@@ -3,7 +3,21 @@ module.exports = {
   clearMocks: true,
 
   // The test environment that will be used for testing
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>jest/setupTests.js'],
-  testPathIgnorePatterns: ['/node_modules/', '/lib/'],
+  testPathIgnorePatterns: [
+    '/lib/',
+    '/node_modules/',
+  ],
+  /*
+  transform: {
+    '^.+\\.(ts|tsx)?$': 'ts-jest',
+  },
+  */
+  collectCoverageFrom: [
+    'src/**/*.tsx?',
+    'components/**/*.tsx?',
+    'pages/**/*.tsx?',
+    '!**/node_modules/**',
+  ],
 };

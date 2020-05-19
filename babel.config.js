@@ -5,6 +5,7 @@ module.exports = (api) => {
     presets: [
       'next/babel',
       '@zeit/next-typescript/babel',
+      '@babel/preset-typescript',
     ],
     plugins: [
       '@babel/proposal-class-properties',

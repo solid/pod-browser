@@ -1,19 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+
 import theme from '../src/theme';
 
-interface IProps {
+
+interface AppProps {
   Component: React.ComponentType;
   pageProps: any;
 }
 
-export default function MyApp(props: IProps) {
+export default function App(props: AppProps) {
   const { Component, pageProps } = props;
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
 
@@ -38,7 +40,7 @@ export default function MyApp(props: IProps) {
   );
 }
 
-MyApp.propTypes = {
+App.propTypes = {
   Component: PropTypes.elementType.isRequired,
   /* eslint react/forbid-prop-types: 0 */
   pageProps: PropTypes.object.isRequired,

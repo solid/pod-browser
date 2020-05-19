@@ -12,6 +12,7 @@ that data.
   solid-auth-fetcher
 1. `cd lib/lit-solid-core && npm i && npm run build` to install and build
   lit-solid-core
+1. Copy `.env-example` into `.env` and update any variables you need.
 1. `npm run dev` to run a dev server, or `npm run build` to compile static html
   and other assets.
 
@@ -21,6 +22,7 @@ that data.
   [extensive documentation](https://nextjs.org/docs/getting-started). It uses
   React for client-side templates, Webpack for building assets, Typescript for
   javascript, and Jest for tests.
+* Any environment variables you wish to expose must be added to next.config.js.
 
 
 # Notes

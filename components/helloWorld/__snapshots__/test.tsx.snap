@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`renders a container with some typography and a button 1`] = `ShallowWrapper {}`;

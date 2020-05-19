@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WebIdLogin form Renders a webid login form, with button bound to login 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <Styled(MuiBox)
+    mb={2}
+  >
+    <WithStyles(ForwardRef(TextField))
+      id="WebId"
+      onChange={[Function]}
+      placeholder="WebID"
+      required={true}
+      type="url"
+      value=""
+    />
+  </Styled(MuiBox)>
+  <Styled(MuiBox)>
+    <WithStyles(ForwardRef(Button))
+      type="submit"
+      variant="contained"
+    >
+      Log In
+    </WithStyles(ForwardRef(Button))>
+  </Styled(MuiBox)>
+</form>
+`;

@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LoginSuccess page Renders a logout button 1`] = `
+<Fragment>
+  <a>
+    Login successful. Redirecting...
+  </a>
+</Fragment>
+`;

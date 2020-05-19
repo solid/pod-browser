@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProviderLogin form Renders a webid login form, with button bound to login 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <Styled(MuiBox)
+    my={2}
+  >
+    <WithStyles(ForwardRef(Select))
+      onChange={[Function]}
+      value="https://broker.demo-ess.inrupt.com/"
+    >
+      <WithStyles(ForwardRef(MenuItem))
+        key="https://broker.demo-ess.inrupt.com/"
+        value="https://broker.demo-ess.inrupt.com/"
+      >
+        ESS Demo
+      </WithStyles(ForwardRef(MenuItem))>
+      <WithStyles(ForwardRef(MenuItem))
+        value="other"
+      >
+        Other
+      </WithStyles(ForwardRef(MenuItem))>
+    </WithStyles(ForwardRef(Select))>
+    <Styled(MuiBox)
+      mt={2}
+    >
+      <WithStyles(ForwardRef(Button))
+        type="submit"
+        variant="contained"
+      >
+        Log In
+      </WithStyles(ForwardRef(Button))>
+    </Styled(MuiBox)>
+  </Styled(MuiBox)>
+</form>
+`;

@@ -1,66 +1,74 @@
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
+import React, { useState } from 'react';
+import Link from 'next/link';
+import {
+  Container,
+  Box,
+  Button,
+  Typography,
+} from '@material-ui/core';
 
-import { getSession } from '../../lib/solid-auth-fetcher/dist';
-
-
-interface IProps {
-}
-
-interface IState {
-  loggedIn: boolean | null;
-}
+import WebIdLogin from './webid';
+import ProviderLogin from './provider';
 
 
-export default class Login extends React.Component<IProps, IState> {
-  constructor(props: any) {
-    super(props);
+export const LOGIN_TYPES = {
+  WEB_ID: 'WebID',
+  PROVIDER: 'Identity Provider',
+};
 
-    this.state = {
-      loggedIn: null,
-    };
+
+export function swapLoginType(currentLoginType: string, setFn: Function) {
+  if (currentLoginType === LOGIN_TYPES.WEB_ID) {
+    return setFn(LOGIN_TYPES.PROVIDER);
   }
 
-  checkSession = (e: React.SyntheticEvent<EventTarget>) => {
+  return setFn(LOGIN_TYPES.WEB_ID);
+}
+
+
+export default function Login() {
+  const [loginType, setLoginType] = useState(LOGIN_TYPES.PROVIDER);
+
+  const onSwapTypeClick = (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault();
+    swapLoginType(loginType, setLoginType);
+  };
 
-    // This is just a demo - it only checks the current session, rather than
-    // firing the auth flow. That's for next sprint, when this code will be
-    // refactored and moved to use react hooks (something like useSession())
-    getSession().then((session: any) => {
-      if (!session || !session.loggedIn) {
-        this.setState({ loggedIn: false });
-      } else {
-        this.setState({ loggedIn: true });
-      }
-    });
-  }
+  return (
+    <Container maxWidth="sm">
+      <Typography align="center" component="div">
+        <h1>Hi! Welcome to Solid.</h1>
 
-  render() {
-    const { loggedIn } = this.state;
-
-    return (
-      <Container maxWidth="sm">
         <Box my={4}>
-          <h1>Log In</h1>
+          <Link href="/register">
+            <a>
+              Register for a Solid Identity
+            </a>
+          </Link>
 
-          <Typography>
-            {loggedIn === true ? 'User logged in' : null}
-            {loggedIn === false ? 'User not logged in' : null}
+          <p>
+            <a href="https://solid.inrupt.com/get-a-solid-pod" rel="nofollow">
+              What is a Solid Identity?
+            </a>
+          </p>
+
+          <Typography variant="h5">
+            Log In
           </Typography>
 
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={this.checkSession}
-          >
-            Check for existing session
+          { loginType === LOGIN_TYPES.WEB_ID ? (
+            <WebIdLogin />
+          ) : (
+            <ProviderLogin />
+          )}
+
+          {/* TODO: replace this with a real URL that stores current provider choice in state */}
+          <Button onClick={onSwapTypeClick} className="button--login">
+            {'Log In with '}
+            { loginType === LOGIN_TYPES.WEB_ID ? LOGIN_TYPES.PROVIDER : LOGIN_TYPES.WEB_ID }
           </Button>
         </Box>
-      </Container>
-    );
-  }
+      </Typography>
+    </Container>
+  );
 }

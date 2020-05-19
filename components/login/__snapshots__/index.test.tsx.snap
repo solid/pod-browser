@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login form Renders a login form, with button bound to swapLoginType 1`] = `
+<WithStyles(ForwardRef(Container))
+  maxWidth="sm"
+>
+  <WithStyles(ForwardRef(Typography))
+    align="center"
+    component="div"
+  >
+    <h1>
+      Hi! Welcome to Solid.
+    </h1>
+    <Styled(MuiBox)
+      my={4}
+    >
+      <Link
+        href="/register"
+      >
+        <a>
+          Register for a Solid Identity
+        </a>
+      </Link>
+      <p>
+        <a
+          href="https://solid.inrupt.com/get-a-solid-pod"
+          rel="nofollow"
+        >
+          What is a Solid Identity?
+        </a>
+      </p>
+      <WithStyles(ForwardRef(Typography))
+        variant="h5"
+      >
+        Log In
+      </WithStyles(ForwardRef(Typography))>
+      <Provider />
+      <WithStyles(ForwardRef(Button))
+        className="button--login"
+        onClick={[Function]}
+      >
+        Log In with 
+        WebID
+      </WithStyles(ForwardRef(Button))>
+    </Styled(MuiBox)>
+  </WithStyles(ForwardRef(Typography))>
+</WithStyles(ForwardRef(Container))>
+`;

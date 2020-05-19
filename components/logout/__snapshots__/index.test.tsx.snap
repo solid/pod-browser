@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Logout button Renders a logout button 1`] = `
+<WithStyles(ForwardRef(Button))
+  onClick={[Function]}
+>
+  Log out
+</WithStyles(ForwardRef(Button))>
+`;
