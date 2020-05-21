@@ -38,15 +38,13 @@ export default function Home() {
 
       if (session && session.webId) {
         const { webId } = session;
-        global.fetch = fetch;
 
         // TODO figure out why LSC doesn't like SAF's fetch.
         const profile = await fetchLitDataset(webId, { fetch });
-        console.log(profile);
-        // console.log(getOneThing(profile, 'http://www.w3.org/ns/pim/space#storage'));
+        const containerIris = getAllIris(profile, 'http://www.w3.org/ns/pim/space#storage');
 
-        // TODO pull this from the profile above
-        const containerIriFromProfile = webId.replace('profile/card#me', '');
+        // TODO work with multiple top-level containers
+        const containerIriFromProfile = containerIris[0];
         setContainerIri(containerIriFromProfile);
 
         // Assign `fetch` from our SAF with session.
@@ -54,13 +52,10 @@ export default function Home() {
         // a submodule.
         // TODO type litDataset.
         const litDataset = await fetchLitDataset(containerIriFromProfile, { fetch });
-        console.log(litDataset);
 
         const container = getOneThing(litDataset, containerIriFromProfile);
-        console.log(container);
 
         const containedResources = getAllIris(container, ldp.contains);
-        console.log(containedResources);
         setResources(containedResources);
         setIsLoading(false);
       }
