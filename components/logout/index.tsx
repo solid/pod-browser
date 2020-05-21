@@ -13,6 +13,6 @@ export function onLogOutClick(e: React.SyntheticEvent<EventTarget>) {
 
 export default function LogOut() {
   return (
-    <Button onClick={onLogOutClick}>Log out</Button>
+    <Button onClick={onLogOutClick} variant="contained">Log out</Button>
   );
 }

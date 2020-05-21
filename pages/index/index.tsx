@@ -1,6 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchLitDataset, getOneThing, getAllIris } from '@inrupt/lit-solid-core';
 import { ldp } from 'rdf-namespaces';
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@material-ui/core';
 
 import { getSession, fetch } from '../../lib/solid-auth-fetcher/dist';
 import { useRedirectIfLoggedOut } from '../../src/effects/auth';
@@ -16,32 +24,82 @@ if (!global.setImmediate) {
 export default function Home() {
   useRedirectIfLoggedOut();
 
+  const defaultResources: string[] | null = [];
+
+  const [resources, setResources] = useState(defaultResources);
+  const [containerIri, setContainerIri] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     // TODO example code; to be moved to src/effects once we start actually displaying data.
     async function fetchContainerData() {
-      // TODO learn how to typescript. Dont' use `any`. Needs to check if it's an ILoggedinSession.
+      // TODO learn how to typescript. Don't use `any`. Needs to check if it's an ILoggedinSession.
       const session: any = await getSession();
 
       if (session && session.webId) {
-        const { webId: containerIri } = session;
+        const { webId } = session;
+        global.fetch = fetch;
+
+        // TODO figure out why LSC doesn't like SAF's fetch.
+        const profile = await fetchLitDataset(webId, { fetch });
+        console.log(profile);
+        // console.log(getOneThing(profile, 'http://www.w3.org/ns/pim/space#storage'));
+
+        // TODO pull this from the profile above
+        const containerIriFromProfile = webId.replace('profile/card#me', '');
+        setContainerIri(containerIriFromProfile);
 
         // Assign `fetch` from our SAF with session.
         // TODO this will be unnecessary once SAF is loaded through an npm module instead of
         // a submodule.
         // TODO type litDataset.
-        // TODO figure out why LSC doesn't like SAF's fetch.
-        fetchLitDataset(containerIri, { fetch }).then((litDataset: any) => {
-          const container = getOneThing(litDataset, containerIri);
-          const containedResources = getAllIris(container, ldp.contains);
-          console.log(containedResources);
-        });
+        const litDataset = await fetchLitDataset(containerIriFromProfile, { fetch });
+        console.log(litDataset);
+
+        const container = getOneThing(litDataset, containerIriFromProfile);
+        console.log(container);
+
+        const containedResources = getAllIris(container, ldp.contains);
+        console.log(containedResources);
+        setResources(containedResources);
+        setIsLoading(false);
       }
     }
 
     fetchContainerData();
   }, []);
 
+
+  // TODO move Loading indicator into separate component
+
   return (
-    <LogOutButton />
+    <>
+      <LogOutButton />
+      { resources && resources.length ? (
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>File</TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            { resources.map((iri: string) => (
+              <TableRow key={iri}>
+                <TableCell>
+                  <a href={`/resource/${iri}`}>
+                    {iri.replace(containerIri, '')}
+                  </a>
+                </TableCell>
+              </TableRow>
+            )) }
+          </TableBody>
+        </Table>
+      ) : null}
+
+      { isLoading ? (
+        <h2>Loading...</h2>
+      ) : null }
+    </>
   );
 }

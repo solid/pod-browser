@@ -71,7 +71,7 @@ export default function Provider() {
         ) : null}
 
         <Box mt={2}>
-          <Button variant="contained" type="submit">
+          <Button variant="contained" type="submit" color="primary">
             Log In
           </Button>
         </Box>
