@@ -50,13 +50,9 @@ export default function Home() {
 
         // TODO figure out why LSC doesn't like SAF's fetch.
         const profile = await fetchLitDataset(webId, { fetch });
-        const containerIris = getAllIris(
-          profile,
-          'http://www.w3.org/ns/pim/space#storage'
-        );
 
         // TODO work with multiple top-level containers
-        const containerIriFromProfile = containerIris[0];
+        const containerIriFromProfile = getIriOne(profile, 'http://www.w3.org/ns/pim/space#storage');
         setContainerIri(containerIriFromProfile);
 
         // Assign `fetch` from our SAF with session.
