@@ -1,16 +1,13 @@
 import React from 'react';
-import {Link} from "@material-ui/core";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import { Link } from '@material-ui/core';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import LogOutButton from '../../components/logout';
 
 export default function Header() {
-    return (
+  return (
     <Breadcrumbs aria-label="breadcrumb">
-        <Link>
-            Inrupt
-        </Link>
-        <LogOutButton />
-        </Breadcrumbs>
-    );
-
+      <Link>Inrupt</Link>
+      <LogOutButton />
+    </Breadcrumbs>
+  );
 }
