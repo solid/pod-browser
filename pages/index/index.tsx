@@ -3,6 +3,7 @@ import {
   fetchLitDataset,
   getOneThing,
   getAllIris,
+  getOneIri,
 } from '@inrupt/lit-solid-core';
 import { ldp } from 'rdf-namespaces';
 
@@ -15,12 +16,12 @@ import {
   Container,
 } from '@material-ui/core';
 
-import { getSession, fetch } from '../../lib/solid-auth-fetcher/dist';
+import { fetch } from '../../lib/solid-auth-fetcher/dist';
 import { useRedirectIfLoggedOut } from '../../src/effects/auth';
 import UserContext from '../../src/contexts/UserContext';
 
 import Spinner from '../../components/spinner';
-import Header from '../../components/header';
+import PodManagerHeader from '../../components/header';
 import ResourceContainer from '../../components/resourceContainer';
 
 // TODO move this to a shims file
@@ -36,56 +37,53 @@ export default function Home() {
   const [resources, setResources] = useState(defaultResources);
   const [containerIri, setContainerIri] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [session, setSession] = useState(null);
+  const { session } = useContext(UserContext);
 
   useEffect(() => {
     // TODO example code; to be moved to src/effects once we start actually displaying data.
     async function fetchContainerData() {
       // TODO learn how to typescript. Don't use `any`. Needs to check if it's an ILoggedinSession.
-      const session: any = await getSession();
 
+      // TODO figure out why LSC doesn't like SAF's fetch.
       if (session && session.webId) {
-        const { webId } = session;
-        setSession(session);
-
-        // TODO figure out why LSC doesn't like SAF's fetch.
-        const profile = await fetchLitDataset(webId, { fetch });
-
+        const profile = await fetchLitDataset(session.webId, { fetch });
         // TODO work with multiple top-level containers
-        const containerIriFromProfile = getIriOne(profile, 'http://www.w3.org/ns/pim/space#storage');
-        setContainerIri(containerIriFromProfile);
+        const containerIriFromProfile = getOneIri(
+          profile,
+          'http://www.w3.org/ns/pim/space#storage',
+        );
+        if (containerIriFromProfile) {
+          setContainerIri(containerIriFromProfile);
 
-        // Assign `fetch` from our SAF with session.
-        // TODO this will be unnecessary once SAF is loaded through an npm module instead of
-        // a submodule.
-        // TODO type litDataset.
-        const litDataset = await fetchLitDataset(containerIriFromProfile, {
-          fetch,
-        });
+          // Assign `fetch` from our SAF with session.
+          // TODO this will be unnecessary once SAF is loaded through an npm module instead of
+          // a submodule.
+          // TODO type litDataset.
+          const litDataset = await fetchLitDataset(containerIriFromProfile, {
+            fetch,
+          });
 
-        const container = getOneThing(litDataset, containerIriFromProfile);
+          const container = getOneThing(litDataset, containerIriFromProfile);
 
-        const containedResources = getAllIris(container, ldp.contains);
-        console.log(JSON.stringify(containedResources));
-        setResources(containedResources);
-        setIsLoading(false);
+          const containedResources = getAllIris(container, ldp.contains);
+          setResources(containedResources);
+          setIsLoading(false);
+        }
       }
     }
 
     fetchContainerData();
-  }, []);
+  }, [session]);
 
   // TODO move Loading indicator into separate component
   // TODO above todo was done but thinking we should
   // move header and isloading.. spinner into one as well so that it's a different
   // header if logged in etc...
   return (
-    <UserContext.Provider value={{ session, isLoading, resources }}>
-      <Container>
-        <Header />
-        {isLoading ? <Spinner /> : null}
-        <ResourceContainer containerIri={containerIri} />
-      </Container>
-    </UserContext.Provider>
+    <Container>
+      <PodManagerHeader />
+      {isLoading ? <Spinner /> : null}
+      <ResourceContainer containerIri={containerIri} resources={resources} />
+    </Container>
   );
 }

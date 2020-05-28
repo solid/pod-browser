@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import {
   Table,
   TableBody,
@@ -6,16 +6,13 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
-import { UserContext } from '../../src/contexts/UserContext';
-import ResourceSearch from '../resourceSearch/index';
+// import UserContext from '../../src/contexts/UserContext';
 
-export default function ResourceContainer({ containerIri }) {
-  const { resources } = useContext(UserContext);
-  const searchResources = () => {};
+export default function ResourceContainer({ containerIri, resources }) {
+  // const { resources } = useContext(UserContext);
 
   return (
     <>
-      <ResourceSearch searchResources={searchResources} />
       {resources && resources.length ? (
         <Table>
           <TableHead>

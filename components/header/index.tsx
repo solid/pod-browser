@@ -1,13 +1,16 @@
 import React from 'react';
 import { Link } from '@material-ui/core';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import LogOutButton from '../../components/logout';
+import LogOutButton from '../logout';
+// import { images, mainNav } from '../../lib/prism/packages/prism-patterns';
 
 export default function Header() {
   return (
-    <Breadcrumbs aria-label="breadcrumb">
+    <nav>
       <Link>Inrupt</Link>
+      <Link>
+        <i className="prism-icon-add" />
+      </Link>
       <LogOutButton />
-    </Breadcrumbs>
+    </nav>
   );
 }

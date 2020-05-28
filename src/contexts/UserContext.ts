@@ -1,12 +1,13 @@
 import { createContext } from 'react';
 // Not sure if this is the correct interface:
-import { Session } from '@inrupt/solid-auth-fetcher';
-import { IriString } from 'lit-solid';
+import { Session } from '../../lib/solid-auth-fetcher/dist';
 
-interface Context  {
-    session: Session | undefined;
-    isLoading: boolean | undefined;
-    resources: IriString[] | undefined;
+interface Context {
+  session: Session | null | undefined;
+  isLoadingSession: boolean | undefined;
 }
 
-export const UserContext = createContext<Context>({});
+export default createContext<Context>({
+  session: undefined,
+  isLoadingSession: true,
+});
