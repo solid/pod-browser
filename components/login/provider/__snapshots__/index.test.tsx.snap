@@ -9,13 +9,19 @@ exports[`ProviderLogin form Renders a webid login form, with button bound to log
   >
     <WithStyles(ForwardRef(Select))
       onChange={[Function]}
-      value="https://broker.demo-ess.inrupt.com/"
+      value="ESS Demo"
     >
       <WithStyles(ForwardRef(MenuItem))
-        key="https://broker.demo-ess.inrupt.com/"
-        value="https://broker.demo-ess.inrupt.com/"
+        key="ESS Demo"
+        value="ESS Demo"
       >
         ESS Demo
+      </WithStyles(ForwardRef(MenuItem))>
+      <WithStyles(ForwardRef(MenuItem))
+        key="dev.inrupt.net"
+        value="dev.inrupt.net"
+      >
+        dev.inrupt.net
       </WithStyles(ForwardRef(MenuItem))>
       <WithStyles(ForwardRef(MenuItem))
         value="other"

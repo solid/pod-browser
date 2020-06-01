@@ -3,28 +3,41 @@ import { Button, Select, MenuItem, Box, TextField } from "@material-ui/core";
 
 import { login } from "../../../lib/solid-auth-fetcher/dist";
 
-import getProviders from "../../../constants/provider";
+import getProviders, { ProviderEntity } from "../../../constants/provider";
 import getConfig from "../../../constants/config";
 
 const PROVIDERS = getProviders();
 const CONFIG = getConfig();
-const CUSTOM_PROVIDER = "other";
 
-export const loginWithProvider = (provider: string): void => {
+const CUSTOM_PROVIDER = {
+  label: "other",
+  value: "",
+  useClientId: false,
+};
+
+export const loginWithProvider = (provider: ProviderEntity): void => {
   login({
-    oidcIssuer: provider,
-    clientId: CONFIG.idpClientId,
+    oidcIssuer: provider.value,
     redirect: `${CONFIG.host}${CONFIG.loginRedirect}`,
+    clientId: provider.useClientId ? CONFIG.idpClientId : undefined,
   });
 };
 
 export default function Provider(): ReactElement {
-  const [provider, setProvider] = useState(PROVIDERS[0].value);
+  const [provider, setProvider] = useState(PROVIDERS[0]);
   const [customProvider, setCustomProvider] = useState("");
 
   const handleFormSubmit = async (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault();
-    loginWithProvider(customProvider || provider);
+
+    if (customProvider) {
+      return loginWithProvider({
+        ...CUSTOM_PROVIDER,
+        value: customProvider,
+      });
+    }
+
+    return loginWithProvider(provider);
   };
 
   // any is used on the select onchange due to ongoing debates about how to handle the event
@@ -34,22 +47,25 @@ export default function Provider(): ReactElement {
     <form onSubmit={handleFormSubmit}>
       <Box my={2}>
         <Select
-          value={provider}
+          value={provider.label}
           onChange={(e: any) => {
             setCustomProvider("");
-            setProvider(e.target.value);
+            setProvider(
+              PROVIDERS.find((p) => p.label === e.target.value) ||
+              CUSTOM_PROVIDER
+            );
           }}
         >
           {PROVIDERS.map((p) => (
-            <MenuItem value={p.value} key={p.value}>
+            <MenuItem value={p.label} key={p.label}>
               {p.label}
             </MenuItem>
           ))}
 
-          <MenuItem value={CUSTOM_PROVIDER}>Other</MenuItem>
+          <MenuItem value={CUSTOM_PROVIDER.label}>Other</MenuItem>
         </Select>
 
-        {provider === CUSTOM_PROVIDER ? (
+        {provider.label === CUSTOM_PROVIDER.label ? (
           <Box mt={2}>
             <TextField
               type="url"

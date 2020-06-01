@@ -18,14 +18,32 @@ describe("ProviderLogin form", () => {
 });
 
 describe("loginWithProvider", () => {
-  test("Calls login if webid is provided", async () => {
+  test("Calls login with clientId if useClientId is true", async () => {
     const oidcIssuer = getProviders()[0];
     const clientId = getConfig().idpClientId;
 
-    await loginWithProvider(oidcIssuer.value);
+    await loginWithProvider({
+      ...oidcIssuer,
+      useClientId: true,
+    });
 
     expect(login).toHaveBeenCalledWith({
       clientId,
+      oidcIssuer: oidcIssuer.value,
+      redirect: "/loginSuccess",
+    });
+  });
+
+  test("Calls login without clientId if useClientId is true", async () => {
+    const oidcIssuer = getProviders()[0];
+    const clientId = getConfig().idpClientId;
+
+    await loginWithProvider({
+      ...oidcIssuer,
+      useClientId: false,
+    });
+
+    expect(login).toHaveBeenCalledWith({
       oidcIssuer: oidcIssuer.value,
       redirect: "/loginSuccess",
     });

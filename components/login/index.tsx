@@ -2,33 +2,9 @@ import React, { ReactElement, useState } from "react";
 import Link from "next/link";
 import { Container, Box, Button, Typography } from "@material-ui/core";
 
-import WebIdLogin from "./webid";
 import ProviderLogin from "./provider";
 
-export const LOGIN_TYPES = {
-  WEB_ID: "WebID",
-  PROVIDER: "Identity Provider",
-};
-
-export function swapLoginType(
-  currentLoginType: string,
-  setFn: (type: string) => void
-): void {
-  if (currentLoginType === LOGIN_TYPES.WEB_ID) {
-    return setFn(LOGIN_TYPES.PROVIDER);
-  }
-
-  return setFn(LOGIN_TYPES.WEB_ID);
-}
-
 export default function Login(): ReactElement {
-  const [loginType, setLoginType] = useState(LOGIN_TYPES.PROVIDER);
-
-  const onSwapTypeClick = (e: React.SyntheticEvent<EventTarget>) => {
-    e.preventDefault();
-    swapLoginType(loginType, setLoginType);
-  };
-
   return (
     <Container maxWidth="sm">
       <Typography align="center" component="div">
@@ -47,19 +23,7 @@ export default function Login(): ReactElement {
 
           <Typography variant="h5">Log In</Typography>
 
-          {loginType === LOGIN_TYPES.WEB_ID ? (
-            <WebIdLogin />
-          ) : (
-            <ProviderLogin />
-          )}
-
-          {/* TODO: replace this with a real URL that stores current provider choice in state */}
-          <Button onClick={onSwapTypeClick} className="button--login">
-            {"Log In with "}
-            {loginType === LOGIN_TYPES.WEB_ID
-              ? LOGIN_TYPES.PROVIDER
-              : LOGIN_TYPES.WEB_ID}
-          </Button>
+          <ProviderLogin />
         </Box>
       </Typography>
     </Container>

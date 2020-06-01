@@ -35,13 +35,6 @@ exports[`Login form Renders a login form, with button bound to swapLoginType 1`]
         Log In
       </WithStyles(ForwardRef(Typography))>
       <Provider />
-      <WithStyles(ForwardRef(Button))
-        className="button--login"
-        onClick={[Function]}
-      >
-        Log In with 
-        WebID
-      </WithStyles(ForwardRef(Button))>
     </Styled(MuiBox)>
   </WithStyles(ForwardRef(Typography))>
 </WithStyles(ForwardRef(Container))>
