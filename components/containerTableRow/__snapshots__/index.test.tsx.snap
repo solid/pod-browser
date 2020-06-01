@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContainerTableRow it renders a table row 1`] = `
+<WithStyles(ForwardRef(TableRow))
+  className="makeStyles-tableRow-1"
+  onClick={[Function]}
+>
+  <WithStyles(ForwardRef(TableCell))>
+    <Link
+      href="/resource/iri"
+    >
+      <a>
+        /iri
+      </a>
+    </Link>
+  </WithStyles(ForwardRef(TableCell))>
+  <WithStyles(ForwardRef(TableCell))>
+    Folder
+  </WithStyles(ForwardRef(TableCell))>
+  <WithStyles(ForwardRef(TableCell))>
+    Full
+  </WithStyles(ForwardRef(TableCell))>
+  <WithStyles(ForwardRef(TableCell))>
+    Today :)
+  </WithStyles(ForwardRef(TableCell))>
+</WithStyles(ForwardRef(TableRow))>
+`;

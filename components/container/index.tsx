@@ -1,8 +1,6 @@
 import { ReactElement, useEffect, useState, useContext } from "react";
 import { ldp } from "rdf-namespaces";
-
 import { fetchLitDataset, getThingOne, getIriAll } from "lit-solid";
-
 import {
   Table,
   TableBody,
@@ -10,7 +8,8 @@ import {
   TableHead,
   TableRow,
 } from "@material-ui/core";
-
+import DetailsContextMenu from "../detailsContextMenu";
+import ContainerTableRow from "../containerTableRow";
 import UserContext from "../../src/contexts/UserContext";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import Spinner from "../spinner";
@@ -34,7 +33,6 @@ export default function Container(props: IPodList): ReactElement {
 
   const defaultResources: string[] | null = [];
   const { session, isLoadingSession } = useContext(UserContext);
-
   const [resources, setResources] = useState(defaultResources);
   const [isLoading, setIsLoading] = useState(
     isLoadingSession || !resources.length
@@ -81,19 +79,11 @@ export default function Container(props: IPodList): ReactElement {
           ) : null}
 
           {resources.map((resourceIri: string) => (
-            <TableRow key={resourceIri}>
-              <TableCell>
-                <a href={`/resource/${encodeURIComponent(resourceIri)}`}>
-                  {resourceIri.replace(iri, "")}
-                </a>
-              </TableCell>
-              <TableCell>Folder</TableCell>
-              <TableCell>Full</TableCell>
-              <TableCell>Today :)</TableCell>
-            </TableRow>
+            <ContainerTableRow key={resourceIri} iri={resourceIri} />
           ))}
         </TableBody>
       </Table>
+      <DetailsContextMenu />
     </>
   );
 }

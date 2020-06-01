@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Container view Renders a the drawer 1`] = `
+<WithStyles(ForwardRef(Drawer))
+  anchor="right"
+  classes={
+    Object {
+      "paper": "makeStyles-drawerPaper-2",
+    }
+  }
+  open={false}
+  variant="persistent"
+>
+  <WithStyles(ForwardRef(IconButton))
+    className="makeStyles-drawerCloseButton-1"
+    onClick={[Function]}
+  >
+    <ChevronRightIcon />
+  </WithStyles(ForwardRef(IconButton))>
+  <div
+    className="makeStyles-drawerContent-3"
+  />
+</WithStyles(ForwardRef(Drawer))>
+`;

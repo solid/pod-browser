@@ -2,8 +2,10 @@
 
 exports[`Index page Renders a logout button 1`] = `
 <WithStyles(ForwardRef(Container))>
-  <PodList
-    podIris={Array []}
-  />
+  <DetailsMenuProvider>
+    <PodList
+      podIris={Array []}
+    />
+  </DetailsMenuProvider>
 </WithStyles(ForwardRef(Container))>
 `;

@@ -7,6 +7,7 @@ import { ILoggedInSolidSession } from "@inrupt/solid-auth-fetcher/dist/solidSess
 import UserContext from "../../../src/contexts/UserContext";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import PodList from "../../podList";
+import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
 
 export async function getPodIrisFromWebId(webId: string): Promise<string[]> {
   const profileDoc = await fetchLitDataset(webId);
@@ -40,7 +41,9 @@ export default function Home(): ReactElement {
 
   return (
     <Container>
-      <PodList podIris={podIris} />
+      <DetailsMenuProvider>
+        <PodList podIris={podIris} />
+      </DetailsMenuProvider>
     </Container>
   );
 }
