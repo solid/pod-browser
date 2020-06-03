@@ -1,11 +1,7 @@
 import { ReactElement, useEffect, useState, useContext } from "react";
 import { ldp } from "rdf-namespaces";
 
-import {
-  fetchLitDataset,
-  getThingOne,
-  getIriAll,
-} from "lit-solid";
+import { fetchLitDataset, getThingOne, getIriAll } from "lit-solid";
 
 import {
   Table,

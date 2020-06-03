@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "next build",
+    "ci": "npm run lint && npm run test && npm run build",
     "dev": "node server.js",
     "lint": "eslint pages components constants src --ext .ts,.tsx,.js",
     "start": "NODE_ENV=production node server.js",

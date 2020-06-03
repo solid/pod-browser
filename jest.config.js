@@ -14,10 +14,18 @@ module.exports = {
     '^.+\\.(ts|tsx)?$': 'ts-jest',
   },
   */
+  collectCoverage: true,
   collectCoverageFrom: [
-    'src/**/*.tsx?',
-    'components/**/*.tsx?',
-    'pages/**/*.tsx?',
-    '!**/node_modules/**',
+    'components/**/*',
+    'pages/**/*',
+    'src/**/*',
   ],
+  coverageThreshold: {
+    global: {
+      branches: 54,
+      functions: 43,
+      lines: 54,
+      statements: 53
+    },
+  },
 };

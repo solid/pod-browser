@@ -33,14 +33,23 @@ describe("Loading container resource iri list", () => {
       "https://myaccount.mypodserver.com/note.txt",
     ];
 
-    const getSession: jest.Mock = jest.requireMock("@inrupt/solid-auth-fetcher").getSession;
+    // Disable this rule to allow mocks. Not sure of a better way.
+    /* eslint @typescript-eslint/no-explicit-any: 0 */
+
+    const { getSession }: { getSession: jest.Mock } = jest.requireMock(
+      "@inrupt/solid-auth-fetcher/dist"
+    );
+
     getSession.mockImplementation(() =>
       Promise.resolve({
         webId: "https://myaccount.mypodserver.com/profile/card#me",
       })
     );
 
-    const getIriAll: jest.Mock = jest.requireMock('lit-solid').getIriAll;
+    const { getIriAll }: { getIriAll: jest.Mock } = jest.requireMock(
+      "lit-solid"
+    );
+
     getIriAll.mockImplementationOnce(() => [containerIri]);
     getIriAll.mockImplementationOnce(() => resources);
 
