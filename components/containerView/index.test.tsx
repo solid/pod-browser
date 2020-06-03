@@ -1,11 +1,11 @@
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import { mock } from "jest-mock-extended";
+import { ILoggedInSolidSession } from "@inrupt/solid-auth-fetcher/dist/solidSession/ISolidSession";
 
 import ContainerView, { getContainerResourceIrisFromSession } from "./index";
-import { ILoggedInSolidSession } from "../../lib/solid-auth-fetcher/dist/solidSession/ISolidSession";
 
-jest.mock("../../lib/solid-auth-fetcher/dist");
+jest.mock("@inrupt/solid-auth-fetcher");
 jest.mock("lit-solid");
 
 describe("Container view", () => {
@@ -33,10 +33,7 @@ describe("Loading container resource iri list", () => {
       "https://myaccount.mypodserver.com/note.txt",
     ];
 
-    // Disable this rule to allow mocks. Not sure of a better way.
-    /* eslint @typescript-eslint/no-explicit-any: 0 */
-
-    const getSession: jest.Mock = jest.requireMock("../../lib/solid-auth-fetcher/dist").getSession;
+    const getSession: jest.Mock = jest.requireMock("@inrupt/solid-auth-fetcher").getSession;
     getSession.mockImplementation(() =>
       Promise.resolve({
         webId: "https://myaccount.mypodserver.com/profile/card#me",

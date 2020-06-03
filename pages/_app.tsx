@@ -5,8 +5,8 @@ import Head from "next/head";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
-import ISolidSession from "../lib/solid-auth-fetcher/dist/solidSession/ISolidSession";
-import { getSession } from "../lib/solid-auth-fetcher/dist";
+import ISolidSession from "@inrupt/solid-auth-fetcher/dist/solidSession/ISolidSession";
+import { getSession } from "@inrupt/solid-auth-fetcher";
 
 // import Header from '../components/header';
 import theme from "../src/theme";

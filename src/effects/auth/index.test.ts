@@ -1,7 +1,7 @@
 import Router from "next/router";
 import { mock } from "jest-mock-extended";
 
-import ISolidSession from "../../../lib/solid-auth-fetcher/dist/solidSession/ISolidSession";
+import ISolidSession from "@inrupt/solid-auth-fetcher/dist/solidSession/ISolidSession";
 
 import { SESSION_STATES, redirectBasedOnSessionState } from "./index";
 

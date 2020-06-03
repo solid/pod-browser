@@ -1,14 +1,14 @@
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 
-import { login } from "../../../lib/solid-auth-fetcher/dist";
+import { login } from "@inrupt/solid-auth-fetcher";
 
 import getProviders from "../../../constants/provider";
 import getConfig from "../../../constants/config";
 
 import ProviderLogin, { loginWithProvider } from "./index";
 
-jest.mock("../../../lib/solid-auth-fetcher/dist");
+jest.mock("@inrupt/solid-auth-fetcher");
 
 describe("ProviderLogin form", () => {
   test("Renders a webid login form, with button bound to login", () => {

@@ -16,8 +16,8 @@ import {
 } from "@material-ui/core";
 
 import UserContext from "../../src/contexts/UserContext";
-import { ILoggedInSolidSession } from "../../lib/solid-auth-fetcher/dist/solidSession/ISolidSession";
-import { fetch } from "../../lib/solid-auth-fetcher/dist";
+import { ILoggedInSolidSession } from "@inrupt/solid-auth-fetcher/dist/solidSession/ISolidSession";
+import { fetch } from "@inrupt/solid-auth-fetcher";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import Spinner from "../spinner";
 

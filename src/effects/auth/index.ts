@@ -1,7 +1,7 @@
 import { useEffect, useContext } from "react";
 import Router from "next/router";
 
-import ISolidSession from "../../../lib/solid-auth-fetcher/dist/solidSession/ISolidSession";
+import ISolidSession from "@inrupt/solid-auth-fetcher/dist/solidSession/ISolidSession";
 import UserContext from "../../contexts/UserContext";
 
 // TODO figure out typescript enums

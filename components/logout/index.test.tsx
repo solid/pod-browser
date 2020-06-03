@@ -1,12 +1,12 @@
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import Router from "next/router";
-import { logout } from "../../lib/solid-auth-fetcher/dist";
+import { logout } from "@inrupt/solid-auth-fetcher";
 
 import LogOutButton from "./index";
 
 jest.mock("next/router");
-jest.mock("../../lib/solid-auth-fetcher/dist");
+jest.mock("@inrupt/solid-auth-fetcher");
 
 describe("Logout button", () => {
   test("Renders a logout button", () => {

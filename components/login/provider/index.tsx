@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState, ReactElement } from "react";
 import { Button, Select, MenuItem, Box, TextField } from "@material-ui/core";
 
-import { login } from "../../../lib/solid-auth-fetcher/dist";
+import { login } from "@inrupt/solid-auth-fetcher";
 
 import getProviders, { ProviderEntity } from "../../../constants/provider";
 import getConfig from "../../../constants/config";

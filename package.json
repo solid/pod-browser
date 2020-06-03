@@ -21,11 +21,12 @@
   },
   "homepage": "https://github.com/inrupt/pod-manager#readme",
   "dependencies": {
-    "lit-solid": "master",
+    "@inrupt/solid-auth-fetcher": "0.0.6",
     "@material-ui/core": "^4.9.14",
     "@material-ui/icons": "^4.9.1",
     "encoding": "^0.1.12",
     "eslint-config-prettier": "^6.11.0",
+    "lit-solid": "master",
     "next": "^9.4.0",
     "next-runtime-dotenv": "^1.2.0",
     "prop-types": "^15.7.2",
