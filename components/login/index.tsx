@@ -1,6 +1,6 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement } from "react";
 import Link from "next/link";
-import { Container, Box, Button, Typography } from "@material-ui/core";
+import { Container, Box, Typography } from "@material-ui/core";
 
 import ProviderLogin from "./provider";
 

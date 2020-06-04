@@ -30,13 +30,12 @@ describe("loginWithProvider", () => {
     expect(login).toHaveBeenCalledWith({
       clientId,
       oidcIssuer: oidcIssuer.value,
-      redirect: "/loginSuccess",
+      redirect: "/",
     });
   });
 
   test("Calls login without clientId if useClientId is true", async () => {
     const oidcIssuer = getProviders()[0];
-    const clientId = getConfig().idpClientId;
 
     await loginWithProvider({
       ...oidcIssuer,
@@ -45,7 +44,7 @@ describe("loginWithProvider", () => {
 
     expect(login).toHaveBeenCalledWith({
       oidcIssuer: oidcIssuer.value,
-      redirect: "/loginSuccess",
+      redirect: "/",
     });
   });
 });

@@ -52,6 +52,11 @@ module.exports = {
     },
   },
 
+  ignorePatterns: [
+    '__mocks__',
+    '__snapshots__',
+  ],
+
   rules: {
     // Make everything work with .ts and .tsx as well
     "import/extensions": [2, {

@@ -1,9 +1,7 @@
-import { ReactElement } from "react";
-import { useRedirectIfLoggedIn } from "../../src/effects/auth";
-import LoginForm from "../../components/login";
+import React, { ReactElement } from "react";
+
+import LoginPage from "../../components/pages/login";
 
 export default function Login(): ReactElement {
-  useRedirectIfLoggedIn();
-
-  return <LoginForm />;
+  return <LoginPage />;
 }

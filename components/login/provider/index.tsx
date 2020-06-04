@@ -52,7 +52,7 @@ export default function Provider(): ReactElement {
             setCustomProvider("");
             setProvider(
               PROVIDERS.find((p) => p.label === e.target.value) ||
-              CUSTOM_PROVIDER
+                CUSTOM_PROVIDER
             );
           }}
         >

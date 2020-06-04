@@ -17,15 +17,14 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     'components/**/*',
-    'pages/**/*',
     'src/**/*',
   ],
   coverageThreshold: {
     global: {
-      branches: 54,
-      functions: 43,
-      lines: 54,
-      statements: 53
+      branches: 55,
+      functions: 53,
+      lines: 62,
+      statements: 62,
     },
   },
 };

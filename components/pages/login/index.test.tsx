@@ -1,10 +1,10 @@
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 
-import { useRedirectIfLoggedIn } from "../../src/effects/auth";
+import { useRedirectIfLoggedIn } from "../../../src/effects/auth";
 import LoginPage from "./index";
 
-jest.mock("../../src/effects/auth");
+jest.mock("../../../src/effects/auth");
 
 describe("Login page", () => {
   test("Renders a logout button", () => {

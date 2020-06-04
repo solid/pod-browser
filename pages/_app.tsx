@@ -70,6 +70,10 @@ export default function App(props: AppProps): ReactElement {
   );
 }
 
+// TODO Temporary workaround to .env issues
+/* eslint @typescript-eslint/no-empty-function: 0 */
+App.getInitialProps = async function placeholder() {};
+
 App.propTypes = {
   Component: PropTypes.elementType.isRequired,
   /* eslint react/forbid-prop-types: 0 */

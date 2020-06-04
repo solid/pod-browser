@@ -12,6 +12,6 @@ export default function getConfig(): ConfigEntity {
   return {
     idpClientId: IDP_CLIENT_ID || "",
     host: APP_HOST || "",
-    loginRedirect: "/loginSuccess",
+    loginRedirect: "/",
   };
 }

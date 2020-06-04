@@ -28,7 +28,6 @@ jobs:
       with:
         path: node_modules
         key: ${{ runner.os }}-node${{ runner.node-version }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-    - run: cd lib/solid-auth-fetcher && npm i && npm run build && cd ../../
     - run: cd lib/prism && npm i && npm run build && cd ../../
     - run: npm ci
     - run: npm run ci
