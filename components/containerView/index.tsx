@@ -78,7 +78,7 @@ export default function Home(): ReactElement {
       return;
     }
 
-    async function fetchContainerData() {
+    async function fetchContainerData(): Promise<void> {
       const {
         containerIri: loadedContainerIri,
         resources: loadedResources,
@@ -91,7 +91,9 @@ export default function Home(): ReactElement {
       setIsLoading(false);
     }
 
-    fetchContainerData();
+    fetchContainerData().catch((e) => {
+      throw e;
+    });
   }, [session, isLoadingSession]);
 
   if (isLoading || !resources) {

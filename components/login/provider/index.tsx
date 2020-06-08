@@ -20,6 +20,8 @@ export const loginWithProvider = (provider: ProviderEntity): void => {
     oidcIssuer: provider.value,
     redirect: `${CONFIG.host}${CONFIG.loginRedirect}`,
     clientId: provider.useClientId ? CONFIG.idpClientId : undefined,
+  }).catch((e) => {
+    throw e;
   });
 };
 

@@ -39,13 +39,15 @@ export default function App(props: AppProps): ReactElement {
     setIsLoadingSession(true);
 
     // Remove the server-side injected CSS.
-    async function fetchSession() {
+    async function fetchSession(): Promise<void> {
       const sessionStorage = (await getSession()) as ISolidSession;
       setSession(sessionStorage);
       setIsLoadingSession(false);
     }
 
-    fetchSession();
+    fetchSession().catch((e) => {
+      throw e;
+    });
   }, [Component, pageProps, setSession, setIsLoadingSession]);
 
   return (

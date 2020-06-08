@@ -10,22 +10,26 @@ export const SESSION_STATES = {
   LOGGED_OUT: "LOGGED_OUT",
 };
 
-export async function redirectBasedOnSessionState(
+export function redirectBasedOnSessionState(
   session: ISolidSession | undefined,
   isLoadingSession: boolean,
   redirectIfSessionState: string,
   location: string
-): Promise<void> {
+): void {
   if (isLoadingSession) {
     return;
   }
 
   if (session && redirectIfSessionState === SESSION_STATES.LOGGED_IN) {
-    Router.push(location);
+    Router.push(location).catch((e) => {
+      throw e;
+    });
   }
 
   if (!session && redirectIfSessionState === SESSION_STATES.LOGGED_OUT) {
-    Router.push(location);
+    Router.push(location).catch((e) => {
+      throw e;
+    });
   }
 }
 

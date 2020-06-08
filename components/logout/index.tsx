@@ -6,8 +6,14 @@ import { logout } from "@inrupt/solid-auth-fetcher";
 
 export function onLogOutClick(e: SyntheticEvent<EventTarget>): void {
   e.preventDefault();
-  logout();
-  Router.push("/login");
+
+  logout().catch((error) => {
+    throw error;
+  });
+
+  Router.push("/login").catch((error) => {
+    throw error;
+  });
 }
 
 export default function LogOut(): ReactElement {
