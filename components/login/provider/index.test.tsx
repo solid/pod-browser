@@ -15,12 +15,19 @@ describe("ProviderLogin form", () => {
     const tree = shallow(<ProviderLogin />);
     expect(shallowToJson(tree)).toMatchSnapshot();
   });
+
+  test("calls login when the form is submitted", () => {
+    const tree = shallow(<ProviderLogin />);
+    tree.simulate("submit", { preventDefault: () => {} });
+    expect(login).toHaveBeenCalled();
+  });
 });
 
 describe("loginWithProvider", () => {
   test("Calls login with clientId if useClientId is true", async () => {
     const oidcIssuer = getProviders()[0];
     const clientId = getConfig().idpClientId;
+    (login as jest.Mock).mockResolvedValue(null);
 
     await loginWithProvider({
       ...oidcIssuer,
@@ -36,6 +43,7 @@ describe("loginWithProvider", () => {
 
   test("Calls login without clientId if useClientId is true", async () => {
     const oidcIssuer = getProviders()[0];
+    (login as jest.Mock).mockResolvedValue(null);
 
     await loginWithProvider({
       ...oidcIssuer,

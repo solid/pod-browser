@@ -1,3 +1,3 @@
 export default {
-  push: jest.fn(),
+  push: jest.fn().mockResolvedValue(null),
 };

@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header with user logged in renders with a logout button 1`] = `
+<nav>
+  <WithStyles(ForwardRef(Link))>
+    Inrupt
+  </WithStyles(ForwardRef(Link))>
+  <WithStyles(ForwardRef(Link))>
+    <i
+      className="prism-icon-add"
+    />
+  </WithStyles(ForwardRef(Link))>
+  <LogOut />
+</nav>
+`;
+
+exports[`Header with user logged out renders without a logout button 1`] = `
+<nav>
+  <WithStyles(ForwardRef(Link))>
+    Inrupt
+  </WithStyles(ForwardRef(Link))>
+  <WithStyles(ForwardRef(Link))>
+    <i
+      className="prism-icon-add"
+    />
+  </WithStyles(ForwardRef(Link))>
+</nav>
+`;
