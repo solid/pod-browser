@@ -1,7 +1,8 @@
+/* eslint-disable camelcase */
 import React from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
-import { LitDataset, fetchLitDataset } from "lit-solid";
+import { LitDataset, unstable_fetchLitDatasetWithAcl } from "lit-solid";
 import ContainerTableRow, {
   fetchContainerDetails,
   getIriPath,
@@ -69,16 +70,18 @@ describe("ContainerTableRow", () => {
 
 describe("fetchContainerDetails", () => {
   test("it returns a normalized dataset", async () => {
-    (fetchLitDataset as jest.Mock).mockImplementationOnce(async () => {
-      return Promise.resolve(createContainer());
-    });
+    (unstable_fetchLitDatasetWithAcl as jest.Mock).mockImplementationOnce(
+      async () => {
+        return Promise.resolve(createContainer());
+      }
+    );
 
     const expectedIri = "https://user.dev.inrupt.net/public/";
     const { name, iri } = await fetchContainerDetails(expectedIri);
 
     expect(name).toEqual("/public");
     expect(iri).toEqual(expectedIri);
-    expect(fetchLitDataset).toHaveBeenCalled();
+    expect(unstable_fetchLitDatasetWithAcl).toHaveBeenCalled();
   });
 });
 
@@ -97,9 +100,11 @@ describe("getIriPath", () => {
 
 describe("handleTableRowClick", () => {
   test("it opens the drawer and sets the menu contents", async () => {
-    (fetchLitDataset as jest.Mock).mockImplementationOnce(async () => {
-      return Promise.resolve(createContainer());
-    });
+    (unstable_fetchLitDatasetWithAcl as jest.Mock).mockImplementationOnce(
+      async () => {
+        return Promise.resolve(createContainer());
+      }
+    );
 
     const setMenuOpen = jest.fn();
     const setMenuContents = jest.fn();

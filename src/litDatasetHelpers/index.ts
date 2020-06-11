@@ -3,7 +3,6 @@ import {
   getIntegerOne,
   getThingOne,
   getIriAll,
-  getIriOne,
   IriString,
   getDecimalOne,
   getDatetimeOne,
@@ -23,18 +22,59 @@ const typeNameMap = Object.keys(ldpWithType).reduce(
   {}
 );
 
-export function getTypeName(rawType: string | null): string {
+export function getTypeName(rawType: string): string {
   if (!rawType) return "";
-  return typeNameMap[rawType];
+  return typeNameMap[rawType] || rawType;
+}
+
+export function displayType(type: string | string[]): string | string[] {
+  if (Array.isArray(type)) {
+    return type.map((t: string): string => getTypeName(t));
+  }
+
+  return getTypeName(type);
+}
+
+interface normalizeAclProps {
+  resourceAcl?: LitDataset;
+  fallbackAcl: LitDataset;
+}
+
+interface normalizedAcl {
+  user: Record<string, boolean>;
+  public: Record<string, boolean>;
+}
+
+export function extractPermissions(acl: LitDataset): normalizedAcl {
+  const {
+    datasetInfo: {
+      unstable_permissions: { user, public: publicPermissions },
+    },
+  } = acl;
+  return { user, public: publicPermissions };
+}
+
+export function normalizeAcl({
+  resourceAcl,
+  fallbackAcl,
+}: normalizeAclProps): normalizedAcl {
+  const resourcePerms = resourceAcl ? extractPermissions(resourceAcl) : {};
+  const fallbackPerms = extractPermissions(fallbackAcl);
+
+  return {
+    ...fallbackPerms,
+    ...resourcePerms,
+  };
 }
 
 export interface NormalizedDataset {
   iri: string;
-  type?: string | null;
+  type?: string | string[] | null;
   mtime?: number | null;
   modified?: Date | null;
   size?: number | null;
   contains?: string[];
+  acl?: Record<string, unknown> | undefined;
 }
 
 export function normalizeDataset(
@@ -42,7 +82,7 @@ export function normalizeDataset(
   iri: IriString
 ): NormalizedDataset {
   const thing = getThingOne(dataset, iri);
-  const rawType = getIriOne(
+  const rawType = getIriAll(
     thing,
     "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
   );
@@ -52,14 +92,14 @@ export function normalizeDataset(
   const modified = getDatetimeOne(thing, "http://purl.org/dc/terms/modified");
   const size = getIntegerOne(thing, "http://www.w3.org/ns/posix/stat#size");
   const contains = getIriAll(thing, ldp.contains);
-  const type = getTypeName(rawType) || rawType;
+  const type = displayType(rawType);
 
   return {
-    iri,
-    type,
-    mtime,
-    modified,
-    size,
     contains,
+    iri,
+    modified,
+    mtime,
+    size,
+    type,
   };
 }
