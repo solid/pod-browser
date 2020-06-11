@@ -1,4 +1,6 @@
+/* eslint-disable camelcase */
 import { ReactElement, useContext } from "react";
+import { unstable_fetchLitDatasetWithAcl } from "lit-solid";
 import { makeStyles } from "@material-ui/core/styles";
 import { CircularProgress, TableCell, TableRow } from "@material-ui/core";
 import Link from "next/link";
@@ -19,7 +21,8 @@ export async function fetchResourceDetails(
   iri: string
 ): Promise<ResourceDetails> {
   const name = getIriPath(iri);
-  const resource = await fetchResourceWithAcl(iri);
+  if (nonRdfIri) return { iri, name: nonRdfIri[1], type: nonRdfIri[1] };
+  const litDataset = await unstable_fetchLitDatasetWithAcl(iri);
 
   return {
     ...resource,

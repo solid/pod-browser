@@ -2,12 +2,13 @@
 import React from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
-import {
-  LitDataset,
-  unstable_fetchLitDatasetWithAcl,
-  unstable_getAgentAccessModesAll,
-} from "lit-solid";
-import ContainerTableRow, { handleTableRowClick, resourceHref } from "./index";
+import { LitDataset, unstable_fetchLitDatasetWithAcl } from "lit-solid";
+import ContainerTableRow, {
+  fetchContainerDetails,
+  getIriPath,
+  handleTableRowClick,
+  resourceLink,
+} from "./index";
 
 jest.mock("lit-solid");
 
@@ -67,7 +68,24 @@ describe("ContainerTableRow", () => {
   });
 });
 
-describe("resourceHref", () => {
+describe("fetchContainerDetails", () => {
+  test("it returns a normalized dataset", async () => {
+    (unstable_fetchLitDatasetWithAcl as jest.Mock).mockImplementationOnce(
+      async () => {
+        return Promise.resolve(createContainer());
+      }
+    );
+
+    const expectedIri = "https://user.dev.inrupt.net/public/";
+    const { name, iri } = await fetchContainerDetails(expectedIri);
+
+    expect(name).toEqual("/public");
+    expect(iri).toEqual(expectedIri);
+    expect(unstable_fetchLitDatasetWithAcl).toHaveBeenCalled();
+  });
+});
+
+describe("resourceLink", () => {
   test("it generates a resource link", () => {
     const link = resourceHref("https://example.com/example.ttl");
     expect(link).toEqual("/resource/https%3A%2F%2Fexample.com%2Fexample.ttl");
@@ -79,20 +97,6 @@ describe("handleTableRowClick", () => {
     (unstable_fetchLitDatasetWithAcl as jest.Mock).mockImplementationOnce(
       async () => {
         return Promise.resolve(createContainer());
-      }
-    );
-
-    (unstable_getAgentAccessModesAll as jest.Mock).mockImplementationOnce(
-      async () => {
-        return Promise.resolve({
-          owner: { read: true, write: true, append: true, control: true },
-          collaborator: {
-            read: true,
-            write: false,
-            append: true,
-            control: false,
-          },
-        });
       }
     );
 
