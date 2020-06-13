@@ -32,5 +32,25 @@ exports[`Container details Renders container details 1`] = `
       </WithStyles(ForwardRef(ListItem))>
     </WithStyles(ForwardRef(List))>
   </section>
+  <WithStyles(ForwardRef(Divider)) />
+  <section
+    className="makeStyles-centeredSection-1"
+  >
+    <WithStyles(ForwardRef(Typography))
+      variant="h5"
+    >
+      My Access
+    </WithStyles(ForwardRef(Typography))>
+  </section>
+  <WithStyles(ForwardRef(Divider)) />
+  <section
+    className="makeStyles-centeredSection-1"
+  >
+    <WithStyles(ForwardRef(Typography))
+      variant="h5"
+    >
+      Sharing
+    </WithStyles(ForwardRef(Typography))>
+  </section>
 </Fragment>
 `;

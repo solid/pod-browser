@@ -5,7 +5,6 @@ import { shallowToJson } from "enzyme-to-json";
 import { LitDataset, unstable_fetchLitDatasetWithAcl } from "lit-solid";
 import ContainerTableRow, {
   fetchContainerDetails,
-  getIriPath,
   handleTableRowClick,
   resourceLink,
 } from "./index";
@@ -65,23 +64,6 @@ describe("ContainerTableRow", () => {
     const tree = shallow(<ContainerTableRow iri="iri" />);
     tree.simulate("click");
     expect(shallowToJson(tree)).toMatchSnapshot();
-  });
-});
-
-describe("fetchContainerDetails", () => {
-  test("it returns a normalized dataset", async () => {
-    (unstable_fetchLitDatasetWithAcl as jest.Mock).mockImplementationOnce(
-      async () => {
-        return Promise.resolve(createContainer());
-      }
-    );
-
-    const expectedIri = "https://user.dev.inrupt.net/public/";
-    const { name, iri } = await fetchContainerDetails(expectedIri);
-
-    expect(name).toEqual("/public");
-    expect(iri).toEqual(expectedIri);
-    expect(unstable_fetchLitDatasetWithAcl).toHaveBeenCalled();
   });
 });
 

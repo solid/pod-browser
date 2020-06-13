@@ -6,6 +6,7 @@ import { CircularProgress, TableCell, TableRow } from "@material-ui/core";
 import Link from "next/link";
 import Details from "../details";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
+
 import {
   NormalizedResource,
   getIriPath,
@@ -21,8 +22,7 @@ export async function fetchResourceDetails(
   iri: string
 ): Promise<ResourceDetails> {
   const name = getIriPath(iri);
-  if (nonRdfIri) return { iri, name: nonRdfIri[1], type: nonRdfIri[1] };
-  const litDataset = await unstable_fetchLitDatasetWithAcl(iri);
+  const resource = await fetchResource(iri);
 
   return {
     ...resource,
