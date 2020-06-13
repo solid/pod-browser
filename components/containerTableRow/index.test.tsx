@@ -5,7 +5,6 @@ import { shallowToJson } from "enzyme-to-json";
 import { LitDataset, unstable_fetchLitDatasetWithAcl } from "lit-solid";
 import ContainerTableRow, {
   fetchContainerDetails,
-  getIriPath,
   handleTableRowClick,
   resourceLink,
 } from "./index";
@@ -68,33 +67,10 @@ describe("ContainerTableRow", () => {
   });
 });
 
-describe("fetchContainerDetails", () => {
-  test("it returns a normalized dataset", async () => {
-    (unstable_fetchLitDatasetWithAcl as jest.Mock).mockImplementationOnce(
-      async () => {
-        return Promise.resolve(createContainer());
-      }
-    );
-
-    const expectedIri = "https://user.dev.inrupt.net/public/";
-    const { name, iri } = await fetchContainerDetails(expectedIri);
-
-    expect(name).toEqual("/public");
-    expect(iri).toEqual(expectedIri);
-    expect(unstable_fetchLitDatasetWithAcl).toHaveBeenCalled();
-  });
-});
-
 describe("resourceLink", () => {
   test("it generates a resource link", () => {
     const link = resourceLink("https://example.com/example.ttl");
     expect(link).toEqual("/resource/https%3A%2F%2Fexample.com%2Fexample.ttl");
-  });
-});
-
-describe("getIriPath", () => {
-  test("it formats the iri for display", () => {
-    expect(getIriPath("https://example.com/example")).toEqual("/example");
   });
 });
 
@@ -123,6 +99,31 @@ describe("handleTableRowClick", () => {
 
     expect(setMenuOpen).toHaveBeenCalledWith(true);
     expect(setMenuContents).toHaveBeenCalled();
-    expect(setMenuContents.mock.calls[0][0]).toBeInstanceOf(Object);
+  });
+
+  test("it commits no operation when the click target is an anchor", async () => {
+    (unstable_fetchLitDatasetWithAcl as jest.Mock).mockImplementationOnce(
+      async () => {
+        return Promise.resolve(createContainer());
+      }
+    );
+
+    const setMenuOpen = jest.fn();
+    const setMenuContents = jest.fn();
+    const iri = "https://user.dev.inrupt.net/public/";
+    const handler = handleTableRowClick({
+      classes: {},
+      iri,
+      setMenuOpen,
+      setMenuContents,
+    });
+
+    const evnt = { target: document.createElement("a") } as Partial<
+      React.MouseEvent<HTMLInputElement>
+    >;
+    await handler(evnt);
+
+    expect(setMenuOpen).not.toHaveBeenCalled();
+    expect(setMenuContents).not.toHaveBeenCalled();
   });
 });

@@ -1,40 +1,32 @@
 import { ReactElement, useContext } from "react";
-/* eslint-disable camelcase */
-import { unstable_fetchLitDatasetWithAcl } from "lit-solid";
 import { makeStyles } from "@material-ui/core/styles";
 import { CircularProgress, TableCell, TableRow } from "@material-ui/core";
 import Link from "next/link";
-import ContainerDetails from "../containerDetails";
+import Details from "../details";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
+
 import {
-  normalizeDataset,
-  NormalizedDataset,
-} from "../../src/litDatasetHelpers";
+  NormalizedResource,
+  getIriPath,
+  fetchResource,
+} from "../../src/lit-solid-helpers";
 import styles from "./styles";
-import { parseUrl } from "../../src/stringHelpers";
 
 const useStyles = makeStyles(styles);
 
-interface ContainerDetails extends NormalizedDataset {
+interface ContainerDetails extends NormalizedResource {
   name: string | undefined;
-}
-
-export function getIriPath(iri: string): string | undefined {
-  const { pathname } = parseUrl(iri);
-  return pathname.replace(/\/?$/, "");
 }
 
 export async function fetchContainerDetails(
   iri: string
 ): Promise<ContainerDetails> {
-  const nonRdfIri = iri.match(/(ico|txt)$/);
   const name = getIriPath(iri);
-  if (nonRdfIri) return { iri, name: nonRdfIri[1], type: nonRdfIri[1] };
-  const litDataset = await unstable_fetchLitDatasetWithAcl(iri);
+  const resource = await fetchResource(iri);
 
   return {
+    ...resource,
     name,
-    ...normalizeDataset(litDataset, iri),
   };
 }
 
@@ -64,9 +56,9 @@ export function handleTableRowClick({
       </div>
     );
 
-    const { type, name } = await fetchContainerDetails(iri);
+    const { type, name, acl } = await fetchContainerDetails(iri);
 
-    setMenuContents(<ContainerDetails iri={iri} type={type} name={name} />);
+    setMenuContents(<Details iri={iri} type={type} name={name} acl={acl} />);
   };
 }
 

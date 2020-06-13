@@ -1,0 +1,158 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Details when given a container it renders a ContainerDetails component 1`] = `
+<ContainerDetails
+  acl={
+    Object {
+      "webId": Object {
+        "append": true,
+        "control": true,
+        "read": true,
+        "write": true,
+      },
+    }
+  }
+  classes={
+    Object {
+      "centeredSection": "makeStyles-centeredSection-1",
+      "detailText": "makeStyles-detailText-4",
+      "listItem": "makeStyles-listItem-3",
+      "raw": "makeStyles-raw-2",
+      "typeValue": "makeStyles-typeValue-5",
+    }
+  }
+  iri="iri"
+  name="container"
+  type="BasicContainer"
+/>
+`;
+
+exports[`Details when given a resource it renders a ResourceDetails component 1`] = `
+<ResourceDetails
+  acl={
+    Object {
+      "webId": Object {
+        "append": true,
+        "control": true,
+        "read": true,
+        "write": true,
+      },
+    }
+  }
+  classes={
+    Object {
+      "centeredSection": "makeStyles-centeredSection-1",
+      "detailText": "makeStyles-detailText-4",
+      "listItem": "makeStyles-listItem-3",
+      "raw": "makeStyles-raw-2",
+      "typeValue": "makeStyles-typeValue-5",
+    }
+  }
+  iri="iri"
+  name="container"
+  type="NotAContainer"
+/>
+`;
+
+exports[`getDetailsComponent when given a container it renders a ContainerDetails component 1`] = `
+<Fragment>
+  <section
+    className="makeStyles-centeredSection-1"
+  >
+    <WithStyles(ForwardRef(Typography))
+      title="iri"
+      variant="h3"
+    >
+      container
+    </WithStyles(ForwardRef(Typography))>
+  </section>
+  <section
+    className="makeStyles-centeredSection-1"
+  >
+    <WithStyles(ForwardRef(Typography))
+      variant="h5"
+    >
+      Details
+    </WithStyles(ForwardRef(Typography))>
+  </section>
+  <WithStyles(ForwardRef(Divider)) />
+  <section
+    className="makeStyles-centeredSection-1"
+  >
+    <WithStyles(ForwardRef(List))>
+      <WithStyles(ForwardRef(ListItem))
+        className="makeStyles-listItem-3"
+      >
+        <WithStyles(ForwardRef(Typography))
+          className="makeStyles-detailText-4"
+        >
+          Thing Type:
+        </WithStyles(ForwardRef(Typography))>
+        <WithStyles(ForwardRef(Typography))
+          className="makeStyles-typeValue-5 makeStyles-detailText-4"
+        >
+          Container
+        </WithStyles(ForwardRef(Typography))>
+      </WithStyles(ForwardRef(ListItem))>
+    </WithStyles(ForwardRef(List))>
+  </section>
+  <WithStyles(ForwardRef(ExpansionPanel))>
+    <WithStyles(ForwardRef(ExpansionPanelSummary))
+      aria-controls="panel1a-content"
+      expandIcon={<Memo(ExpandMoreIcon) />}
+      id="panel1a-header"
+    >
+      <WithStyles(ForwardRef(Typography))
+        variant="h5"
+      >
+        My Access
+      </WithStyles(ForwardRef(Typography))>
+    </WithStyles(ForwardRef(ExpansionPanelSummary))>
+    <WithStyles(ForwardRef(ExpansionPanelDetails))>
+      <WithStyles(ForwardRef(List))>
+        <WithStyles(ForwardRef(ListItem))
+          className="makeStyles-listItem-3"
+        >
+          <WithStyles(ForwardRef(Typography))
+            className="makeStyles-detailText-4"
+          >
+            My Access
+          </WithStyles(ForwardRef(Typography))>
+          <WithStyles(ForwardRef(Typography))
+            className="makeStyles-typeValue-5 makeStyles-detailText-4"
+          >
+            Full Control
+          </WithStyles(ForwardRef(Typography))>
+        </WithStyles(ForwardRef(ListItem))>
+      </WithStyles(ForwardRef(List))>
+    </WithStyles(ForwardRef(ExpansionPanelDetails))>
+  </WithStyles(ForwardRef(ExpansionPanel))>
+  <WithStyles(ForwardRef(ExpansionPanel))>
+    <WithStyles(ForwardRef(ExpansionPanelSummary))
+      aria-controls="panel1a-content"
+      expandIcon={<Memo(ExpandMoreIcon) />}
+      id="panel1a-header"
+    >
+      <WithStyles(ForwardRef(Typography))
+        variant="h5"
+      >
+        Sharing
+      </WithStyles(ForwardRef(Typography))>
+    </WithStyles(ForwardRef(ExpansionPanelSummary))>
+    <WithStyles(ForwardRef(ExpansionPanelDetails))>
+      <WithStyles(ForwardRef(Typography))
+        variant="h6"
+      >
+        People
+      </WithStyles(ForwardRef(Typography))>
+      <WithStyles(ForwardRef(List)) />
+    </WithStyles(ForwardRef(ExpansionPanelDetails))>
+  </WithStyles(ForwardRef(ExpansionPanel))>
+</Fragment>
+`;
+
+exports[`getDetailsComponent when given a resource it renders a ResourceDetails component 1`] = `
+<p>
+  Hello World
+</p>
+`;

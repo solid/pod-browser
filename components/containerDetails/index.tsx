@@ -1,28 +1,25 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, prettier/prettier */
 import { ReactElement } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import { Typography, List, ListItem, Divider } from "@material-ui/core";
-import styles from "./styles";
 
-const useStyles = makeStyles(styles);
-
-interface Props {
+export interface Props {
   iri: string;
-  name?: string | null;
-  type?: string | null;
+  name?: string;
+  type?: string;
+  classes: Record<string, unknown>;
 }
 
 export default function ContainerDetails({
   iri,
   name,
   type,
+  classes,
 }: Props): ReactElement {
-  const classes = useStyles();
-
   return (
     <>
       <section className={classes.centeredSection}>
-        <Typography variant="h3" title={iri}>{name}</Typography>
+        <Typography variant="h3" title={iri}>
+          {name}
+        </Typography>
       </section>
 
       <section className={classes.centeredSection}>

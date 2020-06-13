@@ -1,4 +1,6 @@
-const styles: Record<string, unknown> = {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+const styles: Record<string, any> = {
   centeredSection: {
     padding: "1rem",
   },
