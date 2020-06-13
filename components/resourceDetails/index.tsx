@@ -1,58 +1,76 @@
 /* eslint-disable camelcase */
 import { ReactElement, useContext } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import {
-  Typography,
-  List,
-  ListItem,
-  Divider,
-} from "@material-ui/core";
-import { unstable_AgentAccess } from "lit-solid";
+import { Typography, List, ListItem, Divider } from "@material-ui/core";
 import UserContext from "../../src/contexts/UserContext";
-import { normalizePermissions } from "../../src/lit-solid-helpers";
+import {
+  NormalizedPermission,
+  getUserPermissions,
+  getThirdPartyPermissions,
+} from "../../src/lit-solid-helpers";
 
-
-function getUserAccess(permissions, id: string) {
-  return permissions.find(({ webId }) => webId === id);
-}
-
-function getThirdPartyAccess(permissions, id: string) {
-  return permissions.filter(({ webId }) => webId !== id);
-}
-
-export function displayAccessItem({ webId, access }, classes) {
+export function displayPermission(
+  { webId, alias }: NormalizedPermission,
+  classes: Record<string, unknown>
+): ReactElement {
   return (
-    <ListItem className={classes.listItem}>
+    <ListItem key={webId} className={classes.listItem}>
       <Typography className={classes.detailText}>{webId}</Typography>
       <Typography className={`${classes.typeValue} ${classes.detailText}`}>
-        {access}
+        {alias}
       </Typography>
     </ListItem>
   );
 }
 
-function displayThirdPartyAccess(thirdPartyAccess, classes) {
-  return thirdPartyAccess.map((access) => displayAccessItem(access, classes));
+function displayThirdPartyPermissions(
+  thirdParterPermissions: NormalizedPermission[],
+  classes: Record<string, string>
+): ReactElement {
+  const items = thirdParterPermissions.map(
+    (permission): ReactElement => displayPermission(permission, classes)
+  );
+
+  if (items.length === 0) {
+    return (
+      <section className={classes.centeredSection}>
+        <Typography variant="h5">Sharing</Typography>
+        <List>
+          <ListItem className={classes.listItem}>
+            <Typography className={classes.detailText}>
+              No 3rd party access
+            </Typography>
+          </ListItem>
+        </List>
+      </section>
+    );
+  }
+
+  return (
+    <section className={classes.centeredSection}>
+      <Typography variant="h5">Sharing</Typography>
+      <List>{items}</List>
+    </section>
+  );
 }
 
 export interface Props {
   iri: string;
   name?: string;
-  acl?: unstable_AgentAccess;
+  permissions?: NormalizedPermission[];
   classes: Record<string, unknown>;
+  types?: string[];
 }
 
 export default function ResourceDetails({
   iri,
   name,
-  acl,
+  permissions,
   classes,
 }: Props): ReactElement {
   const { session } = useContext(UserContext);
   const { webId } = session;
-  const normalizedPerms = normalizePermissions(acl);
-  const personalAccess = getUserAccess(normalizedPerms, webId);
-  const thirdPartyAccess = getThirdPartyAccess(normalizedPerms, webId);
+  const userPermissions = getUserPermissions(permissions, webId);
+  const thirdParterPermissions = getThirdPartyPermissions(permissions, webId);
 
   return (
     <>
@@ -62,16 +80,32 @@ export default function ResourceDetails({
         </Typography>
       </section>
 
+      <section className={classes.centeredSection}>
+        <Typography variant="h5">Details</Typography>
+      </section>
+
       <Divider />
 
       <section className={classes.centeredSection}>
         <Typography variant="h5">My Access</Typography>
-        <List>{displayAccessItem(personalAccess, classes)}</List>
+        <List>{displayPermission(userPermissions, classes)}</List>
       </section>
 
+      {displayThirdPartyPermissions(thirdParterPermissions, classes)}
+
+      <Divider />
+
       <section className={classes.centeredSection}>
-        <Typography variant="h5">Sharing</Typography>
-        <List>{displayThirdPartyAccess(thirdPartyAccess, classes)}</List>
+        <List>
+          <ListItem className={classes.listItem}>
+            <Typography className={classes.detailText}>Thing Type:</Typography>
+            <Typography
+              className={`${classes.typeValue} ${classes.detailText}`}
+            >
+              Resource
+            </Typography>
+          </ListItem>
+        </List>
       </section>
     </>
   );

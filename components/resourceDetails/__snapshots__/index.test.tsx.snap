@@ -1,0 +1,191 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Container details renders container details 1`] = `
+<Fragment>
+  <section
+    className="centeredSection"
+  >
+    <WithStyles(ForwardRef(Typography))
+      title="iri"
+      variant="h3"
+    >
+      Container Name
+    </WithStyles(ForwardRef(Typography))>
+  </section>
+  <section
+    className="centeredSection"
+  >
+    <WithStyles(ForwardRef(Typography))
+      variant="h5"
+    >
+      Details
+    </WithStyles(ForwardRef(Typography))>
+  </section>
+  <WithStyles(ForwardRef(Divider)) />
+  <section
+    className="centeredSection"
+  >
+    <WithStyles(ForwardRef(Typography))
+      variant="h5"
+    >
+      My Access
+    </WithStyles(ForwardRef(Typography))>
+    <WithStyles(ForwardRef(List))>
+      <WithStyles(ForwardRef(ListItem))
+        className="listItem"
+        key="owner"
+      >
+        <WithStyles(ForwardRef(Typography))
+          className="detailText"
+        >
+          owner
+        </WithStyles(ForwardRef(Typography))>
+        <WithStyles(ForwardRef(Typography))
+          className="typeValue detailText"
+        >
+          Full Control
+        </WithStyles(ForwardRef(Typography))>
+      </WithStyles(ForwardRef(ListItem))>
+    </WithStyles(ForwardRef(List))>
+  </section>
+  <section
+    className="centeredSection"
+  >
+    <WithStyles(ForwardRef(Typography))
+      variant="h5"
+    >
+      Sharing
+    </WithStyles(ForwardRef(Typography))>
+    <WithStyles(ForwardRef(List))>
+      <WithStyles(ForwardRef(ListItem))
+        className="listItem"
+        key="collaborator"
+      >
+        <WithStyles(ForwardRef(Typography))
+          className="detailText"
+        >
+          collaborator
+        </WithStyles(ForwardRef(Typography))>
+        <WithStyles(ForwardRef(Typography))
+          className="typeValue detailText"
+        >
+          Can View
+        </WithStyles(ForwardRef(Typography))>
+      </WithStyles(ForwardRef(ListItem))>
+    </WithStyles(ForwardRef(List))>
+  </section>
+  <WithStyles(ForwardRef(Divider)) />
+  <section
+    className="centeredSection"
+  >
+    <WithStyles(ForwardRef(List))>
+      <WithStyles(ForwardRef(ListItem))
+        className="listItem"
+      >
+        <WithStyles(ForwardRef(Typography))
+          className="detailText"
+        >
+          Thing Type:
+        </WithStyles(ForwardRef(Typography))>
+        <WithStyles(ForwardRef(Typography))
+          className="typeValue detailText"
+        >
+          Resource
+        </WithStyles(ForwardRef(Typography))>
+      </WithStyles(ForwardRef(ListItem))>
+    </WithStyles(ForwardRef(List))>
+  </section>
+</Fragment>
+`;
+
+exports[`Container details renders no 3rd party access message 1`] = `
+<Fragment>
+  <section
+    className="centeredSection"
+  >
+    <WithStyles(ForwardRef(Typography))
+      title="iri"
+      variant="h3"
+    >
+      Container Name
+    </WithStyles(ForwardRef(Typography))>
+  </section>
+  <section
+    className="centeredSection"
+  >
+    <WithStyles(ForwardRef(Typography))
+      variant="h5"
+    >
+      Details
+    </WithStyles(ForwardRef(Typography))>
+  </section>
+  <WithStyles(ForwardRef(Divider)) />
+  <section
+    className="centeredSection"
+  >
+    <WithStyles(ForwardRef(Typography))
+      variant="h5"
+    >
+      My Access
+    </WithStyles(ForwardRef(Typography))>
+    <WithStyles(ForwardRef(List))>
+      <WithStyles(ForwardRef(ListItem))
+        className="listItem"
+        key="owner"
+      >
+        <WithStyles(ForwardRef(Typography))
+          className="detailText"
+        >
+          owner
+        </WithStyles(ForwardRef(Typography))>
+        <WithStyles(ForwardRef(Typography))
+          className="typeValue detailText"
+        >
+          Full Control
+        </WithStyles(ForwardRef(Typography))>
+      </WithStyles(ForwardRef(ListItem))>
+    </WithStyles(ForwardRef(List))>
+  </section>
+  <section
+    className="centeredSection"
+  >
+    <WithStyles(ForwardRef(Typography))
+      variant="h5"
+    >
+      Sharing
+    </WithStyles(ForwardRef(Typography))>
+    <WithStyles(ForwardRef(List))>
+      <WithStyles(ForwardRef(ListItem))
+        className="listItem"
+      >
+        <WithStyles(ForwardRef(Typography))
+          className="detailText"
+        >
+          No 3rd party access
+        </WithStyles(ForwardRef(Typography))>
+      </WithStyles(ForwardRef(ListItem))>
+    </WithStyles(ForwardRef(List))>
+  </section>
+  <WithStyles(ForwardRef(Divider)) />
+  <section
+    className="centeredSection"
+  >
+    <WithStyles(ForwardRef(List))>
+      <WithStyles(ForwardRef(ListItem))
+        className="listItem"
+      >
+        <WithStyles(ForwardRef(Typography))
+          className="detailText"
+        >
+          Thing Type:
+        </WithStyles(ForwardRef(Typography))>
+        <WithStyles(ForwardRef(Typography))
+          className="typeValue detailText"
+        >
+          Resource
+        </WithStyles(ForwardRef(Typography))>
+      </WithStyles(ForwardRef(ListItem))>
+    </WithStyles(ForwardRef(List))>
+  </section>
+</Fragment>
+`;

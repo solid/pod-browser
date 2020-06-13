@@ -11,7 +11,12 @@ describe("Container details", () => {
     }));
 
     const tree = shallow(
-      <ContainerDetails name="Container Name" type="Container" iri="iri" />
+      <ContainerDetails
+        name="Container Name"
+        types={["Container"]}
+        iri="iri"
+        classes={{}}
+      />
     );
     expect(shallowToJson(tree)).toMatchSnapshot();
   });

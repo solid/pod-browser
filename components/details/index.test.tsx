@@ -1,7 +1,7 @@
 import * as ReactFns from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
-import Details, { getDetailsComponent, ResourceProps } from "./index";
+import Details from "./index";
 
 jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
   session: { webId: "webId" },
@@ -11,7 +11,7 @@ describe("Details", () => {
   describe("when given a container", () => {
     test("it renders a ContainerDetails component", () => {
       const name = "container";
-      const type = "BasicContainer";
+      const types = ["BasicContainer"];
       const iri = "iri";
       const acl = {
         webId: {
@@ -23,7 +23,7 @@ describe("Details", () => {
       };
 
       const tree = shallow(
-        <Details name={name} type={type} iri={iri} acl={acl} />
+        <Details name={name} types={types} iri={iri} acl={acl} />
       );
 
       expect(shallowToJson(tree)).toMatchSnapshot();
@@ -33,7 +33,7 @@ describe("Details", () => {
   describe("when given a resource", () => {
     test("it renders a ResourceDetails component", () => {
       const name = "container";
-      const type = "NotAContainer";
+      const types = ["NotAContainer"];
       const iri = "iri";
       const acl = {
         webId: {
@@ -45,56 +45,30 @@ describe("Details", () => {
       };
 
       const tree = shallow(
-        <Details name={name} type={type} iri={iri} acl={acl} />
+        <Details name={name} types={types} iri={iri} acl={acl} />
       );
 
       expect(shallowToJson(tree)).toMatchSnapshot();
     });
   });
-});
 
-describe("getDetailsComponent", () => {
-  describe("when given a container", () => {
-    test("it renders a ContainerDetails component", () => {
-      const props: ResourceProps = {
-        name: "container",
-        type: "Container",
-        iri: "iri",
-        acl: {
-          webId: {
-            read: true,
-            write: true,
-            append: true,
-            control: true,
-          },
+  describe("when given an unknown resource", () => {
+    test("it renders an Unknown resource message", () => {
+      const name = "container";
+      const types = ["Unknown"];
+      const iri = "iri";
+      const acl = {
+        webId: {
+          read: true,
+          write: true,
+          append: true,
+          control: true,
         },
       };
 
-      const component = getDetailsComponent(props);
-      const tree = shallow(component);
-
-      expect(shallowToJson(tree)).toMatchSnapshot();
-    });
-  });
-
-  describe("when given a resource", () => {
-    test("it renders a ResourceDetails component", () => {
-      const props: ResourceProps = {
-        name: "container",
-        type: "NotAContainer",
-        iri: "iri",
-        acl: {
-          webId: {
-            read: true,
-            write: true,
-            append: true,
-            control: true,
-          },
-        },
-      };
-
-      const component = getDetailsComponent(props);
-      const tree = shallow(component);
+      const tree = shallow(
+        <Details name={name} types={types} iri={iri} acl={acl} />
+      );
 
       expect(shallowToJson(tree)).toMatchSnapshot();
     });

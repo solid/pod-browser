@@ -7,7 +7,7 @@ import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 import {
   NormalizedResource,
   getIriPath,
-  fetchResource,
+  fetchResourceWithAcl,
 } from "../../src/lit-solid-helpers";
 import styles from "./styles";
 
@@ -19,7 +19,7 @@ export async function fetchResourceDetails(
   iri: string
 ): Promise<ResourceDetails> {
   const name = getIriPath(iri);
-  const resource = await fetchResource(iri);
+  const resource = await fetchResourceWithAcl(iri);
 
   return {
     ...resource,

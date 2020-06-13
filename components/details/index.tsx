@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
 import { ReactElement } from "react";
-import { unstable_AgentAccess } from "lit-solid";
 import { makeStyles } from "@material-ui/core/styles";
 import ContainerDetails from "../containerDetails";
 import ResourceDetails from "../resourceDetails";
 import styles from "./styles";
+import { NormalizedPermission } from "../../src/lit-solid-helpers";
 
 const CONTAINER_TYPES: string[] = ["BasicContainer", "Container"];
 const useStyles = makeStyles(styles);
@@ -25,27 +25,27 @@ export interface ResourceProps {
   iri: string;
   name?: string;
   types?: string[];
-  acl?: unstable_AgentAccess;
+  permissions?: NormalizedPermission[];
 }
 
-export function getDetailsComponent(
-  { iri, types, name, acl }: ResourceProps,
-  classes: Record<string, unknown>
-): ReactElement {
-  if (isUnkownType(types)) {
-    return <p>Not a resource</p>;
-  }
-
-  if (isContainerType(types)) {
-    return (
-      <ContainerDetails iri={iri} name={name} acl={acl} classes={classes} />
-    );
-  }
-
-  return <ResourceDetails iri={iri} name={name} acl={acl} classes={classes} />;
-}
-
-export default function Details(props: ResourceProps): ReactElement {
+export default function Details({
+  iri,
+  types,
+  name,
+  permissions,
+}: ResourceProps): ReactElement {
   const classes = useStyles();
-  return getDetailsComponent(props, classes);
+  if (isUnkownType(types)) return <p>Unknown resource</p>;
+  const DetailsComponent = isContainerType(types)
+    ? ContainerDetails
+    : ResourceDetails;
+
+  return (
+    <DetailsComponent
+      iri={iri}
+      name={name}
+      permissions={permissions}
+      classes={classes}
+    />
+  );
 }
