@@ -2,7 +2,11 @@
 import React from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
-import { LitDataset, unstable_fetchLitDatasetWithAcl } from "lit-solid";
+import {
+  LitDataset,
+  unstable_fetchLitDatasetWithAcl,
+  unstable_getAgentAccessModesAll,
+} from "lit-solid";
 import ContainerTableRow, { handleTableRowClick, resourceHref } from "./index";
 
 jest.mock("lit-solid");
@@ -75,6 +79,20 @@ describe("handleTableRowClick", () => {
     (unstable_fetchLitDatasetWithAcl as jest.Mock).mockImplementationOnce(
       async () => {
         return Promise.resolve(createContainer());
+      }
+    );
+
+    (unstable_getAgentAccessModesAll as jest.Mock).mockImplementationOnce(
+      async () => {
+        return Promise.resolve({
+          owner: { read: true, write: true, append: true, control: true },
+          collaborator: {
+            read: true,
+            write: false,
+            append: true,
+            control: false,
+          },
+        });
       }
     );
 
