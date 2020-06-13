@@ -4,7 +4,6 @@ import { CircularProgress, TableCell, TableRow } from "@material-ui/core";
 import Link from "next/link";
 import Details from "../details";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
-
 import {
   NormalizedResource,
   getIriPath,
@@ -12,15 +11,13 @@ import {
 } from "../../src/lit-solid-helpers";
 import styles from "./styles";
 
-const useStyles = makeStyles(styles);
-
-interface ContainerDetails extends NormalizedResource {
+interface ResourceDetails extends NormalizedResource {
   name: string | undefined;
 }
 
-export async function fetchContainerDetails(
+export async function fetchResourceDetails(
   iri: string
-): Promise<ContainerDetails> {
+): Promise<ResourceDetails> {
   const name = getIriPath(iri);
   const resource = await fetchResource(iri);
 
@@ -30,8 +27,15 @@ export async function fetchContainerDetails(
   };
 }
 
-export function resourceLink(iri: string): string {
+export function resourceHref(iri: string): string {
   return `/resource/${encodeURIComponent(iri)}`;
+}
+
+interface TableRowClickHandlerParams {
+  classes: Record<string, string>;
+  iri: string;
+  setMenuOpen: (open: boolean) => void;
+  setMenuContents: (contents: ReactElement) => void;
 }
 
 export function handleTableRowClick({
@@ -39,12 +43,7 @@ export function handleTableRowClick({
   iri,
   setMenuOpen,
   setMenuContents,
-}: {
-  classes: Record<string, string>;
-  iri: string;
-  setMenuOpen: (open: boolean) => void;
-  setMenuContents: (contents: ReactElement) => void;
-}) {
+}: TableRowClickHandlerParams) {
   return async (evnt: Partial<React.MouseEvent>): Promise<void> => {
     const element = evnt.target as HTMLElement;
     if (element && element.tagName === "A") return;
@@ -56,11 +55,13 @@ export function handleTableRowClick({
       </div>
     );
 
-    const { type, name, acl } = await fetchContainerDetails(iri);
+    const { types, name, acl } = await fetchResourceDetails(iri);
 
-    setMenuContents(<Details iri={iri} type={type} name={name} acl={acl} />);
+    setMenuContents(<Details iri={iri} types={types} name={name} acl={acl} />);
   };
 }
+
+const useStyles = makeStyles(styles);
 
 interface Props {
   iri: string;
@@ -79,7 +80,7 @@ export default function ContainerTableRow({ iri }: Props): ReactElement {
   return (
     <TableRow className={classes.tableRow} onClick={onClick}>
       <TableCell>
-        <Link href={resourceLink(iri)}>
+        <Link href={resourceHref(iri)}>
           <a>{getIriPath(iri)}</a>
         </Link>
       </TableCell>

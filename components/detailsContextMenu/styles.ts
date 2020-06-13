@@ -14,7 +14,7 @@ const styles: Record<string, any> = {
     overflowY: "visible",
   },
   drawerContent: {
-    width: 320,
+    width: 520,
   },
 };
 

@@ -3,7 +3,7 @@ import { ldp } from "rdf-namespaces";
 import * as litSolidFns from "lit-solid";
 import {
   displayPermissions,
-  displayType,
+  displayTypes,
   getIriPath,
   getTypeName,
   normalizeDataset,
@@ -45,7 +45,7 @@ function createResource(
   publicContainer = setDatetime(
     publicContainer,
     "http://purl.org/dc/terms/modified",
-    timestamp,
+    timestamp
   );
 
   publicContainer = addIri(

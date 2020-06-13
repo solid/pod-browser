@@ -2,7 +2,6 @@
 import {
   LitDataset,
   getIntegerOne,
-  getThingOne,
   getIriAll,
   IriString,
   getDecimalOne,
@@ -38,13 +37,8 @@ export function getTypeName(rawType: string): string {
   return typeNameMap[rawType] || rawType;
 }
 
-export function displayType(type: string | string[]): string | string[] {
-  if (Array.isArray(type)) {
-    if (!type.length) return "";
-    return type.map((t: string): string => getTypeName(t));
-  }
-
-  return getTypeName(type);
+export function displayTypes(types: string[]): string[] {
+  return types.length ? types.map((t: string): string => getTypeName(t)) : [];
 }
 
 export function displayPermissions(permissions: unstable_AccessModes): string {
@@ -66,7 +60,7 @@ export function normalizePermissions(permissions: unstable_AgentAccess) {
 
 export interface NormalizedResource {
   iri: string;
-  type?: string | string[] | null;
+  types?: string[] | null;
   mtime?: number | null;
   modified?: Date | null;
   size?: number | null;
@@ -88,7 +82,7 @@ export function normalizeDataset(
   const modified = getDatetimeOne(dataset, "http://purl.org/dc/terms/modified");
   const size = getIntegerOne(dataset, "http://www.w3.org/ns/posix/stat#size");
   const contains = getIriAll(dataset, ldp.contains);
-  const type = displayType(rawType);
+  const types = displayTypes(rawType);
 
   return {
     contains,
@@ -96,14 +90,14 @@ export function normalizeDataset(
     modified,
     mtime,
     size,
-    type,
+    types,
   };
 }
 
 export async function fetchResource(iri: string): Promise<NormalizedResource> {
   const nonRdfIri = iri.match(/(ico|txt)$/);
   if (nonRdfIri) {
-    return Promise.resolve({ iri, name: nonRdfIri[1], type: nonRdfIri[1] });
+    return Promise.resolve({ iri, name: nonRdfIri[1], types: ["Unknown"] });
   }
 
   const resource = await unstable_fetchLitDatasetWithAcl(iri);

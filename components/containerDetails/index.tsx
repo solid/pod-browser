@@ -4,14 +4,13 @@ import { Typography, List, ListItem, Divider } from "@material-ui/core";
 export interface Props {
   iri: string;
   name?: string;
-  type?: string;
+  types?: string[];
   classes: Record<string, unknown>;
 }
 
 export default function ContainerDetails({
   iri,
   name,
-  type,
   classes,
 }: Props): ReactElement {
   return (
@@ -35,7 +34,7 @@ export default function ContainerDetails({
             <Typography
               className={`${classes.typeValue} ${classes.detailText}`}
             >
-              {type}
+              Container
             </Typography>
           </ListItem>
         </List>

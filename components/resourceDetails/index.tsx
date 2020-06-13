@@ -1,18 +1,16 @@
 /* eslint-disable camelcase */
 import { ReactElement, useContext } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   Typography,
   List,
   ListItem,
   Divider,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
 } from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { unstable_AgentAccess } from "lit-solid";
 import UserContext from "../../src/contexts/UserContext";
 import { normalizePermissions } from "../../src/lit-solid-helpers";
+
 
 function getUserAccess(permissions, id: string) {
   return permissions.find(({ webId }) => webId === id);
@@ -22,17 +20,19 @@ function getThirdPartyAccess(permissions, id: string) {
   return permissions.filter(({ webId }) => webId !== id);
 }
 
+export function displayAccessItem({ webId, access }, classes) {
+  return (
+    <ListItem className={classes.listItem}>
+      <Typography className={classes.detailText}>{webId}</Typography>
+      <Typography className={`${classes.typeValue} ${classes.detailText}`}>
+        {access}
+      </Typography>
+    </ListItem>
+  );
+}
+
 function displayThirdPartyAccess(thirdPartyAccess, classes) {
-  return thirdPartyAccess.map(({ webId, access }) => {
-    return (
-      <ListItem className={classes.listItem}>
-        <Typography className={classes.detailText}>{webId}</Typography>
-        <Typography className={`${classes.typeValue} ${classes.detailText}`}>
-          {access}
-        </Typography>
-      </ListItem>
-    );
-  });
+  return thirdPartyAccess.map((access) => displayAccessItem(access, classes));
 }
 
 export interface Props {
@@ -64,41 +64,15 @@ export default function ResourceDetails({
 
       <Divider />
 
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography variant="h5">My Access</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <List>
-            <ListItem className={classes.listItem}>
-              <Typography className={classes.detailText}>My Access</Typography>
-              <Typography
-                className={`${classes.typeValue} ${classes.detailText}`}
-              >
-                {personalAccess.access}
-              </Typography>
-            </ListItem>
-          </List>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+      <section className={classes.centeredSection}>
+        <Typography variant="h5">My Access</Typography>
+        <List>{displayAccessItem(personalAccess, classes)}</List>
+      </section>
 
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography variant="h5">Sharing</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Typography variant="h6">People</Typography>
-          <List>{displayThirdPartyAccess(thirdPartyAccess, classes)}</List>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+      <section className={classes.centeredSection}>
+        <Typography variant="h5">Sharing</Typography>
+        <List>{displayThirdPartyAccess(thirdPartyAccess, classes)}</List>
+      </section>
     </>
   );
 }

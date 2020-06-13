@@ -6,41 +6,43 @@ import ContainerDetails from "../containerDetails";
 import ResourceDetails from "../resourceDetails";
 import styles from "./styles";
 
-const CONTAINER_TYPES = ["BasicContainer", "Container"];
+const CONTAINER_TYPES: string[] = ["BasicContainer", "Container"];
 const useStyles = makeStyles(styles);
+
+export function isContainerType(types: string[]): boolean {
+  return types.reduce((acc: boolean, type: string): boolean => {
+    return (
+      acc || CONTAINER_TYPES.some((containerType) => containerType === type)
+    );
+  }, false);
+}
+
+export function isUnkownType(types: string[]): boolean {
+  return types.includes("Unknown");
+}
 
 export interface ResourceProps {
   iri: string;
   name?: string;
-  type?: string;
+  types?: string[];
   acl?: unstable_AgentAccess;
 }
 
 export function getDetailsComponent(
-  { iri, type, name, acl }: ResourceProps,
+  { iri, types, name, acl }: ResourceProps,
   classes: Record<string, unknown>
 ): ReactElement {
-  if (CONTAINER_TYPES.includes(type as string)) {
+  if (isUnkownType(types)) {
+    return <p>Not a resource</p>;
+  }
+
+  if (isContainerType(types)) {
     return (
-      <ContainerDetails
-        iri={iri}
-        name={name}
-        type={type}
-        acl={acl}
-        classes={classes}
-      />
+      <ContainerDetails iri={iri} name={name} acl={acl} classes={classes} />
     );
   }
 
-  return (
-    <ResourceDetails
-      iri={iri}
-      name={name}
-      type={type}
-      acl={acl}
-      classes={classes}
-    />
-  );
+  return <ResourceDetails iri={iri} name={name} acl={acl} classes={classes} />;
 }
 
 export default function Details(props: ResourceProps): ReactElement {
