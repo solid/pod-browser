@@ -6,7 +6,6 @@ import { CircularProgress, TableCell, TableRow } from "@material-ui/core";
 import Link from "next/link";
 import Details from "../details";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
-
 import {
   NormalizedResource,
   getIriPath,

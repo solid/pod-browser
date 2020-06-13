@@ -3,11 +3,7 @@ import React from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import { LitDataset, unstable_fetchLitDatasetWithAcl } from "lit-solid";
-import ContainerTableRow, {
-  fetchContainerDetails,
-  handleTableRowClick,
-  resourceLink,
-} from "./index";
+import ContainerTableRow, { handleTableRowClick, resourceHref } from "./index";
 
 jest.mock("lit-solid");
 
@@ -67,7 +63,7 @@ describe("ContainerTableRow", () => {
   });
 });
 
-describe("resourceLink", () => {
+describe("resourceHref", () => {
   test("it generates a resource link", () => {
     const link = resourceHref("https://example.com/example.ttl");
     expect(link).toEqual("/resource/https%3A%2F%2Fexample.com%2Fexample.ttl");
