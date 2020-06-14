@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { ReactElement, useContext } from "react";
 import { Typography, List, ListItem, Divider } from "@material-ui/core";
+import { ILoggedInSolidSession } from "@inrupt/solid-auth-fetcher/dist/solidSession/ISolidSession";
 import UserContext from "../../src/contexts/UserContext";
 import {
   NormalizedPermission,
@@ -8,26 +9,61 @@ import {
   getThirdPartyPermissions,
 } from "../../src/lit-solid-helpers";
 
+function displayBoolean(bool: boolean): string {
+  return bool ? "true" : "false";
+}
+
 export function displayPermission(
-  { webId, alias }: NormalizedPermission,
-  classes: Record<string, unknown>
-): ReactElement {
+  permission: NormalizedPermission | null,
+  classes: Record<string, string>
+): ReactElement | null {
+  if (!permission) return null;
+  const { webId, alias, acl } = permission;
+
   return (
-    <ListItem key={webId} className={classes.listItem}>
-      <Typography className={classes.detailText}>{webId}</Typography>
-      <Typography className={`${classes.typeValue} ${classes.detailText}`}>
-        {alias}
-      </Typography>
-    </ListItem>
+    <>
+      <ListItem key={webId} className={classes.listItem}>
+        <Typography className={classes.detailText}>{webId}</Typography>
+        <Typography className={`${classes.typeValue} ${classes.detailText}`}>
+          {alias}
+        </Typography>
+      </ListItem>
+      <ListItem key={`${webId}-read`} className={classes.listItem}>
+        <Typography className={classes.detailText}>read</Typography>
+        <Typography className={`${classes.typeValue} ${classes.detailText}`}>
+          {displayBoolean(acl.read)}
+        </Typography>
+      </ListItem>
+      <ListItem key={`${webId}-write`} className={classes.listItem}>
+        <Typography className={classes.detailText}>write</Typography>
+        <Typography className={`${classes.typeValue} ${classes.detailText}`}>
+          {displayBoolean(acl.write)}
+        </Typography>
+      </ListItem>
+      <ListItem key={`${webId}-append`} className={classes.listItem}>
+        <Typography className={classes.detailText}>append</Typography>
+        <Typography className={`${classes.typeValue} ${classes.detailText}`}>
+          {displayBoolean(acl.append)}
+        </Typography>
+      </ListItem>
+      <ListItem key={`${webId}-details`} className={classes.listItem}>
+        <Typography className={classes.detailText}>control</Typography>
+        <Typography className={`${classes.typeValue} ${classes.detailText}`}>
+          {displayBoolean(acl.control)}
+        </Typography>
+      </ListItem>
+    </>
   );
 }
 
 function displayThirdPartyPermissions(
-  thirdParterPermissions: NormalizedPermission[],
+  thirdPartyPermissions: NormalizedPermission[] | null,
   classes: Record<string, string>
-): ReactElement {
-  const items = thirdParterPermissions.map(
-    (permission): ReactElement => displayPermission(permission, classes)
+): ReactElement | null {
+  if (!thirdPartyPermissions) return null;
+
+  const items = thirdPartyPermissions.map((permission): ReactElement | null =>
+    displayPermission(permission, classes)
   );
 
   if (items.length === 0) {
@@ -57,7 +93,7 @@ export interface Props {
   iri: string;
   name?: string;
   permissions?: NormalizedPermission[];
-  classes: Record<string, unknown>;
+  classes: Record<string, string>;
   types?: string[];
 }
 
@@ -68,9 +104,9 @@ export default function ResourceDetails({
   classes,
 }: Props): ReactElement {
   const { session } = useContext(UserContext);
-  const { webId } = session;
-  const userPermissions = getUserPermissions(permissions, webId);
-  const thirdParterPermissions = getThirdPartyPermissions(permissions, webId);
+  const { webId } = session as ILoggedInSolidSession;
+  const userPermissions = getUserPermissions(webId, permissions);
+  const thirdPartyPermissions = getThirdPartyPermissions(webId, permissions);
 
   return (
     <>
@@ -91,7 +127,7 @@ export default function ResourceDetails({
         <List>{displayPermission(userPermissions, classes)}</List>
       </section>
 
-      {displayThirdPartyPermissions(thirdParterPermissions, classes)}
+      {displayThirdPartyPermissions(thirdPartyPermissions, classes)}
 
       <Divider />
 

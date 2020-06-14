@@ -55,9 +55,11 @@ export function handleTableRowClick({
       </div>
     );
 
-    const { types, name, acl } = await fetchResourceDetails(iri);
+    const { types, name, permissions } = await fetchResourceDetails(iri);
 
-    setMenuContents(<Details iri={iri} types={types} name={name} acl={acl} />);
+    setMenuContents(
+      <Details iri={iri} types={types} name={name} permissions={permissions} />
+    );
   };
 }
 

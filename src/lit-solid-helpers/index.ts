@@ -1,11 +1,14 @@
 /* eslint-disable camelcase */
 import {
-  LitDataset,
+  getDatetimeOne,
+  getDecimalOne,
   getIntegerOne,
   getIriAll,
   IriString,
-  getDecimalOne,
-  getDatetimeOne,
+  DatasetInfo,
+  LitDataset,
+  Thing,
+  unstable_Acl,
   unstable_AccessModes,
   unstable_AgentAccess,
   unstable_fetchLitDatasetWithAcl,
@@ -71,30 +74,32 @@ export interface NormalizedPermission {
 
 export function normalizePermissions(
   permissions: unstable_AgentAccess
-): NormalizedPermission {
-  return Object.keys(permissions).map((webId) => {
-    const acl = permissions[webId];
-    return {
-      acl,
-      alias: displayPermissions(acl),
-      webId,
-    };
-  });
+): NormalizedPermission[] {
+  return Object.keys(permissions).map(
+    (webId: string): NormalizedPermission => {
+      const acl = permissions[webId];
+      return {
+        acl,
+        alias: displayPermissions(acl),
+        webId,
+      };
+    }
+  );
 }
 
 export interface NormalizedResource {
   iri: string;
-  types?: string[] | null;
+  types: string[];
   mtime?: number | null;
   modified?: Date | null;
   size?: number | null;
   contains?: string[];
   acl?: unstable_AgentAccess | null;
-  permissions?: NormalizedPermission;
+  permissions?: NormalizedPermission[];
 }
 
 export function normalizeDataset(
-  dataset: LitDataset,
+  dataset: Thing,
   iri: IriString
 ): NormalizedResource {
   const rawType = getIriAll(
@@ -133,26 +138,35 @@ export async function fetchResourceWithAcl(
   }
 
   const resource = await unstable_fetchLitDatasetWithAcl(iri);
-  const acl = await unstable_getAgentAccessModesAll(resource);
+  const acl = await unstable_getAgentAccessModesAll(
+    resource as LitDataset & DatasetInfo & unstable_Acl
+  );
   const permissions = acl ? normalizePermissions(acl) : undefined;
+  const dataset = resource as LitDataset;
+  const thing = dataset as Thing;
 
   return {
     acl,
     permissions,
-    ...normalizeDataset(resource, iri),
+    ...normalizeDataset(thing, iri),
   };
 }
 
 export function getUserPermissions(
-  permissions: NormalizedPermission[],
-  id: string
-): NormalizedPermission {
-  return permissions.find(({ webId }) => webId === id);
+  id: string,
+  permissions?: NormalizedPermission[]
+): NormalizedPermission | null {
+  if (!permissions) return null;
+
+  const permission = permissions.find(({ webId }) => webId === id);
+
+  return permission || null;
 }
 
 export function getThirdPartyPermissions(
-  permissions: NormalizedPermission[],
-  id: string
+  id: string,
+  permissions?: NormalizedPermission[]
 ): NormalizedPermission[] {
+  if (!permissions) return [];
   return permissions.filter(({ webId }) => webId !== id);
 }

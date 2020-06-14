@@ -5,7 +5,7 @@ export interface Props {
   iri: string;
   name?: string;
   types?: string[];
-  classes: Record<string, unknown>;
+  classes: Record<string, string>;
 }
 
 export default function ContainerDetails({

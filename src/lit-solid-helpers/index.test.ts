@@ -357,7 +357,7 @@ describe("getUserPermissions", () => {
     };
 
     const normalizedPermissions = normalizePermissions(acl);
-    const permissions = getUserPermissions(normalizedPermissions, "acl1");
+    const permissions = getUserPermissions("acl1", normalizedPermissions);
 
     expect(permissions.webId).toEqual("acl1");
     expect(permissions.alias).toEqual("Can View");
@@ -376,8 +376,8 @@ describe("getThirdPartyPermissions", () => {
 
     const normalizedPermissions = normalizePermissions(acl);
     const thirdPartyPermissions = getThirdPartyPermissions(
-      normalizedPermissions,
-      "acl1"
+      "acl1",
+      normalizedPermissions
     );
     const [perms2, perms3, perms4] = thirdPartyPermissions;
 

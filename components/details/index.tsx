@@ -17,14 +17,14 @@ export function isContainerType(types: string[]): boolean {
   }, false);
 }
 
-export function isUnkownType(types: string[]): boolean {
+export function isUnknownType(types: string[]): boolean {
   return types.includes("Unknown");
 }
 
 export interface ResourceProps {
   iri: string;
   name?: string;
-  types?: string[];
+  types: string[];
   permissions?: NormalizedPermission[];
 }
 
@@ -35,7 +35,7 @@ export default function Details({
   permissions,
 }: ResourceProps): ReactElement {
   const classes = useStyles();
-  if (isUnkownType(types)) return <p>Unknown resource</p>;
+  if (isUnknownType(types)) return <p>Unknown resource</p>;
   const DetailsComponent = isContainerType(types)
     ? ContainerDetails
     : ResourceDetails;
