@@ -205,7 +205,7 @@ describe("displayPermissions", () => {
 });
 
 describe("normalizePermissions", () => {
-  test("it returns the webId and the human-friendly permission name", () => {
+  test("it returns the webId and the human-friendly permission name", async () => {
     const acl = {
       acl1: { read: true, write: false, control: false, append: false },
       acl2: { read: true, write: true, control: true, append: true },
@@ -213,23 +213,44 @@ describe("normalizePermissions", () => {
       acl4: { read: false, write: false, control: false, append: false },
     };
 
-    const [perms1, perms2, perms3, perms4] = normalizePermissions(acl);
+    const expectedProfile = {
+      avatar: "http://example.com/avatar.png",
+      name: "string",
+      nickname: "string",
+    };
+
+    jest
+      .spyOn(litSolidFns, "fetchLitDataset")
+      .mockImplementation(async () => Promise.resolve());
+    jest.spyOn(litSolidFns, "getThingOne").mockImplementation(() => {});
+    jest
+      .spyOn(litSolidFns, "getStringUnlocalizedOne")
+      .mockImplementation(() => expectedProfile.name);
+    jest
+      .spyOn(litSolidFns, "getIriOne")
+      .mockImplementation(() => expectedProfile.avatar);
+
+    const [perms1, perms2, perms3, perms4] = await normalizePermissions(acl);
 
     expect(perms1.webId).toEqual("acl1");
     expect(perms1.alias).toEqual("Can View");
     expect(perms1.acl).toMatchObject(acl.acl1);
+    expect(perms1.profile).toMatchObject(expectedProfile);
 
     expect(perms2.webId).toEqual("acl2");
     expect(perms2.alias).toEqual("Full Control");
     expect(perms2.acl).toMatchObject(acl.acl2);
+    expect(perms2.profile).toMatchObject(expectedProfile);
 
     expect(perms3.webId).toEqual("acl3");
     expect(perms3.alias).toEqual("Can Edit");
     expect(perms3.acl).toMatchObject(acl.acl3);
+    expect(perms3.profile).toMatchObject(expectedProfile);
 
     expect(perms4.webId).toEqual("acl4");
     expect(perms4.alias).toEqual("No Access");
     expect(perms4.acl).toMatchObject(acl.acl4);
+    expect(perms4.profile).toMatchObject(expectedProfile);
   });
 });
 
@@ -348,7 +369,7 @@ describe("fetchResourceWithAcl", () => {
 });
 
 describe("getUserPermissions", () => {
-  test("it returns the permissions for the given webId", () => {
+  test("it returns the permissions for the given webId", async () => {
     const acl = {
       acl1: { read: true, write: false, control: false, append: false },
       acl2: { read: true, write: true, control: true, append: true },
@@ -356,7 +377,7 @@ describe("getUserPermissions", () => {
       acl4: { read: false, write: false, control: false, append: false },
     };
 
-    const normalizedPermissions = normalizePermissions(acl);
+    const normalizedPermissions = await normalizePermissions(acl);
     const permissions = getUserPermissions("acl1", normalizedPermissions);
 
     expect(permissions.webId).toEqual("acl1");
@@ -366,7 +387,7 @@ describe("getUserPermissions", () => {
 });
 
 describe("getThirdPartyPermissions", () => {
-  test("it returns the permissions that don't belong to the given webId", () => {
+  test("it returns the permissions that don't belong to the given webId", async () => {
     const acl = {
       acl1: { read: true, write: false, control: false, append: false },
       acl2: { read: true, write: true, control: true, append: true },
@@ -374,7 +395,7 @@ describe("getThirdPartyPermissions", () => {
       acl4: { read: false, write: false, control: false, append: false },
     };
 
-    const normalizedPermissions = normalizePermissions(acl);
+    const normalizedPermissions = await normalizePermissions(acl);
     const thirdPartyPermissions = getThirdPartyPermissions(
       "acl1",
       normalizedPermissions

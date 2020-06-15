@@ -1,16 +1,23 @@
-/* eslint-disable camelcase */
 import { ReactElement, useContext } from "react";
-import { Typography, List, ListItem, Divider } from "@material-ui/core";
+import { Typography, List, ListItem, Divider, Avatar } from "@material-ui/core";
 import { ILoggedInSolidSession } from "@inrupt/solid-auth-fetcher/dist/solidSession/ISolidSession";
+import { makeStyles } from "@material-ui/core/styles";
 import UserContext from "../../src/contexts/UserContext";
+import styles from "./styles";
 import {
-  NormalizedPermission,
-  getUserPermissions,
   getThirdPartyPermissions,
+  getUserPermissions,
+  NormalizedPermission,
+  Profile,
 } from "../../src/lit-solid-helpers";
 
-function displayBoolean(bool: boolean): string {
-  return bool ? "true" : "false";
+export function displayName(
+  { nickname, name }: Profile,
+  webId: string
+): string {
+  if (name) return name;
+  if (nickname) return nickname;
+  return webId;
 }
 
 export function displayPermission(
@@ -18,41 +25,24 @@ export function displayPermission(
   classes: Record<string, string>
 ): ReactElement | null {
   if (!permission) return null;
-  const { webId, alias, acl } = permission;
+  const { webId, alias, profile } = permission;
+  const { avatar } = profile;
+  const avatarSrc = avatar || undefined;
 
   return (
-    <>
-      <ListItem key={webId} className={classes.listItem}>
-        <Typography className={classes.detailText}>{webId}</Typography>
-        <Typography className={`${classes.typeValue} ${classes.detailText}`}>
-          {alias}
-        </Typography>
-      </ListItem>
-      <ListItem key={`${webId}-read`} className={classes.listItem}>
-        <Typography className={classes.detailText}>read</Typography>
-        <Typography className={`${classes.typeValue} ${classes.detailText}`}>
-          {displayBoolean(acl.read)}
-        </Typography>
-      </ListItem>
-      <ListItem key={`${webId}-write`} className={classes.listItem}>
-        <Typography className={classes.detailText}>write</Typography>
-        <Typography className={`${classes.typeValue} ${classes.detailText}`}>
-          {displayBoolean(acl.write)}
-        </Typography>
-      </ListItem>
-      <ListItem key={`${webId}-append`} className={classes.listItem}>
-        <Typography className={classes.detailText}>append</Typography>
-        <Typography className={`${classes.typeValue} ${classes.detailText}`}>
-          {displayBoolean(acl.append)}
-        </Typography>
-      </ListItem>
-      <ListItem key={`${webId}-details`} className={classes.listItem}>
-        <Typography className={classes.detailText}>control</Typography>
-        <Typography className={`${classes.typeValue} ${classes.detailText}`}>
-          {displayBoolean(acl.control)}
-        </Typography>
-      </ListItem>
-    </>
+    <ListItem key={webId} className={classes.listItem}>
+      <Avatar
+        className={classes.avatar}
+        alt={displayName(profile, webId)}
+        src={avatarSrc}
+      />
+      <Typography className={classes.detailText}>
+        {displayName(profile, webId)}
+      </Typography>
+      <Typography className={`${classes.typeValue} ${classes.detailText}`}>
+        {alias}
+      </Typography>
+    </ListItem>
   );
 }
 
@@ -89,6 +79,8 @@ function displayThirdPartyPermissions(
   );
 }
 
+const useStyles = makeStyles(styles);
+
 export interface Props {
   iri: string;
   name?: string;
@@ -103,6 +95,10 @@ export default function ResourceDetails({
   permissions,
   classes,
 }: Props): ReactElement {
+  const resourceClasses: Record<string, string> = {
+    ...classes,
+    ...useStyles(),
+  };
   const { session } = useContext(UserContext);
   const { webId } = session as ILoggedInSolidSession;
   const userPermissions = getUserPermissions(webId, permissions);
@@ -110,33 +106,35 @@ export default function ResourceDetails({
 
   return (
     <>
-      <section className={classes.centeredSection}>
+      <section className={resourceClasses.centeredSection}>
         <Typography variant="h3" title={iri}>
           {name}
         </Typography>
       </section>
 
-      <section className={classes.centeredSection}>
+      <section className={resourceClasses.centeredSection}>
         <Typography variant="h5">Details</Typography>
       </section>
 
       <Divider />
 
-      <section className={classes.centeredSection}>
+      <section className={resourceClasses.centeredSection}>
         <Typography variant="h5">My Access</Typography>
-        <List>{displayPermission(userPermissions, classes)}</List>
+        <List>{displayPermission(userPermissions, resourceClasses)}</List>
       </section>
 
-      {displayThirdPartyPermissions(thirdPartyPermissions, classes)}
+      {displayThirdPartyPermissions(thirdPartyPermissions, resourceClasses)}
 
       <Divider />
 
-      <section className={classes.centeredSection}>
+      <section className={resourceClasses.centeredSection}>
         <List>
-          <ListItem className={classes.listItem}>
-            <Typography className={classes.detailText}>Thing Type:</Typography>
+          <ListItem className={resourceClasses.listItem}>
+            <Typography className={resourceClasses.detailText}>
+              Thing Type:
+            </Typography>
             <Typography
-              className={`${classes.typeValue} ${classes.detailText}`}
+              className={`${resourceClasses.typeValue} ${resourceClasses.detailText}`}
             >
               Resource
             </Typography>

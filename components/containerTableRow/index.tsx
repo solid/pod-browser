@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import { ReactElement, useContext } from "react";
-import { unstable_fetchLitDatasetWithAcl } from "lit-solid";
 import { makeStyles } from "@material-ui/core/styles";
 import { CircularProgress, TableCell, TableRow } from "@material-ui/core";
 import Link from "next/link";

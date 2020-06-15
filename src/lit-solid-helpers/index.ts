@@ -1,15 +1,19 @@
 /* eslint-disable camelcase */
 import {
+  DatasetInfo,
+  fetchLitDataset,
   getDatetimeOne,
   getDecimalOne,
   getIntegerOne,
   getIriAll,
+  getStringUnlocalizedOne,
+  getThingOne,
+  getIriOne,
   IriString,
-  DatasetInfo,
   LitDataset,
   Thing,
-  unstable_Acl,
   unstable_AccessModes,
+  unstable_Acl,
   unstable_AgentAccess,
   unstable_fetchLitDatasetWithAcl,
   unstable_getAgentAccessModesAll,
@@ -40,6 +44,16 @@ export const namespace: Record<string, string> = {
   "http://purl.org/dc/terms/modified": "modified",
   size: "http://www.w3.org/ns/posix/stat#size",
   "http://www.w3.org/ns/posix/stat#size": "size",
+  nickname: "http://xmlns.com/foaf/0.1/nick",
+  "http://xmlns.com/foaf/0.1/nick": "nickname",
+  familyName: "http://xmlns.com/foaf/0.1/familyName",
+  "http://xmlns.com/foaf/0.1/familyName": "familyName",
+  img: "http://xmlns.com/foaf/0.1/img",
+  "http://xmlns.com/foaf/0.1/img": "img",
+  name: "http://xmlns.com/foaf/0.1/name",
+  "http://xmlns.com/foaf/0.1/name": "name",
+  hasPhoto: "http://www.w3.org/2006/vcard/ns#hasPhoto",
+  "http://www.w3.org/2006/vcard/ns#hasPhoto": "hasPhoto",
 };
 
 export const NON_RESOURCE_IRI_PATHS: string[] = ["favicon.ico", "robots.txt"];
@@ -66,36 +80,47 @@ export function displayPermissions(permissions: unstable_AccessModes): string {
   return "Can View";
 }
 
+export interface Profile {
+  avatar?: string | null;
+  name?: string | null;
+  nickname?: string | null;
+}
+
+export async function fetchProfile(webId: string): Promise<Profile> {
+  const profileResource = await fetchLitDataset(webId);
+  const profile = getThingOne(profileResource, webId);
+  const nickname = getStringUnlocalizedOne(profile, namespace.nickname);
+  const name = getStringUnlocalizedOne(profile, namespace.name);
+  const avatar = getIriOne(profile, namespace.hasPhoto);
+
+  return { nickname, name, avatar };
+}
+
 export interface NormalizedPermission {
   webId: string;
   alias: string;
   acl: unstable_AccessModes;
+  profile: Profile;
 }
 
-export function normalizePermissions(
+export async function normalizePermissions(
   permissions: unstable_AgentAccess
-): NormalizedPermission[] {
-  return Object.keys(permissions).map(
-    (webId: string): NormalizedPermission => {
-      const acl = permissions[webId];
-      return {
-        acl,
-        alias: displayPermissions(acl),
-        webId,
-      };
-    }
-  );
-}
+): Promise<NormalizedPermission[]> {
+  return Promise.all(
+    Object.keys(permissions).map(
+      async (webId: string): Promise<NormalizedPermission> => {
+        const acl = permissions[webId];
+        const profile = await fetchProfile(webId);
 
-export interface NormalizedResource {
-  iri: string;
-  types: string[];
-  mtime?: number | null;
-  modified?: Date | null;
-  size?: number | null;
-  contains?: string[];
-  acl?: unstable_AgentAccess | null;
-  permissions?: NormalizedPermission[];
+        return {
+          acl,
+          profile,
+          alias: displayPermissions(acl),
+          webId,
+        };
+      }
+    )
+  );
 }
 
 export function normalizeDataset(
@@ -123,6 +148,17 @@ export function normalizeDataset(
   };
 }
 
+export interface NormalizedResource {
+  iri: string;
+  types: string[];
+  mtime?: number | null;
+  modified?: Date | null;
+  size?: number | null;
+  contains?: string[];
+  acl?: unstable_AgentAccess | null;
+  permissions?: NormalizedPermission[];
+}
+
 export function isResourceIri(iri: string): boolean {
   return NON_RESOURCE_IRI_PATHS.every((path) => {
     const pattern = new RegExp(path);
@@ -141,7 +177,7 @@ export async function fetchResourceWithAcl(
   const acl = await unstable_getAgentAccessModesAll(
     resource as LitDataset & DatasetInfo & unstable_Acl
   );
-  const permissions = acl ? normalizePermissions(acl) : undefined;
+  const permissions = acl ? await normalizePermissions(acl) : undefined;
   const dataset = resource as LitDataset;
   const thing = dataset as Thing;
 

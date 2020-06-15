@@ -20,6 +20,11 @@ describe("Container details", () => {
           read: true,
           write: true,
         },
+        profile: {
+          avatar: "http://example.com/avatar.png",
+          nickname: "owner",
+          name: "Test Person",
+        },
       },
       {
         webId: "collaborator",
@@ -29,6 +34,11 @@ describe("Container details", () => {
           control: false,
           read: true,
           write: false,
+        },
+        profile: {
+          avatar: null,
+          nickname: "collaborator",
+          name: "Test Collaborator",
         },
       },
     ];
@@ -67,6 +77,11 @@ describe("Container details", () => {
           control: true,
           read: true,
           write: true,
+        },
+        profile: {
+          avatar: "http://example.com/avatar.png",
+          nickname: "owner",
+          name: "Test Person",
         },
       },
     ];

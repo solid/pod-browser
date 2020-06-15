@@ -35,75 +35,20 @@ exports[`Container details renders container details 1`] = `
         className="listItem"
         key="owner"
       >
+        <WithStyles(ForwardRef(Avatar))
+          alt="Test Person"
+          className="makeStyles-avatar-1"
+          src="http://example.com/avatar.png"
+        />
         <WithStyles(ForwardRef(Typography))
           className="detailText"
         >
-          owner
+          Test Person
         </WithStyles(ForwardRef(Typography))>
         <WithStyles(ForwardRef(Typography))
           className="typeValue detailText"
         >
           Full Control
-        </WithStyles(ForwardRef(Typography))>
-      </WithStyles(ForwardRef(ListItem))>
-      <WithStyles(ForwardRef(ListItem))
-        className="listItem"
-        key="owner-read"
-      >
-        <WithStyles(ForwardRef(Typography))
-          className="detailText"
-        >
-          read
-        </WithStyles(ForwardRef(Typography))>
-        <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
-        >
-          true
-        </WithStyles(ForwardRef(Typography))>
-      </WithStyles(ForwardRef(ListItem))>
-      <WithStyles(ForwardRef(ListItem))
-        className="listItem"
-        key="owner-write"
-      >
-        <WithStyles(ForwardRef(Typography))
-          className="detailText"
-        >
-          write
-        </WithStyles(ForwardRef(Typography))>
-        <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
-        >
-          true
-        </WithStyles(ForwardRef(Typography))>
-      </WithStyles(ForwardRef(ListItem))>
-      <WithStyles(ForwardRef(ListItem))
-        className="listItem"
-        key="owner-append"
-      >
-        <WithStyles(ForwardRef(Typography))
-          className="detailText"
-        >
-          append
-        </WithStyles(ForwardRef(Typography))>
-        <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
-        >
-          true
-        </WithStyles(ForwardRef(Typography))>
-      </WithStyles(ForwardRef(ListItem))>
-      <WithStyles(ForwardRef(ListItem))
-        className="listItem"
-        key="owner-details"
-      >
-        <WithStyles(ForwardRef(Typography))
-          className="detailText"
-        >
-          control
-        </WithStyles(ForwardRef(Typography))>
-        <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
-        >
-          true
         </WithStyles(ForwardRef(Typography))>
       </WithStyles(ForwardRef(ListItem))>
     </WithStyles(ForwardRef(List))>
@@ -121,75 +66,19 @@ exports[`Container details renders container details 1`] = `
         className="listItem"
         key="collaborator"
       >
+        <WithStyles(ForwardRef(Avatar))
+          alt="Test Collaborator"
+          className="makeStyles-avatar-1"
+        />
         <WithStyles(ForwardRef(Typography))
           className="detailText"
         >
-          collaborator
+          Test Collaborator
         </WithStyles(ForwardRef(Typography))>
         <WithStyles(ForwardRef(Typography))
           className="typeValue detailText"
         >
           Can View
-        </WithStyles(ForwardRef(Typography))>
-      </WithStyles(ForwardRef(ListItem))>
-      <WithStyles(ForwardRef(ListItem))
-        className="listItem"
-        key="collaborator-read"
-      >
-        <WithStyles(ForwardRef(Typography))
-          className="detailText"
-        >
-          read
-        </WithStyles(ForwardRef(Typography))>
-        <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
-        >
-          true
-        </WithStyles(ForwardRef(Typography))>
-      </WithStyles(ForwardRef(ListItem))>
-      <WithStyles(ForwardRef(ListItem))
-        className="listItem"
-        key="collaborator-write"
-      >
-        <WithStyles(ForwardRef(Typography))
-          className="detailText"
-        >
-          write
-        </WithStyles(ForwardRef(Typography))>
-        <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
-        >
-          false
-        </WithStyles(ForwardRef(Typography))>
-      </WithStyles(ForwardRef(ListItem))>
-      <WithStyles(ForwardRef(ListItem))
-        className="listItem"
-        key="collaborator-append"
-      >
-        <WithStyles(ForwardRef(Typography))
-          className="detailText"
-        >
-          append
-        </WithStyles(ForwardRef(Typography))>
-        <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
-        >
-          false
-        </WithStyles(ForwardRef(Typography))>
-      </WithStyles(ForwardRef(ListItem))>
-      <WithStyles(ForwardRef(ListItem))
-        className="listItem"
-        key="collaborator-details"
-      >
-        <WithStyles(ForwardRef(Typography))
-          className="detailText"
-        >
-          control
-        </WithStyles(ForwardRef(Typography))>
-        <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
-        >
-          false
         </WithStyles(ForwardRef(Typography))>
       </WithStyles(ForwardRef(ListItem))>
     </WithStyles(ForwardRef(List))>
@@ -253,75 +142,20 @@ exports[`Container details renders no 3rd party access message 1`] = `
         className="listItem"
         key="owner"
       >
+        <WithStyles(ForwardRef(Avatar))
+          alt="Test Person"
+          className="makeStyles-avatar-1"
+          src="http://example.com/avatar.png"
+        />
         <WithStyles(ForwardRef(Typography))
           className="detailText"
         >
-          owner
+          Test Person
         </WithStyles(ForwardRef(Typography))>
         <WithStyles(ForwardRef(Typography))
           className="typeValue detailText"
         >
           Full Control
-        </WithStyles(ForwardRef(Typography))>
-      </WithStyles(ForwardRef(ListItem))>
-      <WithStyles(ForwardRef(ListItem))
-        className="listItem"
-        key="owner-read"
-      >
-        <WithStyles(ForwardRef(Typography))
-          className="detailText"
-        >
-          read
-        </WithStyles(ForwardRef(Typography))>
-        <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
-        >
-          true
-        </WithStyles(ForwardRef(Typography))>
-      </WithStyles(ForwardRef(ListItem))>
-      <WithStyles(ForwardRef(ListItem))
-        className="listItem"
-        key="owner-write"
-      >
-        <WithStyles(ForwardRef(Typography))
-          className="detailText"
-        >
-          write
-        </WithStyles(ForwardRef(Typography))>
-        <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
-        >
-          true
-        </WithStyles(ForwardRef(Typography))>
-      </WithStyles(ForwardRef(ListItem))>
-      <WithStyles(ForwardRef(ListItem))
-        className="listItem"
-        key="owner-append"
-      >
-        <WithStyles(ForwardRef(Typography))
-          className="detailText"
-        >
-          append
-        </WithStyles(ForwardRef(Typography))>
-        <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
-        >
-          true
-        </WithStyles(ForwardRef(Typography))>
-      </WithStyles(ForwardRef(ListItem))>
-      <WithStyles(ForwardRef(ListItem))
-        className="listItem"
-        key="owner-details"
-      >
-        <WithStyles(ForwardRef(Typography))
-          className="detailText"
-        >
-          control
-        </WithStyles(ForwardRef(Typography))>
-        <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
-        >
-          true
         </WithStyles(ForwardRef(Typography))>
       </WithStyles(ForwardRef(ListItem))>
     </WithStyles(ForwardRef(List))>
