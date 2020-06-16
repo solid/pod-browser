@@ -1,7 +1,7 @@
 import { useEffect, useContext } from "react";
 import Router from "next/router";
 
-import UserContext from "../../contexts/UserContext";
+import UserContext, { ISession } from "../../contexts/userContext";
 
 // TODO figure out typescript enums
 export const SESSION_STATES = {
@@ -10,7 +10,7 @@ export const SESSION_STATES = {
 };
 
 export function redirectBasedOnSessionState(
-  session: any,
+  session: ISession | undefined,
   isLoadingSession: boolean,
   redirectIfSessionState: string,
   location: string

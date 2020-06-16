@@ -3,7 +3,7 @@ import { Container } from "@material-ui/core";
 import { fetchLitDataset, getThingOne, getIriAll } from "lit-solid";
 import { space } from "rdf-namespaces";
 
-import UserContext from "../../../src/contexts/UserContext";
+import UserContext from "../../../src/contexts/userContext";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import PodList from "../../podList";
 import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";

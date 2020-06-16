@@ -1,8 +1,11 @@
 import { createContext } from "react";
 
-// Not sure if this is the correct interface:
-interface UserContext {
-  session: any; // TODO replace with SAF session context
+export interface ISession {
+  webId: string;
+}
+
+export interface UserContext {
+  session: ISession | undefined; // TODO replace with SAF session context
   isLoadingSession: boolean;
 }
 

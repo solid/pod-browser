@@ -4,12 +4,10 @@ import PropTypes from "prop-types";
 import Head from "next/head";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import auth from "solid-auth-client";
 
-import { currentSession } from "solid-auth-client";
-
-// import Header from '../components/header';
 import theme from "../src/theme";
-import UserContext from "../src/contexts/UserContext";
+import UserContext, { ISession } from "../src/contexts/userContext";
 import PodManagerHeader from "../components/header";
 
 /* eslint @typescript-eslint/no-explicit-any: 0 */
@@ -21,7 +19,7 @@ interface AppProps {
 export default function App(props: AppProps): ReactElement {
   const { Component, pageProps } = props;
 
-  const [session, setSession] = useState();
+  const [session, setSession] = useState<ISession | undefined>();
   const [isLoadingSession, setIsLoadingSession] = useState(true);
 
   // Remove injected serverside JSS
@@ -39,7 +37,7 @@ export default function App(props: AppProps): ReactElement {
 
     // Remove the server-side injected CSS.
     async function fetchSession(): Promise<void> {
-      const sessionStorage = await currentSession();
+      const sessionStorage = await auth.currentSession();
       setSession(sessionStorage);
       setIsLoadingSession(false);
     }

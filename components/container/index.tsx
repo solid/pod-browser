@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import DetailsContextMenu from "../detailsContextMenu";
 import ContainerTableRow from "../containerTableRow";
-import UserContext from "../../src/contexts/UserContext";
+import UserContext from "../../src/contexts/userContext";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import Spinner from "../spinner";
 
