@@ -2,10 +2,15 @@ import * as ReactFns from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 
-import ResourceDetails from "./index";
+import ResourceDetails, {
+  displayName,
+  displayPermission,
+  displayThirdPartyPermissions,
+  displayType,
+} from "./index";
 
-describe("Container details", () => {
-  test("renders container details", () => {
+describe("Resource details", () => {
+  test("renders resource details", () => {
     jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
       session: { webId: "owner" },
     }));
@@ -52,8 +57,8 @@ describe("Container details", () => {
 
     const tree = shallow(
       <ResourceDetails
-        name="Container Name"
-        types={["Container"]}
+        name="Resource Name"
+        types={["Resource"]}
         iri="iri"
         classes={classes}
         permissions={permissions}
@@ -95,8 +100,8 @@ describe("Container details", () => {
 
     const tree = shallow(
       <ResourceDetails
-        name="Container Name"
-        types={["Container"]}
+        name="Resource Name"
+        types={["Resource"]}
         iri="iri"
         classes={classes}
         permissions={permissions}
@@ -104,5 +109,45 @@ describe("Container details", () => {
     );
 
     expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+});
+
+describe("displayName", () => {
+  const name = "Test Example";
+  const nickname = "test_example";
+  const webId = "webId";
+
+  test("it returns the webId, if no name or nickname is defined", () => {
+    expect(displayName({ webId })).toEqual("webId");
+  });
+
+  test("it returns the nickname, if no name is defined", () => {
+    expect(displayName({ nickname, webId })).toEqual("test_example");
+  });
+
+  test("it returns the name, if defined", () => {
+    expect(displayName({ name, nickname, webId })).toEqual("Test Example");
+  });
+});
+
+describe("displayPermission", () => {
+  test("it returns null if given no permission", () => {
+    let permission;
+    const classes = {};
+    expect(displayPermission(permission, classes)).toBeNull();
+  });
+});
+
+describe("displayThirdPartyPermissions", () => {
+  test("it returns null if given no permissions", () => {
+    let permissions;
+    const classes = {};
+    expect(displayThirdPartyPermissions(permissions, classes)).toBeNull();
+  });
+});
+
+describe("displayType", () => {
+  test("it returns 'Resource' if no types", () => {
+    expect(displayType([])).toEqual("Resource");
   });
 });

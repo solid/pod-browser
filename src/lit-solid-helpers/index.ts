@@ -15,6 +15,7 @@ import {
   unstable_AccessModes,
   unstable_Acl,
   unstable_AgentAccess,
+  unstable_fetchFile,
   unstable_fetchLitDatasetWithAcl,
   unstable_getAgentAccessModesAll,
 } from "lit-solid";
@@ -56,8 +57,6 @@ export const namespace: Record<string, string> = {
   "http://www.w3.org/2006/vcard/ns#hasPhoto": "hasPhoto",
 };
 
-export const NON_RESOURCE_IRI_PATHS: string[] = ["favicon.ico", "robots.txt"];
-
 export function getIriPath(iri: string): string | undefined {
   const { pathname } = parseUrl(iri);
   return pathname.replace(/\/?$/, "");
@@ -81,6 +80,7 @@ export function displayPermissions(permissions: unstable_AccessModes): string {
 }
 
 export interface Profile {
+  webId: string;
   avatar?: string | null;
   name?: string | null;
   nickname?: string | null;
@@ -93,7 +93,7 @@ export async function fetchProfile(webId: string): Promise<Profile> {
   const name = getStringUnlocalizedOne(profile, namespace.name);
   const avatar = getIriOne(profile, namespace.hasPhoto);
 
-  return { nickname, name, avatar };
+  return { webId, nickname, name, avatar };
 }
 
 export interface NormalizedPermission {
@@ -155,24 +155,69 @@ export interface NormalizedResource {
   modified?: Date | null;
   size?: number | null;
   contains?: string[];
-  acl?: unstable_AgentAccess | null;
   permissions?: NormalizedPermission[];
 }
 
-export function isResourceIri(iri: string): boolean {
-  return NON_RESOURCE_IRI_PATHS.every((path) => {
-    const pattern = new RegExp(path);
-    return !iri.match(pattern);
-  });
+export const PERMISSIONS: string[] = ["read", "write", "append", "control"];
+
+export function parseStringAcl(acl: string): unstable_AccessModes {
+  return PERMISSIONS.reduce((acc, key) => {
+    return {
+      ...acc,
+      [key]: acl.includes(key),
+    };
+  }, {} as unstable_AccessModes);
+}
+
+export function permissionsFromWacAllowHeaders(
+  wacAllow?: string
+): NormalizedPermission[] {
+  if (!wacAllow) return [];
+  const permissions = wacAllow.split(",");
+  return permissions.reduce(
+    (acc: NormalizedPermission[], permission: string) => {
+      const [webId, stringAcl] = permission.split("=");
+      const acl = parseStringAcl(stringAcl);
+      const alias = displayPermissions(acl);
+
+      return [
+        ...acc,
+        {
+          webId,
+          alias,
+          acl,
+          profile: { webId, name: webId },
+        },
+      ];
+    },
+    []
+  );
+}
+
+export interface NormalizedFile extends NormalizedResource {
+  file: Blob;
+}
+
+export async function fetchFileWithAcl(iri: string): Promise<NormalizedFile> {
+  const response = await unstable_fetchFile(iri);
+  const file = await response.blob();
+  const { headers } = response;
+  const permissions = permissionsFromWacAllowHeaders(
+    headers.get("wac-allow") as string
+  );
+  const type = headers.get("content-type") as string;
+
+  return {
+    iri,
+    permissions,
+    types: [type],
+    file,
+  };
 }
 
 export async function fetchResourceWithAcl(
   iri: string
 ): Promise<NormalizedResource> {
-  if (!isResourceIri(iri)) {
-    return Promise.resolve({ iri, name: "Unknown", types: ["Unknown"] });
-  }
-
   const resource = await unstable_fetchLitDatasetWithAcl(iri);
   const acl = await unstable_getAgentAccessModesAll(
     resource as LitDataset & DatasetInfo & unstable_Acl
@@ -182,10 +227,13 @@ export async function fetchResourceWithAcl(
   const thing = dataset as Thing;
 
   return {
-    acl,
     permissions,
     ...normalizeDataset(thing, iri),
   };
+}
+
+export function isUserOrMatch(webId: string, id: string): boolean {
+  return webId === "user" || webId === id;
 }
 
 export function getUserPermissions(
@@ -194,7 +242,7 @@ export function getUserPermissions(
 ): NormalizedPermission | null {
   if (!permissions) return null;
 
-  const permission = permissions.find(({ webId }) => webId === id);
+  const permission = permissions.find(({ webId }) => isUserOrMatch(webId, id));
 
   return permission || null;
 }
@@ -204,5 +252,5 @@ export function getThirdPartyPermissions(
   permissions?: NormalizedPermission[]
 ): NormalizedPermission[] {
   if (!permissions) return [];
-  return permissions.filter(({ webId }) => webId !== id);
+  return permissions.filter(({ webId }) => !isUserOrMatch(webId, id));
 }

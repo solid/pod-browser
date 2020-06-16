@@ -9,6 +9,7 @@ import {
   NormalizedResource,
   getIriPath,
   fetchResourceWithAcl,
+  fetchFileWithAcl,
 } from "../../src/lit-solid-helpers";
 import styles from "./styles";
 
@@ -20,7 +21,12 @@ export async function fetchResourceDetails(
   iri: string
 ): Promise<ResourceDetails> {
   const name = getIriPath(iri);
-  const resource = await fetchResourceWithAcl(iri);
+  let resource;
+  try {
+    resource = await fetchResourceWithAcl(iri);
+  } catch (e) {
+    resource = await fetchFileWithAcl(iri);
+  }
 
   return {
     ...resource,

@@ -11,10 +11,7 @@ import {
   Profile,
 } from "../../src/lit-solid-helpers";
 
-export function displayName(
-  { nickname, name }: Profile,
-  webId: string
-): string {
+export function displayName({ nickname, name, webId }: Profile): string {
   if (name) return name;
   if (nickname) return nickname;
   return webId;
@@ -33,11 +30,11 @@ export function displayPermission(
     <ListItem key={webId} className={classes.listItem}>
       <Avatar
         className={classes.avatar}
-        alt={displayName(profile, webId)}
+        alt={displayName(profile)}
         src={avatarSrc}
       />
       <Typography className={classes.detailText}>
-        {displayName(profile, webId)}
+        {displayName(profile)}
       </Typography>
       <Typography className={`${classes.typeValue} ${classes.detailText}`}>
         {alias}
@@ -46,7 +43,7 @@ export function displayPermission(
   );
 }
 
-function displayThirdPartyPermissions(
+export function displayThirdPartyPermissions(
   thirdPartyPermissions: NormalizedPermission[] | null,
   classes: Record<string, string>
 ): ReactElement | null {
@@ -79,6 +76,12 @@ function displayThirdPartyPermissions(
   );
 }
 
+export function displayType(types: string[] | undefined): string {
+  if (!types || types.length === 0) return "Resource";
+  const [type] = types;
+  return type;
+}
+
 const useStyles = makeStyles(styles);
 
 export interface Props {
@@ -94,6 +97,7 @@ export default function ResourceDetails({
   name,
   permissions,
   classes,
+  types,
 }: Props): ReactElement {
   const resourceClasses: Record<string, string> = {
     ...classes,
@@ -136,7 +140,7 @@ export default function ResourceDetails({
             <Typography
               className={`${resourceClasses.typeValue} ${resourceClasses.detailText}`}
             >
-              Resource
+              {displayType(types)}
             </Typography>
           </ListItem>
         </List>

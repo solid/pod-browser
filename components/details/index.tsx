@@ -46,6 +46,7 @@ export default function Details({
       name={name}
       permissions={permissions}
       classes={classes}
+      types={types}
     />
   );
 }

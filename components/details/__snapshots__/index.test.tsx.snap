@@ -13,6 +13,11 @@ exports[`Details when given a container it renders a ContainerDetails component 
   }
   iri="iri"
   name="container"
+  types={
+    Array [
+      "BasicContainer",
+    ]
+  }
 />
 `;
 
@@ -29,6 +34,11 @@ exports[`Details when given a resource it renders a ResourceDetails component 1`
   }
   iri="iri"
   name="container"
+  types={
+    Array [
+      "NotAContainer",
+    ]
+  }
 />
 `;
 

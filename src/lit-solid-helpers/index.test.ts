@@ -4,16 +4,18 @@ import * as litSolidFns from "lit-solid";
 import {
   displayPermissions,
   displayTypes,
+  fetchFileWithAcl,
   fetchResourceWithAcl,
   getIriPath,
   getThirdPartyPermissions,
   getTypeName,
   getUserPermissions,
-  isResourceIri,
+  isUserOrMatch,
   namespace,
-  NON_RESOURCE_IRI_PATHS,
   normalizeDataset,
   normalizePermissions,
+  parseStringAcl,
+  permissionsFromWacAllowHeaders,
 } from "./index";
 
 const {
@@ -266,22 +268,6 @@ describe("getIriPath", () => {
   });
 });
 
-describe("isResourceIri", () => {
-  test("it returns true when the url is not in the blacklist", () => {
-    const iri = "https://user.dev.inrupt.net/public/";
-
-    expect(isResourceIri(iri)).toBe(true);
-  });
-
-  test("it returns false when the url is in the blacklist", () => {
-    NON_RESOURCE_IRI_PATHS.forEach((path) => {
-      const iri = `https://user.dev.inrupt.net/${path}`;
-
-      expect(isResourceIri(iri)).toBe(false);
-    });
-  });
-});
-
 describe("fetchResourceWithAcl", () => {
   test("it returns a normalized dataset", async () => {
     const perms = {
@@ -357,15 +343,6 @@ describe("fetchResourceWithAcl", () => {
     expect(permissions).toBeUndefined();
     expect(acl).toBeUndefined();
   });
-
-  test("it filters known non-resource iris", async () => {
-    const expectedIri = "https://user.dev.inrupt.net/public/favicon.ico";
-    const { iri, types } = await fetchResourceWithAcl(expectedIri);
-
-    expect(iri).toEqual("https://user.dev.inrupt.net/public/favicon.ico");
-    expect(types).toContain("Unknown");
-    expect(types).toHaveLength(1);
-  });
 });
 
 describe("getUserPermissions", () => {
@@ -383,6 +360,25 @@ describe("getUserPermissions", () => {
     expect(permissions.webId).toEqual("acl1");
     expect(permissions.alias).toEqual("Can View");
     expect(permissions.acl).toMatchObject(acl.acl1);
+  });
+
+  test("it returns null if given no permissions", () => {
+    expect(getUserPermissions("webId")).toBeNull();
+  });
+
+  test("it returns null if it can't find a permission matching the web id", () => {
+    const permissions = [
+      {
+        webId: "test",
+        alias: "Can View",
+        acl: { read: true, write: false, control: false, append: false },
+        profile: { webId: "test" },
+      },
+    ];
+
+    const userPermissions = getUserPermissions("acl1", permissions);
+
+    expect(userPermissions).toBeNull();
   });
 });
 
@@ -417,5 +413,113 @@ describe("getThirdPartyPermissions", () => {
     expect(perms4.webId).toEqual("acl4");
     expect(perms4.alias).toEqual("No Access");
     expect(perms4.acl).toMatchObject(acl.acl4);
+  });
+
+  test("it returns an empty Array if given no permissions", () => {
+    expect(getThirdPartyPermissions("webId")).toBeInstanceOf(Array);
+    expect(getThirdPartyPermissions("webId")).toHaveLength(0);
+  });
+});
+
+describe("isUserOrMatch", () => {
+  test("it returns true when given two matching ids", () => {
+    expect(isUserOrMatch("webId", "webId")).toBe(true);
+  });
+
+  test("it returns false when given two unique ids", () => {
+    expect(isUserOrMatch("webId", "otherId")).toBe(false);
+  });
+
+  test("it returns true when given the string 'user'", () => {
+    expect(isUserOrMatch("user", "anything")).toBe(true);
+  });
+});
+
+describe("parseStringAcl", () => {
+  test("it parses a list of string permissions into an unstable_AccessModes", () => {
+    const fullControl = parseStringAcl("read write append control");
+
+    expect(fullControl.read).toBe(true);
+    expect(fullControl.write).toBe(true);
+    expect(fullControl.append).toBe(true);
+    expect(fullControl.control).toBe(true);
+
+    const readWrite = parseStringAcl("read write");
+
+    expect(readWrite.read).toBe(true);
+    expect(readWrite.write).toBe(true);
+    expect(readWrite.append).toBe(false);
+    expect(readWrite.control).toBe(false);
+
+    const noAccess = parseStringAcl("");
+
+    expect(noAccess.read).toBe(false);
+    expect(noAccess.write).toBe(false);
+    expect(noAccess.append).toBe(false);
+    expect(noAccess.control).toBe(false);
+  });
+});
+
+describe("permissionsFromWacAllowHeaders", () => {
+  test("it parses wac-allow headers into NormalizedPermissions", () => {
+    const wacAllow = 'user="read write append control",public="read"';
+    const [user, publicPerms] = permissionsFromWacAllowHeaders(wacAllow);
+
+    expect(user.webId).toEqual("user");
+    expect(user.alias).toEqual("Full Control");
+    expect(user.acl).toMatchObject({
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    });
+    expect(user.profile.name).toEqual("user");
+
+    expect(publicPerms.webId).toEqual("public");
+    expect(publicPerms.alias).toEqual("Can View");
+    expect(publicPerms.acl).toMatchObject({
+      read: true,
+      write: false,
+      append: false,
+      control: false,
+    });
+    expect(publicPerms.profile.name).toEqual("public");
+  });
+
+  test("it returns an emtpy array when given no string", () => {
+    expect(permissionsFromWacAllowHeaders()).toBeInstanceOf(Array);
+    expect(permissionsFromWacAllowHeaders()).toHaveLength(0);
+  });
+});
+
+describe("fetchFileWithAcl", () => {
+  test("it fetches a file and parses the wac-allow header", async () => {
+    const headers = new Headers();
+    const blob = jest.fn().mockImplementation(() => "file contents");
+
+    headers.append("content-type", "image/vnd.microsoft.icon");
+    headers.append(
+      "wac-allow",
+      'user="read write append control",public="read"'
+    );
+
+    jest
+      .spyOn(litSolidFns, "unstable_fetchFile")
+      .mockImplementationOnce(async () => {
+        return Promise.resolve({
+          blob,
+          headers,
+        });
+      });
+
+    const { iri, permissions, types, file } = await fetchFileWithAcl(
+      "some iri"
+    );
+
+    expect(blob).toHaveBeenCalled();
+    expect(iri).toEqual("some iri");
+    expect(types).toContain("image/vnd.microsoft.icon");
+    expect(file).toEqual("file contents");
+    expect(permissions).toHaveLength(2);
   });
 });

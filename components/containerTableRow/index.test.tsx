@@ -2,62 +2,14 @@
 import React from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
-import {
-  LitDataset,
-  unstable_fetchLitDatasetWithAcl,
-  unstable_getAgentAccessModesAll,
-} from "lit-solid";
-import ContainerTableRow, { handleTableRowClick, resourceHref } from "./index";
+import * as litSolidHelpers from "../../src/lit-solid-helpers";
+import ContainerTableRow, {
+  handleTableRowClick,
+  resourceHref,
+  fetchResourceDetails,
+} from "./index";
 
-jest.mock("lit-solid");
-
-const {
-  addIri,
-  createLitDataset,
-  createThing,
-  setDatetime,
-  setDecimal,
-  setInteger,
-  setThing,
-} = jest.requireActual("lit-solid");
-
-function createContainer(): LitDataset {
-  let publicContainer = createThing({
-    iri: "https://user.dev.inrupt.net/public/",
-  });
-  publicContainer = addIri(
-    publicContainer,
-    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-    "http://www.w3.org/ns/ldp#BasicContainer"
-  );
-  publicContainer = addIri(
-    publicContainer,
-    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-    "http://www.w3.org/ns/ldp#Container"
-  );
-  publicContainer = setDatetime(
-    publicContainer,
-    "http://purl.org/dc/terms/modified",
-    new Date(Date.UTC(2020, 5, 2, 15, 59, 21))
-  );
-  publicContainer = addIri(
-    publicContainer,
-    "http://www.w3.org/ns/ldp#contains",
-    "https://user.dev.inrupt.net/public/games/"
-  );
-  publicContainer = setDecimal(
-    publicContainer,
-    "http://www.w3.org/ns/posix/stat#mtime",
-    1591131561.195
-  );
-  publicContainer = setInteger(
-    publicContainer,
-    "http://www.w3.org/ns/posix/stat#size",
-    4096
-  );
-
-  return setThing(createLitDataset(), publicContainer);
-}
+const iri = "https://user.dev.inrupt.net/public/";
 
 describe("ContainerTableRow", () => {
   test("it renders a table row", () => {
@@ -76,29 +28,8 @@ describe("resourceHref", () => {
 
 describe("handleTableRowClick", () => {
   test("it opens the drawer and sets the menu contents", async () => {
-    (unstable_fetchLitDatasetWithAcl as jest.Mock).mockImplementationOnce(
-      async () => {
-        return Promise.resolve(createContainer());
-      }
-    );
-
-    (unstable_getAgentAccessModesAll as jest.Mock).mockImplementationOnce(
-      async () => {
-        return Promise.resolve({
-          owner: { read: true, write: true, append: true, control: true },
-          collaborator: {
-            read: true,
-            write: false,
-            append: true,
-            control: false,
-          },
-        });
-      }
-    );
-
     const setMenuOpen = jest.fn();
     const setMenuContents = jest.fn();
-    const iri = "https://user.dev.inrupt.net/public/";
     const handler = handleTableRowClick({
       classes: {},
       iri,
@@ -109,6 +40,23 @@ describe("handleTableRowClick", () => {
     const evnt = { target: document.createElement("tr") } as Partial<
       React.MouseEvent<HTMLInputElement>
     >;
+
+    jest
+      .spyOn(litSolidHelpers, "fetchResourceWithAcl")
+      .mockImplementationOnce(async () => {
+        return Promise.resolve({
+          iri,
+          types: ["Resource"],
+          permissions: [
+            {
+              webId: "user",
+              alias: "Full Control",
+              acl: { read: true, write: true, append: true, control: true },
+            },
+          ],
+        });
+      });
+
     await handler(evnt);
 
     expect(setMenuOpen).toHaveBeenCalledWith(true);
@@ -118,7 +66,6 @@ describe("handleTableRowClick", () => {
   test("it commits no operation when the click target is an anchor", async () => {
     const setMenuOpen = jest.fn();
     const setMenuContents = jest.fn();
-    const iri = "https://user.dev.inrupt.net/public/";
     const handler = handleTableRowClick({
       classes: {},
       iri,
@@ -133,5 +80,60 @@ describe("handleTableRowClick", () => {
 
     expect(setMenuOpen).not.toHaveBeenCalled();
     expect(setMenuContents).not.toHaveBeenCalled();
+  });
+});
+
+describe("fetchResourceDetails", () => {
+  test("it fetches the resource with acl, adding the name (shortened iri path)", async () => {
+    jest
+      .spyOn(litSolidHelpers, "fetchResourceWithAcl")
+      .mockImplementationOnce(async () => {
+        return Promise.resolve({
+          iri,
+          types: ["Resource"],
+          permissions: [
+            {
+              webId: "user",
+              alias: "Full Control",
+              acl: { read: true, write: true, append: true, control: true },
+            },
+          ],
+        });
+      });
+
+    const { name } = await fetchResourceDetails(iri);
+
+    expect(litSolidHelpers.fetchResourceWithAcl).toHaveBeenCalledWith(iri);
+    expect(name).toEqual("/public");
+  });
+
+  test("it fetches a file if the resource fetch fails", async () => {
+    jest
+      .spyOn(litSolidHelpers, "fetchResourceWithAcl")
+      .mockImplementationOnce(() => {
+        throw new Error("boom");
+      });
+
+    jest
+      .spyOn(litSolidHelpers, "fetchFileWithAcl")
+      .mockImplementationOnce(async () => {
+        return Promise.resolve({
+          iri,
+          types: ["txt/plain"],
+          file: "file contents",
+          permissions: [
+            {
+              webId: "user",
+              alias: "Full Control",
+              acl: { read: true, write: true, append: true, control: true },
+            },
+          ],
+        });
+      });
+
+    const { name } = await fetchResourceDetails(iri);
+
+    expect(litSolidHelpers.fetchFileWithAcl).toHaveBeenCalledWith(iri);
+    expect(name).toEqual("/public");
   });
 });
