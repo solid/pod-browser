@@ -1,4 +1,4 @@
-import { createMuiTheme } from "@material-ui/core/styles";
+import { createTheme } from "../../lib/prism/packages/prism-patterns";
 import defaultTheme from "../../lib/prism/packages/prism-theme-sdk-default";
 
-export default createMuiTheme(defaultTheme);
+export default createTheme(defaultTheme);

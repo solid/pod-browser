@@ -1,0 +1,6 @@
+html,
+body,
+#__next {
+  font-size: 100% !important;
+  height: 100%;
+}

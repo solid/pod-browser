@@ -1,31 +1,37 @@
 import React, { ReactElement } from "react";
 import Link from "next/link";
-import { Container, Box, Typography } from "@material-ui/core";
 
+import { createStyles, makeStyles } from "@material-ui/styles";
+import clsx from "clsx";
 import ProviderLogin from "./provider";
+import styles from "./styles";
+import { PrismTheme, useBem } from "../../lib/prism/packages/prism-patterns";
+
+const useStyles = makeStyles<PrismTheme>((theme) =>
+  createStyles(styles(theme))
+);
 
 export default function Login(): ReactElement {
+  const bem = useBem(useStyles());
   return (
-    <Container maxWidth="sm">
-      <Typography align="center" component="div">
-        <h1>Hi! Welcome to Solid.</h1>
+    <div className={bem("login-form")}>
+      <Link href="/register">
+        <a className={bem("button", "primary", "filled")}>
+          Register for a Solid Identity
+        </a>
+      </Link>
 
-        <Box my={4}>
-          <Link href="/register">
-            <a>Register for a Solid Identity</a>
-          </Link>
+      <p className={clsx(bem("content-p"), bem("login-form__what-is-solid"))}>
+        <a href="https://solid.inrupt.com/get-a-solid-pod" rel="nofollow">
+          What is a Solid Identity?
+        </a>
+      </p>
 
-          <p>
-            <a href="https://solid.inrupt.com/get-a-solid-pod" rel="nofollow">
-              What is a Solid Identity?
-            </a>
-          </p>
+      <h2 className={clsx(bem("content-h5"), bem("login-form__sub-title"))}>
+        <span>Log In</span>
+      </h2>
 
-          <Typography variant="h5">Log In</Typography>
-
-          <ProviderLogin />
-        </Box>
-      </Typography>
-    </Container>
+      <ProviderLogin />
+    </div>
   );
 }

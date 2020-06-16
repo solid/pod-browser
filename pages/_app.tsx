@@ -1,14 +1,18 @@
-import React, { ComponentType, useEffect, useState, ReactElement } from "react";
+import React, { ComponentType, ReactElement, useEffect, useState } from "react";
 
 import PropTypes from "prop-types";
 import Head from "next/head";
-import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import auth from "solid-auth-client";
 
+import { createStyles, makeStyles, ThemeProvider } from "@material-ui/styles";
+
+import { StyleRules } from "@material-ui/styles/withStyles";
 import theme from "../src/theme";
 import UserContext, { ISession } from "../src/contexts/userContext";
 import PodManagerHeader from "../components/header";
+import "./styles.css";
+import { appLayout, useBem } from "../lib/prism/packages/prism-patterns";
 
 /* eslint @typescript-eslint/no-explicit-any: 0 */
 interface AppProps {
@@ -16,11 +20,17 @@ interface AppProps {
   pageProps: any;
 }
 
+const useStyles = makeStyles(() =>
+  createStyles(appLayout.styles(theme) as StyleRules)
+);
+
 export default function App(props: AppProps): ReactElement {
   const { Component, pageProps } = props;
 
   const [session, setSession] = useState<ISession | undefined>();
   const [isLoadingSession, setIsLoadingSession] = useState(true);
+
+  const bem = useBem(useStyles());
 
   // Remove injected serverside JSS
   useEffect(() => {
@@ -61,8 +71,12 @@ export default function App(props: AppProps): ReactElement {
         <UserContext.Provider value={{ session, isLoadingSession }}>
           <CssBaseline />
           {/* eslint react/jsx-props-no-spreading: 0 */}
-          <PodManagerHeader />
-          <Component {...pageProps} />
+          <div className={bem("app-layout")}>
+            <PodManagerHeader />
+            <main className={bem("app-layout__main")}>
+              <Component {...pageProps} />
+            </main>
+          </div>
         </UserContext.Provider>
       </ThemeProvider>
     </>

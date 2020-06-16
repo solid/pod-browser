@@ -1,8 +1,10 @@
 import * as ReactFns from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
+import { ThemeProvider } from "@material-ui/core/styles";
 
 import Header from "./index";
+import theme from "../../src/theme";
 
 describe("Header", () => {
   describe("with user logged in", () => {
@@ -11,7 +13,11 @@ describe("Header", () => {
         session: true,
       }));
 
-      const tree = shallow(<Header />);
+      const tree = shallow(
+        <ThemeProvider theme={theme}>
+          <Header />
+        </ThemeProvider>
+      );
       expect(shallowToJson(tree)).toMatchSnapshot();
     });
   });
@@ -22,7 +28,11 @@ describe("Header", () => {
         session: undefined,
       }));
 
-      const tree = shallow(<Header />);
+      const tree = shallow(
+        <ThemeProvider theme={theme}>
+          <Header />
+        </ThemeProvider>
+      );
       expect(shallowToJson(tree)).toMatchSnapshot();
     });
   });
