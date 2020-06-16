@@ -1,27 +1,20 @@
 import React, { ChangeEvent, useState, ReactElement } from "react";
 import { Button, Select, MenuItem, Box, TextField } from "@material-ui/core";
 
-import { login } from "@inrupt/solid-auth-fetcher";
+import auth from "solid-auth-client";
 
 import getProviders, { ProviderEntity } from "../../../constants/provider";
-import getConfig from "../../../constants/config";
 
 const PROVIDERS = getProviders();
-const CONFIG = getConfig();
 
 const CUSTOM_PROVIDER = {
   label: "other",
   value: "",
-  useClientId: false,
 };
 
 export const loginWithProvider = (provider: ProviderEntity): void => {
-  login({
-    oidcIssuer: provider.value,
-    redirect: `${CONFIG.host}${CONFIG.loginRedirect}`,
-    clientId: provider.useClientId ? CONFIG.idpClientId : undefined,
-  }).catch((e) => {
-    throw e;
+  auth.login(provider.value).catch((error: Error) => {
+    throw error;
   });
 };
 

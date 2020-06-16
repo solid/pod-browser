@@ -1,8 +1,6 @@
 import Router from "next/router";
 import { mock } from "jest-mock-extended";
 
-import ISolidSession from "@inrupt/solid-auth-fetcher/dist/solidSession/ISolidSession";
-
 import { SESSION_STATES, redirectBasedOnSessionState } from "./index";
 
 jest.mock("next/router");
@@ -39,7 +37,7 @@ describe("auth effects", () => {
 
     test("if there is a session, do not redirect", async () => {
       await redirectBasedOnSessionState(
-        mock<ISolidSession>(),
+        mock(),
         false,
         SESSION_STATES.LOGGED_OUT,
         redirectLocation
@@ -63,7 +61,7 @@ describe("auth effects", () => {
 
     test("if there is not a session, do not redirect", async () => {
       await redirectBasedOnSessionState(
-        mock<ISolidSession>(),
+        mock(),
         false,
         SESSION_STATES.LOGGED_IN,
         redirectLocation

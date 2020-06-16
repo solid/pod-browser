@@ -5,8 +5,7 @@ import Head from "next/head";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
-import ISolidSession from "@inrupt/solid-auth-fetcher/dist/solidSession/ISolidSession";
-import { getSession } from "@inrupt/solid-auth-fetcher";
+import { currentSession } from "solid-auth-client";
 
 // import Header from '../components/header';
 import theme from "../src/theme";
@@ -22,7 +21,7 @@ interface AppProps {
 export default function App(props: AppProps): ReactElement {
   const { Component, pageProps } = props;
 
-  const [session, setSession] = useState<ISolidSession | undefined>();
+  const [session, setSession] = useState();
   const [isLoadingSession, setIsLoadingSession] = useState(true);
 
   // Remove injected serverside JSS
@@ -40,7 +39,7 @@ export default function App(props: AppProps): ReactElement {
 
     // Remove the server-side injected CSS.
     async function fetchSession(): Promise<void> {
-      const sessionStorage = (await getSession()) as ISolidSession;
+      const sessionStorage = await currentSession();
       setSession(sessionStorage);
       setIsLoadingSession(false);
     }

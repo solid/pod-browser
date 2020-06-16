@@ -1,9 +1,10 @@
 import { ReactElement, useContext } from "react";
 import { Typography, List, ListItem, Divider, Avatar } from "@material-ui/core";
-import { ILoggedInSolidSession } from "@inrupt/solid-auth-fetcher/dist/solidSession/ISolidSession";
 import { makeStyles } from "@material-ui/core/styles";
-import UserContext from "../../src/contexts/UserContext";
+import UserContext, { ISession } from "../../src/contexts/userContext";
+
 import styles from "./styles";
+
 import {
   getThirdPartyPermissions,
   getUserPermissions,
@@ -100,7 +101,7 @@ export default function ResourceDetails({
     ...useStyles(),
   };
   const { session } = useContext(UserContext);
-  const { webId } = session as ILoggedInSolidSession;
+  const { webId } = session as ISession;
   const userPermissions = getUserPermissions(webId, permissions);
   const thirdPartyPermissions = getThirdPartyPermissions(webId, permissions);
 

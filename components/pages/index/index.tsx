@@ -2,7 +2,6 @@ import React, { ReactElement, useEffect, useContext, useState } from "react";
 import { Container } from "@material-ui/core";
 import { fetchLitDataset, getThingOne, getIriAll } from "lit-solid";
 import { space } from "rdf-namespaces";
-import { ILoggedInSolidSession } from "@inrupt/solid-auth-fetcher/dist/solidSession/ISolidSession";
 
 import UserContext from "../../../src/contexts/UserContext";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
@@ -30,7 +29,7 @@ export default function Home(): ReactElement {
       return;
     }
 
-    const { webId } = session as ILoggedInSolidSession;
+    const { webId } = session;
 
     getPodIrisFromWebId(webId)
       .then(setPodIris)

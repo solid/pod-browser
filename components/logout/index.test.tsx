@@ -1,12 +1,12 @@
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import Router from "next/router";
-import { logout } from "@inrupt/solid-auth-fetcher";
+import auth from "solid-auth-client";
 
 import LogOutButton from "./index";
 
 jest.mock("next/router");
-jest.mock("@inrupt/solid-auth-fetcher");
+jest.mock("solid-auth-client");
 
 describe("Logout button", () => {
   test("Renders a logout button", () => {
@@ -14,14 +14,17 @@ describe("Logout button", () => {
     expect(shallowToJson(tree)).toMatchSnapshot();
   });
 
-  test("Calls logout and redirects on click", () => {
-    (logout as jest.Mock).mockResolvedValue(null);
+  test("Calls logout and redirects on click", async () => {
+    (auth.logout as jest.Mock).mockResolvedValue(null);
     (Router.push as jest.Mock).mockResolvedValue(null);
 
     const tree = shallow(<LogOutButton />);
     tree.simulate("click", { preventDefault: () => {} });
 
+    // Simulate an await before continuing.
+    await auth.logout();
+
     expect(Router.push).toHaveBeenCalledWith("/login");
-    expect(logout).toHaveBeenCalled();
+    expect(auth.logout).toHaveBeenCalled();
   });
 });

@@ -2,14 +2,13 @@ import { ReactElement, SyntheticEvent } from "react";
 import Router from "next/router";
 import { Button } from "@material-ui/core";
 
-import { logout } from "@inrupt/solid-auth-fetcher";
+import auth from "solid-auth-client";
 
-export function onLogOutClick(e: SyntheticEvent<EventTarget>): void {
+export async function onLogOutClick(
+  e: SyntheticEvent<EventTarget>
+): Promise<void> {
   e.preventDefault();
-
-  logout().catch((error) => {
-    throw error;
-  });
+  await auth.logout();
 
   Router.push("/login").catch((error) => {
     throw error;

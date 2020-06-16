@@ -1,7 +1,6 @@
 import { useEffect, useContext } from "react";
 import Router from "next/router";
 
-import ISolidSession from "@inrupt/solid-auth-fetcher/dist/solidSession/ISolidSession";
 import UserContext from "../../contexts/UserContext";
 
 // TODO figure out typescript enums
@@ -11,7 +10,7 @@ export const SESSION_STATES = {
 };
 
 export function redirectBasedOnSessionState(
-  session: ISolidSession | undefined,
+  session: any,
   isLoadingSession: boolean,
   redirectIfSessionState: string,
   location: string

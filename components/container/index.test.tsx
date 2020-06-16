@@ -4,7 +4,7 @@ import { shallowToJson } from "enzyme-to-json";
 
 import Container, { getContainerResourceIrisFromContainerIri } from "./index";
 
-jest.mock("@inrupt/solid-auth-fetcher");
+jest.mock("solid-auth-client");
 jest.mock("lit-solid");
 
 const iri = "https://mypod.myhost.com/container";
