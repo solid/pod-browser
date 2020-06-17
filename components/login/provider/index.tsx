@@ -15,8 +15,11 @@ const CUSTOM_PROVIDER = {
   value: "",
 };
 
-export const loginWithProvider = (provider: string): Promise<void> =>
-  auth.login(provider);
+export const loginWithProvider = (provider: string): void => {
+  auth.popupLogin({ popupUri: `${provider}common/popup.html` }).catch((e) => {
+    throw e;
+  });
+};
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme))

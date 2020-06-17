@@ -41,6 +41,12 @@ export default function App(props: AppProps): ReactElement {
     }
   }, []);
 
+  useEffect(() => {
+    auth.trackSession(setSession).catch((e) => {
+      throw e;
+    });
+  }, []);
+
   // Update the session when a page is loaded
   useEffect(() => {
     setIsLoadingSession(true);

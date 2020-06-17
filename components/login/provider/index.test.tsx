@@ -25,10 +25,12 @@ describe("ProviderLogin form", () => {
 describe("loginWithProvider", () => {
   test("Calls login", async () => {
     const oidcIssuer = getProviders()[0];
-    (auth.login as jest.Mock).mockResolvedValue(null);
+    (auth.popupLogin as jest.Mock).mockResolvedValue(null);
 
     await ProviderFunctions.loginWithProvider(oidcIssuer.value);
 
-    expect(auth.login).toHaveBeenCalledWith(oidcIssuer.value);
+    expect(auth.popupLogin).toHaveBeenCalledWith({
+      popupUri: `${oidcIssuer.value}common/popup.html`,
+    });
   });
 });
