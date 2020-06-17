@@ -2,7 +2,6 @@
 // react-table is super broken with sorting, so temporarily disable ts checking.
 
 import { ReactElement, useEffect, useState, useContext, useMemo } from "react";
-import { ldp } from "rdf-namespaces";
 import { fetchLitDataset, getThingOne, getIriAll } from "lit-solid";
 import { useTable, useSortBy, UseSortByOptions } from "react-table";
 import {
@@ -21,6 +20,7 @@ import {
   getIriPath,
   fetchResourceWithAcl,
   fetchFileWithAcl,
+  namespace,
 } from "../../src/lit-solid-helpers";
 import Spinner from "../spinner";
 
@@ -46,7 +46,7 @@ export async function getResourceInfoFromContainerIri(
 ): Promise<ResourceDetails[]> {
   const litDataset = await fetchLitDataset(containerIri);
   const container = getThingOne(litDataset, containerIri);
-  const iris = getIriAll(container, ldp.contains);
+  const iris = getIriAll(container, namespace.contains);
 
   const promises = iris.map(fetchResourceDetails).map((p) => p.catch((e) => e));
   return Promise.all(promises);
