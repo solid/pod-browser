@@ -17,7 +17,7 @@ export default function Login(): ReactElement {
     <div className={bem("login-form")}>
       <Link href="/register">
         <a className={bem("button", "primary", "filled")}>
-          Register for a Solid Identity
+          <span>Register for a Solid Identity</span>
         </a>
       </Link>
 
