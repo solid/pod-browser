@@ -21,7 +21,6 @@
 
 import { ReactElement, SyntheticEvent } from "react";
 import Router from "next/router";
-import { Button } from "@material-ui/core";
 
 import auth from "solid-auth-client";
 
@@ -36,10 +35,15 @@ export async function onLogOutClick(
   });
 }
 
-export default function LogOut(): ReactElement {
+interface Props {
+  children: ReactElement;
+  className?: string;
+}
+
+export default function LogOut({ children, className }: Props): ReactElement {
   return (
-    <Button onClick={onLogOutClick} variant="contained">
-      Log out
-    </Button>
+    <button onClick={onLogOutClick} className={className} type="button">
+      {children}
+    </button>
   );
 }

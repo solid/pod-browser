@@ -29,7 +29,7 @@ import theme from "../../src/theme";
 
 describe("Header", () => {
   describe("with user logged in", () => {
-    test("renders with a logout button", () => {
+    test("renders a header", () => {
       jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
         session: true,
       }));
@@ -44,7 +44,7 @@ describe("Header", () => {
   });
 
   describe("with user logged out", () => {
-    test("renders without a logout button", () => {
+    test("renders nothing", () => {
       jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
         session: undefined,
       }));

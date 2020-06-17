@@ -26,7 +26,15 @@ import Head from "next/head";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import auth from "solid-auth-client";
 
-import { createStyles, makeStyles, ThemeProvider } from "@material-ui/styles";
+import {
+  createStyles,
+  makeStyles,
+  StylesProvider,
+  ThemeProvider,
+} from "@material-ui/styles";
+
+import { create } from "jss";
+import preset from "jss-preset-default";
 
 import { StyleRules } from "@material-ui/styles/withStyles";
 import { appLayout, useBem } from "@solid/lit-prism-patterns";
@@ -40,6 +48,8 @@ interface AppProps {
   Component: ComponentType;
   pageProps: any;
 }
+
+const jss = create(preset());
 
 const useStyles = makeStyles(() =>
   createStyles(appLayout.styles(theme) as StyleRules)
@@ -94,18 +104,20 @@ export default function App(props: AppProps): ReactElement {
         />
       </Head>
 
-      <ThemeProvider theme={theme}>
-        <UserContext.Provider value={{ session, isLoadingSession }}>
-          <CssBaseline />
-          {/* eslint react/jsx-props-no-spreading: 0 */}
-          <div className={bem("app-layout")}>
-            <PodManagerHeader />
-            <main className={bem("app-layout__main")}>
-              <Component {...pageProps} />
-            </main>
-          </div>
-        </UserContext.Provider>
-      </ThemeProvider>
+      <StylesProvider jss={jss}>
+        <ThemeProvider theme={theme}>
+          <UserContext.Provider value={{ session, isLoadingSession }}>
+            <CssBaseline />
+            {/* eslint react/jsx-props-no-spreading: 0 */}
+            <div className={bem("app-layout")}>
+              <PodManagerHeader />
+              <main className={bem("app-layout__main")}>
+                <Component {...pageProps} />
+              </main>
+            </div>
+          </UserContext.Provider>
+        </ThemeProvider>
+      </StylesProvider>
     </>
   );
 }

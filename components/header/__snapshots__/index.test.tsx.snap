@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Header with user logged in renders with a logout button 1`] = `
+exports[`Header with user logged in renders a header 1`] = `
 <ContextProvider
   value={
     Object {
@@ -429,7 +429,7 @@ font-display: block;",
 </ContextProvider>
 `;
 
-exports[`Header with user logged out renders without a logout button 1`] = `
+exports[`Header with user logged out renders nothing 1`] = `
 <ContextProvider
   value={
     Object {

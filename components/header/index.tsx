@@ -20,34 +20,27 @@
  */
 
 import React, { ReactElement, useContext } from "react";
-import { Link } from "@material-ui/core";
-import clsx from "clsx";
-import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@material-ui/styles";
 import { header, PrismTheme, useBem } from "@solid/lit-prism-patterns";
-import LogOutButton from "../logout";
 import UserContext from "../../src/contexts/userContext";
+import UserMenu from "./userMenu";
+import MainNav from "./mainNav";
+import styles from "./styles";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(header.styles(theme) as StyleRules)
+  createStyles(styles(theme))
 );
 
-export default function Header(): ReactElement {
+export default function Header(): ReactElement | null {
   const { session } = useContext(UserContext);
   const bem = useBem(useStyles());
 
-  return (
+  return session ? (
     <header className={bem("header-banner")}>
       <div className={bem("header-banner__main-nav-container")}>
-        <nav className={clsx(bem("main-nav"), bem("header-banner__main-nav"))}>
-          <Link href="/">Home</Link>
-
-          <Link>
-            <i className="prism-icon-add" />
-          </Link>
-
-          {session ? <LogOutButton /> : null}
-        </nav>
+        <MainNav className={bem("header-banner__main-nav")} />
       </div>
+      <UserMenu />
     </header>
-  );
+  ) : null;
 }
