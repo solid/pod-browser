@@ -106,3 +106,5 @@ dist
 
 # Next.js HTML output
 out/
+
+.vercel

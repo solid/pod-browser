@@ -1,7 +1,9 @@
 module.exports = {
   root: true,
-  extends: ['@inrupt/eslint-config-react'],
+  plugins: ["license-header"],
+  extends: ["@inrupt/eslint-config-react"],
   rules: {
-    '@typescript-eslint/ban-ts-comment': 0,
-  }
+    "@typescript-eslint/ban-ts-comment": 0,
+    "license-header/header": [1, "./resources/license-header.js"],
+  },
 }

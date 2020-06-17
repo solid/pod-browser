@@ -6,9 +6,10 @@
   "scripts": {
     "build": "next build && next export",
     "ci": "npm run lint && npm run test && npm run build",
+    "deploy": "vercel",
     "dev": "node server.js",
     "lint": "eslint pages components constants src --ext .ts,.tsx,.js",
-    "start": "NODE_ENV=production node server.js",
+    "start": "next start",
     "test": "jest"
   },
   "repository": {
@@ -64,6 +65,7 @@
     "eslint-plugin-import": "^2.21.2",
     "eslint-plugin-jest": "^23.13.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-license-header": "^0.2.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-hooks": "^4.0.4",
@@ -74,6 +76,7 @@
     "next-runtime-dotenv": "^1.2.0",
     "prettier": "^2.0.5",
     "ts-jest": "^26.1.0",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.5",
+    "vercel": "^19.1.1"
   }
 }
