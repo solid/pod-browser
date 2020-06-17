@@ -33,7 +33,7 @@ import theme from "../src/theme";
 import UserContext, { ISession } from "../src/contexts/userContext";
 import PodManagerHeader from "../components/header";
 import "./styles.css";
-import { appLayout, useBem } from "../lib/prism/packages/prism-patterns";
+import { appLayout, useBem } from "@solid/lit-prism-patterns";
 
 /* eslint @typescript-eslint/no-explicit-any: 0 */
 interface AppProps {

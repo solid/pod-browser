@@ -25,7 +25,7 @@ import clsx from "clsx";
 import { useRedirectIfLoggedIn } from "../../../src/effects/auth";
 import LoginForm from "../../login";
 import styles from "./styles";
-import { PrismTheme, useBem } from "../../../lib/prism/packages/prism-patterns";
+import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme))

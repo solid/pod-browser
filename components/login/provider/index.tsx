@@ -26,7 +26,7 @@ import { createStyles, makeStyles } from "@material-ui/styles";
 import auth from "solid-auth-client";
 
 import getProviders from "../../../constants/provider";
-import { PrismTheme, useBem } from "../../../lib/prism/packages/prism-patterns";
+import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import styles from "./styles";
 
 const PROVIDERS = getProviders();

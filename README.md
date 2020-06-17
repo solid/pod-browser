@@ -6,8 +6,6 @@ that data.
 # Installation
 
 1. `npm install`
-1. `git submodule update --init` to clone private packages as submodules
-1. `cd lib/prism && npm i && npm run build` to install and build prism
 1. Copy `.env-example` into `.env.local` and update any variables you need.
 1. `npm run dev` to run a dev server, or `npm run build` to compile static html
   and other assets.

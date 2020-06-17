@@ -29,7 +29,7 @@ import {
   header,
   PrismTheme,
   useBem,
-} from "../../lib/prism/packages/prism-patterns";
+} from "@solid/lit-prism-patterns";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(header.styles(theme) as StyleRules)

@@ -14,9 +14,6 @@ jobs:
         node-version: [12.x, 10.x]
     steps:
     - uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.SUBMODULE_TOKEN }}
-        submodules: true
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1.4.1
       with:
@@ -28,6 +25,5 @@ jobs:
       with:
         path: node_modules
         key: ${{ runner.os }}-node${{ runner.node-version }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-    - run: cd lib/prism && npm i && npm run build && cd ../../
     - run: npm ci
     - run: npm run ci

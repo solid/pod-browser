@@ -23,7 +23,7 @@ import { StyleRules } from "@material-ui/styles";
 import {
   content,
   PrismTheme,
-} from "../../../lib/prism/node_modules/prism-patterns";
+} from "@solid/lit-prism-patterns";
 
 const styles = (theme: PrismTheme): StyleRules => ({
   ...content.styles(theme),

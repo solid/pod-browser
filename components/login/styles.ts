@@ -24,7 +24,7 @@ import {
   PrismTheme,
   button,
   content,
-} from "../../lib/prism/node_modules/prism-patterns";
+} from "@solid/lit-prism-patterns";
 
 const styles = (theme: PrismTheme): StyleRules => ({
   ...button.styles(theme),

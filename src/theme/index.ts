@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createTheme } from "../../lib/prism/packages/prism-patterns";
-import defaultTheme from "../../lib/prism/packages/prism-theme-sdk-default";
+import { createTheme } from "@solid/lit-prism-patterns";
+import defaultTheme from "@solid/lit-prism-theme-sdk-default";
 
 export default createTheme(defaultTheme);
