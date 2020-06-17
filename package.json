@@ -24,6 +24,7 @@
   "dependencies": {
     "@material-ui/core": "^4.10.2",
     "@material-ui/icons": "^4.9.1",
+    "@types/react-table": "^7.0.19",
     "encoding": "^0.1.12",
     "eslint-config-prettier": "^6.11.0",
     "lit-solid": "0.0.2-master-128382876-530.0",
@@ -33,6 +34,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-jss": "^10.3.0",
+    "react-table": "^7.2.0",
     "react-transition-group": "~4.3.0",
     "solid-auth-client": "^2.4.1"
   },

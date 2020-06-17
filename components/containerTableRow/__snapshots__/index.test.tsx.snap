@@ -7,21 +7,19 @@ exports[`ContainerTableRow it renders a table row 1`] = `
 >
   <WithStyles(ForwardRef(TableCell))>
     <Link
-      href="/resource/iri"
+      href="/resource/function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20fn.apply(this%2C%20arguments)%3B%0A%20%20%20%20%20%20%7D"
     >
       <a>
-        /iri
+        <Component />
       </a>
     </Link>
   </WithStyles(ForwardRef(TableCell))>
-  <WithStyles(ForwardRef(TableCell))>
-    Folder
-  </WithStyles(ForwardRef(TableCell))>
-  <WithStyles(ForwardRef(TableCell))>
-    Full
-  </WithStyles(ForwardRef(TableCell))>
-  <WithStyles(ForwardRef(TableCell))>
-    Today :)
+  <WithStyles(ForwardRef(TableCell))
+    key="function () {
+        return fn.apply(this, arguments);
+      }-type"
+  >
+    Resource
   </WithStyles(ForwardRef(TableCell))>
 </WithStyles(ForwardRef(TableRow))>
 `;

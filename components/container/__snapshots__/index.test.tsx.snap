@@ -4,35 +4,72 @@ exports[`Container view Renders a container view 1`] = `<Spinner />`;
 
 exports[`Container view Renders a table with data 1`] = `
 <Fragment>
-  <WithStyles(ForwardRef(Table))>
+  <WithStyles(ForwardRef(Table))
+    role="table"
+  >
     <WithStyles(ForwardRef(TableHead))>
-      <WithStyles(ForwardRef(TableRow))>
-        <WithStyles(ForwardRef(TableCell))>
+      <WithStyles(ForwardRef(TableRow))
+        key="headerGroup_0"
+        role="row"
+      >
+        <WithStyles(ForwardRef(TableCell))
+          colSpan={1}
+          key="header_name"
+          onClick={[Function]}
+          role="columnheader"
+          style={
+            Object {
+              "cursor": "pointer",
+            }
+          }
+          title="Toggle SortBy"
+        >
           File
+          <span />
         </WithStyles(ForwardRef(TableCell))>
-        <WithStyles(ForwardRef(TableCell))>
+        <WithStyles(ForwardRef(TableCell))
+          colSpan={1}
+          key="header_types[0]"
+          onClick={[Function]}
+          role="columnheader"
+          style={
+            Object {
+              "cursor": "pointer",
+            }
+          }
+          title="Toggle SortBy"
+        >
           Type
+          <span />
         </WithStyles(ForwardRef(TableCell))>
-        <WithStyles(ForwardRef(TableCell))>
+        <WithStyles(ForwardRef(TableCell))
+          colSpan={1}
+          key="header_permissions[0].alias"
+          onClick={[Function]}
+          role="columnheader"
+          style={
+            Object {
+              "cursor": "pointer",
+            }
+          }
+          title="Toggle SortBy"
+        >
           My Access
-        </WithStyles(ForwardRef(TableCell))>
-        <WithStyles(ForwardRef(TableCell))>
-          Modified
+          <span />
         </WithStyles(ForwardRef(TableCell))>
       </WithStyles(ForwardRef(TableRow))>
     </WithStyles(ForwardRef(TableHead))>
-    <WithStyles(ForwardRef(TableBody))>
+    <WithStyles(ForwardRef(TableBody))
+      role="rowgroup"
+    >
       <ContainerTableRow
-        iri="https://myaccount.mypodserver.com/inbox"
-        key="https://myaccount.mypodserver.com/inbox"
+        resource="https://myaccount.mypodserver.com/inbox"
       />
       <ContainerTableRow
-        iri="https://myaccount.mypodserver.com/private"
-        key="https://myaccount.mypodserver.com/private"
+        resource="https://myaccount.mypodserver.com/private"
       />
       <ContainerTableRow
-        iri="https://myaccount.mypodserver.com/note.txt"
-        key="https://myaccount.mypodserver.com/note.txt"
+        resource="https://myaccount.mypodserver.com/note.txt"
       />
     </WithStyles(ForwardRef(TableBody))>
   </WithStyles(ForwardRef(Table))>
