@@ -110,11 +110,6 @@ export default function App(props: AppProps): ReactElement {
   );
 }
 
-// TODO Temporary workaround to .env issues
-App.getInitialProps = async function placeholder() {
-  return {};
-};
-
 App.defaultProps = { pageProps: {} };
 
 App.propTypes = {
