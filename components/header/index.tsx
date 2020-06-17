@@ -23,13 +23,9 @@ import React, { ReactElement, useContext } from "react";
 import { Link } from "@material-ui/core";
 import clsx from "clsx";
 import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
+import { header, PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import LogOutButton from "../logout";
 import UserContext from "../../src/contexts/userContext";
-import {
-  header,
-  PrismTheme,
-  useBem,
-} from "@solid/lit-prism-patterns";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(header.styles(theme) as StyleRules)

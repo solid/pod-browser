@@ -24,9 +24,9 @@ import Link from "next/link";
 
 import { createStyles, makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
+import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import ProviderLogin from "./provider";
 import styles from "./styles";
-import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme))

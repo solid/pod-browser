@@ -22,10 +22,10 @@
 import React, { ReactElement } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
+import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import { useRedirectIfLoggedIn } from "../../../src/effects/auth";
 import LoginForm from "../../login";
 import styles from "./styles";
-import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme))

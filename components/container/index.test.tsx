@@ -25,7 +25,6 @@ import { shallowToJson } from "enzyme-to-json";
 import { mock } from "jest-mock-extended";
 import * as litSolidHelpers from "../../src/lit-solid-helpers";
 
-import { ResourceDetails } from "../containerTableRow";
 import Container, {
   fetchResourceDetails,
   getResourceInfoFromContainerIri,

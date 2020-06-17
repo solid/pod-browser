@@ -20,11 +20,7 @@
  */
 
 import { StyleRules } from "@material-ui/styles";
-import {
-  PrismTheme,
-  button,
-  content,
-} from "@solid/lit-prism-patterns";
+import { PrismTheme, button, content } from "@solid/lit-prism-patterns";
 
 const styles = (theme: PrismTheme): StyleRules => ({
   ...button.styles(theme),

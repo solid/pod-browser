@@ -25,8 +25,8 @@ import { createStyles, makeStyles } from "@material-ui/styles";
 
 import auth from "solid-auth-client";
 
-import getProviders from "../../../constants/provider";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
+import getProviders from "../../../constants/provider";
 import styles from "./styles";
 
 const PROVIDERS = getProviders();
@@ -36,7 +36,7 @@ const CUSTOM_PROVIDER = {
   value: "",
 };
 
-export const loginWithProvider = (provider: string): void => {
+export const loginWithProvider = (): void => {
   auth.popupLogin({ popupUri: `/login-popup.html` }).catch((e) => {
     throw e;
   });
@@ -52,7 +52,8 @@ export default function Provider(): ReactElement {
 
   const handleFormSubmit = (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault();
-    return loginWithProvider(customProvider || provider.value);
+    // TODO: provider is currently unused, because of the SAC popup flow.
+    return loginWithProvider();
   };
 
   const bem = useBem(useStyles());
