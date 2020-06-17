@@ -6,8 +6,9 @@ import {
   TableHead,
   TableRow,
 } from "@material-ui/core";
+import Link from "next/link";
 import DetailsContextMenu from "../detailsContextMenu";
-import ContainerTableRow from "../containerTableRow";
+import { resourceHref } from "../containerTableRow";
 import Container from "../container";
 
 interface IPodList {
@@ -39,7 +40,13 @@ export default function PodList(props: IPodList): ReactElement | null {
 
         <TableBody>
           {podIris.map((iri: string) => (
-            <ContainerTableRow key={iri} iri={iri} />
+            <TableRow>
+              <TableCell>
+                <Link href={resourceHref(iri)}>
+                  <a>{iri}</a>
+                </Link>
+              </TableCell>
+            </TableRow>
           ))}
         </TableBody>
       </Table>

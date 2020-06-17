@@ -11,9 +11,12 @@ import ContainerTableRow, {
 
 describe("ContainerTableRow", () => {
   test("it renders a table row", () => {
-    const tree = shallow(
-      <ContainerTableRow resource={mock<ResourceDetails>()} />
-    );
+    const resource = mock<ResourceDetails>({
+      iri: "https://example.com/example.ttl",
+    });
+
+    const tree = shallow(<ContainerTableRow resource={resource} />);
+
     tree.simulate("click");
     expect(shallowToJson(tree)).toMatchSnapshot();
   });

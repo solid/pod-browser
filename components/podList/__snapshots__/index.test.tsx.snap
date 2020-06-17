@@ -17,14 +17,28 @@ exports[`Pod list Renders a table if there are multiple pod iris 1`] = `
       </WithStyles(ForwardRef(TableRow))>
     </WithStyles(ForwardRef(TableHead))>
     <WithStyles(ForwardRef(TableBody))>
-      <ContainerTableRow
-        iri="https://mypod.myhost.com"
-        key="https://mypod.myhost.com"
-      />
-      <ContainerTableRow
-        iri="https://myotherpod.myotherhost.com"
-        key="https://myotherpod.myotherhost.com"
-      />
+      <WithStyles(ForwardRef(TableRow))>
+        <WithStyles(ForwardRef(TableCell))>
+          <Link
+            href="/resource/https%3A%2F%2Fmypod.myhost.com"
+          >
+            <a>
+              https://mypod.myhost.com
+            </a>
+          </Link>
+        </WithStyles(ForwardRef(TableCell))>
+      </WithStyles(ForwardRef(TableRow))>
+      <WithStyles(ForwardRef(TableRow))>
+        <WithStyles(ForwardRef(TableCell))>
+          <Link
+            href="/resource/https%3A%2F%2Fmyotherpod.myotherhost.com"
+          >
+            <a>
+              https://myotherpod.myotherhost.com
+            </a>
+          </Link>
+        </WithStyles(ForwardRef(TableCell))>
+      </WithStyles(ForwardRef(TableRow))>
     </WithStyles(ForwardRef(TableBody))>
   </WithStyles(ForwardRef(Table))>
   <DetailsContextMenu />

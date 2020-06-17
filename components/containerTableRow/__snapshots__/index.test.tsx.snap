@@ -7,7 +7,7 @@ exports[`ContainerTableRow it renders a table row 1`] = `
 >
   <WithStyles(ForwardRef(TableCell))>
     <Link
-      href="/resource/function%20()%20%7B%0A%20%20%20%20%20%20%20%20return%20fn.apply(this%2C%20arguments)%3B%0A%20%20%20%20%20%20%7D"
+      href="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
     >
       <a>
         <Component />
@@ -15,9 +15,7 @@ exports[`ContainerTableRow it renders a table row 1`] = `
     </Link>
   </WithStyles(ForwardRef(TableCell))>
   <WithStyles(ForwardRef(TableCell))
-    key="function () {
-        return fn.apply(this, arguments);
-      }-type"
+    key="https://example.com/example.ttl-type"
   >
     Resource
   </WithStyles(ForwardRef(TableCell))>
