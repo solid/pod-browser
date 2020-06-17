@@ -30,7 +30,7 @@ describe("loginWithProvider", () => {
     await ProviderFunctions.loginWithProvider(oidcIssuer.value);
 
     expect(auth.popupLogin).toHaveBeenCalledWith({
-      popupUri: `${oidcIssuer.value}common/popup.html`,
+      popupUri: `/login-popup.html`,
     });
   });
 });

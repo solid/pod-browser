@@ -16,7 +16,7 @@ const CUSTOM_PROVIDER = {
 };
 
 export const loginWithProvider = (provider: string): void => {
-  auth.popupLogin({ popupUri: `${provider}common/popup.html` }).catch((e) => {
+  auth.popupLogin({ popupUri: `/login-popup.html` }).catch((e) => {
     throw e;
   });
 };
