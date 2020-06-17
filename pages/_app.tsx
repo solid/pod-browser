@@ -43,16 +43,19 @@ export default function App(props: AppProps): ReactElement {
 
   // Update the session when a page is loaded
   useEffect(() => {
-    auth
-      .currentSession()
-      .then((sessionData) => {
-        setSession(sessionData);
-        setIsLoadingSession(false);
-      })
-      .catch((e) => {
-        throw e;
-      });
-  }, [Component]);
+    setIsLoadingSession(true);
+
+    // Remove the server-side injected CSS.
+    async function fetchSession(): Promise<void> {
+      const sessionStorage = await auth.currentSession();
+      setSession(sessionStorage);
+      setIsLoadingSession(false);
+    }
+
+    fetchSession().catch((e) => {
+      throw e;
+    });
+  }, [Component, pageProps, setSession, setIsLoadingSession]);
 
   return (
     <>

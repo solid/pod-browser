@@ -45,10 +45,8 @@ export async function getResourceInfoFromContainerIri(
   const container = getThingOne(litDataset, containerIri);
   const iris = getIriAll(container, ldp.contains);
 
-  const resources = await Promise.allSettled(iris.map(fetchResourceDetails));
-  return resources
-    .filter((response) => response.status === "fulfilled")
-    .map((response) => response.value);
+  const promises = iris.map(fetchResourceDetails).map((p) => p.catch((e) => e));
+  return Promise.all(promises);
 }
 
 interface IPodList {

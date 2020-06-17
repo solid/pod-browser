@@ -15,7 +15,7 @@ const CUSTOM_PROVIDER = {
   value: "",
 };
 
-export const loginWithProvider = async (provider: string): Promise<void> =>
+export const loginWithProvider = (provider: string): Promise<void> =>
   auth.login(provider);
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
