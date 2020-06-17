@@ -21,7 +21,7 @@
 
 /* eslint-disable camelcase */
 import { ldp } from "rdf-namespaces";
-import * as litSolidFns from "lit-solid";
+import * as litSolidFns from "@solid/lit-pod";
 import {
   displayPermissions,
   displayTypes,

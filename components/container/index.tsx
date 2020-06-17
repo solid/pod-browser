@@ -23,7 +23,7 @@
 // react-table is super broken with sorting, so temporarily disable ts checking.
 
 import { ReactElement, useEffect, useState, useContext, useMemo } from "react";
-import { fetchLitDataset, getThingOne, getIriAll } from "lit-solid";
+import { fetchLitDataset, getThingOne, getIriAll } from "@solid/lit-pod";
 import { useTable, useSortBy, UseSortByOptions } from "react-table";
 import {
   Table,

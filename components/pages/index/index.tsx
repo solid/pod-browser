@@ -21,7 +21,7 @@
 
 import React, { ReactElement, useEffect, useContext, useState } from "react";
 import { Container } from "@material-ui/core";
-import { fetchLitDataset, getThingOne, getIriAll } from "lit-solid";
+import { fetchLitDataset, getThingOne, getIriAll } from "@solid/lit-pod";
 import { space } from "rdf-namespaces";
 
 import UserContext from "../../../src/contexts/userContext";

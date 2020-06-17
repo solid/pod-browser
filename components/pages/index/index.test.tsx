@@ -21,13 +21,13 @@
 
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
-import { fetchLitDataset, getThingOne, getIriAll } from "lit-solid";
+import { fetchLitDataset, getThingOne, getIriAll } from "@solid/lit-pod";
 
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import IndexPage, { getPodIrisFromWebId } from "./index";
 
 jest.mock("../../../src/effects/auth");
-jest.mock("lit-solid");
+jest.mock("@solid/lit-pod");
 
 describe("Index page", () => {
   test("Renders a logout button", () => {

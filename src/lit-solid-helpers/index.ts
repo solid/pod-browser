@@ -39,7 +39,7 @@ import {
   unstable_fetchFile,
   unstable_fetchLitDatasetWithAcl,
   unstable_getAgentAccessModesAll,
-} from "lit-solid";
+} from "@solid/lit-pod";
 import { ldp } from "rdf-namespaces";
 import { parseUrl } from "../stringHelpers";
 

@@ -31,7 +31,7 @@ import Container, {
 } from "./index";
 
 jest.mock("solid-auth-client");
-jest.mock("lit-solid");
+jest.mock("@solid/lit-pod");
 
 const iri = "https://mypod.myhost.com/public";
 
@@ -76,7 +76,7 @@ describe("Loading container resource iri list", () => {
     ];
 
     const { getIriAll }: { getIriAll: jest.Mock } = jest.requireMock(
-      "lit-solid"
+      "@solid/lit-pod"
     );
 
     getIriAll.mockImplementationOnce(() => resources);
