@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { shallow, mount } from "enzyme";
+import { mount } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 
 import { ThemeProvider } from "@material-ui/core/styles";
@@ -32,7 +32,7 @@ jest.mock("../../../src/effects/auth");
 
 describe("Login page", () => {
   test("Renders a logout button", () => {
-    const tree = shallow(
+    const tree = mount(
       <ThemeProvider theme={theme}>
         <LoginPage />
       </ThemeProvider>

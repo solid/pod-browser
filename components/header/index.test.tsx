@@ -20,7 +20,7 @@
  */
 
 import * as ReactFns from "react";
-import { shallow } from "enzyme";
+import { mount } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import { ThemeProvider } from "@material-ui/core/styles";
 
@@ -34,7 +34,7 @@ describe("Header", () => {
         session: true,
       }));
 
-      const tree = shallow(
+      const tree = mount(
         <ThemeProvider theme={theme}>
           <Header />
         </ThemeProvider>
@@ -49,7 +49,7 @@ describe("Header", () => {
         session: undefined,
       }));
 
-      const tree = shallow(
+      const tree = mount(
         <ThemeProvider theme={theme}>
           <Header />
         </ThemeProvider>

@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MainNav renders navigation 1`] = `
-<ContextProvider
-  value={
+<ThemeProvider
+  theme={
     Object {
       "breakpoints": Object {
         "between": [Function],
@@ -425,6 +425,38 @@ font-display: block;",
     }
   }
 >
-  <MainNav />
-</ContextProvider>
+  <MainNav>
+    <nav
+      className="makeStyles-main-nav-1534"
+    >
+      <ul
+        className="makeStyles-main-nav__list-1535"
+      >
+        <li
+          className="makeStyles-main-nav__item-1536"
+        >
+          <Link
+            href="/"
+          >
+            <a
+              className="makeStyles-main-nav__link-1537"
+              href="/"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              <i
+                className="makeStyles-main-nav__icon-1539"
+              />
+              <span
+                className="makeStyles-main-nav__label-1540"
+              >
+                Home
+              </span>
+            </a>
+          </Link>
+        </li>
+      </ul>
+    </nav>
+  </MainNav>
+</ThemeProvider>
 `;

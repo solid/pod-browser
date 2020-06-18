@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`UserMenu renders a menu 1`] = `
-<ContextProvider
-  value={
+<ThemeProvider
+  theme={
     Object {
       "breakpoints": Object {
         "between": [Function],
@@ -425,6 +425,60 @@ font-display: block;",
     }
   }
 >
-  <UserMenu />
-</ContextProvider>
+  <UserMenu>
+    <div
+      className="makeStyles-header-banner__aside-menu-13 makeStyles-header-banner__aside-menu--popup-14"
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+    >
+      <button
+        aria-controls="UserMenu"
+        aria-expanded={true}
+        aria-haspopup="true"
+        className="makeStyles-header-banner__aside-menu-trigger-15"
+        onClick={[Function]}
+        type="button"
+      >
+        <i
+          aria-label="User Menu"
+          className="makeStyles-header-banner__aside-menu-trigger-profile-17"
+          style={
+            Object {
+              "backgroundImage": "url(./emptyProfile.svg)",
+            }
+          }
+        />
+      </button>
+      <div
+        aria-hidden={true}
+        className="makeStyles-header-banner__aside-menu-popup-18"
+        id="UserMenu"
+      >
+        <ul
+          className="makeStyles-header-banner__user-menu-19"
+        >
+          <li
+            className="makeStyles-header-banner__user-menu-item-20"
+          >
+            <LogOut
+              className="makeStyles-header-banner__user-menu-item-trigger-23"
+            >
+              <button
+                className="makeStyles-header-banner__user-menu-item-trigger-23"
+                onClick={[Function]}
+                type="button"
+              >
+                <span
+                  className="prism-header-banner__user-menu-item-label"
+                >
+                  Log out
+                </span>
+              </button>
+            </LogOut>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </UserMenu>
+</ThemeProvider>
 `;

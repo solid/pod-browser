@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ProviderLogin form Renders a webid login form, with button bound to login 1`] = `
-<ContextProvider
-  value={
+<ThemeProvider
+  theme={
     Object {
       "breakpoints": Object {
         "between": [Function],
@@ -425,6 +425,32 @@ font-display: block;",
     }
   }
 >
-  <Provider />
-</ContextProvider>
+  <Provider>
+    <form>
+      <Styled(MuiBox)
+        my={2}
+      >
+        <div
+          className="MuiBox-root MuiBox-root-8"
+        >
+          <Styled(MuiBox)
+            mt={2}
+          >
+            <div
+              className="MuiBox-root MuiBox-root-9"
+            >
+              <button
+                className="makeStyles-button-1"
+                onClick={[Function]}
+                type="submit"
+              >
+                Log In
+              </button>
+            </div>
+          </Styled(MuiBox)>
+        </div>
+      </Styled(MuiBox)>
+    </form>
+  </Provider>
+</ThemeProvider>
 `;

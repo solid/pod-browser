@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { shallow } from "enzyme";
+import { mount } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 
 import auth from "solid-auth-client";
@@ -34,7 +34,7 @@ jest.mock("solid-auth-client");
 
 describe("ProviderLogin form", () => {
   test("Renders a webid login form, with button bound to login", () => {
-    const tree = shallow(
+    const tree = mount(
       <ThemeProvider theme={theme}>
         <ProviderLogin />
       </ThemeProvider>

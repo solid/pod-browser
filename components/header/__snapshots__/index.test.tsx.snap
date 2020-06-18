@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Header with user logged in renders a header 1`] = `
-<ContextProvider
-  value={
+<ThemeProvider
+  theme={
     Object {
       "breakpoints": Object {
         "between": [Function],
@@ -425,13 +425,112 @@ font-display: block;",
     }
   }
 >
-  <Header />
-</ContextProvider>
+  <Header>
+    <header
+      className="makeStyles-header-banner-9"
+    >
+      <div
+        className="makeStyles-header-banner__main-nav-container-11"
+      >
+        <MainNav
+          className="makeStyles-header-banner__main-nav-12"
+        >
+          <nav
+            className="makeStyles-main-nav-1558 makeStyles-header-banner__main-nav-12"
+          >
+            <ul
+              className="makeStyles-main-nav__list-1559"
+            >
+              <li
+                className="makeStyles-main-nav__item-1560"
+              >
+                <Link
+                  href="/"
+                >
+                  <a
+                    className="makeStyles-main-nav__link-1561"
+                    href="/"
+                    onClick={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <i
+                      className="makeStyles-main-nav__icon-1563"
+                    />
+                    <span
+                      className="makeStyles-main-nav__label-1564"
+                    >
+                      Home
+                    </span>
+                  </a>
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        </MainNav>
+      </div>
+      <UserMenu>
+        <div
+          className="makeStyles-header-banner__aside-menu-1577 makeStyles-header-banner__aside-menu--popup-1578"
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <button
+            aria-controls="UserMenu"
+            aria-expanded={true}
+            aria-haspopup="true"
+            className="makeStyles-header-banner__aside-menu-trigger-1579"
+            onClick={[Function]}
+            type="button"
+          >
+            <i
+              aria-label="User Menu"
+              className="makeStyles-header-banner__aside-menu-trigger-profile-1581"
+              style={
+                Object {
+                  "backgroundImage": "url(./emptyProfile.svg)",
+                }
+              }
+            />
+          </button>
+          <div
+            aria-hidden={true}
+            className="makeStyles-header-banner__aside-menu-popup-1582"
+            id="UserMenu"
+          >
+            <ul
+              className="makeStyles-header-banner__user-menu-1583"
+            >
+              <li
+                className="makeStyles-header-banner__user-menu-item-1584"
+              >
+                <LogOut
+                  className="makeStyles-header-banner__user-menu-item-trigger-1587"
+                >
+                  <button
+                    className="makeStyles-header-banner__user-menu-item-trigger-1587"
+                    onClick={[Function]}
+                    type="button"
+                  >
+                    <span
+                      className="prism-header-banner__user-menu-item-label"
+                    >
+                      Log out
+                    </span>
+                  </button>
+                </LogOut>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </UserMenu>
+    </header>
+  </Header>
+</ThemeProvider>
 `;
 
 exports[`Header with user logged out renders nothing 1`] = `
-<ContextProvider
-  value={
+<ThemeProvider
+  theme={
     Object {
       "breakpoints": Object {
         "between": [Function],
@@ -855,5 +954,5 @@ font-display: block;",
   }
 >
   <Header />
-</ContextProvider>
+</ThemeProvider>
 `;

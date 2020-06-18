@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { shallow } from "enzyme";
+import { mount } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import { ThemeProvider } from "@material-ui/core/styles";
 
@@ -28,7 +28,7 @@ import theme from "../../src/theme";
 
 describe("Login form", () => {
   test("Renders a login form, with button bound to swapLoginType", () => {
-    const tree = shallow(
+    const tree = mount(
       <ThemeProvider theme={theme}>
         <Login />
       </ThemeProvider>
