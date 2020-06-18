@@ -43,7 +43,11 @@ export default function Login(): ReactElement {
       </Link>
 
       <p className={clsx(bem("content-p"), bem("login-form__what-is-solid"))}>
-        <a href="https://solid.inrupt.com/get-a-solid-pod" rel="nofollow">
+        <a
+          href="https://solid.inrupt.com/get-a-solid-pod"
+          rel="nofollow noreferrer"
+          target="_blank"
+        >
           What is a Solid Identity?
         </a>
       </p>
