@@ -19,26 +19,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as ReactFns from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
+import DetailsLoading from "./index";
 
-import ContainerDetails from "./index";
-
-describe("Container details", () => {
-  test("Renders container details", () => {
-    jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
-      session: { webId: "webId" },
-    }));
-
-    const tree = shallow(
-      <ContainerDetails
-        name="Container Name"
-        types={["Container"]}
-        iri="iri"
-        classes={{}}
-      />
-    );
+describe("DetailsLoading", () => {
+  test("Renders a details error view", () => {
+    const resource = { iri: "iri", name: "name", types: ["type"] };
+    const tree = shallow(<DetailsLoading resource={resource} />);
     expect(shallowToJson(tree)).toMatchSnapshot();
   });
 });

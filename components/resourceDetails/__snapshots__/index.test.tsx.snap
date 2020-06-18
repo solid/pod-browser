@@ -3,7 +3,7 @@
 exports[`Resource details renders no 3rd party access message 1`] = `
 <Fragment>
   <section
-    className="centeredSection"
+    className="makeStyles-centeredSection-2"
   >
     <WithStyles(ForwardRef(Typography))
       title="iri"
@@ -13,7 +13,7 @@ exports[`Resource details renders no 3rd party access message 1`] = `
     </WithStyles(ForwardRef(Typography))>
   </section>
   <section
-    className="centeredSection"
+    className="makeStyles-centeredSection-2"
   >
     <WithStyles(ForwardRef(Typography))
       variant="h5"
@@ -23,7 +23,7 @@ exports[`Resource details renders no 3rd party access message 1`] = `
   </section>
   <WithStyles(ForwardRef(Divider)) />
   <section
-    className="centeredSection"
+    className="makeStyles-centeredSection-2"
   >
     <WithStyles(ForwardRef(Typography))
       variant="h5"
@@ -32,7 +32,7 @@ exports[`Resource details renders no 3rd party access message 1`] = `
     </WithStyles(ForwardRef(Typography))>
     <WithStyles(ForwardRef(List))>
       <WithStyles(ForwardRef(ListItem))
-        className="listItem"
+        className="makeStyles-listItem-4"
         key="owner"
       >
         <WithStyles(ForwardRef(Avatar))
@@ -41,12 +41,12 @@ exports[`Resource details renders no 3rd party access message 1`] = `
           src="http://example.com/avatar.png"
         />
         <WithStyles(ForwardRef(Typography))
-          className="detailText"
+          className="makeStyles-detailText-5"
         >
           Test Person
         </WithStyles(ForwardRef(Typography))>
         <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
+          className="makeStyles-typeValue-6 makeStyles-detailText-5"
         >
           Full Control
         </WithStyles(ForwardRef(Typography))>
@@ -54,7 +54,7 @@ exports[`Resource details renders no 3rd party access message 1`] = `
     </WithStyles(ForwardRef(List))>
   </section>
   <section
-    className="centeredSection"
+    className="makeStyles-centeredSection-2"
   >
     <WithStyles(ForwardRef(Typography))
       variant="h5"
@@ -63,10 +63,10 @@ exports[`Resource details renders no 3rd party access message 1`] = `
     </WithStyles(ForwardRef(Typography))>
     <WithStyles(ForwardRef(List))>
       <WithStyles(ForwardRef(ListItem))
-        className="listItem"
+        className="makeStyles-listItem-4"
       >
         <WithStyles(ForwardRef(Typography))
-          className="detailText"
+          className="makeStyles-detailText-5"
         >
           No 3rd party access
         </WithStyles(ForwardRef(Typography))>
@@ -75,19 +75,19 @@ exports[`Resource details renders no 3rd party access message 1`] = `
   </section>
   <WithStyles(ForwardRef(Divider)) />
   <section
-    className="centeredSection"
+    className="makeStyles-centeredSection-2"
   >
     <WithStyles(ForwardRef(List))>
       <WithStyles(ForwardRef(ListItem))
-        className="listItem"
+        className="makeStyles-listItem-4"
       >
         <WithStyles(ForwardRef(Typography))
-          className="detailText"
+          className="makeStyles-detailText-5"
         >
           Thing Type:
         </WithStyles(ForwardRef(Typography))>
         <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
+          className="makeStyles-typeValue-6 makeStyles-detailText-5"
         >
           Resource
         </WithStyles(ForwardRef(Typography))>
@@ -100,7 +100,7 @@ exports[`Resource details renders no 3rd party access message 1`] = `
 exports[`Resource details renders resource details 1`] = `
 <Fragment>
   <section
-    className="centeredSection"
+    className="makeStyles-centeredSection-2"
   >
     <WithStyles(ForwardRef(Typography))
       title="iri"
@@ -110,7 +110,7 @@ exports[`Resource details renders resource details 1`] = `
     </WithStyles(ForwardRef(Typography))>
   </section>
   <section
-    className="centeredSection"
+    className="makeStyles-centeredSection-2"
   >
     <WithStyles(ForwardRef(Typography))
       variant="h5"
@@ -120,7 +120,7 @@ exports[`Resource details renders resource details 1`] = `
   </section>
   <WithStyles(ForwardRef(Divider)) />
   <section
-    className="centeredSection"
+    className="makeStyles-centeredSection-2"
   >
     <WithStyles(ForwardRef(Typography))
       variant="h5"
@@ -129,7 +129,7 @@ exports[`Resource details renders resource details 1`] = `
     </WithStyles(ForwardRef(Typography))>
     <WithStyles(ForwardRef(List))>
       <WithStyles(ForwardRef(ListItem))
-        className="listItem"
+        className="makeStyles-listItem-4"
         key="owner"
       >
         <WithStyles(ForwardRef(Avatar))
@@ -138,12 +138,12 @@ exports[`Resource details renders resource details 1`] = `
           src="http://example.com/avatar.png"
         />
         <WithStyles(ForwardRef(Typography))
-          className="detailText"
+          className="makeStyles-detailText-5"
         >
           Test Person
         </WithStyles(ForwardRef(Typography))>
         <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
+          className="makeStyles-typeValue-6 makeStyles-detailText-5"
         >
           Full Control
         </WithStyles(ForwardRef(Typography))>
@@ -151,7 +151,7 @@ exports[`Resource details renders resource details 1`] = `
     </WithStyles(ForwardRef(List))>
   </section>
   <section
-    className="centeredSection"
+    className="makeStyles-centeredSection-2"
   >
     <WithStyles(ForwardRef(Typography))
       variant="h5"
@@ -160,7 +160,7 @@ exports[`Resource details renders resource details 1`] = `
     </WithStyles(ForwardRef(Typography))>
     <WithStyles(ForwardRef(List))>
       <WithStyles(ForwardRef(ListItem))
-        className="listItem"
+        className="makeStyles-listItem-4"
         key="collaborator"
       >
         <WithStyles(ForwardRef(Avatar))
@@ -168,12 +168,12 @@ exports[`Resource details renders resource details 1`] = `
           className="makeStyles-avatar-1"
         />
         <WithStyles(ForwardRef(Typography))
-          className="detailText"
+          className="makeStyles-detailText-5"
         >
           Test Collaborator
         </WithStyles(ForwardRef(Typography))>
         <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
+          className="makeStyles-typeValue-6 makeStyles-detailText-5"
         >
           Can View
         </WithStyles(ForwardRef(Typography))>
@@ -182,19 +182,19 @@ exports[`Resource details renders resource details 1`] = `
   </section>
   <WithStyles(ForwardRef(Divider)) />
   <section
-    className="centeredSection"
+    className="makeStyles-centeredSection-2"
   >
     <WithStyles(ForwardRef(List))>
       <WithStyles(ForwardRef(ListItem))
-        className="listItem"
+        className="makeStyles-listItem-4"
       >
         <WithStyles(ForwardRef(Typography))
-          className="detailText"
+          className="makeStyles-detailText-5"
         >
           Thing Type:
         </WithStyles(ForwardRef(Typography))>
         <WithStyles(ForwardRef(Typography))
-          className="typeValue detailText"
+          className="makeStyles-typeValue-6 makeStyles-detailText-5"
         >
           Resource
         </WithStyles(ForwardRef(Typography))>

@@ -19,47 +19,30 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement } from "react";
-import { Typography, List, ListItem, Divider } from "@material-ui/core";
+import { useContext, ReactElement } from "react";
+import { shallow } from "enzyme";
+import { shallowToJson } from "enzyme-to-json";
+import UserContext from "./index";
 
-export interface Props {
-  iri: string;
-  name?: string;
-  types?: string[];
-  classes: Record<string, string>;
-}
+function ChildComponent(): ReactElement {
+  const { session, isLoadingSession } = useContext(UserContext);
 
-export default function ContainerDetails({
-  iri,
-  name,
-  classes,
-}: Props): ReactElement {
   return (
-    <>
-      <section className={classes.centeredSection}>
-        <Typography variant="h3" title={iri}>
-          {name}
-        </Typography>
-      </section>
-
-      <section className={classes.centeredSection}>
-        <Typography variant="h5">Details</Typography>
-      </section>
-
-      <Divider />
-
-      <section className={classes.centeredSection}>
-        <List>
-          <ListItem className={classes.listItem}>
-            <Typography className={classes.detailText}>Thing Type:</Typography>
-            <Typography
-              className={`${classes.typeValue} ${classes.detailText}`}
-            >
-              Container
-            </Typography>
-          </ListItem>
-        </List>
-      </section>
-    </>
+    <div>
+      <div className="session" />
+      <div className="isLoadingSession">
+        {isLoadingSession ? "true" : "false"}
+      </div>
+    </div>
   );
 }
+
+describe("UserContext", () => {
+  test("it has context data", () => {
+    const component = shallow(
+      <UserContext.Provider value={{}}>{ChildComponent}</UserContext.Provider>
+    );
+
+    expect(shallowToJson(component)).toMatchSnapshot();
+  });
+});

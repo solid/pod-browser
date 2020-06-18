@@ -21,3 +21,213 @@ exports[`ContainerTableRow it renders a table row 1`] = `
   </WithStyles(ForwardRef(TableCell))>
 </WithStyles(ForwardRef(TableRow))>
 `;
+
+exports[`handleTableRowClick it opens the drawer and sets the menu contents 1`] = `
+<Fragment>
+  <section
+    className="makeStyles-centeredSection-4"
+  >
+    <WithStyles(ForwardRef(Typography))
+      title={[MockFunction]}
+      variant="h3"
+    >
+      <Component />
+    </WithStyles(ForwardRef(Typography))>
+  </section>
+  <section
+    className="makeStyles-centeredSection-4"
+  >
+    <WithStyles(ForwardRef(Typography))
+      variant="h5"
+    >
+      Details
+    </WithStyles(ForwardRef(Typography))>
+  </section>
+  <WithStyles(ForwardRef(Divider)) />
+  <section
+    className="makeStyles-centeredSection-4"
+  >
+    <WithStyles(ForwardRef(Typography))
+      variant="h5"
+    >
+      My Access
+    </WithStyles(ForwardRef(Typography))>
+    <WithStyles(ForwardRef(List))>
+      <WithStyles(ForwardRef(ListItem))
+        className="makeStyles-listItem-6"
+      >
+        <WithStyles(ForwardRef(Skeleton))
+          className="makeStyles-avatar-9"
+          height={40}
+          variant="circle"
+          width={45}
+        />
+        <WithStyles(ForwardRef(Skeleton))
+          variant="text"
+          width="100%"
+        />
+      </WithStyles(ForwardRef(ListItem))>
+    </WithStyles(ForwardRef(List))>
+  </section>
+  <section
+    className="makeStyles-centeredSection-4"
+  >
+    <WithStyles(ForwardRef(Typography))
+      variant="h5"
+    >
+      Sharing
+    </WithStyles(ForwardRef(Typography))>
+    <WithStyles(ForwardRef(List))>
+      <WithStyles(ForwardRef(ListItem))
+        className="makeStyles-listItem-6"
+      >
+        <WithStyles(ForwardRef(Skeleton))
+          className="makeStyles-avatar-9"
+          height={40}
+          variant="circle"
+          width={45}
+        />
+        <WithStyles(ForwardRef(Skeleton))
+          variant="text"
+          width="100%"
+        />
+      </WithStyles(ForwardRef(ListItem))>
+    </WithStyles(ForwardRef(List))>
+  </section>
+  <WithStyles(ForwardRef(Divider)) />
+  <section
+    className="makeStyles-centeredSection-4"
+  >
+    <WithStyles(ForwardRef(List))>
+      <WithStyles(ForwardRef(ListItem))
+        className="makeStyles-listItem-6"
+      >
+        <WithStyles(ForwardRef(Typography))
+          className="makeStyles-detailText-7"
+        >
+          Thing Type:
+        </WithStyles(ForwardRef(Typography))>
+        <WithStyles(ForwardRef(Skeleton))
+          variant="text"
+          width="50%"
+        />
+      </WithStyles(ForwardRef(ListItem))>
+    </WithStyles(ForwardRef(List))>
+  </section>
+</Fragment>
+`;
+
+exports[`handleTableRowClick it renders a detail error when the permission call fails 1`] = `
+<div
+  className="makeStyles-container-16"
+>
+  <WithStyles(ForwardRef(Typography))>
+    There was an error fetching permissions for this resource.
+  </WithStyles(ForwardRef(Typography))>
+</div>
+`;
+
+exports[`handleTableRowClick it renders the resource permissions 1`] = `
+<Fragment>
+  <section
+    className="makeStyles-centeredSection-11"
+  >
+    <WithStyles(ForwardRef(Typography))
+      title="iri"
+      variant="h3"
+    >
+      name
+    </WithStyles(ForwardRef(Typography))>
+  </section>
+  <section
+    className="makeStyles-centeredSection-11"
+  >
+    <WithStyles(ForwardRef(Typography))
+      variant="h5"
+    >
+      Details
+    </WithStyles(ForwardRef(Typography))>
+  </section>
+  <WithStyles(ForwardRef(Divider)) />
+  <section
+    className="makeStyles-centeredSection-11"
+  >
+    <WithStyles(ForwardRef(Typography))
+      variant="h5"
+    >
+      My Access
+    </WithStyles(ForwardRef(Typography))>
+    <WithStyles(ForwardRef(List)) />
+  </section>
+  <section
+    className="makeStyles-centeredSection-11"
+  >
+    <WithStyles(ForwardRef(Typography))
+      variant="h5"
+    >
+      Sharing
+    </WithStyles(ForwardRef(Typography))>
+    <WithStyles(ForwardRef(List))>
+      <WithStyles(ForwardRef(ListItem))
+        className="makeStyles-listItem-13"
+        key="owner"
+      >
+        <WithStyles(ForwardRef(Avatar))
+          alt="owner"
+          className="makeStyles-avatar-10"
+        />
+        <WithStyles(ForwardRef(Typography))
+          className="makeStyles-detailText-14"
+        >
+          owner
+        </WithStyles(ForwardRef(Typography))>
+        <WithStyles(ForwardRef(Typography))
+          className="makeStyles-typeValue-15 makeStyles-detailText-14"
+        >
+          Full Control
+        </WithStyles(ForwardRef(Typography))>
+      </WithStyles(ForwardRef(ListItem))>
+      <WithStyles(ForwardRef(ListItem))
+        className="makeStyles-listItem-13"
+        key="collaborator"
+      >
+        <WithStyles(ForwardRef(Avatar))
+          alt="collaborator"
+          className="makeStyles-avatar-10"
+        />
+        <WithStyles(ForwardRef(Typography))
+          className="makeStyles-detailText-14"
+        >
+          collaborator
+        </WithStyles(ForwardRef(Typography))>
+        <WithStyles(ForwardRef(Typography))
+          className="makeStyles-typeValue-15 makeStyles-detailText-14"
+        >
+          Can View
+        </WithStyles(ForwardRef(Typography))>
+      </WithStyles(ForwardRef(ListItem))>
+    </WithStyles(ForwardRef(List))>
+  </section>
+  <WithStyles(ForwardRef(Divider)) />
+  <section
+    className="makeStyles-centeredSection-11"
+  >
+    <WithStyles(ForwardRef(List))>
+      <WithStyles(ForwardRef(ListItem))
+        className="makeStyles-listItem-13"
+      >
+        <WithStyles(ForwardRef(Typography))
+          className="makeStyles-detailText-14"
+        >
+          Thing Type:
+        </WithStyles(ForwardRef(Typography))>
+        <WithStyles(ForwardRef(Typography))
+          className="makeStyles-typeValue-15 makeStyles-detailText-14"
+        >
+          type
+        </WithStyles(ForwardRef(Typography))>
+      </WithStyles(ForwardRef(ListItem))>
+    </WithStyles(ForwardRef(List))>
+  </section>
+</Fragment>
+`;

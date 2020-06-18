@@ -25,6 +25,7 @@
   "dependencies": {
     "@material-ui/core": "^4.10.2",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "@solid/lit-pod": "0.0.2-chorerename-137272289-92.0",
     "@solid/lit-prism-patterns": "^0.3.0",
     "@solid/lit-prism-theme-sdk-default": "^0.3.0",

@@ -26,6 +26,7 @@ import {
   displayPermissions,
   displayTypes,
   fetchFileWithAcl,
+  fetchResource,
   fetchResourceWithAcl,
   getIriPath,
   getThirdPartyPermissions,
@@ -542,5 +543,49 @@ describe("fetchFileWithAcl", () => {
     expect(types).toContain("image/vnd.microsoft.icon");
     expect(file).toEqual("file contents");
     expect(permissions).toHaveLength(2);
+  });
+});
+
+describe("fetchResource", () => {
+  test("it returns a normalized dataset, without permissions", async () => {
+    const expectedIri = "https://user.dev.inrupt.net/public/";
+
+    jest
+      .spyOn(litSolidFns, "fetchLitDataset")
+      .mockImplementationOnce(async () => {
+        return Promise.resolve(createResource());
+      });
+
+    const normalizedResource = await fetchResource(expectedIri);
+    const { iri, contains, modified, mtime, size, types } = normalizedResource;
+
+    expect(iri).toEqual(expectedIri);
+    expect(contains).toBeInstanceOf(Array);
+    expect(modified).toEqual(timestamp);
+    expect(mtime).toEqual(1591131561.195);
+    expect(size).toEqual(4096);
+    expect(types).toContain("Container");
+    expect(types).toContain("BasicContainer");
+  });
+
+  test("it returns no permissions when acl is not returned", async () => {
+    jest
+      .spyOn(litSolidFns, "unstable_fetchLitDatasetWithAcl")
+      .mockImplementationOnce(async () => {
+        return Promise.resolve(createResource());
+      });
+
+    jest
+      .spyOn(litSolidFns, "unstable_getAgentAccessModesAll")
+      .mockImplementationOnce(async () => {
+        return Promise.resolve(undefined);
+      });
+
+    const { permissions, acl } = await fetchResourceWithAcl(
+      "https://user.dev.inrupt.net/public/"
+    );
+
+    expect(permissions).toBeUndefined();
+    expect(acl).toBeUndefined();
   });
 });

@@ -21,7 +21,7 @@
 
 import * as ReactFns from "react";
 import { mount } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
+import { mountToJson } from "enzyme-to-json";
 import { ThemeProvider } from "@material-ui/core/styles";
 
 import MainNav from "./index";
@@ -38,6 +38,6 @@ describe("MainNav", () => {
         <MainNav />
       </ThemeProvider>
     );
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    expect(mountToJson(tree)).toMatchSnapshot();
   });
 });

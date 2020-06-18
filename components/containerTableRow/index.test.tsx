@@ -20,7 +20,7 @@
  */
 
 /* eslint-disable camelcase */
-import React from "react";
+import * as ReactFns from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import { mock } from "jest-mock-extended";
@@ -29,6 +29,7 @@ import ContainerTableRow, {
   resourceHref,
   ResourceDetails,
 } from "./index";
+import * as litSolidFns from "../../src/lit-solid-helpers";
 
 describe("ContainerTableRow", () => {
   test("it renders a table row", () => {
@@ -37,8 +38,6 @@ describe("ContainerTableRow", () => {
     });
 
     const tree = shallow(<ContainerTableRow resource={resource} />);
-
-    tree.simulate("click");
     expect(shallowToJson(tree)).toMatchSnapshot();
   });
 });
@@ -55,7 +54,6 @@ describe("handleTableRowClick", () => {
     const setMenuOpen = jest.fn();
     const setMenuContents = jest.fn();
     const handler = handleTableRowClick({
-      classes: {},
       resource: mock<ResourceDetails>(),
       setMenuOpen,
       setMenuContents,
@@ -67,15 +65,67 @@ describe("handleTableRowClick", () => {
 
     await handler(evnt);
 
+    const [[loadingComponent]] = setMenuContents.mock.calls;
+    const tree = shallow(loadingComponent);
+
     expect(setMenuOpen).toHaveBeenCalledWith(true);
     expect(setMenuContents).toHaveBeenCalled();
+    expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+
+  test("it renders the resource permissions", async () => {
+    const setMenuOpen = jest.fn();
+    const setMenuContents = jest.fn();
+    const resource = {
+      name: "name",
+      types: ["type"],
+      iri: "iri",
+    };
+    const handler = handleTableRowClick({
+      resource,
+      setMenuOpen,
+      setMenuContents,
+    });
+
+    const evnt = { target: document.createElement("tr") } as Partial<
+      React.MouseEvent<HTMLInputElement>
+    >;
+
+    jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
+      session: { webId: "webId" },
+    }));
+
+    jest.spyOn(litSolidFns, "fetchResourceWithAcl").mockResolvedValue({
+      iri: "iri",
+      types: ["type"],
+      permissions: [
+        {
+          webId: "owner",
+          alias: "Full Control",
+          acl: { read: true, write: true, append: true, control: true },
+          profile: { webId: "owner" },
+        },
+        {
+          webId: "collaborator",
+          alias: "Can View",
+          acl: { read: true, write: false, append: false, control: false },
+          profile: { webId: "collaborator" },
+        },
+      ],
+    });
+
+    await handler(evnt);
+
+    const [, [detailsComponent]] = setMenuContents.mock.calls;
+    const tree = shallow(detailsComponent);
+
+    expect(shallowToJson(tree)).toMatchSnapshot();
   });
 
   test("it commits no operation when the click target is an anchor", async () => {
     const setMenuOpen = jest.fn();
     const setMenuContents = jest.fn();
     const handler = handleTableRowClick({
-      classes: {},
       resource: mock<ResourceDetails>(),
       setMenuOpen,
       setMenuContents,
@@ -88,5 +138,73 @@ describe("handleTableRowClick", () => {
 
     expect(setMenuOpen).not.toHaveBeenCalled();
     expect(setMenuContents).not.toHaveBeenCalled();
+  });
+
+  test("it does not attempt to fetch permissions if there are already permissions", async () => {
+    const setMenuOpen = jest.fn();
+    const setMenuContents = jest.fn();
+    const handler = handleTableRowClick({
+      resource: {
+        iri: "iri",
+        name: "name",
+        types: ["type"],
+        permissions: [
+          {
+            webId: "webId",
+            alias: "Full Control",
+            acl: { read: true, write: true, append: true, control: true },
+            profile: { webId: "webId" },
+          },
+        ],
+      },
+      setMenuOpen,
+      setMenuContents,
+    });
+
+    jest.spyOn(litSolidFns, "fetchResourceWithAcl");
+
+    const evnt = { target: document.createElement("tr") } as Partial<
+      React.MouseEvent<HTMLInputElement>
+    >;
+
+    await handler(evnt);
+
+    expect(setMenuOpen).toHaveBeenCalledWith(true);
+    expect(setMenuContents).toHaveBeenCalled();
+    expect(litSolidFns.fetchResourceWithAcl).not.toHaveBeenCalled();
+  });
+
+  test("it renders a detail error when the permission call fails", async () => {
+    const setMenuOpen = jest.fn();
+    const setMenuContents = jest.fn();
+
+    jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
+      session: { webId: "webId" },
+    }));
+
+    const handler = handleTableRowClick({
+      resource: { iri: "iri", name: "name", types: ["type"] },
+      setMenuOpen,
+      setMenuContents,
+    });
+
+    jest
+      .spyOn(litSolidFns, "fetchResourceWithAcl")
+      .mockImplementationOnce(() => {})
+      .mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+    const evnt = { target: document.createElement("tr") } as Partial<
+      React.MouseEvent<HTMLInputElement>
+    >;
+
+    await handler(evnt);
+
+    const [, [component]] = setMenuContents.mock.calls;
+    const tree = shallow(component);
+
+    expect(setMenuContents).toHaveBeenCalled();
+    expect(shallowToJson(tree)).toMatchSnapshot();
   });
 });

@@ -34,16 +34,20 @@ import {
 } from "@material-ui/core";
 
 import DetailsContextMenu from "../detailsContextMenu";
-import ContainerTableRow, { ResourceDetails } from "../containerTableRow";
+import ContainerTableRow from "../containerTableRow";
 import UserContext from "../../src/contexts/userContext";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import {
   getIriPath,
-  fetchResourceWithAcl,
+  fetchResource,
   fetchFileWithAcl,
   namespace,
 } from "../../src/lit-solid-helpers";
 import Spinner from "../spinner";
+
+interface ResourceDetails extends NormalizedResource {
+  name?: string;
+}
 
 export async function fetchResourceDetails(
   iri: string
@@ -51,7 +55,7 @@ export async function fetchResourceDetails(
   const name = getIriPath(iri);
   let resource;
   try {
-    resource = await fetchResourceWithAcl(iri);
+    resource = await fetchResource(iri);
   } catch (e) {
     resource = await fetchFileWithAcl(iri);
   }
@@ -97,10 +101,6 @@ export default function Container(props: IPodList): ReactElement {
       {
         Header: "Type",
         accessor: "types[0]",
-      },
-      {
-        Header: "My Access",
-        accessor: "permissions[0].alias",
       },
     ],
     []

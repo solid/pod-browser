@@ -42,21 +42,6 @@ exports[`Container view Renders a table with data 1`] = `
           Type
           <span />
         </WithStyles(ForwardRef(TableCell))>
-        <WithStyles(ForwardRef(TableCell))
-          colSpan={1}
-          key="header_permissions[0].alias"
-          onClick={[Function]}
-          role="columnheader"
-          style={
-            Object {
-              "cursor": "pointer",
-            }
-          }
-          title="Toggle SortBy"
-        >
-          My Access
-          <span />
-        </WithStyles(ForwardRef(TableCell))>
       </WithStyles(ForwardRef(TableRow))>
     </WithStyles(ForwardRef(TableHead))>
     <WithStyles(ForwardRef(TableBody))

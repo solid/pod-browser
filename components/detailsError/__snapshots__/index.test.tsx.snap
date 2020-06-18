@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DetailsError Renders a details error view 1`] = `
+<div
+  className="makeStyles-container-1"
+>
+  <WithStyles(ForwardRef(Typography))>
+    There was an error fetching permissions for this resource.
+  </WithStyles(ForwardRef(Typography))>
+</div>
+`;

@@ -253,6 +253,14 @@ export async function fetchResourceWithAcl(
   };
 }
 
+export async function fetchResource(iri: string): Promise<NormalizedResource> {
+  const resource = await fetchLitDataset(iri);
+  const dataset = resource as LitDataset;
+  const thing = dataset as Thing;
+
+  return normalizeDataset(thing, iri);
+}
+
 export function isUserOrMatch(webId: string, id: string): boolean {
   return webId === "user" || webId === id;
 }

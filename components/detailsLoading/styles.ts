@@ -19,42 +19,37 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as ReactFns from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
-import { ThemeProvider } from "@material-ui/core/styles";
+import { StyleRules } from "@material-ui/styles";
 
-import Header from "./index";
-import theme from "../../src/theme";
+const styles: StyleRules = {
+  spinnerContainer: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    justifyContent: "center",
+  },
+  centeredSection: {
+    padding: "1rem",
+  },
+  raw: {
+    height: "100%",
+    width: "100%",
+    maxHeight: "200px",
+    overflow: "auto",
+  },
+  listItem: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  detailText: {
+    fontSize: "0.75rem",
+  },
+  typeValue: {
+    marginLeft: "auto",
+  },
+  avatar: {
+    marginRight: "1rem",
+  },
+};
 
-describe("Header", () => {
-  describe("with user logged in", () => {
-    test("renders a header", () => {
-      jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
-        session: true,
-      }));
-
-      const tree = mount(
-        <ThemeProvider theme={theme}>
-          <Header />
-        </ThemeProvider>
-      );
-      expect(mountToJson(tree)).toMatchSnapshot();
-    });
-  });
-
-  describe("with user logged out", () => {
-    test("renders nothing", () => {
-      jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
-        session: undefined,
-      }));
-
-      const tree = mount(
-        <ThemeProvider theme={theme}>
-          <Header />
-        </ThemeProvider>
-      );
-      expect(mountToJson(tree)).toMatchSnapshot();
-    });
-  });
-});
+export default styles;

@@ -30,6 +30,7 @@ import {
   getThirdPartyPermissions,
   getUserPermissions,
   NormalizedPermission,
+  NormalizedResource,
   Profile,
 } from "../../src/lit-solid-helpers";
 
@@ -106,25 +107,17 @@ export function displayType(types: string[] | undefined): string {
 
 const useStyles = makeStyles(styles);
 
-export interface Props {
-  iri: string;
+export interface Props extends NormalizedResource {
   name?: string;
-  permissions?: NormalizedPermission[];
-  classes: Record<string, string>;
-  types?: string[];
 }
 
 export default function ResourceDetails({
   iri,
   name,
   permissions,
-  classes,
   types,
 }: Props): ReactElement {
-  const resourceClasses: Record<string, string> = {
-    ...classes,
-    ...useStyles(),
-  };
+  const classes = useStyles();
   const { session } = useContext(UserContext);
   const { webId } = session as ISession;
   const userPermissions = getUserPermissions(webId, permissions);
@@ -132,35 +125,33 @@ export default function ResourceDetails({
 
   return (
     <>
-      <section className={resourceClasses.centeredSection}>
+      <section className={classes.centeredSection}>
         <Typography variant="h3" title={iri}>
           {name}
         </Typography>
       </section>
 
-      <section className={resourceClasses.centeredSection}>
+      <section className={classes.centeredSection}>
         <Typography variant="h5">Details</Typography>
       </section>
 
       <Divider />
 
-      <section className={resourceClasses.centeredSection}>
+      <section className={classes.centeredSection}>
         <Typography variant="h5">My Access</Typography>
-        <List>{displayPermission(userPermissions, resourceClasses)}</List>
+        <List>{displayPermission(userPermissions, classes)}</List>
       </section>
 
-      {displayThirdPartyPermissions(thirdPartyPermissions, resourceClasses)}
+      {displayThirdPartyPermissions(thirdPartyPermissions, classes)}
 
       <Divider />
 
-      <section className={resourceClasses.centeredSection}>
+      <section className={classes.centeredSection}>
         <List>
-          <ListItem className={resourceClasses.listItem}>
-            <Typography className={resourceClasses.detailText}>
-              Thing Type:
-            </Typography>
+          <ListItem className={classes.listItem}>
+            <Typography className={classes.detailText}>Thing Type:</Typography>
             <Typography
-              className={`${resourceClasses.typeValue} ${resourceClasses.detailText}`}
+              className={`${classes.typeValue} ${classes.detailText}`}
             >
               {displayType(types)}
             </Typography>
