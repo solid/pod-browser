@@ -22,6 +22,8 @@
 import * as ReactFns from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
+import { ThemeProvider } from "@material-ui/core/styles";
+import theme from "../../src/theme";
 
 import ResourceDetails, {
   displayName,
@@ -77,13 +79,15 @@ describe("Resource details", () => {
     };
 
     const tree = shallow(
-      <ResourceDetails
-        name="Resource Name"
-        types={["Resource"]}
-        iri="iri"
-        classes={classes}
-        permissions={permissions}
-      />
+      <ThemeProvider theme={theme}>
+        <ResourceDetails
+          name="Resource Name"
+          types={["Resource"]}
+          iri="iri"
+          classes={classes}
+          permissions={permissions}
+        />
+      </ThemeProvider>
     );
 
     expect(shallowToJson(tree)).toMatchSnapshot();
@@ -120,13 +124,15 @@ describe("Resource details", () => {
     };
 
     const tree = shallow(
-      <ResourceDetails
-        name="Resource Name"
-        types={["Resource"]}
-        iri="iri"
-        classes={classes}
-        permissions={permissions}
-      />
+      <ThemeProvider theme={theme}>
+        <ResourceDetails
+          name="Resource Name"
+          types={["Resource"]}
+          iri="iri"
+          classes={classes}
+          permissions={permissions}
+        />
+      </ThemeProvider>
     );
 
     expect(shallowToJson(tree)).toMatchSnapshot();

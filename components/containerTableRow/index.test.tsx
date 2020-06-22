@@ -38,6 +38,7 @@ describe("ContainerTableRow", () => {
     });
 
     const tree = shallow(<ContainerTableRow resource={resource} />);
+
     expect(shallowToJson(tree)).toMatchSnapshot();
   });
 });
@@ -65,61 +66,8 @@ describe("handleTableRowClick", () => {
 
     await handler(evnt);
 
-    const [[loadingComponent]] = setMenuContents.mock.calls;
-    const tree = shallow(loadingComponent);
-
     expect(setMenuOpen).toHaveBeenCalledWith(true);
     expect(setMenuContents).toHaveBeenCalled();
-    expect(shallowToJson(tree)).toMatchSnapshot();
-  });
-
-  test("it renders the resource permissions", async () => {
-    const setMenuOpen = jest.fn();
-    const setMenuContents = jest.fn();
-    const resource = {
-      name: "name",
-      types: ["type"],
-      iri: "iri",
-    };
-    const handler = handleTableRowClick({
-      resource,
-      setMenuOpen,
-      setMenuContents,
-    });
-
-    const evnt = { target: document.createElement("tr") } as Partial<
-      React.MouseEvent<HTMLInputElement>
-    >;
-
-    jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
-      session: { webId: "webId" },
-    }));
-
-    jest.spyOn(litSolidFns, "fetchResourceWithAcl").mockResolvedValue({
-      iri: "iri",
-      types: ["type"],
-      permissions: [
-        {
-          webId: "owner",
-          alias: "Full Control",
-          acl: { read: true, write: true, append: true, control: true },
-          profile: { webId: "owner" },
-        },
-        {
-          webId: "collaborator",
-          alias: "Can View",
-          acl: { read: true, write: false, append: false, control: false },
-          profile: { webId: "collaborator" },
-        },
-      ],
-    });
-
-    await handler(evnt);
-
-    const [, [detailsComponent]] = setMenuContents.mock.calls;
-    const tree = shallow(detailsComponent);
-
-    expect(shallowToJson(tree)).toMatchSnapshot();
   });
 
   test("it commits no operation when the click target is an anchor", async () => {
@@ -201,10 +149,6 @@ describe("handleTableRowClick", () => {
 
     await handler(evnt);
 
-    const [, [component]] = setMenuContents.mock.calls;
-    const tree = shallow(component);
-
     expect(setMenuContents).toHaveBeenCalled();
-    expect(shallowToJson(tree)).toMatchSnapshot();
   });
 });

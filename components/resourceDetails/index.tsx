@@ -20,10 +20,17 @@
  */
 
 import { ReactElement, useContext } from "react";
-import { Typography, List, ListItem, Divider, Avatar } from "@material-ui/core";
+import {
+  Typography,
+  List,
+  ListItem,
+  Divider,
+  Avatar,
+  createStyles,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { PrismTheme } from "@solid/lit-prism-patterns";
 import UserContext, { ISession } from "../../src/contexts/userContext";
-
 import styles from "./styles";
 
 import {
@@ -79,7 +86,7 @@ export function displayThirdPartyPermissions(
   if (items.length === 0) {
     return (
       <section className={classes.centeredSection}>
-        <Typography variant="h5">Sharing</Typography>
+        <h5 className={classes["content-h5"]}>Sharing</h5>
         <List>
           <ListItem className={classes.listItem}>
             <Typography className={classes.detailText}>
@@ -93,7 +100,7 @@ export function displayThirdPartyPermissions(
 
   return (
     <section className={classes.centeredSection}>
-      <Typography variant="h5">Sharing</Typography>
+      <h5 className={classes["content-h5"]}>Sharing</h5>
       <List>{items}</List>
     </section>
   );
@@ -105,7 +112,9 @@ export function displayType(types: string[] | undefined): string {
   return type;
 }
 
-const useStyles = makeStyles(styles);
+const useStyles = makeStyles<PrismTheme>((theme) =>
+  createStyles(styles(theme))
+);
 
 export interface Props extends NormalizedResource {
   name?: string;
@@ -126,19 +135,19 @@ export default function ResourceDetails({
   return (
     <>
       <section className={classes.centeredSection}>
-        <Typography variant="h3" title={iri}>
+        <h3 className={classes["content-h3"]} title={iri}>
           {name}
-        </Typography>
+        </h3>
       </section>
 
       <section className={classes.centeredSection}>
-        <Typography variant="h5">Details</Typography>
+        <h5 className={classes["content-h5"]}>Details</h5>
       </section>
 
       <Divider />
 
       <section className={classes.centeredSection}>
-        <Typography variant="h5">My Access</Typography>
+        <h5 className={classes["content-h5"]}>My Access</h5>
         <List>{displayPermission(userPermissions, classes)}</List>
       </section>
 

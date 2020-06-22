@@ -22,11 +22,14 @@
 import { ReactElement } from "react";
 import { Typography, Divider, List, ListItem } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
-import { makeStyles } from "@material-ui/core/styles";
+import { PrismTheme } from "@solid/lit-prism-patterns";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
 import styles from "./styles";
 import { NormalizedResource } from "../../src/lit-solid-helpers";
 
-const useStyles = makeStyles(styles);
+const useStyles = makeStyles<PrismTheme>((theme) =>
+  createStyles(styles(theme))
+);
 
 interface ResourceDetails extends NormalizedResource {
   name: string;
@@ -46,19 +49,19 @@ export default function DetailsLoading({ resource }: Props): ReactElement {
   return (
     <>
       <section className={classes.centeredSection}>
-        <Typography variant="h3" title={iri}>
+        <h3 className={classes["content-h3"]} title={iri}>
           {name}
-        </Typography>
+        </h3>
       </section>
 
       <section className={classes.centeredSection}>
-        <Typography variant="h5">Details</Typography>
+        <h5 className={classes["content-h5"]}>Details</h5>
       </section>
 
       <Divider />
 
       <section className={classes.centeredSection}>
-        <Typography variant="h5">My Access</Typography>
+        <h5 className={classes["content-h5"]}>My Access</h5>
 
         <List>
           <ListItem className={classes.listItem}>
@@ -74,7 +77,7 @@ export default function DetailsLoading({ resource }: Props): ReactElement {
       </section>
 
       <section className={classes.centeredSection}>
-        <Typography variant="h5">Sharing</Typography>
+        <h5 className={classes["content-h5"]}>Sharing</h5>
 
         <List>
           <ListItem className={classes.listItem}>

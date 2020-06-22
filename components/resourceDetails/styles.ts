@@ -20,8 +20,9 @@
  */
 
 import { StyleRules } from "@material-ui/core";
+import { PrismTheme, content } from "@solid/lit-prism-patterns";
 
-const styles: StyleRules = {
+const rules = {
   avatar: {
     marginRight: "1rem",
   },
@@ -46,4 +47,9 @@ const styles: StyleRules = {
   },
 };
 
-export default styles;
+export default function styles(theme: PrismTheme): StyleRules {
+  return {
+    ...rules,
+    ...content.styles(theme),
+  };
+}

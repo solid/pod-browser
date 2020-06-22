@@ -20,12 +20,10 @@
  */
 
 import { StyleRules } from "@material-ui/styles";
+import { PrismTheme, content } from "@solid/lit-prism-patterns";
 
-const styles: StyleRules = {
+const rules = {
   spinnerContainer: {
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "nowrap",
     justifyContent: "center",
   },
   centeredSection: {
@@ -34,7 +32,7 @@ const styles: StyleRules = {
   raw: {
     height: "100%",
     width: "100%",
-    maxHeight: "200px",
+    maxHeight: 200,
     overflow: "auto",
   },
   listItem: {
@@ -52,4 +50,9 @@ const styles: StyleRules = {
   },
 };
 
-export default styles;
+export default function styles(theme: PrismTheme): StyleRules {
+  return {
+    ...rules,
+    ...content.styles(theme),
+  };
+}

@@ -21,12 +21,20 @@
 
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
+import { ThemeProvider } from "@material-ui/core/styles";
 import DetailsLoading from "./index";
+import theme from "../../src/theme";
 
 describe("DetailsLoading", () => {
   test("Renders a details error view", () => {
     const resource = { iri: "iri", name: "name", types: ["type"] };
-    const tree = shallow(<DetailsLoading resource={resource} />);
+
+    const tree = shallow(
+      <ThemeProvider theme={theme}>
+        <DetailsLoading resource={resource} />
+      </ThemeProvider>
+    );
+
     expect(shallowToJson(tree)).toMatchSnapshot();
   });
 });
