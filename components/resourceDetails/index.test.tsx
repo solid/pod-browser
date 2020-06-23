@@ -20,7 +20,7 @@
  */
 
 import * as ReactFns from "react";
-import { shallow } from "enzyme";
+import { mount } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "../../src/theme";
@@ -78,7 +78,7 @@ describe("Resource details", () => {
       centeredSection: "centeredSection",
     };
 
-    const tree = shallow(
+    const tree = mount(
       <ThemeProvider theme={theme}>
         <ResourceDetails
           name="Resource Name"
@@ -123,7 +123,7 @@ describe("Resource details", () => {
       centeredSection: "centeredSection",
     };
 
-    const tree = shallow(
+    const tree = mount(
       <ThemeProvider theme={theme}>
         <ResourceDetails
           name="Resource Name"

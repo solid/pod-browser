@@ -36,14 +36,11 @@ interface ResourceDetails extends NormalizedResource {
 }
 
 interface Props {
-  resource: ResourceDetails | undefined;
+  resource: ResourceDetails;
 }
 
 export default function DetailsLoading({ resource }: Props): ReactElement {
   const classes = useStyles();
-
-  if (!resource) return <></>;
-
   const { name, iri } = resource;
 
   return (
