@@ -58,6 +58,12 @@ export default function Container(props: IPodList): ReactElement {
   const columns = useMemo(
     () => [
       {
+        header: "Icon",
+        accessor: "icon",
+        disableSortBy: true,
+        modifiers: ["align-center", "width-preview"],
+      },
+      {
         Header: "File",
         accessor: "name",
       },
@@ -91,6 +97,7 @@ export default function Container(props: IPodList): ReactElement {
     {
       columns,
       data,
+      defaultCanSort: true,
     },
     useSortBy
   );
@@ -117,10 +124,14 @@ export default function Container(props: IPodList): ReactElement {
               {headerGroup.headers.map((column) => (
                 <td
                   key={column.id}
-                  className={bem("table__header-cell")}
+                  className={bem(
+                    "table__header-cell",
+                    ...(column.modifiers || [])
+                  )}
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
-                  {`${column.render("Header")} `}
+                  {column.render("Header")}
+                  {` `}
                   <SortedTableCarat
                     sorted={column.isSorted}
                     sortedDesc={column.isSortedDesc}

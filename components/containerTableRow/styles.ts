@@ -24,7 +24,7 @@
 import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
 
 const styles = (theme: PrismTheme) =>
-  createStyles(theme, ["table"], {
+  createStyles(theme, ["icons", "table"], {
     tableRow: {
       cursor: "pointer",
     },
@@ -34,6 +34,7 @@ const styles = (theme: PrismTheme) =>
       flexWrap: "nowrap",
       justifyContent: "center",
     },
+    "resource-icon": theme.icons.iconColor(theme.palette.text.secondary),
   });
 
 export default styles;

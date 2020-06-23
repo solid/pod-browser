@@ -22,6 +22,6 @@
 import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
 
 const styles = (theme: PrismTheme) =>
-  createStyles(theme, ["icons", "table"], { });
+  createStyles(theme, ["icons", "table"], {});
 
 export default styles;

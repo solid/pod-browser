@@ -62,6 +62,24 @@ export function handleTableRowClick({
   };
 }
 
+interface IResourceIcon {
+  types?: string[];
+  bem: Function<any>;
+}
+
+function ResourceIcon(props: IResourceIcon): ReactElement | null {
+  const { types, bem } = props;
+
+  if (!types) {
+    return null;
+  }
+
+  // keeping it very simple for now (either folder or file), and then we can expand upon it later
+  const icon = types.indexOf("Container") !== -1 ? "icon-folder" : "icon-file";
+
+  return <i className={clsx(bem(icon), bem("resource-icon"))} />;
+}
+
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme) as StyleRules)
 );
@@ -87,13 +105,17 @@ export default function ContainerTableRow({ resource }: Props): ReactElement {
     resource: loadedResource,
   });
 
-  const { types, permissions } = loadedResource;
+  const { types } = loadedResource;
 
   return (
     <tr
       className={clsx(bem("table__body-row"), bem("tableRow"))}
       onClick={onClick}
     >
+      <td className={bem("table__body-cell", "align-center", "width-preview")}>
+        <ResourceIcon types={types} bem={bem} />
+      </td>
+
       <td className={bem("table__body-cell")}>
         <Link href="/resource/[iri]" as={resourceHref(iri)}>
           <a>{name}</a>
