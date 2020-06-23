@@ -20,7 +20,7 @@
  */
 
 import React, { ReactElement, useContext, useState } from "react";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import LogOutButton from "../../logout";
 import styles from "./styles";
@@ -28,7 +28,7 @@ import UserContext from "../../../src/contexts/userContext";
 import useAuthenticatedProfile from "../../../src/hooks/useAuthenticatedProfile";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme))
+  createStyles(styles(theme) as StyleRules)
 );
 
 export default function UserMenu(): ReactElement {

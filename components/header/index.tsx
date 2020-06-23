@@ -20,7 +20,7 @@
  */
 
 import React, { ReactElement, useContext } from "react";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 import { header, PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import UserContext from "../../src/contexts/userContext";
 import UserMenu from "./userMenu";
@@ -28,7 +28,7 @@ import MainNav from "./mainNav";
 import styles from "./styles";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme))
+  createStyles(styles(theme) as StyleRules)
 );
 
 export default function Header(): ReactElement | null {

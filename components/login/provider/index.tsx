@@ -21,7 +21,7 @@
 
 import React, { ReactElement } from "react";
 import { Box } from "@material-ui/core";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 
 import auth from "solid-auth-client";
 
@@ -35,7 +35,7 @@ export const loginWithProvider = (): void => {
 };
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme))
+  createStyles(styles(theme) as StyleRules)
 );
 
 export default function Provider(): ReactElement {

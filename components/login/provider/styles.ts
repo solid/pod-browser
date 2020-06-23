@@ -19,10 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { StyleRules } from "@material-ui/styles";
 import { PrismTheme, button } from "@solid/lit-prism-patterns";
 
-const styles = (theme: PrismTheme): StyleRules =>
-  button.styles(theme) as StyleRules;
+const styles = (theme: PrismTheme) => button.styles(theme);
 
 export default styles;

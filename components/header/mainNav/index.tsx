@@ -20,7 +20,7 @@
  */
 
 import React, { ReactElement } from "react";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 import clsx from "clsx";
 import Link from "next/link";
 
@@ -32,7 +32,7 @@ interface Props {
 }
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme))
+  createStyles(styles(theme) as StyleRules)
 );
 
 export default function MainNav({ className }: Props): ReactElement {
