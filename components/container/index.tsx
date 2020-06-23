@@ -24,21 +24,23 @@
 
 import { ReactElement, useMemo } from "react";
 import { useTable, useSortBy, UseSortByOptions } from "react-table";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@material-ui/core";
 
-import Spinner from "../spinner";
+import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
+import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
+import clsx from "clsx";
 import DetailsContextMenu from "../detailsContextMenu";
 import ContainerTableRow from "../containerTableRow";
 import SortedTableCarat from "../sortedTableCarat";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import { useFetchContainerResourceIris } from "../../src/hooks/litPod";
 import { ResourceDetails, getIriPath } from "../../src/lit-solid-helpers";
+
+import Spinner from "../spinner";
+import styles from "./styles";
+
+const useStyles = makeStyles<PrismTheme>((theme) =>
+  createStyles(styles(theme) as StyleRules)
+);
 
 interface IPodList {
   iri: string;
@@ -50,6 +52,8 @@ export default function Container(props: IPodList): ReactElement {
   const { iri } = props;
   const { data: resourceIris } = useFetchContainerResourceIris(iri);
   const loading = typeof resourceIris === "undefined";
+
+  const bem = useBem(useStyles());
 
   const columns = useMemo(
     () => [
@@ -99,32 +103,41 @@ export default function Container(props: IPodList): ReactElement {
   /* eslint react/jsx-props-no-spreading: 0 */
   return (
     <>
-      <Table {...getTableProps()}>
-        <TableHead>
+      <table
+        className={clsx(bem("table"), bem("navigator"))}
+        {...getTableProps()}
+      >
+        <thead className={bem("table__header")}>
           {headerGroups.map((headerGroup) => (
-            <TableRow {...headerGroup.getHeaderGroupProps()}>
+            <tr
+              key={headerGroup.id}
+              className={bem("table__header-row")}
+              {...headerGroup.getHeaderGroupProps()}
+            >
               {headerGroup.headers.map((column) => (
-                <TableCell
+                <td
+                  key={column.id}
+                  className={bem("table__header-cell")}
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
-                  {column.render("Header")}
+                  {`${column.render("Header")} `}
                   <SortedTableCarat
                     sorted={column.isSorted}
                     sortedDesc={column.isSortedDesc}
                   />
-                </TableCell>
+                </td>
               ))}
-            </TableRow>
+            </tr>
           ))}
-        </TableHead>
+        </thead>
 
-        <TableBody {...getTableBodyProps()}>
+        <tbody className={bem("table__body")} {...getTableBodyProps()}>
           {!data || !data.length ? (
-            <TableRow key="no-resources-found">
-              <TableCell rowSpan={3}>
+            <tr key="no-resources-found" className={bem("table__body-row")}>
+              <td rowSpan={3} className={bem("table__body-cell")}>
                 No resources were found within this container.
-              </TableCell>
-            </TableRow>
+              </td>
+            </tr>
           ) : null}
 
           {rows.map((row) => {
@@ -132,8 +145,9 @@ export default function Container(props: IPodList): ReactElement {
             const details = row.original as ResourceDetails;
             return <ContainerTableRow key={details.iri} resource={details} />;
           })}
-        </TableBody>
-      </Table>
+        </tbody>
+      </table>
+
       <DetailsContextMenu />
     </>
   );

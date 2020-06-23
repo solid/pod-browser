@@ -19,20 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
 
 const styles = (theme: PrismTheme) =>
   createStyles(theme, ["table"], {
-    tableRow: {
-      cursor: "pointer",
-    },
-    spinnerContainer: {
-      display: "flex",
-      flexDirection: "row",
-      flexWrap: "nowrap",
-      justifyContent: "center",
+    navigator: {
+      marginTop: theme.spacing(1),
     },
   });
 

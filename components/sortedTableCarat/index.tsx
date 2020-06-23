@@ -20,21 +20,36 @@
  */
 
 import { ReactElement } from "react";
+import clsx from "clsx";
+import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
+import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
+import styles from "./styles";
 
 interface ISortedTableCarat {
   sorted: boolean;
   sortedDesc?: boolean;
 }
 
+const useStyles = makeStyles<PrismTheme>((theme) =>
+  createStyles(styles(theme) as StyleRules)
+);
+
 export default function SortedTableCarat(
   props: ISortedTableCarat
-): ReactElement {
+): ReactElement | null {
   const { sorted, sortedDesc } = props;
+  const bem = useBem(useStyles());
+
+  if (!sorted) {
+    return null;
+  }
 
   return (
-    <span>
-      {sorted && sortedDesc ? "v" : ""}
-      {sorted && !sortedDesc ? "^" : ""}
-    </span>
+    <i
+      className={clsx(
+        bem(sortedDesc ? "icon-caret-down" : "icon-caret-up"),
+        bem("table__icon")
+      )}
+    />
   );
 }
