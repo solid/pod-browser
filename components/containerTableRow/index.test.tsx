@@ -27,13 +27,15 @@ import { mock } from "jest-mock-extended";
 import ContainerTableRow, {
   handleTableRowClick,
   resourceHref,
-  ResourceDetails,
+  fetchResourceDetails,
 } from "./index";
-import * as litSolidFns from "../../src/lit-solid-helpers";
+import * as litSolidHelpers from "../../src/lit-solid-helpers";
+
+jest.mock("@solid/lit-pod");
 
 describe("ContainerTableRow", () => {
   test("it renders a table row", () => {
-    const resource = mock<ResourceDetails>({
+    const resource = mock<litSolidHelpers.ResourceDetails>({
       iri: "https://example.com/example.ttl",
     });
 
@@ -55,7 +57,7 @@ describe("handleTableRowClick", () => {
     const setMenuOpen = jest.fn();
     const setMenuContents = jest.fn();
     const handler = handleTableRowClick({
-      resource: mock<ResourceDetails>(),
+      resource: mock<litSolidHelpers.ResourceDetails>(),
       setMenuOpen,
       setMenuContents,
     });
@@ -74,7 +76,7 @@ describe("handleTableRowClick", () => {
     const setMenuOpen = jest.fn();
     const setMenuContents = jest.fn();
     const handler = handleTableRowClick({
-      resource: mock<ResourceDetails>(),
+      resource: mock<litSolidHelpers.ResourceDetails>(),
       setMenuOpen,
       setMenuContents,
     });
@@ -109,7 +111,7 @@ describe("handleTableRowClick", () => {
       setMenuContents,
     });
 
-    jest.spyOn(litSolidFns, "fetchResourceWithAcl");
+    jest.spyOn(litSolidHelpers, "fetchResourceWithAcl");
 
     const evnt = { target: document.createElement("tr") } as Partial<
       React.MouseEvent<HTMLInputElement>
@@ -119,7 +121,7 @@ describe("handleTableRowClick", () => {
 
     expect(setMenuOpen).toHaveBeenCalledWith(true);
     expect(setMenuContents).toHaveBeenCalled();
-    expect(litSolidFns.fetchResourceWithAcl).not.toHaveBeenCalled();
+    expect(litSolidHelpers.fetchResourceWithAcl).not.toHaveBeenCalled();
   });
 
   test("it renders a detail error when the permission call fails", async () => {
@@ -137,7 +139,7 @@ describe("handleTableRowClick", () => {
     });
 
     jest
-      .spyOn(litSolidFns, "fetchResourceWithAcl")
+      .spyOn(litSolidHelpers, "fetchResourceWithAcl")
       .mockImplementationOnce(() => {})
       .mockImplementationOnce(() => {
         throw new Error();
@@ -150,5 +152,37 @@ describe("handleTableRowClick", () => {
     await handler(evnt);
 
     expect(setMenuContents).toHaveBeenCalled();
+  });
+});
+
+describe("fetchResourceDetails", () => {
+  test("it fetches the resource, adding a human-readable name", async () => {
+    const iri = "https://dayton.dev.inrupt.net/public/";
+
+    jest
+      .spyOn(litSolidHelpers, "fetchResource")
+      .mockResolvedValue({ iri, types: ["type"] });
+
+    const resourceDetails = await fetchResourceDetails(iri);
+
+    expect(resourceDetails.name).toEqual("/public");
+    expect(resourceDetails.iri).toEqual(iri);
+  });
+
+  test("it fetches a file with ACL if the fetchResource call fails", async () => {
+    const iri = "https://dayton.dev.inrupt.net/file.txt";
+
+    jest.spyOn(litSolidHelpers, "fetchResource").mockImplementationOnce(() => {
+      throw new Error("boom");
+    });
+
+    jest
+      .spyOn(litSolidHelpers, "fetchFileWithAcl")
+      .mockResolvedValue({ iri, types: ["type"], file: new Blob(["file"]) });
+
+    const resourceDetails = await fetchResourceDetails(iri);
+
+    expect(resourceDetails.name).toEqual("/file.txt");
+    expect(resourceDetails.iri).toEqual(iri);
   });
 });

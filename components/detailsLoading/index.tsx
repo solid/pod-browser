@@ -25,15 +25,11 @@ import Skeleton from "@material-ui/lab/Skeleton";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import styles from "./styles";
-import { NormalizedResource } from "../../src/lit-solid-helpers";
+import { ResourceDetails } from "../../src/lit-solid-helpers";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme))
 );
-
-interface ResourceDetails extends NormalizedResource {
-  name: string;
-}
 
 interface Props {
   resource: ResourceDetails;

@@ -39,42 +39,19 @@ import UserContext from "../../src/contexts/userContext";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import {
   getIriPath,
-  fetchResource,
-  fetchFileWithAcl,
   namespace,
+  ResourceDetails,
 } from "../../src/lit-solid-helpers";
-import Spinner from "../spinner";
+import ContainerTableLoading from "../containerTableLoading";
 
-interface ResourceDetails extends NormalizedResource {
-  name?: string;
-}
-
-export async function fetchResourceDetails(
-  iri: string
-): Promise<ResourceDetails> {
-  const name = getIriPath(iri);
-  let resource;
-  try {
-    resource = await fetchResource(iri);
-  } catch (e) {
-    resource = await fetchFileWithAcl(iri);
-  }
-
-  return {
-    ...resource,
-    name,
-  };
-}
-
-export async function getResourceInfoFromContainerIri(
+export async function getPartialResources(
   containerIri: string
-): Promise<ResourceDetails[]> {
+): Partial<ResourceDetails>[] {
   const litDataset = await fetchLitDataset(containerIri);
   const container = getThingOne(litDataset, containerIri);
   const iris = getIriAll(container, namespace.contains);
-
-  const promises = iris.map(fetchResourceDetails).map((p) => p.catch((e) => e));
-  return Promise.all(promises);
+  const partialResources = iris.map((iri) => ({ iri, name: getIriPath(iri) }));
+  return partialResources;
 }
 
 interface IPodList {
@@ -87,7 +64,7 @@ export default function Container(props: IPodList): ReactElement {
   const { iri } = props;
 
   const { session, isLoadingSession } = useContext(UserContext);
-  const [resources, setResources] = useState<ResourceDetails[]>([]);
+  const [resources, setResources] = useState<Partial<ResourceDetails>[]>([]);
   const [isLoading, setIsLoading] = useState(
     isLoadingSession || !resources || !resources.length
   );
@@ -128,18 +105,14 @@ export default function Container(props: IPodList): ReactElement {
       return;
     }
 
-    getResourceInfoFromContainerIri(iri)
-      .then((loadedResources) => {
-        setResources(loadedResources);
-        setIsLoading(false);
-      })
-      .catch((e) => {
-        throw e;
-      });
+    getPartialResources(iri).then((partialResources) => {
+      setIsLoading(false);
+      setResources(partialResources);
+    });
   }, [session, iri]);
 
   if (isLoading) {
-    return <Spinner />;
+    return <ContainerTableLoading />;
   }
 
   // react-table works through spreads.

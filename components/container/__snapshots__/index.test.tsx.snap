@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Container view Renders a container view 1`] = `<Spinner />`;
+exports[`Container view Renders a container view 1`] = `<ContainerTableLoading />`;
 
 exports[`Container view Renders a table with data 1`] = `
 <Fragment>

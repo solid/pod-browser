@@ -1,0 +1,532 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContainerTableLoading Renders a details error view 1`] = `
+<ContainerTableLoading>
+  <WithStyles(ForwardRef(Table))>
+    <ForwardRef(Table)
+      classes={
+        Object {
+          "root": "MuiTable-root",
+          "stickyHeader": "MuiTable-stickyHeader",
+        }
+      }
+    >
+      <table
+        className="MuiTable-root"
+        role={null}
+      >
+        <WithStyles(ForwardRef(TableHead))>
+          <ForwardRef(TableHead)
+            classes={
+              Object {
+                "root": "MuiTableHead-root",
+              }
+            }
+          >
+            <thead
+              className="MuiTableHead-root"
+              role={null}
+            >
+              <WithStyles(ForwardRef(TableRow))>
+                <ForwardRef(TableRow)
+                  classes={
+                    Object {
+                      "footer": "MuiTableRow-footer",
+                      "head": "MuiTableRow-head",
+                      "hover": "MuiTableRow-hover",
+                      "root": "MuiTableRow-root",
+                      "selected": "Mui-selected",
+                    }
+                  }
+                >
+                  <tr
+                    className="MuiTableRow-root MuiTableRow-head"
+                    role={null}
+                  >
+                    <WithStyles(ForwardRef(TableCell))>
+                      <ForwardRef(TableCell)
+                        classes={
+                          Object {
+                            "alignCenter": "MuiTableCell-alignCenter",
+                            "alignJustify": "MuiTableCell-alignJustify",
+                            "alignLeft": "MuiTableCell-alignLeft",
+                            "alignRight": "MuiTableCell-alignRight",
+                            "body": "MuiTableCell-body",
+                            "footer": "MuiTableCell-footer",
+                            "head": "MuiTableCell-head",
+                            "paddingCheckbox": "MuiTableCell-paddingCheckbox",
+                            "paddingNone": "MuiTableCell-paddingNone",
+                            "root": "MuiTableCell-root",
+                            "sizeSmall": "MuiTableCell-sizeSmall",
+                            "stickyHeader": "MuiTableCell-stickyHeader",
+                          }
+                        }
+                      >
+                        <th
+                          aria-sort={null}
+                          className="MuiTableCell-root MuiTableCell-head"
+                          scope="col"
+                        >
+                          File
+                        </th>
+                      </ForwardRef(TableCell)>
+                    </WithStyles(ForwardRef(TableCell))>
+                    <WithStyles(ForwardRef(TableCell))>
+                      <ForwardRef(TableCell)
+                        classes={
+                          Object {
+                            "alignCenter": "MuiTableCell-alignCenter",
+                            "alignJustify": "MuiTableCell-alignJustify",
+                            "alignLeft": "MuiTableCell-alignLeft",
+                            "alignRight": "MuiTableCell-alignRight",
+                            "body": "MuiTableCell-body",
+                            "footer": "MuiTableCell-footer",
+                            "head": "MuiTableCell-head",
+                            "paddingCheckbox": "MuiTableCell-paddingCheckbox",
+                            "paddingNone": "MuiTableCell-paddingNone",
+                            "root": "MuiTableCell-root",
+                            "sizeSmall": "MuiTableCell-sizeSmall",
+                            "stickyHeader": "MuiTableCell-stickyHeader",
+                          }
+                        }
+                      >
+                        <th
+                          aria-sort={null}
+                          className="MuiTableCell-root MuiTableCell-head"
+                          scope="col"
+                        >
+                          Type
+                        </th>
+                      </ForwardRef(TableCell)>
+                    </WithStyles(ForwardRef(TableCell))>
+                  </tr>
+                </ForwardRef(TableRow)>
+              </WithStyles(ForwardRef(TableRow))>
+            </thead>
+          </ForwardRef(TableHead)>
+        </WithStyles(ForwardRef(TableHead))>
+        <WithStyles(ForwardRef(TableBody))>
+          <ForwardRef(TableBody)
+            classes={
+              Object {
+                "root": "MuiTableBody-root",
+              }
+            }
+          >
+            <tbody
+              className="MuiTableBody-root"
+              role={null}
+            >
+              <WithStyles(ForwardRef(TableRow))>
+                <ForwardRef(TableRow)
+                  classes={
+                    Object {
+                      "footer": "MuiTableRow-footer",
+                      "head": "MuiTableRow-head",
+                      "hover": "MuiTableRow-hover",
+                      "root": "MuiTableRow-root",
+                      "selected": "Mui-selected",
+                    }
+                  }
+                >
+                  <tr
+                    className="MuiTableRow-root"
+                    role={null}
+                  >
+                    <WithStyles(ForwardRef(TableCell))>
+                      <ForwardRef(TableCell)
+                        classes={
+                          Object {
+                            "alignCenter": "MuiTableCell-alignCenter",
+                            "alignJustify": "MuiTableCell-alignJustify",
+                            "alignLeft": "MuiTableCell-alignLeft",
+                            "alignRight": "MuiTableCell-alignRight",
+                            "body": "MuiTableCell-body",
+                            "footer": "MuiTableCell-footer",
+                            "head": "MuiTableCell-head",
+                            "paddingCheckbox": "MuiTableCell-paddingCheckbox",
+                            "paddingNone": "MuiTableCell-paddingNone",
+                            "root": "MuiTableCell-root",
+                            "sizeSmall": "MuiTableCell-sizeSmall",
+                            "stickyHeader": "MuiTableCell-stickyHeader",
+                          }
+                        }
+                      >
+                        <td
+                          aria-sort={null}
+                          className="MuiTableCell-root MuiTableCell-body"
+                        >
+                          <WithStyles(ForwardRef(Skeleton))
+                            variant="text"
+                            width={100}
+                          >
+                            <ForwardRef(Skeleton)
+                              classes={
+                                Object {
+                                  "circle": "MuiSkeleton-circle",
+                                  "fitContent": "MuiSkeleton-fitContent",
+                                  "heightAuto": "MuiSkeleton-heightAuto",
+                                  "pulse": "MuiSkeleton-pulse",
+                                  "rect": "MuiSkeleton-rect",
+                                  "root": "MuiSkeleton-root",
+                                  "text": "MuiSkeleton-text",
+                                  "wave": "MuiSkeleton-wave",
+                                  "withChildren": "MuiSkeleton-withChildren",
+                                }
+                              }
+                              variant="text"
+                              width={100}
+                            >
+                              <span
+                                className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
+                                style={
+                                  Object {
+                                    "height": undefined,
+                                    "width": 100,
+                                  }
+                                }
+                              />
+                            </ForwardRef(Skeleton)>
+                          </WithStyles(ForwardRef(Skeleton))>
+                        </td>
+                      </ForwardRef(TableCell)>
+                    </WithStyles(ForwardRef(TableCell))>
+                    <WithStyles(ForwardRef(TableCell))>
+                      <ForwardRef(TableCell)
+                        classes={
+                          Object {
+                            "alignCenter": "MuiTableCell-alignCenter",
+                            "alignJustify": "MuiTableCell-alignJustify",
+                            "alignLeft": "MuiTableCell-alignLeft",
+                            "alignRight": "MuiTableCell-alignRight",
+                            "body": "MuiTableCell-body",
+                            "footer": "MuiTableCell-footer",
+                            "head": "MuiTableCell-head",
+                            "paddingCheckbox": "MuiTableCell-paddingCheckbox",
+                            "paddingNone": "MuiTableCell-paddingNone",
+                            "root": "MuiTableCell-root",
+                            "sizeSmall": "MuiTableCell-sizeSmall",
+                            "stickyHeader": "MuiTableCell-stickyHeader",
+                          }
+                        }
+                      >
+                        <td
+                          aria-sort={null}
+                          className="MuiTableCell-root MuiTableCell-body"
+                        >
+                          <WithStyles(ForwardRef(Skeleton))
+                            variant="text"
+                            width={100}
+                          >
+                            <ForwardRef(Skeleton)
+                              classes={
+                                Object {
+                                  "circle": "MuiSkeleton-circle",
+                                  "fitContent": "MuiSkeleton-fitContent",
+                                  "heightAuto": "MuiSkeleton-heightAuto",
+                                  "pulse": "MuiSkeleton-pulse",
+                                  "rect": "MuiSkeleton-rect",
+                                  "root": "MuiSkeleton-root",
+                                  "text": "MuiSkeleton-text",
+                                  "wave": "MuiSkeleton-wave",
+                                  "withChildren": "MuiSkeleton-withChildren",
+                                }
+                              }
+                              variant="text"
+                              width={100}
+                            >
+                              <span
+                                className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
+                                style={
+                                  Object {
+                                    "height": undefined,
+                                    "width": 100,
+                                  }
+                                }
+                              />
+                            </ForwardRef(Skeleton)>
+                          </WithStyles(ForwardRef(Skeleton))>
+                        </td>
+                      </ForwardRef(TableCell)>
+                    </WithStyles(ForwardRef(TableCell))>
+                  </tr>
+                </ForwardRef(TableRow)>
+              </WithStyles(ForwardRef(TableRow))>
+              <WithStyles(ForwardRef(TableRow))>
+                <ForwardRef(TableRow)
+                  classes={
+                    Object {
+                      "footer": "MuiTableRow-footer",
+                      "head": "MuiTableRow-head",
+                      "hover": "MuiTableRow-hover",
+                      "root": "MuiTableRow-root",
+                      "selected": "Mui-selected",
+                    }
+                  }
+                >
+                  <tr
+                    className="MuiTableRow-root"
+                    role={null}
+                  >
+                    <WithStyles(ForwardRef(TableCell))>
+                      <ForwardRef(TableCell)
+                        classes={
+                          Object {
+                            "alignCenter": "MuiTableCell-alignCenter",
+                            "alignJustify": "MuiTableCell-alignJustify",
+                            "alignLeft": "MuiTableCell-alignLeft",
+                            "alignRight": "MuiTableCell-alignRight",
+                            "body": "MuiTableCell-body",
+                            "footer": "MuiTableCell-footer",
+                            "head": "MuiTableCell-head",
+                            "paddingCheckbox": "MuiTableCell-paddingCheckbox",
+                            "paddingNone": "MuiTableCell-paddingNone",
+                            "root": "MuiTableCell-root",
+                            "sizeSmall": "MuiTableCell-sizeSmall",
+                            "stickyHeader": "MuiTableCell-stickyHeader",
+                          }
+                        }
+                      >
+                        <td
+                          aria-sort={null}
+                          className="MuiTableCell-root MuiTableCell-body"
+                        >
+                          <WithStyles(ForwardRef(Skeleton))
+                            variant="text"
+                            width={100}
+                          >
+                            <ForwardRef(Skeleton)
+                              classes={
+                                Object {
+                                  "circle": "MuiSkeleton-circle",
+                                  "fitContent": "MuiSkeleton-fitContent",
+                                  "heightAuto": "MuiSkeleton-heightAuto",
+                                  "pulse": "MuiSkeleton-pulse",
+                                  "rect": "MuiSkeleton-rect",
+                                  "root": "MuiSkeleton-root",
+                                  "text": "MuiSkeleton-text",
+                                  "wave": "MuiSkeleton-wave",
+                                  "withChildren": "MuiSkeleton-withChildren",
+                                }
+                              }
+                              variant="text"
+                              width={100}
+                            >
+                              <span
+                                className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
+                                style={
+                                  Object {
+                                    "height": undefined,
+                                    "width": 100,
+                                  }
+                                }
+                              />
+                            </ForwardRef(Skeleton)>
+                          </WithStyles(ForwardRef(Skeleton))>
+                        </td>
+                      </ForwardRef(TableCell)>
+                    </WithStyles(ForwardRef(TableCell))>
+                    <WithStyles(ForwardRef(TableCell))>
+                      <ForwardRef(TableCell)
+                        classes={
+                          Object {
+                            "alignCenter": "MuiTableCell-alignCenter",
+                            "alignJustify": "MuiTableCell-alignJustify",
+                            "alignLeft": "MuiTableCell-alignLeft",
+                            "alignRight": "MuiTableCell-alignRight",
+                            "body": "MuiTableCell-body",
+                            "footer": "MuiTableCell-footer",
+                            "head": "MuiTableCell-head",
+                            "paddingCheckbox": "MuiTableCell-paddingCheckbox",
+                            "paddingNone": "MuiTableCell-paddingNone",
+                            "root": "MuiTableCell-root",
+                            "sizeSmall": "MuiTableCell-sizeSmall",
+                            "stickyHeader": "MuiTableCell-stickyHeader",
+                          }
+                        }
+                      >
+                        <td
+                          aria-sort={null}
+                          className="MuiTableCell-root MuiTableCell-body"
+                        >
+                          <WithStyles(ForwardRef(Skeleton))
+                            variant="text"
+                            width={100}
+                          >
+                            <ForwardRef(Skeleton)
+                              classes={
+                                Object {
+                                  "circle": "MuiSkeleton-circle",
+                                  "fitContent": "MuiSkeleton-fitContent",
+                                  "heightAuto": "MuiSkeleton-heightAuto",
+                                  "pulse": "MuiSkeleton-pulse",
+                                  "rect": "MuiSkeleton-rect",
+                                  "root": "MuiSkeleton-root",
+                                  "text": "MuiSkeleton-text",
+                                  "wave": "MuiSkeleton-wave",
+                                  "withChildren": "MuiSkeleton-withChildren",
+                                }
+                              }
+                              variant="text"
+                              width={100}
+                            >
+                              <span
+                                className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
+                                style={
+                                  Object {
+                                    "height": undefined,
+                                    "width": 100,
+                                  }
+                                }
+                              />
+                            </ForwardRef(Skeleton)>
+                          </WithStyles(ForwardRef(Skeleton))>
+                        </td>
+                      </ForwardRef(TableCell)>
+                    </WithStyles(ForwardRef(TableCell))>
+                  </tr>
+                </ForwardRef(TableRow)>
+              </WithStyles(ForwardRef(TableRow))>
+              <WithStyles(ForwardRef(TableRow))>
+                <ForwardRef(TableRow)
+                  classes={
+                    Object {
+                      "footer": "MuiTableRow-footer",
+                      "head": "MuiTableRow-head",
+                      "hover": "MuiTableRow-hover",
+                      "root": "MuiTableRow-root",
+                      "selected": "Mui-selected",
+                    }
+                  }
+                >
+                  <tr
+                    className="MuiTableRow-root"
+                    role={null}
+                  >
+                    <WithStyles(ForwardRef(TableCell))>
+                      <ForwardRef(TableCell)
+                        classes={
+                          Object {
+                            "alignCenter": "MuiTableCell-alignCenter",
+                            "alignJustify": "MuiTableCell-alignJustify",
+                            "alignLeft": "MuiTableCell-alignLeft",
+                            "alignRight": "MuiTableCell-alignRight",
+                            "body": "MuiTableCell-body",
+                            "footer": "MuiTableCell-footer",
+                            "head": "MuiTableCell-head",
+                            "paddingCheckbox": "MuiTableCell-paddingCheckbox",
+                            "paddingNone": "MuiTableCell-paddingNone",
+                            "root": "MuiTableCell-root",
+                            "sizeSmall": "MuiTableCell-sizeSmall",
+                            "stickyHeader": "MuiTableCell-stickyHeader",
+                          }
+                        }
+                      >
+                        <td
+                          aria-sort={null}
+                          className="MuiTableCell-root MuiTableCell-body"
+                        >
+                          <WithStyles(ForwardRef(Skeleton))
+                            variant="text"
+                            width={100}
+                          >
+                            <ForwardRef(Skeleton)
+                              classes={
+                                Object {
+                                  "circle": "MuiSkeleton-circle",
+                                  "fitContent": "MuiSkeleton-fitContent",
+                                  "heightAuto": "MuiSkeleton-heightAuto",
+                                  "pulse": "MuiSkeleton-pulse",
+                                  "rect": "MuiSkeleton-rect",
+                                  "root": "MuiSkeleton-root",
+                                  "text": "MuiSkeleton-text",
+                                  "wave": "MuiSkeleton-wave",
+                                  "withChildren": "MuiSkeleton-withChildren",
+                                }
+                              }
+                              variant="text"
+                              width={100}
+                            >
+                              <span
+                                className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
+                                style={
+                                  Object {
+                                    "height": undefined,
+                                    "width": 100,
+                                  }
+                                }
+                              />
+                            </ForwardRef(Skeleton)>
+                          </WithStyles(ForwardRef(Skeleton))>
+                        </td>
+                      </ForwardRef(TableCell)>
+                    </WithStyles(ForwardRef(TableCell))>
+                    <WithStyles(ForwardRef(TableCell))>
+                      <ForwardRef(TableCell)
+                        classes={
+                          Object {
+                            "alignCenter": "MuiTableCell-alignCenter",
+                            "alignJustify": "MuiTableCell-alignJustify",
+                            "alignLeft": "MuiTableCell-alignLeft",
+                            "alignRight": "MuiTableCell-alignRight",
+                            "body": "MuiTableCell-body",
+                            "footer": "MuiTableCell-footer",
+                            "head": "MuiTableCell-head",
+                            "paddingCheckbox": "MuiTableCell-paddingCheckbox",
+                            "paddingNone": "MuiTableCell-paddingNone",
+                            "root": "MuiTableCell-root",
+                            "sizeSmall": "MuiTableCell-sizeSmall",
+                            "stickyHeader": "MuiTableCell-stickyHeader",
+                          }
+                        }
+                      >
+                        <td
+                          aria-sort={null}
+                          className="MuiTableCell-root MuiTableCell-body"
+                        >
+                          <WithStyles(ForwardRef(Skeleton))
+                            variant="text"
+                            width={100}
+                          >
+                            <ForwardRef(Skeleton)
+                              classes={
+                                Object {
+                                  "circle": "MuiSkeleton-circle",
+                                  "fitContent": "MuiSkeleton-fitContent",
+                                  "heightAuto": "MuiSkeleton-heightAuto",
+                                  "pulse": "MuiSkeleton-pulse",
+                                  "rect": "MuiSkeleton-rect",
+                                  "root": "MuiSkeleton-root",
+                                  "text": "MuiSkeleton-text",
+                                  "wave": "MuiSkeleton-wave",
+                                  "withChildren": "MuiSkeleton-withChildren",
+                                }
+                              }
+                              variant="text"
+                              width={100}
+                            >
+                              <span
+                                className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
+                                style={
+                                  Object {
+                                    "height": undefined,
+                                    "width": 100,
+                                  }
+                                }
+                              />
+                            </ForwardRef(Skeleton)>
+                          </WithStyles(ForwardRef(Skeleton))>
+                        </td>
+                      </ForwardRef(TableCell)>
+                    </WithStyles(ForwardRef(TableCell))>
+                  </tr>
+                </ForwardRef(TableRow)>
+              </WithStyles(ForwardRef(TableRow))>
+            </tbody>
+          </ForwardRef(TableBody)>
+        </WithStyles(ForwardRef(TableBody))>
+      </table>
+    </ForwardRef(Table)>
+  </WithStyles(ForwardRef(Table))>
+</ContainerTableLoading>
+`;

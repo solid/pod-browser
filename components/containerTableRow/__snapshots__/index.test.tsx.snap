@@ -15,9 +15,12 @@ exports[`ContainerTableRow it renders a table row 1`] = `
     </Link>
   </WithStyles(ForwardRef(TableCell))>
   <WithStyles(ForwardRef(TableCell))
-    key="https://example.com/example.ttl-type"
+    key="https://example.com/example.ttl"
   >
-    Resource
+    <WithStyles(ForwardRef(Skeleton))
+      variant="text"
+      width={100}
+    />
   </WithStyles(ForwardRef(TableCell))>
 </WithStyles(ForwardRef(TableRow))>
 `;

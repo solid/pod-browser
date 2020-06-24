@@ -179,6 +179,10 @@ export interface NormalizedResource {
   permissions?: NormalizedPermission[];
 }
 
+export interface ResourceDetails extends NormalizedResource {
+  name: string;
+}
+
 export const PERMISSIONS: string[] = ["read", "write", "append", "control"];
 
 export function parseStringAcl(acl: string): unstable_AccessModes {

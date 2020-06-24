@@ -22,13 +22,8 @@
 import * as ReactFns from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
-import { mock } from "jest-mock-extended";
 import * as litSolidHelpers from "../../src/lit-solid-helpers";
-
-import Container, {
-  fetchResourceDetails,
-  getResourceInfoFromContainerIri,
-} from "./index";
+import Container, { getPartialResources } from "./index";
 
 jest.mock("solid-auth-client");
 jest.mock("@solid/lit-pod");
@@ -63,11 +58,13 @@ describe("Container view", () => {
   });
 });
 
-describe("Loading container resource iri list", () => {
-  test("Loads resource iris from a container iri", async () => {
-    jest
-      .spyOn(litSolidHelpers, "fetchResource")
-      .mockResolvedValue(mock<litSolidHelpers.NormalizedResource>());
+describe("getPartialResources", () => {
+  test("it fetches the container resource iris", async () => {
+    const {
+      getIriAll,
+    }: {
+      getIriAll: jest.Mock;
+    } = jest.requireMock("@solid/lit-pod");
 
     const resources = [
       "https://myaccount.mypodserver.com/inbox",
@@ -75,58 +72,15 @@ describe("Loading container resource iri list", () => {
       "https://myaccount.mypodserver.com/note.txt",
     ];
 
-    const { getIriAll }: { getIriAll: jest.Mock } = jest.requireMock(
-      "@solid/lit-pod"
+    getIriAll.mockReturnValue(resources);
+
+    const fetchedResources = await getPartialResources("containerIri");
+    const iris = fetchedResources.map(
+      ({ iri: i }: Partial<litSolidHelpers.ResourceDetails>) => i
     );
 
-    getIriAll.mockImplementationOnce(() => resources);
-
-    await getResourceInfoFromContainerIri(iri);
-
-    expect(litSolidHelpers.fetchResource).toHaveBeenCalledWith(resources[0]);
-    expect(litSolidHelpers.fetchResource).toHaveBeenCalledWith(resources[1]);
-    expect(litSolidHelpers.fetchResource).toHaveBeenCalledWith(resources[2]);
-  });
-});
-
-describe("fetchResourceDetails", () => {
-  test("it fetches the resource with acl, adding the name (shortened iri path)", async () => {
-    jest.spyOn(litSolidHelpers, "fetchResource").mockResolvedValue(
-      mock<litSolidHelpers.NormalizedResource>({
-        iri,
-        types: ["Resource"],
-      })
-    );
-
-    const { name } = await fetchResourceDetails(iri);
-
-    expect(litSolidHelpers.fetchResource).toHaveBeenCalledWith(iri);
-    expect(name).toEqual("/public");
-  });
-
-  test("it fetches a file if the resource fetch fails", async () => {
-    jest.spyOn(litSolidHelpers, "fetchResource").mockImplementationOnce(() => {
-      throw new Error("boom");
-    });
-
-    jest.spyOn(litSolidHelpers, "fetchFileWithAcl").mockResolvedValue(
-      mock<NormalizedResource>({
-        iri,
-        types: ["txt/plain"],
-        file: "file contents",
-        permissions: [
-          {
-            webId: "user",
-            alias: "Full Control",
-            acl: { read: true, write: true, append: true, control: true },
-          },
-        ],
-      })
-    );
-
-    const { name } = await fetchResourceDetails(iri);
-
-    expect(litSolidHelpers.fetchFileWithAcl).toHaveBeenCalledWith(iri);
-    expect(name).toEqual("/public");
+    expect(iris).toContain("https://myaccount.mypodserver.com/inbox");
+    expect(iris).toContain("https://myaccount.mypodserver.com/private");
+    expect(iris).toContain("https://myaccount.mypodserver.com/note.txt");
   });
 });
