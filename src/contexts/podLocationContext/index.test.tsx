@@ -19,9 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { mount, shallow } from "enzyme";
+import { mount } from "enzyme";
 import { ReactElement, useContext } from "react";
 import PodLocationContext, { PodLocationProvider } from "./index";
+import usePodRoot from "../../hooks/usePodRoot";
+
+jest.mock("../../hooks/useAuthenticatedProfile");
+jest.mock("../../hooks/usePodRoot");
 
 function ChildComponent(): ReactElement {
   const { baseUri, currentUri } = useContext(PodLocationContext);
@@ -35,13 +39,18 @@ function ChildComponent(): ReactElement {
 
 describe("PodLocationContext", () => {
   test("it provides baseUri based on storages given in profile", () => {
+    const baseUri = "https://foo.test/";
+
+    (usePodRoot as jest.Mock).mockReturnValue(baseUri);
+
     const component = mount(
       <PodLocationProvider currentUri="https://foo.test/bar/baz">
         <ChildComponent />
       </PodLocationProvider>
     );
-    expect(component.find("#BaseUri")).toHaveText("https://foo.test/");
-    expect(component.find("#CurrentUri")).toHaveText(
+
+    expect(component.find("#BaseUri").text()).toEqual("https://foo.test/");
+    expect(component.find("#CurrentUri").text()).toEqual(
       "https://foo.test/bar/baz"
     );
   });

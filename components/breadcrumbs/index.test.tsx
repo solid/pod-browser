@@ -19,17 +19,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { mount, shallow } from "enzyme";
-import { mountToJson, shallowToJson } from "enzyme-to-json";
-import Breadcrumbs from "./index";
+import { mount } from "enzyme";
+import { mountToJson } from "enzyme-to-json";
+import { ThemeProvider } from "@material-ui/core/styles";
+
 import { PodLocationProvider } from "../../src/contexts/podLocationContext";
+import theme from "../../src/theme";
+import Breadcrumbs from "./index";
 
 describe("Breadcrumbs view", () => {
   test("Renders a breadcrumbs view", () => {
     const tree = mount(
-      <PodLocationProvider currentUri={}>
-        <Breadcrumbs />
-      </PodLocationProvider>
+      <ThemeProvider theme={theme}>
+        <PodLocationProvider currentUri="https://www.mypodmanager.com">
+          <Breadcrumbs />
+        </PodLocationProvider>
+      </ThemeProvider>
     );
     expect(mountToJson(tree)).toMatchSnapshot();
   });

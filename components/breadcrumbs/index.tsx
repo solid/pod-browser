@@ -34,7 +34,9 @@ const useStyles = makeStyles<PrismTheme>((theme) =>
 export default function Breadcrumbs(): ReactElement {
   const bem = useBem(useStyles());
   const podLocation = useContext(PodLocationContext);
+
   if (!podLocation.baseUri) return <Spinner />;
+
   const { baseUri, currentUri } = podLocation;
   const crumbs = currentUri
     .substr(baseUri.length)
