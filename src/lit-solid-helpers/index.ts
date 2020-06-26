@@ -26,9 +26,9 @@ import {
   getDecimalOne,
   getIntegerOne,
   getIriAll,
+  getIriOne,
   getStringUnlocalizedOne,
   getThingOne,
-  getIriOne,
   IriString,
   LitDataset,
   Thing,
@@ -37,6 +37,7 @@ import {
   unstable_fetchFile,
   unstable_fetchLitDatasetWithAcl,
   unstable_getAgentAccessModesAll,
+  unstable_WithAcl,
 } from "@solid/lit-pod";
 import { ldp, space } from "rdf-namespaces";
 import { parseUrl } from "../stringHelpers";

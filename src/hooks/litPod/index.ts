@@ -19,16 +19,25 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* eslint-disable camelcase */
+
 import useSWR from "swr";
-import { fetchLitDataset, getThingOne, getIriAll } from "@solid/lit-pod";
+import {
+  fetchLitDataset,
+  getThingOne,
+  getIriAll,
+  unstable_AccessModes,
+  unstable_fetchResourceInfoWithAcl,
+  unstable_getAgentAccessModesAll,
+  isContainer,
+} from "@solid/lit-pod";
 import { space } from "rdf-namespaces";
 import {
-  namespace,
-  getIriPath,
-  ResourceDetails,
   fetchResourceWithAcl,
-  fetchResource,
-  fetchFileWithAcl,
+  getIriPath,
+  namespace,
+  normalizePermissions,
+  ResourceDetails,
 } from "../../lit-solid-helpers";
 
 export async function fetchContainerResourceIris(
@@ -52,15 +61,22 @@ export async function fetchResourceDetails(
   iri: string
 ): Promise<ResourceDetails> {
   const name = getIriPath(iri) as string;
-  let resource;
-  try {
-    resource = await fetchResource(iri);
-  } catch (e) {
-    resource = await fetchFileWithAcl(iri);
-  }
+  const resourceInfo = await unstable_fetchResourceInfoWithAcl(iri);
+  const accessModeList = unstable_getAgentAccessModesAll(resourceInfo);
+  const permissions = await normalizePermissions(
+    accessModeList as Record<string, unstable_AccessModes>
+  );
+
+  let types = [];
+  const contentType = resourceInfo?.resourceInfo?.contentType;
+
+  if (contentType) types = [contentType];
+  if (isContainer(resourceInfo)) types = ["Container"];
 
   return {
-    ...resource,
+    iri,
+    permissions,
+    types,
     name,
   };
 }
