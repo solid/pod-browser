@@ -19,27 +19,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useContext } from "react";
-import { Container } from "@material-ui/core";
+import { ReactElement } from "react";
 
-import { useFetchPodIrisFromWebId } from "../../../src/hooks/litPod";
-import UserContext from "../../../src/contexts/userContext";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import PodList from "../../podList";
-import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
+interface ISortedTableCarat {
+  sorted: boolean;
+  sortedDesc?: boolean;
+}
 
-export default function Home(): ReactElement {
-  useRedirectIfLoggedOut();
-
-  const { session } = useContext(UserContext);
-  const { webId = "" } = session || {};
-  const { data: podIris } = useFetchPodIrisFromWebId(webId);
+export default function SortedTableCarat(
+  props: ISortedTableCarat
+): ReactElement {
+  const { sorted, sortedDesc } = props;
 
   return (
-    <Container>
-      <DetailsMenuProvider>
-        <PodList podIris={podIris} />
-      </DetailsMenuProvider>
-    </Container>
+    <span>
+      {sorted && sortedDesc ? "v" : ""}
+      {sorted && !sortedDesc ? "^" : ""}
+    </span>
   );
 }

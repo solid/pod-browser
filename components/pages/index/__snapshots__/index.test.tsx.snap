@@ -1,10 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Index page Renders a logout button 1`] = `
+exports[`Index page Renders the index page 1`] = `
+<WithStyles(ForwardRef(Container))>
+  <DetailsMenuProvider>
+    <PodList />
+  </DetailsMenuProvider>
+</WithStyles(ForwardRef(Container))>
+`;
+
+exports[`Index page Renders the index page with pod iris 1`] = `
 <WithStyles(ForwardRef(Container))>
   <DetailsMenuProvider>
     <PodList
-      podIris={Array []}
+      podIris={
+        Array [
+          "https://mypod.myhost.com",
+        ]
+      }
     />
   </DetailsMenuProvider>
 </WithStyles(ForwardRef(Container))>

@@ -19,27 +19,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useContext } from "react";
-import { Container } from "@material-ui/core";
+import { shallow } from "enzyme";
+import { shallowToJson } from "enzyme-to-json";
 
-import { useFetchPodIrisFromWebId } from "../../../src/hooks/litPod";
-import UserContext from "../../../src/contexts/userContext";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import PodList from "../../podList";
-import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
+import SortedTableCarat from "./index";
 
-export default function Home(): ReactElement {
-  useRedirectIfLoggedOut();
+describe("Sorted", () => {
+  test("Displays an upwards facing carat when ascending", () => {
+    const tree = shallow(<SortedTableCarat sorted sortedDesc={false} />);
+    expect(shallowToJson(tree)).toMatchSnapshot();
+  });
 
-  const { session } = useContext(UserContext);
-  const { webId = "" } = session || {};
-  const { data: podIris } = useFetchPodIrisFromWebId(webId);
+  test("Displays a downwards facing carat when descending", () => {
+    const tree = shallow(<SortedTableCarat sorted sortedDesc />);
+    expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+});
 
-  return (
-    <Container>
-      <DetailsMenuProvider>
-        <PodList podIris={podIris} />
-      </DetailsMenuProvider>
-    </Container>
-  );
-}
+describe("Unsorted", () => {
+  test("Displays nothing when unsorted", () => {
+    const tree = shallow(<SortedTableCarat sorted={false} />);
+    expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+});

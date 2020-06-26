@@ -21,16 +21,30 @@
 
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
-import { fetchLitDataset, getThingOne, getIriAll } from "@solid/lit-pod";
 
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import IndexPage, { getPodIrisFromWebId } from "./index";
+import { useFetchPodIrisFromWebId } from "../../../src/hooks/litPod";
+import IndexPage from "./index";
 
 jest.mock("../../../src/effects/auth");
+jest.mock("../../../src/hooks/litPod");
 jest.mock("@solid/lit-pod");
 
 describe("Index page", () => {
-  test("Renders a logout button", () => {
+  test("Renders the index page", () => {
+    (useFetchPodIrisFromWebId as jest.Mock).mockReturnValue({
+      data: undefined,
+    });
+
+    const tree = shallow(<IndexPage />);
+    expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+
+  test("Renders the index page with pod iris", () => {
+    (useFetchPodIrisFromWebId as jest.Mock).mockReturnValue({
+      data: ["https://mypod.myhost.com"],
+    });
+
     const tree = shallow(<IndexPage />);
     expect(shallowToJson(tree)).toMatchSnapshot();
   });
@@ -38,22 +52,5 @@ describe("Index page", () => {
   test("Redirects if the user is logged out", () => {
     shallow(<IndexPage />);
     expect(useRedirectIfLoggedOut).toHaveBeenCalled();
-  });
-});
-
-describe("getPodIrisFromWebId", () => {
-  test("Loads data from a webId", async () => {
-    const iri = "https://mypod.myhost.com/profile/card#me";
-    const iris = ["https://mypod.myhost.com/profile"];
-
-    (fetchLitDataset as jest.Mock).mockResolvedValue({});
-    (getThingOne as jest.Mock).mockImplementationOnce(() => {});
-    (getIriAll as jest.Mock).mockImplementationOnce(() => iris);
-
-    expect(await getPodIrisFromWebId(iri)).toEqual(iris);
-
-    expect(fetchLitDataset).toHaveBeenCalled();
-    expect(getThingOne).toHaveBeenCalled();
-    expect(getIriAll).toHaveBeenCalled();
   });
 });

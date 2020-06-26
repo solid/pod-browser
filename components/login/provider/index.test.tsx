@@ -25,7 +25,6 @@ import { shallowToJson } from "enzyme-to-json";
 import auth from "solid-auth-client";
 
 import { ThemeProvider } from "@material-ui/core/styles";
-import getProviders from "../../../constants/provider";
 
 import ProviderLogin, * as ProviderFunctions from "./index";
 import theme from "../../../src/theme";
@@ -39,16 +38,31 @@ describe("ProviderLogin form", () => {
         <ProviderLogin />
       </ThemeProvider>
     );
+
     expect(shallowToJson(tree)).toMatchSnapshot();
   });
 });
 
 describe("loginWithProvider", () => {
+  test("clicking login calls loginWithProvider", () => {
+    const tree = mount(
+      <ThemeProvider theme={theme}>
+        <ProviderLogin />
+      </ThemeProvider>
+    );
+
+    (auth.popupLogin as jest.Mock).mockResolvedValue(null);
+    tree.find("button").simulate("click", { preventDefault: () => {} });
+
+    expect(auth.popupLogin).toHaveBeenCalledWith({
+      popupUri: `/login-popup.html`,
+    });
+  });
+
   test("Calls login", async () => {
-    const oidcIssuer = getProviders()[0];
     (auth.popupLogin as jest.Mock).mockResolvedValue(null);
 
-    await ProviderFunctions.loginWithProvider(oidcIssuer.value);
+    await ProviderFunctions.loginWithProvider();
 
     expect(auth.popupLogin).toHaveBeenCalledWith({
       popupUri: `/login-popup.html`,

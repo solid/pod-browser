@@ -25,7 +25,7 @@ import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import LogOutButton from "../../logout";
 import styles from "./styles";
 import UserContext from "../../../src/contexts/userContext";
-import useAuthenticatedProfile from "../../../src/hooks/useAuthenticatedProfile/useAuthenticatedProfile";
+import useAuthenticatedProfile from "../../../src/hooks/useAuthenticatedProfile";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme))

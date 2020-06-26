@@ -22,8 +22,7 @@
 // @ts-nocheck
 // react-table is super broken with sorting, so temporarily disable ts checking.
 
-import { ReactElement, useEffect, useState, useContext, useMemo } from "react";
-import { fetchLitDataset, getThingOne, getIriAll } from "@solid/lit-pod";
+import { ReactElement, useMemo } from "react";
 import { useTable, useSortBy, UseSortByOptions } from "react-table";
 import {
   Table,
@@ -33,26 +32,13 @@ import {
   TableRow,
 } from "@material-ui/core";
 
+import Spinner from "../spinner";
 import DetailsContextMenu from "../detailsContextMenu";
 import ContainerTableRow from "../containerTableRow";
-import UserContext from "../../src/contexts/userContext";
+import SortedTableCarat from "../sortedTableCarat";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
-import {
-  getIriPath,
-  namespace,
-  ResourceDetails,
-} from "../../src/lit-solid-helpers";
-import ContainerTableLoading from "../containerTableLoading";
-
-export async function getPartialResources(
-  containerIri: string
-): Partial<ResourceDetails>[] {
-  const litDataset = await fetchLitDataset(containerIri);
-  const container = getThingOne(litDataset, containerIri);
-  const iris = getIriAll(container, namespace.contains);
-  const partialResources = iris.map((iri) => ({ iri, name: getIriPath(iri) }));
-  return partialResources;
-}
+import { useFetchContainerResourceIris } from "../../src/hooks/litPod";
+import { ResourceDetails, getIriPath } from "../../src/lit-solid-helpers";
 
 interface IPodList {
   iri: string;
@@ -62,12 +48,8 @@ export default function Container(props: IPodList): ReactElement {
   useRedirectIfLoggedOut();
 
   const { iri } = props;
-
-  const { session, isLoadingSession } = useContext(UserContext);
-  const [resources, setResources] = useState<Partial<ResourceDetails>[]>([]);
-  const [isLoading, setIsLoading] = useState(
-    isLoadingSession || !resources || !resources.length
-  );
+  const { data: resourceIris } = useFetchContainerResourceIris(iri);
+  const loading = typeof resourceIris === "undefined";
 
   const columns = useMemo(
     () => [
@@ -83,7 +65,16 @@ export default function Container(props: IPodList): ReactElement {
     []
   );
 
-  const data = useMemo(() => resources || [], [resources]);
+  const data = useMemo(() => {
+    if (!resourceIris) {
+      return [];
+    }
+
+    return resourceIris.map((rIri) => ({
+      iri: rIri,
+      name: getIriPath(rIri),
+    }));
+  }, [resourceIris]);
 
   // TODO fix typescript errors below.
   const {
@@ -100,19 +91,8 @@ export default function Container(props: IPodList): ReactElement {
     useSortBy
   );
 
-  useEffect(() => {
-    if (!session) {
-      return;
-    }
-
-    getPartialResources(iri).then((partialResources) => {
-      setIsLoading(false);
-      setResources(partialResources);
-    });
-  }, [session, iri]);
-
-  if (isLoading) {
-    return <ContainerTableLoading />;
+  if (loading) {
+    return <Spinner />;
   }
 
   // react-table works through spreads.
@@ -128,10 +108,10 @@ export default function Container(props: IPodList): ReactElement {
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                 >
                   {column.render("Header")}
-                  <span>
-                    {column.isSorted && column.isSortedDesc ? "v" : ""}
-                    {column.isSorted && !column.isSortedDesc ? "^" : ""}
-                  </span>
+                  <SortedTableCarat
+                    sorted={column.isSorted}
+                    sortedDesc={column.isSortedDesc}
+                  />
                 </TableCell>
               ))}
             </TableRow>
@@ -139,7 +119,7 @@ export default function Container(props: IPodList): ReactElement {
         </TableHead>
 
         <TableBody {...getTableBodyProps()}>
-          {!resources || !resources.length ? (
+          {!data || !data.length ? (
             <TableRow key="no-resources-found">
               <TableCell rowSpan={3}>
                 No resources were found within this container.

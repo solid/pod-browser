@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sorted Displays a downwards facing carat when descending 1`] = `
+<span>
+  v
+</span>
+`;
+
+exports[`Sorted Displays an upwards facing carat when ascending 1`] = `
+<span>
+  ^
+</span>
+`;
+
+exports[`Unsorted Displays nothing when unsorted 1`] = `<span />`;

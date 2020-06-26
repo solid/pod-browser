@@ -19,19 +19,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as ReactFns from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
-import * as litSolidHelpers from "../../src/lit-solid-helpers";
-import Container, { getPartialResources } from "./index";
+import Container from "./index";
+import * as litPodHooks from "../../src/hooks/litPod";
 
 jest.mock("solid-auth-client");
-jest.mock("@solid/lit-pod");
+jest.mock("../../src/hooks/litPod");
 
 const iri = "https://mypod.myhost.com/public";
 
 describe("Container view", () => {
-  test("Renders a container view", () => {
+  test("Renders a spinner if data is loading", () => {
+    (litPodHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue({
+      data: undefined,
+    });
+
+    const tree = shallow(<Container iri={iri} />);
+    expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+
+  test("Renders a table view without data", () => {
+    (litPodHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue({
+      data: [],
+    });
+
     const tree = shallow(<Container iri={iri} />);
     expect(shallowToJson(tree)).toMatchSnapshot();
   });
@@ -43,44 +55,11 @@ describe("Container view", () => {
       "https://myaccount.mypodserver.com/note.txt",
     ];
 
-    // Mock the resources useState call
-    jest
-      .spyOn(ReactFns, "useState")
-      .mockImplementationOnce(() => [resources, () => {}]);
-
-    // Mock the isLoading useState call
-    jest
-      .spyOn(ReactFns, "useState")
-      .mockImplementationOnce(() => [false, () => {}]);
+    (litPodHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue({
+      data: resources,
+    });
 
     const tree = shallow(<Container iri={iri} />);
     expect(shallowToJson(tree)).toMatchSnapshot();
-  });
-});
-
-describe("getPartialResources", () => {
-  test("it fetches the container resource iris", async () => {
-    const {
-      getIriAll,
-    }: {
-      getIriAll: jest.Mock;
-    } = jest.requireMock("@solid/lit-pod");
-
-    const resources = [
-      "https://myaccount.mypodserver.com/inbox",
-      "https://myaccount.mypodserver.com/private",
-      "https://myaccount.mypodserver.com/note.txt",
-    ];
-
-    getIriAll.mockReturnValue(resources);
-
-    const fetchedResources = await getPartialResources("containerIri");
-    const iris = fetchedResources.map(
-      ({ iri: i }: Partial<litSolidHelpers.ResourceDetails>) => i
-    );
-
-    expect(iris).toContain("https://myaccount.mypodserver.com/inbox");
-    expect(iris).toContain("https://myaccount.mypodserver.com/private");
-    expect(iris).toContain("https://myaccount.mypodserver.com/note.txt");
   });
 });

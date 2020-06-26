@@ -31,6 +31,8 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import UserContext, { ISession } from "../../src/contexts/userContext";
+import { useFetchResourceWithAcl } from "../../src/hooks/litPod";
+import DetailsLoading from "../detailsLoading";
 import styles from "./styles";
 
 import {
@@ -47,11 +49,15 @@ export function displayName({ nickname, name, webId }: Profile): string {
   return webId;
 }
 
-export function displayPermission(
-  permission: NormalizedPermission | null,
-  classes: Record<string, string>
-): ReactElement | null {
+export interface IPermission {
+  permission: NormalizedPermission | null;
+  classes: Record<string, string>;
+}
+
+export function Permission(props: IPermission): ReactElement | null {
+  const { permission, classes } = props;
   if (!permission) return null;
+
   const { webId, alias, profile } = permission;
   const { avatar } = profile;
   const avatarSrc = avatar || undefined;
@@ -73,17 +79,19 @@ export function displayPermission(
   );
 }
 
-export function displayThirdPartyPermissions(
-  thirdPartyPermissions: NormalizedPermission[] | null,
-  classes: Record<string, string>
+interface IThirdPartyPermissions {
+  thirdPartyPermissions: NormalizedPermission[] | null;
+  classes: Record<string, string>;
+}
+
+export function ThirdPartyPermissions(
+  props: IThirdPartyPermissions
 ): ReactElement | null {
+  const { thirdPartyPermissions, classes } = props;
+
   if (!thirdPartyPermissions) return null;
 
-  const items = thirdPartyPermissions.map((permission): ReactElement | null =>
-    displayPermission(permission, classes)
-  );
-
-  if (items.length === 0) {
+  if (thirdPartyPermissions.length === 0) {
     return (
       <section className={classes.centeredSection}>
         <h5 className={classes["content-h5"]}>Sharing</h5>
@@ -101,7 +109,15 @@ export function displayThirdPartyPermissions(
   return (
     <section className={classes.centeredSection}>
       <h5 className={classes["content-h5"]}>Sharing</h5>
-      <List>{items}</List>
+      <List>
+        {thirdPartyPermissions.map((permission) => (
+          <Permission
+            permission={permission}
+            classes={classes}
+            key={permission.webId}
+          />
+        ))}
+      </List>
     </section>
   );
 }
@@ -121,16 +137,23 @@ export interface Props extends NormalizedResource {
 }
 
 export default function ResourceDetails({
-  iri,
-  name,
-  permissions,
-  types,
+  iri = "",
+  name = "",
+  types = [],
 }: Props): ReactElement {
+  const { data: resourceDetails } = useFetchResourceWithAcl(iri);
+
+  const { permissions } = resourceDetails || {};
+
   const classes = useStyles();
   const { session } = useContext(UserContext);
   const { webId } = session as ISession;
   const userPermissions = getUserPermissions(webId, permissions);
   const thirdPartyPermissions = getThirdPartyPermissions(webId, permissions);
+
+  if (!permissions) {
+    return <DetailsLoading resource={{ iri, name, types }} />;
+  }
 
   return (
     <>
@@ -148,10 +171,15 @@ export default function ResourceDetails({
 
       <section className={classes.centeredSection}>
         <h5 className={classes["content-h5"]}>My Access</h5>
-        <List>{displayPermission(userPermissions, classes)}</List>
+        <List>
+          <Permission permission={userPermissions} classes={classes} />
+        </List>
       </section>
 
-      {displayThirdPartyPermissions(thirdPartyPermissions, classes)}
+      <ThirdPartyPermissions
+        thirdPartyPermissions={thirdPartyPermissions}
+        classes={classes}
+      />
 
       <Divider />
 

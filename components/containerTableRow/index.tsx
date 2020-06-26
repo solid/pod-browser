@@ -20,22 +20,16 @@
  */
 
 /* eslint-disable camelcase */
-import { ReactElement, useContext, useState, useEffect } from "react";
+import { ReactElement, useContext } from "react";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { makeStyles } from "@material-ui/core/styles";
 import { TableCell, TableRow } from "@material-ui/core";
 import Link from "next/link";
 import DetailsLoading from "../detailsLoading";
-import DetailsError from "../detailsError";
 import Details from "../resourceDetails";
+import { useFetchResourceDetails } from "../../src/hooks/litPod";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
-import {
-  fetchResourceWithAcl,
-  fetchResource,
-  fetchFileWithAcl,
-  getIriPath,
-  ResourceDetails,
-} from "../../src/lit-solid-helpers";
+import { ResourceDetails } from "../../src/lit-solid-helpers";
 
 import styles from "./styles";
 
@@ -61,56 +55,15 @@ export function handleTableRowClick({
     setMenuOpen(true);
     setMenuContents(<DetailsLoading resource={resource} />);
 
-    const { iri } = resource;
-    const details = resource;
+    const { types, name, iri } = resource;
 
-    if (!resource.permissions) {
-      try {
-        const { permissions } = await fetchResourceWithAcl(iri);
-        details.permissions = permissions;
-      } catch (e) {
-        setMenuContents(<DetailsError />);
-      }
-    }
-
-    const { types, name, permissions } = details;
-
-    setMenuContents(
-      <Details iri={iri} types={types} name={name} permissions={permissions} />
-    );
+    setMenuContents(<Details iri={iri} types={types} name={name} />);
   };
 }
 
-export function renderResourceDetailCells(
-  isLoading: boolean,
-  resource: ResourceDetails
-): ReactElement {
-  const { types, iri } = resource;
-
-  return isLoading ? (
-    <TableCell key={iri}>
-      <Skeleton variant="text" width={100} />
-    </TableCell>
-  ) : (
-    <TableCell key={`${iri}-type`}>{types[0] || "Resource"}</TableCell>
-  );
-}
-
-export async function fetchResourceDetails(
-  iri: string
-): Promise<ResourceDetails> {
-  const name = getIriPath(iri) as string;
-  let resource;
-  try {
-    resource = await fetchResource(iri);
-  } catch (e) {
-    resource = await fetchFileWithAcl(iri);
-  }
-
-  return {
-    ...resource,
-    name,
-  };
+interface IResourceDetailCells {
+  isLoading: boolean;
+  resource: ResourceDetails;
 }
 
 const useStyles = makeStyles(styles);
@@ -121,8 +74,6 @@ interface Props {
 
 export default function ContainerTableRow({ resource }: Props): ReactElement {
   const { setMenuOpen, setMenuContents } = useContext(DetailsMenuContext);
-  const [isLoading, setIsLoading] = useState(true);
-  const [loadedResource, setLoadedResource] = useState(resource);
 
   const classes = useStyles();
   const onClick = handleTableRowClick({
@@ -131,27 +82,28 @@ export default function ContainerTableRow({ resource }: Props): ReactElement {
     resource,
   });
 
-  const { name, iri } = loadedResource;
-
-  useEffect(() => {
-    if (!isLoading) return;
-
-    fetchResourceDetails(iri)
-      .then((fullResource) => {
-        setLoadedResource(fullResource);
-        setIsLoading(false);
-      })
-      .catch((e) => e);
-  }, [iri, isLoading]);
+  const { name, iri } = resource;
+  const { data } = useFetchResourceDetails(iri);
+  const isLoading = !data;
+  const loadedResource = data || resource;
 
   return (
     <TableRow className={classes.tableRow} onClick={onClick}>
       <TableCell>
-        <Link href={resourceHref(iri)}>
+        <Link href="/resource/[iri]" as={resourceHref(iri)}>
           <a>{name}</a>
         </Link>
       </TableCell>
-      {renderResourceDetailCells(isLoading, loadedResource)}
+
+      {isLoading ? (
+        <TableCell key={iri}>
+          <Skeleton variant="text" width={100} />
+        </TableCell>
+      ) : (
+        <TableCell key={`${iri}-type`}>
+          {loadedResource.types[0] || "Resource"}
+        </TableCell>
+      )}
     </TableRow>
   );
 }

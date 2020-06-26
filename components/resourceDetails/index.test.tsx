@@ -20,15 +20,18 @@
  */
 
 import * as ReactFns from "react";
-import { mount } from "enzyme";
+import { mock } from "jest-mock-extended";
+import { mount, shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "../../src/theme";
 
+import { NormalizedPermission } from "../../src/lit-solid-helpers";
+
 import ResourceDetails, {
   displayName,
-  displayPermission,
-  displayThirdPartyPermissions,
+  Permission,
+  ThirdPartyPermissions,
   displayType,
 } from "./index";
 
@@ -157,24 +160,86 @@ describe("displayName", () => {
   });
 });
 
-describe("displayPermission", () => {
-  test("it returns null if given no permission", () => {
-    let permission;
+describe("Permission", () => {
+  test("it returns null if given no permissions", () => {
     const classes = {};
-    expect(displayPermission(permission, classes)).toBeNull();
+
+    const tree = shallow(<Permission classes={classes} permission={null} />);
+
+    expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+
+  test("it renders permissions if given", () => {
+    const classes = {};
+    const permission = mock<NormalizedPermission>({
+      webId: "https://somepod.somehost.com/profile#me",
+      alias: "some-alias",
+      profile: {
+        avatar: "https://somepod.somehost.com/public/photo.jpg",
+      },
+    });
+
+    const tree = shallow(
+      <Permission classes={classes} permission={permission} />
+    );
+    expect(shallowToJson(tree)).toMatchSnapshot();
   });
 });
 
-describe("displayThirdPartyPermissions", () => {
+describe("ThirdPartyPermissions", () => {
   test("it returns null if given no permissions", () => {
-    let permissions;
+    const tree = shallow(
+      <ThirdPartyPermissions classes={{}} thirdPartyPermissions={null} />
+    );
+
+    expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+
+  test("it returns a useful message if there are no third party permissions", () => {
+    const tree = shallow(
+      <ThirdPartyPermissions classes={{}} thirdPartyPermissions={[]} />
+    );
+
+    expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+
+  test("it renders permissions if given", () => {
     const classes = {};
-    expect(displayThirdPartyPermissions(permissions, classes)).toBeNull();
+    const permissions = [
+      {
+        webId: "https://somepod.somehost.com/profile#me",
+        alias: "some-alias",
+        acl: {},
+        profile: {
+          avatar: "https://somepod.somehost.com/public/photo.jpg",
+        },
+      },
+      {
+        webId: "https://someotherpod.somehost.com/profile#me",
+        alias: "some-other-alias",
+        acl: {},
+        profile: {},
+      },
+    ];
+
+    const tree = shallow(
+      <ThirdPartyPermissions
+        classes={classes}
+        thirdPartyPermissions={permissions}
+      />
+    );
+
+    expect(shallowToJson(tree)).toMatchSnapshot();
   });
 });
 
 describe("displayType", () => {
   test("it returns 'Resource' if no types", () => {
     expect(displayType([])).toEqual("Resource");
+  });
+
+  test("it returns the first type if types", () => {
+    const types = ["A Type"];
+    expect(displayType(types)).toEqual(types[0]);
   });
 });

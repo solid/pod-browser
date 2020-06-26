@@ -1,5 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Permission it renders permissions if given 1`] = `
+<WithStyles(ForwardRef(ListItem))
+  key="https://somepod.somehost.com/profile#me"
+>
+  <WithStyles(ForwardRef(Avatar))
+    alt={[MockFunction]}
+    src="https://somepod.somehost.com/public/photo.jpg"
+  />
+  <WithStyles(ForwardRef(Typography))>
+    <Component />
+  </WithStyles(ForwardRef(Typography))>
+  <WithStyles(ForwardRef(Typography))
+    className="undefined undefined"
+  >
+    some-alias
+  </WithStyles(ForwardRef(Typography))>
+</WithStyles(ForwardRef(ListItem))>
+`;
+
+exports[`Permission it returns null if given no permissions 1`] = `""`;
+
 exports[`Resource details renders no 3rd party access message 1`] = `
 <ThemeProvider
   theme={
@@ -461,494 +482,453 @@ font-display: block;",
       ]
     }
   >
-    <section
-      className="makeStyles-centeredSection-2"
-    >
-      <h3
-        className="makeStyles-content-h3-10"
-        title="iri"
-      >
-        Resource Name
-      </h3>
-    </section>
-    <section
-      className="makeStyles-centeredSection-2"
-    >
-      <h5
-        className="makeStyles-content-h5-12"
-      >
-        Details
-      </h5>
-    </section>
-    <WithStyles(ForwardRef(Divider))>
-      <ForwardRef(Divider)
-        classes={
-          Object {
-            "absolute": "MuiDivider-absolute",
-            "flexItem": "MuiDivider-flexItem",
-            "inset": "MuiDivider-inset",
-            "light": "MuiDivider-light",
-            "middle": "MuiDivider-middle",
-            "root": "MuiDivider-root",
-            "vertical": "MuiDivider-vertical",
-          }
+    <DetailsLoading
+      resource={
+        Object {
+          "iri": "iri",
+          "name": "Resource Name",
+          "types": Array [
+            "Resource",
+          ],
         }
-      >
-        <hr
-          className="MuiDivider-root"
-        />
-      </ForwardRef(Divider)>
-    </WithStyles(ForwardRef(Divider))>
-    <section
-      className="makeStyles-centeredSection-2"
+      }
     >
-      <h5
-        className="makeStyles-content-h5-12"
+      <section
+        className="makeStyles-centeredSection-20"
       >
-        My Access
-      </h5>
-      <WithStyles(ForwardRef(List))>
-        <ForwardRef(List)
+        <h3
+          className="makeStyles-content-h3-29"
+          title="iri"
+        >
+          Resource Name
+        </h3>
+      </section>
+      <section
+        className="makeStyles-centeredSection-20"
+      >
+        <h5
+          className="makeStyles-content-h5-31"
+        >
+          Details
+        </h5>
+      </section>
+      <WithStyles(ForwardRef(Divider))>
+        <ForwardRef(Divider)
           classes={
             Object {
-              "dense": "MuiList-dense",
-              "padding": "MuiList-padding",
-              "root": "MuiList-root",
-              "subheader": "MuiList-subheader",
+              "absolute": "MuiDivider-absolute",
+              "flexItem": "MuiDivider-flexItem",
+              "inset": "MuiDivider-inset",
+              "light": "MuiDivider-light",
+              "middle": "MuiDivider-middle",
+              "root": "MuiDivider-root",
+              "vertical": "MuiDivider-vertical",
             }
           }
         >
-          <ul
-            className="MuiList-root MuiList-padding"
+          <hr
+            className="MuiDivider-root"
+          />
+        </ForwardRef(Divider)>
+      </WithStyles(ForwardRef(Divider))>
+      <section
+        className="makeStyles-centeredSection-20"
+      >
+        <h5
+          className="makeStyles-content-h5-31"
+        >
+          My Access
+        </h5>
+        <WithStyles(ForwardRef(List))>
+          <ForwardRef(List)
+            classes={
+              Object {
+                "dense": "MuiList-dense",
+                "padding": "MuiList-padding",
+                "root": "MuiList-root",
+                "subheader": "MuiList-subheader",
+              }
+            }
           >
-            <WithStyles(ForwardRef(ListItem))
-              className="makeStyles-listItem-4"
-              key="owner"
+            <ul
+              className="MuiList-root MuiList-padding"
             >
-              <ForwardRef(ListItem)
-                className="makeStyles-listItem-4"
-                classes={
-                  Object {
-                    "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
-                    "button": "MuiListItem-button",
-                    "container": "MuiListItem-container",
-                    "dense": "MuiListItem-dense",
-                    "disabled": "Mui-disabled",
-                    "divider": "MuiListItem-divider",
-                    "focusVisible": "Mui-focusVisible",
-                    "gutters": "MuiListItem-gutters",
-                    "root": "MuiListItem-root",
-                    "secondaryAction": "MuiListItem-secondaryAction",
-                    "selected": "Mui-selected",
-                  }
-                }
+              <WithStyles(ForwardRef(ListItem))
+                className="makeStyles-listItem-22"
               >
-                <li
-                  className="MuiListItem-root makeStyles-listItem-4 MuiListItem-gutters"
-                  disabled={false}
+                <ForwardRef(ListItem)
+                  className="makeStyles-listItem-22"
+                  classes={
+                    Object {
+                      "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
+                      "button": "MuiListItem-button",
+                      "container": "MuiListItem-container",
+                      "dense": "MuiListItem-dense",
+                      "disabled": "Mui-disabled",
+                      "divider": "MuiListItem-divider",
+                      "focusVisible": "Mui-focusVisible",
+                      "gutters": "MuiListItem-gutters",
+                      "root": "MuiListItem-root",
+                      "secondaryAction": "MuiListItem-secondaryAction",
+                      "selected": "Mui-selected",
+                    }
+                  }
                 >
-                  <WithStyles(ForwardRef(Avatar))
-                    alt="Test Person"
-                    className="makeStyles-avatar-1"
-                    key=".0"
-                    src="http://example.com/avatar.png"
+                  <li
+                    className="MuiListItem-root makeStyles-listItem-22 MuiListItem-gutters"
+                    disabled={false}
                   >
-                    <ForwardRef(Avatar)
-                      alt="Test Person"
-                      className="makeStyles-avatar-1"
-                      classes={
-                        Object {
-                          "circle": "MuiAvatar-circle",
-                          "colorDefault": "MuiAvatar-colorDefault",
-                          "fallback": "MuiAvatar-fallback",
-                          "img": "MuiAvatar-img",
-                          "root": "MuiAvatar-root",
-                          "rounded": "MuiAvatar-rounded",
-                          "square": "MuiAvatar-square",
-                        }
-                      }
-                      src="http://example.com/avatar.png"
+                    <WithStyles(ForwardRef(Skeleton))
+                      className="makeStyles-avatar-25"
+                      height={40}
+                      key=".0"
+                      variant="circle"
+                      width={45}
                     >
-                      <div
-                        className="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-1"
+                      <ForwardRef(Skeleton)
+                        className="makeStyles-avatar-25"
+                        classes={
+                          Object {
+                            "circle": "MuiSkeleton-circle",
+                            "fitContent": "MuiSkeleton-fitContent",
+                            "heightAuto": "MuiSkeleton-heightAuto",
+                            "pulse": "MuiSkeleton-pulse",
+                            "rect": "MuiSkeleton-rect",
+                            "root": "MuiSkeleton-root",
+                            "text": "MuiSkeleton-text",
+                            "wave": "MuiSkeleton-wave",
+                            "withChildren": "MuiSkeleton-withChildren",
+                          }
+                        }
+                        height={40}
+                        variant="circle"
+                        width={45}
                       >
-                        <img
-                          alt="Test Person"
-                          className="MuiAvatar-img"
-                          src="http://example.com/avatar.png"
+                        <span
+                          className="MuiSkeleton-root MuiSkeleton-circle makeStyles-avatar-25 MuiSkeleton-pulse"
+                          style={
+                            Object {
+                              "height": 40,
+                              "width": 45,
+                            }
+                          }
                         />
-                      </div>
-                    </ForwardRef(Avatar)>
-                  </WithStyles(ForwardRef(Avatar))>
-                  <WithStyles(ForwardRef(Typography))
-                    className="makeStyles-detailText-5"
-                    key=".1"
-                  >
-                    <ForwardRef(Typography)
-                      className="makeStyles-detailText-5"
-                      classes={
-                        Object {
-                          "alignCenter": "MuiTypography-alignCenter",
-                          "alignJustify": "MuiTypography-alignJustify",
-                          "alignLeft": "MuiTypography-alignLeft",
-                          "alignRight": "MuiTypography-alignRight",
-                          "body1": "MuiTypography-body1",
-                          "body2": "MuiTypography-body2",
-                          "button": "MuiTypography-button",
-                          "caption": "MuiTypography-caption",
-                          "colorError": "MuiTypography-colorError",
-                          "colorInherit": "MuiTypography-colorInherit",
-                          "colorPrimary": "MuiTypography-colorPrimary",
-                          "colorSecondary": "MuiTypography-colorSecondary",
-                          "colorTextPrimary": "MuiTypography-colorTextPrimary",
-                          "colorTextSecondary": "MuiTypography-colorTextSecondary",
-                          "displayBlock": "MuiTypography-displayBlock",
-                          "displayInline": "MuiTypography-displayInline",
-                          "gutterBottom": "MuiTypography-gutterBottom",
-                          "h1": "MuiTypography-h1",
-                          "h2": "MuiTypography-h2",
-                          "h3": "MuiTypography-h3",
-                          "h4": "MuiTypography-h4",
-                          "h5": "MuiTypography-h5",
-                          "h6": "MuiTypography-h6",
-                          "noWrap": "MuiTypography-noWrap",
-                          "overline": "MuiTypography-overline",
-                          "paragraph": "MuiTypography-paragraph",
-                          "root": "MuiTypography-root",
-                          "srOnly": "MuiTypography-srOnly",
-                          "subtitle1": "MuiTypography-subtitle1",
-                          "subtitle2": "MuiTypography-subtitle2",
-                        }
-                      }
+                      </ForwardRef(Skeleton)>
+                    </WithStyles(ForwardRef(Skeleton))>
+                    <WithStyles(ForwardRef(Skeleton))
+                      key=".1"
+                      variant="text"
+                      width="100%"
                     >
-                      <p
-                        className="MuiTypography-root makeStyles-detailText-5 MuiTypography-body1"
-                      >
-                        Test Person
-                      </p>
-                    </ForwardRef(Typography)>
-                  </WithStyles(ForwardRef(Typography))>
-                  <WithStyles(ForwardRef(Typography))
-                    className="makeStyles-typeValue-6 makeStyles-detailText-5"
-                    key=".2"
-                  >
-                    <ForwardRef(Typography)
-                      className="makeStyles-typeValue-6 makeStyles-detailText-5"
-                      classes={
-                        Object {
-                          "alignCenter": "MuiTypography-alignCenter",
-                          "alignJustify": "MuiTypography-alignJustify",
-                          "alignLeft": "MuiTypography-alignLeft",
-                          "alignRight": "MuiTypography-alignRight",
-                          "body1": "MuiTypography-body1",
-                          "body2": "MuiTypography-body2",
-                          "button": "MuiTypography-button",
-                          "caption": "MuiTypography-caption",
-                          "colorError": "MuiTypography-colorError",
-                          "colorInherit": "MuiTypography-colorInherit",
-                          "colorPrimary": "MuiTypography-colorPrimary",
-                          "colorSecondary": "MuiTypography-colorSecondary",
-                          "colorTextPrimary": "MuiTypography-colorTextPrimary",
-                          "colorTextSecondary": "MuiTypography-colorTextSecondary",
-                          "displayBlock": "MuiTypography-displayBlock",
-                          "displayInline": "MuiTypography-displayInline",
-                          "gutterBottom": "MuiTypography-gutterBottom",
-                          "h1": "MuiTypography-h1",
-                          "h2": "MuiTypography-h2",
-                          "h3": "MuiTypography-h3",
-                          "h4": "MuiTypography-h4",
-                          "h5": "MuiTypography-h5",
-                          "h6": "MuiTypography-h6",
-                          "noWrap": "MuiTypography-noWrap",
-                          "overline": "MuiTypography-overline",
-                          "paragraph": "MuiTypography-paragraph",
-                          "root": "MuiTypography-root",
-                          "srOnly": "MuiTypography-srOnly",
-                          "subtitle1": "MuiTypography-subtitle1",
-                          "subtitle2": "MuiTypography-subtitle2",
+                      <ForwardRef(Skeleton)
+                        classes={
+                          Object {
+                            "circle": "MuiSkeleton-circle",
+                            "fitContent": "MuiSkeleton-fitContent",
+                            "heightAuto": "MuiSkeleton-heightAuto",
+                            "pulse": "MuiSkeleton-pulse",
+                            "rect": "MuiSkeleton-rect",
+                            "root": "MuiSkeleton-root",
+                            "text": "MuiSkeleton-text",
+                            "wave": "MuiSkeleton-wave",
+                            "withChildren": "MuiSkeleton-withChildren",
+                          }
                         }
-                      }
-                    >
-                      <p
-                        className="MuiTypography-root makeStyles-typeValue-6 makeStyles-detailText-5 MuiTypography-body1"
+                        variant="text"
+                        width="100%"
                       >
-                        Full Control
-                      </p>
-                    </ForwardRef(Typography)>
-                  </WithStyles(ForwardRef(Typography))>
-                </li>
-              </ForwardRef(ListItem)>
-            </WithStyles(ForwardRef(ListItem))>
-          </ul>
-        </ForwardRef(List)>
-      </WithStyles(ForwardRef(List))>
-    </section>
-    <section
-      className="makeStyles-centeredSection-2"
-    >
-      <h5
-        className="makeStyles-content-h5-12"
+                        <span
+                          className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
+                          style={
+                            Object {
+                              "height": undefined,
+                              "width": "100%",
+                            }
+                          }
+                        />
+                      </ForwardRef(Skeleton)>
+                    </WithStyles(ForwardRef(Skeleton))>
+                  </li>
+                </ForwardRef(ListItem)>
+              </WithStyles(ForwardRef(ListItem))>
+            </ul>
+          </ForwardRef(List)>
+        </WithStyles(ForwardRef(List))>
+      </section>
+      <section
+        className="makeStyles-centeredSection-20"
       >
-        Sharing
-      </h5>
-      <WithStyles(ForwardRef(List))>
-        <ForwardRef(List)
+        <h5
+          className="makeStyles-content-h5-31"
+        >
+          Sharing
+        </h5>
+        <WithStyles(ForwardRef(List))>
+          <ForwardRef(List)
+            classes={
+              Object {
+                "dense": "MuiList-dense",
+                "padding": "MuiList-padding",
+                "root": "MuiList-root",
+                "subheader": "MuiList-subheader",
+              }
+            }
+          >
+            <ul
+              className="MuiList-root MuiList-padding"
+            >
+              <WithStyles(ForwardRef(ListItem))
+                className="makeStyles-listItem-22"
+              >
+                <ForwardRef(ListItem)
+                  className="makeStyles-listItem-22"
+                  classes={
+                    Object {
+                      "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
+                      "button": "MuiListItem-button",
+                      "container": "MuiListItem-container",
+                      "dense": "MuiListItem-dense",
+                      "disabled": "Mui-disabled",
+                      "divider": "MuiListItem-divider",
+                      "focusVisible": "Mui-focusVisible",
+                      "gutters": "MuiListItem-gutters",
+                      "root": "MuiListItem-root",
+                      "secondaryAction": "MuiListItem-secondaryAction",
+                      "selected": "Mui-selected",
+                    }
+                  }
+                >
+                  <li
+                    className="MuiListItem-root makeStyles-listItem-22 MuiListItem-gutters"
+                    disabled={false}
+                  >
+                    <WithStyles(ForwardRef(Skeleton))
+                      className="makeStyles-avatar-25"
+                      height={40}
+                      key=".0"
+                      variant="circle"
+                      width={45}
+                    >
+                      <ForwardRef(Skeleton)
+                        className="makeStyles-avatar-25"
+                        classes={
+                          Object {
+                            "circle": "MuiSkeleton-circle",
+                            "fitContent": "MuiSkeleton-fitContent",
+                            "heightAuto": "MuiSkeleton-heightAuto",
+                            "pulse": "MuiSkeleton-pulse",
+                            "rect": "MuiSkeleton-rect",
+                            "root": "MuiSkeleton-root",
+                            "text": "MuiSkeleton-text",
+                            "wave": "MuiSkeleton-wave",
+                            "withChildren": "MuiSkeleton-withChildren",
+                          }
+                        }
+                        height={40}
+                        variant="circle"
+                        width={45}
+                      >
+                        <span
+                          className="MuiSkeleton-root MuiSkeleton-circle makeStyles-avatar-25 MuiSkeleton-pulse"
+                          style={
+                            Object {
+                              "height": 40,
+                              "width": 45,
+                            }
+                          }
+                        />
+                      </ForwardRef(Skeleton)>
+                    </WithStyles(ForwardRef(Skeleton))>
+                    <WithStyles(ForwardRef(Skeleton))
+                      key=".1"
+                      variant="text"
+                      width="100%"
+                    >
+                      <ForwardRef(Skeleton)
+                        classes={
+                          Object {
+                            "circle": "MuiSkeleton-circle",
+                            "fitContent": "MuiSkeleton-fitContent",
+                            "heightAuto": "MuiSkeleton-heightAuto",
+                            "pulse": "MuiSkeleton-pulse",
+                            "rect": "MuiSkeleton-rect",
+                            "root": "MuiSkeleton-root",
+                            "text": "MuiSkeleton-text",
+                            "wave": "MuiSkeleton-wave",
+                            "withChildren": "MuiSkeleton-withChildren",
+                          }
+                        }
+                        variant="text"
+                        width="100%"
+                      >
+                        <span
+                          className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
+                          style={
+                            Object {
+                              "height": undefined,
+                              "width": "100%",
+                            }
+                          }
+                        />
+                      </ForwardRef(Skeleton)>
+                    </WithStyles(ForwardRef(Skeleton))>
+                  </li>
+                </ForwardRef(ListItem)>
+              </WithStyles(ForwardRef(ListItem))>
+            </ul>
+          </ForwardRef(List)>
+        </WithStyles(ForwardRef(List))>
+      </section>
+      <WithStyles(ForwardRef(Divider))>
+        <ForwardRef(Divider)
           classes={
             Object {
-              "dense": "MuiList-dense",
-              "padding": "MuiList-padding",
-              "root": "MuiList-root",
-              "subheader": "MuiList-subheader",
+              "absolute": "MuiDivider-absolute",
+              "flexItem": "MuiDivider-flexItem",
+              "inset": "MuiDivider-inset",
+              "light": "MuiDivider-light",
+              "middle": "MuiDivider-middle",
+              "root": "MuiDivider-root",
+              "vertical": "MuiDivider-vertical",
             }
           }
         >
-          <ul
-            className="MuiList-root MuiList-padding"
-          >
-            <WithStyles(ForwardRef(ListItem))
-              className="makeStyles-listItem-4"
-            >
-              <ForwardRef(ListItem)
-                className="makeStyles-listItem-4"
-                classes={
-                  Object {
-                    "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
-                    "button": "MuiListItem-button",
-                    "container": "MuiListItem-container",
-                    "dense": "MuiListItem-dense",
-                    "disabled": "Mui-disabled",
-                    "divider": "MuiListItem-divider",
-                    "focusVisible": "Mui-focusVisible",
-                    "gutters": "MuiListItem-gutters",
-                    "root": "MuiListItem-root",
-                    "secondaryAction": "MuiListItem-secondaryAction",
-                    "selected": "Mui-selected",
-                  }
-                }
-              >
-                <li
-                  className="MuiListItem-root makeStyles-listItem-4 MuiListItem-gutters"
-                  disabled={false}
-                >
-                  <WithStyles(ForwardRef(Typography))
-                    className="makeStyles-detailText-5"
-                    key=".0"
-                  >
-                    <ForwardRef(Typography)
-                      className="makeStyles-detailText-5"
-                      classes={
-                        Object {
-                          "alignCenter": "MuiTypography-alignCenter",
-                          "alignJustify": "MuiTypography-alignJustify",
-                          "alignLeft": "MuiTypography-alignLeft",
-                          "alignRight": "MuiTypography-alignRight",
-                          "body1": "MuiTypography-body1",
-                          "body2": "MuiTypography-body2",
-                          "button": "MuiTypography-button",
-                          "caption": "MuiTypography-caption",
-                          "colorError": "MuiTypography-colorError",
-                          "colorInherit": "MuiTypography-colorInherit",
-                          "colorPrimary": "MuiTypography-colorPrimary",
-                          "colorSecondary": "MuiTypography-colorSecondary",
-                          "colorTextPrimary": "MuiTypography-colorTextPrimary",
-                          "colorTextSecondary": "MuiTypography-colorTextSecondary",
-                          "displayBlock": "MuiTypography-displayBlock",
-                          "displayInline": "MuiTypography-displayInline",
-                          "gutterBottom": "MuiTypography-gutterBottom",
-                          "h1": "MuiTypography-h1",
-                          "h2": "MuiTypography-h2",
-                          "h3": "MuiTypography-h3",
-                          "h4": "MuiTypography-h4",
-                          "h5": "MuiTypography-h5",
-                          "h6": "MuiTypography-h6",
-                          "noWrap": "MuiTypography-noWrap",
-                          "overline": "MuiTypography-overline",
-                          "paragraph": "MuiTypography-paragraph",
-                          "root": "MuiTypography-root",
-                          "srOnly": "MuiTypography-srOnly",
-                          "subtitle1": "MuiTypography-subtitle1",
-                          "subtitle2": "MuiTypography-subtitle2",
-                        }
-                      }
-                    >
-                      <p
-                        className="MuiTypography-root makeStyles-detailText-5 MuiTypography-body1"
-                      >
-                        No 3rd party access
-                      </p>
-                    </ForwardRef(Typography)>
-                  </WithStyles(ForwardRef(Typography))>
-                </li>
-              </ForwardRef(ListItem)>
-            </WithStyles(ForwardRef(ListItem))>
-          </ul>
-        </ForwardRef(List)>
-      </WithStyles(ForwardRef(List))>
-    </section>
-    <WithStyles(ForwardRef(Divider))>
-      <ForwardRef(Divider)
-        classes={
-          Object {
-            "absolute": "MuiDivider-absolute",
-            "flexItem": "MuiDivider-flexItem",
-            "inset": "MuiDivider-inset",
-            "light": "MuiDivider-light",
-            "middle": "MuiDivider-middle",
-            "root": "MuiDivider-root",
-            "vertical": "MuiDivider-vertical",
-          }
-        }
+          <hr
+            className="MuiDivider-root"
+          />
+        </ForwardRef(Divider)>
+      </WithStyles(ForwardRef(Divider))>
+      <section
+        className="makeStyles-centeredSection-20"
       >
-        <hr
-          className="MuiDivider-root"
-        />
-      </ForwardRef(Divider)>
-    </WithStyles(ForwardRef(Divider))>
-    <section
-      className="makeStyles-centeredSection-2"
-    >
-      <WithStyles(ForwardRef(List))>
-        <ForwardRef(List)
-          classes={
-            Object {
-              "dense": "MuiList-dense",
-              "padding": "MuiList-padding",
-              "root": "MuiList-root",
-              "subheader": "MuiList-subheader",
+        <WithStyles(ForwardRef(List))>
+          <ForwardRef(List)
+            classes={
+              Object {
+                "dense": "MuiList-dense",
+                "padding": "MuiList-padding",
+                "root": "MuiList-root",
+                "subheader": "MuiList-subheader",
+              }
             }
-          }
-        >
-          <ul
-            className="MuiList-root MuiList-padding"
           >
-            <WithStyles(ForwardRef(ListItem))
-              className="makeStyles-listItem-4"
+            <ul
+              className="MuiList-root MuiList-padding"
             >
-              <ForwardRef(ListItem)
-                className="makeStyles-listItem-4"
-                classes={
-                  Object {
-                    "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
-                    "button": "MuiListItem-button",
-                    "container": "MuiListItem-container",
-                    "dense": "MuiListItem-dense",
-                    "disabled": "Mui-disabled",
-                    "divider": "MuiListItem-divider",
-                    "focusVisible": "Mui-focusVisible",
-                    "gutters": "MuiListItem-gutters",
-                    "root": "MuiListItem-root",
-                    "secondaryAction": "MuiListItem-secondaryAction",
-                    "selected": "Mui-selected",
-                  }
-                }
+              <WithStyles(ForwardRef(ListItem))
+                className="makeStyles-listItem-22"
               >
-                <li
-                  className="MuiListItem-root makeStyles-listItem-4 MuiListItem-gutters"
-                  disabled={false}
+                <ForwardRef(ListItem)
+                  className="makeStyles-listItem-22"
+                  classes={
+                    Object {
+                      "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
+                      "button": "MuiListItem-button",
+                      "container": "MuiListItem-container",
+                      "dense": "MuiListItem-dense",
+                      "disabled": "Mui-disabled",
+                      "divider": "MuiListItem-divider",
+                      "focusVisible": "Mui-focusVisible",
+                      "gutters": "MuiListItem-gutters",
+                      "root": "MuiListItem-root",
+                      "secondaryAction": "MuiListItem-secondaryAction",
+                      "selected": "Mui-selected",
+                    }
+                  }
                 >
-                  <WithStyles(ForwardRef(Typography))
-                    className="makeStyles-detailText-5"
-                    key=".0"
+                  <li
+                    className="MuiListItem-root makeStyles-listItem-22 MuiListItem-gutters"
+                    disabled={false}
                   >
-                    <ForwardRef(Typography)
-                      className="makeStyles-detailText-5"
-                      classes={
-                        Object {
-                          "alignCenter": "MuiTypography-alignCenter",
-                          "alignJustify": "MuiTypography-alignJustify",
-                          "alignLeft": "MuiTypography-alignLeft",
-                          "alignRight": "MuiTypography-alignRight",
-                          "body1": "MuiTypography-body1",
-                          "body2": "MuiTypography-body2",
-                          "button": "MuiTypography-button",
-                          "caption": "MuiTypography-caption",
-                          "colorError": "MuiTypography-colorError",
-                          "colorInherit": "MuiTypography-colorInherit",
-                          "colorPrimary": "MuiTypography-colorPrimary",
-                          "colorSecondary": "MuiTypography-colorSecondary",
-                          "colorTextPrimary": "MuiTypography-colorTextPrimary",
-                          "colorTextSecondary": "MuiTypography-colorTextSecondary",
-                          "displayBlock": "MuiTypography-displayBlock",
-                          "displayInline": "MuiTypography-displayInline",
-                          "gutterBottom": "MuiTypography-gutterBottom",
-                          "h1": "MuiTypography-h1",
-                          "h2": "MuiTypography-h2",
-                          "h3": "MuiTypography-h3",
-                          "h4": "MuiTypography-h4",
-                          "h5": "MuiTypography-h5",
-                          "h6": "MuiTypography-h6",
-                          "noWrap": "MuiTypography-noWrap",
-                          "overline": "MuiTypography-overline",
-                          "paragraph": "MuiTypography-paragraph",
-                          "root": "MuiTypography-root",
-                          "srOnly": "MuiTypography-srOnly",
-                          "subtitle1": "MuiTypography-subtitle1",
-                          "subtitle2": "MuiTypography-subtitle2",
-                        }
-                      }
+                    <WithStyles(ForwardRef(Typography))
+                      className="makeStyles-detailText-23"
+                      key=".0"
                     >
-                      <p
-                        className="MuiTypography-root makeStyles-detailText-5 MuiTypography-body1"
-                      >
-                        Thing Type:
-                      </p>
-                    </ForwardRef(Typography)>
-                  </WithStyles(ForwardRef(Typography))>
-                  <WithStyles(ForwardRef(Typography))
-                    className="makeStyles-typeValue-6 makeStyles-detailText-5"
-                    key=".1"
-                  >
-                    <ForwardRef(Typography)
-                      className="makeStyles-typeValue-6 makeStyles-detailText-5"
-                      classes={
-                        Object {
-                          "alignCenter": "MuiTypography-alignCenter",
-                          "alignJustify": "MuiTypography-alignJustify",
-                          "alignLeft": "MuiTypography-alignLeft",
-                          "alignRight": "MuiTypography-alignRight",
-                          "body1": "MuiTypography-body1",
-                          "body2": "MuiTypography-body2",
-                          "button": "MuiTypography-button",
-                          "caption": "MuiTypography-caption",
-                          "colorError": "MuiTypography-colorError",
-                          "colorInherit": "MuiTypography-colorInherit",
-                          "colorPrimary": "MuiTypography-colorPrimary",
-                          "colorSecondary": "MuiTypography-colorSecondary",
-                          "colorTextPrimary": "MuiTypography-colorTextPrimary",
-                          "colorTextSecondary": "MuiTypography-colorTextSecondary",
-                          "displayBlock": "MuiTypography-displayBlock",
-                          "displayInline": "MuiTypography-displayInline",
-                          "gutterBottom": "MuiTypography-gutterBottom",
-                          "h1": "MuiTypography-h1",
-                          "h2": "MuiTypography-h2",
-                          "h3": "MuiTypography-h3",
-                          "h4": "MuiTypography-h4",
-                          "h5": "MuiTypography-h5",
-                          "h6": "MuiTypography-h6",
-                          "noWrap": "MuiTypography-noWrap",
-                          "overline": "MuiTypography-overline",
-                          "paragraph": "MuiTypography-paragraph",
-                          "root": "MuiTypography-root",
-                          "srOnly": "MuiTypography-srOnly",
-                          "subtitle1": "MuiTypography-subtitle1",
-                          "subtitle2": "MuiTypography-subtitle2",
+                      <ForwardRef(Typography)
+                        className="makeStyles-detailText-23"
+                        classes={
+                          Object {
+                            "alignCenter": "MuiTypography-alignCenter",
+                            "alignJustify": "MuiTypography-alignJustify",
+                            "alignLeft": "MuiTypography-alignLeft",
+                            "alignRight": "MuiTypography-alignRight",
+                            "body1": "MuiTypography-body1",
+                            "body2": "MuiTypography-body2",
+                            "button": "MuiTypography-button",
+                            "caption": "MuiTypography-caption",
+                            "colorError": "MuiTypography-colorError",
+                            "colorInherit": "MuiTypography-colorInherit",
+                            "colorPrimary": "MuiTypography-colorPrimary",
+                            "colorSecondary": "MuiTypography-colorSecondary",
+                            "colorTextPrimary": "MuiTypography-colorTextPrimary",
+                            "colorTextSecondary": "MuiTypography-colorTextSecondary",
+                            "displayBlock": "MuiTypography-displayBlock",
+                            "displayInline": "MuiTypography-displayInline",
+                            "gutterBottom": "MuiTypography-gutterBottom",
+                            "h1": "MuiTypography-h1",
+                            "h2": "MuiTypography-h2",
+                            "h3": "MuiTypography-h3",
+                            "h4": "MuiTypography-h4",
+                            "h5": "MuiTypography-h5",
+                            "h6": "MuiTypography-h6",
+                            "noWrap": "MuiTypography-noWrap",
+                            "overline": "MuiTypography-overline",
+                            "paragraph": "MuiTypography-paragraph",
+                            "root": "MuiTypography-root",
+                            "srOnly": "MuiTypography-srOnly",
+                            "subtitle1": "MuiTypography-subtitle1",
+                            "subtitle2": "MuiTypography-subtitle2",
+                          }
                         }
-                      }
-                    >
-                      <p
-                        className="MuiTypography-root makeStyles-typeValue-6 makeStyles-detailText-5 MuiTypography-body1"
                       >
-                        Resource
-                      </p>
-                    </ForwardRef(Typography)>
-                  </WithStyles(ForwardRef(Typography))>
-                </li>
-              </ForwardRef(ListItem)>
-            </WithStyles(ForwardRef(ListItem))>
-          </ul>
-        </ForwardRef(List)>
-      </WithStyles(ForwardRef(List))>
-    </section>
+                        <p
+                          className="MuiTypography-root makeStyles-detailText-23 MuiTypography-body1"
+                        >
+                          Thing Type:
+                        </p>
+                      </ForwardRef(Typography)>
+                    </WithStyles(ForwardRef(Typography))>
+                    <WithStyles(ForwardRef(Skeleton))
+                      key=".1"
+                      variant="text"
+                      width="50%"
+                    >
+                      <ForwardRef(Skeleton)
+                        classes={
+                          Object {
+                            "circle": "MuiSkeleton-circle",
+                            "fitContent": "MuiSkeleton-fitContent",
+                            "heightAuto": "MuiSkeleton-heightAuto",
+                            "pulse": "MuiSkeleton-pulse",
+                            "rect": "MuiSkeleton-rect",
+                            "root": "MuiSkeleton-root",
+                            "text": "MuiSkeleton-text",
+                            "wave": "MuiSkeleton-wave",
+                            "withChildren": "MuiSkeleton-withChildren",
+                          }
+                        }
+                        variant="text"
+                        width="50%"
+                      >
+                        <span
+                          className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
+                          style={
+                            Object {
+                              "height": undefined,
+                              "width": "50%",
+                            }
+                          }
+                        />
+                      </ForwardRef(Skeleton)>
+                    </WithStyles(ForwardRef(Skeleton))>
+                  </li>
+                </ForwardRef(ListItem)>
+              </WithStyles(ForwardRef(ListItem))>
+            </ul>
+          </ForwardRef(List)>
+        </WithStyles(ForwardRef(List))>
+      </section>
+    </DetailsLoading>
   </ResourceDetails>
 </ThemeProvider>
 `;
@@ -1429,604 +1409,506 @@ font-display: block;",
       ]
     }
   >
-    <section
-      className="makeStyles-centeredSection-2"
-    >
-      <h3
-        className="makeStyles-content-h3-10"
-        title="iri"
-      >
-        Resource Name
-      </h3>
-    </section>
-    <section
-      className="makeStyles-centeredSection-2"
-    >
-      <h5
-        className="makeStyles-content-h5-12"
-      >
-        Details
-      </h5>
-    </section>
-    <WithStyles(ForwardRef(Divider))>
-      <ForwardRef(Divider)
-        classes={
-          Object {
-            "absolute": "MuiDivider-absolute",
-            "flexItem": "MuiDivider-flexItem",
-            "inset": "MuiDivider-inset",
-            "light": "MuiDivider-light",
-            "middle": "MuiDivider-middle",
-            "root": "MuiDivider-root",
-            "vertical": "MuiDivider-vertical",
-          }
+    <DetailsLoading
+      resource={
+        Object {
+          "iri": "iri",
+          "name": "Resource Name",
+          "types": Array [
+            "Resource",
+          ],
         }
-      >
-        <hr
-          className="MuiDivider-root"
-        />
-      </ForwardRef(Divider)>
-    </WithStyles(ForwardRef(Divider))>
-    <section
-      className="makeStyles-centeredSection-2"
+      }
     >
-      <h5
-        className="makeStyles-content-h5-12"
+      <section
+        className="makeStyles-centeredSection-20"
       >
-        My Access
-      </h5>
-      <WithStyles(ForwardRef(List))>
-        <ForwardRef(List)
+        <h3
+          className="makeStyles-content-h3-29"
+          title="iri"
+        >
+          Resource Name
+        </h3>
+      </section>
+      <section
+        className="makeStyles-centeredSection-20"
+      >
+        <h5
+          className="makeStyles-content-h5-31"
+        >
+          Details
+        </h5>
+      </section>
+      <WithStyles(ForwardRef(Divider))>
+        <ForwardRef(Divider)
           classes={
             Object {
-              "dense": "MuiList-dense",
-              "padding": "MuiList-padding",
-              "root": "MuiList-root",
-              "subheader": "MuiList-subheader",
+              "absolute": "MuiDivider-absolute",
+              "flexItem": "MuiDivider-flexItem",
+              "inset": "MuiDivider-inset",
+              "light": "MuiDivider-light",
+              "middle": "MuiDivider-middle",
+              "root": "MuiDivider-root",
+              "vertical": "MuiDivider-vertical",
             }
           }
         >
-          <ul
-            className="MuiList-root MuiList-padding"
+          <hr
+            className="MuiDivider-root"
+          />
+        </ForwardRef(Divider)>
+      </WithStyles(ForwardRef(Divider))>
+      <section
+        className="makeStyles-centeredSection-20"
+      >
+        <h5
+          className="makeStyles-content-h5-31"
+        >
+          My Access
+        </h5>
+        <WithStyles(ForwardRef(List))>
+          <ForwardRef(List)
+            classes={
+              Object {
+                "dense": "MuiList-dense",
+                "padding": "MuiList-padding",
+                "root": "MuiList-root",
+                "subheader": "MuiList-subheader",
+              }
+            }
           >
-            <WithStyles(ForwardRef(ListItem))
-              className="makeStyles-listItem-4"
-              key="owner"
+            <ul
+              className="MuiList-root MuiList-padding"
             >
-              <ForwardRef(ListItem)
-                className="makeStyles-listItem-4"
-                classes={
-                  Object {
-                    "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
-                    "button": "MuiListItem-button",
-                    "container": "MuiListItem-container",
-                    "dense": "MuiListItem-dense",
-                    "disabled": "Mui-disabled",
-                    "divider": "MuiListItem-divider",
-                    "focusVisible": "Mui-focusVisible",
-                    "gutters": "MuiListItem-gutters",
-                    "root": "MuiListItem-root",
-                    "secondaryAction": "MuiListItem-secondaryAction",
-                    "selected": "Mui-selected",
-                  }
-                }
+              <WithStyles(ForwardRef(ListItem))
+                className="makeStyles-listItem-22"
               >
-                <li
-                  className="MuiListItem-root makeStyles-listItem-4 MuiListItem-gutters"
-                  disabled={false}
+                <ForwardRef(ListItem)
+                  className="makeStyles-listItem-22"
+                  classes={
+                    Object {
+                      "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
+                      "button": "MuiListItem-button",
+                      "container": "MuiListItem-container",
+                      "dense": "MuiListItem-dense",
+                      "disabled": "Mui-disabled",
+                      "divider": "MuiListItem-divider",
+                      "focusVisible": "Mui-focusVisible",
+                      "gutters": "MuiListItem-gutters",
+                      "root": "MuiListItem-root",
+                      "secondaryAction": "MuiListItem-secondaryAction",
+                      "selected": "Mui-selected",
+                    }
+                  }
                 >
-                  <WithStyles(ForwardRef(Avatar))
-                    alt="Test Person"
-                    className="makeStyles-avatar-1"
-                    key=".0"
-                    src="http://example.com/avatar.png"
+                  <li
+                    className="MuiListItem-root makeStyles-listItem-22 MuiListItem-gutters"
+                    disabled={false}
                   >
-                    <ForwardRef(Avatar)
-                      alt="Test Person"
-                      className="makeStyles-avatar-1"
-                      classes={
-                        Object {
-                          "circle": "MuiAvatar-circle",
-                          "colorDefault": "MuiAvatar-colorDefault",
-                          "fallback": "MuiAvatar-fallback",
-                          "img": "MuiAvatar-img",
-                          "root": "MuiAvatar-root",
-                          "rounded": "MuiAvatar-rounded",
-                          "square": "MuiAvatar-square",
-                        }
-                      }
-                      src="http://example.com/avatar.png"
+                    <WithStyles(ForwardRef(Skeleton))
+                      className="makeStyles-avatar-25"
+                      height={40}
+                      key=".0"
+                      variant="circle"
+                      width={45}
                     >
-                      <div
-                        className="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-1"
+                      <ForwardRef(Skeleton)
+                        className="makeStyles-avatar-25"
+                        classes={
+                          Object {
+                            "circle": "MuiSkeleton-circle",
+                            "fitContent": "MuiSkeleton-fitContent",
+                            "heightAuto": "MuiSkeleton-heightAuto",
+                            "pulse": "MuiSkeleton-pulse",
+                            "rect": "MuiSkeleton-rect",
+                            "root": "MuiSkeleton-root",
+                            "text": "MuiSkeleton-text",
+                            "wave": "MuiSkeleton-wave",
+                            "withChildren": "MuiSkeleton-withChildren",
+                          }
+                        }
+                        height={40}
+                        variant="circle"
+                        width={45}
                       >
-                        <img
-                          alt="Test Person"
-                          className="MuiAvatar-img"
-                          src="http://example.com/avatar.png"
+                        <span
+                          className="MuiSkeleton-root MuiSkeleton-circle makeStyles-avatar-25 MuiSkeleton-pulse"
+                          style={
+                            Object {
+                              "height": 40,
+                              "width": 45,
+                            }
+                          }
                         />
-                      </div>
-                    </ForwardRef(Avatar)>
-                  </WithStyles(ForwardRef(Avatar))>
-                  <WithStyles(ForwardRef(Typography))
-                    className="makeStyles-detailText-5"
-                    key=".1"
-                  >
-                    <ForwardRef(Typography)
-                      className="makeStyles-detailText-5"
-                      classes={
-                        Object {
-                          "alignCenter": "MuiTypography-alignCenter",
-                          "alignJustify": "MuiTypography-alignJustify",
-                          "alignLeft": "MuiTypography-alignLeft",
-                          "alignRight": "MuiTypography-alignRight",
-                          "body1": "MuiTypography-body1",
-                          "body2": "MuiTypography-body2",
-                          "button": "MuiTypography-button",
-                          "caption": "MuiTypography-caption",
-                          "colorError": "MuiTypography-colorError",
-                          "colorInherit": "MuiTypography-colorInherit",
-                          "colorPrimary": "MuiTypography-colorPrimary",
-                          "colorSecondary": "MuiTypography-colorSecondary",
-                          "colorTextPrimary": "MuiTypography-colorTextPrimary",
-                          "colorTextSecondary": "MuiTypography-colorTextSecondary",
-                          "displayBlock": "MuiTypography-displayBlock",
-                          "displayInline": "MuiTypography-displayInline",
-                          "gutterBottom": "MuiTypography-gutterBottom",
-                          "h1": "MuiTypography-h1",
-                          "h2": "MuiTypography-h2",
-                          "h3": "MuiTypography-h3",
-                          "h4": "MuiTypography-h4",
-                          "h5": "MuiTypography-h5",
-                          "h6": "MuiTypography-h6",
-                          "noWrap": "MuiTypography-noWrap",
-                          "overline": "MuiTypography-overline",
-                          "paragraph": "MuiTypography-paragraph",
-                          "root": "MuiTypography-root",
-                          "srOnly": "MuiTypography-srOnly",
-                          "subtitle1": "MuiTypography-subtitle1",
-                          "subtitle2": "MuiTypography-subtitle2",
-                        }
-                      }
+                      </ForwardRef(Skeleton)>
+                    </WithStyles(ForwardRef(Skeleton))>
+                    <WithStyles(ForwardRef(Skeleton))
+                      key=".1"
+                      variant="text"
+                      width="100%"
                     >
-                      <p
-                        className="MuiTypography-root makeStyles-detailText-5 MuiTypography-body1"
-                      >
-                        Test Person
-                      </p>
-                    </ForwardRef(Typography)>
-                  </WithStyles(ForwardRef(Typography))>
-                  <WithStyles(ForwardRef(Typography))
-                    className="makeStyles-typeValue-6 makeStyles-detailText-5"
-                    key=".2"
-                  >
-                    <ForwardRef(Typography)
-                      className="makeStyles-typeValue-6 makeStyles-detailText-5"
-                      classes={
-                        Object {
-                          "alignCenter": "MuiTypography-alignCenter",
-                          "alignJustify": "MuiTypography-alignJustify",
-                          "alignLeft": "MuiTypography-alignLeft",
-                          "alignRight": "MuiTypography-alignRight",
-                          "body1": "MuiTypography-body1",
-                          "body2": "MuiTypography-body2",
-                          "button": "MuiTypography-button",
-                          "caption": "MuiTypography-caption",
-                          "colorError": "MuiTypography-colorError",
-                          "colorInherit": "MuiTypography-colorInherit",
-                          "colorPrimary": "MuiTypography-colorPrimary",
-                          "colorSecondary": "MuiTypography-colorSecondary",
-                          "colorTextPrimary": "MuiTypography-colorTextPrimary",
-                          "colorTextSecondary": "MuiTypography-colorTextSecondary",
-                          "displayBlock": "MuiTypography-displayBlock",
-                          "displayInline": "MuiTypography-displayInline",
-                          "gutterBottom": "MuiTypography-gutterBottom",
-                          "h1": "MuiTypography-h1",
-                          "h2": "MuiTypography-h2",
-                          "h3": "MuiTypography-h3",
-                          "h4": "MuiTypography-h4",
-                          "h5": "MuiTypography-h5",
-                          "h6": "MuiTypography-h6",
-                          "noWrap": "MuiTypography-noWrap",
-                          "overline": "MuiTypography-overline",
-                          "paragraph": "MuiTypography-paragraph",
-                          "root": "MuiTypography-root",
-                          "srOnly": "MuiTypography-srOnly",
-                          "subtitle1": "MuiTypography-subtitle1",
-                          "subtitle2": "MuiTypography-subtitle2",
+                      <ForwardRef(Skeleton)
+                        classes={
+                          Object {
+                            "circle": "MuiSkeleton-circle",
+                            "fitContent": "MuiSkeleton-fitContent",
+                            "heightAuto": "MuiSkeleton-heightAuto",
+                            "pulse": "MuiSkeleton-pulse",
+                            "rect": "MuiSkeleton-rect",
+                            "root": "MuiSkeleton-root",
+                            "text": "MuiSkeleton-text",
+                            "wave": "MuiSkeleton-wave",
+                            "withChildren": "MuiSkeleton-withChildren",
+                          }
                         }
-                      }
-                    >
-                      <p
-                        className="MuiTypography-root makeStyles-typeValue-6 makeStyles-detailText-5 MuiTypography-body1"
+                        variant="text"
+                        width="100%"
                       >
-                        Full Control
-                      </p>
-                    </ForwardRef(Typography)>
-                  </WithStyles(ForwardRef(Typography))>
-                </li>
-              </ForwardRef(ListItem)>
-            </WithStyles(ForwardRef(ListItem))>
-          </ul>
-        </ForwardRef(List)>
-      </WithStyles(ForwardRef(List))>
-    </section>
-    <section
-      className="makeStyles-centeredSection-2"
-    >
-      <h5
-        className="makeStyles-content-h5-12"
+                        <span
+                          className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
+                          style={
+                            Object {
+                              "height": undefined,
+                              "width": "100%",
+                            }
+                          }
+                        />
+                      </ForwardRef(Skeleton)>
+                    </WithStyles(ForwardRef(Skeleton))>
+                  </li>
+                </ForwardRef(ListItem)>
+              </WithStyles(ForwardRef(ListItem))>
+            </ul>
+          </ForwardRef(List)>
+        </WithStyles(ForwardRef(List))>
+      </section>
+      <section
+        className="makeStyles-centeredSection-20"
       >
-        Sharing
-      </h5>
-      <WithStyles(ForwardRef(List))>
-        <ForwardRef(List)
+        <h5
+          className="makeStyles-content-h5-31"
+        >
+          Sharing
+        </h5>
+        <WithStyles(ForwardRef(List))>
+          <ForwardRef(List)
+            classes={
+              Object {
+                "dense": "MuiList-dense",
+                "padding": "MuiList-padding",
+                "root": "MuiList-root",
+                "subheader": "MuiList-subheader",
+              }
+            }
+          >
+            <ul
+              className="MuiList-root MuiList-padding"
+            >
+              <WithStyles(ForwardRef(ListItem))
+                className="makeStyles-listItem-22"
+              >
+                <ForwardRef(ListItem)
+                  className="makeStyles-listItem-22"
+                  classes={
+                    Object {
+                      "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
+                      "button": "MuiListItem-button",
+                      "container": "MuiListItem-container",
+                      "dense": "MuiListItem-dense",
+                      "disabled": "Mui-disabled",
+                      "divider": "MuiListItem-divider",
+                      "focusVisible": "Mui-focusVisible",
+                      "gutters": "MuiListItem-gutters",
+                      "root": "MuiListItem-root",
+                      "secondaryAction": "MuiListItem-secondaryAction",
+                      "selected": "Mui-selected",
+                    }
+                  }
+                >
+                  <li
+                    className="MuiListItem-root makeStyles-listItem-22 MuiListItem-gutters"
+                    disabled={false}
+                  >
+                    <WithStyles(ForwardRef(Skeleton))
+                      className="makeStyles-avatar-25"
+                      height={40}
+                      key=".0"
+                      variant="circle"
+                      width={45}
+                    >
+                      <ForwardRef(Skeleton)
+                        className="makeStyles-avatar-25"
+                        classes={
+                          Object {
+                            "circle": "MuiSkeleton-circle",
+                            "fitContent": "MuiSkeleton-fitContent",
+                            "heightAuto": "MuiSkeleton-heightAuto",
+                            "pulse": "MuiSkeleton-pulse",
+                            "rect": "MuiSkeleton-rect",
+                            "root": "MuiSkeleton-root",
+                            "text": "MuiSkeleton-text",
+                            "wave": "MuiSkeleton-wave",
+                            "withChildren": "MuiSkeleton-withChildren",
+                          }
+                        }
+                        height={40}
+                        variant="circle"
+                        width={45}
+                      >
+                        <span
+                          className="MuiSkeleton-root MuiSkeleton-circle makeStyles-avatar-25 MuiSkeleton-pulse"
+                          style={
+                            Object {
+                              "height": 40,
+                              "width": 45,
+                            }
+                          }
+                        />
+                      </ForwardRef(Skeleton)>
+                    </WithStyles(ForwardRef(Skeleton))>
+                    <WithStyles(ForwardRef(Skeleton))
+                      key=".1"
+                      variant="text"
+                      width="100%"
+                    >
+                      <ForwardRef(Skeleton)
+                        classes={
+                          Object {
+                            "circle": "MuiSkeleton-circle",
+                            "fitContent": "MuiSkeleton-fitContent",
+                            "heightAuto": "MuiSkeleton-heightAuto",
+                            "pulse": "MuiSkeleton-pulse",
+                            "rect": "MuiSkeleton-rect",
+                            "root": "MuiSkeleton-root",
+                            "text": "MuiSkeleton-text",
+                            "wave": "MuiSkeleton-wave",
+                            "withChildren": "MuiSkeleton-withChildren",
+                          }
+                        }
+                        variant="text"
+                        width="100%"
+                      >
+                        <span
+                          className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
+                          style={
+                            Object {
+                              "height": undefined,
+                              "width": "100%",
+                            }
+                          }
+                        />
+                      </ForwardRef(Skeleton)>
+                    </WithStyles(ForwardRef(Skeleton))>
+                  </li>
+                </ForwardRef(ListItem)>
+              </WithStyles(ForwardRef(ListItem))>
+            </ul>
+          </ForwardRef(List)>
+        </WithStyles(ForwardRef(List))>
+      </section>
+      <WithStyles(ForwardRef(Divider))>
+        <ForwardRef(Divider)
           classes={
             Object {
-              "dense": "MuiList-dense",
-              "padding": "MuiList-padding",
-              "root": "MuiList-root",
-              "subheader": "MuiList-subheader",
+              "absolute": "MuiDivider-absolute",
+              "flexItem": "MuiDivider-flexItem",
+              "inset": "MuiDivider-inset",
+              "light": "MuiDivider-light",
+              "middle": "MuiDivider-middle",
+              "root": "MuiDivider-root",
+              "vertical": "MuiDivider-vertical",
             }
           }
         >
-          <ul
-            className="MuiList-root MuiList-padding"
+          <hr
+            className="MuiDivider-root"
+          />
+        </ForwardRef(Divider)>
+      </WithStyles(ForwardRef(Divider))>
+      <section
+        className="makeStyles-centeredSection-20"
+      >
+        <WithStyles(ForwardRef(List))>
+          <ForwardRef(List)
+            classes={
+              Object {
+                "dense": "MuiList-dense",
+                "padding": "MuiList-padding",
+                "root": "MuiList-root",
+                "subheader": "MuiList-subheader",
+              }
+            }
           >
-            <WithStyles(ForwardRef(ListItem))
-              className="makeStyles-listItem-4"
-              key="collaborator"
+            <ul
+              className="MuiList-root MuiList-padding"
             >
-              <ForwardRef(ListItem)
-                className="makeStyles-listItem-4"
-                classes={
-                  Object {
-                    "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
-                    "button": "MuiListItem-button",
-                    "container": "MuiListItem-container",
-                    "dense": "MuiListItem-dense",
-                    "disabled": "Mui-disabled",
-                    "divider": "MuiListItem-divider",
-                    "focusVisible": "Mui-focusVisible",
-                    "gutters": "MuiListItem-gutters",
-                    "root": "MuiListItem-root",
-                    "secondaryAction": "MuiListItem-secondaryAction",
-                    "selected": "Mui-selected",
-                  }
-                }
+              <WithStyles(ForwardRef(ListItem))
+                className="makeStyles-listItem-22"
               >
-                <li
-                  className="MuiListItem-root makeStyles-listItem-4 MuiListItem-gutters"
-                  disabled={false}
+                <ForwardRef(ListItem)
+                  className="makeStyles-listItem-22"
+                  classes={
+                    Object {
+                      "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
+                      "button": "MuiListItem-button",
+                      "container": "MuiListItem-container",
+                      "dense": "MuiListItem-dense",
+                      "disabled": "Mui-disabled",
+                      "divider": "MuiListItem-divider",
+                      "focusVisible": "Mui-focusVisible",
+                      "gutters": "MuiListItem-gutters",
+                      "root": "MuiListItem-root",
+                      "secondaryAction": "MuiListItem-secondaryAction",
+                      "selected": "Mui-selected",
+                    }
+                  }
                 >
-                  <WithStyles(ForwardRef(Avatar))
-                    alt="Test Collaborator"
-                    className="makeStyles-avatar-1"
-                    key=".0"
+                  <li
+                    className="MuiListItem-root makeStyles-listItem-22 MuiListItem-gutters"
+                    disabled={false}
                   >
-                    <ForwardRef(Avatar)
-                      alt="Test Collaborator"
-                      className="makeStyles-avatar-1"
-                      classes={
-                        Object {
-                          "circle": "MuiAvatar-circle",
-                          "colorDefault": "MuiAvatar-colorDefault",
-                          "fallback": "MuiAvatar-fallback",
-                          "img": "MuiAvatar-img",
-                          "root": "MuiAvatar-root",
-                          "rounded": "MuiAvatar-rounded",
-                          "square": "MuiAvatar-square",
-                        }
-                      }
+                    <WithStyles(ForwardRef(Typography))
+                      className="makeStyles-detailText-23"
+                      key=".0"
                     >
-                      <div
-                        className="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-1 MuiAvatar-colorDefault"
+                      <ForwardRef(Typography)
+                        className="makeStyles-detailText-23"
+                        classes={
+                          Object {
+                            "alignCenter": "MuiTypography-alignCenter",
+                            "alignJustify": "MuiTypography-alignJustify",
+                            "alignLeft": "MuiTypography-alignLeft",
+                            "alignRight": "MuiTypography-alignRight",
+                            "body1": "MuiTypography-body1",
+                            "body2": "MuiTypography-body2",
+                            "button": "MuiTypography-button",
+                            "caption": "MuiTypography-caption",
+                            "colorError": "MuiTypography-colorError",
+                            "colorInherit": "MuiTypography-colorInherit",
+                            "colorPrimary": "MuiTypography-colorPrimary",
+                            "colorSecondary": "MuiTypography-colorSecondary",
+                            "colorTextPrimary": "MuiTypography-colorTextPrimary",
+                            "colorTextSecondary": "MuiTypography-colorTextSecondary",
+                            "displayBlock": "MuiTypography-displayBlock",
+                            "displayInline": "MuiTypography-displayInline",
+                            "gutterBottom": "MuiTypography-gutterBottom",
+                            "h1": "MuiTypography-h1",
+                            "h2": "MuiTypography-h2",
+                            "h3": "MuiTypography-h3",
+                            "h4": "MuiTypography-h4",
+                            "h5": "MuiTypography-h5",
+                            "h6": "MuiTypography-h6",
+                            "noWrap": "MuiTypography-noWrap",
+                            "overline": "MuiTypography-overline",
+                            "paragraph": "MuiTypography-paragraph",
+                            "root": "MuiTypography-root",
+                            "srOnly": "MuiTypography-srOnly",
+                            "subtitle1": "MuiTypography-subtitle1",
+                            "subtitle2": "MuiTypography-subtitle2",
+                          }
+                        }
                       >
-                        <ForwardRef(PersonIcon)
-                          className="MuiAvatar-fallback"
+                        <p
+                          className="MuiTypography-root makeStyles-detailText-23 MuiTypography-body1"
                         >
-                          <WithStyles(ForwardRef(SvgIcon))
-                            className="MuiAvatar-fallback"
-                          >
-                            <ForwardRef(SvgIcon)
-                              className="MuiAvatar-fallback"
-                              classes={
-                                Object {
-                                  "colorAction": "MuiSvgIcon-colorAction",
-                                  "colorDisabled": "MuiSvgIcon-colorDisabled",
-                                  "colorError": "MuiSvgIcon-colorError",
-                                  "colorPrimary": "MuiSvgIcon-colorPrimary",
-                                  "colorSecondary": "MuiSvgIcon-colorSecondary",
-                                  "fontSizeInherit": "MuiSvgIcon-fontSizeInherit",
-                                  "fontSizeLarge": "MuiSvgIcon-fontSizeLarge",
-                                  "fontSizeSmall": "MuiSvgIcon-fontSizeSmall",
-                                  "root": "MuiSvgIcon-root",
-                                }
-                              }
-                            >
-                              <svg
-                                aria-hidden={true}
-                                className="MuiSvgIcon-root MuiAvatar-fallback"
-                                focusable="false"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
-                                />
-                              </svg>
-                            </ForwardRef(SvgIcon)>
-                          </WithStyles(ForwardRef(SvgIcon))>
-                        </ForwardRef(PersonIcon)>
-                      </div>
-                    </ForwardRef(Avatar)>
-                  </WithStyles(ForwardRef(Avatar))>
-                  <WithStyles(ForwardRef(Typography))
-                    className="makeStyles-detailText-5"
-                    key=".1"
-                  >
-                    <ForwardRef(Typography)
-                      className="makeStyles-detailText-5"
-                      classes={
-                        Object {
-                          "alignCenter": "MuiTypography-alignCenter",
-                          "alignJustify": "MuiTypography-alignJustify",
-                          "alignLeft": "MuiTypography-alignLeft",
-                          "alignRight": "MuiTypography-alignRight",
-                          "body1": "MuiTypography-body1",
-                          "body2": "MuiTypography-body2",
-                          "button": "MuiTypography-button",
-                          "caption": "MuiTypography-caption",
-                          "colorError": "MuiTypography-colorError",
-                          "colorInherit": "MuiTypography-colorInherit",
-                          "colorPrimary": "MuiTypography-colorPrimary",
-                          "colorSecondary": "MuiTypography-colorSecondary",
-                          "colorTextPrimary": "MuiTypography-colorTextPrimary",
-                          "colorTextSecondary": "MuiTypography-colorTextSecondary",
-                          "displayBlock": "MuiTypography-displayBlock",
-                          "displayInline": "MuiTypography-displayInline",
-                          "gutterBottom": "MuiTypography-gutterBottom",
-                          "h1": "MuiTypography-h1",
-                          "h2": "MuiTypography-h2",
-                          "h3": "MuiTypography-h3",
-                          "h4": "MuiTypography-h4",
-                          "h5": "MuiTypography-h5",
-                          "h6": "MuiTypography-h6",
-                          "noWrap": "MuiTypography-noWrap",
-                          "overline": "MuiTypography-overline",
-                          "paragraph": "MuiTypography-paragraph",
-                          "root": "MuiTypography-root",
-                          "srOnly": "MuiTypography-srOnly",
-                          "subtitle1": "MuiTypography-subtitle1",
-                          "subtitle2": "MuiTypography-subtitle2",
-                        }
-                      }
+                          Thing Type:
+                        </p>
+                      </ForwardRef(Typography)>
+                    </WithStyles(ForwardRef(Typography))>
+                    <WithStyles(ForwardRef(Skeleton))
+                      key=".1"
+                      variant="text"
+                      width="50%"
                     >
-                      <p
-                        className="MuiTypography-root makeStyles-detailText-5 MuiTypography-body1"
-                      >
-                        Test Collaborator
-                      </p>
-                    </ForwardRef(Typography)>
-                  </WithStyles(ForwardRef(Typography))>
-                  <WithStyles(ForwardRef(Typography))
-                    className="makeStyles-typeValue-6 makeStyles-detailText-5"
-                    key=".2"
-                  >
-                    <ForwardRef(Typography)
-                      className="makeStyles-typeValue-6 makeStyles-detailText-5"
-                      classes={
-                        Object {
-                          "alignCenter": "MuiTypography-alignCenter",
-                          "alignJustify": "MuiTypography-alignJustify",
-                          "alignLeft": "MuiTypography-alignLeft",
-                          "alignRight": "MuiTypography-alignRight",
-                          "body1": "MuiTypography-body1",
-                          "body2": "MuiTypography-body2",
-                          "button": "MuiTypography-button",
-                          "caption": "MuiTypography-caption",
-                          "colorError": "MuiTypography-colorError",
-                          "colorInherit": "MuiTypography-colorInherit",
-                          "colorPrimary": "MuiTypography-colorPrimary",
-                          "colorSecondary": "MuiTypography-colorSecondary",
-                          "colorTextPrimary": "MuiTypography-colorTextPrimary",
-                          "colorTextSecondary": "MuiTypography-colorTextSecondary",
-                          "displayBlock": "MuiTypography-displayBlock",
-                          "displayInline": "MuiTypography-displayInline",
-                          "gutterBottom": "MuiTypography-gutterBottom",
-                          "h1": "MuiTypography-h1",
-                          "h2": "MuiTypography-h2",
-                          "h3": "MuiTypography-h3",
-                          "h4": "MuiTypography-h4",
-                          "h5": "MuiTypography-h5",
-                          "h6": "MuiTypography-h6",
-                          "noWrap": "MuiTypography-noWrap",
-                          "overline": "MuiTypography-overline",
-                          "paragraph": "MuiTypography-paragraph",
-                          "root": "MuiTypography-root",
-                          "srOnly": "MuiTypography-srOnly",
-                          "subtitle1": "MuiTypography-subtitle1",
-                          "subtitle2": "MuiTypography-subtitle2",
+                      <ForwardRef(Skeleton)
+                        classes={
+                          Object {
+                            "circle": "MuiSkeleton-circle",
+                            "fitContent": "MuiSkeleton-fitContent",
+                            "heightAuto": "MuiSkeleton-heightAuto",
+                            "pulse": "MuiSkeleton-pulse",
+                            "rect": "MuiSkeleton-rect",
+                            "root": "MuiSkeleton-root",
+                            "text": "MuiSkeleton-text",
+                            "wave": "MuiSkeleton-wave",
+                            "withChildren": "MuiSkeleton-withChildren",
+                          }
                         }
-                      }
-                    >
-                      <p
-                        className="MuiTypography-root makeStyles-typeValue-6 makeStyles-detailText-5 MuiTypography-body1"
+                        variant="text"
+                        width="50%"
                       >
-                        Can View
-                      </p>
-                    </ForwardRef(Typography)>
-                  </WithStyles(ForwardRef(Typography))>
-                </li>
-              </ForwardRef(ListItem)>
-            </WithStyles(ForwardRef(ListItem))>
-          </ul>
-        </ForwardRef(List)>
-      </WithStyles(ForwardRef(List))>
-    </section>
-    <WithStyles(ForwardRef(Divider))>
-      <ForwardRef(Divider)
-        classes={
-          Object {
-            "absolute": "MuiDivider-absolute",
-            "flexItem": "MuiDivider-flexItem",
-            "inset": "MuiDivider-inset",
-            "light": "MuiDivider-light",
-            "middle": "MuiDivider-middle",
-            "root": "MuiDivider-root",
-            "vertical": "MuiDivider-vertical",
-          }
-        }
-      >
-        <hr
-          className="MuiDivider-root"
-        />
-      </ForwardRef(Divider)>
-    </WithStyles(ForwardRef(Divider))>
-    <section
-      className="makeStyles-centeredSection-2"
-    >
-      <WithStyles(ForwardRef(List))>
-        <ForwardRef(List)
-          classes={
-            Object {
-              "dense": "MuiList-dense",
-              "padding": "MuiList-padding",
-              "root": "MuiList-root",
-              "subheader": "MuiList-subheader",
-            }
-          }
-        >
-          <ul
-            className="MuiList-root MuiList-padding"
-          >
-            <WithStyles(ForwardRef(ListItem))
-              className="makeStyles-listItem-4"
-            >
-              <ForwardRef(ListItem)
-                className="makeStyles-listItem-4"
-                classes={
-                  Object {
-                    "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
-                    "button": "MuiListItem-button",
-                    "container": "MuiListItem-container",
-                    "dense": "MuiListItem-dense",
-                    "disabled": "Mui-disabled",
-                    "divider": "MuiListItem-divider",
-                    "focusVisible": "Mui-focusVisible",
-                    "gutters": "MuiListItem-gutters",
-                    "root": "MuiListItem-root",
-                    "secondaryAction": "MuiListItem-secondaryAction",
-                    "selected": "Mui-selected",
-                  }
-                }
-              >
-                <li
-                  className="MuiListItem-root makeStyles-listItem-4 MuiListItem-gutters"
-                  disabled={false}
-                >
-                  <WithStyles(ForwardRef(Typography))
-                    className="makeStyles-detailText-5"
-                    key=".0"
-                  >
-                    <ForwardRef(Typography)
-                      className="makeStyles-detailText-5"
-                      classes={
-                        Object {
-                          "alignCenter": "MuiTypography-alignCenter",
-                          "alignJustify": "MuiTypography-alignJustify",
-                          "alignLeft": "MuiTypography-alignLeft",
-                          "alignRight": "MuiTypography-alignRight",
-                          "body1": "MuiTypography-body1",
-                          "body2": "MuiTypography-body2",
-                          "button": "MuiTypography-button",
-                          "caption": "MuiTypography-caption",
-                          "colorError": "MuiTypography-colorError",
-                          "colorInherit": "MuiTypography-colorInherit",
-                          "colorPrimary": "MuiTypography-colorPrimary",
-                          "colorSecondary": "MuiTypography-colorSecondary",
-                          "colorTextPrimary": "MuiTypography-colorTextPrimary",
-                          "colorTextSecondary": "MuiTypography-colorTextSecondary",
-                          "displayBlock": "MuiTypography-displayBlock",
-                          "displayInline": "MuiTypography-displayInline",
-                          "gutterBottom": "MuiTypography-gutterBottom",
-                          "h1": "MuiTypography-h1",
-                          "h2": "MuiTypography-h2",
-                          "h3": "MuiTypography-h3",
-                          "h4": "MuiTypography-h4",
-                          "h5": "MuiTypography-h5",
-                          "h6": "MuiTypography-h6",
-                          "noWrap": "MuiTypography-noWrap",
-                          "overline": "MuiTypography-overline",
-                          "paragraph": "MuiTypography-paragraph",
-                          "root": "MuiTypography-root",
-                          "srOnly": "MuiTypography-srOnly",
-                          "subtitle1": "MuiTypography-subtitle1",
-                          "subtitle2": "MuiTypography-subtitle2",
-                        }
-                      }
-                    >
-                      <p
-                        className="MuiTypography-root makeStyles-detailText-5 MuiTypography-body1"
-                      >
-                        Thing Type:
-                      </p>
-                    </ForwardRef(Typography)>
-                  </WithStyles(ForwardRef(Typography))>
-                  <WithStyles(ForwardRef(Typography))
-                    className="makeStyles-typeValue-6 makeStyles-detailText-5"
-                    key=".1"
-                  >
-                    <ForwardRef(Typography)
-                      className="makeStyles-typeValue-6 makeStyles-detailText-5"
-                      classes={
-                        Object {
-                          "alignCenter": "MuiTypography-alignCenter",
-                          "alignJustify": "MuiTypography-alignJustify",
-                          "alignLeft": "MuiTypography-alignLeft",
-                          "alignRight": "MuiTypography-alignRight",
-                          "body1": "MuiTypography-body1",
-                          "body2": "MuiTypography-body2",
-                          "button": "MuiTypography-button",
-                          "caption": "MuiTypography-caption",
-                          "colorError": "MuiTypography-colorError",
-                          "colorInherit": "MuiTypography-colorInherit",
-                          "colorPrimary": "MuiTypography-colorPrimary",
-                          "colorSecondary": "MuiTypography-colorSecondary",
-                          "colorTextPrimary": "MuiTypography-colorTextPrimary",
-                          "colorTextSecondary": "MuiTypography-colorTextSecondary",
-                          "displayBlock": "MuiTypography-displayBlock",
-                          "displayInline": "MuiTypography-displayInline",
-                          "gutterBottom": "MuiTypography-gutterBottom",
-                          "h1": "MuiTypography-h1",
-                          "h2": "MuiTypography-h2",
-                          "h3": "MuiTypography-h3",
-                          "h4": "MuiTypography-h4",
-                          "h5": "MuiTypography-h5",
-                          "h6": "MuiTypography-h6",
-                          "noWrap": "MuiTypography-noWrap",
-                          "overline": "MuiTypography-overline",
-                          "paragraph": "MuiTypography-paragraph",
-                          "root": "MuiTypography-root",
-                          "srOnly": "MuiTypography-srOnly",
-                          "subtitle1": "MuiTypography-subtitle1",
-                          "subtitle2": "MuiTypography-subtitle2",
-                        }
-                      }
-                    >
-                      <p
-                        className="MuiTypography-root makeStyles-typeValue-6 makeStyles-detailText-5 MuiTypography-body1"
-                      >
-                        Resource
-                      </p>
-                    </ForwardRef(Typography)>
-                  </WithStyles(ForwardRef(Typography))>
-                </li>
-              </ForwardRef(ListItem)>
-            </WithStyles(ForwardRef(ListItem))>
-          </ul>
-        </ForwardRef(List)>
-      </WithStyles(ForwardRef(List))>
-    </section>
+                        <span
+                          className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
+                          style={
+                            Object {
+                              "height": undefined,
+                              "width": "50%",
+                            }
+                          }
+                        />
+                      </ForwardRef(Skeleton)>
+                    </WithStyles(ForwardRef(Skeleton))>
+                  </li>
+                </ForwardRef(ListItem)>
+              </WithStyles(ForwardRef(ListItem))>
+            </ul>
+          </ForwardRef(List)>
+        </WithStyles(ForwardRef(List))>
+      </section>
+    </DetailsLoading>
   </ResourceDetails>
 </ThemeProvider>
 `;
+
+exports[`ThirdPartyPermissions it renders permissions if given 1`] = `
+<section>
+  <h5>
+    Sharing
+  </h5>
+  <WithStyles(ForwardRef(List))>
+    <Permission
+      classes={Object {}}
+      key="https://somepod.somehost.com/profile#me"
+      permission={
+        Object {
+          "acl": Object {},
+          "alias": "some-alias",
+          "profile": Object {
+            "avatar": "https://somepod.somehost.com/public/photo.jpg",
+          },
+          "webId": "https://somepod.somehost.com/profile#me",
+        }
+      }
+    />
+    <Permission
+      classes={Object {}}
+      key="https://someotherpod.somehost.com/profile#me"
+      permission={
+        Object {
+          "acl": Object {},
+          "alias": "some-other-alias",
+          "profile": Object {},
+          "webId": "https://someotherpod.somehost.com/profile#me",
+        }
+      }
+    />
+  </WithStyles(ForwardRef(List))>
+</section>
+`;
+
+exports[`ThirdPartyPermissions it returns a useful message if there are no third party permissions 1`] = `
+<section>
+  <h5>
+    Sharing
+  </h5>
+  <WithStyles(ForwardRef(List))>
+    <WithStyles(ForwardRef(ListItem))>
+      <WithStyles(ForwardRef(Typography))>
+        No 3rd party access
+      </WithStyles(ForwardRef(Typography))>
+    </WithStyles(ForwardRef(ListItem))>
+  </WithStyles(ForwardRef(List))>
+</section>
+`;
+
+exports[`ThirdPartyPermissions it returns null if given no permissions 1`] = `""`;

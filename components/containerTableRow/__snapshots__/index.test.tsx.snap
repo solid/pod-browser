@@ -7,10 +7,11 @@ exports[`ContainerTableRow it renders a table row 1`] = `
 >
   <WithStyles(ForwardRef(TableCell))>
     <Link
-      href="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
+      as="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
+      href="/resource/[iri]"
     >
       <a>
-        <Component />
+        /example.ttl
       </a>
     </Link>
   </WithStyles(ForwardRef(TableCell))>
@@ -21,6 +22,52 @@ exports[`ContainerTableRow it renders a table row 1`] = `
       variant="text"
       width={100}
     />
+  </WithStyles(ForwardRef(TableCell))>
+</WithStyles(ForwardRef(TableRow))>
+`;
+
+exports[`ContainerTableRow it renders a table row with loaded data 1`] = `
+<WithStyles(ForwardRef(TableRow))
+  className="makeStyles-tableRow-1"
+  onClick={[Function]}
+>
+  <WithStyles(ForwardRef(TableCell))>
+    <Link
+      as="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
+      href="/resource/[iri]"
+    >
+      <a>
+        /example.ttl
+      </a>
+    </Link>
+  </WithStyles(ForwardRef(TableCell))>
+  <WithStyles(ForwardRef(TableCell))
+    key="https://example.com/example.ttl-type"
+  >
+    some-type
+  </WithStyles(ForwardRef(TableCell))>
+</WithStyles(ForwardRef(TableRow))>
+`;
+
+exports[`ContainerTableRow it renders a table row with loaded data without a type 1`] = `
+<WithStyles(ForwardRef(TableRow))
+  className="makeStyles-tableRow-1"
+  onClick={[Function]}
+>
+  <WithStyles(ForwardRef(TableCell))>
+    <Link
+      as="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
+      href="/resource/[iri]"
+    >
+      <a>
+        /example.ttl
+      </a>
+    </Link>
+  </WithStyles(ForwardRef(TableCell))>
+  <WithStyles(ForwardRef(TableCell))
+    key="https://example.com/example.ttl-type"
+  >
+    <Component />
   </WithStyles(ForwardRef(TableCell))>
 </WithStyles(ForwardRef(TableRow))>
 `;
