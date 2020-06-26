@@ -141,7 +141,7 @@ export default function ResourceDetails({
   name = "",
   types = [],
 }: Props): ReactElement {
-  const { data: resourceDetails } = useFetchResourceWithAcl(iri);
+  const { error, data: resourceDetails } = useFetchResourceWithAcl(iri);
 
   const { permissions } = resourceDetails || {};
 
@@ -151,7 +151,9 @@ export default function ResourceDetails({
   const userPermissions = getUserPermissions(webId, permissions);
   const thirdPartyPermissions = getThirdPartyPermissions(webId, permissions);
 
-  if (!permissions) {
+  // TODO:
+  // Files without permissions throw an error in lit-pod.
+  if (!error && !permissions) {
     return <DetailsLoading resource={{ iri, name, types }} />;
   }
 

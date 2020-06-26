@@ -24,8 +24,9 @@ import { mock } from "jest-mock-extended";
 import { mount, shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import { ThemeProvider } from "@material-ui/core/styles";
-import theme from "../../src/theme";
 
+import { useFetchResourceWithAcl } from "../../src/hooks/litPod";
+import theme from "../../src/theme";
 import { NormalizedPermission } from "../../src/lit-solid-helpers";
 
 import ResourceDetails, {
@@ -35,7 +36,47 @@ import ResourceDetails, {
   displayType,
 } from "./index";
 
+jest.mock("../../src/hooks/litPod");
+
 describe("Resource details", () => {
+  test("renders loading if there is no data or error", () => {
+    jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
+      session: { webId: "owner" },
+    }));
+
+    (useFetchResourceWithAcl as jest.Mock).mockReturnValue({
+      data: undefined,
+      error: undefined,
+    });
+
+    const tree = mount(
+      <ThemeProvider theme={theme}>
+        <ResourceDetails name="Resource Name" types={["Resource"]} iri="iri" />
+      </ThemeProvider>
+    );
+
+    expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+
+  test("renders 'no access' if there is an error", () => {
+    jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
+      session: { webId: "owner" },
+    }));
+
+    (useFetchResourceWithAcl as jest.Mock).mockReturnValue({
+      data: undefined,
+      error: { message: "nope" },
+    });
+
+    const tree = mount(
+      <ThemeProvider theme={theme}>
+        <ResourceDetails name="Resource Name" types={["Resource"]} iri="iri" />
+      </ThemeProvider>
+    );
+
+    expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+
   test("renders resource details", () => {
     jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
       session: { webId: "owner" },
@@ -74,22 +115,13 @@ describe("Resource details", () => {
       },
     ];
 
-    const classes = {
-      typeValue: "typeValue",
-      listItem: "listItem",
-      detailText: "detailText",
-      centeredSection: "centeredSection",
-    };
+    (useFetchResourceWithAcl as jest.Mock).mockReturnValue({
+      data: { permissions },
+    });
 
     const tree = mount(
       <ThemeProvider theme={theme}>
-        <ResourceDetails
-          name="Resource Name"
-          types={["Resource"]}
-          iri="iri"
-          classes={classes}
-          permissions={permissions}
-        />
+        <ResourceDetails name="Resource Name" types={["Resource"]} iri="iri" />
       </ThemeProvider>
     );
 
@@ -119,22 +151,13 @@ describe("Resource details", () => {
       },
     ];
 
-    const classes = {
-      typeValue: "typeValue",
-      listItem: "listItem",
-      detailText: "detailText",
-      centeredSection: "centeredSection",
-    };
+    (useFetchResourceWithAcl as jest.Mock).mockReturnValue({
+      data: { permissions },
+    });
 
     const tree = mount(
       <ThemeProvider theme={theme}>
-        <ResourceDetails
-          name="Resource Name"
-          types={["Resource"]}
-          iri="iri"
-          classes={classes}
-          permissions={permissions}
-        />
+        <ResourceDetails name="Resource Name" types={["Resource"]} iri="iri" />
       </ThemeProvider>
     );
 
@@ -207,18 +230,34 @@ describe("ThirdPartyPermissions", () => {
     const classes = {};
     const permissions = [
       {
-        webId: "https://somepod.somehost.com/profile#me",
-        alias: "some-alias",
-        acl: {},
+        webId: "owner",
+        alias: "Full Control",
+        acl: {
+          append: true,
+          control: true,
+          read: true,
+          write: true,
+        },
         profile: {
-          avatar: "https://somepod.somehost.com/public/photo.jpg",
+          avatar: "http://example.com/avatar.png",
+          nickname: "owner",
+          name: "Test Person",
         },
       },
       {
-        webId: "https://someotherpod.somehost.com/profile#me",
-        alias: "some-other-alias",
-        acl: {},
-        profile: {},
+        webId: "collaborator",
+        alias: "Can View",
+        acl: {
+          append: false,
+          control: false,
+          read: true,
+          write: false,
+        },
+        profile: {
+          avatar: null,
+          nickname: "collaborator",
+          name: "Test Collaborator",
+        },
       },
     ];
 
