@@ -19,27 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
-import { Container } from "@material-ui/core";
-import { useRouter } from "next/router";
-import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import ContainerView from "../../container";
-import { PodLocationProvider } from "../../../src/contexts/podLocationContext";
+import { mount, shallow } from "enzyme";
+import { mountToJson, shallowToJson } from "enzyme-to-json";
+import Breadcrumbs from "./index";
+import { PodLocationProvider } from "../../src/contexts/podLocationContext";
 
-export default function Resource(): ReactElement {
-  useRedirectIfLoggedOut();
-
-  const router = useRouter();
-  const decodedIri = decodeURIComponent(router.query.iri as string);
-
-  return (
-    <Container>
-      <PodLocationProvider currentUri={decodedIri}>
-        <DetailsMenuProvider>
-          <ContainerView iri={decodedIri} />
-        </DetailsMenuProvider>
+describe("Breadcrumbs view", () => {
+  test("Renders a breadcrumbs view", () => {
+    const tree = mount(
+      <PodLocationProvider currentUri={}>
+        <Breadcrumbs />
       </PodLocationProvider>
-    </Container>
-  );
-}
+    );
+    expect(mountToJson(tree)).toMatchSnapshot();
+  });
+});

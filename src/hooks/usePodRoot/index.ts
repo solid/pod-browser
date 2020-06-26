@@ -19,27 +19,24 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
-import { Container } from "@material-ui/core";
-import { useRouter } from "next/router";
-import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import ContainerView from "../../container";
-import { PodLocationProvider } from "../../../src/contexts/podLocationContext";
+import { useEffect, useState } from "react";
+import { Profile } from "../../lit-solid-helpers";
 
-export default function Resource(): ReactElement {
-  useRedirectIfLoggedOut();
-
-  const router = useRouter();
-  const decodedIri = decodeURIComponent(router.query.iri as string);
-
-  return (
-    <Container>
-      <PodLocationProvider currentUri={decodedIri}>
-        <DetailsMenuProvider>
-          <ContainerView iri={decodedIri} />
-        </DetailsMenuProvider>
-      </PodLocationProvider>
-    </Container>
-  );
+export default function usePodRoot(
+  location: string,
+  profile?: Profile | null
+): string | null {
+  const [rootUri, setRootUri] = useState<string | null>(null);
+  useEffect(() => {
+    const profilePod = (profile ? profile.pods || [] : []).find((pod) =>
+      location.startsWith(pod)
+    );
+    if (profilePod) {
+      setRootUri(profilePod);
+      return;
+    }
+    const { origin } = new URL(location);
+    setRootUri(`${origin}/`);
+  }, [location, profile]);
+  return rootUri;
 }

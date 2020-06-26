@@ -40,7 +40,7 @@ import {
   unstable_fetchLitDatasetWithAcl,
   unstable_getAgentAccessModesAll,
 } from "@solid/lit-pod";
-import { ldp } from "rdf-namespaces";
+import { ldp, space } from "rdf-namespaces";
 import { parseUrl } from "../stringHelpers";
 
 const ldpWithType: Record<string, string> = ldp;
@@ -105,6 +105,7 @@ export interface Profile {
   avatar?: string | null;
   name?: string | null;
   nickname?: string | null;
+  pods?: string[] | null;
 }
 
 export async function fetchProfile(webId: string): Promise<Profile> {
@@ -113,8 +114,9 @@ export async function fetchProfile(webId: string): Promise<Profile> {
   const nickname = getStringUnlocalizedOne(profile, namespace.nickname);
   const name = getStringUnlocalizedOne(profile, namespace.name);
   const avatar = getIriOne(profile, namespace.hasPhoto);
+  const pods = getIriAll(profile, space.storage);
 
-  return { webId, nickname, name, avatar };
+  return { webId, nickname, name, avatar, pods };
 }
 
 export interface NormalizedPermission {

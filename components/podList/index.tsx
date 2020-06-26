@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement } from "react";
+import React, { ReactElement } from "react";
 import {
   Table,
   TableBody,
@@ -31,6 +31,7 @@ import Link from "next/link";
 import DetailsContextMenu from "../detailsContextMenu";
 import { resourceHref } from "../containerTableRow";
 import Container from "../container";
+import { PodLocationProvider } from "../../src/contexts/podLocationContext";
 
 interface IPodList {
   podIris: string[] | undefined;
@@ -47,7 +48,11 @@ export default function PodList(props: IPodList): ReactElement | null {
   }
 
   if (podIris.length === 1) {
-    return <Container iri={podIris[0]} />;
+    return (
+      <PodLocationProvider currentUri={podIris[0]}>
+        <Container iri={podIris[0]} />
+      </PodLocationProvider>
+    );
   }
 
   return (

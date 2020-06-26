@@ -19,27 +19,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
-import { Container } from "@material-ui/core";
-import { useRouter } from "next/router";
-import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import ContainerView from "../../container";
-import { PodLocationProvider } from "../../../src/contexts/podLocationContext";
+import React from "react";
+import { renderHook } from "@testing-library/react-hooks";
+import usePodRoot from "./index";
+import { Profile } from "../../lit-solid-helpers";
 
-export default function Resource(): ReactElement {
-  useRedirectIfLoggedOut();
+const location = "https://foo.com/bar/baz";
+const location2 = "https://bar.com/";
+const profile: Profile = {
+  webId: "webId",
+  pods: ["https://foo.com/bar/", "https://bar.com"],
+};
 
-  const router = useRouter();
-  const decodedIri = decodeURIComponent(router.query.iri as string);
+describe("usePodRoot", () => {
+  test("it will guess storage URI if profile is null", () => {
+    const { result } = renderHook(() => usePodRoot(location, null));
+    expect(result.current).toEqual("https://foo.com/");
+  });
 
-  return (
-    <Container>
-      <PodLocationProvider currentUri={decodedIri}>
-        <DetailsMenuProvider>
-          <ContainerView iri={decodedIri} />
-        </DetailsMenuProvider>
-      </PodLocationProvider>
-    </Container>
-  );
-}
+  test("it will use storage URI in profile if it matches location", () => {
+    const { result } = renderHook(() => usePodRoot(location, profile));
+    expect(result.current).toEqual("https://foo.com/bar/");
+  });
+
+  test("it makes sure baseUri ends with slash", () => {
+    const { result } = renderHook(() => usePodRoot(location2, profile));
+    expect(result.current).toEqual(location2);
+  });
+});

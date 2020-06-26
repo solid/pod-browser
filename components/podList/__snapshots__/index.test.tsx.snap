@@ -1,9 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Pod list Renders a container if there is one pod iri 1`] = `
-<Container
-  iri="https://mypod.myhost.com"
-/>
+<PodLocationProvider
+  currentUri="https://mypod.myhost.com"
+>
+  <Container
+    iri="https://mypod.myhost.com"
+  />
+</PodLocationProvider>
 `;
 
 exports[`Pod list Renders a table if there are multiple pod iris 1`] = `

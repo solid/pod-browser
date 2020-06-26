@@ -19,27 +19,35 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
-import { Container } from "@material-ui/core";
-import { useRouter } from "next/router";
-import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import ContainerView from "../../container";
-import { PodLocationProvider } from "../../../src/contexts/podLocationContext";
+import { createContext, ReactElement, useContext } from "react";
+import useAuthenticatedProfile from "../../hooks/useAuthenticatedProfile";
+import UserContext from "../userContext";
+import usePodRoot from "../../hooks/usePodRoot";
 
-export default function Resource(): ReactElement {
-  useRedirectIfLoggedOut();
+interface PodLocation {
+  baseUri?: string | null;
+  currentUri: string;
+}
 
-  const router = useRouter();
-  const decodedIri = decodeURIComponent(router.query.iri as string);
+const PodLocationContext = createContext<PodLocation>({
+  currentUri: "",
+});
 
+interface Props {
+  children?: ReactElement | ReactElement[];
+  currentUri: string;
+}
+
+function PodLocationProvider({ children, currentUri }: Props): ReactElement {
+  const { session } = useContext(UserContext);
+  const profile = useAuthenticatedProfile(session);
+  const baseUri = usePodRoot(currentUri, profile);
   return (
-    <Container>
-      <PodLocationProvider currentUri={decodedIri}>
-        <DetailsMenuProvider>
-          <ContainerView iri={decodedIri} />
-        </DetailsMenuProvider>
-      </PodLocationProvider>
-    </Container>
+    <PodLocationContext.Provider value={{ baseUri, currentUri }}>
+      {children}
+    </PodLocationContext.Provider>
   );
 }
+
+export { PodLocationProvider };
+export default PodLocationContext;

@@ -19,27 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
-import { Container } from "@material-ui/core";
-import { useRouter } from "next/router";
-import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import ContainerView from "../../container";
-import { PodLocationProvider } from "../../../src/contexts/podLocationContext";
+import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
 
-export default function Resource(): ReactElement {
-  useRedirectIfLoggedOut();
+const styles = (theme: PrismTheme) =>
+  createStyles(theme, ["breadcrumb", "icons"]);
 
-  const router = useRouter();
-  const decodedIri = decodeURIComponent(router.query.iri as string);
-
-  return (
-    <Container>
-      <PodLocationProvider currentUri={decodedIri}>
-        <DetailsMenuProvider>
-          <ContainerView iri={decodedIri} />
-        </DetailsMenuProvider>
-      </PodLocationProvider>
-    </Container>
-  );
-}
+export default styles;
