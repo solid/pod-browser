@@ -25,10 +25,10 @@ import usePodRoot from "./index";
 import { Profile } from "../../lit-solid-helpers";
 
 const location = "https://foo.com/bar/baz";
-const location2 = "https://bar.com/";
+const locationWithNoEndingSlash = "https://bar.com";
 const profile: Profile = {
   webId: "webId",
-  pods: ["https://foo.com/bar/", "https://bar.com"],
+  pods: ["https://foo.com/bar/", locationWithNoEndingSlash],
 };
 
 describe("usePodRoot", () => {
@@ -43,7 +43,9 @@ describe("usePodRoot", () => {
   });
 
   test("it makes sure baseUri ends with slash", () => {
-    const { result } = renderHook(() => usePodRoot(location2, profile));
-    expect(result.current).toEqual(location2);
+    const { result } = renderHook(() =>
+      usePodRoot(locationWithNoEndingSlash, profile)
+    );
+    expect(result.current).toEqual("https://bar.com/");
   });
 });

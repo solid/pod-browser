@@ -24,10 +24,12 @@ import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import { mock } from "jest-mock-extended";
 
+import { ThemeProvider } from "@material-ui/styles";
 import { ResourceDetails } from "../../src/lit-solid-helpers";
 import { useFetchResourceDetails } from "../../src/hooks/litPod";
 
 import ContainerTableRow, { handleTableRowClick, resourceHref } from "./index";
+import theme from "../../src/theme";
 
 jest.mock("@solid/lit-pod");
 jest.mock("../../src/hooks/litPod");
@@ -41,7 +43,11 @@ describe("ContainerTableRow", () => {
 
     (useFetchResourceDetails as jest.Mock).mockReturnValue({ data: undefined });
 
-    const tree = shallow(<ContainerTableRow resource={resource} />);
+    const tree = shallow(
+      <ThemeProvider theme={theme}>
+        <ContainerTableRow resource={resource} />
+      </ThemeProvider>
+    );
 
     expect(shallowToJson(tree)).toMatchSnapshot();
   });
@@ -55,7 +61,11 @@ describe("ContainerTableRow", () => {
 
     (useFetchResourceDetails as jest.Mock).mockReturnValue({ data: resource });
 
-    const tree = shallow(<ContainerTableRow resource={resource} />);
+    const tree = shallow(
+      <ThemeProvider theme={theme}>
+        <ContainerTableRow resource={resource} />
+      </ThemeProvider>
+    );
 
     expect(shallowToJson(tree)).toMatchSnapshot();
   });
@@ -69,7 +79,11 @@ describe("ContainerTableRow", () => {
 
     (useFetchResourceDetails as jest.Mock).mockReturnValue({ data: resource });
 
-    const tree = shallow(<ContainerTableRow resource={resource} />);
+    const tree = shallow(
+      <ThemeProvider theme={theme}>
+        <ContainerTableRow resource={resource} />
+      </ThemeProvider>
+    );
 
     expect(shallowToJson(tree)).toMatchSnapshot();
   });

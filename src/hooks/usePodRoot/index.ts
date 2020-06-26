@@ -22,6 +22,10 @@
 import { useEffect, useState } from "react";
 import { Profile } from "../../lit-solid-helpers";
 
+function normalizeBaseUri(baseUri: string): string {
+  return baseUri[baseUri.length - 1] === "/" ? baseUri : `${baseUri}/`;
+}
+
 export default function usePodRoot(
   location: string,
   profile?: Profile | null
@@ -32,11 +36,11 @@ export default function usePodRoot(
       location.startsWith(pod)
     );
     if (profilePod) {
-      setRootUri(profilePod);
+      setRootUri(normalizeBaseUri(profilePod));
       return;
     }
     const { origin } = new URL(location);
-    setRootUri(`${origin}/`);
+    setRootUri(normalizeBaseUri(origin));
   }, [location, profile]);
   return rootUri;
 }

@@ -21,8 +21,10 @@
 
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
+import { ThemeProvider } from "@material-ui/styles";
 import Container from "./index";
 import * as litPodHooks from "../../src/hooks/litPod";
+import theme from "../../src/theme";
 
 jest.mock("solid-auth-client");
 jest.mock("../../src/hooks/litPod");
@@ -59,7 +61,11 @@ describe("Container view", () => {
       data: resources,
     });
 
-    const tree = shallow(<Container iri={iri} />);
+    const tree = shallow(
+      <ThemeProvider theme={theme}>
+        <Container iri={iri} />
+      </ThemeProvider>
+    );
     expect(shallowToJson(tree)).toMatchSnapshot();
   });
 });
