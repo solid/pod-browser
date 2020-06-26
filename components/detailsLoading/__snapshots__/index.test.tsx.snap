@@ -359,7 +359,7 @@ font-display: block;",
         "h4": Object {
           "fontFamily": "\\"Raleway\\", \\"Roboto\\", sans-serif",
           "fontSize": "1.25rem",
-          "fontWeight": 900,
+          "fontWeight": 700,
           "letterSpacing": "0.00735em",
           "lineHeight": 1,
           "textTransform": "uppercase",

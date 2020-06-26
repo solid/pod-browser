@@ -359,7 +359,7 @@ font-display: block;",
         "h4": Object {
           "fontFamily": "\\"Raleway\\", \\"Roboto\\", sans-serif",
           "fontSize": "1.25rem",
-          "fontWeight": 900,
+          "fontWeight": 700,
           "letterSpacing": "0.00735em",
           "lineHeight": 1,
           "textTransform": "uppercase",
@@ -427,28 +427,28 @@ font-display: block;",
 >
   <MainNav>
     <nav
-      className="makeStyles-main-nav-1534"
+      className="makeStyles-main-nav-1535"
     >
       <ul
-        className="makeStyles-main-nav__list-1535"
+        className="makeStyles-main-nav__list-1536"
       >
         <li
-          className="makeStyles-main-nav__item-1536"
+          className="makeStyles-main-nav__item-1537"
         >
           <Link
             href="/"
           >
             <a
-              className="makeStyles-main-nav__link-1537"
+              className="makeStyles-main-nav__link-1538"
               href="/"
               onClick={[Function]}
               onMouseEnter={[Function]}
             >
               <i
-                className="makeStyles-main-nav__icon-1539"
+                className="makeStyles-icon-home-1503 makeStyles-main-nav__icon-1540"
               />
               <span
-                className="makeStyles-main-nav__label-1540"
+                className="makeStyles-main-nav__label-1541"
               >
                 Home
               </span>
