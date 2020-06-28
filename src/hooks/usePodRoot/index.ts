@@ -32,6 +32,9 @@ export default function usePodRoot(
 ): string | null {
   const [rootUri, setRootUri] = useState<string | null>(null);
   useEffect(() => {
+    if (location === "undefined") {
+      return;
+    }
     const profilePod = (profile ? profile.pods || [] : []).find((pod) =>
       location.startsWith(pod)
     );

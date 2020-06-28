@@ -19,7 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement, useContext } from "react";
+import {
+  createRef,
+  ReactElement,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+} from "react";
 import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import Link from "next/link";
@@ -34,6 +40,14 @@ const useStyles = makeStyles<PrismTheme>((theme) =>
 export default function Breadcrumbs(): ReactElement {
   const bem = useBem(useStyles());
   const podLocation = useContext(PodLocationContext);
+  const breadcrumbsList = createRef<HTMLUListElement>();
+
+  useLayoutEffect(() => {
+    if (!breadcrumbsList.current) {
+      return;
+    }
+    breadcrumbsList.current.scrollTo(breadcrumbsList.current.scrollWidth, 0);
+  });
 
   if (!podLocation.baseUri) return <Spinner />;
 
@@ -48,27 +62,30 @@ export default function Breadcrumbs(): ReactElement {
       baseUri + crumbs.slice(0, index + 1).join("/")
     )}`;
 
+  const breadcrumbLink = (crumb: string): ReactElement => (
+    <a className={bem("breadcrumb__link")}>{crumb}</a>
+  );
+
+  const activeBreadcrumbLink = (crumb: string): ReactElement => (
+    <a className={bem("breadcrumb__link", "active")}>{crumb}</a>
+  );
+
   return (
     <nav aria-label="Breadcrumbs">
-      <ul className={bem("breadcrumb")}>
+      <ul className={bem("breadcrumb")} ref={breadcrumbsList}>
         <li className={bem("breadcrumb__crumb")}>
           <Link href={resourceHref()}>
             <a className={bem("breadcrumb__link")}>All files</a>
           </Link>
         </li>
         {crumbs.map((crumb, index) => (
-          <li key="crumb" className={bem("breadcrumb__crumb")}>
+          <li key={`crumb-${crumb}`} className={bem("breadcrumb__crumb")}>
             <i className={bem("icon-caret-right")} />
             &nbsp;
             <Link href={resourceHref(index)}>
-              <a
-                className={bem(
-                  "breadcrumb__link",
-                  index === crumbs.length - 1 ? "active" : null
-                )}
-              >
-                {crumb}
-              </a>
+              {crumbs.length - 1 === index
+                ? activeBreadcrumbLink(crumb)
+                : breadcrumbLink(crumb)}
             </Link>
           </li>
         ))}
