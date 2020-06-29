@@ -24,17 +24,20 @@ import { mock } from "jest-mock-extended";
 import { mount, shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import { ThemeProvider } from "@material-ui/core/styles";
-
 import { useFetchResourceWithAcl } from "../../src/hooks/litPod";
 import theme from "../../src/theme";
 import { NormalizedPermission } from "../../src/lit-solid-helpers";
+import * as stringHelpers from "../../src/stringHelpers";
+import ResourceDetails, * as resourceDetailFns from "./index";
 
-import ResourceDetails, {
+const {
   displayName,
+  displayType,
+  downloadResource,
+  forceDownload,
   Permission,
   ThirdPartyPermissions,
-  displayType,
-} from "./index";
+} = resourceDetailFns;
 
 jest.mock("../../src/hooks/litPod");
 
@@ -280,5 +283,66 @@ describe("displayType", () => {
   test("it returns the first type if types", () => {
     const types = ["A Type"];
     expect(displayType(types)).toEqual(types[0]);
+  });
+});
+
+describe("forceDownload", () => {
+  test("it creates an anchor with an object url and clicks it", () => {
+    const setAttributeMock = jest.fn();
+    const clickMock = jest.fn();
+    const revokeObjectURLMock = jest.fn();
+    const appendChildMock = jest.fn();
+    const removeChildMock = jest.fn();
+    const mockAnchor = {
+      style: { display: "block" },
+      setAttribute: setAttributeMock,
+      click: clickMock,
+    };
+    const file = new Blob(["file"]);
+
+    window.URL = {
+      createObjectURL: () => "object-url",
+      revokeObjectURL: revokeObjectURLMock,
+    };
+
+    jest.spyOn(document, "createElement").mockReturnValue(mockAnchor);
+    jest
+      .spyOn(document.body, "appendChild")
+      .mockImplementationOnce(appendChildMock);
+    jest
+      .spyOn(document.body, "removeChild")
+      .mockImplementationOnce(removeChildMock);
+
+    forceDownload("filename", file);
+
+    expect(mockAnchor.style.display).toEqual("none");
+    expect(mockAnchor.href).toEqual("object-url");
+    expect(setAttributeMock).toHaveBeenCalledWith("download", "filename");
+    expect(appendChildMock).toHaveBeenCalledWith(mockAnchor);
+    expect(clickMock).toHaveBeenCalled();
+    expect(revokeObjectURLMock).toHaveBeenCalledWith("object-url");
+    expect(removeChildMock).toHaveBeenCalledWith(mockAnchor);
+  });
+});
+
+describe("downloadResource", () => {
+  test("it returns a handler to download the resource", () => {
+    const iri = "http://example.com/resource";
+    const handler = downloadResource(iri);
+    const blobMock = jest.fn();
+    const responseMock = { blob: blobMock };
+    const fetchMock = jest.fn();
+
+    blobMock.mockResolvedValue("file");
+
+    window.fetch = fetchMock.mockResolvedValue(responseMock);
+
+    jest
+      .spyOn(stringHelpers, "parseUrl")
+      .mockReturnValue({ pathname: "/resource" });
+
+    handler();
+
+    expect(fetchMock).toHaveBeenCalledWith(iri);
   });
 });

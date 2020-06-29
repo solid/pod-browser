@@ -52,11 +52,10 @@ export function handleTableRowClick({
     const element = evnt.target as HTMLElement;
     if (element && element.tagName === "A") return;
 
-    setMenuOpen(true);
-    setMenuContents(<DetailsLoading resource={resource} />);
-
     const { types, name, iri } = resource;
 
+    setMenuOpen(true);
+    setMenuContents(<DetailsLoading resource={resource} />);
     setMenuContents(<Details iri={iri} types={types} name={name} />);
   };
 }
@@ -76,16 +75,16 @@ export default function ContainerTableRow({ resource }: Props): ReactElement {
   const { setMenuOpen, setMenuContents } = useContext(DetailsMenuContext);
 
   const classes = useStyles();
-  const onClick = handleTableRowClick({
-    setMenuOpen,
-    setMenuContents,
-    resource,
-  });
 
   const { name, iri } = resource;
   const { data } = useFetchResourceDetails(iri);
   const isLoading = !data;
   const loadedResource = data || resource;
+  const onClick = handleTableRowClick({
+    setMenuOpen,
+    setMenuContents,
+    resource: loadedResource,
+  });
 
   return (
     <TableRow className={classes.tableRow} onClick={onClick}>

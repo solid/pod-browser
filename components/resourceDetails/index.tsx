@@ -21,20 +21,21 @@
 
 import { ReactElement, useContext } from "react";
 import {
-  Typography,
+  Avatar,
+  Button,
+  createStyles,
+  Divider,
   List,
   ListItem,
-  Divider,
-  Avatar,
-  createStyles,
+  Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import UserContext, { ISession } from "../../src/contexts/userContext";
 import { useFetchResourceWithAcl } from "../../src/hooks/litPod";
 import DetailsLoading from "../detailsLoading";
+import { parseUrl } from "../../src/stringHelpers";
 import styles from "./styles";
-
 import {
   getThirdPartyPermissions,
   getUserPermissions,
@@ -128,6 +129,45 @@ export function displayType(types: string[] | undefined): string {
   return type;
 }
 
+export function forceDownload(name: string, file: Blob): void {
+  const a = document.createElement("a");
+  a.style.display = "none";
+  a.href = window.URL.createObjectURL(file);
+  a.setAttribute("download", name);
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  window.URL.revokeObjectURL(a.href);
+  document.body.removeChild(a);
+}
+
+export function downloadResource(iri: string) {
+  return (): void => {
+    const { pathname } = parseUrl(iri);
+    const name = pathname.replace(/\//g, "");
+
+    fetch(iri)
+      .then((response) => response.blob())
+      .then((file) => forceDownload(name, file))
+      .catch((e) => e);
+  };
+}
+
+export function displayDownloadLink(
+  type: string,
+  iri: string
+): ReactElement | null {
+  if (type.match(/container/i)) return null;
+
+  return (
+    <Button variant="contained" onClick={downloadResource(iri)}>
+      Download
+    </Button>
+  );
+}
+
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme))
 );
@@ -142,7 +182,6 @@ export default function ResourceDetails({
   types = [],
 }: Props): ReactElement {
   const { error, data: resourceDetails } = useFetchResourceWithAcl(iri);
-
   const { permissions } = resourceDetails || {};
 
   const classes = useStyles();
@@ -150,6 +189,7 @@ export default function ResourceDetails({
   const { webId } = session as ISession;
   const userPermissions = getUserPermissions(webId, permissions);
   const thirdPartyPermissions = getThirdPartyPermissions(webId, permissions);
+  const type = displayType(types);
 
   // TODO:
   // Files without permissions throw an error in lit-pod.
@@ -192,10 +232,16 @@ export default function ResourceDetails({
             <Typography
               className={`${classes.typeValue} ${classes.detailText}`}
             >
-              {displayType(types)}
+              {type}
             </Typography>
           </ListItem>
         </List>
+      </section>
+
+      <Divider />
+
+      <section className={classes.centeredSection}>
+        {displayDownloadLink(type, iri)}
       </section>
     </>
   );
