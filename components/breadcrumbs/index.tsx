@@ -19,14 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import {
-  createRef,
-  ReactElement,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-} from "react";
-import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
+import { createRef, ReactElement, useContext, useLayoutEffect } from "react";
+import { StyleRules, createStyles, makeStyles } from "@material-ui/styles";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import Link from "next/link";
 import PodLocationContext from "../../src/contexts/podLocationContext";
@@ -46,6 +40,7 @@ export default function Breadcrumbs(): ReactElement {
     if (!breadcrumbsList.current) {
       return;
     }
+
     breadcrumbsList.current.scrollTo(breadcrumbsList.current.scrollWidth, 0);
   });
 
@@ -82,7 +77,7 @@ export default function Breadcrumbs(): ReactElement {
           <li key={`crumb-${crumb}`} className={bem("breadcrumb__crumb")}>
             <i className={bem("icon-caret-right")} />
             &nbsp;
-            <Link href={resourceHref(index)}>
+            <Link href="/resource/[iri]" as={resourceHref(index)}>
               {crumbs.length - 1 === index
                 ? activeBreadcrumbLink(crumb)
                 : breadcrumbLink(crumb)}

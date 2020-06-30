@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { act, renderHook } from "@testing-library/react-hooks";
+import { renderHook } from "@testing-library/react-hooks";
 import useAuthenticatedProfile from "./index";
 import { fetchProfile } from "../../lit-solid-helpers";
 
@@ -47,21 +47,5 @@ describe("useAuthenticatedProfile", () => {
     await waitForNextUpdate();
 
     expect(result.current).toBe(profile);
-  });
-
-  test.skip("throws error if fetch fails", async () => {
-    // TODO: Unable to get this working
-    // This might be of help - https://github.com/testing-library/react-hooks-testing-library/issues/20
-    const error = "Some error";
-    (fetchProfile as jest.Mock).mockRejectedValue(error);
-
-    const session = { webId };
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useAuthenticatedProfile(session)
-    );
-
-    await waitForNextUpdate();
-
-    expect(result.error).toEqual(Error(error));
   });
 });

@@ -19,26 +19,32 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
+import { mountToJson } from "../__testUtils/mountWithTheme";
 
 import SortedTableCarat from "./index";
 
 describe("Sorted", () => {
   test("Displays an upwards facing carat when ascending", () => {
-    const tree = shallow(<SortedTableCarat sorted sortedDesc={false} />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    const rendered = mountToJson(
+      <SortedTableCarat sorted sortedDesc={false} />
+    );
+
+    expect(rendered).toMatchSnapshot();
   });
 
   test("Displays a downwards facing carat when descending", () => {
-    const tree = shallow(<SortedTableCarat sorted sortedDesc />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    const rendered = mountToJson(
+      <SortedTableCarat sorted sortedDesc={false} />
+    );
+    expect(rendered).toMatchSnapshot();
   });
 });
 
 describe("Unsorted", () => {
   test("Displays nothing when unsorted", () => {
-    const tree = shallow(<SortedTableCarat sorted={false} />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    const rendered = mountToJson(
+      <SortedTableCarat sorted sortedDesc={false} />
+    );
+    expect(rendered).toMatchSnapshot();
   });
 });

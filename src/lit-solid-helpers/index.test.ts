@@ -20,12 +20,13 @@
  */
 
 /* eslint-disable camelcase */
-import { ldp } from "rdf-namespaces";
+import { ldp, space } from "rdf-namespaces";
 import * as litSolidFns from "@solid/lit-pod";
 import {
   displayPermissions,
   displayTypes,
   fetchFileWithAcl,
+  fetchProfile,
   fetchResource,
   fetchResourceWithAcl,
   getIriPath,
@@ -243,18 +244,12 @@ describe("normalizePermissions", () => {
       nickname: "string",
     };
 
-    jest
-      .spyOn(litSolidFns, "fetchLitDataset")
-      .mockImplementation(async () => Promise.resolve());
-    jest.spyOn(litSolidFns, "getThingOne").mockImplementation(() => {});
-    jest
-      .spyOn(litSolidFns, "getStringUnlocalizedOne")
-      .mockImplementation(() => expectedProfile.name);
-    jest
-      .spyOn(litSolidFns, "getIriOne")
-      .mockImplementation(() => expectedProfile.avatar);
+    const fetchProfileFn = jest.fn().mockResolvedValue(expectedProfile);
 
-    const [perms1, perms2, perms3, perms4] = await normalizePermissions(acl);
+    const [perms1, perms2, perms3, perms4] = await normalizePermissions(
+      acl,
+      fetchProfileFn
+    );
 
     expect(perms1.webId).toEqual("acl1");
     expect(perms1.alias).toEqual("Can View");
@@ -301,6 +296,7 @@ describe("fetchResourceWithAcl", () => {
         control: false,
       },
     };
+
     const expectedIri = "https://user.dev.inrupt.net/public/";
 
     jest
@@ -315,7 +311,23 @@ describe("fetchResourceWithAcl", () => {
         return Promise.resolve(perms);
       });
 
-    const normalizedResource = await fetchResourceWithAcl(expectedIri);
+    const normalizePermissionsFn = jest.fn().mockResolvedValue([
+      {
+        webId: Object.keys(perms)[0],
+        alias: displayPermissions(Object.values(perms)[0]),
+        acl: Object.values(perms)[0],
+      },
+      {
+        webId: Object.keys(perms)[1],
+        alias: displayPermissions(Object.values(perms)[1]),
+        acl: Object.values(perms)[1],
+      },
+    ]);
+
+    const normalizedResource = await fetchResourceWithAcl(
+      expectedIri,
+      normalizePermissionsFn
+    );
     const {
       iri,
       contains,
@@ -376,7 +388,10 @@ describe("getUserPermissions", () => {
       acl4: { read: false, write: false, control: false, append: false },
     };
 
-    const normalizedPermissions = await normalizePermissions(acl);
+    const normalizedPermissions = await normalizePermissions(
+      acl,
+      jest.fn().mockResolvedValue(null)
+    );
     const permissions = getUserPermissions("acl1", normalizedPermissions);
 
     expect(permissions.webId).toEqual("acl1");
@@ -413,7 +428,10 @@ describe("getThirdPartyPermissions", () => {
       acl4: { read: false, write: false, control: false, append: false },
     };
 
-    const normalizedPermissions = await normalizePermissions(acl);
+    const normalizedPermissions = await normalizePermissions(
+      acl,
+      jest.fn().mockResolvedValue(null)
+    );
     const thirdPartyPermissions = getThirdPartyPermissions(
       "acl1",
       normalizedPermissions
@@ -517,7 +535,7 @@ describe("permissionsFromWacAllowHeaders", () => {
 describe("fetchFileWithAcl", () => {
   test("it fetches a file and parses the wac-allow header", async () => {
     const headers = new Headers();
-    const blob = jest.fn().mockImplementation(() => "file contents");
+    const blob = jest.fn().mockImplementationOnce(() => "file contents");
 
     headers.append("content-type", "image/vnd.microsoft.icon");
     headers.append(
@@ -548,27 +566,23 @@ describe("fetchFileWithAcl", () => {
 
 describe("fetchResource", () => {
   test("it returns a normalized dataset, without permissions", async () => {
-    const expectedIri = "https://user.dev.inrupt.net/public/";
-
     jest
       .spyOn(litSolidFns, "fetchLitDataset")
-      .mockImplementationOnce(async () => {
-        return Promise.resolve(createResource());
-      });
+      .mockImplementationOnce(async () => Promise.resolve());
 
-    const normalizedResource = await fetchResource(expectedIri);
-    const { iri, contains, modified, mtime, size, types } = normalizedResource;
+    const normalizeDatasetFn = jest.fn().mockResolvedValue(null);
 
-    expect(iri).toEqual(expectedIri);
-    expect(contains).toBeInstanceOf(Array);
-    expect(modified).toEqual(timestamp);
-    expect(mtime).toEqual(1591131561.195);
-    expect(size).toEqual(4096);
-    expect(types).toContain("Container");
-    expect(types).toContain("BasicContainer");
+    const expectedIri = "https://user.dev.inrupt.net/public/";
+    await fetchResource(expectedIri, normalizeDatasetFn);
+
+    expect(normalizeDatasetFn).toHaveBeenCalled();
   });
 
   test("it returns no permissions when acl is not returned", async () => {
+    jest
+      .spyOn(litSolidFns, "fetchLitDataset")
+      .mockImplementationOnce(async () => Promise.resolve());
+
     jest
       .spyOn(litSolidFns, "unstable_fetchLitDatasetWithAcl")
       .mockImplementationOnce(async () => {
@@ -587,5 +601,61 @@ describe("fetchResource", () => {
 
     expect(permissions).toBeUndefined();
     expect(acl).toBeUndefined();
+  });
+});
+
+describe("fetchProfile", () => {
+  it("fetches a profile and its information", async () => {
+    const profileWebId = "https://mypod.myhost.com/profile/card#me";
+    const profileDataset = {};
+
+    jest
+      .spyOn(litSolidFns, "fetchLitDataset")
+      .mockResolvedValue(profileDataset);
+
+    jest.spyOn(litSolidFns, "getThingOne").mockReturnValue(profileDataset);
+
+    jest
+      .spyOn(litSolidFns, "getStringUnlocalizedOne")
+      .mockImplementationOnce(async () => Promise.resolve());
+
+    jest
+      .spyOn(litSolidFns, "getStringUnlocalizedOne")
+      .mockImplementationOnce(async () => Promise.resolve());
+
+    jest
+      .spyOn(litSolidFns, "getIriOne")
+      .mockImplementationOnce(async () => Promise.resolve());
+
+    jest
+      .spyOn(litSolidFns, "getIriAll")
+      .mockImplementationOnce(async () => Promise.resolve());
+
+    const profile = await fetchProfile(profileWebId);
+
+    expect(litSolidFns.fetchLitDataset).toHaveBeenCalledWith(profileWebId);
+    expect(litSolidFns.getStringUnlocalizedOne).toHaveBeenCalledWith(
+      profileDataset,
+      namespace.nickname
+    );
+    expect(litSolidFns.getStringUnlocalizedOne).toHaveBeenCalledWith(
+      profileDataset,
+      namespace.name
+    );
+    expect(litSolidFns.getIriOne).toHaveBeenCalledWith(
+      profileDataset,
+      namespace.hasPhoto
+    );
+    expect(litSolidFns.getIriAll).toHaveBeenCalledWith(
+      profileDataset,
+      space.storage
+    );
+    expect(Object.keys(profile)).toEqual([
+      "webId",
+      "nickname",
+      "name",
+      "avatar",
+      "pods",
+    ]);
   });
 });

@@ -22,7 +22,7 @@
 import React, { ReactElement } from "react";
 import Link from "next/link";
 
-import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
+import { StyleRules, createStyles, makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import ProviderLogin from "./provider";

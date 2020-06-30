@@ -29,7 +29,7 @@ import {
   ListItem,
   Typography,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import UserContext, { ISession } from "../../src/contexts/userContext";
 import { useFetchResourceWithAcl } from "../../src/hooks/litPod";
@@ -174,10 +174,11 @@ const useStyles = makeStyles<PrismTheme>((theme) =>
 
 export interface Props extends NormalizedResource {
   name?: string;
+  iri: string;
 }
 
 export default function ResourceDetails({
-  iri = "",
+  iri,
   name = "",
   types = [],
 }: Props): ReactElement {

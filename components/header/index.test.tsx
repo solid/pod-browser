@@ -22,7 +22,7 @@
 import * as ReactFns from "react";
 import { mount } from "enzyme";
 import { mountToJson } from "enzyme-to-json";
-import { ThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/styles";
 
 import Header from "./index";
 import theme from "../../src/theme";

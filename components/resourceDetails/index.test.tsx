@@ -23,7 +23,8 @@ import * as ReactFns from "react";
 import { mock } from "jest-mock-extended";
 import { mount, shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
-import { ThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/styles";
+
 import { useFetchResourceWithAcl } from "../../src/hooks/litPod";
 import theme from "../../src/theme";
 import { NormalizedPermission } from "../../src/lit-solid-helpers";
@@ -42,6 +43,25 @@ const {
 jest.mock("../../src/hooks/litPod");
 
 describe("Resource details", () => {
+  test("renders loading without name without breaking", () => {
+    jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
+      session: { webId: "owner" },
+    }));
+
+    (useFetchResourceWithAcl as jest.Mock).mockReturnValue({
+      data: undefined,
+      error: undefined,
+    });
+
+    const tree = mount(
+      <ThemeProvider theme={theme}>
+        <ResourceDetails types={["Resource"]} iri="iri" />
+      </ThemeProvider>
+    );
+
+    expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+
   test("renders loading if there is no data or error", () => {
     jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
       session: { webId: "owner" },

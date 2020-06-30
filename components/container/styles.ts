@@ -21,11 +21,12 @@
 
 import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
 
-const styles = (theme: PrismTheme) =>
-  createStyles(theme, ["table"], {
+const styles = (theme: PrismTheme) => {
+  return createStyles(theme, ["table"], {
     navigator: {
       marginTop: theme.spacing(1),
     },
   });
+};
 
 export default styles;

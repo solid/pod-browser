@@ -39,9 +39,9 @@ import Spinner from "../spinner";
 import styles from "./styles";
 import Breadcrumbs from "../breadcrumbs";
 
-const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme) as StyleRules)
-);
+const useStyles = makeStyles<PrismTheme>((theme) => {
+  return createStyles(styles(theme) as StyleRules);
+});
 
 interface IPodList {
   iri: string;

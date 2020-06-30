@@ -19,7 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
 import { renderHook } from "@testing-library/react-hooks";
 import usePodRoot from "./index";
 import { Profile } from "../../lit-solid-helpers";
@@ -32,8 +31,20 @@ const profile: Profile = {
 };
 
 describe("usePodRoot", () => {
+  test("it will return undefined if location is undefined", () => {
+    const { result } = renderHook(() => usePodRoot("undefined", null));
+    expect(result.current).toBeNull();
+  });
+
   test("it will guess storage URI if profile is null", () => {
     const { result } = renderHook(() => usePodRoot(location, null));
+    expect(result.current).toEqual("https://foo.com/");
+  });
+
+  test("it will guess storage URI if profile.pods is empty", () => {
+    const { result } = renderHook(() =>
+      usePodRoot(location, { ...profile, pods: undefined })
+    );
     expect(result.current).toEqual("https://foo.com/");
   });
 

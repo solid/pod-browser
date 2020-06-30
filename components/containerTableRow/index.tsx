@@ -21,12 +21,12 @@
 
 /* eslint-disable camelcase */
 import { ReactElement, useContext } from "react";
+import { makeStyles, createStyles, StyleRules } from "@material-ui/styles";
 import Skeleton from "@material-ui/lab/Skeleton";
-import { makeStyles } from "@material-ui/core/styles";
-import Link from "next/link";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
-import { createStyles, StyleRules } from "@material-ui/styles";
+import Link from "next/link";
 import clsx from "clsx";
+
 import DetailsLoading from "../detailsLoading";
 import Details from "../resourceDetails";
 import { useFetchResourceDetails } from "../../src/hooks/litPod";
@@ -64,7 +64,7 @@ export function handleTableRowClick({
 
 interface IResourceIcon {
   types?: string[];
-  bem: Function<any>;
+  bem: any;
 }
 
 function ResourceIcon(props: IResourceIcon): ReactElement | null {
@@ -113,7 +113,9 @@ export default function ContainerTableRow({ resource }: Props): ReactElement {
       onClick={onClick}
     >
       <td className={bem("table__body-cell", "align-center", "width-preview")}>
-        <ResourceIcon types={types} bem={bem} />
+        {types && types.length ? (
+          <ResourceIcon types={types} bem={bem} />
+        ) : null}
       </td>
 
       <td className={bem("table__body-cell")}>

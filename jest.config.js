@@ -9,6 +9,7 @@ module.exports = {
   testPathIgnorePatterns: [
     '/lib/',
     '/node_modules/',
+    '/__testUtils/',
   ],
 
   collectCoverage: true,
@@ -16,6 +17,7 @@ module.exports = {
   coveragePathIgnorePatterns: [
     "/node_modules/",
     "/lib/",
+    '/__testUtils/',
   ],
 
   coverageThreshold: {

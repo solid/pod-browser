@@ -20,7 +20,7 @@
  */
 
 import React, { ReactElement } from "react";
-import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
+import { StyleRules, createStyles, makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import { useRedirectIfLoggedIn } from "../../../src/effects/auth";

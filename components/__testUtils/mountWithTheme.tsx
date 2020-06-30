@@ -19,33 +19,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { ReactElement, ReactNode } from "react";
+import { ThemeProvider } from "@material-ui/styles";
 import { mount } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
+import defaultTheme from "../../src/theme";
 
-import { ThemeProvider } from "@material-ui/styles";
-import { useRedirectIfLoggedIn } from "../../../src/effects/auth";
-import LoginPage from "./index";
+interface IWithTheme {
+  theme?: any;
+  children: ReactNode;
+}
 
-import theme from "../../../src/theme";
+export const WithTheme = (props: IWithTheme): ReactElement => {
+  const { theme = defaultTheme, children } = props;
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+};
 
-jest.mock("../../../src/effects/auth");
+export const mountWithTheme = (children: ReactNode, theme = defaultTheme) => {
+  return mount(<WithTheme theme={theme}>{children}</WithTheme>);
+};
 
-describe("Login page", () => {
-  test("Renders a logout button", () => {
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <LoginPage />
-      </ThemeProvider>
-    );
-    expect(shallowToJson(tree)).toMatchSnapshot();
-  });
-
-  test("Redirects if the user is logged out", () => {
-    mount(
-      <ThemeProvider theme={theme}>
-        <LoginPage />
-      </ThemeProvider>
-    );
-    expect(useRedirectIfLoggedIn).toHaveBeenCalled();
-  });
-});
+export const mountToJson = (children: ReactNode, theme = defaultTheme) => {
+  return shallowToJson(mountWithTheme(children, theme));
+};

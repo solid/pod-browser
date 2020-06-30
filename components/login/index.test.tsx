@@ -21,7 +21,7 @@
 
 import { mount } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
-import { ThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/styles";
 
 import Login from "./index";
 import theme from "../../src/theme";

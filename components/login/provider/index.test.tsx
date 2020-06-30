@@ -24,7 +24,7 @@ import { shallowToJson } from "enzyme-to-json";
 
 import auth from "solid-auth-client";
 
-import { ThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/styles";
 
 import ProviderLogin, * as ProviderFunctions from "./index";
 import theme from "../../../src/theme";
