@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable camelcase */
+/* eslint-disable camelcase, @typescript-eslint/no-explicit-any */
 
 import useSWR from "swr";
 import {

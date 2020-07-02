@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable camelcase */
+/* eslint-disable camelcase, @typescript-eslint/no-explicit-any */
 import { ReactElement, useContext } from "react";
 import { makeStyles, createStyles, StyleRules } from "@material-ui/styles";
 import Skeleton from "@material-ui/lab/Skeleton";
