@@ -155,10 +155,13 @@ export function downloadResource(iri: string) {
   };
 }
 
-export function displayDownloadLink(
-  type: string,
-  iri: string
-): ReactElement | null {
+interface IDownloadLink {
+  type: string;
+  iri: string;
+}
+
+export function DownloadLink(props: IDownloadLink): ReactElement | null {
+  const { type, iri } = props;
   if (type.match(/container/i)) return null;
 
   return (
@@ -242,7 +245,7 @@ export default function ResourceDetails({
       <Divider />
 
       <section className={classes.centeredSection}>
-        {displayDownloadLink(type, iri)}
+        <DownloadLink type={type} iri={iri} />
       </section>
     </>
   );

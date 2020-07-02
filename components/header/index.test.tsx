@@ -20,12 +20,8 @@
  */
 
 import * as ReactFns from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
-import { ThemeProvider } from "@material-ui/styles";
-
+import { mountToJson } from "../../__testUtils/mountWithTheme";
 import Header from "./index";
-import theme from "../../src/theme";
 
 describe("Header", () => {
   describe("with user logged in", () => {
@@ -34,12 +30,8 @@ describe("Header", () => {
         session: true,
       }));
 
-      const tree = mount(
-        <ThemeProvider theme={theme}>
-          <Header />
-        </ThemeProvider>
-      );
-      expect(mountToJson(tree)).toMatchSnapshot();
+      const tree = mountToJson(<Header />);
+      expect(tree).toMatchSnapshot();
     });
   });
 
@@ -49,12 +41,8 @@ describe("Header", () => {
         session: undefined,
       }));
 
-      const tree = mount(
-        <ThemeProvider theme={theme}>
-          <Header />
-        </ThemeProvider>
-      );
-      expect(mountToJson(tree)).toMatchSnapshot();
+      const tree = mountToJson(<Header />);
+      expect(tree).toMatchSnapshot();
     });
   });
 });

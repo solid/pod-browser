@@ -28,11 +28,8 @@ import auth from "solid-auth-client";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import styles from "./styles";
 
-export const loginWithProvider = (): void => {
-  auth.popupLogin({ popupUri: `/login-popup.html` }).catch((e) => {
-    throw e;
-  });
-};
+export const loginWithProvider = (): Promise<any> =>
+  auth.popupLogin({ popupUri: `/login-popup.html` });
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme) as StyleRules)

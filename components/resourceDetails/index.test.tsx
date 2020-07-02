@@ -21,12 +21,11 @@
 
 import * as ReactFns from "react";
 import { mock } from "jest-mock-extended";
-import { mount, shallow } from "enzyme";
+import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
-import { ThemeProvider } from "@material-ui/styles";
+import { mountToJson } from "../../__testUtils/mountWithTheme";
 
 import { useFetchResourceWithAcl } from "../../src/hooks/litPod";
-import theme from "../../src/theme";
 import { NormalizedPermission } from "../../src/lit-solid-helpers";
 import * as stringHelpers from "../../src/stringHelpers";
 import ResourceDetails, * as resourceDetailFns from "./index";
@@ -34,6 +33,7 @@ import ResourceDetails, * as resourceDetailFns from "./index";
 const {
   displayName,
   displayType,
+  DownloadLink,
   downloadResource,
   forceDownload,
   Permission,
@@ -53,13 +53,11 @@ describe("Resource details", () => {
       error: undefined,
     });
 
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <ResourceDetails types={["Resource"]} iri="iri" />
-      </ThemeProvider>
+    const tree = mountToJson(
+      <ResourceDetails types={["Resource"]} iri="iri" />
     );
 
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
   });
 
   test("renders loading if there is no data or error", () => {
@@ -72,13 +70,11 @@ describe("Resource details", () => {
       error: undefined,
     });
 
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <ResourceDetails name="Resource Name" types={["Resource"]} iri="iri" />
-      </ThemeProvider>
+    const tree = mountToJson(
+      <ResourceDetails name="Resource Name" types={["Resource"]} iri="iri" />
     );
 
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
   });
 
   test("renders 'no access' if there is an error", () => {
@@ -91,13 +87,11 @@ describe("Resource details", () => {
       error: { message: "nope" },
     });
 
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <ResourceDetails name="Resource Name" types={["Resource"]} iri="iri" />
-      </ThemeProvider>
+    const tree = mountToJson(
+      <ResourceDetails name="Resource Name" types={["Resource"]} iri="iri" />
     );
 
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
   });
 
   test("renders resource details", () => {
@@ -142,13 +136,11 @@ describe("Resource details", () => {
       data: { permissions },
     });
 
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <ResourceDetails name="Resource Name" types={["Resource"]} iri="iri" />
-      </ThemeProvider>
+    const tree = mountToJson(
+      <ResourceDetails name="Resource Name" types={["Resource"]} iri="iri" />
     );
 
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
   });
 
   test("renders no 3rd party access message", () => {
@@ -178,13 +170,11 @@ describe("Resource details", () => {
       data: { permissions },
     });
 
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <ResourceDetails name="Resource Name" types={["Resource"]} iri="iri" />
-      </ThemeProvider>
+    const tree = mountToJson(
+      <ResourceDetails name="Resource Name" types={["Resource"]} iri="iri" />
     );
 
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
   });
 });
 
@@ -364,5 +354,21 @@ describe("downloadResource", () => {
     handler();
 
     expect(fetchMock).toHaveBeenCalledWith(iri);
+  });
+});
+
+describe("DownloadLink", () => {
+  test("returns null if resource is a container", () => {
+    const type = "container";
+    const iri = "http://example.com/resource";
+    const tree = shallow(<DownloadLink type={type} iri={iri} />);
+    expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+
+  test("returns a download button if resource is not a container", () => {
+    const type = "foo";
+    const iri = "http://example.com/resource";
+    const tree = shallow(<DownloadLink type={type} iri={iri} />);
+    expect(shallowToJson(tree)).toMatchSnapshot();
   });
 });

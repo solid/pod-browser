@@ -29,10 +29,7 @@ export async function onLogOutClick(
 ): Promise<void> {
   e.preventDefault();
   await auth.logout();
-
-  Router.push("/login").catch((error) => {
-    throw error;
-  });
+  await Router.push("/login");
 }
 
 interface Props {
@@ -47,3 +44,7 @@ export default function LogOut({ children, className }: Props): ReactElement {
     </button>
   );
 }
+
+LogOut.defaultProps = {
+  className: "",
+};

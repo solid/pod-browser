@@ -20,12 +20,8 @@
  */
 
 import * as ReactFns from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
-import { ThemeProvider } from "@material-ui/styles";
-
+import { mountToJson } from "../../../__testUtils/mountWithTheme";
 import UserMenu from "./index";
-import theme from "../../../src/theme";
 
 describe("UserMenu", () => {
   test("renders a menu", () => {
@@ -33,12 +29,8 @@ describe("UserMenu", () => {
       session: undefined,
     }));
 
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <UserMenu />
-      </ThemeProvider>
-    );
-    expect(mountToJson(tree)).toMatchSnapshot();
+    const tree = mountToJson(<UserMenu />);
+    expect(tree).toMatchSnapshot();
   });
 
   // TODO: Write test for the various ways to toggle the user menu

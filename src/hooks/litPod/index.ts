@@ -38,8 +38,6 @@ export async function fetchContainerResourceIris(
   const container = getThingOne(litDataset, containerIri);
   const iris = getIriAll(container, namespace.contains);
   return iris;
-
-  // TODO get do the name magic in the display instead of here
 }
 
 export const GET_CONTAINER_RESOURCE_IRIS = "getContainerResourceIris";

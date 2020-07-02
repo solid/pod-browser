@@ -15,15 +15,16 @@ module.exports = {
 
   coveragePathIgnorePatterns: [
     "/node_modules/",
-    '/__testUtils/',
+    "/__testUtils/",
+    "styles.ts",
   ],
 
   coverageThreshold: {
     global: {
       branches: 93,
-      functions: 87,
-      lines: 95,
-      statements: 95,
+      functions: 94,
+      lines: 97,
+      statements: 97,
     },
   },
 };

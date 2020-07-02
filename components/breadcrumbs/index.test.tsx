@@ -20,38 +20,30 @@
  */
 
 import * as ReactUtils from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
-import { ThemeProvider } from "@material-ui/styles";
-
+import { mountToJson } from "../../__testUtils/mountWithTheme";
 import { PodLocationProvider } from "../../src/contexts/podLocationContext";
-import theme from "../../src/theme";
 import Breadcrumbs from "./index";
 
 describe("Breadcrumbs view", () => {
   test("Renders a breadcrumbs view", () => {
     jest.spyOn(ReactUtils, "useLayoutEffect").mockImplementation(() => {});
 
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <PodLocationProvider currentUri="https://www.mypodmanager.com">
-          <Breadcrumbs />
-        </PodLocationProvider>
-      </ThemeProvider>
+    const tree = mountToJson(
+      <PodLocationProvider currentUri="https://www.mypodmanager.com">
+        <Breadcrumbs />
+      </PodLocationProvider>
     );
-    expect(mountToJson(tree)).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
   });
 
   test("Renders a breadcrumbs view with breadcrumbs based on url slashes", () => {
     jest.spyOn(ReactUtils, "useLayoutEffect").mockImplementation(() => {});
 
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <PodLocationProvider currentUri="https://www.mypodmanager.com/some/location">
-          <Breadcrumbs />
-        </PodLocationProvider>
-      </ThemeProvider>
+    const tree = mountToJson(
+      <PodLocationProvider currentUri="https://www.mypodmanager.com/some/location">
+        <Breadcrumbs />
+      </PodLocationProvider>
     );
-    expect(mountToJson(tree)).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
   });
 });

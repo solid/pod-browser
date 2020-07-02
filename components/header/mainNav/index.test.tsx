@@ -20,12 +20,8 @@
  */
 
 import * as ReactFns from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
-import { ThemeProvider } from "@material-ui/styles";
-
+import { mountToJson } from "../../../__testUtils/mountWithTheme";
 import MainNav from "./index";
-import theme from "../../../src/theme";
 
 describe("MainNav", () => {
   test("renders navigation", () => {
@@ -33,11 +29,7 @@ describe("MainNav", () => {
       session: undefined,
     }));
 
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <MainNav />
-      </ThemeProvider>
-    );
-    expect(mountToJson(tree)).toMatchSnapshot();
+    const tree = mountToJson(<MainNav />);
+    expect(tree).toMatchSnapshot();
   });
 });

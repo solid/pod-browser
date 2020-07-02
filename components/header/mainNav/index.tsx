@@ -52,3 +52,7 @@ export default function MainNav({ className }: Props): ReactElement {
     </nav>
   );
 }
+
+MainNav.defaultProps = {
+  className: "",
+};

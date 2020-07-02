@@ -19,20 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { mount } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
-import { ThemeProvider } from "@material-ui/styles";
-
+import { mountToJson } from "../../__testUtils/mountWithTheme";
 import Login from "./index";
-import theme from "../../src/theme";
 
 describe("Login form", () => {
   test("Renders a login form, with button bound to swapLoginType", () => {
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <Login />
-      </ThemeProvider>
-    );
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    const tree = mountToJson(<Login />);
+    expect(tree).toMatchSnapshot();
   });
 });

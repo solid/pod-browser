@@ -27,7 +27,7 @@ import styles from "./styles";
 
 interface ISortedTableCarat {
   sorted: boolean;
-  sortedDesc?: boolean;
+  sortedDesc: boolean | undefined;
 }
 
 const useStyles = makeStyles<PrismTheme>((theme) =>

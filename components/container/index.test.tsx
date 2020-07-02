@@ -19,12 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { mount } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
-import { ThemeProvider } from "@material-ui/styles";
-
+import { mountToJson } from "../../__testUtils/mountWithTheme";
 import * as litPodHooks from "../../src/hooks/litPod";
-import theme from "../../src/theme";
 import Container from "./index";
 
 jest.mock("solid-auth-client");
@@ -38,12 +34,8 @@ describe("Container view", () => {
       data: undefined,
     });
 
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <Container iri={iri} />
-      </ThemeProvider>
-    );
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    const tree = mountToJson(<Container iri={iri} />);
+    expect(tree).toMatchSnapshot();
   });
 
   test("Renders a table view without data", () => {
@@ -51,13 +43,8 @@ describe("Container view", () => {
       data: [],
     });
 
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <Container iri={iri} />
-      </ThemeProvider>
-    );
-
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    const tree = mountToJson(<Container iri={iri} />);
+    expect(tree).toMatchSnapshot();
   });
 
   test("Renders a table with data", () => {
@@ -75,12 +62,8 @@ describe("Container view", () => {
       data: undefined,
     });
 
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <Container iri={iri} />
-      </ThemeProvider>
-    );
+    const tree = mountToJson(<Container iri={iri} />);
 
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
   });
 });

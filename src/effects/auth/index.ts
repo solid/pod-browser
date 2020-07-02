@@ -30,29 +30,26 @@ export const SESSION_STATES = {
   LOGGED_OUT: "LOGGED_OUT",
 };
 
-export function redirectBasedOnSessionState(
+export async function redirectBasedOnSessionState(
   session: ISession | undefined,
   isLoadingSession: boolean,
   redirectIfSessionState: string,
   location: string
-): void {
+): Promise<void> {
   if (isLoadingSession) {
     return;
   }
 
   if (session && redirectIfSessionState === SESSION_STATES.LOGGED_IN) {
-    Router.push(location).catch((e) => {
-      throw e;
-    });
+    await Router.push(location);
   }
 
   if (!session && redirectIfSessionState === SESSION_STATES.LOGGED_OUT) {
-    Router.push(location).catch((e) => {
-      throw e;
-    });
+    await Router.push(location);
   }
 }
 
+/* eslint @typescript-eslint/no-floating-promises: 0 */
 export function useRedirectIfLoggedOut(location = "/login"): void {
   const { session, isLoadingSession } = useContext(UserContext);
 

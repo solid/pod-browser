@@ -20,16 +20,13 @@
  */
 
 /* eslint-disable camelcase */
-import { mount } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
 import { mock } from "jest-mock-extended";
 
-import { ThemeProvider } from "@material-ui/styles";
+import { mountToJson } from "../../__testUtils/mountWithTheme";
 import { ResourceDetails } from "../../src/lit-solid-helpers";
 import { useFetchResourceDetails } from "../../src/hooks/litPod";
 
 import ContainerTableRow, { handleTableRowClick, resourceHref } from "./index";
-import theme from "../../src/theme";
 
 jest.mock("@solid/lit-pod");
 jest.mock("../../src/hooks/litPod");
@@ -44,17 +41,15 @@ describe("ContainerTableRow", () => {
 
     (useFetchResourceDetails as jest.Mock).mockReturnValue({ data: undefined });
 
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <table>
-          <tbody>
-            <ContainerTableRow resource={resource} />
-          </tbody>
-        </table>
-      </ThemeProvider>
+    const tree = mountToJson(
+      <table>
+        <tbody>
+          <ContainerTableRow resource={resource} />
+        </tbody>
+      </table>
     );
 
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
   });
 
   test("it renders a table row with loaded data", () => {
@@ -66,17 +61,15 @@ describe("ContainerTableRow", () => {
 
     (useFetchResourceDetails as jest.Mock).mockReturnValue({ data: resource });
 
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <table>
-          <tbody>
-            <ContainerTableRow resource={resource} />
-          </tbody>
-        </table>
-      </ThemeProvider>
+    const tree = mountToJson(
+      <table>
+        <tbody>
+          <ContainerTableRow resource={resource} />
+        </tbody>
+      </table>
     );
 
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
   });
 
   test("it renders a table row with loaded data without a type", () => {
@@ -88,17 +81,15 @@ describe("ContainerTableRow", () => {
 
     (useFetchResourceDetails as jest.Mock).mockReturnValue({ data: resource });
 
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <table>
-          <tbody>
-            <ContainerTableRow resource={resource} />
-          </tbody>
-        </table>
-      </ThemeProvider>
+    const tree = mountToJson(
+      <table>
+        <tbody>
+          <ContainerTableRow resource={resource} />
+        </tbody>
+      </table>
     );
 
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
   });
 });
 

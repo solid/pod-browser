@@ -34,7 +34,7 @@ const PodLocationContext = createContext<PodLocation>({
 });
 
 interface Props {
-  children?: ReactElement | ReactElement[];
+  children: ReactElement | ReactElement[] | undefined;
   currentUri: string;
 }
 

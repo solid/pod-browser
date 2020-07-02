@@ -32,7 +32,7 @@ interface DetailsContext {
 const DetailsMenuContext = createContext<DetailsContext>({ menuOpen: false });
 
 interface Props {
-  children?: ReactElement | ReactElement[];
+  children: ReactElement | ReactElement[] | undefined;
 }
 
 function DetailsMenuProvider({ children }: Props): ReactElement {

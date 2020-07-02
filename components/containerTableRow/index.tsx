@@ -63,16 +63,12 @@ export function handleTableRowClick({
 }
 
 interface IResourceIcon {
-  types?: string[];
+  types: string[];
   bem: any;
 }
 
-function ResourceIcon(props: IResourceIcon): ReactElement | null {
+export function ResourceIcon(props: IResourceIcon): ReactElement | null {
   const { types, bem } = props;
-
-  if (!types) {
-    return null;
-  }
 
   // keeping it very simple for now (either folder or file), and then we can expand upon it later
   const icon = types.indexOf("Container") !== -1 ? "icon-folder" : "icon-file";

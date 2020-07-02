@@ -19,36 +19,28 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { mount } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
-
 import auth from "solid-auth-client";
-
-import { ThemeProvider } from "@material-ui/styles";
+import { mount } from "enzyme";
+import { mountToJson, WithTheme } from "../../../__testUtils/mountWithTheme";
 
 import ProviderLogin, * as ProviderFunctions from "./index";
-import theme from "../../../src/theme";
 
 jest.mock("solid-auth-client");
 
 describe("ProviderLogin form", () => {
   test("Renders a webid login form, with button bound to login", () => {
-    const tree = mount(
-      <ThemeProvider theme={theme}>
-        <ProviderLogin />
-      </ThemeProvider>
-    );
+    const tree = mountToJson(<ProviderLogin />);
 
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
   });
 });
 
 describe("loginWithProvider", () => {
   test("clicking login calls loginWithProvider", () => {
     const tree = mount(
-      <ThemeProvider theme={theme}>
+      <WithTheme>
         <ProviderLogin />
-      </ThemeProvider>
+      </WithTheme>
     );
 
     (auth.popupLogin as jest.Mock).mockResolvedValue(null);
@@ -67,5 +59,11 @@ describe("loginWithProvider", () => {
     expect(auth.popupLogin).toHaveBeenCalledWith({
       popupUri: `/login-popup.html`,
     });
+  });
+
+  test("Bubbles errors", async () => {
+    const error = "Failure";
+    (auth.popupLogin as jest.Mock).mockRejectedValue(error);
+    await expect(ProviderFunctions.loginWithProvider()).rejects.toMatch(error);
   });
 });

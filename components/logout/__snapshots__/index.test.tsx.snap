@@ -2,6 +2,7 @@
 
 exports[`Logout button Renders a logout button 1`] = `
 <button
+  className=""
   onClick={[Function]}
   type="button"
 />
