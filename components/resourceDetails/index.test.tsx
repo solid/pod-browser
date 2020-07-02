@@ -176,6 +176,55 @@ describe("Resource details", () => {
 
     expect(tree).toMatchSnapshot();
   });
+
+  test("renders with no types", () => {
+    jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
+      session: { webId: "owner" },
+    }));
+
+    const permissions = [
+      {
+        webId: "owner",
+        alias: "Full Control",
+        acl: {
+          append: true,
+          control: true,
+          read: true,
+          write: true,
+        },
+        profile: {
+          avatar: "http://example.com/avatar.png",
+          nickname: "owner",
+          name: "Test Person",
+        },
+      },
+      {
+        webId: "collaborator",
+        alias: "Can View",
+        acl: {
+          append: false,
+          control: false,
+          read: true,
+          write: false,
+        },
+        profile: {
+          avatar: null,
+          nickname: "collaborator",
+          name: "Test Collaborator",
+        },
+      },
+    ];
+
+    (useFetchResourceWithAcl as jest.Mock).mockReturnValue({
+      data: { permissions },
+    });
+
+    const tree = mountToJson(
+      <ResourceDetails name="Resource Name" iri="iri" />
+    );
+
+    expect(tree).toMatchSnapshot();
+  });
 });
 
 describe("displayName", () => {
