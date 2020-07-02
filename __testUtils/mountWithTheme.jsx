@@ -19,26 +19,19 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement, ReactNode } from "react";
 import { ThemeProvider } from "@material-ui/styles";
 import { mount } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
-import defaultTheme from "../../src/theme";
+import defaultTheme from "../src/theme";
 
-interface IWithTheme {
-  theme?: any;
-  children: ReactNode;
-}
-
-export const WithTheme = (props: IWithTheme): ReactElement => {
-  const { theme = defaultTheme, children } = props;
+export const WithTheme = ({ theme, children }) => {
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 };
 
-export const mountWithTheme = (children: ReactNode, theme = defaultTheme) => {
-  return mount(<WithTheme theme={theme}>{children}</WithTheme>);
-};
+export const mountToJson = (children, theme = defaultTheme) => {
+  const tree = mount(<WithTheme theme={theme}>{children}</WithTheme>);
 
-export const mountToJson = (children: ReactNode, theme = defaultTheme) => {
-  return shallowToJson(mountWithTheme(children, theme));
+  return shallowToJson(tree, {
+    mode: "deep",
+  });
 };

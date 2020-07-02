@@ -439,11 +439,11 @@ font-display: block;",
             className="makeStyles-breadcrumb__crumb-1536"
           >
             <Link
-              href="/resource/https%3A%2F%2Fwww.mypodmanager.com%2F"
+              href="/"
             >
               <a
                 className="makeStyles-breadcrumb__link-1537"
-                href="/resource/https%3A%2F%2Fwww.mypodmanager.com%2F"
+                href="/"
                 onClick={[Function]}
                 onMouseEnter={[Function]}
               >
@@ -897,11 +897,11 @@ font-display: block;",
             className="makeStyles-breadcrumb__crumb-1536"
           >
             <Link
-              href="/resource/https%3A%2F%2Fwww.mypodmanager.com%2F"
+              href="/"
             >
               <a
                 className="makeStyles-breadcrumb__link-1537"
-                href="/resource/https%3A%2F%2Fwww.mypodmanager.com%2F"
+                href="/"
                 onClick={[Function]}
                 onMouseEnter={[Function]}
               >

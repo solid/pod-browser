@@ -7,7 +7,6 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>jest/setupTests.js'],
 
   testPathIgnorePatterns: [
-    '/lib/',
     '/node_modules/',
     '/__testUtils/',
   ],
@@ -16,7 +15,6 @@ module.exports = {
 
   coveragePathIgnorePatterns: [
     "/node_modules/",
-    "/lib/",
     '/__testUtils/',
   ],
 

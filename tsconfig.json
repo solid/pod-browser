@@ -23,7 +23,7 @@
     "node_modules",
     "**/__mocks__/**",
     "**/__snapshots__/**",
-    "lib/**"
+    "__testUtils/**"
   ],
   "include": [
     "next-env.d.ts",

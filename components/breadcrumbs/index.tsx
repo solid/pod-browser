@@ -69,7 +69,7 @@ export default function Breadcrumbs(): ReactElement {
     <nav aria-label="Breadcrumbs">
       <ul className={bem("breadcrumb")} ref={breadcrumbsList}>
         <li className={bem("breadcrumb__crumb")}>
-          <Link href={resourceHref()}>
+          <Link href="/">
             <a className={bem("breadcrumb__link")}>All files</a>
           </Link>
         </li>

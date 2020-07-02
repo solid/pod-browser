@@ -21,7 +21,6 @@
 
 /* eslint-disable camelcase */
 import {
-  DatasetInfo,
   fetchLitDataset,
   getDatetimeOne,
   getDecimalOne,
@@ -34,7 +33,6 @@ import {
   LitDataset,
   Thing,
   unstable_AccessModes,
-  unstable_Acl,
   unstable_AgentAccess,
   unstable_fetchFile,
   unstable_fetchLitDatasetWithAcl,
@@ -248,9 +246,7 @@ export async function fetchResourceWithAcl(
   normalizePermissionsFn = normalizePermissions
 ): Promise<NormalizedResource> {
   const resource = await unstable_fetchLitDatasetWithAcl(iri);
-  const acl = await unstable_getAgentAccessModesAll(
-    resource as LitDataset & DatasetInfo & unstable_Acl
-  );
+  const acl = await unstable_getAgentAccessModesAll(resource);
   const permissions = acl ? await normalizePermissionsFn(acl) : undefined;
   const dataset = resource as LitDataset;
   const thing = dataset as Thing;
