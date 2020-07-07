@@ -127,7 +127,7 @@ export interface NormalizedPermission {
 export async function normalizePermissions(
   permissions: unstable_AgentAccess,
   fetchProfileFn = fetchProfile
-): Promise<NormalizedPermission[]> {
+): Promise<NormalizedFilezedPermission[]> {
   return Promise.all(
     Object.keys(permissions).map(
       async (webId: string): Promise<NormalizedPermission> => {

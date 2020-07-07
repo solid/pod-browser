@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PermissionsForm Renders a permissions form 1`] = `
+<PermissionsForm
+  iri="https://mypod.myhost.com"
+  permission={
+    Object {
+      "acl": Object {
+        "append": true,
+        "control": false,
+        "read": true,
+        "write": true,
+      },
+      "alias": "Full Control",
+      "profile": Object {
+        "webId": "https://mypod.myhost.com/profile/card#me",
+      },
+      "webId": "https://mypod.myhost.com/profile/card#me",
+    }
+  }
+  warnOnSubmit={false}
+/>
+`;

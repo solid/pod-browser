@@ -19,40 +19,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { StyleRules } from "@material-ui/core";
-import { PrismTheme, content } from "@solid/lit-prism-patterns";
+import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
 
-const rules = {
-  avatar: {
-    marginRight: "1rem",
-  },
-  centeredSection: {
-    padding: "1rem",
-  },
-  raw: {
-    height: "100%",
-    width: "100%",
-    maxHeight: "200px",
-    overflow: "auto",
-  },
-  listItem: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-  formListItem: {
-    display: "block",
-  },
-  detailText: {
-    fontSize: "0.75rem",
-  },
-  typeValue: {
-    marginLeft: "auto",
-  },
+const styles = (theme: PrismTheme) => {
+  return createStyles(theme, [], {
+    listItem: {
+      paddingBottom: 0,
+      paddingTop: 0,
+    },
+  });
 };
 
-export default function styles(theme: PrismTheme): StyleRules {
-  return {
-    ...rules,
-    ...content.styles(theme),
-  };
-}
+export default styles;

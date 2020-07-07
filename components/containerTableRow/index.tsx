@@ -54,11 +54,13 @@ export function handleTableRowClick({
     const element = evnt.target as HTMLElement;
     if (element && element.tagName === "A") return;
 
-    const { types, name, iri } = resource;
+    const { types, name, iri, permissions } = resource;
 
     setMenuOpen(true);
     setMenuContents(<DetailsLoading resource={resource} />);
-    setMenuContents(<Details iri={iri} types={types} name={name} />);
+    setMenuContents(
+      <Details iri={iri} types={types} name={name} permissions={permissions} />
+    );
   };
 }
 
