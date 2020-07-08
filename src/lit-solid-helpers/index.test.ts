@@ -306,7 +306,7 @@ describe("fetchResourceWithAcl", () => {
       });
 
     jest
-      .spyOn(litSolidFns, "unstable_getAgentAccessModesAll")
+      .spyOn(litSolidFns, "unstable_getAgentAccessAll")
       .mockImplementationOnce(async () => {
         return Promise.resolve(perms);
       });
@@ -365,7 +365,7 @@ describe("fetchResourceWithAcl", () => {
       });
 
     jest
-      .spyOn(litSolidFns, "unstable_getAgentAccessModesAll")
+      .spyOn(litSolidFns, "unstable_getAgentAccessAll")
       .mockImplementationOnce(async () => {
         return Promise.resolve(undefined);
       });
@@ -476,7 +476,7 @@ describe("isUserOrMatch", () => {
 });
 
 describe("parseStringAcl", () => {
-  test("it parses a list of string permissions into an unstable_AccessModes", () => {
+  test("it parses a list of string permissions into an unstable_Access", () => {
     const fullControl = parseStringAcl("read write append control");
 
     expect(fullControl.read).toBe(true);
@@ -590,7 +590,7 @@ describe("fetchResource", () => {
       });
 
     jest
-      .spyOn(litSolidFns, "unstable_getAgentAccessModesAll")
+      .spyOn(litSolidFns, "unstable_getAgentAccessAll")
       .mockImplementationOnce(async () => {
         return Promise.resolve(undefined);
       });

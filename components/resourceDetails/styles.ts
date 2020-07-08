@@ -38,6 +38,7 @@ const rules = {
   listItem: {
     display: "flex",
     justifyContent: "space-between",
+    alignItems: "flex-start",
   },
   formListItem: {
     display: "block",

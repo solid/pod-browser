@@ -21,12 +21,32 @@
 
 import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
 
+const smallFontSize = {
+  fontSize: "0.75rem",
+};
+
 const styles = (theme: PrismTheme) => {
   return createStyles(theme, [], {
     listItem: {
       paddingBottom: 0,
       paddingTop: 0,
     },
+    summary: {
+      ...smallFontSize,
+      listStyle: "none",
+      display: "flex",
+      flexWrap: "nowrap",
+      alignItems: "center",
+      justifyContent: "space-between",
+      width: 140,
+    },
+    selectIcon: {
+      marginLeft: "auto",
+    },
+    label: smallFontSize,
+    checkbox: {
+      padding: 0,
+    }
   });
 };
 

@@ -19,11 +19,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* eslint-disable camelcase */
 import * as ReactFns from "react";
 import { mount } from "enzyme";
 import { mountToJson } from "enzyme-to-json";
+import * as LitPodFns from "@solid/lit-pod";
 import { NormalizedPermission } from "../../src/lit-solid-helpers";
-import PermissionsForm, { setPermissionHandler } from "./index";
+import PermissionsForm, {
+  setPermissionHandler,
+  savePermissionsHandler,
+} from "./index";
 
 describe("PermissionsForm", () => {
   test("Renders a permissions form", () => {
@@ -58,11 +63,7 @@ describe("PermissionsForm", () => {
       .mockImplementationOnce(() => [false, setSnackbarOpen]);
 
     const tree = mount(
-      <PermissionsForm
-        iri={iri}
-        permission={permission}
-        warnOnSubmit={false}
-      />
+      <PermissionsForm iri={iri} permission={permission} warnOnSubmit={false} />
     );
 
     expect(mountToJson(tree)).toMatchSnapshot();
@@ -71,12 +72,122 @@ describe("PermissionsForm", () => {
 
 describe("setPermissionHandler", () => {
   test("it creates a toggle function", () => {
-    const value = false;
+    const access = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    };
+    const expectedAccess = {
+      read: false,
+      write: true,
+      append: true,
+      control: true,
+    };
     const setPermission = jest.fn();
-    const toggleFunction = setPermissionHandler(value, setPermission);
+    const toggleFunction = setPermissionHandler(access, "read", setPermission);
 
     toggleFunction();
 
-    expect(setPermission).toHaveBeenCalledWith(!value);
+    expect(setPermission).toHaveBeenCalledWith(expectedAccess);
+  });
+});
+
+describe("savePermissionsHandler", () => {
+  test("it creates a savePermissions function", async () => {
+    const closeConfirmation = jest.fn();
+    const setSnackbarMessage = jest.fn();
+    const setSnackbarOpen = jest.fn();
+    const setSnackbarType = jest.fn();
+    const webId = "http://example.com/profile/card#me";
+    const iri = "http://example.com";
+    const access = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    } as LitPodFns.unstable_Access;
+
+    const handler = savePermissionsHandler({
+      closeConfirmation,
+      setSnackbarMessage,
+      setSnackbarOpen,
+      setSnackbarType,
+      webId,
+      iri,
+      access,
+    });
+
+    jest
+      .spyOn(LitPodFns, "unstable_fetchLitDatasetWithAcl")
+      .mockImplementationOnce(jest.fn());
+
+    jest
+      .spyOn(LitPodFns, "unstable_getResourceAcl")
+      .mockImplementationOnce(jest.fn());
+
+    jest
+      .spyOn(LitPodFns, "unstable_setAgentResourceAccess")
+      .mockImplementationOnce(jest.fn());
+    await handler();
+
+    expect(closeConfirmation).toHaveBeenCalled();
+    expect(LitPodFns.unstable_fetchLitDatasetWithAcl).toHaveBeenCalled();
+    expect(LitPodFns.unstable_getResourceAcl).toHaveBeenCalled();
+    expect(LitPodFns.unstable_setAgentResourceAccess).toHaveBeenCalled();
+    expect(setSnackbarMessage).toHaveBeenCalledWith(
+      "Your permissions have been saved!"
+    );
+    expect(setSnackbarOpen).toHaveBeenCalledWith(true);
+  });
+
+  test("it show a message if the save errors out", async () => {
+    const closeConfirmation = jest.fn();
+    const setSnackbarMessage = jest.fn();
+    const setSnackbarOpen = jest.fn();
+    const setSnackbarType = jest.fn();
+    const webId = "http://example.com/profile/card#me";
+    const iri = "http://example.com";
+    const access = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    } as LitPodFns.unstable_Access;
+
+    const handler = savePermissionsHandler({
+      closeConfirmation,
+      setSnackbarMessage,
+      setSnackbarOpen,
+      setSnackbarType,
+      webId,
+      iri,
+      access,
+    });
+
+    jest
+      .spyOn(LitPodFns, "unstable_fetchLitDatasetWithAcl")
+      .mockImplementationOnce(jest.fn());
+
+    jest
+      .spyOn(LitPodFns, "unstable_getResourceAcl")
+      .mockImplementationOnce(jest.fn());
+
+    jest
+      .spyOn(LitPodFns, "unstable_setAgentResourceAccess")
+      .mockImplementationOnce(() => {
+        throw new Error("boom");
+      });
+    await handler();
+
+    expect(closeConfirmation).toHaveBeenCalled();
+    expect(LitPodFns.unstable_fetchLitDatasetWithAcl).toHaveBeenCalled();
+    expect(LitPodFns.unstable_getResourceAcl).toHaveBeenCalled();
+    expect(LitPodFns.unstable_setAgentResourceAccess).toHaveBeenCalled();
+    expect(setSnackbarType).toHaveBeenCalledWith("error");
+    expect(setSnackbarMessage).toHaveBeenCalledWith(
+      "There was an error saving permissions!"
+    );
+    expect(setSnackbarOpen).toHaveBeenCalledWith(true);
   });
 });

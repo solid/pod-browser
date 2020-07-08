@@ -26,9 +26,9 @@ import {
   fetchLitDataset,
   getThingOne,
   getIriAll,
-  unstable_AccessModes,
+  unstable_Access,
   unstable_fetchResourceInfoWithAcl,
-  unstable_getAgentAccessModesAll,
+  unstable_getAgentAccessAll,
   isContainer,
 } from "@solid/lit-pod";
 import { space } from "rdf-namespaces";
@@ -62,12 +62,12 @@ export async function fetchResourceDetails(
 ): Promise<ResourceDetails> {
   const name = getIriPath(iri) as string;
   const resourceInfo = await unstable_fetchResourceInfoWithAcl(iri);
-  const accessModeList = unstable_getAgentAccessModesAll(resourceInfo);
+  const accessModeList = unstable_getAgentAccessAll(resourceInfo);
   const permissions = await normalizePermissions(
-    accessModeList as Record<string, unstable_AccessModes>
+    accessModeList as Record<string, unstable_Access>
   );
 
-  let types = [];
+  let types = [] as string[];
   const contentType = resourceInfo?.resourceInfo?.contentType;
 
   if (contentType) types = [contentType];

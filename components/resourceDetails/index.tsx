@@ -61,7 +61,7 @@ export function Permission(props: IPermission): ReactElement | null {
   const { permission, classes, warnOnSubmit, iri } = props;
   if (!permission) return null;
 
-  const { webId, alias, profile } = permission;
+  const { webId, profile } = permission;
   const { avatar } = profile;
   const avatarSrc = avatar || undefined;
 
@@ -77,23 +77,11 @@ export function Permission(props: IPermission): ReactElement | null {
           {displayName(profile)}
         </Typography>
 
-        <Typography className={`${classes.typeValue} ${classes.detailText}`}>
-          {alias}
-        </Typography>
-      </ListItem>
-      <ListItem
-        key={"${webId}-permission-form"}
-        className={classes.formListItem}
-      >
-        <details>
-          <summary>Change permissions</summary>
-
-          <PermissionsForm
-            iri={iri}
-            permission={permission}
-            warnOnSubmit={warnOnSubmit}
-          />
-        </details>
+        <PermissionsForm
+          iri={iri}
+          permission={permission}
+          warnOnSubmit={warnOnSubmit}
+        />
       </ListItem>
     </>
   );
@@ -248,6 +236,7 @@ export default function ResourceDetails({
       </section>
 
       <ThirdPartyPermissions
+        iri={iri}
         thirdPartyPermissions={thirdPartyPermissions}
         classes={classes}
       />

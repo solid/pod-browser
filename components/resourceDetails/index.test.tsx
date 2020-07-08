@@ -276,7 +276,7 @@ describe("Permission", () => {
         write: true,
         append: true,
         control: true,
-      }
+      },
     });
 
     const tree = shallow(
@@ -294,7 +294,11 @@ describe("Permission", () => {
 describe("ThirdPartyPermissions", () => {
   test("it returns null if given no permissions", () => {
     const tree = shallow(
-      <ThirdPartyPermissions iri="iri" classes={{}} thirdPartyPermissions={null} />
+      <ThirdPartyPermissions
+        iri="iri"
+        classes={{}}
+        thirdPartyPermissions={null}
+      />
     );
 
     expect(shallowToJson(tree)).toMatchSnapshot();
@@ -302,7 +306,11 @@ describe("ThirdPartyPermissions", () => {
 
   test("it returns a useful message if there are no third party permissions", () => {
     const tree = shallow(
-      <ThirdPartyPermissions iri="iri" classes={{}} thirdPartyPermissions={[]} />
+      <ThirdPartyPermissions
+        iri="iri"
+        classes={{}}
+        thirdPartyPermissions={[]}
+      />
     );
 
     expect(shallowToJson(tree)).toMatchSnapshot();
