@@ -534,32 +534,31 @@ describe("permissionsFromWacAllowHeaders", () => {
 
 describe("fetchFileWithAcl", () => {
   test("it fetches a file and parses the wac-allow header", async () => {
-    const headers = new Headers();
-    const blob = jest.fn().mockImplementationOnce(() => "file contents");
+    jest.spyOn(litSolidFns, "unstable_fetchFile").mockResolvedValue({
+      text: "file contents",
+      resourceInfo: {
+        contentType: "type",
+        unstable_permissions: {
+          user: {
+            read: true,
+            write: true,
+            append: true,
+            control: true,
+          },
+          public: {
+            read: true,
+            write: true,
+            append: true,
+            control: true,
+          },
+        },
+      },
+    });
 
-    headers.append("content-type", "image/vnd.microsoft.icon");
-    headers.append(
-      "wac-allow",
-      'user="read write append control",public="read"'
-    );
+    const { iri, permissions, types } = await fetchFileWithAcl("some iri");
 
-    jest
-      .spyOn(litSolidFns, "unstable_fetchFile")
-      .mockImplementationOnce(async () => {
-        return Promise.resolve({
-          blob,
-          headers,
-        });
-      });
-
-    const { iri, permissions, types, file } = await fetchFileWithAcl(
-      "some iri"
-    );
-
-    expect(blob).toHaveBeenCalled();
     expect(iri).toEqual("some iri");
-    expect(types).toContain("image/vnd.microsoft.icon");
-    expect(file).toEqual("file contents");
+    expect(types).toContain("type");
     expect(permissions).toHaveLength(2);
   });
 });

@@ -66,24 +66,22 @@ export function Permission(props: IPermission): ReactElement | null {
   const avatarSrc = avatar || undefined;
 
   return (
-    <>
-      <ListItem key={webId} className={classes.listItem}>
-        <Avatar
-          className={classes.avatar}
-          alt={displayName(profile)}
-          src={avatarSrc}
-        />
-        <Typography className={classes.detailText}>
-          {displayName(profile)}
-        </Typography>
+    <ListItem key={webId} className={classes.listItem}>
+      <Avatar
+        className={classes.avatar}
+        alt={displayName(profile)}
+        src={avatarSrc}
+      />
+      <Typography className={classes.detailText}>
+        {displayName(profile)}
+      </Typography>
 
-        <PermissionsForm
-          iri={iri}
-          permission={permission}
-          warnOnSubmit={warnOnSubmit}
-        />
-      </ListItem>
-    </>
+      <PermissionsForm
+        iri={iri}
+        permission={permission}
+        warnOnSubmit={warnOnSubmit}
+      />
+    </ListItem>
   );
 }
 

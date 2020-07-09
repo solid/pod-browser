@@ -225,18 +225,33 @@ export interface NormalizedFile extends NormalizedResource {
 }
 
 export async function fetchFileWithAcl(iri: string): Promise<NormalizedFile> {
-  const response = await unstable_fetchFile(iri);
-  const file = await response.blob();
-  const { headers } = response;
-  const permissions = permissionsFromWacAllowHeaders(
-    headers.get("wac-allow") as string
-  );
-  const type = headers.get("content-type") as string;
+  const file = await unstable_fetchFile(iri);
+  const {
+    resourceInfo: { unstable_permissions, contentType: type },
+  } = file;
+
+  const permissions = unstable_permissions
+    ? [
+        {
+          webId: "user",
+          alias: displayPermissions(unstable_permissions.user),
+          profile: { webId: "user" },
+          acl: unstable_permissions?.user as unstable_Access,
+        } as NormalizedPermission,
+        {
+          webId: "public",
+          alias: displayPermissions(unstable_permissions.public),
+          profile: { webId: "public" },
+          acl: unstable_permissions?.public as unstable_Access,
+        } as NormalizedPermission,
+      ]
+    : [];
+  const types = type ? [type] : [];
 
   return {
     iri,
     permissions,
-    types: [type],
+    types,
     file,
   };
 }

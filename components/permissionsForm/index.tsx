@@ -1,4 +1,4 @@
-  /**
+/**
  * Copyright 2020 Inrupt Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -53,27 +53,65 @@ const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme) as StyleRules)
 );
 
+interface IConfirmDialog {
+  warn: boolean;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  onConfirm: () => void;
+}
+
+export function confirmationDialog({
+  warn,
+  open,
+  setOpen,
+  onConfirm,
+}: IConfirmDialog): ReactElement | null {
+  if (!warn) return null;
+
+  return (
+    <Dialog
+      disableBackdropClick
+      disableEscapeKeyDown
+      maxWidth="xs"
+      aria-labelledby="permission-edit-confirmation"
+      open={open}
+      onClose={() => setOpen(false)}
+    >
+      <DialogTitle>Change Personal Access</DialogTitle>
+      <DialogContent dividers>
+        <p>
+          You are about to edit your own access to this resource. Are you sure
+          you wish to continue?
+        </p>
+      </DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={() => setOpen(false)} color="primary">
+          Cancel
+        </Button>
+        <Button type="submit" color="primary" onClick={onConfirm}>
+          Ok
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
 interface ISavePermissionHandler {
   access: unstable_Access;
-  closeConfirmation: () => void;
   iri: string;
   setSnackbarMessage: (message: string) => void;
-  setSnackbarOpen: (open: boolean) => void;
   setSnackbarType: (type: AlertProps["severity"]) => void;
   webId: string;
 }
 
 export function savePermissionsHandler({
   access,
-  closeConfirmation,
   iri,
   setSnackbarMessage,
-  setSnackbarOpen,
   setSnackbarType,
   webId,
 }: ISavePermissionHandler): () => void {
   return async (): Promise<void> => {
-    closeConfirmation();
     const dataset = await unstable_fetchLitDatasetWithAcl(iri);
     const aclDataset = unstable_getResourceAcl(dataset);
 
@@ -88,8 +126,6 @@ export function savePermissionsHandler({
       setSnackbarType("error");
       setSnackbarMessage("There was an error saving permissions!");
     }
-
-    setSnackbarOpen(true);
   };
 }
 
@@ -132,25 +168,21 @@ export default function PermissionsForm({
   if (!permission) return null;
   if (!access.control) return null;
 
-  const closeSnackBar = () => setSnackbarOpen(false);
-  const openConfirmation = () => setDialogOpen(true);
-  const closeConfirmation = () => setDialogOpen(false);
-
   const savePermissions = savePermissionsHandler({
     access,
-    closeConfirmation,
     iri,
     setSnackbarMessage,
-    setSnackbarOpen,
     setSnackbarType,
     webId,
   });
 
   const handleSaveClick = async () => {
     if (warnOnSubmit) {
-      openConfirmation();
+      setDialogOpen(true);
     } else {
+      setDialogOpen(false);
       await savePermissions();
+      setSnackbarOpen(true);
     }
   };
 
@@ -249,38 +281,15 @@ export default function PermissionsForm({
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
-        onClose={closeSnackBar}
+        onClose={() => setSnackbarOpen(false)}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert onClose={closeSnackBar} severity={snackBarType}>
+        <Alert onClose={() => setSnackbarOpen(false)} severity={snackBarType}>
           {snackBarMessage}
         </Alert>
       </Snackbar>
 
-      <Dialog
-        disableBackdropClick
-        disableEscapeKeyDown
-        maxWidth="xs"
-        aria-labelledby="permission-edit-confirmation"
-        open={dialogOpen}
-        onClose={closeConfirmation}
-      >
-        <DialogTitle>Change Personal Access</DialogTitle>
-        <DialogContent dividers>
-          <p>
-            You are about to edit your own access to this resource. Are you sure
-            you wish to continue?
-          </p>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={closeConfirmation} color="primary">
-            Cancel
-          </Button>
-          <Button type="submit" color="primary" onClick={savePermissions}>
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {confirmationDialog({warn: warnOnSubmit, open: dialogOpen, setOpen: setDialogOpen, onConfirm: savePermissions})}
     </details>
   );
 }

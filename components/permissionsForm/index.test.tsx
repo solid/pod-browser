@@ -28,6 +28,7 @@ import { NormalizedPermission } from "../../src/lit-solid-helpers";
 import PermissionsForm, {
   setPermissionHandler,
   savePermissionsHandler,
+  confirmationDialog,
 } from "./index";
 
 describe("PermissionsForm", () => {
@@ -95,9 +96,7 @@ describe("setPermissionHandler", () => {
 
 describe("savePermissionsHandler", () => {
   test("it creates a savePermissions function", async () => {
-    const closeConfirmation = jest.fn();
     const setSnackbarMessage = jest.fn();
-    const setSnackbarOpen = jest.fn();
     const setSnackbarType = jest.fn();
     const webId = "http://example.com/profile/card#me";
     const iri = "http://example.com";
@@ -109,9 +108,7 @@ describe("savePermissionsHandler", () => {
     } as LitPodFns.unstable_Access;
 
     const handler = savePermissionsHandler({
-      closeConfirmation,
       setSnackbarMessage,
-      setSnackbarOpen,
       setSnackbarType,
       webId,
       iri,
@@ -131,20 +128,16 @@ describe("savePermissionsHandler", () => {
       .mockImplementationOnce(jest.fn());
     await handler();
 
-    expect(closeConfirmation).toHaveBeenCalled();
     expect(LitPodFns.unstable_fetchLitDatasetWithAcl).toHaveBeenCalled();
     expect(LitPodFns.unstable_getResourceAcl).toHaveBeenCalled();
     expect(LitPodFns.unstable_setAgentResourceAccess).toHaveBeenCalled();
     expect(setSnackbarMessage).toHaveBeenCalledWith(
       "Your permissions have been saved!"
     );
-    expect(setSnackbarOpen).toHaveBeenCalledWith(true);
   });
 
   test("it show a message if the save errors out", async () => {
-    const closeConfirmation = jest.fn();
     const setSnackbarMessage = jest.fn();
-    const setSnackbarOpen = jest.fn();
     const setSnackbarType = jest.fn();
     const webId = "http://example.com/profile/card#me";
     const iri = "http://example.com";
@@ -156,9 +149,7 @@ describe("savePermissionsHandler", () => {
     } as LitPodFns.unstable_Access;
 
     const handler = savePermissionsHandler({
-      closeConfirmation,
       setSnackbarMessage,
-      setSnackbarOpen,
       setSnackbarType,
       webId,
       iri,
@@ -180,7 +171,6 @@ describe("savePermissionsHandler", () => {
       });
     await handler();
 
-    expect(closeConfirmation).toHaveBeenCalled();
     expect(LitPodFns.unstable_fetchLitDatasetWithAcl).toHaveBeenCalled();
     expect(LitPodFns.unstable_getResourceAcl).toHaveBeenCalled();
     expect(LitPodFns.unstable_setAgentResourceAccess).toHaveBeenCalled();
@@ -188,6 +178,32 @@ describe("savePermissionsHandler", () => {
     expect(setSnackbarMessage).toHaveBeenCalledWith(
       "There was an error saving permissions!"
     );
-    expect(setSnackbarOpen).toHaveBeenCalledWith(true);
+  });
+});
+
+describe("confirmationDialog", () => {
+  test("returns null when warn is false", () => {
+    const args = {
+      warn: false,
+      open: false,
+      setOpen: jest.fn(),
+      onConfirm: jest.fn(),
+    };
+
+    expect(confirmationDialog(args)).toBeNull();
+  });
+
+  test("it returns a Dialog component when warn is true", () => {
+    const args = {
+      warn: true,
+      open: false,
+      setOpen: jest.fn(),
+      onConfirm: jest.fn(),
+    };
+
+    const component = confirmationDialog(args);
+    const tree = mount(component);
+
+    expect(mountToJson(tree)).toMatchSnapshot();
   });
 });
