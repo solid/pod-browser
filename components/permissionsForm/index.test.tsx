@@ -202,8 +202,24 @@ describe("confirmationDialog", () => {
     };
 
     const component = confirmationDialog(args);
-    const tree = mount(component);
+    const tree = mount(component as React.ReactElement);
 
     expect(mountToJson(tree)).toMatchSnapshot();
+  });
+
+  test("it closes the dialog when cancel is clicked", () => {
+    const args = {
+      warn: true,
+      open: true,
+      setOpen: jest.fn(),
+      onConfirm: jest.fn(),
+    };
+
+    const component = confirmationDialog(args);
+    const tree = mount(component as React.ReactElement);
+
+    tree.find("button").first().simulate("click");
+
+    expect(args.setOpen).toHaveBeenCalledWith(false);
   });
 });

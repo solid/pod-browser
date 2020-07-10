@@ -77,10 +77,11 @@
     "eslint-plugin-react-hooks": "^4.0.5",
     "jest": "^26.1.0",
     "jest-mock-extended": "^1.0.9",
-    "jsdom": "16.2.2",
+    "jsdom": "^16.2.2",
     "jsdom-global": "3.0.2",
     "next-runtime-dotenv": "^1.2.0",
     "prettier": "^2.0.5",
+    "react-test-renderer": "^16.13.1",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.6",
     "vercel": "^19.1.1"

@@ -28,7 +28,6 @@ exports[`confirmationDialog it returns a Dialog component when warn is true 1`] 
   disableBackdropClick={true}
   disableEscapeKeyDown={true}
   maxWidth="xs"
-  onClose={[Function]}
   open={false}
 >
   <ForwardRef(Dialog)
@@ -55,7 +54,6 @@ exports[`confirmationDialog it returns a Dialog component when warn is true 1`] 
     disableBackdropClick={true}
     disableEscapeKeyDown={true}
     maxWidth="xs"
-    onClose={[Function]}
     open={false}
   >
     <ForwardRef(Modal)
@@ -386,7 +384,6 @@ exports[`confirmationDialog it returns a Dialog component when warn is true 1`] 
       closeAfterTransition={true}
       disableBackdropClick={true}
       disableEscapeKeyDown={true}
-      onClose={[Function]}
       open={false}
     >
       <ForwardRef(Portal)

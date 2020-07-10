@@ -16,17 +16,32 @@ exports[`Permission it renders permissions if given 1`] = `
   key="https://somepod.somehost.com/profile#me"
 >
   <WithStyles(ForwardRef(Avatar))
-    alt={[MockFunction]}
+    alt="https://somepod.somehost.com/profile#me"
     src="https://somepod.somehost.com/public/photo.jpg"
   />
   <WithStyles(ForwardRef(Typography))>
-    <Component />
+    https://somepod.somehost.com/profile#me
   </WithStyles(ForwardRef(Typography))>
-  <WithStyles(ForwardRef(Typography))
-    className="undefined undefined"
-  >
-    some-alias
-  </WithStyles(ForwardRef(Typography))>
+  <PermissionsForm
+    iri="iri"
+    permission={
+      Object {
+        "acl": Object {
+          "append": true,
+          "control": true,
+          "read": true,
+          "write": true,
+        },
+        "alias": "Full Control",
+        "profile": Object {
+          "avatar": "https://somepod.somehost.com/public/photo.jpg",
+          "webId": "https://somepod.somehost.com/profile#me",
+        },
+        "webId": "https://somepod.somehost.com/profile#me",
+      }
+    }
+    warnOnSubmit={false}
+  />
 </WithStyles(ForwardRef(ListItem))>
 `;
 

@@ -75,7 +75,6 @@ export function confirmationDialog({
       maxWidth="xs"
       aria-labelledby="permission-edit-confirmation"
       open={open}
-      onClose={() => setOpen(false)}
     >
       <DialogTitle>Change Personal Access</DialogTitle>
       <DialogContent dividers>
@@ -274,7 +273,7 @@ export default function PermissionsForm({
         </ListItem>
       </List>
 
-      <Button id="save-button" onClick={handleSaveClick} variant="contained">
+      <Button onClick={handleSaveClick} variant="contained">
         Save
       </Button>
 

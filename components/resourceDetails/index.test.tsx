@@ -20,7 +20,6 @@
  */
 
 import * as ReactFns from "react";
-import { mock } from "jest-mock-extended";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
@@ -261,10 +260,10 @@ describe("Permission", () => {
     expect(shallowToJson(tree)).toMatchSnapshot();
   });
 
-  test.skip("it renders permissions if given", () => {
+  test("it renders permissions if given", () => {
     const classes = {};
     const webId = "https://somepod.somehost.com/profile#me";
-    const permission = mock<NormalizedPermission>({
+    const permission = {
       webId,
       alias: "Full Control",
       profile: {
@@ -277,7 +276,7 @@ describe("Permission", () => {
         append: true,
         control: true,
       },
-    });
+    } as NormalizedPermission;
 
     const tree = shallow(
       <Permission
