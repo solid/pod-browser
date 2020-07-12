@@ -19,6 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/require-default-props */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint @typescript-eslint/no-explicit-any: 0 */
 import React, { ComponentType, ReactElement, useEffect, useState } from "react";
 
 import PropTypes from "prop-types";
@@ -41,14 +45,11 @@ import { appLayout, useBem } from "@solid/lit-prism-patterns";
 import theme from "../src/theme";
 import UserContext, { ISession } from "../src/contexts/userContext";
 import { AlertProvider } from "../src/contexts/alertContext";
-import { ConfirmationDialogProvider } from "../src/contexts/confirmationDialogContext";
 import Notification from "../components/notification";
-import ConfirmationDialog from "../components/confirmationDialog";
 
 import PodManagerHeader from "../components/header";
 import "./styles.css";
 
-/* eslint @typescript-eslint/no-explicit-any: 0 */
 interface AppProps {
   Component: ComponentType;
   pageProps: any;
@@ -113,19 +114,15 @@ export default function App(props: AppProps): ReactElement {
         <ThemeProvider theme={theme}>
           <UserContext.Provider value={{ session, isLoadingSession }}>
             <AlertProvider>
-              <ConfirmationDialogProvider>
-                <CssBaseline />
-                {/* eslint react/jsx-props-no-spreading: 0 */}
-                <div className={bem("app-layout")}>
-                  <PodManagerHeader />
-                  <main className={bem("app-layout__main")}>
-                    <Component {...pageProps} />
-                  </main>
-                </div>
+              <CssBaseline />
+              <div className={bem("app-layout")}>
+                <PodManagerHeader />
+                <main className={bem("app-layout__main")}>
+                  <Component {...pageProps} />
+                </main>
+              </div>
 
-                <Notification />
-                <ConfirmationDialog />
-              </ConfirmationDialogProvider>
+              <Notification />
             </AlertProvider>
           </UserContext.Provider>
         </ThemeProvider>
@@ -136,6 +133,5 @@ export default function App(props: AppProps): ReactElement {
 
 App.propTypes = {
   Component: PropTypes.elementType.isRequired,
-  /* eslint react/forbid-prop-types: 0 */
   pageProps: PropTypes.object,
 };

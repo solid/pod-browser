@@ -27,15 +27,20 @@ import {
   getIriAll,
   unstable_fetchResourceInfoWithAcl,
 } from "@solid/lit-pod";
+import useSWR from "swr";
 import * as litSolidHelpers from "../../lit-solid-helpers";
-
 import {
   fetchContainerResourceIris,
   fetchResourceDetails,
   fetchPodIrisFromWebId,
+  useFetchContainerResourceIris,
+  useFetchResourceDetails,
+  useFetchResourceWithAcl,
+  useFetchPodIrisFromWebId,
 } from "./index";
 
 jest.mock("@solid/lit-pod");
+jest.mock("swr");
 
 describe("fetchContainerResourceIris", () => {
   test("it fetches the container resource iris", async () => {
@@ -178,5 +183,49 @@ describe("PodIrisFromWebId", () => {
     expect(fetchLitDataset).toHaveBeenCalled();
     expect(getThingOne).toHaveBeenCalled();
     expect(getIriAll).toHaveBeenCalled();
+  });
+});
+
+describe("useFetchContainerResourceIris", () => {
+  test("it wraps fetchContainerResourceIris in SWR", () => {
+    useFetchContainerResourceIris("iri");
+
+    expect(useSWR).toHaveBeenCalledWith(
+      ["iri", "getContainerResourceIris"],
+      fetchContainerResourceIris
+    );
+  });
+});
+
+describe("useFetchResourceDetails", () => {
+  test("it wraps fetchResourceDetails in SWR", () => {
+    useFetchResourceDetails("iri");
+
+    expect(useSWR).toHaveBeenCalledWith(
+      ["iri", "fetchResourceDetails"],
+      fetchResourceDetails
+    );
+  });
+});
+
+describe("useFetchResourceWithAcl", () => {
+  test("it wraps fetchResourceWithAcl in SWR", () => {
+    useFetchResourceWithAcl("iri");
+
+    expect(useSWR).toHaveBeenCalledWith(
+      ["iri", "fetchResourceWithAcl"],
+      litSolidHelpers.fetchResourceWithAcl
+    );
+  });
+});
+
+describe("useFetchPodIrisFromWebId", () => {
+  test("it wraps fetchPodIrisFromWebId in SWR", () => {
+    useFetchPodIrisFromWebId("iri");
+
+    expect(useSWR).toHaveBeenCalledWith(
+      ["iri", "fetchPodIrisFromWebId"],
+      fetchPodIrisFromWebId
+    );
   });
 });
