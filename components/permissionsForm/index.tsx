@@ -20,8 +20,10 @@
  */
 
 /* eslint-disable camelcase */
-import { ReactElement, useState } from "react";
+import { ReactElement, useState, useContext } from "react";
 import { PrismTheme } from "@solid/lit-prism-patterns";
+import { StyleRules } from "@material-ui/styles";
+import { AlertProps } from "@material-ui/lab/Alert";
 import {
   unstable_Access,
   unstable_AclDataset,
@@ -29,7 +31,6 @@ import {
   unstable_getResourceAcl,
   unstable_setAgentResourceAccess,
 } from "@solid/lit-pod";
-import Alert, { AlertProps } from "@material-ui/lab/Alert";
 import {
   Button,
   Checkbox,
@@ -42,10 +43,9 @@ import {
   List,
   ListItem,
   makeStyles,
-  Snackbar,
-  StyleRules,
 } from "@material-ui/core";
 import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown";
+import AlertContext from "../../src/contexts/alertContext";
 import { NormalizedPermission } from "../../src/lit-solid-helpers";
 import styles from "./styles";
 
@@ -95,19 +95,71 @@ export function confirmationDialog({
   );
 }
 
+export function setPermissionHandler(
+  access: Record<string, boolean>,
+  key: string,
+  setAccess: (access: unstable_Access) => void
+): () => void {
+  return () => {
+    const value = !access[key];
+    setAccess({
+      ...access,
+      [key]: value,
+    } as unstable_Access);
+  };
+}
+
+interface IPermissionCheckbox {
+  label: string;
+  classes: Record<string, string>;
+  onChange: () => void;
+  value: boolean;
+}
+
+export function PermissionCheckbox({
+  value,
+  label,
+  classes,
+  onChange,
+}: IPermissionCheckbox): ReactElement {
+  const name = label.toLowerCase();
+
+  return (
+    // prettier-ignore
+    <ListItem className={classes.listItem}>
+      <FormControlLabel
+        classes={{ label: classes.label }}
+        label={label}
+        control={(
+          <Checkbox
+            classes={{ root: classes.checkbox }}
+            checked={value}
+            name={name}
+            onChange={onChange}
+          />
+        )}
+      />
+    </ListItem>
+  );
+}
+
 interface ISavePermissionHandler {
   access: unstable_Access;
   iri: string;
-  setSnackbarMessage: (message: string) => void;
-  setSnackbarType: (type: AlertProps["severity"]) => void;
+  setMessage: React.Dispatch<React.SetStateAction<string>>;
+  setSeverity: React.Dispatch<React.SetStateAction<AlertProps["severity"]>>;
+  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setAlertOpen: React.Dispatch<React.SetStateAction<boolean>>;
   webId: string;
 }
 
 export function savePermissionsHandler({
   access,
   iri,
-  setSnackbarMessage,
-  setSnackbarType,
+  setMessage,
+  setSeverity,
+  setDialogOpen,
+  setAlertOpen,
   webId,
 }: ISavePermissionHandler): () => void {
   return async (): Promise<void> => {
@@ -120,25 +172,37 @@ export function savePermissionsHandler({
         webId,
         access as unstable_Access
       );
-      setSnackbarMessage("Your permissions have been saved!");
+      setDialogOpen(false);
+      setMessage("Your permissions have been saved!");
+      setAlertOpen(true);
     } catch (e) {
-      setSnackbarType("error");
-      setSnackbarMessage("There was an error saving permissions!");
+      setDialogOpen(false);
+      setSeverity("error" as AlertProps["severity"]);
+      setMessage("There was an error saving permissions!");
+      setAlertOpen(true);
     }
   };
 }
 
-export function setPermissionHandler(
-  access: Record<string, boolean>,
-  key: string,
-  setAccess: (access: unstable_Access) => void
-): () => void {
-  return () => {
-    const value = !access[key];
-    setAccess({
-      ...access,
-      [key]: value,
-    } as unstable_Access);
+interface ISaveHandler {
+  warnOnSubmit: boolean;
+  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  savePermissions: () => void;
+  setAlertOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export function saveHandler({
+  setDialogOpen,
+  warnOnSubmit,
+  savePermissions,
+}: ISaveHandler) {
+  return async (): Promise<void> => {
+    if (warnOnSubmit) {
+      setDialogOpen(true);
+    } else {
+      setDialogOpen(false);
+      await savePermissions();
+    }
   };
 }
 
@@ -157,12 +221,8 @@ export default function PermissionsForm({
 
   const classes = useStyles();
   const [access, setAccess] = useState(acl);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [snackBarType, setSnackbarType] = useState(
-    "success" as AlertProps["severity"]
-  );
-  const [snackBarMessage, setSnackbarMessage] = useState("");
+  const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
 
   if (!permission) return null;
   if (!access.control) return null;
@@ -170,20 +230,23 @@ export default function PermissionsForm({
   const savePermissions = savePermissionsHandler({
     access,
     iri,
-    setSnackbarMessage,
-    setSnackbarType,
+    setMessage,
+    setSeverity,
+    setDialogOpen,
+    setAlertOpen,
     webId,
   });
 
-  const handleSaveClick = async () => {
-    if (warnOnSubmit) {
-      setDialogOpen(true);
-    } else {
-      setDialogOpen(false);
-      await savePermissions();
-      setSnackbarOpen(true);
-    }
-  };
+  const handleSaveClick = saveHandler({
+    savePermissions,
+    setDialogOpen,
+    setAlertOpen,
+    warnOnSubmit,
+  });
+  const readChange = setPermissionHandler(access, "read", setAccess);
+  const writeChange = setPermissionHandler(access, "write", setAccess);
+  const appendChange = setPermissionHandler(access, "append", setAccess);
+  const controlChange = setPermissionHandler(access, "control", setAccess);
 
   return (
     // prettier-ignore
@@ -196,97 +259,15 @@ export default function PermissionsForm({
         </span>
       </summary>
       <List>
-        <ListItem className={classes.listItem}>
-          <FormControlLabel
-            classes={{ label: classes.label }}
-            label="Read"
-            control={(
-              <Checkbox
-                classes={{ root: classes.checkbox }}
-                checked={access.read}
-                name="read"
-                onChange={setPermissionHandler(
-                  access,
-                  "read",
-                  setAccess
-                )}
-              />
-            )}
-          />
-        </ListItem>
-
-        <ListItem className={classes.listItem}>
-          <FormControlLabel
-            classes={{ label: classes.label }}
-            label="Write"
-            control={(
-              <Checkbox
-                classes={{ root: classes.checkbox }}
-                checked={access.write}
-                name="write"
-                onChange={setPermissionHandler(
-                  access,
-                  "write",
-                  setAccess
-                )}
-              />
-            )}
-          />
-        </ListItem>
-
-        <ListItem className={classes.listItem}>
-          <FormControlLabel
-            classes={{ label: classes.label }}
-            label="Append"
-            control={(
-              <Checkbox
-                classes={{ root: classes.checkbox }}
-                checked={access.append}
-                name="append"
-                onChange={setPermissionHandler(
-                  access,
-                  "append",
-                  setAccess
-                )}
-              />
-            )}
-          />
-        </ListItem>
-
-        <ListItem className={classes.listItem}>
-          <FormControlLabel
-            classes={{ label: classes.label }}
-            label="Control"
-            control={(
-              <Checkbox
-                classes={{ root: classes.checkbox }}
-                checked={access.control}
-                name="control"
-                onChange={setPermissionHandler(
-                  access,
-                  "control",
-                  setAccess
-                )}
-              />
-            )}
-          />
-        </ListItem>
+        <PermissionCheckbox value={access.read} classes={classes} label="read" onChange={readChange} />
+        <PermissionCheckbox value={access.write} classes={classes} label="write" onChange={writeChange} />
+        <PermissionCheckbox value={access.append} classes={classes} label="append" onChange={appendChange} />
+        <PermissionCheckbox value={access.control} classes={classes} label="control" onChange={controlChange} />
       </List>
 
       <Button onClick={handleSaveClick} variant="contained">
         Save
       </Button>
-
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert onClose={() => setSnackbarOpen(false)} severity={snackBarType}>
-          {snackBarMessage}
-        </Alert>
-      </Snackbar>
 
       {confirmationDialog({warn: warnOnSubmit, open: dialogOpen, setOpen: setDialogOpen, onConfirm: savePermissions})}
     </details>

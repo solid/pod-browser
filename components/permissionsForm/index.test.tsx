@@ -29,6 +29,8 @@ import PermissionsForm, {
   setPermissionHandler,
   savePermissionsHandler,
   confirmationDialog,
+  PermissionCheckbox,
+  saveHandler,
 } from "./index";
 
 describe("PermissionsForm", () => {
@@ -96,23 +98,27 @@ describe("setPermissionHandler", () => {
 
 describe("savePermissionsHandler", () => {
   test("it creates a savePermissions function", async () => {
-    const setSnackbarMessage = jest.fn();
-    const setSnackbarType = jest.fn();
-    const webId = "http://example.com/profile/card#me";
-    const iri = "http://example.com";
     const access = {
       read: true,
       write: true,
       append: true,
       control: true,
     } as LitPodFns.unstable_Access;
+    const iri = "http://example.com";
+    const setAlertOpen = jest.fn();
+    const setDialogOpen = jest.fn();
+    const setMessage = jest.fn();
+    const setSeverity = jest.fn();
+    const webId = "http://example.com/profile/card#me";
 
     const handler = savePermissionsHandler({
-      setSnackbarMessage,
-      setSnackbarType,
-      webId,
-      iri,
       access,
+      iri,
+      setMessage,
+      setSeverity,
+      setDialogOpen,
+      setAlertOpen,
+      webId,
     });
 
     jest
@@ -131,29 +137,36 @@ describe("savePermissionsHandler", () => {
     expect(LitPodFns.unstable_fetchLitDatasetWithAcl).toHaveBeenCalled();
     expect(LitPodFns.unstable_getResourceAcl).toHaveBeenCalled();
     expect(LitPodFns.unstable_setAgentResourceAccess).toHaveBeenCalled();
-    expect(setSnackbarMessage).toHaveBeenCalledWith(
+
+    expect(setDialogOpen).toHaveBeenCalledWith(false);
+    expect(setMessage).toHaveBeenCalledWith(
       "Your permissions have been saved!"
     );
+    expect(setAlertOpen).toHaveBeenCalledWith(true);
   });
 
   test("it show a message if the save errors out", async () => {
-    const setSnackbarMessage = jest.fn();
-    const setSnackbarType = jest.fn();
-    const webId = "http://example.com/profile/card#me";
-    const iri = "http://example.com";
     const access = {
       read: true,
       write: true,
       append: true,
       control: true,
     } as LitPodFns.unstable_Access;
+    const iri = "http://example.com";
+    const setAlertOpen = jest.fn();
+    const setDialogOpen = jest.fn();
+    const setMessage = jest.fn();
+    const setSeverity = jest.fn();
+    const webId = "http://example.com/profile/card#me";
 
     const handler = savePermissionsHandler({
-      setSnackbarMessage,
-      setSnackbarType,
-      webId,
-      iri,
       access,
+      iri,
+      setMessage,
+      setSeverity,
+      setDialogOpen,
+      setAlertOpen,
+      webId,
     });
 
     jest
@@ -174,10 +187,13 @@ describe("savePermissionsHandler", () => {
     expect(LitPodFns.unstable_fetchLitDatasetWithAcl).toHaveBeenCalled();
     expect(LitPodFns.unstable_getResourceAcl).toHaveBeenCalled();
     expect(LitPodFns.unstable_setAgentResourceAccess).toHaveBeenCalled();
-    expect(setSnackbarType).toHaveBeenCalledWith("error");
-    expect(setSnackbarMessage).toHaveBeenCalledWith(
+
+    expect(setDialogOpen).toHaveBeenCalledWith(false);
+    expect(setSeverity).toHaveBeenCalledWith("error");
+    expect(setMessage).toHaveBeenCalledWith(
       "There was an error saving permissions!"
     );
+    expect(setAlertOpen).toHaveBeenCalledWith(true);
   });
 });
 
@@ -206,20 +222,59 @@ describe("confirmationDialog", () => {
 
     expect(mountToJson(tree)).toMatchSnapshot();
   });
+});
 
-  test("it closes the dialog when cancel is clicked", () => {
+describe("PermissionCheckbox", () => {
+  test("it renders a permission checkbox", () => {
+    const onChange = jest.fn();
+    const classes = {
+      listItem: "listItem",
+      label: "label",
+      checkbox: "checkbox",
+    };
+    const label = "Read";
+    const value = true;
+
+    const tree = mount(
+      <PermissionCheckbox
+        value={value}
+        classes={classes}
+        label={label}
+        onChange={onChange}
+      />
+    );
+
+    expect(mountToJson(tree)).toMatchSnapshot();
+  });
+});
+
+describe("saveHandler", () => {
+  test("it opens the dialog if warnOnSubmit is true", async () => {
     const args = {
-      warn: true,
-      open: true,
-      setOpen: jest.fn(),
-      onConfirm: jest.fn(),
+      savePermissions: jest.fn(),
+      setDialogOpen: jest.fn(),
+      warnOnSubmit: true,
     };
 
-    const component = confirmationDialog(args);
-    const tree = mount(component as React.ReactElement);
+    const handler = saveHandler(args);
 
-    tree.find("button").first().simulate("click");
+    await handler();
 
-    expect(args.setOpen).toHaveBeenCalledWith(false);
+    expect(args.setDialogOpen).toHaveBeenCalledWith(true);
+  });
+
+  test("it saves the permissions, and shows an alert when warnOnSubmit is false", async () => {
+    const args = {
+      savePermissions: jest.fn(),
+      setDialogOpen: jest.fn(),
+      warnOnSubmit: false,
+    };
+
+    const handler = saveHandler(args);
+
+    await handler();
+
+    expect(args.setDialogOpen).toHaveBeenCalledWith(false);
+    expect(args.savePermissions).toHaveBeenCalled();
   });
 });

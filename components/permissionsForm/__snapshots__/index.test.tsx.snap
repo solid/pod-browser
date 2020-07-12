@@ -1,5 +1,341 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`PermissionCheckbox it renders a permission checkbox 1`] = `
+<PermissionCheckbox
+  classes={
+    Object {
+      "checkbox": "checkbox",
+      "label": "label",
+      "listItem": "listItem",
+    }
+  }
+  label="Read"
+  onChange={[MockFunction]}
+  value={true}
+>
+  <WithStyles(ForwardRef(ListItem))
+    className="listItem"
+  >
+    <ForwardRef(ListItem)
+      className="listItem"
+      classes={
+        Object {
+          "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
+          "button": "MuiListItem-button",
+          "container": "MuiListItem-container",
+          "dense": "MuiListItem-dense",
+          "disabled": "Mui-disabled",
+          "divider": "MuiListItem-divider",
+          "focusVisible": "Mui-focusVisible",
+          "gutters": "MuiListItem-gutters",
+          "root": "MuiListItem-root",
+          "secondaryAction": "MuiListItem-secondaryAction",
+          "selected": "Mui-selected",
+        }
+      }
+    >
+      <li
+        className="MuiListItem-root listItem MuiListItem-gutters"
+        disabled={false}
+      >
+        <WithStyles(ForwardRef(FormControlLabel))
+          classes={
+            Object {
+              "label": "label",
+            }
+          }
+          control={
+            <WithStyles(ForwardRef(Checkbox))
+              checked={true}
+              classes={
+                Object {
+                  "root": "checkbox",
+                }
+              }
+              name="read"
+              onChange={[MockFunction]}
+            />
+          }
+          key=".0"
+          label="Read"
+        >
+          <ForwardRef(FormControlLabel)
+            classes={
+              Object {
+                "disabled": "Mui-disabled",
+                "label": "MuiFormControlLabel-label label",
+                "labelPlacementBottom": "MuiFormControlLabel-labelPlacementBottom",
+                "labelPlacementStart": "MuiFormControlLabel-labelPlacementStart",
+                "labelPlacementTop": "MuiFormControlLabel-labelPlacementTop",
+                "root": "MuiFormControlLabel-root",
+              }
+            }
+            control={
+              <WithStyles(ForwardRef(Checkbox))
+                checked={true}
+                classes={
+                  Object {
+                    "root": "checkbox",
+                  }
+                }
+                name="read"
+                onChange={[MockFunction]}
+              />
+            }
+            label="Read"
+          >
+            <label
+              className="MuiFormControlLabel-root"
+            >
+              <WithStyles(ForwardRef(Checkbox))
+                checked={true}
+                classes={
+                  Object {
+                    "root": "checkbox",
+                  }
+                }
+                name="read"
+                onChange={[MockFunction]}
+              >
+                <ForwardRef(Checkbox)
+                  checked={true}
+                  classes={
+                    Object {
+                      "checked": "Mui-checked",
+                      "colorPrimary": "MuiCheckbox-colorPrimary",
+                      "colorSecondary": "MuiCheckbox-colorSecondary",
+                      "disabled": "Mui-disabled",
+                      "indeterminate": "MuiCheckbox-indeterminate",
+                      "root": "MuiCheckbox-root checkbox",
+                    }
+                  }
+                  name="read"
+                  onChange={[MockFunction]}
+                >
+                  <WithStyles(ForwardRef(SwitchBase))
+                    checked={true}
+                    checkedIcon={<Memo />}
+                    classes={
+                      Object {
+                        "checked": "Mui-checked",
+                        "disabled": "Mui-disabled",
+                        "root": "MuiCheckbox-root checkbox MuiCheckbox-colorSecondary",
+                      }
+                    }
+                    color="secondary"
+                    icon={<Memo />}
+                    inputProps={
+                      Object {
+                        "data-indeterminate": false,
+                      }
+                    }
+                    name="read"
+                    onChange={[MockFunction]}
+                    type="checkbox"
+                  >
+                    <ForwardRef(SwitchBase)
+                      checked={true}
+                      checkedIcon={<Memo />}
+                      classes={
+                        Object {
+                          "checked": "PrivateSwitchBase-checked-7 Mui-checked",
+                          "disabled": "PrivateSwitchBase-disabled-8 Mui-disabled",
+                          "input": "PrivateSwitchBase-input-9",
+                          "root": "PrivateSwitchBase-root-6 MuiCheckbox-root checkbox MuiCheckbox-colorSecondary",
+                        }
+                      }
+                      color="secondary"
+                      icon={<Memo />}
+                      inputProps={
+                        Object {
+                          "data-indeterminate": false,
+                        }
+                      }
+                      name="read"
+                      onChange={[MockFunction]}
+                      type="checkbox"
+                    >
+                      <WithStyles(ForwardRef(IconButton))
+                        className="PrivateSwitchBase-root-6 MuiCheckbox-root checkbox MuiCheckbox-colorSecondary PrivateSwitchBase-checked-7 Mui-checked"
+                        color="secondary"
+                        component="span"
+                        onBlur={[Function]}
+                        onFocus={[Function]}
+                        tabIndex={null}
+                      >
+                        <ForwardRef(IconButton)
+                          className="PrivateSwitchBase-root-6 MuiCheckbox-root checkbox MuiCheckbox-colorSecondary PrivateSwitchBase-checked-7 Mui-checked"
+                          classes={
+                            Object {
+                              "colorInherit": "MuiIconButton-colorInherit",
+                              "colorPrimary": "MuiIconButton-colorPrimary",
+                              "colorSecondary": "MuiIconButton-colorSecondary",
+                              "disabled": "Mui-disabled",
+                              "edgeEnd": "MuiIconButton-edgeEnd",
+                              "edgeStart": "MuiIconButton-edgeStart",
+                              "label": "MuiIconButton-label",
+                              "root": "MuiIconButton-root",
+                              "sizeSmall": "MuiIconButton-sizeSmall",
+                            }
+                          }
+                          color="secondary"
+                          component="span"
+                          onBlur={[Function]}
+                          onFocus={[Function]}
+                          tabIndex={null}
+                        >
+                          <WithStyles(ForwardRef(ButtonBase))
+                            centerRipple={true}
+                            className="MuiIconButton-root PrivateSwitchBase-root-6 MuiCheckbox-root checkbox MuiCheckbox-colorSecondary PrivateSwitchBase-checked-7 Mui-checked MuiIconButton-colorSecondary"
+                            component="span"
+                            disabled={false}
+                            focusRipple={true}
+                            onBlur={[Function]}
+                            onFocus={[Function]}
+                            tabIndex={null}
+                          >
+                            <ForwardRef(ButtonBase)
+                              centerRipple={true}
+                              className="MuiIconButton-root PrivateSwitchBase-root-6 MuiCheckbox-root checkbox MuiCheckbox-colorSecondary PrivateSwitchBase-checked-7 Mui-checked MuiIconButton-colorSecondary"
+                              classes={
+                                Object {
+                                  "disabled": "Mui-disabled",
+                                  "focusVisible": "Mui-focusVisible",
+                                  "root": "MuiButtonBase-root",
+                                }
+                              }
+                              component="span"
+                              disabled={false}
+                              focusRipple={true}
+                              onBlur={[Function]}
+                              onFocus={[Function]}
+                              tabIndex={null}
+                            >
+                              <span
+                                aria-disabled={false}
+                                className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-6 MuiCheckbox-root checkbox MuiCheckbox-colorSecondary PrivateSwitchBase-checked-7 Mui-checked MuiIconButton-colorSecondary"
+                                onBlur={[Function]}
+                                onDragLeave={[Function]}
+                                onFocus={[Function]}
+                                onKeyDown={[Function]}
+                                onKeyUp={[Function]}
+                                onMouseDown={[Function]}
+                                onMouseLeave={[Function]}
+                                onMouseUp={[Function]}
+                                onTouchEnd={[Function]}
+                                onTouchMove={[Function]}
+                                onTouchStart={[Function]}
+                                tabIndex={null}
+                              >
+                                <span
+                                  className="MuiIconButton-label"
+                                >
+                                  <input
+                                    checked={true}
+                                    className="PrivateSwitchBase-input-9"
+                                    data-indeterminate={false}
+                                    name="read"
+                                    onChange={[Function]}
+                                    type="checkbox"
+                                  />
+                                  <ForwardRef(CheckBoxIcon)>
+                                    <WithStyles(ForwardRef(SvgIcon))>
+                                      <ForwardRef(SvgIcon)
+                                        classes={
+                                          Object {
+                                            "colorAction": "MuiSvgIcon-colorAction",
+                                            "colorDisabled": "MuiSvgIcon-colorDisabled",
+                                            "colorError": "MuiSvgIcon-colorError",
+                                            "colorPrimary": "MuiSvgIcon-colorPrimary",
+                                            "colorSecondary": "MuiSvgIcon-colorSecondary",
+                                            "fontSizeInherit": "MuiSvgIcon-fontSizeInherit",
+                                            "fontSizeLarge": "MuiSvgIcon-fontSizeLarge",
+                                            "fontSizeSmall": "MuiSvgIcon-fontSizeSmall",
+                                            "root": "MuiSvgIcon-root",
+                                          }
+                                        }
+                                      >
+                                        <svg
+                                          aria-hidden={true}
+                                          className="MuiSvgIcon-root"
+                                          focusable="false"
+                                          viewBox="0 0 24 24"
+                                        >
+                                          <path
+                                            d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                                          />
+                                        </svg>
+                                      </ForwardRef(SvgIcon)>
+                                    </WithStyles(ForwardRef(SvgIcon))>
+                                  </ForwardRef(CheckBoxIcon)>
+                                </span>
+                              </span>
+                            </ForwardRef(ButtonBase)>
+                          </WithStyles(ForwardRef(ButtonBase))>
+                        </ForwardRef(IconButton)>
+                      </WithStyles(ForwardRef(IconButton))>
+                    </ForwardRef(SwitchBase)>
+                  </WithStyles(ForwardRef(SwitchBase))>
+                </ForwardRef(Checkbox)>
+              </WithStyles(ForwardRef(Checkbox))>
+              <WithStyles(ForwardRef(Typography))
+                className="MuiFormControlLabel-label label"
+                component="span"
+              >
+                <ForwardRef(Typography)
+                  className="MuiFormControlLabel-label label"
+                  classes={
+                    Object {
+                      "alignCenter": "MuiTypography-alignCenter",
+                      "alignJustify": "MuiTypography-alignJustify",
+                      "alignLeft": "MuiTypography-alignLeft",
+                      "alignRight": "MuiTypography-alignRight",
+                      "body1": "MuiTypography-body1",
+                      "body2": "MuiTypography-body2",
+                      "button": "MuiTypography-button",
+                      "caption": "MuiTypography-caption",
+                      "colorError": "MuiTypography-colorError",
+                      "colorInherit": "MuiTypography-colorInherit",
+                      "colorPrimary": "MuiTypography-colorPrimary",
+                      "colorSecondary": "MuiTypography-colorSecondary",
+                      "colorTextPrimary": "MuiTypography-colorTextPrimary",
+                      "colorTextSecondary": "MuiTypography-colorTextSecondary",
+                      "displayBlock": "MuiTypography-displayBlock",
+                      "displayInline": "MuiTypography-displayInline",
+                      "gutterBottom": "MuiTypography-gutterBottom",
+                      "h1": "MuiTypography-h1",
+                      "h2": "MuiTypography-h2",
+                      "h3": "MuiTypography-h3",
+                      "h4": "MuiTypography-h4",
+                      "h5": "MuiTypography-h5",
+                      "h6": "MuiTypography-h6",
+                      "noWrap": "MuiTypography-noWrap",
+                      "overline": "MuiTypography-overline",
+                      "paragraph": "MuiTypography-paragraph",
+                      "root": "MuiTypography-root",
+                      "srOnly": "MuiTypography-srOnly",
+                      "subtitle1": "MuiTypography-subtitle1",
+                      "subtitle2": "MuiTypography-subtitle2",
+                    }
+                  }
+                  component="span"
+                >
+                  <span
+                    className="MuiTypography-root MuiFormControlLabel-label label MuiTypography-body1"
+                  >
+                    Read
+                  </span>
+                </ForwardRef(Typography)>
+              </WithStyles(ForwardRef(Typography))>
+            </label>
+          </ForwardRef(FormControlLabel)>
+        </WithStyles(ForwardRef(FormControlLabel))>
+      </li>
+    </ForwardRef(ListItem)>
+  </WithStyles(ForwardRef(ListItem))>
+</PermissionCheckbox>
+`;
+
 exports[`PermissionsForm Renders a permissions form 1`] = `
 <PermissionsForm
   iri="https://mypod.myhost.com"
@@ -385,707 +721,7 @@ exports[`confirmationDialog it returns a Dialog component when warn is true 1`] 
       disableBackdropClick={true}
       disableEscapeKeyDown={true}
       open={false}
-    >
-      <ForwardRef(Portal)
-        disablePortal={false}
-      >
-        <Portal
-          containerInfo={
-            <body>
-              <div
-                aria-hidden="true"
-                class="MuiDialog-root"
-                role="presentation"
-                style="position: fixed; z-index: 1300; right: 0px; bottom: 0px; top: 0px; left: 0px;"
-              >
-                <div
-                  aria-hidden="true"
-                  class="MuiBackdrop-root"
-                  style="opacity: 0; visibility: hidden;"
-                />
-                <div
-                  data-test="sentinelStart"
-                  tabindex="0"
-                />
-                <div
-                  class="MuiDialog-container MuiDialog-scrollPaper"
-                  role="none presentation"
-                  style="opacity: 0; visibility: hidden;"
-                  tabindex="-1"
-                >
-                  <div
-                    aria-labelledby="permission-edit-confirmation"
-                    class="MuiPaper-root MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthXs MuiPaper-elevation24 MuiPaper-rounded"
-                    role="dialog"
-                  >
-                    <div
-                      class="MuiDialogTitle-root"
-                    >
-                      <h2
-                        class="MuiTypography-root MuiTypography-h6"
-                      >
-                        Change Personal Access
-                      </h2>
-                    </div>
-                    <div
-                      class="MuiDialogContent-root MuiDialogContent-dividers"
-                    >
-                      <p>
-                        You are about to edit your own access to this resource. Are you sure you wish to continue?
-                      </p>
-                    </div>
-                    <div
-                      class="MuiDialogActions-root MuiDialogActions-spacing"
-                    >
-                      <button
-                        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary Mui-focusVisible Mui-focusVisible"
-                        tabindex="0"
-                        type="button"
-                      >
-                        <span
-                          class="MuiButton-label"
-                        >
-                          Cancel
-                        </span>
-                        <span
-                          class="MuiTouchRipple-root"
-                        >
-                          <span
-                            class="MuiTouchRipple-ripple MuiTouchRipple-rippleVisible MuiTouchRipple-ripplePulsate"
-                            style="width: 1px; height: 1px; top: -0.5px; left: -0.5px;"
-                          >
-                            <span
-                              class="MuiTouchRipple-child MuiTouchRipple-childPulsate"
-                            />
-                          </span>
-                        </span>
-                      </button>
-                      <button
-                        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary"
-                        tabindex="0"
-                        type="submit"
-                      >
-                        <span
-                          class="MuiButton-label"
-                        >
-                          Ok
-                        </span>
-                        <span
-                          class="MuiTouchRipple-root"
-                        />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  data-test="sentinelEnd"
-                  tabindex="0"
-                />
-              </div>
-            </body>
-          }
-        >
-          <div
-            className="MuiDialog-root"
-            onKeyDown={[Function]}
-            role="presentation"
-            style={
-              Object {
-                "bottom": 0,
-                "left": 0,
-                "position": "fixed",
-                "right": 0,
-                "top": 0,
-                "zIndex": 1300,
-              }
-            }
-          >
-            <WithStyles(ForwardRef(Backdrop))
-              onClick={[Function]}
-              open={false}
-              transitionDuration={
-                Object {
-                  "enter": 225,
-                  "exit": 195,
-                }
-              }
-            >
-              <ForwardRef(Backdrop)
-                classes={
-                  Object {
-                    "invisible": "MuiBackdrop-invisible",
-                    "root": "MuiBackdrop-root",
-                  }
-                }
-                onClick={[Function]}
-                open={false}
-                transitionDuration={
-                  Object {
-                    "enter": 225,
-                    "exit": 195,
-                  }
-                }
-              >
-                <ForwardRef(Fade)
-                  in={false}
-                  onClick={[Function]}
-                  timeout={
-                    Object {
-                      "enter": 225,
-                      "exit": 195,
-                    }
-                  }
-                >
-                  <Transition
-                    appear={true}
-                    enter={true}
-                    exit={true}
-                    in={false}
-                    mountOnEnter={false}
-                    onClick={[Function]}
-                    onEnter={[Function]}
-                    onEntered={[Function]}
-                    onEntering={[Function]}
-                    onExit={[Function]}
-                    onExited={[Function]}
-                    onExiting={[Function]}
-                    timeout={
-                      Object {
-                        "enter": 225,
-                        "exit": 195,
-                      }
-                    }
-                    unmountOnExit={false}
-                  >
-                    <div
-                      aria-hidden={true}
-                      className="MuiBackdrop-root"
-                      onClick={[Function]}
-                      style={
-                        Object {
-                          "opacity": 0,
-                          "visibility": "hidden",
-                        }
-                      }
-                    />
-                  </Transition>
-                </ForwardRef(Fade)>
-              </ForwardRef(Backdrop)>
-            </WithStyles(ForwardRef(Backdrop))>
-            <Unstable_TrapFocus
-              disableAutoFocus={false}
-              disableEnforceFocus={false}
-              disableRestoreFocus={false}
-              getDoc={[Function]}
-              isEnabled={[Function]}
-              open={false}
-            >
-              <div
-                data-test="sentinelStart"
-                tabIndex={0}
-              />
-              <ForwardRef(Fade)
-                appear={true}
-                in={false}
-                onEnter={[Function]}
-                onExited={[Function]}
-                role="none presentation"
-                tabIndex="-1"
-                timeout={
-                  Object {
-                    "enter": 225,
-                    "exit": 195,
-                  }
-                }
-              >
-                <Transition
-                  appear={true}
-                  enter={true}
-                  exit={true}
-                  in={false}
-                  mountOnEnter={false}
-                  onEnter={[Function]}
-                  onEntered={[Function]}
-                  onEntering={[Function]}
-                  onExit={[Function]}
-                  onExited={[Function]}
-                  onExiting={[Function]}
-                  role="none presentation"
-                  tabIndex="-1"
-                  timeout={
-                    Object {
-                      "enter": 225,
-                      "exit": 195,
-                    }
-                  }
-                  unmountOnExit={false}
-                >
-                  <div
-                    className="MuiDialog-container MuiDialog-scrollPaper"
-                    onMouseDown={[Function]}
-                    onMouseUp={[Function]}
-                    role="none presentation"
-                    style={
-                      Object {
-                        "opacity": 0,
-                        "visibility": "hidden",
-                      }
-                    }
-                    tabIndex="-1"
-                  >
-                    <WithStyles(ForwardRef(Paper))
-                      aria-labelledby="permission-edit-confirmation"
-                      className="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthXs"
-                      elevation={24}
-                      role="dialog"
-                    >
-                      <ForwardRef(Paper)
-                        aria-labelledby="permission-edit-confirmation"
-                        className="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthXs"
-                        classes={
-                          Object {
-                            "elevation0": "MuiPaper-elevation0",
-                            "elevation1": "MuiPaper-elevation1",
-                            "elevation10": "MuiPaper-elevation10",
-                            "elevation11": "MuiPaper-elevation11",
-                            "elevation12": "MuiPaper-elevation12",
-                            "elevation13": "MuiPaper-elevation13",
-                            "elevation14": "MuiPaper-elevation14",
-                            "elevation15": "MuiPaper-elevation15",
-                            "elevation16": "MuiPaper-elevation16",
-                            "elevation17": "MuiPaper-elevation17",
-                            "elevation18": "MuiPaper-elevation18",
-                            "elevation19": "MuiPaper-elevation19",
-                            "elevation2": "MuiPaper-elevation2",
-                            "elevation20": "MuiPaper-elevation20",
-                            "elevation21": "MuiPaper-elevation21",
-                            "elevation22": "MuiPaper-elevation22",
-                            "elevation23": "MuiPaper-elevation23",
-                            "elevation24": "MuiPaper-elevation24",
-                            "elevation3": "MuiPaper-elevation3",
-                            "elevation4": "MuiPaper-elevation4",
-                            "elevation5": "MuiPaper-elevation5",
-                            "elevation6": "MuiPaper-elevation6",
-                            "elevation7": "MuiPaper-elevation7",
-                            "elevation8": "MuiPaper-elevation8",
-                            "elevation9": "MuiPaper-elevation9",
-                            "outlined": "MuiPaper-outlined",
-                            "root": "MuiPaper-root",
-                            "rounded": "MuiPaper-rounded",
-                          }
-                        }
-                        elevation={24}
-                        role="dialog"
-                      >
-                        <div
-                          aria-labelledby="permission-edit-confirmation"
-                          className="MuiPaper-root MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthXs MuiPaper-elevation24 MuiPaper-rounded"
-                          role="dialog"
-                        >
-                          <WithStyles(ForwardRef(DialogTitle))>
-                            <ForwardRef(DialogTitle)
-                              classes={
-                                Object {
-                                  "root": "MuiDialogTitle-root",
-                                }
-                              }
-                            >
-                              <div
-                                className="MuiDialogTitle-root"
-                              >
-                                <WithStyles(ForwardRef(Typography))
-                                  component="h2"
-                                  variant="h6"
-                                >
-                                  <ForwardRef(Typography)
-                                    classes={
-                                      Object {
-                                        "alignCenter": "MuiTypography-alignCenter",
-                                        "alignJustify": "MuiTypography-alignJustify",
-                                        "alignLeft": "MuiTypography-alignLeft",
-                                        "alignRight": "MuiTypography-alignRight",
-                                        "body1": "MuiTypography-body1",
-                                        "body2": "MuiTypography-body2",
-                                        "button": "MuiTypography-button",
-                                        "caption": "MuiTypography-caption",
-                                        "colorError": "MuiTypography-colorError",
-                                        "colorInherit": "MuiTypography-colorInherit",
-                                        "colorPrimary": "MuiTypography-colorPrimary",
-                                        "colorSecondary": "MuiTypography-colorSecondary",
-                                        "colorTextPrimary": "MuiTypography-colorTextPrimary",
-                                        "colorTextSecondary": "MuiTypography-colorTextSecondary",
-                                        "displayBlock": "MuiTypography-displayBlock",
-                                        "displayInline": "MuiTypography-displayInline",
-                                        "gutterBottom": "MuiTypography-gutterBottom",
-                                        "h1": "MuiTypography-h1",
-                                        "h2": "MuiTypography-h2",
-                                        "h3": "MuiTypography-h3",
-                                        "h4": "MuiTypography-h4",
-                                        "h5": "MuiTypography-h5",
-                                        "h6": "MuiTypography-h6",
-                                        "noWrap": "MuiTypography-noWrap",
-                                        "overline": "MuiTypography-overline",
-                                        "paragraph": "MuiTypography-paragraph",
-                                        "root": "MuiTypography-root",
-                                        "srOnly": "MuiTypography-srOnly",
-                                        "subtitle1": "MuiTypography-subtitle1",
-                                        "subtitle2": "MuiTypography-subtitle2",
-                                      }
-                                    }
-                                    component="h2"
-                                    variant="h6"
-                                  >
-                                    <h2
-                                      className="MuiTypography-root MuiTypography-h6"
-                                    >
-                                      Change Personal Access
-                                    </h2>
-                                  </ForwardRef(Typography)>
-                                </WithStyles(ForwardRef(Typography))>
-                              </div>
-                            </ForwardRef(DialogTitle)>
-                          </WithStyles(ForwardRef(DialogTitle))>
-                          <WithStyles(ForwardRef(DialogContent))
-                            dividers={true}
-                          >
-                            <ForwardRef(DialogContent)
-                              classes={
-                                Object {
-                                  "dividers": "MuiDialogContent-dividers",
-                                  "root": "MuiDialogContent-root",
-                                }
-                              }
-                              dividers={true}
-                            >
-                              <div
-                                className="MuiDialogContent-root MuiDialogContent-dividers"
-                              >
-                                <p>
-                                  You are about to edit your own access to this resource. Are you sure you wish to continue?
-                                </p>
-                              </div>
-                            </ForwardRef(DialogContent)>
-                          </WithStyles(ForwardRef(DialogContent))>
-                          <WithStyles(ForwardRef(DialogActions))>
-                            <ForwardRef(DialogActions)
-                              classes={
-                                Object {
-                                  "root": "MuiDialogActions-root",
-                                  "spacing": "MuiDialogActions-spacing",
-                                }
-                              }
-                            >
-                              <div
-                                className="MuiDialogActions-root MuiDialogActions-spacing"
-                              >
-                                <WithStyles(ForwardRef(Button))
-                                  autoFocus={true}
-                                  color="primary"
-                                  onClick={[Function]}
-                                >
-                                  <ForwardRef(Button)
-                                    autoFocus={true}
-                                    classes={
-                                      Object {
-                                        "colorInherit": "MuiButton-colorInherit",
-                                        "contained": "MuiButton-contained",
-                                        "containedPrimary": "MuiButton-containedPrimary",
-                                        "containedSecondary": "MuiButton-containedSecondary",
-                                        "containedSizeLarge": "MuiButton-containedSizeLarge",
-                                        "containedSizeSmall": "MuiButton-containedSizeSmall",
-                                        "disableElevation": "MuiButton-disableElevation",
-                                        "disabled": "Mui-disabled",
-                                        "endIcon": "MuiButton-endIcon",
-                                        "focusVisible": "Mui-focusVisible",
-                                        "fullWidth": "MuiButton-fullWidth",
-                                        "iconSizeLarge": "MuiButton-iconSizeLarge",
-                                        "iconSizeMedium": "MuiButton-iconSizeMedium",
-                                        "iconSizeSmall": "MuiButton-iconSizeSmall",
-                                        "label": "MuiButton-label",
-                                        "outlined": "MuiButton-outlined",
-                                        "outlinedPrimary": "MuiButton-outlinedPrimary",
-                                        "outlinedSecondary": "MuiButton-outlinedSecondary",
-                                        "outlinedSizeLarge": "MuiButton-outlinedSizeLarge",
-                                        "outlinedSizeSmall": "MuiButton-outlinedSizeSmall",
-                                        "root": "MuiButton-root",
-                                        "sizeLarge": "MuiButton-sizeLarge",
-                                        "sizeSmall": "MuiButton-sizeSmall",
-                                        "startIcon": "MuiButton-startIcon",
-                                        "text": "MuiButton-text",
-                                        "textPrimary": "MuiButton-textPrimary",
-                                        "textSecondary": "MuiButton-textSecondary",
-                                        "textSizeLarge": "MuiButton-textSizeLarge",
-                                        "textSizeSmall": "MuiButton-textSizeSmall",
-                                      }
-                                    }
-                                    color="primary"
-                                    onClick={[Function]}
-                                  >
-                                    <WithStyles(ForwardRef(ButtonBase))
-                                      autoFocus={true}
-                                      className="MuiButton-root MuiButton-text MuiButton-textPrimary"
-                                      component="button"
-                                      disabled={false}
-                                      focusRipple={true}
-                                      focusVisibleClassName="Mui-focusVisible"
-                                      onClick={[Function]}
-                                      type="button"
-                                    >
-                                      <ForwardRef(ButtonBase)
-                                        autoFocus={true}
-                                        className="MuiButton-root MuiButton-text MuiButton-textPrimary"
-                                        classes={
-                                          Object {
-                                            "disabled": "Mui-disabled",
-                                            "focusVisible": "Mui-focusVisible",
-                                            "root": "MuiButtonBase-root",
-                                          }
-                                        }
-                                        component="button"
-                                        disabled={false}
-                                        focusRipple={true}
-                                        focusVisibleClassName="Mui-focusVisible"
-                                        onClick={[Function]}
-                                        type="button"
-                                      >
-                                        <button
-                                          autoFocus={true}
-                                          className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary Mui-focusVisible Mui-focusVisible"
-                                          disabled={false}
-                                          onBlur={[Function]}
-                                          onClick={[Function]}
-                                          onDragLeave={[Function]}
-                                          onFocus={[Function]}
-                                          onKeyDown={[Function]}
-                                          onKeyUp={[Function]}
-                                          onMouseDown={[Function]}
-                                          onMouseLeave={[Function]}
-                                          onMouseUp={[Function]}
-                                          onTouchEnd={[Function]}
-                                          onTouchMove={[Function]}
-                                          onTouchStart={[Function]}
-                                          tabIndex={0}
-                                          type="button"
-                                        >
-                                          <span
-                                            className="MuiButton-label"
-                                          >
-                                            Cancel
-                                          </span>
-                                          <WithStyles(memo)
-                                            center={false}
-                                          >
-                                            <ForwardRef(TouchRipple)
-                                              center={false}
-                                              classes={
-                                                Object {
-                                                  "child": "MuiTouchRipple-child",
-                                                  "childLeaving": "MuiTouchRipple-childLeaving",
-                                                  "childPulsate": "MuiTouchRipple-childPulsate",
-                                                  "ripple": "MuiTouchRipple-ripple",
-                                                  "ripplePulsate": "MuiTouchRipple-ripplePulsate",
-                                                  "rippleVisible": "MuiTouchRipple-rippleVisible",
-                                                  "root": "MuiTouchRipple-root",
-                                                }
-                                              }
-                                            >
-                                              <span
-                                                className="MuiTouchRipple-root"
-                                              >
-                                                <TransitionGroup
-                                                  childFactory={[Function]}
-                                                  component={null}
-                                                  exit={true}
-                                                >
-                                                  <Ripple
-                                                    classes={
-                                                      Object {
-                                                        "child": "MuiTouchRipple-child",
-                                                        "childLeaving": "MuiTouchRipple-childLeaving",
-                                                        "childPulsate": "MuiTouchRipple-childPulsate",
-                                                        "ripple": "MuiTouchRipple-ripple",
-                                                        "ripplePulsate": "MuiTouchRipple-ripplePulsate",
-                                                        "rippleVisible": "MuiTouchRipple-rippleVisible",
-                                                        "root": "MuiTouchRipple-root",
-                                                      }
-                                                    }
-                                                    exit={true}
-                                                    in={true}
-                                                    key=".$0"
-                                                    onExited={[Function]}
-                                                    pulsate={true}
-                                                    rippleSize={1}
-                                                    rippleX={0}
-                                                    rippleY={0}
-                                                    timeout={550}
-                                                  >
-                                                    <span
-                                                      className="MuiTouchRipple-ripple MuiTouchRipple-rippleVisible MuiTouchRipple-ripplePulsate"
-                                                      style={
-                                                        Object {
-                                                          "height": 1,
-                                                          "left": -0.5,
-                                                          "top": -0.5,
-                                                          "width": 1,
-                                                        }
-                                                      }
-                                                    >
-                                                      <span
-                                                        className="MuiTouchRipple-child MuiTouchRipple-childPulsate"
-                                                      />
-                                                    </span>
-                                                  </Ripple>
-                                                </TransitionGroup>
-                                              </span>
-                                            </ForwardRef(TouchRipple)>
-                                          </WithStyles(memo)>
-                                        </button>
-                                      </ForwardRef(ButtonBase)>
-                                    </WithStyles(ForwardRef(ButtonBase))>
-                                  </ForwardRef(Button)>
-                                </WithStyles(ForwardRef(Button))>
-                                <WithStyles(ForwardRef(Button))
-                                  color="primary"
-                                  onClick={[MockFunction]}
-                                  type="submit"
-                                >
-                                  <ForwardRef(Button)
-                                    classes={
-                                      Object {
-                                        "colorInherit": "MuiButton-colorInherit",
-                                        "contained": "MuiButton-contained",
-                                        "containedPrimary": "MuiButton-containedPrimary",
-                                        "containedSecondary": "MuiButton-containedSecondary",
-                                        "containedSizeLarge": "MuiButton-containedSizeLarge",
-                                        "containedSizeSmall": "MuiButton-containedSizeSmall",
-                                        "disableElevation": "MuiButton-disableElevation",
-                                        "disabled": "Mui-disabled",
-                                        "endIcon": "MuiButton-endIcon",
-                                        "focusVisible": "Mui-focusVisible",
-                                        "fullWidth": "MuiButton-fullWidth",
-                                        "iconSizeLarge": "MuiButton-iconSizeLarge",
-                                        "iconSizeMedium": "MuiButton-iconSizeMedium",
-                                        "iconSizeSmall": "MuiButton-iconSizeSmall",
-                                        "label": "MuiButton-label",
-                                        "outlined": "MuiButton-outlined",
-                                        "outlinedPrimary": "MuiButton-outlinedPrimary",
-                                        "outlinedSecondary": "MuiButton-outlinedSecondary",
-                                        "outlinedSizeLarge": "MuiButton-outlinedSizeLarge",
-                                        "outlinedSizeSmall": "MuiButton-outlinedSizeSmall",
-                                        "root": "MuiButton-root",
-                                        "sizeLarge": "MuiButton-sizeLarge",
-                                        "sizeSmall": "MuiButton-sizeSmall",
-                                        "startIcon": "MuiButton-startIcon",
-                                        "text": "MuiButton-text",
-                                        "textPrimary": "MuiButton-textPrimary",
-                                        "textSecondary": "MuiButton-textSecondary",
-                                        "textSizeLarge": "MuiButton-textSizeLarge",
-                                        "textSizeSmall": "MuiButton-textSizeSmall",
-                                      }
-                                    }
-                                    color="primary"
-                                    onClick={[MockFunction]}
-                                    type="submit"
-                                  >
-                                    <WithStyles(ForwardRef(ButtonBase))
-                                      className="MuiButton-root MuiButton-text MuiButton-textPrimary"
-                                      component="button"
-                                      disabled={false}
-                                      focusRipple={true}
-                                      focusVisibleClassName="Mui-focusVisible"
-                                      onClick={[MockFunction]}
-                                      type="submit"
-                                    >
-                                      <ForwardRef(ButtonBase)
-                                        className="MuiButton-root MuiButton-text MuiButton-textPrimary"
-                                        classes={
-                                          Object {
-                                            "disabled": "Mui-disabled",
-                                            "focusVisible": "Mui-focusVisible",
-                                            "root": "MuiButtonBase-root",
-                                          }
-                                        }
-                                        component="button"
-                                        disabled={false}
-                                        focusRipple={true}
-                                        focusVisibleClassName="Mui-focusVisible"
-                                        onClick={[MockFunction]}
-                                        type="submit"
-                                      >
-                                        <button
-                                          className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary"
-                                          disabled={false}
-                                          onBlur={[Function]}
-                                          onClick={[MockFunction]}
-                                          onDragLeave={[Function]}
-                                          onFocus={[Function]}
-                                          onKeyDown={[Function]}
-                                          onKeyUp={[Function]}
-                                          onMouseDown={[Function]}
-                                          onMouseLeave={[Function]}
-                                          onMouseUp={[Function]}
-                                          onTouchEnd={[Function]}
-                                          onTouchMove={[Function]}
-                                          onTouchStart={[Function]}
-                                          tabIndex={0}
-                                          type="submit"
-                                        >
-                                          <span
-                                            className="MuiButton-label"
-                                          >
-                                            Ok
-                                          </span>
-                                          <WithStyles(memo)
-                                            center={false}
-                                          >
-                                            <ForwardRef(TouchRipple)
-                                              center={false}
-                                              classes={
-                                                Object {
-                                                  "child": "MuiTouchRipple-child",
-                                                  "childLeaving": "MuiTouchRipple-childLeaving",
-                                                  "childPulsate": "MuiTouchRipple-childPulsate",
-                                                  "ripple": "MuiTouchRipple-ripple",
-                                                  "ripplePulsate": "MuiTouchRipple-ripplePulsate",
-                                                  "rippleVisible": "MuiTouchRipple-rippleVisible",
-                                                  "root": "MuiTouchRipple-root",
-                                                }
-                                              }
-                                            >
-                                              <span
-                                                className="MuiTouchRipple-root"
-                                              >
-                                                <TransitionGroup
-                                                  childFactory={[Function]}
-                                                  component={null}
-                                                  exit={true}
-                                                />
-                                              </span>
-                                            </ForwardRef(TouchRipple)>
-                                          </WithStyles(memo)>
-                                        </button>
-                                      </ForwardRef(ButtonBase)>
-                                    </WithStyles(ForwardRef(ButtonBase))>
-                                  </ForwardRef(Button)>
-                                </WithStyles(ForwardRef(Button))>
-                              </div>
-                            </ForwardRef(DialogActions)>
-                          </WithStyles(ForwardRef(DialogActions))>
-                        </div>
-                      </ForwardRef(Paper)>
-                    </WithStyles(ForwardRef(Paper))>
-                  </div>
-                </Transition>
-              </ForwardRef(Fade)>
-              <div
-                data-test="sentinelEnd"
-                tabIndex={0}
-              />
-            </Unstable_TrapFocus>
-          </div>
-        </Portal>
-      </ForwardRef(Portal)>
-    </ForwardRef(Modal)>
+    />
   </ForwardRef(Dialog)>
 </WithStyles(ForwardRef(Dialog))>
 `;
