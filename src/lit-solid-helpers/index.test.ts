@@ -22,7 +22,9 @@
 /* eslint-disable camelcase */
 import { ldp, space } from "rdf-namespaces";
 import * as litSolidFns from "@solid/lit-pod";
-import {
+import * as litSolidHelpers from "./index";
+
+const {
   displayPermissions,
   displayTypes,
   fetchFileWithAcl,
@@ -39,7 +41,7 @@ import {
   normalizePermissions,
   parseStringAcl,
   permissionsFromWacAllowHeaders,
-} from "./index";
+} = litSolidHelpers;
 
 const {
   addIri,
@@ -560,6 +562,30 @@ describe("fetchFileWithAcl", () => {
     expect(iri).toEqual("some iri");
     expect(types).toContain("type");
     expect(permissions).toHaveLength(2);
+  });
+
+  test("it defaults to empty permissions if none are returned", async () => {
+    jest.spyOn(litSolidFns, "unstable_fetchFile").mockResolvedValue({
+      text: "file contents",
+      resourceInfo: {
+        contentType: "type",
+      },
+    });
+
+    const { permissions } = await fetchFileWithAcl("some iri");
+
+    expect(permissions).toHaveLength(0);
+  });
+
+  test("it defaults to an empty array if there is no type", async () => {
+    jest.spyOn(litSolidFns, "unstable_fetchFile").mockResolvedValue({
+      text: "file contents",
+      resourceInfo: {},
+    });
+
+    const { types } = await fetchFileWithAcl("some iri");
+
+    expect(types).toHaveLength(0);
   });
 });
 

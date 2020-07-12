@@ -21,7 +21,7 @@
 
 /* eslint-disable camelcase */
 import * as ReactFns from "react";
-import { mount } from "enzyme";
+import { mount, render } from "enzyme";
 import { mountToJson } from "enzyme-to-json";
 import * as LitPodFns from "@solid/lit-pod";
 import { NormalizedPermission } from "../../src/lit-solid-helpers";
