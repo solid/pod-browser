@@ -740,6 +740,7 @@ describe("savePermissions", () => {
       dataset,
       updatedAcl
     );
+
     expect(response).toEqual("response");
   });
 

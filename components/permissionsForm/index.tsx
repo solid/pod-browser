@@ -20,7 +20,14 @@
  */
 
 /* eslint-disable camelcase */
-import { Dispatch, ReactElement, useContext, useEffect, useState } from "react";
+import {
+  Dispatch,
+  ReactElement,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import { StyleRules } from "@material-ui/styles";
 import { AlertProps } from "@material-ui/lab/Alert";

@@ -113,6 +113,7 @@ describe("Contents", () => {
     const tree = mountToJson(<Contents iri={iri} action="details" />);
 
     expect(tree).toMatchSnapshot();
+
   });
 
   test("it renders a ResourceSharing component when there's data and the action is sharing", () => {

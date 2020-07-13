@@ -26,9 +26,9 @@ import { shallowToJson } from "enzyme-to-json";
 import { mountToJson } from "../../../__testUtils/mountWithTheme";
 import DetailsMenuContext, { DetailsMenuProvider } from "./index";
 
-const { useContext, ReactElement } = ReactFns;
+const { useContext } = ReactFns;
 
-function ChildComponent(): ReactElement {
+function ChildComponent(): ReactFns.ReactElement {
   const { menuOpen, setMenuOpen, action, setAction, iri, setIri } = useContext(
     DetailsMenuContext
   );
