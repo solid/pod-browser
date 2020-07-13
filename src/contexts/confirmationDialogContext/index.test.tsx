@@ -19,45 +19,46 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
+import { useContext, ReactElement } from "react";
+import { shallow } from "enzyme";
+import { shallowToJson } from "enzyme-to-json";
+import ConfirmationDialogContext, { ConfirmationDialogProvider } from "./index";
 
-const smallFontSize = {
-  fontSize: "0.75rem",
-};
+function ChildComponent(): ReactElement {
+  const {
+    confirmed,
+    content,
+    open,
+    setConfirmed,
+    setContent,
+    setOpen,
+    setTitle,
+    title,
+  } = useContext(ConfirmationDialogContext);
 
-const styles = (theme: PrismTheme) => {
-  return createStyles(theme, [], {
-    container: {
-      display: "block",
-      position: "relative",
-    },
-    listItem: {
-      paddingBottom: 0,
-      paddingTop: 0,
-    },
-    selectionClosed: {
-      display: "none",
-    },
-    selectionOpen: {
-      display: "block",
-    },
-    summary: {
-      ...smallFontSize,
-      listStyle: "none",
-      display: "flex",
-      flexWrap: "nowrap",
-      alignItems: "center",
-      justifyContent: "space-between",
-      width: 140,
-    },
-    selectIcon: {
-      marginLeft: "auto",
-    },
-    label: smallFontSize,
-    checkbox: {
-      padding: 0,
-    }
+  setOpen(true);
+  setContent("This is my content");
+  setConfirmed(true);
+  setTitle("This is my title");
+
+  return (
+    <div>
+      <div className="title">{title}</div>
+      <div className="content">{content}</div>
+      <div className="confirmed">{confirmed ? "true" : "false"}</div>
+      <div className="open">{open ? "true" : "false"}</div>
+    </div>
+  );
+}
+
+describe("ConfirmationDialogContext", () => {
+  test("it has context data", () => {
+    const component = shallow(
+      <ConfirmationDialogProvider>
+        <ChildComponent />
+      </ConfirmationDialogProvider>
+    );
+
+    expect(shallowToJson(component)).toMatchSnapshot();
   });
-};
-
-export default styles;
+});

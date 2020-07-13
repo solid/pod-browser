@@ -19,33 +19,70 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement, useContext } from "react";
+import { ReactElement, useContext, useState } from "react";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { Drawer, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 import styles from "./styles";
 import useEscKey from "../../src/effects/useEscKey";
+import DetailsLoading from "../detailsLoading";
+import ResourceDetails from "../resourceDetails";
+import Sharing from "../resourceDetails/sharing";
+import { useFetchResourceDetails } from "../../src/hooks/litPod";
+import { parseUrl } from "../../src/stringHelpers";
 
 const useStyles = makeStyles(styles);
 
-export default function DetailsContextMenu(): ReactElement {
-  const { setMenuOpen, contents, menuOpen } = useContext(DetailsMenuContext);
+interface IContentsProps {
+  action: string;
+  iri: string;
+}
+
+export function Contents({ action, iri }: IContentsProps): ReactElement | null {
+  const { pathname } = parseUrl(iri);
+  const { data, error } = useFetchResourceDetails(iri);
+
+  if (!data) return <DetailsLoading />;
+  if (error) return "error";
+
+  const { permissions } = data;
+
+  switch (action) {
+    case "sharing":
+      return <Sharing iri={iri} name={pathname} permissions={permissions} />;
+
+    default:
+      return <ResourceDetails resource={data} />;
+  }
+}
+
+export default function DetailsContextMenu(): ReactElement | null {
+  const [resource, setResource] = useState(null);
+  const { menuOpen, setMenuOpen, action, iri } = useContext(DetailsMenuContext);
   const classes = useStyles();
-  const closeDrawer = () => setMenuOpen(null);
+  const closeDrawer = () => setMenuOpen(false);
+
   useEscKey(closeDrawer);
 
+  if (!iri) return null;
+
   return (
+    // prettier-ignore
     <Drawer
       anchor="right"
       variant="persistent"
-      open={!!menuOpen}
+      open={menuOpen}
       classes={{ paper: classes.drawerPaper }}
     >
       <IconButton className={classes.drawerCloseButton} onClick={closeDrawer}>
         <ChevronRightIcon />
       </IconButton>
-      <div className={classes.drawerContent}>{contents}</div>
+      <div className={classes.drawerContent}>
+        {!iri
+          ? <DetailsLoading />
+          : <Contents action={action} iri={iri as string} />}
+      </div>
     </Drawer>
   );
 }

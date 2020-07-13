@@ -19,20 +19,29 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useContext, ReactElement } from "react";
+import * as ReactFns from "react";
+import * as RouterFns from "next/router";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
+import { mountToJson } from "../../../__testUtils/mountWithTheme";
 import DetailsMenuContext, { DetailsMenuProvider } from "./index";
 
+const { useContext, ReactElement } = ReactFns;
+
 function ChildComponent(): ReactElement {
-  const { menuOpen, contents, setMenuContents } = useContext(
+  const { menuOpen, setMenuOpen, action, setAction, iri, setIri } = useContext(
     DetailsMenuContext
   );
-  setMenuContents("contents");
+
+  setAction("sharing");
+  setIri("iri");
+  setMenuOpen(true);
+
   return (
     <div>
       <div className="menuOpen">{menuOpen ? "true" : "false"}</div>
-      <div className="contents">{contents}</div>
+      <div className="action">{action}</div>
+      <div className="iri">{iri}</div>
     </div>
   );
 }
@@ -46,5 +55,33 @@ describe("DetailsMenuContext", () => {
     );
 
     expect(shallowToJson(component)).toMatchSnapshot();
+  });
+
+  test("it sets the parameters from the router", () => {
+    const action = "details";
+    const iri = "iri";
+    const setMenuOpen = jest.fn();
+    const setAction = jest.fn();
+    const setIri = jest.fn();
+
+    jest
+      .spyOn(RouterFns, "useRouter")
+      .mockReturnValueOnce({ query: { action, iri } });
+
+    jest
+      .spyOn(ReactFns, "useState")
+      .mockReturnValueOnce([false, setMenuOpen])
+      .mockReturnValueOnce([null, setAction])
+      .mockReturnValueOnce([null, setIri]);
+
+    const tree = mountToJson(
+      <DetailsMenuProvider>
+        <ChildComponent />
+      </DetailsMenuProvider>
+    );
+
+    expect(setMenuOpen).toHaveBeenCalledWith(true);
+    expect(setAction).toHaveBeenCalledWith("details");
+    expect(setIri).toHaveBeenCalledWith(iri);
   });
 });

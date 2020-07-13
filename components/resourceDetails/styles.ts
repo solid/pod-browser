@@ -27,7 +27,17 @@ const rules = {
     marginRight: "1rem",
   },
   centeredSection: {
-    padding: "1rem",
+    paddingLeft: "1rem",
+    paddingRight: "1rem",
+  },
+  headerSection: {
+    paddingLeft: "1rem",
+    paddingRight: "1rem",
+    display: "flex",
+    alignItems: "flex-start",
+    "& button": {
+      marginLeft: "auto",
+    },
   },
   raw: {
     height: "100%",
@@ -39,6 +49,8 @@ const rules = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "flex-start",
+    paddingRight: 0,
+    paddingLeft: 0,
   },
   formListItem: {
     display: "block",
@@ -49,6 +61,14 @@ const rules = {
   typeValue: {
     marginLeft: "auto",
   },
+  downloadButton: {
+    marginTop: "1rem" ,
+    marginBottom: "1rem" ,
+  },
+  agentInput: {
+    width: "100%",
+    marginBottom: "1rem",
+  }
 };
 
 export default function styles(theme: PrismTheme): StyleRules {

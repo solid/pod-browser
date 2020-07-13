@@ -19,27 +19,150 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { shallow, mount } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
+// import { shallow, mount } from "enzyme";
+// import { shallowToJson } from "enzyme-to-json";
 import * as ReactFns from "react";
-import DetailsContextMenu from "./index";
+import * as RouterFns from "next/router";
+import * as LitPodFns from "../../src/hooks/litPod";
+import * as LitSolidHelperFns from "../../src/lit-solid-helpers";
+import DetailsContextMenu, { Contents } from "./index";
+import { mountToJson } from "../../__testUtils/mountWithTheme";
 
 describe("Container view", () => {
-  test("Renders a the drawer", () => {
-    const tree = shallow(<DetailsContextMenu />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
+  test("it renders a loading view when context has no iri", () => {
+    const mockContext = {
+      menuOpen: true,
+      setMenuOpen: jest.fn(),
+    };
+
+    jest.spyOn(ReactFns, "useContext").mockReturnValueOnce(mockContext);
+
+    const tree = mountToJson(<DetailsContextMenu />);
+
+    expect(tree).toMatchSnapshot();
   });
 
-  test("Renders closes the drawer when the close button is clicked", () => {
-    const setMenuOpen = jest.fn();
+  test("it renders a Contents view when context has an iri", () => {
+    const iri = "/iri/";
+    const mockContext = {
+      menuOpen: true,
+      iri,
+      action: "details",
+      setMenuOpen: jest.fn(),
+    };
 
-    jest.spyOn(ReactFns, "useContext").mockImplementationOnce(() => {
-      return { setMenuOpen, menuOpen: true };
-    });
+    const data = {
+      iri,
+      types: ["Container"],
+      permissions: [
+        {
+          webId: "webId",
+          alias: "Full Control",
+          acl: { read: true, write: true, append: true, control: true },
+        },
+      ],
+    };
 
-    const tree = mount(<DetailsContextMenu />);
-    tree.find("WithStyles(ForwardRef(IconButton))").simulate("click");
+    jest
+      .spyOn(LitPodFns, "useFetchResourceDetails")
+      .mockReturnValueOnce({ data });
 
-    expect(setMenuOpen).toHaveBeenCalledWith(null);
+    jest.spyOn(ReactFns, "useContext").mockReturnValueOnce(mockContext);
+
+    jest
+      .spyOn(RouterFns, "useRouter")
+      .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
+
+    const tree = mountToJson(<DetailsContextMenu />);
+    expect(tree).toMatchSnapshot();
+  });
+});
+
+describe("Contents", () => {
+  test("it renders a DetailsLoading component if there's no data", () => {
+    jest.spyOn(LitPodFns, "useFetchResourceDetails").mockReturnValueOnce({});
+
+    jest
+      .spyOn(RouterFns, "useRouter")
+      .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
+
+    const tree = mountToJson(<Contents iri="/iri/" action="details" />);
+
+    expect(tree).toMatchSnapshot();
+  });
+
+  test("it renders a ResourceDetails component when there's data and the action is details", () => {
+    const iri = "/iri/";
+    const data = {
+      iri,
+      types: ["Container"],
+      permissions: [
+        {
+          webId: "webId",
+          alias: "Full Control",
+          acl: { read: true, write: true, append: true, control: true },
+        },
+      ],
+    };
+
+    jest
+      .spyOn(LitPodFns, "useFetchResourceDetails")
+      .mockReturnValueOnce({ data });
+
+    jest
+      .spyOn(RouterFns, "useRouter")
+      .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
+
+    const tree = mountToJson(<Contents iri={iri} action="details" />);
+
+    expect(tree).toMatchSnapshot();
+  });
+
+  test("it renders a Sharing component when there's data and the action is sharing", () => {
+    const iri = "/iri/";
+    const webId = "webId";
+    const mockContext = { session: { webId } };
+    const data = {
+      iri,
+      types: ["Container"],
+      permissions: [
+        {
+          profile: { webId, avatar: "/avatar" },
+          webId,
+          alias: "Full Control",
+          acl: { read: true, write: true, append: true, control: true },
+        },
+      ],
+    };
+
+    jest.spyOn(ReactFns, "useContext").mockReturnValueOnce(mockContext);
+
+    jest
+      .spyOn(LitPodFns, "useFetchResourceDetails")
+      .mockReturnValueOnce({ data });
+
+    jest
+      .spyOn(RouterFns, "useRouter")
+      .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
+
+    const tree = mountToJson(<Contents iri={iri} action="sharing" />);
+
+    expect(tree).toMatchSnapshot();
+  });
+
+  test("it renders 'error' component when there's an error", () => {
+    const iri = "/iri/";
+
+    jest
+      .spyOn(LitPodFns, "useFetchResourceDetails")
+      .mockReturnValueOnce({ data: {}, error: "Some error" });
+
+    jest
+      .spyOn(RouterFns, "useRouter")
+      .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
+
+    const tree = mountToJson(<Contents iri={iri} action="details" />);
+
+    expect(tree).toMatchSnapshot();
   });
 });

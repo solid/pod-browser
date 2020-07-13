@@ -19,116 +19,29 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement, useContext } from "react";
+import { ReactElement } from "react";
 import {
-  Avatar,
   Button,
   createStyles,
   Divider,
   List,
   ListItem,
+  ListItemIcon,
+  ListItemText,
   Typography,
 } from "@material-ui/core";
+import ShareIcon from "@material-ui/icons/Share";
+import { useRouter } from "next/router";
 import { makeStyles } from "@material-ui/styles";
 import { PrismTheme } from "@solid/lit-prism-patterns";
-import UserContext, { ISession } from "../../src/contexts/userContext";
-import PermissionsForm from "../permissionsForm";
-import DetailsLoading from "../detailsLoading";
-import { parseUrl } from "../../src/stringHelpers";
 import styles from "./styles";
-import {
-  getThirdPartyPermissions,
-  getUserPermissions,
-  NormalizedPermission,
-  NormalizedResource,
-  Profile,
-} from "../../src/lit-solid-helpers";
+import { IResourceDetails } from "../../src/lit-solid-helpers";
+import { parseUrl } from "../../src/stringHelpers";
 
-export function displayName({ nickname, name, webId }: Profile): string {
-  if (name) return name;
-  if (nickname) return nickname;
-  return webId;
-}
-
-export interface IPermission {
+interface IDownloadLink {
+  type: string;
   iri: string;
-  permission: NormalizedPermission | null;
-  classes: Record<string, string>;
-  warnOnSubmit: boolean;
-}
-
-export function Permission(props: IPermission): ReactElement | null {
-  const { permission, classes, warnOnSubmit, iri } = props;
-  if (!permission) return null;
-
-  const { webId, profile } = permission;
-  const { avatar } = profile;
-  const avatarSrc = avatar || undefined;
-
-  return (
-    <ListItem key={webId} className={classes.listItem}>
-      <Avatar
-        className={classes.avatar}
-        alt={displayName(profile)}
-        src={avatarSrc}
-      />
-      <Typography className={classes.detailText}>
-        {displayName(profile)}
-      </Typography>
-
-      <PermissionsForm
-        iri={iri}
-        permission={permission}
-        warnOnSubmit={warnOnSubmit}
-      />
-    </ListItem>
-  );
-}
-
-interface IThirdPartyPermissions {
-  iri: string;
-  thirdPartyPermissions: NormalizedPermission[] | null;
-  classes: Record<string, string>;
-}
-
-export function ThirdPartyPermissions(
-  props: IThirdPartyPermissions
-): ReactElement | null {
-  const { iri, thirdPartyPermissions, classes } = props;
-
-  if (!thirdPartyPermissions) return null;
-
-  if (thirdPartyPermissions.length === 0) {
-    return (
-      <section className={classes.centeredSection}>
-        <h5 className={classes["content-h5"]}>Sharing</h5>
-        <List>
-          <ListItem className={classes.listItem}>
-            <Typography className={classes.detailText}>
-              No 3rd party access
-            </Typography>
-          </ListItem>
-        </List>
-      </section>
-    );
-  }
-
-  return (
-    <section className={classes.centeredSection}>
-      <h5 className={classes["content-h5"]}>Sharing</h5>
-      <List>
-        {thirdPartyPermissions.map((permission) => (
-          <Permission
-            iri={iri}
-            permission={permission}
-            classes={classes}
-            key={permission.webId}
-            warnOnSubmit={false}
-          />
-        ))}
-      </List>
-    </section>
-  );
+  className: string;
 }
 
 export function displayType(types: string[] | undefined): string {
@@ -136,6 +49,10 @@ export function displayType(types: string[] | undefined): string {
   const [type] = types;
   return type;
 }
+
+const useStyles = makeStyles<PrismTheme>((theme) =>
+  createStyles(styles(theme))
+);
 
 export function forceDownload(name: string, file: Blob): void {
   const a = document.createElement("a");
@@ -163,81 +80,69 @@ export function downloadResource(iri: string) {
   };
 }
 
-interface IDownloadLink {
-  type: string;
-  iri: string;
-}
-
 export function DownloadLink(props: IDownloadLink): ReactElement | null {
-  const { type, iri } = props;
+  const { type, iri, className } = props;
   if (type.match(/container/i)) return null;
 
   return (
-    <Button variant="contained" onClick={downloadResource(iri)}>
+    <Button
+      variant="contained"
+      onClick={downloadResource(iri)}
+      className={className}
+    >
       Download
     </Button>
   );
 }
 
-const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme))
-);
-
-export interface Props extends NormalizedResource {
-  name?: string;
-  iri: string;
+interface IDetailsProps {
+  resource: IResourceDetails;
 }
 
 export default function ResourceDetails({
-  iri,
-  name = "",
-  types = [],
-  permissions,
-}: Props): ReactElement {
+  resource,
+}: IDetailsProps): ReactElement {
+  const router = useRouter();
   const classes = useStyles();
-  const { session } = useContext(UserContext);
-  const { webId } = session as ISession;
-  const userPermissions = getUserPermissions(webId, permissions);
-  const thirdPartyPermissions = getThirdPartyPermissions(webId, permissions);
+  const { pathname } = router;
+  const { iri, name, types } = resource;
   const type = displayType(types);
-
-  // TODO:
-  // Files without permissions throw an error in lit-pod.
-  if (!permissions) {
-    return <DetailsLoading resource={{ iri, name, types }} />;
-  }
 
   return (
     <>
-      <section className={classes.centeredSection}>
+      <section className={classes.headerSection}>
         <h3 className={classes["content-h3"]} title={iri}>
           {name}
         </h3>
       </section>
 
+      <Divider />
+
       <section className={classes.centeredSection}>
-        <h5 className={classes["content-h5"]}>Details</h5>
+        <h5 className={classes["content-h5"]}>Actions</h5>
+        <List>
+          <ListItem button>
+            <ListItemIcon>
+              <ShareIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="Sharing &amp; App Permissions"
+              onClick={async () => {
+                await router.replace({
+                  pathname,
+                  query: { action: "sharing", iri },
+                });
+              }}
+            />
+          </ListItem>
+        </List>
       </section>
 
       <Divider />
 
       <section className={classes.centeredSection}>
-        <h5 className={classes["content-h5"]}>My Access</h5>
-        <List>
-          <Permission
-            iri={iri}
-            permission={userPermissions}
-            classes={classes}
-            warnOnSubmit
-          />
-        </List>
+        <h5 className={classes["content-h5"]}>Details</h5>
       </section>
-
-      <ThirdPartyPermissions
-        iri={iri}
-        thirdPartyPermissions={thirdPartyPermissions}
-        classes={classes}
-      />
 
       <Divider />
 
@@ -257,7 +162,11 @@ export default function ResourceDetails({
       <Divider />
 
       <section className={classes.centeredSection}>
-        <DownloadLink type={type} iri={iri} />
+        <DownloadLink
+          type={type}
+          iri={iri}
+          className={classes.downloadButton}
+        />
       </section>
     </>
   );

@@ -28,9 +28,9 @@ import { NormalizedPermission } from "../../src/lit-solid-helpers";
 import PermissionsForm, {
   setPermissionHandler,
   savePermissionsHandler,
-  confirmationDialog,
   PermissionCheckbox,
   saveHandler,
+  toggleOpen,
 } from "./index";
 
 describe("PermissionsForm", () => {
@@ -45,31 +45,159 @@ describe("PermissionsForm", () => {
         read: true,
         write: true,
         append: true,
-        control: false,
+        control: true,
       },
     } as NormalizedPermission;
-
-    const setReadPermission = jest.fn();
-    const setWritePermission = jest.fn();
-    const setAppendPermission = jest.fn();
-    const setControlPermission = jest.fn();
-    const setSnackbarOpen = jest.fn();
-    const setDialogOpen = jest.fn();
-
-    jest
-      .spyOn(ReactFns, "useState")
-      .mockImplementationOnce(() => [true, setReadPermission])
-      .mockImplementationOnce(() => [true, setWritePermission])
-      .mockImplementationOnce(() => [true, setAppendPermission])
-      .mockImplementationOnce(() => [true, setControlPermission])
-      .mockImplementationOnce(() => [false, setDialogOpen])
-      .mockImplementationOnce(() => [false, setSnackbarOpen]);
 
     const tree = mount(
       <PermissionsForm iri={iri} permission={permission} warnOnSubmit={false} />
     );
 
     expect(mountToJson(tree)).toMatchSnapshot();
+  });
+
+  test("it returns null if control is false", () => {
+    const iri = "https://mypod.myhost.com";
+    const webId = "https://mypod.myhost.com/profile/card#me";
+    const permission = {
+      webId,
+      alias: "Full Control",
+      profile: { webId },
+      acl: {
+        read: true,
+        write: true,
+        append: true,
+        control: false,
+      },
+    } as NormalizedPermission;
+
+    const tree = mount(
+      <PermissionsForm iri={iri} permission={permission} warnOnSubmit={false} />
+    );
+
+    expect(mountToJson(tree)).toMatchSnapshot();
+  });
+
+  test("it sets up the confirmation dialog", () => {
+    const iri = "https://mypod.myhost.com";
+    const webId = "https://mypod.myhost.com/profile/card#me";
+    const permission = {
+      webId,
+      alias: "Full Control",
+      profile: { webId },
+      acl: {
+        read: true,
+        write: true,
+        append: true,
+        control: true,
+      },
+    } as NormalizedPermission;
+
+    const setMessage = jest.fn();
+    const setSeverity = jest.fn();
+    const setAlertOpen = jest.fn();
+    const setTitle = jest.fn();
+    const setOpen = jest.fn();
+    const setContent = jest.fn();
+    const setConfirmed = jest.fn();
+    const setAccess = jest.fn();
+    const setConfirmationSetup = jest.fn();
+    const setFormOpen = jest.fn();
+
+    jest
+      .spyOn(ReactFns, "useContext")
+      .mockReturnValueOnce({ setMessage, setSeverity, setAlertOpen })
+      .mockReturnValueOnce({
+        setTitle,
+        setOpen,
+        setContent,
+        setConfirmed,
+        confirmed: false,
+      });
+
+    jest
+      .spyOn(ReactFns, "useState")
+      .mockReturnValueOnce([permission.acl, setAccess])
+      .mockReturnValueOnce([false, setFormOpen])
+      .mockReturnValueOnce([false, setConfirmationSetup]);
+
+    jest.spyOn(ReactFns, "useEffect");
+
+    mount(
+      <PermissionsForm iri={iri} permission={permission} warnOnSubmit={false} />
+    );
+
+    expect(setTitle).toHaveBeenCalledWith("Confirm Access Permissions");
+    expect(setContent).toHaveBeenCalledWith(
+      <p>
+        You are about to change your own access to this resource, are you sure
+        you wish to continue?
+      </p>
+    );
+    expect(setConfirmationSetup).toHaveBeenCalledWith(true);
+  });
+
+  test("it saves the permissions when confirmed is true", () => {
+    const iri = "https://mypod.myhost.com";
+    const webId = "https://mypod.myhost.com/profile/card#me";
+    const permission = {
+      webId,
+      alias: "Full Control",
+      profile: { webId },
+      acl: {
+        read: true,
+        write: true,
+        append: true,
+        control: true,
+      },
+    } as NormalizedPermission;
+
+    const setMessage = jest.fn();
+    const setSeverity = jest.fn();
+    const setAlertOpen = jest.fn();
+    const setTitle = jest.fn();
+    const setOpen = jest.fn();
+    const setContent = jest.fn();
+    const setConfirmed = jest.fn();
+    const setAccess = jest.fn();
+    const setConfirmationSetup = jest.fn();
+    const setFormOpen = jest.fn();
+
+    jest
+      .spyOn(LitPodFns, "unstable_fetchLitDatasetWithAcl")
+      .mockResolvedValueOnce({});
+
+    jest.spyOn(LitPodFns, "unstable_getResourceAcl").mockResolvedValueOnce({});
+
+    jest
+      .spyOn(LitPodFns, "unstable_setAgentResourceAccess")
+      .mockResolvedValueOnce({});
+
+    jest
+      .spyOn(ReactFns, "useContext")
+      .mockReturnValueOnce({ setMessage, setSeverity, setAlertOpen })
+      .mockReturnValueOnce({
+        setTitle,
+        setOpen,
+        setContent,
+        setConfirmed,
+        confirmed: true,
+      });
+
+    jest
+      .spyOn(ReactFns, "useState")
+      .mockReturnValueOnce([permission.acl, setAccess])
+      .mockReturnValueOnce([false, setFormOpen])
+      .mockReturnValueOnce([false, setConfirmationSetup]);
+
+    jest.spyOn(ReactFns, "useEffect");
+
+    mount(
+      <PermissionsForm iri={iri} permission={permission} warnOnSubmit={false} />
+    );
+
+    expect(setOpen).toHaveBeenCalledWith(false);
+    expect(setConfirmed).toHaveBeenCalledWith(false);
   });
 });
 
@@ -104,40 +232,23 @@ describe("savePermissionsHandler", () => {
       append: true,
       control: true,
     } as LitPodFns.unstable_Access;
-    const iri = "http://example.com";
     const setAlertOpen = jest.fn();
     const setDialogOpen = jest.fn();
     const setMessage = jest.fn();
     const setSeverity = jest.fn();
-    const webId = "http://example.com/profile/card#me";
-
+    const onSave = jest.fn();
     const handler = savePermissionsHandler({
       access,
-      iri,
+      onSave,
+      setAlertOpen,
+      setDialogOpen,
       setMessage,
       setSeverity,
-      setDialogOpen,
-      setAlertOpen,
-      webId,
     });
 
-    jest
-      .spyOn(LitPodFns, "unstable_fetchLitDatasetWithAcl")
-      .mockImplementationOnce(jest.fn());
-
-    jest
-      .spyOn(LitPodFns, "unstable_getResourceAcl")
-      .mockImplementationOnce(jest.fn());
-
-    jest
-      .spyOn(LitPodFns, "unstable_setAgentResourceAccess")
-      .mockImplementationOnce(jest.fn());
     await handler();
 
-    expect(LitPodFns.unstable_fetchLitDatasetWithAcl).toHaveBeenCalled();
-    expect(LitPodFns.unstable_getResourceAcl).toHaveBeenCalled();
-    expect(LitPodFns.unstable_setAgentResourceAccess).toHaveBeenCalled();
-
+    expect(onSave).toHaveBeenCalledWith(access);
     expect(setDialogOpen).toHaveBeenCalledWith(false);
     expect(setMessage).toHaveBeenCalledWith(
       "Your permissions have been saved!"
@@ -152,41 +263,24 @@ describe("savePermissionsHandler", () => {
       append: true,
       control: true,
     } as LitPodFns.unstable_Access;
-    const iri = "http://example.com";
     const setAlertOpen = jest.fn();
     const setDialogOpen = jest.fn();
     const setMessage = jest.fn();
     const setSeverity = jest.fn();
-    const webId = "http://example.com/profile/card#me";
+    const onSave = () => {
+      throw new Error("boom");
+    };
 
     const handler = savePermissionsHandler({
       access,
-      iri,
+      onSave,
       setMessage,
       setSeverity,
       setDialogOpen,
       setAlertOpen,
-      webId,
     });
 
-    jest
-      .spyOn(LitPodFns, "unstable_fetchLitDatasetWithAcl")
-      .mockImplementationOnce(jest.fn());
-
-    jest
-      .spyOn(LitPodFns, "unstable_getResourceAcl")
-      .mockImplementationOnce(jest.fn());
-
-    jest
-      .spyOn(LitPodFns, "unstable_setAgentResourceAccess")
-      .mockImplementationOnce(() => {
-        throw new Error("boom");
-      });
     await handler();
-
-    expect(LitPodFns.unstable_fetchLitDatasetWithAcl).toHaveBeenCalled();
-    expect(LitPodFns.unstable_getResourceAcl).toHaveBeenCalled();
-    expect(LitPodFns.unstable_setAgentResourceAccess).toHaveBeenCalled();
 
     expect(setDialogOpen).toHaveBeenCalledWith(false);
     expect(setSeverity).toHaveBeenCalledWith("error");
@@ -194,33 +288,6 @@ describe("savePermissionsHandler", () => {
       "There was an error saving permissions!"
     );
     expect(setAlertOpen).toHaveBeenCalledWith(true);
-  });
-});
-
-describe("confirmationDialog", () => {
-  test("returns null when warn is false", () => {
-    const args = {
-      warn: false,
-      open: false,
-      setOpen: jest.fn(),
-      onConfirm: jest.fn(),
-    };
-
-    expect(confirmationDialog(args)).toBeNull();
-  });
-
-  test("it returns a Dialog component when warn is true", () => {
-    const args = {
-      warn: true,
-      open: false,
-      setOpen: jest.fn(),
-      onConfirm: jest.fn(),
-    };
-
-    const component = confirmationDialog(args);
-    const tree = mount(component as React.ReactElement);
-
-    expect(mountToJson(tree)).toMatchSnapshot();
   });
 });
 
@@ -274,7 +341,28 @@ describe("saveHandler", () => {
 
     await handler();
 
-    expect(args.setDialogOpen).toHaveBeenCalledWith(false);
     expect(args.savePermissions).toHaveBeenCalled();
+  });
+});
+
+describe("toggleOpen", () => {
+  test("it calls setOpen with false is open is true", () => {
+    const setOpen = jest.fn();
+    const open = true;
+
+    const toggle = toggleOpen(open, setOpen);
+    toggle();
+
+    expect(setOpen).toHaveBeenCalledWith(false);
+  });
+
+  test("it calls setOpen with true is open is false", () => {
+    const setOpen = jest.fn();
+    const open = false;
+
+    const toggle = toggleOpen(open, setOpen);
+    toggle();
+
+    expect(setOpen).toHaveBeenCalledWith(true);
   });
 });

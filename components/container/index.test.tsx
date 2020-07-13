@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import * as RouterFns from "next/router";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 import * as litPodHooks from "../../src/hooks/litPod";
 import Container from "./index";
@@ -43,6 +44,11 @@ describe("Container view", () => {
       data: [],
     });
 
+    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
+      asPath: "asPath",
+      replace: jest.fn(),
+    });
+
     const tree = mountToJson(<Container iri={iri} />);
     expect(tree).toMatchSnapshot();
   });
@@ -53,6 +59,11 @@ describe("Container view", () => {
       "https://myaccount.mypodserver.com/private",
       "https://myaccount.mypodserver.com/note.txt",
     ];
+    const replace = jest.fn();
+
+    jest
+      .spyOn(RouterFns, "useRouter")
+      .mockReturnValue({ asPath: "asPath", replace });
 
     (litPodHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue({
       data: resources,

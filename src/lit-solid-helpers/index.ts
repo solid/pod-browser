@@ -37,6 +37,9 @@ import {
   unstable_fetchFile,
   unstable_fetchLitDatasetWithAcl,
   unstable_getAgentAccessAll,
+  unstable_getResourceAcl,
+  unstable_saveAclFor,
+  unstable_setAgentResourceAccess,
 } from "@solid/lit-pod";
 import { ldp, space } from "rdf-namespaces";
 import { parseUrl } from "../stringHelpers";
@@ -75,6 +78,10 @@ export const namespace: Record<string, string> = {
   hasPhoto: "http://www.w3.org/2006/vcard/ns#hasPhoto",
   "http://www.w3.org/2006/vcard/ns#hasPhoto": "hasPhoto",
 };
+
+export function isContainerIri(iri: string): boolean {
+  return iri.charAt(iri.length - 1) === "/";
+}
 
 export function getIriPath(iri: string): string | undefined {
   const { pathname } = parseUrl(iri);
@@ -122,6 +129,24 @@ export interface NormalizedPermission {
   alias: string;
   acl: unstable_Access;
   profile: Profile;
+}
+
+interface ISavePermissions {
+  iri: string;
+  webId: string;
+  access: unstable_Access;
+}
+
+export async function savePermissions({
+  iri,
+  webId,
+  access,
+}: ISavePermissions): Promise<unstable_AclDataset> {
+  const dataset = await unstable_fetchLitDatasetWithAcl(iri);
+  const aclDataset = unstable_getResourceAcl(dataset);
+  const updatedAcl = unstable_setAgentResourceAccess(aclDataset, webId, access);
+
+  await unstable_saveAclFor(dataset, updatedAcl);
 }
 
 export async function normalizePermissions(
@@ -180,7 +205,7 @@ export interface NormalizedResource {
   permissions?: NormalizedPermission[];
 }
 
-export interface ResourceDetails extends NormalizedResource {
+export interface IResourceDetails extends NormalizedResource {
   name: string;
 }
 

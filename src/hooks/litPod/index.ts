@@ -37,7 +37,7 @@ import {
   getIriPath,
   namespace,
   normalizePermissions,
-  ResourceDetails,
+  IResourceDetails,
 } from "../../lit-solid-helpers";
 
 export async function fetchContainerResourceIris(
@@ -59,7 +59,7 @@ export function useFetchContainerResourceIris(iri: string): any {
 
 export async function fetchResourceDetails(
   iri: string
-): Promise<ResourceDetails> {
+): Promise<IResourceDetails> {
   const name = getIriPath(iri) as string;
   const resourceInfo = await unstable_fetchResourceInfoWithAcl(iri);
   const accessModeList = unstable_getAgentAccessAll(resourceInfo);

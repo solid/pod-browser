@@ -19,16 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable camelcase */
-import { mock } from "jest-mock-extended";
-
+import * as routerFns from "next/router";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
-import { ResourceDetails } from "../../src/lit-solid-helpers";
 import { useFetchResourceDetails } from "../../src/hooks/litPod";
-
-import ContainerTableRow, { handleTableRowClick, resourceHref } from "./index";
+import ContainerTableRow, {
+  resourceHref,
+  handleClick,
+  ResourceIcon,
+  renderResourceType,
+} from "./index";
 
 jest.mock("@solid/lit-pod");
+jest.mock("next/router");
 jest.mock("../../src/hooks/litPod");
 
 describe("ContainerTableRow", () => {
@@ -38,6 +40,10 @@ describe("ContainerTableRow", () => {
       name: "/example.ttl",
       types: [],
     };
+
+    jest
+      .spyOn(routerFns, "useRouter")
+      .mockReturnValue({ asPath: "/pathname/" } as routerFns.NextRouter);
 
     (useFetchResourceDetails as jest.Mock).mockReturnValue({ data: undefined });
 
@@ -100,42 +106,57 @@ describe("resourceHref", () => {
   });
 });
 
-describe("handleTableRowClick", () => {
-  test("it opens the drawer and sets the menu contents", async () => {
-    const setMenuOpen = jest.fn();
-    const setMenuContents = jest.fn();
-    const resource = mock<ResourceDetails>();
-    const handler = handleTableRowClick({
-      resource,
-      setMenuOpen,
-      setMenuContents,
-    });
-
-    const evnt = { target: document.createElement("tr") } as Partial<
-      React.MouseEvent<HTMLInputElement>
-    >;
+describe("handleClick", () => {
+  it("creates a click handler that replaces the route", async () => {
+    const iri = "iri";
+    const replace = jest.fn();
+    const router = { asPath: "asPath?some=query&variables=true", replace };
+    const evnt = { target: { tagName: "TR" } };
+    const handler = handleClick(iri, router);
 
     await handler(evnt);
 
-    expect(setMenuOpen).toHaveBeenCalledWith(resource.iri);
-    expect(setMenuContents).toHaveBeenCalled();
+    expect(replace).toHaveBeenCalledWith({
+      pathname: "asPath",
+      query: { action: "details", iri },
+    });
   });
 
-  test("it commits no operation when the click target is an anchor", async () => {
-    const setMenuOpen = jest.fn();
-    const setMenuContents = jest.fn();
-    const handler = handleTableRowClick({
-      resource: mock<ResourceDetails>(),
-      setMenuOpen,
-      setMenuContents,
-    });
+  it("defers if an anchor element triggered the click", async () => {
+    const iri = "iri";
+    const replace = jest.fn();
+    const router = { asPath: "asPath", replace };
+    const evnt = { target: { tagName: "A" } };
+    const handler = handleClick(iri, router);
 
-    const evnt = { target: document.createElement("a") } as Partial<
-      React.MouseEvent<HTMLInputElement>
-    >;
     await handler(evnt);
 
-    expect(setMenuOpen).not.toHaveBeenCalled();
-    expect(setMenuContents).not.toHaveBeenCalled();
+    expect(replace).not.toHaveBeenCalled();
+  });
+});
+
+describe("ResourceIcon", () => {
+  test("it renders a container icon for containers", () => {
+    const bem = jest.fn();
+    const tree = mountToJson(<ResourceIcon iri="/container/" bem={bem} />);
+
+    expect(tree).toMatchSnapshot();
+  });
+
+  test("it renders a container icon for resources", () => {
+    const bem = jest.fn();
+    const tree = mountToJson(<ResourceIcon iri="/resource" bem={bem} />);
+
+    expect(tree).toMatchSnapshot();
+  });
+});
+
+describe("renderResourceType", () => {
+  test("it renders Container with a container iri", () => {
+    expect(renderResourceType("/container/")).toEqual("Container");
+  });
+
+  test("it renders Resource with a resource iri", () => {
+    expect(renderResourceType("/resource")).toEqual("Resource");
   });
 });

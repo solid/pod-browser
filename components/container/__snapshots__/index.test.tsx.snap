@@ -2828,306 +2828,7 @@ font-display: block;",
           </tr>
         </tbody>
       </table>
-      <DetailsContextMenu>
-        <WithStyles(ForwardRef(Drawer))
-          anchor="right"
-          classes={
-            Object {
-              "paper": "makeStyles-drawerPaper-4649",
-            }
-          }
-          open={false}
-          variant="persistent"
-        >
-          <ForwardRef(Drawer)
-            anchor="right"
-            classes={
-              Object {
-                "docked": "MuiDrawer-docked",
-                "modal": "MuiDrawer-modal",
-                "paper": "MuiDrawer-paper makeStyles-drawerPaper-4649",
-                "paperAnchorBottom": "MuiDrawer-paperAnchorBottom",
-                "paperAnchorDockedBottom": "MuiDrawer-paperAnchorDockedBottom",
-                "paperAnchorDockedLeft": "MuiDrawer-paperAnchorDockedLeft",
-                "paperAnchorDockedRight": "MuiDrawer-paperAnchorDockedRight",
-                "paperAnchorDockedTop": "MuiDrawer-paperAnchorDockedTop",
-                "paperAnchorLeft": "MuiDrawer-paperAnchorLeft",
-                "paperAnchorRight": "MuiDrawer-paperAnchorRight",
-                "paperAnchorTop": "MuiDrawer-paperAnchorTop",
-                "root": "MuiDrawer-root",
-              }
-            }
-            open={false}
-            variant="persistent"
-          >
-            <div
-              className="MuiDrawer-root MuiDrawer-docked"
-            >
-              <ForwardRef(Slide)
-                appear={false}
-                direction="left"
-                in={false}
-                timeout={
-                  Object {
-                    "enter": 225,
-                    "exit": 195,
-                  }
-                }
-              >
-                <Transition
-                  appear={false}
-                  enter={true}
-                  exit={true}
-                  in={false}
-                  mountOnEnter={false}
-                  nodeRef={
-                    Object {
-                      "current": <div
-                        class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-4649 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight MuiPaper-elevation0"
-                        style="visibility: hidden; webkit-transform: translateX(1024px) translateX(0px); transform: translateX(1024px) translateX(0px);"
-                      >
-                        <button
-                          class="MuiButtonBase-root MuiIconButton-root makeStyles-drawerCloseButton-4648"
-                          tabindex="0"
-                          type="button"
-                        >
-                          <span
-                            class="MuiIconButton-label"
-                          >
-                            <svg
-                              aria-hidden="true"
-                              class="MuiSvgIcon-root"
-                              focusable="false"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
-                              />
-                            </svg>
-                          </span>
-                          <span
-                            class="MuiTouchRipple-root"
-                          />
-                        </button>
-                        <div
-                          class="makeStyles-drawerContent-4650"
-                        />
-                      </div>,
-                    }
-                  }
-                  onEnter={[Function]}
-                  onEntered={[Function]}
-                  onEntering={[Function]}
-                  onExit={[Function]}
-                  onExited={[Function]}
-                  onExiting={[Function]}
-                  timeout={
-                    Object {
-                      "enter": 225,
-                      "exit": 195,
-                    }
-                  }
-                  unmountOnExit={false}
-                >
-                  <WithStyles(ForwardRef(Paper))
-                    className="MuiDrawer-paper makeStyles-drawerPaper-4649 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight"
-                    elevation={0}
-                    square={true}
-                    style={
-                      Object {
-                        "visibility": "hidden",
-                      }
-                    }
-                  >
-                    <ForwardRef(Paper)
-                      className="MuiDrawer-paper makeStyles-drawerPaper-4649 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight"
-                      classes={
-                        Object {
-                          "elevation0": "MuiPaper-elevation0",
-                          "elevation1": "MuiPaper-elevation1",
-                          "elevation10": "MuiPaper-elevation10",
-                          "elevation11": "MuiPaper-elevation11",
-                          "elevation12": "MuiPaper-elevation12",
-                          "elevation13": "MuiPaper-elevation13",
-                          "elevation14": "MuiPaper-elevation14",
-                          "elevation15": "MuiPaper-elevation15",
-                          "elevation16": "MuiPaper-elevation16",
-                          "elevation17": "MuiPaper-elevation17",
-                          "elevation18": "MuiPaper-elevation18",
-                          "elevation19": "MuiPaper-elevation19",
-                          "elevation2": "MuiPaper-elevation2",
-                          "elevation20": "MuiPaper-elevation20",
-                          "elevation21": "MuiPaper-elevation21",
-                          "elevation22": "MuiPaper-elevation22",
-                          "elevation23": "MuiPaper-elevation23",
-                          "elevation24": "MuiPaper-elevation24",
-                          "elevation3": "MuiPaper-elevation3",
-                          "elevation4": "MuiPaper-elevation4",
-                          "elevation5": "MuiPaper-elevation5",
-                          "elevation6": "MuiPaper-elevation6",
-                          "elevation7": "MuiPaper-elevation7",
-                          "elevation8": "MuiPaper-elevation8",
-                          "elevation9": "MuiPaper-elevation9",
-                          "outlined": "MuiPaper-outlined",
-                          "root": "MuiPaper-root",
-                          "rounded": "MuiPaper-rounded",
-                        }
-                      }
-                      elevation={0}
-                      square={true}
-                      style={
-                        Object {
-                          "visibility": "hidden",
-                        }
-                      }
-                    >
-                      <div
-                        className="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-4649 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight MuiPaper-elevation0"
-                        style={
-                          Object {
-                            "visibility": "hidden",
-                          }
-                        }
-                      >
-                        <WithStyles(ForwardRef(IconButton))
-                          className="makeStyles-drawerCloseButton-4648"
-                          onClick={[Function]}
-                        >
-                          <ForwardRef(IconButton)
-                            className="makeStyles-drawerCloseButton-4648"
-                            classes={
-                              Object {
-                                "colorInherit": "MuiIconButton-colorInherit",
-                                "colorPrimary": "MuiIconButton-colorPrimary",
-                                "colorSecondary": "MuiIconButton-colorSecondary",
-                                "disabled": "Mui-disabled",
-                                "edgeEnd": "MuiIconButton-edgeEnd",
-                                "edgeStart": "MuiIconButton-edgeStart",
-                                "label": "MuiIconButton-label",
-                                "root": "MuiIconButton-root",
-                                "sizeSmall": "MuiIconButton-sizeSmall",
-                              }
-                            }
-                            onClick={[Function]}
-                          >
-                            <WithStyles(ForwardRef(ButtonBase))
-                              centerRipple={true}
-                              className="MuiIconButton-root makeStyles-drawerCloseButton-4648"
-                              disabled={false}
-                              focusRipple={true}
-                              onClick={[Function]}
-                            >
-                              <ForwardRef(ButtonBase)
-                                centerRipple={true}
-                                className="MuiIconButton-root makeStyles-drawerCloseButton-4648"
-                                classes={
-                                  Object {
-                                    "disabled": "Mui-disabled",
-                                    "focusVisible": "Mui-focusVisible",
-                                    "root": "MuiButtonBase-root",
-                                  }
-                                }
-                                disabled={false}
-                                focusRipple={true}
-                                onClick={[Function]}
-                              >
-                                <button
-                                  className="MuiButtonBase-root MuiIconButton-root makeStyles-drawerCloseButton-4648"
-                                  disabled={false}
-                                  onBlur={[Function]}
-                                  onClick={[Function]}
-                                  onDragLeave={[Function]}
-                                  onFocus={[Function]}
-                                  onKeyDown={[Function]}
-                                  onKeyUp={[Function]}
-                                  onMouseDown={[Function]}
-                                  onMouseLeave={[Function]}
-                                  onMouseUp={[Function]}
-                                  onTouchEnd={[Function]}
-                                  onTouchMove={[Function]}
-                                  onTouchStart={[Function]}
-                                  tabIndex={0}
-                                  type="button"
-                                >
-                                  <span
-                                    className="MuiIconButton-label"
-                                  >
-                                    <ForwardRef>
-                                      <WithStyles(ForwardRef(SvgIcon))>
-                                        <ForwardRef(SvgIcon)
-                                          classes={
-                                            Object {
-                                              "colorAction": "MuiSvgIcon-colorAction",
-                                              "colorDisabled": "MuiSvgIcon-colorDisabled",
-                                              "colorError": "MuiSvgIcon-colorError",
-                                              "colorPrimary": "MuiSvgIcon-colorPrimary",
-                                              "colorSecondary": "MuiSvgIcon-colorSecondary",
-                                              "fontSizeInherit": "MuiSvgIcon-fontSizeInherit",
-                                              "fontSizeLarge": "MuiSvgIcon-fontSizeLarge",
-                                              "fontSizeSmall": "MuiSvgIcon-fontSizeSmall",
-                                              "root": "MuiSvgIcon-root",
-                                            }
-                                          }
-                                        >
-                                          <svg
-                                            aria-hidden={true}
-                                            className="MuiSvgIcon-root"
-                                            focusable="false"
-                                            viewBox="0 0 24 24"
-                                          >
-                                            <path
-                                              d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
-                                            />
-                                          </svg>
-                                        </ForwardRef(SvgIcon)>
-                                      </WithStyles(ForwardRef(SvgIcon))>
-                                    </ForwardRef>
-                                  </span>
-                                  <WithStyles(memo)
-                                    center={true}
-                                  >
-                                    <ForwardRef(TouchRipple)
-                                      center={true}
-                                      classes={
-                                        Object {
-                                          "child": "MuiTouchRipple-child",
-                                          "childLeaving": "MuiTouchRipple-childLeaving",
-                                          "childPulsate": "MuiTouchRipple-childPulsate",
-                                          "ripple": "MuiTouchRipple-ripple",
-                                          "ripplePulsate": "MuiTouchRipple-ripplePulsate",
-                                          "rippleVisible": "MuiTouchRipple-rippleVisible",
-                                          "root": "MuiTouchRipple-root",
-                                        }
-                                      }
-                                    >
-                                      <span
-                                        className="MuiTouchRipple-root"
-                                      >
-                                        <TransitionGroup
-                                          childFactory={[Function]}
-                                          component={null}
-                                          exit={true}
-                                        />
-                                      </span>
-                                    </ForwardRef(TouchRipple)>
-                                  </WithStyles(memo)>
-                                </button>
-                              </ForwardRef(ButtonBase)>
-                            </WithStyles(ForwardRef(ButtonBase))>
-                          </ForwardRef(IconButton)>
-                        </WithStyles(ForwardRef(IconButton))>
-                        <div
-                          className="makeStyles-drawerContent-4650"
-                        />
-                      </div>
-                    </ForwardRef(Paper)>
-                  </WithStyles(ForwardRef(Paper))>
-                </Transition>
-              </ForwardRef(Slide)>
-            </div>
-          </ForwardRef(Drawer)>
-        </WithStyles(ForwardRef(Drawer))>
-      </DetailsContextMenu>
+      <DetailsContextMenu />
     </Container>
   </ThemeProvider>
 </WithTheme>
@@ -11529,7 +11230,16 @@ font-display: block;",
             >
               <td
                 className="makeStyles-table__body-cell-6198 makeStyles-table__body-cell--align-center-6199 makeStyles-table__body-cell--width-preview-6201"
-              />
+              >
+                <ResourceIcon
+                  bem={[Function]}
+                  iri="https://myaccount.mypodserver.com/inbox"
+                >
+                  <i
+                    className="makeStyles-icon-file-6150 makeStyles-resource-icon-6205"
+                  />
+                </ResourceIcon>
+              </td>
               <td
                 className="makeStyles-table__body-cell-6198"
               >
@@ -11550,38 +11260,7 @@ font-display: block;",
                 className="makeStyles-table__body-cell-6198"
                 key="https://myaccount.mypodserver.com/inbox-type"
               >
-                <WithStyles(ForwardRef(Skeleton))
-                  variant="text"
-                  width={100}
-                >
-                  <ForwardRef(Skeleton)
-                    classes={
-                      Object {
-                        "circle": "MuiSkeleton-circle",
-                        "fitContent": "MuiSkeleton-fitContent",
-                        "heightAuto": "MuiSkeleton-heightAuto",
-                        "pulse": "MuiSkeleton-pulse",
-                        "rect": "MuiSkeleton-rect",
-                        "root": "MuiSkeleton-root",
-                        "text": "MuiSkeleton-text",
-                        "wave": "MuiSkeleton-wave",
-                        "withChildren": "MuiSkeleton-withChildren",
-                      }
-                    }
-                    variant="text"
-                    width={100}
-                  >
-                    <span
-                      className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
-                      style={
-                        Object {
-                          "height": undefined,
-                          "width": 100,
-                        }
-                      }
-                    />
-                  </ForwardRef(Skeleton)>
-                </WithStyles(ForwardRef(Skeleton))>
+                Resource
               </td>
             </tr>
           </ContainerTableRow>
@@ -11600,7 +11279,16 @@ font-display: block;",
             >
               <td
                 className="makeStyles-table__body-cell-6198 makeStyles-table__body-cell--align-center-6199 makeStyles-table__body-cell--width-preview-6201"
-              />
+              >
+                <ResourceIcon
+                  bem={[Function]}
+                  iri="https://myaccount.mypodserver.com/private"
+                >
+                  <i
+                    className="makeStyles-icon-file-6150 makeStyles-resource-icon-6205"
+                  />
+                </ResourceIcon>
+              </td>
               <td
                 className="makeStyles-table__body-cell-6198"
               >
@@ -11621,38 +11309,7 @@ font-display: block;",
                 className="makeStyles-table__body-cell-6198"
                 key="https://myaccount.mypodserver.com/private-type"
               >
-                <WithStyles(ForwardRef(Skeleton))
-                  variant="text"
-                  width={100}
-                >
-                  <ForwardRef(Skeleton)
-                    classes={
-                      Object {
-                        "circle": "MuiSkeleton-circle",
-                        "fitContent": "MuiSkeleton-fitContent",
-                        "heightAuto": "MuiSkeleton-heightAuto",
-                        "pulse": "MuiSkeleton-pulse",
-                        "rect": "MuiSkeleton-rect",
-                        "root": "MuiSkeleton-root",
-                        "text": "MuiSkeleton-text",
-                        "wave": "MuiSkeleton-wave",
-                        "withChildren": "MuiSkeleton-withChildren",
-                      }
-                    }
-                    variant="text"
-                    width={100}
-                  >
-                    <span
-                      className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
-                      style={
-                        Object {
-                          "height": undefined,
-                          "width": 100,
-                        }
-                      }
-                    />
-                  </ForwardRef(Skeleton)>
-                </WithStyles(ForwardRef(Skeleton))>
+                Resource
               </td>
             </tr>
           </ContainerTableRow>
@@ -11671,7 +11328,16 @@ font-display: block;",
             >
               <td
                 className="makeStyles-table__body-cell-6198 makeStyles-table__body-cell--align-center-6199 makeStyles-table__body-cell--width-preview-6201"
-              />
+              >
+                <ResourceIcon
+                  bem={[Function]}
+                  iri="https://myaccount.mypodserver.com/note.txt"
+                >
+                  <i
+                    className="makeStyles-icon-file-6150 makeStyles-resource-icon-6205"
+                  />
+                </ResourceIcon>
+              </td>
               <td
                 className="makeStyles-table__body-cell-6198"
               >
@@ -11692,343 +11358,13 @@ font-display: block;",
                 className="makeStyles-table__body-cell-6198"
                 key="https://myaccount.mypodserver.com/note.txt-type"
               >
-                <WithStyles(ForwardRef(Skeleton))
-                  variant="text"
-                  width={100}
-                >
-                  <ForwardRef(Skeleton)
-                    classes={
-                      Object {
-                        "circle": "MuiSkeleton-circle",
-                        "fitContent": "MuiSkeleton-fitContent",
-                        "heightAuto": "MuiSkeleton-heightAuto",
-                        "pulse": "MuiSkeleton-pulse",
-                        "rect": "MuiSkeleton-rect",
-                        "root": "MuiSkeleton-root",
-                        "text": "MuiSkeleton-text",
-                        "wave": "MuiSkeleton-wave",
-                        "withChildren": "MuiSkeleton-withChildren",
-                      }
-                    }
-                    variant="text"
-                    width={100}
-                  >
-                    <span
-                      className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
-                      style={
-                        Object {
-                          "height": undefined,
-                          "width": 100,
-                        }
-                      }
-                    />
-                  </ForwardRef(Skeleton)>
-                </WithStyles(ForwardRef(Skeleton))>
+                Resource
               </td>
             </tr>
           </ContainerTableRow>
         </tbody>
       </table>
-      <DetailsContextMenu>
-        <WithStyles(ForwardRef(Drawer))
-          anchor="right"
-          classes={
-            Object {
-              "paper": "makeStyles-drawerPaper-4649",
-            }
-          }
-          open={false}
-          variant="persistent"
-        >
-          <ForwardRef(Drawer)
-            anchor="right"
-            classes={
-              Object {
-                "docked": "MuiDrawer-docked",
-                "modal": "MuiDrawer-modal",
-                "paper": "MuiDrawer-paper makeStyles-drawerPaper-4649",
-                "paperAnchorBottom": "MuiDrawer-paperAnchorBottom",
-                "paperAnchorDockedBottom": "MuiDrawer-paperAnchorDockedBottom",
-                "paperAnchorDockedLeft": "MuiDrawer-paperAnchorDockedLeft",
-                "paperAnchorDockedRight": "MuiDrawer-paperAnchorDockedRight",
-                "paperAnchorDockedTop": "MuiDrawer-paperAnchorDockedTop",
-                "paperAnchorLeft": "MuiDrawer-paperAnchorLeft",
-                "paperAnchorRight": "MuiDrawer-paperAnchorRight",
-                "paperAnchorTop": "MuiDrawer-paperAnchorTop",
-                "root": "MuiDrawer-root",
-              }
-            }
-            open={false}
-            variant="persistent"
-          >
-            <div
-              className="MuiDrawer-root MuiDrawer-docked"
-            >
-              <ForwardRef(Slide)
-                appear={false}
-                direction="left"
-                in={false}
-                timeout={
-                  Object {
-                    "enter": 225,
-                    "exit": 195,
-                  }
-                }
-              >
-                <Transition
-                  appear={false}
-                  enter={true}
-                  exit={true}
-                  in={false}
-                  mountOnEnter={false}
-                  nodeRef={
-                    Object {
-                      "current": <div
-                        class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-4649 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight MuiPaper-elevation0"
-                        style="visibility: hidden; webkit-transform: translateX(1024px) translateX(0px); transform: translateX(1024px) translateX(0px);"
-                      >
-                        <button
-                          class="MuiButtonBase-root MuiIconButton-root makeStyles-drawerCloseButton-4648"
-                          tabindex="0"
-                          type="button"
-                        >
-                          <span
-                            class="MuiIconButton-label"
-                          >
-                            <svg
-                              aria-hidden="true"
-                              class="MuiSvgIcon-root"
-                              focusable="false"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
-                              />
-                            </svg>
-                          </span>
-                          <span
-                            class="MuiTouchRipple-root"
-                          />
-                        </button>
-                        <div
-                          class="makeStyles-drawerContent-4650"
-                        />
-                      </div>,
-                    }
-                  }
-                  onEnter={[Function]}
-                  onEntered={[Function]}
-                  onEntering={[Function]}
-                  onExit={[Function]}
-                  onExited={[Function]}
-                  onExiting={[Function]}
-                  timeout={
-                    Object {
-                      "enter": 225,
-                      "exit": 195,
-                    }
-                  }
-                  unmountOnExit={false}
-                >
-                  <WithStyles(ForwardRef(Paper))
-                    className="MuiDrawer-paper makeStyles-drawerPaper-4649 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight"
-                    elevation={0}
-                    square={true}
-                    style={
-                      Object {
-                        "visibility": "hidden",
-                      }
-                    }
-                  >
-                    <ForwardRef(Paper)
-                      className="MuiDrawer-paper makeStyles-drawerPaper-4649 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight"
-                      classes={
-                        Object {
-                          "elevation0": "MuiPaper-elevation0",
-                          "elevation1": "MuiPaper-elevation1",
-                          "elevation10": "MuiPaper-elevation10",
-                          "elevation11": "MuiPaper-elevation11",
-                          "elevation12": "MuiPaper-elevation12",
-                          "elevation13": "MuiPaper-elevation13",
-                          "elevation14": "MuiPaper-elevation14",
-                          "elevation15": "MuiPaper-elevation15",
-                          "elevation16": "MuiPaper-elevation16",
-                          "elevation17": "MuiPaper-elevation17",
-                          "elevation18": "MuiPaper-elevation18",
-                          "elevation19": "MuiPaper-elevation19",
-                          "elevation2": "MuiPaper-elevation2",
-                          "elevation20": "MuiPaper-elevation20",
-                          "elevation21": "MuiPaper-elevation21",
-                          "elevation22": "MuiPaper-elevation22",
-                          "elevation23": "MuiPaper-elevation23",
-                          "elevation24": "MuiPaper-elevation24",
-                          "elevation3": "MuiPaper-elevation3",
-                          "elevation4": "MuiPaper-elevation4",
-                          "elevation5": "MuiPaper-elevation5",
-                          "elevation6": "MuiPaper-elevation6",
-                          "elevation7": "MuiPaper-elevation7",
-                          "elevation8": "MuiPaper-elevation8",
-                          "elevation9": "MuiPaper-elevation9",
-                          "outlined": "MuiPaper-outlined",
-                          "root": "MuiPaper-root",
-                          "rounded": "MuiPaper-rounded",
-                        }
-                      }
-                      elevation={0}
-                      square={true}
-                      style={
-                        Object {
-                          "visibility": "hidden",
-                        }
-                      }
-                    >
-                      <div
-                        className="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-4649 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight MuiPaper-elevation0"
-                        style={
-                          Object {
-                            "visibility": "hidden",
-                          }
-                        }
-                      >
-                        <WithStyles(ForwardRef(IconButton))
-                          className="makeStyles-drawerCloseButton-4648"
-                          onClick={[Function]}
-                        >
-                          <ForwardRef(IconButton)
-                            className="makeStyles-drawerCloseButton-4648"
-                            classes={
-                              Object {
-                                "colorInherit": "MuiIconButton-colorInherit",
-                                "colorPrimary": "MuiIconButton-colorPrimary",
-                                "colorSecondary": "MuiIconButton-colorSecondary",
-                                "disabled": "Mui-disabled",
-                                "edgeEnd": "MuiIconButton-edgeEnd",
-                                "edgeStart": "MuiIconButton-edgeStart",
-                                "label": "MuiIconButton-label",
-                                "root": "MuiIconButton-root",
-                                "sizeSmall": "MuiIconButton-sizeSmall",
-                              }
-                            }
-                            onClick={[Function]}
-                          >
-                            <WithStyles(ForwardRef(ButtonBase))
-                              centerRipple={true}
-                              className="MuiIconButton-root makeStyles-drawerCloseButton-4648"
-                              disabled={false}
-                              focusRipple={true}
-                              onClick={[Function]}
-                            >
-                              <ForwardRef(ButtonBase)
-                                centerRipple={true}
-                                className="MuiIconButton-root makeStyles-drawerCloseButton-4648"
-                                classes={
-                                  Object {
-                                    "disabled": "Mui-disabled",
-                                    "focusVisible": "Mui-focusVisible",
-                                    "root": "MuiButtonBase-root",
-                                  }
-                                }
-                                disabled={false}
-                                focusRipple={true}
-                                onClick={[Function]}
-                              >
-                                <button
-                                  className="MuiButtonBase-root MuiIconButton-root makeStyles-drawerCloseButton-4648"
-                                  disabled={false}
-                                  onBlur={[Function]}
-                                  onClick={[Function]}
-                                  onDragLeave={[Function]}
-                                  onFocus={[Function]}
-                                  onKeyDown={[Function]}
-                                  onKeyUp={[Function]}
-                                  onMouseDown={[Function]}
-                                  onMouseLeave={[Function]}
-                                  onMouseUp={[Function]}
-                                  onTouchEnd={[Function]}
-                                  onTouchMove={[Function]}
-                                  onTouchStart={[Function]}
-                                  tabIndex={0}
-                                  type="button"
-                                >
-                                  <span
-                                    className="MuiIconButton-label"
-                                  >
-                                    <ForwardRef>
-                                      <WithStyles(ForwardRef(SvgIcon))>
-                                        <ForwardRef(SvgIcon)
-                                          classes={
-                                            Object {
-                                              "colorAction": "MuiSvgIcon-colorAction",
-                                              "colorDisabled": "MuiSvgIcon-colorDisabled",
-                                              "colorError": "MuiSvgIcon-colorError",
-                                              "colorPrimary": "MuiSvgIcon-colorPrimary",
-                                              "colorSecondary": "MuiSvgIcon-colorSecondary",
-                                              "fontSizeInherit": "MuiSvgIcon-fontSizeInherit",
-                                              "fontSizeLarge": "MuiSvgIcon-fontSizeLarge",
-                                              "fontSizeSmall": "MuiSvgIcon-fontSizeSmall",
-                                              "root": "MuiSvgIcon-root",
-                                            }
-                                          }
-                                        >
-                                          <svg
-                                            aria-hidden={true}
-                                            className="MuiSvgIcon-root"
-                                            focusable="false"
-                                            viewBox="0 0 24 24"
-                                          >
-                                            <path
-                                              d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
-                                            />
-                                          </svg>
-                                        </ForwardRef(SvgIcon)>
-                                      </WithStyles(ForwardRef(SvgIcon))>
-                                    </ForwardRef>
-                                  </span>
-                                  <WithStyles(memo)
-                                    center={true}
-                                  >
-                                    <ForwardRef(TouchRipple)
-                                      center={true}
-                                      classes={
-                                        Object {
-                                          "child": "MuiTouchRipple-child",
-                                          "childLeaving": "MuiTouchRipple-childLeaving",
-                                          "childPulsate": "MuiTouchRipple-childPulsate",
-                                          "ripple": "MuiTouchRipple-ripple",
-                                          "ripplePulsate": "MuiTouchRipple-ripplePulsate",
-                                          "rippleVisible": "MuiTouchRipple-rippleVisible",
-                                          "root": "MuiTouchRipple-root",
-                                        }
-                                      }
-                                    >
-                                      <span
-                                        className="MuiTouchRipple-root"
-                                      >
-                                        <TransitionGroup
-                                          childFactory={[Function]}
-                                          component={null}
-                                          exit={true}
-                                        />
-                                      </span>
-                                    </ForwardRef(TouchRipple)>
-                                  </WithStyles(memo)>
-                                </button>
-                              </ForwardRef(ButtonBase)>
-                            </WithStyles(ForwardRef(ButtonBase))>
-                          </ForwardRef(IconButton)>
-                        </WithStyles(ForwardRef(IconButton))>
-                        <div
-                          className="makeStyles-drawerContent-4650"
-                        />
-                      </div>
-                    </ForwardRef(Paper)>
-                  </WithStyles(ForwardRef(Paper))>
-                </Transition>
-              </ForwardRef(Slide)>
-            </div>
-          </ForwardRef(Drawer)>
-        </WithStyles(ForwardRef(Drawer))>
-      </DetailsContextMenu>
+      <DetailsContextMenu />
     </Container>
   </ThemeProvider>
 </WithTheme>

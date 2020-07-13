@@ -20,32 +20,55 @@
  */
 
 import { ReactElement } from "react";
-import { Typography, Divider, List, ListItem } from "@material-ui/core";
+import {
+  Typography,
+  Divider,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@material-ui/core";
+import ShareIcon from "@material-ui/icons/Share";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import styles from "./styles";
-import { ResourceDetails } from "../../src/lit-solid-helpers";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme))
 );
 
 interface Props {
-  resource: ResourceDetails;
+  name?: string | null;
+  iri?: string | null;
 }
 
-export default function DetailsLoading({ resource }: Props): ReactElement {
+function DetailsLoading({ name, iri }: Props): ReactElement {
   const classes = useStyles();
-  const { name, iri } = resource;
 
   return (
     <>
       <section className={classes.centeredSection}>
-        <h3 className={classes["content-h3"]} title={iri}>
-          {name}
+        <h3 className={classes["content-h3"]} title={iri || ""}>
+          {name || <Skeleton width={100} />}
         </h3>
       </section>
+
+      <Divider />
+
+      <section className={classes.centeredSection}>
+        <h5 className={classes["content-h5"]}>Actions</h5>
+        <List>
+          <ListItem button>
+            <ListItemIcon>
+              <ShareIcon />
+            </ListItemIcon>
+            <ListItemText primary="Sharing &amp; App Permissions" />
+          </ListItem>
+        </List>
+      </section>
+
+      <Divider />
 
       <section className={classes.centeredSection}>
         <h5 className={classes["content-h5"]}>Details</h5>
@@ -54,47 +77,22 @@ export default function DetailsLoading({ resource }: Props): ReactElement {
       <Divider />
 
       <section className={classes.centeredSection}>
-        <h5 className={classes["content-h5"]}>My Access</h5>
-
         <List>
           <ListItem className={classes.listItem}>
-            <Skeleton
-              className={classes.avatar}
-              variant="circle"
-              width={45}
-              height={40}
-            />
-            <Skeleton variant="text" width="100%" />
-          </ListItem>
-        </List>
-      </section>
-
-      <section className={classes.centeredSection}>
-        <h5 className={classes["content-h5"]}>Sharing</h5>
-
-        <List>
-          <ListItem className={classes.listItem}>
-            <Skeleton
-              className={classes.avatar}
-              variant="circle"
-              width={45}
-              height={40}
-            />
-            <Skeleton variant="text" width="100%" />
+            <Typography className={classes.detailText}>Thing Type:</Typography>
+            <Skeleton width={150} />
           </ListItem>
         </List>
       </section>
 
       <Divider />
-
-      <section className={classes.centeredSection}>
-        <List>
-          <ListItem className={classes.listItem}>
-            <Typography className={classes.detailText}>Thing Type:</Typography>
-            <Skeleton variant="text" width="50%" />
-          </ListItem>
-        </List>
-      </section>
     </>
   );
 }
+
+DetailsLoading.defaultProps = {
+  name: null,
+  iri: null,
+};
+
+export default DetailsLoading;

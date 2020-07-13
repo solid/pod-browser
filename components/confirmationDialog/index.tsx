@@ -19,29 +19,48 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useContext } from "react";
-import { Container } from "@material-ui/core";
+import { ReactElement, useContext, Dispatch, SetStateAction } from "react";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@material-ui/core";
+import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
 
-import { useFetchPodIrisFromWebId } from "../../../src/hooks/litPod";
-import UserContext from "../../../src/contexts/userContext";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import PodList from "../../podList";
-import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
+export default function ConfirmationDialog(): ReactElement {
+  const { open, setOpen, title, content, setConfirmed } = useContext(
+    ConfirmationDialogContext
+  );
 
-// if only one resource redirect to /resources/[iri]
-
-export default function Home(): ReactElement {
-  useRedirectIfLoggedOut();
-
-  const { session } = useContext(UserContext);
-  const { webId = "" } = session || {};
-  const { data: podIris } = useFetchPodIrisFromWebId(webId);
+  const setConfirmedWithType = setConfirmed as Dispatch<
+    SetStateAction<boolean>
+  >;
 
   return (
-    <Container>
-      <DetailsMenuProvider>
-        <PodList podIris={podIris} />
-      </DetailsMenuProvider>
-    </Container>
+    <Dialog
+      disableBackdropClick
+      disableEscapeKeyDown
+      maxWidth="xs"
+      aria-labelledby="confirmation-dialog"
+      open={open as boolean}
+    >
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent dividers>{content}</DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={() => setOpen(false)}>
+          Cancel
+        </Button>
+
+        <Button
+          type="submit"
+          color="primary"
+          onClick={() => setConfirmedWithType(true)}
+        >
+          Ok
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }

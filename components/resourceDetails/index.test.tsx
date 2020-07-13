@@ -19,347 +19,51 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as ReactFns from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
+import * as Router from "next/router";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
-
-import { useFetchResourceWithAcl } from "../../src/hooks/litPod";
-import { NormalizedPermission } from "../../src/lit-solid-helpers";
 import * as stringHelpers from "../../src/stringHelpers";
 import ResourceDetails, * as resourceDetailFns from "./index";
 
 const {
-  displayName,
   displayType,
   DownloadLink,
   downloadResource,
   forceDownload,
-  Permission,
-  ThirdPartyPermissions,
 } = resourceDetailFns;
 
 jest.mock("../../src/hooks/litPod");
 
 describe("Resource details", () => {
-  test("renders loading without name without breaking", () => {
-    jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
-      session: { webId: "owner" },
-    }));
+  test("it renders container details", () => {
+    const resource = {
+      iri: "/container/",
+      types: ["Container"],
+      name: "Name",
+    };
 
-    (useFetchResourceWithAcl as jest.Mock).mockReturnValue({
-      data: undefined,
-      error: undefined,
-    });
+    jest
+      .spyOn(Router, "useRouter")
+      .mockReturnValue({ pathname: "/pathname", replace: jest.fn() });
 
-    const tree = mountToJson(
-      <ResourceDetails types={["Resource"]} iri="iri" />
-    );
-
+    const tree = mountToJson(<ResourceDetails resource={resource} />);
     expect(tree).toMatchSnapshot();
   });
 
-  test("renders loading if there is no data or error", () => {
-    jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
-      session: { webId: "owner" },
-    }));
+  test("it renders resource details", () => {
+    const resource = {
+      iri: "/resource",
+      types: ["Resource"],
+      name: "Name",
+    };
 
-    (useFetchResourceWithAcl as jest.Mock).mockReturnValue({
-      data: undefined,
-      error: undefined,
-    });
+    jest
+      .spyOn(Router, "useRouter")
+      .mockReturnValue({ pathname: "/pathname", replace: jest.fn() });
 
-    const tree = mountToJson(
-      <ResourceDetails name="Resource Name" types={["Resource"]} iri="iri" />
-    );
-
+    const tree = mountToJson(<ResourceDetails resource={resource} />);
     expect(tree).toMatchSnapshot();
-  });
-
-  test("renders 'no access' if there is an error", () => {
-    jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
-      session: { webId: "owner" },
-    }));
-
-    (useFetchResourceWithAcl as jest.Mock).mockReturnValue({
-      data: undefined,
-      error: { message: "nope" },
-    });
-
-    const tree = mountToJson(
-      <ResourceDetails name="Resource Name" types={["Resource"]} iri="iri" />
-    );
-
-    expect(tree).toMatchSnapshot();
-  });
-
-  test("renders resource details", () => {
-    jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
-      session: { webId: "owner" },
-    }));
-
-    const permissions = [
-      {
-        webId: "owner",
-        alias: "Full Control",
-        acl: {
-          append: true,
-          control: true,
-          read: true,
-          write: true,
-        },
-        profile: {
-          avatar: "http://example.com/avatar.png",
-          nickname: "owner",
-          name: "Test Person",
-        },
-      },
-      {
-        webId: "collaborator",
-        alias: "Can View",
-        acl: {
-          append: false,
-          control: false,
-          read: true,
-          write: false,
-        },
-        profile: {
-          avatar: null,
-          nickname: "collaborator",
-          name: "Test Collaborator",
-        },
-      },
-    ];
-
-    (useFetchResourceWithAcl as jest.Mock).mockReturnValue({
-      data: { permissions },
-    });
-
-    const tree = mountToJson(
-      <ResourceDetails name="Resource Name" types={["Resource"]} iri="iri" />
-    );
-
-    expect(tree).toMatchSnapshot();
-  });
-
-  test("renders no 3rd party access message", () => {
-    jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
-      session: { webId: "owner" },
-    }));
-
-    const permissions = [
-      {
-        webId: "owner",
-        alias: "Full Control",
-        acl: {
-          append: true,
-          control: true,
-          read: true,
-          write: true,
-        },
-        profile: {
-          avatar: "http://example.com/avatar.png",
-          nickname: "owner",
-          name: "Test Person",
-        },
-      },
-    ];
-
-    (useFetchResourceWithAcl as jest.Mock).mockReturnValue({
-      data: { permissions },
-    });
-
-    const tree = mountToJson(
-      <ResourceDetails name="Resource Name" types={["Resource"]} iri="iri" />
-    );
-
-    expect(tree).toMatchSnapshot();
-  });
-
-  test("renders with no types", () => {
-    jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
-      session: { webId: "owner" },
-    }));
-
-    const permissions = [
-      {
-        webId: "owner",
-        alias: "Full Control",
-        acl: {
-          append: true,
-          control: true,
-          read: true,
-          write: true,
-        },
-        profile: {
-          avatar: "http://example.com/avatar.png",
-          nickname: "owner",
-          name: "Test Person",
-        },
-      },
-      {
-        webId: "collaborator",
-        alias: "Can View",
-        acl: {
-          append: false,
-          control: false,
-          read: true,
-          write: false,
-        },
-        profile: {
-          avatar: null,
-          nickname: "collaborator",
-          name: "Test Collaborator",
-        },
-      },
-    ];
-
-    (useFetchResourceWithAcl as jest.Mock).mockReturnValue({
-      data: { permissions },
-    });
-
-    const tree = mountToJson(
-      <ResourceDetails name="Resource Name" iri="iri" />
-    );
-
-    expect(tree).toMatchSnapshot();
-  });
-});
-
-describe("displayName", () => {
-  const name = "Test Example";
-  const nickname = "test_example";
-  const webId = "webId";
-
-  test("it returns the webId, if no name or nickname is defined", () => {
-    expect(displayName({ webId })).toEqual("webId");
-  });
-
-  test("it returns the nickname, if no name is defined", () => {
-    expect(displayName({ nickname, webId })).toEqual("test_example");
-  });
-
-  test("it returns the name, if defined", () => {
-    expect(displayName({ name, nickname, webId })).toEqual("Test Example");
-  });
-});
-
-describe("Permission", () => {
-  test("it returns null if given no permissions", () => {
-    const classes = {};
-
-    const tree = shallow(
-      <Permission
-        iri="iri"
-        warnOnSubmit={false}
-        classes={classes}
-        permission={null}
-      />
-    );
-
-    expect(shallowToJson(tree)).toMatchSnapshot();
-  });
-
-  test("it renders permissions if given", () => {
-    const classes = {};
-    const webId = "https://somepod.somehost.com/profile#me";
-    const permission = {
-      webId,
-      alias: "Full Control",
-      profile: {
-        webId,
-        avatar: "https://somepod.somehost.com/public/photo.jpg",
-      },
-      acl: {
-        read: true,
-        write: true,
-        append: true,
-        control: true,
-      },
-    } as NormalizedPermission;
-
-    const tree = shallow(
-      <Permission
-        iri="iri"
-        warnOnSubmit={false}
-        classes={classes}
-        permission={permission}
-      />
-    );
-
-    expect(shallowToJson(tree)).toMatchSnapshot();
-  });
-});
-
-describe("ThirdPartyPermissions", () => {
-  test("it returns null if given no permissions", () => {
-    const tree = shallow(
-      <ThirdPartyPermissions
-        iri="iri"
-        classes={{}}
-        thirdPartyPermissions={null}
-      />
-    );
-
-    expect(shallowToJson(tree)).toMatchSnapshot();
-  });
-
-  test("it returns a useful message if there are no third party permissions", () => {
-    const tree = shallow(
-      <ThirdPartyPermissions
-        iri="iri"
-        classes={{}}
-        thirdPartyPermissions={[]}
-      />
-    );
-
-    expect(shallowToJson(tree)).toMatchSnapshot();
-  });
-
-  test("it renders permissions if given", () => {
-    const classes = {};
-    const permissions = [
-      {
-        webId: "owner",
-        alias: "Full Control",
-        acl: {
-          append: true,
-          control: true,
-          read: true,
-          write: true,
-        },
-        profile: {
-          avatar: "http://example.com/avatar.png",
-          nickname: "owner",
-          name: "Test Person",
-        },
-      } as NormalizedPermission,
-      {
-        webId: "collaborator",
-        alias: "Can View",
-        acl: {
-          append: false,
-          control: false,
-          read: true,
-          write: false,
-        },
-        profile: {
-          avatar: null,
-          nickname: "collaborator",
-          name: "Test Collaborator",
-        },
-      } as NormalizedPermission,
-    ];
-
-    const tree = shallow(
-      <ThirdPartyPermissions
-        iri="iri"
-        classes={classes}
-        thirdPartyPermissions={permissions}
-      />
-    );
-
-    expect(shallowToJson(tree)).toMatchSnapshot();
   });
 });
 

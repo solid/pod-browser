@@ -33,7 +33,7 @@ import ContainerTableRow from "../containerTableRow";
 import SortedTableCarat from "../sortedTableCarat";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import { useFetchContainerResourceIris } from "../../src/hooks/litPod";
-import { ResourceDetails, getIriPath } from "../../src/lit-solid-helpers";
+import { IResourceDetails, getIriPath } from "../../src/lit-solid-helpers";
 
 import Spinner from "../spinner";
 import styles from "./styles";
@@ -95,7 +95,7 @@ export default function Container(props: IPodList): ReactElement {
     headerGroups,
     rows,
     prepareRow,
-  } = useTable<UseSortByOptions<ResourceDetails>>(
+  } = useTable<UseSortByOptions<IResourceDetails>>(
     {
       columns,
       data,
@@ -159,7 +159,7 @@ export default function Container(props: IPodList): ReactElement {
 
           {rows.map((row) => {
             prepareRow(row);
-            const details = row.original as ResourceDetails;
+            const details = row.original as IResourceDetails;
             return <ContainerTableRow key={details.iri} resource={details} />;
           })}
         </tbody>

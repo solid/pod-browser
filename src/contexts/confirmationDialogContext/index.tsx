@@ -23,53 +23,64 @@
 import {
   createContext,
   ReactElement,
+  ReactNode,
   useState,
   Dispatch,
   SetStateAction,
 } from "react";
-import { AlertProps } from "@material-ui/lab/Alert";
 
-interface IAlertContext {
-  alertOpen: boolean;
-  message: string;
-  severity: AlertProps["severity"];
-  setAlertOpen: Dispatch<SetStateAction<boolean>> | any;
-  setMessage: Dispatch<SetStateAction<string>> | any;
-  setSeverity: Dispatch<SetStateAction<AlertProps["severity"]>> | any;
+interface IConfirmationDialogContext {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>> | any;
+  content: ReactNode;
+  setContent: Dispatch<SetStateAction<ReactNode>>;
+  confirmed: boolean;
+  setConfirmed: Dispatch<SetStateAction<boolean>>;
+  title: string;
+  setTitle: Dispatch<SetStateAction<string>>;
 }
 
-const AlertContext = createContext<IAlertContext>({
-  alertOpen: false,
-  message: "",
-  severity: "success",
-  setAlertOpen: () => {},
-  setMessage: () => {},
-  setSeverity: () => {},
+const ConfirmationDialogContext = createContext<IConfirmationDialogContext>({
+  confirmed: false,
+  content: null,
+  open: false,
+  setConfirmed: () => {},
+  setContent: () => {},
+  setOpen: () => {},
+  setTitle: () => {},
+  title: "Confirmation",
 });
 
-export default AlertContext;
+export default ConfirmationDialogContext;
 
-interface IAlertProvider {
-  children: ReactElement | ReactElement[] | undefined | null;
+interface IConfirmationDialogProvider {
+  children: ReactNode;
 }
 
-export function AlertProvider({ children }: IAlertProvider): ReactElement {
-  const [alertOpen, setAlertOpen] = useState(false);
-  const [message, setMessage] = useState("");
-  const [severity, setSeverity] = useState("success" as AlertProps["severity"]);
+export function ConfirmationDialogProvider({
+  children,
+}: IConfirmationDialogProvider): ReactElement {
+  const [open, setOpen] = useState(false);
+  const [content, setContent] = useState(null);
+  const [title, setTitle] = useState("Confirmation");
+  const [confirmed, setConfirmed] = useState(false);
+
+  const setContentWithType = setContent as Dispatch<SetStateAction<ReactNode>>;
 
   return (
-    <AlertContext.Provider
+    <ConfirmationDialogContext.Provider
       value={{
-        alertOpen,
-        message,
-        severity,
-        setAlertOpen,
-        setMessage,
-        setSeverity,
+        content,
+        confirmed,
+        open,
+        setContent: setContentWithType,
+        setConfirmed,
+        setOpen,
+        setTitle,
+        title,
       }}
     >
       {children}
-    </AlertContext.Provider>
+    </ConfirmationDialogContext.Provider>
   );
 }

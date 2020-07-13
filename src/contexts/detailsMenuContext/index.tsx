@@ -20,18 +20,28 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createContext, Dispatch, ReactElement, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  ReactElement,
+  useState,
+  useEffect,
+} from "react";
+import { useRouter } from "next/router";
 
 interface DetailsContext {
-  menuOpen: string | null;
-  contents?: ReactElement;
-  setMenuOpen: Dispatch<string | null>;
-  setMenuContents?: any;
+  action: string | null;
+  iri: string | null;
+  menuOpen: boolean;
+  setAction?: Dispatch<string> | Dispatch<null>;
+  setIri?: Dispatch<string> | Dispatch<null>;
+  setMenuOpen?: Dispatch<boolean>;
 }
 
 const DetailsMenuContext = createContext<DetailsContext>({
-  menuOpen: null,
-  setMenuOpen: () => null,
+  action: null,
+  iri: null,
+  menuOpen: false,
 });
 
 interface Props {
@@ -39,12 +49,31 @@ interface Props {
 }
 
 function DetailsMenuProvider({ children }: Props): ReactElement {
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
-  const [contents, setMenuContents] = useState();
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const [action, setAction] = useState(null);
+  const [iri, setIri] = useState(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const {
+      query: { action: routeAction, iri: routeIri },
+    } = router;
+
+    setMenuOpen(!!routeAction);
+    setAction(routeAction);
+    setIri(routeIri);
+  }, [router, action, iri, setAction, setIri, setMenuOpen]);
 
   return (
     <DetailsMenuContext.Provider
-      value={{ menuOpen, contents, setMenuOpen, setMenuContents }}
+      value={{
+        action,
+        iri,
+        menuOpen,
+        setAction,
+        setIri,
+        setMenuOpen,
+      }}
     >
       {children}
     </DetailsMenuContext.Provider>

@@ -19,63 +19,42 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement, useContext, useEffect } from "react";
+import { ReactElement, useContext } from "react";
 import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
+import { useRouter } from "next/router";
 import styles from "./styles";
-import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 import PodLocationContext from "../../src/contexts/podLocationContext";
-import { useFetchResourceDetails } from "../../src/hooks/litPod";
-import DetailsLoading from "../detailsLoading";
-import Details from "../resourceDetails";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme) as StyleRules)
 );
 
+export function openContextMenu(
+  iri: string,
+  router: NextRouter,
+  pathname: string
+): () => void {
+  return async () => {
+    await router.replace({
+      pathname,
+      query: { action: "details", iri },
+    });
+  };
+}
+
 export default function ContainerToolbar(): ReactElement | null {
-  const { menuOpen, setMenuOpen, setMenuContents } = useContext(
-    DetailsMenuContext
-  );
-  const { baseUri, currentUri } = useContext(PodLocationContext);
-  const { data } = useFetchResourceDetails(currentUri) || {};
+  const { currentUri } = useContext(PodLocationContext);
   const bem = useBem(useStyles());
-
-  useEffect(() => {
-    function getPathName(): string {
-      const path = baseUri ? currentUri.substr(baseUri.length) : null;
-      return path === "" ? "All files" : path || "Unnamed";
-    }
-
-    if (!!menuOpen && menuOpen === currentUri && data) {
-      const { types, name, iri, permissions } = data;
-      setMenuContents(<DetailsLoading resource={data} />);
-      setMenuContents(
-        <Details
-          iri={iri}
-          types={types}
-          name={name || getPathName()}
-          permissions={permissions}
-        />
-      );
-    } else if (!!menuOpen && menuOpen === currentUri) {
-      setMenuContents(
-        <DetailsLoading
-          resource={{
-            iri: currentUri,
-            name: getPathName(),
-            types: ["Container"],
-          }}
-        />
-      );
-    }
-  }, [menuOpen, data, currentUri, baseUri, setMenuContents]);
+  const router = useRouter();
+  const { asPath } = router;
+  const pathname = asPath ? asPath.replace(/\?.+$/, "") : "/";
 
   return (
     <div className={bem("container-toolbar")}>
       <button
         className={bem("icon-button")}
-        onClick={() => setMenuOpen(currentUri)}
+        onClick={openContextMenu(currentUri, router, pathname)}
         type="button"
       >
         <i className={bem("icon-info")} aria-label="View details" />

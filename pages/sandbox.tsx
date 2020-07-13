@@ -19,45 +19,38 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
+import React, {
+  Dispatch,
+  SetStateAction,
+  ReactElement,
+  ReactNode,
+  useContext,
+  useEffect,
+} from "react";
+import ConfirmationDialogContext from "../src/contexts/confirmationDialogContext";
 
-const smallFontSize = {
-  fontSize: "0.75rem",
-};
+export default function Sandbox(): ReactElement {
+  const { setTitle, setOpen, setContent, confirmed, setConfirmed } = useContext(
+    ConfirmationDialogContext
+  );
 
-const styles = (theme: PrismTheme) => {
-  return createStyles(theme, [], {
-    container: {
-      display: "block",
-      position: "relative",
-    },
-    listItem: {
-      paddingBottom: 0,
-      paddingTop: 0,
-    },
-    selectionClosed: {
-      display: "none",
-    },
-    selectionOpen: {
-      display: "block",
-    },
-    summary: {
-      ...smallFontSize,
-      listStyle: "none",
-      display: "flex",
-      flexWrap: "nowrap",
-      alignItems: "center",
-      justifyContent: "space-between",
-      width: 140,
-    },
-    selectIcon: {
-      marginLeft: "auto",
-    },
-    label: smallFontSize,
-    checkbox: {
-      padding: 0,
+  const setContentWithType = setContent as Dispatch<SetStateAction<ReactNode>>;
+  const setTitleWithType = setTitle as Dispatch<SetStateAction<string>>;
+
+  useEffect(() => {
+    setTitleWithType("my title");
+    setContentWithType(<p>This is my content</p>);
+
+    if (confirmed) {
+      setOpen(false);
+      setConfirmed(false);
+      console.log("confirmed");
     }
-  });
-};
+  }, [setTitleWithType, setContentWithType, setOpen, confirmed, setConfirmed]);
 
-export default styles;
+  return (
+    <button type="button" onClick={() => setOpen(true)}>
+      Hello World
+    </button>
+  );
+}

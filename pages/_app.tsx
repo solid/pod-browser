@@ -45,7 +45,9 @@ import { appLayout, useBem } from "@solid/lit-prism-patterns";
 import theme from "../src/theme";
 import UserContext, { ISession } from "../src/contexts/userContext";
 import { AlertProvider } from "../src/contexts/alertContext";
+import { ConfirmationDialogProvider } from "../src/contexts/confirmationDialogContext";
 import Notification from "../components/notification";
+import ConfirmationDialog from "../components/confirmationDialog";
 
 import PodBrowserHeader from "../components/header";
 import "./styles.css";
@@ -114,15 +116,18 @@ export default function App(props: AppProps): ReactElement {
         <ThemeProvider theme={theme}>
           <UserContext.Provider value={{ session, isLoadingSession }}>
             <AlertProvider>
-              <CssBaseline />
-              <div className={bem("app-layout")}>
-                <PodBrowserHeader />
-                <main className={bem("app-layout__main")}>
-                  <Component {...pageProps} />
-                </main>
-              </div>
+              <ConfirmationDialogProvider>
+                <CssBaseline />
+                <div className={bem("app-layout")}>
+                  <PodManagerHeader />
+                  <main className={bem("app-layout__main")}>
+                    <Component {...pageProps} />
+                  </main>
+                </div>
 
-              <Notification />
+                <Notification />
+                <ConfirmationDialog />
+              </ConfirmationDialogProvider>
             </AlertProvider>
           </UserContext.Provider>
         </ThemeProvider>

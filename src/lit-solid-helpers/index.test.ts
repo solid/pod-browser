@@ -41,6 +41,7 @@ const {
   normalizePermissions,
   parseStringAcl,
   permissionsFromWacAllowHeaders,
+  savePermissions,
 } = litSolidHelpers;
 
 const {
@@ -682,5 +683,53 @@ describe("fetchProfile", () => {
       "avatar",
       "pods",
     ]);
+  });
+});
+
+describe("savePermissions", () => {
+  test("it save the new permissions", async () => {
+    const iri = "iri";
+    const webId = "webId";
+    const access = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    };
+    const dataset = "dataset";
+    const aclDataset = "aclDataset";
+    const updatedAcl = "updatedAcl";
+
+    jest
+      .spyOn(litSolidFns, "unstable_fetchLitDatasetWithAcl")
+      .mockResolvedValueOnce(dataset);
+
+    jest
+      .spyOn(litSolidFns, "unstable_getResourceAcl")
+      .mockReturnValueOnce(aclDataset);
+
+    jest
+      .spyOn(litSolidFns, "unstable_setAgentResourceAccess")
+      .mockReturnValue(updatedAcl);
+
+    jest
+      .spyOn(litSolidFns, "unstable_saveAclFor")
+      .mockImplementationOnce(jest.fn());
+
+    await savePermissions({ iri, webId, access });
+
+    expect(litSolidFns.unstable_fetchLitDatasetWithAcl).toHaveBeenCalledWith(
+      iri
+    );
+    expect(litSolidFns.unstable_getResourceAcl).toHaveBeenCalledWith(dataset);
+    expect(litSolidFns.unstable_setAgentResourceAccess).toHaveBeenCalledWith(
+      aclDataset,
+      webId,
+      access
+    );
+    expect(litSolidFns.unstable_saveAclFor).toHaveBeenCalledWith(
+      dataset,
+      updatedAcl
+    );
   });
 });
