@@ -32,14 +32,14 @@ const useStyles = makeStyles(styles);
 export default function DetailsContextMenu(): ReactElement {
   const { setMenuOpen, contents, menuOpen } = useContext(DetailsMenuContext);
   const classes = useStyles();
-  const closeDrawer = () => setMenuOpen(false);
+  const closeDrawer = () => setMenuOpen(null);
   useEscKey(closeDrawer);
 
   return (
     <Drawer
       anchor="right"
       variant="persistent"
-      open={menuOpen}
+      open={!!menuOpen}
       classes={{ paper: classes.drawerPaper }}
     >
       <IconButton className={classes.drawerCloseButton} onClick={closeDrawer}>

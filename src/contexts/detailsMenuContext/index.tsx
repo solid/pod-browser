@@ -20,23 +20,26 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createContext, ReactElement, useState } from "react";
+import { createContext, Dispatch, ReactElement, useState } from "react";
 
 interface DetailsContext {
-  menuOpen: boolean;
+  menuOpen: string | null;
   contents?: ReactElement;
-  setMenuOpen?: any;
+  setMenuOpen: Dispatch<string | null>;
   setMenuContents?: any;
 }
 
-const DetailsMenuContext = createContext<DetailsContext>({ menuOpen: false });
+const DetailsMenuContext = createContext<DetailsContext>({
+  menuOpen: null,
+  setMenuOpen: () => null,
+});
 
 interface Props {
   children: ReactElement | ReactElement[] | undefined;
 }
 
 function DetailsMenuProvider({ children }: Props): ReactElement {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState<string | null>(null);
   const [contents, setMenuContents] = useState();
 
   return (

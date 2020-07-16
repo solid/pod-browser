@@ -40,7 +40,9 @@ function ChildComponent(): ReactElement {
 describe("DetailsMenuContext", () => {
   test("it has context data", () => {
     const component = shallow(
-      <DetailsMenuProvider>{ChildComponent}</DetailsMenuProvider>
+      <DetailsMenuProvider>
+        <ChildComponent />
+      </DetailsMenuProvider>
     );
 
     expect(shallowToJson(component)).toMatchSnapshot();

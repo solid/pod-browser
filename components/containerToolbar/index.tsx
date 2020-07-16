@@ -61,9 +61,9 @@ export default function ContainerToolbar(): ReactElement | null {
       );
     }
 
-    if (menuOpen && data) {
+    if (!!menuOpen && menuOpen === currentUri && data) {
       setMenu();
-    } else if (menuOpen) {
+    } else if (!!menuOpen && menuOpen === currentUri) {
       setMenuContents(
         <DetailsLoading
           resource={{
@@ -80,7 +80,7 @@ export default function ContainerToolbar(): ReactElement | null {
     <div className={bem("container-toolbar")}>
       <button
         className={bem("icon-button")}
-        onClick={() => setMenuOpen(true)}
+        onClick={() => setMenuOpen(currentUri)}
         type="button"
       >
         <i className={bem("icon-info")} aria-label="View details" />
