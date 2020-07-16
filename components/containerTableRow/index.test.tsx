@@ -104,8 +104,9 @@ describe("handleTableRowClick", () => {
   test("it opens the drawer and sets the menu contents", async () => {
     const setMenuOpen = jest.fn();
     const setMenuContents = jest.fn();
+    const resource = mock<ResourceDetails>();
     const handler = handleTableRowClick({
-      resource: mock<ResourceDetails>(),
+      resource,
       setMenuOpen,
       setMenuContents,
     });
@@ -116,7 +117,7 @@ describe("handleTableRowClick", () => {
 
     await handler(evnt);
 
-    expect(setMenuOpen).toHaveBeenCalledWith(true);
+    expect(setMenuOpen).toHaveBeenCalledWith(resource.iri);
     expect(setMenuContents).toHaveBeenCalled();
   });
 

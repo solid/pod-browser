@@ -5,12 +5,12 @@ exports[`DetailsMenuContext it has context data 1`] = `
   value={
     Object {
       "contents": undefined,
-      "menuOpen": false,
+      "menuOpen": null,
       "setMenuContents": [Function],
       "setMenuOpen": [Function],
     }
   }
 >
-  <Component />
+  <ChildComponent />
 </ContextProvider>
 `;

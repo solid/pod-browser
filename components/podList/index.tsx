@@ -66,7 +66,7 @@ export default function PodList(props: IPodList): ReactElement | null {
 
         <TableBody>
           {podIris.map((iri: string) => (
-            <TableRow>
+            <TableRow key={iri}>
               <TableCell>
                 <Link href={resourceHref(iri)}>
                   <a>{iri}</a>

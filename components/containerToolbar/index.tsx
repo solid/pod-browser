@@ -28,53 +28,48 @@ import PodLocationContext from "../../src/contexts/podLocationContext";
 import { useFetchResourceDetails } from "../../src/hooks/litPod";
 import DetailsLoading from "../detailsLoading";
 import Details from "../resourceDetails";
-import { parseUrl } from "../../src/stringHelpers";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme) as StyleRules)
 );
 
-function normalizePathName(pathname: string): string {
-  return pathname === "/" ? "All files" : pathname;
-}
-
 export default function ContainerToolbar(): ReactElement | null {
   const { menuOpen, setMenuOpen, setMenuContents } = useContext(
     DetailsMenuContext
   );
-  const { currentUri } = useContext(PodLocationContext);
-  const { pathname } = parseUrl(currentUri);
-  const { data } = useFetchResourceDetails(currentUri);
+  const { baseUri, currentUri } = useContext(PodLocationContext);
+  const { data } = useFetchResourceDetails(currentUri) || {};
   const bem = useBem(useStyles());
 
   useEffect(() => {
-    function setMenu() {
+    function getPathName(): string {
+      const path = baseUri ? currentUri.substr(baseUri.length) : null;
+      return path === "" ? "All files" : path || "Unnamed";
+    }
+
+    if (!!menuOpen && menuOpen === currentUri && data) {
       const { types, name, iri, permissions } = data;
       setMenuContents(<DetailsLoading resource={data} />);
       setMenuContents(
         <Details
           iri={iri}
           types={types}
-          name={name || normalizePathName(pathname)}
+          name={name || getPathName()}
           permissions={permissions}
         />
       );
-    }
-
-    if (!!menuOpen && menuOpen === currentUri && data) {
-      setMenu();
     } else if (!!menuOpen && menuOpen === currentUri) {
       setMenuContents(
         <DetailsLoading
           resource={{
             iri: currentUri,
-            name: normalizePathName(pathname),
+            name: getPathName(),
             types: ["Container"],
           }}
         />
       );
     }
-  }, [menuOpen, data, currentUri, pathname, setMenuContents]);
+  }, [menuOpen, data, currentUri, baseUri, setMenuContents]);
 
   return (
     <div className={bem("container-toolbar")}>

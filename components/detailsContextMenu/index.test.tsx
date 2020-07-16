@@ -40,6 +40,6 @@ describe("Container view", () => {
     const tree = mount(<DetailsContextMenu />);
     tree.find("WithStyles(ForwardRef(IconButton))").simulate("click");
 
-    expect(setMenuOpen).toHaveBeenCalledWith(false);
+    expect(setMenuOpen).toHaveBeenCalledWith(null);
   });
 });

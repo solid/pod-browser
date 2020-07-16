@@ -19,35 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createContext, ReactElement, useContext } from "react";
-import useAuthenticatedProfile from "../../hooks/useAuthenticatedProfile";
-import UserContext from "../userContext";
-import usePodRoot from "../../hooks/usePodRoot";
+import ContainerToolbar from "./index";
+import { mountToJson } from "../../__testUtils/mountWithTheme";
 
-export interface PodLocation {
-  baseUri?: string | null;
-  currentUri: string;
-}
-
-const PodLocationContext = createContext<PodLocation>({
-  currentUri: "",
+describe("Container toolbar view", () => {
+  test("Renders the toolbar", () => {
+    const tree = mountToJson(<ContainerToolbar />);
+    expect(tree).toMatchSnapshot();
+  });
 });
-
-interface Props {
-  children: ReactElement | ReactElement[] | undefined;
-  currentUri: string;
-}
-
-function PodLocationProvider({ children, currentUri }: Props): ReactElement {
-  const { session } = useContext(UserContext);
-  const profile = useAuthenticatedProfile(session);
-  const baseUri = usePodRoot(currentUri, profile);
-  return (
-    <PodLocationContext.Provider value={{ baseUri, currentUri }}>
-      {children}
-    </PodLocationContext.Provider>
-  );
-}
-
-export { PodLocationProvider };
-export default PodLocationContext;

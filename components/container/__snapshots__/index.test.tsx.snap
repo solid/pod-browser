@@ -872,11 +872,11 @@ font-display: block;",
               className="MuiContainer-root MuiContainer-maxWidthLg"
             >
               <WithStyles(ForwardRef(CircularProgress))
-                className="makeStyles-MuiCicularProgress-root-20"
+                className="makeStyles-MuiCicularProgress-root-21"
                 color="primary"
               >
                 <ForwardRef(CircularProgress)
-                  className="makeStyles-MuiCicularProgress-root-20"
+                  className="makeStyles-MuiCicularProgress-root-21"
                   classes={
                     Object {
                       "circle": "MuiCircularProgress-circle",
@@ -894,7 +894,7 @@ font-display: block;",
                   color="primary"
                 >
                   <div
-                    className="MuiCircularProgress-root makeStyles-MuiCicularProgress-root-20 MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
+                    className="MuiCircularProgress-root makeStyles-MuiCicularProgress-root-21 MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
                     role="progressbar"
                     style={
                       Object {
@@ -1781,82 +1781,102 @@ font-display: block;",
     <Container
       iri="https://mypod.myhost.com/public"
     >
-      <Breadcrumbs>
-        <Spinner>
-          <WithStyles(ForwardRef(Container))>
-            <ForwardRef(Container)
-              classes={
-                Object {
-                  "disableGutters": "MuiContainer-disableGutters",
-                  "fixed": "MuiContainer-fixed",
-                  "maxWidthLg": "MuiContainer-maxWidthLg",
-                  "maxWidthMd": "MuiContainer-maxWidthMd",
-                  "maxWidthSm": "MuiContainer-maxWidthSm",
-                  "maxWidthXl": "MuiContainer-maxWidthXl",
-                  "maxWidthXs": "MuiContainer-maxWidthXs",
-                  "root": "MuiContainer-root",
+      <div
+        className="makeStyles-container-menu-19"
+      >
+        <Breadcrumbs>
+          <Spinner>
+            <WithStyles(ForwardRef(Container))>
+              <ForwardRef(Container)
+                classes={
+                  Object {
+                    "disableGutters": "MuiContainer-disableGutters",
+                    "fixed": "MuiContainer-fixed",
+                    "maxWidthLg": "MuiContainer-maxWidthLg",
+                    "maxWidthMd": "MuiContainer-maxWidthMd",
+                    "maxWidthSm": "MuiContainer-maxWidthSm",
+                    "maxWidthXl": "MuiContainer-maxWidthXl",
+                    "maxWidthXs": "MuiContainer-maxWidthXs",
+                    "root": "MuiContainer-root",
+                  }
                 }
-              }
-            >
-              <div
-                className="MuiContainer-root MuiContainer-maxWidthLg"
               >
-                <WithStyles(ForwardRef(CircularProgress))
-                  className="makeStyles-MuiCicularProgress-root-20"
-                  color="primary"
+                <div
+                  className="MuiContainer-root MuiContainer-maxWidthLg"
                 >
-                  <ForwardRef(CircularProgress)
-                    className="makeStyles-MuiCicularProgress-root-20"
-                    classes={
-                      Object {
-                        "circle": "MuiCircularProgress-circle",
-                        "circleDisableShrink": "MuiCircularProgress-circleDisableShrink",
-                        "circleIndeterminate": "MuiCircularProgress-circleIndeterminate",
-                        "circleStatic": "MuiCircularProgress-circleStatic",
-                        "colorPrimary": "MuiCircularProgress-colorPrimary",
-                        "colorSecondary": "MuiCircularProgress-colorSecondary",
-                        "indeterminate": "MuiCircularProgress-indeterminate",
-                        "root": "MuiCircularProgress-root",
-                        "static": "MuiCircularProgress-static",
-                        "svg": "MuiCircularProgress-svg",
-                      }
-                    }
+                  <WithStyles(ForwardRef(CircularProgress))
+                    className="makeStyles-MuiCicularProgress-root-21"
                     color="primary"
                   >
-                    <div
-                      className="MuiCircularProgress-root makeStyles-MuiCicularProgress-root-20 MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
-                      role="progressbar"
-                      style={
+                    <ForwardRef(CircularProgress)
+                      className="makeStyles-MuiCicularProgress-root-21"
+                      classes={
                         Object {
-                          "height": 40,
-                          "width": 40,
+                          "circle": "MuiCircularProgress-circle",
+                          "circleDisableShrink": "MuiCircularProgress-circleDisableShrink",
+                          "circleIndeterminate": "MuiCircularProgress-circleIndeterminate",
+                          "circleStatic": "MuiCircularProgress-circleStatic",
+                          "colorPrimary": "MuiCircularProgress-colorPrimary",
+                          "colorSecondary": "MuiCircularProgress-colorSecondary",
+                          "indeterminate": "MuiCircularProgress-indeterminate",
+                          "root": "MuiCircularProgress-root",
+                          "static": "MuiCircularProgress-static",
+                          "svg": "MuiCircularProgress-svg",
                         }
                       }
+                      color="primary"
                     >
-                      <svg
-                        className="MuiCircularProgress-svg"
-                        viewBox="22 22 44 44"
+                      <div
+                        className="MuiCircularProgress-root makeStyles-MuiCicularProgress-root-21 MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
+                        role="progressbar"
+                        style={
+                          Object {
+                            "height": 40,
+                            "width": 40,
+                          }
+                        }
                       >
-                        <circle
-                          className="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
-                          cx={44}
-                          cy={44}
-                          fill="none"
-                          r={20.2}
-                          strokeWidth={3.6}
-                          style={Object {}}
-                        />
-                      </svg>
-                    </div>
-                  </ForwardRef(CircularProgress)>
-                </WithStyles(ForwardRef(CircularProgress))>
-              </div>
-            </ForwardRef(Container)>
-          </WithStyles(ForwardRef(Container))>
-        </Spinner>
-      </Breadcrumbs>
+                        <svg
+                          className="MuiCircularProgress-svg"
+                          viewBox="22 22 44 44"
+                        >
+                          <circle
+                            className="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+                            cx={44}
+                            cy={44}
+                            fill="none"
+                            r={20.2}
+                            strokeWidth={3.6}
+                            style={Object {}}
+                          />
+                        </svg>
+                      </div>
+                    </ForwardRef(CircularProgress)>
+                  </WithStyles(ForwardRef(CircularProgress))>
+                </div>
+              </ForwardRef(Container)>
+            </WithStyles(ForwardRef(Container))>
+          </Spinner>
+        </Breadcrumbs>
+        <ContainerToolbar>
+          <div
+            className="makeStyles-container-toolbar-3094"
+          >
+            <button
+              className="makeStyles-icon-button-3095"
+              onClick={[Function]}
+              type="button"
+            >
+              <i
+                aria-label="View details"
+                className="makeStyles-icon-info-3065"
+              />
+            </button>
+          </div>
+        </ContainerToolbar>
+      </div>
       <table
-        className="makeStyles-table-1 makeStyles-navigator-19"
+        className="makeStyles-table-1 makeStyles-navigator-20"
         role="table"
       >
         <thead
@@ -2813,7 +2833,7 @@ font-display: block;",
           anchor="right"
           classes={
             Object {
-              "paper": "makeStyles-drawerPaper-3112",
+              "paper": "makeStyles-drawerPaper-4649",
             }
           }
           open={false}
@@ -2825,7 +2845,7 @@ font-display: block;",
               Object {
                 "docked": "MuiDrawer-docked",
                 "modal": "MuiDrawer-modal",
-                "paper": "MuiDrawer-paper makeStyles-drawerPaper-3112",
+                "paper": "MuiDrawer-paper makeStyles-drawerPaper-4649",
                 "paperAnchorBottom": "MuiDrawer-paperAnchorBottom",
                 "paperAnchorDockedBottom": "MuiDrawer-paperAnchorDockedBottom",
                 "paperAnchorDockedLeft": "MuiDrawer-paperAnchorDockedLeft",
@@ -2863,11 +2883,11 @@ font-display: block;",
                   nodeRef={
                     Object {
                       "current": <div
-                        class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-3112 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight MuiPaper-elevation0"
+                        class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-4649 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight MuiPaper-elevation0"
                         style="visibility: hidden; webkit-transform: translateX(1024px) translateX(0px); transform: translateX(1024px) translateX(0px);"
                       >
                         <button
-                          class="MuiButtonBase-root MuiIconButton-root makeStyles-drawerCloseButton-3111"
+                          class="MuiButtonBase-root MuiIconButton-root makeStyles-drawerCloseButton-4648"
                           tabindex="0"
                           type="button"
                         >
@@ -2890,7 +2910,7 @@ font-display: block;",
                           />
                         </button>
                         <div
-                          class="makeStyles-drawerContent-3113"
+                          class="makeStyles-drawerContent-4650"
                         />
                       </div>,
                     }
@@ -2910,7 +2930,7 @@ font-display: block;",
                   unmountOnExit={false}
                 >
                   <WithStyles(ForwardRef(Paper))
-                    className="MuiDrawer-paper makeStyles-drawerPaper-3112 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight"
+                    className="MuiDrawer-paper makeStyles-drawerPaper-4649 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight"
                     elevation={0}
                     square={true}
                     style={
@@ -2920,7 +2940,7 @@ font-display: block;",
                     }
                   >
                     <ForwardRef(Paper)
-                      className="MuiDrawer-paper makeStyles-drawerPaper-3112 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight"
+                      className="MuiDrawer-paper makeStyles-drawerPaper-4649 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight"
                       classes={
                         Object {
                           "elevation0": "MuiPaper-elevation0",
@@ -2962,7 +2982,7 @@ font-display: block;",
                       }
                     >
                       <div
-                        className="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-3112 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight MuiPaper-elevation0"
+                        className="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-4649 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight MuiPaper-elevation0"
                         style={
                           Object {
                             "visibility": "hidden",
@@ -2970,11 +2990,11 @@ font-display: block;",
                         }
                       >
                         <WithStyles(ForwardRef(IconButton))
-                          className="makeStyles-drawerCloseButton-3111"
+                          className="makeStyles-drawerCloseButton-4648"
                           onClick={[Function]}
                         >
                           <ForwardRef(IconButton)
-                            className="makeStyles-drawerCloseButton-3111"
+                            className="makeStyles-drawerCloseButton-4648"
                             classes={
                               Object {
                                 "colorInherit": "MuiIconButton-colorInherit",
@@ -2992,14 +3012,14 @@ font-display: block;",
                           >
                             <WithStyles(ForwardRef(ButtonBase))
                               centerRipple={true}
-                              className="MuiIconButton-root makeStyles-drawerCloseButton-3111"
+                              className="MuiIconButton-root makeStyles-drawerCloseButton-4648"
                               disabled={false}
                               focusRipple={true}
                               onClick={[Function]}
                             >
                               <ForwardRef(ButtonBase)
                                 centerRipple={true}
-                                className="MuiIconButton-root makeStyles-drawerCloseButton-3111"
+                                className="MuiIconButton-root makeStyles-drawerCloseButton-4648"
                                 classes={
                                   Object {
                                     "disabled": "Mui-disabled",
@@ -3012,7 +3032,7 @@ font-display: block;",
                                 onClick={[Function]}
                               >
                                 <button
-                                  className="MuiButtonBase-root MuiIconButton-root makeStyles-drawerCloseButton-3111"
+                                  className="MuiButtonBase-root MuiIconButton-root makeStyles-drawerCloseButton-4648"
                                   disabled={false}
                                   onBlur={[Function]}
                                   onClick={[Function]}
@@ -3097,7 +3117,7 @@ font-display: block;",
                           </ForwardRef(IconButton)>
                         </WithStyles(ForwardRef(IconButton))>
                         <div
-                          className="makeStyles-drawerContent-3113"
+                          className="makeStyles-drawerContent-4650"
                         />
                       </div>
                     </ForwardRef(Paper)>
@@ -3965,82 +3985,102 @@ font-display: block;",
     <Container
       iri="https://mypod.myhost.com/public"
     >
-      <Breadcrumbs>
-        <Spinner>
-          <WithStyles(ForwardRef(Container))>
-            <ForwardRef(Container)
-              classes={
-                Object {
-                  "disableGutters": "MuiContainer-disableGutters",
-                  "fixed": "MuiContainer-fixed",
-                  "maxWidthLg": "MuiContainer-maxWidthLg",
-                  "maxWidthMd": "MuiContainer-maxWidthMd",
-                  "maxWidthSm": "MuiContainer-maxWidthSm",
-                  "maxWidthXl": "MuiContainer-maxWidthXl",
-                  "maxWidthXs": "MuiContainer-maxWidthXs",
-                  "root": "MuiContainer-root",
+      <div
+        className="makeStyles-container-menu-19"
+      >
+        <Breadcrumbs>
+          <Spinner>
+            <WithStyles(ForwardRef(Container))>
+              <ForwardRef(Container)
+                classes={
+                  Object {
+                    "disableGutters": "MuiContainer-disableGutters",
+                    "fixed": "MuiContainer-fixed",
+                    "maxWidthLg": "MuiContainer-maxWidthLg",
+                    "maxWidthMd": "MuiContainer-maxWidthMd",
+                    "maxWidthSm": "MuiContainer-maxWidthSm",
+                    "maxWidthXl": "MuiContainer-maxWidthXl",
+                    "maxWidthXs": "MuiContainer-maxWidthXs",
+                    "root": "MuiContainer-root",
+                  }
                 }
-              }
-            >
-              <div
-                className="MuiContainer-root MuiContainer-maxWidthLg"
               >
-                <WithStyles(ForwardRef(CircularProgress))
-                  className="makeStyles-MuiCicularProgress-root-20"
-                  color="primary"
+                <div
+                  className="MuiContainer-root MuiContainer-maxWidthLg"
                 >
-                  <ForwardRef(CircularProgress)
-                    className="makeStyles-MuiCicularProgress-root-20"
-                    classes={
-                      Object {
-                        "circle": "MuiCircularProgress-circle",
-                        "circleDisableShrink": "MuiCircularProgress-circleDisableShrink",
-                        "circleIndeterminate": "MuiCircularProgress-circleIndeterminate",
-                        "circleStatic": "MuiCircularProgress-circleStatic",
-                        "colorPrimary": "MuiCircularProgress-colorPrimary",
-                        "colorSecondary": "MuiCircularProgress-colorSecondary",
-                        "indeterminate": "MuiCircularProgress-indeterminate",
-                        "root": "MuiCircularProgress-root",
-                        "static": "MuiCircularProgress-static",
-                        "svg": "MuiCircularProgress-svg",
-                      }
-                    }
+                  <WithStyles(ForwardRef(CircularProgress))
+                    className="makeStyles-MuiCicularProgress-root-21"
                     color="primary"
                   >
-                    <div
-                      className="MuiCircularProgress-root makeStyles-MuiCicularProgress-root-20 MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
-                      role="progressbar"
-                      style={
+                    <ForwardRef(CircularProgress)
+                      className="makeStyles-MuiCicularProgress-root-21"
+                      classes={
                         Object {
-                          "height": 40,
-                          "width": 40,
+                          "circle": "MuiCircularProgress-circle",
+                          "circleDisableShrink": "MuiCircularProgress-circleDisableShrink",
+                          "circleIndeterminate": "MuiCircularProgress-circleIndeterminate",
+                          "circleStatic": "MuiCircularProgress-circleStatic",
+                          "colorPrimary": "MuiCircularProgress-colorPrimary",
+                          "colorSecondary": "MuiCircularProgress-colorSecondary",
+                          "indeterminate": "MuiCircularProgress-indeterminate",
+                          "root": "MuiCircularProgress-root",
+                          "static": "MuiCircularProgress-static",
+                          "svg": "MuiCircularProgress-svg",
                         }
                       }
+                      color="primary"
                     >
-                      <svg
-                        className="MuiCircularProgress-svg"
-                        viewBox="22 22 44 44"
+                      <div
+                        className="MuiCircularProgress-root makeStyles-MuiCicularProgress-root-21 MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
+                        role="progressbar"
+                        style={
+                          Object {
+                            "height": 40,
+                            "width": 40,
+                          }
+                        }
                       >
-                        <circle
-                          className="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
-                          cx={44}
-                          cy={44}
-                          fill="none"
-                          r={20.2}
-                          strokeWidth={3.6}
-                          style={Object {}}
-                        />
-                      </svg>
-                    </div>
-                  </ForwardRef(CircularProgress)>
-                </WithStyles(ForwardRef(CircularProgress))>
-              </div>
-            </ForwardRef(Container)>
-          </WithStyles(ForwardRef(Container))>
-        </Spinner>
-      </Breadcrumbs>
+                        <svg
+                          className="MuiCircularProgress-svg"
+                          viewBox="22 22 44 44"
+                        >
+                          <circle
+                            className="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+                            cx={44}
+                            cy={44}
+                            fill="none"
+                            r={20.2}
+                            strokeWidth={3.6}
+                            style={Object {}}
+                          />
+                        </svg>
+                      </div>
+                    </ForwardRef(CircularProgress)>
+                  </WithStyles(ForwardRef(CircularProgress))>
+                </div>
+              </ForwardRef(Container)>
+            </WithStyles(ForwardRef(Container))>
+          </Spinner>
+        </Breadcrumbs>
+        <ContainerToolbar>
+          <div
+            className="makeStyles-container-toolbar-3094"
+          >
+            <button
+              className="makeStyles-icon-button-3095"
+              onClick={[Function]}
+              type="button"
+            >
+              <i
+                aria-label="View details"
+                className="makeStyles-icon-info-3065"
+              />
+            </button>
+          </div>
+        </ContainerToolbar>
+      </div>
       <table
-        className="makeStyles-table-1 makeStyles-navigator-19"
+        className="makeStyles-table-1 makeStyles-navigator-20"
         role="table"
       >
         <thead
@@ -11484,14 +11524,14 @@ font-display: block;",
             }
           >
             <tr
-              className="makeStyles-table__body-row-4658 makeStyles-tableRow-4666"
+              className="makeStyles-table__body-row-6195 makeStyles-tableRow-6203"
               onClick={[Function]}
             >
               <td
-                className="makeStyles-table__body-cell-4661 makeStyles-table__body-cell--align-center-4662 makeStyles-table__body-cell--width-preview-4664"
+                className="makeStyles-table__body-cell-6198 makeStyles-table__body-cell--align-center-6199 makeStyles-table__body-cell--width-preview-6201"
               />
               <td
-                className="makeStyles-table__body-cell-4661"
+                className="makeStyles-table__body-cell-6198"
               >
                 <Link
                   as="/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Finbox"
@@ -11507,7 +11547,7 @@ font-display: block;",
                 </Link>
               </td>
               <td
-                className="makeStyles-table__body-cell-4661"
+                className="makeStyles-table__body-cell-6198"
                 key="https://myaccount.mypodserver.com/inbox-type"
               >
                 <WithStyles(ForwardRef(Skeleton))
@@ -11555,14 +11595,14 @@ font-display: block;",
             }
           >
             <tr
-              className="makeStyles-table__body-row-4658 makeStyles-tableRow-4666"
+              className="makeStyles-table__body-row-6195 makeStyles-tableRow-6203"
               onClick={[Function]}
             >
               <td
-                className="makeStyles-table__body-cell-4661 makeStyles-table__body-cell--align-center-4662 makeStyles-table__body-cell--width-preview-4664"
+                className="makeStyles-table__body-cell-6198 makeStyles-table__body-cell--align-center-6199 makeStyles-table__body-cell--width-preview-6201"
               />
               <td
-                className="makeStyles-table__body-cell-4661"
+                className="makeStyles-table__body-cell-6198"
               >
                 <Link
                   as="/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Fprivate"
@@ -11578,7 +11618,7 @@ font-display: block;",
                 </Link>
               </td>
               <td
-                className="makeStyles-table__body-cell-4661"
+                className="makeStyles-table__body-cell-6198"
                 key="https://myaccount.mypodserver.com/private-type"
               >
                 <WithStyles(ForwardRef(Skeleton))
@@ -11626,14 +11666,14 @@ font-display: block;",
             }
           >
             <tr
-              className="makeStyles-table__body-row-4658 makeStyles-tableRow-4666"
+              className="makeStyles-table__body-row-6195 makeStyles-tableRow-6203"
               onClick={[Function]}
             >
               <td
-                className="makeStyles-table__body-cell-4661 makeStyles-table__body-cell--align-center-4662 makeStyles-table__body-cell--width-preview-4664"
+                className="makeStyles-table__body-cell-6198 makeStyles-table__body-cell--align-center-6199 makeStyles-table__body-cell--width-preview-6201"
               />
               <td
-                className="makeStyles-table__body-cell-4661"
+                className="makeStyles-table__body-cell-6198"
               >
                 <Link
                   as="/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Fnote.txt"
@@ -11649,7 +11689,7 @@ font-display: block;",
                 </Link>
               </td>
               <td
-                className="makeStyles-table__body-cell-4661"
+                className="makeStyles-table__body-cell-6198"
                 key="https://myaccount.mypodserver.com/note.txt-type"
               >
                 <WithStyles(ForwardRef(Skeleton))
@@ -11694,7 +11734,7 @@ font-display: block;",
           anchor="right"
           classes={
             Object {
-              "paper": "makeStyles-drawerPaper-3112",
+              "paper": "makeStyles-drawerPaper-4649",
             }
           }
           open={false}
@@ -11706,7 +11746,7 @@ font-display: block;",
               Object {
                 "docked": "MuiDrawer-docked",
                 "modal": "MuiDrawer-modal",
-                "paper": "MuiDrawer-paper makeStyles-drawerPaper-3112",
+                "paper": "MuiDrawer-paper makeStyles-drawerPaper-4649",
                 "paperAnchorBottom": "MuiDrawer-paperAnchorBottom",
                 "paperAnchorDockedBottom": "MuiDrawer-paperAnchorDockedBottom",
                 "paperAnchorDockedLeft": "MuiDrawer-paperAnchorDockedLeft",
@@ -11744,11 +11784,11 @@ font-display: block;",
                   nodeRef={
                     Object {
                       "current": <div
-                        class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-3112 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight MuiPaper-elevation0"
+                        class="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-4649 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight MuiPaper-elevation0"
                         style="visibility: hidden; webkit-transform: translateX(1024px) translateX(0px); transform: translateX(1024px) translateX(0px);"
                       >
                         <button
-                          class="MuiButtonBase-root MuiIconButton-root makeStyles-drawerCloseButton-3111"
+                          class="MuiButtonBase-root MuiIconButton-root makeStyles-drawerCloseButton-4648"
                           tabindex="0"
                           type="button"
                         >
@@ -11771,7 +11811,7 @@ font-display: block;",
                           />
                         </button>
                         <div
-                          class="makeStyles-drawerContent-3113"
+                          class="makeStyles-drawerContent-4650"
                         />
                       </div>,
                     }
@@ -11791,7 +11831,7 @@ font-display: block;",
                   unmountOnExit={false}
                 >
                   <WithStyles(ForwardRef(Paper))
-                    className="MuiDrawer-paper makeStyles-drawerPaper-3112 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight"
+                    className="MuiDrawer-paper makeStyles-drawerPaper-4649 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight"
                     elevation={0}
                     square={true}
                     style={
@@ -11801,7 +11841,7 @@ font-display: block;",
                     }
                   >
                     <ForwardRef(Paper)
-                      className="MuiDrawer-paper makeStyles-drawerPaper-3112 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight"
+                      className="MuiDrawer-paper makeStyles-drawerPaper-4649 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight"
                       classes={
                         Object {
                           "elevation0": "MuiPaper-elevation0",
@@ -11843,7 +11883,7 @@ font-display: block;",
                       }
                     >
                       <div
-                        className="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-3112 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight MuiPaper-elevation0"
+                        className="MuiPaper-root MuiDrawer-paper makeStyles-drawerPaper-4649 MuiDrawer-paperAnchorRight MuiDrawer-paperAnchorDockedRight MuiPaper-elevation0"
                         style={
                           Object {
                             "visibility": "hidden",
@@ -11851,11 +11891,11 @@ font-display: block;",
                         }
                       >
                         <WithStyles(ForwardRef(IconButton))
-                          className="makeStyles-drawerCloseButton-3111"
+                          className="makeStyles-drawerCloseButton-4648"
                           onClick={[Function]}
                         >
                           <ForwardRef(IconButton)
-                            className="makeStyles-drawerCloseButton-3111"
+                            className="makeStyles-drawerCloseButton-4648"
                             classes={
                               Object {
                                 "colorInherit": "MuiIconButton-colorInherit",
@@ -11873,14 +11913,14 @@ font-display: block;",
                           >
                             <WithStyles(ForwardRef(ButtonBase))
                               centerRipple={true}
-                              className="MuiIconButton-root makeStyles-drawerCloseButton-3111"
+                              className="MuiIconButton-root makeStyles-drawerCloseButton-4648"
                               disabled={false}
                               focusRipple={true}
                               onClick={[Function]}
                             >
                               <ForwardRef(ButtonBase)
                                 centerRipple={true}
-                                className="MuiIconButton-root makeStyles-drawerCloseButton-3111"
+                                className="MuiIconButton-root makeStyles-drawerCloseButton-4648"
                                 classes={
                                   Object {
                                     "disabled": "Mui-disabled",
@@ -11893,7 +11933,7 @@ font-display: block;",
                                 onClick={[Function]}
                               >
                                 <button
-                                  className="MuiButtonBase-root MuiIconButton-root makeStyles-drawerCloseButton-3111"
+                                  className="MuiButtonBase-root MuiIconButton-root makeStyles-drawerCloseButton-4648"
                                   disabled={false}
                                   onBlur={[Function]}
                                   onClick={[Function]}
@@ -11978,7 +12018,7 @@ font-display: block;",
                           </ForwardRef(IconButton)>
                         </WithStyles(ForwardRef(IconButton))>
                         <div
-                          className="makeStyles-drawerContent-3113"
+                          className="makeStyles-drawerContent-4650"
                         />
                       </div>
                     </ForwardRef(Paper)>
