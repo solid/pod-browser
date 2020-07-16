@@ -38,6 +38,7 @@ import { ResourceDetails, getIriPath } from "../../src/lit-solid-helpers";
 import Spinner from "../spinner";
 import styles from "./styles";
 import Breadcrumbs from "../breadcrumbs";
+import ContainerToolbar from "../containerToolbar";
 
 const useStyles = makeStyles<PrismTheme>((theme) => {
   return createStyles(styles(theme) as StyleRules);
@@ -111,7 +112,10 @@ export default function Container(props: IPodList): ReactElement {
   /* eslint react/jsx-props-no-spreading: 0 */
   return (
     <>
-      <Breadcrumbs />
+      <div className={bem("container-menu")}>
+        <Breadcrumbs />
+        <ContainerToolbar />
+      </div>
       <table
         className={clsx(bem("table"), bem("navigator"))}
         {...getTableProps()}

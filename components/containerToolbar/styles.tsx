@@ -20,19 +20,19 @@
  */
 
 import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
+import { Styles } from "jss";
 
-
-const styles = (theme: PrismTheme) => {
-  return createStyles(theme, ["table"], {
-    "container-menu": {
-      display: "flex",
-      justifyContent: "space-between",
-      margin: theme.spacing(1, 0, 0),
+export default function styles(theme: PrismTheme): Styles {
+  return createStyles(theme, ["icons"], {
+    "container-toolbar": {
+      paddingBottom: theme.spacing(2), // to negate the padding that breadcrumbs must have
     },
-    navigator: {
-      marginTop: theme.spacing(1),
+    "icon-button": {
+      background: "none",
+      border: 0,
+      cursor: "pointer",
+      fontSize: "100%",
+      padding: 0,
     },
   });
-};
-
-export default styles;
+}
