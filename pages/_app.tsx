@@ -47,7 +47,7 @@ import UserContext, { ISession } from "../src/contexts/userContext";
 import { AlertProvider } from "../src/contexts/alertContext";
 import Notification from "../components/notification";
 
-import PodManagerHeader from "../components/header";
+import PodBrowserHeader from "../components/header";
 import "./styles.css";
 
 interface AppProps {
@@ -103,7 +103,7 @@ export default function App(props: AppProps): ReactElement {
   return (
     <>
       <Head>
-        <title>Inrupt Pod Manager</title>
+        <title>Inrupt Pod Browser</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
@@ -116,7 +116,7 @@ export default function App(props: AppProps): ReactElement {
             <AlertProvider>
               <CssBaseline />
               <div className={bem("app-layout")}>
-                <PodManagerHeader />
+                <PodBrowserHeader />
                 <main className={bem("app-layout__main")}>
                   <Component {...pageProps} />
                 </main>

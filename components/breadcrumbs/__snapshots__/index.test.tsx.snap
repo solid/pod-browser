@@ -850,7 +850,7 @@ font-display: block;",
     }
   >
     <PodLocationProvider
-      currentUri="https://www.mypodmanager.com"
+      currentUri="https://www.mypodbrowser.com"
     >
       <Breadcrumbs>
         <nav
@@ -1733,7 +1733,7 @@ font-display: block;",
     }
   >
     <PodLocationProvider
-      currentUri="https://www.mypodmanager.com/some/location"
+      currentUri="https://www.mypodbrowser.com/some/location"
     >
       <Breadcrumbs>
         <nav
@@ -1767,12 +1767,12 @@ font-display: block;",
               />
                
               <Link
-                as="/resource/https%3A%2F%2Fwww.mypodmanager.com%2Fsome"
+                as="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome"
                 href="/resource/[iri]"
               >
                 <a
                   className="makeStyles-breadcrumb__link-1537"
-                  href="/resource/https%3A%2F%2Fwww.mypodmanager.com%2Fsome"
+                  href="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
                 >
@@ -1789,12 +1789,12 @@ font-display: block;",
               />
                
               <Link
-                as="/resource/https%3A%2F%2Fwww.mypodmanager.com%2Fsome%2Flocation"
+                as="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2Flocation"
                 href="/resource/[iri]"
               >
                 <a
                   className="makeStyles-breadcrumb__link-1537 makeStyles-breadcrumb__link--active-1538"
-                  href="/resource/https%3A%2F%2Fwww.mypodmanager.com%2Fsome%2Flocation"
+                  href="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2Flocation"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
                 >

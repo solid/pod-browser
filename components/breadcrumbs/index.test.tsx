@@ -29,7 +29,7 @@ describe("Breadcrumbs view", () => {
     jest.spyOn(ReactUtils, "useLayoutEffect").mockImplementation(() => {});
 
     const tree = mountToJson(
-      <PodLocationProvider currentUri="https://www.mypodmanager.com">
+      <PodLocationProvider currentUri="https://www.mypodbrowser.com">
         <Breadcrumbs />
       </PodLocationProvider>
     );
@@ -40,7 +40,7 @@ describe("Breadcrumbs view", () => {
     jest.spyOn(ReactUtils, "useLayoutEffect").mockImplementation(() => {});
 
     const tree = mountToJson(
-      <PodLocationProvider currentUri="https://www.mypodmanager.com/some/location">
+      <PodLocationProvider currentUri="https://www.mypodbrowser.com/some/location">
         <Breadcrumbs />
       </PodLocationProvider>
     );
