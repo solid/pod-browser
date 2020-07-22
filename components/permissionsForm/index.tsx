@@ -31,7 +31,7 @@ import {
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import { StyleRules } from "@material-ui/styles";
 import { AlertProps } from "@material-ui/lab/Alert";
-import { unstable_Access } from "@solid/lit-pod";
+import { unstable_Access, unstable_AclDataset } from "@solid/lit-pod";
 import {
   Button,
   Checkbox,
@@ -46,8 +46,8 @@ import KeyboardArrowUp from "@material-ui/icons/KeyboardArrowUp";
 import AlertContext from "../../src/contexts/alertContext";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
 import {
-  NormalizedPermission,
   displayPermissions,
+  NormalizedPermission,
 } from "../../src/lit-solid-helpers";
 import styles from "./styles";
 
@@ -171,9 +171,11 @@ export function toggleOpen(
 }
 
 interface IPermissionForm {
-  permission: NormalizedPermission;
+  permission: Partial<NormalizedPermission>;
   warnOnSubmit: boolean;
-  onSave: () => null;
+  onSave: (
+    access: unstable_Access
+  ) => Promise<unstable_AclDataset> | Promise<void> | Promise<null>;
 }
 
 export default function PermissionsForm({
@@ -192,9 +194,10 @@ export default function PermissionsForm({
   const { setTitle, setOpen, setContent, confirmed, setConfirmed } = useContext(
     ConfirmationDialogContext
   );
+  const unstableAccess = access as unstable_Access;
 
   const savePermissions = savePermissionsHandler({
-    access,
+    access: unstableAccess,
     onSave,
     setAlertOpen,
     setDialogOpen: setOpen,
@@ -209,10 +212,18 @@ export default function PermissionsForm({
     warnOnSubmit,
   });
 
-  const readChange = setPermissionHandler(access, "read", setAccess);
-  const writeChange = setPermissionHandler(access, "write", setAccess);
-  const appendChange = setPermissionHandler(access, "append", setAccess);
-  const controlChange = setPermissionHandler(access, "control", setAccess);
+  const readChange = setPermissionHandler(unstableAccess, "read", setAccess);
+  const writeChange = setPermissionHandler(unstableAccess, "write", setAccess);
+  const appendChange = setPermissionHandler(
+    unstableAccess,
+    "append",
+    setAccess
+  );
+  const controlChange = setPermissionHandler(
+    unstableAccess,
+    "control",
+    setAccess
+  );
   const handleToggleClick = toggleOpen(formOpen, setFormOpen);
 
   useEffect(() => {
@@ -248,17 +259,17 @@ export default function PermissionsForm({
     // This chooses typescript rules over prettier in a battle over adding parenthesis to JSX
     <div className={classes.container}>
       <header className={classes.summary} onClick={handleToggleClick}>
-        <span>{displayPermissions(access)}</span>
+        <span>{displayPermissions(unstableAccess)}</span>
         <span className={classes.selectIcon}>
           {icon}
         </span>
       </header>
       <section className={formOpen ? classes.selectionOpen : classes.selectionClosed}>
         <List>
-          <PermissionCheckbox value={access.read} classes={classes} label="read" onChange={readChange} />
-          <PermissionCheckbox value={access.write} classes={classes} label="write" onChange={writeChange} />
-          <PermissionCheckbox value={access.append} classes={classes} label="append" onChange={appendChange} />
-          <PermissionCheckbox value={access.control} classes={classes} label="control" onChange={controlChange} />
+          <PermissionCheckbox value={unstableAccess.read} classes={classes} label="read" onChange={readChange} />
+          <PermissionCheckbox value={unstableAccess.write} classes={classes} label="write" onChange={writeChange} />
+          <PermissionCheckbox value={unstableAccess.append} classes={classes} label="append" onChange={appendChange} />
+          <PermissionCheckbox value={unstableAccess.control} classes={classes} label="control" onChange={controlChange} />
         </List>
 
         <Button onClick={handleSaveClick} variant="contained">

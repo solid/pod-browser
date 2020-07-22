@@ -4,8 +4,8 @@ exports[`DetailsMenuContext it has context data 1`] = `
 <ContextProvider
   value={
     Object {
-      "action": null,
-      "iri": null,
+      "action": "",
+      "iri": "",
       "menuOpen": false,
       "setAction": [Function],
       "setIri": [Function],

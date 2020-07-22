@@ -33,6 +33,7 @@ import {
   LitDataset,
   Thing,
   unstable_Access,
+  unstable_AclDataset,
   unstable_AgentAccess,
   unstable_fetchFile,
   unstable_fetchLitDatasetWithAcl,
@@ -40,6 +41,10 @@ import {
   unstable_getResourceAcl,
   unstable_saveAclFor,
   unstable_setAgentResourceAccess,
+  unstable_WithAccessibleAcl,
+  unstable_WithAcl,
+  unstable_WithResourceAcl,
+  WithResourceInfo,
 } from "@solid/lit-pod";
 import { ldp, space } from "rdf-namespaces";
 import { parseUrl } from "../stringHelpers";
@@ -143,10 +148,17 @@ export async function savePermissions({
   access,
 }: ISavePermissions): Promise<unstable_AclDataset> {
   const dataset = await unstable_fetchLitDatasetWithAcl(iri);
-  const aclDataset = unstable_getResourceAcl(dataset);
-  const updatedAcl = unstable_setAgentResourceAccess(aclDataset, webId, access);
 
-  await unstable_saveAclFor(dataset, updatedAcl);
+  const aclDataset = unstable_getResourceAcl(
+    dataset as unstable_WithAcl & WithResourceInfo & unstable_WithResourceAcl
+  );
+  const updatedAcl = await unstable_setAgentResourceAccess(
+    aclDataset as unstable_AclDataset,
+    webId,
+    access
+  );
+
+  return unstable_saveAclFor(dataset as unstable_WithAccessibleAcl, updatedAcl);
 }
 
 export async function normalizePermissions(

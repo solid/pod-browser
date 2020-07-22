@@ -22,7 +22,7 @@
 import { ReactElement, useContext } from "react";
 import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import styles from "./styles";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 

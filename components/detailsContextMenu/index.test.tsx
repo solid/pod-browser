@@ -24,7 +24,6 @@
 import * as ReactFns from "react";
 import * as RouterFns from "next/router";
 import * as LitPodFns from "../../src/hooks/litPod";
-import * as LitSolidHelperFns from "../../src/lit-solid-helpers";
 import DetailsContextMenu, { Contents } from "./index";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 
@@ -150,8 +149,9 @@ describe("Contents", () => {
     expect(tree).toMatchSnapshot();
   });
 
-  test("it renders 'error' component when there's an error", () => {
+  test("it returns null component when there's an error", () => {
     const iri = "/iri/";
+    const action = "details";
 
     jest
       .spyOn(LitPodFns, "useFetchResourceDetails")
@@ -161,8 +161,6 @@ describe("Contents", () => {
       .spyOn(RouterFns, "useRouter")
       .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
 
-    const tree = mountToJson(<Contents iri={iri} action="details" />);
-
-    expect(tree).toMatchSnapshot();
+    expect(Contents({ iri, action })).toBeNull();
   });
 });

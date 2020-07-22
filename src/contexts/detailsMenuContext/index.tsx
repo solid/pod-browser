@@ -24,6 +24,7 @@ import {
   createContext,
   Dispatch,
   ReactElement,
+  SetStateAction,
   useState,
   useEffect,
 } from "react";
@@ -33,15 +34,18 @@ interface DetailsContext {
   action: string | null;
   iri: string | null;
   menuOpen: boolean;
-  setAction?: Dispatch<string> | Dispatch<null>;
-  setIri?: Dispatch<string> | Dispatch<null>;
-  setMenuOpen?: Dispatch<boolean>;
+  setAction: Dispatch<string>;
+  setIri: Dispatch<string>;
+  setMenuOpen: Dispatch<boolean>;
 }
 
 const DetailsMenuContext = createContext<DetailsContext>({
   action: null,
   iri: null,
   menuOpen: false,
+  setAction: (action: string) => action,
+  setIri: (iri: string) => iri,
+  setMenuOpen: (open: boolean) => open,
 });
 
 interface Props {
@@ -49,15 +53,15 @@ interface Props {
 }
 
 function DetailsMenuProvider({ children }: Props): ReactElement {
-  const [menuOpen, setMenuOpen] = useState<boolean>(false);
-  const [action, setAction] = useState(null);
-  const [iri, setIri] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [action, setAction] = useState("");
+  const [iri, setIri] = useState("");
   const router = useRouter();
 
   useEffect(() => {
-    const {
-      query: { action: routeAction, iri: routeIri },
-    } = router;
+    const { query } = router;
+    const routeAction = query.action ? (query.action as string) : "";
+    const routeIri = query.iri ? (query.iri as string) : "";
 
     setMenuOpen(!!routeAction);
     setAction(routeAction);

@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement, useContext, useState } from "react";
+import { ReactElement, useContext } from "react";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { Drawer, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -44,7 +44,7 @@ export function Contents({ action, iri }: IContentsProps): ReactElement | null {
   const { data, error } = useFetchResourceDetails(iri);
 
   if (!data) return <DetailsLoading />;
-  if (error) return "error";
+  if (error) return null;
 
   const { permissions } = data;
 
@@ -58,7 +58,6 @@ export function Contents({ action, iri }: IContentsProps): ReactElement | null {
 }
 
 export default function DetailsContextMenu(): ReactElement | null {
-  const [resource, setResource] = useState(null);
   const { menuOpen, setMenuOpen, action, iri } = useContext(DetailsMenuContext);
   const classes = useStyles();
   const closeDrawer = () => setMenuOpen(false);
@@ -81,7 +80,7 @@ export default function DetailsContextMenu(): ReactElement | null {
       <div className={classes.drawerContent}>
         {!iri
           ? <DetailsLoading />
-          : <Contents action={action} iri={iri as string} />}
+          : <Contents action={action as string} iri={iri as string} />}
       </div>
     </Drawer>
   );

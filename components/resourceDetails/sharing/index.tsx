@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable camelcase */
+/* eslint-disable camelcase, no-console */
 import {
   ReactElement,
   useContext,
@@ -27,7 +27,7 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import {
   Avatar,
   Button,
@@ -104,7 +104,9 @@ export function saveThirdPartyPermissionHandler({
   setThirdPartyPermissions,
   thirdPartyPermissions,
   webId,
-}: ISaveThirdPartyPermissionHandler): (acl: unstable_Access) => Promise<void> {
+}: ISaveThirdPartyPermissionHandler): (
+  acl: unstable_Access
+) => Promise<unstable_AclDataset> {
   return async (acl) => {
     const alias = displayPermissions(acl);
     const access = acl;
@@ -157,10 +159,9 @@ export function renderAddedAgents({
 
     return (
       <ListItem key={webId} className={classes.listItem}>
-        <Avatar className={classes.avatar} alt={name} src={avatar} />
+        <Avatar className={classes.avatar} alt={name} src={avatar as string} />
         <Typography className={classes.detailText}>{name}</Typography>
         <PermissionsForm
-          iri={iri}
           key={webId}
           permission={{
             alias: "No Control",
@@ -239,7 +240,6 @@ export function Permission(props: IPermission): ReactElement | null {
       </Typography>
 
       <PermissionsForm
-        iri={iri}
         permission={permission}
         warnOnSubmit={warnOnSubmit}
         onSave={onSave}
@@ -287,18 +287,22 @@ export function ThirdPartyPermissionsList({
   classes,
   thirdPartyPermissions,
   setThirdPartyPermissions,
-}: IThirdPartyPermissionsList): ReactElement[] {
-  return thirdPartyPermissions.map((permission) => (
-    <Permission
-      iri={iri}
-      permission={permission}
-      classes={classes}
-      key={permission.webId}
-      warnOnSubmit={false}
-      thirdPartyPermissions={thirdPartyPermissions}
-      setThirdPartyPermissions={setThirdPartyPermissions}
-    />
-  ));
+}: IThirdPartyPermissionsList): ReactElement {
+  return (
+    <>
+      {thirdPartyPermissions.map((permission) => (
+        <Permission
+          iri={iri}
+          permission={permission}
+          classes={classes}
+          key={permission.webId}
+          warnOnSubmit={false}
+          thirdPartyPermissions={thirdPartyPermissions}
+          setThirdPartyPermissions={setThirdPartyPermissions}
+        />
+      ))}
+    </>
+  );
 }
 
 interface IThirdPartyPermissions {
@@ -382,6 +386,7 @@ export default function Sharing({
   const classes = useStyles();
   const router = useRouter();
   const { pathname } = router;
+  const iriString = iri as string;
 
   return (
     <>
@@ -391,7 +396,7 @@ export default function Sharing({
         </h3>
         <Button
           startIcon={<ChevronLeftIcon />}
-          onClick={backToDetailsClick({ iri, pathname, router })}
+          onClick={backToDetailsClick({ iri: iriString, pathname, router })}
         >
           Details
         </Button>
@@ -403,7 +408,7 @@ export default function Sharing({
         <h5 className={classes["content-h5"]}>My Access</h5>
         <List>
           <Permission
-            iri={iri}
+            iri={iriString}
             key={0}
             permission={userPermissions as NormalizedPermission}
             classes={classes}
@@ -415,7 +420,7 @@ export default function Sharing({
       </section>
 
       <ThirdPartyPermissions
-        iri={iri}
+        iri={iriString}
         thirdPartyPermissions={thirdPartyPermissions}
         setThirdPartyPermissions={setThirdPartyPermissions}
         classes={classes}
@@ -424,7 +429,7 @@ export default function Sharing({
       <Divider />
 
       <section className={classes.centeredSection}>
-        <h5 className={classes["content-h5"]} title={iri}>
+        <h5 className={classes["content-h5"]} title={iriString}>
           Grant Permission
         </h5>
 
@@ -459,7 +464,7 @@ export default function Sharing({
             addedAgents,
             ownerId: webId,
             classes,
-            iri,
+            iri: iriString,
             setAddedAgents,
             setThirdPartyPermissions,
             thirdPartyPermissions,

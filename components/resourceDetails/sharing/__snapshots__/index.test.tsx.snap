@@ -2328,7 +2328,6 @@ font-display: block;",
                         </ForwardRef(Typography)>
                       </WithStyles(ForwardRef(Typography))>
                       <PermissionsForm
-                        iri="iri"
                         key=".2"
                         onSave={[Function]}
                         permission={
@@ -4422,7 +4421,6 @@ font-display: block;",
                             </ForwardRef(Typography)>
                           </WithStyles(ForwardRef(Typography))>
                           <PermissionsForm
-                            iri="iri"
                             key=".2"
                             onSave={[Function]}
                             permission={
@@ -9352,7 +9350,6 @@ font-display: block;",
                 </ForwardRef(Typography)>
               </WithStyles(ForwardRef(Typography))>
               <PermissionsForm
-                iri="iri"
                 key=".2"
                 onSave={[Function]}
                 permission={
