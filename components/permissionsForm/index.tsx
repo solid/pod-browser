@@ -31,7 +31,7 @@ import {
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import { StyleRules } from "@material-ui/styles";
 import { AlertProps } from "@material-ui/lab/Alert";
-import { unstable_Access } from "@solid/lit-pod";
+import { unstable_Access, unstable_AclDataset } from "@solid/lit-pod";
 import {
   Button,
   Checkbox,

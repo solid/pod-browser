@@ -33,6 +33,7 @@ import {
   LitDataset,
   Thing,
   unstable_Access,
+  unstable_AclDataset,
   unstable_AgentAccess,
   unstable_fetchFile,
   unstable_fetchLitDatasetWithAcl,
@@ -42,6 +43,10 @@ import {
   unstable_hasResourceAcl,
   unstable_saveAclFor,
   unstable_setAgentResourceAccess,
+  unstable_WithAccessibleAcl,
+  unstable_WithAcl,
+  unstable_WithResourceAcl,
+  WithResourceInfo,
 } from "@solid/lit-pod";
 import { ldp, space } from "rdf-namespaces";
 import { parseUrl } from "../stringHelpers";

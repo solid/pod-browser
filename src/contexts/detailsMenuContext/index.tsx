@@ -24,6 +24,7 @@ import {
   createContext,
   Dispatch,
   ReactElement,
+  SetStateAction,
   useState,
   useEffect,
 } from "react";
