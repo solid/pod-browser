@@ -12,7 +12,7 @@ that data.
 
 # Development
 
-* Pod Browser uses a framework called [Next.js](https://nextjs.org/), which has
+* PodBrowser uses a framework called [Next.js](https://nextjs.org/), which has
   [extensive documentation](https://nextjs.org/docs/getting-started). It uses
   React for client-side templates, Webpack for building assets, Typescript for
   javascript, and Jest for tests.
@@ -21,7 +21,7 @@ that data.
 
 # Deployment
 
-You can use `npm deploy` to deploy a Pod Browser instance to Vercel, if you
+You can use `npm deploy` to deploy a PodBrowser instance to Vercel, if you
 create an account. Alternatively, you can:
 
 * Run `npm run build` and `npm run start` to run the node server;

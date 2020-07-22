@@ -103,7 +103,7 @@ export default function App(props: AppProps): ReactElement {
   return (
     <>
       <Head>
-        <title>Inrupt Pod Browser</title>
+        <title>Inrupt PodBrowser</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
