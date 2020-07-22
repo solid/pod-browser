@@ -48,7 +48,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { makeStyles } from "@material-ui/styles";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import { unstable_Access, unstable_AclDataset } from "@solid/lit-pod";
-import UserContext, { ISession } from "../../../src/contexts/userContext";
+import UserContext, { ISession } from "../../src/contexts/userContext";
 import {
   displayPermissions,
   fetchProfile,
@@ -58,9 +58,9 @@ import {
   NormalizedPermission,
   Profile,
   savePermissions,
-} from "../../../src/lit-solid-helpers";
-import styles from "../styles";
-import PermissionsForm from "../../permissionsForm";
+} from "../../src/lit-solid-helpers";
+import styles from "../resourceDetails/styles";
+import PermissionsForm from "../permissionsForm";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme))
@@ -125,54 +125,68 @@ export function saveThirdPartyPermissionHandler({
   };
 }
 
-interface IRenderAddedAgents {
+interface IAddedAgents {
   addedAgents: Profile[];
   classes: Record<string, string>;
   iri: string;
-  ownerId: string;
   setAddedAgents: Dispatch<Profile[]>;
   setThirdPartyPermissions: Dispatch<NormalizedPermission[]>;
   thirdPartyPermissions: NormalizedPermission[];
 }
 
-export function renderAddedAgents({
+export function AddedAgents({
   addedAgents,
   classes,
   iri,
   setAddedAgents,
   setThirdPartyPermissions,
   thirdPartyPermissions,
-}: IRenderAddedAgents): ReactElement[] {
-  return addedAgents.map((agent) => {
-    const { avatar, webId } = agent;
-    const name = displayName(agent);
+}: IAddedAgents): ReactElement | null {
+  if (!addedAgents || addedAgents.length === 0) return null;
 
-    const onSave = saveThirdPartyPermissionHandler({
-      iri,
-      setAddedAgents,
-      addedAgents,
-      thirdPartyPermissions,
-      setThirdPartyPermissions,
-      webId,
-      profile: agent,
-    });
+  return (
+    <List>
+      {addedAgents.map((agent) => {
+        const { avatar, webId } = agent;
+        const name = displayName(agent);
 
-    return (
-      <ListItem key={webId} className={classes.listItem}>
-        <Avatar className={classes.avatar} alt={name} src={avatar as string} />
-        <Typography className={classes.detailText}>{name}</Typography>
-        <PermissionsForm
-          key={webId}
-          permission={{
-            alias: "No Control",
-            acl: { read: false, write: false, append: false, control: false },
-          }}
-          warnOnSubmit={false}
-          onSave={onSave}
-        />
-      </ListItem>
-    );
-  });
+        const onSave = saveThirdPartyPermissionHandler({
+          iri,
+          setAddedAgents,
+          addedAgents,
+          thirdPartyPermissions,
+          setThirdPartyPermissions,
+          webId,
+          profile: agent,
+        });
+
+        return (
+          <ListItem key={webId} className={classes.listItem}>
+            <Avatar
+              className={classes.avatar}
+              alt={name}
+              src={avatar as string}
+            />
+            <Typography className={classes.detailText}>{name}</Typography>
+            <PermissionsForm
+              key={webId}
+              permission={{
+                alias: "No Control",
+                acl: {
+                  read: false,
+                  write: false,
+                  append: false,
+                  control: false,
+                },
+              }}
+              warnOnSubmit={false}
+              onSave={onSave}
+            />
+          </ListItem>
+        );
+      })}
+    </List>
+  );
 }
 
 interface IHandlePermissionUpdate {
@@ -370,7 +384,7 @@ export function backToDetailsClick({
   };
 }
 
-export default function Sharing({
+export default function ResourceSharing({
   name,
   iri,
   permissions,
@@ -459,17 +473,14 @@ export default function Sharing({
       </section>
 
       <section className={classes.centeredSection}>
-        <List>
-          {renderAddedAgents({
-            addedAgents,
-            ownerId: webId,
-            classes,
-            iri: iriString,
-            setAddedAgents,
-            setThirdPartyPermissions,
-            thirdPartyPermissions,
-          })}
-        </List>
+        <AddedAgents
+          addedAgents={addedAgents}
+          classes={classes}
+          iri={iriString}
+          setAddedAgents={setAddedAgents}
+          setThirdPartyPermissions={setThirdPartyPermissions}
+          thirdPartyPermissions={thirdPartyPermissions}
+        />
       </section>
     </>
   );

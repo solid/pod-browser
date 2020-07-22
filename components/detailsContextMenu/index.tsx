@@ -28,7 +28,7 @@ import styles from "./styles";
 import useEscKey from "../../src/effects/useEscKey";
 import DetailsLoading from "../detailsLoading";
 import ResourceDetails from "../resourceDetails";
-import Sharing from "../resourceDetails/sharing";
+import ResourceSharing from "../resourceSharing";
 import { useFetchResourceDetails } from "../../src/hooks/litPod";
 import { parseUrl } from "../../src/stringHelpers";
 
@@ -50,7 +50,9 @@ export function Contents({ action, iri }: IContentsProps): ReactElement | null {
 
   switch (action) {
     case "sharing":
-      return <Sharing iri={iri} name={pathname} permissions={permissions} />;
+      return (
+        <ResourceSharing iri={iri} name={pathname} permissions={permissions} />
+      );
 
     default:
       return <ResourceDetails resource={data} />;

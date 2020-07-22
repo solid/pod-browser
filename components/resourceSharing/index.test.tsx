@@ -21,21 +21,21 @@
 
 import * as ReactFns from "react";
 import * as RouterFns from "next/router";
-import { mountToJson } from "../../../__testUtils/mountWithTheme";
-import * as LitSoldHelperFns from "../../../src/lit-solid-helpers";
-import Sharing, {
+import { mountToJson } from "../../__testUtils/mountWithTheme";
+import * as LitSoldHelperFns from "../../src/lit-solid-helpers";
+import ResourceSharing, {
+  AddedAgents,
   backToDetailsClick,
   displayName,
   handleAddAgentClick,
   handlePermissionUpdate,
   NoThirdPartyPermissions,
-  renderAddedAgents,
   saveThirdPartyPermissionHandler,
   ThirdPartyPermissions,
   ThirdPartyPermissionsList,
 } from "./index";
 
-describe("Sharing", () => {
+describe("ResourceSharing", () => {
   test("it renders the sharing action component", () => {
     const name = "name";
     const iri = "iri";
@@ -83,7 +83,7 @@ describe("Sharing", () => {
       });
 
     const tree = mountToJson(
-      <Sharing iri={iri} name={name} permissions={permissions} />
+      <ResourceSharing iri={iri} name={name} permissions={permissions} />
     );
 
     expect(tree).toMatchSnapshot();
@@ -198,7 +198,7 @@ describe("saveThirdPartyPermissionHandler", () => {
   });
 });
 
-describe("renderAddedAgents", () => {
+describe("AddedAgents", () => {
   test("it renders a list of agents added to the pending allow access list", () => {
     const webId = "webId";
     const avatar = "avatar";
@@ -218,15 +218,59 @@ describe("renderAddedAgents", () => {
       detailText: "detailText",
     };
 
-    const agents = renderAddedAgents({
-      addedAgents,
+    const tree = mountToJson(
+      <AddedAgents
+        addedAgents={addedAgents}
+        classes={classes}
+        setAddedAgents={setAddedAgents}
+        setThirdPartyPermissions={setThirdPartyPermissions}
+        thirdPartyPermissions={thirdPartyPermissions}
+      />
+    );
+
+    expect(tree).toMatchSnapshot();
+  });
+
+  test("it returns null when addedAgents are null", () => {
+    const setAddedAgents = jest.fn();
+    const setThirdPartyPermissions = jest.fn();
+    const thirdPartyPermissions = [];
+    const classes = {
+      listItem: "listItem",
+      avatar: "avatar",
+      detailText: "detailText",
+    };
+
+    const tree = AddedAgents({
+      addedAgents: null,
       classes,
       setAddedAgents,
       setThirdPartyPermissions,
       thirdPartyPermissions,
     });
 
-    expect(agents).toHaveLength(1);
+    expect(tree).toBeNull();
+  });
+
+  test("it returns null when addedAgents are empty", () => {
+    const setAddedAgents = jest.fn();
+    const setThirdPartyPermissions = jest.fn();
+    const thirdPartyPermissions = [];
+    const classes = {
+      listItem: "listItem",
+      avatar: "avatar",
+      detailText: "detailText",
+    };
+
+    const tree = AddedAgents({
+      addedAgents: [],
+      classes,
+      setAddedAgents,
+      setThirdPartyPermissions,
+      thirdPartyPermissions,
+    });
+
+    expect(tree).toBeNull();
   });
 });
 

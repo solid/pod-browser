@@ -5349,7 +5349,7 @@ font-display: block;",
 </WithTheme>
 `;
 
-exports[`Contents it renders a Sharing component when there's data and the action is sharing 1`] = `
+exports[`Contents it renders a ResourceSharing component when there's data and the action is sharing 1`] = `
 <WithTheme
   theme={
     Object {
@@ -6202,7 +6202,7 @@ font-display: block;",
       action="sharing"
       iri="/iri/"
     >
-      <Sharing
+      <ResourceSharing
         iri="/iri/"
         name="/iri/"
         permissions={
@@ -9047,24 +9047,41 @@ font-display: block;",
         <section
           className="makeStyles-centeredSection-46"
         >
-          <WithStyles(ForwardRef(List))>
-            <ForwardRef(List)
-              classes={
-                Object {
-                  "dense": "MuiList-dense",
-                  "padding": "MuiList-padding",
-                  "root": "MuiList-root",
-                  "subheader": "MuiList-subheader",
-                }
+          <AddedAgents
+            addedAgents={Array []}
+            classes={
+              Object {
+                "agentInput": "makeStyles-agentInput-54",
+                "avatar": "makeStyles-avatar-45",
+                "centeredSection": "makeStyles-centeredSection-46",
+                "content": "makeStyles-content-66",
+                "content-blockquote": "makeStyles-content-blockquote-64",
+                "content-h1": "makeStyles-content-h1-56",
+                "content-h2": "makeStyles-content-h2-57",
+                "content-h3": "makeStyles-content-h3-58",
+                "content-h4": "makeStyles-content-h4-59",
+                "content-h5": "makeStyles-content-h5-60",
+                "content-h6": "makeStyles-content-h6-61",
+                "content-ol": "makeStyles-content-ol-63",
+                "content-p": "makeStyles-content-p-65",
+                "content-ul": "makeStyles-content-ul-62",
+                "detailText": "makeStyles-detailText-51",
+                "downloadButton": "makeStyles-downloadButton-53",
+                "formListItem": "makeStyles-formListItem-50",
+                "headerSection": "makeStyles-headerSection-47",
+                "image": "makeStyles-image-55",
+                "listItem": "makeStyles-listItem-49",
+                "raw": "makeStyles-raw-48",
+                "typeValue": "makeStyles-typeValue-52",
               }
-            >
-              <ul
-                className="MuiList-root MuiList-padding"
-              />
-            </ForwardRef(List)>
-          </WithStyles(ForwardRef(List))>
+            }
+            iri="/iri/"
+            setAddedAgents={[Function]}
+            setThirdPartyPermissions={[Function]}
+            thirdPartyPermissions={Array []}
+          />
         </section>
-      </Sharing>
+      </ResourceSharing>
     </Contents>
   </ThemeProvider>
 </WithTheme>

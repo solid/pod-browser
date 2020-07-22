@@ -117,7 +117,7 @@ describe("Contents", () => {
     expect(tree).toMatchSnapshot();
   });
 
-  test("it renders a Sharing component when there's data and the action is sharing", () => {
+  test("it renders a ResourceSharing component when there's data and the action is sharing", () => {
     const iri = "/iri/";
     const webId = "webId";
     const mockContext = { session: { webId } };
