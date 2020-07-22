@@ -142,14 +142,14 @@ describe("handleAddAgentClick", () => {
     expect(setAddedAgents).not.toHaveBeenCalled();
   });
 
-  test("it logs an error when something goes wrong", () => {
+  test("it logs an error when something goes wrong", async () => {
     jest.spyOn(console, "error").mockImplementationOnce(jest.fn());
     jest.spyOn(LitSoldHelperFns, "fetchProfile").mockImplementationOnce(() => {
       throw new Error("boom");
     });
 
-    const handler = handleAddAgentClick("agentId", [], jest.fn());
-
+    await handleAddAgentClick("agentId", [], jest.fn());
+    /* eslint-disable no-console */
     expect(console.error).toHaveBeenCalledWith("boom");
   });
 });
