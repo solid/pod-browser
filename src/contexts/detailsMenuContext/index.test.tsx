@@ -74,7 +74,7 @@ describe("DetailsMenuContext", () => {
       .mockReturnValueOnce([null, setAction])
       .mockReturnValueOnce([null, setIri]);
 
-    const tree = mountToJson(
+    mountToJson(
       <DetailsMenuProvider>
         <ChildComponent />
       </DetailsMenuProvider>

@@ -50,9 +50,6 @@ const styles = (theme: PrismTheme) => {
       justifyContent: "space-between",
       width: 140,
     },
-    selectIcon: {
-      marginLeft: "auto",
-    },
     label: smallFontSize,
     checkbox: {
       padding: 0,

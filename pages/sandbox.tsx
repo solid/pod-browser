@@ -44,6 +44,7 @@ export default function Sandbox(): ReactElement {
     if (confirmed) {
       setOpen(false);
       setConfirmed(false);
+      /* eslint-disable no-console */
       console.log("confirmed");
     }
   }, [setTitleWithType, setContentWithType, setOpen, confirmed, setConfirmed]);

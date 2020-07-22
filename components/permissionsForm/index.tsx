@@ -258,12 +258,13 @@ export default function PermissionsForm({
     // prettier-ignore
     // This chooses typescript rules over prettier in a battle over adding parenthesis to JSX
     <div className={classes.container}>
-      <header className={classes.summary} onClick={handleToggleClick}>
+      <Button
+        className={classes.summary}
+        onClick={handleToggleClick}
+        endIcon={icon}
+      >
         <span>{displayPermissions(unstableAccess)}</span>
-        <span className={classes.selectIcon}>
-          {icon}
-        </span>
-      </header>
+      </Button>
       <section className={formOpen ? classes.selectionOpen : classes.selectionClosed}>
         <List>
           <PermissionCheckbox value={unstableAccess.read} classes={classes} label="read" onChange={readChange} />
