@@ -24,6 +24,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { AlertProps } from "@material-ui/lab/Alert";
 import { Drawer, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { useRouter } from "next/router";
 import DetailsMenuContext, {
   DETAILS_CONTEXT_ACTIONS,
 } from "../../src/contexts/detailsMenuContext";
@@ -35,7 +36,7 @@ import DetailsError from "../detailsError";
 import ResourceDetails from "../resourceDetails";
 import ResourceSharing from "../resourceSharing";
 import { useFetchResourceDetails } from "../../src/hooks/litPod";
-import { parseUrl } from "../../src/stringHelpers";
+import { parseUrl, stripQueryParams } from "../../src/stringHelpers";
 
 const useStyles = makeStyles(styles);
 
@@ -69,14 +70,21 @@ export function Contents({ action, iri }: IContentsProps): ReactElement | null {
       );
 
     default:
-      return <ResourceDetails resource={data} />;
+      return <ResourceDetails resource={{ ...data, name: pathname }} />;
   }
 }
 
 export default function DetailsContextMenu(): ReactElement | null {
   const { menuOpen, setMenuOpen, action, iri } = useContext(DetailsMenuContext);
   const classes = useStyles();
-  const closeDrawer = () => setMenuOpen(false);
+  const router = useRouter();
+
+  const closeDrawer = async () => {
+    setMenuOpen(false);
+    const { asPath } = router;
+    const pathname = stripQueryParams(asPath) || "/";
+    await router.replace({ pathname });
+  };
 
   useEscKey(closeDrawer);
 
