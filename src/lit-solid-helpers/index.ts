@@ -206,24 +206,30 @@ export async function savePermissions({
   return respond(response);
 }
 
+export function filterMailtoPermissions(webId: string): boolean {
+  return !webId.match(/mailto/);
+}
+
 export async function normalizePermissions(
   permissions: unstable_AgentAccess,
   fetchProfileFn = fetchProfile
 ): Promise<NormalizedPermission[]> {
   return Promise.all(
-    Object.keys(permissions).map(
-      async (webId: string): Promise<NormalizedPermission> => {
-        const acl = permissions[webId];
-        const profile = await fetchProfileFn(webId);
+    Object.keys(permissions)
+      .filter(filterMailtoPermissions)
+      .map(
+        async (webId: string): Promise<NormalizedPermission> => {
+          const acl = permissions[webId];
+          const profile = await fetchProfileFn(webId);
 
-        return {
-          acl,
-          profile,
-          alias: displayPermissions(acl),
-          webId,
-        };
-      }
-    )
+          return {
+            acl,
+            profile,
+            alias: displayPermissions(acl),
+            webId,
+          };
+        }
+      )
   );
 }
 

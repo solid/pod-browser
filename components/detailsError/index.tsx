@@ -20,20 +20,45 @@
  */
 
 import { ReactElement } from "react";
-import { Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
-import styles from "./styles";
+import { Divider } from "@material-ui/core";
+import { PrismTheme } from "@solid/lit-prism-patterns";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
+import styles from "../resourceDetails/styles";
 
-const useStyles = makeStyles(styles);
+const useStyles = makeStyles<PrismTheme>((theme) =>
+  createStyles(styles(theme))
+);
 
-export default function DetailsError(): ReactElement {
+interface IDetailsError {
+  name: string;
+  iri: string;
+  message?: string;
+}
+
+function DetailsError({ name, iri, message }: IDetailsError): ReactElement {
   const classes = useStyles();
+  const errorMessage = message || "There was an error fetching the details.";
 
   return (
-    <div className={classes.container}>
-      <Typography>
-        There was an error fetching permissions for this resource.
-      </Typography>
-    </div>
+    <>
+      <section className={classes.centeredSection}>
+        <h3 className={classes["content-h3"]} title={iri}>
+          {name}
+        </h3>
+      </section>
+
+      <Divider />
+
+      <section className={classes.centeredSection}>
+        <h5 className={classes["content-h5"]}>Error</h5>
+        <p>{errorMessage}</p>
+      </section>
+    </>
   );
 }
+
+DetailsError.defaultProps = {
+  message: "There was an error fetching the resource details.",
+};
+
+export default DetailsError;

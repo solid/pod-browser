@@ -119,7 +119,13 @@ describe("Contents", () => {
   test("it renders a ResourceSharing component when there's data and the action is sharing", () => {
     const iri = "/iri/";
     const webId = "webId";
-    const mockContext = { session: { webId } };
+    const mockUserContext = { session: { webId } };
+    const mockDetailsMenuContext = {
+      menuOpen: false,
+      setMenuOpen: jest.fn(),
+      action: "sharing",
+      iri,
+    };
     const data = {
       iri,
       types: ["Container"],
@@ -133,7 +139,10 @@ describe("Contents", () => {
       ],
     };
 
-    jest.spyOn(ReactFns, "useContext").mockReturnValueOnce(mockContext);
+    jest
+      .spyOn(ReactFns, "useContext")
+      .mockReturnValueOnce(mockDetailsMenuContext)
+      .mockReturnValueOnce(mockUserContext);
 
     jest
       .spyOn(LitPodFns, "useFetchResourceDetails")
@@ -148,9 +157,15 @@ describe("Contents", () => {
     expect(tree).toMatchSnapshot();
   });
 
-  test("it returns null component when there's an error", () => {
+  test("it renders a DetailsError component when there's an error", () => {
     const iri = "/iri/";
-    const action = "details";
+    const mockAlertContext = {
+      setAlertOpen: jest.fn(),
+      setMessage: jest.fn(),
+      setSeverity: jest.fn(),
+    };
+
+    jest.spyOn(ReactFns, "useContext").mockReturnValueOnce(mockAlertContext);
 
     jest
       .spyOn(LitPodFns, "useFetchResourceDetails")
@@ -160,6 +175,8 @@ describe("Contents", () => {
       .spyOn(RouterFns, "useRouter")
       .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
 
-    expect(Contents({ iri, action })).toBeNull();
+    const tree = mountToJson(<Contents iri={iri} action="details" />);
+
+    expect(tree).toMatchSnapshot();
   });
 });

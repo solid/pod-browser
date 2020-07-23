@@ -24,6 +24,7 @@ import {
   createContext,
   Dispatch,
   ReactElement,
+  ReactNode,
   useState,
   useEffect,
 } from "react";
@@ -52,11 +53,11 @@ const DetailsMenuContext = createContext<DetailsContext>({
   setMenuOpen: (open: boolean) => open,
 });
 
-interface Props {
-  children: ReactElement | ReactElement[] | undefined;
+interface IDetailsMenuProvider {
+  children: ReactNode;
 }
 
-function DetailsMenuProvider({ children }: Props): ReactElement {
+function DetailsMenuProvider({ children }: IDetailsMenuProvider): ReactElement {
   const [menuOpen, setMenuOpen] = useState(false);
   const [action, setAction] = useState("");
   const [iri, setIri] = useState("");

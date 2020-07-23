@@ -21,14 +21,17 @@
 
 import { ReactElement, useContext } from "react";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import { AlertProps } from "@material-ui/lab/Alert";
 import { Drawer, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import DetailsMenuContext, {
   DETAILS_CONTEXT_ACTIONS,
 } from "../../src/contexts/detailsMenuContext";
+import AlertContext from "../../src/contexts/alertContext";
 import styles from "./styles";
 import useEscKey from "../../src/effects/useEscKey";
 import DetailsLoading from "../detailsLoading";
+import DetailsError from "../detailsError";
 import ResourceDetails from "../resourceDetails";
 import ResourceSharing from "../resourceSharing";
 import { useFetchResourceDetails } from "../../src/hooks/litPod";
@@ -44,6 +47,15 @@ interface IContentsProps {
 export function Contents({ action, iri }: IContentsProps): ReactElement | null {
   const { pathname } = parseUrl(iri);
   const { data, error } = useFetchResourceDetails(iri);
+  const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
+
+  if (error) {
+    const { message } = error;
+    setSeverity("error" as AlertProps["severity"]);
+    setMessage(message || "There was an error fetching the details.");
+    setAlertOpen(true);
+    return <DetailsError message={message} name={pathname} iri={iri} />;
+  }
 
   if (!data) return <DetailsLoading name={pathname} />;
   if (error) return null;

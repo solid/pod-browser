@@ -19,13 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
+import { mountToJson } from "../../__testUtils/mountWithTheme";
 import DetailsError from "./index";
 
 describe("DetailsError", () => {
   test("Renders a details error view", () => {
-    const tree = shallow(<DetailsError />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    const name = "name";
+    const message = "message";
+    const iri = "iri";
+    const tree = mountToJson(
+      <DetailsError name={name} message={message} iri={iri} />
+    );
+
+    expect(tree).toMatchSnapshot();
   });
 });

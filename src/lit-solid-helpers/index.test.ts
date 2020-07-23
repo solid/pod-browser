@@ -31,6 +31,7 @@ const {
   fetchProfile,
   fetchResource,
   fetchResourceWithAcl,
+  filterMailtoPermissions,
   getIriPath,
   getThirdPartyPermissions,
   getTypeName,
@@ -274,6 +275,30 @@ describe("normalizePermissions", () => {
     expect(perms4.alias).toEqual("No Access");
     expect(perms4.acl).toMatchObject(acl.acl4);
     expect(perms4.profile).toMatchObject(expectedProfile);
+  });
+
+  test("it filters out invalid webIds", async () => {
+    const acl = {
+      acl1: { read: true, write: false, control: false, append: false },
+      "mailto:example@example.com": {
+        read: true,
+        write: true,
+        control: true,
+        append: true,
+      },
+    };
+
+    const expectedProfile = {
+      avatar: "http://example.com/avatar.png",
+      name: "string",
+      nickname: "string",
+    };
+
+    const fetchProfileFn = jest.fn().mockResolvedValue(expectedProfile);
+
+    const permissions = await normalizePermissions(acl, fetchProfileFn);
+
+    expect(permissions).toHaveLength(1);
   });
 });
 
@@ -934,5 +959,29 @@ describe("isContainerIri", () => {
 
   test("it returns false when iri does not end with /", () => {
     expect(isContainerIri("foo")).toEqual(false);
+  });
+});
+
+describe("filterMailtoPermissions", () => {
+  test("it returns false when given a mailto url", () => {
+    expect(filterMailtoPermissions("mailto:example@example.com")).toEqual(
+      false
+    );
+  });
+
+  test("it returns true when given a webId", () => {
+    expect(
+      filterMailtoPermissions("https://user.dev.inrupt.net/public/")
+    ).toEqual(true);
+  });
+});
+
+describe("isContainerIri", () => {
+  test("it returns true when the iri ends in /", () => {
+    expect(isContainerIri("https://user.dev.inrupt.net/public/")).toEqual(true);
+  });
+
+  test("it returns false when the iri ends in /", () => {
+    expect(isContainerIri("https://user.dev.inrupt.net/public")).toEqual(false);
   });
 });
