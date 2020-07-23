@@ -23,7 +23,9 @@ import { ReactElement, useContext } from "react";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { Drawer, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
+import DetailsMenuContext, {
+  DETAILS_CONTEXT_ACTIONS,
+} from "../../src/contexts/detailsMenuContext";
 import styles from "./styles";
 import useEscKey from "../../src/effects/useEscKey";
 import DetailsLoading from "../detailsLoading";
@@ -49,7 +51,7 @@ export function Contents({ action, iri }: IContentsProps): ReactElement | null {
   const { permissions } = data;
 
   switch (action) {
-    case "sharing":
+    case DETAILS_CONTEXT_ACTIONS.SHARING:
       return (
         <ResourceSharing iri={iri} name={pathname} permissions={permissions} />
       );

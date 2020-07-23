@@ -19,8 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// import { shallow, mount } from "enzyme";
-// import { shallowToJson } from "enzyme-to-json";
 import * as ReactFns from "react";
 import * as RouterFns from "next/router";
 import * as LitPodFns from "../../src/hooks/litPod";

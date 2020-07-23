@@ -46,4 +46,8 @@ export function parseUrl(url: string): URL {
   };
 }
 
-export default { parseUrl };
+export function stripQueryParams(path: string): string {
+  return path.replace(/\?.+$/, "");
+}
+
+export default { parseUrl, stripQueryParams };

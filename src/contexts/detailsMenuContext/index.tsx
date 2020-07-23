@@ -38,6 +38,11 @@ interface DetailsContext {
   setMenuOpen: Dispatch<boolean>;
 }
 
+export const DETAILS_CONTEXT_ACTIONS = {
+  SHARING: "sharing",
+  DETAILS: "details",
+};
+
 const DetailsMenuContext = createContext<DetailsContext>({
   action: null,
   iri: null,

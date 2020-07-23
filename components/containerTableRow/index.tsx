@@ -26,7 +26,9 @@ import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import { useRouter, NextRouter } from "next/router";
 import Link from "next/link";
 import clsx from "clsx";
+import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
 import { IResourceDetails, isContainerIri } from "../../src/lit-solid-helpers";
+import { stripQueryParams } from "../../src/stringHelpers";
 import styles from "./styles";
 
 export function resourceHref(iri: string): string {
@@ -62,8 +64,8 @@ export function handleClick(
   router: NextRouter
 ): (evnt: Partial<React.MouseEvent>) => Promise<void> {
   const { asPath } = router;
-  const pathname = asPath.replace(/\?.+$/, "");
-  const action = "details";
+  const pathname = stripQueryParams(asPath);
+  const action = DETAILS_CONTEXT_ACTIONS.DETAILS;
 
   return async (evnt) => {
     const element = evnt.target as HTMLElement;

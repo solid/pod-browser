@@ -48,6 +48,7 @@ import ConfirmationDialogContext from "../../src/contexts/confirmationDialogCont
 import {
   displayPermissions,
   NormalizedPermission,
+  ACL_KEYS,
 } from "../../src/lit-solid-helpers";
 import styles from "./styles";
 
@@ -212,16 +213,24 @@ export default function PermissionsForm({
     warnOnSubmit,
   });
 
-  const readChange = setPermissionHandler(unstableAccess, "read", setAccess);
-  const writeChange = setPermissionHandler(unstableAccess, "write", setAccess);
+  const readChange = setPermissionHandler(
+    unstableAccess,
+    ACL_KEYS.READ,
+    setAccess
+  );
+  const writeChange = setPermissionHandler(
+    unstableAccess,
+    ACL_KEYS.WRITE,
+    setAccess
+  );
   const appendChange = setPermissionHandler(
     unstableAccess,
-    "append",
+    ACL_KEYS.APPEND,
     setAccess
   );
   const controlChange = setPermissionHandler(
     unstableAccess,
-    "control",
+    ACL_KEYS.CONTROL,
     setAccess
   );
   const handleToggleClick = toggleOpen(formOpen, setFormOpen);

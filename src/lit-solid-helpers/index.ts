@@ -62,6 +62,13 @@ const typeNameMap = Object.keys(ldpWithType).reduce(
   {}
 );
 
+export const ACL_KEYS = {
+  READ: "read",
+  WRITE: "write",
+  APPEND: "append",
+  CONTROL: "control",
+};
+
 // TODO use ldp namespace when available
 export const namespace: Record<string, string> = {
   ...ldp,

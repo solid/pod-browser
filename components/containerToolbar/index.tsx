@@ -25,6 +25,8 @@ import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import { useRouter, NextRouter } from "next/router";
 import styles from "./styles";
 import PodLocationContext from "../../src/contexts/podLocationContext";
+import { stripQueryParams } from "../../src/stringHelpers";
+import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme) as StyleRules)
@@ -38,7 +40,7 @@ export function openContextMenu(
   return async () => {
     await router.replace({
       pathname,
-      query: { action: "details", iri },
+      query: { action: DETAILS_CONTEXT_ACTIONS.DETAILS, iri },
     });
   };
 }
@@ -48,7 +50,7 @@ export default function ContainerToolbar(): ReactElement | null {
   const bem = useBem(useStyles());
   const router = useRouter();
   const { asPath } = router;
-  const pathname = asPath ? asPath.replace(/\?.+$/, "") : "/";
+  const pathname = asPath ? stripQueryParams(asPath) : "/";
 
   return (
     <div className={bem("container-toolbar")}>
