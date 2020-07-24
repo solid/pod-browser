@@ -151,7 +151,12 @@ export interface IResponse {
   response?: unknown;
 }
 
-export function createResponder(): (message: unknown) => IResponse {
+interface IResponder {
+  respond: (response: unknown) => IResponse;
+  error: (message: string) => IResponse;
+}
+
+export function createResponder(): IResponder {
   const respond = (response: unknown): IResponse => {
     return { response };
   };

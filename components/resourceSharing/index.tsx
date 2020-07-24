@@ -47,7 +47,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { makeStyles } from "@material-ui/styles";
 import { PrismTheme } from "@solid/lit-prism-patterns";
-import { unstable_Access, unstable_AclDataset } from "@solid/lit-pod";
+import { unstable_Access } from "@solid/lit-pod";
 import UserContext, { ISession } from "../../src/contexts/userContext";
 import {
   displayPermissions,
@@ -55,6 +55,7 @@ import {
   getThirdPartyPermissions,
   getUserPermissions,
   IResourceDetails,
+  IResponse,
   NormalizedPermission,
   Profile,
   savePermissions,
@@ -106,7 +107,7 @@ export function saveThirdPartyPermissionHandler({
   webId,
 }: ISaveThirdPartyPermissionHandler): (
   acl: unstable_Access
-) => Promise<unstable_AclDataset> {
+) => Promise<IResponse> {
   return async (acl) => {
     const alias = displayPermissions(acl);
     const access = acl;
@@ -204,7 +205,7 @@ export function handlePermissionUpdate({
   thirdPartyPermissions,
   webId,
 }: IHandlePermissionUpdate) {
-  return async (access: unstable_Access): Promise<unstable_AclDataset> => {
+  return async (access: unstable_Access): Promise<IResponse> => {
     if (displayPermissions(access) === "No Access") {
       setThirdPartyPermissions(
         thirdPartyPermissions.filter((p) => p.webId !== webId)

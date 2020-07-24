@@ -20,18 +20,11 @@
  */
 
 /* eslint-disable camelcase */
-import {
-  Dispatch,
-  ReactElement,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, ReactElement, useContext, useEffect, useState } from "react";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import { StyleRules } from "@material-ui/styles";
 import { AlertProps } from "@material-ui/lab/Alert";
-import { unstable_Access, unstable_AclDataset } from "@solid/lit-pod";
+import { unstable_Access } from "@solid/lit-pod";
 import {
   Button,
   Checkbox,
@@ -49,6 +42,7 @@ import {
   displayPermissions,
   NormalizedPermission,
   ACL_KEYS,
+  IResponse,
 } from "../../src/lit-solid-helpers";
 import styles from "./styles";
 
@@ -113,11 +107,11 @@ export function PermissionCheckbox({
 
 interface ISavePermissionHandler {
   access: unstable_Access;
-  setMessage: Dispatch<SetStateAction<string>>;
-  setSeverity: Dispatch<SetStateAction<AlertProps["severity"]>>;
-  setDialogOpen: Dispatch<SetStateAction<boolean>>;
-  setAlertOpen: Dispatch<SetStateAction<boolean>>;
-  onSave: (access: unstable_Access) => void;
+  setMessage: Dispatch<string>;
+  setSeverity: Dispatch<AlertProps["severity"]>;
+  setDialogOpen: Dispatch<boolean>;
+  setAlertOpen: Dispatch<boolean>;
+  onSave: (access: unstable_Access) => Promise<IResponse>;
 }
 
 export function savePermissionsHandler({
@@ -138,7 +132,7 @@ export function savePermissionsHandler({
     } else {
       setDialogOpen(false);
       setSeverity("error" as AlertProps["severity"]);
-      setMessage(error);
+      setMessage(error as string);
       setAlertOpen(true);
     }
   };
@@ -146,9 +140,9 @@ export function savePermissionsHandler({
 
 interface ISaveHandler {
   warnOnSubmit: boolean;
-  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setDialogOpen: Dispatch<boolean>;
   savePermissions: () => void;
-  setAlertOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setAlertOpen: Dispatch<boolean>;
 }
 
 export function saveHandler({
@@ -175,9 +169,7 @@ export function toggleOpen(
 interface IPermissionForm {
   permission: Partial<NormalizedPermission>;
   warnOnSubmit: boolean;
-  onSave: (
-    access: unstable_Access
-  ) => Promise<unstable_AclDataset> | Promise<void> | Promise<null>;
+  onSave: (access: unstable_Access) => Promise<IResponse>;
 }
 
 export default function PermissionsForm({
