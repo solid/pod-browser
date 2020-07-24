@@ -33,18 +33,15 @@ import {
   LitDataset,
   Thing,
   unstable_Access,
-  unstable_AclDataset,
   unstable_AgentAccess,
   unstable_fetchFile,
   unstable_fetchLitDatasetWithAcl,
   unstable_getAgentAccessAll,
   unstable_getResourceAcl,
+  unstable_hasAccessibleAcl,
+  unstable_hasResourceAcl,
   unstable_saveAclFor,
   unstable_setAgentResourceAccess,
-  unstable_WithAccessibleAcl,
-  unstable_WithAcl,
-  unstable_WithResourceAcl,
-  WithResourceInfo,
 } from "@solid/lit-pod";
 import { ldp, space } from "rdf-namespaces";
 import { parseUrl } from "../stringHelpers";
@@ -149,23 +146,54 @@ interface ISavePermissions {
   access: unstable_Access;
 }
 
+export interface IResponse {
+  error?: string;
+  response?: unknown;
+}
+
+export function createResponder(): (message: unknown) => IResponse {
+  const respond = (response: unknown): IResponse => {
+    return { response };
+  };
+  const error = (message: string): IResponse => {
+    return { error: message };
+  };
+
+  return { respond, error };
+}
+
 export async function savePermissions({
   iri,
   webId,
   access,
-}: ISavePermissions): Promise<unstable_AclDataset> {
+}: ISavePermissions): Promise<IResponse> {
+  const { respond, error } = createResponder();
+
   const dataset = await unstable_fetchLitDatasetWithAcl(iri);
 
-  const aclDataset = unstable_getResourceAcl(
-    dataset as unstable_WithAcl & WithResourceInfo & unstable_WithResourceAcl
-  );
-  const updatedAcl = await unstable_setAgentResourceAccess(
-    aclDataset as unstable_AclDataset,
-    webId,
-    access
-  );
+  if (!dataset) return error("dataset is empty");
 
-  return unstable_saveAclFor(dataset as unstable_WithAccessibleAcl, updatedAcl);
+  if (!unstable_hasResourceAcl(dataset)) {
+    return error("dataset does not have resource ACL");
+  }
+
+  const aclDataset = unstable_getResourceAcl(dataset);
+
+  if (!aclDataset) return error("aclDataset is empty");
+
+  if (!unstable_hasAccessibleAcl(aclDataset)) {
+    return error("aclDataset does not have accessible ACL");
+  }
+
+  const updatedAcl = unstable_setAgentResourceAccess(aclDataset, webId, access);
+
+  if (!updatedAcl) return error("updatedAcl is empty");
+
+  const response = await unstable_saveAclFor(dataset, updatedAcl);
+
+  if (!response) return error("response is empty");
+
+  return respond(response);
 }
 
 export async function normalizePermissions(

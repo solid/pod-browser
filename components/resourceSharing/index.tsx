@@ -121,7 +121,9 @@ export function saveThirdPartyPermissionHandler({
         profile,
       },
     ]);
-    return savePermissions({ iri, webId, access });
+
+    const { error, response } = await savePermissions({ iri, webId, access });
+    return { error, response };
   };
 }
 

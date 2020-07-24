@@ -129,15 +129,16 @@ export function savePermissionsHandler({
   setSeverity,
 }: ISavePermissionHandler): () => void {
   return async (): Promise<void> => {
-    try {
-      onSave(access);
+    const { response, error } = await onSave(access);
+
+    if (response) {
       setDialogOpen(false);
       setMessage("Your permissions have been saved!");
       setAlertOpen(true);
-    } catch (e) {
+    } else {
       setDialogOpen(false);
       setSeverity("error" as AlertProps["severity"]);
-      setMessage("There was an error saving permissions!");
+      setMessage(error);
       setAlertOpen(true);
     }
   };

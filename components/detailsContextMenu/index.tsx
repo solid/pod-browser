@@ -45,7 +45,7 @@ export function Contents({ action, iri }: IContentsProps): ReactElement | null {
   const { pathname } = parseUrl(iri);
   const { data, error } = useFetchResourceDetails(iri);
 
-  if (!data) return <DetailsLoading />;
+  if (!data) return <DetailsLoading name={pathname} />;
   if (error) return null;
 
   const { permissions } = data;
