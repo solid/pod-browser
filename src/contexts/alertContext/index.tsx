@@ -20,7 +20,13 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createContext, ReactElement, useState, Dispatch } from "react";
+import {
+  createContext,
+  ReactElement,
+  ReactNode,
+  useState,
+  Dispatch,
+} from "react";
 import { AlertProps } from "@material-ui/lab/Alert";
 
 interface IAlertContext {

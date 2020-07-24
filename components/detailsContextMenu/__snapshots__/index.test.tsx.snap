@@ -938,7 +938,9 @@ font-display: block;",
                           <h3
                             class="makeStyles-content-h3-17"
                             title="/iri/"
-                          />
+                          >
+                            /iri/
+                          </h3>
                         </section>
                         <hr
                           class="MuiDivider-root"
@@ -1248,6 +1250,7 @@ font-display: block;",
                             resource={
                               Object {
                                 "iri": "/iri/",
+                                "name": "/iri/",
                                 "permissions": Array [
                                   Object {
                                     "acl": Object {
@@ -1272,7 +1275,9 @@ font-display: block;",
                               <h3
                                 className="makeStyles-content-h3-17"
                                 title="/iri/"
-                              />
+                              >
+                                /iri/
+                              </h3>
                             </section>
                             <WithStyles(ForwardRef(Divider))>
                               <ForwardRef(Divider)
@@ -5712,6 +5717,7 @@ font-display: block;",
         resource={
           Object {
             "iri": "/iri/",
+            "name": "/iri/",
             "permissions": Array [
               Object {
                 "acl": Object {
@@ -5736,7 +5742,9 @@ font-display: block;",
           <h3
             className="makeStyles-content-h3-17"
             title="/iri/"
-          />
+          >
+            /iri/
+          </h3>
         </section>
         <WithStyles(ForwardRef(Divider))>
           <ForwardRef(Divider)

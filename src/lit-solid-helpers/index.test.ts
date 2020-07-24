@@ -31,7 +31,7 @@ const {
   fetchProfile,
   fetchResource,
   fetchResourceWithAcl,
-  filterMailtoPermissions,
+  filterInvalidWebIds,
   getIriPath,
   getThirdPartyPermissions,
   getTypeName,
@@ -237,10 +237,30 @@ describe("displayPermissions", () => {
 describe("normalizePermissions", () => {
   test("it returns the webId and the human-friendly permission name", async () => {
     const acl = {
-      acl1: { read: true, write: false, control: false, append: false },
-      acl2: { read: true, write: true, control: true, append: true },
-      acl3: { read: true, write: true, control: false, append: true },
-      acl4: { read: false, write: false, control: false, append: false },
+      "https://pod.acl1.com/card#me": {
+        read: true,
+        write: false,
+        control: false,
+        append: false,
+      },
+      "https://pod.acl2.com/card#me": {
+        read: true,
+        write: true,
+        control: true,
+        append: true,
+      },
+      "https://pod.acl3.com/card#me": {
+        read: true,
+        write: true,
+        control: false,
+        append: true,
+      },
+      "https://pod.acl4.com/card#me": {
+        read: false,
+        write: false,
+        control: false,
+        append: false,
+      },
     };
 
     const expectedProfile = {
@@ -256,24 +276,24 @@ describe("normalizePermissions", () => {
       fetchProfileFn
     );
 
-    expect(perms1.webId).toEqual("acl1");
+    expect(perms1.webId).toEqual("https://pod.acl1.com/card#me");
     expect(perms1.alias).toEqual("Can View");
-    expect(perms1.acl).toMatchObject(acl.acl1);
+    expect(perms1.acl).toMatchObject(acl["https://pod.acl1.com/card#me"]);
     expect(perms1.profile).toMatchObject(expectedProfile);
 
-    expect(perms2.webId).toEqual("acl2");
+    expect(perms2.webId).toEqual("https://pod.acl2.com/card#me");
     expect(perms2.alias).toEqual("Full Control");
-    expect(perms2.acl).toMatchObject(acl.acl2);
+    expect(perms2.acl).toMatchObject(acl["https://pod.acl2.com/card#me"]);
     expect(perms2.profile).toMatchObject(expectedProfile);
 
-    expect(perms3.webId).toEqual("acl3");
+    expect(perms3.webId).toEqual("https://pod.acl3.com/card#me");
     expect(perms3.alias).toEqual("Can Edit");
-    expect(perms3.acl).toMatchObject(acl.acl3);
+    expect(perms3.acl).toMatchObject(acl["https://pod.acl3.com/card#me"]);
     expect(perms3.profile).toMatchObject(expectedProfile);
 
-    expect(perms4.webId).toEqual("acl4");
+    expect(perms4.webId).toEqual("https://pod.acl4.com/card#me");
     expect(perms4.alias).toEqual("No Access");
-    expect(perms4.acl).toMatchObject(acl.acl4);
+    expect(perms4.acl).toMatchObject(acl["https://pod.acl4.com/card#me"]);
     expect(perms4.profile).toMatchObject(expectedProfile);
   });
 
@@ -298,7 +318,7 @@ describe("normalizePermissions", () => {
 
     const permissions = await normalizePermissions(acl, fetchProfileFn);
 
-    expect(permissions).toHaveLength(1);
+    expect(permissions).toHaveLength(0);
   });
 });
 
@@ -411,21 +431,46 @@ describe("fetchResourceWithAcl", () => {
 describe("getUserPermissions", () => {
   test("it returns the permissions for the given webId", async () => {
     const acl = {
-      acl1: { read: true, write: false, control: false, append: false },
-      acl2: { read: true, write: true, control: true, append: true },
-      acl3: { read: true, write: true, control: false, append: true },
-      acl4: { read: false, write: false, control: false, append: false },
+      "https://host.pod.com/acl1/card#me": {
+        read: true,
+        write: false,
+        control: false,
+        append: false,
+      },
+      "https://host.pod.com/acl2/card#me": {
+        read: true,
+        write: true,
+        control: true,
+        append: true,
+      },
+      "https://host.pod.com/acl3/card#me": {
+        read: true,
+        write: true,
+        control: false,
+        append: true,
+      },
+      "https://host.pod.com/acl4/card#me": {
+        read: false,
+        write: false,
+        control: false,
+        append: false,
+      },
     };
 
     const normalizedPermissions = await normalizePermissions(
       acl,
       jest.fn().mockResolvedValue(null)
     );
-    const permissions = getUserPermissions("acl1", normalizedPermissions);
+    const permissions = getUserPermissions(
+      "https://host.pod.com/acl1/card#me",
+      normalizedPermissions
+    );
 
-    expect(permissions.webId).toEqual("acl1");
+    expect(permissions.webId).toEqual("https://host.pod.com/acl1/card#me");
     expect(permissions.alias).toEqual("Can View");
-    expect(permissions.acl).toMatchObject(acl.acl1);
+    expect(permissions.acl).toMatchObject(
+      acl["https://host.pod.com/acl1/card#me"]
+    );
   });
 
   test("it returns null if given no permissions", () => {
@@ -451,10 +496,30 @@ describe("getUserPermissions", () => {
 describe("getThirdPartyPermissions", () => {
   test("it returns the permissions that don't belong to the given webId", async () => {
     const acl = {
-      acl1: { read: true, write: false, control: false, append: false },
-      acl2: { read: true, write: true, control: true, append: true },
-      acl3: { read: true, write: true, control: false, append: true },
-      acl4: { read: false, write: false, control: false, append: false },
+      "https://pod.host.com/acl1/card#me": {
+        read: true,
+        write: false,
+        control: false,
+        append: false,
+      },
+      "https://pod.host.com/acl2/card#me": {
+        read: true,
+        write: true,
+        control: true,
+        append: true,
+      },
+      "https://pod.host.com/acl3/card#me": {
+        read: true,
+        write: true,
+        control: false,
+        append: true,
+      },
+      "https://pod.host.com/acl4/card#me": {
+        read: false,
+        write: false,
+        control: false,
+        append: false,
+      },
     };
 
     const normalizedPermissions = await normalizePermissions(
@@ -462,26 +527,26 @@ describe("getThirdPartyPermissions", () => {
       jest.fn().mockResolvedValue(null)
     );
     const thirdPartyPermissions = getThirdPartyPermissions(
-      "acl1",
+      "https://pod.host.com/acl1/card#me",
       normalizedPermissions
     );
     const [perms2, perms3, perms4] = thirdPartyPermissions;
 
     expect(thirdPartyPermissions.map(({ webId }) => webId)).not.toContain(
-      "acl1"
+      "https://pod.host.com/acl1/card#me"
     );
 
-    expect(perms2.webId).toEqual("acl2");
+    expect(perms2.webId).toEqual("https://pod.host.com/acl2/card#me");
     expect(perms2.alias).toEqual("Full Control");
-    expect(perms2.acl).toMatchObject(acl.acl2);
+    expect(perms2.acl).toMatchObject(acl["https://pod.host.com/acl2/card#me"]);
 
-    expect(perms3.webId).toEqual("acl3");
+    expect(perms3.webId).toEqual("https://pod.host.com/acl3/card#me");
     expect(perms3.alias).toEqual("Can Edit");
-    expect(perms3.acl).toMatchObject(acl.acl3);
+    expect(perms3.acl).toMatchObject(acl["https://pod.host.com/acl3/card#me"]);
 
-    expect(perms4.webId).toEqual("acl4");
+    expect(perms4.webId).toEqual("https://pod.host.com/acl4/card#me");
     expect(perms4.alias).toEqual("No Access");
-    expect(perms4.acl).toMatchObject(acl.acl4);
+    expect(perms4.acl).toMatchObject(acl["https://pod.host.com/acl4/card#me"]);
   });
 
   test("it returns an empty Array if given no permissions", () => {
@@ -884,7 +949,6 @@ describe("savePermissions", () => {
     };
     const dataset = "dataset";
     const aclDataset = "aclDataset";
-    const updatedAcl = "updatedAcl";
 
     jest
       .spyOn(litSolidFns, "unstable_fetchLitDatasetWithAcl")
@@ -952,27 +1016,15 @@ describe("savePermissions", () => {
   });
 });
 
-describe("isContainerIri", () => {
-  test("it returns true when iri ends with /", () => {
-    expect(isContainerIri("foo/")).toEqual(true);
-  });
-
-  test("it returns false when iri does not end with /", () => {
-    expect(isContainerIri("foo")).toEqual(false);
-  });
-});
-
-describe("filterMailtoPermissions", () => {
+describe("filterInvalidWebIds", () => {
   test("it returns false when given a mailto url", () => {
-    expect(filterMailtoPermissions("mailto:example@example.com")).toEqual(
-      false
-    );
+    expect(filterInvalidWebIds("mailto:example@example.com")).toEqual(false);
   });
 
   test("it returns true when given a webId", () => {
-    expect(
-      filterMailtoPermissions("https://user.dev.inrupt.net/public/")
-    ).toEqual(true);
+    expect(filterInvalidWebIds("https://user.dev.inrupt.net/public/")).toEqual(
+      true
+    );
   });
 });
 

@@ -41,7 +41,7 @@ describe("Container view", () => {
 
   test("it renders a Contents view when context has an iri", () => {
     const iri = "/iri/";
-    const mockContext = {
+    const mockDetailsMenuContext = {
       menuOpen: true,
       iri,
       action: "details",
@@ -64,11 +64,13 @@ describe("Container view", () => {
       .spyOn(LitPodFns, "useFetchResourceDetails")
       .mockReturnValueOnce({ data });
 
-    jest.spyOn(ReactFns, "useContext").mockReturnValueOnce(mockContext);
+    jest
+      .spyOn(ReactFns, "useContext")
+      .mockReturnValueOnce(mockDetailsMenuContext);
 
     jest
       .spyOn(RouterFns, "useRouter")
-      .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
+      .mockReturnValue({ pathname: "/pathname/", replace: jest.fn() });
 
     const tree = mountToJson(<DetailsContextMenu />);
     expect(tree).toMatchSnapshot();
@@ -108,12 +110,11 @@ describe("Contents", () => {
 
     jest
       .spyOn(RouterFns, "useRouter")
-      .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
+      .mockReturnValue({ pathname: "/pathname/", replace: jest.fn() });
 
     const tree = mountToJson(<Contents iri={iri} action="details" />);
 
     expect(tree).toMatchSnapshot();
-
   });
 
   test("it renders a ResourceSharing component when there's data and the action is sharing", () => {

@@ -50,4 +50,13 @@ export function stripQueryParams(path: string): string {
   return path.replace(/\?.+$/, "");
 }
 
-export default { parseUrl, stripQueryParams };
+export function isUrl(string: string): boolean {
+  try {
+    const url = new URL(string);
+    return ["https:", "http:"].includes(url.protocol);
+  } catch (_) {
+    return false;
+  }
+}
+
+export default { parseUrl, stripQueryParams, isUrl };

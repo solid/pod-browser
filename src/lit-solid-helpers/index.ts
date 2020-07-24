@@ -33,7 +33,6 @@ import {
   LitDataset,
   Thing,
   unstable_Access,
-  unstable_AclDataset,
   unstable_AgentAccess,
   unstable_fetchFile,
   unstable_fetchLitDatasetWithAcl,
@@ -43,13 +42,9 @@ import {
   unstable_hasResourceAcl,
   unstable_saveAclFor,
   unstable_setAgentResourceAccess,
-  unstable_WithAccessibleAcl,
-  unstable_WithAcl,
-  unstable_WithResourceAcl,
-  WithResourceInfo,
 } from "@solid/lit-pod";
 import { ldp, space } from "rdf-namespaces";
-import { parseUrl } from "../stringHelpers";
+import { parseUrl, isUrl } from "../stringHelpers";
 
 const ldpWithType: Record<string, string> = ldp;
 
@@ -206,8 +201,8 @@ export async function savePermissions({
   return respond(response);
 }
 
-export function filterMailtoPermissions(webId: string): boolean {
-  return !webId.match(/mailto/);
+export function filterInvalidWebIds(webId: string): boolean {
+  return isUrl(webId);
 }
 
 export async function normalizePermissions(
@@ -216,7 +211,7 @@ export async function normalizePermissions(
 ): Promise<NormalizedPermission[]> {
   return Promise.all(
     Object.keys(permissions)
-      .filter(filterMailtoPermissions)
+      .filter(filterInvalidWebIds)
       .map(
         async (webId: string): Promise<NormalizedPermission> => {
           const acl = permissions[webId];

@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { parseUrl } from "./index";
+import { parseUrl, isUrl, stripQueryParams } from "./index";
 
 describe("parseUrl", () => {
   test("it parses a given url into parts", () => {
@@ -64,5 +64,35 @@ describe("parseUrl", () => {
     expect(port).toEqual("");
     expect(protocol).toEqual("http:");
     expect(search).toEqual("");
+  });
+});
+
+describe("isUrl", () => {
+  test("it returns true when given a string beginning with https", () => {
+    expect(
+      isUrl("https://ajacksified-dev.dev.inrupt.net/profile/card#me")
+    ).toEqual(true);
+  });
+
+  test("it returns true when given a string beginning with http", () => {
+    expect(
+      isUrl("http://ajacksified-dev.dev.inrupt.net/profile/card#me")
+    ).toEqual(true);
+  });
+
+  test("it returns false when given a mailto link", () => {
+    expect(isUrl("mailto:example@example.com")).toEqual(false);
+  });
+
+  test("it returns false when given a url with no protocol", () => {
+    expect(isUrl("ajacksified-dev.dev.inrupt.net/profile/card#me")).toEqual(
+      false
+    );
+  });
+});
+
+describe("stripQueryParams", () => {
+  test("it removes everything in a string after a ?", () => {
+    expect(stripQueryParams("foo?bar=baz")).toEqual("foo");
   });
 });
