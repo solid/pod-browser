@@ -31,7 +31,6 @@ const {
   fetchProfile,
   fetchResource,
   fetchResourceWithAcl,
-  filterInvalidWebIds,
   getIriPath,
   getThirdPartyPermissions,
   getTypeName,
@@ -1013,18 +1012,6 @@ describe("savePermissions", () => {
     const { error } = await savePermissions({ iri, webId, access });
 
     expect(error).toEqual("response is empty");
-  });
-});
-
-describe("filterInvalidWebIds", () => {
-  test("it returns false when given a mailto url", () => {
-    expect(filterInvalidWebIds("mailto:example@example.com")).toEqual(false);
-  });
-
-  test("it returns true when given a webId", () => {
-    expect(filterInvalidWebIds("https://user.dev.inrupt.net/public/")).toEqual(
-      true
-    );
   });
 });
 

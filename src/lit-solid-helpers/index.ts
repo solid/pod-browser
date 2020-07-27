@@ -201,17 +201,13 @@ export async function savePermissions({
   return respond(response);
 }
 
-export function filterInvalidWebIds(webId: string): boolean {
-  return isUrl(webId);
-}
-
 export async function normalizePermissions(
   permissions: unstable_AgentAccess,
   fetchProfileFn = fetchProfile
 ): Promise<NormalizedPermission[]> {
   return Promise.all(
     Object.keys(permissions)
-      .filter(filterInvalidWebIds)
+      .filter(isUrl)
       .map(
         async (webId: string): Promise<NormalizedPermission> => {
           const acl = permissions[webId];
