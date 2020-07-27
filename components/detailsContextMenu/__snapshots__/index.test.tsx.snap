@@ -3485,7 +3485,7 @@ font-display: block;",
     >
       <DetailsError
         iri="/iri/"
-        message="There was an error fetching the resource details."
+        message="There was an error fetching the details."
         name="/iri/"
       >
         <section
@@ -3526,7 +3526,7 @@ font-display: block;",
             Error
           </h5>
           <p>
-            There was an error fetching the resource details.
+            There was an error fetching the details.
           </p>
         </section>
       </DetailsError>

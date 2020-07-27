@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement, useContext } from "react";
+import { ReactElement, useContext, useEffect } from "react";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { AlertProps } from "@material-ui/lab/Alert";
 import { Drawer, IconButton } from "@material-ui/core";
@@ -49,17 +49,21 @@ export function Contents({ action, iri }: IContentsProps): ReactElement | null {
   const { pathname } = parseUrl(iri);
   const { data, error } = useFetchResourceDetails(iri);
   const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
+  const errorMessage = "There was an error fetching the details.";
+
+  useEffect(() => {
+    if (error) {
+      setSeverity("error" as AlertProps["severity"]);
+      setMessage(errorMessage);
+      setAlertOpen(true);
+    }
+  });
 
   if (error) {
-    const { message } = error;
-    setSeverity("error" as AlertProps["severity"]);
-    setMessage(message || "There was an error fetching the details.");
-    setAlertOpen(true);
-    return <DetailsError message={message} name={pathname} iri={iri} />;
+    return <DetailsError message={errorMessage} name={pathname} iri={iri} />;
   }
 
   if (!data) return <DetailsLoading name={pathname} />;
-  if (error) return null;
 
   const { permissions } = data;
 
