@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement, useContext, Dispatch, SetStateAction } from "react";
+import { ReactElement, useContext } from "react";
 import {
   Button,
   Dialog,
@@ -33,10 +33,6 @@ export default function ConfirmationDialog(): ReactElement {
   const { open, setOpen, title, content, setConfirmed } = useContext(
     ConfirmationDialogContext
   );
-
-  const setConfirmedWithType = setConfirmed as Dispatch<
-    SetStateAction<boolean>
-  >;
 
   return (
     <Dialog
@@ -56,7 +52,7 @@ export default function ConfirmationDialog(): ReactElement {
         <Button
           type="submit"
           color="primary"
-          onClick={() => setConfirmedWithType(true)}
+          onClick={() => setConfirmed(true)}
         >
           Ok
         </Button>
