@@ -236,7 +236,7 @@ describe("savePermissionsHandler", () => {
     const setDialogOpen = jest.fn();
     const setMessage = jest.fn();
     const setSeverity = jest.fn();
-    const onSave = jest.fn();
+    const onSave = jest.fn().mockResolvedValueOnce({ response: {} });
     const handler = savePermissionsHandler({
       access,
       onSave,
@@ -267,9 +267,7 @@ describe("savePermissionsHandler", () => {
     const setDialogOpen = jest.fn();
     const setMessage = jest.fn();
     const setSeverity = jest.fn();
-    const onSave = () => {
-      throw new Error("boom");
-    };
+    const onSave = jest.fn().mockResolvedValueOnce({ error: "boom" });
 
     const handler = savePermissionsHandler({
       access,
@@ -284,9 +282,7 @@ describe("savePermissionsHandler", () => {
 
     expect(setDialogOpen).toHaveBeenCalledWith(false);
     expect(setSeverity).toHaveBeenCalledWith("error");
-    expect(setMessage).toHaveBeenCalledWith(
-      "There was an error saving permissions!"
-    );
+    expect(setMessage).toHaveBeenCalledWith("boom");
     expect(setAlertOpen).toHaveBeenCalledWith(true);
   });
 });

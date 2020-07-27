@@ -3480,7 +3480,7 @@ font-display: block;",
     >
       <DetailsLoading
         iri={null}
-        name={null}
+        name="/iri/"
       >
         <section
           className="makeStyles-centeredSection-27"
@@ -3489,36 +3489,7 @@ font-display: block;",
             className="makeStyles-content-h3-36"
             title=""
           >
-            <WithStyles(ForwardRef(Skeleton))
-              width={100}
-            >
-              <ForwardRef(Skeleton)
-                classes={
-                  Object {
-                    "circle": "MuiSkeleton-circle",
-                    "fitContent": "MuiSkeleton-fitContent",
-                    "heightAuto": "MuiSkeleton-heightAuto",
-                    "pulse": "MuiSkeleton-pulse",
-                    "rect": "MuiSkeleton-rect",
-                    "root": "MuiSkeleton-root",
-                    "text": "MuiSkeleton-text",
-                    "wave": "MuiSkeleton-wave",
-                    "withChildren": "MuiSkeleton-withChildren",
-                  }
-                }
-                width={100}
-              >
-                <span
-                  className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
-                  style={
-                    Object {
-                      "height": undefined,
-                      "width": 100,
-                    }
-                  }
-                />
-              </ForwardRef(Skeleton)>
-            </WithStyles(ForwardRef(Skeleton))>
+            /iri/
           </h3>
         </section>
         <WithStyles(ForwardRef(Divider))>
