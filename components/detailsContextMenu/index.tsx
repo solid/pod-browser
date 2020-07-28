@@ -63,7 +63,7 @@ export function Contents({ action, iri }: IContentsProps): ReactElement | null {
     return <DetailsError message={errorMessage} name={pathname} iri={iri} />;
   }
 
-  if (!data) return <DetailsLoading name={pathname} />;
+  if (!data) return <DetailsLoading name={pathname} iri={iri} />;
 
   const { permissions } = data;
 
@@ -106,9 +106,7 @@ export default function DetailsContextMenu(): ReactElement | null {
         <ChevronRightIcon />
       </IconButton>
       <div className={classes.drawerContent}>
-        {!iri
-          ? <DetailsLoading />
-          : <Contents action={action as string} iri={iri as string} />}
+        <Contents action={action as string} iri={iri as string} />
       </div>
     </Drawer>
   );

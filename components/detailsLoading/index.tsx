@@ -28,6 +28,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@material-ui/core";
+import { useRouter } from "next/router";
 import ShareIcon from "@material-ui/icons/Share";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { PrismTheme } from "@solid/lit-prism-patterns";
@@ -45,6 +46,8 @@ interface Props {
 
 function DetailsLoading({ name, iri }: Props): ReactElement {
   const classes = useStyles();
+  const router = useRouter();
+  const { pathname } = router;
 
   return (
     <>
@@ -63,7 +66,15 @@ function DetailsLoading({ name, iri }: Props): ReactElement {
             <ListItemIcon>
               <ShareIcon />
             </ListItemIcon>
-            <ListItemText primary="Sharing &amp; App Permissions" />
+            <ListItemText
+              primary="Sharing &amp; App Permissions"
+              onClick={async () => {
+                await router.replace({
+                  pathname,
+                  query: { action: "sharing", iri },
+                });
+              }}
+            />
           </ListItem>
         </List>
       </section>

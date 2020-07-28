@@ -19,11 +19,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import * as RouterFns from "next/router";
 import DetailsLoading from "./index";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 
 describe("DetailsLoading", () => {
   test("Renders a details error view", () => {
+    jest
+      .spyOn(RouterFns, "useRouter")
+      .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
+
     const resource = { iri: "iri", name: "name", types: ["type"] };
     const tree = mountToJson(<DetailsLoading resource={resource} />);
 

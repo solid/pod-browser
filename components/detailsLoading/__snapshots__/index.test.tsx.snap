@@ -1048,6 +1048,7 @@ font-display: block;",
                         </WithStyles(ForwardRef(ListItemIcon))>
                         <WithStyles(ForwardRef(ListItemText))
                           key=".1"
+                          onClick={[Function]}
                           primary="Sharing & App Permissions"
                         >
                           <ForwardRef(ListItemText)
@@ -1061,10 +1062,12 @@ font-display: block;",
                                 "secondary": "MuiListItemText-secondary",
                               }
                             }
+                            onClick={[Function]}
                             primary="Sharing & App Permissions"
                           >
                             <div
                               className="MuiListItemText-root"
+                              onClick={[Function]}
                             >
                               <WithStyles(ForwardRef(Typography))
                                 className="MuiListItemText-primary"
