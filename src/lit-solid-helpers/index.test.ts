@@ -934,7 +934,7 @@ describe("savePermissions", () => {
 
     const { error } = await savePermissions({ iri, webId, access });
 
-    expect(error).toEqual("aclDataset does not have accessible ACL");
+    expect(error).toEqual("dataset does not have accessible ACL");
   });
 
   test("it returns an error if the updated ACL is empty", async () => {

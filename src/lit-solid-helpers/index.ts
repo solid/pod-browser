@@ -186,8 +186,8 @@ export async function savePermissions({
 
   if (!aclDataset) return error("aclDataset is empty");
 
-  if (!unstable_hasAccessibleAcl(aclDataset)) {
-    return error("aclDataset does not have accessible ACL");
+  if (!unstable_hasAccessibleAcl(dataset)) {
+    return error("dataset does not have accessible ACL");
   }
 
   const updatedAcl = unstable_setAgentResourceAccess(aclDataset, webId, access);
