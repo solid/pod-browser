@@ -87,7 +87,7 @@ export default function DetailsContextMenu(): ReactElement | null {
     setMenuOpen(false);
     const { asPath } = router;
     const pathname = stripQueryParams(asPath) || "/";
-    await router.replace({ pathname });
+    await router.replace("/resource/[iri]", pathname);
   };
 
   useEscKey(closeDrawer);

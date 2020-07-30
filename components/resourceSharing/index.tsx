@@ -60,6 +60,7 @@ import {
   Profile,
   savePermissions,
 } from "../../src/lit-solid-helpers";
+import { stripQueryParams } from "../../src/stringHelpers";
 import styles from "../resourceDetails/styles";
 import PermissionsForm from "../permissionsForm";
 
@@ -381,6 +382,9 @@ export function backToDetailsClick({
 }: IBackToDetailsClick): () => Promise<void> {
   return async () => {
     await router.replace({
+      pathname: "/resource/[iri]",
+      query: { action: "details", iri },
+    }, {
       pathname,
       query: { action: "details", iri },
     });
@@ -402,8 +406,9 @@ export default function ResourceSharing({
   );
   const classes = useStyles();
   const router = useRouter();
-  const { pathname } = router;
+  const { asPath } = router;
   const iriString = iri as string;
+  const pathname = stripQueryParams(asPath) || "/";
 
   return (
     <>

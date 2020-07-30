@@ -36,7 +36,7 @@ import { makeStyles } from "@material-ui/styles";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import styles from "./styles";
 import { IResourceDetails } from "../../src/lit-solid-helpers";
-import { parseUrl } from "../../src/stringHelpers";
+import { parseUrl, stripQueryParams } from "../../src/stringHelpers";
 
 interface IDownloadLink {
   type: string;
@@ -104,9 +104,10 @@ export default function ResourceDetails({
 }: IDetailsProps): ReactElement {
   const router = useRouter();
   const classes = useStyles();
-  const { pathname } = router;
+  const { asPath } = router;
   const { iri, name, types } = resource;
   const type = displayType(types);
+  const pathname = stripQueryParams(asPath) || "/";
 
   return (
     <>
@@ -129,6 +130,9 @@ export default function ResourceDetails({
               primary="Sharing &amp; App Permissions"
               onClick={async () => {
                 await router.replace({
+                  pathname: "/resource/[iri]",
+                  query: { action: "sharing", iri },
+                }, {
                   pathname,
                   query: { action: "sharing", iri },
                 });

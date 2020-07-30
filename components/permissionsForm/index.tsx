@@ -127,6 +127,7 @@ export function savePermissionsHandler({
 
     if (response) {
       setDialogOpen(false);
+      setSeverity("success" as AlertProps["severity"]);
       setMessage("Your permissions have been saved!");
       setAlertOpen(true);
     } else {

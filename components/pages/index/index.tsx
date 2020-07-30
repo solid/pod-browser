@@ -19,29 +19,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useContext } from "react";
-import { Container } from "@material-ui/core";
+import { useContext } from "react";
+import { useRouter } from "next/router";
 
 import { useFetchPodIrisFromWebId } from "../../../src/hooks/litPod";
 import UserContext from "../../../src/contexts/userContext";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import PodList from "../../podList";
-import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
+import {
+  useRedirectIfLoggedOut,
+  useRedirectIfLoggedIn,
+} from "../../../src/effects/auth";
 
-// if only one resource redirect to /resources/[iri]
+import { resourceHref } from "../../containerTableRow";
 
-export default function Home(): ReactElement {
+export default function Home(): null {
   useRedirectIfLoggedOut();
 
+  const router = useRouter();
   const { session } = useContext(UserContext);
   const { webId = "" } = session || {};
-  const { data: podIris } = useFetchPodIrisFromWebId(webId);
+  const { data: podIris = [] } = useFetchPodIrisFromWebId(webId);
+  const [podIri] = podIris;
 
-  return (
-    <Container>
-      <DetailsMenuProvider>
-        <PodList podIris={podIris} />
-      </DetailsMenuProvider>
-    </Container>
-  );
+  if (podIri) {
+    router.replace(
+      "/resource/[iri]",
+      resourceHref(podIri),
+    );
+  }
+
+  return null;
 }

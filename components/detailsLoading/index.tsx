@@ -70,6 +70,9 @@ function DetailsLoading({ name, iri }: Props): ReactElement {
               primary="Sharing &amp; App Permissions"
               onClick={async () => {
                 await router.replace({
+                  pathname: "/resource/[iri]",
+                  query: { action: "sharing", iri },
+                }, {
                   pathname,
                   query: { action: "sharing", iri },
                 });

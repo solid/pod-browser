@@ -39,6 +39,9 @@ export function openContextMenu(
 ): () => void {
   return async () => {
     await router.replace({
+      pathname: "/resource/[iri]",
+      query: { action: DETAILS_CONTEXT_ACTIONS.DETAILS, iri },
+    }, {
       pathname,
       query: { action: DETAILS_CONTEXT_ACTIONS.DETAILS, iri },
     });

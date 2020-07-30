@@ -71,10 +71,15 @@ export function handleClick(
     const element = evnt.target as HTMLElement;
     if (element && element.tagName === "A") return;
 
-    await router.replace({
-      pathname,
-      query: { action, iri },
-    });
+    await router.replace(
+      {
+        pathname: "/resource/[iri]",
+        query: { action, iri },
+      }, {
+        pathname,
+        query: { action, iri },
+      }
+    );
   };
 }
 
