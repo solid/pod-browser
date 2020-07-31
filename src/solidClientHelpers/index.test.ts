@@ -629,7 +629,7 @@ describe("fetchFileWithAcl", () => {
   test("it fetches a file and parses the wac-allow header", async () => {
     jest.spyOn(solidClientFns, "unstable_fetchFile").mockResolvedValue({
       text: "file contents",
-      resourceInfo: {
+      internal_resourceInfo: {
         contentType: "type",
         unstable_permissions: {
           user: {
@@ -658,7 +658,7 @@ describe("fetchFileWithAcl", () => {
   test("it defaults to empty permissions if none are returned", async () => {
     jest.spyOn(solidClientFns, "unstable_fetchFile").mockResolvedValue({
       text: "file contents",
-      resourceInfo: {
+      internal_resourceInfo: {
         contentType: "type",
       },
     });
@@ -671,7 +671,7 @@ describe("fetchFileWithAcl", () => {
   test("it defaults to an empty array if there is no type", async () => {
     jest.spyOn(solidClientFns, "unstable_fetchFile").mockResolvedValue({
       text: "file contents",
-      resourceInfo: {},
+      internal_resourceInfo: {},
     });
 
     const { types } = await fetchFileWithAcl("some iri");
