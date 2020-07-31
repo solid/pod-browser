@@ -881,6 +881,7 @@ font-display: block;",
             >
               <ResourceLink
                 containerIri="https://example.com/example.ttl"
+                resourceIri="https://example.com/example.ttl"
               >
                 <Link
                   as={
@@ -900,9 +901,7 @@ font-display: block;",
                     onClick={[Function]}
                     onMouseEnter={[Function]}
                   >
-                    <a>
-                      /example.ttl
-                    </a>
+                    /example.ttl
                   </a>
                 </Link>
               </ResourceLink>
@@ -1804,6 +1803,7 @@ font-display: block;",
             >
               <ResourceLink
                 containerIri="https://example.com/example.ttl"
+                resourceIri="https://example.com/example.ttl"
               >
                 <Link
                   as={
@@ -1823,9 +1823,7 @@ font-display: block;",
                     onClick={[Function]}
                     onMouseEnter={[Function]}
                   >
-                    <a>
-                      /example.ttl
-                    </a>
+                    /example.ttl
                   </a>
                 </Link>
               </ResourceLink>
@@ -2725,6 +2723,7 @@ font-display: block;",
             >
               <ResourceLink
                 containerIri="https://example.com/example.ttl"
+                resourceIri="https://example.com/example.ttl"
               >
                 <Link
                   as={
@@ -2744,9 +2743,7 @@ font-display: block;",
                     onClick={[Function]}
                     onMouseEnter={[Function]}
                   >
-                    <a>
-                      /example.ttl
-                    </a>
+                    /example.ttl
                   </a>
                 </Link>
               </ResourceLink>
