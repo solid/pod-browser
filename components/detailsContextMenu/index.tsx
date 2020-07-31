@@ -79,9 +79,17 @@ export function Contents({ action, iri }: IContentsProps): ReactElement | null {
 }
 
 export default function DetailsContextMenu(): ReactElement | null {
-  const { menuOpen, setMenuOpen, action, iri } = useContext(DetailsMenuContext);
+  const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
+
+  const { query } = useRouter();
+  const { action, resourceIri } = query;
+
   const classes = useStyles();
   const router = useRouter();
+
+  useEffect(() => {
+    setMenuOpen(!!(action && resourceIri));
+  }, [action, resourceIri, setMenuOpen]);
 
   const closeDrawer = async () => {
     setMenuOpen(false);
@@ -92,7 +100,7 @@ export default function DetailsContextMenu(): ReactElement | null {
 
   useEscKey(closeDrawer);
 
-  if (!iri) return null;
+  if (!resourceIri) return null;
 
   return (
     // prettier-ignore
@@ -106,7 +114,7 @@ export default function DetailsContextMenu(): ReactElement | null {
         <ChevronRightIcon />
       </IconButton>
       <div className={classes.drawerContent}>
-        <Contents action={action as string} iri={iri as string} />
+        <Contents action={action as string} iri={resourceIri as string} />
       </div>
     </Drawer>
   );

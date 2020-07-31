@@ -23,7 +23,6 @@ import * as routerFns from "next/router";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 import { useFetchResourceDetails } from "../../src/hooks/solidClient";
 import ContainerTableRow, {
-  resourceHref,
   handleClick,
   ResourceIcon,
   renderResourceType,
@@ -99,37 +98,40 @@ describe("ContainerTableRow", () => {
   });
 });
 
-describe("resourceHref", () => {
-  test("it generates a resource link", () => {
-    const link = resourceHref("https://example.com/example.ttl");
-    expect(link).toEqual("/resource/https%3A%2F%2Fexample.com%2Fexample.ttl");
-  });
-});
-
 describe("handleClick", () => {
   it("creates a click handler that replaces the route", async () => {
-    const iri = "iri";
+    const resourceIri = "https://mypod.com/container/resource";
+    const containerIri = "https://mypod.com/container";
+
     const replace = jest.fn();
     const router = { asPath: "asPath?some=query&variables=true", replace };
-    const evnt = { target: { tagName: "TR" } };
-    const handler = handleClick(iri, router);
+    const event = { target: { tagName: "TR" } };
+    const handler = handleClick(resourceIri, containerIri, router);
 
-    await handler(evnt);
+    await handler(event);
 
-    expect(replace).toHaveBeenCalledWith({
-      pathname: "asPath",
-      query: { action: "details", iri },
-    });
+    expect(replace).toHaveBeenCalledWith(
+      {
+        pathname: `/resource/[iri]`,
+        query: { action: "details", resourceIri },
+      },
+      {
+        pathname: `/resource/${encodeURIComponent(containerIri)}`,
+        query: { action: "details", resourceIri },
+      }
+    );
   });
 
   it("defers if an anchor element triggered the click", async () => {
-    const iri = "iri";
+    const resourceIri = "https://mypod.com/container/resource";
+    const containerIri = "https://mypod.com/container";
+
     const replace = jest.fn();
     const router = { asPath: "asPath", replace };
-    const evnt = { target: { tagName: "A" } };
-    const handler = handleClick(iri, router);
+    const event = { target: { tagName: "A" } };
+    const handler = handleClick(resourceIri, containerIri, router);
 
-    await handler(evnt);
+    await handler(event);
 
     expect(replace).not.toHaveBeenCalled();
   });

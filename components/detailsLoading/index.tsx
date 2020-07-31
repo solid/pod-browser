@@ -19,7 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement } from "react";
+// @ts-nocheck
+// material-ui is broken and doesn't allow `ListItem` to accept `component`
+
+import React, { ReactElement } from "react";
 import {
   Typography,
   Divider,
@@ -28,11 +31,12 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@material-ui/core";
-import { useRouter } from "next/router";
 import ShareIcon from "@material-ui/icons/Share";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
+import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
+import ResourceLink from "../resourceLink";
 import styles from "./styles";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
@@ -44,10 +48,17 @@ interface Props {
   iri?: string | null;
 }
 
+/* eslint react/jsx-props-no-spreading: 0 */
+const SharingLink = React.forwardRef((linkProps, ref) => (
+  <ResourceLink
+    {...linkProps}
+    action={DETAILS_CONTEXT_ACTIONS.SHARING}
+    ref={ref}
+  />
+));
+
 function DetailsLoading({ name, iri }: Props): ReactElement {
   const classes = useStyles();
-  const router = useRouter();
-  const { pathname } = router;
 
   return (
     <>
@@ -62,22 +73,11 @@ function DetailsLoading({ name, iri }: Props): ReactElement {
       <section className={classes.centeredSection}>
         <h5 className={classes["content-h5"]}>Actions</h5>
         <List>
-          <ListItem button>
+          <ListItem button component={SharingLink} resourceIri={iri}>
             <ListItemIcon>
               <ShareIcon />
             </ListItemIcon>
-            <ListItemText
-              primary="Sharing &amp; App Permissions"
-              onClick={async () => {
-                await router.replace({
-                  pathname: "/resource/[iri]",
-                  query: { action: "sharing", iri },
-                }, {
-                  pathname,
-                  query: { action: "sharing", iri },
-                });
-              }}
-            />
+            <ListItemText primary="Sharing &amp; App Permissions" />
           </ListItem>
         </List>
       </section>

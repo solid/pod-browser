@@ -34,17 +34,21 @@ describe("Container view", () => {
 
     jest.spyOn(ReactFns, "useContext").mockReturnValueOnce(mockContext);
 
+    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
+      asPath: "/pathname/",
+      replace: jest.fn(),
+      query: {},
+    });
+
     const tree = mountToJson(<DetailsContextMenu />);
 
     expect(tree).toMatchSnapshot();
   });
 
-  test("it renders a Contents view when context has an iri", () => {
+  test("it renders a Contents view when the router query has an iri", () => {
     const iri = "/iri/";
     const mockDetailsMenuContext = {
       menuOpen: true,
-      iri,
-      action: "details",
       setMenuOpen: jest.fn(),
     };
 
@@ -68,9 +72,14 @@ describe("Container view", () => {
       .spyOn(ReactFns, "useContext")
       .mockReturnValueOnce(mockDetailsMenuContext);
 
-    jest
-      .spyOn(RouterFns, "useRouter")
-      .mockReturnValue({ pathname: "/pathname/", replace: jest.fn() });
+    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
+      asPath: "/pathname/",
+      replace: jest.fn(),
+      query: {
+        iri,
+        action: "details",
+      },
+    });
 
     const tree = mountToJson(<DetailsContextMenu />);
     expect(tree).toMatchSnapshot();
@@ -79,11 +88,15 @@ describe("Container view", () => {
 
 describe("Contents", () => {
   test("it renders a DetailsLoading component if there's no data", () => {
-    jest.spyOn(SolidClientFns, "useFetchResourceDetails").mockReturnValueOnce({});
-
     jest
-      .spyOn(RouterFns, "useRouter")
-      .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
+      .spyOn(SolidClientFns, "useFetchResourceDetails")
+      .mockReturnValueOnce({});
+
+    jest.spyOn(RouterFns, "useRouter").mockReturnValueOnce({
+      asPath: "/pathname/",
+      replace: jest.fn(),
+      query: {},
+    });
 
     const tree = mountToJson(<Contents iri="/iri/" action="details" />);
 
@@ -108,9 +121,11 @@ describe("Contents", () => {
       .spyOn(SolidClientFns, "useFetchResourceDetails")
       .mockReturnValueOnce({ data });
 
-    jest
-      .spyOn(RouterFns, "useRouter")
-      .mockReturnValue({ pathname: "/pathname/", replace: jest.fn() });
+    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
+      asPath: "/pathname/",
+      replace: jest.fn(),
+      query: {},
+    });
 
     const tree = mountToJson(<Contents iri={iri} action="details" />);
 
@@ -151,7 +166,7 @@ describe("Contents", () => {
 
     jest
       .spyOn(RouterFns, "useRouter")
-      .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
+      .mockReturnValueOnce({ asPath: "/pathname/", replace: jest.fn() });
 
     const tree = mountToJson(<Contents iri={iri} action="sharing" />);
 
@@ -174,7 +189,7 @@ describe("Contents", () => {
 
     jest
       .spyOn(RouterFns, "useRouter")
-      .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
+      .mockReturnValueOnce({ asPath: "/pathname/", replace: jest.fn() });
 
     const tree = mountToJson(<Contents iri={iri} action="details" />);
 

@@ -819,7 +819,9 @@ describe("savePermissions", () => {
     expect(solidClientFns.unstable_fetchLitDatasetWithAcl).toHaveBeenCalledWith(
       iri
     );
-    expect(solidClientFns.unstable_getResourceAcl).toHaveBeenCalledWith(dataset);
+    expect(solidClientFns.unstable_getResourceAcl).toHaveBeenCalledWith(
+      dataset
+    );
     expect(solidClientFns.unstable_setAgentResourceAccess).toHaveBeenCalledWith(
       aclDataset,
       webId,
@@ -1007,7 +1009,9 @@ describe("savePermissions", () => {
       .spyOn(solidClientFns, "unstable_setAgentResourceAccess")
       .mockReturnValue(updatedAcl);
 
-    jest.spyOn(solidClientFns, "unstable_saveAclFor").mockResolvedValueOnce(null);
+    jest
+      .spyOn(solidClientFns, "unstable_saveAclFor")
+      .mockResolvedValueOnce(null);
 
     const { error } = await savePermissions({ iri, webId, access });
 

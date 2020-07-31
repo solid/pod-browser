@@ -29,19 +29,13 @@ import DetailsMenuContext, { DetailsMenuProvider } from "./index";
 const { useContext } = ReactFns;
 
 function ChildComponent(): ReactFns.ReactElement {
-  const { menuOpen, setMenuOpen, action, setAction, iri, setIri } = useContext(
-    DetailsMenuContext
-  );
+  const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
 
-  setAction("sharing");
-  setIri("iri");
   setMenuOpen(true);
 
   return (
     <div>
       <div className="menuOpen">{menuOpen ? "true" : "false"}</div>
-      <div className="action">{action}</div>
-      <div className="iri">{iri}</div>
     </div>
   );
 }
@@ -61,18 +55,12 @@ describe("DetailsMenuContext", () => {
     const action = "details";
     const iri = "iri";
     const setMenuOpen = jest.fn();
-    const setAction = jest.fn();
-    const setIri = jest.fn();
 
     jest
       .spyOn(RouterFns, "useRouter")
       .mockReturnValueOnce({ query: { action, iri } });
 
-    jest
-      .spyOn(ReactFns, "useState")
-      .mockReturnValueOnce([false, setMenuOpen])
-      .mockReturnValueOnce([null, setAction])
-      .mockReturnValueOnce([null, setIri]);
+    jest.spyOn(ReactFns, "useState").mockReturnValueOnce([false, setMenuOpen]);
 
     mountToJson(
       <DetailsMenuProvider>
@@ -81,7 +69,5 @@ describe("DetailsMenuContext", () => {
     );
 
     expect(setMenuOpen).toHaveBeenCalledWith(true);
-    expect(setAction).toHaveBeenCalledWith("details");
-    expect(setIri).toHaveBeenCalledWith(iri);
   });
 });

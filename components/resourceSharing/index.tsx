@@ -49,6 +49,7 @@ import { makeStyles } from "@material-ui/styles";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import { unstable_Access } from "@inrupt/solid-client";
 import UserContext, { ISession } from "../../src/contexts/userContext";
+import { resourceContextRedirect } from "../resourceLink";
 import {
   displayPermissions,
   fetchProfile,
@@ -59,8 +60,7 @@ import {
   NormalizedPermission,
   Profile,
   savePermissions,
-} from "../../src/solid-client-helpers";
-import { stripQueryParams } from "../../src/stringHelpers";
+} from "../../src/solidClientHelpers";
 import styles from "../resourceDetails/styles";
 import PermissionsForm from "../permissionsForm";
 
@@ -234,9 +234,13 @@ export function Permission(props: IPermission): ReactElement | null {
     thirdPartyPermissions,
     setThirdPartyPermissions,
   } = props;
+
   if (!permission) return null;
 
   const { webId, profile } = permission;
+
+  if (!profile) return null;
+
   const { avatar } = profile;
   const avatarSrc = avatar || undefined;
   const onSave = handlePermissionUpdate({
@@ -369,25 +373,10 @@ export function ThirdPartyPermissions(
   );
 }
 
-interface IBackToDetailsClick {
-  router: NextRouter;
-  pathname: string;
-  iri: string;
-}
-
-export function backToDetailsClick({
-  iri,
-  pathname,
-  router,
-}: IBackToDetailsClick): () => Promise<void> {
+export function backToDetailsClick(router: NextRouter): () => Promise<void> {
   return async () => {
-    await router.replace({
-      pathname: "/resource/[iri]",
-      query: { action: "details", iri },
-    }, {
-      pathname,
-      query: { action: "details", iri },
-    });
+    const { iri, resourceIri } = router.query;
+    await resourceContextRedirect("details", resourceIri, iri, router);
   };
 }
 
@@ -406,9 +395,7 @@ export default function ResourceSharing({
   );
   const classes = useStyles();
   const router = useRouter();
-  const { asPath } = router;
   const iriString = iri as string;
-  const pathname = stripQueryParams(asPath) || "/";
 
   return (
     <>
@@ -418,7 +405,7 @@ export default function ResourceSharing({
         </h3>
         <Button
           startIcon={<ChevronLeftIcon />}
-          onClick={backToDetailsClick({ iri: iriString, pathname, router })}
+          onClick={backToDetailsClick(router)}
         >
           Details
         </Button>

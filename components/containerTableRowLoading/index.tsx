@@ -22,8 +22,8 @@
 import { ReactElement } from "react";
 import { TableCell, TableRow } from "@material-ui/core";
 import Link from "next/link";
-import { resourceHref } from "../containerTableRow";
-import { getIriPath } from "../../src/solid-client-helpers";
+import { resourceHref } from "../resourceLink";
+import { getIriPath } from "../../src/solidClientHelpers";
 
 interface Props {
   iri: string;

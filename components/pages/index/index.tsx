@@ -24,12 +24,9 @@ import { useRouter } from "next/router";
 
 import { useFetchPodIrisFromWebId } from "../../../src/hooks/solidClient";
 import UserContext from "../../../src/contexts/userContext";
-import {
-  useRedirectIfLoggedOut,
-  useRedirectIfLoggedIn,
-} from "../../../src/effects/auth";
+import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 
-import { resourceHref } from "../../containerTableRow";
+import { resourceHref } from "../../resourceLink";
 
 export default function Home(): null {
   useRedirectIfLoggedOut();
@@ -41,10 +38,9 @@ export default function Home(): null {
   const [podIri] = podIris;
 
   if (podIri) {
-    router.replace(
-      "/resource/[iri]",
-      resourceHref(podIri),
-    );
+    router.replace("/resource/[iri]", resourceHref(podIri)).catch((e) => {
+      throw e;
+    });
   }
 
   return null;

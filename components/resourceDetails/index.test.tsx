@@ -45,7 +45,7 @@ describe("Resource details", () => {
 
     jest
       .spyOn(Router, "useRouter")
-      .mockReturnValue({ pathname: "/pathname", replace: jest.fn() });
+      .mockReturnValue({ asPath: "/pathname", replace: jest.fn() });
 
     const tree = mountToJson(<ResourceDetails resource={resource} />);
     expect(tree).toMatchSnapshot();
@@ -60,7 +60,7 @@ describe("Resource details", () => {
 
     jest
       .spyOn(Router, "useRouter")
-      .mockReturnValue({ pathname: "/pathname", replace: jest.fn() });
+      .mockReturnValue({ asPath: "/pathname", replace: jest.fn() });
 
     const tree = mountToJson(<ResourceDetails resource={resource} />);
     expect(tree).toMatchSnapshot();

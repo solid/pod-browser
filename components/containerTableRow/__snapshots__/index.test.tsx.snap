@@ -879,18 +879,33 @@ font-display: block;",
             <td
               className="makeStyles-table__body-cell-1548"
             >
-              <Link
-                as="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
-                href="/resource/[iri]"
+              <ResourceLink
+                containerIri="https://example.com/example.ttl"
               >
-                <a
-                  href="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
-                  onClick={[Function]}
-                  onMouseEnter={[Function]}
+                <Link
+                  as={
+                    Object {
+                      "pathname": "/resource/https%3A%2F%2Fexample.com%2Fexample.ttl",
+                    }
+                  }
+                  href={
+                    Object {
+                      "pathname": "/resource/[iri]",
+                    }
+                  }
+                  replace={true}
                 >
-                  /example.ttl
-                </a>
-              </Link>
+                  <a
+                    href="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
+                    onClick={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <a>
+                      /example.ttl
+                    </a>
+                  </a>
+                </Link>
+              </ResourceLink>
             </td>
             <td
               className="makeStyles-table__body-cell-1548"
@@ -1787,18 +1802,33 @@ font-display: block;",
             <td
               className="makeStyles-table__body-cell-1548"
             >
-              <Link
-                as="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
-                href="/resource/[iri]"
+              <ResourceLink
+                containerIri="https://example.com/example.ttl"
               >
-                <a
-                  href="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
-                  onClick={[Function]}
-                  onMouseEnter={[Function]}
+                <Link
+                  as={
+                    Object {
+                      "pathname": "/resource/https%3A%2F%2Fexample.com%2Fexample.ttl",
+                    }
+                  }
+                  href={
+                    Object {
+                      "pathname": "/resource/[iri]",
+                    }
+                  }
+                  replace={true}
                 >
-                  /example.ttl
-                </a>
-              </Link>
+                  <a
+                    href="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
+                    onClick={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <a>
+                      /example.ttl
+                    </a>
+                  </a>
+                </Link>
+              </ResourceLink>
             </td>
             <td
               className="makeStyles-table__body-cell-1548"
@@ -2693,18 +2723,33 @@ font-display: block;",
             <td
               className="makeStyles-table__body-cell-1548"
             >
-              <Link
-                as="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
-                href="/resource/[iri]"
+              <ResourceLink
+                containerIri="https://example.com/example.ttl"
               >
-                <a
-                  href="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
-                  onClick={[Function]}
-                  onMouseEnter={[Function]}
+                <Link
+                  as={
+                    Object {
+                      "pathname": "/resource/https%3A%2F%2Fexample.com%2Fexample.ttl",
+                    }
+                  }
+                  href={
+                    Object {
+                      "pathname": "/resource/[iri]",
+                    }
+                  }
+                  replace={true}
                 >
-                  /example.ttl
-                </a>
-              </Link>
+                  <a
+                    href="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
+                    onClick={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <a>
+                      /example.ttl
+                    </a>
+                  </a>
+                </Link>
+              </ResourceLink>
             </td>
             <td
               className="makeStyles-table__body-cell-1548"

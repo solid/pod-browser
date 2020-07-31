@@ -1862,16 +1862,42 @@ font-display: block;",
           <div
             className="makeStyles-container-toolbar-3094"
           >
-            <button
-              className="makeStyles-icon-button-3095"
-              onClick={[Function]}
-              type="button"
+            <ResourceLink
+              action="details"
             >
-              <i
-                aria-label="View details"
-                className="makeStyles-icon-info-3065"
-              />
-            </button>
+              <Link
+                as={
+                  Object {
+                    "pathname": "/resource/[iri]",
+                    "query": Object {
+                      "action": "details",
+                      "resourceIri": "",
+                    },
+                  }
+                }
+                href={
+                  Object {
+                    "pathname": "/resource/[iri]",
+                    "query": Object {
+                      "action": "details",
+                      "resourceIri": "",
+                    },
+                  }
+                }
+                replace={true}
+              >
+                <a
+                  href="/resource/[iri]?action=details&resourceIri="
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                >
+                  <i
+                    aria-label="View details"
+                    className="makeStyles-icon-info-3065"
+                  />
+                </a>
+              </Link>
+            </ResourceLink>
           </div>
         </ContainerToolbar>
       </div>
@@ -3767,16 +3793,42 @@ font-display: block;",
           <div
             className="makeStyles-container-toolbar-3094"
           >
-            <button
-              className="makeStyles-icon-button-3095"
-              onClick={[Function]}
-              type="button"
+            <ResourceLink
+              action="details"
             >
-              <i
-                aria-label="View details"
-                className="makeStyles-icon-info-3065"
-              />
-            </button>
+              <Link
+                as={
+                  Object {
+                    "pathname": "/resource/[iri]",
+                    "query": Object {
+                      "action": "details",
+                      "resourceIri": "",
+                    },
+                  }
+                }
+                href={
+                  Object {
+                    "pathname": "/resource/[iri]",
+                    "query": Object {
+                      "action": "details",
+                      "resourceIri": "",
+                    },
+                  }
+                }
+                replace={true}
+              >
+                <a
+                  href="/resource/[iri]?action=details&resourceIri="
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                >
+                  <i
+                    aria-label="View details"
+                    className="makeStyles-icon-info-3065"
+                  />
+                </a>
+              </Link>
+            </ResourceLink>
           </div>
         </ContainerToolbar>
       </div>
@@ -11243,18 +11295,33 @@ font-display: block;",
               <td
                 className="makeStyles-table__body-cell-6198"
               >
-                <Link
-                  as="/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Finbox"
-                  href="/resource/[iri]"
+                <ResourceLink
+                  containerIri="https://myaccount.mypodserver.com/inbox"
                 >
-                  <a
-                    href="/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Finbox"
-                    onClick={[Function]}
-                    onMouseEnter={[Function]}
+                  <Link
+                    as={
+                      Object {
+                        "pathname": "/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Finbox",
+                      }
+                    }
+                    href={
+                      Object {
+                        "pathname": "/resource/[iri]",
+                      }
+                    }
+                    replace={true}
                   >
-                    /inbox
-                  </a>
-                </Link>
+                    <a
+                      href="/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Finbox"
+                      onClick={[Function]}
+                      onMouseEnter={[Function]}
+                    >
+                      <a>
+                        /inbox
+                      </a>
+                    </a>
+                  </Link>
+                </ResourceLink>
               </td>
               <td
                 className="makeStyles-table__body-cell-6198"
@@ -11292,18 +11359,33 @@ font-display: block;",
               <td
                 className="makeStyles-table__body-cell-6198"
               >
-                <Link
-                  as="/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Fprivate"
-                  href="/resource/[iri]"
+                <ResourceLink
+                  containerIri="https://myaccount.mypodserver.com/private"
                 >
-                  <a
-                    href="/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Fprivate"
-                    onClick={[Function]}
-                    onMouseEnter={[Function]}
+                  <Link
+                    as={
+                      Object {
+                        "pathname": "/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Fprivate",
+                      }
+                    }
+                    href={
+                      Object {
+                        "pathname": "/resource/[iri]",
+                      }
+                    }
+                    replace={true}
                   >
-                    /private
-                  </a>
-                </Link>
+                    <a
+                      href="/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Fprivate"
+                      onClick={[Function]}
+                      onMouseEnter={[Function]}
+                    >
+                      <a>
+                        /private
+                      </a>
+                    </a>
+                  </Link>
+                </ResourceLink>
               </td>
               <td
                 className="makeStyles-table__body-cell-6198"
@@ -11341,18 +11423,33 @@ font-display: block;",
               <td
                 className="makeStyles-table__body-cell-6198"
               >
-                <Link
-                  as="/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Fnote.txt"
-                  href="/resource/[iri]"
+                <ResourceLink
+                  containerIri="https://myaccount.mypodserver.com/note.txt"
                 >
-                  <a
-                    href="/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Fnote.txt"
-                    onClick={[Function]}
-                    onMouseEnter={[Function]}
+                  <Link
+                    as={
+                      Object {
+                        "pathname": "/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Fnote.txt",
+                      }
+                    }
+                    href={
+                      Object {
+                        "pathname": "/resource/[iri]",
+                      }
+                    }
+                    replace={true}
                   >
-                    /note.txt
-                  </a>
-                </Link>
+                    <a
+                      href="/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Fnote.txt"
+                      onClick={[Function]}
+                      onMouseEnter={[Function]}
+                    >
+                      <a>
+                        /note.txt
+                      </a>
+                    </a>
+                  </Link>
+                </ResourceLink>
               </td>
               <td
                 className="makeStyles-table__body-cell-6198"

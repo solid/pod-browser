@@ -20,7 +20,7 @@
  */
 
 import { useEffect, useState } from "react";
-import { fetchProfile, Profile } from "../../solid-client-helpers";
+import { fetchProfile, Profile } from "../../solidClientHelpers";
 import { ISession } from "../../contexts/userContext";
 
 export default function useAuthenticatedProfile(

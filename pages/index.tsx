@@ -21,8 +21,8 @@
 
 import React, { ReactElement } from "react";
 
-import LoginPage from "../../components/pages/login";
+import IndexPage from "../components/pages/index";
 
-export default function Login(): ReactElement {
-  return <LoginPage />;
+export default function Index(): ReactElement {
+  return <IndexPage />;
 }

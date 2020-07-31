@@ -19,51 +19,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement, useContext } from "react";
+import { ReactElement } from "react";
 import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
-import { useRouter, NextRouter } from "next/router";
 import styles from "./styles";
-import PodLocationContext from "../../src/contexts/podLocationContext";
-import { stripQueryParams } from "../../src/stringHelpers";
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
+
+import ResourceLink from "../resourceLink";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme) as StyleRules)
 );
 
-export function openContextMenu(
-  iri: string,
-  router: NextRouter,
-  pathname: string
-): () => void {
-  return async () => {
-    await router.replace({
-      pathname: "/resource/[iri]",
-      query: { action: DETAILS_CONTEXT_ACTIONS.DETAILS, iri },
-    }, {
-      pathname,
-      query: { action: DETAILS_CONTEXT_ACTIONS.DETAILS, iri },
-    });
-  };
-}
-
 export default function ContainerToolbar(): ReactElement | null {
-  const { currentUri } = useContext(PodLocationContext);
   const bem = useBem(useStyles());
-  const router = useRouter();
-  const { asPath } = router;
-  const pathname = asPath ? stripQueryParams(asPath) : "/";
 
   return (
     <div className={bem("container-toolbar")}>
-      <button
-        className={bem("icon-button")}
-        onClick={openContextMenu(currentUri, router, pathname)}
-        type="button"
-      >
+      <ResourceLink action={DETAILS_CONTEXT_ACTIONS.DETAILS}>
         <i className={bem("icon-info")} aria-label="View details" />
-      </button>
+      </ResourceLink>
     </div>
   );
 }

@@ -24,7 +24,7 @@ import * as ReactFns from "react";
 import { mount } from "enzyme";
 import { mountToJson } from "enzyme-to-json";
 import * as SolidClientfns from "@inrupt/solid-client";
-import { NormalizedPermission } from "../../src/solid-client-helpers";
+import { NormalizedPermission } from "../../src/solidClientHelpers";
 import PermissionsForm, {
   setPermissionHandler,
   savePermissionsHandler,
@@ -167,7 +167,9 @@ describe("PermissionsForm", () => {
       .spyOn(SolidClientfns, "unstable_fetchLitDatasetWithAcl")
       .mockResolvedValueOnce({});
 
-    jest.spyOn(SolidClientfns, "unstable_getResourceAcl").mockResolvedValueOnce({});
+    jest
+      .spyOn(SolidClientfns, "unstable_getResourceAcl")
+      .mockResolvedValueOnce({});
 
     jest
       .spyOn(SolidClientfns, "unstable_setAgentResourceAccess")

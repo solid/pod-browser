@@ -21,17 +21,24 @@
 
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
+import * as nextRouterFns from "next/router";
 
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import { useFetchPodIrisFromWebId } from "../../../src/hooks/solidClient";
+import { resourceHref } from "../../resourceLink";
 import IndexPage from "./index";
 
 jest.mock("../../../src/effects/auth");
 jest.mock("../../../src/hooks/solidClient");
 jest.mock("@inrupt/solid-client");
+jest.mock("next/router");
 
 describe("Index page", () => {
-  test("Renders the index page", () => {
+  test("Renders null if there are no pod iris", () => {
+    (nextRouterFns.useRouter as jest.Mock).mockReturnValue({
+      replace: jest.fn().mockResolvedValue(undefined),
+    });
+
     (useFetchPodIrisFromWebId as jest.Mock).mockReturnValue({
       data: undefined,
     });
@@ -40,13 +47,22 @@ describe("Index page", () => {
     expect(shallowToJson(tree)).toMatchSnapshot();
   });
 
-  test("Renders the index page with pod iris", () => {
+  test("Redirects to the resource page if there is a pod iri", () => {
+    const replace = jest.fn().mockResolvedValue(undefined);
+    const podIri = "https://mypod.myhost.com";
+
+    (nextRouterFns.useRouter as jest.Mock).mockReturnValue({ replace });
+
     (useFetchPodIrisFromWebId as jest.Mock).mockReturnValue({
-      data: ["https://mypod.myhost.com"],
+      data: [podIri],
     });
 
-    const tree = shallow(<IndexPage />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    shallow(<IndexPage />);
+
+    expect(replace).toHaveBeenCalledWith(
+      "/resource/[iri]",
+      resourceHref(podIri)
+    );
   });
 
   test("Redirects if the user is logged out", () => {

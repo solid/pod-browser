@@ -33,7 +33,7 @@ import ContainerTableRow from "../containerTableRow";
 import SortedTableCarat from "../sortedTableCarat";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import { useFetchContainerResourceIris } from "../../src/hooks/solidClient";
-import { IResourceDetails, getIriPath } from "../../src/solid-client-helpers";
+import { IResourceDetails, getIriPath } from "../../src/solidClientHelpers";
 
 import Spinner from "../spinner";
 import styles from "./styles";

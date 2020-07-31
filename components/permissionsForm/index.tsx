@@ -43,7 +43,7 @@ import {
   NormalizedPermission,
   ACL_KEYS,
   IResponse,
-} from "../../src/solid-client-helpers";
+} from "../../src/solidClientHelpers";
 import styles from "./styles";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>

@@ -19,7 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement } from "react";
+// @ts-nocheck
+// material-ui is broken and doesn't allow `ListItem` to accept `component`
+
+import React, { ReactElement } from "react";
 import {
   Button,
   createStyles,
@@ -31,12 +34,13 @@ import {
   Typography,
 } from "@material-ui/core";
 import ShareIcon from "@material-ui/icons/Share";
-import { useRouter } from "next/router";
 import { makeStyles } from "@material-ui/styles";
 import { PrismTheme } from "@solid/lit-prism-patterns";
+import ResourceLink from "../resourceLink";
 import styles from "./styles";
-import { IResourceDetails } from "../../src/solid-client-helpers";
-import { parseUrl, stripQueryParams } from "../../src/stringHelpers";
+import { IResourceDetails } from "../../src/solidClientHelpers";
+import { parseUrl } from "../../src/stringHelpers";
+import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
 
 interface IDownloadLink {
   type: string;
@@ -95,6 +99,15 @@ export function DownloadLink(props: IDownloadLink): ReactElement | null {
   );
 }
 
+/* eslint react/jsx-props-no-spreading: 0 */
+const SharingLink = React.forwardRef((linkProps, ref) => (
+  <ResourceLink
+    {...linkProps}
+    action={DETAILS_CONTEXT_ACTIONS.SHARING}
+    ref={ref}
+  />
+));
+
 interface IDetailsProps {
   resource: IResourceDetails;
 }
@@ -102,12 +115,9 @@ interface IDetailsProps {
 export default function ResourceDetails({
   resource,
 }: IDetailsProps): ReactElement {
-  const router = useRouter();
   const classes = useStyles();
-  const { asPath } = router;
   const { iri, name, types } = resource;
   const type = displayType(types);
-  const pathname = stripQueryParams(asPath) || "/";
 
   return (
     <>
@@ -122,22 +132,11 @@ export default function ResourceDetails({
       <section className={classes.centeredSection}>
         <h5 className={classes["content-h5"]}>Actions</h5>
         <List>
-          <ListItem button>
+          <ListItem button component={SharingLink} resourceIri={iri}>
             <ListItemIcon>
               <ShareIcon />
             </ListItemIcon>
-            <ListItemText
-              primary="Sharing &amp; App Permissions"
-              onClick={async () => {
-                await router.replace({
-                  pathname: "/resource/[iri]",
-                  query: { action: "sharing", iri },
-                }, {
-                  pathname,
-                  query: { action: "sharing", iri },
-                });
-              }}
-            />
+            <ListItemText primary="Sharing &amp; App Permissions" />
           </ListItem>
         </List>
       </section>

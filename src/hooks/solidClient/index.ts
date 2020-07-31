@@ -38,7 +38,7 @@ import {
   namespace,
   normalizePermissions,
   IResourceDetails,
-} from "../../solid-client-helpers";
+} from "../../solidClientHelpers";
 
 export async function fetchContainerResourceIris(
   containerIri: string

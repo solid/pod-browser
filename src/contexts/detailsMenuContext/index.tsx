@@ -26,16 +26,10 @@ import {
   ReactElement,
   ReactNode,
   useState,
-  useEffect,
 } from "react";
-import { useRouter } from "next/router";
 
 interface DetailsContext {
-  action: string | null;
-  iri: string | null;
   menuOpen: boolean;
-  setAction: Dispatch<string>;
-  setIri: Dispatch<string>;
   setMenuOpen: Dispatch<boolean>;
 }
 
@@ -45,11 +39,7 @@ export const DETAILS_CONTEXT_ACTIONS = {
 };
 
 const DetailsMenuContext = createContext<DetailsContext>({
-  action: null,
-  iri: null,
   menuOpen: false,
-  setAction: (action: string) => action,
-  setIri: (iri: string) => iri,
   setMenuOpen: (open: boolean) => open,
 });
 
@@ -59,28 +49,11 @@ interface IDetailsMenuProvider {
 
 function DetailsMenuProvider({ children }: IDetailsMenuProvider): ReactElement {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [action, setAction] = useState("");
-  const [iri, setIri] = useState("");
-  const router = useRouter();
-
-  useEffect(() => {
-    const { query } = router;
-    const routeAction = query.action ? (query.action as string) : "";
-    const routeIri = query.iri ? (query.iri as string) : "";
-
-    setMenuOpen(!!routeAction);
-    setAction(routeAction);
-    setIri(routeIri);
-  }, [router, action, iri, setAction, setIri, setMenuOpen]);
 
   return (
     <DetailsMenuContext.Provider
       value={{
-        action,
-        iri,
         menuOpen,
-        setAction,
-        setIri,
         setMenuOpen,
       }}
     >

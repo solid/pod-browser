@@ -853,16 +853,42 @@ font-display: block;",
       <div
         className="makeStyles-container-toolbar-1535"
       >
-        <button
-          className="makeStyles-icon-button-1536"
-          onClick={[Function]}
-          type="button"
+        <ResourceLink
+          action="details"
         >
-          <i
-            aria-label="View details"
-            className="makeStyles-icon-info-1506"
-          />
-        </button>
+          <Link
+            as={
+              Object {
+                "pathname": "/resource/iri",
+                "query": Object {
+                  "action": "details",
+                  "resourceIri": "iri",
+                },
+              }
+            }
+            href={
+              Object {
+                "pathname": "/resource/[iri]",
+                "query": Object {
+                  "action": "details",
+                  "resourceIri": "iri",
+                },
+              }
+            }
+            replace={true}
+          >
+            <a
+              href="/resource/iri?action=details&resourceIri=iri"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              <i
+                aria-label="View details"
+                className="makeStyles-icon-info-1506"
+              />
+            </a>
+          </Link>
+        </ResourceLink>
       </div>
     </ContainerToolbar>
   </ThemeProvider>

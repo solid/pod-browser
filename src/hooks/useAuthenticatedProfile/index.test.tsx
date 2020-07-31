@@ -21,9 +21,9 @@
 
 import { renderHook } from "@testing-library/react-hooks";
 import useAuthenticatedProfile from "./index";
-import { fetchProfile } from "../../solid-client-helpers";
+import { fetchProfile } from "../../solidClientHelpers";
 
-jest.mock("../../solid-client-helpers");
+jest.mock("../../solidClientHelpers");
 
 const webId = "https://webid.com/#me";
 const profile = { webId };

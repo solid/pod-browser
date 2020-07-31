@@ -21,8 +21,8 @@
 
 import React, { ReactElement } from "react";
 
-import IndexPage from "../../components/pages/index";
+import ResourcePage from "../../components/pages/resource";
 
-export default function Index(): ReactElement {
-  return <IndexPage />;
+export default function Resource(): ReactElement {
+  return <ResourcePage />;
 }

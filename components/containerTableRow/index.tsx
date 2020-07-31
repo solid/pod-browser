@@ -20,20 +20,16 @@
  */
 
 /* eslint-disable camelcase */
-import { ReactElement } from "react";
+import { ReactElement, useContext } from "react";
 import { makeStyles, createStyles, StyleRules } from "@material-ui/styles";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import { useRouter, NextRouter } from "next/router";
-import Link from "next/link";
 import clsx from "clsx";
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
-import { IResourceDetails, isContainerIri } from "../../src/solid-client-helpers";
-import { stripQueryParams } from "../../src/stringHelpers";
+import { IResourceDetails, isContainerIri } from "../../src/solidClientHelpers";
+import PodLocationContext from "../../src/contexts/podLocationContext";
+import ResourceLink, { resourceContextRedirect } from "../resourceLink";
 import styles from "./styles";
-
-export function resourceHref(iri: string): string {
-  return `/resource/${encodeURIComponent(iri)}`;
-}
 
 interface IResourceIcon {
   iri: string;
@@ -60,26 +56,16 @@ interface Props {
 }
 
 export function handleClick(
-  iri: string,
+  resourceIri: string,
+  containerIri: string,
   router: NextRouter
 ): (evnt: Partial<React.MouseEvent>) => Promise<void> {
-  const { asPath } = router;
-  const pathname = stripQueryParams(asPath);
   const action = DETAILS_CONTEXT_ACTIONS.DETAILS;
 
   return async (evnt) => {
     const element = evnt.target as HTMLElement;
     if (element && element.tagName === "A") return;
-
-    await router.replace(
-      {
-        pathname: "/resource/[iri]",
-        query: { action, iri },
-      }, {
-        pathname,
-        query: { action, iri },
-      }
-    );
+    await resourceContextRedirect(action, resourceIri, containerIri, router);
   };
 }
 
@@ -88,20 +74,21 @@ export default function ContainerTableRow({ resource }: Props): ReactElement {
   const bem = useBem(classes);
   const { name, iri } = resource;
   const router = useRouter();
+  const { currentUri } = useContext(PodLocationContext);
 
   return (
     <tr
       className={clsx(bem("table__body-row"), bem("tableRow"))}
-      onClick={handleClick(iri, router)}
+      onClick={handleClick(iri, currentUri, router)}
     >
       <td className={bem("table__body-cell", "align-center", "width-preview")}>
         <ResourceIcon iri={iri} bem={bem} />
       </td>
 
       <td className={bem("table__body-cell")}>
-        <Link href="/resource/[iri]" as={resourceHref(iri)}>
-          <a>{name}</a>
-        </Link>
+        <ResourceLink containerIri={iri} resourceIri={iri}>
+          {name}
+        </ResourceLink>
       </td>
 
       <td key={`${iri}-type`} className={bem("table__body-cell")}>

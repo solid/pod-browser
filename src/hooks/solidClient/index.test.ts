@@ -28,7 +28,7 @@ import {
   unstable_fetchResourceInfoWithAcl,
 } from "@inrupt/solid-client";
 import useSWR from "swr";
-import * as solidClientHelpers from "../../solid-client-helpers";
+import * as solidClientHelpers from "../../solidClientHelpers";
 import {
   fetchContainerResourceIris,
   fetchResourceDetails,
@@ -154,9 +154,11 @@ describe("fetchResourceDetails", () => {
   test("it fetches a file with ACL if the fetchResource call fails", async () => {
     const iri = "https://dayton.dev.inrupt.net/file.txt";
 
-    jest.spyOn(solidClientHelpers, "fetchResource").mockImplementationOnce(() => {
-      throw new Error("boom");
-    });
+    jest
+      .spyOn(solidClientHelpers, "fetchResource")
+      .mockImplementationOnce(() => {
+        throw new Error("boom");
+      });
 
     jest
       .spyOn(solidClientHelpers, "fetchFileWithAcl")

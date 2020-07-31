@@ -31,22 +31,27 @@ const iri = "https://mypod.myhost.com/public";
 
 describe("Container view", () => {
   test("Renders a spinner if data is loading", () => {
-    (solidClientHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue({
-      data: undefined,
-    });
+    (solidClientHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue(
+      {
+        data: undefined,
+      }
+    );
 
     const tree = mountToJson(<Container iri={iri} />);
     expect(tree).toMatchSnapshot();
   });
 
   test("Renders a table view without data", () => {
-    (solidClientHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue({
-      data: [],
-    });
+    (solidClientHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue(
+      {
+        data: [],
+      }
+    );
 
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "asPath",
       replace: jest.fn(),
+      query: {},
     });
 
     const tree = mountToJson(<Container iri={iri} />);
@@ -61,13 +66,17 @@ describe("Container view", () => {
     ];
     const replace = jest.fn();
 
-    jest
-      .spyOn(RouterFns, "useRouter")
-      .mockReturnValue({ asPath: "asPath", replace });
-
-    (solidClientHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue({
-      data: resources,
+    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
+      asPath: "asPath",
+      replace,
+      query: {},
     });
+
+    (solidClientHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue(
+      {
+        data: resources,
+      }
+    );
 
     (solidClientHooks.useFetchResourceDetails as jest.Mock).mockReturnValue({
       data: undefined,

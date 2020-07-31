@@ -22,7 +22,7 @@
 import * as ReactFns from "react";
 import * as RouterFns from "next/router";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
-import * as SolidClientHelperFns from "../../src/solid-client-helpers";
+import * as SolidClientHelperFns from "../../src/solidClientHelpers";
 import ResourceSharing, {
   AddedAgents,
   backToDetailsClick,
@@ -121,7 +121,9 @@ describe("handleAddAgentClick", () => {
     const setAddedAgents = jest.fn();
     const profile = { webId, avatar, name };
 
-    jest.spyOn(SolidClientHelperFns, "fetchProfile").mockResolvedValueOnce(profile);
+    jest
+      .spyOn(SolidClientHelperFns, "fetchProfile")
+      .mockResolvedValueOnce(profile);
 
     await handleAddAgentClick(webId, [], setAddedAgents);
 
@@ -135,7 +137,9 @@ describe("handleAddAgentClick", () => {
     const setAddedAgents = jest.fn();
     const profile = { webId, avatar, name };
 
-    jest.spyOn(SolidClientHelperFns, "fetchProfile").mockResolvedValueOnce(profile);
+    jest
+      .spyOn(SolidClientHelperFns, "fetchProfile")
+      .mockResolvedValueOnce(profile);
 
     await handleAddAgentClick(webId, [profile], setAddedAgents);
 
@@ -144,9 +148,11 @@ describe("handleAddAgentClick", () => {
 
   test("it logs an error when something goes wrong", async () => {
     jest.spyOn(console, "error").mockImplementationOnce(jest.fn());
-    jest.spyOn(SolidClientHelperFns, "fetchProfile").mockImplementationOnce(() => {
-      throw new Error("boom");
-    });
+    jest
+      .spyOn(SolidClientHelperFns, "fetchProfile")
+      .mockImplementationOnce(() => {
+        throw new Error("boom");
+      });
 
     await handleAddAgentClick("agentId", [], jest.fn());
     /* eslint-disable no-console */
@@ -167,7 +173,9 @@ describe("saveThirdPartyPermissionHandler", () => {
       append: true,
       control: true,
     };
-    jest.spyOn(SolidClientHelperFns, "savePermissions").mockResolvedValueOnce({});
+    jest
+      .spyOn(SolidClientHelperFns, "savePermissions")
+      .mockResolvedValueOnce({});
 
     const handler = saveThirdPartyPermissionHandler({
       iri,
@@ -276,7 +284,9 @@ describe("AddedAgents", () => {
 
 describe("handlePermissionUpdate", () => {
   test("it creates a handler that removes agents if all permissions are removed", async () => {
-    jest.spyOn(SolidClientHelperFns, "savePermissions").mockResolvedValueOnce({});
+    jest
+      .spyOn(SolidClientHelperFns, "savePermissions")
+      .mockResolvedValueOnce({});
 
     const iri = "iri";
     const webId = "webId";
@@ -438,24 +448,32 @@ describe("ThirdPartyPermissionsList", () => {
 
 describe("backToDetailsClick", () => {
   test("it returns a handle to go back to the details action", async () => {
-    const iri = "iri";
-    const pathname = "/pathname/";
+    const resourceIri = "iri";
+    const iri = "/pathname/";
     const replace = jest.fn();
-    const router = { replace };
 
-    // jest
-    //   .spyOn(ReactFns, "")
-    const handler = backToDetailsClick({
-      iri,
-      pathname,
-      router,
-    });
+    const router = {
+      replace,
+      pathname: "/pathname/",
+      query: {
+        resourceIri,
+        iri,
+      },
+    };
+
+    const handler = backToDetailsClick(router);
 
     await handler();
 
-    expect(replace).toHaveBeenCalledWith({
-      pathname,
-      query: { action: "details", iri },
-    });
+    expect(replace).toHaveBeenCalledWith(
+      {
+        pathname: "/resource/[iri]",
+        query: { action: "details", resourceIri },
+      },
+      {
+        pathname: "/resource/%2Fpathname%2F",
+        query: { action: "details", resourceIri },
+      }
+    );
   });
 });

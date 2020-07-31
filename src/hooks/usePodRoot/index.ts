@@ -20,7 +20,7 @@
  */
 
 import { useEffect, useState } from "react";
-import { Profile } from "../../solid-client-helpers";
+import { Profile } from "../../solidClientHelpers";
 
 function normalizeBaseUri(baseUri: string): string {
   return baseUri[baseUri.length - 1] === "/" ? baseUri : `${baseUri}/`;
