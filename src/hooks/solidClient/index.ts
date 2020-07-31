@@ -68,7 +68,7 @@ export async function fetchResourceDetails(
   );
 
   let types = [] as string[];
-  const contentType = resourceInfo?.resourceInfo?.contentType;
+  const contentType = resourceInfo?.internal_resourceInfo?.contentType;
 
   if (contentType) types = [contentType];
   if (isContainer(resourceInfo)) types = ["Container"];

@@ -376,7 +376,12 @@ export function ThirdPartyPermissions(
 export function backToDetailsClick(router: NextRouter): () => Promise<void> {
   return async () => {
     const { iri, resourceIri } = router.query;
-    await resourceContextRedirect("details", resourceIri, iri, router);
+    await resourceContextRedirect(
+      "details",
+      resourceIri as string,
+      iri as string,
+      router
+    );
   };
 }
 
