@@ -33,7 +33,7 @@ const {
   forceDownload,
 } = resourceDetailFns;
 
-jest.mock("../../src/hooks/litPod");
+jest.mock("../../src/hooks/solidClient");
 
 describe("Resource details", () => {
   test("it renders container details", () => {

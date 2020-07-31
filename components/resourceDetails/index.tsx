@@ -35,7 +35,7 @@ import { useRouter } from "next/router";
 import { makeStyles } from "@material-ui/styles";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import styles from "./styles";
-import { IResourceDetails } from "../../src/lit-solid-helpers";
+import { IResourceDetails } from "../../src/solid-client-helpers";
 import { parseUrl, stripQueryParams } from "../../src/stringHelpers";
 
 interface IDownloadLink {

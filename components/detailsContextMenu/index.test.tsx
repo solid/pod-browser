@@ -21,7 +21,7 @@
 
 import * as ReactFns from "react";
 import * as RouterFns from "next/router";
-import * as LitPodFns from "../../src/hooks/litPod";
+import * as SolidClientFns from "../../src/hooks/solidClient";
 import DetailsContextMenu, { Contents } from "./index";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 
@@ -61,7 +61,7 @@ describe("Container view", () => {
     };
 
     jest
-      .spyOn(LitPodFns, "useFetchResourceDetails")
+      .spyOn(SolidClientFns, "useFetchResourceDetails")
       .mockReturnValueOnce({ data });
 
     jest
@@ -79,7 +79,7 @@ describe("Container view", () => {
 
 describe("Contents", () => {
   test("it renders a DetailsLoading component if there's no data", () => {
-    jest.spyOn(LitPodFns, "useFetchResourceDetails").mockReturnValueOnce({});
+    jest.spyOn(SolidClientFns, "useFetchResourceDetails").mockReturnValueOnce({});
 
     jest
       .spyOn(RouterFns, "useRouter")
@@ -105,7 +105,7 @@ describe("Contents", () => {
     };
 
     jest
-      .spyOn(LitPodFns, "useFetchResourceDetails")
+      .spyOn(SolidClientFns, "useFetchResourceDetails")
       .mockReturnValueOnce({ data });
 
     jest
@@ -146,7 +146,7 @@ describe("Contents", () => {
       .mockReturnValueOnce(mockUserContext);
 
     jest
-      .spyOn(LitPodFns, "useFetchResourceDetails")
+      .spyOn(SolidClientFns, "useFetchResourceDetails")
       .mockReturnValueOnce({ data });
 
     jest
@@ -169,7 +169,7 @@ describe("Contents", () => {
     jest.spyOn(ReactFns, "useContext").mockReturnValueOnce(mockAlertContext);
 
     jest
-      .spyOn(LitPodFns, "useFetchResourceDetails")
+      .spyOn(SolidClientFns, "useFetchResourceDetails")
       .mockReturnValueOnce({ data: {}, error: "Some error" });
 
     jest

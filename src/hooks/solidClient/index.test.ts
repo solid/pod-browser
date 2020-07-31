@@ -26,9 +26,9 @@ import {
   getThingOne,
   getIriAll,
   unstable_fetchResourceInfoWithAcl,
-} from "@solid/lit-pod";
+} from "@inrupt/solid-client";
 import useSWR from "swr";
-import * as litSolidHelpers from "../../lit-solid-helpers";
+import * as solidClientHelpers from "../../solid-client-helpers";
 import {
   fetchContainerResourceIris,
   fetchResourceDetails,
@@ -39,7 +39,7 @@ import {
   useFetchPodIrisFromWebId,
 } from "./index";
 
-jest.mock("@solid/lit-pod");
+jest.mock("@inrupt/solid-client");
 jest.mock("swr");
 
 describe("fetchContainerResourceIris", () => {
@@ -131,7 +131,7 @@ describe("fetchResourceDetails", () => {
       },
     });
 
-    jest.spyOn(litSolidHelpers, "normalizePermissions").mockResolvedValue([
+    jest.spyOn(solidClientHelpers, "normalizePermissions").mockResolvedValue([
       {
         webId: "https://dayton.dev.inrupt.net/card/#me",
         alias: "Full Control",
@@ -154,12 +154,12 @@ describe("fetchResourceDetails", () => {
   test("it fetches a file with ACL if the fetchResource call fails", async () => {
     const iri = "https://dayton.dev.inrupt.net/file.txt";
 
-    jest.spyOn(litSolidHelpers, "fetchResource").mockImplementationOnce(() => {
+    jest.spyOn(solidClientHelpers, "fetchResource").mockImplementationOnce(() => {
       throw new Error("boom");
     });
 
     jest
-      .spyOn(litSolidHelpers, "fetchFileWithAcl")
+      .spyOn(solidClientHelpers, "fetchFileWithAcl")
       .mockResolvedValue({ iri, types: ["type"], file: new Blob(["file"]) });
 
     const resourceDetails = await fetchResourceDetails(iri);
@@ -214,7 +214,7 @@ describe("useFetchResourceWithAcl", () => {
 
     expect(useSWR).toHaveBeenCalledWith(
       ["iri", "fetchResourceWithAcl"],
-      litSolidHelpers.fetchResourceWithAcl
+      solidClientHelpers.fetchResourceWithAcl
     );
   });
 });

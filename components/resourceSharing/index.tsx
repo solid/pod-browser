@@ -47,7 +47,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { makeStyles } from "@material-ui/styles";
 import { PrismTheme } from "@solid/lit-prism-patterns";
-import { unstable_Access } from "@solid/lit-pod";
+import { unstable_Access } from "@inrupt/solid-client";
 import UserContext, { ISession } from "../../src/contexts/userContext";
 import {
   displayPermissions,
@@ -59,7 +59,7 @@ import {
   NormalizedPermission,
   Profile,
   savePermissions,
-} from "../../src/lit-solid-helpers";
+} from "../../src/solid-client-helpers";
 import { stripQueryParams } from "../../src/stringHelpers";
 import styles from "../resourceDetails/styles";
 import PermissionsForm from "../permissionsForm";

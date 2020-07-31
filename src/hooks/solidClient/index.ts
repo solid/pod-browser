@@ -30,7 +30,7 @@ import {
   unstable_fetchResourceInfoWithAcl,
   unstable_getAgentAccessAll,
   isContainer,
-} from "@solid/lit-pod";
+} from "@inrupt/solid-client";
 import { space } from "rdf-namespaces";
 import {
   fetchResourceWithAcl,
@@ -38,7 +38,7 @@ import {
   namespace,
   normalizePermissions,
   IResourceDetails,
-} from "../../lit-solid-helpers";
+} from "../../solid-client-helpers";
 
 export async function fetchContainerResourceIris(
   containerIri: string

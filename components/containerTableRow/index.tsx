@@ -27,7 +27,7 @@ import { useRouter, NextRouter } from "next/router";
 import Link from "next/link";
 import clsx from "clsx";
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
-import { IResourceDetails, isContainerIri } from "../../src/lit-solid-helpers";
+import { IResourceDetails, isContainerIri } from "../../src/solid-client-helpers";
 import { stripQueryParams } from "../../src/stringHelpers";
 import styles from "./styles";
 

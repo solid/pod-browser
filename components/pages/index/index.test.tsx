@@ -23,12 +23,12 @@ import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import { useFetchPodIrisFromWebId } from "../../../src/hooks/litPod";
+import { useFetchPodIrisFromWebId } from "../../../src/hooks/solidClient";
 import IndexPage from "./index";
 
 jest.mock("../../../src/effects/auth");
-jest.mock("../../../src/hooks/litPod");
-jest.mock("@solid/lit-pod");
+jest.mock("../../../src/hooks/solidClient");
+jest.mock("@inrupt/solid-client");
 
 describe("Index page", () => {
   test("Renders the index page", () => {

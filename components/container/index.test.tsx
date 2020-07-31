@@ -21,17 +21,17 @@
 
 import * as RouterFns from "next/router";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
-import * as litPodHooks from "../../src/hooks/litPod";
+import * as solidClientHooks from "../../src/hooks/solidClient";
 import Container from "./index";
 
 jest.mock("solid-auth-client");
-jest.mock("../../src/hooks/litPod");
+jest.mock("../../src/hooks/solidClient");
 
 const iri = "https://mypod.myhost.com/public";
 
 describe("Container view", () => {
   test("Renders a spinner if data is loading", () => {
-    (litPodHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue({
+    (solidClientHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue({
       data: undefined,
     });
 
@@ -40,7 +40,7 @@ describe("Container view", () => {
   });
 
   test("Renders a table view without data", () => {
-    (litPodHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue({
+    (solidClientHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue({
       data: [],
     });
 
@@ -65,11 +65,11 @@ describe("Container view", () => {
       .spyOn(RouterFns, "useRouter")
       .mockReturnValue({ asPath: "asPath", replace });
 
-    (litPodHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue({
+    (solidClientHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue({
       data: resources,
     });
 
-    (litPodHooks.useFetchResourceDetails as jest.Mock).mockReturnValue({
+    (solidClientHooks.useFetchResourceDetails as jest.Mock).mockReturnValue({
       data: undefined,
     });
 

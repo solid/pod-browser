@@ -23,8 +23,8 @@
 import * as ReactFns from "react";
 import { mount } from "enzyme";
 import { mountToJson } from "enzyme-to-json";
-import * as LitPodFns from "@solid/lit-pod";
-import { NormalizedPermission } from "../../src/lit-solid-helpers";
+import * as SolidClientfns from "@inrupt/solid-client";
+import { NormalizedPermission } from "../../src/solid-client-helpers";
 import PermissionsForm, {
   setPermissionHandler,
   savePermissionsHandler,
@@ -164,13 +164,13 @@ describe("PermissionsForm", () => {
     const setFormOpen = jest.fn();
 
     jest
-      .spyOn(LitPodFns, "unstable_fetchLitDatasetWithAcl")
+      .spyOn(SolidClientfns, "unstable_fetchLitDatasetWithAcl")
       .mockResolvedValueOnce({});
 
-    jest.spyOn(LitPodFns, "unstable_getResourceAcl").mockResolvedValueOnce({});
+    jest.spyOn(SolidClientfns, "unstable_getResourceAcl").mockResolvedValueOnce({});
 
     jest
-      .spyOn(LitPodFns, "unstable_setAgentResourceAccess")
+      .spyOn(SolidClientfns, "unstable_setAgentResourceAccess")
       .mockResolvedValueOnce({});
 
     jest
@@ -231,7 +231,7 @@ describe("savePermissionsHandler", () => {
       write: true,
       append: true,
       control: true,
-    } as LitPodFns.unstable_Access;
+    } as SolidClientfns.unstable_Access;
     const setAlertOpen = jest.fn();
     const setDialogOpen = jest.fn();
     const setMessage = jest.fn();
@@ -262,7 +262,7 @@ describe("savePermissionsHandler", () => {
       write: true,
       append: true,
       control: true,
-    } as LitPodFns.unstable_Access;
+    } as SolidClientfns.unstable_Access;
     const setAlertOpen = jest.fn();
     const setDialogOpen = jest.fn();
     const setMessage = jest.fn();

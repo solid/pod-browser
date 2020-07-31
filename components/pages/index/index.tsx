@@ -22,7 +22,7 @@
 import { useContext } from "react";
 import { useRouter } from "next/router";
 
-import { useFetchPodIrisFromWebId } from "../../../src/hooks/litPod";
+import { useFetchPodIrisFromWebId } from "../../../src/hooks/solidClient";
 import UserContext from "../../../src/contexts/userContext";
 import {
   useRedirectIfLoggedOut,

@@ -42,7 +42,7 @@ import {
   unstable_hasResourceAcl,
   unstable_saveAclFor,
   unstable_setAgentResourceAccess,
-} from "@solid/lit-pod";
+} from "@inrupt/solid-client";
 import { ldp, space } from "rdf-namespaces";
 import { parseUrl, isUrl } from "../stringHelpers";
 

@@ -21,7 +21,7 @@
 
 import * as routerFns from "next/router";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
-import { useFetchResourceDetails } from "../../src/hooks/litPod";
+import { useFetchResourceDetails } from "../../src/hooks/solidClient";
 import ContainerTableRow, {
   resourceHref,
   handleClick,
@@ -29,9 +29,9 @@ import ContainerTableRow, {
   renderResourceType,
 } from "./index";
 
-jest.mock("@solid/lit-pod");
+jest.mock("@inrupt/solid-client");
 jest.mock("next/router");
-jest.mock("../../src/hooks/litPod");
+jest.mock("../../src/hooks/solidClient");
 
 describe("ContainerTableRow", () => {
   test("it renders a table row", () => {

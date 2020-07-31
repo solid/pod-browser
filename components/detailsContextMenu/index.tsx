@@ -35,7 +35,7 @@ import DetailsLoading from "../detailsLoading";
 import DetailsError from "../detailsError";
 import ResourceDetails from "../resourceDetails";
 import ResourceSharing from "../resourceSharing";
-import { useFetchResourceDetails } from "../../src/hooks/litPod";
+import { useFetchResourceDetails } from "../../src/hooks/solidClient";
 import { parseUrl, stripQueryParams } from "../../src/stringHelpers";
 
 const useStyles = makeStyles(styles);

@@ -32,8 +32,8 @@ import DetailsContextMenu from "../detailsContextMenu";
 import ContainerTableRow from "../containerTableRow";
 import SortedTableCarat from "../sortedTableCarat";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
-import { useFetchContainerResourceIris } from "../../src/hooks/litPod";
-import { IResourceDetails, getIriPath } from "../../src/lit-solid-helpers";
+import { useFetchContainerResourceIris } from "../../src/hooks/solidClient";
+import { IResourceDetails, getIriPath } from "../../src/solid-client-helpers";
 
 import Spinner from "../spinner";
 import styles from "./styles";

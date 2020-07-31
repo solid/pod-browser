@@ -21,7 +21,7 @@
 
 import { renderHook } from "@testing-library/react-hooks";
 import usePodRoot from "./index";
-import { Profile } from "../../lit-solid-helpers";
+import { Profile } from "../../solid-client-helpers";
 
 const location = "https://foo.com/bar/baz";
 const locationWithNoEndingSlash = "https://bar.com";

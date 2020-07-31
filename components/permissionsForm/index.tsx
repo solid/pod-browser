@@ -24,7 +24,7 @@ import { Dispatch, ReactElement, useContext, useEffect, useState } from "react";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import { StyleRules } from "@material-ui/styles";
 import { AlertProps } from "@material-ui/lab/Alert";
-import { unstable_Access } from "@solid/lit-pod";
+import { unstable_Access } from "@inrupt/solid-client";
 import {
   Button,
   Checkbox,
@@ -43,7 +43,7 @@ import {
   NormalizedPermission,
   ACL_KEYS,
   IResponse,
-} from "../../src/lit-solid-helpers";
+} from "../../src/solid-client-helpers";
 import styles from "./styles";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>

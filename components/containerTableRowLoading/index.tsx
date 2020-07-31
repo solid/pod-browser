@@ -23,7 +23,7 @@ import { ReactElement } from "react";
 import { TableCell, TableRow } from "@material-ui/core";
 import Link from "next/link";
 import { resourceHref } from "../containerTableRow";
-import { getIriPath } from "../../src/lit-solid-helpers";
+import { getIriPath } from "../../src/solid-client-helpers";
 
 interface Props {
   iri: string;
