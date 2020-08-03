@@ -375,7 +375,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
         "read": true,
         "write": true,
       },
-      "alias": "Full Control",
+      "alias": "Control",
       "profile": Object {
         "webId": "https://mypod.myhost.com/profile/card#me",
       },
@@ -477,7 +477,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                 className="MuiButton-label"
               >
                 <span>
-                  Full Control
+                  Control
                 </span>
                 <span
                   className="MuiButton-endIcon MuiButton-iconSizeMedium"
@@ -576,7 +576,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                   "summary": "makeStyles-summary-5",
                 }
               }
-              label="read"
+              label="View"
               onChange={[Function]}
               value={true}
             >
@@ -619,12 +619,12 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                               "root": "makeStyles-checkbox-7",
                             }
                           }
-                          name="read"
+                          name="view"
                           onChange={[Function]}
                         />
                       }
                       key=".0"
-                      label="read"
+                      label="View"
                     >
                       <ForwardRef(FormControlLabel)
                         classes={
@@ -645,11 +645,11 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                                 "root": "makeStyles-checkbox-7",
                               }
                             }
-                            name="read"
+                            name="view"
                             onChange={[Function]}
                           />
                         }
-                        label="read"
+                        label="View"
                       >
                         <label
                           className="MuiFormControlLabel-root"
@@ -661,7 +661,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                                 "root": "makeStyles-checkbox-7",
                               }
                             }
-                            name="read"
+                            name="view"
                             onChange={[Function]}
                           >
                             <ForwardRef(Checkbox)
@@ -676,7 +676,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                                   "root": "MuiCheckbox-root makeStyles-checkbox-7",
                                 }
                               }
-                              name="read"
+                              name="view"
                               onChange={[Function]}
                             >
                               <WithStyles(ForwardRef(SwitchBase))
@@ -696,7 +696,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                                     "data-indeterminate": false,
                                   }
                                 }
-                                name="read"
+                                name="view"
                                 onChange={[Function]}
                                 type="checkbox"
                               >
@@ -718,7 +718,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                                       "data-indeterminate": false,
                                     }
                                   }
-                                  name="read"
+                                  name="view"
                                   onChange={[Function]}
                                   type="checkbox"
                                 >
@@ -801,7 +801,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                                                 checked={true}
                                                 className="PrivateSwitchBase-input-11"
                                                 data-indeterminate={false}
-                                                name="read"
+                                                name="view"
                                                 onChange={[Function]}
                                                 type="checkbox"
                                               />
@@ -918,7 +918,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                               <span
                                 className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-6 MuiTypography-body1"
                               >
-                                read
+                                View
                               </span>
                             </ForwardRef(Typography)>
                           </WithStyles(ForwardRef(Typography))>
@@ -941,7 +941,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                   "summary": "makeStyles-summary-5",
                 }
               }
-              label="write"
+              label="Edit"
               onChange={[Function]}
               value={true}
             >
@@ -984,12 +984,12 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                               "root": "makeStyles-checkbox-7",
                             }
                           }
-                          name="write"
+                          name="edit"
                           onChange={[Function]}
                         />
                       }
                       key=".0"
-                      label="write"
+                      label="Edit"
                     >
                       <ForwardRef(FormControlLabel)
                         classes={
@@ -1010,11 +1010,11 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                                 "root": "makeStyles-checkbox-7",
                               }
                             }
-                            name="write"
+                            name="edit"
                             onChange={[Function]}
                           />
                         }
-                        label="write"
+                        label="Edit"
                       >
                         <label
                           className="MuiFormControlLabel-root"
@@ -1026,7 +1026,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                                 "root": "makeStyles-checkbox-7",
                               }
                             }
-                            name="write"
+                            name="edit"
                             onChange={[Function]}
                           >
                             <ForwardRef(Checkbox)
@@ -1041,7 +1041,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                                   "root": "MuiCheckbox-root makeStyles-checkbox-7",
                                 }
                               }
-                              name="write"
+                              name="edit"
                               onChange={[Function]}
                             >
                               <WithStyles(ForwardRef(SwitchBase))
@@ -1061,7 +1061,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                                     "data-indeterminate": false,
                                   }
                                 }
-                                name="write"
+                                name="edit"
                                 onChange={[Function]}
                                 type="checkbox"
                               >
@@ -1083,7 +1083,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                                       "data-indeterminate": false,
                                     }
                                   }
-                                  name="write"
+                                  name="edit"
                                   onChange={[Function]}
                                   type="checkbox"
                                 >
@@ -1166,7 +1166,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                                                 checked={true}
                                                 className="PrivateSwitchBase-input-11"
                                                 data-indeterminate={false}
-                                                name="write"
+                                                name="edit"
                                                 onChange={[Function]}
                                                 type="checkbox"
                                               />
@@ -1283,7 +1283,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                               <span
                                 className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-6 MuiTypography-body1"
                               >
-                                write
+                                Edit
                               </span>
                             </ForwardRef(Typography)>
                           </WithStyles(ForwardRef(Typography))>
@@ -1306,7 +1306,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                   "summary": "makeStyles-summary-5",
                 }
               }
-              label="append"
+              label="Append"
               onChange={[Function]}
               value={true}
             >
@@ -1354,7 +1354,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                         />
                       }
                       key=".0"
-                      label="append"
+                      label="Append"
                     >
                       <ForwardRef(FormControlLabel)
                         classes={
@@ -1379,7 +1379,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                             onChange={[Function]}
                           />
                         }
-                        label="append"
+                        label="Append"
                       >
                         <label
                           className="MuiFormControlLabel-root"
@@ -1648,7 +1648,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                               <span
                                 className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-6 MuiTypography-body1"
                               >
-                                append
+                                Append
                               </span>
                             </ForwardRef(Typography)>
                           </WithStyles(ForwardRef(Typography))>
@@ -1671,7 +1671,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                   "summary": "makeStyles-summary-5",
                 }
               }
-              label="control"
+              label="Control"
               onChange={[Function]}
               value={true}
             >
@@ -1719,7 +1719,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                         />
                       }
                       key=".0"
-                      label="control"
+                      label="Control"
                     >
                       <ForwardRef(FormControlLabel)
                         classes={
@@ -1744,7 +1744,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                             onChange={[Function]}
                           />
                         }
-                        label="control"
+                        label="Control"
                       >
                         <label
                           className="MuiFormControlLabel-root"
@@ -2013,7 +2013,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                               <span
                                 className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-6 MuiTypography-body1"
                               >
-                                control
+                                Control
                               </span>
                             </ForwardRef(Typography)>
                           </WithStyles(ForwardRef(Typography))>
@@ -2165,7 +2165,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
         "read": true,
         "write": true,
       },
-      "alias": "Full Control",
+      "alias": "Control",
       "profile": Object {
         "webId": "https://mypod.myhost.com/profile/card#me",
       },
@@ -2267,7 +2267,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                 className="MuiButton-label"
               >
                 <span>
-                  Can Edit
+                  Edit
                 </span>
                 <span
                   className="MuiButton-endIcon MuiButton-iconSizeMedium"
@@ -2366,7 +2366,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                   "summary": "makeStyles-summary-5",
                 }
               }
-              label="read"
+              label="View"
               onChange={[Function]}
               value={true}
             >
@@ -2409,12 +2409,12 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                               "root": "makeStyles-checkbox-7",
                             }
                           }
-                          name="read"
+                          name="view"
                           onChange={[Function]}
                         />
                       }
                       key=".0"
-                      label="read"
+                      label="View"
                     >
                       <ForwardRef(FormControlLabel)
                         classes={
@@ -2435,11 +2435,11 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                                 "root": "makeStyles-checkbox-7",
                               }
                             }
-                            name="read"
+                            name="view"
                             onChange={[Function]}
                           />
                         }
-                        label="read"
+                        label="View"
                       >
                         <label
                           className="MuiFormControlLabel-root"
@@ -2451,7 +2451,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                                 "root": "makeStyles-checkbox-7",
                               }
                             }
-                            name="read"
+                            name="view"
                             onChange={[Function]}
                           >
                             <ForwardRef(Checkbox)
@@ -2466,7 +2466,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                                   "root": "MuiCheckbox-root makeStyles-checkbox-7",
                                 }
                               }
-                              name="read"
+                              name="view"
                               onChange={[Function]}
                             >
                               <WithStyles(ForwardRef(SwitchBase))
@@ -2486,7 +2486,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                                     "data-indeterminate": false,
                                   }
                                 }
-                                name="read"
+                                name="view"
                                 onChange={[Function]}
                                 type="checkbox"
                               >
@@ -2508,7 +2508,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                                       "data-indeterminate": false,
                                     }
                                   }
-                                  name="read"
+                                  name="view"
                                   onChange={[Function]}
                                   type="checkbox"
                                 >
@@ -2591,7 +2591,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                                                 checked={true}
                                                 className="PrivateSwitchBase-input-11"
                                                 data-indeterminate={false}
-                                                name="read"
+                                                name="view"
                                                 onChange={[Function]}
                                                 type="checkbox"
                                               />
@@ -2708,7 +2708,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                               <span
                                 className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-6 MuiTypography-body1"
                               >
-                                read
+                                View
                               </span>
                             </ForwardRef(Typography)>
                           </WithStyles(ForwardRef(Typography))>
@@ -2731,7 +2731,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                   "summary": "makeStyles-summary-5",
                 }
               }
-              label="write"
+              label="Edit"
               onChange={[Function]}
               value={true}
             >
@@ -2774,12 +2774,12 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                               "root": "makeStyles-checkbox-7",
                             }
                           }
-                          name="write"
+                          name="edit"
                           onChange={[Function]}
                         />
                       }
                       key=".0"
-                      label="write"
+                      label="Edit"
                     >
                       <ForwardRef(FormControlLabel)
                         classes={
@@ -2800,11 +2800,11 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                                 "root": "makeStyles-checkbox-7",
                               }
                             }
-                            name="write"
+                            name="edit"
                             onChange={[Function]}
                           />
                         }
-                        label="write"
+                        label="Edit"
                       >
                         <label
                           className="MuiFormControlLabel-root"
@@ -2816,7 +2816,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                                 "root": "makeStyles-checkbox-7",
                               }
                             }
-                            name="write"
+                            name="edit"
                             onChange={[Function]}
                           >
                             <ForwardRef(Checkbox)
@@ -2831,7 +2831,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                                   "root": "MuiCheckbox-root makeStyles-checkbox-7",
                                 }
                               }
-                              name="write"
+                              name="edit"
                               onChange={[Function]}
                             >
                               <WithStyles(ForwardRef(SwitchBase))
@@ -2851,7 +2851,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                                     "data-indeterminate": false,
                                   }
                                 }
-                                name="write"
+                                name="edit"
                                 onChange={[Function]}
                                 type="checkbox"
                               >
@@ -2873,7 +2873,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                                       "data-indeterminate": false,
                                     }
                                   }
-                                  name="write"
+                                  name="edit"
                                   onChange={[Function]}
                                   type="checkbox"
                                 >
@@ -2956,7 +2956,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                                                 checked={true}
                                                 className="PrivateSwitchBase-input-11"
                                                 data-indeterminate={false}
-                                                name="write"
+                                                name="edit"
                                                 onChange={[Function]}
                                                 type="checkbox"
                                               />
@@ -3073,7 +3073,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                               <span
                                 className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-6 MuiTypography-body1"
                               >
-                                write
+                                Edit
                               </span>
                             </ForwardRef(Typography)>
                           </WithStyles(ForwardRef(Typography))>
@@ -3096,7 +3096,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                   "summary": "makeStyles-summary-5",
                 }
               }
-              label="append"
+              label="Append"
               onChange={[Function]}
               value={true}
             >
@@ -3144,7 +3144,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                         />
                       }
                       key=".0"
-                      label="append"
+                      label="Append"
                     >
                       <ForwardRef(FormControlLabel)
                         classes={
@@ -3169,7 +3169,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                             onChange={[Function]}
                           />
                         }
-                        label="append"
+                        label="Append"
                       >
                         <label
                           className="MuiFormControlLabel-root"
@@ -3438,7 +3438,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                               <span
                                 className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-6 MuiTypography-body1"
                               >
-                                append
+                                Append
                               </span>
                             </ForwardRef(Typography)>
                           </WithStyles(ForwardRef(Typography))>
@@ -3461,7 +3461,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                   "summary": "makeStyles-summary-5",
                 }
               }
-              label="control"
+              label="Control"
               onChange={[Function]}
               value={false}
             >
@@ -3509,7 +3509,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                         />
                       }
                       key=".0"
-                      label="control"
+                      label="Control"
                     >
                       <ForwardRef(FormControlLabel)
                         classes={
@@ -3534,7 +3534,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                             onChange={[Function]}
                           />
                         }
-                        label="control"
+                        label="Control"
                       >
                         <label
                           className="MuiFormControlLabel-root"
@@ -3803,7 +3803,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                               <span
                                 className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-6 MuiTypography-body1"
                               >
-                                control
+                                Control
                               </span>
                             </ForwardRef(Typography)>
                           </WithStyles(ForwardRef(Typography))>

@@ -39,7 +39,7 @@ describe("PermissionsForm", () => {
     const webId = "https://mypod.myhost.com/profile/card#me";
     const permission = {
       webId,
-      alias: "Full Control",
+      alias: "Control",
       profile: { webId },
       acl: {
         read: true,
@@ -61,7 +61,7 @@ describe("PermissionsForm", () => {
     const webId = "https://mypod.myhost.com/profile/card#me";
     const permission = {
       webId,
-      alias: "Full Control",
+      alias: "Control",
       profile: { webId },
       acl: {
         read: true,
@@ -83,7 +83,7 @@ describe("PermissionsForm", () => {
     const webId = "https://mypod.myhost.com/profile/card#me";
     const permission = {
       webId,
-      alias: "Full Control",
+      alias: "Control",
       profile: { webId },
       acl: {
         read: true,
@@ -142,7 +142,7 @@ describe("PermissionsForm", () => {
     const webId = "https://mypod.myhost.com/profile/card#me";
     const permission = {
       webId,
-      alias: "Full Control",
+      alias: "Control",
       profile: { webId },
       acl: {
         read: true,

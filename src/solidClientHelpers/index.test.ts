@@ -25,6 +25,7 @@ import * as solidClientFns from "@inrupt/solid-client";
 import * as solidClientHelpers from "./index";
 
 const {
+  ACL,
   displayPermissions,
   displayTypes,
   fetchFileWithAcl,
@@ -188,7 +189,7 @@ describe("displayTypes", () => {
 });
 
 describe("displayPermissions", () => {
-  test("it returns 'Full Control' when all options are true", () => {
+  test("it returns 'Control' when all options are true", () => {
     const perms = displayPermissions({
       read: true,
       write: true,
@@ -196,10 +197,10 @@ describe("displayPermissions", () => {
       control: true,
     });
 
-    expect(perms).toEqual("Full Control");
+    expect(perms).toEqual(ACL.CONTROL.alias);
   });
 
-  test("it returns 'No Access' when all options are false", () => {
+  test("it returns the NONE alias when all options are false", () => {
     const perms = displayPermissions({
       read: false,
       write: false,
@@ -207,10 +208,21 @@ describe("displayPermissions", () => {
       control: false,
     });
 
-    expect(perms).toEqual("No Access");
+    expect(perms).toEqual(ACL.NONE.alias);
   });
 
-  test("it returns 'Can Edit' when write permissions are true", () => {
+  test("it returns the APPEND alias when append permissions are true and edit is false", () => {
+    const perms = displayPermissions({
+      read: true,
+      write: false,
+      append: true,
+      control: false,
+    });
+
+    expect(perms).toEqual(ACL.APPEND.alias);
+  });
+
+  test("it returns the WRITE alias when write permissions are true", () => {
     const perms = displayPermissions({
       read: true,
       write: true,
@@ -218,10 +230,10 @@ describe("displayPermissions", () => {
       control: false,
     });
 
-    expect(perms).toEqual("Can Edit");
+    expect(perms).toEqual(ACL.WRITE.alias);
   });
 
-  test("it returns 'Can View' when read permissions are true", () => {
+  test("it returns the READ alias when read permissions are true", () => {
     const perms = displayPermissions({
       read: true,
       write: false,
@@ -229,7 +241,7 @@ describe("displayPermissions", () => {
       control: false,
     });
 
-    expect(perms).toEqual("Can View");
+    expect(perms).toEqual(ACL.READ.alias);
   });
 });
 
@@ -276,22 +288,22 @@ describe("normalizePermissions", () => {
     );
 
     expect(perms1.webId).toEqual("https://pod.acl1.com/card#me");
-    expect(perms1.alias).toEqual("Can View");
+    expect(perms1.alias).toEqual(ACL.READ.alias);
     expect(perms1.acl).toMatchObject(acl["https://pod.acl1.com/card#me"]);
     expect(perms1.profile).toMatchObject(expectedProfile);
 
     expect(perms2.webId).toEqual("https://pod.acl2.com/card#me");
-    expect(perms2.alias).toEqual("Full Control");
+    expect(perms2.alias).toEqual(ACL.CONTROL.alias);
     expect(perms2.acl).toMatchObject(acl["https://pod.acl2.com/card#me"]);
     expect(perms2.profile).toMatchObject(expectedProfile);
 
     expect(perms3.webId).toEqual("https://pod.acl3.com/card#me");
-    expect(perms3.alias).toEqual("Can Edit");
+    expect(perms3.alias).toEqual(ACL.WRITE.alias);
     expect(perms3.acl).toMatchObject(acl["https://pod.acl3.com/card#me"]);
     expect(perms3.profile).toMatchObject(expectedProfile);
 
     expect(perms4.webId).toEqual("https://pod.acl4.com/card#me");
-    expect(perms4.alias).toEqual("No Access");
+    expect(perms4.alias).toEqual(ACL.NONE.alias);
     expect(perms4.acl).toMatchObject(acl["https://pod.acl4.com/card#me"]);
     expect(perms4.profile).toMatchObject(expectedProfile);
   });
@@ -397,11 +409,11 @@ describe("fetchResourceWithAcl", () => {
     expect(types).toContain("BasicContainer");
 
     expect(ownerPerms.webId).toEqual("owner");
-    expect(ownerPerms.alias).toEqual("Full Control");
+    expect(ownerPerms.alias).toEqual(ACL.CONTROL.alias);
     expect(ownerPerms.acl).toMatchObject(perms.owner);
 
     expect(collaboratorPerms.webId).toEqual("collaborator");
-    expect(collaboratorPerms.alias).toEqual("Can View");
+    expect(collaboratorPerms.alias).toEqual("Append");
     expect(collaboratorPerms.acl).toMatchObject(perms.collaborator);
   });
 
@@ -466,7 +478,7 @@ describe("getUserPermissions", () => {
     );
 
     expect(permissions.webId).toEqual("https://host.pod.com/acl1/card#me");
-    expect(permissions.alias).toEqual("Can View");
+    expect(permissions.alias).toEqual(ACL.READ.alias);
     expect(permissions.acl).toMatchObject(
       acl["https://host.pod.com/acl1/card#me"]
     );
@@ -480,7 +492,7 @@ describe("getUserPermissions", () => {
     const permissions = [
       {
         webId: "test",
-        alias: "Can View",
+        alias: ACL.READ.alias,
         acl: { read: true, write: false, control: false, append: false },
         profile: { webId: "test" },
       },
@@ -536,15 +548,15 @@ describe("getThirdPartyPermissions", () => {
     );
 
     expect(perms2.webId).toEqual("https://pod.host.com/acl2/card#me");
-    expect(perms2.alias).toEqual("Full Control");
+    expect(perms2.alias).toEqual(ACL.CONTROL.alias);
     expect(perms2.acl).toMatchObject(acl["https://pod.host.com/acl2/card#me"]);
 
     expect(perms3.webId).toEqual("https://pod.host.com/acl3/card#me");
-    expect(perms3.alias).toEqual("Can Edit");
+    expect(perms3.alias).toEqual(ACL.WRITE.alias);
     expect(perms3.acl).toMatchObject(acl["https://pod.host.com/acl3/card#me"]);
 
     expect(perms4.webId).toEqual("https://pod.host.com/acl4/card#me");
-    expect(perms4.alias).toEqual("No Access");
+    expect(perms4.alias).toEqual(ACL.NONE.alias);
     expect(perms4.acl).toMatchObject(acl["https://pod.host.com/acl4/card#me"]);
   });
 
@@ -599,7 +611,7 @@ describe("permissionsFromWacAllowHeaders", () => {
     const [user, publicPerms] = permissionsFromWacAllowHeaders(wacAllow);
 
     expect(user.webId).toEqual("user");
-    expect(user.alias).toEqual("Full Control");
+    expect(user.alias).toEqual(ACL.CONTROL.alias);
     expect(user.acl).toMatchObject({
       read: true,
       write: true,
@@ -609,7 +621,7 @@ describe("permissionsFromWacAllowHeaders", () => {
     expect(user.profile.name).toEqual("user");
 
     expect(publicPerms.webId).toEqual("public");
-    expect(publicPerms.alias).toEqual("Can View");
+    expect(publicPerms.alias).toEqual(ACL.READ.alias);
     expect(publicPerms.acl).toMatchObject({
       read: true,
       write: false,

@@ -192,7 +192,7 @@ describe("saveThirdPartyPermissionHandler", () => {
     expect(setAddedAgents).toHaveBeenCalledWith([]);
     expect(setThirdPartyPermissions).toHaveBeenCalledWith([
       {
-        alias: "Full Control",
+        alias: "Control",
         acl: access,
         webId,
         profile,

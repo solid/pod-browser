@@ -1100,7 +1100,7 @@ font-display: block;",
                                   className="MuiButton-label"
                                 >
                                   <span>
-                                    No Access
+                                    No access
                                   </span>
                                   <span
                                     className="MuiButton-endIcon MuiButton-iconSizeMedium"
@@ -1199,7 +1199,7 @@ font-display: block;",
                                     "summary": "makeStyles-summary-27",
                                   }
                                 }
-                                label="read"
+                                label="View"
                                 onChange={[Function]}
                                 value={false}
                               >
@@ -1242,12 +1242,12 @@ font-display: block;",
                                                 "root": "makeStyles-checkbox-29",
                                               }
                                             }
-                                            name="read"
+                                            name="view"
                                             onChange={[Function]}
                                           />
                                         }
                                         key=".0"
-                                        label="read"
+                                        label="View"
                                       >
                                         <ForwardRef(FormControlLabel)
                                           classes={
@@ -1268,11 +1268,11 @@ font-display: block;",
                                                   "root": "makeStyles-checkbox-29",
                                                 }
                                               }
-                                              name="read"
+                                              name="view"
                                               onChange={[Function]}
                                             />
                                           }
-                                          label="read"
+                                          label="View"
                                         >
                                           <label
                                             className="MuiFormControlLabel-root"
@@ -1284,7 +1284,7 @@ font-display: block;",
                                                   "root": "makeStyles-checkbox-29",
                                                 }
                                               }
-                                              name="read"
+                                              name="view"
                                               onChange={[Function]}
                                             >
                                               <ForwardRef(Checkbox)
@@ -1299,7 +1299,7 @@ font-display: block;",
                                                     "root": "MuiCheckbox-root makeStyles-checkbox-29",
                                                   }
                                                 }
-                                                name="read"
+                                                name="view"
                                                 onChange={[Function]}
                                               >
                                                 <WithStyles(ForwardRef(SwitchBase))
@@ -1319,7 +1319,7 @@ font-display: block;",
                                                       "data-indeterminate": false,
                                                     }
                                                   }
-                                                  name="read"
+                                                  name="view"
                                                   onChange={[Function]}
                                                   type="checkbox"
                                                 >
@@ -1341,7 +1341,7 @@ font-display: block;",
                                                         "data-indeterminate": false,
                                                       }
                                                     }
-                                                    name="read"
+                                                    name="view"
                                                     onChange={[Function]}
                                                     type="checkbox"
                                                   >
@@ -1424,7 +1424,7 @@ font-display: block;",
                                                                   checked={false}
                                                                   className="PrivateSwitchBase-input-33"
                                                                   data-indeterminate={false}
-                                                                  name="read"
+                                                                  name="view"
                                                                   onChange={[Function]}
                                                                   type="checkbox"
                                                                 />
@@ -1541,7 +1541,7 @@ font-display: block;",
                                                 <span
                                                   className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-28 MuiTypography-body1"
                                                 >
-                                                  read
+                                                  View
                                                 </span>
                                               </ForwardRef(Typography)>
                                             </WithStyles(ForwardRef(Typography))>
@@ -1564,7 +1564,7 @@ font-display: block;",
                                     "summary": "makeStyles-summary-27",
                                   }
                                 }
-                                label="write"
+                                label="Edit"
                                 onChange={[Function]}
                                 value={false}
                               >
@@ -1607,12 +1607,12 @@ font-display: block;",
                                                 "root": "makeStyles-checkbox-29",
                                               }
                                             }
-                                            name="write"
+                                            name="edit"
                                             onChange={[Function]}
                                           />
                                         }
                                         key=".0"
-                                        label="write"
+                                        label="Edit"
                                       >
                                         <ForwardRef(FormControlLabel)
                                           classes={
@@ -1633,11 +1633,11 @@ font-display: block;",
                                                   "root": "makeStyles-checkbox-29",
                                                 }
                                               }
-                                              name="write"
+                                              name="edit"
                                               onChange={[Function]}
                                             />
                                           }
-                                          label="write"
+                                          label="Edit"
                                         >
                                           <label
                                             className="MuiFormControlLabel-root"
@@ -1649,7 +1649,7 @@ font-display: block;",
                                                   "root": "makeStyles-checkbox-29",
                                                 }
                                               }
-                                              name="write"
+                                              name="edit"
                                               onChange={[Function]}
                                             >
                                               <ForwardRef(Checkbox)
@@ -1664,7 +1664,7 @@ font-display: block;",
                                                     "root": "MuiCheckbox-root makeStyles-checkbox-29",
                                                   }
                                                 }
-                                                name="write"
+                                                name="edit"
                                                 onChange={[Function]}
                                               >
                                                 <WithStyles(ForwardRef(SwitchBase))
@@ -1684,7 +1684,7 @@ font-display: block;",
                                                       "data-indeterminate": false,
                                                     }
                                                   }
-                                                  name="write"
+                                                  name="edit"
                                                   onChange={[Function]}
                                                   type="checkbox"
                                                 >
@@ -1706,7 +1706,7 @@ font-display: block;",
                                                         "data-indeterminate": false,
                                                       }
                                                     }
-                                                    name="write"
+                                                    name="edit"
                                                     onChange={[Function]}
                                                     type="checkbox"
                                                   >
@@ -1789,7 +1789,7 @@ font-display: block;",
                                                                   checked={false}
                                                                   className="PrivateSwitchBase-input-33"
                                                                   data-indeterminate={false}
-                                                                  name="write"
+                                                                  name="edit"
                                                                   onChange={[Function]}
                                                                   type="checkbox"
                                                                 />
@@ -1906,7 +1906,7 @@ font-display: block;",
                                                 <span
                                                   className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-28 MuiTypography-body1"
                                                 >
-                                                  write
+                                                  Edit
                                                 </span>
                                               </ForwardRef(Typography)>
                                             </WithStyles(ForwardRef(Typography))>
@@ -1929,7 +1929,7 @@ font-display: block;",
                                     "summary": "makeStyles-summary-27",
                                   }
                                 }
-                                label="append"
+                                label="Append"
                                 onChange={[Function]}
                                 value={false}
                               >
@@ -1977,7 +1977,7 @@ font-display: block;",
                                           />
                                         }
                                         key=".0"
-                                        label="append"
+                                        label="Append"
                                       >
                                         <ForwardRef(FormControlLabel)
                                           classes={
@@ -2002,7 +2002,7 @@ font-display: block;",
                                               onChange={[Function]}
                                             />
                                           }
-                                          label="append"
+                                          label="Append"
                                         >
                                           <label
                                             className="MuiFormControlLabel-root"
@@ -2271,7 +2271,7 @@ font-display: block;",
                                                 <span
                                                   className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-28 MuiTypography-body1"
                                                 >
-                                                  append
+                                                  Append
                                                 </span>
                                               </ForwardRef(Typography)>
                                             </WithStyles(ForwardRef(Typography))>
@@ -2294,7 +2294,7 @@ font-display: block;",
                                     "summary": "makeStyles-summary-27",
                                   }
                                 }
-                                label="control"
+                                label="Control"
                                 onChange={[Function]}
                                 value={false}
                               >
@@ -2342,7 +2342,7 @@ font-display: block;",
                                           />
                                         }
                                         key=".0"
-                                        label="control"
+                                        label="Control"
                                       >
                                         <ForwardRef(FormControlLabel)
                                           classes={
@@ -2367,7 +2367,7 @@ font-display: block;",
                                               onChange={[Function]}
                                             />
                                           }
-                                          label="control"
+                                          label="Control"
                                         >
                                           <label
                                             className="MuiFormControlLabel-root"
@@ -2636,7 +2636,7 @@ font-display: block;",
                                                 <span
                                                   className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-28 MuiTypography-body1"
                                                 >
-                                                  control
+                                                  Control
                                                 </span>
                                               </ForwardRef(Typography)>
                                             </WithStyles(ForwardRef(Typography))>
@@ -5226,7 +5226,7 @@ font-display: block;",
                                       className="MuiButton-label"
                                     >
                                       <span>
-                                        Full Control
+                                        Control
                                       </span>
                                       <span
                                         className="MuiButton-endIcon MuiButton-iconSizeMedium"
@@ -5325,7 +5325,7 @@ font-display: block;",
                                         "summary": "makeStyles-summary-27",
                                       }
                                     }
-                                    label="read"
+                                    label="View"
                                     onChange={[Function]}
                                     value={true}
                                   >
@@ -5368,12 +5368,12 @@ font-display: block;",
                                                     "root": "makeStyles-checkbox-29",
                                                   }
                                                 }
-                                                name="read"
+                                                name="view"
                                                 onChange={[Function]}
                                               />
                                             }
                                             key=".0"
-                                            label="read"
+                                            label="View"
                                           >
                                             <ForwardRef(FormControlLabel)
                                               classes={
@@ -5394,11 +5394,11 @@ font-display: block;",
                                                       "root": "makeStyles-checkbox-29",
                                                     }
                                                   }
-                                                  name="read"
+                                                  name="view"
                                                   onChange={[Function]}
                                                 />
                                               }
-                                              label="read"
+                                              label="View"
                                             >
                                               <label
                                                 className="MuiFormControlLabel-root"
@@ -5410,7 +5410,7 @@ font-display: block;",
                                                       "root": "makeStyles-checkbox-29",
                                                     }
                                                   }
-                                                  name="read"
+                                                  name="view"
                                                   onChange={[Function]}
                                                 >
                                                   <ForwardRef(Checkbox)
@@ -5425,7 +5425,7 @@ font-display: block;",
                                                         "root": "MuiCheckbox-root makeStyles-checkbox-29",
                                                       }
                                                     }
-                                                    name="read"
+                                                    name="view"
                                                     onChange={[Function]}
                                                   >
                                                     <WithStyles(ForwardRef(SwitchBase))
@@ -5445,7 +5445,7 @@ font-display: block;",
                                                           "data-indeterminate": false,
                                                         }
                                                       }
-                                                      name="read"
+                                                      name="view"
                                                       onChange={[Function]}
                                                       type="checkbox"
                                                     >
@@ -5467,7 +5467,7 @@ font-display: block;",
                                                             "data-indeterminate": false,
                                                           }
                                                         }
-                                                        name="read"
+                                                        name="view"
                                                         onChange={[Function]}
                                                         type="checkbox"
                                                       >
@@ -5550,7 +5550,7 @@ font-display: block;",
                                                                       checked={true}
                                                                       className="PrivateSwitchBase-input-33"
                                                                       data-indeterminate={false}
-                                                                      name="read"
+                                                                      name="view"
                                                                       onChange={[Function]}
                                                                       type="checkbox"
                                                                     />
@@ -5667,7 +5667,7 @@ font-display: block;",
                                                     <span
                                                       className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-28 MuiTypography-body1"
                                                     >
-                                                      read
+                                                      View
                                                     </span>
                                                   </ForwardRef(Typography)>
                                                 </WithStyles(ForwardRef(Typography))>
@@ -5690,7 +5690,7 @@ font-display: block;",
                                         "summary": "makeStyles-summary-27",
                                       }
                                     }
-                                    label="write"
+                                    label="Edit"
                                     onChange={[Function]}
                                     value={true}
                                   >
@@ -5733,12 +5733,12 @@ font-display: block;",
                                                     "root": "makeStyles-checkbox-29",
                                                   }
                                                 }
-                                                name="write"
+                                                name="edit"
                                                 onChange={[Function]}
                                               />
                                             }
                                             key=".0"
-                                            label="write"
+                                            label="Edit"
                                           >
                                             <ForwardRef(FormControlLabel)
                                               classes={
@@ -5759,11 +5759,11 @@ font-display: block;",
                                                       "root": "makeStyles-checkbox-29",
                                                     }
                                                   }
-                                                  name="write"
+                                                  name="edit"
                                                   onChange={[Function]}
                                                 />
                                               }
-                                              label="write"
+                                              label="Edit"
                                             >
                                               <label
                                                 className="MuiFormControlLabel-root"
@@ -5775,7 +5775,7 @@ font-display: block;",
                                                       "root": "makeStyles-checkbox-29",
                                                     }
                                                   }
-                                                  name="write"
+                                                  name="edit"
                                                   onChange={[Function]}
                                                 >
                                                   <ForwardRef(Checkbox)
@@ -5790,7 +5790,7 @@ font-display: block;",
                                                         "root": "MuiCheckbox-root makeStyles-checkbox-29",
                                                       }
                                                     }
-                                                    name="write"
+                                                    name="edit"
                                                     onChange={[Function]}
                                                   >
                                                     <WithStyles(ForwardRef(SwitchBase))
@@ -5810,7 +5810,7 @@ font-display: block;",
                                                           "data-indeterminate": false,
                                                         }
                                                       }
-                                                      name="write"
+                                                      name="edit"
                                                       onChange={[Function]}
                                                       type="checkbox"
                                                     >
@@ -5832,7 +5832,7 @@ font-display: block;",
                                                             "data-indeterminate": false,
                                                           }
                                                         }
-                                                        name="write"
+                                                        name="edit"
                                                         onChange={[Function]}
                                                         type="checkbox"
                                                       >
@@ -5915,7 +5915,7 @@ font-display: block;",
                                                                       checked={true}
                                                                       className="PrivateSwitchBase-input-33"
                                                                       data-indeterminate={false}
-                                                                      name="write"
+                                                                      name="edit"
                                                                       onChange={[Function]}
                                                                       type="checkbox"
                                                                     />
@@ -6032,7 +6032,7 @@ font-display: block;",
                                                     <span
                                                       className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-28 MuiTypography-body1"
                                                     >
-                                                      write
+                                                      Edit
                                                     </span>
                                                   </ForwardRef(Typography)>
                                                 </WithStyles(ForwardRef(Typography))>
@@ -6055,7 +6055,7 @@ font-display: block;",
                                         "summary": "makeStyles-summary-27",
                                       }
                                     }
-                                    label="append"
+                                    label="Append"
                                     onChange={[Function]}
                                     value={true}
                                   >
@@ -6103,7 +6103,7 @@ font-display: block;",
                                               />
                                             }
                                             key=".0"
-                                            label="append"
+                                            label="Append"
                                           >
                                             <ForwardRef(FormControlLabel)
                                               classes={
@@ -6128,7 +6128,7 @@ font-display: block;",
                                                   onChange={[Function]}
                                                 />
                                               }
-                                              label="append"
+                                              label="Append"
                                             >
                                               <label
                                                 className="MuiFormControlLabel-root"
@@ -6397,7 +6397,7 @@ font-display: block;",
                                                     <span
                                                       className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-28 MuiTypography-body1"
                                                     >
-                                                      append
+                                                      Append
                                                     </span>
                                                   </ForwardRef(Typography)>
                                                 </WithStyles(ForwardRef(Typography))>
@@ -6420,7 +6420,7 @@ font-display: block;",
                                         "summary": "makeStyles-summary-27",
                                       }
                                     }
-                                    label="control"
+                                    label="Control"
                                     onChange={[Function]}
                                     value={true}
                                   >
@@ -6468,7 +6468,7 @@ font-display: block;",
                                               />
                                             }
                                             key=".0"
-                                            label="control"
+                                            label="Control"
                                           >
                                             <ForwardRef(FormControlLabel)
                                               classes={
@@ -6493,7 +6493,7 @@ font-display: block;",
                                                   onChange={[Function]}
                                                 />
                                               }
-                                              label="control"
+                                              label="Control"
                                             >
                                               <label
                                                 className="MuiFormControlLabel-root"
@@ -6762,7 +6762,7 @@ font-display: block;",
                                                     <span
                                                       className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-28 MuiTypography-body1"
                                                     >
-                                                      control
+                                                      Control
                                                     </span>
                                                   </ForwardRef(Typography)>
                                                 </WithStyles(ForwardRef(Typography))>
@@ -7433,7 +7433,7 @@ font-display: block;",
                                           className="MuiButton-label"
                                         >
                                           <span>
-                                            Full Control
+                                            Control
                                           </span>
                                           <span
                                             className="MuiButton-endIcon MuiButton-iconSizeMedium"
@@ -7532,7 +7532,7 @@ font-display: block;",
                                             "summary": "makeStyles-summary-27",
                                           }
                                         }
-                                        label="read"
+                                        label="View"
                                         onChange={[Function]}
                                         value={true}
                                       >
@@ -7575,12 +7575,12 @@ font-display: block;",
                                                         "root": "makeStyles-checkbox-29",
                                                       }
                                                     }
-                                                    name="read"
+                                                    name="view"
                                                     onChange={[Function]}
                                                   />
                                                 }
                                                 key=".0"
-                                                label="read"
+                                                label="View"
                                               >
                                                 <ForwardRef(FormControlLabel)
                                                   classes={
@@ -7601,11 +7601,11 @@ font-display: block;",
                                                           "root": "makeStyles-checkbox-29",
                                                         }
                                                       }
-                                                      name="read"
+                                                      name="view"
                                                       onChange={[Function]}
                                                     />
                                                   }
-                                                  label="read"
+                                                  label="View"
                                                 >
                                                   <label
                                                     className="MuiFormControlLabel-root"
@@ -7617,7 +7617,7 @@ font-display: block;",
                                                           "root": "makeStyles-checkbox-29",
                                                         }
                                                       }
-                                                      name="read"
+                                                      name="view"
                                                       onChange={[Function]}
                                                     >
                                                       <ForwardRef(Checkbox)
@@ -7632,7 +7632,7 @@ font-display: block;",
                                                             "root": "MuiCheckbox-root makeStyles-checkbox-29",
                                                           }
                                                         }
-                                                        name="read"
+                                                        name="view"
                                                         onChange={[Function]}
                                                       >
                                                         <WithStyles(ForwardRef(SwitchBase))
@@ -7652,7 +7652,7 @@ font-display: block;",
                                                               "data-indeterminate": false,
                                                             }
                                                           }
-                                                          name="read"
+                                                          name="view"
                                                           onChange={[Function]}
                                                           type="checkbox"
                                                         >
@@ -7674,7 +7674,7 @@ font-display: block;",
                                                                 "data-indeterminate": false,
                                                               }
                                                             }
-                                                            name="read"
+                                                            name="view"
                                                             onChange={[Function]}
                                                             type="checkbox"
                                                           >
@@ -7757,7 +7757,7 @@ font-display: block;",
                                                                           checked={true}
                                                                           className="PrivateSwitchBase-input-33"
                                                                           data-indeterminate={false}
-                                                                          name="read"
+                                                                          name="view"
                                                                           onChange={[Function]}
                                                                           type="checkbox"
                                                                         />
@@ -7874,7 +7874,7 @@ font-display: block;",
                                                         <span
                                                           className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-28 MuiTypography-body1"
                                                         >
-                                                          read
+                                                          View
                                                         </span>
                                                       </ForwardRef(Typography)>
                                                     </WithStyles(ForwardRef(Typography))>
@@ -7897,7 +7897,7 @@ font-display: block;",
                                             "summary": "makeStyles-summary-27",
                                           }
                                         }
-                                        label="write"
+                                        label="Edit"
                                         onChange={[Function]}
                                         value={true}
                                       >
@@ -7940,12 +7940,12 @@ font-display: block;",
                                                         "root": "makeStyles-checkbox-29",
                                                       }
                                                     }
-                                                    name="write"
+                                                    name="edit"
                                                     onChange={[Function]}
                                                   />
                                                 }
                                                 key=".0"
-                                                label="write"
+                                                label="Edit"
                                               >
                                                 <ForwardRef(FormControlLabel)
                                                   classes={
@@ -7966,11 +7966,11 @@ font-display: block;",
                                                           "root": "makeStyles-checkbox-29",
                                                         }
                                                       }
-                                                      name="write"
+                                                      name="edit"
                                                       onChange={[Function]}
                                                     />
                                                   }
-                                                  label="write"
+                                                  label="Edit"
                                                 >
                                                   <label
                                                     className="MuiFormControlLabel-root"
@@ -7982,7 +7982,7 @@ font-display: block;",
                                                           "root": "makeStyles-checkbox-29",
                                                         }
                                                       }
-                                                      name="write"
+                                                      name="edit"
                                                       onChange={[Function]}
                                                     >
                                                       <ForwardRef(Checkbox)
@@ -7997,7 +7997,7 @@ font-display: block;",
                                                             "root": "MuiCheckbox-root makeStyles-checkbox-29",
                                                           }
                                                         }
-                                                        name="write"
+                                                        name="edit"
                                                         onChange={[Function]}
                                                       >
                                                         <WithStyles(ForwardRef(SwitchBase))
@@ -8017,7 +8017,7 @@ font-display: block;",
                                                               "data-indeterminate": false,
                                                             }
                                                           }
-                                                          name="write"
+                                                          name="edit"
                                                           onChange={[Function]}
                                                           type="checkbox"
                                                         >
@@ -8039,7 +8039,7 @@ font-display: block;",
                                                                 "data-indeterminate": false,
                                                               }
                                                             }
-                                                            name="write"
+                                                            name="edit"
                                                             onChange={[Function]}
                                                             type="checkbox"
                                                           >
@@ -8122,7 +8122,7 @@ font-display: block;",
                                                                           checked={true}
                                                                           className="PrivateSwitchBase-input-33"
                                                                           data-indeterminate={false}
-                                                                          name="write"
+                                                                          name="edit"
                                                                           onChange={[Function]}
                                                                           type="checkbox"
                                                                         />
@@ -8239,7 +8239,7 @@ font-display: block;",
                                                         <span
                                                           className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-28 MuiTypography-body1"
                                                         >
-                                                          write
+                                                          Edit
                                                         </span>
                                                       </ForwardRef(Typography)>
                                                     </WithStyles(ForwardRef(Typography))>
@@ -8262,7 +8262,7 @@ font-display: block;",
                                             "summary": "makeStyles-summary-27",
                                           }
                                         }
-                                        label="append"
+                                        label="Append"
                                         onChange={[Function]}
                                         value={true}
                                       >
@@ -8310,7 +8310,7 @@ font-display: block;",
                                                   />
                                                 }
                                                 key=".0"
-                                                label="append"
+                                                label="Append"
                                               >
                                                 <ForwardRef(FormControlLabel)
                                                   classes={
@@ -8335,7 +8335,7 @@ font-display: block;",
                                                       onChange={[Function]}
                                                     />
                                                   }
-                                                  label="append"
+                                                  label="Append"
                                                 >
                                                   <label
                                                     className="MuiFormControlLabel-root"
@@ -8604,7 +8604,7 @@ font-display: block;",
                                                         <span
                                                           className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-28 MuiTypography-body1"
                                                         >
-                                                          append
+                                                          Append
                                                         </span>
                                                       </ForwardRef(Typography)>
                                                     </WithStyles(ForwardRef(Typography))>
@@ -8627,7 +8627,7 @@ font-display: block;",
                                             "summary": "makeStyles-summary-27",
                                           }
                                         }
-                                        label="control"
+                                        label="Control"
                                         onChange={[Function]}
                                         value={true}
                                       >
@@ -8675,7 +8675,7 @@ font-display: block;",
                                                   />
                                                 }
                                                 key=".0"
-                                                label="control"
+                                                label="Control"
                                               >
                                                 <ForwardRef(FormControlLabel)
                                                   classes={
@@ -8700,7 +8700,7 @@ font-display: block;",
                                                       onChange={[Function]}
                                                     />
                                                   }
-                                                  label="control"
+                                                  label="Control"
                                                 >
                                                   <label
                                                     className="MuiFormControlLabel-root"
@@ -8969,7 +8969,7 @@ font-display: block;",
                                                         <span
                                                           className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-28 MuiTypography-body1"
                                                         >
-                                                          control
+                                                          Control
                                                         </span>
                                                       </ForwardRef(Typography)>
                                                     </WithStyles(ForwardRef(Typography))>
@@ -12509,7 +12509,7 @@ font-display: block;",
                               className="MuiButton-label"
                             >
                               <span>
-                                Full Control
+                                Control
                               </span>
                               <span
                                 className="MuiButton-endIcon MuiButton-iconSizeMedium"
@@ -12608,7 +12608,7 @@ font-display: block;",
                                 "summary": "makeStyles-summary-27",
                               }
                             }
-                            label="read"
+                            label="View"
                             onChange={[Function]}
                             value={true}
                           >
@@ -12651,12 +12651,12 @@ font-display: block;",
                                             "root": "makeStyles-checkbox-29",
                                           }
                                         }
-                                        name="read"
+                                        name="view"
                                         onChange={[Function]}
                                       />
                                     }
                                     key=".0"
-                                    label="read"
+                                    label="View"
                                   >
                                     <ForwardRef(FormControlLabel)
                                       classes={
@@ -12677,11 +12677,11 @@ font-display: block;",
                                               "root": "makeStyles-checkbox-29",
                                             }
                                           }
-                                          name="read"
+                                          name="view"
                                           onChange={[Function]}
                                         />
                                       }
-                                      label="read"
+                                      label="View"
                                     >
                                       <label
                                         className="MuiFormControlLabel-root"
@@ -12693,7 +12693,7 @@ font-display: block;",
                                               "root": "makeStyles-checkbox-29",
                                             }
                                           }
-                                          name="read"
+                                          name="view"
                                           onChange={[Function]}
                                         >
                                           <ForwardRef(Checkbox)
@@ -12708,7 +12708,7 @@ font-display: block;",
                                                 "root": "MuiCheckbox-root makeStyles-checkbox-29",
                                               }
                                             }
-                                            name="read"
+                                            name="view"
                                             onChange={[Function]}
                                           >
                                             <WithStyles(ForwardRef(SwitchBase))
@@ -12728,7 +12728,7 @@ font-display: block;",
                                                   "data-indeterminate": false,
                                                 }
                                               }
-                                              name="read"
+                                              name="view"
                                               onChange={[Function]}
                                               type="checkbox"
                                             >
@@ -12750,7 +12750,7 @@ font-display: block;",
                                                     "data-indeterminate": false,
                                                   }
                                                 }
-                                                name="read"
+                                                name="view"
                                                 onChange={[Function]}
                                                 type="checkbox"
                                               >
@@ -12833,7 +12833,7 @@ font-display: block;",
                                                               checked={true}
                                                               className="PrivateSwitchBase-input-33"
                                                               data-indeterminate={false}
-                                                              name="read"
+                                                              name="view"
                                                               onChange={[Function]}
                                                               type="checkbox"
                                                             />
@@ -12950,7 +12950,7 @@ font-display: block;",
                                             <span
                                               className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-28 MuiTypography-body1"
                                             >
-                                              read
+                                              View
                                             </span>
                                           </ForwardRef(Typography)>
                                         </WithStyles(ForwardRef(Typography))>
@@ -12973,7 +12973,7 @@ font-display: block;",
                                 "summary": "makeStyles-summary-27",
                               }
                             }
-                            label="write"
+                            label="Edit"
                             onChange={[Function]}
                             value={true}
                           >
@@ -13016,12 +13016,12 @@ font-display: block;",
                                             "root": "makeStyles-checkbox-29",
                                           }
                                         }
-                                        name="write"
+                                        name="edit"
                                         onChange={[Function]}
                                       />
                                     }
                                     key=".0"
-                                    label="write"
+                                    label="Edit"
                                   >
                                     <ForwardRef(FormControlLabel)
                                       classes={
@@ -13042,11 +13042,11 @@ font-display: block;",
                                               "root": "makeStyles-checkbox-29",
                                             }
                                           }
-                                          name="write"
+                                          name="edit"
                                           onChange={[Function]}
                                         />
                                       }
-                                      label="write"
+                                      label="Edit"
                                     >
                                       <label
                                         className="MuiFormControlLabel-root"
@@ -13058,7 +13058,7 @@ font-display: block;",
                                               "root": "makeStyles-checkbox-29",
                                             }
                                           }
-                                          name="write"
+                                          name="edit"
                                           onChange={[Function]}
                                         >
                                           <ForwardRef(Checkbox)
@@ -13073,7 +13073,7 @@ font-display: block;",
                                                 "root": "MuiCheckbox-root makeStyles-checkbox-29",
                                               }
                                             }
-                                            name="write"
+                                            name="edit"
                                             onChange={[Function]}
                                           >
                                             <WithStyles(ForwardRef(SwitchBase))
@@ -13093,7 +13093,7 @@ font-display: block;",
                                                   "data-indeterminate": false,
                                                 }
                                               }
-                                              name="write"
+                                              name="edit"
                                               onChange={[Function]}
                                               type="checkbox"
                                             >
@@ -13115,7 +13115,7 @@ font-display: block;",
                                                     "data-indeterminate": false,
                                                   }
                                                 }
-                                                name="write"
+                                                name="edit"
                                                 onChange={[Function]}
                                                 type="checkbox"
                                               >
@@ -13198,7 +13198,7 @@ font-display: block;",
                                                               checked={true}
                                                               className="PrivateSwitchBase-input-33"
                                                               data-indeterminate={false}
-                                                              name="write"
+                                                              name="edit"
                                                               onChange={[Function]}
                                                               type="checkbox"
                                                             />
@@ -13315,7 +13315,7 @@ font-display: block;",
                                             <span
                                               className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-28 MuiTypography-body1"
                                             >
-                                              write
+                                              Edit
                                             </span>
                                           </ForwardRef(Typography)>
                                         </WithStyles(ForwardRef(Typography))>
@@ -13338,7 +13338,7 @@ font-display: block;",
                                 "summary": "makeStyles-summary-27",
                               }
                             }
-                            label="append"
+                            label="Append"
                             onChange={[Function]}
                             value={true}
                           >
@@ -13386,7 +13386,7 @@ font-display: block;",
                                       />
                                     }
                                     key=".0"
-                                    label="append"
+                                    label="Append"
                                   >
                                     <ForwardRef(FormControlLabel)
                                       classes={
@@ -13411,7 +13411,7 @@ font-display: block;",
                                           onChange={[Function]}
                                         />
                                       }
-                                      label="append"
+                                      label="Append"
                                     >
                                       <label
                                         className="MuiFormControlLabel-root"
@@ -13680,7 +13680,7 @@ font-display: block;",
                                             <span
                                               className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-28 MuiTypography-body1"
                                             >
-                                              append
+                                              Append
                                             </span>
                                           </ForwardRef(Typography)>
                                         </WithStyles(ForwardRef(Typography))>
@@ -13703,7 +13703,7 @@ font-display: block;",
                                 "summary": "makeStyles-summary-27",
                               }
                             }
-                            label="control"
+                            label="Control"
                             onChange={[Function]}
                             value={true}
                           >
@@ -13751,7 +13751,7 @@ font-display: block;",
                                       />
                                     }
                                     key=".0"
-                                    label="control"
+                                    label="Control"
                                   >
                                     <ForwardRef(FormControlLabel)
                                       classes={
@@ -13776,7 +13776,7 @@ font-display: block;",
                                           onChange={[Function]}
                                         />
                                       }
-                                      label="control"
+                                      label="Control"
                                     >
                                       <label
                                         className="MuiFormControlLabel-root"
@@ -14045,7 +14045,7 @@ font-display: block;",
                                             <span
                                               className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-28 MuiTypography-body1"
                                             >
-                                              control
+                                              Control
                                             </span>
                                           </ForwardRef(Typography)>
                                         </WithStyles(ForwardRef(Typography))>

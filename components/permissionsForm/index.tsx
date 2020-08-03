@@ -41,7 +41,7 @@ import ConfirmationDialogContext from "../../src/contexts/confirmationDialogCont
 import {
   displayPermissions,
   NormalizedPermission,
-  ACL_KEYS,
+  ACL,
   IResponse,
 } from "../../src/solidClientHelpers";
 import styles from "./styles";
@@ -209,22 +209,22 @@ export default function PermissionsForm({
 
   const readChange = setPermissionHandler(
     unstableAccess,
-    ACL_KEYS.READ,
+    ACL.READ.key,
     setAccess
   );
   const writeChange = setPermissionHandler(
     unstableAccess,
-    ACL_KEYS.WRITE,
+    ACL.WRITE.key,
     setAccess
   );
   const appendChange = setPermissionHandler(
     unstableAccess,
-    ACL_KEYS.APPEND,
+    ACL.APPEND.key,
     setAccess
   );
   const controlChange = setPermissionHandler(
     unstableAccess,
-    ACL_KEYS.CONTROL,
+    ACL.CONTROL.key,
     setAccess
   );
   const handleToggleClick = toggleOpen(formOpen, setFormOpen);
@@ -270,10 +270,10 @@ export default function PermissionsForm({
       </Button>
       <section className={formOpen ? classes.selectionOpen : classes.selectionClosed}>
         <List>
-          <PermissionCheckbox value={unstableAccess.read} classes={classes} label="read" onChange={readChange} />
-          <PermissionCheckbox value={unstableAccess.write} classes={classes} label="write" onChange={writeChange} />
-          <PermissionCheckbox value={unstableAccess.append} classes={classes} label="append" onChange={appendChange} />
-          <PermissionCheckbox value={unstableAccess.control} classes={classes} label="control" onChange={controlChange} />
+          <PermissionCheckbox value={unstableAccess.read} classes={classes} label={ACL.READ.alias} onChange={readChange} />
+          <PermissionCheckbox value={unstableAccess.write} classes={classes} label={ACL.WRITE.alias} onChange={writeChange} />
+          <PermissionCheckbox value={unstableAccess.append} classes={classes} label={ACL.APPEND.alias} onChange={appendChange} />
+          <PermissionCheckbox value={unstableAccess.control} classes={classes} label={ACL.CONTROL.alias} onChange={controlChange} />
         </List>
 
         <Button onClick={handleSaveClick} variant="contained">

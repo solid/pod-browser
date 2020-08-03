@@ -19,6 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { ReactNode, ReactElement, useContext } from "react";
 import { NextRouter } from "next/router";
 import Link from "next/link";

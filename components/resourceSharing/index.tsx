@@ -51,6 +51,7 @@ import { unstable_Access } from "@inrupt/solid-client";
 import UserContext, { ISession } from "../../src/contexts/userContext";
 import { resourceContextRedirect } from "../resourceLink";
 import {
+  ACL,
   displayPermissions,
   fetchProfile,
   getThirdPartyPermissions,
@@ -207,7 +208,7 @@ export function handlePermissionUpdate({
   webId,
 }: IHandlePermissionUpdate) {
   return async (access: unstable_Access): Promise<IResponse> => {
-    if (displayPermissions(access) === "No Access") {
+    if (displayPermissions(access) === ACL.NONE.alias) {
       setThirdPartyPermissions(
         thirdPartyPermissions.filter((p) => p.webId !== webId)
       );

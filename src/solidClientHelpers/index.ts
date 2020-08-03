@@ -59,11 +59,27 @@ const typeNameMap = Object.keys(ldpWithType).reduce(
   {}
 );
 
-export const ACL_KEYS = {
-  READ: "read",
-  WRITE: "write",
-  APPEND: "append",
-  CONTROL: "control",
+export const ACL = {
+  NONE: {
+    key: "none",
+    alias: "No access",
+  },
+  READ: {
+    key: "read",
+    alias: "View",
+  },
+  WRITE: {
+    key: "write",
+    alias: "Edit",
+  },
+  APPEND: {
+    key: "append",
+    alias: "Append",
+  },
+  CONTROL: {
+    key: "control",
+    alias: "Control",
+  },
 };
 
 // TODO use ldp namespace when available
@@ -108,10 +124,12 @@ export function displayTypes(types: string[]): string[] {
 
 export function displayPermissions(permissions: unstable_Access): string {
   const perms = Object.values(permissions);
-  if (perms.every((p) => p)) return "Full Control";
-  if (perms.every((p) => !p)) return "No Access";
-  if (permissions.write) return "Can Edit";
-  return "Can View";
+
+  if (perms.every((p) => p)) return ACL.CONTROL.alias;
+  if (perms.every((p) => !p)) return ACL.NONE.alias;
+  if (permissions.append && !permissions.write) return ACL.APPEND.alias;
+  if (permissions.write) return ACL.WRITE.alias;
+  return ACL.READ.alias;
 }
 
 export interface Profile {
