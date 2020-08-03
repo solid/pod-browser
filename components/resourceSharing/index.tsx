@@ -45,6 +45,7 @@ import {
 import PersonIcon from "@material-ui/icons/Person";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import FolderIcon from "@material-ui/icons/Folder";
 import { makeStyles } from "@material-ui/styles";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import { unstable_Access } from "@inrupt/solid-client";
@@ -61,6 +62,7 @@ import {
   NormalizedPermission,
   Profile,
   savePermissions,
+  isContainerIri,
 } from "../../src/solidClientHelpers";
 import styles from "../resourceDetails/styles";
 import PermissionsForm from "../permissionsForm";
@@ -128,6 +130,47 @@ export function saveThirdPartyPermissionHandler({
     const { error, response } = await savePermissions({ iri, webId, access });
     return { error, response };
   };
+}
+
+interface IDefaultPermissions {
+  iri: string;
+  classes: Record<string, string>;
+  webId: string;
+  permission: NormalizedPermission;
+}
+
+export function DefaultPermissions({
+  iri,
+  classes,
+  webId,
+  permission,
+}: IDefaultPermissions): ReactElement | null {
+  if (!isContainerIri(iri)) return null;
+
+  return (
+    <>
+      <section className={classes.centeredSection}>
+        <h5 className={classes["content-h5"]}>Default Access</h5>
+        <List>
+          <ListItem key={webId} className={classes.listItem}>
+            <Avatar className={classes.avatar}>
+              <FolderIcon />
+            </Avatar>
+
+            <PermissionsForm
+              permission={permission}
+              warnOnSubmit={false}
+              onSave={async () => {
+                return { response: "Saved" };
+              }}
+            />
+          </ListItem>
+        </List>
+      </section>
+
+      <Divider />
+    </>
+  );
 }
 
 interface IAddedAgents {
@@ -402,6 +445,17 @@ export default function ResourceSharing({
   const classes = useStyles();
   const router = useRouter();
   const iriString = iri as string;
+  const defaultPermission: NormalizedPermission = {
+    webId,
+    alias: "Control",
+    profile: { webId },
+    acl: {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    },
+  };
 
   return (
     <>
@@ -418,6 +472,13 @@ export default function ResourceSharing({
       </section>
 
       <Divider />
+
+      <DefaultPermissions
+        iri={iriString}
+        webId={webId}
+        permission={defaultPermission}
+        classes={classes}
+      />
 
       <section className={classes.centeredSection}>
         <h5 className={classes["content-h5"]}>My Access</h5>
