@@ -26,6 +26,7 @@ import * as solidClientHelpers from "./index";
 
 const {
   ACL,
+  aclToString,
   displayPermissions,
   displayTypes,
   fetchFileWithAcl,
@@ -37,6 +38,7 @@ const {
   getTypeName,
   getUserPermissions,
   isContainerIri,
+  isEqualACL,
   isUserOrMatch,
   namespace,
   normalizeDataset,
@@ -188,8 +190,54 @@ describe("displayTypes", () => {
   });
 });
 
+describe("aclToString", () => {
+  test("it converts the acl to a standardized string", () => {
+    const acl = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    };
+
+    expect(aclToString(acl as solidClientFns.unstable_Access)).toEqual(
+      "read:true,write:true,append:true,control:true"
+    );
+  });
+});
+
+describe("isEqualACL", () => {
+  test("it returns true when acls are identical", () => {
+    const acl: solidClientFns.unstable_Access = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    };
+
+    expect(isEqualACL(acl, acl)).toEqual(true);
+  });
+
+  test("it returns false when acls are NOT identical", () => {
+    const aclA: solidClientFns.unstable_Access = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    };
+
+    const aclB: solidClientFns.unstable_Access = {
+      read: true,
+      write: true,
+      append: true,
+      control: false,
+    };
+
+    expect(isEqualACL(aclA, aclB)).toEqual(false);
+  });
+});
+
 describe("displayPermissions", () => {
-  test("it returns 'Control' when all options are true", () => {
+  test("it returns the CONTROL alias when all options are true", () => {
     const perms = displayPermissions({
       read: true,
       write: true,
@@ -242,6 +290,17 @@ describe("displayPermissions", () => {
     });
 
     expect(perms).toEqual(ACL.READ.alias);
+  });
+
+  test("it returns 'Custom' when the permissions don't follow a template", () => {
+    const perms = displayPermissions({
+      read: false,
+      write: true,
+      append: false,
+      control: false,
+    });
+
+    expect(perms).toEqual("Custom");
   });
 });
 

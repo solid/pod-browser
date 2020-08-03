@@ -63,22 +63,52 @@ export const ACL = {
   NONE: {
     key: "none",
     alias: "No access",
+    acl: {
+      read: false,
+      write: false,
+      append: false,
+      control: false,
+    },
   },
   READ: {
     key: "read",
     alias: "View",
+    acl: {
+      read: true,
+      write: false,
+      append: false,
+      control: false,
+    },
   },
   WRITE: {
     key: "write",
     alias: "Edit",
+    acl: {
+      read: true,
+      write: true,
+      append: true,
+      control: false,
+    },
   },
   APPEND: {
     key: "append",
     alias: "Append",
+    acl: {
+      read: true,
+      write: false,
+      append: true,
+      control: false,
+    },
   },
   CONTROL: {
     key: "control",
     alias: "Control",
+    acl: {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    },
   },
 };
 
@@ -122,14 +152,25 @@ export function displayTypes(types: string[]): string[] {
   return types?.length ? types.map((t: string): string => getTypeName(t)) : [];
 }
 
-export function displayPermissions(permissions: unstable_Access): string {
-  const perms = Object.values(permissions);
+export function aclToString(acl: unstable_Access): string {
+  return `read:${acl.read},write:${acl.write},append:${acl.append},control:${acl.control}`;
+}
 
-  if (perms.every((p) => p)) return ACL.CONTROL.alias;
-  if (perms.every((p) => !p)) return ACL.NONE.alias;
-  if (permissions.append && !permissions.write) return ACL.APPEND.alias;
-  if (permissions.write) return ACL.WRITE.alias;
-  return ACL.READ.alias;
+export function isEqualACL(
+  aclA: unstable_Access,
+  aclB: unstable_Access
+): boolean {
+  return aclToString(aclA) === aclToString(aclB);
+}
+
+export function displayPermissions(permissions: unstable_Access): string {
+  const templatePermission = Object.values(ACL).find((template) => {
+    const { acl } = template;
+    return isEqualACL(permissions, acl as unstable_Access);
+  });
+
+  if (templatePermission) return templatePermission.alias;
+  return "Custom";
 }
 
 export interface Profile {
