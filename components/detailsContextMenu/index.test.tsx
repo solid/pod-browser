@@ -21,9 +21,11 @@
 
 import * as ReactFns from "react";
 import * as RouterFns from "next/router";
-import * as SolidClientFns from "../../src/hooks/solidClient";
+import * as SolidClientHookFns from "../../src/hooks/solidClient";
+import * as SolidClientFns from "@inrupt/solid-client";
 import DetailsContextMenu, { Contents } from "./index";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { createResource } from "../../src/testHelpers";
 
 describe("Container view", () => {
   test("it renders a loading view when context has no iri", () => {
@@ -65,7 +67,7 @@ describe("Container view", () => {
     };
 
     jest
-      .spyOn(SolidClientFns, "useFetchResourceDetails")
+      .spyOn(SolidClientHookFns, "useFetchResourceDetails")
       .mockReturnValueOnce({ data });
 
     jest
@@ -89,7 +91,7 @@ describe("Container view", () => {
 describe("Contents", () => {
   test("it renders a DetailsLoading component if there's no data", () => {
     jest
-      .spyOn(SolidClientFns, "useFetchResourceDetails")
+      .spyOn(SolidClientHookFns, "useFetchResourceDetails")
       .mockReturnValueOnce({});
 
     jest.spyOn(RouterFns, "useRouter").mockReturnValueOnce({
@@ -118,7 +120,7 @@ describe("Contents", () => {
     };
 
     jest
-      .spyOn(SolidClientFns, "useFetchResourceDetails")
+      .spyOn(SolidClientHookFns, "useFetchResourceDetails")
       .mockReturnValueOnce({ data });
 
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
@@ -136,6 +138,11 @@ describe("Contents", () => {
     const iri = "/iri/";
     const webId = "webId";
     const mockUserContext = { session: { webId } };
+    const mockAlertContext = {
+      setAlertOpen: jest.fn(),
+      setMessage: jest.fn(),
+      setSeverity: jest.fn(),
+    };
     const mockDetailsMenuContext = {
       menuOpen: false,
       setMenuOpen: jest.fn(),
@@ -153,15 +160,41 @@ describe("Contents", () => {
           acl: { read: true, write: true, append: true, control: true },
         },
       ],
+      dataset: {},
     };
 
     jest
       .spyOn(ReactFns, "useContext")
-      .mockReturnValueOnce(mockDetailsMenuContext)
-      .mockReturnValueOnce(mockUserContext);
+      .mockReturnValueOnce(mockAlertContext)
+      .mockReturnValueOnce(mockUserContext)
 
     jest
-      .spyOn(SolidClientFns, "useFetchResourceDetails")
+      .spyOn(SolidClientHookFns, "useFetchResourceDetails")
+      .mockReturnValueOnce({ data });
+
+    jest
+      .spyOn(SolidClientFns, "unstable_hasResourceAcl")
+      .mockReturnValue(true);
+
+    jest
+      .spyOn(SolidClientFns, "unstable_hasAccessibleAcl")
+      .mockReturnValue(true);
+
+    jest
+      .spyOn(SolidClientFns, "unstable_getResourceAcl")
+      .mockReturnValueOnce();
+
+    jest
+      .spyOn(SolidClientFns, "unstable_getAgentDefaultAccessOne")
+      .mockReturnValueOnce({
+        read: true,
+        write: true,
+        append: true,
+        control: true,
+      });
+
+    jest
+      .spyOn(SolidClientHookFns, "useFetchResourceDetails")
       .mockReturnValueOnce({ data });
 
     jest
@@ -184,7 +217,7 @@ describe("Contents", () => {
     jest.spyOn(ReactFns, "useContext").mockReturnValueOnce(mockAlertContext);
 
     jest
-      .spyOn(SolidClientFns, "useFetchResourceDetails")
+      .spyOn(SolidClientHookFns, "useFetchResourceDetails")
       .mockReturnValueOnce({ data: {}, error: "Some error" });
 
     jest

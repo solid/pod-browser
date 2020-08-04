@@ -949,34 +949,6 @@ describe("savePermissions", () => {
     expect(error).toEqual("dataset does not have resource ACL");
   });
 
-  test("it returns an error message if can't get resource ACL", async () => {
-    const iri = "iri";
-    const webId = "webId";
-    const access = {
-      read: true,
-      write: true,
-      append: true,
-      control: true,
-    };
-    const dataset = "dataset";
-
-    jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
-      .mockResolvedValueOnce(dataset);
-
-    jest
-      .spyOn(solidClientFns, "unstable_hasResourceAcl")
-      .mockReturnValueOnce(true);
-
-    jest
-      .spyOn(solidClientFns, "unstable_getResourceAcl")
-      .mockReturnValueOnce(null);
-
-    const { error } = await savePermissions({ iri, webId, access });
-
-    expect(error).toEqual("aclDataset is empty");
-  });
-
   test("it returns an error message if resource has no accessible ACL", async () => {
     const iri = "iri";
     const webId = "webId";
@@ -998,16 +970,44 @@ describe("savePermissions", () => {
       .mockReturnValueOnce(true);
 
     jest
-      .spyOn(solidClientFns, "unstable_getResourceAcl")
-      .mockReturnValueOnce(aclDataset);
-
-    jest
       .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
       .mockReturnValueOnce(false);
 
     const { error } = await savePermissions({ iri, webId, access });
 
     expect(error).toEqual("dataset does not have accessible ACL");
+  });
+
+  test("it returns an error message if can't get resource ACL", async () => {
+    const iri = "iri";
+    const webId = "webId";
+    const access = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    };
+    const dataset = "dataset";
+
+    jest
+      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .mockResolvedValueOnce(dataset);
+
+    jest
+      .spyOn(solidClientFns, "unstable_hasResourceAcl")
+      .mockReturnValueOnce(true);
+
+    jest
+      .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
+      .mockReturnValueOnce(true);
+
+    jest
+      .spyOn(solidClientFns, "unstable_getResourceAcl")
+      .mockReturnValueOnce(null);
+
+    const { error } = await savePermissions({ iri, webId, access });
+
+    expect(error).toEqual("aclDataset is empty");
   });
 
   test("it returns an error if the updated ACL is empty", async () => {

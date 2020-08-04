@@ -24,6 +24,7 @@ import {
   ReactElement,
   useContext,
   useState,
+  useEffect,
   Dispatch,
   SetStateAction,
 } from "react";
@@ -48,7 +49,22 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import FolderIcon from "@material-ui/icons/Folder";
 import { makeStyles } from "@material-ui/styles";
 import { PrismTheme } from "@solid/lit-prism-patterns";
-import { unstable_Access } from "@inrupt/solid-client";
+import {
+  LitDataset,
+  unstable_Access,
+  unstable_AclDataset,
+  unstable_getAgentDefaultAccessOne,
+  unstable_getResourceAcl,
+  unstable_hasAccessibleAcl,
+  unstable_hasResourceAcl,
+  unstable_saveAclFor,
+  unstable_setAgentDefaultAccess,
+  WithResourceInfo,
+} from "@inrupt/solid-client";
+import { useFetchResourceWithAcl } from "../../src/hooks/solidClient";
+import DetailsError from "../detailsError";
+import { parseUrl } from "../../src/stringHelpers";
+import ResourceSharingLoading from "../resourceSharingLoading";
 import UserContext, { ISession } from "../../src/contexts/userContext";
 import { resourceContextRedirect } from "../resourceLink";
 import {
@@ -59,10 +75,11 @@ import {
   getUserPermissions,
   IResourceDetails,
   IResponse,
+  isContainerIri,
   NormalizedPermission,
   Profile,
+  saveDefaultPermissions,
   savePermissions,
-  isContainerIri,
 } from "../../src/solidClientHelpers";
 import styles from "../resourceDetails/styles";
 import PermissionsForm from "../permissionsForm";
@@ -137,6 +154,7 @@ interface IDefaultPermissions {
   classes: Record<string, string>;
   webId: string;
   permission: NormalizedPermission;
+  onSave: (access: unstable_Access) => Promise<IResponse>;
 }
 
 export function DefaultPermissions({
@@ -144,6 +162,7 @@ export function DefaultPermissions({
   classes,
   webId,
   permission,
+  onSave,
 }: IDefaultPermissions): ReactElement | null {
   if (!isContainerIri(iri)) return null;
 
@@ -160,9 +179,7 @@ export function DefaultPermissions({
             <PermissionsForm
               permission={permission}
               warnOnSubmit={false}
-              onSave={async () => {
-                return { response: "Saved" };
-              }}
+              onSave={onSave}
             />
           </ListItem>
         </List>
@@ -433,10 +450,12 @@ export default function ResourceSharing({
   name,
   iri,
   permissions,
+  dataset,
 }: Partial<IResourceDetails>): ReactElement {
   const { session } = useContext(UserContext);
   const { webId } = session as ISession;
   const [agentId, setAgentId] = useState("");
+  const [resourceAcl, setResourceAcl] = useState<unstable_AclDataset>();
   const [addedAgents, setAddedAgents] = useState<Profile[]>([]);
   const userPermissions = getUserPermissions(webId, permissions);
   const [thirdPartyPermissions, setThirdPartyPermissions] = useState(
@@ -445,7 +464,8 @@ export default function ResourceSharing({
   const classes = useStyles();
   const router = useRouter();
   const iriString = iri as string;
-  const defaultPermission: NormalizedPermission = {
+  const { pathname } = parseUrl(iriString);
+  const defaultPermission = {
     webId,
     alias: "Control",
     profile: { webId },
@@ -456,6 +476,12 @@ export default function ResourceSharing({
       control: true,
     },
   };
+
+  if (unstable_hasResourceAcl(dataset) && unstable_hasAccessibleAcl(dataset)) {
+    const resourceAcl = unstable_getResourceAcl(dataset);
+    const acl = unstable_getAgentDefaultAccessOne(resourceAcl, webId);
+    defaultPermission.acl = acl;
+  }
 
   return (
     <>
@@ -476,8 +502,11 @@ export default function ResourceSharing({
       <DefaultPermissions
         iri={iriString}
         webId={webId}
-        permission={defaultPermission}
+        permission={defaultPermission as NormalizedPermission}
         classes={classes}
+        onSave={async (access: unstable_Access): Promise<IResponse> => {
+          return saveDefaultPermissions({ iri, webId, access });
+        }}
       />
 
       <section className={classes.centeredSection}>

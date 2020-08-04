@@ -4892,6 +4892,52 @@ font-display: block;",
           />
         </ForwardRef(Divider)>
       </WithStyles(ForwardRef(Divider))>
+      <DefaultPermissions
+        classes={
+          Object {
+            "agentInput": "makeStyles-agentInput-10",
+            "avatar": "makeStyles-avatar-1",
+            "centeredSection": "makeStyles-centeredSection-2",
+            "content": "makeStyles-content-22",
+            "content-blockquote": "makeStyles-content-blockquote-20",
+            "content-h1": "makeStyles-content-h1-12",
+            "content-h2": "makeStyles-content-h2-13",
+            "content-h3": "makeStyles-content-h3-14",
+            "content-h4": "makeStyles-content-h4-15",
+            "content-h5": "makeStyles-content-h5-16",
+            "content-h6": "makeStyles-content-h6-17",
+            "content-ol": "makeStyles-content-ol-19",
+            "content-p": "makeStyles-content-p-21",
+            "content-ul": "makeStyles-content-ul-18",
+            "detailText": "makeStyles-detailText-7",
+            "downloadButton": "makeStyles-downloadButton-9",
+            "formListItem": "makeStyles-formListItem-6",
+            "headerSection": "makeStyles-headerSection-3",
+            "image": "makeStyles-image-11",
+            "listItem": "makeStyles-listItem-5",
+            "raw": "makeStyles-raw-4",
+            "typeValue": "makeStyles-typeValue-8",
+          }
+        }
+        iri="iri"
+        onSave={[Function]}
+        permission={
+          Object {
+            "acl": Object {
+              "append": true,
+              "control": true,
+              "read": true,
+              "write": true,
+            },
+            "alias": "Control",
+            "profile": Object {
+              "webId": "webId",
+            },
+            "webId": "webId",
+          }
+        }
+        webId="webId"
+      />
       <section
         className="makeStyles-centeredSection-2"
       >
