@@ -22,6 +22,7 @@
 import React, { ReactElement, useContext } from "react";
 import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 import { header, PrismTheme, useBem } from "@solid/lit-prism-patterns";
+import Link from "next/link";
 import UserContext from "../../src/contexts/userContext";
 import UserMenu from "./userMenu";
 import MainNav from "./mainNav";
@@ -37,14 +38,16 @@ export default function Header(): ReactElement | null {
 
   return session ? (
     <header className={bem("header-banner")}>
-      <a href="/" className={bem("header-banner__logo")}>
-        <img
-          height={40}
-          src="/inrupt_logo-2020.svg"
-          className={bem("image")}
-          alt="Inrupt PodBrowser"
-        />
-      </a>
+      <Link href="/">
+        <a className={bem("header-banner__logo")}>
+          <img
+            height={40}
+            src="/inrupt_logo-2020.svg"
+            className={bem("image")}
+            alt="Inrupt PodBrowser"
+          />
+        </a>
+      </Link>
       <div className={bem("header-banner__main-nav")}>
         <MainNav className={bem("app-layout__header-nav")} />
       </div>
