@@ -37,8 +37,16 @@ export default function Header(): ReactElement | null {
 
   return session ? (
     <header className={bem("header-banner")}>
-      <div className={bem("header-banner__main-nav-container")}>
-        <MainNav className={bem("header-banner__main-nav")} />
+      <a href="/" className={bem("header-banner__logo")}>
+        <img
+          height={40}
+          src="/inrupt_logo-2020.svg"
+          className={bem("image")}
+          alt="Inrupt PodBrowser"
+        />
+      </a>
+      <div className={bem("header-banner__main-nav")}>
+        <MainNav className={bem("app-layout__header-nav")} />
       </div>
       <UserMenu />
     </header>
