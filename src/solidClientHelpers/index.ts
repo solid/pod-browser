@@ -279,6 +279,8 @@ export async function saveDefaultPermissions({
   if (!aclDataset) return error("aclDataset is empty");
 
   const updatedAcl = unstable_setAgentDefaultAccess(aclDataset, webId, access);
+
+  console.log(updatedAcl)
   if (!updatedAcl) return error("updatedAcl is empty");
 
   const response = await unstable_saveAclFor(dataset, updatedAcl);

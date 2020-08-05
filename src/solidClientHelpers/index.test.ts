@@ -45,6 +45,7 @@ const {
   normalizePermissions,
   parseStringAcl,
   permissionsFromWacAllowHeaders,
+  saveDefaultPermissions,
   savePermissions,
 } = solidClientHelpers;
 
@@ -1085,6 +1086,249 @@ describe("savePermissions", () => {
       .mockResolvedValueOnce(null);
 
     const { error } = await savePermissions({ iri, webId, access });
+
+    expect(error).toEqual("response is empty");
+  });
+});
+
+describe("saveDefaultPermissions", () => {
+  test("it saves the new default permissions", async () => {
+    const iri = "iri";
+    const webId = "webId";
+    const access = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    };
+    const dataset = "dataset";
+    const aclDataset = "aclDataset";
+    const updatedAcl = "updatedAcl";
+
+    jest
+      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .mockResolvedValueOnce(dataset);
+
+    jest
+      .spyOn(solidClientFns, "unstable_hasResourceAcl")
+      .mockReturnValueOnce(true);
+
+    jest
+      .spyOn(solidClientFns, "unstable_getResourceAcl")
+      .mockReturnValueOnce(aclDataset);
+
+    jest
+      .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
+      .mockReturnValueOnce(true);
+
+    jest
+      .spyOn(solidClientFns, "unstable_setAgentDefaultAccess")
+      .mockReturnValue(updatedAcl);
+
+    jest
+      .spyOn(solidClientFns, "unstable_saveAclFor")
+      .mockImplementationOnce(jest.fn().mockResolvedValueOnce("response"));
+
+    const { response } = await saveDefaultPermissions({ iri, webId, access });
+
+    expect(solidClientFns.unstable_fetchLitDatasetWithAcl).toHaveBeenCalledWith(
+      iri
+    );
+    expect(solidClientFns.unstable_getResourceAcl).toHaveBeenCalledWith(
+      dataset
+    );
+    expect(solidClientFns.unstable_setAgentDefaultAccess).toHaveBeenCalledWith(
+      aclDataset,
+      webId,
+      access
+    );
+    expect(solidClientFns.unstable_saveAclFor).toHaveBeenCalledWith(
+      dataset,
+      updatedAcl
+    );
+
+    expect(response).toEqual("response");
+  });
+
+  test("it returns an error response if there is no dataset", async () => {
+    const iri = "iri";
+    const webId = "webId";
+    const access = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    };
+
+    jest
+      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .mockResolvedValueOnce(null);
+
+    const { error } = await saveDefaultPermissions({ iri, webId, access });
+
+    expect(error).toEqual("dataset is empty");
+  });
+
+  test("it returns an error message if the dataset has no resource ACL", async () => {
+    const iri = "iri";
+    const webId = "webId";
+    const access = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    };
+    const dataset = "dataset";
+
+    jest
+      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .mockResolvedValueOnce(dataset);
+
+    jest
+      .spyOn(solidClientFns, "unstable_hasResourceAcl")
+      .mockReturnValueOnce(false);
+
+    const { error } = await saveDefaultPermissions({ iri, webId, access });
+
+    expect(error).toEqual("dataset does not have resource ACL");
+  });
+
+  test("it returns an error message if resource has no accessible ACL", async () => {
+    const iri = "iri";
+    const webId = "webId";
+    const access = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    };
+    const dataset = "dataset";
+    const aclDataset = "aclDataset";
+
+    jest
+      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .mockResolvedValueOnce(dataset);
+
+    jest
+      .spyOn(solidClientFns, "unstable_hasResourceAcl")
+      .mockReturnValueOnce(true);
+
+    jest
+      .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
+      .mockReturnValueOnce(false);
+
+    const { error } = await saveDefaultPermissions({ iri, webId, access });
+
+    expect(error).toEqual("dataset does not have accessible ACL");
+  });
+
+  test("it returns an error message if can't get resource ACL", async () => {
+    const iri = "iri";
+    const webId = "webId";
+    const access = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    };
+    const dataset = "dataset";
+
+    jest
+      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .mockResolvedValueOnce(dataset);
+
+    jest
+      .spyOn(solidClientFns, "unstable_hasResourceAcl")
+      .mockReturnValueOnce(true);
+
+    jest
+      .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
+      .mockReturnValueOnce(true);
+
+    jest
+      .spyOn(solidClientFns, "unstable_getResourceAcl")
+      .mockReturnValueOnce(null);
+
+    const { error } = await saveDefaultPermissions({ iri, webId, access });
+
+    expect(error).toEqual("aclDataset is empty");
+  });
+
+  test("it returns an error if the updated ACL is empty", async () => {
+    const iri = "iri";
+    const webId = "webId";
+    const access = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    };
+    const dataset = "dataset";
+    const aclDataset = "aclDataset";
+
+    jest
+      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .mockResolvedValueOnce(dataset);
+
+    jest
+      .spyOn(solidClientFns, "unstable_hasResourceAcl")
+      .mockReturnValueOnce(true);
+
+    jest
+      .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
+      .mockReturnValueOnce(true);
+
+    jest
+      .spyOn(solidClientFns, "unstable_getResourceAcl")
+      .mockReturnValueOnce(aclDataset);
+
+    jest
+      .spyOn(solidClientFns, "unstable_setAgentDefaultAccess")
+      .mockReturnValue(null);
+
+    const { error } = await saveDefaultPermissions({ iri, webId, access });
+
+    expect(error).toEqual("updatedAcl is empty");
+  });
+
+  test("it returns an error if the save response is empty", async () => {
+    const iri = "iri";
+    const webId = "webId";
+    const access = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    };
+    const dataset = "dataset";
+    const aclDataset = "aclDataset";
+    const updatedAcl = "updatedAcl";
+
+    jest
+      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .mockResolvedValueOnce(dataset);
+
+    jest
+      .spyOn(solidClientFns, "unstable_hasResourceAcl")
+      .mockReturnValueOnce(true);
+
+    jest
+      .spyOn(solidClientFns, "unstable_getResourceAcl")
+      .mockReturnValueOnce(aclDataset);
+
+    jest
+      .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
+      .mockReturnValueOnce(true);
+
+    jest
+      .spyOn(solidClientFns, "unstable_setAgentDefaultAccess")
+      .mockReturnValue(updatedAcl);
+
+    jest
+      .spyOn(solidClientFns, "unstable_saveAclFor")
+      .mockResolvedValueOnce(null);
+
+    const { error } = await saveDefaultPermissions({ iri, webId, access });
 
     expect(error).toEqual("response is empty");
   });
