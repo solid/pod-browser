@@ -130,7 +130,7 @@ font-display: block;",
       ],
       "localFonts": Object {
         "fonts/Raleway/Raleway-ExtraBold": [Function],
-        "fonts/Raleway/Raleway-Regular": [Function],
+        "fonts/Raleway/Raleway-Medium": [Function],
       },
       "mixins": Object {
         "gutters": [Function],
@@ -222,8 +222,8 @@ font-display: block;",
         "text": Object {
           "disabled": "rgba(0, 0, 0, 0.38)",
           "hint": "rgba(0, 0, 0, 0.38)",
-          "primary": "rgba(0, 0, 0, 0.87)",
-          "secondary": "rgba(0, 0, 0, 0.54)",
+          "primary": "#4E4E4E",
+          "secondary": "#4E4E4E",
         },
         "tonalOffset": 0.2,
         "type": "light",
@@ -291,7 +291,7 @@ font-display: block;",
       "typography": Object {
         "body": Object {
           "fontFamily": "\\"Raleway-Medium\\"",
-          "fontSize": "0.875rem",
+          "fontSize": "0.9375rem",
           "fontWeight": 500,
           "letterSpacing": "0.01071em",
           "lineHeight": 1.43,
@@ -305,7 +305,7 @@ font-display: block;",
         },
         "body2": Object {
           "fontFamily": "\\"Raleway-Medium\\"",
-          "fontSize": "0.875rem",
+          "fontSize": "0.9375rem",
           "fontWeight": 500,
           "letterSpacing": "0.01071em",
           "lineHeight": 1.43,
@@ -333,31 +333,31 @@ font-display: block;",
         "fontWeightRegular": 400,
         "h1": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "2.5rem",
+          "fontSize": "1.375rem",
           "fontWeight": 800,
           "letterSpacing": "-0.01562em",
-          "lineHeight": 1,
+          "lineHeight": 1.45,
         },
         "h2": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "2rem",
+          "fontSize": "1.125rem",
           "fontWeight": 800,
           "letterSpacing": "-0.00833em",
-          "lineHeight": 1,
+          "lineHeight": 1.27,
         },
         "h3": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "1.9rem",
+          "fontSize": "1.05rem",
           "fontWeight": 800,
           "letterSpacing": "0em",
-          "lineHeight": 1,
+          "lineHeight": 1.2,
         },
         "h4": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "1.25rem",
+          "fontSize": "1rem",
           "fontWeight": 800,
           "letterSpacing": "0.00735em",
-          "lineHeight": 1,
+          "lineHeight": 1.1,
         },
         "h5": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
@@ -548,7 +548,7 @@ font-display: block;",
         ],
         "localFonts": Object {
           "fonts/Raleway/Raleway-ExtraBold": [Function],
-          "fonts/Raleway/Raleway-Regular": [Function],
+          "fonts/Raleway/Raleway-Medium": [Function],
         },
         "mixins": Object {
           "gutters": [Function],
@@ -640,8 +640,8 @@ font-display: block;",
           "text": Object {
             "disabled": "rgba(0, 0, 0, 0.38)",
             "hint": "rgba(0, 0, 0, 0.38)",
-            "primary": "rgba(0, 0, 0, 0.87)",
-            "secondary": "rgba(0, 0, 0, 0.54)",
+            "primary": "#4E4E4E",
+            "secondary": "#4E4E4E",
           },
           "tonalOffset": 0.2,
           "type": "light",
@@ -709,7 +709,7 @@ font-display: block;",
         "typography": Object {
           "body": Object {
             "fontFamily": "\\"Raleway-Medium\\"",
-            "fontSize": "0.875rem",
+            "fontSize": "0.9375rem",
             "fontWeight": 500,
             "letterSpacing": "0.01071em",
             "lineHeight": 1.43,
@@ -723,7 +723,7 @@ font-display: block;",
           },
           "body2": Object {
             "fontFamily": "\\"Raleway-Medium\\"",
-            "fontSize": "0.875rem",
+            "fontSize": "0.9375rem",
             "fontWeight": 500,
             "letterSpacing": "0.01071em",
             "lineHeight": 1.43,
@@ -751,31 +751,31 @@ font-display: block;",
           "fontWeightRegular": 400,
           "h1": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "2.5rem",
+            "fontSize": "1.375rem",
             "fontWeight": 800,
             "letterSpacing": "-0.01562em",
-            "lineHeight": 1,
+            "lineHeight": 1.45,
           },
           "h2": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "2rem",
+            "fontSize": "1.125rem",
             "fontWeight": 800,
             "letterSpacing": "-0.00833em",
-            "lineHeight": 1,
+            "lineHeight": 1.27,
           },
           "h3": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "1.9rem",
+            "fontSize": "1.05rem",
             "fontWeight": 800,
             "letterSpacing": "0em",
-            "lineHeight": 1,
+            "lineHeight": 1.2,
           },
           "h4": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "1.25rem",
+            "fontSize": "1rem",
             "fontWeight": 800,
             "letterSpacing": "0.00735em",
-            "lineHeight": 1,
+            "lineHeight": 1.1,
           },
           "h5": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
@@ -849,7 +849,7 @@ font-display: block;",
           }
         >
           <tr
-            className="makeStyles-table__body-row-1547 makeStyles-tableRow-1555"
+            className="makeStyles-table__body-row-1547 makeStyles-table__body-row--selectable-1548 makeStyles-tableRow-1556"
             onClick={[Function]}
           >
             <td
@@ -860,7 +860,7 @@ font-display: block;",
                 iri="https://example.com/example.ttl"
               >
                 <i
-                  className="makeStyles-icon-file-1501 makeStyles-resource-icon-1557"
+                  className="makeStyles-icon-file-1501 makeStyles-resource-icon-1558"
                 />
               </ResourceIcon>
             </td>
@@ -868,6 +868,7 @@ font-display: block;",
               className="makeStyles-table__body-cell-1550"
             >
               <ResourceLink
+                className="makeStyles-table__link-1555"
                 containerIri="https://example.com/example.ttl"
                 resourceIri="https://example.com/example.ttl"
               >
@@ -885,6 +886,7 @@ font-display: block;",
                   replace={true}
                 >
                   <a
+                    className="makeStyles-table__link-1555"
                     href="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
                     onClick={[Function]}
                     onMouseEnter={[Function]}
@@ -1038,7 +1040,7 @@ font-display: block;",
       ],
       "localFonts": Object {
         "fonts/Raleway/Raleway-ExtraBold": [Function],
-        "fonts/Raleway/Raleway-Regular": [Function],
+        "fonts/Raleway/Raleway-Medium": [Function],
       },
       "mixins": Object {
         "gutters": [Function],
@@ -1130,8 +1132,8 @@ font-display: block;",
         "text": Object {
           "disabled": "rgba(0, 0, 0, 0.38)",
           "hint": "rgba(0, 0, 0, 0.38)",
-          "primary": "rgba(0, 0, 0, 0.87)",
-          "secondary": "rgba(0, 0, 0, 0.54)",
+          "primary": "#4E4E4E",
+          "secondary": "#4E4E4E",
         },
         "tonalOffset": 0.2,
         "type": "light",
@@ -1199,7 +1201,7 @@ font-display: block;",
       "typography": Object {
         "body": Object {
           "fontFamily": "\\"Raleway-Medium\\"",
-          "fontSize": "0.875rem",
+          "fontSize": "0.9375rem",
           "fontWeight": 500,
           "letterSpacing": "0.01071em",
           "lineHeight": 1.43,
@@ -1213,7 +1215,7 @@ font-display: block;",
         },
         "body2": Object {
           "fontFamily": "\\"Raleway-Medium\\"",
-          "fontSize": "0.875rem",
+          "fontSize": "0.9375rem",
           "fontWeight": 500,
           "letterSpacing": "0.01071em",
           "lineHeight": 1.43,
@@ -1241,31 +1243,31 @@ font-display: block;",
         "fontWeightRegular": 400,
         "h1": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "2.5rem",
+          "fontSize": "1.375rem",
           "fontWeight": 800,
           "letterSpacing": "-0.01562em",
-          "lineHeight": 1,
+          "lineHeight": 1.45,
         },
         "h2": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "2rem",
+          "fontSize": "1.125rem",
           "fontWeight": 800,
           "letterSpacing": "-0.00833em",
-          "lineHeight": 1,
+          "lineHeight": 1.27,
         },
         "h3": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "1.9rem",
+          "fontSize": "1.05rem",
           "fontWeight": 800,
           "letterSpacing": "0em",
-          "lineHeight": 1,
+          "lineHeight": 1.2,
         },
         "h4": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "1.25rem",
+          "fontSize": "1rem",
           "fontWeight": 800,
           "letterSpacing": "0.00735em",
-          "lineHeight": 1,
+          "lineHeight": 1.1,
         },
         "h5": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
@@ -1456,7 +1458,7 @@ font-display: block;",
         ],
         "localFonts": Object {
           "fonts/Raleway/Raleway-ExtraBold": [Function],
-          "fonts/Raleway/Raleway-Regular": [Function],
+          "fonts/Raleway/Raleway-Medium": [Function],
         },
         "mixins": Object {
           "gutters": [Function],
@@ -1548,8 +1550,8 @@ font-display: block;",
           "text": Object {
             "disabled": "rgba(0, 0, 0, 0.38)",
             "hint": "rgba(0, 0, 0, 0.38)",
-            "primary": "rgba(0, 0, 0, 0.87)",
-            "secondary": "rgba(0, 0, 0, 0.54)",
+            "primary": "#4E4E4E",
+            "secondary": "#4E4E4E",
           },
           "tonalOffset": 0.2,
           "type": "light",
@@ -1617,7 +1619,7 @@ font-display: block;",
         "typography": Object {
           "body": Object {
             "fontFamily": "\\"Raleway-Medium\\"",
-            "fontSize": "0.875rem",
+            "fontSize": "0.9375rem",
             "fontWeight": 500,
             "letterSpacing": "0.01071em",
             "lineHeight": 1.43,
@@ -1631,7 +1633,7 @@ font-display: block;",
           },
           "body2": Object {
             "fontFamily": "\\"Raleway-Medium\\"",
-            "fontSize": "0.875rem",
+            "fontSize": "0.9375rem",
             "fontWeight": 500,
             "letterSpacing": "0.01071em",
             "lineHeight": 1.43,
@@ -1659,31 +1661,31 @@ font-display: block;",
           "fontWeightRegular": 400,
           "h1": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "2.5rem",
+            "fontSize": "1.375rem",
             "fontWeight": 800,
             "letterSpacing": "-0.01562em",
-            "lineHeight": 1,
+            "lineHeight": 1.45,
           },
           "h2": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "2rem",
+            "fontSize": "1.125rem",
             "fontWeight": 800,
             "letterSpacing": "-0.00833em",
-            "lineHeight": 1,
+            "lineHeight": 1.27,
           },
           "h3": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "1.9rem",
+            "fontSize": "1.05rem",
             "fontWeight": 800,
             "letterSpacing": "0em",
-            "lineHeight": 1,
+            "lineHeight": 1.2,
           },
           "h4": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "1.25rem",
+            "fontSize": "1rem",
             "fontWeight": 800,
             "letterSpacing": "0.00735em",
-            "lineHeight": 1,
+            "lineHeight": 1.1,
           },
           "h5": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
@@ -1759,7 +1761,7 @@ font-display: block;",
           }
         >
           <tr
-            className="makeStyles-table__body-row-1547 makeStyles-tableRow-1555"
+            className="makeStyles-table__body-row-1547 makeStyles-table__body-row--selectable-1548 makeStyles-tableRow-1556"
             onClick={[Function]}
           >
             <td
@@ -1770,7 +1772,7 @@ font-display: block;",
                 iri="https://example.com/example.ttl"
               >
                 <i
-                  className="makeStyles-icon-file-1501 makeStyles-resource-icon-1557"
+                  className="makeStyles-icon-file-1501 makeStyles-resource-icon-1558"
                 />
               </ResourceIcon>
             </td>
@@ -1778,6 +1780,7 @@ font-display: block;",
               className="makeStyles-table__body-cell-1550"
             >
               <ResourceLink
+                className="makeStyles-table__link-1555"
                 containerIri="https://example.com/example.ttl"
                 resourceIri="https://example.com/example.ttl"
               >
@@ -1795,6 +1798,7 @@ font-display: block;",
                   replace={true}
                 >
                   <a
+                    className="makeStyles-table__link-1555"
                     href="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
                     onClick={[Function]}
                     onMouseEnter={[Function]}
@@ -1948,7 +1952,7 @@ font-display: block;",
       ],
       "localFonts": Object {
         "fonts/Raleway/Raleway-ExtraBold": [Function],
-        "fonts/Raleway/Raleway-Regular": [Function],
+        "fonts/Raleway/Raleway-Medium": [Function],
       },
       "mixins": Object {
         "gutters": [Function],
@@ -2040,8 +2044,8 @@ font-display: block;",
         "text": Object {
           "disabled": "rgba(0, 0, 0, 0.38)",
           "hint": "rgba(0, 0, 0, 0.38)",
-          "primary": "rgba(0, 0, 0, 0.87)",
-          "secondary": "rgba(0, 0, 0, 0.54)",
+          "primary": "#4E4E4E",
+          "secondary": "#4E4E4E",
         },
         "tonalOffset": 0.2,
         "type": "light",
@@ -2109,7 +2113,7 @@ font-display: block;",
       "typography": Object {
         "body": Object {
           "fontFamily": "\\"Raleway-Medium\\"",
-          "fontSize": "0.875rem",
+          "fontSize": "0.9375rem",
           "fontWeight": 500,
           "letterSpacing": "0.01071em",
           "lineHeight": 1.43,
@@ -2123,7 +2127,7 @@ font-display: block;",
         },
         "body2": Object {
           "fontFamily": "\\"Raleway-Medium\\"",
-          "fontSize": "0.875rem",
+          "fontSize": "0.9375rem",
           "fontWeight": 500,
           "letterSpacing": "0.01071em",
           "lineHeight": 1.43,
@@ -2151,31 +2155,31 @@ font-display: block;",
         "fontWeightRegular": 400,
         "h1": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "2.5rem",
+          "fontSize": "1.375rem",
           "fontWeight": 800,
           "letterSpacing": "-0.01562em",
-          "lineHeight": 1,
+          "lineHeight": 1.45,
         },
         "h2": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "2rem",
+          "fontSize": "1.125rem",
           "fontWeight": 800,
           "letterSpacing": "-0.00833em",
-          "lineHeight": 1,
+          "lineHeight": 1.27,
         },
         "h3": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "1.9rem",
+          "fontSize": "1.05rem",
           "fontWeight": 800,
           "letterSpacing": "0em",
-          "lineHeight": 1,
+          "lineHeight": 1.2,
         },
         "h4": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "1.25rem",
+          "fontSize": "1rem",
           "fontWeight": 800,
           "letterSpacing": "0.00735em",
-          "lineHeight": 1,
+          "lineHeight": 1.1,
         },
         "h5": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
@@ -2366,7 +2370,7 @@ font-display: block;",
         ],
         "localFonts": Object {
           "fonts/Raleway/Raleway-ExtraBold": [Function],
-          "fonts/Raleway/Raleway-Regular": [Function],
+          "fonts/Raleway/Raleway-Medium": [Function],
         },
         "mixins": Object {
           "gutters": [Function],
@@ -2458,8 +2462,8 @@ font-display: block;",
           "text": Object {
             "disabled": "rgba(0, 0, 0, 0.38)",
             "hint": "rgba(0, 0, 0, 0.38)",
-            "primary": "rgba(0, 0, 0, 0.87)",
-            "secondary": "rgba(0, 0, 0, 0.54)",
+            "primary": "#4E4E4E",
+            "secondary": "#4E4E4E",
           },
           "tonalOffset": 0.2,
           "type": "light",
@@ -2527,7 +2531,7 @@ font-display: block;",
         "typography": Object {
           "body": Object {
             "fontFamily": "\\"Raleway-Medium\\"",
-            "fontSize": "0.875rem",
+            "fontSize": "0.9375rem",
             "fontWeight": 500,
             "letterSpacing": "0.01071em",
             "lineHeight": 1.43,
@@ -2541,7 +2545,7 @@ font-display: block;",
           },
           "body2": Object {
             "fontFamily": "\\"Raleway-Medium\\"",
-            "fontSize": "0.875rem",
+            "fontSize": "0.9375rem",
             "fontWeight": 500,
             "letterSpacing": "0.01071em",
             "lineHeight": 1.43,
@@ -2569,31 +2573,31 @@ font-display: block;",
           "fontWeightRegular": 400,
           "h1": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "2.5rem",
+            "fontSize": "1.375rem",
             "fontWeight": 800,
             "letterSpacing": "-0.01562em",
-            "lineHeight": 1,
+            "lineHeight": 1.45,
           },
           "h2": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "2rem",
+            "fontSize": "1.125rem",
             "fontWeight": 800,
             "letterSpacing": "-0.00833em",
-            "lineHeight": 1,
+            "lineHeight": 1.27,
           },
           "h3": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "1.9rem",
+            "fontSize": "1.05rem",
             "fontWeight": 800,
             "letterSpacing": "0em",
-            "lineHeight": 1,
+            "lineHeight": 1.2,
           },
           "h4": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "1.25rem",
+            "fontSize": "1rem",
             "fontWeight": 800,
             "letterSpacing": "0.00735em",
-            "lineHeight": 1,
+            "lineHeight": 1.1,
           },
           "h5": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
@@ -2667,7 +2671,7 @@ font-display: block;",
           }
         >
           <tr
-            className="makeStyles-table__body-row-1547 makeStyles-tableRow-1555"
+            className="makeStyles-table__body-row-1547 makeStyles-table__body-row--selectable-1548 makeStyles-tableRow-1556"
             onClick={[Function]}
           >
             <td
@@ -2678,7 +2682,7 @@ font-display: block;",
                 iri="https://example.com/example.ttl"
               >
                 <i
-                  className="makeStyles-icon-file-1501 makeStyles-resource-icon-1557"
+                  className="makeStyles-icon-file-1501 makeStyles-resource-icon-1558"
                 />
               </ResourceIcon>
             </td>
@@ -2686,6 +2690,7 @@ font-display: block;",
               className="makeStyles-table__body-cell-1550"
             >
               <ResourceLink
+                className="makeStyles-table__link-1555"
                 containerIri="https://example.com/example.ttl"
                 resourceIri="https://example.com/example.ttl"
               >
@@ -2703,6 +2708,7 @@ font-display: block;",
                   replace={true}
                 >
                   <a
+                    className="makeStyles-table__link-1555"
                     href="/resource/https%3A%2F%2Fexample.com%2Fexample.ttl"
                     onClick={[Function]}
                     onMouseEnter={[Function]}
@@ -2856,7 +2862,7 @@ font-display: block;",
       ],
       "localFonts": Object {
         "fonts/Raleway/Raleway-ExtraBold": [Function],
-        "fonts/Raleway/Raleway-Regular": [Function],
+        "fonts/Raleway/Raleway-Medium": [Function],
       },
       "mixins": Object {
         "gutters": [Function],
@@ -2948,8 +2954,8 @@ font-display: block;",
         "text": Object {
           "disabled": "rgba(0, 0, 0, 0.38)",
           "hint": "rgba(0, 0, 0, 0.38)",
-          "primary": "rgba(0, 0, 0, 0.87)",
-          "secondary": "rgba(0, 0, 0, 0.54)",
+          "primary": "#4E4E4E",
+          "secondary": "#4E4E4E",
         },
         "tonalOffset": 0.2,
         "type": "light",
@@ -3017,7 +3023,7 @@ font-display: block;",
       "typography": Object {
         "body": Object {
           "fontFamily": "\\"Raleway-Medium\\"",
-          "fontSize": "0.875rem",
+          "fontSize": "0.9375rem",
           "fontWeight": 500,
           "letterSpacing": "0.01071em",
           "lineHeight": 1.43,
@@ -3031,7 +3037,7 @@ font-display: block;",
         },
         "body2": Object {
           "fontFamily": "\\"Raleway-Medium\\"",
-          "fontSize": "0.875rem",
+          "fontSize": "0.9375rem",
           "fontWeight": 500,
           "letterSpacing": "0.01071em",
           "lineHeight": 1.43,
@@ -3059,31 +3065,31 @@ font-display: block;",
         "fontWeightRegular": 400,
         "h1": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "2.5rem",
+          "fontSize": "1.375rem",
           "fontWeight": 800,
           "letterSpacing": "-0.01562em",
-          "lineHeight": 1,
+          "lineHeight": 1.45,
         },
         "h2": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "2rem",
+          "fontSize": "1.125rem",
           "fontWeight": 800,
           "letterSpacing": "-0.00833em",
-          "lineHeight": 1,
+          "lineHeight": 1.27,
         },
         "h3": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "1.9rem",
+          "fontSize": "1.05rem",
           "fontWeight": 800,
           "letterSpacing": "0em",
-          "lineHeight": 1,
+          "lineHeight": 1.2,
         },
         "h4": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "1.25rem",
+          "fontSize": "1rem",
           "fontWeight": 800,
           "letterSpacing": "0.00735em",
-          "lineHeight": 1,
+          "lineHeight": 1.1,
         },
         "h5": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
@@ -3274,7 +3280,7 @@ font-display: block;",
         ],
         "localFonts": Object {
           "fonts/Raleway/Raleway-ExtraBold": [Function],
-          "fonts/Raleway/Raleway-Regular": [Function],
+          "fonts/Raleway/Raleway-Medium": [Function],
         },
         "mixins": Object {
           "gutters": [Function],
@@ -3366,8 +3372,8 @@ font-display: block;",
           "text": Object {
             "disabled": "rgba(0, 0, 0, 0.38)",
             "hint": "rgba(0, 0, 0, 0.38)",
-            "primary": "rgba(0, 0, 0, 0.87)",
-            "secondary": "rgba(0, 0, 0, 0.54)",
+            "primary": "#4E4E4E",
+            "secondary": "#4E4E4E",
           },
           "tonalOffset": 0.2,
           "type": "light",
@@ -3435,7 +3441,7 @@ font-display: block;",
         "typography": Object {
           "body": Object {
             "fontFamily": "\\"Raleway-Medium\\"",
-            "fontSize": "0.875rem",
+            "fontSize": "0.9375rem",
             "fontWeight": 500,
             "letterSpacing": "0.01071em",
             "lineHeight": 1.43,
@@ -3449,7 +3455,7 @@ font-display: block;",
           },
           "body2": Object {
             "fontFamily": "\\"Raleway-Medium\\"",
-            "fontSize": "0.875rem",
+            "fontSize": "0.9375rem",
             "fontWeight": 500,
             "letterSpacing": "0.01071em",
             "lineHeight": 1.43,
@@ -3477,31 +3483,31 @@ font-display: block;",
           "fontWeightRegular": 400,
           "h1": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "2.5rem",
+            "fontSize": "1.375rem",
             "fontWeight": 800,
             "letterSpacing": "-0.01562em",
-            "lineHeight": 1,
+            "lineHeight": 1.45,
           },
           "h2": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "2rem",
+            "fontSize": "1.125rem",
             "fontWeight": 800,
             "letterSpacing": "-0.00833em",
-            "lineHeight": 1,
+            "lineHeight": 1.27,
           },
           "h3": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "1.9rem",
+            "fontSize": "1.05rem",
             "fontWeight": 800,
             "letterSpacing": "0em",
-            "lineHeight": 1,
+            "lineHeight": 1.2,
           },
           "h4": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "1.25rem",
+            "fontSize": "1rem",
             "fontWeight": 800,
             "letterSpacing": "0.00735em",
-            "lineHeight": 1,
+            "lineHeight": 1.1,
           },
           "h5": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
@@ -3726,7 +3732,7 @@ font-display: block;",
       ],
       "localFonts": Object {
         "fonts/Raleway/Raleway-ExtraBold": [Function],
-        "fonts/Raleway/Raleway-Regular": [Function],
+        "fonts/Raleway/Raleway-Medium": [Function],
       },
       "mixins": Object {
         "gutters": [Function],
@@ -3818,8 +3824,8 @@ font-display: block;",
         "text": Object {
           "disabled": "rgba(0, 0, 0, 0.38)",
           "hint": "rgba(0, 0, 0, 0.38)",
-          "primary": "rgba(0, 0, 0, 0.87)",
-          "secondary": "rgba(0, 0, 0, 0.54)",
+          "primary": "#4E4E4E",
+          "secondary": "#4E4E4E",
         },
         "tonalOffset": 0.2,
         "type": "light",
@@ -3887,7 +3893,7 @@ font-display: block;",
       "typography": Object {
         "body": Object {
           "fontFamily": "\\"Raleway-Medium\\"",
-          "fontSize": "0.875rem",
+          "fontSize": "0.9375rem",
           "fontWeight": 500,
           "letterSpacing": "0.01071em",
           "lineHeight": 1.43,
@@ -3901,7 +3907,7 @@ font-display: block;",
         },
         "body2": Object {
           "fontFamily": "\\"Raleway-Medium\\"",
-          "fontSize": "0.875rem",
+          "fontSize": "0.9375rem",
           "fontWeight": 500,
           "letterSpacing": "0.01071em",
           "lineHeight": 1.43,
@@ -3929,31 +3935,31 @@ font-display: block;",
         "fontWeightRegular": 400,
         "h1": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "2.5rem",
+          "fontSize": "1.375rem",
           "fontWeight": 800,
           "letterSpacing": "-0.01562em",
-          "lineHeight": 1,
+          "lineHeight": 1.45,
         },
         "h2": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "2rem",
+          "fontSize": "1.125rem",
           "fontWeight": 800,
           "letterSpacing": "-0.00833em",
-          "lineHeight": 1,
+          "lineHeight": 1.27,
         },
         "h3": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "1.9rem",
+          "fontSize": "1.05rem",
           "fontWeight": 800,
           "letterSpacing": "0em",
-          "lineHeight": 1,
+          "lineHeight": 1.2,
         },
         "h4": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "1.25rem",
+          "fontSize": "1rem",
           "fontWeight": 800,
           "letterSpacing": "0.00735em",
-          "lineHeight": 1,
+          "lineHeight": 1.1,
         },
         "h5": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
@@ -4144,7 +4150,7 @@ font-display: block;",
         ],
         "localFonts": Object {
           "fonts/Raleway/Raleway-ExtraBold": [Function],
-          "fonts/Raleway/Raleway-Regular": [Function],
+          "fonts/Raleway/Raleway-Medium": [Function],
         },
         "mixins": Object {
           "gutters": [Function],
@@ -4236,8 +4242,8 @@ font-display: block;",
           "text": Object {
             "disabled": "rgba(0, 0, 0, 0.38)",
             "hint": "rgba(0, 0, 0, 0.38)",
-            "primary": "rgba(0, 0, 0, 0.87)",
-            "secondary": "rgba(0, 0, 0, 0.54)",
+            "primary": "#4E4E4E",
+            "secondary": "#4E4E4E",
           },
           "tonalOffset": 0.2,
           "type": "light",
@@ -4305,7 +4311,7 @@ font-display: block;",
         "typography": Object {
           "body": Object {
             "fontFamily": "\\"Raleway-Medium\\"",
-            "fontSize": "0.875rem",
+            "fontSize": "0.9375rem",
             "fontWeight": 500,
             "letterSpacing": "0.01071em",
             "lineHeight": 1.43,
@@ -4319,7 +4325,7 @@ font-display: block;",
           },
           "body2": Object {
             "fontFamily": "\\"Raleway-Medium\\"",
-            "fontSize": "0.875rem",
+            "fontSize": "0.9375rem",
             "fontWeight": 500,
             "letterSpacing": "0.01071em",
             "lineHeight": 1.43,
@@ -4347,31 +4353,31 @@ font-display: block;",
           "fontWeightRegular": 400,
           "h1": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "2.5rem",
+            "fontSize": "1.375rem",
             "fontWeight": 800,
             "letterSpacing": "-0.01562em",
-            "lineHeight": 1,
+            "lineHeight": 1.45,
           },
           "h2": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "2rem",
+            "fontSize": "1.125rem",
             "fontWeight": 800,
             "letterSpacing": "-0.00833em",
-            "lineHeight": 1,
+            "lineHeight": 1.27,
           },
           "h3": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "1.9rem",
+            "fontSize": "1.05rem",
             "fontWeight": 800,
             "letterSpacing": "0em",
-            "lineHeight": 1,
+            "lineHeight": 1.2,
           },
           "h4": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "1.25rem",
+            "fontSize": "1rem",
             "fontWeight": 800,
             "letterSpacing": "0.00735em",
-            "lineHeight": 1,
+            "lineHeight": 1.1,
           },
           "h5": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",

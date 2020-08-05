@@ -21,6 +21,6 @@
 
 import { PrismTheme, createStyles } from "@solid/lit-prism-patterns";
 
-const styles = (theme: PrismTheme) => createStyles(theme, ["headerBanner"]);
+const styles = (theme: PrismTheme) => createStyles(theme, ["headerBanner", "icons"]);
 
 export default styles;

@@ -21,7 +21,12 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { ReactNode, ReactElement, useContext } from "react";
+import {
+  ReactNode,
+  ReactElement,
+  useContext,
+  AnchorHTMLAttributes,
+} from "react";
 import { NextRouter } from "next/router";
 import Link from "next/link";
 import PodLocationContext from "../../src/contexts/podLocationContext";
@@ -61,7 +66,7 @@ export function resourceContextRedirect(
 }
 
 /* eslint react/require-default-props: 0 */
-interface IResourceLink {
+interface IResourceLink extends AnchorHTMLAttributes<HTMLAnchorElement> {
   children?: ReactNode;
   action?: string;
   resourceIri?: string;

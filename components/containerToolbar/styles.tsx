@@ -27,12 +27,8 @@ export default function styles(theme: PrismTheme): Styles {
     "container-toolbar": {
       paddingBottom: theme.spacing(2), // to negate the padding that breadcrumbs must have
     },
-    "icon-button": {
-      background: "none",
-      border: 0,
-      cursor: "pointer",
-      fontSize: "100%",
-      padding: 0,
+    "container-toolbar__trigger": {
+      color: theme.palette.primary.main,
     },
   });
 }

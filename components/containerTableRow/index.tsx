@@ -75,10 +75,14 @@ export default function ContainerTableRow({ resource }: Props): ReactElement {
   const { name, iri } = resource;
   const router = useRouter();
   const { currentUri } = useContext(PodLocationContext);
+  const isActive = router.query.resourceIri === iri;
 
   return (
     <tr
-      className={clsx(bem("table__body-row"), bem("tableRow"))}
+      className={clsx(
+        bem("table__body-row", "selectable", isActive ? "selected" : null),
+        bem("tableRow")
+      )}
       onClick={handleClick(iri, currentUri, router)}
     >
       <td className={bem("table__body-cell", "align-center", "width-preview")}>
@@ -86,7 +90,11 @@ export default function ContainerTableRow({ resource }: Props): ReactElement {
       </td>
 
       <td className={bem("table__body-cell")}>
-        <ResourceLink containerIri={iri} resourceIri={iri}>
+        <ResourceLink
+          containerIri={iri}
+          resourceIri={iri}
+          className={bem("table__link")}
+        >
           {name}
         </ResourceLink>
       </td>

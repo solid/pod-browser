@@ -22,7 +22,7 @@
 // @ts-nocheck
 // react-table is super broken with sorting, so temporarily disable ts checking.
 
-import { ReactElement, useMemo } from "react";
+import { ReactElement, useContext, useMemo } from "react";
 import { useTable, useSortBy, UseSortByOptions } from "react-table";
 
 import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
@@ -39,6 +39,7 @@ import Spinner from "../spinner";
 import styles from "./styles";
 import Breadcrumbs from "../breadcrumbs";
 import ContainerToolbar from "../containerToolbar";
+import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 
 const useStyles = makeStyles<PrismTheme>((theme) => {
   return createStyles(styles(theme) as StyleRules);
@@ -50,6 +51,8 @@ interface IPodList {
 
 export default function Container(props: IPodList): ReactElement {
   useRedirectIfLoggedOut();
+
+  const { menuOpen } = useContext(DetailsMenuContext);
 
   const { iri } = props;
   const { data: resourceIris } = useFetchContainerResourceIris(iri);
@@ -112,60 +115,65 @@ export default function Container(props: IPodList): ReactElement {
   /* eslint react/jsx-props-no-spreading: 0 */
   return (
     <>
-      <div className={bem("container-menu")}>
-        <Breadcrumbs />
-        <ContainerToolbar />
+      <div className={clsx(bem("container"))}>
+        <div className={bem("container-menu")}>
+          <Breadcrumbs />
+          <ContainerToolbar />
+        </div>
       </div>
-      <table
-        className={clsx(bem("table"), bem("navigator"))}
-        {...getTableProps()}
+      <div
+        className={clsx(
+          bem("container"),
+          bem("container-view", menuOpen ? "menu-open" : null)
+        )}
       >
-        <thead className={bem("table__header")}>
-          {headerGroups.map((headerGroup) => (
-            <tr
-              key={headerGroup.id}
-              className={bem("table__header-row")}
-              {...headerGroup.getHeaderGroupProps()}
-            >
-              {headerGroup.headers.map((column) => (
-                <td
-                  key={column.id}
-                  className={bem(
-                    "table__header-cell",
-                    ...(column.modifiers || [])
-                  )}
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                >
-                  {column.render("Header")}
-                  {` `}
-                  <SortedTableCarat
-                    sorted={column.isSorted}
-                    sortedDesc={column.isSortedDesc}
-                  />
+        <table className={clsx(bem("table"))} {...getTableProps()}>
+          <thead className={bem("table__header")}>
+            {headerGroups.map((headerGroup) => (
+              <tr
+                key={headerGroup.id}
+                className={bem("table__header-row")}
+                {...headerGroup.getHeaderGroupProps()}
+              >
+                {headerGroup.headers.map((column) => (
+                  <td
+                    key={column.id}
+                    className={bem(
+                      "table__header-cell",
+                      ...(column.modifiers || [])
+                    )}
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                  >
+                    {column.render("Header")}
+                    {` `}
+                    <SortedTableCarat
+                      sorted={column.isSorted}
+                      sortedDesc={column.isSortedDesc}
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </thead>
+
+          <tbody className={bem("table__body")} {...getTableBodyProps()}>
+            {!data || !data.length ? (
+              <tr key="no-resources-found" className={bem("table__body-row")}>
+                <td rowSpan={3} className={bem("table__body-cell")}>
+                  No resources were found within this container.
                 </td>
-              ))}
-            </tr>
-          ))}
-        </thead>
+              </tr>
+            ) : null}
 
-        <tbody className={bem("table__body")} {...getTableBodyProps()}>
-          {!data || !data.length ? (
-            <tr key="no-resources-found" className={bem("table__body-row")}>
-              <td rowSpan={3} className={bem("table__body-cell")}>
-                No resources were found within this container.
-              </td>
-            </tr>
-          ) : null}
-
-          {rows.map((row) => {
-            prepareRow(row);
-            const details = row.original as IResourceDetails;
-            return <ContainerTableRow key={details.iri} resource={details} />;
-          })}
-        </tbody>
-      </table>
-
-      <DetailsContextMenu />
+            {rows.map((row) => {
+              prepareRow(row);
+              const details = row.original as IResourceDetails;
+              return <ContainerTableRow key={details.iri} resource={details} />;
+            })}
+          </tbody>
+        </table>
+        <DetailsContextMenu />
+      </div>
     </>
   );
 }

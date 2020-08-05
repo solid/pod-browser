@@ -25,6 +25,8 @@ import { AlertProps } from "@material-ui/lab/Alert";
 import { Drawer, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useRouter, NextRouter } from "next/router";
+import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
+import { createStyles, StyleRules } from "@material-ui/styles";
 import DetailsMenuContext, {
   DETAILS_CONTEXT_ACTIONS,
 } from "../../src/contexts/detailsMenuContext";
@@ -39,7 +41,9 @@ import ResourceSharing from "../resourceSharing";
 import { useFetchResourceDetails } from "../../src/hooks/solidClient";
 import { parseUrl, stripQueryParams } from "../../src/stringHelpers";
 
-const useStyles = makeStyles(styles);
+const useStyles = makeStyles<PrismTheme>((theme) => {
+  return createStyles(styles(theme) as StyleRules);
+});
 
 interface IContentsProps {
   action: string;
@@ -113,7 +117,7 @@ export default function DetailsContextMenu(): ReactElement | null {
   const { query } = useRouter();
   const { action, resourceIri } = query;
 
-  const classes = useStyles();
+  const bem = useBem(useStyles());
   const router = useRouter();
 
   useEffect(() => {
@@ -126,19 +130,16 @@ export default function DetailsContextMenu(): ReactElement | null {
   if (!resourceIri) return null;
 
   return (
-    // prettier-ignore
     <Drawer
       anchor="right"
-      variant="persistent"
+      variant="permanent"
       open={menuOpen}
-      classes={{ paper: classes.drawerPaper }}
+      classes={{ paper: bem("drawer__paper") }}
     >
-      <IconButton className={classes.drawerCloseButton} onClick={closeDrawer}>
+      <IconButton className={bem("drawer__close-button")} onClick={closeDrawer}>
         <ChevronRightIcon />
       </IconButton>
-      <div className={classes.drawerContent}>
-        <Contents action={action as string} iri={resourceIri as string} />
-      </div>
+      <Contents action={action as string} iri={resourceIri as string} />
     </Drawer>
   );
 }

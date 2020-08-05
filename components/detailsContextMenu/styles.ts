@@ -18,25 +18,34 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+import { PrismTheme } from "@solid/lit-prism-patterns";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-const styles: Record<string, any> = {
-  drawerCloseButton: {
-    width: "50px",
+const styles = (theme: PrismTheme) => ({
+  "drawer__close-button": {
+    width: 50,
     margin: "8px 0 0 -25px",
-    backgroundColor: "#fff",
+    backgroundColor: theme.palette.background.default,
     boxShadow: "1px 1px 3px #333",
     "&:hover": {
       backgroundColor: "#fff",
     },
   },
-  drawerPaper: {
+  "drawer__paper": {
+    borderLeftStyle: "solid",
+    borderLeftWidth: theme.spacing(1),
+    borderLeftColor: theme.palette.grey["50"],
     overflowY: "visible",
+    width: "95%",
+    [theme.breakpoints.up("sm")]: {
+      width: "50%",
+    },
+    [theme.breakpoints.up("md")]: {
+      width: "33.33%",
+    },
+    [theme.breakpoints.up("lg")]: {
+      width: "25%",
+    }
   },
-  drawerContent: {
-    width: 520,
-  },
-};
+});
 
 export default styles;

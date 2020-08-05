@@ -25,7 +25,6 @@ import { header, PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import Link from "next/link";
 import UserContext from "../../src/contexts/userContext";
 import UserMenu from "./userMenu";
-import MainNav from "./mainNav";
 import styles from "./styles";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
@@ -43,14 +42,12 @@ export default function Header(): ReactElement | null {
           <img
             height={40}
             src="/inrupt_logo-2020.svg"
-            className={bem("image")}
+            className={bem("header-banner__logo-image")}
             alt="Inrupt PodBrowser"
           />
         </a>
       </Link>
-      <div className={bem("header-banner__main-nav")}>
-        <MainNav className={bem("app-layout__header-nav")} />
-      </div>
+      <div className={bem("header-banner__main-nav")} />
       <UserMenu />
     </header>
   ) : null;

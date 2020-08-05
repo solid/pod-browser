@@ -22,6 +22,7 @@
 import React, { ReactElement, useContext, useState } from "react";
 import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
+import clsx from "clsx";
 import LogOutButton from "../../logout";
 import styles from "./styles";
 import UserContext from "../../../src/contexts/userContext";
@@ -55,8 +56,10 @@ export default function UserMenu(): ReactElement {
         onClick={toggleMenu}
       >
         <i
-          className={bem("header-banner__aside-menu-trigger-profile")}
-          style={{ backgroundImage: `url(${avatar})` }}
+          className={clsx(
+            bem("icon-user"),
+            bem("header-banner__aside-menu-trigger-icon")
+          )}
           aria-label="User Menu"
         />
       </button>
@@ -70,9 +73,17 @@ export default function UserMenu(): ReactElement {
             <LogOutButton
               className={bem("header-banner__user-menu-item-trigger")}
             >
-              <span className="prism-header-banner__user-menu-item-label">
-                Log out
-              </span>
+              <>
+                <i
+                  className={clsx(
+                    bem("icon-log-out"),
+                    bem("header-banner__user-menu-item-icon")
+                  )}
+                />
+                <span className={bem("header-banner__user-menu-item-label")}>
+                  Log out
+                </span>
+              </>
             </LogOutButton>
           </li>
         </ul>

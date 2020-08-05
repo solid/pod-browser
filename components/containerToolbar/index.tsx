@@ -36,8 +36,11 @@ export default function ContainerToolbar(): ReactElement | null {
 
   return (
     <div className={bem("container-toolbar")}>
-      <ResourceLink action={DETAILS_CONTEXT_ACTIONS.DETAILS}>
-        <i className={bem("icon-info")} aria-label="View details" />
+      <ResourceLink
+        action={DETAILS_CONTEXT_ACTIONS.DETAILS}
+        className={bem("container-toolbar__trigger")}
+      >
+        Container details
       </ResourceLink>
     </div>
   );

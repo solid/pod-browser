@@ -130,7 +130,7 @@ font-display: block;",
       ],
       "localFonts": Object {
         "fonts/Raleway/Raleway-ExtraBold": [Function],
-        "fonts/Raleway/Raleway-Regular": [Function],
+        "fonts/Raleway/Raleway-Medium": [Function],
       },
       "mixins": Object {
         "gutters": [Function],
@@ -222,8 +222,8 @@ font-display: block;",
         "text": Object {
           "disabled": "rgba(0, 0, 0, 0.38)",
           "hint": "rgba(0, 0, 0, 0.38)",
-          "primary": "rgba(0, 0, 0, 0.87)",
-          "secondary": "rgba(0, 0, 0, 0.54)",
+          "primary": "#4E4E4E",
+          "secondary": "#4E4E4E",
         },
         "tonalOffset": 0.2,
         "type": "light",
@@ -291,7 +291,7 @@ font-display: block;",
       "typography": Object {
         "body": Object {
           "fontFamily": "\\"Raleway-Medium\\"",
-          "fontSize": "0.875rem",
+          "fontSize": "0.9375rem",
           "fontWeight": 500,
           "letterSpacing": "0.01071em",
           "lineHeight": 1.43,
@@ -305,7 +305,7 @@ font-display: block;",
         },
         "body2": Object {
           "fontFamily": "\\"Raleway-Medium\\"",
-          "fontSize": "0.875rem",
+          "fontSize": "0.9375rem",
           "fontWeight": 500,
           "letterSpacing": "0.01071em",
           "lineHeight": 1.43,
@@ -333,31 +333,31 @@ font-display: block;",
         "fontWeightRegular": 400,
         "h1": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "2.5rem",
+          "fontSize": "1.375rem",
           "fontWeight": 800,
           "letterSpacing": "-0.01562em",
-          "lineHeight": 1,
+          "lineHeight": 1.45,
         },
         "h2": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "2rem",
+          "fontSize": "1.125rem",
           "fontWeight": 800,
           "letterSpacing": "-0.00833em",
-          "lineHeight": 1,
+          "lineHeight": 1.27,
         },
         "h3": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "1.9rem",
+          "fontSize": "1.05rem",
           "fontWeight": 800,
           "letterSpacing": "0em",
-          "lineHeight": 1,
+          "lineHeight": 1.2,
         },
         "h4": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "1.25rem",
+          "fontSize": "1rem",
           "fontWeight": 800,
           "letterSpacing": "0.00735em",
-          "lineHeight": 1,
+          "lineHeight": 1.1,
         },
         "h5": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
@@ -548,7 +548,7 @@ font-display: block;",
         ],
         "localFonts": Object {
           "fonts/Raleway/Raleway-ExtraBold": [Function],
-          "fonts/Raleway/Raleway-Regular": [Function],
+          "fonts/Raleway/Raleway-Medium": [Function],
         },
         "mixins": Object {
           "gutters": [Function],
@@ -640,8 +640,8 @@ font-display: block;",
           "text": Object {
             "disabled": "rgba(0, 0, 0, 0.38)",
             "hint": "rgba(0, 0, 0, 0.38)",
-            "primary": "rgba(0, 0, 0, 0.87)",
-            "secondary": "rgba(0, 0, 0, 0.54)",
+            "primary": "#4E4E4E",
+            "secondary": "#4E4E4E",
           },
           "tonalOffset": 0.2,
           "type": "light",
@@ -709,7 +709,7 @@ font-display: block;",
         "typography": Object {
           "body": Object {
             "fontFamily": "\\"Raleway-Medium\\"",
-            "fontSize": "0.875rem",
+            "fontSize": "0.9375rem",
             "fontWeight": 500,
             "letterSpacing": "0.01071em",
             "lineHeight": 1.43,
@@ -723,7 +723,7 @@ font-display: block;",
           },
           "body2": Object {
             "fontFamily": "\\"Raleway-Medium\\"",
-            "fontSize": "0.875rem",
+            "fontSize": "0.9375rem",
             "fontWeight": 500,
             "letterSpacing": "0.01071em",
             "lineHeight": 1.43,
@@ -751,31 +751,31 @@ font-display: block;",
           "fontWeightRegular": 400,
           "h1": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "2.5rem",
+            "fontSize": "1.375rem",
             "fontWeight": 800,
             "letterSpacing": "-0.01562em",
-            "lineHeight": 1,
+            "lineHeight": 1.45,
           },
           "h2": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "2rem",
+            "fontSize": "1.125rem",
             "fontWeight": 800,
             "letterSpacing": "-0.00833em",
-            "lineHeight": 1,
+            "lineHeight": 1.27,
           },
           "h3": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "1.9rem",
+            "fontSize": "1.05rem",
             "fontWeight": 800,
             "letterSpacing": "0em",
-            "lineHeight": 1,
+            "lineHeight": 1.2,
           },
           "h4": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "1.25rem",
+            "fontSize": "1rem",
             "fontWeight": 800,
             "letterSpacing": "0.00735em",
-            "lineHeight": 1,
+            "lineHeight": 1.1,
           },
           "h5": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
@@ -851,13 +851,13 @@ font-display: block;",
           </h1>
           <Login>
             <div
-              className="makeStyles-login-form-35"
+              className="makeStyles-login-form-32"
             >
               <Link
                 href="/register"
               >
                 <a
-                  className="makeStyles-button-16 makeStyles-button--primary-19 makeStyles-button--filled-21"
+                  className="makeStyles-button-16  makeStyles-button--filled-19"
                   href="/register"
                   onClick={[Function]}
                   onMouseEnter={[Function]}
@@ -868,7 +868,7 @@ font-display: block;",
                 </a>
               </Link>
               <p
-                className="makeStyles-content-p-33 makeStyles-login-form__what-is-solid-36"
+                className="makeStyles-content-p-30 makeStyles-login-form__what-is-solid-33"
               >
                 <a
                   href="https://solid.inrupt.com/get-a-solid-pod"
@@ -879,7 +879,7 @@ font-display: block;",
                 </a>
               </p>
               <h2
-                className="makeStyles-content-h5-28 makeStyles-login-form__sub-title-37"
+                className="makeStyles-content-h5-25 makeStyles-login-form__sub-title-34"
               >
                 <span>
                   Log In
@@ -891,16 +891,16 @@ font-display: block;",
                     my={2}
                   >
                     <div
-                      className="MuiBox-root MuiBox-root-45"
+                      className="MuiBox-root MuiBox-root-39"
                     >
                       <Styled(MuiBox)
                         mt={2}
                       >
                         <div
-                          className="MuiBox-root MuiBox-root-46"
+                          className="MuiBox-root MuiBox-root-40"
                         >
                           <button
-                            className="makeStyles-button-38"
+                            className="makeStyles-button-35"
                             onClick={[Function]}
                             type="submit"
                           >

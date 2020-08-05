@@ -130,7 +130,7 @@ font-display: block;",
       ],
       "localFonts": Object {
         "fonts/Raleway/Raleway-ExtraBold": [Function],
-        "fonts/Raleway/Raleway-Regular": [Function],
+        "fonts/Raleway/Raleway-Medium": [Function],
       },
       "mixins": Object {
         "gutters": [Function],
@@ -222,8 +222,8 @@ font-display: block;",
         "text": Object {
           "disabled": "rgba(0, 0, 0, 0.38)",
           "hint": "rgba(0, 0, 0, 0.38)",
-          "primary": "rgba(0, 0, 0, 0.87)",
-          "secondary": "rgba(0, 0, 0, 0.54)",
+          "primary": "#4E4E4E",
+          "secondary": "#4E4E4E",
         },
         "tonalOffset": 0.2,
         "type": "light",
@@ -291,7 +291,7 @@ font-display: block;",
       "typography": Object {
         "body": Object {
           "fontFamily": "\\"Raleway-Medium\\"",
-          "fontSize": "0.875rem",
+          "fontSize": "0.9375rem",
           "fontWeight": 500,
           "letterSpacing": "0.01071em",
           "lineHeight": 1.43,
@@ -305,7 +305,7 @@ font-display: block;",
         },
         "body2": Object {
           "fontFamily": "\\"Raleway-Medium\\"",
-          "fontSize": "0.875rem",
+          "fontSize": "0.9375rem",
           "fontWeight": 500,
           "letterSpacing": "0.01071em",
           "lineHeight": 1.43,
@@ -333,31 +333,31 @@ font-display: block;",
         "fontWeightRegular": 400,
         "h1": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "2.5rem",
+          "fontSize": "1.375rem",
           "fontWeight": 800,
           "letterSpacing": "-0.01562em",
-          "lineHeight": 1,
+          "lineHeight": 1.45,
         },
         "h2": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "2rem",
+          "fontSize": "1.125rem",
           "fontWeight": 800,
           "letterSpacing": "-0.00833em",
-          "lineHeight": 1,
+          "lineHeight": 1.27,
         },
         "h3": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "1.9rem",
+          "fontSize": "1.05rem",
           "fontWeight": 800,
           "letterSpacing": "0em",
-          "lineHeight": 1,
+          "lineHeight": 1.2,
         },
         "h4": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "1.25rem",
+          "fontSize": "1rem",
           "fontWeight": 800,
           "letterSpacing": "0.00735em",
-          "lineHeight": 1,
+          "lineHeight": 1.1,
         },
         "h5": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
@@ -548,7 +548,7 @@ font-display: block;",
         ],
         "localFonts": Object {
           "fonts/Raleway/Raleway-ExtraBold": [Function],
-          "fonts/Raleway/Raleway-Regular": [Function],
+          "fonts/Raleway/Raleway-Medium": [Function],
         },
         "mixins": Object {
           "gutters": [Function],
@@ -640,8 +640,8 @@ font-display: block;",
           "text": Object {
             "disabled": "rgba(0, 0, 0, 0.38)",
             "hint": "rgba(0, 0, 0, 0.38)",
-            "primary": "rgba(0, 0, 0, 0.87)",
-            "secondary": "rgba(0, 0, 0, 0.54)",
+            "primary": "#4E4E4E",
+            "secondary": "#4E4E4E",
           },
           "tonalOffset": 0.2,
           "type": "light",
@@ -709,7 +709,7 @@ font-display: block;",
         "typography": Object {
           "body": Object {
             "fontFamily": "\\"Raleway-Medium\\"",
-            "fontSize": "0.875rem",
+            "fontSize": "0.9375rem",
             "fontWeight": 500,
             "letterSpacing": "0.01071em",
             "lineHeight": 1.43,
@@ -723,7 +723,7 @@ font-display: block;",
           },
           "body2": Object {
             "fontFamily": "\\"Raleway-Medium\\"",
-            "fontSize": "0.875rem",
+            "fontSize": "0.9375rem",
             "fontWeight": 500,
             "letterSpacing": "0.01071em",
             "lineHeight": 1.43,
@@ -751,31 +751,31 @@ font-display: block;",
           "fontWeightRegular": 400,
           "h1": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "2.5rem",
+            "fontSize": "1.375rem",
             "fontWeight": 800,
             "letterSpacing": "-0.01562em",
-            "lineHeight": 1,
+            "lineHeight": 1.45,
           },
           "h2": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "2rem",
+            "fontSize": "1.125rem",
             "fontWeight": 800,
             "letterSpacing": "-0.00833em",
-            "lineHeight": 1,
+            "lineHeight": 1.27,
           },
           "h3": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "1.9rem",
+            "fontSize": "1.05rem",
             "fontWeight": 800,
             "letterSpacing": "0em",
-            "lineHeight": 1,
+            "lineHeight": 1.2,
           },
           "h4": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "1.25rem",
+            "fontSize": "1rem",
             "fontWeight": 800,
             "letterSpacing": "0.00735em",
-            "lineHeight": 1,
+            "lineHeight": 1.1,
           },
           "h5": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
@@ -852,54 +852,18 @@ font-display: block;",
           >
             <img
               alt="Inrupt PodBrowser"
-              className="makeStyles-image-1"
+              className="makeStyles-header-banner__logo-image-11"
               height={40}
               src="/inrupt_logo-2020.svg"
             />
           </a>
         </Link>
         <div
-          className="makeStyles-header-banner__main-nav-11"
-        >
-          <MainNav
-            className="makeStyles-app-layout__header-nav-26"
-          >
-            <nav
-              className="makeStyles-main-nav-1570 makeStyles-app-layout__header-nav-26"
-            >
-              <ul
-                className="makeStyles-main-nav__list-1571"
-              >
-                <li
-                  className="makeStyles-main-nav__item-1572"
-                >
-                  <Link
-                    href="/"
-                  >
-                    <a
-                      className="makeStyles-main-nav__link-1573"
-                      href="/"
-                      onClick={[Function]}
-                      onMouseEnter={[Function]}
-                    >
-                      <i
-                        className="makeStyles-icon-home-1535 makeStyles-main-nav__icon-1575"
-                      />
-                      <span
-                        className="makeStyles-main-nav__label-1576"
-                      >
-                        Home
-                      </span>
-                    </a>
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-          </MainNav>
-        </div>
+          className="makeStyles-header-banner__main-nav-12"
+        />
         <UserMenu>
           <div
-            className="makeStyles-header-banner__aside-menu-1604 makeStyles-header-banner__aside-menu--popup-1605"
+            className="makeStyles-header-banner__aside-menu-1582 makeStyles-header-banner__aside-menu--popup-1583"
             onMouseEnter={[Function]}
             onMouseLeave={[Function]}
           >
@@ -907,41 +871,39 @@ font-display: block;",
               aria-controls="UserMenu"
               aria-expanded={true}
               aria-haspopup="true"
-              className="makeStyles-header-banner__aside-menu-trigger-1606"
+              className="makeStyles-header-banner__aside-menu-trigger-1584"
               onClick={[Function]}
               type="button"
             >
               <i
                 aria-label="User Menu"
-                className="makeStyles-header-banner__aside-menu-trigger-profile-1608"
-                style={
-                  Object {
-                    "backgroundImage": "url(./emptyProfile.svg)",
-                  }
-                }
+                className="makeStyles-icon-user-1565 makeStyles-header-banner__aside-menu-trigger-icon-1585"
               />
             </button>
             <div
               aria-hidden={true}
-              className="makeStyles-header-banner__aside-menu-popup-1609"
+              className="makeStyles-header-banner__aside-menu-popup-1587"
               id="UserMenu"
             >
               <ul
-                className="makeStyles-header-banner__user-menu-1610"
+                className="makeStyles-header-banner__user-menu-1588"
               >
                 <li
-                  className="makeStyles-header-banner__user-menu-item-1611"
+                  className="makeStyles-header-banner__user-menu-item-1589"
                 >
                   <LogOut
-                    className="makeStyles-header-banner__user-menu-item-trigger-1614"
+                    className="makeStyles-header-banner__user-menu-item-trigger-1592"
                   >
                     <button
-                      className="makeStyles-header-banner__user-menu-item-trigger-1614"
+                      className="makeStyles-header-banner__user-menu-item-trigger-1592"
                       onClick={[Function]}
                       type="button"
                     >
+                      <i
+                        className="makeStyles-icon-log-out-1543 makeStyles-header-banner__user-menu-item-icon-1591"
+                      />
                       <span
-                        className="prism-header-banner__user-menu-item-label"
+                        className="makeStyles-header-banner__user-menu-item-label-1593"
                       >
                         Log out
                       </span>
@@ -1088,7 +1050,7 @@ font-display: block;",
       ],
       "localFonts": Object {
         "fonts/Raleway/Raleway-ExtraBold": [Function],
-        "fonts/Raleway/Raleway-Regular": [Function],
+        "fonts/Raleway/Raleway-Medium": [Function],
       },
       "mixins": Object {
         "gutters": [Function],
@@ -1180,8 +1142,8 @@ font-display: block;",
         "text": Object {
           "disabled": "rgba(0, 0, 0, 0.38)",
           "hint": "rgba(0, 0, 0, 0.38)",
-          "primary": "rgba(0, 0, 0, 0.87)",
-          "secondary": "rgba(0, 0, 0, 0.54)",
+          "primary": "#4E4E4E",
+          "secondary": "#4E4E4E",
         },
         "tonalOffset": 0.2,
         "type": "light",
@@ -1249,7 +1211,7 @@ font-display: block;",
       "typography": Object {
         "body": Object {
           "fontFamily": "\\"Raleway-Medium\\"",
-          "fontSize": "0.875rem",
+          "fontSize": "0.9375rem",
           "fontWeight": 500,
           "letterSpacing": "0.01071em",
           "lineHeight": 1.43,
@@ -1263,7 +1225,7 @@ font-display: block;",
         },
         "body2": Object {
           "fontFamily": "\\"Raleway-Medium\\"",
-          "fontSize": "0.875rem",
+          "fontSize": "0.9375rem",
           "fontWeight": 500,
           "letterSpacing": "0.01071em",
           "lineHeight": 1.43,
@@ -1291,31 +1253,31 @@ font-display: block;",
         "fontWeightRegular": 400,
         "h1": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "2.5rem",
+          "fontSize": "1.375rem",
           "fontWeight": 800,
           "letterSpacing": "-0.01562em",
-          "lineHeight": 1,
+          "lineHeight": 1.45,
         },
         "h2": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "2rem",
+          "fontSize": "1.125rem",
           "fontWeight": 800,
           "letterSpacing": "-0.00833em",
-          "lineHeight": 1,
+          "lineHeight": 1.27,
         },
         "h3": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "1.9rem",
+          "fontSize": "1.05rem",
           "fontWeight": 800,
           "letterSpacing": "0em",
-          "lineHeight": 1,
+          "lineHeight": 1.2,
         },
         "h4": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
-          "fontSize": "1.25rem",
+          "fontSize": "1rem",
           "fontWeight": 800,
           "letterSpacing": "0.00735em",
-          "lineHeight": 1,
+          "lineHeight": 1.1,
         },
         "h5": Object {
           "fontFamily": "\\"Raleway-ExtraBold\\"",
@@ -1506,7 +1468,7 @@ font-display: block;",
         ],
         "localFonts": Object {
           "fonts/Raleway/Raleway-ExtraBold": [Function],
-          "fonts/Raleway/Raleway-Regular": [Function],
+          "fonts/Raleway/Raleway-Medium": [Function],
         },
         "mixins": Object {
           "gutters": [Function],
@@ -1598,8 +1560,8 @@ font-display: block;",
           "text": Object {
             "disabled": "rgba(0, 0, 0, 0.38)",
             "hint": "rgba(0, 0, 0, 0.38)",
-            "primary": "rgba(0, 0, 0, 0.87)",
-            "secondary": "rgba(0, 0, 0, 0.54)",
+            "primary": "#4E4E4E",
+            "secondary": "#4E4E4E",
           },
           "tonalOffset": 0.2,
           "type": "light",
@@ -1667,7 +1629,7 @@ font-display: block;",
         "typography": Object {
           "body": Object {
             "fontFamily": "\\"Raleway-Medium\\"",
-            "fontSize": "0.875rem",
+            "fontSize": "0.9375rem",
             "fontWeight": 500,
             "letterSpacing": "0.01071em",
             "lineHeight": 1.43,
@@ -1681,7 +1643,7 @@ font-display: block;",
           },
           "body2": Object {
             "fontFamily": "\\"Raleway-Medium\\"",
-            "fontSize": "0.875rem",
+            "fontSize": "0.9375rem",
             "fontWeight": 500,
             "letterSpacing": "0.01071em",
             "lineHeight": 1.43,
@@ -1709,31 +1671,31 @@ font-display: block;",
           "fontWeightRegular": 400,
           "h1": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "2.5rem",
+            "fontSize": "1.375rem",
             "fontWeight": 800,
             "letterSpacing": "-0.01562em",
-            "lineHeight": 1,
+            "lineHeight": 1.45,
           },
           "h2": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "2rem",
+            "fontSize": "1.125rem",
             "fontWeight": 800,
             "letterSpacing": "-0.00833em",
-            "lineHeight": 1,
+            "lineHeight": 1.27,
           },
           "h3": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "1.9rem",
+            "fontSize": "1.05rem",
             "fontWeight": 800,
             "letterSpacing": "0em",
-            "lineHeight": 1,
+            "lineHeight": 1.2,
           },
           "h4": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",
-            "fontSize": "1.25rem",
+            "fontSize": "1rem",
             "fontWeight": 800,
             "letterSpacing": "0.00735em",
-            "lineHeight": 1,
+            "lineHeight": 1.1,
           },
           "h5": Object {
             "fontFamily": "\\"Raleway-ExtraBold\\"",

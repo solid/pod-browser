@@ -1,15 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Index page Renders a logout button 1`] = `
-<WithStyles(ForwardRef(Container))>
-  <PodLocationProvider
-    currentUri="https://mypod.myhost.com"
-  >
-    <DetailsMenuProvider>
-      <Container
-        iri="https://mypod.myhost.com"
-      />
-    </DetailsMenuProvider>
-  </PodLocationProvider>
-</WithStyles(ForwardRef(Container))>
+<PodLocationProvider
+  currentUri="https://mypod.myhost.com"
+>
+  <DetailsMenuProvider>
+    <Container
+      iri="https://mypod.myhost.com"
+    />
+  </DetailsMenuProvider>
+</PodLocationProvider>
 `;

@@ -20,6 +20,7 @@
  */
 
 import * as routerFns from "next/router";
+import { useRouter } from "next/router";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 import { useFetchResourceDetails } from "../../src/hooks/solidClient";
 import ContainerTableRow, {
@@ -33,6 +34,12 @@ jest.mock("next/router");
 jest.mock("../../src/hooks/solidClient");
 
 describe("ContainerTableRow", () => {
+  beforeEach(() => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {},
+    }));
+  });
+
   test("it renders a table row", () => {
     const resource = {
       iri: "https://example.com/example.ttl",
@@ -40,9 +47,10 @@ describe("ContainerTableRow", () => {
       types: [],
     };
 
-    jest
-      .spyOn(routerFns, "useRouter")
-      .mockReturnValue({ asPath: "/pathname/" } as routerFns.NextRouter);
+    jest.spyOn(routerFns, "useRouter").mockReturnValue({
+      asPath: "/pathname/",
+      query: {},
+    } as routerFns.NextRouter);
 
     (useFetchResourceDetails as jest.Mock).mockReturnValue({ data: undefined });
 
