@@ -22,13 +22,13 @@
 /* eslint-disable camelcase */
 import {
   fetchLitDataset,
-  getDatetimeOne,
-  getDecimalOne,
-  getIntegerOne,
+  getDatetime,
+  getDecimal,
+  getInteger,
   getIriAll,
-  getIriOne,
-  getStringUnlocalizedOne,
-  getThingOne,
+  getIri,
+  getStringNoLocale,
+  getThing,
   IriString,
   LitDataset,
   Thing,
@@ -182,15 +182,25 @@ export interface Profile {
   pods?: string[] | null;
 }
 
-export async function fetchProfile(webId: string): Promise<Profile> {
-  const profileResource = await fetchLitDataset(webId);
-  const profile = getThingOne(profileResource, webId);
-  const nickname = getStringUnlocalizedOne(profile, namespace.nickname);
-  const name = getStringUnlocalizedOne(profile, namespace.name);
-  const avatar = getIriOne(profile, namespace.hasPhoto);
+export async function fetchProfile(
+  webId: string,
+  fetch: typeof window.fetch
+): Promise<Profile> {
+  const profileResource = await fetchLitDataset(webId, { fetch });
+
+  const profile = getThing(profileResource, webId);
+  const nickname = getStringNoLocale(profile, namespace.nickname);
+  const name = getStringNoLocale(profile, namespace.name);
+  const avatar = getIri(profile, namespace.hasPhoto);
   const pods = getIriAll(profile, space.storage);
 
-  return { webId, nickname, name, avatar, pods };
+  return {
+    webId,
+    nickname,
+    name,
+    avatar,
+    pods,
+  };
 }
 
 export interface NormalizedPermission {
@@ -204,6 +214,7 @@ interface ISavePermissions {
   iri: string;
   webId: string;
   access: unstable_Access;
+  fetch: typeof window.fetch;
 }
 
 export interface IResponse {
@@ -217,12 +228,8 @@ interface IResponder {
 }
 
 export function createResponder(): IResponder {
-  const respond = (response: unknown): IResponse => {
-    return { response };
-  };
-  const error = (message: string): IResponse => {
-    return { error: message };
-  };
+  const respond = (response: unknown): IResponse => ({ response });
+  const error = (message: string): IResponse => ({ error: message });
 
   return { respond, error };
 }
@@ -231,9 +238,10 @@ export async function savePermissions({
   iri,
   webId,
   access,
+  fetch,
 }: ISavePermissions): Promise<IResponse> {
   const { respond, error } = createResponder();
-  const dataset = await unstable_fetchLitDatasetWithAcl(iri);
+  const dataset = await unstable_fetchLitDatasetWithAcl(iri, { fetch });
   if (!dataset) return error("dataset is empty");
 
   if (!unstable_hasResourceAcl(dataset)) {
@@ -250,7 +258,7 @@ export async function savePermissions({
   const updatedAcl = unstable_setAgentResourceAccess(aclDataset, webId, access);
   if (!updatedAcl) return error("updatedAcl is empty");
 
-  const response = await unstable_saveAclFor(dataset, updatedAcl);
+  const response = await unstable_saveAclFor(dataset, updatedAcl, { fetch });
   if (!response) return error("response is empty");
 
   return respond(response);
@@ -260,9 +268,10 @@ export async function saveDefaultPermissions({
   iri,
   webId,
   access,
+  fetch,
 }: ISavePermissions): Promise<IResponse> {
   const { respond, error } = createResponder();
-  const dataset = await unstable_fetchLitDatasetWithAcl(iri);
+  const dataset = await unstable_fetchLitDatasetWithAcl(iri, { fetch });
   if (!dataset) return error("dataset is empty");
 
   if (!unstable_hasResourceAcl(dataset)) {
@@ -280,7 +289,7 @@ export async function saveDefaultPermissions({
 
   if (!updatedAcl) return error("updatedAcl is empty");
 
-  const response = await unstable_saveAclFor(dataset, updatedAcl);
+  const response = await unstable_saveAclFor(dataset, updatedAcl, { fetch });
   if (!response) return error("response is empty");
 
   return respond(response);
@@ -288,6 +297,7 @@ export async function saveDefaultPermissions({
 
 export async function normalizePermissions(
   permissions: unstable_AgentAccess,
+  fetch: typeof window.fetch,
   fetchProfileFn = fetchProfile
 ): Promise<NormalizedPermission[]> {
   return Promise.all(
@@ -296,7 +306,7 @@ export async function normalizePermissions(
       .map(
         async (webId: string): Promise<NormalizedPermission> => {
           const acl = permissions[webId];
-          const profile = await fetchProfileFn(webId);
+          const profile = await fetchProfileFn(webId, fetch);
 
           return {
             acl,
@@ -318,9 +328,9 @@ export function normalizeDataset(
     "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
   );
 
-  const mtime = getDecimalOne(dataset, namespace.mtime);
-  const modified = getDatetimeOne(dataset, namespace.modified);
-  const size = getIntegerOne(dataset, namespace.size);
+  const mtime = getDecimal(dataset, namespace.mtime);
+  const modified = getDatetime(dataset, namespace.modified);
+  const size = getInteger(dataset, namespace.size);
   const contains = getIriAll(dataset, namespace.contains);
   const types = displayTypes(rawType);
 
@@ -353,12 +363,13 @@ export interface IResourceDetails extends NormalizedResource {
 export const PERMISSIONS: string[] = ["read", "write", "append", "control"];
 
 export function parseStringAcl(acl: string): unstable_Access {
-  return PERMISSIONS.reduce((acc, key) => {
-    return {
+  return PERMISSIONS.reduce(
+    (acc, key) => ({
       ...acc,
       [key]: acl.includes(key),
-    };
-  }, {} as unstable_Access);
+    }),
+    {} as unstable_Access
+  );
 }
 
 export function permissionsFromWacAllowHeaders(
@@ -390,25 +401,28 @@ export interface NormalizedFile extends NormalizedResource {
   file: Blob;
 }
 
-export async function fetchFileWithAcl(iri: string): Promise<NormalizedFile> {
-  const file = await unstable_fetchFile(iri);
+export async function fetchFileWithAcl(
+  iri: string,
+  fetch: typeof window.fetch
+): Promise<NormalizedFile> {
+  const file = await unstable_fetchFile(iri, { fetch });
   const {
-    internal_resourceInfo: { unstable_permissions, contentType: type },
+    internal_resourceInfo: { permissions: filePermissions, contentType: type },
   } = file;
 
-  const permissions = unstable_permissions
+  const permissions = filePermissions
     ? [
         {
           webId: "user",
-          alias: displayPermissions(unstable_permissions.user),
+          alias: displayPermissions(filePermissions.user),
           profile: { webId: "user" },
-          acl: unstable_permissions?.user as unstable_Access,
+          acl: filePermissions?.user as unstable_Access,
         } as NormalizedPermission,
         {
           webId: "public",
-          alias: displayPermissions(unstable_permissions.public),
+          alias: displayPermissions(filePermissions.public),
           profile: { webId: "public" },
-          acl: unstable_permissions?.public as unstable_Access,
+          acl: filePermissions?.public as unstable_Access,
         } as NormalizedPermission,
       ]
     : [];
@@ -424,11 +438,14 @@ export async function fetchFileWithAcl(iri: string): Promise<NormalizedFile> {
 
 export async function fetchResourceWithAcl(
   iri: string,
+  fetch: typeof window.fetch,
   normalizePermissionsFn = normalizePermissions
 ): Promise<NormalizedResource> {
-  const resource = await unstable_fetchLitDatasetWithAcl(iri);
+  const resource = await unstable_fetchLitDatasetWithAcl(iri, { fetch });
   const acl = await unstable_getAgentAccessAll(resource);
-  const permissions = acl ? await normalizePermissionsFn(acl) : undefined;
+  const permissions = acl
+    ? await normalizePermissionsFn(acl, fetch)
+    : undefined;
   const dataset = resource as LitDataset;
   const thing = dataset as Thing;
 
@@ -440,9 +457,10 @@ export async function fetchResourceWithAcl(
 
 export async function fetchResource(
   iri: string,
-  normalizeDatasetFn = normalizeDataset
+  normalizeDatasetFn = normalizeDataset,
+  fetch: typeof window.fetch
 ): Promise<NormalizedResource> {
-  const resource = await fetchLitDataset(iri);
+  const resource = await fetchLitDataset(iri, { fetch });
   const dataset = resource as LitDataset;
   const thing = dataset as Thing;
 

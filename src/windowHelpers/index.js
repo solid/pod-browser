@@ -19,32 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement, SyntheticEvent } from "react";
-import Router from "next/router";
-
-import auth from "solid-auth-client";
-
-export async function onLogOutClick(
-  e: SyntheticEvent<EventTarget>
-): Promise<void> {
-  e.preventDefault();
-  await auth.logout();
-  await Router.push("/login");
+// A helper function to generate a full redirect url to a given path, using the current
+// domain and protocol.
+export function generateRedirectUrl(path) {
+  const currentOrigin = window.location.origin;
+  return `${currentOrigin}/${path}`;
 }
 
-interface Props {
-  children: ReactElement;
-  className?: string;
+export function hardRedirect(path) {
+  window.location.href = path;
 }
 
-export default function LogOut({ children, className }: Props): ReactElement {
-  return (
-    <button onClick={onLogOutClick} className={className} type="button">
-      {children}
-    </button>
-  );
+// FIXME Temporary fix for an auth bug
+export function clearLocalstorage() {
+  window.localStorage.clear();
 }
-
-LogOut.defaultProps = {
-  className: "",
-};

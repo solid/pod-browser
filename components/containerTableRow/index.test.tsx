@@ -120,7 +120,7 @@ describe("handleClick", () => {
 
     expect(replace).toHaveBeenCalledWith(
       {
-        pathname: `/resource/[iri]`,
+        pathname: "/resource/[iri]",
         query: { action: "details", resourceIri },
       },
       {

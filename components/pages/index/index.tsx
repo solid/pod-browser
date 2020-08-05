@@ -19,11 +19,11 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useContext } from "react";
+import { useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 
 import { useFetchPodIrisFromWebId } from "../../../src/hooks/solidClient";
-import UserContext from "../../../src/contexts/userContext";
+import SessionContext from "../../../src/contexts/sessionContext";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 
 import { resourceHref } from "../../resourceLink";
@@ -32,16 +32,18 @@ export default function Home(): null {
   useRedirectIfLoggedOut();
 
   const router = useRouter();
-  const { session } = useContext(UserContext);
-  const { webId = "" } = session || {};
+  const { session } = useContext(SessionContext);
+  const { webId = "" } = session.info;
   const { data: podIris = [] } = useFetchPodIrisFromWebId(webId);
   const [podIri] = podIris;
 
-  if (podIri) {
-    router.replace("/resource/[iri]", resourceHref(podIri)).catch((e) => {
-      throw e;
-    });
-  }
+  useEffect(() => {
+    if (podIri) {
+      router.replace("/resource/[iri]", resourceHref(podIri)).catch((e) => {
+        throw e;
+      });
+    }
+  }, [podIri, router]);
 
   return null;
 }

@@ -21,8 +21,8 @@
 
 import { useEffect, useContext } from "react";
 import Router from "next/router";
-
-import UserContext, { ISession } from "../../contexts/userContext";
+import { Session } from "@inrupt/solid-client-authn-browser";
+import SessionContext from "../../contexts/sessionContext";
 
 // TODO figure out typescript enums
 export const SESSION_STATES = {
@@ -31,7 +31,7 @@ export const SESSION_STATES = {
 };
 
 export async function redirectBasedOnSessionState(
-  session: ISession | undefined,
+  session: Session,
   isLoadingSession: boolean,
   redirectIfSessionState: string,
   location: string
@@ -40,18 +40,24 @@ export async function redirectBasedOnSessionState(
     return;
   }
 
-  if (session && redirectIfSessionState === SESSION_STATES.LOGGED_IN) {
+  if (
+    session.info.isLoggedIn &&
+    redirectIfSessionState === SESSION_STATES.LOGGED_IN
+  ) {
     await Router.push(location);
   }
 
-  if (!session && redirectIfSessionState === SESSION_STATES.LOGGED_OUT) {
+  if (
+    !session.info.isLoggedIn &&
+    redirectIfSessionState === SESSION_STATES.LOGGED_OUT
+  ) {
     await Router.push(location);
   }
 }
 
 /* eslint @typescript-eslint/no-floating-promises: 0 */
 export function useRedirectIfLoggedOut(location = "/login"): void {
-  const { session, isLoadingSession } = useContext(UserContext);
+  const { session, isLoadingSession } = useContext(SessionContext);
 
   useEffect(() => {
     redirectBasedOnSessionState(
@@ -64,7 +70,7 @@ export function useRedirectIfLoggedOut(location = "/login"): void {
 }
 
 export function useRedirectIfLoggedIn(location = "/"): void {
-  const { session, isLoadingSession } = useContext(UserContext);
+  const { session, isLoadingSession } = useContext(SessionContext);
 
   useEffect(() => {
     redirectBasedOnSessionState(

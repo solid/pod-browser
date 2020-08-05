@@ -23,7 +23,7 @@
 
 import {
   fetchLitDataset,
-  getThingOne,
+  getThing,
   getIriAll,
   unstable_fetchResourceInfoWithAcl,
 } from "@inrupt/solid-client";
@@ -174,13 +174,13 @@ describe("PodIrisFromWebId", () => {
     const iris = ["https://mypod.myhost.com/profile"];
 
     (fetchLitDataset as jest.Mock).mockResolvedValue({});
-    (getThingOne as jest.Mock).mockImplementationOnce(() => {});
+    (getThing as jest.Mock).mockImplementationOnce(() => {});
     (getIriAll as jest.Mock).mockImplementationOnce(() => iris);
 
     expect(await fetchPodIrisFromWebId(iri)).toEqual(iris);
 
     expect(fetchLitDataset).toHaveBeenCalled();
-    expect(getThingOne).toHaveBeenCalled();
+    expect(getThing).toHaveBeenCalled();
     expect(getIriAll).toHaveBeenCalled();
   });
 });

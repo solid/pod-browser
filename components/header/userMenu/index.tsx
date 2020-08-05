@@ -25,7 +25,7 @@ import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import LogOutButton from "../../logout";
 import styles from "./styles";
-import UserContext from "../../../src/contexts/userContext";
+import SessionContext from "../../../src/contexts/sessionContext";
 import useAuthenticatedProfile from "../../../src/hooks/useAuthenticatedProfile";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
@@ -35,8 +35,7 @@ const useStyles = makeStyles<PrismTheme>((theme) =>
 export default function UserMenu(): ReactElement {
   const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
   const bem = useBem(useStyles());
-  const { session } = useContext(UserContext);
-  const profile = useAuthenticatedProfile(session);
+  const profile = useAuthenticatedProfile();
   const avatar = profile?.avatar || "./emptyProfile.svg";
 
   const toggleMenu = () => setUserMenuOpen(!userMenuOpen);

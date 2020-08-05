@@ -24,8 +24,8 @@
 
 import {
   ReactElement,
-  useContext,
   useState,
+  useContext,
   Dispatch,
   SetStateAction,
 } from "react";
@@ -57,7 +57,7 @@ import {
   unstable_hasAccessibleAcl,
   unstable_hasResourceAcl,
 } from "@inrupt/solid-client";
-import UserContext, { ISession } from "../../src/contexts/userContext";
+import SessionContext from "../../src/contexts/sessionContext";
 import { resourceContextRedirect } from "../resourceLink";
 import {
   ACL,
@@ -89,10 +89,11 @@ export function displayName({ nickname, name, webId }: Profile): string {
 export async function handleAddAgentClick(
   agentId: string,
   addedAgents: Profile[],
-  setAddedAgents: Dispatch<SetStateAction<Profile[]>>
+  setAddedAgents: Dispatch<SetStateAction<Profile[]>>,
+  fetch: typeof window.fetch
 ): Promise<void> {
   try {
-    const profile = await fetchProfile(agentId);
+    const profile = await fetchProfile(agentId, fetch);
     const exists = addedAgents.some(({ webId }) => webId === profile.webId);
     if (!exists) setAddedAgents([...addedAgents, profile]);
   } catch ({ message }) {
@@ -108,6 +109,7 @@ interface ISaveThirdPartyPermissionHandler {
   setThirdPartyPermissions: Dispatch<NormalizedPermission[]>;
   thirdPartyPermissions: NormalizedPermission[];
   webId: string;
+  fetch: typeof window.fetch;
 }
 
 export function saveThirdPartyPermissionHandler({
@@ -118,6 +120,7 @@ export function saveThirdPartyPermissionHandler({
   setThirdPartyPermissions,
   thirdPartyPermissions,
   webId,
+  fetch,
 }: ISaveThirdPartyPermissionHandler): (
   acl: unstable_Access
 ) => Promise<IResponse> {
@@ -136,7 +139,13 @@ export function saveThirdPartyPermissionHandler({
       },
     ]);
 
-    const { error, response } = await savePermissions({ iri, webId, access });
+    const { error, response } = await savePermissions({
+      iri,
+      webId,
+      access,
+      fetch,
+    });
+
     return { error, response };
   };
 }
@@ -199,6 +208,8 @@ export function AddedAgents({
   setThirdPartyPermissions,
   thirdPartyPermissions,
 }: IAddedAgents): ReactElement | null {
+  const { session } = useContext(SessionContext);
+
   if (!addedAgents || addedAgents.length === 0) return null;
 
   return (
@@ -215,6 +226,7 @@ export function AddedAgents({
           setThirdPartyPermissions,
           webId,
           profile: agent,
+          fetch: session.fetch,
         });
 
         return (
@@ -288,6 +300,8 @@ export function Permission(props: IPermission): ReactElement | null {
     setThirdPartyPermissions,
   } = props;
 
+  const { session } = useContext(SessionContext);
+
   if (!permission) return null;
 
   const { webId, profile } = permission;
@@ -301,6 +315,7 @@ export function Permission(props: IPermission): ReactElement | null {
     webId,
     thirdPartyPermissions,
     setThirdPartyPermissions,
+    fetch: session.fetch,
   });
 
   return (
@@ -444,8 +459,8 @@ export default function ResourceSharing({
   permissions,
   dataset,
 }: Partial<IResourceDetails>): ReactElement {
-  const { session } = useContext(UserContext);
-  const { webId } = session as ISession;
+  const { session } = useContext(SessionContext);
+  const { webId = "" } = session.info;
   const [agentId, setAgentId] = useState("");
   const [addedAgents, setAddedAgents] = useState<Profile[]>([]);
   const userPermissions = getUserPermissions(webId, permissions);
@@ -495,7 +510,12 @@ export default function ResourceSharing({
         permission={defaultPermission as NormalizedPermission}
         classes={classes}
         onSave={async (access: unstable_Access): Promise<IResponse> => {
-          return saveDefaultPermissions({ iri: iriString, webId, access });
+          return saveDefaultPermissions({
+            iri: iriString,
+            webId,
+            access,
+            fetch: session.fetch,
+          });
         }}
       />
 
@@ -546,7 +566,12 @@ export default function ResourceSharing({
         <Button
           variant="contained"
           onClick={async () => {
-            await handleAddAgentClick(agentId, addedAgents, setAddedAgents);
+            await handleAddAgentClick(
+              agentId,
+              addedAgents,
+              setAddedAgents,
+              session.fetch
+            );
           }}
         >
           Add

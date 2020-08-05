@@ -370,7 +370,12 @@ describe("normalizePermissions", () => {
 
   test("it filters out invalid webIds", async () => {
     const acl = {
-      acl1: { read: true, write: false, control: false, append: false },
+      acl1: {
+        read: true,
+        write: false,
+        control: false,
+        append: false,
+      },
       "mailto:example@example.com": {
         read: true,
         write: true,
@@ -408,7 +413,12 @@ describe("getIriPath", () => {
 describe("fetchResourceWithAcl", () => {
   test("it returns a normalized dataset", async () => {
     const perms = {
-      owner: { read: true, write: true, append: true, control: true },
+      owner: {
+        read: true,
+        write: true,
+        append: true,
+        control: true,
+      },
       collaborator: {
         read: true,
         write: false,
@@ -421,15 +431,11 @@ describe("fetchResourceWithAcl", () => {
 
     jest
       .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
-      .mockImplementationOnce(async () => {
-        return Promise.resolve(createResource());
-      });
+      .mockImplementationOnce(async () => Promise.resolve(createResource()));
 
     jest
       .spyOn(solidClientFns, "unstable_getAgentAccessAll")
-      .mockImplementationOnce(async () => {
-        return Promise.resolve(perms);
-      });
+      .mockImplementationOnce(async () => Promise.resolve(perms));
 
     const normalizePermissionsFn = jest.fn().mockResolvedValue([
       {
@@ -480,15 +486,11 @@ describe("fetchResourceWithAcl", () => {
   test("it returns no permissions when acl is not returned", async () => {
     jest
       .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
-      .mockImplementationOnce(async () => {
-        return Promise.resolve(createResource());
-      });
+      .mockImplementationOnce(async () => Promise.resolve(createResource()));
 
     jest
       .spyOn(solidClientFns, "unstable_getAgentAccessAll")
-      .mockImplementationOnce(async () => {
-        return Promise.resolve(undefined);
-      });
+      .mockImplementationOnce(async () => Promise.resolve(undefined));
 
     const { permissions, acl } = await fetchResourceWithAcl(
       "https://user.dev.inrupt.net/public/"
@@ -553,7 +555,12 @@ describe("getUserPermissions", () => {
       {
         webId: "test",
         alias: ACL.READ.alias,
-        acl: { read: true, write: false, control: false, append: false },
+        acl: {
+          read: true,
+          write: false,
+          control: false,
+          append: false,
+        },
         profile: { webId: "test" },
       },
     ];
@@ -773,15 +780,11 @@ describe("fetchResource", () => {
 
     jest
       .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
-      .mockImplementationOnce(async () => {
-        return Promise.resolve(createResource());
-      });
+      .mockImplementationOnce(async () => Promise.resolve(createResource()));
 
     jest
       .spyOn(solidClientFns, "unstable_getAgentAccessAll")
-      .mockImplementationOnce(async () => {
-        return Promise.resolve(undefined);
-      });
+      .mockImplementationOnce(async () => Promise.resolve(undefined));
 
     const { permissions, acl } = await fetchResourceWithAcl(
       "https://user.dev.inrupt.net/public/"
@@ -801,18 +804,18 @@ describe("fetchProfile", () => {
       .spyOn(solidClientFns, "fetchLitDataset")
       .mockResolvedValue(profileDataset);
 
-    jest.spyOn(solidClientFns, "getThingOne").mockReturnValue(profileDataset);
+    jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileDataset);
 
     jest
-      .spyOn(solidClientFns, "getStringUnlocalizedOne")
+      .spyOn(solidClientFns, "getStringNoLocale")
       .mockImplementationOnce(async () => Promise.resolve());
 
     jest
-      .spyOn(solidClientFns, "getStringUnlocalizedOne")
+      .spyOn(solidClientFns, "getStringNoLocale")
       .mockImplementationOnce(async () => Promise.resolve());
 
     jest
-      .spyOn(solidClientFns, "getIriOne")
+      .spyOn(solidClientFns, "getIri")
       .mockImplementationOnce(async () => Promise.resolve());
 
     jest
@@ -822,15 +825,15 @@ describe("fetchProfile", () => {
     const profile = await fetchProfile(profileWebId);
 
     expect(solidClientFns.fetchLitDataset).toHaveBeenCalledWith(profileWebId);
-    expect(solidClientFns.getStringUnlocalizedOne).toHaveBeenCalledWith(
+    expect(solidClientFns.getStringNoLocale).toHaveBeenCalledWith(
       profileDataset,
       namespace.nickname
     );
-    expect(solidClientFns.getStringUnlocalizedOne).toHaveBeenCalledWith(
+    expect(solidClientFns.getStringNoLocale).toHaveBeenCalledWith(
       profileDataset,
       namespace.name
     );
-    expect(solidClientFns.getIriOne).toHaveBeenCalledWith(
+    expect(solidClientFns.getIri).toHaveBeenCalledWith(
       profileDataset,
       namespace.hasPhoto
     );

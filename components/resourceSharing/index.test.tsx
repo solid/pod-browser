@@ -81,7 +81,7 @@ describe("ResourceSharing", () => {
     jest.spyOn(SolidClientFns, "unstable_getResourceAcl").mockReturnValueOnce();
 
     jest
-      .spyOn(SolidClientFns, "unstable_getAgentDefaultAccessOne")
+      .spyOn(SolidClientFns, "unstable_getAgentDefaultAccess")
       .mockReturnValueOnce({
         read: true,
         write: true,

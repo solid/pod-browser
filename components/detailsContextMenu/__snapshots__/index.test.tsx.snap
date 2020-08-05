@@ -2531,10 +2531,10 @@ font-display: block;",
         name="/iri/"
       >
         <section
-          className="makeStyles-centeredSection-100"
+          className="makeStyles-centeredSection-67"
         >
           <h3
-            className="makeStyles-content-h3-112"
+            className="makeStyles-content-h3-79"
             title="/iri/"
           >
             /iri/
@@ -2560,10 +2560,10 @@ font-display: block;",
           </ForwardRef(Divider)>
         </WithStyles(ForwardRef(Divider))>
         <section
-          className="makeStyles-centeredSection-100"
+          className="makeStyles-centeredSection-67"
         >
           <h5
-            className="makeStyles-content-h5-114"
+            className="makeStyles-content-h5-81"
           >
             Error
           </h5>

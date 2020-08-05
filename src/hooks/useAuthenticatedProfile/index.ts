@@ -19,22 +19,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import SessionContext from "../../contexts/sessionContext";
 import { fetchProfile, Profile } from "../../solidClientHelpers";
-import { ISession } from "../../contexts/userContext";
 
-export default function useAuthenticatedProfile(
-  session: ISession | undefined
-): Profile | null {
+export default function useAuthenticatedProfile(): Profile | null {
   const [profile, setProfile] = useState<Profile | null>(null);
+  const { session } = useContext(SessionContext);
+  const { info } = session;
+
   useEffect(() => {
-    if (!session) return;
-    const { webId } = session;
-    fetchProfile(webId)
+    if (!info.isLoggedIn) return;
+
+    // TODO get rid of all this webId casting everywhere this is gross
+    const { webId = "" } = info;
+
+    fetchProfile(webId, session.fetch)
       .then((loadedProfile) => setProfile(loadedProfile))
       .catch((err) => {
         throw err;
       });
-  }, [session]);
+  }, [info, session.fetch]);
+
   return profile;
 }

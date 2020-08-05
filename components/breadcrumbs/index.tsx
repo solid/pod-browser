@@ -99,7 +99,7 @@ export default function Breadcrumbs(): ReactElement {
     <nav aria-label="Breadcrumbs">
       <ul className={bem("breadcrumb")} ref={breadcrumbsList}>
         {crumbs.slice(0, crumbs.length - 1).map((crumb) => (
-          <Crumb crumb={crumb} />
+          <Crumb crumb={crumb} key={crumb.uri} />
         ))}
       </ul>
     </nav>

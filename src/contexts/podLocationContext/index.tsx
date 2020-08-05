@@ -21,7 +21,7 @@
 
 import { createContext, ReactElement, useContext } from "react";
 import useAuthenticatedProfile from "../../hooks/useAuthenticatedProfile";
-import UserContext from "../userContext";
+import SessionContext from "../sessionContext";
 import usePodRoot from "../../hooks/usePodRoot";
 
 export interface PodLocation {
@@ -39,8 +39,7 @@ interface Props {
 }
 
 function PodLocationProvider({ children, currentUri }: Props): ReactElement {
-  const { session } = useContext(UserContext);
-  const profile = useAuthenticatedProfile(session);
+  const profile = useAuthenticatedProfile();
   const baseUri = usePodRoot(currentUri, profile);
   return (
     <PodLocationContext.Provider value={{ baseUri, currentUri }}>

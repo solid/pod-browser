@@ -19,33 +19,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
-import Router from "next/router";
-import auth from "solid-auth-client";
+import { useContext } from "react";
+import T from "prop-types";
+import { hardRedirect, clearLocalstorage } from "../../src/windowHelpers";
+import SessionProvider from "../../src/contexts/sessionContext";
 
-import LogOutButton from "./index";
+export function onLogOutClick(session) {
+  return async function logout(e) {
+    e.preventDefault();
+    await session.logout();
+    clearLocalstorage();
+    hardRedirect("/login");
+  };
+}
 
-jest.mock("next/router");
-jest.mock("solid-auth-client");
+export default function LogOut({ children, className }) {
+  const { session } = useContext(SessionProvider);
 
-describe("Logout button", () => {
-  test("Renders a logout button", () => {
-    const tree = shallow(<LogOutButton />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
-  });
+  return (
+    <button
+      onClick={onLogOutClick(session)}
+      className={className}
+      type="button"
+    >
+      {children}
+    </button>
+  );
+}
 
-  test("Calls logout and redirects on click", async () => {
-    (auth.logout as jest.Mock).mockResolvedValue(null);
-    (Router.push as jest.Mock).mockResolvedValue(null);
+LogOut.propTypes = {
+  className: T.string,
+  children: T.node.isRequired,
+};
 
-    const tree = shallow(<LogOutButton />);
-    tree.simulate("click", { preventDefault: () => {} });
-
-    // Simulate an await before continuing.
-    await auth.logout();
-
-    expect(Router.push).toHaveBeenCalledWith("/login");
-    expect(auth.logout).toHaveBeenCalled();
-  });
-});
+LogOut.defaultProps = {
+  className: "",
+};

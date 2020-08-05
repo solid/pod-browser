@@ -19,18 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createContext } from "react";
+export default function getIdentityProviders() {
+  return {
+    "inrupt.net": {
+      label: "inrupt.net",
+      iri: "https://inrupt.net/",
+    },
 
-export interface ISession {
-  webId: string;
+    "dev.inrupt.net": {
+      label: "dev.inrupt.net",
+      iri: "https://dev.inrupt.net/",
+    },
+
+    "solid.community": {
+      label: "solid.community",
+      iri: "https://solid.community/",
+    },
+  };
 }
-
-export interface UserContext {
-  session: ISession | undefined; // TODO replace with SAF session context
-  isLoadingSession: boolean;
-}
-
-export default createContext<UserContext>({
-  session: undefined,
-  isLoadingSession: true,
-});

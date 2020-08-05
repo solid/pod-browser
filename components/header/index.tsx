@@ -23,7 +23,7 @@ import React, { ReactElement, useContext } from "react";
 import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 import { header, PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import Link from "next/link";
-import UserContext from "../../src/contexts/userContext";
+import SessionContext from "../../src/contexts/sessionContext";
 import UserMenu from "./userMenu";
 import styles from "./styles";
 
@@ -32,10 +32,10 @@ const useStyles = makeStyles<PrismTheme>((theme) =>
 );
 
 export default function Header(): ReactElement | null {
-  const { session } = useContext(UserContext);
+  const { session } = useContext(SessionContext);
   const bem = useBem(useStyles());
 
-  return session ? (
+  return (
     <header className={bem("header-banner")}>
       <Link href="/">
         <a className={bem("header-banner__logo")}>
@@ -47,8 +47,12 @@ export default function Header(): ReactElement | null {
           />
         </a>
       </Link>
-      <div className={bem("header-banner__main-nav")} />
-      <UserMenu />
+      {session.info.isLoggedIn ? (
+        <>
+          <div className={bem("header-banner__main-nav")} />
+          <UserMenu />
+        </>
+      ) : null}
     </header>
-  ) : null;
+  );
 }

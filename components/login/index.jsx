@@ -19,20 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export type ProviderEntity = {
-  label: string;
-  value: string;
-};
+import React from "react";
 
-export default function getIdentityProviders(): Array<ProviderEntity> {
-  return [
-    {
-      label: "inrupt.net",
-      value: "https://inrupt.net/",
-    },
-    {
-      label: "dev.inrupt.net",
-      value: "https://dev.inrupt.net/",
-    },
-  ];
+import { createStyles, makeStyles } from "@material-ui/styles";
+import { useBem } from "@solid/lit-prism-patterns";
+import ProviderLogin from "./provider";
+import styles from "./styles";
+
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+
+export default function Login() {
+  const bem = useBem(useStyles());
+
+  return (
+    <div className={bem("login-form")}>
+      <ProviderLogin />
+    </div>
+  );
 }

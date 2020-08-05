@@ -64,7 +64,12 @@ describe("Container view", () => {
         {
           webId: "webId",
           alias: "Full Control",
-          acl: { read: true, write: true, append: true, control: true },
+          acl: {
+            read: true,
+            write: true,
+            append: true,
+            control: true,
+          },
         },
       ],
     };
@@ -137,7 +142,12 @@ describe("Contents", () => {
         {
           webId: "webId",
           alias: "Full Control",
-          acl: { read: true, write: true, append: true, control: true },
+          acl: {
+            read: true,
+            write: true,
+            append: true,
+            control: true,
+          },
         },
       ],
     };
@@ -174,7 +184,12 @@ describe("Contents", () => {
           profile: { webId, avatar: "/avatar" },
           webId,
           alias: "Full Control",
-          acl: { read: true, write: true, append: true, control: true },
+          acl: {
+            read: true,
+            write: true,
+            append: true,
+            control: true,
+          },
         },
       ],
       dataset: {},
@@ -200,7 +215,7 @@ describe("Contents", () => {
     jest.spyOn(SolidClientFns, "unstable_getResourceAcl").mockReturnValueOnce();
 
     jest
-      .spyOn(SolidClientFns, "unstable_getAgentDefaultAccessOne")
+      .spyOn(SolidClientFns, "unstable_getAgentDefaultAccess")
       .mockReturnValueOnce({
         read: true,
         write: true,

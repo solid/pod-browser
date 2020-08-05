@@ -853,54 +853,881 @@ font-display: block;",
             <div
               className="makeStyles-login-form-32"
             >
-              <Link
-                href="/register"
-              >
-                <a
-                  className="makeStyles-button-16  makeStyles-button--filled-19"
-                  href="/register"
-                  onClick={[Function]}
-                  onMouseEnter={[Function]}
-                >
-                  <span>
-                    Register for a Solid Identity
-                  </span>
-                </a>
-              </Link>
-              <p
-                className="makeStyles-content-p-30 makeStyles-login-form__what-is-solid-33"
-              >
-                <a
-                  href="https://solid.inrupt.com/get-a-solid-pod"
-                  rel="nofollow noreferrer"
-                  target="_blank"
-                >
-                  What is a Solid Identity?
-                </a>
-              </p>
-              <h2
-                className="makeStyles-content-h5-25 makeStyles-login-form__sub-title-34"
-              >
-                <span>
-                  Log In
-                </span>
-              </h2>
               <Provider>
-                <form>
+                <form
+                  onSubmit={[Function]}
+                >
                   <Styled(MuiBox)
                     my={2}
                   >
                     <div
-                      className="MuiBox-root MuiBox-root-39"
+                      className="MuiBox-root MuiBox-root-38"
                     >
                       <Styled(MuiBox)
                         mt={2}
                       >
                         <div
-                          className="MuiBox-root MuiBox-root-40"
+                          className="MuiBox-root MuiBox-root-39"
                         >
+                          <h3>
+                            Log In
+                          </h3>
+                          <WithStyles(ForwardRef(Autocomplete))
+                            freeSolo={true}
+                            id="provider-select"
+                            onChange={[Function]}
+                            onInputChange={[Function]}
+                            options={
+                              Array [
+                                "https://inrupt.net/",
+                                "https://dev.inrupt.net/",
+                                "https://solid.community/",
+                              ]
+                            }
+                            renderInput={[Function]}
+                          >
+                            <ForwardRef(Autocomplete)
+                              classes={
+                                Object {
+                                  "clearIndicator": "MuiAutocomplete-clearIndicator",
+                                  "clearIndicatorDirty": "MuiAutocomplete-clearIndicatorDirty",
+                                  "endAdornment": "MuiAutocomplete-endAdornment",
+                                  "focused": "Mui-focused",
+                                  "fullWidth": "MuiAutocomplete-fullWidth",
+                                  "groupLabel": "MuiAutocomplete-groupLabel",
+                                  "groupUl": "MuiAutocomplete-groupUl",
+                                  "hasClearIcon": "MuiAutocomplete-hasClearIcon",
+                                  "hasPopupIcon": "MuiAutocomplete-hasPopupIcon",
+                                  "input": "MuiAutocomplete-input",
+                                  "inputFocused": "MuiAutocomplete-inputFocused",
+                                  "inputRoot": "MuiAutocomplete-inputRoot",
+                                  "listbox": "MuiAutocomplete-listbox",
+                                  "loading": "MuiAutocomplete-loading",
+                                  "noOptions": "MuiAutocomplete-noOptions",
+                                  "option": "MuiAutocomplete-option",
+                                  "paper": "MuiAutocomplete-paper",
+                                  "popper": "MuiAutocomplete-popper",
+                                  "popperDisablePortal": "MuiAutocomplete-popperDisablePortal",
+                                  "popupIndicator": "MuiAutocomplete-popupIndicator",
+                                  "popupIndicatorOpen": "MuiAutocomplete-popupIndicatorOpen",
+                                  "root": "MuiAutocomplete-root",
+                                  "tag": "MuiAutocomplete-tag",
+                                  "tagSizeSmall": "MuiAutocomplete-tagSizeSmall",
+                                }
+                              }
+                              freeSolo={true}
+                              id="provider-select"
+                              onChange={[Function]}
+                              onInputChange={[Function]}
+                              options={
+                                Array [
+                                  "https://inrupt.net/",
+                                  "https://dev.inrupt.net/",
+                                  "https://solid.community/",
+                                ]
+                              }
+                              renderInput={[Function]}
+                            >
+                              <div
+                                aria-expanded={false}
+                                aria-owns={null}
+                                className="MuiAutocomplete-root MuiAutocomplete-hasClearIcon"
+                                onClick={[Function]}
+                                onKeyDown={[Function]}
+                                onMouseDown={[Function]}
+                                role="combobox"
+                              >
+                                <WithStyles(ForwardRef(TextField))
+                                  InputLabelProps={
+                                    Object {
+                                      "htmlFor": "provider-select",
+                                      "id": "provider-select-label",
+                                    }
+                                  }
+                                  InputProps={
+                                    Object {
+                                      "className": "MuiAutocomplete-inputRoot",
+                                      "endAdornment": <div
+                                        className="MuiAutocomplete-endAdornment"
+                                      >
+                                        <WithStyles(ForwardRef(IconButton))
+                                          aria-label="Clear"
+                                          className="MuiAutocomplete-clearIndicator"
+                                          onClick={[Function]}
+                                          tabIndex={-1}
+                                          title="Clear"
+                                        >
+                                          <Memo
+                                            fontSize="small"
+                                          />
+                                        </WithStyles(ForwardRef(IconButton))>
+                                      </div>,
+                                      "ref": [Function],
+                                      "startAdornment": undefined,
+                                    }
+                                  }
+                                  disabled={false}
+                                  fullWidth={true}
+                                  id="provider-select"
+                                  inputProps={
+                                    Object {
+                                      "aria-activedescendant": null,
+                                      "aria-autocomplete": "list",
+                                      "aria-controls": null,
+                                      "autoCapitalize": "none",
+                                      "autoComplete": "off",
+                                      "className": "MuiAutocomplete-input MuiAutocomplete-inputFocused",
+                                      "disabled": false,
+                                      "id": "provider-select",
+                                      "onBlur": [Function],
+                                      "onChange": [Function],
+                                      "onFocus": [Function],
+                                      "onMouseDown": [Function],
+                                      "ref": Object {
+                                        "current": <input
+                                          aria-autocomplete="list"
+                                          aria-invalid="false"
+                                          autocapitalize="none"
+                                          autocomplete="off"
+                                          class="MuiInputBase-input MuiOutlinedInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd MuiOutlinedInput-inputAdornedEnd"
+                                          id="provider-select"
+                                          required=""
+                                          spellcheck="false"
+                                          type="url"
+                                          value=""
+                                        />,
+                                      },
+                                      "spellCheck": "false",
+                                      "value": "",
+                                    }
+                                  }
+                                  label="Select ID provider"
+                                  margin="normal"
+                                  required={true}
+                                  type="url"
+                                  variant="outlined"
+                                >
+                                  <ForwardRef(TextField)
+                                    InputLabelProps={
+                                      Object {
+                                        "htmlFor": "provider-select",
+                                        "id": "provider-select-label",
+                                      }
+                                    }
+                                    InputProps={
+                                      Object {
+                                        "className": "MuiAutocomplete-inputRoot",
+                                        "endAdornment": <div
+                                          className="MuiAutocomplete-endAdornment"
+                                        >
+                                          <WithStyles(ForwardRef(IconButton))
+                                            aria-label="Clear"
+                                            className="MuiAutocomplete-clearIndicator"
+                                            onClick={[Function]}
+                                            tabIndex={-1}
+                                            title="Clear"
+                                          >
+                                            <Memo
+                                              fontSize="small"
+                                            />
+                                          </WithStyles(ForwardRef(IconButton))>
+                                        </div>,
+                                        "ref": [Function],
+                                        "startAdornment": undefined,
+                                      }
+                                    }
+                                    classes={
+                                      Object {
+                                        "root": "MuiTextField-root",
+                                      }
+                                    }
+                                    disabled={false}
+                                    fullWidth={true}
+                                    id="provider-select"
+                                    inputProps={
+                                      Object {
+                                        "aria-activedescendant": null,
+                                        "aria-autocomplete": "list",
+                                        "aria-controls": null,
+                                        "autoCapitalize": "none",
+                                        "autoComplete": "off",
+                                        "className": "MuiAutocomplete-input MuiAutocomplete-inputFocused",
+                                        "disabled": false,
+                                        "id": "provider-select",
+                                        "onBlur": [Function],
+                                        "onChange": [Function],
+                                        "onFocus": [Function],
+                                        "onMouseDown": [Function],
+                                        "ref": Object {
+                                          "current": <input
+                                            aria-autocomplete="list"
+                                            aria-invalid="false"
+                                            autocapitalize="none"
+                                            autocomplete="off"
+                                            class="MuiInputBase-input MuiOutlinedInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd MuiOutlinedInput-inputAdornedEnd"
+                                            id="provider-select"
+                                            required=""
+                                            spellcheck="false"
+                                            type="url"
+                                            value=""
+                                          />,
+                                        },
+                                        "spellCheck": "false",
+                                        "value": "",
+                                      }
+                                    }
+                                    label="Select ID provider"
+                                    margin="normal"
+                                    required={true}
+                                    type="url"
+                                    variant="outlined"
+                                  >
+                                    <WithStyles(ForwardRef(FormControl))
+                                      className="MuiTextField-root"
+                                      color="primary"
+                                      disabled={false}
+                                      error={false}
+                                      fullWidth={true}
+                                      margin="normal"
+                                      required={true}
+                                      variant="outlined"
+                                    >
+                                      <ForwardRef(FormControl)
+                                        className="MuiTextField-root"
+                                        classes={
+                                          Object {
+                                            "fullWidth": "MuiFormControl-fullWidth",
+                                            "marginDense": "MuiFormControl-marginDense",
+                                            "marginNormal": "MuiFormControl-marginNormal",
+                                            "root": "MuiFormControl-root",
+                                          }
+                                        }
+                                        color="primary"
+                                        disabled={false}
+                                        error={false}
+                                        fullWidth={true}
+                                        margin="normal"
+                                        required={true}
+                                        variant="outlined"
+                                      >
+                                        <div
+                                          className="MuiFormControl-root MuiTextField-root MuiFormControl-marginNormal MuiFormControl-fullWidth"
+                                        >
+                                          <WithStyles(ForwardRef(InputLabel))
+                                            htmlFor="provider-select"
+                                            id="provider-select-label"
+                                          >
+                                            <ForwardRef(InputLabel)
+                                              classes={
+                                                Object {
+                                                  "animated": "MuiInputLabel-animated",
+                                                  "asterisk": "MuiInputLabel-asterisk",
+                                                  "disabled": "Mui-disabled",
+                                                  "error": "Mui-error",
+                                                  "filled": "MuiInputLabel-filled",
+                                                  "focused": "Mui-focused",
+                                                  "formControl": "MuiInputLabel-formControl",
+                                                  "marginDense": "MuiInputLabel-marginDense",
+                                                  "outlined": "MuiInputLabel-outlined",
+                                                  "required": "Mui-required",
+                                                  "root": "MuiInputLabel-root",
+                                                  "shrink": "MuiInputLabel-shrink",
+                                                }
+                                              }
+                                              htmlFor="provider-select"
+                                              id="provider-select-label"
+                                            >
+                                              <WithStyles(ForwardRef(FormLabel))
+                                                className="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined"
+                                                classes={
+                                                  Object {
+                                                    "asterisk": "MuiInputLabel-asterisk",
+                                                    "disabled": "Mui-disabled",
+                                                    "error": "Mui-error",
+                                                    "focused": "Mui-focused",
+                                                    "required": "Mui-required",
+                                                  }
+                                                }
+                                                data-shrink={false}
+                                                htmlFor="provider-select"
+                                                id="provider-select-label"
+                                              >
+                                                <ForwardRef(FormLabel)
+                                                  className="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined"
+                                                  classes={
+                                                    Object {
+                                                      "asterisk": "MuiFormLabel-asterisk MuiInputLabel-asterisk",
+                                                      "colorSecondary": "MuiFormLabel-colorSecondary",
+                                                      "disabled": "Mui-disabled Mui-disabled",
+                                                      "error": "Mui-error Mui-error",
+                                                      "filled": "MuiFormLabel-filled",
+                                                      "focused": "Mui-focused Mui-focused",
+                                                      "required": "Mui-required Mui-required",
+                                                      "root": "MuiFormLabel-root",
+                                                    }
+                                                  }
+                                                  data-shrink={false}
+                                                  htmlFor="provider-select"
+                                                  id="provider-select-label"
+                                                >
+                                                  <label
+                                                    className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined Mui-required Mui-required"
+                                                    data-shrink={false}
+                                                    htmlFor="provider-select"
+                                                    id="provider-select-label"
+                                                  >
+                                                    Select ID provider
+                                                    <span
+                                                      aria-hidden={true}
+                                                      className="MuiFormLabel-asterisk MuiInputLabel-asterisk"
+                                                    >
+                                                       
+                                                      *
+                                                    </span>
+                                                  </label>
+                                                </ForwardRef(FormLabel)>
+                                              </WithStyles(ForwardRef(FormLabel))>
+                                            </ForwardRef(InputLabel)>
+                                          </WithStyles(ForwardRef(InputLabel))>
+                                          <WithStyles(ForwardRef(OutlinedInput))
+                                            autoFocus={false}
+                                            className="MuiAutocomplete-inputRoot"
+                                            endAdornment={
+                                              <div
+                                                className="MuiAutocomplete-endAdornment"
+                                              >
+                                                <WithStyles(ForwardRef(IconButton))
+                                                  aria-label="Clear"
+                                                  className="MuiAutocomplete-clearIndicator"
+                                                  onClick={[Function]}
+                                                  tabIndex={-1}
+                                                  title="Clear"
+                                                >
+                                                  <Memo
+                                                    fontSize="small"
+                                                  />
+                                                </WithStyles(ForwardRef(IconButton))>
+                                              </div>
+                                            }
+                                            fullWidth={true}
+                                            id="provider-select"
+                                            inputProps={
+                                              Object {
+                                                "aria-activedescendant": null,
+                                                "aria-autocomplete": "list",
+                                                "aria-controls": null,
+                                                "autoCapitalize": "none",
+                                                "autoComplete": "off",
+                                                "className": "MuiAutocomplete-input MuiAutocomplete-inputFocused",
+                                                "disabled": false,
+                                                "id": "provider-select",
+                                                "onBlur": [Function],
+                                                "onChange": [Function],
+                                                "onFocus": [Function],
+                                                "onMouseDown": [Function],
+                                                "ref": Object {
+                                                  "current": <input
+                                                    aria-autocomplete="list"
+                                                    aria-invalid="false"
+                                                    autocapitalize="none"
+                                                    autocomplete="off"
+                                                    class="MuiInputBase-input MuiOutlinedInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd MuiOutlinedInput-inputAdornedEnd"
+                                                    id="provider-select"
+                                                    required=""
+                                                    spellcheck="false"
+                                                    type="url"
+                                                    value=""
+                                                  />,
+                                                },
+                                                "spellCheck": "false",
+                                                "value": "",
+                                              }
+                                            }
+                                            label={
+                                              <React.Fragment>
+                                                Select ID provider
+                                                 *
+                                              </React.Fragment>
+                                            }
+                                            multiline={false}
+                                            type="url"
+                                          >
+                                            <ForwardRef(OutlinedInput)
+                                              autoFocus={false}
+                                              className="MuiAutocomplete-inputRoot"
+                                              classes={
+                                                Object {
+                                                  "adornedEnd": "MuiOutlinedInput-adornedEnd",
+                                                  "adornedStart": "MuiOutlinedInput-adornedStart",
+                                                  "colorSecondary": "MuiOutlinedInput-colorSecondary",
+                                                  "disabled": "Mui-disabled",
+                                                  "error": "Mui-error",
+                                                  "focused": "Mui-focused",
+                                                  "input": "MuiOutlinedInput-input",
+                                                  "inputAdornedEnd": "MuiOutlinedInput-inputAdornedEnd",
+                                                  "inputAdornedStart": "MuiOutlinedInput-inputAdornedStart",
+                                                  "inputMarginDense": "MuiOutlinedInput-inputMarginDense",
+                                                  "inputMultiline": "MuiOutlinedInput-inputMultiline",
+                                                  "marginDense": "MuiOutlinedInput-marginDense",
+                                                  "multiline": "MuiOutlinedInput-multiline",
+                                                  "notchedOutline": "MuiOutlinedInput-notchedOutline",
+                                                  "root": "MuiOutlinedInput-root",
+                                                }
+                                              }
+                                              endAdornment={
+                                                <div
+                                                  className="MuiAutocomplete-endAdornment"
+                                                >
+                                                  <WithStyles(ForwardRef(IconButton))
+                                                    aria-label="Clear"
+                                                    className="MuiAutocomplete-clearIndicator"
+                                                    onClick={[Function]}
+                                                    tabIndex={-1}
+                                                    title="Clear"
+                                                  >
+                                                    <Memo
+                                                      fontSize="small"
+                                                    />
+                                                  </WithStyles(ForwardRef(IconButton))>
+                                                </div>
+                                              }
+                                              fullWidth={true}
+                                              id="provider-select"
+                                              inputProps={
+                                                Object {
+                                                  "aria-activedescendant": null,
+                                                  "aria-autocomplete": "list",
+                                                  "aria-controls": null,
+                                                  "autoCapitalize": "none",
+                                                  "autoComplete": "off",
+                                                  "className": "MuiAutocomplete-input MuiAutocomplete-inputFocused",
+                                                  "disabled": false,
+                                                  "id": "provider-select",
+                                                  "onBlur": [Function],
+                                                  "onChange": [Function],
+                                                  "onFocus": [Function],
+                                                  "onMouseDown": [Function],
+                                                  "ref": Object {
+                                                    "current": <input
+                                                      aria-autocomplete="list"
+                                                      aria-invalid="false"
+                                                      autocapitalize="none"
+                                                      autocomplete="off"
+                                                      class="MuiInputBase-input MuiOutlinedInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd MuiOutlinedInput-inputAdornedEnd"
+                                                      id="provider-select"
+                                                      required=""
+                                                      spellcheck="false"
+                                                      type="url"
+                                                      value=""
+                                                    />,
+                                                  },
+                                                  "spellCheck": "false",
+                                                  "value": "",
+                                                }
+                                              }
+                                              label={
+                                                <React.Fragment>
+                                                  Select ID provider
+                                                   *
+                                                </React.Fragment>
+                                              }
+                                              multiline={false}
+                                              type="url"
+                                            >
+                                              <WithStyles(ForwardRef(InputBase))
+                                                autoFocus={false}
+                                                className="MuiAutocomplete-inputRoot"
+                                                classes={
+                                                  Object {
+                                                    "adornedEnd": "MuiOutlinedInput-adornedEnd",
+                                                    "adornedStart": "MuiOutlinedInput-adornedStart",
+                                                    "colorSecondary": "MuiOutlinedInput-colorSecondary",
+                                                    "disabled": "Mui-disabled",
+                                                    "error": "Mui-error",
+                                                    "focused": "Mui-focused",
+                                                    "input": "MuiOutlinedInput-input",
+                                                    "inputAdornedEnd": "MuiOutlinedInput-inputAdornedEnd",
+                                                    "inputAdornedStart": "MuiOutlinedInput-inputAdornedStart",
+                                                    "inputMarginDense": "MuiOutlinedInput-inputMarginDense",
+                                                    "inputMultiline": "MuiOutlinedInput-inputMultiline",
+                                                    "marginDense": "MuiOutlinedInput-marginDense",
+                                                    "multiline": "MuiOutlinedInput-multiline",
+                                                    "notchedOutline": null,
+                                                    "root": "MuiOutlinedInput-root",
+                                                  }
+                                                }
+                                                endAdornment={
+                                                  <div
+                                                    className="MuiAutocomplete-endAdornment"
+                                                  >
+                                                    <WithStyles(ForwardRef(IconButton))
+                                                      aria-label="Clear"
+                                                      className="MuiAutocomplete-clearIndicator"
+                                                      onClick={[Function]}
+                                                      tabIndex={-1}
+                                                      title="Clear"
+                                                    >
+                                                      <Memo
+                                                        fontSize="small"
+                                                      />
+                                                    </WithStyles(ForwardRef(IconButton))>
+                                                  </div>
+                                                }
+                                                fullWidth={true}
+                                                id="provider-select"
+                                                inputComponent="input"
+                                                inputProps={
+                                                  Object {
+                                                    "aria-activedescendant": null,
+                                                    "aria-autocomplete": "list",
+                                                    "aria-controls": null,
+                                                    "autoCapitalize": "none",
+                                                    "autoComplete": "off",
+                                                    "className": "MuiAutocomplete-input MuiAutocomplete-inputFocused",
+                                                    "disabled": false,
+                                                    "id": "provider-select",
+                                                    "onBlur": [Function],
+                                                    "onChange": [Function],
+                                                    "onFocus": [Function],
+                                                    "onMouseDown": [Function],
+                                                    "ref": Object {
+                                                      "current": <input
+                                                        aria-autocomplete="list"
+                                                        aria-invalid="false"
+                                                        autocapitalize="none"
+                                                        autocomplete="off"
+                                                        class="MuiInputBase-input MuiOutlinedInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd MuiOutlinedInput-inputAdornedEnd"
+                                                        id="provider-select"
+                                                        required=""
+                                                        spellcheck="false"
+                                                        type="url"
+                                                        value=""
+                                                      />,
+                                                    },
+                                                    "spellCheck": "false",
+                                                    "value": "",
+                                                  }
+                                                }
+                                                multiline={false}
+                                                renderSuffix={[Function]}
+                                                type="url"
+                                              >
+                                                <ForwardRef(InputBase)
+                                                  autoFocus={false}
+                                                  className="MuiAutocomplete-inputRoot"
+                                                  classes={
+                                                    Object {
+                                                      "adornedEnd": "MuiInputBase-adornedEnd MuiOutlinedInput-adornedEnd",
+                                                      "adornedStart": "MuiInputBase-adornedStart MuiOutlinedInput-adornedStart",
+                                                      "colorSecondary": "MuiInputBase-colorSecondary MuiOutlinedInput-colorSecondary",
+                                                      "disabled": "Mui-disabled Mui-disabled",
+                                                      "error": "Mui-error Mui-error",
+                                                      "focused": "Mui-focused Mui-focused",
+                                                      "formControl": "MuiInputBase-formControl",
+                                                      "fullWidth": "MuiInputBase-fullWidth",
+                                                      "input": "MuiInputBase-input MuiOutlinedInput-input",
+                                                      "inputAdornedEnd": "MuiInputBase-inputAdornedEnd MuiOutlinedInput-inputAdornedEnd",
+                                                      "inputAdornedStart": "MuiInputBase-inputAdornedStart MuiOutlinedInput-inputAdornedStart",
+                                                      "inputHiddenLabel": "MuiInputBase-inputHiddenLabel",
+                                                      "inputMarginDense": "MuiInputBase-inputMarginDense MuiOutlinedInput-inputMarginDense",
+                                                      "inputMultiline": "MuiInputBase-inputMultiline MuiOutlinedInput-inputMultiline",
+                                                      "inputTypeSearch": "MuiInputBase-inputTypeSearch",
+                                                      "marginDense": "MuiInputBase-marginDense MuiOutlinedInput-marginDense",
+                                                      "multiline": "MuiInputBase-multiline MuiOutlinedInput-multiline",
+                                                      "root": "MuiInputBase-root MuiOutlinedInput-root",
+                                                    }
+                                                  }
+                                                  endAdornment={
+                                                    <div
+                                                      className="MuiAutocomplete-endAdornment"
+                                                    >
+                                                      <WithStyles(ForwardRef(IconButton))
+                                                        aria-label="Clear"
+                                                        className="MuiAutocomplete-clearIndicator"
+                                                        onClick={[Function]}
+                                                        tabIndex={-1}
+                                                        title="Clear"
+                                                      >
+                                                        <Memo
+                                                          fontSize="small"
+                                                        />
+                                                      </WithStyles(ForwardRef(IconButton))>
+                                                    </div>
+                                                  }
+                                                  fullWidth={true}
+                                                  id="provider-select"
+                                                  inputComponent="input"
+                                                  inputProps={
+                                                    Object {
+                                                      "aria-activedescendant": null,
+                                                      "aria-autocomplete": "list",
+                                                      "aria-controls": null,
+                                                      "autoCapitalize": "none",
+                                                      "autoComplete": "off",
+                                                      "className": "MuiAutocomplete-input MuiAutocomplete-inputFocused",
+                                                      "disabled": false,
+                                                      "id": "provider-select",
+                                                      "onBlur": [Function],
+                                                      "onChange": [Function],
+                                                      "onFocus": [Function],
+                                                      "onMouseDown": [Function],
+                                                      "ref": Object {
+                                                        "current": <input
+                                                          aria-autocomplete="list"
+                                                          aria-invalid="false"
+                                                          autocapitalize="none"
+                                                          autocomplete="off"
+                                                          class="MuiInputBase-input MuiOutlinedInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd MuiOutlinedInput-inputAdornedEnd"
+                                                          id="provider-select"
+                                                          required=""
+                                                          spellcheck="false"
+                                                          type="url"
+                                                          value=""
+                                                        />,
+                                                      },
+                                                      "spellCheck": "false",
+                                                      "value": "",
+                                                    }
+                                                  }
+                                                  multiline={false}
+                                                  renderSuffix={[Function]}
+                                                  type="url"
+                                                >
+                                                  <div
+                                                    className="MuiInputBase-root MuiOutlinedInput-root MuiAutocomplete-inputRoot MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiOutlinedInput-adornedEnd"
+                                                    onClick={[Function]}
+                                                  >
+                                                    <input
+                                                      aria-activedescendant={null}
+                                                      aria-autocomplete="list"
+                                                      aria-controls={null}
+                                                      aria-invalid={false}
+                                                      autoCapitalize="none"
+                                                      autoComplete="off"
+                                                      autoFocus={false}
+                                                      className="MuiInputBase-input MuiOutlinedInput-input MuiAutocomplete-input MuiAutocomplete-inputFocused MuiInputBase-inputAdornedEnd MuiOutlinedInput-inputAdornedEnd"
+                                                      disabled={false}
+                                                      id="provider-select"
+                                                      onAnimationStart={[Function]}
+                                                      onBlur={[Function]}
+                                                      onChange={[Function]}
+                                                      onFocus={[Function]}
+                                                      onMouseDown={[Function]}
+                                                      required={true}
+                                                      spellCheck="false"
+                                                      type="url"
+                                                      value=""
+                                                    />
+                                                    <div
+                                                      className="MuiAutocomplete-endAdornment"
+                                                    >
+                                                      <WithStyles(ForwardRef(IconButton))
+                                                        aria-label="Clear"
+                                                        className="MuiAutocomplete-clearIndicator"
+                                                        onClick={[Function]}
+                                                        tabIndex={-1}
+                                                        title="Clear"
+                                                      >
+                                                        <ForwardRef(IconButton)
+                                                          aria-label="Clear"
+                                                          className="MuiAutocomplete-clearIndicator"
+                                                          classes={
+                                                            Object {
+                                                              "colorInherit": "MuiIconButton-colorInherit",
+                                                              "colorPrimary": "MuiIconButton-colorPrimary",
+                                                              "colorSecondary": "MuiIconButton-colorSecondary",
+                                                              "disabled": "Mui-disabled",
+                                                              "edgeEnd": "MuiIconButton-edgeEnd",
+                                                              "edgeStart": "MuiIconButton-edgeStart",
+                                                              "label": "MuiIconButton-label",
+                                                              "root": "MuiIconButton-root",
+                                                              "sizeSmall": "MuiIconButton-sizeSmall",
+                                                            }
+                                                          }
+                                                          onClick={[Function]}
+                                                          tabIndex={-1}
+                                                          title="Clear"
+                                                        >
+                                                          <WithStyles(ForwardRef(ButtonBase))
+                                                            aria-label="Clear"
+                                                            centerRipple={true}
+                                                            className="MuiIconButton-root MuiAutocomplete-clearIndicator"
+                                                            disabled={false}
+                                                            focusRipple={true}
+                                                            onClick={[Function]}
+                                                            tabIndex={-1}
+                                                            title="Clear"
+                                                          >
+                                                            <ForwardRef(ButtonBase)
+                                                              aria-label="Clear"
+                                                              centerRipple={true}
+                                                              className="MuiIconButton-root MuiAutocomplete-clearIndicator"
+                                                              classes={
+                                                                Object {
+                                                                  "disabled": "Mui-disabled",
+                                                                  "focusVisible": "Mui-focusVisible",
+                                                                  "root": "MuiButtonBase-root",
+                                                                }
+                                                              }
+                                                              disabled={false}
+                                                              focusRipple={true}
+                                                              onClick={[Function]}
+                                                              tabIndex={-1}
+                                                              title="Clear"
+                                                            >
+                                                              <button
+                                                                aria-label="Clear"
+                                                                className="MuiButtonBase-root MuiIconButton-root MuiAutocomplete-clearIndicator"
+                                                                disabled={false}
+                                                                onBlur={[Function]}
+                                                                onClick={[Function]}
+                                                                onDragLeave={[Function]}
+                                                                onFocus={[Function]}
+                                                                onKeyDown={[Function]}
+                                                                onKeyUp={[Function]}
+                                                                onMouseDown={[Function]}
+                                                                onMouseLeave={[Function]}
+                                                                onMouseUp={[Function]}
+                                                                onTouchEnd={[Function]}
+                                                                onTouchMove={[Function]}
+                                                                onTouchStart={[Function]}
+                                                                tabIndex={-1}
+                                                                title="Clear"
+                                                                type="button"
+                                                              >
+                                                                <span
+                                                                  className="MuiIconButton-label"
+                                                                >
+                                                                  <ForwardRef(CloseIcon)
+                                                                    fontSize="small"
+                                                                  >
+                                                                    <WithStyles(ForwardRef(SvgIcon))
+                                                                      fontSize="small"
+                                                                    >
+                                                                      <ForwardRef(SvgIcon)
+                                                                        classes={
+                                                                          Object {
+                                                                            "colorAction": "MuiSvgIcon-colorAction",
+                                                                            "colorDisabled": "MuiSvgIcon-colorDisabled",
+                                                                            "colorError": "MuiSvgIcon-colorError",
+                                                                            "colorPrimary": "MuiSvgIcon-colorPrimary",
+                                                                            "colorSecondary": "MuiSvgIcon-colorSecondary",
+                                                                            "fontSizeInherit": "MuiSvgIcon-fontSizeInherit",
+                                                                            "fontSizeLarge": "MuiSvgIcon-fontSizeLarge",
+                                                                            "fontSizeSmall": "MuiSvgIcon-fontSizeSmall",
+                                                                            "root": "MuiSvgIcon-root",
+                                                                          }
+                                                                        }
+                                                                        fontSize="small"
+                                                                      >
+                                                                        <svg
+                                                                          aria-hidden={true}
+                                                                          className="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"
+                                                                          focusable="false"
+                                                                          viewBox="0 0 24 24"
+                                                                        >
+                                                                          <path
+                                                                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                                                                          />
+                                                                        </svg>
+                                                                      </ForwardRef(SvgIcon)>
+                                                                    </WithStyles(ForwardRef(SvgIcon))>
+                                                                  </ForwardRef(CloseIcon)>
+                                                                </span>
+                                                                <WithStyles(memo)
+                                                                  center={true}
+                                                                >
+                                                                  <ForwardRef(TouchRipple)
+                                                                    center={true}
+                                                                    classes={
+                                                                      Object {
+                                                                        "child": "MuiTouchRipple-child",
+                                                                        "childLeaving": "MuiTouchRipple-childLeaving",
+                                                                        "childPulsate": "MuiTouchRipple-childPulsate",
+                                                                        "ripple": "MuiTouchRipple-ripple",
+                                                                        "ripplePulsate": "MuiTouchRipple-ripplePulsate",
+                                                                        "rippleVisible": "MuiTouchRipple-rippleVisible",
+                                                                        "root": "MuiTouchRipple-root",
+                                                                      }
+                                                                    }
+                                                                  >
+                                                                    <span
+                                                                      className="MuiTouchRipple-root"
+                                                                    >
+                                                                      <TransitionGroup
+                                                                        childFactory={[Function]}
+                                                                        component={null}
+                                                                        exit={true}
+                                                                      />
+                                                                    </span>
+                                                                  </ForwardRef(TouchRipple)>
+                                                                </WithStyles(memo)>
+                                                              </button>
+                                                            </ForwardRef(ButtonBase)>
+                                                          </WithStyles(ForwardRef(ButtonBase))>
+                                                        </ForwardRef(IconButton)>
+                                                      </WithStyles(ForwardRef(IconButton))>
+                                                    </div>
+                                                    <WithStyles(ForwardRef(NotchedOutline))
+                                                      className="MuiOutlinedInput-notchedOutline"
+                                                      label={
+                                                        <React.Fragment>
+                                                          Select ID provider
+                                                           *
+                                                        </React.Fragment>
+                                                      }
+                                                      labelWidth={0}
+                                                      notched={false}
+                                                    >
+                                                      <ForwardRef(NotchedOutline)
+                                                        className="MuiOutlinedInput-notchedOutline"
+                                                        classes={
+                                                          Object {
+                                                            "legend": "PrivateNotchedOutline-legend-41",
+                                                            "legendLabelled": "PrivateNotchedOutline-legendLabelled-42",
+                                                            "legendNotched": "PrivateNotchedOutline-legendNotched-43",
+                                                            "root": "PrivateNotchedOutline-root-40",
+                                                          }
+                                                        }
+                                                        label={
+                                                          <React.Fragment>
+                                                            Select ID provider
+                                                             *
+                                                          </React.Fragment>
+                                                        }
+                                                        labelWidth={0}
+                                                        notched={false}
+                                                      >
+                                                        <fieldset
+                                                          aria-hidden={true}
+                                                          className="PrivateNotchedOutline-root-40 MuiOutlinedInput-notchedOutline"
+                                                        >
+                                                          <legend
+                                                            className="PrivateNotchedOutline-legendLabelled-42"
+                                                          >
+                                                            <span>
+                                                              Select ID provider
+                                                               *
+                                                            </span>
+                                                          </legend>
+                                                        </fieldset>
+                                                      </ForwardRef(NotchedOutline)>
+                                                    </WithStyles(ForwardRef(NotchedOutline))>
+                                                  </div>
+                                                </ForwardRef(InputBase)>
+                                              </WithStyles(ForwardRef(InputBase))>
+                                            </ForwardRef(OutlinedInput)>
+                                          </WithStyles(ForwardRef(OutlinedInput))>
+                                        </div>
+                                      </ForwardRef(FormControl)>
+                                    </WithStyles(ForwardRef(FormControl))>
+                                  </ForwardRef(TextField)>
+                                </WithStyles(ForwardRef(TextField))>
+                              </div>
+                            </ForwardRef(Autocomplete)>
+                          </WithStyles(ForwardRef(Autocomplete))>
                           <button
-                            className="makeStyles-button-35"
+                            className="makeStyles-button-34"
                             onClick={[Function]}
                             type="submit"
                           >
