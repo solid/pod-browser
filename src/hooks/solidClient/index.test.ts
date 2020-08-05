@@ -27,16 +27,13 @@ import {
   getIriAll,
   unstable_fetchResourceInfoWithAcl,
 } from "@inrupt/solid-client";
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import useSWR from "swr";
 import * as solidClientHelpers from "../../solidClientHelpers";
 import {
   fetchContainerResourceIris,
   fetchResourceDetails,
   fetchPodIrisFromWebId,
-  useFetchContainerResourceIris,
-  useFetchResourceDetails,
-  useFetchResourceWithAcl,
-  useFetchPodIrisFromWebId,
 } from "./index";
 
 jest.mock("@inrupt/solid-client");

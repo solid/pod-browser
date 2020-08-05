@@ -960,7 +960,6 @@ describe("savePermissions", () => {
       control: true,
     };
     const dataset = "dataset";
-    const aclDataset = "aclDataset";
 
     jest
       .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
@@ -1203,7 +1202,6 @@ describe("saveDefaultPermissions", () => {
       control: true,
     };
     const dataset = "dataset";
-    const aclDataset = "aclDataset";
 
     jest
       .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")

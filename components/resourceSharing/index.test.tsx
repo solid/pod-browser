@@ -21,8 +21,8 @@
 
 import * as ReactFns from "react";
 import * as RouterFns from "next/router";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
 import * as SolidClientFns from "@inrupt/solid-client";
+import { mountToJson } from "../../__testUtils/mountWithTheme";
 import * as SolidClientHelperFns from "../../src/solidClientHelpers";
 import ResourceSharing, {
   AddedAgents,
@@ -72,17 +72,13 @@ describe("ResourceSharing", () => {
       .spyOn(RouterFns, "useRouter")
       .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
 
-    jest
-      .spyOn(SolidClientFns, "unstable_hasResourceAcl")
-      .mockReturnValue(true);
+    jest.spyOn(SolidClientFns, "unstable_hasResourceAcl").mockReturnValue(true);
 
     jest
       .spyOn(SolidClientFns, "unstable_hasAccessibleAcl")
       .mockReturnValue(true);
 
-    jest
-      .spyOn(SolidClientFns, "unstable_getResourceAcl")
-      .mockReturnValueOnce();
+    jest.spyOn(SolidClientFns, "unstable_getResourceAcl").mockReturnValueOnce();
 
     jest
       .spyOn(SolidClientFns, "unstable_getAgentDefaultAccessOne")
@@ -102,7 +98,7 @@ describe("ResourceSharing", () => {
         setContent,
         confirmed,
         setConfirmed,
-      })
+      });
 
     const tree = mountToJson(
       <ResourceSharing iri={iri} name={name} permissions={permissions} />

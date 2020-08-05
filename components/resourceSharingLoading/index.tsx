@@ -21,12 +21,10 @@
 
 import { ReactElement } from "react";
 import {
-  Typography,
   Divider,
   List,
   ListItem,
   ListItemIcon,
-  ListItemText,
   FormControl,
   InputAdornment,
   InputLabel,
@@ -34,7 +32,6 @@ import {
   Button,
   Avatar,
 } from "@material-ui/core";
-import ShareIcon from "@material-ui/icons/Share";
 import FolderIcon from "@material-ui/icons/Folder";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import PersonIcon from "@material-ui/icons/Person";
@@ -43,8 +40,6 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
-import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
-import ResourceLink from "../resourceLink";
 import { backToDetailsClick } from "../resourceSharing";
 import styles from "../resourceDetails/styles";
 
@@ -53,8 +48,8 @@ const useStyles = makeStyles<PrismTheme>((theme) =>
 );
 
 interface Props {
-  name?: string | null;
-  iri?: string | null;
+  name: string;
+  iri: string;
 }
 
 export default function ResourceSharingLoading({

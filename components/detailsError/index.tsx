@@ -32,12 +32,11 @@ const useStyles = makeStyles<PrismTheme>((theme) =>
 interface IDetailsError {
   name: string;
   iri: string;
-  message?: string;
+  message: string;
 }
 
 function DetailsError({ name, iri, message }: IDetailsError): ReactElement {
   const classes = useStyles();
-  const errorMessage = message || "There was an error fetching the details.";
 
   return (
     <>
@@ -51,14 +50,10 @@ function DetailsError({ name, iri, message }: IDetailsError): ReactElement {
 
       <section className={classes.centeredSection}>
         <h5 className={classes["content-h5"]}>Error</h5>
-        <p>{errorMessage}</p>
+        <p>{message}</p>
       </section>
     </>
   );
 }
-
-DetailsError.defaultProps = {
-  message: "There was an error fetching the resource details.",
-};
 
 export default DetailsError;

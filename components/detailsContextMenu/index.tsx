@@ -19,12 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement, useContext, useEffect } from "react";
+import { ReactElement, useContext, useEffect, Dispatch } from "react";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { AlertProps } from "@material-ui/lab/Alert";
 import { Drawer, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import DetailsMenuContext, {
   DETAILS_CONTEXT_ACTIONS,
 } from "../../src/contexts/detailsMenuContext";
@@ -55,7 +55,7 @@ export function Contents({ action, iri }: IContentsProps): ReactElement | null {
     action === "details" ? (
       <DetailsLoading name={pathname} iri={iri} />
     ) : (
-      <ResourceSharingLoading />
+      <ResourceSharingLoading name={pathname} iri={iri} />
     );
 
   useEffect(() => {
@@ -90,6 +90,23 @@ export function Contents({ action, iri }: IContentsProps): ReactElement | null {
   }
 }
 
+interface IHandleCloseDrawer {
+  setMenuOpen: Dispatch<boolean>;
+  router: NextRouter;
+}
+
+export function handleCloseDrawer({
+  setMenuOpen,
+  router,
+}: IHandleCloseDrawer): () => Promise<void> {
+  return async () => {
+    setMenuOpen(false);
+    const { asPath } = router;
+    const pathname = stripQueryParams(asPath) || "/";
+    await router.replace("/resource/[iri]", pathname);
+  };
+}
+
 export default function DetailsContextMenu(): ReactElement | null {
   const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
 
@@ -103,15 +120,9 @@ export default function DetailsContextMenu(): ReactElement | null {
     setMenuOpen(!!(action && resourceIri));
   }, [action, resourceIri, setMenuOpen]);
 
-  const closeDrawer = async () => {
-    setMenuOpen(false);
-    const { asPath } = router;
-    const pathname = stripQueryParams(asPath) || "/";
-    await router.replace("/resource/[iri]", pathname);
-  };
+  const closeDrawer = handleCloseDrawer({ setMenuOpen, router });
 
   useEscKey(closeDrawer);
-
   if (!resourceIri) return null;
 
   return (

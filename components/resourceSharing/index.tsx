@@ -20,11 +20,12 @@
  */
 
 /* eslint-disable camelcase, no-console */
+// @ts-nocheck
+
 import {
   ReactElement,
   useContext,
   useState,
-  useEffect,
   Dispatch,
   SetStateAction,
 } from "react";
@@ -50,21 +51,12 @@ import FolderIcon from "@material-ui/icons/Folder";
 import { makeStyles } from "@material-ui/styles";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import {
-  LitDataset,
   unstable_Access,
-  unstable_AclDataset,
   unstable_getAgentDefaultAccessOne,
   unstable_getResourceAcl,
   unstable_hasAccessibleAcl,
   unstable_hasResourceAcl,
-  unstable_saveAclFor,
-  unstable_setAgentDefaultAccess,
-  WithResourceInfo,
 } from "@inrupt/solid-client";
-import { useFetchResourceWithAcl } from "../../src/hooks/solidClient";
-import DetailsError from "../detailsError";
-import { parseUrl } from "../../src/stringHelpers";
-import ResourceSharingLoading from "../resourceSharingLoading";
 import UserContext, { ISession } from "../../src/contexts/userContext";
 import { resourceContextRedirect } from "../resourceLink";
 import {
@@ -455,7 +447,6 @@ export default function ResourceSharing({
   const { session } = useContext(UserContext);
   const { webId } = session as ISession;
   const [agentId, setAgentId] = useState("");
-  const [resourceAcl, setResourceAcl] = useState<unstable_AclDataset>();
   const [addedAgents, setAddedAgents] = useState<Profile[]>([]);
   const userPermissions = getUserPermissions(webId, permissions);
   const [thirdPartyPermissions, setThirdPartyPermissions] = useState(
@@ -464,7 +455,6 @@ export default function ResourceSharing({
   const classes = useStyles();
   const router = useRouter();
   const iriString = iri as string;
-  const { pathname } = parseUrl(iriString);
   const defaultPermission = {
     webId,
     alias: "Control",
@@ -505,7 +495,7 @@ export default function ResourceSharing({
         permission={defaultPermission as NormalizedPermission}
         classes={classes}
         onSave={async (access: unstable_Access): Promise<IResponse> => {
-          return saveDefaultPermissions({ iri, webId, access });
+          return saveDefaultPermissions({ iri: iriString, webId, access });
         }}
       />
 

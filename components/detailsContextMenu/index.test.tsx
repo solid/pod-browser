@@ -21,13 +21,16 @@
 
 import * as ReactFns from "react";
 import * as RouterFns from "next/router";
-import * as SolidClientHookFns from "../../src/hooks/solidClient";
 import * as SolidClientFns from "@inrupt/solid-client";
-import DetailsContextMenu, { Contents } from "./index";
+import * as SolidClientHookFns from "../../src/hooks/solidClient";
+import DetailsContextMenu, { Contents, handleCloseDrawer } from "./index";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
-import { createResource } from "../../src/testHelpers";
 
 describe("Container view", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   test("it renders a loading view when context has no iri", () => {
     const mockContext = {
       menuOpen: true,
@@ -89,7 +92,11 @@ describe("Container view", () => {
 });
 
 describe("Contents", () => {
-  test("it renders a DetailsLoading component if there's no data", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test("it renders a DetailsLoading component if there's no data and the action is details", () => {
     jest
       .spyOn(SolidClientHookFns, "useFetchResourceDetails")
       .mockReturnValueOnce({});
@@ -101,6 +108,22 @@ describe("Contents", () => {
     });
 
     const tree = mountToJson(<Contents iri="/iri/" action="details" />);
+
+    expect(tree).toMatchSnapshot();
+  });
+
+  test("it renders a ResourceSharingLoading component if there's no data and the action is sharing", () => {
+    jest
+      .spyOn(SolidClientHookFns, "useFetchResourceDetails")
+      .mockReturnValueOnce({});
+
+    jest.spyOn(RouterFns, "useRouter").mockReturnValueOnce({
+      asPath: "/pathname/",
+      replace: jest.fn(),
+      query: {},
+    });
+
+    const tree = mountToJson(<Contents iri="/iri/" action="sharing" />);
 
     expect(tree).toMatchSnapshot();
   });
@@ -143,12 +166,6 @@ describe("Contents", () => {
       setMessage: jest.fn(),
       setSeverity: jest.fn(),
     };
-    const mockDetailsMenuContext = {
-      menuOpen: false,
-      setMenuOpen: jest.fn(),
-      action: "sharing",
-      iri,
-    };
     const data = {
       iri,
       types: ["Container"],
@@ -166,7 +183,7 @@ describe("Contents", () => {
     jest
       .spyOn(ReactFns, "useContext")
       .mockReturnValueOnce(mockAlertContext)
-      .mockReturnValueOnce(mockUserContext)
+      .mockReturnValueOnce(mockUserContext);
 
     jest
       .spyOn(SolidClientHookFns, "useFetchResourceDetails")
@@ -174,15 +191,13 @@ describe("Contents", () => {
 
     jest
       .spyOn(SolidClientFns, "unstable_hasResourceAcl")
-      .mockReturnValue(true);
+      .mockReturnValueOnce(true);
 
     jest
       .spyOn(SolidClientFns, "unstable_hasAccessibleAcl")
-      .mockReturnValue(true);
+      .mockReturnValueOnce(true);
 
-    jest
-      .spyOn(SolidClientFns, "unstable_getResourceAcl")
-      .mockReturnValueOnce();
+    jest.spyOn(SolidClientFns, "unstable_getResourceAcl").mockReturnValueOnce();
 
     jest
       .spyOn(SolidClientFns, "unstable_getAgentDefaultAccessOne")
@@ -218,7 +233,7 @@ describe("Contents", () => {
 
     jest
       .spyOn(SolidClientHookFns, "useFetchResourceDetails")
-      .mockReturnValueOnce({ data: {}, error: "Some error" });
+      .mockReturnValueOnce({ data: null, error: "Some error" });
 
     jest
       .spyOn(RouterFns, "useRouter")
@@ -227,5 +242,20 @@ describe("Contents", () => {
     const tree = mountToJson(<Contents iri={iri} action="details" />);
 
     expect(tree).toMatchSnapshot();
+  });
+});
+
+describe("handleCloseDrawer", () => {
+  test("it creates a function to close the drawer", async () => {
+    const setMenuOpen = jest.fn();
+    const router = {
+      asPath: "/path?with=query",
+      replace: jest.fn(),
+    };
+    const handler = handleCloseDrawer({ setMenuOpen, router });
+    await handler();
+
+    expect(setMenuOpen).toHaveBeenCalledWith(false);
+    expect(router.replace).toHaveBeenCalledWith("/resource/[iri]", "/path");
   });
 });

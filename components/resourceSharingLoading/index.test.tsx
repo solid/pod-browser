@@ -19,11 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as ReactFns from "react";
-import * as RouterFns from "next/router";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
-import * as SolidClientFns from "@inrupt/solid-client";
-import * as SolidClientHelperFns from "../../src/solidClientHelpers";
 import ResourceSharingLoading from "./index";
 
 describe("ResourceSharingLoading", () => {

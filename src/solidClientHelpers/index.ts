@@ -37,14 +37,12 @@ import {
   unstable_fetchFile,
   unstable_fetchLitDatasetWithAcl,
   unstable_getAgentAccessAll,
-  unstable_getAgentDefaultAccessOne,
   unstable_getResourceAcl,
   unstable_hasAccessibleAcl,
   unstable_hasResourceAcl,
   unstable_saveAclFor,
   unstable_setAgentDefaultAccess,
   unstable_setAgentResourceAccess,
-  WithResourceInfo,
 } from "@inrupt/solid-client";
 import { ldp, space } from "rdf-namespaces";
 import { parseUrl, isUrl } from "../stringHelpers";
@@ -280,7 +278,6 @@ export async function saveDefaultPermissions({
 
   const updatedAcl = unstable_setAgentDefaultAccess(aclDataset, webId, access);
 
-  console.log(updatedAcl)
   if (!updatedAcl) return error("updatedAcl is empty");
 
   const response = await unstable_saveAclFor(dataset, updatedAcl);
@@ -341,7 +338,7 @@ export function normalizeDataset(
 export interface NormalizedResource {
   iri: string;
   types: string[];
-  dataset: Thign;
+  dataset?: Thing;
   mtime?: number | null;
   modified?: Date | null;
   size?: number | null;
