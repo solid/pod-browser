@@ -20,7 +20,6 @@
  */
 
 import Router from "next/router";
-import { mock } from "jest-mock-extended";
 
 import { SESSION_STATES, redirectBasedOnSessionState } from "./index";
 

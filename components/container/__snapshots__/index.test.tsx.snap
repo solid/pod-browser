@@ -2859,6 +2859,148 @@ font-display: block;",
             </tr>
           </tbody>
         </table>
+        <Styled(MuiBox)
+          mt={2}
+        >
+          <div
+            className="MuiBox-root MuiBox-root-4666"
+          >
+            <AddFileButton>
+              <WithStyles(ForwardRef(Button))
+                component="label"
+                disabled={false}
+                type="submit"
+                variant="contained"
+              >
+                <ForwardRef(Button)
+                  classes={
+                    Object {
+                      "colorInherit": "MuiButton-colorInherit",
+                      "contained": "MuiButton-contained",
+                      "containedPrimary": "MuiButton-containedPrimary",
+                      "containedSecondary": "MuiButton-containedSecondary",
+                      "containedSizeLarge": "MuiButton-containedSizeLarge",
+                      "containedSizeSmall": "MuiButton-containedSizeSmall",
+                      "disableElevation": "MuiButton-disableElevation",
+                      "disabled": "Mui-disabled",
+                      "endIcon": "MuiButton-endIcon",
+                      "focusVisible": "Mui-focusVisible",
+                      "fullWidth": "MuiButton-fullWidth",
+                      "iconSizeLarge": "MuiButton-iconSizeLarge",
+                      "iconSizeMedium": "MuiButton-iconSizeMedium",
+                      "iconSizeSmall": "MuiButton-iconSizeSmall",
+                      "label": "MuiButton-label",
+                      "outlined": "MuiButton-outlined",
+                      "outlinedPrimary": "MuiButton-outlinedPrimary",
+                      "outlinedSecondary": "MuiButton-outlinedSecondary",
+                      "outlinedSizeLarge": "MuiButton-outlinedSizeLarge",
+                      "outlinedSizeSmall": "MuiButton-outlinedSizeSmall",
+                      "root": "MuiButton-root",
+                      "sizeLarge": "MuiButton-sizeLarge",
+                      "sizeSmall": "MuiButton-sizeSmall",
+                      "startIcon": "MuiButton-startIcon",
+                      "text": "MuiButton-text",
+                      "textPrimary": "MuiButton-textPrimary",
+                      "textSecondary": "MuiButton-textSecondary",
+                      "textSizeLarge": "MuiButton-textSizeLarge",
+                      "textSizeSmall": "MuiButton-textSizeSmall",
+                    }
+                  }
+                  component="label"
+                  disabled={false}
+                  type="submit"
+                  variant="contained"
+                >
+                  <WithStyles(ForwardRef(ButtonBase))
+                    className="MuiButton-root MuiButton-contained"
+                    component="label"
+                    disabled={false}
+                    focusRipple={true}
+                    focusVisibleClassName="Mui-focusVisible"
+                    type="submit"
+                  >
+                    <ForwardRef(ButtonBase)
+                      className="MuiButton-root MuiButton-contained"
+                      classes={
+                        Object {
+                          "disabled": "Mui-disabled",
+                          "focusVisible": "Mui-focusVisible",
+                          "root": "MuiButtonBase-root",
+                        }
+                      }
+                      component="label"
+                      disabled={false}
+                      focusRipple={true}
+                      focusVisibleClassName="Mui-focusVisible"
+                      type="submit"
+                    >
+                      <label
+                        aria-disabled={false}
+                        className="MuiButtonBase-root MuiButton-root MuiButton-contained"
+                        onBlur={[Function]}
+                        onDragLeave={[Function]}
+                        onFocus={[Function]}
+                        onKeyDown={[Function]}
+                        onKeyUp={[Function]}
+                        onMouseDown={[Function]}
+                        onMouseLeave={[Function]}
+                        onMouseUp={[Function]}
+                        onTouchEnd={[Function]}
+                        onTouchMove={[Function]}
+                        onTouchStart={[Function]}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        <span
+                          className="MuiButton-label"
+                        >
+                          Upload File
+                          <input
+                            onChange={[Function]}
+                            style={
+                              Object {
+                                "display": "none",
+                              }
+                            }
+                            type="file"
+                          />
+                        </span>
+                        <WithStyles(memo)
+                          center={false}
+                        >
+                          <ForwardRef(TouchRipple)
+                            center={false}
+                            classes={
+                              Object {
+                                "child": "MuiTouchRipple-child",
+                                "childLeaving": "MuiTouchRipple-childLeaving",
+                                "childPulsate": "MuiTouchRipple-childPulsate",
+                                "ripple": "MuiTouchRipple-ripple",
+                                "ripplePulsate": "MuiTouchRipple-ripplePulsate",
+                                "rippleVisible": "MuiTouchRipple-rippleVisible",
+                                "root": "MuiTouchRipple-root",
+                              }
+                            }
+                          >
+                            <span
+                              className="MuiTouchRipple-root"
+                            >
+                              <TransitionGroup
+                                childFactory={[Function]}
+                                component={null}
+                                exit={true}
+                              />
+                            </span>
+                          </ForwardRef(TouchRipple)>
+                        </WithStyles(memo)>
+                      </label>
+                    </ForwardRef(ButtonBase)>
+                  </WithStyles(ForwardRef(ButtonBase))>
+                </ForwardRef(Button)>
+              </WithStyles(ForwardRef(Button))>
+            </AddFileButton>
+          </div>
+        </Styled(MuiBox)>
         <DetailsContextMenu />
       </div>
     </Container>
@@ -11444,26 +11586,26 @@ font-display: block;",
               }
             >
               <tr
-                className="makeStyles-table__body-row-6214 makeStyles-table__body-row--selectable-6215 makeStyles-tableRow-6223"
+                className="makeStyles-table__body-row-6215 makeStyles-table__body-row--selectable-6216 makeStyles-tableRow-6224"
                 onClick={[Function]}
               >
                 <td
-                  className="makeStyles-table__body-cell-6217 makeStyles-table__body-cell--align-center-6218 makeStyles-table__body-cell--width-preview-6220"
+                  className="makeStyles-table__body-cell-6218 makeStyles-table__body-cell--align-center-6219 makeStyles-table__body-cell--width-preview-6221"
                 >
                   <ResourceIcon
                     bem={[Function]}
                     iri="https://myaccount.mypodserver.com/inbox"
                   >
                     <i
-                      className="makeStyles-icon-file-6168 makeStyles-resource-icon-6225"
+                      className="makeStyles-icon-file-6169 makeStyles-resource-icon-6226"
                     />
                   </ResourceIcon>
                 </td>
                 <td
-                  className="makeStyles-table__body-cell-6217"
+                  className="makeStyles-table__body-cell-6218"
                 >
                   <ResourceLink
-                    className="makeStyles-table__link-6222"
+                    className="makeStyles-table__link-6223"
                     containerIri="https://myaccount.mypodserver.com/inbox"
                     resourceIri="https://myaccount.mypodserver.com/inbox"
                   >
@@ -11481,7 +11623,7 @@ font-display: block;",
                       replace={true}
                     >
                       <a
-                        className="makeStyles-table__link-6222"
+                        className="makeStyles-table__link-6223"
                         href="/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Finbox"
                         onClick={[Function]}
                         onMouseEnter={[Function]}
@@ -11492,7 +11634,7 @@ font-display: block;",
                   </ResourceLink>
                 </td>
                 <td
-                  className="makeStyles-table__body-cell-6217"
+                  className="makeStyles-table__body-cell-6218"
                   key="https://myaccount.mypodserver.com/inbox-type"
                 >
                   Resource
@@ -11509,26 +11651,26 @@ font-display: block;",
               }
             >
               <tr
-                className="makeStyles-table__body-row-6214 makeStyles-table__body-row--selectable-6215 makeStyles-tableRow-6223"
+                className="makeStyles-table__body-row-6215 makeStyles-table__body-row--selectable-6216 makeStyles-tableRow-6224"
                 onClick={[Function]}
               >
                 <td
-                  className="makeStyles-table__body-cell-6217 makeStyles-table__body-cell--align-center-6218 makeStyles-table__body-cell--width-preview-6220"
+                  className="makeStyles-table__body-cell-6218 makeStyles-table__body-cell--align-center-6219 makeStyles-table__body-cell--width-preview-6221"
                 >
                   <ResourceIcon
                     bem={[Function]}
                     iri="https://myaccount.mypodserver.com/private"
                   >
                     <i
-                      className="makeStyles-icon-file-6168 makeStyles-resource-icon-6225"
+                      className="makeStyles-icon-file-6169 makeStyles-resource-icon-6226"
                     />
                   </ResourceIcon>
                 </td>
                 <td
-                  className="makeStyles-table__body-cell-6217"
+                  className="makeStyles-table__body-cell-6218"
                 >
                   <ResourceLink
-                    className="makeStyles-table__link-6222"
+                    className="makeStyles-table__link-6223"
                     containerIri="https://myaccount.mypodserver.com/private"
                     resourceIri="https://myaccount.mypodserver.com/private"
                   >
@@ -11546,7 +11688,7 @@ font-display: block;",
                       replace={true}
                     >
                       <a
-                        className="makeStyles-table__link-6222"
+                        className="makeStyles-table__link-6223"
                         href="/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Fprivate"
                         onClick={[Function]}
                         onMouseEnter={[Function]}
@@ -11557,7 +11699,7 @@ font-display: block;",
                   </ResourceLink>
                 </td>
                 <td
-                  className="makeStyles-table__body-cell-6217"
+                  className="makeStyles-table__body-cell-6218"
                   key="https://myaccount.mypodserver.com/private-type"
                 >
                   Resource
@@ -11574,26 +11716,26 @@ font-display: block;",
               }
             >
               <tr
-                className="makeStyles-table__body-row-6214 makeStyles-table__body-row--selectable-6215 makeStyles-tableRow-6223"
+                className="makeStyles-table__body-row-6215 makeStyles-table__body-row--selectable-6216 makeStyles-tableRow-6224"
                 onClick={[Function]}
               >
                 <td
-                  className="makeStyles-table__body-cell-6217 makeStyles-table__body-cell--align-center-6218 makeStyles-table__body-cell--width-preview-6220"
+                  className="makeStyles-table__body-cell-6218 makeStyles-table__body-cell--align-center-6219 makeStyles-table__body-cell--width-preview-6221"
                 >
                   <ResourceIcon
                     bem={[Function]}
                     iri="https://myaccount.mypodserver.com/note.txt"
                   >
                     <i
-                      className="makeStyles-icon-file-6168 makeStyles-resource-icon-6225"
+                      className="makeStyles-icon-file-6169 makeStyles-resource-icon-6226"
                     />
                   </ResourceIcon>
                 </td>
                 <td
-                  className="makeStyles-table__body-cell-6217"
+                  className="makeStyles-table__body-cell-6218"
                 >
                   <ResourceLink
-                    className="makeStyles-table__link-6222"
+                    className="makeStyles-table__link-6223"
                     containerIri="https://myaccount.mypodserver.com/note.txt"
                     resourceIri="https://myaccount.mypodserver.com/note.txt"
                   >
@@ -11611,7 +11753,7 @@ font-display: block;",
                       replace={true}
                     >
                       <a
-                        className="makeStyles-table__link-6222"
+                        className="makeStyles-table__link-6223"
                         href="/resource/https%3A%2F%2Fmyaccount.mypodserver.com%2Fnote.txt"
                         onClick={[Function]}
                         onMouseEnter={[Function]}
@@ -11622,7 +11764,7 @@ font-display: block;",
                   </ResourceLink>
                 </td>
                 <td
-                  className="makeStyles-table__body-cell-6217"
+                  className="makeStyles-table__body-cell-6218"
                   key="https://myaccount.mypodserver.com/note.txt-type"
                 >
                   Resource
@@ -11631,6 +11773,148 @@ font-display: block;",
             </ContainerTableRow>
           </tbody>
         </table>
+        <Styled(MuiBox)
+          mt={2}
+        >
+          <div
+            className="MuiBox-root MuiBox-root-6227"
+          >
+            <AddFileButton>
+              <WithStyles(ForwardRef(Button))
+                component="label"
+                disabled={false}
+                type="submit"
+                variant="contained"
+              >
+                <ForwardRef(Button)
+                  classes={
+                    Object {
+                      "colorInherit": "MuiButton-colorInherit",
+                      "contained": "MuiButton-contained",
+                      "containedPrimary": "MuiButton-containedPrimary",
+                      "containedSecondary": "MuiButton-containedSecondary",
+                      "containedSizeLarge": "MuiButton-containedSizeLarge",
+                      "containedSizeSmall": "MuiButton-containedSizeSmall",
+                      "disableElevation": "MuiButton-disableElevation",
+                      "disabled": "Mui-disabled",
+                      "endIcon": "MuiButton-endIcon",
+                      "focusVisible": "Mui-focusVisible",
+                      "fullWidth": "MuiButton-fullWidth",
+                      "iconSizeLarge": "MuiButton-iconSizeLarge",
+                      "iconSizeMedium": "MuiButton-iconSizeMedium",
+                      "iconSizeSmall": "MuiButton-iconSizeSmall",
+                      "label": "MuiButton-label",
+                      "outlined": "MuiButton-outlined",
+                      "outlinedPrimary": "MuiButton-outlinedPrimary",
+                      "outlinedSecondary": "MuiButton-outlinedSecondary",
+                      "outlinedSizeLarge": "MuiButton-outlinedSizeLarge",
+                      "outlinedSizeSmall": "MuiButton-outlinedSizeSmall",
+                      "root": "MuiButton-root",
+                      "sizeLarge": "MuiButton-sizeLarge",
+                      "sizeSmall": "MuiButton-sizeSmall",
+                      "startIcon": "MuiButton-startIcon",
+                      "text": "MuiButton-text",
+                      "textPrimary": "MuiButton-textPrimary",
+                      "textSecondary": "MuiButton-textSecondary",
+                      "textSizeLarge": "MuiButton-textSizeLarge",
+                      "textSizeSmall": "MuiButton-textSizeSmall",
+                    }
+                  }
+                  component="label"
+                  disabled={false}
+                  type="submit"
+                  variant="contained"
+                >
+                  <WithStyles(ForwardRef(ButtonBase))
+                    className="MuiButton-root MuiButton-contained"
+                    component="label"
+                    disabled={false}
+                    focusRipple={true}
+                    focusVisibleClassName="Mui-focusVisible"
+                    type="submit"
+                  >
+                    <ForwardRef(ButtonBase)
+                      className="MuiButton-root MuiButton-contained"
+                      classes={
+                        Object {
+                          "disabled": "Mui-disabled",
+                          "focusVisible": "Mui-focusVisible",
+                          "root": "MuiButtonBase-root",
+                        }
+                      }
+                      component="label"
+                      disabled={false}
+                      focusRipple={true}
+                      focusVisibleClassName="Mui-focusVisible"
+                      type="submit"
+                    >
+                      <label
+                        aria-disabled={false}
+                        className="MuiButtonBase-root MuiButton-root MuiButton-contained"
+                        onBlur={[Function]}
+                        onDragLeave={[Function]}
+                        onFocus={[Function]}
+                        onKeyDown={[Function]}
+                        onKeyUp={[Function]}
+                        onMouseDown={[Function]}
+                        onMouseLeave={[Function]}
+                        onMouseUp={[Function]}
+                        onTouchEnd={[Function]}
+                        onTouchMove={[Function]}
+                        onTouchStart={[Function]}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        <span
+                          className="MuiButton-label"
+                        >
+                          Upload File
+                          <input
+                            onChange={[Function]}
+                            style={
+                              Object {
+                                "display": "none",
+                              }
+                            }
+                            type="file"
+                          />
+                        </span>
+                        <WithStyles(memo)
+                          center={false}
+                        >
+                          <ForwardRef(TouchRipple)
+                            center={false}
+                            classes={
+                              Object {
+                                "child": "MuiTouchRipple-child",
+                                "childLeaving": "MuiTouchRipple-childLeaving",
+                                "childPulsate": "MuiTouchRipple-childPulsate",
+                                "ripple": "MuiTouchRipple-ripple",
+                                "ripplePulsate": "MuiTouchRipple-ripplePulsate",
+                                "rippleVisible": "MuiTouchRipple-rippleVisible",
+                                "root": "MuiTouchRipple-root",
+                              }
+                            }
+                          >
+                            <span
+                              className="MuiTouchRipple-root"
+                            >
+                              <TransitionGroup
+                                childFactory={[Function]}
+                                component={null}
+                                exit={true}
+                              />
+                            </span>
+                          </ForwardRef(TouchRipple)>
+                        </WithStyles(memo)>
+                      </label>
+                    </ForwardRef(ButtonBase)>
+                  </WithStyles(ForwardRef(ButtonBase))>
+                </ForwardRef(Button)>
+              </WithStyles(ForwardRef(Button))>
+            </AddFileButton>
+          </div>
+        </Styled(MuiBox)>
         <DetailsContextMenu />
       </div>
     </Container>
