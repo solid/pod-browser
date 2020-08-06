@@ -205,9 +205,7 @@ describe("Contents", () => {
       dataset: {},
     };
 
-    jest
-      .spyOn(ReactFns, "useContext")
-      .mockReturnValueOnce(mockAlertContext)
+    jest.spyOn(ReactFns, "useContext").mockReturnValueOnce(mockAlertContext);
 
     jest
       .spyOn(SolidClientHookFns, "useFetchResourceDetails")
@@ -239,7 +237,6 @@ describe("Contents", () => {
     jest
       .spyOn(RouterFns, "useRouter")
       .mockReturnValueOnce({ asPath: "/pathname/", replace: jest.fn() });
-
 
     const session = {
       info: {

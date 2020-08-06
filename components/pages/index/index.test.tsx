@@ -19,12 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
+import { mount } from "enzyme";
+import { mountToJson } from "enzyme-to-json";
 import * as nextRouterFns from "next/router";
 
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import { useFetchPodIrisFromWebId } from "../../../src/hooks/solidClient";
+import SessionContext from "../../../src/contexts/sessionContext";
 import { resourceHref } from "../../resourceLink";
 import IndexPage from "./index";
 
@@ -35,6 +36,12 @@ jest.mock("next/router");
 
 describe("Index page", () => {
   test("Renders null if there are no pod iris", () => {
+    const session = {
+      info: {
+        isLoggedIn: true,
+      },
+    };
+
     (nextRouterFns.useRouter as jest.Mock).mockReturnValue({
       replace: jest.fn().mockResolvedValue(undefined),
     });
@@ -43,13 +50,23 @@ describe("Index page", () => {
       data: undefined,
     });
 
-    const tree = shallow(<IndexPage />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    const tree = mount(
+      <SessionContext.Provider value={{ session }}>
+        <IndexPage />
+      </SessionContext.Provider>
+    );
+    expect(mountToJson(tree)).toMatchSnapshot();
   });
 
   test("Redirects to the resource page if there is a pod iri", () => {
     const replace = jest.fn().mockResolvedValue(undefined);
     const podIri = "https://mypod.myhost.com";
+
+    const session = {
+      info: {
+        isLoggedIn: true,
+      },
+    };
 
     (nextRouterFns.useRouter as jest.Mock).mockReturnValue({ replace });
 
@@ -57,7 +74,11 @@ describe("Index page", () => {
       data: [podIri],
     });
 
-    shallow(<IndexPage />);
+    mount(
+      <SessionContext.Provider value={{ session }}>
+        <IndexPage />
+      </SessionContext.Provider>
+    );
 
     expect(replace).toHaveBeenCalledWith(
       "/resource/[iri]",
@@ -66,7 +87,17 @@ describe("Index page", () => {
   });
 
   test("Redirects if the user is logged out", () => {
-    shallow(<IndexPage />);
+    const session = {
+      info: {
+        isLoggedIn: false,
+      },
+    };
+
+    mount(
+      <SessionContext.Provider value={{ session }}>
+        <IndexPage />
+      </SessionContext.Provider>
+    );
     expect(useRedirectIfLoggedOut).toHaveBeenCalled();
   });
 });

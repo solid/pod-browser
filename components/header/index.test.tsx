@@ -19,29 +19,42 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as ReactFns from "react";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
+import SessionContext from "../../src/contexts/sessionContext";
 import Header from "./index";
 
 describe("Header", () => {
   describe("with user logged in", () => {
     test("renders a header", () => {
-      jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
-        session: true,
-      }));
+      const session = {
+        info: {
+          isLoggedIn: true,
+        },
+      };
 
-      const tree = mountToJson(<Header />);
+      const tree = mountToJson(
+        <SessionContext.Provider value={{ session }}>
+          <Header />
+        </SessionContext.Provider>
+      );
       expect(tree).toMatchSnapshot();
     });
   });
 
   describe("with user logged out", () => {
     test("renders nothing", () => {
-      jest.spyOn(ReactFns, "useContext").mockImplementation(() => ({
-        session: undefined,
-      }));
+      const session = {
+        info: {
+          isLoggedIn: true,
+        },
+      };
 
-      const tree = mountToJson(<Header />);
+      const tree = mountToJson(
+        <SessionContext.Provider value={{ session }}>
+          <Header />
+        </SessionContext.Provider>
+      );
+
       expect(tree).toMatchSnapshot();
     });
   });

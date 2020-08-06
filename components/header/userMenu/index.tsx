@@ -19,13 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useContext, useState } from "react";
+import React, { ReactElement, useState } from "react";
 import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import LogOutButton from "../../logout";
 import styles from "./styles";
-import SessionContext from "../../../src/contexts/sessionContext";
 import useAuthenticatedProfile from "../../../src/hooks/useAuthenticatedProfile";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
@@ -35,8 +34,6 @@ const useStyles = makeStyles<PrismTheme>((theme) =>
 export default function UserMenu(): ReactElement {
   const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
   const bem = useBem(useStyles());
-  const profile = useAuthenticatedProfile();
-  const avatar = profile?.avatar || "./emptyProfile.svg";
 
   const toggleMenu = () => setUserMenuOpen(!userMenuOpen);
 

@@ -19,7 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as ReactFns from "react";
 import * as RouterFns from "next/router";
 import * as SolidClientFns from "@inrupt/solid-client";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
@@ -63,11 +62,6 @@ describe("ResourceSharing", () => {
         acl,
       },
     ];
-    const setTitle = jest.fn();
-    const setOpen = jest.fn();
-    const setContent = jest.fn();
-    const confirmed = false;
-    const setConfirmed = jest.fn();
 
     const session = {
       info: {

@@ -1757,7 +1757,85 @@ font-display: block;",
       }
     }
   >
-    <Header />
+    <Header>
+      <header
+        className="makeStyles-header-banner-9"
+      >
+        <Link
+          href="/"
+        >
+          <a
+            className="makeStyles-header-banner__logo-10"
+            href="/"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            <img
+              alt="Inrupt PodBrowser"
+              className="makeStyles-header-banner__logo-image-11"
+              height={40}
+              src="/inrupt_logo-2020.svg"
+            />
+          </a>
+        </Link>
+        <div
+          className="makeStyles-header-banner__main-nav-12"
+        />
+        <UserMenu>
+          <div
+            className="makeStyles-header-banner__aside-menu-1582 makeStyles-header-banner__aside-menu--popup-1583"
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <button
+              aria-controls="UserMenu"
+              aria-expanded={true}
+              aria-haspopup="true"
+              className="makeStyles-header-banner__aside-menu-trigger-1584"
+              onClick={[Function]}
+              type="button"
+            >
+              <i
+                aria-label="User Menu"
+                className="makeStyles-icon-user-1565 makeStyles-header-banner__aside-menu-trigger-icon-1585"
+              />
+            </button>
+            <div
+              aria-hidden={true}
+              className="makeStyles-header-banner__aside-menu-popup-1587"
+              id="UserMenu"
+            >
+              <ul
+                className="makeStyles-header-banner__user-menu-1588"
+              >
+                <li
+                  className="makeStyles-header-banner__user-menu-item-1589"
+                >
+                  <LogOut
+                    className="makeStyles-header-banner__user-menu-item-trigger-1592"
+                  >
+                    <button
+                      className="makeStyles-header-banner__user-menu-item-trigger-1592"
+                      onClick={[Function]}
+                      type="button"
+                    >
+                      <i
+                        className="makeStyles-icon-log-out-1543 makeStyles-header-banner__user-menu-item-icon-1591"
+                      />
+                      <span
+                        className="makeStyles-header-banner__user-menu-item-label-1593"
+                      >
+                        Log out
+                      </span>
+                    </button>
+                  </LogOut>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </UserMenu>
+      </header>
+    </Header>
   </ThemeProvider>
 </WithTheme>
 `;

@@ -344,6 +344,7 @@ describe("normalizePermissions", () => {
 
     const [perms1, perms2, perms3, perms4] = await normalizePermissions(
       acl,
+      jest.fn(),
       fetchProfileFn
     );
 
@@ -452,6 +453,7 @@ describe("fetchResourceWithAcl", () => {
 
     const normalizedResource = await fetchResourceWithAcl(
       expectedIri,
+      jest.fn(),
       normalizePermissionsFn
     );
     const {
@@ -532,6 +534,7 @@ describe("getUserPermissions", () => {
 
     const normalizedPermissions = await normalizePermissions(
       acl,
+      jest.fn(),
       jest.fn().mockResolvedValue(null)
     );
     const permissions = getUserPermissions(
@@ -602,6 +605,7 @@ describe("getThirdPartyPermissions", () => {
 
     const normalizedPermissions = await normalizePermissions(
       acl,
+      jest.fn(),
       jest.fn().mockResolvedValue(null)
     );
     const thirdPartyPermissions = getThirdPartyPermissions(
@@ -710,7 +714,7 @@ describe("fetchFileWithAcl", () => {
       text: "file contents",
       internal_resourceInfo: {
         contentType: "type",
-        unstable_permissions: {
+        permissions: {
           user: {
             read: true,
             write: true,
@@ -727,8 +731,13 @@ describe("fetchFileWithAcl", () => {
       },
     });
 
-    const { iri, permissions, types } = await fetchFileWithAcl("some iri");
+    const fetch = jest.fn();
+    const { iri, permissions, types } = await fetchFileWithAcl(
+      "some iri",
+      fetch
+    );
 
+    // TODO fix this broken shit
     expect(iri).toEqual("some iri");
     expect(types).toContain("type");
     expect(permissions).toHaveLength(2);
@@ -822,9 +831,12 @@ describe("fetchProfile", () => {
       .spyOn(solidClientFns, "getIriAll")
       .mockImplementationOnce(async () => Promise.resolve());
 
-    const profile = await fetchProfile(profileWebId);
+    const fetch = jest.fn();
+    const profile = await fetchProfile(profileWebId, fetch);
 
-    expect(solidClientFns.fetchLitDataset).toHaveBeenCalledWith(profileWebId);
+    expect(solidClientFns.fetchLitDataset).toHaveBeenCalledWith(profileWebId, {
+      fetch,
+    });
     expect(solidClientFns.getStringNoLocale).toHaveBeenCalledWith(
       profileDataset,
       namespace.nickname
@@ -889,11 +901,12 @@ describe("savePermissions", () => {
       .spyOn(solidClientFns, "unstable_saveAclFor")
       .mockImplementationOnce(jest.fn().mockResolvedValueOnce("response"));
 
-    const { response } = await savePermissions({ iri, webId, access });
+    const fetch = jest.fn();
+    const { response } = await savePermissions({ iri, webId, access, fetch });
 
-    expect(solidClientFns.unstable_fetchLitDatasetWithAcl).toHaveBeenCalledWith(
-      iri
-    );
+    expect(
+      solidClientFns.unstable_fetchLitDatasetWithAcl
+    ).toHaveBeenCalledWith(iri, { fetch });
     expect(solidClientFns.unstable_getResourceAcl).toHaveBeenCalledWith(
       dataset
     );
@@ -904,7 +917,8 @@ describe("savePermissions", () => {
     );
     expect(solidClientFns.unstable_saveAclFor).toHaveBeenCalledWith(
       dataset,
-      updatedAcl
+      updatedAcl,
+      { fetch }
     );
 
     expect(response).toEqual("response");
@@ -1131,11 +1145,18 @@ describe("saveDefaultPermissions", () => {
       .spyOn(solidClientFns, "unstable_saveAclFor")
       .mockImplementationOnce(jest.fn().mockResolvedValueOnce("response"));
 
-    const { response } = await saveDefaultPermissions({ iri, webId, access });
+    const fetch = jest.fn();
 
-    expect(solidClientFns.unstable_fetchLitDatasetWithAcl).toHaveBeenCalledWith(
-      iri
-    );
+    const { response } = await saveDefaultPermissions({
+      iri,
+      webId,
+      access,
+      fetch,
+    });
+
+    expect(
+      solidClientFns.unstable_fetchLitDatasetWithAcl
+    ).toHaveBeenCalledWith(iri, { fetch });
     expect(solidClientFns.unstable_getResourceAcl).toHaveBeenCalledWith(
       dataset
     );
@@ -1146,7 +1167,8 @@ describe("saveDefaultPermissions", () => {
     );
     expect(solidClientFns.unstable_saveAclFor).toHaveBeenCalledWith(
       dataset,
-      updatedAcl
+      updatedAcl,
+      { fetch }
     );
 
     expect(response).toEqual("response");

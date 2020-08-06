@@ -46,8 +46,14 @@ describe("auth effects", () => {
 
   describe("redirect if logged out", () => {
     test("if there is not a session, redirect", async () => {
+      const session = {
+        info: {
+          isLoggedIn: false,
+        },
+      };
+
       await redirectBasedOnSessionState(
-        undefined,
+        session,
         false,
         SESSION_STATES.LOGGED_OUT,
         redirectLocation
@@ -57,8 +63,14 @@ describe("auth effects", () => {
     });
 
     test("if there is a session, do not redirect", async () => {
+      const session = {
+        info: {
+          isLoggedIn: true,
+        },
+      };
+
       await redirectBasedOnSessionState(
-        mock(),
+        session,
         false,
         SESSION_STATES.LOGGED_OUT,
         redirectLocation
@@ -70,25 +82,37 @@ describe("auth effects", () => {
 
   describe("redirect if logged in", () => {
     test("if there is a session, redirect", async () => {
+      const session = {
+        info: {
+          isLoggedIn: true,
+        },
+      };
+
       await redirectBasedOnSessionState(
-        undefined,
+        session,
         false,
         SESSION_STATES.LOGGED_IN,
         redirectLocation
       );
 
-      expect(Router.push).not.toHaveBeenCalled();
+      expect(Router.push).toHaveBeenCalled();
     });
 
     test("if there is not a session, do not redirect", async () => {
+      const session = {
+        info: {
+          isLoggedIn: false,
+        },
+      };
+
       await redirectBasedOnSessionState(
-        mock(),
+        session,
         false,
         SESSION_STATES.LOGGED_IN,
         redirectLocation
       );
 
-      expect(Router.push).toHaveBeenCalledWith(redirectLocation);
+      expect(Router.push).not.toHaveBeenCalledWith(redirectLocation);
     });
   });
 });

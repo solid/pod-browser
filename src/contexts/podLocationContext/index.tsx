@@ -19,9 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createContext, ReactElement, useContext } from "react";
+import { createContext, ReactElement } from "react";
 import useAuthenticatedProfile from "../../hooks/useAuthenticatedProfile";
-import SessionContext from "../sessionContext";
 import usePodRoot from "../../hooks/usePodRoot";
 
 export interface PodLocation {
