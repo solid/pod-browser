@@ -19,32 +19,51 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
-import Router from "next/router";
+import { mount } from "enzyme";
+import { mountToJson } from "enzyme-to-json";
+
+import { clearLocalstorage, hardRedirect } from "../../src/windowHelpers";
+
+import SessionContext from "../../src/contexts/sessionContext";
 
 import LogOutButton from "./index";
 
-jest.mock("next/router");
-jest.mock("solid-auth-client");
+jest.mock("../../src/windowHelpers");
 
 describe("Logout button", () => {
   test("Renders a logout button", () => {
-    const tree = shallow(<LogOutButton />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    const session = {
+      logout: jest.fn(),
+    };
+
+    const tree = mount(
+      <SessionContext.Provider value={{ session }}>
+        <LogOutButton>Log Out</LogOutButton>
+      </SessionContext.Provider>
+    );
+
+    expect(mountToJson(tree)).toMatchSnapshot();
   });
 
   test("Calls logout and redirects on click", async () => {
-    auth.logout.mockResolvedValue(null);
-    Router.push.mockResolvedValue(null);
+    const session = {
+      logout: jest.fn(),
+    };
 
-    const tree = shallow(<LogOutButton />);
+    const tree = mount(
+      <SessionContext.Provider value={{ session }}>
+        <LogOutButton>Log Out</LogOutButton>
+      </SessionContext.Provider>
+    );
+
     tree.simulate("click", { preventDefault: () => {} });
 
-    // Simulate an await before continuing.
-    await auth.logout();
+    expect(session.logout).toHaveBeenCalled();
 
-    expect(Router.push).toHaveBeenCalledWith("/login");
-    expect(auth.logout).toHaveBeenCalled();
+    // Wait until promises resolve, then continue.
+    await session.logout();
+
+    expect(clearLocalstorage).toHaveBeenCalled();
+    expect(hardRedirect).toHaveBeenCalledWith("/login");
   });
 });

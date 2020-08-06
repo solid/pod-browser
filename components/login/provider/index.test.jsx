@@ -20,9 +20,18 @@
  */
 
 import { mount } from "enzyme";
+
+import {
+  clearLocalstorage,
+  generateRedirectUrl,
+} from "../../../src/windowHelpers";
+
+import SessionContext from "../../../src/contexts/sessionContext";
 import { mountToJson, WithTheme } from "../../../__testUtils/mountWithTheme";
 
 import ProviderLogin, * as ProviderFunctions from "./index";
+
+jest.mock("../../../src/windowHelpers");
 
 describe("ProviderLogin form", () => {
   test("Renders a webid login form, with button bound to login", () => {
@@ -34,39 +43,52 @@ describe("ProviderLogin form", () => {
 
 describe("loginWithProvider", () => {
   test("clicking login calls loginWithProvider", () => {
+    const session = {
+      login: jest.fn(),
+    };
+
     const tree = mount(
-      <WithTheme>
-        <ProviderLogin />
-      </WithTheme>
+      <SessionContext.Provider value={{ session }}>
+        <WithTheme>
+          <ProviderLogin />
+        </WithTheme>
+      </SessionContext.Provider>
     );
 
-    // auth.popupLogin.mockResolvedValue(null);
-    tree.find("button").simulate("click", { preventDefault: () => {} });
+    tree
+      .find("button[type='submit']")
+      .simulate("click", { preventDefault: () => {} });
 
-    /*
-    expect(auth.popupLogin).toHaveBeenCalledWith({
-      popupUri: `/login-popup.html`,
-    });
-     */
+    expect(session.login).toHaveBeenCalled();
   });
 
   test("Calls login", async () => {
-    // auth.popupLogin.mockResolvedValue(null);
+    const redirect = "foo";
+    const providerIri = "https://test.url";
+    const session = {
+      login: jest.fn(),
+    };
 
-    await ProviderFunctions.loginWithProvider();
+    generateRedirectUrl.mockReturnValue("foo");
 
-    /*
-    expect(auth.popupLogin).toHaveBeenCalledWith({
-      popupUri: `/login-popup.html`,
+    await ProviderFunctions.loginWithProvider(providerIri, session);
+
+    expect(clearLocalstorage).toHaveBeenCalled();
+    expect(session.login).toHaveBeenCalledWith({
+      oidcIssuer: providerIri,
+      redirectUrl: redirect,
     });
-     */
   });
 
   test("Bubbles errors", async () => {
     const error = "Failure";
-    //auth.popupLogin.mockRejectedValue(error);
-    /*
-    await expect(ProviderFunctions.loginWithProvider()).rejects.toMatch(error);
-     */
+    const providerIri = "https://test.url";
+    const session = {
+      login: jest.fn().mockRejectedValue(error),
+    };
+
+    await expect(
+      ProviderFunctions.loginWithProvider(providerIri, session)
+    ).rejects.toMatch(error);
   });
 });

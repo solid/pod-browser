@@ -23,6 +23,7 @@ import * as ReactFns from "react";
 import * as RouterFns from "next/router";
 import * as SolidClientFns from "@inrupt/solid-client";
 import * as SolidClientHookFns from "../../src/hooks/solidClient";
+import SessionContext from "../../src/contexts/sessionContext";
 import DetailsContextMenu, { Contents, handleCloseDrawer } from "./index";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 
@@ -162,7 +163,17 @@ describe("Contents", () => {
       query: {},
     });
 
-    const tree = mountToJson(<Contents iri={iri} action="details" />);
+    const session = {
+      info: {
+        webId: "https://test.url/profile/card#me",
+      },
+    };
+
+    const tree = mountToJson(
+      <SessionContext.Provider value={{ session }}>
+        <Contents iri={iri} action="details" />
+      </SessionContext.Provider>
+    );
 
     expect(tree).toMatchSnapshot();
   });
@@ -170,7 +181,6 @@ describe("Contents", () => {
   test("it renders a ResourceSharing component when there's data and the action is sharing", () => {
     const iri = "/iri/";
     const webId = "webId";
-    const mockUserContext = { session: { webId } };
     const mockAlertContext = {
       setAlertOpen: jest.fn(),
       setMessage: jest.fn(),
@@ -198,7 +208,6 @@ describe("Contents", () => {
     jest
       .spyOn(ReactFns, "useContext")
       .mockReturnValueOnce(mockAlertContext)
-      .mockReturnValueOnce(mockUserContext);
 
     jest
       .spyOn(SolidClientHookFns, "useFetchResourceDetails")
@@ -215,7 +224,7 @@ describe("Contents", () => {
     jest.spyOn(SolidClientFns, "unstable_getResourceAcl").mockReturnValueOnce();
 
     jest
-      .spyOn(SolidClientFns, "unstable_getAgentDefaultAccess")
+      .spyOn(SolidClientFns, "unstable_getAgentDefaultAccessOne")
       .mockReturnValueOnce({
         read: true,
         write: true,
@@ -231,7 +240,18 @@ describe("Contents", () => {
       .spyOn(RouterFns, "useRouter")
       .mockReturnValueOnce({ asPath: "/pathname/", replace: jest.fn() });
 
-    const tree = mountToJson(<Contents iri={iri} action="sharing" />);
+
+    const session = {
+      info: {
+        webId: "https://test.url/profile/card#me",
+      },
+    };
+
+    const tree = mountToJson(
+      <SessionContext.Provider value={{ session }}>
+        <Contents iri={iri} action="sharing" />
+      </SessionContext.Provider>
+    );
 
     expect(tree).toMatchSnapshot();
   });

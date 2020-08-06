@@ -460,6 +460,7 @@ export default function ResourceSharing({
   dataset,
 }: Partial<IResourceDetails>): ReactElement {
   const { session } = useContext(SessionContext);
+
   const { webId = "" } = session.info;
   const [agentId, setAgentId] = useState("");
   const [addedAgents, setAddedAgents] = useState<Profile[]>([]);

@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import { renderHook } from "@testing-library/react-hooks";
 import useAuthenticatedProfile from "./index";
 import { fetchProfile } from "../../solidClientHelpers";
@@ -30,19 +31,34 @@ const profile = { webId };
 
 describe("useAuthenticatedProfile", () => {
   test("no profile loaded when no session is given", () => {
+    const session = {
+      fetch: jest.fn(),
+      info: {
+        isLoggedIn: false,
+      },
+    };
+
+    jest.spyOn(React, "useContext").mockReturnValueOnce({ session });
+
     (fetchProfile as jest.Mock).mockResolvedValue(profile);
 
-    const { result } = renderHook(() => useAuthenticatedProfile(undefined));
+    const { result } = renderHook(() => useAuthenticatedProfile());
     expect(result.current).toBeNull();
   });
 
   test("profile is loaded when session is given", async () => {
+    const session = {
+      fetch: jest.fn(),
+      info: {
+        isLoggedIn: true,
+      },
+    };
+
+    jest.spyOn(React, "useContext").mockReturnValueOnce({ session });
+
     (fetchProfile as jest.Mock).mockResolvedValue(profile);
 
-    const session = { webId };
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useAuthenticatedProfile(session)
-    );
+    const { result, waitForNextUpdate } = renderHook(useAuthenticatedProfile);
 
     await waitForNextUpdate();
 

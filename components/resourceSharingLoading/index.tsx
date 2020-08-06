@@ -111,11 +111,8 @@ export default function ResourceSharingLoading({
           </ListItem>
 
           <ListItem key={1} className={classes.listItem}>
-            <ListItem key={0} className={classes.listItem}>
-              <Avatar className={classes.avatar} />
-
-              <Skeleton width={150} />
-            </ListItem>
+            <Avatar className={classes.avatar} />
+            <Skeleton width={150} />
           </ListItem>
         </List>
       </section>

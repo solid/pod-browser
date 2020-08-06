@@ -24,7 +24,6 @@ import { mountToJson } from "../../__testUtils/mountWithTheme";
 import * as solidClientHooks from "../../src/hooks/solidClient";
 import Container from "./index";
 
-jest.mock("solid-auth-client");
 jest.mock("../../src/hooks/solidClient");
 
 const iri = "https://mypod.myhost.com/public";

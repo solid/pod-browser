@@ -1450,125 +1450,96 @@ font-display: block;",
                     className="MuiListItem-root makeStyles-listItem-5 MuiListItem-gutters"
                     disabled={false}
                   >
-                    <WithStyles(ForwardRef(ListItem))
-                      className="makeStyles-listItem-5"
-                      key=".$0"
+                    <WithStyles(ForwardRef(Avatar))
+                      className="makeStyles-avatar-1"
+                      key=".0"
                     >
-                      <ForwardRef(ListItem)
-                        className="makeStyles-listItem-5"
+                      <ForwardRef(Avatar)
+                        className="makeStyles-avatar-1"
                         classes={
                           Object {
-                            "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
-                            "button": "MuiListItem-button",
-                            "container": "MuiListItem-container",
-                            "dense": "MuiListItem-dense",
-                            "disabled": "Mui-disabled",
-                            "divider": "MuiListItem-divider",
-                            "focusVisible": "Mui-focusVisible",
-                            "gutters": "MuiListItem-gutters",
-                            "root": "MuiListItem-root",
-                            "secondaryAction": "MuiListItem-secondaryAction",
-                            "selected": "Mui-selected",
+                            "circle": "MuiAvatar-circle",
+                            "colorDefault": "MuiAvatar-colorDefault",
+                            "fallback": "MuiAvatar-fallback",
+                            "img": "MuiAvatar-img",
+                            "root": "MuiAvatar-root",
+                            "rounded": "MuiAvatar-rounded",
+                            "square": "MuiAvatar-square",
                           }
                         }
                       >
-                        <li
-                          className="MuiListItem-root makeStyles-listItem-5 MuiListItem-gutters"
-                          disabled={false}
+                        <div
+                          className="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-1 MuiAvatar-colorDefault"
                         >
-                          <WithStyles(ForwardRef(Avatar))
-                            className="makeStyles-avatar-1"
-                            key=".0"
+                          <ForwardRef(PersonIcon)
+                            className="MuiAvatar-fallback"
                           >
-                            <ForwardRef(Avatar)
-                              className="makeStyles-avatar-1"
-                              classes={
-                                Object {
-                                  "circle": "MuiAvatar-circle",
-                                  "colorDefault": "MuiAvatar-colorDefault",
-                                  "fallback": "MuiAvatar-fallback",
-                                  "img": "MuiAvatar-img",
-                                  "root": "MuiAvatar-root",
-                                  "rounded": "MuiAvatar-rounded",
-                                  "square": "MuiAvatar-square",
-                                }
-                              }
+                            <WithStyles(ForwardRef(SvgIcon))
+                              className="MuiAvatar-fallback"
                             >
-                              <div
-                                className="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-1 MuiAvatar-colorDefault"
-                              >
-                                <ForwardRef(PersonIcon)
-                                  className="MuiAvatar-fallback"
-                                >
-                                  <WithStyles(ForwardRef(SvgIcon))
-                                    className="MuiAvatar-fallback"
-                                  >
-                                    <ForwardRef(SvgIcon)
-                                      className="MuiAvatar-fallback"
-                                      classes={
-                                        Object {
-                                          "colorAction": "MuiSvgIcon-colorAction",
-                                          "colorDisabled": "MuiSvgIcon-colorDisabled",
-                                          "colorError": "MuiSvgIcon-colorError",
-                                          "colorPrimary": "MuiSvgIcon-colorPrimary",
-                                          "colorSecondary": "MuiSvgIcon-colorSecondary",
-                                          "fontSizeInherit": "MuiSvgIcon-fontSizeInherit",
-                                          "fontSizeLarge": "MuiSvgIcon-fontSizeLarge",
-                                          "fontSizeSmall": "MuiSvgIcon-fontSizeSmall",
-                                          "root": "MuiSvgIcon-root",
-                                        }
-                                      }
-                                    >
-                                      <svg
-                                        aria-hidden={true}
-                                        className="MuiSvgIcon-root MuiAvatar-fallback"
-                                        focusable="false"
-                                        viewBox="0 0 24 24"
-                                      >
-                                        <path
-                                          d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
-                                        />
-                                      </svg>
-                                    </ForwardRef(SvgIcon)>
-                                  </WithStyles(ForwardRef(SvgIcon))>
-                                </ForwardRef(PersonIcon)>
-                              </div>
-                            </ForwardRef(Avatar)>
-                          </WithStyles(ForwardRef(Avatar))>
-                          <WithStyles(ForwardRef(Skeleton))
-                            key=".1"
-                            width={150}
-                          >
-                            <ForwardRef(Skeleton)
-                              classes={
-                                Object {
-                                  "circle": "MuiSkeleton-circle",
-                                  "fitContent": "MuiSkeleton-fitContent",
-                                  "heightAuto": "MuiSkeleton-heightAuto",
-                                  "pulse": "MuiSkeleton-pulse",
-                                  "rect": "MuiSkeleton-rect",
-                                  "root": "MuiSkeleton-root",
-                                  "text": "MuiSkeleton-text",
-                                  "wave": "MuiSkeleton-wave",
-                                  "withChildren": "MuiSkeleton-withChildren",
-                                }
-                              }
-                              width={150}
-                            >
-                              <span
-                                className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
-                                style={
+                              <ForwardRef(SvgIcon)
+                                className="MuiAvatar-fallback"
+                                classes={
                                   Object {
-                                    "height": undefined,
-                                    "width": 150,
+                                    "colorAction": "MuiSvgIcon-colorAction",
+                                    "colorDisabled": "MuiSvgIcon-colorDisabled",
+                                    "colorError": "MuiSvgIcon-colorError",
+                                    "colorPrimary": "MuiSvgIcon-colorPrimary",
+                                    "colorSecondary": "MuiSvgIcon-colorSecondary",
+                                    "fontSizeInherit": "MuiSvgIcon-fontSizeInherit",
+                                    "fontSizeLarge": "MuiSvgIcon-fontSizeLarge",
+                                    "fontSizeSmall": "MuiSvgIcon-fontSizeSmall",
+                                    "root": "MuiSvgIcon-root",
                                   }
                                 }
-                              />
-                            </ForwardRef(Skeleton)>
-                          </WithStyles(ForwardRef(Skeleton))>
-                        </li>
-                      </ForwardRef(ListItem)>
-                    </WithStyles(ForwardRef(ListItem))>
+                              >
+                                <svg
+                                  aria-hidden={true}
+                                  className="MuiSvgIcon-root MuiAvatar-fallback"
+                                  focusable="false"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                                  />
+                                </svg>
+                              </ForwardRef(SvgIcon)>
+                            </WithStyles(ForwardRef(SvgIcon))>
+                          </ForwardRef(PersonIcon)>
+                        </div>
+                      </ForwardRef(Avatar)>
+                    </WithStyles(ForwardRef(Avatar))>
+                    <WithStyles(ForwardRef(Skeleton))
+                      key=".1"
+                      width={150}
+                    >
+                      <ForwardRef(Skeleton)
+                        classes={
+                          Object {
+                            "circle": "MuiSkeleton-circle",
+                            "fitContent": "MuiSkeleton-fitContent",
+                            "heightAuto": "MuiSkeleton-heightAuto",
+                            "pulse": "MuiSkeleton-pulse",
+                            "rect": "MuiSkeleton-rect",
+                            "root": "MuiSkeleton-root",
+                            "text": "MuiSkeleton-text",
+                            "wave": "MuiSkeleton-wave",
+                            "withChildren": "MuiSkeleton-withChildren",
+                          }
+                        }
+                        width={150}
+                      >
+                        <span
+                          className="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse"
+                          style={
+                            Object {
+                              "height": undefined,
+                              "width": 150,
+                            }
+                          }
+                        />
+                      </ForwardRef(Skeleton)>
+                    </WithStyles(ForwardRef(Skeleton))>
                   </li>
                 </ForwardRef(ListItem)>
               </WithStyles(ForwardRef(ListItem))>

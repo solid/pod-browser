@@ -2664,6 +2664,7 @@ font-display: block;",
                   rows={Array []}
                   rowsById={Object {}}
                   setHiddenColumns={[Function]}
+                  setSortBy={[Function]}
                   sortedFlatRows={Array []}
                   sortedRows={Array []}
                   state={
@@ -9595,6 +9596,7 @@ font-display: block;",
                     }
                   }
                   setHiddenColumns={[Function]}
+                  setSortBy={[Function]}
                   sortedFlatRows={
                     Array [
                       Object {
