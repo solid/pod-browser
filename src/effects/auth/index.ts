@@ -24,6 +24,9 @@ import Router from "next/router";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import SessionContext from "../../contexts/sessionContext";
 
+// TODO temporary until NSS supports dpop tokens
+import SessionWrapper from "../../solidAuthClientWrapper";
+
 // TODO figure out typescript enums
 export const SESSION_STATES = {
   LOGGED_IN: "LOGGED_IN",
@@ -31,7 +34,7 @@ export const SESSION_STATES = {
 };
 
 export async function redirectBasedOnSessionState(
-  session: Session,
+  session: Session | SessionWrapper,
   isLoadingSession: boolean,
   redirectIfSessionState: string,
   location: string

@@ -120,14 +120,12 @@ describe("forceDownload", () => {
 describe("downloadResource", () => {
   test("it returns a handler to download the resource", () => {
     const iri = "http://example.com/resource";
-    const handler = downloadResource(iri);
     const blobMock = jest.fn();
     const responseMock = { blob: blobMock };
-    const fetchMock = jest.fn();
+    const fetchMock = jest.fn().mockResolvedValue(responseMock);
+    const handler = downloadResource(iri, fetchMock);
 
     blobMock.mockResolvedValue("file");
-
-    window.fetch = fetchMock.mockResolvedValue(responseMock);
 
     jest
       .spyOn(stringHelpers, "parseUrl")

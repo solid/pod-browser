@@ -37,16 +37,21 @@ import {
   ThemeProvider,
 } from "@material-ui/styles";
 
-import {
-  Session,
-  getClientAuthenticationWithDependencies,
-} from "@inrupt/solid-client-authn-browser";
-
 import { create } from "jss";
 import preset from "jss-preset-default";
 
 import { StyleRules } from "@material-ui/styles/withStyles";
 import { appLayout, useBem } from "@solid/lit-prism-patterns";
+
+// TODO temporary until solid-client-authn-browser works with NSS (NSS supports dpop)
+/*
+import {
+  Session,
+  getClientAuthenticationWithDependencies,
+} from "@inrupt/solid-client-authn-browser";
+ */
+import Session from "../src/solidAuthClientWrapper";
+
 import theme from "../src/theme";
 import SessionContext from "../src/contexts/sessionContext";
 import { AlertProvider } from "../src/contexts/alertContext";
@@ -68,6 +73,8 @@ const useStyles = makeStyles(() =>
   createStyles(appLayout.styles(theme) as StyleRules)
 );
 
+// TODO temporary until solid-client-authn-browser works with NSS (NSS supports dpop)
+/*
 // Generate an app-level session.
 const session = new Session(
   {
@@ -75,6 +82,20 @@ const session = new Session(
   },
   "pod-browser"
 );
+ */
+const session = new Session();
+
+export function hasSolidAuthClientHash(): boolean {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  if (window.location.hash.indexOf("#access_token=") === 0) {
+    return true;
+  }
+
+  return false;
+}
 
 export default function App(props: AppProps): ReactElement {
   const { Component, pageProps } = props;
@@ -82,8 +103,9 @@ export default function App(props: AppProps): ReactElement {
   const { query } = useRouter();
 
   // TODO fix flash of login screen when redirected without code
+  // TODO get rid of window.location.hash after solid-auth-client is gone
   const [isLoadingSession, setIsLoadingSession] = useState(
-    !!query.code || !!query.access_token
+    !!query.code || !!query.access_token || hasSolidAuthClientHash()
   );
 
   // Remove injected serverside JSS
@@ -96,7 +118,7 @@ export default function App(props: AppProps): ReactElement {
   }, []);
 
   useEffect(() => {
-    if (query.code || query.access_token) {
+    if (query.code || query.access_token || hasSolidAuthClientHash()) {
       setIsLoadingSession(true);
 
       session
