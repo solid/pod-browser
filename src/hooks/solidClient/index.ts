@@ -30,7 +30,7 @@ import {
   getThing,
   getIriAll,
   unstable_Access,
-  unstable_fetchResourceInfoWithAcl,
+  fetchResourceInfoWithAcl,
   unstable_getAgentAccessAll,
   isContainer,
 } from "@inrupt/solid-client";
@@ -70,10 +70,12 @@ export async function fetchResourceDetails(
   fetch: typeof window.fetch
 ): Promise<IResourceDetails> {
   const name = getIriPath(iri) as string;
-  const resourceInfo = await unstable_fetchResourceInfoWithAcl(iri, { fetch });
+  const resourceInfo = await fetchResourceInfoWithAcl(iri, { fetch });
+
   const accessModeList = unstable_getAgentAccessAll(resourceInfo);
   const permissions = await normalizePermissions(
-    accessModeList as Record<string, unstable_Access>
+    accessModeList as Record<string, unstable_Access>,
+    fetch
   );
 
   let types = [] as string[];

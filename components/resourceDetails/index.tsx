@@ -22,7 +22,7 @@
 // @ts-nocheck
 // material-ui is broken and doesn't allow `ListItem` to accept `component`
 
-import React, { ReactElement } from "react";
+import React, { ReactElement, useContext } from "react";
 import {
   Button,
   createStyles,
@@ -40,6 +40,7 @@ import ResourceLink from "../resourceLink";
 import styles from "./styles";
 import { IResourceDetails } from "../../src/solidClientHelpers";
 import { parseUrl } from "../../src/stringHelpers";
+import SessionContext from "../../src/contexts/sessionContext";
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
 
 interface IDownloadLink {
@@ -72,7 +73,7 @@ export function forceDownload(name: string, file: Blob): void {
   document.body.removeChild(a);
 }
 
-export function downloadResource(iri: string) {
+export function downloadResource(iri: string, fetch: typeof window.fetch) {
   return (): void => {
     const { pathname } = parseUrl(iri);
     const name = pathname.replace(/\//g, "");
@@ -85,13 +86,15 @@ export function downloadResource(iri: string) {
 }
 
 export function DownloadLink(props: IDownloadLink): ReactElement | null {
+  const { session } = useContext(SessionContext);
   const { type, iri, className } = props;
+
   if (type.match(/container/i)) return null;
 
   return (
     <Button
       variant="contained"
-      onClick={downloadResource(iri)}
+      onClick={downloadResource(iri, session.fetch)}
       className={className}
     >
       Download

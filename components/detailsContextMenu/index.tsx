@@ -53,6 +53,7 @@ interface IContentsProps {
 export function Contents({ action, iri }: IContentsProps): ReactElement | null {
   const { pathname } = parseUrl(iri);
   const { data, error } = useFetchResourceDetails(iri);
+
   const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
   const errorMessage = "There was an error fetching the details.";
   const loadingComponent =
