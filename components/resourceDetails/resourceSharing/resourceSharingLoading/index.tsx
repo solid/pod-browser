@@ -40,8 +40,8 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
-import { backToDetailsClick } from "../resourceSharing";
-import styles from "../resourceDetails/styles";
+import { backToDetailsClick } from "..";
+import styles from "../../styles";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme))

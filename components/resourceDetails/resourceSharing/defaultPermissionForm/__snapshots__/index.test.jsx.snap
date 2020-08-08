@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DetailsError Renders a details error view 1`] = `
+exports[`DefaultPermissionForm it renders a DefaultPermissionForm 1`] = `
 <WithTheme
   theme={
     Object {
@@ -837,53 +837,9 @@ font-display: block;",
       }
     }
   >
-    <DetailsError
+    <DefaultPermissionForm
       iri="iri"
-      message="message"
-      name="name"
-    >
-      <section
-        className="makeStyles-centeredSection-2"
-      >
-        <h3
-          className="makeStyles-content-h3-14"
-          title="iri"
-        >
-          name
-        </h3>
-      </section>
-      <WithStyles(ForwardRef(Divider))>
-        <ForwardRef(Divider)
-          classes={
-            Object {
-              "absolute": "MuiDivider-absolute",
-              "flexItem": "MuiDivider-flexItem",
-              "inset": "MuiDivider-inset",
-              "light": "MuiDivider-light",
-              "middle": "MuiDivider-middle",
-              "root": "MuiDivider-root",
-              "vertical": "MuiDivider-vertical",
-            }
-          }
-        >
-          <hr
-            className="MuiDivider-root"
-          />
-        </ForwardRef(Divider)>
-      </WithStyles(ForwardRef(Divider))>
-      <section
-        className="makeStyles-centeredSection-2"
-      >
-        <h5
-          className="makeStyles-content-h5-16"
-        >
-          Error
-        </h5>
-        <p>
-          message
-        </p>
-      </section>
-    </DetailsError>
+    />
   </ThemeProvider>
 </WithTheme>
 `;

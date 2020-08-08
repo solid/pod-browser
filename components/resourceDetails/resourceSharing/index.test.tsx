@@ -21,22 +21,23 @@
 
 import * as RouterFns from "next/router";
 import * as SolidClientFns from "@inrupt/solid-client";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
-import * as SolidClientHelperFns from "../../src/solidClientHelpers";
-import SessionContext from "../../src/contexts/sessionContext";
+import { mountToJson } from "../../../__testUtils/mountWithTheme";
+import * as SolidClientHelperFns from "../../../src/solidClientHelpers";
+import SessionContext from "../../../src/contexts/sessionContext";
 import ResourceSharing, {
-  AddedAgents,
   backToDetailsClick,
-  displayName,
   handleAddAgentClick,
-  handlePermissionUpdate,
   NoThirdPartyPermissions,
-  saveThirdPartyPermissionHandler,
   ThirdPartyPermissions,
-  ThirdPartyPermissionsList,
+  onThirdPartyAccessSubmit,
+  thirdPartySubmitHandler,
 } from "./index";
 
 describe("ResourceSharing", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   test("it renders the sharing action component", () => {
     const name = "name";
     const iri = "iri";
@@ -99,28 +100,62 @@ describe("ResourceSharing", () => {
 
     expect(tree).toMatchSnapshot();
   });
-});
 
-describe("displayName", () => {
-  test("it returns the name property if given", () => {
+  test("it renders the NoThirdPartyPermissions with no 3rd party permissions", () => {
     const name = "name";
-    const nickname = "nickname";
+    const iri = "iri";
     const webId = "webId";
+    const alias = "Full Control";
+    const acl = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    };
+    const permissions = [
+      {
+        webId,
+        alias,
+        profile: { webId },
+        acl,
+      },
+    ];
 
-    expect(displayName({ name, nickname, webId })).toEqual(name);
-  });
+    const session = {
+      info: {
+        webId,
+      },
+      fetch: jest.fn(),
+    };
 
-  test("it returns the nickname property if no name", () => {
-    const nickname = "nickname";
-    const webId = "webId";
+    jest
+      .spyOn(RouterFns, "useRouter")
+      .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
 
-    expect(displayName({ webId, nickname })).toEqual(nickname);
-  });
+    jest.spyOn(SolidClientFns, "unstable_hasResourceAcl").mockReturnValue(true);
 
-  test("it returns the webId property if no nickname", () => {
-    const webId = "webId";
+    jest
+      .spyOn(SolidClientFns, "unstable_hasAccessibleAcl")
+      .mockReturnValue(true);
 
-    expect(displayName({ webId })).toEqual(webId);
+    jest.spyOn(SolidClientFns, "unstable_getResourceAcl").mockReturnValueOnce();
+
+    jest
+      .spyOn(SolidClientFns, "unstable_getAgentDefaultAccessOne")
+      .mockReturnValueOnce({
+        read: true,
+        write: true,
+        append: true,
+        control: true,
+      });
+
+    const tree = mountToJson(
+      <SessionContext.Provider value={{ session }}>
+        <ResourceSharing iri={iri} name={name} permissions={permissions} />
+      </SessionContext.Provider>
+    );
+
+    expect(tree).toMatchSnapshot();
   });
 });
 
@@ -130,21 +165,31 @@ describe("handleAddAgentClick", () => {
     const avatar = "avatar";
     const name = "name";
     const setAddedAgents = jest.fn();
+    const fetch = jest.fn();
     const profile = { webId, avatar, name };
+    const { ACL } = SolidClientHelperFns;
 
     jest
       .spyOn(SolidClientHelperFns, "fetchProfile")
       .mockResolvedValueOnce(profile);
 
-    await handleAddAgentClick(webId, [], setAddedAgents);
+    await handleAddAgentClick(webId, [], setAddedAgents, fetch);
 
-    expect(setAddedAgents).toHaveBeenCalledWith([profile]);
+    expect(setAddedAgents).toHaveBeenCalledWith([
+      {
+        webId,
+        profile,
+        alias: ACL.NONE.alias,
+        acl: ACL.NONE.acl,
+      },
+    ]);
   });
 
   test("it does not add duplicate agents", async () => {
     const webId = "webId";
     const avatar = "avatar";
     const name = "name";
+    const fetch = jest.fn();
     const setAddedAgents = jest.fn();
     const profile = { webId, avatar, name };
 
@@ -152,12 +197,13 @@ describe("handleAddAgentClick", () => {
       .spyOn(SolidClientHelperFns, "fetchProfile")
       .mockResolvedValueOnce(profile);
 
-    await handleAddAgentClick(webId, [profile], setAddedAgents);
+    await handleAddAgentClick(webId, [profile], setAddedAgents, fetch);
 
     expect(setAddedAgents).not.toHaveBeenCalled();
   });
 
   test("it logs an error when something goes wrong", async () => {
+    const fetch = jest.fn();
     jest.spyOn(console, "error").mockImplementationOnce(jest.fn());
     jest
       .spyOn(SolidClientHelperFns, "fetchProfile")
@@ -165,159 +211,9 @@ describe("handleAddAgentClick", () => {
         throw new Error("boom");
       });
 
-    await handleAddAgentClick("agentId", [], jest.fn());
+    await handleAddAgentClick("agentId", [], jest.fn(), fetch);
     /* eslint-disable no-console */
     expect(console.error).toHaveBeenCalledWith("boom");
-  });
-});
-
-describe("saveThirdPartyPermissionHandler", () => {
-  test("it removes the agent from addedAgents and adds them to the permissions", async () => {
-    const iri = "iri";
-    const setAddedAgents = jest.fn();
-    const setThirdPartyPermissions = jest.fn();
-    const webId = "webId";
-    const profile = { webId, avatar: "avatar", name: "name" };
-    const access = {
-      read: true,
-      write: true,
-      append: true,
-      control: true,
-    };
-    jest
-      .spyOn(SolidClientHelperFns, "savePermissions")
-      .mockResolvedValueOnce({});
-
-    const handler = saveThirdPartyPermissionHandler({
-      iri,
-      setAddedAgents,
-      addedAgents: [profile],
-      thirdPartyPermissions: [],
-      setThirdPartyPermissions,
-      webId,
-      profile,
-    });
-
-    await handler(access);
-
-    expect(setAddedAgents).toHaveBeenCalledWith([]);
-    expect(setThirdPartyPermissions).toHaveBeenCalledWith([
-      {
-        alias: "Control",
-        acl: access,
-        webId,
-        profile,
-      },
-    ]);
-    expect(SolidClientHelperFns.savePermissions).toHaveBeenCalledWith({
-      iri,
-      webId,
-      access,
-    });
-  });
-});
-
-describe("AddedAgents", () => {
-  test("it renders a list of agents added to the pending allow access list", () => {
-    const webId = "webId";
-    const avatar = "avatar";
-    const name = "name";
-    const agent = {
-      webId,
-      avatar,
-      name,
-    };
-    const addedAgents = [agent];
-    const setAddedAgents = jest.fn();
-    const setThirdPartyPermissions = jest.fn();
-    const thirdPartyPermissions = [];
-    const classes = {
-      listItem: "listItem",
-      avatar: "avatar",
-      detailText: "detailText",
-    };
-
-    const session = {
-      fetch: jest.fn(),
-    };
-
-    const tree = mountToJson(
-      <SessionContext.Provider value={{ session }}>
-        <AddedAgents
-          addedAgents={addedAgents}
-          classes={classes}
-          setAddedAgents={setAddedAgents}
-          setThirdPartyPermissions={setThirdPartyPermissions}
-          thirdPartyPermissions={thirdPartyPermissions}
-          iri="https://test.url"
-        />
-      </SessionContext.Provider>
-    );
-
-    expect(tree).toMatchSnapshot();
-  });
-
-  test("it returns null when addedAgents is an empty array", () => {
-    const setAddedAgents = jest.fn();
-    const setThirdPartyPermissions = jest.fn();
-    const thirdPartyPermissions = [];
-    const classes = {
-      listItem: "listItem",
-      avatar: "avatar",
-      detailText: "detailText",
-    };
-
-    const session = {
-      fetch: jest.fn(),
-    };
-
-    const tree = mountToJson(
-      <SessionContext.Provider value={{ session }}>
-        <AddedAgents
-          addedAgents={[]}
-          classes={classes}
-          setAddedAgents={setAddedAgents}
-          setThirdPartyPermissions={setThirdPartyPermissions}
-          thirdPartyPermissions={thirdPartyPermissions}
-        />
-      </SessionContext.Provider>
-    );
-
-    expect(tree).toMatchSnapshot();
-  });
-});
-
-describe("handlePermissionUpdate", () => {
-  test("it creates a handler that removes agents if all permissions are removed", async () => {
-    jest
-      .spyOn(SolidClientHelperFns, "savePermissions")
-      .mockResolvedValueOnce({});
-
-    const iri = "iri";
-    const webId = "webId";
-    const setThirdPartyPermissions = jest.fn();
-    const thirdPartyPermissions = [{ webId }];
-    const access = {
-      read: false,
-      write: false,
-      append: false,
-      control: false,
-    };
-    const handler = handlePermissionUpdate({
-      setThirdPartyPermissions,
-      thirdPartyPermissions,
-      webId,
-      iri,
-    });
-
-    await handler(access);
-
-    expect(setThirdPartyPermissions).toHaveBeenCalledWith([]);
-    expect(SolidClientHelperFns.savePermissions).toHaveBeenCalledWith({
-      iri,
-      webId,
-      access,
-    });
   });
 });
 
@@ -412,45 +308,6 @@ describe("ThirdPartyPermissions", () => {
   });
 });
 
-describe("ThirdPartyPermissionsList", () => {
-  test("it renders the third party permissions", () => {
-    const iri = "iri";
-    const webId = "webId";
-    const alias = "Full Control";
-    const profile = { webId };
-    const setThirdPartyPermissions = jest.fn();
-    const acl = {
-      read: true,
-      write: true,
-      append: true,
-      control: true,
-    };
-    const thirdPartyPermissions = [
-      {
-        webId,
-        alias,
-        acl,
-        profile,
-      },
-    ];
-    const classes = {
-      centeredSection: "centeredSection",
-      listItem: "listItem",
-    };
-
-    const tree = mountToJson(
-      <ThirdPartyPermissionsList
-        iri={iri}
-        classes={classes}
-        thirdPartyPermissions={thirdPartyPermissions}
-        setThirdPartyPermissions={setThirdPartyPermissions}
-      />
-    );
-
-    expect(tree).toMatchSnapshot();
-  });
-});
-
 describe("backToDetailsClick", () => {
   test("it returns a handle to go back to the details action", async () => {
     const resourceIri = "iri";
@@ -480,5 +337,60 @@ describe("backToDetailsClick", () => {
         query: { action: "details", resourceIri },
       }
     );
+  });
+});
+
+describe("onThirdPartyAccessSubmit", () => {
+  test("it creates a handles that adds an agent to the permissions list", async () => {
+    const addedAgents = [];
+    const webId = "webId";
+    const setAddedAgents = jest.fn();
+    const setThirdPartyPermissions = jest.fn();
+    const onSubmit = jest.fn();
+    const thirdPartyPermissions = [];
+    const profile = { webId };
+    const { acl, alias } = SolidClientHelperFns.ACL.CONTROL;
+    const permission = {
+      alias,
+      acl,
+      webId,
+      profile,
+    };
+
+    const handler = onThirdPartyAccessSubmit({
+      addedAgents,
+      setAddedAgents,
+      setThirdPartyPermissions,
+      thirdPartyPermissions,
+      onSubmit,
+    });
+
+    await handler(profile, acl);
+
+    expect(setThirdPartyPermissions).toHaveBeenCalledWith([permission]);
+  });
+});
+
+describe("thirdPartySubmitHandler", () => {
+  test("it create a handler to remove an agent that has access revoked", () => {
+    const { CONTROL, NONE } = SolidClientHelperFns.ACL;
+    const webId = "webId";
+    const profile = { webId };
+    const permissionWithAccess = {
+      alias: CONTROL.alias,
+      acl: CONTROL.acl,
+      webId,
+      profile,
+    };
+    const thirdPartyPermissions = [permissionWithAccess];
+    const setThirdPartyPermissions = jest.fn();
+    const handler = thirdPartySubmitHandler({
+      thirdPartyPermissions,
+      setThirdPartyPermissions,
+    });
+
+    handler(profile, NONE.acl);
+
+    expect(setThirdPartyPermissions).toHaveBeenCalledWith([]);
   });
 });

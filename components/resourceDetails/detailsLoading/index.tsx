@@ -35,8 +35,8 @@ import ShareIcon from "@material-ui/icons/Share";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
-import ResourceLink from "../resourceLink";
+import { DETAILS_CONTEXT_ACTIONS } from "../../../src/contexts/detailsMenuContext";
+import ResourceLink from "../../resourceLink";
 import styles from "./styles";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>

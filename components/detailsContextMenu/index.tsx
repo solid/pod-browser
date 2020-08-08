@@ -34,11 +34,11 @@ import DetailsMenuContext, {
 import AlertContext from "../../src/contexts/alertContext";
 import styles from "./styles";
 import useEscKey from "../../src/effects/useEscKey";
-import DetailsLoading from "../detailsLoading";
-import ResourceSharingLoading from "../resourceSharingLoading";
-import DetailsError from "../detailsError";
+import DetailsLoading from "../resourceDetails/detailsLoading";
+import ResourceSharingLoading from "../resourceDetails/resourceSharing/resourceSharingLoading";
+import DetailsError from "../resourceDetails/detailsError";
 import ResourceDetails from "../resourceDetails";
-import ResourceSharing from "../resourceSharing";
+import ResourceSharing from "../resourceDetails/resourceSharing";
 import { useFetchResourceDetails } from "../../src/hooks/solidClient";
 import { parseUrl, stripQueryParams } from "../../src/stringHelpers";
 

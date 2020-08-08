@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { mountToJson } from "../../../../__testUtils/mountWithTheme";
 import ResourceSharingLoading from "./index";
 
 describe("ResourceSharingLoading", () => {

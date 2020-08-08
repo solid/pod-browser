@@ -186,6 +186,13 @@ describe("Contents", () => {
       setMessage: jest.fn(),
       setSeverity: jest.fn(),
     };
+    const mockSessionContext = {
+      session: {
+        fetch: jest.fn(),
+        info: { webId },
+      },
+    };
+
     const data = {
       iri,
       types: ["Container"],
@@ -201,11 +208,25 @@ describe("Contents", () => {
             control: true,
           },
         },
+        {
+          profile: { webId: "collaborator", avatar: "/avatar" },
+          webId: "collaborator",
+          alias: "Full Control",
+          acl: {
+            read: true,
+            write: true,
+            append: true,
+            control: true,
+          },
+        },
       ],
       dataset: {},
     };
 
-    jest.spyOn(ReactFns, "useContext").mockReturnValueOnce(mockAlertContext);
+    jest
+      .spyOn(ReactFns, "useContext")
+      .mockReturnValueOnce(mockAlertContext)
+      .mockReturnValueOnce(mockSessionContext);
 
     jest
       .spyOn(SolidClientHookFns, "useFetchResourceDetails")

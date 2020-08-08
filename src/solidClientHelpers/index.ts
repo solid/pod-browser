@@ -25,8 +25,8 @@ import {
   getDatetime,
   getDecimal,
   getInteger,
-  getIriAll,
   getIri,
+  getIriAll,
   getStringNoLocale,
   getThing,
   IriString,
@@ -157,6 +157,12 @@ export function aclToString(acl: unstable_Access): string {
   return `read:${acl.read},write:${acl.write},append:${acl.append},control:${acl.control}`;
 }
 
+export function displayProfileName({ nickname, name, webId }: Profile): string {
+  if (name) return name;
+  if (nickname) return nickname;
+  return webId;
+}
+
 export function isEqualACL(
   aclA: unstable_Access,
   aclB: unstable_Access
@@ -210,7 +216,7 @@ export interface NormalizedPermission {
   profile: Profile;
 }
 
-interface ISavePermissions {
+export interface ISavePermissions {
   iri: string;
   webId: string;
   access: unstable_Access;

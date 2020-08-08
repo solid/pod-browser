@@ -19,17 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { mountToJson } from "../../__testUtils/mountWithTheme";
-import DetailsError from "./index";
+import * as RouterFns from "next/router";
+import DetailsLoading from "./index";
+import { mountToJson } from "../../../__testUtils/mountWithTheme";
 
-describe("DetailsError", () => {
+describe("DetailsLoading", () => {
   test("Renders a details error view", () => {
-    const name = "name";
-    const message = "message";
-    const iri = "iri";
-    const tree = mountToJson(
-      <DetailsError name={name} message={message} iri={iri} />
-    );
+    jest
+      .spyOn(RouterFns, "useRouter")
+      .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
+
+    const resource = { iri: "iri", name: "name", types: ["type"] };
+    const tree = mountToJson(<DetailsLoading resource={resource} />);
 
     expect(tree).toMatchSnapshot();
   });

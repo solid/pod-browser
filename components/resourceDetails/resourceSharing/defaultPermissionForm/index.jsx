@@ -1,0 +1,92 @@
+/**
+ * Copyright 2020 Inrupt Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+ * Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/* eslint-disable camelcase, no-console */
+
+import { useState, useContext } from "react";
+import T from "prop-types";
+import {
+  ACL,
+  fetchProfile,
+  isContainerIri,
+  saveDefaultPermissions,
+} from "../../../../src/solidClientHelpers";
+import SessionContext from "../../../../src/contexts/sessionContext";
+import AgentSearchForm from "../../../agentSearchForm";
+import AgentAccessList from "../agentAccessList";
+
+export function handleAgentAdd({ addedAgents, setAddedAgents, fetch }) {
+  return async (agentId) => {
+    try {
+      const profile = await fetchProfile(agentId, fetch);
+      const exists = addedAgents.some(({ webId: id }) => id === profile.webId);
+      if (exists) return;
+
+      setAddedAgents([
+        ...addedAgents,
+        {
+          webId: profile.webId,
+          profile,
+          alias: ACL.NONE.alias,
+          acl: ACL.NONE.acl,
+        },
+      ]);
+    } catch ({ message }) {
+      console.error(message);
+    }
+  };
+}
+
+export function handleAgentSubmit({ setAddedAgents, addedAgents }) {
+  return (agent) => {
+    setAddedAgents(addedAgents.filter((a) => a.webId !== agent.webId));
+  };
+}
+
+function DefaultPermissionForm({ iri }) {
+  const [addedAgents, setAddedAgents] = useState([]);
+  const {
+    session: { fetch },
+  } = useContext(SessionContext);
+  const onAgentAdd = handleAgentAdd({ addedAgents, setAddedAgents, fetch });
+
+  const onAgentSubmit = handleAgentSubmit({ setAddedAgents, addedAgents });
+
+  if (!isContainerIri(iri)) return null;
+
+  return (
+    <>
+      <AgentSearchForm onSubmit={onAgentAdd} heading="Grant Default Access" />
+      <AgentAccessList
+        permissions={addedAgents}
+        iri={iri}
+        saveFn={saveDefaultPermissions}
+        onSubmit={onAgentSubmit}
+      />
+    </>
+  );
+}
+
+DefaultPermissionForm.propTypes = {
+  iri: T.string.isRequired,
+};
+
+export default DefaultPermissionForm;

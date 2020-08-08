@@ -863,7 +863,7 @@ font-display: block;",
         className="makeStyles-headerSection-3"
       >
         <h3
-          className="makeStyles-content-h3-14"
+          className="makeStyles-content-h3-15"
           title="/container/"
         >
           Name
@@ -892,7 +892,7 @@ font-display: block;",
         className="makeStyles-centeredSection-2"
       >
         <h5
-          className="makeStyles-content-h5-16"
+          className="makeStyles-content-h5-17"
         >
           Actions
         </h5>
@@ -1500,7 +1500,7 @@ font-display: block;",
         className="makeStyles-centeredSection-2"
       >
         <h5
-          className="makeStyles-content-h5-16"
+          className="makeStyles-content-h5-17"
         >
           Details
         </h5>
@@ -2554,7 +2554,7 @@ font-display: block;",
         className="makeStyles-headerSection-3"
       >
         <h3
-          className="makeStyles-content-h3-14"
+          className="makeStyles-content-h3-15"
           title="/resource"
         >
           Name
@@ -2583,7 +2583,7 @@ font-display: block;",
         className="makeStyles-centeredSection-2"
       >
         <h5
-          className="makeStyles-content-h5-16"
+          className="makeStyles-content-h5-17"
         >
           Actions
         </h5>
@@ -3191,7 +3191,7 @@ font-display: block;",
         className="makeStyles-centeredSection-2"
       >
         <h5
-          className="makeStyles-content-h5-16"
+          className="makeStyles-content-h5-17"
         >
           Details
         </h5>

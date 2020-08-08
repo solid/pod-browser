@@ -23,7 +23,7 @@ import { ReactElement } from "react";
 import { Divider } from "@material-ui/core";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import styles from "../resourceDetails/styles";
+import styles from "../styles";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme))

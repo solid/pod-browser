@@ -68,6 +68,9 @@ const rules = {
   agentInput: {
     width: "100%",
     marginBottom: "1rem",
+  },
+  agentAddButton: {
+    marginBottom: "1rem",
   }
 };
 

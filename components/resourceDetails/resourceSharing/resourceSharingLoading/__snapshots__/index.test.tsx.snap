@@ -1001,7 +1001,7 @@ font-display: block;",
           </ForwardRef(Button)>
         </WithStyles(ForwardRef(Button))>
         <h3
-          className="makeStyles-content-h3-14"
+          className="makeStyles-content-h3-15"
           title="test"
         >
           test
@@ -1030,7 +1030,7 @@ font-display: block;",
         className="makeStyles-centeredSection-2"
       >
         <h5
-          className="makeStyles-content-h5-16"
+          className="makeStyles-content-h5-17"
         >
           Default Access
         </h5>
@@ -1189,7 +1189,7 @@ font-display: block;",
         className="makeStyles-centeredSection-2"
       >
         <h5
-          className="makeStyles-content-h5-16"
+          className="makeStyles-content-h5-17"
         >
           My Access
         </h5>
@@ -1570,7 +1570,7 @@ font-display: block;",
         className="makeStyles-centeredSection-2"
       >
         <h5
-          className="makeStyles-content-h5-16"
+          className="makeStyles-content-h5-17"
           title="test"
         >
           Grant Permission
