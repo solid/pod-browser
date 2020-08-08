@@ -249,16 +249,21 @@ function ResourceSharing({ name, iri, permissions, dataset }) {
 
   return (
     <>
-      <section className={classes.headerSection}>
-        <h3 className={classes["content-h3"]} title={iri}>
-          {name}
-        </h3>
+      <div className={classes.drawerHeader}>
         <Button
           startIcon={<ChevronLeftIcon />}
           onClick={backToDetailsClick(router)}
         >
           Details
         </Button>
+      </div>
+
+      <Divider />
+
+      <section className={classes.headerSection}>
+        <h3 className={classes["content-h3"]} title={iri}>
+          {name}
+        </h3>
       </section>
 
       <Divider />

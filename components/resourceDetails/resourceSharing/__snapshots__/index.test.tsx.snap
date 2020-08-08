@@ -1884,15 +1884,7 @@ font-display: block;",
         ]
       }
     >
-      <section
-        className="makeStyles-headerSection-3"
-      >
-        <h3
-          className="makeStyles-content-h3-15"
-          title="iri"
-        >
-          name
-        </h3>
+      <div>
         <WithStyles(ForwardRef(Button))
           onClick={[Function]}
           startIcon={<Memo(ChevronLeftIcon) />}
@@ -2049,6 +2041,35 @@ font-display: block;",
             </WithStyles(ForwardRef(ButtonBase))>
           </ForwardRef(Button)>
         </WithStyles(ForwardRef(Button))>
+      </div>
+      <WithStyles(ForwardRef(Divider))>
+        <ForwardRef(Divider)
+          classes={
+            Object {
+              "absolute": "MuiDivider-absolute",
+              "flexItem": "MuiDivider-flexItem",
+              "inset": "MuiDivider-inset",
+              "light": "MuiDivider-light",
+              "middle": "MuiDivider-middle",
+              "root": "MuiDivider-root",
+              "vertical": "MuiDivider-vertical",
+            }
+          }
+        >
+          <hr
+            className="MuiDivider-root"
+          />
+        </ForwardRef(Divider)>
+      </WithStyles(ForwardRef(Divider))>
+      <section
+        className="makeStyles-headerSection-3"
+      >
+        <h3
+          className="makeStyles-content-h3-15"
+          title="iri"
+        >
+          name
+        </h3>
       </section>
       <WithStyles(ForwardRef(Divider))>
         <ForwardRef(Divider)
@@ -5644,15 +5665,7 @@ font-display: block;",
         ]
       }
     >
-      <section
-        className="makeStyles-headerSection-3"
-      >
-        <h3
-          className="makeStyles-content-h3-15"
-          title="iri"
-        >
-          name
-        </h3>
+      <div>
         <WithStyles(ForwardRef(Button))
           onClick={[Function]}
           startIcon={<Memo(ChevronLeftIcon) />}
@@ -5809,6 +5822,35 @@ font-display: block;",
             </WithStyles(ForwardRef(ButtonBase))>
           </ForwardRef(Button)>
         </WithStyles(ForwardRef(Button))>
+      </div>
+      <WithStyles(ForwardRef(Divider))>
+        <ForwardRef(Divider)
+          classes={
+            Object {
+              "absolute": "MuiDivider-absolute",
+              "flexItem": "MuiDivider-flexItem",
+              "inset": "MuiDivider-inset",
+              "light": "MuiDivider-light",
+              "middle": "MuiDivider-middle",
+              "root": "MuiDivider-root",
+              "vertical": "MuiDivider-vertical",
+            }
+          }
+        >
+          <hr
+            className="MuiDivider-root"
+          />
+        </ForwardRef(Divider)>
+      </WithStyles(ForwardRef(Divider))>
+      <section
+        className="makeStyles-headerSection-3"
+      >
+        <h3
+          className="makeStyles-content-h3-15"
+          title="iri"
+        >
+          name
+        </h3>
       </section>
       <WithStyles(ForwardRef(Divider))>
         <ForwardRef(Divider)

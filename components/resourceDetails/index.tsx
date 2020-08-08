@@ -33,6 +33,7 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 import ShareIcon from "@material-ui/icons/Share";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { makeStyles } from "@material-ui/styles";
@@ -134,11 +135,13 @@ const DeleteLink = React.forwardRef(
 interface IDetailsProps {
   resource: IResourceDetails;
   onDelete: void;
+  closeDrawer: () => Promise<void>;
 }
 
 export default function ResourceDetails({
   resource,
   onDelete,
+  closeDrawer,
 }: IDetailsProps): ReactElement {
   const classes = useStyles();
   const { iri, name, types } = resource;
@@ -146,6 +149,13 @@ export default function ResourceDetails({
 
   return (
     <>
+      <div className={classes.drawerHeader}>
+        <Button startIcon={<CloseIcon />} onClick={closeDrawer}>
+          Close
+        </Button>
+      </div>
+
+      <Divider />
       <section className={classes.headerSection}>
         <h3 className={classes["content-h3"]} title={iri}>
           {name}

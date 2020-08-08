@@ -34,7 +34,6 @@ const styles = (theme: PrismTheme) => ({
     borderLeftStyle: "solid",
     borderLeftWidth: theme.spacing(1),
     borderLeftColor: theme.palette.grey["50"],
-    overflowY: "visible",
     width: "95%",
     [theme.breakpoints.up("sm")]: {
       width: "50%",
