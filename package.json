@@ -44,6 +44,7 @@
     "rdf-namespaces": "^1.8.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-id-generator": "^3.0.1",
     "react-jss": "^10.3.0",
     "react-table": "^7.5.0",
     "react-transition-group": "^4.4.1",

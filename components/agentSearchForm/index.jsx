@@ -20,6 +20,7 @@
  */
 
 import { useState } from "react";
+import { useId } from "react-id-generator";
 import {
   Button,
   createStyles,
@@ -53,15 +54,16 @@ function AgentSearchForm({ heading, onSubmit }) {
   const classes = useStyles();
   const onClick = handleClick({ setAgentId, onSubmit });
   const onChange = handleChange(setAgentId);
+  const inputId = useId();
 
   return (
     <>
       <h5 className={classes["content-h5"]}>{heading}</h5>
 
       <FormControl className={classes.agentInput}>
-        <InputLabel htmlFor="agent-web-id">Web ID</InputLabel>
+        <InputLabel htmlFor={inputId}>Web ID</InputLabel>
         <Input
-          id="agent-web-id"
+          id={inputId}
           onChange={onChange}
           value={agentId}
           // prettier-ignore

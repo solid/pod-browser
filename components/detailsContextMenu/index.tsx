@@ -22,11 +22,12 @@
 import { ReactElement, useContext, useEffect, Dispatch } from "react";
 import T from "prop-types";
 import { AlertProps } from "@material-ui/lab/Alert";
-import { Drawer } from "@material-ui/core";
+import { Drawer, Button, Divider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useRouter, NextRouter } from "next/router";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import { createStyles, StyleRules } from "@material-ui/styles";
+import CloseIcon from "@material-ui/icons/Close";
 import DetailsMenuContext, {
   DETAILS_CONTEXT_ACTIONS,
 } from "../../src/contexts/detailsMenuContext";
@@ -49,14 +50,12 @@ interface IContentsProps {
   action: string;
   iri: string;
   onUpdate: void;
-  closeDrawer: () => Promise<void>;
 }
 
 export function Contents({
   action,
   iri,
   onUpdate,
-  closeDrawer,
 }: IContentsProps): ReactElement | null {
   const { pathname } = parseUrl(iri);
   const { data, error } = useFetchResourceDetails(iri);
@@ -102,7 +101,6 @@ export function Contents({
         <ResourceDetails
           resource={{ ...data, name: pathname }}
           onDelete={onUpdate}
-          closeDrawer={closeDrawer}
         />
       );
   }
@@ -139,7 +137,8 @@ export default function DetailsContextMenu(
   const { query } = useRouter();
   const { action, resourceIri } = query;
 
-  const bem = useBem(useStyles());
+  const classes = useStyles();
+  const bem = useBem(classes);
   const router = useRouter();
 
   useEffect(() => {
@@ -158,11 +157,18 @@ export default function DetailsContextMenu(
       open={menuOpen}
       classes={{ paper: bem("drawer__paper") }}
     >
+      <div className={classes.drawerHeader}>
+        <Button startIcon={<CloseIcon />} onClick={closeDrawer}>
+          Close
+        </Button>
+      </div>
+
+      <Divider />
+
       <Contents
         action={action as string}
         iri={resourceIri as string}
         onUpdate={onUpdate}
-        closeDrawer={closeDrawer}
       />
     </Drawer>
   );

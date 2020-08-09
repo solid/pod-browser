@@ -19,47 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const withSourceMaps = require("@zeit/next-source-maps")();
-const SentryWebpackPlugin = require("@sentry/webpack-plugin");
+import Link from "next/link";
 
-const {
-  NEXT_PUBLIC_SENTRY_DSN: SENTRY_DSN,
-  VERCEL_GITHUB_COMMIT_SHA: COMMIT_SHA,
-  SENTRY_ORG,
-  SENTRY_PROJECT,
-  SENTRY_AUTH_TOKEN,
-  NODE_ENV,
-} = process.env;
+export default function Custom404() {
+  return (
+    <>
+      <h1>404 - Page Not Found</h1>
 
-process.env.SENTRY_DSN = SENTRY_DSN;
-
-/* eslint no-param-reassign: 0 */
-module.exports = withSourceMaps({
-  webpack(config, options) {
-    // If the environment is the browser, we should load sentry/react instead of
-    // sentry/node.
-    if (!options.isServer) {
-      config.resolve.alias["@sentry/node"] = "@sentry/react";
-    }
-
-    if (
-      SENTRY_DSN &&
-      SENTRY_ORG &&
-      SENTRY_PROJECT &&
-      SENTRY_AUTH_TOKEN &&
-      COMMIT_SHA &&
-      NODE_ENV === "production"
-    ) {
-      config.plugins.push(
-        new SentryWebpackPlugin({
-          include: ".next",
-          ignore: ["node_modules"],
-          urlPrefix: "~/_next",
-          release: COMMIT_SHA,
-        })
-      );
-    }
-
-    return config;
-  },
-});
+      <p>
+        <Link href="/">
+          <a>Return to the home page.</a>
+        </Link>
+      </p>
+    </>
+  );
+}
