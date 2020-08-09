@@ -24,6 +24,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint @typescript-eslint/no-explicit-any: 0 */
 import React, { ComponentType, ReactElement, useEffect, useState } from "react";
+import * as Sentry from "@sentry/node";
 
 import PropTypes from "prop-types";
 import Head from "next/head";
@@ -64,6 +65,14 @@ import "./styles.css";
 interface AppProps {
   Component: ComponentType;
   pageProps: any;
+}
+
+// Enable Sentry if there's an env var for it.
+if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+  Sentry.init({
+    enabled: process.env.NODE_ENV === "production",
+    dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  });
 }
 
 const jss = create(preset());

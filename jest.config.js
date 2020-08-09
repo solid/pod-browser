@@ -27,10 +27,7 @@ module.exports = {
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>jest/setupTests.js"],
 
-  testPathIgnorePatterns: [
-    "/node_modules/",
-    "/__testUtils/",
-  ],
+  testPathIgnorePatterns: ["/node_modules/", "/__testUtils/"],
 
   collectCoverage: true,
 

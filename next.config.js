@@ -1,7 +1,65 @@
-const withSourceMaps = require('@zeit/next-source-maps');
+/**
+ * Copyright 2020 Inrupt Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+ * Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
+const withSourceMaps = require("@zeit/next-source-maps");
+const SentryWebpackPlugin = require("@sentry/webpack-plugin");
+
+const {
+  NEXT_PUBLIC_SENTRY_DSN: SENTRY_DSN,
+  VERCEL_GITHUB_COMMIT_SHA: COMMIT_SHA,
+  SENTRY_ORG,
+  SENTRY_PROJECT,
+  SENTRY_AUTH_TOKEN,
+  NODE_ENV,
+} = process.env;
+
+process.env.SENTRY_DSN = SENTRY_DSN;
+
+/* eslint no-param-reassign: 0 */
 module.exports = withSourceMaps({
-  webpack(config) {
+  webpack(config, options) {
+    // If the environment is the browser, we should load sentry/react instead of
+    // sentry/node.
+    if (!options.isServer) {
+      config.resolve.alias["@sentry/node"] = "@sentry/react";
+    }
+
+    if (
+      SENTRY_DSN &&
+      SENTRY_ORG &&
+      SENTRY_PROJECT &&
+      SENTRY_AUTH_TOKEN &&
+      COMMIT_SHA &&
+      NODE_ENV === "production"
+    ) {
+      config.plugins.push(
+        new SentryWebpackPlugin({
+          include: ".next",
+          ignore: ["node_modules"],
+          urlPrefix: "~/_next",
+          release: COMMIT_SHA,
+        })
+      );
+    }
+
     return config;
   },
 });
