@@ -271,7 +271,7 @@ function ResourceSharing({ name, iri, permissions, dataset }) {
       <section className={classes.centeredSection}>
         <h5 className={classes["content-h5"]}>My Access</h5>
         <AgentAccessList
-          permissions={[userPermissions]}
+          permissions={userPermissions ? [userPermissions] : []}
           iri={iriString}
           saveFn={savePermissions}
           warn
