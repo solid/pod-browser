@@ -196,6 +196,7 @@ describe("Contents", () => {
     const data = {
       iri,
       types: ["Container"],
+      defaultPermissions: [],
       permissions: [
         {
           profile: { webId, avatar: "/avatar" },

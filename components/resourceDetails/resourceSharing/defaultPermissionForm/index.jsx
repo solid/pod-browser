@@ -55,20 +55,29 @@ export function handleAgentAdd({ addedAgents, setAddedAgents, fetch }) {
   };
 }
 
-export function handleAgentSubmit({ setAddedAgents, addedAgents }) {
-  return (agent) => {
+export function handleAgentSubmit({ setAddedAgents, addedAgents, onSubmit }) {
+  return (agent, access) => {
     setAddedAgents(addedAgents.filter((a) => a.webId !== agent.webId));
+    onSubmit(agent, access);
   };
 }
 
-function DefaultPermissionForm({ iri }) {
+function DefaultPermissionForm({ iri, onSubmit }) {
   const [addedAgents, setAddedAgents] = useState([]);
   const {
     session: { fetch },
   } = useContext(SessionContext);
-  const onAgentAdd = handleAgentAdd({ addedAgents, setAddedAgents, fetch });
+  const onAgentAdd = handleAgentAdd({
+    addedAgents,
+    setAddedAgents,
+    fetch,
+  });
 
-  const onAgentSubmit = handleAgentSubmit({ setAddedAgents, addedAgents });
+  const onAgentSubmit = handleAgentSubmit({
+    setAddedAgents,
+    addedAgents,
+    onSubmit,
+  });
 
   if (!isContainerIri(iri)) return null;
 
@@ -87,6 +96,11 @@ function DefaultPermissionForm({ iri }) {
 
 DefaultPermissionForm.propTypes = {
   iri: T.string.isRequired,
+  onSubmit: T.func,
+};
+
+DefaultPermissionForm.defaultProps = {
+  onSubmit: () => {},
 };
 
 export default DefaultPermissionForm;

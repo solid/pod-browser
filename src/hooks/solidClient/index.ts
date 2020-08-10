@@ -27,12 +27,15 @@ import { space } from "rdf-namespaces";
 
 import {
   fetchLitDataset,
-  getThing,
-  getIriAll,
-  unstable_Access,
   fetchResourceInfoWithAcl,
-  unstable_getAgentAccessAll,
+  getIriAll,
+  getResourceAcl,
+  getThing,
+  hasResourceAcl,
   isContainer,
+  unstable_Access,
+  unstable_getAgentAccessAll,
+  unstable_getAgentDefaultAccessAll,
 } from "@inrupt/solid-client";
 
 import {
@@ -71,12 +74,25 @@ export async function fetchResourceDetails(
 ): Promise<IResourceDetails> {
   const name = getIriPath(iri) as string;
   const resourceInfo = await fetchResourceInfoWithAcl(iri, { fetch });
+  let defaultPermissions = [];
+  let permissions = [];
 
-  const accessModeList = unstable_getAgentAccessAll(resourceInfo);
-  const permissions = await normalizePermissions(
-    accessModeList as Record<string, unstable_Access>,
-    fetch
-  );
+  if (hasResourceAcl(resourceInfo)) {
+    const accessModeList = unstable_getAgentAccessAll(resourceInfo);
+    permissions = await normalizePermissions(
+      accessModeList as Record<string, unstable_Access>,
+      fetch
+    );
+    const resourceAcl = getResourceAcl(resourceInfo);
+    const defaultAccessModeList = unstable_getAgentDefaultAccessAll(
+      resourceAcl
+    );
+
+    defaultPermissions = await normalizePermissions(
+      defaultAccessModeList as Record<string, unstable_Access>,
+      fetch
+    );
+  }
 
   let types = [] as string[];
   const contentType = resourceInfo?.internal_resourceInfo?.contentType;
@@ -87,6 +103,7 @@ export async function fetchResourceDetails(
   return {
     iri,
     permissions,
+    defaultPermissions,
     types,
     name,
     dataset: resourceInfo,

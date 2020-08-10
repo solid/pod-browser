@@ -85,6 +85,7 @@ describe("handleAgentAdd", () => {
 describe("handleAgentSubmit", () => {
   test("it creates a handler that removes the agent from the list", async () => {
     const setAddedAgents = jest.fn();
+    const onSubmit = jest.fn();
     const webId = "webId";
     const { acl, alias } = SolidClientHelpers.ACL.CONTROL;
     const agent = {
@@ -94,9 +95,14 @@ describe("handleAgentSubmit", () => {
       profile: { webId },
     };
     const addedAgents = [agent];
-    const onAgentSubmit = handleAgentSubmit({ addedAgents, setAddedAgents });
-    await onAgentSubmit(agent);
+    const onAgentSubmit = handleAgentSubmit({
+      addedAgents,
+      setAddedAgents,
+      onSubmit,
+    });
+    await onAgentSubmit(agent, acl);
 
     expect(setAddedAgents).toHaveBeenCalledWith([]);
+    expect(onSubmit).toHaveBeenCalledWith(agent, acl);
   });
 });

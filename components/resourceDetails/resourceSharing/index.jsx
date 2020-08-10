@@ -51,6 +51,7 @@ import {
   getThirdPartyPermissions,
   getUserPermissions,
   savePermissions,
+  saveDefaultPermissions,
 } from "../../../src/solidClientHelpers";
 import styles from "../styles";
 import AgentSearchForm from "../../agentSearchForm";
@@ -59,30 +60,27 @@ import AgentAccessList from "./agentAccessList";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export async function handleAddAgentClick(
-  agentId,
-  addedAgents,
-  setAddedAgents,
-  fetch
-) {
-  try {
-    const profile = await fetchProfile(agentId, fetch);
-    const { webId } = profile;
-    const exists = addedAgents.some(({ webId: id }) => id === profile.webId);
-    if (!exists) {
-      setAddedAgents([
-        ...addedAgents,
-        {
-          webId,
-          profile,
-          alias: ACL.NONE.alias,
-          acl: ACL.NONE.acl,
-        },
-      ]);
+export function handleAddAgentClick(addedAgents, setAddedAgents, fetch) {
+  return async (agentId) => {
+    try {
+      const profile = await fetchProfile(agentId, fetch);
+      const { webId } = profile;
+      const exists = addedAgents.some(({ webId: id }) => id === profile.webId);
+      if (!exists) {
+        setAddedAgents([
+          ...addedAgents,
+          {
+            webId,
+            profile,
+            alias: ACL.NONE.alias,
+            acl: ACL.NONE.acl,
+          },
+        ]);
+      }
+    } catch ({ message }) {
+      console.error(message);
     }
-  } catch ({ message }) {
-    console.error(message);
-  }
+  };
 }
 
 export function onThirdPartyAccessSubmit({
@@ -207,13 +205,53 @@ export function backToDetailsClick(router) {
   };
 }
 
-function ResourceSharing({ name, iri, permissions, dataset }) {
+export function handleChangeDefaultAgentPermissions({
+  defaultAgents,
+  setDefaultAgents,
+}) {
+  return (agent, access) => {
+    const noAccess = Object.values(access).every((x) => !x);
+
+    if (noAccess) {
+      setDefaultAgents(defaultAgents.filter((a) => a.webId !== agent.webId));
+    }
+  };
+}
+
+export function handleAddDefaultPermissions({
+  defaultAgents,
+  setDefaultAgents,
+}) {
+  return (agent, access) => {
+    const agentInList = defaultAgents.some((a) => a.webId === agent.webId);
+
+    if (agentInList) return;
+
+    const permission = {
+      webId: agent.webId,
+      alias: displayPermissions(access),
+      profile: agent,
+      acl: access,
+    };
+
+    setDefaultAgents([...defaultAgents, permission]);
+  };
+}
+
+function ResourceSharing({
+  name,
+  iri,
+  permissions,
+  defaultPermissions,
+  dataset,
+}) {
   const { session } = useContext(SessionContext);
   const {
     fetch,
     info: { webId },
   } = session;
   const [addedAgents, setAddedAgents] = useState([]);
+  const [defaultAgents, setDefaultAgents] = useState(defaultPermissions);
 
   const userPermissions = getUserPermissions(webId, permissions);
   const [thirdPartyPermissions, setThirdPartyPermissions] = useState(
@@ -221,7 +259,6 @@ function ResourceSharing({ name, iri, permissions, dataset }) {
   );
   const classes = useStyles();
   const router = useRouter();
-  const iriString = iri;
   const defaultPermission = {
     webId,
     alias: "Control",
@@ -272,14 +309,14 @@ function ResourceSharing({ name, iri, permissions, dataset }) {
         <h5 className={classes["content-h5"]}>My Access</h5>
         <AgentAccessList
           permissions={userPermissions ? [userPermissions] : []}
-          iri={iriString}
+          iri={iri}
           saveFn={savePermissions}
           warn
         />
       </section>
 
       <ThirdPartyPermissions
-        iri={iriString}
+        iri={iri}
         thirdPartyPermissions={thirdPartyPermissions}
         setThirdPartyPermissions={setThirdPartyPermissions}
         classes={classes}
@@ -289,21 +326,14 @@ function ResourceSharing({ name, iri, permissions, dataset }) {
 
       <section className={classes.centeredSection}>
         <AgentSearchForm
-          onSubmit={async (agentId) => {
-            await handleAddAgentClick(
-              agentId,
-              addedAgents,
-              setAddedAgents,
-              fetch
-            );
-          }}
+          onSubmit={handleAddAgentClick(addedAgents, setAddedAgents, fetch)}
         />
       </section>
 
       <section className={classes.centeredSection}>
         <AgentAccessList
           permissions={addedAgents}
-          iri={iriString}
+          iri={iri}
           onSubmit={onThirdPartyPermissionSubmit}
           saveFn={savePermissions}
         />
@@ -312,11 +342,40 @@ function ResourceSharing({ name, iri, permissions, dataset }) {
       <Divider />
 
       <section className={classes.centeredSection}>
+        <h5 className={classes["content-h5"]}>Default Access</h5>
+
+        <List>
+          <ListItem key={0} className={classes.listItem}>
+            <ListItemIcon>
+              <PersonIcon />
+              People
+            </ListItemIcon>
+          </ListItem>
+
+          <Divider />
+
+          <AgentAccessList
+            permissions={defaultAgents}
+            iri={iri}
+            onSubmit={handleChangeDefaultAgentPermissions({
+              defaultAgents,
+              setDefaultAgents,
+            })}
+            saveFn={saveDefaultPermissions}
+          />
+        </List>
+
         <DefaultPermissionForm
-          iri={iriString}
+          iri={iri}
           webId={webId}
           permission={defaultPermission}
+          onSubmit={handleAddDefaultPermissions({
+            defaultAgents,
+            setDefaultAgents,
+          })}
         />
+
+        <Divider />
       </section>
     </>
   );
@@ -326,6 +385,7 @@ ResourceSharing.propTypes = {
   name: T.string.isRequired,
   iri: T.string.isRequired,
   permissions: T.arrayOf(T.object).isRequired,
+  defaultPermissions: T.arrayOf(T.object).isRequired,
   dataset: T.object.isRequired,
 };
 

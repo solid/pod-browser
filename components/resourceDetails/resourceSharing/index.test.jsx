@@ -27,10 +27,12 @@ import SessionContext from "../../../src/contexts/sessionContext";
 import ResourceSharing, {
   backToDetailsClick,
   handleAddAgentClick,
+  handleAddDefaultPermissions,
   NoThirdPartyPermissions,
-  ThirdPartyPermissions,
   onThirdPartyAccessSubmit,
+  ThirdPartyPermissions,
   thirdPartySubmitHandler,
+  handleChangeDefaultAgentPermissions,
 } from "./index";
 
 describe("ResourceSharing", () => {
@@ -94,7 +96,12 @@ describe("ResourceSharing", () => {
 
     const tree = mountToJson(
       <SessionContext.Provider value={{ session }}>
-        <ResourceSharing iri={iri} name={name} permissions={permissions} />
+        <ResourceSharing
+          iri={iri}
+          name={name}
+          permissions={permissions}
+          defaultPermissions={[]}
+        />
       </SessionContext.Provider>
     );
 
@@ -151,7 +158,12 @@ describe("ResourceSharing", () => {
 
     const tree = mountToJson(
       <SessionContext.Provider value={{ session }}>
-        <ResourceSharing iri={iri} name={name} permissions={permissions} />
+        <ResourceSharing
+          iri={iri}
+          name={name}
+          permissions={permissions}
+          defaultPermissions={[]}
+        />
       </SessionContext.Provider>
     );
 
@@ -173,7 +185,8 @@ describe("handleAddAgentClick", () => {
       .spyOn(SolidClientHelperFns, "fetchProfile")
       .mockResolvedValueOnce(profile);
 
-    await handleAddAgentClick(webId, [], setAddedAgents, fetch);
+    const handler = handleAddAgentClick([], setAddedAgents, fetch);
+    await handler(webId);
 
     expect(setAddedAgents).toHaveBeenCalledWith([
       {
@@ -197,7 +210,8 @@ describe("handleAddAgentClick", () => {
       .spyOn(SolidClientHelperFns, "fetchProfile")
       .mockResolvedValueOnce(profile);
 
-    await handleAddAgentClick(webId, [profile], setAddedAgents, fetch);
+    const handler = handleAddAgentClick([profile], setAddedAgents, fetch);
+    await handler(webId);
 
     expect(setAddedAgents).not.toHaveBeenCalled();
   });
@@ -211,7 +225,8 @@ describe("handleAddAgentClick", () => {
         throw new Error("boom");
       });
 
-    await handleAddAgentClick("agentId", [], jest.fn(), fetch);
+    const handler = handleAddAgentClick([], jest.fn(), fetch);
+    await handler("agentId");
     /* eslint-disable no-console */
     expect(console.error).toHaveBeenCalledWith("boom");
   });
@@ -392,5 +407,70 @@ describe("thirdPartySubmitHandler", () => {
     handler(profile, NONE.acl);
 
     expect(setThirdPartyPermissions).toHaveBeenCalledWith([]);
+  });
+
+  test("it does nothing if there is any access", () => {
+    const { CONTROL, READ } = SolidClientHelperFns.ACL;
+    const webId = "webId";
+    const profile = { webId };
+    const permissionWithAccess = {
+      alias: CONTROL.alias,
+      acl: CONTROL.acl,
+      webId,
+      profile,
+    };
+    const thirdPartyPermissions = [permissionWithAccess];
+    const setThirdPartyPermissions = jest.fn();
+    const handler = thirdPartySubmitHandler({
+      thirdPartyPermissions,
+      setThirdPartyPermissions,
+    });
+
+    handler(profile, READ.acl);
+
+    expect(setThirdPartyPermissions).not.toHaveBeenCalledWith();
+  });
+});
+
+describe("handleAddDefaultPermissions", () => {
+  test("it addes the added agent to the defaultAgents", () => {
+    const { ACL } = SolidClientHelperFns;
+    const defaultAgents = [];
+    const setDefaultAgents = jest.fn();
+    const webId = "webId";
+    const { alias, acl } = ACL.CONTROL;
+    const profile = { webId };
+    const handler = handleAddDefaultPermissions({
+      defaultAgents,
+      setDefaultAgents,
+    });
+    const permission = {
+      profile,
+      acl,
+      alias,
+      webId,
+    };
+
+    handler(profile, acl);
+
+    expect(setDefaultAgents).toHaveBeenCalledWith([permission]);
+  });
+});
+
+describe("handleChangeDefaultAgentPermissions", () => {
+  test("it returns a handler that removes agenst with revoked permissions", () => {
+    const { acl } = SolidClientHelperFns.ACL.NONE;
+    const webId = "webId";
+    const agent = { webId };
+    const defaultAgents = [agent];
+    const setDefaultAgents = jest.fn();
+    const handler = handleChangeDefaultAgentPermissions({
+      defaultAgents,
+      setDefaultAgents,
+    });
+
+    handler(agent, acl);
+
+    expect(setDefaultAgents).toHaveBeenCalledWith([]);
   });
 });

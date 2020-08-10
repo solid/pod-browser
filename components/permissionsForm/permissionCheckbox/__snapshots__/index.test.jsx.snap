@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DefaultPermissionForm it renders a DefaultPermissionForm 1`] = `
+exports[`PermissionCheckbox it renders a permission checkbox 1`] = `
 <WithTheme
   theme={
     Object {
@@ -837,10 +837,360 @@ font-display: block;",
       }
     }
   >
-    <DefaultPermissionForm
-      iri="iri"
-      onSubmit={[Function]}
-    />
+    <PermissionCheckbox
+      label="Read"
+      onChange={[MockFunction]}
+      value={true}
+    >
+      <WithStyles(ForwardRef(ListItem))
+        className="makeStyles-listItem-2"
+      >
+        <ForwardRef(ListItem)
+          className="makeStyles-listItem-2"
+          classes={
+            Object {
+              "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
+              "button": "MuiListItem-button",
+              "container": "MuiListItem-container",
+              "dense": "MuiListItem-dense",
+              "disabled": "Mui-disabled",
+              "divider": "MuiListItem-divider",
+              "focusVisible": "Mui-focusVisible",
+              "gutters": "MuiListItem-gutters",
+              "root": "MuiListItem-root",
+              "secondaryAction": "MuiListItem-secondaryAction",
+              "selected": "Mui-selected",
+            }
+          }
+        >
+          <li
+            className="MuiListItem-root makeStyles-listItem-2 MuiListItem-gutters"
+            disabled={false}
+          >
+            <WithStyles(ForwardRef(FormControlLabel))
+              classes={
+                Object {
+                  "label": "makeStyles-label-6",
+                }
+              }
+              control={
+                <WithStyles(ForwardRef(Checkbox))
+                  checked={true}
+                  classes={
+                    Object {
+                      "root": "makeStyles-checkbox-7",
+                    }
+                  }
+                  name="read"
+                  onChange={[MockFunction]}
+                />
+              }
+              key=".0"
+              label="Read"
+            >
+              <ForwardRef(FormControlLabel)
+                classes={
+                  Object {
+                    "disabled": "Mui-disabled",
+                    "label": "MuiFormControlLabel-label makeStyles-label-6",
+                    "labelPlacementBottom": "MuiFormControlLabel-labelPlacementBottom",
+                    "labelPlacementStart": "MuiFormControlLabel-labelPlacementStart",
+                    "labelPlacementTop": "MuiFormControlLabel-labelPlacementTop",
+                    "root": "MuiFormControlLabel-root",
+                  }
+                }
+                control={
+                  <WithStyles(ForwardRef(Checkbox))
+                    checked={true}
+                    classes={
+                      Object {
+                        "root": "makeStyles-checkbox-7",
+                      }
+                    }
+                    name="read"
+                    onChange={[MockFunction]}
+                  />
+                }
+                label="Read"
+              >
+                <label
+                  className="MuiFormControlLabel-root"
+                >
+                  <WithStyles(ForwardRef(Checkbox))
+                    checked={true}
+                    classes={
+                      Object {
+                        "root": "makeStyles-checkbox-7",
+                      }
+                    }
+                    name="read"
+                    onChange={[MockFunction]}
+                  >
+                    <ForwardRef(Checkbox)
+                      checked={true}
+                      classes={
+                        Object {
+                          "checked": "Mui-checked",
+                          "colorPrimary": "MuiCheckbox-colorPrimary",
+                          "colorSecondary": "MuiCheckbox-colorSecondary",
+                          "disabled": "Mui-disabled",
+                          "indeterminate": "MuiCheckbox-indeterminate",
+                          "root": "MuiCheckbox-root makeStyles-checkbox-7",
+                        }
+                      }
+                      name="read"
+                      onChange={[MockFunction]}
+                    >
+                      <WithStyles(ForwardRef(SwitchBase))
+                        checked={true}
+                        checkedIcon={<Memo />}
+                        classes={
+                          Object {
+                            "checked": "Mui-checked",
+                            "disabled": "Mui-disabled",
+                            "root": "MuiCheckbox-root makeStyles-checkbox-7 MuiCheckbox-colorSecondary",
+                          }
+                        }
+                        color="secondary"
+                        icon={<Memo />}
+                        inputProps={
+                          Object {
+                            "data-indeterminate": false,
+                          }
+                        }
+                        name="read"
+                        onChange={[MockFunction]}
+                        type="checkbox"
+                      >
+                        <ForwardRef(SwitchBase)
+                          checked={true}
+                          checkedIcon={<Memo />}
+                          classes={
+                            Object {
+                              "checked": "PrivateSwitchBase-checked-9 Mui-checked",
+                              "disabled": "PrivateSwitchBase-disabled-10 Mui-disabled",
+                              "input": "PrivateSwitchBase-input-11",
+                              "root": "PrivateSwitchBase-root-8 MuiCheckbox-root makeStyles-checkbox-7 MuiCheckbox-colorSecondary",
+                            }
+                          }
+                          color="secondary"
+                          icon={<Memo />}
+                          inputProps={
+                            Object {
+                              "data-indeterminate": false,
+                            }
+                          }
+                          name="read"
+                          onChange={[MockFunction]}
+                          type="checkbox"
+                        >
+                          <WithStyles(ForwardRef(IconButton))
+                            className="PrivateSwitchBase-root-8 MuiCheckbox-root makeStyles-checkbox-7 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-9 Mui-checked"
+                            color="secondary"
+                            component="span"
+                            onBlur={[Function]}
+                            onFocus={[Function]}
+                            tabIndex={null}
+                          >
+                            <ForwardRef(IconButton)
+                              className="PrivateSwitchBase-root-8 MuiCheckbox-root makeStyles-checkbox-7 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-9 Mui-checked"
+                              classes={
+                                Object {
+                                  "colorInherit": "MuiIconButton-colorInherit",
+                                  "colorPrimary": "MuiIconButton-colorPrimary",
+                                  "colorSecondary": "MuiIconButton-colorSecondary",
+                                  "disabled": "Mui-disabled",
+                                  "edgeEnd": "MuiIconButton-edgeEnd",
+                                  "edgeStart": "MuiIconButton-edgeStart",
+                                  "label": "MuiIconButton-label",
+                                  "root": "MuiIconButton-root",
+                                  "sizeSmall": "MuiIconButton-sizeSmall",
+                                }
+                              }
+                              color="secondary"
+                              component="span"
+                              onBlur={[Function]}
+                              onFocus={[Function]}
+                              tabIndex={null}
+                            >
+                              <WithStyles(ForwardRef(ButtonBase))
+                                centerRipple={true}
+                                className="MuiIconButton-root PrivateSwitchBase-root-8 MuiCheckbox-root makeStyles-checkbox-7 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-9 Mui-checked MuiIconButton-colorSecondary"
+                                component="span"
+                                disabled={false}
+                                focusRipple={true}
+                                onBlur={[Function]}
+                                onFocus={[Function]}
+                                tabIndex={null}
+                              >
+                                <ForwardRef(ButtonBase)
+                                  centerRipple={true}
+                                  className="MuiIconButton-root PrivateSwitchBase-root-8 MuiCheckbox-root makeStyles-checkbox-7 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-9 Mui-checked MuiIconButton-colorSecondary"
+                                  classes={
+                                    Object {
+                                      "disabled": "Mui-disabled",
+                                      "focusVisible": "Mui-focusVisible",
+                                      "root": "MuiButtonBase-root",
+                                    }
+                                  }
+                                  component="span"
+                                  disabled={false}
+                                  focusRipple={true}
+                                  onBlur={[Function]}
+                                  onFocus={[Function]}
+                                  tabIndex={null}
+                                >
+                                  <span
+                                    aria-disabled={false}
+                                    className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-8 MuiCheckbox-root makeStyles-checkbox-7 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-9 Mui-checked MuiIconButton-colorSecondary"
+                                    onBlur={[Function]}
+                                    onDragLeave={[Function]}
+                                    onFocus={[Function]}
+                                    onKeyDown={[Function]}
+                                    onKeyUp={[Function]}
+                                    onMouseDown={[Function]}
+                                    onMouseLeave={[Function]}
+                                    onMouseUp={[Function]}
+                                    onTouchEnd={[Function]}
+                                    onTouchMove={[Function]}
+                                    onTouchStart={[Function]}
+                                    tabIndex={null}
+                                  >
+                                    <span
+                                      className="MuiIconButton-label"
+                                    >
+                                      <input
+                                        checked={true}
+                                        className="PrivateSwitchBase-input-11"
+                                        data-indeterminate={false}
+                                        name="read"
+                                        onChange={[Function]}
+                                        type="checkbox"
+                                      />
+                                      <ForwardRef(CheckBoxIcon)>
+                                        <WithStyles(ForwardRef(SvgIcon))>
+                                          <ForwardRef(SvgIcon)
+                                            classes={
+                                              Object {
+                                                "colorAction": "MuiSvgIcon-colorAction",
+                                                "colorDisabled": "MuiSvgIcon-colorDisabled",
+                                                "colorError": "MuiSvgIcon-colorError",
+                                                "colorPrimary": "MuiSvgIcon-colorPrimary",
+                                                "colorSecondary": "MuiSvgIcon-colorSecondary",
+                                                "fontSizeInherit": "MuiSvgIcon-fontSizeInherit",
+                                                "fontSizeLarge": "MuiSvgIcon-fontSizeLarge",
+                                                "fontSizeSmall": "MuiSvgIcon-fontSizeSmall",
+                                                "root": "MuiSvgIcon-root",
+                                              }
+                                            }
+                                          >
+                                            <svg
+                                              aria-hidden={true}
+                                              className="MuiSvgIcon-root"
+                                              focusable="false"
+                                              viewBox="0 0 24 24"
+                                            >
+                                              <path
+                                                d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                                              />
+                                            </svg>
+                                          </ForwardRef(SvgIcon)>
+                                        </WithStyles(ForwardRef(SvgIcon))>
+                                      </ForwardRef(CheckBoxIcon)>
+                                    </span>
+                                    <WithStyles(memo)
+                                      center={true}
+                                    >
+                                      <ForwardRef(TouchRipple)
+                                        center={true}
+                                        classes={
+                                          Object {
+                                            "child": "MuiTouchRipple-child",
+                                            "childLeaving": "MuiTouchRipple-childLeaving",
+                                            "childPulsate": "MuiTouchRipple-childPulsate",
+                                            "ripple": "MuiTouchRipple-ripple",
+                                            "ripplePulsate": "MuiTouchRipple-ripplePulsate",
+                                            "rippleVisible": "MuiTouchRipple-rippleVisible",
+                                            "root": "MuiTouchRipple-root",
+                                          }
+                                        }
+                                      >
+                                        <span
+                                          className="MuiTouchRipple-root"
+                                        >
+                                          <TransitionGroup
+                                            childFactory={[Function]}
+                                            component={null}
+                                            exit={true}
+                                          />
+                                        </span>
+                                      </ForwardRef(TouchRipple)>
+                                    </WithStyles(memo)>
+                                  </span>
+                                </ForwardRef(ButtonBase)>
+                              </WithStyles(ForwardRef(ButtonBase))>
+                            </ForwardRef(IconButton)>
+                          </WithStyles(ForwardRef(IconButton))>
+                        </ForwardRef(SwitchBase)>
+                      </WithStyles(ForwardRef(SwitchBase))>
+                    </ForwardRef(Checkbox)>
+                  </WithStyles(ForwardRef(Checkbox))>
+                  <WithStyles(ForwardRef(Typography))
+                    className="MuiFormControlLabel-label makeStyles-label-6"
+                    component="span"
+                  >
+                    <ForwardRef(Typography)
+                      className="MuiFormControlLabel-label makeStyles-label-6"
+                      classes={
+                        Object {
+                          "alignCenter": "MuiTypography-alignCenter",
+                          "alignJustify": "MuiTypography-alignJustify",
+                          "alignLeft": "MuiTypography-alignLeft",
+                          "alignRight": "MuiTypography-alignRight",
+                          "body1": "MuiTypography-body1",
+                          "body2": "MuiTypography-body2",
+                          "button": "MuiTypography-button",
+                          "caption": "MuiTypography-caption",
+                          "colorError": "MuiTypography-colorError",
+                          "colorInherit": "MuiTypography-colorInherit",
+                          "colorPrimary": "MuiTypography-colorPrimary",
+                          "colorSecondary": "MuiTypography-colorSecondary",
+                          "colorTextPrimary": "MuiTypography-colorTextPrimary",
+                          "colorTextSecondary": "MuiTypography-colorTextSecondary",
+                          "displayBlock": "MuiTypography-displayBlock",
+                          "displayInline": "MuiTypography-displayInline",
+                          "gutterBottom": "MuiTypography-gutterBottom",
+                          "h1": "MuiTypography-h1",
+                          "h2": "MuiTypography-h2",
+                          "h3": "MuiTypography-h3",
+                          "h4": "MuiTypography-h4",
+                          "h5": "MuiTypography-h5",
+                          "h6": "MuiTypography-h6",
+                          "noWrap": "MuiTypography-noWrap",
+                          "overline": "MuiTypography-overline",
+                          "paragraph": "MuiTypography-paragraph",
+                          "root": "MuiTypography-root",
+                          "srOnly": "MuiTypography-srOnly",
+                          "subtitle1": "MuiTypography-subtitle1",
+                          "subtitle2": "MuiTypography-subtitle2",
+                        }
+                      }
+                      component="span"
+                    >
+                      <span
+                        className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-6 MuiTypography-body1"
+                      >
+                        Read
+                      </span>
+                    </ForwardRef(Typography)>
+                  </WithStyles(ForwardRef(Typography))>
+                </label>
+              </ForwardRef(FormControlLabel)>
+            </WithStyles(ForwardRef(FormControlLabel))>
+          </li>
+        </ForwardRef(ListItem)>
+      </WithStyles(ForwardRef(ListItem))>
+    </PermissionCheckbox>
   </ThemeProvider>
 </WithTheme>
 `;

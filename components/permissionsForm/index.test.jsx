@@ -24,13 +24,12 @@ import * as ReactFns from "react";
 import { mount } from "enzyme";
 import { mountToJson } from "enzyme-to-json";
 import * as SolidClientfns from "@inrupt/solid-client";
-import { NormalizedPermission } from "../../src/solidClientHelpers";
 import PermissionsForm, {
   setPermissionHandler,
   savePermissionsHandler,
-  PermissionCheckbox,
   saveHandler,
   toggleOpen,
+  arrowIcon,
 } from "./index";
 
 describe("PermissionsForm", () => {
@@ -47,7 +46,7 @@ describe("PermissionsForm", () => {
         append: true,
         control: true,
       },
-    } as NormalizedPermission;
+    };
 
     const tree = mount(
       <PermissionsForm iri={iri} permission={permission} warnOnSubmit={false} />
@@ -69,7 +68,7 @@ describe("PermissionsForm", () => {
         append: true,
         control: false,
       },
-    } as NormalizedPermission;
+    };
 
     const tree = mount(
       <PermissionsForm iri={iri} permission={permission} warnOnSubmit={false} />
@@ -91,7 +90,7 @@ describe("PermissionsForm", () => {
         append: true,
         control: true,
       },
-    } as NormalizedPermission;
+    };
 
     const setMessage = jest.fn();
     const setSeverity = jest.fn();
@@ -150,7 +149,7 @@ describe("PermissionsForm", () => {
         append: true,
         control: true,
       },
-    } as NormalizedPermission;
+    };
 
     const setMessage = jest.fn();
     const setSeverity = jest.fn();
@@ -233,7 +232,7 @@ describe("savePermissionsHandler", () => {
       write: true,
       append: true,
       control: true,
-    } as SolidClientfns.unstable_Access;
+    };
     const setAlertOpen = jest.fn();
     const setDialogOpen = jest.fn();
     const setMessage = jest.fn();
@@ -264,7 +263,7 @@ describe("savePermissionsHandler", () => {
       write: true,
       append: true,
       control: true,
-    } as SolidClientfns.unstable_Access;
+    };
     const setAlertOpen = jest.fn();
     const setDialogOpen = jest.fn();
     const setMessage = jest.fn();
@@ -286,30 +285,6 @@ describe("savePermissionsHandler", () => {
     expect(setSeverity).toHaveBeenCalledWith("error");
     expect(setMessage).toHaveBeenCalledWith("boom");
     expect(setAlertOpen).toHaveBeenCalledWith(true);
-  });
-});
-
-describe("PermissionCheckbox", () => {
-  test("it renders a permission checkbox", () => {
-    const onChange = jest.fn();
-    const classes = {
-      listItem: "listItem",
-      label: "label",
-      checkbox: "checkbox",
-    };
-    const label = "Read";
-    const value = true;
-
-    const tree = mount(
-      <PermissionCheckbox
-        value={value}
-        classes={classes}
-        label={label}
-        onChange={onChange}
-      />
-    );
-
-    expect(mountToJson(tree)).toMatchSnapshot();
   });
 });
 
@@ -362,5 +337,21 @@ describe("toggleOpen", () => {
     toggle();
 
     expect(setOpen).toHaveBeenCalledWith(true);
+  });
+});
+
+describe("arrowIcon", () => {
+  test("it returns the up arrow when open is true", () => {
+    const icon = arrowIcon(true);
+    const tree = mount(icon);
+
+    expect(mountToJson(tree)).toMatchSnapshot();
+  });
+
+  test("it returns the down arrow when open is false", () => {
+    const icon = arrowIcon(false);
+    const tree = mount(icon);
+
+    expect(mountToJson(tree)).toMatchSnapshot();
   });
 });

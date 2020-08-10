@@ -364,6 +364,7 @@ export interface NormalizedResource {
 
 export interface IResourceDetails extends NormalizedResource {
   name: string;
+  defaultPermissions: NormalizedPermission[];
 }
 
 export const PERMISSIONS: string[] = ["read", "write", "append", "control"];

@@ -95,7 +95,7 @@ export function Contents({
 
   if (!data) return loadingComponent;
 
-  const { permissions, dataset } = data;
+  const { permissions, defaultPermissions, dataset } = data;
 
   switch (action) {
     case DETAILS_CONTEXT_ACTIONS.SHARING:
@@ -104,6 +104,7 @@ export function Contents({
           iri={iri}
           name={pathname}
           permissions={permissions}
+          defaultPermissions={defaultPermissions}
           dataset={dataset}
         />
       );
