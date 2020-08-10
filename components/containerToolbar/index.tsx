@@ -21,8 +21,12 @@
 
 import { ReactElement } from "react";
 import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
+import { Grid } from "@material-ui/core";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
+import InfoIcon from "@material-ui/icons/Info";
+import AddFileButton from "../addFileButton";
 import styles from "./styles";
+
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
 
 import ResourceLink from "../resourceLink";
@@ -31,17 +35,30 @@ const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme) as StyleRules)
 );
 
-export default function ContainerToolbar(): ReactElement | null {
+interface IContainerToolbar {
+  onSave: () => void;
+}
+
+export default function ContainerToolbar(
+  props: IContainerToolbar
+): ReactElement | null {
+  const { onSave } = props;
   const bem = useBem(useStyles());
 
   return (
-    <div className={bem("container-toolbar")}>
-      <ResourceLink
-        action={DETAILS_CONTEXT_ACTIONS.DETAILS}
-        className={bem("container-toolbar__trigger")}
-      >
-        Container details
-      </ResourceLink>
-    </div>
+    <Grid container spacing={1} justify="flex-end" alignItems="center">
+      <Grid item>
+        <ResourceLink
+          action={DETAILS_CONTEXT_ACTIONS.DETAILS}
+          className={bem("container-toolbar__trigger")}
+        >
+          <InfoIcon />
+        </ResourceLink>
+      </Grid>
+
+      <Grid item>
+        <AddFileButton onSave={onSave} />
+      </Grid>
+    </Grid>
   );
 }

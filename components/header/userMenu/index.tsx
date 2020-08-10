@@ -64,7 +64,10 @@ export default function UserMenu(): ReactElement {
         aria-hidden={!userMenuOpen}
       >
         <ul className={bem("header-banner__user-menu")}>
-          <li className={bem("header-banner__user-menu-item")}>
+          <li
+            className={bem("header-banner__user-menu-item")}
+            style={{ zIndex: 100 }}
+          >
             <LogOutButton
               className={bem("header-banner__user-menu-item-trigger")}
             >

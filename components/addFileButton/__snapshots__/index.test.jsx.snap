@@ -8,6 +8,7 @@ exports[`AddFileButton Renders an add file button 1`] = `
     onSave={[Function]}
   >
     <WithStyles(ForwardRef(Button))
+      color="primary"
       component="label"
       disabled={false}
       type="submit"
@@ -47,13 +48,14 @@ exports[`AddFileButton Renders an add file button 1`] = `
             "textSizeSmall": "MuiButton-textSizeSmall",
           }
         }
+        color="primary"
         component="label"
         disabled={false}
         type="submit"
         variant="contained"
       >
         <WithStyles(ForwardRef(ButtonBase))
-          className="MuiButton-root MuiButton-contained"
+          className="MuiButton-root MuiButton-contained MuiButton-containedPrimary"
           component="label"
           disabled={false}
           focusRipple={true}
@@ -61,7 +63,7 @@ exports[`AddFileButton Renders an add file button 1`] = `
           type="submit"
         >
           <ForwardRef(ButtonBase)
-            className="MuiButton-root MuiButton-contained"
+            className="MuiButton-root MuiButton-contained MuiButton-containedPrimary"
             classes={
               Object {
                 "disabled": "Mui-disabled",
@@ -77,7 +79,7 @@ exports[`AddFileButton Renders an add file button 1`] = `
           >
             <label
               aria-disabled={false}
-              className="MuiButtonBase-root MuiButton-root MuiButton-contained"
+              className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary"
               onBlur={[Function]}
               onDragLeave={[Function]}
               onFocus={[Function]}

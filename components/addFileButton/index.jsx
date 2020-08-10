@@ -67,6 +67,7 @@ export default function AddFileButton({ onSave }) {
       variant="contained"
       component="label"
       type="submit"
+      color="primary"
       disabled={isUploading}
     >
       {isUploading ? "Uploading..." : "Upload File"}

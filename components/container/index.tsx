@@ -26,7 +26,6 @@
 import { ReactElement, useContext, useMemo } from "react";
 import { useTable, useSortBy, UseSortByOptions } from "react-table";
 import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
-import { Box } from "@material-ui/core";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { useRouter } from "next/router";
@@ -34,7 +33,6 @@ import { useRouter } from "next/router";
 import DetailsContextMenu, { handleCloseDrawer } from "../detailsContextMenu";
 import ContainerTableRow from "../containerTableRow";
 import SortedTableCarat from "../sortedTableCarat";
-import AddFileButton from "../addFileButton";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import { useFetchContainerResourceIris } from "../../src/hooks/solidClient";
 import { IResourceDetails, getIriPath } from "../../src/solidClientHelpers";
@@ -123,7 +121,7 @@ export default function Container(props: IPodList): ReactElement {
       <div className={clsx(bem("container"))}>
         <div className={bem("container-menu")}>
           <Breadcrumbs />
-          <ContainerToolbar />
+          <ContainerToolbar onSave={mutate} />
         </div>
       </div>
       <div
@@ -177,10 +175,6 @@ export default function Container(props: IPodList): ReactElement {
             })}
           </tbody>
         </table>
-
-        <Box mt={2}>
-          <AddFileButton onSave={mutate} />
-        </Box>
 
         <DetailsContextMenu
           onUpdate={() => {
