@@ -22,7 +22,7 @@
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import { deleteFile } from "@inrupt/solid-client";
-import { wait } from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 
 import DeleteLink from "./index";
 
@@ -74,7 +74,7 @@ describe("Delete link", () => {
 
     tree.find("a").simulate("click", { preventDefault: () => {} });
 
-    await wait(() => expect(onDelete).toHaveBeenCalled());
+    await waitFor(() => expect(onDelete).toHaveBeenCalled());
   });
 
   it("calls onDeleteError after failed delete", async () => {
@@ -94,6 +94,6 @@ describe("Delete link", () => {
 
     tree.find("a").simulate("click", { preventDefault: () => {} });
 
-    await wait(() => expect(onDeleteError).toHaveBeenCalledWith(error));
+    await waitFor(() => expect(onDeleteError).toHaveBeenCalledWith(error));
   });
 });

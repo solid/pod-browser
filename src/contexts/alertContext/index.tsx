@@ -20,6 +20,7 @@
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* istanbul ignore file */
 import {
   createContext,
   ReactElement,
