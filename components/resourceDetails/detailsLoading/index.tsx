@@ -22,7 +22,7 @@
 // @ts-nocheck
 // material-ui is broken and doesn't allow `ListItem` to accept `component`
 
-import React, { ReactElement, useContext } from "react";
+import React, { ReactElement } from "react";
 import {
   Typography,
   Divider,
@@ -36,11 +36,10 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import { deleteFile } from "@inrupt/solid-client";
 
 import { DETAILS_CONTEXT_ACTIONS } from "../../../src/contexts/detailsMenuContext";
-import SessionContext from "../../../src/contexts/sessionContext";
 import ResourceLink from "../../resourceLink";
+import DeleteLink from "../deleteLink";
 import styles from "./styles";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
@@ -51,6 +50,7 @@ interface Props {
   name?: string | null;
   iri?: string | null;
   onDelete: void;
+  onDeleteError: (Error) => void;
 }
 
 /* eslint react/jsx-props-no-spreading: 0 */
@@ -62,25 +62,12 @@ const SharingLink = React.forwardRef((linkProps, ref) => (
   />
 ));
 
-/* eslint react/jsx-props-no-spreading: 0 */
-/* eslint react/prop-types: 0 */
-const DeleteLink = React.forwardRef(
-  ({ resourceIri, onDelete, ...linkProps }, ref) => {
-    const { session } = useContext(SessionContext);
-
-    async function deleteResource() {
-      await deleteFile(resourceIri, { fetch: session.fetch });
-      onDelete();
-    }
-
-    /* eslint jsx-a11y/anchor-has-content: 0 */
-    return (
-      <a href="#delete" {...linkProps} ref={ref} onClick={deleteResource} />
-    );
-  }
-);
-
-function DetailsLoading({ name, iri, onDelete }: Props): ReactElement {
+function DetailsLoading({
+  name,
+  iri,
+  onDelete,
+  onDeleteError,
+}: Props): ReactElement {
   const classes = useStyles();
 
   return (
@@ -108,6 +95,7 @@ function DetailsLoading({ name, iri, onDelete }: Props): ReactElement {
             component={DeleteLink}
             resourceIri={iri}
             onDelete={onDelete}
+            onDeleteError={onDeleteError}
           >
             <ListItemIcon>
               <DeleteIcon />

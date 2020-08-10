@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Delete link it renders a delete link 1`] = `
+<a
+  href="#delete"
+  onClick={[Function]}
+/>
+`;

@@ -37,13 +37,13 @@ import ShareIcon from "@material-ui/icons/Share";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { makeStyles } from "@material-ui/styles";
 import { PrismTheme } from "@solid/lit-prism-patterns";
-import { deleteFile } from "@inrupt/solid-client";
 import ResourceLink from "../resourceLink";
 import styles from "./styles";
 import { IResourceDetails } from "../../src/solidClientHelpers";
 import { parseUrl } from "../../src/stringHelpers";
 import SessionContext from "../../src/contexts/sessionContext";
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
+import DeleteLink from "./deleteLink";
 
 interface IDownloadLink {
   type: string;
@@ -113,32 +113,16 @@ const SharingLink = React.forwardRef((linkProps, ref) => (
   />
 ));
 
-/* eslint react/jsx-props-no-spreading: 0 */
-/* eslint react/prop-types: 0 */
-const DeleteLink = React.forwardRef(
-  ({ resourceIri, onDelete, ...linkProps }, ref) => {
-    const { session } = useContext(SessionContext);
-
-    async function deleteResource() {
-      await deleteFile(resourceIri, { fetch: session.fetch });
-      onDelete();
-    }
-
-    /* eslint jsx-a11y/anchor-has-content: 0 */
-    return (
-      <a href="#delete" {...linkProps} ref={ref} onClick={deleteResource} />
-    );
-  }
-);
-
 interface IDetailsProps {
   resource: IResourceDetails;
   onDelete: void;
+  onDeleteError: (Error) => void;
 }
 
 export default function ResourceDetails({
   resource,
   onDelete,
+  onDeleteError,
 }: IDetailsProps): ReactElement {
   const classes = useStyles();
   const { iri, name, types } = resource;
@@ -169,6 +153,7 @@ export default function ResourceDetails({
             component={DeleteLink}
             resourceIri={iri}
             onDelete={onDelete}
+            onDeleteError={onDeleteError}
           >
             <ListItemIcon>
               <DeleteIcon />

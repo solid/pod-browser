@@ -62,9 +62,21 @@ export function Contents({
 
   const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
   const errorMessage = "There was an error fetching the details.";
+
+  function onDeleteError(e: Error) {
+    setSeverity("error" as AlertProps["severity"]);
+    setMessage(e.toString());
+    setAlertOpen(true);
+  }
+
   const loadingComponent =
     action === "details" ? (
-      <DetailsLoading name={pathname} iri={iri} onDelete={onUpdate} />
+      <DetailsLoading
+        name={pathname}
+        iri={iri}
+        onDelete={onUpdate}
+        onDeleteError={onDeleteError}
+      />
     ) : (
       <ResourceSharingLoading name={pathname} iri={iri} />
     );
@@ -101,6 +113,7 @@ export function Contents({
         <ResourceDetails
           resource={{ ...data, name: pathname }}
           onDelete={onUpdate}
+          onDeleteError={onDeleteError}
         />
       );
   }

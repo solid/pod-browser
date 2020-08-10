@@ -3421,6 +3421,7 @@ font-display: block;",
       <DetailsLoading
         iri="/iri/"
         name="/iri/"
+        onDeleteError={[Function]}
       >
         <section
           className="makeStyles-centeredSection-4"
@@ -3784,6 +3785,7 @@ font-display: block;",
                       "render": [Function],
                     }
                   }
+                  onDeleteError={[Function]}
                   resourceIri="/iri/"
                 >
                   <ForwardRef(ListItem)
@@ -3809,6 +3811,7 @@ font-display: block;",
                         "render": [Function],
                       }
                     }
+                    onDeleteError={[Function]}
                     resourceIri="/iri/"
                   >
                     <WithStyles(ForwardRef(ButtonBase))
@@ -3821,6 +3824,7 @@ font-display: block;",
                       }
                       disabled={false}
                       focusVisibleClassName="Mui-focusVisible"
+                      onDeleteError={[Function]}
                       resourceIri="/iri/"
                     >
                       <ForwardRef(ButtonBase)
@@ -3840,12 +3844,14 @@ font-display: block;",
                         }
                         disabled={false}
                         focusVisibleClassName="Mui-focusVisible"
+                        onDeleteError={[Function]}
                         resourceIri="/iri/"
                       >
                         <ForwardRef
                           aria-disabled={false}
                           className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
                           onBlur={[Function]}
+                          onDeleteError={[Function]}
                           onDragLeave={[Function]}
                           onFocus={[Function]}
                           onKeyDown={[Function]}
@@ -5082,6 +5088,7 @@ font-display: block;",
       iri="/iri/"
     >
       <ResourceDetails
+        onDeleteError={[Function]}
         resource={
           Object {
             "iri": "/iri/",
@@ -5466,6 +5473,7 @@ font-display: block;",
                       "render": [Function],
                     }
                   }
+                  onDeleteError={[Function]}
                   resourceIri="/iri/"
                 >
                   <ForwardRef(ListItem)
@@ -5491,6 +5499,7 @@ font-display: block;",
                         "render": [Function],
                       }
                     }
+                    onDeleteError={[Function]}
                     resourceIri="/iri/"
                   >
                     <WithStyles(ForwardRef(ButtonBase))
@@ -5503,6 +5512,7 @@ font-display: block;",
                       }
                       disabled={false}
                       focusVisibleClassName="Mui-focusVisible"
+                      onDeleteError={[Function]}
                       resourceIri="/iri/"
                     >
                       <ForwardRef(ButtonBase)
@@ -5522,12 +5532,14 @@ font-display: block;",
                         }
                         disabled={false}
                         focusVisibleClassName="Mui-focusVisible"
+                        onDeleteError={[Function]}
                         resourceIri="/iri/"
                       >
                         <ForwardRef
                           aria-disabled={false}
                           className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
                           onBlur={[Function]}
+                          onDeleteError={[Function]}
                           onDragLeave={[Function]}
                           onFocus={[Function]}
                           onKeyDown={[Function]}
