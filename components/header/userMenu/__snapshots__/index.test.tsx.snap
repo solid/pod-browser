@@ -866,6 +866,11 @@ font-display: block;",
           >
             <li
               className="makeStyles-header-banner__user-menu-item-1557"
+              style={
+                Object {
+                  "zIndex": 100,
+                }
+              }
             >
               <LogOut
                 className="makeStyles-header-banner__user-menu-item-trigger-1560"
