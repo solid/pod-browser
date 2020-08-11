@@ -27,7 +27,8 @@ const rules = {
     justifyContent: "center",
   },
   centeredSection: {
-    padding: "1rem",
+    paddingLeft: "1rem",
+    paddingRight: "1rem",
   },
   raw: {
     height: "100%",
