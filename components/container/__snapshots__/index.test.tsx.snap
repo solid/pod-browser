@@ -5182,15 +5182,15 @@ font-display: block;",
                     Array [
                       Object {
                         "iri": "https://myaccount.mypodserver.com/inbox",
-                        "name": "/inbox",
+                        "name": "inbox",
                       },
                       Object {
                         "iri": "https://myaccount.mypodserver.com/private",
-                        "name": "/private",
+                        "name": "private",
                       },
                       Object {
                         "iri": "https://myaccount.mypodserver.com/note.txt",
-                        "name": "/note.txt",
+                        "name": "note.txt",
                       },
                     ]
                   }
@@ -5398,7 +5398,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/inbox",
+                            "value": "inbox",
                           },
                           Object {
                             "column": Object {
@@ -5527,7 +5527,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/inbox",
+                            "value": "inbox",
                           },
                           Object {
                             "column": Object {
@@ -5577,13 +5577,13 @@ font-display: block;",
                         "index": 0,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/inbox",
-                          "name": "/inbox",
+                          "name": "inbox",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/inbox",
+                          "name": "inbox",
                           "types[0]": undefined,
                         },
                       },
@@ -5673,7 +5673,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/private",
+                            "value": "private",
                           },
                           Object {
                             "column": Object {
@@ -5802,7 +5802,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/private",
+                            "value": "private",
                           },
                           Object {
                             "column": Object {
@@ -5852,13 +5852,13 @@ font-display: block;",
                         "index": 1,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/private",
-                          "name": "/private",
+                          "name": "private",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/private",
+                          "name": "private",
                           "types[0]": undefined,
                         },
                       },
@@ -5948,7 +5948,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/note.txt",
+                            "value": "note.txt",
                           },
                           Object {
                             "column": Object {
@@ -6077,7 +6077,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/note.txt",
+                            "value": "note.txt",
                           },
                           Object {
                             "column": Object {
@@ -6127,13 +6127,13 @@ font-display: block;",
                         "index": 2,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/note.txt",
-                          "name": "/note.txt",
+                          "name": "note.txt",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/note.txt",
+                          "name": "note.txt",
                           "types[0]": undefined,
                         },
                       },
@@ -6584,7 +6584,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/inbox",
+                            "value": "inbox",
                           },
                           Object {
                             "column": Object {
@@ -6713,7 +6713,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/inbox",
+                            "value": "inbox",
                           },
                           Object {
                             "column": Object {
@@ -6763,13 +6763,13 @@ font-display: block;",
                         "index": 0,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/inbox",
-                          "name": "/inbox",
+                          "name": "inbox",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/inbox",
+                          "name": "inbox",
                           "types[0]": undefined,
                         },
                       },
@@ -6859,7 +6859,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/private",
+                            "value": "private",
                           },
                           Object {
                             "column": Object {
@@ -6988,7 +6988,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/private",
+                            "value": "private",
                           },
                           Object {
                             "column": Object {
@@ -7038,13 +7038,13 @@ font-display: block;",
                         "index": 1,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/private",
-                          "name": "/private",
+                          "name": "private",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/private",
+                          "name": "private",
                           "types[0]": undefined,
                         },
                       },
@@ -7134,7 +7134,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/note.txt",
+                            "value": "note.txt",
                           },
                           Object {
                             "column": Object {
@@ -7263,7 +7263,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/note.txt",
+                            "value": "note.txt",
                           },
                           Object {
                             "column": Object {
@@ -7313,13 +7313,13 @@ font-display: block;",
                         "index": 2,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/note.txt",
-                          "name": "/note.txt",
+                          "name": "note.txt",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/note.txt",
+                          "name": "note.txt",
                           "types[0]": undefined,
                         },
                       },
@@ -7420,7 +7420,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/inbox",
+                            "value": "inbox",
                           },
                           Object {
                             "column": Object {
@@ -7549,7 +7549,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/inbox",
+                            "value": "inbox",
                           },
                           Object {
                             "column": Object {
@@ -7599,13 +7599,13 @@ font-display: block;",
                         "index": 0,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/inbox",
-                          "name": "/inbox",
+                          "name": "inbox",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/inbox",
+                          "name": "inbox",
                           "types[0]": undefined,
                         },
                       },
@@ -7695,7 +7695,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/private",
+                            "value": "private",
                           },
                           Object {
                             "column": Object {
@@ -7824,7 +7824,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/private",
+                            "value": "private",
                           },
                           Object {
                             "column": Object {
@@ -7874,13 +7874,13 @@ font-display: block;",
                         "index": 1,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/private",
-                          "name": "/private",
+                          "name": "private",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/private",
+                          "name": "private",
                           "types[0]": undefined,
                         },
                       },
@@ -7970,7 +7970,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/note.txt",
+                            "value": "note.txt",
                           },
                           Object {
                             "column": Object {
@@ -8099,7 +8099,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/note.txt",
+                            "value": "note.txt",
                           },
                           Object {
                             "column": Object {
@@ -8149,13 +8149,13 @@ font-display: block;",
                         "index": 2,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/note.txt",
-                          "name": "/note.txt",
+                          "name": "note.txt",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/note.txt",
+                          "name": "note.txt",
                           "types[0]": undefined,
                         },
                       },
@@ -8249,7 +8249,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/inbox",
+                            "value": "inbox",
                           },
                           Object {
                             "column": Object {
@@ -8378,7 +8378,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/inbox",
+                            "value": "inbox",
                           },
                           Object {
                             "column": Object {
@@ -8428,13 +8428,13 @@ font-display: block;",
                         "index": 0,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/inbox",
-                          "name": "/inbox",
+                          "name": "inbox",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/inbox",
+                          "name": "inbox",
                           "types[0]": undefined,
                         },
                       },
@@ -8524,7 +8524,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/private",
+                            "value": "private",
                           },
                           Object {
                             "column": Object {
@@ -8653,7 +8653,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/private",
+                            "value": "private",
                           },
                           Object {
                             "column": Object {
@@ -8703,13 +8703,13 @@ font-display: block;",
                         "index": 1,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/private",
-                          "name": "/private",
+                          "name": "private",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/private",
+                          "name": "private",
                           "types[0]": undefined,
                         },
                       },
@@ -8799,7 +8799,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/note.txt",
+                            "value": "note.txt",
                           },
                           Object {
                             "column": Object {
@@ -8928,7 +8928,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/note.txt",
+                            "value": "note.txt",
                           },
                           Object {
                             "column": Object {
@@ -8978,13 +8978,13 @@ font-display: block;",
                         "index": 2,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/note.txt",
-                          "name": "/note.txt",
+                          "name": "note.txt",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/note.txt",
+                          "name": "note.txt",
                           "types[0]": undefined,
                         },
                       },
@@ -9079,7 +9079,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/inbox",
+                            "value": "inbox",
                           },
                           Object {
                             "column": Object {
@@ -9208,7 +9208,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/inbox",
+                            "value": "inbox",
                           },
                           Object {
                             "column": Object {
@@ -9258,13 +9258,13 @@ font-display: block;",
                         "index": 0,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/inbox",
-                          "name": "/inbox",
+                          "name": "inbox",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/inbox",
+                          "name": "inbox",
                           "types[0]": undefined,
                         },
                       },
@@ -9354,7 +9354,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/private",
+                            "value": "private",
                           },
                           Object {
                             "column": Object {
@@ -9483,7 +9483,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/private",
+                            "value": "private",
                           },
                           Object {
                             "column": Object {
@@ -9533,13 +9533,13 @@ font-display: block;",
                         "index": 1,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/private",
-                          "name": "/private",
+                          "name": "private",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/private",
+                          "name": "private",
                           "types[0]": undefined,
                         },
                       },
@@ -9629,7 +9629,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/note.txt",
+                            "value": "note.txt",
                           },
                           Object {
                             "column": Object {
@@ -9758,7 +9758,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/note.txt",
+                            "value": "note.txt",
                           },
                           Object {
                             "column": Object {
@@ -9808,13 +9808,13 @@ font-display: block;",
                         "index": 2,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/note.txt",
-                          "name": "/note.txt",
+                          "name": "note.txt",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/note.txt",
+                          "name": "note.txt",
                           "types[0]": undefined,
                         },
                       },
@@ -9908,7 +9908,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/inbox",
+                            "value": "inbox",
                           },
                           Object {
                             "column": Object {
@@ -10037,7 +10037,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/inbox",
+                            "value": "inbox",
                           },
                           Object {
                             "column": Object {
@@ -10087,13 +10087,13 @@ font-display: block;",
                         "index": 0,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/inbox",
-                          "name": "/inbox",
+                          "name": "inbox",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/inbox",
+                          "name": "inbox",
                           "types[0]": undefined,
                         },
                       },
@@ -10183,7 +10183,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/private",
+                            "value": "private",
                           },
                           Object {
                             "column": Object {
@@ -10312,7 +10312,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/private",
+                            "value": "private",
                           },
                           Object {
                             "column": Object {
@@ -10362,13 +10362,13 @@ font-display: block;",
                         "index": 1,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/private",
-                          "name": "/private",
+                          "name": "private",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/private",
+                          "name": "private",
                           "types[0]": undefined,
                         },
                       },
@@ -10458,7 +10458,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/note.txt",
+                            "value": "note.txt",
                           },
                           Object {
                             "column": Object {
@@ -10587,7 +10587,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/note.txt",
+                            "value": "note.txt",
                           },
                           Object {
                             "column": Object {
@@ -10637,13 +10637,13 @@ font-display: block;",
                         "index": 2,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/note.txt",
-                          "name": "/note.txt",
+                          "name": "note.txt",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/note.txt",
+                          "name": "note.txt",
                           "types[0]": undefined,
                         },
                       },
@@ -10739,7 +10739,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/inbox",
+                            "value": "inbox",
                           },
                           Object {
                             "column": Object {
@@ -10868,7 +10868,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/inbox",
+                            "value": "inbox",
                           },
                           Object {
                             "column": Object {
@@ -10918,13 +10918,13 @@ font-display: block;",
                         "index": 0,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/inbox",
-                          "name": "/inbox",
+                          "name": "inbox",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/inbox",
+                          "name": "inbox",
                           "types[0]": undefined,
                         },
                       },
@@ -11014,7 +11014,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/private",
+                            "value": "private",
                           },
                           Object {
                             "column": Object {
@@ -11143,7 +11143,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/private",
+                            "value": "private",
                           },
                           Object {
                             "column": Object {
@@ -11193,13 +11193,13 @@ font-display: block;",
                         "index": 1,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/private",
-                          "name": "/private",
+                          "name": "private",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/private",
+                          "name": "private",
                           "types[0]": undefined,
                         },
                       },
@@ -11289,7 +11289,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/note.txt",
+                            "value": "note.txt",
                           },
                           Object {
                             "column": Object {
@@ -11418,7 +11418,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/note.txt",
+                            "value": "note.txt",
                           },
                           Object {
                             "column": Object {
@@ -11468,13 +11468,13 @@ font-display: block;",
                         "index": 2,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/note.txt",
-                          "name": "/note.txt",
+                          "name": "note.txt",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/note.txt",
+                          "name": "note.txt",
                           "types[0]": undefined,
                         },
                       },
@@ -11568,7 +11568,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/inbox",
+                            "value": "inbox",
                           },
                           Object {
                             "column": Object {
@@ -11697,7 +11697,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/inbox",
+                            "value": "inbox",
                           },
                           Object {
                             "column": Object {
@@ -11747,13 +11747,13 @@ font-display: block;",
                         "index": 0,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/inbox",
-                          "name": "/inbox",
+                          "name": "inbox",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/inbox",
+                          "name": "inbox",
                           "types[0]": undefined,
                         },
                       },
@@ -11843,7 +11843,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/private",
+                            "value": "private",
                           },
                           Object {
                             "column": Object {
@@ -11972,7 +11972,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/private",
+                            "value": "private",
                           },
                           Object {
                             "column": Object {
@@ -12022,13 +12022,13 @@ font-display: block;",
                         "index": 1,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/private",
-                          "name": "/private",
+                          "name": "private",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/private",
+                          "name": "private",
                           "types[0]": undefined,
                         },
                       },
@@ -12118,7 +12118,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/note.txt",
+                            "value": "note.txt",
                           },
                           Object {
                             "column": Object {
@@ -12247,7 +12247,7 @@ font-display: block;",
                             "getCellProps": [Function],
                             "render": [Function],
                             "row": [Circular],
-                            "value": "/note.txt",
+                            "value": "note.txt",
                           },
                           Object {
                             "column": Object {
@@ -12297,13 +12297,13 @@ font-display: block;",
                         "index": 2,
                         "original": Object {
                           "iri": "https://myaccount.mypodserver.com/note.txt",
-                          "name": "/note.txt",
+                          "name": "note.txt",
                         },
                         "originalSubRows": Array [],
                         "subRows": Array [],
                         "values": Object {
                           "icon": undefined,
-                          "name": "/note.txt",
+                          "name": "note.txt",
                           "types[0]": undefined,
                         },
                       },
@@ -12493,7 +12493,7 @@ font-display: block;",
               resource={
                 Object {
                   "iri": "https://myaccount.mypodserver.com/inbox",
-                  "name": "/inbox",
+                  "name": "inbox",
                 }
               }
             >
@@ -12516,7 +12516,7 @@ font-display: block;",
                 <td
                   className="makeStyles-table__body-cell-6217"
                 >
-                  /inbox
+                  inbox
                 </td>
                 <td
                   className="makeStyles-table__body-cell-6217"
@@ -12531,7 +12531,7 @@ font-display: block;",
               resource={
                 Object {
                   "iri": "https://myaccount.mypodserver.com/private",
-                  "name": "/private",
+                  "name": "private",
                 }
               }
             >
@@ -12554,7 +12554,7 @@ font-display: block;",
                 <td
                   className="makeStyles-table__body-cell-6217"
                 >
-                  /private
+                  private
                 </td>
                 <td
                   className="makeStyles-table__body-cell-6217"
@@ -12569,7 +12569,7 @@ font-display: block;",
               resource={
                 Object {
                   "iri": "https://myaccount.mypodserver.com/note.txt",
-                  "name": "/note.txt",
+                  "name": "note.txt",
                 }
               }
             >
@@ -12592,7 +12592,7 @@ font-display: block;",
                 <td
                   className="makeStyles-table__body-cell-6217"
                 >
-                  /note.txt
+                  note.txt
                 </td>
                 <td
                   className="makeStyles-table__body-cell-6217"
