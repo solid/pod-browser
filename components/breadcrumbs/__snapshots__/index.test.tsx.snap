@@ -846,7 +846,47 @@ font-display: block;",
         >
           <ul
             className="makeStyles-breadcrumb-1537"
-          />
+          >
+            <Crumb
+              crumb={
+                Object {
+                  "label": "All files",
+                  "uri": "/resource/https%3A%2F%2Fwww.mypodbrowser.com%2F",
+                }
+              }
+              key="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2F"
+            >
+              <li
+                className="makeStyles-breadcrumb__crumb-1541"
+                key="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2F"
+              >
+                <i
+                  className="makeStyles-icon-caret-left-1486 makeStyles-breadcrumb__caret-1538 makeStyles-breadcrumb__caret--small-1539"
+                />
+                <Link
+                  as="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2F"
+                  href="/resource/[iri]"
+                >
+                  <a
+                    className="makeStyles-breadcrumb__link-1542"
+                    href="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2F"
+                    onClick={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <span
+                      className="makeStyles-breadcrumb__prefix-1543"
+                    >
+                      Back to 
+                    </span>
+                    All files
+                  </a>
+                </Link>
+                <i
+                  className="makeStyles-icon-caret-right-1487 makeStyles-breadcrumb__caret-1538 makeStyles-breadcrumb__caret--large-1540"
+                />
+              </li>
+            </Crumb>
+          </ul>
         </nav>
       </Breadcrumbs>
     </PodLocationProvider>
@@ -1772,6 +1812,45 @@ font-display: block;",
                       Back to 
                     </span>
                     some
+                  </a>
+                </Link>
+                <i
+                  className="makeStyles-icon-caret-right-1487 makeStyles-breadcrumb__caret-1538 makeStyles-breadcrumb__caret--large-1540"
+                />
+              </li>
+            </Crumb>
+            <Crumb
+              crumb={
+                Object {
+                  "label": "location",
+                  "uri": "/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2Flocation",
+                }
+              }
+              key="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2Flocation"
+            >
+              <li
+                className="makeStyles-breadcrumb__crumb-1541"
+                key="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2Flocation"
+              >
+                <i
+                  className="makeStyles-icon-caret-left-1486 makeStyles-breadcrumb__caret-1538 makeStyles-breadcrumb__caret--small-1539"
+                />
+                <Link
+                  as="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2Flocation"
+                  href="/resource/[iri]"
+                >
+                  <a
+                    className="makeStyles-breadcrumb__link-1542"
+                    href="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2Flocation"
+                    onClick={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <span
+                      className="makeStyles-breadcrumb__prefix-1543"
+                    >
+                      Back to 
+                    </span>
+                    location
                   </a>
                 </Link>
                 <i
