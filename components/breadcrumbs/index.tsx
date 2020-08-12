@@ -71,7 +71,6 @@ export default function Breadcrumbs(): ReactElement {
   ].concat(
     uriParts.map((part, index) => ({ uri: resourceHref(index), label: part }))
   );
-
   const Crumb = ({ crumb }: CrumbProps): ReactElement => (
     <li key={crumb.uri} className={bem("breadcrumb__crumb")}>
       <i
@@ -98,7 +97,7 @@ export default function Breadcrumbs(): ReactElement {
   return (
     <nav aria-label="Breadcrumbs">
       <ul className={bem("breadcrumb")} ref={breadcrumbsList}>
-        {crumbs.slice(0, crumbs.length - 1).map((crumb) => (
+        {crumbs.map((crumb) => (
           <Crumb crumb={crumb} key={crumb.uri} />
         ))}
       </ul>
