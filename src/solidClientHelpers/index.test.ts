@@ -34,6 +34,7 @@ const {
   fetchResource,
   fetchResourceWithAcl,
   getIriPath,
+  getResourceName,
   getThirdPartyPermissions,
   getTypeName,
   getUserPermissions,
@@ -408,6 +409,19 @@ describe("getIriPath", () => {
 
     expect(path1).toEqual("/public");
     expect(path2).toEqual("/public/games/tictactoe/data.ttl");
+  });
+});
+
+describe("getResourceName", () => {
+  test("it returns the resource name string when given a resource pathname", () => {
+    const resourceName = getResourceName("/public/games/tictactoe/data.ttl");
+
+    expect(resourceName).toEqual("data.ttl");
+  });
+  test("it returns the resource name string when given a container pathname", () => {
+    const resourceName = getResourceName("/public/games/tictactoe/");
+
+    expect(resourceName).toEqual("tictactoe");
   });
 });
 
