@@ -35,7 +35,10 @@ import ContainerTableRow from "../containerTableRow";
 import SortedTableCarat from "../sortedTableCarat";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import { useFetchContainerResourceIris } from "../../src/hooks/solidClient";
-import { IResourceDetails, getIriPath } from "../../src/solidClientHelpers";
+import {
+  IResourceDetails,
+  getResourceName,
+} from "../../src/solidClientHelpers";
 
 import Spinner from "../spinner";
 import styles from "./styles";
@@ -90,7 +93,7 @@ export default function Container(props: IPodList): ReactElement {
 
     return resourceIris.map((rIri) => ({
       iri: rIri,
-      name: getIriPath(rIri),
+      name: getResourceName(rIri),
     }));
   }, [resourceIris]);
 

@@ -144,6 +144,14 @@ export function getIriPath(iri: string): string | undefined {
   return pathname.replace(/\/?$/, "");
 }
 
+export function getResourceName(iri: string): string | undefined {
+  let { pathname } = parseUrl(iri);
+  if (isContainerIri(pathname)) {
+    pathname = pathname.substring(0, pathname.length - 1);
+  }
+  return pathname.match(/(?!\/)(?:.(?!\/))+$/)?.toString();
+}
+
 export function getTypeName(rawType: string): string {
   if (!rawType) return "";
   return typeNameMap[rawType] || rawType;
