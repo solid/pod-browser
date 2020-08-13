@@ -149,7 +149,9 @@ export function getResourceName(iri: string): string | undefined {
   if (isContainerIri(pathname)) {
     pathname = pathname.substring(0, pathname.length - 1);
   }
-  return pathname.match(/(?!\/)(?:.(?!\/))+$/)?.toString();
+  const encodedURISegment: string =
+    pathname.match(/(?!\/)(?:.(?!\/))+$/)?.toString() || "";
+  return decodeURI(encodedURISegment);
 }
 
 export function getTypeName(rawType: string): string {
