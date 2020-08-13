@@ -19,46 +19,48 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useContext, ReactElement } from "react";
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
-import ConfirmationDialogContext, { ConfirmationDialogProvider } from "./index";
+import { createContext, useState } from "react";
+import T from "prop-types";
 
-function ChildComponent(): ReactElement {
-  const {
-    confirmed,
-    content,
-    open,
-    setConfirmed,
-    setContent,
-    setOpen,
-    setTitle,
-    title,
-  } = useContext(ConfirmationDialogContext);
+const ConfirmationDialogContext = createContext({
+  confirmed: false,
+  content: null,
+  open: false,
+  setConfirmed: () => {},
+  setContent: () => {},
+  setOpen: () => {},
+  setTitle: () => {},
+  title: "Confirmation",
+});
 
-  setOpen(true);
-  setContent("This is my content");
-  setConfirmed(true);
-  setTitle("This is my title");
+export default ConfirmationDialogContext;
+
+function ConfirmationDialogProvider({ children }) {
+  const [open, setOpen] = useState(false);
+  const [content, setContent] = useState(null);
+  const [title, setTitle] = useState("Confirmation");
+  const [confirmed, setConfirmed] = useState(false);
 
   return (
-    <div>
-      <div className="title">{title}</div>
-      <div className="content">{content}</div>
-      <div className="confirmed">{confirmed ? "true" : "false"}</div>
-      <div className="open">{open ? "true" : "false"}</div>
-    </div>
+    <ConfirmationDialogContext.Provider
+      value={{
+        content,
+        confirmed,
+        open,
+        setContent,
+        setConfirmed,
+        setOpen,
+        setTitle,
+        title,
+      }}
+    >
+      {children}
+    </ConfirmationDialogContext.Provider>
   );
 }
 
-describe("ConfirmationDialogContext", () => {
-  test("it has context data", () => {
-    const component = shallow(
-      <ConfirmationDialogProvider>
-        <ChildComponent />
-      </ConfirmationDialogProvider>
-    );
+ConfirmationDialogProvider.propTypes = {
+  children: T.node.isRequired,
+};
 
-    expect(shallowToJson(component)).toMatchSnapshot();
-  });
-});
+export { ConfirmationDialogProvider };

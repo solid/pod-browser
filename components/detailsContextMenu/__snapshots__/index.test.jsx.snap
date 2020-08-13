@@ -5483,6 +5483,7 @@ font-display: block;",
                       "render": [Function],
                     }
                   }
+                  name="/iri/"
                   onDelete={[Function]}
                   onDeleteError={[Function]}
                   resourceIri="/iri/"
@@ -5510,6 +5511,7 @@ font-display: block;",
                         "render": [Function],
                       }
                     }
+                    name="/iri/"
                     onDelete={[Function]}
                     onDeleteError={[Function]}
                     resourceIri="/iri/"
@@ -5524,6 +5526,7 @@ font-display: block;",
                       }
                       disabled={false}
                       focusVisibleClassName="Mui-focusVisible"
+                      name="/iri/"
                       onDelete={[Function]}
                       onDeleteError={[Function]}
                       resourceIri="/iri/"
@@ -5545,6 +5548,7 @@ font-display: block;",
                         }
                         disabled={false}
                         focusVisibleClassName="Mui-focusVisible"
+                        name="/iri/"
                         onDelete={[Function]}
                         onDeleteError={[Function]}
                         resourceIri="/iri/"
@@ -5552,6 +5556,7 @@ font-display: block;",
                         <ForwardRef
                           aria-disabled={false}
                           className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
+                          name="/iri/"
                           onBlur={[Function]}
                           onDelete={[Function]}
                           onDeleteError={[Function]}

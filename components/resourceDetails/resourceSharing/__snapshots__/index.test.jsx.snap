@@ -5819,6 +5819,7 @@ font-display: block;",
     }
   >
     <ResourceSharing
+      dataset={Object {}}
       defaultPermissions={Array []}
       iri="iri"
       name="name"

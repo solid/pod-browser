@@ -97,6 +97,7 @@ describe("ResourceSharing", () => {
     const tree = mountToJson(
       <SessionContext.Provider value={{ session }}>
         <ResourceSharing
+          dataset={{}}
           iri={iri}
           name={name}
           permissions={permissions}

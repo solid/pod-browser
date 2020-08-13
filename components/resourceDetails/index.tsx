@@ -152,6 +152,7 @@ export default function ResourceDetails({
             button
             component={DeleteLink}
             resourceIri={iri}
+            name={name}
             onDelete={onDelete}
             onDeleteError={onDeleteError}
           >

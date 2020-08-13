@@ -22,9 +22,8 @@
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import { deleteFile } from "@inrupt/solid-client";
-import { waitFor } from "@testing-library/react";
 
-import DeleteLink from "./index";
+import DeleteLink, { handleDeleteResource } from "./index";
 
 jest.mock("@inrupt/solid-client");
 
@@ -42,58 +41,113 @@ describe("Delete link", () => {
 
     expect(shallowToJson(tree)).toMatchSnapshot();
   });
+});
 
-  it("calls deleteFile on click", () => {
-    const resourceIri = "https://mypod.com/some-resource";
-
-    const tree = shallow(
-      <DeleteLink
-        onDelete={jest.fn()}
-        onDeleteError={jest.fn()}
-        resourceIri={resourceIri}
-      />
-    );
-
-    tree.find("a").simulate("click", { preventDefault: () => {} });
-    expect(deleteFile).toHaveBeenCalled();
-  });
-
-  it("calls onDelete after successful delete", async () => {
-    deleteFile.mockResolvedValue();
-
-    const resourceIri = "https://mypod.com/some-resource";
+describe("handleDeleteResource", () => {
+  test("it returns a handler that deletes the resource", async () => {
+    const name = "Resource";
+    const resourceIri = "iri";
+    const fetch = jest.fn();
     const onDelete = jest.fn();
+    const onDeleteError = jest.fn();
+    const setAlertOpen = jest.fn();
+    const setMessage = jest.fn();
+    const setSeverity = jest.fn();
+    const handler = handleDeleteResource({
+      fetch,
+      name,
+      onDelete,
+      onDeleteError,
+      resourceIri,
+      setAlertOpen,
+      setMessage,
+      setSeverity,
+    });
 
-    const tree = shallow(
-      <DeleteLink
-        onDelete={onDelete}
-        onDeleteError={jest.fn()}
-        resourceIri={resourceIri}
-      />
-    );
+    await handler();
 
-    tree.find("a").simulate("click", { preventDefault: () => {} });
-
-    await waitFor(() => expect(onDelete).toHaveBeenCalled());
+    expect(deleteFile).toHaveBeenCalledWith(resourceIri, { fetch });
   });
 
-  it("calls onDeleteError after failed delete", async () => {
-    const error = new Error("Bad");
-    deleteFile.mockRejectedValue(error);
-
-    const resourceIri = "https://mypod.com/some-resource";
+  test("it returns a handler that calls onDelete if successful", async () => {
+    const name = "Resource";
+    const resourceIri = "iri";
+    const fetch = jest.fn();
+    const onDelete = jest.fn();
     const onDeleteError = jest.fn();
+    const setAlertOpen = jest.fn();
+    const setMessage = jest.fn();
+    const setSeverity = jest.fn();
+    const handler = handleDeleteResource({
+      fetch,
+      name,
+      onDelete,
+      onDeleteError,
+      resourceIri,
+      setAlertOpen,
+      setMessage,
+      setSeverity,
+    });
 
-    const tree = shallow(
-      <DeleteLink
-        onDelete={jest.fn()}
-        onDeleteError={onDeleteError}
-        resourceIri={resourceIri}
-      />
+    await handler();
+
+    expect(onDelete).toHaveBeenCalled();
+  });
+
+  test("it returns a handler that shows an alert if successful", async () => {
+    const name = "Resource";
+    const resourceIri = "iri";
+    const fetch = jest.fn();
+    const onDelete = jest.fn();
+    const onDeleteError = jest.fn();
+    const setAlertOpen = jest.fn();
+    const setMessage = jest.fn();
+    const setSeverity = jest.fn();
+    const handler = handleDeleteResource({
+      fetch,
+      name,
+      onDelete,
+      onDeleteError,
+      resourceIri,
+      setAlertOpen,
+      setMessage,
+      setSeverity,
+    });
+
+    await handler();
+
+    expect(setSeverity).toHaveBeenCalledWith("success");
+    expect(setMessage).toHaveBeenCalledWith(
+      "Resource was successfully deleted."
     );
+    expect(setAlertOpen).toHaveBeenCalledWith(true);
+  });
 
-    tree.find("a").simulate("click", { preventDefault: () => {} });
+  test("it returns a handler that calls onError if not successful", async () => {
+    const name = "Resource";
+    const resourceIri = "iri";
+    const fetch = jest.fn();
+    const error = new Error("boom");
+    const onDelete = jest.fn(() => {
+      throw error;
+    });
+    const onDeleteError = jest.fn();
+    const setAlertOpen = jest.fn();
+    const setMessage = jest.fn();
+    const setSeverity = jest.fn();
+    const handler = handleDeleteResource({
+      fetch,
+      name,
+      onDelete,
+      onDeleteError,
+      resourceIri,
+      setAlertOpen,
+      setMessage,
+      setSeverity,
+    });
 
-    await waitFor(() => expect(onDeleteError).toHaveBeenCalledWith(error));
+    await handler();
+
+    expect(onDeleteError).toHaveBeenCalledWith(error);
   });
 });

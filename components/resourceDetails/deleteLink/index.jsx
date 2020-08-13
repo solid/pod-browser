@@ -19,30 +19,94 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { deleteFile } from "@inrupt/solid-client";
 import SessionContext from "../../../src/contexts/sessionContext";
+import AlertContext from "../../../src/contexts/alertContext";
+import ConfirmationDialogContext from "../../../src/contexts/confirmationDialogContext";
 
+export function handleDeleteResource({
+  fetch,
+  name,
+  onDelete,
+  onDeleteError,
+  resourceIri,
+  setAlertOpen,
+  setMessage,
+  setSeverity,
+}) {
+  return async () => {
+    try {
+      await deleteFile(resourceIri, { fetch });
+      onDelete();
+      setSeverity("success");
+      setMessage(`${name} was successfully deleted.`);
+      setAlertOpen(true);
+    } catch (err) {
+      onDeleteError(err);
+    }
+  };
+}
 /* eslint react/jsx-props-no-spreading: 0 */
 /* eslint react/prop-types: 0 */
 export default React.forwardRef(
-  ({ resourceIri, onDelete, onDeleteError, ...linkProps }, ref) => {
+  ({ name, resourceIri, onDelete, onDeleteError, ...linkProps }, ref) => {
     const { session } = useContext(SessionContext);
+    const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
+    const { fetch } = session;
+    const [confirmationSetup, setConfirmationSetup] = useState(false);
 
-    async function deleteResource(e) {
-      e.preventDefault();
+    const {
+      confirmed,
+      setConfirmed,
+      setContent,
+      setOpen,
+      setTitle,
+    } = useContext(ConfirmationDialogContext);
 
-      try {
-        await deleteFile(resourceIri, { fetch: session.fetch });
-        onDelete();
-      } catch (err) {
-        onDeleteError(err);
+    const deleteResource = handleDeleteResource({
+      name,
+      resourceIri,
+      fetch,
+      onDelete,
+      onDeleteError,
+      setAlertOpen,
+      setMessage,
+      setSeverity,
+    });
+
+    useEffect(() => {
+      if (confirmationSetup && !confirmed) return;
+
+      setTitle("Confirm Delete");
+      setContent(<p>{`Are you sure you wish to delete ${name}?`}</p>);
+      setConfirmationSetup(true);
+
+      if (confirmed) {
+        setOpen(false);
+        setConfirmed(false);
+        deleteResource();
       }
-    }
+    }, [
+      confirmationSetup,
+      confirmed,
+      deleteResource,
+      name,
+      setConfirmationSetup,
+      setConfirmed,
+      setContent,
+      setOpen,
+      setTitle,
+    ]);
 
     /* eslint jsx-a11y/anchor-has-content: 0 */
     return (
-      <a href="#delete" {...linkProps} ref={ref} onClick={deleteResource} />
+      <a
+        href="#delete"
+        {...linkProps}
+        ref={ref}
+        onClick={() => setOpen(true)}
+      />
     );
   }
 );

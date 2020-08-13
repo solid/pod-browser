@@ -19,44 +19,46 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement, useContext } from "react";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@material-ui/core";
-import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
+import { useContext } from "react";
+import { shallow } from "enzyme";
+import { shallowToJson } from "enzyme-to-json";
+import ConfirmationDialogContext, { ConfirmationDialogProvider } from "./index";
 
-export default function ConfirmationDialog(): ReactElement {
-  const { open, setOpen, title, content, setConfirmed } = useContext(
-    ConfirmationDialogContext
-  );
+function ChildComponent() {
+  const {
+    confirmed,
+    content,
+    open,
+    setConfirmed,
+    setContent,
+    setOpen,
+    setTitle,
+    title,
+  } = useContext(ConfirmationDialogContext);
+
+  setOpen(true);
+  setContent("This is my content");
+  setConfirmed(true);
+  setTitle("This is my title");
 
   return (
-    <Dialog
-      disableBackdropClick
-      disableEscapeKeyDown
-      maxWidth="xs"
-      aria-labelledby="confirmation-dialog"
-      open={open as boolean}
-    >
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent dividers>{content}</DialogContent>
-      <DialogActions>
-        <Button autoFocus onClick={() => setOpen(false)}>
-          Cancel
-        </Button>
-
-        <Button
-          type="submit"
-          color="primary"
-          onClick={() => setConfirmed(true)}
-        >
-          Ok
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <div>
+      <div className="title">{title}</div>
+      <div className="content">{content}</div>
+      <div className="confirmed">{confirmed ? "true" : "false"}</div>
+      <div className="open">{open ? "true" : "false"}</div>
+    </div>
   );
 }
+
+describe("ConfirmationDialogContext", () => {
+  test("it has context data", () => {
+    const component = shallow(
+      <ConfirmationDialogProvider>
+        <ChildComponent />
+      </ConfirmationDialogProvider>
+    );
+
+    expect(shallowToJson(component)).toMatchSnapshot();
+  });
+});

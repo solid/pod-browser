@@ -1221,6 +1221,7 @@ font-display: block;",
                     "render": [Function],
                   }
                 }
+                name="Name"
                 resourceIri="/container/"
               >
                 <ForwardRef(ListItem)
@@ -1246,6 +1247,7 @@ font-display: block;",
                       "render": [Function],
                     }
                   }
+                  name="Name"
                   resourceIri="/container/"
                 >
                   <WithStyles(ForwardRef(ButtonBase))
@@ -1258,6 +1260,7 @@ font-display: block;",
                     }
                     disabled={false}
                     focusVisibleClassName="Mui-focusVisible"
+                    name="Name"
                     resourceIri="/container/"
                   >
                     <ForwardRef(ButtonBase)
@@ -1277,11 +1280,13 @@ font-display: block;",
                       }
                       disabled={false}
                       focusVisibleClassName="Mui-focusVisible"
+                      name="Name"
                       resourceIri="/container/"
                     >
                       <ForwardRef
                         aria-disabled={false}
                         className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
+                        name="Name"
                         onBlur={[Function]}
                         onDragLeave={[Function]}
                         onFocus={[Function]}
@@ -2912,6 +2917,7 @@ font-display: block;",
                     "render": [Function],
                   }
                 }
+                name="Name"
                 resourceIri="/resource"
               >
                 <ForwardRef(ListItem)
@@ -2937,6 +2943,7 @@ font-display: block;",
                       "render": [Function],
                     }
                   }
+                  name="Name"
                   resourceIri="/resource"
                 >
                   <WithStyles(ForwardRef(ButtonBase))
@@ -2949,6 +2956,7 @@ font-display: block;",
                     }
                     disabled={false}
                     focusVisibleClassName="Mui-focusVisible"
+                    name="Name"
                     resourceIri="/resource"
                   >
                     <ForwardRef(ButtonBase)
@@ -2968,11 +2976,13 @@ font-display: block;",
                       }
                       disabled={false}
                       focusVisibleClassName="Mui-focusVisible"
+                      name="Name"
                       resourceIri="/resource"
                     >
                       <ForwardRef
                         aria-disabled={false}
                         className="MuiButtonBase-root MuiListItem-root MuiListItem-gutters MuiListItem-button"
+                        name="Name"
                         onBlur={[Function]}
                         onDragLeave={[Function]}
                         onFocus={[Function]}
