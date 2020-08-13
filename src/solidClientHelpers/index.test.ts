@@ -423,6 +423,12 @@ describe("getResourceName", () => {
 
     expect(resourceName).toEqual("tictactoe");
   });
+
+  test("it returns the decoded resource name when spaces have been URI encoded", () => {
+    const resourceName = getResourceName("public/notes/Hello%20World.txt");
+
+    expect(resourceName).toEqual("Hello World.txt");
+  });
 });
 
 describe("fetchResourceWithAcl", () => {
