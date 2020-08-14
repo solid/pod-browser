@@ -20,7 +20,15 @@
  */
 
 /* eslint-disable camelcase */
+// @ts-nocheck
+
 import {
+  AclDataset,
+  addStringUnlocalized,
+  addUrl,
+  createAcl,
+  createLitDataset,
+  createThing,
   fetchLitDataset,
   getDatetime,
   getDecimal,
@@ -29,8 +37,12 @@ import {
   getIriAll,
   getStringNoLocale,
   getThing,
+  getUrl,
   IriString,
   LitDataset,
+  saveSolidDatasetAt,
+  setThing,
+  SolidDataset,
   Thing,
   unstable_Access,
   unstable_AgentAccess,
@@ -43,8 +55,10 @@ import {
   unstable_saveAclFor,
   unstable_setAgentDefaultAccess,
   unstable_setAgentResourceAccess,
+  WithAccessibleAcl,
+  WithResourceInfo,
 } from "@inrupt/solid-client";
-import { ldp, space } from "rdf-namespaces";
+import { rdf, ldp, space, dc, acl } from "rdf-namespaces";
 import { parseUrl, isUrl } from "../stringHelpers";
 
 const ldpWithType: Record<string, string> = ldp;
@@ -163,8 +177,8 @@ export function displayTypes(types: string[]): string[] {
   return types?.length ? types.map((t: string): string => getTypeName(t)) : [];
 }
 
-export function aclToString(acl: unstable_Access): string {
-  return `read:${acl.read},write:${acl.write},append:${acl.append},control:${acl.control}`;
+export function aclToString(access: unstable_Access): string {
+  return `read:${access.read},write:${access.write},append:${access.append},control:${access.control}`;
 }
 
 export function displayProfileName({ nickname, name, webId }: Profile): string {
@@ -182,8 +196,8 @@ export function isEqualACL(
 
 export function displayPermissions(permissions: unstable_Access): string {
   const templatePermission = Object.values(ACL).find((template) => {
-    const { acl } = template;
-    return isEqualACL(permissions, acl as unstable_Access);
+    const { acl: access } = template;
+    return isEqualACL(permissions, access as unstable_Access);
   });
 
   if (templatePermission) return templatePermission.alias;
@@ -321,13 +335,13 @@ export async function normalizePermissions(
       .filter(isUrl)
       .map(
         async (webId: string): Promise<NormalizedPermission> => {
-          const acl = permissions[webId];
+          const access = permissions[webId];
           const profile = await fetchProfileFn(webId, fetch);
 
           return {
-            acl,
+            acl: access,
             profile,
-            alias: displayPermissions(acl),
+            alias: displayPermissions(access),
             webId,
           };
         }
@@ -379,11 +393,11 @@ export interface IResourceDetails extends NormalizedResource {
 
 export const PERMISSIONS: string[] = ["read", "write", "append", "control"];
 
-export function parseStringAcl(acl: string): unstable_Access {
+export function parseStringAcl(access: string): unstable_Access {
   return PERMISSIONS.reduce(
     (acc, key) => ({
       ...acc,
-      [key]: acl.includes(key),
+      [key]: access.includes(key),
     }),
     {} as unstable_Access
   );
@@ -397,15 +411,15 @@ export function permissionsFromWacAllowHeaders(
   return permissions.reduce(
     (acc: NormalizedPermission[], permission: string) => {
       const [webId, stringAcl] = permission.split("=");
-      const acl = parseStringAcl(stringAcl);
-      const alias = displayPermissions(acl);
+      const access = parseStringAcl(stringAcl);
+      const alias = displayPermissions(access);
 
       return [
         ...acc,
         {
           webId,
           alias,
-          acl,
+          acl: access,
           profile: { webId, name: webId },
         },
       ];
@@ -459,9 +473,9 @@ export async function fetchResourceWithAcl(
   normalizePermissionsFn = normalizePermissions
 ): Promise<NormalizedResource> {
   const resource = await unstable_fetchLitDatasetWithAcl(iri, { fetch });
-  const acl = await unstable_getAgentAccessAll(resource);
-  const permissions = acl
-    ? await normalizePermissionsFn(acl, fetch)
+  const access = await unstable_getAgentAccessAll(resource);
+  const permissions = access
+    ? await normalizePermissionsFn(access, fetch)
     : undefined;
   const dataset = resource as LitDataset;
   const thing = dataset as Thing;
@@ -505,4 +519,185 @@ export function getThirdPartyPermissions(
 ): NormalizedPermission[] {
   if (!permissions) return [];
   return permissions.filter(({ webId }) => !isUserOrMatch(webId, id));
+}
+
+export function chain(
+  object: unknown,
+  ...operations: Array<(x: unknown) => unknown>
+): unknown {
+  return operations.reduce(
+    (acc: unknown, transform: (x: unknown) => unknown) => {
+      return transform(acc);
+    },
+    object
+  );
+}
+
+export function defineThing(
+  ...operations: Array<(thing: Thing) => Thing>
+): Thing {
+  return chain(createThing({ name: "this" }), ...operations);
+}
+
+export function defineDataset(
+  ...operations: Array<(thing: Thing) => Thing>
+): SolidDataset {
+  return setThing(createLitDataset(), defineThing(...operations));
+}
+
+export function defineAcl(
+  dataset: WithAccessibleAcl<WithResourceInfo>,
+  webId: string,
+  access = ACL.CONTROL.acl
+): AclDataset {
+  const aclDataset = chain(
+    createAcl(dataset),
+    (a) => unstable_setAgentResourceAccess(a as AclDataset, webId, access),
+    (a) => unstable_setAgentDefaultAccess(a as AclDataset, webId, access)
+  );
+
+  return aclDataset as AclDataset;
+}
+
+export function vcardExtras(property: string): string {
+  return `http://www.w3.org/2006/vcard/ns#${property}`;
+}
+
+interface IContent {
+  iri: string;
+  dataset: SolidDataset;
+}
+
+interface IAddressBookContent {
+  index: IContent;
+  groups: IContent;
+  people: IContent;
+}
+
+interface ICreateAddressBook {
+  iri: string;
+  owner: string;
+  title: string;
+}
+
+export function createAddressBook({
+  iri,
+  owner,
+  title = "Contacts",
+}: ICreateAddressBook): IAddressBookContent {
+  const createIri = (path: string): string => `${iri}/${path}`;
+  const indexIri = createIri("index.ttl");
+  const peopleIri = createIri("people.ttl");
+  const groupsIri = createIri("groups.ttl");
+
+  const groups = defineDataset();
+  const people = defineDataset();
+  const index = defineDataset(
+    (t) => addUrl(t, rdf.type, vcardExtras("AddressBook")),
+    (t) => addUrl(t, acl.owner, owner),
+    (t) => addStringUnlocalized(t, dc.title, title),
+    (t) => addUrl(t, vcardExtras("nameEmailIndex"), peopleIri),
+    (t) => addUrl(t, vcardExtras("groupIndex"), groupsIri)
+  );
+
+  return {
+    index: {
+      iri: indexIri,
+      dataset: index,
+    },
+    groups: {
+      iri: groupsIri,
+      dataset: groups,
+    },
+    people: {
+      iri: peopleIri,
+      dataset: people,
+    },
+  };
+}
+
+export async function getAddressBook(
+  iri: string,
+  fetch: (req: Request) => Promise<void>
+): Promise<IResponse> {
+  const { respond, error } = createResponder();
+
+  try {
+    const indexIri = `${iri}/index.ttl`;
+    const index = await unstable_fetchLitDatasetWithAcl(indexIri, { fetch });
+    const type = getUrl(index, rdf.type);
+
+    if (!type || type !== vcardExtras("AddressBook")) {
+      throw new Error(`${iri} is not an AddressBook`);
+    }
+
+    const groupsIri = getUrl(index, vcardExtras("groupIndex"));
+    const peopleIri = getUrl(index, vcardExtras("nameEmailIndex"));
+
+    const groups = await unstable_fetchLitDatasetWithAcl(groupsIri as string, {
+      fetch,
+    });
+    const people = await unstable_fetchLitDatasetWithAcl(peopleIri as string, {
+      fetch,
+    });
+
+    const response = {
+      index,
+      groups,
+      people,
+    };
+
+    return respond(response);
+  } catch ({ message }) {
+    return error(message);
+  }
+}
+
+export interface ISaveNewAddressBook {
+  iri: string;
+  owner: string;
+  title: string;
+  fetch: (request: Request) => Promise<void>;
+}
+
+export async function saveNewAddressBook({
+  iri,
+  owner,
+  title = "Contacts",
+  fetch,
+}: ISaveNewAddressBook): Promise<IResponse> {
+  const { respond, error } = createResponder();
+  const { response, error: message } = await getAddressBook(iri, fetch);
+
+  if (response) return respond(response);
+
+  if (message && message.match(/4\d{2}/)) {
+    const { index, groups, people } = createAddressBook({
+      iri,
+      owner,
+      title,
+    });
+    const container = { iri: `${iri}/` };
+
+    await Promise.all([
+      saveSolidDatasetAt(index.iri, index.dataset),
+      saveSolidDatasetAt(groups.iri, groups.dataset),
+      saveSolidDatasetAt(people.iri, people.dataset),
+    ]);
+
+    await Promise.all(
+      [container, index, groups, people].map(async ({ iri: i }) => {
+        const dataset = await unstable_fetchLitDatasetWithAcl(i, { fetch });
+        return unstable_saveAclFor(dataset, defineAcl(dataset, owner), {
+          fetch,
+        });
+      })
+    );
+
+    const addressBook = await getAddressBook(iri, fetch);
+
+    return respond(addressBook);
+  }
+
+  return error(message);
 }
