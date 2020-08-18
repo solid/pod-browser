@@ -48,7 +48,7 @@ export default function Breadcrumbs() {
     .substr(baseUri.length)
     .split("/")
     .filter((crumb) => !!crumb);
-  const resourceHref = (index = -1) => {
+  const resourceHref = (index) => {
     return `/resource/${encodeURIComponent(
       baseUri + uriParts.slice(0, index + 1).join("/")
     )}`;
