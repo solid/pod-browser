@@ -20,7 +20,9 @@
  */
 
 import * as ReactUtils from "react";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { mount } from "enzyme";
+import { mountToJson, WithTheme } from "../../__testUtils/mountWithTheme";
+import defaultTheme from "../../src/theme";
 import { PodLocationProvider } from "../../src/contexts/podLocationContext";
 import Breadcrumbs from "./index";
 
@@ -45,5 +47,36 @@ describe("Breadcrumbs view", () => {
       </PodLocationProvider>
     );
     expect(tree).toMatchSnapshot();
+  });
+
+  test("Renders last breadcrumb as plain text", () => {
+    jest.spyOn(ReactUtils, "useLayoutEffect").mockImplementation(() => {});
+
+    const tree = mount(
+      <WithTheme theme={defaultTheme}>
+        <PodLocationProvider currentUri="https://www.mypodbrowser.com/some/location">
+          <Breadcrumbs />
+        </PodLocationProvider>
+      </WithTheme>
+    );
+    expect(tree.html()).toContain(
+      'href="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome'
+    );
+    expect(tree.html()).not.toContain(
+      'href="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2Flocation'
+    );
+  });
+
+  test("Displays current folder as crumb in breadcrumbs", () => {
+    jest.spyOn(ReactUtils, "useLayoutEffect").mockImplementation(() => {});
+
+    const tree = mount(
+      <WithTheme theme={defaultTheme}>
+        <PodLocationProvider currentUri="https://www.mypodbrowser.com/some/location">
+          <Breadcrumbs />
+        </PodLocationProvider>
+      </WithTheme>
+    );
+    expect(tree.html()).toContain("location");
   });
 });

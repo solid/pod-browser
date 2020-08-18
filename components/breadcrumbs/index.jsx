@@ -19,33 +19,20 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createRef, ReactElement, useContext, useLayoutEffect } from "react";
-import { StyleRules, createStyles, makeStyles } from "@material-ui/styles";
-import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
-import Link from "next/link";
-import clsx from "clsx";
+import { createRef, useContext, useLayoutEffect } from "react";
+import { createStyles, makeStyles } from "@material-ui/styles";
+import { useBem } from "@solid/lit-prism-patterns";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import Spinner from "../spinner";
 import styles from "./styles";
+import Crumb from "./crumb";
 
-const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme) as StyleRules)
-);
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-interface Crumb {
-  uri: string;
-  label: string;
-}
-
-interface CrumbProps {
-  crumb: Crumb;
-  isLink: boolean;
-}
-
-export default function Breadcrumbs(): ReactElement {
+export default function Breadcrumbs() {
   const bem = useBem(useStyles());
   const podLocation = useContext(PodLocationContext);
-  const breadcrumbsList = createRef<HTMLUListElement>();
+  const breadcrumbsList = createRef();
 
   useLayoutEffect(() => {
     if (!breadcrumbsList.current) {
@@ -57,45 +44,19 @@ export default function Breadcrumbs(): ReactElement {
   if (!podLocation.baseUri) return <Spinner />;
 
   const { baseUri, currentUri } = podLocation;
-  const uriParts: string[] = currentUri
+  const uriParts = currentUri
     .substr(baseUri.length)
     .split("/")
     .filter((crumb) => !!crumb);
-  const resourceHref = (index = -1): string => {
+  const resourceHref = (index = -1) => {
     return `/resource/${encodeURIComponent(
       baseUri + uriParts.slice(0, index + 1).join("/")
     )}`;
   };
-  const crumbs: Array<Crumb> = [
+  const crumbs = [
     { uri: `/resource/${encodeURIComponent(baseUri)}`, label: "All files" },
   ].concat(
     uriParts.map((part, index) => ({ uri: resourceHref(index), label: part }))
-  );
-  const Crumb = ({ crumb, isLink }: CrumbProps): ReactElement => (
-    <li key={crumb.uri} className={bem("breadcrumb__crumb")}>
-      <i
-        className={clsx(
-          bem("icon-caret-left"),
-          bem("breadcrumb__caret", "small")
-        )}
-      />
-      {isLink ? (
-        <Link href="/resource/[iri]" as={crumb.uri}>
-          <a className={bem("breadcrumb__link")}>
-            <span className={bem("breadcrumb__prefix")}>Back to </span>
-            {crumb.label}
-          </a>
-        </Link>
-      ) : (
-        crumb.label
-      )}
-      <i
-        className={clsx(
-          bem("icon-caret-right"),
-          bem("breadcrumb__caret", "large")
-        )}
-      />
-    </li>
   );
 
   return (
