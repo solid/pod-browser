@@ -39,6 +39,7 @@ interface Crumb {
 
 interface CrumbProps {
   crumb: Crumb;
+  isLink: boolean;
 }
 
 export default function Breadcrumbs(): ReactElement {
@@ -50,7 +51,6 @@ export default function Breadcrumbs(): ReactElement {
     if (!breadcrumbsList.current) {
       return;
     }
-
     breadcrumbsList.current.scrollTo(breadcrumbsList.current.scrollWidth, 0);
   });
 
@@ -71,7 +71,7 @@ export default function Breadcrumbs(): ReactElement {
   ].concat(
     uriParts.map((part, index) => ({ uri: resourceHref(index), label: part }))
   );
-  const Crumb = ({ crumb }: CrumbProps): ReactElement => (
+  const Crumb = ({ crumb, isLink }: CrumbProps): ReactElement => (
     <li key={crumb.uri} className={bem("breadcrumb__crumb")}>
       <i
         className={clsx(
@@ -79,12 +79,16 @@ export default function Breadcrumbs(): ReactElement {
           bem("breadcrumb__caret", "small")
         )}
       />
-      <Link href="/resource/[iri]" as={crumb.uri}>
-        <a className={bem("breadcrumb__link")}>
-          <span className={bem("breadcrumb__prefix")}>Back to </span>
-          {crumb.label}
-        </a>
-      </Link>
+      {isLink ? (
+        <Link href="/resource/[iri]" as={crumb.uri}>
+          <a className={bem("breadcrumb__link")}>
+            <span className={bem("breadcrumb__prefix")}>Back to </span>
+            {crumb.label}
+          </a>
+        </Link>
+      ) : (
+        crumb.label
+      )}
       <i
         className={clsx(
           bem("icon-caret-right"),
@@ -97,8 +101,12 @@ export default function Breadcrumbs(): ReactElement {
   return (
     <nav aria-label="Breadcrumbs">
       <ul className={bem("breadcrumb")} ref={breadcrumbsList}>
-        {crumbs.map((crumb) => (
-          <Crumb crumb={crumb} key={crumb.uri} />
+        {crumbs.map((crumb, index) => (
+          <Crumb
+            crumb={crumb}
+            key={crumb.uri}
+            isLink={index !== crumbs.length - 1}
+          />
         ))}
       </ul>
     </nav>
