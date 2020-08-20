@@ -25,10 +25,8 @@ import {
   getClientAuthenticationWithDependencies,
 } from "@inrupt/solid-client-authn-browser";
 
-import SACSession from "../../solidAuthClientWrapper";
-
 export interface SessionContext {
-  session: Session | SACSession;
+  session: Session;
   isLoadingSession: boolean;
 }
 
