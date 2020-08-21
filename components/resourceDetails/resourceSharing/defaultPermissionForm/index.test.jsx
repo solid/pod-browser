@@ -20,7 +20,8 @@
  */
 
 import { mountToJson } from "../../../../__testUtils/mountWithTheme";
-import * as SolidClientHelpers from "../../../../src/solidClientHelpers";
+import * as PermissionHelpers from "../../../../src/solidClientHelpers/permissions";
+import * as ProfileHelpers from "../../../../src/solidClientHelpers/profile";
 import DefaultPermissionForm, { handleAgentAdd, handleAgentSubmit } from ".";
 
 describe("DefaultPermissionForm", () => {
@@ -34,7 +35,7 @@ describe("DefaultPermissionForm", () => {
 
 describe("handleAgentAdd", () => {
   test("it returns a handler to fetch an agent and add them to the list", async () => {
-    const { ACL } = SolidClientHelpers;
+    const { ACL } = PermissionHelpers;
     const fetch = jest.fn();
     const webId = "webId";
     const profile = { webId };
@@ -48,9 +49,7 @@ describe("handleAgentAdd", () => {
     const setAddedAgents = jest.fn();
     const onAgentAdd = handleAgentAdd({ addedAgents, setAddedAgents, fetch });
 
-    jest
-      .spyOn(SolidClientHelpers, "fetchProfile")
-      .mockResolvedValueOnce(profile);
+    jest.spyOn(ProfileHelpers, "fetchProfile").mockResolvedValueOnce(profile);
 
     await onAgentAdd("agentId");
 
@@ -58,7 +57,7 @@ describe("handleAgentAdd", () => {
   });
 
   test("it does not add an agent that is already in the list", async () => {
-    const { ACL } = SolidClientHelpers;
+    const { ACL } = PermissionHelpers;
     const fetch = jest.fn();
     const webId = "webId";
     const profile = { webId };
@@ -72,9 +71,7 @@ describe("handleAgentAdd", () => {
     const setAddedAgents = jest.fn();
     const onAgentAdd = handleAgentAdd({ addedAgents, setAddedAgents, fetch });
 
-    jest
-      .spyOn(SolidClientHelpers, "fetchProfile")
-      .mockResolvedValueOnce(profile);
+    jest.spyOn(ProfileHelpers, "fetchProfile").mockResolvedValueOnce(profile);
 
     await onAgentAdd("agentId");
 
@@ -87,7 +84,7 @@ describe("handleAgentSubmit", () => {
     const setAddedAgents = jest.fn();
     const onSubmit = jest.fn();
     const webId = "webId";
-    const { acl, alias } = SolidClientHelpers.ACL.CONTROL;
+    const { acl, alias } = PermissionHelpers.ACL.CONTROL;
     const agent = {
       webId,
       alias,

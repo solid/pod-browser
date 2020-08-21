@@ -20,12 +20,12 @@
  */
 
 import { mountToJson } from "../../../../__testUtils/mountWithTheme";
-import * as SolidClientHelpers from "../../../../src/solidClientHelpers";
+import * as PermissionHelpers from "../../../../src/solidClientHelpers/permissions";
 import AgentAccessList, { handleSave } from ".";
 
 describe("AgentAccessList", () => {
   test("it renders an AgentAccessList", () => {
-    const { ACL } = SolidClientHelpers;
+    const { ACL } = PermissionHelpers;
     const iri = "iri";
     const webId = "webId";
     const onSave = jest.fn();
@@ -56,7 +56,7 @@ describe("AgentAccessList", () => {
 
 describe("handleSave", () => {
   test("it returns a handler that calls the saveFn and callbacks", async () => {
-    const { ACL } = SolidClientHelpers;
+    const { ACL } = PermissionHelpers;
     const iri = "iri";
     const webId = "webId";
     const onSave = jest.fn();

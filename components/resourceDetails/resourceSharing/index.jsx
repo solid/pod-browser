@@ -44,15 +44,15 @@ import {
 } from "@inrupt/solid-client";
 import SessionContext from "../../../src/contexts/sessionContext";
 import { resourceContextRedirect } from "../../resourceLink";
+import { fetchProfile } from "../../../src/solidClientHelpers/profile";
 import {
   ACL,
   displayPermissions,
-  fetchProfile,
   getThirdPartyPermissions,
   getUserPermissions,
-  savePermissions,
   saveDefaultPermissions,
-} from "../../../src/solidClientHelpers";
+  savePermissions,
+} from "../../../src/solidClientHelpers/permissions";
 import styles from "../styles";
 import AgentSearchForm from "../../agentSearchForm";
 import DefaultPermissionForm from "./defaultPermissionForm";

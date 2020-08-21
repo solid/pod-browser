@@ -4,7 +4,9 @@ exports[`AlertContext it has context data 1`] = `
 <ContextProvider
   value={
     Object {
+      "alertError": [Function],
       "alertOpen": false,
+      "alertSuccess": [Function],
       "message": "",
       "setAlertOpen": [Function],
       "setMessage": [Function],

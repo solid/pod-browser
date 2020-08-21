@@ -28,7 +28,10 @@ import KeyboardArrowUp from "@material-ui/icons/KeyboardArrowUp";
 import AlertContext from "../../src/contexts/alertContext";
 import PermissionCheckbox from "./permissionCheckbox";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
-import { displayPermissions, ACL } from "../../src/solidClientHelpers";
+import {
+  displayPermissions,
+  ACL,
+} from "../../src/solidClientHelpers/permissions";
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));

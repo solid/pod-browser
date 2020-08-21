@@ -35,7 +35,7 @@ jest.mock("../../src/hooks/solidClient");
 
 describe("ContainerTableRow", () => {
   beforeEach(() => {
-    (useRouter as jest.Mock).mockImplementation(() => ({
+    useRouter.mockImplementation(() => ({
       query: {},
     }));
   });
@@ -50,9 +50,9 @@ describe("ContainerTableRow", () => {
     jest.spyOn(routerFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
       query: {},
-    } as routerFns.NextRouter);
+    });
 
-    (useFetchResourceDetails as jest.Mock).mockReturnValue({ data: undefined });
+    useFetchResourceDetails.mockReturnValue({ data: undefined });
 
     const tree = mountToJson(
       <table>
@@ -72,7 +72,7 @@ describe("ContainerTableRow", () => {
       types: ["some-type"],
     };
 
-    (useFetchResourceDetails as jest.Mock).mockReturnValue({ data: resource });
+    useFetchResourceDetails.mockReturnValue({ data: resource });
 
     const tree = mountToJson(
       <table>
@@ -92,7 +92,7 @@ describe("ContainerTableRow", () => {
       types: [],
     };
 
-    (useFetchResourceDetails as jest.Mock).mockReturnValue({ data: resource });
+    useFetchResourceDetails.mockReturnValue({ data: resource });
 
     const tree = mountToJson(
       <table>

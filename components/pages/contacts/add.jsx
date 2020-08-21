@@ -19,28 +19,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactElement } from "react";
-import { TableCell, TableRow } from "@material-ui/core";
-import Link from "next/link";
-import { resourceHref } from "../resourceLink";
-import { getIriPath } from "../../src/solidClientHelpers";
+import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
+import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
+import AddContact from "../../addContact";
 
-interface Props {
-  iri: string;
-}
-
-export default function ContainerTableRowSkeleton({
-  iri,
-}: Props): ReactElement {
-  const name = getIriPath(iri);
+export default function AddContactPage() {
+  useRedirectIfLoggedOut();
 
   return (
-    <TableRow key="no-resources-found">
-      <TableCell rowSpan={3}>
-        <Link href={resourceHref(iri)}>
-          <a>{name}</a>
-        </Link>
-      </TableCell>
-    </TableRow>
+    <DetailsMenuProvider>
+      <AddContact />
+    </DetailsMenuProvider>
   );
 }

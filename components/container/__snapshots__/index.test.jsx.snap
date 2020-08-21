@@ -1933,7 +1933,7 @@ font-display: block;",
           </PageHeader>
         </PageHeader>
         <div
-          className="PodBrowser-container PodBrowser-container-breadcrumbs"
+          className="PodBrowser-container"
         >
           <Breadcrumbs>
             <Spinner>
@@ -4131,7 +4131,7 @@ font-display: block;",
           </PageHeader>
         </PageHeader>
         <div
-          className="PodBrowser-container PodBrowser-container-breadcrumbs"
+          className="PodBrowser-container"
         >
           <Breadcrumbs>
             <Spinner>

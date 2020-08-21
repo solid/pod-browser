@@ -19,35 +19,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useContext } from "react";
-import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
-import { header, PrismTheme, useBem } from "@solid/lit-prism-patterns";
-import Link from "next/link";
-import SessionContext from "../../src/contexts/sessionContext";
-import UserMenu from "./userMenu";
-import styles from "./styles";
+import {
+  addUrl,
+  createLitDataset,
+  createThing,
+  addDatetime,
+  addDecimal,
+  addInteger,
+  setThing,
+} from "@inrupt/solid-client";
+import { rdf, ldp } from "rdf-namespaces";
 
-const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme) as StyleRules)
-);
+export const TIMESTAMP = new Date(Date.UTC(2020, 5, 2, 15, 59, 21));
 
-export default function Header(): ReactElement | null {
-  const { session } = useContext(SessionContext);
-  const bem = useBem(useStyles());
+export default function createContainer(
+  url = "https://user.dev.inrupt.net/",
+  type = ldp.BasicContainer
+) {
+  const thing = createThing({ url });
+  const publicContainer = [
+    (t) => addUrl(t, rdf.type, type),
+    (t) => addUrl(t, rdf.type, ldp.Container),
+    (t) => addDatetime(t, "http://purl.org/dc/terms/modified", TIMESTAMP),
+    (t) =>
+      addDecimal(t, "http://www.w3.org/ns/posix/stat#mtime", 1591131561.195),
+    (t) => addInteger(t, "http://www.w3.org/ns/posix/stat#size", 4096),
+    (t) => addUrl(t, ldp.contains, "https://user.dev.inrupt.net/public/games/"),
+  ].reduce((acc, fn) => fn(acc), thing);
 
-  return (
-    <header className={bem("header-banner")}>
-      <Link href="/">
-        <a className={bem("header-banner__logo")}>
-          <img
-            height={40}
-            src="/inrupt_logo-2020.svg"
-            className={bem("header-banner__logo-image")}
-            alt="Inrupt PodBrowser"
-          />
-        </a>
-      </Link>
-      {session.info.isLoggedIn ? <UserMenu /> : null}
-    </header>
-  );
+  return setThing(createLitDataset(), publicContainer);
 }

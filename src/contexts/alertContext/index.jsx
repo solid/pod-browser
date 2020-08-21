@@ -19,59 +19,57 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* istanbul ignore file */
-import {
-  createContext,
-  ReactElement,
-  ReactNode,
-  useState,
-  Dispatch,
-} from "react";
-import { AlertProps } from "@material-ui/lab/Alert";
+import { createContext, useState } from "react";
+import T from "prop-types";
 
-interface IAlertContext {
-  alertOpen: boolean;
-  message: string;
-  severity: AlertProps["severity"];
-  setAlertOpen: Dispatch<boolean>;
-  setMessage: Dispatch<string>;
-  setSeverity: Dispatch<AlertProps["severity"]>;
-}
-
-const AlertContext = createContext<IAlertContext>({
+const AlertContext = createContext({
   alertOpen: false,
   message: "",
   severity: "success",
   setAlertOpen: () => false,
   setMessage: () => "",
   setSeverity: () => "success",
+  alertSuccess: () => {},
+  alertError: () => {},
 });
 
-interface IAlertProvider {
-  children: ReactNode;
-}
-
-function AlertProvider({ children }: IAlertProvider): ReactElement {
+function AlertProvider({ children }) {
   const [alertOpen, setAlertOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const [severity, setSeverity] = useState("success" as AlertProps["severity"]);
+  const [severity, setSeverity] = useState("success");
+  const alertSuccess = (msg) => {
+    setSeverity("success");
+    setMessage(msg);
+    setAlertOpen(true);
+  };
+  const alertError = (msg) => {
+    setSeverity("success");
+    setMessage(msg);
+    setAlertOpen(true);
+  };
 
   return (
     <AlertContext.Provider
       value={{
+        alertError,
         alertOpen,
+        alertSuccess,
         message,
-        severity,
         setAlertOpen,
         setMessage,
         setSeverity,
+        severity,
       }}
     >
       {children}
     </AlertContext.Provider>
   );
 }
+
+AlertProvider.propTypes = {
+  children: T.node.isRequired,
+};
 
 export { AlertProvider };
 export default AlertContext;

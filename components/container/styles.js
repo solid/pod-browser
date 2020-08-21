@@ -19,35 +19,30 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useContext } from "react";
-import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
-import { header, PrismTheme, useBem } from "@solid/lit-prism-patterns";
-import Link from "next/link";
-import SessionContext from "../../src/contexts/sessionContext";
-import UserMenu from "./userMenu";
-import styles from "./styles";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme) as StyleRules)
-);
+const styles = (theme) => {
+  return createStyles(theme, ["container", "table"], {
+    "container-view": {
+      marginTop: theme.spacing(1),
+    },
+    "container-view--menu-open": {
+      [theme.breakpoints.up("sm")]: {
+        paddingRight: "50%",
+      },
+      [theme.breakpoints.up("md")]: {
+        paddingRight: "33.33%",
+      },
+      [theme.breakpoints.up("lg")]: {
+        paddingRight: "25%",
+      },
+    },
+    "container-menu": {
+      display: "flex",
+      justifyContent: "space-between",
+      margin: theme.spacing(1, 0, 0),
+    },
+  });
+};
 
-export default function Header(): ReactElement | null {
-  const { session } = useContext(SessionContext);
-  const bem = useBem(useStyles());
-
-  return (
-    <header className={bem("header-banner")}>
-      <Link href="/">
-        <a className={bem("header-banner__logo")}>
-          <img
-            height={40}
-            src="/inrupt_logo-2020.svg"
-            className={bem("header-banner__logo-image")}
-            alt="Inrupt PodBrowser"
-          />
-        </a>
-      </Link>
-      {session.info.isLoggedIn ? <UserMenu /> : null}
-    </header>
-  );
-}
+export default styles;

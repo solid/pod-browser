@@ -34,26 +34,22 @@ describe("Container view", () => {
       asPath: "asPath",
       replace: jest.fn(),
       query: {},
-    } as never)
+    })
   );
 
   test("Renders a spinner if data is loading", () => {
-    (solidClientHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue(
-      {
-        data: undefined,
-      }
-    );
+    solidClientHooks.useFetchContainerResourceIris.mockReturnValue({
+      data: undefined,
+    });
 
     const tree = mountToJson(<Container iri={iri} />);
     expect(tree).toMatchSnapshot();
   });
 
   test("Renders a table view without data", () => {
-    (solidClientHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue(
-      {
-        data: [],
-      }
-    );
+    solidClientHooks.useFetchContainerResourceIris.mockReturnValue({
+      data: [],
+    });
 
     const tree = mountToJson(<Container iri={iri} />);
     expect(tree).toMatchSnapshot();
@@ -66,13 +62,11 @@ describe("Container view", () => {
       "https://myaccount.mypodserver.com/note.txt",
     ];
 
-    (solidClientHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue(
-      {
-        data: resources,
-      }
-    );
+    solidClientHooks.useFetchContainerResourceIris.mockReturnValue({
+      data: resources,
+    });
 
-    (solidClientHooks.useFetchResourceDetails as jest.Mock).mockReturnValue({
+    solidClientHooks.useFetchResourceDetails.mockReturnValue({
       data: undefined,
     });
 

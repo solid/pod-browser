@@ -21,11 +21,10 @@
 
 import { renderHook } from "@testing-library/react-hooks";
 import usePodRoot from "./index";
-import { Profile } from "../../solidClientHelpers";
 
 const location = "https://foo.com/bar/baz";
 const locationWithNoEndingSlash = "https://bar.com";
-const profile: Profile = {
+const profile = {
   webId: "webId",
   pods: ["https://foo.com/bar/", locationWithNoEndingSlash],
 };

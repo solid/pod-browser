@@ -19,18 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export interface URL {
-  hash: string;
-  host: string;
-  hostname: string;
-  origin: string;
-  pathname: string;
-  port: string;
-  protocol: string;
-  search: string;
-}
-
-export function parseUrl(url: string): URL {
+export function parseUrl(url) {
   const a = document.createElement("a");
   a.href = url;
 
@@ -46,11 +35,11 @@ export function parseUrl(url: string): URL {
   };
 }
 
-export function stripQueryParams(path: string): string {
+export function stripQueryParams(path) {
   return path.replace(/\?.+$/, "");
 }
 
-export function isUrl(string: string): boolean {
+export function isUrl(string) {
   try {
     const url = new URL(string);
     return ["https:", "http:"].includes(url.protocol);
@@ -59,4 +48,20 @@ export function isUrl(string: string): boolean {
   }
 }
 
-export default { parseUrl, stripQueryParams, isUrl };
+export function joinPath(root, ...paths) {
+  return [root.replace(/\/$/, ""), ...paths].join("/");
+}
+
+export function hasHash(string) {
+  const parts = parseUrl(string);
+  return !!parts.hash;
+}
+
+export function stripHash(string) {
+  return string.replace(/#/, "");
+}
+
+export function capitalize(string) {
+  return string.replace(/^\w/, (c) => c.toUpperCase());
+}
+export default { parseUrl, stripQueryParams, isUrl, joinPath };

@@ -23,12 +23,12 @@
 
 import { useState, useContext } from "react";
 import T from "prop-types";
+import { isContainerIri } from "../../../../src/solidClientHelpers/utils";
 import {
   ACL,
-  fetchProfile,
-  isContainerIri,
   saveDefaultPermissions,
-} from "../../../../src/solidClientHelpers";
+} from "../../../../src/solidClientHelpers/permissions";
+import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
 import SessionContext from "../../../../src/contexts/sessionContext";
 import AgentSearchForm from "../../../agentSearchForm";
 import AgentAccessList from "../agentAccessList";

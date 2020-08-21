@@ -22,9 +22,9 @@
 import React from "react";
 import { renderHook } from "@testing-library/react-hooks";
 import useAuthenticatedProfile from "./index";
-import { fetchProfile } from "../../solidClientHelpers";
+import { fetchProfile } from "../../solidClientHelpers/profile";
 
-jest.mock("../../solidClientHelpers");
+jest.mock("../../solidClientHelpers/profile");
 
 const webId = "https://webid.com/#me";
 const profile = { webId };
@@ -40,7 +40,7 @@ describe("useAuthenticatedProfile", () => {
 
     jest.spyOn(React, "useContext").mockReturnValueOnce({ session });
 
-    (fetchProfile as jest.Mock).mockResolvedValue(profile);
+    fetchProfile.mockResolvedValue(profile);
 
     const { result } = renderHook(() => useAuthenticatedProfile());
     expect(result.current).toBeNull();
@@ -56,7 +56,7 @@ describe("useAuthenticatedProfile", () => {
 
     jest.spyOn(React, "useContext").mockReturnValueOnce({ session });
 
-    (fetchProfile as jest.Mock).mockResolvedValue(profile);
+    fetchProfile.mockResolvedValue(profile);
 
     const { result, waitForNextUpdate } = renderHook(useAuthenticatedProfile);
 

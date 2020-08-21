@@ -49,7 +49,7 @@ export function handleChange(setAgentId) {
   };
 }
 
-function AgentSearchForm({ heading, onSubmit }) {
+function AgentSearchForm({ heading, onSubmit, buttonText }) {
   const [agentId, setAgentId] = useState("");
   const classes = useStyles();
   const onClick = handleClick({ setAgentId, onSubmit });
@@ -80,18 +80,20 @@ function AgentSearchForm({ heading, onSubmit }) {
         onClick={() => onClick(agentId)}
         className={classes.agentAddButton}
       >
-        Add
+        {buttonText}
       </Button>
     </>
   );
 }
 
 AgentSearchForm.propTypes = {
+  buttonText: T.string,
   heading: T.string,
   onSubmit: T.func,
 };
 
 AgentSearchForm.defaultProps = {
+  buttonText: "Add",
   heading: "Grant Permission",
   onSubmit: () => {},
 };

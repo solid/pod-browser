@@ -852,6 +852,8 @@ font-display: block;",
       }
     >
       <ResourceDetails
+        onDelete={[Function]}
+        onDeleteError={[Function]}
         resource={
           Object {
             "iri": "/Some%20container/",
@@ -1225,6 +1227,8 @@ font-display: block;",
                     }
                   }
                   name="Name"
+                  onDelete={[Function]}
+                  onDeleteError={[Function]}
                   resourceIri="/Some%20container/"
                 >
                   <ForwardRef(ListItem)
@@ -1251,6 +1255,8 @@ font-display: block;",
                       }
                     }
                     name="Name"
+                    onDelete={[Function]}
+                    onDeleteError={[Function]}
                     resourceIri="/Some%20container/"
                   >
                     <WithStyles(ForwardRef(ButtonBase))
@@ -1264,6 +1270,8 @@ font-display: block;",
                       disabled={false}
                       focusVisibleClassName="PodBrowser-focusVisible"
                       name="Name"
+                      onDelete={[Function]}
+                      onDeleteError={[Function]}
                       resourceIri="/Some%20container/"
                     >
                       <ForwardRef(ButtonBase)
@@ -1284,6 +1292,8 @@ font-display: block;",
                         disabled={false}
                         focusVisibleClassName="PodBrowser-focusVisible"
                         name="Name"
+                        onDelete={[Function]}
+                        onDeleteError={[Function]}
                         resourceIri="/Some%20container/"
                       >
                         <ForwardRef
@@ -1291,6 +1301,8 @@ font-display: block;",
                           className="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
                           name="Name"
                           onBlur={[Function]}
+                          onDelete={[Function]}
+                          onDeleteError={[Function]}
                           onDragLeave={[Function]}
                           onFocus={[Function]}
                           onKeyDown={[Function]}
@@ -2552,6 +2564,8 @@ font-display: block;",
       }
     >
       <ResourceDetails
+        onDelete={[Function]}
+        onDeleteError={[Function]}
         resource={
           Object {
             "iri": "/Some%20Resource",
@@ -2925,6 +2939,8 @@ font-display: block;",
                     }
                   }
                   name="Name"
+                  onDelete={[Function]}
+                  onDeleteError={[Function]}
                   resourceIri="/Some%20Resource"
                 >
                   <ForwardRef(ListItem)
@@ -2951,6 +2967,8 @@ font-display: block;",
                       }
                     }
                     name="Name"
+                    onDelete={[Function]}
+                    onDeleteError={[Function]}
                     resourceIri="/Some%20Resource"
                   >
                     <WithStyles(ForwardRef(ButtonBase))
@@ -2964,6 +2982,8 @@ font-display: block;",
                       disabled={false}
                       focusVisibleClassName="PodBrowser-focusVisible"
                       name="Name"
+                      onDelete={[Function]}
+                      onDeleteError={[Function]}
                       resourceIri="/Some%20Resource"
                     >
                       <ForwardRef(ButtonBase)
@@ -2984,6 +3004,8 @@ font-display: block;",
                         disabled={false}
                         focusVisibleClassName="PodBrowser-focusVisible"
                         name="Name"
+                        onDelete={[Function]}
+                        onDeleteError={[Function]}
                         resourceIri="/Some%20Resource"
                       >
                         <ForwardRef
@@ -2991,6 +3013,8 @@ font-display: block;",
                           className="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
                           name="Name"
                           onBlur={[Function]}
+                          onDelete={[Function]}
+                          onDeleteError={[Function]}
                           onDragLeave={[Function]}
                           onFocus={[Function]}
                           onKeyDown={[Function]}
@@ -4377,6 +4401,8 @@ font-display: block;",
       }
     >
       <ResourceDetails
+        onDelete={[Function]}
+        onDeleteError={[Function]}
         resource={
           Object {
             "iri": "/container/",
@@ -4750,6 +4776,8 @@ font-display: block;",
                     }
                   }
                   name="Name"
+                  onDelete={[Function]}
+                  onDeleteError={[Function]}
                   resourceIri="/container/"
                 >
                   <ForwardRef(ListItem)
@@ -4776,6 +4804,8 @@ font-display: block;",
                       }
                     }
                     name="Name"
+                    onDelete={[Function]}
+                    onDeleteError={[Function]}
                     resourceIri="/container/"
                   >
                     <WithStyles(ForwardRef(ButtonBase))
@@ -4789,6 +4819,8 @@ font-display: block;",
                       disabled={false}
                       focusVisibleClassName="PodBrowser-focusVisible"
                       name="Name"
+                      onDelete={[Function]}
+                      onDeleteError={[Function]}
                       resourceIri="/container/"
                     >
                       <ForwardRef(ButtonBase)
@@ -4809,6 +4841,8 @@ font-display: block;",
                         disabled={false}
                         focusVisibleClassName="PodBrowser-focusVisible"
                         name="Name"
+                        onDelete={[Function]}
+                        onDeleteError={[Function]}
                         resourceIri="/container/"
                       >
                         <ForwardRef
@@ -4816,6 +4850,8 @@ font-display: block;",
                           className="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
                           name="Name"
                           onBlur={[Function]}
+                          onDelete={[Function]}
+                          onDeleteError={[Function]}
                           onDragLeave={[Function]}
                           onFocus={[Function]}
                           onKeyDown={[Function]}
@@ -6077,6 +6113,8 @@ font-display: block;",
       }
     >
       <ResourceDetails
+        onDelete={[Function]}
+        onDeleteError={[Function]}
         resource={
           Object {
             "iri": "/resource",
@@ -6450,6 +6488,8 @@ font-display: block;",
                     }
                   }
                   name="Name"
+                  onDelete={[Function]}
+                  onDeleteError={[Function]}
                   resourceIri="/resource"
                 >
                   <ForwardRef(ListItem)
@@ -6476,6 +6516,8 @@ font-display: block;",
                       }
                     }
                     name="Name"
+                    onDelete={[Function]}
+                    onDeleteError={[Function]}
                     resourceIri="/resource"
                   >
                     <WithStyles(ForwardRef(ButtonBase))
@@ -6489,6 +6531,8 @@ font-display: block;",
                       disabled={false}
                       focusVisibleClassName="PodBrowser-focusVisible"
                       name="Name"
+                      onDelete={[Function]}
+                      onDeleteError={[Function]}
                       resourceIri="/resource"
                     >
                       <ForwardRef(ButtonBase)
@@ -6509,6 +6553,8 @@ font-display: block;",
                         disabled={false}
                         focusVisibleClassName="PodBrowser-focusVisible"
                         name="Name"
+                        onDelete={[Function]}
+                        onDeleteError={[Function]}
                         resourceIri="/resource"
                       >
                         <ForwardRef
@@ -6516,6 +6562,8 @@ font-display: block;",
                           className="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
                           name="Name"
                           onBlur={[Function]}
+                          onDelete={[Function]}
+                          onDeleteError={[Function]}
                           onDragLeave={[Function]}
                           onFocus={[Function]}
                           onKeyDown={[Function]}

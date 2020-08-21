@@ -19,10 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// @ts-nocheck
 // material-ui is broken and doesn't allow `ListItem` to accept `component`
 
-import React, { ReactElement, useContext } from "react";
+import React, { useContext } from "react";
+import T from "prop-types";
 import {
   Button,
   createStyles,
@@ -36,32 +36,22 @@ import {
 import ShareIcon from "@material-ui/icons/Share";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { makeStyles } from "@material-ui/styles";
-import { PrismTheme } from "@solid/lit-prism-patterns";
 import ResourceLink from "../resourceLink";
 import styles from "./styles";
-import { IResourceDetails } from "../../src/solidClientHelpers";
 import { parseUrl } from "../../src/stringHelpers";
 import SessionContext from "../../src/contexts/sessionContext";
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
 import DeleteLink from "./deleteLink";
 
-interface IDownloadLink {
-  type: string;
-  iri: string;
-  className: string;
-}
-
-export function displayType(types: string[] | undefined): string {
+export function displayType(types) {
   if (!types || types.length === 0) return "Resource";
   const [type] = types;
   return type;
 }
 
-const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme))
-);
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export function forceDownload(name: string, file: Blob): void {
+export function forceDownload(name, file) {
   const a = document.createElement("a");
   a.style.display = "none";
   a.href = window.URL.createObjectURL(file);
@@ -75,8 +65,8 @@ export function forceDownload(name: string, file: Blob): void {
   document.body.removeChild(a);
 }
 
-export function downloadResource(iri: string, fetch: typeof window.fetch) {
-  return (): void => {
+export function downloadResource(iri, fetch) {
+  return () => {
     const { pathname } = parseUrl(iri);
     const name = pathname.replace(/\//g, "");
 
@@ -87,7 +77,7 @@ export function downloadResource(iri: string, fetch: typeof window.fetch) {
   };
 }
 
-export function DownloadLink(props: IDownloadLink): ReactElement | null {
+function DownloadLink(props) {
   const { session } = useContext(SessionContext);
   const { type, iri, className } = props;
 
@@ -104,6 +94,14 @@ export function DownloadLink(props: IDownloadLink): ReactElement | null {
   );
 }
 
+DownloadLink.propTypes = {
+  type: T.string.isRequired,
+  iri: T.string.isRequired,
+  className: T.string.isRequired,
+};
+
+export { DownloadLink };
+
 /* eslint react/jsx-props-no-spreading: 0 */
 const SharingLink = React.forwardRef((linkProps, ref) => (
   <ResourceLink
@@ -113,17 +111,7 @@ const SharingLink = React.forwardRef((linkProps, ref) => (
   />
 ));
 
-interface IDetailsProps {
-  resource: IResourceDetails;
-  onDelete: void;
-  onDeleteError: (Error) => void;
-}
-
-export default function ResourceDetails({
-  resource,
-  onDelete,
-  onDeleteError,
-}: IDetailsProps): ReactElement {
+function ResourceDetails({ resource, onDelete, onDeleteError }) {
   const classes = useStyles();
   const { iri, name, types } = resource;
   const type = displayType(types);
@@ -197,3 +185,25 @@ export default function ResourceDetails({
     </>
   );
 }
+
+ResourceDetails.propTypes = {
+  resource: T.shape({
+    iri: T.string.isRequired,
+    name: T.string.isRequired,
+    types: T.arrayOf(T.string).isRequired,
+  }),
+  onDelete: T.func,
+  onDeleteError: T.func,
+};
+
+ResourceDetails.defaultProps = {
+  resource: {
+    iri: "",
+    name: "",
+    types: [],
+  },
+  onDelete: () => {},
+  onDeleteError: () => {},
+};
+
+export default ResourceDetails;

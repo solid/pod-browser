@@ -19,24 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// @ts-nocheck
 // react-table is super broken with sorting, so temporarily disable ts checking.
 /* eslint react/jsx-one-expression-per-line: 0 */
 
-import React, { ReactElement, useMemo } from "react";
-import { useTable, useSortBy, UseSortByOptions } from "react-table";
-import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
-import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
+import { useMemo } from "react";
+import T from "prop-types";
+import { useTable, useSortBy } from "react-table";
+import { createStyles, makeStyles } from "@material-ui/styles";
+import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 
 import ContainerTableRow, { renderResourceType } from "../containerTableRow";
 import SortedTableCarat from "../sortedTableCarat";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import { useFetchContainerResourceIris } from "../../src/hooks/solidClient";
-import {
-  IResourceDetails,
-  getResourceName,
-} from "../../src/solidClientHelpers";
+import { getResourceName } from "../../src/solidClientHelpers/resource";
 
 import Spinner from "../spinner";
 import styles from "./styles";
@@ -44,15 +41,9 @@ import Breadcrumbs from "../breadcrumbs";
 import PageHeader from "../containerPageHeader";
 import ContainerDetails from "../containerDetails";
 
-const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme) as StyleRules)
-);
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-interface IPodList {
-  iri: string;
-}
-
-export default function Container({ iri }: IPodList): ReactElement {
+function Container({ iri }) {
   useRedirectIfLoggedOut();
   const encodedIri = encodeURI(iri);
 
@@ -103,7 +94,7 @@ export default function Container({ iri }: IPodList): ReactElement {
     headerGroups,
     rows,
     prepareRow,
-  } = useTable<UseSortByOptions<IResourceDetails>>(
+  } = useTable(
     {
       columns,
       data,
@@ -164,7 +155,7 @@ export default function Container({ iri }: IPodList): ReactElement {
 
             {rows.map((row) => {
               prepareRow(row);
-              const details = row.original as IResourceDetails;
+              const details = row.original;
               return <ContainerTableRow key={details.iri} resource={details} />;
             })}
           </tbody>
@@ -173,3 +164,9 @@ export default function Container({ iri }: IPodList): ReactElement {
     </>
   );
 }
+
+Container.propTypes = {
+  iri: T.string.isRequired,
+};
+
+export default Container;

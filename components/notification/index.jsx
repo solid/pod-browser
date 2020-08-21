@@ -19,42 +19,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useContext, ReactElement } from "react";
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
-import AlertContext, { AlertProvider } from "./index";
+import { useContext } from "react";
+import Alert from "@material-ui/lab/Alert";
+import { Snackbar } from "@material-ui/core";
+import AlertContext from "../../src/contexts/alertContext";
 
-function ChildComponent(): ReactElement {
-  const {
-    alertOpen,
-    message,
-    severity,
-    setAlertOpen,
-    setMessage,
-    setSeverity,
-  } = useContext(AlertContext);
-
-  setAlertOpen(true);
-  setMessage("message");
-  setSeverity("error");
+export default function Notification() {
+  const { alertOpen, message, severity, setAlertOpen } = useContext(
+    AlertContext
+  );
+  const onClose = () => setAlertOpen(false);
 
   return (
-    <div>
-      <div className="alertOpen">{alertOpen ? "true" : "false"}</div>
-      <div className="message">{message}</div>
-      <div className="severity">{severity}</div>
-    </div>
+    <Snackbar
+      open={alertOpen}
+      autoHideDuration={6000}
+      onClose={onClose}
+      anchorOrigin={{ vertical: "top", horizontal: "center" }}
+    >
+      <Alert onClose={onClose} severity={severity}>
+        {message}
+      </Alert>
+    </Snackbar>
   );
 }
-
-describe("AlertContext", () => {
-  test("it has context data", () => {
-    const component = shallow(
-      <AlertProvider>
-        <ChildComponent />
-      </AlertProvider>
-    );
-
-    expect(shallowToJson(component)).toMatchSnapshot();
-  });
-});

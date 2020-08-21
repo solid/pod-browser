@@ -20,56 +20,49 @@
  */
 
 /* eslint-disable camelcase */
-import { ReactElement, useContext } from "react";
-import { makeStyles, createStyles, StyleRules } from "@material-ui/styles";
-import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
-import { useRouter, NextRouter } from "next/router";
+import { useContext } from "react";
+import T from "prop-types";
+import { makeStyles, createStyles } from "@material-ui/styles";
+import { useBem } from "@solid/lit-prism-patterns";
+import { useRouter } from "next/router";
 import clsx from "clsx";
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
-import { IResourceDetails, isContainerIri } from "../../src/solidClientHelpers";
+import { isContainerIri } from "../../src/solidClientHelpers/utils";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import ResourceLink, { resourceContextRedirect } from "../resourceLink";
 import styles from "./styles";
 
-interface IResourceIcon {
-  iri: string;
-  bem: (className: string) => string;
-}
-
-export function ResourceIcon({ iri, bem }: IResourceIcon): ReactElement {
+function ResourceIcon({ iri, bem }) {
   // keeping it very simple for now (either folder or file), and then we can expand upon it later
   const icon = isContainerIri(iri) ? "icon-folder" : "icon-file";
 
   return <i className={clsx(bem(icon), bem("resource-icon"))} />;
 }
 
-export function renderResourceType(iri: string): string {
+ResourceIcon.propTypes = {
+  iri: T.string.isRequired,
+  bem: T.func.isRequired,
+};
+
+export { ResourceIcon };
+
+export function renderResourceType(iri) {
   return isContainerIri(iri) ? "Container" : "Resource";
 }
 
-const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme) as StyleRules)
-);
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-interface Props {
-  resource: IResourceDetails;
-}
-
-export function handleClick(
-  resourceIri: string,
-  containerIri: string,
-  router: NextRouter
-): (evnt: Partial<React.MouseEvent>) => Promise<void> {
+export function handleClick(resourceIri, containerIri, router) {
   const action = DETAILS_CONTEXT_ACTIONS.DETAILS;
 
   return async (evnt) => {
-    const element = evnt.target as HTMLElement;
+    const element = evnt.target;
     if (element && element.tagName === "A") return;
     await resourceContextRedirect(action, resourceIri, containerIri, router);
   };
 }
 
-export default function ContainerTableRow({ resource }: Props): ReactElement {
+function ContainerTableRow({ resource }) {
   const classes = useStyles();
   const bem = useBem(classes);
   const { name, iri } = resource;
@@ -109,3 +102,19 @@ export default function ContainerTableRow({ resource }: Props): ReactElement {
     </tr>
   );
 }
+
+ContainerTableRow.propTypes = {
+  resource: T.shape({
+    name: T.string.isRequired,
+    iri: T.string.isRequired,
+  }),
+};
+
+ContainerTableRow.defaultProps = {
+  resource: {
+    name: "",
+    iri: "",
+  },
+};
+
+export default ContainerTableRow;

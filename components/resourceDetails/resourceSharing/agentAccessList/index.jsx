@@ -32,7 +32,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import T from "prop-types";
-import { displayProfileName } from "../../../../src/solidClientHelpers";
+import { displayProfileName } from "../../../../src/solidClientHelpers/profile";
 import styles from "../../styles";
 import SessionContext from "../../../../src/contexts/sessionContext";
 import PermissionsForm from "../../../permissionsForm";

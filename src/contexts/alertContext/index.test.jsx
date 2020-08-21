@@ -19,31 +19,42 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useEffect, useState } from "react";
-import { Profile } from "../../solidClientHelpers";
+import { useContext } from "react";
+import { shallow } from "enzyme";
+import { shallowToJson } from "enzyme-to-json";
+import AlertContext, { AlertProvider } from "./index";
 
-function normalizeBaseUri(baseUri: string): string {
-  return baseUri[baseUri.length - 1] === "/" ? baseUri : `${baseUri}/`;
+function ChildComponent() {
+  const {
+    alertOpen,
+    message,
+    severity,
+    setAlertOpen,
+    setMessage,
+    setSeverity,
+  } = useContext(AlertContext);
+
+  setAlertOpen(true);
+  setMessage("message");
+  setSeverity("error");
+
+  return (
+    <div>
+      <div className="alertOpen">{alertOpen ? "true" : "false"}</div>
+      <div className="message">{message}</div>
+      <div className="severity">{severity}</div>
+    </div>
+  );
 }
 
-export default function usePodRoot(
-  location: string,
-  profile?: Profile | null
-): string | null {
-  const [rootUri, setRootUri] = useState<string | null>(null);
-  useEffect(() => {
-    if (location === "undefined") {
-      return;
-    }
-    const profilePod = (profile ? profile.pods || [] : []).find((pod) =>
-      location.startsWith(pod)
+describe("AlertContext", () => {
+  test("it has context data", () => {
+    const component = shallow(
+      <AlertProvider>
+        <ChildComponent />
+      </AlertProvider>
     );
-    if (profilePod) {
-      setRootUri(normalizeBaseUri(profilePod));
-      return;
-    }
-    const { origin } = new URL(location);
-    setRootUri(normalizeBaseUri(origin));
-  }, [location, profile]);
-  return rootUri;
-}
+
+    expect(shallowToJson(component)).toMatchSnapshot();
+  });
+});

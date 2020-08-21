@@ -861,10 +861,28 @@ font-display: block;",
               />
             </a>
           </Link>
-          <div
-            className="PodBrowser-header-banner__main-nav"
-          />
           <UserMenu>
+            <div
+              className="PodBrowser-header-banner__main-nav"
+            >
+              <Link
+                href="/contacts"
+                replace={true}
+              >
+                <button
+                  className="PodBrowser-header-banner__aside-menu-trigger"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                  type="button"
+                >
+                  <i
+                    aria-label="Contacts"
+                    className="PodBrowser-icon-users PodBrowser-header-banner__aside-menu-trigger-icon"
+                  />
+                  Contacts
+                </button>
+              </Link>
+            </div>
             <div
               className="PodBrowser-header-banner__aside-menu PodBrowser-header-banner__aside-menu--popup"
               onMouseEnter={[Function]}
@@ -1790,10 +1808,28 @@ font-display: block;",
               />
             </a>
           </Link>
-          <div
-            className="PodBrowser-header-banner__main-nav"
-          />
           <UserMenu>
+            <div
+              className="PodBrowser-header-banner__main-nav"
+            >
+              <Link
+                href="/contacts"
+                replace={true}
+              >
+                <button
+                  className="PodBrowser-header-banner__aside-menu-trigger"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                  type="button"
+                >
+                  <i
+                    aria-label="Contacts"
+                    className="PodBrowser-icon-users PodBrowser-header-banner__aside-menu-trigger-icon"
+                  />
+                  Contacts
+                </button>
+              </Link>
+            </div>
             <div
               className="PodBrowser-header-banner__aside-menu PodBrowser-header-banner__aside-menu--popup"
               onMouseEnter={[Function]}

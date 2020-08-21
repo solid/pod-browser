@@ -19,35 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useContext } from "react";
-import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
-import { header, PrismTheme, useBem } from "@solid/lit-prism-patterns";
-import Link from "next/link";
-import SessionContext from "../../src/contexts/sessionContext";
-import UserMenu from "./userMenu";
-import styles from "./styles";
+import {
+  addUrl,
+  createLitDataset,
+  createThing,
+  setThing,
+} from "@inrupt/solid-client";
+import { rdf, ldp } from "rdf-namespaces";
 
-const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme) as StyleRules)
-);
+export default function createDataset(
+  options,
+  type = "Resource",
+  ...operations
+) {
+  const ops = [(t) => addUrl(t, rdf.type, ldp[type]), ...operations];
+  const thing = ops.reduce((acc, fn) => fn(acc), createThing(options));
 
-export default function Header(): ReactElement | null {
-  const { session } = useContext(SessionContext);
-  const bem = useBem(useStyles());
-
-  return (
-    <header className={bem("header-banner")}>
-      <Link href="/">
-        <a className={bem("header-banner__logo")}>
-          <img
-            height={40}
-            src="/inrupt_logo-2020.svg"
-            className={bem("header-banner__logo-image")}
-            alt="Inrupt PodBrowser"
-          />
-        </a>
-      </Link>
-      {session.info.isLoggedIn ? <UserMenu /> : null}
-    </header>
-  );
+  return setThing(createLitDataset(), thing);
 }

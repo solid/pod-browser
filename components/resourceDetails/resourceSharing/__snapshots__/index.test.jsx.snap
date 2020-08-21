@@ -4336,6 +4336,7 @@ font-display: block;",
           className="PodBrowser-centeredSection"
         >
           <AgentSearchForm
+            buttonText="Add"
             heading="Grant Permission"
             onSubmit={[Function]}
           >
@@ -10237,6 +10238,7 @@ font-display: block;",
           className="PodBrowser-centeredSection"
         >
           <AgentSearchForm
+            buttonText="Add"
             heading="Grant Permission"
             onSubmit={[Function]}
           >

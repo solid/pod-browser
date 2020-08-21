@@ -22,6 +22,7 @@
 import React, { ReactElement, useState } from "react";
 import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
+import Link from "next/link";
 import clsx from "clsx";
 import LogOutButton from "../../logout";
 import styles from "./styles";
@@ -37,55 +38,75 @@ export default function UserMenu(): ReactElement {
   const toggleMenu = () => setUserMenuOpen(!userMenuOpen);
 
   return (
-    <div
-      className={bem("header-banner__aside-menu", "popup")}
-      onMouseEnter={toggleMenu}
-      onMouseLeave={toggleMenu}
-    >
-      <button
-        className={bem("header-banner__aside-menu-trigger")}
-        type="button"
-        aria-haspopup="true"
-        aria-controls="UserMenu"
-        aria-expanded={!userMenuOpen}
-        onClick={toggleMenu}
-      >
-        <i
-          className={clsx(
-            bem("icon-user"),
-            bem("header-banner__aside-menu-trigger-icon")
-          )}
-          aria-label="User Menu"
-        />
-      </button>
-      <div
-        className={bem("header-banner__aside-menu-popup")}
-        id="UserMenu"
-        aria-hidden={!userMenuOpen}
-      >
-        <ul className={bem("header-banner__user-menu")}>
-          <li
-            className={bem("header-banner__user-menu-item")}
-            style={{ zIndex: 100 }}
+    <>
+      <div className={bem("header-banner__main-nav")}>
+        <Link href="/contacts" replace>
+          <button
+            className={bem("header-banner__aside-menu-trigger")}
+            type="button"
           >
-            <LogOutButton
-              className={bem("header-banner__user-menu-item-trigger")}
-            >
-              <>
-                <i
-                  className={clsx(
-                    bem("icon-log-out"),
-                    bem("header-banner__user-menu-item-icon")
-                  )}
-                />
-                <span className={bem("header-banner__user-menu-item-label")}>
-                  Log out
-                </span>
-              </>
-            </LogOutButton>
-          </li>
-        </ul>
+            <i
+              className={clsx(
+                bem("icon-users"),
+                bem("header-banner__aside-menu-trigger-icon")
+              )}
+              aria-label="Contacts"
+            />
+            Contacts
+          </button>
+        </Link>
       </div>
-    </div>
+
+      <div
+        className={bem("header-banner__aside-menu", "popup")}
+        onMouseEnter={toggleMenu}
+        onMouseLeave={toggleMenu}
+      >
+        <button
+          className={bem("header-banner__aside-menu-trigger")}
+          type="button"
+          aria-haspopup="true"
+          aria-controls="UserMenu"
+          aria-expanded={!userMenuOpen}
+          onClick={toggleMenu}
+        >
+          <i
+            className={clsx(
+              bem("icon-user"),
+              bem("header-banner__aside-menu-trigger-icon")
+            )}
+            aria-label="User Menu"
+          />
+        </button>
+        <div
+          className={bem("header-banner__aside-menu-popup")}
+          id="UserMenu"
+          aria-hidden={!userMenuOpen}
+        >
+          <ul className={bem("header-banner__user-menu")}>
+            <li
+              className={bem("header-banner__user-menu-item")}
+              style={{ zIndex: 100 }}
+            >
+              <LogOutButton
+                className={bem("header-banner__user-menu-item-trigger")}
+              >
+                <>
+                  <i
+                    className={clsx(
+                      bem("icon-log-out"),
+                      bem("header-banner__user-menu-item-icon")
+                    )}
+                  />
+                  <span className={bem("header-banner__user-menu-item-label")}>
+                    Log out
+                  </span>
+                </>
+              </LogOutButton>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </>
   );
 }

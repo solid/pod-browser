@@ -19,8 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable camelcase, @typescript-eslint/no-explicit-any */
-// @ts-nocheck
+/* eslint-disable camelcase */
 import { useContext } from "react";
 import useSWR from "swr";
 import { space } from "rdf-namespaces";
@@ -33,25 +32,17 @@ import {
   getThing,
   hasResourceAcl,
   isContainer,
-  unstable_Access,
   unstable_getAgentAccessAll,
   unstable_getAgentDefaultAccessAll,
 } from "@inrupt/solid-client";
 
-import {
-  fetchResourceWithAcl,
-  getIriPath,
-  namespace,
-  normalizePermissions,
-  IResourceDetails,
-} from "../../solidClientHelpers";
+import { getIriPath, namespace } from "../../solidClientHelpers/utils";
+import { normalizePermissions } from "../../solidClientHelpers/permissions";
+import { fetchResourceWithAcl } from "../../solidClientHelpers/resource";
 
 import SessionContext from "../../contexts/sessionContext";
 
-export async function fetchContainerResourceIris(
-  containerIri: string,
-  fetch: typeof window.fetch
-): Promise<string[]> {
+export async function fetchContainerResourceIris(containerIri, fetch) {
   const litDataset = await fetchLitDataset(containerIri, { fetch });
   const container = getThing(litDataset, containerIri);
   const iris = getIriAll(container, namespace.contains);
@@ -60,41 +51,35 @@ export async function fetchContainerResourceIris(
 
 export const GET_CONTAINER_RESOURCE_IRIS = "getContainerResourceIris";
 /* istanbul ignore next */
-export function useFetchContainerResourceIris(iri: string): any {
+export function useFetchContainerResourceIris(iri) {
   const { session } = useContext(SessionContext);
 
-  return useSWR<string[]>([iri, GET_CONTAINER_RESOURCE_IRIS], () =>
+  return useSWR([iri, GET_CONTAINER_RESOURCE_IRIS], () =>
     fetchContainerResourceIris(iri, session.fetch)
   );
 }
 
-export async function fetchResourceDetails(
-  iri: string,
-  fetch: typeof window.fetch
-): Promise<IResourceDetails> {
-  const name = getIriPath(iri) as string;
+export async function fetchResourceDetails(iri, fetch) {
+  const name = getIriPath(iri);
   const resourceInfo = await fetchResourceInfoWithAcl(iri, { fetch });
   let defaultPermissions = [];
   let permissions = [];
 
   if (hasResourceAcl(resourceInfo)) {
     const accessModeList = unstable_getAgentAccessAll(resourceInfo);
-    permissions = await normalizePermissions(
-      accessModeList as Record<string, unstable_Access>,
-      fetch
-    );
+    permissions = await normalizePermissions(accessModeList, fetch);
     const resourceAcl = getResourceAcl(resourceInfo);
     const defaultAccessModeList = unstable_getAgentDefaultAccessAll(
       resourceAcl
     );
 
     defaultPermissions = await normalizePermissions(
-      defaultAccessModeList as Record<string, unstable_Access>,
+      defaultAccessModeList,
       fetch
     );
   }
 
-  let types = [] as string[];
+  let types = [];
   const contentType = resourceInfo?.internal_resourceInfo?.contentType;
 
   if (contentType) types = [contentType];
@@ -112,7 +97,7 @@ export async function fetchResourceDetails(
 
 export const FETCH_RESOURCE_DETAILS = "fetchResourceDetails";
 /* istanbul ignore next */
-export function useFetchResourceDetails(iri: string): any {
+export function useFetchResourceDetails(iri) {
   const { session } = useContext(SessionContext);
   return useSWR([iri, FETCH_RESOURCE_DETAILS], () =>
     fetchResourceDetails(iri, session.fetch)
@@ -121,26 +106,23 @@ export function useFetchResourceDetails(iri: string): any {
 
 export const FETCH_RESOURCE_WITH_ACL = "fetchResourceWithAcl";
 /* istanbul ignore next */
-export function useFetchResourceWithAcl(iri: string): any {
+export function useFetchResourceWithAcl(iri) {
   const { session } = useContext(SessionContext);
   return useSWR([iri, FETCH_RESOURCE_WITH_ACL], () =>
     fetchResourceWithAcl(iri, session.fetch)
   );
 }
 
-export async function fetchPodIrisFromWebId(
-  webId: string,
-  fetch: typeof window.fetch
-): Promise<string[]> {
+export async function fetchPodIrisFromWebId(webId, fetch) {
   const profileDoc = await fetchLitDataset(webId, { fetch });
-
   const profile = getThing(profileDoc, webId);
 
   return getIriAll(profile, space.storage);
 }
+
 export const FETCH_POD_IRIS_FROM_WEB_ID = "fetchPodIrisFromWebId";
 /* istanbul ignore next */
-export function useFetchPodIrisFromWebId(webId: string): any {
+export function useFetchPodIrisFromWebId(webId) {
   const { session } = useContext(SessionContext);
   return useSWR([webId, FETCH_POD_IRIS_FROM_WEB_ID], () =>
     fetchPodIrisFromWebId(webId, session.fetch)

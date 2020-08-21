@@ -28,8 +28,7 @@ import {
   unstable_fetchResourceInfoWithAcl,
 } from "@inrupt/solid-client";
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import useSWR from "swr";
-import * as solidClientHelpers from "../../solidClientHelpers";
+import * as PermissionHelpers from "../../solidClientHelpers/permissions";
 import {
   fetchContainerResourceIris,
   fetchResourceDetails,
@@ -47,7 +46,7 @@ describe("fetchContainerResourceIris", () => {
       "https://myaccount.mypodserver.com/note.txt",
     ];
 
-    (getIriAll as jest.Mock).mockReturnValue(resources);
+    getIriAll.mockReturnValue(resources);
 
     const fetchedResources = await fetchContainerResourceIris("containerIri");
     expect(fetchedResources).toEqual(resources);
@@ -58,7 +57,7 @@ describe("fetchResourceDetails", () => {
   test("it fetches the resource, adding a human-readable name", async () => {
     const iri = "https://dayton.dev.inrupt.net/public/";
 
-    (unstable_fetchResourceInfoWithAcl as jest.Mock).mockResolvedValue({
+    unstable_fetchResourceInfoWithAcl.mockResolvedValue({
       resourceInfo: {
         fetchedFrom: "https://dayton.dev.inrupt.net/public/",
         contentType: "application/octet-stream; charset=utf-8",
@@ -128,7 +127,7 @@ describe("fetchResourceDetails", () => {
       },
     });
 
-    jest.spyOn(solidClientHelpers, "normalizePermissions").mockResolvedValue([
+    jest.spyOn(PermissionHelpers, "normalizePermissions").mockResolvedValue([
       {
         webId: "https://dayton.dev.inrupt.net/card/#me",
         alias: "Full Control",
@@ -147,25 +146,6 @@ describe("fetchResourceDetails", () => {
     expect(resourceDetails.name).toEqual("/public");
     expect(resourceDetails.iri).toEqual(iri);
   });
-
-  test("it fetches a file with ACL if the fetchResource call fails", async () => {
-    const iri = "https://dayton.dev.inrupt.net/file.txt";
-
-    jest
-      .spyOn(solidClientHelpers, "fetchResource")
-      .mockImplementationOnce(() => {
-        throw new Error("boom");
-      });
-
-    jest
-      .spyOn(solidClientHelpers, "fetchFileWithAcl")
-      .mockResolvedValue({ iri, types: ["type"], file: new Blob(["file"]) });
-
-    const resourceDetails = await fetchResourceDetails(iri);
-
-    expect(resourceDetails.name).toEqual("/file.txt");
-    expect(resourceDetails.iri).toEqual(iri);
-  });
 });
 
 describe("PodIrisFromWebId", () => {
@@ -173,9 +153,9 @@ describe("PodIrisFromWebId", () => {
     const iri = "https://mypod.myhost.com/profile/card#me";
     const iris = ["https://mypod.myhost.com/profile"];
 
-    (fetchLitDataset as jest.Mock).mockResolvedValue({});
-    (getThing as jest.Mock).mockImplementationOnce(() => {});
-    (getIriAll as jest.Mock).mockImplementationOnce(() => iris);
+    fetchLitDataset.mockResolvedValue({});
+    getThing.mockImplementationOnce(() => {});
+    getIriAll.mockImplementationOnce(() => iris);
 
     expect(await fetchPodIrisFromWebId(iri)).toEqual(iris);
 

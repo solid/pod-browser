@@ -19,28 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable */
-import { useContext, ReactElement } from "react";
-import Alert from "@material-ui/lab/Alert";
-import { Snackbar } from "@material-ui/core";
-import AlertContext from "../../src/contexts/alertContext";
+import ContactsPage from "../../components/pages/contacts";
 
-export default function Notification(): ReactElement {
-  const { alertOpen, message, severity, setAlertOpen } = useContext(
-    AlertContext
-  );
-  const onClose = () => setAlertOpen(false);
-
-  return (
-    <Snackbar
-      open={alertOpen}
-      autoHideDuration={6000}
-      onClose={onClose}
-      anchorOrigin={{ vertical: "top", horizontal: "center" }}
-    >
-      <Alert onClose={onClose} severity={severity}>
-        {message}
-      </Alert>
-    </Snackbar>
-  );
+export default function Contacts() {
+  return <ContactsPage />;
 }

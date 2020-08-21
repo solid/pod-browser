@@ -22,7 +22,8 @@
 import * as RouterFns from "next/router";
 import * as SolidClientFns from "@inrupt/solid-client";
 import { mountToJson } from "../../../__testUtils/mountWithTheme";
-import * as SolidClientHelperFns from "../../../src/solidClientHelpers";
+import * as ProfileHelpers from "../../../src/solidClientHelpers/profile";
+import * as PermissionHelpers from "../../../src/solidClientHelpers/permissions";
 import SessionContext from "../../../src/contexts/sessionContext";
 import ResourceSharing, {
   backToDetailsClick,
@@ -180,11 +181,9 @@ describe("handleAddAgentClick", () => {
     const setAddedAgents = jest.fn();
     const fetch = jest.fn();
     const profile = { webId, avatar, name };
-    const { ACL } = SolidClientHelperFns;
+    const { ACL } = PermissionHelpers;
 
-    jest
-      .spyOn(SolidClientHelperFns, "fetchProfile")
-      .mockResolvedValueOnce(profile);
+    jest.spyOn(ProfileHelpers, "fetchProfile").mockResolvedValueOnce(profile);
 
     const handler = handleAddAgentClick([], setAddedAgents, fetch);
     await handler(webId);
@@ -207,9 +206,7 @@ describe("handleAddAgentClick", () => {
     const setAddedAgents = jest.fn();
     const profile = { webId, avatar, name };
 
-    jest
-      .spyOn(SolidClientHelperFns, "fetchProfile")
-      .mockResolvedValueOnce(profile);
+    jest.spyOn(ProfileHelpers, "fetchProfile").mockResolvedValueOnce(profile);
 
     const handler = handleAddAgentClick([profile], setAddedAgents, fetch);
     await handler(webId);
@@ -220,11 +217,9 @@ describe("handleAddAgentClick", () => {
   test("it logs an error when something goes wrong", async () => {
     const fetch = jest.fn();
     jest.spyOn(console, "error").mockImplementationOnce(jest.fn());
-    jest
-      .spyOn(SolidClientHelperFns, "fetchProfile")
-      .mockImplementationOnce(() => {
-        throw new Error("boom");
-      });
+    jest.spyOn(ProfileHelpers, "fetchProfile").mockImplementationOnce(() => {
+      throw new Error("boom");
+    });
 
     const handler = handleAddAgentClick([], jest.fn(), fetch);
     await handler("agentId");
@@ -365,7 +360,7 @@ describe("onThirdPartyAccessSubmit", () => {
     const onSubmit = jest.fn();
     const thirdPartyPermissions = [];
     const profile = { webId };
-    const { acl, alias } = SolidClientHelperFns.ACL.CONTROL;
+    const { acl, alias } = PermissionHelpers.ACL.CONTROL;
     const permission = {
       alias,
       acl,
@@ -389,7 +384,7 @@ describe("onThirdPartyAccessSubmit", () => {
 
 describe("thirdPartySubmitHandler", () => {
   test("it create a handler to remove an agent that has access revoked", () => {
-    const { CONTROL, NONE } = SolidClientHelperFns.ACL;
+    const { CONTROL, NONE } = PermissionHelpers.ACL;
     const webId = "webId";
     const profile = { webId };
     const permissionWithAccess = {
@@ -411,7 +406,7 @@ describe("thirdPartySubmitHandler", () => {
   });
 
   test("it does nothing if there is any access", () => {
-    const { CONTROL, READ } = SolidClientHelperFns.ACL;
+    const { CONTROL, READ } = PermissionHelpers.ACL;
     const webId = "webId";
     const profile = { webId };
     const permissionWithAccess = {
@@ -435,7 +430,7 @@ describe("thirdPartySubmitHandler", () => {
 
 describe("handleAddDefaultPermissions", () => {
   test("it addes the added agent to the defaultAgents", () => {
-    const { ACL } = SolidClientHelperFns;
+    const { ACL } = PermissionHelpers;
     const defaultAgents = [];
     const setDefaultAgents = jest.fn();
     const webId = "webId";
@@ -460,7 +455,7 @@ describe("handleAddDefaultPermissions", () => {
 
 describe("handleChangeDefaultAgentPermissions", () => {
   test("it returns a handler that removes agenst with revoked permissions", () => {
-    const { acl } = SolidClientHelperFns.ACL.NONE;
+    const { acl } = PermissionHelpers.ACL.NONE;
     const webId = "webId";
     const agent = { webId };
     const defaultAgents = [agent];

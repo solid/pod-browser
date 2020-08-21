@@ -23,7 +23,7 @@ import React, { useContext, useEffect } from "react";
 import T from "prop-types";
 import { useRouter } from "next/router";
 import { Drawer } from "@inrupt/prism-react-components";
-import { getResourceName } from "../../src/solidClientHelpers";
+import { getResourceName } from "../../src/solidClientHelpers/resource";
 import DetailsMenuContext, {
   DETAILS_CONTEXT_ACTIONS,
 } from "../../src/contexts/detailsMenuContext";

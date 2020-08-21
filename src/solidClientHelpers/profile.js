@@ -19,27 +19,37 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useEffect, useState, useContext } from "react";
-import SessionContext from "../../contexts/sessionContext";
-import { fetchProfile, Profile } from "../../solidClientHelpers";
+import {
+  fetchLitDataset,
+  getIri,
+  getIriAll,
+  getStringNoLocale,
+  getThing,
+} from "@inrupt/solid-client";
+import { space } from "rdf-namespaces";
+import { namespace } from "./utils";
 
-export default function useAuthenticatedProfile(): Profile | null {
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const { session } = useContext(SessionContext);
-  const { info } = session;
+export function displayProfileName({ nickname, name, webId }) {
+  if (name) return name;
+  if (nickname) return nickname;
+  return webId;
+}
 
-  useEffect(() => {
-    if (!info.isLoggedIn) return;
+export async function fetchProfile(webId, fetch) {
+  const dataset = await fetchLitDataset(webId, { fetch });
 
-    // TODO get rid of all this webId casting everywhere this is gross
-    const { webId = "" } = info;
+  const profile = getThing(dataset, webId);
+  const nickname = getStringNoLocale(profile, namespace.nickname);
+  const name = getStringNoLocale(profile, namespace.name);
+  const avatar = getIri(profile, namespace.hasPhoto);
+  const pods = getIriAll(profile, space.storage);
 
-    fetchProfile(webId, session.fetch)
-      .then((loadedProfile) => setProfile(loadedProfile))
-      .catch((err) => {
-        throw err;
-      });
-  }, [info, session.fetch]);
-
-  return profile;
+  return {
+    avatar,
+    dataset,
+    name,
+    nickname,
+    pods,
+    webId,
+  };
 }
