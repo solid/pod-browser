@@ -339,6 +339,25 @@ describe("saveContact", () => {
     expect(error).toEqual("boom");
   });
 
+  test("it returns an error if it can't fetch the people index", async () => {
+    const fetch = jest.fn();
+    const addressBookIri = "https://user.example.com/contacts";
+    const webId = "https://user.example.com/card#me";
+    const contact = { webId, fn: "Test Person" };
+
+    jest
+      .spyOn(solidClientFns, "saveSolidDatasetAt")
+      .mockResolvedValueOnce("dataset");
+
+    jest
+      .spyOn(resourceFns, "getResource")
+      .mockResolvedValueOnce({ error: "There was an error" });
+
+    const { error } = await saveContact(addressBookIri, contact, fetch);
+
+    expect(error).toEqual("There was an error");
+  });
+
   test("it saves the contact and the people index", async () => {
     const fetch = jest.fn();
     const addressBookIri = "https://user.example.com/contacts";

@@ -49,7 +49,6 @@ function ContactsList() {
   const [addressBook, setAddressBook] = useState();
   const [addressBookError, setAddressBookError] = useState();
   const { session } = useContext(SessionContext);
-
   const {
     fetch,
     info: { webId },

@@ -27,6 +27,8 @@ import {
   unstable_fetchLitDatasetWithAcl,
   unstable_getAgentAccessAll,
   unstable_saveAclFor,
+  unstable_getAgentAccessAll,
+  unstable_fetchFile,
 } from "@inrupt/solid-client";
 import camelCase from "camelcase";
 import { parseUrl, isUrl, hasHash, stripHash } from "../stringHelpers";
@@ -73,8 +75,8 @@ export async function getResource(iri, fetch) {
     const resource = { dataset, iri };
 
     return respond(resource);
-  } catch (e) {
-    return error(e.message);
+  } catch ({ message }) {
+    return error(message);
   }
 }
 
@@ -87,8 +89,8 @@ export async function getResourceWithPermissions(iri, fetch) {
     const permissions = normalizePermissions(access);
 
     return respond({ dataset, iri, permissions });
-  } catch (e) {
-    return error(e.message);
+  } catch ({ message }) {
+    return error(message);
   }
 }
 
