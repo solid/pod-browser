@@ -42,10 +42,14 @@ import {
   ThemeProvider,
 } from "@inrupt/prism-react-components";
 
+// TODO temporary until solid-client-authn-browser works with NSS (NSS supports dpop)
+/*
 import {
   Session,
   getClientAuthenticationWithDependencies,
 } from "@inrupt/solid-client-authn-browser";
+ */
+import Session from "../src/solidAuthClientWrapper";
 
 import theme from "../src/theme";
 import SessionContext from "../src/contexts/sessionContext";
@@ -77,6 +81,8 @@ const useStyles = makeStyles(() =>
   createStyles(appLayout.styles(theme) as StyleRules)
 );
 
+// TODO temporary until solid-client-authn-browser works with NSS (NSS supports dpop)
+/*
 // Generate an app-level session.
 const session = new Session(
   {
@@ -84,6 +90,8 @@ const session = new Session(
   },
   "pod-browser"
 );
+ */
+const session = new Session();
 
 export function hasSolidAuthClientHash(): boolean {
   if (typeof window === "undefined") {

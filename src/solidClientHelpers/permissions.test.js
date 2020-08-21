@@ -33,7 +33,6 @@ import {
   parseStringAcl,
   permissionsFromWacAllowHeaders,
   saveDefaultPermissions,
-  saveNewAddressBook,
   savePermissions,
 } from "./permissions";
 
@@ -1150,165 +1149,67 @@ describe("createAddressBook", () => {
 
     const { people, groups, index } = createAddressBook({ iri, owner, title });
 
-    expect(getUrlAll(groups.dataset, ldp.contains)).toHaveLength(0);
-    expect(groups.iri).toEqual(`${iri}/groups.ttl`);
+    const expectedProfile = {
+      avatar: "http://example.com/avatar.png",
+      name: "string",
+      nickname: "string",
+    };
 
-    expect(getUrlAll(people.dataset, ldp.contains)).toHaveLength(0);
-    expect(people.iri).toEqual(`${iri}/people.ttl`);
+    const fetchProfileFn = jest.fn().mockResolvedValue(expectedProfile);
 
-    expect(index.iri).toEqual(`${iri}/index.ttl`);
-    expect(getStringNoLocale(index.dataset, dc.title)).toEqual(title);
-    expect(getUrl(index.dataset, rdf.type)).toEqual(vcardExtras("AddressBook"));
-    expect(getUrl(index.dataset, acl.owner)).toEqual(owner);
-    expect(getUrl(index.dataset, vcardExtras("nameEmailIndex"))).toEqual(
-      "https://example.pod.com/contacts/people.ttl"
+    const [perms1, perms2, perms3, perms4] = await normalizePermissions(
+      access,
+      jest.fn(),
+      fetchProfileFn
     );
-    expect(getUrl(index.dataset, vcardExtras("groupIndex"))).toEqual(
-      "https://example.pod.com/contacts/groups.ttl"
-    );
-  });
-});
 
-describe("getAddressBook", () => {
-  test("it fetches an address book by iri and returns a response", async () => {
-    const fetch = jest.fn();
-    const iri = "https://example.pod.com/contacts";
+    expect(perms1.webId).toEqual("https://pod.acl1.com/card#me");
+    expect(perms1.alias).toEqual(ACL.READ.alias);
+    expect(perms1.acl).toMatchObject(access["https://pod.acl1.com/card#me"]);
+    expect(perms1.profile).toMatchObject(expectedProfile);
 
-    jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
-      .mockReturnValueOnce("index")
-      .mockReturnValueOnce("groups")
-      .mockReturnValueOnce("people");
+    expect(perms2.webId).toEqual("https://pod.acl2.com/card#me");
+    expect(perms2.alias).toEqual(ACL.CONTROL.alias);
+    expect(perms2.acl).toMatchObject(access["https://pod.acl2.com/card#me"]);
+    expect(perms2.profile).toMatchObject(expectedProfile);
 
-    jest
-      .spyOn(solidClientFns, "getUrl")
-      .mockReturnValueOnce(vcardExtras("AddressBook"))
-      .mockReturnValueOnce(vcardExtras("groupIndex"))
-      .mockReturnValueOnce(vcardExtras("nameEmailIndex"));
+    expect(perms3.webId).toEqual("https://pod.acl3.com/card#me");
+    expect(perms3.alias).toEqual(ACL.WRITE.alias);
+    expect(perms3.acl).toMatchObject(access["https://pod.acl3.com/card#me"]);
+    expect(perms3.profile).toMatchObject(expectedProfile);
 
-    const {
-      response: { index, groups, people },
-    } = await getAddressBook(iri, fetch);
-
-    expect(index).toEqual("index");
-    expect(groups).toEqual("groups");
-    expect(people).toEqual("people");
+    expect(perms4.webId).toEqual("https://pod.acl4.com/card#me");
+    expect(perms4.alias).toEqual(ACL.NONE.alias);
+    expect(perms4.acl).toMatchObject(access["https://pod.acl4.com/card#me"]);
+    expect(perms4.profile).toMatchObject(expectedProfile);
   });
 
-  test("it responds with an error if the resource is not an address book", async () => {
-    const fetch = jest.fn();
-    const iri = "https://example.pod.com/contacts";
+  test("it filters out invalid webIds", async () => {
+    const access = {
+      acl1: {
+        read: true,
+        write: false,
+        control: false,
+        append: false,
+      },
+      "mailto:example@example.com": {
+        read: true,
+        write: true,
+        control: true,
+        append: true,
+      },
+    };
 
-    jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
-      .mockReturnValueOnce("index");
+    const expectedProfile = {
+      avatar: "http://example.com/avatar.png",
+      name: "string",
+      nickname: "string",
+    };
 
-    jest
-      .spyOn(solidClientFns, "getUrl")
-      .mockReturnValueOnce("not an address book");
+    const fetchProfileFn = jest.fn().mockResolvedValue(expectedProfile);
 
-    const { error } = await getAddressBook(iri, fetch);
+    const permissions = await normalizePermissions(access, fetchProfileFn);
 
-    expect(error).toEqual(`${iri} is not an AddressBook`);
-  });
-
-  test("it responds with an error if it can't fetch the resource", async () => {
-    const fetch = jest.fn();
-    const iri = "https://example.pod.com/contacts";
-
-    jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
-      .mockImplementationOnce(() => {
-        throw new Error("boom");
-      });
-
-    const { error } = await getAddressBook(iri, fetch);
-
-    expect(error).toEqual("boom");
-  });
-});
-
-describe("saveNewAddressBook", () => {
-  test("it saves a new address at the given iri, for the given owner, with a default title", async () => {
-    const iri = "https://example.pod.com/contacts";
-    const owner = "https://example.pod.com/card#me";
-    const addressBook = createAddressBook({ iri, owner });
-    const container = { iri };
-
-    jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
-      .mockRejectedValueOnce(new Error("404"))
-      .mockResolvedValueOnce(container)
-      .mockResolvedValueOnce(addressBook.index)
-      .mockResolvedValueOnce(addressBook.groups)
-      .mockResolvedValueOnce(addressBook.people)
-      .mockResolvedValueOnce(addressBook.index)
-      .mockResolvedValueOnce(addressBook.groups)
-      .mockResolvedValueOnce(addressBook.people);
-
-    jest
-      .spyOn(solidClientFns, "unstable_saveAclFor")
-      .mockResolvedValueOnce(container)
-      .mockResolvedValueOnce(addressBook.index)
-      .mockResolvedValueOnce(addressBook.groups)
-      .mockResolvedValueOnce(addressBook.people);
-
-    jest.spyOn(solidClientFns, "createAcl").mockReturnValue("acl");
-
-    jest
-      .spyOn(solidClientFns, "unstable_setAgentResourceAccess")
-      .mockReturnValue("acl");
-
-    jest
-      .spyOn(solidClientFns, "unstable_setAgentDefaultAccess")
-      .mockReturnValue("acl");
-
-    jest
-      .spyOn(solidClientFns, "getUrl")
-      .mockReturnValueOnce(vcardExtras("AddressBook"))
-      .mockReturnValueOnce(`${iri}/groups.ttl`)
-      .mockReturnValueOnce(`${iri}/groups.ttl`)
-      .mockReturnValueOnce(vcardExtras("AddressBook"))
-      .mockReturnValueOnce(`${iri}/groups.ttl`)
-      .mockReturnValueOnce(`${iri}/groups.ttl`);
-
-    jest
-      .spyOn(solidClientFns, "saveSolidDatasetAt")
-      .mockResolvedValueOnce(addressBook.index)
-      .mockResolvedValueOnce(addressBook.groups)
-      .mockResolvedValueOnce(addressBook.people);
-
-    await saveNewAddressBook({ iri, owner });
-    const { index, groups, people } = addressBook;
-
-    const [
-      saveIndexArgs,
-      saveGroupsArgs,
-      savePeopleArgs,
-    ] = solidClientFns.saveSolidDatasetAt.mock.calls;
-
-    expect(saveIndexArgs[0]).toEqual(index.iri);
-    expect(saveGroupsArgs[0]).toEqual(groups.iri);
-    expect(savePeopleArgs[0]).toEqual(people.iri);
-  });
-});
-
-describe("displayProfileName", () => {
-  test("with name, displays the name", () => {
-    const name = "name";
-    const nickname = "nickname";
-    const webId = "webId";
-    expect(displayProfileName({ name, nickname, webId })).toEqual(name);
-  });
-
-  test("without name, and a nickname, displays the nickname", () => {
-    const nickname = "nickname";
-    const webId = "webId";
-    expect(displayProfileName({ nickname, webId })).toEqual(nickname);
-  });
-
-  test("with only webId, displays the webId", () => {
-    const webId = "webId";
-    expect(displayProfileName({ webId })).toEqual(webId);
+    expect(permissions).toHaveLength(0);
   });
 });

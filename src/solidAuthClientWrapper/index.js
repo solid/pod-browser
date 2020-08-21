@@ -19,22 +19,49 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createContext } from "react";
-import {
-  Session,
-  getClientAuthenticationWithDependencies,
-} from "@inrupt/solid-client-authn-browser";
+import auth from "solid-auth-client";
 
-import SACSession from "../../solidAuthClientWrapper";
+/* eslint class-methods-use-this: 0 */
 
-export interface SessionContext {
-  session: Session | SACSession;
-  isLoadingSession: boolean;
+export default class SessionWrapper {
+  login({ oidcIssuer }) {
+    return auth.login(oidcIssuer);
+  }
+
+  async logout() {
+    await auth.logout();
+    this.info = this.defaultInfo();
+  }
+
+  fetch(...args) {
+    return auth.fetch(...args);
+  }
+
+  // Quiet down eslint so that the interface more closely matches.
+  /* eslint no-unused-vars: 0 */
+  handleIncomingRedirect(location) {
+    return this.loadCurrentSession();
+  }
+
+  defaultInfo = () => ({
+    isLoggedIn: false,
+    webId: undefined,
+  });
+
+  loadCurrentSession = async () => {
+    const session = await auth.currentSession();
+
+    if (session) {
+      this.info = {
+        webId: session.webId,
+        isLoggedIn: true,
+      };
+    } else {
+      this.info = this.defaultInfo();
+    }
+  };
+
+  constructor() {
+    this.info = this.defaultInfo();
+  }
 }
-
-export default createContext<SessionContext>({
-  session: new Session({
-    clientAuthentication: getClientAuthenticationWithDependencies({}),
-  }),
-  isLoadingSession: true,
-});
