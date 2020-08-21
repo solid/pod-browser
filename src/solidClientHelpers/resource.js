@@ -24,11 +24,10 @@ import {
   fetchLitDataset,
   saveSolidDatasetAt,
   unstable_fetchFile,
+  unstable_fetchFile,
   unstable_fetchLitDatasetWithAcl,
   unstable_getAgentAccessAll,
   unstable_saveAclFor,
-  unstable_getAgentAccessAll,
-  unstable_fetchFile,
 } from "@inrupt/solid-client";
 import camelCase from "camelcase";
 import { parseUrl, isUrl, hasHash, stripHash } from "../stringHelpers";
