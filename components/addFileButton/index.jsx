@@ -40,7 +40,7 @@ export function handleSaveResource({
   return async (uploadedFile) => {
     try {
       const response = await overwriteFile(
-        `${currentUri + uploadedFile.name}`,
+        currentUri + uploadedFile.name,
         uploadedFile,
         { type: uploadedFile.type, fetch }
       );
@@ -62,12 +62,23 @@ export function handleSaveResource({
   };
 }
 
-export async function findExistingFile(path, filename) {
+export function handleFetchError({ setSeverity, setMessage, setAlertOpen }) {
+  return (error) => {
+    setSeverity("error");
+    setMessage(error.toString());
+    setAlertOpen(true);
+  };
+}
+
+export async function findExistingFile(path, filename, onFetchError) {
   try {
-    const existingFile = await fetchResourceInfoWithAcl(`${path}/${filename}`);
-    return existingFile;
-  } catch (err) {
-    return null;
+    return await fetchResourceInfoWithAcl(`${path}/${filename}`);
+  } catch (error) {
+    // The error object should include a status code, in the meantime we are extracting the error type from the message string
+    if (error.message.includes("404")) {
+      return null;
+    }
+    return onFetchError(error);
   }
 }
 
@@ -102,6 +113,7 @@ export function handleFileSelect({
   setSeverity,
   setMessage,
   setAlertOpen,
+  onFetchError,
 }) {
   return async (e) => {
     try {
@@ -109,7 +121,11 @@ export function handleFileSelect({
         setIsUploading(true);
         const [uploadedFile] = e.target.files;
         setFile(uploadedFile);
-        const existingFile = await findFile(currentUri, uploadedFile.name);
+        const existingFile = await findFile(
+          currentUri,
+          uploadedFile.name,
+          onFetchError
+        );
         saveUploadedFile(uploadedFile, existingFile);
       }
     } catch (error) {
@@ -147,6 +163,12 @@ export default function AddFileButton({ onSave }) {
   const [file, setFile] = useState(null);
   const findFile = findExistingFile;
 
+  const onFetchError = handleFetchError({
+    setSeverity,
+    setMessage,
+    setAlertOpen,
+  });
+
   const saveResource = handleSaveResource({
     fetch,
     currentUri,
@@ -176,6 +198,7 @@ export default function AddFileButton({ onSave }) {
     setSeverity,
     setMessage,
     setAlertOpen,
+    onFetchError,
   });
 
   const onConfirmation = handleConfirmation({
