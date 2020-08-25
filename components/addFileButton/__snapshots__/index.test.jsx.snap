@@ -2,10 +2,10 @@
 
 exports[`AddFileButton Renders an add file button 1`] = `
 <PodLocationProvider
-  currentUri="https://www.mypodbrowser.com"
+  currentUri="https://www.mypodbrowser.com/"
 >
   <AddFileButton
-    onSave={[Function]}
+    onSave={[MockFunction]}
   >
     <WithStyles(ForwardRef(Button))
       color="primary"
