@@ -25,6 +25,29 @@ import SessionContext from "../../../src/contexts/sessionContext";
 import AlertContext from "../../../src/contexts/alertContext";
 import ConfirmationDialogContext from "../../../src/contexts/confirmationDialogContext";
 
+export function handleConfirmation({
+  setOpen,
+  setConfirmed,
+  deleteResource,
+  setTitle,
+  setContent,
+  setConfirmationSetup,
+}) {
+  return (confirmationSetup, confirmed, name) => {
+    if (confirmationSetup && !confirmed) return;
+
+    setTitle("Confirm Delete");
+    setContent(<p>{`Are you sure you wish to delete ${name}?`}</p>);
+    setConfirmationSetup(true);
+
+    if (confirmed) {
+      setOpen(false);
+      setConfirmed(false);
+      deleteResource();
+    }
+  };
+}
+
 export function handleDeleteResource({
   fetch,
   name,
@@ -75,29 +98,18 @@ export default React.forwardRef(
       setSeverity,
     });
 
-    useEffect(() => {
-      if (confirmationSetup && !confirmed) return;
-
-      setTitle("Confirm Delete");
-      setContent(<p>{`Are you sure you wish to delete ${name}?`}</p>);
-      setConfirmationSetup(true);
-
-      if (confirmed) {
-        setOpen(false);
-        setConfirmed(false);
-        deleteResource();
-      }
-    }, [
-      confirmationSetup,
-      confirmed,
-      deleteResource,
-      name,
-      setConfirmationSetup,
-      setConfirmed,
-      setContent,
+    const onConfirmation = handleConfirmation({
       setOpen,
+      setConfirmed,
+      deleteResource,
       setTitle,
-    ]);
+      setContent,
+      setConfirmationSetup,
+    });
+
+    useEffect(() => {
+      onConfirmation(confirmationSetup, confirmed, name);
+    }, [confirmationSetup, confirmed, onConfirmation, name]);
 
     /* eslint jsx-a11y/anchor-has-content: 0 */
     return (
