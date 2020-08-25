@@ -100,6 +100,7 @@ exports[`AddFileButton Renders an add file button 1`] = `
                 Upload File
                 <input
                   onChange={[Function]}
+                  onClick={[Function]}
                   style={
                     Object {
                       "display": "none",

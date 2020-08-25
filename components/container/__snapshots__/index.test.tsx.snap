@@ -2355,6 +2355,7 @@ font-display: block;",
                                       Upload File
                                       <input
                                         onChange={[Function]}
+                                        onClick={[Function]}
                                         style={
                                           Object {
                                             "display": "none",
@@ -4832,6 +4833,7 @@ font-display: block;",
                                       Upload File
                                       <input
                                         onChange={[Function]}
+                                        onClick={[Function]}
                                         style={
                                           Object {
                                             "display": "none",
