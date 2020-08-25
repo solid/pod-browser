@@ -23,7 +23,7 @@ import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import { deleteFile } from "@inrupt/solid-client";
 
-import DeleteLink, { handleDeleteResource } from "./index";
+import DeleteLink, { handleDeleteResource, handleConfirmation } from "./index";
 
 jest.mock("@inrupt/solid-client");
 
@@ -149,5 +149,40 @@ describe("handleDeleteResource", () => {
     await handler();
 
     expect(onDeleteError).toHaveBeenCalledWith(error);
+  });
+});
+describe("handleConfirmation", () => {
+  const name = "someFile.txt";
+  const setOpen = jest.fn();
+  const deleteResource = jest.fn();
+  const setConfirmed = jest.fn();
+  const setTitle = jest.fn();
+  const setContent = jest.fn();
+  const setConfirmationSetup = jest.fn();
+
+  const handler = handleConfirmation({
+    setOpen,
+    setConfirmed,
+    deleteResource,
+    setTitle,
+    setContent,
+    setConfirmationSetup,
+  });
+
+  test("it returns a handler that deletes the file when user confirms dialog", async () => {
+    await handler(true, true, name);
+
+    expect(setOpen).toHaveBeenCalled();
+    expect(deleteResource).toHaveBeenCalled();
+    expect(setConfirmed).toHaveBeenCalled();
+    expect(setTitle).toHaveBeenCalled();
+    expect(setContent).toHaveBeenCalled();
+    expect(setConfirmationSetup).toHaveBeenCalled();
+  });
+  test("it returns a handler that exits when user cancels the operation", async () => {
+    await handler(true, false, name);
+
+    expect(deleteResource).not.toHaveBeenCalled();
+    expect(setConfirmed).not.toHaveBeenCalled();
   });
 });
