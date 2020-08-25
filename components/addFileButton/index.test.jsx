@@ -33,64 +33,54 @@ import AddFileButton, {
   findExistingFile,
   handleUploadedFile,
   handleConfirmation,
+  handleFetchError,
 } from "./index";
 
 jest.mock("@inrupt/solid-client");
 
 describe("AddFileButton", () => {
-  test("Renders an add file button", () => {
-    const session = {
-      logout: jest.fn(),
-    };
+  const fileContents = "file contents";
 
-    const tree = mount(
-      <PodLocationProvider currentUri="https://www.mypodbrowser.com">
+  const file = new Blob([fileContents], {
+    type: "text/plain",
+    name: "myfile.txt",
+  });
+
+  const currentUri = "https://www.mypodbrowser.com/";
+  const newFilePath = currentUri + file.name;
+
+  const session = {
+    logout: jest.fn(),
+  };
+
+  const setAlertOpen = jest.fn();
+  const setMessage = jest.fn();
+  const setSeverity = jest.fn();
+  const onSave = jest.fn();
+
+  const tree = mount(
+    <AlertContext.Provider
+      value={{
+        setAlertOpen,
+        setMessage,
+        setSeverity,
+      }}
+    >
+      <PodLocationProvider currentUri={currentUri}>
         <SessionContext.Provider value={{ session }}>
-          <AddFileButton />
+          <AddFileButton onSave={onSave} />
         </SessionContext.Provider>
       </PodLocationProvider>
-    );
+    </AlertContext.Provider>
+  );
 
+  test("Renders an add file button", () => {
     expect(mountToJson(tree)).toMatchSnapshot();
   });
 
   test("Uploads a file", async () => {
-    const fileContents = "file contents";
-
-    const file = new Blob([fileContents], {
-      type: "text/plain",
-      name: "myfile.txt",
-    });
-
-    const currentUri = "https://www.mypodbrowser.com/";
-    const newFilePath = currentUri + file.name;
-
-    const session = {
-      logout: jest.fn(),
-    };
-
-    const setAlertOpen = jest.fn();
-    const setMessage = jest.fn();
-    const setSeverity = jest.fn();
-    const onSave = jest.fn();
-
-    const tree = mount(
-      <AlertContext.Provider
-        value={{
-          setAlertOpen,
-          setMessage,
-          setSeverity,
-        }}
-      >
-        <PodLocationProvider currentUri={currentUri}>
-          <SessionContext.Provider value={{ session }}>
-            <AddFileButton onSave={onSave} />
-          </SessionContext.Provider>
-        </PodLocationProvider>
-      </AlertContext.Provider>
-    );
-
     await act(async () => {
+      tree.find("input").simulate("click");
       tree.find("input").simulate("change", { target: { files: [file] } });
     });
 
@@ -103,190 +93,203 @@ describe("AddFileButton", () => {
     });
 
     expect(onSave).toHaveBeenCalled();
+    expect(setAlertOpen).toHaveBeenCalled();
+  });
+});
+
+describe("handleSaveResource", () => {
+  test("it returns a handler that saves the resource", async () => {
+    const fileContents = "file contents";
+
+    const file = new Blob([fileContents], {
+      type: "text/plain",
+      name: "myfile.txt",
+    });
+
+    const currentUri = "https://www.mypodbrowser.com/";
+    const newFilePath = currentUri + file.name;
+
+    const fetch = jest.fn();
+    const onSave = jest.fn();
+    const setIsUploading = jest.fn();
+    const setAlertOpen = jest.fn();
+    const setMessage = jest.fn();
+    const setSeverity = jest.fn();
+    const handler = handleSaveResource({
+      fetch,
+      currentUri,
+      onSave,
+      setIsUploading,
+      setAlertOpen,
+      setMessage,
+      setSeverity,
+    });
+
+    await handler(file);
+
+    expect(overwriteFile).toHaveBeenCalledWith(newFilePath, file, {
+      type: file.type,
+      fetch,
+    });
+    expect(setAlertOpen).toHaveBeenCalledWith(true);
+  });
+});
+
+describe("handleFileSelect", () => {
+  const fileContents = "file contents";
+
+  const file = new Blob([fileContents], {
+    type: "text/plain",
+    name: "myfile.txt",
   });
 
-  describe("handleSaveResource", () => {
-    test("it returns a handler that saves the resource", async () => {
-      const fileContents = "file contents";
+  const currentUri = "https://www.mypodbrowser.com/";
 
-      const file = new Blob([fileContents], {
-        type: "text/plain",
-        name: "myfile.txt",
-      });
+  const setIsUploading = jest.fn();
+  const setFile = jest.fn();
+  const findFile = jest.fn();
+  const saveUploadedFile = jest.fn();
+  const setSeverity = jest.fn();
+  const setMessage = jest.fn();
+  const setAlertOpen = jest.fn();
+  const onFetchError = jest.fn();
 
-      const currentUri = "https://www.mypodbrowser.com/";
-      const newFilePath = currentUri + file.name;
+  const handler = handleFileSelect({
+    currentUri,
+    setIsUploading,
+    setFile,
+    findFile,
+    saveUploadedFile,
+    setSeverity,
+    setMessage,
+    setAlertOpen,
+    onFetchError,
+  });
+  test("it returns a handler that uploads a file", async () => {
+    await handler({ target: { files: [file] } });
 
-      const fetch = jest.fn();
-      const onSave = jest.fn();
-      const setIsUploading = jest.fn();
-      const setAlertOpen = jest.fn();
-      const setMessage = jest.fn();
-      const setSeverity = jest.fn();
-      const handler = handleSaveResource({
-        fetch,
-        currentUri,
-        onSave,
-        setIsUploading,
-        setAlertOpen,
-        setMessage,
-        setSeverity,
-      });
-
-      await handler(file);
-
-      expect(overwriteFile).toHaveBeenCalledWith(newFilePath, file, {
-        type: file.type,
-        fetch,
-      });
-    });
+    expect(setIsUploading).toHaveBeenCalled();
+    expect(setFile).toHaveBeenCalled();
+    expect(findFile).toHaveBeenCalled();
+    expect(saveUploadedFile).toHaveBeenCalled();
   });
 
-  describe("handleFileSelect", () => {
-    test("it returns a handler that uploads a file", async () => {
-      const fileContents = "file contents";
+  test("it returns a handler that returns an error if not successful", async () => {
+    await handler();
 
-      const file = new Blob([fileContents], {
-        type: "text/plain",
-        name: "myfile.txt",
-      });
+    expect(setSeverity).toHaveBeenCalledWith("error");
+    expect(setMessage).toHaveBeenCalled();
+    expect(setAlertOpen).toHaveBeenCalled();
+  });
+});
 
-      const currentUri = "https://www.mypodbrowser.com/";
+describe("handleUploadedFile", () => {
+  test("it returns a handler that triggers the confirmation logic in case the file already exists", async () => {
+    const fileContents = "file contents";
 
-      const setIsUploading = jest.fn();
-      const setFile = jest.fn();
-      const findFile = jest.fn();
-      const saveUploadedFile = jest.fn();
-      const setSeverity = jest.fn();
-      const setMessage = jest.fn();
-      const setAlertOpen = jest.fn();
-
-      const handler = handleFileSelect({
-        currentUri,
-        setIsUploading,
-        setFile,
-        findFile,
-        saveUploadedFile,
-        setSeverity,
-        setMessage,
-        setAlertOpen,
-      });
-
-      await handler({ target: { files: [file] } });
-
-      expect(setIsUploading).toHaveBeenCalled();
-      expect(setFile).toHaveBeenCalled();
-      expect(findFile).toHaveBeenCalled();
-      expect(saveUploadedFile).toHaveBeenCalled();
+    const file = new Blob([fileContents], {
+      type: "text/plain",
+      name: "myfile.txt",
     });
 
-    test("it returns a handler that returns an error if not successful", async () => {
-      const currentUri = "https://www.mypodbrowser.com/";
-      const setIsUploading = jest.fn();
-      const setFile = jest.fn();
-      const findFile = jest.fn();
-      const saveUploadedFile = jest.fn();
-      const setSeverity = jest.fn();
-      const setMessage = jest.fn();
-      const setAlertOpen = jest.fn();
+    const existingFile = true;
 
-      const handler = handleFileSelect({
-        currentUri,
-        setIsUploading,
-        setFile,
-        findFile,
-        saveUploadedFile,
-        setSeverity,
-        setMessage,
-        setAlertOpen,
-      });
+    const saveResource = jest.fn();
+    const setIsUploading = jest.fn();
+    const setOpen = jest.fn();
+    const setTitle = jest.fn();
+    const setContent = jest.fn();
+    const setConfirmationSetup = jest.fn();
 
-      await handler();
-
-      expect(setSeverity).toHaveBeenCalledWith("error");
-      expect(setMessage).toHaveBeenCalled();
-      expect(setAlertOpen).toHaveBeenCalled();
+    const handler = handleUploadedFile({
+      setOpen,
+      setTitle,
+      setContent,
+      setConfirmationSetup,
+      setIsUploading,
+      saveResource,
     });
 
-    describe("handleUploadedFile", () => {
-      test("it returns a handler that triggers the confirmation logic in case the file already exists", async () => {
-        const fileContents = "file contents";
+    await handler(file, existingFile);
 
-        const file = new Blob([fileContents], {
-          type: "text/plain",
-          name: "myfile.txt",
-        });
+    expect(setIsUploading).toHaveBeenCalled();
+    expect(setOpen).toHaveBeenCalled();
+    expect(setContent).toHaveBeenCalled();
+    expect(setTitle).toHaveBeenCalled();
+    expect(setConfirmationSetup).toHaveBeenCalled();
+  });
+});
 
-        const existingFile = true;
+describe("findExistingFile", () => {
+  test("it tries to find a file and returns the file or throws an error and returns null if the file does not exist", async () => {
+    const fileContents = "file contents";
 
-        const saveResource = jest.fn();
-        const setIsUploading = jest.fn();
-        const setOpen = jest.fn();
-        const setTitle = jest.fn();
-        const setContent = jest.fn();
-        const setConfirmationSetup = jest.fn();
-
-        const handler = handleUploadedFile({
-          setOpen,
-          setTitle,
-          setContent,
-          setConfirmationSetup,
-          setIsUploading,
-          saveResource,
-        });
-
-        await handler(file, existingFile);
-
-        expect(setIsUploading).toHaveBeenCalled();
-        expect(setOpen).toHaveBeenCalled();
-        expect(setContent).toHaveBeenCalled();
-        expect(setTitle).toHaveBeenCalled();
-        expect(setConfirmationSetup).toHaveBeenCalled();
-      });
+    const file = new Blob([fileContents], {
+      type: "text/plain",
+      name: "myfile.txt",
     });
 
-    describe("findExistingFile", () => {
-      test("it tries to find a file and returns the file or throws an error and returns null if the file does not exist", async () => {
-        const fileContents = "file contents";
+    const currentUri = "https://www.mypodbrowser.com/";
 
-        const file = new Blob([fileContents], {
-          type: "text/plain",
-          name: "myfile.txt",
-        });
+    const onFetchError = jest.fn();
 
-        const currentUri = "https://www.mypodbrowser.com/";
+    return findExistingFile(currentUri, file.name, onFetchError).catch(
+      (error) => {
+        expect(error).toMatch("error");
+      }
+    );
+  });
+});
 
-        return findExistingFile(currentUri, file.name).catch((error) => {
-          expect(error).toMatch("error");
-        });
-      });
+describe("handleConfirmation", () => {
+  const fileContents = "file contents";
+
+  const file = new Blob([fileContents], {
+    type: "text/plain",
+    name: "myfile.txt",
+  });
+
+  const setOpen = jest.fn();
+  const saveResource = jest.fn();
+  const setConfirmed = jest.fn();
+
+  const handler = handleConfirmation({
+    setOpen,
+    setConfirmed,
+    saveResource,
+  });
+
+  test("it returns a handler that saves the file when user confirms dialog", async () => {
+    await handler(true, true, file);
+
+    expect(setOpen).toHaveBeenCalled();
+    expect(saveResource).toHaveBeenCalled();
+    expect(setConfirmed).toHaveBeenCalled();
+  });
+  test("it returns a handler that exits when user cancels the operation", async () => {
+    await handler(true, false, file);
+
+    expect(saveResource).not.toHaveBeenCalled();
+    expect(setConfirmed).not.toHaveBeenCalled();
+  });
+});
+
+describe("handleFetchError", () => {
+  test("it returns a handler that sets the severity, message and alert of error", async () => {
+    const setSeverity = jest.fn();
+    const setMessage = jest.fn();
+    const setAlertOpen = jest.fn();
+
+    const handler = handleFetchError({
+      setSeverity,
+      setMessage,
+      setAlertOpen,
     });
 
-    describe("handleConfirmation", () => {
-      test("it returns a handler that saves the file when user confirms dialog", async () => {
-        const fileContents = "file contents";
+    await handler("error");
 
-        const file = new Blob([fileContents], {
-          type: "text/plain",
-          name: "myfile.txt",
-        });
-
-        const setOpen = jest.fn();
-        const saveResource = jest.fn();
-        const setConfirmed = jest.fn();
-
-        const handler = handleConfirmation({
-          setOpen,
-          setConfirmed,
-          saveResource,
-        });
-
-        await handler(true, true, file);
-
-        expect(setOpen).toHaveBeenCalled();
-        expect(saveResource).toHaveBeenCalled();
-        expect(setConfirmed).toHaveBeenCalled();
-      });
-    });
+    expect(setSeverity).toHaveBeenCalled();
+    expect(setMessage).toHaveBeenCalled();
+    expect(setAlertOpen).toHaveBeenCalled();
   });
 });
