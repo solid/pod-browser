@@ -38,11 +38,15 @@ export function handleSaveResource({
   setSeverity,
 }) {
   return async (uploadedFile) => {
+    const fileName = encodeURIComponent(uploadedFile.name);
     try {
       const response = await overwriteFile(
-        currentUri + uploadedFile.name,
+        currentUri + fileName,
         uploadedFile,
-        { type: uploadedFile.type, fetch }
+        {
+          type: uploadedFile.type,
+          fetch,
+        }
       );
 
       onSave();
