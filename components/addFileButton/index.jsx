@@ -38,10 +38,9 @@ export function handleSaveResource({
   setSeverity,
 }) {
   return async (uploadedFile) => {
-    const fileName = encodeURIComponent(uploadedFile.name);
     try {
       const response = await overwriteFile(
-        currentUri + fileName,
+        currentUri + encodeURIComponent(uploadedFile.name),
         uploadedFile,
         {
           type: uploadedFile.type,
@@ -53,7 +52,9 @@ export function handleSaveResource({
 
       setSeverity("success");
       setMessage(
-        `Your file has been saved to ${response.internal_resourceInfo.sourceIri}`
+        `Your file has been saved to ${decodeURIComponent(
+          response.internal_resourceInfo.sourceIri
+        )}`
       );
       setAlertOpen(true);
     } catch (error) {
@@ -142,13 +143,19 @@ export function handleFileSelect({
   };
 }
 
-export function handleConfirmation({ setOpen, setConfirmed, saveResource }) {
+export function handleConfirmation({
+  setOpen,
+  setConfirmed,
+  saveResource,
+  setConfirmationSetup,
+}) {
   return (confirmationSetup, confirmed, file) => {
     if (confirmationSetup && !confirmed) return;
 
-    if (confirmed) {
+    if (confirmationSetup && confirmed) {
       setOpen(false);
       setConfirmed(false);
+      setConfirmationSetup(false);
       saveResource(file);
     }
   };
@@ -209,6 +216,7 @@ export default function AddFileButton({ onSave }) {
     setOpen,
     setConfirmed,
     saveResource,
+    setConfirmationSetup,
   });
 
   useEffect(() => {
