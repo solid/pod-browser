@@ -67,23 +67,15 @@ export function handleSaveResource({
   };
 }
 
-export function handleFetchError({ setSeverity, setMessage, setAlertOpen }) {
-  return (error) => {
-    setSeverity("error");
-    setMessage(error.toString());
-    setAlertOpen(true);
-  };
-}
-
-export async function findExistingFile(path, filename, onFetchError) {
+export async function findExistingFile(path, filename) {
   try {
     return await fetchResourceInfoWithAcl(path + filename);
   } catch (error) {
     // The error object should include a status code, in the meantime we are extracting the error type from the message string
     if (error.message.includes("404")) {
-      return null;
+      return false;
     }
-    return onFetchError(error);
+    throw error;
   }
 }
 
@@ -118,7 +110,6 @@ export function handleFileSelect({
   setSeverity,
   setMessage,
   setAlertOpen,
-  onFetchError,
 }) {
   return async (e) => {
     try {
@@ -126,12 +117,14 @@ export function handleFileSelect({
         setIsUploading(true);
         const [uploadedFile] = e.target.files;
         setFile(uploadedFile);
-        const existingFile = await findFile(
-          currentUri,
-          uploadedFile.name,
-          onFetchError
-        );
-        saveUploadedFile(uploadedFile, existingFile);
+        try {
+          const existingFile = await findFile(currentUri, uploadedFile.name);
+          saveUploadedFile(uploadedFile, existingFile);
+        } catch (error) {
+          setSeverity("error");
+          setMessage(error.toString());
+          setAlertOpen(true);
+        }
       }
     } catch (error) {
       setSeverity("error");
@@ -174,12 +167,6 @@ export default function AddFileButton({ onSave }) {
   const [file, setFile] = useState(null);
   const findFile = findExistingFile;
 
-  const onFetchError = handleFetchError({
-    setSeverity,
-    setMessage,
-    setAlertOpen,
-  });
-
   const saveResource = handleSaveResource({
     fetch,
     currentUri,
@@ -209,7 +196,6 @@ export default function AddFileButton({ onSave }) {
     setSeverity,
     setMessage,
     setAlertOpen,
-    onFetchError,
   });
 
   const onConfirmation = handleConfirmation({
