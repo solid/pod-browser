@@ -269,4 +269,3 @@ describe("handleConfirmation", () => {
     expect(setConfirmed).not.toHaveBeenCalled();
   });
 });
-
