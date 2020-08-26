@@ -37,10 +37,12 @@ export function handleConfirmation({
     if (confirmationSetup && !confirmed) return;
 
     setTitle("Confirm Delete");
-    setContent(<p>{`Are you sure you wish to delete ${name}?`}</p>);
+    setContent(
+      <p>{`Are you sure you wish to delete ${decodeURIComponent(name)}?`}</p>
+    );
     setConfirmationSetup(true);
 
-    if (confirmed) {
+    if (confirmationSetup && confirmed) {
       setOpen(false);
       setConfirmed(false);
       deleteResource();
@@ -63,7 +65,7 @@ export function handleDeleteResource({
       await deleteFile(resourceIri, { fetch });
       onDelete();
       setSeverity("success");
-      setMessage(`${name} was successfully deleted.`);
+      setMessage(`${decodeURIComponent(name)} was successfully deleted.`);
       setAlertOpen(true);
     } catch (err) {
       onDeleteError(err);
