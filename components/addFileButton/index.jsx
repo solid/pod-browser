@@ -72,7 +72,7 @@ export function handleFetchError({ setSeverity, setMessage, setAlertOpen }) {
 
 export async function findExistingFile(path, filename, onFetchError) {
   try {
-    return await fetchResourceInfoWithAcl(`${path}/${filename}`);
+    return await fetchResourceInfoWithAcl(path + filename);
   } catch (error) {
     // The error object should include a status code, in the meantime we are extracting the error type from the message string
     if (error.message.includes("404")) {
