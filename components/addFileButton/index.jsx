@@ -67,9 +67,9 @@ export function handleSaveResource({
   };
 }
 
-export async function findExistingFile(path, filename) {
+export async function findExistingFile(path, filename, options) {
   try {
-    return await fetchResourceInfoWithAcl(path + filename);
+    return await fetchResourceInfoWithAcl(path + filename, options);
   } catch (error) {
     // The error object should include a status code, in the meantime we are extracting the error type from the message string
     if (error.message.includes("404")) {
@@ -102,6 +102,7 @@ export function handleUploadedFile({
 }
 
 export function handleFileSelect({
+  fetch,
   currentUri,
   setIsUploading,
   setFile,
@@ -118,7 +119,9 @@ export function handleFileSelect({
         const [uploadedFile] = e.target.files;
         setFile(uploadedFile);
         try {
-          const existingFile = await findFile(currentUri, uploadedFile.name);
+          const existingFile = await findFile(currentUri, uploadedFile.name, {
+            fetch,
+          });
           saveUploadedFile(uploadedFile, existingFile);
         } catch (error) {
           setSeverity("error");
@@ -187,6 +190,7 @@ export default function AddFileButton({ onSave }) {
   });
 
   const onFileSelect = handleFileSelect({
+    fetch,
     currentUri,
     setIsUploading,
     setFile,
