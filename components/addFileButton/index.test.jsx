@@ -252,11 +252,13 @@ describe("handleConfirmation", () => {
   const setOpen = jest.fn();
   const saveResource = jest.fn();
   const setConfirmed = jest.fn();
+  const setConfirmationSetup = jest.fn();
 
   const handler = handleConfirmation({
     setOpen,
     setConfirmed,
     saveResource,
+    setConfirmationSetup,
   });
 
   test("it returns a handler that saves the file when user confirms dialog", async () => {
@@ -265,6 +267,7 @@ describe("handleConfirmation", () => {
     expect(setOpen).toHaveBeenCalled();
     expect(saveResource).toHaveBeenCalled();
     expect(setConfirmed).toHaveBeenCalled();
+    expect(setConfirmationSetup).toHaveBeenCalled();
   });
   test("it returns a handler that exits when user cancels the operation", async () => {
     await handler(true, false, file);
