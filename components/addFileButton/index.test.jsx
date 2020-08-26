@@ -33,7 +33,6 @@ import AddFileButton, {
   findExistingFile,
   handleUploadedFile,
   handleConfirmation,
-  handleFetchError,
 } from "./index";
 
 jest.mock("@inrupt/solid-client");
@@ -152,7 +151,6 @@ describe("handleFileSelect", () => {
   const setSeverity = jest.fn();
   const setMessage = jest.fn();
   const setAlertOpen = jest.fn();
-  const onFetchError = jest.fn();
 
   const handler = handleFileSelect({
     currentUri,
@@ -163,7 +161,6 @@ describe("handleFileSelect", () => {
     setSeverity,
     setMessage,
     setAlertOpen,
-    onFetchError,
   });
   test("it returns a handler that uploads a file", async () => {
     await handler({ target: { files: [file] } });
@@ -231,13 +228,9 @@ describe("findExistingFile", () => {
 
     const currentUri = "https://www.mypodbrowser.com/";
 
-    const onFetchError = jest.fn();
-
-    return findExistingFile(currentUri, file.name, onFetchError).catch(
-      (error) => {
-        expect(error).toMatch("error");
-      }
-    );
+    return findExistingFile(currentUri, file.name).catch((error) => {
+      expect(error).toMatch("error");
+    });
   });
 });
 
@@ -277,22 +270,3 @@ describe("handleConfirmation", () => {
   });
 });
 
-describe("handleFetchError", () => {
-  test("it returns a handler that sets the severity, message and alert of error", async () => {
-    const setSeverity = jest.fn();
-    const setMessage = jest.fn();
-    const setAlertOpen = jest.fn();
-
-    const handler = handleFetchError({
-      setSeverity,
-      setMessage,
-      setAlertOpen,
-    });
-
-    await handler("error");
-
-    expect(setSeverity).toHaveBeenCalled();
-    expect(setMessage).toHaveBeenCalled();
-    expect(setAlertOpen).toHaveBeenCalled();
-  });
-});
