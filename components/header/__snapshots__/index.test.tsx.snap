@@ -863,7 +863,7 @@ font-display: block;",
         />
         <UserMenu>
           <div
-            className="makeStyles-header-banner__aside-menu-1582 makeStyles-header-banner__aside-menu--popup-1583"
+            className="makeStyles-header-banner__aside-menu-1581 makeStyles-header-banner__aside-menu--popup-1582"
             onMouseEnter={[Function]}
             onMouseLeave={[Function]}
           >
@@ -871,25 +871,25 @@ font-display: block;",
               aria-controls="UserMenu"
               aria-expanded={true}
               aria-haspopup="true"
-              className="makeStyles-header-banner__aside-menu-trigger-1584"
+              className="makeStyles-header-banner__aside-menu-trigger-1583"
               onClick={[Function]}
               type="button"
             >
               <i
                 aria-label="User Menu"
-                className="makeStyles-icon-user-1565 makeStyles-header-banner__aside-menu-trigger-icon-1585"
+                className="makeStyles-icon-user-1564 makeStyles-header-banner__aside-menu-trigger-icon-1584"
               />
             </button>
             <div
               aria-hidden={true}
-              className="makeStyles-header-banner__aside-menu-popup-1587"
+              className="makeStyles-header-banner__aside-menu-popup-1585"
               id="UserMenu"
             >
               <ul
-                className="makeStyles-header-banner__user-menu-1588"
+                className="makeStyles-header-banner__user-menu-1586"
               >
                 <li
-                  className="makeStyles-header-banner__user-menu-item-1589"
+                  className="makeStyles-header-banner__user-menu-item-1587"
                   style={
                     Object {
                       "zIndex": 100,
@@ -897,18 +897,18 @@ font-display: block;",
                   }
                 >
                   <LogOut
-                    className="makeStyles-header-banner__user-menu-item-trigger-1592"
+                    className="makeStyles-header-banner__user-menu-item-trigger-1590"
                   >
                     <button
-                      className="makeStyles-header-banner__user-menu-item-trigger-1592"
+                      className="makeStyles-header-banner__user-menu-item-trigger-1590"
                       onClick={[Function]}
                       type="button"
                     >
                       <i
-                        className="makeStyles-icon-log-out-1543 makeStyles-header-banner__user-menu-item-icon-1591"
+                        className="makeStyles-icon-log-out-1542 makeStyles-header-banner__user-menu-item-icon-1589"
                       />
                       <span
-                        className="makeStyles-header-banner__user-menu-item-label-1593"
+                        className="makeStyles-header-banner__user-menu-item-label-1591"
                       >
                         Log out
                       </span>
@@ -1788,7 +1788,7 @@ font-display: block;",
         />
         <UserMenu>
           <div
-            className="makeStyles-header-banner__aside-menu-1582 makeStyles-header-banner__aside-menu--popup-1583"
+            className="makeStyles-header-banner__aside-menu-1581 makeStyles-header-banner__aside-menu--popup-1582"
             onMouseEnter={[Function]}
             onMouseLeave={[Function]}
           >
@@ -1796,25 +1796,25 @@ font-display: block;",
               aria-controls="UserMenu"
               aria-expanded={true}
               aria-haspopup="true"
-              className="makeStyles-header-banner__aside-menu-trigger-1584"
+              className="makeStyles-header-banner__aside-menu-trigger-1583"
               onClick={[Function]}
               type="button"
             >
               <i
                 aria-label="User Menu"
-                className="makeStyles-icon-user-1565 makeStyles-header-banner__aside-menu-trigger-icon-1585"
+                className="makeStyles-icon-user-1564 makeStyles-header-banner__aside-menu-trigger-icon-1584"
               />
             </button>
             <div
               aria-hidden={true}
-              className="makeStyles-header-banner__aside-menu-popup-1587"
+              className="makeStyles-header-banner__aside-menu-popup-1585"
               id="UserMenu"
             >
               <ul
-                className="makeStyles-header-banner__user-menu-1588"
+                className="makeStyles-header-banner__user-menu-1586"
               >
                 <li
-                  className="makeStyles-header-banner__user-menu-item-1589"
+                  className="makeStyles-header-banner__user-menu-item-1587"
                   style={
                     Object {
                       "zIndex": 100,
@@ -1822,18 +1822,18 @@ font-display: block;",
                   }
                 >
                   <LogOut
-                    className="makeStyles-header-banner__user-menu-item-trigger-1592"
+                    className="makeStyles-header-banner__user-menu-item-trigger-1590"
                   >
                     <button
-                      className="makeStyles-header-banner__user-menu-item-trigger-1592"
+                      className="makeStyles-header-banner__user-menu-item-trigger-1590"
                       onClick={[Function]}
                       type="button"
                     >
                       <i
-                        className="makeStyles-icon-log-out-1543 makeStyles-header-banner__user-menu-item-icon-1591"
+                        className="makeStyles-icon-log-out-1542 makeStyles-header-banner__user-menu-item-icon-1589"
                       />
                       <span
-                        className="makeStyles-header-banner__user-menu-item-label-1593"
+                        className="makeStyles-header-banner__user-menu-item-label-1591"
                       >
                         Log out
                       </span>

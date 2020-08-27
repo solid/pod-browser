@@ -838,24 +838,53 @@ font-display: block;",
     }
   >
     <Footer>
-      <Styled(MuiBox)
-        borderColor="grey.500"
-        borderTop={1}
-        p={3}
+      <Footer
+        links={
+          Array [
+            Object {
+              "href": "https://inrupt.com/terms-of-service",
+              "rel": "noreferrer",
+              "target": "_blank",
+              "text": "Terms of Service",
+            },
+          ]
+        }
+        texts={
+          Array [
+            Object {
+              "text": "Copyright 2020 Inrupt, inc.",
+            },
+          ]
+        }
       >
-        <div
-          className="MuiBox-root MuiBox-root-1"
+        <footer
+          className="makeStyles-footer-1"
         >
-          Copyright 2020 Inrupt, inc. 
-          <a
-            href="https://inrupt.com/terms-of-service"
-            rel="noreferrer"
-            target="_blank"
+          <div
+            className="makeStyles-footer__info-2"
           >
-            Terms of Service
-          </a>
-        </div>
-      </Styled(MuiBox)>
+            <span
+              className="makeStyles-footer__info-text-3"
+              key="Copyright 2020 Inrupt, inc."
+            >
+              Copyright 2020 Inrupt, inc.
+            </span>
+          </div>
+          <div
+            className="makeStyles-footer__links-5"
+          >
+            <a
+              className="makeStyles-footer__link-6"
+              href="https://inrupt.com/terms-of-service"
+              key="Terms of Service"
+              rel="noreferrer"
+              target="_blank"
+            >
+              Terms of Service
+            </a>
+          </div>
+        </footer>
+      </Footer>
     </Footer>
   </ThemeProvider>
 </WithTheme>

@@ -858,14 +858,14 @@ font-display: block;",
         </button>
         <div
           aria-hidden={true}
-          className="makeStyles-header-banner__aside-menu-popup-1555"
+          className="makeStyles-header-banner__aside-menu-popup-1554"
           id="UserMenu"
         >
           <ul
-            className="makeStyles-header-banner__user-menu-1556"
+            className="makeStyles-header-banner__user-menu-1555"
           >
             <li
-              className="makeStyles-header-banner__user-menu-item-1557"
+              className="makeStyles-header-banner__user-menu-item-1556"
               style={
                 Object {
                   "zIndex": 100,
@@ -873,18 +873,18 @@ font-display: block;",
               }
             >
               <LogOut
-                className="makeStyles-header-banner__user-menu-item-trigger-1560"
+                className="makeStyles-header-banner__user-menu-item-trigger-1559"
               >
                 <button
-                  className="makeStyles-header-banner__user-menu-item-trigger-1560"
+                  className="makeStyles-header-banner__user-menu-item-trigger-1559"
                   onClick={[Function]}
                   type="button"
                 >
                   <i
-                    className="makeStyles-icon-log-out-1511 makeStyles-header-banner__user-menu-item-icon-1559"
+                    className="makeStyles-icon-log-out-1511 makeStyles-header-banner__user-menu-item-icon-1558"
                   />
                   <span
-                    className="makeStyles-header-banner__user-menu-item-label-1561"
+                    className="makeStyles-header-banner__user-menu-item-label-1560"
                   >
                     Log out
                   </span>

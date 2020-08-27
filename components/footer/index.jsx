@@ -19,19 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { Box } from "@material-ui/core";
+import React from "react";
+import { Footer as PrismFooter } from "@inrupt/prism-react-components";
 
 export default function Footer() {
-  return (
-    <Box p={3} borderTop={1} borderColor="grey.500">
-      {"Copyright 2020 Inrupt, inc. "}
-      <a
-        href="https://inrupt.com/terms-of-service"
-        target="_blank"
-        rel="noreferrer"
-      >
-        Terms of Service
-      </a>
-    </Box>
-  );
+  const links = [
+    {
+      href: "https://inrupt.com/terms-of-service",
+      text: "Terms of Service",
+      rel: "noreferrer",
+      target: "_blank",
+    },
+  ];
+  const texts = [{ text: "Copyright 2020 Inrupt, inc." }];
+  return <PrismFooter texts={texts} links={links} />;
 }

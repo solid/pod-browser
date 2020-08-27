@@ -2532,10 +2532,10 @@ font-display: block;",
         name="/iri/"
       >
         <section
-          className="makeStyles-centeredSection-156"
+          className="makeStyles-centeredSection-154"
         >
           <h3
-            className="makeStyles-content-h3-169"
+            className="makeStyles-content-h3-167"
             title="/iri/"
           >
             /iri/
@@ -2561,10 +2561,10 @@ font-display: block;",
           </ForwardRef(Divider)>
         </WithStyles(ForwardRef(Divider))>
         <section
-          className="makeStyles-centeredSection-156"
+          className="makeStyles-centeredSection-154"
         >
           <h5
-            className="makeStyles-content-h5-171"
+            className="makeStyles-content-h5-169"
           >
             Error
           </h5>
@@ -3427,10 +3427,10 @@ font-display: block;",
         onDeleteError={[Function]}
       >
         <section
-          className="makeStyles-centeredSection-4"
+          className="makeStyles-centeredSection-2"
         >
           <h3
-            className="makeStyles-content-h3-13"
+            className="makeStyles-content-h3-11"
             title="/iri/"
           >
             /iri/
@@ -3456,10 +3456,10 @@ font-display: block;",
           </ForwardRef(Divider)>
         </WithStyles(ForwardRef(Divider))>
         <section
-          className="makeStyles-centeredSection-4"
+          className="makeStyles-centeredSection-2"
         >
           <h5
-            className="makeStyles-content-h5-15"
+            className="makeStyles-content-h5-13"
           >
             Actions
           </h5>
@@ -4074,10 +4074,10 @@ font-display: block;",
           </ForwardRef(Divider)>
         </WithStyles(ForwardRef(Divider))>
         <section
-          className="makeStyles-centeredSection-4"
+          className="makeStyles-centeredSection-2"
         >
           <h5
-            className="makeStyles-content-h5-15"
+            className="makeStyles-content-h5-13"
           >
             Details
           </h5>
@@ -4102,7 +4102,7 @@ font-display: block;",
           </ForwardRef(Divider)>
         </WithStyles(ForwardRef(Divider))>
         <section
-          className="makeStyles-centeredSection-4"
+          className="makeStyles-centeredSection-2"
         >
           <WithStyles(ForwardRef(List))>
             <ForwardRef(List)
@@ -4119,10 +4119,10 @@ font-display: block;",
                 className="MuiList-root MuiList-padding"
               >
                 <WithStyles(ForwardRef(ListItem))
-                  className="makeStyles-listItem-6"
+                  className="makeStyles-listItem-4"
                 >
                   <ForwardRef(ListItem)
-                    className="makeStyles-listItem-6"
+                    className="makeStyles-listItem-4"
                     classes={
                       Object {
                         "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -4140,15 +4140,15 @@ font-display: block;",
                     }
                   >
                     <li
-                      className="MuiListItem-root makeStyles-listItem-6 MuiListItem-gutters"
+                      className="MuiListItem-root makeStyles-listItem-4 MuiListItem-gutters"
                       disabled={false}
                     >
                       <WithStyles(ForwardRef(Typography))
-                        className="makeStyles-detailText-7"
+                        className="makeStyles-detailText-5"
                         key=".0"
                       >
                         <ForwardRef(Typography)
-                          className="makeStyles-detailText-7"
+                          className="makeStyles-detailText-5"
                           classes={
                             Object {
                               "alignCenter": "MuiTypography-alignCenter",
@@ -4185,7 +4185,7 @@ font-display: block;",
                           }
                         >
                           <p
-                            className="MuiTypography-root makeStyles-detailText-7 MuiTypography-body1"
+                            className="MuiTypography-root makeStyles-detailText-5 MuiTypography-body1"
                           >
                             Thing Type:
                           </p>
@@ -5122,10 +5122,10 @@ font-display: block;",
         }
       >
         <section
-          className="makeStyles-headerSection-47"
+          className="makeStyles-headerSection-45"
         >
           <h3
-            className="makeStyles-content-h3-59"
+            className="makeStyles-content-h3-57"
             title="/iri/"
           >
             /iri/
@@ -5151,10 +5151,10 @@ font-display: block;",
           </ForwardRef(Divider)>
         </WithStyles(ForwardRef(Divider))>
         <section
-          className="makeStyles-centeredSection-46"
+          className="makeStyles-centeredSection-44"
         >
           <h5
-            className="makeStyles-content-h5-61"
+            className="makeStyles-content-h5-59"
           >
             Actions
           </h5>
@@ -5774,10 +5774,10 @@ font-display: block;",
           </ForwardRef(Divider)>
         </WithStyles(ForwardRef(Divider))>
         <section
-          className="makeStyles-centeredSection-46"
+          className="makeStyles-centeredSection-44"
         >
           <h5
-            className="makeStyles-content-h5-61"
+            className="makeStyles-content-h5-59"
           >
             Details
           </h5>
@@ -5802,7 +5802,7 @@ font-display: block;",
           </ForwardRef(Divider)>
         </WithStyles(ForwardRef(Divider))>
         <section
-          className="makeStyles-centeredSection-46"
+          className="makeStyles-centeredSection-44"
         >
           <WithStyles(ForwardRef(List))>
             <ForwardRef(List)
@@ -5819,10 +5819,10 @@ font-display: block;",
                 className="MuiList-root MuiList-padding"
               >
                 <WithStyles(ForwardRef(ListItem))
-                  className="makeStyles-listItem-49"
+                  className="makeStyles-listItem-47"
                 >
                   <ForwardRef(ListItem)
-                    className="makeStyles-listItem-49"
+                    className="makeStyles-listItem-47"
                     classes={
                       Object {
                         "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -5840,15 +5840,15 @@ font-display: block;",
                     }
                   >
                     <li
-                      className="MuiListItem-root makeStyles-listItem-49 MuiListItem-gutters"
+                      className="MuiListItem-root makeStyles-listItem-47 MuiListItem-gutters"
                       disabled={false}
                     >
                       <WithStyles(ForwardRef(Typography))
-                        className="makeStyles-detailText-51"
+                        className="makeStyles-detailText-49"
                         key=".0"
                       >
                         <ForwardRef(Typography)
-                          className="makeStyles-detailText-51"
+                          className="makeStyles-detailText-49"
                           classes={
                             Object {
                               "alignCenter": "MuiTypography-alignCenter",
@@ -5885,18 +5885,18 @@ font-display: block;",
                           }
                         >
                           <p
-                            className="MuiTypography-root makeStyles-detailText-51 MuiTypography-body1"
+                            className="MuiTypography-root makeStyles-detailText-49 MuiTypography-body1"
                           >
                             Thing Type:
                           </p>
                         </ForwardRef(Typography)>
                       </WithStyles(ForwardRef(Typography))>
                       <WithStyles(ForwardRef(Typography))
-                        className="makeStyles-typeValue-52 makeStyles-detailText-51"
+                        className="makeStyles-typeValue-50 makeStyles-detailText-49"
                         key=".1"
                       >
                         <ForwardRef(Typography)
-                          className="makeStyles-typeValue-52 makeStyles-detailText-51"
+                          className="makeStyles-typeValue-50 makeStyles-detailText-49"
                           classes={
                             Object {
                               "alignCenter": "MuiTypography-alignCenter",
@@ -5933,7 +5933,7 @@ font-display: block;",
                           }
                         >
                           <p
-                            className="MuiTypography-root makeStyles-typeValue-52 makeStyles-detailText-51 MuiTypography-body1"
+                            className="MuiTypography-root makeStyles-typeValue-50 makeStyles-detailText-49 MuiTypography-body1"
                           >
                             Container
                           </p>
@@ -5966,10 +5966,10 @@ font-display: block;",
           </ForwardRef(Divider)>
         </WithStyles(ForwardRef(Divider))>
         <section
-          className="makeStyles-centeredSection-46"
+          className="makeStyles-centeredSection-44"
         >
           <DownloadLink
-            className="makeStyles-downloadButton-53"
+            className="makeStyles-downloadButton-51"
             iri="/iri/"
             type="Container"
           />
@@ -7038,10 +7038,10 @@ font-display: block;",
           </ForwardRef(Divider)>
         </WithStyles(ForwardRef(Divider))>
         <section
-          className="makeStyles-headerSection-70"
+          className="makeStyles-headerSection-68"
         >
           <h3
-            className="makeStyles-content-h3-82"
+            className="makeStyles-content-h3-80"
             title="/iri/"
           >
             /iri/
@@ -7067,10 +7067,10 @@ font-display: block;",
           </ForwardRef(Divider)>
         </WithStyles(ForwardRef(Divider))>
         <section
-          className="makeStyles-centeredSection-69"
+          className="makeStyles-centeredSection-67"
         >
           <h5
-            className="makeStyles-content-h5-84"
+            className="makeStyles-content-h5-82"
           >
             My Access
           </h5>
@@ -7114,11 +7114,11 @@ font-display: block;",
                   className="MuiList-root MuiList-padding"
                 >
                   <WithStyles(ForwardRef(ListItem))
-                    className="makeStyles-listItem-95"
+                    className="makeStyles-listItem-93"
                     key="webId"
                   >
                     <ForwardRef(ListItem)
-                      className="makeStyles-listItem-95"
+                      className="makeStyles-listItem-93"
                       classes={
                         Object {
                           "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -7136,18 +7136,18 @@ font-display: block;",
                       }
                     >
                       <li
-                        className="MuiListItem-root makeStyles-listItem-95 MuiListItem-gutters"
+                        className="MuiListItem-root makeStyles-listItem-93 MuiListItem-gutters"
                         disabled={false}
                       >
                         <WithStyles(ForwardRef(Avatar))
                           alt="webId"
-                          className="makeStyles-avatar-91"
+                          className="makeStyles-avatar-89"
                           key=".0"
                           src="/avatar"
                         >
                           <ForwardRef(Avatar)
                             alt="webId"
-                            className="makeStyles-avatar-91"
+                            className="makeStyles-avatar-89"
                             classes={
                               Object {
                                 "circle": "MuiAvatar-circle",
@@ -7162,7 +7162,7 @@ font-display: block;",
                             src="/avatar"
                           >
                             <div
-                              className="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-91"
+                              className="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-89"
                             >
                               <img
                                 alt="webId"
@@ -7173,11 +7173,11 @@ font-display: block;",
                           </ForwardRef(Avatar)>
                         </WithStyles(ForwardRef(Avatar))>
                         <WithStyles(ForwardRef(Typography))
-                          className="makeStyles-detailText-97"
+                          className="makeStyles-detailText-95"
                           key=".1"
                         >
                           <ForwardRef(Typography)
-                            className="makeStyles-detailText-97"
+                            className="makeStyles-detailText-95"
                             classes={
                               Object {
                                 "alignCenter": "MuiTypography-alignCenter",
@@ -7214,7 +7214,7 @@ font-display: block;",
                             }
                           >
                             <p
-                              className="MuiTypography-root makeStyles-detailText-97 MuiTypography-body1"
+                              className="MuiTypography-root makeStyles-detailText-95 MuiTypography-body1"
                             >
                               webId
                             </p>
@@ -7242,15 +7242,15 @@ font-display: block;",
                           warnOnSubmit={true}
                         >
                           <div
-                            className="makeStyles-container-114"
+                            className="makeStyles-container-112"
                           >
                             <WithStyles(ForwardRef(Button))
-                              className="makeStyles-summary-118"
+                              className="makeStyles-summary-116"
                               endIcon={<Memo(KeyboardArrowDownIcon) />}
                               onClick={[Function]}
                             >
                               <ForwardRef(Button)
-                                className="makeStyles-summary-118"
+                                className="makeStyles-summary-116"
                                 classes={
                                   Object {
                                     "colorInherit": "MuiButton-colorInherit",
@@ -7288,7 +7288,7 @@ font-display: block;",
                                 onClick={[Function]}
                               >
                                 <WithStyles(ForwardRef(ButtonBase))
-                                  className="MuiButton-root MuiButton-text makeStyles-summary-118"
+                                  className="MuiButton-root MuiButton-text makeStyles-summary-116"
                                   component="button"
                                   disabled={false}
                                   focusRipple={true}
@@ -7297,7 +7297,7 @@ font-display: block;",
                                   type="button"
                                 >
                                   <ForwardRef(ButtonBase)
-                                    className="MuiButton-root MuiButton-text makeStyles-summary-118"
+                                    className="MuiButton-root MuiButton-text makeStyles-summary-116"
                                     classes={
                                       Object {
                                         "disabled": "Mui-disabled",
@@ -7313,7 +7313,7 @@ font-display: block;",
                                     type="button"
                                   >
                                     <button
-                                      className="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-summary-118"
+                                      className="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-summary-116"
                                       disabled={false}
                                       onBlur={[Function]}
                                       onClick={[Function]}
@@ -7405,7 +7405,7 @@ font-display: block;",
                               </ForwardRef(Button)>
                             </WithStyles(ForwardRef(Button))>
                             <section
-                              className="makeStyles-selectionClosed-116"
+                              className="makeStyles-selectionClosed-114"
                             >
                               <WithStyles(ForwardRef(List))>
                                 <ForwardRef(List)
@@ -7424,13 +7424,13 @@ font-display: block;",
                                     <PermissionCheckbox
                                       classes={
                                         Object {
-                                          "checkbox": "makeStyles-checkbox-120",
-                                          "container": "makeStyles-container-114",
-                                          "label": "makeStyles-label-119",
-                                          "listItem": "makeStyles-listItem-115",
-                                          "selectionClosed": "makeStyles-selectionClosed-116",
-                                          "selectionOpen": "makeStyles-selectionOpen-117",
-                                          "summary": "makeStyles-summary-118",
+                                          "checkbox": "makeStyles-checkbox-118",
+                                          "container": "makeStyles-container-112",
+                                          "label": "makeStyles-label-117",
+                                          "listItem": "makeStyles-listItem-113",
+                                          "selectionClosed": "makeStyles-selectionClosed-114",
+                                          "selectionOpen": "makeStyles-selectionOpen-115",
+                                          "summary": "makeStyles-summary-116",
                                         }
                                       }
                                       label="View"
@@ -7438,10 +7438,10 @@ font-display: block;",
                                       value={true}
                                     >
                                       <WithStyles(ForwardRef(ListItem))
-                                        className="makeStyles-listItem-122"
+                                        className="makeStyles-listItem-120"
                                       >
                                         <ForwardRef(ListItem)
-                                          className="makeStyles-listItem-122"
+                                          className="makeStyles-listItem-120"
                                           classes={
                                             Object {
                                               "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -7459,13 +7459,13 @@ font-display: block;",
                                           }
                                         >
                                           <li
-                                            className="MuiListItem-root makeStyles-listItem-122 MuiListItem-gutters"
+                                            className="MuiListItem-root makeStyles-listItem-120 MuiListItem-gutters"
                                             disabled={false}
                                           >
                                             <WithStyles(ForwardRef(FormControlLabel))
                                               classes={
                                                 Object {
-                                                  "label": "makeStyles-label-126",
+                                                  "label": "makeStyles-label-124",
                                                 }
                                               }
                                               control={
@@ -7473,7 +7473,7 @@ font-display: block;",
                                                   checked={true}
                                                   classes={
                                                     Object {
-                                                      "root": "makeStyles-checkbox-127",
+                                                      "root": "makeStyles-checkbox-125",
                                                     }
                                                   }
                                                   name="view"
@@ -7487,7 +7487,7 @@ font-display: block;",
                                                 classes={
                                                   Object {
                                                     "disabled": "Mui-disabled",
-                                                    "label": "MuiFormControlLabel-label makeStyles-label-126",
+                                                    "label": "MuiFormControlLabel-label makeStyles-label-124",
                                                     "labelPlacementBottom": "MuiFormControlLabel-labelPlacementBottom",
                                                     "labelPlacementStart": "MuiFormControlLabel-labelPlacementStart",
                                                     "labelPlacementTop": "MuiFormControlLabel-labelPlacementTop",
@@ -7499,7 +7499,7 @@ font-display: block;",
                                                     checked={true}
                                                     classes={
                                                       Object {
-                                                        "root": "makeStyles-checkbox-127",
+                                                        "root": "makeStyles-checkbox-125",
                                                       }
                                                     }
                                                     name="view"
@@ -7515,7 +7515,7 @@ font-display: block;",
                                                     checked={true}
                                                     classes={
                                                       Object {
-                                                        "root": "makeStyles-checkbox-127",
+                                                        "root": "makeStyles-checkbox-125",
                                                       }
                                                     }
                                                     name="view"
@@ -7530,7 +7530,7 @@ font-display: block;",
                                                           "colorSecondary": "MuiCheckbox-colorSecondary",
                                                           "disabled": "Mui-disabled",
                                                           "indeterminate": "MuiCheckbox-indeterminate",
-                                                          "root": "MuiCheckbox-root makeStyles-checkbox-127",
+                                                          "root": "MuiCheckbox-root makeStyles-checkbox-125",
                                                         }
                                                       }
                                                       name="view"
@@ -7543,7 +7543,7 @@ font-display: block;",
                                                           Object {
                                                             "checked": "Mui-checked",
                                                             "disabled": "Mui-disabled",
-                                                            "root": "MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary",
+                                                            "root": "MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary",
                                                           }
                                                         }
                                                         color="secondary"
@@ -7562,10 +7562,10 @@ font-display: block;",
                                                           checkedIcon={<Memo />}
                                                           classes={
                                                             Object {
-                                                              "checked": "PrivateSwitchBase-checked-129 Mui-checked",
-                                                              "disabled": "PrivateSwitchBase-disabled-130 Mui-disabled",
-                                                              "input": "PrivateSwitchBase-input-131",
-                                                              "root": "PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary",
+                                                              "checked": "PrivateSwitchBase-checked-127 Mui-checked",
+                                                              "disabled": "PrivateSwitchBase-disabled-128 Mui-disabled",
+                                                              "input": "PrivateSwitchBase-input-129",
+                                                              "root": "PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary",
                                                             }
                                                           }
                                                           color="secondary"
@@ -7580,7 +7580,7 @@ font-display: block;",
                                                           type="checkbox"
                                                         >
                                                           <WithStyles(ForwardRef(IconButton))
-                                                            className="PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked"
+                                                            className="PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked"
                                                             color="secondary"
                                                             component="span"
                                                             onBlur={[Function]}
@@ -7588,7 +7588,7 @@ font-display: block;",
                                                             tabIndex={null}
                                                           >
                                                             <ForwardRef(IconButton)
-                                                              className="PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked"
+                                                              className="PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked"
                                                               classes={
                                                                 Object {
                                                                   "colorInherit": "MuiIconButton-colorInherit",
@@ -7610,7 +7610,7 @@ font-display: block;",
                                                             >
                                                               <WithStyles(ForwardRef(ButtonBase))
                                                                 centerRipple={true}
-                                                                className="MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                className="MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                 component="span"
                                                                 disabled={false}
                                                                 focusRipple={true}
@@ -7620,7 +7620,7 @@ font-display: block;",
                                                               >
                                                                 <ForwardRef(ButtonBase)
                                                                   centerRipple={true}
-                                                                  className="MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                  className="MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                   classes={
                                                                     Object {
                                                                       "disabled": "Mui-disabled",
@@ -7637,7 +7637,7 @@ font-display: block;",
                                                                 >
                                                                   <span
                                                                     aria-disabled={false}
-                                                                    className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                    className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                     onBlur={[Function]}
                                                                     onDragLeave={[Function]}
                                                                     onFocus={[Function]}
@@ -7656,7 +7656,7 @@ font-display: block;",
                                                                     >
                                                                       <input
                                                                         checked={true}
-                                                                        className="PrivateSwitchBase-input-131"
+                                                                        className="PrivateSwitchBase-input-129"
                                                                         data-indeterminate={false}
                                                                         name="view"
                                                                         onChange={[Function]}
@@ -7731,11 +7731,11 @@ font-display: block;",
                                                     </ForwardRef(Checkbox)>
                                                   </WithStyles(ForwardRef(Checkbox))>
                                                   <WithStyles(ForwardRef(Typography))
-                                                    className="MuiFormControlLabel-label makeStyles-label-126"
+                                                    className="MuiFormControlLabel-label makeStyles-label-124"
                                                     component="span"
                                                   >
                                                     <ForwardRef(Typography)
-                                                      className="MuiFormControlLabel-label makeStyles-label-126"
+                                                      className="MuiFormControlLabel-label makeStyles-label-124"
                                                       classes={
                                                         Object {
                                                           "alignCenter": "MuiTypography-alignCenter",
@@ -7773,7 +7773,7 @@ font-display: block;",
                                                       component="span"
                                                     >
                                                       <span
-                                                        className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-126 MuiTypography-body1"
+                                                        className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-124 MuiTypography-body1"
                                                       >
                                                         View
                                                       </span>
@@ -7789,13 +7789,13 @@ font-display: block;",
                                     <PermissionCheckbox
                                       classes={
                                         Object {
-                                          "checkbox": "makeStyles-checkbox-120",
-                                          "container": "makeStyles-container-114",
-                                          "label": "makeStyles-label-119",
-                                          "listItem": "makeStyles-listItem-115",
-                                          "selectionClosed": "makeStyles-selectionClosed-116",
-                                          "selectionOpen": "makeStyles-selectionOpen-117",
-                                          "summary": "makeStyles-summary-118",
+                                          "checkbox": "makeStyles-checkbox-118",
+                                          "container": "makeStyles-container-112",
+                                          "label": "makeStyles-label-117",
+                                          "listItem": "makeStyles-listItem-113",
+                                          "selectionClosed": "makeStyles-selectionClosed-114",
+                                          "selectionOpen": "makeStyles-selectionOpen-115",
+                                          "summary": "makeStyles-summary-116",
                                         }
                                       }
                                       label="Edit"
@@ -7803,10 +7803,10 @@ font-display: block;",
                                       value={true}
                                     >
                                       <WithStyles(ForwardRef(ListItem))
-                                        className="makeStyles-listItem-122"
+                                        className="makeStyles-listItem-120"
                                       >
                                         <ForwardRef(ListItem)
-                                          className="makeStyles-listItem-122"
+                                          className="makeStyles-listItem-120"
                                           classes={
                                             Object {
                                               "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -7824,13 +7824,13 @@ font-display: block;",
                                           }
                                         >
                                           <li
-                                            className="MuiListItem-root makeStyles-listItem-122 MuiListItem-gutters"
+                                            className="MuiListItem-root makeStyles-listItem-120 MuiListItem-gutters"
                                             disabled={false}
                                           >
                                             <WithStyles(ForwardRef(FormControlLabel))
                                               classes={
                                                 Object {
-                                                  "label": "makeStyles-label-126",
+                                                  "label": "makeStyles-label-124",
                                                 }
                                               }
                                               control={
@@ -7838,7 +7838,7 @@ font-display: block;",
                                                   checked={true}
                                                   classes={
                                                     Object {
-                                                      "root": "makeStyles-checkbox-127",
+                                                      "root": "makeStyles-checkbox-125",
                                                     }
                                                   }
                                                   name="edit"
@@ -7852,7 +7852,7 @@ font-display: block;",
                                                 classes={
                                                   Object {
                                                     "disabled": "Mui-disabled",
-                                                    "label": "MuiFormControlLabel-label makeStyles-label-126",
+                                                    "label": "MuiFormControlLabel-label makeStyles-label-124",
                                                     "labelPlacementBottom": "MuiFormControlLabel-labelPlacementBottom",
                                                     "labelPlacementStart": "MuiFormControlLabel-labelPlacementStart",
                                                     "labelPlacementTop": "MuiFormControlLabel-labelPlacementTop",
@@ -7864,7 +7864,7 @@ font-display: block;",
                                                     checked={true}
                                                     classes={
                                                       Object {
-                                                        "root": "makeStyles-checkbox-127",
+                                                        "root": "makeStyles-checkbox-125",
                                                       }
                                                     }
                                                     name="edit"
@@ -7880,7 +7880,7 @@ font-display: block;",
                                                     checked={true}
                                                     classes={
                                                       Object {
-                                                        "root": "makeStyles-checkbox-127",
+                                                        "root": "makeStyles-checkbox-125",
                                                       }
                                                     }
                                                     name="edit"
@@ -7895,7 +7895,7 @@ font-display: block;",
                                                           "colorSecondary": "MuiCheckbox-colorSecondary",
                                                           "disabled": "Mui-disabled",
                                                           "indeterminate": "MuiCheckbox-indeterminate",
-                                                          "root": "MuiCheckbox-root makeStyles-checkbox-127",
+                                                          "root": "MuiCheckbox-root makeStyles-checkbox-125",
                                                         }
                                                       }
                                                       name="edit"
@@ -7908,7 +7908,7 @@ font-display: block;",
                                                           Object {
                                                             "checked": "Mui-checked",
                                                             "disabled": "Mui-disabled",
-                                                            "root": "MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary",
+                                                            "root": "MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary",
                                                           }
                                                         }
                                                         color="secondary"
@@ -7927,10 +7927,10 @@ font-display: block;",
                                                           checkedIcon={<Memo />}
                                                           classes={
                                                             Object {
-                                                              "checked": "PrivateSwitchBase-checked-129 Mui-checked",
-                                                              "disabled": "PrivateSwitchBase-disabled-130 Mui-disabled",
-                                                              "input": "PrivateSwitchBase-input-131",
-                                                              "root": "PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary",
+                                                              "checked": "PrivateSwitchBase-checked-127 Mui-checked",
+                                                              "disabled": "PrivateSwitchBase-disabled-128 Mui-disabled",
+                                                              "input": "PrivateSwitchBase-input-129",
+                                                              "root": "PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary",
                                                             }
                                                           }
                                                           color="secondary"
@@ -7945,7 +7945,7 @@ font-display: block;",
                                                           type="checkbox"
                                                         >
                                                           <WithStyles(ForwardRef(IconButton))
-                                                            className="PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked"
+                                                            className="PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked"
                                                             color="secondary"
                                                             component="span"
                                                             onBlur={[Function]}
@@ -7953,7 +7953,7 @@ font-display: block;",
                                                             tabIndex={null}
                                                           >
                                                             <ForwardRef(IconButton)
-                                                              className="PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked"
+                                                              className="PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked"
                                                               classes={
                                                                 Object {
                                                                   "colorInherit": "MuiIconButton-colorInherit",
@@ -7975,7 +7975,7 @@ font-display: block;",
                                                             >
                                                               <WithStyles(ForwardRef(ButtonBase))
                                                                 centerRipple={true}
-                                                                className="MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                className="MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                 component="span"
                                                                 disabled={false}
                                                                 focusRipple={true}
@@ -7985,7 +7985,7 @@ font-display: block;",
                                                               >
                                                                 <ForwardRef(ButtonBase)
                                                                   centerRipple={true}
-                                                                  className="MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                  className="MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                   classes={
                                                                     Object {
                                                                       "disabled": "Mui-disabled",
@@ -8002,7 +8002,7 @@ font-display: block;",
                                                                 >
                                                                   <span
                                                                     aria-disabled={false}
-                                                                    className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                    className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                     onBlur={[Function]}
                                                                     onDragLeave={[Function]}
                                                                     onFocus={[Function]}
@@ -8021,7 +8021,7 @@ font-display: block;",
                                                                     >
                                                                       <input
                                                                         checked={true}
-                                                                        className="PrivateSwitchBase-input-131"
+                                                                        className="PrivateSwitchBase-input-129"
                                                                         data-indeterminate={false}
                                                                         name="edit"
                                                                         onChange={[Function]}
@@ -8096,11 +8096,11 @@ font-display: block;",
                                                     </ForwardRef(Checkbox)>
                                                   </WithStyles(ForwardRef(Checkbox))>
                                                   <WithStyles(ForwardRef(Typography))
-                                                    className="MuiFormControlLabel-label makeStyles-label-126"
+                                                    className="MuiFormControlLabel-label makeStyles-label-124"
                                                     component="span"
                                                   >
                                                     <ForwardRef(Typography)
-                                                      className="MuiFormControlLabel-label makeStyles-label-126"
+                                                      className="MuiFormControlLabel-label makeStyles-label-124"
                                                       classes={
                                                         Object {
                                                           "alignCenter": "MuiTypography-alignCenter",
@@ -8138,7 +8138,7 @@ font-display: block;",
                                                       component="span"
                                                     >
                                                       <span
-                                                        className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-126 MuiTypography-body1"
+                                                        className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-124 MuiTypography-body1"
                                                       >
                                                         Edit
                                                       </span>
@@ -8154,13 +8154,13 @@ font-display: block;",
                                     <PermissionCheckbox
                                       classes={
                                         Object {
-                                          "checkbox": "makeStyles-checkbox-120",
-                                          "container": "makeStyles-container-114",
-                                          "label": "makeStyles-label-119",
-                                          "listItem": "makeStyles-listItem-115",
-                                          "selectionClosed": "makeStyles-selectionClosed-116",
-                                          "selectionOpen": "makeStyles-selectionOpen-117",
-                                          "summary": "makeStyles-summary-118",
+                                          "checkbox": "makeStyles-checkbox-118",
+                                          "container": "makeStyles-container-112",
+                                          "label": "makeStyles-label-117",
+                                          "listItem": "makeStyles-listItem-113",
+                                          "selectionClosed": "makeStyles-selectionClosed-114",
+                                          "selectionOpen": "makeStyles-selectionOpen-115",
+                                          "summary": "makeStyles-summary-116",
                                         }
                                       }
                                       label="Append"
@@ -8168,10 +8168,10 @@ font-display: block;",
                                       value={true}
                                     >
                                       <WithStyles(ForwardRef(ListItem))
-                                        className="makeStyles-listItem-122"
+                                        className="makeStyles-listItem-120"
                                       >
                                         <ForwardRef(ListItem)
-                                          className="makeStyles-listItem-122"
+                                          className="makeStyles-listItem-120"
                                           classes={
                                             Object {
                                               "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -8189,13 +8189,13 @@ font-display: block;",
                                           }
                                         >
                                           <li
-                                            className="MuiListItem-root makeStyles-listItem-122 MuiListItem-gutters"
+                                            className="MuiListItem-root makeStyles-listItem-120 MuiListItem-gutters"
                                             disabled={false}
                                           >
                                             <WithStyles(ForwardRef(FormControlLabel))
                                               classes={
                                                 Object {
-                                                  "label": "makeStyles-label-126",
+                                                  "label": "makeStyles-label-124",
                                                 }
                                               }
                                               control={
@@ -8203,7 +8203,7 @@ font-display: block;",
                                                   checked={true}
                                                   classes={
                                                     Object {
-                                                      "root": "makeStyles-checkbox-127",
+                                                      "root": "makeStyles-checkbox-125",
                                                     }
                                                   }
                                                   name="append"
@@ -8217,7 +8217,7 @@ font-display: block;",
                                                 classes={
                                                   Object {
                                                     "disabled": "Mui-disabled",
-                                                    "label": "MuiFormControlLabel-label makeStyles-label-126",
+                                                    "label": "MuiFormControlLabel-label makeStyles-label-124",
                                                     "labelPlacementBottom": "MuiFormControlLabel-labelPlacementBottom",
                                                     "labelPlacementStart": "MuiFormControlLabel-labelPlacementStart",
                                                     "labelPlacementTop": "MuiFormControlLabel-labelPlacementTop",
@@ -8229,7 +8229,7 @@ font-display: block;",
                                                     checked={true}
                                                     classes={
                                                       Object {
-                                                        "root": "makeStyles-checkbox-127",
+                                                        "root": "makeStyles-checkbox-125",
                                                       }
                                                     }
                                                     name="append"
@@ -8245,7 +8245,7 @@ font-display: block;",
                                                     checked={true}
                                                     classes={
                                                       Object {
-                                                        "root": "makeStyles-checkbox-127",
+                                                        "root": "makeStyles-checkbox-125",
                                                       }
                                                     }
                                                     name="append"
@@ -8260,7 +8260,7 @@ font-display: block;",
                                                           "colorSecondary": "MuiCheckbox-colorSecondary",
                                                           "disabled": "Mui-disabled",
                                                           "indeterminate": "MuiCheckbox-indeterminate",
-                                                          "root": "MuiCheckbox-root makeStyles-checkbox-127",
+                                                          "root": "MuiCheckbox-root makeStyles-checkbox-125",
                                                         }
                                                       }
                                                       name="append"
@@ -8273,7 +8273,7 @@ font-display: block;",
                                                           Object {
                                                             "checked": "Mui-checked",
                                                             "disabled": "Mui-disabled",
-                                                            "root": "MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary",
+                                                            "root": "MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary",
                                                           }
                                                         }
                                                         color="secondary"
@@ -8292,10 +8292,10 @@ font-display: block;",
                                                           checkedIcon={<Memo />}
                                                           classes={
                                                             Object {
-                                                              "checked": "PrivateSwitchBase-checked-129 Mui-checked",
-                                                              "disabled": "PrivateSwitchBase-disabled-130 Mui-disabled",
-                                                              "input": "PrivateSwitchBase-input-131",
-                                                              "root": "PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary",
+                                                              "checked": "PrivateSwitchBase-checked-127 Mui-checked",
+                                                              "disabled": "PrivateSwitchBase-disabled-128 Mui-disabled",
+                                                              "input": "PrivateSwitchBase-input-129",
+                                                              "root": "PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary",
                                                             }
                                                           }
                                                           color="secondary"
@@ -8310,7 +8310,7 @@ font-display: block;",
                                                           type="checkbox"
                                                         >
                                                           <WithStyles(ForwardRef(IconButton))
-                                                            className="PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked"
+                                                            className="PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked"
                                                             color="secondary"
                                                             component="span"
                                                             onBlur={[Function]}
@@ -8318,7 +8318,7 @@ font-display: block;",
                                                             tabIndex={null}
                                                           >
                                                             <ForwardRef(IconButton)
-                                                              className="PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked"
+                                                              className="PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked"
                                                               classes={
                                                                 Object {
                                                                   "colorInherit": "MuiIconButton-colorInherit",
@@ -8340,7 +8340,7 @@ font-display: block;",
                                                             >
                                                               <WithStyles(ForwardRef(ButtonBase))
                                                                 centerRipple={true}
-                                                                className="MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                className="MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                 component="span"
                                                                 disabled={false}
                                                                 focusRipple={true}
@@ -8350,7 +8350,7 @@ font-display: block;",
                                                               >
                                                                 <ForwardRef(ButtonBase)
                                                                   centerRipple={true}
-                                                                  className="MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                  className="MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                   classes={
                                                                     Object {
                                                                       "disabled": "Mui-disabled",
@@ -8367,7 +8367,7 @@ font-display: block;",
                                                                 >
                                                                   <span
                                                                     aria-disabled={false}
-                                                                    className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                    className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                     onBlur={[Function]}
                                                                     onDragLeave={[Function]}
                                                                     onFocus={[Function]}
@@ -8386,7 +8386,7 @@ font-display: block;",
                                                                     >
                                                                       <input
                                                                         checked={true}
-                                                                        className="PrivateSwitchBase-input-131"
+                                                                        className="PrivateSwitchBase-input-129"
                                                                         data-indeterminate={false}
                                                                         name="append"
                                                                         onChange={[Function]}
@@ -8461,11 +8461,11 @@ font-display: block;",
                                                     </ForwardRef(Checkbox)>
                                                   </WithStyles(ForwardRef(Checkbox))>
                                                   <WithStyles(ForwardRef(Typography))
-                                                    className="MuiFormControlLabel-label makeStyles-label-126"
+                                                    className="MuiFormControlLabel-label makeStyles-label-124"
                                                     component="span"
                                                   >
                                                     <ForwardRef(Typography)
-                                                      className="MuiFormControlLabel-label makeStyles-label-126"
+                                                      className="MuiFormControlLabel-label makeStyles-label-124"
                                                       classes={
                                                         Object {
                                                           "alignCenter": "MuiTypography-alignCenter",
@@ -8503,7 +8503,7 @@ font-display: block;",
                                                       component="span"
                                                     >
                                                       <span
-                                                        className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-126 MuiTypography-body1"
+                                                        className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-124 MuiTypography-body1"
                                                       >
                                                         Append
                                                       </span>
@@ -8519,13 +8519,13 @@ font-display: block;",
                                     <PermissionCheckbox
                                       classes={
                                         Object {
-                                          "checkbox": "makeStyles-checkbox-120",
-                                          "container": "makeStyles-container-114",
-                                          "label": "makeStyles-label-119",
-                                          "listItem": "makeStyles-listItem-115",
-                                          "selectionClosed": "makeStyles-selectionClosed-116",
-                                          "selectionOpen": "makeStyles-selectionOpen-117",
-                                          "summary": "makeStyles-summary-118",
+                                          "checkbox": "makeStyles-checkbox-118",
+                                          "container": "makeStyles-container-112",
+                                          "label": "makeStyles-label-117",
+                                          "listItem": "makeStyles-listItem-113",
+                                          "selectionClosed": "makeStyles-selectionClosed-114",
+                                          "selectionOpen": "makeStyles-selectionOpen-115",
+                                          "summary": "makeStyles-summary-116",
                                         }
                                       }
                                       label="Control"
@@ -8533,10 +8533,10 @@ font-display: block;",
                                       value={true}
                                     >
                                       <WithStyles(ForwardRef(ListItem))
-                                        className="makeStyles-listItem-122"
+                                        className="makeStyles-listItem-120"
                                       >
                                         <ForwardRef(ListItem)
-                                          className="makeStyles-listItem-122"
+                                          className="makeStyles-listItem-120"
                                           classes={
                                             Object {
                                               "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -8554,13 +8554,13 @@ font-display: block;",
                                           }
                                         >
                                           <li
-                                            className="MuiListItem-root makeStyles-listItem-122 MuiListItem-gutters"
+                                            className="MuiListItem-root makeStyles-listItem-120 MuiListItem-gutters"
                                             disabled={false}
                                           >
                                             <WithStyles(ForwardRef(FormControlLabel))
                                               classes={
                                                 Object {
-                                                  "label": "makeStyles-label-126",
+                                                  "label": "makeStyles-label-124",
                                                 }
                                               }
                                               control={
@@ -8568,7 +8568,7 @@ font-display: block;",
                                                   checked={true}
                                                   classes={
                                                     Object {
-                                                      "root": "makeStyles-checkbox-127",
+                                                      "root": "makeStyles-checkbox-125",
                                                     }
                                                   }
                                                   name="control"
@@ -8582,7 +8582,7 @@ font-display: block;",
                                                 classes={
                                                   Object {
                                                     "disabled": "Mui-disabled",
-                                                    "label": "MuiFormControlLabel-label makeStyles-label-126",
+                                                    "label": "MuiFormControlLabel-label makeStyles-label-124",
                                                     "labelPlacementBottom": "MuiFormControlLabel-labelPlacementBottom",
                                                     "labelPlacementStart": "MuiFormControlLabel-labelPlacementStart",
                                                     "labelPlacementTop": "MuiFormControlLabel-labelPlacementTop",
@@ -8594,7 +8594,7 @@ font-display: block;",
                                                     checked={true}
                                                     classes={
                                                       Object {
-                                                        "root": "makeStyles-checkbox-127",
+                                                        "root": "makeStyles-checkbox-125",
                                                       }
                                                     }
                                                     name="control"
@@ -8610,7 +8610,7 @@ font-display: block;",
                                                     checked={true}
                                                     classes={
                                                       Object {
-                                                        "root": "makeStyles-checkbox-127",
+                                                        "root": "makeStyles-checkbox-125",
                                                       }
                                                     }
                                                     name="control"
@@ -8625,7 +8625,7 @@ font-display: block;",
                                                           "colorSecondary": "MuiCheckbox-colorSecondary",
                                                           "disabled": "Mui-disabled",
                                                           "indeterminate": "MuiCheckbox-indeterminate",
-                                                          "root": "MuiCheckbox-root makeStyles-checkbox-127",
+                                                          "root": "MuiCheckbox-root makeStyles-checkbox-125",
                                                         }
                                                       }
                                                       name="control"
@@ -8638,7 +8638,7 @@ font-display: block;",
                                                           Object {
                                                             "checked": "Mui-checked",
                                                             "disabled": "Mui-disabled",
-                                                            "root": "MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary",
+                                                            "root": "MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary",
                                                           }
                                                         }
                                                         color="secondary"
@@ -8657,10 +8657,10 @@ font-display: block;",
                                                           checkedIcon={<Memo />}
                                                           classes={
                                                             Object {
-                                                              "checked": "PrivateSwitchBase-checked-129 Mui-checked",
-                                                              "disabled": "PrivateSwitchBase-disabled-130 Mui-disabled",
-                                                              "input": "PrivateSwitchBase-input-131",
-                                                              "root": "PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary",
+                                                              "checked": "PrivateSwitchBase-checked-127 Mui-checked",
+                                                              "disabled": "PrivateSwitchBase-disabled-128 Mui-disabled",
+                                                              "input": "PrivateSwitchBase-input-129",
+                                                              "root": "PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary",
                                                             }
                                                           }
                                                           color="secondary"
@@ -8675,7 +8675,7 @@ font-display: block;",
                                                           type="checkbox"
                                                         >
                                                           <WithStyles(ForwardRef(IconButton))
-                                                            className="PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked"
+                                                            className="PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked"
                                                             color="secondary"
                                                             component="span"
                                                             onBlur={[Function]}
@@ -8683,7 +8683,7 @@ font-display: block;",
                                                             tabIndex={null}
                                                           >
                                                             <ForwardRef(IconButton)
-                                                              className="PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked"
+                                                              className="PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked"
                                                               classes={
                                                                 Object {
                                                                   "colorInherit": "MuiIconButton-colorInherit",
@@ -8705,7 +8705,7 @@ font-display: block;",
                                                             >
                                                               <WithStyles(ForwardRef(ButtonBase))
                                                                 centerRipple={true}
-                                                                className="MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                className="MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                 component="span"
                                                                 disabled={false}
                                                                 focusRipple={true}
@@ -8715,7 +8715,7 @@ font-display: block;",
                                                               >
                                                                 <ForwardRef(ButtonBase)
                                                                   centerRipple={true}
-                                                                  className="MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                  className="MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                   classes={
                                                                     Object {
                                                                       "disabled": "Mui-disabled",
@@ -8732,7 +8732,7 @@ font-display: block;",
                                                                 >
                                                                   <span
                                                                     aria-disabled={false}
-                                                                    className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                    className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                     onBlur={[Function]}
                                                                     onDragLeave={[Function]}
                                                                     onFocus={[Function]}
@@ -8751,7 +8751,7 @@ font-display: block;",
                                                                     >
                                                                       <input
                                                                         checked={true}
-                                                                        className="PrivateSwitchBase-input-131"
+                                                                        className="PrivateSwitchBase-input-129"
                                                                         data-indeterminate={false}
                                                                         name="control"
                                                                         onChange={[Function]}
@@ -8826,11 +8826,11 @@ font-display: block;",
                                                     </ForwardRef(Checkbox)>
                                                   </WithStyles(ForwardRef(Checkbox))>
                                                   <WithStyles(ForwardRef(Typography))
-                                                    className="MuiFormControlLabel-label makeStyles-label-126"
+                                                    className="MuiFormControlLabel-label makeStyles-label-124"
                                                     component="span"
                                                   >
                                                     <ForwardRef(Typography)
-                                                      className="MuiFormControlLabel-label makeStyles-label-126"
+                                                      className="MuiFormControlLabel-label makeStyles-label-124"
                                                       classes={
                                                         Object {
                                                           "alignCenter": "MuiTypography-alignCenter",
@@ -8868,7 +8868,7 @@ font-display: block;",
                                                       component="span"
                                                     >
                                                       <span
-                                                        className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-126 MuiTypography-body1"
+                                                        className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-124 MuiTypography-body1"
                                                       >
                                                         Control
                                                       </span>
@@ -9020,29 +9020,29 @@ font-display: block;",
         <ThirdPartyPermissions
           classes={
             Object {
-              "agentAddButton": "makeStyles-agentAddButton-78",
-              "agentInput": "makeStyles-agentInput-77",
-              "avatar": "makeStyles-avatar-68",
-              "centeredSection": "makeStyles-centeredSection-69",
-              "content": "makeStyles-content-90",
-              "content-blockquote": "makeStyles-content-blockquote-88",
-              "content-h1": "makeStyles-content-h1-80",
-              "content-h2": "makeStyles-content-h2-81",
-              "content-h3": "makeStyles-content-h3-82",
-              "content-h4": "makeStyles-content-h4-83",
-              "content-h5": "makeStyles-content-h5-84",
-              "content-h6": "makeStyles-content-h6-85",
-              "content-ol": "makeStyles-content-ol-87",
-              "content-p": "makeStyles-content-p-89",
-              "content-ul": "makeStyles-content-ul-86",
-              "detailText": "makeStyles-detailText-74",
-              "downloadButton": "makeStyles-downloadButton-76",
-              "formListItem": "makeStyles-formListItem-73",
-              "headerSection": "makeStyles-headerSection-70",
-              "image": "makeStyles-image-79",
-              "listItem": "makeStyles-listItem-72",
-              "raw": "makeStyles-raw-71",
-              "typeValue": "makeStyles-typeValue-75",
+              "agentAddButton": "makeStyles-agentAddButton-76",
+              "agentInput": "makeStyles-agentInput-75",
+              "avatar": "makeStyles-avatar-66",
+              "centeredSection": "makeStyles-centeredSection-67",
+              "content": "makeStyles-content-88",
+              "content-blockquote": "makeStyles-content-blockquote-86",
+              "content-h1": "makeStyles-content-h1-78",
+              "content-h2": "makeStyles-content-h2-79",
+              "content-h3": "makeStyles-content-h3-80",
+              "content-h4": "makeStyles-content-h4-81",
+              "content-h5": "makeStyles-content-h5-82",
+              "content-h6": "makeStyles-content-h6-83",
+              "content-ol": "makeStyles-content-ol-85",
+              "content-p": "makeStyles-content-p-87",
+              "content-ul": "makeStyles-content-ul-84",
+              "detailText": "makeStyles-detailText-72",
+              "downloadButton": "makeStyles-downloadButton-74",
+              "formListItem": "makeStyles-formListItem-71",
+              "headerSection": "makeStyles-headerSection-68",
+              "image": "makeStyles-image-77",
+              "listItem": "makeStyles-listItem-70",
+              "raw": "makeStyles-raw-69",
+              "typeValue": "makeStyles-typeValue-73",
             }
           }
           iri="/iri/"
@@ -9067,10 +9067,10 @@ font-display: block;",
           }
         >
           <section
-            className="makeStyles-centeredSection-69"
+            className="makeStyles-centeredSection-67"
           >
             <h5
-              className="makeStyles-content-h5-84"
+              className="makeStyles-content-h5-82"
             >
               Sharing
             </h5>
@@ -9089,11 +9089,11 @@ font-display: block;",
                   className="MuiList-root MuiList-padding"
                 >
                   <WithStyles(ForwardRef(ListItem))
-                    className="makeStyles-listItem-72"
+                    className="makeStyles-listItem-70"
                     key="0"
                   >
                     <ForwardRef(ListItem)
-                      className="makeStyles-listItem-72"
+                      className="makeStyles-listItem-70"
                       classes={
                         Object {
                           "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -9111,7 +9111,7 @@ font-display: block;",
                       }
                     >
                       <li
-                        className="MuiListItem-root makeStyles-listItem-72 MuiListItem-gutters"
+                        className="MuiListItem-root makeStyles-listItem-70 MuiListItem-gutters"
                         disabled={false}
                       >
                         <WithStyles(ForwardRef(ListItemIcon))
@@ -9187,29 +9187,29 @@ font-display: block;",
                   <AgentAccessList
                     classes={
                       Object {
-                        "agentAddButton": "makeStyles-agentAddButton-78",
-                        "agentInput": "makeStyles-agentInput-77",
-                        "avatar": "makeStyles-avatar-68",
-                        "centeredSection": "makeStyles-centeredSection-69",
-                        "content": "makeStyles-content-90",
-                        "content-blockquote": "makeStyles-content-blockquote-88",
-                        "content-h1": "makeStyles-content-h1-80",
-                        "content-h2": "makeStyles-content-h2-81",
-                        "content-h3": "makeStyles-content-h3-82",
-                        "content-h4": "makeStyles-content-h4-83",
-                        "content-h5": "makeStyles-content-h5-84",
-                        "content-h6": "makeStyles-content-h6-85",
-                        "content-ol": "makeStyles-content-ol-87",
-                        "content-p": "makeStyles-content-p-89",
-                        "content-ul": "makeStyles-content-ul-86",
-                        "detailText": "makeStyles-detailText-74",
-                        "downloadButton": "makeStyles-downloadButton-76",
-                        "formListItem": "makeStyles-formListItem-73",
-                        "headerSection": "makeStyles-headerSection-70",
-                        "image": "makeStyles-image-79",
-                        "listItem": "makeStyles-listItem-72",
-                        "raw": "makeStyles-raw-71",
-                        "typeValue": "makeStyles-typeValue-75",
+                        "agentAddButton": "makeStyles-agentAddButton-76",
+                        "agentInput": "makeStyles-agentInput-75",
+                        "avatar": "makeStyles-avatar-66",
+                        "centeredSection": "makeStyles-centeredSection-67",
+                        "content": "makeStyles-content-88",
+                        "content-blockquote": "makeStyles-content-blockquote-86",
+                        "content-h1": "makeStyles-content-h1-78",
+                        "content-h2": "makeStyles-content-h2-79",
+                        "content-h3": "makeStyles-content-h3-80",
+                        "content-h4": "makeStyles-content-h4-81",
+                        "content-h5": "makeStyles-content-h5-82",
+                        "content-h6": "makeStyles-content-h6-83",
+                        "content-ol": "makeStyles-content-ol-85",
+                        "content-p": "makeStyles-content-p-87",
+                        "content-ul": "makeStyles-content-ul-84",
+                        "detailText": "makeStyles-detailText-72",
+                        "downloadButton": "makeStyles-downloadButton-74",
+                        "formListItem": "makeStyles-formListItem-71",
+                        "headerSection": "makeStyles-headerSection-68",
+                        "image": "makeStyles-image-77",
+                        "listItem": "makeStyles-listItem-70",
+                        "raw": "makeStyles-raw-69",
+                        "typeValue": "makeStyles-typeValue-73",
                       }
                     }
                     iri="/iri/"
@@ -9251,11 +9251,11 @@ font-display: block;",
                           className="MuiList-root MuiList-padding"
                         >
                           <WithStyles(ForwardRef(ListItem))
-                            className="makeStyles-listItem-95"
+                            className="makeStyles-listItem-93"
                             key="collaborator"
                           >
                             <ForwardRef(ListItem)
-                              className="makeStyles-listItem-95"
+                              className="makeStyles-listItem-93"
                               classes={
                                 Object {
                                   "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -9273,18 +9273,18 @@ font-display: block;",
                               }
                             >
                               <li
-                                className="MuiListItem-root makeStyles-listItem-95 MuiListItem-gutters"
+                                className="MuiListItem-root makeStyles-listItem-93 MuiListItem-gutters"
                                 disabled={false}
                               >
                                 <WithStyles(ForwardRef(Avatar))
                                   alt="collaborator"
-                                  className="makeStyles-avatar-91"
+                                  className="makeStyles-avatar-89"
                                   key=".0"
                                   src="/avatar"
                                 >
                                   <ForwardRef(Avatar)
                                     alt="collaborator"
-                                    className="makeStyles-avatar-91"
+                                    className="makeStyles-avatar-89"
                                     classes={
                                       Object {
                                         "circle": "MuiAvatar-circle",
@@ -9299,7 +9299,7 @@ font-display: block;",
                                     src="/avatar"
                                   >
                                     <div
-                                      className="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-91"
+                                      className="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-89"
                                     >
                                       <img
                                         alt="collaborator"
@@ -9310,11 +9310,11 @@ font-display: block;",
                                   </ForwardRef(Avatar)>
                                 </WithStyles(ForwardRef(Avatar))>
                                 <WithStyles(ForwardRef(Typography))
-                                  className="makeStyles-detailText-97"
+                                  className="makeStyles-detailText-95"
                                   key=".1"
                                 >
                                   <ForwardRef(Typography)
-                                    className="makeStyles-detailText-97"
+                                    className="makeStyles-detailText-95"
                                     classes={
                                       Object {
                                         "alignCenter": "MuiTypography-alignCenter",
@@ -9351,7 +9351,7 @@ font-display: block;",
                                     }
                                   >
                                     <p
-                                      className="MuiTypography-root makeStyles-detailText-97 MuiTypography-body1"
+                                      className="MuiTypography-root makeStyles-detailText-95 MuiTypography-body1"
                                     >
                                       collaborator
                                     </p>
@@ -9379,15 +9379,15 @@ font-display: block;",
                                   warnOnSubmit={false}
                                 >
                                   <div
-                                    className="makeStyles-container-114"
+                                    className="makeStyles-container-112"
                                   >
                                     <WithStyles(ForwardRef(Button))
-                                      className="makeStyles-summary-118"
+                                      className="makeStyles-summary-116"
                                       endIcon={<Memo(KeyboardArrowDownIcon) />}
                                       onClick={[Function]}
                                     >
                                       <ForwardRef(Button)
-                                        className="makeStyles-summary-118"
+                                        className="makeStyles-summary-116"
                                         classes={
                                           Object {
                                             "colorInherit": "MuiButton-colorInherit",
@@ -9425,7 +9425,7 @@ font-display: block;",
                                         onClick={[Function]}
                                       >
                                         <WithStyles(ForwardRef(ButtonBase))
-                                          className="MuiButton-root MuiButton-text makeStyles-summary-118"
+                                          className="MuiButton-root MuiButton-text makeStyles-summary-116"
                                           component="button"
                                           disabled={false}
                                           focusRipple={true}
@@ -9434,7 +9434,7 @@ font-display: block;",
                                           type="button"
                                         >
                                           <ForwardRef(ButtonBase)
-                                            className="MuiButton-root MuiButton-text makeStyles-summary-118"
+                                            className="MuiButton-root MuiButton-text makeStyles-summary-116"
                                             classes={
                                               Object {
                                                 "disabled": "Mui-disabled",
@@ -9450,7 +9450,7 @@ font-display: block;",
                                             type="button"
                                           >
                                             <button
-                                              className="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-summary-118"
+                                              className="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-summary-116"
                                               disabled={false}
                                               onBlur={[Function]}
                                               onClick={[Function]}
@@ -9542,7 +9542,7 @@ font-display: block;",
                                       </ForwardRef(Button)>
                                     </WithStyles(ForwardRef(Button))>
                                     <section
-                                      className="makeStyles-selectionClosed-116"
+                                      className="makeStyles-selectionClosed-114"
                                     >
                                       <WithStyles(ForwardRef(List))>
                                         <ForwardRef(List)
@@ -9561,13 +9561,13 @@ font-display: block;",
                                             <PermissionCheckbox
                                               classes={
                                                 Object {
-                                                  "checkbox": "makeStyles-checkbox-120",
-                                                  "container": "makeStyles-container-114",
-                                                  "label": "makeStyles-label-119",
-                                                  "listItem": "makeStyles-listItem-115",
-                                                  "selectionClosed": "makeStyles-selectionClosed-116",
-                                                  "selectionOpen": "makeStyles-selectionOpen-117",
-                                                  "summary": "makeStyles-summary-118",
+                                                  "checkbox": "makeStyles-checkbox-118",
+                                                  "container": "makeStyles-container-112",
+                                                  "label": "makeStyles-label-117",
+                                                  "listItem": "makeStyles-listItem-113",
+                                                  "selectionClosed": "makeStyles-selectionClosed-114",
+                                                  "selectionOpen": "makeStyles-selectionOpen-115",
+                                                  "summary": "makeStyles-summary-116",
                                                 }
                                               }
                                               label="View"
@@ -9575,10 +9575,10 @@ font-display: block;",
                                               value={true}
                                             >
                                               <WithStyles(ForwardRef(ListItem))
-                                                className="makeStyles-listItem-122"
+                                                className="makeStyles-listItem-120"
                                               >
                                                 <ForwardRef(ListItem)
-                                                  className="makeStyles-listItem-122"
+                                                  className="makeStyles-listItem-120"
                                                   classes={
                                                     Object {
                                                       "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -9596,13 +9596,13 @@ font-display: block;",
                                                   }
                                                 >
                                                   <li
-                                                    className="MuiListItem-root makeStyles-listItem-122 MuiListItem-gutters"
+                                                    className="MuiListItem-root makeStyles-listItem-120 MuiListItem-gutters"
                                                     disabled={false}
                                                   >
                                                     <WithStyles(ForwardRef(FormControlLabel))
                                                       classes={
                                                         Object {
-                                                          "label": "makeStyles-label-126",
+                                                          "label": "makeStyles-label-124",
                                                         }
                                                       }
                                                       control={
@@ -9610,7 +9610,7 @@ font-display: block;",
                                                           checked={true}
                                                           classes={
                                                             Object {
-                                                              "root": "makeStyles-checkbox-127",
+                                                              "root": "makeStyles-checkbox-125",
                                                             }
                                                           }
                                                           name="view"
@@ -9624,7 +9624,7 @@ font-display: block;",
                                                         classes={
                                                           Object {
                                                             "disabled": "Mui-disabled",
-                                                            "label": "MuiFormControlLabel-label makeStyles-label-126",
+                                                            "label": "MuiFormControlLabel-label makeStyles-label-124",
                                                             "labelPlacementBottom": "MuiFormControlLabel-labelPlacementBottom",
                                                             "labelPlacementStart": "MuiFormControlLabel-labelPlacementStart",
                                                             "labelPlacementTop": "MuiFormControlLabel-labelPlacementTop",
@@ -9636,7 +9636,7 @@ font-display: block;",
                                                             checked={true}
                                                             classes={
                                                               Object {
-                                                                "root": "makeStyles-checkbox-127",
+                                                                "root": "makeStyles-checkbox-125",
                                                               }
                                                             }
                                                             name="view"
@@ -9652,7 +9652,7 @@ font-display: block;",
                                                             checked={true}
                                                             classes={
                                                               Object {
-                                                                "root": "makeStyles-checkbox-127",
+                                                                "root": "makeStyles-checkbox-125",
                                                               }
                                                             }
                                                             name="view"
@@ -9667,7 +9667,7 @@ font-display: block;",
                                                                   "colorSecondary": "MuiCheckbox-colorSecondary",
                                                                   "disabled": "Mui-disabled",
                                                                   "indeterminate": "MuiCheckbox-indeterminate",
-                                                                  "root": "MuiCheckbox-root makeStyles-checkbox-127",
+                                                                  "root": "MuiCheckbox-root makeStyles-checkbox-125",
                                                                 }
                                                               }
                                                               name="view"
@@ -9680,7 +9680,7 @@ font-display: block;",
                                                                   Object {
                                                                     "checked": "Mui-checked",
                                                                     "disabled": "Mui-disabled",
-                                                                    "root": "MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary",
+                                                                    "root": "MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary",
                                                                   }
                                                                 }
                                                                 color="secondary"
@@ -9699,10 +9699,10 @@ font-display: block;",
                                                                   checkedIcon={<Memo />}
                                                                   classes={
                                                                     Object {
-                                                                      "checked": "PrivateSwitchBase-checked-129 Mui-checked",
-                                                                      "disabled": "PrivateSwitchBase-disabled-130 Mui-disabled",
-                                                                      "input": "PrivateSwitchBase-input-131",
-                                                                      "root": "PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary",
+                                                                      "checked": "PrivateSwitchBase-checked-127 Mui-checked",
+                                                                      "disabled": "PrivateSwitchBase-disabled-128 Mui-disabled",
+                                                                      "input": "PrivateSwitchBase-input-129",
+                                                                      "root": "PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary",
                                                                     }
                                                                   }
                                                                   color="secondary"
@@ -9717,7 +9717,7 @@ font-display: block;",
                                                                   type="checkbox"
                                                                 >
                                                                   <WithStyles(ForwardRef(IconButton))
-                                                                    className="PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked"
+                                                                    className="PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked"
                                                                     color="secondary"
                                                                     component="span"
                                                                     onBlur={[Function]}
@@ -9725,7 +9725,7 @@ font-display: block;",
                                                                     tabIndex={null}
                                                                   >
                                                                     <ForwardRef(IconButton)
-                                                                      className="PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked"
+                                                                      className="PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked"
                                                                       classes={
                                                                         Object {
                                                                           "colorInherit": "MuiIconButton-colorInherit",
@@ -9747,7 +9747,7 @@ font-display: block;",
                                                                     >
                                                                       <WithStyles(ForwardRef(ButtonBase))
                                                                         centerRipple={true}
-                                                                        className="MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                        className="MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                         component="span"
                                                                         disabled={false}
                                                                         focusRipple={true}
@@ -9757,7 +9757,7 @@ font-display: block;",
                                                                       >
                                                                         <ForwardRef(ButtonBase)
                                                                           centerRipple={true}
-                                                                          className="MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                          className="MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                           classes={
                                                                             Object {
                                                                               "disabled": "Mui-disabled",
@@ -9774,7 +9774,7 @@ font-display: block;",
                                                                         >
                                                                           <span
                                                                             aria-disabled={false}
-                                                                            className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                            className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                             onBlur={[Function]}
                                                                             onDragLeave={[Function]}
                                                                             onFocus={[Function]}
@@ -9793,7 +9793,7 @@ font-display: block;",
                                                                             >
                                                                               <input
                                                                                 checked={true}
-                                                                                className="PrivateSwitchBase-input-131"
+                                                                                className="PrivateSwitchBase-input-129"
                                                                                 data-indeterminate={false}
                                                                                 name="view"
                                                                                 onChange={[Function]}
@@ -9868,11 +9868,11 @@ font-display: block;",
                                                             </ForwardRef(Checkbox)>
                                                           </WithStyles(ForwardRef(Checkbox))>
                                                           <WithStyles(ForwardRef(Typography))
-                                                            className="MuiFormControlLabel-label makeStyles-label-126"
+                                                            className="MuiFormControlLabel-label makeStyles-label-124"
                                                             component="span"
                                                           >
                                                             <ForwardRef(Typography)
-                                                              className="MuiFormControlLabel-label makeStyles-label-126"
+                                                              className="MuiFormControlLabel-label makeStyles-label-124"
                                                               classes={
                                                                 Object {
                                                                   "alignCenter": "MuiTypography-alignCenter",
@@ -9910,7 +9910,7 @@ font-display: block;",
                                                               component="span"
                                                             >
                                                               <span
-                                                                className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-126 MuiTypography-body1"
+                                                                className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-124 MuiTypography-body1"
                                                               >
                                                                 View
                                                               </span>
@@ -9926,13 +9926,13 @@ font-display: block;",
                                             <PermissionCheckbox
                                               classes={
                                                 Object {
-                                                  "checkbox": "makeStyles-checkbox-120",
-                                                  "container": "makeStyles-container-114",
-                                                  "label": "makeStyles-label-119",
-                                                  "listItem": "makeStyles-listItem-115",
-                                                  "selectionClosed": "makeStyles-selectionClosed-116",
-                                                  "selectionOpen": "makeStyles-selectionOpen-117",
-                                                  "summary": "makeStyles-summary-118",
+                                                  "checkbox": "makeStyles-checkbox-118",
+                                                  "container": "makeStyles-container-112",
+                                                  "label": "makeStyles-label-117",
+                                                  "listItem": "makeStyles-listItem-113",
+                                                  "selectionClosed": "makeStyles-selectionClosed-114",
+                                                  "selectionOpen": "makeStyles-selectionOpen-115",
+                                                  "summary": "makeStyles-summary-116",
                                                 }
                                               }
                                               label="Edit"
@@ -9940,10 +9940,10 @@ font-display: block;",
                                               value={true}
                                             >
                                               <WithStyles(ForwardRef(ListItem))
-                                                className="makeStyles-listItem-122"
+                                                className="makeStyles-listItem-120"
                                               >
                                                 <ForwardRef(ListItem)
-                                                  className="makeStyles-listItem-122"
+                                                  className="makeStyles-listItem-120"
                                                   classes={
                                                     Object {
                                                       "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -9961,13 +9961,13 @@ font-display: block;",
                                                   }
                                                 >
                                                   <li
-                                                    className="MuiListItem-root makeStyles-listItem-122 MuiListItem-gutters"
+                                                    className="MuiListItem-root makeStyles-listItem-120 MuiListItem-gutters"
                                                     disabled={false}
                                                   >
                                                     <WithStyles(ForwardRef(FormControlLabel))
                                                       classes={
                                                         Object {
-                                                          "label": "makeStyles-label-126",
+                                                          "label": "makeStyles-label-124",
                                                         }
                                                       }
                                                       control={
@@ -9975,7 +9975,7 @@ font-display: block;",
                                                           checked={true}
                                                           classes={
                                                             Object {
-                                                              "root": "makeStyles-checkbox-127",
+                                                              "root": "makeStyles-checkbox-125",
                                                             }
                                                           }
                                                           name="edit"
@@ -9989,7 +9989,7 @@ font-display: block;",
                                                         classes={
                                                           Object {
                                                             "disabled": "Mui-disabled",
-                                                            "label": "MuiFormControlLabel-label makeStyles-label-126",
+                                                            "label": "MuiFormControlLabel-label makeStyles-label-124",
                                                             "labelPlacementBottom": "MuiFormControlLabel-labelPlacementBottom",
                                                             "labelPlacementStart": "MuiFormControlLabel-labelPlacementStart",
                                                             "labelPlacementTop": "MuiFormControlLabel-labelPlacementTop",
@@ -10001,7 +10001,7 @@ font-display: block;",
                                                             checked={true}
                                                             classes={
                                                               Object {
-                                                                "root": "makeStyles-checkbox-127",
+                                                                "root": "makeStyles-checkbox-125",
                                                               }
                                                             }
                                                             name="edit"
@@ -10017,7 +10017,7 @@ font-display: block;",
                                                             checked={true}
                                                             classes={
                                                               Object {
-                                                                "root": "makeStyles-checkbox-127",
+                                                                "root": "makeStyles-checkbox-125",
                                                               }
                                                             }
                                                             name="edit"
@@ -10032,7 +10032,7 @@ font-display: block;",
                                                                   "colorSecondary": "MuiCheckbox-colorSecondary",
                                                                   "disabled": "Mui-disabled",
                                                                   "indeterminate": "MuiCheckbox-indeterminate",
-                                                                  "root": "MuiCheckbox-root makeStyles-checkbox-127",
+                                                                  "root": "MuiCheckbox-root makeStyles-checkbox-125",
                                                                 }
                                                               }
                                                               name="edit"
@@ -10045,7 +10045,7 @@ font-display: block;",
                                                                   Object {
                                                                     "checked": "Mui-checked",
                                                                     "disabled": "Mui-disabled",
-                                                                    "root": "MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary",
+                                                                    "root": "MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary",
                                                                   }
                                                                 }
                                                                 color="secondary"
@@ -10064,10 +10064,10 @@ font-display: block;",
                                                                   checkedIcon={<Memo />}
                                                                   classes={
                                                                     Object {
-                                                                      "checked": "PrivateSwitchBase-checked-129 Mui-checked",
-                                                                      "disabled": "PrivateSwitchBase-disabled-130 Mui-disabled",
-                                                                      "input": "PrivateSwitchBase-input-131",
-                                                                      "root": "PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary",
+                                                                      "checked": "PrivateSwitchBase-checked-127 Mui-checked",
+                                                                      "disabled": "PrivateSwitchBase-disabled-128 Mui-disabled",
+                                                                      "input": "PrivateSwitchBase-input-129",
+                                                                      "root": "PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary",
                                                                     }
                                                                   }
                                                                   color="secondary"
@@ -10082,7 +10082,7 @@ font-display: block;",
                                                                   type="checkbox"
                                                                 >
                                                                   <WithStyles(ForwardRef(IconButton))
-                                                                    className="PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked"
+                                                                    className="PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked"
                                                                     color="secondary"
                                                                     component="span"
                                                                     onBlur={[Function]}
@@ -10090,7 +10090,7 @@ font-display: block;",
                                                                     tabIndex={null}
                                                                   >
                                                                     <ForwardRef(IconButton)
-                                                                      className="PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked"
+                                                                      className="PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked"
                                                                       classes={
                                                                         Object {
                                                                           "colorInherit": "MuiIconButton-colorInherit",
@@ -10112,7 +10112,7 @@ font-display: block;",
                                                                     >
                                                                       <WithStyles(ForwardRef(ButtonBase))
                                                                         centerRipple={true}
-                                                                        className="MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                        className="MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                         component="span"
                                                                         disabled={false}
                                                                         focusRipple={true}
@@ -10122,7 +10122,7 @@ font-display: block;",
                                                                       >
                                                                         <ForwardRef(ButtonBase)
                                                                           centerRipple={true}
-                                                                          className="MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                          className="MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                           classes={
                                                                             Object {
                                                                               "disabled": "Mui-disabled",
@@ -10139,7 +10139,7 @@ font-display: block;",
                                                                         >
                                                                           <span
                                                                             aria-disabled={false}
-                                                                            className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                            className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                             onBlur={[Function]}
                                                                             onDragLeave={[Function]}
                                                                             onFocus={[Function]}
@@ -10158,7 +10158,7 @@ font-display: block;",
                                                                             >
                                                                               <input
                                                                                 checked={true}
-                                                                                className="PrivateSwitchBase-input-131"
+                                                                                className="PrivateSwitchBase-input-129"
                                                                                 data-indeterminate={false}
                                                                                 name="edit"
                                                                                 onChange={[Function]}
@@ -10233,11 +10233,11 @@ font-display: block;",
                                                             </ForwardRef(Checkbox)>
                                                           </WithStyles(ForwardRef(Checkbox))>
                                                           <WithStyles(ForwardRef(Typography))
-                                                            className="MuiFormControlLabel-label makeStyles-label-126"
+                                                            className="MuiFormControlLabel-label makeStyles-label-124"
                                                             component="span"
                                                           >
                                                             <ForwardRef(Typography)
-                                                              className="MuiFormControlLabel-label makeStyles-label-126"
+                                                              className="MuiFormControlLabel-label makeStyles-label-124"
                                                               classes={
                                                                 Object {
                                                                   "alignCenter": "MuiTypography-alignCenter",
@@ -10275,7 +10275,7 @@ font-display: block;",
                                                               component="span"
                                                             >
                                                               <span
-                                                                className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-126 MuiTypography-body1"
+                                                                className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-124 MuiTypography-body1"
                                                               >
                                                                 Edit
                                                               </span>
@@ -10291,13 +10291,13 @@ font-display: block;",
                                             <PermissionCheckbox
                                               classes={
                                                 Object {
-                                                  "checkbox": "makeStyles-checkbox-120",
-                                                  "container": "makeStyles-container-114",
-                                                  "label": "makeStyles-label-119",
-                                                  "listItem": "makeStyles-listItem-115",
-                                                  "selectionClosed": "makeStyles-selectionClosed-116",
-                                                  "selectionOpen": "makeStyles-selectionOpen-117",
-                                                  "summary": "makeStyles-summary-118",
+                                                  "checkbox": "makeStyles-checkbox-118",
+                                                  "container": "makeStyles-container-112",
+                                                  "label": "makeStyles-label-117",
+                                                  "listItem": "makeStyles-listItem-113",
+                                                  "selectionClosed": "makeStyles-selectionClosed-114",
+                                                  "selectionOpen": "makeStyles-selectionOpen-115",
+                                                  "summary": "makeStyles-summary-116",
                                                 }
                                               }
                                               label="Append"
@@ -10305,10 +10305,10 @@ font-display: block;",
                                               value={true}
                                             >
                                               <WithStyles(ForwardRef(ListItem))
-                                                className="makeStyles-listItem-122"
+                                                className="makeStyles-listItem-120"
                                               >
                                                 <ForwardRef(ListItem)
-                                                  className="makeStyles-listItem-122"
+                                                  className="makeStyles-listItem-120"
                                                   classes={
                                                     Object {
                                                       "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -10326,13 +10326,13 @@ font-display: block;",
                                                   }
                                                 >
                                                   <li
-                                                    className="MuiListItem-root makeStyles-listItem-122 MuiListItem-gutters"
+                                                    className="MuiListItem-root makeStyles-listItem-120 MuiListItem-gutters"
                                                     disabled={false}
                                                   >
                                                     <WithStyles(ForwardRef(FormControlLabel))
                                                       classes={
                                                         Object {
-                                                          "label": "makeStyles-label-126",
+                                                          "label": "makeStyles-label-124",
                                                         }
                                                       }
                                                       control={
@@ -10340,7 +10340,7 @@ font-display: block;",
                                                           checked={true}
                                                           classes={
                                                             Object {
-                                                              "root": "makeStyles-checkbox-127",
+                                                              "root": "makeStyles-checkbox-125",
                                                             }
                                                           }
                                                           name="append"
@@ -10354,7 +10354,7 @@ font-display: block;",
                                                         classes={
                                                           Object {
                                                             "disabled": "Mui-disabled",
-                                                            "label": "MuiFormControlLabel-label makeStyles-label-126",
+                                                            "label": "MuiFormControlLabel-label makeStyles-label-124",
                                                             "labelPlacementBottom": "MuiFormControlLabel-labelPlacementBottom",
                                                             "labelPlacementStart": "MuiFormControlLabel-labelPlacementStart",
                                                             "labelPlacementTop": "MuiFormControlLabel-labelPlacementTop",
@@ -10366,7 +10366,7 @@ font-display: block;",
                                                             checked={true}
                                                             classes={
                                                               Object {
-                                                                "root": "makeStyles-checkbox-127",
+                                                                "root": "makeStyles-checkbox-125",
                                                               }
                                                             }
                                                             name="append"
@@ -10382,7 +10382,7 @@ font-display: block;",
                                                             checked={true}
                                                             classes={
                                                               Object {
-                                                                "root": "makeStyles-checkbox-127",
+                                                                "root": "makeStyles-checkbox-125",
                                                               }
                                                             }
                                                             name="append"
@@ -10397,7 +10397,7 @@ font-display: block;",
                                                                   "colorSecondary": "MuiCheckbox-colorSecondary",
                                                                   "disabled": "Mui-disabled",
                                                                   "indeterminate": "MuiCheckbox-indeterminate",
-                                                                  "root": "MuiCheckbox-root makeStyles-checkbox-127",
+                                                                  "root": "MuiCheckbox-root makeStyles-checkbox-125",
                                                                 }
                                                               }
                                                               name="append"
@@ -10410,7 +10410,7 @@ font-display: block;",
                                                                   Object {
                                                                     "checked": "Mui-checked",
                                                                     "disabled": "Mui-disabled",
-                                                                    "root": "MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary",
+                                                                    "root": "MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary",
                                                                   }
                                                                 }
                                                                 color="secondary"
@@ -10429,10 +10429,10 @@ font-display: block;",
                                                                   checkedIcon={<Memo />}
                                                                   classes={
                                                                     Object {
-                                                                      "checked": "PrivateSwitchBase-checked-129 Mui-checked",
-                                                                      "disabled": "PrivateSwitchBase-disabled-130 Mui-disabled",
-                                                                      "input": "PrivateSwitchBase-input-131",
-                                                                      "root": "PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary",
+                                                                      "checked": "PrivateSwitchBase-checked-127 Mui-checked",
+                                                                      "disabled": "PrivateSwitchBase-disabled-128 Mui-disabled",
+                                                                      "input": "PrivateSwitchBase-input-129",
+                                                                      "root": "PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary",
                                                                     }
                                                                   }
                                                                   color="secondary"
@@ -10447,7 +10447,7 @@ font-display: block;",
                                                                   type="checkbox"
                                                                 >
                                                                   <WithStyles(ForwardRef(IconButton))
-                                                                    className="PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked"
+                                                                    className="PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked"
                                                                     color="secondary"
                                                                     component="span"
                                                                     onBlur={[Function]}
@@ -10455,7 +10455,7 @@ font-display: block;",
                                                                     tabIndex={null}
                                                                   >
                                                                     <ForwardRef(IconButton)
-                                                                      className="PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked"
+                                                                      className="PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked"
                                                                       classes={
                                                                         Object {
                                                                           "colorInherit": "MuiIconButton-colorInherit",
@@ -10477,7 +10477,7 @@ font-display: block;",
                                                                     >
                                                                       <WithStyles(ForwardRef(ButtonBase))
                                                                         centerRipple={true}
-                                                                        className="MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                        className="MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                         component="span"
                                                                         disabled={false}
                                                                         focusRipple={true}
@@ -10487,7 +10487,7 @@ font-display: block;",
                                                                       >
                                                                         <ForwardRef(ButtonBase)
                                                                           centerRipple={true}
-                                                                          className="MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                          className="MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                           classes={
                                                                             Object {
                                                                               "disabled": "Mui-disabled",
@@ -10504,7 +10504,7 @@ font-display: block;",
                                                                         >
                                                                           <span
                                                                             aria-disabled={false}
-                                                                            className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                            className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                             onBlur={[Function]}
                                                                             onDragLeave={[Function]}
                                                                             onFocus={[Function]}
@@ -10523,7 +10523,7 @@ font-display: block;",
                                                                             >
                                                                               <input
                                                                                 checked={true}
-                                                                                className="PrivateSwitchBase-input-131"
+                                                                                className="PrivateSwitchBase-input-129"
                                                                                 data-indeterminate={false}
                                                                                 name="append"
                                                                                 onChange={[Function]}
@@ -10598,11 +10598,11 @@ font-display: block;",
                                                             </ForwardRef(Checkbox)>
                                                           </WithStyles(ForwardRef(Checkbox))>
                                                           <WithStyles(ForwardRef(Typography))
-                                                            className="MuiFormControlLabel-label makeStyles-label-126"
+                                                            className="MuiFormControlLabel-label makeStyles-label-124"
                                                             component="span"
                                                           >
                                                             <ForwardRef(Typography)
-                                                              className="MuiFormControlLabel-label makeStyles-label-126"
+                                                              className="MuiFormControlLabel-label makeStyles-label-124"
                                                               classes={
                                                                 Object {
                                                                   "alignCenter": "MuiTypography-alignCenter",
@@ -10640,7 +10640,7 @@ font-display: block;",
                                                               component="span"
                                                             >
                                                               <span
-                                                                className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-126 MuiTypography-body1"
+                                                                className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-124 MuiTypography-body1"
                                                               >
                                                                 Append
                                                               </span>
@@ -10656,13 +10656,13 @@ font-display: block;",
                                             <PermissionCheckbox
                                               classes={
                                                 Object {
-                                                  "checkbox": "makeStyles-checkbox-120",
-                                                  "container": "makeStyles-container-114",
-                                                  "label": "makeStyles-label-119",
-                                                  "listItem": "makeStyles-listItem-115",
-                                                  "selectionClosed": "makeStyles-selectionClosed-116",
-                                                  "selectionOpen": "makeStyles-selectionOpen-117",
-                                                  "summary": "makeStyles-summary-118",
+                                                  "checkbox": "makeStyles-checkbox-118",
+                                                  "container": "makeStyles-container-112",
+                                                  "label": "makeStyles-label-117",
+                                                  "listItem": "makeStyles-listItem-113",
+                                                  "selectionClosed": "makeStyles-selectionClosed-114",
+                                                  "selectionOpen": "makeStyles-selectionOpen-115",
+                                                  "summary": "makeStyles-summary-116",
                                                 }
                                               }
                                               label="Control"
@@ -10670,10 +10670,10 @@ font-display: block;",
                                               value={true}
                                             >
                                               <WithStyles(ForwardRef(ListItem))
-                                                className="makeStyles-listItem-122"
+                                                className="makeStyles-listItem-120"
                                               >
                                                 <ForwardRef(ListItem)
-                                                  className="makeStyles-listItem-122"
+                                                  className="makeStyles-listItem-120"
                                                   classes={
                                                     Object {
                                                       "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -10691,13 +10691,13 @@ font-display: block;",
                                                   }
                                                 >
                                                   <li
-                                                    className="MuiListItem-root makeStyles-listItem-122 MuiListItem-gutters"
+                                                    className="MuiListItem-root makeStyles-listItem-120 MuiListItem-gutters"
                                                     disabled={false}
                                                   >
                                                     <WithStyles(ForwardRef(FormControlLabel))
                                                       classes={
                                                         Object {
-                                                          "label": "makeStyles-label-126",
+                                                          "label": "makeStyles-label-124",
                                                         }
                                                       }
                                                       control={
@@ -10705,7 +10705,7 @@ font-display: block;",
                                                           checked={true}
                                                           classes={
                                                             Object {
-                                                              "root": "makeStyles-checkbox-127",
+                                                              "root": "makeStyles-checkbox-125",
                                                             }
                                                           }
                                                           name="control"
@@ -10719,7 +10719,7 @@ font-display: block;",
                                                         classes={
                                                           Object {
                                                             "disabled": "Mui-disabled",
-                                                            "label": "MuiFormControlLabel-label makeStyles-label-126",
+                                                            "label": "MuiFormControlLabel-label makeStyles-label-124",
                                                             "labelPlacementBottom": "MuiFormControlLabel-labelPlacementBottom",
                                                             "labelPlacementStart": "MuiFormControlLabel-labelPlacementStart",
                                                             "labelPlacementTop": "MuiFormControlLabel-labelPlacementTop",
@@ -10731,7 +10731,7 @@ font-display: block;",
                                                             checked={true}
                                                             classes={
                                                               Object {
-                                                                "root": "makeStyles-checkbox-127",
+                                                                "root": "makeStyles-checkbox-125",
                                                               }
                                                             }
                                                             name="control"
@@ -10747,7 +10747,7 @@ font-display: block;",
                                                             checked={true}
                                                             classes={
                                                               Object {
-                                                                "root": "makeStyles-checkbox-127",
+                                                                "root": "makeStyles-checkbox-125",
                                                               }
                                                             }
                                                             name="control"
@@ -10762,7 +10762,7 @@ font-display: block;",
                                                                   "colorSecondary": "MuiCheckbox-colorSecondary",
                                                                   "disabled": "Mui-disabled",
                                                                   "indeterminate": "MuiCheckbox-indeterminate",
-                                                                  "root": "MuiCheckbox-root makeStyles-checkbox-127",
+                                                                  "root": "MuiCheckbox-root makeStyles-checkbox-125",
                                                                 }
                                                               }
                                                               name="control"
@@ -10775,7 +10775,7 @@ font-display: block;",
                                                                   Object {
                                                                     "checked": "Mui-checked",
                                                                     "disabled": "Mui-disabled",
-                                                                    "root": "MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary",
+                                                                    "root": "MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary",
                                                                   }
                                                                 }
                                                                 color="secondary"
@@ -10794,10 +10794,10 @@ font-display: block;",
                                                                   checkedIcon={<Memo />}
                                                                   classes={
                                                                     Object {
-                                                                      "checked": "PrivateSwitchBase-checked-129 Mui-checked",
-                                                                      "disabled": "PrivateSwitchBase-disabled-130 Mui-disabled",
-                                                                      "input": "PrivateSwitchBase-input-131",
-                                                                      "root": "PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary",
+                                                                      "checked": "PrivateSwitchBase-checked-127 Mui-checked",
+                                                                      "disabled": "PrivateSwitchBase-disabled-128 Mui-disabled",
+                                                                      "input": "PrivateSwitchBase-input-129",
+                                                                      "root": "PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary",
                                                                     }
                                                                   }
                                                                   color="secondary"
@@ -10812,7 +10812,7 @@ font-display: block;",
                                                                   type="checkbox"
                                                                 >
                                                                   <WithStyles(ForwardRef(IconButton))
-                                                                    className="PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked"
+                                                                    className="PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked"
                                                                     color="secondary"
                                                                     component="span"
                                                                     onBlur={[Function]}
@@ -10820,7 +10820,7 @@ font-display: block;",
                                                                     tabIndex={null}
                                                                   >
                                                                     <ForwardRef(IconButton)
-                                                                      className="PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked"
+                                                                      className="PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked"
                                                                       classes={
                                                                         Object {
                                                                           "colorInherit": "MuiIconButton-colorInherit",
@@ -10842,7 +10842,7 @@ font-display: block;",
                                                                     >
                                                                       <WithStyles(ForwardRef(ButtonBase))
                                                                         centerRipple={true}
-                                                                        className="MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                        className="MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                         component="span"
                                                                         disabled={false}
                                                                         focusRipple={true}
@@ -10852,7 +10852,7 @@ font-display: block;",
                                                                       >
                                                                         <ForwardRef(ButtonBase)
                                                                           centerRipple={true}
-                                                                          className="MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                          className="MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                           classes={
                                                                             Object {
                                                                               "disabled": "Mui-disabled",
@@ -10869,7 +10869,7 @@ font-display: block;",
                                                                         >
                                                                           <span
                                                                             aria-disabled={false}
-                                                                            className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-128 MuiCheckbox-root makeStyles-checkbox-127 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-129 Mui-checked MuiIconButton-colorSecondary"
+                                                                            className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-126 MuiCheckbox-root makeStyles-checkbox-125 MuiCheckbox-colorSecondary PrivateSwitchBase-checked-127 Mui-checked MuiIconButton-colorSecondary"
                                                                             onBlur={[Function]}
                                                                             onDragLeave={[Function]}
                                                                             onFocus={[Function]}
@@ -10888,7 +10888,7 @@ font-display: block;",
                                                                             >
                                                                               <input
                                                                                 checked={true}
-                                                                                className="PrivateSwitchBase-input-131"
+                                                                                className="PrivateSwitchBase-input-129"
                                                                                 data-indeterminate={false}
                                                                                 name="control"
                                                                                 onChange={[Function]}
@@ -10963,11 +10963,11 @@ font-display: block;",
                                                             </ForwardRef(Checkbox)>
                                                           </WithStyles(ForwardRef(Checkbox))>
                                                           <WithStyles(ForwardRef(Typography))
-                                                            className="MuiFormControlLabel-label makeStyles-label-126"
+                                                            className="MuiFormControlLabel-label makeStyles-label-124"
                                                             component="span"
                                                           >
                                                             <ForwardRef(Typography)
-                                                              className="MuiFormControlLabel-label makeStyles-label-126"
+                                                              className="MuiFormControlLabel-label makeStyles-label-124"
                                                               classes={
                                                                 Object {
                                                                   "alignCenter": "MuiTypography-alignCenter",
@@ -11005,7 +11005,7 @@ font-display: block;",
                                                               component="span"
                                                             >
                                                               <span
-                                                                className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-126 MuiTypography-body1"
+                                                                className="MuiTypography-root MuiFormControlLabel-label makeStyles-label-124 MuiTypography-body1"
                                                               >
                                                                 Control
                                                               </span>
@@ -11178,22 +11178,22 @@ font-display: block;",
           </ForwardRef(Divider)>
         </WithStyles(ForwardRef(Divider))>
         <section
-          className="makeStyles-centeredSection-69"
+          className="makeStyles-centeredSection-67"
         >
           <AgentSearchForm
             heading="Grant Permission"
             onSubmit={[Function]}
           >
             <h5
-              className="makeStyles-content-h5-148"
+              className="makeStyles-content-h5-146"
             >
               Grant Permission
             </h5>
             <WithStyles(ForwardRef(FormControl))
-              className="makeStyles-agentInput-141"
+              className="makeStyles-agentInput-139"
             >
               <ForwardRef(FormControl)
-                className="makeStyles-agentInput-141"
+                className="makeStyles-agentInput-139"
                 classes={
                   Object {
                     "fullWidth": "MuiFormControl-fullWidth",
@@ -11204,7 +11204,7 @@ font-display: block;",
                 }
               >
                 <div
-                  className="MuiFormControl-root makeStyles-agentInput-141"
+                  className="MuiFormControl-root makeStyles-agentInput-139"
                 >
                   <WithStyles(ForwardRef(InputLabel))
                     htmlFor={
@@ -11503,12 +11503,12 @@ font-display: block;",
               </ForwardRef(FormControl)>
             </WithStyles(ForwardRef(FormControl))>
             <WithStyles(ForwardRef(Button))
-              className="makeStyles-agentAddButton-142"
+              className="makeStyles-agentAddButton-140"
               onClick={[Function]}
               variant="contained"
             >
               <ForwardRef(Button)
-                className="makeStyles-agentAddButton-142"
+                className="makeStyles-agentAddButton-140"
                 classes={
                   Object {
                     "colorInherit": "MuiButton-colorInherit",
@@ -11546,7 +11546,7 @@ font-display: block;",
                 variant="contained"
               >
                 <WithStyles(ForwardRef(ButtonBase))
-                  className="MuiButton-root MuiButton-contained makeStyles-agentAddButton-142"
+                  className="MuiButton-root MuiButton-contained makeStyles-agentAddButton-140"
                   component="button"
                   disabled={false}
                   focusRipple={true}
@@ -11555,7 +11555,7 @@ font-display: block;",
                   type="button"
                 >
                   <ForwardRef(ButtonBase)
-                    className="MuiButton-root MuiButton-contained makeStyles-agentAddButton-142"
+                    className="MuiButton-root MuiButton-contained makeStyles-agentAddButton-140"
                     classes={
                       Object {
                         "disabled": "Mui-disabled",
@@ -11571,7 +11571,7 @@ font-display: block;",
                     type="button"
                   >
                     <button
-                      className="MuiButtonBase-root MuiButton-root MuiButton-contained makeStyles-agentAddButton-142"
+                      className="MuiButtonBase-root MuiButton-root MuiButton-contained makeStyles-agentAddButton-140"
                       disabled={false}
                       onBlur={[Function]}
                       onClick={[Function]}
@@ -11629,7 +11629,7 @@ font-display: block;",
           </AgentSearchForm>
         </section>
         <section
-          className="makeStyles-centeredSection-69"
+          className="makeStyles-centeredSection-67"
         >
           <AgentAccessList
             iri="/iri/"
@@ -11660,10 +11660,10 @@ font-display: block;",
           </ForwardRef(Divider)>
         </WithStyles(ForwardRef(Divider))>
         <section
-          className="makeStyles-centeredSection-69"
+          className="makeStyles-centeredSection-67"
         >
           <h5
-            className="makeStyles-content-h5-84"
+            className="makeStyles-content-h5-82"
           >
             Default Access
           </h5>
@@ -11682,11 +11682,11 @@ font-display: block;",
                 className="MuiList-root MuiList-padding"
               >
                 <WithStyles(ForwardRef(ListItem))
-                  className="makeStyles-listItem-72"
+                  className="makeStyles-listItem-70"
                   key="0"
                 >
                   <ForwardRef(ListItem)
-                    className="makeStyles-listItem-72"
+                    className="makeStyles-listItem-70"
                     classes={
                       Object {
                         "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -11704,7 +11704,7 @@ font-display: block;",
                     }
                   >
                     <li
-                      className="MuiListItem-root makeStyles-listItem-72 MuiListItem-gutters"
+                      className="MuiListItem-root makeStyles-listItem-70 MuiListItem-gutters"
                       disabled={false}
                     >
                       <WithStyles(ForwardRef(ListItemIcon))
@@ -11813,15 +11813,15 @@ font-display: block;",
               onSubmit={[Function]}
             >
               <h5
-                className="makeStyles-content-h5-148"
+                className="makeStyles-content-h5-146"
               >
                 Grant Default Access
               </h5>
               <WithStyles(ForwardRef(FormControl))
-                className="makeStyles-agentInput-141"
+                className="makeStyles-agentInput-139"
               >
                 <ForwardRef(FormControl)
-                  className="makeStyles-agentInput-141"
+                  className="makeStyles-agentInput-139"
                   classes={
                     Object {
                       "fullWidth": "MuiFormControl-fullWidth",
@@ -11832,7 +11832,7 @@ font-display: block;",
                   }
                 >
                   <div
-                    className="MuiFormControl-root makeStyles-agentInput-141"
+                    className="MuiFormControl-root makeStyles-agentInput-139"
                   >
                     <WithStyles(ForwardRef(InputLabel))
                       htmlFor={
@@ -12131,12 +12131,12 @@ font-display: block;",
                 </ForwardRef(FormControl)>
               </WithStyles(ForwardRef(FormControl))>
               <WithStyles(ForwardRef(Button))
-                className="makeStyles-agentAddButton-142"
+                className="makeStyles-agentAddButton-140"
                 onClick={[Function]}
                 variant="contained"
               >
                 <ForwardRef(Button)
-                  className="makeStyles-agentAddButton-142"
+                  className="makeStyles-agentAddButton-140"
                   classes={
                     Object {
                       "colorInherit": "MuiButton-colorInherit",
@@ -12174,7 +12174,7 @@ font-display: block;",
                   variant="contained"
                 >
                   <WithStyles(ForwardRef(ButtonBase))
-                    className="MuiButton-root MuiButton-contained makeStyles-agentAddButton-142"
+                    className="MuiButton-root MuiButton-contained makeStyles-agentAddButton-140"
                     component="button"
                     disabled={false}
                     focusRipple={true}
@@ -12183,7 +12183,7 @@ font-display: block;",
                     type="button"
                   >
                     <ForwardRef(ButtonBase)
-                      className="MuiButton-root MuiButton-contained makeStyles-agentAddButton-142"
+                      className="MuiButton-root MuiButton-contained makeStyles-agentAddButton-140"
                       classes={
                         Object {
                           "disabled": "Mui-disabled",
@@ -12199,7 +12199,7 @@ font-display: block;",
                       type="button"
                     >
                       <button
-                        className="MuiButtonBase-root MuiButton-root MuiButton-contained makeStyles-agentAddButton-142"
+                        className="MuiButtonBase-root MuiButton-root MuiButton-contained makeStyles-agentAddButton-140"
                         disabled={false}
                         onBlur={[Function]}
                         onClick={[Function]}
@@ -13137,7 +13137,7 @@ font-display: block;",
         name="/iri/"
       >
         <section
-          className="makeStyles-headerSection-24"
+          className="makeStyles-headerSection-22"
         >
           <WithStyles(ForwardRef(Button))
             onClick={[Function]}
@@ -13296,7 +13296,7 @@ font-display: block;",
             </ForwardRef(Button)>
           </WithStyles(ForwardRef(Button))>
           <h3
-            className="makeStyles-content-h3-36"
+            className="makeStyles-content-h3-34"
             title="/iri/"
           >
             /iri/
@@ -13322,10 +13322,10 @@ font-display: block;",
           </ForwardRef(Divider)>
         </WithStyles(ForwardRef(Divider))>
         <section
-          className="makeStyles-centeredSection-23"
+          className="makeStyles-centeredSection-21"
         >
           <h5
-            className="makeStyles-content-h5-38"
+            className="makeStyles-content-h5-36"
           >
             Default Access
           </h5>
@@ -13344,11 +13344,11 @@ font-display: block;",
                 className="MuiList-root MuiList-padding"
               >
                 <WithStyles(ForwardRef(ListItem))
-                  className="makeStyles-listItem-26"
+                  className="makeStyles-listItem-24"
                   key="0"
                 >
                   <ForwardRef(ListItem)
-                    className="makeStyles-listItem-26"
+                    className="makeStyles-listItem-24"
                     classes={
                       Object {
                         "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -13366,15 +13366,15 @@ font-display: block;",
                     }
                   >
                     <li
-                      className="MuiListItem-root makeStyles-listItem-26 MuiListItem-gutters"
+                      className="MuiListItem-root makeStyles-listItem-24 MuiListItem-gutters"
                       disabled={false}
                     >
                       <WithStyles(ForwardRef(Avatar))
-                        className="makeStyles-avatar-22"
+                        className="makeStyles-avatar-20"
                         key=".0"
                       >
                         <ForwardRef(Avatar)
-                          className="makeStyles-avatar-22"
+                          className="makeStyles-avatar-20"
                           classes={
                             Object {
                               "circle": "MuiAvatar-circle",
@@ -13388,7 +13388,7 @@ font-display: block;",
                           }
                         >
                           <div
-                            className="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-22 MuiAvatar-colorDefault"
+                            className="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-20 MuiAvatar-colorDefault"
                           >
                             <ForwardRef>
                               <WithStyles(ForwardRef(SvgIcon))>
@@ -13481,10 +13481,10 @@ font-display: block;",
           </ForwardRef(Divider)>
         </WithStyles(ForwardRef(Divider))>
         <section
-          className="makeStyles-centeredSection-23"
+          className="makeStyles-centeredSection-21"
         >
           <h5
-            className="makeStyles-content-h5-38"
+            className="makeStyles-content-h5-36"
           >
             My Access
           </h5>
@@ -13503,11 +13503,11 @@ font-display: block;",
                 className="MuiList-root MuiList-padding"
               >
                 <WithStyles(ForwardRef(ListItem))
-                  className="makeStyles-listItem-26"
+                  className="makeStyles-listItem-24"
                   key="0"
                 >
                   <ForwardRef(ListItem)
-                    className="makeStyles-listItem-26"
+                    className="makeStyles-listItem-24"
                     classes={
                       Object {
                         "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -13525,15 +13525,15 @@ font-display: block;",
                     }
                   >
                     <li
-                      className="MuiListItem-root makeStyles-listItem-26 MuiListItem-gutters"
+                      className="MuiListItem-root makeStyles-listItem-24 MuiListItem-gutters"
                       disabled={false}
                     >
                       <WithStyles(ForwardRef(Avatar))
-                        className="makeStyles-avatar-22"
+                        className="makeStyles-avatar-20"
                         key=".0"
                       >
                         <ForwardRef(Avatar)
-                          className="makeStyles-avatar-22"
+                          className="makeStyles-avatar-20"
                           classes={
                             Object {
                               "circle": "MuiAvatar-circle",
@@ -13547,7 +13547,7 @@ font-display: block;",
                           }
                         >
                           <div
-                            className="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-22 MuiAvatar-colorDefault"
+                            className="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-20 MuiAvatar-colorDefault"
                           >
                             <ForwardRef(PersonIcon)
                               className="MuiAvatar-fallback"
@@ -13626,7 +13626,7 @@ font-display: block;",
           </WithStyles(ForwardRef(List))>
         </section>
         <section
-          className="makeStyles-centeredSection-23"
+          className="makeStyles-centeredSection-21"
         >
           <WithStyles(ForwardRef(List))>
             <ForwardRef(List)
@@ -13643,11 +13643,11 @@ font-display: block;",
                 className="MuiList-root MuiList-padding"
               >
                 <WithStyles(ForwardRef(ListItem))
-                  className="makeStyles-listItem-26"
+                  className="makeStyles-listItem-24"
                   key="0"
                 >
                   <ForwardRef(ListItem)
-                    className="makeStyles-listItem-26"
+                    className="makeStyles-listItem-24"
                     classes={
                       Object {
                         "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -13665,7 +13665,7 @@ font-display: block;",
                     }
                   >
                     <li
-                      className="MuiListItem-root makeStyles-listItem-26 MuiListItem-gutters"
+                      className="MuiListItem-root makeStyles-listItem-24 MuiListItem-gutters"
                       disabled={false}
                     >
                       <WithStyles(ForwardRef(ListItemIcon))
@@ -13720,11 +13720,11 @@ font-display: block;",
                   </ForwardRef(ListItem)>
                 </WithStyles(ForwardRef(ListItem))>
                 <WithStyles(ForwardRef(ListItem))
-                  className="makeStyles-listItem-26"
+                  className="makeStyles-listItem-24"
                   key="1"
                 >
                   <ForwardRef(ListItem)
-                    className="makeStyles-listItem-26"
+                    className="makeStyles-listItem-24"
                     classes={
                       Object {
                         "alignItemsFlexStart": "MuiListItem-alignItemsFlexStart",
@@ -13742,15 +13742,15 @@ font-display: block;",
                     }
                   >
                     <li
-                      className="MuiListItem-root makeStyles-listItem-26 MuiListItem-gutters"
+                      className="MuiListItem-root makeStyles-listItem-24 MuiListItem-gutters"
                       disabled={false}
                     >
                       <WithStyles(ForwardRef(Avatar))
-                        className="makeStyles-avatar-22"
+                        className="makeStyles-avatar-20"
                         key=".0"
                       >
                         <ForwardRef(Avatar)
-                          className="makeStyles-avatar-22"
+                          className="makeStyles-avatar-20"
                           classes={
                             Object {
                               "circle": "MuiAvatar-circle",
@@ -13764,7 +13764,7 @@ font-display: block;",
                           }
                         >
                           <div
-                            className="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-22 MuiAvatar-colorDefault"
+                            className="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-20 MuiAvatar-colorDefault"
                           >
                             <ForwardRef(PersonIcon)
                               className="MuiAvatar-fallback"
@@ -13862,19 +13862,19 @@ font-display: block;",
           </ForwardRef(Divider)>
         </WithStyles(ForwardRef(Divider))>
         <section
-          className="makeStyles-centeredSection-23"
+          className="makeStyles-centeredSection-21"
         >
           <h5
-            className="makeStyles-content-h5-38"
+            className="makeStyles-content-h5-36"
             title="/iri/"
           >
             Grant Permission
           </h5>
           <WithStyles(ForwardRef(FormControl))
-            className="makeStyles-agentInput-31"
+            className="makeStyles-agentInput-29"
           >
             <ForwardRef(FormControl)
-              className="makeStyles-agentInput-31"
+              className="makeStyles-agentInput-29"
               classes={
                 Object {
                   "fullWidth": "MuiFormControl-fullWidth",
@@ -13885,7 +13885,7 @@ font-display: block;",
               }
             >
               <div
-                className="MuiFormControl-root makeStyles-agentInput-31"
+                className="MuiFormControl-root makeStyles-agentInput-29"
               >
                 <WithStyles(ForwardRef(InputLabel))
                   htmlFor="agent-web-id"

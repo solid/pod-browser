@@ -19,24 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as RouterFns from "next/router";
-import * as ReactFns from "react";
-import ContainerToolbar from "./index";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
+import { Styles } from "jss";
 
-describe("Container toolbar view", () => {
-  test("Renders the toolbar", () => {
-    const currentUri = "iri";
-
-    jest.spyOn(RouterFns, "useRouter").mockReturnValueOnce({
-      asPath: "asPath",
-      pathname: "/pathname?action=details&iri=iri",
-      replace: jest.fn(),
-    });
-
-    jest.spyOn(ReactFns, "useContext").mockReturnValueOnce({ currentUri });
-
-    const tree = mountToJson(<ContainerToolbar />);
-    expect(tree).toMatchSnapshot();
-  });
-});
+export default function styles(theme: PrismTheme): Styles {
+  return createStyles(theme, ["pageHeader"]);
+}

@@ -19,16 +19,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
-import { Styles } from "jss";
+import React, { ReactElement } from "react";
+import ResourceLink from "../resourceLink";
+import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
 
-export default function styles(theme: PrismTheme): Styles {
-  return createStyles(theme, ["icons"], {
-    "container-toolbar": {
-      paddingBottom: theme.spacing(2), // to negate the padding that breadcrumbs must have
-    },
-    "container-toolbar__trigger": {
-      color: theme.palette.primary.main,
-    },
-  });
+interface Props {
+  // eslint-disable-next-line react/require-default-props
+  className?: string;
+}
+
+export default function ContainerDetails({ className }: Props): ReactElement {
+  return (
+    <ResourceLink
+      action={DETAILS_CONTEXT_ACTIONS.DETAILS}
+      className={className}
+    >
+      Folder Details
+    </ResourceLink>
+  );
 }

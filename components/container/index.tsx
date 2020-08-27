@@ -23,13 +23,14 @@
 // react-table is super broken with sorting, so temporarily disable ts checking.
 /* eslint react/jsx-one-expression-per-line: 0 */
 
-import { ReactElement, useContext, useMemo } from "react";
+import React, { ReactElement, useContext, useMemo } from "react";
 import { useTable, useSortBy, UseSortByOptions } from "react-table";
 import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 
+import { DrawerContainer, PageHeader } from "@inrupt/prism-react-components";
 import DetailsContextMenu, { handleCloseDrawer } from "../detailsContextMenu";
 import ContainerTableRow from "../containerTableRow";
 import SortedTableCarat from "../sortedTableCarat";
@@ -43,8 +44,9 @@ import {
 import Spinner from "../spinner";
 import styles from "./styles";
 import Breadcrumbs from "../breadcrumbs";
-import ContainerToolbar from "../containerToolbar";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
+import AddFileButton from "../addFileButton";
+import ContainerDetails from "../containerDetails";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme) as StyleRules)
@@ -117,22 +119,33 @@ export default function Container(props: IPodList): ReactElement {
     return <Spinner />;
   }
 
+  const drawer = (
+    <DetailsContextMenu
+      onUpdate={() => {
+        mutate();
+        handleCloseDrawer({ setMenuOpen, router })().catch((e) => {
+          throw e;
+        });
+      }}
+    />
+  );
+
+  const containerDetails = (
+    <ContainerDetails className={bem("page-header__action")} />
+  );
+  const addFileButton = (
+    <AddFileButton onSave={mutate} className={bem("page-header__action")} />
+  );
+
   // react-table works through spreads.
   /* eslint react/jsx-props-no-spreading: 0 */
   return (
     <>
-      <div className={clsx(bem("container"))}>
-        <div className={bem("container-menu")}>
-          <Breadcrumbs />
-          <ContainerToolbar onSave={mutate} />
-        </div>
+      <PageHeader title="Files" tools={[containerDetails, addFileButton]} />
+      <div className={clsx(bem("container"), bem("container-breadcrumbs"))}>
+        <Breadcrumbs />
       </div>
-      <div
-        className={clsx(
-          bem("container"),
-          bem("container-view", menuOpen ? "menu-open" : null)
-        )}
-      >
+      <DrawerContainer drawer={drawer} open={menuOpen}>
         <table className={clsx(bem("table"))} {...getTableProps()}>
           <thead className={bem("table__header")}>
             {headerGroups.map((headerGroup) => (
@@ -178,16 +191,7 @@ export default function Container(props: IPodList): ReactElement {
             })}
           </tbody>
         </table>
-
-        <DetailsContextMenu
-          onUpdate={() => {
-            mutate();
-            handleCloseDrawer({ setMenuOpen, router })().catch((e) => {
-              throw e;
-            });
-          }}
-        />
-      </div>
+      </DrawerContainer>
     </>
   );
 }

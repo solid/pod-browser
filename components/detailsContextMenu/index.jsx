@@ -19,20 +19,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import T from "prop-types";
-import { Drawer, Button, Divider } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
-import { useBem } from "@solid/lit-prism-patterns";
-import { createStyles } from "@material-ui/styles";
-import CloseIcon from "@material-ui/icons/Close";
+import { Drawer } from "@inrupt/prism-react-components";
 import DetailsMenuContext, {
   DETAILS_CONTEXT_ACTIONS,
 } from "../../src/contexts/detailsMenuContext";
 import AlertContext from "../../src/contexts/alertContext";
-import styles from "./styles";
-import useEscKey from "../../src/effects/useEscKey";
 import DetailsLoading from "../resourceDetails/detailsLoading";
 import ResourceSharingLoading from "../resourceDetails/resourceSharing/resourceSharingLoading";
 import DetailsError from "../resourceDetails/detailsError";
@@ -40,10 +34,6 @@ import ResourceDetails from "../resourceDetails";
 import ResourceSharing from "../resourceDetails/resourceSharing";
 import { useFetchResourceDetails } from "../../src/hooks/solidClient";
 import { parseUrl, stripQueryParams } from "../../src/stringHelpers";
-
-const useStyles = makeStyles((theme) => {
-  return createStyles(styles(theme));
-});
 
 function Contents({ action, iri, onUpdate }) {
   const { pathname } = parseUrl(iri);
@@ -131,15 +121,12 @@ export function handleCloseDrawer({ setMenuOpen, router }) {
 }
 
 /* eslint @typescript-eslint/explicit-module-boundary-types: 0 */
-export default function DetailsContextMenu(props) {
-  const { onUpdate } = props;
+export default function DetailsContextMenu({ onUpdate }) {
   const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
 
   const { query } = useRouter();
   const { action, resourceIri } = query;
 
-  const classes = useStyles();
-  const bem = useBem(classes);
   const router = useRouter();
 
   useEffect(() => {
@@ -148,24 +135,10 @@ export default function DetailsContextMenu(props) {
 
   const closeDrawer = handleCloseDrawer({ setMenuOpen, router });
 
-  useEscKey(closeDrawer);
   if (!resourceIri) return null;
 
   return (
-    <Drawer
-      anchor="right"
-      variant="permanent"
-      open={menuOpen}
-      classes={{ paper: bem("drawer__paper") }}
-    >
-      <div className={classes.drawerHeader}>
-        <Button startIcon={<CloseIcon />} onClick={closeDrawer}>
-          Close
-        </Button>
-      </div>
-
-      <Divider />
-
+    <Drawer open={menuOpen} close={closeDrawer}>
       <Contents action={action} iri={resourceIri} onUpdate={onUpdate} />
     </Drawer>
   );

@@ -30,18 +30,17 @@ import PropTypes from "prop-types";
 import Head from "next/head";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
-import {
-  createStyles,
-  makeStyles,
-  StylesProvider,
-  ThemeProvider,
-} from "@material-ui/styles";
-
 import { create } from "jss";
 import preset from "jss-preset-default";
 
-import { StyleRules } from "@material-ui/styles/withStyles";
 import { appLayout, useBem } from "@solid/lit-prism-patterns";
+import {
+  createStyles,
+  makeStyles,
+  StyleRules,
+  StylesProvider,
+  ThemeProvider,
+} from "@inrupt/prism-react-components";
 
 import {
   Session,
@@ -147,7 +146,9 @@ export default function App(props: AppProps): ReactElement {
                   <main className={bem("app-layout__main")}>
                     <Component {...pageProps} />
                   </main>
-                  <PodBrowserFooter />
+                  <div className={bem("app-layout__footer")}>
+                    <PodBrowserFooter />
+                  </div>
                 </div>
 
                 <Notification />

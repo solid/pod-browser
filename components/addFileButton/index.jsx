@@ -22,7 +22,6 @@
 import { useContext, useState, useEffect } from "react";
 import T from "prop-types";
 import { overwriteFile, fetchResourceInfoWithAcl } from "@inrupt/solid-client";
-import { Button } from "@material-ui/core";
 import SessionContext from "../../src/contexts/sessionContext";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import AlertContext from "../../src/contexts/alertContext";
@@ -157,7 +156,7 @@ export function handleConfirmation({
   };
 }
 
-export default function AddFileButton({ onSave }) {
+export default function AddFileButton({ className, onSave }) {
   const { session } = useContext(SessionContext);
   const { fetch } = session;
   const { currentUri } = useContext(PodLocationContext);
@@ -214,13 +213,8 @@ export default function AddFileButton({ onSave }) {
   }, [confirmationSetup, confirmed, onConfirmation, file]);
 
   return (
-    <Button
-      variant="contained"
-      component="label"
-      type="submit"
-      color="primary"
-      disabled={isUploading}
-    >
+    // eslint-disable-next-line jsx-a11y/label-has-associated-control
+    <label disabled={isUploading} className={className}>
       {isUploading ? "Uploading..." : "Upload File"}
       <input
         type="file"
@@ -230,14 +224,16 @@ export default function AddFileButton({ onSave }) {
         }}
         onChange={onFileSelect}
       />
-    </Button>
+    </label>
   );
 }
 
 AddFileButton.propTypes = {
+  className: T.string,
   onSave: T.func,
 };
 
 AddFileButton.defaultProps = {
+  className: () => null,
   onSave: () => {},
 };
