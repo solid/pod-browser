@@ -245,7 +245,7 @@ describe("getResourceWithPermissions", () => {
 
     jest
       .spyOn(SolidClientFns, "unstable_getAgentAccessAll")
-      .mockResolvedValueOnce(access);
+      .mockReturnValueOnce(access);
 
     const { response } = await getResourceWithPermissions(iri, fetch);
 

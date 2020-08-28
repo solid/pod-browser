@@ -22,7 +22,7 @@
 import { createStyles } from "@solid/lit-prism-patterns";
 
 const styles = (theme) => {
-  return createStyles(theme, ["container"], {
+  return createStyles(theme, ["container", "table"], {
     "container-view": {
       marginTop: theme.spacing(1),
     },
@@ -41,6 +41,13 @@ const styles = (theme) => {
       display: "flex",
       justifyContent: "space-between",
       margin: theme.spacing(1, 0, 0),
+    },
+    avatar: {
+      width: "30px",
+      height: "30px",
+    },
+    addNewContact: {
+      textAlign: "right",
     },
   });
 };

@@ -64,4 +64,5 @@ export function stripHash(string) {
 export function capitalize(string) {
   return string.replace(/^\w/, (c) => c.toUpperCase());
 }
+
 export default { parseUrl, stripQueryParams, isUrl, joinPath };

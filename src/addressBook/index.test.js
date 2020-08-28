@@ -36,6 +36,7 @@ import {
   schemaFunctionMappings,
   shortId,
   vcardExtras,
+  contactsContainerIri,
 } from "./index";
 
 const {
@@ -209,12 +210,34 @@ describe("getPeople", () => {
   test("it fetches the people in the address book", async () => {
     const containerIri = "https://user.example.com/contacts";
     const fetch = jest.fn();
+    const expectedPerson1 = {
+      webId: "http://testperson.example.com/card#me",
+      name: "Test Person",
+      nickname: "testperson",
+      avatar: "http://example.com/testperson.png",
+    };
+    const expectedPerson2 = {
+      webId: "http://anotherperson.example.com/card#me",
+      name: "Another Person",
+      nickname: "anotherperson",
+      avatar: "http://example.com/anotherperson.png",
+    };
 
     jest
       .spyOn(resourceFns, "getResource")
-      .mockResolvedValueOnce({ response: "people container" })
-      .mockResolvedValueOnce({ response: "Person 1" })
-      .mockResolvedValueOnce({ response: "Person 2" });
+      .mockResolvedValueOnce({ response: { dataset: "people container" } })
+      .mockResolvedValueOnce({
+        response: { dataset: "Person 1", iri: expectedPerson1.webId },
+      })
+      .mockResolvedValueOnce({
+        response: { dataset: "Person 2", iri: expectedPerson2.webId },
+      })
+      .mockResolvedValueOnce({
+        response: { dataset: "Profile 1", iri: expectedPerson1.webId },
+      })
+      .mockResolvedValueOnce({
+        response: { dataset: "Profile 2", iri: expectedPerson2.webId },
+      });
 
     jest
       .spyOn(solidClientFns, "getUrlAll")
@@ -223,12 +246,26 @@ describe("getPeople", () => {
         "https://example.com/contacts/Person/5678/",
       ]);
 
+    jest
+      .spyOn(solidClientFns, "getStringNoLocale")
+      .mockReturnValueOnce(expectedPerson1.nickname)
+      .mockReturnValueOnce(expectedPerson1.name)
+      .mockReturnValueOnce(expectedPerson2.nickname)
+      .mockReturnValueOnce(expectedPerson2.name);
+
+    jest
+      .spyOn(solidClientFns, "getUrl")
+      .mockReturnValueOnce(expectedPerson1.webId)
+      .mockReturnValueOnce(expectedPerson2.webId)
+      .mockReturnValueOnce(expectedPerson1.avatar)
+      .mockReturnValueOnce(expectedPerson2.avatar);
+
     const {
       response: [person1, person2],
     } = await getPeople(containerIri, fetch);
 
-    expect(person1).toEqual("Person 1");
-    expect(person2).toEqual("Person 2");
+    expect(person1).toMatchObject(expectedPerson1);
+    expect(person2).toMatchObject(expectedPerson2);
   });
 
   test("it returns an error if it can't fetch the people container", async () => {
@@ -247,12 +284,25 @@ describe("getPeople", () => {
   test("it filters out people for which the resource couldn't be fetched", async () => {
     const containerIri = "https://user.example.com/contacts";
     const fetch = jest.fn();
+    const expectedPerson1 = {
+      webId: "http://testperson.example.com/card#me",
+      name: "Test Person",
+      nickname: "testperson",
+      avatar: "http://example.com/testperson.png",
+    };
 
     jest
       .spyOn(resourceFns, "getResource")
-      .mockResolvedValueOnce({ response: "people container" })
-      .mockResolvedValueOnce({ response: "Person 1" })
-      .mockResolvedValueOnce({ error: "There was an error" });
+      .mockResolvedValueOnce({ response: { dataset: "people container" } })
+      .mockResolvedValueOnce({
+        response: { dataset: "Person 1", iri: expectedPerson1.webId },
+      })
+      .mockResolvedValueOnce({
+        error: "There was an error",
+      })
+      .mockResolvedValueOnce({
+        response: { dataset: "Profile 1", iri: expectedPerson1.webId },
+      });
 
     jest
       .spyOn(solidClientFns, "getUrlAll")
@@ -260,6 +310,16 @@ describe("getPeople", () => {
         "https://example.com/contacts/Person/1234/",
         "https://example.com/contacts/Person/5678/",
       ]);
+
+    jest
+      .spyOn(solidClientFns, "getStringNoLocale")
+      .mockReturnValueOnce(expectedPerson1.nickname)
+      .mockReturnValueOnce(expectedPerson1.name);
+
+    jest
+      .spyOn(solidClientFns, "getUrl")
+      .mockReturnValueOnce(expectedPerson1.webId)
+      .mockReturnValueOnce(expectedPerson1.avatar);
 
     const { response } = await getPeople(containerIri, fetch);
 
@@ -405,6 +465,27 @@ describe("saveNewAddressBook", () => {
     expect(savePeopleArgs[0].iri).toEqual(addressBook.people.iri);
   });
 
+  test("it returns an error if the user is unauthorized", async () => {
+    const iri = "https://example.pod.com/contacts";
+    const owner = "https://example.pod.com/card#me";
+
+    jest
+      .spyOn(resourceFns, "getResource")
+      .mockResolvedValueOnce({ error: "There was an error" });
+
+    jest
+      .spyOn(resourceFns, "saveResource")
+      .mockResolvedValueOnce({ error: "401 Unauthorized" })
+      .mockResolvedValueOnce({ error: "401 Unauthorized" })
+      .mockResolvedValueOnce({ error: "401 Unauthorized" });
+
+    const { error } = await saveNewAddressBook({ iri, owner });
+
+    expect(error).toEqual(
+      "You do not have permission to create an address book"
+    );
+  });
+
   test("it returns an error if the address book already exists", async () => {
     const iri = "https://example.pod.com/contacts";
     const owner = "https://example.pod.com/card#me";
@@ -413,7 +494,7 @@ describe("saveNewAddressBook", () => {
       .spyOn(resourceFns, "getResource")
       .mockResolvedValueOnce({ response: "existing address book" });
 
-    const { error } = await saveNewAddressBook({ iri, owner });
+    const { error } = await saveNewAddressBook({ iri, owner }, jest.fn());
 
     expect(error).toEqual("Address book already exists.");
   });
@@ -541,6 +622,14 @@ describe("vcardExtras", () => {
   test("it returns an unsupported vcard attribute", () => {
     expect(vcardExtras("attribute")).toEqual(
       "http://www.w3.org/2006/vcard/ns#attribute"
+    );
+  });
+});
+
+describe("contactsContainerIri", () => {
+  test("it appends the container path to the given iri", () => {
+    expect(contactsContainerIri("http://example.com")).toEqual(
+      "http://example.com/contacts/"
     );
   });
 });

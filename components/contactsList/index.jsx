@@ -21,9 +21,11 @@
 
 import clsx from "clsx";
 import Link from "next/link";
+import { Avatar } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { useContext, useState, useEffect } from "react";
+import { PageHeader } from "@inrupt/prism-react-components";
 import Spinner from "../spinner";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 import SessionContext from "../../src/contexts/sessionContext";
@@ -31,16 +33,23 @@ import styles from "./styles";
 import { getResource } from "../../src/solidClientHelpers/resource";
 import { isHTTPError, ERROR_CODES } from "../../src/solidClientHelpers/utils";
 import { fetchProfile } from "../../src/solidClientHelpers/profile";
-import { joinPath } from "../../src/stringHelpers";
-import { saveNewAddressBook } from "../../src/addressBook";
+import {
+  saveNewAddressBook,
+  contactsContainerIri,
+  getPeople,
+} from "../../src/addressBook";
+
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
+
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 function ContactsList() {
   useRedirectIfLoggedOut();
 
-  const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-  const bem = useBem(useStyles());
+  const classes = useStyles();
+  const bem = useBem(classes);
   const { menuOpen } = useContext(DetailsMenuContext);
+  const actionClass = PageHeader.actionClassName();
   const containerClass = clsx(
     bem("container"),
     bem("container-view", menuOpen ? "menu-open" : null)
@@ -48,8 +57,8 @@ function ContactsList() {
   const [loadingContacts, setLoadingContacts] = useState(true);
   const [addressBook, setAddressBook] = useState();
   const [addressBookError, setAddressBookError] = useState();
+  const [contacts, setContacts] = useState([]);
   const { session } = useContext(SessionContext);
-
   const {
     fetch,
     info: { webId },
@@ -60,9 +69,7 @@ function ContactsList() {
 
     (async () => {
       const { pods } = await fetchProfile(webId, fetch);
-      if (!pods) return;
-
-      const contactsIri = joinPath(pods[0], "contacts/");
+      const contactsIri = contactsContainerIri(pods[0]);
 
       const {
         response: existingAddressBook,
@@ -71,13 +78,23 @@ function ContactsList() {
 
       if (existingError && !isHTTPError(existingError, ERROR_CODES.NOT_FOUND)) {
         setLoadingContacts(false);
-        setAddressBookError(existingError);
         return;
       }
 
       if (existingAddressBook) {
         setAddressBook(existingAddressBook);
         setLoadingContacts(false);
+        const { response: people, error: peopleError } = await getPeople(
+          contactsIri,
+          fetch
+        );
+        if (peopleError) {
+          setAddressBookError(peopleError);
+          return;
+        }
+
+        setContacts(people);
+
         return;
       }
 
@@ -107,11 +124,36 @@ function ContactsList() {
   if (addressBookError) return addressBookError;
 
   return (
-    <div className={containerClass}>
-      <Link href="/contacts/add" replace>
-        Add
-      </Link>
-    </div>
+    <>
+      <PageHeader
+        title="Contacts"
+        actions={[
+          <Link href="/contacts/add">
+            <a className={actionClass}>Add new contact</a>
+          </Link>,
+        ]}
+      />
+      <div className={containerClass}>
+        <table className={bem("table")}>
+          <tbody className={bem("table__body")}>
+            {contacts.map(({ name, avatar }) => (
+              <tr className={bem("table__body-row")}>
+                <td
+                  className={clsx(
+                    bem("table__body-cell"),
+                    bem("table__body-cell--align-end"),
+                    bem("table__body-cell--width-preview")
+                  )}
+                >
+                  <Avatar className={bem("avatar")} alt={name} src={avatar} />
+                </td>
+                <td>{name}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }
 

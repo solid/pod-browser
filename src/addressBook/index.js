@@ -24,8 +24,10 @@
 import {
   addStringUnlocalized,
   addUrl,
-  getUrlAll,
+  getStringNoLocale,
   getStringNoLocaleAll,
+  getUrl,
+  getUrlAll,
   setThing,
 } from "@inrupt/solid-client";
 import { v4 as uuid } from "uuid";
@@ -40,8 +42,14 @@ import {
 import { getResource, saveResource } from "../solidClientHelpers/resource";
 import { joinPath } from "../stringHelpers";
 
+const CONTACTS_CONTAINER = "contacts/";
+
 export function vcardExtras(property) {
   return `http://www.w3.org/2006/vcard/ns#${property}`;
+}
+
+export function contactsContainerIri(iri) {
+  return joinPath(iri, CONTACTS_CONTAINER);
 }
 
 export function createAddressBook({ iri, owner, title = "Contacts" }) {
@@ -123,7 +131,34 @@ export async function getPeople(containerIri, fetch) {
     .filter(({ error: e }) => !e)
     .map(({ response }) => response);
 
-  return respond(people);
+  const profileResponses = await Promise.all(
+    people.map(({ dataset }) => {
+      const url = getUrl(dataset, foaf.openid);
+      return getResource(url, fetch);
+    })
+  );
+
+  const profiles = profileResponses
+    .filter(({ error: e }) => !e)
+    .map(({ response }) => response)
+    .map(({ dataset, iri: webId }) => {
+      const nickname =
+        getStringNoLocale(dataset, vcard.nickname) ||
+        getStringNoLocale(dataset, foaf.nick);
+      const name =
+        getStringNoLocale(dataset, vcard.fn) ||
+        getStringNoLocale(dataset, foaf.name);
+      const avatar = getUrl(dataset, vcard.hasPhoto);
+
+      return {
+        avatar,
+        name,
+        nickname,
+        webId,
+      };
+    });
+
+  return respond(profiles);
 }
 
 export async function saveNewAddressBook(
@@ -283,7 +318,7 @@ export async function saveContact(addressBookIri, schema, fetch) {
   if (peopleError) return error(peopleError);
 
   const peopleThing = defineThing(
-    { name: iri },
+    { name: "this  " },
     (t) => addStringUnlocalized(t, vcard.fn, schema.fn || schema.name),
     (t) => addUrl(t, vcardExtras("inAddressBook"), indexIri)
   );

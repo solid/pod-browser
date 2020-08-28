@@ -20,8 +20,7 @@
  */
 
 import * as solidClientFns from "@inrupt/solid-client";
-import { space } from "rdf-namespaces";
-import { namespace } from "./utils";
+import { space, foaf, vcard } from "rdf-namespaces";
 import { displayProfileName, fetchProfile } from "./profile";
 
 describe("displayProfileName", () => {
@@ -75,15 +74,15 @@ describe("fetchProfile", () => {
     });
     expect(solidClientFns.getStringNoLocale).toHaveBeenCalledWith(
       profileDataset,
-      namespace.nickname
+      foaf.nick
     );
     expect(solidClientFns.getStringNoLocale).toHaveBeenCalledWith(
       profileDataset,
-      namespace.name
+      vcard.fn
     );
     expect(solidClientFns.getIri).toHaveBeenCalledWith(
       profileDataset,
-      namespace.hasPhoto
+      vcard.hasPhoto
     );
     expect(solidClientFns.getIriAll).toHaveBeenCalledWith(
       profileDataset,

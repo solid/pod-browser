@@ -24,7 +24,6 @@ import {
   fetchLitDataset,
   saveSolidDatasetAt,
   unstable_fetchFile,
-  unstable_fetchFile,
   unstable_fetchLitDatasetWithAcl,
   unstable_getAgentAccessAll,
   unstable_saveAclFor,
@@ -84,7 +83,7 @@ export async function getResourceWithPermissions(iri, fetch) {
 
   try {
     const dataset = await unstable_fetchLitDatasetWithAcl(iri, { fetch });
-    const access = await unstable_getAgentAccessAll(dataset);
+    const access = unstable_getAgentAccessAll(dataset);
     const permissions = normalizePermissions(access);
 
     return respond({ dataset, iri, permissions });
@@ -175,7 +174,7 @@ export async function saveResourceWithPermissions(
   fetch
 ) {
   const { respond, error } = createResponder();
-  const { error: saveError } = await saveResource(resource);
+  const { error: saveError } = await saveResource(resource, fetch);
 
   if (saveError) return error(saveError);
 

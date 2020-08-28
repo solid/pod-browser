@@ -26,8 +26,7 @@ import {
   getStringNoLocale,
   getThing,
 } from "@inrupt/solid-client";
-import { space } from "rdf-namespaces";
-import { namespace } from "./utils";
+import { space, vcard, foaf } from "rdf-namespaces";
 
 export function displayProfileName({ nickname, name, webId }) {
   if (name) return name;
@@ -39,9 +38,9 @@ export async function fetchProfile(webId, fetch) {
   const dataset = await fetchLitDataset(webId, { fetch });
 
   const profile = getThing(dataset, webId);
-  const nickname = getStringNoLocale(profile, namespace.nickname);
-  const name = getStringNoLocale(profile, namespace.name);
-  const avatar = getIri(profile, namespace.hasPhoto);
+  const nickname = getStringNoLocale(profile, foaf.nick);
+  const name = getStringNoLocale(profile, vcard.fn);
+  const avatar = getIri(profile, vcard.hasPhoto);
   const pods = getIriAll(profile, space.storage);
 
   return {

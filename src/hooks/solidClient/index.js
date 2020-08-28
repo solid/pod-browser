@@ -22,7 +22,7 @@
 /* eslint-disable camelcase */
 import { useContext } from "react";
 import useSWR from "swr";
-import { space } from "rdf-namespaces";
+import { space, ldp } from "rdf-namespaces";
 
 import {
   fetchLitDataset,
@@ -36,7 +36,7 @@ import {
   unstable_getAgentDefaultAccessAll,
 } from "@inrupt/solid-client";
 
-import { getIriPath, namespace } from "../../solidClientHelpers/utils";
+import { getIriPath } from "../../solidClientHelpers/utils";
 import { normalizePermissions } from "../../solidClientHelpers/permissions";
 import { fetchResourceWithAcl } from "../../solidClientHelpers/resource";
 
@@ -45,7 +45,7 @@ import SessionContext from "../../contexts/sessionContext";
 export async function fetchContainerResourceIris(containerIri, fetch) {
   const litDataset = await fetchLitDataset(containerIri, { fetch });
   const container = getThing(litDataset, containerIri);
-  const iris = getIriAll(container, namespace.contains);
+  const iris = getIriAll(container, ldp.contains);
   return iris;
 }
 
