@@ -75,8 +75,8 @@ export async function getResource(iri, fetch) {
     const resource = { dataset, iri };
 
     return respond(resource);
-  } catch ({ message }) {
-    return error(message);
+  } catch (e) {
+    return error(e.message);
   }
 }
 
@@ -85,12 +85,12 @@ export async function getResourceWithPermissions(iri, fetch) {
 
   try {
     const dataset = await unstable_fetchLitDatasetWithAcl(iri, { fetch });
-    const access = await unstable_getAgentAccessAll(dataset);
+    const access = unstable_getAgentAccessAll(dataset);
     const permissions = normalizePermissions(access);
 
     return respond({ dataset, iri, permissions });
-  } catch ({ message }) {
-    return error(message);
+  } catch (e) {
+    return error(e.message);
   }
 }
 

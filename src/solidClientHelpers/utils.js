@@ -28,6 +28,7 @@ import {
   getDecimal,
   getInteger,
   getUrlAll,
+  saveSolidDatasetAt,
   setThing,
 } from "@inrupt/solid-client";
 import camelCase from "camelcase";
