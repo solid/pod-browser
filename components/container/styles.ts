@@ -23,7 +23,7 @@ import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
 
 
 const styles = (theme: PrismTheme) => {
-  return createStyles(theme, ["container", "pageHeader", "table"], {
+  return createStyles(theme, ["container", "table"], {
     "container-breadcrumbs": {
       borderBottom: `solid 1px ${theme.palette.divider}`,
       marginTop: theme.spacing(1),

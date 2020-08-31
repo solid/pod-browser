@@ -29,6 +29,14 @@ jest.mock("../../src/hooks/solidClient");
 const iri = "https://mypod.myhost.com/public";
 
 describe("Container view", () => {
+  beforeEach(() =>
+    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
+      asPath: "asPath",
+      replace: jest.fn(),
+      query: {},
+    } as never)
+  );
+
   test("Renders a spinner if data is loading", () => {
     (solidClientHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue(
       {
@@ -47,12 +55,6 @@ describe("Container view", () => {
       }
     );
 
-    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
-      asPath: "asPath",
-      replace: jest.fn(),
-      query: {},
-    });
-
     const tree = mountToJson(<Container iri={iri} />);
     expect(tree).toMatchSnapshot();
   });
@@ -63,13 +65,6 @@ describe("Container view", () => {
       "https://myaccount.mypodserver.com/private",
       "https://myaccount.mypodserver.com/note.txt",
     ];
-    const replace = jest.fn();
-
-    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
-      asPath: "asPath",
-      replace,
-      query: {},
-    });
 
     (solidClientHooks.useFetchContainerResourceIris as jest.Mock).mockReturnValue(
       {
@@ -82,7 +77,6 @@ describe("Container view", () => {
     });
 
     const tree = mountToJson(<Container iri={iri} />);
-
     expect(tree).toMatchSnapshot();
   });
 });

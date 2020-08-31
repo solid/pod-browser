@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContainerDetailsButton Renders view 1`] = `
+<ContainerDetailsButton>
+  <ResourceLink
+    action="details"
+  >
+    <Link
+      as={
+        Object {
+          "pathname": "/resource/[iri]",
+          "query": Object {
+            "action": "details",
+            "resourceIri": "",
+          },
+        }
+      }
+      href={
+        Object {
+          "pathname": "/resource/[iri]",
+          "query": Object {
+            "action": "details",
+            "resourceIri": "",
+          },
+        }
+      }
+      replace={true}
+    >
+      <a
+        href="/resource/[iri]?action=details&resourceIri="
+        onClick={[Function]}
+        onMouseEnter={[Function]}
+      >
+        Folder Details
+      </a>
+    </Link>
+  </ResourceLink>
+</ContainerDetailsButton>
+`;

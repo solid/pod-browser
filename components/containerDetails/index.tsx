@@ -19,22 +19,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
-import ResourceLink from "../resourceLink";
-import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
+import React, { ReactElement, ReactNode, useContext } from "react";
+import { DrawerContainer } from "@inrupt/prism-react-components";
+import { useRouter } from "next/router";
+import DetailsContextMenu, { handleCloseDrawer } from "../detailsContextMenu";
+import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 
 interface Props {
   // eslint-disable-next-line react/require-default-props
-  className?: string;
+  children?: ReactNode;
+  mutate: () => void;
 }
 
-export default function ContainerDetails({ className }: Props): ReactElement {
+export default function ContainerDetails({
+  children,
+  mutate,
+}: Props): ReactElement {
+  const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
+  const router = useRouter();
+
+  const drawer = (
+    <DetailsContextMenu
+      onUpdate={() => {
+        mutate();
+        handleCloseDrawer({ setMenuOpen, router })().catch((e) => {
+          throw e;
+        });
+      }}
+    />
+  );
+
   return (
-    <ResourceLink
-      action={DETAILS_CONTEXT_ACTIONS.DETAILS}
-      className={className}
-    >
-      Folder Details
-    </ResourceLink>
+    <DrawerContainer drawer={drawer} open={menuOpen}>
+      {children}
+    </DrawerContainer>
   );
 }

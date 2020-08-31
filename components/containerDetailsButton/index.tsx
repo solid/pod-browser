@@ -19,23 +19,24 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
-import * as RouterFns from "next/router";
-import ContainerDetails from "./index";
+import React, { ReactElement } from "react";
+import ResourceLink from "../resourceLink";
+import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
 
-describe("ContainerDetails", () => {
-  beforeEach(() =>
-    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
-      asPath: "asPath",
-      replace: jest.fn(),
-      query: {},
-    } as never)
+interface Props {
+  // eslint-disable-next-line react/require-default-props
+  className?: string;
+}
+
+export default function ContainerDetailsButton({
+  className,
+}: Props): ReactElement {
+  return (
+    <ResourceLink
+      action={DETAILS_CONTEXT_ACTIONS.DETAILS}
+      className={className}
+    >
+      Folder Details
+    </ResourceLink>
   );
-
-  test("Renders view", () => {
-    const tree = mount(<ContainerDetails mutate={() => null} />);
-    expect(mountToJson(tree)).toMatchSnapshot();
-  });
-});
+}

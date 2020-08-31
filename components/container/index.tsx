@@ -23,15 +23,12 @@
 // react-table is super broken with sorting, so temporarily disable ts checking.
 /* eslint react/jsx-one-expression-per-line: 0 */
 
-import React, { ReactElement, useContext, useMemo } from "react";
+import React, { ReactElement, useMemo } from "react";
 import { useTable, useSortBy, UseSortByOptions } from "react-table";
 import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
-import { useRouter } from "next/router";
 
-import { DrawerContainer, PageHeader } from "@inrupt/prism-react-components";
-import DetailsContextMenu, { handleCloseDrawer } from "../detailsContextMenu";
 import ContainerTableRow from "../containerTableRow";
 import SortedTableCarat from "../sortedTableCarat";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
@@ -44,8 +41,7 @@ import {
 import Spinner from "../spinner";
 import styles from "./styles";
 import Breadcrumbs from "../breadcrumbs";
-import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
-import AddFileButton from "../addFileButton";
+import PageHeader from "../containerPageHeader";
 import ContainerDetails from "../containerDetails";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
@@ -56,17 +52,13 @@ interface IPodList {
   iri: string;
 }
 
-export default function Container(props: IPodList): ReactElement {
+export default function Container({ iri }: IPodList): ReactElement {
   useRedirectIfLoggedOut();
 
-  const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
-
-  const { iri } = props;
   const { data: resourceIris, mutate } = useFetchContainerResourceIris(iri);
   const loading = typeof resourceIris === "undefined";
 
   const bem = useBem(useStyles());
-  const router = useRouter();
 
   const columns = useMemo(
     () => [
@@ -119,33 +111,15 @@ export default function Container(props: IPodList): ReactElement {
     return <Spinner />;
   }
 
-  const drawer = (
-    <DetailsContextMenu
-      onUpdate={() => {
-        mutate();
-        handleCloseDrawer({ setMenuOpen, router })().catch((e) => {
-          throw e;
-        });
-      }}
-    />
-  );
-
-  const containerDetails = (
-    <ContainerDetails className={bem("page-header__action")} />
-  );
-  const addFileButton = (
-    <AddFileButton onSave={mutate} className={bem("page-header__action")} />
-  );
-
   // react-table works through spreads.
   /* eslint react/jsx-props-no-spreading: 0 */
   return (
     <>
-      <PageHeader title="Files" tools={[containerDetails, addFileButton]} />
+      <PageHeader mutate={mutate} />
       <div className={clsx(bem("container"), bem("container-breadcrumbs"))}>
         <Breadcrumbs />
       </div>
-      <DrawerContainer drawer={drawer} open={menuOpen}>
+      <ContainerDetails mutate={mutate}>
         <table className={clsx(bem("table"))} {...getTableProps()}>
           <thead className={bem("table__header")}>
             {headerGroups.map((headerGroup) => (
@@ -174,7 +148,6 @@ export default function Container(props: IPodList): ReactElement {
               </tr>
             ))}
           </thead>
-
           <tbody className={bem("table__body")} {...getTableBodyProps()}>
             {!data || !data.length ? (
               <tr key="no-resources-found" className={bem("table__body-row")}>
@@ -191,7 +164,7 @@ export default function Container(props: IPodList): ReactElement {
             })}
           </tbody>
         </table>
-      </DrawerContainer>
+      </ContainerDetails>
     </>
   );
 }

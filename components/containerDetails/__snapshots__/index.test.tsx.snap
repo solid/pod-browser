@@ -1,39 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ContainerDetails Renders view 1`] = `
-<ContainerDetails>
-  <ResourceLink
-    action="details"
+<ContainerDetails
+  mutate={[Function]}
+>
+  <DrawerContainer
+    drawer={
+      <DetailsContextMenu
+        onUpdate={[Function]}
+      />
+    }
+    open={false}
   >
-    <Link
-      as={
-        Object {
-          "pathname": "/resource/[iri]",
-          "query": Object {
-            "action": "details",
-            "resourceIri": "",
-          },
-        }
-      }
-      href={
-        Object {
-          "pathname": "/resource/[iri]",
-          "query": Object {
-            "action": "details",
-            "resourceIri": "",
-          },
-        }
-      }
-      replace={true}
+    <div
+      className="makeStyles-drawer-container-1"
     >
-      <a
-        href="/resource/[iri]?action=details&resourceIri="
-        onClick={[Function]}
-        onMouseEnter={[Function]}
-      >
-        Folder Details
-      </a>
-    </Link>
-  </ResourceLink>
+      <div
+        className="makeStyles-drawer-container__content-2"
+      />
+      <DetailsContextMenu
+        onUpdate={[Function]}
+      />
+    </div>
+  </DrawerContainer>
 </ContainerDetails>
 `;

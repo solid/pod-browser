@@ -19,23 +19,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
-import * as RouterFns from "next/router";
-import ContainerDetails from "./index";
+import React, { ReactElement } from "react";
+import { PageHeader as PrismPageHeader } from "@inrupt/prism-react-components";
+import ContainerDetails from "../containerDetailsButton";
+import AddFileButton from "../addFileButton";
 
-describe("ContainerDetails", () => {
-  beforeEach(() =>
-    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
-      asPath: "asPath",
-      replace: jest.fn(),
-      query: {},
-    } as never)
+interface Props {
+  mutate: () => void;
+}
+
+export default function PageHeader({ mutate }: Props): ReactElement {
+  const pageHeaderAction = PrismPageHeader.actionClassName();
+
+  const containerDetails = <ContainerDetails className={pageHeaderAction} />;
+  const addFileButton = (
+    <AddFileButton onSave={mutate} className={pageHeaderAction} />
   );
-
-  test("Renders view", () => {
-    const tree = mount(<ContainerDetails mutate={() => null} />);
-    expect(mountToJson(tree)).toMatchSnapshot();
-  });
-});
+  return (
+    <PrismPageHeader
+      title="Files"
+      actions={[containerDetails, addFileButton]}
+    />
+  );
+}

@@ -22,20 +22,11 @@
 import React from "react";
 import { mount } from "enzyme";
 import { mountToJson } from "enzyme-to-json";
-import * as RouterFns from "next/router";
-import ContainerDetails from "./index";
+import ContainerPageHeader from "./index";
 
-describe("ContainerDetails", () => {
-  beforeEach(() =>
-    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
-      asPath: "asPath",
-      replace: jest.fn(),
-      query: {},
-    } as never)
-  );
-
+describe("ContainerPageHeader", () => {
   test("Renders view", () => {
-    const tree = mount(<ContainerDetails mutate={() => null} />);
+    const tree = mount(<ContainerPageHeader mutate={() => null} />);
     expect(mountToJson(tree)).toMatchSnapshot();
   });
 });
