@@ -59,6 +59,9 @@ The following is how the SHACL shape in `https://raw.githubusercontent.com/solid
 - vcard:AddressBook
   - vcard:includesGroup
     - Using terms (sh:count, sh:FollowMe) that isn't formalized
+- vcard:Group
+  - vcard:fn cardinality difference
+  - vcard:member (not a formal term) instead of vcard:hasMember 
     
 ## People Index (in the context of Contacts)
 
