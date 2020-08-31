@@ -19,20 +19,25 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ReactNode, ReactElement } from "react";
-import { ThemeProvider } from "@material-ui/styles";
+import React, { ReactNode, ReactElement } from "react";
 import { mount } from "enzyme";
 import { mountToJson as enzymeMountToJson } from "enzyme-to-json";
+import { PrismTheme } from "@solid/lit-prism-patterns";
+import { StylesProvider, ThemeProvider } from "@inrupt/prism-react-components";
 import defaultTheme from "../src/theme";
 
 interface IWithTheme {
-  theme?: any;
+  theme?: PrismTheme;
   children: ReactNode;
 }
 
 export const WithTheme = (props: IWithTheme): ReactElement => {
   const { theme, children } = props;
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+  return (
+    <StylesProvider generateClassName={(rule) => `PodBrowser-${rule.key}`}>
+      <ThemeProvider theme={theme!}>{children}</ThemeProvider>
+    </StylesProvider>
+  );
 };
 
 WithTheme.defaultProps = {
@@ -42,7 +47,7 @@ WithTheme.defaultProps = {
 export const mountToJson = (
   children: ReactNode,
   theme = defaultTheme
-): object => {
+): unknown => {
   const tree = mount(<WithTheme theme={theme}>{children}</WithTheme>);
   return enzymeMountToJson(tree);
 };
