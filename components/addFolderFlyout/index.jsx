@@ -112,7 +112,7 @@ export function handleChange(setFolderName) {
   };
 }
 
-export default function AddFolderFlyout({ onSave, data }) {
+export default function AddFolderFlyout({ onSave, className, data }) {
   const classes = useStyles();
   const [folderName, setFolderName] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -149,15 +149,15 @@ export default function AddFolderFlyout({ onSave, data }) {
 
   return (
     <div>
-      <Button
+      <button
+        type="button"
         aria-describedby={id}
         id="add-folder-button"
-        variant="contained"
-        color="primary"
+        className={className}
         onClick={handleClick}
       >
         Create Folder
-      </Button>
+      </button>
       <Popover
         id={id}
         open={open}
