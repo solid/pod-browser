@@ -124,7 +124,7 @@ export default function Container(props: IPodList): ReactElement {
       <div className={clsx(bem("container"))}>
         <div className={bem("container-menu")}>
           <Breadcrumbs />
-          <ContainerToolbar onSave={mutate} />
+          <ContainerToolbar onSave={mutate} data={data} />
         </div>
       </div>
       <div

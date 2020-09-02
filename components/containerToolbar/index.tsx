@@ -25,6 +25,7 @@ import { Grid } from "@material-ui/core";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import InfoIcon from "@material-ui/icons/Info";
 import AddFileButton from "../addFileButton";
+import AddFolderFlyout from "../addFolderFlyout";
 import styles from "./styles";
 
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
@@ -37,12 +38,17 @@ const useStyles = makeStyles<PrismTheme>((theme) =>
 
 interface IContainerToolbar {
   onSave: () => void;
+  data: [{ iri: string; name: string }];
 }
 
 export default function ContainerToolbar(
   props: IContainerToolbar
 ): ReactElement | null {
   const { onSave } = props;
+  const { data } = props;
+  const folders =
+    data &&
+    data.filter((el: { iri: string; name: string }) => el.iri.endsWith("/"));
   const bem = useBem(useStyles());
 
   return (
@@ -54,6 +60,10 @@ export default function ContainerToolbar(
         >
           <InfoIcon />
         </ResourceLink>
+      </Grid>
+
+      <Grid item>
+        <AddFolderFlyout onSave={onSave} folders={folders} />
       </Grid>
 
       <Grid item>
