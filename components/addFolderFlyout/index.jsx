@@ -193,9 +193,11 @@ export default function AddFolderFlyout({ onSave, className, data }) {
 AddFolderFlyout.propTypes = {
   onSave: PropTypes.func,
   data: PropTypes.arrayOf(PropTypes.shape()),
+  className: PropTypes.string,
 };
 
 AddFolderFlyout.defaultProps = {
   onSave: () => {},
   data: [],
+  className: null,
 };

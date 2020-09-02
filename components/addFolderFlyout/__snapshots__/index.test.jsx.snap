@@ -5,6 +5,7 @@ exports[`AddFolderFlyout Renders an Add Folder button 1`] = `
   currentUri="https://www.mypodbrowser.com/"
 >
   <AddFolderFlyout
+    className={null}
     data={Array []}
     folders={
       Array [
@@ -17,135 +18,14 @@ exports[`AddFolderFlyout Renders an Add Folder button 1`] = `
     onSave={[MockFunction]}
   >
     <div>
-      <WithStyles(ForwardRef(Button))
-        color="primary"
+      <button
+        className={null}
         id="add-folder-button"
         onClick={[Function]}
-        variant="contained"
+        type="button"
       >
-        <ForwardRef(Button)
-          classes={
-            Object {
-              "colorInherit": "MuiButton-colorInherit",
-              "contained": "MuiButton-contained",
-              "containedPrimary": "MuiButton-containedPrimary",
-              "containedSecondary": "MuiButton-containedSecondary",
-              "containedSizeLarge": "MuiButton-containedSizeLarge",
-              "containedSizeSmall": "MuiButton-containedSizeSmall",
-              "disableElevation": "MuiButton-disableElevation",
-              "disabled": "Mui-disabled",
-              "endIcon": "MuiButton-endIcon",
-              "focusVisible": "Mui-focusVisible",
-              "fullWidth": "MuiButton-fullWidth",
-              "iconSizeLarge": "MuiButton-iconSizeLarge",
-              "iconSizeMedium": "MuiButton-iconSizeMedium",
-              "iconSizeSmall": "MuiButton-iconSizeSmall",
-              "label": "MuiButton-label",
-              "outlined": "MuiButton-outlined",
-              "outlinedPrimary": "MuiButton-outlinedPrimary",
-              "outlinedSecondary": "MuiButton-outlinedSecondary",
-              "outlinedSizeLarge": "MuiButton-outlinedSizeLarge",
-              "outlinedSizeSmall": "MuiButton-outlinedSizeSmall",
-              "root": "MuiButton-root",
-              "sizeLarge": "MuiButton-sizeLarge",
-              "sizeSmall": "MuiButton-sizeSmall",
-              "startIcon": "MuiButton-startIcon",
-              "text": "MuiButton-text",
-              "textPrimary": "MuiButton-textPrimary",
-              "textSecondary": "MuiButton-textSecondary",
-              "textSizeLarge": "MuiButton-textSizeLarge",
-              "textSizeSmall": "MuiButton-textSizeSmall",
-            }
-          }
-          color="primary"
-          id="add-folder-button"
-          onClick={[Function]}
-          variant="contained"
-        >
-          <WithStyles(ForwardRef(ButtonBase))
-            className="MuiButton-root MuiButton-contained MuiButton-containedPrimary"
-            component="button"
-            disabled={false}
-            focusRipple={true}
-            focusVisibleClassName="Mui-focusVisible"
-            id="add-folder-button"
-            onClick={[Function]}
-            type="button"
-          >
-            <ForwardRef(ButtonBase)
-              className="MuiButton-root MuiButton-contained MuiButton-containedPrimary"
-              classes={
-                Object {
-                  "disabled": "Mui-disabled",
-                  "focusVisible": "Mui-focusVisible",
-                  "root": "MuiButtonBase-root",
-                }
-              }
-              component="button"
-              disabled={false}
-              focusRipple={true}
-              focusVisibleClassName="Mui-focusVisible"
-              id="add-folder-button"
-              onClick={[Function]}
-              type="button"
-            >
-              <button
-                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary"
-                disabled={false}
-                id="add-folder-button"
-                onBlur={[Function]}
-                onClick={[Function]}
-                onDragLeave={[Function]}
-                onFocus={[Function]}
-                onKeyDown={[Function]}
-                onKeyUp={[Function]}
-                onMouseDown={[Function]}
-                onMouseLeave={[Function]}
-                onMouseUp={[Function]}
-                onTouchEnd={[Function]}
-                onTouchMove={[Function]}
-                onTouchStart={[Function]}
-                tabIndex={0}
-                type="button"
-              >
-                <span
-                  className="MuiButton-label"
-                >
-                  Create Folder
-                </span>
-                <WithStyles(memo)
-                  center={false}
-                >
-                  <ForwardRef(TouchRipple)
-                    center={false}
-                    classes={
-                      Object {
-                        "child": "MuiTouchRipple-child",
-                        "childLeaving": "MuiTouchRipple-childLeaving",
-                        "childPulsate": "MuiTouchRipple-childPulsate",
-                        "ripple": "MuiTouchRipple-ripple",
-                        "ripplePulsate": "MuiTouchRipple-ripplePulsate",
-                        "rippleVisible": "MuiTouchRipple-rippleVisible",
-                        "root": "MuiTouchRipple-root",
-                      }
-                    }
-                  >
-                    <span
-                      className="MuiTouchRipple-root"
-                    >
-                      <TransitionGroup
-                        childFactory={[Function]}
-                        component={null}
-                        exit={true}
-                      />
-                    </span>
-                  </ForwardRef(TouchRipple)>
-                </WithStyles(memo)>
-              </button>
-            </ForwardRef(ButtonBase)>
-          </WithStyles(ForwardRef(ButtonBase))>
-        </ForwardRef(Button)>
-      </WithStyles(ForwardRef(Button))>
+        Create Folder
+      </button>
       <WithStyles(ForwardRef(Popover))
         anchorEl={null}
         anchorOrigin={
