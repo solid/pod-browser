@@ -115,7 +115,7 @@ export default function Container({ iri }: IPodList): ReactElement {
   /* eslint react/jsx-props-no-spreading: 0 */
   return (
     <>
-      <PageHeader mutate={mutate} />
+      <PageHeader mutate={mutate} data={data} />
       <div className={clsx(bem("container"), bem("container-breadcrumbs"))}>
         <Breadcrumbs />
       </div>

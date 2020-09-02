@@ -23,22 +23,27 @@ import React, { ReactElement } from "react";
 import { PageHeader as PrismPageHeader } from "@inrupt/prism-react-components";
 import ContainerDetails from "../containerDetailsButton";
 import AddFileButton from "../addFileButton";
+import AddFolderFlyout from "../addFolderFlyout";
 
 interface Props {
   mutate: () => void;
+  data: [{ iri: string; name: string }];
 }
 
-export default function PageHeader({ mutate }: Props): ReactElement {
+export default function PageHeader({ mutate, data }: Props): ReactElement {
   const pageHeaderAction = PrismPageHeader.actionClassName();
 
   const containerDetails = <ContainerDetails className={pageHeaderAction} />;
+  const addFolderFlyout = (
+    <AddFolderFlyout onSave={mutate} className={pageHeaderAction} data={data} />
+  );
   const addFileButton = (
     <AddFileButton onSave={mutate} className={pageHeaderAction} />
   );
   return (
     <PrismPageHeader
       title="Files"
-      actions={[containerDetails, addFileButton]}
+      actions={[containerDetails, addFolderFlyout, addFileButton]}
     />
   );
 }
