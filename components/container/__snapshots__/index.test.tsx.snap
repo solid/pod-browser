@@ -1764,12 +1764,19 @@ font-display: block;",
       <Container
         iri="https://mypod.myhost.com/public"
       >
-        <PageHeader>
+        <PageHeader
+          data={Array []}
+        >
           <PageHeader
             actions={
               Array [
                 <ContainerDetailsButton
                   className="PodBrowser-page-header__action"
+                />,
+                <AddFolderFlyout
+                  className="PodBrowser-page-header__action"
+                  data={Array []}
+                  onSave={[Function]}
                 />,
                 <AddFileButton
                   className="PodBrowser-page-header__action"
@@ -1832,6 +1839,195 @@ font-display: block;",
                     </Link>
                   </ResourceLink>
                 </ContainerDetailsButton>
+                <AddFolderFlyout
+                  className="PodBrowser-page-header__action"
+                  data={Array []}
+                  onSave={[Function]}
+                >
+                  <div>
+                    <WithStyles(ForwardRef(Button))
+                      color="primary"
+                      id="add-folder-button"
+                      onClick={[Function]}
+                      variant="contained"
+                    >
+                      <ForwardRef(Button)
+                        classes={
+                          Object {
+                            "colorInherit": "PodBrowser-colorInherit",
+                            "contained": "PodBrowser-contained",
+                            "containedPrimary": "PodBrowser-containedPrimary",
+                            "containedSecondary": "PodBrowser-containedSecondary",
+                            "containedSizeLarge": "PodBrowser-containedSizeLarge",
+                            "containedSizeSmall": "PodBrowser-containedSizeSmall",
+                            "disableElevation": "PodBrowser-disableElevation",
+                            "disabled": "PodBrowser-disabled",
+                            "endIcon": "PodBrowser-endIcon",
+                            "focusVisible": "PodBrowser-focusVisible",
+                            "fullWidth": "PodBrowser-fullWidth",
+                            "iconSizeLarge": "PodBrowser-iconSizeLarge",
+                            "iconSizeMedium": "PodBrowser-iconSizeMedium",
+                            "iconSizeSmall": "PodBrowser-iconSizeSmall",
+                            "label": "PodBrowser-label",
+                            "outlined": "PodBrowser-outlined",
+                            "outlinedPrimary": "PodBrowser-outlinedPrimary",
+                            "outlinedSecondary": "PodBrowser-outlinedSecondary",
+                            "outlinedSizeLarge": "PodBrowser-outlinedSizeLarge",
+                            "outlinedSizeSmall": "PodBrowser-outlinedSizeSmall",
+                            "root": "PodBrowser-root",
+                            "sizeLarge": "PodBrowser-sizeLarge",
+                            "sizeSmall": "PodBrowser-sizeSmall",
+                            "startIcon": "PodBrowser-startIcon",
+                            "text": "PodBrowser-text",
+                            "textPrimary": "PodBrowser-textPrimary",
+                            "textSecondary": "PodBrowser-textSecondary",
+                            "textSizeLarge": "PodBrowser-textSizeLarge",
+                            "textSizeSmall": "PodBrowser-textSizeSmall",
+                          }
+                        }
+                        color="primary"
+                        id="add-folder-button"
+                        onClick={[Function]}
+                        variant="contained"
+                      >
+                        <WithStyles(ForwardRef(ButtonBase))
+                          className="PodBrowser-root PodBrowser-contained PodBrowser-containedPrimary"
+                          component="button"
+                          disabled={false}
+                          focusRipple={true}
+                          focusVisibleClassName="PodBrowser-focusVisible"
+                          id="add-folder-button"
+                          onClick={[Function]}
+                          type="button"
+                        >
+                          <ForwardRef(ButtonBase)
+                            className="PodBrowser-root PodBrowser-contained PodBrowser-containedPrimary"
+                            classes={
+                              Object {
+                                "disabled": "PodBrowser-disabled",
+                                "focusVisible": "PodBrowser-focusVisible",
+                                "root": "PodBrowser-root",
+                              }
+                            }
+                            component="button"
+                            disabled={false}
+                            focusRipple={true}
+                            focusVisibleClassName="PodBrowser-focusVisible"
+                            id="add-folder-button"
+                            onClick={[Function]}
+                            type="button"
+                          >
+                            <button
+                              className="PodBrowser-root PodBrowser-root PodBrowser-contained PodBrowser-containedPrimary"
+                              disabled={false}
+                              id="add-folder-button"
+                              onBlur={[Function]}
+                              onClick={[Function]}
+                              onDragLeave={[Function]}
+                              onFocus={[Function]}
+                              onKeyDown={[Function]}
+                              onKeyUp={[Function]}
+                              onMouseDown={[Function]}
+                              onMouseLeave={[Function]}
+                              onMouseUp={[Function]}
+                              onTouchEnd={[Function]}
+                              onTouchMove={[Function]}
+                              onTouchStart={[Function]}
+                              tabIndex={0}
+                              type="button"
+                            >
+                              <span
+                                className="PodBrowser-label"
+                              >
+                                Create Folder
+                              </span>
+                              <WithStyles(memo)
+                                center={false}
+                              >
+                                <ForwardRef(TouchRipple)
+                                  center={false}
+                                  classes={
+                                    Object {
+                                      "child": "PodBrowser-child",
+                                      "childLeaving": "PodBrowser-childLeaving",
+                                      "childPulsate": "PodBrowser-childPulsate",
+                                      "ripple": "PodBrowser-ripple",
+                                      "ripplePulsate": "PodBrowser-ripplePulsate",
+                                      "rippleVisible": "PodBrowser-rippleVisible",
+                                      "root": "PodBrowser-root",
+                                    }
+                                  }
+                                >
+                                  <span
+                                    className="PodBrowser-root"
+                                  >
+                                    <TransitionGroup
+                                      childFactory={[Function]}
+                                      component={null}
+                                      exit={true}
+                                    />
+                                  </span>
+                                </ForwardRef(TouchRipple)>
+                              </WithStyles(memo)>
+                            </button>
+                          </ForwardRef(ButtonBase)>
+                        </WithStyles(ForwardRef(ButtonBase))>
+                      </ForwardRef(Button)>
+                    </WithStyles(ForwardRef(Button))>
+                    <WithStyles(ForwardRef(Popover))
+                      anchorEl={null}
+                      anchorOrigin={
+                        Object {
+                          "horizontal": "center",
+                          "vertical": "bottom",
+                        }
+                      }
+                      onClose={[Function]}
+                      open={false}
+                      transformOrigin={
+                        Object {
+                          "horizontal": "center",
+                          "vertical": "top",
+                        }
+                      }
+                    >
+                      <ForwardRef(Popover)
+                        anchorEl={null}
+                        anchorOrigin={
+                          Object {
+                            "horizontal": "center",
+                            "vertical": "bottom",
+                          }
+                        }
+                        classes={
+                          Object {
+                            "paper": "PodBrowser-paper",
+                            "root": "PodBrowser-root",
+                          }
+                        }
+                        onClose={[Function]}
+                        open={false}
+                        transformOrigin={
+                          Object {
+                            "horizontal": "center",
+                            "vertical": "top",
+                          }
+                        }
+                      >
+                        <ForwardRef(Modal)
+                          BackdropProps={
+                            Object {
+                              "invisible": true,
+                            }
+                          }
+                          className="PodBrowser-root"
+                          onClose={[Function]}
+                          open={false}
+                        />
+                      </ForwardRef(Popover)>
+                    </WithStyles(ForwardRef(Popover))>
+                  </div>
+                </AddFolderFlyout>
                 <AddFileButton
                   className="PodBrowser-page-header__action"
                   onSave={[Function]}
@@ -3782,12 +3978,49 @@ font-display: block;",
       <Container
         iri="https://mypod.myhost.com/public"
       >
-        <PageHeader>
+        <PageHeader
+          data={
+            Array [
+              Object {
+                "iri": "https://myaccount.mypodserver.com/inbox",
+                "name": "inbox",
+              },
+              Object {
+                "iri": "https://myaccount.mypodserver.com/private",
+                "name": "private",
+              },
+              Object {
+                "iri": "https://myaccount.mypodserver.com/note.txt",
+                "name": "note.txt",
+              },
+            ]
+          }
+        >
           <PageHeader
             actions={
               Array [
                 <ContainerDetailsButton
                   className="PodBrowser-page-header__action"
+                />,
+                <AddFolderFlyout
+                  className="PodBrowser-page-header__action"
+                  data={
+                    Array [
+                      Object {
+                        "iri": "https://myaccount.mypodserver.com/inbox",
+                        "name": "inbox",
+                      },
+                      Object {
+                        "iri": "https://myaccount.mypodserver.com/private",
+                        "name": "private",
+                      },
+                      Object {
+                        "iri": "https://myaccount.mypodserver.com/note.txt",
+                        "name": "note.txt",
+                      },
+                    ]
+                  }
+                  onSave={[Function]}
                 />,
                 <AddFileButton
                   className="PodBrowser-page-header__action"
@@ -3850,6 +4083,210 @@ font-display: block;",
                     </Link>
                   </ResourceLink>
                 </ContainerDetailsButton>
+                <AddFolderFlyout
+                  className="PodBrowser-page-header__action"
+                  data={
+                    Array [
+                      Object {
+                        "iri": "https://myaccount.mypodserver.com/inbox",
+                        "name": "inbox",
+                      },
+                      Object {
+                        "iri": "https://myaccount.mypodserver.com/private",
+                        "name": "private",
+                      },
+                      Object {
+                        "iri": "https://myaccount.mypodserver.com/note.txt",
+                        "name": "note.txt",
+                      },
+                    ]
+                  }
+                  onSave={[Function]}
+                >
+                  <div>
+                    <WithStyles(ForwardRef(Button))
+                      color="primary"
+                      id="add-folder-button"
+                      onClick={[Function]}
+                      variant="contained"
+                    >
+                      <ForwardRef(Button)
+                        classes={
+                          Object {
+                            "colorInherit": "PodBrowser-colorInherit",
+                            "contained": "PodBrowser-contained",
+                            "containedPrimary": "PodBrowser-containedPrimary",
+                            "containedSecondary": "PodBrowser-containedSecondary",
+                            "containedSizeLarge": "PodBrowser-containedSizeLarge",
+                            "containedSizeSmall": "PodBrowser-containedSizeSmall",
+                            "disableElevation": "PodBrowser-disableElevation",
+                            "disabled": "PodBrowser-disabled",
+                            "endIcon": "PodBrowser-endIcon",
+                            "focusVisible": "PodBrowser-focusVisible",
+                            "fullWidth": "PodBrowser-fullWidth",
+                            "iconSizeLarge": "PodBrowser-iconSizeLarge",
+                            "iconSizeMedium": "PodBrowser-iconSizeMedium",
+                            "iconSizeSmall": "PodBrowser-iconSizeSmall",
+                            "label": "PodBrowser-label",
+                            "outlined": "PodBrowser-outlined",
+                            "outlinedPrimary": "PodBrowser-outlinedPrimary",
+                            "outlinedSecondary": "PodBrowser-outlinedSecondary",
+                            "outlinedSizeLarge": "PodBrowser-outlinedSizeLarge",
+                            "outlinedSizeSmall": "PodBrowser-outlinedSizeSmall",
+                            "root": "PodBrowser-root",
+                            "sizeLarge": "PodBrowser-sizeLarge",
+                            "sizeSmall": "PodBrowser-sizeSmall",
+                            "startIcon": "PodBrowser-startIcon",
+                            "text": "PodBrowser-text",
+                            "textPrimary": "PodBrowser-textPrimary",
+                            "textSecondary": "PodBrowser-textSecondary",
+                            "textSizeLarge": "PodBrowser-textSizeLarge",
+                            "textSizeSmall": "PodBrowser-textSizeSmall",
+                          }
+                        }
+                        color="primary"
+                        id="add-folder-button"
+                        onClick={[Function]}
+                        variant="contained"
+                      >
+                        <WithStyles(ForwardRef(ButtonBase))
+                          className="PodBrowser-root PodBrowser-contained PodBrowser-containedPrimary"
+                          component="button"
+                          disabled={false}
+                          focusRipple={true}
+                          focusVisibleClassName="PodBrowser-focusVisible"
+                          id="add-folder-button"
+                          onClick={[Function]}
+                          type="button"
+                        >
+                          <ForwardRef(ButtonBase)
+                            className="PodBrowser-root PodBrowser-contained PodBrowser-containedPrimary"
+                            classes={
+                              Object {
+                                "disabled": "PodBrowser-disabled",
+                                "focusVisible": "PodBrowser-focusVisible",
+                                "root": "PodBrowser-root",
+                              }
+                            }
+                            component="button"
+                            disabled={false}
+                            focusRipple={true}
+                            focusVisibleClassName="PodBrowser-focusVisible"
+                            id="add-folder-button"
+                            onClick={[Function]}
+                            type="button"
+                          >
+                            <button
+                              className="PodBrowser-root PodBrowser-root PodBrowser-contained PodBrowser-containedPrimary"
+                              disabled={false}
+                              id="add-folder-button"
+                              onBlur={[Function]}
+                              onClick={[Function]}
+                              onDragLeave={[Function]}
+                              onFocus={[Function]}
+                              onKeyDown={[Function]}
+                              onKeyUp={[Function]}
+                              onMouseDown={[Function]}
+                              onMouseLeave={[Function]}
+                              onMouseUp={[Function]}
+                              onTouchEnd={[Function]}
+                              onTouchMove={[Function]}
+                              onTouchStart={[Function]}
+                              tabIndex={0}
+                              type="button"
+                            >
+                              <span
+                                className="PodBrowser-label"
+                              >
+                                Create Folder
+                              </span>
+                              <WithStyles(memo)
+                                center={false}
+                              >
+                                <ForwardRef(TouchRipple)
+                                  center={false}
+                                  classes={
+                                    Object {
+                                      "child": "PodBrowser-child",
+                                      "childLeaving": "PodBrowser-childLeaving",
+                                      "childPulsate": "PodBrowser-childPulsate",
+                                      "ripple": "PodBrowser-ripple",
+                                      "ripplePulsate": "PodBrowser-ripplePulsate",
+                                      "rippleVisible": "PodBrowser-rippleVisible",
+                                      "root": "PodBrowser-root",
+                                    }
+                                  }
+                                >
+                                  <span
+                                    className="PodBrowser-root"
+                                  >
+                                    <TransitionGroup
+                                      childFactory={[Function]}
+                                      component={null}
+                                      exit={true}
+                                    />
+                                  </span>
+                                </ForwardRef(TouchRipple)>
+                              </WithStyles(memo)>
+                            </button>
+                          </ForwardRef(ButtonBase)>
+                        </WithStyles(ForwardRef(ButtonBase))>
+                      </ForwardRef(Button)>
+                    </WithStyles(ForwardRef(Button))>
+                    <WithStyles(ForwardRef(Popover))
+                      anchorEl={null}
+                      anchorOrigin={
+                        Object {
+                          "horizontal": "center",
+                          "vertical": "bottom",
+                        }
+                      }
+                      onClose={[Function]}
+                      open={false}
+                      transformOrigin={
+                        Object {
+                          "horizontal": "center",
+                          "vertical": "top",
+                        }
+                      }
+                    >
+                      <ForwardRef(Popover)
+                        anchorEl={null}
+                        anchorOrigin={
+                          Object {
+                            "horizontal": "center",
+                            "vertical": "bottom",
+                          }
+                        }
+                        classes={
+                          Object {
+                            "paper": "PodBrowser-paper",
+                            "root": "PodBrowser-root",
+                          }
+                        }
+                        onClose={[Function]}
+                        open={false}
+                        transformOrigin={
+                          Object {
+                            "horizontal": "center",
+                            "vertical": "top",
+                          }
+                        }
+                      >
+                        <ForwardRef(Modal)
+                          BackdropProps={
+                            Object {
+                              "invisible": true,
+                            }
+                          }
+                          className="PodBrowser-root"
+                          onClose={[Function]}
+                          open={false}
+                        />
+                      </ForwardRef(Popover)>
+                    </WithStyles(ForwardRef(Popover))>
+                  </div>
+                </AddFolderFlyout>
                 <AddFileButton
                   className="PodBrowser-page-header__action"
                   onSave={[Function]}

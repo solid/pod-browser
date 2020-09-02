@@ -5,6 +5,7 @@ exports[`AddFolderFlyout Renders an Add Folder button 1`] = `
   currentUri="https://www.mypodbrowser.com/"
 >
   <AddFolderFlyout
+    data={Array []}
     folders={
       Array [
         Object {
