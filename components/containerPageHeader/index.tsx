@@ -27,15 +27,22 @@ import AddFolderFlyout from "../addFolderFlyout";
 
 interface Props {
   mutate: () => void;
-  data: [{ iri: string; name: string }];
+  resourceList: [{ iri: string; name: string }];
 }
 
-export default function PageHeader({ mutate, data }: Props): ReactElement {
+export default function PageHeader({
+  mutate,
+  resourceList,
+}: Props): ReactElement {
   const pageHeaderAction = PrismPageHeader.actionClassName();
 
   const containerDetails = <ContainerDetails className={pageHeaderAction} />;
   const addFolderFlyout = (
-    <AddFolderFlyout onSave={mutate} className={pageHeaderAction} data={data} />
+    <AddFolderFlyout
+      onSave={mutate}
+      className={pageHeaderAction}
+      resourceList={resourceList}
+    />
   );
   const addFileButton = (
     <AddFileButton onSave={mutate} className={pageHeaderAction} />

@@ -77,6 +77,7 @@ export function handleFolderSubmit({
   setSeverity,
   setMessage,
   setAlertOpen,
+  handleClose,
 }) {
   return async () => {
     try {
@@ -91,6 +92,7 @@ export function handleFolderSubmit({
         )}`
       );
       setAlertOpen(true);
+      handleClose();
     } catch (error) {
       setSeverity("error");
       setMessage(error.toString());
@@ -112,7 +114,7 @@ export function handleChange(setFolderName) {
   };
 }
 
-export default function AddFolderFlyout({ onSave, className, data }) {
+export default function AddFolderFlyout({ onSave, className, resourceList }) {
   const classes = useStyles();
   const [folderName, setFolderName] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -120,7 +122,8 @@ export default function AddFolderFlyout({ onSave, className, data }) {
   const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
   const { session } = useContext(SessionContext);
   const { fetch } = session;
-  const folders = data && data.filter((el) => el.iri.endsWith("/"));
+  const folders =
+    resourceList && resourceList.filter((el) => el.iri.endsWith("/"));
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -142,6 +145,7 @@ export default function AddFolderFlyout({ onSave, className, data }) {
     setSeverity,
     setMessage,
     setAlertOpen,
+    handleClose,
   });
 
   const onClick = handleCreateFolderClick({ setFolderName, onSubmit });
@@ -192,12 +196,12 @@ export default function AddFolderFlyout({ onSave, className, data }) {
 
 AddFolderFlyout.propTypes = {
   onSave: PropTypes.func,
-  data: PropTypes.arrayOf(PropTypes.shape()),
+  resourceList: PropTypes.arrayOf(PropTypes.shape()),
   className: PropTypes.string,
 };
 
 AddFolderFlyout.defaultProps = {
   onSave: () => {},
-  data: [],
+  resourceList: [],
   className: null,
 };
