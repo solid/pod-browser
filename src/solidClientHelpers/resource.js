@@ -85,7 +85,7 @@ export async function getResourceWithPermissions(iri, fetch) {
 
   try {
     const dataset = await unstable_fetchLitDatasetWithAcl(iri, { fetch });
-    const access = unstable_getAgentAccessAll(dataset);
+    const access = await unstable_getAgentAccessAll(dataset);
     const permissions = normalizePermissions(access);
 
     return respond({ dataset, iri, permissions });

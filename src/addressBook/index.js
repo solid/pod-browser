@@ -103,6 +103,7 @@ export async function getGroups(containerIri, fetch) {
 export async function getPeople(containerIri, fetch) {
   const { respond, error } = createResponder();
   const peopleIri = joinPath(containerIri, "Person/");
+
   const { response: peopleResponse, error: peopleError } = await getResource(
     peopleIri,
     fetch
