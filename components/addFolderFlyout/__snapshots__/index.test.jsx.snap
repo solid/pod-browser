@@ -6,7 +6,6 @@ exports[`AddFolderFlyout Renders an Add Folder button 1`] = `
 >
   <AddFolderFlyout
     className={null}
-    data={Array []}
     folders={
       Array [
         Object {
@@ -16,6 +15,7 @@ exports[`AddFolderFlyout Renders an Add Folder button 1`] = `
       ]
     }
     onSave={[MockFunction]}
+    resourceList={Array []}
   >
     <div>
       <button

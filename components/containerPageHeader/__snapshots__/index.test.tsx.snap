@@ -12,8 +12,8 @@ exports[`ContainerPageHeader Renders view 1`] = `
         />,
         <AddFolderFlyout
           className="makeStyles-page-header__action-5"
-          data={Array []}
           onSave={[Function]}
+          resourceList={Array []}
         />,
         <AddFileButton
           className="makeStyles-page-header__action-5"
@@ -78,8 +78,8 @@ exports[`ContainerPageHeader Renders view 1`] = `
         </ContainerDetailsButton>
         <AddFolderFlyout
           className="makeStyles-page-header__action-5"
-          data={Array []}
           onSave={[Function]}
+          resourceList={Array []}
         >
           <div>
             <button

@@ -1765,7 +1765,7 @@ font-display: block;",
         iri="https://mypod.myhost.com/public"
       >
         <PageHeader
-          data={Array []}
+          resourceList={Array []}
         >
           <PageHeader
             actions={
@@ -1775,8 +1775,8 @@ font-display: block;",
                 />,
                 <AddFolderFlyout
                   className="PodBrowser-page-header__action"
-                  data={Array []}
                   onSave={[Function]}
+                  resourceList={Array []}
                 />,
                 <AddFileButton
                   className="PodBrowser-page-header__action"
@@ -1841,8 +1841,8 @@ font-display: block;",
                 </ContainerDetailsButton>
                 <AddFolderFlyout
                   className="PodBrowser-page-header__action"
-                  data={Array []}
                   onSave={[Function]}
+                  resourceList={Array []}
                 >
                   <div>
                     <button
@@ -3858,7 +3858,7 @@ font-display: block;",
         iri="https://mypod.myhost.com/public"
       >
         <PageHeader
-          data={
+          resourceList={
             Array [
               Object {
                 "iri": "https://myaccount.mypodserver.com/inbox",
@@ -3883,7 +3883,8 @@ font-display: block;",
                 />,
                 <AddFolderFlyout
                   className="PodBrowser-page-header__action"
-                  data={
+                  onSave={[Function]}
+                  resourceList={
                     Array [
                       Object {
                         "iri": "https://myaccount.mypodserver.com/inbox",
@@ -3899,7 +3900,6 @@ font-display: block;",
                       },
                     ]
                   }
-                  onSave={[Function]}
                 />,
                 <AddFileButton
                   className="PodBrowser-page-header__action"
@@ -3964,7 +3964,8 @@ font-display: block;",
                 </ContainerDetailsButton>
                 <AddFolderFlyout
                   className="PodBrowser-page-header__action"
-                  data={
+                  onSave={[Function]}
+                  resourceList={
                     Array [
                       Object {
                         "iri": "https://myaccount.mypodserver.com/inbox",
@@ -3980,7 +3981,6 @@ font-display: block;",
                       },
                     ]
                   }
-                  onSave={[Function]}
                 >
                   <div>
                     <button
