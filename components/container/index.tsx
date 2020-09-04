@@ -29,7 +29,7 @@ import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 
-import ContainerTableRow from "../containerTableRow";
+import ContainerTableRow, { renderResourceType } from "../containerTableRow";
 import SortedTableCarat from "../sortedTableCarat";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import { useFetchContainerResourceIris } from "../../src/hooks/solidClient";
@@ -70,11 +70,11 @@ export default function Container({ iri }: IPodList): ReactElement {
       },
       {
         Header: "File",
-        accessor: "name",
+        accessor: "filename",
       },
       {
         Header: "Type",
-        accessor: "types[0]",
+        accessor: "type",
       },
     ],
     []
@@ -88,6 +88,8 @@ export default function Container({ iri }: IPodList): ReactElement {
     return resourceIris.map((rIri) => ({
       iri: rIri,
       name: getResourceName(rIri),
+      filename: getResourceName(rIri)?.toLowerCase(),
+      type: renderResourceType(rIri),
     }));
   }, [resourceIris]);
 
