@@ -1844,21 +1844,43 @@ font-display: block;",
                   onSave={[Function]}
                   resourceList={Array []}
                 >
-                  <div>
-                    <button
-                      className="PodBrowser-page-header__action"
-                      id="add-folder-button"
-                      onClick={[Function]}
-                      type="button"
-                    >
-                      Create Folder
-                    </button>
-                    <WithStyles(ForwardRef(Popover))
+                  <button
+                    className="PodBrowser-page-header__action"
+                    id="add-folder-button"
+                    onClick={[Function]}
+                    type="button"
+                  >
+                    Create Folder
+                  </button>
+                  <WithStyles(ForwardRef(Popover))
+                    anchorEl={null}
+                    anchorOrigin={
+                      Object {
+                        "horizontal": "center",
+                        "vertical": "bottom",
+                      }
+                    }
+                    onClose={[Function]}
+                    open={false}
+                    transformOrigin={
+                      Object {
+                        "horizontal": "center",
+                        "vertical": "top",
+                      }
+                    }
+                  >
+                    <ForwardRef(Popover)
                       anchorEl={null}
                       anchorOrigin={
                         Object {
                           "horizontal": "center",
                           "vertical": "bottom",
+                        }
+                      }
+                      classes={
+                        Object {
+                          "paper": "PodBrowser-paper",
+                          "root": "PodBrowser-root",
                         }
                       }
                       onClose={[Function]}
@@ -1870,42 +1892,18 @@ font-display: block;",
                         }
                       }
                     >
-                      <ForwardRef(Popover)
-                        anchorEl={null}
-                        anchorOrigin={
+                      <ForwardRef(Modal)
+                        BackdropProps={
                           Object {
-                            "horizontal": "center",
-                            "vertical": "bottom",
+                            "invisible": true,
                           }
                         }
-                        classes={
-                          Object {
-                            "paper": "PodBrowser-paper",
-                            "root": "PodBrowser-root",
-                          }
-                        }
+                        className="PodBrowser-root"
                         onClose={[Function]}
                         open={false}
-                        transformOrigin={
-                          Object {
-                            "horizontal": "center",
-                            "vertical": "top",
-                          }
-                        }
-                      >
-                        <ForwardRef(Modal)
-                          BackdropProps={
-                            Object {
-                              "invisible": true,
-                            }
-                          }
-                          className="PodBrowser-root"
-                          onClose={[Function]}
-                          open={false}
-                        />
-                      </ForwardRef(Popover)>
-                    </WithStyles(ForwardRef(Popover))>
-                  </div>
+                      />
+                    </ForwardRef(Popover)>
+                  </WithStyles(ForwardRef(Popover))>
                 </AddFolderFlyout>
                 <AddFileButton
                   className="PodBrowser-page-header__action"
@@ -3982,21 +3980,43 @@ font-display: block;",
                     ]
                   }
                 >
-                  <div>
-                    <button
-                      className="PodBrowser-page-header__action"
-                      id="add-folder-button"
-                      onClick={[Function]}
-                      type="button"
-                    >
-                      Create Folder
-                    </button>
-                    <WithStyles(ForwardRef(Popover))
+                  <button
+                    className="PodBrowser-page-header__action"
+                    id="add-folder-button"
+                    onClick={[Function]}
+                    type="button"
+                  >
+                    Create Folder
+                  </button>
+                  <WithStyles(ForwardRef(Popover))
+                    anchorEl={null}
+                    anchorOrigin={
+                      Object {
+                        "horizontal": "center",
+                        "vertical": "bottom",
+                      }
+                    }
+                    onClose={[Function]}
+                    open={false}
+                    transformOrigin={
+                      Object {
+                        "horizontal": "center",
+                        "vertical": "top",
+                      }
+                    }
+                  >
+                    <ForwardRef(Popover)
                       anchorEl={null}
                       anchorOrigin={
                         Object {
                           "horizontal": "center",
                           "vertical": "bottom",
+                        }
+                      }
+                      classes={
+                        Object {
+                          "paper": "PodBrowser-paper",
+                          "root": "PodBrowser-root",
                         }
                       }
                       onClose={[Function]}
@@ -4008,42 +4028,18 @@ font-display: block;",
                         }
                       }
                     >
-                      <ForwardRef(Popover)
-                        anchorEl={null}
-                        anchorOrigin={
+                      <ForwardRef(Modal)
+                        BackdropProps={
                           Object {
-                            "horizontal": "center",
-                            "vertical": "bottom",
+                            "invisible": true,
                           }
                         }
-                        classes={
-                          Object {
-                            "paper": "PodBrowser-paper",
-                            "root": "PodBrowser-root",
-                          }
-                        }
+                        className="PodBrowser-root"
                         onClose={[Function]}
                         open={false}
-                        transformOrigin={
-                          Object {
-                            "horizontal": "center",
-                            "vertical": "top",
-                          }
-                        }
-                      >
-                        <ForwardRef(Modal)
-                          BackdropProps={
-                            Object {
-                              "invisible": true,
-                            }
-                          }
-                          className="PodBrowser-root"
-                          onClose={[Function]}
-                          open={false}
-                        />
-                      </ForwardRef(Popover)>
-                    </WithStyles(ForwardRef(Popover))>
-                  </div>
+                      />
+                    </ForwardRef(Popover)>
+                  </WithStyles(ForwardRef(Popover))>
                 </AddFolderFlyout>
                 <AddFileButton
                   className="PodBrowser-page-header__action"

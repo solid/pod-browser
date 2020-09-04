@@ -81,21 +81,43 @@ exports[`ContainerPageHeader Renders view 1`] = `
           onSave={[Function]}
           resourceList={Array []}
         >
-          <div>
-            <button
-              className="makeStyles-page-header__action-5"
-              id="add-folder-button"
-              onClick={[Function]}
-              type="button"
-            >
-              Create Folder
-            </button>
-            <WithStyles(ForwardRef(Popover))
+          <button
+            className="makeStyles-page-header__action-5"
+            id="add-folder-button"
+            onClick={[Function]}
+            type="button"
+          >
+            Create Folder
+          </button>
+          <WithStyles(ForwardRef(Popover))
+            anchorEl={null}
+            anchorOrigin={
+              Object {
+                "horizontal": "center",
+                "vertical": "bottom",
+              }
+            }
+            onClose={[Function]}
+            open={false}
+            transformOrigin={
+              Object {
+                "horizontal": "center",
+                "vertical": "top",
+              }
+            }
+          >
+            <ForwardRef(Popover)
               anchorEl={null}
               anchorOrigin={
                 Object {
                   "horizontal": "center",
                   "vertical": "bottom",
+                }
+              }
+              classes={
+                Object {
+                  "paper": "MuiPopover-paper",
+                  "root": "MuiPopover-root",
                 }
               }
               onClose={[Function]}
@@ -107,42 +129,18 @@ exports[`ContainerPageHeader Renders view 1`] = `
                 }
               }
             >
-              <ForwardRef(Popover)
-                anchorEl={null}
-                anchorOrigin={
+              <ForwardRef(Modal)
+                BackdropProps={
                   Object {
-                    "horizontal": "center",
-                    "vertical": "bottom",
+                    "invisible": true,
                   }
                 }
-                classes={
-                  Object {
-                    "paper": "MuiPopover-paper",
-                    "root": "MuiPopover-root",
-                  }
-                }
+                className="MuiPopover-root"
                 onClose={[Function]}
                 open={false}
-                transformOrigin={
-                  Object {
-                    "horizontal": "center",
-                    "vertical": "top",
-                  }
-                }
-              >
-                <ForwardRef(Modal)
-                  BackdropProps={
-                    Object {
-                      "invisible": true,
-                    }
-                  }
-                  className="MuiPopover-root"
-                  onClose={[Function]}
-                  open={false}
-                />
-              </ForwardRef(Popover)>
-            </WithStyles(ForwardRef(Popover))>
-          </div>
+              />
+            </ForwardRef(Popover)>
+          </WithStyles(ForwardRef(Popover))>
         </AddFolderFlyout>
         <AddFileButton
           className="makeStyles-page-header__action-5"

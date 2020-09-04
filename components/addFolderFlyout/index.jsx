@@ -152,7 +152,7 @@ export default function AddFolderFlyout({ onSave, className, resourceList }) {
   const onChange = handleChange(setFolderName);
 
   return (
-    <div>
+    <>
       <button
         type="button"
         aria-describedby={id}
@@ -190,7 +190,7 @@ export default function AddFolderFlyout({ onSave, className, resourceList }) {
           </Button>
         </Typography>
       </Popover>
-    </div>
+    </>
   );
 }
 
