@@ -1807,6 +1807,7 @@ font-display: block;",
                   <ResourceLink
                     action="details"
                     className="PodBrowser-page-header__action"
+                    id="folder-details-button"
                   >
                     <Link
                       as={
@@ -1832,6 +1833,7 @@ font-display: block;",
                       <a
                         className="PodBrowser-page-header__action"
                         href="/resource/[iri]?action=details&resourceIri="
+                        id="folder-details-button"
                         onClick={[Function]}
                         onMouseEnter={[Function]}
                       >
@@ -1914,9 +1916,11 @@ font-display: block;",
                   <label
                     className="PodBrowser-page-header__action"
                     disabled={false}
+                    id="upload-file-button"
                   >
                     Upload File
                     <input
+                      id="upload-file-input"
                       onChange={[Function]}
                       onClick={[Function]}
                       style={
@@ -3963,6 +3967,7 @@ font-display: block;",
                   <ResourceLink
                     action="details"
                     className="PodBrowser-page-header__action"
+                    id="folder-details-button"
                   >
                     <Link
                       as={
@@ -3988,6 +3993,7 @@ font-display: block;",
                       <a
                         className="PodBrowser-page-header__action"
                         href="/resource/[iri]?action=details&resourceIri="
+                        id="folder-details-button"
                         onClick={[Function]}
                         onMouseEnter={[Function]}
                       >
@@ -4112,9 +4118,11 @@ font-display: block;",
                   <label
                     className="PodBrowser-page-header__action"
                     disabled={false}
+                    id="upload-file-button"
                   >
                     Upload File
                     <input
+                      id="upload-file-input"
                       onChange={[Function]}
                       onClick={[Function]}
                       style={

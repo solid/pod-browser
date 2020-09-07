@@ -33,6 +33,7 @@ export default function ContainerDetailsButton({
 }: Props): ReactElement {
   return (
     <ResourceLink
+      id="folder-details-button"
       action={DETAILS_CONTEXT_ACTIONS.DETAILS}
       className={className}
     >

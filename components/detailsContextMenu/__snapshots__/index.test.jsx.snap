@@ -5279,6 +5279,7 @@ font-display: block;",
                               action="sharing"
                               aria-disabled={false}
                               className="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
+                              id="share-permissions-button"
                               onBlur={[Function]}
                               onDragLeave={[Function]}
                               onFocus={[Function]}
@@ -5319,6 +5320,7 @@ font-display: block;",
                                   aria-disabled={false}
                                   className="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
                                   href="/resource/[iri]?action=sharing&resourceIri=%2Firi%2F"
+                                  id="share-permissions-button"
                                   onBlur={[Function]}
                                   onClick={[Function]}
                                   onDragLeave={[Function]}

@@ -44,6 +44,7 @@ exports[`ContainerPageHeader Renders view 1`] = `
           <ResourceLink
             action="details"
             className="makeStyles-page-header__action-5"
+            id="folder-details-button"
           >
             <Link
               as={
@@ -69,6 +70,7 @@ exports[`ContainerPageHeader Renders view 1`] = `
               <a
                 className="makeStyles-page-header__action-5"
                 href="/resource/[iri]?action=details&resourceIri="
+                id="folder-details-button"
                 onClick={[Function]}
                 onMouseEnter={[Function]}
               >
@@ -151,9 +153,11 @@ exports[`ContainerPageHeader Renders view 1`] = `
           <label
             className="makeStyles-page-header__action-5"
             disabled={false}
+            id="upload-file-button"
           >
             Upload File
             <input
+              id="upload-file-input"
               onChange={[Function]}
               onClick={[Function]}
               style={

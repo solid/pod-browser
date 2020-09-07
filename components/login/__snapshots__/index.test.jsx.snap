@@ -860,7 +860,9 @@ font-display: block;",
                     <div
                       className="PodBrowser-root PodBrowser-root"
                     >
-                      <h3>
+                      <h3
+                        id="login-title"
+                      >
                         Log In
                       </h3>
                       <WithStyles(ForwardRef(Autocomplete))
@@ -1717,6 +1719,7 @@ font-display: block;",
                       </WithStyles(ForwardRef(Autocomplete))>
                       <button
                         className="PodBrowser-button"
+                        id="login-button"
                         onClick={[Function]}
                         type="submit"
                       >
