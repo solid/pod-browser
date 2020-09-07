@@ -85,6 +85,7 @@ function DownloadLink(props) {
 
   return (
     <Button
+      id="download-resource-button"
       variant="contained"
       onClick={downloadResource(iri, session.fetch)}
       className={className}
@@ -106,6 +107,7 @@ export { DownloadLink };
 const SharingLink = React.forwardRef((linkProps, ref) => (
   <ResourceLink
     {...linkProps}
+    id="share-permissions-button"
     action={DETAILS_CONTEXT_ACTIONS.SHARING}
     ref={ref}
   />

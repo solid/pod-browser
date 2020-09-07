@@ -2,6 +2,7 @@
 
 exports[`DownloadLink returns a download button if resource is not a container 1`] = `
 <WithStyles(ForwardRef(Button))
+  id="download-resource-button"
   onClick={[Function]}
   variant="contained"
 >
@@ -1003,6 +1004,7 @@ font-display: block;",
                             action="sharing"
                             aria-disabled={false}
                             className="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
+                            id="share-permissions-button"
                             onBlur={[Function]}
                             onDragLeave={[Function]}
                             onFocus={[Function]}
@@ -2715,6 +2717,7 @@ font-display: block;",
                             action="sharing"
                             aria-disabled={false}
                             className="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
+                            id="share-permissions-button"
                             onBlur={[Function]}
                             onDragLeave={[Function]}
                             onFocus={[Function]}
@@ -3430,6 +3433,7 @@ font-display: block;",
           >
             <WithStyles(ForwardRef(Button))
               className="PodBrowser-downloadButton"
+              id="download-resource-button"
               onClick={[Function]}
               variant="contained"
             >
@@ -3468,6 +3472,7 @@ font-display: block;",
                     "textSizeSmall": "PodBrowser-textSizeSmall",
                   }
                 }
+                id="download-resource-button"
                 onClick={[Function]}
                 variant="contained"
               >
@@ -3477,6 +3482,7 @@ font-display: block;",
                   disabled={false}
                   focusRipple={true}
                   focusVisibleClassName="PodBrowser-focusVisible"
+                  id="download-resource-button"
                   onClick={[Function]}
                   type="button"
                 >
@@ -3493,12 +3499,14 @@ font-display: block;",
                     disabled={false}
                     focusRipple={true}
                     focusVisibleClassName="PodBrowser-focusVisible"
+                    id="download-resource-button"
                     onClick={[Function]}
                     type="button"
                   >
                     <button
                       className="PodBrowser-root PodBrowser-root PodBrowser-contained PodBrowser-downloadButton"
                       disabled={false}
+                      id="download-resource-button"
                       onBlur={[Function]}
                       onClick={[Function]}
                       onDragLeave={[Function]}
@@ -4592,6 +4600,7 @@ font-display: block;",
                                 aria-disabled={false}
                                 className="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
                                 href="/resource/[iri]?action=sharing&resourceIri=%2Fcontainer%2F"
+                                id="share-permissions-button"
                                 onBlur={[Function]}
                                 onClick={[Function]}
                                 onDragLeave={[Function]}
@@ -6304,6 +6313,7 @@ font-display: block;",
                                 aria-disabled={false}
                                 className="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
                                 href="/resource/[iri]?action=sharing&resourceIri=%2Fresource"
+                                id="share-permissions-button"
                                 onBlur={[Function]}
                                 onClick={[Function]}
                                 onDragLeave={[Function]}
