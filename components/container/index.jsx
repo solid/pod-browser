@@ -25,12 +25,13 @@ import { useTable, useSortBy } from "react-table";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
+import T from "prop-types";
 
 import ContainerTableRow, { renderResourceType } from "../containerTableRow";
 import SortedTableCarat from "../sortedTableCarat";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import { useFetchContainerResourceIris } from "../../src/hooks/solidClient";
-import { getResourceName } from "../../src/solidClientHelpers/resource";
+import { getResourceName } from "../../src/solidClientHelpers";
 
 import Spinner from "../spinner";
 import styles from "./styles";
