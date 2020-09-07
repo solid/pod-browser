@@ -3,6 +3,7 @@
 exports[`Delete link it renders a delete link 1`] = `
 <a
   href="#delete"
+  id="delete-button"
   onClick={[Function]}
 />
 `;

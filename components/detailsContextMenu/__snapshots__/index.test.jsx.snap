@@ -3893,6 +3893,7 @@ font-display: block;",
                               aria-disabled={false}
                               className="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
                               href="#delete"
+                              id="delete-button"
                               onBlur={[Function]}
                               onClick={[Function]}
                               onDragLeave={[Function]}
@@ -5599,6 +5600,7 @@ font-display: block;",
                               aria-disabled={false}
                               className="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
                               href="#delete"
+                              id="delete-button"
                               onBlur={[Function]}
                               onClick={[Function]}
                               onDragLeave={[Function]}

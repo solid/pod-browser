@@ -117,6 +117,7 @@ export default React.forwardRef(
     return (
       <a
         href="#delete"
+        id="delete-button"
         {...linkProps}
         ref={ref}
         onClick={() => setOpen(true)}
