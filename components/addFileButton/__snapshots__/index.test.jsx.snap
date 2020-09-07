@@ -12,9 +12,11 @@ exports[`AddFileButton Renders an add file button 1`] = `
     <label
       className={[Function]}
       disabled={false}
+      id="upload-file-button"
     >
       Upload File
       <input
+        id="upload-file-input"
         onChange={[Function]}
         onClick={[Function]}
         style={

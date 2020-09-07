@@ -199,9 +199,10 @@ export default function AddFileButton({ className, onSave, resourceList }) {
 
   return (
     // eslint-disable-next-line jsx-a11y/label-has-associated-control
-    <label disabled={isUploading} className={className}>
+    <label id="upload-file-button" disabled={isUploading} className={className}>
       {isUploading ? "Uploading..." : "Upload File"}
       <input
+        id="upload-file-input"
         type="file"
         style={{ display: "none" }}
         onClick={(e) => {
