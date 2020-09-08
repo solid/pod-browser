@@ -850,6 +850,7 @@ font-display: block;",
             <a
               className="PodBrowser-header-banner__logo"
               href="/"
+              id="header-banner-link"
               onClick={[Function]}
               onMouseEnter={[Function]}
             >
@@ -893,6 +894,7 @@ font-display: block;",
                 aria-expanded={true}
                 aria-haspopup="true"
                 className="PodBrowser-header-banner__aside-menu-trigger"
+                id="user-menu-button"
                 onClick={[Function]}
                 type="button"
               >
@@ -922,6 +924,7 @@ font-display: block;",
                     >
                       <button
                         className="PodBrowser-header-banner__user-menu-item-trigger"
+                        id="logout-button"
                         onClick={[Function]}
                         type="button"
                       >
@@ -1797,6 +1800,7 @@ font-display: block;",
             <a
               className="PodBrowser-header-banner__logo"
               href="/"
+              id="header-banner-link"
               onClick={[Function]}
               onMouseEnter={[Function]}
             >
@@ -1840,6 +1844,7 @@ font-display: block;",
                 aria-expanded={true}
                 aria-haspopup="true"
                 className="PodBrowser-header-banner__aside-menu-trigger"
+                id="user-menu-button"
                 onClick={[Function]}
                 type="button"
               >
@@ -1869,6 +1874,7 @@ font-display: block;",
                     >
                       <button
                         className="PodBrowser-header-banner__user-menu-item-trigger"
+                        id="logout-button"
                         onClick={[Function]}
                         type="button"
                       >

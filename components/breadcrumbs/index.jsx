@@ -61,7 +61,7 @@ export default function Breadcrumbs() {
 
   return (
     <nav aria-label="Breadcrumbs">
-      <ul className={bem("breadcrumb")} ref={breadcrumbsList}>
+      <ul id="breadcrumbs" className={bem("breadcrumb")} ref={breadcrumbsList}>
         {crumbs.map((crumb, index) => (
           <Crumb
             crumb={crumb}

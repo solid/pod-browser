@@ -126,6 +126,7 @@ function Container({ iri }) {
               >
                 {headerGroup.headers.map((column) => (
                   <td
+                    id={`toggle-sortby-${column.id}`}
                     key={column.id}
                     className={bem(
                       "table__header-cell",

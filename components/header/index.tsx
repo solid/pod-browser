@@ -38,7 +38,7 @@ export default function Header(): ReactElement | null {
   return (
     <header className={bem("header-banner")}>
       <Link href="/">
-        <a className={bem("header-banner__logo")}>
+        <a id="header-banner-link" className={bem("header-banner__logo")}>
           <img
             height={40}
             src="/inrupt_logo-2020.svg"

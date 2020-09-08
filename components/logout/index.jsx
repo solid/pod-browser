@@ -38,6 +38,7 @@ export default function LogOut({ children, className }) {
 
   return (
     <button
+      id="logout-button"
       onClick={onLogOutClick(session)}
       className={className}
       type="button"

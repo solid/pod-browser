@@ -2044,6 +2044,7 @@ font-display: block;",
                       <td
                         className="PodBrowser-table__header-cell PodBrowser-table__header-cell--align-center PodBrowser-table__header-cell--width-preview"
                         colSpan={1}
+                        id="toggle-sortby-icon"
                         key="header_icon"
                         role="columnheader"
                         style={
@@ -2951,6 +2952,7 @@ font-display: block;",
                       <td
                         className="PodBrowser-table__header-cell"
                         colSpan={1}
+                        id="toggle-sortby-filename"
                         key="header_filename"
                         onClick={[Function]}
                         role="columnheader"
@@ -2970,6 +2972,7 @@ font-display: block;",
                       <td
                         className="PodBrowser-table__header-cell"
                         colSpan={1}
+                        id="toggle-sortby-type"
                         key="header_type"
                         onClick={[Function]}
                         role="columnheader"
@@ -4246,6 +4249,7 @@ font-display: block;",
                       <td
                         className="PodBrowser-table__header-cell PodBrowser-table__header-cell--align-center PodBrowser-table__header-cell--width-preview"
                         colSpan={1}
+                        id="toggle-sortby-icon"
                         key="header_icon"
                         role="columnheader"
                         style={
@@ -11846,6 +11850,7 @@ font-display: block;",
                       <td
                         className="PodBrowser-table__header-cell"
                         colSpan={1}
+                        id="toggle-sortby-filename"
                         key="header_filename"
                         onClick={[Function]}
                         role="columnheader"
@@ -11865,6 +11870,7 @@ font-display: block;",
                       <td
                         className="PodBrowser-table__header-cell"
                         colSpan={1}
+                        id="toggle-sortby-type"
                         key="header_type"
                         onClick={[Function]}
                         role="columnheader"
