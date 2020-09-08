@@ -1,0 +1,6 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix schem: <http://schema.org/>.
+@prefix sp: <http://www.w3.org/ns/pim/space#>.
+
+<> a schem:Person, foaf:Person;
+   sp:preferencesFile </settings/prefs.ttl> .

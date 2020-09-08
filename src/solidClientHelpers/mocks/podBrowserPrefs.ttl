@@ -1,0 +1,6 @@
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix sp: <http://www.w3.org/ns/pim/space#>.
+
+<> a <sp#ConfigurationFile> ;
+   dct:title "Preferences file".
+

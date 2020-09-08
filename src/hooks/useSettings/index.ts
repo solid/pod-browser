@@ -20,6 +20,7 @@
  */
 
 import { useContext, useEffect, useState } from "react";
+import { getSolidDataset } from "@inrupt/solid-client";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import { getOrCreateSettings } from "../../solidClientHelpers/settings";
 import { Resource } from "../../solidClientHelpers/resource";
@@ -33,7 +34,11 @@ export default function useSettings(): Resource | null {
   useEffect(() => {
     if (!profile || !session) return;
     // eslint-disable-next-line no-void
-    void getOrCreateSettings(profile.webId, session).then(setSettings);
+    void getOrCreateSettings(profile.webId, session)
+      .then((settingsUrl) =>
+        getSolidDataset(settingsUrl, { fetch: session.fetch })
+      )
+      .then(setSettings);
   }, [profile, session]);
 
   return settings;

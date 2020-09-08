@@ -19,37 +19,46 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-module.exports = {
-  // Automatically clear mock calls and instances between every test
-  clearMocks: true,
+import "whatwg-fetch";
+import Mock = jest.Mock;
 
-  // The test environment that will be used for testing
-  testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["<rootDir>jest/setupTests.js"],
+type fetchType = typeof window.fetch;
 
-  testPathIgnorePatterns: ["/node_modules/", "/__testUtils/"],
+export default function mockFetch(
+  responses: Record<string, Response | Record<string, Response>>
+): Mock<fetchType> {
+  return jest
+    .fn<any, Parameters<fetchType>>()
+    .mockImplementation((url, init) => {
+      const response = responses[url.toString()];
+      const responseObject = response as Record<string, Response>;
+      const method = init?.method || "GET";
+      if (typeof responseObject[method] !== "undefined") {
+        return Promise.resolve(responseObject[method]);
+      }
+      if (response) {
+        return Promise.resolve(response);
+      }
+      throw new Error(`URL (${url}) not mocked properly`);
+    });
+}
 
-  transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
-    "^.+\\.ttl$": "jest-raw-loader",
-  },
+export function mockSolidClientRequest(
+  body: string,
+  method = "GET",
+  headers: Record<string, string> = {}
+): Request {
+  return new Request(body, {
+    headers: new Headers(headers),
+    method,
+  });
+}
 
-  // Coverage configs
-  collectCoverage: true,
-
-  coveragePathIgnorePatterns: [
-    "/node_modules/",
-    "/__testUtils/",
-    "styles.ts",
-    "/src/windowHelpers",
-  ],
-
-  coverageThreshold: {
-    global: {
-      branches: 89,
-      functions: 89,
-      lines: 90,
-      statements: 90,
+export function mockTurtleResponse(status: number, body = ""): Response {
+  return new Response(body, {
+    status,
+    headers: {
+      "Content-Type": "text/turtle",
     },
-  },
-};
+  });
+}
