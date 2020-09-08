@@ -68,7 +68,7 @@ export default function Provider() {
     <form onSubmit={handleLogin}>
       <Box my={2}>
         <Box mt={2}>
-          <h3 id="login-title">Log In</h3>
+          <h3>Log In</h3>
 
           <Autocomplete
             onChange={onProviderChange}

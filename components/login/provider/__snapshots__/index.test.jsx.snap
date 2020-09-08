@@ -856,9 +856,7 @@ font-display: block;",
                 <div
                   className="PodBrowser-root PodBrowser-root"
                 >
-                  <h3
-                    id="login-title"
-                  >
+                  <h3>
                     Log In
                   </h3>
                   <WithStyles(ForwardRef(Autocomplete))
