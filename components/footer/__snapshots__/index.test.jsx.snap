@@ -846,6 +846,7 @@ font-display: block;",
             Array [
               Object {
                 "href": "https://inrupt.com/terms-of-service",
+                "id": "tos-link",
                 "rel": "noreferrer",
                 "target": "_blank",
                 "text": "Terms of Service",
@@ -879,6 +880,7 @@ font-display: block;",
               <a
                 className="PodBrowser-footer__link"
                 href="https://inrupt.com/terms-of-service"
+                id="tos-link"
                 key="Terms of Service"
                 rel="noreferrer"
                 target="_blank"

@@ -29,6 +29,7 @@ export default function Footer() {
       text: "Terms of Service",
       rel: "noreferrer",
       target: "_blank",
+      id: "tos-link",
     },
   ];
   const texts = [{ text: "Copyright 2020 Inrupt, inc." }];
