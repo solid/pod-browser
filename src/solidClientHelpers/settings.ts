@@ -29,6 +29,7 @@ import {
   addStringNoLocale,
   createThing,
   addUrl,
+  fetchResourceInfoWithAcl,
 } from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { Thing } from "@inrupt/solid-client/src/interfaces";
@@ -37,35 +38,29 @@ import { type } from "rdf-namespaces/dist/rdf";
 import { namespace } from "./index";
 import { Resource } from "./resource";
 
-async function getUserSettings(
+async function getUserSettingsUrl(
   webId: string,
   { fetch }: Session
-): Promise<Resource> {
+): Promise<string> {
   const profileResource = await getSolidDataset(webId, { fetch });
   const profile = getThing(profileResource, webId);
   const settingsUrl = getUrl(profile, namespace.preferencesFile);
   if (!settingsUrl) {
     throw new Error("Missing pointer to preferences file");
-    // How do we want to handle that users don't have a pointer to a preferences file?
-    // we could request that we create it on behalf of the user
-    // this is probably very edge case, so not important to fix now I think
-    // TODO: WRITE LOGIC?
+    // TODO: How do we handle that users don't have a pointer to a preferences file?
+    // - we could request that we create it on behalf of the user
+    // - this is probably very edge case, so not important to fix now I think
   }
-  try {
-    return await getSolidDataset(settingsUrl, { fetch });
-  } catch (error) {
-    throw new Error("Cannot access preferences file");
-    // Do we want to handle this in any special manner?
-    // TODO: WRITE LOGIC?
-  }
+  return settingsUrl;
 }
 
 async function getOrCreatePodBrowserSettingsResource(
   podBrowserSettingsUrl: string,
   { fetch }: Session
-): Promise<Resource> {
+): Promise<string> {
   try {
-    return await getSolidDataset(podBrowserSettingsUrl, { fetch });
+    await fetchResourceInfoWithAcl(podBrowserSettingsUrl, { fetch });
+    return podBrowserSettingsUrl;
   } catch (error) {
     if (!error.toString().match(/404/)) {
       throw error;
@@ -86,12 +81,13 @@ async function getOrCreatePodBrowserSettingsResource(
   await saveSolidDatasetAt(podBrowserSettingsUrl, settingsWithType, {
     fetch,
   });
-  return getSolidDataset(podBrowserSettingsUrl, { fetch });
+  return podBrowserSettingsUrl;
 }
 
 async function getOrCreatePodBrowserSettingsPointer(
   userSettings: Thing,
   userSettingsResource: Resource,
+  userSettingsUrl: string,
   { fetch }: Session
 ): Promise<string> {
   const podBrowserSettingsUrl = getUrl(
@@ -102,7 +98,7 @@ async function getOrCreatePodBrowserSettingsPointer(
     return Promise.resolve(podBrowserSettingsUrl);
   }
   // pointer does not already exist, so we create it
-  const newPodBrowserSettingsUrl = userSettingsResource.internal_resourceInfo.sourceIri.replace(
+  const newPodBrowserSettingsUrl = userSettingsUrl.replace(
     /\/(\w+(.\w+)?)?$/g, // find the container that prefs.ttl resides in
     "/podBrowserPrefs.ttl"
   );
@@ -115,27 +111,28 @@ async function getOrCreatePodBrowserSettingsPointer(
     userSettingsResource,
     updatedUserSettings
   );
-  await saveSolidDatasetAt(
-    userSettingsResource.internal_resourceInfo.sourceIri,
-    updatedUserSettingsResource,
-    {
-      fetch,
-    }
-  );
+  await saveSolidDatasetAt(userSettingsUrl, updatedUserSettingsResource, {
+    fetch,
+  });
   return Promise.resolve(newPodBrowserSettingsUrl);
 }
 
 async function getPodBrowserSettings(
-  userSettingsResource: Resource,
+  userSettingsUrl: string,
   session: Session
-): Promise<Resource> {
-  const userSettings = getThing(
-    userSettingsResource,
-    userSettingsResource.internal_resourceInfo.sourceIri
-  );
+): Promise<string> {
+  const userSettingsResource = await getSolidDataset(userSettingsUrl, {
+    fetch: session.fetch,
+  });
+  // TODO: How do we handle that prefs.ttl does not exist?
+  // - we could request that we create it on behalf of the user
+  // - this is probably very edge case, so not important to fix now I think
+
+  const userSettings = getThing(userSettingsResource, userSettingsUrl);
   const podBrowserSettingsUrl = await getOrCreatePodBrowserSettingsPointer(
     userSettings,
     userSettingsResource,
+    userSettingsUrl,
     session
   );
   return getOrCreatePodBrowserSettingsResource(podBrowserSettingsUrl, session);
@@ -145,7 +142,7 @@ async function getPodBrowserSettings(
 export async function getOrCreateSettings(
   webId: string,
   session: Session
-): Promise<Resource> {
-  const userSettingsResource = await getUserSettings(webId, session);
-  return getPodBrowserSettings(userSettingsResource, session);
+): Promise<string> {
+  const userSettingsUrl = await getUserSettingsUrl(webId, session);
+  return getPodBrowserSettings(userSettingsUrl, session);
 }
