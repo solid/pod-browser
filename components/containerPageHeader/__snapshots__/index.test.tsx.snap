@@ -18,6 +18,7 @@ exports[`ContainerPageHeader Renders view 1`] = `
         <AddFileButton
           className="makeStyles-page-header__action-5"
           onSave={[Function]}
+          resourceList={Array []}
         />,
       ]
     }
@@ -145,6 +146,7 @@ exports[`ContainerPageHeader Renders view 1`] = `
         <AddFileButton
           className="makeStyles-page-header__action-5"
           onSave={[Function]}
+          resourceList={Array []}
         >
           <label
             className="makeStyles-page-header__action-5"

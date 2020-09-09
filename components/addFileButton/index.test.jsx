@@ -30,7 +30,6 @@ import AlertContext from "../../src/contexts/alertContext";
 import AddFileButton, {
   handleSaveResource,
   handleFileSelect,
-  findExistingFile,
   handleUploadedFile,
   handleConfirmation,
 } from "./index";
@@ -146,28 +145,30 @@ describe("handleFileSelect", () => {
 
   const setIsUploading = jest.fn();
   const setFile = jest.fn();
-  const findFile = jest.fn();
   const saveUploadedFile = jest.fn();
   const setSeverity = jest.fn();
   const setMessage = jest.fn();
   const setAlertOpen = jest.fn();
+  const resourceList = [
+    { iri: "https://www.mypodbrowser.com/", name: "somefile.pdf" },
+  ];
 
   const handler = handleFileSelect({
     currentUri,
     setIsUploading,
     setFile,
-    findFile,
     saveUploadedFile,
     setSeverity,
     setMessage,
     setAlertOpen,
+    resourceList,
   });
+
   test("it returns a handler that uploads a file", async () => {
     await handler({ target: { files: [file] } });
 
     expect(setIsUploading).toHaveBeenCalled();
     expect(setFile).toHaveBeenCalled();
-    expect(findFile).toHaveBeenCalled();
     expect(saveUploadedFile).toHaveBeenCalled();
   });
 
@@ -181,7 +182,7 @@ describe("handleFileSelect", () => {
 });
 
 describe("handleUploadedFile", () => {
-  test("it returns a handler that triggers the confirmation logic in case the file already exists", async () => {
+  test("it returns a handler that triggers the confirmation logic in case the file already exists", () => {
     const fileContents = "file contents";
 
     const file = new Blob([fileContents], {
@@ -207,30 +208,13 @@ describe("handleUploadedFile", () => {
       saveResource,
     });
 
-    await handler(file, existingFile);
+    handler(file, existingFile);
 
     expect(setIsUploading).toHaveBeenCalled();
     expect(setOpen).toHaveBeenCalled();
     expect(setContent).toHaveBeenCalled();
     expect(setTitle).toHaveBeenCalled();
     expect(setConfirmationSetup).toHaveBeenCalled();
-  });
-});
-
-describe("findExistingFile", () => {
-  test("it tries to find a file and returns the file or throws an error and returns null if the file does not exist", async () => {
-    const fileContents = "file contents";
-
-    const file = new Blob([fileContents], {
-      type: "text/plain",
-      name: "myfile.txt",
-    });
-
-    const currentUri = "https://www.mypodbrowser.com/";
-
-    return findExistingFile(currentUri, file.name).catch((error) => {
-      expect(error).toMatch("error");
-    });
   });
 });
 
@@ -254,16 +238,16 @@ describe("handleConfirmation", () => {
     setConfirmationSetup,
   });
 
-  test("it returns a handler that saves the file when user confirms dialog", async () => {
-    await handler(true, true, file);
+  test("it returns a handler that saves the file when user confirms dialog", () => {
+    handler(true, true, file);
 
     expect(setOpen).toHaveBeenCalled();
     expect(saveResource).toHaveBeenCalled();
     expect(setConfirmed).toHaveBeenCalled();
     expect(setConfirmationSetup).toHaveBeenCalled();
   });
-  test("it returns a handler that exits when user cancels the operation", async () => {
-    await handler(true, false, file);
+  test("it returns a handler that exits when user cancels the operation", () => {
+    handler(true, false, file);
 
     expect(saveResource).not.toHaveBeenCalled();
     expect(setConfirmed).not.toHaveBeenCalled();

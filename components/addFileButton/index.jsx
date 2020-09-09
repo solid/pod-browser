@@ -21,7 +21,7 @@
 
 import { useContext, useState, useEffect } from "react";
 import T from "prop-types";
-import { overwriteFile, fetchResourceInfoWithAcl } from "@inrupt/solid-client";
+import { overwriteFile } from "@inrupt/solid-client";
 import SessionContext from "../../src/contexts/sessionContext";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import AlertContext from "../../src/contexts/alertContext";
@@ -39,7 +39,7 @@ export function handleSaveResource({
   return async (uploadedFile) => {
     try {
       const response = await overwriteFile(
-        currentUri + encodeURIComponent(uploadedFile.name),
+        encodeURI(currentUri) + encodeURIComponent(uploadedFile.name),
         uploadedFile,
         {
           type: uploadedFile.type,
@@ -66,18 +66,6 @@ export function handleSaveResource({
   };
 }
 
-export async function findExistingFile(path, filename, options) {
-  try {
-    return await fetchResourceInfoWithAcl(path + filename, options);
-  } catch (error) {
-    // The error object should include a status code, in the meantime we are extracting the error type from the message string
-    if (error.message.includes("404")) {
-      return false;
-    }
-    throw error;
-  }
-}
-
 export function handleUploadedFile({
   setOpen,
   setTitle,
@@ -101,26 +89,24 @@ export function handleUploadedFile({
 }
 
 export function handleFileSelect({
-  fetch,
-  currentUri,
   setIsUploading,
   setFile,
-  findFile,
   saveUploadedFile,
   setSeverity,
   setMessage,
   setAlertOpen,
+  resourceList,
 }) {
-  return async (e) => {
+  return (e) => {
     try {
       if (e.target.files.length) {
         setIsUploading(true);
         const [uploadedFile] = e.target.files;
         setFile(uploadedFile);
         try {
-          const existingFile = await findFile(currentUri, uploadedFile.name, {
-            fetch,
-          });
+          const existingFile = resourceList.filter(
+            (resource) => resource.name === uploadedFile.name
+          ).length;
           saveUploadedFile(uploadedFile, existingFile);
         } catch (error) {
           setSeverity("error");
@@ -156,7 +142,7 @@ export function handleConfirmation({
   };
 }
 
-export default function AddFileButton({ className, onSave }) {
+export default function AddFileButton({ className, onSave, resourceList }) {
   const { session } = useContext(SessionContext);
   const { fetch } = session;
   const { currentUri } = useContext(PodLocationContext);
@@ -167,7 +153,6 @@ export default function AddFileButton({ className, onSave }) {
   );
   const [confirmationSetup, setConfirmationSetup] = useState(false);
   const [file, setFile] = useState(null);
-  const findFile = findExistingFile;
 
   const saveResource = handleSaveResource({
     fetch,
@@ -193,12 +178,12 @@ export default function AddFileButton({ className, onSave }) {
     currentUri,
     setIsUploading,
     setFile,
-    findFile,
     saveUploadedFile,
     saveResource,
     setSeverity,
     setMessage,
     setAlertOpen,
+    resourceList,
   });
 
   const onConfirmation = handleConfirmation({
@@ -231,9 +216,11 @@ export default function AddFileButton({ className, onSave }) {
 AddFileButton.propTypes = {
   className: T.string,
   onSave: T.func,
+  resourceList: T.arrayOf(T.shape),
 };
 
 AddFileButton.defaultProps = {
   className: () => null,
   onSave: () => {},
+  resourceList: [],
 };

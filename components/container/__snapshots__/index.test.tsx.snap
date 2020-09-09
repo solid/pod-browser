@@ -1781,6 +1781,7 @@ font-display: block;",
                 <AddFileButton
                   className="PodBrowser-page-header__action"
                   onSave={[Function]}
+                  resourceList={Array []}
                 />,
               ]
             }
@@ -1908,6 +1909,7 @@ font-display: block;",
                 <AddFileButton
                   className="PodBrowser-page-header__action"
                   onSave={[Function]}
+                  resourceList={Array []}
                 >
                   <label
                     className="PodBrowser-page-header__action"
@@ -3914,6 +3916,28 @@ font-display: block;",
                 <AddFileButton
                   className="PodBrowser-page-header__action"
                   onSave={[Function]}
+                  resourceList={
+                    Array [
+                      Object {
+                        "filename": "inbox",
+                        "iri": "https://myaccount.mypodserver.com/inbox",
+                        "name": "inbox",
+                        "type": "Resource",
+                      },
+                      Object {
+                        "filename": "private",
+                        "iri": "https://myaccount.mypodserver.com/private",
+                        "name": "private",
+                        "type": "Resource",
+                      },
+                      Object {
+                        "filename": "note.txt",
+                        "iri": "https://myaccount.mypodserver.com/note.txt",
+                        "name": "note.txt",
+                        "type": "Resource",
+                      },
+                    ]
+                  }
                 />,
               ]
             }
@@ -4062,6 +4086,28 @@ font-display: block;",
                 <AddFileButton
                   className="PodBrowser-page-header__action"
                   onSave={[Function]}
+                  resourceList={
+                    Array [
+                      Object {
+                        "filename": "inbox",
+                        "iri": "https://myaccount.mypodserver.com/inbox",
+                        "name": "inbox",
+                        "type": "Resource",
+                      },
+                      Object {
+                        "filename": "private",
+                        "iri": "https://myaccount.mypodserver.com/private",
+                        "name": "private",
+                        "type": "Resource",
+                      },
+                      Object {
+                        "filename": "note.txt",
+                        "iri": "https://myaccount.mypodserver.com/note.txt",
+                        "name": "note.txt",
+                        "type": "Resource",
+                      },
+                    ]
+                  }
                 >
                   <label
                     className="PodBrowser-page-header__action"

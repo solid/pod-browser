@@ -54,8 +54,11 @@ interface IPodList {
 
 export default function Container({ iri }: IPodList): ReactElement {
   useRedirectIfLoggedOut();
+  const encodedIri = encodeURI(iri);
 
-  const { data: resourceIris, mutate } = useFetchContainerResourceIris(iri);
+  const { data: resourceIris, mutate } = useFetchContainerResourceIris(
+    encodedIri
+  );
   const loading = typeof resourceIris === "undefined";
 
   const bem = useBem(useStyles());

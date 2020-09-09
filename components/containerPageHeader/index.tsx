@@ -45,7 +45,11 @@ export default function PageHeader({
     />
   );
   const addFileButton = (
-    <AddFileButton onSave={mutate} className={pageHeaderAction} />
+    <AddFileButton
+      onSave={mutate}
+      className={pageHeaderAction}
+      resourceList={resourceList}
+    />
   );
   return (
     <PrismPageHeader
