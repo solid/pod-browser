@@ -19,13 +19,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as ReactFns from "react";
+import React from "react";
 import * as RouterFns from "next/router";
 import * as SolidClientFns from "@inrupt/solid-client";
 import * as SolidClientHookFns from "../../src/hooks/solidClient";
 import SessionContext from "../../src/contexts/sessionContext";
 import DetailsContextMenu, { Contents, handleCloseDrawer } from "./index";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
+import mockDetailsContextMenuProvider from "../../__testUtils/mockDetailsContextMenuProvider";
+import mockAlertContextProvider from "../../__testUtils/mockAlertContextProvider";
 
 describe("Container view", () => {
   afterEach(() => {
@@ -33,12 +35,10 @@ describe("Container view", () => {
   });
 
   test("it renders a loading view when context has no iri", () => {
-    const mockContext = {
+    const DetailsContext = mockDetailsContextMenuProvider({
       menuOpen: true,
-      setMenuOpen: jest.fn(),
-    };
-
-    jest.spyOn(ReactFns, "useContext").mockReturnValueOnce(mockContext);
+      setMenuOpen: jest.fn,
+    });
 
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
@@ -46,17 +46,17 @@ describe("Container view", () => {
       query: {},
     });
 
-    const tree = mountToJson(<DetailsContextMenu />);
+    const tree = mountToJson(
+      <DetailsContext>
+        <DetailsContextMenu />
+      </DetailsContext>
+    );
 
     expect(tree).toMatchSnapshot();
   });
 
   test("it renders a Contents view when the router query has an iri", () => {
     const iri = "/iri/";
-    const mockDetailsMenuContext = {
-      menuOpen: true,
-      setMenuOpen: jest.fn(),
-    };
 
     const data = {
       iri,
@@ -75,13 +75,14 @@ describe("Container view", () => {
       ],
     };
 
+    const DetailsMenuContext = mockDetailsContextMenuProvider({
+      menuOpen: true,
+      setMenuOpen: jest.fn,
+    });
+
     jest
       .spyOn(SolidClientHookFns, "useFetchResourceDetails")
       .mockReturnValueOnce({ data });
-
-    jest
-      .spyOn(ReactFns, "useContext")
-      .mockReturnValueOnce(mockDetailsMenuContext);
 
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
@@ -92,7 +93,11 @@ describe("Container view", () => {
       },
     });
 
-    const tree = mountToJson(<DetailsContextMenu />);
+    const tree = mountToJson(
+      <DetailsMenuContext>
+        <DetailsContextMenu />
+      </DetailsMenuContext>
+    );
     expect(tree).toMatchSnapshot();
   });
 });
@@ -181,17 +186,6 @@ describe("Contents", () => {
   test("it renders a ResourceSharing component when there's data and the action is sharing", () => {
     const iri = "/iri/";
     const webId = "webId";
-    const mockAlertContext = {
-      setAlertOpen: jest.fn(),
-      setMessage: jest.fn(),
-      setSeverity: jest.fn(),
-    };
-    const mockSessionContext = {
-      session: {
-        fetch: jest.fn(),
-        info: { webId },
-      },
-    };
 
     const data = {
       iri,
@@ -224,20 +218,21 @@ describe("Contents", () => {
       dataset: {},
     };
 
-    jest
-      .spyOn(ReactFns, "useContext")
-      .mockReturnValueOnce(mockAlertContext)
-      .mockReturnValueOnce(mockSessionContext);
+    const AlertContextProvider = mockAlertContextProvider({
+      setAlertOpen: jest.fn(),
+      setMessage: jest.fn(),
+      setSeverity: jest.fn(),
+    });
 
     jest
       .spyOn(SolidClientHookFns, "useFetchResourceDetails")
       .mockReturnValueOnce({ data });
 
-    jest.spyOn(SolidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
+    jest.spyOn(SolidClientFns, "hasResourceAcl").mockReturnValue(true);
 
-    jest.spyOn(SolidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
+    jest.spyOn(SolidClientFns, "hasAccessibleAcl").mockReturnValue(true);
 
-    jest.spyOn(SolidClientFns, "getResourceAcl").mockReturnValueOnce();
+    jest.spyOn(SolidClientFns, "getResourceAcl").mockReturnValue();
 
     jest.spyOn(SolidClientFns, "getAgentDefaultAccess").mockReturnValueOnce({
       read: true,
@@ -262,7 +257,9 @@ describe("Contents", () => {
 
     const tree = mountToJson(
       <SessionContext.Provider value={{ session }}>
-        <Contents iri={iri} action="sharing" />
+        <AlertContextProvider>
+          <Contents iri={iri} action="sharing" />
+        </AlertContextProvider>
       </SessionContext.Provider>
     );
 
@@ -271,13 +268,12 @@ describe("Contents", () => {
 
   test("it renders a DetailsError component when there's an error", () => {
     const iri = "/iri/";
-    const mockAlertContext = {
+
+    const AlertContextProvider = mockAlertContextProvider({
       setAlertOpen: jest.fn(),
       setMessage: jest.fn(),
       setSeverity: jest.fn(),
-    };
-
-    jest.spyOn(ReactFns, "useContext").mockReturnValueOnce(mockAlertContext);
+    });
 
     jest
       .spyOn(SolidClientHookFns, "useFetchResourceDetails")
@@ -287,7 +283,11 @@ describe("Contents", () => {
       .spyOn(RouterFns, "useRouter")
       .mockReturnValueOnce({ asPath: "/pathname/", replace: jest.fn() });
 
-    const tree = mountToJson(<Contents iri={iri} action="details" />);
+    const tree = mountToJson(
+      <AlertContextProvider>
+        <Contents iri={iri} action="details" />
+      </AlertContextProvider>
+    );
 
     expect(tree).toMatchSnapshot();
   });

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DetailsLoading Renders a details error view 1`] = `
-<WithTheme
+<Component
   theme={
     Object {
       "breakpoints": Object {
@@ -1023,6 +1023,7 @@ font-display: block;",
                             action="sharing"
                             aria-disabled={false}
                             className="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
+                            containerIri={null}
                             onBlur={[Function]}
                             onDragLeave={[Function]}
                             onFocus={[Function]}
@@ -1710,5 +1711,5 @@ font-display: block;",
       </DetailsLoading>
     </ThemeProvider>
   </StylesProvider>
-</WithTheme>
+</Component>
 `;

@@ -20,6 +20,7 @@
  */
 
 /* eslint-disable camelcase */
+import React from "react";
 import { mountToJson } from "../../../__testUtils/mountWithTheme";
 import PermissionCheckbox from "./index";
 

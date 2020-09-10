@@ -27,6 +27,7 @@ module.exports = (api) => {
       "next/babel",
       "@zeit/next-typescript/babel",
       "@babel/preset-typescript",
+      "@babel/preset-react",
     ],
     plugins: ["@babel/proposal-class-properties"],
   };

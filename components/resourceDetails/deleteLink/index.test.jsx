@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import { deleteFile } from "@inrupt/solid-client";

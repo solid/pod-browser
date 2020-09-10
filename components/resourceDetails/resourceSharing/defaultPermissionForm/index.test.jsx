@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import { mountToJson } from "../../../../__testUtils/mountWithTheme";
 import * as PermissionHelpers from "../../../../src/solidClientHelpers/permissions";
 import * as ProfileHelpers from "../../../../src/solidClientHelpers/profile";

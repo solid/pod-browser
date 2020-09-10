@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ContainerTableRow it renders a table row 1`] = `
-<WithTheme
+<Component
   theme={
     Object {
       "breakpoints": Object {
@@ -884,11 +884,11 @@ font-display: block;",
       </table>
     </ThemeProvider>
   </StylesProvider>
-</WithTheme>
+</Component>
 `;
 
 exports[`ContainerTableRow it renders a table row with loaded data 1`] = `
-<WithTheme
+<Component
   theme={
     Object {
       "breakpoints": Object {
@@ -1773,11 +1773,11 @@ font-display: block;",
       </table>
     </ThemeProvider>
   </StylesProvider>
-</WithTheme>
+</Component>
 `;
 
 exports[`ContainerTableRow it renders a table row with loaded data without a type 1`] = `
-<WithTheme
+<Component
   theme={
     Object {
       "breakpoints": Object {
@@ -2660,11 +2660,11 @@ font-display: block;",
       </table>
     </ThemeProvider>
   </StylesProvider>
-</WithTheme>
+</Component>
 `;
 
 exports[`ResourceIcon it renders a container icon for containers 1`] = `
-<WithTheme
+<Component
   theme={
     Object {
       "breakpoints": Object {
@@ -3534,11 +3534,11 @@ font-display: block;",
       </ResourceIcon>
     </ThemeProvider>
   </StylesProvider>
-</WithTheme>
+</Component>
 `;
 
 exports[`ResourceIcon it renders a container icon for resources 1`] = `
-<WithTheme
+<Component
   theme={
     Object {
       "breakpoints": Object {
@@ -4408,5 +4408,5 @@ font-display: block;",
       </ResourceIcon>
     </ThemeProvider>
   </StylesProvider>
-</WithTheme>
+</Component>
 `;

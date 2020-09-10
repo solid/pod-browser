@@ -22,21 +22,23 @@
 /* eslint-disable camelcase */
 
 import {
-  getSolidDataset,
+  fetchLitDataset,
   getThing,
   getIriAll,
-  getResourceInfoWithAcl,
+  fetchResourceInfoWithAcl,
 } from "@inrupt/solid-client";
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as PermissionHelpers from "../../solidClientHelpers/permissions";
 import {
   fetchContainerResourceIris,
   fetchResourceDetails,
   fetchPodIrisFromWebId,
 } from "./index";
+import mockFetch from "../../../__testUtils/mockFetch";
 
 jest.mock("@inrupt/solid-client");
 jest.mock("swr");
+
+const fetch = mockFetch();
 
 describe("fetchContainerResourceIris", () => {
   test("it fetches the container resource iris", async () => {
@@ -48,7 +50,10 @@ describe("fetchContainerResourceIris", () => {
 
     getIriAll.mockReturnValue(resources);
 
-    const fetchedResources = await fetchContainerResourceIris("containerIri");
+    const fetchedResources = await fetchContainerResourceIris(
+      "containerIri",
+      fetch
+    );
     expect(fetchedResources).toEqual(resources);
   });
 });
@@ -57,12 +62,12 @@ describe("fetchResourceDetails", () => {
   test("it fetches the resource, adding a human-readable name", async () => {
     const iri = "https://dayton.dev.inrupt.net/public/";
 
-    getResourceInfoWithAcl.mockResolvedValue({
+    fetchResourceInfoWithAcl.mockResolvedValue({
       resourceInfo: {
         fetchedFrom: "https://dayton.dev.inrupt.net/public/",
         contentType: "application/octet-stream; charset=utf-8",
-        unstable_aclUrl: "https://dayton.dev.inrupt.net/public/.acl",
-        unstable_permissions: {
+        aclUrl: "https://dayton.dev.inrupt.net/public/.acl",
+        permissions: {
           user: {
             read: true,
             append: true,
@@ -83,8 +88,8 @@ describe("fetchResourceDetails", () => {
           resourceInfo: {
             fetchedFrom: "https://dayton.dev.inrupt.net/.acl",
             contentType: "text/turtle",
-            unstable_aclUrl: "https://dayton.dev.inrupt.net/.acl.acl",
-            unstable_permissions: {
+            aclUrl: "https://dayton.dev.inrupt.net/.acl.acl",
+            permissions: {
               user: {
                 read: true,
                 append: true,
@@ -106,8 +111,8 @@ describe("fetchResourceDetails", () => {
           resourceInfo: {
             fetchedFrom: "https://dayton.dev.inrupt.net/public/.acl",
             contentType: "text/turtle",
-            unstable_aclUrl: "https://dayton.dev.inrupt.net/public/.acl.acl",
-            unstable_permissions: {
+            aclUrl: "https://dayton.dev.inrupt.net/public/.acl.acl",
+            permissions: {
               user: {
                 read: true,
                 append: true,
@@ -141,7 +146,7 @@ describe("fetchResourceDetails", () => {
       },
     ]);
 
-    const resourceDetails = await fetchResourceDetails(iri);
+    const resourceDetails = await fetchResourceDetails(iri, fetch);
 
     expect(resourceDetails.name).toEqual("/public");
     expect(resourceDetails.iri).toEqual(iri);
@@ -153,13 +158,13 @@ describe("PodIrisFromWebId", () => {
     const iri = "https://mypod.myhost.com/profile/card#me";
     const iris = ["https://mypod.myhost.com/profile"];
 
-    getSolidDataset.mockResolvedValue({});
+    fetchLitDataset.mockResolvedValue({});
     getThing.mockImplementationOnce(() => {});
     getIriAll.mockImplementationOnce(() => iris);
 
-    expect(await fetchPodIrisFromWebId(iri)).toEqual(iris);
+    expect(await fetchPodIrisFromWebId(iri, fetch)).toEqual(iris);
 
-    expect(getSolidDataset).toHaveBeenCalled();
+    expect(fetchLitDataset).toHaveBeenCalled();
     expect(getThing).toHaveBeenCalled();
     expect(getIriAll).toHaveBeenCalled();
   });

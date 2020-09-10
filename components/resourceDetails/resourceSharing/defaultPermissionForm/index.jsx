@@ -21,7 +21,7 @@
 
 /* eslint-disable camelcase, no-console */
 
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import T from "prop-types";
 import { isContainerIri } from "../../../../src/solidClientHelpers/utils";
 import {

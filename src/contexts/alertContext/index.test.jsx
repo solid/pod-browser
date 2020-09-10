@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import AlertContext, { AlertProvider } from "./index";

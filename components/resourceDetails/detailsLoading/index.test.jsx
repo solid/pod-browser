@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import * as RouterFns from "next/router";
 import DetailsLoading from "./index";
 import { mountToJson } from "../../../__testUtils/mountWithTheme";

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AgentSearchForm it has a default heading 1`] = `
-<WithTheme
+<Component
   theme={
     Object {
       "breakpoints": Object {
@@ -1290,11 +1290,11 @@ font-display: block;",
       </AgentSearchForm>
     </ThemeProvider>
   </StylesProvider>
-</WithTheme>
+</Component>
 `;
 
 exports[`AgentSearchForm it renders an AgentSearchForm 1`] = `
-<WithTheme
+<Component
   theme={
     Object {
       "breakpoints": Object {
@@ -2583,5 +2583,5 @@ font-display: block;",
       </AgentSearchForm>
     </ThemeProvider>
   </StylesProvider>
-</WithTheme>
+</Component>
 `;

@@ -20,19 +20,19 @@
  */
 
 /* eslint-disable camelcase */
-import { useContext } from "react";
-import T from "prop-types";
+import React, { useContext } from "react";
 import { makeStyles, createStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { useRouter } from "next/router";
 import clsx from "clsx";
+import T from "prop-types";
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
 import { isContainerIri } from "../../src/solidClientHelpers/utils";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import ResourceLink, { resourceContextRedirect } from "../resourceLink";
 import styles from "./styles";
 
-function ResourceIcon({ iri, bem }) {
+export function ResourceIcon({ iri, bem }) {
   // keeping it very simple for now (either folder or file), and then we can expand upon it later
   const icon = isContainerIri(iri) ? "icon-folder" : "icon-file";
 
@@ -43,8 +43,6 @@ ResourceIcon.propTypes = {
   iri: T.string.isRequired,
   bem: T.func.isRequired,
 };
-
-export { ResourceIcon };
 
 export function renderResourceType(iri) {
   return isContainerIri(iri) ? "Container" : "Resource";
@@ -62,7 +60,7 @@ export function handleClick(resourceIri, containerIri, router) {
   };
 }
 
-function ContainerTableRow({ resource }) {
+export default function ContainerTableRow({ resource }) {
   const classes = useStyles();
   const bem = useBem(classes);
   const { name, iri } = resource;
@@ -116,5 +114,3 @@ ContainerTableRow.defaultProps = {
     iri: "",
   },
 };
-
-export default ContainerTableRow;

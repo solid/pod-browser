@@ -20,17 +20,17 @@
  */
 
 import React, { useMemo } from "react";
+import T from "prop-types";
 import { useTable, useSortBy } from "react-table";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
-import T from "prop-types";
 
 import ContainerTableRow, { renderResourceType } from "../containerTableRow";
 import SortedTableCarat from "../sortedTableCarat";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import { useFetchContainerResourceIris } from "../../src/hooks/solidClient";
-import { getResourceName } from "../../src/solidClientHelpers";
+import { getResourceName } from "../../src/solidClientHelpers/resource";
 
 import Spinner from "../spinner";
 import styles from "./styles";
@@ -84,6 +84,7 @@ export default function Container({ iri }) {
     }));
   }, [resourceIris]);
 
+  // TODO fix typescript errors below.
   const {
     getTableProps,
     getTableBodyProps,
@@ -108,8 +109,10 @@ export default function Container({ iri }) {
   return (
     <>
       <PageHeader mutate={mutate} resourceList={data} />
-      <ContainerDetails mutate={mutate}>
+      <div className={clsx(bem("container"), bem("container-breadcrumbs"))}>
         <Breadcrumbs />
+      </div>
+      <ContainerDetails mutate={mutate}>
         <table className={clsx(bem("table"))} {...getTableProps()}>
           <thead className={bem("table__header")}>
             {headerGroups.map((headerGroup) => (

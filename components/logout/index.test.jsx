@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import { mount } from "enzyme";
 import { mountToJson } from "enzyme-to-json";
 

@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Index page Renders null if there are no pod iris 1`] = `
+<SessionContextProvider
+  isLoadingSession={false}
+  session={
+    Object {
+      "fetch": [MockFunction],
+      "info": Object {
+        "isLoggedIn": true,
+        "sessionId": "some-session-id",
+        "webId": "http://example.com/webId#me",
+      },
+    }
+  }
+>
+  <Home />
+</SessionContextProvider>
+`;

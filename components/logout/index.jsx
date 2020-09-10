@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useContext } from "react";
+import React, { useContext } from "react";
 import T from "prop-types";
 import { hardRedirect, clearLocalstorage } from "../../src/windowHelpers";
 import SessionProvider from "../../src/contexts/sessionContext";
@@ -51,10 +51,11 @@ export default function LogOut({ children, className }) {
 }
 
 LogOut.propTypes = {
+  children: T.node,
   className: T.string,
-  children: T.node.isRequired,
 };
 
 LogOut.defaultProps = {
-  className: "",
+  children: null,
+  className: null,
 };

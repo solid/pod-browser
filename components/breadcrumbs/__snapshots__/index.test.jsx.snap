@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Breadcrumbs view Renders a breadcrumbs view 1`] = `
-<WithTheme
+<Component
   theme={
     Object {
       "breakpoints": Object {
@@ -880,11 +880,11 @@ font-display: block;",
       </PodLocationProvider>
     </ThemeProvider>
   </StylesProvider>
-</WithTheme>
+</Component>
 `;
 
 exports[`Breadcrumbs view Renders a breadcrumbs view with breadcrumbs based on url slashes 1`] = `
-<WithTheme
+<Component
   theme={
     Object {
       "breakpoints": Object {
@@ -1843,5 +1843,5 @@ font-display: block;",
       </PodLocationProvider>
     </ThemeProvider>
   </StylesProvider>
-</WithTheme>
+</Component>
 `;

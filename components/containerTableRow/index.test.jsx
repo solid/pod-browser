@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import * as routerFns from "next/router";
 import { useRouter } from "next/router";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
@@ -112,8 +113,13 @@ describe("handleClick", () => {
     const containerIri = "https://mypod.com/container";
 
     const replace = jest.fn();
-    const router = { asPath: "asPath?some=query&variables=true", replace };
-    const event = { target: { tagName: "TR" } };
+    const router = {
+      asPath: "asPath?some=query&variables=true",
+      replace,
+    };
+    const event = {
+      target: { tagName: "TR" },
+    };
     const handler = handleClick(resourceIri, containerIri, router);
 
     await handler(event);

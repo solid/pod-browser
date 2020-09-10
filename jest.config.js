@@ -30,7 +30,7 @@ module.exports = {
   testPathIgnorePatterns: ["/node_modules/", "/__testUtils/"],
 
   transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
+    "^.+\\.(js|jsx|ts|tsx)$": "ts-jest",
     "^.+\\.ttl$": "jest-raw-loader",
   },
 

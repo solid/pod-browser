@@ -19,8 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* istanbul ignore file */
-import { createContext, useState } from "react";
+import React, { createContext, useState } from "react";
 import T from "prop-types";
 
 const AlertContext = createContext({

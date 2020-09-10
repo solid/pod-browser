@@ -72,6 +72,12 @@ export const namespace = {
   region: "http://www.w3.org/2006/vcard/ns#region",
   "http://www.w3.org/2006/vcard/ns#street-address": "streetAddress",
   streetAddress: "http://www.w3.org/2006/vcard/ns#street-address",
+  "http://www.w3.org/ns/pim/space#preferencesFile": "preferencesFile",
+  preferencesFile: "http://www.w3.org/ns/pim/space#preferencesFile",
+  "https://inrupt.com/podbrowser#preferencesFile": "podBrowserPreferencesFile",
+  podBrowserPreferencesFile: "https://inrupt.com/podbrowser#preferencesFile",
+  "http://www.w3.org/ns/pim/space#ConfigurationFile": "ConfigurationFile",
+  ConfigurationFile: "http://www.w3.org/ns/pim/space#ConfigurationFile",
 };
 
 export function vocabularyLabel(url) {

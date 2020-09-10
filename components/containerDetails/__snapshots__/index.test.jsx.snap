@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContainerDetails Renders view 1`] = `
+<ContainerDetails
+  mutate={[MockFunction]}
+>
+  <DrawerContainer
+    drawer={
+      <DetailsContextMenu
+        onUpdate={[Function]}
+      />
+    }
+    open={false}
+  >
+    <div
+      className="makeStyles-drawer-container-1"
+    >
+      <div
+        className="makeStyles-drawer-container__content-2"
+      />
+      <DetailsContextMenu
+        onUpdate={[Function]}
+      />
+    </div>
+  </DrawerContainer>
+</ContainerDetails>
+`;

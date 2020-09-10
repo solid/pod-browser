@@ -1796,6 +1796,72 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
 </PermissionsForm>
 `;
 
+exports[`PermissionsForm arrowIcon it returns the down arrow when open is false 1`] = `
+<ForwardRef>
+  <WithStyles(ForwardRef(SvgIcon))>
+    <ForwardRef(SvgIcon)
+      classes={
+        Object {
+          "colorAction": "MuiSvgIcon-colorAction",
+          "colorDisabled": "MuiSvgIcon-colorDisabled",
+          "colorError": "MuiSvgIcon-colorError",
+          "colorPrimary": "MuiSvgIcon-colorPrimary",
+          "colorSecondary": "MuiSvgIcon-colorSecondary",
+          "fontSizeInherit": "MuiSvgIcon-fontSizeInherit",
+          "fontSizeLarge": "MuiSvgIcon-fontSizeLarge",
+          "fontSizeSmall": "MuiSvgIcon-fontSizeSmall",
+          "root": "MuiSvgIcon-root",
+        }
+      }
+    >
+      <svg
+        aria-hidden={true}
+        className="MuiSvgIcon-root"
+        focusable="false"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
+        />
+      </svg>
+    </ForwardRef(SvgIcon)>
+  </WithStyles(ForwardRef(SvgIcon))>
+</ForwardRef>
+`;
+
+exports[`PermissionsForm arrowIcon it returns the up arrow when open is true 1`] = `
+<ForwardRef>
+  <WithStyles(ForwardRef(SvgIcon))>
+    <ForwardRef(SvgIcon)
+      classes={
+        Object {
+          "colorAction": "MuiSvgIcon-colorAction",
+          "colorDisabled": "MuiSvgIcon-colorDisabled",
+          "colorError": "MuiSvgIcon-colorError",
+          "colorPrimary": "MuiSvgIcon-colorPrimary",
+          "colorSecondary": "MuiSvgIcon-colorSecondary",
+          "fontSizeInherit": "MuiSvgIcon-fontSizeInherit",
+          "fontSizeLarge": "MuiSvgIcon-fontSizeLarge",
+          "fontSizeSmall": "MuiSvgIcon-fontSizeSmall",
+          "root": "MuiSvgIcon-root",
+        }
+      }
+    >
+      <svg
+        aria-hidden={true}
+        className="MuiSvgIcon-root"
+        focusable="false"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"
+        />
+      </svg>
+    </ForwardRef(SvgIcon)>
+  </WithStyles(ForwardRef(SvgIcon))>
+</ForwardRef>
+`;
+
 exports[`PermissionsForm it returns null if control is false 1`] = `
 <PermissionsForm
   iri="https://mypod.myhost.com"
@@ -3590,70 +3656,4 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
     </section>
   </div>
 </PermissionsForm>
-`;
-
-exports[`arrowIcon it returns the down arrow when open is false 1`] = `
-<ForwardRef>
-  <WithStyles(ForwardRef(SvgIcon))>
-    <ForwardRef(SvgIcon)
-      classes={
-        Object {
-          "colorAction": "MuiSvgIcon-colorAction",
-          "colorDisabled": "MuiSvgIcon-colorDisabled",
-          "colorError": "MuiSvgIcon-colorError",
-          "colorPrimary": "MuiSvgIcon-colorPrimary",
-          "colorSecondary": "MuiSvgIcon-colorSecondary",
-          "fontSizeInherit": "MuiSvgIcon-fontSizeInherit",
-          "fontSizeLarge": "MuiSvgIcon-fontSizeLarge",
-          "fontSizeSmall": "MuiSvgIcon-fontSizeSmall",
-          "root": "MuiSvgIcon-root",
-        }
-      }
-    >
-      <svg
-        aria-hidden={true}
-        className="MuiSvgIcon-root"
-        focusable="false"
-        viewBox="0 0 24 24"
-      >
-        <path
-          d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
-        />
-      </svg>
-    </ForwardRef(SvgIcon)>
-  </WithStyles(ForwardRef(SvgIcon))>
-</ForwardRef>
-`;
-
-exports[`arrowIcon it returns the up arrow when open is true 1`] = `
-<ForwardRef>
-  <WithStyles(ForwardRef(SvgIcon))>
-    <ForwardRef(SvgIcon)
-      classes={
-        Object {
-          "colorAction": "MuiSvgIcon-colorAction",
-          "colorDisabled": "MuiSvgIcon-colorDisabled",
-          "colorError": "MuiSvgIcon-colorError",
-          "colorPrimary": "MuiSvgIcon-colorPrimary",
-          "colorSecondary": "MuiSvgIcon-colorSecondary",
-          "fontSizeInherit": "MuiSvgIcon-fontSizeInherit",
-          "fontSizeLarge": "MuiSvgIcon-fontSizeLarge",
-          "fontSizeSmall": "MuiSvgIcon-fontSizeSmall",
-          "root": "MuiSvgIcon-root",
-        }
-      }
-    >
-      <svg
-        aria-hidden={true}
-        className="MuiSvgIcon-root"
-        focusable="false"
-        viewBox="0 0 24 24"
-      >
-        <path
-          d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"
-        />
-      </svg>
-    </ForwardRef(SvgIcon)>
-  </WithStyles(ForwardRef(SvgIcon))>
-</ForwardRef>
 `;

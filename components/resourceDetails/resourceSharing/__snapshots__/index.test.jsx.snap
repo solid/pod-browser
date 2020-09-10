@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`NoThirdPartyPermissions it renders a no 3rd party permissions component 1`] = `
-<WithTheme
+<Component
   theme={
     Object {
       "breakpoints": Object {
@@ -1027,11 +1027,11 @@ font-display: block;",
       </NoThirdPartyPermissions>
     </ThemeProvider>
   </StylesProvider>
-</WithTheme>
+</Component>
 `;
 
 exports[`ResourceSharing it renders the NoThirdPartyPermissions with no 3rd party permissions 1`] = `
-<WithTheme
+<Component
   theme={
     Object {
       "breakpoints": Object {
@@ -4995,11 +4995,11 @@ font-display: block;",
       </ResourceSharing>
     </ThemeProvider>
   </StylesProvider>
-</WithTheme>
+</Component>
 `;
 
 exports[`ResourceSharing it renders the sharing action component 1`] = `
-<WithTheme
+<Component
   theme={
     Object {
       "breakpoints": Object {
@@ -10913,11 +10913,11 @@ font-display: block;",
       </ResourceSharing>
     </ThemeProvider>
   </StylesProvider>
-</WithTheme>
+</Component>
 `;
 
 exports[`ThirdPartyPermissions it renders NoThirdPartyPermissions when the list is empty 1`] = `
-<WithTheme
+<Component
   theme={
     Object {
       "breakpoints": Object {
@@ -11770,11 +11770,11 @@ font-display: block;",
       />
     </ThemeProvider>
   </StylesProvider>
-</WithTheme>
+</Component>
 `;
 
 exports[`ThirdPartyPermissions it renders a list of Permissions if there are permissions in the list 1`] = `
-<WithTheme
+<Component
   theme={
     Object {
       "breakpoints": Object {
@@ -12642,5 +12642,5 @@ font-display: block;",
       />
     </ThemeProvider>
   </StylesProvider>
-</WithTheme>
+</Component>
 `;

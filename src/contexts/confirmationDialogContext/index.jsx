@@ -19,10 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createContext, useState } from "react";
+import React, { createContext, useState } from "react";
 import T from "prop-types";
 
-const ConfirmationDialogContext = createContext({
+export const defaultConfirmationDialogContext = {
   confirmed: false,
   content: null,
   open: false,
@@ -31,7 +31,10 @@ const ConfirmationDialogContext = createContext({
   setOpen: () => {},
   setTitle: () => {},
   title: "Confirmation",
-});
+};
+const ConfirmationDialogContext = createContext(
+  defaultConfirmationDialogContext
+);
 
 export default ConfirmationDialogContext;
 
@@ -60,7 +63,11 @@ function ConfirmationDialogProvider({ children }) {
 }
 
 ConfirmationDialogProvider.propTypes = {
-  children: T.node.isRequired,
+  children: T.node,
+};
+
+ConfirmationDialogProvider.defaultProps = {
+  children: null,
 };
 
 export { ConfirmationDialogProvider };

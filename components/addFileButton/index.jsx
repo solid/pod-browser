@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import T from "prop-types";
 import { overwriteFile } from "@inrupt/solid-client";
 import SessionContext from "../../src/contexts/sessionContext";

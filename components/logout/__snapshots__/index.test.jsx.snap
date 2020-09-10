@@ -2,10 +2,10 @@
 
 exports[`Logout button Renders a logout button 1`] = `
 <LogOut
-  className=""
+  className={null}
 >
   <button
-    className=""
+    className={null}
     data-testid="logout-button"
     onClick={[Function]}
     type="button"
