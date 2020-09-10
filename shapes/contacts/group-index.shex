@@ -1,0 +1,6 @@
+PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
+
+vcard:Group {
+  vcard:fn xsd:string {1} ;
+  ^ vcard:includesGroup vcard:AddressBook ;
+}

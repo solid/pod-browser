@@ -1,0 +1,50 @@
+PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
+PREFIX xsd:   <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dc: <https://dublincore.org/specifications/dublin-core/dcmi-terms/#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+# We should store the preferred WebId for each person, since sameAs can be multiple WebIds
+
+vcard:Individual {
+    vcard:fn xsd:string {1} ;
+    vcard:inAddressBook vcard:AddressBook + ;
+    owl:sameAs vcard:Individual * ; # WebIds
+    vcard:hasUID xsd:string ? ;
+    vcard:hasName xsd:string ? ; # structured name
+    vcard:hasPhoto dc:Image * ;
+    vcard:hasRelated vcard:RelatedType * ;
+    vcard:url rdf:Resource * ; # need to describe the type of url to be able to identify WebIds
+    vcard:hasAddress vcard:Address * ;
+    vcard:bday xsd:date ? ;
+    vcard:hasEmail vcard:Email * ;
+    vcard:hasTelephone vcard:Tel * ;
+    vcard:organization-name xsd:string ? ;
+    vcard:role xsd:string ? ;
+    vcard:title xsd:string ? ;
+    vcard:note xsd:string ? ;
+}
+
+vcard:Address {
+    a [vcard:Home vcard:Work] {1} ;
+    vcard:street-address xsd:string {1} ;
+    vcard:locality xsd:string {1} ;
+    vcard:postal-code xsd:string {1} ;
+    vcard:region xsd:string {1} ;
+    vcard:country-name xsd:string {1} ;
+}
+
+vcard:Email {
+    a [vcard:Home vcard:Work] {1} ;
+    rdf:value xsd:string /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/ {1} ; # should have a `mailto` prefix
+}
+
+vcard:Tel {
+    a [vcard:Home vcard:Work vcard:Cell vcard:Fax vcard:Pager vcard:Text vcard:TextPhone vcard:Video vcard:Video vcard:Voice] {1} ;
+    rdf:value xsd:string /^\+?[0-9]+[0-9-]*[0-9]$/ {1} ; # should have a `tel` prefix
+}
+
+vcard:RelatedType EXTRA a {
+    a [vcard:Acquaintance vcard:Child vcard:Colleague vcard:Coworker vcard:Emergency vcard:Friend vcard:Neighbor vcard:Parent vcard:Sibling vcard:Spouse] ;
+    rdf:value vcard:Individual ;
+}

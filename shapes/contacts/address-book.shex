@@ -1,0 +1,11 @@
+PREFIX acl:   <http://www.w3.org/ns/auth/acl#>
+PREFIX dc:    <http://purl.org/dc/elements/1.1/>
+PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
+PREFIX xsd:   <http://www.w3.org/2001/XMLSchema#>
+
+vcard:AddressBook {
+  dc:title              xsd:string {1} ;
+  vcard:nameEmailIndex  IRI {1} ;
+  vcard:groupIndex      IRI {1} ;
+  acl:owner             IRI +
+}

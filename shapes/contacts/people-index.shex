@@ -1,0 +1,7 @@
+PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
+PREFIX xsd:   <http://www.w3.org/2001/XMLSchema#>
+
+vcard:Individual {
+  vcard:fn xsd:string {1} ;
+  vcard:inAddressBook vcard:AddressBook ?
+}
