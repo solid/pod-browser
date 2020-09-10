@@ -27,7 +27,7 @@ import { useRouter } from "next/router";
 import clsx from "clsx";
 import T from "prop-types";
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
-import { isContainerIri } from "../../src/solidClientHelpers/utils";
+import { isContainerIri } from "../../src/solidClientHelpers";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import ResourceLink, { resourceContextRedirect } from "../resourceLink";
 import styles from "./styles";
@@ -102,10 +102,7 @@ export default function ContainerTableRow({ resource }) {
 }
 
 ContainerTableRow.propTypes = {
-  resource: T.shape({
-    name: T.string.isRequired,
-    iri: T.string.isRequired,
-  }),
+  resource: T.node.isRequired,
 };
 
 ContainerTableRow.defaultProps = {

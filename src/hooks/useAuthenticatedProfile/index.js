@@ -35,7 +35,7 @@ export default function useAuthenticatedProfile() {
     const { webId = "" } = info;
 
     fetchProfile(webId, session.fetch)
-      .then((loadedProfile) => setProfile(loadedProfile))
+      .then(setProfile)
       .catch((err) => {
         throw err;
       });

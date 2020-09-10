@@ -19,10 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// material-ui is broken and doesn't allow `ListItem` to accept `component`
-
 import React, { useContext } from "react";
-import T from "prop-types";
 import {
   Button,
   createStyles,
@@ -36,6 +33,7 @@ import {
 import ShareIcon from "@material-ui/icons/Share";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { makeStyles } from "@material-ui/styles";
+import T from "prop-types";
 import ResourceLink from "../resourceLink";
 import styles from "./styles";
 import { parseUrl } from "../../src/stringHelpers";
@@ -119,7 +117,7 @@ const SharingLink = React.forwardRef((linkProps, ref) => (
   />
 ));
 
-function ResourceDetails({ resource, onDelete, onDeleteError }) {
+export default function ResourceDetails({ resource, onDelete, onDeleteError }) {
   const classes = useStyles();
   const { iri, name, types } = resource;
   const type = displayType(types);
@@ -159,7 +157,7 @@ function ResourceDetails({ resource, onDelete, onDeleteError }) {
             <ListItemIcon>
               <DeleteIcon />
             </ListItemIcon>
-            <ListItemText primary="Delete" />
+            <ListItemText primary="Delete File" />
           </ListItem>
         </List>
       </section>
@@ -199,23 +197,12 @@ function ResourceDetails({ resource, onDelete, onDeleteError }) {
 }
 
 ResourceDetails.propTypes = {
-  resource: T.shape({
-    iri: T.string.isRequired,
-    name: T.string.isRequired,
-    types: T.arrayOf(T.string).isRequired,
-  }),
+  resource: T.node.isRequired,
   onDelete: T.func,
   onDeleteError: T.func,
 };
 
 ResourceDetails.defaultProps = {
-  resource: {
-    iri: "",
-    name: "",
-    types: [],
-  },
-  onDelete: () => {},
-  onDeleteError: () => {},
+  onDelete: () => null,
+  onDeleteError: () => null,
 };
-
-export default ResourceDetails;

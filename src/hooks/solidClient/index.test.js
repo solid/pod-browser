@@ -132,7 +132,7 @@ describe("fetchResourceDetails", () => {
       },
     });
 
-    jest.spyOn(PermissionHelpers, "normalizePermissions").mockResolvedValue([
+    jest.spyOn(solidClientHelpers, "normalizePermissions").mockResolvedValue([
       {
         webId: "https://dayton.dev.inrupt.net/card/#me",
         alias: "Full Control",
@@ -149,6 +149,25 @@ describe("fetchResourceDetails", () => {
     const resourceDetails = await fetchResourceDetails(iri, fetch);
 
     expect(resourceDetails.name).toEqual("/public");
+    expect(resourceDetails.iri).toEqual(iri);
+  });
+
+  test("it fetches a file with ACL if the fetchResource call fails", async () => {
+    const iri = "https://dayton.dev.inrupt.net/file.txt";
+
+    jest
+      .spyOn(solidClientHelpers, "fetchResource")
+      .mockImplementationOnce(() => {
+        throw new Error("boom");
+      });
+
+    jest
+      .spyOn(solidClientHelpers, "fetchFileWithAcl")
+      .mockResolvedValue({ iri, types: ["type"], file: new Blob(["file"]) });
+
+    const resourceDetails = await fetchResourceDetails(iri, fetch);
+
+    expect(resourceDetails.name).toEqual("/file.txt");
     expect(resourceDetails.iri).toEqual(iri);
   });
 });
