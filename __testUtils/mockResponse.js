@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import "whatwg-fetch"; // must be imported so that Response class is available
+import "whatwg-fetch"; // must be imported for Response class to be available
 
 export default function mockResponse(status, body = "", headers = {}) {
   return new Response(body, {

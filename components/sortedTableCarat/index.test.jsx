@@ -43,10 +43,3 @@ describe("Unsorted", () => {
     expect(tree).toMatchSnapshot();
   });
 });
-
-describe("Hiding the caret", () => {
-  test("Is hidden", () => {
-    const tree = mountToJson(<SortedTableCarat sorted={false} />);
-    expect(tree).toMatchSnapshot();
-  });
-});

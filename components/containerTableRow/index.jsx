@@ -102,17 +102,7 @@ export default function ContainerTableRow({ resource }) {
 }
 
 ContainerTableRow.propTypes = {
-  resource: T.shape({
-    name: T.string.isRequired,
-    iri: T.string.isRequired,
-  }),
-};
-
-ContainerTableRow.defaultProps = {
-  resource: {
-    name: "",
-    iri: "",
-  },
+  resource: T.node.isRequired,
 };
 
 ContainerTableRow.defaultProps = {

@@ -19,46 +19,34 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* istanbul ignore file */
 import React, { createContext, useState } from "react";
 import T from "prop-types";
 
-const AlertContext = createContext({
+export const defaultAlertContext = {
   alertOpen: false,
   message: "",
   severity: "success",
   setAlertOpen: () => false,
   setMessage: () => "",
   setSeverity: () => "success",
-  alertSuccess: () => {},
-  alertError: () => {},
-});
+};
+const AlertContext = createContext(defaultAlertContext);
 
 function AlertProvider({ children }) {
   const [alertOpen, setAlertOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState("success");
-  const alertSuccess = (msg) => {
-    setSeverity("success");
-    setMessage(msg);
-    setAlertOpen(true);
-  };
-  const alertError = (msg) => {
-    setSeverity("success");
-    setMessage(msg);
-    setAlertOpen(true);
-  };
 
   return (
     <AlertContext.Provider
       value={{
-        alertError,
         alertOpen,
-        alertSuccess,
         message,
+        severity,
         setAlertOpen,
         setMessage,
         setSeverity,
-        severity,
       }}
     >
       {children}
@@ -67,7 +55,11 @@ function AlertProvider({ children }) {
 }
 
 AlertProvider.propTypes = {
-  children: T.node.isRequired,
+  children: T.node,
+};
+
+AlertProvider.defaultProps = {
+  children: null,
 };
 
 export { AlertProvider };
