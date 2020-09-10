@@ -5,12 +5,12 @@ exports[`AddFileButton Renders an add file button 1`] = `
   currentUri="https://www.mypodbrowser.com/"
 >
   <AddFileButton
-    className={[Function]}
+    className={null}
     onSave={[MockFunction]}
     resourceList={Array []}
   >
     <label
-      className={[Function]}
+      className={null}
       data-testid="upload-file-button"
       disabled={false}
     >

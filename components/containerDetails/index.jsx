@@ -19,22 +19,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, ReactNode, useContext } from "react";
+import React, { useContext } from "react";
+import T from "prop-types";
 import { DrawerContainer } from "@inrupt/prism-react-components";
 import { useRouter } from "next/router";
 import DetailsContextMenu, { handleCloseDrawer } from "../detailsContextMenu";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 
-interface Props {
-  // eslint-disable-next-line react/require-default-props
-  children?: ReactNode;
-  mutate: () => void;
-}
-
-export default function ContainerDetails({
-  children,
-  mutate,
-}: Props): ReactElement {
+export default function ContainerDetails({ children, mutate }) {
   const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
   const router = useRouter();
 
@@ -42,9 +34,7 @@ export default function ContainerDetails({
     <DetailsContextMenu
       onUpdate={() => {
         mutate();
-        handleCloseDrawer({ setMenuOpen, router })().catch((e) => {
-          throw e;
-        });
+        handleCloseDrawer({ setMenuOpen, router })();
       }}
     />
   );
@@ -55,3 +45,12 @@ export default function ContainerDetails({
     </DrawerContainer>
   );
 }
+
+ContainerDetails.propTypes = {
+  children: T.node,
+  mutate: T.func.isRequired,
+};
+
+ContainerDetails.defaultProps = {
+  children: null,
+};

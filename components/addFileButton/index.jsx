@@ -228,7 +228,7 @@ AddFileButton.propTypes = {
 };
 
 AddFileButton.defaultProps = {
-  className: () => null,
+  className: null,
   onSave: () => {},
   resourceList: [],
 };
