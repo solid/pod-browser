@@ -121,7 +121,6 @@ export function handleCloseDrawer({ setMenuOpen, router }) {
   };
 }
 
-/* eslint @typescript-eslint/explicit-module-boundary-types: 0 */
 export default function DetailsContextMenu({ onUpdate }) {
   const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
 

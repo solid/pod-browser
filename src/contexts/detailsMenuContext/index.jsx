@@ -19,8 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { createContext, ReactElement, ReactNode, useState } from "react";
+import React, { createContext, useState } from "react";
+import T from "prop-types";
 
 export const DETAILS_CONTEXT_ACTIONS = {
   SHARING: "sharing",
@@ -47,6 +47,14 @@ function DetailsMenuProvider({ children }) {
     </DetailsMenuContext.Provider>
   );
 }
+
+DetailsMenuProvider.propTypes = {
+  children: T.node,
+};
+
+DetailsMenuProvider.defaultProps = {
+  children: null,
+};
 
 export { DetailsMenuProvider };
 export default DetailsMenuContext;
