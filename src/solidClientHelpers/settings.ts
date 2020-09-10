@@ -35,8 +35,7 @@ import { Session } from "@inrupt/solid-client-authn-browser";
 import { Thing } from "@inrupt/solid-client/src/interfaces";
 import { title } from "rdf-namespaces/dist/dct";
 import { type } from "rdf-namespaces/dist/rdf";
-import { namespace } from "./index";
-import { Resource } from "./resource";
+import { namespace } from "./utils";
 
 async function getUserSettingsUrl(
   webId: string,
@@ -86,7 +85,7 @@ async function getOrCreatePodBrowserSettingsResource(
 
 async function getOrCreatePodBrowserSettingsPointer(
   userSettings: Thing,
-  userSettingsResource: Resource,
+  userSettingsResource: any,
   userSettingsUrl: string,
   { fetch }: Session
 ): Promise<string> {
