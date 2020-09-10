@@ -20,43 +20,35 @@
  */
 
 import {
+  addStringNoLocale,
+  addUrl,
+  createThing,
+  fetchResourceInfoWithAcl,
   getSolidDataset,
   getThing,
   getUrl,
-  setUrl,
-  setThing,
   saveSolidDatasetAt,
-  addStringNoLocale,
-  createThing,
-  addUrl,
-  fetchResourceInfoWithAcl,
+  setThing,
+  setUrl,
 } from "@inrupt/solid-client";
-import { Session } from "@inrupt/solid-client-authn-browser";
-import { Thing } from "@inrupt/solid-client/src/interfaces";
 import { title } from "rdf-namespaces/dist/dct";
 import { type } from "rdf-namespaces/dist/rdf";
 import { namespace } from "./utils";
 
-async function getUserSettingsUrl(
-  webId: string,
-  { fetch }: Session
-): Promise<string> {
+async function getUserSettingsUrl(webId, { fetch }) {
   const profileResource = await getSolidDataset(webId, { fetch });
   const profile = getThing(profileResource, webId);
   const settingsUrl = getUrl(profile, namespace.preferencesFile);
   if (!settingsUrl) {
-    throw new Error("Missing pointer to preferences file");
-    // TODO: How do we handle that users don't have a pointer to a preferences file?
-    // - we could request that we create it on behalf of the user
-    // - this is probably very edge case, so not important to fix now I think
+    throw new Error(`Missing pointer to preferences file: ${settingsUrl}`);
   }
   return settingsUrl;
 }
 
-async function getOrCreatePodBrowserSettingsResource(
-  podBrowserSettingsUrl: string,
-  { fetch }: Session
-): Promise<string> {
+async function getOrCreatePodBrowserSettingsResourceUrl(
+  podBrowserSettingsUrl,
+  { fetch }
+) {
   try {
     await fetchResourceInfoWithAcl(podBrowserSettingsUrl, { fetch });
     return podBrowserSettingsUrl;
@@ -84,11 +76,11 @@ async function getOrCreatePodBrowserSettingsResource(
 }
 
 async function getOrCreatePodBrowserSettingsPointer(
-  userSettings: Thing,
-  userSettingsResource: any,
-  userSettingsUrl: string,
-  { fetch }: Session
-): Promise<string> {
+  userSettings,
+  userSettingsResource,
+  userSettingsUrl,
+  { fetch }
+) {
   const podBrowserSettingsUrl = getUrl(
     userSettings,
     namespace.podBrowserPreferencesFile
@@ -116,16 +108,10 @@ async function getOrCreatePodBrowserSettingsPointer(
   return Promise.resolve(newPodBrowserSettingsUrl);
 }
 
-async function getPodBrowserSettings(
-  userSettingsUrl: string,
-  session: Session
-): Promise<string> {
+async function getPodBrowserSettingsUrl(userSettingsUrl, session) {
   const userSettingsResource = await getSolidDataset(userSettingsUrl, {
     fetch: session.fetch,
   });
-  // TODO: How do we handle that prefs.ttl does not exist?
-  // - we could request that we create it on behalf of the user
-  // - this is probably very edge case, so not important to fix now I think
 
   const userSettings = getThing(userSettingsResource, userSettingsUrl);
   const podBrowserSettingsUrl = await getOrCreatePodBrowserSettingsPointer(
@@ -134,14 +120,18 @@ async function getPodBrowserSettings(
     userSettingsUrl,
     session
   );
-  return getOrCreatePodBrowserSettingsResource(podBrowserSettingsUrl, session);
+  return getOrCreatePodBrowserSettingsResourceUrl(
+    podBrowserSettingsUrl,
+    session
+  );
 }
 
 // eslint-disable-next-line import/prefer-default-export
-export async function getOrCreateSettings(
-  webId: string,
-  session: Session
-): Promise<string> {
+export async function getOrCreateSettings(webId, session) {
   const userSettingsUrl = await getUserSettingsUrl(webId, session);
-  return getPodBrowserSettings(userSettingsUrl, session);
+  const podBrowserSettingsUrl = await getPodBrowserSettingsUrl(
+    userSettingsUrl,
+    session
+  );
+  return getSolidDataset(podBrowserSettingsUrl, { fetch: session.fetch });
 }

@@ -23,23 +23,21 @@ import { useContext, useEffect, useState } from "react";
 import { getSolidDataset } from "@inrupt/solid-client";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import { getOrCreateSettings } from "../../solidClientHelpers/settings";
-import { Resource } from "../../solidClientHelpers/resource";
 import SessionProvider from "../../contexts/sessionContext";
 
-export default function useSettings(): Resource | null {
+export default function usePodBrowserSettings() {
   const { session } = useContext(SessionProvider);
-  const [settings, setSettings] = useState<Resource | null>(null);
-  const profile = useAuthenticatedProfile();
+  const profileInfo = useAuthenticatedProfile();
+  const [settings, setSettings] = useState(null);
 
   useEffect(() => {
-    if (!profile || !session) return;
-    // eslint-disable-next-line no-void
-    void getOrCreateSettings(profile.webId, session)
+    if (!profileInfo || !session) return;
+    getOrCreateSettings(profileInfo.webId, session)
       .then((settingsUrl) =>
         getSolidDataset(settingsUrl, { fetch: session.fetch })
       )
       .then(setSettings);
-  }, [profile, session]);
+  }, [profileInfo, session]);
 
   return settings;
 }

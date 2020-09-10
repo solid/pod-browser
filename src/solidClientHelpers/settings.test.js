@@ -19,16 +19,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { Session } from "@inrupt/solid-client-authn-browser";
-import mockFetch, { mockTurtleResponse } from "../../__testUtils/mockFetch";
+import { getSolidDataset } from "@inrupt/solid-client";
+import mockFetch from "../../__testUtils/mockFetch";
 import { getOrCreateSettings } from "./settings";
+import { mockTurtleResponse } from "../../__testUtils/mockResponse";
 
 import profileWithPrefsPointer from "./mocks/profileWithPrefsPointer.ttl";
 import profileWithoutPrefsPointer from "./mocks/profileWithoutPrefsPointer.ttl";
 import prefsWithPodBrowserPrefsPointer from "./mocks/prefsWithPodBrowserPrefsPointer.ttl";
-import prefsWithoutPodBrowserPrefsPointer from "./mocks/prefsWithoutPodBrowserPrefsPointer.ttl";
+import prefsWithoutPBPrefsPointer from "./mocks/prefsWithoutPodBrowserPrefsPointer.ttl";
 import podBrowserPrefs from "./mocks/podBrowserPrefs.ttl";
-import Mock = jest.Mock;
 
 describe("getOrCreateSettings", () => {
   const root = "http://localhost";
@@ -36,37 +36,49 @@ describe("getOrCreateSettings", () => {
   const prefs = "http://localhost/settings/prefs.ttl";
   const pbPrefs = "http://localhost/settings/podBrowserPrefs.ttl";
 
-  let session: Session;
+  let session;
+  let mockedPbPrefsResource;
+
+  beforeAll(async () => {
+    mockedPbPrefsResource = await getSolidDataset(pbPrefs, {
+      fetch: mockFetch({
+        [pbPrefs]: () => mockTurtleResponse(200, podBrowserPrefs),
+      }),
+    });
+  });
 
   describe("pointer to PodBrowserPrefs.ttl is set and file exist", () => {
     beforeEach(async () => {
-      session = ({
+      session = {
         fetch: mockFetch({
-          [root]: mockTurtleResponse(200),
-          [webId]: mockTurtleResponse(200, profileWithPrefsPointer),
-          [prefs]: mockTurtleResponse(200, prefsWithPodBrowserPrefsPointer),
-          [pbPrefs]: mockTurtleResponse(200, podBrowserPrefs),
+          [root]: () => mockTurtleResponse(200),
+          [webId]: () => mockTurtleResponse(200, profileWithPrefsPointer),
+          [prefs]: () =>
+            mockTurtleResponse(200, prefsWithPodBrowserPrefsPointer),
+          [pbPrefs]: () => mockTurtleResponse(200, podBrowserPrefs),
         }),
-      } as unknown) as Session;
+      };
     });
 
     it("returns Pod Browser Resource", async () =>
-      expect(await getOrCreateSettings(webId, session)).toEqual(pbPrefs));
+      expect(await getOrCreateSettings(webId, session)).toEqual(
+        mockedPbPrefsResource
+      ));
   });
 
   describe("pointer to PodBrowserPrefs.ttl in prefs.ttl is missing", () => {
-    let fetch: Mock<typeof window.fetch>;
-    let pbPrefsUrl: string;
+    let fetch;
+    let pbPrefsResource;
 
     beforeEach(async () => {
       fetch = mockFetch({
-        [root]: mockTurtleResponse(200),
-        [webId]: mockTurtleResponse(200, profileWithPrefsPointer),
-        [prefs]: mockTurtleResponse(200, prefsWithoutPodBrowserPrefsPointer),
-        [pbPrefs]: mockTurtleResponse(200, podBrowserPrefs),
+        [root]: () => mockTurtleResponse(200),
+        [webId]: () => mockTurtleResponse(200, profileWithPrefsPointer),
+        [prefs]: () => mockTurtleResponse(200, prefsWithoutPBPrefsPointer),
+        [pbPrefs]: () => mockTurtleResponse(200, podBrowserPrefs),
       });
-      session = ({ fetch } as unknown) as Session;
-      pbPrefsUrl = await getOrCreateSettings(webId, session);
+      session = { fetch };
+      pbPrefsResource = await getOrCreateSettings(webId, session);
     });
 
     it("creates pointer to PodBrowserPrefs.ttl in prefs.ttl", () =>
@@ -83,29 +95,42 @@ describe("getOrCreateSettings", () => {
       }));
 
     it("returns Pod Browser Resource", () =>
-      expect(pbPrefsUrl).toEqual(pbPrefs));
+      expect(pbPrefsResource).toEqual(mockedPbPrefsResource));
   });
 
   describe("PodBrowserPrefs.ttl is missing", () => {
-    let fetch: Mock<typeof window.fetch>;
-    let pbPrefsUrl: string;
+    let fetch;
+    let pbPrefsResource;
+    let pbPrefsPutSpy;
 
     beforeEach(async () => {
+      let pbPrefsIsCreated = false;
+      pbPrefsPutSpy = jest.fn();
       fetch = mockFetch({
-        [root]: mockTurtleResponse(200),
-        [webId]: mockTurtleResponse(200, profileWithPrefsPointer),
-        [prefs]: mockTurtleResponse(200, prefsWithPodBrowserPrefsPointer),
+        [root]: () => mockTurtleResponse(200),
+        [webId]: () => mockTurtleResponse(200, profileWithPrefsPointer),
+        [prefs]: () => mockTurtleResponse(200, prefsWithPodBrowserPrefsPointer),
         [pbPrefs]: {
-          HEAD: mockTurtleResponse(404),
-          PUT: mockTurtleResponse(201),
+          GET: () => mockTurtleResponse(200, podBrowserPrefs),
+          HEAD: () => {
+            if (pbPrefsIsCreated) {
+              return mockTurtleResponse(200);
+            }
+            pbPrefsIsCreated = true;
+            return mockTurtleResponse(404);
+          },
+          PUT: (...args) => {
+            pbPrefsPutSpy(...args);
+            return mockTurtleResponse(201);
+          },
         },
       });
-      session = ({ fetch } as unknown) as Session;
-      pbPrefsUrl = await getOrCreateSettings(webId, session);
+      session = { fetch };
+      pbPrefsResource = await getOrCreateSettings(webId, session);
     });
 
     it("creates PodBrowserPrefs.ttl", () =>
-      expect(fetch).toHaveBeenCalledWith(pbPrefsUrl, {
+      expect(pbPrefsPutSpy).toHaveBeenCalledWith(pbPrefs, {
         body: `<http://localhost/settings/podBrowserPrefs.ttl> <http://purl.org/dc/terms/title> "Pod Browser Preferences File";
     a <http://www.w3.org/ns/pim/space#ConfigurationFile>.
 `,
@@ -117,17 +142,17 @@ describe("getOrCreateSettings", () => {
         method: "PUT",
       }));
 
-    it("returns Pod Browser Resource", () =>
-      expect(pbPrefsUrl).toEqual(pbPrefs));
+    it("returns Pod Browser Resource", async () =>
+      expect(pbPrefsResource).toEqual(mockedPbPrefsResource));
   });
 
   describe("Missing pointer to User Preferences resource", () => {
     beforeEach(async () => {
       const fetch = mockFetch({
-        [root]: mockTurtleResponse(200),
-        [webId]: mockTurtleResponse(200, profileWithoutPrefsPointer),
+        [root]: () => mockTurtleResponse(200),
+        [webId]: () => mockTurtleResponse(200, profileWithoutPrefsPointer),
       });
-      session = ({ fetch } as unknown) as Session;
+      session = { fetch };
     });
 
     it("casts error", async () => {
@@ -138,14 +163,14 @@ describe("getOrCreateSettings", () => {
   describe("PodBrowserPrefs.ttl returns any error beside 404", () => {
     beforeEach(async () => {
       const fetch = mockFetch({
-        [root]: mockTurtleResponse(200),
-        [webId]: mockTurtleResponse(200, profileWithPrefsPointer),
-        [prefs]: mockTurtleResponse(200, prefsWithPodBrowserPrefsPointer),
+        [root]: () => mockTurtleResponse(200),
+        [webId]: () => mockTurtleResponse(200, profileWithPrefsPointer),
+        [prefs]: () => mockTurtleResponse(200, prefsWithPodBrowserPrefsPointer),
         [pbPrefs]: {
-          HEAD: mockTurtleResponse(403),
+          HEAD: () => mockTurtleResponse(403),
         },
       });
-      session = ({ fetch } as unknown) as Session;
+      session = { fetch };
     });
 
     it("casts error", async () => {
