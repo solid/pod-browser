@@ -159,7 +159,7 @@ export default function ResourceDetails({
             <ListItemIcon>
               <DeleteIcon />
             </ListItemIcon>
-            <ListItemText primary="Delete File" />
+            <ListItemText primary="Delete" />
           </ListItem>
         </List>
       </section>

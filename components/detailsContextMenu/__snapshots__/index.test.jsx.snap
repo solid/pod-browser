@@ -3957,7 +3957,7 @@ font-display: block;",
                               </WithStyles(ForwardRef(ListItemIcon))>
                               <WithStyles(ForwardRef(ListItemText))
                                 key=".1"
-                                primary="Delete File"
+                                primary="Delete"
                               >
                                 <ForwardRef(ListItemText)
                                   classes={
@@ -3970,7 +3970,7 @@ font-display: block;",
                                       "secondary": "PodBrowser-secondary",
                                     }
                                   }
-                                  primary="Delete File"
+                                  primary="Delete"
                                 >
                                   <div
                                     className="PodBrowser-root"
@@ -4024,7 +4024,7 @@ font-display: block;",
                                         <span
                                           className="PodBrowser-root PodBrowser-primary PodBrowser-body1 PodBrowser-displayBlock"
                                         >
-                                          Delete File
+                                          Delete
                                         </span>
                                       </ForwardRef(Typography)>
                                     </WithStyles(ForwardRef(Typography))>
@@ -5661,7 +5661,7 @@ font-display: block;",
                               </WithStyles(ForwardRef(ListItemIcon))>
                               <WithStyles(ForwardRef(ListItemText))
                                 key=".1"
-                                primary="Delete File"
+                                primary="Delete"
                               >
                                 <ForwardRef(ListItemText)
                                   classes={
@@ -5674,7 +5674,7 @@ font-display: block;",
                                       "secondary": "PodBrowser-secondary",
                                     }
                                   }
-                                  primary="Delete File"
+                                  primary="Delete"
                                 >
                                   <div
                                     className="PodBrowser-root"
@@ -5728,7 +5728,7 @@ font-display: block;",
                                         <span
                                           className="PodBrowser-root PodBrowser-primary PodBrowser-body1 PodBrowser-displayBlock"
                                         >
-                                          Delete File
+                                          Delete
                                         </span>
                                       </ForwardRef(Typography)>
                                     </WithStyles(ForwardRef(Typography))>
