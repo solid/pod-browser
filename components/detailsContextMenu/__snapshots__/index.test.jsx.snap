@@ -5147,7 +5147,7 @@ font-display: block;",
               className="PodBrowser-content-h3"
               title="/iri/"
             >
-              /iri/
+              iri
             </h3>
           </section>
           <WithStyles(ForwardRef(Divider))>

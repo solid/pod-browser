@@ -869,7 +869,7 @@ font-display: block;",
             className="PodBrowser-content-h3"
             title="/container/"
           >
-            Name
+            container
           </h3>
         </section>
         <WithStyles(ForwardRef(Divider))>
@@ -2569,7 +2569,7 @@ font-display: block;",
             className="PodBrowser-content-h3"
             title="/resource"
           >
-            Name
+            resource
           </h3>
         </section>
         <WithStyles(ForwardRef(Divider))>
