@@ -867,7 +867,6 @@ font-display: block;",
           <UserMenu>
             <div
               className="PodBrowser-header-banner__aside-menu PodBrowser-header-banner__aside-menu--popup"
-              onMouseEnter={[Function]}
               onMouseLeave={[Function]}
             >
               <button
@@ -876,6 +875,7 @@ font-display: block;",
                 aria-haspopup="true"
                 className="PodBrowser-header-banner__aside-menu-trigger"
                 onClick={[Function]}
+                onMouseEnter={[Function]}
                 type="button"
               >
                 <i
@@ -1796,7 +1796,6 @@ font-display: block;",
           <UserMenu>
             <div
               className="PodBrowser-header-banner__aside-menu PodBrowser-header-banner__aside-menu--popup"
-              onMouseEnter={[Function]}
               onMouseLeave={[Function]}
             >
               <button
@@ -1805,6 +1804,7 @@ font-display: block;",
                 aria-haspopup="true"
                 className="PodBrowser-header-banner__aside-menu-trigger"
                 onClick={[Function]}
+                onMouseEnter={[Function]}
                 type="button"
               >
                 <i

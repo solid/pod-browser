@@ -39,7 +39,6 @@ export default function UserMenu(): ReactElement {
   return (
     <div
       className={bem("header-banner__aside-menu", "popup")}
-      onMouseEnter={toggleMenu}
       onMouseLeave={toggleMenu}
     >
       <button
@@ -49,6 +48,7 @@ export default function UserMenu(): ReactElement {
         aria-controls="UserMenu"
         aria-expanded={!userMenuOpen}
         onClick={toggleMenu}
+        onMouseEnter={toggleMenu}
       >
         <i
           className={clsx(
