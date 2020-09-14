@@ -50,7 +50,8 @@ export function SessionContextProvider({
 SessionContextProvider.propTypes = {
   children: T.node,
   isLoadingSession: T.bool,
-  session: T.node.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  session: T.object.isRequired,
 };
 
 SessionContextProvider.defaultProps = {

@@ -20,40 +20,47 @@
  */
 
 import React from "react";
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
-import { useRouter } from "next/router";
+import Router from "next/router";
+import mockSession, {
+  mockUnauthenticatedSession,
+} from "../../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
+import AccessRequired from ".";
+import { mountToJson } from "../../../__testUtils/mountWithTheme";
 
-import {
-  useRedirectIfLoggedOut,
-  useRedirectIfNoControlAccessToPod,
-} from "../../../src/effects/auth";
-import IndexPage from "./index";
-
-jest.mock("../../../src/effects/auth");
 jest.mock("next/router");
 
-describe("Index page", () => {
-  beforeEach(() => {
-    useRouter.mockImplementation(() => ({
-      query: {
-        iri: encodeURIComponent("https://mypod.myhost.com"),
-      },
-    }));
+describe("Access Required page", () => {
+  test("with profile that has access to Pod", () => {
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider({
+      session,
+      isLoadingSession: false,
+    });
+
+    const snapshot = mountToJson(
+      <SessionProvider>
+        <AccessRequired />
+      </SessionProvider>
+    );
+    expect(snapshot).toMatchSnapshot();
   });
 
-  test("Renders a logout button", () => {
-    const tree = shallow(<IndexPage />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
-  });
+  test("unauthenticated profile is redirected to login", () => {
+    const session = mockUnauthenticatedSession();
+    const SessionProvider = mockSessionContextProvider({
+      session,
+      isLoadingSession: false,
+    });
 
-  test("Redirects if the user is logged out", () => {
-    shallow(<IndexPage />);
-    expect(useRedirectIfLoggedOut).toHaveBeenCalled();
-  });
+    Router.push.mockResolvedValue(null);
 
-  test("Redirects if the user does not have access to Pod", () => {
-    shallow(<IndexPage />);
-    expect(useRedirectIfNoControlAccessToPod).toHaveBeenCalled();
+    mountToJson(
+      <SessionProvider>
+        <AccessRequired />
+      </SessionProvider>
+    );
+
+    expect(Router.push).toHaveBeenCalledWith("/login");
   });
 });

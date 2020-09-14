@@ -19,22 +19,35 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import "whatwg-fetch"; // must be imported for Response class to be available
+import { useEffect, useContext } from "react";
+import { useRouter } from "next/router";
 
-export default function mockResponse(status, body = "", headers = {}) {
-  const response = new Response(body, {
-    status,
-    headers,
-  });
-  if (headers.url) {
-    response.url = headers.url;
-  }
-  return response;
-}
+import { useFetchPodIrisFromWebId } from "../../../src/hooks/solidClient";
+import SessionContext from "../../../src/contexts/sessionContext";
+import {
+  useRedirectIfLoggedOut,
+  useRedirectIfNoControlAccessToPod,
+} from "../../../src/effects/auth";
 
-export function mockTurtleResponse(status, body = "", headers = {}) {
-  return mockResponse(status, body, {
-    ...headers,
-    "Content-Type": "text/turtle",
-  });
+import { resourceHref } from "../../resourceLink";
+
+export default function Home() {
+  useRedirectIfLoggedOut();
+  useRedirectIfNoControlAccessToPod();
+
+  const router = useRouter();
+  const { session } = useContext(SessionContext);
+  const { webId = "" } = session.info;
+  const { data: podIris = [] } = useFetchPodIrisFromWebId(webId);
+  const [podIri] = podIris;
+
+  useEffect(() => {
+    if (podIri) {
+      router.replace("/resource/[iri]", resourceHref(podIri)).catch((e) => {
+        throw e;
+      });
+    }
+  }, [podIri, router]);
+
+  return null;
 }

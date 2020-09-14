@@ -19,31 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useEffect, useContext } from "react";
-import { useRouter } from "next/router";
+import React from "react";
+import AccessRequired from "../components/pages/access-required";
 
-import { useFetchPodIrisFromWebId } from "../../../src/hooks/solidClient";
-import SessionContext from "../../../src/contexts/sessionContext";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-
-import { resourceHref } from "../../resourceLink";
-
-export default function Home(): null {
-  useRedirectIfLoggedOut();
-
-  const router = useRouter();
-  const { session } = useContext(SessionContext);
-  const { webId = "" } = session.info;
-  const { data: podIris = [] } = useFetchPodIrisFromWebId(webId);
-  const [podIri] = podIris;
-
-  useEffect(() => {
-    if (podIri) {
-      router.replace("/resource/[iri]", resourceHref(podIri)).catch((e) => {
-        throw e;
-      });
-    }
-  }, [podIri, router]);
-
-  return null;
+export default function Custom404() {
+  return <AccessRequired />;
 }

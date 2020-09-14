@@ -19,22 +19,28 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import "whatwg-fetch"; // must be imported for Response class to be available
+import React from "react";
+import { useRouter } from "next/router";
+import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
+import {
+  useRedirectIfLoggedOut,
+  useRedirectIfNoControlAccessToPod,
+} from "../../../src/effects/auth";
+import ContainerView from "../../container";
+import { PodLocationProvider } from "../../../src/contexts/podLocationContext";
 
-export default function mockResponse(status, body = "", headers = {}) {
-  const response = new Response(body, {
-    status,
-    headers,
-  });
-  if (headers.url) {
-    response.url = headers.url;
-  }
-  return response;
-}
+export default function Resource() {
+  useRedirectIfLoggedOut();
+  useRedirectIfNoControlAccessToPod();
 
-export function mockTurtleResponse(status, body = "", headers = {}) {
-  return mockResponse(status, body, {
-    ...headers,
-    "Content-Type": "text/turtle",
-  });
+  const router = useRouter();
+  const decodedIri = decodeURIComponent(router.query.iri);
+
+  return (
+    <PodLocationProvider currentUri={decodedIri}>
+      <DetailsMenuProvider>
+        <ContainerView iri={decodedIri} />
+      </DetailsMenuProvider>
+    </PodLocationProvider>
+  );
 }

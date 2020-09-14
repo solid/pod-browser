@@ -21,20 +21,21 @@
 
 import { useEffect, useContext } from "react";
 import Router from "next/router";
+import { getSolidDatasetWithAcl, hasResourceAcl } from "@inrupt/solid-client";
 import SessionContext from "../../contexts/sessionContext";
+import useAuthenticatedProfile from "../../hooks/useAuthenticatedProfile";
 
-// TODO figure out typescript enums
 export const SESSION_STATES = {
   LOGGED_IN: "LOGGED_IN",
   LOGGED_OUT: "LOGGED_OUT",
 };
 
 export async function redirectBasedOnSessionState(
-  sessionIsLoggedIn: boolean,
-  isLoadingSession: boolean,
-  redirectIfSessionState: string,
-  location: string
-): Promise<void> {
+  sessionIsLoggedIn,
+  isLoadingSession,
+  redirectIfSessionState,
+  location
+) {
   if (isLoadingSession) {
     return;
   }
@@ -54,8 +55,7 @@ export async function redirectBasedOnSessionState(
   }
 }
 
-/* eslint @typescript-eslint/no-floating-promises: 0 */
-export function useRedirectIfLoggedOut(location = "/login"): void {
+export function useRedirectIfLoggedOut(location = "/login") {
   const { session, isLoadingSession } = useContext(SessionContext);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export function useRedirectIfLoggedOut(location = "/login"): void {
   });
 }
 
-export function useRedirectIfLoggedIn(location = "/"): void {
+export function useRedirectIfLoggedIn(location = "/") {
   const { session, isLoadingSession } = useContext(SessionContext);
 
   useEffect(() => {
@@ -79,4 +79,29 @@ export function useRedirectIfLoggedIn(location = "/"): void {
       location
     );
   });
+}
+
+export function useRedirectIfNoControlAccessToPod(
+  location = "/access-required"
+) {
+  const { session, isLoadingSession } = useContext(SessionContext);
+  const profile = useAuthenticatedProfile();
+
+  useEffect(() => {
+    if (isLoadingSession || !profile) return;
+
+    Promise.all(
+      profile.pods.map((pod) =>
+        getSolidDatasetWithAcl(pod, {
+          fetch: session.fetch,
+        })
+      )
+    ).then((podResources) => {
+      const hasControlAccessToPods = !podResources.find(
+        (podResource) => !hasResourceAcl(podResource)
+      );
+      if (hasControlAccessToPods) return;
+      Router.push(location);
+    });
+  }, [session, isLoadingSession, profile, location]);
 }

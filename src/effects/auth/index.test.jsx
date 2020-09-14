@@ -19,16 +19,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import Router from "next/router";
 
-import { SESSION_STATES, redirectBasedOnSessionState } from "./index";
+import { renderHook } from "@testing-library/react-hooks";
+import {
+  SESSION_STATES,
+  redirectBasedOnSessionState,
+  useRedirectIfNoControlAccessToPod,
+} from "./index";
+import mockSession, {
+  mockAuthenticatedSessionWithNoAccessToPod,
+} from "../../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 
 jest.mock("next/router");
 
 const redirectLocation = "/redirectLocation";
 
 describe("auth effects", () => {
-  (Router.push as jest.Mock).mockResolvedValue(null);
+  Router.push.mockResolvedValue(null);
 
   describe("do nothing if session is still loading", () => {
     test("if the session is loading, don't attempt to redirect", async () => {
@@ -88,6 +98,50 @@ describe("auth effects", () => {
       );
 
       expect(Router.push).not.toHaveBeenCalledWith(redirectLocation);
+    });
+  });
+
+  describe("useRedirectIfNoControlAccessToPod", () => {
+    test("Do not get redirected if profile has access to all pods", async () => {
+      const session = mockSession();
+      const SessionProvider = mockSessionContextProvider({
+        session,
+        isLoadingSession: false,
+      });
+
+      const wrapper = ({ children }) => (
+        <SessionProvider>{children}</SessionProvider>
+      );
+
+      const { waitForNextUpdate } = renderHook(
+        () => useRedirectIfNoControlAccessToPod(),
+        { wrapper }
+      );
+
+      await waitForNextUpdate();
+
+      expect(Router.push).not.toHaveBeenCalledWith();
+    });
+
+    test("Gets redirected if profile do not have access to all pods", async () => {
+      const session = mockAuthenticatedSessionWithNoAccessToPod();
+      const SessionProvider = mockSessionContextProvider({
+        session,
+        isLoadingSession: false,
+      });
+
+      const wrapper = ({ children }) => (
+        <SessionProvider>{children}</SessionProvider>
+      );
+
+      const { waitForNextUpdate } = renderHook(
+        () => useRedirectIfNoControlAccessToPod(),
+        { wrapper }
+      );
+
+      await waitForNextUpdate();
+
+      expect(Router.push).toHaveBeenCalled();
     });
   });
 });
