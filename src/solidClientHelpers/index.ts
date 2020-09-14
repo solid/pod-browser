@@ -151,7 +151,7 @@ export function getResourceName(iri: string): string | undefined {
   }
   const encodedURISegment: string =
     pathname.match(/(?!\/)(?:.(?!\/))+$/)?.toString() || "";
-  return decodeURI(encodedURISegment);
+  return decodeURIComponent(encodedURISegment);
 }
 
 export function getTypeName(rawType: string): string {

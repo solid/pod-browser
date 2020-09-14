@@ -39,10 +39,7 @@ import { makeStyles } from "@material-ui/styles";
 import { PrismTheme } from "@solid/lit-prism-patterns";
 import ResourceLink from "../resourceLink";
 import styles from "./styles";
-import {
-  getResourceName,
-  IResourceDetails,
-} from "../../src/solidClientHelpers";
+import { IResourceDetails } from "../../src/solidClientHelpers";
 import { parseUrl } from "../../src/stringHelpers";
 import SessionContext from "../../src/contexts/sessionContext";
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
@@ -130,13 +127,12 @@ export default function ResourceDetails({
   const classes = useStyles();
   const { iri, name, types } = resource;
   const type = displayType(types);
-  const displayName = getResourceName(iri);
 
   return (
     <>
       <section className={classes.headerSection}>
         <h3 className={classes["content-h3"]} title={iri}>
-          {displayName}
+          {name}
         </h3>
       </section>
 

@@ -23,6 +23,7 @@ import React, { useContext, useEffect } from "react";
 import T from "prop-types";
 import { useRouter } from "next/router";
 import { Drawer } from "@inrupt/prism-react-components";
+import { getResourceName } from "../../src/solidClientHelpers";
 import DetailsMenuContext, {
   DETAILS_CONTEXT_ACTIONS,
 } from "../../src/contexts/detailsMenuContext";
@@ -33,11 +34,11 @@ import DetailsError from "../resourceDetails/detailsError";
 import ResourceDetails from "../resourceDetails";
 import ResourceSharing from "../resourceDetails/resourceSharing";
 import { useFetchResourceDetails } from "../../src/hooks/solidClient";
-import { parseUrl, stripQueryParams } from "../../src/stringHelpers";
+import { stripQueryParams } from "../../src/stringHelpers";
 
 function Contents({ action, iri, onUpdate }) {
-  const { pathname } = parseUrl(iri);
   const { data, error } = useFetchResourceDetails(iri);
+  const displayName = getResourceName(iri);
 
   const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
   const errorMessage = "There was an error fetching the details.";
@@ -51,13 +52,13 @@ function Contents({ action, iri, onUpdate }) {
   const loadingComponent =
     action === "details" ? (
       <DetailsLoading
-        name={pathname}
+        name={displayName}
         iri={iri}
         onDelete={onUpdate}
         onDeleteError={onDeleteError}
       />
     ) : (
-      <ResourceSharingLoading name={pathname} iri={iri} />
+      <ResourceSharingLoading name={displayName} iri={iri} />
     );
 
   useEffect(() => {
@@ -69,7 +70,7 @@ function Contents({ action, iri, onUpdate }) {
   });
 
   if (error) {
-    return <DetailsError message={errorMessage} name={pathname} iri={iri} />;
+    return <DetailsError message={errorMessage} name={displayName} iri={iri} />;
   }
 
   if (!data) return loadingComponent;
@@ -81,7 +82,7 @@ function Contents({ action, iri, onUpdate }) {
       return (
         <ResourceSharing
           iri={iri}
-          name={pathname}
+          name={displayName}
           permissions={permissions}
           defaultPermissions={defaultPermissions}
           dataset={dataset}
@@ -91,7 +92,7 @@ function Contents({ action, iri, onUpdate }) {
     default:
       return (
         <ResourceDetails
-          resource={{ ...data, name: pathname }}
+          resource={{ ...data, name: displayName }}
           onDelete={onUpdate}
           onDeleteError={onDeleteError}
         />
