@@ -65,7 +65,7 @@ export function determineFinalUrl(folders, currentUri, name) {
     }
   }
   determineFinalName();
-  return currentUri + encodeURIComponent(currentName);
+  return encodeURI(currentUri) + encodeURIComponent(currentName);
 }
 
 export function handleFolderSubmit({
