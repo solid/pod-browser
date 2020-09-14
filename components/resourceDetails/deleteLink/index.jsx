@@ -25,6 +25,8 @@ import SessionContext from "../../../src/contexts/sessionContext";
 import AlertContext from "../../../src/contexts/alertContext";
 import ConfirmationDialogContext from "../../../src/contexts/confirmationDialogContext";
 
+const TESTCAFE_ID_DELETE_BUTTON = "delete-button";
+
 export function handleConfirmation({
   setOpen,
   setConfirmed,
@@ -117,7 +119,7 @@ export default React.forwardRef(
     return (
       <a
         href="#delete"
-        id="delete-button"
+        data-testid={TESTCAFE_ID_DELETE_BUTTON}
         {...linkProps}
         ref={ref}
         onClick={() => setOpen(true)}

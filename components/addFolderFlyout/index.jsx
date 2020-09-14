@@ -35,6 +35,10 @@ import SessionContext from "../../src/contexts/sessionContext";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import AlertContext from "../../src/contexts/alertContext";
 
+const TESTCAFE_ID_ADD_FOLDER_BUTTON = "add-folder-button";
+const TESTCAFE_ID_FOLDER_NAME_INPUT = "folder-name-input";
+const TESTCAFE_ID_CREATE_FOLDER_FLYOUT_BUTTON = "create-folder-flyout-button";
+
 const useStyles = makeStyles((theme) => {
   return {
     typography: {
@@ -156,14 +160,14 @@ export default function AddFolderFlyout({ onSave, className, resourceList }) {
       <button
         type="button"
         aria-describedby={id}
-        id="add-folder-button"
+        data-testid={TESTCAFE_ID_ADD_FOLDER_BUTTON}
         className={className}
         onClick={handleClick}
       >
         Create Folder
       </button>
       <Popover
-        id={id}
+        data-testid={id}
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
@@ -179,9 +183,14 @@ export default function AddFolderFlyout({ onSave, className, resourceList }) {
         <Typography className={classes.typography}>
           <FormControl className={classes.folderInput}>
             <InputLabel htmlFor="folder-input">Folder name</InputLabel>
-            <Input id="folder-input" onChange={onChange} value={folderName} />
+            <Input
+              data-testid={TESTCAFE_ID_FOLDER_NAME_INPUT}
+              onChange={onChange}
+              value={folderName}
+            />
           </FormControl>
           <Button
+            data-testid={TESTCAFE_ID_CREATE_FOLDER_FLYOUT_BUTTON}
             variant="contained"
             onClick={onClick}
             disabled={folderName === ""}

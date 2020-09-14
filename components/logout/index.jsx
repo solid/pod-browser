@@ -24,6 +24,8 @@ import T from "prop-types";
 import { hardRedirect, clearLocalstorage } from "../../src/windowHelpers";
 import SessionProvider from "../../src/contexts/sessionContext";
 
+const TESTCAFE_ID_LOGOUT_BUTTON = "logout-button";
+
 export function onLogOutClick(session) {
   return async function logout(e) {
     e.preventDefault();
@@ -38,7 +40,7 @@ export default function LogOut({ children, className }) {
 
   return (
     <button
-      id="logout-button"
+      data-testid={TESTCAFE_ID_LOGOUT_BUTTON}
       onClick={onLogOutClick(session)}
       className={className}
       type="button"

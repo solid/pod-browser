@@ -22,6 +22,8 @@
 import React from "react";
 import { Footer as PrismFooter } from "@inrupt/prism-react-components";
 
+const TESTCAFE_ID_TOS_LINK = "tos-link";
+
 export default function Footer() {
   const links = [
     {
@@ -29,7 +31,7 @@ export default function Footer() {
       text: "Terms of Service",
       rel: "noreferrer",
       target: "_blank",
-      id: "tos-link",
+      "data-testid": TESTCAFE_ID_TOS_LINK,
     },
   ];
   const texts = [{ text: "Copyright 2020 Inrupt, inc." }];

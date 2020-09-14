@@ -1849,7 +1849,7 @@ font-display: block;",
                 >
                   <button
                     className="PodBrowser-page-header__action"
-                    id="add-folder-button"
+                    data-testid="add-folder-button"
                     onClick={[Function]}
                     type="button"
                   >
@@ -1915,12 +1915,12 @@ font-display: block;",
                 >
                   <label
                     className="PodBrowser-page-header__action"
+                    data-testid="upload-file-button"
                     disabled={false}
-                    id="upload-file-button"
                   >
                     Upload File
                     <input
-                      id="upload-file-input"
+                      data-testid="upload-file-input"
                       onChange={[Function]}
                       onClick={[Function]}
                       style={
@@ -2044,7 +2044,6 @@ font-display: block;",
                       <td
                         className="PodBrowser-table__header-cell PodBrowser-table__header-cell--align-center PodBrowser-table__header-cell--width-preview"
                         colSpan={1}
-                        id="toggle-sortby-icon"
                         key="header_icon"
                         role="columnheader"
                         style={
@@ -2952,7 +2951,6 @@ font-display: block;",
                       <td
                         className="PodBrowser-table__header-cell"
                         colSpan={1}
-                        id="toggle-sortby-filename"
                         key="header_filename"
                         onClick={[Function]}
                         role="columnheader"
@@ -2972,7 +2970,6 @@ font-display: block;",
                       <td
                         className="PodBrowser-table__header-cell"
                         colSpan={1}
-                        id="toggle-sortby-type"
                         key="header_type"
                         onClick={[Function]}
                         role="columnheader"
@@ -4033,7 +4030,7 @@ font-display: block;",
                 >
                   <button
                     className="PodBrowser-page-header__action"
-                    id="add-folder-button"
+                    data-testid="add-folder-button"
                     onClick={[Function]}
                     type="button"
                   >
@@ -4120,12 +4117,12 @@ font-display: block;",
                 >
                   <label
                     className="PodBrowser-page-header__action"
+                    data-testid="upload-file-button"
                     disabled={false}
-                    id="upload-file-button"
                   >
                     Upload File
                     <input
-                      id="upload-file-input"
+                      data-testid="upload-file-input"
                       onChange={[Function]}
                       onClick={[Function]}
                       style={
@@ -4249,7 +4246,6 @@ font-display: block;",
                       <td
                         className="PodBrowser-table__header-cell PodBrowser-table__header-cell--align-center PodBrowser-table__header-cell--width-preview"
                         colSpan={1}
-                        id="toggle-sortby-icon"
                         key="header_icon"
                         role="columnheader"
                         style={
@@ -11850,7 +11846,6 @@ font-display: block;",
                       <td
                         className="PodBrowser-table__header-cell"
                         colSpan={1}
-                        id="toggle-sortby-filename"
                         key="header_filename"
                         onClick={[Function]}
                         role="columnheader"
@@ -11870,7 +11865,6 @@ font-display: block;",
                       <td
                         className="PodBrowser-table__header-cell"
                         colSpan={1}
-                        id="toggle-sortby-type"
                         key="header_type"
                         onClick={[Function]}
                         role="columnheader"

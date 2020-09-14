@@ -36,6 +36,8 @@ import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
+const TESTCAFE_ID_PERMISSIONS_DROPDOWN_BUTTON = "permissions-dropdown-button";
+
 export function setPermissionHandler(access, key, setAccess) {
   return () => {
     const value = !access[key];
@@ -142,6 +144,7 @@ function PermissionsForm({ permission, warnOnSubmit, onSave }) {
     // This chooses typescript rules over prettier in a battle over adding parenthesis to JSX
     <div className={classes.container}>
       <Button
+        data-testid={TESTCAFE_ID_PERMISSIONS_DROPDOWN_BUTTON}
         className={classes.summary}
         onClick={toggleOpen(formOpen, setFormOpen)}
         endIcon={arrowIcon(formOpen)}

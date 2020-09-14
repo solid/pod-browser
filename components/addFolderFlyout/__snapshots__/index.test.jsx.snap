@@ -19,7 +19,7 @@ exports[`AddFolderFlyout Renders an Add Folder button 1`] = `
   >
     <button
       className={null}
-      id="add-folder-button"
+      data-testid="add-folder-button"
       onClick={[Function]}
       type="button"
     >

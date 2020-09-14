@@ -1335,8 +1335,8 @@ font-display: block;",
                           <a
                             aria-disabled={false}
                             className="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
+                            data-testid="delete-button"
                             href="#delete"
-                            id="delete-button"
                             onBlur={[Function]}
                             onClick={[Function]}
                             onDragLeave={[Function]}

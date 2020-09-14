@@ -26,6 +26,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
   >
     <WithStyles(ForwardRef(Button))
       className="makeStyles-summary-5"
+      data-testid="permissions-dropdown-button"
       endIcon={<Memo(KeyboardArrowDownIcon) />}
       onClick={[Function]}
     >
@@ -64,12 +65,14 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
             "textSizeSmall": "MuiButton-textSizeSmall",
           }
         }
+        data-testid="permissions-dropdown-button"
         endIcon={<Memo(KeyboardArrowDownIcon) />}
         onClick={[Function]}
       >
         <WithStyles(ForwardRef(ButtonBase))
           className="MuiButton-root MuiButton-text makeStyles-summary-5"
           component="button"
+          data-testid="permissions-dropdown-button"
           disabled={false}
           focusRipple={true}
           focusVisibleClassName="Mui-focusVisible"
@@ -86,6 +89,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
               }
             }
             component="button"
+            data-testid="permissions-dropdown-button"
             disabled={false}
             focusRipple={true}
             focusVisibleClassName="Mui-focusVisible"
@@ -94,6 +98,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
           >
             <button
               className="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-summary-5"
+              data-testid="permissions-dropdown-button"
               disabled={false}
               onBlur={[Function]}
               onClick={[Function]}
@@ -1817,6 +1822,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
   >
     <WithStyles(ForwardRef(Button))
       className="makeStyles-summary-5"
+      data-testid="permissions-dropdown-button"
       endIcon={<Memo(KeyboardArrowDownIcon) />}
       onClick={[Function]}
     >
@@ -1855,12 +1861,14 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
             "textSizeSmall": "MuiButton-textSizeSmall",
           }
         }
+        data-testid="permissions-dropdown-button"
         endIcon={<Memo(KeyboardArrowDownIcon) />}
         onClick={[Function]}
       >
         <WithStyles(ForwardRef(ButtonBase))
           className="MuiButton-root MuiButton-text makeStyles-summary-5"
           component="button"
+          data-testid="permissions-dropdown-button"
           disabled={false}
           focusRipple={true}
           focusVisibleClassName="Mui-focusVisible"
@@ -1877,6 +1885,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
               }
             }
             component="button"
+            data-testid="permissions-dropdown-button"
             disabled={false}
             focusRipple={true}
             focusVisibleClassName="Mui-focusVisible"
@@ -1885,6 +1894,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
           >
             <button
               className="MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-summary-5"
+              data-testid="permissions-dropdown-button"
               disabled={false}
               onBlur={[Function]}
               onClick={[Function]}

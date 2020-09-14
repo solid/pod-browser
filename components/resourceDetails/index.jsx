@@ -43,6 +43,10 @@ import SessionContext from "../../src/contexts/sessionContext";
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
 import DeleteLink from "./deleteLink";
 
+const TESTCAFE_ID_SHARE_PERMISSIONS_BUTTON = "share-permissions-button";
+const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
+const TESTCAFE_ID_TITLE = "resource-title";
+
 export function displayType(types) {
   if (!types || types.length === 0) return "Resource";
   const [type] = types;
@@ -85,7 +89,7 @@ function DownloadLink(props) {
 
   return (
     <Button
-      id="download-resource-button"
+      data-testid={TESTCAFE_ID_DOWNLOAD_BUTTON}
       variant="contained"
       onClick={downloadResource(iri, session.fetch)}
       className={className}
@@ -107,7 +111,7 @@ export { DownloadLink };
 const SharingLink = React.forwardRef((linkProps, ref) => (
   <ResourceLink
     {...linkProps}
-    id="share-permissions-button"
+    data-testid={TESTCAFE_ID_SHARE_PERMISSIONS_BUTTON}
     action={DETAILS_CONTEXT_ACTIONS.SHARING}
     ref={ref}
   />
@@ -121,7 +125,11 @@ function ResourceDetails({ resource, onDelete, onDeleteError }) {
   return (
     <>
       <section className={classes.headerSection}>
-        <h3 className={classes["content-h3"]} title={iri}>
+        <h3
+          data-testid={TESTCAFE_ID_TITLE}
+          className={classes["content-h3"]}
+          title={iri}
+        >
           {name}
         </h3>
       </section>

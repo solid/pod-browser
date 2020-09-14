@@ -36,6 +36,8 @@ import SessionContext from "../../../src/contexts/sessionContext";
 import styles from "./styles";
 
 const providers = getIdentityProviders();
+const TESTCAFE_ID_LOGIN_TITLE = "login-title";
+const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
 
 export async function loginWithProvider(providerIri, session) {
   clearLocalstorage();
@@ -68,7 +70,7 @@ export default function Provider() {
     <form onSubmit={handleLogin}>
       <Box my={2}>
         <Box mt={2}>
-          <h3>Log In</h3>
+          <h3 data-testid={TESTCAFE_ID_LOGIN_TITLE}>Log In</h3>
 
           <Autocomplete
             onChange={onProviderChange}
@@ -89,7 +91,7 @@ export default function Provider() {
           />
 
           <button
-            id="login-button"
+            data-testid={TESTCAFE_ID_LOGIN_BUTTON}
             type="submit"
             className={bem("button", "primary")}
             onClick={handleLogin}

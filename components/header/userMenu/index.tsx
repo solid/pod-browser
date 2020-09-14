@@ -31,6 +31,8 @@ const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme) as StyleRules)
 );
 
+const TESTCAFE_ID_USER_MENU_BUTTON = "user-menu-button";
+
 export default function UserMenu(): ReactElement {
   const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
   const bem = useBem(useStyles());
@@ -63,6 +65,7 @@ export default function UserMenu(): ReactElement {
         onMouseLeave={toggleMenu}
       >
         <button
+          data-testid={TESTCAFE_ID_USER_MENU_BUTTON}
           className={bem("header-banner__aside-menu-trigger")}
           type="button"
           aria-haspopup="true"
@@ -78,6 +81,7 @@ export default function UserMenu(): ReactElement {
             aria-label="User Menu"
           />
         </button>
+
         <div
           className={bem("header-banner__aside-menu-popup")}
           id="UserMenu"

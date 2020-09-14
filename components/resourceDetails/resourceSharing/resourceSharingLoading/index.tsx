@@ -52,6 +52,8 @@ interface Props {
   iri: string;
 }
 
+const TESTCAFE_ID_AGENT_WEB_ID_INPUT = "agent-web-id-input";
+
 export default function ResourceSharingLoading({
   iri,
   name,
@@ -126,17 +128,19 @@ export default function ResourceSharingLoading({
         </h5>
 
         <FormControl className={classes.agentInput}>
-          <InputLabel htmlFor="agent-web-id">Web ID</InputLabel>
-          <Input
-            disabled
-            id="agent-web-id"
-            // prettier-ignore
-            startAdornment={(
-              <InputAdornment position="start">
-                <AccountCircle />
-              </InputAdornment>
-            )}
-          />
+          <InputLabel>
+            Web ID
+            <Input
+              disabled
+              data-testid={TESTCAFE_ID_AGENT_WEB_ID_INPUT}
+              // prettier-ignore
+              startAdornment={(
+                <InputAdornment position="start">
+                  <AccountCircle />
+                </InputAdornment>
+              )}
+            />
+          </InputLabel>
         </FormControl>
 
         <Button variant="contained" disabled>

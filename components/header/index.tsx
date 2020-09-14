@@ -31,6 +31,8 @@ const useStyles = makeStyles<PrismTheme>((theme) =>
   createStyles(styles(theme) as StyleRules)
 );
 
+const TESTCAFE_ID_HEADER_LOGO = "header-banner-logo";
+
 export default function Header(): ReactElement | null {
   const { session } = useContext(SessionContext);
   const bem = useBem(useStyles());
@@ -38,7 +40,10 @@ export default function Header(): ReactElement | null {
   return (
     <header className={bem("header-banner")}>
       <Link href="/">
-        <a id="header-banner-link" className={bem("header-banner__logo")}>
+        <a
+          data-testid={TESTCAFE_ID_HEADER_LOGO}
+          className={bem("header-banner__logo")}
+        >
           <img
             height={40}
             src="/inrupt_logo-2020.svg"

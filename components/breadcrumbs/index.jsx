@@ -29,6 +29,8 @@ import Crumb from "./crumb";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
+const TESTCAFE_ID_BREADCRUMBS = "breadcrumbs";
+
 export default function Breadcrumbs() {
   const bem = useBem(useStyles());
   const podLocation = useContext(PodLocationContext);
@@ -61,7 +63,11 @@ export default function Breadcrumbs() {
 
   return (
     <nav aria-label="Breadcrumbs">
-      <ul id="breadcrumbs" className={bem("breadcrumb")} ref={breadcrumbsList}>
+      <ul
+        data-testid={TESTCAFE_ID_BREADCRUMBS}
+        className={bem("breadcrumb")}
+        ref={breadcrumbsList}
+      >
         {crumbs.map((crumb, index) => (
           <Crumb
             crumb={crumb}

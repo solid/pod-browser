@@ -56,7 +56,7 @@ describe("loginWithProvider", () => {
     );
 
     tree
-      .find("button#login-button")
+      .find("button[children='Log In']")
       .simulate("click", { preventDefault: () => {} });
 
     expect(session.login).toHaveBeenCalled();

@@ -39,6 +39,8 @@ import PermissionsForm from "../../../permissionsForm";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
+const TESTCAFE_ID_AGENT_WEB_ID = "agent-web-id";
+
 export function handleSave({
   onSubmit,
   saveFn,
@@ -89,7 +91,12 @@ function AgentAccessList({ iri, onSave, onSubmit, permissions, saveFn, warn }) {
         return (
           <ListItem key={webId} className={classes.listItem}>
             <Avatar className={classes.avatar} alt={name} src={avatar} />
-            <Typography className={classes.detailText}>{name}</Typography>
+            <Typography
+              data-testid={TESTCAFE_ID_AGENT_WEB_ID}
+              className={classes.detailText}
+            >
+              {name}
+            </Typography>
             <PermissionsForm
               key={webId}
               permission={permission}

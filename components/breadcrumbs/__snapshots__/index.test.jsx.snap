@@ -849,7 +849,7 @@ font-display: block;",
           >
             <ul
               className="PodBrowser-breadcrumb"
-              id="breadcrumbs"
+              data-testid="breadcrumbs"
             >
               <Crumb
                 crumb={
@@ -1732,7 +1732,7 @@ font-display: block;",
           >
             <ul
               className="PodBrowser-breadcrumb"
-              id="breadcrumbs"
+              data-testid="breadcrumbs"
             >
               <Crumb
                 crumb={

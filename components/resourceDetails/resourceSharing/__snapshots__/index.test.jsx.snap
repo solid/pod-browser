@@ -2233,6 +2233,7 @@ font-display: block;",
                         </WithStyles(ForwardRef(Avatar))>
                         <WithStyles(ForwardRef(Typography))
                           className="PodBrowser-detailText"
+                          data-testid="agent-web-id"
                           key=".1"
                         >
                           <ForwardRef(Typography)
@@ -2271,9 +2272,11 @@ font-display: block;",
                                 "subtitle2": "PodBrowser-subtitle2",
                               }
                             }
+                            data-testid="agent-web-id"
                           >
                             <p
                               className="PodBrowser-root PodBrowser-detailText PodBrowser-body1"
+                              data-testid="agent-web-id"
                             >
                               webId
                             </p>
@@ -2304,6 +2307,7 @@ font-display: block;",
                           >
                             <WithStyles(ForwardRef(Button))
                               className="PodBrowser-summary"
+                              data-testid="permissions-dropdown-button"
                               endIcon={<Memo(KeyboardArrowDownIcon) />}
                               onClick={[Function]}
                             >
@@ -2342,12 +2346,14 @@ font-display: block;",
                                     "textSizeSmall": "PodBrowser-textSizeSmall",
                                   }
                                 }
+                                data-testid="permissions-dropdown-button"
                                 endIcon={<Memo(KeyboardArrowDownIcon) />}
                                 onClick={[Function]}
                               >
                                 <WithStyles(ForwardRef(ButtonBase))
                                   className="PodBrowser-root PodBrowser-text PodBrowser-summary"
                                   component="button"
+                                  data-testid="permissions-dropdown-button"
                                   disabled={false}
                                   focusRipple={true}
                                   focusVisibleClassName="PodBrowser-focusVisible"
@@ -2364,6 +2370,7 @@ font-display: block;",
                                       }
                                     }
                                     component="button"
+                                    data-testid="permissions-dropdown-button"
                                     disabled={false}
                                     focusRipple={true}
                                     focusVisibleClassName="PodBrowser-focusVisible"
@@ -2372,6 +2379,7 @@ font-display: block;",
                                   >
                                     <button
                                       className="PodBrowser-root PodBrowser-root PodBrowser-text PodBrowser-summary"
+                                      data-testid="permissions-dropdown-button"
                                       disabled={false}
                                       onBlur={[Function]}
                                       onClick={[Function]}
@@ -6207,6 +6215,7 @@ font-display: block;",
                         </WithStyles(ForwardRef(Avatar))>
                         <WithStyles(ForwardRef(Typography))
                           className="PodBrowser-detailText"
+                          data-testid="agent-web-id"
                           key=".1"
                         >
                           <ForwardRef(Typography)
@@ -6245,9 +6254,11 @@ font-display: block;",
                                 "subtitle2": "PodBrowser-subtitle2",
                               }
                             }
+                            data-testid="agent-web-id"
                           >
                             <p
                               className="PodBrowser-root PodBrowser-detailText PodBrowser-body1"
+                              data-testid="agent-web-id"
                             >
                               webId
                             </p>
@@ -6278,6 +6289,7 @@ font-display: block;",
                           >
                             <WithStyles(ForwardRef(Button))
                               className="PodBrowser-summary"
+                              data-testid="permissions-dropdown-button"
                               endIcon={<Memo(KeyboardArrowDownIcon) />}
                               onClick={[Function]}
                             >
@@ -6316,12 +6328,14 @@ font-display: block;",
                                     "textSizeSmall": "PodBrowser-textSizeSmall",
                                   }
                                 }
+                                data-testid="permissions-dropdown-button"
                                 endIcon={<Memo(KeyboardArrowDownIcon) />}
                                 onClick={[Function]}
                               >
                                 <WithStyles(ForwardRef(ButtonBase))
                                   className="PodBrowser-root PodBrowser-text PodBrowser-summary"
                                   component="button"
+                                  data-testid="permissions-dropdown-button"
                                   disabled={false}
                                   focusRipple={true}
                                   focusVisibleClassName="PodBrowser-focusVisible"
@@ -6338,6 +6352,7 @@ font-display: block;",
                                       }
                                     }
                                     component="button"
+                                    data-testid="permissions-dropdown-button"
                                     disabled={false}
                                     focusRipple={true}
                                     focusVisibleClassName="PodBrowser-focusVisible"
@@ -6346,6 +6361,7 @@ font-display: block;",
                                   >
                                     <button
                                       className="PodBrowser-root PodBrowser-root PodBrowser-text PodBrowser-summary"
+                                      data-testid="permissions-dropdown-button"
                                       disabled={false}
                                       onBlur={[Function]}
                                       onClick={[Function]}
@@ -8369,6 +8385,7 @@ font-display: block;",
                                 </WithStyles(ForwardRef(Avatar))>
                                 <WithStyles(ForwardRef(Typography))
                                   className="PodBrowser-detailText"
+                                  data-testid="agent-web-id"
                                   key=".1"
                                 >
                                   <ForwardRef(Typography)
@@ -8407,9 +8424,11 @@ font-display: block;",
                                         "subtitle2": "PodBrowser-subtitle2",
                                       }
                                     }
+                                    data-testid="agent-web-id"
                                   >
                                     <p
                                       className="PodBrowser-root PodBrowser-detailText PodBrowser-body1"
+                                      data-testid="agent-web-id"
                                     >
                                       agentId
                                     </p>
@@ -8440,6 +8459,7 @@ font-display: block;",
                                   >
                                     <WithStyles(ForwardRef(Button))
                                       className="PodBrowser-summary"
+                                      data-testid="permissions-dropdown-button"
                                       endIcon={<Memo(KeyboardArrowDownIcon) />}
                                       onClick={[Function]}
                                     >
@@ -8478,12 +8498,14 @@ font-display: block;",
                                             "textSizeSmall": "PodBrowser-textSizeSmall",
                                           }
                                         }
+                                        data-testid="permissions-dropdown-button"
                                         endIcon={<Memo(KeyboardArrowDownIcon) />}
                                         onClick={[Function]}
                                       >
                                         <WithStyles(ForwardRef(ButtonBase))
                                           className="PodBrowser-root PodBrowser-text PodBrowser-summary"
                                           component="button"
+                                          data-testid="permissions-dropdown-button"
                                           disabled={false}
                                           focusRipple={true}
                                           focusVisibleClassName="PodBrowser-focusVisible"
@@ -8500,6 +8522,7 @@ font-display: block;",
                                               }
                                             }
                                             component="button"
+                                            data-testid="permissions-dropdown-button"
                                             disabled={false}
                                             focusRipple={true}
                                             focusVisibleClassName="PodBrowser-focusVisible"
@@ -8508,6 +8531,7 @@ font-display: block;",
                                           >
                                             <button
                                               className="PodBrowser-root PodBrowser-root PodBrowser-text PodBrowser-summary"
+                                              data-testid="permissions-dropdown-button"
                                               disabled={false}
                                               onBlur={[Function]}
                                               onClick={[Function]}

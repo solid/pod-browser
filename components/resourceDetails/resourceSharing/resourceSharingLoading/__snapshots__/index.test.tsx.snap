@@ -1595,9 +1595,7 @@ font-display: block;",
               <div
                 className="PodBrowser-root PodBrowser-agentInput"
               >
-                <WithStyles(ForwardRef(InputLabel))
-                  htmlFor="agent-web-id"
-                >
+                <WithStyles(ForwardRef(InputLabel))>
                   <ForwardRef(InputLabel)
                     classes={
                       Object {
@@ -1615,7 +1613,6 @@ font-display: block;",
                         "shrink": "PodBrowser-shrink",
                       }
                     }
-                    htmlFor="agent-web-id"
                   >
                     <WithStyles(ForwardRef(FormLabel))
                       className="PodBrowser-root PodBrowser-formControl PodBrowser-animated PodBrowser-shrink"
@@ -1629,7 +1626,6 @@ font-display: block;",
                         }
                       }
                       data-shrink={true}
-                      htmlFor="agent-web-id"
                     >
                       <ForwardRef(FormLabel)
                         className="PodBrowser-root PodBrowser-formControl PodBrowser-animated PodBrowser-shrink"
@@ -1646,203 +1642,201 @@ font-display: block;",
                           }
                         }
                         data-shrink={true}
-                        htmlFor="agent-web-id"
                       >
                         <label
                           className="PodBrowser-root PodBrowser-root PodBrowser-formControl PodBrowser-animated PodBrowser-shrink"
                           data-shrink={true}
-                          htmlFor="agent-web-id"
                         >
                           Web ID
+                          <WithStyles(ForwardRef(Input))
+                            data-testid="agent-web-id-input"
+                            disabled={true}
+                            startAdornment={
+                              <WithStyles(ForwardRef(InputAdornment))
+                                position="start"
+                              >
+                                <Memo(AccountCircleIcon) />
+                              </WithStyles(ForwardRef(InputAdornment))>
+                            }
+                          >
+                            <ForwardRef(Input)
+                              classes={
+                                Object {
+                                  "colorSecondary": "PodBrowser-colorSecondary",
+                                  "disabled": "PodBrowser-disabled",
+                                  "error": "PodBrowser-error",
+                                  "focused": "PodBrowser-focused",
+                                  "formControl": "PodBrowser-formControl",
+                                  "fullWidth": "PodBrowser-fullWidth",
+                                  "input": "PodBrowser-input",
+                                  "inputMarginDense": "PodBrowser-inputMarginDense",
+                                  "inputMultiline": "PodBrowser-inputMultiline",
+                                  "inputTypeSearch": "PodBrowser-inputTypeSearch",
+                                  "marginDense": "PodBrowser-marginDense",
+                                  "multiline": "PodBrowser-multiline",
+                                  "root": "PodBrowser-root",
+                                  "underline": "PodBrowser-underline",
+                                }
+                              }
+                              data-testid="agent-web-id-input"
+                              disabled={true}
+                              startAdornment={
+                                <WithStyles(ForwardRef(InputAdornment))
+                                  position="start"
+                                >
+                                  <Memo(AccountCircleIcon) />
+                                </WithStyles(ForwardRef(InputAdornment))>
+                              }
+                            >
+                              <WithStyles(ForwardRef(InputBase))
+                                classes={
+                                  Object {
+                                    "colorSecondary": "PodBrowser-colorSecondary",
+                                    "disabled": "PodBrowser-disabled",
+                                    "error": "PodBrowser-error",
+                                    "focused": "PodBrowser-focused",
+                                    "formControl": "PodBrowser-formControl",
+                                    "fullWidth": "PodBrowser-fullWidth",
+                                    "input": "PodBrowser-input",
+                                    "inputMarginDense": "PodBrowser-inputMarginDense",
+                                    "inputMultiline": "PodBrowser-inputMultiline",
+                                    "inputTypeSearch": "PodBrowser-inputTypeSearch",
+                                    "marginDense": "PodBrowser-marginDense",
+                                    "multiline": "PodBrowser-multiline",
+                                    "root": "PodBrowser-root PodBrowser-underline",
+                                    "underline": null,
+                                  }
+                                }
+                                data-testid="agent-web-id-input"
+                                disabled={true}
+                                fullWidth={false}
+                                inputComponent="input"
+                                multiline={false}
+                                startAdornment={
+                                  <WithStyles(ForwardRef(InputAdornment))
+                                    position="start"
+                                  >
+                                    <Memo(AccountCircleIcon) />
+                                  </WithStyles(ForwardRef(InputAdornment))>
+                                }
+                                type="text"
+                              >
+                                <ForwardRef(InputBase)
+                                  classes={
+                                    Object {
+                                      "adornedEnd": "PodBrowser-adornedEnd",
+                                      "adornedStart": "PodBrowser-adornedStart",
+                                      "colorSecondary": "PodBrowser-colorSecondary PodBrowser-colorSecondary",
+                                      "disabled": "PodBrowser-disabled PodBrowser-disabled",
+                                      "error": "PodBrowser-error PodBrowser-error",
+                                      "focused": "PodBrowser-focused PodBrowser-focused",
+                                      "formControl": "PodBrowser-formControl PodBrowser-formControl",
+                                      "fullWidth": "PodBrowser-fullWidth PodBrowser-fullWidth",
+                                      "input": "PodBrowser-input PodBrowser-input",
+                                      "inputAdornedEnd": "PodBrowser-inputAdornedEnd",
+                                      "inputAdornedStart": "PodBrowser-inputAdornedStart",
+                                      "inputHiddenLabel": "PodBrowser-inputHiddenLabel",
+                                      "inputMarginDense": "PodBrowser-inputMarginDense PodBrowser-inputMarginDense",
+                                      "inputMultiline": "PodBrowser-inputMultiline PodBrowser-inputMultiline",
+                                      "inputTypeSearch": "PodBrowser-inputTypeSearch PodBrowser-inputTypeSearch",
+                                      "marginDense": "PodBrowser-marginDense PodBrowser-marginDense",
+                                      "multiline": "PodBrowser-multiline PodBrowser-multiline",
+                                      "root": "PodBrowser-root PodBrowser-root PodBrowser-underline",
+                                    }
+                                  }
+                                  data-testid="agent-web-id-input"
+                                  disabled={true}
+                                  fullWidth={false}
+                                  inputComponent="input"
+                                  multiline={false}
+                                  startAdornment={
+                                    <WithStyles(ForwardRef(InputAdornment))
+                                      position="start"
+                                    >
+                                      <Memo(AccountCircleIcon) />
+                                    </WithStyles(ForwardRef(InputAdornment))>
+                                  }
+                                  type="text"
+                                >
+                                  <div
+                                    className="PodBrowser-root PodBrowser-root PodBrowser-underline PodBrowser-disabled PodBrowser-disabled PodBrowser-formControl PodBrowser-formControl PodBrowser-adornedStart"
+                                    data-testid="agent-web-id-input"
+                                    onClick={[Function]}
+                                  >
+                                    <WithStyles(ForwardRef(InputAdornment))
+                                      position="start"
+                                    >
+                                      <ForwardRef(InputAdornment)
+                                        classes={
+                                          Object {
+                                            "disablePointerEvents": "PodBrowser-disablePointerEvents",
+                                            "filled": "PodBrowser-filled",
+                                            "hiddenLabel": "PodBrowser-hiddenLabel",
+                                            "marginDense": "PodBrowser-marginDense",
+                                            "positionEnd": "PodBrowser-positionEnd",
+                                            "positionStart": "PodBrowser-positionStart",
+                                            "root": "PodBrowser-root",
+                                          }
+                                        }
+                                        position="start"
+                                      >
+                                        <div
+                                          className="PodBrowser-root PodBrowser-positionStart"
+                                        >
+                                          <ForwardRef>
+                                            <WithStyles(ForwardRef(SvgIcon))>
+                                              <ForwardRef(SvgIcon)
+                                                classes={
+                                                  Object {
+                                                    "colorAction": "PodBrowser-colorAction",
+                                                    "colorDisabled": "PodBrowser-colorDisabled",
+                                                    "colorError": "PodBrowser-colorError",
+                                                    "colorPrimary": "PodBrowser-colorPrimary",
+                                                    "colorSecondary": "PodBrowser-colorSecondary",
+                                                    "fontSizeInherit": "PodBrowser-fontSizeInherit",
+                                                    "fontSizeLarge": "PodBrowser-fontSizeLarge",
+                                                    "fontSizeSmall": "PodBrowser-fontSizeSmall",
+                                                    "root": "PodBrowser-root",
+                                                  }
+                                                }
+                                              >
+                                                <svg
+                                                  aria-hidden={true}
+                                                  className="PodBrowser-root"
+                                                  focusable="false"
+                                                  viewBox="0 0 24 24"
+                                                >
+                                                  <path
+                                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+                                                  />
+                                                </svg>
+                                              </ForwardRef(SvgIcon)>
+                                            </WithStyles(ForwardRef(SvgIcon))>
+                                          </ForwardRef>
+                                        </div>
+                                      </ForwardRef(InputAdornment)>
+                                    </WithStyles(ForwardRef(InputAdornment))>
+                                    <input
+                                      aria-invalid={false}
+                                      className="PodBrowser-input PodBrowser-input PodBrowser-disabled PodBrowser-disabled PodBrowser-inputAdornedStart"
+                                      disabled={true}
+                                      onAnimationStart={[Function]}
+                                      onBlur={[Function]}
+                                      onChange={[Function]}
+                                      onFocus={[Function]}
+                                      required={false}
+                                      type="text"
+                                    />
+                                  </div>
+                                </ForwardRef(InputBase)>
+                              </WithStyles(ForwardRef(InputBase))>
+                            </ForwardRef(Input)>
+                          </WithStyles(ForwardRef(Input))>
                         </label>
                       </ForwardRef(FormLabel)>
                     </WithStyles(ForwardRef(FormLabel))>
                   </ForwardRef(InputLabel)>
                 </WithStyles(ForwardRef(InputLabel))>
-                <WithStyles(ForwardRef(Input))
-                  disabled={true}
-                  id="agent-web-id"
-                  startAdornment={
-                    <WithStyles(ForwardRef(InputAdornment))
-                      position="start"
-                    >
-                      <Memo(AccountCircleIcon) />
-                    </WithStyles(ForwardRef(InputAdornment))>
-                  }
-                >
-                  <ForwardRef(Input)
-                    classes={
-                      Object {
-                        "colorSecondary": "PodBrowser-colorSecondary",
-                        "disabled": "PodBrowser-disabled",
-                        "error": "PodBrowser-error",
-                        "focused": "PodBrowser-focused",
-                        "formControl": "PodBrowser-formControl",
-                        "fullWidth": "PodBrowser-fullWidth",
-                        "input": "PodBrowser-input",
-                        "inputMarginDense": "PodBrowser-inputMarginDense",
-                        "inputMultiline": "PodBrowser-inputMultiline",
-                        "inputTypeSearch": "PodBrowser-inputTypeSearch",
-                        "marginDense": "PodBrowser-marginDense",
-                        "multiline": "PodBrowser-multiline",
-                        "root": "PodBrowser-root",
-                        "underline": "PodBrowser-underline",
-                      }
-                    }
-                    disabled={true}
-                    id="agent-web-id"
-                    startAdornment={
-                      <WithStyles(ForwardRef(InputAdornment))
-                        position="start"
-                      >
-                        <Memo(AccountCircleIcon) />
-                      </WithStyles(ForwardRef(InputAdornment))>
-                    }
-                  >
-                    <WithStyles(ForwardRef(InputBase))
-                      classes={
-                        Object {
-                          "colorSecondary": "PodBrowser-colorSecondary",
-                          "disabled": "PodBrowser-disabled",
-                          "error": "PodBrowser-error",
-                          "focused": "PodBrowser-focused",
-                          "formControl": "PodBrowser-formControl",
-                          "fullWidth": "PodBrowser-fullWidth",
-                          "input": "PodBrowser-input",
-                          "inputMarginDense": "PodBrowser-inputMarginDense",
-                          "inputMultiline": "PodBrowser-inputMultiline",
-                          "inputTypeSearch": "PodBrowser-inputTypeSearch",
-                          "marginDense": "PodBrowser-marginDense",
-                          "multiline": "PodBrowser-multiline",
-                          "root": "PodBrowser-root PodBrowser-underline",
-                          "underline": null,
-                        }
-                      }
-                      disabled={true}
-                      fullWidth={false}
-                      id="agent-web-id"
-                      inputComponent="input"
-                      multiline={false}
-                      startAdornment={
-                        <WithStyles(ForwardRef(InputAdornment))
-                          position="start"
-                        >
-                          <Memo(AccountCircleIcon) />
-                        </WithStyles(ForwardRef(InputAdornment))>
-                      }
-                      type="text"
-                    >
-                      <ForwardRef(InputBase)
-                        classes={
-                          Object {
-                            "adornedEnd": "PodBrowser-adornedEnd",
-                            "adornedStart": "PodBrowser-adornedStart",
-                            "colorSecondary": "PodBrowser-colorSecondary PodBrowser-colorSecondary",
-                            "disabled": "PodBrowser-disabled PodBrowser-disabled",
-                            "error": "PodBrowser-error PodBrowser-error",
-                            "focused": "PodBrowser-focused PodBrowser-focused",
-                            "formControl": "PodBrowser-formControl PodBrowser-formControl",
-                            "fullWidth": "PodBrowser-fullWidth PodBrowser-fullWidth",
-                            "input": "PodBrowser-input PodBrowser-input",
-                            "inputAdornedEnd": "PodBrowser-inputAdornedEnd",
-                            "inputAdornedStart": "PodBrowser-inputAdornedStart",
-                            "inputHiddenLabel": "PodBrowser-inputHiddenLabel",
-                            "inputMarginDense": "PodBrowser-inputMarginDense PodBrowser-inputMarginDense",
-                            "inputMultiline": "PodBrowser-inputMultiline PodBrowser-inputMultiline",
-                            "inputTypeSearch": "PodBrowser-inputTypeSearch PodBrowser-inputTypeSearch",
-                            "marginDense": "PodBrowser-marginDense PodBrowser-marginDense",
-                            "multiline": "PodBrowser-multiline PodBrowser-multiline",
-                            "root": "PodBrowser-root PodBrowser-root PodBrowser-underline",
-                          }
-                        }
-                        disabled={true}
-                        fullWidth={false}
-                        id="agent-web-id"
-                        inputComponent="input"
-                        multiline={false}
-                        startAdornment={
-                          <WithStyles(ForwardRef(InputAdornment))
-                            position="start"
-                          >
-                            <Memo(AccountCircleIcon) />
-                          </WithStyles(ForwardRef(InputAdornment))>
-                        }
-                        type="text"
-                      >
-                        <div
-                          className="PodBrowser-root PodBrowser-root PodBrowser-underline PodBrowser-disabled PodBrowser-disabled PodBrowser-formControl PodBrowser-formControl PodBrowser-adornedStart"
-                          onClick={[Function]}
-                        >
-                          <WithStyles(ForwardRef(InputAdornment))
-                            position="start"
-                          >
-                            <ForwardRef(InputAdornment)
-                              classes={
-                                Object {
-                                  "disablePointerEvents": "PodBrowser-disablePointerEvents",
-                                  "filled": "PodBrowser-filled",
-                                  "hiddenLabel": "PodBrowser-hiddenLabel",
-                                  "marginDense": "PodBrowser-marginDense",
-                                  "positionEnd": "PodBrowser-positionEnd",
-                                  "positionStart": "PodBrowser-positionStart",
-                                  "root": "PodBrowser-root",
-                                }
-                              }
-                              position="start"
-                            >
-                              <div
-                                className="PodBrowser-root PodBrowser-positionStart"
-                              >
-                                <ForwardRef>
-                                  <WithStyles(ForwardRef(SvgIcon))>
-                                    <ForwardRef(SvgIcon)
-                                      classes={
-                                        Object {
-                                          "colorAction": "PodBrowser-colorAction",
-                                          "colorDisabled": "PodBrowser-colorDisabled",
-                                          "colorError": "PodBrowser-colorError",
-                                          "colorPrimary": "PodBrowser-colorPrimary",
-                                          "colorSecondary": "PodBrowser-colorSecondary",
-                                          "fontSizeInherit": "PodBrowser-fontSizeInherit",
-                                          "fontSizeLarge": "PodBrowser-fontSizeLarge",
-                                          "fontSizeSmall": "PodBrowser-fontSizeSmall",
-                                          "root": "PodBrowser-root",
-                                        }
-                                      }
-                                    >
-                                      <svg
-                                        aria-hidden={true}
-                                        className="PodBrowser-root"
-                                        focusable="false"
-                                        viewBox="0 0 24 24"
-                                      >
-                                        <path
-                                          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
-                                        />
-                                      </svg>
-                                    </ForwardRef(SvgIcon)>
-                                  </WithStyles(ForwardRef(SvgIcon))>
-                                </ForwardRef>
-                              </div>
-                            </ForwardRef(InputAdornment)>
-                          </WithStyles(ForwardRef(InputAdornment))>
-                          <input
-                            aria-invalid={false}
-                            className="PodBrowser-input PodBrowser-input PodBrowser-disabled PodBrowser-disabled PodBrowser-inputAdornedStart"
-                            disabled={true}
-                            id="agent-web-id"
-                            onAnimationStart={[Function]}
-                            onBlur={[Function]}
-                            onChange={[Function]}
-                            onFocus={[Function]}
-                            required={false}
-                            type="text"
-                          />
-                        </div>
-                      </ForwardRef(InputBase)>
-                    </WithStyles(ForwardRef(InputBase))>
-                  </ForwardRef(Input)>
-                </WithStyles(ForwardRef(Input))>
               </div>
             </ForwardRef(FormControl)>
           </WithStyles(ForwardRef(FormControl))>

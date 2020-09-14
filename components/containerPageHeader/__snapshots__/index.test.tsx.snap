@@ -86,7 +86,7 @@ exports[`ContainerPageHeader Renders view 1`] = `
         >
           <button
             className="makeStyles-page-header__action-5"
-            id="add-folder-button"
+            data-testid="add-folder-button"
             onClick={[Function]}
             type="button"
           >
@@ -152,12 +152,12 @@ exports[`ContainerPageHeader Renders view 1`] = `
         >
           <label
             className="makeStyles-page-header__action-5"
+            data-testid="upload-file-button"
             disabled={false}
-            id="upload-file-button"
           >
             Upload File
             <input
-              id="upload-file-input"
+              data-testid="upload-file-input"
               onChange={[Function]}
               onClick={[Function]}
               style={

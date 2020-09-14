@@ -872,7 +872,7 @@ font-display: block;",
             aria-expanded={true}
             aria-haspopup="true"
             className="PodBrowser-header-banner__aside-menu-trigger"
-            id="user-menu-button"
+            data-testid="user-menu-button"
             onClick={[Function]}
             type="button"
           >
@@ -902,7 +902,7 @@ font-display: block;",
                 >
                   <button
                     className="PodBrowser-header-banner__user-menu-item-trigger"
-                    id="logout-button"
+                    data-testid="logout-button"
                     onClick={[Function]}
                     type="button"
                   >

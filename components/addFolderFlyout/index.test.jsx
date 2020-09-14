@@ -71,7 +71,7 @@ describe("AddFolderFlyout", () => {
 
   test("Displays a flyout on click", async () => {
     await act(async () => {
-      tree.find("button#add-folder-button").simulate("click");
+      tree.find("button[children='Create Folder']").simulate("click");
     });
 
     expect(tree.html()).toContain("add-folder-flyout");
