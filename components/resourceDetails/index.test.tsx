@@ -50,10 +50,38 @@ describe("Resource details", () => {
     const tree = mountToJson(<ResourceDetails resource={resource} />);
     expect(tree).toMatchSnapshot();
   });
+  test("it renders a decoded cntainer name", () => {
+    const resource = {
+      iri: "/Some%20container/",
+      types: ["Container"],
+      name: "Name",
+    };
+
+    jest
+      .spyOn(Router, "useRouter")
+      .mockReturnValue({ asPath: "/pathname", replace: jest.fn() });
+
+    const tree = mountToJson(<ResourceDetails resource={resource} />);
+    expect(tree).toMatchSnapshot();
+  });
 
   test("it renders resource details", () => {
     const resource = {
       iri: "/resource",
+      types: ["Resource"],
+      name: "Name",
+    };
+
+    jest
+      .spyOn(Router, "useRouter")
+      .mockReturnValue({ asPath: "/pathname", replace: jest.fn() });
+
+    const tree = mountToJson(<ResourceDetails resource={resource} />);
+    expect(tree).toMatchSnapshot();
+  });
+  test("it renders a decoded resource name", () => {
+    const resource = {
+      iri: "/Some%20Resource",
       types: ["Resource"],
       name: "Name",
     };
