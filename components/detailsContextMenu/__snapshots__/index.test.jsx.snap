@@ -2540,7 +2540,7 @@ font-display: block;",
         <DetailsError
           iri="/iri/"
           message="There was an error fetching the details."
-          name="/iri/"
+          name="iri"
         >
           <section
             className="PodBrowser-centeredSection"
@@ -2549,7 +2549,7 @@ font-display: block;",
               className="PodBrowser-content-h3"
               title="/iri/"
             >
-              /iri/
+              iri
             </h3>
           </section>
           <WithStyles(ForwardRef(Divider))>
@@ -3437,7 +3437,7 @@ font-display: block;",
       >
         <DetailsLoading
           iri="/iri/"
-          name="/iri/"
+          name="iri"
           onDelete={[Function]}
           onDeleteError={[Function]}
         >
@@ -3448,7 +3448,7 @@ font-display: block;",
               className="PodBrowser-content-h3"
               title="/iri/"
             >
-              /iri/
+              iri
             </h3>
           </section>
           <WithStyles(ForwardRef(Divider))>
@@ -5121,7 +5121,7 @@ font-display: block;",
           resource={
             Object {
               "iri": "/iri/",
-              "name": "/iri/",
+              "name": "iri",
               "permissions": Array [
                 Object {
                   "acl": Object {
@@ -5502,7 +5502,7 @@ font-display: block;",
                         "render": [Function],
                       }
                     }
-                    name="/iri/"
+                    name="iri"
                     onDelete={[Function]}
                     onDeleteError={[Function]}
                     resourceIri="/iri/"
@@ -5530,7 +5530,7 @@ font-display: block;",
                           "render": [Function],
                         }
                       }
-                      name="/iri/"
+                      name="iri"
                       onDelete={[Function]}
                       onDeleteError={[Function]}
                       resourceIri="/iri/"
@@ -5545,7 +5545,7 @@ font-display: block;",
                         }
                         disabled={false}
                         focusVisibleClassName="PodBrowser-focusVisible"
-                        name="/iri/"
+                        name="iri"
                         onDelete={[Function]}
                         onDeleteError={[Function]}
                         resourceIri="/iri/"
@@ -5567,7 +5567,7 @@ font-display: block;",
                           }
                           disabled={false}
                           focusVisibleClassName="PodBrowser-focusVisible"
-                          name="/iri/"
+                          name="iri"
                           onDelete={[Function]}
                           onDeleteError={[Function]}
                           resourceIri="/iri/"
@@ -5575,7 +5575,7 @@ font-display: block;",
                           <ForwardRef
                             aria-disabled={false}
                             className="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
-                            name="/iri/"
+                            name="iri"
                             onBlur={[Function]}
                             onDelete={[Function]}
                             onDeleteError={[Function]}
@@ -6849,7 +6849,7 @@ font-display: block;",
           dataset={Object {}}
           defaultPermissions={Array []}
           iri="/iri/"
-          name="/iri/"
+          name="iri"
           permissions={
             Array [
               Object {
@@ -7067,7 +7067,7 @@ font-display: block;",
               className="PodBrowser-content-h3"
               title="/iri/"
             >
-              /iri/
+              iri
             </h3>
           </section>
           <WithStyles(ForwardRef(Divider))>
@@ -13161,7 +13161,7 @@ font-display: block;",
       >
         <ResourceSharingLoading
           iri="/iri/"
-          name="/iri/"
+          name="iri"
         >
           <section
             className="PodBrowser-headerSection"
@@ -13326,7 +13326,7 @@ font-display: block;",
               className="PodBrowser-content-h3"
               title="/iri/"
             >
-              /iri/
+              iri
             </h3>
           </section>
           <WithStyles(ForwardRef(Divider))>

@@ -424,10 +424,11 @@ describe("getResourceName", () => {
     expect(resourceName).toEqual("tictactoe");
   });
 
-  test("it returns the decoded resource name when spaces have been URI encoded", () => {
-    const resourceName = getResourceName("public/notes/Hello%20World.txt");
-
-    expect(resourceName).toEqual("Hello World.txt");
+  test("it returns the decoded resource name when spaces and special characters have been URI encoded", () => {
+    const resourceName = getResourceName(
+      "public/notes/Hello%20World%3AHello%40World%3BHello.txt"
+    );
+    expect(resourceName).toEqual("Hello World:Hello@World;Hello.txt");
   });
 });
 
