@@ -44,7 +44,7 @@ exports[`ContainerPageHeader Renders view 1`] = `
           <ResourceLink
             action="details"
             className="makeStyles-page-header__action-5"
-            id="folder-details-button"
+            data-testid="folder-details-button"
           >
             <Link
               as={
@@ -69,8 +69,8 @@ exports[`ContainerPageHeader Renders view 1`] = `
             >
               <a
                 className="makeStyles-page-header__action-5"
+                data-testid="folder-details-button"
                 href="/resource/[iri]?action=details&resourceIri="
-                id="folder-details-button"
                 onClick={[Function]}
                 onMouseEnter={[Function]}
               >

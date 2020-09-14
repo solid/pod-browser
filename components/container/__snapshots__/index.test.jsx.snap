@@ -1807,7 +1807,7 @@ font-display: block;",
                   <ResourceLink
                     action="details"
                     className="PodBrowser-page-header__action"
-                    id="folder-details-button"
+                    data-testid="folder-details-button"
                   >
                     <Link
                       as={
@@ -1832,8 +1832,8 @@ font-display: block;",
                     >
                       <a
                         className="PodBrowser-page-header__action"
+                        data-testid="folder-details-button"
                         href="/resource/[iri]?action=details&resourceIri="
-                        id="folder-details-button"
                         onClick={[Function]}
                         onMouseEnter={[Function]}
                       >
@@ -3967,7 +3967,7 @@ font-display: block;",
                   <ResourceLink
                     action="details"
                     className="PodBrowser-page-header__action"
-                    id="folder-details-button"
+                    data-testid="folder-details-button"
                   >
                     <Link
                       as={
@@ -3992,8 +3992,8 @@ font-display: block;",
                     >
                       <a
                         className="PodBrowser-page-header__action"
+                        data-testid="folder-details-button"
                         href="/resource/[iri]?action=details&resourceIri="
-                        id="folder-details-button"
                         onClick={[Function]}
                         onMouseEnter={[Function]}
                       >

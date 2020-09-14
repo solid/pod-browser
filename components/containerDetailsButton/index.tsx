@@ -28,12 +28,14 @@ interface Props {
   className?: string;
 }
 
+const TESTCAFE_ID_FOLDER_DETAILS_BUTTON = "folder-details-button";
+
 export default function ContainerDetailsButton({
   className,
 }: Props): ReactElement {
   return (
     <ResourceLink
-      id="folder-details-button"
+      data-testid={TESTCAFE_ID_FOLDER_DETAILS_BUTTON}
       action={DETAILS_CONTEXT_ACTIONS.DETAILS}
       className={className}
     >
