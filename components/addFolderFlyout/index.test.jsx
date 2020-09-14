@@ -141,6 +141,40 @@ describe("handleFolderSubmit", () => {
     expect(setMessage).toHaveBeenCalled();
     expect(setAlertOpen).toHaveBeenCalledWith(true);
   });
+  test("it returns a handler that creates a new folder within a folder which has spaces in its name", async () => {
+    const fetch = jest.fn();
+    const options = { fetch };
+    const onSave = jest.fn();
+    const currentUri = "https://www.mypodbrowser.com/First Folder/";
+    const folders = [];
+    const name = "Second Folder";
+    const setSeverity = jest.fn();
+    const setMessage = jest.fn();
+    const setAlertOpen = jest.fn();
+
+    const handler = handleFolderSubmit({
+      options,
+      onSave,
+      currentUri,
+      folders,
+      name,
+      setSeverity,
+      setMessage,
+      setAlertOpen,
+    });
+
+    await handler();
+
+    expect(createContainerAt).toHaveBeenCalledWith(
+      "https://www.mypodbrowser.com/First%20Folder/Second%20Folder",
+      options
+    );
+
+    expect(onSave).toHaveBeenCalled();
+    expect(setSeverity).toHaveBeenCalledWith("success");
+    expect(setMessage).toHaveBeenCalled();
+    expect(setAlertOpen).toHaveBeenCalledWith(true);
+  });
 });
 describe("handleCreateFolderClick", () => {
   test("it returns a handler that submits the current folder and calls a function to clear the current folder name from state", () => {
