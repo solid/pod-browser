@@ -1808,7 +1808,7 @@ font-display: block;",
         isLoadingSession={false}
         session={
           Object {
-            "fetch": [MockFunction],
+            "fetch": [Function],
             "info": Object {
               "isLoggedIn": false,
               "sessionId": null,

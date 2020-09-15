@@ -19,20 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import "whatwg-fetch";
-
 export default function mockFetch(responses = {}) {
   return jest.fn().mockImplementation((url, init) => {
-    const response = responses[url.toString()];
-    const responseObject = response;
+    const responseFn = responses[url.toString()];
+    const responseObject = responseFn;
     const method = init?.method || "GET";
-    if (response && typeof responseObject[method] !== "undefined") {
-      return Promise.resolve(responseObject[method]);
+    let response;
+    if (responseFn && typeof responseObject[method] !== "undefined") {
+      response = responseObject[method](url, init);
+    } else if (responseFn) {
+      response = responseFn(url, init);
+    } else {
+      throw new Error(`URL (${url}) not mocked properly`);
     }
-    if (response) {
-      return Promise.resolve(response);
-    }
-    throw new Error(`URL (${url}) not mocked properly`);
+    response.uri = url;
+    return Promise.resolve(response);
   });
 }
 

@@ -20,7 +20,6 @@
  */
 
 import { useContext, useEffect, useState } from "react";
-import { getSolidDataset } from "@inrupt/solid-client";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import { getOrCreateSettings } from "../../solidClientHelpers/settings";
 import SessionProvider from "../../contexts/sessionContext";
@@ -31,12 +30,14 @@ export default function usePodBrowserSettings() {
   const [settings, setSettings] = useState(null);
 
   useEffect(() => {
-    if (!profileInfo || !session) return;
-    getOrCreateSettings(profileInfo.webId, session)
-      .then((settingsUrl) =>
-        getSolidDataset(settingsUrl, { fetch: session.fetch })
-      )
-      .then(setSettings);
+    if (!profileInfo || !session.info.isLoggedIn) return;
+    (async () => {
+      const settingsResource = await getOrCreateSettings(
+        profileInfo.webId,
+        session
+      );
+      setSettings(settingsResource);
+    })();
   }, [profileInfo, session]);
 
   return settings;

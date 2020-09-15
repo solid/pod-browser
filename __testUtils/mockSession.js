@@ -34,7 +34,7 @@ export default function mockSession(options = {}) {
   // consider naming it and create a reusable mock function
   return {
     fetch: mockFetch({
-      [webId]: mockResponse(200, profile),
+      [webId]: () => mockResponse(200, profile),
     }),
     info: {
       isLoggedIn: true,
@@ -49,7 +49,7 @@ export default function mockSession(options = {}) {
 
 export function mockUnauthenticatedSession() {
   return {
-    fetch: mockFetch(),
+    fetch: () => mockFetch(),
     info: {
       isLoggedIn: false,
       sessionId: null,

@@ -20,7 +20,6 @@
  */
 
 import { renderHook } from "@testing-library/react-hooks";
-import { getSolidDataset } from "@inrupt/solid-client";
 import mockSession, {
   mockUnauthenticatedSession,
   profile,
@@ -43,14 +42,13 @@ describe("usePodBrowserSettings", () => {
     it("should return a dataset for pod browser settings", async () => {
       const session = mockSession({
         fetch: mockFetch({
-          [webId]: mockResponse(200, profile),
-          [settingsUrl]: mockResponse(200, podBrowserPrefs),
+          [webId]: () => mockResponse(200, profile),
+          [settingsUrl]: () => mockResponse(200, podBrowserPrefs),
         }),
       });
       // TODO: Wanted to avoid the use of mockResolvedValue, but didn't find another way
       const dataset = "testDataset";
-      getSolidDataset.mockResolvedValue(dataset);
-      getOrCreateSettings.mockResolvedValue(settingsUrl);
+      getOrCreateSettings.mockResolvedValue(dataset);
       const wrapper = mockSessionContextProvider({ session });
       const { result, waitForNextUpdate } = renderHook(
         () => usePodBrowserSettings(),
