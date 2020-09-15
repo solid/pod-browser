@@ -841,7 +841,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <AccessRequired>
+        <AccessRequiredPage>
           <div>
             <PageHeader
               title="No access to resource"
@@ -895,11 +895,14 @@ font-display: block;",
                         .
                       </li>
                       <li>
-                        In the Manage your trusted applications table, against the URL of PodBrowser (
+                        In the Manage your trusted applications table, against the URL of PodBrowser
+                         
+                        (
                         <strong>
                           http://localhost
                         </strong>
-                        ):
+                        )
+                        :
                         <ol>
                           <li>
                             Select Read, Write, Append, and Control Access Modes.
@@ -918,7 +921,7 @@ font-display: block;",
               </div>
             </Container>
           </div>
-        </AccessRequired>
+        </AccessRequiredPage>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>

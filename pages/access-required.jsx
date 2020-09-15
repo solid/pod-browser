@@ -20,8 +20,8 @@
  */
 
 import React from "react";
-import AccessRequired from "../components/pages/access-required";
+import AccessRequiredPage from "../components/pages/access-required";
 
-export default function Custom404() {
-  return <AccessRequired />;
+export default function AccessRequired() {
+  return <AccessRequiredPage />;
 }

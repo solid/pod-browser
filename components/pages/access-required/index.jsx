@@ -31,11 +31,11 @@ import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function AccessRequired() {
+export default function AccessRequiredPage() {
   useRedirectIfLoggedOut();
 
   const bem = useBem(useStyles());
-  const [appUrl, setAppUrl] = useState("http://podbrowser.inrupt.com/");
+  const [appUrl, setAppUrl] = useState(null);
   useEffect(() => setAppUrl(window.location.origin), []);
   return (
     <div>
@@ -59,7 +59,14 @@ export default function AccessRequired() {
             </li>
             <li>
               In the Manage your trusted applications table, against the URL of
-              PodBrowser (<strong>{appUrl}</strong>):
+              PodBrowser
+              {appUrl ? (
+                <>
+                  {" "}
+                  (<strong>{appUrl}</strong>)
+                </>
+              ) : null}
+              :
               <ol>
                 <li>Select Read, Write, Append, and Control Access Modes.</li>
                 <li>Click &quot;Update&quot; under Actions.</li>
