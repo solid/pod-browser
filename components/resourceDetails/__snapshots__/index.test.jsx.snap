@@ -2,6 +2,7 @@
 
 exports[`DownloadLink returns a download button if resource is not a container 1`] = `
 <WithStyles(ForwardRef(Button))
+  className={null}
   data-testid="download-resource-button"
   onClick={[Function]}
   variant="contained"

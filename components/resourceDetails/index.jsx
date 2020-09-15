@@ -81,7 +81,7 @@ export function downloadResource(iri, fetch) {
   };
 }
 
-function DownloadLink(props) {
+export function DownloadLink(props) {
   const { session } = useContext(SessionContext);
   const { type, iri, className } = props;
 
@@ -102,10 +102,12 @@ function DownloadLink(props) {
 DownloadLink.propTypes = {
   type: T.string.isRequired,
   iri: T.string.isRequired,
-  className: T.string.isRequired,
+  className: T.string,
 };
 
-export { DownloadLink };
+DownloadLink.defaultProps = {
+  className: null,
+};
 
 /* eslint react/jsx-props-no-spreading: 0 */
 const SharingLink = React.forwardRef((linkProps, ref) => (
