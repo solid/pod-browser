@@ -50,7 +50,7 @@ export default function Breadcrumbs() {
     .filter((crumb) => !!crumb);
   const resourceHref = (index) => {
     return `/resource/${encodeURIComponent(
-      baseUri + uriParts.slice(0, index + 1).join("/")
+      `${baseUri + uriParts.slice(0, index + 1).join("/")}/`
     )}`;
   };
   const crumbs = [

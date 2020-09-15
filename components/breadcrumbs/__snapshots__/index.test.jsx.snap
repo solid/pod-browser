@@ -1776,26 +1776,26 @@ font-display: block;",
                 crumb={
                   Object {
                     "label": "some",
-                    "uri": "/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome",
+                    "uri": "/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2F",
                   }
                 }
                 isLink={true}
-                key="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome"
+                key="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2F"
               >
                 <li
                   className="PodBrowser-breadcrumb__crumb"
-                  key="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome"
+                  key="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2F"
                 >
                   <i
                     className="PodBrowser-icon-caret-left PodBrowser-breadcrumb__caret PodBrowser-breadcrumb__caret--small"
                   />
                   <Link
-                    as="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome"
+                    as="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2F"
                     href="/resource/[iri]"
                   >
                     <a
                       className="PodBrowser-breadcrumb__link"
-                      href="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome"
+                      href="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2F"
                       onClick={[Function]}
                       onMouseEnter={[Function]}
                     >
@@ -1816,15 +1816,15 @@ font-display: block;",
                 crumb={
                   Object {
                     "label": "location",
-                    "uri": "/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2Flocation",
+                    "uri": "/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2Flocation%2F",
                   }
                 }
                 isLink={false}
-                key="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2Flocation"
+                key="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2Flocation%2F"
               >
                 <li
                   className="PodBrowser-breadcrumb__crumb"
-                  key="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2Flocation"
+                  key="/resource/https%3A%2F%2Fwww.mypodbrowser.com%2Fsome%2Flocation%2F"
                 >
                   <i
                     className="PodBrowser-icon-caret-left PodBrowser-breadcrumb__caret PodBrowser-breadcrumb__caret--small"
