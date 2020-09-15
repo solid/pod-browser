@@ -19,7 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// @ts-nocheck
 /* eslint-disable camelcase */
 
 import React, { useContext } from "react";
