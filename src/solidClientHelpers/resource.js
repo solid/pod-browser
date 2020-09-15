@@ -49,7 +49,7 @@ export function getResourceName(iri) {
   }
   const encodedURISegment =
     pathname.match(/(?!\/)(?:.(?!\/))+$/)?.toString() || "";
-  return decodeURI(encodedURISegment);
+  return decodeURIComponent(encodedURISegment);
 }
 
 export function normalizePermissions(permissions) {
