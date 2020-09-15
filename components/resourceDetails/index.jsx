@@ -157,7 +157,7 @@ export default function ResourceDetails({ resource, onDelete, onDeleteError }) {
             <ListItemIcon>
               <DeleteIcon />
             </ListItemIcon>
-            <ListItemText primary="Delete File" />
+            <ListItemText primary="Delete" />
           </ListItem>
         </List>
       </section>
