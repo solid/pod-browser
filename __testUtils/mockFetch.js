@@ -32,7 +32,7 @@ export default function mockFetch(responses = {}) {
     } else {
       throw new Error(`URL (${url}) not mocked properly`);
     }
-    response.uri = url;
+    response.url = url;
     return Promise.resolve(response);
   });
 }

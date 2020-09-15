@@ -69,30 +69,35 @@ describe("getOrCreateSettings", () => {
   describe("pointer to PodBrowserPrefs.ttl in prefs.ttl is missing", () => {
     let fetch;
     let pbPrefsResource;
+    let prefsFetchSpy;
 
     beforeEach(async () => {
+      prefsFetchSpy = jest.fn();
       fetch = mockFetch({
         [root]: () => mockTurtleResponse(200),
         [webId]: () => mockTurtleResponse(200, profileWithPrefsPointer),
-        [prefs]: () => mockTurtleResponse(200, prefsWithoutPBPrefsPointer),
+        [prefs]: {
+          GET: () => mockTurtleResponse(200, prefsWithoutPBPrefsPointer),
+          PATCH: (...args) => {
+            prefsFetchSpy(...args);
+            return mockTurtleResponse(201);
+          },
+        },
         [pbPrefs]: () => mockTurtleResponse(200, podBrowserPrefs),
       });
       session = { fetch };
       pbPrefsResource = await getOrCreateSettings(webId, session);
     });
 
-    it("creates pointer to PodBrowserPrefs.ttl in prefs.ttl", () =>
-      expect(fetch).toHaveBeenCalledWith(prefs, {
-        body: `<http://localhost/settings/prefs.ttl> a <http://localhost/settings/sp#ConfigurationFile>;
-    <https://inrupt.com/podbrowser#preferencesFile> <http://localhost/settings/podBrowserPrefs.ttl>.
-`,
+    it("creates pointer to PodBrowserPrefs.ttl in prefs.ttl", () => {
+      expect(prefsFetchSpy).toHaveBeenCalledWith(prefs, {
+        body: ` INSERT DATA {<http://localhost/settings/prefs.ttl> <https://inrupt.com/podbrowser#preferencesFile> <http://localhost/settings/podBrowserPrefs.ttl>.};`,
         headers: {
-          "Content-Type": "text/turtle",
-          "If-None-Match": "*",
-          Link: '<http://www.w3.org/ns/ldp#Resource>; rel="type"',
+          "Content-Type": "application/sparql-update",
         },
-        method: "PUT",
-      }));
+        method: "PATCH",
+      });
+    });
 
     it("returns Pod Browser Resource", () =>
       expect(pbPrefsResource).toEqual(mockedPbPrefsResource));
