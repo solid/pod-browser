@@ -37,7 +37,7 @@ import {
 } from "./permissions";
 
 describe("parseStringAcl", () => {
-  test("it parses a list of string permissions into an unstable_Access", () => {
+  test("it parses a list of string permissions into an Access", () => {
     const fullControl = parseStringAcl("read write append control");
 
     expect(fullControl.read).toBe(true);
@@ -267,22 +267,22 @@ describe("defineAcl", () => {
     jest.spyOn(solidClientFns, "createAcl").mockImplementationOnce(() => "acl");
 
     jest
-      .spyOn(solidClientFns, "unstable_setAgentResourceAccess")
+      .spyOn(solidClientFns, "setAgentResourceAccess")
       .mockImplementationOnce((x) => x);
 
     jest
-      .spyOn(solidClientFns, "unstable_setAgentDefaultAccess")
+      .spyOn(solidClientFns, "setAgentDefaultAccess")
       .mockImplementationOnce((x) => x);
 
     const access = defineAcl("dataset", "webId");
 
     expect(solidClientFns.createAcl).toHaveBeenCalledWith("dataset");
-    expect(solidClientFns.unstable_setAgentResourceAccess).toHaveBeenCalledWith(
+    expect(solidClientFns.setAgentResourceAccess).toHaveBeenCalledWith(
       "acl",
       "webId",
       ACL.CONTROL.acl
     );
-    expect(solidClientFns.unstable_setAgentDefaultAccess).toHaveBeenCalledWith(
+    expect(solidClientFns.setAgentDefaultAccess).toHaveBeenCalledWith(
       "acl",
       "webId",
       ACL.CONTROL.acl
@@ -294,22 +294,22 @@ describe("defineAcl", () => {
     jest.spyOn(solidClientFns, "createAcl").mockImplementationOnce(() => "acl");
 
     jest
-      .spyOn(solidClientFns, "unstable_setAgentResourceAccess")
+      .spyOn(solidClientFns, "setAgentResourceAccess")
       .mockImplementationOnce((x) => x);
 
     jest
-      .spyOn(solidClientFns, "unstable_setAgentDefaultAccess")
+      .spyOn(solidClientFns, "setAgentDefaultAccess")
       .mockImplementationOnce((x) => x);
 
     const access = defineAcl("dataset", "webId", ACL.READ.acl);
 
     expect(solidClientFns.createAcl).toHaveBeenCalledWith("dataset");
-    expect(solidClientFns.unstable_setAgentResourceAccess).toHaveBeenCalledWith(
+    expect(solidClientFns.setAgentResourceAccess).toHaveBeenCalledWith(
       "acl",
       "webId",
       ACL.READ.acl
     );
-    expect(solidClientFns.unstable_setAgentDefaultAccess).toHaveBeenCalledWith(
+    expect(solidClientFns.setAgentDefaultAccess).toHaveBeenCalledWith(
       "acl",
       "webId",
       ACL.READ.acl
@@ -432,44 +432,38 @@ describe("savePermissions", () => {
     const updatedAcl = "updatedAcl";
 
     jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
       .mockResolvedValueOnce(dataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasResourceAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
 
     jest
-      .spyOn(solidClientFns, "unstable_getResourceAcl")
+      .spyOn(solidClientFns, "getResourceAcl")
       .mockReturnValueOnce(aclDataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
 
     jest
-      .spyOn(solidClientFns, "unstable_setAgentResourceAccess")
+      .spyOn(solidClientFns, "setAgentResourceAccess")
       .mockReturnValue(updatedAcl);
 
     jest
-      .spyOn(solidClientFns, "unstable_saveAclFor")
+      .spyOn(solidClientFns, "saveAclFor")
       .mockImplementationOnce(jest.fn().mockResolvedValueOnce("response"));
 
     const fetch = jest.fn();
     const { response } = await savePermissions({ iri, webId, access, fetch });
 
-    expect(
-      solidClientFns.unstable_fetchLitDatasetWithAcl
-    ).toHaveBeenCalledWith(iri, { fetch });
-    expect(solidClientFns.unstable_getResourceAcl).toHaveBeenCalledWith(
-      dataset
-    );
-    expect(solidClientFns.unstable_setAgentResourceAccess).toHaveBeenCalledWith(
+    expect(solidClientFns.getSolidDatasetWithAcl).toHaveBeenCalledWith(iri, {
+      fetch,
+    });
+    expect(solidClientFns.getResourceAcl).toHaveBeenCalledWith(dataset);
+    expect(solidClientFns.setAgentResourceAccess).toHaveBeenCalledWith(
       aclDataset,
       webId,
       access
     );
-    expect(solidClientFns.unstable_saveAclFor).toHaveBeenCalledWith(
+    expect(solidClientFns.saveAclFor).toHaveBeenCalledWith(
       dataset,
       updatedAcl,
       { fetch }
@@ -489,7 +483,7 @@ describe("savePermissions", () => {
     };
 
     jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
       .mockResolvedValueOnce(null);
 
     const { error } = await savePermissions({ iri, webId, access });
@@ -509,12 +503,10 @@ describe("savePermissions", () => {
     const dataset = "dataset";
 
     jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
       .mockResolvedValueOnce(dataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasResourceAcl")
-      .mockReturnValueOnce(false);
+    jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(false);
 
     const { error } = await savePermissions({ iri, webId, access });
 
@@ -533,16 +525,12 @@ describe("savePermissions", () => {
     const dataset = "dataset";
 
     jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
       .mockResolvedValueOnce(dataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasResourceAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
-      .mockReturnValueOnce(false);
+    jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(false);
 
     const { error } = await savePermissions({ iri, webId, access });
 
@@ -561,20 +549,14 @@ describe("savePermissions", () => {
     const dataset = "dataset";
 
     jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
       .mockResolvedValueOnce(dataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasResourceAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
 
-    jest
-      .spyOn(solidClientFns, "unstable_getResourceAcl")
-      .mockReturnValueOnce(null);
+    jest.spyOn(solidClientFns, "getResourceAcl").mockReturnValueOnce(null);
 
     const { error } = await savePermissions({ iri, webId, access });
 
@@ -594,24 +576,18 @@ describe("savePermissions", () => {
     const aclDataset = "aclDataset";
 
     jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
       .mockResolvedValueOnce(dataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasResourceAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
 
     jest
-      .spyOn(solidClientFns, "unstable_getResourceAcl")
+      .spyOn(solidClientFns, "getResourceAcl")
       .mockReturnValueOnce(aclDataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
 
-    jest
-      .spyOn(solidClientFns, "unstable_setAgentResourceAccess")
-      .mockReturnValue(null);
+    jest.spyOn(solidClientFns, "setAgentResourceAccess").mockReturnValue(null);
 
     const { error } = await savePermissions({ iri, webId, access });
 
@@ -632,28 +608,22 @@ describe("savePermissions", () => {
     const updatedAcl = "updatedAcl";
 
     jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
       .mockResolvedValueOnce(dataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasResourceAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
 
     jest
-      .spyOn(solidClientFns, "unstable_getResourceAcl")
+      .spyOn(solidClientFns, "getResourceAcl")
       .mockReturnValueOnce(aclDataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
 
     jest
-      .spyOn(solidClientFns, "unstable_setAgentResourceAccess")
+      .spyOn(solidClientFns, "setAgentResourceAccess")
       .mockReturnValue(updatedAcl);
 
-    jest
-      .spyOn(solidClientFns, "unstable_saveAclFor")
-      .mockResolvedValueOnce(null);
+    jest.spyOn(solidClientFns, "saveAclFor").mockResolvedValueOnce(null);
 
     const { error } = await savePermissions({ iri, webId, access });
 
@@ -676,27 +646,23 @@ describe("saveDefaultPermissions", () => {
     const updatedAcl = "updatedAcl";
 
     jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
       .mockResolvedValueOnce(dataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasResourceAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
 
     jest
-      .spyOn(solidClientFns, "unstable_getResourceAcl")
+      .spyOn(solidClientFns, "getResourceAcl")
       .mockReturnValueOnce(aclDataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
 
     jest
-      .spyOn(solidClientFns, "unstable_setAgentDefaultAccess")
+      .spyOn(solidClientFns, "setAgentDefaultAccess")
       .mockReturnValue(updatedAcl);
 
     jest
-      .spyOn(solidClientFns, "unstable_saveAclFor")
+      .spyOn(solidClientFns, "saveAclFor")
       .mockImplementationOnce(jest.fn().mockResolvedValueOnce("response"));
 
     const fetch = jest.fn();
@@ -708,18 +674,16 @@ describe("saveDefaultPermissions", () => {
       fetch,
     });
 
-    expect(
-      solidClientFns.unstable_fetchLitDatasetWithAcl
-    ).toHaveBeenCalledWith(iri, { fetch });
-    expect(solidClientFns.unstable_getResourceAcl).toHaveBeenCalledWith(
-      dataset
-    );
-    expect(solidClientFns.unstable_setAgentDefaultAccess).toHaveBeenCalledWith(
+    expect(solidClientFns.getSolidDatasetWithAcl).toHaveBeenCalledWith(iri, {
+      fetch,
+    });
+    expect(solidClientFns.getResourceAcl).toHaveBeenCalledWith(dataset);
+    expect(solidClientFns.setAgentDefaultAccess).toHaveBeenCalledWith(
       aclDataset,
       webId,
       access
     );
-    expect(solidClientFns.unstable_saveAclFor).toHaveBeenCalledWith(
+    expect(solidClientFns.saveAclFor).toHaveBeenCalledWith(
       dataset,
       updatedAcl,
       { fetch }
@@ -739,7 +703,7 @@ describe("saveDefaultPermissions", () => {
     };
 
     jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
       .mockResolvedValueOnce(null);
 
     const { error } = await saveDefaultPermissions({ iri, webId, access });
@@ -759,12 +723,10 @@ describe("saveDefaultPermissions", () => {
     const dataset = "dataset";
 
     jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
       .mockResolvedValueOnce(dataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasResourceAcl")
-      .mockReturnValueOnce(false);
+    jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(false);
 
     const { error } = await saveDefaultPermissions({ iri, webId, access });
 
@@ -783,16 +745,12 @@ describe("saveDefaultPermissions", () => {
     const dataset = "dataset";
 
     jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
       .mockResolvedValueOnce(dataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasResourceAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
-      .mockReturnValueOnce(false);
+    jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(false);
 
     const { error } = await saveDefaultPermissions({ iri, webId, access });
 
@@ -811,20 +769,14 @@ describe("saveDefaultPermissions", () => {
     const dataset = "dataset";
 
     jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
       .mockResolvedValueOnce(dataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasResourceAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
 
-    jest
-      .spyOn(solidClientFns, "unstable_getResourceAcl")
-      .mockReturnValueOnce(null);
+    jest.spyOn(solidClientFns, "getResourceAcl").mockReturnValueOnce(null);
 
     const { error } = await saveDefaultPermissions({ iri, webId, access });
 
@@ -844,24 +796,18 @@ describe("saveDefaultPermissions", () => {
     const aclDataset = "aclDataset";
 
     jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
       .mockResolvedValueOnce(dataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasResourceAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
+
+    jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
 
     jest
-      .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
-      .mockReturnValueOnce(true);
-
-    jest
-      .spyOn(solidClientFns, "unstable_getResourceAcl")
+      .spyOn(solidClientFns, "getResourceAcl")
       .mockReturnValueOnce(aclDataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_setAgentDefaultAccess")
-      .mockReturnValue(null);
+    jest.spyOn(solidClientFns, "setAgentDefaultAccess").mockReturnValue(null);
 
     const { error } = await saveDefaultPermissions({ iri, webId, access });
 
@@ -882,28 +828,22 @@ describe("saveDefaultPermissions", () => {
     const updatedAcl = "updatedAcl";
 
     jest
-      .spyOn(solidClientFns, "unstable_fetchLitDatasetWithAcl")
+      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
       .mockResolvedValueOnce(dataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasResourceAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
 
     jest
-      .spyOn(solidClientFns, "unstable_getResourceAcl")
+      .spyOn(solidClientFns, "getResourceAcl")
       .mockReturnValueOnce(aclDataset);
 
-    jest
-      .spyOn(solidClientFns, "unstable_hasAccessibleAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
 
     jest
-      .spyOn(solidClientFns, "unstable_setAgentDefaultAccess")
+      .spyOn(solidClientFns, "setAgentDefaultAccess")
       .mockReturnValue(updatedAcl);
 
-    jest
-      .spyOn(solidClientFns, "unstable_saveAclFor")
-      .mockResolvedValueOnce(null);
+    jest.spyOn(solidClientFns, "saveAclFor").mockResolvedValueOnce(null);
 
     const { error } = await saveDefaultPermissions({ iri, webId, access });
 

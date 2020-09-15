@@ -21,12 +21,12 @@
 
 /* eslint-disable camelcase */
 import {
-  fetchLitDataset,
+  getSolidDataset,
   saveSolidDatasetAt,
-  unstable_fetchFile,
-  unstable_fetchLitDatasetWithAcl,
-  unstable_getAgentAccessAll,
-  unstable_saveAclFor,
+  getFile,
+  getSolidDatasetWithAcl,
+  getAgentAccessAll,
+  saveAclFor,
 } from "@inrupt/solid-client";
 import camelCase from "camelcase";
 import { parseUrl, isUrl, hasHash, stripHash } from "../stringHelpers";
@@ -69,7 +69,7 @@ export async function getResource(iri, fetch) {
   const { respond, error } = createResponder();
 
   try {
-    const dataset = await fetchLitDataset(iri, { fetch });
+    const dataset = await getSolidDataset(iri, { fetch });
     const resource = { dataset, iri };
 
     return respond(resource);
@@ -82,8 +82,8 @@ export async function getResourceWithPermissions(iri, fetch) {
   const { respond, error } = createResponder();
 
   try {
-    const dataset = await unstable_fetchLitDatasetWithAcl(iri, { fetch });
-    const access = unstable_getAgentAccessAll(dataset);
+    const dataset = await getSolidDatasetWithAcl(iri, { fetch });
+    const access = getAgentAccessAll(dataset);
     const permissions = normalizePermissions(access);
 
     return respond({ dataset, iri, permissions });
@@ -93,7 +93,7 @@ export async function getResourceWithPermissions(iri, fetch) {
 }
 
 export async function fetchFileWithAcl(iri, fetch) {
-  const file = await unstable_fetchFile(iri, { fetch });
+  const file = await getFile(iri, { fetch });
   const {
     internal_resourceInfo: { permissions: filePermissions, contentType: type },
   } = file;
@@ -129,8 +129,8 @@ export async function fetchResourceWithAcl(
   fetch,
   normalizePermissionsFn = normalizePermissions
 ) {
-  const dataset = await unstable_fetchLitDatasetWithAcl(iri, { fetch });
-  const access = unstable_getAgentAccessAll(dataset);
+  const dataset = await getSolidDatasetWithAcl(iri, { fetch });
+  const access = getAgentAccessAll(dataset);
   const permissions = access
     ? await normalizePermissionsFn(access, fetch)
     : undefined;
@@ -158,8 +158,8 @@ export async function saveResourcePermissions(
   const { respond, error } = createResponder();
 
   try {
-    const saveResponse = await unstable_saveAclFor(dataset, acl);
-    const access = unstable_getAgentAccessAll(saveResponse);
+    const saveResponse = await saveAclFor(dataset, acl);
+    const access = getAgentAccessAll(saveResponse);
     const permissions = normalizePermissions(access);
 
     return respond({ dataset, iri, permissions });

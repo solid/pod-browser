@@ -21,7 +21,7 @@
 
 import {
   addUrl,
-  createLitDataset,
+  createSolidDataset,
   createThing,
   setThing,
 } from "@inrupt/solid-client";
@@ -35,5 +35,5 @@ export default function createDataset(
   const ops = [(t) => addUrl(t, rdf.type, ldp[type]), ...operations];
   const thing = ops.reduce((acc, fn) => fn(acc), createThing(options));
 
-  return setThing(createLitDataset(), thing);
+  return setThing(createSolidDataset(), thing);
 }

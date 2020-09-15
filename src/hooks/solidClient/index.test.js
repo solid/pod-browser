@@ -22,10 +22,10 @@
 /* eslint-disable camelcase */
 
 import {
-  fetchLitDataset,
+  getSolidDataset,
   getThing,
   getIriAll,
-  unstable_fetchResourceInfoWithAcl,
+  getResourceInfoWithAcl,
 } from "@inrupt/solid-client";
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as PermissionHelpers from "../../solidClientHelpers/permissions";
@@ -57,7 +57,7 @@ describe("fetchResourceDetails", () => {
   test("it fetches the resource, adding a human-readable name", async () => {
     const iri = "https://dayton.dev.inrupt.net/public/";
 
-    unstable_fetchResourceInfoWithAcl.mockResolvedValue({
+    getResourceInfoWithAcl.mockResolvedValue({
       resourceInfo: {
         fetchedFrom: "https://dayton.dev.inrupt.net/public/",
         contentType: "application/octet-stream; charset=utf-8",
@@ -153,13 +153,13 @@ describe("PodIrisFromWebId", () => {
     const iri = "https://mypod.myhost.com/profile/card#me";
     const iris = ["https://mypod.myhost.com/profile"];
 
-    fetchLitDataset.mockResolvedValue({});
+    getSolidDataset.mockResolvedValue({});
     getThing.mockImplementationOnce(() => {});
     getIriAll.mockImplementationOnce(() => iris);
 
     expect(await fetchPodIrisFromWebId(iri)).toEqual(iris);
 
-    expect(fetchLitDataset).toHaveBeenCalled();
+    expect(getSolidDataset).toHaveBeenCalled();
     expect(getThing).toHaveBeenCalled();
     expect(getIriAll).toHaveBeenCalled();
   });

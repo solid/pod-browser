@@ -22,7 +22,7 @@
 /* eslint-disable camelcase */
 
 import {
-  addStringUnlocalized,
+  addStringNoLocale,
   addUrl,
   getStringNoLocale,
   getStringNoLocaleAll,
@@ -61,7 +61,7 @@ export function createAddressBook({ iri, owner, title = "Contacts" }) {
     { name: "this" },
     (t) => addUrl(t, rdf.type, vcardExtras("AddressBook")),
     (t) => addUrl(t, acl.owner, owner),
-    (t) => addStringUnlocalized(t, dc.title, title),
+    (t) => addStringNoLocale(t, dc.title, title),
     (t) => addUrl(t, vcardExtras("nameEmailIndex"), peopleIri),
     (t) => addUrl(t, vcardExtras("groupIndex"), groupsIri)
   );
@@ -205,21 +205,20 @@ export async function saveNewAddressBook(
 
 export const schemaFunctionMappings = {
   webId: (v) => (t) => addUrl(t, foaf.openid, v),
-  fn: (v) => (t) => addStringUnlocalized(t, vcard.fn, v),
-  name: (v) => (t) => addStringUnlocalized(t, foaf.name, v),
+  fn: (v) => (t) => addStringNoLocale(t, vcard.fn, v),
+  name: (v) => (t) => addStringNoLocale(t, foaf.name, v),
   organizationName: (v) => (t) =>
-    addStringUnlocalized(t, vcardExtras("organization-name"), v),
-  role: (v) => (t) => addStringUnlocalized(t, vcard.role, v),
+    addStringNoLocale(t, vcardExtras("organization-name"), v),
+  role: (v) => (t) => addStringNoLocale(t, vcard.role, v),
   countryName: (v) => (t) =>
-    addStringUnlocalized(t, vcardExtras("country-name"), v),
-  locality: (v) => (t) => addStringUnlocalized(t, vcard.locality, v),
-  postalCode: (v) => (t) =>
-    addStringUnlocalized(t, vcardExtras("postal-code"), v),
-  region: (v) => (t) => addStringUnlocalized(t, vcard.region, v),
+    addStringNoLocale(t, vcardExtras("country-name"), v),
+  locality: (v) => (t) => addStringNoLocale(t, vcard.locality, v),
+  postalCode: (v) => (t) => addStringNoLocale(t, vcardExtras("postal-code"), v),
+  region: (v) => (t) => addStringNoLocale(t, vcard.region, v),
   streetAddress: (v) => (t) =>
-    addStringUnlocalized(t, vcardExtras("street-address"), v),
-  type: (v) => (t) => addStringUnlocalized(t, rdf.type, v),
-  value: (v) => (t) => addStringUnlocalized(t, vcard.value, v),
+    addStringNoLocale(t, vcardExtras("street-address"), v),
+  type: (v) => (t) => addStringNoLocale(t, rdf.type, v),
+  value: (v) => (t) => addStringNoLocale(t, vcard.value, v),
 };
 
 export function getSchemaFunction(type, value) {
@@ -319,7 +318,7 @@ export async function saveContact(addressBookIri, schema, fetch) {
 
   const peopleThing = defineThing(
     { name: "this  " },
-    (t) => addStringUnlocalized(t, vcard.fn, schema.fn || schema.name),
+    (t) => addStringNoLocale(t, vcard.fn, schema.fn || schema.name),
     (t) => addUrl(t, vcardExtras("inAddressBook"), indexIri)
   );
 

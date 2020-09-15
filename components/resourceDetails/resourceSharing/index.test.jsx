@@ -78,22 +78,18 @@ describe("ResourceSharing", () => {
       .spyOn(RouterFns, "useRouter")
       .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
 
-    jest.spyOn(SolidClientFns, "unstable_hasResourceAcl").mockReturnValue(true);
+    jest.spyOn(SolidClientFns, "hasResourceAcl").mockReturnValue(true);
 
-    jest
-      .spyOn(SolidClientFns, "unstable_hasAccessibleAcl")
-      .mockReturnValue(true);
+    jest.spyOn(SolidClientFns, "hasAccessibleAcl").mockReturnValue(true);
 
-    jest.spyOn(SolidClientFns, "unstable_getResourceAcl").mockReturnValueOnce();
+    jest.spyOn(SolidClientFns, "getResourceAcl").mockReturnValueOnce();
 
-    jest
-      .spyOn(SolidClientFns, "unstable_getAgentDefaultAccessOne")
-      .mockReturnValueOnce({
-        read: true,
-        write: true,
-        append: true,
-        control: true,
-      });
+    jest.spyOn(SolidClientFns, "getAgentDefaultAccess").mockReturnValueOnce({
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    });
 
     const tree = mountToJson(
       <SessionContext.Provider value={{ session }}>
@@ -141,22 +137,18 @@ describe("ResourceSharing", () => {
       .spyOn(RouterFns, "useRouter")
       .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
 
-    jest.spyOn(SolidClientFns, "unstable_hasResourceAcl").mockReturnValue(true);
+    jest.spyOn(SolidClientFns, "hasResourceAcl").mockReturnValue(true);
 
-    jest
-      .spyOn(SolidClientFns, "unstable_hasAccessibleAcl")
-      .mockReturnValue(true);
+    jest.spyOn(SolidClientFns, "hasAccessibleAcl").mockReturnValue(true);
 
-    jest.spyOn(SolidClientFns, "unstable_getResourceAcl").mockReturnValueOnce();
+    jest.spyOn(SolidClientFns, "getResourceAcl").mockReturnValueOnce();
 
-    jest
-      .spyOn(SolidClientFns, "unstable_getAgentDefaultAccessOne")
-      .mockReturnValueOnce({
-        read: true,
-        write: true,
-        append: true,
-        control: true,
-      });
+    jest.spyOn(SolidClientFns, "getAgentDefaultAccess").mockReturnValueOnce({
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    });
 
     const tree = mountToJson(
       <SessionContext.Provider value={{ session }}>

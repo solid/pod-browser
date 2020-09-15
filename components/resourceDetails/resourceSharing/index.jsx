@@ -37,10 +37,10 @@ import PersonIcon from "@material-ui/icons/Person";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { makeStyles } from "@material-ui/styles";
 import {
-  unstable_hasResourceAcl,
-  unstable_hasAccessibleAcl,
-  unstable_getResourceAcl,
-  unstable_getAgentDefaultAccessOne,
+  hasResourceAcl,
+  hasAccessibleAcl,
+  getResourceAcl,
+  getAgentDefaultAccess,
 } from "@inrupt/solid-client";
 import SessionContext from "../../../src/contexts/sessionContext";
 import { resourceContextRedirect } from "../../resourceLink";
@@ -271,9 +271,9 @@ function ResourceSharing({
     },
   };
 
-  if (unstable_hasResourceAcl(dataset) && unstable_hasAccessibleAcl(dataset)) {
-    const resourceAcl = unstable_getResourceAcl(dataset);
-    const acl = unstable_getAgentDefaultAccessOne(resourceAcl, webId);
+  if (hasResourceAcl(dataset) && hasAccessibleAcl(dataset)) {
+    const resourceAcl = getResourceAcl(dataset);
+    const acl = getAgentDefaultAccess(resourceAcl, webId);
     defaultPermission.acl = acl;
   }
 

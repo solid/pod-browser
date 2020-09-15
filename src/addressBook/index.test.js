@@ -40,7 +40,7 @@ import {
 } from "./index";
 
 const {
-  createLitDataset,
+  createSolidDataset,
   createThing,
   getStringNoLocale,
   getStringNoLocaleAll,
@@ -405,15 +405,15 @@ describe("saveContact", () => {
     const webId = "https://user.example.com/card#me";
     const schema = { webId, fn: "Test Person" };
     const contactDataset = setThing(
-      createLitDataset(),
+      createSolidDataset(),
       createThing({ name: "this" })
     );
     const peopleIndexDataset = setThing(
-      createLitDataset(),
+      createSolidDataset(),
       createThing({ name: "this" })
     );
     const peopleDataset = setThing(
-      createLitDataset(),
+      createSolidDataset(),
       createThing({ name: "this" })
     );
 

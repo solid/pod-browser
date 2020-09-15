@@ -53,7 +53,7 @@ const styles = (theme: PrismTheme) => {
     label: smallFontSize,
     checkbox: {
       padding: 0,
-    }
+    },
   });
 };
 

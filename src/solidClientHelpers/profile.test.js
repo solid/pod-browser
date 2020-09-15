@@ -49,7 +49,7 @@ describe("fetchProfile", () => {
     const profileDataset = {};
 
     jest
-      .spyOn(solidClientFns, "fetchLitDataset")
+      .spyOn(solidClientFns, "getSolidDataset")
       .mockResolvedValue(profileDataset);
 
     jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileDataset);
@@ -69,7 +69,7 @@ describe("fetchProfile", () => {
     const fetch = jest.fn();
     const profile = await fetchProfile(profileWebId, fetch);
 
-    expect(solidClientFns.fetchLitDataset).toHaveBeenCalledWith(profileWebId, {
+    expect(solidClientFns.getSolidDataset).toHaveBeenCalledWith(profileWebId, {
       fetch,
     });
     expect(solidClientFns.getStringNoLocale).toHaveBeenCalledWith(

@@ -20,7 +20,7 @@
  */
 
 import {
-  fetchLitDataset,
+  getSolidDataset,
   getIri,
   getIriAll,
   getStringNoLocale,
@@ -35,7 +35,7 @@ export function displayProfileName({ nickname, name, webId }) {
 }
 
 export async function fetchProfile(webId, fetch) {
-  const dataset = await fetchLitDataset(webId, { fetch });
+  const dataset = await getSolidDataset(webId, { fetch });
 
   const profile = getThing(dataset, webId);
   const nickname = getStringNoLocale(profile, foaf.nick);

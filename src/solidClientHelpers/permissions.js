@@ -22,13 +22,13 @@
 /* eslint-disable camelcase */
 import {
   createAcl,
-  unstable_fetchLitDatasetWithAcl,
-  unstable_getResourceAcl,
-  unstable_hasAccessibleAcl,
-  unstable_hasResourceAcl,
-  unstable_saveAclFor,
-  unstable_setAgentDefaultAccess,
-  unstable_setAgentResourceAccess,
+  getSolidDatasetWithAcl,
+  getResourceAcl,
+  hasAccessibleAcl,
+  hasResourceAcl,
+  saveAclFor,
+  setAgentDefaultAccess,
+  setAgentResourceAccess,
 } from "@inrupt/solid-client";
 import { isUrl } from "../stringHelpers";
 import { createResponder, chain } from "./utils";
@@ -102,8 +102,8 @@ export function parseStringAcl(access) {
 export function defineAcl(dataset, webId, access = ACL.CONTROL.acl) {
   const aclDataset = chain(
     createAcl(dataset),
-    (a) => unstable_setAgentResourceAccess(a, webId, access),
-    (a) => unstable_setAgentDefaultAccess(a, webId, access)
+    (a) => setAgentResourceAccess(a, webId, access),
+    (a) => setAgentDefaultAccess(a, webId, access)
   );
 
   return aclDataset;
@@ -167,25 +167,25 @@ export function getThirdPartyPermissions(id, permissions) {
 
 export async function savePermissions({ iri, webId, access, fetch }) {
   const { respond, error } = createResponder();
-  const dataset = await unstable_fetchLitDatasetWithAcl(iri, { fetch });
+  const dataset = await getSolidDatasetWithAcl(iri, { fetch });
 
   if (!dataset) return error("dataset is empty");
 
-  if (!unstable_hasResourceAcl(dataset)) {
+  if (!hasResourceAcl(dataset)) {
     return error("dataset does not have resource ACL");
   }
 
-  if (!unstable_hasAccessibleAcl(dataset)) {
+  if (!hasAccessibleAcl(dataset)) {
     return error("dataset does not have accessible ACL");
   }
 
-  const aclDataset = unstable_getResourceAcl(dataset);
+  const aclDataset = getResourceAcl(dataset);
   if (!aclDataset) return error("aclDataset is empty");
 
-  const updatedAcl = unstable_setAgentResourceAccess(aclDataset, webId, access);
+  const updatedAcl = setAgentResourceAccess(aclDataset, webId, access);
   if (!updatedAcl) return error("updatedAcl is empty");
 
-  const response = await unstable_saveAclFor(dataset, updatedAcl, { fetch });
+  const response = await saveAclFor(dataset, updatedAcl, { fetch });
   if (!response) return error("response is empty");
 
   return respond(response);
@@ -193,25 +193,25 @@ export async function savePermissions({ iri, webId, access, fetch }) {
 
 export async function saveDefaultPermissions({ iri, webId, access, fetch }) {
   const { respond, error } = createResponder();
-  const dataset = await unstable_fetchLitDatasetWithAcl(iri, { fetch });
+  const dataset = await getSolidDatasetWithAcl(iri, { fetch });
   if (!dataset) return error("dataset is empty");
 
-  if (!unstable_hasResourceAcl(dataset)) {
+  if (!hasResourceAcl(dataset)) {
     return error("dataset does not have resource ACL");
   }
 
-  if (!unstable_hasAccessibleAcl(dataset)) {
+  if (!hasAccessibleAcl(dataset)) {
     return error("dataset does not have accessible ACL");
   }
 
-  const aclDataset = unstable_getResourceAcl(dataset);
+  const aclDataset = getResourceAcl(dataset);
   if (!aclDataset) return error("aclDataset is empty");
 
-  const updatedAcl = unstable_setAgentDefaultAccess(aclDataset, webId, access);
+  const updatedAcl = setAgentDefaultAccess(aclDataset, webId, access);
 
   if (!updatedAcl) return error("updatedAcl is empty");
 
-  const response = await unstable_saveAclFor(dataset, updatedAcl, { fetch });
+  const response = await saveAclFor(dataset, updatedAcl, { fetch });
   if (!response) return error("response is empty");
 
   return respond(response);

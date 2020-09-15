@@ -62,8 +62,8 @@ const rules = {
     marginLeft: "auto",
   },
   downloadButton: {
-    marginTop: "1rem" ,
-    marginBottom: "1rem" ,
+    marginTop: "1rem",
+    marginBottom: "1rem",
   },
   agentInput: {
     width: "100%",
@@ -71,7 +71,7 @@ const rules = {
   },
   agentAddButton: {
     marginBottom: "1rem",
-  }
+  },
 };
 
 export default function styles(theme: PrismTheme): StyleRules {

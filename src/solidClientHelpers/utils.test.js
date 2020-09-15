@@ -41,7 +41,7 @@ const TIMESTAMP = new Date(Date.UTC(2020, 5, 2, 15, 59, 21));
 function createDataset(url, type = "http://www.w3.org/ns/ldp#BasicContainer") {
   const {
     addUrl,
-    createLitDataset,
+    createSolidDataset,
     createThing,
     setDatetime,
     setDecimal,
@@ -86,7 +86,7 @@ function createDataset(url, type = "http://www.w3.org/ns/ldp#BasicContainer") {
     4096
   );
 
-  return setThing(createLitDataset(), publicContainer);
+  return setThing(createSolidDataset(), publicContainer);
 }
 
 describe("changeThing", () => {
@@ -134,7 +134,7 @@ describe("defineDataset", () => {
       .spyOn(solidClientFns, "setThing")
       .mockImplementationOnce(jest.fn((x) => x));
     jest
-      .spyOn(solidClientFns, "createLitDataset")
+      .spyOn(solidClientFns, "createSolidDataset")
       .mockReturnValueOnce("dataset");
 
     const thing = defineDataset({ name: "this" }, opOne, opTwo);

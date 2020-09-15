@@ -163,15 +163,13 @@ describe("PermissionsForm", () => {
     const setFormOpen = jest.fn();
 
     jest
-      .spyOn(SolidClientfns, "unstable_fetchLitDatasetWithAcl")
+      .spyOn(SolidClientfns, "getSolidDatasetWithAcl")
       .mockResolvedValueOnce({});
 
-    jest
-      .spyOn(SolidClientfns, "unstable_getResourceAcl")
-      .mockResolvedValueOnce({});
+    jest.spyOn(SolidClientfns, "getResourceAcl").mockResolvedValueOnce({});
 
     jest
-      .spyOn(SolidClientfns, "unstable_setAgentResourceAccess")
+      .spyOn(SolidClientfns, "setAgentResourceAccess")
       .mockResolvedValueOnce({});
 
     jest

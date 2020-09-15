@@ -233,24 +233,18 @@ describe("Contents", () => {
       .spyOn(SolidClientHookFns, "useFetchResourceDetails")
       .mockReturnValueOnce({ data });
 
-    jest
-      .spyOn(SolidClientFns, "unstable_hasResourceAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(SolidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
 
-    jest
-      .spyOn(SolidClientFns, "unstable_hasAccessibleAcl")
-      .mockReturnValueOnce(true);
+    jest.spyOn(SolidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
 
-    jest.spyOn(SolidClientFns, "unstable_getResourceAcl").mockReturnValueOnce();
+    jest.spyOn(SolidClientFns, "getResourceAcl").mockReturnValueOnce();
 
-    jest
-      .spyOn(SolidClientFns, "unstable_getAgentDefaultAccessOne")
-      .mockReturnValueOnce({
-        read: true,
-        write: true,
-        append: true,
-        control: true,
-      });
+    jest.spyOn(SolidClientFns, "getAgentDefaultAccess").mockReturnValueOnce({
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    });
 
     jest
       .spyOn(SolidClientHookFns, "useFetchResourceDetails")

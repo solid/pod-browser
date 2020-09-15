@@ -25,15 +25,15 @@ import useSWR from "swr";
 import { space, ldp } from "rdf-namespaces";
 
 import {
-  fetchLitDataset,
-  fetchResourceInfoWithAcl,
+  getSolidDataset,
+  getResourceInfoWithAcl,
   getIriAll,
   getResourceAcl,
   getThing,
   hasResourceAcl,
   isContainer,
-  unstable_getAgentAccessAll,
-  unstable_getAgentDefaultAccessAll,
+  getAgentAccessAll,
+  getAgentDefaultAccessAll,
 } from "@inrupt/solid-client";
 
 import { getIriPath } from "../../solidClientHelpers/utils";
@@ -43,7 +43,7 @@ import { fetchResourceWithAcl } from "../../solidClientHelpers/resource";
 import SessionContext from "../../contexts/sessionContext";
 
 export async function fetchContainerResourceIris(containerIri, fetch) {
-  const litDataset = await fetchLitDataset(containerIri, { fetch });
+  const litDataset = await getSolidDataset(containerIri, { fetch });
   const container = getThing(litDataset, containerIri);
   const iris = getIriAll(container, ldp.contains);
   return iris;
@@ -61,17 +61,15 @@ export function useFetchContainerResourceIris(iri) {
 
 export async function fetchResourceDetails(iri, fetch) {
   const name = getIriPath(iri);
-  const resourceInfo = await fetchResourceInfoWithAcl(iri, { fetch });
+  const resourceInfo = await getResourceInfoWithAcl(iri, { fetch });
   let defaultPermissions = [];
   let permissions = [];
 
   if (hasResourceAcl(resourceInfo)) {
-    const accessModeList = unstable_getAgentAccessAll(resourceInfo);
+    const accessModeList = getAgentAccessAll(resourceInfo);
     permissions = await normalizePermissions(accessModeList, fetch);
     const resourceAcl = getResourceAcl(resourceInfo);
-    const defaultAccessModeList = unstable_getAgentDefaultAccessAll(
-      resourceAcl
-    );
+    const defaultAccessModeList = getAgentDefaultAccessAll(resourceAcl);
 
     defaultPermissions = await normalizePermissions(
       defaultAccessModeList,
@@ -114,7 +112,7 @@ export function useFetchResourceWithAcl(iri) {
 }
 
 export async function fetchPodIrisFromWebId(webId, fetch) {
-  const profileDoc = await fetchLitDataset(webId, { fetch });
+  const profileDoc = await getSolidDataset(webId, { fetch });
   const profile = getThing(profileDoc, webId);
 
   return getIriAll(profile, space.storage);

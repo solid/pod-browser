@@ -21,7 +21,7 @@
 
 import {
   addUrl,
-  createLitDataset,
+  createSolidDataset,
   createThing,
   addDatetime,
   addDecimal,
@@ -47,5 +47,5 @@ export default function createContainer(
     (t) => addUrl(t, ldp.contains, "https://user.dev.inrupt.net/public/games/"),
   ].reduce((acc, fn) => fn(acc), thing);
 
-  return setThing(createLitDataset(), publicContainer);
+  return setThing(createSolidDataset(), publicContainer);
 }

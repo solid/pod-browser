@@ -22,7 +22,7 @@
 /* eslint-disable camelcase */
 
 import {
-  createLitDataset,
+  createSolidDataset,
   createThing,
   getDatetime,
   getDecimal,
@@ -141,7 +141,7 @@ export function defineThing(options, ...operations) {
 }
 
 export function defineDataset(options, ...operations) {
-  return setThing(createLitDataset(), defineThing(options, ...operations));
+  return setThing(createSolidDataset(), defineThing(options, ...operations));
 }
 
 export function changeThing(thing, ...operations) {
