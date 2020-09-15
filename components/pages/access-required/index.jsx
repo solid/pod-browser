@@ -20,6 +20,7 @@
  */
 
 /* eslint react/jsx-one-expression-per-line: 0 */
+// Prettier and ESLint have a conflict with <strong>{appUrl}</strong>
 
 import React, { useEffect, useState } from "react";
 import { Container, Content, PageHeader } from "@inrupt/prism-react-components";

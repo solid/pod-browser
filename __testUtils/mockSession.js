@@ -37,14 +37,16 @@ export default function mockSession(options = {}) {
   // consider naming it and create a reusable mock function
   return {
     fetch: mockFetch({
-      [webId]: mockResponse(200, profile),
-      [storage]: mockResponse(200, "", {
-        Link: `<${storageAcl}>; rel="acl"`,
-        url: storage,
-      }),
-      [storageAcl]: mockResponse(200, storageAclTtl, {
-        url: storageAcl,
-      }),
+      [webId]: () => mockResponse(200, profile),
+      [storage]: () =>
+        mockResponse(200, "", {
+          Link: `<${storageAcl}>; rel="acl"`,
+          url: storage,
+        }),
+      [storageAcl]: () =>
+        mockResponse(200, storageAclTtl, {
+          url: storageAcl,
+        }),
     }),
     info: {
       isLoggedIn: true,
@@ -71,14 +73,16 @@ export function mockUnauthenticatedSession() {
 export function mockAuthenticatedSessionWithNoAccessToPod() {
   return {
     fetch: mockFetch({
-      [webId]: mockResponse(200, profile),
-      [storage]: mockResponse(200, "", {
-        Link: `<${storageAcl}>; rel="acl"`,
-        url: storage,
-      }),
-      [storageAcl]: mockResponse(401, "", {
-        url: storageAcl,
-      }),
+      [webId]: () => mockResponse(200, profile),
+      [storage]: () =>
+        mockResponse(200, "", {
+          Link: `<${storageAcl}>; rel="acl"`,
+          url: storage,
+        }),
+      [storageAcl]: () =>
+        mockResponse(401, "", {
+          url: storageAcl,
+        }),
     }),
     info: {
       isLoggedIn: true,
