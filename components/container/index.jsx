@@ -30,7 +30,7 @@ import ContainerTableRow, { renderResourceType } from "../containerTableRow";
 import SortedTableCarat from "../sortedTableCarat";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import { useFetchContainerResourceIris } from "../../src/hooks/solidClient";
-import { getResourceName } from "../../src/solidClientHelpers";
+import { getResourceName } from "../../src/solidClientHelpers/resource";
 
 import Spinner from "../spinner";
 import styles from "./styles";

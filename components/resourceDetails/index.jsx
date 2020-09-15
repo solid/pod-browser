@@ -197,12 +197,21 @@ export default function ResourceDetails({ resource, onDelete, onDeleteError }) {
 }
 
 ResourceDetails.propTypes = {
-  resource: T.node.isRequired,
+  resource: T.shape({
+    iri: T.string.isRequired,
+    name: T.string.isRequired,
+    types: T.arrayOf(T.string).isRequired,
+  }),
   onDelete: T.func,
   onDeleteError: T.func,
 };
 
 ResourceDetails.defaultProps = {
-  onDelete: () => null,
-  onDeleteError: () => null,
+  resource: {
+    iri: "",
+    name: "",
+    types: [],
+  },
+  onDelete: () => {},
+  onDeleteError: () => {},
 };

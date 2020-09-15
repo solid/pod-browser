@@ -27,7 +27,7 @@ import { useRouter } from "next/router";
 import clsx from "clsx";
 import T from "prop-types";
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
-import { isContainerIri } from "../../src/solidClientHelpers";
+import { isContainerIri } from "../../src/solidClientHelpers/utils";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import ResourceLink, { resourceContextRedirect } from "../resourceLink";
 import styles from "./styles";
