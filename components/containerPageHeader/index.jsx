@@ -66,3 +66,8 @@ ContainerPageHeader.defaultProps = {
   mutate: () => null,
   resourceList: [],
 };
+
+ContainerPageHeader.defaultProps = {
+  mutate: () => null,
+  resourceList: [],
+};

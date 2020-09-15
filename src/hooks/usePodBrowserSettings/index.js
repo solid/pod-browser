@@ -31,13 +31,7 @@ export default function usePodBrowserSettings() {
 
   useEffect(() => {
     if (!profileInfo || !session.info.isLoggedIn) return;
-    (async () => {
-      const settingsResource = await getOrCreateSettings(
-        profileInfo.webId,
-        session
-      );
-      setSettings(settingsResource);
-    })();
+    getOrCreateSettings(profileInfo.webId, session).then(setSettings);
   }, [profileInfo, session]);
 
   return settings;
