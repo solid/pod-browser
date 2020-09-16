@@ -866,9 +866,7 @@ font-display: block;",
               <div
                 className="PodBrowser-hero"
               >
-                <h1
-                  className="PodBrowser-title"
-                >
+                <h1>
                   You don’t have access to this resource
                 </h1>
               </div>

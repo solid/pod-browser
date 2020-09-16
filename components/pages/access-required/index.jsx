@@ -29,24 +29,18 @@ import {
   Hero,
   PageHeader,
 } from "@inrupt/prism-react-components";
-import { createStyles, makeStyles } from "@material-ui/styles";
-import { useBem } from "@solid/lit-prism-patterns";
-import styles from "./styles";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function AccessRequiredPage() {
   useRedirectIfLoggedOut();
 
-  const bem = useBem(useStyles());
   const [appUrl, setAppUrl] = useState(null);
   useEffect(() => setAppUrl(window.location.origin), []);
   return (
     <div>
       <PageHeader title="No access to resource" />
       <Hero>
-        <h1 className={bem("title")}>You don’t have access to this resource</h1>
+        <h1>You don’t have access to this resource</h1>
       </Hero>
       <Container>
         <Content>

@@ -114,10 +114,3 @@ ContainerTableRow.defaultProps = {
     iri: "",
   },
 };
-
-ContainerTableRow.defaultProps = {
-  resource: {
-    name: "",
-    iri: "",
-  },
-};
