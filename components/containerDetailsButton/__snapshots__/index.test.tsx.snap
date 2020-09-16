@@ -8,6 +8,7 @@ exports[`ContainerDetailsButton Renders view 1`] = `
     action="details"
     className={null}
     containerIri={null}
+    data-testid="folder-details-button"
     ref={null}
     resourceIri={null}
   >
@@ -34,6 +35,7 @@ exports[`ContainerDetailsButton Renders view 1`] = `
     >
       <a
         className={null}
+        data-testid="folder-details-button"
         href="/resource/[iri]?action=details&resourceIri="
         onClick={[Function]}
         onMouseEnter={[Function]}

@@ -46,6 +46,7 @@ exports[`ContainerPageHeader Renders view 1`] = `
             action="details"
             className="makeStyles-page-header__action-5"
             containerIri={null}
+            data-testid="folder-details-button"
             ref={null}
             resourceIri={null}
           >
@@ -72,6 +73,7 @@ exports[`ContainerPageHeader Renders view 1`] = `
             >
               <a
                 className="makeStyles-page-header__action-5"
+                data-testid="folder-details-button"
                 href="/resource/[iri]?action=details&resourceIri="
                 onClick={[Function]}
                 onMouseEnter={[Function]}

@@ -24,9 +24,12 @@ import T from "prop-types";
 import ResourceLink from "../resourceLink";
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
 
+const TESTCAFE_ID_FOLDER_DETAILS_BUTTON = "folder-details-button";
+
 export default function ContainerDetailsButton({ className }) {
   return (
     <ResourceLink
+      data-testid={TESTCAFE_ID_FOLDER_DETAILS_BUTTON}
       action={DETAILS_CONTEXT_ACTIONS.DETAILS}
       className={className}
     >
