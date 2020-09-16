@@ -27,7 +27,7 @@ import AddFileButton from "../addFileButton";
 import AddFolderFlyout from "../addFolderFlyout";
 
 export default function ContainerPageHeader({ mutate, resourceList }) {
-  const pageHeaderAction = PrismPageHeader.actionClassName();
+  const pageHeaderAction = PrismPageHeader.usePageHeaderActionClassName();
 
   const containerDetails = <ContainerDetails className={pageHeaderAction} />;
   const addFolderFlyout = (

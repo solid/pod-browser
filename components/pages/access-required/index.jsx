@@ -23,7 +23,12 @@
 // Prettier and ESLint have a conflict with <strong>{appUrl}</strong>
 
 import React, { useEffect, useState } from "react";
-import { Container, Content, PageHeader } from "@inrupt/prism-react-components";
+import {
+  Container,
+  Content,
+  Hero,
+  PageHeader,
+} from "@inrupt/prism-react-components";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import styles from "./styles";
@@ -40,11 +45,11 @@ export default function AccessRequiredPage() {
   return (
     <div>
       <PageHeader title="No access to resource" />
+      <Hero>
+        <h1 className={bem("title")}>You don’t have access to this resource</h1>
+      </Hero>
       <Container>
         <Content>
-          <h1 className={bem("title")}>
-            You don’t have access to this resource
-          </h1>
           <p>
             <strong>To manage your Trusted Applications:</strong>
           </p>

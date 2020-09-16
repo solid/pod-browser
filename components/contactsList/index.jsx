@@ -49,7 +49,7 @@ function ContactsList() {
   const classes = useStyles();
   const bem = useBem(classes);
   const { menuOpen } = useContext(DetailsMenuContext);
-  const actionClass = PageHeader.actionClassName();
+  const actionClass = PageHeader.usePageHeaderActionClassName();
   const containerClass = clsx(
     bem("container"),
     bem("container-view", menuOpen ? "menu-open" : null)

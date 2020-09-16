@@ -862,6 +862,17 @@ font-display: block;",
                 />
               </div>
             </PageHeader>
+            <Hero>
+              <div
+                className="PodBrowser-hero"
+              >
+                <h1
+                  className="PodBrowser-title"
+                >
+                  You don’t have access to this resource
+                </h1>
+              </div>
+            </Hero>
             <Container>
               <div
                 className="PodBrowser-container"
@@ -870,11 +881,6 @@ font-display: block;",
                   <div
                     className="PodBrowser-content"
                   >
-                    <h1
-                      className="PodBrowser-title"
-                    >
-                      You don’t have access to this resource
-                    </h1>
                     <p>
                       <strong>
                         To manage your Trusted Applications:
