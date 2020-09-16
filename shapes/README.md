@@ -4,7 +4,7 @@
 
 We've decided to keep the structure of bookmarks simple, only storing `terms:created`, `terms:title`, and 
 `bookmark:recalls`. Note that some Solid bookmarking apps also use `foaf:maker`, but we didn't think it necessary in the
-context of the PodBrowser, so we've chosen to omit it.
+context of the PodBrowser, so we've chosen to make it optional.
 
 At some point we might need to group bookmarks, but at this point we've chosen to keep it simple and simply
 implement bookmarks as a set of bookmarks that are stored in one file.
