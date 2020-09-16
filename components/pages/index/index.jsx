@@ -24,16 +24,12 @@ import { useRouter } from "next/router";
 
 import { useFetchPodIrisFromWebId } from "../../../src/hooks/solidClient";
 import SessionContext from "../../../src/contexts/sessionContext";
-import {
-  useRedirectIfLoggedOut,
-  useRedirectIfNoControlAccessToPod,
-} from "../../../src/effects/auth";
+import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 
 import { resourceHref } from "../../resourceLink";
 
 export default function Home() {
   useRedirectIfLoggedOut();
-  useRedirectIfNoControlAccessToPod();
 
   const router = useRouter();
   const { session } = useContext(SessionContext);

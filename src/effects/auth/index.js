@@ -24,6 +24,7 @@ import Router from "next/router";
 import { getSolidDatasetWithAcl, hasResourceAcl } from "@inrupt/solid-client";
 import SessionContext from "../../contexts/sessionContext";
 import useAuthenticatedProfile from "../../hooks/useAuthenticatedProfile";
+import usePodRoot from "../../hooks/usePodRoot";
 
 export const SESSION_STATES = {
   LOGGED_IN: "LOGGED_IN",
@@ -81,21 +82,25 @@ export function useRedirectIfLoggedIn(location = "/") {
   });
 }
 
-export function useRedirectIfNoControlAccessToPod(
+export function useRedirectIfNoControlAccessToOwnPod(
+  resourceUrl,
   location = "/access-required"
 ) {
   const { session, isLoadingSession } = useContext(SessionContext);
   const profile = useAuthenticatedProfile();
+  const podRoot = usePodRoot(resourceUrl, profile);
 
   useEffect(() => {
     if (isLoadingSession || !profile) return;
 
     Promise.all(
-      profile.pods.map((pod) =>
-        getSolidDatasetWithAcl(pod, {
-          fetch: session.fetch,
-        })
-      )
+      profile.pods
+        .filter((pod) => pod === podRoot)
+        .map((pod) =>
+          getSolidDatasetWithAcl(pod, {
+            fetch: session.fetch,
+          })
+        )
     ).then((podResources) => {
       const hasControlAccessToPods = !podResources.find(
         (podResource) => !hasResourceAcl(podResource)
@@ -103,5 +108,5 @@ export function useRedirectIfNoControlAccessToPod(
       if (hasControlAccessToPods) return;
       Router.push(location);
     });
-  }, [session, isLoadingSession, profile, location]);
+  }, [session, isLoadingSession, profile, location, podRoot]);
 }

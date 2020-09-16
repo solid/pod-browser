@@ -28,6 +28,8 @@ import mockResponse from "./mockResponse";
 export const webId = "http://example.com/webId#me";
 export const storage = "http://example.com/";
 export const storageAcl = "http://example.com/.acl";
+export const anotherUsersStorage = "http://anotheruser.com/";
+export const anotherUsersStorageAcl = "http://anotheruser.com/.acl";
 
 export { profile };
 
@@ -41,12 +43,8 @@ export default function mockSession(options = {}) {
       [storage]: () =>
         mockResponse(200, "", {
           Link: `<${storageAcl}>; rel="acl"`,
-          url: storage,
         }),
-      [storageAcl]: () =>
-        mockResponse(200, storageAclTtl, {
-          url: storageAcl,
-        }),
+      [storageAcl]: () => mockResponse(200, storageAclTtl),
     }),
     info: {
       isLoggedIn: true,
@@ -77,12 +75,26 @@ export function mockAuthenticatedSessionWithNoAccessToPod() {
       [storage]: () =>
         mockResponse(200, "", {
           Link: `<${storageAcl}>; rel="acl"`,
-          url: storage,
         }),
-      [storageAcl]: () =>
-        mockResponse(401, "", {
-          url: storageAcl,
+      [storageAcl]: () => mockResponse(401),
+    }),
+    info: {
+      isLoggedIn: true,
+      sessionId: "some-session-id",
+      webId,
+    },
+  };
+}
+
+export function mockAuthenticatedSessionWithNoAccessToAnotherUsersPod() {
+  return {
+    fetch: mockFetch({
+      [webId]: () => mockResponse(200, profile),
+      [anotherUsersStorage]: () =>
+        mockResponse(200, "", {
+          Link: `<${anotherUsersStorageAcl}>; rel="acl"`,
         }),
+      [anotherUsersStorageAcl]: () => mockResponse(401),
     }),
     info: {
       isLoggedIn: true,

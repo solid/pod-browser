@@ -26,7 +26,7 @@ import { useRouter } from "next/router";
 
 import {
   useRedirectIfLoggedOut,
-  useRedirectIfNoControlAccessToPod,
+  useRedirectIfNoControlAccessToOwnPod,
 } from "../../../src/effects/auth";
 import IndexPage from "./index";
 
@@ -54,6 +54,6 @@ describe("Index page", () => {
 
   test("Redirects if the user does not have access to Pod", () => {
     shallow(<IndexPage />);
-    expect(useRedirectIfNoControlAccessToPod).toHaveBeenCalled();
+    expect(useRedirectIfNoControlAccessToOwnPod).toHaveBeenCalled();
   });
 });

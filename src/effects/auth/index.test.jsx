@@ -26,10 +26,13 @@ import { renderHook } from "@testing-library/react-hooks";
 import {
   SESSION_STATES,
   redirectBasedOnSessionState,
-  useRedirectIfNoControlAccessToPod,
+  useRedirectIfNoControlAccessToOwnPod,
 } from "./index";
 import mockSession, {
+  anotherUsersStorage,
+  mockAuthenticatedSessionWithNoAccessToAnotherUsersPod,
   mockAuthenticatedSessionWithNoAccessToPod,
+  storage,
 } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 
@@ -101,7 +104,7 @@ describe("auth effects", () => {
     });
   });
 
-  describe("useRedirectIfNoControlAccessToPod", () => {
+  describe("useRedirectIfNoControlAccessToOwnPod", () => {
     test("Do not get redirected if profile has access to all pods", async () => {
       const session = mockSession();
       const SessionProvider = mockSessionContextProvider({
@@ -114,7 +117,28 @@ describe("auth effects", () => {
       );
 
       const { waitForNextUpdate } = renderHook(
-        () => useRedirectIfNoControlAccessToPod(),
+        () => useRedirectIfNoControlAccessToOwnPod(storage),
+        { wrapper }
+      );
+
+      await waitForNextUpdate();
+
+      expect(Router.push).not.toHaveBeenCalledWith();
+    });
+
+    test("Do not get redirected if pod is not owned by user", async () => {
+      const session = mockAuthenticatedSessionWithNoAccessToAnotherUsersPod();
+      const SessionProvider = mockSessionContextProvider({
+        session,
+        isLoadingSession: false,
+      });
+
+      const wrapper = ({ children }) => (
+        <SessionProvider>{children}</SessionProvider>
+      );
+
+      const { waitForNextUpdate } = renderHook(
+        () => useRedirectIfNoControlAccessToOwnPod(anotherUsersStorage),
         { wrapper }
       );
 
@@ -135,7 +159,7 @@ describe("auth effects", () => {
       );
 
       const { waitForNextUpdate } = renderHook(
-        () => useRedirectIfNoControlAccessToPod(),
+        () => useRedirectIfNoControlAccessToOwnPod(storage),
         { wrapper }
       );
 

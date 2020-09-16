@@ -24,16 +24,15 @@ import { useRouter } from "next/router";
 import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
 import {
   useRedirectIfLoggedOut,
-  useRedirectIfNoControlAccessToPod,
+  useRedirectIfNoControlAccessToOwnPod,
 } from "../../../src/effects/auth";
 import ContainerView from "../../container";
 import { PodLocationProvider } from "../../../src/contexts/podLocationContext";
 
 export default function Resource() {
   useRedirectIfLoggedOut();
-  useRedirectIfNoControlAccessToPod();
-
   const router = useRouter();
+  useRedirectIfNoControlAccessToOwnPod(router.query.iri);
   const decodedIri = decodeURIComponent(router.query.iri);
 
   return (

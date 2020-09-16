@@ -24,10 +24,7 @@ import { mount, shallow } from "enzyme";
 import { mountToJson } from "enzyme-to-json";
 import Router, * as nextRouterFns from "next/router";
 
-import {
-  useRedirectIfLoggedOut,
-  useRedirectIfNoControlAccessToPod,
-} from "../../../src/effects/auth";
+import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import { useFetchPodIrisFromWebId } from "../../../src/hooks/solidClient";
 import { SessionContextProvider } from "../../../src/contexts/sessionContext";
 import { resourceHref } from "../../resourceLink";
@@ -90,10 +87,5 @@ describe("Index page", () => {
   test("Redirects if the user is logged out", () => {
     shallow(<IndexPage />);
     expect(useRedirectIfLoggedOut).toHaveBeenCalled();
-  });
-
-  test("Redirects if the user does not have access to Pod", () => {
-    shallow(<IndexPage />);
-    expect(useRedirectIfNoControlAccessToPod).toHaveBeenCalled();
   });
 });
