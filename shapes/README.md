@@ -6,6 +6,9 @@ We've decided to keep the structure of bookmarks simple, only storing `terms:cre
 `bookmark:recalls`. Note that some Solid bookmarking apps also use `foaf:maker`, but we didn't think it necessary in the
 context of the PodBrowser, so we've chosen to make it optional.
 
+We've also decided to omit the use of an index using `dct:references`, as this would require us to keep the index 
+up-to-date manually, and we think it's better to find the bookmarks using the `bookmark:Bookmark` class. 
+
 At some point we might need to group bookmarks, but at this point we've chosen to keep it simple and simply
 implement bookmarks as a set of bookmarks that are stored in one file.
 
