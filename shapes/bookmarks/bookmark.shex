@@ -1,0 +1,9 @@
+PREFIX bookmark: <http://www.w3.org/2002/01/bookmark#>
+PREFIX terms: <http://purl.org/dc/terms/>
+PREFIX xsd: <https://www.w3.org/2001/XMLSchema#>
+
+bookmark:Bookmark {
+  terms:created xsd:dateTime {1} ;
+  terms:title xsd:string {1} ;
+  bookmark:recalls IRI {1} ;
+}

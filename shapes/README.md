@@ -1,9 +1,20 @@
 # Shapes
 
+## Bookmarks
+
+We've decided to keep the structure of bookmarks simple, only storing `terms:created`, `terms:title`, and 
+`bookmark:recalls`. Note that some Solid bookmarking apps also use `foaf:maker`, but we didn't think it necessary in the
+context of the PodBrowser, so we've chosen to omit it.
+
+At some point we might need to group bookmarks, but at this point we've chosen to keep it simple and simply
+implement bookmarks as a set of bookmarks that are stored in one file.
+
+## Contacts
+
 Because there are some differences between the ShEx shapes we've described and previous work on SHACL shapes we wanted 
 to explain the differences those shapes. Once they have been resolved, we might remove this README altogether.
 
-## Address Book: Differences between ShEx and SHACL
+### Address Book: Differences between ShEx and SHACL
 
 The following is how the SHACL shape in `https://raw.githubusercontent.com/solid/contacts-pane/master/shapes/contacts-shapes.ttl` differs from the ShEx shape in `contacts/address-book.shex`.
 
@@ -16,7 +27,7 @@ The following is how the SHACL shape in `https://raw.githubusercontent.com/solid
   - vcard:vcard:groupIndex
     - Using terms (sh:count, sh:FollowMe) that isn't formalized
     
-## Group Index: Differences between ShEx and SHACL
+### Group Index: Differences between ShEx and SHACL
 
 The following is how the SHACL shape in `https://raw.githubusercontent.com/solid/contacts-pane/master/shapes/contacts-shapes.ttl` differ from the ShEx shape in `contacts/group-index.shex`.
 
@@ -26,7 +37,7 @@ The following is how the SHACL shape in `https://raw.githubusercontent.com/solid
   - vcard:includesGroup
     - We used an inverse triple constraint instead (putting this term under vcard:Group shape instead)
 
-## Group: Differences between ShEx and SHACL
+### Group: Differences between ShEx and SHACL
 
 The following is how the SHACL shape in `https://raw.githubusercontent.com/solid/contacts-pane/master/shapes/contacts-shapes.ttl` differ from the ShEx shape in `contacts/group.shex`.
 
@@ -37,7 +48,7 @@ The following is how the SHACL shape in `https://raw.githubusercontent.com/solid
   - vcard:fn cardinality difference (one or more instead of just one)
   - vcard:member (informal term) instead of vcard:hasMember 
     
-## People Index: Differences between ShEx and SHACL
+### People Index: Differences between ShEx and SHACL
 
 The following is how the SHACL shape in `https://raw.githubusercontent.com/solid/contacts-pane/master/shapes/contacts-shapes.ttl` differ from the ShEx shape in `contacts/people-index.shex`.
 
@@ -46,7 +57,7 @@ The following is how the SHACL shape in `https://raw.githubusercontent.com/solid
     - uses informal term sh:BackwardLink
     - minimum and maximum one instance of IRI (can be part of only one address book)
 
-## Person: Differences between ShEx and SHACL
+### Person: Differences between ShEx and SHACL
 
 The following is how the SHACL shape in `https://raw.githubusercontent.com/solid/contacts-pane/master/shapes/contacts-shapes.ttl` differ from the ShEx shape in `contacts/person.shex`.
 
