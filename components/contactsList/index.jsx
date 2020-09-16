@@ -26,6 +26,8 @@ import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { useContext, useState, useEffect } from "react";
 import { PageHeader } from "@inrupt/prism-react-components";
+import { Table, TableColumn } from "@inrupt/solid-ui-react";
+import { vcard } from "rdf-namespaces";
 import Spinner from "../spinner";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 import SessionContext from "../../src/contexts/sessionContext";
@@ -58,6 +60,8 @@ function ContactsList() {
   const [addressBook, setAddressBook] = useState();
   const [addressBookError, setAddressBookError] = useState();
   const [contacts, setContacts] = useState([]);
+  const formattedNamePredicate = vcard.fn;
+  const hasPhotoPredicate = vcard.hasPhoto;
   const { session } = useContext(SessionContext);
   const {
     fetch,
@@ -83,7 +87,6 @@ function ContactsList() {
 
       if (existingAddressBook) {
         setAddressBook(existingAddressBook);
-        setLoadingContacts(false);
         const { response: people, error: peopleError } = await getPeople(
           contactsIri,
           fetch
@@ -92,7 +95,7 @@ function ContactsList() {
           setAddressBookError(peopleError);
           return;
         }
-
+        setLoadingContacts(false);
         setContacts(people);
 
         return;
@@ -134,24 +137,44 @@ function ContactsList() {
         ]}
       />
       <div className={containerClass}>
-        <table className={bem("table")}>
-          <tbody className={bem("table__body")}>
-            {contacts.map(({ name, avatar }) => (
-              <tr className={bem("table__body-row")}>
-                <td
-                  className={clsx(
-                    bem("table__body-cell"),
-                    bem("table__body-cell--align-end"),
-                    bem("table__body-cell--width-preview")
-                  )}
-                >
-                  <Avatar className={bem("avatar")} alt={name} src={avatar} />
-                </td>
-                <td>{name}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <Table
+          things={contacts}
+          className={bem("table")}
+          // prettier-ignore
+          ascIndicator={(
+            <span role="img" aria-label="Sorted in ascending order">
+              {" "}
+              <i className={clsx(bem("icon-caret-up"), bem("table__icon"))} />
+            </span>
+          )}
+          // prettier-ignore
+          descIndicator={(
+            <span role="img" aria-label="Sorted in descending order">
+              {" "}
+              <i className={clsx(bem("icon-caret-down"), bem("table__icon"))} />
+            </span>
+          )}
+        >
+          <TableColumn
+            property={hasPhotoPredicate}
+            header=""
+            datatype="url"
+            body={({ value }) => {
+              return (
+                <Avatar
+                  className={bem("avatar")}
+                  alt="Contact avatar"
+                  src={value}
+                />
+              );
+            }}
+          />
+          <TableColumn
+            property={formattedNamePredicate}
+            header="Name"
+            sortable
+          />
+        </Table>
       </div>
     </>
   );

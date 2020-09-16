@@ -24,8 +24,8 @@
 import {
   addStringNoLocale,
   addUrl,
-  getStringNoLocale,
   getStringNoLocaleAll,
+  getThing,
   getUrl,
   getUrlAll,
   setThing,
@@ -141,21 +141,14 @@ export async function getPeople(containerIri, fetch) {
   const profiles = profileResponses
     .filter(({ error: e }) => !e)
     .map(({ response }) => response)
+    .filter(({ iri }) => iri.includes("/profile/card#me")) // filtering by valid WebId so it doesn't error out if the user entered a contact with an invalid ID
     .map(({ dataset, iri: webId }) => {
-      const nickname =
-        getStringNoLocale(dataset, vcard.nickname) ||
-        getStringNoLocale(dataset, foaf.nick);
-      const name =
-        getStringNoLocale(dataset, vcard.fn) ||
-        getStringNoLocale(dataset, foaf.name);
       const avatar = getUrl(dataset, vcard.hasPhoto);
-
-      return {
-        avatar,
-        name,
-        nickname,
-        webId,
-      };
+      return addStringNoLocale(
+        getThing(dataset, webId),
+        vcard.hasPhoto,
+        avatar
+      );
     });
 
   return respond(profiles);
