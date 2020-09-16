@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createRef, useContext, useLayoutEffect } from "react";
+import { createRef, useContext } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import PodLocationContext from "../../src/contexts/podLocationContext";
@@ -35,13 +35,6 @@ export default function Breadcrumbs() {
   const bem = useBem(useStyles());
   const podLocation = useContext(PodLocationContext);
   const breadcrumbsList = createRef();
-
-  useLayoutEffect(() => {
-    if (!breadcrumbsList.current) {
-      return;
-    }
-    breadcrumbsList.current.scrollTo(breadcrumbsList.current.scrollWidth, 0);
-  });
 
   if (!podLocation.baseUri) return <Spinner />;
 

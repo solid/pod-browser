@@ -1936,84 +1936,6 @@ font-display: block;",
             </div>
           </PageHeader>
         </PageHeader>
-        <div
-          className="PodBrowser-container"
-        >
-          <Breadcrumbs>
-            <Spinner>
-              <WithStyles(ForwardRef(Container))>
-                <ForwardRef(Container)
-                  classes={
-                    Object {
-                      "disableGutters": "PodBrowser-disableGutters",
-                      "fixed": "PodBrowser-fixed",
-                      "maxWidthLg": "PodBrowser-maxWidthLg",
-                      "maxWidthMd": "PodBrowser-maxWidthMd",
-                      "maxWidthSm": "PodBrowser-maxWidthSm",
-                      "maxWidthXl": "PodBrowser-maxWidthXl",
-                      "maxWidthXs": "PodBrowser-maxWidthXs",
-                      "root": "PodBrowser-root",
-                    }
-                  }
-                >
-                  <div
-                    className="PodBrowser-root PodBrowser-maxWidthLg"
-                  >
-                    <WithStyles(ForwardRef(CircularProgress))
-                      className="PodBrowser-MuiCicularProgress-root"
-                      color="primary"
-                    >
-                      <ForwardRef(CircularProgress)
-                        className="PodBrowser-MuiCicularProgress-root"
-                        classes={
-                          Object {
-                            "circle": "PodBrowser-circle",
-                            "circleDisableShrink": "PodBrowser-circleDisableShrink",
-                            "circleIndeterminate": "PodBrowser-circleIndeterminate",
-                            "circleStatic": "PodBrowser-circleStatic",
-                            "colorPrimary": "PodBrowser-colorPrimary",
-                            "colorSecondary": "PodBrowser-colorSecondary",
-                            "indeterminate": "PodBrowser-indeterminate",
-                            "root": "PodBrowser-root",
-                            "static": "PodBrowser-static",
-                            "svg": "PodBrowser-svg",
-                          }
-                        }
-                        color="primary"
-                      >
-                        <div
-                          className="PodBrowser-root PodBrowser-MuiCicularProgress-root PodBrowser-colorPrimary PodBrowser-indeterminate"
-                          role="progressbar"
-                          style={
-                            Object {
-                              "height": 40,
-                              "width": 40,
-                            }
-                          }
-                        >
-                          <svg
-                            className="PodBrowser-svg"
-                            viewBox="22 22 44 44"
-                          >
-                            <circle
-                              className="PodBrowser-circle PodBrowser-circleIndeterminate"
-                              cx={44}
-                              cy={44}
-                              fill="none"
-                              r={20.2}
-                              strokeWidth={3.6}
-                              style={Object {}}
-                            />
-                          </svg>
-                        </div>
-                      </ForwardRef(CircularProgress)>
-                    </WithStyles(ForwardRef(CircularProgress))>
-                  </div>
-                </ForwardRef(Container)>
-              </WithStyles(ForwardRef(Container))>
-            </Spinner>
-          </Breadcrumbs>
-        </div>
         <ContainerDetails>
           <DrawerContainer
             drawer={
@@ -2029,6 +1951,80 @@ font-display: block;",
               <div
                 className="PodBrowser-drawer-container__content"
               >
+                <Breadcrumbs>
+                  <Spinner>
+                    <WithStyles(ForwardRef(Container))>
+                      <ForwardRef(Container)
+                        classes={
+                          Object {
+                            "disableGutters": "PodBrowser-disableGutters",
+                            "fixed": "PodBrowser-fixed",
+                            "maxWidthLg": "PodBrowser-maxWidthLg",
+                            "maxWidthMd": "PodBrowser-maxWidthMd",
+                            "maxWidthSm": "PodBrowser-maxWidthSm",
+                            "maxWidthXl": "PodBrowser-maxWidthXl",
+                            "maxWidthXs": "PodBrowser-maxWidthXs",
+                            "root": "PodBrowser-root",
+                          }
+                        }
+                      >
+                        <div
+                          className="PodBrowser-root PodBrowser-maxWidthLg"
+                        >
+                          <WithStyles(ForwardRef(CircularProgress))
+                            className="PodBrowser-MuiCicularProgress-root"
+                            color="primary"
+                          >
+                            <ForwardRef(CircularProgress)
+                              className="PodBrowser-MuiCicularProgress-root"
+                              classes={
+                                Object {
+                                  "circle": "PodBrowser-circle",
+                                  "circleDisableShrink": "PodBrowser-circleDisableShrink",
+                                  "circleIndeterminate": "PodBrowser-circleIndeterminate",
+                                  "circleStatic": "PodBrowser-circleStatic",
+                                  "colorPrimary": "PodBrowser-colorPrimary",
+                                  "colorSecondary": "PodBrowser-colorSecondary",
+                                  "indeterminate": "PodBrowser-indeterminate",
+                                  "root": "PodBrowser-root",
+                                  "static": "PodBrowser-static",
+                                  "svg": "PodBrowser-svg",
+                                }
+                              }
+                              color="primary"
+                            >
+                              <div
+                                className="PodBrowser-root PodBrowser-MuiCicularProgress-root PodBrowser-colorPrimary PodBrowser-indeterminate"
+                                role="progressbar"
+                                style={
+                                  Object {
+                                    "height": 40,
+                                    "width": 40,
+                                  }
+                                }
+                              >
+                                <svg
+                                  className="PodBrowser-svg"
+                                  viewBox="22 22 44 44"
+                                >
+                                  <circle
+                                    className="PodBrowser-circle PodBrowser-circleIndeterminate"
+                                    cx={44}
+                                    cy={44}
+                                    fill="none"
+                                    r={20.2}
+                                    strokeWidth={3.6}
+                                    style={Object {}}
+                                  />
+                                </svg>
+                              </div>
+                            </ForwardRef(CircularProgress)>
+                          </WithStyles(ForwardRef(CircularProgress))>
+                        </div>
+                      </ForwardRef(Container)>
+                    </WithStyles(ForwardRef(Container))>
+                  </Spinner>
+                </Breadcrumbs>
                 <table
                   className="PodBrowser-table"
                   role="table"
@@ -4138,84 +4134,6 @@ font-display: block;",
             </div>
           </PageHeader>
         </PageHeader>
-        <div
-          className="PodBrowser-container"
-        >
-          <Breadcrumbs>
-            <Spinner>
-              <WithStyles(ForwardRef(Container))>
-                <ForwardRef(Container)
-                  classes={
-                    Object {
-                      "disableGutters": "PodBrowser-disableGutters",
-                      "fixed": "PodBrowser-fixed",
-                      "maxWidthLg": "PodBrowser-maxWidthLg",
-                      "maxWidthMd": "PodBrowser-maxWidthMd",
-                      "maxWidthSm": "PodBrowser-maxWidthSm",
-                      "maxWidthXl": "PodBrowser-maxWidthXl",
-                      "maxWidthXs": "PodBrowser-maxWidthXs",
-                      "root": "PodBrowser-root",
-                    }
-                  }
-                >
-                  <div
-                    className="PodBrowser-root PodBrowser-maxWidthLg"
-                  >
-                    <WithStyles(ForwardRef(CircularProgress))
-                      className="PodBrowser-MuiCicularProgress-root"
-                      color="primary"
-                    >
-                      <ForwardRef(CircularProgress)
-                        className="PodBrowser-MuiCicularProgress-root"
-                        classes={
-                          Object {
-                            "circle": "PodBrowser-circle",
-                            "circleDisableShrink": "PodBrowser-circleDisableShrink",
-                            "circleIndeterminate": "PodBrowser-circleIndeterminate",
-                            "circleStatic": "PodBrowser-circleStatic",
-                            "colorPrimary": "PodBrowser-colorPrimary",
-                            "colorSecondary": "PodBrowser-colorSecondary",
-                            "indeterminate": "PodBrowser-indeterminate",
-                            "root": "PodBrowser-root",
-                            "static": "PodBrowser-static",
-                            "svg": "PodBrowser-svg",
-                          }
-                        }
-                        color="primary"
-                      >
-                        <div
-                          className="PodBrowser-root PodBrowser-MuiCicularProgress-root PodBrowser-colorPrimary PodBrowser-indeterminate"
-                          role="progressbar"
-                          style={
-                            Object {
-                              "height": 40,
-                              "width": 40,
-                            }
-                          }
-                        >
-                          <svg
-                            className="PodBrowser-svg"
-                            viewBox="22 22 44 44"
-                          >
-                            <circle
-                              className="PodBrowser-circle PodBrowser-circleIndeterminate"
-                              cx={44}
-                              cy={44}
-                              fill="none"
-                              r={20.2}
-                              strokeWidth={3.6}
-                              style={Object {}}
-                            />
-                          </svg>
-                        </div>
-                      </ForwardRef(CircularProgress)>
-                    </WithStyles(ForwardRef(CircularProgress))>
-                  </div>
-                </ForwardRef(Container)>
-              </WithStyles(ForwardRef(Container))>
-            </Spinner>
-          </Breadcrumbs>
-        </div>
         <ContainerDetails>
           <DrawerContainer
             drawer={
@@ -4231,6 +4149,80 @@ font-display: block;",
               <div
                 className="PodBrowser-drawer-container__content"
               >
+                <Breadcrumbs>
+                  <Spinner>
+                    <WithStyles(ForwardRef(Container))>
+                      <ForwardRef(Container)
+                        classes={
+                          Object {
+                            "disableGutters": "PodBrowser-disableGutters",
+                            "fixed": "PodBrowser-fixed",
+                            "maxWidthLg": "PodBrowser-maxWidthLg",
+                            "maxWidthMd": "PodBrowser-maxWidthMd",
+                            "maxWidthSm": "PodBrowser-maxWidthSm",
+                            "maxWidthXl": "PodBrowser-maxWidthXl",
+                            "maxWidthXs": "PodBrowser-maxWidthXs",
+                            "root": "PodBrowser-root",
+                          }
+                        }
+                      >
+                        <div
+                          className="PodBrowser-root PodBrowser-maxWidthLg"
+                        >
+                          <WithStyles(ForwardRef(CircularProgress))
+                            className="PodBrowser-MuiCicularProgress-root"
+                            color="primary"
+                          >
+                            <ForwardRef(CircularProgress)
+                              className="PodBrowser-MuiCicularProgress-root"
+                              classes={
+                                Object {
+                                  "circle": "PodBrowser-circle",
+                                  "circleDisableShrink": "PodBrowser-circleDisableShrink",
+                                  "circleIndeterminate": "PodBrowser-circleIndeterminate",
+                                  "circleStatic": "PodBrowser-circleStatic",
+                                  "colorPrimary": "PodBrowser-colorPrimary",
+                                  "colorSecondary": "PodBrowser-colorSecondary",
+                                  "indeterminate": "PodBrowser-indeterminate",
+                                  "root": "PodBrowser-root",
+                                  "static": "PodBrowser-static",
+                                  "svg": "PodBrowser-svg",
+                                }
+                              }
+                              color="primary"
+                            >
+                              <div
+                                className="PodBrowser-root PodBrowser-MuiCicularProgress-root PodBrowser-colorPrimary PodBrowser-indeterminate"
+                                role="progressbar"
+                                style={
+                                  Object {
+                                    "height": 40,
+                                    "width": 40,
+                                  }
+                                }
+                              >
+                                <svg
+                                  className="PodBrowser-svg"
+                                  viewBox="22 22 44 44"
+                                >
+                                  <circle
+                                    className="PodBrowser-circle PodBrowser-circleIndeterminate"
+                                    cx={44}
+                                    cy={44}
+                                    fill="none"
+                                    r={20.2}
+                                    strokeWidth={3.6}
+                                    style={Object {}}
+                                  />
+                                </svg>
+                              </div>
+                            </ForwardRef(CircularProgress)>
+                          </WithStyles(ForwardRef(CircularProgress))>
+                        </div>
+                      </ForwardRef(Container)>
+                    </WithStyles(ForwardRef(Container))>
+                  </Spinner>
+                </Breadcrumbs>
                 <table
                   className="PodBrowser-table"
                   role="table"

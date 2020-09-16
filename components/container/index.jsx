@@ -87,7 +87,6 @@ function Container({ iri }) {
     }));
   }, [resourceIris]);
 
-  // TODO fix typescript errors below.
   const {
     getTableProps,
     getTableBodyProps,
@@ -112,10 +111,8 @@ function Container({ iri }) {
   return (
     <>
       <PageHeader mutate={mutate} resourceList={data} />
-      <div className={clsx(bem("container"), bem("container-breadcrumbs"))}>
-        <Breadcrumbs />
-      </div>
       <ContainerDetails mutate={mutate}>
+        <Breadcrumbs />
         <table className={clsx(bem("table"))} {...getTableProps()}>
           <thead className={bem("table__header")}>
             {headerGroups.map((headerGroup) => (

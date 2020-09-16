@@ -19,7 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as ReactUtils from "react";
 import { mount } from "enzyme";
 import { mountToJson, WithTheme } from "../../__testUtils/mountWithTheme";
 import defaultTheme from "../../src/theme";
@@ -28,8 +27,6 @@ import Breadcrumbs from "./index";
 
 describe("Breadcrumbs view", () => {
   test("Renders a breadcrumbs view", () => {
-    jest.spyOn(ReactUtils, "useLayoutEffect").mockImplementation(() => {});
-
     const tree = mountToJson(
       <PodLocationProvider currentUri="https://www.mypodbrowser.com">
         <Breadcrumbs />
@@ -39,8 +36,6 @@ describe("Breadcrumbs view", () => {
   });
 
   test("Renders a breadcrumbs view with breadcrumbs based on url slashes", () => {
-    jest.spyOn(ReactUtils, "useLayoutEffect").mockImplementation(() => {});
-
     const tree = mountToJson(
       <PodLocationProvider currentUri="https://www.mypodbrowser.com/some/location">
         <Breadcrumbs />
@@ -50,8 +45,6 @@ describe("Breadcrumbs view", () => {
   });
 
   test("Renders last breadcrumb as plain text", () => {
-    jest.spyOn(ReactUtils, "useLayoutEffect").mockImplementation(() => {});
-
     const tree = mount(
       <WithTheme theme={defaultTheme}>
         <PodLocationProvider currentUri="https://www.mypodbrowser.com/some/location">
@@ -68,8 +61,6 @@ describe("Breadcrumbs view", () => {
   });
 
   test("Displays current folder as crumb in breadcrumbs", () => {
-    jest.spyOn(ReactUtils, "useLayoutEffect").mockImplementation(() => {});
-
     const tree = mount(
       <WithTheme theme={defaultTheme}>
         <PodLocationProvider currentUri="https://www.mypodbrowser.com/some/location">
