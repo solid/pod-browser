@@ -30,6 +30,8 @@ export const defaultAlertContext = {
   setAlertOpen: () => false,
   setMessage: () => "",
   setSeverity: () => "success",
+  alertSuccess: () => {},
+  alertError: () => {},
 };
 const AlertContext = createContext(defaultAlertContext);
 
@@ -37,16 +39,28 @@ function AlertProvider({ children }) {
   const [alertOpen, setAlertOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState("success");
+  const alertSuccess = (msg) => {
+    setSeverity("success");
+    setMessage(msg);
+    setAlertOpen(true);
+  };
+  const alertError = (msg) => {
+    setSeverity("error");
+    setMessage(msg);
+    setAlertOpen(true);
+  };
 
   return (
     <AlertContext.Provider
       value={{
+        alertError,
         alertOpen,
+        alertSuccess,
         message,
-        severity,
         setAlertOpen,
         setMessage,
         setSeverity,
+        severity,
       }}
     >
       {children}
@@ -55,11 +69,7 @@ function AlertProvider({ children }) {
 }
 
 AlertProvider.propTypes = {
-  children: T.node,
-};
-
-AlertProvider.defaultProps = {
-  children: null,
+  children: T.node.isRequired,
 };
 
 export { AlertProvider };
