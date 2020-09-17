@@ -25,14 +25,7 @@ const styles = (theme) => {
   const tableStyles = table.styles(theme);
   return createStyles(theme, ["container", "table", "icons"], {
     table: {
-      ...tableStyles.table,
-      "& tbody": tableStyles.table__body,
-      "& thead": tableStyles.table__header,
-      "& thead tr": tableStyles["table__header-row"],
-      "& thead tr th": tableStyles["table__header-cell"],
-      "& tbody tr": tableStyles["table__body-row"],
       "& tbody td": {
-        ...tableStyles["table__body-cell"],
         "&:first-child": tableStyles["table__body-cell--width-preview"],
       },
     },

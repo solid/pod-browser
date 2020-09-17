@@ -25,7 +25,10 @@ import { Avatar } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { useContext, useState, useEffect } from "react";
-import { PageHeader } from "@inrupt/prism-react-components";
+import {
+  PageHeader,
+  Table as PrismTable,
+} from "@inrupt/prism-react-components";
 import { Table, TableColumn } from "@inrupt/solid-ui-react";
 import { vcard } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";
@@ -49,6 +52,7 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 function ContactsList() {
   useRedirectIfLoggedOut();
 
+  const tableClass = PrismTable.useTableClass("table", "inherits");
   const classes = useStyles();
   const bem = useBem(classes);
   const { menuOpen } = useContext(DetailsMenuContext);
@@ -140,7 +144,7 @@ function ContactsList() {
       <div className={containerClass}>
         <Table
           things={contacts}
-          className={bem("table")}
+          className={clsx(tableClass, bem("table"))}
           // prettier-ignore
           ascIndicator={(
             <>
