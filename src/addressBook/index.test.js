@@ -318,59 +318,6 @@ describe("getPeople", () => {
     expect(person1.internal_url).toEqual(expectedPerson1.webId);
     expect(person2.internal_url).toEqual(expectedPerson2.webId);
   });
-  test("it filters out profiles without a valid WebID", async () => {
-    const containerIri = "https://user.example.com/contacts";
-    const fetch = jest.fn();
-    const expectedPerson1 = {
-      webId: "http://testperson.example.com/profile/card#me",
-    };
-    const expectedPerson2 = {
-      webId: "http://testperson.example.com",
-    };
-    const mockThingPerson1 = solidClientFns.mockThingFrom(
-      expectedPerson1.webId
-    );
-    const mockThingPerson2 = solidClientFns.mockThingFrom(
-      expectedPerson2.webId
-    );
-
-    jest
-      .spyOn(resourceFns, "getResource")
-      .mockResolvedValueOnce({ response: { dataset: "people container" } })
-      .mockResolvedValueOnce({
-        response: mockThingPerson1,
-      })
-      .mockResolvedValueOnce({
-        response: mockThingPerson2,
-      })
-      .mockResolvedValueOnce({
-        response: { dataset: "Profile 1", iri: expectedPerson1.webId },
-      })
-      .mockResolvedValueOnce({
-        response: { dataset: "Profile 2", iri: expectedPerson2.webId },
-      });
-
-    jest
-      .spyOn(solidClientFns, "getUrlAll")
-      .mockReturnValueOnce([
-        "https://example.com/contacts/Person/1234/",
-        "https://example.com/contacts/Person/5678/",
-      ]);
-
-    jest
-      .spyOn(solidClientFns, "addStringNoLocale")
-      .mockReturnValueOnce(mockThingPerson1)
-      .mockReturnValueOnce(mockThingPerson2);
-
-    jest
-      .spyOn(solidClientFns, "getUrl")
-      .mockReturnValueOnce(expectedPerson1.webId)
-      .mockReturnValueOnce(expectedPerson2.webId);
-
-    const { response } = await getPeople(containerIri, fetch);
-
-    expect(response).toHaveLength(1);
-  });
   test("it returns an error if it can't fetch the people container", async () => {
     const containerIri = "https://user.example.com/contacts";
     const fetch = jest.fn();
