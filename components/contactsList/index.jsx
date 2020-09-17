@@ -19,27 +19,19 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import clsx from "clsx";
 import Link from "next/link";
 import { Avatar } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { useContext, useState, useEffect } from "react";
-import { PageHeader } from "@inrupt/prism-react-components";
+import { Container, PageHeader } from "@inrupt/prism-react-components";
 import Spinner from "../spinner";
-import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
-import SessionContext from "../../src/contexts/sessionContext";
 import styles from "./styles";
-import { getResource } from "../../src/solidClientHelpers/resource";
-import { isHTTPError, ERROR_CODES } from "../../src/solidClientHelpers/utils";
-import { fetchProfile } from "../../src/solidClientHelpers/profile";
-import {
-  saveNewAddressBook,
-  contactsContainerIri,
-  getPeople,
-} from "../../src/addressBook";
 
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
+import useAddressBook from "../../src/hooks/useAddressBook";
+import usePeople from "../../src/hooks/usePeople";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -48,80 +40,14 @@ function ContactsList() {
 
   const classes = useStyles();
   const bem = useBem(classes);
-  const { menuOpen } = useContext(DetailsMenuContext);
   const actionClass = PageHeader.actionClassName();
-  const containerClass = clsx(
-    bem("container"),
-    bem("container-view", menuOpen ? "menu-open" : null)
-  );
-  const [loadingContacts, setLoadingContacts] = useState(true);
-  const [addressBook, setAddressBook] = useState();
-  const [addressBookError, setAddressBookError] = useState();
-  const [contacts, setContacts] = useState([]);
-  const { session } = useContext(SessionContext);
-  const {
-    fetch,
-    info: { webId },
-  } = session;
 
-  useEffect(() => {
-    if (!webId || addressBookError || addressBook) return;
+  const [addressBook, addressBookError] = useAddressBook();
+  const [people, peopleError] = usePeople(addressBook);
 
-    (async () => {
-      const { pods } = await fetchProfile(webId, fetch);
-      const contactsIri = contactsContainerIri(pods[0]);
-
-      const {
-        response: existingAddressBook,
-        error: existingError,
-      } = await getResource(contactsIri, fetch);
-
-      if (existingError && !isHTTPError(existingError, ERROR_CODES.NOT_FOUND)) {
-        setLoadingContacts(false);
-        return;
-      }
-
-      if (existingAddressBook) {
-        setAddressBook(existingAddressBook);
-        setLoadingContacts(false);
-        const { response: people, error: peopleError } = await getPeople(
-          contactsIri,
-          fetch
-        );
-        if (peopleError) {
-          setAddressBookError(peopleError);
-          return;
-        }
-
-        setContacts(people);
-
-        return;
-      }
-
-      const { response: newAddressBook, error } = await saveNewAddressBook(
-        {
-          iri: contactsIri,
-          owner: webId,
-        },
-        fetch
-      );
-
-      setAddressBook(newAddressBook);
-      setLoadingContacts(false);
-      setAddressBookError(error);
-    })();
-  }, [
-    webId,
-    setLoadingContacts,
-    setAddressBookError,
-    setAddressBook,
-    fetch,
-    addressBook,
-    addressBookError,
-  ]);
-
-  if (loadingContacts) return <Spinner />;
+  if (!addressBook || !people) return <Spinner />;
   if (addressBookError) return addressBookError;
+  if (peopleError) return peopleError;
 
   return (
     <>
@@ -133,11 +59,11 @@ function ContactsList() {
           </Link>,
         ]}
       />
-      <div className={containerClass}>
+      <Container>
         <table className={bem("table")}>
           <tbody className={bem("table__body")}>
-            {contacts.map(({ name, avatar }) => (
-              <tr className={bem("table__body-row")}>
+            {people.map(({ name, avatar, webId }) => (
+              <tr className={bem("table__body-row")} key={webId}>
                 <td
                   className={clsx(
                     bem("table__body-cell"),
@@ -152,7 +78,7 @@ function ContactsList() {
             ))}
           </tbody>
         </table>
-      </div>
+      </Container>
     </>
   );
 }
