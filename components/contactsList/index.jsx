@@ -28,6 +28,7 @@ import { useContext, useState, useEffect } from "react";
 import { PageHeader } from "@inrupt/prism-react-components";
 import { Table, TableColumn } from "@inrupt/solid-ui-react";
 import { vcard } from "rdf-namespaces";
+import SortedTableCarat from "../sortedTableCarat";
 import Spinner from "../spinner";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 import SessionContext from "../../src/contexts/sessionContext";
@@ -142,17 +143,17 @@ function ContactsList() {
           className={bem("table")}
           // prettier-ignore
           ascIndicator={(
-            <span role="img" aria-label="Sorted in ascending order">
-              {" "}
-              <i className={clsx(bem("icon-caret-up"), bem("table__icon"))} />
-            </span>
+            <>
+              {` `}
+              <SortedTableCarat sorted />
+            </>
           )}
           // prettier-ignore
           descIndicator={(
-            <span role="img" aria-label="Sorted in descending order">
+            <>
               {" "}
-              <i className={clsx(bem("icon-caret-down"), bem("table__icon"))} />
-            </span>
+              <SortedTableCarat sorted sortedDesc />
+            </>
           )}
         >
           <TableColumn
