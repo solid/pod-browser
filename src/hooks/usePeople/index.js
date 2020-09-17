@@ -27,8 +27,9 @@ import { getPeople } from "../../addressBook";
 export default function usePeople(addressBook) {
   const [people, setPeople] = useState(null);
   const [error, setError] = useState(null);
-  const { session } = useContext(SessionContext);
-  const { fetch } = session;
+  const {
+    session: { fetch },
+  } = useContext(SessionContext);
 
   useEffect(() => {
     if (!addressBook) {

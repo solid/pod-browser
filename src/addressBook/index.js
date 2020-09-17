@@ -116,7 +116,13 @@ export async function getPeople(containerIri, fetch) {
     fetch
   );
 
-  if (peopleError) return error(peopleError);
+  if (peopleError && isHTTPError(peopleError, ERROR_CODES.NOT_FOUND)) {
+    // temporary solution to allow loading contacts page when /contacts/Person isn't created yet
+    return respond([]);
+  }
+  if (peopleError) {
+    return error(peopleError);
+  }
 
   const peopleIris = getUrlAll(
     peopleResponse.dataset,

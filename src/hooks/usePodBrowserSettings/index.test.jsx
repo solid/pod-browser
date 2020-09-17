@@ -22,8 +22,8 @@
 import { renderHook } from "@testing-library/react-hooks";
 import mockSession, {
   mockUnauthenticatedSession,
-  profile,
-  webId,
+  profileTurtle,
+  webIdUrl,
 } from "../../../__testUtils/mockSession";
 import usePodBrowserSettings from "./index";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
@@ -42,7 +42,7 @@ describe("usePodBrowserSettings", () => {
     it("should return a dataset for pod browser settings", async () => {
       const session = mockSession({
         fetch: mockFetch({
-          [webId]: () => mockResponse(200, profile),
+          [webIdUrl]: () => mockResponse(200, profileTurtle),
           [settingsUrl]: () => mockResponse(200, podBrowserPrefs),
         }),
       });

@@ -1,0 +1,23 @@
+@prefix ldp: <http://www.w3.org/ns/ldp#>.
+@prefix terms: <http://purl.org/dc/terms/>.
+@prefix vnd: <http://www.w3.org/ns/iana/media-types/image/vnd.microsoft.icon#>.
+@prefix pl: <http://www.w3.org/ns/iana/media-types/text/plain#>.
+
+<> a ldp:BasicContainer, ldp:Container;
+   ldp:contains
+     </.well-known/>,
+     </contacts/>,
+     </favicon.ico>,
+     </inbox/>,
+     </profile/>,
+     </public/>,
+     </robots.txt>,
+     </settings/> .
+</.well-known/> a ldp:BasicContainer, ldp:Container, ldp:Resource .
+</contacts/> a ldp:BasicContainer, ldp:Container, ldp:Resource .
+</favicon.ico> a vnd:Resource, ldp:Resource .
+</inbox/> a ldp:BasicContainer, ldp:Container, ldp:Resource .
+</profile/> a ldp:BasicContainer, ldp:Container, ldp:Resource .
+</public/> a ldp:BasicContainer, ldp:Container, ldp:Resource .
+</robots.txt> a pl:Resource, ldp:Resource .
+</settings/> a ldp:BasicContainer, ldp:Container, ldp:Resource .

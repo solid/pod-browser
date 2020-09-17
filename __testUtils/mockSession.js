@@ -20,18 +20,19 @@
  */
 
 import mockFetch from "./mockFetch";
-
-import profile from "./mocks/profile.ttl";
-import storageAclTtl from "./mocks/storageAcl.ttl";
 import mockResponse from "./mockResponse";
 
-export const webId = "http://example.com/webId#me";
-export const storage = "http://example.com/";
-export const storageAcl = "http://example.com/.acl";
-export const anotherUsersStorage = "http://anotheruser.com/";
-export const anotherUsersStorageAcl = "http://anotheruser.com/.acl";
+import profileTurtle from "./mocks/profile.ttl";
+import storageTurtle from "./mocks/podRoot.ttl";
+import storageAclTurtle from "./mocks/storageAcl.ttl";
 
-export { profile };
+export const webIdUrl = "http://example.com/webId#me";
+export const storageUrl = "http://example.com/";
+export const storageAclUrl = "http://example.com/.acl";
+export const anotherUsersStorageUrl = "http://anotheruser.com/";
+export const anotherUsersStorageAclUrl = "http://anotheruser.com/.acl";
+
+export { profileTurtle };
 
 export default function mockSession(options = {}) {
   // this instance is a normal, authenticated session
@@ -39,17 +40,17 @@ export default function mockSession(options = {}) {
   // consider naming it and create a reusable mock function
   return {
     fetch: mockFetch({
-      [webId]: () => mockResponse(200, profile),
-      [storage]: () =>
-        mockResponse(200, "", {
-          Link: `<${storageAcl}>; rel="acl"`,
+      [webIdUrl]: () => mockResponse(200, profileTurtle),
+      [storageUrl]: () =>
+        mockResponse(200, storageTurtle, {
+          Link: `<${storageAclUrl}>; rel="acl"`,
         }),
-      [storageAcl]: () => mockResponse(200, storageAclTtl),
+      [storageAclUrl]: () => mockResponse(200, storageAclTurtle),
     }),
     info: {
       isLoggedIn: true,
       sessionId: "some-session-id",
-      webId,
+      webId: webIdUrl,
     }, // add more properties as needed
     ...options,
   }; // add more properties as needed
@@ -71,17 +72,17 @@ export function mockUnauthenticatedSession() {
 export function mockAuthenticatedSessionWithNoAccessToPod() {
   return {
     fetch: mockFetch({
-      [webId]: () => mockResponse(200, profile),
-      [storage]: () =>
+      [webIdUrl]: () => mockResponse(200, profileTurtle),
+      [storageUrl]: () =>
         mockResponse(200, "", {
-          Link: `<${storageAcl}>; rel="acl"`,
+          Link: `<${storageAclUrl}>; rel="acl"`,
         }),
-      [storageAcl]: () => mockResponse(401),
+      [storageAclUrl]: () => mockResponse(401),
     }),
     info: {
       isLoggedIn: true,
       sessionId: "some-session-id",
-      webId,
+      webId: webIdUrl,
     },
   };
 }
@@ -89,17 +90,17 @@ export function mockAuthenticatedSessionWithNoAccessToPod() {
 export function mockAuthenticatedSessionWithNoAccessToAnotherUsersPod() {
   return {
     fetch: mockFetch({
-      [webId]: () => mockResponse(200, profile),
-      [anotherUsersStorage]: () =>
+      [webIdUrl]: () => mockResponse(200, profileTurtle),
+      [anotherUsersStorageUrl]: () =>
         mockResponse(200, "", {
-          Link: `<${anotherUsersStorageAcl}>; rel="acl"`,
+          Link: `<${anotherUsersStorageAclUrl}>; rel="acl"`,
         }),
-      [anotherUsersStorageAcl]: () => mockResponse(401),
+      [anotherUsersStorageAclUrl]: () => mockResponse(401),
     }),
     info: {
       isLoggedIn: true,
       sessionId: "some-session-id",
-      webId,
+      webId: webIdUrl,
     },
   };
 }

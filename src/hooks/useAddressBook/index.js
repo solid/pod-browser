@@ -20,7 +20,6 @@
  */
 
 import { useContext, useEffect, useState } from "react";
-import { fetchLitDataset } from "@inrupt/solid-client";
 import SessionContext from "../../contexts/sessionContext";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import { contactsContainerIri, saveNewAddressBook } from "../../addressBook";
@@ -40,8 +39,6 @@ export default function useAddressBook() {
     const contactsIri = contactsContainerIri(pods[0]);
 
     (async () => {
-      let addressBookUri;
-
       const {
         response: existingAddressBook,
         error: existingError,
@@ -52,7 +49,7 @@ export default function useAddressBook() {
         return;
       }
 
-      if (existingError && !isHTTPError(existingError, ERROR_CODES.NOT_FOUND)) {
+      if (existingError && isHTTPError(existingError, ERROR_CODES.NOT_FOUND)) {
         const {
           response: newAddressBook,
           error: newError,
@@ -67,13 +64,10 @@ export default function useAddressBook() {
           setError(newError);
           return;
         }
-        addressBookUri = newAddressBook.iri;
-      } else if (existingError) {
-        setError(existingError);
+        setAddressBook(newAddressBook.index);
         return;
       }
-
-      setAddressBook(await fetchLitDataset(addressBookUri, { fetch }));
+      setError(existingError);
     })();
   }, [session, profile]);
 

@@ -29,10 +29,10 @@ import {
   useRedirectIfNoControlAccessToOwnPod,
 } from "./index";
 import mockSession, {
-  anotherUsersStorage,
+  anotherUsersStorageUrl,
   mockAuthenticatedSessionWithNoAccessToAnotherUsersPod,
   mockAuthenticatedSessionWithNoAccessToPod,
-  storage,
+  storageUrl,
 } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 
@@ -117,7 +117,7 @@ describe("auth effects", () => {
       );
 
       const { waitForNextUpdate } = renderHook(
-        () => useRedirectIfNoControlAccessToOwnPod(storage),
+        () => useRedirectIfNoControlAccessToOwnPod(storageUrl),
         { wrapper }
       );
 
@@ -138,7 +138,7 @@ describe("auth effects", () => {
       );
 
       const { waitForNextUpdate } = renderHook(
-        () => useRedirectIfNoControlAccessToOwnPod(anotherUsersStorage),
+        () => useRedirectIfNoControlAccessToOwnPod(anotherUsersStorageUrl),
         { wrapper }
       );
 
@@ -159,7 +159,7 @@ describe("auth effects", () => {
       );
 
       const { waitForNextUpdate } = renderHook(
-        () => useRedirectIfNoControlAccessToOwnPod(storage),
+        () => useRedirectIfNoControlAccessToOwnPod(storageUrl),
         { wrapper }
       );
 
