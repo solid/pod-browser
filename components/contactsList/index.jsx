@@ -19,13 +19,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import clsx from "clsx";
 import Link from "next/link";
 import { Avatar } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { useContext, useState, useEffect } from "react";
 import {
+  Container,
   PageHeader,
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
@@ -33,19 +34,11 @@ import { Table, TableColumn } from "@inrupt/solid-ui-react";
 import { vcard } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";
 import Spinner from "../spinner";
-import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
-import SessionContext from "../../src/contexts/sessionContext";
 import styles from "./styles";
-import { getResource } from "../../src/solidClientHelpers/resource";
-import { isHTTPError, ERROR_CODES } from "../../src/solidClientHelpers/utils";
-import { fetchProfile } from "../../src/solidClientHelpers/profile";
-import {
-  saveNewAddressBook,
-  contactsContainerIri,
-  getPeople,
-} from "../../src/addressBook";
 
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
+import useAddressBook from "../../src/hooks/useAddressBook";
+import usePeople from "../../src/hooks/usePeople";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -55,81 +48,19 @@ function ContactsList() {
   const tableClass = PrismTable.useTableClass("table", "inherits");
   const classes = useStyles();
   const bem = useBem(classes);
-  const { menuOpen } = useContext(DetailsMenuContext);
   const actionClass = PageHeader.usePageHeaderActionClassName();
-  const containerClass = clsx(
-    bem("container"),
-    bem("container-view", menuOpen ? "menu-open" : null)
-  );
-  const [loadingContacts, setLoadingContacts] = useState(true);
-  const [addressBook, setAddressBook] = useState();
-  const [addressBookError, setAddressBookError] = useState();
-  const [contacts, setContacts] = useState([]);
+
+  const [addressBook, addressBookError] = useAddressBook();
+  const [people, peopleError] = usePeople(addressBook);
+  const isLoading =
+    (!addressBook && !addressBookError) || (!people && !peopleError);
+
+  if (isLoading) return <Spinner />;
+  if (addressBookError) return addressBookError;
+  if (peopleError) return peopleError;
+
   const formattedNamePredicate = vcard.fn;
   const hasPhotoPredicate = vcard.hasPhoto;
-  const { session } = useContext(SessionContext);
-  const {
-    fetch,
-    info: { webId },
-  } = session;
-
-  useEffect(() => {
-    if (!webId || addressBookError || addressBook) return;
-
-    (async () => {
-      const { pods } = await fetchProfile(webId, fetch);
-      const contactsIri = contactsContainerIri(pods[0]);
-
-      const {
-        response: existingAddressBook,
-        error: existingError,
-      } = await getResource(contactsIri, fetch);
-
-      if (existingError && !isHTTPError(existingError, ERROR_CODES.NOT_FOUND)) {
-        setLoadingContacts(false);
-        return;
-      }
-
-      if (existingAddressBook) {
-        setAddressBook(existingAddressBook);
-        const { response: people, error: peopleError } = await getPeople(
-          contactsIri,
-          fetch
-        );
-        if (peopleError) {
-          setAddressBookError(peopleError);
-          return;
-        }
-        setLoadingContacts(false);
-        setContacts(people);
-
-        return;
-      }
-
-      const { response: newAddressBook, error } = await saveNewAddressBook(
-        {
-          iri: contactsIri,
-          owner: webId,
-        },
-        fetch
-      );
-
-      setAddressBook(newAddressBook);
-      setLoadingContacts(false);
-      setAddressBookError(error);
-    })();
-  }, [
-    webId,
-    setLoadingContacts,
-    setAddressBookError,
-    setAddressBook,
-    fetch,
-    addressBook,
-    addressBookError,
-  ]);
-
-  if (loadingContacts) return <Spinner />;
-  if (addressBookError) return addressBookError;
 
   return (
     <>
@@ -141,9 +72,9 @@ function ContactsList() {
           </Link>,
         ]}
       />
-      <div className={containerClass}>
+      <Container>
         <Table
-          things={contacts}
+          things={people}
           className={clsx(tableClass, bem("table"))}
           // prettier-ignore
           ascIndicator={(
@@ -180,7 +111,7 @@ function ContactsList() {
             sortable
           />
         </Table>
-      </div>
+      </Container>
     </>
   );
 }

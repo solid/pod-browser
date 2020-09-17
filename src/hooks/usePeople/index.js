@@ -19,21 +19,35 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles, table } from "@solid/lit-prism-patterns";
+import { useContext, useEffect, useState } from "react";
+import { getSourceUrl } from "@inrupt/solid-client";
+import SessionContext from "../../contexts/sessionContext";
+import { getPeople } from "../../addressBook";
 
-const styles = (theme) => {
-  const tableStyles = table.styles(theme);
-  return createStyles(theme, ["table", "icons"], {
-    table: {
-      "& tbody td": {
-        "&:first-child": tableStyles["table__body-cell--width-preview"],
-      },
-    },
-    avatar: {
-      width: "30px",
-      height: "30px",
-    },
-  });
-};
+export default function usePeople(addressBook) {
+  const [people, setPeople] = useState(null);
+  const [error, setError] = useState(null);
+  const { session } = useContext(SessionContext);
+  const { fetch } = session;
 
-export default styles;
+  useEffect(() => {
+    if (!addressBook) {
+      setPeople(null);
+      return;
+    }
+    const contactsIri = getSourceUrl(addressBook);
+    (async () => {
+      const { response, error: peopleError } = await getPeople(
+        contactsIri,
+        fetch
+      );
+      if (response) {
+        setPeople(response);
+        return;
+      }
+      setError(peopleError);
+    })();
+  }, [fetch, addressBook]);
+
+  return [people, error];
+}
