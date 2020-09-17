@@ -141,7 +141,6 @@ export async function getPeople(containerIri, fetch) {
   const profiles = profileResponses
     .filter(({ error: e }) => !e)
     .map(({ response }) => response)
-    .filter(({ iri }) => iri.includes("/profile/card#me")) // filtering by valid WebId so it doesn't error out if the user entered a contact with an invalid ID
     .map(({ dataset, iri: webId }) => {
       const avatar = getUrl(dataset, vcard.hasPhoto);
       return addStringNoLocale(
