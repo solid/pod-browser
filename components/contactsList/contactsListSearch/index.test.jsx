@@ -19,43 +19,35 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
+import { mountToJson } from "../../../__testUtils/mountWithTheme";
+import { SearchProvider } from "../../../src/contexts/searchContext";
+import ContactsListSearch from "./index";
 import {
-  getSolidDataset,
-  getIriAll,
-  getStringNoLocale,
-  getThing,
-  getUrl,
-  asUrl,
-  getSourceUrl,
-} from "@inrupt/solid-client";
-import { space, vcard, foaf } from "rdf-namespaces";
+  mockPersonDatasetAlice,
+  mockPersonDatasetBob,
+} from "../../../__testUtils/mockPersonResource";
 
-export function displayProfileName({ nickname, name, webId }) {
-  if (name) return name;
-  if (nickname) return nickname;
-  return webId;
-}
+describe("ContactsListSearch", () => {
+  it("renders form if people are still loading", () => {
+    expect(
+      mountToJson(
+        <SearchProvider>
+          <ContactsListSearch />
+        </SearchProvider>
+      )
+    ).toMatchSnapshot();
+  });
 
-export function getProfileFromPersonDataset(dataset) {
-  return {
-    avatar: getUrl(dataset, vcard.hasPhoto),
-    name:
-      getStringNoLocale(dataset, vcard.fn) ||
-      getStringNoLocale(dataset, foaf.name),
-    nickname:
-      getStringNoLocale(dataset, vcard.nickname) ||
-      getStringNoLocale(dataset, foaf.nick),
-    webId: asUrl(dataset),
-  };
-}
-
-export async function fetchProfile(webId, fetch) {
-  const dataset = await getSolidDataset(webId, { fetch });
-  const profile = getThing(dataset, webId);
-  return {
-    ...getProfileFromPersonDataset(dataset),
-    webId: getSourceUrl(dataset),
-    dataset,
-    pods: getIriAll(profile, space.storage),
-  };
-}
+  it("render profiles when people are loaded", () => {
+    expect(
+      mountToJson(
+        <SearchProvider>
+          <ContactsListSearch
+            people={[mockPersonDatasetAlice(), mockPersonDatasetBob()]}
+          />
+        </SearchProvider>
+      )
+    ).toMatchSnapshot();
+  });
+});

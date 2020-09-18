@@ -19,43 +19,30 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import {
-  getSolidDataset,
-  getIriAll,
-  getStringNoLocale,
-  getThing,
-  getUrl,
-  asUrl,
-  getSourceUrl,
-} from "@inrupt/solid-client";
-import { space, vcard, foaf } from "rdf-namespaces";
+import React, { useContext } from "react";
+import { mount } from "enzyme";
+import SearchContext, { SearchProvider } from "./index";
 
-export function displayProfileName({ nickname, name, webId }) {
-  if (name) return name;
-  if (nickname) return nickname;
-  return webId;
+jest.mock("../../hooks/useAuthenticatedProfile");
+jest.mock("../../hooks/usePodRoot");
+
+function ChildComponent() {
+  const { search, setSearch } = useContext(SearchContext);
+  setSearch("bar");
+  return <div id="Search">{search}</div>;
 }
 
-export function getProfileFromPersonDataset(dataset) {
-  return {
-    avatar: getUrl(dataset, vcard.hasPhoto),
-    name:
-      getStringNoLocale(dataset, vcard.fn) ||
-      getStringNoLocale(dataset, foaf.name),
-    nickname:
-      getStringNoLocale(dataset, vcard.nickname) ||
-      getStringNoLocale(dataset, foaf.nick),
-    webId: asUrl(dataset),
-  };
-}
+describe("SearchContext", () => {
+  test("it provides search and setSearch", () => {
+    const search = "foo";
+    const setSearch = jest.fn();
+    const component = mount(
+      <SearchProvider search={search} setSearch={setSearch}>
+        <ChildComponent />
+      </SearchProvider>
+    );
 
-export async function fetchProfile(webId, fetch) {
-  const dataset = await getSolidDataset(webId, { fetch });
-  const profile = getThing(dataset, webId);
-  return {
-    ...getProfileFromPersonDataset(dataset),
-    webId: getSourceUrl(dataset),
-    dataset,
-    pods: getIriAll(profile, space.storage),
-  };
-}
+    expect(component.find("#Search").text()).toEqual(search);
+    expect(setSearch).toHaveBeenCalledWith("bar");
+  });
+});

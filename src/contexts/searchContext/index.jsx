@@ -19,43 +19,30 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import {
-  getSolidDataset,
-  getIriAll,
-  getStringNoLocale,
-  getThing,
-  getUrl,
-  asUrl,
-  getSourceUrl,
-} from "@inrupt/solid-client";
-import { space, vcard, foaf } from "rdf-namespaces";
+import React, { createContext } from "react";
+import T from "prop-types";
 
-export function displayProfileName({ nickname, name, webId }) {
-  if (name) return name;
-  if (nickname) return nickname;
-  return webId;
+const defaultValues = {
+  search: "",
+  setSearch: () => {},
+};
+const SearchContext = createContext(defaultValues);
+
+function SearchProvider({ children, search, setSearch }) {
+  return (
+    <SearchContext.Provider value={{ search, setSearch }}>
+      {children}
+    </SearchContext.Provider>
+  );
 }
 
-export function getProfileFromPersonDataset(dataset) {
-  return {
-    avatar: getUrl(dataset, vcard.hasPhoto),
-    name:
-      getStringNoLocale(dataset, vcard.fn) ||
-      getStringNoLocale(dataset, foaf.name),
-    nickname:
-      getStringNoLocale(dataset, vcard.nickname) ||
-      getStringNoLocale(dataset, foaf.nick),
-    webId: asUrl(dataset),
-  };
-}
+SearchProvider.propTypes = {
+  children: T.node.isRequired,
+  search: T.string,
+  setSearch: T.func,
+};
 
-export async function fetchProfile(webId, fetch) {
-  const dataset = await getSolidDataset(webId, { fetch });
-  const profile = getThing(dataset, webId);
-  return {
-    ...getProfileFromPersonDataset(dataset),
-    webId: getSourceUrl(dataset),
-    dataset,
-    pods: getIriAll(profile, space.storage),
-  };
-}
+SearchProvider.defaultProps = defaultValues;
+
+export { SearchProvider };
+export default SearchContext;

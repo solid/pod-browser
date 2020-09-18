@@ -19,43 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import {
-  getSolidDataset,
-  getIriAll,
-  getStringNoLocale,
-  getThing,
-  getUrl,
-  asUrl,
-  getSourceUrl,
-} from "@inrupt/solid-client";
-import { space, vcard, foaf } from "rdf-namespaces";
-
-export function displayProfileName({ nickname, name, webId }) {
-  if (name) return name;
-  if (nickname) return nickname;
-  return webId;
-}
-
-export function getProfileFromPersonDataset(dataset) {
+export default function styles(theme) {
   return {
-    avatar: getUrl(dataset, vcard.hasPhoto),
-    name:
-      getStringNoLocale(dataset, vcard.fn) ||
-      getStringNoLocale(dataset, foaf.name),
-    nickname:
-      getStringNoLocale(dataset, vcard.nickname) ||
-      getStringNoLocale(dataset, foaf.nick),
-    webId: asUrl(dataset),
-  };
-}
-
-export async function fetchProfile(webId, fetch) {
-  const dataset = await getSolidDataset(webId, { fetch });
-  const profile = getThing(dataset, webId);
-  return {
-    ...getProfileFromPersonDataset(dataset),
-    webId: getSourceUrl(dataset),
-    dataset,
-    pods: getIriAll(profile, space.storage),
+    search: {
+      maxWidth: 450,
+    },
+    searchInput: {
+      background: theme.palette.background.default,
+    },
   };
 }

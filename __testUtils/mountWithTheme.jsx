@@ -19,35 +19,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactNode, ReactElement } from "react";
+import React from "react";
+import T from "prop-types";
 import { mount } from "enzyme";
 import { mountToJson as enzymeMountToJson } from "enzyme-to-json";
-import { PrismTheme } from "@solid/lit-prism-patterns";
 import { StylesProvider, ThemeProvider } from "@inrupt/prism-react-components";
 import defaultTheme from "../src/theme";
 
-interface IWithTheme {
-  theme?: PrismTheme;
-  children: ReactNode;
-}
-
-export const WithTheme = (props: IWithTheme): ReactElement => {
+export const WithTheme = (props) => {
   const { theme, children } = props;
   return (
     <StylesProvider generateClassName={(rule) => `PodBrowser-${rule.key}`}>
-      <ThemeProvider theme={theme!}>{children}</ThemeProvider>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </StylesProvider>
   );
+};
+
+WithTheme.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  theme: T.object,
+  children: T.node.isRequired,
 };
 
 WithTheme.defaultProps = {
   theme: defaultTheme,
 };
 
-export const mountToJson = (
-  children: ReactNode,
-  theme = defaultTheme
-): unknown => {
+export const mountToJson = (children, theme = defaultTheme) => {
   const tree = mount(<WithTheme theme={theme}>{children}</WithTheme>);
   return enzymeMountToJson(tree);
 };

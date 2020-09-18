@@ -5,12 +5,15 @@
 @prefix schem: <http://schema.org/>.
 @prefix sp: <http://www.w3.org/ns/pim/space#>.
 @prefix podRoot: </>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
 
 doc:card a foaf:PersonalProfileDocument; foaf:maker :me; foaf:primaryTopic :me .
 
 :me
     a schem:Person, foaf:Person;
     foaf:name "Test Testersen";
+    foaf:nick "Testy";
+    vcard:hasPhoto </photo.jpg>;
     sp:preferencesFile </settings/prefs.ttl>;
     sp:storage podRoot:;
     solid:account podRoot:;

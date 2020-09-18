@@ -19,11 +19,11 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
 import Link from "next/link";
-import { Avatar } from "@material-ui/core";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { Avatar, createStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import {
   Container,
@@ -39,6 +39,8 @@ import styles from "./styles";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import useAddressBook from "../../src/hooks/useAddressBook";
 import usePeople from "../../src/hooks/usePeople";
+import ContactsListSearch from "./contactsListSearch";
+import { SearchProvider } from "../../src/contexts/searchContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -49,6 +51,7 @@ function ContactsList() {
   const classes = useStyles();
   const bem = useBem(classes);
   const actionClass = PageHeader.usePageHeaderActionClassName();
+  const [search, setSearch] = useState("");
 
   const [addressBook, addressBookError] = useAddressBook();
   const [people, peopleError] = usePeople(addressBook);
@@ -62,6 +65,19 @@ function ContactsList() {
   const formattedNamePredicate = vcard.fn;
   const hasPhotoPredicate = vcard.hasPhoto;
 
+  const ascIndicator = (
+    <>
+      {` `}
+      <SortedTableCarat sorted />
+    </>
+  );
+  const descIndicator = (
+    <>
+      {" "}
+      <SortedTableCarat sorted sortedDesc />
+    </>
+  );
+
   // format things for the data table
   const contacts = people.map((p) => ({
     thing: p,
@@ -69,7 +85,7 @@ function ContactsList() {
   }));
 
   return (
-    <>
+    <SearchProvider setSearch={setSearch}>
       <PageHeader
         title="Contacts"
         actions={[
@@ -77,25 +93,16 @@ function ContactsList() {
             <a className={actionClass}>Add new contact</a>
           </Link>,
         ]}
-      />
+      >
+        <ContactsListSearch people={people} />
+      </PageHeader>
       <Container>
         <Table
           things={contacts}
           className={clsx(tableClass, bem("table"))}
-          // prettier-ignore
-          ascIndicator={(
-            <>
-              {` `}
-              <SortedTableCarat sorted />
-            </>
-          )}
-          // prettier-ignore
-          descIndicator={(
-            <>
-              {" "}
-              <SortedTableCarat sorted sortedDesc />
-            </>
-          )}
+          filter={search}
+          ascIndicator={ascIndicator}
+          descIndicator={descIndicator}
         >
           <TableColumn
             property={hasPhotoPredicate}
@@ -114,11 +121,12 @@ function ContactsList() {
           <TableColumn
             property={formattedNamePredicate}
             header="Name"
+            filterable
             sortable
           />
         </Table>
       </Container>
-    </>
+    </SearchProvider>
   );
 }
 

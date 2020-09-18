@@ -19,9 +19,19 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as solidClientFns from "@inrupt/solid-client";
-import { space, foaf, vcard } from "rdf-namespaces";
-import { displayProfileName, fetchProfile } from "./profile";
+import { getSolidDataset } from "@inrupt/solid-client";
+import {
+  displayProfileName,
+  fetchProfile,
+  getProfileFromPersonDataset,
+} from "./profile";
+import {
+  mockPersonDatasetAlice,
+  mockPersonDatasetBob,
+  mockProfileAlice,
+  mockProfileBob,
+} from "../../__testUtils/mockPersonResource";
+import mockSession, { webIdUrl } from "../../__testUtils/mockSession";
 
 describe("displayProfileName", () => {
   test("with name, displays the name", () => {
@@ -45,56 +55,28 @@ describe("displayProfileName", () => {
 
 describe("fetchProfile", () => {
   it("fetches a profile and its information", async () => {
-    const profileWebId = "https://mypod.myhost.com/profile/card#me";
-    const profileDataset = {};
+    const profileWebId = webIdUrl;
+    const { fetch } = mockSession();
 
-    jest
-      .spyOn(solidClientFns, "getSolidDataset")
-      .mockResolvedValue(profileDataset);
-
-    jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileDataset);
-
-    jest
-      .spyOn(solidClientFns, "getStringNoLocale")
-      .mockResolvedValueOnce(undefined);
-
-    jest
-      .spyOn(solidClientFns, "getStringNoLocale")
-      .mockResolvedValueOnce(undefined);
-
-    jest.spyOn(solidClientFns, "getIri").mockResolvedValueOnce(undefined);
-
-    jest.spyOn(solidClientFns, "getIriAll").mockResolvedValueOnce(undefined);
-
-    const fetch = jest.fn();
     const profile = await fetchProfile(profileWebId, fetch);
+    const dataset = await getSolidDataset(profileWebId, { fetch });
+    expect(profile.webId).toEqual(profileWebId);
+    expect(profile.name).toEqual("Test Testersen");
+    expect(profile.nickname).toEqual("Testy");
+    expect(profile.avatar).toEqual("http://example.com/photo.jpg");
+    expect(profile.pods).toEqual(["http://example.com/"]);
+    expect(profile.dataset).toEqual(dataset);
+  });
+});
 
-    expect(solidClientFns.getSolidDataset).toHaveBeenCalledWith(profileWebId, {
-      fetch,
-    });
-    expect(solidClientFns.getStringNoLocale).toHaveBeenCalledWith(
-      profileDataset,
-      foaf.nick
+describe("getProfileFromPersonDataset", () => {
+  test("it maps people into profiles", async () => {
+    expect(getProfileFromPersonDataset(mockPersonDatasetAlice())).toEqual(
+      mockProfileAlice()
     );
-    expect(solidClientFns.getStringNoLocale).toHaveBeenCalledWith(
-      profileDataset,
-      vcard.fn
+
+    expect(getProfileFromPersonDataset(mockPersonDatasetBob())).toEqual(
+      mockProfileBob()
     );
-    expect(solidClientFns.getIri).toHaveBeenCalledWith(
-      profileDataset,
-      vcard.hasPhoto
-    );
-    expect(solidClientFns.getIriAll).toHaveBeenCalledWith(
-      profileDataset,
-      space.storage
-    );
-    expect(Object.keys(profile)).toEqual([
-      "avatar",
-      "dataset",
-      "name",
-      "nickname",
-      "pods",
-      "webId",
-    ]);
   });
 });
