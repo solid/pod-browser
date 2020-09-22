@@ -841,91 +841,133 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <AccessRequiredPage>
-          <div>
-            <PageHeader
-              title="No access to resource"
-            >
-              <div
-                className="PodBrowser-page-header"
+        <h
+          session={
+            Object {
+              "fetch": [MockFunction],
+              "handleIncomingRedirect": [MockFunction] {
+                "calls": Array [
+                  Array [
+                    "http://localhost/",
+                  ],
+                ],
+                "results": Array [
+                  Object {
+                    "type": "return",
+                    "value": Promise {},
+                  },
+                ],
+              },
+              "info": Object {
+                "isLoggedIn": true,
+                "sessionId": "some-session-id",
+                "webId": "http://example.com/webId#me",
+              },
+              "on": [MockFunction] {
+                "calls": Array [
+                  Array [
+                    "logout",
+                    [Function],
+                  ],
+                ],
+                "results": Array [
+                  Object {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+            }
+          }
+          sessionId="test-session"
+          sessionRequestInProgress={false}
+        >
+          <AccessRequiredPage>
+            <div>
+              <PageHeader
+                title="No access to resource"
               >
-                <h1
-                  className="PodBrowser-page-header__title"
+                <div
+                  className="PodBrowser-page-header"
                 >
-                  No access to resource
-                </h1>
-                <div
-                  className="PodBrowser-page-header__content"
-                />
-                <div
-                  className="PodBrowser-page-header__toolbar"
-                />
-              </div>
-            </PageHeader>
-            <Hero>
-              <div
-                className="PodBrowser-hero"
-              >
-                <h1>
-                  You don’t have access to this resource
-                </h1>
-              </div>
-            </Hero>
-            <Container>
-              <div
-                className="PodBrowser-container"
-              >
-                <Content>
-                  <div
-                    className="PodBrowser-content"
+                  <h1
+                    className="PodBrowser-page-header__title"
                   >
-                    <p>
-                      <strong>
-                        To manage your Trusted Applications:
-                      </strong>
-                    </p>
-                    <ol>
-                      <li>
-                        Log into your Pod.
-                      </li>
-                      <li>
-                        Display your
-                         
-                        <a
-                          href="https://github.com/solid/userguide/blob/master/README.md#preferences"
-                        >
-                          Preferences
-                        </a>
-                        .
-                      </li>
-                      <li>
-                        In the Manage your trusted applications table, against the URL of PodBrowser
-                         
-                        (
+                    No access to resource
+                  </h1>
+                  <div
+                    className="PodBrowser-page-header__content"
+                  />
+                  <div
+                    className="PodBrowser-page-header__toolbar"
+                  />
+                </div>
+              </PageHeader>
+              <Hero>
+                <div
+                  className="PodBrowser-hero"
+                >
+                  <h1>
+                    You don’t have access to this resource
+                  </h1>
+                </div>
+              </Hero>
+              <Container>
+                <div
+                  className="PodBrowser-container"
+                >
+                  <Content>
+                    <div
+                      className="PodBrowser-content"
+                    >
+                      <p>
                         <strong>
-                          http://localhost
+                          To manage your Trusted Applications:
                         </strong>
-                        )
-                        :
-                        <ol>
-                          <li>
-                            Select Read, Write, Append, and Control Access Modes.
-                          </li>
-                          <li>
-                            Click "Update" under Actions.
-                          </li>
-                        </ol>
-                      </li>
-                    </ol>
-                    <p>
-                      You should now be able to access your Pod using the PodBrowser.
-                    </p>
-                  </div>
-                </Content>
-              </div>
-            </Container>
-          </div>
-        </AccessRequiredPage>
+                      </p>
+                      <ol>
+                        <li>
+                          Log into your Pod.
+                        </li>
+                        <li>
+                          Display your
+                           
+                          <a
+                            href="https://github.com/solid/userguide/blob/master/README.md#preferences"
+                          >
+                            Preferences
+                          </a>
+                          .
+                        </li>
+                        <li>
+                          In the Manage your trusted applications table, against the URL of PodBrowser
+                           
+                          (
+                          <strong>
+                            http://localhost
+                          </strong>
+                          )
+                          :
+                          <ol>
+                            <li>
+                              Select Read, Write, Append, and Control Access Modes.
+                            </li>
+                            <li>
+                              Click "Update" under Actions.
+                            </li>
+                          </ol>
+                        </li>
+                      </ol>
+                      <p>
+                        You should now be able to access your Pod using the PodBrowser.
+                      </p>
+                    </div>
+                  </Content>
+                </div>
+              </Container>
+            </div>
+          </AccessRequiredPage>
+        </h>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>

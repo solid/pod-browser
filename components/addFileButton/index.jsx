@@ -22,7 +22,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import T from "prop-types";
 import { overwriteFile } from "@inrupt/solid-client";
-import SessionContext from "../../src/contexts/sessionContext";
+import { useSession } from "@inrupt/solid-ui-react";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import AlertContext from "../../src/contexts/alertContext";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
@@ -146,7 +146,7 @@ export function handleConfirmation({
 }
 
 export default function AddFileButton({ className, onSave, resourceList }) {
-  const { session } = useContext(SessionContext);
+  const { session } = useSession();
   const { fetch } = session;
   const { currentUri } = useContext(PodLocationContext);
   const [isUploading, setIsUploading] = useState(false);

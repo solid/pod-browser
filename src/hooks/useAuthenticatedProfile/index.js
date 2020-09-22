@@ -19,13 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useEffect, useState, useContext } from "react";
-import SessionContext from "../../contexts/sessionContext";
+import { useEffect, useState } from "react";
+import { useSession } from "@inrupt/solid-ui-react";
 import { fetchProfile } from "../../solidClientHelpers/profile";
 
 export default function useAuthenticatedProfile() {
   const [profile, setProfile] = useState(null);
-  const { session } = useContext(SessionContext);
+  const { session } = useSession();
   const { info } = session;
 
   useEffect(() => {

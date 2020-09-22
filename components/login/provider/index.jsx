@@ -19,87 +19,71 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Box, TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
+import { LoginButton } from "@inrupt/solid-ui-react";
 
-import {
-  clearLocalstorage,
-  generateRedirectUrl,
-} from "../../../src/windowHelpers";
+import { generateRedirectUrl } from "../../../src/windowHelpers";
 
 import getIdentityProviders from "../../../constants/provider";
-import SessionContext from "../../../src/contexts/sessionContext";
 import styles from "./styles";
 
 const providers = getIdentityProviders();
 const TESTCAFE_ID_LOGIN_TITLE = "login-title";
 const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
 
-export async function loginWithProvider(providerIri, session) {
-  clearLocalstorage();
-
-  await session.login({
-    oidcIssuer: providerIri,
-    redirectUrl: generateRedirectUrl(""),
-  });
-}
-
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function Provider() {
-  const { session } = useContext(SessionContext);
   const bem = useBem(useStyles());
-  const [providerIri, setProviderIri] = useState();
+  const [providerIri, setProviderIri] = useState("https://inrupt.net");
 
   const onProviderChange = (e, newValue) => {
     setProviderIri(newValue);
   };
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    return loginWithProvider(providerIri, session);
-  };
-
   /* eslint react/jsx-props-no-spreading: 0 */
 
   return (
-    <form onSubmit={handleLogin}>
-      <Box my={2}>
-        <Box mt={2}>
-          <h3 data-testid={TESTCAFE_ID_LOGIN_TITLE}>Log In</h3>
+    <Box my={2}>
+      <Box mt={2}>
+        <h3 data-testid={TESTCAFE_ID_LOGIN_TITLE}>Log In</h3>
 
-          <Autocomplete
-            onChange={onProviderChange}
-            onInputChange={onProviderChange}
-            id="provider-select"
-            freeSolo
-            options={Object.values(providers).map((provider) => provider.iri)}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Select ID provider"
-                margin="normal"
-                variant="outlined"
-                type="url"
-                required
-              />
-            )}
-          />
+        <Autocomplete
+          onChange={onProviderChange}
+          onInputChange={onProviderChange}
+          id="provider-select"
+          freeSolo
+          options={Object.values(providers).map((provider) => provider.iri)}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Select ID provider"
+              margin="normal"
+              variant="outlined"
+              type="url"
+              required
+            />
+          )}
+        />
 
+        <LoginButton
+          oidcIssuer={providerIri}
+          redirectUrl={generateRedirectUrl("")}
+        >
           <button
             data-testid={TESTCAFE_ID_LOGIN_BUTTON}
             type="submit"
             className={bem("button", "primary")}
-            onClick={handleLogin}
           >
             Log In
           </button>
-        </Box>
+        </LoginButton>
       </Box>
-    </form>
+    </Box>
   );
 }

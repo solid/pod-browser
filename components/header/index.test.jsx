@@ -21,7 +21,7 @@
 
 import React from "react";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
-import { SessionContextProvider } from "../../src/contexts/sessionContext";
+import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import Header from "./index";
 import mockSession, {
   mockUnauthenticatedSession,
@@ -31,11 +31,12 @@ describe("Header", () => {
   describe("with user logged in", () => {
     test("renders a header", () => {
       const session = mockSession();
+      const SessionProvider = mockSessionContextProvider(session);
 
       const tree = mountToJson(
-        <SessionContextProvider session={session}>
+        <SessionProvider>
           <Header />
-        </SessionContextProvider>
+        </SessionProvider>
       );
       expect(tree).toMatchSnapshot();
     });
@@ -44,11 +45,12 @@ describe("Header", () => {
   describe("with user logged out", () => {
     test("renders nothing", () => {
       const session = mockUnauthenticatedSession();
+      const SessionProvider = mockSessionContextProvider(session);
 
       const tree = mountToJson(
-        <SessionContextProvider session={session}>
+        <SessionProvider>
           <Header />
-        </SessionContextProvider>
+        </SessionProvider>
       );
 
       expect(tree).toMatchSnapshot();

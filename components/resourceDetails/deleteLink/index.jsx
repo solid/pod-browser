@@ -21,7 +21,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import { deleteFile } from "@inrupt/solid-client";
-import SessionContext from "../../../src/contexts/sessionContext";
+import { useSession } from "@inrupt/solid-ui-react";
 import AlertContext from "../../../src/contexts/alertContext";
 import ConfirmationDialogContext from "../../../src/contexts/confirmationDialogContext";
 
@@ -78,7 +78,7 @@ export function handleDeleteResource({
 /* eslint react/prop-types: 0 */
 export default React.forwardRef(
   ({ name, resourceIri, onDelete, onDeleteError, ...linkProps }, ref) => {
-    const { session } = useContext(SessionContext);
+    const { session } = useSession();
     const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
     const { fetch } = session;
     const [confirmationSetup, setConfirmationSetup] = useState(false);

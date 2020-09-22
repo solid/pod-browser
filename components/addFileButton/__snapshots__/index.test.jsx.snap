@@ -4,29 +4,48 @@ exports[`AddFileButton Renders an add file button 1`] = `
 <PodLocationProvider
   currentUri="https://www.mypodbrowser.com/"
 >
-  <AddFileButton
-    className={null}
-    onSave={[MockFunction]}
-    resourceList={Array []}
-  >
-    <label
-      className={null}
-      data-testid="upload-file-button"
-      disabled={false}
-    >
-      Upload File
-      <input
-        data-testid="upload-file-input"
-        onChange={[Function]}
-        onClick={[Function]}
-        style={
-          Object {
-            "display": "none",
-          }
+  <MockedSessionContextProvider>
+    <h
+      session={
+        Object {
+          "fetch": [MockFunction],
+          "handleIncomingRedirect": [MockFunction],
+          "info": Object {
+            "isLoggedIn": true,
+            "sessionId": "some-session-id",
+            "webId": "http://example.com/webId#me",
+          },
+          "on": [MockFunction],
         }
-        type="file"
-      />
-    </label>
-  </AddFileButton>
+      }
+      sessionId="test-session"
+      sessionRequestInProgress={false}
+    >
+      <AddFileButton
+        className={null}
+        onSave={[MockFunction]}
+        resourceList={Array []}
+      >
+        <label
+          className={null}
+          data-testid="upload-file-button"
+          disabled={false}
+        >
+          Upload File
+          <input
+            data-testid="upload-file-input"
+            onChange={[Function]}
+            onClick={[Function]}
+            style={
+              Object {
+                "display": "none",
+              }
+            }
+            type="file"
+          />
+        </label>
+      </AddFileButton>
+    </h>
+  </MockedSessionContextProvider>
 </PodLocationProvider>
 `;

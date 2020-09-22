@@ -19,13 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useSession } from "@inrupt/solid-ui-react";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import { getOrCreateSettings } from "../../solidClientHelpers/settings";
-import SessionProvider from "../../contexts/sessionContext";
 
 export default function usePodBrowserSettings() {
-  const { session } = useContext(SessionProvider);
+  const { session } = useSession();
   const profileInfo = useAuthenticatedProfile();
   const [settings, setSettings] = useState(null);
 

@@ -841,41 +841,83 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <MainNav
-          className=""
+        <h
+          session={
+            Object {
+              "fetch": [Function],
+              "handleIncomingRedirect": [MockFunction] {
+                "calls": Array [
+                  Array [
+                    "http://localhost/",
+                  ],
+                ],
+                "results": Array [
+                  Object {
+                    "type": "return",
+                    "value": Promise {},
+                  },
+                ],
+              },
+              "info": Object {
+                "isLoggedIn": false,
+                "sessionId": null,
+                "webId": null,
+              },
+              "on": [MockFunction] {
+                "calls": Array [
+                  Array [
+                    "logout",
+                    [Function],
+                  ],
+                ],
+                "results": Array [
+                  Object {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+            }
+          }
+          sessionId="test-session"
+          sessionRequestInProgress={false}
         >
-          <nav
-            className="PodBrowser-main-nav"
+          <MainNav
+            className=""
           >
-            <ul
-              className="PodBrowser-main-nav__list"
+            <nav
+              className="PodBrowser-main-nav"
             >
-              <li
-                className="PodBrowser-main-nav__item"
+              <ul
+                className="PodBrowser-main-nav__list"
               >
-                <Link
-                  href="/"
+                <li
+                  className="PodBrowser-main-nav__item"
                 >
-                  <a
-                    className="PodBrowser-main-nav__link"
+                  <Link
                     href="/"
-                    onClick={[Function]}
-                    onMouseEnter={[Function]}
                   >
-                    <i
-                      className="PodBrowser-icon-home PodBrowser-main-nav__icon"
-                    />
-                    <span
-                      className="PodBrowser-main-nav__label"
+                    <a
+                      className="PodBrowser-main-nav__link"
+                      href="/"
+                      onClick={[Function]}
+                      onMouseEnter={[Function]}
                     >
-                      Home
-                    </span>
-                  </a>
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        </MainNav>
+                      <i
+                        className="PodBrowser-icon-home PodBrowser-main-nav__icon"
+                      />
+                      <span
+                        className="PodBrowser-main-nav__label"
+                      >
+                        Home
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          </MainNav>
+        </h>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>

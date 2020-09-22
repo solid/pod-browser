@@ -33,10 +33,7 @@ jest.mock("next/router");
 describe("Access Required page", () => {
   test("with profile that has access to Pod", () => {
     const session = mockSession();
-    const SessionProvider = mockSessionContextProvider({
-      session,
-      isLoadingSession: false,
-    });
+    const SessionProvider = mockSessionContextProvider(session);
 
     const snapshot = mountToJson(
       <SessionProvider>
@@ -48,10 +45,7 @@ describe("Access Required page", () => {
 
   test("unauthenticated profile is redirected to login", () => {
     const session = mockUnauthenticatedSession();
-    const SessionProvider = mockSessionContextProvider({
-      session,
-      isLoadingSession: false,
-    });
+    const SessionProvider = mockSessionContextProvider(session);
 
     Router.push.mockResolvedValue(null);
 

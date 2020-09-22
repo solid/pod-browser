@@ -21,7 +21,7 @@
 
 /* eslint-disable camelcase, no-console, react/forbid-prop-types */
 
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import T from "prop-types";
 import { useRouter } from "next/router";
 import {
@@ -42,7 +42,7 @@ import {
   getResourceAcl,
   getAgentDefaultAccess,
 } from "@inrupt/solid-client";
-import SessionContext from "../../../src/contexts/sessionContext";
+import { useSession } from "@inrupt/solid-ui-react";
 import { resourceContextRedirect } from "../../resourceLink";
 import { fetchProfile } from "../../../src/solidClientHelpers/profile";
 import {
@@ -245,7 +245,7 @@ function ResourceSharing({
   defaultPermissions,
   dataset,
 }) {
-  const { session } = useContext(SessionContext);
+  const { session } = useSession();
   const {
     fetch,
     info: { webId },

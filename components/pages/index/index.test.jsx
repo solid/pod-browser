@@ -26,7 +26,7 @@ import Router, * as nextRouterFns from "next/router";
 
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import { useFetchPodIrisFromWebId } from "../../../src/hooks/solidClient";
-import { SessionContextProvider } from "../../../src/contexts/sessionContext";
+import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import { resourceHref } from "../../resourceLink";
 import IndexPage from "./index";
 import mockSession from "../../../__testUtils/mockSession";
@@ -48,6 +48,7 @@ describe("Index page", () => {
 
   test("Renders null if there are no pod iris", () => {
     const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
 
     nextRouterFns.useRouter.mockReturnValue({
       replace: jest.fn().mockResolvedValue(undefined),
@@ -58,9 +59,9 @@ describe("Index page", () => {
     });
 
     const tree = mount(
-      <SessionContextProvider session={session}>
+      <SessionProvider>
         <IndexPage />
-      </SessionContextProvider>
+      </SessionProvider>
     );
     expect(mountToJson(tree)).toMatchSnapshot();
   });
@@ -69,13 +70,14 @@ describe("Index page", () => {
     const replace = jest.fn().mockResolvedValue(undefined);
 
     const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
 
     nextRouterFns.useRouter.mockReturnValue({ replace });
 
     mount(
-      <SessionContextProvider session={session}>
+      <SessionProvider>
         <IndexPage />
-      </SessionContextProvider>
+      </SessionProvider>
     );
 
     expect(replace).toHaveBeenCalledWith(

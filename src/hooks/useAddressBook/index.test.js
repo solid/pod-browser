@@ -41,7 +41,7 @@ describe("useAddressBook", () => {
   describe("with an unauthenticated user", () => {
     it("should not return any addressBook", () => {
       const session = mockUnauthenticatedSession();
-      const wrapper = mockSessionContextProvider({ session });
+      const wrapper = mockSessionContextProvider(session);
       const { result } = renderHook(() => useAddressBook(), {
         wrapper,
       });
@@ -56,7 +56,7 @@ describe("useAddressBook", () => {
     describe("with an existing address book", () => {
       beforeEach(() => {
         session = mockSession();
-        wrapper = mockSessionContextProvider({ session });
+        wrapper = mockSessionContextProvider(session);
       });
 
       it("should call getResource", async () => {
@@ -99,7 +99,7 @@ describe("useAddressBook", () => {
     describe("with address book missing", () => {
       beforeEach(() => {
         session = mockSession();
-        wrapper = mockSessionContextProvider({ session });
+        wrapper = mockSessionContextProvider(session);
         getResource.mockResolvedValue({ response: null, error: "404" });
       });
 

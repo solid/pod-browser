@@ -19,43 +19,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React from "react";
 import T from "prop-types";
-import { hardRedirect, clearLocalstorage } from "../../src/windowHelpers";
-import SessionProvider from "../../src/contexts/sessionContext";
+import { LogoutButton } from "@inrupt/solid-ui-react";
+import { hardRedirect } from "../../src/windowHelpers";
 
 const TESTCAFE_ID_LOGOUT_BUTTON = "logout-button";
 
-export function onLogOutClick(session) {
-  return async function logout(e) {
-    e.preventDefault();
-    await session.logout();
-    clearLocalstorage();
-    hardRedirect("/login");
-  };
-}
-
-export default function LogOut({ children, className }) {
-  const { session } = useContext(SessionProvider);
-
+export default function Logout({ children, className }) {
   return (
-    <button
-      data-testid={TESTCAFE_ID_LOGOUT_BUTTON}
-      onClick={onLogOutClick(session)}
-      className={className}
-      type="button"
-    >
-      {children}
-    </button>
+    <LogoutButton onLogout={() => hardRedirect("/login")}>
+      <button
+        data-testid={TESTCAFE_ID_LOGOUT_BUTTON}
+        className={className}
+        type="button"
+      >
+        {children}
+      </button>
+    </LogoutButton>
   );
 }
 
-LogOut.propTypes = {
+Logout.propTypes = {
   children: T.node,
   className: T.string,
 };
 
-LogOut.defaultProps = {
+Logout.defaultProps = {
   children: null,
   className: null,
 };

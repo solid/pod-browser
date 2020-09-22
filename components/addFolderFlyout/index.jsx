@@ -23,6 +23,7 @@ import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { createContainerAt } from "@inrupt/solid-client";
 import { makeStyles } from "@material-ui/core/styles";
+import { useSession } from "@inrupt/solid-ui-react";
 import {
   Popover,
   Button,
@@ -31,7 +32,6 @@ import {
   Input,
   InputLabel,
 } from "@material-ui/core";
-import SessionContext from "../../src/contexts/sessionContext";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import AlertContext from "../../src/contexts/alertContext";
 
@@ -124,8 +124,11 @@ export default function AddFolderFlyout({ onSave, className, resourceList }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { currentUri } = useContext(PodLocationContext);
   const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
-  const { session } = useContext(SessionContext);
-  const { fetch } = session;
+
+  const {
+    session: { fetch },
+  } = useSession();
+
   const folders =
     resourceList && resourceList.filter((el) => el.iri.endsWith("/"));
   const handleClick = (event) => {

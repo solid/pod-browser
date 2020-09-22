@@ -23,7 +23,7 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint @typescript-eslint/no-explicit-any: 0 */
-import React, { ComponentType, ReactElement, useEffect, useState } from "react";
+import React, { ComponentType, ReactElement, useEffect } from "react";
 import * as Sentry from "@sentry/node";
 
 import PropTypes from "prop-types";
@@ -34,6 +34,7 @@ import { create } from "jss";
 import preset from "jss-preset-default";
 
 import { appLayout, useBem } from "@solid/lit-prism-patterns";
+import { SessionProvider } from "@inrupt/solid-ui-react";
 import {
   createStyles,
   makeStyles,
@@ -42,13 +43,7 @@ import {
   ThemeProvider,
 } from "@inrupt/prism-react-components";
 
-import {
-  Session,
-  getClientAuthenticationWithDependencies,
-} from "@inrupt/solid-client-authn-browser";
-
 import theme from "../src/theme";
-import SessionContext from "../src/contexts/sessionContext";
 import { AlertProvider } from "../src/contexts/alertContext";
 import { ConfirmationDialogProvider } from "../src/contexts/confirmationDialogContext";
 import Notification from "../components/notification";
@@ -77,14 +72,6 @@ const useStyles = makeStyles(() =>
   createStyles(appLayout.styles(theme) as StyleRules)
 );
 
-// Generate an app-level session.
-const session = new Session(
-  {
-    clientAuthentication: getClientAuthenticationWithDependencies({}),
-  },
-  "pod-browser"
-);
-
 export function hasSolidAuthClientHash(): boolean {
   if (typeof window === "undefined") {
     return false;
@@ -100,7 +87,6 @@ export function hasSolidAuthClientHash(): boolean {
 export default function App(props: AppProps): ReactElement {
   const { Component, pageProps } = props;
   const bem = useBem(useStyles());
-  const [isLoadingSession, setIsLoadingSession] = useState(true);
 
   useEffect(() => {
     // Remove injected serverside JSS
@@ -109,15 +95,6 @@ export default function App(props: AppProps): ReactElement {
     if (jssStyles && jssStyles.parentElement) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
-
-    session
-      .handleIncomingRedirect(window.location.href)
-      .then(() => {
-        setIsLoadingSession(false);
-      })
-      .catch((error: Error) => {
-        throw error;
-      });
   }, []);
 
   return (
@@ -132,12 +109,7 @@ export default function App(props: AppProps): ReactElement {
 
       <StylesProvider jss={jss}>
         <ThemeProvider theme={theme}>
-          <SessionContext.Provider
-            value={{
-              session,
-              isLoadingSession,
-            }}
-          >
+          <SessionProvider sessionId="pod-browser">
             <AlertProvider>
               <ConfirmationDialogProvider>
                 <CssBaseline />
@@ -155,7 +127,7 @@ export default function App(props: AppProps): ReactElement {
                 <ConfirmationDialog />
               </ConfirmationDialogProvider>
             </AlertProvider>
-          </SessionContext.Provider>
+          </SessionProvider>
         </ThemeProvider>
       </StylesProvider>
     </>

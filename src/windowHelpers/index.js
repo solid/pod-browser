@@ -22,15 +22,14 @@
 // A helper function to generate a full redirect url to a given path, using the current
 // domain and protocol.
 export function generateRedirectUrl(path) {
-  const currentOrigin = window.location.origin;
-  return `${currentOrigin}/${path}`;
+  if (typeof window !== "undefined") {
+    const currentOrigin = window.location.origin;
+    return `${currentOrigin}/${path}`;
+  }
+
+  return "";
 }
 
 export function hardRedirect(path) {
   window.location.href = path;
-}
-
-// FIXME Temporary fix for an auth bug
-export function clearLocalstorage() {
-  window.localStorage.clear();
 }

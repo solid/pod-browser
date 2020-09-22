@@ -26,6 +26,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import { getStringNoLocale, getUrl } from "@inrupt/solid-client";
 import { vcard, foaf, space } from "rdf-namespaces";
+import { useSession } from "@inrupt/solid-ui-react";
 import Spinner from "../spinner";
 import { saveContact } from "../../src/addressBook";
 import { getResource } from "../../src/solidClientHelpers/resource";
@@ -33,7 +34,6 @@ import { joinPath } from "../../src/stringHelpers";
 import AgentSearchForm from "../agentSearchForm";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 import AlertContext from "../../src/contexts/alertContext";
-import SessionContext from "../../src/contexts/sessionContext";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import styles from "./styles";
 
@@ -78,7 +78,7 @@ export function handleSubmit({ alertError, alertSuccess, fetch, webId }) {
 export default function AddContact() {
   useRedirectIfLoggedOut();
   const { alertSuccess, alertError } = useContext(AlertContext);
-  const { session } = useContext(SessionContext);
+  const { session } = useSession();
   const { fetch } = session;
   const {
     info: { webId },

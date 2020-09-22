@@ -25,7 +25,8 @@ import { mountToJson } from "enzyme-to-json";
 import { act } from "react-dom/test-utils";
 import { createContainerAt } from "@inrupt/solid-client";
 import { PodLocationProvider } from "../../src/contexts/podLocationContext";
-import SessionContext from "../../src/contexts/sessionContext";
+import mockSession from "../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import AlertContext from "../../src/contexts/alertContext";
 import AddFolderFlyout, {
   determineFinalUrl,
@@ -41,9 +42,8 @@ describe("AddFolderFlyout", () => {
     { iri: "https://www.mypodbrowser.com/SomeFolder", name: "SomeFolder" },
   ];
 
-  const session = {
-    logout: jest.fn(),
-  };
+  const session = mockSession();
+  const SessionProvider = mockSessionContextProvider(session);
 
   const setAlertOpen = jest.fn();
   const setMessage = jest.fn();
@@ -59,9 +59,9 @@ describe("AddFolderFlyout", () => {
       }}
     >
       <PodLocationProvider currentUri={currentUri}>
-        <SessionContext.Provider value={{ session }}>
+        <SessionProvider>
           <AddFolderFlyout onSave={onSave} folders={folders} />
-        </SessionContext.Provider>
+        </SessionProvider>
       </PodLocationProvider>
     </AlertContext.Provider>
   );

@@ -107,10 +107,7 @@ describe("auth effects", () => {
   describe("useRedirectIfNoControlAccessToOwnPod", () => {
     test("Do not get redirected if profile has access to all pods", async () => {
       const session = mockSession();
-      const SessionProvider = mockSessionContextProvider({
-        session,
-        isLoadingSession: false,
-      });
+      const SessionProvider = mockSessionContextProvider(session);
 
       const wrapper = ({ children }) => (
         <SessionProvider>{children}</SessionProvider>
@@ -128,10 +125,7 @@ describe("auth effects", () => {
 
     test("Do not get redirected if pod is not owned by user", async () => {
       const session = mockAuthenticatedSessionWithNoAccessToAnotherUsersPod();
-      const SessionProvider = mockSessionContextProvider({
-        session,
-        isLoadingSession: false,
-      });
+      const SessionProvider = mockSessionContextProvider(session);
 
       const wrapper = ({ children }) => (
         <SessionProvider>{children}</SessionProvider>
@@ -149,10 +143,7 @@ describe("auth effects", () => {
 
     test("Gets redirected if profile do not have access to all pods", async () => {
       const session = mockAuthenticatedSessionWithNoAccessToPod();
-      const SessionProvider = mockSessionContextProvider({
-        session,
-        isLoadingSession: false,
-      });
+      const SessionProvider = mockSessionContextProvider(session);
 
       const wrapper = ({ children }) => (
         <SessionProvider>{children}</SessionProvider>

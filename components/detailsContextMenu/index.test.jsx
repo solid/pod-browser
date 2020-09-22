@@ -23,7 +23,9 @@ import React from "react";
 import * as RouterFns from "next/router";
 import * as SolidClientFns from "@inrupt/solid-client";
 import * as SolidClientHookFns from "../../src/hooks/solidClient";
-import SessionContext from "../../src/contexts/sessionContext";
+
+import mockSession from "../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import DetailsContextMenu, { Contents, handleCloseDrawer } from "./index";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 import mockDetailsContextMenuProvider from "../../__testUtils/mockDetailsContextMenuProvider";
@@ -168,16 +170,13 @@ describe("Contents", () => {
       query: {},
     });
 
-    const session = {
-      info: {
-        webId: "https://test.url/profile/card#me",
-      },
-    };
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
 
     const tree = mountToJson(
-      <SessionContext.Provider value={{ session }}>
+      <SessionProvider>
         <Contents iri={iri} action="details" />
-      </SessionContext.Provider>
+      </SessionProvider>
     );
 
     expect(tree).toMatchSnapshot();
@@ -249,18 +248,15 @@ describe("Contents", () => {
       .spyOn(RouterFns, "useRouter")
       .mockReturnValueOnce({ asPath: "/pathname/", replace: jest.fn() });
 
-    const session = {
-      info: {
-        webId: "https://test.url/profile/card#me",
-      },
-    };
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
 
     const tree = mountToJson(
-      <SessionContext.Provider value={{ session }}>
+      <SessionProvider>
         <AlertContextProvider>
           <Contents iri={iri} action="sharing" />
         </AlertContextProvider>
-      </SessionContext.Provider>
+      </SessionProvider>
     );
 
     expect(tree).toMatchSnapshot();

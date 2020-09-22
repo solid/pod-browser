@@ -19,10 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import Router from "next/router";
 import { getSolidDatasetWithAcl, hasResourceAcl } from "@inrupt/solid-client";
-import SessionContext from "../../contexts/sessionContext";
+import { useSession } from "@inrupt/solid-ui-react";
 import useAuthenticatedProfile from "../../hooks/useAuthenticatedProfile";
 import usePodRoot from "../../hooks/usePodRoot";
 
@@ -33,11 +33,11 @@ export const SESSION_STATES = {
 
 export async function redirectBasedOnSessionState(
   sessionIsLoggedIn,
-  isLoadingSession,
+  sessionRequestInProgress,
   redirectIfSessionState,
   location
 ) {
-  if (isLoadingSession) {
+  if (sessionRequestInProgress) {
     return;
   }
 
@@ -57,12 +57,12 @@ export async function redirectBasedOnSessionState(
 }
 
 export function useRedirectIfLoggedOut(location = "/login") {
-  const { session, isLoadingSession } = useContext(SessionContext);
+  const { session, sessionRequestInProgress } = useSession();
 
   useEffect(() => {
     redirectBasedOnSessionState(
       session.info.isLoggedIn,
-      isLoadingSession,
+      sessionRequestInProgress,
       SESSION_STATES.LOGGED_OUT,
       location
     );
@@ -70,12 +70,12 @@ export function useRedirectIfLoggedOut(location = "/login") {
 }
 
 export function useRedirectIfLoggedIn(location = "/") {
-  const { session, isLoadingSession } = useContext(SessionContext);
+  const { session, sessionRequestInProgress } = useSession();
 
   useEffect(() => {
     redirectBasedOnSessionState(
       session.info.isLoggedIn,
-      isLoadingSession,
+      sessionRequestInProgress,
       SESSION_STATES.LOGGED_IN,
       location
     );
@@ -86,12 +86,12 @@ export function useRedirectIfNoControlAccessToOwnPod(
   resourceUrl,
   location = "/access-required"
 ) {
-  const { session, isLoadingSession } = useContext(SessionContext);
+  const { session, sessionRequestInProgress } = useSession();
   const profile = useAuthenticatedProfile();
   const podRoot = usePodRoot(resourceUrl, profile);
 
   useEffect(() => {
-    if (isLoadingSession || !profile) return;
+    if (sessionRequestInProgress || !profile) return;
 
     Promise.all(
       profile.pods
@@ -108,5 +108,5 @@ export function useRedirectIfNoControlAccessToOwnPod(
       if (hasControlAccessToPods) return;
       Router.push(location);
     });
-  }, [session, isLoadingSession, profile, location, podRoot]);
+  }, [session, sessionRequestInProgress, profile, location, podRoot]);
 }

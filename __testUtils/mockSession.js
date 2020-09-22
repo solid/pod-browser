@@ -39,6 +39,8 @@ export default function mockSession(options = {}) {
   // you can override the properties with what you need, but if you repeat something a lot
   // consider naming it and create a reusable mock function
   return {
+    on: jest.fn(),
+    handleIncomingRedirect: jest.fn().mockResolvedValue(null),
     fetch: mockFetch({
       [webIdUrl]: () => mockResponse(200, profileTurtle),
       [storageUrl]: () =>
@@ -60,17 +62,21 @@ export default function mockSession(options = {}) {
 
 export function mockUnauthenticatedSession() {
   return {
+    on: jest.fn(),
+    handleIncomingRedirect: jest.fn().mockResolvedValue(null),
     fetch: () => mockFetch(),
     info: {
       isLoggedIn: false,
       sessionId: null,
       webId: null,
-    }, // add more properties as needed
-  }; // add more properties as needed
+    },
+  };
 }
 
 export function mockAuthenticatedSessionWithNoAccessToPod() {
   return {
+    on: jest.fn(),
+    handleIncomingRedirect: jest.fn().mockResolvedValue(null),
     fetch: mockFetch({
       [webIdUrl]: () => mockResponse(200, profileTurtle),
       [storageUrl]: () =>
@@ -89,6 +95,8 @@ export function mockAuthenticatedSessionWithNoAccessToPod() {
 
 export function mockAuthenticatedSessionWithNoAccessToAnotherUsersPod() {
   return {
+    on: jest.fn(),
+    handleIncomingRedirect: jest.fn().mockResolvedValue(null),
     fetch: mockFetch({
       [webIdUrl]: () => mockResponse(200, profileTurtle),
       [anotherUsersStorageUrl]: () =>

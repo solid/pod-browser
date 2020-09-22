@@ -21,15 +21,15 @@
 
 /* eslint-disable camelcase, no-console */
 
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import T from "prop-types";
+import { useSession } from "@inrupt/solid-ui-react";
 import { isContainerIri } from "../../../../src/solidClientHelpers/utils";
 import {
   ACL,
   saveDefaultPermissions,
 } from "../../../../src/solidClientHelpers/permissions";
 import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
-import SessionContext from "../../../../src/contexts/sessionContext";
 import AgentSearchForm from "../../../agentSearchForm";
 import AgentAccessList from "../agentAccessList";
 
@@ -66,7 +66,7 @@ function DefaultPermissionForm({ iri, onSubmit }) {
   const [addedAgents, setAddedAgents] = useState([]);
   const {
     session: { fetch },
-  } = useContext(SessionContext);
+  } = useSession();
   const onAgentAdd = handleAgentAdd({
     addedAgents,
     setAddedAgents,

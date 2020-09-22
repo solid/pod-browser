@@ -32,7 +32,7 @@ describe("usePeople", () => {
   describe("with no address book", () => {
     it("should return null", () => {
       const session = mockSession();
-      const wrapper = mockSessionContextProvider({ session });
+      const wrapper = mockSessionContextProvider(session);
       const { result } = renderHook(() => usePeople(null), {
         wrapper,
       });
@@ -49,7 +49,7 @@ describe("usePeople", () => {
 
     beforeEach(() => {
       session = mockSession();
-      wrapper = mockSessionContextProvider({ session });
+      wrapper = mockSessionContextProvider(session);
     });
 
     it("should call getPeople", async () => {

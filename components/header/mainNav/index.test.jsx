@@ -28,7 +28,7 @@ import mockSessionContextProvider from "../../../__testUtils/mockSessionContextP
 describe("MainNav", () => {
   test("renders navigation", () => {
     const session = mockUnauthenticatedSession();
-    const SessionProvider = mockSessionContextProvider({ session });
+    const SessionProvider = mockSessionContextProvider(session);
 
     const tree = mountToJson(
       <SessionProvider>

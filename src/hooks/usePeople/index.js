@@ -19,9 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
-import SessionContext from "../../contexts/sessionContext";
 import { getPeople } from "../../addressBook";
 
 export default function usePeople(addressBook) {
@@ -29,7 +29,7 @@ export default function usePeople(addressBook) {
   const [error, setError] = useState(null);
   const {
     session: { fetch },
-  } = useContext(SessionContext);
+  } = useSession();
 
   useEffect(() => {
     if (!addressBook) {

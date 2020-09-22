@@ -49,7 +49,7 @@ describe("usePodBrowserSettings", () => {
       // TODO: Wanted to avoid the use of mockResolvedValue, but didn't find another way
       const dataset = "testDataset";
       getOrCreateSettings.mockResolvedValue(dataset);
-      const wrapper = mockSessionContextProvider({ session });
+      const wrapper = mockSessionContextProvider(session);
       const { result, waitForNextUpdate } = renderHook(
         () => usePodBrowserSettings(),
         { wrapper }
@@ -62,7 +62,7 @@ describe("usePodBrowserSettings", () => {
   describe("when user is unauthenticated", () => {
     it("should return null", () => {
       const session = mockUnauthenticatedSession();
-      const wrapper = mockSessionContextProvider({ session });
+      const wrapper = mockSessionContextProvider(session);
       const { result } = renderHook(() => usePodBrowserSettings(), { wrapper });
       expect(result.current).toBeNull();
     });

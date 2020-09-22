@@ -20,7 +20,6 @@
  */
 
 /* eslint-disable camelcase */
-import { useContext } from "react";
 import useSWR from "swr";
 import { space, ldp } from "rdf-namespaces";
 
@@ -35,12 +34,11 @@ import {
   getAgentAccessAll,
   getAgentDefaultAccessAll,
 } from "@inrupt/solid-client";
+import { useSession } from "@inrupt/solid-ui-react";
 
 import { getIriPath } from "../../solidClientHelpers/utils";
 import { normalizePermissions } from "../../solidClientHelpers/permissions";
 import { fetchResourceWithAcl } from "../../solidClientHelpers/resource";
-
-import SessionContext from "../../contexts/sessionContext";
 
 export async function fetchContainerResourceIris(containerIri, fetch) {
   const litDataset = await getSolidDataset(containerIri, { fetch });
@@ -52,7 +50,7 @@ export async function fetchContainerResourceIris(containerIri, fetch) {
 export const GET_CONTAINER_RESOURCE_IRIS = "getContainerResourceIris";
 /* istanbul ignore next */
 export function useFetchContainerResourceIris(iri) {
-  const { session } = useContext(SessionContext);
+  const { session } = useSession();
 
   return useSWR([iri, GET_CONTAINER_RESOURCE_IRIS], () =>
     fetchContainerResourceIris(iri, session.fetch)
@@ -96,7 +94,7 @@ export async function fetchResourceDetails(iri, fetch) {
 export const FETCH_RESOURCE_DETAILS = "fetchResourceDetails";
 /* istanbul ignore next */
 export function useFetchResourceDetails(iri) {
-  const { session } = useContext(SessionContext);
+  const { session } = useSession();
   return useSWR([iri, FETCH_RESOURCE_DETAILS], () =>
     fetchResourceDetails(iri, session.fetch)
   );
@@ -105,7 +103,7 @@ export function useFetchResourceDetails(iri) {
 export const FETCH_RESOURCE_WITH_ACL = "fetchResourceWithAcl";
 /* istanbul ignore next */
 export function useFetchResourceWithAcl(iri) {
-  const { session } = useContext(SessionContext);
+  const { session } = useSession();
   return useSWR([iri, FETCH_RESOURCE_WITH_ACL], () =>
     fetchResourceWithAcl(iri, session.fetch)
   );
@@ -121,7 +119,7 @@ export async function fetchPodIrisFromWebId(webId, fetch) {
 export const FETCH_POD_IRIS_FROM_WEB_ID = "fetchPodIrisFromWebId";
 /* istanbul ignore next */
 export function useFetchPodIrisFromWebId(webId) {
-  const { session } = useContext(SessionContext);
+  const { session } = useSession();
   return useSWR([webId, FETCH_POD_IRIS_FROM_WEB_ID], () =>
     fetchPodIrisFromWebId(webId, session.fetch)
   );

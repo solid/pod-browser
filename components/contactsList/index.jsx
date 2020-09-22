@@ -62,6 +62,12 @@ function ContactsList() {
   const formattedNamePredicate = vcard.fn;
   const hasPhotoPredicate = vcard.hasPhoto;
 
+  // format things for the data table
+  const contacts = people.map((p) => ({
+    thing: p,
+    dataset: addressBook,
+  }));
+
   return (
     <>
       <PageHeader
@@ -74,7 +80,7 @@ function ContactsList() {
       />
       <Container>
         <Table
-          things={people}
+          things={contacts}
           className={clsx(tableClass, bem("table"))}
           // prettier-ignore
           ascIndicator={(

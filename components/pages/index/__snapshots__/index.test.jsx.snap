@@ -1,19 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Index page Renders null if there are no pod iris 1`] = `
-<SessionContextProvider
-  isLoadingSession={false}
-  session={
-    Object {
-      "fetch": [MockFunction],
-      "info": Object {
-        "isLoggedIn": true,
-        "sessionId": "some-session-id",
-        "webId": "http://example.com/webId#me",
-      },
+<MockedSessionContextProvider>
+  <h
+    session={
+      Object {
+        "fetch": [MockFunction],
+        "handleIncomingRedirect": [MockFunction] {
+          "calls": Array [
+            Array [
+              "http://localhost/",
+            ],
+          ],
+          "results": Array [
+            Object {
+              "type": "return",
+              "value": Promise {},
+            },
+          ],
+        },
+        "info": Object {
+          "isLoggedIn": true,
+          "sessionId": "some-session-id",
+          "webId": "http://example.com/webId#me",
+        },
+        "on": [MockFunction] {
+          "calls": Array [
+            Array [
+              "logout",
+              [Function],
+            ],
+          ],
+          "results": Array [
+            Object {
+              "type": "return",
+              "value": undefined,
+            },
+          ],
+        },
+      }
     }
-  }
->
-  <Home />
-</SessionContextProvider>
+    sessionId="test-session"
+    sessionRequestInProgress={false}
+  >
+    <Home />
+  </h>
+</MockedSessionContextProvider>
 `;

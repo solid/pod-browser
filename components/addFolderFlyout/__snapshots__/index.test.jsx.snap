@@ -4,79 +4,98 @@ exports[`AddFolderFlyout Renders an Add Folder button 1`] = `
 <PodLocationProvider
   currentUri="https://www.mypodbrowser.com/"
 >
-  <AddFolderFlyout
-    className={null}
-    folders={
-      Array [
+  <MockedSessionContextProvider>
+    <h
+      session={
         Object {
-          "iri": "https://www.mypodbrowser.com/SomeFolder",
-          "name": "SomeFolder",
-        },
-      ]
-    }
-    onSave={[MockFunction]}
-    resourceList={Array []}
-  >
-    <button
-      className={null}
-      data-testid="add-folder-button"
-      onClick={[Function]}
-      type="button"
-    >
-      Create Folder
-    </button>
-    <WithStyles(ForwardRef(Popover))
-      anchorEl={null}
-      anchorOrigin={
-        Object {
-          "horizontal": "center",
-          "vertical": "bottom",
+          "fetch": [MockFunction],
+          "handleIncomingRedirect": [MockFunction],
+          "info": Object {
+            "isLoggedIn": true,
+            "sessionId": "some-session-id",
+            "webId": "http://example.com/webId#me",
+          },
+          "on": [MockFunction],
         }
       }
-      onClose={[Function]}
-      open={false}
-      transformOrigin={
-        Object {
-          "horizontal": "center",
-          "vertical": "top",
-        }
-      }
+      sessionId="test-session"
+      sessionRequestInProgress={false}
     >
-      <ForwardRef(Popover)
-        anchorEl={null}
-        anchorOrigin={
-          Object {
-            "horizontal": "center",
-            "vertical": "bottom",
-          }
-        }
-        classes={
-          Object {
-            "paper": "MuiPopover-paper",
-            "root": "MuiPopover-root",
-          }
-        }
-        onClose={[Function]}
-        open={false}
-        transformOrigin={
-          Object {
-            "horizontal": "center",
-            "vertical": "top",
-          }
-        }
-      >
-        <ForwardRef(Modal)
-          BackdropProps={
+      <AddFolderFlyout
+        className={null}
+        folders={
+          Array [
             Object {
-              "invisible": true,
+              "iri": "https://www.mypodbrowser.com/SomeFolder",
+              "name": "SomeFolder",
+            },
+          ]
+        }
+        onSave={[MockFunction]}
+        resourceList={Array []}
+      >
+        <button
+          className={null}
+          data-testid="add-folder-button"
+          onClick={[Function]}
+          type="button"
+        >
+          Create Folder
+        </button>
+        <WithStyles(ForwardRef(Popover))
+          anchorEl={null}
+          anchorOrigin={
+            Object {
+              "horizontal": "center",
+              "vertical": "bottom",
             }
           }
-          className="MuiPopover-root"
           onClose={[Function]}
           open={false}
-        />
-      </ForwardRef(Popover)>
-    </WithStyles(ForwardRef(Popover))>
-  </AddFolderFlyout>
+          transformOrigin={
+            Object {
+              "horizontal": "center",
+              "vertical": "top",
+            }
+          }
+        >
+          <ForwardRef(Popover)
+            anchorEl={null}
+            anchorOrigin={
+              Object {
+                "horizontal": "center",
+                "vertical": "bottom",
+              }
+            }
+            classes={
+              Object {
+                "paper": "MuiPopover-paper",
+                "root": "MuiPopover-root",
+              }
+            }
+            onClose={[Function]}
+            open={false}
+            transformOrigin={
+              Object {
+                "horizontal": "center",
+                "vertical": "top",
+              }
+            }
+          >
+            <ForwardRef(Modal)
+              BackdropProps={
+                Object {
+                  "invisible": true,
+                }
+              }
+              className="MuiPopover-root"
+              onClose={[Function]}
+              open={false}
+            />
+          </ForwardRef(Popover)>
+        </WithStyles(ForwardRef(Popover))>
+      </AddFolderFlyout>
+    </h>
+  </MockedSessionContextProvider>
 </PodLocationProvider>
 `;

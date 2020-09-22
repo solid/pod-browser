@@ -19,11 +19,11 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useContext } from "react";
+import React, { ReactElement } from "react";
 import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
 import { header, PrismTheme, useBem } from "@solid/lit-prism-patterns";
+import { useSession } from "@inrupt/solid-ui-react";
 import Link from "next/link";
-import SessionContext from "../../src/contexts/sessionContext";
 import UserMenu from "./userMenu";
 import styles from "./styles";
 
@@ -34,7 +34,7 @@ const useStyles = makeStyles<PrismTheme>((theme) =>
 const TESTCAFE_ID_HEADER_LOGO = "header-banner-logo";
 
 export default function Header(): ReactElement | null {
-  const { session } = useContext(SessionContext);
+  const { session } = useSession();
   const bem = useBem(useStyles());
 
   return (

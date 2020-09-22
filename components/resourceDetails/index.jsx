@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React from "react";
 import {
   Button,
   createStyles,
@@ -34,10 +34,10 @@ import ShareIcon from "@material-ui/icons/Share";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { makeStyles } from "@material-ui/styles";
 import T from "prop-types";
+import { useSession } from "@inrupt/solid-ui-react";
 import ResourceLink from "../resourceLink";
 import styles from "./styles";
 import { parseUrl } from "../../src/stringHelpers";
-import SessionContext from "../../src/contexts/sessionContext";
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
 import DeleteLink from "./deleteLink";
 
@@ -80,7 +80,7 @@ export function downloadResource(iri, fetch) {
 }
 
 export function DownloadLink(props) {
-  const { session } = useContext(SessionContext);
+  const { session } = useSession();
   const { type, iri, className } = props;
 
   if (type.match(/container/i)) return null;

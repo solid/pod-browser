@@ -19,8 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useContext, useEffect, useState } from "react";
-import SessionContext from "../../contexts/sessionContext";
+import { useEffect, useState } from "react";
+import { useSession } from "@inrupt/solid-ui-react";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import { contactsContainerIri, saveNewAddressBook } from "../../addressBook";
 import { getResource } from "../../solidClientHelpers/resource";
@@ -29,7 +29,7 @@ import { ERROR_CODES, isHTTPError } from "../../solidClientHelpers/utils";
 export default function useAddressBook() {
   const [addressBook, setAddressBook] = useState(null);
   const [error, setError] = useState(null);
-  const { session } = useContext(SessionContext);
+  const { session } = useSession();
   const profile = useAuthenticatedProfile();
 
   useEffect(() => {

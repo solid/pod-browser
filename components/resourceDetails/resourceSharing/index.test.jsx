@@ -25,7 +25,8 @@ import * as SolidClientFns from "@inrupt/solid-client";
 import { mountToJson } from "../../../__testUtils/mountWithTheme";
 import * as ProfileHelpers from "../../../src/solidClientHelpers/profile";
 import * as PermissionHelpers from "../../../src/solidClientHelpers/permissions";
-import SessionContext from "../../../src/contexts/sessionContext";
+import mockSession from "../../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import ResourceSharing, {
   backToDetailsClick,
   handleAddAgentClick,
@@ -68,12 +69,8 @@ describe("ResourceSharing", () => {
       },
     ];
 
-    const session = {
-      info: {
-        webId,
-      },
-      fetch: jest.fn(),
-    };
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
 
     jest
       .spyOn(RouterFns, "useRouter")
@@ -93,7 +90,7 @@ describe("ResourceSharing", () => {
     });
 
     const tree = mountToJson(
-      <SessionContext.Provider value={{ session }}>
+      <SessionProvider>
         <ResourceSharing
           dataset={{}}
           iri={iri}
@@ -101,7 +98,7 @@ describe("ResourceSharing", () => {
           permissions={permissions}
           defaultPermissions={[]}
         />
-      </SessionContext.Provider>
+      </SessionProvider>
     );
 
     expect(tree).toMatchSnapshot();
@@ -127,12 +124,8 @@ describe("ResourceSharing", () => {
       },
     ];
 
-    const session = {
-      info: {
-        webId,
-      },
-      fetch: jest.fn(),
-    };
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
 
     jest
       .spyOn(RouterFns, "useRouter")
@@ -152,14 +145,14 @@ describe("ResourceSharing", () => {
     });
 
     const tree = mountToJson(
-      <SessionContext.Provider value={{ session }}>
+      <SessionProvider>
         <ResourceSharing
           iri={iri}
           name={name}
           permissions={permissions}
           defaultPermissions={[]}
         />
-      </SessionContext.Provider>
+      </SessionProvider>
     );
 
     expect(tree).toMatchSnapshot();

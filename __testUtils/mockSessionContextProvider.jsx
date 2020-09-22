@@ -21,18 +21,21 @@
 
 import React from "react";
 import T from "prop-types";
-import SessionContext, {
-  defaultSessionContext,
-} from "../src/contexts/sessionContext";
+import { SessionProvider } from "@inrupt/solid-ui-react";
 
 export default function mockSessionContextProvider(
-  value = defaultSessionContext
+  session,
+  sessionRequestInProgress = false
 ) {
   function MockedSessionContextProvider({ children }) {
     return (
-      <SessionContext.Provider value={{ ...defaultSessionContext, ...value }}>
+      <SessionProvider
+        sessionId="test-session"
+        session={session}
+        sessionRequestInProgress={sessionRequestInProgress}
+      >
         {children}
-      </SessionContext.Provider>
+      </SessionProvider>
     );
   }
 

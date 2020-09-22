@@ -897,25 +897,35 @@ font-display: block;",
                   }
                 }
               >
-                <LogOut
+                <Logout
                   className="PodBrowser-header-banner__user-menu-item-trigger"
                 >
-                  <button
-                    className="PodBrowser-header-banner__user-menu-item-trigger"
-                    data-testid="logout-button"
-                    onClick={[Function]}
-                    type="button"
+                  <R
+                    onLogout={[Function]}
                   >
-                    <i
-                      className="PodBrowser-icon-log-out PodBrowser-header-banner__user-menu-item-icon"
-                    />
-                    <span
-                      className="PodBrowser-header-banner__user-menu-item-label"
+                    <div
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
+                      role="button"
+                      tabIndex={0}
                     >
-                      Log out
-                    </span>
-                  </button>
-                </LogOut>
+                      <button
+                        className="PodBrowser-header-banner__user-menu-item-trigger"
+                        data-testid="logout-button"
+                        type="button"
+                      >
+                        <i
+                          className="PodBrowser-icon-log-out PodBrowser-header-banner__user-menu-item-icon"
+                        />
+                        <span
+                          className="PodBrowser-header-banner__user-menu-item-label"
+                        >
+                          Log out
+                        </span>
+                      </button>
+                    </div>
+                  </R>
+                </Logout>
               </li>
             </ul>
           </div>

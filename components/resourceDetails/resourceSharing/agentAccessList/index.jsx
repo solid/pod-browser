@@ -21,7 +21,7 @@
 
 /* eslint-disable camelcase */
 
-import React, { useContext } from "react";
+import React from "react";
 import {
   Avatar,
   createStyles,
@@ -31,9 +31,9 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import T from "prop-types";
+import { useSession } from "@inrupt/solid-ui-react";
 import { displayProfileName } from "../../../../src/solidClientHelpers/profile";
 import styles from "../../styles";
-import SessionContext from "../../../../src/contexts/sessionContext";
 import PermissionsForm from "../../../permissionsForm";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -69,7 +69,7 @@ function AgentAccessList({ iri, onSave, onSubmit, permissions, saveFn, warn }) {
   const classes = useStyles();
   const {
     session: { fetch },
-  } = useContext(SessionContext);
+  } = useSession();
   if (permissions.length === 0) return null;
 
   return (

@@ -20,17 +20,9 @@
  */
 
 import React from "react";
-import { mount } from "enzyme";
+import { mountToJson } from "../../../__testUtils/mountWithTheme";
 
-import {
-  clearLocalstorage,
-  generateRedirectUrl,
-} from "../../../src/windowHelpers";
-
-import SessionContext from "../../../src/contexts/sessionContext";
-import { mountToJson, WithTheme } from "../../../__testUtils/mountWithTheme";
-
-import ProviderLogin, * as ProviderFunctions from "./index";
+import ProviderLogin from "./index";
 
 jest.mock("../../../src/windowHelpers");
 
@@ -39,57 +31,5 @@ describe("ProviderLogin form", () => {
     const tree = mountToJson(<ProviderLogin />);
 
     expect(tree).toMatchSnapshot();
-  });
-});
-
-describe("loginWithProvider", () => {
-  test("clicking login calls loginWithProvider", () => {
-    const session = {
-      login: jest.fn(),
-    };
-
-    const tree = mount(
-      <SessionContext.Provider value={{ session }}>
-        <WithTheme>
-          <ProviderLogin />
-        </WithTheme>
-      </SessionContext.Provider>
-    );
-
-    tree
-      .find("button[children='Log In']")
-      .simulate("click", { preventDefault: () => {} });
-
-    expect(session.login).toHaveBeenCalled();
-  });
-
-  test("Calls login", async () => {
-    const redirect = "foo";
-    const providerIri = "https://test.url";
-    const session = {
-      login: jest.fn(),
-    };
-
-    generateRedirectUrl.mockReturnValue("foo");
-
-    await ProviderFunctions.loginWithProvider(providerIri, session);
-
-    expect(clearLocalstorage).toHaveBeenCalled();
-    expect(session.login).toHaveBeenCalledWith({
-      oidcIssuer: providerIri,
-      redirectUrl: redirect,
-    });
-  });
-
-  test("Bubbles errors", async () => {
-    const error = "Failure";
-    const providerIri = "https://test.url";
-    const session = {
-      login: jest.fn().mockRejectedValue(error),
-    };
-
-    await expect(
-      ProviderFunctions.loginWithProvider(providerIri, session)
-    ).rejects.toMatch(error);
   });
 });

@@ -19,11 +19,11 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 
+import { useSession } from "@inrupt/solid-ui-react";
 import { useFetchPodIrisFromWebId } from "../../../src/hooks/solidClient";
-import SessionContext from "../../../src/contexts/sessionContext";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 
 import { resourceHref } from "../../resourceLink";
@@ -32,7 +32,7 @@ export default function Home() {
   useRedirectIfLoggedOut();
 
   const router = useRouter();
-  const { session } = useContext(SessionContext);
+  const { session } = useSession();
   const { webId = "" } = session.info;
   const { data: podIris = [] } = useFetchPodIrisFromWebId(webId);
   const [podIri] = podIris;
