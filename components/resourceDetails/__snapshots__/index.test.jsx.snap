@@ -1,18 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DownloadLink returns a download button if resource is not a container 1`] = `
-<WithStyles(ForwardRef(Button))
-  className={null}
-  data-testid="download-resource-button"
-  onClick={[Function]}
-  variant="contained"
->
-  Download
-</WithStyles(ForwardRef(Button))>
-`;
-
-exports[`DownloadLink returns null if resource is a container 1`] = `""`;
-
 exports[`Resource details it renders a decoded cntainer name 1`] = `
 <Component
   theme={

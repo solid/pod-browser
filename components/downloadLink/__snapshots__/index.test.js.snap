@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DownloadLink returns a download button if resource is not a container 1`] = `
+<button
+  className={null}
+  onClick={[Function]}
+  type="button"
+/>
+`;
+
+exports[`DownloadLink returns null if resource is a container 1`] = `""`;

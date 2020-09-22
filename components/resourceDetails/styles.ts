@@ -61,10 +61,10 @@ const rules = {
   typeValue: {
     marginLeft: "auto",
   },
-  downloadButton: {
-    marginTop: "1rem",
-    marginBottom: "1rem",
-  },
+  // downloadButton: {
+  //   marginTop: "1rem",
+  //   marginBottom: "1rem",
+  // },
   agentInput: {
     width: "100%",
     marginBottom: "1rem",

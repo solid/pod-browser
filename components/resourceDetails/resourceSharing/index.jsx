@@ -23,9 +23,7 @@
 
 import React, { useState } from "react";
 import T from "prop-types";
-import { useRouter } from "next/router";
 import {
-  Button,
   createStyles,
   Divider,
   List,
@@ -34,7 +32,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import PersonIcon from "@material-ui/icons/Person";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { makeStyles } from "@material-ui/styles";
 import {
   hasResourceAcl,
@@ -238,18 +235,9 @@ export function handleAddDefaultPermissions({
   };
 }
 
-function ResourceSharing({
-  name,
-  iri,
-  permissions,
-  defaultPermissions,
-  dataset,
-}) {
-  const { session } = useSession();
-  const {
-    fetch,
-    info: { webId },
-  } = session;
+function ResourceSharing({ iri, permissions, defaultPermissions, dataset }) {
+  const { fetch, info } = useSession();
+  const { webId } = info || {};
   const [addedAgents, setAddedAgents] = useState([]);
   const [defaultAgents, setDefaultAgents] = useState(defaultPermissions);
 
@@ -258,7 +246,6 @@ function ResourceSharing({
     getThirdPartyPermissions(webId, permissions)
   );
   const classes = useStyles();
-  const router = useRouter();
   const defaultPermission = {
     webId,
     alias: "Control",
@@ -286,25 +273,6 @@ function ResourceSharing({
 
   return (
     <>
-      <div className={classes.drawerHeader}>
-        <Button
-          startIcon={<ChevronLeftIcon />}
-          onClick={backToDetailsClick(router)}
-        >
-          Details
-        </Button>
-      </div>
-
-      <Divider />
-
-      <section className={classes.headerSection}>
-        <h3 className={classes["content-h3"]} title={iri}>
-          {name}
-        </h3>
-      </section>
-
-      <Divider />
-
       <section className={classes.centeredSection}>
         <h5 className={classes["content-h5"]}>My Access</h5>
         <AgentAccessList
@@ -382,7 +350,6 @@ function ResourceSharing({
 }
 
 ResourceSharing.propTypes = {
-  name: T.string.isRequired,
   iri: T.string.isRequired,
   permissions: T.arrayOf(T.object).isRequired,
   defaultPermissions: T.arrayOf(T.object).isRequired,

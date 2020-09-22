@@ -1934,212 +1934,6 @@ font-display: block;",
               ]
             }
           >
-            <div>
-              <WithStyles(ForwardRef(Button))
-                onClick={[Function]}
-                startIcon={<Memo(ChevronLeftIcon) />}
-              >
-                <ForwardRef(Button)
-                  classes={
-                    Object {
-                      "colorInherit": "PodBrowser-colorInherit",
-                      "contained": "PodBrowser-contained",
-                      "containedPrimary": "PodBrowser-containedPrimary",
-                      "containedSecondary": "PodBrowser-containedSecondary",
-                      "containedSizeLarge": "PodBrowser-containedSizeLarge",
-                      "containedSizeSmall": "PodBrowser-containedSizeSmall",
-                      "disableElevation": "PodBrowser-disableElevation",
-                      "disabled": "PodBrowser-disabled",
-                      "endIcon": "PodBrowser-endIcon",
-                      "focusVisible": "PodBrowser-focusVisible",
-                      "fullWidth": "PodBrowser-fullWidth",
-                      "iconSizeLarge": "PodBrowser-iconSizeLarge",
-                      "iconSizeMedium": "PodBrowser-iconSizeMedium",
-                      "iconSizeSmall": "PodBrowser-iconSizeSmall",
-                      "label": "PodBrowser-label",
-                      "outlined": "PodBrowser-outlined",
-                      "outlinedPrimary": "PodBrowser-outlinedPrimary",
-                      "outlinedSecondary": "PodBrowser-outlinedSecondary",
-                      "outlinedSizeLarge": "PodBrowser-outlinedSizeLarge",
-                      "outlinedSizeSmall": "PodBrowser-outlinedSizeSmall",
-                      "root": "PodBrowser-root",
-                      "sizeLarge": "PodBrowser-sizeLarge",
-                      "sizeSmall": "PodBrowser-sizeSmall",
-                      "startIcon": "PodBrowser-startIcon",
-                      "text": "PodBrowser-text",
-                      "textPrimary": "PodBrowser-textPrimary",
-                      "textSecondary": "PodBrowser-textSecondary",
-                      "textSizeLarge": "PodBrowser-textSizeLarge",
-                      "textSizeSmall": "PodBrowser-textSizeSmall",
-                    }
-                  }
-                  onClick={[Function]}
-                  startIcon={<Memo(ChevronLeftIcon) />}
-                >
-                  <WithStyles(ForwardRef(ButtonBase))
-                    className="PodBrowser-root PodBrowser-text"
-                    component="button"
-                    disabled={false}
-                    focusRipple={true}
-                    focusVisibleClassName="PodBrowser-focusVisible"
-                    onClick={[Function]}
-                    type="button"
-                  >
-                    <ForwardRef(ButtonBase)
-                      className="PodBrowser-root PodBrowser-text"
-                      classes={
-                        Object {
-                          "disabled": "PodBrowser-disabled",
-                          "focusVisible": "PodBrowser-focusVisible",
-                          "root": "PodBrowser-root",
-                        }
-                      }
-                      component="button"
-                      disabled={false}
-                      focusRipple={true}
-                      focusVisibleClassName="PodBrowser-focusVisible"
-                      onClick={[Function]}
-                      type="button"
-                    >
-                      <button
-                        className="PodBrowser-root PodBrowser-root PodBrowser-text"
-                        disabled={false}
-                        onBlur={[Function]}
-                        onClick={[Function]}
-                        onDragLeave={[Function]}
-                        onFocus={[Function]}
-                        onKeyDown={[Function]}
-                        onKeyUp={[Function]}
-                        onMouseDown={[Function]}
-                        onMouseLeave={[Function]}
-                        onMouseUp={[Function]}
-                        onTouchEnd={[Function]}
-                        onTouchMove={[Function]}
-                        onTouchStart={[Function]}
-                        tabIndex={0}
-                        type="button"
-                      >
-                        <span
-                          className="PodBrowser-label"
-                        >
-                          <span
-                            className="PodBrowser-startIcon PodBrowser-iconSizeMedium"
-                          >
-                            <ForwardRef>
-                              <WithStyles(ForwardRef(SvgIcon))>
-                                <ForwardRef(SvgIcon)
-                                  classes={
-                                    Object {
-                                      "colorAction": "PodBrowser-colorAction",
-                                      "colorDisabled": "PodBrowser-colorDisabled",
-                                      "colorError": "PodBrowser-colorError",
-                                      "colorPrimary": "PodBrowser-colorPrimary",
-                                      "colorSecondary": "PodBrowser-colorSecondary",
-                                      "fontSizeInherit": "PodBrowser-fontSizeInherit",
-                                      "fontSizeLarge": "PodBrowser-fontSizeLarge",
-                                      "fontSizeSmall": "PodBrowser-fontSizeSmall",
-                                      "root": "PodBrowser-root",
-                                    }
-                                  }
-                                >
-                                  <svg
-                                    aria-hidden={true}
-                                    className="PodBrowser-root"
-                                    focusable="false"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"
-                                    />
-                                  </svg>
-                                </ForwardRef(SvgIcon)>
-                              </WithStyles(ForwardRef(SvgIcon))>
-                            </ForwardRef>
-                          </span>
-                          Details
-                        </span>
-                        <WithStyles(memo)
-                          center={false}
-                        >
-                          <ForwardRef(TouchRipple)
-                            center={false}
-                            classes={
-                              Object {
-                                "child": "PodBrowser-child",
-                                "childLeaving": "PodBrowser-childLeaving",
-                                "childPulsate": "PodBrowser-childPulsate",
-                                "ripple": "PodBrowser-ripple",
-                                "ripplePulsate": "PodBrowser-ripplePulsate",
-                                "rippleVisible": "PodBrowser-rippleVisible",
-                                "root": "PodBrowser-root",
-                              }
-                            }
-                          >
-                            <span
-                              className="PodBrowser-root"
-                            >
-                              <TransitionGroup
-                                childFactory={[Function]}
-                                component={null}
-                                exit={true}
-                              />
-                            </span>
-                          </ForwardRef(TouchRipple)>
-                        </WithStyles(memo)>
-                      </button>
-                    </ForwardRef(ButtonBase)>
-                  </WithStyles(ForwardRef(ButtonBase))>
-                </ForwardRef(Button)>
-              </WithStyles(ForwardRef(Button))>
-            </div>
-            <WithStyles(ForwardRef(Divider))>
-              <ForwardRef(Divider)
-                classes={
-                  Object {
-                    "absolute": "PodBrowser-absolute",
-                    "flexItem": "PodBrowser-flexItem",
-                    "inset": "PodBrowser-inset",
-                    "light": "PodBrowser-light",
-                    "middle": "PodBrowser-middle",
-                    "root": "PodBrowser-root",
-                    "vertical": "PodBrowser-vertical",
-                  }
-                }
-              >
-                <hr
-                  className="PodBrowser-root"
-                />
-              </ForwardRef(Divider)>
-            </WithStyles(ForwardRef(Divider))>
-            <section
-              className="PodBrowser-headerSection"
-            >
-              <h3
-                className="PodBrowser-content-h3"
-                title="iri"
-              >
-                name
-              </h3>
-            </section>
-            <WithStyles(ForwardRef(Divider))>
-              <ForwardRef(Divider)
-                classes={
-                  Object {
-                    "absolute": "PodBrowser-absolute",
-                    "flexItem": "PodBrowser-flexItem",
-                    "inset": "PodBrowser-inset",
-                    "light": "PodBrowser-light",
-                    "middle": "PodBrowser-middle",
-                    "root": "PodBrowser-root",
-                    "vertical": "PodBrowser-vertical",
-                  }
-                }
-              >
-                <hr
-                  className="PodBrowser-root"
-                />
-              </ForwardRef(Divider)>
-            </WithStyles(ForwardRef(Divider))>
             <section
               className="PodBrowser-centeredSection"
             >
@@ -2176,7 +1970,6 @@ font-display: block;",
                   "content-p": "PodBrowser-content-p",
                   "content-ul": "PodBrowser-content-ul",
                   "detailText": "PodBrowser-detailText",
-                  "downloadButton": "PodBrowser-downloadButton",
                   "formListItem": "PodBrowser-formListItem",
                   "headerSection": "PodBrowser-headerSection",
                   "image": "PodBrowser-image",
@@ -2342,7 +2135,6 @@ font-display: block;",
                             "content-p": "PodBrowser-content-p",
                             "content-ul": "PodBrowser-content-ul",
                             "detailText": "PodBrowser-detailText",
-                            "downloadButton": "PodBrowser-downloadButton",
                             "formListItem": "PodBrowser-formListItem",
                             "headerSection": "PodBrowser-headerSection",
                             "image": "PodBrowser-image",
@@ -4975,12 +4767,11 @@ font-display: block;",
                     },
                     "alias": "Control",
                     "profile": Object {
-                      "webId": "http://example.com/webId#me",
+                      "webId": undefined,
                     },
-                    "webId": "http://example.com/webId#me",
+                    "webId": undefined,
                   }
                 }
-                webId="http://example.com/webId#me"
               />
               <WithStyles(ForwardRef(Divider))>
                 <ForwardRef(Divider)
@@ -5928,212 +5719,6 @@ font-display: block;",
               ]
             }
           >
-            <div>
-              <WithStyles(ForwardRef(Button))
-                onClick={[Function]}
-                startIcon={<Memo(ChevronLeftIcon) />}
-              >
-                <ForwardRef(Button)
-                  classes={
-                    Object {
-                      "colorInherit": "PodBrowser-colorInherit",
-                      "contained": "PodBrowser-contained",
-                      "containedPrimary": "PodBrowser-containedPrimary",
-                      "containedSecondary": "PodBrowser-containedSecondary",
-                      "containedSizeLarge": "PodBrowser-containedSizeLarge",
-                      "containedSizeSmall": "PodBrowser-containedSizeSmall",
-                      "disableElevation": "PodBrowser-disableElevation",
-                      "disabled": "PodBrowser-disabled",
-                      "endIcon": "PodBrowser-endIcon",
-                      "focusVisible": "PodBrowser-focusVisible",
-                      "fullWidth": "PodBrowser-fullWidth",
-                      "iconSizeLarge": "PodBrowser-iconSizeLarge",
-                      "iconSizeMedium": "PodBrowser-iconSizeMedium",
-                      "iconSizeSmall": "PodBrowser-iconSizeSmall",
-                      "label": "PodBrowser-label",
-                      "outlined": "PodBrowser-outlined",
-                      "outlinedPrimary": "PodBrowser-outlinedPrimary",
-                      "outlinedSecondary": "PodBrowser-outlinedSecondary",
-                      "outlinedSizeLarge": "PodBrowser-outlinedSizeLarge",
-                      "outlinedSizeSmall": "PodBrowser-outlinedSizeSmall",
-                      "root": "PodBrowser-root",
-                      "sizeLarge": "PodBrowser-sizeLarge",
-                      "sizeSmall": "PodBrowser-sizeSmall",
-                      "startIcon": "PodBrowser-startIcon",
-                      "text": "PodBrowser-text",
-                      "textPrimary": "PodBrowser-textPrimary",
-                      "textSecondary": "PodBrowser-textSecondary",
-                      "textSizeLarge": "PodBrowser-textSizeLarge",
-                      "textSizeSmall": "PodBrowser-textSizeSmall",
-                    }
-                  }
-                  onClick={[Function]}
-                  startIcon={<Memo(ChevronLeftIcon) />}
-                >
-                  <WithStyles(ForwardRef(ButtonBase))
-                    className="PodBrowser-root PodBrowser-text"
-                    component="button"
-                    disabled={false}
-                    focusRipple={true}
-                    focusVisibleClassName="PodBrowser-focusVisible"
-                    onClick={[Function]}
-                    type="button"
-                  >
-                    <ForwardRef(ButtonBase)
-                      className="PodBrowser-root PodBrowser-text"
-                      classes={
-                        Object {
-                          "disabled": "PodBrowser-disabled",
-                          "focusVisible": "PodBrowser-focusVisible",
-                          "root": "PodBrowser-root",
-                        }
-                      }
-                      component="button"
-                      disabled={false}
-                      focusRipple={true}
-                      focusVisibleClassName="PodBrowser-focusVisible"
-                      onClick={[Function]}
-                      type="button"
-                    >
-                      <button
-                        className="PodBrowser-root PodBrowser-root PodBrowser-text"
-                        disabled={false}
-                        onBlur={[Function]}
-                        onClick={[Function]}
-                        onDragLeave={[Function]}
-                        onFocus={[Function]}
-                        onKeyDown={[Function]}
-                        onKeyUp={[Function]}
-                        onMouseDown={[Function]}
-                        onMouseLeave={[Function]}
-                        onMouseUp={[Function]}
-                        onTouchEnd={[Function]}
-                        onTouchMove={[Function]}
-                        onTouchStart={[Function]}
-                        tabIndex={0}
-                        type="button"
-                      >
-                        <span
-                          className="PodBrowser-label"
-                        >
-                          <span
-                            className="PodBrowser-startIcon PodBrowser-iconSizeMedium"
-                          >
-                            <ForwardRef>
-                              <WithStyles(ForwardRef(SvgIcon))>
-                                <ForwardRef(SvgIcon)
-                                  classes={
-                                    Object {
-                                      "colorAction": "PodBrowser-colorAction",
-                                      "colorDisabled": "PodBrowser-colorDisabled",
-                                      "colorError": "PodBrowser-colorError",
-                                      "colorPrimary": "PodBrowser-colorPrimary",
-                                      "colorSecondary": "PodBrowser-colorSecondary",
-                                      "fontSizeInherit": "PodBrowser-fontSizeInherit",
-                                      "fontSizeLarge": "PodBrowser-fontSizeLarge",
-                                      "fontSizeSmall": "PodBrowser-fontSizeSmall",
-                                      "root": "PodBrowser-root",
-                                    }
-                                  }
-                                >
-                                  <svg
-                                    aria-hidden={true}
-                                    className="PodBrowser-root"
-                                    focusable="false"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"
-                                    />
-                                  </svg>
-                                </ForwardRef(SvgIcon)>
-                              </WithStyles(ForwardRef(SvgIcon))>
-                            </ForwardRef>
-                          </span>
-                          Details
-                        </span>
-                        <WithStyles(memo)
-                          center={false}
-                        >
-                          <ForwardRef(TouchRipple)
-                            center={false}
-                            classes={
-                              Object {
-                                "child": "PodBrowser-child",
-                                "childLeaving": "PodBrowser-childLeaving",
-                                "childPulsate": "PodBrowser-childPulsate",
-                                "ripple": "PodBrowser-ripple",
-                                "ripplePulsate": "PodBrowser-ripplePulsate",
-                                "rippleVisible": "PodBrowser-rippleVisible",
-                                "root": "PodBrowser-root",
-                              }
-                            }
-                          >
-                            <span
-                              className="PodBrowser-root"
-                            >
-                              <TransitionGroup
-                                childFactory={[Function]}
-                                component={null}
-                                exit={true}
-                              />
-                            </span>
-                          </ForwardRef(TouchRipple)>
-                        </WithStyles(memo)>
-                      </button>
-                    </ForwardRef(ButtonBase)>
-                  </WithStyles(ForwardRef(ButtonBase))>
-                </ForwardRef(Button)>
-              </WithStyles(ForwardRef(Button))>
-            </div>
-            <WithStyles(ForwardRef(Divider))>
-              <ForwardRef(Divider)
-                classes={
-                  Object {
-                    "absolute": "PodBrowser-absolute",
-                    "flexItem": "PodBrowser-flexItem",
-                    "inset": "PodBrowser-inset",
-                    "light": "PodBrowser-light",
-                    "middle": "PodBrowser-middle",
-                    "root": "PodBrowser-root",
-                    "vertical": "PodBrowser-vertical",
-                  }
-                }
-              >
-                <hr
-                  className="PodBrowser-root"
-                />
-              </ForwardRef(Divider)>
-            </WithStyles(ForwardRef(Divider))>
-            <section
-              className="PodBrowser-headerSection"
-            >
-              <h3
-                className="PodBrowser-content-h3"
-                title="iri"
-              >
-                name
-              </h3>
-            </section>
-            <WithStyles(ForwardRef(Divider))>
-              <ForwardRef(Divider)
-                classes={
-                  Object {
-                    "absolute": "PodBrowser-absolute",
-                    "flexItem": "PodBrowser-flexItem",
-                    "inset": "PodBrowser-inset",
-                    "light": "PodBrowser-light",
-                    "middle": "PodBrowser-middle",
-                    "root": "PodBrowser-root",
-                    "vertical": "PodBrowser-vertical",
-                  }
-                }
-              >
-                <hr
-                  className="PodBrowser-root"
-                />
-              </ForwardRef(Divider)>
-            </WithStyles(ForwardRef(Divider))>
             <section
               className="PodBrowser-centeredSection"
             >
@@ -6170,7 +5755,6 @@ font-display: block;",
                   "content-p": "PodBrowser-content-p",
                   "content-ul": "PodBrowser-content-ul",
                   "detailText": "PodBrowser-detailText",
-                  "downloadButton": "PodBrowser-downloadButton",
                   "formListItem": "PodBrowser-formListItem",
                   "headerSection": "PodBrowser-headerSection",
                   "image": "PodBrowser-image",
@@ -6349,7 +5933,6 @@ font-display: block;",
                             "content-p": "PodBrowser-content-p",
                             "content-ul": "PodBrowser-content-ul",
                             "detailText": "PodBrowser-detailText",
-                            "downloadButton": "PodBrowser-downloadButton",
                             "formListItem": "PodBrowser-formListItem",
                             "headerSection": "PodBrowser-headerSection",
                             "image": "PodBrowser-image",
@@ -10929,12 +10512,11 @@ font-display: block;",
                     },
                     "alias": "Control",
                     "profile": Object {
-                      "webId": "http://example.com/webId#me",
+                      "webId": undefined,
                     },
-                    "webId": "http://example.com/webId#me",
+                    "webId": undefined,
                   }
                 }
-                webId="http://example.com/webId#me"
               />
               <WithStyles(ForwardRef(Divider))>
                 <ForwardRef(Divider)

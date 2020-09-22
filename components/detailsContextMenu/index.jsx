@@ -24,15 +24,11 @@ import T from "prop-types";
 import { useRouter } from "next/router";
 import { Drawer } from "@inrupt/prism-react-components";
 import { getResourceName } from "../../src/solidClientHelpers/resource";
-import DetailsMenuContext, {
-  DETAILS_CONTEXT_ACTIONS,
-} from "../../src/contexts/detailsMenuContext";
+import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 import AlertContext from "../../src/contexts/alertContext";
 import DetailsLoading from "../resourceDetails/detailsLoading";
-import ResourceSharingLoading from "../resourceDetails/resourceSharing/resourceSharingLoading";
 import DetailsError from "../resourceDetails/detailsError";
 import ResourceDetails from "../resourceDetails";
-import ResourceSharing from "../resourceDetails/resourceSharing";
 import { useFetchResourceDetails } from "../../src/hooks/solidClient";
 import { stripQueryParams } from "../../src/stringHelpers";
 
@@ -49,17 +45,14 @@ function Contents({ action, iri, onUpdate }) {
     setAlertOpen(true);
   }
 
-  const loadingComponent =
-    action === "details" ? (
-      <DetailsLoading
-        name={displayName}
-        iri={iri}
-        onDelete={onUpdate}
-        onDeleteError={onDeleteError}
-      />
-    ) : (
-      <ResourceSharingLoading name={displayName} iri={iri} />
-    );
+  const loadingComponent = (
+    <DetailsLoading
+      name={displayName}
+      iri={iri}
+      onDelete={onUpdate}
+      onDeleteError={onDeleteError}
+    />
+  );
 
   useEffect(() => {
     if (error) {
@@ -75,20 +68,7 @@ function Contents({ action, iri, onUpdate }) {
 
   if (!data) return loadingComponent;
 
-  const { permissions, defaultPermissions, dataset } = data;
-
   switch (action) {
-    case DETAILS_CONTEXT_ACTIONS.SHARING:
-      return (
-        <ResourceSharing
-          iri={iri}
-          name={displayName}
-          permissions={permissions}
-          defaultPermissions={defaultPermissions}
-          dataset={dataset}
-        />
-      );
-
     default:
       return (
         <ResourceDetails

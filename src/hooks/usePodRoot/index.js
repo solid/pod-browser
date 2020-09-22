@@ -28,7 +28,8 @@ function normalizeBaseUri(baseUri) {
 export default function usePodRoot(location, profile) {
   const [rootUri, setRootUri] = useState(null);
   useEffect(() => {
-    if (location === "undefined") {
+    if (!location || location === "undefined") {
+      setRootUri(null);
       return;
     }
     const profilePod = (profile ? profile.pods || [] : []).find((pod) =>

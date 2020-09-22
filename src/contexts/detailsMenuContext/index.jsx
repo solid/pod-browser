@@ -23,7 +23,6 @@ import React, { createContext, useState } from "react";
 import T from "prop-types";
 
 export const DETAILS_CONTEXT_ACTIONS = {
-  SHARING: "sharing",
   DETAILS: "details",
 };
 
