@@ -20,12 +20,12 @@
  */
 
 import React, { useContext, useEffect, useState } from "react";
+import { useSession } from "@inrupt/solid-ui-react";
 import PropTypes from "prop-types";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { getUrlAll } from "@inrupt/solid-client";
-import sessionContext from "../../src/contexts/sessionContext";
 import styles from "./styles";
 import { addBookmark } from "../../src/solidClientHelpers/bookmarks";
 import BookmarksContext from "../../src/contexts/bookmarksContext";
@@ -72,7 +72,7 @@ const isBookmarked = (iri, dataset) => {
 };
 
 export default function Bookmark({ iri }) {
-  const { session } = useContext(sessionContext);
+  const { session } = useSession();
   const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
   const { fetch } = session;
   const bem = useBem(useStyles());

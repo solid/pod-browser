@@ -20,9 +20,9 @@
  */
 
 import { useState, useContext, useEffect } from "react";
+import { useSession } from "@inrupt/solid-ui-react";
 import AlertContext from "../../contexts/alertContext";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
-import SessionContext from "../../contexts/sessionContext";
 import { joinPath } from "../../stringHelpers";
 import { getResource } from "../../solidClientHelpers/resource";
 import { initializeBookmarks } from "../../solidClientHelpers/bookmarks";
@@ -32,7 +32,7 @@ const BOOKMARKS_PATH = "bookmarks/index.ttl";
 
 export default function useBookmarks() {
   const profile = useAuthenticatedProfile();
-  const { session } = useContext(SessionContext);
+  const { session } = useSession();
   const { setMessage, setAlertOpen, setSeverity } = useContext(AlertContext);
   const [bookmarks, setBookmarks] = useState();
   const [updatedBookmarks, setUpdatedBookmarks] = useState();
