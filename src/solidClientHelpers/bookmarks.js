@@ -42,14 +42,18 @@ export async function initializeBookmarks(iri, fetch) {
   return { dataset: bookmarks, iri };
 }
 
+export const RECALLS_PROPERTY_IRI =
+  "http://www.w3.org/2002/01/bookmark#recalls";
+export const BOOKMARK_TYPE_IRI = "http://www.w3.org/2002/01/bookmark#Bookmark";
+
 export async function addBookmark(bookmarkIri, bookmarks, fetch) {
   const { dataset, iri } = bookmarks;
   const bookmarkTitle = getResourceName(bookmarkIri);
   const bookmark = defineThing(
     {},
-    (t) => addUrl(t, rdf.type, "http://www.w3.org/2002/01/bookmark#Bookmark"),
+    (t) => addUrl(t, rdf.type, BOOKMARK_TYPE_IRI),
     (t) => addStringNoLocale(t, dct.title, bookmarkTitle),
-    (t) => addUrl(t, "http://www.w3.org/2002/01/bookmark#recalls", bookmarkIri),
+    (t) => addUrl(t, RECALLS_PROPERTY_IRI, bookmarkIri),
     (t) => addDatetime(t, dct.created, new Date())
   );
 

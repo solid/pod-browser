@@ -27,7 +27,10 @@ import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { getUrlAll } from "@inrupt/solid-client";
 import styles from "./styles";
-import { addBookmark } from "../../src/solidClientHelpers/bookmarks";
+import {
+  addBookmark,
+  RECALLS_PROPERTY_IRI,
+} from "../../src/solidClientHelpers/bookmarks";
 import BookmarksContext from "../../src/contexts/bookmarksContext";
 import AlertContext from "../../src/contexts/alertContext";
 
@@ -61,13 +64,7 @@ export const toggleBookmarkHandler = ({
 };
 
 const isBookmarked = (iri, dataset) => {
-  const listOfRecallsUrls = getUrlAll(
-    dataset,
-    "http://www.w3.org/2002/01/bookmark#recalls"
-  );
-  if (!listOfRecallsUrls) {
-    return false;
-  }
+  const listOfRecallsUrls = getUrlAll(dataset, RECALLS_PROPERTY_IRI);
   return listOfRecallsUrls.includes(iri);
 };
 

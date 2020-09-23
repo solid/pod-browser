@@ -21,6 +21,7 @@
 
 import React from "react";
 import * as routerFns from "next/router";
+import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { useRouter } from "next/router";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 import { useFetchResourceDetails } from "../../src/hooks/solidClient";
@@ -29,10 +30,16 @@ import ContainerTableRow, {
   ResourceIcon,
   renderResourceType,
 } from "./index";
+import BookmarksContext from "../../src/contexts/bookmarksContext";
 
 jest.mock("@inrupt/solid-client");
 jest.mock("next/router");
 jest.mock("../../src/hooks/solidClient");
+
+const bookmarks = mockSolidDatasetFrom(
+  "https://somepod.com/bookmarks/index.ttl"
+);
+const setBookmarks = jest.fn();
 
 describe("ContainerTableRow", () => {
   beforeEach(() => {
@@ -58,7 +65,9 @@ describe("ContainerTableRow", () => {
     const tree = mountToJson(
       <table>
         <tbody>
-          <ContainerTableRow resource={resource} />
+          <BookmarksContext.Provider value={(bookmarks, setBookmarks)}>
+            <ContainerTableRow resource={resource} />
+          </BookmarksContext.Provider>
         </tbody>
       </table>
     );
@@ -78,7 +87,9 @@ describe("ContainerTableRow", () => {
     const tree = mountToJson(
       <table>
         <tbody>
-          <ContainerTableRow resource={resource} />
+          <BookmarksContext.Provider value={(bookmarks, setBookmarks)}>
+            <ContainerTableRow resource={resource} />
+          </BookmarksContext.Provider>
         </tbody>
       </table>
     );
@@ -98,7 +109,9 @@ describe("ContainerTableRow", () => {
     const tree = mountToJson(
       <table>
         <tbody>
-          <ContainerTableRow resource={resource} />
+          <BookmarksContext.Provider value={(bookmarks, setBookmarks)}>
+            <ContainerTableRow resource={resource} />
+          </BookmarksContext.Provider>
         </tbody>
       </table>
     );
