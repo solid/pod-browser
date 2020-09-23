@@ -27,7 +27,7 @@ import {
   createSolidDataset,
   setThing,
 } from "@inrupt/solid-client";
-import { rdf } from "rdf-namespaces";
+import { rdf, dct } from "rdf-namespaces";
 import { saveResource, getResourceName } from "./resource";
 import { defineThing } from "./utils";
 
@@ -48,10 +48,9 @@ export async function addBookmark(bookmarkIri, bookmarks, fetch) {
   const bookmark = defineThing(
     {},
     (t) => addUrl(t, rdf.type, "http://www.w3.org/2002/01/bookmark#Bookmark"),
-    (t) =>
-      addStringNoLocale(t, "http://purl.org/dc/terms/title", bookmarkTitle),
+    (t) => addStringNoLocale(t, dct.title, bookmarkTitle),
     (t) => addUrl(t, "http://www.w3.org/2002/01/bookmark#recalls", bookmarkIri),
-    (t) => addDatetime(t, "http://purl.org/dc/terms/created", new Date())
+    (t) => addDatetime(t, dct.created, new Date())
   );
 
   const bookmarkResource = {
