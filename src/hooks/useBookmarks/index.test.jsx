@@ -38,7 +38,7 @@ describe("useBookmarks", () => {
   describe("with an unauthenticated user", () => {
     it("should not return any bookmarks", () => {
       const session = mockUnauthenticatedSession();
-      const wrapper = mockSessionContextProvider({ session });
+      const wrapper = mockSessionContextProvider(session);
       const { result } = renderHook(() => useBookmarks(), {
         wrapper,
       });
@@ -54,7 +54,7 @@ describe("useBookmarks", () => {
     describe("with an existing bookmarks index", () => {
       beforeEach(() => {
         session = mockSession();
-        wrapper = mockSessionContextProvider({ session });
+        wrapper = mockSessionContextProvider(session);
       });
 
       it("should call getResource", async () => {
@@ -82,9 +82,9 @@ describe("useBookmarks", () => {
     describe("without existing bookmark index", () => {
       beforeEach(() => {
         session = mockSession();
-        wrapper = mockSessionContextProvider({ session });
+        wrapper = mockSessionContextProvider(session);
         getResource.mockResolvedValueOnce({
-          response: undefined,
+          response: null,
           error: "404",
         });
       });
@@ -97,11 +97,10 @@ describe("useBookmarks", () => {
 
         initializeBookmarks.mockResolvedValueOnce({
           dataset,
-          iri: bookmarksIri,
         });
         await waitForNextUpdate();
-        const expectedResult = result.current;
-        expect(expectedResult[0]).toEqual({ dataset, iri: bookmarksIri });
+        const expectedDataset = result.current[0].dataset;
+        expect(expectedDataset).toEqual(dataset);
       });
     });
   });
