@@ -37,6 +37,7 @@ import styles from "./styles";
 import Breadcrumbs from "../breadcrumbs";
 import PageHeader from "../containerPageHeader";
 import ContainerDetails from "../containerDetails";
+import { BookmarksContextProvider } from "../../src/contexts/bookmarksContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -56,6 +57,12 @@ export default function Container({ iri }) {
       {
         header: "Icon",
         accessor: "icon",
+        disableSortBy: true,
+        modifiers: ["align-center", "width-preview"],
+      },
+      {
+        header: "BookmarkIcon",
+        accessor: "bookmark-icon",
         disableSortBy: true,
         modifiers: ["align-center", "width-preview"],
       },
@@ -108,54 +115,58 @@ export default function Container({ iri }) {
   /* eslint react/jsx-props-no-spreading: 0 */
   return (
     <>
-      <PageHeader mutate={mutate} resourceList={data} />
-      <ContainerDetails mutate={mutate}>
-        <Breadcrumbs />
-        <table className={clsx(bem("table"))} {...getTableProps()}>
-          <thead className={bem("table__header")}>
-            {headerGroups.map((headerGroup) => (
-              <tr
-                key={headerGroup.id}
-                className={bem("table__header-row")}
-                {...headerGroup.getHeaderGroupProps()}
-              >
-                {headerGroup.headers.map((column) => (
-                  <td
-                    key={column.id}
-                    className={bem(
-                      "table__header-cell",
-                      ...(column.modifiers || [])
-                    )}
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                  >
-                    {column.render("Header")}
-                    {` `}
-                    <SortedTableCarat
-                      sorted={column.isSorted}
-                      sortedDesc={column.isSortedDesc}
-                    />
+      <BookmarksContextProvider>
+        <PageHeader mutate={mutate} resourceList={data} />
+        <ContainerDetails mutate={mutate}>
+          <Breadcrumbs />
+          <table className={clsx(bem("table"))} {...getTableProps()}>
+            <thead className={bem("table__header")}>
+              {headerGroups.map((headerGroup) => (
+                <tr
+                  key={headerGroup.id}
+                  className={bem("table__header-row")}
+                  {...headerGroup.getHeaderGroupProps()}
+                >
+                  {headerGroup.headers.map((column) => (
+                    <td
+                      key={column.id}
+                      className={bem(
+                        "table__header-cell",
+                        ...(column.modifiers || [])
+                      )}
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                    >
+                      {column.render("Header")}
+                      {` `}
+                      <SortedTableCarat
+                        sorted={column.isSorted}
+                        sortedDesc={column.isSortedDesc}
+                      />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody className={bem("table__body")} {...getTableBodyProps()}>
+              {!data || !data.length ? (
+                <tr key="no-resources-found" className={bem("table__body-row")}>
+                  <td rowSpan={3} className={bem("table__body-cell")}>
+                    No resources were found within this container.
                   </td>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody className={bem("table__body")} {...getTableBodyProps()}>
-            {!data || !data.length ? (
-              <tr key="no-resources-found" className={bem("table__body-row")}>
-                <td rowSpan={3} className={bem("table__body-cell")}>
-                  No resources were found within this container.
-                </td>
-              </tr>
-            ) : null}
+                </tr>
+              ) : null}
 
-            {rows.map((row) => {
-              prepareRow(row);
-              const details = row.original;
-              return <ContainerTableRow key={details.iri} resource={details} />;
-            })}
-          </tbody>
-        </table>
-      </ContainerDetails>
+              {rows.map((row) => {
+                prepareRow(row);
+                const details = row.original;
+                return (
+                  <ContainerTableRow key={details.iri} resource={details} />
+                );
+              })}
+            </tbody>
+          </table>
+        </ContainerDetails>
+      </BookmarksContextProvider>
     </>
   );
 }

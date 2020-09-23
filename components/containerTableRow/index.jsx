@@ -30,6 +30,7 @@ import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
 import { isContainerIri } from "../../src/solidClientHelpers/utils";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import ResourceLink, { resourceContextRedirect } from "../resourceLink";
+import Bookmark from "../bookmark";
 import styles from "./styles";
 
 export function ResourceIcon({ iri, bem }) {
@@ -56,6 +57,7 @@ export function handleClick(resourceIri, containerIri, router) {
   return async (evnt) => {
     const element = evnt.target;
     if (element && element.tagName === "A") return;
+    if (element && element.tagName === "I") return;
     await resourceContextRedirect(action, resourceIri, containerIri, router);
   };
 }
@@ -77,9 +79,11 @@ export default function ContainerTableRow({ resource }) {
       onClick={handleClick(iri, currentUri, router)}
     >
       <td className={bem("table__body-cell", "align-center", "width-preview")}>
+        <Bookmark iri={iri} />
+      </td>
+      <td className={bem("table__body-cell", "align-center", "width-preview")}>
         <ResourceIcon iri={iri} bem={bem} />
       </td>
-
       <td className={bem("table__body-cell")}>
         {isContainerIri(iri) ? (
           <ResourceLink
@@ -93,7 +97,6 @@ export default function ContainerTableRow({ resource }) {
           name
         )}
       </td>
-
       <td key={`${iri}-type`} className={bem("table__body-cell")}>
         {renderResourceType(iri)}
       </td>

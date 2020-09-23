@@ -858,6 +858,25 @@ font-display: block;",
               <td
                 className="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
               >
+                <Bookmark
+                  iri="https://example.com/example.ttl"
+                >
+                  <button
+                    className="PodBrowser-button PodBrowser-button--text"
+                    onClick={[Function]}
+                    type="button"
+                  >
+                    <i
+                      alt="bookmark button"
+                      aria-label="bookmark"
+                      className="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+                    />
+                  </button>
+                </Bookmark>
+              </td>
+              <td
+                className="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+              >
                 <ResourceIcon
                   bem={[Function]}
                   iri="https://example.com/example.ttl"
@@ -1747,6 +1766,25 @@ font-display: block;",
               <td
                 className="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
               >
+                <Bookmark
+                  iri="https://example.com/example.ttl"
+                >
+                  <button
+                    className="PodBrowser-button PodBrowser-button--text"
+                    onClick={[Function]}
+                    type="button"
+                  >
+                    <i
+                      alt="bookmark button"
+                      aria-label="bookmark"
+                      className="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+                    />
+                  </button>
+                </Bookmark>
+              </td>
+              <td
+                className="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+              >
                 <ResourceIcon
                   bem={[Function]}
                   iri="https://example.com/example.ttl"
@@ -2631,6 +2669,25 @@ font-display: block;",
               className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable PodBrowser-tableRow"
               onClick={[Function]}
             >
+              <td
+                className="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+              >
+                <Bookmark
+                  iri="https://example.com/example.ttl"
+                >
+                  <button
+                    className="PodBrowser-button PodBrowser-button--text"
+                    onClick={[Function]}
+                    type="button"
+                  >
+                    <i
+                      alt="bookmark button"
+                      aria-label="bookmark"
+                      className="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+                    />
+                  </button>
+                </Bookmark>
+              </td>
               <td
                 className="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
               >
