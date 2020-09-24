@@ -23,8 +23,8 @@ import { StyleRules } from "@material-ui/core";
 import { PrismTheme, content } from "@solid/lit-prism-patterns";
 
 const rules = {
-  avatar: {
-    marginRight: "1rem",
+  accordionDetails: {
+    display: "block",
   },
   centeredSection: {
     paddingLeft: "1rem",
@@ -45,13 +45,6 @@ const rules = {
     maxHeight: "200px",
     overflow: "auto",
   },
-  listItem: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    paddingRight: 0,
-    paddingLeft: 0,
-  },
   formListItem: {
     display: "block",
   },
@@ -61,15 +54,8 @@ const rules = {
   typeValue: {
     marginLeft: "auto",
   },
-  // downloadButton: {
-  //   marginTop: "1rem",
-  //   marginBottom: "1rem",
-  // },
   agentInput: {
     width: "100%",
-    marginBottom: "1rem",
-  },
-  agentAddButton: {
     marginBottom: "1rem",
   },
 };

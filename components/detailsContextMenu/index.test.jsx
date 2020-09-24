@@ -26,7 +26,7 @@ import * as SolidClientHookFns from "../../src/hooks/solidClient";
 
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
-import DetailsContextMenu, { Contents, handleCloseDrawer } from "./index";
+import DetailsContextMenu, { handleCloseDrawer } from "./index";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 import mockDetailsContextMenuProvider from "../../__testUtils/mockDetailsContextMenuProvider";
 import mockAlertContextProvider from "../../__testUtils/mockAlertContextProvider";

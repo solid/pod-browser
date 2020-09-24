@@ -4,9 +4,9 @@ exports[`ConfirmationDialogContext it has context data 1`] = `
 <ContextProvider
   value={
     Object {
-      "confirmed": false,
+      "confirmed": null,
       "content": null,
-      "open": false,
+      "open": null,
       "setConfirmed": [Function],
       "setContent": [Function],
       "setOpen": [Function],

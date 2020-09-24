@@ -21,20 +21,8 @@
 
 import React, { useState } from "react";
 import { useId } from "react-id-generator";
-import {
-  Button,
-  createStyles,
-  FormControl,
-  Input,
-  InputAdornment,
-  InputLabel,
-} from "@material-ui/core";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import T from "prop-types";
-import { makeStyles } from "@material-ui/styles";
-import styles from "../resourceDetails/styles";
-
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+import { Button, Input } from "@inrupt/prism-react-components";
 
 export function handleClick({ setAgentId, onSubmit }) {
   return (agentId) => {
@@ -49,52 +37,31 @@ export function handleChange(setAgentId) {
   };
 }
 
-function AgentSearchForm({ heading, onSubmit, buttonText }) {
+function AgentSearchForm({ children, onSubmit, buttonText }) {
   const [agentId, setAgentId] = useState("");
-  const classes = useStyles();
   const onClick = handleClick({ setAgentId, onSubmit });
   const onChange = handleChange(setAgentId);
   const inputId = useId();
-
   return (
     <>
-      <h5 className={classes["content-h5"]}>{heading}</h5>
+      <Input id={inputId} label="WebID" onChange={onChange} value={agentId} />
 
-      <FormControl className={classes.agentInput}>
-        <InputLabel htmlFor={inputId}>Web ID</InputLabel>
-        <Input
-          id={inputId}
-          onChange={onChange}
-          value={agentId}
-          // prettier-ignore
-          startAdornment={(
-            <InputAdornment position="start">
-              <AccountCircle />
-            </InputAdornment>
-          )}
-        />
-      </FormControl>
+      {children}
 
-      <Button
-        variant="contained"
-        onClick={() => onClick(agentId)}
-        className={classes.agentAddButton}
-      >
-        {buttonText}
-      </Button>
+      <Button onClick={() => onClick(agentId)}>{buttonText}</Button>
     </>
   );
 }
 
 AgentSearchForm.propTypes = {
   buttonText: T.string,
-  heading: T.string,
+  children: T.node,
   onSubmit: T.func,
 };
 
 AgentSearchForm.defaultProps = {
   buttonText: "Add",
-  heading: "Grant Permission",
+  children: null,
   onSubmit: () => {},
 };
 

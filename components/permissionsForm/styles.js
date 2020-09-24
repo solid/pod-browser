@@ -19,42 +19,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
-
 const smallFontSize = {
   fontSize: "0.75rem",
 };
 
-const styles = (theme: PrismTheme) => {
-  return createStyles(theme, [], {
-    container: {
-      display: "block",
-      position: "relative",
-    },
-    listItem: {
-      paddingBottom: 0,
-      paddingTop: 0,
-    },
-    selectionClosed: {
-      display: "none",
-    },
-    selectionOpen: {
-      display: "block",
-    },
-    summary: {
-      ...smallFontSize,
-      listStyle: "none",
-      display: "flex",
-      flexWrap: "nowrap",
-      alignItems: "center",
-      justifyContent: "space-between",
-      width: 140,
-    },
-    label: smallFontSize,
-    checkbox: {
-      padding: 0,
-    },
-  });
-};
-
-export default styles;
+export default (theme) => ({
+  container: {
+    display: "block",
+    position: "relative",
+  },
+  listItem: {
+    paddingBottom: 0,
+    paddingTop: 0,
+  },
+  selectionClosed: {
+    display: "none",
+  },
+  selectionOpen: {
+    display: "block",
+  },
+  summary: {
+    listStyle: "none",
+    display: "flex",
+    flexWrap: "nowrap",
+    alignItems: "center",
+    justifyContent: "space-between",
+    textTransform: "inherit",
+    fontSize: theme.typography.body.fontSize,
+    maxWidth: "95%",
+    margin: theme.spacing(0.5, 0),
+    padding: theme.spacing(1.5, 2),
+  },
+  label: smallFontSize,
+  checkbox: {
+    padding: 0,
+  },
+});

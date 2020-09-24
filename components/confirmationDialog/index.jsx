@@ -30,7 +30,7 @@ import {
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
 
 export default function ConfirmationDialog() {
-  const { open, setOpen, title, content, setConfirmed } = useContext(
+  const { open, title, content, setConfirmed } = useContext(
     ConfirmationDialogContext
   );
 
@@ -40,12 +40,12 @@ export default function ConfirmationDialog() {
       disableEscapeKeyDown
       maxWidth="xs"
       aria-labelledby="confirmation-dialog"
-      open={open}
+      open={!!open}
     >
       <DialogTitle>{title}</DialogTitle>
       <DialogContent dividers>{content}</DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={() => setOpen(false)}>
+        <Button autoFocus onClick={() => setConfirmed(false)}>
           Cancel
         </Button>
 

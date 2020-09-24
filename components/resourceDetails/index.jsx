@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Accordion,
   AccordionDetails,
@@ -32,14 +32,17 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import T from "prop-types";
-import { useSession } from "@inrupt/solid-ui-react";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { ActionMenu, ActionMenuItem } from "@inrupt/prism-react-components";
-import ResourceLink from "../resourceLink";
+import { getDisplayName } from "next/dist/next-server/lib/utils";
+import { DatasetContext } from "@inrupt/solid-ui-react";
+import { getSourceUrl } from "@inrupt/solid-client";
 import styles from "./styles";
 import DeleteLink from "../deleteLink";
 import DownloadLink from "../downloadLink";
 import ResourceSharing from "./resourceSharing";
+import { getIriPath, getTypes } from "../../src/solidClientHelpers/utils";
+import DetailsLoading from "./detailsLoading";
 
 const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
 const TESTCAFE_ID_SHARE_PERMISSIONS_BUTTON = "share-permissions-button";
@@ -47,25 +50,23 @@ const TESTCAFE_ID_TITLE = "resource-title";
 
 export function displayType(types) {
   if (!types || types.length === 0) return "Resource";
-  const [type] = types;
-  return type;
+  return types[0];
 }
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function ResourceDetails({ resource, onDelete, onDeleteError }) {
+export default function ResourceDetails({ onDelete, onDeleteError }) {
   const [sharingExpanded, setSharingExpanded] = useState(false);
+  const { dataset, loading } = useContext(DatasetContext);
+  const datasetUrl = getSourceUrl(dataset);
   const classes = useStyles();
-  const {
-    iri,
-    name,
-    types,
-    permissions,
-    defaultPermissions,
-    dataset,
-  } = resource;
+  const name = getIriPath(datasetUrl);
+  const displayName = getDisplayName(name);
+  const types = getTypes(dataset);
   const type = displayType(types);
   const actionMenuBem = ActionMenu.useBem();
+
+  if (loading) return <DetailsLoading name={displayName} iri={datasetUrl} />;
 
   const expandIcon = <ExpandMoreIcon />;
   return (
@@ -74,9 +75,9 @@ export default function ResourceDetails({ resource, onDelete, onDeleteError }) {
         <h3
           data-testid={TESTCAFE_ID_TITLE}
           className={classes["content-h3"]}
-          title={iri}
+          title={datasetUrl}
         >
-          {name}
+          {displayName}
         </h3>
       </section>
 
@@ -84,13 +85,13 @@ export default function ResourceDetails({ resource, onDelete, onDeleteError }) {
 
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={expandIcon}>Actions</AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails className={classes.accordionDetails}>
           <ActionMenu>
             <ActionMenuItem>
               <DownloadLink
                 className={actionMenuBem("action-menu__trigger")}
                 data-testid={TESTCAFE_ID_DOWNLOAD_BUTTON}
-                iri={iri}
+                iri={datasetUrl}
                 type={type}
               >
                 Download
@@ -109,8 +110,8 @@ export default function ResourceDetails({ resource, onDelete, onDeleteError }) {
             <ActionMenuItem>
               <DeleteLink
                 className={actionMenuBem("action-menu__trigger", "danger")}
-                resourceIri={iri}
-                name={name}
+                resourceIri={datasetUrl}
+                name={displayName}
                 onDelete={onDelete}
                 onDeleteError={onDeleteError}
                 data-testid={TESTCAFE_ID_DOWNLOAD_BUTTON}
@@ -124,7 +125,7 @@ export default function ResourceDetails({ resource, onDelete, onDeleteError }) {
 
       <Accordion>
         <AccordionSummary expandIcon={expandIcon}>Details</AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails className={classes.accordionDetails}>
           <section className={classes.centeredSection}>
             <List>
               <ListItem className={classes.listItem}>
@@ -147,15 +148,8 @@ export default function ResourceDetails({ resource, onDelete, onDeleteError }) {
         onChange={() => setSharingExpanded(!sharingExpanded)}
       >
         <AccordionSummary expandIcon={expandIcon}>Permissions</AccordionSummary>
-        <AccordionDetails>
-          <div>
-            <ResourceSharing
-              iri={iri}
-              permissions={permissions}
-              defaultPermissions={defaultPermissions}
-              dataset={dataset}
-            />
-          </div>
+        <AccordionDetails className={classes.accordionDetails}>
+          <ResourceSharing />
         </AccordionDetails>
       </Accordion>
     </>
@@ -163,28 +157,11 @@ export default function ResourceDetails({ resource, onDelete, onDeleteError }) {
 }
 
 ResourceDetails.propTypes = {
-  resource: T.shape({
-    iri: T.string.isRequired,
-    name: T.string.isRequired,
-    types: T.arrayOf(T.string).isRequired,
-    permissions: T.arrayOf(T.object).isRequired,
-    defaultPermissions: T.arrayOf(T.object).isRequired,
-    // eslint-disable-next-line react/forbid-prop-types
-    dataset: T.object.isRequired,
-  }),
   onDelete: T.func,
   onDeleteError: T.func,
 };
 
 ResourceDetails.defaultProps = {
-  resource: {
-    iri: "",
-    name: "",
-    types: [],
-    permissions: [],
-    defaultPermissions: [],
-    dataset: null,
-  },
   onDelete: () => {},
   onDeleteError: () => {},
 };

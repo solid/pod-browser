@@ -21,10 +21,9 @@
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { useContext } from "react";
+import React from "react";
 import T from "prop-types";
 import { useSession } from "@inrupt/solid-ui-react";
-import SessionContext from "../../src/contexts/sessionContext";
 import { parseUrl } from "../../src/stringHelpers";
 
 export function forceDownload(name, file) {

@@ -33,6 +33,9 @@ import {
   isContainer,
   getAgentAccessAll,
   getAgentDefaultAccessAll,
+  hasAccessibleAcl,
+  getFallbackAcl,
+  getSourceUrl,
 } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
 
@@ -73,6 +76,10 @@ export async function fetchResourceDetails(iri, fetch) {
       defaultAccessModeList,
       fetch
     );
+  } else if (hasAccessibleAcl(resourceInfo)) {
+    const fallbackAcl = getFallbackAcl(resourceInfo);
+    const accessModeList = getAgentDefaultAccessAll(fallbackAcl);
+    permissions = await normalizePermissions(accessModeList, fetch);
   }
 
   let types = [];

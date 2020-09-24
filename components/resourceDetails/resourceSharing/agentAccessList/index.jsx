@@ -19,109 +19,75 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable camelcase */
+/* eslint-disable camelcase, react/jsx-props-no-spreading */
 
-import React from "react";
-import {
-  Avatar,
-  createStyles,
-  List,
-  ListItem,
-  Typography,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
-import T from "prop-types";
-import { useSession } from "@inrupt/solid-ui-react";
-import { displayProfileName } from "../../../../src/solidClientHelpers/profile";
-import styles from "../../styles";
-import PermissionsForm from "../../../permissionsForm";
+import React, { useContext, useEffect, useState } from "react";
+import { CircularProgress, List, ListItem } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/styles";
+import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
+import { Button } from "@inrupt/prism-react-components";
+import styles from "./styles";
+import AgentAccess from "../agentAccess";
+import { getPermissions } from "../../../../src/solidClientHelpers/permissions";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-const TESTCAFE_ID_AGENT_WEB_ID = "agent-web-id";
-
-export function handleSave({
-  onSubmit,
-  saveFn,
-  onSave,
-  profile,
-  iri,
-  webId,
-  fetch,
-}) {
-  return async (access) => {
-    onSubmit(profile, access);
-
-    const response = await saveFn({
-      iri,
-      webId,
-      access,
-      fetch,
-    });
-
-    onSave(profile, response);
-
-    return response;
-  };
-}
-
-function AgentAccessList({ iri, onSave, onSubmit, permissions, saveFn, warn }) {
+function AgentAccessList() {
   const classes = useStyles();
-  const {
-    session: { fetch },
-  } = useSession();
-  if (permissions.length === 0) return null;
+  const { fetch } = useSession();
+  const [permissions, setPermissions] = useState([]);
+  const [showAll, setShowAll] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const { dataset } = useContext(DatasetContext);
+
+  useEffect(() => {
+    if (!dataset) return;
+    setLoading(true);
+    getPermissions(dataset, fetch).then((normalizedPermissions) => {
+      setPermissions(
+        normalizedPermissions.sort((a, b) => (a.webId <= b.webId ? -1 : 1))
+      );
+      setLoading(false);
+    });
+  }, [dataset, fetch]);
+
+  if (loading) return <CircularProgress color="primary" />;
+
+  if (permissions.length === 0) {
+    return <div>No access granted to individuals yet</div>;
+  }
+
+  const permissionsShown = showAll ? permissions : permissions.slice(0, 3);
 
   return (
-    <List>
-      {permissions.map((permission) => {
-        const { profile, webId } = permission;
-        const { avatar } = profile;
-        const name = displayProfileName(profile);
-        const saveHandler = handleSave({
-          fetch,
-          iri,
-          onSave,
-          onSubmit,
-          profile,
-          saveFn,
-          webId,
-        });
-        return (
-          <ListItem key={webId} className={classes.listItem}>
-            <Avatar className={classes.avatar} alt={name} src={avatar} />
-            <Typography
-              data-testid={TESTCAFE_ID_AGENT_WEB_ID}
-              className={classes.detailText}
-            >
-              {name}
-            </Typography>
-            <PermissionsForm
-              key={webId}
-              permission={permission}
-              warnOnSubmit={warn}
-              onSave={saveHandler}
-            />
+    <>
+      <List>
+        {permissionsShown.map((permission) => (
+          <ListItem key={permission.webId} className={classes.listItem}>
+            <AgentAccess permission={permission} />
           </ListItem>
-        );
-      })}
-    </List>
+        ))}
+      </List>
+      {showAll ? null : (
+        <Button onClick={() => setShowAll(true)} variant="action">
+          Show all
+        </Button>
+      )}
+    </>
   );
 }
 
 AgentAccessList.defaultProps = {
-  warn: false,
-  onSave: () => {},
-  onSubmit: () => {},
+  // warn: false,
+  // onSave: () => {},
+  // onSubmit: () => {},
 };
 
 AgentAccessList.propTypes = {
-  iri: T.string.isRequired,
-  onSave: T.func,
-  onSubmit: T.func,
-  permissions: T.arrayOf(T.object).isRequired,
-  saveFn: T.func.isRequired,
-  warn: T.bool,
+  // onSave: T.func,
+  // onSubmit: T.func,
+  // saveFn: T.func.isRequired,
+  // warn: T.bool,
 };
 
 export default AgentAccessList;

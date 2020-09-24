@@ -24,14 +24,18 @@
 import {
   createSolidDataset,
   createThing,
+  getContentType,
   getDatetime,
   getDecimal,
   getInteger,
+  getSourceIri,
+  getSourceUrl,
+  getThing,
   getUrlAll,
   setThing,
 } from "@inrupt/solid-client";
 import camelCase from "camelcase";
-import { ldp } from "rdf-namespaces";
+import { ldp, rdf } from "rdf-namespaces";
 import { parseUrl } from "../stringHelpers";
 
 const typeNameMap = Object.keys(ldp).reduce((acc, key) => {
@@ -95,6 +99,17 @@ export function isContainerIri(iri) {
 export function getIriPath(iri) {
   const { pathname } = parseUrl(iri);
   return pathname.replace(/\/?$/, "");
+}
+
+export function getTypes(dataset) {
+  const thing = getThing(dataset, getSourceUrl(dataset));
+  return getUrlAll(thing, rdf.type);
+}
+
+export function datasetIsContainer(dataset) {
+  return (
+    getTypes(dataset).find((type) => type.match(/container/i)) !== undefined
+  );
 }
 
 export function getTypeName(rawType) {

@@ -29,6 +29,7 @@ import ConfirmationDialogContext from "../../src/contexts/confirmationDialogCont
 
 const TESTCAFE_ID_UPLOAD_BUTTON = "upload-file-button";
 const TESTCAFE_ID_UPLOAD_INPUT = "upload-file-input";
+const DUPLICATE_DIALOG_ID = "upload-duplicate-file";
 
 export function handleSaveResource({
   fetch,
@@ -79,7 +80,7 @@ export function handleUploadedFile({
 }) {
   return (uploadedFile, existingFile) => {
     if (existingFile) {
-      setOpen(true);
+      setOpen(DUPLICATE_DIALOG_ID);
       setTitle(`File ${uploadedFile.name} already exists`);
       setContent(<p>Do you want to replace it?</p>);
       setConfirmationSetup(true);
@@ -133,14 +134,18 @@ export function handleConfirmation({
   saveResource,
   setConfirmationSetup,
 }) {
-  return (confirmationSetup, confirmed, file) => {
-    if (confirmationSetup && !confirmed) return;
+  return (confirmationSetup, confirmed, file, open) => {
+    if (confirmationSetup && confirmed === null && open === DUPLICATE_DIALOG_ID)
+      return;
 
-    if (confirmationSetup && confirmed) {
-      setOpen(false);
-      setConfirmed(false);
-      setConfirmationSetup(false);
+    if (confirmationSetup && confirmed && open === DUPLICATE_DIALOG_ID) {
       saveResource(file);
+    }
+
+    if (confirmed !== null) {
+      setOpen(null);
+      setConfirmed(null);
+      setConfirmationSetup(false);
     }
   };
 }
@@ -151,9 +156,14 @@ export default function AddFileButton({ className, onSave, resourceList }) {
   const { currentUri } = useContext(PodLocationContext);
   const [isUploading, setIsUploading] = useState(false);
   const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
-  const { confirmed, setConfirmed, setContent, setOpen, setTitle } = useContext(
-    ConfirmationDialogContext
-  );
+  const {
+    confirmed,
+    open,
+    setConfirmed,
+    setContent,
+    setOpen,
+    setTitle,
+  } = useContext(ConfirmationDialogContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
   const [file, setFile] = useState(null);
 
@@ -194,11 +204,12 @@ export default function AddFileButton({ className, onSave, resourceList }) {
     setConfirmed,
     saveResource,
     setConfirmationSetup,
+    open,
   });
 
   useEffect(() => {
-    onConfirmation(confirmationSetup, confirmed, file);
-  }, [confirmationSetup, confirmed, onConfirmation, file]);
+    onConfirmation(confirmationSetup, confirmed, file, open);
+  }, [confirmationSetup, confirmed, onConfirmation, file, open]);
 
   return (
     // eslint-disable-next-line jsx-a11y/label-has-associated-control

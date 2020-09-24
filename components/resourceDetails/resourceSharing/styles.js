@@ -19,53 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import T from "prop-types";
-import {
-  Checkbox,
-  FormControlLabel,
-  ListItem,
-  makeStyles,
-  createStyles,
-} from "@material-ui/core";
-import styles from "../styles";
-
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-
-function PermissionCheckbox({ value, label, disabled, onChange }) {
-  const classes = useStyles();
-  const name = label.toLowerCase();
-
-  return (
-    // prettier-ignore
-    <ListItem className={classes.listItem}>
-      <FormControlLabel
-        classes={{ label: classes.label }}
-        label={label}
-        control={(
-          <Checkbox
-            classes={{ root: classes.checkbox }}
-            checked={value}
-            name={name}
-            onChange={onChange}
-            disabled={disabled}
-          />
-        )}
-      />
-    </ListItem>
-  );
-}
-
-PermissionCheckbox.propTypes = {
-  disabled: T.bool,
-  value: T.bool.isRequired,
-  label: T.string.isRequired,
-  onChange: T.func,
-};
-
-PermissionCheckbox.defaultProps = {
-  disabled: false,
-  onChange: () => {},
-};
-
-export default PermissionCheckbox;
+export default () => ({
+  details: {
+    display: "block",
+  },
+});

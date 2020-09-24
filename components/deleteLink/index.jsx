@@ -23,13 +23,14 @@ import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import { deleteFile } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
-import SessionContext from "../../src/contexts/sessionContext";
 import AlertContext from "../../src/contexts/alertContext";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
 
 const TESTCAFE_ID_DELETE_BUTTON = "delete-button";
 
 export function handleConfirmation({
+  dialogId,
+  open,
   setOpen,
   setConfirmed,
   deleteResource,
@@ -38,7 +39,8 @@ export function handleConfirmation({
   setConfirmationSetup,
 }) {
   return (confirmationSetup, confirmed, name) => {
-    if (confirmationSetup && !confirmed) return;
+    if (open !== dialogId) return;
+    if (confirmationSetup && confirmed === null) return;
 
     setTitle("Confirm Delete");
     setContent(
@@ -47,9 +49,13 @@ export function handleConfirmation({
     setConfirmationSetup(true);
 
     if (confirmationSetup && confirmed) {
-      setOpen(false);
-      setConfirmed(false);
+      setConfirmed(null);
       deleteResource();
+    }
+
+    if (confirmationSetup && confirmed !== null) {
+      setConfirmed(null);
+      setOpen(null);
     }
   };
 }
@@ -84,14 +90,19 @@ export default function DeleteLink({
   onDeleteError,
   ...linkProps
 }) {
-  const session = useSession();
+  const { fetch } = useSession();
   const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
-  const { fetch } = session;
   const [confirmationSetup, setConfirmationSetup] = useState(false);
+  const dialogId = `delete-resource-${resourceIri}`;
 
-  const { confirmed, setConfirmed, setContent, setOpen, setTitle } = useContext(
-    ConfirmationDialogContext
-  );
+  const {
+    confirmed,
+    open,
+    setConfirmed,
+    setContent,
+    setOpen,
+    setTitle,
+  } = useContext(ConfirmationDialogContext);
 
   const deleteResource = handleDeleteResource({
     name,
@@ -105,6 +116,8 @@ export default function DeleteLink({
   });
 
   const onConfirmation = handleConfirmation({
+    dialogId,
+    open,
     setOpen,
     setConfirmed,
     deleteResource,
@@ -123,7 +136,7 @@ export default function DeleteLink({
       href="#delete"
       data-testid={TESTCAFE_ID_DELETE_BUTTON}
       {...linkProps}
-      onClick={() => setOpen(true)}
+      onClick={() => setOpen(dialogId)}
     />
   );
 }

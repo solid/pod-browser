@@ -23,74 +23,9 @@ import React, { useContext, useEffect } from "react";
 import T from "prop-types";
 import { useRouter } from "next/router";
 import { Drawer } from "@inrupt/prism-react-components";
-import { getResourceName } from "../../src/solidClientHelpers/resource";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
-import AlertContext from "../../src/contexts/alertContext";
-import DetailsLoading from "../resourceDetails/detailsLoading";
-import DetailsError from "../resourceDetails/detailsError";
-import ResourceDetails from "../resourceDetails";
-import { useFetchResourceDetails } from "../../src/hooks/solidClient";
 import { stripQueryParams } from "../../src/stringHelpers";
-
-function Contents({ action, iri, onUpdate }) {
-  const { data, error } = useFetchResourceDetails(iri);
-  const displayName = getResourceName(iri);
-
-  const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
-  const errorMessage = "There was an error fetching the details.";
-
-  function onDeleteError(e) {
-    setSeverity("error");
-    setMessage(e.toString());
-    setAlertOpen(true);
-  }
-
-  const loadingComponent = (
-    <DetailsLoading
-      name={displayName}
-      iri={iri}
-      onDelete={onUpdate}
-      onDeleteError={onDeleteError}
-    />
-  );
-
-  useEffect(() => {
-    if (error) {
-      setSeverity("error");
-      setMessage(errorMessage);
-      setAlertOpen(true);
-    }
-  });
-
-  if (error) {
-    return <DetailsError message={errorMessage} name={displayName} iri={iri} />;
-  }
-
-  if (!data) return loadingComponent;
-
-  switch (action) {
-    default:
-      return (
-        <ResourceDetails
-          resource={{ ...data, name: displayName }}
-          onDelete={onUpdate}
-          onDeleteError={onDeleteError}
-        />
-      );
-  }
-}
-
-Contents.propTypes = {
-  action: T.string.isRequired,
-  iri: T.string.isRequired,
-  onUpdate: T.func,
-};
-
-Contents.defaultProps = {
-  onUpdate: () => {},
-};
-
-export { Contents };
+import DetailsContextMenuContents from "./detailsContextMenuContent";
 
 export function handleCloseDrawer({ setMenuOpen, router }) {
   return async () => {
@@ -119,7 +54,7 @@ export default function DetailsContextMenu({ onUpdate }) {
 
   return (
     <Drawer open={menuOpen} close={closeDrawer}>
-      <Contents action={action} iri={resourceIri} onUpdate={onUpdate} />
+      <DetailsContextMenuContents iri={resourceIri} onUpdate={onUpdate} />
     </Drawer>
   );
 }

@@ -2,23 +2,16 @@
 
 exports[`PermissionsForm Renders a permissions form 1`] = `
 <PermissionsForm
-  iri="https://mypod.myhost.com"
-  onSave={[Function]}
-  permission={
+  acl={
     Object {
-      "acl": Object {
-        "append": true,
-        "control": true,
-        "read": true,
-        "write": true,
-      },
-      "alias": "Control",
-      "profile": Object {
-        "webId": "https://mypod.myhost.com/profile/card#me",
-      },
-      "webId": "https://mypod.myhost.com/profile/card#me",
+      "append": true,
+      "control": true,
+      "read": true,
+      "write": true,
     }
   }
+  iri="https://mypod.myhost.com"
+  onSave={[Function]}
   warnOnSubmit={false}
 >
   <div
@@ -1864,23 +1857,16 @@ exports[`PermissionsForm arrowIcon it returns the up arrow when open is true 1`]
 
 exports[`PermissionsForm it returns null if control is false 1`] = `
 <PermissionsForm
-  iri="https://mypod.myhost.com"
-  onSave={[Function]}
-  permission={
+  acl={
     Object {
-      "acl": Object {
-        "append": true,
-        "control": false,
-        "read": true,
-        "write": true,
-      },
-      "alias": "Control",
-      "profile": Object {
-        "webId": "https://mypod.myhost.com/profile/card#me",
-      },
-      "webId": "https://mypod.myhost.com/profile/card#me",
+      "append": true,
+      "control": false,
+      "read": true,
+      "write": true,
     }
   }
+  iri="https://mypod.myhost.com"
+  onSave={[Function]}
   warnOnSubmit={false}
 >
   <div

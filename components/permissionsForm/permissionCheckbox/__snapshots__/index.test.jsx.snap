@@ -841,6 +841,7 @@ font-display: block;",
       }
     >
       <PermissionCheckbox
+        disabled={false}
         label="Read"
         onChange={[MockFunction]}
         value={true}
@@ -884,6 +885,7 @@ font-display: block;",
                         "root": "PodBrowser-checkbox",
                       }
                     }
+                    disabled={false}
                     name="read"
                     onChange={[MockFunction]}
                   />
@@ -910,6 +912,7 @@ font-display: block;",
                           "root": "PodBrowser-checkbox",
                         }
                       }
+                      disabled={false}
                       name="read"
                       onChange={[MockFunction]}
                     />
@@ -926,6 +929,7 @@ font-display: block;",
                           "root": "PodBrowser-checkbox",
                         }
                       }
+                      disabled={false}
                       name="read"
                       onChange={[MockFunction]}
                     >
@@ -941,6 +945,7 @@ font-display: block;",
                             "root": "PodBrowser-root PodBrowser-checkbox",
                           }
                         }
+                        disabled={false}
                         name="read"
                         onChange={[MockFunction]}
                       >
@@ -955,6 +960,7 @@ font-display: block;",
                             }
                           }
                           color="secondary"
+                          disabled={false}
                           icon={<Memo />}
                           inputProps={
                             Object {
@@ -977,6 +983,7 @@ font-display: block;",
                               }
                             }
                             color="secondary"
+                            disabled={false}
                             icon={<Memo />}
                             inputProps={
                               Object {
@@ -991,6 +998,7 @@ font-display: block;",
                               className="PodBrowser-root PodBrowser-root PodBrowser-checkbox PodBrowser-colorSecondary PodBrowser-checked PodBrowser-checked"
                               color="secondary"
                               component="span"
+                              disabled={false}
                               onBlur={[Function]}
                               onFocus={[Function]}
                               tabIndex={null}
@@ -1012,6 +1020,7 @@ font-display: block;",
                                 }
                                 color="secondary"
                                 component="span"
+                                disabled={false}
                                 onBlur={[Function]}
                                 onFocus={[Function]}
                                 tabIndex={null}
@@ -1066,6 +1075,7 @@ font-display: block;",
                                           checked={true}
                                           className="PodBrowser-input"
                                           data-indeterminate={false}
+                                          disabled={false}
                                           name="read"
                                           onChange={[Function]}
                                           type="checkbox"

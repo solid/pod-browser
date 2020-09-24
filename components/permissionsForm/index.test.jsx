@@ -36,7 +36,6 @@ import mockConfirmationDialogContextProvider from "../../__testUtils/mockConfirm
 
 describe("PermissionsForm", () => {
   const iri = "https://mypod.myhost.com";
-  const webId = "https://mypod.myhost.com/profile/card#me";
 
   let AlertContextProvider;
   let setAlertOpen;
@@ -65,56 +64,41 @@ describe("PermissionsForm", () => {
   });
 
   test("Renders a permissions form", () => {
-    const permission = {
-      webId,
-      alias: "Control",
-      profile: { webId },
-      acl: {
-        read: true,
-        write: true,
-        append: true,
-        control: true,
-      },
+    const acl = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
     };
 
     const tree = mount(
-      <PermissionsForm iri={iri} permission={permission} warnOnSubmit={false} />
+      <PermissionsForm iri={iri} acl={acl} warnOnSubmit={false} />
     );
 
     expect(mountToJson(tree)).toMatchSnapshot();
   });
 
   test("it returns null if control is false", () => {
-    const permission = {
-      webId,
-      alias: "Control",
-      profile: { webId },
-      acl: {
-        read: true,
-        write: true,
-        append: true,
-        control: false,
-      },
+    const acl = {
+      read: true,
+      write: true,
+      append: true,
+      control: false,
     };
 
     const tree = mount(
-      <PermissionsForm iri={iri} permission={permission} warnOnSubmit={false} />
+      <PermissionsForm iri={iri} acl={acl} warnOnSubmit={false} />
     );
 
     expect(mountToJson(tree)).toMatchSnapshot();
   });
 
   test("it sets up the confirmation dialog", () => {
-    const permission = {
-      webId,
-      alias: "Control",
-      profile: { webId },
-      acl: {
-        read: true,
-        write: true,
-        append: true,
-        control: true,
-      },
+    const acl = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
     };
 
     const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
@@ -127,11 +111,7 @@ describe("PermissionsForm", () => {
     mount(
       <AlertContextProvider>
         <ConfirmationDialogProvider>
-          <PermissionsForm
-            iri={iri}
-            permission={permission}
-            warnOnSubmit={false}
-          />
+          <PermissionsForm iri={iri} acl={acl} warnOnSubmit={false} />
         </ConfirmationDialogProvider>
       </AlertContextProvider>
     );
@@ -146,16 +126,11 @@ describe("PermissionsForm", () => {
   });
 
   test("it saves the permissions when confirmed is true", () => {
-    const permission = {
-      webId,
-      alias: "Control",
-      profile: { webId },
-      acl: {
-        read: true,
-        write: true,
-        append: true,
-        control: true,
-      },
+    const acl = {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
     };
 
     jest
@@ -179,11 +154,7 @@ describe("PermissionsForm", () => {
     mount(
       <AlertContextProvider>
         <ConfirmationDialogProvider>
-          <PermissionsForm
-            iri={iri}
-            permission={permission}
-            warnOnSubmit={false}
-          />
+          <PermissionsForm iri={iri} acl={acl} warnOnSubmit={false} />
         </ConfirmationDialogProvider>
       </AlertContextProvider>
     );

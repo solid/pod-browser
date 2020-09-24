@@ -39,10 +39,10 @@ const ConfirmationDialogContext = createContext(
 export default ConfirmationDialogContext;
 
 function ConfirmationDialogProvider({ children }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(null);
   const [content, setContent] = useState(null);
   const [title, setTitle] = useState("Confirmation");
-  const [confirmed, setConfirmed] = useState(false);
+  const [confirmed, setConfirmed] = useState(null);
 
   return (
     <ConfirmationDialogContext.Provider
