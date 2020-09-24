@@ -845,6 +845,7 @@ font-display: block;",
       >
         <button
           className="PodBrowser-button PodBrowser-button--text"
+          disabled={false}
           onClick={[Function]}
           type="button"
         >
