@@ -19,39 +19,74 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { mockSolidDatasetFrom, mockThingFrom } from "@inrupt/solid-client";
-import { initializeBookmarks, addBookmark } from "./bookmarks";
+import {
+  addUrl,
+  createSolidDataset,
+  createThing,
+  mockSolidDatasetFrom,
+  setThing,
+} from "@inrupt/solid-client";
+import {
+  initializeBookmarks,
+  addBookmark,
+  removeBookmark,
+  RECALLS_PROPERTY_IRI,
+} from "./bookmarks";
 import { saveResource } from "./resource";
 
 jest.mock("./resource");
-jest.mock("@inrupt/solid-client");
 const bookmarksIri = "https://mypost.myhost.com/bookmarks/index.ttl";
 const bookmarksDataset = mockSolidDatasetFrom(bookmarksIri);
 const fetch = jest.fn();
 
 describe("initialize bookmarks", () => {
   test("it saves a new bookmarks dataset at a given IRI", async () => {
-    saveResource.mockResolvedValue({
-      dataset: bookmarksDataset,
-      iri: bookmarksIri,
-    });
+    saveResource.mockResolvedValue({ response: bookmarksDataset });
     const expected = await initializeBookmarks(bookmarksIri, fetch);
+
     expect(expected).toEqual({ dataset: bookmarksDataset, iri: bookmarksIri });
   });
 });
 
 describe("addBookmark", () => {
   test("it saves a new bookmark to the bookmarks dataset", async () => {
-    await addBookmark(
+    const emptyDataset = createSolidDataset();
+    const bookmarkThing = addUrl(
+      createThing(),
+      RECALLS_PROPERTY_IRI,
+      "https://example.org/cats"
+    );
+    const filledDataset = setThing(emptyDataset, bookmarkThing);
+
+    saveResource.mockResolvedValue({ response: filledDataset });
+
+    const { response: finalDataset } = await addBookmark(
       "https://example.org/cats",
-      { dataset: bookmarksDataset, iri: bookmarksIri },
+      { dataset: emptyDataset, iri: bookmarksIri },
       fetch
     );
+    expect(finalDataset.quads.size).toBe(1);
+  });
+});
 
-    const bookmarkResource = {
-      dataset: mockThingFrom(bookmarksIri),
-      iri: bookmarksIri,
-    };
-    expect(saveResource).toHaveBeenCalledWith(bookmarkResource, fetch);
+describe("removeBookmark", () => {
+  test("it removes a bookmark from the bookmarks dataset", async () => {
+    const emptyDataset = createSolidDataset();
+    const bookmarkThing = addUrl(
+      createThing(),
+      RECALLS_PROPERTY_IRI,
+      "https://example.org/cats"
+    );
+    const filledDataset = setThing(emptyDataset, bookmarkThing);
+
+    await removeBookmark(
+      "https://example.org/cats",
+      { dataset: filledDataset, iri: bookmarksIri },
+      fetch
+    );
+    expect(saveResource).toHaveBeenCalledWith(
+      { dataset: emptyDataset, iri: bookmarksIri },
+      fetch
+    );
   });
 });

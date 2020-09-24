@@ -55,8 +55,11 @@ describe("toggleHandler", () => {
     );
 
     expect(tree.html()).toContain("bookmark-icon-unselected");
+  });
 
+  test("it updates the icon when adding bookmarks", async () => {
     const setBookmarked = jest.fn();
+    const setDisabled = jest.fn();
 
     const toggleHandler = toggleBookmarkHandler({
       bookmarks,
@@ -67,6 +70,7 @@ describe("toggleHandler", () => {
       setAlertOpen: jest.fn(),
       setBookmarked,
       setBookmarks,
+      setDisabled,
       fetch: jest.fn(),
     });
 
@@ -75,7 +79,32 @@ describe("toggleHandler", () => {
       .mockResolvedValueOnce({ response: bookmarks });
 
     await toggleHandler();
-    expect(setBookmarked).toHaveBeenCalled();
+    expect(setBookmarked).toHaveBeenCalledWith(true);
+    expect(setBookmarks).toHaveBeenCalled();
+  });
+  test("it updates the icon when removing bookmarks", async () => {
+    const setBookmarked = jest.fn();
+    const setDisabled = jest.fn();
+
+    const toggleHandler = toggleBookmarkHandler({
+      bookmarks,
+      bookmarked: true,
+      iri,
+      setSeverity: jest.fn(),
+      setMessage: jest.fn(),
+      setAlertOpen: jest.fn(),
+      setBookmarked,
+      setBookmarks,
+      setDisabled,
+      fetch: jest.fn(),
+    });
+
+    jest
+      .spyOn(bookmarkHelpers, "removeBookmark")
+      .mockResolvedValueOnce({ response: bookmarks });
+
+    await toggleHandler();
+    expect(setBookmarked).toHaveBeenCalledWith(false);
     expect(setBookmarks).toHaveBeenCalled();
   });
   test("it renders an error when it is unsuccessful in adding bookmark", async () => {
@@ -93,6 +122,7 @@ describe("toggleHandler", () => {
     const setAlertOpen = jest.fn();
     const setSeverity = jest.fn();
     const setMessage = jest.fn();
+    const setDisabled = jest.fn();
 
     const toggleHandler = toggleBookmarkHandler({
       bookmarks,
@@ -103,6 +133,7 @@ describe("toggleHandler", () => {
       setAlertOpen,
       setBookmarked,
       setBookmarks,
+      setDisabled,
       fetch: jest.fn(),
     });
 

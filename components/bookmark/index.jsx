@@ -30,6 +30,7 @@ import styles from "./styles";
 import {
   addBookmark,
   RECALLS_PROPERTY_IRI,
+  removeBookmark,
 } from "../../src/solidClientHelpers/bookmarks";
 import BookmarksContext from "../../src/contexts/bookmarksContext";
 import AlertContext from "../../src/contexts/alertContext";
@@ -38,26 +39,31 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export const toggleBookmarkHandler = ({
   bookmarks,
-  bookmarked,
   iri,
   setSeverity,
   setMessage,
   setAlertOpen,
-  setBookmarked,
+  bookmarked,
   setBookmarks,
+  setBookmarked,
+  setDisabled,
   fetch,
 }) => {
   return async () => {
+    setDisabled(true);
+    let results;
     if (bookmarked) {
-      return; // returning for now until we have the remove logic
+      results = await removeBookmark(iri, bookmarks, fetch);
+    } else {
+      results = await addBookmark(iri, bookmarks, fetch);
     }
-    const { response, error } = await addBookmark(iri, bookmarks, fetch);
+    const { response, error } = results;
     if (error) {
       setSeverity("error");
       setMessage(error);
       setAlertOpen(true);
     } else {
-      setBookmarked(true); // optimistically set bookmarked to true so it doesn't take that long to display the item as bookmarked
+      setBookmarked(!bookmarked);
       setBookmarks(response);
     }
   };
@@ -75,6 +81,7 @@ export default function Bookmark({ iri }) {
   const bem = useBem(useStyles());
   const { bookmarks, setBookmarks } = useContext(BookmarksContext);
   const [bookmarked, setBookmarked] = useState();
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     if (!bookmarks) {
@@ -83,6 +90,7 @@ export default function Bookmark({ iri }) {
     const { dataset } = bookmarks;
     const bookmarkState = isBookmarked(iri, dataset);
     setBookmarked(bookmarkState);
+    setDisabled(false);
   }, [bookmarks, iri]);
 
   const toggleBookmark = toggleBookmarkHandler({
@@ -94,6 +102,7 @@ export default function Bookmark({ iri }) {
     setAlertOpen,
     setBookmarked,
     setBookmarks,
+    setDisabled,
     fetch,
   });
 
@@ -106,6 +115,7 @@ export default function Bookmark({ iri }) {
       type="button"
       className={clsx(bem("button", "text"))}
       onClick={toggleBookmark}
+      disabled={disabled}
     >
       <i
         className={clsx(bem("icon-star"), bem(bookmarkIconClass))}

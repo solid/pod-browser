@@ -26,6 +26,9 @@ import {
   createThing,
   createSolidDataset,
   setThing,
+  getThingAll,
+  getUrl,
+  removeThing,
 } from "@inrupt/solid-client";
 import { rdf, dct } from "rdf-namespaces";
 import { saveResource, getResourceName } from "./resource";
@@ -49,19 +52,43 @@ export const BOOKMARK_TYPE_IRI = "http://www.w3.org/2002/01/bookmark#Bookmark";
 export async function addBookmark(bookmarkIri, bookmarks, fetch) {
   const { dataset, iri } = bookmarks;
   const bookmarkTitle = getResourceName(bookmarkIri);
-  const bookmark = defineThing(
-    {},
-    (t) => addUrl(t, rdf.type, BOOKMARK_TYPE_IRI),
-    (t) => addStringNoLocale(t, dct.title, bookmarkTitle),
-    (t) => addUrl(t, RECALLS_PROPERTY_IRI, bookmarkIri),
-    (t) => addDatetime(t, dct.created, new Date())
+  const [existingBookmark] = getThingAll(dataset).filter(
+    (t) => getUrl(t, RECALLS_PROPERTY_IRI) === bookmarkIri
   );
+  let results;
+  if (existingBookmark) {
+    results = { response: bookmarks, error: null };
+  } else {
+    const bookmark = defineThing(
+      {},
+      (t) => addUrl(t, rdf.type, BOOKMARK_TYPE_IRI),
+      (t) => addStringNoLocale(t, dct.title, bookmarkTitle),
+      (t) => addUrl(t, RECALLS_PROPERTY_IRI, bookmarkIri),
+      (t) => addDatetime(t, dct.created, new Date())
+    );
+    const bookmarkResource = {
+      dataset: setThing(dataset, bookmark),
+      iri,
+    };
+    results = await saveResource(bookmarkResource, fetch);
+  }
+  return results;
+}
 
-  const bookmarkResource = {
-    dataset: setThing(dataset, bookmark),
-    iri,
-  };
-
-  const { response, error } = await saveResource(bookmarkResource, fetch);
-  return { response, error };
+export async function removeBookmark(bookmarkIri, bookmarks, fetch) {
+  const { dataset, iri } = bookmarks;
+  let results;
+  const [bookmarkToDelete] = getThingAll(dataset).filter(
+    (t) => getUrl(t, RECALLS_PROPERTY_IRI) === bookmarkIri
+  );
+  if (!bookmarkToDelete) {
+    results = { response: bookmarks, error: null };
+  } else {
+    const updatedDataset = {
+      dataset: removeThing(dataset, bookmarkToDelete),
+      iri,
+    };
+    results = await saveResource(updatedDataset, fetch);
+  }
+  return results;
 }
