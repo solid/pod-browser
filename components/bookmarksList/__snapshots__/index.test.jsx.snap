@@ -2531,7 +2531,7 @@ font-display: block;",
                               key="cell_0_col0"
                               role="cell"
                             >
-                              <body
+                              <bookmarkBody
                                 allColumns={
                                   Array [
                                     Object {
@@ -11610,7 +11610,7 @@ font-display: block;",
                                     />
                                   </button>
                                 </Bookmark>
-                              </body>
+                              </bookmarkBody>
                             </td>
                             <td
                               key="cell_0_col1"
@@ -20715,7 +20715,7 @@ font-display: block;",
                               key="cell_0_col2"
                               role="cell"
                             >
-                              <body
+                              <ownerBody
                                 allColumns={
                                   Array [
                                     Object {
@@ -29812,7 +29812,7 @@ font-display: block;",
                                     </ForwardRef(Skeleton)>
                                   </WithStyles(ForwardRef(Skeleton))>
                                 </OwnerDisplayName>
-                              </body>
+                              </ownerBody>
                             </td>
                           </E>
                         </w>
@@ -30518,7 +30518,7 @@ font-display: block;",
                               key="cell_1_col0"
                               role="cell"
                             >
-                              <body
+                              <bookmarkBody
                                 allColumns={
                                   Array [
                                     Object {
@@ -39597,7 +39597,7 @@ font-display: block;",
                                     />
                                   </button>
                                 </Bookmark>
-                              </body>
+                              </bookmarkBody>
                             </td>
                             <td
                               key="cell_1_col1"
@@ -48702,7 +48702,7 @@ font-display: block;",
                               key="cell_1_col2"
                               role="cell"
                             >
-                              <body
+                              <ownerBody
                                 allColumns={
                                   Array [
                                     Object {
@@ -57799,7 +57799,7 @@ font-display: block;",
                                     </ForwardRef(Skeleton)>
                                   </WithStyles(ForwardRef(Skeleton))>
                                 </OwnerDisplayName>
-                              </body>
+                              </ownerBody>
                             </td>
                           </E>
                         </w>

@@ -62,11 +62,36 @@ function OwnerDisplayName({ iri }) {
   return <span>{ownerName}</span>;
 }
 
+const bookmarkBody = ({ value }) => {
+  return <Bookmark iri={value} />;
+};
+
+const titleBody = ({ row, value, className }) => {
+  const bookmarkedResourceIri = row.original.col0;
+  return (
+    <ResourceLink
+      containerIri={bookmarkedResourceIri}
+      resourceIri={bookmarkedResourceIri}
+      className={className}
+    >
+      {value}
+    </ResourceLink>
+  );
+};
+
+const ownerBody = ({ value }) => {
+  if (!value) {
+    return null;
+  }
+  return <OwnerDisplayName iri={value} />;
+};
+
 function BookmarksList() {
   const { bookmarks } = useContext(BookmarksContext);
   const tableClass = PrismTable.useTableClass("table", "inherits");
   const classes = useStyles();
   const bem = useBem(classes);
+  const tableLinkClassName = bem("table__link");
   const [search, setSearch] = useState();
 
   const isLoading = !bookmarks;
@@ -114,25 +139,14 @@ function BookmarksList() {
             property={RECALLS_PROPERTY_IRI}
             dataType="url"
             header=""
-            body={({ value }) => {
-              return <Bookmark iri={value} />;
-            }}
+            body={bookmarkBody}
           />
           <TableColumn
             property={dct.title}
             header="Name"
-            body={({ row, value }) => {
-              const bookmarkedResourceIri = row.original.col0;
-              return (
-                <ResourceLink
-                  containerIri={bookmarkedResourceIri}
-                  resourceIri={bookmarkedResourceIri}
-                  className={bem("table__link")}
-                >
-                  {value}
-                </ResourceLink>
-              );
-            }}
+            className={tableLinkClassName}
+            // eslint-disable-next-line prettier/prettier
+            body={({ row, value }) => titleBody({ row, value, className: tableLinkClassName })}
             sortable
             filterable
             ascIndicator={ascIndicator}
@@ -142,12 +156,7 @@ function BookmarksList() {
             property={RECALLS_PROPERTY_IRI}
             dataType="url"
             header="Owner"
-            body={({ value }) => {
-              if (!value) {
-                return null;
-              }
-              return <OwnerDisplayName iri={value} />;
-            }}
+            body={ownerBody}
           />
         </Table>
       </Container>
