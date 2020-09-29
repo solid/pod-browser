@@ -56,11 +56,9 @@ export const toggleBookmarkHandler = ({
     let results;
     let message;
     if (bookmarked) {
-      setBookmarked(!bookmarked);
       results = await removeBookmark(iri, bookmarks, fetch);
       message = BOOKMARK_REMOVED_NOTIFICATION_MESSAGE;
     } else {
-      setBookmarked(!bookmarked);
       results = await addBookmark(iri, bookmarks, fetch);
       message = BOOKMARK_ADDED_NOTIFICATION_MESSAGE;
     }
@@ -70,6 +68,7 @@ export const toggleBookmarkHandler = ({
       setMessage(error);
       setAlertOpen(true);
     } else {
+      setBookmarked(!bookmarked);
       setSeverity("success");
       setMessage(message);
       setAlertOpen(true);

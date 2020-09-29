@@ -145,6 +145,7 @@ describe("toggleHandler", () => {
     expect(setAlertOpen).toHaveBeenCalledWith(true);
     expect(setSeverity).toHaveBeenCalledWith("error");
     expect(setMessage).toHaveBeenCalledWith("There was an error");
+    expect(setBookmarked).not.toHaveBeenCalled();
     expect(setBookmarks).not.toHaveBeenCalled();
   });
 });
