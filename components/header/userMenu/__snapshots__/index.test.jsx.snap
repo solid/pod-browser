@@ -862,6 +862,25 @@ font-display: block;",
             </button>
           </Link>
         </div>
+        <div>
+          <Link
+            href="/bookmarks"
+            replace={true}
+          >
+            <button
+              className="PodBrowser-header-banner__aside-menu-trigger"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+              type="button"
+            >
+              <i
+                aria-label="Bookmarks"
+                className="PodBrowser-icon-star PodBrowser-header-banner__aside-menu-trigger-icon"
+              />
+              Bookmarks
+            </button>
+          </Link>
+        </div>
         <div
           className="PodBrowser-header-banner__aside-menu PodBrowser-header-banner__aside-menu--popup"
           onMouseEnter={[Function]}
