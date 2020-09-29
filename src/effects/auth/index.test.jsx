@@ -27,6 +27,7 @@ import {
   SESSION_STATES,
   redirectBasedOnSessionState,
   useRedirectIfNoControlAccessToOwnPod,
+  useRedirectIfLoggedIn,
 } from "./index";
 import mockSession, {
   anotherUsersStorageUrl,
@@ -158,5 +159,20 @@ describe("auth effects", () => {
 
       expect(Router.push).toHaveBeenCalled();
     });
+  });
+});
+
+describe("useRedirectIfLoggedIn", () => {
+  Router.push.mockResolvedValue(null);
+
+  test("it should redirect to home", () => {
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
+
+    const wrapper = ({ children }) => (
+      <SessionProvider>{children}</SessionProvider>
+    );
+    renderHook(() => useRedirectIfLoggedIn(), { wrapper });
+    expect(Router.push).toHaveBeenCalledWith("/");
   });
 });

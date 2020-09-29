@@ -491,6 +491,25 @@ describe("saveNewAddressBook", () => {
 
     expect(error).toEqual("Address book already exists.");
   });
+
+  it("passes the error on if it isn't a 401 error", async () => {
+    const iri = "https://example.pod.com/contacts";
+    const owner = "https://example.pod.com/card#me";
+
+    jest
+      .spyOn(resourceFns, "getResource")
+      .mockResolvedValueOnce({ resource: null });
+
+    jest
+      .spyOn(resourceFns, "saveResource")
+      .mockResolvedValueOnce({ error: "500 Server error" })
+      .mockResolvedValueOnce({ error: "401 Unauthorized" })
+      .mockResolvedValueOnce({ error: "401 Unauthorized" });
+
+    const { error } = await saveNewAddressBook({ iri, owner });
+
+    expect(error).toEqual("500 Server error");
+  });
 });
 
 describe("schemaFunctionMappings", () => {

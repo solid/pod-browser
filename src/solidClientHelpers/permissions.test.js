@@ -20,7 +20,7 @@
  */
 
 import * as solidClientFns from "@inrupt/solid-client";
-import { getSourceUrl, mockSolidDatasetFrom } from "@inrupt/solid-client";
+import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import {
   ACL,
   aclToString,

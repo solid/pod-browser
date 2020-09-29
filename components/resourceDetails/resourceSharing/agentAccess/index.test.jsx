@@ -103,29 +103,6 @@ describe("AgentAccess", () => {
       expect(setOpen).toHaveBeenCalledWith(null);
       expect(setConfirmed).toHaveBeenCalledWith(null);
     });
-
-    it.skip("handles if user confirms", async () => {
-      jest
-        .spyOn(permissionHelpers, "saveAllPermissions")
-        .mockResolvedValue({ response: "response" });
-      const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
-        open: dialogId,
-        setOpen,
-        setConfirmed,
-        confirmed: true,
-      });
-      mountToJson(
-        <ConfirmationDialogProvider>
-          <DatasetProvider dataset={dataset}>
-            <AgentAccess permission={permission} />
-          </DatasetProvider>
-        </ConfirmationDialogProvider>
-      );
-
-      expect(permissionHelpers.saveAllPermissions).toHaveBeenCalled();
-      expect(setOpen).toHaveBeenCalledWith(null);
-      expect(setConfirmed).toHaveBeenCalledWith(null);
-    });
   });
 });
 

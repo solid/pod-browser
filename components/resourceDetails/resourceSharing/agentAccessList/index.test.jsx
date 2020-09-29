@@ -59,20 +59,6 @@ describe("AgentAccessList", () => {
     ).toMatchSnapshot();
   });
 
-  it.skip("normalizes permissions", () => {
-    mountToJson(
-      <SessionProvider>
-        <DatasetProvider dataset={dataset}>
-          <AgentAccessList />
-        </DatasetProvider>
-      </SessionProvider>
-    );
-    expect(permissionHelpers.getPermissions).toHaveBeenCalledWith(
-      dataset,
-      session.fetch
-    );
-  });
-
   it("renders a list of permissions", () => {
     permissionHelpers.getPermissions.mockResolvedValue([
       {

@@ -27,26 +27,26 @@ import {
   createStyles,
   Accordion,
   AccordionSummary,
-  AccordionDetails,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import T from "prop-types";
 import Skeleton from "@material-ui/lab/Skeleton";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { ActionMenu, ActionMenuItem } from "@inrupt/prism-react-components";
 import styles from "./styles";
-import DownloadLink from "../../downloadLink";
+import { getIriPath } from "../../../src/solidClientHelpers/utils";
+import { getResourceName } from "../../../src/solidClientHelpers/resource";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-function DetailsLoading({ name, iri, onDelete, onDeleteError }) {
+function DetailsLoading({ iri }) {
   const classes = useStyles();
+  const name = getIriPath(iri);
+  const displayName = getResourceName(name);
 
   return (
     <>
       <section className={classes.centeredSection}>
         <h3 className={classes["content-h3"]} title={iri || ""}>
-          {name || <Skeleton width={100} />}
+          {displayName || <Skeleton width={100} />}
         </h3>
       </section>
 
@@ -69,16 +69,10 @@ function DetailsLoading({ name, iri, onDelete, onDeleteError }) {
 
 DetailsLoading.propTypes = {
   iri: T.string,
-  name: T.string,
-  onDelete: T.func,
-  onDeleteError: T.func,
 };
 
 DetailsLoading.defaultProps = {
   iri: null,
-  name: null,
-  onDelete: () => {},
-  onDeleteError: () => {},
 };
 
 export default DetailsLoading;

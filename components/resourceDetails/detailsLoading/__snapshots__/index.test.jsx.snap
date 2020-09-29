@@ -842,9 +842,6 @@ font-display: block;",
     >
       <DetailsLoading
         iri={null}
-        name={null}
-        onDelete={[Function]}
-        onDeleteError={[Function]}
         resource={
           Object {
             "iri": "iri",
@@ -862,36 +859,7 @@ font-display: block;",
             className="PodBrowser-content-h3"
             title=""
           >
-            <WithStyles(ForwardRef(Skeleton))
-              width={100}
-            >
-              <ForwardRef(Skeleton)
-                classes={
-                  Object {
-                    "circle": "PodBrowser-circle",
-                    "fitContent": "PodBrowser-fitContent",
-                    "heightAuto": "PodBrowser-heightAuto",
-                    "pulse": "PodBrowser-pulse",
-                    "rect": "PodBrowser-rect",
-                    "root": "PodBrowser-root",
-                    "text": "PodBrowser-text",
-                    "wave": "PodBrowser-wave",
-                    "withChildren": "PodBrowser-withChildren",
-                  }
-                }
-                width={100}
-              >
-                <span
-                  className="PodBrowser-root PodBrowser-text PodBrowser-pulse"
-                  style={
-                    Object {
-                      "height": undefined,
-                      "width": 100,
-                    }
-                  }
-                />
-              </ForwardRef(Skeleton)>
-            </WithStyles(ForwardRef(Skeleton))>
+            null
           </h3>
         </section>
         <WithStyles(ForwardRef(Divider))>
