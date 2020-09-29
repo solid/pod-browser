@@ -26,12 +26,11 @@ import {
   getFile,
   getSolidDatasetWithAcl,
   getAgentAccessAll,
-  saveAclFor,
 } from "@inrupt/solid-client";
 import camelCase from "camelcase";
 import { parseUrl, isUrl, hasHash, stripHash } from "../stringHelpers";
 import { createResponder, isContainerIri, normalizeDataset } from "./utils";
-import { ACL, defineAcl, displayPermissions } from "./permissions";
+import { displayPermissions } from "./permissions";
 
 export function labelOrUrl(url) {
   if (hasHash(url)) {
@@ -149,56 +148,4 @@ export async function saveResource({ dataset, iri }, fetch) {
   } catch (e) {
     return error(e.message);
   }
-}
-
-export async function saveResourcePermissions(
-  { dataset, iri },
-  acl = ACL.CONTROL.acl
-) {
-  const { respond, error } = createResponder();
-
-  try {
-    const saveResponse = await saveAclFor(dataset, acl);
-    const access = getAgentAccessAll(saveResponse);
-    const permissions = normalizePermissions(access);
-
-    return respond({ dataset, iri, permissions });
-  } catch (e) {
-    return error(e.message);
-  }
-}
-
-export async function saveResourceWithPermissions(
-  resource,
-  acl = ACL.CONTROL.acl,
-  fetch
-) {
-  const { respond, error } = createResponder();
-  const { error: saveError } = await saveResource(resource, fetch);
-
-  if (saveError) return error(saveError);
-
-  const {
-    response: newResource,
-    error: getResourceError,
-  } = await getResourceWithPermissions(resource.iri, fetch);
-
-  if (getResourceError) return error(getResourceError);
-
-  const {
-    response: resourceWithPermission,
-    error: savePermissionsError,
-  } = await saveResourcePermissions(newResource, acl);
-
-  if (savePermissionsError) return error(savePermissionsError);
-
-  return respond(resourceWithPermission);
-}
-
-export function createResourceAcl(
-  { dataset },
-  webId,
-  access = ACL.CONTROL.acl
-) {
-  return defineAcl(dataset, webId, access);
 }

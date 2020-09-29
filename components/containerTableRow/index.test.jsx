@@ -24,7 +24,6 @@ import * as routerFns from "next/router";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { useRouter } from "next/router";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
-import { useFetchResourceDetails } from "../../src/hooks/solidClient";
 import ContainerTableRow, {
   handleClick,
   ResourceIcon,
@@ -60,8 +59,6 @@ describe("ContainerTableRow", () => {
       query: {},
     });
 
-    useFetchResourceDetails.mockReturnValue({ data: undefined });
-
     const tree = mountToJson(
       <table>
         <tbody>
@@ -82,8 +79,6 @@ describe("ContainerTableRow", () => {
       types: ["some-type"],
     };
 
-    useFetchResourceDetails.mockReturnValue({ data: resource });
-
     const tree = mountToJson(
       <table>
         <tbody>
@@ -103,8 +98,6 @@ describe("ContainerTableRow", () => {
       name: "/example.ttl",
       types: [],
     };
-
-    useFetchResourceDetails.mockReturnValue({ data: resource });
 
     const tree = mountToJson(
       <table>

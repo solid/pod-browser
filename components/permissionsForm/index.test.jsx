@@ -21,277 +21,42 @@
 
 /* eslint-disable camelcase */
 import React from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
-import * as SolidClientfns from "@inrupt/solid-client";
 import PermissionsForm, {
-  setPermissionHandler,
-  savePermissionsHandler,
-  saveHandler,
-  toggleOpen,
   arrowIcon,
+  permissionHandler,
+  toggleOpen,
 } from "./index";
-import mockAlertContextProvider from "../../__testUtils/mockAlertContextProvider";
-import mockConfirmationDialogContextProvider from "../../__testUtils/mockConfirmationDialogContextProvider";
+import { ACL, createAccessMap } from "../../src/solidClientHelpers/permissions";
+import { mountToJson } from "../../__testUtils/mountWithTheme";
 
 describe("PermissionsForm", () => {
-  const iri = "https://mypod.myhost.com";
-
-  let AlertContextProvider;
-  let setAlertOpen;
-  let setMessage;
-  let setSeverity;
-
-  let setTitle;
-  let setOpen;
-  let setContent;
-  let setConfirmed;
-
-  beforeEach(() => {
-    setAlertOpen = jest.fn();
-    setMessage = jest.fn();
-    setSeverity = jest.fn();
-    AlertContextProvider = mockAlertContextProvider({
-      setAlertOpen,
-      setMessage,
-      setSeverity,
-    });
-
-    setTitle = jest.fn();
-    setOpen = jest.fn();
-    setContent = jest.fn();
-    setConfirmed = jest.fn();
-  });
-
   test("Renders a permissions form", () => {
-    const acl = {
-      read: true,
-      write: true,
-      append: true,
-      control: true,
-    };
+    const acl = createAccessMap(true, true, true, true);
 
-    const tree = mount(
-      <PermissionsForm iri={iri} acl={acl} warnOnSubmit={false} />
-    );
-
-    expect(mountToJson(tree)).toMatchSnapshot();
+    expect(mountToJson(<PermissionsForm acl={acl} />)).toMatchSnapshot();
   });
 
   test("it returns null if control is false", () => {
-    const acl = {
-      read: true,
-      write: true,
-      append: true,
-      control: false,
-    };
+    const acl = createAccessMap(true, true, true, false);
 
-    const tree = mount(
-      <PermissionsForm iri={iri} acl={acl} warnOnSubmit={false} />
-    );
-
-    expect(mountToJson(tree)).toMatchSnapshot();
-  });
-
-  test("it sets up the confirmation dialog", () => {
-    const acl = {
-      read: true,
-      write: true,
-      append: true,
-      control: true,
-    };
-
-    const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
-      setTitle,
-      setOpen,
-      setContent,
-      setConfirmed,
-    });
-
-    mount(
-      <AlertContextProvider>
-        <ConfirmationDialogProvider>
-          <PermissionsForm iri={iri} acl={acl} warnOnSubmit={false} />
-        </ConfirmationDialogProvider>
-      </AlertContextProvider>
-    );
-
-    expect(setTitle).toHaveBeenCalledWith("Confirm Access Permissions");
-    expect(setContent).toHaveBeenCalledWith(
-      <p>
-        You are about to change your own access to this resource, are you sure
-        you wish to continue?
-      </p>
-    );
-  });
-
-  test("it saves the permissions when confirmed is true", () => {
-    const acl = {
-      read: true,
-      write: true,
-      append: true,
-      control: true,
-    };
-
-    jest
-      .spyOn(SolidClientfns, "getSolidDatasetWithAcl")
-      .mockResolvedValueOnce({});
-
-    jest.spyOn(SolidClientfns, "getResourceAcl").mockResolvedValueOnce({});
-
-    jest
-      .spyOn(SolidClientfns, "setAgentResourceAccess")
-      .mockResolvedValueOnce({});
-
-    const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
-      setTitle,
-      setOpen,
-      setContent,
-      setConfirmed,
-      confirmed: true,
-    });
-
-    mount(
-      <AlertContextProvider>
-        <ConfirmationDialogProvider>
-          <PermissionsForm iri={iri} acl={acl} warnOnSubmit={false} />
-        </ConfirmationDialogProvider>
-      </AlertContextProvider>
-    );
-
-    expect(setOpen).toHaveBeenCalledWith(false);
-    expect(setConfirmed).toHaveBeenCalledWith(false);
-  });
-
-  describe("setPermissionHandler", () => {
-    test("it creates a toggle function", () => {
-      const access = {
-        read: true,
-        write: true,
-        append: true,
-        control: true,
-      };
-      const expectedAccess = {
-        read: false,
-        write: true,
-        append: true,
-        control: true,
-      };
-      const setPermission = jest.fn();
-      const toggleFunction = setPermissionHandler(
-        access,
-        "read",
-        setPermission
-      );
-
-      toggleFunction();
-
-      expect(setPermission).toHaveBeenCalledWith(expectedAccess);
-    });
-  });
-
-  describe("savePermissionsHandler", () => {
-    test("it creates a savePermissions function", async () => {
-      const access = {
-        read: true,
-        write: true,
-        append: true,
-        control: true,
-      };
-      const setDialogOpen = jest.fn();
-      const onSave = jest.fn().mockResolvedValueOnce({ response: {} });
-      const handler = savePermissionsHandler({
-        access,
-        onSave,
-        setAlertOpen,
-        setDialogOpen,
-        setMessage,
-        setSeverity,
-      });
-
-      await handler();
-
-      expect(onSave).toHaveBeenCalledWith(access);
-      expect(setDialogOpen).toHaveBeenCalledWith(false);
-      expect(setMessage).toHaveBeenCalledWith(
-        "Your permissions have been saved!"
-      );
-      expect(setAlertOpen).toHaveBeenCalledWith(true);
-    });
-
-    test("it show a message if the save errors out", async () => {
-      const access = {
-        read: true,
-        write: true,
-        append: true,
-        control: true,
-      };
-      const setDialogOpen = jest.fn();
-      const onSave = jest.fn().mockResolvedValueOnce({ error: "boom" });
-
-      const handler = savePermissionsHandler({
-        access,
-        onSave,
-        setMessage,
-        setSeverity,
-        setDialogOpen,
-        setAlertOpen,
-      });
-
-      await handler();
-
-      expect(setDialogOpen).toHaveBeenCalledWith(false);
-      expect(setSeverity).toHaveBeenCalledWith("error");
-      expect(setMessage).toHaveBeenCalledWith("boom");
-      expect(setAlertOpen).toHaveBeenCalledWith(true);
-    });
-  });
-
-  describe("saveHandler", () => {
-    test("it opens the dialog if warnOnSubmit is true", async () => {
-      const args = {
-        savePermissions: jest.fn(),
-        setDialogOpen: jest.fn(),
-        warnOnSubmit: true,
-      };
-
-      const handler = saveHandler(args);
-
-      await handler();
-
-      expect(args.setDialogOpen).toHaveBeenCalledWith(true);
-    });
-
-    test("it saves the permissions, and shows an alert when warnOnSubmit is false", async () => {
-      const args = {
-        savePermissions: jest.fn(),
-        setDialogOpen: jest.fn(),
-        warnOnSubmit: false,
-      };
-
-      const handler = saveHandler(args);
-
-      await handler();
-
-      expect(args.savePermissions).toHaveBeenCalled();
-    });
+    expect(mountToJson(<PermissionsForm acl={acl} />)).toMatchSnapshot();
   });
 
   describe("toggleOpen", () => {
-    test("it calls setOpen with false is open is true", () => {
-      const open = true;
+    let setOpen;
 
-      const toggle = toggleOpen(open, setOpen);
-      toggle();
+    beforeEach(() => {
+      setOpen = jest.fn();
+    });
+
+    test("it calls setOpen with false is open is true", () => {
+      toggleOpen(true, setOpen)();
 
       expect(setOpen).toHaveBeenCalledWith(false);
     });
 
     test("it calls setOpen with true is open is false", () => {
-      const open = false;
-
-      const toggle = toggleOpen(open, setOpen);
-      toggle();
+      toggleOpen(false, setOpen)();
 
       expect(setOpen).toHaveBeenCalledWith(true);
     });
@@ -299,17 +64,25 @@ describe("PermissionsForm", () => {
 
   describe("arrowIcon", () => {
     test("it returns the up arrow when open is true", () => {
-      const icon = arrowIcon(true);
-      const tree = mount(icon);
-
-      expect(mountToJson(tree)).toMatchSnapshot();
+      expect(mountToJson(arrowIcon(true))).toMatchSnapshot();
     });
 
     test("it returns the down arrow when open is false", () => {
-      const icon = arrowIcon(false);
-      const tree = mount(icon);
-
-      expect(mountToJson(tree)).toMatchSnapshot();
+      expect(mountToJson(arrowIcon(false))).toMatchSnapshot();
     });
+  });
+});
+
+describe("permissionHandler", () => {
+  it("updates access map", () => {
+    const access = createAccessMap(true, true);
+    const setAccess = jest.fn();
+    const onChange = jest.fn();
+
+    const setPermissionHandler = permissionHandler(access, setAccess, onChange);
+    setPermissionHandler(ACL.READ.key)();
+
+    expect(setAccess).toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalled();
   });
 });

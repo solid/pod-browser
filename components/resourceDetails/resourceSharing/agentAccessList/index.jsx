@@ -19,9 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable camelcase, react/jsx-props-no-spreading */
-
 import React, { useContext, useEffect, useState } from "react";
+import T from "prop-types";
 import { CircularProgress, List, ListItem } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
@@ -32,7 +31,7 @@ import { getPermissions } from "../../../../src/solidClientHelpers/permissions";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-function AgentAccessList() {
+function AgentAccessList({ onLoading }) {
   const classes = useStyles();
   const { fetch } = useSession();
   const [permissions, setPermissions] = useState([]);
@@ -44,9 +43,7 @@ function AgentAccessList() {
     if (!dataset) return;
     setLoading(true);
     getPermissions(dataset, fetch).then((normalizedPermissions) => {
-      setPermissions(
-        normalizedPermissions.sort((a, b) => (a.webId <= b.webId ? -1 : 1))
-      );
+      setPermissions(normalizedPermissions.reverse());
       setLoading(false);
     });
   }, [dataset, fetch]);
@@ -64,7 +61,7 @@ function AgentAccessList() {
       <List>
         {permissionsShown.map((permission) => (
           <ListItem key={permission.webId} className={classes.listItem}>
-            <AgentAccess permission={permission} />
+            <AgentAccess permission={permission} onLoading={onLoading} />
           </ListItem>
         ))}
       </List>
@@ -77,17 +74,12 @@ function AgentAccessList() {
   );
 }
 
-AgentAccessList.defaultProps = {
-  // warn: false,
-  // onSave: () => {},
-  // onSubmit: () => {},
+AgentAccessList.propTypes = {
+  onLoading: T.func,
 };
 
-AgentAccessList.propTypes = {
-  // onSave: T.func,
-  // onSubmit: T.func,
-  // saveFn: T.func.isRequired,
-  // warn: T.bool,
+AgentAccessList.defaultProps = {
+  onLoading: () => {},
 };
 
 export default AgentAccessList;

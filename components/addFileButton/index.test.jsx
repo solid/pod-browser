@@ -34,6 +34,7 @@ import AddFileButton, {
   handleFileSelect,
   handleUploadedFile,
   handleConfirmation,
+  DUPLICATE_DIALOG_ID,
 } from "./index";
 
 jest.mock("@inrupt/solid-client");
@@ -251,7 +252,7 @@ describe("handleConfirmation", () => {
   });
 
   test("it returns a handler that saves the file when user confirms dialog", () => {
-    handler(true, true, file);
+    handler(true, true, file, DUPLICATE_DIALOG_ID);
 
     expect(setOpen).toHaveBeenCalled();
     expect(saveResource).toHaveBeenCalled();
@@ -259,9 +260,9 @@ describe("handleConfirmation", () => {
     expect(setConfirmationSetup).toHaveBeenCalled();
   });
   test("it returns a handler that exits when user cancels the operation", () => {
-    handler(true, false, file);
+    handler(true, false, file, DUPLICATE_DIALOG_ID);
 
     expect(saveResource).not.toHaveBeenCalled();
-    expect(setConfirmed).not.toHaveBeenCalled();
+    expect(setConfirmed).toHaveBeenCalledWith(null);
   });
 });

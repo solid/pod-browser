@@ -21,12 +21,12 @@
 
 /* eslint-disable react/forbid-prop-types */
 
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import { Avatar, createStyles, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
-import { getSolidDatasetWithAcl, getSourceUrl } from "@inrupt/solid-client";
+import { getSourceUrl } from "@inrupt/solid-client";
 import { Button } from "@inrupt/prism-react-components";
 import PermissionsForm from "../../../permissionsForm";
 import styles from "./styles";
@@ -39,7 +39,66 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 const TESTCAFE_ID_AGENT_WEB_ID = "agent-web-id";
 
-export default function AgentAccess({ permission }) {
+export function submitHandler(
+  authenticatedWebId,
+  webId,
+  setOpen,
+  dialogId,
+  savePermissions,
+  tempAccess
+) {
+  return async () => {
+    if (authenticatedWebId === webId) {
+      setOpen(dialogId);
+    } else {
+      await savePermissions(tempAccess);
+    }
+  };
+}
+
+export function saveHandler(
+  onLoading,
+  setAccess,
+  dataset,
+  webId,
+  fetch,
+  setDataset,
+  setTempAccess,
+  setSeverity,
+  setMessage,
+  setAlertOpen
+) {
+  return async (newAccess) => {
+    onLoading(true);
+    setAccess(newAccess);
+
+    const { response, error } = await saveAllPermissions(
+      dataset,
+      webId,
+      newAccess,
+      fetch
+    );
+
+    if (error) throw error;
+
+    setDataset(response);
+
+    setTempAccess(null);
+    setSeverity("success");
+    setMessage("Permissions have been updated!");
+    setAlertOpen(true);
+    onLoading(false);
+  };
+}
+
+export function getDialogId(datasetIri) {
+  return `change-agent-access-${datasetIri}`;
+}
+
+export default function AgentAccess({
+  onLoading,
+  permission: { acl, profile, webId },
+}) {
   const classes = useStyles();
   const {
     fetch,
@@ -47,7 +106,6 @@ export default function AgentAccess({ permission }) {
       info: { webId: authenticatedWebId },
     },
   } = useSession();
-  const { acl, profile, webId } = permission;
   const [access, setAccess] = useState(acl);
   const [tempAccess, setTempAccess] = useState(null);
   const { avatar } = profile;
@@ -55,8 +113,7 @@ export default function AgentAccess({ permission }) {
   const name = displayProfileName(profile);
 
   const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
-  const datasetIri = getSourceUrl(dataset);
-  const dialogId = `change-agent-access-${datasetIri}`;
+  const dialogId = getDialogId(getSourceUrl(dataset));
   const {
     setTitle,
     open,
@@ -66,49 +123,27 @@ export default function AgentAccess({ permission }) {
     setConfirmed,
   } = useContext(ConfirmationDialogContext);
 
-  const savePermissions = useCallback(
-    async (newAccess) => {
-      setAccess(newAccess);
-
-      const datasetWithAcl = await getSolidDatasetWithAcl(datasetIri, {
-        fetch,
-      });
-
-      // eslint-disable-next-line no-unused-vars
-      const [{ response }, error] = await saveAllPermissions(
-        datasetWithAcl,
-        webId,
-        newAccess,
-        fetch
-      );
-
-      if (error) throw error;
-
-      setDataset(response);
-
-      setTempAccess(null);
-      setSeverity("success");
-      setMessage("Your permissions have been updated!");
-      setAlertOpen(true);
-    },
-    [
-      datasetIri,
-      fetch,
-      webId,
-      setDataset,
-      setSeverity,
-      setMessage,
-      setAlertOpen,
-    ]
+  const savePermissions = saveHandler(
+    onLoading,
+    setAccess,
+    dataset,
+    webId,
+    fetch,
+    setDataset,
+    setTempAccess,
+    setSeverity,
+    setMessage,
+    setAlertOpen
   );
 
-  const saveHandler = () => {
-    if (authenticatedWebId === webId) {
-      setOpen(dialogId);
-    } else {
-      savePermissions(tempAccess);
-    }
-  };
+  const onClick = submitHandler(
+    authenticatedWebId,
+    webId,
+    setOpen,
+    dialogId,
+    savePermissions,
+    tempAccess
+  );
 
   useEffect(() => {
     if (!open || open !== dialogId) return;
@@ -156,7 +191,7 @@ export default function AgentAccess({ permission }) {
         {name}
       </Typography>
       <PermissionsForm key={webId} acl={access} onChange={setTempAccess}>
-        <Button onClick={saveHandler}>Save</Button>
+        <Button onClick={onClick}>Save</Button>
       </PermissionsForm>
     </>
   );
@@ -164,7 +199,9 @@ export default function AgentAccess({ permission }) {
 
 AgentAccess.propTypes = {
   permission: T.object.isRequired,
-  // onSave: T.func.isRequired,
-  // onSubmit: T.func.isRequired,
-  // saveFn: T.func.isRequired,
+  onLoading: T.func,
+};
+
+AgentAccess.defaultProps = {
+  onLoading: () => {},
 };

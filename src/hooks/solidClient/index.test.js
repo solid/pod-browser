@@ -21,18 +21,8 @@
 
 /* eslint-disable camelcase */
 
-import {
-  fetchLitDataset,
-  getThing,
-  getIriAll,
-  fetchResourceInfoWithAcl,
-} from "@inrupt/solid-client";
-import * as PermissionHelpers from "../../solidClientHelpers/permissions";
-import {
-  fetchContainerResourceIris,
-  fetchResourceDetails,
-  fetchPodIrisFromWebId,
-} from "./index";
+import { fetchLitDataset, getThing, getIriAll } from "@inrupt/solid-client";
+import { fetchContainerResourceIris, fetchPodIrisFromWebId } from "./index";
 import mockFetch from "../../../__testUtils/mockFetch";
 
 jest.mock("@inrupt/solid-client");
@@ -55,101 +45,6 @@ describe("fetchContainerResourceIris", () => {
       fetch
     );
     expect(fetchedResources).toEqual(resources);
-  });
-});
-
-describe("fetchResourceDetails", () => {
-  test("it fetches the resource, adding a human-readable name", async () => {
-    const iri = "https://dayton.dev.inrupt.net/public/";
-
-    fetchResourceInfoWithAcl.mockResolvedValue({
-      resourceInfo: {
-        fetchedFrom: "https://dayton.dev.inrupt.net/public/",
-        contentType: "application/octet-stream; charset=utf-8",
-        aclUrl: "https://dayton.dev.inrupt.net/public/.acl",
-        permissions: {
-          user: {
-            read: true,
-            append: true,
-            write: true,
-            control: true,
-          },
-          public: {
-            read: true,
-            append: false,
-            write: false,
-            control: false,
-          },
-        },
-      },
-      acl: {
-        fallbackAcl: {
-          quads: {},
-          resourceInfo: {
-            fetchedFrom: "https://dayton.dev.inrupt.net/.acl",
-            contentType: "text/turtle",
-            aclUrl: "https://dayton.dev.inrupt.net/.acl.acl",
-            permissions: {
-              user: {
-                read: true,
-                append: true,
-                write: true,
-                control: true,
-              },
-              public: {
-                read: false,
-                append: false,
-                write: false,
-                control: false,
-              },
-            },
-          },
-          accessTo: "https://dayton.dev.inrupt.net/",
-        },
-        resourceAcl: {
-          quads: {},
-          resourceInfo: {
-            fetchedFrom: "https://dayton.dev.inrupt.net/public/.acl",
-            contentType: "text/turtle",
-            aclUrl: "https://dayton.dev.inrupt.net/public/.acl.acl",
-            permissions: {
-              user: {
-                read: true,
-                append: true,
-                write: true,
-                control: true,
-              },
-              public: {
-                read: false,
-                append: false,
-                write: false,
-                control: false,
-              },
-            },
-          },
-          accessTo: "https://dayton.dev.inrupt.net/public/",
-        },
-      },
-    });
-
-    jest.spyOn(PermissionHelpers, "normalizePermissions").mockResolvedValue([
-      {
-        webId: "https://dayton.dev.inrupt.net/card/#me",
-        alias: "Full Control",
-        acl: {
-          read: true,
-          write: true,
-          append: true,
-          control: true,
-        },
-        profile: { webId: "https://dayton.dev.inrupt.net/card/#me" },
-      },
-    ]);
-
-    const resourceDetails = await fetchResourceDetails(iri, fetch);
-
-    expect(resourceDetails.name).toEqual("/public");
-    expect(resourceDetails.iri).toEqual(iri);
   });
 });
 

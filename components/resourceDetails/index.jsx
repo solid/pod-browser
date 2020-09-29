@@ -34,7 +34,6 @@ import { makeStyles } from "@material-ui/styles";
 import T from "prop-types";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { ActionMenu, ActionMenuItem } from "@inrupt/prism-react-components";
-import { getDisplayName } from "next/dist/next-server/lib/utils";
 import { DatasetContext } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
 import styles from "./styles";
@@ -42,7 +41,7 @@ import DeleteLink from "../deleteLink";
 import DownloadLink from "../downloadLink";
 import ResourceSharing from "./resourceSharing";
 import { getIriPath, getTypes } from "../../src/solidClientHelpers/utils";
-import DetailsLoading from "./detailsLoading";
+import { getResourceName } from "../../src/solidClientHelpers/resource";
 
 const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
 const TESTCAFE_ID_SHARE_PERMISSIONS_BUTTON = "share-permissions-button";
@@ -55,18 +54,16 @@ export function displayType(types) {
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function ResourceDetails({ onDelete, onDeleteError }) {
+export default function ResourceDetails({ onDelete }) {
   const [sharingExpanded, setSharingExpanded] = useState(false);
-  const { dataset, loading } = useContext(DatasetContext);
+  const { dataset } = useContext(DatasetContext);
   const datasetUrl = getSourceUrl(dataset);
   const classes = useStyles();
   const name = getIriPath(datasetUrl);
-  const displayName = getDisplayName(name);
+  const displayName = getResourceName(name);
   const types = getTypes(dataset);
   const type = displayType(types);
   const actionMenuBem = ActionMenu.useBem();
-
-  if (loading) return <DetailsLoading name={displayName} iri={datasetUrl} />;
 
   const expandIcon = <ExpandMoreIcon />;
   return (
@@ -113,7 +110,6 @@ export default function ResourceDetails({ onDelete, onDeleteError }) {
                 resourceIri={datasetUrl}
                 name={displayName}
                 onDelete={onDelete}
-                onDeleteError={onDeleteError}
                 data-testid={TESTCAFE_ID_DOWNLOAD_BUTTON}
               >
                 Delete
@@ -158,10 +154,8 @@ export default function ResourceDetails({ onDelete, onDeleteError }) {
 
 ResourceDetails.propTypes = {
   onDelete: T.func,
-  onDeleteError: T.func,
 };
 
 ResourceDetails.defaultProps = {
   onDelete: () => {},
-  onDeleteError: () => {},
 };

@@ -19,13 +19,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import { useRouter } from "next/router";
 import { Drawer } from "@inrupt/prism-react-components";
+import { DatasetProvider, useSession } from "@inrupt/solid-ui-react";
+import { getSolidDatasetWithAcl } from "@inrupt/solid-client";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 import { stripQueryParams } from "../../src/stringHelpers";
-import DetailsContextMenuContents from "./detailsContextMenuContent";
+import ResourceDetails from "../resourceDetails";
 
 export function handleCloseDrawer({ setMenuOpen, router }) {
   return async () => {
@@ -38,9 +40,12 @@ export function handleCloseDrawer({ setMenuOpen, router }) {
 
 export default function DetailsContextMenu({ onUpdate }) {
   const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
+  const { fetch } = useSession();
+  const [datasetWithAcl, setDatasetWithAcl] = useState(null);
 
-  const { query } = useRouter();
-  const { action, resourceIri } = query;
+  const {
+    query: { action, resourceIri },
+  } = useRouter();
 
   const router = useRouter();
 
@@ -48,17 +53,26 @@ export default function DetailsContextMenu({ onUpdate }) {
     setMenuOpen(!!(action && resourceIri));
   }, [action, resourceIri, setMenuOpen]);
 
-  const closeDrawer = handleCloseDrawer({ setMenuOpen, router });
+  useEffect(() => {
+    if (!resourceIri) return;
+    getSolidDatasetWithAcl(resourceIri, { fetch }).then(setDatasetWithAcl);
+  }, [fetch, resourceIri]);
 
-  if (!resourceIri) return null;
+  const closeDrawer = handleCloseDrawer({ setMenuOpen, router });
 
   return (
     <Drawer open={menuOpen} close={closeDrawer}>
-      <DetailsContextMenuContents iri={resourceIri} onUpdate={onUpdate} />
+      <DatasetProvider dataset={datasetWithAcl}>
+        <ResourceDetails onDelete={onUpdate} />
+      </DatasetProvider>
     </Drawer>
   );
 }
 
 DetailsContextMenu.propTypes = {
-  onUpdate: T.func.isRequired,
+  onUpdate: T.func,
+};
+
+DetailsContextMenu.defaultProps = {
+  onUpdate: () => {},
 };

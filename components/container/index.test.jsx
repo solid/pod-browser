@@ -67,10 +67,6 @@ describe("Container view", () => {
       data: resources,
     });
 
-    solidClientHooks.useFetchResourceDetails.mockReturnValue({
-      data: undefined,
-    });
-
     const tree = mountToJson(<Container iri={iri} />);
     expect(tree).toMatchSnapshot();
   });

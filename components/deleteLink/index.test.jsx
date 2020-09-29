@@ -28,16 +28,13 @@ import DeleteLink, { handleDeleteResource, handleConfirmation } from "./index";
 
 jest.mock("@inrupt/solid-client");
 
+const name = "Resource";
+const resourceIri = "iri";
+
 describe("Delete link", () => {
   test("it renders a delete link", () => {
-    const resourceIri = "https://mypod.com/some-resource";
-
     const tree = shallow(
-      <DeleteLink
-        onDelete={jest.fn()}
-        onDeleteError={jest.fn()}
-        resourceIri={resourceIri}
-      />
+      <DeleteLink onDelete={jest.fn()} resourceIri={resourceIri} name={name} />
     );
 
     expect(shallowToJson(tree)).toMatchSnapshot();
@@ -46,8 +43,6 @@ describe("Delete link", () => {
 
 describe("handleDeleteResource", () => {
   test("it returns a handler that deletes the resource", async () => {
-    const name = "Resource";
-    const resourceIri = "iri";
     const fetch = jest.fn();
     const onDelete = jest.fn();
     const onDeleteError = jest.fn();
@@ -71,8 +66,6 @@ describe("handleDeleteResource", () => {
   });
 
   test("it returns a handler that calls onDelete if successful", async () => {
-    const name = "Resource";
-    const resourceIri = "iri";
     const fetch = jest.fn();
     const onDelete = jest.fn();
     const onDeleteError = jest.fn();
@@ -96,8 +89,6 @@ describe("handleDeleteResource", () => {
   });
 
   test("it returns a handler that shows an alert if successful", async () => {
-    const name = "Resource";
-    const resourceIri = "iri";
     const fetch = jest.fn();
     const onDelete = jest.fn();
     const onDeleteError = jest.fn();
@@ -125,8 +116,6 @@ describe("handleDeleteResource", () => {
   });
 
   test("it returns a handler that calls onError if not successful", async () => {
-    const name = "Resource";
-    const resourceIri = "iri";
     const fetch = jest.fn();
     const error = new Error("boom");
     const onDelete = jest.fn(() => {
@@ -153,15 +142,18 @@ describe("handleDeleteResource", () => {
   });
 });
 describe("handleConfirmation", () => {
-  const name = "someFile.txt";
   const setOpen = jest.fn();
   const deleteResource = jest.fn();
   const setConfirmed = jest.fn();
   const setTitle = jest.fn();
   const setContent = jest.fn();
   const setConfirmationSetup = jest.fn();
+  const dialogId = "handleConfirmation-dialog";
+  const open = dialogId;
 
   const handler = handleConfirmation({
+    dialogId,
+    open,
     setOpen,
     setConfirmed,
     deleteResource,
@@ -173,17 +165,17 @@ describe("handleConfirmation", () => {
   test("it returns a handler that deletes the file when user confirms dialog", async () => {
     await handler(true, true, name);
 
-    expect(setOpen).toHaveBeenCalled();
+    expect(setOpen).toHaveBeenCalledWith(null);
     expect(deleteResource).toHaveBeenCalled();
-    expect(setConfirmed).toHaveBeenCalled();
+    expect(setConfirmed).toHaveBeenCalledWith(null);
     expect(setTitle).toHaveBeenCalled();
     expect(setContent).toHaveBeenCalled();
-    expect(setConfirmationSetup).toHaveBeenCalled();
+    expect(setConfirmationSetup).toHaveBeenCalledWith(true);
   });
   test("it returns a handler that exits when user cancels the operation", async () => {
     await handler(true, false, name);
 
     expect(deleteResource).not.toHaveBeenCalled();
-    expect(setConfirmed).not.toHaveBeenCalled();
+    expect(setConfirmed).toHaveBeenCalledWith(null);
   });
 });

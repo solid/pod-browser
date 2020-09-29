@@ -4466,7 +4466,50 @@ font-display: block;",
                 </div>
                 <DetailsContextMenu
                   onUpdate={[Function]}
-                />
+                >
+                  <Drawer
+                    close={[Function]}
+                    open={false}
+                  >
+                    <section
+                      className="PodBrowser-drawer"
+                    >
+                      <div
+                        className="PodBrowser-drawer__content"
+                      >
+                        <div
+                          className="PodBrowser-drawer__article"
+                        >
+                          <Button
+                            onClick={[Function]}
+                            variant="text"
+                          >
+                            <button
+                              className="PodBrowser-button PodBrowser-button--text"
+                              onClick={[Function]}
+                            >
+                              <Icon
+                                name="cancel"
+                              >
+                                <span
+                                  className="PodBrowser-icon-cancel"
+                                />
+                              </Icon>
+                               Close
+                            </button>
+                          </Button>
+                        </div>
+                        <m
+                          dataset={null}
+                        >
+                          <span>
+                            Fetching data...
+                          </span>
+                        </m>
+                      </div>
+                    </section>
+                  </Drawer>
+                </DetailsContextMenu>
               </div>
             </DrawerContainer>
           </ContainerDetails>
@@ -26050,7 +26093,50 @@ font-display: block;",
                 </div>
                 <DetailsContextMenu
                   onUpdate={[Function]}
-                />
+                >
+                  <Drawer
+                    close={[Function]}
+                    open={false}
+                  >
+                    <section
+                      className="PodBrowser-drawer"
+                    >
+                      <div
+                        className="PodBrowser-drawer__content"
+                      >
+                        <div
+                          className="PodBrowser-drawer__article"
+                        >
+                          <Button
+                            onClick={[Function]}
+                            variant="text"
+                          >
+                            <button
+                              className="PodBrowser-button PodBrowser-button--text"
+                              onClick={[Function]}
+                            >
+                              <Icon
+                                name="cancel"
+                              >
+                                <span
+                                  className="PodBrowser-icon-cancel"
+                                />
+                              </Icon>
+                               Close
+                            </button>
+                          </Button>
+                        </div>
+                        <m
+                          dataset={null}
+                        >
+                          <span>
+                            Fetching data...
+                          </span>
+                        </m>
+                      </div>
+                    </section>
+                  </Drawer>
+                </DetailsContextMenu>
               </div>
             </DrawerContainer>
           </ContainerDetails>

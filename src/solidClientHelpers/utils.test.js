@@ -20,32 +20,42 @@
  */
 
 import * as solidClientFns from "@inrupt/solid-client";
-import { ldp } from "rdf-namespaces";
+import {
+  addUrl,
+  mockSolidDatasetFrom,
+  mockThingFrom,
+  setThing,
+} from "@inrupt/solid-client";
+import { ldp, rdf } from "rdf-namespaces";
 import {
   chain,
   changeThing,
   createResponder,
+  datasetIsContainer,
   defineDataset,
   defineThing,
   displayTypes,
   getIriPath,
   getTypeName,
+  getTypes,
   isContainerIri,
+  isHTTPError,
   namespace,
   normalizeDataset,
-  vocabularyLabel,
 } from "./utils";
 
 const TIMESTAMP = new Date(Date.UTC(2020, 5, 2, 15, 59, 21));
 
 function createDataset(url, type = "http://www.w3.org/ns/ldp#BasicContainer") {
   const {
+    // eslint-disable-next-line no-shadow
     addUrl,
     createSolidDataset,
     createThing,
     setDatetime,
     setDecimal,
     setInteger,
+    // eslint-disable-next-line no-shadow
     setThing,
   } = solidClientFns;
   let publicContainer = createThing({ url });
@@ -172,8 +182,11 @@ describe("displayTypes", () => {
   });
 
   test("it returns an empty Array if types are empty", () => {
-    const types = displayTypes([]);
-    expect(types).toHaveLength(0);
+    expect(displayTypes([])).toHaveLength(0);
+  });
+
+  test("it returns an empty array if types are not a list", () => {
+    expect(displayTypes(null)).toHaveLength(0);
   });
 });
 
@@ -264,20 +277,49 @@ describe("normalizeDataset", () => {
   });
 });
 
-describe("vocabularyLabel", () => {
-  test("it returns the 'label' portion of the url", () => {
-    expect(vocabularyLabel("https://example.com/vocab#label")).toEqual("label");
-  });
+const iri = "http://example.com/resource";
+const type1 = "http://example.com/Type1";
+const type2 = "http://example.com/Type2";
+const containerType = "http://example.com/Container";
 
-  test("it returns the 'label' in camel case if necessary", () => {
-    expect(
-      vocabularyLabel("https://example.com/vocab#camel-case-label")
-    ).toEqual("camelCaseLabel");
-  });
-
-  test("it returns the full url if there's no 'label'", () => {
-    expect(vocabularyLabel("https://example.com/vocab")).toEqual(
-      "https://example.com/vocab"
+describe("getTypes", () => {
+  it("returns a list of types based on rdf:type", () => {
+    const thing = chain(
+      mockThingFrom(iri),
+      (t) => addUrl(t, rdf.type, type1),
+      (t) => addUrl(t, rdf.type, type2)
     );
+    const dataset = chain(mockSolidDatasetFrom(iri), (t) => setThing(t, thing));
+    expect(getTypes(dataset)).toEqual([type1, type2]);
+  });
+
+  it("returns an empty list if dataset does not have resource info", () => {
+    expect(getTypes({})).toEqual([]);
+  });
+});
+
+describe("datasetIsContainer", () => {
+  it("checks whether or not dataset is a container", () => {
+    const thing1 = chain(mockThingFrom(iri), (t) =>
+      addUrl(t, rdf.type, containerType)
+    );
+    const dataset1 = chain(mockSolidDatasetFrom(iri), (t) =>
+      setThing(t, thing1)
+    );
+    expect(datasetIsContainer(dataset1)).toBeTruthy();
+
+    const thing2 = chain(mockThingFrom(iri), (t) => addUrl(t, rdf.type, type1));
+    const dataset2 = chain(mockSolidDatasetFrom(iri), (t) =>
+      setThing(t, thing2)
+    );
+    expect(datasetIsContainer(dataset2)).toBeFalsy();
+  });
+});
+
+describe("isHTTPError", () => {
+  it("Checks http messages for given code", () => {
+    expect(isHTTPError("Something with 404", 404)).toBeTruthy();
+    expect(isHTTPError("Something with 500", 404)).toBeFalsy();
+    expect(isHTTPError("Something with 404", 500)).toBeFalsy();
   });
 });

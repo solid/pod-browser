@@ -29,7 +29,7 @@ import ConfirmationDialogContext from "../../src/contexts/confirmationDialogCont
 
 const TESTCAFE_ID_UPLOAD_BUTTON = "upload-file-button";
 const TESTCAFE_ID_UPLOAD_INPUT = "upload-file-input";
-const DUPLICATE_DIALOG_ID = "upload-duplicate-file";
+export const DUPLICATE_DIALOG_ID = "upload-duplicate-file";
 
 export function handleSaveResource({
   fetch,

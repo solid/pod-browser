@@ -49,7 +49,6 @@ export function handleConfirmation({
     setConfirmationSetup(true);
 
     if (confirmationSetup && confirmed) {
-      setConfirmed(null);
       deleteResource();
     }
 
@@ -87,7 +86,6 @@ export default function DeleteLink({
   name,
   resourceIri,
   onDelete,
-  onDeleteError,
   ...linkProps
 }) {
   const { fetch } = useSession();
@@ -103,6 +101,12 @@ export default function DeleteLink({
     setOpen,
     setTitle,
   } = useContext(ConfirmationDialogContext);
+
+  function onDeleteError(e) {
+    setSeverity("error");
+    setMessage(e.toString());
+    setAlertOpen(true);
+  }
 
   const deleteResource = handleDeleteResource({
     name,
@@ -145,5 +149,4 @@ DeleteLink.propTypes = {
   name: T.string.isRequired,
   resourceIri: T.string.isRequired,
   onDelete: T.func.isRequired,
-  onDeleteError: T.func.isRequired,
 };

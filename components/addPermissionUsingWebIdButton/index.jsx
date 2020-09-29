@@ -22,9 +22,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useContext, useEffect, useState } from "react";
+import T from "prop-types";
 import { createStyles, makeStyles, Popover } from "@material-ui/core";
 import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
-import { getSolidDatasetWithAcl, getSourceUrl } from "@inrupt/solid-client";
 import { InputGroup, Label, Message } from "@inrupt/prism-react-components";
 import AgentSearchForm from "../agentSearchForm";
 import PermissionsForm from "../permissionsForm";
@@ -39,7 +39,63 @@ const POPOVER_ID = "AddPermissionWithWebId";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function AddPermissionUsingWebIdButton(buttonProps) {
+export function clickHandler(setAnchorEl) {
+  return (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+}
+
+export function closeHandler(
+  setAnchorEl,
+  setAccess,
+  setDisabled,
+  setSubmitted,
+  onLoading
+) {
+  return () => {
+    setAnchorEl(null);
+    setAccess(createAccessMap(true));
+    setDisabled(false);
+    setSubmitted(false);
+    onLoading(false);
+  };
+}
+
+export function submitHandler(
+  onLoading,
+  setSubmitted,
+  access,
+  setPermissionFormError,
+  setDisabled,
+  dataset,
+  setDataset,
+  handleClose,
+  fetch
+) {
+  return async (agentId) => {
+    onLoading(true);
+    setSubmitted(true);
+    if (isEmptyAccess(access)) {
+      setPermissionFormError(true);
+      return;
+    }
+    setDisabled(true);
+    const { response, error } = await saveAllPermissions(
+      dataset,
+      agentId,
+      access,
+      fetch
+    );
+    if (error) throw error;
+    setDataset(response);
+    handleClose();
+  };
+}
+
+export default function AddPermissionUsingWebIdButton({
+  onLoading,
+  ...buttonProps
+}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [access, setAccess] = useState(createAccessMap(true));
   const { fetch } = useSession();
@@ -49,38 +105,27 @@ export default function AddPermissionUsingWebIdButton(buttonProps) {
   const [submitted, setSubmitted] = useState(false);
   const [permissionFormError, setPermissionFormError] = useState(false);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleClick = clickHandler(setAnchorEl);
 
-  const handleClose = () => {
-    setAnchorEl(null);
-    setAccess(createAccessMap(true));
-    setDisabled(false);
-    setSubmitted(false);
-  };
+  const handleClose = closeHandler(
+    setAnchorEl,
+    setAccess,
+    setDisabled,
+    setSubmitted,
+    onLoading
+  );
 
-  const onSubmit = async (agentId) => {
-    setSubmitted(true);
-    if (isEmptyAccess(access)) {
-      setPermissionFormError(true);
-      return;
-    }
-    setDisabled(true);
-    const datasetIri = getSourceUrl(dataset);
-    const datasetWithAcl = await getSolidDatasetWithAcl(datasetIri, {
-      fetch,
-    });
-    const [{ response }, error] = await saveAllPermissions(
-      datasetWithAcl,
-      agentId,
-      access,
-      fetch
-    );
-    if (error) throw error;
-    setDataset(response);
-    handleClose();
-  };
+  const onSubmit = submitHandler(
+    onLoading,
+    setSubmitted,
+    access,
+    setPermissionFormError,
+    setDisabled,
+    dataset,
+    setDataset,
+    handleClose,
+    fetch
+  );
 
   useEffect(() => {
     if (!submitted) return;
@@ -134,3 +179,11 @@ export default function AddPermissionUsingWebIdButton(buttonProps) {
     </>
   );
 }
+
+AddPermissionUsingWebIdButton.propTypes = {
+  onLoading: T.func,
+};
+
+AddPermissionUsingWebIdButton.defaultProps = {
+  onLoading: () => {},
+};

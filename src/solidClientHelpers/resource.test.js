@@ -24,7 +24,6 @@ import * as SolidClientFns from "@inrupt/solid-client";
 import createContainer, { TIMESTAMP } from "../../__testUtils/createContainer";
 import * as permissionFns from "./permissions";
 import {
-  createResourceAcl,
   fetchFileWithAcl,
   fetchResourceWithAcl,
   getResource,
@@ -33,9 +32,8 @@ import {
   labelOrUrl,
   normalizePermissions,
   saveResource,
-  saveResourcePermissions,
-  saveResourceWithPermissions,
 } from "./resource";
+import { createAccessMap } from "./permissions";
 
 const { displayPermissions, ACL } = permissionFns;
 
@@ -102,18 +100,8 @@ describe("fetchFileWithAcl", () => {
 describe("fetchResourceWithAcl", () => {
   test("it returns a normalized dataset", async () => {
     const perms = {
-      owner: {
-        read: true,
-        write: true,
-        append: true,
-        control: true,
-      },
-      collaborator: {
-        read: true,
-        write: false,
-        append: true,
-        control: false,
-      },
+      owner: createAccessMap(true, true, true, true),
+      collaborator: createAccessMap(true, false, true, false),
     };
 
     const expectedIri = "https://user.dev.inrupt.net/public/";
@@ -340,172 +328,5 @@ describe("saveResource", () => {
     );
 
     expect(error).toEqual("boom");
-  });
-});
-
-describe("saveResourceWithPermissions", () => {
-  test("it responds with an error if the save fails", async () => {
-    const iri = "https://user.example.com/resource";
-    const fetch = jest.fn();
-
-    jest
-      .spyOn(SolidClientFns, "saveSolidDatasetAt")
-      .mockImplementationOnce(() => {
-        throw new Error("boom");
-      });
-
-    const { error } = await saveResourceWithPermissions(
-      {
-        dataset: "dataset",
-        iri,
-      },
-      fetch
-    );
-
-    expect(error).toEqual("boom");
-  });
-
-  test("it responds with an error if fetching the resource with permissions fails", async () => {
-    const iri = "https://user.example.com/resource";
-    const fetch = jest.fn();
-
-    jest
-      .spyOn(SolidClientFns, "saveSolidDatasetAt")
-      .mockResolvedValueOnce("dataset");
-
-    jest
-      .spyOn(SolidClientFns, "getSolidDatasetWithAcl")
-      .mockImplementationOnce(() => {
-        throw new Error("boom");
-      });
-
-    const { error } = await saveResourceWithPermissions(
-      {
-        dataset: "dataset",
-        iri,
-      },
-      fetch
-    );
-
-    expect(error).toEqual("boom");
-  });
-
-  test("it responds with an error if saving the permissions fails", async () => {
-    const iri = "https://user.example.com/resource";
-    const fetch = jest.fn();
-    const access = {
-      [iri]: ACL.CONTROL.acl,
-    };
-
-    jest
-      .spyOn(SolidClientFns, "saveSolidDatasetAt")
-      .mockResolvedValueOnce("dataset");
-
-    jest
-      .spyOn(SolidClientFns, "getSolidDatasetWithAcl")
-      .mockResolvedValue("dataset");
-
-    jest.spyOn(SolidClientFns, "getAgentAccessAll").mockReturnValue(access);
-
-    jest.spyOn(SolidClientFns, "saveAclFor").mockImplementationOnce(() => {
-      throw new Error("boom");
-    });
-
-    const { error } = await saveResourceWithPermissions(
-      {
-        dataset: "dataset",
-        iri,
-      },
-      fetch
-    );
-
-    expect(error).toEqual("boom");
-  });
-
-  test("it responds with a resource with permissions", async () => {
-    const iri = "https://user.example.com/resource";
-    const access = {
-      [iri]: ACL.CONTROL.acl,
-    };
-
-    jest
-      .spyOn(SolidClientFns, "saveSolidDatasetAt")
-      .mockResolvedValueOnce("dataset");
-
-    jest
-      .spyOn(SolidClientFns, "getSolidDatasetWithAcl")
-      .mockResolvedValue("dataset");
-
-    jest
-      .spyOn(SolidClientFns, "getAgentAccessAll")
-      .mockReturnValueOnce(access)
-      .mockReturnValueOnce(access);
-
-    jest.spyOn(SolidClientFns, "saveAclFor").mockResolvedValueOnce("saved acl");
-
-    const { response } = await saveResourceWithPermissions({
-      dataset: "dataset",
-      iri,
-    });
-
-    expect(response.iri).toEqual(iri);
-  });
-});
-
-describe("saveResourcePermissions", () => {
-  test("it returns an error if the permission save fails", async () => {
-    jest.spyOn(SolidClientFns, "saveAclFor").mockImplementationOnce(() => {
-      throw new Error("boom");
-    });
-
-    const { error } = await saveResourcePermissions({
-      dataset: "dataset",
-      iri: "iri",
-    });
-
-    expect(error).toEqual("boom");
-  });
-
-  test("it saves a resource with a default control access", async () => {
-    const webId = "https://user.example.com/card";
-    const access = { [webId]: ACL.CONTROL.acl };
-    const resource = {
-      dataset: "dataset",
-      iri: "iri",
-    };
-
-    jest.spyOn(SolidClientFns, "saveAclFor").mockResolvedValueOnce("response");
-
-    jest.spyOn(SolidClientFns, "getAgentAccessAll").mockReturnValue(access);
-
-    const { response } = await saveResourcePermissions(resource);
-    const [permission] = response.permissions;
-
-    expect(SolidClientFns.saveAclFor).toHaveBeenCalledWith(
-      "dataset",
-      ACL.CONTROL.acl
-    );
-
-    expect(response.dataset).toEqual("dataset");
-    expect(response.iri).toEqual("iri");
-    expect(permission.acl).toMatchObject(ACL.CONTROL.acl);
-    expect(permission.webId).toEqual(webId);
-  });
-});
-
-describe("createResourceAcl", () => {
-  test("it default to control access for the given resource", () => {
-    const resource = { dataset: "dataset" };
-    const webId = "https://user.example.com";
-
-    jest.spyOn(permissionFns, "defineAcl").mockImplementationOnce(jest.fn());
-
-    createResourceAcl({ dataset: "dataset" }, webId);
-
-    expect(permissionFns.defineAcl).toHaveBeenCalledWith(
-      resource.dataset,
-      webId,
-      ACL.CONTROL.acl
-    );
   });
 });

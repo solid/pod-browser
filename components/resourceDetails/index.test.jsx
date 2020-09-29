@@ -20,7 +20,8 @@
  */
 
 import React from "react";
-import * as Router from "next/router";
+import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import { DatasetProvider } from "@inrupt/solid-ui-react";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 import ResourceDetails, * as resourceDetailFns from "./index";
 
@@ -30,62 +31,25 @@ jest.mock("../../src/hooks/solidClient");
 
 describe("Resource details", () => {
   test("it renders container details", () => {
-    const resource = {
-      iri: "/container/",
-      types: ["Container"],
-      name: "Name",
-    };
+    const dataset = mockSolidDatasetFrom("http://example.com/container/");
 
-    jest.spyOn(Router, "useRouter").mockReturnValue({
-      asPath: "/pathname",
-      replace: jest.fn(),
-    });
-
-    const tree = mountToJson(<ResourceDetails resource={resource} />);
+    const tree = mountToJson(
+      <DatasetProvider dataset={dataset}>
+        <ResourceDetails />
+      </DatasetProvider>
+    );
     expect(tree).toMatchSnapshot();
   });
-  test("it renders a decoded cntainer name", () => {
-    const resource = {
-      iri: "/Some%20container/",
-      types: ["Container"],
-      name: "Name",
-    };
+  test("it renders a decoded container name", () => {
+    const dataset = mockSolidDatasetFrom(
+      "http://example.com/Some%20container/"
+    );
 
-    jest
-      .spyOn(Router, "useRouter")
-      .mockReturnValue({ asPath: "/pathname", replace: jest.fn() });
-
-    const tree = mountToJson(<ResourceDetails resource={resource} />);
-    expect(tree).toMatchSnapshot();
-  });
-
-  test("it renders resource details", () => {
-    const resource = {
-      iri: "/resource",
-      types: ["Resource"],
-      name: "Name",
-    };
-
-    jest.spyOn(Router, "useRouter").mockReturnValue({
-      asPath: "/pathname",
-      replace: jest.fn(),
-    });
-
-    const tree = mountToJson(<ResourceDetails resource={resource} />);
-    expect(tree).toMatchSnapshot();
-  });
-  test("it renders a decoded resource name", () => {
-    const resource = {
-      iri: "/Some%20Resource",
-      types: ["Resource"],
-      name: "Name",
-    };
-
-    jest
-      .spyOn(Router, "useRouter")
-      .mockReturnValue({ asPath: "/pathname", replace: jest.fn() });
-
-    const tree = mountToJson(<ResourceDetails resource={resource} />);
+    const tree = mountToJson(
+      <DatasetProvider dataset={dataset}>
+        <ResourceDetails />
+      </DatasetProvider>
+    );
     expect(tree).toMatchSnapshot();
   });
 });

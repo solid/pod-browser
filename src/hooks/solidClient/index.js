@@ -23,25 +23,8 @@
 import useSWR from "swr";
 import { space, ldp } from "rdf-namespaces";
 
-import {
-  getSolidDataset,
-  getResourceInfoWithAcl,
-  getIriAll,
-  getResourceAcl,
-  getThing,
-  hasResourceAcl,
-  isContainer,
-  getAgentAccessAll,
-  getAgentDefaultAccessAll,
-  hasAccessibleAcl,
-  getFallbackAcl,
-  getSourceUrl,
-} from "@inrupt/solid-client";
+import { getSolidDataset, getIriAll, getThing } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
-
-import { getIriPath } from "../../solidClientHelpers/utils";
-import { normalizePermissions } from "../../solidClientHelpers/permissions";
-import { fetchResourceWithAcl } from "../../solidClientHelpers/resource";
 
 export async function fetchContainerResourceIris(containerIri, fetch) {
   const litDataset = await getSolidDataset(containerIri, { fetch });
@@ -57,62 +40,6 @@ export function useFetchContainerResourceIris(iri) {
 
   return useSWR([iri, GET_CONTAINER_RESOURCE_IRIS], () =>
     fetchContainerResourceIris(iri, session.fetch)
-  );
-}
-
-export async function fetchResourceDetails(iri, fetch) {
-  const name = getIriPath(iri);
-  const resourceInfo = await getResourceInfoWithAcl(iri, { fetch });
-  let defaultPermissions = [];
-  let permissions = [];
-
-  if (hasResourceAcl(resourceInfo)) {
-    const accessModeList = getAgentAccessAll(resourceInfo);
-    permissions = await normalizePermissions(accessModeList, fetch);
-    const resourceAcl = getResourceAcl(resourceInfo);
-    const defaultAccessModeList = getAgentDefaultAccessAll(resourceAcl);
-
-    defaultPermissions = await normalizePermissions(
-      defaultAccessModeList,
-      fetch
-    );
-  } else if (hasAccessibleAcl(resourceInfo)) {
-    const fallbackAcl = getFallbackAcl(resourceInfo);
-    const accessModeList = getAgentDefaultAccessAll(fallbackAcl);
-    permissions = await normalizePermissions(accessModeList, fetch);
-  }
-
-  let types = [];
-  const contentType = resourceInfo?.internal_resourceInfo?.contentType;
-
-  if (contentType) types = [contentType];
-  if (isContainer(resourceInfo)) types = ["Container"];
-
-  return {
-    iri,
-    permissions,
-    defaultPermissions,
-    types,
-    name,
-    dataset: resourceInfo,
-  };
-}
-
-export const FETCH_RESOURCE_DETAILS = "fetchResourceDetails";
-/* istanbul ignore next */
-export function useFetchResourceDetails(iri) {
-  const { session } = useSession();
-  return useSWR([iri, FETCH_RESOURCE_DETAILS], () =>
-    fetchResourceDetails(iri, session.fetch)
-  );
-}
-
-export const FETCH_RESOURCE_WITH_ACL = "fetchResourceWithAcl";
-/* istanbul ignore next */
-export function useFetchResourceWithAcl(iri) {
-  const { session } = useSession();
-  return useSWR([iri, FETCH_RESOURCE_WITH_ACL], () =>
-    fetchResourceWithAcl(iri, session.fetch)
   );
 }
 

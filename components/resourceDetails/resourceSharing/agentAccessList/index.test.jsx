@@ -20,66 +20,76 @@
  */
 
 import React from "react";
+import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import { DatasetProvider } from "@inrupt/solid-ui-react";
 import { mountToJson } from "../../../../__testUtils/mountWithTheme";
-import * as PermissionHelpers from "../../../../src/solidClientHelpers/permissions";
-import AgentAccessList, { handleSave } from ".";
+import * as permissionHelpers from "../../../../src/solidClientHelpers/permissions";
+import AgentAccessList from ".";
+import mockSession from "../../../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../../../__testUtils/mockSessionContextProvider";
+
+const datasetUrl = "http://example.com/dataset";
+const dataset = mockSolidDatasetFrom(datasetUrl);
+const { ACL } = permissionHelpers;
+const webId = "webId";
 
 describe("AgentAccessList", () => {
-  test("it renders an AgentAccessList", () => {
-    const { ACL } = PermissionHelpers;
-    const iri = "iri";
-    const webId = "webId";
-    const onSave = jest.fn();
-    const onSubmit = jest.fn();
-    const saveFn = jest.fn();
-    const permissions = [
+  let session;
+  let SessionProvider;
+
+  beforeEach(() => {
+    session = mockSession();
+    SessionProvider = mockSessionContextProvider(session);
+    jest.spyOn(permissionHelpers, "getPermissions").mockResolvedValue([]);
+  });
+
+  it("renders an AgentAccessList", () => {
+    expect(mountToJson(<AgentAccessList />)).toMatchSnapshot();
+  });
+
+  it("renders a about empty list of permissions", () => {
+    expect(
+      mountToJson(
+        <SessionProvider>
+          <DatasetProvider dataset={dataset}>
+            <AgentAccessList />
+          </DatasetProvider>
+        </SessionProvider>
+      )
+    ).toMatchSnapshot();
+  });
+
+  it.skip("normalizes permissions", () => {
+    mountToJson(
+      <SessionProvider>
+        <DatasetProvider dataset={dataset}>
+          <AgentAccessList />
+        </DatasetProvider>
+      </SessionProvider>
+    );
+    expect(permissionHelpers.getPermissions).toHaveBeenCalledWith(
+      dataset,
+      session.fetch
+    );
+  });
+
+  it("renders a list of permissions", () => {
+    permissionHelpers.getPermissions.mockResolvedValue([
       {
         webId,
         alias: ACL.CONTROL.alias,
         acl: ACL.CONTROL.acl,
         profile: { webId },
       },
-    ];
-    const tree = mountToJson(
-      <AgentAccessList
-        iri={iri}
-        onSave={onSave}
-        onSubmit={onSubmit}
-        permissions={permissions}
-        saveFn={saveFn}
-        warn
-      />
-    );
-
-    expect(tree).toMatchSnapshot();
-  });
-});
-
-describe("handleSave", () => {
-  test("it returns a handler that calls the saveFn and callbacks", async () => {
-    const { ACL } = PermissionHelpers;
-    const iri = "iri";
-    const webId = "webId";
-    const onSave = jest.fn();
-    const onSubmit = jest.fn();
-    const fetch = jest.fn();
-    const saveFn = jest.fn(() => "response");
-    const profile = { webId };
-    const access = ACL.CONTROL.acl;
-    const handler = handleSave({
-      fetch,
-      iri,
-      onSave,
-      onSubmit,
-      profile,
-      saveFn,
-      webId,
-    });
-
-    await handler(access);
-
-    expect(onSubmit).toHaveBeenCalledWith(profile, access);
-    expect(saveFn).toHaveBeenCalledWith({ iri, webId, access, fetch });
-    expect(onSave).toHaveBeenCalledWith(profile, "response");
+    ]);
+    expect(
+      mountToJson(
+        <SessionProvider>
+          <DatasetProvider dataset={dataset}>
+            <AgentAccessList />
+          </DatasetProvider>
+        </SessionProvider>
+      )
+    ).toMatchSnapshot();
   });
 });

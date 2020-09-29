@@ -44,22 +44,24 @@ export function arrowIcon(open) {
   return open ? <KeyboardArrowUp /> : <KeyboardArrowDown />;
 }
 
+export function permissionHandler(access, setAccess, onChange) {
+  return (key) => () => {
+    const value = !access[key];
+    const newAccess = {
+      ...access,
+      [key]: value,
+    };
+    setAccess(newAccess);
+    onChange(newAccess);
+  };
+}
+
 export default function PermissionsForm({ acl, children, disabled, onChange }) {
   const classes = useStyles();
   const [access, setAccess] = useState(acl);
   const [formOpen, setFormOpen] = useState(false);
 
-  function setPermissionHandler(key) {
-    return () => {
-      const value = !access[key];
-      const newAccess = {
-        ...access,
-        [key]: value,
-      };
-      setAccess(newAccess);
-      onChange(newAccess);
-    };
-  }
+  const setPermissionHandler = permissionHandler(access, setAccess, onChange);
 
   return (
     <div className={classes.container}>
@@ -118,7 +120,7 @@ PermissionsForm.propTypes = {
   }),
   children: T.node,
   disabled: T.bool,
-  onChange: T.func.isRequired,
+  onChange: T.func,
 };
 
 PermissionsForm.defaultProps = {
@@ -130,4 +132,5 @@ PermissionsForm.defaultProps = {
   },
   children: null,
   disabled: false,
+  onChange: () => {},
 };
