@@ -857,14 +857,29 @@ font-display: block;",
                 className="PodBrowser-page-header__content"
               >
                 <WithStyles(ForwardRef(TextField))
+                  InputProps={
+                    Object {
+                      "className": "PodBrowser-searchInput",
+                    }
+                  }
+                  classes={
+                    Object {
+                      "root": "PodBrowser-search",
+                    }
+                  }
                   margin="dense"
                   onChange={[Function]}
                   variant="outlined"
                 >
                   <ForwardRef(TextField)
+                    InputProps={
+                      Object {
+                        "className": "PodBrowser-searchInput",
+                      }
+                    }
                     classes={
                       Object {
-                        "root": "PodBrowser-root",
+                        "root": "PodBrowser-root PodBrowser-search",
                       }
                     }
                     margin="dense"
@@ -872,7 +887,7 @@ font-display: block;",
                     variant="outlined"
                   >
                     <WithStyles(ForwardRef(FormControl))
-                      className="PodBrowser-root"
+                      className="PodBrowser-root PodBrowser-search"
                       color="primary"
                       disabled={false}
                       error={false}
@@ -882,7 +897,7 @@ font-display: block;",
                       variant="outlined"
                     >
                       <ForwardRef(FormControl)
-                        className="PodBrowser-root"
+                        className="PodBrowser-root PodBrowser-search"
                         classes={
                           Object {
                             "fullWidth": "PodBrowser-fullWidth",
@@ -900,16 +915,18 @@ font-display: block;",
                         variant="outlined"
                       >
                         <div
-                          className="PodBrowser-root PodBrowser-root PodBrowser-marginDense"
+                          className="PodBrowser-root PodBrowser-root PodBrowser-search PodBrowser-marginDense"
                         >
                           <WithStyles(ForwardRef(OutlinedInput))
                             autoFocus={false}
+                            className="PodBrowser-searchInput"
                             fullWidth={false}
                             multiline={false}
                             onChange={[Function]}
                           >
                             <ForwardRef(OutlinedInput)
                               autoFocus={false}
+                              className="PodBrowser-searchInput"
                               classes={
                                 Object {
                                   "adornedEnd": "PodBrowser-adornedEnd",
@@ -935,6 +952,7 @@ font-display: block;",
                             >
                               <WithStyles(ForwardRef(InputBase))
                                 autoFocus={false}
+                                className="PodBrowser-searchInput"
                                 classes={
                                   Object {
                                     "adornedEnd": "PodBrowser-adornedEnd",
@@ -963,6 +981,7 @@ font-display: block;",
                               >
                                 <ForwardRef(InputBase)
                                   autoFocus={false}
+                                  className="PodBrowser-searchInput"
                                   classes={
                                     Object {
                                       "adornedEnd": "PodBrowser-adornedEnd PodBrowser-adornedEnd",
@@ -993,7 +1012,7 @@ font-display: block;",
                                   type="text"
                                 >
                                   <div
-                                    className="PodBrowser-root PodBrowser-root PodBrowser-formControl PodBrowser-marginDense PodBrowser-marginDense"
+                                    className="PodBrowser-root PodBrowser-root PodBrowser-searchInput PodBrowser-formControl PodBrowser-marginDense PodBrowser-marginDense"
                                     onClick={[Function]}
                                   >
                                     <input

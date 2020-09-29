@@ -29,6 +29,12 @@ const styles = (theme) => {
         "&:first-child": tableStyles["table__body-cell--width-preview"],
       },
     },
+    search: {
+      width: 450,
+    },
+    searchInput: {
+      backgroundColor: theme.palette.background.default,
+    },
   });
 };
 

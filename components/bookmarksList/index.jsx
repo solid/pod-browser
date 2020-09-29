@@ -122,6 +122,12 @@ function BookmarksList() {
     <>
       <PageHeader title="Bookmarks">
         <TextField
+          classes={{
+            root: classes.search,
+          }}
+          InputProps={{
+            className: classes.searchInput,
+          }}
           margin="dense"
           variant="outlined"
           onChange={(e) => setSearch(e.target.value)}

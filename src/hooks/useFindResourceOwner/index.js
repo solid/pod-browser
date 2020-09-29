@@ -27,8 +27,7 @@ import { joinPath } from "../../stringHelpers";
 import { getResource } from "../../solidClientHelpers/resource";
 
 export default function useFindResourceOwner(iri) {
-  const session = useSession();
-  const { fetch } = session;
+  const { fetch } = useSession();
   const [ownerName, setOwnerName] = useState();
   const [error, setError] = useState();
   const resourceOrigin = new URL(iri).origin;
