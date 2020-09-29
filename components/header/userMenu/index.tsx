@@ -58,6 +58,23 @@ export default function UserMenu(): ReactElement {
           </button>
         </Link>
       </div>
+      <div>
+        <Link href="/bookmarks" replace>
+          <button
+            className={bem("header-banner__aside-menu-trigger")}
+            type="button"
+          >
+            <i
+              className={clsx(
+                bem("icon-star"),
+                bem("header-banner__aside-menu-trigger-icon")
+              )}
+              aria-label="Bookmarks"
+            />
+            Bookmarks
+          </button>
+        </Link>
+      </div>
 
       <div
         className={bem("header-banner__aside-menu", "popup")}

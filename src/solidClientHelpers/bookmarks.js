@@ -52,6 +52,7 @@ export const BOOKMARK_TYPE_IRI = "http://www.w3.org/2002/01/bookmark#Bookmark";
 export async function addBookmark(bookmarkIri, bookmarks, fetch) {
   const { dataset, iri } = bookmarks;
   const bookmarkTitle = getResourceName(bookmarkIri);
+
   const [existingBookmark] = getThingAll(dataset).filter(
     (t) => getUrl(t, RECALLS_PROPERTY_IRI) === bookmarkIri
   );
@@ -66,6 +67,7 @@ export async function addBookmark(bookmarkIri, bookmarks, fetch) {
       (t) => addUrl(t, RECALLS_PROPERTY_IRI, bookmarkIri),
       (t) => addDatetime(t, dct.created, new Date())
     );
+
     const bookmarkResource = {
       dataset: setThing(dataset, bookmark),
       iri,

@@ -36,6 +36,8 @@ import BookmarksContext from "../../src/contexts/bookmarksContext";
 import AlertContext from "../../src/contexts/alertContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+const BOOKMARK_ADDED_NOTIFICATION_MESSAGE = "Resource added to bookmarks";
+const BOOKMARK_REMOVED_NOTIFICATION_MESSAGE = "Bookmark removed";
 
 export const toggleBookmarkHandler = ({
   bookmarks,
@@ -52,10 +54,15 @@ export const toggleBookmarkHandler = ({
   return async () => {
     setDisabled(true);
     let results;
+    let message;
     if (bookmarked) {
+      setBookmarked(!bookmarked);
       results = await removeBookmark(iri, bookmarks, fetch);
+      message = BOOKMARK_REMOVED_NOTIFICATION_MESSAGE;
     } else {
+      setBookmarked(!bookmarked);
       results = await addBookmark(iri, bookmarks, fetch);
+      message = BOOKMARK_ADDED_NOTIFICATION_MESSAGE;
     }
     const { response, error } = results;
     if (error) {
@@ -63,7 +70,9 @@ export const toggleBookmarkHandler = ({
       setMessage(error);
       setAlertOpen(true);
     } else {
-      setBookmarked(!bookmarked);
+      setSeverity("success");
+      setMessage(message);
+      setAlertOpen(true);
       setBookmarks(response);
     }
   };
@@ -81,7 +90,7 @@ export default function Bookmark({ iri }) {
   const bem = useBem(useStyles());
   const { bookmarks, setBookmarks } = useContext(BookmarksContext);
   const [bookmarked, setBookmarked] = useState();
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
     if (!bookmarks) {
@@ -91,7 +100,7 @@ export default function Bookmark({ iri }) {
     const bookmarkState = isBookmarked(iri, dataset);
     setBookmarked(bookmarkState);
     setDisabled(false);
-  }, [bookmarks, iri]);
+  }, [bookmarks, iri, setBookmarked, setDisabled]);
 
   const toggleBookmark = toggleBookmarkHandler({
     bookmarks,
