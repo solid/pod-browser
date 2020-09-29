@@ -20,19 +20,24 @@
  */
 
 import {
+  addDatetime,
+  addStringNoLocale,
   addUrl,
   createSolidDataset,
   createThing,
   mockSolidDatasetFrom,
   setThing,
 } from "@inrupt/solid-client";
+import { dct, rdf } from "rdf-namespaces";
 import {
   initializeBookmarks,
   addBookmark,
   removeBookmark,
   RECALLS_PROPERTY_IRI,
+  BOOKMARK_TYPE_IRI,
 } from "./bookmarks";
 import { saveResource } from "./resource";
+import { defineDataset } from "./utils";
 
 jest.mock("./resource");
 const bookmarksIri = "https://mypost.myhost.com/bookmarks/index.ttl";
@@ -49,23 +54,37 @@ describe("initialize bookmarks", () => {
 });
 
 describe("addBookmark", () => {
+  const bookmarkUrl = "https://example.org/cats";
   test("it saves a new bookmark to the bookmarks dataset", async () => {
     const emptyDataset = createSolidDataset();
     const bookmarkThing = addUrl(
       createThing(),
       RECALLS_PROPERTY_IRI,
-      "https://example.org/cats"
+      bookmarkUrl
     );
     const filledDataset = setThing(emptyDataset, bookmarkThing);
 
     saveResource.mockResolvedValue({ response: filledDataset });
 
     const { response: finalDataset } = await addBookmark(
-      "https://example.org/cats",
+      bookmarkUrl,
       { dataset: emptyDataset, iri: bookmarksIri },
       fetch
     );
     expect(finalDataset.quads.size).toBe(1);
+  });
+
+  it("does not overwrite existing bookmarks", async () => {
+    const dataset = defineDataset(
+      {},
+      (t) => addUrl(t, rdf.type, BOOKMARK_TYPE_IRI),
+      (t) => addStringNoLocale(t, dct.title, "Cats are awesome!"),
+      (t) => addUrl(t, RECALLS_PROPERTY_IRI, bookmarkUrl),
+      (t) => addDatetime(t, dct.created, new Date())
+    );
+    const bookmarks = { dataset, iri: bookmarksIri };
+    const { response } = await addBookmark(bookmarkUrl, bookmarks, fetch);
+    expect(response).toBe(bookmarks);
   });
 });
 
@@ -88,5 +107,17 @@ describe("removeBookmark", () => {
       { dataset: emptyDataset, iri: bookmarksIri },
       fetch
     );
+  });
+
+  it("returns the same dataset if bookmark already exists", async () => {
+    const emptyDataset = createSolidDataset();
+
+    const bookmarks = { dataset: emptyDataset, iri: bookmarksIri };
+    const { response } = await removeBookmark(
+      "https://example.org/cats",
+      bookmarks,
+      fetch
+    );
+    expect(response).toEqual(bookmarks);
   });
 });
