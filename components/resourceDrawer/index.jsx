@@ -22,12 +22,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import { useRouter } from "next/router";
-import { Drawer, LoadingIndicator } from "@inrupt/prism-react-components";
+import { Drawer } from "@inrupt/prism-react-components";
 import { DatasetProvider, useSession } from "@inrupt/solid-ui-react";
 import { getResourceInfoWithAcl } from "@inrupt/solid-client";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 import { stripQueryParams } from "../../src/stringHelpers";
 import ResourceDetails from "../resourceDetails";
+import DetailsLoading from "../resourceDetails/detailsLoading";
 
 export function handleCloseDrawer({ setMenuOpen, router }) {
   return async () => {
@@ -68,7 +69,7 @@ export default function ResourceDrawer({ onUpdate }) {
   return (
     <Drawer open={menuOpen} close={closeDrawer}>
       {loading ? (
-        <LoadingIndicator center maxHeight={400} />
+        <DetailsLoading iri={resourceIri} />
       ) : (
         <DatasetProvider dataset={datasetWithAcl}>
           <ResourceDetails onDelete={onUpdate} />
