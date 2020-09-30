@@ -1805,9 +1805,7 @@ font-display: block;",
                   Array [
                     "/iri/",
                     Object {
-                      "headers": Object {
-                        "Accept": "text/turtle",
-                      },
+                      "method": "HEAD",
                     },
                   ],
                 ],

@@ -35,22 +35,17 @@ import T from "prop-types";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { ActionMenu, ActionMenuItem } from "@inrupt/prism-react-components";
 import { DatasetContext } from "@inrupt/solid-ui-react";
-import { getSourceUrl } from "@inrupt/solid-client";
+import { getContentType, getSourceUrl } from "@inrupt/solid-client";
 import styles from "./styles";
 import DeleteLink from "../deleteLink";
 import DownloadLink from "../downloadLink";
 import ResourceSharing from "./resourceSharing";
-import { getIriPath, getTypes } from "../../src/solidClientHelpers/utils";
+import { getIriPath } from "../../src/solidClientHelpers/utils";
 import { getResourceName } from "../../src/solidClientHelpers/resource";
 
 const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
 const TESTCAFE_ID_SHARE_PERMISSIONS_BUTTON = "share-permissions-button";
 const TESTCAFE_ID_TITLE = "resource-title";
-
-export function displayType(types) {
-  if (!types || types.length === 0) return "Resource";
-  return types[0];
-}
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -61,8 +56,7 @@ export default function ResourceDetails({ onDelete }) {
   const classes = useStyles();
   const name = getIriPath(datasetUrl);
   const displayName = getResourceName(name);
-  const types = getTypes(dataset);
-  const type = displayType(types);
+  const type = getContentType(dataset);
   const actionMenuBem = ActionMenu.useBem();
 
   const expandIcon = <ExpandMoreIcon />;
@@ -89,7 +83,6 @@ export default function ResourceDetails({ onDelete }) {
                 className={actionMenuBem("action-menu__trigger")}
                 data-testid={TESTCAFE_ID_DOWNLOAD_BUTTON}
                 iri={datasetUrl}
-                type={type}
               >
                 Download
               </DownloadLink>

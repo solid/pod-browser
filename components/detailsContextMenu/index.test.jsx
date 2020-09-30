@@ -95,7 +95,7 @@ describe("Container view", () => {
 
   it("fetches dataset with acl", () => {
     jest
-      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
+      .spyOn(solidClientFns, "getResourceInfoWithAcl")
       .mockResolvedValueOnce("datasetWithAcl");
 
     const tree = mountToJson(
@@ -106,7 +106,7 @@ describe("Container view", () => {
       </SessionProvider>
     );
     expect(tree).toMatchSnapshot();
-    expect(solidClientFns.getSolidDatasetWithAcl).toHaveBeenCalled();
+    expect(solidClientFns.getResourceInfoWithAcl).toHaveBeenCalled();
   });
 });
 

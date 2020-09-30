@@ -25,6 +25,7 @@ import React from "react";
 import T from "prop-types";
 import { useSession } from "@inrupt/solid-ui-react";
 import { parseUrl } from "../../src/stringHelpers";
+import { isContainerIri } from "../../src/solidClientHelpers/utils";
 
 export function forceDownload(name, file) {
   const a = document.createElement("a");
@@ -52,10 +53,10 @@ export function downloadResource(iri, fetch) {
   };
 }
 
-export default function DownloadLink({ type, iri, ...props }) {
+export default function DownloadLink({ iri, ...props }) {
   const { fetch } = useSession();
 
-  if (type.match(/container/i)) return null;
+  if (isContainerIri(iri)) return null;
 
   return (
     <button {...props} onClick={downloadResource(iri, fetch)} type="button" />

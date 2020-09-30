@@ -24,7 +24,7 @@ import T from "prop-types";
 import { useRouter } from "next/router";
 import { Drawer, LoadingIndicator } from "@inrupt/prism-react-components";
 import { DatasetProvider, useSession } from "@inrupt/solid-ui-react";
-import { getSolidDatasetWithAcl } from "@inrupt/solid-client";
+import { getResourceInfoWithAcl } from "@inrupt/solid-client";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 import { stripQueryParams } from "../../src/stringHelpers";
 import ResourceDetails from "../resourceDetails";
@@ -57,7 +57,7 @@ export default function DetailsContextMenu({ onUpdate }) {
   useEffect(() => {
     if (!resourceIri) return;
     setLoading(true);
-    getSolidDatasetWithAcl(resourceIri, { fetch }).then((dataset) => {
+    getResourceInfoWithAcl(resourceIri, { fetch }).then((dataset) => {
       setDatasetWithAcl(dataset);
       setLoading(false);
     });

@@ -313,7 +313,7 @@ describe("saveAllPermissions", () => {
       .mockImplementationOnce(jest.fn().mockResolvedValueOnce("aclDataset"));
 
     jest
-      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
+      .spyOn(solidClientFns, "getResourceInfoWithAcl")
       .mockResolvedValueOnce("datasetWithAcl");
 
     const fetch = jest.fn();
@@ -335,7 +335,7 @@ describe("saveAllPermissions", () => {
       updatedAcl,
       { fetch }
     );
-    expect(solidClientFns.getSolidDatasetWithAcl).toHaveBeenCalledWith(iri, {
+    expect(solidClientFns.getResourceInfoWithAcl).toHaveBeenCalledWith(iri, {
       fetch,
     });
 
@@ -360,7 +360,7 @@ describe("saveAllPermissions", () => {
       .mockImplementationOnce(jest.fn().mockResolvedValueOnce("aclDataset"));
 
     jest
-      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
+      .spyOn(solidClientFns, "getResourceInfoWithAcl")
       .mockResolvedValueOnce("datasetWithAcl");
 
     const fetch = jest.fn();
@@ -383,7 +383,7 @@ describe("saveAllPermissions", () => {
       updatedAcl,
       { fetch }
     );
-    expect(solidClientFns.getSolidDatasetWithAcl).toHaveBeenCalledWith(iri, {
+    expect(solidClientFns.getResourceInfoWithAcl).toHaveBeenCalledWith(iri, {
       fetch,
     });
 
@@ -485,7 +485,7 @@ describe("saveAllPermissions", () => {
       .spyOn(solidClientFns, "saveAclFor")
       .mockResolvedValueOnce("some response");
     jest
-      .spyOn(solidClientFns, "getSolidDatasetWithAcl")
+      .spyOn(solidClientFns, "getResourceInfoWithAcl")
       .mockResolvedValueOnce(null);
 
     const { error } = await saveAllPermissions(

@@ -23,9 +23,7 @@ import React from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
-import ResourceDetails, * as resourceDetailFns from "./index";
-
-const { displayType } = resourceDetailFns;
+import ResourceDetails from "./index";
 
 jest.mock("../../src/hooks/solidClient");
 
@@ -51,16 +49,5 @@ describe("Resource details", () => {
       </DatasetProvider>
     );
     expect(tree).toMatchSnapshot();
-  });
-});
-
-describe("displayType", () => {
-  test("it returns 'Resource' if no types", () => {
-    expect(displayType([])).toEqual("Resource");
-  });
-
-  test("it returns the first type if types", () => {
-    const types = ["A Type"];
-    expect(displayType(types)).toEqual(types[0]);
   });
 });

@@ -1235,17 +1235,7 @@ font-display: block;",
                                                   className="PodBrowser-action-menu__trigger"
                                                   data-testid="download-resource-button"
                                                   iri="http://example.com/Some%20container/"
-                                                  type="Resource"
-                                                >
-                                                  <button
-                                                    className="PodBrowser-action-menu__trigger"
-                                                    data-testid="download-resource-button"
-                                                    onClick={[Function]}
-                                                    type="button"
-                                                  >
-                                                    Download
-                                                  </button>
-                                                </DownloadLink>
+                                                />
                                               </li>
                                             </ActionMenuItem>
                                             <ActionMenuItem>
@@ -1767,7 +1757,7 @@ font-display: block;",
                                                           <p
                                                             className="PodBrowser-root PodBrowser-typeValue PodBrowser-detailText PodBrowser-body1"
                                                           >
-                                                            Resource
+                                                            text/turtle
                                                           </p>
                                                         </ForwardRef(Typography)>
                                                       </WithStyles(ForwardRef(Typography))>
@@ -3877,17 +3867,7 @@ font-display: block;",
                                                   className="PodBrowser-action-menu__trigger"
                                                   data-testid="download-resource-button"
                                                   iri="http://example.com/container/"
-                                                  type="Resource"
-                                                >
-                                                  <button
-                                                    className="PodBrowser-action-menu__trigger"
-                                                    data-testid="download-resource-button"
-                                                    onClick={[Function]}
-                                                    type="button"
-                                                  >
-                                                    Download
-                                                  </button>
-                                                </DownloadLink>
+                                                />
                                               </li>
                                             </ActionMenuItem>
                                             <ActionMenuItem>
@@ -4409,7 +4389,7 @@ font-display: block;",
                                                           <p
                                                             className="PodBrowser-root PodBrowser-typeValue PodBrowser-detailText PodBrowser-body1"
                                                           >
-                                                            Resource
+                                                            text/turtle
                                                           </p>
                                                         </ForwardRef(Typography)>
                                                       </WithStyles(ForwardRef(Typography))>

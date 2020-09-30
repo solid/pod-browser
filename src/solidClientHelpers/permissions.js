@@ -22,7 +22,6 @@
 /* eslint-disable camelcase */
 import {
   createAcl,
-  getSolidDatasetWithAcl,
   getResourceAcl,
   hasAccessibleAcl,
   hasResourceAcl,
@@ -35,9 +34,10 @@ import {
   getAgentDefaultAccessAll,
   getFallbackAcl,
   getSourceUrl,
+  getResourceInfoWithAcl,
 } from "@inrupt/solid-client";
 import { isUrl } from "../stringHelpers";
-import { createResponder, chain, datasetIsContainer } from "./utils";
+import { createResponder, chain, isContainerIri } from "./utils";
 import { fetchProfile } from "./profile";
 
 export const ACL = {
@@ -142,10 +142,11 @@ export async function saveAllPermissions(datasetWithAcl, webId, access, fetch) {
 
   if (!aclDataset) return error("aclDataset is empty");
 
+  const datasetUri = getSourceUrl(datasetWithAcl);
   const updatedAcl = chain(
     setAgentResourceAccess(aclDataset, webId, access),
     (acl) =>
-      datasetIsContainer(datasetWithAcl)
+      isContainerIri(datasetUri)
         ? setAgentDefaultAccess(acl, webId, access) // will only apply default permissions if dataset is a container
         : acl
   );
@@ -155,7 +156,7 @@ export async function saveAllPermissions(datasetWithAcl, webId, access, fetch) {
   if (!response) return error("response is empty");
 
   // TODO: Can optimize once saveAclFor returns the resource dataset instead of the acl dataset
-  const dataset = await getSolidDatasetWithAcl(getSourceUrl(datasetWithAcl), {
+  const dataset = await getResourceInfoWithAcl(getSourceUrl(datasetWithAcl), {
     fetch,
   });
   if (!dataset) return error("dataset is empty");
