@@ -23,7 +23,7 @@ import React, { useContext } from "react";
 import T from "prop-types";
 import { DrawerContainer } from "@inrupt/prism-react-components";
 import { useRouter } from "next/router";
-import DetailsContextMenu, { handleCloseDrawer } from "../detailsContextMenu";
+import ResourceDrawer, { handleCloseDrawer } from "../resourceDrawer";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 
 export default function ContainerDetails({ children, mutate }) {
@@ -31,7 +31,7 @@ export default function ContainerDetails({ children, mutate }) {
   const router = useRouter();
 
   const drawer = (
-    <DetailsContextMenu
+    <ResourceDrawer
       onUpdate={() => {
         mutate();
         handleCloseDrawer({ setMenuOpen, router })();

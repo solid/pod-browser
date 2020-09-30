@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Container view fetches dataset with acl 1`] = `
+exports[`ResourceDrawer view fetches dataset with acl 1`] = `
 <Component
   theme={
     Object {
@@ -883,7 +883,7 @@ font-display: block;",
           sessionRequestInProgress={false}
         >
           <DetailsContextMenuProvider>
-            <DetailsContextMenu
+            <ResourceDrawer
               onUpdate={[Function]}
             >
               <Drawer
@@ -947,7 +947,7 @@ font-display: block;",
                   </div>
                 </section>
               </Drawer>
-            </DetailsContextMenu>
+            </ResourceDrawer>
           </DetailsContextMenuProvider>
         </g>
       </MockedSessionContextProvider>
@@ -956,7 +956,7 @@ font-display: block;",
 </Component>
 `;
 
-exports[`Container view it renders a Contents view when the router query has an iri 1`] = `
+exports[`ResourceDrawer view it renders a Contents view when the router query has an iri 1`] = `
 <Component
   theme={
     Object {
@@ -1854,7 +1854,7 @@ font-display: block;",
           sessionRequestInProgress={false}
         >
           <DetailsContextMenuProvider>
-            <DetailsContextMenu
+            <ResourceDrawer
               onUpdate={[Function]}
             >
               <Drawer
@@ -1918,7 +1918,7 @@ font-display: block;",
                   </div>
                 </section>
               </Drawer>
-            </DetailsContextMenu>
+            </ResourceDrawer>
           </DetailsContextMenuProvider>
         </g>
       </MockedSessionContextProvider>
@@ -1927,7 +1927,7 @@ font-display: block;",
 </Component>
 `;
 
-exports[`Container view it renders a loading view when context has no iri 1`] = `
+exports[`ResourceDrawer view it renders a loading view when context has no iri 1`] = `
 <Component
   theme={
     Object {
@@ -2768,7 +2768,7 @@ font-display: block;",
       }
     >
       <DetailsContextMenuProvider>
-        <DetailsContextMenu
+        <ResourceDrawer
           onUpdate={[Function]}
         >
           <Drawer
@@ -2832,7 +2832,7 @@ font-display: block;",
               </div>
             </section>
           </Drawer>
-        </DetailsContextMenu>
+        </ResourceDrawer>
       </DetailsContextMenuProvider>
     </ThemeProvider>
   </StylesProvider>

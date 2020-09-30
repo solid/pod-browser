@@ -1899,7 +1899,7 @@ font-display: block;",
           <ContainerDetails>
             <DrawerContainer
               drawer={
-                <DetailsContextMenu
+                <ResourceDrawer
                   onUpdate={[Function]}
                 />
               }
@@ -4374,7 +4374,7 @@ font-display: block;",
                     </tbody>
                   </table>
                 </div>
-                <DetailsContextMenu
+                <ResourceDrawer
                   onUpdate={[Function]}
                 >
                   <Drawer
@@ -4438,7 +4438,7 @@ font-display: block;",
                       </div>
                     </section>
                   </Drawer>
-                </DetailsContextMenu>
+                </ResourceDrawer>
               </div>
             </DrawerContainer>
           </ContainerDetails>
@@ -5577,7 +5577,7 @@ font-display: block;",
           <ContainerDetails>
             <DrawerContainer
               drawer={
-                <DetailsContextMenu
+                <ResourceDrawer
                   onUpdate={[Function]}
                 />
               }
@@ -25975,7 +25975,7 @@ font-display: block;",
                     </tbody>
                   </table>
                 </div>
-                <DetailsContextMenu
+                <ResourceDrawer
                   onUpdate={[Function]}
                 >
                   <Drawer
@@ -26039,7 +26039,7 @@ font-display: block;",
                       </div>
                     </section>
                   </Drawer>
-                </DetailsContextMenu>
+                </ResourceDrawer>
               </div>
             </DrawerContainer>
           </ContainerDetails>

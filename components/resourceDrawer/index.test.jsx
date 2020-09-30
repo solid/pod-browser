@@ -25,13 +25,13 @@ import * as RouterFns from "next/router";
 import * as solidClientFns from "@inrupt/solid-client";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
-import DetailsContextMenu, { handleCloseDrawer } from "./index";
+import ResourceDrawer, { handleCloseDrawer } from "./index";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 import mockDetailsContextMenuProvider from "../../__testUtils/mockDetailsContextMenuProvider";
 
 const iri = "/iri/";
 
-describe("Container view", () => {
+describe("ResourceDrawer view", () => {
   let fetch;
   let session;
   let SessionProvider;
@@ -75,7 +75,7 @@ describe("Container view", () => {
 
     const tree = mountToJson(
       <DetailsContext>
-        <DetailsContextMenu />
+        <ResourceDrawer />
       </DetailsContext>
     );
 
@@ -86,7 +86,7 @@ describe("Container view", () => {
     const tree = mountToJson(
       <SessionProvider>
         <DetailsMenuContext>
-          <DetailsContextMenu />
+          <ResourceDrawer />
         </DetailsMenuContext>
       </SessionProvider>
     );
@@ -101,7 +101,7 @@ describe("Container view", () => {
     const tree = mountToJson(
       <SessionProvider>
         <DetailsMenuContext>
-          <DetailsContextMenu />
+          <ResourceDrawer />
         </DetailsMenuContext>
       </SessionProvider>
     );

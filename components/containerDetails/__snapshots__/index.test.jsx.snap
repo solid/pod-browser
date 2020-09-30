@@ -6,7 +6,7 @@ exports[`ContainerDetails Renders view 1`] = `
 >
   <DrawerContainer
     drawer={
-      <DetailsContextMenu
+      <ResourceDrawer
         onUpdate={[Function]}
       />
     }
@@ -18,7 +18,7 @@ exports[`ContainerDetails Renders view 1`] = `
       <div
         className="makeStyles-drawer-container__content-2"
       />
-      <DetailsContextMenu
+      <ResourceDrawer
         onUpdate={[Function]}
       />
     </div>

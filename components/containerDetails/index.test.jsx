@@ -25,9 +25,9 @@ import { mountToJson } from "enzyme-to-json";
 import * as RouterFns from "next/router";
 import T from "prop-types";
 import ContainerDetails from "./index";
-import DetailsContextMenu, { handleCloseDrawer } from "../detailsContextMenu";
+import ResourceDrawer, { handleCloseDrawer } from "../resourceDrawer";
 
-jest.mock("../detailsContextMenu");
+jest.mock("../resourceDrawer");
 
 describe("ContainerDetails", () => {
   let mutate;
@@ -42,15 +42,15 @@ describe("ContainerDetails", () => {
       query: {},
     });
 
-    function MockDetailsContextMenu({ onUpdate }) {
+    function MockResourceDrawer({ onUpdate }) {
       onUpdateFn = onUpdate;
       return null;
     }
-    MockDetailsContextMenu.propTypes = {
+    MockResourceDrawer.propTypes = {
       onUpdate: T.func.isRequired,
     };
 
-    DetailsContextMenu.mockImplementationOnce(MockDetailsContextMenu);
+    ResourceDrawer.mockImplementationOnce(MockResourceDrawer);
 
     handleCloseDrawerFn = jest.fn().mockResolvedValue(jest.fn());
     handleCloseDrawer.mockImplementationOnce(() => handleCloseDrawerFn);

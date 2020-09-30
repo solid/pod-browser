@@ -38,7 +38,7 @@ export function handleCloseDrawer({ setMenuOpen, router }) {
   };
 }
 
-export default function DetailsContextMenu({ onUpdate }) {
+export default function ResourceDrawer({ onUpdate }) {
   const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
   const { fetch } = useSession();
   const [datasetWithAcl, setDatasetWithAcl] = useState(null);
@@ -78,10 +78,10 @@ export default function DetailsContextMenu({ onUpdate }) {
   );
 }
 
-DetailsContextMenu.propTypes = {
+ResourceDrawer.propTypes = {
   onUpdate: T.func,
 };
 
-DetailsContextMenu.defaultProps = {
+ResourceDrawer.defaultProps = {
   onUpdate: () => {},
 };
