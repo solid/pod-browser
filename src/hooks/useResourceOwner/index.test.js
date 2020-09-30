@@ -20,7 +20,7 @@
  */
 
 import { renderHook } from "@testing-library/react-hooks";
-import useFindResourceOwner from ".";
+import useResourceOwner from ".";
 import {
   mockPersonDatasetAlice,
   mockPersonDatasetBob,
@@ -29,7 +29,7 @@ import { getResource } from "../../solidClientHelpers/resource";
 
 jest.mock("../../solidClientHelpers/resource");
 
-describe("useFindResourceOwner", () => {
+describe("useResourceOwner", () => {
   describe("with a profile and formatted name", () => {
     const userWebId = "http://example.com/alice#me";
     const userProfile = mockPersonDatasetAlice();
@@ -39,7 +39,7 @@ describe("useFindResourceOwner", () => {
         error: null,
       });
       const { result, waitForNextUpdate } = renderHook(() =>
-        useFindResourceOwner(userWebId)
+        useResourceOwner(userWebId)
       );
       await waitForNextUpdate();
       expect(result.current.ownerName).toEqual("Alice");
@@ -54,7 +54,7 @@ describe("useFindResourceOwner", () => {
         error: null,
       });
       const { result, waitForNextUpdate } = renderHook(() =>
-        useFindResourceOwner(userWebId)
+        useResourceOwner(userWebId)
       );
       await waitForNextUpdate();
       expect(result.current.ownerName).toEqual("Bob");
@@ -68,7 +68,7 @@ describe("useFindResourceOwner", () => {
         error: "error",
       });
       const { result, waitForNextUpdate } = renderHook(() =>
-        useFindResourceOwner(userWebId)
+        useResourceOwner(userWebId)
       );
       await waitForNextUpdate();
       expect(result.current.ownerName).toBeNull();

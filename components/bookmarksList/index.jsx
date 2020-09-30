@@ -41,12 +41,12 @@ import SortedTableCarat from "../sortedTableCarat";
 import Spinner from "../spinner";
 import styles from "./styles";
 import { RECALLS_PROPERTY_IRI } from "../../src/solidClientHelpers/bookmarks";
-import useFindResourceOwner from "../../src/hooks/useFindResourceOwner";
+import useResourceOwner from "../../src/hooks/useResourceOwner";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 function OwnerDisplayName({ iri }) {
-  const { ownerName } = useFindResourceOwner(iri);
+  const { ownerName } = useResourceOwner(iri);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (typeof ownerName === "undefined") {
