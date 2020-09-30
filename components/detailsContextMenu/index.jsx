@@ -22,7 +22,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import { useRouter } from "next/router";
-import { Drawer } from "@inrupt/prism-react-components";
+import { Drawer, LoadingIndicator } from "@inrupt/prism-react-components";
 import { DatasetProvider, useSession } from "@inrupt/solid-ui-react";
 import { getSolidDatasetWithAcl } from "@inrupt/solid-client";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
@@ -42,6 +42,7 @@ export default function DetailsContextMenu({ onUpdate }) {
   const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
   const { fetch } = useSession();
   const [datasetWithAcl, setDatasetWithAcl] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const {
     query: { action, resourceIri },
@@ -55,16 +56,24 @@ export default function DetailsContextMenu({ onUpdate }) {
 
   useEffect(() => {
     if (!resourceIri) return;
-    getSolidDatasetWithAcl(resourceIri, { fetch }).then(setDatasetWithAcl);
+    setLoading(true);
+    getSolidDatasetWithAcl(resourceIri, { fetch }).then((dataset) => {
+      setDatasetWithAcl(dataset);
+      setLoading(false);
+    });
   }, [fetch, resourceIri]);
 
   const closeDrawer = handleCloseDrawer({ setMenuOpen, router });
 
   return (
     <Drawer open={menuOpen} close={closeDrawer}>
-      <DatasetProvider dataset={datasetWithAcl}>
-        <ResourceDetails onDelete={onUpdate} />
-      </DatasetProvider>
+      {loading ? (
+        <LoadingIndicator center maxHeight={400} />
+      ) : (
+        <DatasetProvider dataset={datasetWithAcl}>
+          <ResourceDetails onDelete={onUpdate} />
+        </DatasetProvider>
+      )}
     </Drawer>
   );
 }

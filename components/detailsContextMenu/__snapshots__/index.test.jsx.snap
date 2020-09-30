@@ -918,13 +918,32 @@ font-display: block;",
                         </button>
                       </Button>
                     </div>
-                    <m
-                      dataset={null}
+                    <LoadingIndicator
+                      center={true}
+                      maxHeight={400}
                     >
-                      <span>
-                        Fetching data...
-                      </span>
-                    </m>
+                      <div
+                        className="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
+                        style={
+                          Object {
+                            "maxHeight": 400,
+                          }
+                        }
+                      >
+                        <svg
+                          className="PodBrowser-loading-indicator"
+                          viewBox="22 22 44 44"
+                        >
+                          <circle
+                            cx="44"
+                            cy="44"
+                            fill="none"
+                            r="20.2"
+                            strokeWidth="3.6"
+                          />
+                        </svg>
+                      </div>
+                    </LoadingIndicator>
                   </div>
                 </section>
               </Drawer>
@@ -1872,13 +1891,32 @@ font-display: block;",
                         </button>
                       </Button>
                     </div>
-                    <m
-                      dataset={null}
+                    <LoadingIndicator
+                      center={true}
+                      maxHeight={400}
                     >
-                      <span>
-                        Fetching data...
-                      </span>
-                    </m>
+                      <div
+                        className="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
+                        style={
+                          Object {
+                            "maxHeight": 400,
+                          }
+                        }
+                      >
+                        <svg
+                          className="PodBrowser-loading-indicator"
+                          viewBox="22 22 44 44"
+                        >
+                          <circle
+                            cx="44"
+                            cy="44"
+                            fill="none"
+                            r="20.2"
+                            strokeWidth="3.6"
+                          />
+                        </svg>
+                      </div>
+                    </LoadingIndicator>
                   </div>
                 </section>
               </Drawer>
@@ -2767,13 +2805,32 @@ font-display: block;",
                     </button>
                   </Button>
                 </div>
-                <m
-                  dataset={null}
+                <LoadingIndicator
+                  center={true}
+                  maxHeight={400}
                 >
-                  <span>
-                    Fetching data...
-                  </span>
-                </m>
+                  <div
+                    className="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
+                    style={
+                      Object {
+                        "maxHeight": 400,
+                      }
+                    }
+                  >
+                    <svg
+                      className="PodBrowser-loading-indicator"
+                      viewBox="22 22 44 44"
+                    >
+                      <circle
+                        cx="44"
+                        cy="44"
+                        fill="none"
+                        r="20.2"
+                        strokeWidth="3.6"
+                      />
+                    </svg>
+                  </div>
+                </LoadingIndicator>
               </div>
             </section>
           </Drawer>
