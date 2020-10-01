@@ -27,11 +27,11 @@ const styles = (theme) =>
       display: "flex",
     },
     indicatorLabel: {
-      fontSize: 13,
+      fontSize: "0.825rem",
       fontWeight: theme.typography.fontWeightMedium,
     },
     indicatorPrompt: {
-      color: "black",
+      color: theme.palette.text.secondary,
       textTransform: "none",
       fontSize: theme.typography.htmlFontSize,
       fontWeight: theme.typography.fontWeightRegular,

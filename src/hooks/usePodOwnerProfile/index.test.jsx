@@ -40,5 +40,19 @@ describe("usePodOwnerProfile", () => {
     );
     await waitForNextUpdate();
     expect(result.current.profile.dataset).toEqual(userProfile);
+    expect(result.current.error).toBeNull();
+  });
+  it("should return null if there's an error fetching the profile", async () => {
+    getResource.mockResolvedValue({
+      response: null,
+      error: "error",
+    });
+    const { result, waitForNextUpdate } = renderHook(() =>
+      usePodOwnerProfile(podUri)
+    );
+    await waitForNextUpdate();
+
+    expect(result.current.error).toEqual("error");
+    expect(result.current.profile).toBeNull();
   });
 });
