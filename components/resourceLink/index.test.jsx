@@ -21,74 +21,9 @@
 
 import React from "react";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
-import ResourceLink, {
-  resourceHref,
-  resourceContextRedirect,
-  urlForResourceAction,
-} from "./index";
+import ResourceLink from "./index";
 
 jest.mock("next/router");
-
-describe("resourceHref", () => {
-  test("it generates a resource link", () => {
-    const link = resourceHref("https://example.com/example.ttl");
-    expect(link).toEqual("/resource/https%3A%2F%2Fexample.com%2Fexample.ttl");
-  });
-});
-
-describe("resourceContextRedirect", () => {
-  test("it calls router.replace with a new action for a given container and resource", () => {
-    const resourceIri = "https://mypod.myhost.com/resource";
-    const containerIri = "https://mypod.myhost.com";
-    const action = "myAction";
-
-    const router = {
-      replace: jest.fn(),
-    };
-
-    // Seriously, in test files, linter?
-    /* eslint @typescript-eslint/no-floating-promises: 0 */
-    resourceContextRedirect(action, resourceIri, containerIri, router);
-
-    expect(router.replace).toHaveBeenCalledWith(
-      urlForResourceAction(action, resourceIri, undefined),
-      urlForResourceAction(action, resourceIri, containerIri)
-    );
-  });
-});
-
-describe("urlForResourceAction", () => {
-  test("generates a url without a querystring if no action is given", () => {
-    const resourceIri = "https://mypod.myhost.com/resource";
-    const containerIri = "https://mypod.myhost.com";
-
-    // TODO reorder so that action is last
-    expect(urlForResourceAction(undefined, resourceIri, containerIri)).toEqual({
-      pathname: resourceHref(containerIri),
-    });
-  });
-
-  test("generates a url for a resource+container", () => {
-    const resourceIri = "https://mypod.myhost.com/resource";
-    const containerIri = "https://mypod.myhost.com";
-    const action = "myAction";
-
-    expect(urlForResourceAction(action, resourceIri, containerIri)).toEqual({
-      pathname: resourceHref(containerIri),
-      query: { action, resourceIri },
-    });
-  });
-
-  test("generates an alias url for a resource", () => {
-    const resourceIri = "https://mypod.myhost.com/resource";
-    const action = "myAction";
-
-    expect(urlForResourceAction(action, resourceIri, undefined)).toEqual({
-      pathname: "/resource/[iri]",
-      query: { action, resourceIri },
-    });
-  });
-});
 
 describe("ResourceLink", () => {
   test("renders with a resource and container", () => {

@@ -19,31 +19,17 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useEffect } from "react";
-import { useRouter } from "next/router";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-import { useSession } from "@inrupt/solid-ui-react";
-import { useFetchPodIrisFromWebId } from "../../../src/hooks/solidClient";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
+const styles = (theme) =>
+  createStyles(theme, ["appLayout", "headerBanner", "icons"], {
+    logoIndicatorContainer: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      marginRight: theme.spacing(2),
+      paddingTop: theme.spacing(2),
+    },
+  });
 
-import { resourceHref } from "../../../src/navigator";
-
-export default function Home() {
-  useRedirectIfLoggedOut();
-
-  const router = useRouter();
-  const { session } = useSession();
-  const { webId = "" } = session.info;
-  const { data: podIris = [] } = useFetchPodIrisFromWebId(webId);
-  const [podIri] = podIris;
-
-  useEffect(() => {
-    if (podIri) {
-      router.replace("/resource/[iri]", resourceHref(podIri)).catch((e) => {
-        throw e;
-      });
-    }
-  }, [podIri, router]);
-
-  return null;
-}
+export default styles;

@@ -29,9 +29,10 @@ import T from "prop-types";
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
 import { isContainerIri } from "../../src/solidClientHelpers/utils";
 import PodLocationContext from "../../src/contexts/podLocationContext";
-import ResourceLink, { resourceContextRedirect } from "../resourceLink";
+import ResourceLink from "../resourceLink";
 import Bookmark from "../bookmark";
 import styles from "./styles";
+import { resourceContextRedirect } from "../../src/navigator";
 
 export function ResourceIcon({ iri, bem }) {
   // keeping it very simple for now (either folder or file), and then we can expand upon it later

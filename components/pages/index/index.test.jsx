@@ -27,9 +27,9 @@ import Router, * as nextRouterFns from "next/router";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import { useFetchPodIrisFromWebId } from "../../../src/hooks/solidClient";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
-import { resourceHref } from "../../resourceLink";
 import IndexPage from "./index";
 import mockSession from "../../../__testUtils/mockSession";
+import { resourceHref } from "../../../src/navigator";
 
 jest.mock("../../../src/effects/auth");
 jest.mock("../../../src/hooks/solidClient");

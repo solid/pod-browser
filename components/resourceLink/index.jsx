@@ -23,34 +23,7 @@ import React, { useContext } from "react";
 import Link from "next/link";
 import T from "prop-types";
 import PodLocationContext from "../../src/contexts/podLocationContext";
-
-export function resourceHref(iri) {
-  return `/resource/${encodeURIComponent(iri)}`;
-}
-
-export const urlForResourceAction = (action, resourceIri, containerIri) => ({
-  pathname: containerIri ? resourceHref(containerIri) : "/resource/[iri]",
-  ...(action
-    ? {
-        query: {
-          action,
-          resourceIri,
-        },
-      }
-    : {}),
-});
-
-export function resourceContextRedirect(
-  action,
-  resourceIri,
-  containerIri,
-  router
-) {
-  return router.replace(
-    urlForResourceAction(action, resourceIri, undefined),
-    urlForResourceAction(action, resourceIri, containerIri)
-  );
-}
+import { urlForResourceAction } from "../../src/navigator";
 
 /* eslint react/jsx-props-no-spreading: 0 */
 export default function ResourceLink(props) {

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`UserMenu renders a menu 1`] = `
+exports[`PodNavigator renders view 1`] = `
 <Component
   theme={
     Object {
@@ -840,76 +840,71 @@ font-display: block;",
         }
       }
     >
-      <UserMenu>
-        <div
-          className="PodBrowser-header-banner__aside-menu PodBrowser-header-banner__aside-menu--popup"
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
+      <PodNavigator>
+        <button
+          onClick={[Function]}
+          type="button"
         >
-          <button
-            aria-controls="UserMenu"
-            aria-expanded={true}
-            aria-haspopup="true"
-            className="PodBrowser-header-banner__aside-menu-trigger"
-            data-testid="user-menu-button"
-            onClick={[Function]}
-            type="button"
+          NAVIGATOR TRIGGER (PLACEHOLDER)
+        </button>
+        <WithStyles(ForwardRef(Popover))
+          anchorEl={null}
+          anchorOrigin={
+            Object {
+              "horizontal": "left",
+              "vertical": "bottom",
+            }
+          }
+          classes={
+            Object {
+              "paper": "PodBrowser-paper",
+            }
+          }
+          onClose={[Function]}
+          open={false}
+          transformOrigin={
+            Object {
+              "horizontal": "left",
+              "vertical": "top",
+            }
+          }
+        >
+          <ForwardRef(Popover)
+            anchorEl={null}
+            anchorOrigin={
+              Object {
+                "horizontal": "left",
+                "vertical": "bottom",
+              }
+            }
+            classes={
+              Object {
+                "paper": "PodBrowser-paper PodBrowser-paper",
+                "root": "PodBrowser-root",
+              }
+            }
+            onClose={[Function]}
+            open={false}
+            transformOrigin={
+              Object {
+                "horizontal": "left",
+                "vertical": "top",
+              }
+            }
           >
-            <i
-              aria-label="User Menu"
-              className="PodBrowser-icon-user PodBrowser-header-banner__aside-menu-trigger-icon"
-            />
-          </button>
-          <div
-            aria-hidden={true}
-            className="PodBrowser-header-banner__aside-menu-popup"
-            id="UserMenu"
-          >
-            <ul
-              className="PodBrowser-header-banner__user-menu"
-            >
-              <li
-                className="PodBrowser-header-banner__user-menu-item"
-                style={
-                  Object {
-                    "zIndex": 100,
-                  }
+            <ForwardRef(Modal)
+              BackdropProps={
+                Object {
+                  "invisible": true,
                 }
-              >
-                <Logout
-                  className="PodBrowser-header-banner__user-menu-item-trigger"
-                >
-                  <L
-                    onLogout={[Function]}
-                  >
-                    <div
-                      onClick={[Function]}
-                      onKeyDown={[Function]}
-                      role="button"
-                      tabIndex={0}
-                    >
-                      <button
-                        className="PodBrowser-header-banner__user-menu-item-trigger"
-                        data-testid="logout-button"
-                        type="button"
-                      >
-                        <i
-                          className="PodBrowser-icon-log-out PodBrowser-header-banner__user-menu-item-icon"
-                        />
-                        <span
-                          className="PodBrowser-header-banner__user-menu-item-label"
-                        >
-                          Log out
-                        </span>
-                      </button>
-                    </div>
-                  </L>
-                </Logout>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </UserMenu>
+              }
+              className="PodBrowser-root"
+              onClose={[Function]}
+              open={false}
+            />
+          </ForwardRef(Popover)>
+        </WithStyles(ForwardRef(Popover))>
+      </PodNavigator>
     </ThemeProvider>
   </StylesProvider>
 </Component>

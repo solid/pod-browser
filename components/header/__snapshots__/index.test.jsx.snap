@@ -925,76 +925,122 @@ font-display: block;",
                 </Link>
                 <PodIndicator />
               </div>
-              <UserMenu>
-                <nav
-                  className="PodBrowser-header-banner__main-nav"
+              <PodNavigator>
+                <button
+                  onClick={[Function]}
+                  type="button"
                 >
-                  <ul
-                    className="PodBrowser-main-nav__list"
+                  NAVIGATOR TRIGGER (PLACEHOLDER)
+                </button>
+                <WithStyles(ForwardRef(Popover))
+                  anchorEl={null}
+                  anchorOrigin={
+                    Object {
+                      "horizontal": "left",
+                      "vertical": "bottom",
+                    }
+                  }
+                  classes={
+                    Object {
+                      "paper": "PodBrowser-paper",
+                    }
+                  }
+                  onClose={[Function]}
+                  open={false}
+                  transformOrigin={
+                    Object {
+                      "horizontal": "left",
+                      "vertical": "top",
+                    }
+                  }
+                >
+                  <ForwardRef(Popover)
+                    anchorEl={null}
+                    anchorOrigin={
+                      Object {
+                        "horizontal": "left",
+                        "vertical": "bottom",
+                      }
+                    }
+                    classes={
+                      Object {
+                        "paper": "PodBrowser-paper PodBrowser-paper",
+                        "root": "PodBrowser-root",
+                      }
+                    }
+                    onClose={[Function]}
+                    open={false}
+                    transformOrigin={
+                      Object {
+                        "horizontal": "left",
+                        "vertical": "top",
+                      }
+                    }
                   >
-                    <li
-                      className="PodBrowser-main-nav__item"
-                    >
-                      <Link
-                        href="/"
-                        replace={true}
-                      >
-                        <button
-                          className="PodBrowser-header-banner__aside-menu-trigger"
-                          onClick={[Function]}
-                          onMouseEnter={[Function]}
-                          type="button"
-                        >
-                          <i
-                            aria-label="Files"
-                            className="PodBrowser-icon-files PodBrowser-header-banner__aside-menu-trigger-icon"
-                          />
-                          Files
-                        </button>
-                      </Link>
-                    </li>
-                    <li
-                      className="PodBrowser-main-nav__item"
-                    >
-                      <Link
-                        href="/contacts"
-                        replace={true}
-                      >
-                        <button
-                          className="PodBrowser-header-banner__aside-menu-trigger"
-                          onClick={[Function]}
-                          onMouseEnter={[Function]}
-                          type="button"
-                        >
-                          <i
-                            aria-label="Contacts"
-                            className="PodBrowser-icon-users PodBrowser-header-banner__aside-menu-trigger-icon"
-                          />
-                          Contacts
-                        </button>
-                      </Link>
-                    </li>
-                  </ul>
-                </nav>
-                <div>
-                  <Link
-                    href="/bookmarks"
-                    replace={true}
+                    <ForwardRef(Modal)
+                      BackdropProps={
+                        Object {
+                          "invisible": true,
+                        }
+                      }
+                      className="PodBrowser-root"
+                      onClose={[Function]}
+                      open={false}
+                    />
+                  </ForwardRef(Popover)>
+                </WithStyles(ForwardRef(Popover))>
+              </PodNavigator>
+              <nav
+                className="PodBrowser-header-banner__main-nav"
+              >
+                <ul
+                  className="PodBrowser-main-nav__list"
+                >
+                  <li
+                    className="PodBrowser-main-nav__item"
                   >
-                    <button
-                      className="PodBrowser-header-banner__aside-menu-trigger"
-                      onClick={[Function]}
-                      onMouseEnter={[Function]}
-                      type="button"
+                    <Link
+                      href="/"
+                      replace={true}
                     >
-                      <i
-                        aria-label="Bookmarks"
-                        className="PodBrowser-icon-star PodBrowser-header-banner__aside-menu-trigger-icon"
-                      />
-                      Bookmarks
-                    </button>
-                  </Link>
-                </div>
+                      <button
+                        className="PodBrowser-header-banner__aside-menu-trigger"
+                        onClick={[Function]}
+                        onMouseEnter={[Function]}
+                        type="button"
+                      >
+                        <i
+                          aria-label="Files"
+                          className="PodBrowser-icon-files PodBrowser-header-banner__aside-menu-trigger-icon"
+                        />
+                        Files
+                      </button>
+                    </Link>
+                  </li>
+                  <li
+                    className="PodBrowser-main-nav__item"
+                  >
+                    <Link
+                      href="/contacts"
+                      replace={true}
+                    >
+                      <button
+                        className="PodBrowser-header-banner__aside-menu-trigger"
+                        onClick={[Function]}
+                        onMouseEnter={[Function]}
+                        type="button"
+                      >
+                        <i
+                          aria-label="Contacts"
+                          className="PodBrowser-icon-users PodBrowser-header-banner__aside-menu-trigger-icon"
+                        />
+                        Contacts
+                      </button>
+                    </Link>
+                  </li>
+                </ul>
+              </nav>
+              <UserMenu>
                 <div
                   className="PodBrowser-header-banner__aside-menu PodBrowser-header-banner__aside-menu--popup"
                   onMouseEnter={[Function]}

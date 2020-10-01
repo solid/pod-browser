@@ -22,8 +22,8 @@
 import T from "prop-types";
 import { TableCell, TableRow } from "@material-ui/core";
 import Link from "next/link";
-import { resourceHref } from "../resourceLink";
 import { getIriPath } from "../../src/solidClientHelpers/utils";
+import { resourceHref } from "../../src/navigator";
 
 function ContainerTableRowSkeleton({ iri }) {
   const name = getIriPath(iri);

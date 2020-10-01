@@ -19,22 +19,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
-import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
-import { header, PrismTheme, useBem } from "@solid/lit-prism-patterns";
+import React from "react";
+import { createStyles, makeStyles } from "@material-ui/styles";
+import { header, useBem } from "@solid/lit-prism-patterns";
 import { useSession } from "@inrupt/solid-ui-react";
 import Link from "next/link";
+import clsx from "clsx";
 import UserMenu from "./userMenu";
 import PodIndicator from "./podIndicator";
 import styles from "./styles";
+import PodNavigator from "../podNavigator";
 
-const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme) as StyleRules)
-);
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 const TESTCAFE_ID_HEADER_LOGO = "header-banner-logo";
 
-export default function Header(): ReactElement | null {
+export default function Header() {
   const { session } = useSession();
   const bem = useBem(useStyles());
   const classes = useStyles();
@@ -54,7 +54,50 @@ export default function Header(): ReactElement | null {
         </Link>
         {session.info.isLoggedIn ? <PodIndicator /> : null}
       </div>
-      {session.info.isLoggedIn ? <UserMenu /> : null}
+      {session.info.isLoggedIn ? (
+        <>
+          <PodNavigator />
+          <nav className={bem("header-banner__main-nav")}>
+            <ul className={bem("main-nav__list")}>
+              <li className={bem("main-nav__item")}>
+                <Link href="/" replace>
+                  <button
+                    className={bem("header-banner__aside-menu-trigger")}
+                    type="button"
+                  >
+                    <i
+                      className={clsx(
+                        bem("icon-files"),
+                        bem("header-banner__aside-menu-trigger-icon")
+                      )}
+                      aria-label="Files"
+                    />
+                    Files
+                  </button>
+                </Link>
+              </li>
+              <li className={bem("main-nav__item")}>
+                <Link href="/contacts" replace>
+                  <button
+                    className={bem("header-banner__aside-menu-trigger")}
+                    type="button"
+                  >
+                    <i
+                      className={clsx(
+                        bem("icon-users"),
+                        bem("header-banner__aside-menu-trigger-icon")
+                      )}
+                      aria-label="Contacts"
+                    />
+                    Contacts
+                  </button>
+                </Link>
+              </li>
+            </ul>
+          </nav>
+          <UserMenu />
+        </>
+      ) : null}
     </header>
   );
 }
