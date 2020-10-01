@@ -20,6 +20,7 @@
  */
 
 import React from "react";
+import { useRouter } from "next/router";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import Header from "./index";
@@ -27,8 +28,17 @@ import mockSession, {
   mockUnauthenticatedSession,
 } from "../../__testUtils/mockSession";
 
+jest.mock("next/router");
+
 describe("Header", () => {
   describe("with user logged in", () => {
+    beforeEach(() => {
+      useRouter.mockImplementation(() => ({
+        query: {
+          iri: encodeURIComponent("https://mypod.myhost.com"),
+        },
+      }));
+    });
     test("renders a header", () => {
       const session = mockSession();
       const SessionProvider = mockSessionContextProvider(session);
