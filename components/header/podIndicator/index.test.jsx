@@ -24,13 +24,19 @@ import { mount } from "enzyme";
 import { useRouter } from "next/router";
 import { mountToJson as enzymeMountToJson } from "enzyme-to-json";
 import { WithTheme } from "../../../__testUtils/mountWithTheme";
-import PodIndicator from "./index";
+import PodIndicator, {
+  clickHandler,
+  closeHandler,
+  submitHandler,
+} from "./index";
 import {
   mockPersonDatasetAlice,
   mockPersonDatasetBob,
 } from "../../../__testUtils/mockPersonResource";
 import usePodOwnerProfile from "../../../src/hooks/usePodOwnerProfile";
 import defaultTheme from "../../../src/theme";
+
+import * as navigatorFns from "../../../src/navigator";
 
 jest.mock("next/router");
 jest.mock("../../../src/hooks/usePodOwnerProfile");
@@ -43,6 +49,7 @@ describe("PodIndicator", () => {
       },
     }));
   });
+
   test("it renders the pod indicator with the correct name with a formatted name", async () => {
     const userProfile = mockPersonDatasetAlice();
     usePodOwnerProfile.mockReturnValue({
@@ -57,6 +64,7 @@ describe("PodIndicator", () => {
     expect(tree.html()).toContain("Alice");
     expect(enzymeMountToJson(tree)).toMatchSnapshot();
   });
+
   test("it renders the pod indicator with the correct name with a name", async () => {
     const userProfile = mockPersonDatasetBob();
     usePodOwnerProfile.mockReturnValue({
@@ -71,6 +79,7 @@ describe("PodIndicator", () => {
     expect(tree.html()).toContain("Bob");
     expect(enzymeMountToJson(tree)).toMatchSnapshot();
   });
+
   test("it returns null if there is no profile", async () => {
     usePodOwnerProfile.mockReturnValue({
       profile: null,
@@ -83,5 +92,55 @@ describe("PodIndicator", () => {
     );
     expect(tree.html()).toEqual("");
     expect(enzymeMountToJson(tree)).toMatchSnapshot();
+  });
+});
+
+describe("clickHandler", () => {
+  test("it sets up a click handler", () => {
+    const setAnchorEl = jest.fn();
+    const currentTarget = "test";
+    clickHandler(setAnchorEl)({ currentTarget });
+    expect(setAnchorEl).toHaveBeenCalledWith(currentTarget);
+  });
+});
+
+describe("closeHandler", () => {
+  test("it sets up a close handler", () => {
+    const setAnchorEl = jest.fn();
+    closeHandler(setAnchorEl)();
+    expect(setAnchorEl).toHaveBeenCalledWith(null);
+  });
+});
+
+describe("submitHandler", () => {
+  const router = "router";
+  const fetch = "fetch";
+  const url = "url";
+  let event;
+  let handleClose;
+
+  beforeEach(() => {
+    event = { preventDefault: jest.fn() };
+    handleClose = jest.fn();
+  });
+
+  test("it sets up a submit handler", async () => {
+    jest.spyOn(navigatorFns, "urlRedirect").mockResolvedValue(false);
+    await submitHandler(handleClose)(event, url, router, fetch);
+    expect(event.preventDefault).toHaveBeenCalledWith();
+    expect(navigatorFns.urlRedirect).toHaveBeenCalledWith(url, router, {
+      fetch,
+    });
+    expect(handleClose).not.toHaveBeenCalled();
+  });
+
+  test("closes on successful redirect", async () => {
+    jest.spyOn(navigatorFns, "urlRedirect").mockResolvedValue(true);
+    await submitHandler(handleClose)(event, url, router, fetch);
+    expect(event.preventDefault).toHaveBeenCalledWith();
+    expect(navigatorFns.urlRedirect).toHaveBeenCalledWith(url, router, {
+      fetch,
+    });
+    expect(handleClose).toHaveBeenCalledWith();
   });
 });

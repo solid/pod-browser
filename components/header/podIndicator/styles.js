@@ -36,6 +36,9 @@ const styles = (theme) =>
       fontSize: theme.typography.htmlFontSize,
       fontWeight: theme.typography.fontWeightRegular,
     },
+    popover: {
+      padding: theme.spacing(2, 2, 0),
+    },
   });
 
 export default styles;

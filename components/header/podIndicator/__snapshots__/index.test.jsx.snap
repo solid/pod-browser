@@ -854,10 +854,69 @@ font-display: block;",
             <button
               className="PodBrowser-button PodBrowser-button--prompt PodBrowser-indicatorPrompt"
               data-testid="pod-indicator-prompt"
+              id="pod-indicator-prompt"
+              onClick={[Function]}
               type="button"
             >
               Alice
             </button>
+            <WithStyles(ForwardRef(Popover))
+              anchorEl={null}
+              anchorOrigin={
+                Object {
+                  "horizontal": "left",
+                  "vertical": "bottom",
+                }
+              }
+              classes={
+                Object {
+                  "paper": "PodBrowser-popover",
+                }
+              }
+              onClose={[Function]}
+              open={false}
+              transformOrigin={
+                Object {
+                  "horizontal": "left",
+                  "vertical": "top",
+                }
+              }
+            >
+              <ForwardRef(Popover)
+                anchorEl={null}
+                anchorOrigin={
+                  Object {
+                    "horizontal": "left",
+                    "vertical": "bottom",
+                  }
+                }
+                classes={
+                  Object {
+                    "paper": "PodBrowser-paper PodBrowser-popover",
+                    "root": "PodBrowser-root",
+                  }
+                }
+                onClose={[Function]}
+                open={false}
+                transformOrigin={
+                  Object {
+                    "horizontal": "left",
+                    "vertical": "top",
+                  }
+                }
+              >
+                <ForwardRef(Modal)
+                  BackdropProps={
+                    Object {
+                      "invisible": true,
+                    }
+                  }
+                  className="PodBrowser-root"
+                  onClose={[Function]}
+                  open={false}
+                />
+              </ForwardRef(Popover)>
+            </WithStyles(ForwardRef(Popover))>
           </label>
         </div>
       </PodIndicator>
@@ -1720,10 +1779,69 @@ font-display: block;",
             <button
               className="PodBrowser-button PodBrowser-button--prompt PodBrowser-indicatorPrompt"
               data-testid="pod-indicator-prompt"
+              id="pod-indicator-prompt"
+              onClick={[Function]}
               type="button"
             >
               Bob
             </button>
+            <WithStyles(ForwardRef(Popover))
+              anchorEl={null}
+              anchorOrigin={
+                Object {
+                  "horizontal": "left",
+                  "vertical": "bottom",
+                }
+              }
+              classes={
+                Object {
+                  "paper": "PodBrowser-popover",
+                }
+              }
+              onClose={[Function]}
+              open={false}
+              transformOrigin={
+                Object {
+                  "horizontal": "left",
+                  "vertical": "top",
+                }
+              }
+            >
+              <ForwardRef(Popover)
+                anchorEl={null}
+                anchorOrigin={
+                  Object {
+                    "horizontal": "left",
+                    "vertical": "bottom",
+                  }
+                }
+                classes={
+                  Object {
+                    "paper": "PodBrowser-paper PodBrowser-popover",
+                    "root": "PodBrowser-root",
+                  }
+                }
+                onClose={[Function]}
+                open={false}
+                transformOrigin={
+                  Object {
+                    "horizontal": "left",
+                    "vertical": "top",
+                  }
+                }
+              >
+                <ForwardRef(Modal)
+                  BackdropProps={
+                    Object {
+                      "invisible": true,
+                    }
+                  }
+                  className="PodBrowser-root"
+                  onClose={[Function]}
+                  open={false}
+                />
+              </ForwardRef(Popover)>
+            </WithStyles(ForwardRef(Popover))>
           </label>
         </div>
       </PodIndicator>

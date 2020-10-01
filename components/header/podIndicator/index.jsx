@@ -23,30 +23,67 @@ import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useRouter } from "next/router";
-import { useBem } from "@solid/lit-prism-patterns";
 import { foaf, vcard } from "rdf-namespaces";
 import { getStringNoLocale } from "@inrupt/solid-client";
+import { useSession } from "@inrupt/solid-ui-react";
+import { useBem } from "@solid/lit-prism-patterns";
+import Popover from "@material-ui/core/Popover";
+import { Form, Input } from "@inrupt/prism-react-components";
 import usePodOwnerProfile from "../../../src/hooks/usePodOwnerProfile";
-
 import styles from "./styles";
+import { urlRedirect } from "../../../src/navigator";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
+export const clickHandler = (setAnchorEl) => (event) =>
+  setAnchorEl(event.currentTarget);
+
+export const closeHandler = (setAnchorEl) => () => setAnchorEl(null);
+
+export const submitHandler = (handleClose) => async (
+  event,
+  url,
+  router,
+  fetch
+) => {
+  event.preventDefault();
+  if (await urlRedirect(url, router, { fetch })) {
+    handleClose();
+  }
+};
+
 export default function PodIndicator() {
   const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [url, setUrl] = useState("");
   const router = useRouter();
+  const { fetch } = useSession();
   const bem = useBem(useStyles());
-  const resourceUri = decodeURIComponent(router.query.iri);
-  const podUri = new URL(resourceUri).origin;
-  
-  const { profile: podOwner } = usePodOwnerProfile(podUri);
-  if (!podOwner) {
+  const decodedResourceUri = decodeURIComponent(router.query.iri);
+  const [podUri, setPodUri] = useState();
+
+  useEffect(() => {
+    if (decodedResourceUri === "undefined") {
+      return;
+    }
+    const originUri = decodedResourceUri && new URL(decodedResourceUri).origin;
+    const decodedPodUri = decodeURIComponent(originUri);
+    setPodUri(decodedPodUri);
+  }, [decodedResourceUri]);
+
+  const { profile } = usePodOwnerProfile(podUri);
+  if (!profile) {
     return null;
   }
 
+  const open = Boolean(anchorEl);
+  const id = open ? "pod-navigator" : undefined;
+  const handleClick = clickHandler(setAnchorEl);
+  const handleClose = closeHandler(setAnchorEl);
+  const onSubmit = submitHandler(handleClose);
   const podOwnerName =
-    getStringNoLocale(podOwner.dataset, vcard.fn) ||
-    getStringNoLocale(podOwner.dataset, foaf.name);
+    getStringNoLocale(profile.dataset, vcard.fn) ||
+    getStringNoLocale(profile.dataset, foaf.name);
 
   return (
     <div className={classes.indicator}>
@@ -54,11 +91,40 @@ export default function PodIndicator() {
         <span>Pod: </span>
         <button
           data-testid="pod-indicator-prompt"
+          id="pod-indicator-prompt"
           type="button"
+          aria-describedby={id}
+          onClick={handleClick}
           className={clsx(bem("button", "prompt"), classes.indicatorPrompt)}
         >
           {podOwnerName}
         </button>
+        <Popover
+          id={id}
+          classes={{
+            paper: classes.popover,
+          }}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+        >
+          <Form onSubmit={(event) => onSubmit(event, url, router, fetch)}>
+            <Input
+              id="PodNavigator"
+              label="Go to Pod"
+              value={url}
+              onChange={(event) => setUrl(event.target.value)}
+            />
+          </Form>
+        </Popover>
       </label>
     </div>
   );

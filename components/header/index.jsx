@@ -28,7 +28,6 @@ import clsx from "clsx";
 import UserMenu from "./userMenu";
 import PodIndicator from "./podIndicator";
 import styles from "./styles";
-import PodNavigator from "../podNavigator";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -56,7 +55,6 @@ export default function Header() {
       </div>
       {session.info.isLoggedIn ? (
         <>
-          <PodNavigator />
           <nav className={bem("header-banner__main-nav")}>
             <ul className={bem("main-nav__list")}>
               <li className={bem("main-nav__item")}>
