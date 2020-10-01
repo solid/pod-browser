@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import clsx from "clsx";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useRouter } from "next/router";
@@ -36,19 +36,10 @@ export default function PodIndicator() {
   const classes = useStyles();
   const router = useRouter();
   const bem = useBem(useStyles());
-  const decodedResourceUri = decodeURIComponent(router.query.iri);
-  const [podUri, setPodUri] = useState();
 
-  useEffect(() => {
-    if (decodedResourceUri === "undefined") {
-      return;
-    }
-    const originUri = decodedResourceUri && new URL(decodedResourceUri).origin;
-    const decodedPodUri = decodeURIComponent(originUri);
-    setPodUri(decodedPodUri);
-  }, [decodedResourceUri]);
+  const decodedIri = decodeURIComponent(router.query.iri);
 
-  const { profile: podOwner } = usePodOwnerProfile(podUri);
+  const { profile: podOwner } = usePodOwnerProfile(decodedIri);
   if (!podOwner) {
     return null;
   }
