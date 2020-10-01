@@ -19,17 +19,29 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { PrismTheme, createStyles } from "@solid/lit-prism-patterns";
+import { useState, useEffect } from "react";
+import { useSession } from "@inrupt/solid-ui-react";
+import { joinPath } from "../../stringHelpers";
+import { getResource } from "../../solidClientHelpers/resource";
 
-const styles = (theme: PrismTheme) =>
-  createStyles(theme, ["appLayout", "headerBanner"], {
-    logoIndicatorContainer: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      marginRight: theme.spacing(2),
-      paddingTop: theme.spacing(2),
-    },
-  });
+export default function usePodOwnerProfile(podUri) {
+  const session = useSession();
+  const { fetch } = session;
+  const [profile, setProfile] = useState();
+  const [error, setError] = useState();
+  const profileIri = joinPath(podUri, "profile/card#me"); // we won't need to do this once ownership is available
 
-export default styles;
+  useEffect(() => {
+    (async () => {
+      const {
+        response: ownerProfile,
+        error: ownerProfileError,
+      } = await getResource(profileIri, fetch);
+      if (ownerProfileError) {
+        setError(ownerProfileError);
+      }
+      setProfile(ownerProfile);
+    })();
+  }, [profileIri, fetch]);
+  return { profile, error };
+}

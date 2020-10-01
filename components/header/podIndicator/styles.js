@@ -19,16 +19,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { PrismTheme, createStyles } from "@solid/lit-prism-patterns";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-const styles = (theme: PrismTheme) =>
-  createStyles(theme, ["appLayout", "headerBanner"], {
-    logoIndicatorContainer: {
+const styles = (theme) =>
+  createStyles(theme, ["button"], {
+    indicator: {
       display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      marginRight: theme.spacing(2),
-      paddingTop: theme.spacing(2),
+    },
+    indicatorLabel: {
+      fontSize: 13,
+      fontWeight: theme.typography.fontWeightMedium,
+    },
+    indicatorPrompt: {
+      color: "black",
+      textTransform: "none",
+      fontSize: theme.typography.htmlFontSize,
+      fontWeight: theme.typography.fontWeightRegular,
     },
   });
 

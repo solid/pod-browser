@@ -25,6 +25,7 @@ import { header, PrismTheme, useBem } from "@solid/lit-prism-patterns";
 import { useSession } from "@inrupt/solid-ui-react";
 import Link from "next/link";
 import UserMenu from "./userMenu";
+import PodIndicator from "./podIndicator";
 import styles from "./styles";
 
 const useStyles = makeStyles<PrismTheme>((theme) =>
@@ -36,22 +37,23 @@ const TESTCAFE_ID_HEADER_LOGO = "header-banner-logo";
 export default function Header(): ReactElement | null {
   const { session } = useSession();
   const bem = useBem(useStyles());
+  const classes = useStyles();
 
   return (
     <header className={bem("header-banner")}>
-      <Link href="/">
-        <a
-          data-testid={TESTCAFE_ID_HEADER_LOGO}
-          className={bem("header-banner__logo")}
-        >
-          <img
-            height={40}
-            src="/inrupt_logo-2020.svg"
-            className={bem("header-banner__logo-image")}
-            alt="Inrupt PodBrowser"
-          />
-        </a>
-      </Link>
+      <div className={classes.logoIndicatorContainer}>
+        <Link href="/">
+          <a data-testid={TESTCAFE_ID_HEADER_LOGO}>
+            <img
+              height={40}
+              src="/inrupt_logo-2020.svg"
+              className={bem("header-banner__logo-image")}
+              alt="Inrupt PodBrowser"
+            />
+          </a>
+        </Link>
+        {session.info.isLoggedIn ? <PodIndicator /> : null}
+      </div>
       {session.info.isLoggedIn ? <UserMenu /> : null}
     </header>
   );
