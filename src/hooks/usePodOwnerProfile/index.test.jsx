@@ -40,6 +40,7 @@ describe("usePodOwnerProfile", () => {
     );
     await waitForNextUpdate();
     expect(result.current.profile.dataset).toEqual(userProfile);
+    expect(result.current.error).toBeNull();
   });
   it("should return null if there's an error fetching the profile", async () => {
     getResource.mockResolvedValue({
@@ -52,5 +53,6 @@ describe("usePodOwnerProfile", () => {
     await waitForNextUpdate();
 
     expect(result.current.error).toEqual("error");
+    expect(result.current.profile).toBeNull();
   });
 });

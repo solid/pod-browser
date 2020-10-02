@@ -29,7 +29,7 @@ export default function usePodOwnerProfile(podUri) {
   const { fetch } = session;
   const [profile, setProfile] = useState();
   const [error, setError] = useState();
-  const profileIri = joinPath(podUri, "profile/card#me"); // we won't need to do this once ownership is available
+  const profileIri = podUri && joinPath(podUri, "profile/card#me"); // we won't need to do this once ownership is available
 
   useEffect(() => {
     (async () => {
@@ -39,8 +39,10 @@ export default function usePodOwnerProfile(podUri) {
       } = await getResource(profileIri, fetch);
       if (ownerProfileError) {
         setError(ownerProfileError);
+        setProfile(null);
       } else {
         setProfile(ownerProfile);
+        setError(null);
       }
     })();
   }, [profileIri, fetch]);

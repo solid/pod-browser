@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useRouter } from "next/router";
