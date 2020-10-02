@@ -38,7 +38,7 @@ export default function PodIndicator() {
   const bem = useBem(useStyles());
   const resourceUri = decodeURIComponent(router.query.iri);
   const podUri = new URL(resourceUri).origin;
-  
+
   const { profile: podOwner } = usePodOwnerProfile(podUri);
   if (!podOwner) {
     return null;

@@ -39,10 +39,8 @@ export default function usePodOwnerProfile(podUri) {
       } = await getResource(profileIri, fetch);
       if (ownerProfileError) {
         setError(ownerProfileError);
-        setProfile(null);
       } else {
         setProfile(ownerProfile);
-        setError(null);
       }
     })();
   }, [profileIri, fetch]);
