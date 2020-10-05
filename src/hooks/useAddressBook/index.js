@@ -30,7 +30,7 @@ export default function useAddressBook() {
   const [addressBook, setAddressBook] = useState(null);
   const [error, setError] = useState(null);
   const { session } = useSession();
-  const profile = useAuthenticatedProfile();
+  const { data: profile } = useAuthenticatedProfile();
 
   useEffect(() => {
     if (!session.info.isLoggedIn || !profile) return;

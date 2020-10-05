@@ -19,46 +19,24 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import {
-  getSolidDataset,
-  getStringNoLocale,
-  getThing,
-  getUrl,
-  asUrl,
-  getUrlAll,
-} from "@inrupt/solid-client";
-import { space, vcard, foaf } from "rdf-namespaces";
+import React from "react";
+import { useRouter } from "next/router";
+import { mountToJson } from "../../__testUtils/mountWithTheme";
+import AccessForbidden from "./index";
 
-export function displayProfileName({ nickname, name, webId }) {
-  if (name) return name;
-  if (nickname) return nickname;
-  return webId;
-}
+jest.mock("next/router");
 
-export function getProfileFromPersonDataset(dataset) {
-  return {
-    avatar: getUrl(dataset, vcard.hasPhoto),
-    name:
-      getStringNoLocale(dataset, vcard.fn) ||
-      getStringNoLocale(dataset, foaf.name),
-    nickname:
-      getStringNoLocale(dataset, vcard.nickname) ||
-      getStringNoLocale(dataset, foaf.nick),
-    webId: asUrl(dataset),
-  };
-}
+describe("AccessForbidden", () => {
+  beforeEach(() => {
+    useRouter.mockImplementation(() => ({
+      query: {
+        iri: encodeURIComponent("https://mypod.myhost.com"),
+      },
+    }));
+  });
 
-export function packageProfile(webId, dataset) {
-  const profile = getThing(dataset, webId);
-  return {
-    ...getProfileFromPersonDataset(dataset),
-    webId,
-    dataset,
-    pods: getUrlAll(profile, space.storage),
-  };
-}
-
-export async function fetchProfile(webId, fetch) {
-  const dataset = await getSolidDataset(webId, { fetch });
-  return packageProfile(webId, dataset);
-}
+  it("renders", () => {
+    const tree = mountToJson(<AccessForbidden />);
+    expect(tree).toMatchSnapshot();
+  });
+});

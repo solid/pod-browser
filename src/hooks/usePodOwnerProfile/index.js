@@ -20,31 +20,38 @@
  */
 
 import { useState, useEffect } from "react";
-import { useSession } from "@inrupt/solid-ui-react";
+import { useRouter } from "next/router";
 import { joinPath } from "../../stringHelpers";
-import { getResource } from "../../solidClientHelpers/resource";
+import useAuthenticatedProfile from "../useAuthenticatedProfile";
+import usePodRoot from "../usePodRoot";
+import useFetchProfile from "../useFetchProfile";
 
-export default function usePodOwnerProfile(podUri) {
-  const session = useSession();
-  const { fetch } = session;
+export default function usePodOwnerProfile() {
   const [profile, setProfile] = useState();
   const [error, setError] = useState();
-  const profileIri = podUri && joinPath(podUri, "profile/card#me"); // we won't need to do this once ownership is available
+  const router = useRouter();
+  const decodedResourceUri = decodeURIComponent(router.query.iri);
+  const podRoot = usePodRoot(decodedResourceUri, null);
+  const profileIri = podRoot && joinPath(podRoot, "profile/card#me"); // we won't need to do this once ownership is available
+  const { data: authProfile, error: authError } = useAuthenticatedProfile();
+  const { data: ownerProfile, error: ownerError } = useFetchProfile(profileIri);
 
   useEffect(() => {
-    (async () => {
-      const {
-        response: ownerProfile,
-        error: ownerProfileError,
-      } = await getResource(profileIri, fetch);
-      if (ownerProfileError) {
-        setError(ownerProfileError);
-        setProfile(null);
-      } else {
-        setProfile(ownerProfile);
-        setError(null);
-      }
-    })();
-  }, [profileIri, fetch]);
+    if (!router.query.iri && authProfile) {
+      // we're not using the Navigator, so we'll use the authenticated user's profile
+      setProfile(authProfile);
+      setError(authError);
+      return;
+    }
+    if (!router.query.iri) {
+      // we haven't loaded the profile yet
+      setProfile(null);
+      setError(null);
+      return;
+    }
+    setProfile(ownerProfile);
+    setError(ownerError);
+  }, [router.query.iri, authProfile, authError, ownerProfile, ownerError]);
+
   return { profile, error };
 }

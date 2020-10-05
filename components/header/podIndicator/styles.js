@@ -33,7 +33,7 @@ const styles = (theme) =>
     indicatorPrompt: {
       color: theme.palette.text.secondary,
       textTransform: "none",
-      fontSize: theme.typography.htmlFontSize,
+      fontSize: "0.825rem",
       fontWeight: theme.typography.fontWeightRegular,
     },
     popover: {

@@ -19,46 +19,25 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import {
-  getSolidDataset,
-  getStringNoLocale,
-  getThing,
-  getUrl,
-  asUrl,
-  getUrlAll,
-} from "@inrupt/solid-client";
-import { space, vcard, foaf } from "rdf-namespaces";
+import React from "react";
+import { Container, PageHeader } from "@inrupt/prism-react-components";
+import { useRouter } from "next/router";
+import ResourceLink from "../resourceLink";
 
-export function displayProfileName({ nickname, name, webId }) {
-  if (name) return name;
-  if (nickname) return nickname;
-  return webId;
-}
-
-export function getProfileFromPersonDataset(dataset) {
-  return {
-    avatar: getUrl(dataset, vcard.hasPhoto),
-    name:
-      getStringNoLocale(dataset, vcard.fn) ||
-      getStringNoLocale(dataset, foaf.name),
-    nickname:
-      getStringNoLocale(dataset, vcard.nickname) ||
-      getStringNoLocale(dataset, foaf.nick),
-    webId: asUrl(dataset),
-  };
-}
-
-export function packageProfile(webId, dataset) {
-  const profile = getThing(dataset, webId);
-  return {
-    ...getProfileFromPersonDataset(dataset),
-    webId,
-    dataset,
-    pods: getUrlAll(profile, space.storage),
-  };
-}
-
-export async function fetchProfile(webId, fetch) {
-  const dataset = await getSolidDataset(webId, { fetch });
-  return packageProfile(webId, dataset);
+export default function ResourceNotFound() {
+  const router = useRouter();
+  return (
+    <>
+      <PageHeader title="Resource Not Found" />
+      <Container>
+        <p>
+          Unable to find the resource:&nbsp;
+          <ResourceLink resourceIri={router.query.iri}>
+            {router.query.iri}
+          </ResourceLink>
+          .
+        </p>
+      </Container>
+    </>
+  );
 }

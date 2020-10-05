@@ -29,7 +29,7 @@ const PodLocationContext = createContext({
 });
 
 function PodLocationProvider({ children, currentUri }) {
-  const profile = useAuthenticatedProfile();
+  const { data: profile } = useAuthenticatedProfile();
   const baseUri = usePodRoot(currentUri, profile);
   return (
     <PodLocationContext.Provider value={{ baseUri, currentUri }}>

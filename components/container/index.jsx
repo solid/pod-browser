@@ -38,6 +38,9 @@ import Breadcrumbs from "../breadcrumbs";
 import PageHeader from "../containerPageHeader";
 import ContainerDetails from "../containerDetails";
 import { BookmarksContextProvider } from "../../src/contexts/bookmarksContext";
+import { isHTTPError } from "../../src/solidClientHelpers/utils";
+import AccessForbidden from "../accessForbidden";
+import ResourceNotFound from "../resourceNotFound";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -45,9 +48,10 @@ export default function Container({ iri }) {
   useRedirectIfLoggedOut();
   const encodedIri = encodeURI(iri);
 
-  const { data: resourceIris, mutate } = useFetchContainerResourceIris(
+  const { data: resourceIris, mutate, error } = useFetchContainerResourceIris(
     encodedIri
   );
+
   const loading = typeof resourceIris === "undefined";
 
   const bem = useBem(useStyles());
@@ -106,6 +110,10 @@ export default function Container({ iri }) {
     },
     useSortBy
   );
+
+  if (error && isHTTPError(error.message, 404)) return <ResourceNotFound />;
+  if (error && isHTTPError(error.message, 403)) return <AccessForbidden />;
+  if (error) throw error;
 
   if (loading) {
     return <Spinner />;

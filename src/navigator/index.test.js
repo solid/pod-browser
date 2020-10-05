@@ -23,7 +23,7 @@ import {
   resourceContextRedirect,
   resourceHref,
   urlForResourceAction,
-  urlRedirect,
+  urlLookupAndRedirect,
 } from "./index";
 import mockFetch from "../../__testUtils/mockFetch";
 import mockResponse from "../../__testUtils/mockResponse";
@@ -90,7 +90,7 @@ describe("urlForResourceAction", () => {
   });
 });
 
-describe("urlRedirect", () => {
+describe("urlLookupAndRedirect", () => {
   let router;
   const containerUrl = "http://example.com/container/";
   const resourceUrl = "http://example.com/container/resource";
@@ -104,7 +104,7 @@ describe("urlRedirect", () => {
       [containerUrl]: () => mockResponse(200),
     });
     await expect(
-      urlRedirect(containerUrl, router, { fetch })
+      urlLookupAndRedirect(containerUrl, router, { fetch })
     ).resolves.toBeTruthy();
     expect(router.replace).toHaveBeenCalledWith(
       "/resource/[iri]",
@@ -118,7 +118,7 @@ describe("urlRedirect", () => {
       [resourceUrl]: () => mockResponse(200),
     });
     await expect(
-      urlRedirect(resourceUrl, router, { fetch })
+      urlLookupAndRedirect(resourceUrl, router, { fetch })
     ).resolves.toBeTruthy();
     expect(router.replace).toHaveBeenCalledWith(
       {
@@ -137,7 +137,7 @@ describe("urlRedirect", () => {
       [containerUrl]: () => mockResponse(401),
     });
     await expect(
-      urlRedirect(containerUrl, router, { fetch })
+      urlLookupAndRedirect(containerUrl, router, { fetch })
     ).resolves.toBeFalsy();
     expect(router.replace).toHaveBeenCalledWith("/access-required");
   });
@@ -148,7 +148,7 @@ describe("urlRedirect", () => {
       [resourceUrl]: () => mockResponse(401),
     });
     await expect(
-      urlRedirect(resourceUrl, router, { fetch })
+      urlLookupAndRedirect(resourceUrl, router, { fetch })
     ).resolves.toBeFalsy();
     expect(router.replace).toHaveBeenCalledWith("/access-required");
   });
@@ -159,7 +159,7 @@ describe("urlRedirect", () => {
       [resourceUrl]: () => mockResponse(200),
     });
     await expect(
-      urlRedirect(resourceUrl, router, { fetch })
+      urlLookupAndRedirect(resourceUrl, router, { fetch })
     ).resolves.toBeFalsy();
     expect(router.replace).toHaveBeenCalledWith("/access-required");
   });

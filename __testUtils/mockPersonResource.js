@@ -21,26 +21,20 @@
 
 import { addStringNoLocale, addUrl, mockThingFrom } from "@inrupt/solid-client";
 import { vcard, foaf } from "rdf-namespaces";
+import { chain } from "../src/solidClientHelpers/utils";
 
-const person1WebIdUrl = "http://example.com/alice#me";
-const person1Name = "Alice";
-const person1Nick = "A";
-const person1Photo = "http://example.com/alice.jpg";
+export const person1WebIdUrl = "http://example.com/alice#me";
+export const person1Name = "Alice";
+export const person1Nick = "A";
+export const person1Photo = "http://example.com/alice.jpg";
 
 export function mockPersonDatasetAlice() {
-  const person1 = mockThingFrom(person1WebIdUrl);
-  const person1WithName = addStringNoLocale(person1, vcard.fn, person1Name);
-  const person1WithNick = addStringNoLocale(
-    person1WithName,
-    vcard.nickname,
-    person1Nick
+  return chain(
+    mockThingFrom(person1WebIdUrl),
+    (t) => addStringNoLocale(t, vcard.fn, person1Name),
+    (t) => addStringNoLocale(t, vcard.nickname, person1Nick),
+    (t) => addUrl(t, vcard.hasPhoto, person1Photo)
   );
-  const person1WithPhoto = addUrl(
-    person1WithNick,
-    vcard.hasPhoto,
-    person1Photo
-  );
-  return person1WithPhoto;
 }
 
 export function mockProfileAlice() {
@@ -52,19 +46,16 @@ export function mockProfileAlice() {
   };
 }
 
-const person2WebIdUrl = "http://example.com/bob#me";
-const person2Name = "Bob";
-const person2Nick = "B";
+export const person2WebIdUrl = "http://example.com/bob#me";
+export const person2Name = "Bob";
+export const person2Nick = "B";
 
 export function mockPersonDatasetBob() {
-  const person2 = mockThingFrom(person2WebIdUrl);
-  const person2WithName = addStringNoLocale(person2, foaf.name, person2Name);
-  const person2WithNick = addStringNoLocale(
-    person2WithName,
-    foaf.nick,
-    person2Nick
+  return chain(
+    mockThingFrom(person2WebIdUrl),
+    (t) => addStringNoLocale(t, foaf.name, person2Name),
+    (t) => addStringNoLocale(t, foaf.nick, person2Nick)
   );
-  return person2WithNick;
 }
 
 export function mockProfileBob() {

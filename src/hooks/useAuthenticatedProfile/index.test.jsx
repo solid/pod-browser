@@ -22,46 +22,45 @@
 import React from "react";
 import { renderHook } from "@testing-library/react-hooks";
 import useAuthenticatedProfile from "./index";
-import { fetchProfile } from "../../solidClientHelpers/profile";
+import useFetchProfile from "../useFetchProfile";
+import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
+import mockSession, {
+  mockUnauthenticatedSession,
+  webIdUrl,
+} from "../../../__testUtils/mockSession";
 
-jest.mock("../../solidClientHelpers/profile");
+jest.mock("../useFetchProfile");
 
 const webId = "https://webid.com/#me";
 const profile = { webId };
 
 describe("useAuthenticatedProfile", () => {
   test("no profile loaded when no session is given", () => {
-    const session = {
-      fetch: jest.fn(),
-      info: {
-        isLoggedIn: false,
-      },
-    };
+    const session = mockUnauthenticatedSession();
+    const SessionProvider = mockSessionContextProvider(session);
+    const wrapper = ({ children }) => (
+      <SessionProvider>{children}</SessionProvider>
+    );
 
-    jest.spyOn(React, "useContext").mockReturnValueOnce({ session });
+    useFetchProfile.mockReturnValue(null);
 
-    fetchProfile.mockResolvedValue(profile);
-
-    const { result } = renderHook(() => useAuthenticatedProfile());
+    const { result } = renderHook(() => useAuthenticatedProfile(), { wrapper });
     expect(result.current).toBeNull();
+    expect(useFetchProfile).toHaveBeenCalledWith(null);
   });
 
-  test("profile is loaded when session is given", async () => {
-    const session = {
-      fetch: jest.fn(),
-      info: {
-        isLoggedIn: true,
-      },
-    };
+  test("profile is loaded when session is given", () => {
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
+    const wrapper = ({ children }) => (
+      <SessionProvider>{children}</SessionProvider>
+    );
 
-    jest.spyOn(React, "useContext").mockReturnValueOnce({ session });
+    useFetchProfile.mockReturnValue(profile);
 
-    fetchProfile.mockResolvedValue(profile);
-
-    const { result, waitForNextUpdate } = renderHook(useAuthenticatedProfile);
-
-    await waitForNextUpdate();
+    const { result } = renderHook(() => useAuthenticatedProfile(), { wrapper });
 
     expect(result.current).toBe(profile);
+    expect(useFetchProfile).toHaveBeenCalledWith(webIdUrl);
   });
 });

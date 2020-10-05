@@ -51,7 +51,7 @@ export function resourceContextRedirect(
   );
 }
 
-export async function urlRedirect(url, router, { fetch }) {
+export async function urlLookupAndRedirect(url, router, { fetch }) {
   try {
     const resourceInfo = await getResourceInfo(url, { fetch });
     const resourceSourceUrl = getSourceUrl(resourceInfo);
@@ -77,7 +77,7 @@ export async function urlRedirect(url, router, { fetch }) {
     );
     return true;
   } catch (err) {
-    await router.replace("/access-required");
+    await router.replace("/resource/[iri]", resourceHref(url));
   }
-  return false;
+  return true;
 }

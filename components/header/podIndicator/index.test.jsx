@@ -32,11 +32,14 @@ import PodIndicator, {
 import {
   mockPersonDatasetAlice,
   mockPersonDatasetBob,
+  person1WebIdUrl,
+  person2WebIdUrl,
 } from "../../../__testUtils/mockPersonResource";
 import usePodOwnerProfile from "../../../src/hooks/usePodOwnerProfile";
 import defaultTheme from "../../../src/theme";
 
 import * as navigatorFns from "../../../src/navigator";
+import { packageProfile } from "../../../src/solidClientHelpers/profile";
 
 jest.mock("next/router");
 jest.mock("../../../src/hooks/usePodOwnerProfile");
@@ -53,7 +56,7 @@ describe("PodIndicator", () => {
   test("it renders the pod indicator with the correct name with a formatted name", async () => {
     const userProfile = mockPersonDatasetAlice();
     usePodOwnerProfile.mockReturnValue({
-      profile: { dataset: userProfile, iri: "https://example.com" },
+      profile: packageProfile(person1WebIdUrl, userProfile),
       error: null,
     });
     const tree = mount(
@@ -68,7 +71,7 @@ describe("PodIndicator", () => {
   test("it renders the pod indicator with the correct name with a name", async () => {
     const userProfile = mockPersonDatasetBob();
     usePodOwnerProfile.mockReturnValue({
-      profile: { dataset: userProfile, iri: "https://example.com" },
+      profile: packageProfile(person2WebIdUrl, userProfile),
       error: null,
     });
     const tree = mount(
@@ -90,7 +93,6 @@ describe("PodIndicator", () => {
         <PodIndicator />
       </WithTheme>
     );
-    expect(tree.html()).toEqual("");
     expect(enzymeMountToJson(tree)).toMatchSnapshot();
   });
 });
@@ -125,22 +127,30 @@ describe("submitHandler", () => {
   });
 
   test("it sets up a submit handler", async () => {
-    jest.spyOn(navigatorFns, "urlRedirect").mockResolvedValue(false);
+    jest.spyOn(navigatorFns, "urlLookupAndRedirect").mockResolvedValue(false);
     await submitHandler(handleClose)(event, url, router, fetch);
     expect(event.preventDefault).toHaveBeenCalledWith();
-    expect(navigatorFns.urlRedirect).toHaveBeenCalledWith(url, router, {
-      fetch,
-    });
+    expect(navigatorFns.urlLookupAndRedirect).toHaveBeenCalledWith(
+      url,
+      router,
+      {
+        fetch,
+      }
+    );
     expect(handleClose).not.toHaveBeenCalled();
   });
 
   test("closes on successful redirect", async () => {
-    jest.spyOn(navigatorFns, "urlRedirect").mockResolvedValue(true);
+    jest.spyOn(navigatorFns, "urlLookupAndRedirect").mockResolvedValue(true);
     await submitHandler(handleClose)(event, url, router, fetch);
     expect(event.preventDefault).toHaveBeenCalledWith();
-    expect(navigatorFns.urlRedirect).toHaveBeenCalledWith(url, router, {
-      fetch,
-    });
+    expect(navigatorFns.urlLookupAndRedirect).toHaveBeenCalledWith(
+      url,
+      router,
+      {
+        fetch,
+      }
+    );
     expect(handleClose).toHaveBeenCalledWith();
   });
 });

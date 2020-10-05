@@ -24,14 +24,13 @@ import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 import { useRouter } from "next/router";
 
-import {
-  useRedirectIfLoggedOut,
-  useRedirectIfNoControlAccessToOwnPod,
-} from "../../../src/effects/auth";
+import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import IndexPage from "./index";
+import useRedirectIfNoControlAccessToOwnPod from "../../../src/hooks/useRedirectIfNoControlAccessToOwnPod";
 
 jest.mock("../../../src/effects/auth");
 jest.mock("next/router");
+jest.mock("../../../src/hooks/useRedirectIfNoControlAccessToOwnPod");
 
 describe("Index page", () => {
   beforeEach(() => {

@@ -26,7 +26,7 @@ const styles = (theme) =>
     logoIndicatorContainer: {
       display: "flex",
       flexDirection: "column",
-      alignItems: "center",
+      alignItems: "start",
       marginRight: theme.spacing(2),
       paddingTop: theme.spacing(2),
     },

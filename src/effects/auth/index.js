@@ -21,10 +21,7 @@
 
 import { useEffect } from "react";
 import Router from "next/router";
-import { getSolidDatasetWithAcl, hasResourceAcl } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
-import useAuthenticatedProfile from "../../hooks/useAuthenticatedProfile";
-import usePodRoot from "../../hooks/usePodRoot";
 
 export const SESSION_STATES = {
   LOGGED_IN: "LOGGED_IN",
@@ -80,33 +77,4 @@ export function useRedirectIfLoggedIn(location = "/") {
       location
     );
   });
-}
-
-export function useRedirectIfNoControlAccessToOwnPod(
-  resourceUrl,
-  location = "/access-required"
-) {
-  const { session, sessionRequestInProgress } = useSession();
-  const profile = useAuthenticatedProfile();
-  const podRoot = usePodRoot(resourceUrl, profile);
-
-  useEffect(() => {
-    if (sessionRequestInProgress || !profile) return;
-
-    Promise.all(
-      profile.pods
-        .filter((pod) => pod === podRoot)
-        .map((pod) =>
-          getSolidDatasetWithAcl(pod, {
-            fetch: session.fetch,
-          })
-        )
-    ).then((podResources) => {
-      const hasControlAccessToPods = !podResources.find(
-        (podResource) => !hasResourceAcl(podResource)
-      );
-      if (hasControlAccessToPods) return;
-      Router.push(location);
-    });
-  }, [session, sessionRequestInProgress, profile, location, podRoot]);
 }

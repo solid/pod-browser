@@ -20,39 +20,47 @@
  */
 
 import { renderHook } from "@testing-library/react-hooks";
+import * as RouterFns from "next/router";
 import usePodOwnerProfile from "./index";
-import { mockPersonDatasetAlice } from "../../../__testUtils/mockPersonResource";
-import { getResource } from "../../solidClientHelpers/resource";
+import {
+  mockPersonDatasetAlice,
+  mockPersonDatasetBob,
+} from "../../../__testUtils/mockPersonResource";
+import useAuthenticatedProfile from "../useAuthenticatedProfile";
+import useFetchProfile from "../useFetchProfile";
 
-jest.mock("../../solidClientHelpers/resource");
+jest.mock("../useFetchProfile");
+jest.mock("../useAuthenticatedProfile");
 
 describe("usePodOwnerProfile", () => {
-  const userWebId = "http://example.com/alice#me";
-  const podUri = "http://example.com/";
+  const resourceUrl = "http://example.com/foo/bar";
+  const userProfileUri = "http://example.com/profile/card#me";
   const userProfile = mockPersonDatasetAlice();
-  it("should return the user profile", async () => {
-    getResource.mockResolvedValue({
-      response: { dataset: userProfile, iri: userWebId },
-      error: null,
-    });
-    const { result, waitForNextUpdate } = renderHook(() =>
-      usePodOwnerProfile(podUri)
-    );
-    await waitForNextUpdate();
-    expect(result.current.profile.dataset).toEqual(userProfile);
-    expect(result.current.error).toBeNull();
-  });
-  it("should return null if there's an error fetching the profile", async () => {
-    getResource.mockResolvedValue({
-      response: null,
-      error: "error",
-    });
-    const { result, waitForNextUpdate } = renderHook(() =>
-      usePodOwnerProfile(podUri)
-    );
-    await waitForNextUpdate();
+  const authProfile = mockPersonDatasetBob();
 
-    expect(result.current.error).toEqual("error");
+  beforeEach(() => {
+    useAuthenticatedProfile.mockReturnValue({ data: authProfile });
+    useFetchProfile.mockReturnValue({ data: userProfile });
+    jest.spyOn(RouterFns, "useRouter").mockReturnValue({ query: {} });
+  });
+
+  it("returns the authenticated profile if no iri is given in router", () => {
+    const { result } = renderHook(() => usePodOwnerProfile());
+    expect(result.current.profile).toEqual(authProfile);
+  });
+
+  it("returns the user profile for the Pod if iri is given in router", () => {
+    RouterFns.useRouter.mockReturnValue({
+      query: { iri: encodeURIComponent(resourceUrl) },
+    });
+    const { result } = renderHook(() => usePodOwnerProfile());
+    expect(result.current.profile).toEqual(userProfile);
+    expect(useFetchProfile).toHaveBeenCalledWith(userProfileUri);
+  });
+
+  it("should return null while requests are loading", () => {
+    useAuthenticatedProfile.mockReturnValue({ data: null });
+    const { result } = renderHook(() => usePodOwnerProfile());
     expect(result.current.profile).toBeNull();
   });
 });

@@ -20,9 +20,35 @@
  */
 
 import { useSession } from "@inrupt/solid-ui-react";
-import useFetchProfile from "../useFetchProfile";
+import { useEffect } from "react";
+import { getResourceInfoWithAcl, hasResourceAcl } from "@inrupt/solid-client";
+import Router from "next/router";
+import usePodRoot from "../usePodRoot";
+import useAuthenticatedProfile from "../useAuthenticatedProfile";
 
-export default function useAuthenticatedProfile() {
-  const { session } = useSession();
-  return useFetchProfile(session.info?.webId);
+export default function useRedirectIfNoControlAccessToOwnPod(
+  resourceUrl,
+  location = "/access-required"
+) {
+  const { fetch, sessionRequestInProgress } = useSession();
+  const { data: profile } = useAuthenticatedProfile();
+  const podRoot = usePodRoot(resourceUrl, profile);
+
+  useEffect(() => {
+    if (sessionRequestInProgress || !profile) return;
+
+    (async () => {
+      const podResources = await Promise.all(
+        profile.pods
+          .filter((pod) => pod === podRoot)
+          .map((pod) => getResourceInfoWithAcl(pod, { fetch }))
+      );
+      const hasControlAccessToPods = !podResources.find(
+        (podResource) => !hasResourceAcl(podResource)
+      );
+      console.log("TEST", podResources, hasControlAccessToPods, location);
+      if (hasControlAccessToPods) return;
+      await Router.push(location);
+    })();
+  }, [sessionRequestInProgress, profile, location, podRoot, fetch]);
 }

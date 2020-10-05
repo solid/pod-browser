@@ -26,7 +26,7 @@ import { getOrCreateSettings } from "../../solidClientHelpers/settings";
 
 export default function usePodBrowserSettings() {
   const { session } = useSession();
-  const profileInfo = useAuthenticatedProfile();
+  const { data: profileInfo } = useAuthenticatedProfile();
   const [settings, setSettings] = useState(null);
 
   useEffect(() => {

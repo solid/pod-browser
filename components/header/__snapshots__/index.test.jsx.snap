@@ -847,6 +847,14 @@ font-display: block;",
               "fetch": [MockFunction] {
                 "calls": Array [
                   Array [
+                    "http://example.com/webId#me",
+                    Object {
+                      "headers": Object {
+                        "Accept": "text/turtle",
+                      },
+                    },
+                  ],
+                  Array [
                     "https://mypod.myhost.com/profile/card#me",
                     Object {
                       "headers": Object {
@@ -856,6 +864,10 @@ font-display: block;",
                   ],
                 ],
                 "results": Array [
+                  Object {
+                    "type": "return",
+                    "value": Promise {},
+                  },
                   Object {
                     "type": "throw",
                     "value": [Error: URL (https://mypod.myhost.com/profile/card#me) not mocked properly],
@@ -923,7 +935,118 @@ font-display: block;",
                     />
                   </a>
                 </Link>
-                <PodIndicator />
+                <PodIndicator>
+                  <div
+                    className="PodBrowser-indicator"
+                  >
+                    <label
+                      className="PodBrowser-indicatorLabel"
+                      htmlFor="pod-indicator-prompt"
+                    >
+                      <span>
+                        Pod: 
+                      </span>
+                      <WithStyles(ForwardRef(Skeleton))
+                        style={
+                          Object {
+                            "display": "inline-block",
+                          }
+                        }
+                        width={100}
+                      >
+                        <ForwardRef(Skeleton)
+                          classes={
+                            Object {
+                              "circle": "PodBrowser-circle",
+                              "fitContent": "PodBrowser-fitContent",
+                              "heightAuto": "PodBrowser-heightAuto",
+                              "pulse": "PodBrowser-pulse",
+                              "rect": "PodBrowser-rect",
+                              "root": "PodBrowser-root",
+                              "text": "PodBrowser-text",
+                              "wave": "PodBrowser-wave",
+                              "withChildren": "PodBrowser-withChildren",
+                            }
+                          }
+                          style={
+                            Object {
+                              "display": "inline-block",
+                            }
+                          }
+                          width={100}
+                        >
+                          <span
+                            className="PodBrowser-root PodBrowser-text PodBrowser-pulse"
+                            style={
+                              Object {
+                                "display": "inline-block",
+                                "height": undefined,
+                                "width": 100,
+                              }
+                            }
+                          />
+                        </ForwardRef(Skeleton)>
+                      </WithStyles(ForwardRef(Skeleton))>
+                      <WithStyles(ForwardRef(Popover))
+                        anchorEl={null}
+                        anchorOrigin={
+                          Object {
+                            "horizontal": "left",
+                            "vertical": "bottom",
+                          }
+                        }
+                        classes={
+                          Object {
+                            "paper": "PodBrowser-popover",
+                          }
+                        }
+                        onClose={[Function]}
+                        open={false}
+                        transformOrigin={
+                          Object {
+                            "horizontal": "left",
+                            "vertical": "top",
+                          }
+                        }
+                      >
+                        <ForwardRef(Popover)
+                          anchorEl={null}
+                          anchorOrigin={
+                            Object {
+                              "horizontal": "left",
+                              "vertical": "bottom",
+                            }
+                          }
+                          classes={
+                            Object {
+                              "paper": "PodBrowser-paper PodBrowser-popover",
+                              "root": "PodBrowser-root",
+                            }
+                          }
+                          onClose={[Function]}
+                          open={false}
+                          transformOrigin={
+                            Object {
+                              "horizontal": "left",
+                              "vertical": "top",
+                            }
+                          }
+                        >
+                          <ForwardRef(Modal)
+                            BackdropProps={
+                              Object {
+                                "invisible": true,
+                              }
+                            }
+                            className="PodBrowser-root"
+                            onClose={[Function]}
+                            open={false}
+                          />
+                        </ForwardRef(Popover)>
+                      </WithStyles(ForwardRef(Popover))>
+                    </label>
+                  </div>
+                </PodIndicator>
               </div>
               <nav
                 className="PodBrowser-header-banner__main-nav"
