@@ -841,7 +841,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <h
+        <g
           session={
             Object {
               "fetch": [MockFunction],
@@ -967,7 +967,7 @@ font-display: block;",
               </Container>
             </div>
           </AccessRequiredPage>
-        </h>
+        </g>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>

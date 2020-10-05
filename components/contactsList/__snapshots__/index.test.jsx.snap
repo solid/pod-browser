@@ -3533,7 +3533,7 @@ font-display: block;",
             <div
               className="PodBrowser-container"
             >
-              <_
+              <B
                 ascIndicator={
                   <React.Fragment>
                      
@@ -3554,6 +3554,7 @@ font-display: block;",
                   </React.Fragment>
                 }
                 filter=""
+                getRowProps={[Function]}
                 things={
                   Array [
                     Object {
@@ -3703,7 +3704,7 @@ font-display: block;",
                       key="row_0"
                       role="row"
                     >
-                      <A
+                      <F
                         dataset={42}
                         thing={
                           DatasetCore {
@@ -3763,10 +3764,10 @@ font-display: block;",
                           }
                         }
                       >
-                        <w
+                        <m
                           dataset={42}
                         >
-                          <E
+                          <x
                             thing={
                               DatasetCore {
                                 "internal_url": "http://example.com/alice#me",
@@ -16492,15 +16493,15 @@ font-display: block;",
                                 Alice
                               </Component>
                             </td>
-                          </E>
-                        </w>
-                      </A>
+                          </x>
+                        </m>
+                      </F>
                     </tr>
                     <tr
                       key="row_1"
                       role="row"
                     >
-                      <A
+                      <F
                         dataset={42}
                         thing={
                           DatasetCore {
@@ -16546,10 +16547,10 @@ font-display: block;",
                           }
                         }
                       >
-                        <w
+                        <m
                           dataset={42}
                         >
-                          <E
+                          <x
                             thing={
                               DatasetCore {
                                 "internal_url": "http://example.com/bob#me",
@@ -29259,13 +29260,13 @@ font-display: block;",
                                 }
                               />
                             </td>
-                          </E>
-                        </w>
-                      </A>
+                          </x>
+                        </m>
+                      </F>
                     </tr>
                   </tbody>
                 </table>
-              </_>
+              </B>
             </div>
           </Container>
         </SearchProvider>

@@ -2,7 +2,7 @@
 
 exports[`Index page Renders null if there are no pod iris 1`] = `
 <MockedSessionContextProvider>
-  <h
+  <g
     session={
       Object {
         "fetch": [MockFunction],
@@ -44,6 +44,6 @@ exports[`Index page Renders null if there are no pod iris 1`] = `
     sessionRequestInProgress={false}
   >
     <Home />
-  </h>
+  </g>
 </MockedSessionContextProvider>
 `;

@@ -2,7 +2,7 @@
 
 exports[`Logout button Renders a logout button 1`] = `
 <MockedSessionContextProvider>
-  <h
+  <g
     session={
       Object {
         "fetch": [MockFunction],
@@ -46,7 +46,7 @@ exports[`Logout button Renders a logout button 1`] = `
     <Logout
       className={null}
     >
-      <R
+      <L
         onLogout={[Function]}
       >
         <div
@@ -63,8 +63,8 @@ exports[`Logout button Renders a logout button 1`] = `
             Log Out
           </button>
         </div>
-      </R>
+      </L>
     </Logout>
-  </h>
+  </g>
 </MockedSessionContextProvider>
 `;

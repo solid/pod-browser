@@ -1726,7 +1726,7 @@ font-display: block;",
                               </div>
                             </ForwardRef(Autocomplete)>
                           </WithStyles(ForwardRef(Autocomplete))>
-                          <k
+                          <U
                             oidcIssuer="https://inrupt.net"
                             redirectUrl="http://localhost/"
                           >
@@ -1744,7 +1744,7 @@ font-display: block;",
                                 Log In
                               </button>
                             </div>
-                          </k>
+                          </U>
                         </div>
                       </Styled(MuiBox)>
                     </div>

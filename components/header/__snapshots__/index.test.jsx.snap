@@ -841,7 +841,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <h
+        <g
           session={
             Object {
               "fetch": [MockFunction] {
@@ -985,7 +985,7 @@ font-display: block;",
                         <Logout
                           className="PodBrowser-header-banner__user-menu-item-trigger"
                         >
-                          <R
+                          <L
                             onLogout={[Function]}
                           >
                             <div
@@ -1009,7 +1009,7 @@ font-display: block;",
                                 </span>
                               </button>
                             </div>
-                          </R>
+                          </L>
                         </Logout>
                       </li>
                     </ul>
@@ -1018,7 +1018,7 @@ font-display: block;",
               </UserMenu>
             </header>
           </Header>
-        </h>
+        </g>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>
@@ -1866,7 +1866,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <h
+        <g
           session={
             Object {
               "fetch": [Function],
@@ -1934,7 +1934,7 @@ font-display: block;",
               </div>
             </header>
           </Header>
-        </h>
+        </g>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>

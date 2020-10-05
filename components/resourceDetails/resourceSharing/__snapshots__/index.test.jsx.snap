@@ -1871,7 +1871,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <h
+        <g
           session={
             Object {
               "fetch": [MockFunction],
@@ -5003,7 +5003,7 @@ font-display: block;",
               </WithStyles(ForwardRef(Divider))>
             </section>
           </ResourceSharing>
-        </h>
+        </g>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>
@@ -5851,7 +5851,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <h
+        <g
           session={
             Object {
               "fetch": [MockFunction],
@@ -10957,7 +10957,7 @@ font-display: block;",
               </WithStyles(ForwardRef(Divider))>
             </section>
           </ResourceSharing>
-        </h>
+        </g>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>
