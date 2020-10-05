@@ -200,4 +200,34 @@ describe("handleSubmit", () => {
       "There was an error saving the resource"
     );
   });
+  test("it alerts the user if there is an error while fetching the profile", async () => {
+    const { mockThingFrom } = jest.requireActual("@inrupt/solid-client");
+    const personUri = "http://example.com/alice#me";
+    const personDataset = mockThingFrom(personUri);
+    const setIsLoading = jest.fn();
+    const alertError = jest.fn();
+    const alertSuccess = jest.fn();
+    const handler = handleSubmit({
+      setIsLoading,
+      alertError,
+      alertSuccess,
+      fetch,
+      webId: personUri,
+    });
+    getResource
+      .mockResolvedValueOnce({
+        response: { dataset: personDataset, iri: personUri },
+        error: null,
+      })
+      .mockResolvedValueOnce({
+        response: null,
+        error: "There was an error fetching the profile",
+      });
+    await handler();
+    expect(setIsLoading).toHaveBeenCalledTimes(2);
+    expect(alertSuccess).not.toHaveBeenCalled();
+    expect(alertError).toHaveBeenCalledWith(
+      "There was an error fetching the profile"
+    );
+  });
 });
