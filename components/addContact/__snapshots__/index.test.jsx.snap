@@ -4,7 +4,7 @@ exports[`AddContact it renders a spinner when user is not logged in 1`] = `React
 
 exports[`AddContact it renders the Add Contact form 1`] = `
 <MockedSessionContextProvider>
-  <h
+  <g
     session={
       Object {
         "fetch": [MockFunction],
@@ -1356,6 +1356,6 @@ font-display: block;",
         </ThemeProvider>
       </StylesProvider>
     </Component>
-  </h>
+  </g>
 </MockedSessionContextProvider>
 `;
