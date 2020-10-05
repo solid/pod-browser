@@ -24,6 +24,7 @@
 import {
   addStringNoLocale,
   addUrl,
+  asUrl,
   getStringNoLocaleAll,
   getThing,
   getUrl,
@@ -293,6 +294,12 @@ export function createContact(addressBookIri, contact) {
   };
 }
 
+export async function findContactInAddressBook(addressBookIri, webId, fetch) {
+  const { response: people } = await getPeople(addressBookIri, fetch);
+  const existingContact = people.filter((person) => asUrl(person) === webId);
+  return existingContact;
+}
+
 export async function saveContact(addressBookIri, schema, fetch) {
   const { respond, error } = createResponder();
   const newContact = createContact(addressBookIri, schema);
@@ -331,6 +338,5 @@ export async function saveContact(addressBookIri, schema, fetch) {
   );
 
   if (savePeopleError) return error(savePeopleError);
-
   return respond({ iri, contact, people });
 }
