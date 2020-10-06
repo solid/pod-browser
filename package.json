@@ -43,7 +43,7 @@
     "jss": "^10.3.0",
     "jss-preset-default": "^10.3.0",
     "license-checker": "^25.0.1",
-    "next": "^9.5.1",
+    "next": "^9.5.3",
     "prop-types": "^15.7.2",
     "rdf-namespaces": "^1.8.0",
     "react": "^16.13.1",
