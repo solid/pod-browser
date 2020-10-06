@@ -82,6 +82,7 @@ describe("handleSubmit", () => {
   test("it alerts the user and exits if the webid already exists", async () => {
     const personUri = "http://example.com/alice#me";
     const personDataset = mockPersonDatasetAlice();
+    const personProfile = mockProfileAlice();
     const setIsLoading = jest.fn();
     const alertError = jest.fn();
     const alertSuccess = jest.fn();
@@ -92,6 +93,9 @@ describe("handleSubmit", () => {
       fetch,
       webId: personUri,
     });
+    jest
+      .spyOn(profileHelperFns, "fetchProfile")
+      .mockResolvedValue(personProfile);
     jest
       .spyOn(addressBookFns, "findContactInAddressBook")
       .mockResolvedValue([personDataset]);
