@@ -45,7 +45,7 @@
     "license-checker": "^25.0.1",
     "next": "^9.5.1",
     "prop-types": "^15.7.2",
-    "rdf-namespaces": "^1.8.0",
+    "rdf-namespaces": "^1.9.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-id-generator": "^3.0.1",
