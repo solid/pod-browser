@@ -22,7 +22,6 @@
 import React from "react";
 import { mount } from "enzyme";
 import { mountToJson } from "enzyme-to-json";
-import { getStringNoLocale, getUrl } from "@inrupt/solid-client";
 import { vcard } from "rdf-namespaces";
 import mockSession, {
   mockUnauthenticatedSession,
@@ -33,24 +32,26 @@ import AddContact, {
   EXISTING_WEBID_ERROR_MESSAGE,
   NO_NAME_ERROR_MESSAGE,
 } from "./index";
-import { findContactInAddressBook, saveContact } from "../../src/addressBook";
+import * as addressBookFns from "../../src/addressBook";
 import { WithTheme } from "../../__testUtils/mountWithTheme";
 import { defaultTheme } from "../../src/theme";
-import { mockPersonDatasetAlice } from "../../__testUtils/mockPersonResource";
-import { getResource } from "../../src/solidClientHelpers/resource";
+import {
+  mockPersonDatasetAlice,
+  mockProfileAlice,
+} from "../../__testUtils/mockPersonResource";
+import * as profileHelperFns from "../../src/solidClientHelpers/profile";
 
 jest.mock("@inrupt/solid-client");
 jest.mock("next/router");
 jest.mock("../../src/addressBook");
 jest.mock("../../src/solidClientHelpers/resource");
-
-beforeEach(() => {
-  jest.resetModules();
-});
+jest.mock("../../src/solidClientHelpers/profile");
 
 describe("AddContact", () => {
   test("it renders the Add Contact form", () => {
     const session = mockSession();
+    const mockProfile = mockPersonDatasetAlice();
+    jest.spyOn(profileHelperFns, "fetchProfile").mockResolvedValue(mockProfile);
     const SessionProvider = mockSessionContextProvider(session);
     const tree = mount(
       <SessionProvider>
@@ -74,7 +75,7 @@ describe("AddContact", () => {
       </SessionProvider>
     );
 
-    expect(tree).toMatchSnapshot();
+    expect(mountToJson(tree)).toMatchSnapshot();
   });
 });
 describe("handleSubmit", () => {
@@ -91,19 +92,16 @@ describe("handleSubmit", () => {
       fetch,
       webId: personUri,
     });
-    getResource.mockResolvedValue({
-      response: { dataset: personDataset, iri: personUri },
-    });
-    getUrl.mockReturnValue("https://www.example.com/");
-    findContactInAddressBook.mockResolvedValue([personDataset]);
+    jest
+      .spyOn(addressBookFns, "findContactInAddressBook")
+      .mockResolvedValue([personDataset]);
     await handler();
     expect(setIsLoading).toHaveBeenCalledTimes(2);
     expect(alertError).toHaveBeenCalledWith(EXISTING_WEBID_ERROR_MESSAGE);
   });
   test("it alerts the user and exits if the webid doesn't have a name", async () => {
-    const { mockThingFrom } = jest.requireActual("@inrupt/solid-client");
     const personUri = "http://example.com/marie#me";
-    const personDataset = mockThingFrom(personUri);
+    const mockProfile = { webId: personUri };
     const setIsLoading = jest.fn();
     const alertError = jest.fn();
     const alertSuccess = jest.fn();
@@ -114,13 +112,13 @@ describe("handleSubmit", () => {
       fetch,
       webId: personUri,
     });
-    getUrl.mockReturnValue("https://www.example.com/");
-    getResource.mockResolvedValue({
-      response: { dataset: personDataset, iri: personUri },
-    });
-    findContactInAddressBook.mockResolvedValue([]);
+    jest.spyOn(profileHelperFns, "fetchProfile").mockResolvedValue(mockProfile);
+    jest
+      .spyOn(addressBookFns, "findContactInAddressBook")
+      .mockResolvedValue([]);
     await handler();
     expect(setIsLoading).toHaveBeenCalledTimes(2);
+    expect(alertSuccess).not.toHaveBeenCalled();
     expect(alertError).toHaveBeenCalledWith(NO_NAME_ERROR_MESSAGE);
   });
   test("it saves a new contact", async () => {
@@ -130,16 +128,19 @@ describe("handleSubmit", () => {
       mockThingFrom,
       addStringNoLocale,
     } = jest.requireActual("@inrupt/solid-client");
+    const { contactsContainerIri } = jest.requireActual(
+      "../../src/addressBook"
+    );
     const personUri = "http://example.com/alice#me";
     const personDataset = addStringNoLocale(
       mockThingFrom(personUri),
       vcard.fn,
       "Alice"
     );
-    const peopleDataset = mockSolidDatasetFrom(
-      "https://www.example.com/contacts"
-    );
+    const contactsIri = contactsContainerIri("http://www.example.com/");
+    const peopleDataset = mockSolidDatasetFrom(contactsIri);
     const peopleDatasetWithContact = setThing(peopleDataset, personDataset);
+    const mockProfile = mockProfileAlice();
     const setIsLoading = jest.fn();
     const alertError = jest.fn();
     const alertSuccess = jest.fn();
@@ -150,14 +151,11 @@ describe("handleSubmit", () => {
       fetch,
       webId: personUri,
     });
-    getResource.mockResolvedValue({
-      response: { dataset: personDataset, iri: personUri },
-      error: null,
-    });
-    getUrl.mockReturnValue("https://www.example.com/");
-    getStringNoLocale.mockReturnValue("Alice");
-    findContactInAddressBook.mockResolvedValue([]);
-    saveContact.mockResolvedValue({
+    jest
+      .spyOn(addressBookFns, "findContactInAddressBook")
+      .mockResolvedValue([]);
+    jest.spyOn(profileHelperFns, "fetchProfile").mockResolvedValue(mockProfile);
+    jest.spyOn(addressBookFns, "saveContact").mockResolvedValue({
       response: peopleDatasetWithContact,
       error: null,
     });
@@ -169,9 +167,8 @@ describe("handleSubmit", () => {
     expect(alertError).not.toHaveBeenCalled();
   });
   test("it alerts the user if there is an error while creating the contact", async () => {
-    const { mockThingFrom } = jest.requireActual("@inrupt/solid-client");
     const personUri = "http://example.com/alice#me";
-    const personDataset = mockThingFrom(personUri);
+    const mockProfile = mockProfileAlice();
     const setIsLoading = jest.fn();
     const alertError = jest.fn();
     const alertSuccess = jest.fn();
@@ -182,14 +179,11 @@ describe("handleSubmit", () => {
       fetch,
       webId: personUri,
     });
-    getResource.mockResolvedValue({
-      response: { dataset: personDataset, iri: personUri },
-      error: null,
-    });
-    getUrl.mockReturnValue("https://www.example.com/");
-    getStringNoLocale.mockReturnValue("Alice");
-    findContactInAddressBook.mockResolvedValue([]);
-    saveContact.mockResolvedValue({
+    jest.spyOn(profileHelperFns, "fetchProfile").mockResolvedValue(mockProfile);
+    jest
+      .spyOn(addressBookFns, "findContactInAddressBook")
+      .mockResolvedValue([]);
+    jest.spyOn(addressBookFns, "saveContact").mockResolvedValue({
       response: null,
       error: "There was an error saving the resource",
     });
@@ -198,36 +192,6 @@ describe("handleSubmit", () => {
     expect(alertSuccess).not.toHaveBeenCalled();
     expect(alertError).toHaveBeenCalledWith(
       "There was an error saving the resource"
-    );
-  });
-  test("it alerts the user if there is an error while fetching the profile", async () => {
-    const { mockThingFrom } = jest.requireActual("@inrupt/solid-client");
-    const personUri = "http://example.com/alice#me";
-    const personDataset = mockThingFrom(personUri);
-    const setIsLoading = jest.fn();
-    const alertError = jest.fn();
-    const alertSuccess = jest.fn();
-    const handler = handleSubmit({
-      setIsLoading,
-      alertError,
-      alertSuccess,
-      fetch,
-      webId: personUri,
-    });
-    getResource
-      .mockResolvedValueOnce({
-        response: { dataset: personDataset, iri: personUri },
-        error: null,
-      })
-      .mockResolvedValueOnce({
-        response: null,
-        error: "There was an error fetching the profile",
-      });
-    await handler();
-    expect(setIsLoading).toHaveBeenCalledTimes(2);
-    expect(alertSuccess).not.toHaveBeenCalled();
-    expect(alertError).toHaveBeenCalledWith(
-      "There was an error fetching the profile"
     );
   });
 });

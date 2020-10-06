@@ -24,18 +24,17 @@ import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import Link from "next/link";
-import { getStringNoLocale, getUrl } from "@inrupt/solid-client";
-import { vcard, foaf, space } from "rdf-namespaces";
+import { getSourceUrl } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
 import Spinner from "../spinner";
 import { findContactInAddressBook, saveContact } from "../../src/addressBook";
-import { getResource } from "../../src/solidClientHelpers/resource";
-import { joinPath } from "../../src/stringHelpers";
+import useAddressBook from "../../src/hooks/useAddressBook";
 import AgentSearchForm from "../agentSearchForm";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 import AlertContext from "../../src/contexts/alertContext";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import styles from "./styles";
+import { fetchProfile } from "../../src/solidClientHelpers/profile";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export const EXISTING_WEBID_ERROR_MESSAGE =
@@ -43,17 +42,15 @@ export const EXISTING_WEBID_ERROR_MESSAGE =
 export const NO_NAME_ERROR_MESSAGE = "That WebID does not have a name";
 
 export function handleSubmit({
+  addressBook,
   setIsLoading,
   alertError,
   alertSuccess,
   fetch,
-  webId,
 }) {
   return async (iri) => {
     setIsLoading(true);
-    const { response: userProfile } = await getResource(webId, fetch);
-    const pod = getUrl(userProfile.dataset, space.storage);
-    const addressBookIri = joinPath(pod, "contacts/");
+    const addressBookIri = getSourceUrl(addressBook);
     const existingContact = await findContactInAddressBook(
       addressBookIri,
       iri,
@@ -66,29 +63,20 @@ export function handleSubmit({
       return;
     }
 
-    const { response: profile, error: profileError } = await getResource(
-      iri,
-      fetch
-    );
+    const { name, webId } = await fetchProfile(iri, fetch);
 
-    if (profileError) alertError(profileError);
-    if (profile) {
-      const contact = { webId: iri };
-      contact.fn =
-        getStringNoLocale(profile.dataset, foaf.name) ||
-        getStringNoLocale(profile.dataset, vcard.fn);
-      if (contact.fn) {
-        const { response, error } = await saveContact(
-          addressBookIri,
-          contact,
-          fetch
-        );
+    if (name) {
+      const contact = { webId, fn: name };
+      const { response, error } = await saveContact(
+        addressBookIri,
+        contact,
+        fetch
+      );
 
-        if (error) alertError(error);
-        if (response) alertSuccess(`${contact.fn} was added to your contacts`);
-      } else {
-        alertError(NO_NAME_ERROR_MESSAGE);
-      }
+      if (error) alertError(error);
+      if (response) alertSuccess(`${contact.fn} was added to your contacts`);
+    } else {
+      alertError(NO_NAME_ERROR_MESSAGE);
     }
     setIsLoading(false);
   };
@@ -108,11 +96,12 @@ export default function AddContact() {
     bem("container"),
     bem("container-view", menuOpen ? "menu-open" : null)
   );
+  const [addressBook] = useAddressBook();
   const [isLoading, setIsLoading] = useState(false);
-
   if (!webId || isLoading) return <Spinner />;
 
   const onSubmit = handleSubmit({
+    addressBook,
     setIsLoading,
     alertError,
     alertSuccess,
