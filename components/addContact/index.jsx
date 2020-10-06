@@ -51,9 +51,12 @@ export function handleSubmit({
   return async (iri) => {
     setIsLoading(true);
     const addressBookIri = getSourceUrl(addressBook);
+
+    const { name, webId } = await fetchProfile(iri, fetch);
+
     const existingContact = await findContactInAddressBook(
       addressBookIri,
-      iri,
+      webId,
       fetch
     );
 
@@ -62,8 +65,6 @@ export function handleSubmit({
       setIsLoading(false);
       return;
     }
-
-    const { name, webId } = await fetchProfile(iri, fetch);
 
     if (name) {
       const contact = { webId, fn: name };
