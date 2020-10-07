@@ -19,11 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import clsx from "clsx";
-import PropTypes from "prop-types";
 import { createStyles, TextField } from "@material-ui/core";
-import Skeleton from "@material-ui/lab/Skeleton";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import {
@@ -41,26 +39,8 @@ import SortedTableCarat from "../sortedTableCarat";
 import Spinner from "../spinner";
 import styles from "./styles";
 import { RECALLS_PROPERTY_IRI } from "../../src/solidClientHelpers/bookmarks";
-import useResourceOwner from "../../src/hooks/useResourceOwner";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-
-function OwnerDisplayName({ iri }) {
-  const { ownerName } = useResourceOwner(iri);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    if (typeof ownerName === "undefined") {
-      setLoading(true);
-    } else {
-      setLoading(false);
-    }
-  }, [ownerName, setLoading]);
-
-  if (loading) {
-    return <Skeleton width={150} />;
-  }
-  return <span>{ownerName}</span>;
-}
 
 const bookmarkBody = ({ value }) => {
   return <Bookmark iri={value} />;
@@ -77,13 +57,6 @@ const titleBody = ({ row, value, className }) => {
       {value}
     </ResourceLink>
   );
-};
-
-const ownerBody = ({ value }) => {
-  if (!value) {
-    return null;
-  }
-  return <OwnerDisplayName iri={value} />;
 };
 
 function BookmarksList() {
@@ -158,21 +131,11 @@ function BookmarksList() {
             ascIndicator={ascIndicator}
             descIndicator={descIndicator}
           />
-          <TableColumn
-            property={RECALLS_PROPERTY_IRI}
-            dataType="url"
-            header="Owner"
-            body={ownerBody}
-          />
         </Table>
       </Container>
     </>
   );
 }
-
-OwnerDisplayName.propTypes = {
-  iri: PropTypes.string.isRequired,
-};
 
 BookmarksList.propTypes = {};
 
