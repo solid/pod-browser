@@ -22,6 +22,10 @@
 import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
 
 const styles = (theme: PrismTheme) =>
-  createStyles(theme, ["icons", "table"], {});
+  createStyles(theme, ["icons", "table"], {
+    "table__icon": {
+      marginLeft: "0.5em",
+    },
+  });
 
 export default styles;

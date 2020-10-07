@@ -65,19 +65,6 @@ function ContactsList() {
   const formattedNamePredicate = vcard.fn;
   const hasPhotoPredicate = vcard.hasPhoto;
 
-  const ascIndicator = (
-    <>
-      {` `}
-      <SortedTableCarat sorted />
-    </>
-  );
-  const descIndicator = (
-    <>
-      {" "}
-      <SortedTableCarat sorted sortedDesc />
-    </>
-  );
-
   // format things for the data table
   const contacts = people.map((p) => ({
     thing: p,
@@ -101,8 +88,8 @@ function ContactsList() {
           things={contacts}
           className={clsx(tableClass, bem("table"))}
           filter={search}
-          ascIndicator={ascIndicator}
-          descIndicator={descIndicator}
+          ascIndicator={<SortedTableCarat sorted />}
+          descIndicator={<SortedTableCarat sorted sortedDesc />}
         >
           <TableColumn
             property={hasPhotoPredicate}

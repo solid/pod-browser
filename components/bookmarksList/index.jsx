@@ -78,19 +78,6 @@ function BookmarksList() {
     };
   });
 
-  const ascIndicator = (
-    <>
-      {" "}
-      <SortedTableCarat sorted />
-    </>
-  );
-  const descIndicator = (
-    <>
-      {" "}
-      <SortedTableCarat sorted sortedDesc />
-    </>
-  );
-
   return (
     <>
       <PageHeader title="Bookmarks">
@@ -111,8 +98,8 @@ function BookmarksList() {
           things={bookmarksList}
           className={clsx(tableClass, bem("table"))}
           filter={search}
-          ascIndicator={ascIndicator}
-          descIndicator={descIndicator}
+          ascIndicator={<SortedTableCarat sorted />}
+          descIndicator={<SortedTableCarat sorted sortedDesc />}
         >
           <TableColumn
             property={RECALLS_PROPERTY_IRI}
@@ -128,8 +115,6 @@ function BookmarksList() {
             body={({ row, value }) => titleBody({ row, value, className: tableLinkClassName })}
             sortable
             filterable
-            ascIndicator={ascIndicator}
-            descIndicator={descIndicator}
           />
         </Table>
       </Container>

@@ -1095,23 +1095,17 @@ font-display: block;",
             >
               <B
                 ascIndicator={
-                  <React.Fragment>
-                     
-                    <SortedTableCarat
-                      sorted={true}
-                      sortedDesc={null}
-                    />
-                  </React.Fragment>
+                  <SortedTableCarat
+                    sorted={true}
+                    sortedDesc={null}
+                  />
                 }
                 className="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
                 descIndicator={
-                  <React.Fragment>
-                     
-                    <SortedTableCarat
-                      sorted={true}
-                      sortedDesc={true}
-                    />
-                  </React.Fragment>
+                  <SortedTableCarat
+                    sorted={true}
+                    sortedDesc={true}
+                  />
                 }
                 getRowProps={[Function]}
                 things={
