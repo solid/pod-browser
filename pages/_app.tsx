@@ -46,6 +46,7 @@ import {
 import theme from "../src/theme";
 import { AlertProvider } from "../src/contexts/alertContext";
 import { ConfirmationDialogProvider } from "../src/contexts/confirmationDialogContext";
+import { FeatureProvider } from "../src/contexts/featureFlagsContext";
 import Notification from "../components/notification";
 import ConfirmationDialog from "../components/confirmationDialog";
 import PodBrowserHeader from "../components/header";
@@ -110,23 +111,25 @@ export default function App(props: AppProps): ReactElement {
       <StylesProvider jss={jss}>
         <ThemeProvider theme={theme}>
           <SessionProvider sessionId="pod-browser">
-            <AlertProvider>
-              <ConfirmationDialogProvider>
-                <CssBaseline />
-                <div className={bem("app-layout")}>
-                  <PodBrowserHeader />
-                  <main className={bem("app-layout__main")}>
-                    <Component {...pageProps} />
-                  </main>
-                  <div className={bem("app-layout__footer")}>
-                    <PodBrowserFooter />
+            <FeatureProvider>
+              <AlertProvider>
+                <ConfirmationDialogProvider>
+                  <CssBaseline />
+                  <div className={bem("app-layout")}>
+                    <PodBrowserHeader />
+                    <main className={bem("app-layout__main")}>
+                      <Component {...pageProps} />
+                    </main>
+                    <div className={bem("app-layout__footer")}>
+                      <PodBrowserFooter />
+                    </div>
                   </div>
-                </div>
 
-                <Notification />
-                <ConfirmationDialog />
-              </ConfirmationDialogProvider>
-            </AlertProvider>
+                  <Notification />
+                  <ConfirmationDialog />
+                </ConfirmationDialogProvider>
+              </AlertProvider>
+            </FeatureProvider>
           </SessionProvider>
         </ThemeProvider>
       </StylesProvider>

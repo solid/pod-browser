@@ -19,46 +19,41 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const tsConfig = require("./tsconfig.json");
+import React, { createContext } from "react";
+import T from "prop-types";
+import { useSession } from "@inrupt/solid-ui-react";
+import rules from "../../featureFlags";
 
-module.exports = {
-  // Automatically clear mock calls and instances between every test
-  clearMocks: true,
+const FeatureContext = createContext({
+  enabled: () => false,
+});
 
-  // The test environment that will be used for testing
-  testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["<rootDir>jest/setupTests.js"],
+export function isEnabled(session, rule, extraContext) {
+  return rules()[rule](session, extraContext);
+}
 
-  testPathIgnorePatterns: ["/node_modules/", "/__testUtils/"],
+export function FeatureProvider({ children }) {
+  const { session } = useSession();
 
-  transform: {
-    "^.+\\.(js|jsx|ts|tsx)$": "ts-jest",
-    "^.+\\.ttl$": "jest-raw-loader",
-  },
+  const sessionBoundEnabled = (rule, extraContext) =>
+    isEnabled(session, rule, extraContext);
 
-  // ts config
-  globals: {
-    "ts-jest": {
-      tsConfig: { ...tsConfig.compilerOptions, jsx: "react" },
-    },
-  },
+  // Pass the current session in as context.
 
-  // Coverage configs
-  collectCoverage: true,
+  return (
+    <FeatureContext.Provider value={{ enabled: sessionBoundEnabled }}>
+      {children}
+    </FeatureContext.Provider>
+  );
+}
 
-  coveragePathIgnorePatterns: [
-    "/node_modules/",
-    "/__testUtils/",
-    "styles.ts",
-    "/src/windowHelpers",
-  ],
-
-  coverageThreshold: {
-    global: {
-      branches: 89,
-      functions: 89,
-      lines: 95,
-      statements: 95,
-    },
-  },
+/* eslint react/forbid-prop-types: 0 */
+FeatureProvider.propTypes = {
+  children: T.node,
 };
+
+FeatureProvider.defaultProps = {
+  children: null,
+};
+
+export default FeatureContext;

@@ -41,7 +41,7 @@
     "camelcase": "^6.0.0",
     "encoding": "^0.1.13",
     "jss": "^10.4.0",
-    "jss-preset-default": "^10.3.0",
+    "jss-preset-default": "^10.4.0",
     "license-checker": "^25.0.1",
     "next": "^9.5.3",
     "prop-types": "^15.7.2",
@@ -49,10 +49,10 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-id-generator": "^3.0.1",
-    "react-jss": "^10.3.0",
+    "react-jss": "^10.4.0",
     "react-table": "^7.5.0",
     "react-transition-group": "^4.4.1",
-    "swr": "^0.3.0",
+    "swr": "^0.3.2",
     "uuid": "^8.3.0"
   },
   "devDependencies": {

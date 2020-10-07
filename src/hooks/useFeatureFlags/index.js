@@ -19,46 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const tsConfig = require("./tsconfig.json");
+import { useContext } from "react";
+import FeatureContext from "../../contexts/featureFlagsContext";
 
-module.exports = {
-  // Automatically clear mock calls and instances between every test
-  clearMocks: true,
-
-  // The test environment that will be used for testing
-  testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["<rootDir>jest/setupTests.js"],
-
-  testPathIgnorePatterns: ["/node_modules/", "/__testUtils/"],
-
-  transform: {
-    "^.+\\.(js|jsx|ts|tsx)$": "ts-jest",
-    "^.+\\.ttl$": "jest-raw-loader",
-  },
-
-  // ts config
-  globals: {
-    "ts-jest": {
-      tsConfig: { ...tsConfig.compilerOptions, jsx: "react" },
-    },
-  },
-
-  // Coverage configs
-  collectCoverage: true,
-
-  coveragePathIgnorePatterns: [
-    "/node_modules/",
-    "/__testUtils/",
-    "styles.ts",
-    "/src/windowHelpers",
-  ],
-
-  coverageThreshold: {
-    global: {
-      branches: 89,
-      functions: 89,
-      lines: 95,
-      statements: 95,
-    },
-  },
-};
+export default function useFeatureFlag(flag, context) {
+  const { enabled } = useContext(FeatureContext);
+  return enabled(flag, context);
+}
