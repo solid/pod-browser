@@ -19,46 +19,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const tsConfig = require("./tsconfig.json");
+import rules, {
+  acpEnabled,
+  ACP_ENABLED,
+  wacEnabled,
+  WAC_ENABLED,
+} from "./index";
 
-module.exports = {
-  // Automatically clear mock calls and instances between every test
-  clearMocks: true,
+describe("rules", () => {
+  test("it indexes all rules", () => {
+    expect(Object.keys(rules())).toEqual([ACP_ENABLED, WAC_ENABLED]);
+  });
 
-  // The test environment that will be used for testing
-  testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["<rootDir>jest/setupTests.js"],
+  test("it has rules for acp", () => {
+    expect(acpEnabled()).toBe(false);
+  });
 
-  testPathIgnorePatterns: ["/node_modules/", "/__testUtils/"],
-
-  transform: {
-    "^.+\\.(js|jsx|ts|tsx)$": "ts-jest",
-    "^.+\\.ttl$": "jest-raw-loader",
-  },
-
-  // ts config
-  globals: {
-    "ts-jest": {
-      tsConfig: { ...tsConfig.compilerOptions, jsx: "react" },
-    },
-  },
-
-  // Coverage configs
-  collectCoverage: true,
-
-  coveragePathIgnorePatterns: [
-    "/node_modules/",
-    "/__testUtils/",
-    "styles.ts",
-    "/src/windowHelpers",
-  ],
-
-  coverageThreshold: {
-    global: {
-      branches: 89,
-      functions: 89,
-      lines: 95,
-      statements: 95,
-    },
-  },
-};
+  test("it has rules for wac", () => {
+    expect(wacEnabled()).toBe(true);
+  });
+});

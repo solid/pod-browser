@@ -19,46 +19,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const tsConfig = require("./tsconfig.json");
+import React, { useContext } from "react";
+import { mount } from "enzyme";
+import { useSession } from "@inrupt/solid-ui-react";
+import rules from "../../featureFlags";
+import FeatureContext, { FeatureProvider } from "./index";
 
-module.exports = {
-  // Automatically clear mock calls and instances between every test
-  clearMocks: true,
+jest.mock("@inrupt/solid-ui-react");
+jest.mock("../../featureFlags");
 
-  // The test environment that will be used for testing
-  testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["<rootDir>jest/setupTests.js"],
+function ChildComponent() {
+  rules.mockReturnValue({
+    test: () => true,
+  });
 
-  testPathIgnorePatterns: ["/node_modules/", "/__testUtils/"],
+  const { enabled } = useContext(FeatureContext);
 
-  transform: {
-    "^.+\\.(js|jsx|ts|tsx)$": "ts-jest",
-    "^.+\\.ttl$": "jest-raw-loader",
-  },
+  return (
+    <>
+      <div id="test">{enabled("test").toString()}</div>
+    </>
+  );
+}
 
-  // ts config
-  globals: {
-    "ts-jest": {
-      tsConfig: { ...tsConfig.compilerOptions, jsx: "react" },
-    },
-  },
+describe("PodLocationContext", () => {
+  test("it can read feature flags", () => {
+    useSession.mockReturnValue({ session: null });
 
-  // Coverage configs
-  collectCoverage: true,
+    const component = mount(
+      <FeatureProvider>
+        <ChildComponent />
+      </FeatureProvider>
+    );
 
-  coveragePathIgnorePatterns: [
-    "/node_modules/",
-    "/__testUtils/",
-    "styles.ts",
-    "/src/windowHelpers",
-  ],
-
-  coverageThreshold: {
-    global: {
-      branches: 89,
-      functions: 89,
-      lines: 95,
-      statements: 95,
-    },
-  },
-};
+    expect(component.find("#test").text()).toEqual("true");
+  });
+});
