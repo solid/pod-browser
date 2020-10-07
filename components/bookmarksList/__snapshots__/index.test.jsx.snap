@@ -1178,7 +1178,7 @@ font-display: block;",
                                 "value": "2020-10-28T03:24:00.000Z",
                               },
                               "predicate": NamedNode {
-                                "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                "value": "http://purl.org/dc/terms/created",
                               },
                               "subject": NamedNode {
                                 "value": "http://example.com/bookmarks/index.ttl#1234",
@@ -1242,7 +1242,7 @@ font-display: block;",
                                 "value": "2020-10-29T03:24:00.000Z",
                               },
                               "predicate": NamedNode {
-                                "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                "value": "http://purl.org/dc/terms/created",
                               },
                               "subject": NamedNode {
                                 "value": "http://example.com/bookmarks/index.ttl#4567",
@@ -1315,7 +1315,7 @@ font-display: block;",
                               "value": "2020-10-28T03:24:00.000Z",
                             },
                             "predicate": NamedNode {
-                              "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                              "value": "http://purl.org/dc/terms/created",
                             },
                             "subject": NamedNode {
                               "value": "http://example.com/bookmarks/index.ttl#1234",
@@ -1379,7 +1379,7 @@ font-display: block;",
                               "value": "2020-10-29T03:24:00.000Z",
                             },
                             "predicate": NamedNode {
-                              "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                              "value": "http://purl.org/dc/terms/created",
                             },
                             "subject": NamedNode {
                               "value": "http://example.com/bookmarks/index.ttl#4567",
@@ -1448,7 +1448,7 @@ font-display: block;",
                               "value": "2020-10-28T03:24:00.000Z",
                             },
                             "predicate": NamedNode {
-                              "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                              "value": "http://purl.org/dc/terms/created",
                             },
                             "subject": NamedNode {
                               "value": "http://example.com/bookmarks/index.ttl#1234",
@@ -1519,7 +1519,7 @@ font-display: block;",
                                 "value": "2020-10-28T03:24:00.000Z",
                               },
                               "predicate": NamedNode {
-                                "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                "value": "http://purl.org/dc/terms/created",
                               },
                               "subject": NamedNode {
                                 "value": "http://example.com/bookmarks/index.ttl#1234",
@@ -1583,7 +1583,7 @@ font-display: block;",
                                 "value": "2020-10-29T03:24:00.000Z",
                               },
                               "predicate": NamedNode {
-                                "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                "value": "http://purl.org/dc/terms/created",
                               },
                               "subject": NamedNode {
                                 "value": "http://example.com/bookmarks/index.ttl#4567",
@@ -1656,7 +1656,7 @@ font-display: block;",
                               "value": "2020-10-28T03:24:00.000Z",
                             },
                             "predicate": NamedNode {
-                              "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                              "value": "http://purl.org/dc/terms/created",
                             },
                             "subject": NamedNode {
                               "value": "http://example.com/bookmarks/index.ttl#1234",
@@ -1720,7 +1720,7 @@ font-display: block;",
                               "value": "2020-10-29T03:24:00.000Z",
                             },
                             "predicate": NamedNode {
-                              "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                              "value": "http://purl.org/dc/terms/created",
                             },
                             "subject": NamedNode {
                               "value": "http://example.com/bookmarks/index.ttl#4567",
@@ -1789,7 +1789,7 @@ font-display: block;",
                               "value": "2020-10-29T03:24:00.000Z",
                             },
                             "predicate": NamedNode {
-                              "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                              "value": "http://purl.org/dc/terms/created",
                             },
                             "subject": NamedNode {
                               "value": "http://example.com/bookmarks/index.ttl#4567",
@@ -1906,7 +1906,7 @@ font-display: block;",
                                     "value": "2020-10-28T03:24:00.000Z",
                                   },
                                   "predicate": NamedNode {
-                                    "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                    "value": "http://purl.org/dc/terms/created",
                                   },
                                   "subject": NamedNode {
                                     "value": "http://example.com/bookmarks/index.ttl#1234",
@@ -1970,7 +1970,7 @@ font-display: block;",
                                     "value": "2020-10-29T03:24:00.000Z",
                                   },
                                   "predicate": NamedNode {
-                                    "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                    "value": "http://purl.org/dc/terms/created",
                                   },
                                   "subject": NamedNode {
                                     "value": "http://example.com/bookmarks/index.ttl#4567",
@@ -2043,7 +2043,7 @@ font-display: block;",
                                   "value": "2020-10-28T03:24:00.000Z",
                                 },
                                 "predicate": NamedNode {
-                                  "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                  "value": "http://purl.org/dc/terms/created",
                                 },
                                 "subject": NamedNode {
                                   "value": "http://example.com/bookmarks/index.ttl#1234",
@@ -2107,7 +2107,7 @@ font-display: block;",
                                   "value": "2020-10-29T03:24:00.000Z",
                                 },
                                 "predicate": NamedNode {
-                                  "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                  "value": "http://purl.org/dc/terms/created",
                                 },
                                 "subject": NamedNode {
                                   "value": "http://example.com/bookmarks/index.ttl#4567",
@@ -2178,7 +2178,7 @@ font-display: block;",
                                   "value": "2020-10-28T03:24:00.000Z",
                                 },
                                 "predicate": NamedNode {
-                                  "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                  "value": "http://purl.org/dc/terms/created",
                                 },
                                 "subject": NamedNode {
                                   "value": "http://example.com/bookmarks/index.ttl#1234",
@@ -2251,7 +2251,7 @@ font-display: block;",
                                       "value": "2020-10-28T03:24:00.000Z",
                                     },
                                     "predicate": NamedNode {
-                                      "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                      "value": "http://purl.org/dc/terms/created",
                                     },
                                     "subject": NamedNode {
                                       "value": "http://example.com/bookmarks/index.ttl#1234",
@@ -2315,7 +2315,7 @@ font-display: block;",
                                       "value": "2020-10-29T03:24:00.000Z",
                                     },
                                     "predicate": NamedNode {
-                                      "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                      "value": "http://purl.org/dc/terms/created",
                                     },
                                     "subject": NamedNode {
                                       "value": "http://example.com/bookmarks/index.ttl#4567",
@@ -2388,7 +2388,7 @@ font-display: block;",
                                     "value": "2020-10-28T03:24:00.000Z",
                                   },
                                   "predicate": NamedNode {
-                                    "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                    "value": "http://purl.org/dc/terms/created",
                                   },
                                   "subject": NamedNode {
                                     "value": "http://example.com/bookmarks/index.ttl#1234",
@@ -2452,7 +2452,7 @@ font-display: block;",
                                     "value": "2020-10-29T03:24:00.000Z",
                                   },
                                   "predicate": NamedNode {
-                                    "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                    "value": "http://purl.org/dc/terms/created",
                                   },
                                   "subject": NamedNode {
                                     "value": "http://example.com/bookmarks/index.ttl#4567",
@@ -2525,7 +2525,7 @@ font-display: block;",
                                       "value": "2020-10-28T03:24:00.000Z",
                                     },
                                     "predicate": NamedNode {
-                                      "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                      "value": "http://purl.org/dc/terms/created",
                                     },
                                     "subject": NamedNode {
                                       "value": "http://example.com/bookmarks/index.ttl#1234",
@@ -15256,7 +15256,7 @@ font-display: block;",
                                     "value": "2020-10-28T03:24:00.000Z",
                                   },
                                   "predicate": NamedNode {
-                                    "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                    "value": "http://purl.org/dc/terms/created",
                                   },
                                   "subject": NamedNode {
                                     "value": "http://example.com/bookmarks/index.ttl#1234",
@@ -15320,7 +15320,7 @@ font-display: block;",
                                     "value": "2020-10-29T03:24:00.000Z",
                                   },
                                   "predicate": NamedNode {
-                                    "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                    "value": "http://purl.org/dc/terms/created",
                                   },
                                   "subject": NamedNode {
                                     "value": "http://example.com/bookmarks/index.ttl#4567",
@@ -15393,7 +15393,7 @@ font-display: block;",
                                   "value": "2020-10-28T03:24:00.000Z",
                                 },
                                 "predicate": NamedNode {
-                                  "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                  "value": "http://purl.org/dc/terms/created",
                                 },
                                 "subject": NamedNode {
                                   "value": "http://example.com/bookmarks/index.ttl#1234",
@@ -15457,7 +15457,7 @@ font-display: block;",
                                   "value": "2020-10-29T03:24:00.000Z",
                                 },
                                 "predicate": NamedNode {
-                                  "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                  "value": "http://purl.org/dc/terms/created",
                                 },
                                 "subject": NamedNode {
                                   "value": "http://example.com/bookmarks/index.ttl#4567",
@@ -15528,7 +15528,7 @@ font-display: block;",
                                   "value": "2020-10-29T03:24:00.000Z",
                                 },
                                 "predicate": NamedNode {
-                                  "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                  "value": "http://purl.org/dc/terms/created",
                                 },
                                 "subject": NamedNode {
                                   "value": "http://example.com/bookmarks/index.ttl#4567",
@@ -15601,7 +15601,7 @@ font-display: block;",
                                       "value": "2020-10-28T03:24:00.000Z",
                                     },
                                     "predicate": NamedNode {
-                                      "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                      "value": "http://purl.org/dc/terms/created",
                                     },
                                     "subject": NamedNode {
                                       "value": "http://example.com/bookmarks/index.ttl#1234",
@@ -15665,7 +15665,7 @@ font-display: block;",
                                       "value": "2020-10-29T03:24:00.000Z",
                                     },
                                     "predicate": NamedNode {
-                                      "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                      "value": "http://purl.org/dc/terms/created",
                                     },
                                     "subject": NamedNode {
                                       "value": "http://example.com/bookmarks/index.ttl#4567",
@@ -15738,7 +15738,7 @@ font-display: block;",
                                     "value": "2020-10-28T03:24:00.000Z",
                                   },
                                   "predicate": NamedNode {
-                                    "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                    "value": "http://purl.org/dc/terms/created",
                                   },
                                   "subject": NamedNode {
                                     "value": "http://example.com/bookmarks/index.ttl#1234",
@@ -15802,7 +15802,7 @@ font-display: block;",
                                     "value": "2020-10-29T03:24:00.000Z",
                                   },
                                   "predicate": NamedNode {
-                                    "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                    "value": "http://purl.org/dc/terms/created",
                                   },
                                   "subject": NamedNode {
                                     "value": "http://example.com/bookmarks/index.ttl#4567",
@@ -15875,7 +15875,7 @@ font-display: block;",
                                       "value": "2020-10-29T03:24:00.000Z",
                                     },
                                     "predicate": NamedNode {
-                                      "value": "http://www.w3.org/2002/01/bookmark#recalls",
+                                      "value": "http://purl.org/dc/terms/created",
                                     },
                                     "subject": NamedNode {
                                       "value": "http://example.com/bookmarks/index.ttl#4567",

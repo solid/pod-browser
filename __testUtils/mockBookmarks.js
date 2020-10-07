@@ -32,6 +32,7 @@ import {
   RECALLS_PROPERTY_IRI,
   BOOKMARK_TYPE_IRI,
 } from "../src/solidClientHelpers/bookmarks";
+import { changeThing } from "../src/solidClientHelpers/utils";
 
 const bookmarksUrl = "http://example.com/bookmarks/index.ttl";
 const bookmark1Title = "Cat gifs";
@@ -41,50 +42,28 @@ const bookmark2Recalls = "https://example.com/dogvideos";
 
 export default function mockBookmarks() {
   let bookmarksDataset = mockSolidDatasetFrom(bookmarksUrl);
-  const bookmark1 = mockThingFrom(`${bookmarksUrl}#1234`);
-  const bookmark1WithTitle = addStringNoLocale(
-    bookmark1,
-    dct.title,
-    bookmark1Title
+  const bookmark1Thing = mockThingFrom(`${bookmarksUrl}#1234`);
+  const bookmark1 = changeThing(
+    bookmark1Thing,
+    (t) => addStringNoLocale(t, dct.title, bookmark1Title),
+    (t) => addUrl(t, RECALLS_PROPERTY_IRI, bookmark1Recalls),
+    (t) => addUrl(t, rdf.type, BOOKMARK_TYPE_IRI),
+    (t) =>
+      addDatetime(t, dct.created, new Date(Date.UTC(2020, 9, 28, 3, 24, 0)))
   );
-  const bookmark1WithRecalls = addUrl(
-    bookmark1WithTitle,
-    RECALLS_PROPERTY_IRI,
-    bookmark1Recalls
+
+  bookmarksDataset = setThing(bookmarksDataset, bookmark1);
+  const bookmark2Thing = mockThingFrom(`${bookmarksUrl}#4567`);
+  const bookmark2 = changeThing(
+    bookmark2Thing,
+    (t) => addStringNoLocale(t, dct.title, bookmark2Title),
+    (t) => addUrl(t, RECALLS_PROPERTY_IRI, bookmark2Recalls),
+    (t) => addUrl(t, rdf.type, BOOKMARK_TYPE_IRI),
+    (t) =>
+      addDatetime(t, dct.created, new Date(Date.UTC(2020, 9, 29, 3, 24, 0)))
   );
-  const bookmark1WithType = addUrl(
-    bookmark1WithRecalls,
-    rdf.type,
-    BOOKMARK_TYPE_IRI
-  );
-  const bookmark1WithCreated = addDatetime(
-    bookmark1WithType,
-    RECALLS_PROPERTY_IRI,
-    new Date(Date.UTC(2020, 9, 28, 3, 24, 0))
-  );
-  bookmarksDataset = setThing(bookmarksDataset, bookmark1WithCreated);
-  const bookmark2 = mockThingFrom(`${bookmarksUrl}#4567`);
-  const bookmark2WithTitle = addStringNoLocale(
-    bookmark2,
-    dct.title,
-    bookmark2Title
-  );
-  const bookmark2WithRecalls = addUrl(
-    bookmark2WithTitle,
-    RECALLS_PROPERTY_IRI,
-    bookmark2Recalls
-  );
-  const bookmark2WithType = addUrl(
-    bookmark2WithRecalls,
-    rdf.type,
-    BOOKMARK_TYPE_IRI
-  );
-  const bookmark2WithCreated = addDatetime(
-    bookmark2WithType,
-    RECALLS_PROPERTY_IRI,
-    new Date(Date.UTC(2020, 9, 29, 3, 24, 0))
-  );
-  bookmarksDataset = setThing(bookmarksDataset, bookmark2WithCreated);
+
+  bookmarksDataset = setThing(bookmarksDataset, bookmark2);
   return {
     dataset: bookmarksDataset,
     iri: bookmarksUrl,

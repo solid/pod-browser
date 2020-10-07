@@ -80,7 +80,7 @@ function BookmarksList() {
 
   const ascIndicator = (
     <>
-      {` `}
+      {" "}
       <SortedTableCarat sorted />
     </>
   );
