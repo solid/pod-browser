@@ -19,36 +19,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
 import { getPeople } from "../../addressBook";
 
 export default function usePeople(addressBook) {
-  const [people, setPeople] = useState(null);
-  const [error, setError] = useState(null);
   const {
     session: { fetch },
   } = useSession();
 
-  useEffect(() => {
-    if (!addressBook) {
-      setPeople(null);
-      return;
-    }
+  return useSWR(addressBook, async () => {
     const contactsIri = getSourceUrl(addressBook);
-    (async () => {
-      const { response, error: peopleError } = await getPeople(
-        contactsIri,
-        fetch
-      );
-      if (response) {
-        setPeople(response);
-        return;
-      }
-      setError(peopleError);
-    })();
-  }, [fetch, addressBook]);
-
-  return [people, error];
+    const { response, error } = await getPeople(contactsIri, fetch);
+    if (error) {
+      throw error;
+    }
+    return response;
+  });
 }

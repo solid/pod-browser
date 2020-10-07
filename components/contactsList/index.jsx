@@ -26,11 +26,11 @@ import { Avatar, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import {
-  Container,
+  DrawerContainer,
   PageHeader,
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
-import { Table, TableColumn } from "@inrupt/solid-ui-react";
+import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
 import { vcard } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";
 import Spinner from "../spinner";
@@ -39,8 +39,11 @@ import styles from "./styles";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import useAddressBook from "../../src/hooks/useAddressBook";
 import usePeople from "../../src/hooks/usePeople";
-import ContactsListSearch from "./contactsListSearch";
+import useProfiles from "../../src/hooks/useProfiles";
 import { SearchProvider } from "../../src/contexts/searchContext";
+import { deleteContact } from "../../src/addressBook";
+import ContactsDrawer from "./contactsDrawer";
+import ContactsListSearch from "./contactsListSearch";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -54,9 +57,37 @@ function ContactsList() {
   const [search, setSearch] = useState("");
 
   const [addressBook, addressBookError] = useAddressBook();
-  const [people, peopleError] = usePeople(addressBook);
+  const { data: people, error: peopleError, mutate: peopleMutate } = usePeople(
+    addressBook
+  );
+  const profiles = useProfiles(people);
+
+  const {
+    session: { fetch },
+  } = useSession();
+
+  const [selectedContactIndex, setSelectedContactIndex] = useState(null);
+
+  const closeDrawer = () => setSelectedContactIndex(null);
+  const handleDeleteContact = async (contactToDeleteIndex) => {
+    const contactToDelete = people[contactToDeleteIndex];
+    await deleteContact(contactToDelete, fetch);
+    peopleMutate();
+    closeDrawer();
+  };
+
+  const drawer = (
+    <ContactsDrawer
+      open={selectedContactIndex !== null}
+      onClose={closeDrawer}
+      onDelete={() => handleDeleteContact(selectedContactIndex)}
+    />
+  );
+
   const isLoading =
-    (!addressBook && !addressBookError) || (!people && !peopleError);
+    (!addressBook && !addressBookError) ||
+    (!people && !peopleError) ||
+    !profiles;
 
   if (isLoading) return <Spinner />;
   if (addressBookError) return addressBookError;
@@ -66,7 +97,7 @@ function ContactsList() {
   const hasPhotoPredicate = vcard.hasPhoto;
 
   // format things for the data table
-  const contacts = people.map((p) => ({
+  const contacts = profiles.map((p) => ({
     thing: p,
     dataset: addressBook,
   }));
@@ -81,15 +112,28 @@ function ContactsList() {
           </Link>,
         ]}
       >
-        <ContactsListSearch people={people} />
+        <ContactsListSearch people={profiles} />
       </PageHeader>
-      <Container>
+      <DrawerContainer drawer={drawer} open={selectedContactIndex !== null}>
         <Table
           things={contacts}
           className={clsx(tableClass, bem("table"))}
           filter={search}
           ascIndicator={<SortedTableCarat sorted />}
           descIndicator={<SortedTableCarat sorted sortedDesc />}
+          getRowProps={(row, contact) => {
+            return {
+              className: clsx(
+                bem(
+                  "table__body-row",
+                  "selectable",
+                  contact === profiles[selectedContactIndex] ? "selected" : null
+                ),
+                bem("tableRow")
+              ),
+              onClick: () => setSelectedContactIndex(row.index),
+            };
+          }}
         >
           <TableColumn
             property={hasPhotoPredicate}
@@ -112,7 +156,7 @@ function ContactsList() {
             sortable
           />
         </Table>
-      </Container>
+      </DrawerContainer>
     </SearchProvider>
   );
 }

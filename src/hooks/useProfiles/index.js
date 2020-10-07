@@ -19,24 +19,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles, table } from "@solid/lit-prism-patterns";
+import { useEffect, useState } from "react";
+import { useSession } from "@inrupt/solid-ui-react";
+import { getProfiles } from "../../addressBook";
 
-const styles = (theme) => {
-  const tableStyles = table.styles(theme);
-  return createStyles(theme, ["table", "icons"], {
-    table: {
-      "& tbody td": {
-        "&:first-child": tableStyles["table__body-cell--width-preview"],
-      },
-    },
-    tableRow: {
-      cursor: "pointer",
-    },
-    avatar: {
-      width: "30px",
-      height: "30px",
-    },
-  });
-};
+export default function useProfiles(people) {
+  const [profiles, setProfiles] = useState(null);
+  const {
+    session: { fetch },
+  } = useSession();
 
-export default styles;
+  useEffect(() => {
+    if (!people) {
+      setProfiles(null);
+      return;
+    }
+    (async () => {
+      const profilesResponse = await getProfiles(people, fetch);
+      setProfiles(profilesResponse);
+    })();
+  }, [fetch, people]);
+
+  return profiles;
+}

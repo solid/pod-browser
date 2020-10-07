@@ -25,6 +25,7 @@ import {
   addStringNoLocale,
   addUrl,
   asUrl,
+  deleteFile,
   getSourceUrl,
   getStringNoLocaleAll,
   getThing,
@@ -139,6 +140,9 @@ export async function getPeople(containerIri, fetch) {
     .filter(({ error: e }) => !e)
     .map(({ response }) => response);
 
+  return respond(people);
+}
+export async function getProfiles(people, fetch) {
   const profileResponses = await Promise.all(
     people.map(({ dataset }) => {
       const url = getUrl(dataset, foaf.openid);
@@ -158,7 +162,7 @@ export async function getPeople(containerIri, fetch) {
       );
     });
 
-  return respond(profiles);
+  return profiles;
 }
 
 export async function saveNewAddressBook(
@@ -341,4 +345,15 @@ export async function saveContact(addressBookIri, schema, fetch) {
 
   if (savePeopleError) return error(savePeopleError);
   return respond({ iri, contact, people });
+}
+
+export async function deleteContact(contactToDelete, fetch) {
+  const contactIri = contactToDelete.iri;
+  const contactContainerIri = contactIri.substring(
+    0,
+    contactIri.lastIndexOf("/") + 1
+  );
+
+  await deleteFile(contactIri, { fetch });
+  await deleteFile(contactContainerIri, { fetch });
 }
