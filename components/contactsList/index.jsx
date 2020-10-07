@@ -84,14 +84,15 @@ function ContactsList() {
     />
   );
 
+  if (addressBookError) return addressBookError;
+  if (peopleError) return peopleError;
+
   const isLoading =
     (!addressBook && !addressBookError) ||
     (!people && !peopleError) ||
     !profiles;
 
   if (isLoading) return <Spinner />;
-  if (addressBookError) return addressBookError;
-  if (peopleError) return peopleError;
 
   const formattedNamePredicate = vcard.fn;
   const hasPhotoPredicate = vcard.hasPhoto;
