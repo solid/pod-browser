@@ -60,7 +60,7 @@ export default function mockBookmarks() {
   const bookmark1WithCreated = addDatetime(
     bookmark1WithType,
     RECALLS_PROPERTY_IRI,
-    new Date(2020, 9, 28)
+    new Date(2020, 9, 28, 3, 24, 0)
   );
   bookmarksDataset = setThing(bookmarksDataset, bookmark1WithCreated);
   const bookmark2 = mockThingFrom(`${bookmarksUrl}#4567`);
@@ -82,7 +82,7 @@ export default function mockBookmarks() {
   const bookmark2WithCreated = addDatetime(
     bookmark2WithType,
     RECALLS_PROPERTY_IRI,
-    new Date(2020, 9, 29)
+    new Date(2020, 9, 29, 3, 24, 0)
   );
   bookmarksDataset = setThing(bookmarksDataset, bookmark2WithCreated);
   return {
