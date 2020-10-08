@@ -25,6 +25,7 @@ import {
   addStringNoLocale,
   addUrl,
   asUrl,
+  getSourceUrl,
   getStringNoLocaleAll,
   getThing,
   getUrl,
@@ -311,7 +312,6 @@ export async function saveContact(addressBookIri, schema, fetch) {
     newContact,
     fetch
   );
-
   if (saveContactError) return error(saveContactError);
 
   const { response: peopleIndex, error: peopleError } = await getResource(
@@ -322,7 +322,9 @@ export async function saveContact(addressBookIri, schema, fetch) {
   if (peopleError) return error(peopleError);
 
   const peopleThing = defineThing(
-    { name: "this  " },
+    {
+      url: `${getSourceUrl(contact)}#this`,
+    },
     (t) => addStringNoLocale(t, vcard.fn, schema.fn || schema.name),
     (t) => addUrl(t, vcardExtras("inAddressBook"), indexIri)
   );

@@ -399,7 +399,9 @@ describe("saveContact", () => {
     const schema = { webId, fn: "Test Person" };
     const contactDataset = setThing(
       createSolidDataset(),
-      createThing({ name: "this" })
+      createThing({
+        url: "https://user.example.com/contacts/People/1234/index.ttl",
+      })
     );
     const peopleIndexDataset = setThing(
       createSolidDataset(),
@@ -409,6 +411,12 @@ describe("saveContact", () => {
       createSolidDataset(),
       createThing({ name: "this" })
     );
+
+    jest
+      .spyOn(solidClientFns, "getSourceUrl")
+      .mockReturnValueOnce(
+        "https://user.example.com/contacts/People/1234/index.ttl"
+      );
 
     jest
       .spyOn(resourceFns, "saveResource")

@@ -152,7 +152,7 @@ export function chain(object, ...operations) {
 }
 
 export function defineThing(options, ...operations) {
-  return chain(createThing({ options }), ...operations);
+  return chain(createThing(options), ...operations);
 }
 
 export function defineDataset(options, ...operations) {
