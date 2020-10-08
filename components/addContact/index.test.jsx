@@ -23,6 +23,12 @@ import React from "react";
 import { mount } from "enzyme";
 import { mountToJson } from "enzyme-to-json";
 import { vcard } from "rdf-namespaces";
+import {
+  addStringNoLocale,
+  mockSolidDatasetFrom,
+  mockThingFrom,
+  setThing,
+} from "@inrupt/solid-client";
 import mockSession, {
   mockUnauthenticatedSession,
 } from "../../__testUtils/mockSession";
@@ -40,18 +46,11 @@ import {
   mockProfileAlice,
 } from "../../__testUtils/mockPersonResource";
 import * as profileHelperFns from "../../src/solidClientHelpers/profile";
-
-jest.mock("@inrupt/solid-client");
-jest.mock("next/router");
-jest.mock("../../src/addressBook");
-jest.mock("../../src/solidClientHelpers/resource");
-jest.mock("../../src/solidClientHelpers/profile");
+import { contactsContainerIri } from "../../src/addressBook";
 
 describe("AddContact", () => {
   test("it renders the Add Contact form", () => {
     const session = mockSession();
-    const mockProfile = mockPersonDatasetAlice();
-    jest.spyOn(profileHelperFns, "fetchProfile").mockResolvedValue(mockProfile);
     const SessionProvider = mockSessionContextProvider(session);
     const tree = mount(
       <SessionProvider>
@@ -79,19 +78,20 @@ describe("AddContact", () => {
   });
 });
 describe("handleSubmit", () => {
+  const addressBook = mockSolidDatasetFrom("https://example.com/addressBook");
+
   test("it alerts the user and exits if the webid already exists", async () => {
-    const personUri = "http://example.com/alice#me";
     const personDataset = mockPersonDatasetAlice();
     const personProfile = mockProfileAlice();
     const setIsLoading = jest.fn();
     const alertError = jest.fn();
     const alertSuccess = jest.fn();
     const handler = handleSubmit({
+      addressBook,
       setIsLoading,
       alertError,
       alertSuccess,
       fetch,
-      webId: personUri,
     });
     jest
       .spyOn(profileHelperFns, "fetchProfile")
@@ -110,11 +110,11 @@ describe("handleSubmit", () => {
     const alertError = jest.fn();
     const alertSuccess = jest.fn();
     const handler = handleSubmit({
+      addressBook,
       setIsLoading,
       alertError,
       alertSuccess,
       fetch,
-      webId: personUri,
     });
     jest.spyOn(profileHelperFns, "fetchProfile").mockResolvedValue(mockProfile);
     jest
@@ -126,15 +126,6 @@ describe("handleSubmit", () => {
     expect(alertError).toHaveBeenCalledWith(NO_NAME_ERROR_MESSAGE);
   });
   test("it saves a new contact", async () => {
-    const {
-      setThing,
-      mockSolidDatasetFrom,
-      mockThingFrom,
-      addStringNoLocale,
-    } = jest.requireActual("@inrupt/solid-client");
-    const { contactsContainerIri } = jest.requireActual(
-      "../../src/addressBook"
-    );
     const personUri = "http://example.com/alice#me";
     const personDataset = addStringNoLocale(
       mockThingFrom(personUri),
@@ -149,11 +140,11 @@ describe("handleSubmit", () => {
     const alertError = jest.fn();
     const alertSuccess = jest.fn();
     const handler = handleSubmit({
+      addressBook,
       setIsLoading,
       alertError,
       alertSuccess,
       fetch,
-      webId: personUri,
     });
     jest
       .spyOn(addressBookFns, "findContactInAddressBook")
@@ -171,17 +162,16 @@ describe("handleSubmit", () => {
     expect(alertError).not.toHaveBeenCalled();
   });
   test("it alerts the user if there is an error while creating the contact", async () => {
-    const personUri = "http://example.com/alice#me";
     const mockProfile = mockProfileAlice();
     const setIsLoading = jest.fn();
     const alertError = jest.fn();
     const alertSuccess = jest.fn();
     const handler = handleSubmit({
+      addressBook,
       setIsLoading,
       alertError,
       alertSuccess,
       fetch,
-      webId: personUri,
     });
     jest.spyOn(profileHelperFns, "fetchProfile").mockResolvedValue(mockProfile);
     jest

@@ -923,7 +923,24 @@ exports[`AddContact it renders the Add Contact form 1`] = `
   <g
     session={
       Object {
-        "fetch": [MockFunction],
+        "fetch": [MockFunction] {
+          "calls": Array [
+            Array [
+              "http://example.com/webId#me",
+              Object {
+                "headers": Object {
+                  "Accept": "text/turtle",
+                },
+              },
+            ],
+          ],
+          "results": Array [
+            Object {
+              "type": "return",
+              "value": Promise {},
+            },
+          ],
+        },
         "handleIncomingRedirect": [MockFunction] {
           "calls": Array [
             Array [

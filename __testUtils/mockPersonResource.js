@@ -22,6 +22,7 @@
 import { addStringNoLocale, addUrl, mockThingFrom } from "@inrupt/solid-client";
 import { vcard, foaf } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
+import { packageProfile } from "../src/solidClientHelpers/profile";
 
 export const person1WebIdUrl = "http://example.com/alice#me";
 export const person1Name = "Alice";
@@ -38,12 +39,7 @@ export function mockPersonDatasetAlice() {
 }
 
 export function mockProfileAlice() {
-  return {
-    name: person1Name,
-    nickname: person1Nick,
-    avatar: person1Photo,
-    webId: person1WebIdUrl,
-  };
+  return packageProfile(person1WebIdUrl, mockPersonDatasetAlice());
 }
 
 export const person2WebIdUrl = "http://example.com/bob#me";
@@ -59,10 +55,5 @@ export function mockPersonDatasetBob() {
 }
 
 export function mockProfileBob() {
-  return {
-    name: person2Name,
-    nickname: person2Nick,
-    avatar: null,
-    webId: person2WebIdUrl,
-  };
+  return packageProfile(person2WebIdUrl, mockPersonDatasetBob());
 }

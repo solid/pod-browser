@@ -24,25 +24,30 @@ import {
   addStringNoLocale,
   addUrl,
   createSolidDataset,
-  createThing,
   mockSolidDatasetFrom,
   setThing,
 } from "@inrupt/solid-client";
 import { dct, rdf } from "rdf-namespaces";
 import {
-  initializeBookmarks,
   addBookmark,
-  removeBookmark,
-  RECALLS_PROPERTY_IRI,
   BOOKMARK_TYPE_IRI,
+  initializeBookmarks,
+  RECALLS_PROPERTY_IRI,
+  removeBookmark,
 } from "./bookmarks";
 import { saveResource } from "./resource";
-import { defineDataset } from "./utils";
+import { defineDataset, defineThing } from "./utils";
 
 jest.mock("./resource");
 const bookmarksIri = "https://mypost.myhost.com/bookmarks/index.ttl";
 const bookmarksDataset = mockSolidDatasetFrom(bookmarksIri);
 const fetch = jest.fn();
+
+const emptyDataset = createSolidDataset();
+const bookmarkThing = defineThing({}, (t) =>
+  addUrl(t, RECALLS_PROPERTY_IRI, "https://example.org/cats")
+);
+const filledDataset = setThing(emptyDataset, bookmarkThing);
 
 describe("initialize bookmarks", () => {
   test("it saves a new bookmarks dataset at a given IRI", async () => {
@@ -56,22 +61,29 @@ describe("initialize bookmarks", () => {
 describe("addBookmark", () => {
   const bookmarkUrl = "https://example.org/cats";
   test("it saves a new bookmark to the bookmarks dataset", async () => {
-    const emptyDataset = createSolidDataset();
-    const bookmarkThing = addUrl(
-      createThing(),
-      RECALLS_PROPERTY_IRI,
-      bookmarkUrl
-    );
-    const filledDataset = setThing(emptyDataset, bookmarkThing);
+    saveResource.mockResolvedValue({ response: 42 });
 
-    saveResource.mockResolvedValue({ response: filledDataset });
-
-    const { response: finalDataset } = await addBookmark(
-      bookmarkUrl,
+    const { response } = await addBookmark(
+      "https://example.org/cats",
       { dataset: emptyDataset, iri: bookmarksIri },
       fetch
     );
-    expect(finalDataset.quads.size).toBe(1);
+    expect(saveResource).toHaveBeenCalled();
+    expect(response).toBe(42);
+  });
+
+  it("does not add bookmark if it already exists", async () => {
+    saveResource.mockResolvedValue({ response: 42 });
+
+    const bookmarks = { dataset: filledDataset, iri: bookmarksIri };
+    const { response, error } = await addBookmark(
+      "https://example.org/cats",
+      bookmarks,
+      fetch
+    );
+    expect(response).toBe(bookmarks);
+    expect(error).toBeNull();
+    expect(saveResource).not.toHaveBeenCalled();
   });
 
   it("does not overwrite existing bookmarks", async () => {
@@ -90,14 +102,6 @@ describe("addBookmark", () => {
 
 describe("removeBookmark", () => {
   test("it removes a bookmark from the bookmarks dataset", async () => {
-    const emptyDataset = createSolidDataset();
-    const bookmarkThing = addUrl(
-      createThing(),
-      RECALLS_PROPERTY_IRI,
-      "https://example.org/cats"
-    );
-    const filledDataset = setThing(emptyDataset, bookmarkThing);
-
     await removeBookmark(
       "https://example.org/cats",
       { dataset: filledDataset, iri: bookmarksIri },
@@ -109,15 +113,15 @@ describe("removeBookmark", () => {
     );
   });
 
-  it("returns the same dataset if bookmark already exists", async () => {
-    const emptyDataset = createSolidDataset();
-
+  it("does not remove bookmarks that is not added from before", async () => {
     const bookmarks = { dataset: emptyDataset, iri: bookmarksIri };
-    const { response } = await removeBookmark(
+    const { response, error } = await removeBookmark(
       "https://example.org/cats",
       bookmarks,
       fetch
     );
-    expect(response).toEqual(bookmarks);
+    expect(response).toBe(bookmarks);
+    expect(error).toBeNull();
+    expect(saveResource).not.toHaveBeenCalled();
   });
 });

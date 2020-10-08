@@ -44,9 +44,20 @@ export default function usePodOwnerProfile() {
       return;
     }
     if (!router.query.iri) {
-      // we haven't loaded the profile yet
+      // we haven't loaded the authenticated profile yet
       setProfile(null);
       setError(null);
+      return;
+    }
+    const resourceIri = decodeURIComponent(router.query.iri);
+    if (
+      router.query.iri &&
+      authProfile &&
+      authProfile.pods.find((storage) => resourceIri.startsWith(storage))
+    ) {
+      // the authenticated user has noted the storage as theirs, so we assume we can list them as Pod owner
+      setProfile(authProfile);
+      setError(authError);
       return;
     }
     setProfile(ownerProfile);

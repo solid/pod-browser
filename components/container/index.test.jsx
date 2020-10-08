@@ -70,4 +70,25 @@ describe("Container view", () => {
     const tree = mountToJson(<Container iri={iri} />);
     expect(tree).toMatchSnapshot();
   });
+
+  it("renders Access Forbidden if the fetch for container returns 401", () => {
+    solidClientHooks.useFetchContainerResourceIris.mockReturnValue({
+      error: { message: "401" },
+    });
+    expect(mountToJson(<Container iri={iri} />)).toMatchSnapshot();
+  });
+
+  it("renders Access Forbidden if the fetch for container returns 403", () => {
+    solidClientHooks.useFetchContainerResourceIris.mockReturnValue({
+      error: { message: "403" },
+    });
+    expect(mountToJson(<Container iri={iri} />)).toMatchSnapshot();
+  });
+
+  it("renders Access Forbidden if the fetch for container returns 404", () => {
+    solidClientHooks.useFetchContainerResourceIris.mockReturnValue({
+      error: { message: "404" },
+    });
+    expect(mountToJson(<Container iri={iri} />)).toMatchSnapshot();
+  });
 });

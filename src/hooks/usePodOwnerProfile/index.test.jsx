@@ -21,22 +21,30 @@
 
 import { renderHook } from "@testing-library/react-hooks";
 import * as RouterFns from "next/router";
+import { addUrl } from "@inrupt/solid-client";
+import { space } from "rdf-namespaces/dist/index";
 import usePodOwnerProfile from "./index";
 import {
   mockPersonDatasetAlice,
   mockPersonDatasetBob,
+  person1WebIdUrl,
+  person2WebIdUrl,
 } from "../../../__testUtils/mockPersonResource";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import useFetchProfile from "../useFetchProfile";
+import { packageProfile } from "../../solidClientHelpers/profile";
 
 jest.mock("../useFetchProfile");
 jest.mock("../useAuthenticatedProfile");
 
 describe("usePodOwnerProfile", () => {
+  const podUrl = "http://example.com";
   const resourceUrl = "http://example.com/foo/bar";
   const userProfileUri = "http://example.com/profile/card#me";
-  const userProfile = mockPersonDatasetAlice();
-  const authProfile = mockPersonDatasetBob();
+  const userDataset = mockPersonDatasetAlice();
+  const userProfile = packageProfile(person1WebIdUrl, userDataset);
+  const authDataset = mockPersonDatasetBob();
+  const authProfile = packageProfile(person2WebIdUrl, authDataset);
 
   beforeEach(() => {
     useAuthenticatedProfile.mockReturnValue({ data: authProfile });
@@ -56,6 +64,26 @@ describe("usePodOwnerProfile", () => {
     const { result } = renderHook(() => usePodOwnerProfile());
     expect(result.current.profile).toEqual(userProfile);
     expect(useFetchProfile).toHaveBeenCalledWith(userProfileUri);
+  });
+
+  it("returns the authenticated user profile if Pod is listed in their profile", () => {
+    const authProfileWithStorageDataset = addUrl(
+      authDataset,
+      space.storage,
+      podUrl
+    );
+    const authProfileWithStorageProfile = packageProfile(
+      person2WebIdUrl,
+      authProfileWithStorageDataset
+    );
+    useAuthenticatedProfile.mockReturnValue({
+      data: authProfileWithStorageProfile,
+    });
+    RouterFns.useRouter.mockReturnValue({
+      query: { iri: encodeURIComponent(resourceUrl) },
+    });
+    const { result } = renderHook(() => usePodOwnerProfile());
+    expect(result.current.profile).toEqual(authProfileWithStorageProfile);
   });
 
   it("should return null while requests are loading", () => {

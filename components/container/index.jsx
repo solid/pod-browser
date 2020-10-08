@@ -111,8 +111,9 @@ export default function Container({ iri }) {
     useSortBy
   );
 
-  if (error && isHTTPError(error.message, 404)) return <ResourceNotFound />;
+  if (error && isHTTPError(error.message, 401)) return <AccessForbidden />;
   if (error && isHTTPError(error.message, 403)) return <AccessForbidden />;
+  if (error && isHTTPError(error.message, 404)) return <ResourceNotFound />;
   if (error) throw error;
 
   if (loading) {

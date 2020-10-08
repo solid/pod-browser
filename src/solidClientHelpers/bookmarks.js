@@ -23,15 +23,15 @@ import {
   addDatetime,
   addStringNoLocale,
   addUrl,
-  createThing,
   createSolidDataset,
-  setThing,
+  createThing,
   getThingAll,
   getUrl,
   removeThing,
+  setThing,
 } from "@inrupt/solid-client";
-import { rdf, dct } from "rdf-namespaces";
-import { saveResource, getResourceName } from "./resource";
+import { dct, rdf } from "rdf-namespaces";
+import { getResourceName, saveResource } from "./resource";
 import { defineThing } from "./utils";
 
 export async function initializeBookmarks(iri, fetch) {
@@ -56,41 +56,34 @@ export async function addBookmark(bookmarkIri, bookmarks, fetch) {
   const [existingBookmark] = getThingAll(dataset).filter(
     (t) => getUrl(t, RECALLS_PROPERTY_IRI) === bookmarkIri
   );
-  let results;
   if (existingBookmark) {
-    results = { response: bookmarks, error: null };
-  } else {
-    const bookmark = defineThing(
-      {},
-      (t) => addUrl(t, rdf.type, BOOKMARK_TYPE_IRI),
-      (t) => addStringNoLocale(t, dct.title, bookmarkTitle),
-      (t) => addUrl(t, RECALLS_PROPERTY_IRI, bookmarkIri),
-      (t) => addDatetime(t, dct.created, new Date())
-    );
-
-    const bookmarkResource = {
-      dataset: setThing(dataset, bookmark),
-      iri,
-    };
-    results = await saveResource(bookmarkResource, fetch);
+    return { response: bookmarks, error: null };
   }
-  return results;
+  const bookmark = defineThing(
+    {},
+    (t) => addUrl(t, rdf.type, BOOKMARK_TYPE_IRI),
+    (t) => addStringNoLocale(t, dct.title, bookmarkTitle),
+    (t) => addUrl(t, RECALLS_PROPERTY_IRI, bookmarkIri),
+    (t) => addDatetime(t, dct.created, new Date())
+  );
+  const bookmarkResource = {
+    dataset: setThing(dataset, bookmark),
+    iri,
+  };
+  return saveResource(bookmarkResource, fetch);
 }
 
 export async function removeBookmark(bookmarkIri, bookmarks, fetch) {
   const { dataset, iri } = bookmarks;
-  let results;
   const [bookmarkToDelete] = getThingAll(dataset).filter(
     (t) => getUrl(t, RECALLS_PROPERTY_IRI) === bookmarkIri
   );
   if (!bookmarkToDelete) {
-    results = { response: bookmarks, error: null };
-  } else {
-    const updatedDataset = {
-      dataset: removeThing(dataset, bookmarkToDelete),
-      iri,
-    };
-    results = await saveResource(updatedDataset, fetch);
+    return { response: bookmarks, error: null };
   }
-  return results;
+  const updatedDataset = {
+    dataset: removeThing(dataset, bookmarkToDelete),
+    iri,
+  };
+  return saveResource(updatedDataset, fetch);
 }

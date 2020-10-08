@@ -71,12 +71,20 @@ describe("fetchProfile", () => {
 
 describe("getProfileFromPersonDataset", () => {
   test("it maps people into profiles", async () => {
-    expect(getProfileFromPersonDataset(mockPersonDatasetAlice())).toEqual(
-      mockProfileAlice()
-    );
+    const alice = mockProfileAlice();
+    expect(getProfileFromPersonDataset(mockPersonDatasetAlice())).toEqual({
+      avatar: alice.avatar,
+      name: alice.name,
+      nickname: alice.nickname,
+      webId: alice.webId,
+    });
 
-    expect(getProfileFromPersonDataset(mockPersonDatasetBob())).toEqual(
-      mockProfileBob()
-    );
+    const bob = mockProfileBob();
+    expect(getProfileFromPersonDataset(mockPersonDatasetBob())).toEqual({
+      avatar: bob.avatar,
+      name: bob.name,
+      nickname: bob.nickname,
+      webId: bob.webId,
+    });
   });
 });

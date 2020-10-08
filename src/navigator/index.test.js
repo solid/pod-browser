@@ -132,32 +132,51 @@ describe("urlLookupAndRedirect", () => {
     );
   });
 
-  it("redirects to access required on containers that are not accessible", async () => {
+  it("redirects to containers that not accessible (we show error in the Navigator)", async () => {
     const fetch = mockFetch({
       [containerUrl]: () => mockResponse(401),
     });
     await expect(
       urlLookupAndRedirect(containerUrl, router, { fetch })
-    ).resolves.toBeFalsy();
-    expect(router.replace).toHaveBeenCalledWith("/access-required");
+    ).resolves.toBeTruthy();
+    expect(router.replace).toHaveBeenCalledWith(
+      "/resource/[iri]",
+      resourceHref(containerUrl)
+    );
   });
 
-  it("redirects to access required on resources that are not accessible", async () => {
+  it("redirects to resources that are not accessible (we show error in the Navigator)", async () => {
     const fetch = mockFetch({
       [containerUrl]: () => mockResponse(200),
       [resourceUrl]: () => mockResponse(401),
     });
     await expect(
       urlLookupAndRedirect(resourceUrl, router, { fetch })
-    ).resolves.toBeFalsy();
-    expect(router.replace).toHaveBeenCalledWith("/access-required");
+    ).resolves.toBeTruthy();
+    expect(router.replace).toHaveBeenCalledWith(
+      "/resource/[iri]",
+      resourceHref(resourceUrl)
+    );
   });
 
-  it("redirects to access required on resources when their parent container is not accessible", async () => {
+  it("redirects to containers on resources when their parent container is not accessible", async () => {
     const fetch = mockFetch({
       [containerUrl]: () => mockResponse(401),
       [resourceUrl]: () => mockResponse(200),
     });
+    await expect(
+      urlLookupAndRedirect(resourceUrl, router, { fetch })
+    ).resolves.toBeTruthy();
+    expect(router.replace).toHaveBeenCalledWith(
+      "/resource/[iri]",
+      resourceHref(resourceUrl)
+    );
+  });
+
+  it("redirects to access required for resources that fails to fetch", async () => {
+    const fetch = () => {
+      throw new Error("Failed to fetch");
+    };
     await expect(
       urlLookupAndRedirect(resourceUrl, router, { fetch })
     ).resolves.toBeFalsy();

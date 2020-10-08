@@ -19,9 +19,17 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import Router from "next/router";
 
-import { SESSION_STATES, redirectBasedOnSessionState } from "./index";
+import { renderHook } from "@testing-library/react-hooks";
+import {
+  SESSION_STATES,
+  redirectBasedOnSessionState,
+  useRedirectIfLoggedIn,
+} from "./index";
+import mockSession from "../../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 
 jest.mock("next/router");
 jest.mock("../../hooks/useAuthenticatedProfile");

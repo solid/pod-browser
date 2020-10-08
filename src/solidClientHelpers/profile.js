@@ -35,23 +35,23 @@ export function displayProfileName({ nickname, name, webId }) {
   return webId;
 }
 
-export function getProfileFromPersonDataset(dataset) {
+export function getProfileFromPersonDataset(profileThing) {
   return {
-    avatar: getUrl(dataset, vcard.hasPhoto),
+    avatar: getUrl(profileThing, vcard.hasPhoto),
     name:
-      getStringNoLocale(dataset, vcard.fn) ||
-      getStringNoLocale(dataset, foaf.name),
+      getStringNoLocale(profileThing, vcard.fn) ||
+      getStringNoLocale(profileThing, foaf.name),
     nickname:
-      getStringNoLocale(dataset, vcard.nickname) ||
-      getStringNoLocale(dataset, foaf.nick),
-    webId: asUrl(dataset),
+      getStringNoLocale(profileThing, vcard.nickname) ||
+      getStringNoLocale(profileThing, foaf.nick),
+    webId: asUrl(profileThing),
   };
 }
 
 export function packageProfile(webId, dataset) {
   const profile = getThing(dataset, webId);
   return {
-    ...getProfileFromPersonDataset(dataset),
+    ...getProfileFromPersonDataset(profile),
     webId,
     dataset,
     pods: getUrlAll(profile, space.storage),

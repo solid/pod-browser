@@ -37,9 +37,11 @@ import {
 } from "../../../__testUtils/mockPersonResource";
 import { packageProfile } from "../../solidClientHelpers/profile";
 import { chain } from "../../solidClientHelpers/utils";
+import usePodRoot from "../usePodRoot";
 
 jest.mock("../useAuthenticatedProfile");
 jest.mock("next/router");
+jest.mock("../usePodRoot");
 
 const { addUrl } = solidClientFns;
 
@@ -56,6 +58,7 @@ describe("useRedirectIfNoControlAccessToOwnPod", () => {
     useAuthenticatedProfile.mockReturnValue({
       data: packageProfile(person1WebIdUrl, aliceWithPods),
     });
+    usePodRoot.mockReturnValue(storageUrl);
     jest.spyOn(solidClientFns, "getResourceInfoWithAcl").mockResolvedValue(42);
     jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValue(true);
 
@@ -98,62 +101,3 @@ describe("useRedirectIfNoControlAccessToOwnPod", () => {
     expect(Router.push).toHaveBeenCalled();
   });
 });
-
-// describe("useRedirectIfNoControlAccessToOwnPod", () => {
-//   beforeEach(() => {
-//     jest.spyOn(Router, "push").mockResolvedValue(null);
-//   });
-//   test("Do not get redirected if profile has access to all pods", async () => {
-//     const session = mockSession();
-//     const SessionProvider = mockSessionContextProvider(session);
-//
-//     const wrapper = ({ children }) => (
-//       <SessionProvider>{children}</SessionProvider>
-//     );
-//
-//     const { waitForNextUpdate } = renderHook(
-//       () => useRedirectIfNoControlAccessToOwnPod(storageUrl),
-//       { wrapper }
-//     );
-//
-//     await waitForNextUpdate();
-//
-//     expect(Router.push).not.toHaveBeenCalledWith();
-//   });
-//
-//   test("Do not get redirected if pod is not owned by user", async () => {
-//     const session = mockAuthenticatedSessionWithNoAccessToAnotherUsersPod();
-//     const SessionProvider = mockSessionContextProvider(session);
-//
-//     const wrapper = ({ children }) => (
-//       <SessionProvider>{children}</SessionProvider>
-//     );
-//
-//     const { waitForNextUpdate } = renderHook(
-//       () => useRedirectIfNoControlAccessToOwnPod(anotherUsersStorageUrl),
-//       { wrapper }
-//     );
-//
-//     await waitForNextUpdate();
-//
-//     expect(Router.push).not.toHaveBeenCalledWith();
-//   });
-//
-//   test("Gets redirected if profile do not have access to all pods", async () => {
-//     const session = mockAuthenticatedSessionWithNoAccessToPod();
-//     const SessionProvider = mockSessionContextProvider(session);
-//
-//     const wrapper = ({ children }) => (
-//       <SessionProvider>{children}</SessionProvider>
-//     );
-//
-//     const { waitForNextUpdate } = renderHook(
-//       () => useRedirectIfNoControlAccessToOwnPod(storageUrl),
-//       { wrapper }
-//     );
-//
-//     await waitForNextUpdate();
-//
-//     expect(Router.push).toHaveBeenCalled();
-//   });
-// });

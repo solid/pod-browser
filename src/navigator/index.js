@@ -20,7 +20,7 @@
  */
 
 import { getResourceInfo, getSourceUrl } from "@inrupt/solid-client";
-import { isContainerIri } from "../solidClientHelpers/utils";
+import { isContainerIri, isHTTPError } from "../solidClientHelpers/utils";
 import { DETAILS_CONTEXT_ACTIONS } from "../contexts/detailsMenuContext";
 
 export function resourceHref(iri) {
@@ -77,6 +77,15 @@ export async function urlLookupAndRedirect(url, router, { fetch }) {
     );
     return true;
   } catch (err) {
+    if (
+      !isHTTPError(err.message, 401) &&
+      !isHTTPError(err.message, 403) &&
+      !isHTTPError(err.message, 404)
+    ) {
+      await router.replace("/access-required");
+      return false;
+    }
+    // if we're able to fetch the resource at all (e.g. not a CORS-problem), we allow navigating to that resource to show the error in the navigator
     await router.replace("/resource/[iri]", resourceHref(url));
   }
   return true;
