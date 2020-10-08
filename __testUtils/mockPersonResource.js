@@ -24,36 +24,36 @@ import { vcard, foaf } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
 import { packageProfile } from "../src/solidClientHelpers/profile";
 
-export const person1WebIdUrl = "http://example.com/alice#me";
-export const person1Name = "Alice";
-export const person1Nick = "A";
-export const person1Photo = "http://example.com/alice.jpg";
+export const aliceWebIdUrl = "http://example.com/alice#me";
+export const aliceName = "Alice";
+export const aliceNick = "A";
+export const alicePhoto = "http://example.com/alice.jpg";
 
 export function mockPersonDatasetAlice() {
   return chain(
-    mockThingFrom(person1WebIdUrl),
-    (t) => addStringNoLocale(t, vcard.fn, person1Name),
-    (t) => addStringNoLocale(t, vcard.nickname, person1Nick),
-    (t) => addUrl(t, vcard.hasPhoto, person1Photo)
+    mockThingFrom(aliceWebIdUrl),
+    (t) => addStringNoLocale(t, vcard.fn, aliceName),
+    (t) => addStringNoLocale(t, vcard.nickname, aliceNick),
+    (t) => addUrl(t, vcard.hasPhoto, alicePhoto)
   );
 }
 
 export function mockProfileAlice() {
-  return packageProfile(person1WebIdUrl, mockPersonDatasetAlice());
+  return packageProfile(aliceWebIdUrl, mockPersonDatasetAlice());
 }
 
-export const person2WebIdUrl = "http://example.com/bob#me";
-export const person2Name = "Bob";
-export const person2Nick = "B";
+export const bobWebIdUrl = "http://example.com/bob#me";
+export const bobName = "Bob";
+export const bobNick = "B";
 
 export function mockPersonDatasetBob() {
   return chain(
-    mockThingFrom(person2WebIdUrl),
-    (t) => addStringNoLocale(t, foaf.name, person2Name),
-    (t) => addStringNoLocale(t, foaf.nick, person2Nick)
+    mockThingFrom(bobWebIdUrl),
+    (t) => addStringNoLocale(t, foaf.name, bobName),
+    (t) => addStringNoLocale(t, foaf.nick, bobNick)
   );
 }
 
 export function mockProfileBob() {
-  return packageProfile(person2WebIdUrl, mockPersonDatasetBob());
+  return packageProfile(bobWebIdUrl, mockPersonDatasetBob());
 }

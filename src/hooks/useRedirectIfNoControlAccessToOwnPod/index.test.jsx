@@ -33,7 +33,7 @@ import useRedirectIfNoControlAccessToOwnPod from "./index";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import {
   mockPersonDatasetAlice,
-  person1WebIdUrl,
+  aliceWebIdUrl,
 } from "../../../__testUtils/mockPersonResource";
 import { packageProfile } from "../../solidClientHelpers/profile";
 import { chain } from "../../solidClientHelpers/utils";
@@ -56,7 +56,7 @@ describe("useRedirectIfNoControlAccessToOwnPod", () => {
       addUrl(t, space.storage, storageUrl)
     );
     useAuthenticatedProfile.mockReturnValue({
-      data: packageProfile(person1WebIdUrl, aliceWithPods),
+      data: packageProfile(aliceWebIdUrl, aliceWithPods),
     });
     usePodRoot.mockReturnValue(storageUrl);
     jest.spyOn(solidClientFns, "getResourceInfoWithAcl").mockResolvedValue(42);

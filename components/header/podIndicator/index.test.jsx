@@ -32,8 +32,8 @@ import PodIndicator, {
 import {
   mockPersonDatasetAlice,
   mockPersonDatasetBob,
-  person1WebIdUrl,
-  person2WebIdUrl,
+  aliceWebIdUrl,
+  bobWebIdUrl,
 } from "../../../__testUtils/mockPersonResource";
 import usePodOwnerProfile from "../../../src/hooks/usePodOwnerProfile";
 import defaultTheme from "../../../src/theme";
@@ -56,7 +56,7 @@ describe("PodIndicator", () => {
   test("it renders the pod indicator with the correct name with a formatted name", async () => {
     const userProfile = mockPersonDatasetAlice();
     usePodOwnerProfile.mockReturnValue({
-      profile: packageProfile(person1WebIdUrl, userProfile),
+      profile: packageProfile(aliceWebIdUrl, userProfile),
       error: null,
     });
     const tree = mount(
@@ -71,7 +71,7 @@ describe("PodIndicator", () => {
   test("it renders the pod indicator with the correct name with a name", async () => {
     const userProfile = mockPersonDatasetBob();
     usePodOwnerProfile.mockReturnValue({
-      profile: packageProfile(person2WebIdUrl, userProfile),
+      profile: packageProfile(bobWebIdUrl, userProfile),
       error: null,
     });
     const tree = mount(

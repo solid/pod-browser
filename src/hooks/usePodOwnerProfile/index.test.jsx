@@ -27,8 +27,8 @@ import usePodOwnerProfile from "./index";
 import {
   mockPersonDatasetAlice,
   mockPersonDatasetBob,
-  person1WebIdUrl,
-  person2WebIdUrl,
+  aliceWebIdUrl,
+  bobWebIdUrl,
 } from "../../../__testUtils/mockPersonResource";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import useFetchProfile from "../useFetchProfile";
@@ -42,9 +42,9 @@ describe("usePodOwnerProfile", () => {
   const resourceUrl = "http://example.com/foo/bar";
   const userProfileUri = "http://example.com/profile/card#me";
   const userDataset = mockPersonDatasetAlice();
-  const userProfile = packageProfile(person1WebIdUrl, userDataset);
+  const userProfile = packageProfile(aliceWebIdUrl, userDataset);
   const authDataset = mockPersonDatasetBob();
-  const authProfile = packageProfile(person2WebIdUrl, authDataset);
+  const authProfile = packageProfile(bobWebIdUrl, authDataset);
 
   beforeEach(() => {
     useAuthenticatedProfile.mockReturnValue({ data: authProfile });
@@ -73,7 +73,7 @@ describe("usePodOwnerProfile", () => {
       podUrl
     );
     const authProfileWithStorageProfile = packageProfile(
-      person2WebIdUrl,
+      bobWebIdUrl,
       authProfileWithStorageDataset
     );
     useAuthenticatedProfile.mockReturnValue({
