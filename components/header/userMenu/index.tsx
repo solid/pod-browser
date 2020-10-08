@@ -44,23 +44,6 @@ export default function UserMenu(): ReactElement {
       <nav className={bem("header-banner__main-nav")}>
         <ul className={bem("main-nav__list")}>
           <li className={bem("main-nav__item")}>
-            <Link href="/contacts" replace>
-              <button
-                className={bem("header-banner__aside-menu-trigger")}
-                type="button"
-              >
-                <i
-                  className={clsx(
-                    bem("icon-users"),
-                    bem("header-banner__aside-menu-trigger-icon")
-                  )}
-                  aria-label="Contacts"
-                />
-                Contacts
-              </button>
-            </Link>
-          </li>
-          <li className={bem("main-nav__item")}>
             <Link href="/" replace>
               <button
                 className={bem("header-banner__aside-menu-trigger")}
@@ -74,6 +57,23 @@ export default function UserMenu(): ReactElement {
                   aria-label="Files"
                 />
                 Files
+              </button>
+            </Link>
+          </li>
+          <li className={bem("main-nav__item")}>
+            <Link href="/contacts" replace>
+              <button
+                className={bem("header-banner__aside-menu-trigger")}
+                type="button"
+              >
+                <i
+                  className={clsx(
+                    bem("icon-users"),
+                    bem("header-banner__aside-menu-trigger-icon")
+                  )}
+                  aria-label="Contacts"
+                />
+                Contacts
               </button>
             </Link>
           </li>
