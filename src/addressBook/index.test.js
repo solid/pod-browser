@@ -28,6 +28,7 @@ import {
   createContact,
   getGroups,
   getPeople,
+  getProfiles,
   getSchemaFunction,
   mapSchema,
   getSchemaOperations,
@@ -261,62 +262,39 @@ describe("getSchemaOperations", () => {
 });
 
 describe("getPeople", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
   test("it fetches the people in the address book", async () => {
     const containerIri = "https://user.example.com/contacts";
     const fetch = jest.fn();
+    const personContainer1 = "https://user.example.com/contacts/Person/1234/";
+    const personContainer2 = "https://user.example.com/contacts/Person/5678/";
     const expectedPerson1 = {
-      webId: "http://testperson.example.com/profile/card#me",
+      dataset: "Person 1",
+      iri: `${personContainer1}index.ttl`,
     };
     const expectedPerson2 = {
-      webId: "http://anotherperson.example.com/profile/card#me",
+      dataset: "Person 2",
+      iri: `${personContainer2}index.ttl`,
     };
-
-    const mockThingPerson1 = solidClientFns.mockThingFrom(
-      expectedPerson1.webId
-    );
-    const mockThingPerson2 = solidClientFns.mockThingFrom(
-      expectedPerson2.webId
-    );
 
     jest
       .spyOn(resourceFns, "getResource")
       .mockResolvedValueOnce({ response: { dataset: "people container" } })
-      .mockResolvedValueOnce({
-        response: { dataset: "Person 1", iri: expectedPerson1.webId },
-      })
-      .mockResolvedValueOnce({
-        response: { dataset: "Person 2", iri: expectedPerson2.webId },
-      })
-      .mockResolvedValueOnce({
-        response: { dataset: "Profile 1", iri: expectedPerson1.webId },
-      })
-      .mockResolvedValueOnce({
-        response: { dataset: "Profile 2", iri: expectedPerson2.webId },
-      });
+      .mockResolvedValueOnce({ response: expectedPerson1 })
+      .mockResolvedValueOnce({ response: expectedPerson2 });
 
     jest
       .spyOn(solidClientFns, "getUrlAll")
-      .mockReturnValueOnce([
-        "https://example.com/contacts/Person/1234/",
-        "https://example.com/contacts/Person/5678/",
-      ]);
-
-    jest
-      .spyOn(solidClientFns, "addStringNoLocale")
-      .mockReturnValueOnce(mockThingPerson1)
-      .mockReturnValueOnce(mockThingPerson2);
-
-    jest
-      .spyOn(solidClientFns, "getUrl")
-      .mockReturnValueOnce(expectedPerson1.webId)
-      .mockReturnValueOnce(expectedPerson2.webId);
+      .mockReturnValueOnce([expectedPerson1.iri, expectedPerson2.iri]);
 
     const {
       response: [person1, person2],
     } = await getPeople(containerIri, fetch);
 
-    expect(person1.internal_url).toEqual(expectedPerson1.webId);
-    expect(person2.internal_url).toEqual(expectedPerson2.webId);
+    expect(person1).toEqual(expectedPerson1);
+    expect(person2).toEqual(expectedPerson2);
   });
   test("it returns an error if it can't fetch the people container", async () => {
     const containerIri = "https://user.example.com/contacts";
@@ -330,47 +308,97 @@ describe("getPeople", () => {
 
     expect(error).toEqual("There was an error");
   });
-  test("it filters out people for which the resource couldn't be fetched", async () => {
-    const containerIri = "https://user.example.com/contacts";
+});
+
+describe("getProfiles", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+  test("it fetches the profiles of the given people contacts", async () => {
     const fetch = jest.fn();
-    const expectedPerson1 = {
+    const person1 = {
+      dataset: "Person 1",
+      iri: "https://user.example.com/contacts/Person/1234/index.ttl",
+    };
+    const person2 = {
+      dataset: "Person 2",
+      iri: "https://user.example.com/contacts/Person/1234/index.ttl",
+    };
+    const expectedProfile1 = {
       webId: "http://testperson.example.com/profile/card#me",
     };
-    const mockThingPerson1 = solidClientFns.mockThingFrom(
-      expectedPerson1.webId
+    const expectedProfile2 = {
+      webId: "http://anotherperson.example.com/profile/card#me",
+    };
+
+    const mockThingProfile1 = solidClientFns.mockThingFrom(
+      expectedProfile1.webId
+    );
+    const mockThingProfile2 = solidClientFns.mockThingFrom(
+      expectedProfile2.webId
     );
 
     jest
       .spyOn(resourceFns, "getResource")
-      .mockResolvedValueOnce({ response: { dataset: "people container" } })
       .mockResolvedValueOnce({
-        response: mockThingPerson1,
+        response: { dataset: "Profile 1", iri: expectedProfile1.webId },
       })
       .mockResolvedValueOnce({
-        error: "There was an error",
-      })
-      .mockResolvedValueOnce({
-        response: { dataset: "Profile 1", iri: expectedPerson1.webId },
+        response: { dataset: "Profile 2", iri: expectedProfile2.webId },
       });
 
     jest
-      .spyOn(solidClientFns, "getUrlAll")
-      .mockReturnValueOnce([
-        "https://example.com/contacts/Person/1234/",
-        "https://example.com/contacts/Person/5678/",
-      ]);
-
-    jest
       .spyOn(solidClientFns, "addStringNoLocale")
-      .mockReturnValueOnce(mockThingPerson1);
+      .mockReturnValueOnce(mockThingProfile1)
+      .mockReturnValueOnce(mockThingProfile2);
 
     jest
       .spyOn(solidClientFns, "getUrl")
-      .mockReturnValueOnce(expectedPerson1.webId);
+      .mockReturnValueOnce(expectedProfile1.webId)
+      .mockReturnValueOnce(expectedProfile2.webId);
 
-    const { response } = await getPeople(containerIri, fetch);
+    const [profile1, profile2] = await getProfiles([person1, person2], fetch);
 
-    expect(response).toHaveLength(1);
+    expect(profile1.internal_url).toEqual(expectedProfile1.webId);
+    expect(profile2.internal_url).toEqual(expectedProfile2.webId);
+  });
+  test("it filters out people for which the resource couldn't be fetched", async () => {
+    const fetch = jest.fn();
+    const person1 = {
+      dataset: "Person 1",
+      iri: "https://user.example.com/contacts/Person/1234/index.ttl",
+    };
+    const person2 = {
+      dataset: "Person 2",
+      iri: "https://user.example.com/contacts/Person/1234/index.ttl",
+    };
+    const expectedProfile = {
+      webId: "http://testperson.example.com/profile/card#me",
+    };
+    const mockThingProfile = solidClientFns.mockThingFrom(
+      expectedProfile.webId
+    );
+
+    jest
+      .spyOn(resourceFns, "getResource")
+      .mockResolvedValueOnce({
+        response: { dataset: "Profile 1", iri: expectedProfile.webId },
+      })
+      .mockResolvedValueOnce({
+        error: "There was an error",
+      });
+
+    jest
+      .spyOn(solidClientFns, "addStringNoLocale")
+      .mockReturnValueOnce(mockThingProfile);
+
+    jest
+      .spyOn(solidClientFns, "getUrl")
+      .mockReturnValueOnce(expectedProfile.webId);
+
+    const profiles = await getProfiles([person1, person2], fetch);
+
+    expect(profiles).toHaveLength(1);
   });
 });
 

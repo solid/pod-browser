@@ -19,8 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import { renderHook } from "@testing-library/react-hooks";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import { cache, SWRConfig } from "swr";
 import usePeople from "./index";
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
@@ -30,13 +32,16 @@ jest.mock("../../addressBook");
 
 describe("usePeople", () => {
   describe("with no address book", () => {
-    it("should return null", () => {
+    it("should return undefined", () => {
       const session = mockSession();
       const wrapper = mockSessionContextProvider(session);
       const { result } = renderHook(() => usePeople(null), {
         wrapper,
       });
-      expect(result.current).toEqual([null, null]);
+      expect(result.current).toMatchObject({
+        data: undefined,
+        error: undefined,
+      });
     });
   });
 
@@ -49,17 +54,25 @@ describe("usePeople", () => {
 
     beforeEach(() => {
       session = mockSession();
-      wrapper = mockSessionContextProvider(session);
+      const SessionProvider = mockSessionContextProvider(session);
+      // eslint-disable-next-line react/prop-types
+      wrapper = ({ children }) => (
+        <SessionProvider>
+          <SWRConfig value={{ dedupingInterval: 0 }}>{children}</SWRConfig>
+        </SessionProvider>
+      );
+    });
+
+    afterEach(() => {
+      cache.clear();
     });
 
     it("should call getPeople", async () => {
       getPeople.mockResolvedValue({ response });
 
-      const { waitForNextUpdate } = renderHook(() => usePeople(addressBook), {
+      renderHook(() => usePeople(addressBook), {
         wrapper,
       });
-
-      await waitForNextUpdate();
 
       expect(getPeople).toHaveBeenCalledWith(addressBookUrl, session.fetch);
     });
@@ -67,32 +80,32 @@ describe("usePeople", () => {
     it("should return response", async () => {
       getPeople.mockResolvedValue({ response });
 
-      const { result, waitForNextUpdate } = renderHook(
-        () => usePeople(addressBook),
-        {
-          wrapper,
-        }
+      const { result, waitFor } = renderHook(() => usePeople(addressBook), {
+        wrapper,
+      });
+
+      await waitFor(() =>
+        expect(result.current).toMatchObject({
+          data: response,
+          error: undefined,
+        })
       );
-
-      await waitForNextUpdate();
-
-      expect(result.current).toEqual([response, null]);
     });
 
     it("should return error", async () => {
       const error = "Some error";
       getPeople.mockResolvedValue({ error });
 
-      const { result, waitForNextUpdate } = renderHook(
-        () => usePeople(addressBook),
-        {
-          wrapper,
-        }
+      const { result, waitFor } = renderHook(() => usePeople(addressBook), {
+        wrapper,
+      });
+
+      await waitFor(() =>
+        expect(result.current).toMatchObject({
+          data: undefined,
+          error,
+        })
       );
-
-      await waitForNextUpdate();
-
-      expect(result.current).toEqual([null, error]);
     });
   });
 });
