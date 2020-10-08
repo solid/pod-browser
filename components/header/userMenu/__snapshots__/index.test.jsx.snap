@@ -841,27 +841,56 @@ font-display: block;",
       }
     >
       <UserMenu>
-        <div
+        <nav
           className="PodBrowser-header-banner__main-nav"
         >
-          <Link
-            href="/contacts"
-            replace={true}
+          <ul
+            className="PodBrowser-main-nav__list"
           >
-            <button
-              className="PodBrowser-header-banner__aside-menu-trigger"
-              onClick={[Function]}
-              onMouseEnter={[Function]}
-              type="button"
+            <li
+              className="PodBrowser-main-nav__item"
             >
-              <i
-                aria-label="Contacts"
-                className="PodBrowser-icon-users PodBrowser-header-banner__aside-menu-trigger-icon"
-              />
-              Contacts
-            </button>
-          </Link>
-        </div>
+              <Link
+                href="/contacts"
+                replace={true}
+              >
+                <button
+                  className="PodBrowser-header-banner__aside-menu-trigger"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                  type="button"
+                >
+                  <i
+                    aria-label="Contacts"
+                    className="PodBrowser-icon-users PodBrowser-header-banner__aside-menu-trigger-icon"
+                  />
+                  Contacts
+                </button>
+              </Link>
+            </li>
+            <li
+              className="PodBrowser-main-nav__item"
+            >
+              <Link
+                href="/"
+                replace={true}
+              >
+                <button
+                  className="PodBrowser-header-banner__aside-menu-trigger"
+                  onClick={[Function]}
+                  onMouseEnter={[Function]}
+                  type="button"
+                >
+                  <i
+                    aria-label="Files"
+                    className="PodBrowser-icon-files PodBrowser-header-banner__aside-menu-trigger-icon"
+                  />
+                  Files
+                </button>
+              </Link>
+            </li>
+          </ul>
+        </nav>
         <div>
           <Link
             href="/bookmarks"
