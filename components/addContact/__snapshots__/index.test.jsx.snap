@@ -884,76 +884,31 @@ font-display: block;",
         >
           <AddContact>
             <Spinner>
-              <WithStyles(ForwardRef(Container))>
-                <ForwardRef(Container)
-                  classes={
+              <LoadingIndicator
+                center={true}
+              >
+                <div
+                  className="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
+                  style={
                     Object {
-                      "disableGutters": "PodBrowser-disableGutters",
-                      "fixed": "PodBrowser-fixed",
-                      "maxWidthLg": "PodBrowser-maxWidthLg",
-                      "maxWidthMd": "PodBrowser-maxWidthMd",
-                      "maxWidthSm": "PodBrowser-maxWidthSm",
-                      "maxWidthXl": "PodBrowser-maxWidthXl",
-                      "maxWidthXs": "PodBrowser-maxWidthXs",
-                      "root": "PodBrowser-root",
+                      "maxHeight": undefined,
                     }
                   }
                 >
-                  <div
-                    className="PodBrowser-root PodBrowser-maxWidthLg"
+                  <svg
+                    className="PodBrowser-loading-indicator"
+                    viewBox="22 22 44 44"
                   >
-                    <WithStyles(ForwardRef(CircularProgress))
-                      className="PodBrowser-MuiCicularProgress-root"
-                      color="primary"
-                    >
-                      <ForwardRef(CircularProgress)
-                        className="PodBrowser-MuiCicularProgress-root"
-                        classes={
-                          Object {
-                            "circle": "PodBrowser-circle",
-                            "circleDisableShrink": "PodBrowser-circleDisableShrink",
-                            "circleIndeterminate": "PodBrowser-circleIndeterminate",
-                            "circleStatic": "PodBrowser-circleStatic",
-                            "colorPrimary": "PodBrowser-colorPrimary",
-                            "colorSecondary": "PodBrowser-colorSecondary",
-                            "indeterminate": "PodBrowser-indeterminate",
-                            "root": "PodBrowser-root",
-                            "static": "PodBrowser-static",
-                            "svg": "PodBrowser-svg",
-                          }
-                        }
-                        color="primary"
-                      >
-                        <div
-                          className="PodBrowser-root PodBrowser-MuiCicularProgress-root PodBrowser-colorPrimary PodBrowser-indeterminate"
-                          role="progressbar"
-                          style={
-                            Object {
-                              "height": 40,
-                              "width": 40,
-                            }
-                          }
-                        >
-                          <svg
-                            className="PodBrowser-svg"
-                            viewBox="22 22 44 44"
-                          >
-                            <circle
-                              className="PodBrowser-circle PodBrowser-circleIndeterminate"
-                              cx={44}
-                              cy={44}
-                              fill="none"
-                              r={20.2}
-                              strokeWidth={3.6}
-                              style={Object {}}
-                            />
-                          </svg>
-                        </div>
-                      </ForwardRef(CircularProgress)>
-                    </WithStyles(ForwardRef(CircularProgress))>
-                  </div>
-                </ForwardRef(Container)>
-              </WithStyles(ForwardRef(Container))>
+                    <circle
+                      cx="44"
+                      cy="44"
+                      fill="none"
+                      r="20.2"
+                      strokeWidth="3.6"
+                    />
+                  </svg>
+                </div>
+              </LoadingIndicator>
             </Spinner>
           </AddContact>
         </ThemeProvider>
@@ -1869,448 +1824,82 @@ font-display: block;",
                 heading="Add contact using Web ID"
                 onSubmit={[Function]}
               >
-                <h5
-                  className="PodBrowser-content-h5"
+                <Input
+                  id={
+                    Array [
+                      "id1",
+                    ]
+                  }
+                  label="WebID"
+                  onChange={[Function]}
+                  value=""
                 >
-                  Add contact using Web ID
-                </h5>
-                <WithStyles(ForwardRef(FormControl))
-                  className="PodBrowser-agentInput"
-                >
-                  <ForwardRef(FormControl)
-                    className="PodBrowser-agentInput"
-                    classes={
-                      Object {
-                        "fullWidth": "PodBrowser-fullWidth",
-                        "marginDense": "PodBrowser-marginDense",
-                        "marginNormal": "PodBrowser-marginNormal",
-                        "root": "PodBrowser-root",
-                      }
-                    }
-                  >
+                  <InputGroup>
                     <div
-                      className="PodBrowser-root PodBrowser-agentInput"
+                      className="PodBrowser-input-group"
                     >
-                      <WithStyles(ForwardRef(InputLabel))
+                      <Label
                         htmlFor={
                           Array [
                             "id1",
                           ]
                         }
                       >
-                        <ForwardRef(InputLabel)
-                          classes={
-                            Object {
-                              "animated": "PodBrowser-animated",
-                              "asterisk": "PodBrowser-asterisk",
-                              "disabled": "PodBrowser-disabled",
-                              "error": "PodBrowser-error",
-                              "filled": "PodBrowser-filled",
-                              "focused": "PodBrowser-focused",
-                              "formControl": "PodBrowser-formControl",
-                              "marginDense": "PodBrowser-marginDense",
-                              "outlined": "PodBrowser-outlined",
-                              "required": "PodBrowser-required",
-                              "root": "PodBrowser-root",
-                              "shrink": "PodBrowser-shrink",
-                            }
-                          }
+                        <label
+                          className="PodBrowser-label"
                           htmlFor={
                             Array [
                               "id1",
                             ]
                           }
                         >
-                          <WithStyles(ForwardRef(FormLabel))
-                            className="PodBrowser-root PodBrowser-formControl PodBrowser-animated PodBrowser-shrink"
-                            classes={
-                              Object {
-                                "asterisk": "PodBrowser-asterisk",
-                                "disabled": "PodBrowser-disabled",
-                                "error": "PodBrowser-error",
-                                "focused": "PodBrowser-focused",
-                                "required": "PodBrowser-required",
-                              }
-                            }
-                            data-shrink={true}
-                            htmlFor={
-                              Array [
-                                "id1",
-                              ]
-                            }
-                          >
-                            <ForwardRef(FormLabel)
-                              className="PodBrowser-root PodBrowser-formControl PodBrowser-animated PodBrowser-shrink"
-                              classes={
-                                Object {
-                                  "asterisk": "PodBrowser-asterisk PodBrowser-asterisk",
-                                  "colorSecondary": "PodBrowser-colorSecondary",
-                                  "disabled": "PodBrowser-disabled PodBrowser-disabled",
-                                  "error": "PodBrowser-error PodBrowser-error",
-                                  "filled": "PodBrowser-filled",
-                                  "focused": "PodBrowser-focused PodBrowser-focused",
-                                  "required": "PodBrowser-required PodBrowser-required",
-                                  "root": "PodBrowser-root",
-                                }
-                              }
-                              data-shrink={true}
-                              htmlFor={
-                                Array [
-                                  "id1",
-                                ]
-                              }
-                            >
-                              <label
-                                className="PodBrowser-root PodBrowser-root PodBrowser-formControl PodBrowser-animated PodBrowser-shrink"
-                                data-shrink={true}
-                                htmlFor={
-                                  Array [
-                                    "id1",
-                                  ]
-                                }
-                              >
-                                Web ID
-                              </label>
-                            </ForwardRef(FormLabel)>
-                          </WithStyles(ForwardRef(FormLabel))>
-                        </ForwardRef(InputLabel)>
-                      </WithStyles(ForwardRef(InputLabel))>
-                      <WithStyles(ForwardRef(Input))
+                          WebID
+                        </label>
+                      </Label>
+                      <SimpleInput
                         id={
                           Array [
                             "id1",
                           ]
                         }
-                        onChange={[Function]}
-                        startAdornment={
-                          <WithStyles(ForwardRef(InputAdornment))
-                            position="start"
-                          >
-                            <Memo(AccountCircleIcon) />
-                          </WithStyles(ForwardRef(InputAdornment))>
+                        name={
+                          Array [
+                            "id1",
+                          ]
                         }
+                        onChange={[Function]}
                         value=""
                       >
-                        <ForwardRef(Input)
-                          classes={
-                            Object {
-                              "colorSecondary": "PodBrowser-colorSecondary",
-                              "disabled": "PodBrowser-disabled",
-                              "error": "PodBrowser-error",
-                              "focused": "PodBrowser-focused",
-                              "formControl": "PodBrowser-formControl",
-                              "fullWidth": "PodBrowser-fullWidth",
-                              "input": "PodBrowser-input",
-                              "inputMarginDense": "PodBrowser-inputMarginDense",
-                              "inputMultiline": "PodBrowser-inputMultiline",
-                              "inputTypeSearch": "PodBrowser-inputTypeSearch",
-                              "marginDense": "PodBrowser-marginDense",
-                              "multiline": "PodBrowser-multiline",
-                              "root": "PodBrowser-root",
-                              "underline": "PodBrowser-underline",
-                            }
-                          }
+                        <input
+                          className="PodBrowser-input"
+                          defaultValue=""
                           id={
                             Array [
                               "id1",
                             ]
                           }
+                          name={
+                            Array [
+                              "id1",
+                            ]
+                          }
                           onChange={[Function]}
-                          startAdornment={
-                            <WithStyles(ForwardRef(InputAdornment))
-                              position="start"
-                            >
-                              <Memo(AccountCircleIcon) />
-                            </WithStyles(ForwardRef(InputAdornment))>
-                          }
-                          value=""
-                        >
-                          <WithStyles(ForwardRef(InputBase))
-                            classes={
-                              Object {
-                                "colorSecondary": "PodBrowser-colorSecondary",
-                                "disabled": "PodBrowser-disabled",
-                                "error": "PodBrowser-error",
-                                "focused": "PodBrowser-focused",
-                                "formControl": "PodBrowser-formControl",
-                                "fullWidth": "PodBrowser-fullWidth",
-                                "input": "PodBrowser-input",
-                                "inputMarginDense": "PodBrowser-inputMarginDense",
-                                "inputMultiline": "PodBrowser-inputMultiline",
-                                "inputTypeSearch": "PodBrowser-inputTypeSearch",
-                                "marginDense": "PodBrowser-marginDense",
-                                "multiline": "PodBrowser-multiline",
-                                "root": "PodBrowser-root PodBrowser-underline",
-                                "underline": null,
-                              }
-                            }
-                            fullWidth={false}
-                            id={
-                              Array [
-                                "id1",
-                              ]
-                            }
-                            inputComponent="input"
-                            multiline={false}
-                            onChange={[Function]}
-                            startAdornment={
-                              <WithStyles(ForwardRef(InputAdornment))
-                                position="start"
-                              >
-                                <Memo(AccountCircleIcon) />
-                              </WithStyles(ForwardRef(InputAdornment))>
-                            }
-                            type="text"
-                            value=""
-                          >
-                            <ForwardRef(InputBase)
-                              classes={
-                                Object {
-                                  "adornedEnd": "PodBrowser-adornedEnd",
-                                  "adornedStart": "PodBrowser-adornedStart",
-                                  "colorSecondary": "PodBrowser-colorSecondary PodBrowser-colorSecondary",
-                                  "disabled": "PodBrowser-disabled PodBrowser-disabled",
-                                  "error": "PodBrowser-error PodBrowser-error",
-                                  "focused": "PodBrowser-focused PodBrowser-focused",
-                                  "formControl": "PodBrowser-formControl PodBrowser-formControl",
-                                  "fullWidth": "PodBrowser-fullWidth PodBrowser-fullWidth",
-                                  "input": "PodBrowser-input PodBrowser-input",
-                                  "inputAdornedEnd": "PodBrowser-inputAdornedEnd",
-                                  "inputAdornedStart": "PodBrowser-inputAdornedStart",
-                                  "inputHiddenLabel": "PodBrowser-inputHiddenLabel",
-                                  "inputMarginDense": "PodBrowser-inputMarginDense PodBrowser-inputMarginDense",
-                                  "inputMultiline": "PodBrowser-inputMultiline PodBrowser-inputMultiline",
-                                  "inputTypeSearch": "PodBrowser-inputTypeSearch PodBrowser-inputTypeSearch",
-                                  "marginDense": "PodBrowser-marginDense PodBrowser-marginDense",
-                                  "multiline": "PodBrowser-multiline PodBrowser-multiline",
-                                  "root": "PodBrowser-root PodBrowser-root PodBrowser-underline",
-                                }
-                              }
-                              fullWidth={false}
-                              id={
-                                Array [
-                                  "id1",
-                                ]
-                              }
-                              inputComponent="input"
-                              multiline={false}
-                              onChange={[Function]}
-                              startAdornment={
-                                <WithStyles(ForwardRef(InputAdornment))
-                                  position="start"
-                                >
-                                  <Memo(AccountCircleIcon) />
-                                </WithStyles(ForwardRef(InputAdornment))>
-                              }
-                              type="text"
-                              value=""
-                            >
-                              <div
-                                className="PodBrowser-root PodBrowser-root PodBrowser-underline PodBrowser-formControl PodBrowser-formControl PodBrowser-adornedStart"
-                                onClick={[Function]}
-                              >
-                                <WithStyles(ForwardRef(InputAdornment))
-                                  position="start"
-                                >
-                                  <ForwardRef(InputAdornment)
-                                    classes={
-                                      Object {
-                                        "disablePointerEvents": "PodBrowser-disablePointerEvents",
-                                        "filled": "PodBrowser-filled",
-                                        "hiddenLabel": "PodBrowser-hiddenLabel",
-                                        "marginDense": "PodBrowser-marginDense",
-                                        "positionEnd": "PodBrowser-positionEnd",
-                                        "positionStart": "PodBrowser-positionStart",
-                                        "root": "PodBrowser-root",
-                                      }
-                                    }
-                                    position="start"
-                                  >
-                                    <div
-                                      className="PodBrowser-root PodBrowser-positionStart"
-                                    >
-                                      <ForwardRef>
-                                        <WithStyles(ForwardRef(SvgIcon))>
-                                          <ForwardRef(SvgIcon)
-                                            classes={
-                                              Object {
-                                                "colorAction": "PodBrowser-colorAction",
-                                                "colorDisabled": "PodBrowser-colorDisabled",
-                                                "colorError": "PodBrowser-colorError",
-                                                "colorPrimary": "PodBrowser-colorPrimary",
-                                                "colorSecondary": "PodBrowser-colorSecondary",
-                                                "fontSizeInherit": "PodBrowser-fontSizeInherit",
-                                                "fontSizeLarge": "PodBrowser-fontSizeLarge",
-                                                "fontSizeSmall": "PodBrowser-fontSizeSmall",
-                                                "root": "PodBrowser-root",
-                                              }
-                                            }
-                                          >
-                                            <svg
-                                              aria-hidden={true}
-                                              className="PodBrowser-root"
-                                              focusable="false"
-                                              viewBox="0 0 24 24"
-                                            >
-                                              <path
-                                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
-                                              />
-                                            </svg>
-                                          </ForwardRef(SvgIcon)>
-                                        </WithStyles(ForwardRef(SvgIcon))>
-                                      </ForwardRef>
-                                    </div>
-                                  </ForwardRef(InputAdornment)>
-                                </WithStyles(ForwardRef(InputAdornment))>
-                                <input
-                                  aria-invalid={false}
-                                  className="PodBrowser-input PodBrowser-input PodBrowser-inputAdornedStart"
-                                  disabled={false}
-                                  id={
-                                    Array [
-                                      "id1",
-                                    ]
-                                  }
-                                  onAnimationStart={[Function]}
-                                  onBlur={[Function]}
-                                  onChange={[Function]}
-                                  onFocus={[Function]}
-                                  required={false}
-                                  type="text"
-                                  value=""
-                                />
-                              </div>
-                            </ForwardRef(InputBase)>
-                          </WithStyles(ForwardRef(InputBase))>
-                        </ForwardRef(Input)>
-                      </WithStyles(ForwardRef(Input))>
+                          type="text"
+                        />
+                      </SimpleInput>
                     </div>
-                  </ForwardRef(FormControl)>
-                </WithStyles(ForwardRef(FormControl))>
-                <WithStyles(ForwardRef(Button))
-                  className="PodBrowser-agentAddButton"
+                  </InputGroup>
+                </Input>
+                <Button
                   onClick={[Function]}
-                  variant="contained"
                 >
-                  <ForwardRef(Button)
-                    className="PodBrowser-agentAddButton"
-                    classes={
-                      Object {
-                        "colorInherit": "PodBrowser-colorInherit",
-                        "contained": "PodBrowser-contained",
-                        "containedPrimary": "PodBrowser-containedPrimary",
-                        "containedSecondary": "PodBrowser-containedSecondary",
-                        "containedSizeLarge": "PodBrowser-containedSizeLarge",
-                        "containedSizeSmall": "PodBrowser-containedSizeSmall",
-                        "disableElevation": "PodBrowser-disableElevation",
-                        "disabled": "PodBrowser-disabled",
-                        "endIcon": "PodBrowser-endIcon",
-                        "focusVisible": "PodBrowser-focusVisible",
-                        "fullWidth": "PodBrowser-fullWidth",
-                        "iconSizeLarge": "PodBrowser-iconSizeLarge",
-                        "iconSizeMedium": "PodBrowser-iconSizeMedium",
-                        "iconSizeSmall": "PodBrowser-iconSizeSmall",
-                        "label": "PodBrowser-label",
-                        "outlined": "PodBrowser-outlined",
-                        "outlinedPrimary": "PodBrowser-outlinedPrimary",
-                        "outlinedSecondary": "PodBrowser-outlinedSecondary",
-                        "outlinedSizeLarge": "PodBrowser-outlinedSizeLarge",
-                        "outlinedSizeSmall": "PodBrowser-outlinedSizeSmall",
-                        "root": "PodBrowser-root",
-                        "sizeLarge": "PodBrowser-sizeLarge",
-                        "sizeSmall": "PodBrowser-sizeSmall",
-                        "startIcon": "PodBrowser-startIcon",
-                        "text": "PodBrowser-text",
-                        "textPrimary": "PodBrowser-textPrimary",
-                        "textSecondary": "PodBrowser-textSecondary",
-                        "textSizeLarge": "PodBrowser-textSizeLarge",
-                        "textSizeSmall": "PodBrowser-textSizeSmall",
-                      }
-                    }
+                  <button
+                    className="PodBrowser-button"
                     onClick={[Function]}
-                    variant="contained"
                   >
-                    <WithStyles(ForwardRef(ButtonBase))
-                      className="PodBrowser-root PodBrowser-contained PodBrowser-agentAddButton"
-                      component="button"
-                      disabled={false}
-                      focusRipple={true}
-                      focusVisibleClassName="PodBrowser-focusVisible"
-                      onClick={[Function]}
-                      type="button"
-                    >
-                      <ForwardRef(ButtonBase)
-                        className="PodBrowser-root PodBrowser-contained PodBrowser-agentAddButton"
-                        classes={
-                          Object {
-                            "disabled": "PodBrowser-disabled",
-                            "focusVisible": "PodBrowser-focusVisible",
-                            "root": "PodBrowser-root",
-                          }
-                        }
-                        component="button"
-                        disabled={false}
-                        focusRipple={true}
-                        focusVisibleClassName="PodBrowser-focusVisible"
-                        onClick={[Function]}
-                        type="button"
-                      >
-                        <button
-                          className="PodBrowser-root PodBrowser-root PodBrowser-contained PodBrowser-agentAddButton"
-                          disabled={false}
-                          onBlur={[Function]}
-                          onClick={[Function]}
-                          onDragLeave={[Function]}
-                          onFocus={[Function]}
-                          onKeyDown={[Function]}
-                          onKeyUp={[Function]}
-                          onMouseDown={[Function]}
-                          onMouseLeave={[Function]}
-                          onMouseUp={[Function]}
-                          onTouchEnd={[Function]}
-                          onTouchMove={[Function]}
-                          onTouchStart={[Function]}
-                          tabIndex={0}
-                          type="button"
-                        >
-                          <span
-                            className="PodBrowser-label"
-                          >
-                            Add Contact
-                          </span>
-                          <WithStyles(memo)
-                            center={false}
-                          >
-                            <ForwardRef(TouchRipple)
-                              center={false}
-                              classes={
-                                Object {
-                                  "child": "PodBrowser-child",
-                                  "childLeaving": "PodBrowser-childLeaving",
-                                  "childPulsate": "PodBrowser-childPulsate",
-                                  "ripple": "PodBrowser-ripple",
-                                  "ripplePulsate": "PodBrowser-ripplePulsate",
-                                  "rippleVisible": "PodBrowser-rippleVisible",
-                                  "root": "PodBrowser-root",
-                                }
-                              }
-                            >
-                              <span
-                                className="PodBrowser-root"
-                              >
-                                <TransitionGroup
-                                  childFactory={[Function]}
-                                  component={null}
-                                  exit={true}
-                                />
-                              </span>
-                            </ForwardRef(TouchRipple)>
-                          </WithStyles(memo)>
-                        </button>
-                      </ForwardRef(ButtonBase)>
-                    </WithStyles(ForwardRef(ButtonBase))>
-                  </ForwardRef(Button)>
-                </WithStyles(ForwardRef(Button))>
+                    Add Contact
+                  </button>
+                </Button>
               </AgentSearchForm>
             </div>
           </AddContact>

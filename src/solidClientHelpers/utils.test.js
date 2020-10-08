@@ -168,6 +168,16 @@ describe("defineThing", () => {
     expect(opTwo).toHaveBeenCalledWith("thing:one");
     expect(thing).toEqual("thing:one:two");
   });
+  test("it correctly applies options when creating a thing", () => {
+    const url = "https://www.example.org/";
+    const mockThing = mockThingFrom(url);
+
+    const thing = defineThing({ url });
+    const thingUrl = solidClientFns.asUrl(thing);
+    const mockThingUrl = solidClientFns.asUrl(mockThing);
+
+    expect(thingUrl).toEqual(mockThingUrl);
+  });
 });
 
 describe("displayTypes", () => {
