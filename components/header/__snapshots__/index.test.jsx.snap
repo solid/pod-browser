@@ -1050,6 +1050,11 @@ font-display: block;",
               </div>
               <nav
                 className="PodBrowser-header-banner__main-nav"
+                style={
+                  Object {
+                    "display": "flex",
+                  }
+                }
               >
                 <ul
                   className="PodBrowser-main-nav__list"
