@@ -32,7 +32,8 @@ export default function mockFetch(responses = {}) {
     } else {
       throw new Error(`URL (${url}) not mocked properly`);
     }
-    response.url = url;
+    const urlObj = new URL(url);
+    response.url = urlObj.origin + urlObj.pathname; // to mimic that calls for /card#me are actually /card
     return Promise.resolve(response);
   });
 }

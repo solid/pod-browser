@@ -26,7 +26,6 @@ import {
   getThing,
   getUrl,
   asUrl,
-  getSourceUrl,
 } from "@inrupt/solid-client";
 import { space, vcard, foaf } from "rdf-namespaces";
 
@@ -54,7 +53,7 @@ export async function fetchProfile(webId, fetch) {
   const profile = getThing(dataset, webId);
   return {
     ...getProfileFromPersonDataset(dataset),
-    webId: getSourceUrl(dataset),
+    webId,
     dataset,
     pods: getIriAll(profile, space.storage),
   };
