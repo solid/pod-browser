@@ -25,10 +25,5 @@ export default function getIdentityProviders() {
       label: "inrupt.net",
       iri: "https://inrupt.net/",
     },
-
-    "solid.community": {
-      label: "solid.community",
-      iri: "https://solid.community/",
-    },
   };
 }

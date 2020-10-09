@@ -866,7 +866,6 @@ font-display: block;",
                   options={
                     Array [
                       "https://inrupt.net/",
-                      "https://solid.community/",
                     ]
                   }
                   renderInput={[Function]}
@@ -907,7 +906,6 @@ font-display: block;",
                     options={
                       Array [
                         "https://inrupt.net/",
-                        "https://solid.community/",
                       ]
                     }
                     renderInput={[Function]}
