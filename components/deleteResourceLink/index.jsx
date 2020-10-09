@@ -21,49 +21,42 @@
 
 import React from "react";
 import T from "prop-types";
-import {
-  ActionMenu,
-  ActionMenuItem,
-  Drawer,
-} from "@inrupt/prism-react-components";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-} from "@material-ui/core";
-import { ExpandMore } from "@material-ui/icons";
-import DeleteContactLink from "../../deleteContactLink";
+import { deleteFile } from "@inrupt/solid-client";
+import { useSession } from "@inrupt/solid-ui-react";
+import DeleteLink from "../deleteLink";
 
-export default function ContactsDrawer({ open, onClose, onDelete }) {
-  const actionMenuBem = ActionMenu.useBem();
+/* eslint react/jsx-props-no-spreading: 0 */
+export default function DeleteResourceLink({
+  name,
+  resourceIri,
+  onDelete,
+  ...linkProps
+}) {
+  const { fetch } = useSession();
+
+  const handleDelete = async () => {
+    await deleteFile(resourceIri, { fetch });
+    onDelete();
+  };
 
   return (
-    <Drawer open={open} close={onClose}>
-      <Accordion defaultExpanded square>
-        <AccordionSummary expandIcon={<ExpandMore />}>Actions</AccordionSummary>
-        <AccordionDetails>
-          <ActionMenu>
-            <ActionMenuItem>
-              <DeleteContactLink
-                className={actionMenuBem("action-menu__trigger", "danger")}
-                onDelete={onDelete}
-              />
-            </ActionMenuItem>
-          </ActionMenu>
-        </AccordionDetails>
-      </Accordion>
-    </Drawer>
+    <DeleteLink
+      confirmationTitle="Confirm Delete"
+      confirmationContent={`Are you sure you wish to delete ${decodeURIComponent(
+        name
+      )}?`}
+      dialogId={`delete-resource-${resourceIri}`}
+      onDelete={handleDelete}
+      successMessage={`${decodeURIComponent(name)} was successfully deleted.`}
+      {...linkProps}
+    >
+      Delete
+    </DeleteLink>
   );
 }
 
-ContactsDrawer.propTypes = {
-  open: T.bool,
-  onClose: T.func,
-  onDelete: T.func,
-};
-
-ContactsDrawer.defaultProps = {
-  open: false,
-  onClose: () => {},
-  onDelete: () => {},
+DeleteResourceLink.propTypes = {
+  name: T.string.isRequired,
+  resourceIri: T.string.isRequired,
+  onDelete: T.func.isRequired,
 };

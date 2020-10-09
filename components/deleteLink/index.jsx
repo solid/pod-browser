@@ -21,8 +21,6 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
-import { deleteFile } from "@inrupt/solid-client";
-import { useSession } from "@inrupt/solid-ui-react";
 import AlertContext from "../../src/contexts/alertContext";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
 
@@ -38,14 +36,12 @@ export function handleConfirmation({
   setContent,
   setConfirmationSetup,
 }) {
-  return (confirmationSetup, confirmed, name) => {
+  return (confirmationSetup, confirmed, title, content) => {
     if (open !== dialogId) return;
     if (confirmationSetup && confirmed === null) return;
 
-    setTitle("Confirm Delete");
-    setContent(
-      <p>{`Are you sure you wish to delete ${decodeURIComponent(name)}?`}</p>
-    );
+    setTitle(title);
+    setContent(<p>{content}</p>);
     setConfirmationSetup(true);
 
     if (confirmationSetup && confirmed) {
@@ -60,21 +56,18 @@ export function handleConfirmation({
 }
 
 export function handleDeleteResource({
-  fetch,
-  name,
   onDelete,
   onDeleteError,
-  resourceIri,
   setAlertOpen,
   setMessage,
   setSeverity,
+  successMessage,
 }) {
   return async () => {
     try {
-      await deleteFile(resourceIri, { fetch });
-      onDelete();
+      await onDelete();
       setSeverity("success");
-      setMessage(`${decodeURIComponent(name)} was successfully deleted.`);
+      setMessage(successMessage);
       setAlertOpen(true);
     } catch (err) {
       onDeleteError(err);
@@ -83,15 +76,15 @@ export function handleDeleteResource({
 }
 /* eslint react/jsx-props-no-spreading: 0 */
 export default function DeleteLink({
-  name,
-  resourceIri,
+  confirmationTitle,
+  confirmationContent,
+  dialogId,
   onDelete,
+  successMessage,
   ...linkProps
 }) {
-  const { fetch } = useSession();
   const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
-  const dialogId = `delete-resource-${resourceIri}`;
 
   const {
     confirmed,
@@ -109,14 +102,12 @@ export default function DeleteLink({
   }
 
   const deleteResource = handleDeleteResource({
-    name,
-    resourceIri,
-    fetch,
     onDelete,
     onDeleteError,
     setAlertOpen,
     setMessage,
     setSeverity,
+    successMessage,
   });
 
   const onConfirmation = handleConfirmation({
@@ -131,8 +122,19 @@ export default function DeleteLink({
   });
 
   useEffect(() => {
-    onConfirmation(confirmationSetup, confirmed, name);
-  }, [confirmationSetup, confirmed, onConfirmation, name]);
+    onConfirmation(
+      confirmationSetup,
+      confirmed,
+      confirmationTitle,
+      confirmationContent
+    );
+  }, [
+    confirmationSetup,
+    confirmed,
+    onConfirmation,
+    confirmationTitle,
+    confirmationContent,
+  ]);
 
   /* eslint jsx-a11y/anchor-has-content: 0 */
   return (
@@ -146,7 +148,9 @@ export default function DeleteLink({
 }
 
 DeleteLink.propTypes = {
-  name: T.string.isRequired,
-  resourceIri: T.string.isRequired,
+  confirmationTitle: T.string.isRequired,
+  confirmationContent: T.string.isRequired,
+  dialogId: T.string.isRequired,
   onDelete: T.func.isRequired,
+  successMessage: T.string.isRequired,
 };

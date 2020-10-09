@@ -37,7 +37,7 @@ import { ActionMenu, ActionMenuItem } from "@inrupt/prism-react-components";
 import { DatasetContext } from "@inrupt/solid-ui-react";
 import { getContentType, getSourceUrl } from "@inrupt/solid-client";
 import styles from "./styles";
-import DeleteLink from "../deleteLink";
+import DeleteResourceLink from "../deleteResourceLink";
 import DownloadLink from "../downloadLink";
 import ResourceSharing from "./resourceSharing";
 import { getIriPath } from "../../src/solidClientHelpers/utils";
@@ -98,15 +98,13 @@ export default function ResourceDetails({ onDelete }) {
               </button>
             </ActionMenuItem>
             <ActionMenuItem>
-              <DeleteLink
+              <DeleteResourceLink
                 className={actionMenuBem("action-menu__trigger", "danger")}
                 resourceIri={datasetUrl}
                 name={displayName}
                 onDelete={onDelete}
                 data-testid={TESTCAFE_ID_DOWNLOAD_BUTTON}
-              >
-                Delete
-              </DeleteLink>
+              />
             </ActionMenuItem>
           </ActionMenu>
         </AccordionDetails>

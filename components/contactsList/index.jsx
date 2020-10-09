@@ -69,9 +69,9 @@ function ContactsList() {
   const [selectedContactIndex, setSelectedContactIndex] = useState(null);
 
   const closeDrawer = () => setSelectedContactIndex(null);
-  const handleDeleteContact = async (contactToDeleteIndex) => {
-    const contactToDelete = people[contactToDeleteIndex];
-    await deleteContact(contactToDelete, fetch);
+  const handleDeleteContact = async () => {
+    const selectedContact = people[selectedContactIndex];
+    await deleteContact(selectedContact, fetch);
     peopleMutate();
     closeDrawer();
   };
@@ -80,7 +80,7 @@ function ContactsList() {
     <ContactsDrawer
       open={selectedContactIndex !== null}
       onClose={closeDrawer}
-      onDelete={() => handleDeleteContact(selectedContactIndex)}
+      onDelete={handleDeleteContact}
     />
   );
 

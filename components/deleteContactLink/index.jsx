@@ -21,49 +21,24 @@
 
 import React from "react";
 import T from "prop-types";
-import {
-  ActionMenu,
-  ActionMenuItem,
-  Drawer,
-} from "@inrupt/prism-react-components";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-} from "@material-ui/core";
-import { ExpandMore } from "@material-ui/icons";
-import DeleteContactLink from "../../deleteContactLink";
+import DeleteLink from "../deleteLink";
 
-export default function ContactsDrawer({ open, onClose, onDelete }) {
-  const actionMenuBem = ActionMenu.useBem();
-
+/* eslint react/jsx-props-no-spreading: 0 */
+export default function DeleteContactLink({ onDelete, ...linkProps }) {
   return (
-    <Drawer open={open} close={onClose}>
-      <Accordion defaultExpanded square>
-        <AccordionSummary expandIcon={<ExpandMore />}>Actions</AccordionSummary>
-        <AccordionDetails>
-          <ActionMenu>
-            <ActionMenuItem>
-              <DeleteContactLink
-                className={actionMenuBem("action-menu__trigger", "danger")}
-                onDelete={onDelete}
-              />
-            </ActionMenuItem>
-          </ActionMenu>
-        </AccordionDetails>
-      </Accordion>
-    </Drawer>
+    <DeleteLink
+      confirmationTitle="Delete Contact?"
+      confirmationContent="This action cannot be undone."
+      dialogId="delete-contact"
+      onDelete={onDelete}
+      successMessage="Contact was successfully deleted."
+      {...linkProps}
+    >
+      Delete
+    </DeleteLink>
   );
 }
 
-ContactsDrawer.propTypes = {
-  open: T.bool,
-  onClose: T.func,
-  onDelete: T.func,
-};
-
-ContactsDrawer.defaultProps = {
-  open: false,
-  onClose: () => {},
-  onDelete: () => {},
+DeleteContactLink.propTypes = {
+  onDelete: T.func.isRequired,
 };
