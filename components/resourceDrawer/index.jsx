@@ -58,7 +58,8 @@ export default function ResourceDrawer({ onUpdate }) {
   useEffect(() => {
     if (!resourceIri) return;
     setLoading(true);
-    getResourceInfoWithAcl(resourceIri, { fetch }).then((dataset) => {
+    const encodedResourceIri = encodeURI(resourceIri);
+    getResourceInfoWithAcl(encodedResourceIri, { fetch }).then((dataset) => {
       setDatasetWithAcl(dataset);
       setLoading(false);
     });

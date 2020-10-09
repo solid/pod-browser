@@ -30,6 +30,7 @@ import { mountToJson } from "../../__testUtils/mountWithTheme";
 import mockDetailsContextMenuProvider from "../../__testUtils/mockDetailsContextMenuProvider";
 
 const iri = "/iri/";
+const iriWithSpaces = "/iri with spaces/";
 
 describe("ResourceDrawer view", () => {
   let fetch;
@@ -83,6 +84,25 @@ describe("ResourceDrawer view", () => {
   });
 
   test("it renders a Contents view when the router query has an iri", () => {
+    const tree = mountToJson(
+      <SessionProvider>
+        <DetailsMenuContext>
+          <ResourceDrawer />
+        </DetailsMenuContext>
+      </SessionProvider>
+    );
+    expect(tree).toMatchSnapshot();
+  });
+
+  test("it renders without errors when iri contains spaces", () => {
+    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
+      asPath: "/pathname/",
+      replace: jest.fn(),
+      query: {
+        resourceIri: iriWithSpaces,
+        action: "details",
+      },
+    });
     const tree = mountToJson(
       <SessionProvider>
         <DetailsMenuContext>
