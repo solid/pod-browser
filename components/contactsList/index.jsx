@@ -30,6 +30,7 @@ import {
   PageHeader,
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
+import { getSourceUrl } from "@inrupt/solid-client";
 import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
 import { vcard } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";
@@ -46,6 +47,26 @@ import ContactsDrawer from "./contactsDrawer";
 import ContactsListSearch from "./contactsListSearch";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+
+export function handleClose(setSelectedContactIndex) {
+  return () => setSelectedContactIndex(null);
+}
+
+export function handleDeleteContact({
+  addressBook,
+  closeDrawer,
+  fetch,
+  people,
+  peopleMutate,
+  selectedContactIndex,
+}) {
+  return async () => {
+    const selectedContact = people[selectedContactIndex];
+    await deleteContact(getSourceUrl(addressBook), selectedContact, fetch);
+    peopleMutate();
+    closeDrawer();
+  };
+}
 
 function ContactsList() {
   useRedirectIfLoggedOut();
@@ -68,19 +89,21 @@ function ContactsList() {
 
   const [selectedContactIndex, setSelectedContactIndex] = useState(null);
 
-  const closeDrawer = () => setSelectedContactIndex(null);
-  const handleDeleteContact = async () => {
-    const selectedContact = people[selectedContactIndex];
-    await deleteContact(selectedContact, fetch);
-    peopleMutate();
-    closeDrawer();
-  };
+  const closeDrawer = handleClose(setSelectedContactIndex);
+  const deleteSelectedContact = handleDeleteContact({
+    addressBook,
+    closeDrawer,
+    fetch,
+    people,
+    peopleMutate,
+    selectedContactIndex,
+  });
 
   const drawer = (
     <ContactsDrawer
       open={selectedContactIndex !== null}
       onClose={closeDrawer}
-      onDelete={handleDeleteContact}
+      onDelete={deleteSelectedContact}
     />
   );
 

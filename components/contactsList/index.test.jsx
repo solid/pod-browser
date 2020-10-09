@@ -20,11 +20,13 @@
  */
 
 import React from "react";
+import * as solidClientFns from "@inrupt/solid-client";
+import { deleteContact } from "../../src/addressBook";
 import useAddressBook from "../../src/hooks/useAddressBook";
 import usePeople from "../../src/hooks/usePeople";
 import useProfiles from "../../src/hooks/useProfiles";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
-import ContactsList from "./index";
+import ContactsList, { handleDeleteContact } from "./index";
 import {
   mockPersonDatasetAlice,
   mockPersonDatasetBob,
@@ -32,6 +34,7 @@ import {
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 
+jest.mock("../../src/addressBook");
 jest.mock("../../src/hooks/useAddressBook");
 jest.mock("../../src/hooks/usePeople");
 jest.mock("../../src/hooks/useProfiles");
@@ -150,5 +153,35 @@ describe("ContactsList", () => {
         </SessionProvider>
       )
     ).toMatchSnapshot();
+  });
+});
+
+describe("handleDeleteContact", () => {
+  it("returns a handler that deletes a contact, updates people data and closes drawer", async () => {
+    const addressBookUrl = "http://example.com/contacts";
+    const contact = "contact";
+    const addressBook = "address book";
+    const closeDrawer = jest.fn();
+    const fetch = jest.fn();
+    const people = [contact];
+    const peopleMutate = jest.fn();
+    const selectedContactIndex = 0;
+
+    jest.spyOn(solidClientFns, "getSourceUrl").mockReturnValue(addressBookUrl);
+
+    const handler = handleDeleteContact({
+      addressBook,
+      closeDrawer,
+      fetch,
+      people,
+      peopleMutate,
+      selectedContactIndex,
+    });
+
+    await handler();
+
+    expect(deleteContact).toHaveBeenCalledWith(addressBookUrl, contact, fetch);
+    expect(peopleMutate).toHaveBeenCalled();
+    expect(closeDrawer).toHaveBeenCalled();
   });
 });

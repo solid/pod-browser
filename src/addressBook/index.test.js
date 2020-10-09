@@ -38,6 +38,7 @@ import {
   shortId,
   vcardExtras,
   contactsContainerIri,
+  deleteContact,
 } from "./index";
 
 const {
@@ -464,6 +465,79 @@ describe("saveContact", () => {
 
     expect(contact).toEqual(contactDataset);
     expect(people).toEqual(peopleDataset);
+  });
+});
+
+describe("deleteContact", () => {
+  const addressBookUrl = "https://example.com/contacts";
+  const owner = "https://example.com/card#me";
+  const contactContainerUrl = "http://example.com/contact/id-001/";
+  const contactUrl = `${contactContainerUrl}index.ttl`;
+  const contactToDelete = { iri: contactUrl };
+  const addressBook = createAddressBook({ iri: addressBookUrl, owner });
+  const newAddressBook = createAddressBook({ iri: addressBookUrl, owner });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test("it deletes the contact file and its containing folder", async () => {
+    const fetch = jest.fn();
+    jest
+      .spyOn(resourceFns, "getResource")
+      .mockResolvedValueOnce({ response: addressBook.people });
+
+    jest
+      .spyOn(solidClientFns, "removeThing")
+      .mockReturnValueOnce(newAddressBook.people.dataset);
+
+    const mockDeleteFile = jest
+      .spyOn(solidClientFns, "deleteFile")
+      .mockResolvedValueOnce()
+      .mockResolvedValueOnce();
+
+    jest.spyOn(resourceFns, "saveResource").mockResolvedValueOnce({});
+
+    await deleteContact(addressBookUrl, contactToDelete, fetch);
+    expect(mockDeleteFile).toHaveBeenCalledTimes(2);
+    expect(mockDeleteFile).toHaveBeenNthCalledWith(1, contactUrl, { fetch });
+    expect(mockDeleteFile).toHaveBeenNthCalledWith(2, contactContainerUrl, {
+      fetch,
+    });
+  });
+  test("it updates the people index", async () => {
+    const fetch = jest.fn();
+
+    jest
+      .spyOn(resourceFns, "getResource")
+      .mockResolvedValueOnce({ response: addressBook.people });
+
+    jest
+      .spyOn(solidClientFns, "removeThing")
+      .mockReturnValueOnce(newAddressBook.people.dataset);
+
+    jest
+      .spyOn(solidClientFns, "deleteFile")
+      .mockResolvedValueOnce()
+      .mockResolvedValueOnce();
+
+    const mockSaveResource = jest
+      .spyOn(resourceFns, "saveResource")
+      .mockResolvedValueOnce({});
+
+    await deleteContact(addressBookUrl, contactToDelete, fetch);
+
+    expect(mockSaveResource).toHaveBeenCalledWith(newAddressBook.people, fetch);
+  });
+  test("it returns an error if fetching people index fails", async () => {
+    const fetch = jest.fn();
+
+    jest
+      .spyOn(resourceFns, "getResource")
+      .mockResolvedValueOnce({ error: "error" });
+    await expect(
+      deleteContact(addressBookUrl, contactToDelete, fetch)
+    ).rejects.toEqual("error");
   });
 });
 

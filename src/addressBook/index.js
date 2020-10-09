@@ -29,8 +29,10 @@ import {
   getSourceUrl,
   getStringNoLocaleAll,
   getThing,
+  getThingAll,
   getUrl,
   getUrlAll,
+  removeThing,
   setThing,
 } from "@inrupt/solid-client";
 import { v4 as uuid } from "uuid";
@@ -350,8 +352,30 @@ export async function saveContact(addressBookIri, schema, fetch) {
   return respond({ iri, contact, people });
 }
 
-export async function deleteContact(contactToDelete, fetch) {
+export async function deleteContact(addressBookIri, contactToDelete, fetch) {
+  // TODO: get contact from people index once SOLIDOS-503 is resolved
   const contactIri = contactToDelete.iri;
+  const peopleIri = joinPath(addressBookIri, "people.ttl");
+  const { response: peopleIndex, error: peopleError } = await getResource(
+    peopleIri,
+    fetch
+  );
+  if (peopleError) {
+    throw peopleError;
+  }
+  const peopleIndexThings = getThingAll(peopleIndex.dataset);
+  const peopleIndexEntryToRemove = peopleIndexThings.find((thing) =>
+    asUrl(thing).includes(contactIri)
+  );
+  const updatedPeopleIndex = removeThing(
+    peopleIndex.dataset,
+    peopleIndexEntryToRemove
+  );
+  const updatedPeopleIndexResponse = saveResource(
+    { dataset: updatedPeopleIndex, iri: peopleIri },
+    fetch
+  );
+
   const contactContainerIri = contactIri.substring(
     0,
     contactIri.lastIndexOf("/") + 1
@@ -359,4 +383,8 @@ export async function deleteContact(contactToDelete, fetch) {
 
   await deleteFile(contactIri, { fetch });
   await deleteFile(contactContainerIri, { fetch });
+  const { error: savePeopleError } = await updatedPeopleIndexResponse;
+  if (savePeopleError) {
+    throw savePeopleError;
+  }
 }
