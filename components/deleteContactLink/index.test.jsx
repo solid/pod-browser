@@ -29,7 +29,9 @@ jest.mock("@inrupt/solid-client");
 
 describe("Delete contact link", () => {
   test("it renders a delete contact link", () => {
-    const tree = shallow(<DeleteContactLink onDelete={jest.fn()} />);
+    const tree = shallow(
+      <DeleteContactLink onDelete={jest.fn()} name="Test" />
+    );
 
     expect(shallowToJson(tree)).toMatchSnapshot();
   });

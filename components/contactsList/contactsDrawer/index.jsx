@@ -34,7 +34,12 @@ import {
 import { ExpandMore } from "@material-ui/icons";
 import DeleteContactLink from "../../deleteContactLink";
 
-export default function ContactsDrawer({ open, onClose, onDelete }) {
+export default function ContactsDrawer({
+  open,
+  onClose,
+  onDelete,
+  selectedContactName,
+}) {
   const actionMenuBem = ActionMenu.useBem();
 
   return (
@@ -47,6 +52,7 @@ export default function ContactsDrawer({ open, onClose, onDelete }) {
               <DeleteContactLink
                 className={actionMenuBem("action-menu__trigger", "danger")}
                 onDelete={onDelete}
+                name={selectedContactName}
               />
             </ActionMenuItem>
           </ActionMenu>
@@ -57,13 +63,8 @@ export default function ContactsDrawer({ open, onClose, onDelete }) {
 }
 
 ContactsDrawer.propTypes = {
-  open: T.bool,
-  onClose: T.func,
-  onDelete: T.func,
-};
-
-ContactsDrawer.defaultProps = {
-  open: false,
-  onClose: () => {},
-  onDelete: () => {},
+  open: T.bool.isRequired,
+  onClose: T.func.isRequired,
+  onDelete: T.func.isRequired,
+  selectedContactName: T.string.isRequired,
 };

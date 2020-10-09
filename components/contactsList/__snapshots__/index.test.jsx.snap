@@ -3594,6 +3594,7 @@ font-display: block;",
                     onClose={[Function]}
                     onDelete={[Function]}
                     open={false}
+                    selectedContactName=""
                   />
                 }
                 open={false}
@@ -29341,6 +29342,7 @@ font-display: block;",
                     onClose={[Function]}
                     onDelete={[Function]}
                     open={false}
+                    selectedContactName=""
                   >
                     <Drawer
                       close={[Function]}
@@ -29722,12 +29724,13 @@ font-display: block;",
                                                               >
                                                                 <DeleteContactLink
                                                                   className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                                                                  name=""
                                                                   onDelete={[Function]}
                                                                 >
                                                                   <DeleteLink
                                                                     className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
-                                                                    confirmationContent="This action cannot be undone."
-                                                                    confirmationTitle="Delete Contact?"
+                                                                    confirmationContent="Are you sure you wish to delete  from your contacts?"
+                                                                    confirmationTitle="Delete Contact"
                                                                     dialogId="delete-contact"
                                                                     onDelete={[Function]}
                                                                     successMessage="Contact was successfully deleted."

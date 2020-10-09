@@ -24,11 +24,11 @@ import T from "prop-types";
 import DeleteLink from "../deleteLink";
 
 /* eslint react/jsx-props-no-spreading: 0 */
-export default function DeleteContactLink({ onDelete, ...linkProps }) {
+export default function DeleteContactLink({ onDelete, name, ...linkProps }) {
   return (
     <DeleteLink
-      confirmationTitle="Delete Contact?"
-      confirmationContent="This action cannot be undone."
+      confirmationTitle="Delete Contact"
+      confirmationContent={`Are you sure you wish to delete ${name} from your contacts?`}
       dialogId="delete-contact"
       onDelete={onDelete}
       successMessage="Contact was successfully deleted."
@@ -41,4 +41,5 @@ export default function DeleteContactLink({ onDelete, ...linkProps }) {
 
 DeleteContactLink.propTypes = {
   onDelete: T.func.isRequired,
+  name: T.string.isRequired,
 };

@@ -30,7 +30,7 @@ import {
   PageHeader,
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
-import { getSourceUrl } from "@inrupt/solid-client";
+import { getSourceUrl, getStringNoLocale } from "@inrupt/solid-client";
 import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
 import { vcard } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";
@@ -89,24 +89,6 @@ function ContactsList() {
 
   const [selectedContactIndex, setSelectedContactIndex] = useState(null);
 
-  const closeDrawer = handleClose(setSelectedContactIndex);
-  const deleteSelectedContact = handleDeleteContact({
-    addressBook,
-    closeDrawer,
-    fetch,
-    people,
-    peopleMutate,
-    selectedContactIndex,
-  });
-
-  const drawer = (
-    <ContactsDrawer
-      open={selectedContactIndex !== null}
-      onClose={closeDrawer}
-      onDelete={deleteSelectedContact}
-    />
-  );
-
   if (addressBookError) return addressBookError;
   if (peopleError) return peopleError;
 
@@ -122,6 +104,32 @@ function ContactsList() {
     thing: p,
     dataset: addressBook,
   }));
+
+  const closeDrawer = handleClose(setSelectedContactIndex);
+  const deleteSelectedContact = handleDeleteContact({
+    addressBook,
+    closeDrawer,
+    fetch,
+    people,
+    peopleMutate,
+    selectedContactIndex,
+  });
+
+  const drawer = (
+    <ContactsDrawer
+      open={selectedContactIndex !== null}
+      onClose={closeDrawer}
+      onDelete={deleteSelectedContact}
+      selectedContactName={
+        selectedContactIndex !== null
+          ? getStringNoLocale(
+              people[selectedContactIndex].dataset,
+              formattedNamePredicate
+            )
+          : ""
+      }
+    />
+  );
 
   return (
     <SearchProvider setSearch={setSearch}>

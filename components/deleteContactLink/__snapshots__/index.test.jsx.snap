@@ -2,8 +2,8 @@
 
 exports[`Delete contact link it renders a delete contact link 1`] = `
 <DeleteLink
-  confirmationContent="This action cannot be undone."
-  confirmationTitle="Delete Contact?"
+  confirmationContent="Are you sure you wish to delete Test from your contacts?"
+  confirmationTitle="Delete Contact"
   dialogId="delete-contact"
   onDelete={[MockFunction]}
   successMessage="Contact was successfully deleted."
