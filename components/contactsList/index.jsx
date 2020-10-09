@@ -110,10 +110,7 @@ function ContactsList() {
   if (addressBookError) return addressBookError;
   if (peopleError) return peopleError;
 
-  const isLoading =
-    (!addressBook && !addressBookError) ||
-    (!people && !peopleError) ||
-    !profiles;
+  const isLoading = !addressBook || !people || !profiles;
 
   if (isLoading) return <Spinner />;
 
