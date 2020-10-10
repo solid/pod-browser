@@ -50,7 +50,7 @@
     "react-dom": "^16.13.1",
     "react-id-generator": "^3.0.1",
     "react-jss": "^10.4.0",
-    "react-table": "^7.5.0",
+    "react-table": "^7.5.1",
     "react-transition-group": "^4.4.1",
     "swr": "^0.3.2",
     "uuid": "^8.3.0"
