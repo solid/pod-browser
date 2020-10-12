@@ -19,9 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { PrismTheme, createStyles } from "@solid/lit-prism-patterns";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-const styles = (theme: PrismTheme) =>
+const styles = (theme) =>
   createStyles(theme, ["headerBanner", "icons", "mainNav"]);
 
 export default styles;

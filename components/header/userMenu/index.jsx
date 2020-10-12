@@ -19,22 +19,20 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useState } from "react";
-import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
-import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
+import React, { useState } from "react";
+import { createStyles, makeStyles } from "@material-ui/styles";
+import { useBem } from "@solid/lit-prism-patterns";
 import Link from "next/link";
 import clsx from "clsx";
 import LogOutButton from "../../logout";
 import styles from "./styles";
 
-const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme) as StyleRules)
-);
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 const TESTCAFE_ID_USER_MENU_BUTTON = "user-menu-button";
 
-export default function UserMenu(): ReactElement {
-  const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
+export default function UserMenu() {
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const bem = useBem(useStyles());
 
   const toggleMenu = () => setUserMenuOpen(!userMenuOpen);
