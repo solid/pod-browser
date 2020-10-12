@@ -21,14 +21,21 @@
 
 import { PrismTheme, createStyles } from "@solid/lit-prism-patterns";
 
+const HEADER_HEIGHT = "100px";
+
 const styles = (theme: PrismTheme) =>
   createStyles(theme, ["appLayout", "headerBanner"], {
     logoIndicatorContainer: {
       display: "flex",
+      height: HEADER_HEIGHT,
       flexDirection: "column",
       alignItems: "center",
+      justifyContent: "center",
       marginRight: theme.spacing(2),
-      paddingTop: theme.spacing(2),
+      paddingTop: theme.spacing(1),
+      [theme.breakpoints.up("sm")]: {
+        paddingTop: theme.spacing(2),
+      },
     },
   });
 
