@@ -38,6 +38,8 @@ export default function UserMenu(): ReactElement {
   const bem = useBem(useStyles());
 
   const toggleMenu = () => setUserMenuOpen(!userMenuOpen);
+  const handleMenuOpen = () => setUserMenuOpen(true);
+  const handleMenuClose = () => setUserMenuOpen(false);
 
   return (
     <>
@@ -99,8 +101,8 @@ export default function UserMenu(): ReactElement {
 
       <div
         className={bem("header-banner__aside-menu", "popup")}
-        onMouseEnter={toggleMenu}
-        onMouseLeave={toggleMenu}
+        onMouseEnter={handleMenuOpen}
+        onMouseLeave={handleMenuClose}
       >
         <button
           data-testid={TESTCAFE_ID_USER_MENU_BUTTON}
