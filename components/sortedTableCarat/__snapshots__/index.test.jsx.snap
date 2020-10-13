@@ -1691,10 +1691,10 @@ font-display: block;",
     >
       <SortedTableCarat
         sorted={true}
-        sortedDesc={false}
+        sortedDesc={true}
       >
         <i
-          className="PodBrowser-icon-caret-up PodBrowser-table__icon"
+          className="PodBrowser-icon-caret-down PodBrowser-table__icon"
         />
       </SortedTableCarat>
     </ThemeProvider>

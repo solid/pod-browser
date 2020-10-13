@@ -22,7 +22,6 @@
 import React from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
-import { mount } from "enzyme";
 import { mountToJson } from "../../../../__testUtils/mountWithTheme";
 import * as permissionHelpers from "../../../../src/solidClientHelpers/permissions";
 import AgentAccessList from ".";

@@ -22,6 +22,7 @@
 /* eslint-disable camelcase, no-console, react/forbid-prop-types */
 
 import React, { useState } from "react";
+import T from "prop-types";
 import {
   Accordion,
   AccordionDetails,
@@ -37,10 +38,10 @@ import AddPermissionUsingWebIdButton from "../../addPermissionUsingWebIdButton";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-function ResourceSharing() {
+export default function ResourceSharing({ startLoading }) {
   const actionMenuBem = ActionMenu.useBem();
   const classes = useStyles();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(startLoading);
 
   if (loading) return <CircularProgress color="primary" />;
 
@@ -66,4 +67,10 @@ function ResourceSharing() {
   );
 }
 
-export default ResourceSharing;
+ResourceSharing.propTypes = {
+  startLoading: T.bool,
+};
+
+ResourceSharing.defaultProps = {
+  startLoading: false,
+};

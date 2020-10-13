@@ -23,11 +23,7 @@ import {
   resourceContextRedirect,
   resourceHref,
   urlForResourceAction,
-  urlLookupAndRedirect,
 } from "./index";
-import mockFetch from "../../__testUtils/mockFetch";
-import mockResponse from "../../__testUtils/mockResponse";
-import { DETAILS_CONTEXT_ACTIONS } from "../contexts/detailsMenuContext";
 
 describe("resourceHref", () => {
   test("it generates a resource link", () => {

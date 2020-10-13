@@ -31,4 +31,8 @@ describe("ResourceSharing", () => {
   test("it renders the sharing action component", () => {
     expect(mountToJson(<ResourceSharing />)).toMatchSnapshot();
   });
+
+  test("it renders the spinner if it's loading", () => {
+    expect(mountToJson(<ResourceSharing startLoading />)).toMatchSnapshot();
+  });
 });

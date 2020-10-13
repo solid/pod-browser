@@ -28,8 +28,7 @@ import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function SortedTableCarat(props) {
-  const { sorted, sortedDesc } = props;
+export default function SortedTableCarat({ sorted, sortedDesc }) {
   const bem = useBem(useStyles());
 
   if (!sorted) {

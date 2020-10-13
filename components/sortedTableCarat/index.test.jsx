@@ -32,7 +32,7 @@ describe("Sorted", () => {
   });
 
   test("Displays a downwards facing carat when descending", () => {
-    const tree = mountToJson(<SortedTableCarat sorted sortedDesc={false} />);
+    const tree = mountToJson(<SortedTableCarat sorted sortedDesc />);
     expect(tree).toMatchSnapshot();
   });
 });

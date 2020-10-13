@@ -38,7 +38,6 @@ import {
 import usePodOwnerProfile from "../../../src/hooks/usePodOwnerProfile";
 import defaultTheme from "../../../src/theme";
 
-import * as navigatorFns from "../../../src/navigator";
 import { packageProfile } from "../../../src/solidClientHelpers/profile";
 import { resourceHref } from "../../../src/navigator";
 import { normalizeContainerUrl } from "../../../src/stringHelpers";
