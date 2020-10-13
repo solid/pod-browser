@@ -52,7 +52,7 @@
     "react-jss": "^10.4.0",
     "react-table": "^7.5.0",
     "react-transition-group": "^4.4.1",
-    "swr": "^0.3.2",
+    "swr": "^0.3.3",
     "uuid": "^8.3.0"
   },
   "devDependencies": {
