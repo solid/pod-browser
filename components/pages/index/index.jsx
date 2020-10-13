@@ -23,10 +23,10 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { useSession } from "@inrupt/solid-ui-react";
-import { useFetchPodIrisFromWebId } from "../../../src/hooks/solidClient";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 
 import { resourceHref } from "../../../src/navigator";
+import usePodIrisFromWebId from "../../../src/hooks/usePodIrisFromWebId";
 
 export default function Home() {
   useRedirectIfLoggedOut();
@@ -34,7 +34,7 @@ export default function Home() {
   const router = useRouter();
   const { session } = useSession();
   const { webId = "" } = session.info;
-  const { data: podIris = [] } = useFetchPodIrisFromWebId(webId);
+  const { data: podIris = [] } = usePodIrisFromWebId(webId);
   const [podIri] = podIris;
 
   useEffect(() => {

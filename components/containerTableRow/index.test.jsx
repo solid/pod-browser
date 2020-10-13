@@ -33,7 +33,6 @@ import BookmarksContext from "../../src/contexts/bookmarksContext";
 
 jest.mock("@inrupt/solid-client");
 jest.mock("next/router");
-jest.mock("../../src/hooks/solidClient");
 
 const bookmarks = mockSolidDatasetFrom(
   "https://somepod.com/bookmarks/index.ttl"

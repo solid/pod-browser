@@ -21,26 +21,32 @@
 
 import React from "react";
 import * as RouterFns from "next/router";
+import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
-import * as solidClientHooks from "../../src/hooks/solidClient";
 import Container from "./index";
+import useContainerResourceIris from "../../src/hooks/useContainerResourceIris";
+import useDataset from "../../src/hooks/useDataset";
 
-jest.mock("../../src/hooks/solidClient");
-
-const iri = "https://mypod.myhost.com/public";
+jest.mock("../../src/hooks/useDataset");
+jest.mock("../../src/hooks/useContainerResourceIris");
 
 describe("Container view", () => {
-  beforeEach(() =>
+  const iri = "https://example.com/container/";
+  const container = mockSolidDatasetFrom(iri);
+
+  beforeEach(() => {
+    useDataset.mockReturnValue({ data: container });
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "asPath",
       replace: jest.fn(),
       query: {},
-    })
-  );
+    });
+  });
 
   test("Renders a spinner if data is loading", () => {
-    solidClientHooks.useFetchContainerResourceIris.mockReturnValue({
+    useContainerResourceIris.mockReturnValue({
       data: undefined,
+      mutate: () => {},
     });
 
     const tree = mountToJson(<Container iri={iri} />);
@@ -48,8 +54,9 @@ describe("Container view", () => {
   });
 
   test("Renders a table view without data", () => {
-    solidClientHooks.useFetchContainerResourceIris.mockReturnValue({
+    useContainerResourceIris.mockReturnValue({
       data: [],
+      mutate: () => {},
     });
 
     const tree = mountToJson(<Container iri={iri} />);
@@ -57,14 +64,13 @@ describe("Container view", () => {
   });
 
   test("Renders a table with data", () => {
-    const resources = [
-      "https://myaccount.mypodserver.com/inbox",
-      "https://myaccount.mypodserver.com/private",
-      "https://myaccount.mypodserver.com/note.txt",
-    ];
-
-    solidClientHooks.useFetchContainerResourceIris.mockReturnValue({
-      data: resources,
+    useContainerResourceIris.mockReturnValue({
+      data: [
+        "https://myaccount.mypodserver.com/inbox",
+        "https://myaccount.mypodserver.com/private",
+        "https://myaccount.mypodserver.com/note.txt",
+      ],
+      mutate: () => {},
     });
 
     const tree = mountToJson(<Container iri={iri} />);
@@ -72,23 +78,42 @@ describe("Container view", () => {
   });
 
   it("renders Access Forbidden if the fetch for container returns 401", () => {
-    solidClientHooks.useFetchContainerResourceIris.mockReturnValue({
+    useContainerResourceIris.mockReturnValue({
       error: { message: "401" },
     });
     expect(mountToJson(<Container iri={iri} />)).toMatchSnapshot();
   });
 
   it("renders Access Forbidden if the fetch for container returns 403", () => {
-    solidClientHooks.useFetchContainerResourceIris.mockReturnValue({
+    useContainerResourceIris.mockReturnValue({
       error: { message: "403" },
     });
     expect(mountToJson(<Container iri={iri} />)).toMatchSnapshot();
   });
 
   it("renders Access Forbidden if the fetch for container returns 404", () => {
-    solidClientHooks.useFetchContainerResourceIris.mockReturnValue({
+    useContainerResourceIris.mockReturnValue({
       error: { message: "404" },
     });
     expect(mountToJson(<Container iri={iri} />)).toMatchSnapshot();
+  });
+
+  it("renders Not supported if the fetch for container returns 500", () => {
+    useContainerResourceIris.mockReturnValue({
+      error: { message: "500" },
+    });
+    expect(mountToJson(<Container iri={iri} />)).toMatchSnapshot();
+  });
+
+  it("renders Not Supported if resource loaded is not a container", () => {
+    const resourceIri = "http://example.com/resource";
+    useDataset.mockReturnValue({
+      data: mockSolidDatasetFrom(resourceIri),
+    });
+    useContainerResourceIris.mockReturnValue({
+      data: [],
+      mutate: () => {},
+    });
+    expect(mountToJson(<Container iri={resourceIri} />)).toMatchSnapshot();
   });
 });

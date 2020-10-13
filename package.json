@@ -38,7 +38,6 @@
     "@solid/lit-prism-patterns": "0.9.1",
     "@solid/lit-prism-theme-sdk-default": "0.9.1",
     "@zeit/next-source-maps": "0.0.4-canary.1",
-    "camelcase": "^6.0.0",
     "encoding": "^0.1.13",
     "jss": "^10.4.0",
     "jss-preset-default": "^10.4.0",

@@ -52,17 +52,6 @@ export function joinPath(root, ...paths) {
   return [root.replace(/\/$/, ""), ...paths].join("/");
 }
 
-export function hasHash(string) {
-  const parts = parseUrl(string);
-  return !!parts.hash;
+export function normalizeContainerUrl(url) {
+  return joinPath(url, "");
 }
-
-export function stripHash(string) {
-  return string.replace(/#/, "");
-}
-
-export function capitalize(string) {
-  return string.replace(/^\w/, (c) => c.toUpperCase());
-}
-
-export default { parseUrl, stripQueryParams, isUrl, joinPath };

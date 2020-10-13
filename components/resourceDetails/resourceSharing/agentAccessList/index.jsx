@@ -30,6 +30,8 @@ import AgentAccess from "../agentAccess";
 import { getPermissions } from "../../../../src/solidClientHelpers/permissions";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
+  "agent-access-list-show-all";
 
 function AgentAccessList({ onLoading }) {
   const classes = useStyles();
@@ -65,8 +67,12 @@ function AgentAccessList({ onLoading }) {
           </ListItem>
         ))}
       </List>
-      {showAll ? null : (
-        <Button onClick={() => setShowAll(true)} variant="action">
+      {showAll || permissions.length < 3 ? null : (
+        <Button
+          data-testid={TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL}
+          onClick={() => setShowAll(true)}
+          variant="action"
+        >
           Show all
         </Button>
       )}

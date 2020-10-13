@@ -23,7 +23,7 @@ import { useSession } from "@inrupt/solid-ui-react";
 import useSWR from "swr";
 import { fetchProfile } from "../../solidClientHelpers/profile";
 
-const FETCH_PROFILE = "fetchProfile";
+export const FETCH_PROFILE = "fetchProfile";
 export default function useFetchProfile(webId) {
   const { fetch } = useSession();
   return useSWR(webId ? [webId, FETCH_PROFILE] : null, () =>

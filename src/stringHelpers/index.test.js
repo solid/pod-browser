@@ -19,7 +19,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { parseUrl, isUrl, stripQueryParams } from "./index";
+import {
+  parseUrl,
+  isUrl,
+  stripQueryParams,
+  normalizeContainerUrl,
+  joinPath,
+} from "./index";
+
+describe("joinPath", () => {
+  it("joins two strings with slash", () =>
+    expect(joinPath("foo", "bar")).toEqual("foo/bar"));
+  it("joins two strings with slash, and takes care to not get double slashes if first string ends with a slash", () =>
+    expect(joinPath("foo/", "bar")).toEqual("foo/bar"));
+});
+
+describe("normalizeContainerUrl", () => {
+  it("should leave urls with slash on the end alone", () =>
+    expect(normalizeContainerUrl("http://example.com/")).toEqual(
+      "http://example.com/"
+    ));
+  it("should normalize urls without slash on the end", () =>
+    expect(normalizeContainerUrl("http://example.com")).toEqual(
+      "http://example.com/"
+    ));
+});
 
 describe("parseUrl", () => {
   test("it parses a given url into parts", () => {

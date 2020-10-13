@@ -25,14 +25,14 @@ import { mountToJson } from "enzyme-to-json";
 import Router, * as nextRouterFns from "next/router";
 
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import { useFetchPodIrisFromWebId } from "../../../src/hooks/solidClient";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import IndexPage from "./index";
 import mockSession from "../../../__testUtils/mockSession";
 import { resourceHref } from "../../../src/navigator";
+import usePodIrisFromWebId from "../../../src/hooks/usePodIrisFromWebId";
 
 jest.mock("../../../src/effects/auth");
-jest.mock("../../../src/hooks/solidClient");
+jest.mock("../../../src/hooks/usePodIrisFromWebId");
 jest.mock("@inrupt/solid-client");
 jest.mock("next/router");
 
@@ -41,7 +41,7 @@ describe("Index page", () => {
 
   beforeEach(() => {
     Router.push.mockReturnValue(null);
-    useFetchPodIrisFromWebId.mockReturnValue({
+    usePodIrisFromWebId.mockReturnValue({
       data: [podIri],
     });
   });
@@ -54,7 +54,7 @@ describe("Index page", () => {
       replace: jest.fn().mockResolvedValue(undefined),
     });
 
-    useFetchPodIrisFromWebId.mockReturnValue({
+    usePodIrisFromWebId.mockReturnValue({
       data: undefined,
     });
 

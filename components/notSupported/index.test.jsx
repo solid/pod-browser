@@ -19,39 +19,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { getSolidDataset, saveSolidDatasetAt } from "@inrupt/solid-client";
-import { parseUrl } from "../stringHelpers";
-import { createResponder, isContainerIri } from "./utils";
+import React from "react";
+import { useRouter } from "next/router";
+import { mountToJson } from "../../__testUtils/mountWithTheme";
+import AccessForbidden from "./index";
 
-export function getResourceName(iri) {
-  let { pathname } = parseUrl(iri);
-  if (isContainerIri(pathname)) {
-    pathname = pathname.substring(0, pathname.length - 1);
-  }
-  const encodedURISegment =
-    pathname.match(/(?!\/)(?:.(?!\/))+$/)?.toString() || "";
-  return decodeURIComponent(encodedURISegment);
-}
+jest.mock("next/router");
 
-export async function getResource(iri, fetch) {
-  const { respond, error } = createResponder();
+describe("NotSupported", () => {
+  beforeEach(() => {
+    useRouter.mockImplementation(() => ({
+      query: {
+        iri: encodeURIComponent("https://mypod.myhost.com"),
+      },
+    }));
+  });
 
-  try {
-    const dataset = await getSolidDataset(iri, { fetch });
-    const resource = { dataset, iri };
-
-    return respond(resource);
-  } catch (e) {
-    return error(e.message);
-  }
-}
-
-export async function saveResource({ dataset, iri }, fetch) {
-  const { respond, error } = createResponder();
-  try {
-    const response = await saveSolidDatasetAt(iri, dataset, { fetch });
-    return respond(response);
-  } catch (e) {
-    return error(e.message);
-  }
-}
+  it("renders", () =>
+    expect(mountToJson(<AccessForbidden />)).toMatchSnapshot());
+});

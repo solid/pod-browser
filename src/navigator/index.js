@@ -19,10 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { getResourceInfo, getSourceUrl } from "@inrupt/solid-client";
-import { isContainerIri, isHTTPError } from "../solidClientHelpers/utils";
-import { DETAILS_CONTEXT_ACTIONS } from "../contexts/detailsMenuContext";
-
 export function resourceHref(iri) {
   return `/resource/${encodeURIComponent(iri)}`;
 }
@@ -49,44 +45,4 @@ export function resourceContextRedirect(
     urlForResourceAction(action, resourceIri, undefined),
     urlForResourceAction(action, resourceIri, containerIri)
   );
-}
-
-export async function urlLookupAndRedirect(url, router, { fetch }) {
-  try {
-    const resourceInfo = await getResourceInfo(url, { fetch });
-    const resourceSourceUrl = getSourceUrl(resourceInfo);
-    if (isContainerIri(resourceSourceUrl)) {
-      await router.replace("/resource/[iri]", resourceHref(resourceSourceUrl));
-      return true;
-    }
-    const parentUrlParts = resourceSourceUrl.split("/");
-    const parentUrl = `${parentUrlParts
-      .slice(0, parentUrlParts.length - 1)
-      .join("/")}/`;
-    const parentResourceInfo = await getResourceInfo(parentUrl, { fetch });
-    const parentSourceUrl = getSourceUrl(parentResourceInfo);
-    await router.replace(
-      {
-        pathname: "/resource/[iri]",
-        query: {
-          action: DETAILS_CONTEXT_ACTIONS.DETAILS,
-          resourceIri: resourceSourceUrl,
-        },
-      },
-      resourceHref(parentSourceUrl)
-    );
-    return true;
-  } catch (err) {
-    if (
-      !isHTTPError(err.message, 401) &&
-      !isHTTPError(err.message, 403) &&
-      !isHTTPError(err.message, 404)
-    ) {
-      await router.replace("/access-required");
-      return false;
-    }
-    // if we're able to fetch the resource at all (e.g. not a CORS-problem), we allow navigating to that resource to show the error in the navigator
-    await router.replace("/resource/[iri]", resourceHref(url));
-  }
-  return true;
 }

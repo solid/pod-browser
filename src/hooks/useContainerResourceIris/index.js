@@ -21,40 +21,22 @@
 
 /* eslint-disable camelcase */
 import useSWR from "swr";
-import { space, ldp } from "rdf-namespaces";
+import { ldp } from "rdf-namespaces";
 
-import { getSolidDataset, getIriAll, getThing } from "@inrupt/solid-client";
+import { getIriAll, getSolidDataset, getThing } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
 
-export async function fetchContainerResourceIris(containerIri, fetch) {
+async function fetchContainerResourceIris(containerIri, fetch) {
   const litDataset = await getSolidDataset(containerIri, { fetch });
   const container = getThing(litDataset, containerIri);
-  const iris = getIriAll(container, ldp.contains);
-  return iris;
+  return getIriAll(container, ldp.contains);
 }
 
 export const GET_CONTAINER_RESOURCE_IRIS = "getContainerResourceIris";
-/* istanbul ignore next */
-export function useFetchContainerResourceIris(iri) {
+export default function useContainerResourceIris(iri) {
   const { session } = useSession();
 
   return useSWR([iri, GET_CONTAINER_RESOURCE_IRIS], () =>
     fetchContainerResourceIris(iri, session.fetch)
-  );
-}
-
-export async function fetchPodIrisFromWebId(webId, fetch) {
-  const profileDoc = await getSolidDataset(webId, { fetch });
-  const profile = getThing(profileDoc, webId);
-
-  return getIriAll(profile, space.storage);
-}
-
-export const FETCH_POD_IRIS_FROM_WEB_ID = "fetchPodIrisFromWebId";
-/* istanbul ignore next */
-export function useFetchPodIrisFromWebId(webId) {
-  const { session } = useSession();
-  return useSWR([webId, FETCH_POD_IRIS_FROM_WEB_ID], () =>
-    fetchPodIrisFromWebId(webId, session.fetch)
   );
 }

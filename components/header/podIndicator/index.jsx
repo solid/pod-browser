@@ -23,15 +23,14 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useRouter } from "next/router";
-import { useSession } from "@inrupt/solid-ui-react";
 import { useBem } from "@solid/lit-prism-patterns";
 import Popover from "@material-ui/core/Popover";
 import { Form, Input } from "@inrupt/prism-react-components";
 import Skeleton from "@material-ui/lab/Skeleton";
 import usePodOwnerProfile from "../../../src/hooks/usePodOwnerProfile";
 import styles from "./styles";
-import { urlLookupAndRedirect } from "../../../src/navigator";
-import { isHTTPError } from "../../../src/solidClientHelpers/utils";
+import { resourceHref } from "../../../src/navigator";
+import { normalizeContainerUrl } from "../../../src/stringHelpers";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -40,16 +39,16 @@ export const clickHandler = (setAnchorEl) => (event) =>
 
 export const closeHandler = (setAnchorEl) => () => setAnchorEl(null);
 
-export const submitHandler = (handleClose) => async (
+export const submitHandler = (handleClose, setUrl) => async (
   event,
   url,
-  router,
-  fetch
+  router
 ) => {
   event.preventDefault();
-  if (await urlLookupAndRedirect(url, router, { fetch })) {
-    handleClose();
-  }
+  const containerUrl = normalizeContainerUrl(url);
+  await router.replace("/resource/[iri]", resourceHref(containerUrl));
+  handleClose();
+  setUrl("");
 };
 
 export default function PodIndicator() {
@@ -57,7 +56,6 @@ export default function PodIndicator() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [url, setUrl] = useState("");
   const router = useRouter();
-  const { fetch } = useSession();
   const bem = useBem(useStyles());
   const { profile, error } = usePodOwnerProfile();
   const loading = !profile && !error;
@@ -66,12 +64,7 @@ export default function PodIndicator() {
   const id = open ? "pod-navigator" : undefined;
   const handleClick = clickHandler(setAnchorEl);
   const handleClose = closeHandler(setAnchorEl);
-  const onSubmit = submitHandler(handleClose);
-
-  if (error && !isHTTPError(error.message, 403)) {
-    // we'll accept 403s, but nothing else
-    throw error;
-  }
+  const onSubmit = submitHandler(handleClose, setUrl);
 
   return (
     <div className={classes.indicator}>
@@ -108,7 +101,7 @@ export default function PodIndicator() {
             horizontal: "left",
           }}
         >
-          <Form onSubmit={(event) => onSubmit(event, url, router, fetch)}>
+          <Form onSubmit={(event) => onSubmit(event, url, router)}>
             <Input
               id="PodNavigator"
               label="Go to Pod"

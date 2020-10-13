@@ -26,10 +26,10 @@ import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 
+import { isContainer } from "@inrupt/solid-client";
 import ContainerTableRow, { renderResourceType } from "../containerTableRow";
 import SortedTableCarat from "../sortedTableCarat";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
-import { useFetchContainerResourceIris } from "../../src/hooks/solidClient";
 import { getResourceName } from "../../src/solidClientHelpers/resource";
 
 import Spinner from "../spinner";
@@ -41,6 +41,9 @@ import { BookmarksContextProvider } from "../../src/contexts/bookmarksContext";
 import { isHTTPError } from "../../src/solidClientHelpers/utils";
 import AccessForbidden from "../accessForbidden";
 import ResourceNotFound from "../resourceNotFound";
+import useDataset from "../../src/hooks/useDataset";
+import NotSupported from "../notSupported";
+import useContainerResourceIris from "../../src/hooks/useContainerResourceIris";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -48,11 +51,10 @@ export default function Container({ iri }) {
   useRedirectIfLoggedOut();
   const encodedIri = encodeURI(iri);
 
-  const { data: resourceIris, mutate, error } = useFetchContainerResourceIris(
-    encodedIri
-  );
+  const { data: container, error } = useDataset(iri);
+  const { data: resourceIris, mutate } = useContainerResourceIris(encodedIri);
 
-  const loading = typeof resourceIris === "undefined";
+  const loading = !resourceIris || !container;
 
   const bem = useBem(useStyles());
 
@@ -114,11 +116,13 @@ export default function Container({ iri }) {
   if (error && isHTTPError(error.message, 401)) return <AccessForbidden />;
   if (error && isHTTPError(error.message, 403)) return <AccessForbidden />;
   if (error && isHTTPError(error.message, 404)) return <ResourceNotFound />;
-  if (error) throw error;
+  if (error) return <NotSupported />;
 
   if (loading) {
     return <Spinner />;
   }
+
+  if (!isContainer(container)) return <NotSupported />;
 
   // react-table works through spreads.
   /* eslint react/jsx-props-no-spreading: 0 */

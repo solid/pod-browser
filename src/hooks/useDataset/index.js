@@ -19,39 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { getSolidDataset, saveSolidDatasetAt } from "@inrupt/solid-client";
-import { parseUrl } from "../stringHelpers";
-import { createResponder, isContainerIri } from "./utils";
+import { useSession } from "@inrupt/solid-ui-react";
+import useSWR from "swr";
+import { getSolidDataset } from "@inrupt/solid-client";
 
-export function getResourceName(iri) {
-  let { pathname } = parseUrl(iri);
-  if (isContainerIri(pathname)) {
-    pathname = pathname.substring(0, pathname.length - 1);
-  }
-  const encodedURISegment =
-    pathname.match(/(?!\/)(?:.(?!\/))+$/)?.toString() || "";
-  return decodeURIComponent(encodedURISegment);
-}
+export const GET_DATASET = "getDataset";
 
-export async function getResource(iri, fetch) {
-  const { respond, error } = createResponder();
-
-  try {
-    const dataset = await getSolidDataset(iri, { fetch });
-    const resource = { dataset, iri };
-
-    return respond(resource);
-  } catch (e) {
-    return error(e.message);
-  }
-}
-
-export async function saveResource({ dataset, iri }, fetch) {
-  const { respond, error } = createResponder();
-  try {
-    const response = await saveSolidDatasetAt(iri, dataset, { fetch });
-    return respond(response);
-  } catch (e) {
-    return error(e.message);
-  }
+export default function useDataset(iri) {
+  const { fetch } = useSession();
+  return useSWR([iri, GET_DATASET], () => getSolidDataset(iri, { fetch }));
 }

@@ -25,8 +25,6 @@ import { DatasetProvider } from "@inrupt/solid-ui-react";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 import ResourceDetails from "./index";
 
-jest.mock("../../src/hooks/solidClient");
-
 describe("Resource details", () => {
   test("it renders container details", () => {
     const dataset = mockSolidDatasetFrom("http://example.com/container/");

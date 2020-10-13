@@ -40,6 +40,8 @@ import defaultTheme from "../../../src/theme";
 
 import * as navigatorFns from "../../../src/navigator";
 import { packageProfile } from "../../../src/solidClientHelpers/profile";
+import { resourceHref } from "../../../src/navigator";
+import { normalizeContainerUrl } from "../../../src/stringHelpers";
 
 jest.mock("next/router");
 jest.mock("../../../src/hooks/usePodOwnerProfile");
@@ -115,42 +117,27 @@ describe("closeHandler", () => {
 });
 
 describe("submitHandler", () => {
-  const router = "router";
-  const fetch = "fetch";
-  const url = "url";
+  const url = "http://url.com";
   let event;
   let handleClose;
+  let setUrl;
+  const router = {};
 
   beforeEach(() => {
     event = { preventDefault: jest.fn() };
     handleClose = jest.fn();
+    setUrl = jest.fn();
+    router.replace = jest.fn();
   });
 
   test("it sets up a submit handler", async () => {
-    jest.spyOn(navigatorFns, "urlLookupAndRedirect").mockResolvedValue(false);
-    await submitHandler(handleClose)(event, url, router, fetch);
+    await submitHandler(handleClose, setUrl)(event, url, router);
     expect(event.preventDefault).toHaveBeenCalledWith();
-    expect(navigatorFns.urlLookupAndRedirect).toHaveBeenCalledWith(
-      url,
-      router,
-      {
-        fetch,
-      }
-    );
-    expect(handleClose).not.toHaveBeenCalled();
-  });
-
-  test("closes on successful redirect", async () => {
-    jest.spyOn(navigatorFns, "urlLookupAndRedirect").mockResolvedValue(true);
-    await submitHandler(handleClose)(event, url, router, fetch);
-    expect(event.preventDefault).toHaveBeenCalledWith();
-    expect(navigatorFns.urlLookupAndRedirect).toHaveBeenCalledWith(
-      url,
-      router,
-      {
-        fetch,
-      }
+    expect(router.replace).toHaveBeenCalledWith(
+      "/resource/[iri]",
+      resourceHref(normalizeContainerUrl(url))
     );
     expect(handleClose).toHaveBeenCalledWith();
+    expect(setUrl).toHaveBeenCalledWith("");
   });
 });

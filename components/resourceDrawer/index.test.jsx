@@ -143,4 +143,17 @@ describe("handleCloseDrawer", () => {
     expect(setMenuOpen).toHaveBeenCalledWith(false);
     expect(router.replace).toHaveBeenCalledWith("/resource/[iri]", "/path");
   });
+
+  it("defaults pathname to /", async () => {
+    const setMenuOpen = jest.fn();
+    const router = {
+      asPath: "?with=query",
+      replace: jest.fn(),
+    };
+    const handler = handleCloseDrawer({ setMenuOpen, router });
+    await handler();
+
+    expect(setMenuOpen).toHaveBeenCalledWith(false);
+    expect(router.replace).toHaveBeenCalledWith("/resource/[iri]", "/");
+  });
 });
