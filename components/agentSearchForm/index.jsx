@@ -22,34 +22,39 @@
 import React, { useState } from "react";
 import { useId } from "react-id-generator";
 import T from "prop-types";
-import { Button, Input } from "@inrupt/prism-react-components";
-
-export function handleClick({ setAgentId, onSubmit }) {
-  return (agentId) => {
-    setAgentId("");
-    onSubmit(agentId);
-  };
-}
-
-export function handleChange(setAgentId) {
-  return ({ target: { value } }) => {
-    setAgentId(value);
-  };
-}
+import { Form, Button, Input } from "@inrupt/prism-react-components";
 
 function AgentSearchForm({ children, onSubmit, buttonText }) {
   const [agentId, setAgentId] = useState("");
-  const onClick = handleClick({ setAgentId, onSubmit });
-  const onChange = handleChange(setAgentId);
   const inputId = useId();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    onSubmit(agentId);
+    setAgentId("");
+  };
+
+  const handleChange = (event) => {
+    setAgentId(event.target.value);
+  };
+
   return (
-    <>
-      <Input id={inputId} label="WebID" onChange={onChange} value={agentId} />
+    <Form onSubmit={handleSubmit}>
+      <Input
+        id={inputId}
+        label="WebID"
+        onChange={handleChange}
+        value={agentId}
+        required
+        type="url"
+        pattern="https://.+"
+        title="Must start with https://"
+      />
 
       {children}
 
-      <Button onClick={() => onClick(agentId)}>{buttonText}</Button>
-    </>
+      <Button type="submit">{buttonText}</Button>
+    </Form>
   );
 }
 
