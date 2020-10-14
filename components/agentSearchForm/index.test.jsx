@@ -19,9 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { render, fireEvent } from "@testing-library/react";
 import React from "react";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
-import AgentSearchForm, { handleClick, handleChange } from "./index";
+import AgentSearchForm from "./index";
 
 describe("AgentSearchForm", () => {
   test("it renders an AgentSearchForm", () => {
@@ -40,28 +41,25 @@ describe("AgentSearchForm", () => {
 
     expect(tree).toMatchSnapshot();
   });
-});
-
-describe("handleClick", () => {
-  test("it returns a handler that clears the agentId input and calls onSubmit", () => {
-    const setAgentId = jest.fn();
+  test("it calls onSubmit when clicking the submit button", () => {
     const onSubmit = jest.fn();
-    const onClick = handleClick({ setAgentId, onSubmit });
-
-    onClick("agentId");
-
-    expect(setAgentId).toHaveBeenCalledWith("");
-    expect(onSubmit).toHaveBeenCalledWith("agentId");
+    const wrapper = render(<AgentSearchForm onSubmit={onSubmit} />);
+    const input = wrapper.getByRole("textbox");
+    fireEvent.change(input, { target: { value: "https://www.example.com" } });
+    const button = wrapper.getByRole("button");
+    fireEvent.click(button);
+    expect(onSubmit).toHaveBeenCalledWith("https://www.example.com");
   });
-});
-
-describe("handleChange", () => {
-  test("it returns a handler that sets the agentId", () => {
+  test("it clears the input box before calling onSubmit", () => {
+    const onSubmit = jest.fn();
     const setAgentId = jest.fn();
-    const onChange = handleChange(setAgentId);
-
-    onChange({ target: { value: "test" } });
-
-    expect(setAgentId).toHaveBeenCalledWith("test");
+    const useStateSpy = jest.spyOn(React, "useState");
+    useStateSpy.mockImplementation((agentId) => [agentId, setAgentId]);
+    const wrapper = render(<AgentSearchForm onSubmit={onSubmit} />);
+    const input = wrapper.getByRole("textbox");
+    fireEvent.change(input, { target: { value: "https://www.example.com" } });
+    const button = wrapper.getByRole("button");
+    fireEvent.click(button);
+    expect(setAgentId).toHaveBeenCalledWith("");
   });
 });

@@ -1824,82 +1824,102 @@ font-display: block;",
                 heading="Add contact using Web ID"
                 onSubmit={[Function]}
               >
-                <Input
-                  id={
-                    Array [
-                      "id1",
-                    ]
-                  }
-                  label="WebID"
-                  onChange={[Function]}
-                  value=""
+                <Form
+                  onSubmit={[Function]}
                 >
-                  <InputGroup>
-                    <div
-                      className="PodBrowser-input-group"
-                    >
-                      <Label
-                        htmlFor={
-                          Array [
-                            "id1",
-                          ]
-                        }
-                      >
-                        <label
-                          className="PodBrowser-label"
-                          htmlFor={
-                            Array [
-                              "id1",
-                            ]
-                          }
-                        >
-                          WebID
-                        </label>
-                      </Label>
-                      <SimpleInput
-                        id={
-                          Array [
-                            "id1",
-                          ]
-                        }
-                        name={
-                          Array [
-                            "id1",
-                          ]
-                        }
-                        onChange={[Function]}
-                        value=""
-                      >
-                        <input
-                          className="PodBrowser-input"
-                          defaultValue=""
-                          id={
-                            Array [
-                              "id1",
-                            ]
-                          }
-                          name={
-                            Array [
-                              "id1",
-                            ]
-                          }
-                          onChange={[Function]}
-                          type="text"
-                        />
-                      </SimpleInput>
-                    </div>
-                  </InputGroup>
-                </Input>
-                <Button
-                  onClick={[Function]}
-                >
-                  <button
-                    className="PodBrowser-button"
-                    onClick={[Function]}
+                  <form
+                    className="PodBrowser-form"
+                    onSubmit={[Function]}
                   >
-                    Add Contact
-                  </button>
-                </Button>
+                    <Input
+                      id={
+                        Array [
+                          "id1",
+                        ]
+                      }
+                      label="WebID"
+                      onChange={[Function]}
+                      pattern="https://.+"
+                      required={true}
+                      title="Must start with https://"
+                      type="url"
+                      value=""
+                    >
+                      <InputGroup>
+                        <div
+                          className="PodBrowser-input-group"
+                        >
+                          <Label
+                            htmlFor={
+                              Array [
+                                "id1",
+                              ]
+                            }
+                          >
+                            <label
+                              className="PodBrowser-label"
+                              htmlFor={
+                                Array [
+                                  "id1",
+                                ]
+                              }
+                            >
+                              WebID
+                            </label>
+                          </Label>
+                          <SimpleInput
+                            id={
+                              Array [
+                                "id1",
+                              ]
+                            }
+                            name={
+                              Array [
+                                "id1",
+                              ]
+                            }
+                            onChange={[Function]}
+                            pattern="https://.+"
+                            required={true}
+                            title="Must start with https://"
+                            type="url"
+                            value=""
+                          >
+                            <input
+                              className="PodBrowser-input"
+                              defaultValue=""
+                              id={
+                                Array [
+                                  "id1",
+                                ]
+                              }
+                              name={
+                                Array [
+                                  "id1",
+                                ]
+                              }
+                              onChange={[Function]}
+                              pattern="https://.+"
+                              required={true}
+                              title="Must start with https://"
+                              type="url"
+                            />
+                          </SimpleInput>
+                        </div>
+                      </InputGroup>
+                    </Input>
+                    <Button
+                      type="submit"
+                    >
+                      <button
+                        className="PodBrowser-button"
+                        type="submit"
+                      >
+                        Add Contact
+                      </button>
+                    </Button>
+                  </form>
+                </Form>
               </AgentSearchForm>
             </div>
           </AddContact>
