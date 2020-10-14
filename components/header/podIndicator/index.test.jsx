@@ -126,17 +126,25 @@ describe("submitHandler", () => {
     event = { preventDefault: jest.fn() };
     handleClose = jest.fn();
     setUrl = jest.fn();
-    router.replace = jest.fn();
+    router.push = jest.fn();
   });
 
   test("it sets up a submit handler", async () => {
     await submitHandler(handleClose, setUrl)(event, url, router);
     expect(event.preventDefault).toHaveBeenCalledWith();
-    expect(router.replace).toHaveBeenCalledWith(
+    expect(router.push).toHaveBeenCalledWith(
       "/resource/[iri]",
       resourceHref(normalizeContainerUrl(url))
     );
     expect(handleClose).toHaveBeenCalledWith();
     expect(setUrl).toHaveBeenCalledWith("");
+  });
+
+  it("should do nothing if no url is given", async () => {
+    await submitHandler(handleClose, setUrl)(event, "", router);
+    expect(event.preventDefault).toHaveBeenCalledWith();
+    expect(router.push).not.toHaveBeenCalled();
+    expect(handleClose).not.toHaveBeenCalled();
+    expect(setUrl).not.toHaveBeenCalled();
   });
 });

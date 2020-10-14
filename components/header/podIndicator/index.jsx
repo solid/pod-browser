@@ -32,6 +32,9 @@ import styles from "./styles";
 import { resourceHref } from "../../../src/navigator";
 import { normalizeContainerUrl } from "../../../src/stringHelpers";
 
+const TESTCAFE_ID_POD_NAVIGATE_INPUT = "pod-navigate-input";
+const TESTCAFE_ID_POD_NAVIGATE_TRIGGER = "pod-indicator-prompt";
+
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export const clickHandler = (setAnchorEl) => (event) =>
@@ -45,8 +48,11 @@ export const submitHandler = (handleClose, setUrl) => async (
   router
 ) => {
   event.preventDefault();
+  if (url === "") {
+    return;
+  }
   const containerUrl = normalizeContainerUrl(url);
-  await router.replace("/resource/[iri]", resourceHref(containerUrl));
+  await router.push("/resource/[iri]", resourceHref(containerUrl));
   handleClose();
   setUrl("");
 };
@@ -74,7 +80,7 @@ export default function PodIndicator() {
           <Skeleton width={100} style={{ display: "inline-block" }} />
         ) : (
           <button
-            data-testid="pod-indicator-prompt"
+            data-testid={TESTCAFE_ID_POD_NAVIGATE_TRIGGER}
             id="pod-indicator-prompt"
             type="button"
             aria-describedby={id}
@@ -104,9 +110,13 @@ export default function PodIndicator() {
           <Form onSubmit={(event) => onSubmit(event, url, router)}>
             <Input
               id="PodNavigator"
+              data-testid={TESTCAFE_ID_POD_NAVIGATE_INPUT}
               label="Go to Pod"
               value={url}
               onChange={(event) => setUrl(event.target.value)}
+              type="url"
+              pattern="https://.*"
+              title="Must start with https://"
             />
           </Form>
         </Popover>
