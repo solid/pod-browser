@@ -24,16 +24,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import { createStyles, makeStyles, Popover } from "@material-ui/core";
-import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
 import { InputGroup, Label, Message } from "@inrupt/prism-react-components";
 import AgentSearchForm from "../agentSearchForm";
 import PermissionsForm from "../permissionsForm";
 import {
   createAccessMap,
   isEmptyAccess,
-  saveAllPermissions,
 } from "../../src/solidClientHelpers/permissions";
 import styles from "./styles";
+import AccessControlContext from "../../src/contexts/accessControlContext";
 
 const POPOVER_ID = "AddPermissionWithWebId";
 
@@ -68,15 +67,13 @@ export function closeHandler(
 }
 
 export function submitHandler(
+  accessControl,
   onLoading,
   setSubmitted,
   access,
   setPermissionFormError,
   setDisabled,
-  dataset,
-  setDataset,
-  handleClose,
-  fetch
+  handleClose
 ) {
   return async (agentId) => {
     onLoading(true);
@@ -86,14 +83,11 @@ export function submitHandler(
       return;
     }
     setDisabled(true);
-    const { response, error } = await saveAllPermissions(
-      dataset,
+    const { error } = await accessControl.savePermissionsForAgent(
       agentId,
-      access,
-      fetch
+      access
     );
     if (error) throw error;
-    setDataset(response);
     handleClose();
   };
 }
@@ -104,10 +98,9 @@ export default function AddPermissionUsingWebIdButton({
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [access, setAccess] = useState(createAccessMap(true));
-  const { fetch } = useSession();
   const classes = useStyles();
   const [disabled, setDisabled] = useState(false);
-  const { dataset, setDataset } = useContext(DatasetContext);
+  const { accessControl } = useContext(AccessControlContext);
   const [submitted, setSubmitted] = useState(false);
   const [permissionFormError, setPermissionFormError] = useState(false);
   const [agentId, setAgentId] = useState("");
@@ -125,15 +118,13 @@ export default function AddPermissionUsingWebIdButton({
   );
 
   const onSubmit = submitHandler(
+    accessControl,
     onLoading,
     setSubmitted,
     access,
     setPermissionFormError,
     setDisabled,
-    dataset,
-    setDataset,
-    handleClose,
-    fetch
+    handleClose
   );
 
   useEffect(() => {

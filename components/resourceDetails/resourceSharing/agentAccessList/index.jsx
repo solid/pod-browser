@@ -23,11 +23,10 @@ import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import { CircularProgress, List, ListItem } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/styles";
-import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
 import { Button } from "@inrupt/prism-react-components";
 import styles from "./styles";
 import AgentAccess from "../agentAccess";
-import { getPermissions } from "../../../../src/solidClientHelpers/permissions";
+import AccessControlContext from "../../../../src/contexts/accessControlContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
@@ -35,20 +34,21 @@ export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
 
 function AgentAccessList({ onLoading }) {
   const classes = useStyles();
-  const { fetch } = useSession();
-  const [permissions, setPermissions] = useState([]);
+  const [permissions, setPermissions] = useState(null);
   const [showAll, setShowAll] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const { dataset } = useContext(DatasetContext);
+  const { accessControl } = useContext(AccessControlContext);
 
   useEffect(() => {
-    if (!dataset) return;
-    setLoading(true);
-    getPermissions(dataset, fetch).then((normalizedPermissions) => {
+    if (!accessControl) {
+      setPermissions(null);
+      return;
+    }
+    accessControl.getPermissions().then((normalizedPermissions) => {
       setPermissions(normalizedPermissions.reverse());
-      setLoading(false);
     });
-  }, [dataset, fetch]);
+  }, [accessControl]);
+
+  const loading = !permissions;
 
   if (loading) return <CircularProgress color="primary" />;
 

@@ -844,7 +844,22 @@ font-display: block;",
         <g
           session={
             Object {
-              "fetch": [MockFunction],
+              "fetch": [MockFunction] {
+                "calls": Array [
+                  Array [
+                    "/iri/",
+                    Object {
+                      "method": "HEAD",
+                    },
+                  ],
+                ],
+                "results": Array [
+                  Object {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
               "handleIncomingRedirect": [MockFunction] {
                 "calls": Array [
                   Array [
@@ -2388,8 +2403,18 @@ font-display: block;",
                       "method": "HEAD",
                     },
                   ],
+                  Array [
+                    "/iri/",
+                    Object {
+                      "method": "HEAD",
+                    },
+                  ],
                 ],
                 "results": Array [
+                  Object {
+                    "type": "return",
+                    "value": undefined,
+                  },
                   Object {
                     "type": "return",
                     "value": undefined,
@@ -5426,6 +5451,12 @@ font-display: block;",
               "fetch": [MockFunction] {
                 "calls": Array [
                   Array [
+                    "/iri with spaces/",
+                    Object {
+                      "method": "HEAD",
+                    },
+                  ],
+                  Array [
                     "/iri%20with%20spaces/",
                     Object {
                       "method": "HEAD",
@@ -5433,6 +5464,10 @@ font-display: block;",
                   ],
                 ],
                 "results": Array [
+                  Object {
+                    "type": "return",
+                    "value": undefined,
+                  },
                   Object {
                     "type": "return",
                     "value": undefined,

@@ -115,8 +115,8 @@ describe("ResourceDrawer view", () => {
 
   it("fetches dataset with acl", () => {
     jest
-      .spyOn(solidClientFns, "getResourceInfoWithAcl")
-      .mockResolvedValueOnce("datasetWithAcl");
+      .spyOn(solidClientFns, "getResourceInfo")
+      .mockResolvedValueOnce("resourceInfo");
 
     const tree = mountToJson(
       <SessionProvider>
@@ -126,7 +126,7 @@ describe("ResourceDrawer view", () => {
       </SessionProvider>
     );
     expect(tree).toMatchSnapshot();
-    expect(solidClientFns.getResourceInfoWithAcl).toHaveBeenCalled();
+    expect(solidClientFns.getResourceInfo).toHaveBeenCalled();
   });
 });
 

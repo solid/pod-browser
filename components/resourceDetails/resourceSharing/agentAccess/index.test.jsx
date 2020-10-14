@@ -26,7 +26,6 @@ import AgentAccess, { getDialogId, saveHandler, submitHandler } from "./index";
 import { mountToJson } from "../../../../__testUtils/mountWithTheme";
 import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
 import mockConfirmationDialogContextProvider from "../../../../__testUtils/mockConfirmationDialogContextProvider";
-import * as permissionHelpers from "../../../../src/solidClientHelpers/permissions";
 
 jest.mock("../../../../src/solidClientHelpers/permissions");
 
@@ -129,34 +128,31 @@ describe("submitHandler", () => {
 });
 
 describe("saveHandler", () => {
-  let savePermissions;
+  const accessControl = {
+    savePermissionsForAgent: jest.fn().mockResolvedValue({}),
+  };
   let onLoading;
   let setAccess;
-  const dataset = "dataset";
   const webId = "webId";
-  const fetch = "fetch";
-  let setDataset;
   let setTempAccess;
   let setSeverity;
   let setMessage;
   let setAlertOpen;
   const newAccess = "newAccess";
+  let savePermissions;
 
   beforeEach(() => {
     onLoading = jest.fn();
     setAccess = jest.fn();
-    setDataset = jest.fn();
     setTempAccess = jest.fn();
     setSeverity = jest.fn();
     setMessage = jest.fn();
     setAlertOpen = jest.fn();
     savePermissions = saveHandler(
+      accessControl,
       onLoading,
       setAccess,
-      dataset,
       webId,
-      fetch,
-      setDataset,
       setTempAccess,
       setSeverity,
       setMessage,
@@ -165,20 +161,14 @@ describe("saveHandler", () => {
   });
 
   test("save is successful", async () => {
-    const response = "response";
-    jest
-      .spyOn(permissionHelpers, "saveAllPermissions")
-      .mockResolvedValue({ response });
-    await savePermissions(newAccess);
+    await expect(savePermissions(newAccess)).resolves.toBeUndefined();
+
     expect(onLoading).toHaveBeenCalledWith(true);
     expect(setAccess).toHaveBeenCalledWith(newAccess);
-    expect(permissionHelpers.saveAllPermissions).toHaveBeenCalledWith(
-      dataset,
+    expect(accessControl.savePermissionsForAgent).toHaveBeenCalledWith(
       webId,
-      newAccess,
-      fetch
+      newAccess
     );
-    expect(setDataset).toHaveBeenCalledWith(response);
     expect(setTempAccess).toHaveBeenCalledWith(null);
     expect(setSeverity).toHaveBeenCalledWith("success");
     expect(setMessage).toHaveBeenCalledWith("Permissions have been updated!");
@@ -188,17 +178,15 @@ describe("saveHandler", () => {
 
   test("save request fails", async () => {
     const error = "error";
-    jest
-      .spyOn(permissionHelpers, "saveAllPermissions")
-      .mockResolvedValue({ error });
+    accessControl.savePermissionsForAgent.mockResolvedValue({ error });
+
     await expect(savePermissions(newAccess)).rejects.toEqual(error);
+
     expect(onLoading).toHaveBeenCalledWith(true);
     expect(setAccess).toHaveBeenCalledWith(newAccess);
-    expect(permissionHelpers.saveAllPermissions).toHaveBeenCalledWith(
-      dataset,
+    expect(accessControl.savePermissionsForAgent).toHaveBeenCalledWith(
       webId,
-      newAccess,
-      fetch
+      newAccess
     );
   });
 });

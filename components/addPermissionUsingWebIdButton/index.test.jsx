@@ -30,7 +30,6 @@ import AddPermissionUsingWebIdButton, {
   submitHandler,
 } from "./index";
 import { createAccessMap } from "../../src/solidClientHelpers/permissions";
-import * as permissionHelpers from "../../src/solidClientHelpers/permissions";
 
 const datasetUrl = "http://example.com/dataset";
 const dataset = mockSolidDatasetFrom(datasetUrl);
@@ -86,37 +85,35 @@ describe("closeHandler", () => {
 });
 
 describe("submitHandler", () => {
+  let accessControl;
   let onLoading;
   let setSubmitted;
   let setPermissionFormError;
   let setDisabled;
-  let setDataset;
   let handleClose;
-  let fetch;
   const agentId = "agentId";
 
   beforeEach(() => {
+    accessControl = {
+      savePermissionsForAgent: jest.fn().mockResolvedValue({}),
+    };
     onLoading = jest.fn();
     setSubmitted = jest.fn();
     setPermissionFormError = jest.fn();
     setDisabled = jest.fn();
-    setDataset = jest.fn();
     handleClose = jest.fn();
-    fetch = jest.fn();
   });
 
   it("validates whether access is set", async () => {
     const access = createAccessMap();
     const submit = submitHandler(
+      accessControl,
       onLoading,
       setSubmitted,
       access,
       setPermissionFormError,
       setDisabled,
-      dataset,
-      setDataset,
-      handleClose,
-      fetch
+      handleClose
     );
     await expect(submit(agentId)).resolves.toBeUndefined();
     expect(onLoading).toHaveBeenCalledWith(true);
@@ -125,62 +122,47 @@ describe("submitHandler", () => {
   });
 
   it("saves successfully", async () => {
-    const response = "response";
-    jest
-      .spyOn(permissionHelpers, "saveAllPermissions")
-      .mockResolvedValue({ response });
     const access = createAccessMap(true);
     const submit = submitHandler(
+      accessControl,
       onLoading,
       setSubmitted,
       access,
       setPermissionFormError,
       setDisabled,
-      dataset,
-      setDataset,
-      handleClose,
-      fetch
+      handleClose
     );
     await expect(submit(agentId)).resolves.toBeUndefined();
     expect(onLoading).toHaveBeenCalledWith(true);
     expect(setSubmitted).toHaveBeenCalledWith(true);
     expect(setDisabled).toHaveBeenCalledWith(true);
-    expect(permissionHelpers.saveAllPermissions).toHaveBeenCalledWith(
-      dataset,
+    expect(accessControl.savePermissionsForAgent).toHaveBeenCalledWith(
       agentId,
-      access,
-      fetch
+      access
     );
-    expect(setDataset).toHaveBeenCalledWith(response);
     expect(handleClose).toHaveBeenCalledWith();
   });
 
   it("handles failing save request", async () => {
     const error = "error";
-    jest
-      .spyOn(permissionHelpers, "saveAllPermissions")
-      .mockResolvedValue({ error });
     const access = createAccessMap(true);
+    accessControl.savePermissionsForAgent.mockResolvedValue({ error });
     const submit = submitHandler(
+      accessControl,
       onLoading,
       setSubmitted,
       access,
       setPermissionFormError,
       setDisabled,
-      dataset,
-      setDataset,
-      handleClose,
-      fetch
+      handleClose
     );
     await expect(submit(agentId)).rejects.toEqual(error);
     expect(onLoading).toHaveBeenCalledWith(true);
     expect(setSubmitted).toHaveBeenCalledWith(true);
     expect(setDisabled).toHaveBeenCalledWith(true);
-    expect(permissionHelpers.saveAllPermissions).toHaveBeenCalledWith(
-      dataset,
+    expect(accessControl.savePermissionsForAgent).toHaveBeenCalledWith(
       agentId,
-      access,
-      fetch
+      access
     );
   });
 });

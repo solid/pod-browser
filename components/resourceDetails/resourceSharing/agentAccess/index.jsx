@@ -33,7 +33,7 @@ import styles from "./styles";
 import { displayProfileName } from "../../../../src/solidClientHelpers/profile";
 import AlertContext from "../../../../src/contexts/alertContext";
 import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
-import { saveAllPermissions } from "../../../../src/solidClientHelpers/permissions";
+import AccessControlContext from "../../../../src/contexts/accessControlContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -57,12 +57,10 @@ export function submitHandler(
 }
 
 export function saveHandler(
+  accessControl,
   onLoading,
   setAccess,
-  dataset,
   webId,
-  fetch,
-  setDataset,
   setTempAccess,
   setSeverity,
   setMessage,
@@ -72,16 +70,12 @@ export function saveHandler(
     onLoading(true);
     setAccess(newAccess);
 
-    const { response, error } = await saveAllPermissions(
-      dataset,
+    const { error } = await accessControl.savePermissionsForAgent(
       webId,
-      newAccess,
-      fetch
+      newAccess
     );
 
     if (error) throw error;
-
-    setDataset(response);
 
     setTempAccess(null);
     setSeverity("success");
@@ -101,7 +95,6 @@ export default function AgentAccess({
 }) {
   const classes = useStyles();
   const {
-    fetch,
     session: {
       info: { webId: authenticatedWebId },
     },
@@ -109,8 +102,9 @@ export default function AgentAccess({
   const [access, setAccess] = useState(acl);
   const [tempAccess, setTempAccess] = useState(null);
   const { avatar } = profile;
-  const { dataset, setDataset } = useContext(DatasetContext);
+  const { dataset } = useContext(DatasetContext);
   const name = displayProfileName(profile);
+  const { accessControl } = useContext(AccessControlContext);
 
   const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
   const dialogId = getDialogId(getSourceUrl(dataset));
@@ -124,12 +118,10 @@ export default function AgentAccess({
   } = useContext(ConfirmationDialogContext);
 
   const savePermissions = saveHandler(
+    accessControl,
     onLoading,
     setAccess,
-    dataset,
     webId,
-    fetch,
-    setDataset,
     setTempAccess,
     setSeverity,
     setMessage,

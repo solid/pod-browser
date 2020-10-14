@@ -28,8 +28,9 @@ import {
   redirectBasedOnSessionState,
   useRedirectIfLoggedIn,
 } from "./index";
-import mockSession from "../../../__testUtils/mockSession";
+import mockSession, { storageUrl } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
+import * as accessControlFns from "../../accessControl";
 
 jest.mock("next/router");
 jest.mock("../../hooks/useAuthenticatedProfile");
@@ -97,6 +98,45 @@ describe("auth effects", () => {
       );
 
       expect(Router.push).not.toHaveBeenCalledWith(redirectLocation);
+    });
+  });
+
+  describe("useRedirectIfNoControlAccessToOwnPod", () => {
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
+
+    const wrapper = ({ children }) => (
+      <SessionProvider>{children}</SessionProvider>
+    );
+
+    test("Do not get redirected if user has Control access to Pod", async () => {
+      jest
+        .spyOn(accessControlFns, "getAccessControl")
+        .mockResolvedValue({ hasAccess: () => true });
+
+      const { waitForNextUpdate } = renderHook(
+        () => useRedirectIfNoControlAccessToOwnPod(storageUrl),
+        { wrapper }
+      );
+
+      await waitForNextUpdate();
+
+      expect(Router.push).not.toHaveBeenCalledWith();
+    });
+
+    test("Gets redirected if profile do not have Control access to all pods", async () => {
+      jest
+        .spyOn(accessControlFns, "getAccessControl")
+        .mockResolvedValue({ hasAccess: () => false });
+
+      const { waitForNextUpdate } = renderHook(
+        () => useRedirectIfNoControlAccessToOwnPod(storageUrl),
+        { wrapper }
+      );
+
+      await waitForNextUpdate();
+
+      expect(Router.push).toHaveBeenCalled();
     });
   });
 });

@@ -25,8 +25,7 @@ import { DatasetProvider } from "@inrupt/solid-ui-react";
 import { mountToJson } from "../../../../__testUtils/mountWithTheme";
 import * as permissionHelpers from "../../../../src/solidClientHelpers/permissions";
 import AgentAccessList from ".";
-import mockSession from "../../../../__testUtils/mockSession";
-import mockSessionContextProvider from "../../../../__testUtils/mockSessionContextProvider";
+import { AccessControlProvider } from "../../../../src/contexts/accessControlContext";
 
 const datasetUrl = "http://example.com/dataset";
 const dataset = mockSolidDatasetFrom(datasetUrl);
@@ -40,14 +39,9 @@ const permission = {
 };
 
 describe("AgentAccessList", () => {
-  let session;
-  let SessionProvider;
-
-  beforeEach(() => {
-    session = mockSession();
-    SessionProvider = mockSessionContextProvider(session);
-    jest.spyOn(permissionHelpers, "getPermissions").mockResolvedValue([]);
-  });
+  const accessControl = {
+    getPermissions: () => Promise.resolve([]),
+  };
 
   it("renders an AgentAccessList", () => {
     expect(mountToJson(<AgentAccessList />)).toMatchSnapshot();
@@ -56,24 +50,24 @@ describe("AgentAccessList", () => {
   it("renders a about empty list of permissions", () => {
     expect(
       mountToJson(
-        <SessionProvider>
+        <AccessControlProvider accessControl={accessControl}>
           <DatasetProvider dataset={dataset}>
             <AgentAccessList />
           </DatasetProvider>
-        </SessionProvider>
+        </AccessControlProvider>
       )
     ).toMatchSnapshot();
   });
 
   it("renders a list of permissions", () => {
-    permissionHelpers.getPermissions.mockResolvedValue([permission]);
+    accessControl.getPermissions = () => Promise.resolve([permission]);
     expect(
       mountToJson(
-        <SessionProvider>
+        <AccessControlProvider accessControl={accessControl}>
           <DatasetProvider dataset={dataset}>
             <AgentAccessList />
           </DatasetProvider>
-        </SessionProvider>
+        </AccessControlProvider>
       )
     ).toMatchSnapshot();
   });
