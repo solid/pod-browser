@@ -28,9 +28,12 @@ function AgentSearchForm({ children, onSubmit, buttonText }) {
   const [agentId, setAgentId] = useState("");
   const inputId = useId();
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (agentId === "") {
+      return;
+    }
     onSubmit(agentId);
-    setAgentId("");
   };
 
   const handleChange = (event) => {
@@ -44,7 +47,6 @@ function AgentSearchForm({ children, onSubmit, buttonText }) {
         label="WebID"
         onChange={handleChange}
         value={agentId}
-        required
         type="url"
         pattern="https://.+"
         title="Must start with https://"

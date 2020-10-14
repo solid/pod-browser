@@ -50,16 +50,4 @@ describe("AgentSearchForm", () => {
     fireEvent.click(button);
     expect(onSubmit).toHaveBeenCalledWith("https://www.example.com");
   });
-  test("it clears the input box before calling onSubmit", () => {
-    const onSubmit = jest.fn();
-    const setAgentId = jest.fn();
-    const useStateSpy = jest.spyOn(React, "useState");
-    useStateSpy.mockImplementation((agentId) => [agentId, setAgentId]);
-    const wrapper = render(<AgentSearchForm onSubmit={onSubmit} />);
-    const input = wrapper.getByRole("textbox");
-    fireEvent.change(input, { target: { value: "https://www.example.com" } });
-    const button = wrapper.getByRole("button");
-    fireEvent.click(button);
-    expect(setAgentId).toHaveBeenCalledWith("");
-  });
 });

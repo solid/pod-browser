@@ -1840,7 +1840,6 @@ font-display: block;",
                       label="WebID"
                       onChange={[Function]}
                       pattern="https://.+"
-                      required={true}
                       title="Must start with https://"
                       type="url"
                       value=""
@@ -1880,7 +1879,6 @@ font-display: block;",
                             }
                             onChange={[Function]}
                             pattern="https://.+"
-                            required={true}
                             title="Must start with https://"
                             type="url"
                             value=""
@@ -1900,7 +1898,6 @@ font-display: block;",
                               }
                               onChange={[Function]}
                               pattern="https://.+"
-                              required={true}
                               title="Must start with https://"
                               type="url"
                             />
