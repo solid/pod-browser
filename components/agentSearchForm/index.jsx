@@ -28,8 +28,7 @@ function AgentSearchForm({ children, onSubmit, buttonText }) {
   const [agentId, setAgentId] = useState("");
   const inputId = useId();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = () => {
     onSubmit(agentId);
     setAgentId("");
   };
