@@ -41,7 +41,6 @@ export default function ContactsDrawer({
   selectedContactName,
 }) {
   const actionMenuBem = ActionMenu.useBem();
-
   return (
     <Drawer open={open} close={onClose}>
       <Accordion defaultExpanded square>

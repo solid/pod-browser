@@ -39,7 +39,6 @@ export function handleConfirmation({
   return (confirmationSetup, confirmed, title, content) => {
     if (open !== dialogId) return;
     if (confirmationSetup && confirmed === null) return;
-
     setTitle(title);
     setContent(<p>{content}</p>);
     setConfirmationSetup(true);
@@ -51,6 +50,7 @@ export function handleConfirmation({
     if (confirmationSetup && confirmed !== null) {
       setConfirmed(null);
       setOpen(null);
+      setConfirmationSetup(false);
     }
   };
 }
@@ -85,7 +85,6 @@ export default function DeleteLink({
 }) {
   const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
-
   const {
     confirmed,
     open,

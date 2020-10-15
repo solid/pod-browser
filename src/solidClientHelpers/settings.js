@@ -23,7 +23,7 @@ import {
   addStringNoLocale,
   addUrl,
   createThing,
-  fetchResourceInfoWithAcl,
+  getResourceInfoWithAcl,
   getSolidDataset,
   getThing,
   getUrl,
@@ -50,7 +50,7 @@ async function getOrCreatePodBrowserSettingsResourceUrl(
   { fetch }
 ) {
   try {
-    await fetchResourceInfoWithAcl(podBrowserSettingsUrl, { fetch });
+    await getResourceInfoWithAcl(podBrowserSettingsUrl, { fetch });
     return podBrowserSettingsUrl;
   } catch (error) {
     if (!error.toString().match(/404/)) {

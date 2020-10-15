@@ -1248,6 +1248,7 @@ font-display: block;",
                         "internal_resourceInfo": Object {
                           "contentType": "text/turtle",
                           "isRawData": false,
+                          "linkedResources": Object {},
                           "sourceIri": "http://example.com/bookmarks/index.ttl",
                         },
                         "quads": Set {
@@ -1589,6 +1590,7 @@ font-display: block;",
                         "internal_resourceInfo": Object {
                           "contentType": "text/turtle",
                           "isRawData": false,
+                          "linkedResources": Object {},
                           "sourceIri": "http://example.com/bookmarks/index.ttl",
                         },
                         "quads": Set {
@@ -1976,6 +1978,7 @@ font-display: block;",
                             "internal_resourceInfo": Object {
                               "contentType": "text/turtle",
                               "isRawData": false,
+                              "linkedResources": Object {},
                               "sourceIri": "http://example.com/bookmarks/index.ttl",
                             },
                             "quads": Set {
@@ -2321,6 +2324,7 @@ font-display: block;",
                               "internal_resourceInfo": Object {
                                 "contentType": "text/turtle",
                                 "isRawData": false,
+                                "linkedResources": Object {},
                                 "sourceIri": "http://example.com/bookmarks/index.ttl",
                               },
                               "quads": Set {
@@ -15326,6 +15330,7 @@ font-display: block;",
                             "internal_resourceInfo": Object {
                               "contentType": "text/turtle",
                               "isRawData": false,
+                              "linkedResources": Object {},
                               "sourceIri": "http://example.com/bookmarks/index.ttl",
                             },
                             "quads": Set {
@@ -15671,6 +15676,7 @@ font-display: block;",
                               "internal_resourceInfo": Object {
                                 "contentType": "text/turtle",
                                 "isRawData": false,
+                                "linkedResources": Object {},
                                 "sourceIri": "http://example.com/bookmarks/index.ttl",
                               },
                               "quads": Set {

@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import Link from "next/link";
 import { Avatar, createStyles } from "@material-ui/core";
@@ -82,12 +82,23 @@ function ContactsList() {
     addressBook
   );
   const profiles = useProfiles(people);
+  const formattedNamePredicate = vcard.fn;
+  const hasPhotoPredicate = vcard.hasPhoto;
 
   const {
     session: { fetch },
   } = useSession();
 
   const [selectedContactIndex, setSelectedContactIndex] = useState(null);
+  const [selectedContactName, setSelectedContactName] = useState("");
+  useEffect(() => {
+    if (selectedContactIndex === null) return;
+    const name = getStringNoLocale(
+      people[selectedContactIndex].dataset,
+      formattedNamePredicate
+    );
+    setSelectedContactName(name);
+  }, [selectedContactIndex, formattedNamePredicate, people]);
 
   if (addressBookError) return addressBookError;
   if (peopleError) return peopleError;
@@ -95,9 +106,6 @@ function ContactsList() {
   const isLoading = !addressBook || !people || !profiles;
 
   if (isLoading) return <Spinner />;
-
-  const formattedNamePredicate = vcard.fn;
-  const hasPhotoPredicate = vcard.hasPhoto;
 
   // format things for the data table
   const contacts = profiles.map((p) => ({
@@ -120,14 +128,7 @@ function ContactsList() {
       open={selectedContactIndex !== null}
       onClose={closeDrawer}
       onDelete={deleteSelectedContact}
-      selectedContactName={
-        selectedContactIndex !== null
-          ? getStringNoLocale(
-              people[selectedContactIndex].dataset,
-              formattedNamePredicate
-            )
-          : ""
-      }
+      selectedContactName={selectedContactName}
     />
   );
 
@@ -160,7 +161,9 @@ function ContactsList() {
                 ),
                 bem("tableRow")
               ),
-              onClick: () => setSelectedContactIndex(row.index),
+              onClick: () => {
+                setSelectedContactIndex(row.index);
+              },
             };
           }}
         >

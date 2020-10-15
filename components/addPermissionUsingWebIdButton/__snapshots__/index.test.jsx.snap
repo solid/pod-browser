@@ -846,6 +846,7 @@ font-display: block;",
             "internal_resourceInfo": Object {
               "contentType": "text/turtle",
               "isRawData": false,
+              "linkedResources": Object {},
               "sourceIri": "http://example.com/dataset",
             },
             "quads": Set {},
