@@ -114,6 +114,7 @@ export default function PodIndicator() {
               label="Go to Pod"
               value={url}
               onChange={(event) => setUrl(event.target.value)}
+              placeholder="Enter Pod URI"
               type="url"
               pattern="https://.*"
               title="Must start with https://"

@@ -38,6 +38,7 @@ const styles = (theme) =>
     },
     popover: {
       padding: theme.spacing(2, 2, 0),
+      width: 450,
     },
   });
 
