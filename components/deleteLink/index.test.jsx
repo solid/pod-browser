@@ -20,10 +20,11 @@
  */
 
 import React from "react";
-import { shallow } from "enzyme";
+import { shallow, mount } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 
 import DeleteLink, { handleDeleteResource, handleConfirmation } from "./index";
+import mockConfirmationDialogContextProvider from "../../__testUtils/mockConfirmationDialogContextProvider";
 
 jest.mock("@inrupt/solid-client");
 
@@ -43,8 +44,31 @@ describe("Delete link", () => {
         successMessage={successMessage}
       />
     );
-
     expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+  test("clicking on delete link calls setOpen with the correct id", () => {
+    const setOpen = jest.fn();
+    const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
+      open: dialogId,
+      setOpen,
+      setTitle: jest.fn(),
+      setContent: jest.fn(),
+      confirmed: null,
+    });
+    const tree = mount(
+      <ConfirmationDialogProvider>
+        <DeleteLink
+          onDelete={jest.fn()}
+          confirmationTitle={confirmationTitle}
+          confirmationContent={confirmationContent}
+          dialogId={dialogId}
+          successMessage={successMessage}
+        />
+      </ConfirmationDialogProvider>
+    );
+    const link = tree.find("a");
+    link.simulate("click");
+    expect(setOpen).toHaveBeenCalledWith(dialogId);
   });
 });
 
@@ -109,7 +133,6 @@ describe("handleDeleteResource", () => {
     });
 
     await handler();
-
     expect(onDeleteError).toHaveBeenCalledWith(error);
   });
 });
@@ -148,5 +171,12 @@ describe("handleConfirmation", () => {
 
     expect(deleteResource).not.toHaveBeenCalled();
     expect(setConfirmed).toHaveBeenCalledWith(null);
+  });
+  test("it returns a handler that exits when user starts confirmation but hasn't selected an option", async () => {
+    await handler(true, null, confirmationTitle, confirmationContent);
+
+    expect(deleteResource).not.toHaveBeenCalled();
+    expect(setTitle).not.toHaveBeenCalled();
+    expect(setContent).not.toHaveBeenCalled();
   });
 });
