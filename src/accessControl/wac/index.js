@@ -137,8 +137,11 @@ export default class WacAccessControlStrategy {
     return respond(dataset);
   }
 
-  static async init(resourceIri, fetch) {
-    const datasetWithAcl = await getResourceInfoWithAcl(resourceIri, { fetch });
+  static async init(resourceInfo, fetch) {
+    const datasetWithAcl = await getResourceInfoWithAcl(
+      getSourceUrl(resourceInfo),
+      { fetch }
+    );
     return new WacAccessControlStrategy(datasetWithAcl, fetch);
   }
 }

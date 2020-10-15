@@ -19,24 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
-import { mount } from "enzyme";
-import AccessControlContext, { AccessControlProvider } from "./index";
+import { joinPath } from "../../stringHelpers";
 
-function ChildComponent() {
-  const { accessControl } = useContext(AccessControlContext);
-  return <div id="AccessControl">{accessControl.toString()}</div>;
+const POLICIES_CONTAINER = "policies/";
+
+export function getPoliciesContainerUrl(podRootUri) {
+  return joinPath(podRootUri, POLICIES_CONTAINER);
 }
 
-describe("AccessControlContext", () => {
-  test("it provides accessControl", () => {
-    const accessControl = "accessControl";
-    const component = mount(
-      <AccessControlProvider accessControl={{ toString: () => accessControl }}>
-        <ChildComponent />
-      </AccessControlProvider>
-    );
-
-    expect(component.find("#AccessControl").text()).toEqual(accessControl);
-  });
-});
+export default class AcpAccessControlStrategy {
+  // eslint-disable-next-line no-unused-vars
+  static init(resourceInfo, policies, fetch) {
+    // TODO: Implement ACP specific init
+    throw new Error("Not implemented yet");
+  }
+}

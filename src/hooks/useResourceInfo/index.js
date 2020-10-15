@@ -19,24 +19,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
-import { mount } from "enzyme";
-import AccessControlContext, { AccessControlProvider } from "./index";
+import { getResourceInfo } from "@inrupt/solid-client";
+import { useSession } from "@inrupt/solid-ui-react";
+import useSWR from "swr";
 
-function ChildComponent() {
-  const { accessControl } = useContext(AccessControlContext);
-  return <div id="AccessControl">{accessControl.toString()}</div>;
+export const GET_RESOURCE_INFO = "getResourceInfo";
+export default function useResourceInfo(iri) {
+  const { fetch } = useSession();
+
+  return useSWR(
+    iri && iri !== "undefined" ? [iri, GET_RESOURCE_INFO] : null,
+    () => getResourceInfo(iri, { fetch })
+  );
 }
-
-describe("AccessControlContext", () => {
-  test("it provides accessControl", () => {
-    const accessControl = "accessControl";
-    const component = mount(
-      <AccessControlProvider accessControl={{ toString: () => accessControl }}>
-        <ChildComponent />
-      </AccessControlProvider>
-    );
-
-    expect(component.find("#AccessControl").text()).toEqual(accessControl);
-  });
-});

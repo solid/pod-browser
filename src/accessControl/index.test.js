@@ -19,27 +19,66 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import * as solidClientHelperFns from "@inrupt/solid-client";
+import AcpAccessControlStrategy from "./acp";
 import WacAccessControlStrategy from "./wac";
-import { getAccessControl } from "./index";
+import { getAccessControl, noAccessPolicyError } from "./index";
+import * as mockedAcpFns from "./acp/mockedClientApi";
 
+jest.mock("./acp");
 jest.mock("./wac");
 
 describe("getAccessControl", () => {
   let result;
-  const resourceIri = "resourceIri";
+  const resource = "resource";
+  const policies = "policies";
   const fetch = "fetch";
+  const acpStrategy = "acpStrategy";
+  const wacStrategy = "wacStrategy";
 
-  beforeEach(async () => {
-    jest.spyOn(WacAccessControlStrategy, "init").mockReturnValue(42);
-    result = await getAccessControl(resourceIri, fetch);
+  beforeEach(() => {
+    jest.spyOn(solidClientHelperFns, "hasAccessibleAcl").mockReturnValue(false);
+    jest.spyOn(mockedAcpFns, "hasLinkedAcr").mockReturnValue(false);
+    jest.spyOn(WacAccessControlStrategy, "init").mockReturnValue(wacStrategy);
+    jest.spyOn(AcpAccessControlStrategy, "init").mockReturnValue(acpStrategy);
   });
 
-  it("calls WacAccessControlStrategy.init", () =>
-    expect(WacAccessControlStrategy.init).toHaveBeenCalledWith(
-      resourceIri,
-      fetch
-    ));
+  it("throws error if no access link is found", async () => {
+    await expect(getAccessControl(resource, policies, fetch)).rejects.toEqual(
+      new Error(noAccessPolicyError)
+    );
+  });
 
-  it("returns the result from WacAccessControlStrategy.init", () =>
-    expect(result).toBe(42));
+  describe("ACP is supported", () => {
+    beforeEach(async () => {
+      mockedAcpFns.hasLinkedAcr.mockReturnValue(true);
+      result = await getAccessControl(resource, policies, fetch);
+    });
+
+    it("calls AcpAccessControlStrategy.init", () =>
+      expect(AcpAccessControlStrategy.init).toHaveBeenCalledWith(
+        resource,
+        policies,
+        fetch
+      ));
+
+    it("returns the result from WacAccessControlStrategy.init", () =>
+      expect(result).toBe(acpStrategy));
+  });
+
+  describe("WAC is supported", () => {
+    beforeEach(async () => {
+      solidClientHelperFns.hasAccessibleAcl.mockReturnValue(true);
+      result = await getAccessControl(resource, policies, fetch);
+    });
+
+    it("calls WacAccessControlStrategy.init", () =>
+      expect(WacAccessControlStrategy.init).toHaveBeenCalledWith(
+        resource,
+        fetch
+      ));
+
+    it("returns the result from WacAccessControlStrategy.init", () =>
+      expect(result).toBe(wacStrategy));
+  });
 });

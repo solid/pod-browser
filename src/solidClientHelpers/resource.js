@@ -46,6 +46,21 @@ export async function getResource(iri, fetch) {
   }
 }
 
+export async function getOrCreateContainer(iri, fetch) {
+  const { respond, error } = createResponder();
+  const { response, error: getError } = await getResource(iri, fetch);
+  if (response) return respond(response.dataset);
+  if (getError && isHTTPError(getError, 404)) {
+    try {
+      const container = await createContainerAt(iri, { fetch });
+      return respond(container);
+    } catch (err) {
+      return error(err.message);
+    }
+  }
+  return error(getError);
+}
+
 export async function saveResource({ dataset, iri }, fetch) {
   const { respond, error } = createResponder();
   try {

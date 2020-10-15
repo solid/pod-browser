@@ -22,18 +22,28 @@
 import { renderHook } from "@testing-library/react-hooks";
 import useAccessControl from "./index";
 import * as accessControlFns from "../../accessControl";
+import usePolicies from "../usePolicies";
+
+jest.mock("../usePolicies");
 
 describe("useAccessControl", () => {
+  const accessControl = "accessControl";
   const resourceIri = "resourceIri";
   const fetch = "fetch";
+  const policies = "policies";
+  const error = "error";
 
   beforeEach(() => {
-    jest.spyOn(accessControlFns, "getAccessControl").mockResolvedValue(42);
+    jest
+      .spyOn(accessControlFns, "getAccessControl")
+      .mockResolvedValue(accessControl);
+    usePolicies.mockReturnValue({ policies });
   });
 
   it("returns null if given no resourceUri", () => {
     const { result } = renderHook(() => useAccessControl(null, fetch));
-    expect(result.current).toBeNull();
+    expect(result.current.accessControl).toBeNull();
+    expect(result.current.error).toBeNull();
   });
 
   it("returns accessControl if given resourceUri", async () => {
@@ -43,8 +53,27 @@ describe("useAccessControl", () => {
     await waitForNextUpdate();
     expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
       resourceIri,
+      policies,
       fetch
     );
-    expect(result.current).toBe(42);
+    expect(result.current.accessControl).toBe(accessControl);
+    expect(result.current.error).toBeNull();
+  });
+
+  it("returns error if usePolicies return error", async () => {
+    usePolicies.mockReturnValue({ error });
+    const { result } = renderHook(() => useAccessControl(resourceIri, fetch));
+    expect(result.current.accessControl).toBeNull();
+    expect(result.current.error).toBe(error);
+  });
+
+  it("returns error if getAccessControl fails", async () => {
+    accessControlFns.getAccessControl.mockRejectedValue(error);
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useAccessControl(resourceIri, fetch)
+    );
+    await waitForNextUpdate();
+    expect(result.current.accessControl).toBeNull();
+    expect(result.current.error).toBe(error);
   });
 });

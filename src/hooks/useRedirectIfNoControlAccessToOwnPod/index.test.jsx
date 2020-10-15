@@ -19,55 +19,55 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import Router from "next/router";
 import { renderHook } from "@testing-library/react-hooks";
-import * as solidClientFns from "@inrupt/solid-client";
-import { space } from "rdf-namespaces/dist/index";
-import mockSession, {
-  anotherUsersStorageUrl,
-  storageUrl,
-} from "../../../__testUtils/mockSession";
+import Router from "next/router";
+import React from "react";
+import mockSession, { storageUrl } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
+import * as accessControlFns from "../../accessControl";
 import useRedirectIfNoControlAccessToOwnPod from "./index";
-import useAuthenticatedProfile from "../useAuthenticatedProfile";
-import {
-  mockPersonDatasetAlice,
-  aliceWebIdUrl,
-} from "../../../__testUtils/mockPersonResource";
-import { packageProfile } from "../../solidClientHelpers/profile";
-import { chain } from "../../solidClientHelpers/utils";
-import usePodRoot from "../usePodRoot";
+import useResourceInfo from "../useResourceInfo";
+import usePolicies from "../usePolicies";
 
-jest.mock("../useAuthenticatedProfile");
 jest.mock("next/router");
-jest.mock("../usePodRoot");
+jest.mock("../../hooks/useResourceInfo");
+jest.mock("../../hooks/usePolicies");
 
-const { addUrl } = solidClientFns;
+const resourceInfo = "resourceInfo";
+const policies = "policies";
 
 describe("useRedirectIfNoControlAccessToOwnPod", () => {
-  const alice = mockPersonDatasetAlice();
-  let wrapper;
+  const session = mockSession();
+  const SessionProvider = mockSessionContextProvider(session);
+
+  const wrapper = ({ children }) => (
+    <SessionProvider>{children}</SessionProvider>
+  );
 
   beforeEach(() => {
-    const session = mockSession();
-    const SessionProvider = mockSessionContextProvider(session);
-    const aliceWithPods = chain(alice, (t) =>
-      addUrl(t, space.storage, storageUrl)
-    );
-    useAuthenticatedProfile.mockReturnValue({
-      data: packageProfile(aliceWebIdUrl, aliceWithPods),
-    });
-    usePodRoot.mockReturnValue(storageUrl);
-    jest.spyOn(solidClientFns, "getResourceInfoWithAcl").mockResolvedValue(42);
-    jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValue(true);
-
-    // eslint-disable-next-line react/prop-types
-    wrapper = ({ children }) => <SessionProvider>{children}</SessionProvider>;
-    jest.spyOn(Router, "push").mockResolvedValue(null);
+    useResourceInfo.mockReturnValue({ data: resourceInfo });
+    usePolicies.mockReturnValue({ policies });
+    jest
+      .spyOn(accessControlFns, "getAccessControl")
+      .mockResolvedValue({ hasAccess: () => true });
   });
 
-  it("Do not get redirected if profile has access to all pods", async () => {
+  it("makes request to getAccessControl", async () => {
+    const { waitForNextUpdate } = renderHook(
+      () => useRedirectIfNoControlAccessToOwnPod(storageUrl),
+      { wrapper }
+    );
+
+    await waitForNextUpdate();
+
+    expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
+      resourceInfo,
+      policies,
+      expect.any(Function)
+    );
+  });
+
+  test("Do not get redirected if user has Control access to Pod", async () => {
     const { waitForNextUpdate } = renderHook(
       () => useRedirectIfNoControlAccessToOwnPod(storageUrl),
       { wrapper }
@@ -78,23 +78,15 @@ describe("useRedirectIfNoControlAccessToOwnPod", () => {
     expect(Router.push).not.toHaveBeenCalled();
   });
 
-  it("Do not get redirected if pod is not owned by user", async () => {
-    const { waitForNextUpdate } = renderHook(
-      () => useRedirectIfNoControlAccessToOwnPod(anotherUsersStorageUrl),
-      { wrapper }
-    );
+  test("Gets redirected if profile do not have Control access to all pods", async () => {
+    jest
+      .spyOn(accessControlFns, "getAccessControl")
+      .mockResolvedValue({ hasAccess: () => false });
 
-    await waitForNextUpdate();
-
-    expect(Router.push).not.toHaveBeenCalled();
-  });
-
-  it("Gets redirected if profile do not have access to all pods", async () => {
     const { waitForNextUpdate } = renderHook(
       () => useRedirectIfNoControlAccessToOwnPod(storageUrl),
       { wrapper }
     );
-    solidClientFns.hasResourceAcl.mockReturnValue(false);
 
     await waitForNextUpdate();
 

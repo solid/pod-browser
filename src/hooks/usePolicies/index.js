@@ -19,53 +19,36 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useSession } from "@inrupt/solid-ui-react";
 import { useEffect, useState } from "react";
-import Router from "next/router";
+import { useSession } from "@inrupt/solid-ui-react";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
-import usePodRootUri from "../usePodRootUri";
+import { getPoliciesContainerUrl } from "../../accessControl/acp";
+import { getOrCreateContainer } from "../../solidClientHelpers/resource";
 import useResourceInfo from "../useResourceInfo";
-import usePolicies from "../usePolicies";
-import { getAccessControl } from "../../accessControl";
+import { hasLinkedAcr } from "../../accessControl/acp/mockedClientApi";
 
-export default function useRedirectIfNoControlAccessToOwnPod(
-  resourceUrl,
-  location = "/access-required"
-) {
-  const [redirected, setRedirected] = useState(null);
-  const { fetch, sessionRequestInProgress } = useSession();
+export default function usePolicies() {
+  const [policies, setPolicies] = useState();
+  const { fetch } = useSession();
   const { data: profile } = useAuthenticatedProfile();
-  const podRootUri = usePodRootUri(resourceUrl, profile);
-  const profilePodUri =
-    podRootUri && profile
-      ? profile.pods.find((pod) => pod === podRootUri)
-      : null;
-  const { data: profilePod } = useResourceInfo(profilePodUri);
-  const { policies } = usePolicies();
+  const podRootUri = profile?.pods[0];
+  const { data: podRoot, error: podRootError } = useResourceInfo(podRootUri);
+  const [error, setError] = useState(podRootError || null);
 
   useEffect(() => {
-    if (sessionRequestInProgress || !profile) {
-      setRedirected(null);
+    if (!profile || podRootError || !podRoot || !hasLinkedAcr(podRoot)) {
+      setPolicies(null);
+      setError(podRootError || null);
       return;
     }
-
-    (async () => {
-      const accessControl = await getAccessControl(profilePod, policies, fetch);
-      if (accessControl.hasAccess()) {
-        setRedirected(false);
-        return;
+    const policiesUri = getPoliciesContainerUrl(podRootUri);
+    getOrCreateContainer(policiesUri, fetch).then(
+      ({ response, error: createError }) => {
+        setPolicies(response || null);
+        setError(createError || null);
       }
-      setRedirected(true);
-      Router.push(location);
-    })();
-  }, [
-    sessionRequestInProgress,
-    profile,
-    location,
-    fetch,
-    profilePod,
-    policies,
-  ]);
+    );
+  }, [fetch, podRoot, podRootError, podRootUri, profile]);
 
-  return redirected;
+  return { policies, error };
 }

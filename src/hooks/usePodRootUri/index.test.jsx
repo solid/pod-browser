@@ -20,7 +20,7 @@
  */
 
 import { renderHook } from "@testing-library/react-hooks";
-import usePodRoot from "./index";
+import usePodRootUri from "./index";
 
 const location = "https://foo.com/bar/baz";
 const locationWithNoEndingSlash = "https://bar.com";
@@ -29,32 +29,32 @@ const profile = {
   pods: ["https://foo.com/bar/", locationWithNoEndingSlash],
 };
 
-describe("usePodRoot", () => {
+describe("usePodRootUri", () => {
   test("it will return undefined if location is undefined", () => {
-    const { result } = renderHook(() => usePodRoot("undefined", null));
+    const { result } = renderHook(() => usePodRootUri("undefined", null));
     expect(result.current).toBeNull();
   });
 
   test("it will guess storage URI if profile is null", () => {
-    const { result } = renderHook(() => usePodRoot(location, null));
+    const { result } = renderHook(() => usePodRootUri(location, null));
     expect(result.current).toEqual("https://foo.com/");
   });
 
   test("it will guess storage URI if profile.pods is empty", () => {
     const { result } = renderHook(() =>
-      usePodRoot(location, { ...profile, pods: undefined })
+      usePodRootUri(location, { ...profile, pods: undefined })
     );
     expect(result.current).toEqual("https://foo.com/");
   });
 
   test("it will use storage URI in profile if it matches location", () => {
-    const { result } = renderHook(() => usePodRoot(location, profile));
+    const { result } = renderHook(() => usePodRootUri(location, profile));
     expect(result.current).toEqual("https://foo.com/bar/");
   });
 
   test("it makes sure baseUri ends with slash", () => {
     const { result } = renderHook(() =>
-      usePodRoot(locationWithNoEndingSlash, profile)
+      usePodRootUri(locationWithNoEndingSlash, profile)
     );
     expect(result.current).toEqual("https://bar.com/");
   });

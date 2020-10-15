@@ -21,19 +21,29 @@
 
 import { useEffect, useState } from "react";
 import { getAccessControl } from "../../accessControl";
+import usePolicies from "../usePolicies";
 
-export default function useAccessControl(resourceIri, fetch) {
+export default function useAccessControl(resourceInfo, fetch) {
   const [accessControl, setAccessControl] = useState(null);
+  const { policies, error: policiesError } = usePolicies();
+  const [error, setError] = useState(policiesError || null);
 
   useEffect(() => {
-    if (!resourceIri) {
+    if (!resourceInfo || policiesError) {
       setAccessControl(null);
+      setError(policiesError || null);
       return;
     }
-    (async () => {
-      setAccessControl(await getAccessControl(resourceIri, fetch));
-    })();
-  }, [fetch, resourceIri]);
+    getAccessControl(resourceInfo, policies, fetch)
+      .then((response) => {
+        setAccessControl(response);
+        setError(null);
+      })
+      .catch((accessControlError) => {
+        setAccessControl(null);
+        setError(accessControlError);
+      });
+  }, [fetch, policies, policiesError, resourceInfo]);
 
-  return accessControl;
+  return { accessControl, error };
 }

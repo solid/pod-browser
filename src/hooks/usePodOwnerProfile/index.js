@@ -23,7 +23,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { joinPath } from "../../stringHelpers";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
-import usePodRoot from "../usePodRoot";
+import usePodRootUri from "../usePodRootUri";
 import useFetchProfile from "../useFetchProfile";
 
 export default function usePodOwnerProfile() {
@@ -31,7 +31,7 @@ export default function usePodOwnerProfile() {
   const [error, setError] = useState();
   const router = useRouter();
   const decodedResourceUri = decodeURIComponent(router.query.iri);
-  const podRoot = usePodRoot(decodedResourceUri, null);
+  const podRoot = usePodRootUri(decodedResourceUri, null);
   const profileIri = podRoot && joinPath(podRoot, "profile/card#me"); // we won't need to do this once ownership is available
   const { data: authProfile, error: authError } = useAuthenticatedProfile();
   const { data: ownerProfile, error: ownerError } = useFetchProfile(profileIri);

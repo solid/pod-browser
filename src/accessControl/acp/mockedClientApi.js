@@ -19,24 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
-import { mount } from "enzyme";
-import AccessControlContext, { AccessControlProvider } from "./index";
-
-function ChildComponent() {
-  const { accessControl } = useContext(AccessControlContext);
-  return <div id="AccessControl">{accessControl.toString()}</div>;
+// eslint-disable-next-line no-unused-vars,import/prefer-default-export
+export function hasLinkedAcr(resource) {
+  // TODO: Switch this out with the corresponding API method exposed from @inrupt/solid-client
+  return false;
 }
-
-describe("AccessControlContext", () => {
-  test("it provides accessControl", () => {
-    const accessControl = "accessControl";
-    const component = mount(
-      <AccessControlProvider accessControl={{ toString: () => accessControl }}>
-        <ChildComponent />
-      </AccessControlProvider>
-    );
-
-    expect(component.find("#AccessControl").text()).toEqual(accessControl);
-  });
-});

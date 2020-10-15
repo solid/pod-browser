@@ -19,9 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { hasAccessibleAcl } from "@inrupt/solid-client";
 import WacAccessControlStrategy from "./wac";
+import { hasLinkedAcr } from "./acp/mockedClientApi";
+import AcpAccessControlStrategy from "./acp";
+
+export const noAccessPolicyError =
+  "No available access policy for this resource";
 
 // eslint-disable-next-line import/prefer-default-export
-export async function getAccessControl(resourceIri, fetch) {
-  return WacAccessControlStrategy.init(resourceIri, fetch);
+export async function getAccessControl(resourceInfo, policies, fetch) {
+  if (hasAccessibleAcl(resourceInfo)) {
+    return WacAccessControlStrategy.init(resourceInfo, fetch);
+  }
+  if (hasLinkedAcr(resourceInfo)) {
+    return AcpAccessControlStrategy.init(resourceInfo, policies, fetch);
+  }
+  throw new Error(noAccessPolicyError);
 }

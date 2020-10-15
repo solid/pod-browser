@@ -22,12 +22,12 @@
 import React, { useContext } from "react";
 import { mount } from "enzyme";
 import PodLocationContext, { PodLocationProvider } from "./index";
-import usePodRoot from "../../hooks/usePodRoot";
+import usePodRootUri from "../../hooks/usePodRootUri";
 import useAuthenticatedProfile from "../../hooks/useAuthenticatedProfile";
 import { mockProfileAlice } from "../../../__testUtils/mockPersonResource";
 
 jest.mock("../../hooks/useAuthenticatedProfile");
-jest.mock("../../hooks/usePodRoot");
+jest.mock("../../hooks/usePodRootUri");
 
 function ChildComponent() {
   const { baseUri, currentUri } = useContext(PodLocationContext);
@@ -46,7 +46,7 @@ describe("PodLocationContext", () => {
     useAuthenticatedProfile.mockReturnValue({
       data: mockProfileAlice(),
     });
-    usePodRoot.mockReturnValue(baseUri);
+    usePodRootUri.mockReturnValue(baseUri);
 
     const component = mount(
       <PodLocationProvider currentUri="https://foo.test/bar/baz">

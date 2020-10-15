@@ -22,7 +22,7 @@
 import React, { createContext } from "react";
 import T from "prop-types";
 import useAuthenticatedProfile from "../../hooks/useAuthenticatedProfile";
-import usePodRoot from "../../hooks/usePodRoot";
+import usePodRootUri from "../../hooks/usePodRootUri";
 
 const PodLocationContext = createContext({
   currentUri: "",
@@ -30,7 +30,7 @@ const PodLocationContext = createContext({
 
 function PodLocationProvider({ children, currentUri }) {
   const { data: profile } = useAuthenticatedProfile();
-  const baseUri = usePodRoot(currentUri, profile);
+  const baseUri = usePodRootUri(currentUri, profile);
   return (
     <PodLocationContext.Provider value={{ baseUri, currentUri }}>
       {children}

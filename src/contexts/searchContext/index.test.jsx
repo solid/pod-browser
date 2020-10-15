@@ -23,9 +23,6 @@ import React, { useContext } from "react";
 import { mount } from "enzyme";
 import SearchContext, { SearchProvider } from "./index";
 
-jest.mock("../../hooks/useAuthenticatedProfile");
-jest.mock("../../hooks/usePodRoot");
-
 function ChildComponent() {
   const { search, setSearch } = useContext(SearchContext);
   setSearch("bar");

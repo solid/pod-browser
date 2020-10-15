@@ -19,28 +19,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useEffect, useState } from "react";
+import useSWR from "swr";
+import * as solidClientFns from "@inrupt/solid-client";
+import { renderHook } from "@testing-library/react-hooks";
+import useResourceInfo, { GET_RESOURCE_INFO } from "./index";
 
-function normalizeBaseUri(baseUri) {
-  return baseUri[baseUri.length - 1] === "/" ? baseUri : `${baseUri}/`;
-}
+jest.mock("swr");
 
-export default function usePodRoot(location, profile) {
-  const [rootUri, setRootUri] = useState(null);
-  useEffect(() => {
-    if (!location || location === "undefined") {
-      setRootUri(null);
-      return;
-    }
-    const profilePod = (profile ? profile.pods || [] : []).find((pod) =>
-      location.startsWith(pod)
+describe("useResourceInfo", () => {
+  const iri = "iri";
+
+  beforeEach(() => {
+    useSWR.mockReturnValue(42);
+    jest.spyOn(solidClientFns, "getResourceInfo").mockReturnValue(1337);
+  });
+
+  it("caches using SWR", () => {
+    expect(renderHook(() => useResourceInfo(iri)).result.current).toBe(42);
+    expect(useSWR).toHaveBeenCalledWith(
+      [iri, GET_RESOURCE_INFO],
+      expect.any(Function)
     );
-    if (profilePod) {
-      setRootUri(normalizeBaseUri(profilePod));
-      return;
-    }
-    const { origin } = new URL(location);
-    setRootUri(normalizeBaseUri(origin));
-  }, [location, profile]);
-  return rootUri;
-}
+  });
+
+  it("fetches data using getResourceInfo", () => {
+    renderHook(() => useResourceInfo(iri));
+    expect(useSWR.mock.calls[0][1]()).toBe(1337);
+    expect(solidClientFns.getResourceInfo).toHaveBeenCalledWith(iri, {
+      fetch: expect.any(Function),
+    });
+  });
+
+  it("handles string undefined being passed as iri", () => {
+    renderHook(() => useResourceInfo("undefined"));
+    expect(useSWR).toHaveBeenCalledWith(null, expect.any(Function));
+  });
+});
