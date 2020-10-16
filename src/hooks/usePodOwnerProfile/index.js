@@ -26,6 +26,8 @@ import useFetchProfile from "../useFetchProfile";
 import usePodOwner from "../usePodOwner";
 
 export default function usePodOwnerProfile() {
+  const { session } = useSession();
+  const { fetch } = session;
   const [profile, setProfile] = useState();
   const [error, setError] = useState();
   const router = useRouter();
