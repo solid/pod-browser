@@ -21,20 +21,39 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useSession } from "@inrupt/solid-ui-react";
+import { getResourceInfo, getPodOwner } from "@inrupt/solid-client";
 import { joinPath } from "../../stringHelpers";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import usePodRootUri from "../usePodRootUri";
 import useFetchProfile from "../useFetchProfile";
 
 export default function usePodOwnerProfile() {
+  const { session } = useSession();
+  const { fetch } = session;
   const [profile, setProfile] = useState();
   const [error, setError] = useState();
   const router = useRouter();
   // const decodedResourceUri = decodeURIComponent(router.query.iri);
   const podRoot = usePodRootUri(router.query.iri, null);
-  const profileIri = podRoot && joinPath(podRoot, "profile/card#me"); // we won't need to do this once ownership is available
+  const [podOwnerWebId, setPodOwnerWebId] = useState(null);
+  const profileIri =
+    podOwnerWebId || (podRoot && joinPath(podRoot, "profile/card#me")); // we won't need to do this once ownership is available
   const { data: authProfile, error: authError } = useAuthenticatedProfile();
   const { data: ownerProfile, error: ownerError } = useFetchProfile(profileIri);
+
+  useEffect(() => {
+    if (!router.query.iri) return;
+    (async () => {
+      try {
+        const resourceInfo = await getResourceInfo(router.query.iri, { fetch });
+        const { response: webId } = await getPodOwner(resourceInfo, fetch);
+        setPodOwnerWebId(webId);
+      } catch (e) {
+        setError(e);
+      }
+    })();
+  }, [router.query.iri, fetch, session]);
 
   useEffect(() => {
     if (!router.query.iri && authProfile) {

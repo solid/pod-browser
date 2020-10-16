@@ -855,6 +855,12 @@ font-display: block;",
                     },
                   ],
                   Array [
+                    "https://mypod.myhost.com",
+                    Object {
+                      "method": "HEAD",
+                    },
+                  ],
+                  Array [
                     "https://mypod.myhost.com/profile/card#me",
                     Object {
                       "headers": Object {
@@ -867,6 +873,10 @@ font-display: block;",
                   Object {
                     "type": "return",
                     "value": Promise {},
+                  },
+                  Object {
+                    "type": "throw",
+                    "value": [Error: URL (https://mypod.myhost.com) not mocked properly],
                   },
                   Object {
                     "type": "throw",
