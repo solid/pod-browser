@@ -40,6 +40,8 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export const EXISTING_WEBID_ERROR_MESSAGE =
   "That WebID is already in your contacts";
 export const NO_NAME_ERROR_MESSAGE = "That WebID does not have a name";
+export const FETCH_PROFILE_FAILED_ERROR_MESSAGE =
+  "Unable to retrieve a profile from the given WebID";
 
 export function handleSubmit({
   addressBook,
@@ -52,32 +54,36 @@ export function handleSubmit({
     setIsLoading(true);
     const addressBookIri = getSourceUrl(addressBook);
 
-    const { name, webId } = await fetchProfile(iri, fetch);
+    try {
+      const { name, webId } = await fetchProfile(iri, fetch);
 
-    const existingContact = await findContactInAddressBook(
-      addressBookIri,
-      webId,
-      fetch
-    );
-
-    if (existingContact.length) {
-      alertError(EXISTING_WEBID_ERROR_MESSAGE);
-      setIsLoading(false);
-      return;
-    }
-
-    if (name) {
-      const contact = { webId, fn: name };
-      const { response, error } = await saveContact(
+      const existingContact = await findContactInAddressBook(
         addressBookIri,
-        contact,
+        webId,
         fetch
       );
 
-      if (error) alertError(error);
-      if (response) alertSuccess(`${contact.fn} was added to your contacts`);
-    } else {
-      alertError(NO_NAME_ERROR_MESSAGE);
+      if (existingContact.length) {
+        alertError(EXISTING_WEBID_ERROR_MESSAGE);
+        setIsLoading(false);
+        return;
+      }
+
+      if (name) {
+        const contact = { webId, fn: name };
+        const { response, error } = await saveContact(
+          addressBookIri,
+          contact,
+          fetch
+        );
+
+        if (error) alertError(error);
+        if (response) alertSuccess(`${contact.fn} was added to your contacts`);
+      } else {
+        alertError(NO_NAME_ERROR_MESSAGE);
+      }
+    } catch (error) {
+      alertError(FETCH_PROFILE_FAILED_ERROR_MESSAGE);
     }
     setIsLoading(false);
   };

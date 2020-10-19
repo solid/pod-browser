@@ -37,6 +37,7 @@ import AddContact, {
   handleSubmit,
   EXISTING_WEBID_ERROR_MESSAGE,
   NO_NAME_ERROR_MESSAGE,
+  FETCH_PROFILE_FAILED_ERROR_MESSAGE,
 } from "./index";
 import * as addressBookFns from "../../src/addressBook";
 import { WithTheme } from "../../__testUtils/mountWithTheme";
@@ -124,6 +125,26 @@ describe("handleSubmit", () => {
     expect(setIsLoading).toHaveBeenCalledTimes(2);
     expect(alertSuccess).not.toHaveBeenCalled();
     expect(alertError).toHaveBeenCalledWith(NO_NAME_ERROR_MESSAGE);
+  });
+  test("it alerts the user and exits if fetching the profile fails", async () => {
+    const mockProfileError = new Error("error");
+    const setIsLoading = jest.fn();
+    const alertError = jest.fn();
+    const alertSuccess = jest.fn();
+    const handler = handleSubmit({
+      addressBook,
+      setIsLoading,
+      alertError,
+      alertSuccess,
+      fetch,
+    });
+    jest
+      .spyOn(profileHelperFns, "fetchProfile")
+      .mockRejectedValue(mockProfileError);
+    await handler();
+    expect(setIsLoading).toHaveBeenCalledTimes(2);
+    expect(alertSuccess).not.toHaveBeenCalled();
+    expect(alertError).toHaveBeenCalledWith(FETCH_PROFILE_FAILED_ERROR_MESSAGE);
   });
   test("it saves a new contact", async () => {
     const personUri = "http://example.com/alice#me";
