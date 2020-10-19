@@ -20,19 +20,17 @@
  */
 
 import { useSession } from "@inrupt/solid-ui-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Router from "next/router";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import usePodRootUri from "../usePodRootUri";
 import useResourceInfo from "../useResourceInfo";
-import usePolicies from "../usePolicies";
-import { getAccessControl } from "../../accessControl";
+import { hasAccess } from "../../accessControl";
 
 export default function useRedirectIfNoControlAccessToOwnPod(
   resourceUrl,
   location = "/access-required"
 ) {
-  const [redirected, setRedirected] = useState(null);
   const { fetch, sessionRequestInProgress } = useSession();
   const { data: profile } = useAuthenticatedProfile();
   const podRootUri = usePodRootUri(resourceUrl, profile);
@@ -41,31 +39,14 @@ export default function useRedirectIfNoControlAccessToOwnPod(
       ? profile.pods.find((pod) => pod === podRootUri)
       : null;
   const { data: profilePod } = useResourceInfo(profilePodUri);
-  const { policies } = usePolicies();
 
   useEffect(() => {
-    if (sessionRequestInProgress || !profile) {
-      setRedirected(null);
+    if (sessionRequestInProgress || !profile || !profilePod) {
       return;
     }
-
-    (async () => {
-      const accessControl = await getAccessControl(profilePod, policies, fetch);
-      if (accessControl.hasAccess()) {
-        setRedirected(false);
-        return;
-      }
-      setRedirected(true);
-      Router.push(location);
-    })();
-  }, [
-    sessionRequestInProgress,
-    profile,
-    location,
-    fetch,
-    profilePod,
-    policies,
-  ]);
-
-  return redirected;
+    if (hasAccess(profilePod)) {
+      return;
+    }
+    Router.push(location);
+  }, [sessionRequestInProgress, profile, location, fetch, profilePod]);
 }

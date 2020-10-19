@@ -42,6 +42,7 @@ import {
   isHTTPError,
   namespace,
   normalizeDataset,
+  sharedStart,
 } from "./utils";
 
 const TIMESTAMP = new Date(Date.UTC(2020, 5, 2, 15, 59, 21));
@@ -331,5 +332,14 @@ describe("isHTTPError", () => {
     expect(isHTTPError("Something with 404", 404)).toBeTruthy();
     expect(isHTTPError("Something with 500", 404)).toBeFalsy();
     expect(isHTTPError("Something with 404", 500)).toBeFalsy();
+  });
+});
+
+describe("sharedStart", () => {
+  it("gets the matching characters from the start of strings", () => {
+    expect(sharedStart("bar", "baz")).toEqual("ba");
+    expect(sharedStart("foo", "bar")).toEqual("");
+    expect(sharedStart("bar", "baz", "bam")).toEqual("ba");
+    expect(sharedStart(undefined, "baz")).toEqual("");
   });
 });

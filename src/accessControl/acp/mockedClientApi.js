@@ -19,7 +19,43 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// eslint-disable-next-line no-unused-vars,import/prefer-default-export
+/* eslint-disable no-unused-vars */
+
+export function getAccessControlAll(accessControlResource, options) {
+  // Returns list of AccessControl
+  throw new Error("Not implemented");
+}
+
+export function getControlPolicyUrlAll(datasetWithAcr) {
+  // returns string[]
+  throw new Error("Not implemented");
+}
+
+export function getAllowModesOnPolicy(policy) {
+  // returns AccessModes
+  throw new Error("Not implemented");
+}
+
+export function getPolicyAll(policyResource) {
+  // returns Policy[]
+  throw new Error("Not implemented");
+}
+
+export function getPolicyUrlAll(accessControl) {
+  // returns UrlString[]
+  throw new Error("Not implemented");
+}
+
+export function getRequiredRuleOnPolicy(policy) {
+  // returns AccessRule[]
+  throw new Error("Not implemented");
+}
+
+export async function getResourceInfoWithAcp(url, options) {
+  // returns accessControlResource
+  throw new Error("Not implemented");
+}
+
 export function hasLinkedAcr(resource) {
   // TODO: Switch this out with the corresponding API method exposed from @inrupt/solid-client
   return false;

@@ -50,11 +50,9 @@ describe("WacAccessControlStrategy", () => {
       }));
 
     it("exposes the methods we expect for a access control strategy", () =>
-      [
-        "getPermissions",
-        "hasAccess",
-        "savePermissionsForAgent",
-      ].forEach((method) => expect(wac[method]).toBeDefined()));
+      ["getPermissions", "savePermissionsForAgent"].forEach((method) =>
+        expect(wac[method]).toBeDefined()
+      ));
   });
 
   describe("getPermissions", () => {

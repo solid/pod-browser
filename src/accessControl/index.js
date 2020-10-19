@@ -27,7 +27,10 @@ import AcpAccessControlStrategy from "./acp";
 export const noAccessPolicyError =
   "No available access policy for this resource";
 
-// eslint-disable-next-line import/prefer-default-export
+export function hasAccess(resourceInfo) {
+  return hasAccessibleAcl(resourceInfo) || hasLinkedAcr(resourceInfo);
+}
+
 export async function getAccessControl(resourceInfo, policies, fetch) {
   if (hasAccessibleAcl(resourceInfo)) {
     return WacAccessControlStrategy.init(resourceInfo, fetch);

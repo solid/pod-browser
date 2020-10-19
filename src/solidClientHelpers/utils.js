@@ -230,3 +230,14 @@ export const ERROR_CODES = {
 export function isHTTPError(errorMessage, code) {
   return !!errorMessage.match(new RegExp(code));
 }
+
+export function sharedStart(...strings) {
+  const A = strings.concat().sort();
+  const a1 = A[0] || "";
+  const a2 = A[A.length - 1] || "";
+  const L = a1.length;
+  let i = 0;
+  // eslint-disable-next-line no-plusplus
+  while (i < L && a1.charAt(i) === a2.charAt(i)) i++;
+  return a1.substring(0, i);
+}
