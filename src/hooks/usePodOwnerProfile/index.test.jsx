@@ -24,6 +24,7 @@ import * as RouterFns from "next/router";
 import { addUrl } from "@inrupt/solid-client";
 import { space } from "rdf-namespaces/dist/index";
 import usePodOwnerProfile from "./index";
+import usePodOwner from "../usePodOwner/index";
 import {
   mockPersonDatasetAlice,
   mockPersonDatasetBob,
@@ -36,6 +37,7 @@ import { packageProfile } from "../../solidClientHelpers/profile";
 
 jest.mock("../useFetchProfile");
 jest.mock("../useAuthenticatedProfile");
+jest.mock("../usePodOwner");
 
 describe("usePodOwnerProfile", () => {
   const podUrl = "http://example.com";
@@ -49,6 +51,7 @@ describe("usePodOwnerProfile", () => {
   beforeEach(() => {
     useAuthenticatedProfile.mockReturnValue({ data: authProfile });
     useFetchProfile.mockReturnValue({ data: userProfile });
+    usePodOwner.mockReturnValue({ podOwnerWebId: userProfileUri });
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({ query: {} });
   });
 

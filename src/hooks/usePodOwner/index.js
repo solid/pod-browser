@@ -22,24 +22,32 @@
 import { useState, useEffect } from "react";
 import { getResourceInfo, getPodOwner } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
+import { joinPath } from "../../stringHelpers";
+import usePodRoot from "../usePodRoot";
 
-export default function usePodOwner(resourceIri) {
+export default function usePodOwner({ resourceIri }) {
   const { fetch } = useSession();
   const [podOwnerWebId, setPodOwnerWebId] = useState(null);
-  const [error, setError] = useState();
+  const [error, setError] = useState(null);
+  const decodedResourceUri = decodeURIComponent(resourceIri);
+  const podRoot = usePodRoot(decodedResourceUri, null);
+  const profileIri = podRoot && joinPath(podRoot, "profile/card#me");
 
   useEffect(() => {
-    if (!resourceIri) return;
+    if (!resourceIri) {
+      setError(null);
+      setPodOwnerWebId(null);
+      return;
+    }
     (async () => {
       try {
         const resourceInfo = await getResourceInfo(resourceIri, { fetch });
-        const { response: webId } = await getPodOwner(resourceInfo, fetch);
+        const { response: webId } = getPodOwner(resourceInfo, fetch);
         setPodOwnerWebId(webId);
       } catch (e) {
         setError(e);
       }
     })();
   }, [resourceIri, fetch]);
-
-  return { podOwnerWebId, error };
+  return { podOwnerWebId: podOwnerWebId || profileIri, error };
 }
