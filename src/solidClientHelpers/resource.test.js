@@ -19,10 +19,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable camelcase */
 import * as SolidClientFns from "@inrupt/solid-client";
+import {
+  asUrl,
+  getSourceUrl,
+  mockSolidDatasetFrom,
+  mockThingFrom,
+  setThing,
+} from "@inrupt/solid-client";
 import createContainer from "../../__testUtils/createContainer";
-import { getResource, getResourceName, saveResource } from "./resource";
+import {
+  getOrCreateContainer,
+  getOrCreateDataset,
+  getOrCreateThing,
+  getResource,
+  getResourceName,
+  saveResource,
+} from "./resource";
 
 describe("getResource", () => {
   test("it returns a dataset and an iri", async () => {
@@ -65,6 +78,127 @@ describe("getResourceName", () => {
       "public/notes/Hello%20World%3AHello%40World%3BHello.txt"
     );
     expect(resourceName).toEqual("Hello World:Hello@World;Hello.txt");
+  });
+});
+
+describe("getOrCreateContainer", () => {
+  const iri = "http://example.com/test/";
+  const fetch = "fetch";
+  const existingContainer = "existingContainer";
+  const newContainer = "newContainer";
+  const missingError = "404";
+  const cannotCreateError = "cannotCreateError";
+
+  it("returns existing containers", async () => {
+    jest
+      .spyOn(SolidClientFns, "getSolidDataset")
+      .mockResolvedValue(existingContainer);
+    const { response } = await getOrCreateContainer(iri, fetch);
+    expect(response).toBe(existingContainer);
+  });
+
+  it("creates a new container if it doesn't exist", async () => {
+    jest
+      .spyOn(SolidClientFns, "getSolidDataset")
+      .mockRejectedValue(new Error(missingError));
+    jest
+      .spyOn(SolidClientFns, "createContainerAt")
+      .mockResolvedValue(newContainer);
+    const { response } = await getOrCreateContainer(iri, fetch);
+    expect(response).toBe(newContainer);
+  });
+
+  it("returns error if it doesn't exist and cannot be created", async () => {
+    jest
+      .spyOn(SolidClientFns, "getSolidDataset")
+      .mockRejectedValue(new Error(cannotCreateError));
+    const { error } = await getOrCreateContainer(iri, fetch);
+    expect(error).toEqual(cannotCreateError);
+  });
+
+  it("returns error if it fails to create create", async () => {
+    jest
+      .spyOn(SolidClientFns, "getSolidDataset")
+      .mockRejectedValue(new Error(missingError));
+    jest
+      .spyOn(SolidClientFns, "createContainerAt")
+      .mockRejectedValue(new Error(cannotCreateError));
+    const { error } = await getOrCreateContainer(iri, fetch);
+    expect(error).toEqual(cannotCreateError);
+  });
+});
+
+describe("getOrCreateDataset", () => {
+  const iri = "http://example.com/test.ttl";
+  const fetch = "fetch";
+  const existingResource = "existingResource";
+  const newResource = "newResource";
+  const missingError = "404";
+  const cannotCreateError = "cannotCreateError";
+
+  it("returns existing resource", async () => {
+    jest
+      .spyOn(SolidClientFns, "getSolidDataset")
+      .mockResolvedValue(existingResource);
+    const { response } = await getOrCreateDataset(iri, fetch);
+    expect(response).toBe(existingResource);
+  });
+
+  it("creates a new resource if it doesn't exist", async () => {
+    jest
+      .spyOn(SolidClientFns, "getSolidDataset")
+      .mockRejectedValue(new Error(missingError));
+    jest
+      .spyOn(SolidClientFns, "saveSolidDatasetAt")
+      .mockResolvedValue(newResource);
+    const { response } = await getOrCreateDataset(iri, fetch);
+    expect(response).toBe(newResource);
+  });
+
+  it("returns error if it doesn't exist and cannot be created", async () => {
+    jest
+      .spyOn(SolidClientFns, "getSolidDataset")
+      .mockRejectedValue(new Error(cannotCreateError));
+    const { error } = await getOrCreateDataset(iri, fetch);
+    expect(error).toEqual(cannotCreateError);
+  });
+
+  it("returns error if it fails to create create", async () => {
+    jest
+      .spyOn(SolidClientFns, "getSolidDataset")
+      .mockRejectedValue(new Error(missingError));
+    jest
+      .spyOn(SolidClientFns, "saveSolidDatasetAt")
+      .mockRejectedValue(new Error(cannotCreateError));
+    const { error } = await getOrCreateDataset(iri, fetch);
+    expect(error).toEqual(cannotCreateError);
+  });
+});
+
+describe("getOrCreateThing", () => {
+  const existingThingIri = "http://example.com/#thing";
+  const existingThing = mockThingFrom(existingThingIri);
+  const existingDatasetIri = "http://example.com/";
+  const existingDataset = setThing(
+    mockSolidDatasetFrom(existingDatasetIri),
+    existingThing
+  );
+  const newThingIri = "http://example.com/#newThing";
+
+  it("returns existing things", () => {
+    const { thing, dataset } = getOrCreateThing(
+      existingDataset,
+      existingThingIri
+    );
+    expect(thing).toEqual(existingThing);
+    expect(asUrl(thing)).toEqual(existingThingIri);
+    expect(getSourceUrl(dataset)).toEqual(getSourceUrl(existingDataset));
+  });
+
+  it("create new thing if it doesn't exist from before", () => {
+    const { thing, dataset } = getOrCreateThing(existingDataset, newThingIri);
+    expect(asUrl(thing)).toEqual(newThingIri);
+    expect(getSourceUrl(dataset)).toEqual(getSourceUrl(existingDataset));
   });
 });
 

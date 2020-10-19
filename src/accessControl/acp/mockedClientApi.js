@@ -19,15 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* istanbul ignore file */
+// TODO: Remove once Solid Client ACP API is complete
 /* eslint-disable no-unused-vars */
 
 export function getAccessControlAll(accessControlResource, options) {
   // Returns list of AccessControl
-  throw new Error("Not implemented");
-}
-
-export function getControlPolicyUrlAll(datasetWithAcr) {
-  // returns string[]
   throw new Error("Not implemented");
 }
 
@@ -59,4 +56,66 @@ export async function getResourceInfoWithAcp(url, options) {
 export function hasLinkedAcr(resource) {
   // TODO: Switch this out with the corresponding API method exposed from @inrupt/solid-client
   return false;
+}
+
+// function setRequiredRuleOnPolicy(policy: AccessPolicy, rule: Partial<AccessRule>): AccessPolicy
+export function setRequiredRuleOnPolicy(policy, rule) {
+  throw new Error("Not implemented");
+}
+
+// function savePolicyDatasetAt(url: Url | UrlString, dataset: PolicyDataset, options?: Partial<typeof internal_defaultFetchOptions>): ReturnType<typeof saveSolidDatasetAt>
+export async function savePolicyDatasetAt(url, dataset, options) {
+  throw new Error("Not implemented");
+}
+
+/* POLICY METHODS */
+// function getPolicy(policyResource: PolicyDataset, url: Url | UrlString): Policy | null;
+export function getPolicy(policyResource, url) {
+  throw new Error("Not implemented");
+}
+
+// function createPolicy(url: UrlString): AccessPolicy
+export function createPolicy(url) {
+  throw new Error("Not implemented");
+}
+
+// function setPolicy(policyResource: PolicyDataset, policy: Policy): PolicyDataset
+export function setPolicy(policyResource, policy) {
+  throw new Error("Not implemented");
+}
+
+// function setAllowModesOnPolicy(policy: AccessPolicy, modes: AccessModes): AccessPolicy
+export function setAllowModesOnPolicy(policy, modes) {
+  throw new Error("Not implemented");
+}
+
+/* ACCESS CONTROL METHODS */
+// function addPolicyUrl(accessControl: AccessControl, policyUrl: Url | UrlString | ThingPersisted): AccessControl;
+export function addPolicyUrl(accessControl, policyUrl) {
+  throw new Error("Not implemented");
+}
+
+// function createAccessControl(options?: Parameters<typeof createThing>[0]): AccessControl
+export function createAccessControl(options) {
+  throw new Error("Not implemented");
+}
+
+// function setAccessControl(accessControlResource: AccessControlResource, accessControl: AccessControl): AccessControlResource
+export function setAccessControl(accessControlResource, accessControl) {
+  throw new Error("Not implemented");
+}
+
+// export function addControlPolicyUrl<ResourceExt extends WithAccessibleAcr>(
+//   withAccessControlResource: ResourceExt,
+//   policyUrl: Url | UrlString | ThingPersisted
+// ): ResourceExt
+export function addControlPolicyUrl(withAccessControlResource, policyUrl) {
+  throw new Error("Not implemented");
+}
+
+// function getControlPolicyUrlAll<ResourceExt extends WithAccessibleAcr>(
+//   withAccessControlResource: ResourceExt,
+// ): UrlString[]
+export function getControlPolicyUrlAll(withAccessControlResource) {
+  throw new Error("Not implemented");
 }

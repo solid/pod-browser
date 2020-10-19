@@ -19,9 +19,17 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { getSolidDataset, saveSolidDatasetAt } from "@inrupt/solid-client";
+import {
+  createContainerAt,
+  createSolidDataset,
+  createThing,
+  getSolidDataset,
+  getThing,
+  saveSolidDatasetAt,
+  setThing,
+} from "@inrupt/solid-client";
 import { parseUrl } from "../stringHelpers";
-import { createResponder, isContainerIri } from "./utils";
+import { createResponder, isContainerIri, isHTTPError } from "./utils";
 
 export function getResourceName(iri) {
   let { pathname } = parseUrl(iri);
@@ -52,13 +60,38 @@ export async function getOrCreateContainer(iri, fetch) {
   if (response) return respond(response.dataset);
   if (getError && isHTTPError(getError, 404)) {
     try {
-      const container = await createContainerAt(iri, { fetch });
-      return respond(container);
+      return respond(await createContainerAt(iri, { fetch }));
     } catch (err) {
       return error(err.message);
     }
   }
   return error(getError);
+}
+
+export async function getOrCreateDataset(iri, fetch) {
+  const { respond, error } = createResponder();
+  const { response, error: getError } = await getResource(iri, fetch);
+  if (response) return respond(response.dataset);
+  if (getError && isHTTPError(getError, 404)) {
+    try {
+      return respond(
+        await saveSolidDatasetAt(iri, createSolidDataset(), { fetch })
+      );
+    } catch (saveError) {
+      return error(saveError.message);
+    }
+  }
+  return error(getError);
+}
+
+export function getOrCreateThing(dataset, iri) {
+  const existing = getThing(dataset, iri);
+  if (existing) {
+    return { thing: existing, dataset };
+  }
+  const created = createThing({ url: iri });
+  const updatedDataset = setThing(dataset, created);
+  return { thing: created, dataset: updatedDataset };
 }
 
 export async function saveResource({ dataset, iri }, fetch) {

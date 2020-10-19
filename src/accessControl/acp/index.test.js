@@ -26,30 +26,35 @@ import AcpAccessControlStrategy, {
   convertAcpToAcl,
   createAcpMap,
   getOrCreatePermission,
+  getOrCreatePolicy,
   getPoliciesContainerUrl,
   getPolicyUrl,
 } from "./index";
 import { createAccessMap } from "../../solidClientHelpers/permissions";
-import { joinPath } from "../../stringHelpers";
 
 describe("AcpAccessControlStrategy", () => {
-  const resourceInfo = "resourceInfo";
-  const policies = "policies";
+  const resourceInfoUrl = "http://example.com/resourceInfo";
+  const resourceInfo = mockSolidDatasetFrom(resourceInfoUrl);
+  const policiesUrl = "http://example.com/policies";
+  const policies = mockSolidDatasetFrom(policiesUrl);
   const fetch = "fetch";
-  const acr = "acr";
+  const datasetWithAcrUrl = "http://example.com/resourceInfo=acr";
+  const datasetWithAcr = mockSolidDatasetFrom(datasetWithAcrUrl);
 
   let acp;
 
   describe("init", () => {
     beforeEach(async () => {
-      jest.spyOn(mockedAcpFns, "getResourceInfoWithAcp").mockResolvedValue(acr);
+      jest
+        .spyOn(mockedAcpFns, "getResourceInfoWithAcp")
+        .mockResolvedValue(datasetWithAcr);
       acp = await AcpAccessControlStrategy.init(resourceInfo, policies, fetch);
     });
 
     it("uses getResourceInfoWithAcp to fetch data", () =>
       expect(
         mockedAcpFns.getResourceInfoWithAcp
-      ).toHaveBeenCalledWith(resourceInfo, { fetch }));
+      ).toHaveBeenCalledWith(resourceInfoUrl, { fetch }));
 
     it("exposes the methods we expect for a access control strategy", () =>
       ["getPermissions", "savePermissionsForAgent"].forEach((method) =>
@@ -165,6 +170,36 @@ describe("getOrCreatePermission", () => {
       ...blankPermission,
       test: 42,
     });
+  });
+});
+
+describe("getOrCreatePolicy", () => {
+  const existingPolicy = "existingPolicy";
+  const existingDataset = "dataset";
+  const url = "url";
+  const createdPolicy = "createdPolicy";
+  const updatedDataset = "updatedDataset";
+
+  it("returns existing policy", () => {
+    jest.spyOn(mockedAcpFns, "getPolicy").mockReturnValue(existingPolicy);
+    const { policy, dataset } = getOrCreatePolicy(existingDataset, url);
+    expect(mockedAcpFns.getPolicy).toHaveBeenCalledWith(existingDataset, url);
+    expect(policy).toBe(existingPolicy);
+    expect(dataset).toBe(existingDataset);
+  });
+
+  it("creates new policy if none exist", () => {
+    jest.spyOn(mockedAcpFns, "getPolicy").mockReturnValue(null);
+    jest.spyOn(mockedAcpFns, "createPolicy").mockReturnValue(createdPolicy);
+    jest.spyOn(mockedAcpFns, "setPolicy").mockReturnValue(updatedDataset);
+    const { policy, dataset } = getOrCreatePolicy(existingDataset, url);
+    expect(mockedAcpFns.createPolicy).toHaveBeenCalledWith(url);
+    expect(mockedAcpFns.setPolicy).toHaveBeenCalledWith(
+      existingDataset,
+      createdPolicy
+    );
+    expect(policy).toBe(createdPolicy);
+    expect(dataset).toBe(updatedDataset);
   });
 });
 

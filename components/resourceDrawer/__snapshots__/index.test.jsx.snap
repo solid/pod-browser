@@ -1344,22 +1344,32 @@ font-display: block;",
                                                               <li
                                                                 className="PodBrowser-action-menu__item"
                                                               >
-                                                                <DeleteLink
+                                                                <DeleteResourceLink
                                                                   className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                                                                   data-testid="download-resource-button"
                                                                   name="iri"
                                                                   onDelete={[Function]}
                                                                   resourceIri="/iri/"
                                                                 >
-                                                                  <a
+                                                                  <DeleteLink
                                                                     className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                                                                    confirmationContent="Are you sure you wish to delete iri?"
+                                                                    confirmationTitle="Confirm Delete"
                                                                     data-testid="download-resource-button"
-                                                                    href="#delete"
-                                                                    onClick={[Function]}
+                                                                    dialogId="delete-resource-/iri/"
+                                                                    onDelete={[Function]}
+                                                                    successMessage="iri was successfully deleted."
                                                                   >
-                                                                    Delete
-                                                                  </a>
-                                                                </DeleteLink>
+                                                                    <a
+                                                                      className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                                                                      data-testid="download-resource-button"
+                                                                      href="#delete"
+                                                                      onClick={[Function]}
+                                                                    >
+                                                                      Delete
+                                                                    </a>
+                                                                  </DeleteLink>
+                                                                </DeleteResourceLink>
                                                               </li>
                                                             </ActionMenuItem>
                                                           </ul>
@@ -4032,22 +4042,32 @@ font-display: block;",
                                                           <li
                                                             className="PodBrowser-action-menu__item"
                                                           >
-                                                            <DeleteLink
+                                                            <DeleteResourceLink
                                                               className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                                                               data-testid="download-resource-button"
                                                               name="iri"
                                                               onDelete={[Function]}
                                                               resourceIri="/iri/"
                                                             >
-                                                              <a
+                                                              <DeleteLink
                                                                 className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                                                                confirmationContent="Are you sure you wish to delete iri?"
+                                                                confirmationTitle="Confirm Delete"
                                                                 data-testid="download-resource-button"
-                                                                href="#delete"
-                                                                onClick={[Function]}
+                                                                dialogId="delete-resource-/iri/"
+                                                                onDelete={[Function]}
+                                                                successMessage="iri was successfully deleted."
                                                               >
-                                                                Delete
-                                                              </a>
-                                                            </DeleteLink>
+                                                                <a
+                                                                  className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                                                                  data-testid="download-resource-button"
+                                                                  href="#delete"
+                                                                  onClick={[Function]}
+                                                                >
+                                                                  Delete
+                                                                </a>
+                                                              </DeleteLink>
+                                                            </DeleteResourceLink>
                                                           </li>
                                                         </ActionMenuItem>
                                                       </ul>
@@ -6760,22 +6780,32 @@ font-display: block;",
                                                               <li
                                                                 className="PodBrowser-action-menu__item"
                                                               >
-                                                                <DeleteLink
+                                                                <DeleteResourceLink
                                                                   className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                                                                   data-testid="download-resource-button"
                                                                   name="iri"
                                                                   onDelete={[Function]}
                                                                   resourceIri="/iri/"
                                                                 >
-                                                                  <a
+                                                                  <DeleteLink
                                                                     className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                                                                    confirmationContent="Are you sure you wish to delete iri?"
+                                                                    confirmationTitle="Confirm Delete"
                                                                     data-testid="download-resource-button"
-                                                                    href="#delete"
-                                                                    onClick={[Function]}
+                                                                    dialogId="delete-resource-/iri/"
+                                                                    onDelete={[Function]}
+                                                                    successMessage="iri was successfully deleted."
                                                                   >
-                                                                    Delete
-                                                                  </a>
-                                                                </DeleteLink>
+                                                                    <a
+                                                                      className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                                                                      data-testid="download-resource-button"
+                                                                      href="#delete"
+                                                                      onClick={[Function]}
+                                                                    >
+                                                                      Delete
+                                                                    </a>
+                                                                  </DeleteLink>
+                                                                </DeleteResourceLink>
                                                               </li>
                                                             </ActionMenuItem>
                                                           </ul>
