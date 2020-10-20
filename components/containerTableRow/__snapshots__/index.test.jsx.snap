@@ -852,7 +852,7 @@ font-display: block;",
             }
           >
             <tr
-              className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable PodBrowser-tableRow"
+              className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
               onClick={[Function]}
             >
               <td
@@ -1761,7 +1761,7 @@ font-display: block;",
             }
           >
             <tr
-              className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable PodBrowser-tableRow"
+              className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
               onClick={[Function]}
             >
               <td
@@ -2668,7 +2668,7 @@ font-display: block;",
             }
           >
             <tr
-              className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable PodBrowser-tableRow"
+              className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
               onClick={[Function]}
             >
               <td

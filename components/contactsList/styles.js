@@ -29,9 +29,6 @@ const styles = (theme) => {
         "&:first-child": tableStyles["table__body-cell--width-preview"],
       },
     },
-    tableRow: {
-      cursor: "pointer",
-    },
     avatar: {
       width: "30px",
       height: "30px",

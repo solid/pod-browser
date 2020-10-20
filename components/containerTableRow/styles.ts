@@ -25,9 +25,6 @@ import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
 
 const styles = (theme: PrismTheme) =>
   createStyles(theme, ["icons", "table"], {
-    tableRow: {
-      cursor: "pointer",
-    },
     spinnerContainer: {
       display: "flex",
       flexDirection: "row",

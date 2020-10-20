@@ -158,8 +158,7 @@ function ContactsList() {
                   "table__body-row",
                   "selectable",
                   contact === profiles[selectedContactIndex] ? "selected" : null
-                ),
-                bem("tableRow")
+                )
               ),
               onClick: () => {
                 setSelectedContactIndex(row.index);

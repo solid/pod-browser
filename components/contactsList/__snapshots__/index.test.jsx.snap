@@ -3767,7 +3767,7 @@ font-display: block;",
                           role="rowgroup"
                         >
                           <tr
-                            className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable PodBrowser-tableRow"
+                            className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
                             key="row_0"
                             onClick={[Function]}
                             role="row"
@@ -16566,7 +16566,7 @@ font-display: block;",
                             </F>
                           </tr>
                           <tr
-                            className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable PodBrowser-tableRow"
+                            className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
                             key="row_1"
                             onClick={[Function]}
                             role="row"

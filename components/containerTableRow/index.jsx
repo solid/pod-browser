@@ -74,8 +74,7 @@ export default function ContainerTableRow({ resource }) {
   return (
     <tr
       className={clsx(
-        bem("table__body-row", "selectable", isActive ? "selected" : null),
-        bem("tableRow")
+        bem("table__body-row", "selectable", isActive ? "selected" : null)
       )}
       onClick={handleClick(iri, currentUri, router)}
     >
