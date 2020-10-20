@@ -181,17 +181,29 @@ export default class AcpAccessControlStrategy {
     this.#fetch = fetch;
   }
 
-  async getPolicies(policyUrls) {
+  async getPolicyModesAndAgents(policyUrls) {
     const policyResources = await Promise.all(
       policyUrls.map((url) => getSolidDataset(url, { fetch: this.#fetch }))
     );
     const policies = policyResources
-      .map((resource) => getPolicyAll(resource))
+      .map((policyDataset) => ({
+        policy: getPolicyAll(policyDataset),
+        dataset: policyDataset,
+      }))
       .flat();
-    return policies.map((policy) => ({
-      modes: getAllowModesOnPolicy(policy),
-      agents: getRequiredRuleOnPolicyAll(policy).agents,
-    }));
+    return Promise.all(
+      policies.map(({ policy, dataset }) => {
+        const modes = getAllowModesOnPolicy(policy);
+        const ruleUrls = getRequiredRuleOnPolicyAll(policy);
+        // assumption: rule resides in the same resource as policies
+        const rules = ruleUrls.map((url) => getRule(dataset, url));
+        const agents = rules.map((rule) => getAgentForRuleAll(rule)).flat();
+        return {
+          modes,
+          agents,
+        };
+      })
+    );
   }
 
   async getPermissions() {
@@ -201,23 +213,25 @@ export default class AcpAccessControlStrategy {
     const policyUrls = accessControls
       .map((ac) => getPolicyUrlAll(ac).filter((url) => url === this.#policyUrl))
       .flat();
-    (await this.getPolicies(policyUrls)).forEach(({ modes, agents }) =>
-      agents.forEach((webId) => {
-        const permission = getOrCreatePermission(permissions, webId);
-        permission.acp.apply = addAcpModes(permission.acp.apply, modes);
-        permissions[webId] = permission;
-      })
+    (await this.getPolicyModesAndAgents(policyUrls)).forEach(
+      ({ modes, agents }) =>
+        agents.forEach((webId) => {
+          const permission = getOrCreatePermission(permissions, webId);
+          permission.acp.apply = addAcpModes(permission.acp.apply, modes);
+          permissions[webId] = permission;
+        })
     );
     // assigning Control
     const controlPolicyUrls = getReferencedPolicyUrlAll(
       this.#datasetWithAcr
     ).filter((url) => url === this.#policyUrl);
-    (await this.getPolicies(controlPolicyUrls)).forEach(({ modes, agents }) =>
-      agents.forEach((webId) => {
-        const permission = getOrCreatePermission(permissions, webId);
-        permission.acp.access = addAcpModes(permission.acp.access, modes);
-        permissions[webId] = permission;
-      })
+    (await this.getPolicyModesAndAgents(controlPolicyUrls)).forEach(
+      ({ modes, agents }) =>
+        agents.forEach((webId) => {
+          const permission = getOrCreatePermission(permissions, webId);
+          permission.acp.access = addAcpModes(permission.acp.access, modes);
+          permissions[webId] = permission;
+        })
     );
     // normalize permissions
     return Promise.all(
