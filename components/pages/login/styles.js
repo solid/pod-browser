@@ -19,11 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-const styles = (theme: PrismTheme) =>
+const styles = (theme) =>
   createStyles(theme, ["content"], {
     "login-page": {
+      flexGrow: 1,
+      flexShrink: 0,
       background:
         "linear-gradient(135deg, rgb(124, 77, 255) 0%, rgb(24, 169, 230) 50%, rgb(1, 201, 234) 100%)",
       backgroundRepeat: "no-repeat",

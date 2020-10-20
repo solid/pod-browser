@@ -19,19 +19,17 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
-import { StyleRules, createStyles, makeStyles } from "@material-ui/styles";
+import React from "react";
+import { createStyles, makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
-import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
+import { useBem } from "@solid/lit-prism-patterns";
 import { useRedirectIfLoggedIn } from "../../../src/effects/auth";
 import LoginForm from "../../login";
 import styles from "./styles";
 
-const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme) as StyleRules)
-);
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function Login(): ReactElement {
+export default function Login() {
   useRedirectIfLoggedIn();
   const bem = useBem(useStyles());
 
