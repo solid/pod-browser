@@ -61,11 +61,9 @@ export default function ResourceDrawer({ onUpdate }) {
     setMenuOpen(!!(action && resourceIri));
   }, [action, resourceIri, setMenuOpen]);
 
-  useEffect(() => {
-    if (accessControlError || resourceError) {
-      throw accessControlError || resourceError;
-    }
-  });
+  if (accessControlError || resourceError) {
+    throw accessControlError || resourceError;
+  }
 
   const closeDrawer = handleCloseDrawer({ setMenuOpen, router });
   const loading = !accessControl || !resourceInfo;

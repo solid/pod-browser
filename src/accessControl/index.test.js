@@ -31,7 +31,7 @@ jest.mock("./wac");
 describe("getAccessControl", () => {
   let result;
   const resource = "resource";
-  const policies = "policies";
+  const policiesContainer = "policiesContainer";
   const fetch = "fetch";
   const acpStrategy = "acpStrategy";
   const wacStrategy = "wacStrategy";
@@ -44,21 +44,21 @@ describe("getAccessControl", () => {
   });
 
   it("throws error if no access link is found", async () => {
-    await expect(getAccessControl(resource, policies, fetch)).rejects.toEqual(
-      new Error(noAccessPolicyError)
-    );
+    await expect(
+      getAccessControl(resource, policiesContainer, fetch)
+    ).rejects.toEqual(new Error(noAccessPolicyError));
   });
 
   describe("ACP is supported", () => {
     beforeEach(async () => {
       mockedAcpFns.hasLinkedAcr.mockReturnValue(true);
-      result = await getAccessControl(resource, policies, fetch);
+      result = await getAccessControl(resource, policiesContainer, fetch);
     });
 
     it("calls AcpAccessControlStrategy.init", () =>
       expect(AcpAccessControlStrategy.init).toHaveBeenCalledWith(
         resource,
-        policies,
+        policiesContainer,
         fetch
       ));
 
@@ -69,7 +69,7 @@ describe("getAccessControl", () => {
   describe("WAC is supported", () => {
     beforeEach(async () => {
       solidClientHelperFns.hasAccessibleAcl.mockReturnValue(true);
-      result = await getAccessControl(resource, policies, fetch);
+      result = await getAccessControl(resource, policiesContainer, fetch);
     });
 
     it("calls WacAccessControlStrategy.init", () =>

@@ -22,22 +22,22 @@
 import { renderHook } from "@testing-library/react-hooks";
 import useAccessControl from "./index";
 import * as accessControlFns from "../../accessControl";
-import usePolicies from "../usePolicies";
+import usePoliciesContainer from "../usePoliciesContainer";
 
-jest.mock("../usePolicies");
+jest.mock("../usePoliciesContainer");
 
 describe("useAccessControl", () => {
   const accessControl = "accessControl";
   const resourceIri = "resourceIri";
   const fetch = "fetch";
-  const policies = "policies";
+  const policiesContainer = "policiesContainer";
   const error = "error";
 
   beforeEach(() => {
     jest
       .spyOn(accessControlFns, "getAccessControl")
       .mockResolvedValue(accessControl);
-    usePolicies.mockReturnValue({ policies });
+    usePoliciesContainer.mockReturnValue({ policiesContainer });
   });
 
   it("returns null if given no resourceUri", () => {
@@ -53,7 +53,7 @@ describe("useAccessControl", () => {
     await waitForNextUpdate();
     expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
       resourceIri,
-      policies,
+      policiesContainer,
       fetch
     );
     expect(result.current.accessControl).toBe(accessControl);
@@ -61,7 +61,7 @@ describe("useAccessControl", () => {
   });
 
   it("returns error if usePolicies return error", async () => {
-    usePolicies.mockReturnValue({ error });
+    usePoliciesContainer.mockReturnValue({ error });
     const { result } = renderHook(() => useAccessControl(resourceIri, fetch));
     expect(result.current.accessControl).toBeNull();
     expect(result.current.error).toBe(error);

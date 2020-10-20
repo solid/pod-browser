@@ -40,8 +40,8 @@ const iriWithSpaces = "/iri with spaces/";
 
 describe("ResourceDrawer view", () => {
   const resourceInfo = mockSolidDatasetFrom(iri);
-  const accessControl = mockAccessControl();
 
+  let accessControl;
   let fetch;
   let session;
   let SessionProvider;
@@ -51,6 +51,7 @@ describe("ResourceDrawer view", () => {
     fetch = jest.fn();
     session = mockSession({ fetch });
     SessionProvider = mockSessionContextProvider(session);
+    accessControl = mockAccessControl();
 
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",

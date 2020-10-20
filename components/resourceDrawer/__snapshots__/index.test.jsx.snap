@@ -922,7 +922,6 @@ font-display: block;",
                       accessControl={
                         Object {
                           "getPermissions": [Function],
-                          "hasAccess": [Function],
                           "savePermissionsForAgent": [Function],
                         }
                       }
@@ -3620,7 +3619,6 @@ font-display: block;",
                   accessControl={
                     Object {
                       "getPermissions": [Function],
-                      "hasAccess": [Function],
                       "savePermissionsForAgent": [Function],
                     }
                   }
@@ -6358,7 +6356,6 @@ font-display: block;",
                       accessControl={
                         Object {
                           "getPermissions": [Function],
-                          "hasAccess": [Function],
                           "savePermissionsForAgent": [Function],
                         }
                       }

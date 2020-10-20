@@ -35,7 +35,7 @@ import {
   createPolicy,
   getAccessControlAll,
   getAllowModesOnPolicy,
-  getControlPolicyUrlAll,
+  getReferencedPolicyUrlAll,
   getPolicy,
   getPolicyAll,
   getPolicyUrlAll,
@@ -45,6 +45,7 @@ import {
   setAllowModesOnPolicy,
   setPolicy,
   setRequiredRuleOnPolicy,
+  saveAccessControlResource,
 } from "./mockedClientApi";
 import { fetchProfile } from "../../solidClientHelpers/profile";
 import {
@@ -103,9 +104,9 @@ export function getOrCreatePermission(permissions, webId) {
   return permission;
 }
 
-export function getPolicyUrl(resource, policies) {
+export function getPolicyUrl(resource, policiesContainer) {
   const resourceUrl = getSourceUrl(resource);
-  const policiesUrl = getSourceUrl(policies);
+  const policiesUrl = getSourceUrl(policiesContainer);
   const matchingStart = sharedStart(resourceUrl, policiesUrl);
   const path = resourceUrl.substr(matchingStart.length);
   return `${getPoliciesContainerUrl(matchingStart) + path}.ttl`;
@@ -143,9 +144,9 @@ export default class AcpAccessControlStrategy {
 
   #fetch;
 
-  constructor(datasetWithAcr, policies, fetch) {
+  constructor(datasetWithAcr, policiesContainer, fetch) {
     this.#datasetWithAcr = datasetWithAcr;
-    this.#policyUrl = getPolicyUrl(datasetWithAcr, policies);
+    this.#policyUrl = getPolicyUrl(datasetWithAcr, policiesContainer);
     this.#fetch = fetch;
   }
 
@@ -177,7 +178,7 @@ export default class AcpAccessControlStrategy {
       })
     );
     // assigning Control
-    const controlPolicyUrls = getControlPolicyUrlAll(
+    const controlPolicyUrls = getReferencedPolicyUrlAll(
       this.#datasetWithAcr
     ).filter((url) => url === this.#policyUrl);
     (await this.getPolicies(controlPolicyUrls)).forEach(({ modes, agents }) =>
@@ -227,7 +228,7 @@ export default class AcpAccessControlStrategy {
 
   async saveAccessPolicyForAgent(dataset, webId, access) {
     const policyUrl = `${this.#policyUrl}#controlPolicy`;
-    const existingPolicy = getControlPolicyUrlAll(this.#datasetWithAcr).find(
+    const existingPolicy = getReferencedPolicyUrlAll(this.#datasetWithAcr).find(
       (url) => url === policyUrl
     );
     const policy = chain(
@@ -285,21 +286,22 @@ export default class AcpAccessControlStrategy {
           ),
         async (d) => this.saveAccessPolicyForAgent(d, webId, access)
       );
-      this.#datasetWithAcr = await saveSolidDatasetAt(
-        getSourceUrl(updatedDataset),
-        updatedDataset
-      );
+      this.#datasetWithAcr = await saveAccessControlResource(updatedDataset);
     } catch (err) {
       return error(err.message);
     }
     return respond(this.#datasetWithAcr);
   }
 
-  static async init(resourceInfo, policies, fetch) {
+  static async init(resourceInfo, policiesContainer, fetch) {
     const resourceUrl = getSourceUrl(resourceInfo);
     const datasetWithAcr = await getResourceInfoWithAcp(resourceUrl, {
       fetch,
     });
-    return new AcpAccessControlStrategy(datasetWithAcr, policies, fetch);
+    return new AcpAccessControlStrategy(
+      datasetWithAcr,
+      policiesContainer,
+      fetch
+    );
   }
 }

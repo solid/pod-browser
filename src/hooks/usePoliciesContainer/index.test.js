@@ -20,7 +20,7 @@
  */
 
 import { renderHook } from "@testing-library/react-hooks";
-import usePolicies from "./index";
+import usePoliciesContainer from "./index";
 import mockSession, { storageUrl } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import { getPoliciesContainerUrl } from "../../accessControl/acp";
@@ -31,7 +31,7 @@ import useResourceInfo from "../useResourceInfo";
 
 jest.mock("../useResourceInfo");
 
-describe("usePolicies", () => {
+describe("usePoliciesContainer", () => {
   const response = "response";
   const error = "error";
   const policiesContainerUri = getPoliciesContainerUrl(storageUrl);
@@ -49,19 +49,22 @@ describe("usePolicies", () => {
   });
 
   it("returns null by default", () => {
-    const { result } = renderHook(() => usePolicies(), { wrapper });
-    expect(result.current.policies).toBeNull();
+    const { result } = renderHook(() => usePoliciesContainer(), { wrapper });
+    expect(result.current.policiesContainer).toBeNull();
     expect(result.current.error).toBeNull();
   });
 
   it("returns response if ACP is supported", async () => {
-    const { result, waitForNextUpdate } = renderHook(() => usePolicies(), {
-      wrapper,
-    });
+    const { result, waitForNextUpdate } = renderHook(
+      () => usePoliciesContainer(),
+      {
+        wrapper,
+      }
+    );
 
     await waitForNextUpdate();
 
-    expect(result.current.policies).toBe(response);
+    expect(result.current.policiesContainer).toBe(response);
     expect(result.current.error).toBeNull();
     expect(resourceHelperFns.getOrCreateContainer).toHaveBeenCalledWith(
       policiesContainerUri,
@@ -71,33 +74,36 @@ describe("usePolicies", () => {
 
   it("returns null if ACP is not supported", () => {
     mockedAcpFns.hasLinkedAcr.mockReturnValue(false);
-    const { result } = renderHook(() => usePolicies(), {
+    const { result } = renderHook(() => usePoliciesContainer(), {
       wrapper,
     });
 
-    expect(result.current.policies).toBeNull();
+    expect(result.current.policiesContainer).toBeNull();
     expect(result.current.error).toBeNull();
   });
 
   it("return an error if getOrCreateContainer fails", async () => {
     resourceHelperFns.getOrCreateContainer.mockResolvedValue({ error });
-    const { result, waitForNextUpdate } = renderHook(() => usePolicies(), {
-      wrapper,
-    });
+    const { result, waitForNextUpdate } = renderHook(
+      () => usePoliciesContainer(),
+      {
+        wrapper,
+      }
+    );
 
     await waitForNextUpdate();
 
-    expect(result.current.policies).toBeNull();
+    expect(result.current.policiesContainer).toBeNull();
     expect(result.current.error).toBe(error);
   });
 
   it("return an error if useResourceInfo fails", () => {
     useResourceInfo.mockReturnValue({ error });
-    const { result } = renderHook(() => usePolicies(), {
+    const { result } = renderHook(() => usePoliciesContainer(), {
       wrapper,
     });
 
-    expect(result.current.policies).toBeNull();
+    expect(result.current.policiesContainer).toBeNull();
     expect(result.current.error).toBe(error);
   });
 });

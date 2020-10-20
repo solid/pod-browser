@@ -26,6 +26,7 @@ import { mountToJson } from "../../../../__testUtils/mountWithTheme";
 import * as permissionHelpers from "../../../../src/solidClientHelpers/permissions";
 import AgentAccessList from ".";
 import { AccessControlProvider } from "../../../../src/contexts/accessControlContext";
+import mockAccessControl from "../../../../__testUtils/mockAccessControl";
 
 const datasetUrl = "http://example.com/dataset";
 const dataset = mockSolidDatasetFrom(datasetUrl);
@@ -39,15 +40,12 @@ const permission = {
 };
 
 describe("AgentAccessList", () => {
-  const accessControl = {
-    getPermissions: () => Promise.resolve([]),
-  };
-
   it("renders an AgentAccessList", () => {
     expect(mountToJson(<AgentAccessList />)).toMatchSnapshot();
   });
 
   it("renders a about empty list of permissions", () => {
+    const accessControl = mockAccessControl();
     expect(
       mountToJson(
         <AccessControlProvider accessControl={accessControl}>
@@ -60,7 +58,9 @@ describe("AgentAccessList", () => {
   });
 
   it("renders a list of permissions", () => {
-    accessControl.getPermissions = () => Promise.resolve([permission]);
+    const accessControl = mockAccessControl({
+      permissions: [permission],
+    });
     expect(
       mountToJson(
         <AccessControlProvider accessControl={accessControl}>

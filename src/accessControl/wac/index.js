@@ -68,10 +68,6 @@ export default class WacAccessControlStrategy {
     );
   }
 
-  hasAccess() {
-    return hasAccessibleAcl(this.#datasetWithAcl);
-  }
-
   async normalizePermissions(permissions) {
     return Promise.all(
       Object.keys(permissions)

@@ -116,6 +116,11 @@ export function addControlPolicyUrl(withAccessControlResource, policyUrl) {
 // function getControlPolicyUrlAll<ResourceExt extends WithAccessibleAcr>(
 //   withAccessControlResource: ResourceExt,
 // ): UrlString[]
-export function getControlPolicyUrlAll(withAccessControlResource) {
+export function getReferencedPolicyUrlAll(withAccessControlResource) {
+  throw new Error("Not implemented");
+}
+
+// returns the modified datasetWithAcr
+export async function saveAccessControlResource(datasetWithAcr, dataset) {
   throw new Error("Not implemented");
 }

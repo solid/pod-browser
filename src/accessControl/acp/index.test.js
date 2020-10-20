@@ -35,8 +35,8 @@ import { createAccessMap } from "../../solidClientHelpers/permissions";
 describe("AcpAccessControlStrategy", () => {
   const resourceInfoUrl = "http://example.com/resourceInfo";
   const resourceInfo = mockSolidDatasetFrom(resourceInfoUrl);
-  const policiesUrl = "http://example.com/policies";
-  const policies = mockSolidDatasetFrom(policiesUrl);
+  const policiesContainerUrl = "http://example.com/policies";
+  const policiesContainer = mockSolidDatasetFrom(policiesContainerUrl);
   const fetch = "fetch";
   const datasetWithAcrUrl = "http://example.com/resourceInfo=acr";
   const datasetWithAcr = mockSolidDatasetFrom(datasetWithAcrUrl);
@@ -48,7 +48,11 @@ describe("AcpAccessControlStrategy", () => {
       jest
         .spyOn(mockedAcpFns, "getResourceInfoWithAcp")
         .mockResolvedValue(datasetWithAcr);
-      acp = await AcpAccessControlStrategy.init(resourceInfo, policies, fetch);
+      acp = await AcpAccessControlStrategy.init(
+        resourceInfo,
+        policiesContainer,
+        fetch
+      );
     });
 
     it("uses getResourceInfoWithAcp to fetch data", () =>

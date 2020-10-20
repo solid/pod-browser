@@ -27,8 +27,8 @@ import { getOrCreateContainer } from "../../solidClientHelpers/resource";
 import useResourceInfo from "../useResourceInfo";
 import { hasLinkedAcr } from "../../accessControl/acp/mockedClientApi";
 
-export default function usePolicies() {
-  const [policies, setPolicies] = useState();
+export default function usePoliciesContainer() {
+  const [policiesContainer, setPoliciesContainer] = useState();
   const { fetch } = useSession();
   const { data: profile } = useAuthenticatedProfile();
   const podRootUri = profile?.pods[0];
@@ -37,18 +37,18 @@ export default function usePolicies() {
 
   useEffect(() => {
     if (!profile || podRootError || !podRoot || !hasLinkedAcr(podRoot)) {
-      setPolicies(null);
+      setPoliciesContainer(null);
       setError(podRootError || null);
       return;
     }
     const policiesUri = getPoliciesContainerUrl(podRootUri);
     getOrCreateContainer(policiesUri, fetch).then(
       ({ response, error: createError }) => {
-        setPolicies(response || null);
+        setPoliciesContainer(response || null);
         setError(createError || null);
       }
     );
   }, [fetch, podRoot, podRootError, podRootUri, profile]);
 
-  return { policies, error };
+  return { policiesContainer, error };
 }

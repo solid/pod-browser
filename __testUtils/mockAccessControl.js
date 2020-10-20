@@ -19,10 +19,11 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function mockAccessControl() {
+export default function mockAccessControl(
+  { permissions } = { permissions: [] }
+) {
   return {
-    getPermissions: async () => Promise.resolve([]),
-    hasAccess: () => true,
+    getPermissions: async () => Promise.resolve(permissions),
     savePermissionsForAgent: async () => ({ response: {} }),
   };
 }

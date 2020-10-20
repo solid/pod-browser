@@ -21,11 +21,11 @@
 
 import { useEffect, useState } from "react";
 import { getAccessControl } from "../../accessControl";
-import usePolicies from "../usePolicies";
+import usePoliciesContainer from "../usePoliciesContainer";
 
 export default function useAccessControl(resourceInfo, fetch) {
   const [accessControl, setAccessControl] = useState(null);
-  const { policies, error: policiesError } = usePolicies();
+  const { policiesContainer, error: policiesError } = usePoliciesContainer();
   const [error, setError] = useState(policiesError || null);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function useAccessControl(resourceInfo, fetch) {
       setError(policiesError || null);
       return;
     }
-    getAccessControl(resourceInfo, policies, fetch)
+    getAccessControl(resourceInfo, policiesContainer, fetch)
       .then((response) => {
         setAccessControl(response);
         setError(null);
@@ -43,7 +43,7 @@ export default function useAccessControl(resourceInfo, fetch) {
         setAccessControl(null);
         setError(accessControlError);
       });
-  }, [fetch, policies, policiesError, resourceInfo]);
+  }, [fetch, policiesContainer, policiesError, resourceInfo]);
 
   return { accessControl, error };
 }

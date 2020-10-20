@@ -31,12 +31,16 @@ export function hasAccess(resourceInfo) {
   return hasAccessibleAcl(resourceInfo) || hasLinkedAcr(resourceInfo);
 }
 
-export async function getAccessControl(resourceInfo, policies, fetch) {
+export async function getAccessControl(resourceInfo, policiesContainer, fetch) {
   if (hasAccessibleAcl(resourceInfo)) {
     return WacAccessControlStrategy.init(resourceInfo, fetch);
   }
   if (hasLinkedAcr(resourceInfo)) {
-    return AcpAccessControlStrategy.init(resourceInfo, policies, fetch);
+    return AcpAccessControlStrategy.init(
+      resourceInfo,
+      policiesContainer,
+      fetch
+    );
   }
   throw new Error(noAccessPolicyError);
 }

@@ -231,6 +231,9 @@ export function isHTTPError(errorMessage, code) {
   return !!errorMessage.match(new RegExp(code));
 }
 
+/**
+ * Returns the shared characters that two strings starts with, e.g. sharedStart("bar", "baz", "bam") will return "ba".
+ */
 export function sharedStart(...strings) {
   const A = strings.concat().sort();
   const a1 = A[0] || "";
