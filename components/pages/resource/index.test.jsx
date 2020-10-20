@@ -29,7 +29,6 @@ import IndexPage from "./index";
 import useRedirectIfNoControlAccessToOwnPod from "../../../src/hooks/useRedirectIfNoControlAccessToOwnPod";
 
 jest.mock("../../../src/effects/auth");
-jest.mock("../../../src/hooks/useRedirectIfNoControlAccessToOwnPod");
 jest.mock("next/router");
 jest.mock("../../../src/hooks/useRedirectIfNoControlAccessToOwnPod");
 
