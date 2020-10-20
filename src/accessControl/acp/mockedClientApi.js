@@ -43,7 +43,8 @@ export function getPolicyUrlAll(accessControl) {
   throw new Error("Not implemented");
 }
 
-export function getRequiredRuleOnPolicy(policy) {
+// function getRequiredRuleOnPolicyAll(policy: Policy): UrlString[]
+export function getRequiredRuleOnPolicyAll(policy) {
   // returns AccessRule[]
   throw new Error("Not implemented");
 }
@@ -58,8 +59,8 @@ export function hasLinkedAcr(resource) {
   return false;
 }
 
-// function setRequiredRuleOnPolicy(policy: AccessPolicy, rule: Partial<AccessRule>): AccessPolicy
-export function setRequiredRuleOnPolicy(policy, rule) {
+// function setRequiredRuleOnPolicy(policy: AccessPolicy, rules: Rule[]): AccessPolicy
+export function setRequiredRuleOnPolicy(policy, rules) {
   throw new Error("Not implemented");
 }
 
@@ -122,5 +123,29 @@ export function getReferencedPolicyUrlAll(withAccessControlResource) {
 
 // returns the modified datasetWithAcr
 export async function saveAccessControlResource(datasetWithAcr, dataset) {
+  throw new Error("Not implemented");
+}
+
+/* RULE METHODS */
+// function createRule(url: Url | UrlString): Rule
+export function createRule(url) {
+  throw new Error("Not implemented");
+}
+
+// function getRule(
+//   ruleResource: RuleDataset,
+//   url: Url | UrlString
+// ): Rule | null
+export function getRule(ruleResource, url) {
+  throw new Error("Not implemented");
+}
+
+// function getAgentForRuleAll(rule: Rule): WebId[]
+export function getAgentForRuleAll(rule) {
+  throw new Error("Not implemented");
+}
+
+// function setAgentInRule(rule: Rule, agents: WebId[]): Rule
+export function setAgentInRule(rule, agents) {
   throw new Error("Not implemented");
 }

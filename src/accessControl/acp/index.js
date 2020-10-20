@@ -23,6 +23,7 @@
 // TODO: Remove once Solid Client ACP API is complete
 
 import {
+  asUrl,
   getSolidDataset,
   getSourceUrl,
   saveSolidDatasetAt,
@@ -39,13 +40,17 @@ import {
   getPolicy,
   getPolicyAll,
   getPolicyUrlAll,
-  getRequiredRuleOnPolicy,
+  getRequiredRuleOnPolicyAll,
   getResourceInfoWithAcp,
   setAccessControl,
   setAllowModesOnPolicy,
   setPolicy,
   setRequiredRuleOnPolicy,
   saveAccessControlResource,
+  getAgentForRuleAll,
+  createRule,
+  getRule,
+  setAgentInRule,
 } from "./mockedClientApi";
 import { fetchProfile } from "../../solidClientHelpers/profile";
 import {
@@ -112,29 +117,55 @@ export function getPolicyUrl(resource, policiesContainer) {
   return `${getPoliciesContainerUrl(matchingStart) + path}.ttl`;
 }
 
-export function getOrCreatePolicy(dataset, url) {
-  const existingPolicy = getPolicy(dataset, url);
+export function getOrCreatePolicy(policyDataset, url) {
+  const existingPolicy = getPolicy(policyDataset, url);
   if (existingPolicy) {
-    return { policy: existingPolicy, dataset };
+    return { policy: existingPolicy, dataset: policyDataset };
   }
   const newPolicy = createPolicy(url);
-  const newDataset = setPolicy(dataset, newPolicy);
-  return { policy: newPolicy, dataset: newDataset };
+  const updatedPolicyDataset = setPolicy(policyDataset, newPolicy);
+  return { policy: newPolicy, dataset: updatedPolicyDataset };
 }
 
-export async function setAgents(policy, webId, access, mode) {
-  const { agents: existingAgents } = getRequiredRuleOnPolicy(policy);
+export function getRulesOrCreate(ruleUrls, policy, policyDataset) {
+  // assumption: Rules resides in the same resource as the policies
+  const rules = ruleUrls
+    .map((url) => getRule(policyDataset, url))
+    .filter((rule) => !!rule);
+  if (rules.length === 0) {
+    const ruleUrl = `${asUrl(policy)}Rule`; // e.g. <pod>/policies/.ttl#readPolicyRule
+    return [createRule(ruleUrl)];
+  }
+  return rules;
+}
+
+export function getRuleWithAgent(rules, agentWebId) {
+  // assumption 1: the rules for the policies we work with will not have agents across multiple rules
+  // assumption 2: there will always be at least one rule (we enforce this with getRulesOrCreate)
+  const rule = rules.find((r) =>
+    getAgentForRuleAll(r).find((webId) => webId === agentWebId)
+  );
+  // if we don't find the agent in a rule, we'll just pick the first one
+  return rule || rules[0];
+}
+
+export async function setAgents(policy, policyDataset, webId, access, mode) {
+  const ruleUrls = getRequiredRuleOnPolicyAll(policy);
+  const rules = getRulesOrCreate(ruleUrls, policy, policyDataset);
+  const rule = getRuleWithAgent(rules, webId);
+  const existingAgents = getAgentForRuleAll(rule);
   const agentIndex = existingAgents.indexOf(webId);
-  let agents;
+  let modifiedAgents;
   if (access[mode] && agentIndex === -1) {
-    agents = existingAgents.concat(webId);
+    modifiedAgents = existingAgents.concat(webId);
   }
   if (!access[mode] && agentIndex !== -1) {
-    agents = existingAgents
+    modifiedAgents = existingAgents
       .slice(0, agentIndex)
       .concat(existingAgents.slice(agentIndex + 1));
   }
-  return setRequiredRuleOnPolicy(policy, { agents });
+  const modifiedRule = setAgentInRule(rule, modifiedAgents);
+  return setRequiredRuleOnPolicy(policy, modifiedRule);
 }
 
 export default class AcpAccessControlStrategy {
@@ -159,7 +190,7 @@ export default class AcpAccessControlStrategy {
       .flat();
     return policies.map((policy) => ({
       modes: getAllowModesOnPolicy(policy),
-      agents: getRequiredRuleOnPolicy(policy).agents,
+      agents: getRequiredRuleOnPolicyAll(policy).agents,
     }));
   }
 
@@ -202,14 +233,17 @@ export default class AcpAccessControlStrategy {
     );
   }
 
-  async saveApplyPolicyForAgent(dataset, webId, access, mode, acpMap) {
+  async saveApplyPolicyForAgent(policyDataset, webId, access, mode, acpMap) {
     const policyUrl = `${this.#policyUrl}#${mode}Policy`;
-    const policy = chain(
-      getOrCreatePolicy(dataset, policyUrl),
-      (p) => setAllowModesOnPolicy(p, acpMap),
-      (p) => setAgents(p, webId, access, mode)
+    const { dataset } = chain(
+      getOrCreatePolicy(policyDataset, policyUrl),
+      ({ policy: p, dataset: d }) => ({
+        policy: setAllowModesOnPolicy(p, acpMap),
+        dataset: d,
+      }),
+      ({ policy: p, dataset: d }) => setAgents(p, d, webId, access, mode)
     );
-    const savedPolicyDataset = await saveSolidDatasetAt(policyUrl, policy);
+    const savedPolicyDataset = await saveSolidDatasetAt(policyUrl, dataset);
     const accessControls = getAccessControlAll(this.#datasetWithAcr);
     let accessControlWithPolicy = accessControls.find((ac) =>
       getPolicyUrlAll(ac).find(policyUrl)
