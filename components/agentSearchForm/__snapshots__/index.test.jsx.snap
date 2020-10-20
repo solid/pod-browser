@@ -842,7 +842,9 @@ font-display: block;",
     >
       <AgentSearchForm
         buttonText="Add"
+        onChange={[Function]}
         onSubmit={[MockFunction]}
+        value=""
       >
         <Form
           onSubmit={[Function]}
@@ -1786,7 +1788,9 @@ font-display: block;",
       <AgentSearchForm
         buttonText="Add"
         heading="Heading"
+        onChange={[MockFunction]}
         onSubmit={[MockFunction]}
+        value=""
       >
         <Form
           onSubmit={[Function]}

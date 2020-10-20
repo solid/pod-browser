@@ -19,25 +19,24 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
+import React from "react";
 import { useId } from "react-id-generator";
 import T from "prop-types";
 import { Form, Button, Input } from "@inrupt/prism-react-components";
 
-function AgentSearchForm({ children, onSubmit, buttonText }) {
-  const [agentId, setAgentId] = useState("");
+function AgentSearchForm({ children, onSubmit, buttonText, value, onChange }) {
   const inputId = useId();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (agentId === "") {
+    if (value === "") {
       return;
     }
-    onSubmit(agentId);
+    onSubmit(value);
   };
 
   const handleChange = (event) => {
-    setAgentId(event.target.value);
+    onChange(event.target.value);
   };
 
   return (
@@ -46,7 +45,7 @@ function AgentSearchForm({ children, onSubmit, buttonText }) {
         id={inputId}
         label="WebID"
         onChange={handleChange}
-        value={agentId}
+        value={value}
         type="url"
         pattern="https://.+"
         title="Must start with https://"
@@ -62,13 +61,17 @@ function AgentSearchForm({ children, onSubmit, buttonText }) {
 AgentSearchForm.propTypes = {
   buttonText: T.string,
   children: T.node,
+  onChange: T.func,
   onSubmit: T.func,
+  value: T.string,
 };
 
 AgentSearchForm.defaultProps = {
   buttonText: "Add",
   children: null,
+  onChange: () => {},
   onSubmit: () => {},
+  value: "",
 };
 
 export default AgentSearchForm;

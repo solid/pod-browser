@@ -39,6 +39,12 @@ const POPOVER_ID = "AddPermissionWithWebId";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
+export function changeHandler(setAgentId) {
+  return (newAgentId) => {
+    setAgentId(newAgentId);
+  };
+}
+
 export function clickHandler(setAnchorEl) {
   return (event) => {
     setAnchorEl(event.currentTarget);
@@ -104,6 +110,9 @@ export default function AddPermissionUsingWebIdButton({
   const { dataset, setDataset } = useContext(DatasetContext);
   const [submitted, setSubmitted] = useState(false);
   const [permissionFormError, setPermissionFormError] = useState(false);
+  const [agentId, setAgentId] = useState("");
+
+  const handleChange = changeHandler(setAgentId);
 
   const handleClick = clickHandler(setAnchorEl);
 
@@ -160,7 +169,11 @@ export default function AddPermissionUsingWebIdButton({
           horizontal: "center",
         }}
       >
-        <AgentSearchForm onSubmit={onSubmit}>
+        <AgentSearchForm
+          onChange={handleChange}
+          onSubmit={onSubmit}
+          value={agentId}
+        >
           <InputGroup>
             <Label>Assign permissions</Label>
             <PermissionsForm

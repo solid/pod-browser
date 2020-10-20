@@ -1839,7 +1839,9 @@ font-display: block;",
               <AgentSearchForm
                 buttonText="Add Contact"
                 heading="Add contact using Web ID"
+                onChange={[Function]}
                 onSubmit={[Function]}
+                value=""
               >
                 <Form
                   onSubmit={[Function]}

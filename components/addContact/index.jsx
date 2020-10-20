@@ -45,6 +45,7 @@ export const FETCH_PROFILE_FAILED_ERROR_MESSAGE =
 
 export function handleSubmit({
   addressBook,
+  setAgentId,
   setIsLoading,
   alertError,
   alertSuccess,
@@ -78,11 +79,14 @@ export function handleSubmit({
         );
 
         if (error) alertError(error);
-        if (response) alertSuccess(`${contact.fn} was added to your contacts`);
+        if (response) {
+          alertSuccess(`${contact.fn} was added to your contacts`);
+          setAgentId("");
+        }
       } else {
         alertError(NO_NAME_ERROR_MESSAGE);
       }
-    } catch (error) {
+    } catch {
       alertError(FETCH_PROFILE_FAILED_ERROR_MESSAGE);
     }
     setIsLoading(false);
@@ -105,16 +109,20 @@ export default function AddContact() {
   );
   const [addressBook] = useAddressBook();
   const [isLoading, setIsLoading] = useState(false);
+  const [agentId, setAgentId] = useState("");
   if (!webId || isLoading) return <Spinner />;
 
   const onSubmit = handleSubmit({
     addressBook,
+    setAgentId,
     setIsLoading,
     alertError,
     alertSuccess,
     fetch,
     webId,
   });
+
+  const handleChange = (newValue) => setAgentId(newValue);
 
   return (
     <div className={containerClass}>
@@ -125,8 +133,10 @@ export default function AddContact() {
 
       <AgentSearchForm
         heading="Add contact using Web ID"
+        onChange={handleChange}
         onSubmit={onSubmit}
         buttonText="Add Contact"
+        value={agentId}
       />
     </div>
   );

@@ -24,6 +24,7 @@ import { DatasetProvider } from "@inrupt/solid-ui-react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 import AddPermissionUsingWebIdButton, {
+  changeHandler,
   clickHandler,
   closeHandler,
   submitHandler,
@@ -43,6 +44,14 @@ describe("AddPermissionUsingWebIdButton", () => {
         </DatasetProvider>
       )
     ).toMatchSnapshot();
+  });
+});
+
+describe("changeHandler", () => {
+  it("triggers setAgentId", () => {
+    const setAgentId = jest.fn();
+    changeHandler(setAgentId)("https://example.com");
+    expect(setAgentId).toHaveBeenCalledWith("https://example.com");
   });
 });
 

@@ -27,9 +27,15 @@ import AgentSearchForm from "./index";
 describe("AgentSearchForm", () => {
   test("it renders an AgentSearchForm", () => {
     const heading = "Heading";
+    const onChange = jest.fn();
     const onSubmit = jest.fn();
     const tree = mountToJson(
-      <AgentSearchForm heading={heading} onSubmit={onSubmit} />
+      <AgentSearchForm
+        heading={heading}
+        onChange={onChange}
+        onSubmit={onSubmit}
+        value=""
+      />
     );
 
     expect(tree).toMatchSnapshot();
@@ -41,11 +47,21 @@ describe("AgentSearchForm", () => {
 
     expect(tree).toMatchSnapshot();
   });
-  test("it calls onSubmit when clicking the submit button", () => {
+  test("it calls onChange when updating the input", () => {
+    const onChange = jest.fn();
     const onSubmit = jest.fn();
-    const wrapper = render(<AgentSearchForm onSubmit={onSubmit} />);
+    const wrapper = render(
+      <AgentSearchForm onSubmit={onSubmit} onChange={onChange} value="" />
+    );
     const input = wrapper.getByRole("textbox");
     fireEvent.change(input, { target: { value: "https://www.example.com" } });
+    expect(onChange).toHaveBeenCalledWith("https://www.example.com");
+  });
+  test("it calls onSubmit when clicking the submit button", () => {
+    const onSubmit = jest.fn();
+    const wrapper = render(
+      <AgentSearchForm onSubmit={onSubmit} value="https://www.example.com" />
+    );
     const button = wrapper.getByRole("button");
     fireEvent.click(button);
     expect(onSubmit).toHaveBeenCalledWith("https://www.example.com");

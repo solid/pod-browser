@@ -80,15 +80,20 @@ describe("AddContact", () => {
 });
 describe("handleSubmit", () => {
   const addressBook = mockSolidDatasetFrom("https://example.com/addressBook");
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
 
   test("it alerts the user and exits if the webid already exists", async () => {
     const personDataset = mockPersonDatasetAlice();
     const personProfile = mockProfileAlice();
+    const setAgentId = jest.fn();
     const setIsLoading = jest.fn();
     const alertError = jest.fn();
     const alertSuccess = jest.fn();
     const handler = handleSubmit({
       addressBook,
+      setAgentId,
       setIsLoading,
       alertError,
       alertSuccess,
@@ -101,17 +106,20 @@ describe("handleSubmit", () => {
       .spyOn(addressBookFns, "findContactInAddressBook")
       .mockResolvedValue([personDataset]);
     await handler();
+    expect(setAgentId).toHaveBeenCalledTimes(0);
     expect(setIsLoading).toHaveBeenCalledTimes(2);
     expect(alertError).toHaveBeenCalledWith(EXISTING_WEBID_ERROR_MESSAGE);
   });
   test("it alerts the user and exits if the webid doesn't have a name", async () => {
     const personUri = "http://example.com/marie#me";
     const mockProfile = { webId: personUri };
+    const setAgentId = jest.fn();
     const setIsLoading = jest.fn();
     const alertError = jest.fn();
     const alertSuccess = jest.fn();
     const handler = handleSubmit({
       addressBook,
+      setAgentId,
       setIsLoading,
       alertError,
       alertSuccess,
@@ -122,17 +130,20 @@ describe("handleSubmit", () => {
       .spyOn(addressBookFns, "findContactInAddressBook")
       .mockResolvedValue([]);
     await handler();
+    expect(setAgentId).toHaveBeenCalledTimes(0);
     expect(setIsLoading).toHaveBeenCalledTimes(2);
     expect(alertSuccess).not.toHaveBeenCalled();
     expect(alertError).toHaveBeenCalledWith(NO_NAME_ERROR_MESSAGE);
   });
   test("it alerts the user and exits if fetching the profile fails", async () => {
     const mockProfileError = new Error("error");
+    const setAgentId = jest.fn();
     const setIsLoading = jest.fn();
     const alertError = jest.fn();
     const alertSuccess = jest.fn();
     const handler = handleSubmit({
       addressBook,
+      setAgentId,
       setIsLoading,
       alertError,
       alertSuccess,
@@ -140,8 +151,9 @@ describe("handleSubmit", () => {
     });
     jest
       .spyOn(profileHelperFns, "fetchProfile")
-      .mockRejectedValue(mockProfileError);
+      .mockRejectedValueOnce(mockProfileError);
     await handler();
+    expect(setAgentId).toHaveBeenCalledTimes(0);
     expect(setIsLoading).toHaveBeenCalledTimes(2);
     expect(alertSuccess).not.toHaveBeenCalled();
     expect(alertError).toHaveBeenCalledWith(FETCH_PROFILE_FAILED_ERROR_MESSAGE);
@@ -157,11 +169,13 @@ describe("handleSubmit", () => {
     const peopleDataset = mockSolidDatasetFrom(contactsIri);
     const peopleDatasetWithContact = setThing(peopleDataset, personDataset);
     const mockProfile = mockProfileAlice();
+    const setAgentId = jest.fn();
     const setIsLoading = jest.fn();
     const alertError = jest.fn();
     const alertSuccess = jest.fn();
     const handler = handleSubmit({
       addressBook,
+      setAgentId,
       setIsLoading,
       alertError,
       alertSuccess,
@@ -176,6 +190,7 @@ describe("handleSubmit", () => {
       error: null,
     });
     await handler();
+    expect(setAgentId).toHaveBeenCalledWith("");
     expect(setIsLoading).toHaveBeenCalledTimes(2);
     expect(alertSuccess).toHaveBeenCalledWith(
       "Alice was added to your contacts"
@@ -184,11 +199,13 @@ describe("handleSubmit", () => {
   });
   test("it alerts the user if there is an error while creating the contact", async () => {
     const mockProfile = mockProfileAlice();
+    const setAgentId = jest.fn();
     const setIsLoading = jest.fn();
     const alertError = jest.fn();
     const alertSuccess = jest.fn();
     const handler = handleSubmit({
       addressBook,
+      setAgentId,
       setIsLoading,
       alertError,
       alertSuccess,
@@ -203,6 +220,7 @@ describe("handleSubmit", () => {
       error: "There was an error saving the resource",
     });
     await handler();
+    expect(setAgentId).toHaveBeenCalledTimes(0);
     expect(setIsLoading).toHaveBeenCalledTimes(2);
     expect(alertSuccess).not.toHaveBeenCalled();
     expect(alertError).toHaveBeenCalledWith(
