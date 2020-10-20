@@ -93,10 +93,10 @@ export function convertAcpToAcl(acp) {
 }
 
 export function getOrCreatePermission(permissions, webId) {
-  const permission = permissions[webId] || {
+  const permission = permissions[webId] ?? {
     webId,
   };
-  permission.acp = permissions.acp || {
+  permission.acp = permissions.acp ?? {
     apply: createAcpMap(),
     access: createAcpMap(),
   };
