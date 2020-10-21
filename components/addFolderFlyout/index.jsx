@@ -21,7 +21,7 @@
 
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
-import { createContainerAt } from "@inrupt/solid-client";
+import { createContainerAt, getSourceUrl } from "@inrupt/solid-client";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSession } from "@inrupt/solid-ui-react";
 import {
@@ -32,6 +32,7 @@ import {
   Input,
   InputLabel,
 } from "@material-ui/core";
+import { Form } from "@inrupt/prism-react-components";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import AlertContext from "../../src/contexts/alertContext";
 
@@ -82,8 +83,13 @@ export function handleFolderSubmit({
   setMessage,
   setAlertOpen,
   handleClose,
+  setFolderName,
 }) {
-  return async () => {
+  return async (event) => {
+    event.preventDefault();
+    if (!name) {
+      return;
+    }
     try {
       const url = determineFinalUrl(folders, currentUri, name);
       const response = await createContainerAt(url, options);
@@ -92,23 +98,17 @@ export function handleFolderSubmit({
       setSeverity("success");
       setMessage(
         `Your folder has been created at ${decodeURIComponent(
-          response.internal_resourceInfo.sourceIri
+          getSourceUrl(response)
         )}`
       );
       setAlertOpen(true);
+      setFolderName("");
       handleClose();
     } catch (error) {
       setSeverity("error");
       setMessage(error.toString());
       setAlertOpen(true);
     }
-  };
-}
-
-export function handleCreateFolderClick({ setFolderName, onSubmit }) {
-  return () => {
-    setFolderName("");
-    onSubmit();
   };
 }
 
@@ -153,9 +153,9 @@ export default function AddFolderFlyout({ onSave, className, resourceList }) {
     setMessage,
     setAlertOpen,
     handleClose,
+    setFolderName,
   });
 
-  const onClick = handleCreateFolderClick({ setFolderName, onSubmit });
   const onChange = handleChange(setFolderName);
 
   return (
@@ -183,24 +183,24 @@ export default function AddFolderFlyout({ onSave, className, resourceList }) {
           horizontal: "center",
         }}
       >
-        <Typography className={classes.typography}>
-          <FormControl className={classes.folderInput}>
-            <InputLabel htmlFor="folder-input">Folder name</InputLabel>
-            <Input
-              data-testid={TESTCAFE_ID_FOLDER_NAME_INPUT}
-              onChange={onChange}
-              value={folderName}
-            />
-          </FormControl>
-          <Button
-            data-testid={TESTCAFE_ID_CREATE_FOLDER_FLYOUT_BUTTON}
-            variant="contained"
-            onClick={onClick}
-            disabled={folderName === ""}
-          >
-            Create Folder
-          </Button>
-        </Typography>
+        <Form onSubmit={(event) => onSubmit(event)}>
+          <Typography className={classes.typography}>
+            <FormControl className={classes.folderInput}>
+              <InputLabel htmlFor="folder-input">Folder name</InputLabel>
+              <Input
+                data-testid={TESTCAFE_ID_FOLDER_NAME_INPUT}
+                onChange={onChange}
+                value={folderName}
+              />
+            </FormControl>
+            <Button
+              data-testid={TESTCAFE_ID_CREATE_FOLDER_FLYOUT_BUTTON}
+              variant="contained"
+            >
+              Create Folder
+            </Button>
+          </Typography>
+        </Form>
       </Popover>
     </>
   );

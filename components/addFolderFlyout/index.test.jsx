@@ -31,7 +31,6 @@ import AlertContext from "../../src/contexts/alertContext";
 import AddFolderFlyout, {
   determineFinalUrl,
   handleFolderSubmit,
-  handleCreateFolderClick,
 } from "./index";
 
 jest.mock("@inrupt/solid-client");
@@ -106,18 +105,32 @@ describe("determineFinalUrl", () => {
 });
 
 describe("handleFolderSubmit", () => {
-  test("it returns a handler that creates a new folder at a given location", async () => {
-    const fetch = jest.fn();
-    const options = { fetch };
-    const onSave = jest.fn();
+  let fetch;
+  let options;
+  let onSave;
+  let setSeverity;
+  let setMessage;
+  let setAlertOpen;
+  let setFolderName;
+  let event;
+
+  beforeEach(() => {
+    fetch = jest.fn();
+    options = { fetch };
+    onSave = jest.fn();
+    setSeverity = jest.fn();
+    setMessage = jest.fn();
+    setAlertOpen = jest.fn();
+    setFolderName = jest.fn();
+    event = { preventDefault: jest.fn() };
+  });
+
+  it("returns a handler that creates a new folder at a given location", async () => {
     const currentUri = "https://www.mypodbrowser.com/";
     const folders = [
       { iri: "https://www.mypodbrowser.com/SomeFolder", name: "SomeFolder" },
     ];
     const name = "SomeFolder";
-    const setSeverity = jest.fn();
-    const setMessage = jest.fn();
-    const setAlertOpen = jest.fn();
 
     const handler = handleFolderSubmit({
       options,
@@ -128,9 +141,10 @@ describe("handleFolderSubmit", () => {
       setSeverity,
       setMessage,
       setAlertOpen,
+      setFolderName,
     });
 
-    await handler();
+    await handler(event);
 
     expect(createContainerAt).toHaveBeenCalledWith(
       "https://www.mypodbrowser.com/SomeFolder(1)",
@@ -141,17 +155,14 @@ describe("handleFolderSubmit", () => {
     expect(setSeverity).toHaveBeenCalledWith("success");
     expect(setMessage).toHaveBeenCalled();
     expect(setAlertOpen).toHaveBeenCalledWith(true);
+    expect(setFolderName).toHaveBeenCalledWith("");
+    expect(event.preventDefault).toHaveBeenCalledWith();
   });
-  test("it returns a handler that creates a new folder within a folder which has spaces in its name", async () => {
-    const fetch = jest.fn();
-    const options = { fetch };
-    const onSave = jest.fn();
+
+  it("returns a handler that creates a new folder within a folder which has spaces in its name", async () => {
     const currentUri = "https://www.mypodbrowser.com/First Folder/";
     const folders = [];
     const name = "Second Folder";
-    const setSeverity = jest.fn();
-    const setMessage = jest.fn();
-    const setAlertOpen = jest.fn();
 
     const handler = handleFolderSubmit({
       options,
@@ -162,9 +173,10 @@ describe("handleFolderSubmit", () => {
       setSeverity,
       setMessage,
       setAlertOpen,
+      setFolderName,
     });
 
-    await handler();
+    await handler(event);
 
     expect(createContainerAt).toHaveBeenCalledWith(
       "https://www.mypodbrowser.com/First%20Folder/Second%20Folder",
@@ -175,21 +187,7 @@ describe("handleFolderSubmit", () => {
     expect(setSeverity).toHaveBeenCalledWith("success");
     expect(setMessage).toHaveBeenCalled();
     expect(setAlertOpen).toHaveBeenCalledWith(true);
-  });
-});
-describe("handleCreateFolderClick", () => {
-  test("it returns a handler that submits the current folder and calls a function to clear the current folder name from state", () => {
-    const setFolderName = jest.fn();
-    const onSubmit = jest.fn();
-
-    const handler = handleCreateFolderClick({
-      setFolderName,
-      onSubmit,
-    });
-
-    handler(setFolderName, onSubmit);
-
     expect(setFolderName).toHaveBeenCalledWith("");
-    expect(onSubmit).toHaveBeenCalled();
+    expect(event.preventDefault).toHaveBeenCalledWith();
   });
 });
