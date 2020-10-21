@@ -19,17 +19,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import AddContact from "../../addContact";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-export default function AddContactPage() {
-  useRedirectIfLoggedOut();
+const styles = (theme) => {
+  return createStyles(theme, ["back-to-nav", "input"], {
+    avatar: {
+      width: "64px",
+      height: "64px",
+    },
+  });
+};
 
-  return (
-    <DetailsMenuProvider>
-      <AddContact />
-    </DetailsMenuProvider>
-  );
-}
+export default styles;

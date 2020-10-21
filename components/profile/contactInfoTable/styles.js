@@ -19,21 +19,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { mountToJson } from "../../../__testUtils/mountWithTheme";
-import { useRedirectIfLoggedIn } from "../../../src/effects/auth";
-import LoginPage from "./index";
+import { createStyles, table } from "@solid/lit-prism-patterns";
 
-jest.mock("../../../src/effects/auth");
-
-describe("Login page", () => {
-  test("Renders a login button", () => {
-    const tree = mountToJson(<LoginPage />);
-    expect(tree).toMatchSnapshot();
+const styles = (theme) => {
+  const tableStyles = table.styles(theme);
+  return createStyles(theme, ["table", "button", "input"], {
+    table: {
+      "& tbody td": {
+        "&:nth-child(1)": {
+          ...tableStyles["table__body-cell--width-preview"],
+          "padding-right": "1.85em",
+        },
+        "&:nth-child(2)": {
+          width: "100%",
+        },
+        "&:nth-child(3)": {
+          width: "10em",
+        },
+      },
+    },
   });
+};
 
-  test("Redirects if the user is logged out", () => {
-    mountToJson(<LoginPage />);
-    expect(useRedirectIfLoggedIn).toHaveBeenCalled();
-  });
-});
+export default styles;

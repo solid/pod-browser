@@ -20,39 +20,9 @@
  */
 
 import React from "react";
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
-import { useRouter } from "next/router";
 
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import IndexPage from "./index";
-import useRedirectIfNoControlAccessToOwnPod from "../../../src/hooks/useRedirectIfNoControlAccessToOwnPod";
+import ProfilePage from "../components/pages/profile";
 
-jest.mock("../../../src/effects/auth");
-jest.mock("next/router");
-jest.mock("../../../src/hooks/useRedirectIfNoControlAccessToOwnPod");
-
-describe("Resource page", () => {
-  beforeEach(() => {
-    useRouter.mockImplementation(() => ({
-      query: {
-        iri: encodeURIComponent("https://mypod.myhost.com"),
-      },
-    }));
-  });
-
-  test("Renders the resource page", () => {
-    const tree = shallow(<IndexPage />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
-  });
-
-  test("Redirects if the user is logged out", () => {
-    shallow(<IndexPage />);
-    expect(useRedirectIfLoggedOut).toHaveBeenCalled();
-  });
-
-  test("Redirects if the user does not have access to Pod", () => {
-    shallow(<IndexPage />);
-    expect(useRedirectIfNoControlAccessToOwnPod).toHaveBeenCalled();
-  });
-});
+export default function Profile() {
+  return <ProfilePage />;
+}

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`UserMenu renders a menu 1`] = `
+exports[`Profile page Renders the profile page 1`] = `
 <Component
   theme={
     Object {
@@ -840,103 +840,180 @@ font-display: block;",
         }
       }
     >
-      <UserMenu>
-        <div
-          className="PodBrowser-userMenu"
+      <MockedSessionContextProvider>
+        <g
+          session={
+            Object {
+              "fetch": [MockFunction] {
+                "calls": Array [
+                  Array [
+                    "http://example.com/webId#me",
+                    Object {
+                      "headers": Object {
+                        "Accept": "text/turtle",
+                      },
+                    },
+                  ],
+                ],
+                "results": Array [
+                  Object {
+                    "type": "return",
+                    "value": Promise {},
+                  },
+                ],
+              },
+              "handleIncomingRedirect": [MockFunction] {
+                "calls": Array [
+                  Array [
+                    "http://localhost/",
+                  ],
+                ],
+                "results": Array [
+                  Object {
+                    "type": "return",
+                    "value": Promise {},
+                  },
+                ],
+              },
+              "info": Object {
+                "isLoggedIn": true,
+                "sessionId": "some-session-id",
+                "webId": "http://example.com/webId#me",
+              },
+              "on": [MockFunction] {
+                "calls": Array [
+                  Array [
+                    "logout",
+                    [Function],
+                  ],
+                ],
+                "results": Array [
+                  Object {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
+            }
+          }
+          sessionId="test-session"
+          sessionRequestInProgress={false}
         >
-          <div
-            className="PodBrowser-header-banner__aside-menu PodBrowser-header-banner__aside-menu--popup"
-            onMouseEnter={[Function]}
-            onMouseLeave={[Function]}
-          >
-            <button
-              aria-controls="UserMenu"
-              aria-expanded={true}
-              aria-haspopup="true"
-              className="PodBrowser-header-banner__aside-menu-trigger"
-              data-testid="user-menu-button"
-              onClick={[Function]}
-              type="button"
+          <ProfileShow>
+            <Profile
+              editing={true}
+              profileIri="http://example.com/webId#me"
             >
-              <i
-                aria-label="User Menu"
-                className="PodBrowser-icon-user PodBrowser-header-banner__aside-menu-trigger-icon"
-              />
-            </button>
-            <div
-              aria-hidden={true}
-              className="PodBrowser-header-banner__aside-menu-popup"
-              id="UserMenu"
-            >
-              <ul
-                className="PodBrowser-header-banner__user-menu"
-              >
-                <li
-                  className="PodBrowser-header-banner__user-menu-item"
-                  style={
-                    Object {
-                      "zIndex": 100,
-                    }
-                  }
+              <Container>
+                <div
+                  className="PodBrowser-container"
                 >
-                  <button
-                    className="PodBrowser-header-banner__user-menu-item-trigger"
-                    onClick={[Function]}
-                    type="button"
+                  <Styled(MuiBox)
+                    mb={2}
+                    mt={2}
                   >
-                    <i
-                      className="PodBrowser-icon-user PodBrowser-header-banner__user-menu-item-icon"
-                    />
-                    <span
-                      className="PodBrowser-header-banner__user-menu-item-label"
+                    <div
+                      className="PodBrowser-root PodBrowser-root"
                     >
-                      Profile
-                    </span>
-                  </button>
-                </li>
-                <li
-                  className="PodBrowser-header-banner__user-menu-item"
-                  style={
-                    Object {
-                      "zIndex": 100,
+                      <Link
+                        className=""
+                        href="/contacts"
+                      >
+                        <a
+                          href="/contacts"
+                          onClick={[Function]}
+                          onMouseEnter={[Function]}
+                        >
+                          &lt; Back to contacts
+                        </a>
+                      </Link>
+                    </div>
+                  </Styled(MuiBox)>
+                  <WithStyles(ForwardRef(Paper))
+                    style={
+                      Object {
+                        "maxWidth": "800px",
+                      }
                     }
-                  }
-                >
-                  <Logout
-                    className="PodBrowser-header-banner__user-menu-item-trigger"
                   >
-                    <k
-                      onLogout={[Function]}
+                    <ForwardRef(Paper)
+                      classes={
+                        Object {
+                          "elevation0": "PodBrowser-elevation0",
+                          "elevation1": "PodBrowser-elevation1",
+                          "elevation10": "PodBrowser-elevation10",
+                          "elevation11": "PodBrowser-elevation11",
+                          "elevation12": "PodBrowser-elevation12",
+                          "elevation13": "PodBrowser-elevation13",
+                          "elevation14": "PodBrowser-elevation14",
+                          "elevation15": "PodBrowser-elevation15",
+                          "elevation16": "PodBrowser-elevation16",
+                          "elevation17": "PodBrowser-elevation17",
+                          "elevation18": "PodBrowser-elevation18",
+                          "elevation19": "PodBrowser-elevation19",
+                          "elevation2": "PodBrowser-elevation2",
+                          "elevation20": "PodBrowser-elevation20",
+                          "elevation21": "PodBrowser-elevation21",
+                          "elevation22": "PodBrowser-elevation22",
+                          "elevation23": "PodBrowser-elevation23",
+                          "elevation24": "PodBrowser-elevation24",
+                          "elevation3": "PodBrowser-elevation3",
+                          "elevation4": "PodBrowser-elevation4",
+                          "elevation5": "PodBrowser-elevation5",
+                          "elevation6": "PodBrowser-elevation6",
+                          "elevation7": "PodBrowser-elevation7",
+                          "elevation8": "PodBrowser-elevation8",
+                          "elevation9": "PodBrowser-elevation9",
+                          "outlined": "PodBrowser-outlined",
+                          "root": "PodBrowser-root",
+                          "rounded": "PodBrowser-rounded",
+                        }
+                      }
+                      style={
+                        Object {
+                          "maxWidth": "800px",
+                        }
+                      }
                     >
                       <div
-                        onClick={[Function]}
-                        onKeyDown={[Function]}
-                        role="button"
-                        tabIndex={0}
+                        className="PodBrowser-root PodBrowser-elevation1 PodBrowser-rounded"
+                        style={
+                          Object {
+                            "maxWidth": "800px",
+                          }
+                        }
                       >
-                        <button
-                          className="PodBrowser-header-banner__user-menu-item-trigger"
-                          data-testid="logout-button"
-                          type="button"
+                        <Styled(MuiBox)
+                          p={2}
                         >
-                          <i
-                            className="PodBrowser-icon-log-out PodBrowser-header-banner__user-menu-item-icon"
-                          />
-                          <span
-                            className="PodBrowser-header-banner__user-menu-item-label"
+                          <div
+                            className="PodBrowser-root PodBrowser-root"
                           >
-                            Log out
-                          </span>
-                        </button>
+                            <A
+                              datasetUrl="http://example.com/webId#me"
+                              onError={[Function]}
+                              thingUrl="http://example.com/webId#me"
+                            >
+                              <m
+                                datasetUrl="http://example.com/webId#me"
+                                onError={[Function]}
+                              >
+                                <span>
+                                  Fetching data...
+                                </span>
+                              </m>
+                            </A>
+                          </div>
+                        </Styled(MuiBox)>
                       </div>
-                    </k>
-                  </Logout>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </UserMenu>
+                    </ForwardRef(Paper)>
+                  </WithStyles(ForwardRef(Paper))>
+                </div>
+              </Container>
+            </Profile>
+          </ProfileShow>
+        </g>
+      </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>
 </Component>

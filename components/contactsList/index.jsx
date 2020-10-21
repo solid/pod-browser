@@ -30,9 +30,9 @@ import {
   PageHeader,
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
-import { getSourceUrl, getStringNoLocale } from "@inrupt/solid-client";
+import { getSourceUrl, getUrl, getStringNoLocale } from "@inrupt/solid-client";
 import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
-import { vcard } from "rdf-namespaces";
+import { vcard, foaf } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";
 import Spinner from "../spinner";
 import styles from "./styles";
@@ -41,10 +41,11 @@ import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import useAddressBook from "../../src/hooks/useAddressBook";
 import usePeople from "../../src/hooks/usePeople";
 import useProfiles from "../../src/hooks/useProfiles";
+import ContactsListSearch from "./contactsListSearch";
+import ProfileLink from "../profileLink";
 import { SearchProvider } from "../../src/contexts/searchContext";
 import { deleteContact } from "../../src/addressBook";
 import ContactsDrawer from "./contactsDrawer";
-import ContactsListSearch from "./contactsListSearch";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -91,6 +92,8 @@ function ContactsList() {
 
   const [selectedContactIndex, setSelectedContactIndex] = useState(null);
   const [selectedContactName, setSelectedContactName] = useState("");
+  const [selectedContactWebId, setSelectedContactWebId] = useState("");
+
   useEffect(() => {
     if (selectedContactIndex === null) return;
     const name = getStringNoLocale(
@@ -98,6 +101,9 @@ function ContactsList() {
       formattedNamePredicate
     );
     setSelectedContactName(name);
+
+    const webId = getUrl(people[selectedContactIndex].dataset, foaf.openid);
+    setSelectedContactWebId(webId);
   }, [selectedContactIndex, formattedNamePredicate, people]);
 
   if (addressBookError) return addressBookError;
@@ -129,6 +135,7 @@ function ContactsList() {
       onClose={closeDrawer}
       onDelete={deleteSelectedContact}
       selectedContactName={selectedContactName}
+      profileIri={selectedContactWebId}
     />
   );
 
@@ -185,6 +192,7 @@ function ContactsList() {
             header="Name"
             filterable
             sortable
+            body={ProfileLink}
           />
         </Table>
       </DrawerContainer>

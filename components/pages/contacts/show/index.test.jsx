@@ -20,39 +20,34 @@
  */
 
 import React from "react";
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
-import { useRouter } from "next/router";
+import * as RouterFns from "next/router";
+import { mountToJson } from "../../../../__testUtils/mountWithTheme";
+import mockSessionContextProvider from "../../../../__testUtils/mockSessionContextProvider";
+import mockSession from "../../../../__testUtils/mockSession";
 
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import IndexPage from "./index";
-import useRedirectIfNoControlAccessToOwnPod from "../../../src/hooks/useRedirectIfNoControlAccessToOwnPod";
+import ContactPage from "./index";
 
-jest.mock("../../../src/effects/auth");
-jest.mock("next/router");
-jest.mock("../../../src/hooks/useRedirectIfNoControlAccessToOwnPod");
+jest.mock("../../../../src/effects/auth");
 
-describe("Resource page", () => {
-  beforeEach(() => {
-    useRouter.mockImplementation(() => ({
+describe("Contact show page", () => {
+  test("Renders the Contact show page", () => {
+    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
+      asPath: "/pathname/",
+      replace: jest.fn(),
       query: {
-        iri: encodeURIComponent("https://mypod.myhost.com"),
+        iri: "https://example.com/profile/card#me",
       },
-    }));
-  });
+    });
 
-  test("Renders the resource page", () => {
-    const tree = shallow(<IndexPage />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
-  });
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
 
-  test("Redirects if the user is logged out", () => {
-    shallow(<IndexPage />);
-    expect(useRedirectIfLoggedOut).toHaveBeenCalled();
-  });
+    const tree = mountToJson(
+      <SessionProvider>
+        <ContactPage />
+      </SessionProvider>
+    );
 
-  test("Redirects if the user does not have access to Pod", () => {
-    shallow(<IndexPage />);
-    expect(useRedirectIfNoControlAccessToOwnPod).toHaveBeenCalled();
+    expect(tree).toMatchSnapshot();
   });
 });

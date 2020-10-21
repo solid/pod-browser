@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Login page Renders a logout button 1`] = `
+exports[`Login page Renders a login button 1`] = `
 <Component
   theme={
     Object {

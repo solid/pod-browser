@@ -20,6 +20,7 @@
  */
 
 import React from "react";
+import Link from "next/link";
 import T from "prop-types";
 import {
   ActionMenu,
@@ -33,12 +34,14 @@ import {
 } from "@material-ui/core";
 import { ExpandMore } from "@material-ui/icons";
 import DeleteContactLink from "../../deleteContactLink";
+import { buildProfileLink } from "../../profileLink";
 
 export default function ContactsDrawer({
   open,
   onClose,
   onDelete,
   selectedContactName,
+  profileIri,
 }) {
   const actionMenuBem = ActionMenu.useBem();
   return (
@@ -47,6 +50,15 @@ export default function ContactsDrawer({
         <AccordionSummary expandIcon={<ExpandMore />}>Actions</AccordionSummary>
         <AccordionDetails>
           <ActionMenu>
+            <ActionMenuItem>
+              <Link
+                href="/contacts/[show]"
+                as={buildProfileLink(profileIri)}
+                className={actionMenuBem("action-menu__trigger", "danger")}
+              >
+                <a>View Profile</a>
+              </Link>
+            </ActionMenuItem>
             <ActionMenuItem>
               <DeleteContactLink
                 className={actionMenuBem("action-menu__trigger", "danger")}
@@ -66,4 +78,5 @@ ContactsDrawer.propTypes = {
   onClose: T.func.isRequired,
   onDelete: T.func.isRequired,
   selectedContactName: T.string.isRequired,
+  profileIri: T.string.isRequired,
 };

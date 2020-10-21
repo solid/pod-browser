@@ -20,6 +20,7 @@
  */
 
 import React, { useState } from "react";
+import Router from "next/router";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
@@ -70,6 +71,26 @@ export default function UserMenu() {
           aria-hidden={!userMenuOpen}
         >
           <ul className={bem("header-banner__user-menu")}>
+            <li
+              className={bem("header-banner__user-menu-item")}
+              style={{ zIndex: 100 }}
+            >
+              <button
+                type="button"
+                className={bem("header-banner__user-menu-item-trigger")}
+                onClick={() => Router.push("/profile")}
+              >
+                <i
+                  className={clsx(
+                    bem("icon-user"),
+                    bem("header-banner__user-menu-item-icon")
+                  )}
+                />
+                <span className={bem("header-banner__user-menu-item-label")}>
+                  Profile
+                </span>
+              </button>
+            </li>
             <li
               className={bem("header-banner__user-menu-item")}
               style={{ zIndex: 100 }}

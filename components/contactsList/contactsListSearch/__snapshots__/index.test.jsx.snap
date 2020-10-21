@@ -953,13 +953,25 @@ font-display: block;",
                 "root": "PodBrowser-search",
               }
             }
+            filterOptions={[Function]}
             freeSolo={true}
+            getOptionLabel={[Function]}
             id="ContactsSearch"
             onChange={[Function]}
             options={
               Array [
-                "Alice",
-                "Bob",
+                Object {
+                  "avatar": "http://example.com/alice.jpg",
+                  "name": "Alice",
+                  "nickname": "A",
+                  "webId": "http://example.com/alice#me",
+                },
+                Object {
+                  "avatar": null,
+                  "name": "Bob",
+                  "nickname": "B",
+                  "webId": "http://example.com/bob#me",
+                },
               ]
             }
             renderInput={[Function]}
@@ -993,13 +1005,25 @@ font-display: block;",
                   "tagSizeSmall": "PodBrowser-tagSizeSmall",
                 }
               }
+              filterOptions={[Function]}
               freeSolo={true}
+              getOptionLabel={[Function]}
               id="ContactsSearch"
               onChange={[Function]}
               options={
                 Array [
-                  "Alice",
-                  "Bob",
+                  Object {
+                    "avatar": "http://example.com/alice.jpg",
+                    "name": "Alice",
+                    "nickname": "A",
+                    "webId": "http://example.com/alice#me",
+                  },
+                  Object {
+                    "avatar": null,
+                    "name": "Bob",
+                    "nickname": "B",
+                    "webId": "http://example.com/bob#me",
+                  },
                 ]
               }
               renderInput={[Function]}
@@ -2575,7 +2599,9 @@ font-display: block;",
                 "root": "PodBrowser-search",
               }
             }
+            filterOptions={[Function]}
             freeSolo={true}
+            getOptionLabel={[Function]}
             id="ContactsSearch"
             onChange={[Function]}
             options={Array []}
@@ -2610,7 +2636,9 @@ font-display: block;",
                   "tagSizeSmall": "PodBrowser-tagSizeSmall",
                 }
               }
+              filterOptions={[Function]}
               freeSolo={true}
+              getOptionLabel={[Function]}
               id="ContactsSearch"
               onChange={[Function]}
               options={Array []}

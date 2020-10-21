@@ -20,39 +20,25 @@
  */
 
 import React from "react";
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
-import { useRouter } from "next/router";
+import { mountToJson } from "../../../__testUtils/mountWithTheme";
+import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
+import mockSession from "../../../__testUtils/mockSession";
 
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import IndexPage from "./index";
-import useRedirectIfNoControlAccessToOwnPod from "../../../src/hooks/useRedirectIfNoControlAccessToOwnPod";
+import ProfilePage from "./index";
 
 jest.mock("../../../src/effects/auth");
-jest.mock("next/router");
-jest.mock("../../../src/hooks/useRedirectIfNoControlAccessToOwnPod");
 
-describe("Resource page", () => {
-  beforeEach(() => {
-    useRouter.mockImplementation(() => ({
-      query: {
-        iri: encodeURIComponent("https://mypod.myhost.com"),
-      },
-    }));
-  });
+describe("Profile page", () => {
+  test("Renders the profile page", () => {
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
 
-  test("Renders the resource page", () => {
-    const tree = shallow(<IndexPage />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
-  });
+    const tree = mountToJson(
+      <SessionProvider>
+        <ProfilePage />
+      </SessionProvider>
+    );
 
-  test("Redirects if the user is logged out", () => {
-    shallow(<IndexPage />);
-    expect(useRedirectIfLoggedOut).toHaveBeenCalled();
-  });
-
-  test("Redirects if the user does not have access to Pod", () => {
-    shallow(<IndexPage />);
-    expect(useRedirectIfNoControlAccessToOwnPod).toHaveBeenCalled();
+    expect(tree).toMatchSnapshot();
   });
 });

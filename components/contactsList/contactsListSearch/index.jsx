@@ -24,11 +24,13 @@
 
 import React, { useContext } from "react";
 import T from "prop-types";
+import Router from "next/router";
 import { Autocomplete } from "@material-ui/lab";
 import { createStyles, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { getProfileFromPersonDataset } from "../../../src/solidClientHelpers/profile";
 import SearchContext from "../../../src/contexts/searchContext";
+import { buildProfileLink } from "../../profileLink";
 import styles from "./styles";
 
 const TESTCAFE_ID_CONTACTS_SEARCH = "contacts-search";
@@ -39,9 +41,6 @@ export default function ContactsListSearch({ people }) {
   const classes = useStyles();
 
   const profiles = people.map(getProfileFromPersonDataset);
-  const profileNames = profiles
-    .filter((profile) => !!profile.name)
-    .map((profile) => profile.name);
 
   return (
     <Autocomplete
@@ -51,10 +50,22 @@ export default function ContactsListSearch({ people }) {
         inputRoot: classes.searchInput,
       }}
       freeSolo
-      options={profileNames}
-      // TODO: When we introduce profile page, we need to change onChange to redirect
-      // But for now we simply update search
-      onChange={(event, search) => setSearch(search)}
+      options={profiles}
+      getOptionLabel={(o) => (!o ? "" : o.name || o)}
+      filterOptions={(options, state) => {
+        return options.filter((o) =>
+          o.name.toLowerCase().includes(state.inputValue.toLowerCase())
+        );
+      }}
+      onChange={(event, search) => {
+        // If a row was selected, use the object with webid
+        if (search && search.webId) {
+          Router.push(buildProfileLink(search.webId));
+        }
+
+        // Otherwise, use the string value
+        return setSearch(search);
+      }}
       renderInput={(params) => (
         <TextField
           {...params}

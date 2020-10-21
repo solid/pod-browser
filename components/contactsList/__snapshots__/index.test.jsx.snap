@@ -2807,13 +2807,25 @@ font-display: block;",
                             "root": "PodBrowser-search",
                           }
                         }
+                        filterOptions={[Function]}
                         freeSolo={true}
+                        getOptionLabel={[Function]}
                         id="ContactsSearch"
                         onChange={[Function]}
                         options={
                           Array [
-                            "Alice",
-                            "Bob",
+                            Object {
+                              "avatar": "http://example.com/alice.jpg",
+                              "name": "Alice",
+                              "nickname": "A",
+                              "webId": "http://example.com/alice#me",
+                            },
+                            Object {
+                              "avatar": null,
+                              "name": "Bob",
+                              "nickname": "B",
+                              "webId": "http://example.com/bob#me",
+                            },
                           ]
                         }
                         renderInput={[Function]}
@@ -2847,13 +2859,25 @@ font-display: block;",
                               "tagSizeSmall": "PodBrowser-tagSizeSmall",
                             }
                           }
+                          filterOptions={[Function]}
                           freeSolo={true}
+                          getOptionLabel={[Function]}
                           id="ContactsSearch"
                           onChange={[Function]}
                           options={
                             Array [
-                              "Alice",
-                              "Bob",
+                              Object {
+                                "avatar": "http://example.com/alice.jpg",
+                                "name": "Alice",
+                                "nickname": "A",
+                                "webId": "http://example.com/alice#me",
+                              },
+                              Object {
+                                "avatar": null,
+                                "name": "Bob",
+                                "nickname": "B",
+                                "webId": "http://example.com/bob#me",
+                              },
                             ]
                           }
                           renderInput={[Function]}
@@ -3594,6 +3618,7 @@ font-display: block;",
                     onClose={[Function]}
                     onDelete={[Function]}
                     open={false}
+                    profileIri=""
                     selectedContactName=""
                   />
                 }
@@ -10262,7 +10287,7 @@ font-display: block;",
                                     key="cell_0_col1"
                                     role="cell"
                                   >
-                                    <Component
+                                    <ProfileLink
                                       allColumns={
                                         Array [
                                           Object {
@@ -12844,6 +12869,7 @@ font-display: block;",
                                           "globalFilter": undefined,
                                         }
                                       }
+                                      iri={null}
                                       plugins={
                                         Array [
                                           [Function],
@@ -16558,8 +16584,19 @@ font-display: block;",
                                         ]
                                       }
                                     >
-                                      Alice
-                                    </Component>
+                                      <Link
+                                        as="/contacts/http%3A%2F%2Fexample.com%2Falice%23me"
+                                        href="/contacts/[show]"
+                                      >
+                                        <a
+                                          href="/contacts/http%3A%2F%2Fexample.com%2Falice%23me"
+                                          onClick={[Function]}
+                                          onMouseEnter={[Function]}
+                                        >
+                                          Alice
+                                        </a>
+                                      </Link>
+                                    </ProfileLink>
                                   </td>
                                 </x>
                               </m>
@@ -23033,7 +23070,7 @@ font-display: block;",
                                     key="cell_1_col1"
                                     role="cell"
                                   >
-                                    <Component
+                                    <ProfileLink
                                       allColumns={
                                         Array [
                                           Object {
@@ -25615,6 +25652,7 @@ font-display: block;",
                                           "globalFilter": undefined,
                                         }
                                       }
+                                      iri={null}
                                       plugins={
                                         Array [
                                           [Function],
@@ -29328,7 +29366,20 @@ font-display: block;",
                                           },
                                         ]
                                       }
-                                    />
+                                    >
+                                      <Link
+                                        as="/contacts/http%3A%2F%2Fexample.com%2Fbob%23me"
+                                        href="/contacts/[show]"
+                                      >
+                                        <a
+                                          href="/contacts/http%3A%2F%2Fexample.com%2Fbob%23me"
+                                          onClick={[Function]}
+                                          onMouseEnter={[Function]}
+                                        >
+                                          Bob
+                                        </a>
+                                      </Link>
+                                    </ProfileLink>
                                   </td>
                                 </x>
                               </m>
@@ -29342,6 +29393,7 @@ font-display: block;",
                     onClose={[Function]}
                     onDelete={[Function]}
                     open={false}
+                    profileIri=""
                     selectedContactName=""
                   >
                     <Drawer
@@ -29718,6 +29770,25 @@ font-display: block;",
                                                           <ul
                                                             className="PodBrowser-action-menu"
                                                           >
+                                                            <ActionMenuItem>
+                                                              <li
+                                                                className="PodBrowser-action-menu__item"
+                                                              >
+                                                                <Link
+                                                                  as="/contacts/"
+                                                                  className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                                                                  href="/contacts/[show]"
+                                                                >
+                                                                  <a
+                                                                    href="/contacts"
+                                                                    onClick={[Function]}
+                                                                    onMouseEnter={[Function]}
+                                                                  >
+                                                                    View Profile
+                                                                  </a>
+                                                                </Link>
+                                                              </li>
+                                                            </ActionMenuItem>
                                                             <ActionMenuItem>
                                                               <li
                                                                 className="PodBrowser-action-menu__item"

@@ -20,39 +20,38 @@
  */
 
 import React from "react";
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
-import { useRouter } from "next/router";
+import T from "prop-types";
+import Link from "next/link";
+import { useThing } from "@inrupt/solid-ui-react";
+import { getStringNoLocale, asUrl } from "@inrupt/solid-client";
+import { vcard, foaf } from "rdf-namespaces";
 
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import IndexPage from "./index";
-import useRedirectIfNoControlAccessToOwnPod from "../../../src/hooks/useRedirectIfNoControlAccessToOwnPod";
+export function buildProfileLink(iri) {
+  return `/contacts/${encodeURIComponent(iri)}`;
+}
 
-jest.mock("../../../src/effects/auth");
-jest.mock("next/router");
-jest.mock("../../../src/hooks/useRedirectIfNoControlAccessToOwnPod");
+export default function ProfileLink(props) {
+  const { iri } = props;
+  const { thing } = useThing();
 
-describe("Resource page", () => {
-  beforeEach(() => {
-    useRouter.mockImplementation(() => ({
-      query: {
-        iri: encodeURIComponent("https://mypod.myhost.com"),
-      },
-    }));
-  });
+  // Pass in an iri, or use the thing from context (such as for the contacts list)
+  const profileIri = iri || asUrl(thing);
 
-  test("Renders the resource page", () => {
-    const tree = shallow(<IndexPage />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
-  });
+  // TODO remove this once react-sdk allows property fallbacks
+  const name =
+    getStringNoLocale(thing, vcard.fn) || getStringNoLocale(thing, foaf.name);
 
-  test("Redirects if the user is logged out", () => {
-    shallow(<IndexPage />);
-    expect(useRedirectIfLoggedOut).toHaveBeenCalled();
-  });
+  return (
+    <Link href="/contacts/[show]" as={buildProfileLink(profileIri)}>
+      {name}
+    </Link>
+  );
+}
 
-  test("Redirects if the user does not have access to Pod", () => {
-    shallow(<IndexPage />);
-    expect(useRedirectIfNoControlAccessToOwnPod).toHaveBeenCalled();
-  });
-});
+ProfileLink.propTypes = {
+  iri: T.string,
+};
+
+ProfileLink.defaultProps = {
+  iri: null,
+};

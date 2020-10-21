@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Index page Renders a logout button 1`] = `
+exports[`Resource page Renders the resource page 1`] = `
 <PodLocationProvider
   currentUri="https%3A%2F%2Fmypod.myhost.com"
 >
