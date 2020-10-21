@@ -49,6 +49,10 @@ export function getRequiredRuleOnPolicyAll(policy) {
   throw new Error("Not implemented");
 }
 
+export async function getSolidDatasetWithAcp(url, options) {
+  throw new Error("Not implemented");
+}
+
 export async function getResourceInfoWithAcp(url, options) {
   // returns accessControlResource
   throw new Error("Not implemented");

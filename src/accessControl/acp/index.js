@@ -51,6 +51,7 @@ import {
   createRule,
   getRule,
   setAgentInRule,
+  getSolidDatasetWithAcp,
 } from "./mockedClientApi";
 import { fetchProfile } from "../../solidClientHelpers/profile";
 import {
@@ -149,17 +150,17 @@ export function getRuleWithAgent(rules, agentWebId) {
   return rule || rules[0];
 }
 
-export async function setAgents(policy, policyDataset, webId, access, mode) {
+export async function setAgents(policy, policyDataset, webId, accessToMode) {
   const ruleUrls = getRequiredRuleOnPolicyAll(policy);
   const rules = getRulesOrCreate(ruleUrls, policy, policyDataset);
   const rule = getRuleWithAgent(rules, webId);
   const existingAgents = getAgentForRuleAll(rule);
   const agentIndex = existingAgents.indexOf(webId);
   let modifiedAgents;
-  if (access[mode] && agentIndex === -1) {
+  if (accessToMode && agentIndex === -1) {
     modifiedAgents = existingAgents.concat(webId);
   }
-  if (!access[mode] && agentIndex !== -1) {
+  if (!accessToMode && agentIndex !== -1) {
     modifiedAgents = existingAgents
       .slice(0, agentIndex)
       .concat(existingAgents.slice(agentIndex + 1));
@@ -247,17 +248,26 @@ export default class AcpAccessControlStrategy {
     );
   }
 
-  async saveApplyPolicyForAgent(policyDataset, webId, access, mode, acpMap) {
+  async saveApplyPolicyWithAgentForOriginalResource(
+    policyDataset,
+    webId,
+    access,
+    mode,
+    acpMap
+  ) {
     const policyUrl = `${this.#policyUrl}#${mode}Policy`;
-    const { dataset } = chain(
+    const { dataset: modifiedPolicyDataset } = chain(
       getOrCreatePolicy(policyDataset, policyUrl),
       ({ policy: p, dataset: d }) => ({
         policy: setAllowModesOnPolicy(p, acpMap),
         dataset: d,
       }),
-      ({ policy: p, dataset: d }) => setAgents(p, d, webId, access, mode)
+      ({ policy: p, dataset: d }) => ({
+        policy: setAgents(p, d, webId, access[mode]),
+        dataset: d,
+      })
     );
-    const savedPolicyDataset = await saveSolidDatasetAt(policyUrl, dataset);
+    // making sure that policy is connected to access control
     const accessControls = getAccessControlAll(this.#datasetWithAcr);
     let accessControlWithPolicy = accessControls.find((ac) =>
       getPolicyUrlAll(ac).find(policyUrl)
@@ -271,30 +281,71 @@ export default class AcpAccessControlStrategy {
       this.#datasetWithAcr,
       accessControlWithPolicy
     );
-    return savedPolicyDataset;
+    // return the modified policy dataset
+    return modifiedPolicyDataset;
   }
 
-  async saveAccessPolicyForAgent(dataset, webId, access) {
-    const policyUrl = `${this.#policyUrl}#controlPolicy`;
-    const existingPolicy = getReferencedPolicyUrlAll(this.#datasetWithAcr).find(
-      (url) => url === policyUrl
-    );
-    const policy = chain(
-      existingPolicy || getOrCreatePolicy(dataset, policyUrl),
+  async saveAccessPolicyWithAgentForOriginalResource(
+    policyDataset,
+    webId,
+    access
+  ) {
+    const policyUrl = `${this.#policyUrl}#controlAccessPolicy`;
+    const existingAccessPolicyUrl = getReferencedPolicyUrlAll(
+      this.#datasetWithAcr
+    ).find((url) => url === policyUrl);
+    const existingPolicy = getPolicy(policyDataset, existingAccessPolicyUrl);
+    const accessPolicy = chain(
+      existingPolicy || getOrCreatePolicy(policyDataset, policyUrl),
       (p) => setAllowModesOnPolicy(p, createAcpMap(true, true)),
-      (p) => setAgents(p, webId, access, "control")
+      (p) => setAgents(p, policyDataset, webId, access.control)
     );
-    const savedPolicyDataset = await saveSolidDatasetAt(policyUrl, policy);
+    const modifiedPolicyDataset = setPolicy(policyDataset, accessPolicy);
+    // making sure that policy is connected to access control
     if (!existingPolicy) {
       this.#datasetWithAcr = await addControlPolicyUrl(
         this.#datasetWithAcr,
         policyUrl
       );
     }
-    return savedPolicyDataset;
+    // return the modified policy dataset
+    return modifiedPolicyDataset;
   }
 
-  // eslint-disable-next-line no-unused-vars
+  async saveApplyPolicyWithAgentsForPolicyResource(
+    policyDataset,
+    webId,
+    access
+  ) {
+    const policyUrl = `${this.#policyUrl}#controlApplyPolicy`;
+    const policyDatasetWithAcr = await getSolidDatasetWithAcp(
+      getSourceUrl(policyDataset)
+    );
+    const accessControls = getAccessControlAll(policyDatasetWithAcr);
+    const existingAccessPolicyUrl = accessControls
+      .map((ac) => getPolicyUrlAll(ac).filter((url) => url === this.#policyUrl))
+      .flat();
+    const existingPolicy = getPolicy(policyDataset, existingAccessPolicyUrl[0]);
+    const applyPolicy = chain(
+      existingPolicy || getOrCreatePolicy(policyDataset, policyUrl),
+      (p) => setAllowModesOnPolicy(p, createAcpMap(true, true)),
+      (p) => setAgents(p, policyDataset, webId, access.control)
+    );
+    const modifiedPolicyDataset = setPolicy(policyDataset, applyPolicy);
+    // making sure that policy is connected to access control
+    let accessControlWithPolicy = accessControls.find((ac) =>
+      getPolicyUrlAll(ac).find(policyUrl)
+    );
+    if (!accessControlWithPolicy) {
+      accessControlWithPolicy = chain(createAccessControl(), (ac) =>
+        addPolicyUrl(ac, policyUrl)
+      );
+    }
+    setAccessControl(policyDatasetWithAcr, accessControlWithPolicy);
+    // return the modified policy dataset
+    return modifiedPolicyDataset;
+  }
+
   async savePermissionsForAgent(webId, access) {
     const { respond, error } = createResponder();
 
@@ -309,7 +360,7 @@ export default class AcpAccessControlStrategy {
       const updatedDataset = chain(
         policyDataset,
         async (d) =>
-          this.saveApplyPolicyForAgent(
+          this.saveApplyPolicyWithAgentForOriginalResource(
             d,
             webId,
             access,
@@ -317,7 +368,7 @@ export default class AcpAccessControlStrategy {
             createAcpMap(true)
           ),
         async (d) =>
-          this.saveApplyPolicyForAgent(
+          this.saveApplyPolicyWithAgentForOriginalResource(
             d,
             webId,
             access,
@@ -325,16 +376,22 @@ export default class AcpAccessControlStrategy {
             createAcpMap(false, true)
           ),
         async (d) =>
-          this.saveApplyPolicyForAgent(
+          this.saveApplyPolicyWithAgentForOriginalResource(
             d,
             webId,
             access,
             "append",
             createAcpMap(false, false, true)
           ),
-        async (d) => this.saveAccessPolicyForAgent(d, webId, access)
+        async (d) =>
+          this.saveAccessPolicyWithAgentForOriginalResource(d, webId, access),
+        async (d) =>
+          this.saveApplyPolicyWithAgentsForPolicyResource(d, webId, access)
       );
-      this.#datasetWithAcr = await saveAccessControlResource(updatedDataset);
+      await saveSolidDatasetAt(this.#policyUrl, updatedDataset);
+      this.#datasetWithAcr = await saveAccessControlResource(
+        this.#datasetWithAcr
+      );
     } catch (err) {
       return error(err.message);
     }
