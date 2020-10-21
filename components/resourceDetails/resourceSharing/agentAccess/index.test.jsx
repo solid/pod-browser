@@ -112,18 +112,26 @@ describe("getDialogId", () => {
 });
 
 describe("submitHandler", () => {
+  let event;
+
+  beforeEach(() => {
+    event = { preventDefault: jest.fn() };
+  });
+
   test("user changes their own permissions", () => {
     const setOpen = jest.fn();
     const dialogId = "dialogId";
-    submitHandler(42, 42, setOpen, dialogId)();
+    submitHandler(42, 42, setOpen, dialogId)(event);
 
+    expect(event.preventDefault).toHaveBeenCalledWith();
     expect(setOpen).toHaveBeenCalledWith(dialogId);
   });
   test("user changes someone else's permissions", () => {
     const savePermissions = jest.fn();
     const tempAccess = "tempAccess";
-    submitHandler(42, 1337, null, null, savePermissions, tempAccess)();
+    submitHandler(42, 1337, null, null, savePermissions, tempAccess)(event);
 
+    expect(event.preventDefault).toHaveBeenCalledWith();
     expect(savePermissions).toHaveBeenCalledWith(tempAccess);
   });
 });

@@ -27,7 +27,7 @@ import { Avatar, createStyles, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
-import { Button } from "@inrupt/prism-react-components";
+import { Button, Form } from "@inrupt/prism-react-components";
 import PermissionsForm from "../../../permissionsForm";
 import styles from "./styles";
 import { displayProfileName } from "../../../../src/solidClientHelpers/profile";
@@ -47,7 +47,8 @@ export function submitHandler(
   savePermissions,
   tempAccess
 ) {
-  return async () => {
+  return async (event) => {
+    event.preventDefault();
     if (authenticatedWebId === webId) {
       setOpen(dialogId);
     } else {
@@ -136,7 +137,7 @@ export default function AgentAccess({
     setAlertOpen
   );
 
-  const onClick = submitHandler(
+  const onSubmit = submitHandler(
     authenticatedWebId,
     webId,
     setOpen,
@@ -190,9 +191,13 @@ export default function AgentAccess({
       >
         {name}
       </Typography>
-      <PermissionsForm key={webId} acl={access} onChange={setTempAccess}>
-        <Button onClick={onClick}>Save</Button>
-      </PermissionsForm>
+      <Form onSubmit={(event) => onSubmit(event)}>
+        <PermissionsForm key={webId} acl={access} onChange={setTempAccess}>
+          <Button onClick={onSubmit} type="submit">
+            Save
+          </Button>
+        </PermissionsForm>
+      </Form>
     </>
   );
 }

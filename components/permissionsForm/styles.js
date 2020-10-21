@@ -47,7 +47,6 @@ export default (theme) => ({
     textTransform: "inherit",
     fontSize: theme.typography.body.fontSize,
     maxWidth: "95%",
-    margin: theme.spacing(0.5, 0),
     padding: theme.spacing(1.5, 2),
   },
   label: smallFontSize,
