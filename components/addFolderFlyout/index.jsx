@@ -177,7 +177,7 @@ export default function AddFolderFlyout({ onSave, className, resourceList }) {
           />
           <Button
             data-testid={TESTCAFE_ID_CREATE_FOLDER_FLYOUT_BUTTON}
-            type="button"
+            type="submit"
           >
             Create Folder
           </Button>
