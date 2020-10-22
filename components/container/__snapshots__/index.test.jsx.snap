@@ -1823,6 +1823,11 @@ font-display: block;",
                           "vertical": "bottom",
                         }
                       }
+                      classes={
+                        Object {
+                          "paper": "PodBrowser-paper",
+                        }
+                      }
                       onClose={[Function]}
                       open={false}
                       transformOrigin={
@@ -1842,7 +1847,7 @@ font-display: block;",
                         }
                         classes={
                           Object {
-                            "paper": "PodBrowser-paper",
+                            "paper": "PodBrowser-paper PodBrowser-paper",
                             "root": "PodBrowser-root",
                           }
                         }
@@ -6062,6 +6067,11 @@ font-display: block;",
                           "vertical": "bottom",
                         }
                       }
+                      classes={
+                        Object {
+                          "paper": "PodBrowser-paper",
+                        }
+                      }
                       onClose={[Function]}
                       open={false}
                       transformOrigin={
@@ -6081,7 +6091,7 @@ font-display: block;",
                         }
                         classes={
                           Object {
-                            "paper": "PodBrowser-paper",
+                            "paper": "PodBrowser-paper PodBrowser-paper",
                             "root": "PodBrowser-root",
                           }
                         }

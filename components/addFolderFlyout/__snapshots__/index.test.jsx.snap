@@ -50,6 +50,11 @@ exports[`AddFolderFlyout Renders an Add Folder button 1`] = `
               "vertical": "bottom",
             }
           }
+          classes={
+            Object {
+              "paper": "makeStyles-paper-1",
+            }
+          }
           onClose={[Function]}
           open={false}
           transformOrigin={
@@ -69,7 +74,7 @@ exports[`AddFolderFlyout Renders an Add Folder button 1`] = `
             }
             classes={
               Object {
-                "paper": "MuiPopover-paper",
+                "paper": "MuiPopover-paper makeStyles-paper-1",
                 "root": "MuiPopover-root",
               }
             }

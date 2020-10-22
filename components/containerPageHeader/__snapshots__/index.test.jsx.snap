@@ -104,6 +104,11 @@ exports[`ContainerPageHeader Renders view 1`] = `
                 "vertical": "bottom",
               }
             }
+            classes={
+              Object {
+                "paper": "makeStyles-paper-6",
+              }
+            }
             onClose={[Function]}
             open={false}
             transformOrigin={
@@ -123,7 +128,7 @@ exports[`ContainerPageHeader Renders view 1`] = `
               }
               classes={
                 Object {
-                  "paper": "MuiPopover-paper",
+                  "paper": "MuiPopover-paper makeStyles-paper-6",
                   "root": "MuiPopover-root",
                 }
               }

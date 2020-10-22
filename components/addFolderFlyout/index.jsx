@@ -24,34 +24,17 @@ import PropTypes from "prop-types";
 import { createContainerAt, getSourceUrl } from "@inrupt/solid-client";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSession } from "@inrupt/solid-ui-react";
-import {
-  Popover,
-  Button,
-  Typography,
-  FormControl,
-  Input,
-  InputLabel,
-} from "@material-ui/core";
-import { Form } from "@inrupt/prism-react-components";
+import { createStyles, Popover } from "@material-ui/core";
+import { Button, Form, Input } from "@inrupt/prism-react-components";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import AlertContext from "../../src/contexts/alertContext";
+import styles from "../addPermissionUsingWebIdButton/styles";
 
 const TESTCAFE_ID_ADD_FOLDER_BUTTON = "add-folder-button";
 const TESTCAFE_ID_FOLDER_NAME_INPUT = "folder-name-input";
 const TESTCAFE_ID_CREATE_FOLDER_FLYOUT_BUTTON = "create-folder-flyout-button";
 
-const useStyles = makeStyles((theme) => {
-  return {
-    typography: {
-      padding: theme.spacing(2),
-      display: "flex",
-      flexDirection: "column",
-    },
-    folderInput: {
-      padding: theme.spacing(2, 0),
-    },
-  };
-});
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export function determineFinalUrl(folders, currentUri, name) {
   let currentName = name;
@@ -173,6 +156,7 @@ export default function AddFolderFlyout({ onSave, className, resourceList }) {
         data-testid={id}
         open={open}
         anchorEl={anchorEl}
+        classes={classes}
         onClose={handleClose}
         anchorOrigin={{
           vertical: "bottom",
@@ -184,22 +168,19 @@ export default function AddFolderFlyout({ onSave, className, resourceList }) {
         }}
       >
         <Form onSubmit={(event) => onSubmit(event)}>
-          <Typography className={classes.typography}>
-            <FormControl className={classes.folderInput}>
-              <InputLabel htmlFor="folder-input">Folder name</InputLabel>
-              <Input
-                data-testid={TESTCAFE_ID_FOLDER_NAME_INPUT}
-                onChange={onChange}
-                value={folderName}
-              />
-            </FormControl>
-            <Button
-              data-testid={TESTCAFE_ID_CREATE_FOLDER_FLYOUT_BUTTON}
-              variant="contained"
-            >
-              Create Folder
-            </Button>
-          </Typography>
+          <Input
+            data-testid={TESTCAFE_ID_FOLDER_NAME_INPUT}
+            id="folder-input"
+            label="Folder name"
+            onChange={onChange}
+            value={folderName}
+          />
+          <Button
+            data-testid={TESTCAFE_ID_CREATE_FOLDER_FLYOUT_BUTTON}
+            type="button"
+          >
+            Create Folder
+          </Button>
         </Form>
       </Popover>
     </>
