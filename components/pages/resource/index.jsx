@@ -34,7 +34,7 @@ export default function Resource() {
   const decodedIri = decodeURIComponent(router.query.iri);
 
   return (
-    <PodLocationProvider currentUri={decodedIri}>
+    <PodLocationProvider currentUri={router.query.iri}>
       <DetailsMenuProvider>
         <ContainerView iri={decodedIri} />
       </DetailsMenuProvider>

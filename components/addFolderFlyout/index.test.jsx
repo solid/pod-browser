@@ -160,7 +160,7 @@ describe("handleFolderSubmit", () => {
   });
 
   it("returns a handler that creates a new folder within a folder which has spaces in its name", async () => {
-    const currentUri = "https://www.mypodbrowser.com/First Folder/";
+    const currentUri = "https://www.mypodbrowser.com/First%20Folder/";
     const folders = [];
     const name = "Second Folder";
 

@@ -48,9 +48,8 @@ export default function ResourceDrawer({ onUpdate }) {
   const {
     query: { action, resourceIri },
   } = router;
-  const encodedResourceIri = encodeURI(resourceIri);
   const { data: resourceInfo, error: resourceError } = useResourceInfo(
-    encodedResourceIri
+    resourceIri
   );
   const { accessControl, error: accessControlError } = useAccessControl(
     resourceInfo,

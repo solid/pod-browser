@@ -34,9 +34,9 @@ async function fetchContainerResourceIris(containerIri, fetch) {
 
 export const GET_CONTAINER_RESOURCE_IRIS = "getContainerResourceIris";
 export default function useContainerResourceIris(iri) {
-  const { session } = useSession();
+  const { fetch } = useSession();
 
   return useSWR([iri, GET_CONTAINER_RESOURCE_IRIS], () =>
-    fetchContainerResourceIris(iri, session.fetch)
+    fetchContainerResourceIris(iri, fetch)
   );
 }

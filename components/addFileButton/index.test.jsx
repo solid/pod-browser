@@ -23,7 +23,7 @@ import React from "react";
 import { mount } from "enzyme";
 import { mountToJson } from "enzyme-to-json";
 import { act } from "react-dom/test-utils";
-import { overwriteFile } from "@inrupt/solid-client";
+import * as SolidClientFns from "@inrupt/solid-client";
 
 import { PodLocationProvider } from "../../src/contexts/podLocationContext";
 import mockSession from "../../__testUtils/mockSession";
@@ -36,8 +36,6 @@ import AddFileButton, {
   handleConfirmation,
   DUPLICATE_DIALOG_ID,
 } from "./index";
-
-jest.mock("@inrupt/solid-client");
 
 describe("AddFileButton", () => {
   const fileContents = "file contents";
@@ -57,6 +55,10 @@ describe("AddFileButton", () => {
   const setMessage = jest.fn();
   const setSeverity = jest.fn();
   const onSave = jest.fn();
+
+  jest
+    .spyOn(SolidClientFns, "overwriteFile")
+    .mockResolvedValue(SolidClientFns.mockSolidDatasetFrom(newFilePath));
 
   const tree = mount(
     <AlertContext.Provider
@@ -87,10 +89,14 @@ describe("AddFileButton", () => {
     // await for promises to resolve
     await Promise.resolve();
 
-    expect(overwriteFile).toHaveBeenCalledWith(newFilePath, file, {
-      type: file.type,
-      fetch: session.fetch,
-    });
+    expect(SolidClientFns.overwriteFile).toHaveBeenCalledWith(
+      newFilePath,
+      file,
+      {
+        type: file.type,
+        fetch: session.fetch,
+      }
+    );
 
     expect(onSave).toHaveBeenCalled();
     expect(setAlertOpen).toHaveBeenCalled();
@@ -126,18 +132,22 @@ describe("handleSaveResource", () => {
       setSeverity,
     });
 
-    overwriteFile.mockResolvedValue({
-      internal_resourceInfo: {
-        sourceIri: encodeURIComponent(fileName),
-      },
-    });
+    jest
+      .spyOn(SolidClientFns, "overwriteFile")
+      .mockResolvedValue(
+        SolidClientFns.mockSolidDatasetFrom(encodeURIComponent(fileName))
+      );
 
     await handler(file);
 
-    expect(overwriteFile).toHaveBeenCalledWith(newFilePath, file, {
-      type: file.type,
-      fetch,
-    });
+    expect(SolidClientFns.overwriteFile).toHaveBeenCalledWith(
+      newFilePath,
+      file,
+      {
+        type: file.type,
+        fetch,
+      }
+    );
     expect(setSeverity).toHaveBeenCalledWith("success");
     expect(setMessage).toHaveBeenCalledWith(
       `Your file has been saved to ${fileName}`

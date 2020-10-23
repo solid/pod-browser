@@ -51,7 +51,7 @@ export default function Container({ iri }) {
   useRedirectIfLoggedOut();
   const encodedIri = encodeURI(iri);
 
-  const { data: container, error } = useDataset(iri);
+  const { data: container, error } = useDataset(encodedIri);
   const { data: resourceIris, mutate } = useContainerResourceIris(encodedIri);
 
   const loading = !resourceIris || !container;

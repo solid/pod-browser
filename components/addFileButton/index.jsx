@@ -21,11 +21,12 @@
 
 import React, { useContext, useState, useEffect } from "react";
 import T from "prop-types";
-import { overwriteFile } from "@inrupt/solid-client";
+import { getSourceUrl, overwriteFile } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import AlertContext from "../../src/contexts/alertContext";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
+import { joinPath } from "../../src/stringHelpers";
 
 const TESTCAFE_ID_UPLOAD_BUTTON = "upload-file-button";
 const TESTCAFE_ID_UPLOAD_INPUT = "upload-file-input";
@@ -43,7 +44,7 @@ export function handleSaveResource({
   return async (uploadedFile) => {
     try {
       const response = await overwriteFile(
-        encodeURI(currentUri) + encodeURIComponent(uploadedFile.name),
+        joinPath(currentUri, encodeURIComponent(uploadedFile.name)),
         uploadedFile,
         {
           type: uploadedFile.type,
@@ -56,7 +57,7 @@ export function handleSaveResource({
       setSeverity("success");
       setMessage(
         `Your file has been saved to ${decodeURIComponent(
-          response.internal_resourceInfo.sourceIri
+          getSourceUrl(response)
         )}`
       );
       setAlertOpen(true);

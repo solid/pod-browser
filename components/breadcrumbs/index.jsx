@@ -51,7 +51,10 @@ export default function Breadcrumbs() {
   const crumbs = [
     { uri: `/resource/${encodeURIComponent(baseUri)}`, label: "All files" },
   ].concat(
-    uriParts.map((part, index) => ({ uri: resourceHref(index), label: part }))
+    uriParts.map((part, index) => ({
+      uri: resourceHref(index),
+      label: decodeURIComponent(part),
+    }))
   );
 
   return (

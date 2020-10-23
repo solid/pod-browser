@@ -2,7 +2,7 @@
 
 exports[`Index page Renders a logout button 1`] = `
 <PodLocationProvider
-  currentUri="https://mypod.myhost.com"
+  currentUri="https%3A%2F%2Fmypod.myhost.com"
 >
   <DetailsMenuProvider>
     <Container

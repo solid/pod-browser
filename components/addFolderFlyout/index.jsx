@@ -29,6 +29,7 @@ import { Button, Form, Input } from "@inrupt/prism-react-components";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import AlertContext from "../../src/contexts/alertContext";
 import styles from "../addPermissionUsingWebIdButton/styles";
+import { joinPath } from "../../src/stringHelpers";
 
 const TESTCAFE_ID_ADD_FOLDER_BUTTON = "add-folder-button";
 const TESTCAFE_ID_FOLDER_NAME_INPUT = "folder-name-input";
@@ -53,7 +54,7 @@ export function determineFinalUrl(folders, currentUri, name) {
     }
   }
   determineFinalName();
-  return encodeURI(currentUri) + encodeURIComponent(currentName);
+  return joinPath(currentUri, encodeURIComponent(currentName));
 }
 
 export function handleFolderSubmit({

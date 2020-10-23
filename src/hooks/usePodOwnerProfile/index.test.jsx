@@ -59,7 +59,7 @@ describe("usePodOwnerProfile", () => {
 
   it("returns the user profile for the Pod if iri is given in router", () => {
     RouterFns.useRouter.mockReturnValue({
-      query: { iri: encodeURIComponent(resourceUrl) },
+      query: { iri: resourceUrl },
     });
     const { result } = renderHook(() => usePodOwnerProfile());
     expect(result.current.profile).toEqual(userProfile);
@@ -80,7 +80,7 @@ describe("usePodOwnerProfile", () => {
       data: authProfileWithStorageProfile,
     });
     RouterFns.useRouter.mockReturnValue({
-      query: { iri: encodeURIComponent(resourceUrl) },
+      query: { iri: resourceUrl },
     });
     const { result } = renderHook(() => usePodOwnerProfile());
     expect(result.current.profile).toEqual(authProfileWithStorageProfile);

@@ -35,7 +35,7 @@ describe("Header", () => {
     beforeEach(() => {
       useRouter.mockImplementation(() => ({
         query: {
-          iri: encodeURIComponent("https://mypod.myhost.com"),
+          iri: "https://mypod.myhost.com",
         },
       }));
     });

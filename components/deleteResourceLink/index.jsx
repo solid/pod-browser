@@ -42,12 +42,10 @@ export default function DeleteResourceLink({
   return (
     <DeleteLink
       confirmationTitle="Confirm Delete"
-      confirmationContent={`Are you sure you wish to delete ${decodeURIComponent(
-        name
-      )}?`}
+      confirmationContent={`Are you sure you wish to delete ${name}?`}
       dialogId={`delete-resource-${resourceIri}`}
       onDelete={handleDelete}
-      successMessage={`${decodeURIComponent(name)} was successfully deleted.`}
+      successMessage={`${name} was successfully deleted.`}
       {...linkProps}
     >
       Delete
