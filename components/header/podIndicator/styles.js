@@ -41,6 +41,7 @@ const styles = (theme) =>
       textOverflow: "ellipsis",
       overflow: "hidden",
       maxWidth: "200px",
+      whiteSpace: "nowrap",
     },
     popover: {
       padding: theme.spacing(2, 2, 0),
