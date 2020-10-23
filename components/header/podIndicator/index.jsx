@@ -86,8 +86,11 @@ export default function PodIndicator() {
             aria-describedby={id}
             onClick={handleClick}
             className={clsx(bem("button", "prompt"), classes.indicatorPrompt)}
+            title={profile ? profile.name : "Unknown"}
           >
-            {profile ? profile.name : "Unknown"}
+            <span className={classes.indicatorName}>
+              {profile ? profile.name : "Unknown"}
+            </span>
           </button>
         )}
         <Popover

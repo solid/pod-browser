@@ -856,9 +856,14 @@ font-display: block;",
               data-testid="pod-indicator-prompt"
               id="pod-indicator-prompt"
               onClick={[Function]}
+              title="Alice"
               type="button"
             >
-              Alice
+              <span
+                className="PodBrowser-indicatorName"
+              >
+                Alice
+              </span>
             </button>
             <WithStyles(ForwardRef(Popover))
               anchorEl={null}
@@ -1781,9 +1786,14 @@ font-display: block;",
               data-testid="pod-indicator-prompt"
               id="pod-indicator-prompt"
               onClick={[Function]}
+              title="Bob"
               type="button"
             >
-              Bob
+              <span
+                className="PodBrowser-indicatorName"
+              >
+                Bob
+              </span>
             </button>
             <WithStyles(ForwardRef(Popover))
               anchorEl={null}

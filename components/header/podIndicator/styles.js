@@ -31,10 +31,16 @@ const styles = (theme) =>
       fontWeight: theme.typography.fontWeightMedium,
     },
     indicatorPrompt: {
+      display: "inline-flex",
       color: theme.palette.text.secondary,
       textTransform: "none",
       fontSize: "0.825rem",
       fontWeight: theme.typography.fontWeightRegular,
+    },
+    indicatorName: {
+      textOverflow: "ellipsis",
+      overflow: "hidden",
+      maxWidth: "200px",
     },
     popover: {
       padding: theme.spacing(2, 2, 0),
