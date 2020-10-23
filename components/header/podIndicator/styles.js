@@ -40,7 +40,7 @@ const styles = (theme) =>
     indicatorName: {
       textOverflow: "ellipsis",
       overflow: "hidden",
-      maxWidth: "200px",
+      maxWidth: "12rem",
       whiteSpace: "nowrap",
     },
     popover: {
