@@ -170,11 +170,11 @@ function ContactsList() {
             property={hasPhotoPredicate}
             header=""
             datatype="url"
-            body={({ value }) => {
+            body={({ value, row }) => {
               return (
                 <Avatar
                   className={bem("avatar")}
-                  alt="Contact avatar"
+                  alt={row.values.col1 || "Contact avatar"}
                   src={value}
                 />
               );

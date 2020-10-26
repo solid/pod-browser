@@ -10195,12 +10195,12 @@ font-display: block;",
                                       }
                                     >
                                       <WithStyles(ForwardRef(Avatar))
-                                        alt="Contact avatar"
+                                        alt="Alice"
                                         className="PodBrowser-avatar"
                                         src={null}
                                       >
                                         <ForwardRef(Avatar)
-                                          alt="Contact avatar"
+                                          alt="Alice"
                                           className="PodBrowser-avatar"
                                           classes={
                                             Object {
