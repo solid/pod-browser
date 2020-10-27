@@ -19,16 +19,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles } from "@solid/lit-prism-patterns";
+import React from "react";
+import { mountToJson } from "../../../__testUtils/mountWithTheme";
+import MenuDrawer from "./index";
+import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 
-export default function styles(theme) {
-  return createStyles(theme, ["headerBanner", "icons"], {
-    userMenu: {
-      display: "none",
-      [theme.breakpoints.up("sm")]: {
-        display: "flex",
-        justifySelf: "flex-end",
-      },
-    },
+describe("MenuDrawer", () => {
+  test("renders menu drawer", () => {
+    const session = mockUnauthenticatedSession();
+    const SessionProvider = mockSessionContextProvider(session);
+
+    const tree = mountToJson(
+      <SessionProvider>
+        <MenuDrawer />
+      </SessionProvider>
+    );
+    expect(tree).toMatchSnapshot();
   });
-}
+});

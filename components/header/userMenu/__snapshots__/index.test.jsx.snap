@@ -841,91 +841,76 @@ font-display: block;",
       }
     >
       <UserMenu>
-        <div>
-          <Link
-            href="/bookmarks"
-            replace={true}
+        <div
+          className="PodBrowser-userMenu"
+        >
+          <div
+            className="PodBrowser-header-banner__aside-menu PodBrowser-header-banner__aside-menu--popup"
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
           >
             <button
+              aria-controls="UserMenu"
+              aria-expanded={true}
+              aria-haspopup="true"
               className="PodBrowser-header-banner__aside-menu-trigger"
+              data-testid="user-menu-button"
               onClick={[Function]}
-              onMouseEnter={[Function]}
               type="button"
             >
               <i
-                aria-label="Bookmarks"
-                className="PodBrowser-icon-star PodBrowser-header-banner__aside-menu-trigger-icon"
+                aria-label="User Menu"
+                className="PodBrowser-icon-user PodBrowser-header-banner__aside-menu-trigger-icon"
               />
-              Bookmarks
             </button>
-          </Link>
-        </div>
-        <div
-          className="PodBrowser-header-banner__aside-menu PodBrowser-header-banner__aside-menu--popup"
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
-        >
-          <button
-            aria-controls="UserMenu"
-            aria-expanded={true}
-            aria-haspopup="true"
-            className="PodBrowser-header-banner__aside-menu-trigger"
-            data-testid="user-menu-button"
-            onClick={[Function]}
-            type="button"
-          >
-            <i
-              aria-label="User Menu"
-              className="PodBrowser-icon-user PodBrowser-header-banner__aside-menu-trigger-icon"
-            />
-          </button>
-          <div
-            aria-hidden={true}
-            className="PodBrowser-header-banner__aside-menu-popup"
-            id="UserMenu"
-          >
-            <ul
-              className="PodBrowser-header-banner__user-menu"
+            <div
+              aria-hidden={true}
+              className="PodBrowser-header-banner__aside-menu-popup"
+              id="UserMenu"
             >
-              <li
-                className="PodBrowser-header-banner__user-menu-item"
-                style={
-                  Object {
-                    "zIndex": 100,
-                  }
-                }
+              <ul
+                className="PodBrowser-header-banner__user-menu"
               >
-                <Logout
-                  className="PodBrowser-header-banner__user-menu-item-trigger"
+                <li
+                  className="PodBrowser-header-banner__user-menu-item"
+                  style={
+                    Object {
+                      "zIndex": 100,
+                    }
+                  }
                 >
-                  <k
-                    onLogout={[Function]}
+                  <Logout
+                    className="PodBrowser-header-banner__user-menu-item-trigger"
                   >
-                    <div
-                      onClick={[Function]}
-                      onKeyDown={[Function]}
-                      role="button"
-                      tabIndex={0}
+                    <k
+                      onLogout={[Function]}
                     >
-                      <button
-                        className="PodBrowser-header-banner__user-menu-item-trigger"
-                        data-testid="logout-button"
-                        type="button"
+                      <div
+                        onClick={[Function]}
+                        onKeyDown={[Function]}
+                        role="button"
+                        tabIndex={0}
                       >
-                        <i
-                          className="PodBrowser-icon-log-out PodBrowser-header-banner__user-menu-item-icon"
-                        />
-                        <span
-                          className="PodBrowser-header-banner__user-menu-item-label"
+                        <button
+                          className="PodBrowser-header-banner__user-menu-item-trigger"
+                          data-testid="logout-button"
+                          type="button"
                         >
-                          Log out
-                        </span>
-                      </button>
-                    </div>
-                  </k>
-                </Logout>
-              </li>
-            </ul>
+                          <i
+                            className="PodBrowser-icon-log-out PodBrowser-header-banner__user-menu-item-icon"
+                          />
+                          <span
+                            className="PodBrowser-header-banner__user-menu-item-label"
+                          >
+                            Log out
+                          </span>
+                        </button>
+                      </div>
+                    </k>
+                  </Logout>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </UserMenu>

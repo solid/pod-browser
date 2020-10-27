@@ -22,7 +22,6 @@
 import React, { useState } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import Link from "next/link";
 import clsx from "clsx";
 import LogOutButton from "../../logout";
 import styles from "./styles";
@@ -34,31 +33,14 @@ const TESTCAFE_ID_USER_MENU_BUTTON = "user-menu-button";
 export default function UserMenu() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const bem = useBem(useStyles());
+  const classes = useStyles();
 
   const toggleMenu = () => setUserMenuOpen(!userMenuOpen);
   const handleMenuOpen = () => setUserMenuOpen(true);
   const handleMenuClose = () => setUserMenuOpen(false);
 
   return (
-    <>
-      <div>
-        <Link href="/bookmarks" replace>
-          <button
-            className={bem("header-banner__aside-menu-trigger")}
-            type="button"
-          >
-            <i
-              className={clsx(
-                bem("icon-star"),
-                bem("header-banner__aside-menu-trigger-icon")
-              )}
-              aria-label="Bookmarks"
-            />
-            Bookmarks
-          </button>
-        </Link>
-      </div>
-
+    <div className={classes.userMenu}>
       <div
         className={bem("header-banner__aside-menu", "popup")}
         onMouseEnter={handleMenuOpen}
@@ -111,6 +93,6 @@ export default function UserMenu() {
           </ul>
         </div>
       </div>
-    </>
+    </div>
   );
 }

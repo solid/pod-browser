@@ -19,40 +19,17 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
-import { createStyles, makeStyles, StyleRules } from "@material-ui/styles";
-import clsx from "clsx";
-import Link from "next/link";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-import { PrismTheme, useBem } from "@solid/lit-prism-patterns";
-import styles from "./styles";
+const styles = (theme) =>
+  createStyles(theme, ["headerBanner", "icons"], {
+    mainNav: {
+      display: "none",
+      width: "100%",
+      [theme.breakpoints.up("sm")]: {
+        display: "flex",
+      },
+    },
+  });
 
-interface Props {
-  className?: string;
-}
-
-const useStyles = makeStyles<PrismTheme>((theme) =>
-  createStyles(styles(theme) as StyleRules)
-);
-
-export default function MainNav({ className }: Props): ReactElement {
-  const bem = useBem(useStyles());
-  return (
-    <nav className={clsx(bem("main-nav"), className)}>
-      <ul className={bem("main-nav__list")}>
-        <li className={bem("main-nav__item")}>
-          <Link href="/">
-            <a className={bem("main-nav__link")}>
-              <i className={clsx(bem("icon-home"), bem("main-nav__icon"))} />
-              <span className={bem("main-nav__label")}>Home</span>
-            </a>
-          </Link>
-        </li>
-      </ul>
-    </nav>
-  );
-}
-
-MainNav.defaultProps = {
-  className: "",
-};
+export default styles;

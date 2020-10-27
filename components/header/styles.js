@@ -28,7 +28,11 @@ const styles = (theme) =>
       flexDirection: "column",
       alignItems: "start",
       marginRight: theme.spacing(2),
-      paddingTop: theme.spacing(2),
+      paddingTop: theme.spacing(1),
+      [theme.breakpoints.up("sm")]: {
+        minWidth: "max-content",
+        paddingTop: theme.spacing(2),
+      },
     },
   });
 
