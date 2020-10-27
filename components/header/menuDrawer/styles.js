@@ -23,13 +23,10 @@ import { createStyles } from "@solid/lit-prism-patterns";
 
 const styles = (theme) =>
   createStyles(theme, ["icons", "headerBanner", "buttons"], {
-    icon: {
-      ...theme.icons.iconColor(theme.palette.primary.main),
-      fontSize: "1.25em",
-    },
+    icon: theme.icons.iconColor(theme.palette.primary.main),
     "icon-close": {
       ...theme.icons.iconColor(theme.palette.primary.text),
-      fontSize: "1.5em",
+      fontSize: theme.typography.h1.fontSize,
     },
     "menu-drawer-item__text": {
       fontSize: theme.typography.body.fontSize,
@@ -42,6 +39,7 @@ const styles = (theme) =>
       borderRadius: "0px 0px 10px 10px",
     },
     hamburgerMenu: {
+      fontSize: theme.typography.body.fontSize,
       display: "flex",
       width: "100%",
       justifyContent: "flex-end",
