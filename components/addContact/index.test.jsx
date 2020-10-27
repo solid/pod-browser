@@ -34,20 +34,21 @@ import mockSession, {
 } from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import AddContact, {
-  handleSubmit,
   EXISTING_WEBID_ERROR_MESSAGE,
-  NO_NAME_ERROR_MESSAGE,
   FETCH_PROFILE_FAILED_ERROR_MESSAGE,
+  handleSubmit,
+  NO_NAME_ERROR_MESSAGE,
 } from "./index";
 import * as addressBookFns from "../../src/addressBook";
+import { contactsContainerIri } from "../../src/addressBook";
 import { WithTheme } from "../../__testUtils/mountWithTheme";
 import { defaultTheme } from "../../src/theme";
 import {
+  aliceWebIdUrl,
   mockPersonDatasetAlice,
   mockProfileAlice,
 } from "../../__testUtils/mockPersonResource";
 import * as profileHelperFns from "../../src/solidClientHelpers/profile";
-import { contactsContainerIri } from "../../src/addressBook";
 
 describe("AddContact", () => {
   test("it renders the Add Contact form", () => {
@@ -79,7 +80,23 @@ describe("AddContact", () => {
   });
 });
 describe("handleSubmit", () => {
-  const addressBook = mockSolidDatasetFrom("https://example.com/addressBook");
+  const addressBookUri = "https://example.com/addressBook";
+  const addressBook = mockSolidDatasetFrom(addressBookUri);
+  let setAgentId;
+  let setIsLoading;
+  let alertError;
+  let alertSuccess;
+  let setDirtyForm;
+  const fetch = "fetch";
+
+  beforeEach(() => {
+    setAgentId = jest.fn();
+    setIsLoading = jest.fn();
+    alertError = jest.fn();
+    alertSuccess = jest.fn();
+    setDirtyForm = jest.fn();
+  });
+
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -87,10 +104,6 @@ describe("handleSubmit", () => {
   test("it alerts the user and exits if the webid already exists", async () => {
     const personDataset = mockPersonDatasetAlice();
     const personProfile = mockProfileAlice();
-    const setAgentId = jest.fn();
-    const setIsLoading = jest.fn();
-    const alertError = jest.fn();
-    const alertSuccess = jest.fn();
     const handler = handleSubmit({
       addressBook,
       setAgentId,
@@ -98,6 +111,7 @@ describe("handleSubmit", () => {
       alertError,
       alertSuccess,
       fetch,
+      setDirtyForm,
     });
     jest
       .spyOn(profileHelperFns, "fetchProfile")
@@ -105,18 +119,20 @@ describe("handleSubmit", () => {
     jest
       .spyOn(addressBookFns, "findContactInAddressBook")
       .mockResolvedValue([personDataset]);
-    await handler();
+    await handler("alreadyExistingWebId");
+    expect(addressBookFns.findContactInAddressBook).toHaveBeenCalledWith(
+      addressBookUri,
+      aliceWebIdUrl,
+      fetch
+    );
     expect(setAgentId).toHaveBeenCalledTimes(0);
     expect(setIsLoading).toHaveBeenCalledTimes(2);
     expect(alertError).toHaveBeenCalledWith(EXISTING_WEBID_ERROR_MESSAGE);
+    expect(setDirtyForm).toHaveBeenCalledWith(true);
   });
   test("it alerts the user and exits if the webid doesn't have a name", async () => {
     const personUri = "http://example.com/marie#me";
     const mockProfile = { webId: personUri };
-    const setAgentId = jest.fn();
-    const setIsLoading = jest.fn();
-    const alertError = jest.fn();
-    const alertSuccess = jest.fn();
     const handler = handleSubmit({
       addressBook,
       setAgentId,
@@ -124,12 +140,13 @@ describe("handleSubmit", () => {
       alertError,
       alertSuccess,
       fetch,
+      setDirtyForm,
     });
     jest.spyOn(profileHelperFns, "fetchProfile").mockResolvedValue(mockProfile);
     jest
       .spyOn(addressBookFns, "findContactInAddressBook")
       .mockResolvedValue([]);
-    await handler();
+    await handler(personUri);
     expect(setAgentId).toHaveBeenCalledTimes(0);
     expect(setIsLoading).toHaveBeenCalledTimes(2);
     expect(alertSuccess).not.toHaveBeenCalled();
@@ -137,10 +154,6 @@ describe("handleSubmit", () => {
   });
   test("it alerts the user and exits if fetching the profile fails", async () => {
     const mockProfileError = new Error("error");
-    const setAgentId = jest.fn();
-    const setIsLoading = jest.fn();
-    const alertError = jest.fn();
-    const alertSuccess = jest.fn();
     const handler = handleSubmit({
       addressBook,
       setAgentId,
@@ -148,11 +161,12 @@ describe("handleSubmit", () => {
       alertError,
       alertSuccess,
       fetch,
+      setDirtyForm,
     });
     jest
       .spyOn(profileHelperFns, "fetchProfile")
       .mockRejectedValueOnce(mockProfileError);
-    await handler();
+    await handler("iri");
     expect(setAgentId).toHaveBeenCalledTimes(0);
     expect(setIsLoading).toHaveBeenCalledTimes(2);
     expect(alertSuccess).not.toHaveBeenCalled();
@@ -169,10 +183,6 @@ describe("handleSubmit", () => {
     const peopleDataset = mockSolidDatasetFrom(contactsIri);
     const peopleDatasetWithContact = setThing(peopleDataset, personDataset);
     const mockProfile = mockProfileAlice();
-    const setAgentId = jest.fn();
-    const setIsLoading = jest.fn();
-    const alertError = jest.fn();
-    const alertSuccess = jest.fn();
     const handler = handleSubmit({
       addressBook,
       setAgentId,
@@ -180,6 +190,7 @@ describe("handleSubmit", () => {
       alertError,
       alertSuccess,
       fetch,
+      setDirtyForm,
     });
     jest
       .spyOn(addressBookFns, "findContactInAddressBook")
@@ -189,20 +200,17 @@ describe("handleSubmit", () => {
       response: peopleDatasetWithContact,
       error: null,
     });
-    await handler();
+    await handler(personUri);
     expect(setAgentId).toHaveBeenCalledWith("");
     expect(setIsLoading).toHaveBeenCalledTimes(2);
     expect(alertSuccess).toHaveBeenCalledWith(
       "Alice was added to your contacts"
     );
     expect(alertError).not.toHaveBeenCalled();
+    expect(setDirtyForm).toHaveBeenCalledWith(false);
   });
   test("it alerts the user if there is an error while creating the contact", async () => {
     const mockProfile = mockProfileAlice();
-    const setAgentId = jest.fn();
-    const setIsLoading = jest.fn();
-    const alertError = jest.fn();
-    const alertSuccess = jest.fn();
     const handler = handleSubmit({
       addressBook,
       setAgentId,
@@ -210,6 +218,7 @@ describe("handleSubmit", () => {
       alertError,
       alertSuccess,
       fetch,
+      setDirtyForm,
     });
     jest.spyOn(profileHelperFns, "fetchProfile").mockResolvedValue(mockProfile);
     jest
@@ -219,7 +228,7 @@ describe("handleSubmit", () => {
       response: null,
       error: "There was an error saving the resource",
     });
-    await handler();
+    await handler(aliceWebIdUrl);
     expect(setAgentId).toHaveBeenCalledTimes(0);
     expect(setIsLoading).toHaveBeenCalledTimes(2);
     expect(alertSuccess).not.toHaveBeenCalled();

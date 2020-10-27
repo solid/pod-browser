@@ -19,20 +19,32 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
+import React, { useState } from "react";
 import { useId } from "react-id-generator";
 import T from "prop-types";
-import { Form, Button, Input } from "@inrupt/prism-react-components";
+import {
+  Form,
+  Button,
+  Label,
+  Message,
+  SimpleInput,
+} from "@inrupt/prism-react-components";
 
-function AgentSearchForm({ children, onSubmit, buttonText, value, onChange }) {
+function AgentSearchForm({
+  children,
+  onSubmit,
+  buttonText,
+  value,
+  onChange,
+  dirtyForm,
+}) {
   const inputId = useId();
+  const [dirtyWebIdField, setDirtyWebIdField] = useState(dirtyForm);
+  const invalidWebIdField = !value && (dirtyForm || dirtyWebIdField);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (value === "") {
-      return;
-    }
-    onSubmit(value);
+    await onSubmit(value);
   };
 
   const handleChange = (event) => {
@@ -41,14 +53,19 @@ function AgentSearchForm({ children, onSubmit, buttonText, value, onChange }) {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Input
+      <Label>WebID</Label>
+      {invalidWebIdField ? (
+        <Message variant="invalid">Please provide a valid WebID</Message>
+      ) : null}
+      <SimpleInput
         id={inputId}
-        label="WebID"
         onChange={handleChange}
         value={value}
         type="url"
         pattern="https://.+"
         title="Must start with https://"
+        onBlur={() => setDirtyWebIdField(true)}
+        required={invalidWebIdField}
       />
 
       {children}
@@ -61,6 +78,7 @@ function AgentSearchForm({ children, onSubmit, buttonText, value, onChange }) {
 AgentSearchForm.propTypes = {
   buttonText: T.string,
   children: T.node,
+  dirtyForm: T.bool,
   onChange: T.func,
   onSubmit: T.func,
   value: T.string,
@@ -69,6 +87,7 @@ AgentSearchForm.propTypes = {
 AgentSearchForm.defaultProps = {
   buttonText: "Add",
   children: null,
+  dirtyForm: false,
   onChange: () => {},
   onSubmit: () => {},
   value: "",

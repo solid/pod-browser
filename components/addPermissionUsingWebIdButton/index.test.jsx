@@ -67,58 +67,78 @@ describe("closeHandler", () => {
     const setAnchorEl = jest.fn();
     const setAccess = jest.fn();
     const setDisabled = jest.fn();
-    const setSubmitted = jest.fn();
     const onLoading = jest.fn();
+    const setDirtyForm = jest.fn();
     closeHandler(
       setAnchorEl,
       setAccess,
       setDisabled,
-      setSubmitted,
-      onLoading
+      onLoading,
+      setDirtyForm
     )();
     expect(setAnchorEl).toHaveBeenCalledWith(null);
     expect(setAccess).toHaveBeenCalledWith(createAccessMap(true));
     expect(setDisabled).toHaveBeenCalledWith(false);
-    expect(setSubmitted).toHaveBeenCalledWith(false);
     expect(onLoading).toHaveBeenCalledWith(false);
+    expect(setDirtyForm).toHaveBeenCalledWith(false);
   });
 });
 
 describe("submitHandler", () => {
   let accessControl;
   let onLoading;
-  let setSubmitted;
-  let setPermissionFormError;
   let setDisabled;
   let handleClose;
   const agentId = "agentId";
+  let setDirtyForm;
 
   beforeEach(() => {
     accessControl = {
       savePermissionsForAgent: jest.fn().mockResolvedValue({}),
     };
     onLoading = jest.fn();
-    setSubmitted = jest.fn();
-    setPermissionFormError = jest.fn();
     setDisabled = jest.fn();
     handleClose = jest.fn();
+    setDirtyForm = jest.fn();
   });
 
-  it("validates whether access is set", async () => {
+  it("requires a valid agentId", async () => {
     const access = createAccessMap();
     const submit = submitHandler(
       accessControl,
       onLoading,
-      setSubmitted,
       access,
-      setPermissionFormError,
       setDisabled,
-      handleClose
+      handleClose,
+      setDirtyForm
     );
-    await expect(submit(agentId)).resolves.toBeUndefined();
+    await expect(submit("")).resolves.toBeUndefined();
+    expect(setDirtyForm).toHaveBeenCalledWith(true);
+    expect(onLoading).not.toHaveBeenCalled();
+  });
+
+  it("validates whether access is set", async () => {
+    const invalidSubmit = submitHandler(
+      accessControl,
+      onLoading,
+      createAccessMap(),
+      setDisabled,
+      handleClose,
+      setDirtyForm
+    );
+    await expect(invalidSubmit(agentId)).resolves.toBeUndefined();
+    expect(onLoading).not.toHaveBeenCalled();
+
+    const validSubmit = submitHandler(
+      accessControl,
+      onLoading,
+      createAccessMap(true),
+      setDisabled,
+      handleClose,
+      setDirtyForm
+    );
+    await expect(validSubmit(agentId)).resolves.toBeUndefined();
     expect(onLoading).toHaveBeenCalledWith(true);
-    expect(setSubmitted).toHaveBeenCalledWith(true);
-    expect(setPermissionFormError).toHaveBeenCalledWith(true);
   });
 
   it("saves successfully", async () => {
@@ -126,21 +146,20 @@ describe("submitHandler", () => {
     const submit = submitHandler(
       accessControl,
       onLoading,
-      setSubmitted,
       access,
-      setPermissionFormError,
       setDisabled,
-      handleClose
+      handleClose,
+      setDirtyForm
     );
     await expect(submit(agentId)).resolves.toBeUndefined();
     expect(onLoading).toHaveBeenCalledWith(true);
-    expect(setSubmitted).toHaveBeenCalledWith(true);
     expect(setDisabled).toHaveBeenCalledWith(true);
     expect(accessControl.savePermissionsForAgent).toHaveBeenCalledWith(
       agentId,
       access
     );
     expect(handleClose).toHaveBeenCalledWith();
+    expect(setDirtyForm).toHaveBeenCalledWith(false);
   });
 
   it("handles failing save request", async () => {
@@ -150,15 +169,13 @@ describe("submitHandler", () => {
     const submit = submitHandler(
       accessControl,
       onLoading,
-      setSubmitted,
       access,
-      setPermissionFormError,
       setDisabled,
-      handleClose
+      handleClose,
+      setDirtyForm
     );
     await expect(submit(agentId)).rejects.toEqual(error);
     expect(onLoading).toHaveBeenCalledWith(true);
-    expect(setSubmitted).toHaveBeenCalledWith(true);
     expect(setDisabled).toHaveBeenCalledWith(true);
     expect(accessControl.savePermissionsForAgent).toHaveBeenCalledWith(
       agentId,

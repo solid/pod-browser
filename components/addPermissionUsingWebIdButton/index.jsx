@@ -21,7 +21,7 @@
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import T from "prop-types";
 import { createStyles, makeStyles, Popover } from "@material-ui/core";
 import { InputGroup, Label, Message } from "@inrupt/prism-react-components";
@@ -54,34 +54,32 @@ export function closeHandler(
   setAnchorEl,
   setAccess,
   setDisabled,
-  setSubmitted,
-  onLoading
+  onLoading,
+  setDirtyForm
 ) {
   return () => {
     setAnchorEl(null);
     setAccess(createAccessMap(true));
     setDisabled(false);
-    setSubmitted(false);
     onLoading(false);
+    setDirtyForm(false);
   };
 }
 
 export function submitHandler(
   accessControl,
   onLoading,
-  setSubmitted,
   access,
-  setPermissionFormError,
   setDisabled,
-  handleClose
+  handleClose,
+  setDirtyForm
 ) {
   return async (agentId) => {
-    onLoading(true);
-    setSubmitted(true);
-    if (isEmptyAccess(access)) {
-      setPermissionFormError(true);
+    setDirtyForm(true);
+    if (!agentId || isEmptyAccess(access)) {
       return;
     }
+    onLoading(true);
     setDisabled(true);
     const { error } = await accessControl.savePermissionsForAgent(
       agentId,
@@ -89,6 +87,7 @@ export function submitHandler(
     );
     if (error) throw error;
     handleClose();
+    setDirtyForm(false);
   };
 }
 
@@ -101,9 +100,8 @@ export default function AddPermissionUsingWebIdButton({
   const classes = useStyles();
   const [disabled, setDisabled] = useState(false);
   const { accessControl } = useContext(AccessControlContext);
-  const [submitted, setSubmitted] = useState(false);
-  const [permissionFormError, setPermissionFormError] = useState(false);
   const [agentId, setAgentId] = useState("");
+  const [dirtyForm, setDirtyForm] = useState(false);
 
   const handleChange = changeHandler(setAgentId);
 
@@ -113,27 +111,22 @@ export default function AddPermissionUsingWebIdButton({
     setAnchorEl,
     setAccess,
     setDisabled,
-    setSubmitted,
-    onLoading
+    onLoading,
+    setDirtyForm
   );
 
   const onSubmit = submitHandler(
     accessControl,
     onLoading,
-    setSubmitted,
     access,
-    setPermissionFormError,
     setDisabled,
-    handleClose
+    handleClose,
+    setDirtyForm
   );
-
-  useEffect(() => {
-    if (!submitted) return;
-    setPermissionFormError(isEmptyAccess(access));
-  }, [submitted, access]);
 
   const open = Boolean(anchorEl);
   const id = open ? POPOVER_ID : undefined;
+  const permissionFormInvalid = dirtyForm && isEmptyAccess(access);
 
   return (
     <>
@@ -161,6 +154,7 @@ export default function AddPermissionUsingWebIdButton({
         }}
       >
         <AgentSearchForm
+          dirtyForm={dirtyForm}
           onChange={handleChange}
           onSubmit={onSubmit}
           value={agentId}
@@ -172,8 +166,8 @@ export default function AddPermissionUsingWebIdButton({
               onChange={setAccess}
               disabled={disabled}
             />
-            {permissionFormError ? (
-              <Message variant="error">
+            {permissionFormInvalid ? (
+              <Message variant="invalid">
                 Please assign at least one permission
               </Message>
             ) : null}

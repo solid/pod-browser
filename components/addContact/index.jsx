@@ -52,8 +52,13 @@ export function handleSubmit({
   alertError,
   alertSuccess,
   fetch,
+  setDirtyForm,
 }) {
   return async (iri) => {
+    setDirtyForm(true);
+    if (!iri) {
+      return;
+    }
     setIsLoading(true);
     const addressBookIri = getSourceUrl(addressBook);
 
@@ -92,6 +97,7 @@ export function handleSubmit({
       alertError(FETCH_PROFILE_FAILED_ERROR_MESSAGE);
     }
     setIsLoading(false);
+    setDirtyForm(false);
   };
 }
 
@@ -112,6 +118,8 @@ export default function AddContact() {
   const [addressBook] = useAddressBook();
   const [isLoading, setIsLoading] = useState(false);
   const [agentId, setAgentId] = useState("");
+  const [dirtyForm, setDirtyForm] = useState(false);
+
   if (!webId || isLoading) return <Spinner />;
 
   const onSubmit = handleSubmit({
@@ -122,9 +130,12 @@ export default function AddContact() {
     alertSuccess,
     fetch,
     webId,
+    setDirtyForm,
   });
 
-  const handleChange = (newValue) => setAgentId(newValue);
+  const handleChange = (newValue) => {
+    setAgentId(newValue);
+  };
 
   return (
     <div className={containerClass}>
@@ -142,6 +153,7 @@ export default function AddContact() {
         onSubmit={onSubmit}
         buttonText="Add Contact"
         value={agentId}
+        dirtyForm={dirtyForm}
       />
     </div>
   );

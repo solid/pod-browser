@@ -66,11 +66,4 @@ describe("AgentSearchForm", () => {
     fireEvent.click(button);
     expect(onSubmit).toHaveBeenCalledWith("https://www.example.com");
   });
-  test("it does not call onSubmit with an empty string", () => {
-    const onSubmit = jest.fn();
-    const wrapper = render(<AgentSearchForm onSubmit={onSubmit} />);
-    const button = wrapper.getByRole("button");
-    fireEvent.click(button);
-    expect(onSubmit).not.toHaveBeenCalled();
-  });
 });
