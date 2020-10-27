@@ -41,7 +41,7 @@ describe("usePodOwner", () => {
     solidClientFns.getResourceInfo = jest.fn().mockResolvedValue(resourceInfo);
     solidClientFns.getPodOwner = jest
       .fn()
-      .mockReturnValue({ response: "https://www.example.com/profile#WebId" });
+      .mockReturnValue("https://www.example.com/profile#WebId");
 
     const { result, waitForNextUpdate } = renderHook(() =>
       usePodOwner({ resourceIri: "https://www.example.com" })
@@ -60,7 +60,7 @@ describe("usePodOwner", () => {
     };
 
     solidClientFns.getResourceInfo = jest.fn().mockResolvedValue(resourceInfo);
-    solidClientFns.getPodOwner = jest.fn().mockReturnValue({ response: null });
+    solidClientFns.getPodOwner = jest.fn().mockReturnValue(null);
 
     const { result, waitForNextUpdate } = renderHook(() =>
       usePodOwner({ resourceIri: "https://www.example.com" })
@@ -85,7 +85,7 @@ describe("usePodOwner", () => {
     solidClientFns.getResourceInfo = jest.fn().mockResolvedValue(resourceInfo);
     solidClientFns.getPodOwner = jest
       .fn()
-      .mockReturnValue({ response: "https://www.example.com/profile#WebId" });
+      .mockReturnValue("https://www.example.com/profile#WebId");
 
     const { result, rerender, waitForNextUpdate } = renderHook(
       ({ resourceIri }) => usePodOwner({ resourceIri }),
