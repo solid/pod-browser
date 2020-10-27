@@ -29,6 +29,7 @@ import {
 import { ldp, rdf } from "rdf-namespaces";
 import {
   chain,
+  chainPromise,
   changeThing,
   createResponder,
   datasetIsContainer,
@@ -132,6 +133,26 @@ describe("chain", () => {
     expect(opOne).toHaveBeenCalledWith("x");
     expect(opTwo).toHaveBeenCalledWith("x:one");
     expect(value).toEqual("x:one:two");
+  });
+});
+
+describe("chainPromise", () => {
+  it("supports chaining with promises", async () => {
+    expect(
+      await chainPromise(
+        Promise.resolve(42),
+        async (a) => Promise.resolve(a + 1),
+        (a) => a + 1
+      )
+    ).toBe(44);
+
+    expect(
+      await chainPromise(
+        1337,
+        (a) => a + 1,
+        async (a) => a + 1
+      )
+    ).toBe(1339);
   });
 });
 

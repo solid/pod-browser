@@ -19,23 +19,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { hasAccessibleAcl } from "@inrupt/solid-client";
+// eslint-disable-next-line camelcase
+import { hasAccessibleAcl, acp_lowlevel_preview } from "@inrupt/solid-client";
 import WacAccessControlStrategy from "./wac";
-import { hasLinkedAcr } from "./acp/mockedClientApi";
 import AcpAccessControlStrategy from "./acp";
 
 export const noAccessPolicyError =
   "No available access policy for this resource";
 
 export function hasAccess(resourceInfo) {
-  return hasAccessibleAcl(resourceInfo) || hasLinkedAcr(resourceInfo);
+  return (
+    hasAccessibleAcl(resourceInfo) ||
+    acp_lowlevel_preview.hasLinkedAcr(resourceInfo)
+  );
 }
 
 export async function getAccessControl(resourceInfo, policiesContainer, fetch) {
   if (hasAccessibleAcl(resourceInfo)) {
     return WacAccessControlStrategy.init(resourceInfo, fetch);
   }
-  if (hasLinkedAcr(resourceInfo)) {
+  if (acp_lowlevel_preview.hasLinkedAcr(resourceInfo)) {
     return AcpAccessControlStrategy.init(
       resourceInfo,
       policiesContainer,

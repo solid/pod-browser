@@ -151,6 +151,16 @@ export function chain(object, ...operations) {
   }, object);
 }
 
+export async function chainPromise(object, ...operations) {
+  return operations.reduce(
+    async (acc, transform) => {
+      // eslint-disable-next-line no-return-await
+      return acc.then ? transform(await acc) : Promise.resolve(transform(acc));
+    },
+    object.then ? await object : Promise.resolve(object)
+  );
+}
+
 export function defineThing(options, ...operations) {
   return chain(createThing(options), ...operations);
 }

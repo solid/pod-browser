@@ -21,11 +21,12 @@
 
 import { useEffect, useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
+// eslint-disable-next-line camelcase
+import { acp_lowlevel_preview } from "@inrupt/solid-client/dist";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import { getPoliciesContainerUrl } from "../../accessControl/acp";
 import { getOrCreateContainer } from "../../solidClientHelpers/resource";
 import useResourceInfo from "../useResourceInfo";
-import { hasLinkedAcr } from "../../accessControl/acp/mockedClientApi";
 
 export default function usePoliciesContainer() {
   const [policiesContainer, setPoliciesContainer] = useState();
@@ -36,7 +37,12 @@ export default function usePoliciesContainer() {
   const [error, setError] = useState(podRootError || null);
 
   useEffect(() => {
-    if (!profile || podRootError || !podRoot || !hasLinkedAcr(podRoot)) {
+    if (
+      !profile ||
+      podRootError ||
+      !podRoot ||
+      !acp_lowlevel_preview.hasLinkedAcr(podRoot)
+    ) {
       setPoliciesContainer(null);
       setError(podRootError || null);
       return;
