@@ -25,7 +25,13 @@ import { createContainerAt, getSourceUrl } from "@inrupt/solid-client";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSession } from "@inrupt/solid-ui-react";
 import { createStyles, Popover } from "@material-ui/core";
-import { Button, Form, Input } from "@inrupt/prism-react-components";
+import {
+  Button,
+  Form,
+  Label,
+  Message,
+  SimpleInput,
+} from "@inrupt/prism-react-components";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import AlertContext from "../../src/contexts/alertContext";
 import styles from "../addPermissionUsingWebIdButton/styles";
@@ -68,9 +74,12 @@ export function handleFolderSubmit({
   setAlertOpen,
   handleClose,
   setFolderName,
+  setDirtyForm,
+  setDirtyNameField,
 }) {
   return async (event) => {
     event.preventDefault();
+    setDirtyForm(true);
     if (!name) {
       return;
     }
@@ -87,6 +96,8 @@ export function handleFolderSubmit({
       );
       setAlertOpen(true);
       setFolderName("");
+      setDirtyForm(false);
+      setDirtyNameField(false);
       handleClose();
     } catch (error) {
       setSeverity("error");
@@ -105,7 +116,9 @@ export function handleChange(setFolderName) {
 export default function AddFolderFlyout({ onSave, className, resourceList }) {
   const classes = useStyles();
   const [folderName, setFolderName] = useState("");
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [dirtyForm, setDirtyForm] = useState(false);
+  const [dirtyNameField, setDirtyNameField] = useState(false);
   const { currentUri } = useContext(PodLocationContext);
   const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
 
@@ -138,9 +151,12 @@ export default function AddFolderFlyout({ onSave, className, resourceList }) {
     setAlertOpen,
     handleClose,
     setFolderName,
+    setDirtyForm,
+    setDirtyNameField,
   });
 
   const onChange = handleChange(setFolderName);
+  const invalidNameField = !folderName && (dirtyForm || dirtyNameField);
 
   return (
     <>
@@ -169,12 +185,17 @@ export default function AddFolderFlyout({ onSave, className, resourceList }) {
         }}
       >
         <Form onSubmit={(event) => onSubmit(event)}>
-          <Input
-            data-testid={TESTCAFE_ID_FOLDER_NAME_INPUT}
+          <Label htmlFor="folder-input">Folder name</Label>
+          {invalidNameField ? (
+            <Message variant="invalid">Please give a name</Message>
+          ) : null}
+          <SimpleInput
             id="folder-input"
-            label="Folder name"
+            data-testid={TESTCAFE_ID_FOLDER_NAME_INPUT}
             onChange={onChange}
+            onBlur={() => setDirtyNameField(true)}
             value={folderName}
+            required={invalidNameField}
           />
           <Button
             data-testid={TESTCAFE_ID_CREATE_FOLDER_FLYOUT_BUTTON}

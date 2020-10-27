@@ -113,6 +113,8 @@ describe("handleFolderSubmit", () => {
   let setAlertOpen;
   let setFolderName;
   let event;
+  let setDirtyForm;
+  let setDirtyNameField;
 
   beforeEach(() => {
     fetch = jest.fn();
@@ -123,6 +125,8 @@ describe("handleFolderSubmit", () => {
     setAlertOpen = jest.fn();
     setFolderName = jest.fn();
     event = { preventDefault: jest.fn() };
+    setDirtyForm = jest.fn();
+    setDirtyNameField = jest.fn();
   });
 
   it("returns a handler that creates a new folder at a given location", async () => {
@@ -142,6 +146,8 @@ describe("handleFolderSubmit", () => {
       setMessage,
       setAlertOpen,
       setFolderName,
+      setDirtyForm,
+      setDirtyNameField,
     });
 
     await handler(event);
@@ -157,6 +163,8 @@ describe("handleFolderSubmit", () => {
     expect(setAlertOpen).toHaveBeenCalledWith(true);
     expect(setFolderName).toHaveBeenCalledWith("");
     expect(event.preventDefault).toHaveBeenCalledWith();
+    expect(setDirtyForm).toHaveBeenCalledWith(false);
+    expect(setDirtyNameField).toHaveBeenCalledWith(false);
   });
 
   it("returns a handler that creates a new folder within a folder which has spaces in its name", async () => {
@@ -174,6 +182,8 @@ describe("handleFolderSubmit", () => {
       setMessage,
       setAlertOpen,
       setFolderName,
+      setDirtyForm,
+      setDirtyNameField,
     });
 
     await handler(event);
@@ -189,5 +199,38 @@ describe("handleFolderSubmit", () => {
     expect(setAlertOpen).toHaveBeenCalledWith(true);
     expect(setFolderName).toHaveBeenCalledWith("");
     expect(event.preventDefault).toHaveBeenCalledWith();
+    expect(setDirtyForm).toHaveBeenCalledWith(false);
+    expect(setDirtyNameField).toHaveBeenCalledWith(false);
+  });
+
+  it("returns a handler that validates name before creating it", async () => {
+    const currentUri = "https://www.mypodbrowser.com/First%20Folder/";
+    const folders = [];
+    const name = "";
+
+    const handler = handleFolderSubmit({
+      options,
+      onSave,
+      currentUri,
+      folders,
+      name,
+      setSeverity,
+      setMessage,
+      setAlertOpen,
+      setFolderName,
+      setDirtyForm,
+      setDirtyNameField,
+    });
+
+    await handler(event);
+
+    expect(createContainerAt).not.toHaveBeenCalled();
+    expect(onSave).not.toHaveBeenCalled();
+    expect(setSeverity).not.toHaveBeenCalled();
+    expect(setMessage).not.toHaveBeenCalled();
+    expect(setAlertOpen).not.toHaveBeenCalled();
+    expect(setFolderName).not.toHaveBeenCalled();
+    expect(event.preventDefault).toHaveBeenCalledWith();
+    expect(setDirtyForm).toHaveBeenCalledWith(true);
   });
 });
