@@ -46,7 +46,7 @@ exports[`Logout button Renders a logout button 1`] = `
     <Logout
       className={null}
     >
-      <L
+      <k
         onLogout={[Function]}
       >
         <div
@@ -63,7 +63,7 @@ exports[`Logout button Renders a logout button 1`] = `
             Log Out
           </button>
         </div>
-      </L>
+      </k>
     </Logout>
   </g>
 </MockedSessionContextProvider>

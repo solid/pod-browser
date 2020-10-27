@@ -3772,7 +3772,7 @@ font-display: block;",
                             onClick={[Function]}
                             role="row"
                           >
-                            <F
+                            <A
                               dataset={42}
                               thing={
                                 DatasetCore {
@@ -16563,7 +16563,7 @@ font-display: block;",
                                   </td>
                                 </x>
                               </m>
-                            </F>
+                            </A>
                           </tr>
                           <tr
                             className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
@@ -16571,7 +16571,7 @@ font-display: block;",
                             onClick={[Function]}
                             role="row"
                           >
-                            <F
+                            <A
                               dataset={42}
                               thing={
                                 DatasetCore {
@@ -29332,7 +29332,7 @@ font-display: block;",
                                   </td>
                                 </x>
                               </m>
-                            </F>
+                            </A>
                           </tr>
                         </tbody>
                       </table>
