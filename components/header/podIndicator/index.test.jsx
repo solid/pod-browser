@@ -121,16 +121,25 @@ describe("submitHandler", () => {
   let handleClose;
   let setUrl;
   const router = {};
+  let setDirtyForm;
+  let setDirtyUrlField;
 
   beforeEach(() => {
     event = { preventDefault: jest.fn() };
     handleClose = jest.fn();
     setUrl = jest.fn();
     router.push = jest.fn();
+    setDirtyForm = jest.fn();
+    setDirtyUrlField = jest.fn();
   });
 
   test("it sets up a submit handler", async () => {
-    await submitHandler(handleClose, setUrl)(event, url, router);
+    await submitHandler(
+      handleClose,
+      setUrl,
+      setDirtyForm,
+      setDirtyUrlField
+    )(event, url, router);
     expect(event.preventDefault).toHaveBeenCalledWith();
     expect(router.push).toHaveBeenCalledWith(
       "/resource/[iri]",
@@ -138,13 +147,22 @@ describe("submitHandler", () => {
     );
     expect(handleClose).toHaveBeenCalledWith();
     expect(setUrl).toHaveBeenCalledWith("");
+    expect(setDirtyForm).toHaveBeenCalledWith(false);
+    expect(setDirtyUrlField).toHaveBeenCalledWith(false);
   });
 
   it("should do nothing if no url is given", async () => {
-    await submitHandler(handleClose, setUrl)(event, "", router);
+    await submitHandler(
+      handleClose,
+      setUrl,
+      setDirtyForm,
+      setDirtyUrlField
+    )(event, "", router);
     expect(event.preventDefault).toHaveBeenCalledWith();
     expect(router.push).not.toHaveBeenCalled();
     expect(handleClose).not.toHaveBeenCalled();
     expect(setUrl).not.toHaveBeenCalled();
+    expect(setDirtyForm).toHaveBeenCalledWith(true);
+    expect(setDirtyUrlField).not.toHaveBeenCalled();
   });
 });

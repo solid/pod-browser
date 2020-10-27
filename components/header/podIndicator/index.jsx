@@ -25,7 +25,12 @@ import { createStyles, makeStyles } from "@material-ui/styles";
 import { useRouter } from "next/router";
 import { useBem } from "@solid/lit-prism-patterns";
 import { Button, Box, Popover } from "@material-ui/core";
-import { Form, Input } from "@inrupt/prism-react-components";
+import {
+  Form,
+  Label,
+  Message,
+  SimpleInput,
+} from "@inrupt/prism-react-components";
 import Skeleton from "@material-ui/lab/Skeleton";
 import usePodOwnerProfile from "../../../src/hooks/usePodOwnerProfile";
 import styles from "./styles";
@@ -43,18 +48,22 @@ export const clickHandler = (setAnchorEl) => (event) =>
 
 export const closeHandler = (setAnchorEl) => () => setAnchorEl(null);
 
-export const submitHandler = (handleClose, setUrl) => async (
-  event,
-  url,
-  router
-) => {
+export const submitHandler = (
+  handleClose,
+  setUrl,
+  setDirtyForm,
+  setDirtyUrlField
+) => async (event, url, router) => {
   event.preventDefault();
+  setDirtyForm(true);
   if (url === "") {
     return;
   }
   const containerUrl = normalizeContainerUrl(url);
   await router.push("/resource/[iri]", resourceHref(containerUrl));
   handleClose();
+  setDirtyForm(false);
+  setDirtyUrlField(false);
   setUrl("");
 };
 
@@ -65,13 +74,21 @@ export default function PodIndicator() {
   const router = useRouter();
   const bem = useBem(useStyles());
   const { profile, error } = usePodOwnerProfile();
+  const [dirtyForm, setDirtyForm] = useState(false);
+  const [dirtyUrlField, setDirtyUrlField] = useState(false);
   const loading = !profile && !error;
+  const invalidUrlField = !url && (dirtyForm || dirtyUrlField);
 
   const open = Boolean(anchorEl);
   const id = open ? "pod-navigator" : undefined;
   const handleClick = clickHandler(setAnchorEl);
   const handleClose = closeHandler(setAnchorEl);
-  const onSubmit = submitHandler(handleClose, setUrl);
+  const onSubmit = submitHandler(
+    handleClose,
+    setUrl,
+    setDirtyForm,
+    setDirtyUrlField
+  );
 
   return (
     <div className={classes.indicator}>
@@ -112,18 +129,22 @@ export default function PodIndicator() {
           }}
         >
           <Form onSubmit={(event) => onSubmit(event, url, router)}>
+            <Label id="PodNavigator">Go to Pod</Label>
+            {invalidUrlField ? (
+              <Message variant="invalid">Please enter valid URL</Message>
+            ) : null}
             <Box display="flex" alignItems="center">
               <Box width="100%">
-                <Input
+                <SimpleInput
                   id="PodNavigator"
                   data-testid={TESTCAFE_ID_POD_NAVIGATE_INPUT}
-                  label="Go to Pod"
                   value={url}
                   onChange={(event) => setUrl(event.target.value)}
                   placeholder="Enter Pod URI"
                   type="url"
                   pattern="https://.*"
                   title="Must start with https://"
+                  required={invalidUrlField}
                 />
               </Box>
               <Box>
