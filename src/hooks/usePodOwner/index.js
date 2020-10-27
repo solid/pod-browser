@@ -41,7 +41,7 @@ export default function usePodOwner({ resourceIri }) {
     (async () => {
       try {
         const resourceInfo = await getResourceInfo(resourceIri, { fetch });
-        const { response: webId } = getPodOwner(resourceInfo, fetch);
+        const webId = getPodOwner(resourceInfo, fetch);
         setPodOwnerWebId(webId);
       } catch (e) {
         setError(e);
