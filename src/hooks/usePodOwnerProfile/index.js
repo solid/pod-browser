@@ -32,7 +32,7 @@ export default function usePodOwnerProfile() {
   const [error, setError] = useState();
   const router = useRouter();
   const podRoot = usePodRootUri(router.query.iri, null);
-  const { podOwnerWebId } = usePodOwner(router.query.iri);
+  const { podOwnerWebId } = usePodOwner({ resourceIri: router.query.iri }); // passing in an object for testing purposes
   const profileIri =
     podOwnerWebId || (podRoot && joinPath(podRoot, "profile/card#me")); // we won't need to do this once ownership is available
   const { data: authProfile, error: authError } = useAuthenticatedProfile();
