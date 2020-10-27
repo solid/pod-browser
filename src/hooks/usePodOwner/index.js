@@ -30,7 +30,6 @@ export default function usePodOwner({ resourceIri }) {
   const [podOwnerWebId, setPodOwnerWebId] = useState(null);
   const [error, setError] = useState(null);
   const podRoot = usePodRootUri(resourceIri, null);
-  const profileIri = podRoot && joinPath(podRoot, "profile/card#me");
 
   useEffect(() => {
     if (!resourceIri) {
@@ -41,12 +40,14 @@ export default function usePodOwner({ resourceIri }) {
     (async () => {
       try {
         const resourceInfo = await getResourceInfo(resourceIri, { fetch });
-        const webId = getPodOwner(resourceInfo, fetch);
+        const webId =
+          getPodOwner(resourceInfo) ||
+          (podRoot && joinPath(podRoot, "profile/card#me"));
         setPodOwnerWebId(webId);
       } catch (e) {
         setError(e);
       }
     })();
-  }, [resourceIri, fetch]);
-  return { podOwnerWebId: podOwnerWebId || profileIri, error };
+  }, [resourceIri, fetch, podRoot]);
+  return { podOwnerWebId, error };
 }

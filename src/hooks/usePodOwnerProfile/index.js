@@ -21,9 +21,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { joinPath } from "../../stringHelpers";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
-import usePodRootUri from "../usePodRootUri";
 import useFetchProfile from "../useFetchProfile";
 import usePodOwner from "../usePodOwner";
 
@@ -31,14 +29,20 @@ export default function usePodOwnerProfile() {
   const [profile, setProfile] = useState();
   const [error, setError] = useState();
   const router = useRouter();
-  const podRoot = usePodRootUri(router.query.iri, null);
-  const { podOwnerWebId } = usePodOwner({ resourceIri: router.query.iri }); // passing in an object for testing purposes
-  const profileIri =
-    podOwnerWebId || (podRoot && joinPath(podRoot, "profile/card#me")); // we won't need to do this once ownership is available
+  const { podOwnerWebId, error: podOwnerError } = usePodOwner({
+    resourceIri: router.query.iri,
+  }); // passing in an object for testing purposes
   const { data: authProfile, error: authError } = useAuthenticatedProfile();
-  const { data: ownerProfile, error: ownerError } = useFetchProfile(profileIri);
+  const { data: ownerProfile, error: ownerError } = useFetchProfile(
+    podOwnerWebId
+  );
 
   useEffect(() => {
+    if (podOwnerError) {
+      setProfile(null);
+      setError(podOwnerError);
+      return;
+    }
     if (!router.query.iri && authProfile) {
       // we're not using the Navigator, so we'll use the authenticated user's profile
       setProfile(authProfile);
@@ -64,7 +68,14 @@ export default function usePodOwnerProfile() {
     }
     setProfile(ownerProfile);
     setError(ownerError);
-  }, [router.query.iri, authProfile, authError, ownerProfile, ownerError]);
+  }, [
+    router.query.iri,
+    authProfile,
+    authError,
+    ownerProfile,
+    ownerError,
+    podOwnerError,
+  ]);
 
   return { profile, error };
 }

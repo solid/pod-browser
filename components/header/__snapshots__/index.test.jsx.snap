@@ -861,11 +861,9 @@ font-display: block;",
                     },
                   ],
                   Array [
-                    "https://mypod.myhost.com/profile/card#me",
+                    "https://mypod.myhost.com",
                     Object {
-                      "headers": Object {
-                        "Accept": "text/turtle",
-                      },
+                      "method": "HEAD",
                     },
                   ],
                 ],
@@ -880,7 +878,7 @@ font-display: block;",
                   },
                   Object {
                     "type": "throw",
-                    "value": [Error: URL (https://mypod.myhost.com/profile/card#me) not mocked properly],
+                    "value": [Error: URL (https://mypod.myhost.com) not mocked properly],
                   },
                 ],
               },
