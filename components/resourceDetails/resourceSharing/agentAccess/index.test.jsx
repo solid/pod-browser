@@ -23,9 +23,12 @@ import React from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
 import AgentAccess, { getDialogId, saveHandler, submitHandler } from "./index";
+
+import mockSessionContextProvider from "../../../../__testUtils/mockSessionContextProvider";
+import mockSession from "../../../../__testUtils/mockSession";
+
 import { mountToJson } from "../../../../__testUtils/mountWithTheme";
 import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
-import mockConfirmationDialogContextProvider from "../../../../__testUtils/mockConfirmationDialogContextProvider";
 
 jest.mock("../../../../src/solidClientHelpers/permissions");
 
@@ -51,56 +54,19 @@ describe("AgentAccess", () => {
   });
 
   describe("user tries to change access for themselves", () => {
-    let dialogId;
-    let setTitle;
-    let setContent;
-    let setOpen;
-    let setConfirmed;
+    it("checkboxes are disabled", () => {
+      const session = mockSession();
+      const SessionProvider = mockSessionContextProvider(session);
 
-    beforeEach(() => {
-      dialogId = getDialogId(datasetUrl);
-      setTitle = jest.fn();
-      setContent = jest.fn();
-      setOpen = jest.fn();
-      setConfirmed = jest.fn();
-    });
-
-    it("opens a prompt if user tries to change access for themself", () => {
-      const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
-        open: dialogId,
-        setTitle,
-        setContent,
-        confirmed: null,
-      });
-      mountToJson(
-        <ConfirmationDialogProvider>
-          <DatasetProvider dataset={dataset}>
-            <AgentAccess permission={permission} />
-          </DatasetProvider>
-        </ConfirmationDialogProvider>
-      );
-
-      expect(setTitle).toHaveBeenCalledWith("Confirm Access Permissions");
-      expect(setContent).toHaveBeenCalled();
-    });
-
-    it("handles if user cancels", () => {
-      const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
-        open: dialogId,
-        setOpen,
-        setConfirmed,
-        confirmed: false,
-      });
-      mountToJson(
-        <ConfirmationDialogProvider>
-          <DatasetProvider dataset={dataset}>
-            <AgentAccess permission={permission} />
-          </DatasetProvider>
-        </ConfirmationDialogProvider>
-      );
-
-      expect(setOpen).toHaveBeenCalledWith(null);
-      expect(setConfirmed).toHaveBeenCalledWith(null);
+      expect(
+        mountToJson(
+          <SessionProvider>
+            <DatasetProvider dataset={dataset}>
+              <AgentAccess permission={permission} webId={session.info.webId} />
+            </DatasetProvider>
+          </SessionProvider>
+        )
+      ).toMatchSnapshot();
     });
   });
 });

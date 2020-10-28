@@ -21,7 +21,7 @@
 
 /* eslint-disable react/forbid-prop-types */
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import T from "prop-types";
 import { Avatar, createStyles, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
@@ -30,9 +30,9 @@ import { getSourceUrl } from "@inrupt/solid-client";
 import { Button, Form } from "@inrupt/prism-react-components";
 import PermissionsForm from "../../../permissionsForm";
 import styles from "./styles";
+import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
 import { displayProfileName } from "../../../../src/solidClientHelpers/profile";
 import AlertContext from "../../../../src/contexts/alertContext";
-import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -107,16 +107,10 @@ export default function AgentAccess({
   const name = displayProfileName(profile);
   const { accessControl } = useContext(AccessControlContext);
 
+  const { setOpen } = useContext(ConfirmationDialogContext);
+
   const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
   const dialogId = getDialogId(getSourceUrl(dataset));
-  const {
-    setTitle,
-    open,
-    setOpen,
-    setContent,
-    confirmed,
-    setConfirmed,
-  } = useContext(ConfirmationDialogContext);
 
   const savePermissions = saveHandler(
     accessControl,
@@ -138,42 +132,6 @@ export default function AgentAccess({
     tempAccess
   );
 
-  useEffect(() => {
-    if (!open || open !== dialogId) return;
-
-    setTitle("Confirm Access Permissions");
-    setContent(
-      <p>
-        You are about to change your own access to this resource, are you sure
-        you wish to continue?
-      </p>
-    );
-
-    if (confirmed === null) return;
-
-    (async () => {
-      if (open && confirmed) {
-        await savePermissions(tempAccess);
-      }
-
-      if (open && confirmed !== null) {
-        setTempAccess(null);
-        setOpen(null);
-        setConfirmed(null);
-      }
-    })();
-  }, [
-    setTitle,
-    setContent,
-    confirmed,
-    setOpen,
-    setConfirmed,
-    open,
-    savePermissions,
-    tempAccess,
-    dialogId,
-  ]);
-
   return (
     <>
       <Avatar className={classes.avatar} alt={name} src={avatar} />
@@ -184,7 +142,12 @@ export default function AgentAccess({
         {name}
       </Typography>
       <Form onSubmit={(event) => onSubmit(event)}>
-        <PermissionsForm key={webId} acl={access} onChange={setTempAccess}>
+        <PermissionsForm
+          key={webId}
+          webId={webId}
+          acl={access}
+          onChange={setTempAccess}
+        >
           <Button onClick={onSubmit} type="submit">
             Save
           </Button>

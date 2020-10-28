@@ -25,6 +25,7 @@ import T from "prop-types";
 import { Button, createStyles, List, makeStyles } from "@material-ui/core";
 import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUp from "@material-ui/icons/KeyboardArrowUp";
+import { useSession } from "@inrupt/solid-ui-react";
 import PermissionCheckbox from "./permissionCheckbox";
 import {
   displayPermissions,
@@ -56,10 +57,18 @@ export function permissionHandler(access, setAccess, onChange) {
   };
 }
 
-export default function PermissionsForm({ acl, children, disabled, onChange }) {
+export default function PermissionsForm({
+  acl,
+  children,
+  disabled: propsDisabled,
+  onChange,
+  webId,
+}) {
   const classes = useStyles();
+  const { session } = useSession();
   const [access, setAccess] = useState(acl);
   const [formOpen, setFormOpen] = useState(false);
+  const disabled = propsDisabled ?? session.info.webId === webId;
 
   const setPermissionHandler = permissionHandler(access, setAccess, onChange);
 
@@ -82,6 +91,7 @@ export default function PermissionsForm({ acl, children, disabled, onChange }) {
             classes={classes}
             label={ACL.READ.alias}
             onChange={setPermissionHandler(ACL.READ.key)}
+            disabled={disabled}
           />
           <PermissionCheckbox
             value={access.write}
@@ -118,6 +128,7 @@ PermissionsForm.propTypes = {
     append: T.bool.isRequired,
     control: T.bool.isRequired,
   }),
+  webId: T.string,
   children: T.node,
   disabled: T.bool,
   onChange: T.func,
@@ -131,6 +142,7 @@ PermissionsForm.defaultProps = {
     control: false,
   },
   children: null,
-  disabled: false,
+  disabled: null,
+  webId: null,
   onChange: () => {},
 };
