@@ -64,7 +64,6 @@ export default function DownloadLink({ iri, ...props }) {
 }
 
 DownloadLink.propTypes = {
-  type: T.string.isRequired,
   iri: T.string.isRequired,
   className: T.string,
 };

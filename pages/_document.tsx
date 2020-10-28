@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { Children, ReactElement } from "react";
+import React, { Children, ReactElement } from "react";
 import { ServerStyleSheets } from "@material-ui/core/styles";
 import Document, { Html, Head, Main, NextScript } from "next/document";
 

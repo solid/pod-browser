@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useContext } from "react";
+import React, { useContext } from "react";
 import Alert from "@material-ui/lab/Alert";
 import { Snackbar } from "@material-ui/core";
 import AlertContext from "../../src/contexts/alertContext";

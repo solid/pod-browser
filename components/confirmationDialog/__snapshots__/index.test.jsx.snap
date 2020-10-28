@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ConfirmationDialog Renders a ConfirmationDialog 1`] = `
+<WithStyles(ForwardRef(Dialog))
+  aria-labelledby="confirmation-dialog"
+  disableBackdropClick={true}
+  disableEscapeKeyDown={true}
+  maxWidth="xs"
+  open={false}
+>
+  <WithStyles(ForwardRef(DialogTitle))>
+    Confirmation
+  </WithStyles(ForwardRef(DialogTitle))>
+  <WithStyles(ForwardRef(DialogContent))
+    dividers={true}
+  />
+  <WithStyles(ForwardRef(DialogActions))>
+    <WithStyles(ForwardRef(Button))
+      autoFocus={true}
+      onClick={[Function]}
+    >
+      Cancel
+    </WithStyles(ForwardRef(Button))>
+    <WithStyles(ForwardRef(Button))
+      color="primary"
+      onClick={[Function]}
+      type="submit"
+    >
+      Ok
+    </WithStyles(ForwardRef(Button))>
+  </WithStyles(ForwardRef(DialogActions))>
+</WithStyles(ForwardRef(Dialog))>
+`;

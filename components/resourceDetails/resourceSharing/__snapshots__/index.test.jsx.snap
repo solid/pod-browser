@@ -1128,7 +1128,7 @@ font-display: block;",
                                       <span
                                         className="PodBrowser-label"
                                       >
-                                        <ForwardRef>
+                                        <ExpandMoreIcon>
                                           <WithStyles(ForwardRef(SvgIcon))>
                                             <ForwardRef(SvgIcon)
                                               classes={
@@ -1157,7 +1157,7 @@ font-display: block;",
                                               </svg>
                                             </ForwardRef(SvgIcon)>
                                           </WithStyles(ForwardRef(SvgIcon))>
-                                        </ForwardRef>
+                                        </ExpandMoreIcon>
                                       </span>
                                       <WithStyles(memo)
                                         center={true}

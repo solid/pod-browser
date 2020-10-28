@@ -19,5 +19,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const Adapter = require("@wojtekmaj/enzyme-adapter-react-17")
-require("enzyme").configure({adapter: new Adapter()})
+import React from "react";
+import { shallow } from "enzyme";
+import { shallowToJson } from "enzyme-to-json";
+import ContainerTableRowSkeleton from "./index";
+
+describe("ContainerTableRowSkeleton", () => {
+  test("Renders a ContainerTableRowSkeleton", () => {
+    const tree = shallow(
+      <ContainerTableRowSkeleton iri="https://example.com/resource" />
+    );
+    expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+});

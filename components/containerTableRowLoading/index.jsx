@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import T from "prop-types";
 import { TableCell, TableRow } from "@material-ui/core";
 import Link from "next/link";

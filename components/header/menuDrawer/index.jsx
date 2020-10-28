@@ -77,7 +77,7 @@ export default function MenuDrawer() {
             { text: "Bookmarks", icon: "icon-star", path: "/bookmarks" },
           ].map(({ text, icon, path }) => {
             return (
-              <Link href={path} replace>
+              <Link href={path} replace key={path}>
                 <ListItem button key={text} onClick={handleDrawerClose}>
                   <ListItemIcon>
                     <i

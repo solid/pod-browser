@@ -19,5 +19,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const Adapter = require("@wojtekmaj/enzyme-adapter-react-17")
-require("enzyme").configure({adapter: new Adapter()})
+import React from "react";
+import { shallow } from "enzyme";
+import { shallowToJson } from "enzyme-to-json";
+import ConfirmationDialog from "./index";
+
+describe("ConfirmationDialog", () => {
+  test("Renders a ConfirmationDialog", () => {
+    const tree = shallow(<ConfirmationDialog />);
+    expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+});

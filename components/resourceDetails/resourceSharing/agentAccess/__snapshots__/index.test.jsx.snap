@@ -1067,7 +1067,7 @@ font-display: block;",
                               <span
                                 className="PodBrowser-endIcon PodBrowser-iconSizeMedium"
                               >
-                                <ForwardRef>
+                                <KeyboardArrowDownIcon>
                                   <WithStyles(ForwardRef(SvgIcon))>
                                     <ForwardRef(SvgIcon)
                                       classes={
@@ -1096,7 +1096,7 @@ font-display: block;",
                                       </svg>
                                     </ForwardRef(SvgIcon)>
                                   </WithStyles(ForwardRef(SvgIcon))>
-                                </ForwardRef>
+                                </KeyboardArrowDownIcon>
                               </span>
                             </span>
                             <WithStyles(memo)
