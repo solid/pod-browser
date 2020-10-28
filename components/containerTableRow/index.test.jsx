@@ -25,7 +25,7 @@ import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { useRouter } from "next/router";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 import ContainerTableRow, {
-  handleClick,
+  handleAction,
   ResourceIcon,
   renderResourceType,
 } from "./index";
@@ -112,7 +112,7 @@ describe("ContainerTableRow", () => {
   });
 });
 
-describe("handleClick", () => {
+describe("handleAction", () => {
   it("creates a click handler that replaces the route", async () => {
     const resourceIri = "https://mypod.com/container/resource";
     const containerIri = "https://mypod.com/container";
@@ -125,7 +125,7 @@ describe("handleClick", () => {
     const event = {
       target: { tagName: "TR" },
     };
-    const handler = handleClick(resourceIri, containerIri, router);
+    const handler = handleAction(resourceIri, containerIri, router);
 
     await handler(event);
 
@@ -148,7 +148,20 @@ describe("handleClick", () => {
     const replace = jest.fn();
     const router = { asPath: "asPath", replace };
     const event = { target: { tagName: "A" } };
-    const handler = handleClick(resourceIri, containerIri, router);
+    const handler = handleAction(resourceIri, containerIri, router);
+
+    await handler(event);
+
+    expect(replace).not.toHaveBeenCalled();
+  });
+  it("defers if an any key other than enter key triggered the keydown", async () => {
+    const resourceIri = "https://mypod.com/container/resource";
+    const containerIri = "https://mypod.com/container";
+
+    const replace = jest.fn();
+    const router = { asPath: "asPath", replace };
+    const event = { type: "keydown", keyCode: 0 };
+    const handler = handleAction(resourceIri, containerIri, router);
 
     await handler(event);
 
