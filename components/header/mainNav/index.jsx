@@ -29,11 +29,9 @@ import styles from "./styles";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function MainNav() {
-  const classes = useStyles();
-
   const bem = useBem(useStyles());
   return (
-    <div className={classes.mainNav}>
+    <div className={bem("main-nav-container")}>
       <nav className={bem("header-banner__main-nav")}>
         <ul className={bem("main-nav__list")}>
           <li className={bem("main-nav__item")}>

@@ -884,7 +884,7 @@ font-display: block;",
         >
           <MainNav>
             <div
-              className="PodBrowser-mainNav"
+              className="PodBrowser-main-nav-container"
             >
               <nav
                 className="PodBrowser-header-banner__main-nav"

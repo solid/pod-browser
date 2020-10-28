@@ -23,7 +23,7 @@ import { createStyles } from "@solid/lit-prism-patterns";
 
 const styles = (theme) =>
   createStyles(theme, ["headerBanner", "icons"], {
-    mainNav: {
+    "main-nav-container": {
       display: "none",
       width: "100%",
       [theme.breakpoints.up("sm")]: {

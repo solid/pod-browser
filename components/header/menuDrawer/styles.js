@@ -36,7 +36,9 @@ const styles = (theme) =>
       "text-decoration": "underline",
     },
     drawerContainer: {
-      borderRadius: "0px 0px 10px 10px",
+      borderRadius: `0 0 
+      ${theme.shape.borderRadius * 2.5}px 
+      ${theme.shape.borderRadius * 2.5}px`,
     },
     hamburgerMenu: {
       fontSize: theme.typography.body.fontSize,
