@@ -28,6 +28,7 @@ const styles = (theme) => {
       "& tbody td": {
         "&:first-child": tableStyles["table__body-cell--width-preview"],
       },
+      "& tbody a": tableStyles.table__link,
     },
     avatar: {
       width: "30px",

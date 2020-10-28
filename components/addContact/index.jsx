@@ -21,7 +21,9 @@
 
 import React, { useContext, useState } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
+import { Box } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
+import { BackToNavLink } from "@inrupt/prism-react-components";
 import clsx from "clsx";
 import Link from "next/link";
 import { getSourceUrl } from "@inrupt/solid-client";
@@ -126,9 +128,12 @@ export default function AddContact() {
 
   return (
     <div className={containerClass}>
-      <Link href="/contacts" replace>
-        &lt; Back to contacts
-      </Link>
+      <Box mt={2} mb={2}>
+        <Link href="/contacts" replace passHref>
+          <BackToNavLink>contacts</BackToNavLink>
+        </Link>
+      </Box>
+
       <h3>Add new contact</h3>
 
       <AgentSearchForm

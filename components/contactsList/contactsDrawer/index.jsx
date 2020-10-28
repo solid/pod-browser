@@ -54,7 +54,7 @@ export default function ContactsDrawer({
               <Link
                 href="/contacts/[show]"
                 as={buildProfileLink(profileIri)}
-                className={actionMenuBem("action-menu__trigger", "danger")}
+                className={actionMenuBem("action-menu__trigger")}
               >
                 <a>View Profile</a>
               </Link>

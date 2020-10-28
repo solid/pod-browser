@@ -31,9 +31,8 @@ import {
   createStyles,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import clsx from "clsx";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Container } from "@inrupt/prism-react-components";
+import { Container, BackToNavLink } from "@inrupt/prism-react-components";
 
 import { CombinedDataProvider, Text, Image } from "@inrupt/solid-ui-react";
 
@@ -57,8 +56,8 @@ export default function Profile(props) {
   return (
     <Container>
       <Box mt={2} mb={2}>
-        <Link href="/contacts" className={clsx(bem("back-to-nav__link"))}>
-          &lt; Back to contacts
+        <Link href="/contacts" passHref>
+          <BackToNavLink>contacts</BackToNavLink>
         </Link>
       </Box>
 

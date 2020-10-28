@@ -1821,18 +1821,36 @@ font-display: block;",
             <div
               className="PodBrowser-container"
             >
-              <Link
-                href="/contacts"
-                replace={true}
+              <Styled(MuiBox)
+                mb={2}
+                mt={2}
               >
-                <a
-                  href="/contacts"
-                  onClick={[Function]}
-                  onMouseEnter={[Function]}
+                <div
+                  className="PodBrowser-root PodBrowser-root"
                 >
-                  &lt; Back to contacts
-                </a>
-              </Link>
+                  <Link
+                    href="/contacts"
+                    passHref={true}
+                    replace={true}
+                  >
+                    <BackToNavLink
+                      href="/contacts"
+                      onClick={[Function]}
+                      onMouseEnter={[Function]}
+                    >
+                      <a
+                        className="PodBrowser-back-to-nav__link"
+                        href="/contacts"
+                        onClick={[Function]}
+                        onMouseEnter={[Function]}
+                      >
+                        Back to 
+                        contacts
+                      </a>
+                    </BackToNavLink>
+                  </Link>
+                </div>
+              </Styled(MuiBox)>
               <h3>
                 Add new contact
               </h3>

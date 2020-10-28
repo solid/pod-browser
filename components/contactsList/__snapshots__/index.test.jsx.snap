@@ -29776,7 +29776,7 @@ font-display: block;",
                                                               >
                                                                 <Link
                                                                   as="/contacts/"
-                                                                  className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                                                                  className="PodBrowser-action-menu__trigger"
                                                                   href="/contacts/[show]"
                                                                 >
                                                                   <a
