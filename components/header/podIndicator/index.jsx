@@ -24,7 +24,7 @@ import clsx from "clsx";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useRouter } from "next/router";
 import { useBem } from "@solid/lit-prism-patterns";
-import Popover from "@material-ui/core/Popover";
+import { Button, Box, Popover } from "@material-ui/core";
 import { Form, Input } from "@inrupt/prism-react-components";
 import Skeleton from "@material-ui/lab/Skeleton";
 import usePodOwnerProfile from "../../../src/hooks/usePodOwnerProfile";
@@ -34,6 +34,7 @@ import { normalizeContainerUrl } from "../../../src/stringHelpers";
 
 const TESTCAFE_ID_POD_NAVIGATE_INPUT = "pod-navigate-input";
 const TESTCAFE_ID_POD_NAVIGATE_TRIGGER = "pod-indicator-prompt";
+const TESTCAFE_ID_POD_NAVIGATE_BUTTON = "pod-navigate-button";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -111,17 +112,32 @@ export default function PodIndicator() {
           }}
         >
           <Form onSubmit={(event) => onSubmit(event, url, router)}>
-            <Input
-              id="PodNavigator"
-              data-testid={TESTCAFE_ID_POD_NAVIGATE_INPUT}
-              label="Go to Pod"
-              value={url}
-              onChange={(event) => setUrl(event.target.value)}
-              placeholder="Enter Pod URI"
-              type="url"
-              pattern="https://.*"
-              title="Must start with https://"
-            />
+            <Box display="flex" alignItems="center">
+              <Box width="100%">
+                <Input
+                  id="PodNavigator"
+                  data-testid={TESTCAFE_ID_POD_NAVIGATE_INPUT}
+                  label="Go to Pod"
+                  value={url}
+                  onChange={(event) => setUrl(event.target.value)}
+                  placeholder="Enter Pod URI"
+                  type="url"
+                  pattern="https://.*"
+                  title="Must start with https://"
+                />
+              </Box>
+              <Box>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  size="large"
+                  id={TESTCAFE_ID_POD_NAVIGATE_BUTTON}
+                >
+                  Go
+                </Button>
+              </Box>
+            </Box>
           </Form>
         </Popover>
       </label>
