@@ -55,8 +55,8 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export function handleClick(resourceIri, containerIri, router) {
   const action = DETAILS_CONTEXT_ACTIONS.DETAILS;
 
-  return async (evnt) => {
-    const element = evnt.target;
+  return async (event) => {
+    const element = event.target;
     if (element && element.tagName === "A") return;
     if (element && element.tagName === "I") return;
     await resourceContextRedirect(action, resourceIri, containerIri, router);
@@ -73,10 +73,14 @@ export default function ContainerTableRow({ resource }) {
 
   return (
     <tr
+      tabIndex="0"
       className={clsx(
         bem("table__body-row", "selectable", isActive ? "selected" : null)
       )}
       onClick={handleClick(iri, currentUri, router)}
+      onKeyDown={(event) => {
+        if (event.keyCode === 13) handleClick(iri, currentUri, router)(event);
+      }}
     >
       <td className={bem("table__body-cell", "align-center", "width-preview")}>
         <Bookmark iri={iri} />

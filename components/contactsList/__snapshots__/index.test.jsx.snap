@@ -3795,7 +3795,9 @@ font-display: block;",
                             className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
                             key="row_0"
                             onClick={[Function]}
+                            onKeyDown={[Function]}
                             role="row"
+                            tabIndex="0"
                           >
                             <A
                               dataset={42}
@@ -16606,7 +16608,9 @@ font-display: block;",
                             className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
                             key="row_1"
                             onClick={[Function]}
+                            onKeyDown={[Function]}
                             role="row"
+                            tabIndex="0"
                           >
                             <A
                               dataset={42}

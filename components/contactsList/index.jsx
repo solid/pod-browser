@@ -160,6 +160,7 @@ function ContactsList() {
           descIndicator={<SortedTableCarat sorted sortedDesc />}
           getRowProps={(row, contact) => {
             return {
+              tabIndex: "0",
               className: clsx(
                 bem(
                   "table__body-row",
@@ -167,6 +168,9 @@ function ContactsList() {
                   contact === profiles[selectedContactIndex] ? "selected" : null
                 )
               ),
+              onKeyDown: (event) => {
+                if (event.keyCode === 13) setSelectedContactIndex(row.index);
+              },
               onClick: () => {
                 setSelectedContactIndex(row.index);
               },

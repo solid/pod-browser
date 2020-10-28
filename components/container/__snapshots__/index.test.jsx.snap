@@ -26400,6 +26400,8 @@ font-display: block;",
                         <tr
                           className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
                           onClick={[Function]}
+                          onKeyDown={[Function]}
+                          tabIndex="0"
                         >
                           <td
                             className="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
@@ -26460,6 +26462,8 @@ font-display: block;",
                         <tr
                           className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
                           onClick={[Function]}
+                          onKeyDown={[Function]}
+                          tabIndex="0"
                         >
                           <td
                             className="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
@@ -26520,6 +26524,8 @@ font-display: block;",
                         <tr
                           className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
                           onClick={[Function]}
+                          onKeyDown={[Function]}
+                          tabIndex="0"
                         >
                           <td
                             className="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
