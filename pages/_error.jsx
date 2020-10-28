@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import NextErrorComponent from "next/error";
 import * as Sentry from "@sentry/node";
 

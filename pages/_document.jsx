@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { Children, ReactElement } from "react";
+import React, { Children } from "react";
 import { ServerStyleSheets } from "@material-ui/core/styles";
 import Document, { Html, Head, Main, NextScript } from "next/document";
 
@@ -27,7 +27,7 @@ import theme from "../src/theme";
 
 export default class MyDocument extends Document {
   /* eslint class-methods-use-this: 0 */
-  render(): ReactElement {
+  render() {
     return (
       <Html lang="en">
         <Head>

@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import { BookmarksContextProvider } from "../../../src/contexts/bookmarksContext";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import BookmarksList from "../../bookmarksList";

@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import ContactsList from "../../contactsList";

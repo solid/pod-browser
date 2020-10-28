@@ -19,9 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
-import { LoadingIndicator } from "@inrupt/prism-react-components";
+import React from "react";
+import ResourcePage from "../../components/pages/resource";
 
-export default function Spinner(): ReactElement {
-  return <LoadingIndicator center />;
+export default function Resource() {
+  return <ResourcePage />;
 }

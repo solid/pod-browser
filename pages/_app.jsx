@@ -23,7 +23,7 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint @typescript-eslint/no-explicit-any: 0 */
-import React, { ComponentType, ReactElement, useEffect } from "react";
+import React, { useEffect } from "react";
 import * as Sentry from "@sentry/node";
 
 import PropTypes from "prop-types";
@@ -38,7 +38,6 @@ import { SessionProvider } from "@inrupt/solid-ui-react";
 import {
   createStyles,
   makeStyles,
-  StyleRules,
   StylesProvider,
   ThemeProvider,
 } from "@inrupt/prism-react-components";
@@ -54,11 +53,6 @@ import PodBrowserFooter from "../components/footer";
 
 import "./styles.css";
 
-interface AppProps {
-  Component: ComponentType;
-  pageProps: any;
-}
-
 // Enable Sentry if there's an env var for it.
 if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   Sentry.init({
@@ -69,11 +63,9 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
 
 const jss = create(preset());
 
-const useStyles = makeStyles(() =>
-  createStyles(appLayout.styles(theme) as StyleRules)
-);
+const useStyles = makeStyles(() => createStyles(appLayout.styles(theme)));
 
-export function hasSolidAuthClientHash(): boolean {
+export function hasSolidAuthClientHash() {
   if (typeof window === "undefined") {
     return false;
   }
@@ -85,7 +77,7 @@ export function hasSolidAuthClientHash(): boolean {
   return false;
 }
 
-export default function App(props: AppProps): ReactElement {
+export default function App(props) {
   const { Component, pageProps } = props;
   const bem = useBem(useStyles());
 

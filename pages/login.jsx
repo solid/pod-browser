@@ -19,8 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import BookmarksPage from "../../components/pages/bookmarks";
+import React from "react";
 
-export default function Contacts() {
-  return <BookmarksPage />;
+import LoginPage from "../components/pages/login";
+
+export default function Login() {
+  return <LoginPage />;
 }

@@ -19,7 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import ContactsPage from "../../components/pages/contacts";
+import React from "react";
+import ContactsPage from "../components/pages/contacts";
 
 export default function Contacts() {
   return <ContactsPage />;

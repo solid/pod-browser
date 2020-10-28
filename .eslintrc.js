@@ -111,9 +111,6 @@ module.exports = {
 
     "react/jsx-filename-extension": [1, { extensions: [".tsx", ".jsx"] }],
 
-    // Import react by default via webpack config
-    "react/react-in-jsx-scope": 0,
-
     // Order the properties of react components nicely
     "react/static-property-placement": [2, "static public field"],
 

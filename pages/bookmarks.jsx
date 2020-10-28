@@ -19,10 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
+import React from "react";
+import BookmarksPage from "../components/pages/bookmarks";
 
-import IndexPage from "../components/pages/index";
-
-export default function Index(): ReactElement {
-  return <IndexPage />;
+export default function Contacts() {
+  return <BookmarksPage />;
 }
