@@ -25,9 +25,11 @@
 /* eslint @typescript-eslint/no-explicit-any: 0 */
 import React, { useEffect } from "react";
 import * as Sentry from "@sentry/node";
+import { MatomoProvider, createInstance } from "@datapunt/matomo-tracker-react";
 
 import PropTypes from "prop-types";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import { create } from "jss";
@@ -61,6 +63,20 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   });
 }
 
+let matomoInstance = null;
+
+if (process.env.NEXT_PUBLIC_MATOMO_URL_BASE) {
+  matomoInstance = createInstance({
+    urlBase: process.env.NEXT_PUBLIC_MATOMO_URL_BASE,
+    siteId: process.env.NEXT_PUBLIC_MATOMO_SITE_ID,
+    configurations: {
+      disableCookies: true,
+      setSecureCookie: true,
+      setRequestMethod: "POST",
+    },
+  });
+}
+
 const jss = create(preset());
 
 const useStyles = makeStyles(() => createStyles(appLayout.styles(theme)));
@@ -80,6 +96,7 @@ export function hasSolidAuthClientHash() {
 export default function App(props) {
   const { Component, pageProps } = props;
   const bem = useBem(useStyles());
+  const { asPath } = useRouter();
 
   useEffect(() => {
     // Remove injected serverside JSS
@@ -89,6 +106,11 @@ export default function App(props) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
+
+  // Fire off a pageview tracker whenever the path changes.
+  useEffect(() => {
+    matomoInstance?.trackPageView();
+  }, [asPath]);
 
   return (
     <>
@@ -100,31 +122,34 @@ export default function App(props) {
         />
       </Head>
 
-      <StylesProvider jss={jss}>
-        <ThemeProvider theme={theme}>
-          <SessionProvider sessionId="pod-browser">
-            <FeatureProvider>
-              <AlertProvider>
-                <ConfirmationDialogProvider>
-                  <CssBaseline />
-                  <div className={bem("app-layout")}>
-                    <PodBrowserHeader />
-                    <main className={bem("app-layout__main")}>
-                      <Component {...pageProps} />
-                    </main>
-                    <div className={bem("app-layout__footer")}>
-                      <PodBrowserFooter />
-                    </div>
-                  </div>
+      <MatomoProvider value={matomoInstance}>
+        <StylesProvider jss={jss}>
+          <ThemeProvider theme={theme}>
+            <SessionProvider sessionId="pod-browser">
+              <FeatureProvider>
+                <AlertProvider>
+                  <ConfirmationDialogProvider>
+                    <CssBaseline />
+                    <div className={bem("app-layout")}>
+                      <PodBrowserHeader />
 
-                  <Notification />
-                  <ConfirmationDialog />
-                </ConfirmationDialogProvider>
-              </AlertProvider>
-            </FeatureProvider>
-          </SessionProvider>
-        </ThemeProvider>
-      </StylesProvider>
+                      <main className={bem("app-layout__main")}>
+                        <Component {...pageProps} />
+                      </main>
+
+                      <div className={bem("app-layout__footer")}>
+                        <PodBrowserFooter />
+                      </div>
+                    </div>
+                    <Notification />
+                    <ConfirmationDialog />
+                  </ConfirmationDialogProvider>
+                </AlertProvider>
+              </FeatureProvider>
+            </SessionProvider>
+          </ThemeProvider>
+        </StylesProvider>
+      </MatomoProvider>
     </>
   );
 }
