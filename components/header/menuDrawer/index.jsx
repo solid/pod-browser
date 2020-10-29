@@ -95,18 +95,36 @@ export default function MenuDrawer() {
             );
           })}
           <Divider />
-          <LogOutButton
-            className={bem("header-banner__user-menu-item-trigger")}
-          >
-            <span
+          <ListItem button key="profile" onClick={handleDrawerClose}>
+            <Link href="/profile" replace>
+              <span
+                className={clsx(
+                  bem("menu-drawer-item"),
+                  bem("menu-drawer-item__text"),
+                  bem("menu-drawer-item__link")
+                )}
+              >
+                Profile
+              </span>
+            </Link>
+          </ListItem>
+          <ListItem button key="logout" onClick={handleDrawerClose}>
+            <LogOutButton
               className={clsx(
-                bem("menu-drawer-item__text", "menu-drawer-item__link"),
-                bem("menu-drawer-item__link")
+                bem("header-banner__user-menu-item-trigger"),
+                bem("menu-drawer-item")
               )}
             >
-              Log out
-            </span>
-          </LogOutButton>
+              <span
+                className={clsx(
+                  bem("menu-drawer-item__text"),
+                  bem("menu-drawer-item__link")
+                )}
+              >
+                Log out
+              </span>
+            </LogOutButton>
+          </ListItem>
         </List>
       </Drawer>
     </div>
