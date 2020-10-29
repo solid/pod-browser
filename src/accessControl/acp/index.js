@@ -159,7 +159,10 @@ export function getPolicyModesAndAgents(policyUrls, policyDataset) {
       const ruleUrls = acp.getRequiredRuleForPolicyAll(policy);
       // assumption: rule resides in the same resource as policies
       const rules = ruleUrls.map((url) => acp.getRule(policyDataset, url));
-      const agents = rules.map((rule) => acp.getAgentForRuleAll(rule)).flat();
+      const agents = rules.reduce(
+        (memo, rule) => memo.concat(acp.getAgentForRuleAll(rule)),
+        []
+      );
       return {
         modes,
         agents,
