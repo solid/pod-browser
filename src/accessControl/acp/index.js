@@ -184,7 +184,13 @@ export default class AcpAccessControlStrategy {
     await deleteFile(getSourceUrl(this.#datasetWithAcr), {
       fetch: this.#fetch,
     });
-    return deleteFile(this.#policyUrl, { fetch: this.#fetch });
+    try {
+      await deleteFile(this.#policyUrl, { fetch: this.#fetch });
+    } catch (err) {
+      if (!isHTTPError(err.message, 404)) {
+        throw err;
+      }
+    }
   }
 
   async getPermissions() {
