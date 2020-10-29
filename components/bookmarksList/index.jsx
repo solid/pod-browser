@@ -30,15 +30,18 @@ import {
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
 import { Table, TableColumn } from "@inrupt/solid-ui-react";
-import { getThingAll } from "@inrupt/solid-client";
-import { dct } from "rdf-namespaces";
+import { getThingAll, getUrl } from "@inrupt/solid-client";
+import { dct, rdf } from "rdf-namespaces";
 import BookmarksContext from "../../src/contexts/bookmarksContext";
 import Bookmark from "../bookmark";
 import ResourceLink from "../resourceLink";
 import SortedTableCarat from "../sortedTableCarat";
 import Spinner from "../spinner";
 import styles from "./styles";
-import { RECALLS_PROPERTY_IRI } from "../../src/solidClientHelpers/bookmarks";
+import {
+  RECALLS_PROPERTY_IRI,
+  BOOKMARK_TYPE_IRI,
+} from "../../src/solidClientHelpers/bookmarks";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -71,13 +74,14 @@ function BookmarksList() {
 
   if (isLoading) return <Spinner />;
   const { dataset } = bookmarks;
-  const bookmarksList = getThingAll(dataset).map((b) => {
-    return {
-      thing: b,
-      dataset,
-    };
-  });
-
+  const bookmarksList = getThingAll(dataset)
+    .filter((b) => getUrl(b, rdf.type) === BOOKMARK_TYPE_IRI)
+    .map((b) => {
+      return {
+        thing: b,
+        dataset,
+      };
+    });
   return (
     <>
       <PageHeader title="Bookmarks">
