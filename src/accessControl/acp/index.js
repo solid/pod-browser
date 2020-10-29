@@ -151,6 +151,23 @@ export async function setAgents(policy, policyDataset, webId, accessToMode) {
   };
 }
 
+function getPolicyModesAndAgents(policyUrls, policyDataset) {
+  return policyUrls
+    .map((url) => acp.getPolicy(policyDataset, url))
+    .filter((policy) => !!policy)
+    .map((policy) => {
+      const modes = acp.getAllowModesOnPolicy(policy);
+      const ruleUrls = acp.getRequiredRuleForPolicyAll(policy);
+      // assumption: rule resides in the same resource as policies
+      const rules = ruleUrls.map((url) => acp.getRule(policyDataset, url));
+      const agents = rules.map((rule) => acp.getAgentForRuleAll(rule)).flat();
+      return {
+        modes,
+        agents,
+      };
+    });
+}
+
 export default class AcpAccessControlStrategy {
   #datasetWithAcr;
 
@@ -164,65 +181,38 @@ export default class AcpAccessControlStrategy {
     this.#fetch = fetch;
   }
 
-  async getPolicyModesAndAgents(policyUrls) {
-    const policyResources = await Promise.all(
-      policyUrls.map((url) => getSolidDataset(url, { fetch: this.#fetch }))
-    );
-    const policies = policyResources
-      .map((dataset) =>
-        acp.getPolicyAll(dataset).map((policy) => ({
-          policy,
-          dataset,
-        }))
-      )
-      .flat();
-    return Promise.all(
-      policies.map(({ policy, dataset }) => {
-        const modes = acp.getAllowModesOnPolicy(policy);
-        const ruleUrls = acp.getRequiredRuleForPolicyAll(policy);
-        // assumption: rule resides in the same resource as policies
-        const rules = ruleUrls.map((url) => acp.getRule(dataset, url));
-        const agents = rules.map((rule) => acp.getAgentForRuleAll(rule)).flat();
-        return {
-          modes,
-          agents,
-        };
-      })
-    );
-  }
-
   async getPermissions() {
     const permissions = {};
+    const policyDataset = await getSolidDataset(this.#policyUrl, {
+      fetch: this.#fetch,
+    });
     // assigning Read, Write, and Append
-    const accessControls = acp.getAccessControlAll(this.#datasetWithAcr);
-    const policyUrls = accessControls
-      .map((ac) => {
-        // we only want policies that is in the corresponding policy resource
-        return acp
-          .getPolicyUrlAll(ac)
-          .filter((url) => url.startsWith(this.#policyUrl));
+    // assumption 1: We know the URLs of the policies we want to check
+    getPolicyModesAndAgents(
+      [
+        `${this.#policyUrl}#readApplyPolicy`,
+        `${this.#policyUrl}#writeApplyPolicy`,
+        `${this.#policyUrl}#appendApplyPolicy`,
+      ],
+      policyDataset
+    ).forEach(({ modes, agents }) =>
+      agents.forEach((webId) => {
+        const permission = getOrCreatePermission(permissions, webId);
+        permission.acp.apply = addAcpModes(permission.acp.apply, modes);
+        permissions[webId] = permission;
       })
-      .flat();
-    (await this.getPolicyModesAndAgents(policyUrls)).forEach(
-      ({ modes, agents }) =>
-        agents.forEach((webId) => {
-          const permission = getOrCreatePermission(permissions, webId);
-          permission.acp.apply = addAcpModes(permission.acp.apply, modes);
-          permissions[webId] = permission;
-        })
     );
     // assigning Control
-    const controlPolicies = acp.getAcrPolicyUrlAll(this.#datasetWithAcr);
-    const controlPolicyUrls = controlPolicies.filter((url) =>
-      url.startsWith(this.#policyUrl)
-    );
-    (await this.getPolicyModesAndAgents(controlPolicyUrls)).forEach(
-      ({ modes, agents }) =>
-        agents.forEach((webId) => {
-          const permission = getOrCreatePermission(permissions, webId);
-          permission.acp.access = addAcpModes(permission.acp.access, modes);
-          permissions[webId] = permission;
-        })
+    // assumption 2: control access involves another policy URL, but since both have the same modes, we only check one
+    getPolicyModesAndAgents(
+      [`${this.#policyUrl}#controlAccessPolicy`],
+      policyDataset
+    ).forEach(({ modes, agents }) =>
+      agents.forEach((webId) => {
+        const permission = getOrCreatePermission(permissions, webId);
+        permission.acp.access = addAcpModes(permission.acp.access, modes);
+        permissions[webId] = permission;
+      })
     );
     // normalize permissions
     return Promise.all(
