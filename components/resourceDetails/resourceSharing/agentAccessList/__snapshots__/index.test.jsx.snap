@@ -843,8 +843,19 @@ font-display: block;",
       <AccessControlProvider
         accessControl={
           Object {
-            "getPermissions": [Function],
-            "savePermissionsForAgent": [Function],
+            "deleteFile": [MockFunction],
+            "getPermissions": [MockFunction] {
+              "calls": Array [
+                Array [],
+              ],
+              "results": Array [
+                Object {
+                  "type": "return",
+                  "value": Promise {},
+                },
+              ],
+            },
+            "savePermissionsForAgent": [MockFunction],
           }
         }
       >
@@ -1762,8 +1773,19 @@ font-display: block;",
       <AccessControlProvider
         accessControl={
           Object {
-            "getPermissions": [Function],
-            "savePermissionsForAgent": [Function],
+            "deleteFile": [MockFunction],
+            "getPermissions": [MockFunction] {
+              "calls": Array [
+                Array [],
+              ],
+              "results": Array [
+                Object {
+                  "type": "return",
+                  "value": Promise {},
+                },
+              ],
+            },
+            "savePermissionsForAgent": [MockFunction],
           }
         }
       >

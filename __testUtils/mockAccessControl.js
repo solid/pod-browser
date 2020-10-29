@@ -23,7 +23,8 @@ export default function mockAccessControl(
   { permissions } = { permissions: [] }
 ) {
   return {
-    getPermissions: async () => Promise.resolve(permissions),
-    savePermissionsForAgent: async () => ({ response: {} }),
+    deleteFile: jest.fn().mockResolvedValue({ response: {} }),
+    getPermissions: jest.fn().mockResolvedValue(permissions),
+    savePermissionsForAgent: jest.fn().mockResolvedValue({ response: {} }),
   };
 }

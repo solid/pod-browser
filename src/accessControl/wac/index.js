@@ -21,6 +21,7 @@
 
 import {
   createAclFromFallbackAcl,
+  deleteFile,
   getAgentAccessAll,
   getAgentDefaultAccessAll,
   getFallbackAcl,
@@ -55,7 +56,9 @@ export default class WacAccessControlStrategy {
 
   // eslint-disable-next-line class-methods-use-this
   async deleteFile() {
-    return Promise.resolve();
+    return deleteFile(getSourceUrl(this.#datasetWithAcl), {
+      fetch: this.#fetch,
+    });
   }
 
   async getPermissions() {

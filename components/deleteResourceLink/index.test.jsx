@@ -23,15 +23,51 @@ import React from "react";
 import { shallow } from "enzyme";
 import { shallowToJson } from "enzyme-to-json";
 
-import DeleteResourceLink from "./index";
+import DeleteResourceLink, { createDeleteHandler } from "./index";
+import mockAccessControl from "../../__testUtils/mockAccessControl";
+import useAccessControl from "../../src/hooks/useAccessControl";
+import useResourceInfo from "../../src/hooks/useResourceInfo";
 
 jest.mock("@inrupt/solid-client");
+jest.mock("../../src/hooks/useAccessControl");
+jest.mock("../../src/hooks/useResourceInfo");
 
 const name = "Resource";
 const resourceIri = "iri";
 
 describe("Delete resource link", () => {
-  test("it renders a delete resource link", () => {
+  const resourceInfo = "data";
+
+  beforeEach(() => {
+    useResourceInfo.mockImplementation(() => ({ data: resourceInfo }));
+    useAccessControl.mockImplementation(() => ({
+      accessControl: mockAccessControl(),
+    }));
+  });
+
+  describe("it hooks works successfully", () => {
+    let tree;
+    beforeEach(() => {
+      tree = shallow(
+        <DeleteResourceLink
+          onDelete={jest.fn()}
+          resourceIri={resourceIri}
+          name={name}
+        />
+      );
+    });
+
+    it("renders a delete resource link", () =>
+      expect(shallowToJson(tree)).toMatchSnapshot());
+    it("calls useResourceInfo", () =>
+      expect(useResourceInfo).toHaveBeenCalledWith(resourceIri));
+    it("calls useAccessControl", () =>
+      expect(useAccessControl).toHaveBeenCalledWith(resourceInfo));
+  });
+
+  it("handles if useResourceInfo fails", () => {
+    useResourceInfo.mockImplementation(() => ({ error: "error" }));
+
     const tree = shallow(
       <DeleteResourceLink
         onDelete={jest.fn()}
@@ -42,4 +78,34 @@ describe("Delete resource link", () => {
 
     expect(shallowToJson(tree)).toMatchSnapshot();
   });
+
+  it("handles if useAccessControl fails", () => {
+    useAccessControl.mockImplementation(() => ({ error: "error" }));
+
+    const tree = shallow(
+      <DeleteResourceLink
+        onDelete={jest.fn()}
+        resourceIri={resourceIri}
+        name={name}
+      />
+    );
+
+    expect(shallowToJson(tree)).toMatchSnapshot();
+  });
+});
+
+describe("createDeleteHandler", () => {
+  let accessControl;
+  let onDelete;
+  let handleDelete;
+
+  beforeEach(async () => {
+    accessControl = mockAccessControl();
+    onDelete = jest.fn();
+    handleDelete = createDeleteHandler(accessControl, onDelete);
+    await handleDelete();
+  });
+  it("triggers accessControl.deleteFile", () =>
+    expect(accessControl.deleteFile).toHaveBeenCalledWith());
+  it("triggers onDelete", () => expect(onDelete).toHaveBeenCalledWith());
 });

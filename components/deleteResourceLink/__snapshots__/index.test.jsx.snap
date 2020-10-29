@@ -1,6 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Delete resource link it renders a delete resource link 1`] = `
+exports[`Delete resource link handles if useAccessControl fails 1`] = `""`;
+
+exports[`Delete resource link handles if useResourceInfo fails 1`] = `""`;
+
+exports[`Delete resource link it hooks works successfully renders a delete resource link 1`] = `
 <DeleteLink
   confirmationContent="Are you sure you wish to delete Resource?"
   confirmationTitle="Confirm Delete"
