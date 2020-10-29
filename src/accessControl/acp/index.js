@@ -45,7 +45,7 @@ import {
 } from "../../solidClientHelpers/utils";
 import { getOrCreateDataset } from "../../solidClientHelpers/resource";
 
-const POLICIES_CONTAINER = "policies2/";
+const POLICIES_CONTAINER = "pb_policies/";
 
 export function getPoliciesContainerUrl(podRootUri) {
   return joinPath(podRootUri, POLICIES_CONTAINER);
@@ -94,7 +94,7 @@ export function getPolicyUrl(resource, policiesContainer) {
   const policiesUrl = getSourceUrl(policiesContainer);
   const matchingStart = sharedStart(resourceUrl, policiesUrl);
   const path = resourceUrl.substr(matchingStart.length);
-  return `${getPoliciesContainerUrl(matchingStart) + path}policy.ttl`;
+  return `${getPoliciesContainerUrl(matchingStart) + path}.ttl`;
 }
 
 export function getOrCreatePolicy(policyDataset, url) {
@@ -245,8 +245,10 @@ export default class AcpAccessControlStrategy {
     );
     let modifiedDatasetWithAcr = datasetWithAcr;
     if (!existingAccessControl) {
-      const newAccessControl = chain(acp.createAccessControl(), (ac) =>
-        acp.addPolicyUrl(ac, policyUrl)
+      const newAccessControl = chain(
+        acp.createAccessControl(),
+        (ac) => acp.addPolicyUrl(ac, policyUrl),
+        (ac) => acp.addMemberPolicyUrl(ac, policyUrl)
       );
       modifiedDatasetWithAcr = acp.setAccessControl(
         datasetWithAcr,
@@ -318,13 +320,14 @@ export default class AcpAccessControlStrategy {
       })
     );
     // making sure that policy is connected to access control
-    const modifiedDatasetWithAcr = acp.addAcrPolicyUrl(
-      this.#datasetWithAcr,
-      policyUrl
+    this.#datasetWithAcr = await chainPromise(
+      acp.addAcrPolicyUrl(this.#datasetWithAcr, policyUrl),
+      (datasetWithAcr) => acp.addMemberAcrPolicyUrl(datasetWithAcr, policyUrl),
+      async (datasetWithAcr) =>
+        acp.saveAcrFor(datasetWithAcr, {
+          fetch: this.#fetch,
+        })
     );
-    this.#datasetWithAcr = await acp.saveAcrFor(modifiedDatasetWithAcr, {
-      fetch: this.#fetch,
-    });
     // return the modified policy dataset
     return modifiedPolicyDataset;
   }
