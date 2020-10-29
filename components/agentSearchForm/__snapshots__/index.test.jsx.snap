@@ -891,7 +891,7 @@ font-display: block;",
                 type="url"
               />
             </SimpleInput>
-            <Button
+            <ForwardRef
               type="submit"
             >
               <button
@@ -900,7 +900,7 @@ font-display: block;",
               >
                 Add
               </button>
-            </Button>
+            </ForwardRef>
           </form>
         </Form>
       </AgentSearchForm>
@@ -1801,7 +1801,7 @@ font-display: block;",
                 type="url"
               />
             </SimpleInput>
-            <Button
+            <ForwardRef
               type="submit"
             >
               <button
@@ -1810,7 +1810,7 @@ font-display: block;",
               >
                 Add
               </button>
-            </Button>
+            </ForwardRef>
           </form>
         </Form>
       </AgentSearchForm>

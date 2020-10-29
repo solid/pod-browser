@@ -29413,7 +29413,7 @@ font-display: block;",
                           <div
                             className="PodBrowser-drawer__article"
                           >
-                            <Button
+                            <ForwardRef
                               onClick={[Function]}
                               variant="text"
                             >
@@ -29430,7 +29430,7 @@ font-display: block;",
                                 </Icon>
                                  Close
                               </button>
-                            </Button>
+                            </ForwardRef>
                           </div>
                           <WithStyles(ForwardRef(Accordion))
                             defaultExpanded={true}
