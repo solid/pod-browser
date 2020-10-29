@@ -41,6 +41,7 @@ import {
   chain,
   chainPromise,
   createResponder,
+  isHTTPError,
   sharedStart,
 } from "../../solidClientHelpers/utils";
 import { getOrCreateDataset } from "../../solidClientHelpers/resource";
@@ -183,49 +184,56 @@ export default class AcpAccessControlStrategy {
 
   async getPermissions() {
     const permissions = {};
-    const policyDataset = await getSolidDataset(this.#policyUrl, {
-      fetch: this.#fetch,
-    });
-    // assigning Read, Write, and Append
-    // assumption 1: We know the URLs of the policies we want to check
-    getPolicyModesAndAgents(
-      [
-        `${this.#policyUrl}#readApplyPolicy`,
-        `${this.#policyUrl}#writeApplyPolicy`,
-        `${this.#policyUrl}#appendApplyPolicy`,
-      ],
-      policyDataset
-    ).forEach(({ modes, agents }) =>
-      agents.forEach((webId) => {
-        const permission = getOrCreatePermission(permissions, webId);
-        permission.acp.apply = addAcpModes(permission.acp.apply, modes);
-        permissions[webId] = permission;
-      })
-    );
-    // assigning Control
-    // assumption 2: control access involves another policy URL, but since both have the same modes, we only check one
-    getPolicyModesAndAgents(
-      [`${this.#policyUrl}#controlAccessPolicy`],
-      policyDataset
-    ).forEach(({ modes, agents }) =>
-      agents.forEach((webId) => {
-        const permission = getOrCreatePermission(permissions, webId);
-        permission.acp.access = addAcpModes(permission.acp.access, modes);
-        permissions[webId] = permission;
-      })
-    );
-    // normalize permissions
-    return Promise.all(
-      Object.values(permissions).map(async ({ acp: access, webId }) => {
-        const acl = convertAcpToAcl(access);
-        return {
-          acl,
-          alias: displayPermissions(acl),
-          profile: await fetchProfile(webId, this.#fetch),
-          webId,
-        };
-      })
-    );
+    try {
+      const policyDataset = await getSolidDataset(this.#policyUrl, {
+        fetch: this.#fetch,
+      });
+      // assigning Read, Write, and Append
+      // assumption 1: We know the URLs of the policies we want to check
+      getPolicyModesAndAgents(
+        [
+          `${this.#policyUrl}#readApplyPolicy`,
+          `${this.#policyUrl}#writeApplyPolicy`,
+          `${this.#policyUrl}#appendApplyPolicy`,
+        ],
+        policyDataset
+      ).forEach(({ modes, agents }) =>
+        agents.forEach((webId) => {
+          const permission = getOrCreatePermission(permissions, webId);
+          permission.acp.apply = addAcpModes(permission.acp.apply, modes);
+          permissions[webId] = permission;
+        })
+      );
+      // assigning Control
+      // assumption 2: control access involves another policy URL, but since both have the same modes, we only check one
+      getPolicyModesAndAgents(
+        [`${this.#policyUrl}#controlAccessPolicy`],
+        policyDataset
+      ).forEach(({ modes, agents }) =>
+        agents.forEach((webId) => {
+          const permission = getOrCreatePermission(permissions, webId);
+          permission.acp.access = addAcpModes(permission.acp.access, modes);
+          permissions[webId] = permission;
+        })
+      );
+      // normalize permissions
+      return Promise.all(
+        Object.values(permissions).map(async ({ acp: access, webId }) => {
+          const acl = convertAcpToAcl(access);
+          return {
+            acl,
+            alias: displayPermissions(acl),
+            profile: await fetchProfile(webId, this.#fetch),
+            webId,
+          };
+        })
+      );
+    } catch (error) {
+      if (isHTTPError(error.message, 404)) {
+        return [];
+      }
+      throw error;
+    }
   }
 
   async ensureAccessControl(policyUrl, datasetWithAcr) {
