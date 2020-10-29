@@ -31,7 +31,6 @@ jest.mock("../usePoliciesContainer");
 describe("useAccessControl", () => {
   const accessControl = "accessControl";
   const resourceIri = "resourceIri";
-  const fetch = "fetch";
   const policiesContainer = "policiesContainer";
   const error = "error";
   let session;
@@ -63,7 +62,7 @@ describe("useAccessControl", () => {
     expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
       resourceIri,
       policiesContainer,
-      session.fetch
+      expect.any(Function)
     );
     expect(result.current.accessControl).toBe(accessControl);
     expect(result.current.error).toBeNull();

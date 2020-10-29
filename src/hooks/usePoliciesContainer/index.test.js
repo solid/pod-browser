@@ -20,7 +20,7 @@
  */
 
 import { renderHook } from "@testing-library/react-hooks";
-import * as solidClientFns from "@inrupt/solid-client";
+import { acp_lowlevel_preview as acp } from "@inrupt/solid-client";
 import usePoliciesContainer from "./index";
 import mockSession, { storageUrl } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
@@ -44,7 +44,7 @@ describe("usePoliciesContainer", () => {
     jest
       .spyOn(resourceHelperFns, "getOrCreateContainer")
       .mockResolvedValue({ response });
-    jest.spyOn(solidClientFns, "hasLinkedAcr").mockReturnValue(true);
+    jest.spyOn(acp, "hasLinkedAcr").mockReturnValue(true);
     useResourceInfo.mockReturnValue({ data: "podRootData" });
   });
 
@@ -73,7 +73,7 @@ describe("usePoliciesContainer", () => {
   });
 
   it("returns null if ACP is not supported", () => {
-    solidClientFns.hasLinkedAcr.mockReturnValue(false);
+    acp.hasLinkedAcr.mockReturnValue(false);
     const { result } = renderHook(() => usePoliciesContainer(), {
       wrapper,
     });
