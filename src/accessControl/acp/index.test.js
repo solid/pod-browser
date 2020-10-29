@@ -22,6 +22,7 @@
 import {
   mockSolidDatasetFrom,
   acp_lowlevel_preview as acpFns,
+  setThing,
 } from "@inrupt/solid-client";
 import AcpAccessControlStrategy, {
   addAcpModes,
@@ -30,14 +31,25 @@ import AcpAccessControlStrategy, {
   getOrCreatePermission,
   getOrCreatePolicy,
   getPoliciesContainerUrl,
+  getPolicyModesAndAgents,
   getPolicyUrl,
+  getRulesOrCreate,
+  getRuleWithAgent,
+  setAgents,
 } from "./index";
 import { createAccessMap } from "../../solidClientHelpers/permissions";
+import { chain } from "../../solidClientHelpers/utils";
 
-describe.skip("AcpAccessControlStrategy", () => {
+const policyResourceUrl = "http://example.com/policies/.ttl";
+const readPolicyUrl = `${policyResourceUrl}#readAccessPolicy`;
+const readPolicyRuleUrl = `${readPolicyUrl}Rule`;
+const writePolicyUrl = `${policyResourceUrl}#writeAccessPolicy`;
+const writePolicyRuleUrl = `${writePolicyUrl}Rule`;
+
+describe("AcpAccessControlStrategy", () => {
   const resourceInfoUrl = "http://example.com/resourceInfo";
   const resourceInfo = mockSolidDatasetFrom(resourceInfoUrl);
-  const policiesContainerUrl = "http://example.com/policies";
+  const policiesContainerUrl = "http://example.com/pb_policies";
   const policiesContainer = mockSolidDatasetFrom(policiesContainerUrl);
   const fetch = "fetch";
   const datasetWithAcrUrl = "http://example.com/resourceInfo=acr";
@@ -48,7 +60,7 @@ describe.skip("AcpAccessControlStrategy", () => {
   describe("init", () => {
     beforeEach(async () => {
       jest
-        .spyOn(acpFns, "getResourceInfoWithAcp")
+        .spyOn(acpFns, "getResourceInfoWithAcr")
         .mockResolvedValue(datasetWithAcr);
       acp = await AcpAccessControlStrategy.init(
         resourceInfo,
@@ -57,21 +69,23 @@ describe.skip("AcpAccessControlStrategy", () => {
       );
     });
 
-    it("uses getResourceInfoWithAcp to fetch data", () =>
+    it("uses getResourceInfoWithAcr to fetch data", () =>
       expect(
-        acpFns.getResourceInfoWithAcp
+        acpFns.getResourceInfoWithAcr
       ).toHaveBeenCalledWith(resourceInfoUrl, { fetch }));
 
     it("exposes the methods we expect for a access control strategy", () =>
-      ["getPermissions", "savePermissionsForAgent"].forEach((method) =>
-        expect(acp[method]).toBeDefined()
-      ));
+      [
+        "deleteFile",
+        "getPermissions",
+        "savePermissionsForAgent",
+      ].forEach((method) => expect(acp[method]).toBeDefined()));
   });
 
   describe("getPermissions", () => {});
 });
 
-describe.skip("addAcpModes", () => {
+describe("addAcpModes", () => {
   it("combines modes", () => {
     expect(addAcpModes(undefined, createAcpMap(true, false, true))).toEqual(
       createAcpMap(true, false, true)
@@ -85,7 +99,7 @@ describe.skip("addAcpModes", () => {
   });
 });
 
-describe.skip("convertAcpToAcl", () => {
+describe("convertAcpToAcl", () => {
   it("converts ACP maps onto the equivalent ACL map", () => {
     expect(
       convertAcpToAcl({
@@ -132,7 +146,7 @@ describe.skip("convertAcpToAcl", () => {
   });
 });
 
-describe.skip("createAcpMap", () => {
+describe("createAcpMap", () => {
   it("creates maps of access modes", () => {
     expect(createAcpMap()).toEqual({
       read: false,
@@ -157,7 +171,7 @@ describe.skip("createAcpMap", () => {
   });
 });
 
-describe.skip("getOrCreatePermission", () => {
+describe("getOrCreatePermission", () => {
   const webId = "http://example.com/profile#me";
   const blankPermission = {
     acp: {
@@ -179,59 +193,220 @@ describe.skip("getOrCreatePermission", () => {
   });
 });
 
-describe.skip("getOrCreatePolicy", () => {
-  const existingPolicy = "existingPolicy";
-  const existingDataset = "dataset";
-  const url = "url";
-  const createdPolicy = "createdPolicy";
-  const updatedDataset = "updatedDataset";
+describe("getOrCreatePolicy", () => {
+  const policyDataset = mockSolidDatasetFrom(policyResourceUrl);
+  const policyThing = acpFns.createPolicy(readPolicyUrl);
 
   it("returns existing policy", () => {
-    jest.spyOn(acpFns, "getPolicy").mockReturnValue(existingPolicy);
-    const { policy, dataset } = getOrCreatePolicy(existingDataset, url);
-    expect(acpFns.getPolicy).toHaveBeenCalledWith(existingDataset, url);
-    expect(policy).toBe(existingPolicy);
-    expect(dataset).toBe(existingDataset);
+    const modifiedDataset = chain(policyDataset, (d) =>
+      setThing(d, policyThing)
+    );
+    const { policy, dataset } = getOrCreatePolicy(
+      modifiedDataset,
+      readPolicyUrl
+    );
+    expect(policy).toEqual(policyThing);
+    expect(dataset).toEqual(modifiedDataset);
   });
 
   it("creates new policy if none exist", () => {
-    jest.spyOn(acpFns, "getPolicy").mockReturnValue(null);
-    jest.spyOn(acpFns, "createPolicy").mockReturnValue(createdPolicy);
-    jest.spyOn(acpFns, "setPolicy").mockReturnValue(updatedDataset);
-    const { policy, dataset } = getOrCreatePolicy(existingDataset, url);
-    expect(acpFns.createPolicy).toHaveBeenCalledWith(url);
-    expect(acpFns.setPolicy).toHaveBeenCalledWith(
-      existingDataset,
-      createdPolicy
-    );
-    expect(policy).toBe(createdPolicy);
-    expect(dataset).toBe(updatedDataset);
+    const { policy, dataset } = getOrCreatePolicy(policyDataset, readPolicyUrl);
+    expect(policy).toEqual(policyThing);
+    expect(dataset).toEqual(setThing(policyDataset, policyThing));
   });
 });
 
-describe.skip("getPolicyUrl", () => {
+describe("getPolicyUrl", () => {
   const podUrl = "http://example.com/";
   const policiesUrl = getPoliciesContainerUrl(podUrl);
   const policies = mockSolidDatasetFrom(policiesUrl);
 
   it("returns corresponding policy URLs", () => {
     expect(getPolicyUrl(mockSolidDatasetFrom(podUrl), policies)).toEqual(
-      "http://example.com/policies/.ttl"
+      "http://example.com/pb_policies/.ttl"
     );
     expect(
       getPolicyUrl(mockSolidDatasetFrom(`${podUrl}test`), policies)
-    ).toEqual("http://example.com/policies/test.ttl");
+    ).toEqual("http://example.com/pb_policies/test.ttl");
     expect(
       getPolicyUrl(mockSolidDatasetFrom(`${podUrl}test.ttl`), policies)
-    ).toEqual("http://example.com/policies/test.ttl.ttl");
+    ).toEqual("http://example.com/pb_policies/test.ttl.ttl");
     expect(
       getPolicyUrl(mockSolidDatasetFrom(`${podUrl}foo/bar`), policies)
-    ).toEqual("http://example.com/policies/foo/bar.ttl");
+    ).toEqual("http://example.com/pb_policies/foo/bar.ttl");
     expect(getPolicyUrl(mockSolidDatasetFrom(policiesUrl), policies)).toEqual(
-      "http://example.com/policies/policies/.ttl"
+      "http://example.com/pb_policies/pb_policies/.ttl"
     );
     expect(
       getPolicyUrl(mockSolidDatasetFrom(`${policiesUrl}test`), policies)
-    ).toEqual("http://example.com/policies/policies/test.ttl");
+    ).toEqual("http://example.com/pb_policies/pb_policies/test.ttl");
+  });
+});
+
+describe("getRulesOrCreate", () => {
+  const readPolicy = chain(acpFns.createPolicy(readPolicyUrl), (p) =>
+    acpFns.setAllowModesOnPolicy(p, createAcpMap(true))
+  );
+  const readPolicyRule = acpFns.createRule(readPolicyRuleUrl);
+  const policyDataset = chain(mockSolidDatasetFrom(policyResourceUrl), (d) =>
+    acpFns.setPolicy(d, readPolicy)
+  );
+
+  it("creates a rule on the fly if no rules exist", () => {
+    expect(getRulesOrCreate([], readPolicy, policyDataset)).toEqual({
+      existing: false,
+      rules: [acpFns.createRule(readPolicyRuleUrl)],
+    });
+  });
+
+  it("returns existing rule if it exist", () => {
+    const modifiedPolicyDataset = setThing(policyDataset, readPolicyRule);
+    expect(
+      getRulesOrCreate([readPolicyRuleUrl], readPolicy, modifiedPolicyDataset)
+    ).toEqual({
+      existing: true,
+      rules: [readPolicyRule],
+    });
+  });
+});
+
+describe("getRuleWithAgent", () => {
+  const ruleUrl = "http://example.com/#Rule";
+  const rule = acpFns.createRule(ruleUrl);
+  const webId = "http://example.com/profile/card#me";
+
+  it("returns a rule if it's connected to the agent", () => {
+    const ruleWithAgent = acpFns.addAgentForRule(rule, webId);
+    expect(getRuleWithAgent([rule, ruleWithAgent], webId)).toBe(ruleWithAgent);
+  });
+
+  it("returns first rule if no rule is connected to the agent", () => {
+    expect(getRuleWithAgent([rule], webId)).toBe(rule);
+  });
+});
+
+describe("setAgents", () => {
+  const readPolicy = chain(acpFns.createPolicy(readPolicyUrl), (p) =>
+    acpFns.setAllowModesOnPolicy(p, createAcpMap(true))
+  );
+  const readPolicyRule = acpFns.createRule(readPolicyRuleUrl);
+  const policyDataset = chain(mockSolidDatasetFrom(policyResourceUrl), (d) =>
+    acpFns.setPolicy(d, readPolicy)
+  );
+  const webId = "http://example.com/profile/card#me";
+
+  describe("adding agent", () => {
+    it("will add new rule and add agent to it", () => {
+      const expectedRule = acpFns.addAgentForRule(readPolicyRule, webId);
+      const expectedDataset = setThing(policyDataset, expectedRule);
+      const expectedPolicy = acpFns.addRequiredRuleForPolicy(
+        readPolicy,
+        expectedRule
+      );
+      expect(setAgents(readPolicy, policyDataset, webId, true)).toEqual({
+        policy: expectedPolicy,
+        dataset: expectedDataset,
+      });
+    });
+
+    it("will use existing rule and add agent to it", () => {
+      const policyDatasetWithRule = setThing(policyDataset, readPolicyRule);
+      const expectedRule = acpFns.addAgentForRule(readPolicyRule, webId);
+      const expectedDataset = setThing(policyDatasetWithRule, expectedRule);
+      const expectedPolicy = acpFns.setRequiredRuleForPolicy(
+        readPolicy,
+        expectedRule
+      );
+      expect(setAgents(readPolicy, policyDatasetWithRule, webId, true)).toEqual(
+        {
+          policy: expectedPolicy,
+          dataset: expectedDataset,
+        }
+      );
+    });
+
+    it("will use existing rule and not add agent to it if agent already is added", () => {
+      const ruleWithAgent = acpFns.addAgentForRule(readPolicyRule, webId);
+      const policyDatasetWithRule = setThing(policyDataset, ruleWithAgent);
+      const expectedDataset = setThing(policyDatasetWithRule, ruleWithAgent);
+      const expectedPolicy = acpFns.setRequiredRuleForPolicy(
+        readPolicy,
+        ruleWithAgent
+      );
+      expect(setAgents(readPolicy, policyDatasetWithRule, webId, true)).toEqual(
+        {
+          policy: expectedPolicy,
+          dataset: expectedDataset,
+        }
+      );
+    });
+  });
+
+  describe("removing agent", () => {
+    it("adds rule to policy and dataset if trying to remove agent when there are no rules yet", () => {
+      const expectedPolicy = acpFns.addRequiredRuleForPolicy(
+        readPolicy,
+        readPolicyRule
+      );
+      const expectedDataset = setThing(policyDataset, readPolicyRule);
+      expect(setAgents(readPolicy, policyDataset, webId, false)).toEqual({
+        policy: expectedPolicy,
+        dataset: expectedDataset,
+      });
+    });
+
+    it("removes agent from rule", () => {
+      const ruleWithAgent = acpFns.addAgentForRule(readPolicyRule, webId);
+      const policyDatasetWithRule = setThing(policyDataset, ruleWithAgent);
+      const expectedDataset = setThing(policyDatasetWithRule, readPolicyRule);
+      const expectedPolicy = acpFns.setRequiredRuleForPolicy(
+        readPolicy,
+        readPolicyRule
+      );
+      expect(
+        setAgents(readPolicy, policyDatasetWithRule, webId, false)
+      ).toEqual({
+        policy: expectedPolicy,
+        dataset: expectedDataset,
+      });
+    });
+  });
+});
+
+describe("getPolicyModesAndAgents", () => {
+  it("maps agents from policies together with the access modes they're granted", () => {
+    const webId1 = "http://example.com/agent1";
+    const webId2 = "http://example.com/agent2";
+    const readPolicyRule = chain(
+      acpFns.createRule(readPolicyRuleUrl),
+      (r) => acpFns.addAgentForRule(r, webId1),
+      (r) => acpFns.addAgentForRule(r, webId2)
+    );
+    const readPolicy = chain(
+      acpFns.createPolicy(readPolicyUrl),
+      (p) => acpFns.setAllowModesOnPolicy(p, createAcpMap(true)),
+      (p) => acpFns.setRequiredRuleForPolicy(p, readPolicyRule)
+    );
+    const writePolicyRule = chain(acpFns.createRule(writePolicyRuleUrl), (r) =>
+      acpFns.addAgentForRule(r, webId2)
+    );
+    const writePolicy = chain(
+      acpFns.createPolicy(writePolicyUrl),
+      (p) => acpFns.setAllowModesOnPolicy(p, createAcpMap(false, true)),
+      (p) => acpFns.setRequiredRuleForPolicy(p, writePolicyRule)
+    );
+    const policyDataset = chain(
+      mockSolidDatasetFrom(policyResourceUrl),
+      (d) => setThing(d, readPolicyRule),
+      (d) => setThing(d, readPolicy),
+      (d) => setThing(d, writePolicyRule),
+      (d) => setThing(d, writePolicy)
+    );
+    expect(
+      getPolicyModesAndAgents([readPolicyUrl, writePolicyUrl], policyDataset)
+    ).toEqual([
+      { agents: [webId1, webId2], modes: createAcpMap(true) },
+      { agents: [webId2], modes: createAcpMap(false, true) },
+    ]);
   });
 });

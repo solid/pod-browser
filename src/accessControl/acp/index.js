@@ -19,9 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* istanbul ignore file */
-// TODO: Remove once Solid Client ACP API is complete
-
 import {
   acp_lowlevel_preview as acp,
   asUrl,
@@ -131,7 +128,7 @@ export function getRuleWithAgent(rules, agentWebId) {
   return rule || rules[0];
 }
 
-export async function setAgents(policy, policyDataset, webId, accessToMode) {
+export function setAgents(policy, policyDataset, webId, accessToMode) {
   const ruleUrls = acp.getRequiredRuleForPolicyAll(policy);
   const { existing, rules } = getRulesOrCreate(ruleUrls, policy, policyDataset);
   const rule = getRuleWithAgent(rules, webId);
@@ -153,7 +150,7 @@ export async function setAgents(policy, policyDataset, webId, accessToMode) {
   };
 }
 
-function getPolicyModesAndAgents(policyUrls, policyDataset) {
+export function getPolicyModesAndAgents(policyUrls, policyDataset) {
   return policyUrls
     .map((url) => acp.getPolicy(policyDataset, url))
     .filter((policy) => !!policy)
@@ -280,14 +277,13 @@ export default class AcpAccessControlStrategy {
       // no need to add policy if it doesn't exist and we're not adding the agent to it
       return policyDataset;
     }
-    const { dataset: modifiedPolicyDataset } = await chainPromise(
+    const { dataset: modifiedPolicyDataset } = chain(
       getOrCreatePolicy(policyDataset, policyUrl),
       ({ policy, dataset }) => ({
         policy: acp.setAllowModesOnPolicy(policy, acpMap),
         dataset,
       }),
-      async ({ policy, dataset }) =>
-        setAgents(policy, dataset, webId, access[mode]),
+      ({ policy, dataset }) => setAgents(policy, dataset, webId, access[mode]),
       ({ policy, dataset }) => ({
         policy,
         dataset: acp.setPolicy(dataset, policy),
@@ -312,13 +308,13 @@ export default class AcpAccessControlStrategy {
       // no need to add policy if it doesn't exist and we're not adding the agent to it
       return policyDataset;
     }
-    const { dataset: modifiedPolicyDataset } = await chainPromise(
+    const { dataset: modifiedPolicyDataset } = chain(
       getOrCreatePolicy(policyDataset, policyUrl),
       ({ policy, dataset }) => ({
         policy: acp.setAllowModesOnPolicy(policy, createAcpMap(true, true)),
         dataset,
       }),
-      async ({ policy, dataset }) =>
+      ({ policy, dataset }) =>
         setAgents(policy, dataset, webId, access.control),
       ({ policy, dataset }) => ({
         policy,
@@ -353,13 +349,13 @@ export default class AcpAccessControlStrategy {
       getSourceUrl(policyDataset),
       { fetch: this.#fetch }
     );
-    const { policy: modifiedPolicyDataset } = await chainPromise(
+    const { policy: modifiedPolicyDataset } = chain(
       getOrCreatePolicy(policyDataset, policyUrl),
       ({ policy, dataset }) => ({
         policy: acp.setAllowModesOnPolicy(policy, createAcpMap(true, true)),
         dataset,
       }),
-      async ({ policy, dataset }) =>
+      ({ policy, dataset }) =>
         setAgents(policy, dataset, webId, access.control),
       ({ policy, dataset }) => ({
         policy: acp.setPolicy(dataset, policy),
