@@ -45,7 +45,9 @@ export default function Provider() {
   const onProviderChange = (e, newValue) => {
     setProviderIri(newValue);
   };
-
+  const authOptions = {
+    clientName: "Pod Browser",
+  };
   /* eslint react/jsx-props-no-spreading: 0 */
 
   return (
@@ -74,6 +76,7 @@ export default function Provider() {
         <LoginButton
           oidcIssuer={providerIri}
           redirectUrl={generateRedirectUrl("")}
+          authOptions={authOptions}
         >
           <button
             data-testid={TESTCAFE_ID_LOGIN_BUTTON}

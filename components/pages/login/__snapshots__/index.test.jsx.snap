@@ -1725,6 +1725,11 @@ font-display: block;",
                             </ForwardRef(Autocomplete)>
                           </WithStyles(ForwardRef(Autocomplete))>
                           <L
+                            authOptions={
+                              Object {
+                                "clientName": "Pod Browser",
+                              }
+                            }
                             oidcIssuer="https://inrupt.net"
                             redirectUrl="http://localhost/"
                           >
