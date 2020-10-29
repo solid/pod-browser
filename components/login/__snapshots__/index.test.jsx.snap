@@ -1715,7 +1715,7 @@ font-display: block;",
                     <L
                       authOptions={
                         Object {
-                          "clientName": "Pod Browser",
+                          "clientName": "Inrupt PodBrowser",
                         }
                       }
                       oidcIssuer="https://inrupt.net"

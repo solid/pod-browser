@@ -46,7 +46,7 @@ export default function Provider() {
     setProviderIri(newValue);
   };
   const authOptions = {
-    clientName: "Pod Browser",
+    clientName: "Inrupt PodBrowser",
   };
   /* eslint react/jsx-props-no-spreading: 0 */
 
