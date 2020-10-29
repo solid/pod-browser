@@ -44,7 +44,6 @@ import { getIriPath } from "../../src/solidClientHelpers/utils";
 import { getResourceName } from "../../src/solidClientHelpers/resource";
 
 const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
-const TESTCAFE_ID_SHARE_PERMISSIONS_BUTTON = "share-permissions-button";
 const TESTCAFE_ID_TITLE = "resource-title";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -86,16 +85,6 @@ export default function ResourceDetails({ onDelete }) {
               >
                 Download
               </DownloadLink>
-            </ActionMenuItem>
-            <ActionMenuItem>
-              <button
-                className={actionMenuBem("action-menu__trigger")}
-                data-testid={TESTCAFE_ID_SHARE_PERMISSIONS_BUTTON}
-                type="button"
-                onClick={() => setSharingExpanded(true)}
-              >
-                Sharing & App Permissions
-              </button>
             </ActionMenuItem>
             <ActionMenuItem>
               <DeleteResourceLink

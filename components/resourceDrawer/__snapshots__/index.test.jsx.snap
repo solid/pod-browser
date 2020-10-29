@@ -1329,20 +1329,6 @@ font-display: block;",
                                                               <li
                                                                 className="PodBrowser-action-menu__item"
                                                               >
-                                                                <button
-                                                                  className="PodBrowser-action-menu__trigger"
-                                                                  data-testid="share-permissions-button"
-                                                                  onClick={[Function]}
-                                                                  type="button"
-                                                                >
-                                                                  Sharing & App Permissions
-                                                                </button>
-                                                              </li>
-                                                            </ActionMenuItem>
-                                                            <ActionMenuItem>
-                                                              <li
-                                                                className="PodBrowser-action-menu__item"
-                                                              >
                                                                 <DeleteResourceLink
                                                                   className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                                                                   data-testid="download-resource-button"
@@ -4020,20 +4006,6 @@ font-display: block;",
                                                               data-testid="download-resource-button"
                                                               iri="/iri/"
                                                             />
-                                                          </li>
-                                                        </ActionMenuItem>
-                                                        <ActionMenuItem>
-                                                          <li
-                                                            className="PodBrowser-action-menu__item"
-                                                          >
-                                                            <button
-                                                              className="PodBrowser-action-menu__trigger"
-                                                              data-testid="share-permissions-button"
-                                                              onClick={[Function]}
-                                                              type="button"
-                                                            >
-                                                              Sharing & App Permissions
-                                                            </button>
                                                           </li>
                                                         </ActionMenuItem>
                                                         <ActionMenuItem>
@@ -6757,20 +6729,6 @@ font-display: block;",
                                                                   data-testid="download-resource-button"
                                                                   iri="/iri/"
                                                                 />
-                                                              </li>
-                                                            </ActionMenuItem>
-                                                            <ActionMenuItem>
-                                                              <li
-                                                                className="PodBrowser-action-menu__item"
-                                                              >
-                                                                <button
-                                                                  className="PodBrowser-action-menu__trigger"
-                                                                  data-testid="share-permissions-button"
-                                                                  onClick={[Function]}
-                                                                  type="button"
-                                                                >
-                                                                  Sharing & App Permissions
-                                                                </button>
                                                               </li>
                                                             </ActionMenuItem>
                                                             <ActionMenuItem>
