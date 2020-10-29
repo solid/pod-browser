@@ -54,7 +54,6 @@ export default class WacAccessControlStrategy {
     this.#fetch = fetch;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async deleteFile() {
     return deleteFile(getSourceUrl(this.#datasetWithAcl), {
       fetch: this.#fetch,
