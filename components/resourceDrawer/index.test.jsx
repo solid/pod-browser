@@ -145,10 +145,7 @@ describe("ResourceDrawer view", () => {
         </DetailsMenuContext>
       </SessionProvider>
     );
-    expect(useAccessControl).toHaveBeenCalledWith(
-      resourceInfo,
-      expect.any(Function)
-    );
+    expect(useAccessControl).toHaveBeenCalledWith(resourceInfo);
   });
 });
 

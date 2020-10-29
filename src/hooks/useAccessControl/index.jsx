@@ -20,10 +20,12 @@
  */
 
 import { useEffect, useState } from "react";
+import { useSession } from "@inrupt/solid-ui-react";
 import { getAccessControl } from "../../accessControl";
 import usePoliciesContainer from "../usePoliciesContainer";
 
-export default function useAccessControl(resourceInfo, fetch) {
+export default function useAccessControl(resourceInfo) {
+  const { fetch } = useSession();
   const [accessControl, setAccessControl] = useState(null);
   const { policiesContainer, error: policiesError } = usePoliciesContainer();
   const [error, setError] = useState(policiesError || null);

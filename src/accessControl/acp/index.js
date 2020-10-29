@@ -25,6 +25,7 @@
 import {
   acp_lowlevel_preview as acp,
   asUrl,
+  deleteFile,
   getSolidDataset,
   getSourceUrl,
   saveSolidDatasetAt,
@@ -180,6 +181,10 @@ export default class AcpAccessControlStrategy {
     this.#datasetWithAcr = datasetWithAcr;
     this.#policyUrl = getPolicyUrl(datasetWithAcr, policiesContainer);
     this.#fetch = fetch;
+  }
+
+  async deleteFile() {
+    return deleteFile(this.#policyUrl, { fetch: this.#fetch });
   }
 
   async getPermissions() {

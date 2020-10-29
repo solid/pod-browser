@@ -53,6 +53,11 @@ export default class WacAccessControlStrategy {
     this.#fetch = fetch;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  async deleteFile() {
+    return Promise.resolve();
+  }
+
   async getPermissions() {
     if (hasResourceAcl(this.#datasetWithAcl)) {
       const accessModeList = getAgentAccessAll(this.#datasetWithAcl);

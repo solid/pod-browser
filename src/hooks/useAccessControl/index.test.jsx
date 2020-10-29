@@ -23,6 +23,8 @@ import { renderHook } from "@testing-library/react-hooks";
 import useAccessControl from "./index";
 import * as accessControlFns from "../../accessControl";
 import usePoliciesContainer from "../usePoliciesContainer";
+import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
+import mockSession from "../../../__testUtils/mockSession";
 
 jest.mock("../usePoliciesContainer");
 
@@ -32,29 +34,36 @@ describe("useAccessControl", () => {
   const fetch = "fetch";
   const policiesContainer = "policiesContainer";
   const error = "error";
+  let session;
+  let wrapper;
 
   beforeEach(() => {
     jest
       .spyOn(accessControlFns, "getAccessControl")
       .mockResolvedValue(accessControl);
     usePoliciesContainer.mockReturnValue({ policiesContainer });
+    session = mockSession();
+    wrapper = mockSessionContextProvider(session);
   });
 
   it("returns null if given no resourceUri", () => {
-    const { result } = renderHook(() => useAccessControl(null, fetch));
+    const { result } = renderHook(() => useAccessControl(null, session.fetch), {
+      wrapper,
+    });
     expect(result.current.accessControl).toBeNull();
     expect(result.current.error).toBeNull();
   });
 
   it("returns accessControl if given resourceUri", async () => {
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useAccessControl(resourceIri, fetch)
+    const { result, waitForNextUpdate } = renderHook(
+      () => useAccessControl(resourceIri),
+      { wrapper }
     );
     await waitForNextUpdate();
     expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
       resourceIri,
       policiesContainer,
-      fetch
+      session.fetch
     );
     expect(result.current.accessControl).toBe(accessControl);
     expect(result.current.error).toBeNull();
@@ -62,15 +71,18 @@ describe("useAccessControl", () => {
 
   it("returns error if usePolicies return error", async () => {
     usePoliciesContainer.mockReturnValue({ error });
-    const { result } = renderHook(() => useAccessControl(resourceIri, fetch));
+    const { result } = renderHook(() => useAccessControl(resourceIri), {
+      wrapper,
+    });
     expect(result.current.accessControl).toBeNull();
     expect(result.current.error).toBe(error);
   });
 
   it("returns error if getAccessControl fails", async () => {
     accessControlFns.getAccessControl.mockRejectedValue(error);
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useAccessControl(resourceIri, fetch)
+    const { result, waitForNextUpdate } = renderHook(
+      () => useAccessControl(resourceIri),
+      { wrapper }
     );
     await waitForNextUpdate();
     expect(result.current.accessControl).toBeNull();

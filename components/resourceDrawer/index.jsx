@@ -43,7 +43,6 @@ export function handleCloseDrawer({ setMenuOpen, router }) {
 
 export default function ResourceDrawer({ onUpdate }) {
   const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
-  const { fetch } = useSession();
   const router = useRouter();
   const {
     query: { action, resourceIri },
@@ -52,8 +51,7 @@ export default function ResourceDrawer({ onUpdate }) {
     resourceIri
   );
   const { accessControl, error: accessControlError } = useAccessControl(
-    resourceInfo,
-    fetch
+    resourceInfo
   );
 
   useEffect(() => {
