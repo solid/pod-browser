@@ -97,7 +97,7 @@ export default function MenuDrawer() {
           <Divider />
           <ListItem button key="profile" onClick={handleDrawerClose}>
             <Link href="/profile" replace>
-              <span
+              <a
                 className={clsx(
                   bem("menu-drawer-item"),
                   bem("menu-drawer-item__text"),
@@ -105,7 +105,7 @@ export default function MenuDrawer() {
                 )}
               >
                 Profile
-              </span>
+              </a>
             </Link>
           </ListItem>
           <ListItem button key="logout" onClick={handleDrawerClose}>
