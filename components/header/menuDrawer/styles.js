@@ -37,6 +37,9 @@ const styles = (theme) =>
     },
     "menu-drawer-item__link": {
       "text-decoration": "underline",
+      "&:visited": {
+        color: "inherit",
+      },
     },
     drawerContainer: {
       borderRadius: `0 0 
