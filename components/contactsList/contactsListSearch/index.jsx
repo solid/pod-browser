@@ -28,7 +28,7 @@ import Router from "next/router";
 import { Autocomplete } from "@material-ui/lab";
 import { createStyles, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import { getProfileFromPersonDataset } from "../../../src/solidClientHelpers/profile";
+import { getProfileFromThing } from "../../../src/solidClientHelpers/profile";
 import SearchContext from "../../../src/contexts/searchContext";
 import { buildProfileLink } from "../../profileLink";
 import styles from "./styles";
@@ -40,7 +40,7 @@ export default function ContactsListSearch({ people }) {
   const { setSearch } = useContext(SearchContext);
   const classes = useStyles();
 
-  const profiles = people.map(getProfileFromPersonDataset);
+  const profiles = people.map(getProfileFromThing);
 
   return (
     <Autocomplete

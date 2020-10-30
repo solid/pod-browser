@@ -63,7 +63,7 @@ export function handleSubmit({
     const addressBookIri = getSourceUrl(addressBook);
 
     try {
-      const { name, webId } = await fetchProfile(iri, fetch);
+      const { name, webId, types } = await fetchProfile(iri, fetch);
 
       const existingContact = await findContactInAddressBook(
         addressBookIri,
@@ -82,6 +82,7 @@ export function handleSubmit({
         const { response, error } = await saveContact(
           addressBookIri,
           contact,
+          types,
           fetch
         );
 

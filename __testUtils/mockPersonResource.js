@@ -20,7 +20,7 @@
  */
 
 import { addStringNoLocale, addUrl, mockThingFrom } from "@inrupt/solid-client";
-import { vcard, foaf } from "rdf-namespaces";
+import { vcard, foaf, rdf } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
 import { packageProfile } from "../src/solidClientHelpers/profile";
 
@@ -34,7 +34,8 @@ export function mockPersonDatasetAlice() {
     mockThingFrom(aliceWebIdUrl),
     (t) => addStringNoLocale(t, vcard.fn, aliceName),
     (t) => addStringNoLocale(t, vcard.nickname, aliceNick),
-    (t) => addUrl(t, vcard.hasPhoto, alicePhoto)
+    (t) => addUrl(t, vcard.hasPhoto, alicePhoto),
+    (t) => addUrl(t, rdf.type, foaf.Person)
   );
 }
 
@@ -50,7 +51,8 @@ export function mockPersonDatasetBob() {
   return chain(
     mockThingFrom(bobWebIdUrl),
     (t) => addStringNoLocale(t, foaf.name, bobName),
-    (t) => addStringNoLocale(t, foaf.nick, bobNick)
+    (t) => addStringNoLocale(t, foaf.nick, bobNick),
+    (t) => addUrl(t, rdf.type, foaf.Person)
   );
 }
 

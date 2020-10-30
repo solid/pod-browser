@@ -23,11 +23,15 @@
 import { ldp, rdf, acl, dc, foaf, vcard } from "rdf-namespaces";
 import * as solidClientFns from "@inrupt/solid-client";
 import * as resourceFns from "../solidClientHelpers/resource";
+
+import { mockPersonDatasetAlice } from "../../__testUtils/mockPersonResource";
+import { mockPersonContactDataset } from "../../__testUtils/mockContactResource";
+
 import {
   createAddressBook,
   createContact,
   getGroups,
-  getPeople,
+  getContacts,
   getProfiles,
   getSchemaFunction,
   mapSchema,
@@ -138,7 +142,7 @@ describe("createContact", () => {
       role: "Developer",
     };
 
-    const { dataset } = createContact(addressBookIri, schema);
+    const { dataset } = createContact(addressBookIri, schema, [foaf.Person]);
     const emailsAndPhones = getStringNoLocaleAll(dataset, vcard.value);
 
     expect(getStringNoLocale(dataset, vcard.fn)).toEqual("Test Person");
@@ -262,7 +266,7 @@ describe("getSchemaOperations", () => {
   });
 });
 
-describe("getPeople", () => {
+describe("getContacts", () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -292,7 +296,7 @@ describe("getPeople", () => {
 
     const {
       response: [person1, person2],
-    } = await getPeople(containerIri, fetch);
+    } = await getContacts(foaf.Person, containerIri, fetch);
 
     expect(person1).toEqual(expectedPerson1);
     expect(person2).toEqual(expectedPerson2);
@@ -305,7 +309,7 @@ describe("getPeople", () => {
       .spyOn(resourceFns, "getResource")
       .mockResolvedValueOnce({ error: "There was an error" });
 
-    const { error } = await getPeople(containerIri, fetch);
+    const { error } = await getContacts(foaf.Person, containerIri, fetch);
 
     expect(error).toEqual("There was an error");
   });
@@ -416,7 +420,12 @@ describe("saveContact", () => {
         throw new Error("boom");
       });
 
-    const { error } = await saveContact(addressBookIri, contact, fetch);
+    const { error } = await saveContact(
+      addressBookIri,
+      contact,
+      [foaf.Person],
+      fetch
+    );
 
     expect(error).toEqual("boom");
   });
@@ -460,11 +469,11 @@ describe("saveContact", () => {
     });
 
     const {
-      response: { contact, people },
-    } = await saveContact(addressBookIri, schema, fetch);
+      response: { contact, contacts },
+    } = await saveContact(addressBookIri, schema, [foaf.Person], fetch);
 
     expect(contact).toEqual(contactDataset);
-    expect(people).toEqual(peopleDataset);
+    expect(contacts).toEqual(peopleDataset);
   });
 });
 
@@ -473,9 +482,20 @@ describe("deleteContact", () => {
   const owner = "https://example.com/card#me";
   const contactContainerUrl = "http://example.com/contact/id-001/";
   const contactUrl = `${contactContainerUrl}index.ttl`;
-  const contactToDelete = { iri: contactUrl };
+
+  const contactToDelete = {
+    iri: contactUrl,
+    dataset: mockPersonContactDataset(),
+  };
+
   const addressBook = createAddressBook({ iri: addressBookUrl, owner });
   const newAddressBook = createAddressBook({ iri: addressBookUrl, owner });
+
+  beforeEach(() => {
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValueOnce(mockPersonDatasetAlice());
+  });
 
   afterEach(() => {
     jest.restoreAllMocks();

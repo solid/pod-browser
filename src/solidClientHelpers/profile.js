@@ -27,7 +27,7 @@ import {
   asUrl,
   getUrlAll,
 } from "@inrupt/solid-client";
-import { space, vcard, foaf } from "rdf-namespaces";
+import { space, vcard, foaf, rdf, schema } from "rdf-namespaces";
 
 export function displayProfileName({ nickname, name, webId }) {
   if (name) return name;
@@ -35,7 +35,7 @@ export function displayProfileName({ nickname, name, webId }) {
   return webId;
 }
 
-export function getProfileFromPersonDataset(profileThing) {
+export function getProfileFromPersonThing(profileThing) {
   return {
     avatar: getUrl(profileThing, vcard.hasPhoto),
     name:
@@ -45,13 +45,32 @@ export function getProfileFromPersonDataset(profileThing) {
       getStringNoLocale(profileThing, vcard.nickname) ||
       getStringNoLocale(profileThing, foaf.nick),
     webId: asUrl(profileThing),
+    types: getUrlAll(profileThing, rdf.type),
   };
+}
+
+const TYPE_MAP = {
+  [foaf.Person]: getProfileFromPersonThing,
+  [schema.Person]: getProfileFromPersonThing,
+};
+
+export function getProfileFromThing(contactThing) {
+  const types = getUrlAll(contactThing, rdf.type);
+  const profileFn = TYPE_MAP[types.find((type) => TYPE_MAP[type])];
+
+  if (!profileFn) {
+    throw new Error(
+      `Cannot handle profile for contact: ${asUrl(contactThing)}`
+    );
+  }
+
+  return profileFn(contactThing);
 }
 
 export function packageProfile(webId, dataset) {
   const profile = getThing(dataset, webId);
   return {
-    ...getProfileFromPersonDataset(profile),
+    ...getProfileFromPersonThing(profile),
     webId,
     dataset,
     pods: getUrlAll(profile, space.storage),

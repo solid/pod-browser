@@ -19,29 +19,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import useSWR from "swr";
-import { useSession } from "@inrupt/solid-ui-react";
-import { getSourceUrl } from "@inrupt/solid-client";
-import { foaf } from "rdf-namespaces";
-import { getContacts } from "../../addressBook";
+import { addUrl, mockThingFrom } from "@inrupt/solid-client";
+import { vcard, rdf, foaf } from "rdf-namespaces";
+import { chain } from "../src/solidClientHelpers/utils";
 
-export default function usePeople(addressBook) {
-  const {
-    session: { fetch },
-  } = useSession();
+export const webIdUrl = "http://example.com/alice#me";
 
-  return useSWR(addressBook, async () => {
-    const contactsIri = getSourceUrl(addressBook);
-    const { response, error } = await getContacts(
-      foaf.Person,
-      contactsIri,
-      fetch
-    );
-
-    if (error) {
-      throw error;
-    }
-
-    return response;
-  });
+export function mockPersonContactDataset() {
+  return chain(
+    mockThingFrom(webIdUrl),
+    (t) => addUrl(t, rdf.type, vcard.Individual),
+    (t) => addUrl(t, foaf.openid, webIdUrl)
+  );
 }

@@ -900,6 +900,20 @@ font-display: block;",
                       "value": "http://example.com/alice#me",
                     },
                   },
+                  Quad {
+                    "graph": DefaultGraph {
+                      "value": "",
+                    },
+                    "object": NamedNode {
+                      "value": "http://xmlns.com/foaf/0.1/Person",
+                    },
+                    "predicate": NamedNode {
+                      "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+                    },
+                    "subject": NamedNode {
+                      "value": "http://example.com/alice#me",
+                    },
+                  },
                 },
               },
               DatasetCore {
@@ -941,6 +955,20 @@ font-display: block;",
                       "value": "http://example.com/bob#me",
                     },
                   },
+                  Quad {
+                    "graph": DefaultGraph {
+                      "value": "",
+                    },
+                    "object": NamedNode {
+                      "value": "http://xmlns.com/foaf/0.1/Person",
+                    },
+                    "predicate": NamedNode {
+                      "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+                    },
+                    "subject": NamedNode {
+                      "value": "http://example.com/bob#me",
+                    },
+                  },
                 },
               },
             ]
@@ -964,12 +992,18 @@ font-display: block;",
                   "avatar": "http://example.com/alice.jpg",
                   "name": "Alice",
                   "nickname": "A",
+                  "types": Array [
+                    "http://xmlns.com/foaf/0.1/Person",
+                  ],
                   "webId": "http://example.com/alice#me",
                 },
                 Object {
                   "avatar": null,
                   "name": "Bob",
                   "nickname": "B",
+                  "types": Array [
+                    "http://xmlns.com/foaf/0.1/Person",
+                  ],
                   "webId": "http://example.com/bob#me",
                 },
               ]
@@ -1016,12 +1050,18 @@ font-display: block;",
                     "avatar": "http://example.com/alice.jpg",
                     "name": "Alice",
                     "nickname": "A",
+                    "types": Array [
+                      "http://xmlns.com/foaf/0.1/Person",
+                    ],
                     "webId": "http://example.com/alice#me",
                   },
                   Object {
                     "avatar": null,
                     "name": "Bob",
                     "nickname": "B",
+                    "types": Array [
+                      "http://xmlns.com/foaf/0.1/Person",
+                    ],
                     "webId": "http://example.com/bob#me",
                   },
                 ]

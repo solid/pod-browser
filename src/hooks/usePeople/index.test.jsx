@@ -23,10 +23,11 @@ import React from "react";
 import { renderHook } from "@testing-library/react-hooks";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { cache, SWRConfig } from "swr";
+import { foaf } from "rdf-namespaces";
 import usePeople from "./index";
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
-import { getPeople } from "../../addressBook";
+import { getContacts } from "../../addressBook";
 
 jest.mock("../../addressBook");
 
@@ -67,18 +68,22 @@ describe("usePeople", () => {
       cache.clear();
     });
 
-    it("should call getPeople", async () => {
-      getPeople.mockResolvedValue({ response });
+    it("should call getContacts", async () => {
+      getContacts.mockResolvedValue({ response });
 
       renderHook(() => usePeople(addressBook), {
         wrapper,
       });
 
-      expect(getPeople).toHaveBeenCalledWith(addressBookUrl, session.fetch);
+      expect(getContacts).toHaveBeenCalledWith(
+        foaf.Person,
+        addressBookUrl,
+        session.fetch
+      );
     });
 
     it("should return response", async () => {
-      getPeople.mockResolvedValue({ response });
+      getContacts.mockResolvedValue({ response });
 
       const { result, waitFor } = renderHook(() => usePeople(addressBook), {
         wrapper,
@@ -94,7 +99,7 @@ describe("usePeople", () => {
 
     it("should return error", async () => {
       const error = "Some error";
-      getPeople.mockResolvedValue({ error });
+      getContacts.mockResolvedValue({ error });
 
       const { result, waitFor } = renderHook(() => usePeople(addressBook), {
         wrapper,

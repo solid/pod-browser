@@ -20,10 +20,11 @@
  */
 
 import { getSolidDataset } from "@inrupt/solid-client";
+import { schema, foaf } from "rdf-namespaces";
 import {
   displayProfileName,
   fetchProfile,
-  getProfileFromPersonDataset,
+  getProfileFromPersonThing,
 } from "./profile";
 import {
   mockPersonDatasetAlice,
@@ -60,31 +61,35 @@ describe("fetchProfile", () => {
 
     const profile = await fetchProfile(profileWebId, fetch);
     const dataset = await getSolidDataset(profileWebId, { fetch });
+
     expect(profile.webId).toEqual(profileWebId);
     expect(profile.name).toEqual("Test Testersen");
     expect(profile.nickname).toEqual("Testy");
     expect(profile.avatar).toEqual("http://example.com/photo.jpg");
     expect(profile.pods).toEqual(["http://example.com/"]);
+    expect(profile.types).toEqual([schema.Person, foaf.Person]);
     expect(profile.dataset).toEqual(dataset);
   });
 });
 
-describe("getProfileFromPersonDataset", () => {
+describe("getProfileFromPersonThing", () => {
   test("it maps people into profiles", async () => {
     const alice = mockProfileAlice();
-    expect(getProfileFromPersonDataset(mockPersonDatasetAlice())).toEqual({
+    expect(getProfileFromPersonThing(mockPersonDatasetAlice())).toEqual({
       avatar: alice.avatar,
       name: alice.name,
       nickname: alice.nickname,
       webId: alice.webId,
+      types: ["http://xmlns.com/foaf/0.1/Person"],
     });
 
     const bob = mockProfileBob();
-    expect(getProfileFromPersonDataset(mockPersonDatasetBob())).toEqual({
+    expect(getProfileFromPersonThing(mockPersonDatasetBob())).toEqual({
       avatar: bob.avatar,
       name: bob.name,
       nickname: bob.nickname,
       webId: bob.webId,
+      types: ["http://xmlns.com/foaf/0.1/Person"],
     });
   });
 });
