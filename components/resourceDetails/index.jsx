@@ -35,13 +35,18 @@ import T from "prop-types";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { ActionMenu, ActionMenuItem } from "@inrupt/prism-react-components";
 import { DatasetContext } from "@inrupt/solid-ui-react";
-import { getContentType, getSourceUrl } from "@inrupt/solid-client";
+import {
+  getContentType,
+  getSourceUrl,
+  isContainer,
+} from "@inrupt/solid-client";
 import styles from "./styles";
 import DeleteResourceLink from "../deleteResourceLink";
 import DownloadLink from "../downloadLink";
 import ResourceSharing from "./resourceSharing";
 import { getIriPath } from "../../src/solidClientHelpers/utils";
 import { getResourceName } from "../../src/solidClientHelpers/resource";
+import AccessControlContext from "../../src/contexts/accessControlContext";
 
 const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
 const TESTCAFE_ID_TITLE = "resource-title";
@@ -56,6 +61,9 @@ export default function ResourceDetails({ onDelete }) {
   const displayName = getResourceName(name);
   const type = getContentType(dataset);
   const actionMenuBem = ActionMenu.useBem();
+  const { accessControl } = useContext(AccessControlContext);
+  const resourceIsContainer = isContainer(datasetUrl);
+  const showActions = accessControl || !resourceIsContainer;
 
   const expandIcon = <ExpandMoreIcon />;
   return (
@@ -72,33 +80,37 @@ export default function ResourceDetails({ onDelete }) {
 
       <Divider />
 
-      <Accordion defaultExpanded>
-        <AccordionSummary expandIcon={expandIcon}>Actions</AccordionSummary>
-        <AccordionDetails className={classes.accordionDetails}>
-          <ActionMenu>
-            <ActionMenuItem>
-              <DownloadLink
-                className={actionMenuBem("action-menu__trigger")}
-                data-testid={TESTCAFE_ID_DOWNLOAD_BUTTON}
-                iri={datasetUrl}
-              >
-                Download
-              </DownloadLink>
-            </ActionMenuItem>
-            <ActionMenuItem>
-              <DeleteResourceLink
-                className={actionMenuBem("action-menu__trigger", "danger")}
-                resourceIri={datasetUrl}
-                name={displayName}
-                onDelete={onDelete}
-                data-testid={TESTCAFE_ID_DOWNLOAD_BUTTON}
-              />
-            </ActionMenuItem>
-          </ActionMenu>
-        </AccordionDetails>
-      </Accordion>
+      {showActions ? (
+        <Accordion defaultExpanded={showActions}>
+          <AccordionSummary expandIcon={expandIcon}>Actions</AccordionSummary>
+          <AccordionDetails className={classes.accordionDetails}>
+            <ActionMenu>
+              <ActionMenuItem>
+                <DownloadLink
+                  className={actionMenuBem("action-menu__trigger")}
+                  data-testid={TESTCAFE_ID_DOWNLOAD_BUTTON}
+                  iri={datasetUrl}
+                >
+                  Download
+                </DownloadLink>
+              </ActionMenuItem>
+              {accessControl ? ( // since we might need to delete the corresponding policy resource, we must require that the user has control access
+                <ActionMenuItem>
+                  <DeleteResourceLink
+                    className={actionMenuBem("action-menu__trigger", "danger")}
+                    resourceIri={datasetUrl}
+                    name={displayName}
+                    onDelete={onDelete}
+                    data-testid={TESTCAFE_ID_DOWNLOAD_BUTTON}
+                  />
+                </ActionMenuItem>
+              ) : null}
+            </ActionMenu>
+          </AccordionDetails>
+        </Accordion>
+      ) : null}
 
-      <Accordion>
+      <Accordion defaultExpanded={!showActions}>
         <AccordionSummary expandIcon={expandIcon}>Details</AccordionSummary>
         <AccordionDetails className={classes.accordionDetails}>
           <section className={classes.centeredSection}>
@@ -118,12 +130,16 @@ export default function ResourceDetails({ onDelete }) {
         </AccordionDetails>
       </Accordion>
 
-      <Accordion>
-        <AccordionSummary expandIcon={expandIcon}>Permissions</AccordionSummary>
-        <AccordionDetails className={classes.accordionDetails}>
-          <ResourceSharing />
-        </AccordionDetails>
-      </Accordion>
+      {accessControl ? ( // only show when we know user has control access
+        <Accordion>
+          <AccordionSummary expandIcon={expandIcon}>
+            Permissions
+          </AccordionSummary>
+          <AccordionDetails className={classes.accordionDetails}>
+            <ResourceSharing />
+          </AccordionDetails>
+        </Accordion>
+      ) : null}
     </>
   );
 }

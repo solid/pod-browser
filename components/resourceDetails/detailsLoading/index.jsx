@@ -22,18 +22,14 @@
 // material-ui is broken and doesn't allow `ListItem` to accept `component`
 
 import React from "react";
-import {
-  Divider,
-  createStyles,
-  Accordion,
-  AccordionSummary,
-} from "@material-ui/core";
+import { Divider, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import T from "prop-types";
 import Skeleton from "@material-ui/lab/Skeleton";
 import styles from "./styles";
 import { getIriPath } from "../../../src/solidClientHelpers/utils";
 import { getResourceName } from "../../../src/solidClientHelpers/resource";
+import Spinner from "../../spinner";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -52,17 +48,7 @@ function DetailsLoading({ iri }) {
 
       <Divider />
 
-      <Accordion disabled>
-        <AccordionSummary>Actions</AccordionSummary>
-      </Accordion>
-
-      <Accordion disabled>
-        <AccordionSummary>Details</AccordionSummary>
-      </Accordion>
-
-      <Accordion disabled>
-        <AccordionSummary>Permissions</AccordionSummary>
-      </Accordion>
+      <Spinner />
     </>
   );
 }

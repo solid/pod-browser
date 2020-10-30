@@ -147,6 +147,34 @@ describe("ResourceDrawer view", () => {
     );
     expect(useAccessControl).toHaveBeenCalledWith(resourceInfo);
   });
+
+  it("renders a specific error message if resource fails with 403", () => {
+    useResourceInfo.mockReturnValue({ error: new Error("403") });
+
+    expect(
+      mountToJson(
+        <SessionProvider>
+          <DetailsMenuContext>
+            <ResourceDrawer />
+          </DetailsMenuContext>
+        </SessionProvider>
+      )
+    ).toMatchSnapshot();
+  });
+
+  it("renders an error message if resource fails to load", () => {
+    useResourceInfo.mockReturnValue({ error: new Error("error") });
+
+    expect(
+      mountToJson(
+        <SessionProvider>
+          <DetailsMenuContext>
+            <ResourceDrawer />
+          </DetailsMenuContext>
+        </SessionProvider>
+      )
+    ).toMatchSnapshot();
+  });
 });
 
 describe("handleCloseDrawer", () => {

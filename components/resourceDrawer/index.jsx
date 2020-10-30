@@ -22,7 +22,7 @@
 import React, { useContext, useEffect } from "react";
 import T from "prop-types";
 import { useRouter } from "next/router";
-import { Drawer } from "@inrupt/prism-react-components";
+import { Drawer, Message } from "@inrupt/prism-react-components";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 import { stripQueryParams } from "../../src/stringHelpers";
@@ -31,6 +31,7 @@ import DetailsLoading from "../resourceDetails/detailsLoading";
 import useAccessControl from "../../src/hooks/useAccessControl";
 import { AccessControlProvider } from "../../src/contexts/accessControlContext";
 import useResourceInfo from "../../src/hooks/useResourceInfo";
+import { isHTTPError } from "../../src/solidClientHelpers/utils";
 
 export function handleCloseDrawer({ setMenuOpen, router }) {
   return async () => {
@@ -58,12 +59,25 @@ export default function ResourceDrawer({ onUpdate }) {
     setMenuOpen(!!(action && resourceIri));
   }, [action, resourceIri, setMenuOpen]);
 
-  if (accessControlError || resourceError) {
-    throw accessControlError || resourceError;
+  const closeDrawer = handleCloseDrawer({ setMenuOpen, router });
+
+  if (resourceError) {
+    // if we fail to load the resource, there's not much more we can do
+    // but if access control fails, we can load the rest of the functionality
+    return (
+      <Drawer open={menuOpen} close={closeDrawer}>
+        <Message variant="error">
+          {isHTTPError(resourceError, 403) ? (
+            <p>You do not have access to this resource.</p>
+          ) : (
+            <p>We had a problem loading the resource.</p>
+          )}
+        </Message>
+      </Drawer>
+    );
   }
 
-  const closeDrawer = handleCloseDrawer({ setMenuOpen, router });
-  const loading = !accessControl || !resourceInfo;
+  const loading = (!accessControl && !accessControlError) || !resourceInfo;
 
   return (
     <Drawer open={menuOpen} close={closeDrawer}>

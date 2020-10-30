@@ -354,6 +354,12 @@ describe("isHTTPError", () => {
     expect(isHTTPError("Something with 500", 404)).toBeFalsy();
     expect(isHTTPError("Something with 404", 500)).toBeFalsy();
   });
+
+  it("also handles Error objects", () => {
+    expect(isHTTPError(new Error("Something with 404"), 404)).toBeTruthy();
+    expect(isHTTPError(new Error("Something with 500"), 404)).toBeFalsy();
+    expect(isHTTPError(new Error("Something with 404"), 500)).toBeFalsy();
+  });
 });
 
 describe("sharedStart", () => {
