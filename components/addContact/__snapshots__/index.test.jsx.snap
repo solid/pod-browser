@@ -1906,7 +1906,7 @@ font-display: block;",
                         type="url"
                       />
                     </SimpleInput>
-                    <ForwardRef
+                    <Button
                       type="submit"
                     >
                       <button
@@ -1915,7 +1915,7 @@ font-display: block;",
                       >
                         Add Contact
                       </button>
-                    </ForwardRef>
+                    </Button>
                   </form>
                 </Form>
               </AgentSearchForm>

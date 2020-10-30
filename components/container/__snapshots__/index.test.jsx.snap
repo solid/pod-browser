@@ -4397,7 +4397,7 @@ font-display: block;",
                         <div
                           className="PodBrowser-drawer__article"
                         >
-                          <ForwardRef
+                          <Button
                             onClick={[Function]}
                             variant="text"
                           >
@@ -4414,7 +4414,7 @@ font-display: block;",
                               </Icon>
                                Close
                             </button>
-                          </ForwardRef>
+                          </Button>
                         </div>
                         <DetailsLoading
                           iri={null}
@@ -26585,7 +26585,7 @@ font-display: block;",
                         <div
                           className="PodBrowser-drawer__article"
                         >
-                          <ForwardRef
+                          <Button
                             onClick={[Function]}
                             variant="text"
                           >
@@ -26602,7 +26602,7 @@ font-display: block;",
                               </Icon>
                                Close
                             </button>
-                          </ForwardRef>
+                          </Button>
                         </div>
                         <DetailsLoading
                           iri={null}

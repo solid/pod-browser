@@ -2652,7 +2652,7 @@ font-display: block;",
                         </ul>
                       </ForwardRef(List)>
                     </WithStyles(ForwardRef(List))>
-                    <ForwardRef
+                    <Button
                       onClick={[Function]}
                       type="submit"
                     >
@@ -2663,7 +2663,7 @@ font-display: block;",
                       >
                         Save
                       </button>
-                    </ForwardRef>
+                    </Button>
                   </section>
                 </div>
               </PermissionsForm>
