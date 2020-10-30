@@ -21,7 +21,7 @@
 
 import React, { useContext, useState, useEffect } from "react";
 import T from "prop-types";
-import { getSourceUrl, overwriteFile } from "@inrupt/solid-client";
+import { overwriteFile } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import AlertContext from "../../src/contexts/alertContext";
@@ -43,8 +43,9 @@ export function handleSaveResource({
 }) {
   return async (uploadedFile) => {
     try {
-      const response = await overwriteFile(
-        joinPath(currentUri, encodeURIComponent(uploadedFile.name)),
+      const fileName = uploadedFile.name.replace(/^-/, "");
+      await overwriteFile(
+        joinPath(currentUri, encodeURIComponent(fileName)),
         uploadedFile,
         {
           type: uploadedFile.type,
@@ -55,11 +56,7 @@ export function handleSaveResource({
       onSave();
 
       setSeverity("success");
-      setMessage(
-        `Your file has been saved to ${decodeURIComponent(
-          getSourceUrl(response)
-        )}`
-      );
+      setMessage(`Your file has been uploaded as ${fileName}`);
       setAlertOpen(true);
     } catch (error) {
       setSeverity("error");

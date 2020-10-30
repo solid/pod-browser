@@ -30,22 +30,20 @@ import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import AlertContext from "../../src/contexts/alertContext";
 import AddFileButton, {
-  handleSaveResource,
-  handleFileSelect,
-  handleUploadedFile,
-  handleConfirmation,
   DUPLICATE_DIALOG_ID,
+  handleConfirmation,
+  handleFileSelect,
+  handleSaveResource,
+  handleUploadedFile,
 } from "./index";
 
+const currentUri = "https://www.mypodbrowser.com/";
+const file = new Blob(["file contents"], {
+  type: "text/plain",
+});
+file.name = "myfile.txt";
+
 describe("AddFileButton", () => {
-  const fileContents = "file contents";
-
-  const file = new Blob([fileContents], {
-    type: "text/plain",
-    name: "myfile.txt",
-  });
-
-  const currentUri = "https://www.mypodbrowser.com/";
   const newFilePath = currentUri + file.name;
 
   const session = mockSession();
@@ -104,25 +102,23 @@ describe("AddFileButton", () => {
 });
 
 describe("handleSaveResource", () => {
-  test("it returns a handler that saves the resource", async () => {
-    const fileContents = "file contents";
+  let fetch;
+  let onSave;
+  let setIsUploading;
+  let setAlertOpen;
+  let setMessage;
+  let setSeverity;
+  let handler;
 
-    const fileName = "myfile with space.txt";
-    const file = new Blob([fileContents], {
-      type: "text/plain",
-      name: fileName,
-    });
+  beforeEach(() => {
+    fetch = jest.fn();
+    onSave = jest.fn();
+    setIsUploading = jest.fn();
+    setAlertOpen = jest.fn();
+    setMessage = jest.fn();
+    setSeverity = jest.fn();
 
-    const currentUri = "https://www.mypodbrowser.com/";
-    const newFilePath = currentUri + file.name;
-
-    const fetch = jest.fn();
-    const onSave = jest.fn();
-    const setIsUploading = jest.fn();
-    const setAlertOpen = jest.fn();
-    const setMessage = jest.fn();
-    const setSeverity = jest.fn();
-    const handler = handleSaveResource({
+    handler = handleSaveResource({
       fetch,
       currentUri,
       onSave,
@@ -131,12 +127,16 @@ describe("handleSaveResource", () => {
       setMessage,
       setSeverity,
     });
+  });
+
+  test("it returns a handler that saves the resource and gives feedback to user", async () => {
+    file.name = "myfile with space.txt";
+
+    const newFilePath = currentUri + encodeURIComponent(file.name);
 
     jest
       .spyOn(SolidClientFns, "overwriteFile")
-      .mockResolvedValue(
-        SolidClientFns.mockSolidDatasetFrom(encodeURIComponent(fileName))
-      );
+      .mockResolvedValue(SolidClientFns.mockSolidDatasetFrom(newFilePath));
 
     await handler(file);
 
@@ -148,24 +148,39 @@ describe("handleSaveResource", () => {
         fetch,
       }
     );
+
     expect(setSeverity).toHaveBeenCalledWith("success");
     expect(setMessage).toHaveBeenCalledWith(
-      `Your file has been saved to ${fileName}`
+      `Your file has been uploaded as myfile with space.txt`
     );
     expect(setAlertOpen).toHaveBeenCalledWith(true);
+  });
+
+  it("handles resources that starts with a dash", async () => {
+    file.name = "-starting-with-a-dash-";
+    const newFilePathWithoutStartingDash =
+      currentUri + encodeURIComponent(file.name.substr(1));
+
+    jest
+      .spyOn(SolidClientFns, "overwriteFile")
+      .mockResolvedValue(
+        SolidClientFns.mockSolidDatasetFrom(newFilePathWithoutStartingDash)
+      );
+
+    await handler(file);
+
+    expect(SolidClientFns.overwriteFile).toHaveBeenCalledWith(
+      newFilePathWithoutStartingDash,
+      file,
+      {
+        type: file.type,
+        fetch,
+      }
+    );
   });
 });
 
 describe("handleFileSelect", () => {
-  const fileContents = "file contents";
-
-  const file = new Blob([fileContents], {
-    type: "text/plain",
-    name: "myfile.txt",
-  });
-
-  const currentUri = "https://www.mypodbrowser.com/";
-
   const setIsUploading = jest.fn();
   const setFile = jest.fn();
   const saveUploadedFile = jest.fn();
@@ -206,13 +221,6 @@ describe("handleFileSelect", () => {
 
 describe("handleUploadedFile", () => {
   test("it returns a handler that triggers the confirmation logic in case the file already exists", () => {
-    const fileContents = "file contents";
-
-    const file = new Blob([fileContents], {
-      type: "text/plain",
-      name: "myfile.txt",
-    });
-
     const existingFile = true;
 
     const saveResource = jest.fn();
@@ -242,13 +250,6 @@ describe("handleUploadedFile", () => {
 });
 
 describe("handleConfirmation", () => {
-  const fileContents = "file contents";
-
-  const file = new Blob([fileContents], {
-    type: "text/plain",
-    name: "myfile.txt",
-  });
-
   const setOpen = jest.fn();
   const saveResource = jest.fn();
   const setConfirmed = jest.fn();
