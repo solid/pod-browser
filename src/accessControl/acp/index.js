@@ -90,8 +90,12 @@ export function getOrCreatePermission(permissions, webId) {
 
 export function getPolicyUrl(resource, policiesContainer) {
   const resourceUrl = getSourceUrl(resource);
-  const policiesUrl = getSourceUrl(policiesContainer);
-  const matchingStart = sharedStart(resourceUrl, policiesUrl);
+  const policiesContainerUrl = getSourceUrl(policiesContainer);
+  const rootUrl = policiesContainerUrl.substr(
+    0,
+    policiesContainerUrl.length - POLICIES_CONTAINER.length
+  );
+  const matchingStart = sharedStart(resourceUrl, rootUrl);
   const path = resourceUrl.substr(matchingStart.length);
   return `${getPoliciesContainerUrl(matchingStart) + path}.ttl`;
 }
