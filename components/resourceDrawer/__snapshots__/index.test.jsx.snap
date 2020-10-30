@@ -899,7 +899,7 @@ font-display: block;",
                     <div
                       className="PodBrowser-drawer__article"
                     >
-                      <Button
+                      <ForwardRef
                         onClick={[Function]}
                         variant="text"
                       >
@@ -916,7 +916,7 @@ font-display: block;",
                           </Icon>
                            Close
                         </button>
-                      </Button>
+                      </ForwardRef>
                     </div>
                     <AccessControlProvider
                       accessControl={
@@ -1866,10 +1866,7 @@ font-display: block;",
                               </WithStyles(ForwardRef(Paper))>
                             </ForwardRef(Accordion)>
                           </WithStyles(ForwardRef(Accordion))>
-                          <WithStyles(ForwardRef(Accordion))
-                            expanded={false}
-                            onChange={[Function]}
-                          >
+                          <WithStyles(ForwardRef(Accordion))>
                             <ForwardRef(Accordion)
                               classes={
                                 Object {
@@ -1879,8 +1876,6 @@ font-display: block;",
                                   "rounded": "PodBrowser-rounded",
                                 }
                               }
-                              expanded={false}
-                              onChange={[Function]}
                             >
                               <WithStyles(ForwardRef(Paper))
                                 className="PodBrowser-root PodBrowser-rounded"
@@ -3582,7 +3577,7 @@ font-display: block;",
                 <div
                   className="PodBrowser-drawer__article"
                 >
-                  <Button
+                  <ForwardRef
                     onClick={[Function]}
                     variant="text"
                   >
@@ -3599,7 +3594,7 @@ font-display: block;",
                       </Icon>
                        Close
                     </button>
-                  </Button>
+                  </ForwardRef>
                 </div>
                 <AccessControlProvider
                   accessControl={
@@ -4549,10 +4544,7 @@ font-display: block;",
                           </WithStyles(ForwardRef(Paper))>
                         </ForwardRef(Accordion)>
                       </WithStyles(ForwardRef(Accordion))>
-                      <WithStyles(ForwardRef(Accordion))
-                        expanded={false}
-                        onChange={[Function]}
-                      >
+                      <WithStyles(ForwardRef(Accordion))>
                         <ForwardRef(Accordion)
                           classes={
                             Object {
@@ -4562,8 +4554,6 @@ font-display: block;",
                               "rounded": "PodBrowser-rounded",
                             }
                           }
-                          expanded={false}
-                          onChange={[Function]}
                         >
                           <WithStyles(ForwardRef(Paper))
                             className="PodBrowser-root PodBrowser-rounded"
@@ -6305,7 +6295,7 @@ font-display: block;",
                     <div
                       className="PodBrowser-drawer__article"
                     >
-                      <Button
+                      <ForwardRef
                         onClick={[Function]}
                         variant="text"
                       >
@@ -6322,7 +6312,7 @@ font-display: block;",
                           </Icon>
                            Close
                         </button>
-                      </Button>
+                      </ForwardRef>
                     </div>
                     <AccessControlProvider
                       accessControl={
@@ -7272,10 +7262,7 @@ font-display: block;",
                               </WithStyles(ForwardRef(Paper))>
                             </ForwardRef(Accordion)>
                           </WithStyles(ForwardRef(Accordion))>
-                          <WithStyles(ForwardRef(Accordion))
-                            expanded={false}
-                            onChange={[Function]}
-                          >
+                          <WithStyles(ForwardRef(Accordion))>
                             <ForwardRef(Accordion)
                               classes={
                                 Object {
@@ -7285,8 +7272,6 @@ font-display: block;",
                                   "rounded": "PodBrowser-rounded",
                                 }
                               }
-                              expanded={false}
-                              onChange={[Function]}
                             >
                               <WithStyles(ForwardRef(Paper))
                                 className="PodBrowser-root PodBrowser-rounded"

@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
   Accordion,
   AccordionDetails,
@@ -49,7 +49,6 @@ const TESTCAFE_ID_TITLE = "resource-title";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function ResourceDetails({ onDelete }) {
-  const [sharingExpanded, setSharingExpanded] = useState(false);
   const { dataset } = useContext(DatasetContext);
   const datasetUrl = getSourceUrl(dataset);
   const classes = useStyles();
@@ -119,10 +118,7 @@ export default function ResourceDetails({ onDelete }) {
         </AccordionDetails>
       </Accordion>
 
-      <Accordion
-        expanded={sharingExpanded}
-        onChange={() => setSharingExpanded(!sharingExpanded)}
-      >
+      <Accordion>
         <AccordionSummary expandIcon={expandIcon}>Permissions</AccordionSummary>
         <AccordionDetails className={classes.accordionDetails}>
           <ResourceSharing />
