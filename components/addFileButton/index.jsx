@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import { overwriteFile } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
@@ -32,6 +32,10 @@ const TESTCAFE_ID_UPLOAD_BUTTON = "upload-file-button";
 const TESTCAFE_ID_UPLOAD_INPUT = "upload-file-input";
 export const DUPLICATE_DIALOG_ID = "upload-duplicate-file";
 
+function normalizeSafeFileName(fileName) {
+  return fileName.replace(/^-/, "");
+}
+
 export function handleSaveResource({
   fetch,
   currentUri,
@@ -43,7 +47,7 @@ export function handleSaveResource({
 }) {
   return async (uploadedFile) => {
     try {
-      const fileName = uploadedFile.name.replace(/^-/, "");
+      const fileName = normalizeSafeFileName(uploadedFile.name);
       await overwriteFile(
         joinPath(currentUri, encodeURIComponent(fileName)),
         uploadedFile,
@@ -79,7 +83,9 @@ export function handleUploadedFile({
   return (uploadedFile, existingFile) => {
     if (existingFile) {
       setOpen(DUPLICATE_DIALOG_ID);
-      setTitle(`File ${uploadedFile.name} already exists`);
+      setTitle(
+        `File ${normalizeSafeFileName(uploadedFile.name)} already exists`
+      );
       setContent(<p>Do you want to replace it?</p>);
       setConfirmationSetup(true);
       setIsUploading(false);
@@ -106,9 +112,9 @@ export function handleFileSelect({
         const [uploadedFile] = e.target.files;
         setFile(uploadedFile);
         try {
-          const existingFile = resourceList.filter(
-            (resource) => resource.name === uploadedFile.name
-          ).length;
+          const existingFile = !!resourceList.find(
+            (file) => file.name === normalizeSafeFileName(uploadedFile.name)
+          );
           saveUploadedFile(uploadedFile, existingFile);
         } catch (error) {
           setSeverity("error");
