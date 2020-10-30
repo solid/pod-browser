@@ -227,8 +227,8 @@ export const ERROR_CODES = {
   URI_TOO_LONG: 414,
 };
 
-export function isHTTPError(errorMessage, code) {
-  return !!errorMessage.match(new RegExp(code));
+export function isHTTPError(error, code) {
+  return !!error.toString().match(new RegExp(code));
 }
 
 /**

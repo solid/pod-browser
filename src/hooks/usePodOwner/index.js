@@ -24,6 +24,11 @@ import { getResourceInfo, getPodOwner } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
 import { joinPath } from "../../stringHelpers";
 import usePodRootUri from "../usePodRootUri";
+import { isHTTPError } from "../../solidClientHelpers/utils";
+
+function hackProfileUri(podRoot) {
+  return podRoot ? joinPath(podRoot, "profile/card#me") : null;
+}
 
 export default function usePodOwner({ resourceIri }) {
   const { fetch } = useSession();
@@ -33,18 +38,18 @@ export default function usePodOwner({ resourceIri }) {
 
   useEffect(() => {
     if (!resourceIri) {
-      setError(null);
       setPodOwnerWebId(null);
+      setError(null);
       return;
     }
     (async () => {
       try {
         const resourceInfo = await getResourceInfo(resourceIri, { fetch });
-        const webId =
-          getPodOwner(resourceInfo) ||
-          (podRoot && joinPath(podRoot, "profile/card#me"));
+        const webId = getPodOwner(resourceInfo) || hackProfileUri(podRoot);
         setPodOwnerWebId(webId);
+        setError(null);
       } catch (e) {
+        setPodOwnerWebId(isHTTPError(e, 403) ? hackProfileUri(podRoot) : null);
         setError(e);
       }
     })();

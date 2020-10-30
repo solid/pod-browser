@@ -73,10 +73,10 @@ export default function PodIndicator() {
   const [url, setUrl] = useState("");
   const router = useRouter();
   const bem = useBem(useStyles());
-  const { profile, error } = usePodOwnerProfile();
+  const { profile, error: profileError } = usePodOwnerProfile();
   const [dirtyForm, setDirtyForm] = useState(false);
   const [dirtyUrlField, setDirtyUrlField] = useState(false);
-  const loading = !profile && !error;
+  const loading = !profile && !profileError;
   const invalidUrlField = !url && (dirtyForm || dirtyUrlField);
 
   const open = Boolean(anchorEl);

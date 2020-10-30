@@ -33,13 +33,22 @@ export default function usePodOwnerProfile() {
     resourceIri: router.query.iri,
   }); // passing in an object for testing purposes
   const { data: authProfile, error: authError } = useAuthenticatedProfile();
-  const { data: ownerProfile, error: ownerError } = useFetchProfile(
-    podOwnerWebId
-  );
+  const {
+    data: ownerProfile,
+    error: ownerError,
+    isValidating,
+  } = useFetchProfile(podOwnerWebId);
 
   useEffect(() => {
-    if (podOwnerError) {
+    if (podOwnerError && isValidating) {
+      // we're still waiting for a response on podOwner
       setProfile(null);
+      setError(podOwnerError);
+      return;
+    }
+    if (podOwnerError) {
+      // there is an error, but we have found a profile to show anyway
+      setProfile(ownerProfile);
       setError(podOwnerError);
       return;
     }
@@ -75,6 +84,8 @@ export default function usePodOwnerProfile() {
     ownerProfile,
     ownerError,
     podOwnerError,
+    podOwnerWebId,
+    isValidating,
   ]);
 
   return { profile, error };
