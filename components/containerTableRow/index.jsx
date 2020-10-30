@@ -56,7 +56,7 @@ export function handleAction(resourceIri, containerIri, router) {
   const action = DETAILS_CONTEXT_ACTIONS.DETAILS;
 
   return async (event) => {
-    if (event.type === "keydown" && event.keyCode !== 13) return;
+    if (event.type === "keydown" && event.key !== "Enter") return;
     const element = event.target;
     if (element && element.tagName === "A") return;
     if (element && element.tagName === "I") return;

@@ -168,8 +168,8 @@ function ContactsList() {
                   contact === profiles[selectedContactIndex] ? "selected" : null
                 )
               ),
-              onKeyDown: (event) => {
-                if (event.keyCode === 13) setSelectedContactIndex(row.index);
+              onKeyUp: (event) => {
+                if (event.key === "Enter") setSelectedContactIndex(row.index);
               },
               onClick: () => {
                 setSelectedContactIndex(row.index);

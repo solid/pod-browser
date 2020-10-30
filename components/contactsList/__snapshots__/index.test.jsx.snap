@@ -3795,7 +3795,7 @@ font-display: block;",
                             className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
                             key="row_0"
                             onClick={[Function]}
-                            onKeyDown={[Function]}
+                            onKeyUp={[Function]}
                             role="row"
                             tabIndex="0"
                           >
@@ -16608,7 +16608,7 @@ font-display: block;",
                             className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
                             key="row_1"
                             onClick={[Function]}
-                            onKeyDown={[Function]}
+                            onKeyUp={[Function]}
                             role="row"
                             tabIndex="0"
                           >
