@@ -160,21 +160,21 @@ describe("AcpAccessControlStrategy", () => {
 
     it("normalizes the permissions retrieved from the policy resource", async () => {
       const readPolicyRule = chain(acpFns.createRule(readPolicyRuleUrl), (r) =>
-        acpFns.addAgentForRule(r, webId)
+        acpFns.addAgent(r, webId)
       );
       const readPolicy = chain(
         acpFns.createPolicy(readApplyPolicyUrl),
-        (p) => acpFns.setAllowModesOnPolicy(p, createAcpMap(true)),
-        (p) => acpFns.setRequiredRuleForPolicy(p, readPolicyRule)
+        (p) => acpFns.setAllowModes(p, createAcpMap(true)),
+        (p) => acpFns.setRequiredRuleUrl(p, readPolicyRule)
       );
       const controlPolicyRule = chain(
         acpFns.createRule(controlPolicyRuleUrl),
-        (r) => acpFns.addAgentForRule(r, webId)
+        (r) => acpFns.addAgent(r, webId)
       );
       const controlPolicy = chain(
         acpFns.createPolicy(controlAccessPolicyUrl),
-        (p) => acpFns.setAllowModesOnPolicy(p, createAcpMap(true, true)),
-        (p) => acpFns.setRequiredRuleForPolicy(p, controlPolicyRule)
+        (p) => acpFns.setAllowModes(p, createAcpMap(true, true)),
+        (p) => acpFns.setRequiredRuleUrl(p, controlPolicyRule)
       );
       const policyDataset = chain(
         mockSolidDatasetFrom(policyResourceUrl),
@@ -201,17 +201,17 @@ describe("AcpAccessControlStrategy", () => {
   describe("savePermissionsForAgent", () => {
     const webId = "http://example.com/agent1";
     const readAC = chain(
-      acpFns.createAccessControl(),
+      acpFns.createControl(),
       (ac) => acpFns.addPolicyUrl(ac, readApplyPolicyUrl),
       (ac) => acpFns.addPolicyUrl(ac, readApplyPolicyUrl)
     );
     const writeAc = chain(
-      acpFns.createAccessControl(),
+      acpFns.createControl(),
       (ac) => acpFns.addPolicyUrl(ac, writeApplyPolicyUrl),
       (ac) => acpFns.addPolicyUrl(ac, writeApplyPolicyUrl)
     );
     const appendAC = chain(
-      acpFns.createAccessControl(),
+      acpFns.createControl(),
       (ac) => acpFns.addPolicyUrl(ac, appendApplyPolicyUrl),
       (ac) => acpFns.addPolicyUrl(ac, appendApplyPolicyUrl)
     );
@@ -276,13 +276,13 @@ describe("AcpAccessControlStrategy", () => {
           (d) => acpFns.addMockAcrTo(d)
         );
         const datasetWithAcrRead = chain(datasetWithAcr, (d) =>
-          acpFns.setAccessControl(d, readAC)
+          acpFns.setControl(d, readAC)
         );
         const datasetWithAcrWrite = chain(datasetWithAcrRead, (d) =>
-          acpFns.setAccessControl(d, writeAc)
+          acpFns.setControl(d, writeAc)
         );
         const datasetWithAcrAppend = chain(datasetWithAcrWrite, (d) =>
-          acpFns.setAccessControl(d, appendAC)
+          acpFns.setControl(d, appendAC)
         );
         const datasetWithAcrControlAccess = chain(
           datasetWithAcrAppend,
@@ -340,9 +340,9 @@ describe("AcpAccessControlStrategy", () => {
         const policyResource = chain(
           mockSolidDatasetFrom(policyResourceUrl),
           (d) => acpFns.addMockAcrTo(d),
-          (d) => acpFns.setAccessControl(d, readAC),
-          (d) => acpFns.setAccessControl(d, writeAc),
-          (d) => acpFns.setAccessControl(d, appendAC),
+          (d) => acpFns.setControl(d, readAC),
+          (d) => acpFns.setControl(d, writeAc),
+          (d) => acpFns.setControl(d, appendAC),
           (d) => acpFns.addAcrPolicyUrl(d, controlAccessPolicyUrl),
           (d) => acpFns.addMemberAcrPolicyUrl(d, controlAccessPolicyUrl)
         );
@@ -527,7 +527,7 @@ describe("getPolicyUrl", () => {
 
 describe("getRulesOrCreate", () => {
   const readPolicy = chain(acpFns.createPolicy(readApplyPolicyUrl), (p) =>
-    acpFns.setAllowModesOnPolicy(p, createAcpMap(true))
+    acpFns.setAllowModes(p, createAcpMap(true))
   );
   const readPolicyRule = acpFns.createRule(readPolicyRuleUrl);
   const policyDataset = chain(mockSolidDatasetFrom(policyResourceUrl), (d) =>
@@ -558,7 +558,7 @@ describe("getRuleWithAgent", () => {
   const webId = "http://example.com/profile/card#me";
 
   it("returns a rule if it's connected to the agent", () => {
-    const ruleWithAgent = acpFns.addAgentForRule(rule, webId);
+    const ruleWithAgent = acpFns.addAgent(rule, webId);
     expect(getRuleWithAgent([rule, ruleWithAgent], webId)).toBe(ruleWithAgent);
   });
 
@@ -569,7 +569,7 @@ describe("getRuleWithAgent", () => {
 
 describe("setAgents", () => {
   const readPolicy = chain(acpFns.createPolicy(readApplyPolicyUrl), (p) =>
-    acpFns.setAllowModesOnPolicy(p, createAcpMap(true))
+    acpFns.setAllowModes(p, createAcpMap(true))
   );
   const readPolicyRule = acpFns.createRule(readPolicyRuleUrl);
   const policyDataset = chain(mockSolidDatasetFrom(policyResourceUrl), (d) =>
@@ -579,9 +579,9 @@ describe("setAgents", () => {
 
   describe("adding agent", () => {
     it("will add new rule and add agent to it", () => {
-      const expectedRule = acpFns.addAgentForRule(readPolicyRule, webId);
+      const expectedRule = acpFns.addAgent(readPolicyRule, webId);
       const expectedDataset = setThing(policyDataset, expectedRule);
-      const expectedPolicy = acpFns.addRequiredRuleForPolicy(
+      const expectedPolicy = acpFns.addRequiredRuleUrl(
         readPolicy,
         expectedRule
       );
@@ -593,9 +593,9 @@ describe("setAgents", () => {
 
     it("will use existing rule and add agent to it", () => {
       const policyDatasetWithRule = setThing(policyDataset, readPolicyRule);
-      const expectedRule = acpFns.addAgentForRule(readPolicyRule, webId);
+      const expectedRule = acpFns.addAgent(readPolicyRule, webId);
       const expectedDataset = setThing(policyDatasetWithRule, expectedRule);
-      const expectedPolicy = acpFns.setRequiredRuleForPolicy(
+      const expectedPolicy = acpFns.setRequiredRuleUrl(
         readPolicy,
         expectedRule
       );
@@ -608,10 +608,10 @@ describe("setAgents", () => {
     });
 
     it("will use existing rule and not add agent to it if agent already is added", () => {
-      const ruleWithAgent = acpFns.addAgentForRule(readPolicyRule, webId);
+      const ruleWithAgent = acpFns.addAgent(readPolicyRule, webId);
       const policyDatasetWithRule = setThing(policyDataset, ruleWithAgent);
       const expectedDataset = setThing(policyDatasetWithRule, ruleWithAgent);
-      const expectedPolicy = acpFns.setRequiredRuleForPolicy(
+      const expectedPolicy = acpFns.setRequiredRuleUrl(
         readPolicy,
         ruleWithAgent
       );
@@ -626,7 +626,7 @@ describe("setAgents", () => {
 
   describe("removing agent", () => {
     it("adds rule to policy and dataset if trying to remove agent when there are no rules yet", () => {
-      const expectedPolicy = acpFns.addRequiredRuleForPolicy(
+      const expectedPolicy = acpFns.addRequiredRuleUrl(
         readPolicy,
         readPolicyRule
       );
@@ -638,10 +638,10 @@ describe("setAgents", () => {
     });
 
     it("removes agent from rule", () => {
-      const ruleWithAgent = acpFns.addAgentForRule(readPolicyRule, webId);
+      const ruleWithAgent = acpFns.addAgent(readPolicyRule, webId);
       const policyDatasetWithRule = setThing(policyDataset, ruleWithAgent);
       const expectedDataset = setThing(policyDatasetWithRule, readPolicyRule);
-      const expectedPolicy = acpFns.setRequiredRuleForPolicy(
+      const expectedPolicy = acpFns.setRequiredRuleUrl(
         readPolicy,
         readPolicyRule
       );
@@ -661,21 +661,21 @@ describe("getPolicyModesAndAgents", () => {
     const webId2 = "http://example.com/agent2";
     const readPolicyRule = chain(
       acpFns.createRule(readPolicyRuleUrl),
-      (r) => acpFns.addAgentForRule(r, webId1),
-      (r) => acpFns.addAgentForRule(r, webId2)
+      (r) => acpFns.addAgent(r, webId1),
+      (r) => acpFns.addAgent(r, webId2)
     );
     const readPolicy = chain(
       acpFns.createPolicy(readApplyPolicyUrl),
-      (p) => acpFns.setAllowModesOnPolicy(p, createAcpMap(true)),
-      (p) => acpFns.setRequiredRuleForPolicy(p, readPolicyRule)
+      (p) => acpFns.setAllowModes(p, createAcpMap(true)),
+      (p) => acpFns.setRequiredRuleUrl(p, readPolicyRule)
     );
     const writePolicyRule = chain(acpFns.createRule(writePolicyRuleUrl), (r) =>
-      acpFns.addAgentForRule(r, webId2)
+      acpFns.addAgent(r, webId2)
     );
     const writePolicy = chain(
       acpFns.createPolicy(writeApplyPolicyUrl),
-      (p) => acpFns.setAllowModesOnPolicy(p, createAcpMap(false, true)),
-      (p) => acpFns.setRequiredRuleForPolicy(p, writePolicyRule)
+      (p) => acpFns.setAllowModes(p, createAcpMap(false, true)),
+      (p) => acpFns.setRequiredRuleUrl(p, writePolicyRule)
     );
     const policyDataset = chain(
       mockSolidDatasetFrom(policyResourceUrl),
