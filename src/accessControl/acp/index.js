@@ -126,30 +126,30 @@ export function getRuleWithAgent(rules, agentWebId) {
   // assumption 1: the rules for the policies we work with will not have agents across multiple rules
   // assumption 2: there will always be at least one rule (we enforce this with getRulesOrCreate)
   const rule = rules.find((r) =>
-    acp.getAgentAll(r).find((webId) => webId === agentWebId)
+    acp.getAgentForRuleAll(r).find((webId) => webId === agentWebId)
   );
   // if we don't find the agent in a rule, we'll just pick the first one
   return rule || rules[0];
 }
 
 export function setAgents(policy, policyDataset, webId, accessToMode) {
-  const ruleUrls = acp.getRequiredRuleUrlAll(policy);
+  const ruleUrls = acp.getRequiredRuleForPolicyAll(policy);
   const { existing, rules } = getRulesOrCreate(ruleUrls, policy, policyDataset);
   const rule = getRuleWithAgent(rules, webId);
-  const existingAgents = acp.getAgentAll(rule);
+  const existingAgents = acp.getAgentForRuleAll(rule);
   const agentIndex = existingAgents.indexOf(webId);
   let modifiedRule = rule;
   if (accessToMode && agentIndex === -1) {
-    modifiedRule = acp.addAgent(rule, webId);
+    modifiedRule = acp.addAgentForRule(rule, webId);
   }
   if (!accessToMode && agentIndex !== -1) {
-    modifiedRule = acp.removeAgent(rule, webId);
+    modifiedRule = acp.removeAgentForRule(rule, webId);
   }
   const modifiedDataset = setThing(policyDataset, modifiedRule);
   return {
     policy: existing
-      ? acp.setRequiredRuleUrl(policy, modifiedRule)
-      : acp.addRequiredRuleUrl(policy, modifiedRule),
+      ? acp.setRequiredRuleForPolicy(policy, modifiedRule)
+      : acp.addRequiredRuleForPolicy(policy, modifiedRule),
     dataset: modifiedDataset,
   };
 }
@@ -159,12 +159,12 @@ export function getPolicyModesAndAgents(policyUrls, policyDataset) {
     .map((url) => acp.getPolicy(policyDataset, url))
     .filter((policy) => !!policy)
     .map((policy) => {
-      const modes = acp.getAllowModes(policy);
-      const ruleUrls = acp.getRequiredRuleUrlAll(policy);
+      const modes = acp.getAllowModesOnPolicy(policy);
+      const ruleUrls = acp.getRequiredRuleForPolicyAll(policy);
       // assumption: rule resides in the same resource as policies
       const rules = ruleUrls.map((url) => acp.getRule(policyDataset, url));
       const agents = rules.reduce(
-        (memo, rule) => memo.concat(acp.getAgentAll(rule)),
+        (memo, rule) => memo.concat(acp.getAgentForRuleAll(rule)),
         []
       );
       return {
@@ -255,18 +255,21 @@ export default class AcpAccessControlStrategy {
   }
 
   async ensureAccessControl(policyUrl, datasetWithAcr) {
-    const accessControls = acp.getControlAll(datasetWithAcr);
+    const accessControls = acp.getAccessControlAll(datasetWithAcr);
     const existingAccessControl = accessControls.find((ac) =>
       acp.getPolicyUrlAll(ac).find((url) => policyUrl === url)
     );
     let modifiedDatasetWithAcr = datasetWithAcr;
     if (!existingAccessControl) {
       const newAccessControl = chain(
-        acp.createControl(),
+        acp.createAccessControl(),
         (ac) => acp.addPolicyUrl(ac, policyUrl),
         (ac) => acp.addMemberPolicyUrl(ac, policyUrl)
       );
-      modifiedDatasetWithAcr = acp.setControl(datasetWithAcr, newAccessControl);
+      modifiedDatasetWithAcr = acp.setAccessControl(
+        datasetWithAcr,
+        newAccessControl
+      );
       modifiedDatasetWithAcr = await acp.saveAcrFor(modifiedDatasetWithAcr, {
         fetch: this.#fetch,
       });
@@ -290,7 +293,7 @@ export default class AcpAccessControlStrategy {
     const { dataset: modifiedPolicyDataset } = chain(
       getOrCreatePolicy(policyDataset, policyUrl),
       ({ policy, dataset }) => ({
-        policy: acp.setAllowModes(policy, acpMap),
+        policy: acp.setAllowModesOnPolicy(policy, acpMap),
         dataset,
       }),
       ({ policy, dataset }) => setAgents(policy, dataset, webId, access[mode]),
@@ -321,7 +324,7 @@ export default class AcpAccessControlStrategy {
     const { dataset: modifiedPolicyDataset } = chain(
       getOrCreatePolicy(policyDataset, policyUrl),
       ({ policy, dataset }) => ({
-        policy: acp.setAllowModes(policy, createAcpMap(true, true)),
+        policy: acp.setAllowModesOnPolicy(policy, createAcpMap(true, true)),
         dataset,
       }),
       ({ policy, dataset }) =>
@@ -362,7 +365,7 @@ export default class AcpAccessControlStrategy {
     const { policy: modifiedPolicyDataset } = chain(
       getOrCreatePolicy(policyDataset, policyUrl),
       ({ policy, dataset }) => ({
-        policy: acp.setAllowModes(policy, createAcpMap(true, true)),
+        policy: acp.setAllowModesOnPolicy(policy, createAcpMap(true, true)),
         dataset,
       }),
       ({ policy, dataset }) =>
