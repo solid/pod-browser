@@ -840,7 +840,7 @@ font-display: block;",
         }
       }
     >
-      <m
+      <E
         dataset={
           DatasetCore {
             "internal_resourceInfo": Object {
@@ -2671,7 +2671,7 @@ font-display: block;",
             </form>
           </Form>
         </AgentAccess>
-      </m>
+      </E>
     </ThemeProvider>
   </StylesProvider>
 </Component>
@@ -3518,7 +3518,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <g
+        <y
           session={
             Object {
               "fetch": [MockFunction],
@@ -3559,7 +3559,7 @@ font-display: block;",
           sessionId="test-session"
           sessionRequestInProgress={false}
         >
-          <m
+          <E
             dataset={
               DatasetCore {
                 "internal_resourceInfo": Object {
@@ -5391,8 +5391,8 @@ font-display: block;",
                 </form>
               </Form>
             </AgentAccess>
-          </m>
-        </g>
+          </E>
+        </y>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>

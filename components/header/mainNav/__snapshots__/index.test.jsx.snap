@@ -841,7 +841,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <g
+        <y
           session={
             Object {
               "fetch": [Function],
@@ -959,7 +959,7 @@ font-display: block;",
               </nav>
             </div>
           </MainNav>
-        </g>
+        </y>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>

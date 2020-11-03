@@ -2,7 +2,7 @@
 
 exports[`AddContact it renders a spinner when user is not logged in 1`] = `
 <MockedSessionContextProvider>
-  <g
+  <y
     session={
       Object {
         "fetch": [Function],
@@ -914,13 +914,13 @@ font-display: block;",
         </ThemeProvider>
       </StylesProvider>
     </Component>
-  </g>
+  </y>
 </MockedSessionContextProvider>
 `;
 
 exports[`AddContact it renders the Add Contact form 1`] = `
 <MockedSessionContextProvider>
-  <g
+  <y
     session={
       Object {
         "fetch": [MockFunction] {
@@ -1924,6 +1924,6 @@ font-display: block;",
         </ThemeProvider>
       </StylesProvider>
     </Component>
-  </g>
+  </y>
 </MockedSessionContextProvider>
 `;

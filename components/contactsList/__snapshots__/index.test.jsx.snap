@@ -841,7 +841,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <g
+        <y
           session={
             Object {
               "fetch": [MockFunction],
@@ -885,7 +885,7 @@ font-display: block;",
           <ContactsList>
             error
           </ContactsList>
-        </g>
+        </y>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>
@@ -1733,7 +1733,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <g
+        <y
           session={
             Object {
               "fetch": [MockFunction],
@@ -1777,7 +1777,7 @@ font-display: block;",
           <ContactsList>
             error
           </ContactsList>
-        </g>
+        </y>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>
@@ -2625,7 +2625,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <g
+        <y
           session={
             Object {
               "fetch": [MockFunction],
@@ -3670,7 +3670,7 @@ font-display: block;",
                   <div
                     className="PodBrowser-drawer-container__content"
                   >
-                    <B
+                    <z
                       ascIndicator={
                         <SortedTableCarat
                           sorted={true}
@@ -3867,7 +3867,7 @@ font-display: block;",
                             role="row"
                             tabIndex="0"
                           >
-                            <A
+                            <_
                               dataset={42}
                               thing={
                                 DatasetCore {
@@ -3941,10 +3941,10 @@ font-display: block;",
                                 }
                               }
                             >
-                              <m
+                              <E
                                 dataset={42}
                               >
-                                <x
+                                <I
                                   thing={
                                     DatasetCore {
                                       "internal_url": "http://example.com/alice#me",
@@ -16696,9 +16696,9 @@ font-display: block;",
                                       </Link>
                                     </ProfileLink>
                                   </td>
-                                </x>
-                              </m>
-                            </A>
+                                </I>
+                              </E>
+                            </_>
                           </tr>
                           <tr
                             className="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
@@ -16708,7 +16708,7 @@ font-display: block;",
                             role="row"
                             tabIndex="0"
                           >
-                            <A
+                            <_
                               dataset={42}
                               thing={
                                 DatasetCore {
@@ -16768,10 +16768,10 @@ font-display: block;",
                                 }
                               }
                             >
-                              <m
+                              <E
                                 dataset={42}
                               >
-                                <x
+                                <I
                                   thing={
                                     DatasetCore {
                                       "internal_url": "http://example.com/bob#me",
@@ -29509,13 +29509,13 @@ font-display: block;",
                                       </Link>
                                     </ProfileLink>
                                   </td>
-                                </x>
-                              </m>
-                            </A>
+                                </I>
+                              </E>
+                            </_>
                           </tr>
                         </tbody>
                       </table>
-                    </B>
+                    </z>
                   </div>
                   <ContactsDrawer
                     onClose={[Function]}
@@ -29971,7 +29971,7 @@ font-display: block;",
               </DrawerContainer>
             </SearchProvider>
           </ContactsList>
-        </g>
+        </y>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>
@@ -30819,7 +30819,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <g
+        <y
           session={
             Object {
               "fetch": [MockFunction],
@@ -30889,7 +30889,7 @@ font-display: block;",
               </LoadingIndicator>
             </Spinner>
           </ContactsList>
-        </g>
+        </y>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>
@@ -31737,7 +31737,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <g
+        <y
           session={
             Object {
               "fetch": [MockFunction],
@@ -31807,7 +31807,7 @@ font-display: block;",
               </LoadingIndicator>
             </Spinner>
           </ContactsList>
-        </g>
+        </y>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>
@@ -32655,7 +32655,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <g
+        <y
           session={
             Object {
               "fetch": [MockFunction],
@@ -32725,7 +32725,7 @@ font-display: block;",
               </LoadingIndicator>
             </Spinner>
           </ContactsList>
-        </g>
+        </y>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>

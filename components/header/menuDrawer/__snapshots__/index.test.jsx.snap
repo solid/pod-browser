@@ -841,7 +841,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <g
+        <y
           session={
             Object {
               "fetch": [Function],
@@ -1371,7 +1371,7 @@ font-display: block;",
               </WithStyles(ForwardRef(Drawer))>
             </div>
           </MenuDrawer>
-        </g>
+        </y>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>

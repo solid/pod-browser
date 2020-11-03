@@ -841,7 +841,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <g
+        <y
           session={
             Object {
               "fetch": [Function],
@@ -882,7 +882,7 @@ font-display: block;",
           sessionId="test-session"
           sessionRequestInProgress={false}
         >
-          <x
+          <I
             thing={
               DatasetCore {
                 "internal_url": "http://example.com/alice#me",
@@ -900,7 +900,7 @@ font-display: block;",
                 <div
                   className="PodBrowser-root PodBrowser-root"
                 >
-                  <B
+                  <z
                     ascIndicator={
                       <span
                         aria-label="Sorted in ascending order"
@@ -2708,12 +2708,12 @@ font-display: block;",
                         role="rowgroup"
                       />
                     </table>
-                  </B>
+                  </z>
                 </div>
               </Styled(MuiBox)>
             </ContactTable>
-          </x>
-        </g>
+          </I>
+        </y>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>
@@ -3561,7 +3561,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <g
+        <y
           session={
             Object {
               "fetch": [Function],
@@ -3602,7 +3602,7 @@ font-display: block;",
           sessionId="test-session"
           sessionRequestInProgress={false}
         >
-          <x
+          <I
             thing={
               DatasetCore {
                 "internal_url": "http://example.com/alice#me",
@@ -3620,7 +3620,7 @@ font-display: block;",
                 <div
                   className="PodBrowser-root PodBrowser-root"
                 >
-                  <B
+                  <z
                     ascIndicator={
                       <span
                         aria-label="Sorted in ascending order"
@@ -5428,7 +5428,7 @@ font-display: block;",
                         role="rowgroup"
                       />
                     </table>
-                  </B>
+                  </z>
                 </div>
               </Styled(MuiBox)>
               <Styled(MuiBox)
@@ -6282,8 +6282,8 @@ font-display: block;",
                 </div>
               </Styled(MuiBox)>
             </ContactTable>
-          </x>
-        </g>
+          </I>
+        </y>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>

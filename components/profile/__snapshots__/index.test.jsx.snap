@@ -937,20 +937,20 @@ font-display: block;",
                     <div
                       className="PodBrowser-root PodBrowser-root"
                     >
-                      <A
+                      <_
                         datasetUrl="https://example.com/profile/card#me"
                         onError={[Function]}
                         thingUrl="https://example.com/profile/card#me"
                       >
-                        <m
+                        <E
                           datasetUrl="https://example.com/profile/card#me"
                           onError={[Function]}
                         >
                           <span>
                             Fetching data...
                           </span>
-                        </m>
-                      </A>
+                        </E>
+                      </_>
                     </div>
                   </Styled(MuiBox)>
                 </div>

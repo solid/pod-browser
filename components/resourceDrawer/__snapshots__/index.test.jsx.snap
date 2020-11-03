@@ -841,7 +841,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <g
+        <y
           session={
             Object {
               "fetch": [MockFunction],
@@ -937,7 +937,7 @@ font-display: block;",
                         }
                       }
                     >
-                      <m
+                      <E
                         dataset={
                           DatasetCore {
                             "internal_resourceInfo": Object {
@@ -2717,14 +2717,14 @@ font-display: block;",
                             </ForwardRef(Accordion)>
                           </WithStyles(ForwardRef(Accordion))>
                         </ResourceDetails>
-                      </m>
+                      </E>
                     </AccessControlProvider>
                   </div>
                 </section>
               </Drawer>
             </ResourceDrawer>
           </DetailsContextMenuProvider>
-        </g>
+        </y>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>
@@ -3626,7 +3626,7 @@ font-display: block;",
                     }
                   }
                 >
-                  <m
+                  <E
                     dataset={
                       DatasetCore {
                         "internal_resourceInfo": Object {
@@ -5406,7 +5406,7 @@ font-display: block;",
                         </ForwardRef(Accordion)>
                       </WithStyles(ForwardRef(Accordion))>
                     </ResourceDetails>
-                  </m>
+                  </E>
                 </AccessControlProvider>
               </div>
             </section>
@@ -6259,7 +6259,7 @@ font-display: block;",
       }
     >
       <MockedSessionContextProvider>
-        <g
+        <y
           session={
             Object {
               "fetch": [MockFunction],
@@ -6355,7 +6355,7 @@ font-display: block;",
                         }
                       }
                     >
-                      <m
+                      <E
                         dataset={
                           DatasetCore {
                             "internal_resourceInfo": Object {
@@ -8135,14 +8135,14 @@ font-display: block;",
                             </ForwardRef(Accordion)>
                           </WithStyles(ForwardRef(Accordion))>
                         </ResourceDetails>
-                      </m>
+                      </E>
                     </AccessControlProvider>
                   </div>
                 </section>
               </Drawer>
             </ResourceDrawer>
           </DetailsContextMenuProvider>
-        </g>
+        </y>
       </MockedSessionContextProvider>
     </ThemeProvider>
   </StylesProvider>

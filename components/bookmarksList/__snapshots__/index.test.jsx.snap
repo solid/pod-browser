@@ -1093,7 +1093,7 @@ font-display: block;",
             <div
               className="PodBrowser-container"
             >
-              <B
+              <z
                 ascIndicator={
                   <SortedTableCarat
                     sorted={true}
@@ -1839,7 +1839,7 @@ font-display: block;",
                       key="row_0"
                       role="row"
                     >
-                      <A
+                      <_
                         dataset={
                           DatasetCore {
                             "internal_changeLog": Object {
@@ -2185,7 +2185,7 @@ font-display: block;",
                           }
                         }
                       >
-                        <m
+                        <E
                           dataset={
                             DatasetCore {
                               "internal_changeLog": Object {
@@ -2460,7 +2460,7 @@ font-display: block;",
                             }
                           }
                         >
-                          <x
+                          <I
                             thing={
                               DatasetCore {
                                 "internal_url": "http://example.com/bookmarks/index.ttl#1234",
@@ -15183,15 +15183,15 @@ font-display: block;",
                                 </ResourceLink>
                               </body>
                             </td>
-                          </x>
-                        </m>
-                      </A>
+                          </I>
+                        </E>
+                      </_>
                     </tr>
                     <tr
                       key="row_1"
                       role="row"
                     >
-                      <A
+                      <_
                         dataset={
                           DatasetCore {
                             "internal_changeLog": Object {
@@ -15537,7 +15537,7 @@ font-display: block;",
                           }
                         }
                       >
-                        <m
+                        <E
                           dataset={
                             DatasetCore {
                               "internal_changeLog": Object {
@@ -15812,7 +15812,7 @@ font-display: block;",
                             }
                           }
                         >
-                          <x
+                          <I
                             thing={
                               DatasetCore {
                                 "internal_url": "http://example.com/bookmarks/index.ttl#4567",
@@ -28535,13 +28535,13 @@ font-display: block;",
                                 </ResourceLink>
                               </body>
                             </td>
-                          </x>
-                        </m>
-                      </A>
+                          </I>
+                        </E>
+                      </_>
                     </tr>
                   </tbody>
                 </table>
-              </B>
+              </z>
             </div>
           </Container>
         </BookmarksList>

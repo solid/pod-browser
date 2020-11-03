@@ -840,7 +840,7 @@ font-display: block;",
         }
       }
     >
-      <m
+      <E
         dataset={
           DatasetCore {
             "internal_resourceInfo": Object {
@@ -2620,7 +2620,7 @@ font-display: block;",
             </ForwardRef(Accordion)>
           </WithStyles(ForwardRef(Accordion))>
         </ResourceDetails>
-      </m>
+      </E>
     </ThemeProvider>
   </StylesProvider>
 </Component>
@@ -3466,7 +3466,7 @@ font-display: block;",
         }
       }
     >
-      <m
+      <E
         dataset={
           DatasetCore {
             "internal_resourceInfo": Object {
@@ -5246,7 +5246,7 @@ font-display: block;",
             </ForwardRef(Accordion)>
           </WithStyles(ForwardRef(Accordion))>
         </ResourceDetails>
-      </m>
+      </E>
     </ThemeProvider>
   </StylesProvider>
 </Component>

@@ -5,7 +5,7 @@ exports[`AddFolderFlyout Renders an Add Folder button 1`] = `
   currentUri="https://www.mypodbrowser.com/"
 >
   <MockedSessionContextProvider>
-    <g
+    <y
       session={
         Object {
           "fetch": [MockFunction],
@@ -100,7 +100,7 @@ exports[`AddFolderFlyout Renders an Add Folder button 1`] = `
           </ForwardRef(Popover)>
         </WithStyles(ForwardRef(Popover))>
       </AddFolderFlyout>
-    </g>
+    </y>
   </MockedSessionContextProvider>
 </PodLocationProvider>
 `;

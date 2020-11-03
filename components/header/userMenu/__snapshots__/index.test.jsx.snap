@@ -905,7 +905,7 @@ font-display: block;",
                   <Logout
                     className="PodBrowser-header-banner__user-menu-item-trigger"
                   >
-                    <k
+                    <q
                       onLogout={[Function]}
                     >
                       <div
@@ -929,7 +929,7 @@ font-display: block;",
                           </span>
                         </button>
                       </div>
-                    </k>
+                    </q>
                   </Logout>
                 </li>
               </ul>

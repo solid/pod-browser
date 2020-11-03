@@ -840,7 +840,7 @@ font-display: block;",
         }
       }
     >
-      <m
+      <E
         dataset={
           DatasetCore {
             "internal_resourceInfo": Object {
@@ -920,7 +920,7 @@ font-display: block;",
             </ForwardRef(Popover)>
           </WithStyles(ForwardRef(Popover))>
         </AddPermissionUsingWebIdButton>
-      </m>
+      </E>
     </ThemeProvider>
   </StylesProvider>
 </Component>
