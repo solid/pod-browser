@@ -21,27 +21,32 @@
 
 import useSWR from "swr";
 import { useSession } from "@inrupt/solid-ui-react";
-import { getSourceUrl } from "@inrupt/solid-client";
-import { foaf } from "rdf-namespaces";
-import { getContacts } from "../../addressBook";
+import {
+  getContacts,
+  getIndexDatasetFromAddressBook,
+  TYPE_MAP,
+} from "../../addressBook";
 
-export default function usePeople(addressBook) {
+export default function useContacts(addressBook, type) {
   const {
     session: { fetch },
   } = useSession();
-
   return useSWR(addressBook, async () => {
-    const contactsIri = getSourceUrl(addressBook);
-    const { response, error } = await getContacts(
-      foaf.Person,
-      contactsIri,
+    const { indexFilePredicate } = TYPE_MAP[type];
+    const { contactTypeIri } = TYPE_MAP[type];
+    const { response: indexFileDataset } = await getIndexDatasetFromAddressBook(
+      addressBook,
+      indexFilePredicate,
       fetch
     );
-
+    const { response, error } = await getContacts(
+      indexFileDataset,
+      contactTypeIri,
+      fetch
+    );
     if (error) {
       throw error;
     }
-
     return response;
   });
 }

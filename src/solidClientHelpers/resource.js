@@ -47,7 +47,6 @@ export async function getResource(iri, fetch) {
   try {
     const dataset = await getSolidDataset(iri, { fetch });
     const resource = { dataset, iri };
-
     return respond(resource);
   } catch (e) {
     return error(e.message);

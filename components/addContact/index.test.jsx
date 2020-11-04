@@ -104,6 +104,7 @@ describe("handleSubmit", () => {
   test("it alerts the user and exits if the webid already exists", async () => {
     const personDataset = mockPersonDatasetAlice();
     const personProfile = mockProfileAlice();
+    const people = [personDataset];
     const handler = handleSubmit({
       addressBook,
       setAgentId,
@@ -112,6 +113,7 @@ describe("handleSubmit", () => {
       alertSuccess,
       fetch,
       setDirtyForm,
+      people,
     });
     jest
       .spyOn(profileHelperFns, "fetchProfile")
@@ -121,7 +123,7 @@ describe("handleSubmit", () => {
       .mockResolvedValue([personDataset]);
     await handler("alreadyExistingWebId");
     expect(addressBookFns.findContactInAddressBook).toHaveBeenCalledWith(
-      addressBookUri,
+      people,
       aliceWebIdUrl,
       fetch
     );
@@ -180,8 +182,9 @@ describe("handleSubmit", () => {
       "Alice"
     );
     const contactsIri = contactsContainerIri("http://www.example.com/");
-    const peopleDataset = mockSolidDatasetFrom(contactsIri);
-    const peopleDatasetWithContact = setThing(peopleDataset, personDataset);
+    const people = mockSolidDatasetFrom(contactsIri);
+    const peopleMutate = jest.fn();
+    const peopleDatasetWithContact = setThing(people, personDataset);
     const mockProfile = mockProfileAlice();
     const handler = handleSubmit({
       addressBook,
@@ -191,6 +194,8 @@ describe("handleSubmit", () => {
       alertSuccess,
       fetch,
       setDirtyForm,
+      people,
+      peopleMutate,
     });
     jest
       .spyOn(addressBookFns, "findContactInAddressBook")

@@ -21,9 +21,10 @@
 
 import React from "react";
 import * as solidClientFns from "@inrupt/solid-client";
+import { foaf } from "rdf-namespaces";
 import { deleteContact } from "../../src/addressBook";
 import useAddressBook from "../../src/hooks/useAddressBook";
-import usePeople from "../../src/hooks/usePeople";
+import useContacts from "../../src/hooks/useContacts";
 import useProfiles from "../../src/hooks/useProfiles";
 import { mountToJson } from "../../__testUtils/mountWithTheme";
 import ContactsList, { handleDeleteContact } from "./index";
@@ -36,7 +37,7 @@ import mockSessionContextProvider from "../../__testUtils/mockSessionContextProv
 
 jest.mock("../../src/addressBook");
 jest.mock("../../src/hooks/useAddressBook");
-jest.mock("../../src/hooks/usePeople");
+jest.mock("../../src/hooks/useContacts");
 jest.mock("../../src/hooks/useProfiles");
 
 describe("ContactsList", () => {
@@ -44,7 +45,7 @@ describe("ContactsList", () => {
   const SessionProvider = mockSessionContextProvider(session);
   it("renders spinner while useAddressBook is loading", () => {
     useAddressBook.mockReturnValue([null, null]);
-    usePeople.mockReturnValue({
+    useContacts.mockReturnValue({
       data: undefined,
       error: undefined,
       mutate: () => {},
@@ -59,12 +60,12 @@ describe("ContactsList", () => {
       )
     ).toMatchSnapshot();
     expect(useAddressBook).toHaveBeenCalledWith();
-    expect(usePeople).toHaveBeenCalledWith(null);
+    expect(useContacts).toHaveBeenCalledWith(null, foaf.Person);
   });
 
-  it("renders spinner while usePeople is loading", () => {
+  it("renders spinner while useContacts is loading", () => {
     useAddressBook.mockReturnValue([42, null]);
-    usePeople.mockReturnValue({
+    useContacts.mockReturnValue({
       data: undefined,
       error: undefined,
       mutate: () => {},
@@ -78,12 +79,12 @@ describe("ContactsList", () => {
         </SessionProvider>
       )
     ).toMatchSnapshot();
-    expect(usePeople).toHaveBeenCalledWith(42);
+    expect(useContacts).toHaveBeenCalledWith(42, foaf.Person);
   });
 
   it("renders spinner while useProfiles is loading", () => {
     useAddressBook.mockReturnValue([42, null]);
-    usePeople.mockReturnValue({
+    useContacts.mockReturnValue({
       data: "peopleData",
       error: undefined,
       mutate: () => {},
@@ -102,7 +103,7 @@ describe("ContactsList", () => {
 
   it("renders error if useAddressBook returns error", () => {
     useAddressBook.mockReturnValue([null, "error"]);
-    usePeople.mockReturnValue({
+    useContacts.mockReturnValue({
       data: undefined,
       error: undefined,
       mutate: () => {},
@@ -119,7 +120,7 @@ describe("ContactsList", () => {
 
   it("renders page when people is loaded", () => {
     useAddressBook.mockReturnValue([42, null]);
-    usePeople.mockReturnValue({
+    useContacts.mockReturnValue({
       data: "peopleData",
       error: undefined,
       mutate: () => {},
@@ -138,9 +139,9 @@ describe("ContactsList", () => {
     ).toMatchSnapshot();
   });
 
-  it("renders error if usePeople returns error", () => {
+  it("renders error if useContacts returns error", () => {
     useAddressBook.mockReturnValue([42, null]);
-    usePeople.mockReturnValue({
+    useContacts.mockReturnValue({
       data: undefined,
       error: "error",
       mutate: () => {},
@@ -180,7 +181,12 @@ describe("handleDeleteContact", () => {
 
     await handler();
 
-    expect(deleteContact).toHaveBeenCalledWith(addressBookUrl, contact, fetch);
+    expect(deleteContact).toHaveBeenCalledWith(
+      addressBookUrl,
+      contact,
+      foaf.Person,
+      fetch
+    );
     expect(peopleMutate).toHaveBeenCalled();
     expect(closeDrawer).toHaveBeenCalled();
   });

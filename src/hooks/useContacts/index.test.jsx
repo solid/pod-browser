@@ -20,23 +20,21 @@
  */
 
 import React from "react";
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook, cleanup } from "@testing-library/react-hooks";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { cache, SWRConfig } from "swr";
 import { foaf } from "rdf-namespaces";
-import usePeople from "./index";
+import useContacts from "./index";
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
-import { getContacts } from "../../addressBook";
+import * as addressBookFns from "../../addressBook";
 
-jest.mock("../../addressBook");
-
-describe("usePeople", () => {
+describe("useContacts", () => {
   describe("with no address book", () => {
     it("should return undefined", () => {
       const session = mockSession();
       const wrapper = mockSessionContextProvider(session);
-      const { result } = renderHook(() => usePeople(null), {
+      const { result } = renderHook(() => useContacts(null, foaf.Person), {
         wrapper,
       });
       expect(result.current).toMatchObject({
@@ -66,49 +64,43 @@ describe("usePeople", () => {
 
     afterEach(() => {
       cache.clear();
-    });
-
-    it("should call getContacts", async () => {
-      getContacts.mockResolvedValue({ response });
-
-      renderHook(() => usePeople(addressBook), {
-        wrapper,
-      });
-
-      expect(getContacts).toHaveBeenCalledWith(
-        foaf.Person,
-        addressBookUrl,
-        session.fetch
-      );
-    });
-
-    it("should return response", async () => {
-      getContacts.mockResolvedValue({ response });
-
-      const { result, waitFor } = renderHook(() => usePeople(addressBook), {
-        wrapper,
-      });
-
-      await waitFor(() =>
-        expect(result.current).toMatchObject({
-          data: response,
-          error: undefined,
-        })
-      );
+      jest.clearAllMocks();
+      cleanup();
     });
 
     it("should return error", async () => {
       const error = "Some error";
-      getContacts.mockResolvedValue({ error });
+      jest.spyOn(addressBookFns, "getContacts").mockResolvedValue({ error });
 
-      const { result, waitFor } = renderHook(() => usePeople(addressBook), {
-        wrapper,
-      });
+      const { result, waitFor } = renderHook(
+        () => useContacts(addressBook, foaf.Person),
+        {
+          wrapper,
+        }
+      );
 
       await waitFor(() =>
         expect(result.current).toMatchObject({
           data: undefined,
           error,
+        })
+      );
+    });
+
+    it("should return response", async () => {
+      jest.spyOn(addressBookFns, "getContacts").mockResolvedValue({ response });
+
+      const { result, waitFor } = renderHook(
+        () => useContacts(addressBook, foaf.Person),
+        {
+          wrapper,
+        }
+      );
+
+      await waitFor(() =>
+        expect(result.current).toMatchObject({
+          data: response,
+          error: undefined,
         })
       );
     });

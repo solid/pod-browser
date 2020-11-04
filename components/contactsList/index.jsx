@@ -39,7 +39,7 @@ import styles from "./styles";
 
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import useAddressBook from "../../src/hooks/useAddressBook";
-import usePeople from "../../src/hooks/usePeople";
+import useContacts from "../../src/hooks/useContacts";
 import useProfiles from "../../src/hooks/useProfiles";
 import ContactsListSearch from "./contactsListSearch";
 import ProfileLink from "../profileLink";
@@ -63,7 +63,13 @@ export function handleDeleteContact({
 }) {
   return async () => {
     const selectedContact = people[selectedContactIndex];
-    await deleteContact(getSourceUrl(addressBook), selectedContact, fetch);
+
+    await deleteContact(
+      getSourceUrl(addressBook),
+      selectedContact,
+      foaf.Person,
+      fetch
+    );
     peopleMutate();
     closeDrawer();
   };
@@ -79,9 +85,11 @@ function ContactsList() {
   const [search, setSearch] = useState("");
 
   const [addressBook, addressBookError] = useAddressBook();
-  const { data: people, error: peopleError, mutate: peopleMutate } = usePeople(
-    addressBook
-  );
+  const {
+    data: people,
+    error: peopleError,
+    mutate: peopleMutate,
+  } = useContacts(addressBook, foaf.Person);
   const profiles = useProfiles(people);
   const formattedNamePredicate = vcard.fn;
   const hasPhotoPredicate = vcard.hasPhoto;
@@ -103,6 +111,7 @@ function ContactsList() {
     setSelectedContactName(name);
 
     const webId = getUrl(people[selectedContactIndex].dataset, foaf.openid);
+
     setSelectedContactWebId(webId);
   }, [selectedContactIndex, formattedNamePredicate, people]);
 

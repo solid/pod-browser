@@ -892,7 +892,7 @@ font-display: block;",
 </Component>
 `;
 
-exports[`ContactsList renders error if usePeople returns error 1`] = `
+exports[`ContactsList renders error if useContacts returns error 1`] = `
 <Component
   theme={
     Object {
@@ -30896,7 +30896,7 @@ font-display: block;",
 </Component>
 `;
 
-exports[`ContactsList renders spinner while usePeople is loading 1`] = `
+exports[`ContactsList renders spinner while useContacts is loading 1`] = `
 <Component
   theme={
     Object {
