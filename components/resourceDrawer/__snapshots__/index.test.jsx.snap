@@ -1073,6 +1073,7 @@ font-display: block;",
                                     className="PodBrowser-root PodBrowser-root PodBrowser-expanded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
                                   >
                                     <WithStyles(ForwardRef(AccordionSummary))
+                                      data-testid="accordion-resource-actions-trigger"
                                       expandIcon={<Memo(ExpandMoreIcon) />}
                                       key=".0"
                                     >
@@ -1087,6 +1088,7 @@ font-display: block;",
                                             "root": "PodBrowser-root",
                                           }
                                         }
+                                        data-testid="accordion-resource-actions-trigger"
                                         expandIcon={<Memo(ExpandMoreIcon) />}
                                       >
                                         <WithStyles(ForwardRef(ButtonBase))
@@ -1109,6 +1111,7 @@ font-display: block;",
                                           }
                                           className="PodBrowser-root PodBrowser-expanded"
                                           component="div"
+                                          data-testid="accordion-resource-actions-trigger"
                                           disableRipple={true}
                                           disabled={false}
                                           focusRipple={false}
@@ -1143,6 +1146,7 @@ font-display: block;",
                                               }
                                             }
                                             component="div"
+                                            data-testid="accordion-resource-actions-trigger"
                                             disableRipple={true}
                                             disabled={false}
                                             focusRipple={false}
@@ -1170,6 +1174,7 @@ font-display: block;",
                                                 }
                                               }
                                               className="PodBrowser-root PodBrowser-root PodBrowser-expanded"
+                                              data-testid="accordion-resource-actions-trigger"
                                               onBlur={[Function]}
                                               onClick={[Function]}
                                               onDragLeave={[Function]}
@@ -1470,7 +1475,7 @@ font-display: block;",
                                                               >
                                                                 <DeleteResourceLink
                                                                   className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
-                                                                  data-testid="download-resource-button"
+                                                                  data-testid="delete-resource-button"
                                                                   name="iri"
                                                                   onDelete={[Function]}
                                                                   resourceIri="/iri/"
@@ -1479,14 +1484,14 @@ font-display: block;",
                                                                     className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                                                                     confirmationContent="Are you sure you wish to delete iri?"
                                                                     confirmationTitle="Confirm Delete"
-                                                                    data-testid="download-resource-button"
+                                                                    data-testid="delete-resource-button"
                                                                     dialogId="delete-resource-/iri/"
                                                                     onDelete={[Function]}
                                                                     successMessage="iri was successfully deleted."
                                                                   >
                                                                     <a
                                                                       className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
-                                                                      data-testid="download-resource-button"
+                                                                      data-testid="delete-resource-button"
                                                                       href="#delete"
                                                                       onClick={[Function]}
                                                                     >
@@ -1571,6 +1576,7 @@ font-display: block;",
                                     className="PodBrowser-root PodBrowser-root PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
                                   >
                                     <WithStyles(ForwardRef(AccordionSummary))
+                                      data-testid="accordion-resource-details-trigger"
                                       expandIcon={<Memo(ExpandMoreIcon) />}
                                       key=".0"
                                     >
@@ -1585,12 +1591,14 @@ font-display: block;",
                                             "root": "PodBrowser-root",
                                           }
                                         }
+                                        data-testid="accordion-resource-details-trigger"
                                         expandIcon={<Memo(ExpandMoreIcon) />}
                                       >
                                         <WithStyles(ForwardRef(ButtonBase))
                                           aria-expanded={false}
                                           className="PodBrowser-root"
                                           component="div"
+                                          data-testid="accordion-resource-details-trigger"
                                           disableRipple={true}
                                           disabled={false}
                                           focusRipple={false}
@@ -1609,6 +1617,7 @@ font-display: block;",
                                               }
                                             }
                                             component="div"
+                                            data-testid="accordion-resource-details-trigger"
                                             disableRipple={true}
                                             disabled={false}
                                             focusRipple={false}
@@ -1620,6 +1629,7 @@ font-display: block;",
                                               aria-disabled={false}
                                               aria-expanded={false}
                                               className="PodBrowser-root PodBrowser-root"
+                                              data-testid="accordion-resource-details-trigger"
                                               onBlur={[Function]}
                                               onClick={[Function]}
                                               onDragLeave={[Function]}
@@ -2063,6 +2073,7 @@ font-display: block;",
                                     className="PodBrowser-root PodBrowser-root PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
                                   >
                                     <WithStyles(ForwardRef(AccordionSummary))
+                                      data-testid="accordion-resource-permissions-trigger"
                                       expandIcon={<Memo(ExpandMoreIcon) />}
                                       key=".0"
                                     >
@@ -2077,12 +2088,14 @@ font-display: block;",
                                             "root": "PodBrowser-root",
                                           }
                                         }
+                                        data-testid="accordion-resource-permissions-trigger"
                                         expandIcon={<Memo(ExpandMoreIcon) />}
                                       >
                                         <WithStyles(ForwardRef(ButtonBase))
                                           aria-expanded={false}
                                           className="PodBrowser-root"
                                           component="div"
+                                          data-testid="accordion-resource-permissions-trigger"
                                           disableRipple={true}
                                           disabled={false}
                                           focusRipple={false}
@@ -2101,6 +2114,7 @@ font-display: block;",
                                               }
                                             }
                                             component="div"
+                                            data-testid="accordion-resource-permissions-trigger"
                                             disableRipple={true}
                                             disabled={false}
                                             focusRipple={false}
@@ -2112,6 +2126,7 @@ font-display: block;",
                                               aria-disabled={false}
                                               aria-expanded={false}
                                               className="PodBrowser-root PodBrowser-root"
+                                              data-testid="accordion-resource-permissions-trigger"
                                               onBlur={[Function]}
                                               onClick={[Function]}
                                               onDragLeave={[Function]}
@@ -3893,6 +3908,7 @@ font-display: block;",
                                 className="PodBrowser-root PodBrowser-root PodBrowser-expanded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
                               >
                                 <WithStyles(ForwardRef(AccordionSummary))
+                                  data-testid="accordion-resource-actions-trigger"
                                   expandIcon={<Memo(ExpandMoreIcon) />}
                                   key=".0"
                                 >
@@ -3907,6 +3923,7 @@ font-display: block;",
                                         "root": "PodBrowser-root",
                                       }
                                     }
+                                    data-testid="accordion-resource-actions-trigger"
                                     expandIcon={<Memo(ExpandMoreIcon) />}
                                   >
                                     <WithStyles(ForwardRef(ButtonBase))
@@ -3929,6 +3946,7 @@ font-display: block;",
                                       }
                                       className="PodBrowser-root PodBrowser-expanded"
                                       component="div"
+                                      data-testid="accordion-resource-actions-trigger"
                                       disableRipple={true}
                                       disabled={false}
                                       focusRipple={false}
@@ -3963,6 +3981,7 @@ font-display: block;",
                                           }
                                         }
                                         component="div"
+                                        data-testid="accordion-resource-actions-trigger"
                                         disableRipple={true}
                                         disabled={false}
                                         focusRipple={false}
@@ -3990,6 +4009,7 @@ font-display: block;",
                                             }
                                           }
                                           className="PodBrowser-root PodBrowser-root PodBrowser-expanded"
+                                          data-testid="accordion-resource-actions-trigger"
                                           onBlur={[Function]}
                                           onClick={[Function]}
                                           onDragLeave={[Function]}
@@ -4290,7 +4310,7 @@ font-display: block;",
                                                           >
                                                             <DeleteResourceLink
                                                               className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
-                                                              data-testid="download-resource-button"
+                                                              data-testid="delete-resource-button"
                                                               name="iri"
                                                               onDelete={[Function]}
                                                               resourceIri="/iri/"
@@ -4299,14 +4319,14 @@ font-display: block;",
                                                                 className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                                                                 confirmationContent="Are you sure you wish to delete iri?"
                                                                 confirmationTitle="Confirm Delete"
-                                                                data-testid="download-resource-button"
+                                                                data-testid="delete-resource-button"
                                                                 dialogId="delete-resource-/iri/"
                                                                 onDelete={[Function]}
                                                                 successMessage="iri was successfully deleted."
                                                               >
                                                                 <a
                                                                   className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
-                                                                  data-testid="download-resource-button"
+                                                                  data-testid="delete-resource-button"
                                                                   href="#delete"
                                                                   onClick={[Function]}
                                                                 >
@@ -4391,6 +4411,7 @@ font-display: block;",
                                 className="PodBrowser-root PodBrowser-root PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
                               >
                                 <WithStyles(ForwardRef(AccordionSummary))
+                                  data-testid="accordion-resource-details-trigger"
                                   expandIcon={<Memo(ExpandMoreIcon) />}
                                   key=".0"
                                 >
@@ -4405,12 +4426,14 @@ font-display: block;",
                                         "root": "PodBrowser-root",
                                       }
                                     }
+                                    data-testid="accordion-resource-details-trigger"
                                     expandIcon={<Memo(ExpandMoreIcon) />}
                                   >
                                     <WithStyles(ForwardRef(ButtonBase))
                                       aria-expanded={false}
                                       className="PodBrowser-root"
                                       component="div"
+                                      data-testid="accordion-resource-details-trigger"
                                       disableRipple={true}
                                       disabled={false}
                                       focusRipple={false}
@@ -4429,6 +4452,7 @@ font-display: block;",
                                           }
                                         }
                                         component="div"
+                                        data-testid="accordion-resource-details-trigger"
                                         disableRipple={true}
                                         disabled={false}
                                         focusRipple={false}
@@ -4440,6 +4464,7 @@ font-display: block;",
                                           aria-disabled={false}
                                           aria-expanded={false}
                                           className="PodBrowser-root PodBrowser-root"
+                                          data-testid="accordion-resource-details-trigger"
                                           onBlur={[Function]}
                                           onClick={[Function]}
                                           onDragLeave={[Function]}
@@ -4883,6 +4908,7 @@ font-display: block;",
                                 className="PodBrowser-root PodBrowser-root PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
                               >
                                 <WithStyles(ForwardRef(AccordionSummary))
+                                  data-testid="accordion-resource-permissions-trigger"
                                   expandIcon={<Memo(ExpandMoreIcon) />}
                                   key=".0"
                                 >
@@ -4897,12 +4923,14 @@ font-display: block;",
                                         "root": "PodBrowser-root",
                                       }
                                     }
+                                    data-testid="accordion-resource-permissions-trigger"
                                     expandIcon={<Memo(ExpandMoreIcon) />}
                                   >
                                     <WithStyles(ForwardRef(ButtonBase))
                                       aria-expanded={false}
                                       className="PodBrowser-root"
                                       component="div"
+                                      data-testid="accordion-resource-permissions-trigger"
                                       disableRipple={true}
                                       disabled={false}
                                       focusRipple={false}
@@ -4921,6 +4949,7 @@ font-display: block;",
                                           }
                                         }
                                         component="div"
+                                        data-testid="accordion-resource-permissions-trigger"
                                         disableRipple={true}
                                         disabled={false}
                                         focusRipple={false}
@@ -4932,6 +4961,7 @@ font-display: block;",
                                           aria-disabled={false}
                                           aria-expanded={false}
                                           className="PodBrowser-root PodBrowser-root"
+                                          data-testid="accordion-resource-permissions-trigger"
                                           onBlur={[Function]}
                                           onClick={[Function]}
                                           onDragLeave={[Function]}
@@ -6753,6 +6783,7 @@ font-display: block;",
                                     className="PodBrowser-root PodBrowser-root PodBrowser-expanded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
                                   >
                                     <WithStyles(ForwardRef(AccordionSummary))
+                                      data-testid="accordion-resource-actions-trigger"
                                       expandIcon={<Memo(ExpandMoreIcon) />}
                                       key=".0"
                                     >
@@ -6767,6 +6798,7 @@ font-display: block;",
                                             "root": "PodBrowser-root",
                                           }
                                         }
+                                        data-testid="accordion-resource-actions-trigger"
                                         expandIcon={<Memo(ExpandMoreIcon) />}
                                       >
                                         <WithStyles(ForwardRef(ButtonBase))
@@ -6789,6 +6821,7 @@ font-display: block;",
                                           }
                                           className="PodBrowser-root PodBrowser-expanded"
                                           component="div"
+                                          data-testid="accordion-resource-actions-trigger"
                                           disableRipple={true}
                                           disabled={false}
                                           focusRipple={false}
@@ -6823,6 +6856,7 @@ font-display: block;",
                                               }
                                             }
                                             component="div"
+                                            data-testid="accordion-resource-actions-trigger"
                                             disableRipple={true}
                                             disabled={false}
                                             focusRipple={false}
@@ -6850,6 +6884,7 @@ font-display: block;",
                                                 }
                                               }
                                               className="PodBrowser-root PodBrowser-root PodBrowser-expanded"
+                                              data-testid="accordion-resource-actions-trigger"
                                               onBlur={[Function]}
                                               onClick={[Function]}
                                               onDragLeave={[Function]}
@@ -7150,7 +7185,7 @@ font-display: block;",
                                                               >
                                                                 <DeleteResourceLink
                                                                   className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
-                                                                  data-testid="download-resource-button"
+                                                                  data-testid="delete-resource-button"
                                                                   name="iri"
                                                                   onDelete={[Function]}
                                                                   resourceIri="/iri/"
@@ -7159,14 +7194,14 @@ font-display: block;",
                                                                     className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                                                                     confirmationContent="Are you sure you wish to delete iri?"
                                                                     confirmationTitle="Confirm Delete"
-                                                                    data-testid="download-resource-button"
+                                                                    data-testid="delete-resource-button"
                                                                     dialogId="delete-resource-/iri/"
                                                                     onDelete={[Function]}
                                                                     successMessage="iri was successfully deleted."
                                                                   >
                                                                     <a
                                                                       className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
-                                                                      data-testid="download-resource-button"
+                                                                      data-testid="delete-resource-button"
                                                                       href="#delete"
                                                                       onClick={[Function]}
                                                                     >
@@ -7251,6 +7286,7 @@ font-display: block;",
                                     className="PodBrowser-root PodBrowser-root PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
                                   >
                                     <WithStyles(ForwardRef(AccordionSummary))
+                                      data-testid="accordion-resource-details-trigger"
                                       expandIcon={<Memo(ExpandMoreIcon) />}
                                       key=".0"
                                     >
@@ -7265,12 +7301,14 @@ font-display: block;",
                                             "root": "PodBrowser-root",
                                           }
                                         }
+                                        data-testid="accordion-resource-details-trigger"
                                         expandIcon={<Memo(ExpandMoreIcon) />}
                                       >
                                         <WithStyles(ForwardRef(ButtonBase))
                                           aria-expanded={false}
                                           className="PodBrowser-root"
                                           component="div"
+                                          data-testid="accordion-resource-details-trigger"
                                           disableRipple={true}
                                           disabled={false}
                                           focusRipple={false}
@@ -7289,6 +7327,7 @@ font-display: block;",
                                               }
                                             }
                                             component="div"
+                                            data-testid="accordion-resource-details-trigger"
                                             disableRipple={true}
                                             disabled={false}
                                             focusRipple={false}
@@ -7300,6 +7339,7 @@ font-display: block;",
                                               aria-disabled={false}
                                               aria-expanded={false}
                                               className="PodBrowser-root PodBrowser-root"
+                                              data-testid="accordion-resource-details-trigger"
                                               onBlur={[Function]}
                                               onClick={[Function]}
                                               onDragLeave={[Function]}
@@ -7743,6 +7783,7 @@ font-display: block;",
                                     className="PodBrowser-root PodBrowser-root PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
                                   >
                                     <WithStyles(ForwardRef(AccordionSummary))
+                                      data-testid="accordion-resource-permissions-trigger"
                                       expandIcon={<Memo(ExpandMoreIcon) />}
                                       key=".0"
                                     >
@@ -7757,12 +7798,14 @@ font-display: block;",
                                             "root": "PodBrowser-root",
                                           }
                                         }
+                                        data-testid="accordion-resource-permissions-trigger"
                                         expandIcon={<Memo(ExpandMoreIcon) />}
                                       >
                                         <WithStyles(ForwardRef(ButtonBase))
                                           aria-expanded={false}
                                           className="PodBrowser-root"
                                           component="div"
+                                          data-testid="accordion-resource-permissions-trigger"
                                           disableRipple={true}
                                           disabled={false}
                                           focusRipple={false}
@@ -7781,6 +7824,7 @@ font-display: block;",
                                               }
                                             }
                                             component="div"
+                                            data-testid="accordion-resource-permissions-trigger"
                                             disableRipple={true}
                                             disabled={false}
                                             focusRipple={false}
@@ -7792,6 +7836,7 @@ font-display: block;",
                                               aria-disabled={false}
                                               aria-expanded={false}
                                               className="PodBrowser-root PodBrowser-root"
+                                              data-testid="accordion-resource-permissions-trigger"
                                               onBlur={[Function]}
                                               onClick={[Function]}
                                               onDragLeave={[Function]}

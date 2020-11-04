@@ -944,6 +944,7 @@ font-display: block;",
                     className="PodBrowser-root PodBrowser-root PodBrowser-expanded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
                   >
                     <WithStyles(ForwardRef(AccordionSummary))
+                      data-testid="accordion-resource-details-trigger"
                       expandIcon={<Memo(ExpandMoreIcon) />}
                       key=".0"
                     >
@@ -958,12 +959,14 @@ font-display: block;",
                             "root": "PodBrowser-root",
                           }
                         }
+                        data-testid="accordion-resource-details-trigger"
                         expandIcon={<Memo(ExpandMoreIcon) />}
                       >
                         <WithStyles(ForwardRef(ButtonBase))
                           aria-expanded={true}
                           className="PodBrowser-root PodBrowser-expanded"
                           component="div"
+                          data-testid="accordion-resource-details-trigger"
                           disableRipple={true}
                           disabled={false}
                           focusRipple={false}
@@ -982,6 +985,7 @@ font-display: block;",
                               }
                             }
                             component="div"
+                            data-testid="accordion-resource-details-trigger"
                             disableRipple={true}
                             disabled={false}
                             focusRipple={false}
@@ -993,6 +997,7 @@ font-display: block;",
                               aria-disabled={false}
                               aria-expanded={true}
                               className="PodBrowser-root PodBrowser-root PodBrowser-expanded"
+                              data-testid="accordion-resource-details-trigger"
                               onBlur={[Function]}
                               onClick={[Function]}
                               onDragLeave={[Function]}
@@ -2332,6 +2337,7 @@ font-display: block;",
                     className="PodBrowser-root PodBrowser-root PodBrowser-expanded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
                   >
                     <WithStyles(ForwardRef(AccordionSummary))
+                      data-testid="accordion-resource-details-trigger"
                       expandIcon={<Memo(ExpandMoreIcon) />}
                       key=".0"
                     >
@@ -2346,12 +2352,14 @@ font-display: block;",
                             "root": "PodBrowser-root",
                           }
                         }
+                        data-testid="accordion-resource-details-trigger"
                         expandIcon={<Memo(ExpandMoreIcon) />}
                       >
                         <WithStyles(ForwardRef(ButtonBase))
                           aria-expanded={true}
                           className="PodBrowser-root PodBrowser-expanded"
                           component="div"
+                          data-testid="accordion-resource-details-trigger"
                           disableRipple={true}
                           disabled={false}
                           focusRipple={false}
@@ -2370,6 +2378,7 @@ font-display: block;",
                               }
                             }
                             component="div"
+                            data-testid="accordion-resource-details-trigger"
                             disableRipple={true}
                             disabled={false}
                             focusRipple={false}
@@ -2381,6 +2390,7 @@ font-display: block;",
                               aria-disabled={false}
                               aria-expanded={true}
                               className="PodBrowser-root PodBrowser-root PodBrowser-expanded"
+                              data-testid="accordion-resource-details-trigger"
                               onBlur={[Function]}
                               onClick={[Function]}
                               onDragLeave={[Function]}

@@ -49,6 +49,11 @@ import { getResourceName } from "../../src/solidClientHelpers/resource";
 import AccessControlContext from "../../src/contexts/accessControlContext";
 
 const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
+const TESTCAFE_ID_DELETE_BUTTON = "delete-resource-button";
+const TESTCAFE_ID_ACCORDION_ACTIONS = "accordion-resource-actions-trigger";
+const TESTCAFE_ID_ACCORDION_DETAILS = "accordion-resource-details-trigger";
+const TESTCAFE_ID_ACCORDION_PERMISSIONS =
+  "accordion-resource-permissions-trigger";
 const TESTCAFE_ID_TITLE = "resource-title";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -82,7 +87,12 @@ export default function ResourceDetails({ onDelete }) {
 
       {showActions ? (
         <Accordion defaultExpanded={showActions}>
-          <AccordionSummary expandIcon={expandIcon}>Actions</AccordionSummary>
+          <AccordionSummary
+            expandIcon={expandIcon}
+            data-testid={TESTCAFE_ID_ACCORDION_ACTIONS}
+          >
+            Actions
+          </AccordionSummary>
           <AccordionDetails className={classes.accordionDetails}>
             <ActionMenu>
               <ActionMenuItem>
@@ -101,7 +111,7 @@ export default function ResourceDetails({ onDelete }) {
                     resourceIri={datasetUrl}
                     name={displayName}
                     onDelete={onDelete}
-                    data-testid={TESTCAFE_ID_DOWNLOAD_BUTTON}
+                    data-testid={TESTCAFE_ID_DELETE_BUTTON}
                   />
                 </ActionMenuItem>
               ) : null}
@@ -111,7 +121,12 @@ export default function ResourceDetails({ onDelete }) {
       ) : null}
 
       <Accordion defaultExpanded={!showActions}>
-        <AccordionSummary expandIcon={expandIcon}>Details</AccordionSummary>
+        <AccordionSummary
+          expandIcon={expandIcon}
+          data-testid={TESTCAFE_ID_ACCORDION_DETAILS}
+        >
+          Details
+        </AccordionSummary>
         <AccordionDetails className={classes.accordionDetails}>
           <section className={classes.centeredSection}>
             <List>
@@ -132,7 +147,10 @@ export default function ResourceDetails({ onDelete }) {
 
       {accessControl ? ( // only show when we know user has control access
         <Accordion>
-          <AccordionSummary expandIcon={expandIcon}>
+          <AccordionSummary
+            expandIcon={expandIcon}
+            data-testid={TESTCAFE_ID_ACCORDION_PERMISSIONS}
+          >
             Permissions
           </AccordionSummary>
           <AccordionDetails className={classes.accordionDetails}>
