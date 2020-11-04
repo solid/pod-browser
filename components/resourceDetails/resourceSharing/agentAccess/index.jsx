@@ -27,13 +27,15 @@ import { Avatar, createStyles, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
-import { Button, Form } from "@inrupt/prism-react-components";
+import { Button, Form, Message } from "@inrupt/prism-react-components";
+import { Skeleton } from "@material-ui/lab";
 import PermissionsForm from "../../../permissionsForm";
 import styles from "./styles";
 import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
 import { displayProfileName } from "../../../../src/solidClientHelpers/profile";
 import AlertContext from "../../../../src/contexts/alertContext";
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
+import useFetchProfile from "../../../../src/hooks/useFetchProfile";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -90,10 +92,8 @@ export function getDialogId(datasetIri) {
   return `change-agent-access-${datasetIri}`;
 }
 
-export default function AgentAccess({
-  onLoading,
-  permission: { acl, profile, webId },
-}) {
+export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
+  const { data: profile, error: profileError } = useFetchProfile(webId);
   const classes = useStyles();
   const {
     session: {
@@ -102,15 +102,37 @@ export default function AgentAccess({
   } = useSession();
   const [access, setAccess] = useState(acl);
   const [tempAccess, setTempAccess] = useState(acl);
-  const { avatar } = profile;
   const { dataset } = useContext(DatasetContext);
-  const name = displayProfileName(profile);
   const { accessControl } = useContext(AccessControlContext);
 
   const { setOpen } = useContext(ConfirmationDialogContext);
 
   const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
   const dialogId = getDialogId(getSourceUrl(dataset));
+
+  if (profileError) {
+    const message = `Failed to load ${webId}`;
+    return <Message variant="error">{message}</Message>;
+  }
+
+  if (!profile) {
+    return (
+      <>
+        <Skeleton
+          className={classes.avatar}
+          variant="circle"
+          width={40}
+          height={40}
+        />
+        <div className={classes.detailText}>
+          <Skeleton variant="text" width={100} />
+        </div>
+      </>
+    );
+  }
+
+  const { avatar } = profile;
+  const name = displayProfileName(profile);
 
   const savePermissions = saveHandler(
     accessControl,

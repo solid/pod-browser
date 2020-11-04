@@ -29,21 +29,47 @@ import mockSession from "../../../../__testUtils/mockSession";
 
 import { mountToJson } from "../../../../__testUtils/mountWithTheme";
 import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
+import useFetchProfile from "../../../../src/hooks/useFetchProfile";
+import { mockProfileAlice } from "../../../../__testUtils/mockPersonResource";
 
 jest.mock("../../../../src/solidClientHelpers/permissions");
+jest.mock("../../../../src/hooks/useFetchProfile");
+
+const webId = "http://example.com/webId#me";
 
 describe("AgentAccess", () => {
   const permission = {
     acl: createAccessMap(),
-    profile: {
-      avatar: "http://example.com/avatar.jpg",
-      name: "name",
-    },
+    webId,
   };
   const datasetUrl = "http://example.com/dataset";
   const dataset = mockSolidDatasetFrom(datasetUrl);
 
+  beforeEach(() => {
+    useFetchProfile.mockReturnValue({ data: mockProfileAlice() });
+  });
+
   it("renders", () => {
+    expect(
+      mountToJson(
+        <DatasetProvider dataset={dataset}>
+          <AgentAccess permission={permission} />
+        </DatasetProvider>
+      )
+    ).toMatchSnapshot();
+  });
+
+  it("fetches profile for webId", () => {
+    mountToJson(
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} />
+      </DatasetProvider>
+    );
+    expect(useFetchProfile).toHaveBeenCalledWith(webId);
+  });
+
+  it("renders an error message if it's unable to load profile", () => {
+    useFetchProfile.mockReturnValue({ error: "error" });
     expect(
       mountToJson(
         <DatasetProvider dataset={dataset}>
@@ -107,7 +133,6 @@ describe("saveHandler", () => {
   };
   let onLoading;
   let setAccess;
-  const webId = "webId";
   let setTempAccess;
   let setSeverity;
   let setMessage;

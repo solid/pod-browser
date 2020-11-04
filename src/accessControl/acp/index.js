@@ -27,7 +27,6 @@ import {
   saveSolidDatasetAt,
   setThing,
 } from "@inrupt/solid-client";
-import { fetchProfile } from "../../solidClientHelpers/profile";
 import {
   ACL,
   createAccessMap,
@@ -205,17 +204,14 @@ export default class AcpAccessControlStrategy {
         })
       );
       // normalize permissions
-      return Promise.all(
-        Object.values(permissions).map(async ({ acp: access, webId }) => {
-          const acl = convertAcpToAcl(access);
-          return {
-            acl,
-            alias: displayPermissions(acl),
-            profile: await fetchProfile(webId, this.#fetch),
-            webId,
-          };
-        })
-      );
+      return Object.values(permissions).map(({ acp: access, webId }) => {
+        const acl = convertAcpToAcl(access);
+        return {
+          acl,
+          alias: displayPermissions(acl),
+          webId,
+        };
+      });
     } catch (error) {
       if (isHTTPError(error.message, 404)) {
         return [];

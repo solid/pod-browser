@@ -154,7 +154,7 @@ describe("WacAccessControlStrategy", () => {
       wac = await WacAccessControlStrategy.init(resourceInfo, fetch);
     });
 
-    test("it returns the webId and the human-friendly permission name", async () => {
+    test("it returns the webId and the human-friendly permission name", () => {
       const access = {
         [webId1]: createAccessMap(true),
         [webId2]: createAccessMap(true, true, true, true),
@@ -162,29 +162,31 @@ describe("WacAccessControlStrategy", () => {
         [webId4]: createAccessMap(),
       };
 
-      const [perms1, perms2, perms3, perms4] = await wac.normalizePermissions(
-        access
-      );
+      const [perms1, perms2, perms3, perms4] = wac.normalizePermissions(access);
 
-      expect(perms1.webId).toEqual("https://pod.acl1.com/card#me");
-      expect(perms1.alias).toEqual(ACL.READ.alias);
-      expect(perms1.acl).toMatchObject(access["https://pod.acl1.com/card#me"]);
-      expect(perms1.profile).toMatchObject(expectedProfile);
+      expect(perms1).toEqual({
+        webId: "https://pod.acl1.com/card#me",
+        alias: ACL.READ.alias,
+        acl: access["https://pod.acl1.com/card#me"],
+      });
 
-      expect(perms2.webId).toEqual("https://pod.acl2.com/card#me");
-      expect(perms2.alias).toEqual(ACL.CONTROL.alias);
-      expect(perms2.acl).toMatchObject(access["https://pod.acl2.com/card#me"]);
-      expect(perms2.profile).toMatchObject(expectedProfile);
+      expect(perms2).toEqual({
+        webId: "https://pod.acl2.com/card#me",
+        alias: ACL.CONTROL.alias,
+        acl: access["https://pod.acl2.com/card#me"],
+      });
 
-      expect(perms3.webId).toEqual("https://pod.acl3.com/card#me");
-      expect(perms3.alias).toEqual(ACL.WRITE.alias);
-      expect(perms3.acl).toMatchObject(access["https://pod.acl3.com/card#me"]);
-      expect(perms3.profile).toMatchObject(expectedProfile);
+      expect(perms3).toEqual({
+        webId: "https://pod.acl3.com/card#me",
+        alias: ACL.WRITE.alias,
+        acl: access["https://pod.acl3.com/card#me"],
+      });
 
-      expect(perms4.webId).toEqual("https://pod.acl4.com/card#me");
-      expect(perms4.alias).toEqual(ACL.NONE.alias);
-      expect(perms4.acl).toMatchObject(access["https://pod.acl4.com/card#me"]);
-      expect(perms4.profile).toMatchObject(expectedProfile);
+      expect(perms4).toEqual({
+        webId: "https://pod.acl4.com/card#me",
+        alias: ACL.NONE.alias,
+        acl: access["https://pod.acl4.com/card#me"],
+      });
     });
 
     test("it filters out invalid webIds", async () => {

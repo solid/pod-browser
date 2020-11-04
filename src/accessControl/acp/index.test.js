@@ -164,7 +164,6 @@ describe("AcpAccessControlStrategy", () => {
         {
           acl: createAccessMap(true, false, false, true),
           alias: "Custom",
-          profile,
           webId,
         },
       ]);

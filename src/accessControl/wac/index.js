@@ -41,7 +41,6 @@ import {
   isContainerIri,
 } from "../../solidClientHelpers/utils";
 import { displayPermissions } from "../../solidClientHelpers/permissions";
-import { fetchProfile } from "../../solidClientHelpers/profile";
 import { isUrl } from "../../stringHelpers";
 
 export const noAclError = "No available ACL resource for this resource";
@@ -82,22 +81,19 @@ export default class WacAccessControlStrategy {
     );
   }
 
-  async normalizePermissions(permissions) {
-    return Promise.all(
-      Object.keys(permissions)
-        .filter(isUrl)
-        .map(async (webId) => {
-          const acl = permissions[webId];
-          const profile = await fetchProfile(webId, this.#fetch);
-          const alias = displayPermissions(acl);
-          return {
-            acl,
-            profile,
-            alias,
-            webId,
-          };
-        })
-    );
+  // eslint-disable-next-line class-methods-use-this
+  normalizePermissions(permissions) {
+    return Object.keys(permissions)
+      .filter(isUrl)
+      .map((webId) => {
+        const acl = permissions[webId];
+        const alias = displayPermissions(acl);
+        return {
+          acl,
+          alias,
+          webId,
+        };
+      });
   }
 
   async savePermissionsForAgent(webId, access) {
