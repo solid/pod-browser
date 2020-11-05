@@ -62,6 +62,12 @@ const titleBody = ({ row, value, className }) => {
   );
 };
 
+const linkBody = ({ value, className }) => (
+  <ResourceLink containerIri={value} resourceIri={value} className={className}>
+    {value}
+  </ResourceLink>
+);
+
 function BookmarksList() {
   const { bookmarks } = useContext(BookmarksContext);
   const tableClass = PrismTable.useTableClass("table", "inherits");
@@ -116,9 +122,22 @@ function BookmarksList() {
             header="Name"
             className={tableLinkClassName}
             // eslint-disable-next-line prettier/prettier
-            body={({ row, value }) => titleBody({ row, value, className: tableLinkClassName })}
+            body={
+              ({ row, value }) =>
+                titleBody({ row, value, className: tableLinkClassName })
+              // eslint-disable-next-line react/jsx-curly-newline
+            }
             sortable
             filterable
+          />
+          <TableColumn
+            property={RECALLS_PROPERTY_IRI}
+            dataType="url"
+            header="URL"
+            body={
+              ({ value }) => linkBody({ value, className: tableLinkClassName })
+              // eslint-disable-next-line react/jsx-curly-newline
+            }
           />
         </Table>
       </Container>
