@@ -20,11 +20,11 @@
  */
 
 import React from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
 import { act } from "react-dom/test-utils";
 import * as SolidClientFns from "@inrupt/solid-client";
 
+import { render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { PodLocationProvider } from "../../src/contexts/podLocationContext";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
@@ -38,50 +38,54 @@ import AddFileButton, {
 } from "./index";
 
 const currentUri = "https://www.mypodbrowser.com/";
-const file = new Blob(["file contents"], {
+const file = new File(["file contents"], "myfile.txt", {
   type: "text/plain",
 });
-file.name = "myfile.txt";
 
 describe("AddFileButton", () => {
   const newFilePath = currentUri + file.name;
 
   const session = mockSession();
   const SessionProvider = mockSessionContextProvider(session);
+  let onSave;
+  let setAlertOpen;
+  let renderResult;
 
-  const setAlertOpen = jest.fn();
-  const setMessage = jest.fn();
-  const setSeverity = jest.fn();
-  const onSave = jest.fn();
+  beforeEach(() => {
+    setAlertOpen = jest.fn();
+    const setMessage = jest.fn();
+    const setSeverity = jest.fn();
+    onSave = jest.fn();
 
-  jest
-    .spyOn(SolidClientFns, "overwriteFile")
-    .mockResolvedValue(SolidClientFns.mockSolidDatasetFrom(newFilePath));
+    jest
+      .spyOn(SolidClientFns, "overwriteFile")
+      .mockResolvedValue(SolidClientFns.mockSolidDatasetFrom(newFilePath));
 
-  const tree = mount(
-    <AlertContext.Provider
-      value={{
-        setAlertOpen,
-        setMessage,
-        setSeverity,
-      }}
-    >
-      <PodLocationProvider currentUri={currentUri}>
-        <SessionProvider>
-          <AddFileButton onSave={onSave} />
-        </SessionProvider>
-      </PodLocationProvider>
-    </AlertContext.Provider>
-  );
+    renderResult = render(
+      <AlertContext.Provider
+        value={{
+          setAlertOpen,
+          setMessage,
+          setSeverity,
+        }}
+      >
+        <PodLocationProvider currentUri={currentUri}>
+          <SessionProvider>
+            <AddFileButton onSave={onSave} />
+          </SessionProvider>
+        </PodLocationProvider>
+      </AlertContext.Provider>
+    );
+  });
 
   test("Renders an add file button", () => {
-    expect(mountToJson(tree)).toMatchSnapshot();
+    expect(renderResult.asFragment()).toMatchSnapshot();
   });
 
   test("Uploads a file", async () => {
     await act(async () => {
-      tree.find("input").simulate("click");
-      tree.find("input").simulate("change", { target: { files: [file] } });
+      userEvent.click(renderResult.container.querySelector("input"));
+      userEvent.upload(renderResult.container.querySelector("input"), file);
     });
 
     // await for promises to resolve
@@ -130,21 +134,23 @@ describe("handleSaveResource", () => {
   });
 
   test("it returns a handler that saves the resource and gives feedback to user", async () => {
-    file.name = "myfile with space.txt";
-
-    const newFilePath = currentUri + encodeURIComponent(file.name);
+    const fileName = "myfile with space.txt";
+    const fileWithSpace = new File(["test"], fileName, {
+      type: "text/plain",
+    });
+    const newFilePath = currentUri + encodeURIComponent(fileName);
 
     jest
       .spyOn(SolidClientFns, "overwriteFile")
       .mockResolvedValue(SolidClientFns.mockSolidDatasetFrom(newFilePath));
 
-    await handler(file);
+    await handler(fileWithSpace);
 
     expect(SolidClientFns.overwriteFile).toHaveBeenCalledWith(
       newFilePath,
-      file,
+      fileWithSpace,
       {
-        type: file.type,
+        type: fileWithSpace.type,
         fetch,
       }
     );
@@ -157,9 +163,12 @@ describe("handleSaveResource", () => {
   });
 
   it("handles resources that starts with a dash", async () => {
-    file.name = "-starting-with-a-dash-";
+    const fileName = "-starting-with-a-dash-";
+    const fileWithDash = new File(["test"], fileName, {
+      type: "text/plain",
+    });
     const newFilePathWithoutStartingDash =
-      currentUri + encodeURIComponent(file.name.substr(1));
+      currentUri + encodeURIComponent(fileName.substr(1));
 
     jest
       .spyOn(SolidClientFns, "overwriteFile")
@@ -167,13 +176,13 @@ describe("handleSaveResource", () => {
         SolidClientFns.mockSolidDatasetFrom(newFilePathWithoutStartingDash)
       );
 
-    await handler(file);
+    await handler(fileWithDash);
 
     expect(SolidClientFns.overwriteFile).toHaveBeenCalledWith(
       newFilePathWithoutStartingDash,
-      file,
+      fileWithDash,
       {
-        type: file.type,
+        type: fileWithDash.type,
         fetch,
       }
     );

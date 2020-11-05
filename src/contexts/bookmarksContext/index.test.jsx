@@ -19,21 +19,20 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
+import React, { useContext, useEffect } from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import { render } from "@testing-library/react";
 import BookmarkContext, { BookmarksContextProvider } from "./index";
+
+const bookmarksIri = "https://mypod.myhost.com/bookmarks/index.ttl";
+const bookmark = {
+  dataset: mockSolidDatasetFrom(bookmarksIri),
+  iri: bookmarksIri,
+};
 
 function ChildComponent() {
   const { bookmarks, setBookmarks } = useContext(BookmarkContext);
-  const bookmarksIri = "https://mypod.myhost.com/bookmarks/index.ttl";
-
-  const bookmarksInitialData = {
-    dataset: mockSolidDatasetFrom(bookmarksIri),
-    iri: bookmarksIri,
-  };
-  setBookmarks(bookmarksInitialData);
+  setBookmarks(bookmark);
   return (
     <div id="bookmarks">{bookmarks ? "bookmarks exist" : "no bookmarks"}</div>
   );
@@ -41,11 +40,11 @@ function ChildComponent() {
 
 describe("BookmarksContext", () => {
   test("it has context data", () => {
-    const component = shallow(
+    const { asFragment } = render(
       <BookmarksContextProvider>
         <ChildComponent />
       </BookmarksContextProvider>
     );
-    expect(shallowToJson(component)).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });

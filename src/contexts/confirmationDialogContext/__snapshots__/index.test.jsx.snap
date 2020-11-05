@@ -1,20 +1,28 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ConfirmationDialogContext it has context data 1`] = `
-<ContextProvider
-  value={
-    Object {
-      "confirmed": null,
-      "content": null,
-      "open": null,
-      "setConfirmed": [Function],
-      "setContent": [Function],
-      "setOpen": [Function],
-      "setTitle": [Function],
-      "title": "Confirmation",
-    }
-  }
->
-  <ChildComponent />
-</ContextProvider>
+<DocumentFragment>
+  <div>
+    <div
+      class="title"
+    >
+      This is my title
+    </div>
+    <div
+      class="content"
+    >
+      This is my content
+    </div>
+    <div
+      class="confirmed"
+    >
+      true
+    </div>
+    <div
+      class="open"
+    >
+      true
+    </div>
+  </div>
+</DocumentFragment>
 `;

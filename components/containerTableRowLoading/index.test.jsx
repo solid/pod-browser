@@ -20,15 +20,14 @@
  */
 
 import React from "react";
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
+import { render } from "@testing-library/react";
 import ContainerTableRowSkeleton from "./index";
 
 describe("ContainerTableRowSkeleton", () => {
   test("Renders a ContainerTableRowSkeleton", () => {
-    const tree = shallow(
+    const { asFragment } = render(
       <ContainerTableRowSkeleton iri="https://example.com/resource" />
     );
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });

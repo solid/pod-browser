@@ -27,7 +27,6 @@ module.exports = {
 
   // The test environment that will be used for testing
   testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["<rootDir>jest/setupTests.js"],
 
   testPathIgnorePatterns: ["/node_modules/", "/__testUtils/"],
 
@@ -39,7 +38,7 @@ module.exports = {
   // ts config
   globals: {
     "ts-jest": {
-      tsConfig: { ...tsConfig.compilerOptions, jsx: "react" },
+      tsconfig: { ...tsConfig.compilerOptions, jsx: "react" },
     },
   },
 

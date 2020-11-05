@@ -20,7 +20,7 @@
  */
 
 import React, { useContext } from "react";
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 import SearchContext, { SearchProvider } from "./index";
 
 function ChildComponent() {
@@ -33,13 +33,13 @@ describe("SearchContext", () => {
   test("it provides search and setSearch", () => {
     const search = "foo";
     const setSearch = jest.fn();
-    const component = mount(
+    const { container } = render(
       <SearchProvider search={search} setSearch={setSearch}>
         <ChildComponent />
       </SearchProvider>
     );
 
-    expect(component.find("#Search").text()).toEqual(search);
+    expect(container.querySelector("#Search").innerHTML).toEqual(search);
     expect(setSearch).toHaveBeenCalledWith("bar");
   });
 });

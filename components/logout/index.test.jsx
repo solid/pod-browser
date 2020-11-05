@@ -20,9 +20,7 @@
  */
 
 import React from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
-
+import { render } from "@testing-library/react";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 
@@ -35,12 +33,12 @@ describe("Logout button", () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
 
-    const tree = mount(
+    const { asFragment } = render(
       <SessionProvider>
         <LogOutButton>Log Out</LogOutButton>
       </SessionProvider>
     );
 
-    expect(mountToJson(tree)).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });

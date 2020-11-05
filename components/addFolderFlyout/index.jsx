@@ -37,7 +37,7 @@ import AlertContext from "../../src/contexts/alertContext";
 import styles from "../addPermissionUsingWebIdButton/styles";
 import { joinPath } from "../../src/stringHelpers";
 
-const TESTCAFE_ID_ADD_FOLDER_BUTTON = "add-folder-button";
+export const TESTCAFE_ID_ADD_FOLDER_BUTTON = "add-folder-button";
 const TESTCAFE_ID_FOLDER_NAME_INPUT = "folder-name-input";
 const TESTCAFE_ID_CREATE_FOLDER_FLYOUT_BUTTON = "create-folder-flyout-button";
 

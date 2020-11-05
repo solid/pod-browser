@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Delete contact button it renders a delete contact button 1`] = `
-<DeleteButton
-  confirmationContent="Are you sure you wish to delete Test from your contacts?"
-  confirmationTitle="Delete Contact"
-  dialogId="delete-contact"
-  onDelete={[MockFunction]}
-  successMessage="Contact was successfully deleted."
->
-  Delete
-</DeleteButton>
+<DocumentFragment>
+  <button
+    class="PodBrowser-button PodBrowser-button--action"
+    data-testid="delete-button"
+    type="button"
+  >
+    Delete
+  </button>
+</DocumentFragment>
 `;

@@ -20,13 +20,12 @@
  */
 
 import React from "react";
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
+import { render } from "@testing-library/react";
 import Spinner from "./index";
 
 describe("Spinner", () => {
   test("Renders a spinner", () => {
-    const tree = shallow(<Spinner />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    const { asFragment } = render(<Spinner />);
+    expect(asFragment()).toMatchSnapshot();
   });
 });

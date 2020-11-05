@@ -1,48 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ContainerDetailsButton Renders view 1`] = `
-<ContainerDetailsButton
-  className={null}
->
-  <ResourceLink
-    action="details"
-    className={null}
-    containerIri={null}
+<DocumentFragment>
+  <a
     data-testid="folder-details-button"
-    ref={null}
-    resourceIri={null}
+    href="/resource/[iri]?action=details&resourceIri="
   >
-    <Link
-      as={
-        Object {
-          "pathname": "/resource/[iri]",
-          "query": Object {
-            "action": "details",
-            "resourceIri": "",
-          },
-        }
-      }
-      href={
-        Object {
-          "pathname": "/resource/[iri]",
-          "query": Object {
-            "action": "details",
-            "resourceIri": "",
-          },
-        }
-      }
-      replace={true}
-    >
-      <a
-        className={null}
-        data-testid="folder-details-button"
-        href="/resource/[iri]?action=details&resourceIri="
-        onClick={[Function]}
-        onMouseEnter={[Function]}
-      >
-        Folder Details
-      </a>
-    </Link>
-  </ResourceLink>
-</ContainerDetailsButton>
+    Folder Details
+  </a>
+</DocumentFragment>
 `;

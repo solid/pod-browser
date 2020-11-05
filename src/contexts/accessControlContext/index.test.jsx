@@ -20,23 +20,23 @@
  */
 
 import React, { useContext } from "react";
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 import AccessControlContext, { AccessControlProvider } from "./index";
 
 function ChildComponent() {
   const { accessControl } = useContext(AccessControlContext);
-  return <div id="AccessControl">{accessControl.toString()}</div>;
+  return accessControl.toString();
 }
 
 describe("AccessControlContext", () => {
   test("it provides accessControl", () => {
     const accessControl = "accessControl";
-    const component = mount(
+    const { queryByText } = render(
       <AccessControlProvider accessControl={{ toString: () => accessControl }}>
         <ChildComponent />
       </AccessControlProvider>
     );
 
-    expect(component.find("#AccessControl").text()).toEqual(accessControl);
+    expect(queryByText(accessControl)).toBeDefined();
   });
 });

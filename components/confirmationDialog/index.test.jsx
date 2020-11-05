@@ -20,13 +20,12 @@
  */
 
 import React from "react";
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
+import { render } from "@testing-library/react";
 import ConfirmationDialog from "./index";
 
 describe("ConfirmationDialog", () => {
   test("Renders a ConfirmationDialog", () => {
-    const tree = shallow(<ConfirmationDialog />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    const { asFragment } = render(<ConfirmationDialog />);
+    expect(asFragment()).toMatchSnapshot();
   });
 });

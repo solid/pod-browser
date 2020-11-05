@@ -20,13 +20,12 @@
  */
 
 import React from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
+import { render } from "@testing-library/react";
 import ContainerTableLoading from "./index";
 
 describe("ContainerTableLoading", () => {
   test("Renders a details error view", () => {
-    const tree = mount(<ContainerTableLoading />);
-    expect(mountToJson(tree)).toMatchSnapshot();
+    const { asFragment } = render(<ContainerTableLoading />);
+    expect(asFragment()).toMatchSnapshot();
   });
 });

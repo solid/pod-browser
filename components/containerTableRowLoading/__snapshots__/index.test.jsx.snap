@@ -1,19 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ContainerTableRowSkeleton Renders a ContainerTableRowSkeleton 1`] = `
-<WithStyles(ForwardRef(TableRow))
-  key="no-resources-found"
->
-  <WithStyles(ForwardRef(TableCell))
-    rowSpan={3}
+<DocumentFragment>
+  <a
+    href="/resource/https%3A%2F%2Fexample.com%2Fresource"
   >
-    <Link
-      href="/resource/https%3A%2F%2Fexample.com%2Fresource"
-    >
-      <a>
-        /resource
-      </a>
-    </Link>
-  </WithStyles(ForwardRef(TableCell))>
-</WithStyles(ForwardRef(TableRow))>
+    /resource
+  </a>
+</DocumentFragment>
 `;

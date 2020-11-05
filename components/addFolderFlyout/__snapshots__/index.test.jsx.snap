@@ -1,106 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AddFolderFlyout Renders an Add Folder button 1`] = `
-<PodLocationProvider
-  currentUri="https://www.mypodbrowser.com/"
->
-  <MockedSessionContextProvider>
-    <y
-      session={
-        Object {
-          "fetch": [MockFunction],
-          "handleIncomingRedirect": [MockFunction],
-          "info": Object {
-            "isLoggedIn": true,
-            "sessionId": "some-session-id",
-            "webId": "http://example.com/webId#me",
-          },
-          "on": [MockFunction],
-        }
-      }
-      sessionId="test-session"
-      sessionRequestInProgress={false}
-    >
-      <AddFolderFlyout
-        className={null}
-        folders={
-          Array [
-            Object {
-              "iri": "https://www.mypodbrowser.com/SomeFolder",
-              "name": "SomeFolder",
-            },
-          ]
-        }
-        onSave={[MockFunction]}
-        resourceList={Array []}
-      >
-        <button
-          className={null}
-          data-testid="add-folder-button"
-          onClick={[Function]}
-          type="button"
-        >
-          Create Folder
-        </button>
-        <WithStyles(ForwardRef(Popover))
-          anchorEl={null}
-          anchorOrigin={
-            Object {
-              "horizontal": "center",
-              "vertical": "bottom",
-            }
-          }
-          classes={
-            Object {
-              "paper": "makeStyles-paper-1",
-            }
-          }
-          onClose={[Function]}
-          open={false}
-          transformOrigin={
-            Object {
-              "horizontal": "center",
-              "vertical": "top",
-            }
-          }
-        >
-          <ForwardRef(Popover)
-            anchorEl={null}
-            anchorOrigin={
-              Object {
-                "horizontal": "center",
-                "vertical": "bottom",
-              }
-            }
-            classes={
-              Object {
-                "paper": "MuiPopover-paper makeStyles-paper-1",
-                "root": "MuiPopover-root",
-              }
-            }
-            onClose={[Function]}
-            open={false}
-            transformOrigin={
-              Object {
-                "horizontal": "center",
-                "vertical": "top",
-              }
-            }
-          >
-            <ForwardRef(Modal)
-              BackdropProps={
-                Object {
-                  "invisible": true,
-                }
-              }
-              className="MuiPopover-root"
-              onClose={[Function]}
-              open={false}
-            />
-          </ForwardRef(Popover)>
-        </WithStyles(ForwardRef(Popover))>
-      </AddFolderFlyout>
-    </y>
-  </MockedSessionContextProvider>
-</PodLocationProvider>
+<DocumentFragment>
+  <button
+    data-testid="add-folder-button"
+    type="button"
+  >
+    Create Folder
+  </button>
+</DocumentFragment>
 `;

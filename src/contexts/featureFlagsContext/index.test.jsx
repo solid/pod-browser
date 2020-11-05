@@ -20,8 +20,8 @@
  */
 
 import React, { useContext } from "react";
-import { mount } from "enzyme";
 import { useSession } from "@inrupt/solid-ui-react";
+import { render } from "@testing-library/react";
 import rules from "../../featureFlags";
 import FeatureContext, { FeatureProvider } from "./index";
 
@@ -46,12 +46,12 @@ describe("PodLocationContext", () => {
   test("it can read feature flags", () => {
     useSession.mockReturnValue({ session: null });
 
-    const component = mount(
+    const { container } = render(
       <FeatureProvider>
         <ChildComponent />
       </FeatureProvider>
     );
 
-    expect(component.find("#test").text()).toEqual("true");
+    expect(container.querySelector("#test").innerHTML).toEqual("true");
   });
 });

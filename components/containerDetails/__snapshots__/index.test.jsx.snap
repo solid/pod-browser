@@ -1,27 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ContainerDetails Renders view 1`] = `
-<ContainerDetails
-  mutate={[MockFunction]}
->
-  <DrawerContainer
-    drawer={
-      <ResourceDrawer
-        onUpdate={[Function]}
-      />
-    }
-    open={false}
+<DocumentFragment>
+  <div
+    class="makeStyles-drawer-container-1"
   >
     <div
-      className="makeStyles-drawer-container-1"
-    >
-      <div
-        className="makeStyles-drawer-container__content-2"
-      />
-      <ResourceDrawer
-        onUpdate={[Function]}
-      />
-    </div>
-  </DrawerContainer>
-</ContainerDetails>
+      class="makeStyles-drawer-container__content-2"
+    />
+  </div>
+</DocumentFragment>
 `;

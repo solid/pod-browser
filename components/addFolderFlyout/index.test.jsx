@@ -20,10 +20,9 @@
  */
 
 import React from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
-import { act } from "react-dom/test-utils";
+import { render, waitFor } from "@testing-library/react";
 import { createContainerAt } from "@inrupt/solid-client";
+import userEvent from "@testing-library/user-event";
 import { PodLocationProvider } from "../../src/contexts/podLocationContext";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
@@ -31,59 +30,58 @@ import AlertContext from "../../src/contexts/alertContext";
 import AddFolderFlyout, {
   determineFinalUrl,
   handleFolderSubmit,
+  TESTCAFE_ID_ADD_FOLDER_BUTTON,
 } from "./index";
 
 jest.mock("@inrupt/solid-client");
 
-describe("AddFolderFlyout", () => {
-  const currentUri = "https://www.mypodbrowser.com/";
-  const folders = [
-    { iri: "https://www.mypodbrowser.com/SomeFolder", name: "SomeFolder" },
-  ];
+const currentUri = "https://www.mypodbrowser.com/";
+const folders = [
+  { iri: "https://www.mypodbrowser.com/SomeFolder", name: "SomeFolder" },
+];
 
+describe("AddFolderFlyout", () => {
   const session = mockSession();
   const SessionProvider = mockSessionContextProvider(session);
 
-  const setAlertOpen = jest.fn();
-  const setMessage = jest.fn();
-  const setSeverity = jest.fn();
-  const onSave = jest.fn();
+  let result;
 
-  const tree = mount(
-    <AlertContext.Provider
-      value={{
-        setAlertOpen,
-        setMessage,
-        setSeverity,
-      }}
-    >
-      <PodLocationProvider currentUri={currentUri}>
-        <SessionProvider>
-          <AddFolderFlyout onSave={onSave} folders={folders} />
-        </SessionProvider>
-      </PodLocationProvider>
-    </AlertContext.Provider>
-  );
+  beforeEach(() => {
+    result = render(
+      <AlertContext.Provider
+        value={{
+          setAlertOpen: jest.fn(),
+          setMessage: jest.fn(),
+          setSeverity: jest.fn(),
+        }}
+      >
+        <PodLocationProvider currentUri={currentUri}>
+          <SessionProvider>
+            <AddFolderFlyout onSave={jest.fn()} folders={folders} />
+          </SessionProvider>
+        </PodLocationProvider>
+      </AlertContext.Provider>
+    );
+  });
 
   test("Renders an Add Folder button", () => {
-    expect(mountToJson(tree)).toMatchSnapshot();
+    expect(result.asFragment()).toMatchSnapshot();
   });
 
   test("Displays a flyout on click", async () => {
-    await act(async () => {
-      tree.find("button[children='Create Folder']").simulate("click");
-    });
+    const { container, queryByTestId } = result;
+    await waitFor(() =>
+      expect(queryByTestId(TESTCAFE_ID_ADD_FOLDER_BUTTON)).toBeDefined()
+    );
+    const createFolderButton = queryByTestId(TESTCAFE_ID_ADD_FOLDER_BUTTON);
+    userEvent.click(createFolderButton);
 
-    expect(tree.html()).toContain("add-folder-flyout");
+    return expect(container.querySelector("#add-folder-flyout")).toBeDefined();
   });
 });
 
 describe("determineFinalUrl", () => {
   test("it returns a URL for a new folder with apended integer if folder already exists", () => {
-    const folders = [
-      { iri: "https://www.mypodbrowser.com/SomeFolder", name: "SomeFolder" },
-    ];
-    const currentUri = "https://www.mypodbrowser.com/";
     const name = "SomeFolder";
     const url = determineFinalUrl(folders, currentUri, name);
     expect(url).toMatch("https://www.mypodbrowser.com/SomeFolder(1)");
@@ -130,18 +128,12 @@ describe("handleFolderSubmit", () => {
   });
 
   it("returns a handler that creates a new folder at a given location", async () => {
-    const currentUri = "https://www.mypodbrowser.com/";
-    const folders = [
-      { iri: "https://www.mypodbrowser.com/SomeFolder", name: "SomeFolder" },
-    ];
-    const name = "SomeFolder";
-
     const handler = handleFolderSubmit({
       options,
       onSave,
       currentUri,
       folders,
-      name,
+      name: "SomeFolder",
       setSeverity,
       setMessage,
       setAlertOpen,
@@ -168,16 +160,12 @@ describe("handleFolderSubmit", () => {
   });
 
   it("returns a handler that creates a new folder within a folder which has spaces in its name", async () => {
-    const currentUri = "https://www.mypodbrowser.com/First%20Folder/";
-    const folders = [];
-    const name = "Second Folder";
-
     const handler = handleFolderSubmit({
       options,
       onSave,
-      currentUri,
-      folders,
-      name,
+      currentUri: "https://www.mypodbrowser.com/First%20Folder/",
+      folders: [],
+      name: "Second Folder",
       setSeverity,
       setMessage,
       setAlertOpen,
@@ -204,16 +192,12 @@ describe("handleFolderSubmit", () => {
   });
 
   it("returns a handler that validates name before creating it", async () => {
-    const currentUri = "https://www.mypodbrowser.com/First%20Folder/";
-    const folders = [];
-    const name = "";
-
     const handler = handleFolderSubmit({
       options,
       onSave,
-      currentUri,
-      folders,
-      name,
+      currentUri: "https://www.mypodbrowser.com/First%20Folder/",
+      folders: [],
+      name: "",
       setSeverity,
       setMessage,
       setAlertOpen,

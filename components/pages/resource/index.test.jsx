@@ -20,13 +20,12 @@
  */
 
 import React from "react";
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
 import { useRouter } from "next/router";
-
+import { render } from "@testing-library/react";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import IndexPage from "./index";
 import useRedirectIfNoControlAccessToOwnPod from "../../../src/hooks/useRedirectIfNoControlAccessToOwnPod";
+import TestApp from "../../../__testUtils/testApp";
 
 jest.mock("../../../src/effects/auth");
 jest.mock("next/router");
@@ -36,23 +35,35 @@ describe("Resource page", () => {
   beforeEach(() => {
     useRouter.mockImplementation(() => ({
       query: {
-        iri: encodeURIComponent("https://mypod.myhost.com"),
+        iri: "https://mypod.myhost.com",
       },
     }));
   });
 
   test("Renders the resource page", () => {
-    const tree = shallow(<IndexPage />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    const { asFragment } = render(
+      <TestApp>
+        <IndexPage />
+      </TestApp>
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("Redirects if the user is logged out", () => {
-    shallow(<IndexPage />);
+    render(
+      <TestApp>
+        <IndexPage />
+      </TestApp>
+    );
     expect(useRedirectIfLoggedOut).toHaveBeenCalled();
   });
 
   test("Redirects if the user does not have access to Pod", () => {
-    shallow(<IndexPage />);
+    render(
+      <TestApp>
+        <IndexPage />
+      </TestApp>
+    );
     expect(useRedirectIfNoControlAccessToOwnPod).toHaveBeenCalled();
   });
 });

@@ -1,20 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AlertContext it has context data 1`] = `
-<ContextProvider
-  value={
-    Object {
-      "alertError": [Function],
-      "alertOpen": false,
-      "alertSuccess": [Function],
-      "message": "",
-      "setAlertOpen": [Function],
-      "setMessage": [Function],
-      "setSeverity": [Function],
-      "severity": "success",
-    }
-  }
->
-  <ChildComponent />
-</ContextProvider>
+<DocumentFragment>
+  <div>
+    <div
+      class="alertOpen"
+    >
+      true
+    </div>
+    <div
+      class="message"
+    >
+      message
+    </div>
+    <div
+      class="severity"
+    >
+      error
+    </div>
+  </div>
+</DocumentFragment>
 `;

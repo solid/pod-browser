@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 import { WithTheme } from "../../../__testUtils/mountWithTheme";
 import defaultTheme from "../../../src/theme";
 import Crumb from "./index";
@@ -34,13 +34,13 @@ describe("Breadcrumbs crumb component", () => {
       },
       isLink: false,
     };
-    const crumb = mount(
+    const { container } = render(
       <WithTheme theme={defaultTheme}>
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Crumb {...crumbProps} />
       </WithTheme>
     );
-    expect(crumb.html()).not.toContain("href");
+    expect(container.querySelector("[href]")).toBeNull();
   });
 
   test("Renders all crumbs except last one as links", () => {
@@ -51,12 +51,12 @@ describe("Breadcrumbs crumb component", () => {
       },
       isLink: true,
     };
-    const crumb = mount(
+    const { container } = render(
       <WithTheme theme={defaultTheme}>
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Crumb {...crumbProps} />
       </WithTheme>
     );
-    expect(crumb.html()).toContain("href");
+    expect(container.querySelector("[href]")).toBeDefined();
   });
 });

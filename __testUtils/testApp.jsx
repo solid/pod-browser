@@ -19,5 +19,36 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const Adapter = require("@wojtekmaj/enzyme-adapter-react-17")
-require("enzyme").configure({adapter: new Adapter()})
+import React from "react";
+import T from "prop-types";
+import { WithTheme } from "./mountWithTheme";
+import { FeatureProvider } from "../src/contexts/featureFlagsContext";
+import { AlertProvider } from "../src/contexts/alertContext";
+import { ConfirmationDialogProvider } from "../src/contexts/confirmationDialogContext";
+import mockSessionContextProvider from "./mockSessionContextProvider";
+import mockSession from "./mockSession";
+
+export default function TestApp({ children, session }) {
+  const SessionProvider = mockSessionContextProvider(session);
+  return (
+    <WithTheme>
+      <SessionProvider>
+        <FeatureProvider>
+          <AlertProvider>
+            <ConfirmationDialogProvider>{children}</ConfirmationDialogProvider>
+          </AlertProvider>
+        </FeatureProvider>
+      </SessionProvider>
+    </WithTheme>
+  );
+}
+
+TestApp.defaultProps = {
+  session: mockSession(),
+};
+
+TestApp.propTypes = {
+  children: T.node.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  session: T.object,
+};

@@ -1,70 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Logout button Renders a logout button 1`] = `
-<MockedSessionContextProvider>
-  <y
-    session={
-      Object {
-        "fetch": [MockFunction],
-        "handleIncomingRedirect": [MockFunction] {
-          "calls": Array [
-            Array [
-              "http://localhost/",
-            ],
-          ],
-          "results": Array [
-            Object {
-              "type": "return",
-              "value": Promise {},
-            },
-          ],
-        },
-        "info": Object {
-          "isLoggedIn": true,
-          "sessionId": "some-session-id",
-          "webId": "http://example.com/webId#me",
-        },
-        "on": [MockFunction] {
-          "calls": Array [
-            Array [
-              "logout",
-              [Function],
-            ],
-          ],
-          "results": Array [
-            Object {
-              "type": "return",
-              "value": undefined,
-            },
-          ],
-        },
-      }
-    }
-    sessionId="test-session"
-    sessionRequestInProgress={false}
+<DocumentFragment>
+  <div
+    role="button"
+    tabindex="0"
   >
-    <Logout
-      className={null}
+    <button
+      data-testid="logout-button"
+      type="button"
     >
-      <q
-        onLogout={[Function]}
-      >
-        <div
-          onClick={[Function]}
-          onKeyDown={[Function]}
-          role="button"
-          tabIndex={0}
-        >
-          <button
-            className={null}
-            data-testid="logout-button"
-            type="button"
-          >
-            Log Out
-          </button>
-        </div>
-      </q>
-    </Logout>
-  </y>
-</MockedSessionContextProvider>
+      Log Out
+    </button>
+  </div>
+</DocumentFragment>
 `;

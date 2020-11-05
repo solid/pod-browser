@@ -20,9 +20,8 @@
  */
 
 import React from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import { render } from "@testing-library/react";
 import DeleteResourceButton, { createDeleteHandler } from "./index";
 import usePoliciesContainer from "../../src/hooks/usePoliciesContainer";
 import {
@@ -49,9 +48,9 @@ describe("Delete resource button", () => {
   }));
   useResourceInfo.mockReturnValue("resource info");
   describe("it hooks works successfully", () => {
-    let tree;
+    let renderResult;
     beforeEach(() => {
-      tree = mount(
+      renderResult = render(
         <WithTheme theme={defaultTheme}>
           <DeleteResourceButton
             onDelete={jest.fn()}
@@ -63,7 +62,7 @@ describe("Delete resource button", () => {
     });
 
     it("renders a delete resource button", () => {
-      expect(mountToJson(tree)).toMatchSnapshot();
+      expect(renderResult.asFragment()).toMatchSnapshot();
     });
   });
 

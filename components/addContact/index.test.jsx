@@ -20,8 +20,6 @@
  */
 
 import React from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
 import { vcard } from "rdf-namespaces";
 import {
   addStringNoLocale,
@@ -29,6 +27,7 @@ import {
   mockThingFrom,
   setThing,
 } from "@inrupt/solid-client";
+import { render } from "@testing-library/react";
 import mockSession, {
   mockUnauthenticatedSession,
 } from "../../__testUtils/mockSession";
@@ -54,7 +53,7 @@ describe("AddContact", () => {
   test("it renders the Add Contact form", () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
-    const tree = mount(
+    const { asFragment } = render(
       <SessionProvider>
         <WithTheme theme={defaultTheme}>
           <AddContact />
@@ -62,13 +61,13 @@ describe("AddContact", () => {
       </SessionProvider>
     );
 
-    expect(mountToJson(tree)).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("it renders a spinner when user is not logged in", () => {
     const session = mockUnauthenticatedSession();
     const SessionProvider = mockSessionContextProvider(session);
-    const tree = mount(
+    const { asFragment } = render(
       <SessionProvider>
         <WithTheme theme={defaultTheme}>
           <AddContact />
@@ -76,7 +75,7 @@ describe("AddContact", () => {
       </SessionProvider>
     );
 
-    expect(mountToJson(tree)).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });
 describe("handleSubmit", () => {

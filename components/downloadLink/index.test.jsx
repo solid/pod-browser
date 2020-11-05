@@ -19,9 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
 import React from "react";
+import { render } from "@testing-library/react";
 import * as stringHelpers from "../../src/stringHelpers";
 import DownloadLink, { downloadResource, forceDownload } from "./index";
 
@@ -62,6 +61,8 @@ describe("forceDownload", () => {
     expect(revokeObjectURLMock).toHaveBeenCalledWith("object-url");
     expect(removeChildMock).toHaveBeenCalledWith(mockAnchor);
   });
+
+  afterEach(() => jest.restoreAllMocks());
 });
 
 describe("downloadResource", () => {
@@ -86,16 +87,16 @@ describe("downloadResource", () => {
 
 describe("DownloadLink", () => {
   test("returns null if resource is a container", () => {
-    const type = "container";
-    const iri = "http://example.com/resource";
-    const tree = shallow(<DownloadLink type={type} iri={iri} />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    const { asFragment } = render(
+      <DownloadLink type="container" iri="http://example.com/resource" />
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("returns a download button if resource is not a container", () => {
-    const type = "foo";
-    const iri = "http://example.com/resource";
-    const tree = shallow(<DownloadLink type={type} iri={iri} />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    const { asFragment } = render(
+      <DownloadLink type="foo" iri="http://example.com/resource" />
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 });

@@ -20,9 +20,8 @@
  */
 
 import React from "react";
-import { mount } from "enzyme";
 import { useRouter } from "next/router";
-import { mountToJson as enzymeMountToJson } from "enzyme-to-json";
+import { render } from "@testing-library/react";
 import { WithTheme } from "../../../__testUtils/mountWithTheme";
 import PodIndicator, {
   clickHandler,
@@ -60,13 +59,13 @@ describe("PodIndicator", () => {
       profile: packageProfile(aliceWebIdUrl, userProfile),
       error: null,
     });
-    const tree = mount(
+    const { asFragment, queryByText } = render(
       <WithTheme theme={defaultTheme}>
         <PodIndicator />
       </WithTheme>
     );
-    expect(tree.html()).toContain("Alice");
-    expect(enzymeMountToJson(tree)).toMatchSnapshot();
+    expect(queryByText("Alice")).toBeDefined();
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("it renders the pod indicator with the correct name with a name", async () => {
@@ -75,13 +74,13 @@ describe("PodIndicator", () => {
       profile: packageProfile(bobWebIdUrl, userProfile),
       error: null,
     });
-    const tree = mount(
+    const { asFragment, queryByText } = render(
       <WithTheme theme={defaultTheme}>
         <PodIndicator />
       </WithTheme>
     );
-    expect(tree.html()).toContain("Bob");
-    expect(enzymeMountToJson(tree)).toMatchSnapshot();
+    expect(queryByText("Bob")).toBeDefined();
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("it returns null if there is no profile", async () => {
@@ -89,12 +88,12 @@ describe("PodIndicator", () => {
       profile: null,
       error: null,
     });
-    const tree = mount(
+    const { asFragment } = render(
       <WithTheme theme={defaultTheme}>
         <PodIndicator />
       </WithTheme>
     );
-    expect(enzymeMountToJson(tree)).toMatchSnapshot();
+    expect(asFragment).toMatchSnapshot();
   });
 });
 

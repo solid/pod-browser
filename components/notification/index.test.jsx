@@ -20,13 +20,12 @@
  */
 
 import React from "react";
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
+import { render } from "@testing-library/react";
 import Notification from "./index";
 
 describe("Notification", () => {
   test("Renders a Notification", () => {
-    const tree = shallow(<Notification />);
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    const { asFragment } = render(<Notification />);
+    expect(asFragment()).toMatchSnapshot();
   });
 });

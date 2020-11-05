@@ -20,12 +20,17 @@
  */
 
 import React from "react";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { render } from "@testing-library/react";
 import Login from "./index";
+import { WithTheme } from "../../__testUtils/mountWithTheme";
 
 describe("Login form", () => {
   test("Renders a login form, with button bound to swapLoginType", () => {
-    const tree = mountToJson(<Login />);
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = render(
+      <WithTheme>
+        <Login />
+      </WithTheme>
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 });

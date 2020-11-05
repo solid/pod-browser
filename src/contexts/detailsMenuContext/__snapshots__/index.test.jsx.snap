@@ -1,14 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DetailsMenuContext it has context data 1`] = `
-<ContextProvider
-  value={
-    Object {
-      "menuOpen": false,
-      "setMenuOpen": [Function],
-    }
-  }
->
-  <ChildComponent />
-</ContextProvider>
+<DocumentFragment>
+  <div
+    id="menuOpen"
+  >
+    true
+  </div>
+</DocumentFragment>
 `;

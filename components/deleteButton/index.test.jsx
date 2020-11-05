@@ -20,7 +20,8 @@
  */
 
 import React from "react";
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { mountToJson, WithTheme } from "../../__testUtils/mountWithTheme";
 import defaultTheme from "../../src/theme";
 
@@ -59,7 +60,7 @@ describe("Delete button", () => {
       setContent: jest.fn(),
       confirmed: null,
     });
-    const tree = mount(
+    const { container } = render(
       <WithTheme theme={defaultTheme}>
         <ConfirmationDialogProvider>
           <DeleteButton
@@ -72,8 +73,8 @@ describe("Delete button", () => {
         </ConfirmationDialogProvider>
       </WithTheme>
     );
-    const deletebutton = tree.find("button");
-    deletebutton.simulate("click");
+    const deletebutton = container.querySelector("button");
+    userEvent.click(deletebutton);
     expect(setOpen).toHaveBeenCalledWith(dialogId);
   });
 });

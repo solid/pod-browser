@@ -20,8 +20,7 @@
  */
 
 import React, { useContext } from "react";
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
+import { render } from "@testing-library/react";
 import AlertContext, { AlertProvider } from "./index";
 
 function ChildComponent() {
@@ -49,12 +48,12 @@ function ChildComponent() {
 
 describe("AlertContext", () => {
   test("it has context data", () => {
-    const component = shallow(
+    const { asFragment } = render(
       <AlertProvider>
         <ChildComponent />
       </AlertProvider>
     );
 
-    expect(shallowToJson(component)).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });

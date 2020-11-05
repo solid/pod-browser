@@ -1,185 +1,47 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ContainerPageHeader Renders view 1`] = `
-<ContainerPageHeader
-  mutate={[Function]}
-  resourceList={Array []}
->
-  <PageHeader
-    actions={
-      Array [
-        <ContainerDetailsButton
-          className="makeStyles-page-header__action-5"
-        />,
-        <AddFolderFlyout
-          className="makeStyles-page-header__action-5"
-          onSave={[Function]}
-          resourceList={Array []}
-        />,
-        <AddFileButton
-          className="makeStyles-page-header__action-5"
-          onSave={[Function]}
-          resourceList={Array []}
-        />,
-      ]
-    }
-    title="Files"
+<DocumentFragment>
+  <div
+    class="makeStyles-page-header-1"
   >
-    <div
-      className="makeStyles-page-header-1"
+    <h1
+      class="makeStyles-page-header__title-2"
     >
-      <h1
-        className="makeStyles-page-header__title-2"
+      Files
+    </h1>
+    <div
+      class="makeStyles-page-header__content-3"
+    />
+    <div
+      class="makeStyles-page-header__toolbar-4"
+    >
+      <a
+        class="makeStyles-page-header__action-5"
+        data-testid="folder-details-button"
+        href="/resource/[iri]?action=details&resourceIri="
       >
-        Files
-      </h1>
-      <div
-        className="makeStyles-page-header__content-3"
-      />
-      <div
-        className="makeStyles-page-header__toolbar-4"
+        Folder Details
+      </a>
+      <button
+        class="makeStyles-page-header__action-5"
+        data-testid="add-folder-button"
+        type="button"
       >
-        <ContainerDetailsButton
-          className="makeStyles-page-header__action-5"
-        >
-          <ResourceLink
-            action="details"
-            className="makeStyles-page-header__action-5"
-            containerIri={null}
-            data-testid="folder-details-button"
-            ref={null}
-            resourceIri={null}
-          >
-            <Link
-              as={
-                Object {
-                  "pathname": "/resource/[iri]",
-                  "query": Object {
-                    "action": "details",
-                    "resourceIri": "",
-                  },
-                }
-              }
-              href={
-                Object {
-                  "pathname": "/resource/[iri]",
-                  "query": Object {
-                    "action": "details",
-                    "resourceIri": "",
-                  },
-                }
-              }
-              replace={true}
-            >
-              <a
-                className="makeStyles-page-header__action-5"
-                data-testid="folder-details-button"
-                href="/resource/[iri]?action=details&resourceIri="
-                onClick={[Function]}
-                onMouseEnter={[Function]}
-              >
-                Folder Details
-              </a>
-            </Link>
-          </ResourceLink>
-        </ContainerDetailsButton>
-        <AddFolderFlyout
-          className="makeStyles-page-header__action-5"
-          onSave={[Function]}
-          resourceList={Array []}
-        >
-          <button
-            className="makeStyles-page-header__action-5"
-            data-testid="add-folder-button"
-            onClick={[Function]}
-            type="button"
-          >
-            Create Folder
-          </button>
-          <WithStyles(ForwardRef(Popover))
-            anchorEl={null}
-            anchorOrigin={
-              Object {
-                "horizontal": "center",
-                "vertical": "bottom",
-              }
-            }
-            classes={
-              Object {
-                "paper": "makeStyles-paper-6",
-              }
-            }
-            onClose={[Function]}
-            open={false}
-            transformOrigin={
-              Object {
-                "horizontal": "center",
-                "vertical": "top",
-              }
-            }
-          >
-            <ForwardRef(Popover)
-              anchorEl={null}
-              anchorOrigin={
-                Object {
-                  "horizontal": "center",
-                  "vertical": "bottom",
-                }
-              }
-              classes={
-                Object {
-                  "paper": "MuiPopover-paper makeStyles-paper-6",
-                  "root": "MuiPopover-root",
-                }
-              }
-              onClose={[Function]}
-              open={false}
-              transformOrigin={
-                Object {
-                  "horizontal": "center",
-                  "vertical": "top",
-                }
-              }
-            >
-              <ForwardRef(Modal)
-                BackdropProps={
-                  Object {
-                    "invisible": true,
-                  }
-                }
-                className="MuiPopover-root"
-                onClose={[Function]}
-                open={false}
-              />
-            </ForwardRef(Popover)>
-          </WithStyles(ForwardRef(Popover))>
-        </AddFolderFlyout>
-        <AddFileButton
-          className="makeStyles-page-header__action-5"
-          onSave={[Function]}
-          resourceList={Array []}
-        >
-          <label
-            className="makeStyles-page-header__action-5"
-            data-testid="upload-file-button"
-            disabled={false}
-          >
-            Upload File
-            <input
-              data-testid="upload-file-input"
-              onChange={[Function]}
-              onClick={[Function]}
-              style={
-                Object {
-                  "display": "none",
-                }
-              }
-              type="file"
-            />
-          </label>
-        </AddFileButton>
-      </div>
+        Create Folder
+      </button>
+      <label
+        class="makeStyles-page-header__action-5"
+        data-testid="upload-file-button"
+      >
+        Upload File
+        <input
+          data-testid="upload-file-input"
+          style="display: none;"
+          type="file"
+        />
+      </label>
     </div>
-  </PageHeader>
-</ContainerPageHeader>
+  </div>
+</DocumentFragment>
 `;

@@ -20,13 +20,12 @@
  */
 
 import React from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
+import { render } from "@testing-library/react";
 import ContainerPageHeader from "./index";
 
 describe("ContainerPageHeader", () => {
   test("Renders view", () => {
-    const tree = mount(<ContainerPageHeader />);
-    expect(mountToJson(tree)).toMatchSnapshot();
+    const { asFragment } = render(<ContainerPageHeader />);
+    expect(asFragment()).toMatchSnapshot();
   });
 });

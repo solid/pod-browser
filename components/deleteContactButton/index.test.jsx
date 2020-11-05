@@ -20,19 +20,18 @@
  */
 
 import React from "react";
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
 
 import DeleteContactButton from "./index";
+import { mountToJson } from "../../__testUtils/mountWithTheme";
 
 jest.mock("@inrupt/solid-client");
 
 describe("Delete contact button", () => {
   test("it renders a delete contact button", () => {
-    const tree = shallow(
+    const fragment = mountToJson(
       <DeleteContactButton onDelete={jest.fn()} name="Test" />
     );
 
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    expect(fragment).toMatchSnapshot();
   });
 });

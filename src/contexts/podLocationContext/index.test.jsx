@@ -20,7 +20,7 @@
  */
 
 import React, { useContext } from "react";
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 import PodLocationContext, { PodLocationProvider } from "./index";
 import usePodRootUri from "../../hooks/usePodRootUri";
 import useAuthenticatedProfile from "../../hooks/useAuthenticatedProfile";
@@ -48,15 +48,16 @@ describe("PodLocationContext", () => {
     });
     usePodRootUri.mockReturnValue(baseUri);
 
-    const component = mount(
-      <PodLocationProvider currentUri="https://foo.test/bar/baz">
+    const currentUri = "https://foo.test/bar/baz";
+    const { container } = render(
+      <PodLocationProvider currentUri={currentUri}>
         <ChildComponent />
       </PodLocationProvider>
     );
 
-    expect(component.find("#BaseUri").text()).toEqual("https://foo.test/");
-    expect(component.find("#CurrentUri").text()).toEqual(
-      "https://foo.test/bar/baz"
+    expect(container.querySelector("#BaseUri").innerHTML).toEqual(baseUri);
+    expect(container.querySelector("#CurrentUri").innerHTML).toEqual(
+      currentUri
     );
   });
 });

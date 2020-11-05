@@ -1,14 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`BookmarksContext it has context data 1`] = `
-<ContextProvider
-  value={
-    Object {
-      "bookmarks": undefined,
-      "setBookmarks": [Function],
-    }
-  }
->
-  <ChildComponent />
-</ContextProvider>
+<DocumentFragment>
+  <div
+    id="bookmarks"
+  >
+    no bookmarks
+  </div>
+</DocumentFragment>
 `;

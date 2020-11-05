@@ -20,20 +20,18 @@
  */
 
 import React from "react";
-import { mount, shallow } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
 import Router, * as nextRouterFns from "next/router";
 
+import { render } from "@testing-library/react";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import IndexPage from "./index";
-import mockSession from "../../../__testUtils/mockSession";
+import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
 import { resourceHref } from "../../../src/navigator";
 import usePodIrisFromWebId from "../../../src/hooks/usePodIrisFromWebId";
+import TestApp from "../../../__testUtils/testApp";
 
 jest.mock("../../../src/effects/auth");
 jest.mock("../../../src/hooks/usePodIrisFromWebId");
-jest.mock("@inrupt/solid-client");
 jest.mock("next/router");
 
 describe("Index page", () => {
@@ -47,9 +45,6 @@ describe("Index page", () => {
   });
 
   test("Renders null if there are no pod iris", () => {
-    const session = mockSession();
-    const SessionProvider = mockSessionContextProvider(session);
-
     nextRouterFns.useRouter.mockReturnValue({
       replace: jest.fn().mockResolvedValue(undefined),
     });
@@ -58,26 +53,23 @@ describe("Index page", () => {
       data: undefined,
     });
 
-    const tree = mount(
-      <SessionProvider>
+    const { asFragment } = render(
+      <TestApp>
         <IndexPage />
-      </SessionProvider>
+      </TestApp>
     );
-    expect(mountToJson(tree)).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("Redirects to the resource page if there is a pod iri", () => {
     const replace = jest.fn().mockResolvedValue(undefined);
 
-    const session = mockSession();
-    const SessionProvider = mockSessionContextProvider(session);
-
     nextRouterFns.useRouter.mockReturnValue({ replace });
 
-    mount(
-      <SessionProvider>
+    render(
+      <TestApp>
         <IndexPage />
-      </SessionProvider>
+      </TestApp>
     );
 
     expect(replace).toHaveBeenCalledWith(
@@ -87,7 +79,11 @@ describe("Index page", () => {
   });
 
   test("Redirects if the user is logged out", () => {
-    shallow(<IndexPage />);
+    render(
+      <TestApp session={mockUnauthenticatedSession()}>
+        <IndexPage />
+      </TestApp>
+    );
     expect(useRedirectIfLoggedOut).toHaveBeenCalled();
   });
 });

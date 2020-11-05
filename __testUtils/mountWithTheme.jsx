@@ -21,9 +21,8 @@
 
 import React from "react";
 import T from "prop-types";
-import { mount } from "enzyme";
-import { mountToJson as enzymeMountToJson } from "enzyme-to-json";
 import { StylesProvider, ThemeProvider } from "@inrupt/prism-react-components";
+import { render } from "@testing-library/react";
 import defaultTheme from "../src/theme";
 
 export const WithTheme = (props) => {
@@ -46,6 +45,8 @@ WithTheme.defaultProps = {
 };
 
 export const mountToJson = (children, theme = defaultTheme) => {
-  const tree = mount(<WithTheme theme={theme}>{children}</WithTheme>);
-  return enzymeMountToJson(tree);
+  const { asFragment } = render(
+    <WithTheme theme={theme}>{children}</WithTheme>
+  );
+  return asFragment();
 };

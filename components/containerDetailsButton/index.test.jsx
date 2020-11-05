@@ -20,13 +20,12 @@
  */
 
 import React from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
+import { render } from "@testing-library/react";
 import ContainerDetailsButton from "./index";
 
 describe("ContainerDetailsButton", () => {
   test("Renders view", () => {
-    const tree = mount(<ContainerDetailsButton />);
-    expect(mountToJson(tree)).toMatchSnapshot();
+    const { asFragment } = render(<ContainerDetailsButton />);
+    expect(asFragment()).toMatchSnapshot();
   });
 });

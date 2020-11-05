@@ -1,7 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Spinner Renders a spinner 1`] = `
-<LoadingIndicator
-  center={true}
-/>
+<DocumentFragment>
+  <div
+    class="makeStyles-loading-indicator-container-4 makeStyles-loading-indicator-container--center-5"
+  >
+    <svg
+      class="makeStyles-loading-indicator-3"
+      viewBox="22 22 44 44"
+    >
+      <circle
+        cx="44"
+        cy="44"
+        fill="none"
+        r="20.2"
+        stroke-width="3.6"
+      />
+    </svg>
+  </div>
+</DocumentFragment>
 `;

@@ -20,10 +20,9 @@
  */
 
 import React from "react";
-import { mount } from "enzyme";
-import { mountToJson } from "enzyme-to-json";
 import * as RouterFns from "next/router";
 import T from "prop-types";
+import { render } from "@testing-library/react";
 import ContainerDetails from "./index";
 import ResourceDrawer, { handleCloseDrawer } from "../resourceDrawer";
 
@@ -33,7 +32,7 @@ describe("ContainerDetails", () => {
   let mutate;
   let onUpdateFn;
   let handleCloseDrawerFn;
-  let tree;
+  let renderResult;
 
   beforeEach(() => {
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
@@ -57,11 +56,11 @@ describe("ContainerDetails", () => {
 
     mutate = jest.fn();
 
-    tree = mount(<ContainerDetails mutate={mutate} />);
+    renderResult = render(<ContainerDetails mutate={mutate} />);
   });
 
   test("Renders view", () => {
-    expect(mountToJson(tree)).toMatchSnapshot();
+    expect(renderResult.asFragment()).toMatchSnapshot();
   });
 
   describe("when DetailsContextMenu.onUpdate is called", () => {
