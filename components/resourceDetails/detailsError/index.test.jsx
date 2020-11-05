@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { mountToJson } from "../../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 import DetailsError from "./index";
 
 describe("DetailsError", () => {
@@ -28,10 +28,10 @@ describe("DetailsError", () => {
     const name = "name";
     const message = "message";
     const iri = "iri";
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <DetailsError name={name} message={message} iri={iri} />
     );
 
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });

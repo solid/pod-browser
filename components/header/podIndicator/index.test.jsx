@@ -21,8 +21,7 @@
 
 import React from "react";
 import { useRouter } from "next/router";
-import { render } from "@testing-library/react";
-import { WithTheme } from "../../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 import PodIndicator, {
   clickHandler,
   closeHandler,
@@ -35,7 +34,6 @@ import {
   bobWebIdUrl,
 } from "../../../__testUtils/mockPersonResource";
 import usePodOwnerProfile from "../../../src/hooks/usePodOwnerProfile";
-import defaultTheme from "../../../src/theme";
 
 import { packageProfile } from "../../../src/solidClientHelpers/profile";
 import { resourceHref } from "../../../src/navigator";
@@ -59,11 +57,7 @@ describe("PodIndicator", () => {
       profile: packageProfile(aliceWebIdUrl, userProfile),
       error: null,
     });
-    const { asFragment, queryByText } = render(
-      <WithTheme theme={defaultTheme}>
-        <PodIndicator />
-      </WithTheme>
-    );
+    const { asFragment, queryByText } = renderWithTheme(<PodIndicator />);
     expect(queryByText("Alice")).toBeDefined();
     expect(asFragment()).toMatchSnapshot();
   });
@@ -74,11 +68,7 @@ describe("PodIndicator", () => {
       profile: packageProfile(bobWebIdUrl, userProfile),
       error: null,
     });
-    const { asFragment, queryByText } = render(
-      <WithTheme theme={defaultTheme}>
-        <PodIndicator />
-      </WithTheme>
-    );
+    const { asFragment, queryByText } = renderWithTheme(<PodIndicator />);
     expect(queryByText("Bob")).toBeDefined();
     expect(asFragment()).toMatchSnapshot();
   });
@@ -88,11 +78,7 @@ describe("PodIndicator", () => {
       profile: null,
       error: null,
     });
-    const { asFragment } = render(
-      <WithTheme theme={defaultTheme}>
-        <PodIndicator />
-      </WithTheme>
-    );
+    const { asFragment } = renderWithTheme(<PodIndicator />);
     expect(asFragment).toMatchSnapshot();
   });
 });

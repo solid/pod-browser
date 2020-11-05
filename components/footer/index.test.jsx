@@ -20,12 +20,12 @@
  */
 
 import React from "react";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import Footer from "./index";
 
 describe("Footer", () => {
   test("renders the footer", () => {
-    const tree = mountToJson(<Footer />);
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<Footer />);
+    expect(asFragment()).toMatchSnapshot();
   });
 });

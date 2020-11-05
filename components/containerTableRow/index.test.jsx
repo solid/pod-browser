@@ -23,7 +23,7 @@ import React from "react";
 import * as routerFns from "next/router";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { useRouter } from "next/router";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import ContainerTableRow, {
   handleAction,
   ResourceIcon,
@@ -58,7 +58,7 @@ describe("ContainerTableRow", () => {
       query: {},
     });
 
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <table>
         <tbody>
           <BookmarksContext.Provider value={(bookmarks, setBookmarks)}>
@@ -68,7 +68,7 @@ describe("ContainerTableRow", () => {
       </table>
     );
 
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("it renders a table row with loaded data", () => {
@@ -78,7 +78,7 @@ describe("ContainerTableRow", () => {
       types: ["some-type"],
     };
 
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <table>
         <tbody>
           <BookmarksContext.Provider value={(bookmarks, setBookmarks)}>
@@ -88,7 +88,7 @@ describe("ContainerTableRow", () => {
       </table>
     );
 
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("it renders a table row with loaded data without a type", () => {
@@ -98,7 +98,7 @@ describe("ContainerTableRow", () => {
       types: [],
     };
 
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <table>
         <tbody>
           <BookmarksContext.Provider value={(bookmarks, setBookmarks)}>
@@ -108,7 +108,7 @@ describe("ContainerTableRow", () => {
       </table>
     );
 
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });
 
@@ -172,16 +172,20 @@ describe("handleAction", () => {
 describe("ResourceIcon", () => {
   test("it renders a container icon for containers", () => {
     const bem = jest.fn();
-    const tree = mountToJson(<ResourceIcon iri="/container/" bem={bem} />);
+    const { asFragment } = renderWithTheme(
+      <ResourceIcon iri="/container/" bem={bem} />
+    );
 
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("it renders a container icon for resources", () => {
     const bem = jest.fn();
-    const tree = mountToJson(<ResourceIcon iri="/resource" bem={bem} />);
+    const { asFragment } = renderWithTheme(
+      <ResourceIcon iri="/resource" bem={bem} />
+    );
 
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });
 

@@ -22,7 +22,7 @@
 import React from "react";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import AddPermissionUsingWebIdButton, {
   changeHandler,
   clickHandler,
@@ -36,13 +36,12 @@ const dataset = mockSolidDatasetFrom(datasetUrl);
 
 describe("AddPermissionUsingWebIdButton", () => {
   it("renders", () => {
-    expect(
-      mountToJson(
-        <DatasetProvider dataset={dataset}>
-          <AddPermissionUsingWebIdButton />
-        </DatasetProvider>
-      )
-    ).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <DatasetProvider dataset={dataset}>
+        <AddPermissionUsingWebIdButton />
+      </DatasetProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 });
 

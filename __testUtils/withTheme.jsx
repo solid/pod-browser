@@ -25,14 +25,14 @@ import { StylesProvider, ThemeProvider } from "@inrupt/prism-react-components";
 import { render } from "@testing-library/react";
 import defaultTheme from "../src/theme";
 
-export const WithTheme = (props) => {
+export default function WithTheme(props) {
   const { theme, children } = props;
   return (
     <StylesProvider generateClassName={(rule) => `PodBrowser-${rule.key}`}>
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </StylesProvider>
   );
-};
+}
 
 WithTheme.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
@@ -44,9 +44,6 @@ WithTheme.defaultProps = {
   theme: defaultTheme,
 };
 
-export const mountToJson = (children, theme = defaultTheme) => {
-  const { asFragment } = render(
-    <WithTheme theme={theme}>{children}</WithTheme>
-  );
-  return asFragment();
+export const renderWithTheme = (children, theme = defaultTheme) => {
+  return render(<WithTheme theme={theme}>{children}</WithTheme>);
 };

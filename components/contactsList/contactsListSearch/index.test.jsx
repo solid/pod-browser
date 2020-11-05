@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { mountToJson } from "../../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 import { SearchProvider } from "../../../src/contexts/searchContext";
 import ContactsListSearch from "./index";
 import {
@@ -30,24 +30,22 @@ import {
 
 describe("ContactsListSearch", () => {
   it("renders form if people are still loading", () => {
-    expect(
-      mountToJson(
-        <SearchProvider>
-          <ContactsListSearch />
-        </SearchProvider>
-      )
-    ).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <SearchProvider>
+        <ContactsListSearch />
+      </SearchProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it("render profiles when people are loaded", () => {
-    expect(
-      mountToJson(
-        <SearchProvider>
-          <ContactsListSearch
-            people={[mockPersonDatasetAlice(), mockPersonDatasetBob()]}
-          />
-        </SearchProvider>
-      )
-    ).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <SearchProvider>
+        <ContactsListSearch
+          people={[mockPersonDatasetAlice(), mockPersonDatasetBob()]}
+        />
+      </SearchProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 });

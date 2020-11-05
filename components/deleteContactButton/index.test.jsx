@@ -22,16 +22,16 @@
 import React from "react";
 
 import DeleteContactButton from "./index";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 
 jest.mock("@inrupt/solid-client");
 
 describe("Delete contact button", () => {
   test("it renders a delete contact button", () => {
-    const fragment = mountToJson(
+    const { asFragment } = renderWithTheme(
       <DeleteContactButton onDelete={jest.fn()} name="Test" />
     );
 
-    expect(fragment).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });

@@ -21,7 +21,7 @@
 
 import React from "react";
 import * as RouterFns from "next/router";
-import { mountToJson } from "../../../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../../../__testUtils/mockSessionContextProvider";
 import mockSession from "../../../../__testUtils/mockSession";
 
@@ -42,12 +42,12 @@ describe("Contact show page", () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
 
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <SessionProvider>
         <ContactPage />
       </SessionProvider>
     );
 
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });

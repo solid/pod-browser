@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import BookmarksList from "./index";
 import mockBookmarks from "../../__testUtils/mockBookmarks";
 import mockBookmarksContextProvider from "../../__testUtils/mockBookmarksContextProvider";
@@ -33,12 +33,12 @@ describe("BookmarksList", () => {
       bookmarks,
       setBookmarks,
     });
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <BookmarksContextProvider>
         <BookmarksList />
       </BookmarksContextProvider>
     );
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
   test("it renders a list of bookmarks", async () => {
     const bookmarks = mockBookmarks();
@@ -47,11 +47,11 @@ describe("BookmarksList", () => {
       bookmarks,
       setBookmarks,
     });
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <BookmarksContextProvider>
         <BookmarksList />
       </BookmarksContextProvider>
     );
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });

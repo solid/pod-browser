@@ -22,7 +22,7 @@
 import React from "react";
 import * as RouterFns from "next/router";
 import DetailsLoading from "./index";
-import { mountToJson } from "../../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 
 describe("DetailsLoading", () => {
   test("Renders a details error view", () => {
@@ -31,8 +31,10 @@ describe("DetailsLoading", () => {
       .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });
 
     const resource = { iri: "iri", name: "name", types: ["type"] };
-    const tree = mountToJson(<DetailsLoading resource={resource} />);
+    const { asFragment } = renderWithTheme(
+      <DetailsLoading resource={resource} />
+    );
 
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });

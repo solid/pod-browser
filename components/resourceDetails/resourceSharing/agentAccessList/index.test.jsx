@@ -22,7 +22,7 @@
 import React from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
-import { mountToJson } from "../../../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import * as permissionHelpers from "../../../../src/solidClientHelpers/permissions";
 import AgentAccessList from ".";
 import { AccessControlProvider } from "../../../../src/contexts/accessControlContext";
@@ -41,34 +41,33 @@ const permission = {
 
 describe("AgentAccessList", () => {
   it("renders an AgentAccessList", () => {
-    expect(mountToJson(<AgentAccessList />)).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<AgentAccessList />);
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders a about empty list of permissions", () => {
     const accessControl = mockAccessControl();
-    expect(
-      mountToJson(
-        <AccessControlProvider accessControl={accessControl}>
-          <DatasetProvider dataset={dataset}>
-            <AgentAccessList />
-          </DatasetProvider>
-        </AccessControlProvider>
-      )
-    ).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <AccessControlProvider accessControl={accessControl}>
+        <DatasetProvider dataset={dataset}>
+          <AgentAccessList />
+        </DatasetProvider>
+      </AccessControlProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders a list of permissions", () => {
     const accessControl = mockAccessControl({
       permissions: [permission],
     });
-    expect(
-      mountToJson(
-        <AccessControlProvider accessControl={accessControl}>
-          <DatasetProvider dataset={dataset}>
-            <AgentAccessList />
-          </DatasetProvider>
-        </AccessControlProvider>
-      )
-    ).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <AccessControlProvider accessControl={accessControl}>
+        <DatasetProvider dataset={dataset}>
+          <AgentAccessList />
+        </DatasetProvider>
+      </AccessControlProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 });

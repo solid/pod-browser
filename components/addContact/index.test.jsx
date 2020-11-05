@@ -27,7 +27,6 @@ import {
   mockThingFrom,
   setThing,
 } from "@inrupt/solid-client";
-import { render } from "@testing-library/react";
 import mockSession, {
   mockUnauthenticatedSession,
 } from "../../__testUtils/mockSession";
@@ -40,8 +39,7 @@ import AddContact, {
 } from "./index";
 import * as addressBookFns from "../../src/addressBook";
 import { contactsContainerIri } from "../../src/addressBook";
-import { WithTheme } from "../../__testUtils/mountWithTheme";
-import { defaultTheme } from "../../src/theme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import {
   aliceWebIdUrl,
   mockPersonDatasetAlice,
@@ -53,11 +51,9 @@ describe("AddContact", () => {
   test("it renders the Add Contact form", () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
-    const { asFragment } = render(
+    const { asFragment } = renderWithTheme(
       <SessionProvider>
-        <WithTheme theme={defaultTheme}>
-          <AddContact />
-        </WithTheme>
+        <AddContact />
       </SessionProvider>
     );
 
@@ -67,11 +63,9 @@ describe("AddContact", () => {
   test("it renders a spinner when user is not logged in", () => {
     const session = mockUnauthenticatedSession();
     const SessionProvider = mockSessionContextProvider(session);
-    const { asFragment } = render(
+    const { asFragment } = renderWithTheme(
       <SessionProvider>
-        <WithTheme theme={defaultTheme}>
-          <AddContact />
-        </WithTheme>
+        <AddContact />
       </SessionProvider>
     );
 

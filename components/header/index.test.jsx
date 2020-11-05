@@ -21,7 +21,7 @@
 
 import React from "react";
 import { useRouter } from "next/router";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import Header from "./index";
 import mockSession, {
@@ -43,12 +43,12 @@ describe("Header", () => {
       const session = mockSession();
       const SessionProvider = mockSessionContextProvider(session);
 
-      const tree = mountToJson(
+      const { asFragment } = renderWithTheme(
         <SessionProvider>
           <Header />
         </SessionProvider>
       );
-      expect(tree).toMatchSnapshot();
+      expect(asFragment()).toMatchSnapshot();
     });
   });
 
@@ -57,13 +57,13 @@ describe("Header", () => {
       const session = mockUnauthenticatedSession();
       const SessionProvider = mockSessionContextProvider(session);
 
-      const tree = mountToJson(
+      const { asFragment } = renderWithTheme(
         <SessionProvider>
           <Header />
         </SessionProvider>
       );
 
-      expect(tree).toMatchSnapshot();
+      expect(asFragment()).toMatchSnapshot();
     });
   });
 });

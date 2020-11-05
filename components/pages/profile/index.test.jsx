@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { mountToJson } from "../../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import mockSession from "../../../__testUtils/mockSession";
 
@@ -33,12 +33,12 @@ describe("Profile page", () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
 
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <SessionProvider>
         <ProfilePage />
       </SessionProvider>
     );
 
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });

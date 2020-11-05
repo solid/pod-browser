@@ -20,13 +20,13 @@
  */
 
 import React from "react";
-import { mountToJson } from "../../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 import UserMenu from "./index";
 
 describe("UserMenu", () => {
   test("renders a menu", () => {
-    const tree = mountToJson(<UserMenu />);
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<UserMenu />);
+    expect(asFragment()).toMatchSnapshot();
   });
 
   // TODO: Write test for the various ways to toggle the user menu

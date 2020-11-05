@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { mountToJson } from "../../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 import MainNav from "./index";
 import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
@@ -30,11 +30,11 @@ describe("MainNav", () => {
     const session = mockUnauthenticatedSession();
     const SessionProvider = mockSessionContextProvider(session);
 
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <SessionProvider>
         <MainNav />
       </SessionProvider>
     );
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });

@@ -21,7 +21,7 @@
 
 import React from "react";
 import { useRouter } from "next/router";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import AccessForbidden from "./index";
 
 jest.mock("next/router");
@@ -36,7 +36,7 @@ describe("AccessForbidden", () => {
   });
 
   it("renders", () => {
-    const tree = mountToJson(<AccessForbidden />);
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<AccessForbidden />);
+    expect(asFragment()).toMatchSnapshot();
   });
 });

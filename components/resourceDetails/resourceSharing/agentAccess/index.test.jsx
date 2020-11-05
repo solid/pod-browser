@@ -27,7 +27,7 @@ import AgentAccess, { getDialogId, saveHandler, submitHandler } from "./index";
 import mockSessionContextProvider from "../../../../__testUtils/mockSessionContextProvider";
 import mockSession from "../../../../__testUtils/mockSession";
 
-import { mountToJson } from "../../../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
 import useFetchProfile from "../../../../src/hooks/useFetchProfile";
 import { mockProfileAlice } from "../../../../__testUtils/mockPersonResource";
@@ -50,13 +50,12 @@ describe("AgentAccess", () => {
   });
 
   it("renders", () => {
-    expect(
-      mountToJson(
-        <DatasetProvider dataset={dataset}>
-          <AgentAccess permission={permission} />
-        </DatasetProvider>
-      )
-    ).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} />
+      </DatasetProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it("fetches profile for webId", () => {
@@ -84,15 +83,14 @@ describe("AgentAccess", () => {
       const session = mockSession();
       const SessionProvider = mockSessionContextProvider(session);
 
-      expect(
-        mountToJson(
-          <SessionProvider>
-            <DatasetProvider dataset={dataset}>
-              <AgentAccess permission={permission} webId={session.info.webId} />
-            </DatasetProvider>
-          </SessionProvider>
-        )
-      ).toMatchSnapshot();
+      const { asFragment } = renderWithTheme(
+        <SessionProvider>
+          <DatasetProvider dataset={dataset}>
+            <AgentAccess permission={permission} webId={session.info.webId} />
+          </DatasetProvider>
+        </SessionProvider>
+      );
+      expect(asFragment()).toMatchSnapshot();
     });
   });
 });

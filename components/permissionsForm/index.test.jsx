@@ -27,19 +27,21 @@ import PermissionsForm, {
   toggleOpen,
 } from "./index";
 import { ACL, createAccessMap } from "../../src/solidClientHelpers/permissions";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 
 describe("PermissionsForm", () => {
   test("Renders a permissions form", () => {
     const acl = createAccessMap(true, true, true, true);
 
-    expect(mountToJson(<PermissionsForm acl={acl} />)).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<PermissionsForm acl={acl} />);
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("it returns null if control is false", () => {
     const acl = createAccessMap(true, true, true, false);
 
-    expect(mountToJson(<PermissionsForm acl={acl} />)).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<PermissionsForm acl={acl} />);
+    expect(asFragment()).toMatchSnapshot();
   });
 
   describe("toggleOpen", () => {
@@ -64,11 +66,13 @@ describe("PermissionsForm", () => {
 
   describe("arrowIcon", () => {
     test("it returns the up arrow when open is true", () => {
-      expect(mountToJson(arrowIcon(true))).toMatchSnapshot();
+      const { asFragment } = renderWithTheme(arrowIcon(true));
+      expect(asFragment()).toMatchSnapshot();
     });
 
     test("it returns the down arrow when open is false", () => {
-      expect(mountToJson(arrowIcon(false))).toMatchSnapshot();
+      const { asFragment } = renderWithTheme(arrowIcon(false));
+      expect(asFragment()).toMatchSnapshot();
     });
   });
 });

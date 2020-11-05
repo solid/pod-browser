@@ -20,33 +20,38 @@
  */
 
 import React from "react";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 
 import SortedTableCarat from "./index";
 
 describe("Sorted", () => {
   test("Displays an upwards facing carat when ascending", () => {
-    const tree = mountToJson(<SortedTableCarat sorted sortedDesc={false} />);
-
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <SortedTableCarat sorted sortedDesc={false} />
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("Displays a downwards facing carat when descending", () => {
-    const tree = mountToJson(<SortedTableCarat sorted sortedDesc />);
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <SortedTableCarat sorted sortedDesc />
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 });
 
 describe("Unsorted", () => {
   test("Displays nothing when unsorted", () => {
-    const tree = mountToJson(<SortedTableCarat sorted sortedDesc={false} />);
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <SortedTableCarat sorted sortedDesc={false} />
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 });
 
 describe("Hiding the caret", () => {
   test("Is hidden", () => {
-    const tree = mountToJson(<SortedTableCarat sorted={false} />);
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<SortedTableCarat sorted={false} />);
+    expect(asFragment()).toMatchSnapshot();
   });
 });

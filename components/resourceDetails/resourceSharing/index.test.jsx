@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { mountToJson } from "../../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 import ResourceSharing from "./index";
 
 describe("ResourceSharing", () => {
@@ -29,10 +29,12 @@ describe("ResourceSharing", () => {
   });
 
   test("it renders the sharing action component", () => {
-    expect(mountToJson(<ResourceSharing />)).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<ResourceSharing />);
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("it renders the spinner if it's loading", () => {
-    expect(mountToJson(<ResourceSharing startLoading />)).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<ResourceSharing startLoading />);
+    expect(asFragment()).toMatchSnapshot();
   });
 });

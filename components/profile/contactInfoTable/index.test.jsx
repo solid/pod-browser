@@ -26,7 +26,7 @@ import { ThingProvider } from "@inrupt/solid-ui-react";
 
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
-import { mountToJson } from "../../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 
 import ContactInfoTable from "./index";
 
@@ -36,7 +36,7 @@ describe("ContactInfoTable", () => {
     const SessionProvider = mockSessionContextProvider(session);
     const thing = mockThingFrom("http://example.com/alice#me");
 
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <SessionProvider>
         <ThingProvider thing={thing}>
           <ContactInfoTable property={vcard.hasEmail} />
@@ -44,7 +44,7 @@ describe("ContactInfoTable", () => {
       </SessionProvider>
     );
 
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("renders an editable table of contact info", () => {
@@ -52,7 +52,7 @@ describe("ContactInfoTable", () => {
     const SessionProvider = mockSessionContextProvider(session);
     const thing = mockThingFrom("http://example.com/alice#me");
 
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <SessionProvider>
         <ThingProvider thing={thing}>
           <ContactInfoTable property={vcard.hasEmail} editing />
@@ -60,6 +60,6 @@ describe("ContactInfoTable", () => {
       </SessionProvider>
     );
 
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });

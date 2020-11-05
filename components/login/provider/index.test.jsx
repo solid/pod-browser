@@ -24,18 +24,16 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
-import { renderWithTheme } from "../../../__testUtils/renderWithTheme";
-import { mountToJson } from "../../../__testUtils/mountWithTheme";
 
 import ProviderLogin from "./index";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 
 jest.mock("../../../src/windowHelpers");
 
 describe("ProviderLogin form", () => {
   test("Renders a webid login form, with button bound to login", () => {
-    const tree = mountToJson(<ProviderLogin />);
-
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<ProviderLogin />);
+    expect(asFragment()).toMatchSnapshot();
   });
   test("It calls the login function upon submitting the form", () => {
     const session = mockUnauthenticatedSession();

@@ -26,7 +26,7 @@ import mockSession, {
 } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import AccessRequired from ".";
-import { mountToJson } from "../../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 
 jest.mock("next/router");
 
@@ -35,12 +35,12 @@ describe("Access Required page", () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
 
-    const snapshot = mountToJson(
+    const { asFragment } = renderWithTheme(
       <SessionProvider>
         <AccessRequired />
       </SessionProvider>
     );
-    expect(snapshot).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("unauthenticated profile is redirected to login", () => {
@@ -49,7 +49,7 @@ describe("Access Required page", () => {
 
     Router.push.mockResolvedValue(null);
 
-    mountToJson(
+    renderWithTheme(
       <SessionProvider>
         <AccessRequired />
       </SessionProvider>

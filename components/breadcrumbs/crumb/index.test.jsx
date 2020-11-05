@@ -20,9 +20,7 @@
  */
 
 import React from "react";
-import { render } from "@testing-library/react";
-import { WithTheme } from "../../../__testUtils/mountWithTheme";
-import defaultTheme from "../../../src/theme";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 import Crumb from "./index";
 
 describe("Breadcrumbs crumb component", () => {
@@ -34,11 +32,9 @@ describe("Breadcrumbs crumb component", () => {
       },
       isLink: false,
     };
-    const { container } = render(
-      <WithTheme theme={defaultTheme}>
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Crumb {...crumbProps} />
-      </WithTheme>
+    const { container } = renderWithTheme(
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      <Crumb {...crumbProps} />
     );
     expect(container.querySelector("[href]")).toBeNull();
   });
@@ -51,11 +47,9 @@ describe("Breadcrumbs crumb component", () => {
       },
       isLink: true,
     };
-    const { container } = render(
-      <WithTheme theme={defaultTheme}>
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Crumb {...crumbProps} />
-      </WithTheme>
+    const { container } = renderWithTheme(
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      <Crumb {...crumbProps} />
     );
     expect(container.querySelector("[href]")).toBeDefined();
   });

@@ -26,7 +26,7 @@ import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import ResourceDrawer, { handleCloseDrawer } from "./index";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockDetailsContextMenuProvider from "../../__testUtils/mockDetailsContextMenuProvider";
 import useResourceInfo from "../../src/hooks/useResourceInfo";
 import useAccessControl from "../../src/hooks/useAccessControl";
@@ -87,24 +87,24 @@ describe("ResourceDrawer view", () => {
       query: {},
     });
 
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <DetailsContext>
         <ResourceDrawer />
       </DetailsContext>
     );
 
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("it renders a Contents view when the router query has an iri", () => {
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
           <ResourceDrawer />
         </DetailsMenuContext>
       </SessionProvider>
     );
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("it renders without errors when iri contains spaces", () => {
@@ -116,18 +116,18 @@ describe("ResourceDrawer view", () => {
         action: "details",
       },
     });
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
           <ResourceDrawer />
         </DetailsMenuContext>
       </SessionProvider>
     );
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it("uses resource dataset", () => {
-    mountToJson(
+    renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
           <ResourceDrawer />
@@ -138,7 +138,7 @@ describe("ResourceDrawer view", () => {
   });
 
   it("uses access control", () => {
-    mountToJson(
+    renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
           <ResourceDrawer />
@@ -151,29 +151,27 @@ describe("ResourceDrawer view", () => {
   it("renders a specific error message if resource fails with 403", () => {
     useResourceInfo.mockReturnValue({ error: new Error("403") });
 
-    expect(
-      mountToJson(
-        <SessionProvider>
-          <DetailsMenuContext>
-            <ResourceDrawer />
-          </DetailsMenuContext>
-        </SessionProvider>
-      )
-    ).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <SessionProvider>
+        <DetailsMenuContext>
+          <ResourceDrawer />
+        </DetailsMenuContext>
+      </SessionProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders an error message if resource fails to load", () => {
     useResourceInfo.mockReturnValue({ error: new Error("error") });
 
-    expect(
-      mountToJson(
-        <SessionProvider>
-          <DetailsMenuContext>
-            <ResourceDrawer />
-          </DetailsMenuContext>
-        </SessionProvider>
-      )
-    ).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <SessionProvider>
+        <DetailsMenuContext>
+          <ResourceDrawer />
+        </DetailsMenuContext>
+      </SessionProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 });
 

@@ -21,7 +21,7 @@
 
 /* eslint-disable camelcase */
 import React from "react";
-import { mountToJson } from "../../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 import PermissionCheckbox from "./index";
 
 describe("PermissionCheckbox", () => {
@@ -30,10 +30,10 @@ describe("PermissionCheckbox", () => {
     const label = "Read";
     const value = true;
 
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <PermissionCheckbox value={value} label={label} onChange={onChange} />
     );
 
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });

@@ -21,7 +21,7 @@
 
 import { render, fireEvent } from "@testing-library/react";
 import React from "react";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import AgentSearchForm from "./index";
 
 describe("AgentSearchForm", () => {
@@ -29,7 +29,7 @@ describe("AgentSearchForm", () => {
     const heading = "Heading";
     const onChange = jest.fn();
     const onSubmit = jest.fn();
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <AgentSearchForm
         heading={heading}
         onChange={onChange}
@@ -38,14 +38,15 @@ describe("AgentSearchForm", () => {
       />
     );
 
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("it has a default heading", () => {
     const onSubmit = jest.fn();
-    const tree = mountToJson(<AgentSearchForm onSubmit={onSubmit} />);
-
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <AgentSearchForm onSubmit={onSubmit} />
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
   test("it calls onChange when updating the input", () => {
     const onChange = jest.fn();

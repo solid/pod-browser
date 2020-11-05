@@ -20,19 +20,21 @@
  */
 
 import React from "react";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import Profile from "./index";
 
 const profileIri = "https://example.com/profile/card#me";
 
 describe("Profile", () => {
   test("renders a profile", () => {
-    const tree = mountToJson(<Profile profileIri={profileIri} />);
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<Profile profileIri={profileIri} />);
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("renders an editable profile", () => {
-    const tree = mountToJson(<Profile profileIri={profileIri} editing />);
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <Profile profileIri={profileIri} editing />
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 });

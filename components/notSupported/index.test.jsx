@@ -21,7 +21,7 @@
 
 import React from "react";
 import { useRouter } from "next/router";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import AccessForbidden from "./index";
 
 jest.mock("next/router");
@@ -30,11 +30,13 @@ describe("NotSupported", () => {
   beforeEach(() => {
     useRouter.mockImplementation(() => ({
       query: {
-        iri: encodeURIComponent("https://mypod.myhost.com"),
+        iri: "https://mypod.myhost.com",
       },
     }));
   });
 
-  it("renders", () =>
-    expect(mountToJson(<AccessForbidden />)).toMatchSnapshot());
+  it("renders", () => {
+    const { asFragment } = renderWithTheme(<AccessForbidden />);
+    expect(asFragment()).toMatchSnapshot();
+  });
 });

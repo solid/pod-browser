@@ -31,9 +31,9 @@ exports[`NotSupported renders 1`] = `
           Navigate to the resource directly (this will navigate away from PodBrowser): 
         </span>
         <a
-          href="https%3A%2F%2Fmypod.myhost.com"
+          href="https://mypod.myhost.com"
         >
-          https%3A%2F%2Fmypod.myhost.com
+          https://mypod.myhost.com
         </a>
       </p>
     </div>

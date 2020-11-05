@@ -28,9 +28,9 @@ import {
   getResource,
   deleteResource,
 } from "../../src/solidClientHelpers/resource";
-import { WithTheme } from "../../__testUtils/mountWithTheme";
 import defaultTheme from "../../src/theme";
 import useResourceInfo from "../../src/hooks/useResourceInfo";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 
 jest.mock("@inrupt/solid-client");
 jest.mock("../../src/hooks/useResourceInfo");
@@ -50,14 +50,12 @@ describe("Delete resource button", () => {
   describe("it hooks works successfully", () => {
     let renderResult;
     beforeEach(() => {
-      renderResult = render(
-        <WithTheme theme={defaultTheme}>
-          <DeleteResourceButton
-            onDelete={jest.fn()}
-            resourceIri={resourceIri}
-            name={name}
-          />
-        </WithTheme>
+      renderResult = renderWithTheme(
+        <DeleteResourceButton
+          onDelete={jest.fn()}
+          resourceIri={resourceIri}
+          name={name}
+        />
       );
     });
 

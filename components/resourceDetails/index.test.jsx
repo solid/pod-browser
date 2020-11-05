@@ -22,30 +22,30 @@
 import React from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import ResourceDetails from "./index";
 
 describe("Resource details", () => {
   test("it renders container details", () => {
     const dataset = mockSolidDatasetFrom("http://example.com/container/");
 
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <DatasetProvider dataset={dataset}>
         <ResourceDetails />
       </DatasetProvider>
     );
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
   test("it renders a decoded container name", () => {
     const dataset = mockSolidDatasetFrom(
       "http://example.com/Some%20container/"
     );
 
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <DatasetProvider dataset={dataset}>
         <ResourceDetails />
       </DatasetProvider>
     );
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });

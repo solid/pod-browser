@@ -27,7 +27,7 @@ import { deleteContact } from "../../src/addressBook";
 import useAddressBook from "../../src/hooks/useAddressBook";
 import useContacts from "../../src/hooks/useContacts";
 import useProfiles from "../../src/hooks/useProfiles";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import ContactsList, { handleDeleteContact } from "./index";
 import {
   mockPersonDatasetAlice,
@@ -54,13 +54,12 @@ describe("ContactsList", () => {
     });
     useProfiles.mockReturnValue(null);
 
-    expect(
-      mountToJson(
-        <SessionProvider>
-          <ContactsList />
-        </SessionProvider>
-      )
-    ).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <SessionProvider>
+        <ContactsList />
+      </SessionProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
     expect(useAddressBook).toHaveBeenCalledWith();
     expect(useContacts).toHaveBeenCalledWith(null, foaf.Person);
   });
@@ -74,13 +73,12 @@ describe("ContactsList", () => {
     });
     useProfiles.mockReturnValue(null);
 
-    expect(
-      mountToJson(
-        <SessionProvider>
-          <ContactsList />
-        </SessionProvider>
-      )
-    ).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <SessionProvider>
+        <ContactsList />
+      </SessionProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
     expect(useContacts).toHaveBeenCalledWith(42, foaf.Person);
   });
 
@@ -93,13 +91,12 @@ describe("ContactsList", () => {
     });
     useProfiles.mockReturnValue(null);
 
-    expect(
-      mountToJson(
-        <SessionProvider>
-          <ContactsList />
-        </SessionProvider>
-      )
-    ).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <SessionProvider>
+        <ContactsList />
+      </SessionProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
     expect(useProfiles).toHaveBeenCalledWith("peopleData");
   });
 
@@ -111,13 +108,12 @@ describe("ContactsList", () => {
       mutate: () => {},
     });
 
-    expect(
-      mountToJson(
-        <SessionProvider>
-          <ContactsList />
-        </SessionProvider>
-      )
-    ).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <SessionProvider>
+        <ContactsList />
+      </SessionProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders page when people is loaded", () => {
@@ -132,13 +128,12 @@ describe("ContactsList", () => {
       mockPersonDatasetBob(),
     ]);
 
-    expect(
-      mountToJson(
-        <SessionProvider>
-          <ContactsList />
-        </SessionProvider>
-      )
-    ).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <SessionProvider>
+        <ContactsList />
+      </SessionProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders empty state message when there are no contacts", () => {
@@ -169,13 +164,12 @@ describe("ContactsList", () => {
       mutate: () => {},
     });
 
-    expect(
-      mountToJson(
-        <SessionProvider>
-          <ContactsList />
-        </SessionProvider>
-      )
-    ).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <SessionProvider>
+        <ContactsList />
+      </SessionProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 });
 

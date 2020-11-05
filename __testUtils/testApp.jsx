@@ -21,7 +21,7 @@
 
 import React from "react";
 import T from "prop-types";
-import { WithTheme } from "./mountWithTheme";
+import WithTheme from "./withTheme";
 import { FeatureProvider } from "../src/contexts/featureFlagsContext";
 import { AlertProvider } from "../src/contexts/alertContext";
 import { ConfirmationDialogProvider } from "../src/contexts/confirmationDialogContext";

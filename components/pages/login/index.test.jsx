@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { mountToJson } from "../../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 import { useRedirectIfLoggedIn } from "../../../src/effects/auth";
 import LoginPage from "./index";
 
@@ -28,12 +28,12 @@ jest.mock("../../../src/effects/auth");
 
 describe("Login page", () => {
   test("Renders a login button", () => {
-    const tree = mountToJson(<LoginPage />);
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<LoginPage />);
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("Redirects if the user is logged out", () => {
-    mountToJson(<LoginPage />);
+    renderWithTheme(<LoginPage />);
     expect(useRedirectIfLoggedIn).toHaveBeenCalled();
   });
 });

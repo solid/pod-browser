@@ -21,7 +21,7 @@
 
 import React from "react";
 import { useRouter } from "next/router";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import ResourceNotFound from "./index";
 
 jest.mock("next/router");
@@ -36,7 +36,7 @@ describe("ResourceNotFound", () => {
   });
 
   it("renders", () => {
-    const tree = mountToJson(<ResourceNotFound />);
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<ResourceNotFound />);
+    expect(asFragment()).toMatchSnapshot();
   });
 });

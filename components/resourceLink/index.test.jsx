@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import ResourceLink from "./index";
 
 jest.mock("next/router");
@@ -30,12 +30,12 @@ describe("ResourceLink", () => {
     const resourceIri = "https://mypod.myhost.com/resource";
     const containerIri = "https://mypod.myhost.com";
 
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <ResourceLink resourceIri={resourceIri} containerIri={containerIri}>
         Text
       </ResourceLink>
     );
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("renders with a resource, container, and action", () => {
@@ -43,7 +43,7 @@ describe("ResourceLink", () => {
     const containerIri = "https://mypod.myhost.com";
     const action = "myAction";
 
-    const tree = mountToJson(
+    const { asFragment } = renderWithTheme(
       <ResourceLink
         resourceIri={resourceIri}
         containerIri={containerIri}
@@ -52,6 +52,6 @@ describe("ResourceLink", () => {
         Text
       </ResourceLink>
     );
-    expect(tree).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 });

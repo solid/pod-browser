@@ -22,7 +22,7 @@
 import React from "react";
 import * as RouterFns from "next/router";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
-import { mountToJson } from "../../__testUtils/mountWithTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import Container from "./index";
 import useContainerResourceIris from "../../src/hooks/useContainerResourceIris";
 import useDataset from "../../src/hooks/useDataset";
@@ -49,8 +49,8 @@ describe("Container view", () => {
       mutate: () => {},
     });
 
-    const tree = mountToJson(<Container iri={iri} />);
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<Container iri={iri} />);
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("Renders a table view without data", () => {
@@ -59,8 +59,8 @@ describe("Container view", () => {
       mutate: () => {},
     });
 
-    const tree = mountToJson(<Container iri={iri} />);
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<Container iri={iri} />);
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("Renders a table with data", () => {
@@ -73,36 +73,40 @@ describe("Container view", () => {
       mutate: () => {},
     });
 
-    const tree = mountToJson(<Container iri={iri} />);
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<Container iri={iri} />);
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders Access Forbidden if the fetch for container returns 401", () => {
     useContainerResourceIris.mockReturnValue({
       error: { message: "401" },
     });
-    expect(mountToJson(<Container iri={iri} />)).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<Container iri={iri} />);
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders Access Forbidden if the fetch for container returns 403", () => {
     useContainerResourceIris.mockReturnValue({
       error: { message: "403" },
     });
-    expect(mountToJson(<Container iri={iri} />)).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<Container iri={iri} />);
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders Access Forbidden if the fetch for container returns 404", () => {
     useContainerResourceIris.mockReturnValue({
       error: { message: "404" },
     });
-    expect(mountToJson(<Container iri={iri} />)).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<Container iri={iri} />);
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders Not supported if the fetch for container returns 500", () => {
     useContainerResourceIris.mockReturnValue({
       error: { message: "500" },
     });
-    expect(mountToJson(<Container iri={iri} />)).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<Container iri={iri} />);
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders Not Supported if resource loaded is not a container", () => {
@@ -114,6 +118,7 @@ describe("Container view", () => {
       data: [],
       mutate: () => {},
     });
-    expect(mountToJson(<Container iri={resourceIri} />)).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<Container iri={resourceIri} />);
+    expect(asFragment()).toMatchSnapshot();
   });
 });
