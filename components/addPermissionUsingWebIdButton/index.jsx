@@ -35,6 +35,8 @@ import styles from "./styles";
 import AccessControlContext from "../../src/contexts/accessControlContext";
 
 const POPOVER_ID = "AddPermissionWithWebId";
+const TESTCAFE_ID_ADD_USER_WITH_WEBID_BUTTON =
+  "permissions-add-user-with-webid-button";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -135,6 +137,7 @@ export default function AddPermissionUsingWebIdButton({
         type="button"
         {...buttonProps}
         onClick={handleClick}
+        data-testid={TESTCAFE_ID_ADD_USER_WITH_WEBID_BUTTON}
       >
         Add with WebId
       </button>

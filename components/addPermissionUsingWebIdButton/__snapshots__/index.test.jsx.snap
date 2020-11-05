@@ -857,6 +857,7 @@ font-display: block;",
           onLoading={[Function]}
         >
           <button
+            data-testid="permissions-add-user-with-webid-button"
             onClick={[Function]}
             type="button"
           >

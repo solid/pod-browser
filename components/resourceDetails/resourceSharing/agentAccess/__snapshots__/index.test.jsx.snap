@@ -1211,6 +1211,7 @@ font-display: block;",
                                         onChange={[Function]}
                                       />
                                     }
+                                    data-testid="permission-checkbox-view"
                                     key=".0"
                                     label="View"
                                   >
@@ -1238,10 +1239,12 @@ font-display: block;",
                                           onChange={[Function]}
                                         />
                                       }
+                                      data-testid="permission-checkbox-view"
                                       label="View"
                                     >
                                       <label
                                         className="PodBrowser-root"
+                                        data-testid="permission-checkbox-view"
                                       >
                                         <WithStyles(ForwardRef(Checkbox))
                                           checked={false}
@@ -1586,6 +1589,7 @@ font-display: block;",
                                         onChange={[Function]}
                                       />
                                     }
+                                    data-testid="permission-checkbox-edit"
                                     key=".0"
                                     label="Edit"
                                   >
@@ -1613,10 +1617,12 @@ font-display: block;",
                                           onChange={[Function]}
                                         />
                                       }
+                                      data-testid="permission-checkbox-edit"
                                       label="Edit"
                                     >
                                       <label
                                         className="PodBrowser-root"
+                                        data-testid="permission-checkbox-edit"
                                       >
                                         <WithStyles(ForwardRef(Checkbox))
                                           checked={false}
@@ -1961,6 +1967,7 @@ font-display: block;",
                                         onChange={[Function]}
                                       />
                                     }
+                                    data-testid="permission-checkbox-append"
                                     key=".0"
                                     label="Append"
                                   >
@@ -1988,10 +1995,12 @@ font-display: block;",
                                           onChange={[Function]}
                                         />
                                       }
+                                      data-testid="permission-checkbox-append"
                                       label="Append"
                                     >
                                       <label
                                         className="PodBrowser-root"
+                                        data-testid="permission-checkbox-append"
                                       >
                                         <WithStyles(ForwardRef(Checkbox))
                                           checked={false}
@@ -2336,6 +2345,7 @@ font-display: block;",
                                         onChange={[Function]}
                                       />
                                     }
+                                    data-testid="permission-checkbox-control"
                                     key=".0"
                                     label="Control"
                                   >
@@ -2363,10 +2373,12 @@ font-display: block;",
                                           onChange={[Function]}
                                         />
                                       }
+                                      data-testid="permission-checkbox-control"
                                       label="Control"
                                     >
                                       <label
                                         className="PodBrowser-root"
+                                        data-testid="permission-checkbox-control"
                                       >
                                         <WithStyles(ForwardRef(Checkbox))
                                           checked={false}
@@ -3931,6 +3943,7 @@ font-display: block;",
                                             onChange={[Function]}
                                           />
                                         }
+                                        data-testid="permission-checkbox-view"
                                         key=".0"
                                         label="View"
                                       >
@@ -3958,10 +3971,12 @@ font-display: block;",
                                               onChange={[Function]}
                                             />
                                           }
+                                          data-testid="permission-checkbox-view"
                                           label="View"
                                         >
                                           <label
                                             className="PodBrowser-root"
+                                            data-testid="permission-checkbox-view"
                                           >
                                             <WithStyles(ForwardRef(Checkbox))
                                               checked={false}
@@ -4306,6 +4321,7 @@ font-display: block;",
                                             onChange={[Function]}
                                           />
                                         }
+                                        data-testid="permission-checkbox-edit"
                                         key=".0"
                                         label="Edit"
                                       >
@@ -4333,10 +4349,12 @@ font-display: block;",
                                               onChange={[Function]}
                                             />
                                           }
+                                          data-testid="permission-checkbox-edit"
                                           label="Edit"
                                         >
                                           <label
                                             className="PodBrowser-root"
+                                            data-testid="permission-checkbox-edit"
                                           >
                                             <WithStyles(ForwardRef(Checkbox))
                                               checked={false}
@@ -4681,6 +4699,7 @@ font-display: block;",
                                             onChange={[Function]}
                                           />
                                         }
+                                        data-testid="permission-checkbox-append"
                                         key=".0"
                                         label="Append"
                                       >
@@ -4708,10 +4727,12 @@ font-display: block;",
                                               onChange={[Function]}
                                             />
                                           }
+                                          data-testid="permission-checkbox-append"
                                           label="Append"
                                         >
                                           <label
                                             className="PodBrowser-root"
+                                            data-testid="permission-checkbox-append"
                                           >
                                             <WithStyles(ForwardRef(Checkbox))
                                               checked={false}
@@ -5056,6 +5077,7 @@ font-display: block;",
                                             onChange={[Function]}
                                           />
                                         }
+                                        data-testid="permission-checkbox-control"
                                         key=".0"
                                         label="Control"
                                       >
@@ -5083,10 +5105,12 @@ font-display: block;",
                                               onChange={[Function]}
                                             />
                                           }
+                                          data-testid="permission-checkbox-control"
                                           label="Control"
                                         >
                                           <label
                                             className="PodBrowser-root"
+                                            data-testid="permission-checkbox-control"
                                           >
                                             <WithStyles(ForwardRef(Checkbox))
                                               checked={false}

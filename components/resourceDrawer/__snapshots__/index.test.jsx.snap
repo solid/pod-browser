@@ -2375,6 +2375,7 @@ font-display: block;",
                                                                   >
                                                                     <button
                                                                       className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--prompt"
+                                                                      data-testid="permissions-add-user-with-webid-button"
                                                                       onClick={[Function]}
                                                                       type="button"
                                                                     >
@@ -5210,6 +5211,7 @@ font-display: block;",
                                                               >
                                                                 <button
                                                                   className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--prompt"
+                                                                  data-testid="permissions-add-user-with-webid-button"
                                                                   onClick={[Function]}
                                                                   type="button"
                                                                 >
@@ -8085,6 +8087,7 @@ font-display: block;",
                                                                   >
                                                                     <button
                                                                       className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--prompt"
+                                                                      data-testid="permissions-add-user-with-webid-button"
                                                                       onClick={[Function]}
                                                                       type="button"
                                                                     >
