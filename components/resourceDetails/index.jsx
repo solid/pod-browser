@@ -68,7 +68,7 @@ export default function ResourceDetails({ onDelete }) {
   const actionMenuBem = ActionMenu.useBem();
   const { accessControl } = useContext(AccessControlContext);
   const resourceIsContainer = isContainer(datasetUrl);
-  const showActions = accessControl || !resourceIsContainer;
+  const showActions = !!accessControl || !resourceIsContainer;
 
   const expandIcon = <ExpandMoreIcon />;
   return (
