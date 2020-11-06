@@ -55,3 +55,8 @@ export function joinPath(root, ...paths) {
 export function normalizeContainerUrl(url) {
   return joinPath(url, "");
 }
+
+export function getContainerUrl(url) {
+  const encodedIri = encodeURI(url);
+  return encodedIri.substring(0, encodedIri.lastIndexOf("/") + 1);
+}

@@ -20,19 +20,20 @@
  */
 
 /* eslint-disable camelcase */
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { makeStyles, createStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { useRouter } from "next/router";
 import clsx from "clsx";
 import T from "prop-types";
+import { isContainer } from "@inrupt/solid-client";
 import { DETAILS_CONTEXT_ACTIONS } from "../../src/contexts/detailsMenuContext";
-import { isContainerIri } from "../../src/solidClientHelpers/utils";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import ResourceLink from "../resourceLink";
 import Bookmark from "../bookmark";
 import styles from "./styles";
 import { resourceContextRedirect } from "../../src/navigator";
+import { isContainerIri } from "../../src/solidClientHelpers/utils";
 
 export function ResourceIcon({ iri, bem }) {
   // keeping it very simple for now (either folder or file), and then we can expand upon it later
@@ -64,13 +65,46 @@ export function handleAction(resourceIri, containerIri, router) {
   };
 }
 
-export default function ContainerTableRow({ resource }) {
+export function handlePreselection(resourceIri, containerIri, router) {
+  const action = DETAILS_CONTEXT_ACTIONS.DETAILS;
+  return (async () => {
+    await resourceContextRedirect(action, resourceIri, containerIri, router);
+  })();
+}
+
+export default function ContainerTableRow({
+  resource,
+  container,
+  preselected,
+}) {
   const classes = useStyles();
   const bem = useBem(classes);
   const { name, iri } = resource;
   const router = useRouter();
   const { currentUri } = useContext(PodLocationContext);
-  const isActive = router.query.resourceIri === iri;
+  const isActive = router.query.resourceIri === iri || preselected;
+  const [shouldRedirect, setShouldRedirect] = useState(preselected);
+
+  useEffect(() => {
+    if (!isContainer(iri) && preselected) {
+      setShouldRedirect(true);
+    }
+  }, [preselected, iri, setShouldRedirect]);
+
+  useEffect(() => {
+    if (shouldRedirect) {
+      handlePreselection(iri, container, router);
+      setShouldRedirect(false);
+    }
+  }, [
+    shouldRedirect,
+    setShouldRedirect,
+    container,
+    iri,
+    router,
+    preselected,
+    resource,
+  ]);
 
   return (
     <tr
@@ -88,7 +122,7 @@ export default function ContainerTableRow({ resource }) {
         <ResourceIcon iri={iri} bem={bem} />
       </td>
       <td className={bem("table__body-cell")}>
-        {isContainerIri(iri) ? (
+        {isContainer(iri) ? (
           <ResourceLink
             containerIri={iri}
             resourceIri={iri}
@@ -112,6 +146,8 @@ ContainerTableRow.propTypes = {
     name: T.string.isRequired,
     iri: T.string.isRequired,
   }),
+  container: T.string.isRequired,
+  preselected: T.bool,
 };
 
 ContainerTableRow.defaultProps = {
@@ -119,4 +155,5 @@ ContainerTableRow.defaultProps = {
     name: "",
     iri: "",
   },
+  preselected: false,
 };

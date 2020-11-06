@@ -25841,7 +25841,9 @@ font-display: block;",
                       role="rowgroup"
                     >
                       <ContainerTableRow
+                        container="https://example.com/container/"
                         key="https://myaccount.mypodserver.com/inbox"
+                        preselected={false}
                         resource={
                           Object {
                             "filename": "inbox",
@@ -25903,7 +25905,9 @@ font-display: block;",
                         </tr>
                       </ContainerTableRow>
                       <ContainerTableRow
+                        container="https://example.com/container/"
                         key="https://myaccount.mypodserver.com/private"
+                        preselected={false}
                         resource={
                           Object {
                             "filename": "private",
@@ -25965,7 +25969,9 @@ font-display: block;",
                         </tr>
                       </ContainerTableRow>
                       <ContainerTableRow
+                        container="https://example.com/container/"
                         key="https://myaccount.mypodserver.com/note.txt"
+                        preselected={false}
                         resource={
                           Object {
                             "filename": "note.txt",

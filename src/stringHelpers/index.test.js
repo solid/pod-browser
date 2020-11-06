@@ -25,6 +25,7 @@ import {
   stripQueryParams,
   normalizeContainerUrl,
   joinPath,
+  getContainerUrl,
 } from "./index";
 
 describe("joinPath", () => {
@@ -118,5 +119,16 @@ describe("isUrl", () => {
 describe("stripQueryParams", () => {
   test("it removes everything in a string after a ?", () => {
     expect(stripQueryParams("foo?bar=baz")).toEqual("foo");
+  });
+});
+
+describe("getContainerUrl", () => {
+  const resourceUrl = "https://www.example.org/stuff/photo.jpg";
+  const containerUrl = "https://www.example.org/stuff/";
+  test("it returns the url of the parent container of a given resource", () => {
+    expect(getContainerUrl(resourceUrl)).toEqual(containerUrl);
+  });
+  test("it returns the same url when passed a container url", () => {
+    expect(getContainerUrl(containerUrl)).toEqual(containerUrl);
   });
 });

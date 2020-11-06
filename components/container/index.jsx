@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import T from "prop-types";
 import { useTable, useSortBy } from "react-table";
 import { createStyles, makeStyles } from "@material-ui/styles";
@@ -44,15 +44,28 @@ import ResourceNotFound from "../resourceNotFound";
 import useDataset from "../../src/hooks/useDataset";
 import NotSupported from "../notSupported";
 import useContainerResourceIris from "../../src/hooks/useContainerResourceIris";
+import { getContainerUrl } from "../../src/stringHelpers";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function Container({ iri }) {
   useRedirectIfLoggedOut();
   const encodedIri = encodeURI(iri);
+  const encodedContainerPathIri = getContainerUrl(iri);
+  const [containerPath, setContainerPath] = useState(encodedContainerPathIri);
+  const [resourcePath, setResourcePath] = useState(encodedIri);
 
-  const { data: container, error } = useDataset(encodedIri);
-  const { data: resourceIris, mutate } = useContainerResourceIris(encodedIri);
+  useEffect(() => {
+    setResourcePath(encodedIri);
+    const path = getContainerUrl(iri);
+    setContainerPath(path);
+  }, [encodedIri, iri]);
+
+  const { data: container, error } = useDataset(containerPath);
+
+  const { data: resourceIris, mutate } = useContainerResourceIris(
+    containerPath
+  );
 
   const loading = !resourceIris || !container;
 
@@ -173,7 +186,14 @@ export default function Container({ iri }) {
                 prepareRow(row);
                 const details = row.original;
                 return (
-                  <ContainerTableRow key={details.iri} resource={details} />
+                  <ContainerTableRow
+                    key={details.iri}
+                    resource={details}
+                    container={containerPath}
+                    preselected={
+                      details.iri === resourcePath && !isContainer(resourcePath)
+                    }
+                  />
                 );
               })}
             </tbody>
