@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProfileLink supports rendering name from foaf.name 1`] = `
+<DocumentFragment>
+  <a
+    href="/contacts/https%3A%2F%2Fexample.com%2Fbob"
+  >
+    Bob
+  </a>
+</DocumentFragment>
+`;
+
+exports[`ProfileLink supports rendering name from vcard.fn 1`] = `
+<DocumentFragment>
+  <a
+    href="/contacts/https%3A%2F%2Fexample.com%2Falice"
+  >
+    Alice
+  </a>
+</DocumentFragment>
+`;

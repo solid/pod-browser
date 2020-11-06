@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddContactPage renders 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-container"
+  >
+    <nav
+      class="PodBrowser-back-to-nav"
+    >
+      <span
+        class="PodBrowser-icon-caret-left PodBrowser-back-to-nav__caret"
+      />
+      <a
+        class="PodBrowser-back-to-nav__link"
+        href="/contacts"
+      >
+        Back to contacts
+      </a>
+    </nav>
+    <h3>
+      Add new contact
+    </h3>
+    <form
+      class="PodBrowser-form"
+    >
+      <label
+        class="PodBrowser-label"
+      >
+        WebID
+      </label>
+      <input
+        class="PodBrowser-input"
+        id="id1"
+        pattern="https://.+"
+        title="Must start with https://"
+        type="url"
+        value=""
+      />
+      <button
+        class="PodBrowser-button"
+        type="submit"
+      >
+        Add Contact
+      </button>
+    </form>
+  </div>
+</DocumentFragment>
+`;

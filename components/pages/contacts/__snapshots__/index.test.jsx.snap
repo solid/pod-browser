@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContactsPage renders 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
+  >
+    <svg
+      class="PodBrowser-loading-indicator"
+      viewBox="22 22 44 44"
+    >
+      <circle
+        cx="44"
+        cy="44"
+        fill="none"
+        r="20.2"
+        stroke-width="3.6"
+      />
+    </svg>
+  </div>
+</DocumentFragment>
+`;

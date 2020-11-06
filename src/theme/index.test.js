@@ -19,27 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles } from "@solid/lit-prism-patterns";
+import theme from "./index";
 
-const styles = (theme) => {
-  return createStyles(theme, ["container", "table"], {
-    "container-view--menu-open": {
-      [theme.breakpoints.up("sm")]: {
-        paddingRight: "50%",
-      },
-      [theme.breakpoints.up("md")]: {
-        paddingRight: "33.33%",
-      },
-      [theme.breakpoints.up("lg")]: {
-        paddingRight: "25%",
-      },
-    },
-    "container-menu": {
-      display: "flex",
-      justifyContent: "space-between",
-      margin: theme.spacing(1, 0, 0),
-    },
+describe("theme", () => {
+  it("renders a theme object", () => {
+    expect(theme).toMatchSnapshot();
   });
-};
-
-export default styles;
+});

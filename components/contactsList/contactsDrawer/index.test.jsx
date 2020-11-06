@@ -19,27 +19,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles } from "@solid/lit-prism-patterns";
+import React from "react";
+import ContactsDrawer from "./index";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 
-const styles = (theme) => {
-  return createStyles(theme, ["container", "table"], {
-    "container-view--menu-open": {
-      [theme.breakpoints.up("sm")]: {
-        paddingRight: "50%",
-      },
-      [theme.breakpoints.up("md")]: {
-        paddingRight: "33.33%",
-      },
-      [theme.breakpoints.up("lg")]: {
-        paddingRight: "25%",
-      },
-    },
-    "container-menu": {
-      display: "flex",
-      justifyContent: "space-between",
-      margin: theme.spacing(1, 0, 0),
-    },
+describe("ContactsDrawer", () => {
+  const onClose = () => {};
+  const onDelete = () => {};
+  const selectedContactName = "Alice";
+  const profileIri = "https://example.com/profile#alice";
+
+  it("renders", () => {
+    const { asFragment } = renderWithTheme(
+      <ContactsDrawer
+        open
+        onClose={onClose}
+        onDelete={onDelete}
+        selectedContactName={selectedContactName}
+        profileIri={profileIri}
+      />
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
-};
-
-export default styles;
+});
