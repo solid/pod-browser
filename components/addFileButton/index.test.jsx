@@ -20,10 +20,8 @@
  */
 
 import React from "react";
-import { act } from "react-dom/test-utils";
 import * as SolidClientFns from "@inrupt/solid-client";
-
-import { render } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { PodLocationProvider } from "../../src/contexts/podLocationContext";
 import mockSession from "../../__testUtils/mockSession";
@@ -89,6 +87,7 @@ describe("AddFileButton", () => {
     });
 
     // await for promises to resolve
+    await Promise.resolve();
     await Promise.resolve();
 
     expect(SolidClientFns.overwriteFile).toHaveBeenCalledWith(
