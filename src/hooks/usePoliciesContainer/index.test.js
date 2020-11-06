@@ -20,7 +20,7 @@
  */
 
 import { renderHook } from "@testing-library/react-hooks";
-import { acp_lowlevel_preview as acp } from "@inrupt/solid-client";
+import { acp_v1 as acp } from "@inrupt/solid-client";
 import usePoliciesContainer from "./index";
 import mockSession, { storageUrl } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";

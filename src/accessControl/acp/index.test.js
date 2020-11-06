@@ -42,7 +42,7 @@ jest.mock("../../solidClientHelpers/profile", () => {
   return jest.requireActual("../../solidClientHelpers/profile");
 });
 
-const { mockSolidDatasetFrom, acp_lowlevel_preview: acpFns, setThing } = scFns;
+const { mockSolidDatasetFrom, acp_v1: acpFns, setThing } = scFns;
 
 const podUrl = "http://example.com/";
 const resourceUrl = "http://example.com/resourceInfo";

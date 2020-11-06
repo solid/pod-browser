@@ -24,7 +24,7 @@ import AcpAccessControlStrategy from "./acp";
 import WacAccessControlStrategy from "./wac";
 import { getAccessControl, noAccessPolicyError } from "./index";
 
-const acp = solidClientFns.acp_lowlevel_preview;
+const acp = solidClientFns.acp_v1;
 
 jest.mock("./acp");
 jest.mock("./wac");

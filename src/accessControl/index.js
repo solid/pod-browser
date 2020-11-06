@@ -20,10 +20,7 @@
  */
 
 // eslint-disable-next-line camelcase
-import {
-  hasAccessibleAcl,
-  acp_lowlevel_preview as acp,
-} from "@inrupt/solid-client";
+import { hasAccessibleAcl, acp_v1 as acp } from "@inrupt/solid-client";
 import WacAccessControlStrategy from "./wac";
 import AcpAccessControlStrategy from "./acp";
 
