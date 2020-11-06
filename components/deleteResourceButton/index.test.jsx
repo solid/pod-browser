@@ -21,14 +21,12 @@
 
 import React from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
-import { render } from "@testing-library/react";
 import DeleteResourceButton, { createDeleteHandler } from "./index";
 import usePoliciesContainer from "../../src/hooks/usePoliciesContainer";
 import {
   getResource,
   deleteResource,
 } from "../../src/solidClientHelpers/resource";
-import defaultTheme from "../../src/theme";
 import useResourceInfo from "../../src/hooks/useResourceInfo";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 

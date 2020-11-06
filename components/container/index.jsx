@@ -110,7 +110,6 @@ export default function Container({ iri }) {
     }));
   }, [resourceIris]);
 
-  // TODO fix typescript errors below.
   const {
     getTableProps,
     getTableBodyProps,

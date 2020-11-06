@@ -19,13 +19,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default () => ({
-  avatar: {
-    marginRight: "1rem",
-  },
-  detailText: {
-    fontSize: "0.75rem",
-    textAlign: "left",
-    flexGrow: 1,
-  },
-});
+export default function styles() {
+  return {
+    avatar: {
+      marginRight: "1rem",
+    },
+    detailText: {
+      fontSize: "0.75rem",
+      textAlign: "left",
+      flexGrow: 1,
+    },
+  };
+}

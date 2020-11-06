@@ -25,9 +25,7 @@
     "**/__snapshots__/**"
   ],
   "include": [
-    "next-env.d.ts",
-    "typings/*.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
+    "**/*.js",
+    "**/*.jsx"
   ]
 }

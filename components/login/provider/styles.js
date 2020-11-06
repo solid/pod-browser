@@ -19,12 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { StyleRules } from "@material-ui/styles";
+import { button } from "@solid/lit-prism-patterns";
 
-const styles: StyleRules = {
-  container: {
-    textAlign: "center",
-  },
-};
-
-export default styles;
+export default function styles(theme) {
+  return button.styles(theme);
+}

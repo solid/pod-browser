@@ -19,21 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { PrismTheme, createStyles } from "@solid/lit-prism-patterns";
-
-const styles = (theme: PrismTheme) =>
-  createStyles(theme, ["button", "content"], {
-    "login-form": {
-      background: theme.palette.background.default,
-      borderRadius: theme.shape.borderRadius,
-      boxShadow: "0px 2px 4px 0px rgba(0,0,0,0.3)",
-      padding: theme.spacing(5),
-      minWidth: 420,
-      maxWidth: 600,
+export default function styles() {
+  return {
+    container: {
+      textAlign: "center",
     },
-    "login-form__what-is-solid": {
-      margin: 0,
-    },
-  });
-
-export default styles;
+  };
+}

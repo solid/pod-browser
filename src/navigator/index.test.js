@@ -42,8 +42,6 @@ describe("resourceContextRedirect", () => {
       replace: jest.fn(),
     };
 
-    // Seriously, in test files, linter?
-    /* eslint @typescript-eslint/no-floating-promises: 0 */
     resourceContextRedirect(action, resourceIri, containerIri, router);
 
     expect(router.replace).toHaveBeenCalledWith(

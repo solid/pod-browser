@@ -19,13 +19,49 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
+import { content } from "@solid/lit-prism-patterns";
 
-const styles = (theme: PrismTheme) =>
-  createStyles(theme, ["icons", "table"], {
-    "table__icon": {
-      marginLeft: "0.5em",
+const rules = {
+  accordionDetails: {
+    display: "block",
+  },
+  centeredSection: {
+    paddingLeft: "1rem",
+    paddingRight: "1rem",
+  },
+  headerSection: {
+    paddingLeft: "1rem",
+    paddingRight: "1rem",
+    display: "flex",
+    alignItems: "flex-start",
+    "& button": {
+      marginLeft: "auto",
     },
-  });
+  },
+  raw: {
+    height: "100%",
+    width: "100%",
+    maxHeight: "200px",
+    overflow: "auto",
+  },
+  formListItem: {
+    display: "block",
+  },
+  detailText: {
+    fontSize: "0.75rem",
+  },
+  typeValue: {
+    marginLeft: "auto",
+  },
+  agentInput: {
+    width: "100%",
+    marginBottom: "1rem",
+  },
+};
 
-export default styles;
+export default function styles(theme) {
+  return {
+    ...rules,
+    ...content.styles(theme),
+  };
+}

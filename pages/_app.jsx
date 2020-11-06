@@ -20,9 +20,7 @@
  */
 
 /* eslint-disable react/forbid-prop-types */
-/* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint @typescript-eslint/no-explicit-any: 0 */
 import React, { useEffect } from "react";
 import * as Sentry from "@sentry/node";
 import { MatomoProvider, createInstance } from "@datapunt/matomo-tracker-react";
@@ -154,6 +152,10 @@ export default function App(props) {
     </>
   );
 }
+
+App.defaultProps = {
+  pageProps: null,
+};
 
 App.propTypes = {
   Component: PropTypes.elementType.isRequired,

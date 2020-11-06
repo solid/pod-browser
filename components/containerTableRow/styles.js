@@ -19,50 +19,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { StyleRules } from "@material-ui/core";
-import { PrismTheme, content } from "@solid/lit-prism-patterns";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-const rules = {
-  accordionDetails: {
-    display: "block",
-  },
-  centeredSection: {
-    paddingLeft: "1rem",
-    paddingRight: "1rem",
-  },
-  headerSection: {
-    paddingLeft: "1rem",
-    paddingRight: "1rem",
-    display: "flex",
-    alignItems: "flex-start",
-    "& button": {
-      marginLeft: "auto",
+export default function styles(theme) {
+  return createStyles(theme, ["icons", "table"], {
+    spinnerContainer: {
+      display: "flex",
+      flexDirection: "row",
+      flexWrap: "nowrap",
+      justifyContent: "center",
     },
-  },
-  raw: {
-    height: "100%",
-    width: "100%",
-    maxHeight: "200px",
-    overflow: "auto",
-  },
-  formListItem: {
-    display: "block",
-  },
-  detailText: {
-    fontSize: "0.75rem",
-  },
-  typeValue: {
-    marginLeft: "auto",
-  },
-  agentInput: {
-    width: "100%",
-    marginBottom: "1rem",
-  },
-};
-
-export default function styles(theme: PrismTheme): StyleRules {
-  return {
-    ...rules,
-    ...content.styles(theme),
-  };
+    "resource-icon": theme.icons.iconColor(theme.palette.text.secondary),
+  });
 }

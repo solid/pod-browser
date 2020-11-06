@@ -19,9 +19,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
-import { Styles } from "jss";
+import { useEffect } from "react";
 
-export default function styles(theme: PrismTheme): Styles {
-  return createStyles(theme, ["pageHeader"]);
+export const ESC_KEYCODE = 27;
+
+export function handleEscKeydown(callback) {
+  return (e) => {
+    if (!e?.keyCode) return;
+    if (e.keyCode === ESC_KEYCODE) callback(e);
+  };
+}
+
+export default function useEscKey(callback) {
+  return useEffect(() => {
+    document.body.addEventListener("keydown", handleEscKeydown(callback));
+
+    return () => {
+      document.body.removeEventListener("keydown", handleEscKeydown(callback));
+    };
+  });
 }

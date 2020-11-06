@@ -19,16 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-type ConfigEntity = {
-  idpClientId: string;
-  loginRedirect: string;
-  host: string;
-};
+import { createStyles } from "@solid/lit-prism-patterns";
 
-export default function getConfig(): ConfigEntity {
-  return {
-    idpClientId: process.env.NEXT_PUBLIC_IDP_CLIENT_ID || "",
-    host: process.env.NEXT_PUBLIC_APP_HOST || "",
-    loginRedirect: "/",
-  };
+export default function styles(theme) {
+  return createStyles(theme, ["icons", "table"], {
+    table__icon: {
+      marginLeft: "0.5em",
+    },
+  });
 }

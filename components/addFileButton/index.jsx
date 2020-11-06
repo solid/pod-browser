@@ -109,7 +109,7 @@ export function handleFileSelect({
     try {
       if (e.target.files.length) {
         setIsUploading(true);
-        const [uploadedFile] = e.target.files;
+        const uploadedFile = e.target.files["0"];
         setFile(uploadedFile);
         try {
           const existingFile = !!resourceList.find(

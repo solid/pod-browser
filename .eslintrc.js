@@ -25,10 +25,11 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
+    jest: true,
   },
 
   // Airbnb base provides many style rules; it is then overridden by our current defaults
-  // (jest, eslint, typescript)
+  // (jest, eslint)
   extends: [
     "airbnb-base",
     "eslint:recommended",
@@ -39,9 +40,8 @@ module.exports = {
     "plugin:prettier/recommended",
   ],
 
-  // Set up es6 and typescript linting, and add lint rules for jest
+  // Set up es6 linting, and add lint rules for jest
   plugins: [
-    "@typescript-eslint",
     "jest",
     "license-header",
     "react",
@@ -65,7 +65,7 @@ module.exports = {
   settings: {
     "import/resolver": {
       node: {
-        extensions: [".js", ".ts", ".jsx", ".tsx"],
+        extensions: [".js", ".jsx"],
       },
     },
   },
@@ -109,7 +109,7 @@ module.exports = {
       },
     ],
 
-    "react/jsx-filename-extension": [1, { extensions: [".tsx", ".jsx"] }],
+    "react/jsx-filename-extension": [1, { extensions: [".jsx"] }],
 
     // Order the properties of react components nicely
     "react/static-property-placement": [2, "static public field"],
@@ -124,13 +124,10 @@ module.exports = {
       },
     ],
 
-    // Make everything work with .tsx as well as .ts
     "import/extensions": [
       2,
       {
         js: "never",
-        ts: "never",
-        tsx: "never",
         jsx: "never",
       },
     ],
@@ -140,17 +137,16 @@ module.exports = {
 
   overrides: [
     {
-      files: ["**/*.ts", "**/*.tsx"],
+      files: ["**/*.js", "**/*.jsx"],
       extends: ["@inrupt/eslint-config-react"],
       rules: {
-        "@typescript-eslint/ban-ts-comment": 0,
         "license-header/header": [1, "./resources/license-header.js"],
-        "react/jsx-filename-extension": [1, { extensions: [".tsx", ".jsx"] }],
+        "react/jsx-filename-extension": [1, { extensions: [".jsx"] }],
       },
       settings: {
         "import/resolver": {
           node: {
-            extensions: [".js", ".ts", ".jsx", ".tsx"],
+            extensions: [".js", ".jsx"],
           },
         },
       },

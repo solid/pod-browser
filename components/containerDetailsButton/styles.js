@@ -19,19 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { createStyles } from "@solid/lit-prism-patterns";
 
-import { createStyles, PrismTheme } from "@solid/lit-prism-patterns";
-
-const styles = (theme: PrismTheme) =>
-  createStyles(theme, ["icons", "table"], {
-    spinnerContainer: {
-      display: "flex",
-      flexDirection: "row",
-      flexWrap: "nowrap",
-      justifyContent: "center",
-    },
-    "resource-icon": theme.icons.iconColor(theme.palette.text.secondary),
-  });
-
-export default styles;
+export default function styles(theme) {
+  return createStyles(theme, ["pageHeader"]);
+}

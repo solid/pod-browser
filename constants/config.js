@@ -19,27 +19,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useEffect } from "react";
+// type ConfigEntity = {
+//   idpClientId: string;
+//   loginRedirect: string;
+//   host: string;
+// };
 
-export const ESC_KEYCODE = 27;
-
-export function handleEscKeydown(
-  callback: (evnt: KeyboardEvent) => unknown
-): (evnt: KeyboardEvent) => unknown {
-  return (e: KeyboardEvent) => {
-    if (!e?.keyCode) return;
-    if (e.keyCode === ESC_KEYCODE) callback(e);
+export default function getConfig() {
+  return {
+    idpClientId: process.env.NEXT_PUBLIC_IDP_CLIENT_ID || "",
+    host: process.env.NEXT_PUBLIC_APP_HOST || "",
+    loginRedirect: "/",
   };
-}
-
-export default function useEscKey(
-  callback: (evnt: KeyboardEvent) => unknown
-): void {
-  return useEffect(() => {
-    document.body.addEventListener("keydown", handleEscKeydown(callback));
-
-    return () => {
-      document.body.removeEventListener("keydown", handleEscKeydown(callback));
-    };
-  });
 }

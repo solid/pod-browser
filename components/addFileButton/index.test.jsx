@@ -86,10 +86,6 @@ describe("AddFileButton", () => {
       userEvent.upload(renderResult.container.querySelector("input"), file);
     });
 
-    // await for promises to resolve
-    await Promise.resolve();
-    await Promise.resolve();
-
     expect(SolidClientFns.overwriteFile).toHaveBeenCalledWith(
       newFilePath,
       file,
