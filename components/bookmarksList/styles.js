@@ -30,7 +30,8 @@ const styles = (theme) => {
       },
     },
     search: {
-      width: 450,
+      width: "100%",
+      maxWidth: 450,
     },
     searchInput: {
       backgroundColor: theme.palette.background.default,
