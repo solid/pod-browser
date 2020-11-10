@@ -82,7 +82,7 @@ export default function ContainerTableRow({
   const { name, iri } = resource;
   const router = useRouter();
   const { currentUri } = useContext(PodLocationContext);
-  const isActive = router.query.resourceIri === iri || preselected;
+  const isActive = router.query.resourceIri === iri;
   const [shouldRedirect, setShouldRedirect] = useState(preselected);
 
   useEffect(() => {
