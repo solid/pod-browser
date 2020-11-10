@@ -844,7 +844,24 @@ font-display: block;",
         <y
           session={
             Object {
-              "fetch": [MockFunction],
+              "fetch": [MockFunction] {
+                "calls": Array [
+                  Array [
+                    "http://example.com/webId#me",
+                    Object {
+                      "headers": Object {
+                        "Accept": "text/turtle",
+                      },
+                    },
+                  ],
+                ],
+                "results": Array [
+                  Object {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
               "handleIncomingRedirect": [MockFunction] {
                 "calls": Array [
                   Array [
@@ -6300,7 +6317,24 @@ font-display: block;",
         <y
           session={
             Object {
-              "fetch": [MockFunction],
+              "fetch": [MockFunction] {
+                "calls": Array [
+                  Array [
+                    "http://example.com/webId#me",
+                    Object {
+                      "headers": Object {
+                        "Accept": "text/turtle",
+                      },
+                    },
+                  ],
+                ],
+                "results": Array [
+                  Object {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              },
               "handleIncomingRedirect": [MockFunction] {
                 "calls": Array [
                   Array [

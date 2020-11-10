@@ -1,17 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Delete resource link handles if useAccessControl fails 1`] = `""`;
-
-exports[`Delete resource link handles if useResourceInfo fails 1`] = `""`;
-
 exports[`Delete resource link it hooks works successfully renders a delete resource link 1`] = `
-<DeleteLink
-  confirmationContent="Are you sure you wish to delete Resource?"
-  confirmationTitle="Confirm Delete"
-  dialogId="delete-resource-iri"
-  onDelete={[Function]}
-  successMessage="Resource was successfully deleted."
+<DeleteResourceLink
+  name="Resource"
+  onDelete={[MockFunction]}
+  resourceIri="iri"
 >
-  Delete
-</DeleteLink>
+  <DeleteLink
+    confirmationContent="Are you sure you wish to delete Resource?"
+    confirmationTitle="Confirm Delete"
+    dialogId="delete-resource-iri"
+    onDelete={[Function]}
+    successMessage="Resource was successfully deleted."
+  >
+    <a
+      data-testid="delete-button"
+      href="#delete"
+      onClick={[Function]}
+    >
+      Delete
+    </a>
+  </DeleteLink>
+</DeleteResourceLink>
 `;

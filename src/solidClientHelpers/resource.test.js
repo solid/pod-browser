@@ -35,6 +35,7 @@ import {
   getResource,
   getResourceName,
   saveResource,
+  deleteResource,
 } from "./resource";
 
 describe("getResource", () => {
@@ -235,5 +236,41 @@ describe("saveResource", () => {
     );
 
     expect(error).toEqual("boom");
+  });
+});
+
+describe("deleteResource", () => {
+  const mockDeleteFile = jest
+    .spyOn(SolidClientFns, "deleteFile")
+    .mockImplementation(jest.fn());
+
+  test("it deletes the given resource only when no policy is found", async () => {
+    const fetch = jest.fn();
+    const resourceIri = "https://example.org/example.txt";
+    const policyUrl = null;
+
+    await deleteResource(resourceIri, policyUrl, fetch);
+
+    expect(mockDeleteFile).toHaveBeenCalledWith(resourceIri, {
+      fetch,
+    });
+    expect(mockDeleteFile).not.toHaveBeenCalledWith(policyUrl, {
+      fetch,
+    });
+  });
+
+  test("it deletes the given resource and corresponding access policy if available", async () => {
+    const policyUrl = "https://example.org/examplePolicyUrl";
+    const fetch = jest.fn();
+    const resourceIri = "https://example.org/example.txt";
+
+    await deleteResource(resourceIri, policyUrl, fetch);
+
+    expect(mockDeleteFile).toHaveBeenCalledWith(resourceIri, {
+      fetch,
+    });
+    expect(mockDeleteFile).toHaveBeenCalledWith(policyUrl, {
+      fetch,
+    });
   });
 });

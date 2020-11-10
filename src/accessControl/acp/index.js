@@ -22,7 +22,6 @@
 import {
   acp_v1 as acp,
   asUrl,
-  deleteFile,
   getSolidDataset,
   getSourceUrl,
   saveSolidDatasetAt,
@@ -185,19 +184,6 @@ export default class AcpAccessControlStrategy {
     this.#datasetWithAcr = datasetWithAcr;
     this.#policyUrl = getPolicyUrl(datasetWithAcr, policiesContainer);
     this.#fetch = fetch;
-  }
-
-  async deleteFile() {
-    await deleteFile(getSourceUrl(this.#datasetWithAcr), {
-      fetch: this.#fetch,
-    });
-    try {
-      await deleteFile(this.#policyUrl, { fetch: this.#fetch });
-    } catch (err) {
-      if (!isHTTPError(err.message, 404)) {
-        throw err;
-      }
-    }
   }
 
   async getPermissions() {

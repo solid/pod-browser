@@ -19,15 +19,20 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import T from "prop-types";
+import { useSession } from "@inrupt/solid-ui-react";
 import DeleteLink from "../deleteLink";
-import useAccessControl from "../../src/hooks/useAccessControl";
-import useResourceInfo from "../../src/hooks/useResourceInfo";
+import usePoliciesContainer from "../../src/hooks/usePoliciesContainer";
+import {
+  deleteResource,
+  getResource,
+} from "../../src/solidClientHelpers/resource";
+import { getPolicyUrl } from "../../src/accessControl/acp";
 
-export function createDeleteHandler(accessControl, onDelete) {
+export function createDeleteHandler(resourceIri, policyUrl, onDelete, fetch) {
   return async () => {
-    await accessControl.deleteFile();
+    await deleteResource(resourceIri, policyUrl, fetch);
     onDelete();
   };
 }
@@ -39,18 +44,33 @@ export default function DeleteResourceLink({
   onDelete,
   ...linkProps
 }) {
-  const { data: resourceInfo, error: resourceInfoError } = useResourceInfo(
-    resourceIri
-  );
-  const { accessControl, error: accessControlError } = useAccessControl(
-    resourceInfo
-  );
+  const { fetch } = useSession();
 
-  const handleDelete = createDeleteHandler(accessControl, onDelete);
+  const { policiesContainer } = usePoliciesContainer();
+  const [policyUrl, setPolicyUrl] = useState(null);
 
-  if (resourceInfoError || accessControlError) {
-    return null;
-  }
+  useEffect(() => {
+    if (!policiesContainer || !resourceIri) return;
+    (async () => {
+      const { response: resource, error } = await getResource(
+        resourceIri,
+        fetch
+      );
+      if (error) {
+        throw error;
+      }
+      if (!resource) return;
+      const url = getPolicyUrl(resource.dataset, policiesContainer);
+      setPolicyUrl(url);
+    })();
+  }, [policiesContainer, resourceIri, fetch]);
+
+  const handleDelete = createDeleteHandler(
+    resourceIri,
+    policyUrl,
+    onDelete,
+    fetch
+  );
 
   return (
     <DeleteLink

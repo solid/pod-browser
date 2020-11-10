@@ -89,47 +89,9 @@ describe("AcpAccessControlStrategy", () => {
       ).toHaveBeenCalledWith(resourceInfoUrl, { fetch }));
 
     it("exposes the methods we expect for a access control strategy", () =>
-      [
-        "deleteFile",
-        "getPermissions",
-        "savePermissionsForAgent",
-      ].forEach((method) => expect(acp[method]).toBeDefined()));
-  });
-
-  describe("deleteFile", () => {
-    beforeEach(() => {
-      acp = new AcpAccessControlStrategy(
-        datasetWithAcr,
-        policiesContainer,
-        fetch
-      );
-      jest.spyOn(scFns, "deleteFile").mockResolvedValue();
-    });
-    it("deletes original resource", async () => {
-      await acp.deleteFile();
-      expect(scFns.deleteFile).toHaveBeenCalledWith(datasetWithAcrUrl, {
-        fetch,
-      });
-    });
-    it("deletes the corresponding policy resource", async () => {
-      await acp.deleteFile();
-      expect(scFns.deleteFile).toHaveBeenCalledWith(
-        getPolicyUrl(datasetWithAcr, policiesContainer),
-        { fetch }
-      );
-    });
-    it("ignores if the policy resource does not exist", async () => {
-      scFns.deleteFile.mockResolvedValueOnce().mockImplementationOnce(() => {
-        throw new Error("404");
-      });
-      await expect(acp.deleteFile()).resolves.toBeUndefined();
-    });
-    it("throws the error if it's anything besides 404", async () => {
-      scFns.deleteFile.mockResolvedValueOnce().mockImplementationOnce(() => {
-        throw new Error("500");
-      });
-      await expect(acp.deleteFile()).rejects.toEqual(new Error("500"));
-    });
+      ["getPermissions", "savePermissionsForAgent"].forEach((method) =>
+        expect(acp[method]).toBeDefined()
+      ));
   });
 
   describe("getPermissions", () => {
