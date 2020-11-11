@@ -37,6 +37,9 @@ import {
   saveResource,
   deleteResource,
 } from "./resource";
+import { getPolicyUrl } from "./policies";
+
+jest.mock("./policies");
 
 describe("getResource", () => {
   test("it returns a dataset and an iri", async () => {
@@ -244,33 +247,39 @@ describe("deleteResource", () => {
     .spyOn(SolidClientFns, "deleteFile")
     .mockImplementation(jest.fn());
 
-  test("it deletes the given resource only when no policy is found", async () => {
-    const fetch = jest.fn();
-    const resourceIri = "https://example.org/example.txt";
-    const policyUrl = null;
+  const fetch = jest.fn();
+  const resourceIri = "https://example.org/example.txt";
+  const policiesContainer = "https://example.og/pb_policies/";
+  const resourceDataset = mockSolidDatasetFrom(resourceIri);
+  const resource = {
+    dataset: resourceDataset,
+    iri: resourceIri,
+  };
 
-    await deleteResource(resourceIri, policyUrl, fetch);
+  test("it deletes the given resource only when no policy is found", async () => {
+    getPolicyUrl.mockReturnValue(null);
+
+    await deleteResource(resource, policiesContainer, fetch);
 
     expect(mockDeleteFile).toHaveBeenCalledWith(resourceIri, {
       fetch,
     });
-    expect(mockDeleteFile).not.toHaveBeenCalledWith(policyUrl, {
-      fetch,
-    });
+    expect(mockDeleteFile).not.toHaveBeenCalledWith(null);
   });
 
   test("it deletes the given resource and corresponding access policy if available", async () => {
-    const policyUrl = "https://example.org/examplePolicyUrl";
-    const fetch = jest.fn();
-    const resourceIri = "https://example.org/example.txt";
+    getPolicyUrl.mockReturnValue("https://example.org/examplePolicyUrl");
 
-    await deleteResource(resourceIri, policyUrl, fetch);
+    await deleteResource(resource, policiesContainer, fetch);
 
     expect(mockDeleteFile).toHaveBeenCalledWith(resourceIri, {
       fetch,
     });
-    expect(mockDeleteFile).toHaveBeenCalledWith(policyUrl, {
-      fetch,
-    });
+    expect(mockDeleteFile).toHaveBeenCalledWith(
+      "https://example.org/examplePolicyUrl",
+      {
+        fetch,
+      }
+    );
   });
 });

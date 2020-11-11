@@ -19,18 +19,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import T from "prop-types";
 import { useDataset, useSession } from "@inrupt/solid-ui-react";
 import DeleteLink from "../deleteLink";
 import usePoliciesContainer from "../../src/hooks/usePoliciesContainer";
 import AlertContext from "../../src/contexts/alertContext";
 import { deleteResource } from "../../src/solidClientHelpers/resource";
-import { getPolicyUrl } from "../../src/accessControl/acp";
 
-export function createDeleteHandler(resourceIri, policyUrl, onDelete, fetch) {
+export function createDeleteHandler(
+  resource,
+  policiesContainer,
+  onDelete,
+  fetch
+) {
   return async () => {
-    await deleteResource(resourceIri, policyUrl, fetch);
+    await deleteResource(resource, policiesContainer, fetch);
     onDelete();
   };
 }
@@ -46,23 +50,20 @@ export default function DeleteResourceLink({
 
   const { alertError } = useContext(AlertContext);
   const { policiesContainer } = usePoliciesContainer();
-  const [policyUrl, setPolicyUrl] = useState(null);
   const { dataset: resourceDataset, error: datasetError } = useDataset(
     resourceIri
   );
   if (datasetError) {
     alertError(datasetError);
   }
-
-  useEffect(() => {
-    if (!policiesContainer || !resourceDataset) return;
-    const url = getPolicyUrl(resourceDataset, policiesContainer);
-    setPolicyUrl(url);
-  }, [policiesContainer, resourceDataset, fetch]);
+  const resource = {
+    dataset: resourceDataset,
+    iri: resourceIri,
+  };
 
   const handleDelete = createDeleteHandler(
-    resourceIri,
-    policyUrl,
+    resource,
+    policiesContainer,
     onDelete,
     fetch
   );

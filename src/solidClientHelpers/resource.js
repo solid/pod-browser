@@ -30,6 +30,7 @@ import {
   setThing,
 } from "@inrupt/solid-client";
 import { parseUrl } from "../stringHelpers";
+import { getPolicyUrl } from "./policies";
 import { createResponder, isContainerIri, isHTTPError } from "./utils";
 
 export function getResourceName(iri) {
@@ -105,10 +106,13 @@ export async function saveResource({ dataset, iri }, fetch) {
   }
 }
 
-export async function deleteResource(resourceIri, policyUrl, fetch) {
-  await deleteFile(resourceIri, {
+export async function deleteResource(resource, policiesContainer, fetch) {
+  const { dataset, iri } = resource;
+  await deleteFile(iri, {
     fetch,
   });
+  if (!policiesContainer) return;
+  const policyUrl = getPolicyUrl(dataset, policiesContainer);
   try {
     if (!policyUrl) return;
     await deleteFile(policyUrl, { fetch });

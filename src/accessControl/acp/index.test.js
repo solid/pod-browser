@@ -27,13 +27,15 @@ import AcpAccessControlStrategy, {
   createAcpMap,
   getOrCreatePermission,
   getOrCreatePolicy,
-  getPoliciesContainerUrl,
   getPolicyModesAndAgents,
-  getPolicyUrl,
   getRulesOrCreate,
   getRuleWithAgent,
   setAgents,
 } from "./index";
+import {
+  getPolicyUrl,
+  getPoliciesContainerUrl,
+} from "../../solidClientHelpers/policies";
 import { createAccessMap } from "../../solidClientHelpers/permissions";
 import { chain } from "../../solidClientHelpers/utils";
 import { mockProfileAlice } from "../../../__testUtils/mockPersonResource";
@@ -455,35 +457,6 @@ describe("getOrCreatePolicy", () => {
     );
     expect(policy).toEqual(policyThing);
     expect(dataset).toEqual(setThing(policyDataset, policyThing));
-  });
-});
-
-describe("getPolicyUrl", () => {
-  const policiesUrl = getPoliciesContainerUrl(podUrl);
-  const policies = mockSolidDatasetFrom(policiesUrl);
-
-  it("returns corresponding policy URLs", () => {
-    expect(getPolicyUrl(mockSolidDatasetFrom(podUrl), policies)).toEqual(
-      "http://example.com/pb_policies/.ttl"
-    );
-    expect(
-      getPolicyUrl(mockSolidDatasetFrom(`${podUrl}test`), policies)
-    ).toEqual("http://example.com/pb_policies/test.ttl");
-    expect(
-      getPolicyUrl(mockSolidDatasetFrom(`${podUrl}test.ttl`), policies)
-    ).toEqual("http://example.com/pb_policies/test.ttl.ttl");
-    expect(
-      getPolicyUrl(mockSolidDatasetFrom(`${podUrl}foo/bar`), policies)
-    ).toEqual("http://example.com/pb_policies/foo/bar.ttl");
-    expect(getPolicyUrl(mockSolidDatasetFrom(policiesUrl), policies)).toEqual(
-      "http://example.com/pb_policies/pb_policies/.ttl"
-    );
-    expect(
-      getPolicyUrl(mockSolidDatasetFrom(`${policiesUrl}test`), policies)
-    ).toEqual("http://example.com/pb_policies/pb_policies/test.ttl");
-    expect(
-      getPolicyUrl(mockSolidDatasetFrom(`${podUrl}public`), policies)
-    ).toEqual("http://example.com/pb_policies/public.ttl");
   });
 });
 

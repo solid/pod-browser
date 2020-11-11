@@ -24,7 +24,7 @@ import { useSession } from "@inrupt/solid-ui-react";
 // eslint-disable-next-line camelcase
 import { acp_v1 } from "@inrupt/solid-client/dist";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
-import { getPoliciesContainerUrl } from "../../accessControl/acp";
+import { getPoliciesContainerUrl } from "../../solidClientHelpers/policies";
 import { getOrCreateContainer } from "../../solidClientHelpers/resource";
 import useResourceInfo from "../useResourceInfo";
 

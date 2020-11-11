@@ -24,7 +24,7 @@ import { acp_v1 as acp } from "@inrupt/solid-client";
 import usePoliciesContainer from "./index";
 import mockSession, { storageUrl } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
-import { getPoliciesContainerUrl } from "../../accessControl/acp";
+import { getPoliciesContainerUrl } from "../../solidClientHelpers/policies";
 
 import * as resourceHelperFns from "../../solidClientHelpers/resource";
 import useResourceInfo from "../useResourceInfo";
