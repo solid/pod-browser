@@ -41,7 +41,7 @@ import {
   isContainer,
 } from "@inrupt/solid-client";
 import styles from "./styles";
-import DeleteResourceLink from "../deleteResourceLink";
+import DeleteResourceButton from "../deleteResourceButton";
 import DownloadLink from "../downloadLink";
 import ResourceSharing from "./resourceSharing";
 import { getIriPath } from "../../src/solidClientHelpers/utils";
@@ -106,7 +106,7 @@ export default function ResourceDetails({ onDelete }) {
               </ActionMenuItem>
               {accessControl ? ( // since we might need to delete the corresponding policy resource, we must require that the user has control access
                 <ActionMenuItem>
-                  <DeleteResourceLink
+                  <DeleteResourceButton
                     className={actionMenuBem("action-menu__trigger", "danger")}
                     resourceIri={datasetUrl}
                     name={displayName}

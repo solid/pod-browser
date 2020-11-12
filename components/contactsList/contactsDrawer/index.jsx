@@ -33,7 +33,7 @@ import {
   AccordionSummary,
 } from "@material-ui/core";
 import { ExpandMore } from "@material-ui/icons";
-import DeleteContactLink from "../../deleteContactLink";
+import DeleteContactButton from "../../deleteContactButton";
 import { buildProfileLink } from "../../profileLink";
 
 export default function ContactsDrawer({
@@ -60,7 +60,7 @@ export default function ContactsDrawer({
               </Link>
             </ActionMenuItem>
             <ActionMenuItem>
-              <DeleteContactLink
+              <DeleteContactButton
                 className={actionMenuBem("action-menu__trigger", "danger")}
                 onDelete={onDelete}
                 name={selectedContactName}

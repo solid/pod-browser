@@ -29921,12 +29921,12 @@ font-display: block;",
                                                               <li
                                                                 className="PodBrowser-action-menu__item"
                                                               >
-                                                                <DeleteContactLink
+                                                                <DeleteContactButton
                                                                   className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                                                                   name=""
                                                                   onDelete={[Function]}
                                                                 >
-                                                                  <DeleteLink
+                                                                  <DeleteButton
                                                                     className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                                                                     confirmationContent="Are you sure you wish to delete  from your contacts?"
                                                                     confirmationTitle="Delete Contact"
@@ -29934,16 +29934,16 @@ font-display: block;",
                                                                     onDelete={[Function]}
                                                                     successMessage="Contact was successfully deleted."
                                                                   >
-                                                                    <a
+                                                                    <button
                                                                       className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                                                                       data-testid="delete-button"
-                                                                      href="#delete"
                                                                       onClick={[Function]}
+                                                                      type="button"
                                                                     >
                                                                       Delete
-                                                                    </a>
-                                                                  </DeleteLink>
-                                                                </DeleteContactLink>
+                                                                    </button>
+                                                                  </DeleteButton>
+                                                                </DeleteContactButton>
                                                               </li>
                                                             </ActionMenuItem>
                                                           </ul>

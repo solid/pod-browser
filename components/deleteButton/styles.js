@@ -19,27 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import T from "prop-types";
-import DeleteLink from "../deleteLink";
+import { button } from "@solid/lit-prism-patterns";
 
-/* eslint react/jsx-props-no-spreading: 0 */
-export default function DeleteContactLink({ onDelete, name, ...linkProps }) {
-  return (
-    <DeleteLink
-      confirmationTitle="Delete Contact"
-      confirmationContent={`Are you sure you wish to delete ${name} from your contacts?`}
-      dialogId="delete-contact"
-      onDelete={onDelete}
-      successMessage="Contact was successfully deleted."
-      {...linkProps}
-    >
-      Delete
-    </DeleteLink>
-  );
-}
+const styles = (theme) => button.styles(theme);
 
-DeleteContactLink.propTypes = {
-  onDelete: T.func.isRequired,
-  name: T.string.isRequired,
-};
+export default styles;

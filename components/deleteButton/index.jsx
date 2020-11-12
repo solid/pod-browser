@@ -20,11 +20,17 @@
  */
 
 import React, { useContext, useEffect, useState } from "react";
+import clsx from "clsx";
+import { createStyles, makeStyles } from "@material-ui/styles";
+import { useBem } from "@solid/lit-prism-patterns";
 import T from "prop-types";
 import AlertContext from "../../src/contexts/alertContext";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
+import styles from "./styles";
 
 const TESTCAFE_ID_DELETE_BUTTON = "delete-button";
+
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export function handleConfirmation({
   dialogId,
@@ -75,14 +81,15 @@ export function handleDeleteResource({
   };
 }
 /* eslint react/jsx-props-no-spreading: 0 */
-export default function DeleteLink({
+export default function DeleteButton({
   confirmationTitle,
   confirmationContent,
   dialogId,
   onDelete,
   successMessage,
-  ...linkProps
+  ...buttonProps
 }) {
+  const bem = useBem(useStyles());
   const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
   const {
@@ -135,18 +142,18 @@ export default function DeleteLink({
     confirmationContent,
   ]);
 
-  /* eslint jsx-a11y/anchor-has-content: 0 */
   return (
-    <a
-      href="#delete"
+    <button
+      type="button"
+      className={clsx(bem("button", "action"))}
       data-testid={TESTCAFE_ID_DELETE_BUTTON}
-      {...linkProps}
+      {...buttonProps}
       onClick={() => setOpen(dialogId)}
     />
   );
 }
 
-DeleteLink.propTypes = {
+DeleteButton.propTypes = {
   confirmationTitle: T.string.isRequired,
   confirmationContent: T.string.isRequired,
   dialogId: T.string.isRequired,

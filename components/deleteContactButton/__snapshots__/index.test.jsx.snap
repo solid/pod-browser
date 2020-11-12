@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Delete contact link it renders a delete contact link 1`] = `
-<DeleteLink
+exports[`Delete contact button it renders a delete contact button 1`] = `
+<DeleteButton
   confirmationContent="Are you sure you wish to delete Test from your contacts?"
   confirmationTitle="Delete Contact"
   dialogId="delete-contact"
@@ -9,5 +9,5 @@ exports[`Delete contact link it renders a delete contact link 1`] = `
   successMessage="Contact was successfully deleted."
 >
   Delete
-</DeleteLink>
+</DeleteButton>
 `;

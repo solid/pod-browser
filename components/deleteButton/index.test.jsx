@@ -20,10 +20,14 @@
  */
 
 import React from "react";
-import { shallow, mount } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
+import { mount } from "enzyme";
+import { mountToJson, WithTheme } from "../../__testUtils/mountWithTheme";
+import defaultTheme from "../../src/theme";
 
-import DeleteLink, { handleDeleteResource, handleConfirmation } from "./index";
+import DeleteButton, {
+  handleDeleteResource,
+  handleConfirmation,
+} from "./index";
 import mockConfirmationDialogContextProvider from "../../__testUtils/mockConfirmationDialogContextProvider";
 
 jest.mock("@inrupt/solid-client");
@@ -33,10 +37,10 @@ const confirmationContent = "confirmationContent";
 const dialogId = "dialogId";
 const successMessage = "successMessage";
 
-describe("Delete link", () => {
-  test("it renders a delete link", () => {
-    const tree = shallow(
-      <DeleteLink
+describe("Delete button", () => {
+  test("it renders a delete button", () => {
+    const tree = mountToJson(
+      <DeleteButton
         onDelete={jest.fn()}
         confirmationTitle={confirmationTitle}
         confirmationContent={confirmationContent}
@@ -44,9 +48,9 @@ describe("Delete link", () => {
         successMessage={successMessage}
       />
     );
-    expect(shallowToJson(tree)).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
   });
-  test("clicking on delete link calls setOpen with the correct id", () => {
+  test("clicking on delete button calls setOpen with the correct id", () => {
     const setOpen = jest.fn();
     const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
       open: dialogId,
@@ -56,18 +60,20 @@ describe("Delete link", () => {
       confirmed: null,
     });
     const tree = mount(
-      <ConfirmationDialogProvider>
-        <DeleteLink
-          onDelete={jest.fn()}
-          confirmationTitle={confirmationTitle}
-          confirmationContent={confirmationContent}
-          dialogId={dialogId}
-          successMessage={successMessage}
-        />
-      </ConfirmationDialogProvider>
+      <WithTheme theme={defaultTheme}>
+        <ConfirmationDialogProvider>
+          <DeleteButton
+            onDelete={jest.fn()}
+            confirmationTitle={confirmationTitle}
+            confirmationContent={confirmationContent}
+            dialogId={dialogId}
+            successMessage={successMessage}
+          />
+        </ConfirmationDialogProvider>
+      </WithTheme>
     );
-    const link = tree.find("a");
-    link.simulate("click");
+    const deletebutton = tree.find("button");
+    deletebutton.simulate("click");
     expect(setOpen).toHaveBeenCalledWith(dialogId);
   });
 });

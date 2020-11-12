@@ -20,19 +20,30 @@
  */
 
 import React from "react";
-import { shallow } from "enzyme";
-import { shallowToJson } from "enzyme-to-json";
+import T from "prop-types";
+import DeleteButton from "../deleteButton";
 
-import DeleteContactLink from "./index";
+/* eslint react/jsx-props-no-spreading: 0 */
+export default function DeleteContactButton({
+  onDelete,
+  name,
+  ...buttonProps
+}) {
+  return (
+    <DeleteButton
+      confirmationTitle="Delete Contact"
+      confirmationContent={`Are you sure you wish to delete ${name} from your contacts?`}
+      dialogId="delete-contact"
+      onDelete={onDelete}
+      successMessage="Contact was successfully deleted."
+      {...buttonProps}
+    >
+      Delete
+    </DeleteButton>
+  );
+}
 
-jest.mock("@inrupt/solid-client");
-
-describe("Delete contact link", () => {
-  test("it renders a delete contact link", () => {
-    const tree = shallow(
-      <DeleteContactLink onDelete={jest.fn()} name="Test" />
-    );
-
-    expect(shallowToJson(tree)).toMatchSnapshot();
-  });
-});
+DeleteContactButton.propTypes = {
+  onDelete: T.func.isRequired,
+  name: T.string.isRequired,
+};

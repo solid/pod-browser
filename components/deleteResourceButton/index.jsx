@@ -22,10 +22,10 @@
 import React, { useContext } from "react";
 import T from "prop-types";
 import { useDataset, useSession } from "@inrupt/solid-ui-react";
-import DeleteLink from "../deleteLink";
 import usePoliciesContainer from "../../src/hooks/usePoliciesContainer";
 import AlertContext from "../../src/contexts/alertContext";
 import { deleteResource } from "../../src/solidClientHelpers/resource";
+import DeleteButton from "../deleteButton";
 
 export function createDeleteHandler(
   resource,
@@ -40,11 +40,11 @@ export function createDeleteHandler(
 }
 
 /* eslint react/jsx-props-no-spreading: 0 */
-export default function DeleteResourceLink({
+export default function DeleteResourceButton({
   name,
   resourceIri,
   onDelete,
-  ...linkProps
+  ...buttonProps
 }) {
   const { fetch } = useSession();
 
@@ -69,20 +69,20 @@ export default function DeleteResourceLink({
   );
 
   return (
-    <DeleteLink
+    <DeleteButton
       confirmationTitle="Confirm Delete"
       confirmationContent={`Are you sure you wish to delete ${name}?`}
       dialogId={`delete-resource-${resourceIri}`}
       onDelete={handleDelete}
       successMessage={`${name} was successfully deleted.`}
-      {...linkProps}
+      {...buttonProps}
     >
       Delete
-    </DeleteLink>
+    </DeleteButton>
   );
 }
 
-DeleteResourceLink.propTypes = {
+DeleteResourceButton.propTypes = {
   name: T.string.isRequired,
   resourceIri: T.string.isRequired,
   onDelete: T.func.isRequired,
