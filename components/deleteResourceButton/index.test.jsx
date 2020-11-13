@@ -23,12 +23,14 @@ import React from "react";
 import { mount } from "enzyme";
 import { mountToJson } from "enzyme-to-json";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
-import DeleteResourceLink, { createDeleteHandler } from "./index";
+import DeleteResourceButton, { createDeleteHandler } from "./index";
 import usePoliciesContainer from "../../src/hooks/usePoliciesContainer";
 import {
   getResource,
   deleteResource,
 } from "../../src/solidClientHelpers/resource";
+import { WithTheme } from "../../__testUtils/mountWithTheme";
+import defaultTheme from "../../src/theme";
 
 jest.mock("@inrupt/solid-client");
 jest.mock("../../src/hooks/useAccessControl");
@@ -39,7 +41,7 @@ jest.mock("../../src/solidClientHelpers/resource");
 const name = "Resource";
 const resourceIri = "iri";
 
-describe("Delete resource link", () => {
+describe("Delete resource button", () => {
   const policiesContainerUrl = "https://example.org/policies";
   const mockPoliciesContainer = mockSolidDatasetFrom(policiesContainerUrl);
   usePoliciesContainer.mockImplementation(() => ({
@@ -50,15 +52,17 @@ describe("Delete resource link", () => {
     let tree;
     beforeEach(() => {
       tree = mount(
-        <DeleteResourceLink
-          onDelete={jest.fn()}
-          resourceIri={resourceIri}
-          name={name}
-        />
+        <WithTheme theme={defaultTheme}>
+          <DeleteResourceButton
+            onDelete={jest.fn()}
+            resourceIri={resourceIri}
+            name={name}
+          />
+        </WithTheme>
       );
     });
 
-    it("renders a delete resource link", () => {
+    it("renders a delete resource button", () => {
       expect(mountToJson(tree)).toMatchSnapshot();
     });
   });
