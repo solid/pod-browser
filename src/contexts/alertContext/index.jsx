@@ -39,14 +39,28 @@ function AlertProvider({ children }) {
   const [alertOpen, setAlertOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState("success");
+
   const alertSuccess = (msg) => {
+    let errorMessage = msg;
+
+    if (msg instanceof Error) {
+      errorMessage = msg.toString();
+    }
+
     setSeverity("success");
-    setMessage(msg);
+    setMessage(errorMessage);
     setAlertOpen(true);
   };
+
   const alertError = (msg) => {
+    let errorMessage = msg;
+
+    if (msg instanceof Error) {
+      errorMessage = msg.toString();
+    }
+
     setSeverity("error");
-    setMessage(msg);
+    setMessage(errorMessage);
     setAlertOpen(true);
   };
 
