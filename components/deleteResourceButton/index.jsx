@@ -29,13 +29,13 @@ import { deleteResource } from "../../src/solidClientHelpers/resource";
 import DeleteButton from "../deleteButton";
 
 export function createDeleteHandler(
-  resource,
+  resourceInfo,
   policiesContainer,
   onDelete,
   fetch
 ) {
   return async () => {
-    await deleteResource(resource, policiesContainer, fetch);
+    await deleteResource(resourceInfo, policiesContainer, fetch);
     onDelete();
   };
 }
@@ -58,13 +58,9 @@ export default function DeleteResourceButton({
   if (resourceError) {
     alertError(resourceError.message);
   }
-  const resource = {
-    info: resourceInfo,
-    iri: resourceIri,
-  };
 
   const handleDelete = createDeleteHandler(
-    resource,
+    resourceInfo,
     policiesContainer,
     onDelete,
     fetch

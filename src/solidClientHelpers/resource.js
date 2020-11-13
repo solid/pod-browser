@@ -25,6 +25,7 @@ import {
   createThing,
   deleteFile,
   getSolidDataset,
+  getSourceUrl,
   getThing,
   saveSolidDatasetAt,
   setThing,
@@ -106,13 +107,13 @@ export async function saveResource({ dataset, iri }, fetch) {
   }
 }
 
-export async function deleteResource(resource, policiesContainer, fetch) {
-  const { info, iri } = resource;
+export async function deleteResource(resourceInfo, policiesContainer, fetch) {
+  const iri = getSourceUrl(resourceInfo);
   await deleteFile(iri, {
     fetch,
   });
   if (!policiesContainer) return;
-  const policyUrl = getPolicyUrl(info, policiesContainer);
+  const policyUrl = getPolicyUrl(resourceInfo, policiesContainer);
   try {
     if (!policyUrl) return;
     await deleteFile(policyUrl, { fetch });
