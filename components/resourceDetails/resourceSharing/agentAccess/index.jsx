@@ -101,7 +101,7 @@ export default function AgentAccess({
     },
   } = useSession();
   const [access, setAccess] = useState(acl);
-  const [tempAccess, setTempAccess] = useState(null);
+  const [tempAccess, setTempAccess] = useState(acl);
   const { avatar } = profile;
   const { dataset } = useContext(DatasetContext);
   const name = displayProfileName(profile);
