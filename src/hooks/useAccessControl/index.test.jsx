@@ -87,4 +87,16 @@ describe("useAccessControl", () => {
     expect(result.current.accessControl).toBeNull();
     expect(result.current.error).toBe(error);
   });
+
+  it("sets accessControl and error to null while loading", async () => {
+    const { rerender, result, waitForNextUpdate } = renderHook(
+      () => useAccessControl(resourceIri),
+      { wrapper }
+    );
+    await waitForNextUpdate();
+    expect(result.current.accessControl).not.toBeNull();
+    rerender(resourceIri + 2);
+    expect(result.current.accessControl).toBeNull();
+    expect(result.current.error).toBeNull();
+  });
 });
