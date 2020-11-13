@@ -44,6 +44,13 @@ import { displayPermissions } from "../../solidClientHelpers/permissions";
 import { fetchProfile } from "../../solidClientHelpers/profile";
 import { isUrl } from "../../stringHelpers";
 
+export const noAclError = "No available ACL resource for this resource";
+
+export function hasAcl(dataset) {
+  // TODO: stand-in until hasAcl is properly exported from @inrupt/solid-client
+  return typeof dataset.internal_acl === "object";
+}
+
 export default class WacAccessControlStrategy {
   #datasetWithAcl;
 
@@ -145,6 +152,12 @@ export default class WacAccessControlStrategy {
       getSourceUrl(resourceInfo),
       { fetch }
     );
+    if (
+      !hasAcl(datasetWithAcl) ||
+      (!hasResourceAcl(datasetWithAcl) && !hasFallbackAcl(datasetWithAcl))
+    ) {
+      throw new Error(noAclError);
+    }
     return new WacAccessControlStrategy(datasetWithAcl, fetch);
   }
 }

@@ -35,10 +35,14 @@ function AccessControlProvider({ children, accessControl }) {
   );
 }
 
+AccessControlProvider.defaultProps = {
+  accessControl: null,
+};
+
 AccessControlProvider.propTypes = {
   children: T.node.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  accessControl: T.object.isRequired,
+  accessControl: T.object,
 };
 
 export { AccessControlProvider };

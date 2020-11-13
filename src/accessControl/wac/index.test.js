@@ -19,16 +19,25 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import {
+  addMockFallbackAclTo,
+  addMockResourceAclTo,
+  mockSolidDatasetFrom,
+} from "@inrupt/solid-client";
 import * as solidClientFns from "@inrupt/solid-client";
 import * as profileHelperFns from "../../solidClientHelpers/profile";
 import { ACL, createAccessMap } from "../../solidClientHelpers/permissions";
-import WacAccessControlStrategy from "./index";
+import WacAccessControlStrategy, { noAclError } from "./index";
+import { chain } from "../../solidClientHelpers/utils";
 
 const url = "http://example.com";
 const fetch = () => {};
 const resourceInfo = mockSolidDatasetFrom(url);
-const resourceInfoWithAcl = mockSolidDatasetFrom(url);
+const resourceInfoWithAcl = chain(
+  mockSolidDatasetFrom(url),
+  (d) => addMockResourceAclTo(d),
+  (d) => addMockFallbackAclTo(d)
+);
 
 describe("WacAccessControlStrategy", () => {
   let wac;
@@ -55,6 +64,14 @@ describe("WacAccessControlStrategy", () => {
         "getPermissions",
         "savePermissionsForAgent",
       ].forEach((method) => expect(wac[method]).toBeDefined()));
+
+    it("throws an error if no ACL resource is available", async () => {
+      solidClientFns.getResourceInfoWithAcl.mockResolvedValue(resourceInfo);
+
+      await expect(
+        WacAccessControlStrategy.init(resourceInfo, fetch)
+      ).rejects.toEqual(new Error(noAclError));
+    });
   });
 
   describe("deleteFile", () => {
