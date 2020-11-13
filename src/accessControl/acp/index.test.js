@@ -30,6 +30,7 @@ import AcpAccessControlStrategy, {
   getPolicyModesAndAgents,
   getRulesOrCreate,
   getRuleWithAgent,
+  noAcrAccessError,
   setAgents,
 } from "./index";
 import {
@@ -94,6 +95,14 @@ describe("AcpAccessControlStrategy", () => {
       ["getPermissions", "savePermissionsForAgent"].forEach((method) =>
         expect(acp[method]).toBeDefined()
       ));
+
+    it("throws an error if ACR is not accessible", async () => {
+      const dataset = mockSolidDatasetFrom(datasetWithAcrUrl);
+      acpFns.getResourceInfoWithAcr.mockResolvedValue(dataset);
+      await expect(
+        AcpAccessControlStrategy.init(resourceInfo, policiesContainer, fetch)
+      ).rejects.toEqual(new Error(noAcrAccessError));
+    });
   });
 
   describe("getPermissions", () => {

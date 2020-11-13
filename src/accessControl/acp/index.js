@@ -42,6 +42,9 @@ import {
 import { getOrCreateDataset } from "../../solidClientHelpers/resource";
 import { getPolicyUrl } from "../../solidClientHelpers/policies";
 
+export const noAcrAccessError =
+  "No access to Access Control Resource for this resource";
+
 export function createAcpMap(read = false, write = false, append = false) {
   return {
     [ACL.READ.key]: read,
@@ -409,6 +412,9 @@ export default class AcpAccessControlStrategy {
     const datasetWithAcr = await acp.getResourceInfoWithAcr(resourceUrl, {
       fetch,
     });
+    if (!acp.hasAccessibleAcr(datasetWithAcr)) {
+      throw new Error(noAcrAccessError);
+    }
     return new AcpAccessControlStrategy(
       datasetWithAcr,
       policiesContainer,
