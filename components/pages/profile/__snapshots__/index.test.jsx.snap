@@ -176,7 +176,7 @@ font-display: block;",
           "contrastText": "#fff",
           "dark": "#d32f2f",
           "light": "#e57373",
-          "main": "#f44336",
+          "main": "#C44539",
         },
         "getContrastText": [Function],
         "grey": Object {
@@ -597,7 +597,7 @@ font-display: block;",
               "contrastText": "#fff",
               "dark": "#d32f2f",
               "light": "#e57373",
-              "main": "#f44336",
+              "main": "#C44539",
             },
             "getContrastText": [Function],
             "grey": Object {
@@ -908,39 +908,10 @@ font-display: block;",
                 <div
                   className="PodBrowser-container"
                 >
-                  <Styled(MuiBox)
-                    mb={2}
-                    mt={2}
-                  >
-                    <div
-                      className="PodBrowser-root PodBrowser-root"
-                    >
-                      <Link
-                        href="/contacts"
-                        passHref={true}
-                      >
-                        <BackToNavLink
-                          href="/contacts"
-                          onClick={[Function]}
-                          onMouseEnter={[Function]}
-                        >
-                          <a
-                            className="PodBrowser-back-to-nav__link"
-                            href="/contacts"
-                            onClick={[Function]}
-                            onMouseEnter={[Function]}
-                          >
-                            Back to 
-                            contacts
-                          </a>
-                        </BackToNavLink>
-                      </Link>
-                    </div>
-                  </Styled(MuiBox)>
                   <WithStyles(ForwardRef(Paper))
                     style={
                       Object {
-                        "maxWidth": "800px",
+                        "marginTop": "1em",
                       }
                     }
                   >
@@ -979,7 +950,7 @@ font-display: block;",
                       }
                       style={
                         Object {
-                          "maxWidth": "800px",
+                          "marginTop": "1em",
                         }
                       }
                     >
@@ -987,7 +958,7 @@ font-display: block;",
                         className="PodBrowser-root PodBrowser-elevation1 PodBrowser-rounded"
                         style={
                           Object {
-                            "maxWidth": "800px",
+                            "marginTop": "1em",
                           }
                         }
                       >

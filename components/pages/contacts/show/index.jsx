@@ -21,13 +21,31 @@
 
 import React from "react";
 import { useRouter } from "next/router";
-import { useRedirectIfLoggedOut } from "../../../../src/effects/auth";
+import Link from "next/link";
+import {
+  BackToNav,
+  BackToNavLink,
+  Container,
+} from "@inrupt/prism-react-components";
 import Profile from "../../../profile";
+import { useRedirectIfLoggedOut } from "../../../../src/effects/auth";
 
 export default function ContactShow() {
   useRedirectIfLoggedOut();
   const router = useRouter();
   const decodedIri = decodeURIComponent(router.query.iri);
 
-  return <Profile profileIri={decodedIri} />;
+  const link = (
+    <Link href="/contacts" passHref>
+      <BackToNavLink>contacts</BackToNavLink>
+    </Link>
+  );
+  return (
+    <>
+      <Container>
+        <BackToNav link={link} />
+      </Container>
+      <Profile profileIri={decodedIri} />
+    </>
+  );
 }

@@ -218,7 +218,7 @@ font-display: block;",
               "contrastText": "#fff",
               "dark": "#d32f2f",
               "light": "#e57373",
-              "main": "#f44336",
+              "main": "#C44539",
             },
             "getContrastText": [Function],
             "grey": Object {
@@ -639,7 +639,7 @@ font-display: block;",
                   "contrastText": "#fff",
                   "dark": "#d32f2f",
                   "light": "#e57373",
-                  "main": "#f44336",
+                  "main": "#C44539",
                 },
                 "getContrastText": [Function],
                 "grey": Object {
@@ -1153,7 +1153,7 @@ font-display: block;",
               "contrastText": "#fff",
               "dark": "#d32f2f",
               "light": "#e57373",
-              "main": "#f44336",
+              "main": "#C44539",
             },
             "getContrastText": [Function],
             "grey": Object {
@@ -1574,7 +1574,7 @@ font-display: block;",
                   "contrastText": "#fff",
                   "dark": "#d32f2f",
                   "light": "#e57373",
-                  "main": "#f44336",
+                  "main": "#C44539",
                 },
                 "getContrastText": [Function],
                 "grey": Object {
@@ -1821,17 +1821,32 @@ font-display: block;",
             <div
               className="PodBrowser-container"
             >
-              <Styled(MuiBox)
-                mb={2}
-                mt={2}
-              >
-                <div
-                  className="PodBrowser-root PodBrowser-root"
-                >
+              <BackToNav
+                link={
                   <Link
                     href="/contacts"
                     passHref={true}
-                    replace={true}
+                  >
+                    <BackToNavLink>
+                      contacts
+                    </BackToNavLink>
+                  </Link>
+                }
+              >
+                <nav
+                  className="PodBrowser-back-to-nav"
+                >
+                  <Icon
+                    className="PodBrowser-back-to-nav__caret"
+                    name="caret-left"
+                  >
+                    <span
+                      className="PodBrowser-icon-caret-left PodBrowser-back-to-nav__caret"
+                    />
+                  </Icon>
+                  <Link
+                    href="/contacts"
+                    passHref={true}
                   >
                     <BackToNavLink
                       href="/contacts"
@@ -1849,8 +1864,8 @@ font-display: block;",
                       </a>
                     </BackToNavLink>
                   </Link>
-                </div>
-              </Styled(MuiBox)>
+                </nav>
+              </BackToNav>
               <h3>
                 Add new contact
               </h3>

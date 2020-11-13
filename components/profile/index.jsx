@@ -22,7 +22,6 @@
 import React, { useState } from "react";
 import T from "prop-types";
 import { vcard } from "rdf-namespaces";
-import Link from "next/link";
 import {
   Avatar,
   Box,
@@ -32,7 +31,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Container, BackToNavLink } from "@inrupt/prism-react-components";
+import { Container } from "@inrupt/prism-react-components";
 
 import { CombinedDataProvider, Text, Image } from "@inrupt/solid-ui-react";
 
@@ -55,13 +54,7 @@ export default function Profile(props) {
 
   return (
     <Container>
-      <Box mt={2} mb={2}>
-        <Link href="/contacts" passHref>
-          <BackToNavLink>contacts</BackToNavLink>
-        </Link>
-      </Box>
-
-      <Paper style={{ maxWidth: "800px" }}>
+      <Paper style={{ marginTop: "1em" }}>
         <Box p={2}>
           <CombinedDataProvider
             datasetUrl={profileIri}

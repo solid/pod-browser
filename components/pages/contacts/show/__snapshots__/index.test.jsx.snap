@@ -176,7 +176,7 @@ font-display: block;",
           "contrastText": "#fff",
           "dark": "#d32f2f",
           "light": "#e57373",
-          "main": "#f44336",
+          "main": "#C44539",
         },
         "getContrastText": [Function],
         "grey": Object {
@@ -597,7 +597,7 @@ font-display: block;",
               "contrastText": "#fff",
               "dark": "#d32f2f",
               "light": "#e57373",
-              "main": "#f44336",
+              "main": "#C44539",
             },
             "getContrastText": [Function],
             "grey": Object {
@@ -900,6 +900,57 @@ font-display: block;",
           sessionRequestInProgress={false}
         >
           <ContactShow>
+            <Container>
+              <div
+                className="PodBrowser-container"
+              >
+                <BackToNav
+                  link={
+                    <Link
+                      href="/contacts"
+                      passHref={true}
+                    >
+                      <BackToNavLink>
+                        contacts
+                      </BackToNavLink>
+                    </Link>
+                  }
+                >
+                  <nav
+                    className="PodBrowser-back-to-nav"
+                  >
+                    <Icon
+                      className="PodBrowser-back-to-nav__caret"
+                      name="caret-left"
+                    >
+                      <span
+                        className="PodBrowser-icon-caret-left PodBrowser-back-to-nav__caret"
+                      />
+                    </Icon>
+                    <Link
+                      href="/contacts"
+                      passHref={true}
+                    >
+                      <BackToNavLink
+                        href="/contacts"
+                        onClick={[Function]}
+                        onMouseEnter={[Function]}
+                      >
+                        <a
+                          className="PodBrowser-back-to-nav__link"
+                          href="/contacts"
+                          onClick={[Function]}
+                          onMouseEnter={[Function]}
+                        >
+                          Back to 
+                          contacts
+                        </a>
+                      </BackToNavLink>
+                    </Link>
+                  </nav>
+                </BackToNav>
+              </div>
+            </Container>
             <Profile
               editing={false}
               profileIri="https://example.com/profile/card#me"
@@ -908,39 +959,10 @@ font-display: block;",
                 <div
                   className="PodBrowser-container"
                 >
-                  <Styled(MuiBox)
-                    mb={2}
-                    mt={2}
-                  >
-                    <div
-                      className="PodBrowser-root PodBrowser-root"
-                    >
-                      <Link
-                        href="/contacts"
-                        passHref={true}
-                      >
-                        <BackToNavLink
-                          href="/contacts"
-                          onClick={[Function]}
-                          onMouseEnter={[Function]}
-                        >
-                          <a
-                            className="PodBrowser-back-to-nav__link"
-                            href="/contacts"
-                            onClick={[Function]}
-                            onMouseEnter={[Function]}
-                          >
-                            Back to 
-                            contacts
-                          </a>
-                        </BackToNavLink>
-                      </Link>
-                    </div>
-                  </Styled(MuiBox)>
                   <WithStyles(ForwardRef(Paper))
                     style={
                       Object {
-                        "maxWidth": "800px",
+                        "marginTop": "1em",
                       }
                     }
                   >
@@ -979,7 +1001,7 @@ font-display: block;",
                       }
                       style={
                         Object {
-                          "maxWidth": "800px",
+                          "marginTop": "1em",
                         }
                       }
                     >
@@ -987,7 +1009,7 @@ font-display: block;",
                         className="PodBrowser-root PodBrowser-elevation1 PodBrowser-rounded"
                         style={
                           Object {
-                            "maxWidth": "800px",
+                            "marginTop": "1em",
                           }
                         }
                       >
