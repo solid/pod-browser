@@ -35,11 +35,7 @@ import T from "prop-types";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { ActionMenu, ActionMenuItem } from "@inrupt/prism-react-components";
 import { DatasetContext } from "@inrupt/solid-ui-react";
-import {
-  getContentType,
-  getSourceUrl,
-  isContainer,
-} from "@inrupt/solid-client";
+import { getContentType, getSourceUrl } from "@inrupt/solid-client";
 import styles from "./styles";
 import DeleteResourceButton from "../deleteResourceButton";
 import DownloadLink from "../downloadLink";
@@ -67,8 +63,6 @@ export default function ResourceDetails({ onDelete }) {
   const type = getContentType(dataset);
   const actionMenuBem = ActionMenu.useBem();
   const { accessControl } = useContext(AccessControlContext);
-  const resourceIsContainer = isContainer(datasetUrl);
-  const showActions = !!accessControl || !resourceIsContainer;
 
   const expandIcon = <ExpandMoreIcon />;
   return (
@@ -85,42 +79,38 @@ export default function ResourceDetails({ onDelete }) {
 
       <Divider />
 
-      {showActions ? (
-        <Accordion defaultExpanded={showActions}>
-          <AccordionSummary
-            expandIcon={expandIcon}
-            data-testid={TESTCAFE_ID_ACCORDION_ACTIONS}
-          >
-            Actions
-          </AccordionSummary>
-          <AccordionDetails className={classes.accordionDetails}>
-            <ActionMenu>
-              <ActionMenuItem>
-                <DownloadLink
-                  className={actionMenuBem("action-menu__trigger")}
-                  data-testid={TESTCAFE_ID_DOWNLOAD_BUTTON}
-                  iri={datasetUrl}
-                >
-                  Download
-                </DownloadLink>
-              </ActionMenuItem>
-              {accessControl ? ( // since we might need to delete the corresponding policy resource, we must require that the user has control access
-                <ActionMenuItem>
-                  <DeleteResourceButton
-                    className={actionMenuBem("action-menu__trigger", "danger")}
-                    resourceIri={datasetUrl}
-                    name={displayName}
-                    onDelete={onDelete}
-                    data-testid={TESTCAFE_ID_DELETE_BUTTON}
-                  />
-                </ActionMenuItem>
-              ) : null}
-            </ActionMenu>
-          </AccordionDetails>
-        </Accordion>
-      ) : null}
+      <Accordion defaultExpanded>
+        <AccordionSummary
+          expandIcon={expandIcon}
+          data-testid={TESTCAFE_ID_ACCORDION_ACTIONS}
+        >
+          Actions
+        </AccordionSummary>
+        <AccordionDetails className={classes.accordionDetails}>
+          <ActionMenu>
+            <ActionMenuItem>
+              <DownloadLink
+                className={actionMenuBem("action-menu__trigger")}
+                data-testid={TESTCAFE_ID_DOWNLOAD_BUTTON}
+                iri={datasetUrl}
+              >
+                Download
+              </DownloadLink>
+            </ActionMenuItem>
+            <ActionMenuItem>
+              <DeleteResourceButton
+                className={actionMenuBem("action-menu__trigger", "danger")}
+                resourceIri={datasetUrl}
+                name={displayName}
+                onDelete={onDelete}
+                data-testid={TESTCAFE_ID_DELETE_BUTTON}
+              />
+            </ActionMenuItem>
+          </ActionMenu>
+        </AccordionDetails>
+      </Accordion>
 
-      <Accordion defaultExpanded={!showActions}>
+      <Accordion>
         <AccordionSummary
           expandIcon={expandIcon}
           data-testid={TESTCAFE_ID_ACCORDION_DETAILS}

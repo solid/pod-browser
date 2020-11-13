@@ -36,6 +36,8 @@ export default function useAccessControl(resourceInfo) {
       setError(policiesError || null);
       return;
     }
+    setAccessControl(null);
+    setError(null);
     getAccessControl(resourceInfo, policiesContainer, fetch)
       .then((response) => {
         setAccessControl(response);
