@@ -107,12 +107,12 @@ export async function saveResource({ dataset, iri }, fetch) {
 }
 
 export async function deleteResource(resource, policiesContainer, fetch) {
-  const { dataset, iri } = resource;
+  const { info, iri } = resource;
   await deleteFile(iri, {
     fetch,
   });
   if (!policiesContainer) return;
-  const policyUrl = getPolicyUrl(dataset, policiesContainer);
+  const policyUrl = getPolicyUrl(info, policiesContainer);
   try {
     if (!policyUrl) return;
     await deleteFile(policyUrl, { fetch });

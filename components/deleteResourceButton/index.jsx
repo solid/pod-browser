@@ -21,9 +21,10 @@
 
 import React, { useContext } from "react";
 import T from "prop-types";
-import { useDataset, useSession } from "@inrupt/solid-ui-react";
+import { useSession } from "@inrupt/solid-ui-react";
 import usePoliciesContainer from "../../src/hooks/usePoliciesContainer";
 import AlertContext from "../../src/contexts/alertContext";
+import useResourceInfo from "../../src/hooks/useResourceInfo";
 import { deleteResource } from "../../src/solidClientHelpers/resource";
 import DeleteButton from "../deleteButton";
 
@@ -50,14 +51,15 @@ export default function DeleteResourceButton({
 
   const { alertError } = useContext(AlertContext);
   const { policiesContainer } = usePoliciesContainer();
-  const { dataset: resourceDataset, error: datasetError } = useDataset(
+  const { data: resourceInfo, error: resourceError } = useResourceInfo(
     resourceIri
   );
-  if (datasetError) {
-    alertError(datasetError);
+
+  if (resourceError) {
+    alertError(resourceError.message);
   }
   const resource = {
-    dataset: resourceDataset,
+    info: resourceInfo,
     iri: resourceIri,
   };
 

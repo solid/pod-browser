@@ -250,9 +250,9 @@ describe("deleteResource", () => {
   const fetch = jest.fn();
   const resourceIri = "https://example.org/example.txt";
   const policiesContainer = "https://example.og/pb_policies/";
-  const resourceDataset = mockSolidDatasetFrom(resourceIri);
+  const resourceInfo = mockSolidDatasetFrom(resourceIri);
   const resource = {
-    dataset: resourceDataset,
+    info: resourceInfo,
     iri: resourceIri,
   };
 

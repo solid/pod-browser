@@ -31,9 +31,9 @@ import {
 } from "../../src/solidClientHelpers/resource";
 import { WithTheme } from "../../__testUtils/mountWithTheme";
 import defaultTheme from "../../src/theme";
+import useResourceInfo from "../../src/hooks/useResourceInfo";
 
 jest.mock("@inrupt/solid-client");
-jest.mock("../../src/hooks/useAccessControl");
 jest.mock("../../src/hooks/useResourceInfo");
 jest.mock("../../src/hooks/usePoliciesContainer");
 jest.mock("../../src/solidClientHelpers/resource");
@@ -47,7 +47,7 @@ describe("Delete resource button", () => {
   usePoliciesContainer.mockImplementation(() => ({
     policiesContainer: mockPoliciesContainer,
   }));
-
+  useResourceInfo.mockReturnValue("resource info");
   describe("it hooks works successfully", () => {
     let tree;
     beforeEach(() => {

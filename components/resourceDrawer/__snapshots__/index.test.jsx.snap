@@ -854,20 +854,8 @@ font-display: block;",
                       },
                     },
                   ],
-                  Array [
-                    "/iri/",
-                    Object {
-                      "headers": Object {
-                        "Accept": "text/turtle",
-                      },
-                    },
-                  ],
                 ],
                 "results": Array [
-                  Object {
-                    "type": "return",
-                    "value": undefined,
-                  },
                   Object {
                     "type": "return",
                     "value": undefined,
@@ -6339,20 +6327,8 @@ font-display: block;",
                       },
                     },
                   ],
-                  Array [
-                    "/iri/",
-                    Object {
-                      "headers": Object {
-                        "Accept": "text/turtle",
-                      },
-                    },
-                  ],
                 ],
                 "results": Array [
-                  Object {
-                    "type": "return",
-                    "value": undefined,
-                  },
                   Object {
                     "type": "return",
                     "value": undefined,
