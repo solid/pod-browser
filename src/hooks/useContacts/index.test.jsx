@@ -20,9 +20,9 @@
  */
 
 import React from "react";
-import { renderHook, cleanup } from "@testing-library/react-hooks";
+import { renderHook } from "@testing-library/react-hooks";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
-import { cache, SWRConfig } from "swr";
+import { SWRConfig } from "swr";
 import { foaf } from "rdf-namespaces";
 import useContacts from "./index";
 import mockSession from "../../../__testUtils/mockSession";
@@ -60,12 +60,6 @@ describe("useContacts", () => {
           <SWRConfig value={{ dedupingInterval: 0 }}>{children}</SWRConfig>
         </SessionProvider>
       );
-    });
-
-    afterEach(() => {
-      cache.clear();
-      jest.clearAllMocks();
-      cleanup();
     });
 
     it("should return error", async () => {

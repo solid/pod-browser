@@ -288,10 +288,8 @@ export async function getIndexDatasetFromAddressBook(
     const addressBookDataset = await getSolidDataset(addressBookDatasetIri, {
       fetch,
     });
-
     const indexDatasetIri = getUrl(addressBookDataset, indexFilePredicate);
     const indexFileDataset = await getSolidDataset(indexDatasetIri, { fetch });
-
     return respond(indexFileDataset);
   } catch (e) {
     return error(e);
@@ -419,15 +417,17 @@ export async function deleteContact(
   type,
   fetch
 ) {
-  const addressBookDatasetIri = joinPath(addressBookIri, INDEX_FILE);
-  const addressBookDataset = await getSolidDataset(addressBookDatasetIri, {
+  const addressBook = await getSolidDataset(addressBookIri, {
     fetch,
   });
-  const indexDatasetIri = await getUrl(
-    addressBookDataset,
-    TYPE_MAP[type].indexFilePredicate
+  const { indexFilePredicate } = TYPE_MAP[type];
+  const { response: indexFileDataset } = await getIndexDatasetFromAddressBook(
+    addressBook,
+    indexFilePredicate,
+    fetch
   );
-  const indexFileDataset = await getSolidDataset(indexDatasetIri, { fetch });
+
+  const indexDatasetIri = getSourceUrl(indexFileDataset);
   const contactsIndexThings = getThingAll(indexFileDataset, { fetch });
 
   const contactsIndexEntryToRemove = contactsIndexThings.find((thing) =>
