@@ -23,7 +23,7 @@ import React from "react";
 import NextErrorComponent from "next/error";
 import * as Sentry from "@sentry/node";
 
-const Error = async ({ statusCode, hasGetInitialPropsRun, err }) => {
+const ErrorPage = async ({ statusCode, hasGetInitialPropsRun, err }) => {
   if (!hasGetInitialPropsRun && err) {
     // getInitialProps is not called in case of
     // https://github.com/vercel/next.js/issues/8592. As a workaround, we pass
@@ -36,7 +36,7 @@ const Error = async ({ statusCode, hasGetInitialPropsRun, err }) => {
   return <NextErrorComponent statusCode={statusCode} />;
 };
 
-Error.getInitialProps = async ({ res, err, asPath }) => {
+ErrorPage.getInitialProps = async ({ res, err, asPath }) => {
   const errorInitialProps = await NextErrorComponent.getInitialProps({
     res,
     err,
@@ -80,4 +80,4 @@ Error.getInitialProps = async ({ res, err, asPath }) => {
   return errorInitialProps;
 };
 
-export default Error;
+export default ErrorPage;

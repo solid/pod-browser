@@ -60,6 +60,7 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   Sentry.init({
     enabled: process.env.NODE_ENV === "production",
     dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+    tracesSampleRate: process.env.NEXT_PUBLIC_SENTRY_SAMPLE_RATE || 0.1,
   });
 }
 
