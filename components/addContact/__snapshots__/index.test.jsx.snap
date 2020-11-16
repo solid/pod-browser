@@ -24,6 +24,7 @@ exports[`AddContact it renders a spinner when user is not logged in 1`] = `
           "sessionId": null,
           "webId": null,
         },
+        "login": [MockFunction],
         "on": [MockFunction] {
           "calls": Array [
             Array [

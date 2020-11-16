@@ -20,6 +20,11 @@
  */
 
 import React from "react";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
+import { renderWithTheme } from "../../../__testUtils/renderWithTheme";
 import { mountToJson } from "../../../__testUtils/mountWithTheme";
 
 import ProviderLogin from "./index";
@@ -31,5 +36,18 @@ describe("ProviderLogin form", () => {
     const tree = mountToJson(<ProviderLogin />);
 
     expect(tree).toMatchSnapshot();
+  });
+  test("It calls the login function upon submitting the form", () => {
+    const session = mockUnauthenticatedSession();
+    const SessionProvider = mockSessionContextProvider(session);
+    const { login } = session;
+    renderWithTheme(
+      <SessionProvider>
+        <ProviderLogin />
+      </SessionProvider>
+    );
+    const loginInput = screen.getByText("Select ID provider");
+    userEvent.type(loginInput, "{enter}");
+    expect(login).toHaveBeenCalled();
   });
 });

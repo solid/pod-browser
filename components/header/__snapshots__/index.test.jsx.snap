@@ -2591,6 +2591,7 @@ font-display: block;",
                 "sessionId": null,
                 "webId": null,
               },
+              "login": [MockFunction],
               "on": [MockFunction] {
                 "calls": Array [
                   Array [

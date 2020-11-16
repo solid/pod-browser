@@ -70,6 +70,7 @@ export function mockUnauthenticatedSession() {
       sessionId: null,
       webId: null,
     },
+    login: jest.fn(),
   };
 }
 
