@@ -12967,7 +12967,6 @@ font-display: block;",
                                           "globalFilter": undefined,
                                         }
                                       }
-                                      iri={null}
                                       plugins={
                                         Array [
                                           [Function],
@@ -16681,6 +16680,7 @@ font-display: block;",
                                           },
                                         ]
                                       }
+                                      webId={null}
                                     >
                                       <Link
                                         as="/contacts/http%3A%2F%2Fexample.com%2Falice%23me"
@@ -25780,7 +25780,6 @@ font-display: block;",
                                           "globalFilter": undefined,
                                         }
                                       }
-                                      iri={null}
                                       plugins={
                                         Array [
                                           [Function],
@@ -29494,6 +29493,7 @@ font-display: block;",
                                           },
                                         ]
                                       }
+                                      webId={null}
                                     >
                                       <Link
                                         as="/contacts/http%3A%2F%2Fexample.com%2Fbob%23me"

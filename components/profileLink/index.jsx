@@ -26,16 +26,16 @@ import { useThing } from "@inrupt/solid-ui-react";
 import { getStringNoLocale, asUrl } from "@inrupt/solid-client";
 import { vcard, foaf } from "rdf-namespaces";
 
-export function buildProfileLink(iri) {
-  return `/contacts/${encodeURIComponent(iri)}`;
+export function buildProfileLink(webId) {
+  return `/contacts/${encodeURIComponent(webId)}`;
 }
 
 export default function ProfileLink(props) {
-  const { iri } = props;
+  const { webId } = props;
   const { thing } = useThing();
 
   // Pass in an iri, or use the thing from context (such as for the contacts list)
-  const profileIri = iri || asUrl(thing);
+  const profileIri = webId || asUrl(thing);
 
   // TODO remove this once react-sdk allows property fallbacks
   const name =
@@ -49,9 +49,9 @@ export default function ProfileLink(props) {
 }
 
 ProfileLink.propTypes = {
-  iri: T.string,
+  webId: T.string,
 };
 
 ProfileLink.defaultProps = {
-  iri: null,
+  webId: null,
 };

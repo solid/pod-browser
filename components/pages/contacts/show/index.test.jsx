@@ -35,7 +35,7 @@ describe("Contact show page", () => {
       asPath: "/pathname/",
       replace: jest.fn(),
       query: {
-        iri: "https://example.com/profile/card#me",
+        webId: "https://example.com/profile/card#me",
       },
     });
 

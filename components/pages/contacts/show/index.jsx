@@ -33,7 +33,7 @@ import { useRedirectIfLoggedOut } from "../../../../src/effects/auth";
 export default function ContactShow() {
   useRedirectIfLoggedOut();
   const router = useRouter();
-  const decodedIri = decodeURIComponent(router.query.iri);
+  const decodedIri = decodeURIComponent(router.query.webId);
 
   const link = (
     <Link href="/contacts" passHref>
