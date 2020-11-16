@@ -31,6 +31,7 @@ import AcpAccessControlStrategy, {
   getRulesOrCreate,
   getRuleWithAgent,
   noAcrAccessError,
+  removePermissionsForAgent,
   setAgents,
 } from "./index";
 import {
@@ -39,7 +40,11 @@ import {
 } from "../../solidClientHelpers/policies";
 import { createAccessMap } from "../../solidClientHelpers/permissions";
 import { chain } from "../../solidClientHelpers/utils";
-import { mockProfileAlice } from "../../../__testUtils/mockPersonResource";
+import {
+  aliceWebIdUrl,
+  bobWebIdUrl,
+  mockProfileAlice,
+} from "../../../__testUtils/mockPersonResource";
 
 jest.mock("../../solidClientHelpers/profile", () => {
   return jest.requireActual("../../solidClientHelpers/profile");
@@ -217,26 +222,6 @@ describe("AcpAccessControlStrategy", () => {
         await expect(
           acp.savePermissionsForAgent(webId, createAccessMap())
         ).resolves.toEqual({ error: "500" });
-      });
-
-      it("doesn't save anything if there's nothing to add", async () => {
-        const policyResource = chain(
-          mockSolidDatasetFrom(policyResourceUrl),
-          (d) => acpFns.addMockAcrTo(d)
-        );
-        jest.spyOn(scFns, "getSolidDataset").mockResolvedValue(policyResource);
-        jest.spyOn(acpFns, "saveAcrFor");
-        jest.spyOn(scFns, "saveSolidDatasetAt").mockResolvedValue();
-
-        await expect(
-          acp.savePermissionsForAgent(webId, createAccessMap())
-        ).resolves.toEqual({ response: policyResource });
-        expect(acpFns.saveAcrFor).not.toHaveBeenCalled();
-        expect(scFns.saveSolidDatasetAt).toHaveBeenCalledWith(
-          policyResourceUrl,
-          policyResource,
-          { fetch }
-        );
       });
 
       it("returns the modified datasetWithAcr after adding modes to agent", async () => {
@@ -582,18 +567,26 @@ describe("setAgents", () => {
 
     it("removes agent from rule", () => {
       const ruleWithAgent = acpFns.addAgent(readPolicyRule, webId);
-      const policyDatasetWithRule = setThing(policyDataset, ruleWithAgent);
-      const expectedDataset = setThing(policyDatasetWithRule, readPolicyRule);
-      const expectedPolicy = acpFns.setRequiredRuleUrl(
+      const policyWithRule = acpFns.setRequiredRuleUrl(
         readPolicy,
         readPolicyRule
       );
-      expect(
-        setAgents(readPolicy, policyDatasetWithRule, webId, false)
-      ).toEqual({
-        policy: expectedPolicy,
-        dataset: expectedDataset,
-      });
+      const policyDatasetWithPolicyAndRule = chain(
+        policyDataset,
+        (d) => setThing(d, ruleWithAgent),
+        (d) => setThing(d, policyWithRule)
+      );
+      const { policy, dataset } = setAgents(
+        policyWithRule,
+        policyDatasetWithPolicyAndRule,
+        webId,
+        false
+      );
+      expect(policy).toEqual(policyWithRule);
+      const rules = acpFns.getRuleAll(dataset);
+      expect(rules).toHaveLength(1);
+      const agents = acpFns.getAgentAll(rules[0]);
+      expect(agents).toHaveLength(0);
     });
   });
 });
@@ -636,5 +629,31 @@ describe("getPolicyModesAndAgents", () => {
       { agents: [webId1, webId2], modes: createAcpMap(true) },
       { agents: [webId2], modes: createAcpMap(false, true) },
     ]);
+  });
+});
+
+describe("removePermissionsForAgent", () => {
+  it("removes all permissions for a given agent", () => {
+    const agent1 = aliceWebIdUrl;
+    const agent2 = bobWebIdUrl;
+    const rule1WithAgents = chain(
+      acpFns.createRule(readPolicyRuleUrl),
+      (r) => acpFns.setAgent(r, agent1),
+      (r) => acpFns.setAgent(r, agent2)
+    );
+    const rule2WithAgents = chain(acpFns.createRule(writePolicyRuleUrl), (r) =>
+      acpFns.setAgent(r, agent1)
+    );
+    const datasetWithRules = chain(
+      mockSolidDatasetFrom(resourceUrl),
+      (d) => setThing(d, rule1WithAgents),
+      (d) => setThing(d, rule2WithAgents)
+    );
+    const updatedDataset = removePermissionsForAgent(agent1, datasetWithRules);
+    expect(
+      acpFns
+        .getRuleAll(updatedDataset)
+        .reduce((memo, rule) => memo.concat(acpFns.getAgentAll(rule)), [])
+    ).toEqual([agent2]);
   });
 });
