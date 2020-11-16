@@ -25,7 +25,7 @@ import { Autocomplete } from "@material-ui/lab";
 
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { LoginButton } from "@inrupt/solid-ui-react";
+import { LoginButton, useSession } from "@inrupt/solid-ui-react";
 
 import { generateRedirectUrl } from "../../../src/windowHelpers";
 
@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export default function Provider() {
   const bem = useBem(useStyles());
   const [providerIri, setProviderIri] = useState("https://inrupt.net");
+  const { login } = useSession();
 
   const onProviderChange = (e, newValue) => {
     setProviderIri(newValue);
@@ -48,45 +49,52 @@ export default function Provider() {
   const authOptions = {
     clientName: "Inrupt PodBrowser",
   };
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+    login();
+  };
   /* eslint react/jsx-props-no-spreading: 0 */
 
   return (
-    <Box my={2}>
-      <Box mt={2}>
-        <h3 data-testid={TESTCAFE_ID_LOGIN_TITLE}>Log In</h3>
+    <form onSubmit={handleLogin}>
+      <Box my={2}>
+        <Box mt={2}>
+          <h3 data-testid={TESTCAFE_ID_LOGIN_TITLE}>Log In</h3>
 
-        <Autocomplete
-          onChange={onProviderChange}
-          onInputChange={onProviderChange}
-          id="provider-select"
-          freeSolo
-          options={Object.values(providers).map((provider) => provider.iri)}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Select ID provider"
-              margin="normal"
-              variant="outlined"
-              type="url"
-              required
-            />
-          )}
-        />
+          <Autocomplete
+            onChange={onProviderChange}
+            onInputChange={onProviderChange}
+            id="provider-select"
+            freeSolo
+            options={Object.values(providers).map((provider) => provider.iri)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Select ID provider"
+                margin="normal"
+                variant="outlined"
+                type="url"
+                required
+              />
+            )}
+          />
 
-        <LoginButton
-          oidcIssuer={providerIri}
-          redirectUrl={generateRedirectUrl("")}
-          authOptions={authOptions}
-        >
-          <button
-            data-testid={TESTCAFE_ID_LOGIN_BUTTON}
-            type="submit"
-            className={bem("button", "primary")}
+          <LoginButton
+            oidcIssuer={providerIri}
+            redirectUrl={generateRedirectUrl("")}
+            authOptions={authOptions}
           >
-            Log In
-          </button>
-        </LoginButton>
+            <button
+              data-testid={TESTCAFE_ID_LOGIN_BUTTON}
+              type="submit"
+              className={bem("button", "primary")}
+            >
+              Log In
+            </button>
+          </LoginButton>
+        </Box>
       </Box>
-    </Box>
+    </form>
   );
 }
