@@ -29535,124 +29535,109 @@ font-display: block;",
                           className="PodBrowser-drawer__content"
                         >
                           <div
-                            className="PodBrowser-drawer__article"
+                            className="PodBrowser-drawer__content-wrapper"
                           >
-                            <ForwardRef
-                              onClick={[Function]}
-                              variant="text"
+                            <div
+                              className="PodBrowser-drawer__article"
                             >
-                              <button
-                                className="PodBrowser-button PodBrowser-button--text"
+                              <ForwardRef
                                 onClick={[Function]}
+                                variant="text"
                               >
-                                <Icon
-                                  name="cancel"
+                                <button
+                                  className="PodBrowser-button PodBrowser-button--text"
+                                  onClick={[Function]}
                                 >
-                                  <span
-                                    className="PodBrowser-icon-cancel"
-                                  />
-                                </Icon>
-                                 Close
-                              </button>
-                            </ForwardRef>
-                          </div>
-                          <WithStyles(ForwardRef(Accordion))
-                            defaultExpanded={true}
-                            square={true}
-                          >
-                            <ForwardRef(Accordion)
-                              classes={
-                                Object {
-                                  "disabled": "PodBrowser-disabled",
-                                  "expanded": "PodBrowser-expanded",
-                                  "root": "PodBrowser-root",
-                                  "rounded": "PodBrowser-rounded",
-                                }
-                              }
+                                  <Icon
+                                    name="cancel"
+                                  >
+                                    <span
+                                      className="PodBrowser-icon-cancel"
+                                    />
+                                  </Icon>
+                                   Close
+                                </button>
+                              </ForwardRef>
+                            </div>
+                            <WithStyles(ForwardRef(Accordion))
                               defaultExpanded={true}
                               square={true}
                             >
-                              <WithStyles(ForwardRef(Paper))
-                                className="PodBrowser-root PodBrowser-expanded"
+                              <ForwardRef(Accordion)
+                                classes={
+                                  Object {
+                                    "disabled": "PodBrowser-disabled",
+                                    "expanded": "PodBrowser-expanded",
+                                    "root": "PodBrowser-root",
+                                    "rounded": "PodBrowser-rounded",
+                                  }
+                                }
+                                defaultExpanded={true}
                                 square={true}
                               >
-                                <ForwardRef(Paper)
+                                <WithStyles(ForwardRef(Paper))
                                   className="PodBrowser-root PodBrowser-expanded"
-                                  classes={
-                                    Object {
-                                      "elevation0": "PodBrowser-elevation0",
-                                      "elevation1": "PodBrowser-elevation1",
-                                      "elevation10": "PodBrowser-elevation10",
-                                      "elevation11": "PodBrowser-elevation11",
-                                      "elevation12": "PodBrowser-elevation12",
-                                      "elevation13": "PodBrowser-elevation13",
-                                      "elevation14": "PodBrowser-elevation14",
-                                      "elevation15": "PodBrowser-elevation15",
-                                      "elevation16": "PodBrowser-elevation16",
-                                      "elevation17": "PodBrowser-elevation17",
-                                      "elevation18": "PodBrowser-elevation18",
-                                      "elevation19": "PodBrowser-elevation19",
-                                      "elevation2": "PodBrowser-elevation2",
-                                      "elevation20": "PodBrowser-elevation20",
-                                      "elevation21": "PodBrowser-elevation21",
-                                      "elevation22": "PodBrowser-elevation22",
-                                      "elevation23": "PodBrowser-elevation23",
-                                      "elevation24": "PodBrowser-elevation24",
-                                      "elevation3": "PodBrowser-elevation3",
-                                      "elevation4": "PodBrowser-elevation4",
-                                      "elevation5": "PodBrowser-elevation5",
-                                      "elevation6": "PodBrowser-elevation6",
-                                      "elevation7": "PodBrowser-elevation7",
-                                      "elevation8": "PodBrowser-elevation8",
-                                      "elevation9": "PodBrowser-elevation9",
-                                      "outlined": "PodBrowser-outlined",
-                                      "root": "PodBrowser-root",
-                                      "rounded": "PodBrowser-rounded",
-                                    }
-                                  }
                                   square={true}
                                 >
-                                  <div
-                                    className="PodBrowser-root PodBrowser-root PodBrowser-expanded PodBrowser-elevation1"
+                                  <ForwardRef(Paper)
+                                    className="PodBrowser-root PodBrowser-expanded"
+                                    classes={
+                                      Object {
+                                        "elevation0": "PodBrowser-elevation0",
+                                        "elevation1": "PodBrowser-elevation1",
+                                        "elevation10": "PodBrowser-elevation10",
+                                        "elevation11": "PodBrowser-elevation11",
+                                        "elevation12": "PodBrowser-elevation12",
+                                        "elevation13": "PodBrowser-elevation13",
+                                        "elevation14": "PodBrowser-elevation14",
+                                        "elevation15": "PodBrowser-elevation15",
+                                        "elevation16": "PodBrowser-elevation16",
+                                        "elevation17": "PodBrowser-elevation17",
+                                        "elevation18": "PodBrowser-elevation18",
+                                        "elevation19": "PodBrowser-elevation19",
+                                        "elevation2": "PodBrowser-elevation2",
+                                        "elevation20": "PodBrowser-elevation20",
+                                        "elevation21": "PodBrowser-elevation21",
+                                        "elevation22": "PodBrowser-elevation22",
+                                        "elevation23": "PodBrowser-elevation23",
+                                        "elevation24": "PodBrowser-elevation24",
+                                        "elevation3": "PodBrowser-elevation3",
+                                        "elevation4": "PodBrowser-elevation4",
+                                        "elevation5": "PodBrowser-elevation5",
+                                        "elevation6": "PodBrowser-elevation6",
+                                        "elevation7": "PodBrowser-elevation7",
+                                        "elevation8": "PodBrowser-elevation8",
+                                        "elevation9": "PodBrowser-elevation9",
+                                        "outlined": "PodBrowser-outlined",
+                                        "root": "PodBrowser-root",
+                                        "rounded": "PodBrowser-rounded",
+                                      }
+                                    }
+                                    square={true}
                                   >
-                                    <WithStyles(ForwardRef(AccordionSummary))
-                                      expandIcon={<Memo(ExpandMoreIcon) />}
-                                      key=".0"
+                                    <div
+                                      className="PodBrowser-root PodBrowser-root PodBrowser-expanded PodBrowser-elevation1"
                                     >
-                                      <ForwardRef(AccordionSummary)
-                                        classes={
-                                          Object {
-                                            "content": "PodBrowser-content",
-                                            "disabled": "PodBrowser-disabled",
-                                            "expandIcon": "PodBrowser-expandIcon",
-                                            "expanded": "PodBrowser-expanded",
-                                            "focused": "PodBrowser-focused",
-                                            "root": "PodBrowser-root",
-                                          }
-                                        }
+                                      <WithStyles(ForwardRef(AccordionSummary))
                                         expandIcon={<Memo(ExpandMoreIcon) />}
+                                        key=".0"
                                       >
-                                        <WithStyles(ForwardRef(ButtonBase))
-                                          aria-expanded={true}
-                                          className="PodBrowser-root PodBrowser-expanded"
-                                          component="div"
-                                          disableRipple={true}
-                                          disabled={false}
-                                          focusRipple={false}
-                                          onBlur={[Function]}
-                                          onClick={[Function]}
-                                          onFocusVisible={[Function]}
+                                        <ForwardRef(AccordionSummary)
+                                          classes={
+                                            Object {
+                                              "content": "PodBrowser-content",
+                                              "disabled": "PodBrowser-disabled",
+                                              "expandIcon": "PodBrowser-expandIcon",
+                                              "expanded": "PodBrowser-expanded",
+                                              "focused": "PodBrowser-focused",
+                                              "root": "PodBrowser-root",
+                                            }
+                                          }
+                                          expandIcon={<Memo(ExpandMoreIcon) />}
                                         >
-                                          <ForwardRef(ButtonBase)
+                                          <WithStyles(ForwardRef(ButtonBase))
                                             aria-expanded={true}
                                             className="PodBrowser-root PodBrowser-expanded"
-                                            classes={
-                                              Object {
-                                                "disabled": "PodBrowser-disabled",
-                                                "focusVisible": "PodBrowser-focusVisible",
-                                                "root": "PodBrowser-root",
-                                              }
-                                            }
                                             component="div"
                                             disableRipple={true}
                                             disabled={false}
@@ -29661,308 +29646,327 @@ font-display: block;",
                                             onClick={[Function]}
                                             onFocusVisible={[Function]}
                                           >
-                                            <div
-                                              aria-disabled={false}
+                                            <ForwardRef(ButtonBase)
                                               aria-expanded={true}
-                                              className="PodBrowser-root PodBrowser-root PodBrowser-expanded"
+                                              className="PodBrowser-root PodBrowser-expanded"
+                                              classes={
+                                                Object {
+                                                  "disabled": "PodBrowser-disabled",
+                                                  "focusVisible": "PodBrowser-focusVisible",
+                                                  "root": "PodBrowser-root",
+                                                }
+                                              }
+                                              component="div"
+                                              disableRipple={true}
+                                              disabled={false}
+                                              focusRipple={false}
                                               onBlur={[Function]}
                                               onClick={[Function]}
-                                              onDragLeave={[Function]}
-                                              onFocus={[Function]}
-                                              onKeyDown={[Function]}
-                                              onKeyUp={[Function]}
-                                              onMouseDown={[Function]}
-                                              onMouseLeave={[Function]}
-                                              onMouseUp={[Function]}
-                                              onTouchEnd={[Function]}
-                                              onTouchMove={[Function]}
-                                              onTouchStart={[Function]}
-                                              role="button"
-                                              tabIndex={0}
+                                              onFocusVisible={[Function]}
                                             >
                                               <div
-                                                className="PodBrowser-content PodBrowser-expanded"
+                                                aria-disabled={false}
+                                                aria-expanded={true}
+                                                className="PodBrowser-root PodBrowser-root PodBrowser-expanded"
+                                                onBlur={[Function]}
+                                                onClick={[Function]}
+                                                onDragLeave={[Function]}
+                                                onFocus={[Function]}
+                                                onKeyDown={[Function]}
+                                                onKeyUp={[Function]}
+                                                onMouseDown={[Function]}
+                                                onMouseLeave={[Function]}
+                                                onMouseUp={[Function]}
+                                                onTouchEnd={[Function]}
+                                                onTouchMove={[Function]}
+                                                onTouchStart={[Function]}
+                                                role="button"
+                                                tabIndex={0}
                                               >
-                                                Actions
-                                              </div>
-                                              <WithStyles(ForwardRef(IconButton))
-                                                aria-hidden={true}
-                                                className="PodBrowser-expandIcon PodBrowser-expanded"
-                                                component="div"
-                                                edge="end"
-                                                role={null}
-                                                tabIndex={null}
-                                              >
-                                                <ForwardRef(IconButton)
+                                                <div
+                                                  className="PodBrowser-content PodBrowser-expanded"
+                                                >
+                                                  Actions
+                                                </div>
+                                                <WithStyles(ForwardRef(IconButton))
                                                   aria-hidden={true}
                                                   className="PodBrowser-expandIcon PodBrowser-expanded"
-                                                  classes={
-                                                    Object {
-                                                      "colorInherit": "PodBrowser-colorInherit",
-                                                      "colorPrimary": "PodBrowser-colorPrimary",
-                                                      "colorSecondary": "PodBrowser-colorSecondary",
-                                                      "disabled": "PodBrowser-disabled",
-                                                      "edgeEnd": "PodBrowser-edgeEnd",
-                                                      "edgeStart": "PodBrowser-edgeStart",
-                                                      "label": "PodBrowser-label",
-                                                      "root": "PodBrowser-root",
-                                                      "sizeSmall": "PodBrowser-sizeSmall",
-                                                    }
-                                                  }
                                                   component="div"
                                                   edge="end"
                                                   role={null}
                                                   tabIndex={null}
                                                 >
-                                                  <WithStyles(ForwardRef(ButtonBase))
+                                                  <ForwardRef(IconButton)
                                                     aria-hidden={true}
-                                                    centerRipple={true}
-                                                    className="PodBrowser-root PodBrowser-expandIcon PodBrowser-expanded PodBrowser-edgeEnd"
+                                                    className="PodBrowser-expandIcon PodBrowser-expanded"
+                                                    classes={
+                                                      Object {
+                                                        "colorInherit": "PodBrowser-colorInherit",
+                                                        "colorPrimary": "PodBrowser-colorPrimary",
+                                                        "colorSecondary": "PodBrowser-colorSecondary",
+                                                        "disabled": "PodBrowser-disabled",
+                                                        "edgeEnd": "PodBrowser-edgeEnd",
+                                                        "edgeStart": "PodBrowser-edgeStart",
+                                                        "label": "PodBrowser-label",
+                                                        "root": "PodBrowser-root",
+                                                        "sizeSmall": "PodBrowser-sizeSmall",
+                                                      }
+                                                    }
                                                     component="div"
-                                                    disabled={false}
-                                                    focusRipple={true}
+                                                    edge="end"
                                                     role={null}
                                                     tabIndex={null}
                                                   >
-                                                    <ForwardRef(ButtonBase)
+                                                    <WithStyles(ForwardRef(ButtonBase))
                                                       aria-hidden={true}
                                                       centerRipple={true}
                                                       className="PodBrowser-root PodBrowser-expandIcon PodBrowser-expanded PodBrowser-edgeEnd"
-                                                      classes={
-                                                        Object {
-                                                          "disabled": "PodBrowser-disabled",
-                                                          "focusVisible": "PodBrowser-focusVisible",
-                                                          "root": "PodBrowser-root",
-                                                        }
-                                                      }
                                                       component="div"
                                                       disabled={false}
                                                       focusRipple={true}
                                                       role={null}
                                                       tabIndex={null}
                                                     >
-                                                      <div
-                                                        aria-disabled={false}
+                                                      <ForwardRef(ButtonBase)
                                                         aria-hidden={true}
-                                                        className="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-expanded PodBrowser-edgeEnd"
-                                                        onBlur={[Function]}
-                                                        onDragLeave={[Function]}
-                                                        onFocus={[Function]}
-                                                        onKeyDown={[Function]}
-                                                        onKeyUp={[Function]}
-                                                        onMouseDown={[Function]}
-                                                        onMouseLeave={[Function]}
-                                                        onMouseUp={[Function]}
-                                                        onTouchEnd={[Function]}
-                                                        onTouchMove={[Function]}
-                                                        onTouchStart={[Function]}
+                                                        centerRipple={true}
+                                                        className="PodBrowser-root PodBrowser-expandIcon PodBrowser-expanded PodBrowser-edgeEnd"
+                                                        classes={
+                                                          Object {
+                                                            "disabled": "PodBrowser-disabled",
+                                                            "focusVisible": "PodBrowser-focusVisible",
+                                                            "root": "PodBrowser-root",
+                                                          }
+                                                        }
+                                                        component="div"
+                                                        disabled={false}
+                                                        focusRipple={true}
                                                         role={null}
                                                         tabIndex={null}
                                                       >
-                                                        <span
-                                                          className="PodBrowser-label"
+                                                        <div
+                                                          aria-disabled={false}
+                                                          aria-hidden={true}
+                                                          className="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-expanded PodBrowser-edgeEnd"
+                                                          onBlur={[Function]}
+                                                          onDragLeave={[Function]}
+                                                          onFocus={[Function]}
+                                                          onKeyDown={[Function]}
+                                                          onKeyUp={[Function]}
+                                                          onMouseDown={[Function]}
+                                                          onMouseLeave={[Function]}
+                                                          onMouseUp={[Function]}
+                                                          onTouchEnd={[Function]}
+                                                          onTouchMove={[Function]}
+                                                          onTouchStart={[Function]}
+                                                          role={null}
+                                                          tabIndex={null}
                                                         >
-                                                          <ExpandMoreIcon>
-                                                            <WithStyles(ForwardRef(SvgIcon))>
-                                                              <ForwardRef(SvgIcon)
-                                                                classes={
-                                                                  Object {
-                                                                    "colorAction": "PodBrowser-colorAction",
-                                                                    "colorDisabled": "PodBrowser-colorDisabled",
-                                                                    "colorError": "PodBrowser-colorError",
-                                                                    "colorPrimary": "PodBrowser-colorPrimary",
-                                                                    "colorSecondary": "PodBrowser-colorSecondary",
-                                                                    "fontSizeInherit": "PodBrowser-fontSizeInherit",
-                                                                    "fontSizeLarge": "PodBrowser-fontSizeLarge",
-                                                                    "fontSizeSmall": "PodBrowser-fontSizeSmall",
-                                                                    "root": "PodBrowser-root",
-                                                                  }
-                                                                }
-                                                              >
-                                                                <svg
-                                                                  aria-hidden={true}
-                                                                  className="PodBrowser-root"
-                                                                  focusable="false"
-                                                                  viewBox="0 0 24 24"
-                                                                >
-                                                                  <path
-                                                                    d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
-                                                                  />
-                                                                </svg>
-                                                              </ForwardRef(SvgIcon)>
-                                                            </WithStyles(ForwardRef(SvgIcon))>
-                                                          </ExpandMoreIcon>
-                                                        </span>
-                                                        <WithStyles(memo)
-                                                          center={true}
-                                                        >
-                                                          <ForwardRef(TouchRipple)
-                                                            center={true}
-                                                            classes={
-                                                              Object {
-                                                                "child": "PodBrowser-child",
-                                                                "childLeaving": "PodBrowser-childLeaving",
-                                                                "childPulsate": "PodBrowser-childPulsate",
-                                                                "ripple": "PodBrowser-ripple",
-                                                                "ripplePulsate": "PodBrowser-ripplePulsate",
-                                                                "rippleVisible": "PodBrowser-rippleVisible",
-                                                                "root": "PodBrowser-root",
-                                                              }
-                                                            }
+                                                          <span
+                                                            className="PodBrowser-label"
                                                           >
-                                                            <span
-                                                              className="PodBrowser-root"
+                                                            <ExpandMoreIcon>
+                                                              <WithStyles(ForwardRef(SvgIcon))>
+                                                                <ForwardRef(SvgIcon)
+                                                                  classes={
+                                                                    Object {
+                                                                      "colorAction": "PodBrowser-colorAction",
+                                                                      "colorDisabled": "PodBrowser-colorDisabled",
+                                                                      "colorError": "PodBrowser-colorError",
+                                                                      "colorPrimary": "PodBrowser-colorPrimary",
+                                                                      "colorSecondary": "PodBrowser-colorSecondary",
+                                                                      "fontSizeInherit": "PodBrowser-fontSizeInherit",
+                                                                      "fontSizeLarge": "PodBrowser-fontSizeLarge",
+                                                                      "fontSizeSmall": "PodBrowser-fontSizeSmall",
+                                                                      "root": "PodBrowser-root",
+                                                                    }
+                                                                  }
+                                                                >
+                                                                  <svg
+                                                                    aria-hidden={true}
+                                                                    className="PodBrowser-root"
+                                                                    focusable="false"
+                                                                    viewBox="0 0 24 24"
+                                                                  >
+                                                                    <path
+                                                                      d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                                                                    />
+                                                                  </svg>
+                                                                </ForwardRef(SvgIcon)>
+                                                              </WithStyles(ForwardRef(SvgIcon))>
+                                                            </ExpandMoreIcon>
+                                                          </span>
+                                                          <WithStyles(memo)
+                                                            center={true}
+                                                          >
+                                                            <ForwardRef(TouchRipple)
+                                                              center={true}
+                                                              classes={
+                                                                Object {
+                                                                  "child": "PodBrowser-child",
+                                                                  "childLeaving": "PodBrowser-childLeaving",
+                                                                  "childPulsate": "PodBrowser-childPulsate",
+                                                                  "ripple": "PodBrowser-ripple",
+                                                                  "ripplePulsate": "PodBrowser-ripplePulsate",
+                                                                  "rippleVisible": "PodBrowser-rippleVisible",
+                                                                  "root": "PodBrowser-root",
+                                                                }
+                                                              }
                                                             >
-                                                              <TransitionGroup
-                                                                childFactory={[Function]}
-                                                                component={null}
-                                                                exit={true}
-                                                              />
-                                                            </span>
-                                                          </ForwardRef(TouchRipple)>
-                                                        </WithStyles(memo)>
-                                                      </div>
-                                                    </ForwardRef(ButtonBase)>
-                                                  </WithStyles(ForwardRef(ButtonBase))>
-                                                </ForwardRef(IconButton)>
-                                              </WithStyles(ForwardRef(IconButton))>
-                                            </div>
-                                          </ForwardRef(ButtonBase)>
-                                        </WithStyles(ForwardRef(ButtonBase))>
-                                      </ForwardRef(AccordionSummary)>
-                                    </WithStyles(ForwardRef(AccordionSummary))>
-                                    <WithStyles(ForwardRef(Collapse))
-                                      in={true}
-                                      timeout="auto"
-                                    >
-                                      <ForwardRef(Collapse)
-                                        classes={
-                                          Object {
-                                            "container": "PodBrowser-container",
-                                            "entered": "PodBrowser-entered",
-                                            "hidden": "PodBrowser-hidden",
-                                            "wrapper": "PodBrowser-wrapper",
-                                            "wrapperInner": "PodBrowser-wrapperInner",
-                                          }
-                                        }
+                                                              <span
+                                                                className="PodBrowser-root"
+                                                              >
+                                                                <TransitionGroup
+                                                                  childFactory={[Function]}
+                                                                  component={null}
+                                                                  exit={true}
+                                                                />
+                                                              </span>
+                                                            </ForwardRef(TouchRipple)>
+                                                          </WithStyles(memo)>
+                                                        </div>
+                                                      </ForwardRef(ButtonBase)>
+                                                    </WithStyles(ForwardRef(ButtonBase))>
+                                                  </ForwardRef(IconButton)>
+                                                </WithStyles(ForwardRef(IconButton))>
+                                              </div>
+                                            </ForwardRef(ButtonBase)>
+                                          </WithStyles(ForwardRef(ButtonBase))>
+                                        </ForwardRef(AccordionSummary)>
+                                      </WithStyles(ForwardRef(AccordionSummary))>
+                                      <WithStyles(ForwardRef(Collapse))
                                         in={true}
                                         timeout="auto"
                                       >
-                                        <Transition
-                                          addEndListener={[Function]}
-                                          appear={false}
-                                          enter={true}
-                                          exit={true}
-                                          in={true}
-                                          mountOnEnter={false}
-                                          onEnter={[Function]}
-                                          onEntered={[Function]}
-                                          onEntering={[Function]}
-                                          onExit={[Function]}
-                                          onExited={[Function]}
-                                          onExiting={[Function]}
-                                          timeout={null}
-                                          unmountOnExit={false}
-                                        >
-                                          <div
-                                            className="PodBrowser-container PodBrowser-entered"
-                                            style={
-                                              Object {
-                                                "minHeight": "0px",
-                                              }
+                                        <ForwardRef(Collapse)
+                                          classes={
+                                            Object {
+                                              "container": "PodBrowser-container",
+                                              "entered": "PodBrowser-entered",
+                                              "hidden": "PodBrowser-hidden",
+                                              "wrapper": "PodBrowser-wrapper",
+                                              "wrapperInner": "PodBrowser-wrapperInner",
                                             }
+                                          }
+                                          in={true}
+                                          timeout="auto"
+                                        >
+                                          <Transition
+                                            addEndListener={[Function]}
+                                            appear={false}
+                                            enter={true}
+                                            exit={true}
+                                            in={true}
+                                            mountOnEnter={false}
+                                            onEnter={[Function]}
+                                            onEntered={[Function]}
+                                            onEntering={[Function]}
+                                            onExit={[Function]}
+                                            onExited={[Function]}
+                                            onExiting={[Function]}
+                                            timeout={null}
+                                            unmountOnExit={false}
                                           >
                                             <div
-                                              className="PodBrowser-wrapper"
+                                              className="PodBrowser-container PodBrowser-entered"
+                                              style={
+                                                Object {
+                                                  "minHeight": "0px",
+                                                }
+                                              }
                                             >
                                               <div
-                                                className="PodBrowser-wrapperInner"
+                                                className="PodBrowser-wrapper"
                                               >
                                                 <div
-                                                  role="region"
+                                                  className="PodBrowser-wrapperInner"
                                                 >
-                                                  <WithStyles(ForwardRef(AccordionDetails))
-                                                    key=".1"
+                                                  <div
+                                                    role="region"
                                                   >
-                                                    <ForwardRef(AccordionDetails)
-                                                      classes={
-                                                        Object {
-                                                          "root": "PodBrowser-root",
-                                                        }
-                                                      }
+                                                    <WithStyles(ForwardRef(AccordionDetails))
+                                                      key=".1"
                                                     >
-                                                      <div
-                                                        className="PodBrowser-root"
+                                                      <ForwardRef(AccordionDetails)
+                                                        classes={
+                                                          Object {
+                                                            "root": "PodBrowser-root",
+                                                          }
+                                                        }
                                                       >
-                                                        <ActionMenu>
-                                                          <ul
-                                                            className="PodBrowser-action-menu"
-                                                          >
-                                                            <ActionMenuItem>
-                                                              <li
-                                                                className="PodBrowser-action-menu__item"
-                                                              >
-                                                                <Link
-                                                                  as="/contacts/"
-                                                                  className="PodBrowser-action-menu__trigger"
-                                                                  href="/contacts/[show]"
+                                                        <div
+                                                          className="PodBrowser-root"
+                                                        >
+                                                          <ActionMenu>
+                                                            <ul
+                                                              className="PodBrowser-action-menu"
+                                                            >
+                                                              <ActionMenuItem>
+                                                                <li
+                                                                  className="PodBrowser-action-menu__item"
                                                                 >
-                                                                  <a
-                                                                    href="/contacts"
-                                                                    onClick={[Function]}
-                                                                    onMouseEnter={[Function]}
+                                                                  <Link
+                                                                    as="/contacts/"
+                                                                    className="PodBrowser-action-menu__trigger"
+                                                                    href="/contacts/[show]"
                                                                   >
-                                                                    View Profile
-                                                                  </a>
-                                                                </Link>
-                                                              </li>
-                                                            </ActionMenuItem>
-                                                            <ActionMenuItem>
-                                                              <li
-                                                                className="PodBrowser-action-menu__item"
-                                                              >
-                                                                <DeleteContactButton
-                                                                  className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
-                                                                  name=""
-                                                                  onDelete={[Function]}
-                                                                >
-                                                                  <DeleteButton
-                                                                    className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
-                                                                    confirmationContent="Are you sure you wish to delete  from your contacts?"
-                                                                    confirmationTitle="Delete Contact"
-                                                                    dialogId="delete-contact"
-                                                                    onDelete={[Function]}
-                                                                    successMessage="Contact was successfully deleted."
-                                                                  >
-                                                                    <button
-                                                                      className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
-                                                                      data-testid="delete-button"
+                                                                    <a
+                                                                      href="/contacts"
                                                                       onClick={[Function]}
-                                                                      type="button"
+                                                                      onMouseEnter={[Function]}
                                                                     >
-                                                                      Delete
-                                                                    </button>
-                                                                  </DeleteButton>
-                                                                </DeleteContactButton>
-                                                              </li>
-                                                            </ActionMenuItem>
-                                                          </ul>
-                                                        </ActionMenu>
-                                                      </div>
-                                                    </ForwardRef(AccordionDetails)>
-                                                  </WithStyles(ForwardRef(AccordionDetails))>
+                                                                      View Profile
+                                                                    </a>
+                                                                  </Link>
+                                                                </li>
+                                                              </ActionMenuItem>
+                                                              <ActionMenuItem>
+                                                                <li
+                                                                  className="PodBrowser-action-menu__item"
+                                                                >
+                                                                  <DeleteContactButton
+                                                                    className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                                                                    name=""
+                                                                    onDelete={[Function]}
+                                                                  >
+                                                                    <DeleteButton
+                                                                      className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                                                                      confirmationContent="Are you sure you wish to delete  from your contacts?"
+                                                                      confirmationTitle="Delete Contact"
+                                                                      dialogId="delete-contact"
+                                                                      onDelete={[Function]}
+                                                                      successMessage="Contact was successfully deleted."
+                                                                    >
+                                                                      <button
+                                                                        className="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                                                                        data-testid="delete-button"
+                                                                        onClick={[Function]}
+                                                                        type="button"
+                                                                      >
+                                                                        Delete
+                                                                      </button>
+                                                                    </DeleteButton>
+                                                                  </DeleteContactButton>
+                                                                </li>
+                                                              </ActionMenuItem>
+                                                            </ul>
+                                                          </ActionMenu>
+                                                        </div>
+                                                      </ForwardRef(AccordionDetails)>
+                                                    </WithStyles(ForwardRef(AccordionDetails))>
+                                                  </div>
                                                 </div>
                                               </div>
                                             </div>
-                                          </div>
-                                        </Transition>
-                                      </ForwardRef(Collapse)>
-                                    </WithStyles(ForwardRef(Collapse))>
-                                  </div>
-                                </ForwardRef(Paper)>
-                              </WithStyles(ForwardRef(Paper))>
-                            </ForwardRef(Accordion)>
-                          </WithStyles(ForwardRef(Accordion))>
+                                          </Transition>
+                                        </ForwardRef(Collapse)>
+                                      </WithStyles(ForwardRef(Collapse))>
+                                    </div>
+                                  </ForwardRef(Paper)>
+                                </WithStyles(ForwardRef(Paper))>
+                              </ForwardRef(Accordion)>
+                            </WithStyles(ForwardRef(Accordion))>
+                          </div>
                         </div>
                       </section>
                     </Drawer>

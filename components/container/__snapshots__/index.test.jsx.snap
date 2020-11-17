@@ -4395,87 +4395,91 @@ font-display: block;",
                         className="PodBrowser-drawer__content"
                       >
                         <div
-                          className="PodBrowser-drawer__article"
+                          className="PodBrowser-drawer__content-wrapper"
                         >
-                          <ForwardRef
-                            onClick={[Function]}
-                            variant="text"
+                          <div
+                            className="PodBrowser-drawer__article"
                           >
-                            <button
-                              className="PodBrowser-button PodBrowser-button--text"
+                            <ForwardRef
                               onClick={[Function]}
+                              variant="text"
                             >
-                              <Icon
-                                name="cancel"
+                              <button
+                                className="PodBrowser-button PodBrowser-button--text"
+                                onClick={[Function]}
                               >
-                                <span
-                                  className="PodBrowser-icon-cancel"
-                                />
-                              </Icon>
-                               Close
-                            </button>
-                          </ForwardRef>
-                        </div>
-                        <DetailsLoading
-                          iri={null}
-                        >
-                          <section
-                            className="PodBrowser-centeredSection"
+                                <Icon
+                                  name="cancel"
+                                >
+                                  <span
+                                    className="PodBrowser-icon-cancel"
+                                  />
+                                </Icon>
+                                 Close
+                              </button>
+                            </ForwardRef>
+                          </div>
+                          <DetailsLoading
+                            iri={null}
                           >
-                            <h3
-                              className="PodBrowser-content-h3"
-                              title=""
+                            <section
+                              className="PodBrowser-centeredSection"
                             >
-                              null
-                            </h3>
-                          </section>
-                          <WithStyles(ForwardRef(Divider))>
-                            <ForwardRef(Divider)
-                              classes={
-                                Object {
-                                  "absolute": "PodBrowser-absolute",
-                                  "flexItem": "PodBrowser-flexItem",
-                                  "inset": "PodBrowser-inset",
-                                  "light": "PodBrowser-light",
-                                  "middle": "PodBrowser-middle",
-                                  "root": "PodBrowser-root",
-                                  "vertical": "PodBrowser-vertical",
-                                }
-                              }
-                            >
-                              <hr
-                                className="PodBrowser-root"
-                              />
-                            </ForwardRef(Divider)>
-                          </WithStyles(ForwardRef(Divider))>
-                          <Spinner>
-                            <LoadingIndicator
-                              center={true}
-                            >
-                              <div
-                                className="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
-                                style={
+                              <h3
+                                className="PodBrowser-content-h3"
+                                title=""
+                              >
+                                null
+                              </h3>
+                            </section>
+                            <WithStyles(ForwardRef(Divider))>
+                              <ForwardRef(Divider)
+                                classes={
                                   Object {
-                                    "maxHeight": undefined,
+                                    "absolute": "PodBrowser-absolute",
+                                    "flexItem": "PodBrowser-flexItem",
+                                    "inset": "PodBrowser-inset",
+                                    "light": "PodBrowser-light",
+                                    "middle": "PodBrowser-middle",
+                                    "root": "PodBrowser-root",
+                                    "vertical": "PodBrowser-vertical",
                                   }
                                 }
                               >
-                                <svg
-                                  className="PodBrowser-loading-indicator"
-                                  viewBox="22 22 44 44"
+                                <hr
+                                  className="PodBrowser-root"
+                                />
+                              </ForwardRef(Divider)>
+                            </WithStyles(ForwardRef(Divider))>
+                            <Spinner>
+                              <LoadingIndicator
+                                center={true}
+                              >
+                                <div
+                                  className="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
+                                  style={
+                                    Object {
+                                      "maxHeight": undefined,
+                                    }
+                                  }
                                 >
-                                  <circle
-                                    cx="44"
-                                    cy="44"
-                                    fill="none"
-                                    r="20.2"
-                                    strokeWidth="3.6"
-                                  />
-                                </svg>
-                              </div>
-                            </LoadingIndicator>
-                          </Spinner>
-                        </DetailsLoading>
+                                  <svg
+                                    className="PodBrowser-loading-indicator"
+                                    viewBox="22 22 44 44"
+                                  >
+                                    <circle
+                                      cx="44"
+                                      cy="44"
+                                      fill="none"
+                                      r="20.2"
+                                      strokeWidth="3.6"
+                                    />
+                                  </svg>
+                                </div>
+                              </LoadingIndicator>
+                            </Spinner>
+                          </DetailsLoading>
+                        </div>
                       </div>
                     </section>
                   </Drawer>
@@ -26049,87 +26053,91 @@ font-display: block;",
                         className="PodBrowser-drawer__content"
                       >
                         <div
-                          className="PodBrowser-drawer__article"
+                          className="PodBrowser-drawer__content-wrapper"
                         >
-                          <ForwardRef
-                            onClick={[Function]}
-                            variant="text"
+                          <div
+                            className="PodBrowser-drawer__article"
                           >
-                            <button
-                              className="PodBrowser-button PodBrowser-button--text"
+                            <ForwardRef
                               onClick={[Function]}
+                              variant="text"
                             >
-                              <Icon
-                                name="cancel"
+                              <button
+                                className="PodBrowser-button PodBrowser-button--text"
+                                onClick={[Function]}
                               >
-                                <span
-                                  className="PodBrowser-icon-cancel"
-                                />
-                              </Icon>
-                               Close
-                            </button>
-                          </ForwardRef>
-                        </div>
-                        <DetailsLoading
-                          iri={null}
-                        >
-                          <section
-                            className="PodBrowser-centeredSection"
+                                <Icon
+                                  name="cancel"
+                                >
+                                  <span
+                                    className="PodBrowser-icon-cancel"
+                                  />
+                                </Icon>
+                                 Close
+                              </button>
+                            </ForwardRef>
+                          </div>
+                          <DetailsLoading
+                            iri={null}
                           >
-                            <h3
-                              className="PodBrowser-content-h3"
-                              title=""
+                            <section
+                              className="PodBrowser-centeredSection"
                             >
-                              null
-                            </h3>
-                          </section>
-                          <WithStyles(ForwardRef(Divider))>
-                            <ForwardRef(Divider)
-                              classes={
-                                Object {
-                                  "absolute": "PodBrowser-absolute",
-                                  "flexItem": "PodBrowser-flexItem",
-                                  "inset": "PodBrowser-inset",
-                                  "light": "PodBrowser-light",
-                                  "middle": "PodBrowser-middle",
-                                  "root": "PodBrowser-root",
-                                  "vertical": "PodBrowser-vertical",
-                                }
-                              }
-                            >
-                              <hr
-                                className="PodBrowser-root"
-                              />
-                            </ForwardRef(Divider)>
-                          </WithStyles(ForwardRef(Divider))>
-                          <Spinner>
-                            <LoadingIndicator
-                              center={true}
-                            >
-                              <div
-                                className="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
-                                style={
+                              <h3
+                                className="PodBrowser-content-h3"
+                                title=""
+                              >
+                                null
+                              </h3>
+                            </section>
+                            <WithStyles(ForwardRef(Divider))>
+                              <ForwardRef(Divider)
+                                classes={
                                   Object {
-                                    "maxHeight": undefined,
+                                    "absolute": "PodBrowser-absolute",
+                                    "flexItem": "PodBrowser-flexItem",
+                                    "inset": "PodBrowser-inset",
+                                    "light": "PodBrowser-light",
+                                    "middle": "PodBrowser-middle",
+                                    "root": "PodBrowser-root",
+                                    "vertical": "PodBrowser-vertical",
                                   }
                                 }
                               >
-                                <svg
-                                  className="PodBrowser-loading-indicator"
-                                  viewBox="22 22 44 44"
+                                <hr
+                                  className="PodBrowser-root"
+                                />
+                              </ForwardRef(Divider)>
+                            </WithStyles(ForwardRef(Divider))>
+                            <Spinner>
+                              <LoadingIndicator
+                                center={true}
+                              >
+                                <div
+                                  className="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
+                                  style={
+                                    Object {
+                                      "maxHeight": undefined,
+                                    }
+                                  }
                                 >
-                                  <circle
-                                    cx="44"
-                                    cy="44"
-                                    fill="none"
-                                    r="20.2"
-                                    strokeWidth="3.6"
-                                  />
-                                </svg>
-                              </div>
-                            </LoadingIndicator>
-                          </Spinner>
-                        </DetailsLoading>
+                                  <svg
+                                    className="PodBrowser-loading-indicator"
+                                    viewBox="22 22 44 44"
+                                  >
+                                    <circle
+                                      cx="44"
+                                      cy="44"
+                                      fill="none"
+                                      r="20.2"
+                                      strokeWidth="3.6"
+                                    />
+                                  </svg>
+                                </div>
+                              </LoadingIndicator>
+                            </Spinner>
+                          </DetailsLoading>
+                        </div>
                       </div>
                     </section>
                   </Drawer>
