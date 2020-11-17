@@ -20,9 +20,13 @@
  */
 
 import * as solidClientFns from "@inrupt/solid-client";
+import {
+  addMockResourceAclTo,
+  mockSolidDatasetFrom,
+} from "@inrupt/solid-client";
 import AcpAccessControlStrategy from "./acp";
 import WacAccessControlStrategy from "./wac";
-import { getAccessControl, noAccessPolicyError } from "./index";
+import { getAccessControl, hasAccess, noAccessPolicyError } from "./index";
 
 const acp = solidClientFns.acp_v1;
 
@@ -43,6 +47,8 @@ describe("getAccessControl", () => {
     jest.spyOn(WacAccessControlStrategy, "init").mockReturnValue(wacStrategy);
     jest.spyOn(AcpAccessControlStrategy, "init").mockReturnValue(acpStrategy);
   });
+
+  afterEach(() => jest.restoreAllMocks());
 
   it("throws error if no access link is found", async () => {
     await expect(
@@ -81,5 +87,20 @@ describe("getAccessControl", () => {
 
     it("returns the result from WacAccessControlStrategy.init", () =>
       expect(result).toBe(wacStrategy));
+  });
+});
+
+describe("hasAccess", () => {
+  it("checks whether resource is accessible either through ACP or WAC", () => {
+    const resource = mockSolidDatasetFrom("http://example.com");
+    const resourceWithWac = addMockResourceAclTo(resource);
+    const resourceWithAcp = acp.addMockAcrTo(resource);
+    jest
+      .spyOn(acp, "hasLinkedAcr")
+      .mockImplementation((r) => r === resourceWithAcp);
+
+    expect(hasAccess(resource)).toBeFalsy();
+    expect(hasAccess(resourceWithWac)).toBeTruthy();
+    expect(hasAccess(resourceWithAcp)).toBeTruthy();
   });
 });
