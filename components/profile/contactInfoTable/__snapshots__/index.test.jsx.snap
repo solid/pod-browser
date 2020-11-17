@@ -142,3 +142,15 @@ exports[`ContactInfoTable renders an editable table of contact info 1`] = `
   </div>
 </DocumentFragment>
 `;
+
+exports[`setupDeleteButtonCell renders nothing if not editable 1`] = `<DocumentFragment />`;
+
+exports[`setupDeleteButtonCell returns a button if editable 1`] = `
+<DocumentFragment>
+  <button
+    type="button"
+  >
+    Delete
+  </button>
+</DocumentFragment>
+`;

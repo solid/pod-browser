@@ -58,6 +58,7 @@ import {
 
 import { Table as PrismTable } from "@inrupt/prism-react-components";
 import styles from "./styles";
+import { chain } from "../../../src/solidClientHelpers/utils";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -66,12 +67,81 @@ const CONTACT_TYPE_LABEL_MAP = {
   [vcard.Work]: "Work",
 };
 
-const PREFIX_MAP = {
+export const PREFIX_MAP = {
   [vcard.hasTelephone]: "tel:",
   [vcard.hasEmail]: "mailto:",
 };
 
-const DEFAULT_CONTACT_TYPE = vcard.Home;
+export const DEFAULT_CONTACT_TYPE = vcard.Home;
+
+export function setupAddContactDetail(
+  property,
+  newContactType,
+  newContactValue,
+  dataset,
+  profile,
+  saveHandler,
+  setNewContactValue
+) {
+  return async () => {
+    const prefix = PREFIX_MAP[property];
+    const newContactDetail = chain(
+      setUrl(createThing(), rdf.type, newContactType),
+      (t) => setUrl(t, vcard.value, `${prefix}${newContactValue}`)
+    );
+
+    const datasetWithContactDetail = setThing(dataset, newContactDetail);
+
+    const newProfile = addUrl(
+      profile,
+      property,
+      asUrl(newContactDetail, getSourceUrl(dataset))
+    );
+
+    await saveHandler(newProfile, datasetWithContactDetail);
+
+    setNewContactValue("");
+  };
+}
+
+export function setupSaveHandler(fetch, setDataset) {
+  return async (newThing, datasetToUpdate) => {
+    const savedDataset = await saveSolidDatasetAt(
+      getSourceUrl(datasetToUpdate),
+      setThing(datasetToUpdate, newThing),
+      { fetch }
+    );
+    setDataset(savedDataset);
+  };
+}
+
+export function setupRemoveRow(profile, property, saveHandler, dataset) {
+  return async (rowThing) => {
+    const contactDetailUrl = asUrl(rowThing);
+    const newProfile = removeUrl(profile, property, contactDetailUrl);
+    await saveHandler(newProfile, dataset);
+  };
+}
+
+export function setupDeleteButtonCell(editing, removeRow, bem) {
+  return () => {
+    const { thing: rowThing } = useThing();
+
+    if (!editing) {
+      return null;
+    }
+
+    return (
+      <button
+        onClick={() => removeRow(rowThing)}
+        className={bem("button", "action")}
+        type="button"
+      >
+        Delete
+      </button>
+    );
+  };
+}
 
 export default function ContactTable({ editing, property }) {
   const tableClass = PrismTable.useTableClass("table", "inherits");
@@ -90,63 +160,21 @@ export default function ContactTable({ editing, property }) {
     thing: getThing(dataset, url),
   }));
 
-  const saveHandler = async (newThing, datasetToUpdate) => {
-    const savedDataset = await saveSolidDatasetAt(
-      getSourceUrl(datasetToUpdate),
-      setThing(datasetToUpdate, newThing),
-      { fetch }
-    );
-    setDataset(savedDataset);
-  };
+  const saveHandler = setupSaveHandler(fetch, setDataset);
 
-  const addContactDetail = async () => {
-    const prefix = PREFIX_MAP[property];
-    const newContactDetail = setUrl(createThing(), rdf.type, newContactType);
-    const newContactDetailWithValue = setUrl(
-      newContactDetail,
-      vcard.value,
-      `${prefix}${newContactValue}`
-    );
+  const addContactDetail = setupAddContactDetail(
+    property,
+    newContactType,
+    newContactValue,
+    dataset,
+    profile,
+    saveHandler,
+    setNewContactValue
+  );
 
-    const datasetWithContactDetail = setThing(
-      dataset,
-      newContactDetailWithValue
-    );
+  const removeRow = setupRemoveRow(profile, property, saveHandler, dataset);
 
-    const newProfile = addUrl(
-      profile,
-      property,
-      asUrl(newContactDetailWithValue, getSourceUrl(dataset))
-    );
-
-    await saveHandler(newProfile, datasetWithContactDetail);
-
-    setNewContactValue("");
-  };
-
-  const removeRow = async (rowThing) => {
-    const contactDetailUrl = asUrl(rowThing);
-    const newProfile = removeUrl(profile, property, contactDetailUrl);
-    await saveHandler(newProfile, dataset);
-  };
-
-  const DeleteButtonCell = () => {
-    const { thing: rowThing } = useThing();
-
-    if (!editing) {
-      return null;
-    }
-
-    return (
-      <button
-        onClick={() => removeRow(rowThing)}
-        className={bem("button", "action")}
-        type="button"
-      >
-        Delete
-      </button>
-    );
-  };
+  const DeleteButtonCell = setupDeleteButtonCell(editing, removeRow, bem);
 
   return (
     <>
