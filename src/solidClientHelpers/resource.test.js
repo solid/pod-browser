@@ -26,7 +26,9 @@ import {
   mockSolidDatasetFrom,
   mockThingFrom,
   setThing,
+  setUrl,
 } from "@inrupt/solid-client";
+import { rdf } from "rdf-namespaces";
 import createContainer from "../../__testUtils/createContainer";
 import {
   getOrCreateContainer,
@@ -38,6 +40,7 @@ import {
   deleteResource,
 } from "./resource";
 import { getPolicyUrl } from "./policies";
+import { chain } from "./utils";
 
 jest.mock("./policies");
 
@@ -181,11 +184,12 @@ describe("getOrCreateDataset", () => {
 
 describe("getOrCreateThing", () => {
   const existingThingIri = "http://example.com/#thing";
-  const existingThing = mockThingFrom(existingThingIri);
+  const existingThing = chain(mockThingFrom(existingThingIri), (t) =>
+    setUrl(t, rdf.type, "http://example.com/#Class")
+  );
   const existingDatasetIri = "http://example.com/";
-  const existingDataset = setThing(
-    mockSolidDatasetFrom(existingDatasetIri),
-    existingThing
+  const existingDataset = chain(mockSolidDatasetFrom(existingDatasetIri), (d) =>
+    setThing(d, existingThing)
   );
   const newThingIri = "http://example.com/#newThing";
 
@@ -196,13 +200,13 @@ describe("getOrCreateThing", () => {
     );
     expect(thing).toEqual(existingThing);
     expect(asUrl(thing)).toEqual(existingThingIri);
-    expect(getSourceUrl(dataset)).toEqual(getSourceUrl(existingDataset));
+    expect(getSourceUrl(dataset)).toEqual(existingDatasetIri);
   });
 
   it("create new thing if it doesn't exist from before", () => {
     const { thing, dataset } = getOrCreateThing(existingDataset, newThingIri);
     expect(asUrl(thing)).toEqual(newThingIri);
-    expect(getSourceUrl(dataset)).toEqual(getSourceUrl(existingDataset));
+    expect(getSourceUrl(dataset)).toEqual(existingDatasetIri);
   });
 });
 
@@ -252,6 +256,14 @@ describe("deleteResource", () => {
   const policiesContainer = "https://example.og/pb_policies/";
   const resourceInfo = mockSolidDatasetFrom(resourceIri);
 
+  test("it won't try to delete policy if no policy container is given", async () => {
+    await deleteResource(resourceInfo, null, fetch);
+
+    expect(mockDeleteFile).toHaveBeenCalledWith(resourceIri, {
+      fetch,
+    });
+  });
+
   test("it deletes the given resource only when no policy is found", async () => {
     getPolicyUrl.mockReturnValue(null);
 
@@ -277,5 +289,35 @@ describe("deleteResource", () => {
         fetch,
       }
     );
+  });
+
+  it("ignores 403 errors when deleting the policy resource", async () => {
+    getPolicyUrl.mockReturnValue("https://example.org/examplePolicyUrl");
+    SolidClientFns.deleteFile.mockResolvedValueOnce().mockImplementation(() => {
+      throw new Error("403");
+    });
+    await expect(
+      deleteResource(resourceInfo, policiesContainer, fetch)
+    ).resolves.toBeUndefined();
+  });
+
+  it("ignores 404 errors when deleting the policy resource", async () => {
+    getPolicyUrl.mockReturnValue("https://example.org/examplePolicyUrl");
+    SolidClientFns.deleteFile.mockResolvedValueOnce().mockImplementation(() => {
+      throw new Error("404");
+    });
+    await expect(
+      deleteResource(resourceInfo, policiesContainer, fetch)
+    ).resolves.toBeUndefined();
+  });
+
+  it("lets through other errors when deleting the policy resource", async () => {
+    getPolicyUrl.mockReturnValue("https://example.org/examplePolicyUrl");
+    SolidClientFns.deleteFile.mockResolvedValueOnce().mockImplementation(() => {
+      throw new Error("500");
+    });
+    await expect(
+      deleteResource(resourceInfo, policiesContainer, fetch)
+    ).rejects.toEqual(new Error("500"));
   });
 });
