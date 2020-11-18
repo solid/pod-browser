@@ -20,38 +20,49 @@
  */
 
 import React, { useContext } from "react";
-import { useSession } from "@inrupt/solid-ui-react";
 import { render } from "@testing-library/react";
 import rules from "../../featureFlags";
-import FeatureContext, { FeatureProvider } from "./index";
+import FeatureContext, { defaultContext, FeatureProvider } from "./index";
+import mockSession from "../../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 
-jest.mock("@inrupt/solid-ui-react");
 jest.mock("../../featureFlags");
 
 function ChildComponent() {
-  rules.mockReturnValue({
-    test: () => true,
-  });
-
   const { enabled } = useContext(FeatureContext);
 
   return (
     <>
-      <div id="test">{enabled("test").toString()}</div>
+      <div data-testid="test">{enabled("test").toString()}</div>
     </>
   );
 }
 
 describe("PodLocationContext", () => {
-  test("it can read feature flags", () => {
-    useSession.mockReturnValue({ session: null });
+  let SessionProvider;
 
-    const { container } = render(
-      <FeatureProvider>
-        <ChildComponent />
-      </FeatureProvider>
+  beforeEach(() => {
+    const session = mockSession();
+    SessionProvider = mockSessionContextProvider(session);
+  });
+
+  it("has a default context", () => {
+    expect(defaultContext.enabled()).toBe(false);
+  });
+
+  it("can read feature flags", () => {
+    rules.mockReturnValue({
+      test: () => true,
+    });
+
+    const { getByTestId } = render(
+      <SessionProvider>
+        <FeatureProvider>
+          <ChildComponent />
+        </FeatureProvider>
+      </SessionProvider>
     );
 
-    expect(container.querySelector("#test").innerHTML).toEqual("true");
+    expect(getByTestId("test").innerHTML).toEqual("true");
   });
 });

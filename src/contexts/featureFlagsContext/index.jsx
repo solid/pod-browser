@@ -24,9 +24,10 @@ import T from "prop-types";
 import { useSession } from "@inrupt/solid-ui-react";
 import rules from "../../featureFlags";
 
-const FeatureContext = createContext({
+export const defaultContext = {
   enabled: () => false,
-});
+};
+const FeatureContext = createContext(defaultContext);
 
 export function isEnabled(session, rule, extraContext) {
   return rules()[rule](session, extraContext);
@@ -39,7 +40,6 @@ export function FeatureProvider({ children }) {
     isEnabled(session, rule, extraContext);
 
   // Pass the current session in as context.
-
   return (
     <FeatureContext.Provider value={{ enabled: sessionBoundEnabled }}>
       {children}
@@ -47,7 +47,6 @@ export function FeatureProvider({ children }) {
   );
 }
 
-/* eslint react/forbid-prop-types: 0 */
 FeatureProvider.propTypes = {
   children: T.node,
 };
