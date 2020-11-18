@@ -99,7 +99,7 @@ describe("setupAddContactDetail", () => {
     ).resolves.toBeUndefined();
 
     expect(saveHandler).toHaveBeenCalled();
-    const [newProfile, newDataset] = saveHandler.mock.calls[0];
+    const newDataset = saveHandler.mock.calls[0][1];
     const newContactDetail = getThingAll(newDataset)[0];
     expect(getUrl(newContactDetail, rdf.type)).toEqual(contactType);
     expect(getUrl(newContactDetail, vcard.value)).toEqual(

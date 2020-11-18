@@ -593,7 +593,6 @@ describe("saveContact", () => {
 
 describe("deleteContact", () => {
   const addressBookUrl = "https://example.com/contacts";
-  const owner = "https://example.com/card#me";
   const contactContainerUrl = "http://example.com/contact/id-001/";
   const contactUrl = `${contactContainerUrl}index.ttl`;
   const mockContactToDelete = chain(
@@ -622,8 +621,6 @@ describe("deleteContact", () => {
     (indexDataset) =>
       solidClientFns.setThing(indexDataset, mockPersonContactDataset())
   );
-
-  const addressBook = createAddressBook({ iri: addressBookUrl, owner });
 
   let fetch;
   let mockDeleteFile;

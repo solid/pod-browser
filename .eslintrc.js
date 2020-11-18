@@ -142,6 +142,9 @@ module.exports = {
       rules: {
         "license-header/header": [1, "./resources/license-header.js"],
         "react/jsx-filename-extension": [1, { extensions: [".jsx"] }],
+        // Turn off TypeScript specific ESLint error
+        "@typescript-eslint/explicit-module-boundary-types": 0,
+        "@typescript-eslint/no-floating-promises": 0,
       },
       settings: {
         "import/resolver": {

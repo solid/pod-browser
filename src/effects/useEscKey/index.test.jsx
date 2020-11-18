@@ -63,7 +63,6 @@ describe("useEscKey", () => {
 
     const cleanupFn = useEscKey(jest.fn());
     // TODO: the intent is to trigger the cleanup function of useEffect - fix the test to work without ts-ignore
-    // @ts-ignore
     cleanupFn();
 
     expect(document.body.addEventListener).toHaveBeenCalled();

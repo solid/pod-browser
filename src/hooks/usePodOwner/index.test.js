@@ -38,9 +38,11 @@ describe("usePodOwner", () => {
       },
     };
 
-    solidClientFns.getResourceInfo = jest.fn().mockResolvedValue(resourceInfo);
-    solidClientFns.getPodOwner = jest
-      .fn()
+    jest
+      .spyOn(solidClientFns, "getResourceInfo")
+      .mockResolvedValue(resourceInfo);
+    jest
+      .spyOn(solidClientFns, "getPodOwner")
       .mockReturnValue("https://www.example.com/profile#WebId");
 
     const { result, waitForNextUpdate } = renderHook(() =>
@@ -59,8 +61,10 @@ describe("usePodOwner", () => {
       },
     };
 
-    solidClientFns.getResourceInfo = jest.fn().mockResolvedValue(resourceInfo);
-    solidClientFns.getPodOwner = jest.fn().mockReturnValue(null);
+    jest
+      .spyOn(solidClientFns, "getResourceInfo")
+      .mockResolvedValue(resourceInfo);
+    jest.spyOn(solidClientFns, "getPodOwner").mockReturnValue(null);
 
     const { result, waitForNextUpdate } = renderHook(() =>
       usePodOwner({ resourceIri: "https://www.example.com" })
@@ -82,9 +86,11 @@ describe("usePodOwner", () => {
       },
     };
 
-    solidClientFns.getResourceInfo = jest.fn().mockResolvedValue(resourceInfo);
-    solidClientFns.getPodOwner = jest
-      .fn()
+    jest
+      .spyOn(solidClientFns, "getResourceInfo")
+      .mockResolvedValue(resourceInfo);
+    jest
+      .spyOn(solidClientFns, "getPodOwner")
       .mockReturnValue("https://www.example.com/profile#WebId");
 
     const { result, rerender, waitForNextUpdate } = renderHook(

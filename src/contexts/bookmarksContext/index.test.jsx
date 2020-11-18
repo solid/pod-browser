@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { render } from "@testing-library/react";
 import BookmarkContext, { BookmarksContextProvider } from "./index";
