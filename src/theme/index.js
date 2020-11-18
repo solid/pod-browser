@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* istanbul ignore file */
 import { createTheme } from "@solid/lit-prism-patterns";
 import defaultTheme from "@solid/lit-prism-theme-sdk-default";
 
