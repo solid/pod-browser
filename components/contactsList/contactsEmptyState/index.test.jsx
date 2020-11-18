@@ -26,8 +26,8 @@ import { renderWithTheme } from "../../../__testUtils/renderWithTheme";
 
 describe("ContactsEmptyState", () => {
   test("it renders an empty state component", () => {
-    const tree = renderWithTheme(<ContactsEmptyState />);
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(<ContactsEmptyState />);
+    expect(asFragment()).toMatchSnapshot();
   });
   test("it renders an empty state message", () => {
     renderWithTheme(<ContactsEmptyState />);
