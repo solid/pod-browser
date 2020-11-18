@@ -9,7 +9,7 @@ Object {
         class="PodBrowser-content"
       >
         <div
-          class="PodBrowser-container"
+          class="PodBrowser-container PodBrowser-empty-state-container"
         >
           <i
             class="PodBrowser-icon-user-astronaut PodBrowser-icon-large"
@@ -22,6 +22,7 @@ Object {
           </p>
           <a
             class="PodBrowser-button PodBrowser-add-contact-button"
+            data-testid="add-new-contact-button"
             href="/contacts/add"
           >
             Add new contact
@@ -35,7 +36,7 @@ Object {
       class="PodBrowser-content"
     >
       <div
-        class="PodBrowser-container"
+        class="PodBrowser-container PodBrowser-empty-state-container"
       >
         <i
           class="PodBrowser-icon-user-astronaut PodBrowser-icon-large"
@@ -48,6 +49,7 @@ Object {
         </p>
         <a
           class="PodBrowser-button PodBrowser-add-contact-button"
+          data-testid="add-new-contact-button"
           href="/contacts/add"
         >
           Add new contact

@@ -36,7 +36,7 @@ describe("ContactsEmptyState", () => {
   });
   test("it renders an 'add new contact' button", () => {
     renderWithTheme(<ContactsEmptyState />);
-    const button = screen.getByText("Add new contact");
+    const button = screen.getByTestId("add-new-contact-button");
     expect(button).toBeTruthy();
   });
 });

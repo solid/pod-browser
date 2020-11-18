@@ -23,7 +23,7 @@ import { createStyles } from "@solid/lit-prism-patterns";
 
 const styles = (theme) => {
   return createStyles(theme, ["icons", "button", "content"], {
-    container: {
+    "empty-state-container": {
       textAlign: "center",
       paddingTop: "20%",
       paddingBottom: "20%",
