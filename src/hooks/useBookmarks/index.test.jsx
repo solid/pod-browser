@@ -19,18 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { renderHook } from "@testing-library/react-hooks";
+import { act, renderHook } from "@testing-library/react-hooks";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import { SessionProvider } from "@inrupt/solid-ui-react";
+import React from "react";
 import mockSession, {
   mockUnauthenticatedSession,
 } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import useBookmarks from "./index";
-import { getResource } from "../../solidClientHelpers/resource";
-import { initializeBookmarks } from "../../solidClientHelpers/bookmarks";
-
-jest.mock("../../solidClientHelpers/resource");
-jest.mock("../../solidClientHelpers/bookmarks");
+import * as resourceFns from "../../solidClientHelpers/resource";
+import * as bookmarkFns from "../../solidClientHelpers/bookmarks";
+import AlertContext from "../../contexts/alertContext";
 
 describe("useBookmarks", () => {
   const bookmarksIri = "http://example.com/bookmarks/index.ttl";
@@ -42,66 +42,111 @@ describe("useBookmarks", () => {
       const { result } = renderHook(() => useBookmarks(), {
         wrapper,
       });
-      const expectedDataset = result.current[0];
-      expect(expectedDataset).toBeUndefined();
+      expect(result.current[0]).toBeUndefined();
     });
   });
 
   describe("with an authenticated user", () => {
+    const dataset = mockSolidDatasetFrom(bookmarksIri);
+
     let session;
     let wrapper;
+    let setMessage;
+    let setAlertOpen;
+    let setSeverity;
+
+    beforeEach(() => {
+      session = mockSession();
+      setMessage = jest.fn();
+      setAlertOpen = jest.fn();
+      setSeverity = jest.fn();
+      // eslint-disable-next-line react/prop-types
+      wrapper = ({ children }) => (
+        <SessionProvider sessionId="test-session" session={session}>
+          <AlertContext.Provider
+            value={{ setMessage, setAlertOpen, setSeverity }}
+          >
+            {children}
+          </AlertContext.Provider>
+        </SessionProvider>
+      );
+    });
 
     describe("with an existing bookmarks index", () => {
       beforeEach(() => {
-        session = mockSession();
-        wrapper = mockSessionContextProvider(session);
+        jest
+          .spyOn(resourceFns, "getResource")
+          .mockResolvedValue({ response: { dataset } });
       });
 
       it("should call getResource", async () => {
-        const dataset = mockSolidDatasetFrom(bookmarksIri);
-        getResource.mockResolvedValue({ response: { dataset } });
         const { waitForNextUpdate } = renderHook(() => useBookmarks(), {
           wrapper,
         });
         await waitForNextUpdate();
-        expect(getResource).toHaveBeenCalledWith(bookmarksIri, session.fetch);
+        expect(resourceFns.getResource).toHaveBeenCalledWith(
+          bookmarksIri,
+          session.fetch
+        );
       });
 
       it("should return the bookmarks resource", async () => {
-        const dataset = mockSolidDatasetFrom(bookmarksIri);
-        getResource.mockResolvedValue({ response: { dataset } });
         const { result, waitForNextUpdate } = renderHook(() => useBookmarks(), {
           wrapper,
         });
         await waitForNextUpdate();
-        const expectedDataset = result.current[0].dataset;
-        expect(expectedDataset).toEqual(dataset);
+        expect(result.current[0].dataset).toEqual(dataset);
+      });
+
+      it("reeturns a refresh function", async () => {
+        const { result, waitForNextUpdate } = renderHook(() => useBookmarks(), {
+          wrapper,
+        });
+        await waitForNextUpdate();
+        expect(resourceFns.getResource).toHaveBeenCalledTimes(1);
+        act(() => {
+          result.current[1]("something to update with");
+        });
+        await waitForNextUpdate();
+        expect(resourceFns.getResource).toHaveBeenCalledTimes(2);
       });
     });
 
     describe("without existing bookmark index", () => {
       beforeEach(() => {
-        session = mockSession();
-        wrapper = mockSessionContextProvider(session);
-        getResource.mockResolvedValueOnce({
+        jest.spyOn(resourceFns, "getResource").mockResolvedValue({
           response: null,
           error: "404",
+        });
+        jest.spyOn(bookmarkFns, "initializeBookmarks").mockResolvedValue({
+          dataset,
         });
       });
 
       it("should return a new bookmarks resource", async () => {
-        const dataset = mockSolidDatasetFrom(bookmarksIri);
         const { result, waitForNextUpdate } = renderHook(() => useBookmarks(), {
           wrapper,
         });
 
-        initializeBookmarks.mockResolvedValueOnce({
-          dataset,
-        });
         await waitForNextUpdate();
-        const expectedDataset = result.current[0].dataset;
-        expect(expectedDataset).toEqual(dataset);
+        expect(result.current[0].dataset).toEqual(dataset);
       });
+    });
+
+    it("notifies user about error", async () => {
+      const error = new Error("error");
+      jest.spyOn(resourceFns, "getResource").mockRejectedValue(error);
+
+      const { result, waitForNextUpdate } = renderHook(() => useBookmarks(), {
+        wrapper,
+      });
+
+      await waitForNextUpdate();
+
+      expect(result.current[0]).toEqual([]);
+      expect(setSeverity).toHaveBeenCalledWith("error");
+      expect(setMessage).toHaveBeenCalledWith(error);
+      expect(setAlertOpen).toHaveBeenCalledWith(true);
     });
   });
 });

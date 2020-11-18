@@ -57,6 +57,7 @@ export default function useBookmarks() {
           setBookmarks(existingBookmarks);
         }
       } catch (error) {
+        setBookmarks([]);
         setSeverity("error");
         setMessage(error);
         setAlertOpen(true);
@@ -72,5 +73,5 @@ export default function useBookmarks() {
     setSeverity,
     session,
   ]);
-  return [bookmarks, (value) => setUpdatedBookmarks(value)];
+  return [bookmarks, setUpdatedBookmarks];
 }
