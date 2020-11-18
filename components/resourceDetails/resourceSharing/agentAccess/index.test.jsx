@@ -59,7 +59,7 @@ describe("AgentAccess", () => {
   });
 
   it("fetches profile for webId", () => {
-    mountToJson(
+    renderWithTheme(
       <DatasetProvider dataset={dataset}>
         <AgentAccess permission={permission} />
       </DatasetProvider>
@@ -69,13 +69,12 @@ describe("AgentAccess", () => {
 
   it("renders an error message if it's unable to load profile", () => {
     useFetchProfile.mockReturnValue({ error: "error" });
-    expect(
-      mountToJson(
-        <DatasetProvider dataset={dataset}>
-          <AgentAccess permission={permission} />
-        </DatasetProvider>
-      )
-    ).toMatchSnapshot();
+    const { asFragment } = renderWithTheme(
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} />
+      </DatasetProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 
   describe("user tries to change access for themselves", () => {
