@@ -46,6 +46,7 @@ import ProfileLink from "../profileLink";
 import { SearchProvider } from "../../src/contexts/searchContext";
 import { deleteContact } from "../../src/addressBook";
 import ContactsDrawer from "./contactsDrawer";
+import ContactsEmptyState from "./contactsEmptyState";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -160,55 +161,61 @@ function ContactsList() {
       >
         <ContactsListSearch people={profiles} />
       </PageHeader>
-      <DrawerContainer drawer={drawer} open={selectedContactIndex !== null}>
-        <Table
-          things={contacts}
-          className={clsx(tableClass, bem("table"))}
-          filter={search}
-          ascIndicator={<SortedTableCarat sorted />}
-          descIndicator={<SortedTableCarat sorted sortedDesc />}
-          getRowProps={(row, contact) => {
-            return {
-              tabIndex: "0",
-              className: clsx(
-                bem(
-                  "table__body-row",
-                  "selectable",
-                  contact === profiles[selectedContactIndex] ? "selected" : null
-                )
-              ),
-              onKeyUp: (event) => {
-                if (event.key === "Enter") setSelectedContactIndex(row.index);
-              },
-              onClick: () => {
-                setSelectedContactIndex(row.index);
-              },
-            };
-          }}
-        >
-          <TableColumn
-            property={hasPhotoPredicate}
-            header=""
-            datatype="url"
-            body={({ value, row }) => {
-              return (
-                <Avatar
-                  className={bem("avatar")}
-                  alt={row.values.col1 || "Contact avatar"}
-                  src={value}
-                />
-              );
+      {!contacts.length ? (
+        <ContactsEmptyState />
+      ) : (
+        <DrawerContainer drawer={drawer} open={selectedContactIndex !== null}>
+          <Table
+            things={contacts}
+            className={clsx(tableClass, bem("table"))}
+            filter={search}
+            ascIndicator={<SortedTableCarat sorted />}
+            descIndicator={<SortedTableCarat sorted sortedDesc />}
+            getRowProps={(row, contact) => {
+              return {
+                tabIndex: "0",
+                className: clsx(
+                  bem(
+                    "table__body-row",
+                    "selectable",
+                    contact === profiles[selectedContactIndex]
+                      ? "selected"
+                      : null
+                  )
+                ),
+                onKeyUp: (event) => {
+                  if (event.key === "Enter") setSelectedContactIndex(row.index);
+                },
+                onClick: () => {
+                  setSelectedContactIndex(row.index);
+                },
+              };
             }}
-          />
-          <TableColumn
-            property={formattedNamePredicate}
-            header="Name"
-            filterable
-            sortable
-            body={ProfileLink}
-          />
-        </Table>
-      </DrawerContainer>
+          >
+            <TableColumn
+              property={hasPhotoPredicate}
+              header=""
+              datatype="url"
+              body={({ value, row }) => {
+                return (
+                  <Avatar
+                    className={bem("avatar")}
+                    alt={row.values.col1 || "Contact avatar"}
+                    src={value}
+                  />
+                );
+              }}
+            />
+            <TableColumn
+              property={formattedNamePredicate}
+              header="Name"
+              filterable
+              sortable
+              body={ProfileLink}
+            />
+          </Table>
+        </DrawerContainer>
+      )}
     </SearchProvider>
   );
 }

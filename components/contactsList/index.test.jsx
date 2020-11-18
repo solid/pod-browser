@@ -22,6 +22,7 @@
 import React from "react";
 import * as solidClientFns from "@inrupt/solid-client";
 import { foaf } from "rdf-namespaces";
+import { screen } from "@testing-library/react";
 import { deleteContact } from "../../src/addressBook";
 import useAddressBook from "../../src/hooks/useAddressBook";
 import useContacts from "../../src/hooks/useContacts";
@@ -34,6 +35,7 @@ import {
 } from "../../__testUtils/mockPersonResource";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
+import { renderWithTheme } from "../../__testUtils/renderWithTheme";
 
 jest.mock("../../src/addressBook");
 jest.mock("../../src/hooks/useAddressBook");
@@ -137,6 +139,26 @@ describe("ContactsList", () => {
         </SessionProvider>
       )
     ).toMatchSnapshot();
+  });
+
+  it("renders empty state message when there are no contacts", () => {
+    useAddressBook.mockReturnValue([42, null]);
+    useContacts.mockReturnValue({
+      data: "peopleData",
+      error: undefined,
+      mutate: () => {},
+    });
+    useProfiles.mockReturnValue([]);
+
+    renderWithTheme(
+      <SessionProvider>
+        <ContactsList />
+      </SessionProvider>
+    );
+
+    const message = screen.getByText("You don’t have any contacts yet!");
+
+    expect(message).toBeTruthy();
   });
 
   it("renders error if useContacts returns error", () => {
