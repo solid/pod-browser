@@ -49,19 +49,21 @@ export function getProfileFromPersonThing(profileThing) {
   };
 }
 
-const TYPE_MAP = {
+export const TYPE_MAP = {
   [foaf.Person]: getProfileFromPersonThing,
   [schema.Person]: getProfileFromPersonThing,
 };
+
+export function getProfileFromThingError(contactThing) {
+  return new Error(`Cannot handle profile for contact: ${asUrl(contactThing)}`);
+}
 
 export function getProfileFromThing(contactThing) {
   const types = getUrlAll(contactThing, rdf.type);
   const profileFn = TYPE_MAP[types.find((type) => TYPE_MAP[type])];
 
   if (!profileFn) {
-    throw new Error(
-      `Cannot handle profile for contact: ${asUrl(contactThing)}`
-    );
+    throw getProfileFromThingError(contactThing);
   }
 
   return profileFn(contactThing);

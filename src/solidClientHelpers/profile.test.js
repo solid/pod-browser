@@ -19,12 +19,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { getSolidDataset } from "@inrupt/solid-client";
-import { schema, foaf } from "rdf-namespaces";
+import { getSolidDataset, mockThingFrom, setUrl } from "@inrupt/solid-client";
+import { schema, foaf, rdf } from "rdf-namespaces";
 import {
   displayProfileName,
   fetchProfile,
   getProfileFromPersonThing,
+  getProfileFromThing,
+  getProfileFromThingError,
+  TYPE_MAP,
 } from "./profile";
 import {
   mockPersonDatasetAlice,
@@ -33,6 +36,7 @@ import {
   mockProfileBob,
 } from "../../__testUtils/mockPersonResource";
 import mockSession, { webIdUrl } from "../../__testUtils/mockSession";
+import { chain } from "./utils";
 
 describe("displayProfileName", () => {
   test("with name, displays the name", () => {
@@ -91,5 +95,30 @@ describe("getProfileFromPersonThing", () => {
       webId: bob.webId,
       types: ["http://xmlns.com/foaf/0.1/Person"],
     });
+  });
+});
+
+describe("getProfileFromThing", () => {
+  const personIri = "http://example.com/#person";
+  const person = mockThingFrom(personIri);
+
+  it("handles foaf:Person", () => {
+    jest.spyOn(TYPE_MAP, foaf.Person).mockReturnValue(42);
+    const profile = chain(person, (t) => setUrl(t, rdf.type, foaf.Person));
+    expect(getProfileFromThing(profile)).toBe(42);
+    expect(TYPE_MAP[foaf.Person]).toHaveBeenCalledWith(profile);
+  });
+
+  it("handles schema:Person", () => {
+    jest.spyOn(TYPE_MAP, schema.Person).mockReturnValue(1337);
+    const profile = chain(person, (t) => setUrl(t, rdf.type, schema.Person));
+    expect(getProfileFromThing(profile)).toBe(1337);
+    expect(TYPE_MAP[schema.Person]).toHaveBeenCalledWith(profile);
+  });
+
+  it("throws errors for things it cannot handle", () => {
+    expect(() => getProfileFromThing(person)).toThrow(
+      getProfileFromThingError(person)
+    );
   });
 });
