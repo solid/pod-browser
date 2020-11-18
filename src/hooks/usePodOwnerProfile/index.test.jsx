@@ -55,6 +55,25 @@ describe("usePodOwnerProfile", () => {
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({ query: {} });
   });
 
+  it("handles errors and request still being validated", () => {
+    const error = "error";
+    usePodOwner.mockReturnValue({ error });
+    useFetchProfile.mockReturnValue({ isValidating: true });
+    const { result } = renderHook(() => usePodOwnerProfile());
+    expect(result.current.profile).toBeNull();
+    expect(result.current.error).toEqual(error);
+  });
+
+  it("handles errors", () => {
+    const error = "error";
+    const profile = "profile";
+    usePodOwner.mockReturnValue({ error });
+    useFetchProfile.mockReturnValue({ data: profile });
+    const { result } = renderHook(() => usePodOwnerProfile());
+    expect(result.current.profile).toEqual(profile);
+    expect(result.current.error).toEqual(error);
+  });
+
   it("returns the authenticated profile if no iri is given in router", () => {
     const { result } = renderHook(() => usePodOwnerProfile());
     expect(result.current.profile).toEqual(authProfile);
