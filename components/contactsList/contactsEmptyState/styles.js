@@ -34,10 +34,10 @@ const styles = (theme) => {
     },
     "add-contact-button": {
       backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
+      fontWeight: theme.typography.fontWeightBold,
       "& a, &:hover": {
-        color: theme.palette.primary.contrastText,
         textDecoration: "none",
-        fontWeight: theme.typography.fontWeightBold,
       },
     },
   });

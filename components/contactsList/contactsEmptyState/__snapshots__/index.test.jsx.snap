@@ -20,15 +20,12 @@ Object {
           <p>
             Add a new contact to share files with.
           </p>
-          <button
+          <a
             class="PodBrowser-button PodBrowser-add-contact-button"
+            href="/contacts/add"
           >
-            <a
-              href="/contacts/add"
-            >
-              Add new contact
-            </a>
-          </button>
+            Add new contact
+          </a>
         </div>
       </div>
     </div>
@@ -49,15 +46,12 @@ Object {
         <p>
           Add a new contact to share files with.
         </p>
-        <button
+        <a
           class="PodBrowser-button PodBrowser-add-contact-button"
+          href="/contacts/add"
         >
-          <a
-            href="/contacts/add"
-          >
-            Add new contact
-          </a>
-        </button>
+          Add new contact
+        </a>
       </div>
     </div>
   </div>,

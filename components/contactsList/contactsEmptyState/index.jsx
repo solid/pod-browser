@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function ContactsEmptyState() {
   const bem = useBem(useStyles());
+  const buttonBem = Button.useBem();
 
   return (
     <Content>
@@ -38,9 +39,11 @@ export default function ContactsEmptyState() {
         <i className={clsx(bem("icon-user-astronaut"), bem("icon-large"))} />
         <h1>You don’t have any contacts yet!</h1>
         <p>Add a new contact to share files with.</p>
-        <Button className={bem("add-contact-button")}>
-          <Link href="/contacts/add">Add new contact</Link>
-        </Button>
+        <Link href="/contacts/add">
+          <a className={clsx(buttonBem("button"), bem("add-contact-button"))}>
+            Add new contact
+          </a>
+        </Link>
       </div>
     </Content>
   );
