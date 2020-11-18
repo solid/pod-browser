@@ -33,14 +33,41 @@ import SearchContext from "../../../src/contexts/searchContext";
 import { buildProfileLink } from "../../profileLink";
 import styles from "./styles";
 
-const TESTCAFE_ID_CONTACTS_SEARCH = "contacts-search";
+export const TESTCAFE_ID_CONTACTS_SEARCH = "contacts-search";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+
+export function setupOnChange(setSearch) {
+  return (event, search) => {
+    // If a row was selected, use the object with webid
+    if (search && search.webId) {
+      Router.push(buildProfileLink(search.webId));
+    }
+
+    // Otherwise, use the string value
+    return setSearch(search);
+  };
+}
+
+export function setupFilterOptions() {
+  return (options, state) => {
+    return options.filter((o) =>
+      o.name.toLowerCase().includes(state.inputValue.toLowerCase())
+    );
+  };
+}
+
+export function setupGetOptionLabel() {
+  return (o) => (!o ? "" : o.name || o);
+}
 
 export default function ContactsListSearch({ people }) {
   const { setSearch } = useContext(SearchContext);
   const classes = useStyles();
 
   const profiles = people.map(getProfileFromThing);
+  const onChange = setupOnChange(setSearch);
+  const filterOptions = setupFilterOptions();
+  const getOptionLabel = setupGetOptionLabel();
 
   return (
     <Autocomplete
@@ -51,21 +78,9 @@ export default function ContactsListSearch({ people }) {
       }}
       freeSolo
       options={profiles}
-      getOptionLabel={(o) => (!o ? "" : o.name || o)}
-      filterOptions={(options, state) => {
-        return options.filter((o) =>
-          o.name.toLowerCase().includes(state.inputValue.toLowerCase())
-        );
-      }}
-      onChange={(event, search) => {
-        // If a row was selected, use the object with webid
-        if (search && search.webId) {
-          Router.push(buildProfileLink(search.webId));
-        }
-
-        // Otherwise, use the string value
-        return setSearch(search);
-      }}
+      getOptionLabel={getOptionLabel}
+      filterOptions={filterOptions}
+      onChange={onChange}
       renderInput={(params) => (
         <TextField
           {...params}
