@@ -9,96 +9,100 @@ exports[`ContactsDrawer renders 1`] = `
       class="PodBrowser-drawer__content"
     >
       <div
-        class="PodBrowser-drawer__article"
-      >
-        <button
-          class="PodBrowser-button PodBrowser-button--text"
-        >
-          <span
-            class="PodBrowser-icon-cancel"
-          />
-           Close
-        </button>
-      </div>
-      <div
-        class="PodBrowser-root PodBrowser-root PodBrowser-expanded PodBrowser-elevation1"
+        class="PodBrowser-drawer__content-wrapper"
       >
         <div
-          aria-disabled="false"
-          aria-expanded="true"
-          class="PodBrowser-root PodBrowser-root PodBrowser-expanded"
-          role="button"
-          tabindex="0"
+          class="PodBrowser-drawer__article"
         >
-          <div
-            class="PodBrowser-content PodBrowser-expanded"
-          >
-            Actions
-          </div>
-          <div
-            aria-disabled="false"
-            aria-hidden="true"
-            class="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-expanded PodBrowser-edgeEnd"
+          <button
+            class="PodBrowser-button PodBrowser-button--text"
           >
             <span
-              class="PodBrowser-label"
-            >
-              <svg
-                aria-hidden="true"
-                class="PodBrowser-root"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
-                />
-              </svg>
-            </span>
-            <span
-              class="PodBrowser-root"
+              class="PodBrowser-icon-cancel"
             />
-          </div>
+             Close
+          </button>
         </div>
         <div
-          class="PodBrowser-container PodBrowser-entered"
-          style="min-height: 0px;"
+          class="PodBrowser-root PodBrowser-root PodBrowser-expanded PodBrowser-elevation1"
         >
           <div
-            class="PodBrowser-wrapper"
+            aria-disabled="false"
+            aria-expanded="true"
+            class="PodBrowser-root PodBrowser-root PodBrowser-expanded"
+            role="button"
+            tabindex="0"
           >
             <div
-              class="PodBrowser-wrapperInner"
+              class="PodBrowser-content PodBrowser-expanded"
+            >
+              Actions
+            </div>
+            <div
+              aria-disabled="false"
+              aria-hidden="true"
+              class="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-expanded PodBrowser-edgeEnd"
+            >
+              <span
+                class="PodBrowser-label"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="PodBrowser-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                  />
+                </svg>
+              </span>
+              <span
+                class="PodBrowser-root"
+              />
+            </div>
+          </div>
+          <div
+            class="PodBrowser-container PodBrowser-entered"
+            style="min-height: 0px;"
+          >
+            <div
+              class="PodBrowser-wrapper"
             >
               <div
-                role="region"
+                class="PodBrowser-wrapperInner"
               >
                 <div
-                  class="PodBrowser-root"
+                  role="region"
                 >
-                  <ul
-                    class="PodBrowser-action-menu"
+                  <div
+                    class="PodBrowser-root"
                   >
-                    <li
-                      class="PodBrowser-action-menu__item"
+                    <ul
+                      class="PodBrowser-action-menu"
                     >
-                      <a
-                        href="/contacts/https%3A%2F%2Fexample.com%2Fprofile%23alice"
+                      <li
+                        class="PodBrowser-action-menu__item"
                       >
-                        View Profile
-                      </a>
-                    </li>
-                    <li
-                      class="PodBrowser-action-menu__item"
-                    >
-                      <button
-                        class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
-                        data-testid="delete-button"
-                        type="button"
+                        <a
+                          href="/contacts/https%3A%2F%2Fexample.com%2Fprofile%23alice"
+                        >
+                          View Profile
+                        </a>
+                      </li>
+                      <li
+                        class="PodBrowser-action-menu__item"
                       >
-                        Delete
-                      </button>
-                    </li>
-                  </ul>
+                        <button
+                          class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                          data-testid="delete-button"
+                          type="button"
+                        >
+                          Delete
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
