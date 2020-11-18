@@ -35,7 +35,8 @@ export function mockPersonDatasetAlice() {
     (t) => addStringNoLocale(t, vcard.fn, aliceName),
     (t) => addStringNoLocale(t, vcard.nickname, aliceNick),
     (t) => addUrl(t, vcard.hasPhoto, alicePhoto),
-    (t) => addUrl(t, rdf.type, foaf.Person)
+    (t) => addUrl(t, rdf.type, foaf.Person),
+    (t) => addUrl(t, foaf.openid, aliceWebIdUrl)
   );
 }
 
@@ -52,7 +53,8 @@ export function mockPersonDatasetBob() {
     mockThingFrom(bobWebIdUrl),
     (t) => addStringNoLocale(t, foaf.name, bobName),
     (t) => addStringNoLocale(t, foaf.nick, bobNick),
-    (t) => addUrl(t, rdf.type, foaf.Person)
+    (t) => addUrl(t, rdf.type, foaf.Person),
+    (t) => addUrl(t, foaf.openid, bobWebIdUrl)
   );
 }
 

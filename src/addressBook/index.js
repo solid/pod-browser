@@ -296,12 +296,16 @@ export async function getIndexDatasetFromAddressBook(
   }
 }
 
+export function createContactTypeNotFoundError(contact) {
+  return new Error(`Contact is unsupported type: ${contact.type}`);
+}
+
 export function createContact(addressBookIri, contact, types) {
   // Find the first matching container mapping.
   const containerMap = TYPE_MAP[types.find((type) => TYPE_MAP[type])];
 
   if (!containerMap) {
-    throw new Error(`Contact is unsupported type: ${contact.type}`);
+    throw createContactTypeNotFoundError(contact);
   }
 
   const { container } = containerMap;
