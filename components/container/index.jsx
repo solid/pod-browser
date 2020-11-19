@@ -34,7 +34,6 @@ import { getResourceName } from "../../src/solidClientHelpers/resource";
 
 import Spinner from "../spinner";
 import styles from "./styles";
-import Breadcrumbs from "../breadcrumbs";
 import PageHeader from "../containerPageHeader";
 import ContainerDetails from "../containerDetails";
 import { BookmarksContextProvider } from "../../src/contexts/bookmarksContext";
@@ -45,6 +44,7 @@ import useDataset from "../../src/hooks/useDataset";
 import NotSupported from "../notSupported";
 import useContainerResourceIris from "../../src/hooks/useContainerResourceIris";
 import { getContainerUrl } from "../../src/stringHelpers";
+import ContainerSubHeader from "../containerSubHeader";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -141,9 +141,9 @@ export default function Container({ iri }) {
   return (
     <>
       <BookmarksContextProvider>
-        <PageHeader mutate={mutate} resourceList={data} />
+        <PageHeader />
         <ContainerDetails mutate={mutate}>
-          <Breadcrumbs />
+          <ContainerSubHeader mutate={mutate} resourceList={data} />
           <table className={clsx(bem("table"))} {...getTableProps()}>
             <thead className={bem("table__header")}>
               {headerGroups.map((headerGroup) => (

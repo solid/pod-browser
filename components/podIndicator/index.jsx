@@ -32,11 +32,12 @@ import {
   SimpleInput,
 } from "@inrupt/prism-react-components";
 import Skeleton from "@material-ui/lab/Skeleton";
-import usePodOwnerProfile from "../../../src/hooks/usePodOwnerProfile";
+import usePodOwnerProfile from "../../src/hooks/usePodOwnerProfile";
 import styles from "./styles";
-import { resourceHref } from "../../../src/navigator";
-import { normalizeContainerUrl } from "../../../src/stringHelpers";
+import { resourceHref } from "../../src/navigator";
+import { normalizeContainerUrl } from "../../src/stringHelpers";
 
+const TESTCAFE_ID_POD_INDICATOR = "pod-indicator";
 const TESTCAFE_ID_POD_NAVIGATE_INPUT = "pod-navigate-input";
 const TESTCAFE_ID_POD_NAVIGATE_TRIGGER = "pod-indicator-prompt";
 const TESTCAFE_ID_POD_NAVIGATE_BUTTON = "pod-navigate-button";
@@ -91,7 +92,7 @@ export default function PodIndicator() {
   );
 
   return (
-    <div className={classes.indicator}>
+    <div data-testid={TESTCAFE_ID_POD_INDICATOR} className={classes.indicator}>
       <label htmlFor="pod-indicator-prompt" className={classes.indicatorLabel}>
         <span>Pod: </span>
         {loading ? (

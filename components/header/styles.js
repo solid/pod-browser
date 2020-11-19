@@ -23,15 +23,14 @@ import { createStyles } from "@solid/lit-prism-patterns";
 
 const styles = (theme) =>
   createStyles(theme, ["appLayout", "headerBanner", "icons"], {
-    logoIndicatorContainer: {
+    logoContainer: {
       display: "flex",
       flexDirection: "column",
       alignItems: "start",
+      justifyContent: "center",
       marginRight: theme.spacing(2),
-      paddingTop: theme.spacing(1),
       [theme.breakpoints.up("sm")]: {
         minWidth: "max-content",
-        paddingTop: theme.spacing(2),
       },
     },
   });

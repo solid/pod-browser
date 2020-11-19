@@ -4,6 +4,7 @@ exports[`PodIndicator it renders the pod indicator with the correct name with a 
 <DocumentFragment>
   <div
     class="PodBrowser-indicator"
+    data-testid="pod-indicator"
   >
     <label
       class="PodBrowser-indicatorLabel"
@@ -34,6 +35,7 @@ exports[`PodIndicator it renders the pod indicator with the correct name with a 
 <DocumentFragment>
   <div
     class="PodBrowser-indicator"
+    data-testid="pod-indicator"
   >
     <label
       class="PodBrowser-indicatorLabel"

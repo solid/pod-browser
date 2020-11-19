@@ -21,23 +21,52 @@
 
 import React from "react";
 import { PageHeader as PrismPageHeader } from "@inrupt/prism-react-components";
-import { useSession } from "@inrupt/solid-ui-react";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
+import T from "prop-types";
 import styles from "./styles";
-import PodIndicator from "../podIndicator";
+import Breadcrumbs from "../breadcrumbs";
+import ContainerDetails from "../containerDetailsButton";
+import AddFileButton from "../addFileButton";
+import AddFolderFlyout from "../addFolderFlyout";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function ContainerPageHeader() {
-  const { session } = useSession();
+export default function ContainerSubHeader({ mutate, resourceList }) {
+  const pageHeaderAction = PrismPageHeader.usePageHeaderActionClassName();
   const bem = useBem(useStyles());
-  const podIndicator = session.info.isLoggedIn ? <PodIndicator /> : null;
   return (
-    <PrismPageHeader
-      title="Files"
-      className={bem("files-container-header")}
-      actions={podIndicator ? [podIndicator] : null}
-    />
+    <div className={bem("sub-header")}>
+      <Breadcrumbs />
+      <div className={bem("actions-container")}>
+        <ContainerDetails className={pageHeaderAction} />
+        <AddFolderFlyout
+          onSave={mutate}
+          resourceList={resourceList}
+          className={pageHeaderAction}
+        />
+
+        <AddFileButton
+          onSave={mutate}
+          resourceList={resourceList}
+          className={pageHeaderAction}
+        />
+      </div>
+    </div>
   );
 }
+
+ContainerSubHeader.propTypes = {
+  mutate: T.func,
+  resourceList: T.arrayOf(
+    T.shape({
+      iri: T.string.isRequired,
+      name: T.string.isRequired,
+    })
+  ),
+};
+
+ContainerSubHeader.defaultProps = {
+  mutate: () => null,
+  resourceList: [],
+};

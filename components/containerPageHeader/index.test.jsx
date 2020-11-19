@@ -20,12 +20,42 @@
  */
 
 import React from "react";
-import { render } from "@testing-library/react";
+import { useRouter } from "next/router";
+import { screen, render } from "@testing-library/react";
+import { useSession } from "@inrupt/solid-ui-react";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import ContainerPageHeader from "./index";
 
+jest.mock("@inrupt/solid-ui-react");
+jest.mock("next/router");
+
 describe("ContainerPageHeader", () => {
+  beforeEach(() => {
+    useRouter.mockImplementation(() => ({
+      query: {
+        iri: "https://mypod.myhost.com",
+      },
+    }));
+  });
   test("Renders view", () => {
-    const { asFragment } = render(<ContainerPageHeader />);
+    useSession.mockReturnValue({ session: { info: { isLoggedIn: true } } });
+    const { asFragment } = renderWithTheme(<ContainerPageHeader />);
     expect(asFragment()).toMatchSnapshot();
+  });
+  test("renders title only when logged out", () => {
+    useSession.mockReturnValue({ session: { info: { isLoggedIn: false } } });
+    renderWithTheme(<ContainerPageHeader />);
+    const title = screen.getByText("Files");
+    const podIndicator = screen.queryByText("Pod:");
+    expect(title).toBeTruthy();
+    expect(podIndicator).toBeNull();
+  });
+  test("renders pod indicator when logged in", () => {
+    useSession.mockReturnValue({ session: { info: { isLoggedIn: true } } });
+    renderWithTheme(<ContainerPageHeader />);
+    const title = screen.getByText("Files");
+    const podIndicator = screen.getByTestId("pod-indicator");
+    expect(title).toBeTruthy();
+    expect(podIndicator).toBeTruthy();
   });
 });

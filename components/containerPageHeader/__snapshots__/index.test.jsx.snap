@@ -3,44 +3,36 @@
 exports[`ContainerPageHeader Renders view 1`] = `
 <DocumentFragment>
   <div
-    class="makeStyles-page-header-1"
+    class="PodBrowser-page-header PodBrowser-files-container-header"
   >
     <h1
-      class="makeStyles-page-header__title-2"
+      class="PodBrowser-page-header__title"
     >
       Files
     </h1>
     <div
-      class="makeStyles-page-header__content-3"
+      class="PodBrowser-page-header__content"
     />
     <div
-      class="makeStyles-page-header__toolbar-4"
+      class="PodBrowser-page-header__toolbar"
     >
-      <a
-        class="makeStyles-page-header__action-5"
-        data-testid="folder-details-button"
-        href="/resource/[iri]?action=details&resourceIri="
+      <div
+        class="PodBrowser-indicator"
+        data-testid="pod-indicator"
       >
-        Folder Details
-      </a>
-      <button
-        class="makeStyles-page-header__action-5"
-        data-testid="add-folder-button"
-        type="button"
-      >
-        Create Folder
-      </button>
-      <label
-        class="makeStyles-page-header__action-5"
-        data-testid="upload-file-button"
-      >
-        Upload File
-        <input
-          data-testid="upload-file-input"
-          style="display: none;"
-          type="file"
-        />
-      </label>
+        <label
+          class="PodBrowser-indicatorLabel"
+          for="pod-indicator-prompt"
+        >
+          <span>
+            Pod: 
+          </span>
+          <span
+            class="PodBrowser-root PodBrowser-text PodBrowser-pulse"
+            style="width: 100px; display: inline-block;"
+          />
+        </label>
+      </div>
     </div>
   </div>
 </DocumentFragment>

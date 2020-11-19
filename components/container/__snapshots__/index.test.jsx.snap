@@ -24,7 +24,7 @@ exports[`Container view Renders a spinner if data is loading 1`] = `
 exports[`Container view Renders a table view without data 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-page-header"
+    class="PodBrowser-page-header PodBrowser-files-container-header"
   >
     <h1
       class="PodBrowser-page-header__title"
@@ -36,33 +36,7 @@ exports[`Container view Renders a table view without data 1`] = `
     />
     <div
       class="PodBrowser-page-header__toolbar"
-    >
-      <a
-        class="PodBrowser-page-header__action"
-        data-testid="folder-details-button"
-        href="/resource/[iri]?action=details&resourceIri="
-      >
-        Folder Details
-      </a>
-      <button
-        class="PodBrowser-page-header__action"
-        data-testid="add-folder-button"
-        type="button"
-      >
-        Create Folder
-      </button>
-      <label
-        class="PodBrowser-page-header__action"
-        data-testid="upload-file-button"
-      >
-        Upload File
-        <input
-          data-testid="upload-file-input"
-          style="display: none;"
-          type="file"
-        />
-      </label>
-    </div>
+    />
   </div>
   <div
     class="PodBrowser-drawer-container"
@@ -71,20 +45,53 @@ exports[`Container view Renders a table view without data 1`] = `
       class="PodBrowser-drawer-container__content"
     >
       <div
-        class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
+        class="PodBrowser-sub-header"
       >
-        <svg
-          class="PodBrowser-loading-indicator"
-          viewBox="22 22 44 44"
+        <div
+          class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
         >
-          <circle
-            cx="44"
-            cy="44"
-            fill="none"
-            r="20.2"
-            stroke-width="3.6"
-          />
-        </svg>
+          <svg
+            class="PodBrowser-loading-indicator"
+            viewBox="22 22 44 44"
+          >
+            <circle
+              cx="44"
+              cy="44"
+              fill="none"
+              r="20.2"
+              stroke-width="3.6"
+            />
+          </svg>
+        </div>
+        <div
+          class="PodBrowser-actions-container"
+        >
+          <a
+            class="PodBrowser-page-header__action"
+            data-testid="folder-details-button"
+            href="/resource/[iri]?action=details&resourceIri="
+          >
+            Folder Details
+          </a>
+          <button
+            class="PodBrowser-page-header__action"
+            data-testid="add-folder-button"
+            type="button"
+          >
+            Create Folder
+          </button>
+          <label
+            class="PodBrowser-page-header__action"
+            data-testid="upload-file-button"
+          >
+            Upload File
+            <input
+              data-testid="upload-file-input"
+              style="display: none;"
+              type="file"
+            />
+          </label>
+        </div>
       </div>
       <table
         class="PodBrowser-table"
@@ -208,7 +215,7 @@ exports[`Container view Renders a table view without data 1`] = `
 exports[`Container view Renders a table with data 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-page-header"
+    class="PodBrowser-page-header PodBrowser-files-container-header"
   >
     <h1
       class="PodBrowser-page-header__title"
@@ -220,33 +227,7 @@ exports[`Container view Renders a table with data 1`] = `
     />
     <div
       class="PodBrowser-page-header__toolbar"
-    >
-      <a
-        class="PodBrowser-page-header__action"
-        data-testid="folder-details-button"
-        href="/resource/[iri]?action=details&resourceIri="
-      >
-        Folder Details
-      </a>
-      <button
-        class="PodBrowser-page-header__action"
-        data-testid="add-folder-button"
-        type="button"
-      >
-        Create Folder
-      </button>
-      <label
-        class="PodBrowser-page-header__action"
-        data-testid="upload-file-button"
-      >
-        Upload File
-        <input
-          data-testid="upload-file-input"
-          style="display: none;"
-          type="file"
-        />
-      </label>
-    </div>
+    />
   </div>
   <div
     class="PodBrowser-drawer-container"
@@ -255,20 +236,53 @@ exports[`Container view Renders a table with data 1`] = `
       class="PodBrowser-drawer-container__content"
     >
       <div
-        class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
+        class="PodBrowser-sub-header"
       >
-        <svg
-          class="PodBrowser-loading-indicator"
-          viewBox="22 22 44 44"
+        <div
+          class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
         >
-          <circle
-            cx="44"
-            cy="44"
-            fill="none"
-            r="20.2"
-            stroke-width="3.6"
-          />
-        </svg>
+          <svg
+            class="PodBrowser-loading-indicator"
+            viewBox="22 22 44 44"
+          >
+            <circle
+              cx="44"
+              cy="44"
+              fill="none"
+              r="20.2"
+              stroke-width="3.6"
+            />
+          </svg>
+        </div>
+        <div
+          class="PodBrowser-actions-container"
+        >
+          <a
+            class="PodBrowser-page-header__action"
+            data-testid="folder-details-button"
+            href="/resource/[iri]?action=details&resourceIri="
+          >
+            Folder Details
+          </a>
+          <button
+            class="PodBrowser-page-header__action"
+            data-testid="add-folder-button"
+            type="button"
+          >
+            Create Folder
+          </button>
+          <label
+            class="PodBrowser-page-header__action"
+            data-testid="upload-file-button"
+          >
+            Upload File
+            <input
+              data-testid="upload-file-input"
+              style="display: none;"
+              type="file"
+            />
+          </label>
+        </div>
       </div>
       <table
         class="PodBrowser-table"

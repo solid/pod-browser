@@ -21,7 +21,7 @@
 
 import React from "react";
 import { useRouter } from "next/router";
-import { renderWithTheme } from "../../../__testUtils/withTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import PodIndicator, {
   clickHandler,
   closeHandler,
@@ -32,15 +32,15 @@ import {
   mockPersonDatasetBob,
   aliceWebIdUrl,
   bobWebIdUrl,
-} from "../../../__testUtils/mockPersonResource";
-import usePodOwnerProfile from "../../../src/hooks/usePodOwnerProfile";
+} from "../../__testUtils/mockPersonResource";
+import usePodOwnerProfile from "../../src/hooks/usePodOwnerProfile";
 
-import { packageProfile } from "../../../src/solidClientHelpers/profile";
-import { resourceHref } from "../../../src/navigator";
-import { normalizeContainerUrl } from "../../../src/stringHelpers";
+import { packageProfile } from "../../src/solidClientHelpers/profile";
+import { resourceHref } from "../../src/navigator";
+import { normalizeContainerUrl } from "../../src/stringHelpers";
 
 jest.mock("next/router");
-jest.mock("../../../src/hooks/usePodOwnerProfile");
+jest.mock("../../src/hooks/usePodOwnerProfile");
 
 describe("PodIndicator", () => {
   beforeEach(() => {

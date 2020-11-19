@@ -6,7 +6,7 @@ exports[`Header with user logged in renders a header 1`] = `
     class="PodBrowser-header-banner"
   >
     <div
-      class="PodBrowser-logoIndicatorContainer"
+      class="PodBrowser-logoContainer"
     >
       <a
         data-testid="header-banner-logo"
@@ -19,22 +19,6 @@ exports[`Header with user logged in renders a header 1`] = `
           src="/inrupt_logo-2020.svg"
         />
       </a>
-      <div
-        class="PodBrowser-indicator"
-      >
-        <label
-          class="PodBrowser-indicatorLabel"
-          for="pod-indicator-prompt"
-        >
-          <span>
-            Pod: 
-          </span>
-          <span
-            class="PodBrowser-root PodBrowser-text PodBrowser-pulse"
-            style="width: 100px; display: inline-block;"
-          />
-        </label>
-      </div>
     </div>
     <div
       class="PodBrowser-hamburgerMenu"
@@ -194,7 +178,7 @@ exports[`Header with user logged out renders nothing 1`] = `
     class="PodBrowser-header-banner"
   >
     <div
-      class="PodBrowser-logoIndicatorContainer"
+      class="PodBrowser-logoContainer"
     >
       <a
         data-testid="header-banner-logo"

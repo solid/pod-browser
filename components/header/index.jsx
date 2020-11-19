@@ -27,7 +27,6 @@ import Link from "next/link";
 import UserMenu from "./userMenu";
 import MenuDrawer from "./menuDrawer";
 import MainNav from "./mainNav";
-import PodIndicator from "./podIndicator";
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -41,7 +40,7 @@ export default function Header() {
 
   return (
     <header className={bem("header-banner")}>
-      <div className={classes.logoIndicatorContainer}>
+      <div className={classes.logoContainer}>
         <Link href="/">
           <a data-testid={TESTCAFE_ID_HEADER_LOGO}>
             <img
@@ -52,7 +51,6 @@ export default function Header() {
             />
           </a>
         </Link>
-        {session.info.isLoggedIn ? <PodIndicator /> : null}
       </div>
       {session.info.isLoggedIn ? (
         <>
