@@ -22,7 +22,7 @@
 import React from "react";
 import { screen } from "@testing-library/react";
 import ContactsEmptyState from ".";
-import { renderWithTheme } from "../../../__testUtils/renderWithTheme";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 
 describe("ContactsEmptyState", () => {
   test("it renders an empty state component", () => {

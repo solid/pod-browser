@@ -35,7 +35,6 @@ import {
 } from "../../__testUtils/mockPersonResource";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
-import { renderWithTheme } from "../../__testUtils/renderWithTheme";
 
 jest.mock("../../src/addressBook");
 jest.mock("../../src/hooks/useAddressBook");
