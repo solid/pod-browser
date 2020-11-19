@@ -31,6 +31,7 @@ const styles = (theme) =>
       fontWeight: theme.typography.fontWeightMedium,
     },
     indicatorPrompt: {
+      backgroundColor: "transparent",
       display: "inline-flex",
       color: theme.palette.text.secondary,
       textTransform: "none",
