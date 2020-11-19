@@ -25,10 +25,12 @@ const styles = (theme) => {
   return createStyles(theme, ["icons", "button", "content"], {
     "empty-state-container": {
       textAlign: "center",
-      paddingTop: "min(64px, 20%)",
-      // eslint-disable-next-line no-dupe-keys
       paddingTop: "64px",
-      paddingBottom: "20px",
+      // eslint-disable-next-line no-dupe-keys
+      paddingTop: "min(64px, 20%)",
+      paddingBottom: "64px",
+      // eslint-disable-next-line no-dupe-keys
+      paddingBottom: "min(64px, 20%)",
     },
     "icon-large": {
       fontSize: "64px",
