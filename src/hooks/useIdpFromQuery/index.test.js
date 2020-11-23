@@ -19,45 +19,32 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as routerFns from "next/router";
 import { renderHook } from "@testing-library/react-hooks";
-import useIdp from "./index";
+import useIdpFromQuery from "./index";
+import useQuery from "../useQuery";
 
-describe("useIdp", () => {
+jest.mock("../useQuery");
+
+describe("useIdpFromQuery", () => {
   it("returns null when there is no idp query param", () => {
-    jest.spyOn(routerFns, "useRouter").mockReturnValue({ query: {} });
-    const { result } = renderHook(() => useIdp());
+    useQuery.mockReturnValue(undefined);
+    const { result } = renderHook(() => useIdpFromQuery());
     expect(result.current).toBeNull();
   });
 
   it("returns an object with a valid idp query param", () => {
     const idp = "https://example.com";
-    jest.spyOn(routerFns, "useRouter").mockReturnValue({ query: { idp } });
-    const { result } = renderHook(() => useIdp());
+    useQuery.mockReturnValue(idp);
+    const { result } = renderHook(() => useIdpFromQuery());
     expect(result.current).toEqual({
       iri: idp,
       label: "example.com",
     });
   });
 
-  it("will choose the first idp in a list of idps", () => {
-    const idp1 = "https://example.com";
-    const idp2 = "https://example2.com";
-    jest
-      .spyOn(routerFns, "useRouter")
-      .mockReturnValue({ query: { idp: [idp1, idp2] } });
-    const { result } = renderHook(() => useIdp());
-    expect(result.current).toEqual({
-      iri: idp1,
-      label: "example.com",
-    });
-  });
-
   it("returns null on invalid idp query param", () => {
-    jest
-      .spyOn(routerFns, "useRouter")
-      .mockReturnValue({ query: { idp: "test" } });
-    const { result } = renderHook(() => useIdp());
+    useQuery.mockReturnValue("test");
+    const { result } = renderHook(() => useIdpFromQuery());
     expect(result.current).toBeNull();
   });
 });

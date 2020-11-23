@@ -23,14 +23,14 @@ import React from "react";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import { useRedirectIfLoggedIn } from "../../../src/effects/auth";
 import LoginPage from "./index";
-import useIdp from "../../../src/hooks/useIdp";
+import useIdpFromQuery from "../../../src/hooks/useIdpFromQuery";
 
 jest.mock("../../../src/effects/auth");
-jest.mock("../../../src/hooks/useIdp");
+jest.mock("../../../src/hooks/useIdpFromQuery");
 
 describe("Login page", () => {
   beforeEach(() => {
-    useIdp.mockReturnValue(null);
+    useIdpFromQuery.mockReturnValue(null);
   });
 
   test("Renders a login button", () => {

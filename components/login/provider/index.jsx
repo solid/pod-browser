@@ -37,9 +37,8 @@ import { LoginButton, useSession } from "@inrupt/solid-ui-react";
 import { Button } from "@inrupt/prism-react-components";
 import { generateRedirectUrl } from "../../../src/windowHelpers";
 import getIdentityProviders from "../../../constants/provider";
-
 import { ERROR_REGEXES, hasError } from "../../../src/error";
-import useIdp from "../../../src/hooks/useIdp";
+import useIdpFromQuery from "../../../src/hooks/useIdpFromQuery";
 
 const providers = getIdentityProviders();
 const TESTCAFE_ID_LOGIN_TITLE = "login-title";
@@ -85,7 +84,7 @@ export default function Provider({ defaultError }) {
   const { login } = useSession();
   const [loginError, setLoginError] = useState(defaultError);
   const theme = useTheme();
-  const idp = useIdp();
+  const idp = useIdpFromQuery();
   const loginFieldRef = createRef();
 
   useEffect(() => {

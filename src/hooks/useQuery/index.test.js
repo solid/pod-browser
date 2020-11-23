@@ -19,20 +19,35 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import Login from "./index";
-import { renderWithTheme } from "../../__testUtils/withTheme";
-import useIdpFromQuery from "../../src/hooks/useIdpFromQuery";
+import * as routerFns from "next/router";
+import { renderHook } from "@testing-library/react-hooks";
+import useQuery from "./index";
 
-jest.mock("../../src/hooks/useIdpFromQuery");
+describe("useQuery", () => {
+  const value1 = "value1";
+  const value2 = "value2";
 
-describe("Login form", () => {
   beforeEach(() => {
-    useIdpFromQuery.mockReturnValue(null);
+    jest.spyOn(routerFns, "useRouter").mockReturnValue({
+      query: {
+        bar: value1,
+        baz: [value2, value1],
+      },
+    });
   });
 
-  test("Renders a login form, with button bound to swapLoginType", () => {
-    const { asFragment } = renderWithTheme(<Login />);
-    expect(asFragment()).toMatchSnapshot();
+  it("returns undefined when there is no query param", () => {
+    const { result } = renderHook(() => useQuery("foo"));
+    expect(result.current).toBeUndefined();
+  });
+
+  it("returns the value if query param is given", () => {
+    const { result } = renderHook(() => useQuery("bar"));
+    expect(result.current).toEqual(value1);
+  });
+
+  it("will choose the first value in a list of query params", () => {
+    const { result } = renderHook(() => useQuery("baz"));
+    expect(result.current).toEqual(value2);
   });
 });

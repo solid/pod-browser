@@ -22,29 +22,16 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-export default function useIdp() {
-  const [idp, setIdp] = useState(null);
+export default function useQuery(key) {
+  const [query, setQuery] = useState();
   const router = useRouter();
 
   useEffect(() => {
-    const idpQuery =
-      typeof router.query.idp === "object"
-        ? router.query.idp[0]
-        : router.query.idp;
-    if (!idpQuery) {
-      setIdp(null);
-      return;
-    }
-    try {
-      const idpUrl = new URL(idpQuery);
-      setIdp({
-        iri: idpQuery,
-        label: idpUrl.hostname,
-      });
-    } catch (err) {
-      setIdp(null);
-    }
-  }, [router]);
-
-  return idp;
+    setQuery(
+      Array.isArray(router.query[key])
+        ? router.query[key][0]
+        : router.query[key]
+    );
+  }, [key, router]);
+  return query;
 }

@@ -32,14 +32,14 @@ import ProviderLogin, {
   TESTCAFE_ID_LOGIN_FIELD,
 } from "./index";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
-import useIdp from "../../../src/hooks/useIdp";
+import useIdpFromQuery from "../../../src/hooks/useIdpFromQuery";
 
 jest.mock("../../../src/windowHelpers");
-jest.mock("../../../src/hooks/useIdp");
+jest.mock("../../../src/hooks/useIdpFromQuery");
 
 describe("ProviderLogin form", () => {
   beforeEach(() => {
-    useIdp.mockReturnValue(null);
+    useIdpFromQuery.mockReturnValue(null);
   });
 
   it("renders a webid login form", () => {
@@ -70,7 +70,7 @@ describe("ProviderLogin form", () => {
 
   it("allows setting idp with query param", () => {
     const iri = "http://example.com";
-    useIdp.mockReturnValue({
+    useIdpFromQuery.mockReturnValue({
       iri,
       label: "example.com",
     });
