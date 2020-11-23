@@ -95,7 +95,7 @@ export function hasSolidAuthClientHash() {
 export default function App(props) {
   const { Component, pageProps } = props;
   const bem = useBem(useStyles());
-  const { asPath } = useRouter();
+  const { pathname, asPath } = useRouter();
 
   useEffect(() => {
     // Remove injected serverside JSS
@@ -106,10 +106,13 @@ export default function App(props) {
     }
   }, []);
 
-  // Fire off a pageview tracker whenever the path changes.
+  // Fire off a pageview tracker whenever the path changes. Use the pagename
+  // (e.g. /resource/[iri]) instead of the full path to scrub sensitive data.
   useEffect(() => {
-    matomoInstance?.trackPageView();
-  }, [asPath]);
+    matomoInstance?.trackPageView({
+      href: pathname,
+    });
+  }, [pathname, asPath]);
 
   return (
     <>
