@@ -62,6 +62,12 @@ import { chain } from "../../../src/solidClientHelpers/utils";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
+const TESTCAFE_ID_DELETE_BUTTON = "profile-address-delete-button";
+const TESTCAFE_ID_EXISTING_VALUE = "profile-address-existing-value";
+const TESTCAFE_ID_NEW_BUTTON = "profile-address-new-button";
+const TESTCAFE_ID_NEW_TYPE = "profile-address-new-type";
+const TESTCAFE_ID_NEW_VALUE = "profile-address-new-value";
+
 const CONTACT_TYPE_LABEL_MAP = {
   [vcard.Home]: "Home",
   [vcard.Work]: "Work",
@@ -136,6 +142,7 @@ export function setupDeleteButtonCell(editing, removeRow, bem) {
         onClick={() => removeRow(rowThing)}
         className={bem("button", "action")}
         type="button"
+        data-testid={TESTCAFE_ID_DELETE_BUTTON}
       >
         Delete
       </button>
@@ -189,11 +196,8 @@ export default function ContactTable({ editing, property }) {
           <TableColumn
             property={rdf.type}
             body={({ value }) => {
-              return (
-                <Typography title={value}>
-                  {CONTACT_TYPE_LABEL_MAP[value] || value}
-                </Typography>
-              );
+              const existingTypeValue = CONTACT_TYPE_LABEL_MAP[value] || value;
+              return <Typography title={value}>{existingTypeValue}</Typography>;
             }}
             dataType="url"
             header={() => null}
@@ -207,7 +211,10 @@ export default function ContactTable({ editing, property }) {
                   edit={editing}
                   autosave
                   dataType="url"
-                  inputProps={{ className: bem("input") }}
+                  inputProps={{
+                    className: bem("input"),
+                    "data-testid": TESTCAFE_ID_EXISTING_VALUE,
+                  }}
                   property={vcard.value}
                   onSave={(savedDataset) => {
                     setDataset(savedDataset);
@@ -236,6 +243,9 @@ export default function ContactTable({ editing, property }) {
                 <Select
                   value={newContactType}
                   onChange={(e) => setNewContactType(e.target.value)}
+                  inputProps={{
+                    "data-testid": TESTCAFE_ID_NEW_TYPE,
+                  }}
                 >
                   {Object.keys(CONTACT_TYPE_LABEL_MAP).map((iri) => (
                     <MenuItem key={iri} value={iri}>
@@ -252,6 +262,7 @@ export default function ContactTable({ editing, property }) {
                 value={newContactValue}
                 onChange={(e) => setNewContactValue(e.target.value)}
                 className={bem("input")}
+                data-testid={TESTCAFE_ID_NEW_VALUE}
               />
             </Box>
 
@@ -260,6 +271,7 @@ export default function ContactTable({ editing, property }) {
                 type="button"
                 onClick={addContactDetail}
                 className={bem("button", "action")}
+                data-testid={TESTCAFE_ID_NEW_BUTTON}
               >
                 Add
               </button>

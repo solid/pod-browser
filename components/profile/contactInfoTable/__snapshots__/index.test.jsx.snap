@@ -90,6 +90,7 @@ exports[`ContactInfoTable renders an editable table of contact info 1`] = `
           <input
             aria-hidden="true"
             class="PodBrowser-nativeInput"
+            data-testid="profile-address-new-type"
             tabindex="-1"
             value="http://www.w3.org/2006/vcard/ns#Home"
           />
@@ -125,6 +126,7 @@ exports[`ContactInfoTable renders an editable table of contact info 1`] = `
     >
       <input
         class="PodBrowser-input"
+        data-testid="profile-address-new-value"
         label="Value"
         value=""
       />
@@ -134,6 +136,7 @@ exports[`ContactInfoTable renders an editable table of contact info 1`] = `
     >
       <button
         class="PodBrowser-button PodBrowser-button--action"
+        data-testid="profile-address-new-button"
         type="button"
       >
         Add
@@ -148,6 +151,7 @@ exports[`setupDeleteButtonCell renders nothing if not editable 1`] = `<DocumentF
 exports[`setupDeleteButtonCell returns a button if editable 1`] = `
 <DocumentFragment>
   <button
+    data-testid="profile-address-delete-button"
     type="button"
   >
     Delete
