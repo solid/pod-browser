@@ -19,20 +19,32 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import Login from "./index";
-import { renderWithTheme } from "../../__testUtils/withTheme";
-import useIdp from "../../src/hooks/useIdp";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
-jest.mock("../../src/hooks/useIdp");
+export default function useIdp() {
+  const [idp, setIdp] = useState(null);
+  const router = useRouter();
 
-describe("Login form", () => {
-  beforeEach(() => {
-    useIdp.mockReturnValue(null);
-  });
+  useEffect(() => {
+    const idpQuery =
+      typeof router.query.idp === "object"
+        ? router.query.idp[0]
+        : router.query.idp;
+    if (!idpQuery) {
+      setIdp(null);
+      return;
+    }
+    try {
+      const idpUrl = new URL(idpQuery);
+      setIdp({
+        iri: idpQuery,
+        label: idpUrl.hostname,
+      });
+    } catch (err) {
+      setIdp(null);
+    }
+  }, [router]);
 
-  test("Renders a login form, with button bound to swapLoginType", () => {
-    const { asFragment } = renderWithTheme(<Login />);
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
+  return idp;
+}
