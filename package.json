@@ -36,7 +36,6 @@
     "@sentry/react": "^5.27.3",
     "@solid/lit-prism-patterns": "0.10.12",
     "@solid/lit-prism-theme-sdk-default": "0.10.12",
-    "@wojtekmaj/enzyme-adapter-react-17": "^0.1.1",
     "@zeit/next-source-maps": "0.0.4-canary.1",
     "encoding": "^0.1.13",
     "husky": "^4.3.0",
