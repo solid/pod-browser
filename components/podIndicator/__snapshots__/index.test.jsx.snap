@@ -6,27 +6,27 @@ exports[`PodIndicator it renders the pod indicator with the correct name with a 
     class="PodBrowser-indicator"
     data-testid="pod-indicator"
   >
-    <label
-      class="PodBrowser-indicatorLabel"
-      for="pod-indicator-prompt"
+    <button
+      class="PodBrowser-indicatorPrompt"
+      data-testid="pod-indicator-prompt"
+      id="pod-indicator-prompt"
+      title="Alice"
+      type="button"
     >
-      <span>
-        Pod: 
-      </span>
-      <button
-        class="PodBrowser-button PodBrowser-button--prompt PodBrowser-indicatorPrompt"
-        data-testid="pod-indicator-prompt"
-        id="pod-indicator-prompt"
-        title="Alice"
-        type="button"
+      <span
+        class="PodBrowser-indicatorLabel"
       >
-        <span
-          class="PodBrowser-indicatorName"
-        >
-          Alice
-        </span>
-      </button>
-    </label>
+        Pod
+        <i
+          class="PodBrowser-icon-caret-down PodBrowser-indicatorChevron"
+        />
+      </span>
+      <span
+        class="PodBrowser-indicatorName"
+      >
+        Alice
+      </span>
+    </button>
   </div>
 </DocumentFragment>
 `;
@@ -37,27 +37,27 @@ exports[`PodIndicator it renders the pod indicator with the correct name with a 
     class="PodBrowser-indicator"
     data-testid="pod-indicator"
   >
-    <label
-      class="PodBrowser-indicatorLabel"
-      for="pod-indicator-prompt"
+    <button
+      class="PodBrowser-indicatorPrompt"
+      data-testid="pod-indicator-prompt"
+      id="pod-indicator-prompt"
+      title="Bob"
+      type="button"
     >
-      <span>
-        Pod: 
-      </span>
-      <button
-        class="PodBrowser-button PodBrowser-button--prompt PodBrowser-indicatorPrompt"
-        data-testid="pod-indicator-prompt"
-        id="pod-indicator-prompt"
-        title="Bob"
-        type="button"
+      <span
+        class="PodBrowser-indicatorLabel"
       >
-        <span
-          class="PodBrowser-indicatorName"
-        >
-          Bob
-        </span>
-      </button>
-    </label>
+        Pod
+        <i
+          class="PodBrowser-icon-caret-down PodBrowser-indicatorChevron"
+        />
+      </span>
+      <span
+        class="PodBrowser-indicatorName"
+      >
+        Bob
+      </span>
+    </button>
   </div>
 </DocumentFragment>
 `;

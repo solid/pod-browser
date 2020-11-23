@@ -19,103 +19,111 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
+import React, { createRef, useEffect, useState } from "react";
 import clsx from "clsx";
 import { createStyles, makeStyles } from "@material-ui/styles";
-import { useRouter } from "next/router";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Button, Box, Popover } from "@material-ui/core";
 import {
-  Form,
-  Label,
-  Message,
-  SimpleInput,
-} from "@inrupt/prism-react-components";
+  Popover,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+} from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import usePodOwnerProfile from "../../src/hooks/usePodOwnerProfile";
+import PodNavigatorPopover from "./podNavigatorPopover";
 import styles from "./styles";
-import { resourceHref } from "../../src/navigator";
-import { normalizeContainerUrl } from "../../src/stringHelpers";
 
 const TESTCAFE_ID_POD_INDICATOR = "pod-indicator";
-const TESTCAFE_ID_POD_NAVIGATE_INPUT = "pod-navigate-input";
 const TESTCAFE_ID_POD_NAVIGATE_TRIGGER = "pod-indicator-prompt";
-const TESTCAFE_ID_POD_NAVIGATE_BUTTON = "pod-navigate-button";
-
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export const clickHandler = (setAnchorEl) => (event) =>
   setAnchorEl(event.currentTarget);
 
 export const closeHandler = (setAnchorEl) => () => setAnchorEl(null);
 
-export const submitHandler = (
-  handleClose,
-  setUrl,
-  setDirtyForm,
-  setDirtyUrlField
-) => async (event, url, router) => {
-  event.preventDefault();
-  setDirtyForm(true);
-  if (url === "") {
-    return;
-  }
-  const containerUrl = normalizeContainerUrl(url);
-  await router.push("/resource/[iri]", resourceHref(containerUrl));
-  handleClose();
-  setDirtyForm(false);
-  setDirtyUrlField(false);
-  setUrl("");
-};
-
 export default function PodIndicator() {
+  const [indicatorWidth, setIndicatorWidth] = useState();
+  const [displayNavigator, setDisplayNavigator] = useState(false);
+  const [indicatorLabelWidth, setIndicatorLabelWidth] = useState();
+
+  const useStyles = makeStyles((theme) =>
+    createStyles(styles(theme, indicatorWidth, indicatorLabelWidth))
+  );
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [url, setUrl] = useState("");
-  const router = useRouter();
+  const [navigatorAnchor, setNavigatorAnchor] = useState(null);
   const bem = useBem(useStyles());
   const { profile, error: profileError } = usePodOwnerProfile();
-  const [dirtyForm, setDirtyForm] = useState(false);
-  const [dirtyUrlField, setDirtyUrlField] = useState(false);
   const loading = !profile && !profileError;
-  const invalidUrlField = !url && (dirtyForm || dirtyUrlField);
 
   const open = Boolean(anchorEl);
-  const id = open ? "pod-navigator" : undefined;
+  const id = open ? "pod-indicator-menu" : undefined;
   const handleClick = clickHandler(setAnchorEl);
   const handleClose = closeHandler(setAnchorEl);
-  const onSubmit = submitHandler(
-    handleClose,
-    setUrl,
-    setDirtyForm,
-    setDirtyUrlField
-  );
+  const handleOpenNavigator = () => {
+    setNavigatorAnchor(anchorEl);
+    setDisplayNavigator(true);
+    handleClose();
+  };
+  const ref = createRef(null);
+  const indicatorLabelRef = createRef(null);
+
+  useEffect(() => {
+    const width = ref.current.offsetWidth || 0;
+    setIndicatorWidth(width);
+  }, [ref]);
+
+  useEffect(() => {
+    if (!indicatorLabelRef.current) return;
+    const width = indicatorLabelRef.current.offsetWidth || 0;
+    setIndicatorLabelWidth(width);
+  }, [indicatorLabelRef]);
 
   return (
-    <div data-testid={TESTCAFE_ID_POD_INDICATOR} className={classes.indicator}>
-      <label htmlFor="pod-indicator-prompt" className={classes.indicatorLabel}>
-        <span>Pod: </span>
-        {loading ? (
-          <Skeleton width={100} style={{ display: "inline-block" }} />
-        ) : (
-          <button
-            data-testid={TESTCAFE_ID_POD_NAVIGATE_TRIGGER}
-            id="pod-indicator-prompt"
-            type="button"
-            aria-describedby={id}
-            onClick={handleClick}
-            className={clsx(bem("button", "prompt"), classes.indicatorPrompt)}
-            title={profile ? profile.name : "Unknown"}
-          >
-            <span className={classes.indicatorName}>
-              {profile ? profile.name : "Unknown"}
-            </span>
-          </button>
-        )}
+    <div
+      data-testid={TESTCAFE_ID_POD_INDICATOR}
+      className={classes.indicator}
+      ref={ref}
+    >
+      {loading ? (
+        <Skeleton width={100} style={{ display: "inline-block" }} />
+      ) : (
+        <button
+          data-testid={TESTCAFE_ID_POD_NAVIGATE_TRIGGER}
+          id="pod-indicator-prompt"
+          type="button"
+          aria-describedby={id}
+          onClick={handleClick}
+          className={classes.indicatorPrompt}
+          title={profile ? profile.name : "Unknown"}
+        >
+          <span className={classes.indicatorLabel}>
+            Pod
+            <i
+              className={clsx(
+                bem(open ? "icon-caret-up" : "icon-caret-down"),
+                classes.indicatorChevron
+              )}
+            />
+          </span>
+          <span className={classes.indicatorName} ref={indicatorLabelRef}>
+            {profile ? profile.name : "Unknown"}
+          </span>
+        </button>
+      )}
+      {displayNavigator ? (
+        <PodNavigatorPopover
+          anchor={navigatorAnchor}
+          setDisplayNavigator={setDisplayNavigator}
+          popoverWidth={indicatorWidth}
+        />
+      ) : (
         <Popover
           id={id}
           classes={{
-            paper: classes.popover,
+            paper: classes.popoverMenu,
           }}
           open={open}
           anchorEl={anchorEl}
@@ -129,40 +137,28 @@ export default function PodIndicator() {
             horizontal: "left",
           }}
         >
-          <Form onSubmit={(event) => onSubmit(event, url, router)}>
-            <Label id="PodNavigator">Go to Pod</Label>
-            {invalidUrlField ? (
-              <Message variant="invalid">Please enter valid URL</Message>
-            ) : null}
-            <Box display="flex" alignItems="center">
-              <Box width="100%">
-                <SimpleInput
-                  id="PodNavigator"
-                  data-testid={TESTCAFE_ID_POD_NAVIGATE_INPUT}
-                  value={url}
-                  onChange={(event) => setUrl(event.target.value)}
-                  placeholder="Enter Pod URI"
-                  type="url"
-                  pattern="https://.*"
-                  title="Must start with https://"
-                  required={invalidUrlField}
+          <List classes={{ root: classes.list }}>
+            <ListItem
+              button
+              key="change-pod"
+              onClick={handleOpenNavigator}
+              classes={{ root: classes.menuItem }}
+            >
+              <ListItemIcon classes={{ root: classes.itemIcon }}>
+                <i
+                  className={clsx(bem("icon-move"), bem("icon"))}
+                  aria-label="Change pod"
                 />
-              </Box>
-              <Box>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  size="large"
-                  id={TESTCAFE_ID_POD_NAVIGATE_BUTTON}
-                >
-                  Go
-                </Button>
-              </Box>
-            </Box>
-          </Form>
+              </ListItemIcon>
+              <ListItemText
+                disableTypography
+                primary="Change pod"
+                className={bem("menu-drawer-item__text")}
+              />
+            </ListItem>
+          </List>
         </Popover>
-      </label>
+      )}
     </div>
   );
 }

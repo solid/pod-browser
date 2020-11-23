@@ -21,7 +21,7 @@
 
 import React from "react";
 import { useRouter } from "next/router";
-import { screen, render } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { useSession } from "@inrupt/solid-ui-react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import ContainerPageHeader from "./index";

@@ -22,11 +22,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { renderWithTheme } from "../../__testUtils/withTheme";
-import PodIndicator, {
-  clickHandler,
-  closeHandler,
-  submitHandler,
-} from "./index";
+import PodIndicator, { clickHandler, closeHandler } from "./index";
 import {
   mockPersonDatasetAlice,
   mockPersonDatasetBob,
@@ -34,10 +30,7 @@ import {
   bobWebIdUrl,
 } from "../../__testUtils/mockPersonResource";
 import usePodOwnerProfile from "../../src/hooks/usePodOwnerProfile";
-
 import { packageProfile } from "../../src/solidClientHelpers/profile";
-import { resourceHref } from "../../src/navigator";
-import { normalizeContainerUrl } from "../../src/stringHelpers";
 
 jest.mock("next/router");
 jest.mock("../../src/hooks/usePodOwnerProfile");
@@ -97,57 +90,5 @@ describe("closeHandler", () => {
     const setAnchorEl = jest.fn();
     closeHandler(setAnchorEl)();
     expect(setAnchorEl).toHaveBeenCalledWith(null);
-  });
-});
-
-describe("submitHandler", () => {
-  const url = "http://url.com";
-  let event;
-  let handleClose;
-  let setUrl;
-  const router = {};
-  let setDirtyForm;
-  let setDirtyUrlField;
-
-  beforeEach(() => {
-    event = { preventDefault: jest.fn() };
-    handleClose = jest.fn();
-    setUrl = jest.fn();
-    router.push = jest.fn();
-    setDirtyForm = jest.fn();
-    setDirtyUrlField = jest.fn();
-  });
-
-  test("it sets up a submit handler", async () => {
-    await submitHandler(
-      handleClose,
-      setUrl,
-      setDirtyForm,
-      setDirtyUrlField
-    )(event, url, router);
-    expect(event.preventDefault).toHaveBeenCalledWith();
-    expect(router.push).toHaveBeenCalledWith(
-      "/resource/[iri]",
-      resourceHref(normalizeContainerUrl(url))
-    );
-    expect(handleClose).toHaveBeenCalledWith();
-    expect(setUrl).toHaveBeenCalledWith("");
-    expect(setDirtyForm).toHaveBeenCalledWith(false);
-    expect(setDirtyUrlField).toHaveBeenCalledWith(false);
-  });
-
-  it("should do nothing if no url is given", async () => {
-    await submitHandler(
-      handleClose,
-      setUrl,
-      setDirtyForm,
-      setDirtyUrlField
-    )(event, "", router);
-    expect(event.preventDefault).toHaveBeenCalledWith();
-    expect(router.push).not.toHaveBeenCalled();
-    expect(handleClose).not.toHaveBeenCalled();
-    expect(setUrl).not.toHaveBeenCalled();
-    expect(setDirtyForm).toHaveBeenCalledWith(true);
-    expect(setDirtyUrlField).not.toHaveBeenCalled();
   });
 });

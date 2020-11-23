@@ -20,18 +20,10 @@ exports[`ContainerPageHeader Renders view 1`] = `
         class="PodBrowser-indicator"
         data-testid="pod-indicator"
       >
-        <label
-          class="PodBrowser-indicatorLabel"
-          for="pod-indicator-prompt"
-        >
-          <span>
-            Pod: 
-          </span>
-          <span
-            class="PodBrowser-root PodBrowser-text PodBrowser-pulse"
-            style="width: 100px; display: inline-block;"
-          />
-        </label>
+        <span
+          class="PodBrowser-root PodBrowser-text PodBrowser-pulse"
+          style="width: 100px; display: inline-block;"
+        />
       </div>
     </div>
   </div>

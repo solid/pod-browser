@@ -21,23 +21,19 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
-const styles = (theme) =>
-  createStyles(theme, ["pageHeader"], {
-    "files-container-header": {
+const styles = (theme, popoverWidth) =>
+  createStyles(theme, [], {
+    popoverNavigator: {
+      borderRadius: "0 0 10px 10px",
+      padding: theme.spacing(2, 2, 2),
+      maxWidth: popoverWidth,
       [theme.breakpoints.up("sm")]: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingRight: 0,
-        borderBottom: `1px solid ${theme.palette.grey.A100}`,
+        minWidth: 450,
+        width: popoverWidth,
       },
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "flex-start",
-      paddingLeft: 0,
-      "& h1": {
-        paddingLeft: "24px",
+      [theme.breakpoints.down("xs")]: {
+        width: "100vw",
+        left: "0 !important",
       },
     },
   });
