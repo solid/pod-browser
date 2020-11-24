@@ -35,9 +35,15 @@ import ContactInfoTable, {
   DEFAULT_CONTACT_TYPE,
   PREFIX_MAP,
   setupAddContactDetail,
+  setupColumnTypeBody,
+  setupColumnValueBody,
   setupDeleteButtonCell,
+  setupOnChange,
+  setupOnSave,
   setupRemoveRow,
+  setupRowProps,
   setupSaveHandler,
+  TESTCAFE_ID_NEW_TYPE,
 } from "./index";
 
 const { mockSolidDatasetFrom, mockThingFrom } = scFns;
@@ -187,5 +193,61 @@ describe("setupDeleteButtonCell", () => {
     );
 
     expect(asFragment()).toMatchSnapshot();
+  });
+});
+
+describe("setupRowProps", () => {
+  it("sets up row props", () => {
+    const bem = (value) => value;
+    expect(setupRowProps(bem)()).toEqual({
+      className: "table__body-row",
+    });
+  });
+});
+
+describe("setupColumnTypeBody", () => {
+  it("sets up body for type", () => {
+    const columnTypeBody = setupColumnTypeBody();
+    const { asFragment } = render(columnTypeBody({ value: vcard.Home }));
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("has a fallback if value is not valid", () => {
+    const columnTypeBody = setupColumnTypeBody();
+    const { asFragment } = render(columnTypeBody({ value: "invalid" }));
+    expect(asFragment()).toMatchSnapshot();
+  });
+});
+
+describe("setupOnSave", () => {
+  it("sets dataset", () => {
+    const setDataset = jest.fn();
+    expect(setupOnSave(setDataset)(dataset)).toBeUndefined();
+    expect(setDataset).toHaveBeenCalledWith(dataset);
+  });
+});
+
+describe("setupColumnValueBody", () => {
+  const bem = (value) => value;
+  const onSave = () => {};
+
+  it("renders for read-only mode", () => {
+    const { asFragment } = render(setupColumnValueBody(false, bem, onSave)());
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("renders for editing mode", () => {
+    const { asFragment } = render(setupColumnValueBody(true, bem, onSave)());
+    expect(asFragment()).toMatchSnapshot();
+  });
+});
+
+describe("setupOnChange", () => {
+  it("setups an onChange handler", () => {
+    const setValue = jest.fn();
+    const onChange = setupOnChange(setValue);
+    const value = "value";
+    expect(onChange({ target: { value } })).toBeUndefined();
+    expect(setValue).toHaveBeenCalledWith(value);
   });
 });

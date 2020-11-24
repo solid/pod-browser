@@ -146,6 +146,52 @@ exports[`ContactInfoTable renders an editable table of contact info 1`] = `
 </DocumentFragment>
 `;
 
+exports[`setupColumnTypeBody has a fallback if value is not valid 1`] = `
+<DocumentFragment>
+  <p
+    class="MuiTypography-root MuiTypography-body1"
+    title="invalid"
+  >
+    invalid
+  </p>
+</DocumentFragment>
+`;
+
+exports[`setupColumnTypeBody sets up body for type 1`] = `
+<DocumentFragment>
+  <p
+    class="MuiTypography-root MuiTypography-body1"
+    title="http://www.w3.org/2006/vcard/ns#Home"
+  >
+    Home
+  </p>
+</DocumentFragment>
+`;
+
+exports[`setupColumnValueBody renders for editing mode 1`] = `
+<DocumentFragment>
+  <p
+    class="MuiTypography-root MuiTypography-body1"
+  >
+    <span>
+      fetching data in progress
+    </span>
+  </p>
+</DocumentFragment>
+`;
+
+exports[`setupColumnValueBody renders for read-only mode 1`] = `
+<DocumentFragment>
+  <p
+    class="MuiTypography-root MuiTypography-body1"
+  >
+    <span>
+      fetching data in progress
+    </span>
+  </p>
+</DocumentFragment>
+`;
+
 exports[`setupDeleteButtonCell renders nothing if not editable 1`] = `<DocumentFragment />`;
 
 exports[`setupDeleteButtonCell returns a button if editable 1`] = `
