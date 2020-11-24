@@ -20,8 +20,9 @@
  */
 
 import React from "react";
+import { render } from "@testing-library/react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
-import Profile from "./index";
+import Profile, { setupErrorComponent } from "./index";
 
 const profileIri = "https://example.com/profile/card#me";
 
@@ -35,6 +36,14 @@ describe("Profile", () => {
     const { asFragment } = renderWithTheme(
       <Profile profileIri={profileIri} editing />
     );
+    expect(asFragment()).toMatchSnapshot();
+  });
+});
+
+describe("setupErrorComponent", () => {
+  it("renders", () => {
+    const bem = (value) => value;
+    const { asFragment } = render(setupErrorComponent(bem)());
     expect(asFragment()).toMatchSnapshot();
   });
 });
