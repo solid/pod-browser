@@ -37,7 +37,7 @@ const styles = (theme) =>
       alignItems: "flex-start",
       paddingLeft: 0,
       "& h1": {
-        paddingLeft: "24px",
+        paddingLeft: theme.spacing(2.4),
       },
     },
   });

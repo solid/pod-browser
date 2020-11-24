@@ -38,7 +38,7 @@ const styles = (theme, indicatorWidth, indicatorLabelWidth) => {
       },
     },
     indicatorLabel: {
-      fontSize: "13px",
+      fontSize: theme.typography.subtitle2,
       fontWeight: theme.typography.fontWeightBold,
       color: theme.palette.primary.main,
       textTransform: "uppercase",
@@ -48,7 +48,7 @@ const styles = (theme, indicatorWidth, indicatorLabelWidth) => {
       color: theme.palette.primary.main,
     },
     indicatorPrompt: {
-      padding: "6px 24px",
+      padding: theme.spacing(0.6, 2.4),
       cursor: "pointer",
       width: "100%",
       height: "100%",
@@ -62,13 +62,13 @@ const styles = (theme, indicatorWidth, indicatorLabelWidth) => {
       borderTop: `1px solid ${theme.palette.grey.A100}`,
       borderBottom: `1px solid ${theme.palette.grey.A100}`,
       textTransform: "none",
-      fontSize: "0.825rem",
+      fontSize: theme.typography.subtitle2,
       fontWeight: theme.typography.fontWeightRegular,
       [theme.breakpoints.up("sm")]: {
         border: "none",
         borderLeft: `1px solid ${theme.palette.grey.A100}`,
         alignItems: "flex-end",
-        padding: `6px 40px 3px ${indicatorLabelPaddingLeft}px`,
+        padding: theme.spacing(0.6, 4, 0.6, indicatorLabelPaddingLeft / 10),
       },
     },
     indicatorName: {
@@ -87,7 +87,7 @@ const styles = (theme, indicatorWidth, indicatorLabelWidth) => {
       maxWidth: `max(${indicatorWidth}px, 170px)`,
       minWidth: "128px",
       width: `max(${indicatorWidth}px, 170px)`,
-      borderRadius: "0 0 10px 10px",
+      borderRadius: theme.spacing(0, 0, 1, 1),
       [theme.breakpoints.down("xs")]: {
         left: "0 !important", // overiding Material UI positioning
         width: "100vw",
@@ -102,7 +102,7 @@ const styles = (theme, indicatorWidth, indicatorLabelWidth) => {
       padding: theme.spacing(1),
     },
     itemIcon: {
-      padding: "0 8px",
+      padding: theme.spacing(0, 0.8),
       minWidth: "max-content !important",
     },
     itemText: {

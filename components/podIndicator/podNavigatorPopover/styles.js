@@ -24,7 +24,7 @@ import { createStyles } from "@solid/lit-prism-patterns";
 const styles = (theme, popoverWidth) =>
   createStyles(theme, [], {
     popoverNavigator: {
-      borderRadius: "0 0 10px 10px",
+      borderRadius: theme.spacing(0, 0, 1, 1),
       padding: theme.spacing(2, 2, 2),
       maxWidth: popoverWidth,
       [theme.breakpoints.up("sm")]: {
