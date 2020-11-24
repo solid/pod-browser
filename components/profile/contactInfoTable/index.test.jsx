@@ -43,7 +43,6 @@ import ContactInfoTable, {
   setupRemoveRow,
   setupRowProps,
   setupSaveHandler,
-  TESTCAFE_ID_NEW_TYPE,
 } from "./index";
 
 const { mockSolidDatasetFrom, mockThingFrom } = scFns;
