@@ -38,7 +38,7 @@ const styles = (theme, indicatorWidth, indicatorLabelWidth) => {
       },
     },
     indicatorLabel: {
-      fontSize: theme.typography.subtitle2,
+      fontSize: theme.typography.subtitle2.fontSize,
       fontWeight: theme.typography.fontWeightBold,
       color: theme.palette.primary.main,
       textTransform: "uppercase",
@@ -62,7 +62,7 @@ const styles = (theme, indicatorWidth, indicatorLabelWidth) => {
       borderTop: `1px solid ${theme.palette.grey.A100}`,
       borderBottom: `1px solid ${theme.palette.grey.A100}`,
       textTransform: "none",
-      fontSize: theme.typography.subtitle2,
+      fontSize: theme.typography.subtitle2.fontSize,
       fontWeight: theme.typography.fontWeightRegular,
       [theme.breakpoints.up("sm")]: {
         border: "none",
