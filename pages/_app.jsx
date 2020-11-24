@@ -150,7 +150,9 @@ export default function App(props) {
                       </main>
 
                       <div className={bem("app-layout__footer")}>
-                        <PodBrowserFooter />
+                        <PodBrowserFooter
+                          useAtlassianFeedbackWidget={!!atlassianFeedbackId}
+                        />
                       </div>
                     </div>
                     <Notification />
