@@ -77,6 +77,9 @@ if (process.env.NEXT_PUBLIC_MATOMO_URL_BASE) {
 }
 
 const atlassianFeedbackId = process.env.NEXT_PUBLIC_ATLASSIAN_FEEDBACK_ID;
+const atlassianFeedbackWidth = atlassianFeedbackId
+  ? process.env.NEXT_PUBLIC_ATLASSIAN_FEEDBACK_WIDTH || 50
+  : null;
 
 const jss = create(preset());
 
@@ -151,7 +154,7 @@ export default function App(props) {
 
                       <div className={bem("app-layout__footer")}>
                         <PodBrowserFooter
-                          useAtlassianFeedbackWidget={!!atlassianFeedbackId}
+                          atlassianFeedbackWidth={atlassianFeedbackWidth}
                         />
                       </div>
                     </div>
