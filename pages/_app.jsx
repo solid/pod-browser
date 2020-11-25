@@ -78,7 +78,7 @@ if (process.env.NEXT_PUBLIC_MATOMO_URL_BASE) {
 
 const atlassianFeedbackId = process.env.NEXT_PUBLIC_ATLASSIAN_FEEDBACK_ID;
 const atlassianFeedbackWidth = atlassianFeedbackId
-  ? process.env.NEXT_PUBLIC_ATLASSIAN_FEEDBACK_WIDTH || 50
+  ? parseInt(process.env.NEXT_PUBLIC_ATLASSIAN_FEEDBACK_WIDTH, 10) || 50
   : null;
 
 const jss = create(preset());
