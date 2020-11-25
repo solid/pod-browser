@@ -341,7 +341,8 @@ exports[`Container view Renders a table with data 1`] = `
               class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
             >
               <button
-                class="PodBrowser-button PodBrowser-button--text"
+                class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+                data-testid="bookmark-button"
                 disabled=""
                 type="button"
               >
@@ -378,7 +379,8 @@ exports[`Container view Renders a table with data 1`] = `
               class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
             >
               <button
-                class="PodBrowser-button PodBrowser-button--text"
+                class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+                data-testid="bookmark-button"
                 disabled=""
                 type="button"
               >
@@ -415,7 +417,8 @@ exports[`Container view Renders a table with data 1`] = `
               class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
             >
               <button
-                class="PodBrowser-button PodBrowser-button--text"
+                class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+                data-testid="bookmark-button"
                 disabled=""
                 type="button"
               >

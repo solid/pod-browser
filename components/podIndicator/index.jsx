@@ -21,6 +21,7 @@
 
 import React, { createRef, useEffect, useState } from "react";
 import clsx from "clsx";
+import { useRouter } from "next/router";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import {
@@ -33,6 +34,7 @@ import {
 import Skeleton from "@material-ui/lab/Skeleton";
 import usePodOwnerProfile from "../../src/hooks/usePodOwnerProfile";
 import PodNavigatorPopover from "./podNavigatorPopover";
+import Bookmark from "../bookmark";
 import styles from "./styles";
 
 const TESTCAFE_ID_POD_INDICATOR = "pod-indicator";
@@ -44,6 +46,7 @@ export const clickHandler = (setAnchorEl) => (event) =>
 export const closeHandler = (setAnchorEl) => () => setAnchorEl(null);
 
 export default function PodIndicator() {
+  const router = useRouter();
   const [indicatorWidth, setIndicatorWidth] = useState();
   const [displayNavigator, setDisplayNavigator] = useState(false);
   const [indicatorLabelWidth, setIndicatorLabelWidth] = useState();
@@ -57,7 +60,8 @@ export default function PodIndicator() {
   const bem = useBem(useStyles());
   const { profile, error: profileError } = usePodOwnerProfile();
   const loading = !profile && !profileError;
-
+  const podIri = router.query.iri;
+  const profileName = profile ? profile.name : "Unknown";
   const open = Boolean(anchorEl);
   const id = open ? "pod-indicator-menu" : undefined;
   const handleClick = clickHandler(setAnchorEl);
@@ -97,7 +101,7 @@ export default function PodIndicator() {
           aria-describedby={id}
           onClick={handleClick}
           className={classes.indicatorPrompt}
-          title={profile ? profile.name : "Unknown"}
+          title={profileName}
         >
           <span className={classes.indicatorLabel}>
             Pod
@@ -109,7 +113,7 @@ export default function PodIndicator() {
             />
           </span>
           <span className={classes.indicatorName} ref={indicatorLabelRef}>
-            {profile ? profile.name : "Unknown"}
+            {profileName}
           </span>
         </button>
       )}
@@ -138,6 +142,13 @@ export default function PodIndicator() {
           }}
         >
           <List classes={{ root: classes.list }}>
+            <Bookmark
+              iri={podIri}
+              menuItem
+              addText="Bookmark Pod"
+              removeText="Remove Pod Bookmark"
+              profileName={profileName}
+            />
             <ListItem
               button
               key="change-pod"
@@ -150,11 +161,7 @@ export default function PodIndicator() {
                   aria-label="Change pod"
                 />
               </ListItemIcon>
-              <ListItemText
-                disableTypography
-                primary="Change pod"
-                className={bem("menu-drawer-item__text")}
-              />
+              <ListItemText disableTypography primary="Change Pod" />
             </ListItem>
           </List>
         </Popover>

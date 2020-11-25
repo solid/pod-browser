@@ -49,9 +49,13 @@ export const RECALLS_PROPERTY_IRI =
   "http://www.w3.org/2002/01/bookmark#recalls";
 export const BOOKMARK_TYPE_IRI = "http://www.w3.org/2002/01/bookmark#Bookmark";
 
-export async function addBookmark(bookmarkIri, bookmarks, fetch) {
+export async function addBookmark(bookmarkIri, bookmarks, profileName, fetch) {
   const { dataset, iri } = bookmarks;
-  const bookmarkTitle = getResourceName(bookmarkIri);
+
+  const resourceName = getResourceName(bookmarkIri);
+
+  const bookmarkTitle =
+    !resourceName.length && profileName ? `${profileName}'s Pod` : resourceName;
 
   const [existingBookmark] = getThingAll(dataset).filter(
     (t) => getUrl(t, RECALLS_PROPERTY_IRI) === bookmarkIri

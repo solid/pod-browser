@@ -35,7 +35,7 @@ import {
   RECALLS_PROPERTY_IRI,
   removeBookmark,
 } from "./bookmarks";
-import { saveResource } from "./resource";
+import { saveResource, getResourceName } from "./resource";
 import { defineDataset, defineThing } from "./utils";
 
 jest.mock("./resource");
@@ -62,6 +62,7 @@ describe("addBookmark", () => {
   const bookmarkUrl = "https://example.org/cats";
   test("it saves a new bookmark to the bookmarks dataset", async () => {
     saveResource.mockResolvedValue({ response: 42 });
+    getResourceName.mockReturnValue("cats");
 
     const { response } = await addBookmark(
       "https://example.org/cats",

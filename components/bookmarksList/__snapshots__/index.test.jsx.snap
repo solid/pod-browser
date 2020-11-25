@@ -87,7 +87,8 @@ exports[`BookmarksList it renders a list of bookmarks 1`] = `
             role="cell"
           >
             <button
-              class="PodBrowser-button PodBrowser-button--text"
+              class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+              data-testid="bookmark-button"
               type="button"
             >
               <i
@@ -125,7 +126,8 @@ exports[`BookmarksList it renders a list of bookmarks 1`] = `
             role="cell"
           >
             <button
-              class="PodBrowser-button PodBrowser-button--text"
+              class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+              data-testid="bookmark-button"
               type="button"
             >
               <i

@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import T from "prop-types";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useRouter } from "next/router";
@@ -74,7 +74,7 @@ export default function PodNavigatorPopover({
   );
 
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(anchor);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const [url, setUrl] = useState("");
   const router = useRouter();
   const [dirtyForm, setDirtyForm] = useState(false);
@@ -90,6 +90,10 @@ export default function PodNavigatorPopover({
     setDirtyForm,
     setDirtyUrlField
   );
+
+  useEffect(() => {
+    setAnchorEl(anchor);
+  }, [anchor]);
 
   return (
     <Popover

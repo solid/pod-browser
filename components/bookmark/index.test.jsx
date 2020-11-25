@@ -21,6 +21,7 @@
 
 import React from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import { screen } from "@testing-library/react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import Bookmark, { toggleBookmarkHandler } from "./index";
 import BookmarkContext from "../../src/contexts/bookmarksContext";
@@ -41,7 +42,65 @@ describe("Bookmark", () => {
     );
     expect(asFragment()).toMatchSnapshot();
   });
+
+  test("it renders a bookmark icon and text if withText prop is true", async () => {
+    const { asFragment } = renderWithTheme(
+      <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
+        <Bookmark iri={iri} withText />
+      </BookmarkContext.Provider>
+    );
+    const text = screen.getByTestId("bookmark-text");
+    expect(text).toBeTruthy();
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  test("it renders default text if add and remove strings are not passed", async () => {
+    renderWithTheme(
+      <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
+        <Bookmark iri={iri} withText />
+      </BookmarkContext.Provider>
+    );
+    const addText = screen.getByText("Add Bookmark");
+    expect(addText).toBeTruthy();
+  });
+  test("it renders passed strings for add and remove if available", async () => {
+    renderWithTheme(
+      <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
+        <Bookmark
+          iri={iri}
+          withText
+          addText="Bookmark Pod"
+          removeText="Remove Pod Bookmark"
+        />
+      </BookmarkContext.Provider>
+    );
+    const addText = screen.getByText("Bookmark Pod");
+    expect(addText).toBeTruthy();
+  });
+
+  test("it renders a button if menuItem is false", async () => {
+    const { asFragment } = renderWithTheme(
+      <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
+        <Bookmark iri={iri} />
+      </BookmarkContext.Provider>
+    );
+    const button = screen.getByTestId("bookmark-button");
+    expect(button).toBeTruthy();
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  test("it renders a list item button if menuItem is true", async () => {
+    const { asFragment } = renderWithTheme(
+      <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
+        <Bookmark iri={iri} menuItem />
+      </BookmarkContext.Provider>
+    );
+    const button = screen.getByTestId("bookmark-list-item-button");
+    expect(button).toBeTruthy();
+    expect(asFragment()).toMatchSnapshot();
+  });
 });
+
 describe("toggleHandler", () => {
   test("it updates icon when the toggle handler is triggered", async () => {
     const { container } = renderWithTheme(

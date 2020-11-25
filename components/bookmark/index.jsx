@@ -33,9 +33,10 @@ import {
   removeBookmark,
 } from "../../src/solidClientHelpers/bookmarks";
 import BookmarksContext from "../../src/contexts/bookmarksContext";
+import BookmarkButton from "./bookmarkButton";
+import BookmarkText from "./bookmarkText";
 import AlertContext from "../../src/contexts/alertContext";
 
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const BOOKMARK_ADDED_NOTIFICATION_MESSAGE = "Resource added to bookmarks";
 const BOOKMARK_REMOVED_NOTIFICATION_MESSAGE = "Bookmark removed";
 
@@ -49,6 +50,7 @@ export const toggleBookmarkHandler = ({
   setBookmarks,
   setBookmarked,
   setDisabled,
+  profileName,
   fetch,
 }) => {
   return async () => {
@@ -59,7 +61,7 @@ export const toggleBookmarkHandler = ({
       results = await removeBookmark(iri, bookmarks, fetch);
       message = BOOKMARK_REMOVED_NOTIFICATION_MESSAGE;
     } else {
-      results = await addBookmark(iri, bookmarks, fetch);
+      results = await addBookmark(iri, bookmarks, profileName, fetch);
       message = BOOKMARK_ADDED_NOTIFICATION_MESSAGE;
     }
     const { response, error } = results;
@@ -82,10 +84,20 @@ const isBookmarked = (iri, dataset) => {
   return listOfRecallsUrls.includes(iri);
 };
 
-export default function Bookmark({ iri }) {
+export default function Bookmark({
+  iri,
+  menuItem,
+  withText,
+  addText,
+  removeText,
+  profileName,
+}) {
   const { session } = useSession();
   const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
   const { fetch } = session;
+  const useStyles = makeStyles((theme) =>
+    createStyles(styles(theme, menuItem))
+  );
   const bem = useBem(useStyles());
   const { bookmarks, setBookmarks } = useContext(BookmarksContext);
   const [bookmarked, setBookmarked] = useState();
@@ -111,6 +123,7 @@ export default function Bookmark({ iri }) {
     setBookmarked,
     setBookmarks,
     setDisabled,
+    profileName,
     fetch,
   });
 
@@ -118,22 +131,51 @@ export default function Bookmark({ iri }) {
     ? "bookmark-icon-selected"
     : "bookmark-icon-unselected";
 
+  const bookmarkButtonClass = menuItem
+    ? clsx(bem("bookmark-menu-item"))
+    : clsx(
+        bem("button", "text"),
+        bem("bookmark-button"),
+        menuItem && bem("bookmark-menu-item")
+      );
+
   return (
-    <button
-      type="button"
-      className={clsx(bem("button", "text"))}
-      onClick={toggleBookmark}
+    <BookmarkButton
+      className={bookmarkButtonClass}
+      menuItem={menuItem}
+      clickHandler={toggleBookmark}
       disabled={disabled}
     >
       <i
-        className={clsx(bem("icon-star"), bem(bookmarkIconClass))}
+        className={clsx(bem("icon-star"), bem("icon"), bem(bookmarkIconClass))}
         aria-label="bookmark"
         alt="bookmark button"
       />
-    </button>
+      {(withText || menuItem) && (
+        <BookmarkText
+          bookmarked={bookmarked}
+          addText={addText}
+          removeText={removeText}
+          className={bem("bookmark-text")}
+        />
+      )}
+    </BookmarkButton>
   );
 }
 
 Bookmark.propTypes = {
   iri: PropTypes.string.isRequired,
+  menuItem: PropTypes.bool,
+  withText: PropTypes.bool,
+  addText: PropTypes.string,
+  removeText: PropTypes.string,
+  profileName: PropTypes.string,
+};
+
+Bookmark.defaultProps = {
+  menuItem: false,
+  withText: false,
+  addText: null,
+  removeText: null,
+  profileName: null,
 };

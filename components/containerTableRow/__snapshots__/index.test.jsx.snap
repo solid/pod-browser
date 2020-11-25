@@ -12,7 +12,8 @@ exports[`ContainerTableRow it renders a table row 1`] = `
           class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
         >
           <button
-            class="PodBrowser-button PodBrowser-button--text"
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+            data-testid="bookmark-button"
             disabled=""
             type="button"
           >
@@ -58,7 +59,8 @@ exports[`ContainerTableRow it renders a table row with loaded data 1`] = `
           class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
         >
           <button
-            class="PodBrowser-button PodBrowser-button--text"
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+            data-testid="bookmark-button"
             disabled=""
             type="button"
           >
@@ -104,7 +106,8 @@ exports[`ContainerTableRow it renders a table row with loaded data without a typ
           class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
         >
           <button
-            class="PodBrowser-button PodBrowser-button--text"
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+            data-testid="bookmark-button"
             disabled=""
             type="button"
           >

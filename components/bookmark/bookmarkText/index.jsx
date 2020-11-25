@@ -19,43 +19,36 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles } from "@solid/lit-prism-patterns";
+import React from "react";
+import PropTypes from "prop-types";
 
-const styles = (theme, menuItem) => {
-  const bookmarkIconOutline = menuItem
-    ? `2px ${theme.palette.text.primary}`
-    : `2px ${theme.palette.grey["400"]}`;
+const TESTCAFE_ID_BOOKMARK_TEST = "bookmark-text";
 
-  return createStyles(theme, ["icons", "button"], {
-    "bookmark-button": {
-      width: "100%",
-      height: "100%",
-      "&:hover": {
-        textDecoration: "none",
-      },
-    },
-    "bookmark-menu-item": {
-      textAlign: "left",
-      display: "flex",
-      alignItems: "center",
-      padding: theme.spacing(1),
-      borderRadius: "unset",
-      "& i": {
-        padding: theme.spacing(0, 0.8),
-      },
-    },
-    "bookmark-icon-unselected": {
-      color: theme.palette.background.paper,
-      textStroke: bookmarkIconOutline,
-    },
-    "bookmark-icon-selected": theme.icons.iconColor(theme.palette.primary.main),
-    "bookmark-text": {
-      fontSize: theme.typography.htmlFontSize,
-      textTransform: "none",
-      letterSpacing: "normal",
-      padding: 0,
-    },
-  });
+export default function BookmarkText({
+  bookmarked,
+  addText,
+  removeText,
+  className,
+}) {
+  const addString = addText || "Add Bookmark";
+  const removeString = removeText || "Remove Bookmark";
+  return (
+    <span data-testid={TESTCAFE_ID_BOOKMARK_TEST} className={className}>
+      {bookmarked ? removeString : addString}
+    </span>
+  );
+}
+
+BookmarkText.propTypes = {
+  bookmarked: PropTypes.bool,
+  addText: PropTypes.string,
+  removeText: PropTypes.string,
+  className: PropTypes.string,
 };
 
-export default styles;
+BookmarkText.defaultProps = {
+  bookmarked: null,
+  addText: null,
+  removeText: null,
+  className: null,
+};

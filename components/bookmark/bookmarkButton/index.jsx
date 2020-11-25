@@ -19,43 +19,54 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles } from "@solid/lit-prism-patterns";
+import React from "react";
+import { ListItem } from "@material-ui/core";
+import PropTypes from "prop-types";
 
-const styles = (theme, menuItem) => {
-  const bookmarkIconOutline = menuItem
-    ? `2px ${theme.palette.text.primary}`
-    : `2px ${theme.palette.grey["400"]}`;
+const TESTCAFE_ID_BOOKMARK_LIST_ITEM_BUTTON = "bookmark-list-item-button";
+const TESTCAFE_ID_BOOKMARK_BUTTON = "bookmark-button";
 
-  return createStyles(theme, ["icons", "button"], {
-    "bookmark-button": {
-      width: "100%",
-      height: "100%",
-      "&:hover": {
-        textDecoration: "none",
-      },
-    },
-    "bookmark-menu-item": {
-      textAlign: "left",
-      display: "flex",
-      alignItems: "center",
-      padding: theme.spacing(1),
-      borderRadius: "unset",
-      "& i": {
-        padding: theme.spacing(0, 0.8),
-      },
-    },
-    "bookmark-icon-unselected": {
-      color: theme.palette.background.paper,
-      textStroke: bookmarkIconOutline,
-    },
-    "bookmark-icon-selected": theme.icons.iconColor(theme.palette.primary.main),
-    "bookmark-text": {
-      fontSize: theme.typography.htmlFontSize,
-      textTransform: "none",
-      letterSpacing: "normal",
-      padding: 0,
-    },
-  });
+export default function BookmarkButton({
+  children,
+  className,
+  menuItem,
+  clickHandler,
+  disabled,
+}) {
+  return menuItem ? (
+    <ListItem
+      button
+      data-testid={TESTCAFE_ID_BOOKMARK_LIST_ITEM_BUTTON}
+      key="bookmark-pod"
+      onClick={clickHandler}
+      className={className}
+    >
+      {children}
+    </ListItem>
+  ) : (
+    <button
+      type="button"
+      data-testid={TESTCAFE_ID_BOOKMARK_BUTTON}
+      className={className}
+      onClick={clickHandler}
+      disabled={disabled}
+    >
+      {children}
+    </button>
+  );
+}
+BookmarkButton.defaultProps = {
+  children: null,
+  className: null,
+  menuItem: false,
+  clickHandler: () => {},
+  disabled: false,
 };
 
-export default styles;
+BookmarkButton.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string,
+  menuItem: PropTypes.bool,
+  clickHandler: PropTypes.func,
+  disabled: PropTypes.bool,
+};

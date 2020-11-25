@@ -3,7 +3,8 @@
 exports[`Bookmark it renders a bookmark icon 1`] = `
 <DocumentFragment>
   <button
-    class="PodBrowser-button PodBrowser-button--text"
+    class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+    data-testid="bookmark-button"
     disabled=""
     type="button"
   >
@@ -13,5 +14,72 @@ exports[`Bookmark it renders a bookmark icon 1`] = `
       class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
     />
   </button>
+</DocumentFragment>
+`;
+
+exports[`Bookmark it renders a bookmark icon and text if withText prop is true 1`] = `
+<DocumentFragment>
+  <button
+    class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+    data-testid="bookmark-button"
+    disabled=""
+    type="button"
+  >
+    <i
+      alt="bookmark button"
+      aria-label="bookmark"
+      class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+    />
+    <span
+      class="PodBrowser-bookmark-text"
+      data-testid="bookmark-text"
+    >
+      Add Bookmark
+    </span>
+  </button>
+</DocumentFragment>
+`;
+
+exports[`Bookmark it renders a button if menuItem is false 1`] = `
+<DocumentFragment>
+  <button
+    class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+    data-testid="bookmark-button"
+    disabled=""
+    type="button"
+  >
+    <i
+      alt="bookmark button"
+      aria-label="bookmark"
+      class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+    />
+  </button>
+</DocumentFragment>
+`;
+
+exports[`Bookmark it renders a list item button if menuItem is true 1`] = `
+<DocumentFragment>
+  <div
+    aria-disabled="false"
+    class="PodBrowser-root PodBrowser-root PodBrowser-bookmark-menu-item PodBrowser-gutters PodBrowser-button"
+    data-testid="bookmark-list-item-button"
+    role="button"
+    tabindex="0"
+  >
+    <i
+      alt="bookmark button"
+      aria-label="bookmark"
+      class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+    />
+    <span
+      class="PodBrowser-bookmark-text"
+      data-testid="bookmark-text"
+    >
+      Add Bookmark
+    </span>
+    <span
+      class="PodBrowser-root"
+    />
+  </div>
 </DocumentFragment>
 `;
