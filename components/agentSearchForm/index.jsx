@@ -29,6 +29,7 @@ import {
   Message,
   SimpleInput,
 } from "@inrupt/prism-react-components";
+import { useSession } from "@inrupt/solid-ui-react";
 
 function AgentSearchForm({
   children,
@@ -37,13 +38,19 @@ function AgentSearchForm({
   value,
   onChange,
   dirtyForm,
+  permissions,
 }) {
   const inputId = useId();
+  const { session } = useSession();
   const [dirtyWebIdField, setDirtyWebIdField] = useState(dirtyForm);
   const invalidWebIdField = !value && (dirtyForm || dirtyWebIdField);
-
+  const [existingWebId, setExistingWebId] = useState(null);
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (permissions.filter((p) => p.webId === value).length) {
+      setExistingWebId(value);
+      return;
+    }
     await onSubmit(value);
   };
 
@@ -56,6 +63,13 @@ function AgentSearchForm({
       <Label>WebID</Label>
       {invalidWebIdField ? (
         <Message variant="invalid">Please provide a valid WebID</Message>
+      ) : null}
+      {existingWebId ? (
+        <Message variant="error">
+          {session.info.webId === existingWebId
+            ? "You cannot overwrite your own permissions."
+            : `The WebID ${existingWebId} is already in your permissions.`}
+        </Message>
       ) : null}
       <SimpleInput
         id={inputId}
@@ -82,6 +96,7 @@ AgentSearchForm.propTypes = {
   onChange: T.func,
   onSubmit: T.func,
   value: T.string,
+  permissions: T.arrayOf(T.shape),
 };
 
 AgentSearchForm.defaultProps = {
@@ -91,6 +106,7 @@ AgentSearchForm.defaultProps = {
   onChange: () => {},
   onSubmit: () => {},
   value: "",
+  permissions: null,
 };
 
 export default AgentSearchForm;

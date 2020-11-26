@@ -21,10 +21,18 @@
 
 import { render, fireEvent } from "@testing-library/react";
 import React from "react";
+import { useSession } from "@inrupt/solid-ui-react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
+import mockSession from "../../__testUtils/mockSession";
 import AgentSearchForm from "./index";
 
+jest.mock("@inrupt/solid-ui-react");
+
 describe("AgentSearchForm", () => {
+  const session = mockSession();
+  useSession.mockReturnValue({
+    session,
+  });
   test("it renders an AgentSearchForm", () => {
     const heading = "Heading";
     const onChange = jest.fn();
@@ -61,10 +69,66 @@ describe("AgentSearchForm", () => {
   test("it calls onSubmit when clicking the submit button", () => {
     const onSubmit = jest.fn();
     const wrapper = render(
-      <AgentSearchForm onSubmit={onSubmit} value="https://www.example.com" />
+      <AgentSearchForm
+        onSubmit={onSubmit}
+        value="https://www.example.com"
+        permissions={[
+          {
+            acl: { read: true, append: true, write: true, control: true },
+            alias: "Control",
+            webId: "https://mypod.com/me/",
+          },
+        ]}
+      />
     );
     const button = wrapper.getByRole("button");
     fireEvent.click(button);
     expect(onSubmit).toHaveBeenCalledWith("https://www.example.com");
+  });
+  test("when agentId is already in permissions, it renders error message and does not call onSubmit", () => {
+    const onSubmit = jest.fn();
+    const wrapper = render(
+      <AgentSearchForm
+        onSubmit={onSubmit}
+        value="https://www.example.com"
+        permissions={[
+          {
+            acl: { read: true, append: true, write: true, control: true },
+            alias: "Control",
+            webId: "https://www.example.com",
+          },
+        ]}
+      />
+    );
+    const button = wrapper.getByRole("button");
+    fireEvent.click(button);
+    const errorMessage = wrapper.queryByText(
+      "The WebID https://www.example.com is already in your permissions."
+    );
+    expect(errorMessage).toBeTruthy();
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+  test("when agentId is same as session webId, it renders error message and does not call onSubmit", () => {
+    const onSubmit = jest.fn();
+    const wrapper = render(
+      <AgentSearchForm
+        onSubmit={onSubmit}
+        value="http://example.com/webId#me"
+        permissions={[
+          {
+            acl: { read: true, append: true, write: true, control: true },
+            alias: "Control",
+            webId: "http://example.com/webId#me",
+          },
+        ]}
+      />
+    );
+    const button = wrapper.getByRole("button");
+    fireEvent.click(button);
+    const errorMessage = wrapper.queryByText(
+      "You cannot overwrite your own permissions."
+    );
+    expect(errorMessage).toBeTruthy();
+    expect(onSubmit).not.toHaveBeenCalled();
   });
 });

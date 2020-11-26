@@ -21,7 +21,7 @@
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import { createStyles, makeStyles, Popover } from "@material-ui/core";
 import { InputGroup, Label, Message } from "@inrupt/prism-react-components";
@@ -99,11 +99,22 @@ export default function AddPermissionUsingWebIdButton({
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [access, setAccess] = useState(createAccessMap(true));
+  const [permissions, setPermissions] = useState(null);
   const classes = useStyles();
   const [disabled, setDisabled] = useState(false);
   const { accessControl } = useContext(AccessControlContext);
   const [agentId, setAgentId] = useState("");
   const [dirtyForm, setDirtyForm] = useState(false);
+
+  useEffect(() => {
+    if (!accessControl) {
+      setPermissions(null);
+      return;
+    }
+    accessControl.getPermissions().then((normalizedPermissions) => {
+      setPermissions(normalizedPermissions.reverse());
+    });
+  }, [accessControl]);
 
   const handleChange = changeHandler(setAgentId);
 
@@ -123,7 +134,8 @@ export default function AddPermissionUsingWebIdButton({
     access,
     setDisabled,
     handleClose,
-    setDirtyForm
+    setDirtyForm,
+    permissions
   );
 
   const open = Boolean(anchorEl);
@@ -161,6 +173,7 @@ export default function AddPermissionUsingWebIdButton({
           onChange={handleChange}
           onSubmit={onSubmit}
           value={agentId}
+          permissions={permissions}
         >
           <InputGroup>
             <Label>Assign permissions</Label>
