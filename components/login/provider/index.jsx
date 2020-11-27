@@ -80,19 +80,19 @@ export function getErrorMessage(error) {
 
 export default function Provider({ defaultError }) {
   const buttonBem = Button.useBem();
-  const [providerIri, setProviderIri] = useState("https://inrupt.net");
   const { login } = useSession();
   const [loginError, setLoginError] = useState(defaultError);
   const theme = useTheme();
   const idp = useIdpFromQuery();
+  const [providerIri, setProviderIri] = useState(
+    Object.values(providers)[0]?.iri
+  );
   const loginFieldRef = createRef();
 
   useEffect(() => {
     if (idp) {
       setProviderIri(idp.iri);
-    }
-    if (idp && loginFieldRef.current) {
-      loginFieldRef.current.querySelector("input")?.focus();
+      loginFieldRef.current?.querySelector("input")?.focus();
     }
   }, [idp, loginFieldRef]);
 

@@ -44,7 +44,6 @@ import {
   normalizeDataset,
   sharedStart,
 } from "./utils";
-import { isHTTPError } from "../error";
 
 const TIMESTAMP = new Date(Date.UTC(2020, 5, 2, 15, 59, 21));
 
