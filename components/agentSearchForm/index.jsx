@@ -80,6 +80,7 @@ function AgentSearchForm({
         title="Must start with https://"
         onBlur={() => setDirtyWebIdField(true)}
         required={invalidWebIdField}
+        variant={existingWebId ? "invalid" : null}
       />
 
       {children}
