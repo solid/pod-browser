@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BookmarkButton it returns a button when menuItem is false 1`] = `
+<DocumentFragment>
+  <button
+    data-testid="bookmark-button"
+    type="button"
+  />
+</DocumentFragment>
+`;
+
+exports[`BookmarkButton it returns a list item when menuItem is true 1`] = `
+<DocumentFragment>
+  <div
+    aria-disabled="false"
+    class="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
+    data-testid="bookmark-list-item-button"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      class="PodBrowser-root"
+    />
+  </div>
+</DocumentFragment>
+`;

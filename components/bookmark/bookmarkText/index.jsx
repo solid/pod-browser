@@ -22,7 +22,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const TESTCAFE_ID_BOOKMARK_TEST = "bookmark-text";
+const TESTCAFE_ID_BOOKMARK_TEXT = "bookmark-text";
 
 export default function BookmarkText({
   bookmarked,
@@ -33,7 +33,7 @@ export default function BookmarkText({
   const addString = addText || "Add Bookmark";
   const removeString = removeText || "Remove Bookmark";
   return (
-    <span data-testid={TESTCAFE_ID_BOOKMARK_TEST} className={className}>
+    <span data-testid={TESTCAFE_ID_BOOKMARK_TEXT} className={className}>
       {bookmarked ? removeString : addString}
     </span>
   );
