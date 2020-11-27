@@ -65,7 +65,7 @@ function AgentSearchForm({
         <Message variant="invalid">Please provide a valid WebID</Message>
       ) : null}
       {existingWebId ? (
-        <Message variant="error">
+        <Message variant="invalid">
           {session.info.webId === existingWebId
             ? "You cannot overwrite your own permissions."
             : `The WebID ${existingWebId} is already in your permissions.`}
