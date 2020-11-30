@@ -21,6 +21,10 @@
 
 export default function getIdentityProviders() {
   return {
+    "broker.pod.inrupt.com": {
+      label: "broker.pod.inrupt.com",
+      iri: "https://broker.pod.inrupt.com/",
+    },
     "inrupt.net": {
       label: "inrupt.net",
       iri: "https://inrupt.net/",
