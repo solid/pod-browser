@@ -20,6 +20,9 @@
  */
 
 import React from "react";
+import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import * as RouterFns from "next/router";
+import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import PodNavigatorPopover, {
   submitHandler,
@@ -27,9 +30,13 @@ import PodNavigatorPopover, {
   clickHandler,
 } from "./index";
 import { resourceHref } from "../../../src/navigator";
-import { normalizeContainerUrl } from "../../../src/stringHelpers";
+import useResourceInfo from "../../../src/hooks/useResourceInfo";
+
+jest.mock("../../../src/hooks/useResourceInfo");
 
 test("it renders the pod indicator with the correct name with a formatted name", async () => {
+  const resourceInfo = mockSolidDatasetFrom("https://example.org/");
+  useResourceInfo.mockReturnValue({ data: resourceInfo });
   const { asFragment, queryByText } = renderWithTheme(
     <PodNavigatorPopover
       anchor={{}}
@@ -39,6 +46,69 @@ test("it renders the pod indicator with the correct name with a formatted name",
   );
   expect(queryByText("Alice")).toBeDefined();
   expect(asFragment()).toMatchSnapshot();
+});
+
+describe("PodNavigatorPopover", () => {
+  const router = { push: jest.fn() };
+  jest.spyOn(RouterFns, "useRouter").mockReturnValue(router);
+  test("it redirects with the correct url for a container on submit", () => {
+    const resourceInfo = mockSolidDatasetFrom("https://example.org/Photos/");
+    useResourceInfo.mockReturnValue({ data: resourceInfo });
+
+    const { getByTestId } = renderWithTheme(
+      <PodNavigatorPopover
+        anchor={{}}
+        setDisplayNavigator={() => {}}
+        popoverWidth={100}
+      />
+    );
+    const button = getByTestId("pod-navigate-button");
+    const input = getByTestId("pod-navigate-input");
+    userEvent.type(input, "https://example.org/Photos");
+    userEvent.click(button);
+    expect(router.push).toHaveBeenCalledWith(
+      "/resource/[iri]",
+      resourceHref("https://example.org/Photos/")
+    );
+  });
+  test("it redirects with the correct url for a resource on submit", () => {
+    const resourceInfo = mockSolidDatasetFrom("https://example.org/photo.jpg");
+    useResourceInfo.mockReturnValue({ data: resourceInfo });
+    const { getByTestId } = renderWithTheme(
+      <PodNavigatorPopover
+        anchor={{}}
+        setDisplayNavigator={() => {}}
+        popoverWidth={100}
+      />
+    );
+    const button = getByTestId("pod-navigate-button");
+    const input = getByTestId("pod-navigate-input");
+    userEvent.type(input, "https://example.org/photo.jpg");
+    userEvent.click(button);
+    expect(router.push).toHaveBeenCalledWith(
+      "/resource/[iri]",
+      resourceHref("https://example.org/photo.jpg")
+    );
+  });
+  test("it redirects to a url with ending slash when it cannot fetch the source url", () => {
+    const resourceInfo = null;
+    useResourceInfo.mockReturnValue({ data: resourceInfo });
+    const { getByTestId } = renderWithTheme(
+      <PodNavigatorPopover
+        anchor={{}}
+        setDisplayNavigator={() => {}}
+        popoverWidth={100}
+      />
+    );
+    const button = getByTestId("pod-navigate-button");
+    const input = getByTestId("pod-navigate-input");
+    userEvent.type(input, "https://example.org/photo.jpg");
+    userEvent.click(button);
+    expect(router.push).toHaveBeenCalledWith(
+      "/resource/[iri]",
+      resourceHref("https://example.org/photo.jpg/")
+    );
+  });
 });
 
 describe("submitHandler", () => {
@@ -88,7 +158,7 @@ describe("submitHandler", () => {
     expect(event.preventDefault).toHaveBeenCalledWith();
     expect(router.push).toHaveBeenCalledWith(
       "/resource/[iri]",
-      resourceHref(normalizeContainerUrl(url))
+      resourceHref(url)
     );
     expect(handleClose).toHaveBeenCalledWith();
     expect(setUrl).toHaveBeenCalledWith("");

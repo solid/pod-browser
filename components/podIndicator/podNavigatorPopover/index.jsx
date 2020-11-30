@@ -23,6 +23,8 @@ import React, { useEffect, useState } from "react";
 import T from "prop-types";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useRouter } from "next/router";
+import { getSourceIri } from "@inrupt/solid-client";
+
 import { Button, Box, Popover } from "@material-ui/core";
 import {
   Form,
@@ -32,6 +34,7 @@ import {
 } from "@inrupt/prism-react-components";
 import styles from "./styles";
 import { resourceHref } from "../../../src/navigator";
+import useResourceInfo from "../../../src/hooks/useResourceInfo";
 import { normalizeContainerUrl } from "../../../src/stringHelpers";
 
 const TESTCAFE_ID_POD_NAVIGATE_INPUT = "pod-navigate-input";
@@ -50,14 +53,13 @@ export const submitHandler = (
   setUrl,
   setDirtyForm,
   setDirtyUrlField
-) => async (event, url, router) => {
+) => async (event, sourceUrl, router) => {
   event.preventDefault();
   setDirtyForm(true);
-  if (url === "") {
+  if (sourceUrl === "") {
     return;
   }
-  const containerUrl = normalizeContainerUrl(url);
-  await router.push("/resource/[iri]", resourceHref(containerUrl));
+  await router.push("/resource/[iri]", resourceHref(sourceUrl));
   handleClose();
   setDirtyForm(false);
   setDirtyUrlField(false);
@@ -72,7 +74,6 @@ export default function PodNavigatorPopover({
   const useStyles = makeStyles((theme) =>
     createStyles(styles(theme, popoverWidth))
   );
-
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [url, setUrl] = useState("");
@@ -80,6 +81,10 @@ export default function PodNavigatorPopover({
   const [dirtyForm, setDirtyForm] = useState(false);
   const [dirtyUrlField, setDirtyUrlField] = useState(false);
   const invalidUrlField = !url && (dirtyForm || dirtyUrlField);
+
+  const { data: resourceInfo } = useResourceInfo(url);
+  const sourceUrl =
+    (resourceInfo && getSourceIri(resourceInfo)) || normalizeContainerUrl(url);
 
   const open = Boolean(anchorEl);
   const id = open ? "pod-navigator" : undefined;
@@ -113,7 +118,7 @@ export default function PodNavigatorPopover({
         horizontal: "left",
       }}
     >
-      <Form onSubmit={(event) => onSubmit(event, url, router)}>
+      <Form onSubmit={(event) => onSubmit(event, sourceUrl, router)}>
         <Label id="PodNavigator">Go to Pod</Label>
         {invalidUrlField ? (
           <Message variant="invalid">Please enter valid URL</Message>
@@ -138,6 +143,7 @@ export default function PodNavigatorPopover({
               color="primary"
               type="submit"
               size="large"
+              data-testid={TESTCAFE_ID_POD_NAVIGATE_BUTTON}
               id={TESTCAFE_ID_POD_NAVIGATE_BUTTON}
             >
               Go
