@@ -63,8 +63,6 @@ export function setupErrorHandler(setLoginError) {
 }
 
 export function getErrorMessage(error) {
-  // eslint-disable-next-line no-console
-  console.log({ error });
   const postFix = " Please fill out a valid Solid Identity Provider.";
   if (
     error.message.match(/fetch/g) || // Chrome, Edge, Firefox
@@ -140,7 +138,6 @@ export default function Provider({ defaultError }) {
                 style={{ marginBottom: theme.spacing(1) }}
               >
                 {getErrorMessage(loginError)}
-                {loginError.message}
               </FormHelperText>
             ) : null}
           </FormControl>
