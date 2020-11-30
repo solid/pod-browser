@@ -24,7 +24,7 @@ import { getResourceInfo, getPodOwner } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
 import { joinPath } from "../../stringHelpers";
 import usePodRootUri from "../usePodRootUri";
-import { isHTTPError } from "../../solidClientHelpers/utils";
+import { isHTTPError } from "../../error";
 
 function hackProfileUri(podRoot) {
   return podRoot ? joinPath(podRoot, "profile/card#me") : null;

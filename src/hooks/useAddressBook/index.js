@@ -24,7 +24,7 @@ import { useSession } from "@inrupt/solid-ui-react";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import { contactsContainerIri, saveNewAddressBook } from "../../addressBook";
 import { getResource } from "../../solidClientHelpers/resource";
-import { ERROR_CODES, isHTTPError } from "../../solidClientHelpers/utils";
+import { ERROR_CODES, isHTTPError } from "../../error";
 
 export default function useAddressBook() {
   const [addressBook, setAddressBook] = useState(null);

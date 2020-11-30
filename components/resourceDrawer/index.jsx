@@ -31,7 +31,7 @@ import DetailsLoading from "../resourceDetails/detailsLoading";
 import useAccessControl from "../../src/hooks/useAccessControl";
 import { AccessControlProvider } from "../../src/contexts/accessControlContext";
 import useResourceInfo from "../../src/hooks/useResourceInfo";
-import { isHTTPError } from "../../src/solidClientHelpers/utils";
+import { isHTTPError } from "../../src/error";
 
 export function handleCloseDrawer({ setMenuOpen, router }) {
   return async () => {

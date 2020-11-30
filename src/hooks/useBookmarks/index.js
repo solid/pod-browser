@@ -26,7 +26,7 @@ import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import { joinPath } from "../../stringHelpers";
 import { getResource } from "../../solidClientHelpers/resource";
 import { initializeBookmarks } from "../../solidClientHelpers/bookmarks";
-import { isHTTPError, ERROR_CODES } from "../../solidClientHelpers/utils";
+import { ERROR_CODES, isHTTPError } from "../../error";
 
 const BOOKMARKS_PATH = "bookmarks/index.ttl";
 

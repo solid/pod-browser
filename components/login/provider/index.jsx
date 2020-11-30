@@ -37,6 +37,7 @@ import { LoginButton, useSession } from "@inrupt/solid-ui-react";
 import { Button } from "@inrupt/prism-react-components";
 import { generateRedirectUrl } from "../../../src/windowHelpers";
 import getIdentityProviders from "../../../constants/provider";
+import { ERROR_REGEXES, hasError } from "../../../src/error";
 
 const providers = getIdentityProviders();
 const TESTCAFE_ID_LOGIN_TITLE = "login-title";
@@ -64,25 +65,13 @@ export function setupErrorHandler(setLoginError) {
 
 export function getErrorMessage(error) {
   const postFix = " Please fill out a valid Solid Identity Provider.";
-  if (
-    error.message.match(/fetch/g) || // Chrome, Edge, Firefox
-    error.message.match(/Not allowed to request resource/g) || // Safari (macOS)
-    error.message.match(/SSL Error/g) // Safari (iOS)
-  ) {
-    // Happens when URL is not an IdP
+  if (hasError(error, ERROR_REGEXES.INVALID_IDP)) {
     return `This URL is not a Solid Identity Provider.`;
   }
-  if (
-    error.message.match(/Invalid URL/g) || // Chrome, Edge
-    error.message.match(/URL constructor/g) // Firefox
-  ) {
-    // Happens when value is not a URL
+  if (hasError(error, ERROR_REGEXES.INVALID_URL)) {
     return `This value is not a URL.${postFix}`;
   }
-  if (error.message.match(/sessionId/g)) {
-    // All browsers
-    // Happens when user tries an empty field after failing before
-    // Error is emitted from AggregateLoginHandler from Solid UI React
+  if (hasError(error, ERROR_REGEXES.HANDLER_NOT_FOUND)) {
     return `Please provide a URL.${postFix}`;
   }
   return `We were unable to log in with this URL.${postFix}`;

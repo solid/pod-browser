@@ -32,7 +32,8 @@ import {
 } from "@inrupt/solid-client";
 import { parseUrl } from "../stringHelpers";
 import { getPolicyUrl } from "./policies";
-import { createResponder, isContainerIri, isHTTPError } from "./utils";
+import { createResponder, isContainerIri } from "./utils";
+import { isHTTPError } from "../error";
 
 export function getResourceName(iri) {
   let { pathname } = parseUrl(iri);

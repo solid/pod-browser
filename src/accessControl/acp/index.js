@@ -33,13 +33,10 @@ import {
   displayPermissions,
   isEmptyAccess,
 } from "../../solidClientHelpers/permissions";
-import {
-  chain,
-  createResponder,
-  isHTTPError,
-} from "../../solidClientHelpers/utils";
+import { chain, createResponder } from "../../solidClientHelpers/utils";
 import { getOrCreateDataset } from "../../solidClientHelpers/resource";
 import { getPolicyUrl } from "../../solidClientHelpers/policies";
+import { isHTTPError } from "../../error";
 
 export const noAcrAccessError =
   "No access to Access Control Resource for this resource";

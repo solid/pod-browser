@@ -37,7 +37,6 @@ import styles from "./styles";
 import PageHeader from "../containerPageHeader";
 import ContainerDetails from "../containerDetails";
 import { BookmarksContextProvider } from "../../src/contexts/bookmarksContext";
-import { isHTTPError } from "../../src/solidClientHelpers/utils";
 import AccessForbidden from "../accessForbidden";
 import ResourceNotFound from "../resourceNotFound";
 import useDataset from "../../src/hooks/useDataset";
@@ -45,6 +44,7 @@ import NotSupported from "../notSupported";
 import useContainerResourceIris from "../../src/hooks/useContainerResourceIris";
 import { getContainerUrl } from "../../src/stringHelpers";
 import ContainerSubHeader from "../containerSubHeader";
+import { isHTTPError } from "../../src/error";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 

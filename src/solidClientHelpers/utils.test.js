@@ -40,11 +40,11 @@ import {
   getTypeName,
   getTypes,
   isContainerIri,
-  isHTTPError,
   namespace,
   normalizeDataset,
   sharedStart,
 } from "./utils";
+import { isHTTPError } from "../error";
 
 const TIMESTAMP = new Date(Date.UTC(2020, 5, 2, 15, 59, 21));
 
@@ -345,20 +345,6 @@ describe("datasetIsContainer", () => {
       setThing(t, thing2)
     );
     expect(datasetIsContainer(dataset2)).toBeFalsy();
-  });
-});
-
-describe("isHTTPError", () => {
-  it("Checks http messages for given code", () => {
-    expect(isHTTPError("Something with 404", 404)).toBeTruthy();
-    expect(isHTTPError("Something with 500", 404)).toBeFalsy();
-    expect(isHTTPError("Something with 404", 500)).toBeFalsy();
-  });
-
-  it("also handles Error objects", () => {
-    expect(isHTTPError(new Error("Something with 404"), 404)).toBeTruthy();
-    expect(isHTTPError(new Error("Something with 500"), 404)).toBeFalsy();
-    expect(isHTTPError(new Error("Something with 404"), 500)).toBeFalsy();
   });
 });
 

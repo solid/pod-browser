@@ -42,11 +42,10 @@ import {
   createResponder,
   defineDataset,
   defineThing,
-  isHTTPError,
-  ERROR_CODES,
 } from "../solidClientHelpers/utils";
 import { getResource, saveResource } from "../solidClientHelpers/resource";
 import { joinPath } from "../stringHelpers";
+import { ERROR_CODES, isHTTPError } from "../error";
 
 const CONTACTS_CONTAINER = "contacts/";
 
