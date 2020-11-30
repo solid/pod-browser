@@ -36,7 +36,6 @@ export default function BookmarkButton({
   return menuItem ? (
     <ListItem
       button
-      disabled={disabled}
       data-testid={TESTCAFE_ID_BOOKMARK_LIST_ITEM_BUTTON}
       key="bookmark-pod"
       onClick={clickHandler}

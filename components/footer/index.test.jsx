@@ -28,4 +28,11 @@ describe("Footer", () => {
     const { asFragment } = renderWithTheme(<Footer />);
     expect(asFragment()).toMatchSnapshot();
   });
+
+  it("supports setting a width for feedback widget", () => {
+    const { asFragment } = renderWithTheme(
+      <Footer atlassianFeedbackWidth={100} />
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
 });

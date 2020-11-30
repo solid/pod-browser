@@ -20,11 +20,14 @@
  */
 
 import React from "react";
+import T from "prop-types";
 import { Footer as PrismFooter } from "@inrupt/prism-react-components";
+import { useTheme } from "@material-ui/core";
 
 const TESTCAFE_ID_TOS_LINK = "tos-link";
 
-export default function Footer() {
+export default function Footer({ atlassianFeedbackWidth }) {
+  const theme = useTheme();
   const links = [
     {
       href: "https://inrupt.com/terms-of-service",
@@ -35,5 +38,18 @@ export default function Footer() {
     },
   ];
   const texts = [{ text: "Copyright 2020 Inrupt, inc." }];
-  return <PrismFooter texts={texts} links={links} />;
+  const style = atlassianFeedbackWidth
+    ? {
+        paddingRight: atlassianFeedbackWidth + theme.spacing(1),
+      }
+    : {};
+  return <PrismFooter texts={texts} links={links} style={style} />;
 }
+
+Footer.propTypes = {
+  atlassianFeedbackWidth: T.number,
+};
+
+Footer.defaultProps = {
+  atlassianFeedbackWidth: null,
+};
