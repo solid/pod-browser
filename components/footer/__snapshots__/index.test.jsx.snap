@@ -30,3 +30,35 @@ exports[`Footer renders the footer 1`] = `
   </footer>
 </DocumentFragment>
 `;
+
+exports[`Footer supports setting a width for feedback widget 1`] = `
+<DocumentFragment>
+  <footer
+    class="PodBrowser-footer"
+    style="padding-right: 110px;"
+  >
+    <div
+      class="PodBrowser-footer__info"
+    >
+      <span
+        class="PodBrowser-footer__info-text"
+      >
+        Copyright 2020 Inrupt, inc.
+      </span>
+    </div>
+    <div
+      class="PodBrowser-footer__links"
+    >
+      <a
+        class="PodBrowser-footer__link"
+        data-testid="tos-link"
+        href="https://inrupt.com/terms-of-service"
+        rel="noreferrer"
+        target="_blank"
+      >
+        Terms of Service
+      </a>
+    </div>
+  </footer>
+</DocumentFragment>
+`;

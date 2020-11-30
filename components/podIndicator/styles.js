@@ -106,6 +106,7 @@ const styles = (theme, indicatorWidth, indicatorLabelWidth) => {
       textAlign: "center",
       minWidth: "max-content !important",
       width: "34px",
+      minWidth: "max-content !important",
     },
     itemText: {
       padding: 0,
