@@ -95,7 +95,7 @@ describe("getErrorMessage", () => {
     expect(getErrorMessage(new Error())).toEqual(
       "We were unable to log in with this URL. Please fill out a valid Solid Identity Provider."
     ));
-  it("handles when URL is not an IdP for Chrome and Firefox", () =>
+  it("handles when URL is not an IdP for Chrome, Edge, and Firefox", () =>
     expect(getErrorMessage(new Error("fetch"))).toEqual(
       "This URL is not a Solid Identity Provider."
     ));
@@ -103,7 +103,7 @@ describe("getErrorMessage", () => {
     expect(
       getErrorMessage(new Error("Not allowed to request resource"))
     ).toEqual("This URL is not a Solid Identity Provider."));
-  it("handles when value is not a value for Chrome", () =>
+  it("handles when value is not a value for Chrome and Edge", () =>
     expect(getErrorMessage(new Error("Invalid URL"))).toEqual(
       "This value is not a URL. Please fill out a valid Solid Identity Provider."
     ));
