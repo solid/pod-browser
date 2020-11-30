@@ -68,7 +68,8 @@ export function getErrorMessage(error) {
   const postFix = " Please fill out a valid Solid Identity Provider.";
   if (
     error.message.match(/fetch/g) || // Chrome, Edge, Firefox
-    error.message.match(/Not allowed to request resource/g) // Safari
+    error.message.match(/Not allowed to request resource/g) || // Safari (macOS)
+    error.message.match(/SSL Error/g) // Safari (iOS)
   ) {
     // Happens when URL is not an IdP
     return `This URL is not a Solid Identity Provider.`;
@@ -80,9 +81,10 @@ export function getErrorMessage(error) {
     // Happens when value is not a URL
     return `This value is not a URL.${postFix}`;
   }
-  if (error.message.match(/AggregateLoginHandler/g)) {
+  if (error.message.match(/sessionId/g)) {
     // All browsers
     // Happens when user tries an empty field after failing before
+    // Error is emitted from AggregateLoginHandler from Solid UI React
     return `Please provide a URL.${postFix}`;
   }
   return `We were unable to log in with this URL.${postFix}`;
@@ -127,7 +129,6 @@ export default function Provider({ defaultError }) {
                   margin="normal"
                   variant="outlined"
                   type="url"
-                  required
                   aria-describedby={loginError ? "login-error-text" : null}
                   data-testid={TESTCAFE_ID_LOGIN_FIELD}
                 />

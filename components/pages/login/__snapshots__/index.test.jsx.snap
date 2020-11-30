@@ -42,18 +42,12 @@ exports[`Login page Renders a login button 1`] = `
                     data-testid="login-field"
                   >
                     <label
-                      class="PodBrowser-root PodBrowser-root PodBrowser-formControl PodBrowser-animated PodBrowser-outlined PodBrowser-required PodBrowser-required"
+                      class="PodBrowser-root PodBrowser-root PodBrowser-formControl PodBrowser-animated PodBrowser-outlined"
                       data-shrink="false"
                       for="provider-select"
                       id="provider-select-label"
                     >
                       Select ID provider
-                      <span
-                        aria-hidden="true"
-                        class="PodBrowser-asterisk PodBrowser-asterisk"
-                      >
-                         *
-                      </span>
                     </label>
                     <div
                       class="PodBrowser-root PodBrowser-root PodBrowser-inputRoot PodBrowser-fullWidth PodBrowser-formControl PodBrowser-adornedEnd PodBrowser-adornedEnd"
@@ -65,7 +59,6 @@ exports[`Login page Renders a login button 1`] = `
                         autocomplete="off"
                         class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd"
                         id="provider-select"
-                        required=""
                         spellcheck="false"
                         type="url"
                         value=""
@@ -107,7 +100,7 @@ exports[`Login page Renders a login button 1`] = `
                           class="PodBrowser-legendLabelled"
                         >
                           <span>
-                            Select ID provider *
+                            Select ID provider
                           </span>
                         </legend>
                       </fieldset>
