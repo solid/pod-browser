@@ -139,6 +139,7 @@ export default function Provider({ defaultError }) {
                 style={{ marginBottom: theme.spacing(1) }}
               >
                 {getErrorMessage(loginError)}
+                {loginError.message}
               </FormHelperText>
             ) : null}
           </FormControl>
