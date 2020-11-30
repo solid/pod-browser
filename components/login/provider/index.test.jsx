@@ -20,32 +20,99 @@
  */
 
 import React from "react";
-import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 
-import ProviderLogin from "./index";
+import ProviderLogin, {
+  getErrorMessage,
+  setupErrorHandler,
+  setupLoginHandler,
+  setupOnProviderChange,
+  TESTCAFE_ID_LOGIN_FIELD,
+} from "./index";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 
 jest.mock("../../../src/windowHelpers");
 
 describe("ProviderLogin form", () => {
-  test("Renders a webid login form, with button bound to login", () => {
+  it("renders a webid login form", () => {
     const { asFragment } = renderWithTheme(<ProviderLogin />);
     expect(asFragment()).toMatchSnapshot();
   });
-  test("It calls the login function upon submitting the form", () => {
+
+  it("calls the login function upon submitting the form", () => {
     const session = mockUnauthenticatedSession();
     const SessionProvider = mockSessionContextProvider(session);
     const { login } = session;
-    renderWithTheme(
+    const { getByTestId } = renderWithTheme(
       <SessionProvider>
         <ProviderLogin />
       </SessionProvider>
     );
-    const loginInput = screen.getByText("Select ID provider");
+    const loginInput = getByTestId(TESTCAFE_ID_LOGIN_FIELD);
     userEvent.type(loginInput, "{enter}");
     expect(login).toHaveBeenCalled();
   });
+
+  it("renders a validation error if login fails", () => {
+    const { asFragment } = renderWithTheme(
+      <ProviderLogin defaultError={new Error()} />
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+});
+
+describe("setupOnProviderChange", () => {
+  it("sets up event handler", () => {
+    const setProviderIri = jest.fn();
+    setupOnProviderChange(setProviderIri)({}, 42);
+    expect(setProviderIri).toHaveBeenCalledWith(42);
+  });
+});
+
+describe("setupLoginHandler", () => {
+  it("sets up event handler", () => {
+    const login = jest.fn();
+    const event = { preventDefault: jest.fn() };
+    setupLoginHandler(login)(event);
+    expect(event.preventDefault).toHaveBeenCalledWith();
+    expect(login).toHaveBeenCalledWith();
+  });
+});
+
+describe("setupErrorHandler", () => {
+  it("sets up event handler", () => {
+    const setLoginError = jest.fn();
+    const error = new Error();
+    setupErrorHandler(setLoginError)(error);
+    expect(setLoginError).toHaveBeenCalledWith(error);
+  });
+});
+
+describe("getErrorMessage", () => {
+  it("has a standard message", () =>
+    expect(getErrorMessage(new Error())).toEqual(
+      "We were unable to log in with this URL. Please fill out a valid Solid Identity Provider."
+    ));
+  it("handles when URL is not an IdP for Chrome and Firefox", () =>
+    expect(getErrorMessage(new Error("fetch"))).toEqual(
+      "This URL is not a Solid Identity Provider."
+    ));
+  it("handles when URL is not an IDP for Safari", () =>
+    expect(
+      getErrorMessage(new Error("Not allowed to request resource"))
+    ).toEqual("This URL is not a Solid Identity Provider."));
+  it("handles when value is not a value for Chrome", () =>
+    expect(getErrorMessage(new Error("Invalid URL"))).toEqual(
+      "This value is not a URL. Please fill out a valid Solid Identity Provider."
+    ));
+  it("handles when value is not a value for Firefox", () =>
+    expect(getErrorMessage(new Error("URL constructor"))).toEqual(
+      "This value is not a URL. Please fill out a valid Solid Identity Provider."
+    ));
+  it("handles when value is empty", () =>
+    expect(getErrorMessage(new Error("AggregateLoginHandler"))).toEqual(
+      "Please provide a URL. Please fill out a valid Solid Identity Provider."
+    ));
 });

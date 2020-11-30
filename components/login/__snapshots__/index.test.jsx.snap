@@ -18,83 +18,89 @@ exports[`Login form Renders a login form, with button bound to swapLoginType 1`]
             Log In
           </h3>
           <div
-            aria-expanded="false"
-            class="PodBrowser-root PodBrowser-hasClearIcon"
-            role="combobox"
+            class="PodBrowser-root"
+            style="max-width: 320px; width: 100%;"
           >
             <div
-              class="PodBrowser-root PodBrowser-root PodBrowser-marginNormal PodBrowser-fullWidth"
+              aria-expanded="false"
+              class="PodBrowser-root PodBrowser-hasClearIcon"
+              role="combobox"
             >
-              <label
-                class="PodBrowser-root PodBrowser-root PodBrowser-formControl PodBrowser-animated PodBrowser-outlined PodBrowser-required PodBrowser-required"
-                data-shrink="false"
-                for="provider-select"
-                id="provider-select-label"
-              >
-                Select ID provider
-                <span
-                  aria-hidden="true"
-                  class="PodBrowser-asterisk PodBrowser-asterisk"
-                >
-                   *
-                </span>
-              </label>
               <div
-                class="PodBrowser-root PodBrowser-root PodBrowser-inputRoot PodBrowser-fullWidth PodBrowser-formControl PodBrowser-adornedEnd PodBrowser-adornedEnd"
+                class="PodBrowser-root PodBrowser-root PodBrowser-marginNormal PodBrowser-fullWidth"
+                data-testid="login-field"
               >
-                <input
-                  aria-autocomplete="list"
-                  aria-invalid="false"
-                  autocapitalize="none"
-                  autocomplete="off"
-                  class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd"
-                  id="provider-select"
-                  required=""
-                  spellcheck="false"
-                  type="url"
-                  value=""
-                />
+                <label
+                  class="PodBrowser-root PodBrowser-root PodBrowser-formControl PodBrowser-animated PodBrowser-outlined PodBrowser-required PodBrowser-required"
+                  data-shrink="false"
+                  for="provider-select"
+                  id="provider-select-label"
+                >
+                  Select ID provider
+                  <span
+                    aria-hidden="true"
+                    class="PodBrowser-asterisk PodBrowser-asterisk"
+                  >
+                     *
+                  </span>
+                </label>
                 <div
-                  class="PodBrowser-endAdornment"
+                  class="PodBrowser-root PodBrowser-root PodBrowser-inputRoot PodBrowser-fullWidth PodBrowser-formControl PodBrowser-adornedEnd PodBrowser-adornedEnd"
                 >
-                  <button
-                    aria-label="Clear"
-                    class="PodBrowser-root PodBrowser-root PodBrowser-clearIndicator"
-                    tabindex="-1"
-                    title="Clear"
-                    type="button"
+                  <input
+                    aria-autocomplete="list"
+                    aria-invalid="false"
+                    autocapitalize="none"
+                    autocomplete="off"
+                    class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd"
+                    id="provider-select"
+                    required=""
+                    spellcheck="false"
+                    type="url"
+                    value=""
+                  />
+                  <div
+                    class="PodBrowser-endAdornment"
                   >
-                    <span
-                      class="PodBrowser-label"
+                    <button
+                      aria-label="Clear"
+                      class="PodBrowser-root PodBrowser-root PodBrowser-clearIndicator"
+                      tabindex="-1"
+                      title="Clear"
+                      type="button"
                     >
-                      <svg
-                        aria-hidden="true"
-                        class="PodBrowser-root PodBrowser-fontSizeSmall"
-                        focusable="false"
-                        viewBox="0 0 24 24"
+                      <span
+                        class="PodBrowser-label"
                       >
-                        <path
-                          d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-                        />
-                      </svg>
-                    </span>
-                    <span
-                      class="PodBrowser-root"
-                    />
-                  </button>
-                </div>
-                <fieldset
-                  aria-hidden="true"
-                  class="PodBrowser-root PodBrowser-notchedOutline"
-                >
-                  <legend
-                    class="PodBrowser-legendLabelled"
+                        <svg
+                          aria-hidden="true"
+                          class="PodBrowser-root PodBrowser-fontSizeSmall"
+                          focusable="false"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                          />
+                        </svg>
+                      </span>
+                      <span
+                        class="PodBrowser-root"
+                      />
+                    </button>
+                  </div>
+                  <fieldset
+                    aria-hidden="true"
+                    class="PodBrowser-root PodBrowser-notchedOutline"
                   >
-                    <span>
-                      Select ID provider *
-                    </span>
-                  </legend>
-                </fieldset>
+                    <legend
+                      class="PodBrowser-legendLabelled"
+                    >
+                      <span>
+                        Select ID provider *
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
               </div>
             </div>
           </div>

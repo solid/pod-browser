@@ -19,42 +19,86 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* eslint react/jsx-props-no-spreading: 0 */
+
 import React, { useState } from "react";
-import { Box, TextField } from "@material-ui/core";
+import T from "prop-types";
+import {
+  Box,
+  FormControl,
+  FormHelperText,
+  TextField,
+  useTheme,
+} from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 
-import { createStyles, makeStyles } from "@material-ui/styles";
-import { useBem } from "@solid/lit-prism-patterns";
 import { LoginButton, useSession } from "@inrupt/solid-ui-react";
 
+import { Button } from "@inrupt/prism-react-components";
 import { generateRedirectUrl } from "../../../src/windowHelpers";
-
 import getIdentityProviders from "../../../constants/provider";
-import styles from "./styles";
 
 const providers = getIdentityProviders();
 const TESTCAFE_ID_LOGIN_TITLE = "login-title";
+export const TESTCAFE_ID_LOGIN_FIELD = "login-field";
 const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
 
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-
-export default function Provider() {
-  const bem = useBem(useStyles());
-  const [providerIri, setProviderIri] = useState("https://inrupt.net");
-  const { login } = useSession();
-
-  const onProviderChange = (e, newValue) => {
+export function setupOnProviderChange(setProviderIri) {
+  return (e, newValue) => {
     setProviderIri(newValue);
   };
+}
+
+export function setupLoginHandler(login) {
+  return async (event) => {
+    event.preventDefault();
+    login();
+  };
+}
+
+export function setupErrorHandler(setLoginError) {
+  return (error) => {
+    setLoginError(error);
+  };
+}
+
+export function getErrorMessage(error) {
+  const postFix = " Please fill out a valid Solid Identity Provider.";
+  if (
+    error.message.match(/fetch/g) || // Chrome, Firefox
+    error.message.match(/Not allowed to request resource/g) // Safari
+  ) {
+    // Happens when URL is not an IdP
+    return `This URL is not a Solid Identity Provider.`;
+  }
+  if (
+    error.message.match(/Invalid URL/g) || // Chrome
+    error.message.match(/URL constructor/g) // Firefox
+  ) {
+    // Happens when value is not a URL
+    return `This value is not a URL.${postFix}`;
+  }
+  if (error.message.match(/AggregateLoginHandler/g)) {
+    // Happens when user tries an empty field after failing before
+    return `Please provide a URL.${postFix}`;
+  }
+  return `We were unable to log in with this URL.${postFix}`;
+}
+
+export default function Provider({ defaultError }) {
+  const buttonBem = Button.useBem();
+  const [providerIri, setProviderIri] = useState("https://inrupt.net");
+  const { login } = useSession();
+  const [loginError, setLoginError] = useState(defaultError);
+  const theme = useTheme();
+
   const authOptions = {
     clientName: "Inrupt PodBrowser",
   };
 
-  const handleLogin = (event) => {
-    event.preventDefault();
-    login();
-  };
-  /* eslint react/jsx-props-no-spreading: 0 */
+  const onProviderChange = setupOnProviderChange(setProviderIri);
+  const handleLogin = setupLoginHandler(login);
+  const onError = setupErrorHandler(setLoginError);
 
   return (
     <form onSubmit={handleLogin}>
@@ -62,33 +106,50 @@ export default function Provider() {
         <Box mt={2}>
           <h3 data-testid={TESTCAFE_ID_LOGIN_TITLE}>Log In</h3>
 
-          <Autocomplete
-            onChange={onProviderChange}
-            onInputChange={onProviderChange}
-            id="provider-select"
-            freeSolo
-            options={Object.values(providers).map((provider) => provider.iri)}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Select ID provider"
-                margin="normal"
-                variant="outlined"
-                type="url"
-                required
-              />
-            )}
-          />
+          <FormControl
+            error={!!loginError}
+            style={{ maxWidth: 320, width: "100%" }}
+          >
+            <Autocomplete
+              onChange={onProviderChange}
+              onInputChange={onProviderChange}
+              id="provider-select"
+              freeSolo
+              options={Object.values(providers).map((provider) => provider.iri)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  error={!!loginError}
+                  label="Select ID provider"
+                  margin="normal"
+                  variant="outlined"
+                  type="url"
+                  required
+                  aria-describedby={loginError ? "login-error-text" : null}
+                  data-testid={TESTCAFE_ID_LOGIN_FIELD}
+                />
+              )}
+            />
+            {loginError ? (
+              <FormHelperText
+                id="login-error-text"
+                style={{ marginBottom: theme.spacing(1) }}
+              >
+                {getErrorMessage(loginError)}
+              </FormHelperText>
+            ) : null}
+          </FormControl>
 
           <LoginButton
             oidcIssuer={providerIri}
             redirectUrl={generateRedirectUrl("")}
             authOptions={authOptions}
+            onError={onError}
           >
             <button
               data-testid={TESTCAFE_ID_LOGIN_BUTTON}
               type="submit"
-              className={bem("button", "primary")}
+              className={buttonBem("button", "primary")}
             >
               Log In
             </button>
@@ -98,3 +159,12 @@ export default function Provider() {
     </form>
   );
 }
+
+Provider.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  defaultError: T.object,
+};
+
+Provider.defaultProps = {
+  defaultError: null,
+};
