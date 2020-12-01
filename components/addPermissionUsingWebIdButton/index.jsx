@@ -108,7 +108,6 @@ export default function AddPermissionUsingWebIdButton({
 
   useEffect(() => {
     if (!accessControl) {
-      setPermissions(null);
       return;
     }
     accessControl.getPermissions().then((normalizedPermissions) => {

@@ -69,19 +69,19 @@ function AgentSearchForm({
   return (
     <Form onSubmit={handleSubmit}>
       <Label>WebID</Label>
-      {invalidWebIdField ? (
+      {invalidWebIdField && (
         <Message variant="invalid">Please provide a valid WebID</Message>
-      ) : null}
-      {isPodOwner ? (
+      )}
+      {isPodOwner && (
         <Message variant="invalid">
           You cannot overwrite your own permissions.
         </Message>
-      ) : null}
-      {existingWebId ? (
+      )}
+      {existingWebId && (
         <Message variant="invalid">
           {`The WebID ${existingWebId} is already in your permissions.`}
         </Message>
-      ) : null}
+      )}
       <SimpleInput
         id={inputId}
         onChange={handleChange}
