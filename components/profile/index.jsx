@@ -62,7 +62,7 @@ export default function Profile(props) {
     return error.toString();
   }
 
-  const errorComponent = setupErrorComponent();
+  const errorComponent = setupErrorComponent(bem);
 
   return (
     <Container>
