@@ -45,8 +45,14 @@ function AgentSearchForm({
   const [dirtyWebIdField, setDirtyWebIdField] = useState(dirtyForm);
   const invalidWebIdField = !value && (dirtyForm || dirtyWebIdField);
   const [existingWebId, setExistingWebId] = useState(null);
+  const [isPodOwner, setIsPodOwner] = useState(false);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (value === session.info.webId) {
+      setIsPodOwner(true);
+      return;
+    }
     if (permissions.filter((p) => p.webId === value).length) {
       setExistingWebId(value);
       return;
@@ -64,11 +70,14 @@ function AgentSearchForm({
       {invalidWebIdField ? (
         <Message variant="invalid">Please provide a valid WebID</Message>
       ) : null}
+      {isPodOwner ? (
+        <Message variant="invalid">
+          You cannot overwrite your own permissions.
+        </Message>
+      ) : null}
       {existingWebId ? (
         <Message variant="invalid">
-          {session.info.webId === existingWebId
-            ? "You cannot overwrite your own permissions."
-            : `The WebID ${existingWebId} is already in your permissions.`}
+          {`The WebID ${existingWebId} is already in your permissions.`}
         </Message>
       ) : null}
       <SimpleInput
@@ -80,7 +89,7 @@ function AgentSearchForm({
         title="Must start with https://"
         onBlur={() => setDirtyWebIdField(true)}
         required={invalidWebIdField}
-        variant={existingWebId ? "invalid" : null}
+        variant={existingWebId || isPodOwner ? "invalid" : null}
       />
 
       {children}
