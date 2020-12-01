@@ -62,6 +62,8 @@ function AgentSearchForm({
 
   const handleChange = (event) => {
     onChange(event.target.value);
+    setIsPodOwner(false);
+    setExistingWebId(null);
   };
 
   return (
