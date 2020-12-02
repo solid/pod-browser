@@ -19,20 +19,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { render, fireEvent } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import { useSession } from "@inrupt/solid-ui-react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockSession from "../../__testUtils/mockSession";
-import AgentSearchForm from "./index";
+import AgentSearchForm, {
+  setupOnBlurHandler,
+  setupOnChangeHandler,
+  setupSubmitHandler,
+} from "./index";
 
 jest.mock("@inrupt/solid-ui-react");
 
 describe("AgentSearchForm", () => {
-  const session = mockSession();
-  useSession.mockReturnValue({
-    session,
+  beforeEach(() => {
+    const session = mockSession();
+    useSession.mockReturnValue({
+      session,
+    });
   });
+
   test("it renders an AgentSearchForm", () => {
     const heading = "Heading";
     const onChange = jest.fn();
@@ -56,6 +63,7 @@ describe("AgentSearchForm", () => {
     );
     expect(asFragment()).toMatchSnapshot();
   });
+
   test("it calls onChange when updating the input", () => {
     const onChange = jest.fn();
     const onSubmit = jest.fn();
@@ -66,6 +74,7 @@ describe("AgentSearchForm", () => {
     fireEvent.change(input, { target: { value: "https://www.example.com" } });
     expect(onChange).toHaveBeenCalledWith("https://www.example.com");
   });
+
   test("it calls onSubmit when clicking the submit button", () => {
     const onSubmit = jest.fn();
     const wrapper = render(
@@ -85,6 +94,7 @@ describe("AgentSearchForm", () => {
     fireEvent.click(button);
     expect(onSubmit).toHaveBeenCalledWith("https://www.example.com");
   });
+
   test("when agentId is already in permissions, it renders error message and does not call onSubmit", () => {
     const onSubmit = jest.fn();
     const wrapper = render(
@@ -108,6 +118,7 @@ describe("AgentSearchForm", () => {
     expect(errorMessage).toBeTruthy();
     expect(onSubmit).not.toHaveBeenCalled();
   });
+
   test("when agentId is same as session webId, it renders error message and does not call onSubmit", () => {
     const onSubmit = jest.fn();
     const wrapper = render(
@@ -130,5 +141,94 @@ describe("AgentSearchForm", () => {
     );
     expect(errorMessage).toBeTruthy();
     expect(onSubmit).not.toHaveBeenCalled();
+  });
+});
+
+describe("setupSubmitHandler", () => {
+  const session = mockSession();
+  let setIsPodOwner;
+  let setExistingWebId;
+  let onSubmit;
+  let event;
+
+  beforeEach(() => {
+    setIsPodOwner = jest.fn();
+    setExistingWebId = jest.fn();
+    onSubmit = jest.fn();
+    event = { preventDefault: jest.fn() };
+  });
+
+  it("sets up a submit handler", async () => {
+    const webId = "value";
+    await expect(
+      setupSubmitHandler(
+        webId,
+        session,
+        setIsPodOwner,
+        [],
+        setExistingWebId,
+        onSubmit
+      )(event)
+    ).resolves.toBeUndefined();
+    expect(event.preventDefault).toHaveBeenCalledWith();
+    expect(onSubmit).toHaveBeenCalledWith(webId);
+  });
+
+  it("won't allow submitting your own WebId", async () => {
+    const { webId } = session.info;
+    await expect(
+      setupSubmitHandler(
+        webId,
+        session,
+        setIsPodOwner,
+        null,
+        setExistingWebId,
+        onSubmit
+      )(event)
+    ).resolves.toBeUndefined();
+    expect(event.preventDefault).toHaveBeenCalledWith();
+    expect(setIsPodOwner).toHaveBeenCalledWith(true);
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it("won't allow submitting your WebId that already exists", async () => {
+    const webId = "value";
+    await expect(
+      setupSubmitHandler(
+        webId,
+        session,
+        setIsPodOwner,
+        [{ webId }],
+        setExistingWebId,
+        onSubmit
+      )(event)
+    ).resolves.toBeUndefined();
+    expect(event.preventDefault).toHaveBeenCalledWith();
+    expect(setExistingWebId).toHaveBeenCalledWith(webId);
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+});
+
+describe("setupOnChangeHandler", () => {
+  it("sets up onChange handler", () => {
+    const value = "value";
+    const onChange = jest.fn();
+    const setIsPodOwner = jest.fn();
+    const setExistingWebId = jest.fn();
+    const event = { target: { value } };
+    expect(
+      setupOnChangeHandler(onChange, setIsPodOwner, setExistingWebId)(event)
+    ).toBeUndefined();
+    expect(onChange).toHaveBeenCalledWith(value);
+    expect(setIsPodOwner).toHaveBeenCalledWith(false);
+    expect(setExistingWebId).toHaveBeenCalledWith(null);
+  });
+});
+
+describe("setupOnBlurHandler", () => {
+  it("sets up onBlur handler", () => {
+    const setDirtyWebIdField = jest.fn();
+    expect(setupOnBlurHandler(setDirtyWebIdField)()).toBeUndefined();
+    expect(setDirtyWebIdField).toHaveBeenCalledWith(true);
   });
 });

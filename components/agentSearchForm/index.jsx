@@ -31,14 +31,52 @@ import {
 } from "@inrupt/prism-react-components";
 import { useSession } from "@inrupt/solid-ui-react";
 
-function AgentSearchForm({
-  children,
-  onSubmit,
-  buttonText,
+export function setupSubmitHandler(
   value,
-  onChange,
-  dirtyForm,
+  session,
+  setIsPodOwner,
   permissions,
+  setExistingWebId,
+  onSubmit
+) {
+  return async (event) => {
+    event.preventDefault();
+    if (value === session.info.webId) {
+      setIsPodOwner(true);
+      return;
+    }
+    if ((permissions || []).filter((p) => p.webId === value).length) {
+      setExistingWebId(value);
+      return;
+    }
+    await onSubmit(value);
+  };
+}
+
+export function setupOnChangeHandler(
+  onChange,
+  setIsPodOwner,
+  setExistingWebId
+) {
+  return (event) => {
+    onChange(event.target.value);
+    setIsPodOwner(false);
+    setExistingWebId(null);
+  };
+}
+
+export function setupOnBlurHandler(setDirtyWebIdField) {
+  return () => setDirtyWebIdField(true);
+}
+
+export default function AgentSearchForm({
+  buttonText,
+  children,
+  dirtyForm,
+  onChange,
+  onSubmit,
+  permissions,
+  value,
 }) {
   const inputId = useId();
   const { session } = useSession();
@@ -47,24 +85,20 @@ function AgentSearchForm({
   const [existingWebId, setExistingWebId] = useState(null);
   const [isPodOwner, setIsPodOwner] = useState(false);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (value === session.info.webId) {
-      setIsPodOwner(true);
-      return;
-    }
-    if (permissions.filter((p) => p.webId === value).length) {
-      setExistingWebId(value);
-      return;
-    }
-    await onSubmit(value);
-  };
-
-  const handleChange = (event) => {
-    onChange(event.target.value);
-    setIsPodOwner(false);
-    setExistingWebId(null);
-  };
+  const handleSubmit = setupSubmitHandler(
+    value,
+    session,
+    setIsPodOwner,
+    permissions,
+    setExistingWebId,
+    onSubmit
+  );
+  const handleChange = setupOnChangeHandler(
+    onChange,
+    setIsPodOwner,
+    setExistingWebId
+  );
+  const onBlur = setupOnBlurHandler(setDirtyWebIdField);
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -89,7 +123,7 @@ function AgentSearchForm({
         type="url"
         pattern="https://.+"
         title="Must start with https://"
-        onBlur={() => setDirtyWebIdField(true)}
+        onBlur={onBlur}
         required={invalidWebIdField}
         variant={existingWebId || isPodOwner ? "invalid" : null}
       />
@@ -107,8 +141,8 @@ AgentSearchForm.propTypes = {
   dirtyForm: T.bool,
   onChange: T.func,
   onSubmit: T.func,
+  permissions: T.arrayOf(T.object),
   value: T.string,
-  permissions: T.arrayOf(T.shape),
 };
 
 AgentSearchForm.defaultProps = {
@@ -117,8 +151,6 @@ AgentSearchForm.defaultProps = {
   dirtyForm: false,
   onChange: () => {},
   onSubmit: () => {},
+  permissions: [],
   value: "",
-  permissions: null,
 };
-
-export default AgentSearchForm;
