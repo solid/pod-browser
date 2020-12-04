@@ -53,12 +53,18 @@ export const submitHandler = (
   setUrl,
   setDirtyForm,
   setDirtyUrlField
-) => async (event, sourceUrl, router) => {
+) => async (event, url, router) => {
   event.preventDefault();
   setDirtyForm(true);
-  if (sourceUrl === "") {
+
+  if (url === "") {
     return;
   }
+
+  const { data: resourceInfo } = useResourceInfo(url);
+  const sourceUrl =
+    (resourceInfo && getSourceIri(resourceInfo)) || normalizeContainerUrl(url);
+
   await router.push("/resource/[iri]", resourceHref(sourceUrl));
   handleClose();
   setDirtyForm(false);
@@ -81,10 +87,6 @@ export default function PodNavigatorPopover({
   const [dirtyForm, setDirtyForm] = useState(false);
   const [dirtyUrlField, setDirtyUrlField] = useState(false);
   const invalidUrlField = !url && (dirtyForm || dirtyUrlField);
-
-  const { data: resourceInfo } = useResourceInfo(url);
-  const sourceUrl =
-    (resourceInfo && getSourceIri(resourceInfo)) || normalizeContainerUrl(url);
 
   const open = Boolean(anchorEl);
   const id = open ? "pod-navigator" : undefined;
@@ -118,7 +120,7 @@ export default function PodNavigatorPopover({
         horizontal: "left",
       }}
     >
-      <Form onSubmit={(event) => onSubmit(event, sourceUrl, router)}>
+      <Form onSubmit={(event) => onSubmit(event, url, router)}>
         <Label id="PodNavigator">Go to Pod</Label>
         {invalidUrlField ? (
           <Message variant="invalid">Please enter valid URL</Message>

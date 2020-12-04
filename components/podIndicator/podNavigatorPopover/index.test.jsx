@@ -149,6 +149,8 @@ describe("submitHandler", () => {
   });
 
   test("it sets up a submit handler", async () => {
+    const resourceInfo = mockSolidDatasetFrom(url);
+    useResourceInfo.mockReturnValue({ data: resourceInfo });
     await submitHandler(
       handleClose,
       setUrl,
