@@ -1118,9 +1118,13 @@ exports[`ResourceDrawer view renders a specific error message if resource fails 
         <div
           class="PodBrowser-message PodBrowser-message--error"
         >
-          <p>
-            You do not have access to this resource.
-          </p>
+          <div
+            class="PodBrowser-message__main"
+          >
+            <p>
+              You do not have access to this resource.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -1154,9 +1158,13 @@ exports[`ResourceDrawer view renders an error message if resource fails to load 
         <div
           class="PodBrowser-message PodBrowser-message--error"
         >
-          <p>
-            We had a problem loading the resource.
-          </p>
+          <div
+            class="PodBrowser-message__main"
+          >
+            <p>
+              We had a problem loading the resource.
+            </p>
+          </div>
         </div>
       </div>
     </div>

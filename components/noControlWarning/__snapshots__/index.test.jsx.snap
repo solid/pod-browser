@@ -1,0 +1,91 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NoControlWarning renders 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-message PodBrowser-message--warning PodBrowser-message--prominent"
+    data-testid="no-control-error"
+  >
+    <div
+      class="PodBrowser-message__icon PodBrowser-message__icon--warning"
+    >
+      <span
+        class="PodBrowser-icon-error"
+      />
+    </div>
+    <div
+      class="PodBrowser-message__main"
+    >
+      <p
+        class="PodBrowser-message__title"
+      >
+        You can't share anything or change permissions in your Pod
+      </p>
+      <p>
+        This is because you don't have control access. You can still browse the resources in your Pod, but you won't be able to share anything.
+      </p>
+      <p
+        class="PodBrowser-message__title"
+      >
+        How to fix:
+      </p>
+      <ol>
+        <li>
+          <span>
+            Log in to 
+          </span>
+          <a
+            href="http://example.com"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <span>
+              your Pod
+            </span>
+            <span
+              class="PodBrowser-icon-external-link"
+              data-external="true"
+            />
+          </a>
+        </li>
+        <li>
+          Go to “Preferences”
+        </li>
+        <li>
+          <span>
+            Under “Manage your trusted applications,” look for 
+          </span>
+          <span>
+            http://localhost
+          </span>
+          <span>
+             and check the “Control” box
+          </span>
+        </li>
+        <li>
+          Click on “Update”
+        </li>
+        <li>
+          Return to PodBrowser
+        </li>
+      </ol>
+    </div>
+    <div
+      class="PodBrowser-message__close PodBrowser-message__close--warning"
+    >
+      <button
+        class="PodBrowser-button PodBrowser-button--text"
+        data-testid="no-control-close-button"
+      >
+        <span
+          aria-label="Close message"
+          class="PodBrowser-icon-cancel"
+          role="img"
+        />
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`NoControlWarning renders nothing if no-control-warning-closed is set to true 1`] = `<DocumentFragment />`;

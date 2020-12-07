@@ -19,6 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles } from "@solid/lit-prism-patterns";
+import React from "react";
+import { Container, PageHeader } from "@inrupt/prism-react-components";
 
-export default (theme) => createStyles(theme, ["table"]);
+export const TESTCAFE_ID_AUTH_PROFILE_LOAD_ERROR = "auth-profile-load-error";
+
+export default function AuthProfileLoadError() {
+  return (
+    <div data-testid={TESTCAFE_ID_AUTH_PROFILE_LOAD_ERROR}>
+      <PageHeader title="Failed loading your profile" />
+      <Container>
+        <p>PodBrowser were not able to load your profile.</p>
+      </Container>
+    </div>
+  );
+}

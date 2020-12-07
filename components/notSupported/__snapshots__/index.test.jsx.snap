@@ -3,39 +3,43 @@
 exports[`NotSupported renders 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-page-header"
-  >
-    <h1
-      class="PodBrowser-page-header__title"
-    >
-      Resource Not Supported
-    </h1>
-    <div
-      class="PodBrowser-page-header__content"
-    />
-    <div
-      class="PodBrowser-page-header__toolbar"
-    />
-  </div>
-  <div
-    class="PodBrowser-container"
+    data-testid="not-supported"
   >
     <div
-      class="PodBrowser-content"
+      class="PodBrowser-page-header"
     >
-      <p>
-        PodBrowser can only show resources that are Solid containers.
-      </p>
-      <p>
-        <span>
-          Navigate to the resource directly (this will navigate away from PodBrowser): 
-        </span>
-        <a
-          href="https://mypod.myhost.com"
-        >
-          https://mypod.myhost.com
-        </a>
-      </p>
+      <h1
+        class="PodBrowser-page-header__title"
+      >
+        Resource Not Supported
+      </h1>
+      <div
+        class="PodBrowser-page-header__content"
+      />
+      <div
+        class="PodBrowser-page-header__toolbar"
+      />
+    </div>
+    <div
+      class="PodBrowser-container"
+    >
+      <div
+        class="PodBrowser-content"
+      >
+        <p>
+          PodBrowser can only show resources that are Solid containers.
+        </p>
+        <p>
+          <span>
+            Navigate to the resource directly (this will navigate away from PodBrowser): 
+          </span>
+          <a
+            href="https://mypod.myhost.com"
+          >
+            https://mypod.myhost.com
+          </a>
+        </p>
+      </div>
     </div>
   </div>
 </DocumentFragment>

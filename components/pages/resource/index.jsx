@@ -25,18 +25,15 @@ import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import ContainerView from "../../container";
 import { PodLocationProvider } from "../../../src/contexts/podLocationContext";
-import useRedirectIfNoControlAccessToOwnPod from "../../../src/hooks/useRedirectIfNoControlAccessToOwnPod";
 
 export default function Resource() {
   useRedirectIfLoggedOut();
   const router = useRouter();
-  useRedirectIfNoControlAccessToOwnPod(router.query.iri);
-  const decodedIri = decodeURIComponent(router.query.iri);
 
   return (
     <PodLocationProvider currentUri={router.query.iri}>
       <DetailsMenuProvider>
-        <ContainerView iri={decodedIri} />
+        <ContainerView iri={router.query.iri} />
       </DetailsMenuProvider>
     </PodLocationProvider>
   );

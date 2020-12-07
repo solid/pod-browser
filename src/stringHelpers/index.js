@@ -59,8 +59,7 @@ export function normalizeContainerUrl(url) {
 }
 
 export function getContainerUrl(url) {
-  const encodedIri = encodeURI(url);
-  return encodedIri.substring(0, encodedIri.lastIndexOf("/") + 1);
+  return url.substring(0, url.lastIndexOf("/") + 1);
 }
 
 export function getParentContainerUrl(url) {

@@ -21,19 +21,13 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import T from "prop-types";
-import { useTable, useSortBy } from "react-table";
-import { createStyles, makeStyles } from "@material-ui/styles";
-import { useBem } from "@solid/lit-prism-patterns";
-import clsx from "clsx";
 
 import { isContainer } from "@inrupt/solid-client";
-import ContainerTableRow, { renderResourceType } from "../containerTableRow";
-import SortedTableCarat from "../sortedTableCarat";
+import { renderResourceType } from "../containerTableRow";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import { getResourceName } from "../../src/solidClientHelpers/resource";
 
 import Spinner from "../spinner";
-import styles from "./styles";
 import PageHeader from "../containerPageHeader";
 import ContainerDetails from "../containerDetails";
 import { BookmarksContextProvider } from "../../src/contexts/bookmarksContext";
@@ -44,57 +38,43 @@ import NotSupported from "../notSupported";
 import useContainerResourceIris from "../../src/hooks/useContainerResourceIris";
 import { getContainerUrl } from "../../src/stringHelpers";
 import ContainerSubHeader from "../containerSubHeader";
+import usePodRootUri from "../../src/hooks/usePodRootUri";
+import useAuthenticatedProfile from "../../src/hooks/useAuthenticatedProfile";
+import AuthProfileLoadError from "../authProfileLoadError";
+import NoControlWarning from "../noControlWarning";
+import useResourceInfo from "../../src/hooks/useResourceInfo";
+import useAccessControl from "../../src/hooks/useAccessControl";
+import PodRootLoadError from "../podRootLoadError";
+import ContainerTable from "../containerTable";
 import { isHTTPError } from "../../src/error";
-
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function Container({ iri }) {
   useRedirectIfLoggedOut();
-  const encodedIri = encodeURI(iri);
   const encodedContainerPathIri = getContainerUrl(iri);
   const [containerPath, setContainerPath] = useState(encodedContainerPathIri);
-  const [resourcePath, setResourcePath] = useState(encodedIri);
+  const [resourcePath, setResourcePath] = useState(iri);
+  const {
+    data: authenticatedProfile,
+    error: authenticatedProfileError,
+  } = useAuthenticatedProfile();
+  const podRootIri = usePodRootUri(iri, authenticatedProfile);
+  const { data: podRootResourceInfo, error: podRootError } = useResourceInfo(
+    podRootIri
+  );
+  const { error: accessControlError } = useAccessControl(podRootResourceInfo);
+
+  const isAuthPod = iri.startsWith(podRootIri);
 
   useEffect(() => {
-    setResourcePath(encodedIri);
+    setResourcePath(iri);
     const path = getContainerUrl(iri);
     setContainerPath(path);
-  }, [encodedIri, iri]);
+  }, [iri]);
 
-  const { data: container, error } = useDataset(containerPath);
+  const { data: container, error: containerError } = useDataset(containerPath);
 
   const { data: resourceIris, mutate } = useContainerResourceIris(
     containerPath
-  );
-
-  const loading = !resourceIris || !container;
-
-  const bem = useBem(useStyles());
-
-  const columns = useMemo(
-    () => [
-      {
-        header: "Icon",
-        accessor: "icon",
-        disableSortBy: true,
-        modifiers: ["align-center", "width-preview"],
-      },
-      {
-        header: "BookmarkIcon",
-        accessor: "bookmark-icon",
-        disableSortBy: true,
-        modifiers: ["align-center", "width-preview"],
-      },
-      {
-        Header: "File",
-        accessor: "filename",
-      },
-      {
-        Header: "Type",
-        accessor: "type",
-      },
-    ],
-    []
   );
 
   const data = useMemo(() => {
@@ -110,25 +90,17 @@ export default function Container({ iri }) {
     }));
   }, [resourceIris]);
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable(
-    {
-      columns,
-      data,
-      defaultCanSort: true,
-    },
-    useSortBy
-  );
+  const loading = !resourceIris || !container;
 
-  if (error && isHTTPError(error.message, 401)) return <AccessForbidden />;
-  if (error && isHTTPError(error.message, 403)) return <AccessForbidden />;
-  if (error && isHTTPError(error.message, 404)) return <ResourceNotFound />;
-  if (error) return <NotSupported />;
+  if (containerError && isHTTPError(containerError.message, 401))
+    return <AccessForbidden />;
+  if (containerError && isHTTPError(containerError.message, 403))
+    return <AccessForbidden />;
+  if (containerError && isHTTPError(containerError.message, 404))
+    return <ResourceNotFound />;
+  if (containerError) return <NotSupported />;
+  if (authenticatedProfileError) return <AuthProfileLoadError />;
+  if (isAuthPod && podRootError) return <PodRootLoadError />;
 
   if (loading) {
     return <Spinner />;
@@ -136,67 +108,20 @@ export default function Container({ iri }) {
 
   if (!isContainer(container)) return <NotSupported />;
 
-  // react-table works through spreads.
-  /* eslint react/jsx-props-no-spreading: 0 */
   return (
     <>
       <BookmarksContextProvider>
         <PageHeader />
         <ContainerDetails mutate={mutate}>
           <ContainerSubHeader mutate={mutate} resourceList={data} />
-          <table className={clsx(bem("table"))} {...getTableProps()}>
-            <thead className={bem("table__header")}>
-              {headerGroups.map((headerGroup) => (
-                <tr
-                  key={headerGroup.id}
-                  className={bem("table__header-row")}
-                  {...headerGroup.getHeaderGroupProps()}
-                >
-                  {headerGroup.headers.map((column) => (
-                    <td
-                      key={column.id}
-                      className={bem(
-                        "table__header-cell",
-                        ...(column.modifiers || [])
-                      )}
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
-                    >
-                      {column.render("Header")}
-                      {` `}
-                      <SortedTableCarat
-                        sorted={column.isSorted}
-                        sortedDesc={column.isSortedDesc}
-                      />
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody className={bem("table__body")} {...getTableBodyProps()}>
-              {!data || !data.length ? (
-                <tr key="no-resources-found" className={bem("table__body-row")}>
-                  <td rowSpan={3} className={bem("table__body-cell")}>
-                    No resources were found within this container.
-                  </td>
-                </tr>
-              ) : null}
-
-              {rows.map((row) => {
-                prepareRow(row);
-                const details = row.original;
-                return (
-                  <ContainerTableRow
-                    key={details.iri}
-                    resource={details}
-                    container={containerPath}
-                    preselected={
-                      details.iri === resourcePath && !isContainer(resourcePath)
-                    }
-                  />
-                );
-              })}
-            </tbody>
-          </table>
+          {isAuthPod && accessControlError && (
+            <NoControlWarning podRootIri={podRootIri} />
+          )}
+          <ContainerTable
+            containerPath={containerPath}
+            data={data}
+            resourcePath={resourcePath}
+          />
         </ContainerDetails>
       </BookmarksContextProvider>
     </>

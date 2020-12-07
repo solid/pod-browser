@@ -1,0 +1,237 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContainerTable renders a table view without data 1`] = `
+<DocumentFragment>
+  <table
+    class="PodBrowser-table"
+    role="table"
+  >
+    <thead
+      class="PodBrowser-table__header"
+    >
+      <tr
+        class="PodBrowser-table__header-row"
+        role="row"
+      >
+        <td
+          class="PodBrowser-table__header-cell PodBrowser-table__header-cell--align-center PodBrowser-table__header-cell--width-preview"
+          colspan="1"
+          role="columnheader"
+        >
+            
+        </td>
+        <td
+          class="PodBrowser-table__header-cell PodBrowser-table__header-cell--align-center PodBrowser-table__header-cell--width-preview"
+          colspan="1"
+          role="columnheader"
+        >
+            
+        </td>
+        <td
+          class="PodBrowser-table__header-cell"
+          colspan="1"
+          role="columnheader"
+          style="cursor: pointer;"
+          title="Toggle SortBy"
+        >
+          File 
+        </td>
+        <td
+          class="PodBrowser-table__header-cell"
+          colspan="1"
+          role="columnheader"
+          style="cursor: pointer;"
+          title="Toggle SortBy"
+        >
+          Type 
+        </td>
+      </tr>
+    </thead>
+    <tbody
+      class="PodBrowser-table__body"
+      role="rowgroup"
+    >
+      <tr
+        class="PodBrowser-table__body-row"
+      >
+        <td
+          class="PodBrowser-table__body-cell"
+          rowspan="3"
+        >
+          No resources were found within this container.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</DocumentFragment>
+`;
+
+exports[`ContainerTable renders a table with data 1`] = `
+<DocumentFragment>
+  <table
+    class="PodBrowser-table"
+    role="table"
+  >
+    <thead
+      class="PodBrowser-table__header"
+    >
+      <tr
+        class="PodBrowser-table__header-row"
+        role="row"
+      >
+        <td
+          class="PodBrowser-table__header-cell PodBrowser-table__header-cell--align-center PodBrowser-table__header-cell--width-preview"
+          colspan="1"
+          role="columnheader"
+        >
+            
+        </td>
+        <td
+          class="PodBrowser-table__header-cell PodBrowser-table__header-cell--align-center PodBrowser-table__header-cell--width-preview"
+          colspan="1"
+          role="columnheader"
+        >
+            
+        </td>
+        <td
+          class="PodBrowser-table__header-cell"
+          colspan="1"
+          role="columnheader"
+          style="cursor: pointer;"
+          title="Toggle SortBy"
+        >
+          File 
+        </td>
+        <td
+          class="PodBrowser-table__header-cell"
+          colspan="1"
+          role="columnheader"
+          style="cursor: pointer;"
+          title="Toggle SortBy"
+        >
+          Type 
+        </td>
+      </tr>
+    </thead>
+    <tbody
+      class="PodBrowser-table__body"
+      role="rowgroup"
+    >
+      <tr
+        class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
+        tabindex="0"
+      >
+        <td
+          class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+        >
+          <button
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+            data-testid="bookmark-button"
+            disabled=""
+            type="button"
+          >
+            <i
+              alt="bookmark button"
+              aria-label="bookmark"
+              class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+            />
+          </button>
+        </td>
+        <td
+          class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+        >
+          <i
+            class="PodBrowser-icon-file PodBrowser-resource-icon"
+          />
+        </td>
+        <td
+          class="PodBrowser-table__body-cell"
+        >
+          inbox
+        </td>
+        <td
+          class="PodBrowser-table__body-cell"
+        >
+          Resource
+        </td>
+      </tr>
+      <tr
+        class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
+        tabindex="0"
+      >
+        <td
+          class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+        >
+          <button
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+            data-testid="bookmark-button"
+            disabled=""
+            type="button"
+          >
+            <i
+              alt="bookmark button"
+              aria-label="bookmark"
+              class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+            />
+          </button>
+        </td>
+        <td
+          class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+        >
+          <i
+            class="PodBrowser-icon-file PodBrowser-resource-icon"
+          />
+        </td>
+        <td
+          class="PodBrowser-table__body-cell"
+        >
+          private
+        </td>
+        <td
+          class="PodBrowser-table__body-cell"
+        >
+          Resource
+        </td>
+      </tr>
+      <tr
+        class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
+        tabindex="0"
+      >
+        <td
+          class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+        >
+          <button
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+            data-testid="bookmark-button"
+            disabled=""
+            type="button"
+          >
+            <i
+              alt="bookmark button"
+              aria-label="bookmark"
+              class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+            />
+          </button>
+        </td>
+        <td
+          class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+        >
+          <i
+            class="PodBrowser-icon-file PodBrowser-resource-icon"
+          />
+        </td>
+        <td
+          class="PodBrowser-table__body-cell"
+        >
+          note.txt
+        </td>
+        <td
+          class="PodBrowser-table__body-cell"
+        >
+          Resource
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</DocumentFragment>
+`;

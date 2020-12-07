@@ -20,41 +20,17 @@
  */
 
 import React from "react";
-import Router from "next/router";
-import mockSession, {
-  mockUnauthenticatedSession,
-} from "../../../__testUtils/mockSession";
-import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
-import AccessRequired from ".";
-import { renderWithTheme } from "../../../__testUtils/withTheme";
+import { Container, PageHeader } from "@inrupt/prism-react-components";
 
-jest.mock("next/router");
+export const TESTCAFE_ID_POD_ROOT_LOAD_ERROR = "pod-root-load-error";
 
-describe("Access Required page", () => {
-  test("with profile that has access to Pod", () => {
-    const session = mockSession();
-    const SessionProvider = mockSessionContextProvider(session);
-
-    const { asFragment } = renderWithTheme(
-      <SessionProvider>
-        <AccessRequired />
-      </SessionProvider>
-    );
-    expect(asFragment()).toMatchSnapshot();
-  });
-
-  test("unauthenticated profile is redirected to login", () => {
-    const session = mockUnauthenticatedSession();
-    const SessionProvider = mockSessionContextProvider(session);
-
-    Router.push.mockResolvedValue(null);
-
-    renderWithTheme(
-      <SessionProvider>
-        <AccessRequired />
-      </SessionProvider>
-    );
-
-    expect(Router.push).toHaveBeenCalledWith("/login");
-  });
-});
+export default function PodRootLoadError() {
+  return (
+    <div data-testid={TESTCAFE_ID_POD_ROOT_LOAD_ERROR}>
+      <PageHeader title="Could not load your Pod" />
+      <Container>
+        <p>PodBrowser encountered an error while loading your Pod.</p>
+      </Container>
+    </div>
+  );
+}

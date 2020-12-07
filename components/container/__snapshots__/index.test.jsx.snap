@@ -21,7 +21,143 @@ exports[`Container view Renders a spinner if data is loading 1`] = `
 </DocumentFragment>
 `;
 
-exports[`Container view Renders a table view without data 1`] = `
+exports[`Container view renders Access Forbidden if the fetch for container returns 401 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="access-forbidden"
+  >
+    <div
+      class="PodBrowser-page-header"
+    >
+      <h1
+        class="PodBrowser-page-header__title"
+      >
+        No Access
+      </h1>
+      <div
+        class="PodBrowser-page-header__content"
+      />
+      <div
+        class="PodBrowser-page-header__toolbar"
+      />
+    </div>
+    <div
+      class="PodBrowser-container"
+    >
+      <p>
+        You don't have access to this resource: 
+        <a
+          href="/resource/[iri]"
+        />
+        .
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Container view renders Access Forbidden if the fetch for container returns 403 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="access-forbidden"
+  >
+    <div
+      class="PodBrowser-page-header"
+    >
+      <h1
+        class="PodBrowser-page-header__title"
+      >
+        No Access
+      </h1>
+      <div
+        class="PodBrowser-page-header__content"
+      />
+      <div
+        class="PodBrowser-page-header__toolbar"
+      />
+    </div>
+    <div
+      class="PodBrowser-container"
+    >
+      <p>
+        You don't have access to this resource: 
+        <a
+          href="/resource/[iri]"
+        />
+        .
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Container view renders Access Forbidden if the fetch for container returns 404 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="resource-not-found"
+  >
+    <div
+      class="PodBrowser-page-header"
+    >
+      <h1
+        class="PodBrowser-page-header__title"
+      >
+        Resource Not Found
+      </h1>
+      <div
+        class="PodBrowser-page-header__content"
+      />
+      <div
+        class="PodBrowser-page-header__toolbar"
+      />
+    </div>
+    <div
+      class="PodBrowser-container"
+    >
+      <p>
+        Unable to find the resource: 
+        <a
+          href="/resource/[iri]"
+        />
+        .
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Container view renders AuthProfileLoadError if fetching authenticated profile fails 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="auth-profile-load-error"
+  >
+    <div
+      class="PodBrowser-page-header"
+    >
+      <h1
+        class="PodBrowser-page-header__title"
+      >
+        Failed loading your profile
+      </h1>
+      <div
+        class="PodBrowser-page-header__content"
+      />
+      <div
+        class="PodBrowser-page-header__toolbar"
+      />
+    </div>
+    <div
+      class="PodBrowser-container"
+    >
+      <p>
+        PodBrowser were not able to load your profile.
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Container view renders NoControlError if it fails to get access control for podRoot 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-page-header PodBrowser-files-container-header"
@@ -96,6 +232,89 @@ exports[`Container view Renders a table view without data 1`] = `
           </label>
         </div>
       </div>
+      <div
+        class="PodBrowser-message PodBrowser-message--warning PodBrowser-message--prominent"
+        data-testid="no-control-error"
+      >
+        <div
+          class="PodBrowser-message__icon PodBrowser-message__icon--warning"
+        >
+          <span
+            class="PodBrowser-icon-error"
+          />
+        </div>
+        <div
+          class="PodBrowser-message__main"
+        >
+          <p
+            class="PodBrowser-message__title"
+          >
+            You can't share anything or change permissions in your Pod
+          </p>
+          <p>
+            This is because you don't have control access. You can still browse the resources in your Pod, but you won't be able to share anything.
+          </p>
+          <p
+            class="PodBrowser-message__title"
+          >
+            How to fix:
+          </p>
+          <ol>
+            <li>
+              <span>
+                Log in to 
+              </span>
+              <a
+                href="https://example.com/container/"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <span>
+                  your Pod
+                </span>
+                <span
+                  class="PodBrowser-icon-external-link"
+                  data-external="true"
+                />
+              </a>
+            </li>
+            <li>
+              Go to “Preferences”
+            </li>
+            <li>
+              <span>
+                Under “Manage your trusted applications,” look for 
+              </span>
+              <span>
+                http://localhost
+              </span>
+              <span>
+                 and check the “Control” box
+              </span>
+            </li>
+            <li>
+              Click on “Update”
+            </li>
+            <li>
+              Return to PodBrowser
+            </li>
+          </ol>
+        </div>
+        <div
+          class="PodBrowser-message__close PodBrowser-message__close--warning"
+        >
+          <button
+            class="PodBrowser-button PodBrowser-button--text"
+            data-testid="no-control-close-button"
+          >
+            <span
+              aria-label="Close message"
+              class="PodBrowser-icon-cancel"
+              role="img"
+            />
+          </button>
+        </div>
+      </div>
       <table
         class="PodBrowser-table"
         role="table"
@@ -146,13 +365,117 @@ exports[`Container view Renders a table view without data 1`] = `
           role="rowgroup"
         >
           <tr
-            class="PodBrowser-table__body-row"
+            class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
+            tabindex="0"
           >
             <td
-              class="PodBrowser-table__body-cell"
-              rowspan="3"
+              class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
             >
-              No resources were found within this container.
+              <button
+                class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+                data-testid="bookmark-button"
+                disabled=""
+                type="button"
+              >
+                <i
+                  alt="bookmark button"
+                  aria-label="bookmark"
+                  class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+                />
+              </button>
+            </td>
+            <td
+              class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+            >
+              <i
+                class="PodBrowser-icon-file PodBrowser-resource-icon"
+              />
+            </td>
+            <td
+              class="PodBrowser-table__body-cell"
+            >
+              inbox
+            </td>
+            <td
+              class="PodBrowser-table__body-cell"
+            >
+              Resource
+            </td>
+          </tr>
+          <tr
+            class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
+            tabindex="0"
+          >
+            <td
+              class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+            >
+              <button
+                class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+                data-testid="bookmark-button"
+                disabled=""
+                type="button"
+              >
+                <i
+                  alt="bookmark button"
+                  aria-label="bookmark"
+                  class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+                />
+              </button>
+            </td>
+            <td
+              class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+            >
+              <i
+                class="PodBrowser-icon-file PodBrowser-resource-icon"
+              />
+            </td>
+            <td
+              class="PodBrowser-table__body-cell"
+            >
+              private
+            </td>
+            <td
+              class="PodBrowser-table__body-cell"
+            >
+              Resource
+            </td>
+          </tr>
+          <tr
+            class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
+            tabindex="0"
+          >
+            <td
+              class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+            >
+              <button
+                class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+                data-testid="bookmark-button"
+                disabled=""
+                type="button"
+              >
+                <i
+                  alt="bookmark button"
+                  aria-label="bookmark"
+                  class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+                />
+              </button>
+            </td>
+            <td
+              class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+            >
+              <i
+                class="PodBrowser-icon-file PodBrowser-resource-icon"
+              />
+            </td>
+            <td
+              class="PodBrowser-table__body-cell"
+            >
+              note.txt
+            </td>
+            <td
+              class="PodBrowser-table__body-cell"
+            >
+              Resource
             </td>
           </tr>
         </tbody>
@@ -180,33 +503,182 @@ exports[`Container view Renders a table view without data 1`] = `
             </button>
           </div>
           <section
-            class="PodBrowser-centeredSection"
+            class="PodBrowser-headerSection"
           >
             <h3
               class="PodBrowser-content-h3"
-              title=""
+              data-testid="resource-title"
+              title="https://example.com/container/"
             >
-              null
+              container
             </h3>
           </section>
           <hr
             class="PodBrowser-root"
           />
           <div
-            class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
+            class="PodBrowser-root PodBrowser-root PodBrowser-expanded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
           >
-            <svg
-              class="PodBrowser-loading-indicator"
-              viewBox="22 22 44 44"
+            <div
+              aria-disabled="false"
+              aria-expanded="true"
+              class="PodBrowser-root PodBrowser-root PodBrowser-expanded"
+              data-testid="accordion-resource-actions-trigger"
+              role="button"
+              tabindex="0"
             >
-              <circle
-                cx="44"
-                cy="44"
-                fill="none"
-                r="20.2"
-                stroke-width="3.6"
-              />
-            </svg>
+              <div
+                class="PodBrowser-content PodBrowser-expanded"
+              >
+                Actions
+              </div>
+              <div
+                aria-disabled="false"
+                aria-hidden="true"
+                class="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-expanded PodBrowser-edgeEnd"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="PodBrowser-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                    />
+                  </svg>
+                </span>
+                <span
+                  class="PodBrowser-root"
+                />
+              </div>
+            </div>
+            <div
+              class="PodBrowser-container PodBrowser-entered"
+              style="min-height: 0px;"
+            >
+              <div
+                class="PodBrowser-wrapper"
+              >
+                <div
+                  class="PodBrowser-wrapperInner"
+                >
+                  <div
+                    role="region"
+                  >
+                    <div
+                      class="PodBrowser-root PodBrowser-accordionDetails"
+                    >
+                      <ul
+                        class="PodBrowser-action-menu"
+                      >
+                        <li
+                          class="PodBrowser-action-menu__item"
+                        />
+                        <li
+                          class="PodBrowser-action-menu__item"
+                        >
+                          <button
+                            class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                            data-testid="delete-resource-button"
+                            type="button"
+                          >
+                            Delete
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="PodBrowser-root PodBrowser-root PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+          >
+            <div
+              aria-disabled="false"
+              aria-expanded="false"
+              class="PodBrowser-root PodBrowser-root"
+              data-testid="accordion-resource-details-trigger"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="PodBrowser-content"
+              >
+                Details
+              </div>
+              <div
+                aria-disabled="false"
+                aria-hidden="true"
+                class="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-edgeEnd"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="PodBrowser-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                    />
+                  </svg>
+                </span>
+                <span
+                  class="PodBrowser-root"
+                />
+              </div>
+            </div>
+            <div
+              class="PodBrowser-container PodBrowser-hidden"
+              style="min-height: 0px;"
+            >
+              <div
+                class="PodBrowser-wrapper"
+              >
+                <div
+                  class="PodBrowser-wrapperInner"
+                >
+                  <div
+                    role="region"
+                  >
+                    <div
+                      class="PodBrowser-root PodBrowser-accordionDetails"
+                    >
+                      <section
+                        class="PodBrowser-centeredSection"
+                      >
+                        <ul
+                          class="PodBrowser-root PodBrowser-padding"
+                        >
+                          <li
+                            class="PodBrowser-root PodBrowser-gutters"
+                          >
+                            <p
+                              class="PodBrowser-root PodBrowser-detailText PodBrowser-body1"
+                            >
+                              Thing Type:
+                            </p>
+                            <p
+                              class="PodBrowser-root PodBrowser-typeValue PodBrowser-detailText PodBrowser-body1"
+                            >
+                              text/turtle
+                            </p>
+                          </li>
+                        </ul>
+                      </section>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -215,7 +687,120 @@ exports[`Container view Renders a table view without data 1`] = `
 </DocumentFragment>
 `;
 
-exports[`Container view Renders a table with data 1`] = `
+exports[`Container view renders Not Supported if resource loaded is not a container 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="not-supported"
+  >
+    <div
+      class="PodBrowser-page-header"
+    >
+      <h1
+        class="PodBrowser-page-header__title"
+      >
+        Resource Not Supported
+      </h1>
+      <div
+        class="PodBrowser-page-header__content"
+      />
+      <div
+        class="PodBrowser-page-header__toolbar"
+      />
+    </div>
+    <div
+      class="PodBrowser-container"
+    >
+      <div
+        class="PodBrowser-content"
+      >
+        <p>
+          PodBrowser can only show resources that are Solid containers.
+        </p>
+        <p>
+          <span>
+            Navigate to the resource directly (this will navigate away from PodBrowser): 
+          </span>
+          <a />
+        </p>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Container view renders Not supported if the fetch for container returns 500 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="not-supported"
+  >
+    <div
+      class="PodBrowser-page-header"
+    >
+      <h1
+        class="PodBrowser-page-header__title"
+      >
+        Resource Not Supported
+      </h1>
+      <div
+        class="PodBrowser-page-header__content"
+      />
+      <div
+        class="PodBrowser-page-header__toolbar"
+      />
+    </div>
+    <div
+      class="PodBrowser-container"
+    >
+      <div
+        class="PodBrowser-content"
+      >
+        <p>
+          PodBrowser can only show resources that are Solid containers.
+        </p>
+        <p>
+          <span>
+            Navigate to the resource directly (this will navigate away from PodBrowser): 
+          </span>
+          <a />
+        </p>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Container view renders PodRootLoadError if it fails to fetch resourceInfo for podRoot 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="pod-root-load-error"
+  >
+    <div
+      class="PodBrowser-page-header"
+    >
+      <h1
+        class="PodBrowser-page-header__title"
+      >
+        Could not load your Pod
+      </h1>
+      <div
+        class="PodBrowser-page-header__content"
+      />
+      <div
+        class="PodBrowser-page-header__toolbar"
+      />
+    </div>
+    <div
+      class="PodBrowser-container"
+    >
+      <p>
+        PodBrowser encountered an error while loading your Pod.
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Container view renders a table 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-page-header PodBrowser-files-container-header"
@@ -509,127 +1094,6 @@ exports[`Container view Renders a table with data 1`] = `
         </div>
       </div>
     </section>
-  </div>
-</DocumentFragment>
-`;
-
-exports[`Container view renders Access Forbidden if the fetch for container returns 401 1`] = `
-<DocumentFragment>
-  <div
-    class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
-  >
-    <svg
-      class="PodBrowser-loading-indicator"
-      viewBox="22 22 44 44"
-    >
-      <circle
-        cx="44"
-        cy="44"
-        fill="none"
-        r="20.2"
-        stroke-width="3.6"
-      />
-    </svg>
-  </div>
-</DocumentFragment>
-`;
-
-exports[`Container view renders Access Forbidden if the fetch for container returns 403 1`] = `
-<DocumentFragment>
-  <div
-    class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
-  >
-    <svg
-      class="PodBrowser-loading-indicator"
-      viewBox="22 22 44 44"
-    >
-      <circle
-        cx="44"
-        cy="44"
-        fill="none"
-        r="20.2"
-        stroke-width="3.6"
-      />
-    </svg>
-  </div>
-</DocumentFragment>
-`;
-
-exports[`Container view renders Access Forbidden if the fetch for container returns 404 1`] = `
-<DocumentFragment>
-  <div
-    class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
-  >
-    <svg
-      class="PodBrowser-loading-indicator"
-      viewBox="22 22 44 44"
-    >
-      <circle
-        cx="44"
-        cy="44"
-        fill="none"
-        r="20.2"
-        stroke-width="3.6"
-      />
-    </svg>
-  </div>
-</DocumentFragment>
-`;
-
-exports[`Container view renders Not Supported if resource loaded is not a container 1`] = `
-<DocumentFragment>
-  <div
-    class="PodBrowser-page-header"
-  >
-    <h1
-      class="PodBrowser-page-header__title"
-    >
-      Resource Not Supported
-    </h1>
-    <div
-      class="PodBrowser-page-header__content"
-    />
-    <div
-      class="PodBrowser-page-header__toolbar"
-    />
-  </div>
-  <div
-    class="PodBrowser-container"
-  >
-    <div
-      class="PodBrowser-content"
-    >
-      <p>
-        PodBrowser can only show resources that are Solid containers.
-      </p>
-      <p>
-        <span>
-          Navigate to the resource directly (this will navigate away from PodBrowser): 
-        </span>
-        <a />
-      </p>
-    </div>
-  </div>
-</DocumentFragment>
-`;
-
-exports[`Container view renders Not supported if the fetch for container returns 500 1`] = `
-<DocumentFragment>
-  <div
-    class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
-  >
-    <svg
-      class="PodBrowser-loading-indicator"
-      viewBox="22 22 44 44"
-    >
-      <circle
-        cx="44"
-        cy="44"
-        fill="none"
-        r="20.2"
-        stroke-width="3.6"
-      />
-    </svg>
   </div>
 </DocumentFragment>
 `;

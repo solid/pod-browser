@@ -26,6 +26,8 @@ module.exports = {
   // The test environment that will be used for testing
   testEnvironment: "jsdom",
 
+  setupFiles: ["jest-localstorage-mock"],
+
   testPathIgnorePatterns: ["/node_modules/", "/__testUtils/"],
 
   transform: {
