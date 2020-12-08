@@ -32,7 +32,7 @@ import {
 } from "@inrupt/prism-react-components";
 import { getSourceUrl, getUrl, getStringNoLocale } from "@inrupt/solid-client";
 import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
-import { vcard, foaf } from "rdf-namespaces";
+import { vcard, foaf, owl } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";
 import Spinner from "../spinner";
 import styles from "./styles";
@@ -111,7 +111,9 @@ function ContactsList() {
     );
     setSelectedContactName(name);
 
-    const webId = getUrl(people[selectedContactIndex].dataset, foaf.openid);
+    const webId =
+      getUrl(people[selectedContactIndex].dataset, owl.sameAs) ||
+      getUrl(people[selectedContactIndex].dataset, foaf.openid);
 
     setSelectedContactWebId(webId);
   }, [selectedContactIndex, formattedNamePredicate, people]);

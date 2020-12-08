@@ -20,7 +20,7 @@
  */
 
 /* eslint-disable camelcase */
-import { ldp, rdf, acl, dc, foaf, vcard } from "rdf-namespaces";
+import { ldp, rdf, acl, dc, foaf, vcard, owl } from "rdf-namespaces";
 import * as solidClientFns from "@inrupt/solid-client";
 import { asUrl } from "@inrupt/solid-client";
 import * as resourceFns from "../solidClientHelpers/resource";
@@ -155,7 +155,7 @@ describe("createContact", () => {
     const emailsAndPhones = getStringNoLocaleAll(dataset, vcard.value);
 
     expect(getStringNoLocale(dataset, vcard.fn)).toEqual("Test Person");
-    expect(getUrl(dataset, foaf.openid)).toEqual(webId);
+    expect(getUrl(dataset, owl.sameAs)).toEqual(webId);
     expect(
       getStringNoLocale(dataset, vcardExtras("organization-name"))
     ).toEqual("Test Company");
@@ -235,7 +235,7 @@ describe("getSchemaFunction", () => {
     const fn = getSchemaFunction("webId", value);
     const thing = fn(createThing(options));
 
-    expect(getUrl(thing, foaf.openid)).toEqual(value);
+    expect(getUrl(thing, owl.sameAs)).toEqual(value);
   });
 
   test("it returns an identity function if the key does not exist in the map", () => {
@@ -598,7 +598,7 @@ describe("deleteContact", () => {
   const mockContactToDelete = chain(
     solidClientFns.mockThingFrom(contactUrl),
     (t) => solidClientFns.addUrl(t, rdf.type, vcard.Individual),
-    (t) => solidClientFns.addUrl(t, foaf.openid, contactUrl)
+    (t) => solidClientFns.addUrl(t, owl.sameAs, contactUrl)
   );
 
   const contactToDelete = {
@@ -767,12 +767,12 @@ describe("saveNewAddressBook", () => {
 });
 
 describe("schemaFunctionMappings", () => {
-  test("webId sets a foaf.openid", () => {
+  test("webId sets a own.sameAs", () => {
     const webId = "https://user.example.com/card#me";
     const options = { name: "this" };
     const thing = schemaFunctionMappings.webId(webId)(createThing(options));
 
-    expect(getUrl(thing, foaf.openid)).toEqual(webId);
+    expect(getUrl(thing, owl.sameAs)).toEqual(webId);
   });
 
   test("fn sets a vcard.fn", () => {

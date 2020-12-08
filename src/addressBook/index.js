@@ -37,7 +37,7 @@ import {
   setThing,
 } from "@inrupt/solid-client";
 import { v4 as uuid } from "uuid";
-import { rdf, dc, acl, vcard, foaf, schema } from "rdf-namespaces";
+import { rdf, dc, acl, vcard, foaf, schema, owl } from "rdf-namespaces";
 import {
   createResponder,
   defineDataset,
@@ -163,7 +163,7 @@ export async function getContacts(indexFileDataset, contactTypeIri, fetch) {
 export async function getProfiles(people, fetch) {
   const profileResponses = await Promise.all(
     people.map(({ dataset }) => {
-      const url = getUrl(dataset, foaf.openid);
+      const url = getUrl(dataset, owl.sameAs) || getUrl(dataset, foaf.openid);
       return getResource(url, fetch);
     })
   );
@@ -226,7 +226,7 @@ export async function saveNewAddressBook(
 }
 
 export const schemaFunctionMappings = {
-  webId: (v) => (t) => addUrl(t, foaf.openid, v),
+  webId: (v) => (t) => addUrl(t, owl.sameAs, v),
   fn: (v) => (t) => addStringNoLocale(t, vcard.fn, v),
   name: (v) => (t) => addStringNoLocale(t, foaf.name, v),
   organizationName: (v) => (t) =>

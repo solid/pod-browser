@@ -20,7 +20,7 @@
  */
 
 import { addUrl, mockThingFrom } from "@inrupt/solid-client";
-import { vcard, rdf, foaf } from "rdf-namespaces";
+import { vcard, rdf, owl } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
 
 export const webIdUrl = "http://example.com/alice#me";
@@ -29,6 +29,6 @@ export function mockPersonContactDataset() {
   return chain(
     mockThingFrom(webIdUrl),
     (t) => addUrl(t, rdf.type, vcard.Individual),
-    (t) => addUrl(t, foaf.openid, webIdUrl)
+    (t) => addUrl(t, owl.sameAs, webIdUrl)
   );
 }
