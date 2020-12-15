@@ -35,10 +35,12 @@ import {
   removeThing,
   getSolidDataset,
   setThing,
+  createThing,
 } from "@inrupt/solid-client";
 import { v4 as uuid } from "uuid";
 import { rdf, dc, acl, vcard, foaf, schema } from "rdf-namespaces";
 import {
+  chain,
   createResponder,
   defineDataset,
   defineThing,
@@ -56,6 +58,8 @@ const INDEX_FILE = "index.ttl";
 const PEOPLE_INDEX_FILE = "people.ttl";
 const GROUPS_INDEX_FILE = "groups.ttl";
 const PERSON_CONTAINER = "Person";
+
+const VCARD_WEBID_PREDICATE = "https://www.w3.org/2006/vcard/ns#WebId";
 
 export const TYPE_MAP = {
   [foaf.Person]: {
@@ -162,8 +166,19 @@ export async function getContacts(indexFileDataset, contactTypeIri, fetch) {
 
 export async function getProfiles(people, fetch) {
   const profileResponses = await Promise.all(
-    people.map(({ dataset }) => {
-      const url = getUrl(dataset, foaf.openid);
+    people.map(async ({ dataset }) => {
+      const webIdNodeUrl = getUrl(dataset, vcard.url);
+      let webIdNode;
+      let webIdUrl;
+      let url;
+      try {
+        webIdNode = await getSolidDataset(webIdNodeUrl, { fetch });
+        webIdUrl = webIdNode && getUrl(webIdNode, vcard.value);
+        url = webIdUrl;
+      } catch {
+        webIdNode = null;
+        url = getUrl(dataset, foaf.openid);
+      }
       return getResource(url, fetch);
     })
   );
@@ -225,8 +240,18 @@ export async function saveNewAddressBook(
   return respond({ iri, index, groups, people });
 }
 
+export const createWebIdNodeFn = (webId, iri) => {
+  const webIdNode = chain(
+    createThing(),
+    (t) => addUrl(t, rdf.type, VCARD_WEBID_PREDICATE),
+    (t) => addUrl(t, vcard.value, webId)
+  );
+  const webIdNodeUrl = asUrl(webIdNode, iri);
+  return { webIdNode, webIdNodeUrl };
+};
+
 export const schemaFunctionMappings = {
-  webId: (v) => (t) => addUrl(t, foaf.openid, v),
+  webId: (v) => (t) => addUrl(t, vcard.url, v),
   fn: (v) => (t) => addStringNoLocale(t, vcard.fn, v),
   name: (v) => (t) => addStringNoLocale(t, foaf.name, v),
   organizationName: (v) => (t) =>
@@ -249,11 +274,14 @@ export function getSchemaFunction(type, value) {
   return fn(value);
 }
 
-export function getSchemaOperations(contactSchema) {
+export function getSchemaOperations(contactSchema, webIdNodeUrl) {
   if (!contactSchema) return [];
 
   return Object.keys(contactSchema).reduce((acc, key) => {
-    const value = contactSchema[key];
+    let value = contactSchema[key];
+    if (webIdNodeUrl && key === "webId") {
+      value = webIdNodeUrl;
+    }
     if (typeof value === "string") {
       return [...acc, getSchemaFunction(key, value)];
     }
@@ -270,7 +298,6 @@ export function mapSchema(prefix) {
     const name = [prefix, shortId()].join("-");
     const operations = getSchemaOperations(contactSchema);
     const thing = defineThing({ name }, ...operations);
-
     return { name, thing };
   };
 }
@@ -299,7 +326,12 @@ export function createContactTypeNotFoundError(contact) {
   return new Error(`Contact is unsupported type: ${contact.type}`);
 }
 
-export function createContact(addressBookIri, contact, types) {
+export function createContact(
+  addressBookIri,
+  contact,
+  types,
+  createWebIdNode = createWebIdNodeFn
+) {
   // Find the first matching container mapping.
   const containerMap = TYPE_MAP[types.find((type) => TYPE_MAP[type])];
 
@@ -318,13 +350,13 @@ export function createContact(addressBookIri, contact, types) {
 
   const id = uuid();
   const iri = joinPath(addressBookIri, container, id, INDEX_FILE);
-  const rootAttributeFns = getSchemaOperations(contact);
-
+  const { webIdNode, webIdNodeUrl } = createWebIdNode(contact.webId, iri);
+  const rootAttributeFns = getSchemaOperations(contact, webIdNodeUrl);
   const emails = normalizedContact.emails.map(mapSchema("email"));
   const addresses = normalizedContact.addresses.map(mapSchema("address"));
   const telephones = normalizedContact.telephones.map(mapSchema("telephone"));
 
-  const person = defineDataset(
+  const person = defineThing(
     { name: "this" },
     ...[(t) => addUrl(t, rdf.type, vcard.Individual), ...rootAttributeFns],
     ...emails.map(({ name }) => {
@@ -337,13 +369,13 @@ export function createContact(addressBookIri, contact, types) {
       return (t) => addUrl(t, vcard.hasTelephone, [iri, name].join("#"));
     })
   );
-
-  const dataset = [...emails, ...addresses, ...telephones].reduce(
+  let dataset = [...emails, ...addresses, ...telephones].reduce(
     (acc, { thing }) => {
       return setThing(acc, thing);
     },
     person
   );
+  dataset = webIdNode && setThing(dataset, webIdNode);
 
   return {
     iri,
@@ -370,7 +402,8 @@ export async function saveContact(
   const newContact = createContact(
     addressBookContainerIri,
     contactSchema,
-    types
+    types,
+    createWebIdNodeFn
   );
   const { iri } = newContact;
 

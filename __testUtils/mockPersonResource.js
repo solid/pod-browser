@@ -19,7 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { addStringNoLocale, addUrl, mockThingFrom } from "@inrupt/solid-client";
+import {
+  addStringNoLocale,
+  addUrl,
+  asUrl,
+  mockThingFrom,
+} from "@inrupt/solid-client";
 import { vcard, foaf, rdf } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
 import { packageProfile } from "../src/solidClientHelpers/profile";
@@ -29,6 +34,20 @@ export const aliceName = "Alice";
 export const aliceNick = "A";
 export const alicePhoto = "http://example.com/alice.jpg";
 
+const VCARD_WEBID_PREDICATE = "https://www.w3.org/2006/vcard/ns#WebId";
+
+export function mockWebIdNode(webId) {
+  const dataset = chain(
+    mockThingFrom("https://example.org/contacts/Person/1234/index.ttl#4567"),
+    (t) => addUrl(t, rdf.type, VCARD_WEBID_PREDICATE),
+    (t) => addUrl(t, vcard.value, webId)
+  );
+  const url = asUrl(dataset);
+  return { webIdNode: dataset, webIdNodeUrl: url };
+}
+
+const mockWebIdNodeAlice = mockWebIdNode(aliceWebIdUrl);
+
 export function mockPersonDatasetAlice() {
   return chain(
     mockThingFrom(aliceWebIdUrl),
@@ -36,7 +55,7 @@ export function mockPersonDatasetAlice() {
     (t) => addStringNoLocale(t, vcard.nickname, aliceNick),
     (t) => addUrl(t, vcard.hasPhoto, alicePhoto),
     (t) => addUrl(t, rdf.type, foaf.Person),
-    (t) => addUrl(t, foaf.openid, aliceWebIdUrl)
+    (t) => addUrl(t, vcard.url, mockWebIdNodeAlice.webIdNodeUrl)
   );
 }
 

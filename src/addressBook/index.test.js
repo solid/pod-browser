@@ -31,6 +31,7 @@ import {
   bobWebIdUrl,
   mockPersonDatasetAlice,
   mockPersonDatasetBob,
+  mockWebIdNode,
 } from "../../__testUtils/mockPersonResource";
 import { mockPersonContactDataset } from "../../__testUtils/mockContactResource";
 
@@ -117,6 +118,10 @@ describe("createAddressBook", () => {
 describe("createContact", () => {
   const addressBookIri = "https://user.example.com/contacts";
   const webId = "https://user.example.com/card";
+  const { webIdNodeUrl } = mockWebIdNode(webId);
+  const mockWebIdNodeFn = jest
+    .spyOn(addressBookFns, "createWebIdNodeFn")
+    .mockImplementation(mockWebIdNode);
 
   test("it creates a new contact with a given schema object", () => {
     const schema = {
@@ -151,11 +156,18 @@ describe("createContact", () => {
       role: "Developer",
     };
 
-    const { dataset } = createContact(addressBookIri, schema, [foaf.Person]);
+    const { dataset } = createContact(
+      addressBookIri,
+      schema,
+      [foaf.Person],
+      mockWebIdNodeFn
+    );
+
     const emailsAndPhones = getStringNoLocaleAll(dataset, vcard.value);
 
     expect(getStringNoLocale(dataset, vcard.fn)).toEqual("Test Person");
-    expect(getUrl(dataset, foaf.openid)).toEqual(webId);
+    expect(mockWebIdNodeFn).toHaveBeenCalledWith(webId, expect.anything());
+    expect(getUrl(dataset, vcard.url)).toEqual(webIdNodeUrl);
     expect(
       getStringNoLocale(dataset, vcardExtras("organization-name"))
     ).toEqual("Test Company");
@@ -230,12 +242,13 @@ describe("getGroups", () => {
 
 describe("getSchemaFunction", () => {
   test("it returns a function for the given key, value", () => {
-    const value = "https://user.example.com/card#me";
+    const value = mockWebIdNode("https://user.example.com/card#me")
+      .webIdNodeUrl;
     const options = { name: "this" };
     const fn = getSchemaFunction("webId", value);
     const thing = fn(createThing(options));
 
-    expect(getUrl(thing, foaf.openid)).toEqual(value);
+    expect(getUrl(thing, vcard.url)).toEqual(value);
   });
 
   test("it returns an identity function if the key does not exist in the map", () => {
@@ -371,6 +384,11 @@ describe("getProfiles", () => {
       dataset: "Person 1",
       iri: "https://user.example.com/contacts/Person/1234/index.ttl",
     };
+    const mockWebIdNodePerson1 = mockWebIdNode(person1.iri);
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockReturnValueOnce(mockWebIdNodePerson1)
+      .mockReturnValue(undefined);
     const person2 = {
       dataset: "Person 2",
       iri: "https://user.example.com/contacts/Person/1234/index.ttl",
@@ -767,12 +785,15 @@ describe("saveNewAddressBook", () => {
 });
 
 describe("schemaFunctionMappings", () => {
-  test("webId sets a foaf.openid", () => {
+  test("webId sets a vcard.url", () => {
     const webId = "https://user.example.com/card#me";
     const options = { name: "this" };
-    const thing = schemaFunctionMappings.webId(webId)(createThing(options));
-
-    expect(getUrl(thing, foaf.openid)).toEqual(webId);
+    const { webIdNode, webIdNodeUrl } = mockWebIdNode(webId);
+    const thing = schemaFunctionMappings.webId(webIdNodeUrl)(
+      createThing(options)
+    );
+    expect(getUrl(thing, vcard.url)).toEqual(webIdNodeUrl);
+    expect(getUrl(webIdNode, vcard.value)).toEqual(webId);
   });
 
   test("fn sets a vcard.fn", () => {
