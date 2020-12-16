@@ -124,12 +124,10 @@ function ContactsList() {
   if (isLoading) return <Spinner />;
 
   // format things for the data table
-  const contacts = profiles.map((p) => {
-    return {
-      thing: p,
-      dataset: addressBook,
-    };
-  });
+  const contacts = profiles.map((p) => ({
+    thing: p,
+    dataset: addressBook,
+  }));
 
   const closeDrawer = handleClose(setSelectedContactIndex);
   const deleteSelectedContact = handleDeleteContact({
