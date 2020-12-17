@@ -168,6 +168,7 @@ export default function AddPermissionUsingWebIdButton({
         }}
       >
         <AgentSearchForm
+          type="permissions"
           dirtyForm={dirtyForm}
           onChange={handleChange}
           onSubmit={onSubmit}

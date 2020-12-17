@@ -51,15 +51,19 @@ export function handleSubmit({
   setIsLoading,
   alertError,
   alertSuccess,
-  fetch,
+  session,
   setDirtyForm,
   peopleMutate,
   people,
 }) {
   return async (iri) => {
+    const { fetch } = session;
     setDirtyForm(true);
     if (!iri) {
       return;
+    }
+    if (iri === session.info.webId) {
+      alertError("You cannot add yourself as a contact");
     }
     setIsLoading(true);
 
@@ -106,7 +110,6 @@ export default function AddContact() {
   useRedirectIfLoggedOut();
   const { alertSuccess, alertError } = useContext(AlertContext);
   const { session } = useSession();
-  const { fetch } = session;
   const {
     info: { webId },
   } = session;
@@ -136,8 +139,7 @@ export default function AddContact() {
     setIsLoading,
     alertError,
     alertSuccess,
-    fetch,
-    webId,
+    session,
     setDirtyForm,
     peopleMutate,
     people,
@@ -160,7 +162,7 @@ export default function AddContact() {
       <h3>Add new contact</h3>
 
       <AgentSearchForm
-        heading="Add contact using Web ID"
+        type="contacts"
         onChange={handleChange}
         onSubmit={onSubmit}
         buttonText="Add Contact"
