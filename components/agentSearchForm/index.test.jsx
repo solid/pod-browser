@@ -142,6 +142,30 @@ describe("AgentSearchForm", () => {
     expect(errorMessage).toBeTruthy();
     expect(onSubmit).not.toHaveBeenCalled();
   });
+  test("renders correct error message when agent type is 'contacts'", () => {
+    const onSubmit = jest.fn();
+    const wrapper = render(
+      <AgentSearchForm
+        type="contacts"
+        onSubmit={onSubmit}
+        value="http://example.com/webId#me"
+        permissions={[
+          {
+            acl: { read: true, append: true, write: true, control: true },
+            alias: "Control",
+            webId: "http://example.com/webId#me",
+          },
+        ]}
+      />
+    );
+    const button = wrapper.getByRole("button");
+    fireEvent.click(button);
+    const errorMessage = wrapper.queryByText(
+      "You cannot add yourself as a contact."
+    );
+    expect(errorMessage).toBeTruthy();
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
 });
 
 describe("setupSubmitHandler", () => {
