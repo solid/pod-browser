@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import T from "prop-types";
 import { overwriteFile } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
@@ -30,6 +30,8 @@ import { joinPath } from "../../src/stringHelpers";
 
 const TESTCAFE_ID_UPLOAD_BUTTON = "upload-file-button";
 const TESTCAFE_ID_UPLOAD_INPUT = "upload-file-input";
+const TESTCAFE_ID_UPLOAD_LABEL = "upload-file-label";
+
 export const DUPLICATE_DIALOG_ID = "upload-duplicate-file";
 
 function normalizeSafeFileName(fileName) {
@@ -170,6 +172,7 @@ export default function AddFileButton({ className, onSave, resourceList }) {
   } = useContext(ConfirmationDialogContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
   const [file, setFile] = useState(null);
+  const ref = useRef();
 
   const saveResource = handleSaveResource({
     fetch,
@@ -216,23 +219,36 @@ export default function AddFileButton({ className, onSave, resourceList }) {
   }, [confirmationSetup, confirmed, onConfirmation, file, open]);
 
   return (
-    // eslint-disable-next-line jsx-a11y/label-has-associated-control
-    <label
-      data-testid={TESTCAFE_ID_UPLOAD_BUTTON}
-      disabled={isUploading}
+    <button
+      type="button"
       className={className}
+      data-testid={TESTCAFE_ID_UPLOAD_BUTTON}
+      onClick={(e) => {
+        e.target.value = null;
+      }}
+      onKeyUp={(e) => {
+        if (ref.current) {
+          ref.current.click();
+        }
+        e.target.value = null;
+      }}
     >
-      {isUploading ? "Uploading..." : "Upload File"}
-      <input
-        data-testid={TESTCAFE_ID_UPLOAD_INPUT}
-        type="file"
-        style={{ display: "none" }}
-        onClick={(e) => {
-          e.target.value = null;
-        }}
-        onChange={onFileSelect}
-      />
-    </label>
+      <label
+        htmlFor="upload-file-input"
+        data-testid={TESTCAFE_ID_UPLOAD_LABEL}
+        disabled={isUploading}
+      >
+        {isUploading ? "Uploading..." : "Upload File"}
+        <input
+          ref={ref}
+          id="upload-file-input"
+          data-testid={TESTCAFE_ID_UPLOAD_INPUT}
+          type="file"
+          style={{ display: "none" }}
+          onChange={onFileSelect}
+        />
+      </label>
+    </button>
   );
 }
 

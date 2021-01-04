@@ -80,17 +80,24 @@ exports[`Container view Renders a table view without data 1`] = `
           >
             Create Folder
           </button>
-          <label
+          <button
             class="PodBrowser-page-header__action"
             data-testid="upload-file-button"
+            type="button"
           >
-            Upload File
-            <input
-              data-testid="upload-file-input"
-              style="display: none;"
-              type="file"
-            />
-          </label>
+            <label
+              data-testid="upload-file-label"
+              for="upload-file-input"
+            >
+              Upload File
+              <input
+                data-testid="upload-file-input"
+                id="upload-file-input"
+                style="display: none;"
+                type="file"
+              />
+            </label>
+          </button>
         </div>
       </div>
       <table
@@ -271,17 +278,24 @@ exports[`Container view Renders a table with data 1`] = `
           >
             Create Folder
           </button>
-          <label
+          <button
             class="PodBrowser-page-header__action"
             data-testid="upload-file-button"
+            type="button"
           >
-            Upload File
-            <input
-              data-testid="upload-file-input"
-              style="display: none;"
-              type="file"
-            />
-          </label>
+            <label
+              data-testid="upload-file-label"
+              for="upload-file-input"
+            >
+              Upload File
+              <input
+                data-testid="upload-file-input"
+                id="upload-file-input"
+                style="display: none;"
+                type="file"
+              />
+            </label>
+          </button>
         </div>
       </div>
       <table
