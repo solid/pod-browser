@@ -30,15 +30,14 @@ import {
 import useResourceInfo from "../../src/hooks/useResourceInfo";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 
-jest.mock("@inrupt/solid-client");
 jest.mock("../../src/hooks/useResourceInfo");
 jest.mock("../../src/hooks/usePoliciesContainer");
 jest.mock("../../src/solidClientHelpers/resource");
 
-const name = "Resource";
-const resourceIri = "iri";
-
 describe("Delete resource button", () => {
+  const name = "Resource";
+  const resourceIri = "iri";
+
   const policiesContainerUrl = "https://example.org/policies";
   const mockPoliciesContainer = mockSolidDatasetFrom(policiesContainerUrl);
   usePoliciesContainer.mockImplementation(() => ({
@@ -65,20 +64,25 @@ describe("Delete resource button", () => {
   describe("createDeleteHandler", () => {
     let onDelete;
     let handleDelete;
+    const router = {};
+    router.push = jest.fn();
     const policyUrl = null;
     const fetch = jest.fn();
-    const mockDataset = mockSolidDatasetFrom("https://example.org/example.txt");
+    const resourceInfo = mockSolidDatasetFrom(
+      "https://example.org/example.txt"
+    );
 
     beforeEach(async () => {
       getResource.mockResolvedValue({
-        dataset: mockDataset,
+        dataset: resourceInfo,
         iri: "https://example.org/example.txt",
       });
       onDelete = jest.fn();
       handleDelete = createDeleteHandler(
-        resourceIri,
+        resourceInfo,
         policyUrl,
         onDelete,
+        router,
         fetch
       );
       await handleDelete();
@@ -89,5 +93,40 @@ describe("Delete resource button", () => {
     });
 
     it("triggers onDelete", () => expect(onDelete).toHaveBeenCalledWith());
+  });
+
+  describe("when deleting current folder", () => {
+    let onDelete;
+    let handleDelete;
+    const router = {};
+    router.push = jest.fn();
+    const policyUrl = null;
+    const fetch = jest.fn();
+    const iri = "https://example.org/folder/subfolder/";
+
+    const resourceInfo = mockSolidDatasetFrom(iri);
+    beforeEach(async () => {
+      getResource.mockResolvedValue({
+        dataset: resourceInfo,
+        iri: "https://example.org/folder/subfolder/",
+      });
+      onDelete = jest.fn();
+      router.query = { iri: "https://example.org/folder/subfolder/" };
+      handleDelete = createDeleteHandler(
+        resourceInfo,
+        policyUrl,
+        onDelete,
+        router,
+        fetch
+      );
+      await handleDelete();
+    });
+
+    it("redirects to parent container", () => {
+      expect(router.push).toHaveBeenCalledWith(
+        "/resource/[iri]",
+        `/resource/${encodeURIComponent("https://example.org/folder/")}`
+      );
+    });
   });
 });

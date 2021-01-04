@@ -26,6 +26,7 @@ import {
   normalizeContainerUrl,
   joinPath,
   getContainerUrl,
+  getParentContainerUrl,
 } from "./index";
 
 describe("joinPath", () => {
@@ -130,5 +131,17 @@ describe("getContainerUrl", () => {
   });
   test("it returns the same url when passed a container url", () => {
     expect(getContainerUrl(containerUrl)).toEqual(containerUrl);
+  });
+});
+
+describe("getParentContainerUrl", () => {
+  const resourceUrl = "https://www.example.org/stuff/photo.jpg";
+  const containerUrl = "https://www.example.org/stuff/";
+  test("it returns the url of the parent container of a given resource", () => {
+    expect(getParentContainerUrl(resourceUrl)).toEqual(containerUrl);
+  });
+  const nestedContainerUrl = "https://www.example.org/stuff/nested/";
+  test("it returns the url of the parent container of a given container", () => {
+    expect(getParentContainerUrl(nestedContainerUrl)).toEqual(containerUrl);
   });
 });

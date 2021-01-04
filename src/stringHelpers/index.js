@@ -19,6 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { isContainer } from "@inrupt/solid-client";
+
 export function parseUrl(url) {
   const a = document.createElement("a");
   a.href = url;
@@ -59,4 +61,11 @@ export function normalizeContainerUrl(url) {
 export function getContainerUrl(url) {
   const encodedIri = encodeURI(url);
   return encodedIri.substring(0, encodedIri.lastIndexOf("/") + 1);
+}
+
+export function getParentContainerUrl(url) {
+  const parts = url.split("/");
+  return isContainer(url)
+    ? parts.slice(0, -2).join("/").concat("/")
+    : parts.slice(0, -1).join("/").concat("/");
 }

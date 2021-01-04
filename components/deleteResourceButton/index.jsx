@@ -21,7 +21,10 @@
 
 import React, { useContext } from "react";
 import T from "prop-types";
+import { useRouter } from "next/router";
 import { useSession } from "@inrupt/solid-ui-react";
+import { getSourceIri, isContainer } from "@inrupt/solid-client";
+import { getParentContainerUrl } from "../../src/stringHelpers";
 import usePoliciesContainer from "../../src/hooks/usePoliciesContainer";
 import AlertContext from "../../src/contexts/alertContext";
 import useResourceInfo from "../../src/hooks/useResourceInfo";
@@ -32,11 +35,22 @@ export function createDeleteHandler(
   resourceInfo,
   policiesContainer,
   onDelete,
+  router,
   fetch
 ) {
   return async () => {
     await deleteResource(resourceInfo, policiesContainer, fetch);
     onDelete();
+    const iri = getSourceIri(resourceInfo);
+
+    if (isContainer(resourceInfo) && iri === router.query.iri) {
+      const parentContainerUrl = getParentContainerUrl(iri);
+
+      router.push(
+        "/resource/[iri]",
+        `/resource/${encodeURIComponent(parentContainerUrl)}`
+      );
+    }
   };
 }
 
@@ -48,6 +62,7 @@ export default function DeleteResourceButton({
   ...buttonProps
 }) {
   const { fetch } = useSession();
+  const router = useRouter();
 
   const { alertError } = useContext(AlertContext);
   const { policiesContainer } = usePoliciesContainer();
@@ -63,6 +78,7 @@ export default function DeleteResourceButton({
     resourceInfo,
     policiesContainer,
     onDelete,
+    router,
     fetch
   );
 
