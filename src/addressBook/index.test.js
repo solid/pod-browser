@@ -374,6 +374,20 @@ describe("getContacts", () => {
   });
 });
 
+describe("getWebId", () => {
+  test("it returns the webId for a given person dataset", async () => {
+    const personDataset = mockPersonDatasetAlice();
+    const mockPersonWebIdNode = mockWebIdNode("http://example.com/alice#me");
+    const fetch = jest.fn();
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValueOnce(mockPersonWebIdNode.webIdNode);
+
+    const webId = await addressBookFns.getWebId(personDataset, fetch);
+    expect(webId).toEqual("http://example.com/alice#me");
+  });
+});
+
 describe("getProfiles", () => {
   afterEach(() => {
     jest.restoreAllMocks();

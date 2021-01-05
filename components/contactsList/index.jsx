@@ -30,7 +30,7 @@ import {
   PageHeader,
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
-import { getSourceUrl, getUrl, getStringNoLocale } from "@inrupt/solid-client";
+import { getSourceUrl, getStringNoLocale } from "@inrupt/solid-client";
 import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
 import { vcard, foaf } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";
@@ -44,7 +44,7 @@ import useProfiles from "../../src/hooks/useProfiles";
 import ContactsListSearch from "./contactsListSearch";
 import ProfileLink from "../profileLink";
 import { SearchProvider } from "../../src/contexts/searchContext";
-import { deleteContact } from "../../src/addressBook";
+import { deleteContact, getWebId } from "../../src/addressBook";
 import ContactsDrawer from "./contactsDrawer";
 import ContactsEmptyState from "./contactsEmptyState";
 
@@ -110,11 +110,11 @@ function ContactsList() {
       formattedNamePredicate
     );
     setSelectedContactName(name);
-
-    const webId = getUrl(people[selectedContactIndex].dataset, foaf.openid);
-
-    setSelectedContactWebId(webId);
-  }, [selectedContactIndex, formattedNamePredicate, people]);
+    (async () => {
+      const webId = await getWebId(people[selectedContactIndex].dataset, fetch);
+      setSelectedContactWebId(webId);
+    })();
+  }, [selectedContactIndex, formattedNamePredicate, people, fetch]);
 
   if (addressBookError) return addressBookError;
   if (peopleError) return peopleError;
