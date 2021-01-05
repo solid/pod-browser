@@ -375,7 +375,8 @@ export function createContact(
     },
     person
   );
-  dataset = webIdNode && setThing(dataset, webIdNode);
+
+  dataset = setThing(dataset, webIdNode);
 
   return {
     iri,

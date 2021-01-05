@@ -37,13 +37,13 @@ export const alicePhoto = "http://example.com/alice.jpg";
 const VCARD_WEBID_PREDICATE = "https://www.w3.org/2006/vcard/ns#WebId";
 
 export function mockWebIdNode(webId) {
-  const dataset = chain(
+  const webIdNode = chain(
     mockThingFrom("https://example.org/contacts/Person/1234/index.ttl#4567"),
     (t) => addUrl(t, rdf.type, VCARD_WEBID_PREDICATE),
     (t) => addUrl(t, vcard.value, webId)
   );
-  const url = asUrl(dataset);
-  return { webIdNode: dataset, webIdNodeUrl: url };
+  const url = asUrl(webIdNode);
+  return { webIdNode, webIdNodeUrl: url };
 }
 
 const mockWebIdNodeAlice = mockWebIdNode(aliceWebIdUrl);
