@@ -25,6 +25,7 @@ import { useSession } from "@inrupt/solid-ui-react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockSession from "../../__testUtils/mockSession";
 import AgentSearchForm, {
+  TESTCAFE_ID_ADD_AGENT_BUTTON,
   setupOnBlurHandler,
   setupOnChangeHandler,
   setupSubmitHandler,
@@ -158,7 +159,7 @@ describe("AgentSearchForm", () => {
         ]}
       />
     );
-    const button = wrapper.getByRole("button");
+    const button = wrapper.getByTestId(TESTCAFE_ID_ADD_AGENT_BUTTON);
     fireEvent.click(button);
     const errorMessage = wrapper.queryByText(
       "You cannot add yourself as a contact."

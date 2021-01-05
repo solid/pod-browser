@@ -88,12 +88,7 @@ describe("handleSubmit", () => {
     alertError = jest.fn();
     alertSuccess = jest.fn();
     setDirtyForm = jest.fn();
-    session = {
-      info: {
-        webId: "url",
-      },
-      fetch: jest.fn(),
-    };
+    session = mockSession();
   });
 
   afterEach(() => {

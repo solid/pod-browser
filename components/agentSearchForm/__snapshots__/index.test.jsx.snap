@@ -20,6 +20,7 @@ exports[`AgentSearchForm it has a default heading 1`] = `
     />
     <button
       class="PodBrowser-button"
+      data-testid="add-agent-button"
       type="submit"
     >
       Add
@@ -48,6 +49,7 @@ exports[`AgentSearchForm it renders an AgentSearchForm 1`] = `
     />
     <button
       class="PodBrowser-button"
+      data-testid="add-agent-button"
       type="submit"
     >
       Add

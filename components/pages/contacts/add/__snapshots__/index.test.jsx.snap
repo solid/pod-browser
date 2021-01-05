@@ -39,6 +39,7 @@ exports[`AddContactPage renders 1`] = `
       />
       <button
         class="PodBrowser-button"
+        data-testid="add-agent-button"
         type="submit"
       >
         Add Contact

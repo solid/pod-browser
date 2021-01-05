@@ -31,6 +31,8 @@ import {
 } from "@inrupt/prism-react-components";
 import { useSession } from "@inrupt/solid-ui-react";
 
+export const TESTCAFE_ID_ADD_AGENT_BUTTON = "add-agent-button";
+
 export function setupSubmitHandler(
   value,
   session,
@@ -140,7 +142,9 @@ export default function AgentSearchForm({
 
       {children}
 
-      <Button type="submit">{buttonText}</Button>
+      <Button type="submit" data-testid={TESTCAFE_ID_ADD_AGENT_BUTTON}>
+        {buttonText}
+      </Button>
     </Form>
   );
 }
