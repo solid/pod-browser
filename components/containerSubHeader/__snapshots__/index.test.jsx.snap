@@ -38,24 +38,20 @@ exports[`ContainerSubHeader Renders subheader 1`] = `
       >
         Create Folder
       </button>
-      <button
+      <label
         class="PodBrowser-page-header__action"
         data-testid="upload-file-button"
-        type="button"
+        for="upload-file-input"
+        tabindex="0"
       >
-        <label
-          data-testid="upload-file-label"
-          for="upload-file-input"
-        >
-          Upload File
-          <input
-            data-testid="upload-file-input"
-            id="upload-file-input"
-            style="display: none;"
-            type="file"
-          />
-        </label>
-      </button>
+        Upload File
+        <input
+          data-testid="upload-file-input"
+          id="upload-file-input"
+          style="display: none;"
+          type="file"
+        />
+      </label>
     </div>
   </div>
 </DocumentFragment>

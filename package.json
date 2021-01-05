@@ -62,6 +62,7 @@
     "@inrupt/eslint-config-react": "^0.0.4",
     "@sentry/webpack-plugin": "^1.13.0",
     "@testing-library/dom": "^7.26.5",
+    "@testing-library/jest-dom": "^5.11.8",
     "@testing-library/react": "^11.1.0",
     "@testing-library/react-hooks": "^3.4.2",
     "@testing-library/user-event": "^12.2.0",

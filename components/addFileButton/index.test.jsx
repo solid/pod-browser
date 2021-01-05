@@ -22,6 +22,7 @@
 import React from "react";
 import * as SolidClientFns from "@inrupt/solid-client";
 import { act, render } from "@testing-library/react";
+import "@testing-library/jest-dom/extend-expect";
 import userEvent from "@testing-library/user-event";
 import { PodLocationProvider } from "../../src/contexts/podLocationContext";
 import mockSession from "../../__testUtils/mockSession";
@@ -29,6 +30,8 @@ import mockSessionContextProvider from "../../__testUtils/mockSessionContextProv
 import AlertContext from "../../src/contexts/alertContext";
 import AddFileButton, {
   DUPLICATE_DIALOG_ID,
+  TESTCAFE_ID_UPLOAD_BUTTON,
+  TESTCAFE_ID_UPLOAD_INPUT,
   handleConfirmation,
   handleFileSelect,
   handleSaveResource,
@@ -78,6 +81,28 @@ describe("AddFileButton", () => {
 
   test("Renders an add file button", () => {
     expect(renderResult.asFragment()).toMatchSnapshot();
+  });
+
+  test("Handles focus correctly on click", () => {
+    const label = renderResult.getByTestId(TESTCAFE_ID_UPLOAD_BUTTON);
+    userEvent.tab();
+    expect(label).toHaveFocus();
+
+    userEvent.click(label);
+
+    const input = renderResult.getByTestId(TESTCAFE_ID_UPLOAD_INPUT);
+    expect(input).toHaveFocus();
+  });
+
+  test("Handles focus correctly on enter", () => {
+    const label = renderResult.getByTestId(TESTCAFE_ID_UPLOAD_BUTTON);
+    userEvent.tab();
+    expect(label).toHaveFocus();
+
+    userEvent.type(label, "{enter}");
+
+    const input = renderResult.getByTestId(TESTCAFE_ID_UPLOAD_INPUT);
+    expect(input).toHaveFocus();
   });
 
   test("Uploads a file", async () => {

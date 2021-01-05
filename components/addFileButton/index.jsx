@@ -28,9 +28,8 @@ import AlertContext from "../../src/contexts/alertContext";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
 import { joinPath } from "../../src/stringHelpers";
 
-const TESTCAFE_ID_UPLOAD_BUTTON = "upload-file-button";
-const TESTCAFE_ID_UPLOAD_INPUT = "upload-file-input";
-const TESTCAFE_ID_UPLOAD_LABEL = "upload-file-label";
+export const TESTCAFE_ID_UPLOAD_BUTTON = "upload-file-button";
+export const TESTCAFE_ID_UPLOAD_INPUT = "upload-file-input";
 
 export const DUPLICATE_DIALOG_ID = "upload-duplicate-file";
 
@@ -219,36 +218,36 @@ export default function AddFileButton({ className, onSave, resourceList }) {
   }, [confirmationSetup, confirmed, onConfirmation, file, open]);
 
   return (
-    <button
-      type="button"
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+    <label
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+      tabIndex="0"
+      htmlFor="upload-file-input"
       className={className}
       data-testid={TESTCAFE_ID_UPLOAD_BUTTON}
+      disabled={isUploading}
       onClick={(e) => {
         e.target.value = null;
       }}
       onKeyUp={(e) => {
-        if (ref.current) {
-          ref.current.click();
+        if (e.key === "Enter") {
+          if (ref.current) {
+            ref.current.click();
+          }
+          e.target.value = null;
         }
-        e.target.value = null;
       }}
     >
-      <label
-        htmlFor="upload-file-input"
-        data-testid={TESTCAFE_ID_UPLOAD_LABEL}
-        disabled={isUploading}
-      >
-        {isUploading ? "Uploading..." : "Upload File"}
-        <input
-          ref={ref}
-          id="upload-file-input"
-          data-testid={TESTCAFE_ID_UPLOAD_INPUT}
-          type="file"
-          style={{ display: "none" }}
-          onChange={onFileSelect}
-        />
-      </label>
-    </button>
+      {isUploading ? "Uploading..." : "Upload File"}
+      <input
+        ref={ref}
+        id="upload-file-input"
+        data-testid={TESTCAFE_ID_UPLOAD_INPUT}
+        type="file"
+        style={{ display: "none" }}
+        onChange={onFileSelect}
+      />
+    </label>
   );
 }
 
