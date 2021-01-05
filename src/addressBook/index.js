@@ -164,17 +164,14 @@ export async function getContacts(indexFileDataset, contactTypeIri, fetch) {
   return respond(contacts);
 }
 
-export async function getWebId(dataset, fetch) {
-  const webIdNodeUrl = getUrl(dataset, vcard.url);
-  let webIdNode;
-  let webIdUrl;
+export function getWebId(dataset) {
   let url;
-  try {
-    webIdNode = await getSolidDataset(webIdNodeUrl, { fetch });
-    webIdUrl = webIdNode && getUrl(webIdNode, vcard.value);
+  const webIdNodeUrl = getUrl(dataset, vcard.url);
+  if (webIdNodeUrl) {
+    const webIdNode = getThing(dataset, webIdNodeUrl);
+    const webIdUrl = webIdNode && getUrl(webIdNode, vcard.value);
     url = webIdUrl;
-  } catch {
-    webIdNode = null;
+  } else {
     url = getUrl(dataset, foaf.openid);
   }
   return url;
@@ -183,7 +180,7 @@ export async function getWebId(dataset, fetch) {
 export async function getProfiles(people, fetch) {
   const profileResponses = await Promise.all(
     people.map(async ({ dataset }) => {
-      const url = await getWebId(dataset, fetch);
+      const url = getWebId(dataset);
       return getResource(url, fetch);
     })
   );

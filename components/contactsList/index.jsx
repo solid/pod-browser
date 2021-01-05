@@ -111,7 +111,7 @@ function ContactsList() {
     );
     setSelectedContactName(name);
     (async () => {
-      const webId = await getWebId(people[selectedContactIndex].dataset, fetch);
+      const webId = getWebId(people[selectedContactIndex].dataset, fetch);
       setSelectedContactWebId(webId);
     })();
   }, [selectedContactIndex, formattedNamePredicate, people, fetch]);

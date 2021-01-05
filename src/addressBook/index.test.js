@@ -375,15 +375,15 @@ describe("getContacts", () => {
 });
 
 describe("getWebId", () => {
-  test("it returns the webId for a given person dataset", async () => {
+  test("it returns the webId for a given person dataset", () => {
     const personDataset = mockPersonDatasetAlice();
     const mockPersonWebIdNode = mockWebIdNode("http://example.com/alice#me");
-    const fetch = jest.fn();
-    jest
-      .spyOn(solidClientFns, "getSolidDataset")
-      .mockResolvedValueOnce(mockPersonWebIdNode.webIdNode);
 
-    const webId = await addressBookFns.getWebId(personDataset, fetch);
+    jest
+      .spyOn(solidClientFns, "getThing")
+      .mockReturnValueOnce(mockPersonWebIdNode.webIdNode);
+
+    const webId = addressBookFns.getWebId(personDataset);
     expect(webId).toEqual("http://example.com/alice#me");
   });
 });
