@@ -9,12 +9,11 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 vcard:Individual {
     vcard:fn xsd:string {1} ;
     vcard:inAddressBook vcard:AddressBook + ;
-    owl:sameAs vcard:Individual * ; # WebIds
+    vcard:url vcard:WebId {1}; 
     vcard:hasUID xsd:string ? ;
     vcard:hasName xsd:string ? ; # structured name
     vcard:hasPhoto dc:Image * ;
     vcard:hasRelated vcard:RelatedType * ;
-    vcard:url rdf:Resource * ; # need to describe the type of url to be able to identify WebIds
     vcard:hasAddress vcard:Address * ;
     vcard:bday xsd:date ? ;
     vcard:hasEmail vcard:Email * ;
@@ -23,6 +22,10 @@ vcard:Individual {
     vcard:role xsd:string ? ;
     vcard:title xsd:string ? ;
     vcard:note xsd:string ? ;
+}
+
+vcard:WebId {
+    vcard:value xsd:string {1};
 }
 
 vcard:Address {
