@@ -24,14 +24,19 @@ import * as RouterFns from "next/router";
 import T from "prop-types";
 import { render } from "@testing-library/react";
 import ContainerDetails from "./index";
-import ResourceDrawer, { handleCloseDrawer } from "../resourceDrawer";
+import ResourceDrawer, {
+  handleCloseDrawer,
+  handleRedirectToParentContainer,
+} from "../resourceDrawer";
 
 jest.mock("../resourceDrawer");
 
 describe("ContainerDetails", () => {
   let mutate;
   let onUpdateFn;
+  let onDeleteCurrentContainerFn;
   let handleCloseDrawerFn;
+  let handleRedirectToParentContainerFn;
   let renderResult;
 
   beforeEach(() => {
@@ -41,18 +46,25 @@ describe("ContainerDetails", () => {
       query: {},
     });
 
-    function MockResourceDrawer({ onUpdate }) {
+    function MockResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
       onUpdateFn = onUpdate;
+      onDeleteCurrentContainerFn = onDeleteCurrentContainer;
       return null;
     }
     MockResourceDrawer.propTypes = {
       onUpdate: T.func.isRequired,
+      onDeleteCurrentContainer: T.func.isRequired,
     };
 
     ResourceDrawer.mockImplementationOnce(MockResourceDrawer);
 
     handleCloseDrawerFn = jest.fn().mockResolvedValue(jest.fn());
     handleCloseDrawer.mockImplementationOnce(() => handleCloseDrawerFn);
+
+    handleRedirectToParentContainerFn = jest.fn().mockResolvedValue(jest.fn());
+    handleRedirectToParentContainer.mockImplementationOnce(
+      () => handleRedirectToParentContainerFn
+    );
 
     mutate = jest.fn();
 
@@ -69,5 +81,13 @@ describe("ContainerDetails", () => {
     test("it calls mutate", () => expect(mutate).toHaveBeenCalled());
     test("it calls handleCloseDrawerFn", () =>
       expect(handleCloseDrawerFn).toHaveBeenCalled());
+  });
+
+  describe("when onDeleteCurrentContainer is called", () => {
+    beforeEach(() => onDeleteCurrentContainerFn());
+
+    test("it calls mutate", () => expect(mutate).toHaveBeenCalled());
+    test("it calls handleCloseDrawerFn", () =>
+      expect(handleRedirectToParentContainerFn).toHaveBeenCalled());
   });
 });

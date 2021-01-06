@@ -24,7 +24,6 @@ import T from "prop-types";
 import { useRouter } from "next/router";
 import { useSession } from "@inrupt/solid-ui-react";
 import { getSourceIri, isContainer } from "@inrupt/solid-client";
-import { getParentContainerUrl } from "../../src/stringHelpers";
 import usePoliciesContainer from "../../src/hooks/usePoliciesContainer";
 import AlertContext from "../../src/contexts/alertContext";
 import useResourceInfo from "../../src/hooks/useResourceInfo";
@@ -35,21 +34,18 @@ export function createDeleteHandler(
   resourceInfo,
   policiesContainer,
   onDelete,
+  onDeleteCurrentContainer,
   router,
   fetch
 ) {
   return async () => {
     await deleteResource(resourceInfo, policiesContainer, fetch);
-    onDelete();
     const iri = getSourceIri(resourceInfo);
 
     if (isContainer(resourceInfo) && iri === router.query.iri) {
-      const parentContainerUrl = getParentContainerUrl(iri);
-
-      router.push(
-        "/resource/[iri]",
-        `/resource/${encodeURIComponent(parentContainerUrl)}`
-      );
+      onDeleteCurrentContainer(iri);
+    } else {
+      onDelete();
     }
   };
 }
@@ -59,6 +55,7 @@ export default function DeleteResourceButton({
   name,
   resourceIri,
   onDelete,
+  onDeleteCurrentContainer,
   ...buttonProps
 }) {
   const { fetch } = useSession();
@@ -78,6 +75,7 @@ export default function DeleteResourceButton({
     resourceInfo,
     policiesContainer,
     onDelete,
+    onDeleteCurrentContainer,
     router,
     fetch
   );
@@ -100,4 +98,5 @@ DeleteResourceButton.propTypes = {
   name: T.string.isRequired,
   resourceIri: T.string.isRequired,
   onDelete: T.func.isRequired,
+  onDeleteCurrentContainer: T.func.isRequired,
 };

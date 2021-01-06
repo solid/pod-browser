@@ -25,7 +25,10 @@ import * as RouterFns from "next/router";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
-import ResourceDrawer, { handleCloseDrawer } from "./index";
+import ResourceDrawer, {
+  handleCloseDrawer,
+  handleRedirectToParentContainer,
+} from "./index";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockDetailsContextMenuProvider from "../../__testUtils/mockDetailsContextMenuProvider";
 import useResourceInfo from "../../src/hooks/useResourceInfo";
@@ -200,5 +203,27 @@ describe("handleCloseDrawer", () => {
 
     expect(setMenuOpen).toHaveBeenCalledWith(false);
     expect(router.replace).toHaveBeenCalledWith("/resource/[iri]", "/");
+  });
+});
+
+describe("handleRedirectToParentContainer", () => {
+  test("it creates a function that closes the drawer and redirects to parent container", async () => {
+    const setMenuOpen = jest.fn();
+    const router = {
+      replace: jest.fn(),
+    };
+    const subfolderIri = "https://example.org/folder/subfolder/";
+    const handler = handleRedirectToParentContainer({
+      setMenuOpen,
+      iri: subfolderIri,
+      router,
+    });
+    await handler();
+
+    expect(setMenuOpen).toHaveBeenCalledWith(false);
+    expect(router.replace).toHaveBeenCalledWith(
+      "/resource/[iri]",
+      `/resource/${encodeURIComponent("https://example.org/folder/")}`
+    );
   });
 });

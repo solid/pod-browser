@@ -50,6 +50,7 @@ describe("Delete resource button", () => {
       renderResult = renderWithTheme(
         <DeleteResourceButton
           onDelete={jest.fn()}
+          onDeleteCurrentContainer={jest.fn()}
           resourceIri={resourceIri}
           name={name}
         />
@@ -97,6 +98,7 @@ describe("Delete resource button", () => {
 
   describe("when deleting current folder", () => {
     let onDelete;
+    let onDeleteCurrentContainer;
     let handleDelete;
     const router = {};
     router.push = jest.fn();
@@ -111,22 +113,19 @@ describe("Delete resource button", () => {
         iri: "https://example.org/folder/subfolder/",
       });
       onDelete = jest.fn();
+      onDeleteCurrentContainer = jest.fn();
       router.query = { iri: "https://example.org/folder/subfolder/" };
       handleDelete = createDeleteHandler(
         resourceInfo,
         policyUrl,
         onDelete,
+        onDeleteCurrentContainer,
         router,
         fetch
       );
       await handleDelete();
     });
-
-    it("redirects to parent container", () => {
-      expect(router.push).toHaveBeenCalledWith(
-        "/resource/[iri]",
-        `/resource/${encodeURIComponent("https://example.org/folder/")}`
-      );
-    });
+    it("triggers onDeleteCurrentContainer", () =>
+      expect(onDeleteCurrentContainer).toHaveBeenCalled());
   });
 });

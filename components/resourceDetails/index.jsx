@@ -54,7 +54,10 @@ const TESTCAFE_ID_TITLE = "resource-title";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function ResourceDetails({ onDelete }) {
+export default function ResourceDetails({
+  onDelete,
+  onDeleteCurrentContainer,
+}) {
   const { dataset } = useContext(DatasetContext);
   const datasetUrl = getSourceUrl(dataset);
   const classes = useStyles();
@@ -103,6 +106,7 @@ export default function ResourceDetails({ onDelete }) {
                 resourceIri={datasetUrl}
                 name={displayName}
                 onDelete={onDelete}
+                onDeleteCurrentContainer={onDeleteCurrentContainer}
                 data-testid={TESTCAFE_ID_DELETE_BUTTON}
               />
             </ActionMenuItem>
@@ -154,8 +158,10 @@ export default function ResourceDetails({ onDelete }) {
 
 ResourceDetails.propTypes = {
   onDelete: T.func,
+  onDeleteCurrentContainer: T.func,
 };
 
 ResourceDetails.defaultProps = {
   onDelete: () => {},
+  onDeleteCurrentContainer: () => {},
 };

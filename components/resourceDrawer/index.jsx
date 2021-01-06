@@ -25,7 +25,10 @@ import { useRouter } from "next/router";
 import { Drawer, Message } from "@inrupt/prism-react-components";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
-import { stripQueryParams } from "../../src/stringHelpers";
+import {
+  getParentContainerUrl,
+  stripQueryParams,
+} from "../../src/stringHelpers";
 import ResourceDetails from "../resourceDetails";
 import DetailsLoading from "../resourceDetails/detailsLoading";
 import useAccessControl from "../../src/hooks/useAccessControl";
@@ -42,7 +45,18 @@ export function handleCloseDrawer({ setMenuOpen, router }) {
   };
 }
 
-export default function ResourceDrawer({ onUpdate }) {
+export function handleRedirectToParentContainer({ setMenuOpen, iri, router }) {
+  return async () => {
+    setMenuOpen(false);
+    const parentContainerUrl = getParentContainerUrl(iri);
+    await router.replace(
+      "/resource/[iri]",
+      `/resource/${encodeURIComponent(parentContainerUrl)}`
+    );
+  };
+}
+
+export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
   const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
   const router = useRouter();
   const {
@@ -86,7 +100,10 @@ export default function ResourceDrawer({ onUpdate }) {
       ) : (
         <AccessControlProvider accessControl={accessControl}>
           <DatasetProvider dataset={resourceInfo}>
-            <ResourceDetails onDelete={onUpdate} />
+            <ResourceDetails
+              onDelete={onUpdate}
+              onDeleteCurrentContainer={onDeleteCurrentContainer}
+            />
           </DatasetProvider>
         </AccessControlProvider>
       )}
@@ -96,8 +113,10 @@ export default function ResourceDrawer({ onUpdate }) {
 
 ResourceDrawer.propTypes = {
   onUpdate: T.func,
+  onDeleteCurrentContainer: T.func,
 };
 
 ResourceDrawer.defaultProps = {
   onUpdate: () => {},
+  onDeleteCurrentContainer: () => {},
 };
