@@ -59,7 +59,7 @@ export function normalizeContainerUrl(url) {
 }
 
 export function getContainerUrl(url) {
-  return url.substring(0, url.lastIndexOf("/") + 1);
+  return url?.substring(0, url.lastIndexOf("/") + 1);
 }
 
 export function getParentContainerUrl(url) {

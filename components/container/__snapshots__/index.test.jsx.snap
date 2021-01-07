@@ -7,6 +7,7 @@ exports[`Container view Renders a spinner if data is loading 1`] = `
   >
     <svg
       class="PodBrowser-loading-indicator"
+      data-testid="spinner"
       viewBox="22 22 44 44"
     >
       <circle
@@ -188,6 +189,7 @@ exports[`Container view renders NoControlError if it fails to get access control
         >
           <svg
             class="PodBrowser-loading-indicator"
+            data-testid="spinner"
             viewBox="22 22 44 44"
           >
             <circle
@@ -831,6 +833,7 @@ exports[`Container view renders a table 1`] = `
         >
           <svg
             class="PodBrowser-loading-indicator"
+            data-testid="spinner"
             viewBox="22 22 44 44"
           >
             <circle
@@ -1080,6 +1083,7 @@ exports[`Container view renders a table 1`] = `
           >
             <svg
               class="PodBrowser-loading-indicator"
+              data-testid="spinner"
               viewBox="22 22 44 44"
             >
               <circle

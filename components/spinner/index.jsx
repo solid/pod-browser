@@ -22,6 +22,8 @@
 import React from "react";
 import { LoadingIndicator } from "@inrupt/prism-react-components";
 
+export const TESTID_SPINNER = "spinner";
+
 export default function Spinner() {
-  return <LoadingIndicator center />;
+  return <LoadingIndicator center data-testid={TESTID_SPINNER} />;
 }

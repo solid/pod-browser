@@ -63,7 +63,7 @@ export default function Container({ iri }) {
   );
   const { error: accessControlError } = useAccessControl(podRootResourceInfo);
 
-  const isAuthPod = iri.startsWith(podRootIri);
+  const isAuthPod = iri?.startsWith(podRootIri);
 
   useEffect(() => {
     setResourcePath(iri);
@@ -90,7 +90,7 @@ export default function Container({ iri }) {
     }));
   }, [resourceIris]);
 
-  const loading = !resourceIris || !container;
+  const loading = !resourceIris || !container || !iri;
 
   if (containerError && isHTTPError(containerError.message, 401))
     return <AccessForbidden />;

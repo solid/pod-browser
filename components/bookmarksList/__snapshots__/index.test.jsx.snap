@@ -171,6 +171,7 @@ exports[`BookmarksList it renders a spinner if bookmarks are loading 1`] = `
   >
     <svg
       class="PodBrowser-loading-indicator"
+      data-testid="spinner"
       viewBox="22 22 44 44"
     >
       <circle
