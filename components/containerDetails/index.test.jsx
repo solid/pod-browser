@@ -87,7 +87,7 @@ describe("ContainerDetails", () => {
     beforeEach(() => onDeleteCurrentContainerFn());
 
     test("it calls mutate", () => expect(mutate).toHaveBeenCalled());
-    test("it calls handleCloseDrawerFn", () =>
+    test("it calls handleRedirectToParentContainerFn", () =>
       expect(handleRedirectToParentContainerFn).toHaveBeenCalled());
   });
 });
