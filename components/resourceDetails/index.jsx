@@ -145,7 +145,7 @@ export default function ResourceDetails({
             expandIcon={expandIcon}
             data-testid={TESTCAFE_ID_ACCORDION_PERMISSIONS}
           >
-            Permissions
+            Sharing
           </AccordionSummary>
           <AccordionDetails className={classes.accordionDetails}>
             <ResourceSharing />

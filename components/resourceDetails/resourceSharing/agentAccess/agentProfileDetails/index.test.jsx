@@ -20,34 +20,32 @@
  */
 
 import React from "react";
-import { renderWithTheme } from "../../../__testUtils/withTheme";
-import ResourceSharing from "./index";
-import usePermissions from "../../../src/hooks/usePermissions";
-import * as permissionHelpers from "../../../src/solidClientHelpers/permissions";
+import AgentProfileDetails from "./index";
 
-jest.mock("../../../src/hooks/usePermissions");
+import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 
-const { ACL } = permissionHelpers;
-const webId = "webId";
-const permission = {
-  webId,
-  alias: ACL.CONTROL.alias,
-  acl: ACL.CONTROL.acl,
-  profile: { webId },
-};
+const webId = "https://example.com/profile/card#me";
 
-describe("AgentAccessList", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-  test("it renders three lists of permissions for editors, viewers and blocked", () => {
-    usePermissions.mockReturnValue({ permissions: [permission] });
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
-    expect(asFragment()).toMatchSnapshot();
-  });
-  test("it renders a spinner while loading permissions for access control", () => {
-    usePermissions.mockReturnValue({ permissions: null });
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
+describe("AgentProfileDetails", () => {
+  const profile = {
+    avatar: null,
+    name: "Example Agent",
+    webId,
+  };
+  const toggleShare = jest.fn();
+  const removePermissions = jest.fn();
+  const resourceIri = "/iri/";
+
+  it("renders without error", () => {
+    const { asFragment } = renderWithTheme(
+      <AgentProfileDetails
+        removePermissions={removePermissions}
+        toggleShare={toggleShare}
+        profile={profile}
+        resourceIri={resourceIri}
+        webId={webId}
+      />
+    );
     expect(asFragment()).toMatchSnapshot();
   });
 });
