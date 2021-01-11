@@ -19,12 +19,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default () => ({
-  listItem: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    paddingRight: 0,
-    paddingLeft: 0,
-  },
+import React from "react";
+import userEvent from "@testing-library/user-event";
+
+import AddAgentButton from "./index";
+
+import { renderWithTheme } from "../../../../__testUtils/withTheme";
+
+describe("AddAgentButton", () => {
+  const onClick = jest.fn();
+  it("renders a button with the correct text", () => {
+    const { asFragment } = renderWithTheme(
+      <AddAgentButton type="editors" onClick={onClick} />
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+  it("calls onClick function when clicking the button", () => {
+    const { getByTestId } = renderWithTheme(
+      <AddAgentButton type="editors" onClick={onClick} />
+    );
+    const button = getByTestId("add-agent-button");
+    userEvent.click(button);
+    expect(onClick).toHaveBeenCalled();
+  });
 });

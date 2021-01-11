@@ -1,0 +1,314 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AgentAccessTable renders a list of permissions 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+  >
+    <div
+      class="PodBrowser-headerContainer"
+    >
+      <i
+        class="PodBrowser-icon-editor PodBrowser-icon PodBrowser-iconEditor"
+      />
+      <div
+        class="PodBrowser-textContainer"
+      >
+        <div
+          class="PodBrowser-titleAndButtonContainer"
+        >
+          <p
+            class="PodBrowser-title"
+          >
+            Editors
+          </p>
+          <button
+            class="PodBrowser-button PodBrowser-button--action PodBrowser-button"
+            data-testid="add-agent-button"
+          >
+            <i
+              alt="Add Editors Button"
+              class="PodBrowser-icon-add PodBrowser-icon"
+            />
+            Add Editors
+          </button>
+        </div>
+        <span
+          class="PodBrowser-description"
+        >
+          <p>
+            <b>
+              Can 
+            </b>
+            view, edit and delete this resource
+          </p>
+        </span>
+      </div>
+    </div>
+    <div
+      class="PodBrowser-container PodBrowser-entered"
+      style="min-height: 0px;"
+    >
+      <div
+        class="PodBrowser-wrapper"
+      >
+        <div
+          class="PodBrowser-wrapperInner"
+        >
+          <div
+            role="region"
+          >
+            <div
+              class="PodBrowser-permissionsContainer"
+            >
+              <div
+                class="PodBrowser-tabsContainer"
+              >
+                <div
+                  class="PodBrowser-root"
+                >
+                  <div
+                    class="PodBrowser-scroller PodBrowser-fixed"
+                    style="overflow: hidden;"
+                  >
+                    <div
+                      aria-label="Permissions Filter tabs"
+                      class="PodBrowser-flexContainer"
+                      role="tablist"
+                    >
+                      <button
+                        aria-selected="true"
+                        class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit PodBrowser-selected PodBrowser-selected"
+                        data-testid="tab-all"
+                        role="tab"
+                        tabindex="0"
+                        type="button"
+                      >
+                        <span
+                          class="PodBrowser-wrapper"
+                        >
+                          All
+                        </span>
+                        <span
+                          class="PodBrowser-root"
+                        />
+                      </button>
+                      <button
+                        aria-selected="false"
+                        class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit"
+                        data-testid="tab-people"
+                        role="tab"
+                        tabindex="-1"
+                        type="button"
+                      >
+                        <span
+                          class="PodBrowser-wrapper"
+                        >
+                          People
+                        </span>
+                        <span
+                          class="PodBrowser-root"
+                        />
+                      </button>
+                      <button
+                        aria-selected="false"
+                        class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit"
+                        data-testid="tab-groups"
+                        role="tab"
+                        tabindex="-1"
+                        type="button"
+                      >
+                        <span
+                          class="PodBrowser-wrapper"
+                        >
+                          Groups
+                        </span>
+                        <span
+                          class="PodBrowser-root"
+                        />
+                      </button>
+                    </div>
+                    <span
+                      class="PodBrowser-root PodBrowser-colorSecondary PodBrowser-indicator PodBrowser-indicator"
+                      style="left: 0px; width: 0px;"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="PodBrowser-searchBoxContainer"
+              >
+                <button
+                  aria-label="search"
+                  class="PodBrowser-root PodBrowser-root"
+                  tabindex="0"
+                  type="submit"
+                >
+                  <span
+                    class="PodBrowser-label"
+                  >
+                    <i
+                      alt="search icon"
+                      aria-label="search"
+                      class="PodBrowser-icon-search PodBrowser-icon PodBrowser-iconSearch"
+                    />
+                  </span>
+                  <span
+                    class="PodBrowser-root"
+                  />
+                </button>
+                <div
+                  class="PodBrowser-root PodBrowser-searchInput"
+                >
+                  <input
+                    aria-label="Search by name or WebId"
+                    class="PodBrowser-input"
+                    data-testid="search-input"
+                    placeholder="Search by name or WebId"
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <table
+                class="PodBrowser-table PodBrowser-agents-table"
+                role="table"
+              >
+                <tbody
+                  class="PodBrowser-table__body"
+                  role="rowgroup"
+                >
+                  <tr
+                    class="PodBrowser-table__body-row"
+                  >
+                    <td
+                      class="PodBrowser-table__body-cell PodBrowser-agent-cell"
+                    >
+                      <div
+                        class="PodBrowser-nameAndAvatarContainer"
+                      >
+                        <div
+                          class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="PodBrowser-root PodBrowser-fallback"
+                            focusable="false"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                            />
+                          </svg>
+                        </div>
+                        <p
+                          class="PodBrowser-root PodBrowser-detailText PodBrowser-body1 PodBrowser-detailText"
+                          data-testid="agent-web-id"
+                        >
+                          Example 1
+                          <span
+                            class="PodBrowser-shareText"
+                          >
+                            Can Share
+                          </span>
+                        </p>
+                        <button
+                          class="PodBrowser-button"
+                          data-testid="menu-button"
+                          type="button"
+                        >
+                          <i
+                            alt="More Options Menu"
+                            class="PodBrowser-icon-more"
+                          />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AgentAccessTable renders an empty list of permissions 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+  >
+    <div
+      class="PodBrowser-headerContainer"
+    >
+      <i
+        class="PodBrowser-icon-editor PodBrowser-icon PodBrowser-iconEditor"
+      />
+      <div
+        class="PodBrowser-textContainer"
+      >
+        <div
+          class="PodBrowser-titleAndButtonContainer"
+        >
+          <p
+            class="PodBrowser-title"
+          >
+            Editors
+          </p>
+          <button
+            class="PodBrowser-button PodBrowser-button--action PodBrowser-button"
+            data-testid="add-agent-button"
+          >
+            <i
+              alt="Add Editors Button"
+              class="PodBrowser-icon-add PodBrowser-icon"
+            />
+            Add Editors
+          </button>
+        </div>
+        <span
+          class="PodBrowser-description"
+        >
+          <p>
+            <b>
+              Can 
+            </b>
+            view, edit and delete this resource
+          </p>
+        </span>
+      </div>
+    </div>
+    <div
+      class="PodBrowser-container PodBrowser-entered"
+      style="min-height: 0px;"
+    >
+      <div
+        class="PodBrowser-wrapper"
+      >
+        <div
+          class="PodBrowser-wrapperInner"
+        >
+          <div
+            role="region"
+          >
+            <div
+              class="PodBrowser-permissionsContainer"
+            >
+              <span
+                class="PodBrowser-emptyStateTextContainer"
+              >
+                <p>
+                  No editors
+                </p>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AgentAccessOptionsMenu it renders a button which triggers the opening of the menu 1`] = `
+<DocumentFragment>
+  <button
+    class="PodBrowser-button"
+    data-testid="menu-button"
+    type="button"
+  >
+    <i
+      alt="More Options Menu"
+      class="PodBrowser-icon-more"
+    />
+  </button>
+</DocumentFragment>
+`;
