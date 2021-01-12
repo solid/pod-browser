@@ -21,7 +21,7 @@
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import T from "prop-types";
 import { createStyles, makeStyles, Popover } from "@material-ui/core";
 import { InputGroup, Label, Message } from "@inrupt/prism-react-components";
@@ -33,6 +33,7 @@ import {
 } from "../../src/solidClientHelpers/permissions";
 import styles from "./styles";
 import AccessControlContext from "../../src/contexts/accessControlContext";
+import usePermissions from "../../src/hooks/usePermissions";
 
 const POPOVER_ID = "AddPermissionWithWebId";
 const TESTCAFE_ID_ADD_USER_WITH_WEBID_BUTTON =
@@ -99,21 +100,12 @@ export default function AddPermissionUsingWebIdButton({
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [access, setAccess] = useState(createAccessMap(true));
-  const [permissions, setPermissions] = useState(null);
   const classes = useStyles();
   const [disabled, setDisabled] = useState(false);
   const { accessControl } = useContext(AccessControlContext);
   const [agentId, setAgentId] = useState("");
   const [dirtyForm, setDirtyForm] = useState(false);
-
-  useEffect(() => {
-    if (!accessControl) {
-      return;
-    }
-    accessControl.getPermissions().then((normalizedPermissions) => {
-      setPermissions(normalizedPermissions.reverse());
-    });
-  }, [accessControl]);
+  const { permissions } = usePermissions(accessControl);
 
   const handleChange = changeHandler(setAgentId);
 

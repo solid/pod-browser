@@ -1,54 +1,39 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AgentAccessList renders a about empty list of permissions 1`] = `
-<DocumentFragment>
-  <div
-    class="PodBrowser-root PodBrowser-colorPrimary PodBrowser-indeterminate"
-    role="progressbar"
-    style="width: 40px; height: 40px;"
-  >
-    <svg
-      class="PodBrowser-svg"
-      viewBox="22 22 44 44"
-    >
-      <circle
-        class="PodBrowser-circle PodBrowser-circleIndeterminate"
-        cx="44"
-        cy="44"
-        fill="none"
-        r="20.2"
-        stroke-width="3.6"
-      />
-    </svg>
-  </div>
-</DocumentFragment>
-`;
-
 exports[`AgentAccessList renders a list of permissions 1`] = `
 <DocumentFragment>
-  <div
-    class="PodBrowser-root PodBrowser-colorPrimary PodBrowser-indeterminate"
-    role="progressbar"
-    style="width: 40px; height: 40px;"
+  <ul
+    class="PodBrowser-root PodBrowser-padding"
   >
-    <svg
-      class="PodBrowser-svg"
-      viewBox="22 22 44 44"
+    <li
+      class="PodBrowser-root PodBrowser-listItem PodBrowser-gutters"
     >
-      <circle
-        class="PodBrowser-circle PodBrowser-circleIndeterminate"
-        cx="44"
-        cy="44"
-        fill="none"
-        r="20.2"
-        stroke-width="3.6"
+      <span
+        class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-pulse"
+        style="width: 40px; height: 40px;"
       />
-    </svg>
+      <div
+        class="PodBrowser-detailText"
+      >
+        <span
+          class="PodBrowser-root PodBrowser-text PodBrowser-pulse"
+          style="width: 100px;"
+        />
+      </div>
+    </li>
+  </ul>
+</DocumentFragment>
+`;
+
+exports[`AgentAccessList renders an empty list of permissions 1`] = `
+<DocumentFragment>
+  <div>
+    No access granted to individuals yet
   </div>
 </DocumentFragment>
 `;
 
-exports[`AgentAccessList renders an AgentAccessList 1`] = `
+exports[`AgentAccessList renders loading while loading permissions for access control 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-root PodBrowser-colorPrimary PodBrowser-indeterminate"

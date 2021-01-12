@@ -19,7 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext, useEffect, useState } from "react";
+/* eslint-disable react/jsx-props-no-spreading */
+
+import React, { useContext, useState } from "react";
 import T from "prop-types";
 import { CircularProgress, List, ListItem } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/styles";
@@ -27,6 +29,7 @@ import { Button } from "@inrupt/prism-react-components";
 import styles from "./styles";
 import AgentAccess from "../agentAccess";
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
+import usePermissions from "../../../../src/hooks/usePermissions";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
@@ -34,19 +37,9 @@ export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
 
 function AgentAccessList({ onLoading }) {
   const classes = useStyles();
-  const [permissions, setPermissions] = useState(null);
   const [showAll, setShowAll] = useState(false);
   const { accessControl } = useContext(AccessControlContext);
-
-  useEffect(() => {
-    if (!accessControl) {
-      setPermissions(null);
-      return;
-    }
-    accessControl.getPermissions().then((normalizedPermissions) => {
-      setPermissions(normalizedPermissions.reverse());
-    });
-  }, [accessControl]);
+  const { permissions } = usePermissions(accessControl);
 
   const loading = !permissions;
 

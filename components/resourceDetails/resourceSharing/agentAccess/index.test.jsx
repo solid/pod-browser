@@ -22,6 +22,8 @@
 import React from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
+import { waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import AgentAccess, { getDialogId, saveHandler, submitHandler } from "./index";
 
 import mockSessionContextProvider from "../../../../__testUtils/mockSessionContextProvider";
@@ -30,6 +32,7 @@ import mockSession from "../../../../__testUtils/mockSession";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
 import useFetchProfile from "../../../../src/hooks/useFetchProfile";
+import * as profileFns from "../../../../src/solidClientHelpers/profile";
 import { mockProfileAlice } from "../../../../__testUtils/mockPersonResource";
 
 jest.mock("../../../../src/solidClientHelpers/permissions");
@@ -67,14 +70,88 @@ describe("AgentAccess", () => {
     expect(useFetchProfile).toHaveBeenCalledWith(webId);
   });
 
-  it("renders an error message if it's unable to load profile", () => {
-    useFetchProfile.mockReturnValue({ error: "error" });
+  it("renders skeleton placeholders when profile is not available", () => {
+    useFetchProfile.mockReturnValue({ profile: null });
     const { asFragment } = renderWithTheme(
       <DatasetProvider dataset={dataset}>
         <AgentAccess permission={permission} />
       </DatasetProvider>
     );
+
     expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("renders an error message with a 'try again' button if it's unable to load profile", () => {
+    useFetchProfile.mockReturnValue({ error: "error" });
+    const { asFragment, getByTestId } = renderWithTheme(
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} />
+      </DatasetProvider>
+    );
+    expect(getByTestId("try-again-button")).toBeTruthy();
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("renders a spinner after clicking 'try again' button", async () => {
+    useFetchProfile.mockReturnValue({ error: "error" });
+    const { getByTestId } = renderWithTheme(
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} />
+      </DatasetProvider>
+    );
+    const button = getByTestId("try-again-button");
+    userEvent.click(button);
+
+    expect(getByTestId("try-again-spinner")).toBeTruthy();
+  });
+
+  it("tries to fetch the profile again when clicking 'try again' button", async () => {
+    useFetchProfile.mockReturnValue({ error: "error" });
+    const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
+    const { getByTestId } = renderWithTheme(
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} />
+      </DatasetProvider>
+    );
+    const button = getByTestId("try-again-button");
+    userEvent.click(button);
+
+    await waitFor(() =>
+      expect(fetchProfile).toHaveBeenCalledWith(webId, expect.anything())
+    );
+  });
+
+  it("removes the spinner when fetching succeeds", async () => {
+    useFetchProfile.mockReturnValue({ error: "error" });
+    const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
+    fetchProfile.mockReturnValue("profile");
+    const { getByTestId, queryByTestId } = renderWithTheme(
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} />
+      </DatasetProvider>
+    );
+    const button = getByTestId("try-again-button");
+    userEvent.click(button);
+
+    await waitFor(() => expect(queryByTestId("try-again-spinner")).toBeFalsy());
+  });
+
+  it("removes the spinner when fetching errors", async () => {
+    useFetchProfile.mockReturnValue({ error: "error" });
+    const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
+    fetchProfile.mockReturnValue("profile");
+    const { getByTestId, queryByTestId } = renderWithTheme(
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} />
+      </DatasetProvider>
+    );
+    const button = getByTestId("try-again-button");
+    userEvent.click(button);
+
+    await waitFor(() =>
+      expect(fetchProfile).toHaveBeenCalledWith(webId, expect.anything())
+    );
+    await waitFor(() => expect(queryByTestId("try-again-spinner")).toBeFalsy());
   });
 
   describe("user tries to change access for themselves", () => {
@@ -91,6 +168,20 @@ describe("AgentAccess", () => {
       );
       expect(asFragment()).toMatchSnapshot();
     });
+  });
+
+  test("default value for onLoading", async () => {
+    useFetchProfile.mockReturnValue({ error: "error" });
+    const { getByTestId } = renderWithTheme(
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} onLoading={undefined} />
+      </DatasetProvider>
+    );
+    const button = getByTestId("try-again-button");
+    const { onLoading } = AgentAccess.defaultProps;
+    userEvent.click(button);
+
+    expect(onLoading).toBeInstanceOf(Function);
   });
 });
 

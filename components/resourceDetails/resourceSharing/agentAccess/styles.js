@@ -19,7 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function styles() {
+export default function styles(theme) {
+  const WARNING_BACKGROUND_COLOR = "#FFF4E5";
+  const SEPARATOR_COLOR = "#E1CAAA";
   return {
     avatar: {
       marginRight: "1rem",
@@ -28,6 +30,50 @@ export default function styles() {
       fontSize: "0.75rem",
       textAlign: "left",
       flexGrow: 1,
+    },
+    "alert-container": {
+      maxWidth: "100%",
+      backgroundColor: WARNING_BACKGROUND_COLOR,
+      padding: theme.spacing(0.7, 1.4),
+    },
+    action: {
+      padding: 0,
+      paddingRight: theme.spacing(0.5),
+    },
+    alertBox: {
+      width: "100%",
+      overflowWrap: "break-word",
+      padding: 0,
+    },
+    alertMessage: {
+      overflowWrap: "break-word",
+      fontSize: "14px",
+    },
+    "avatar-container": {
+      display: "flex",
+      maxWidth: "100%",
+      padding: 0,
+      "& p": {
+        overflowWrap: "break-word",
+        marginRight: theme.spacing(0.7, 1.6, 1.4, 0.7),
+        [theme.breakpoints.up("sm")]: {
+          overflowWrap: "anywhere",
+        },
+      },
+    },
+    "bold-button": {
+      fontWeight: "bold",
+      alignSelf: "right",
+    },
+    spinner: {
+      margin: theme.spacing(2),
+    },
+    separator: {
+      boxSizing: "border-box",
+      border: `1px solid ${SEPARATOR_COLOR}`,
+      margin: 0,
+      marginBottom: theme.spacing(0.8),
+      height: "1px",
     },
   };
 }
