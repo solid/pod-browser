@@ -30,7 +30,6 @@ import { ldp, rdf } from "rdf-namespaces";
 import {
   chain,
   chainPromise,
-  changeThing,
   createResponder,
   datasetIsContainer,
   defineDataset,
@@ -41,7 +40,6 @@ import {
   getTypes,
   isContainerIri,
   namespace,
-  normalizeDataset,
   sharedStart,
 } from "./utils";
 
@@ -99,20 +97,6 @@ function createDataset(url, type = "http://www.w3.org/ns/ldp#BasicContainer") {
 
   return setThing(createSolidDataset(), publicContainer);
 }
-
-describe("changeThing", () => {
-  test("it takes a thing and reduces it with an arbitrary list of operations", () => {
-    const { createThing } = solidClientFns;
-    const op1 = jest.fn((x) => x);
-    const op2 = jest.fn((x) => x);
-    const thing = createThing({ name: "this" });
-
-    changeThing(thing, op1, op2);
-
-    expect(op1).toHaveBeenCalledWith(thing);
-    expect(op2).toHaveBeenCalledWith(thing);
-  });
-});
 
 describe("createResponder", () => {
   test("it returns a function to respond with a data or with an error message", () => {
@@ -275,36 +259,6 @@ describe("namespace", () => {
 
       expect(value).toEqual(expectedValue);
     });
-  });
-});
-
-describe("normalizeDataset", () => {
-  test("it returns a normalized dataset", () => {
-    const containerIri = "https://user.dev.inrupt.net/public/";
-    const litDataset = createDataset(containerIri);
-    const { iri, types, mtime, modified, size, contains } = normalizeDataset(
-      litDataset,
-      containerIri
-    );
-    expect(iri).toEqual(containerIri);
-    expect(types).toContain("BasicContainer");
-    expect(types).toContain("Container");
-    expect(mtime).toEqual(1591131561.195);
-    expect(modified).toEqual(new Date(Date.UTC(2020, 5, 2, 15, 59, 21)));
-    expect(size).toEqual(4096);
-    expect(contains).toContain("https://user.dev.inrupt.net/public/games/");
-  });
-
-  test("it uses full type if no human-friendly name found", () => {
-    const containerIri = "https://user.dev.inrupt.net/public/";
-    const litDataset = createDataset(
-      containerIri,
-      "http://www.w3.org/ns/ldp#UnknownType"
-    );
-    const { types } = normalizeDataset(litDataset, containerIri);
-
-    expect(types).toContain("http://www.w3.org/ns/ldp#UnknownType");
-    expect(types).toContain("Container");
   });
 });
 

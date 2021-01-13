@@ -20,9 +20,15 @@
  */
 
 /* eslint-disable camelcase */
-import { ldp, rdf, acl, dc, foaf, vcard } from "rdf-namespaces";
+import { acl, dc, foaf, rdf, vcard } from "rdf-namespaces";
 import * as solidClientFns from "@inrupt/solid-client";
-import { asUrl } from "@inrupt/solid-client";
+import {
+  asUrl,
+  getThingAll,
+  mockSolidDatasetFrom,
+  mockThingFrom,
+  setThing,
+} from "@inrupt/solid-client";
 import * as resourceFns from "../solidClientHelpers/resource";
 import * as addressBookFns from ".";
 
@@ -36,32 +42,31 @@ import {
 import { mockPersonContactDataset } from "../../__testUtils/mockContactResource";
 
 import {
+  contactsContainerIri,
   createAddressBook,
   createContact,
-  getGroups,
+  createContactTypeNotFoundError,
+  deleteContact,
+  findContactInAddressBook,
   getContacts,
+  getGroups,
   getProfiles,
   getSchemaFunction,
-  mapSchema,
   getSchemaOperations,
+  mapSchema,
   saveContact,
   saveNewAddressBook,
   schemaFunctionMappings,
   shortId,
   vcardExtras,
-  contactsContainerIri,
-  deleteContact,
-  createContactTypeNotFoundError,
-  findContactInAddressBook,
 } from "./index";
-import { chain, defineDataset } from "../solidClientHelpers/utils";
+import { chain } from "../solidClientHelpers/utils";
 
 const {
   createThing,
   getStringNoLocale,
   getStringNoLocaleAll,
   getUrl,
-  getUrlAll,
 } = solidClientFns;
 
 describe("createAddressBook", () => {
@@ -71,20 +76,23 @@ describe("createAddressBook", () => {
 
     const { people, groups, index } = createAddressBook({ iri, owner });
 
-    expect(getUrlAll(groups.dataset, ldp.contains)).toHaveLength(0);
+    expect(getThingAll(groups.dataset)).toHaveLength(0);
     expect(groups.iri).toEqual(`${iri}/groups.ttl`);
 
-    expect(getUrlAll(people.dataset, ldp.contains)).toHaveLength(0);
+    expect(getThingAll(people.dataset)).toHaveLength(0);
     expect(people.iri).toEqual(`${iri}/people.ttl`);
 
+    const addressBookThing = getThingAll(index.dataset)[0]; // only add one subject
     expect(index.iri).toEqual(`${iri}/index.ttl`);
-    expect(getStringNoLocale(index.dataset, dc.title)).toEqual("Contacts");
-    expect(getUrl(index.dataset, rdf.type)).toEqual(vcardExtras("AddressBook"));
-    expect(getUrl(index.dataset, acl.owner)).toEqual(owner);
-    expect(getUrl(index.dataset, vcardExtras("nameEmailIndex"))).toEqual(
+    expect(getStringNoLocale(addressBookThing, dc.title)).toEqual("Contacts");
+    expect(getUrl(addressBookThing, rdf.type)).toEqual(
+      vcardExtras("AddressBook")
+    );
+    expect(getUrl(addressBookThing, acl.owner)).toEqual(owner);
+    expect(getUrl(addressBookThing, vcardExtras("nameEmailIndex"))).toEqual(
       "https://example.pod.com/contacts/people.ttl"
     );
-    expect(getUrl(index.dataset, vcardExtras("groupIndex"))).toEqual(
+    expect(getUrl(addressBookThing, vcardExtras("groupIndex"))).toEqual(
       "https://example.pod.com/contacts/groups.ttl"
     );
   });
@@ -96,20 +104,23 @@ describe("createAddressBook", () => {
 
     const { people, groups, index } = createAddressBook({ iri, owner, title });
 
-    expect(getUrlAll(groups.dataset, ldp.contains)).toHaveLength(0);
+    expect(getThingAll(groups.dataset)).toHaveLength(0);
     expect(groups.iri).toEqual(`${iri}/groups.ttl`);
 
-    expect(getUrlAll(people.dataset, ldp.contains)).toHaveLength(0);
+    expect(getThingAll(people.dataset)).toHaveLength(0);
     expect(people.iri).toEqual(`${iri}/people.ttl`);
 
+    const addressBookThing = getThingAll(index.dataset)[0]; // only add one subject
     expect(index.iri).toEqual(`${iri}/index.ttl`);
-    expect(getStringNoLocale(index.dataset, dc.title)).toEqual(title);
-    expect(getUrl(index.dataset, rdf.type)).toEqual(vcardExtras("AddressBook"));
-    expect(getUrl(index.dataset, acl.owner)).toEqual(owner);
-    expect(getUrl(index.dataset, vcardExtras("nameEmailIndex"))).toEqual(
+    expect(getStringNoLocale(addressBookThing, dc.title)).toEqual(title);
+    expect(getUrl(addressBookThing, rdf.type)).toEqual(
+      vcardExtras("AddressBook")
+    );
+    expect(getUrl(addressBookThing, acl.owner)).toEqual(owner);
+    expect(getUrl(addressBookThing, vcardExtras("nameEmailIndex"))).toEqual(
       "https://example.pod.com/contacts/people.ttl"
     );
-    expect(getUrl(index.dataset, vcardExtras("groupIndex"))).toEqual(
+    expect(getUrl(addressBookThing, vcardExtras("groupIndex"))).toEqual(
       "https://example.pod.com/contacts/groups.ttl"
     );
   });
@@ -117,15 +128,16 @@ describe("createAddressBook", () => {
 
 describe("createContact", () => {
   const addressBookIri = "https://user.example.com/contacts";
-  const webId = "https://user.example.com/card";
-  const { webIdNodeUrl } = mockWebIdNode(webId);
+  const webIdUrl = "https://user.example.com/card";
+  const mockedWebIdNode = mockWebIdNode(webIdUrl);
+  const { webIdNodeUrl } = mockedWebIdNode;
   const mockWebIdNodeFn = jest
     .spyOn(addressBookFns, "createWebIdNodeFn")
-    .mockImplementation(mockWebIdNode);
+    .mockImplementation(() => mockedWebIdNode);
 
   test("it creates a new contact with a given schema object", () => {
     const schema = {
-      webId,
+      webId: webIdUrl,
       addresses: [
         {
           countryName: "Fake Country",
@@ -163,29 +175,38 @@ describe("createContact", () => {
       mockWebIdNodeFn
     );
 
-    const emailsAndPhones = getStringNoLocaleAll(dataset, vcard.value);
+    const things = getThingAll(dataset);
+    const webId = things[0]; // always the first thing in this dataset
+    const addressesThing = things[3];
+    const emailsAndPhones = things.flatMap((t) =>
+      getStringNoLocaleAll(t, vcard.value)
+    );
 
-    expect(getStringNoLocale(dataset, vcard.fn)).toEqual("Test Person");
-    expect(mockWebIdNodeFn).toHaveBeenCalledWith(webId, expect.anything());
-    expect(getUrl(dataset, vcard.url)).toEqual(webIdNodeUrl);
-    expect(
-      getStringNoLocale(dataset, vcardExtras("organization-name"))
-    ).toEqual("Test Company");
-    expect(getStringNoLocale(dataset, vcard.role)).toEqual("Developer");
+    expect(getStringNoLocale(webId, vcard.fn)).toEqual("Test Person");
+    expect(mockWebIdNodeFn).toHaveBeenCalledWith(webIdUrl, expect.anything());
+    expect(getUrl(webId, vcard.url)).toEqual(webIdNodeUrl);
+    expect(getStringNoLocale(webId, vcardExtras("organization-name"))).toEqual(
+      "Test Company"
+    );
+    expect(getStringNoLocale(webId, vcard.role)).toEqual("Developer");
     expect(emailsAndPhones).toContain("test@example.com");
     expect(emailsAndPhones).toContain("test.person@example.com");
     expect(emailsAndPhones).toContain("555-555-5555");
-    expect(getStringNoLocale(dataset, vcardExtras("country-name"))).toEqual(
-      "Fake Country"
+    expect(
+      getStringNoLocale(addressesThing, vcardExtras("country-name"))
+    ).toEqual("Fake Country");
+    expect(getStringNoLocale(addressesThing, vcard.locality)).toEqual(
+      "Fake Town"
     );
-    expect(getStringNoLocale(dataset, vcard.locality)).toEqual("Fake Town");
-    expect(getStringNoLocale(dataset, vcardExtras("postal-code"))).toEqual(
-      "55555"
+    expect(
+      getStringNoLocale(addressesThing, vcardExtras("postal-code"))
+    ).toEqual("55555");
+    expect(getStringNoLocale(addressesThing, vcard.region)).toEqual(
+      "Fake State"
     );
-    expect(getStringNoLocale(dataset, vcard.region)).toEqual("Fake State");
-    expect(getStringNoLocale(dataset, vcardExtras("street-address"))).toEqual(
-      "123 Fake St."
-    );
+    expect(
+      getStringNoLocale(addressesThing, vcardExtras("street-address"))
+    ).toEqual("123 Fake St.");
   });
 
   it("throws an error if no container is found", () => {
@@ -392,6 +413,7 @@ describe("getProfiles", () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
+
   test("it fetches the profiles of the given people contacts", async () => {
     const fetch = jest.fn();
     const person1 = {
@@ -407,77 +429,61 @@ describe("getProfiles", () => {
       dataset: "Person 2",
       iri: "https://user.example.com/contacts/Person/1234/index.ttl",
     };
-    const expectedProfile1 = {
-      webId: "http://testperson.example.com/profile/card#me",
-    };
-    const expectedProfile2 = {
-      webId: "http://anotherperson.example.com/profile/card#me",
-    };
-
-    const mockThingProfile1 = solidClientFns.mockThingFrom(
-      expectedProfile1.webId
-    );
-    const mockThingProfile2 = solidClientFns.mockThingFrom(
-      expectedProfile2.webId
-    );
+    const expectedProfile1Url = "http://testperson.example.com/profile/card#me";
+    const expectedProfile2Url =
+      "http://anotherperson.example.com/profile/card#me";
 
     jest
       .spyOn(resourceFns, "getResource")
       .mockResolvedValueOnce({
-        response: { dataset: "Profile 1", iri: expectedProfile1.webId },
+        response: {
+          dataset: chain(mockSolidDatasetFrom(expectedProfile1Url), (d) =>
+            setThing(d, solidClientFns.mockThingFrom(expectedProfile1Url))
+          ),
+          iri: expectedProfile1Url,
+        },
       })
       .mockResolvedValueOnce({
-        response: { dataset: "Profile 2", iri: expectedProfile2.webId },
+        response: {
+          dataset: chain(mockSolidDatasetFrom(expectedProfile2Url), (d) =>
+            setThing(d, solidClientFns.mockThingFrom(expectedProfile2Url))
+          ),
+          iri: expectedProfile2Url,
+        },
       });
-
-    jest
-      .spyOn(solidClientFns, "addStringNoLocale")
-      .mockReturnValueOnce(mockThingProfile1)
-      .mockReturnValueOnce(mockThingProfile2);
-
-    jest
-      .spyOn(solidClientFns, "getUrl")
-      .mockReturnValueOnce(expectedProfile1.webId)
-      .mockReturnValueOnce(expectedProfile2.webId);
 
     const [profile1, profile2] = await getProfiles([person1, person2], fetch);
 
-    expect(profile1.internal_url).toEqual(expectedProfile1.webId);
-    expect(profile2.internal_url).toEqual(expectedProfile2.webId);
+    expect(asUrl(profile1)).toEqual(expectedProfile1Url);
+    expect(asUrl(profile2)).toEqual(expectedProfile2Url);
   });
+
   test("it filters out people for which the resource couldn't be fetched", async () => {
     const fetch = jest.fn();
+    const person1Iri =
+      "https://user.example.com/contacts/Person/1234/index.ttl";
     const person1 = {
-      dataset: "Person 1",
-      iri: "https://user.example.com/contacts/Person/1234/index.ttl",
+      dataset: mockSolidDatasetFrom(person1Iri),
+      iri: person1Iri,
     };
+    const person2Iri =
+      "https://user.example.com/contacts/Person/1234/index.ttl";
     const person2 = {
-      dataset: "Person 2",
-      iri: "https://user.example.com/contacts/Person/1234/index.ttl",
+      dataset: mockSolidDatasetFrom(person2Iri),
+      iri: person2Iri,
     };
     const expectedProfile = {
       webId: "http://testperson.example.com/profile/card#me",
     };
-    const mockThingProfile = solidClientFns.mockThingFrom(
-      expectedProfile.webId
-    );
 
     jest
       .spyOn(resourceFns, "getResource")
       .mockResolvedValueOnce({
-        response: { dataset: "Profile 1", iri: expectedProfile.webId },
+        response: { dataset: person1.dataset, iri: expectedProfile.webId },
       })
       .mockResolvedValueOnce({
         error: "There was an error",
       });
-
-    jest
-      .spyOn(solidClientFns, "addStringNoLocale")
-      .mockReturnValueOnce(mockThingProfile);
-
-    jest
-      .spyOn(solidClientFns, "getUrl")
-      .mockReturnValueOnce(expectedProfile.webId);
 
     const profiles = await getProfiles([person1, person2], fetch);
 
@@ -941,14 +947,19 @@ describe("getIndexDatasetFromAddressBook", () => {
   const peopleIndexDataset = solidClientFns.mockSolidDatasetFrom(
     peopleIndexIri
   );
-  const addressBook = solidClientFns.mockSolidDatasetFrom(addressBookIri);
-  const addressBookDataset = defineDataset(
-    { url: addressBookIri },
-    (t) => solidClientFns.addUrl(t, rdf.type, vcardExtras("AddressBook")),
-    (t) =>
-      solidClientFns.addUrl(t, vcardExtras("nameEmailIndex"), peopleIndexIri)
+  const nameEmailIndex = vcardExtras("nameEmailIndex");
+  const addressBookDataset = chain(
+    solidClientFns.mockSolidDatasetFrom(addressBookIri),
+    (d) =>
+      setThing(
+        d,
+        chain(
+          mockThingFrom(addressBookIri),
+          (t) => solidClientFns.addUrl(t, rdf.type, vcardExtras("AddressBook")),
+          (t) => solidClientFns.addUrl(t, nameEmailIndex, peopleIndexIri)
+        )
+      )
   );
-  const nameEmailIndex = "http://www.w3.org/2006/vcard/ns#nameEmailIndex";
 
   beforeAll(() => {
     jest.restoreAllMocks();
@@ -959,13 +970,12 @@ describe("getIndexDatasetFromAddressBook", () => {
     const fetch = jest.fn();
     jest
       .spyOn(solidClientFns, "getSolidDataset")
-      .mockResolvedValueOnce(addressBookDataset)
       .mockResolvedValueOnce(peopleIndexDataset);
 
     const {
       response: results,
     } = await addressBookFns.getIndexDatasetFromAddressBook(
-      addressBook,
+      addressBookDataset,
       nameEmailIndex,
       fetch
     );
@@ -981,7 +991,7 @@ describe("getIndexDatasetFromAddressBook", () => {
     const {
       error,
     } = await addressBookFns.getIndexDatasetFromAddressBook(
-      addressBook,
+      addressBookDataset,
       nameEmailIndex,
       () => {}
     );

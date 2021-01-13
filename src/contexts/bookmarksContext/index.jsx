@@ -24,7 +24,7 @@ import PropTypes from "prop-types";
 import useBookmarks from "../../hooks/useBookmarks";
 
 export const defaultBookmarksContext = {
-  bookmarks: [],
+  bookmarks: null,
   setBookmarks: () => {},
 };
 

@@ -164,23 +164,24 @@ export async function getContacts(indexFileDataset, contactTypeIri, fetch) {
   return respond(contacts);
 }
 
-export function getWebId(dataset) {
+export function getWebId(dataset, iri) {
   let url;
-  const webIdNodeUrl = getUrl(dataset, vcard.url);
+  const thing = getThing(dataset, iri);
+  const webIdNodeUrl = getUrl(thing, vcard.url);
   if (webIdNodeUrl) {
     const webIdNode = getThing(dataset, webIdNodeUrl);
     const webIdUrl = webIdNode && getUrl(webIdNode, vcard.value);
     url = webIdUrl;
   } else {
-    url = getUrl(dataset, foaf.openid);
+    url = getUrl(thing, foaf.openid);
   }
   return url;
 }
 
 export async function getProfiles(people, fetch) {
   const profileResponses = await Promise.all(
-    people.map(async ({ dataset }) => {
-      const url = getWebId(dataset);
+    people.map(async ({ dataset, iri }) => {
+      const url = getWebId(dataset, iri);
       return getResource(url, fetch);
     })
   );
@@ -189,12 +190,9 @@ export async function getProfiles(people, fetch) {
     .filter(({ error: e }) => !e)
     .map(({ response }) => response)
     .map(({ dataset, iri: webId }) => {
-      const avatar = getUrl(dataset, vcard.hasPhoto);
-      return addStringNoLocale(
-        getThing(dataset, webId),
-        vcard.hasPhoto,
-        avatar
-      );
+      const thing = getThing(dataset, webId);
+      const avatar = getUrl(thing, vcard.hasPhoto);
+      return addStringNoLocale(getThing(thing, webId), vcard.hasPhoto, avatar);
     });
 
   return profiles;
@@ -305,18 +303,15 @@ export function mapSchema(prefix) {
 }
 
 export async function getIndexDatasetFromAddressBook(
-  addressBook,
+  addressBookDataset,
   indexFilePredicate,
   fetch
 ) {
   const { respond, error } = createResponder();
   try {
-    const contactsIri = getSourceUrl(addressBook);
-    const addressBookDatasetIri = joinPath(contactsIri, INDEX_FILE);
-    const addressBookDataset = await getSolidDataset(addressBookDatasetIri, {
-      fetch,
-    });
-    const indexDatasetIri = getUrl(addressBookDataset, indexFilePredicate);
+    const addressBookIri = getSourceUrl(addressBookDataset);
+    const addressBookThing = getThing(addressBookDataset, addressBookIri);
+    const indexDatasetIri = getUrl(addressBookThing, indexFilePredicate);
     const indexFileDataset = await getSolidDataset(indexDatasetIri, { fetch });
     return respond(indexFileDataset);
   } catch (e) {

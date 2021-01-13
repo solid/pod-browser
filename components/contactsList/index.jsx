@@ -111,7 +111,10 @@ function ContactsList() {
     );
     setSelectedContactName(name);
     (async () => {
-      const webId = getWebId(people[selectedContactIndex].dataset, fetch);
+      const webId = getWebId(
+        people[selectedContactIndex].dataset,
+        people[selectedContactIndex].iri
+      );
       setSelectedContactWebId(webId);
     })();
   }, [selectedContactIndex, formattedNamePredicate, people, fetch]);
