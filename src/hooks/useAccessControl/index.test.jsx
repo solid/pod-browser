@@ -53,6 +53,15 @@ describe("useAccessControl", () => {
     expect(result.current.error).toBeNull();
   });
 
+  it("returns null if no policiesContainer", () => {
+    usePoliciesContainer.mockReturnValue({ policiesContainer: null });
+    const { result } = renderHook(() => useAccessControl(null, session.fetch), {
+      wrapper,
+    });
+    expect(result.current.accessControl).toBeNull();
+    expect(result.current.error).toBeNull();
+  });
+
   it("returns accessControl if given resourceUri", async () => {
     const { result, waitForNextUpdate } = renderHook(
       () => useAccessControl(resourceIri),

@@ -31,7 +31,7 @@ export default function useAccessControl(resourceInfo) {
   const [error, setError] = useState(policiesError || null);
 
   useEffect(() => {
-    if (!resourceInfo || policiesError) {
+    if (!resourceInfo || policiesError || !policiesContainer) {
       setAccessControl(null);
       setError(policiesError || null);
       return;
