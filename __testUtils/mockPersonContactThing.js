@@ -25,9 +25,9 @@ import { chain } from "../src/solidClientHelpers/utils";
 
 export const webIdUrl = "http://example.com/alice#me";
 
-export function mockPersonContactDataset() {
+export default function mockPersonContactThing(url = webIdUrl) {
   return chain(
-    mockThingFrom(webIdUrl),
+    mockThingFrom(url),
     (t) => addUrl(t, rdf.type, vcard.Individual),
     (t) => addUrl(t, foaf.openid, webIdUrl)
   );

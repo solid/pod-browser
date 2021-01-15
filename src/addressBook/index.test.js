@@ -46,7 +46,7 @@ import {
   mockPersonDatasetBob,
   mockWebIdNode,
 } from "../../__testUtils/mockPersonResource";
-import { mockPersonContactDataset } from "../../__testUtils/mockContactResource";
+import mockPersonContactThing from "../../__testUtils/mockPersonContactThing";
 
 import {
   contactsContainerIri,
@@ -69,6 +69,7 @@ import {
   vcardExtras,
 } from "./index";
 import { chain } from "../solidClientHelpers/utils";
+import { joinPath } from "../stringHelpers";
 
 const {
   createThing,
@@ -330,28 +331,34 @@ describe("getContacts", () => {
   });
 
   test("it fetches the people in the address book", async () => {
+    const fetch = jest.fn();
+
     const mockIndexFileDatasetIri =
       "https://user.example.com/contacts/people.ttl";
-
-    const fetch = jest.fn();
-    const personContainer1 = "https://user.example.com/contacts/Person/1234/";
-    const personContainer2 = "https://user.example.com/contacts/Person/5678/";
-    const expectedPerson1 = {
-      dataset: mockPersonContactDataset(),
-      iri: `${personContainer1}index.ttl`,
-    };
-    const expectedPerson2 = {
-      dataset: mockPersonContactDataset(),
-      iri: `${personContainer2}index.ttl`,
-    };
-
     const mockIndexFileDataset = chain(
       solidClientFns.mockSolidDatasetFrom(mockIndexFileDatasetIri),
-      (indexDataset) =>
-        solidClientFns.setThing(indexDataset, mockPersonDatasetAlice()),
-      (indexDataset) =>
-        solidClientFns.setThing(indexDataset, mockPersonDatasetBob())
+      (d) => solidClientFns.setThing(d, mockPersonDatasetAlice()),
+      (d) => solidClientFns.setThing(d, mockPersonDatasetBob())
     );
+
+    const personContainer1 = "https://user.example.com/contacts/Person/1234/";
+    const personDoc1 = joinPath(personContainer1, "index.ttl");
+    const personIri1 = `${personDoc1}#me`;
+    const expectedPerson1 = {
+      dataset: chain(mockSolidDatasetFrom(personDoc1), (d) =>
+        setThing(d, mockPersonContactThing(personIri1))
+      ),
+      iri: personIri1,
+    };
+    const personContainer2 = "https://user.example.com/contacts/Person/5678/";
+    const personDoc2 = joinPath(personContainer2, "index.ttl");
+    const personIri2 = `${personDoc2}#me`;
+    const expectedPerson2 = {
+      dataset: chain(mockSolidDatasetFrom(personDoc2), (d) =>
+        setThing(d, mockPersonContactThing(personIri2))
+      ),
+      iri: personIri2,
+    };
 
     jest
       .spyOn(resourceFns, "getResource")
@@ -368,18 +375,21 @@ describe("getContacts", () => {
 
   test("it filters out the contacts that it cannot fetch due to an error", async () => {
     const personContainer1 = "https://user.example.com/contacts/Person/1234/";
+    const personDoc1 = joinPath(personContainer1, "index.ttl");
+    const personIri1 = `${personDoc1}#me`;
     const expectedPerson1 = {
-      dataset: mockPersonContactDataset(),
-      iri: `${personContainer1}index.ttl`,
+      dataset: chain(mockSolidDatasetFrom(personDoc1), (d) =>
+        setThing(d, mockPersonContactThing(personIri1))
+      ),
+      iri: personIri1,
     };
+
     const mockIndexFileDatasetIri =
       "https://user.example.com/contacts/people.ttl";
     const mockIndexFileDataset = chain(
       solidClientFns.mockSolidDatasetFrom(mockIndexFileDatasetIri),
-      (indexDataset) =>
-        solidClientFns.setThing(indexDataset, mockPersonDatasetAlice()),
-      (indexDataset) =>
-        solidClientFns.setThing(indexDataset, mockPersonDatasetBob())
+      (d) => solidClientFns.setThing(d, mockPersonDatasetAlice()),
+      (d) => solidClientFns.setThing(d, mockPersonDatasetBob())
     );
     const fetch = jest.fn();
 
@@ -693,7 +703,7 @@ describe("deleteContact", () => {
   const peopleIndexDataset = chain(
     solidClientFns.mockSolidDatasetFrom(peopleIndexIri),
     (d) => solidClientFns.setThing(d, mockContactToDelete),
-    (d) => solidClientFns.setThing(d, mockPersonContactDataset())
+    (d) => solidClientFns.setThing(d, mockPersonContactThing())
   );
 
   const addressBookDataset = chain(
@@ -710,7 +720,7 @@ describe("deleteContact", () => {
   const updatedPeopleIndexDataset = chain(
     solidClientFns.mockSolidDatasetFrom(peopleIndexIri),
     (indexDataset) =>
-      solidClientFns.setThing(indexDataset, mockPersonContactDataset())
+      solidClientFns.setThing(indexDataset, mockPersonContactThing())
   );
 
   let fetch;
