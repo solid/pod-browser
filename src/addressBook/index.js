@@ -25,7 +25,9 @@ import {
   addStringNoLocale,
   addUrl,
   asUrl,
+  createThing,
   deleteFile,
+  getSolidDataset,
   getSourceUrl,
   getStringNoLocaleAll,
   getThing,
@@ -33,12 +35,10 @@ import {
   getUrl,
   getUrlAll,
   removeThing,
-  getSolidDataset,
   setThing,
-  createThing,
 } from "@inrupt/solid-client";
 import { v4 as uuid } from "uuid";
-import { rdf, dc, acl, vcard, foaf, schema } from "rdf-namespaces";
+import { acl, dc, foaf, rdf, schema, vcard } from "rdf-namespaces";
 import {
   chain,
   createResponder,
@@ -80,8 +80,12 @@ export function vcardExtras(property) {
   return `http://www.w3.org/2006/vcard/ns#${property}`;
 }
 
-export function contactsContainerIri(iri) {
-  return joinPath(iri, CONTACTS_CONTAINER);
+export function contactsContainerIri(podRootIri) {
+  return joinPath(podRootIri, CONTACTS_CONTAINER);
+}
+
+export function getContactsIndexIri(contactsIri) {
+  return joinPath(contactsIri, INDEX_FILE);
 }
 
 export function createAddressBook({ iri, owner, title = "Contacts" }) {
@@ -127,8 +131,10 @@ export async function getGroups(containerIri, fetch) {
 
   if (resourceError) return error(resourceError);
   const { dataset } = groupsResponse;
-  const names = getStringNoLocaleAll(dataset, vcard.fn);
-  const iris = getUrlAll(dataset, vcardExtras("includesGroup"));
+  const groupsThingUrl = `${getSourceUrl(dataset)}#this`; // TODO: Ugly hack, should remove
+  const groupsThing = getThing(dataset, groupsThingUrl);
+  const names = getStringNoLocaleAll(groupsThing, vcard.fn);
+  const iris = getUrlAll(groupsThing, vcardExtras("includesGroup"));
 
   const groups = iris.map((iri, i) => {
     return {
@@ -142,9 +148,8 @@ export async function getGroups(containerIri, fetch) {
 
 export async function getContacts(indexFileDataset, contactTypeIri, fetch) {
   const { respond } = createResponder();
-  let contacts = [];
   if (!indexFileDataset) {
-    return respond(contacts);
+    return respond([]);
   }
   const contactsThings = getThingAll(indexFileDataset);
 
@@ -154,48 +159,43 @@ export async function getContacts(indexFileDataset, contactTypeIri, fetch) {
     contactsIris.map((iri) => getResource(iri, fetch))
   );
 
-  contacts = contactsResponses
+  const contacts = contactsResponses
     .filter(({ error: e }) => !e)
     .map(({ response }) => response)
-    .filter((contact) =>
-      getUrlAll(contact.dataset, rdf.type).includes(contactTypeIri)
-    );
+    .filter(({ dataset, iri }) => {
+      const contactThing = getThing(dataset, iri);
+      return getUrlAll(contactThing, rdf.type).includes(contactTypeIri);
+    });
 
   return respond(contacts);
 }
 
-export function getWebId(dataset, iri) {
-  let url;
+export function getWebIdUrl(dataset, iri) {
   const thing = getThing(dataset, iri);
   const webIdNodeUrl = getUrl(thing, vcard.url);
   if (webIdNodeUrl) {
     const webIdNode = getThing(dataset, webIdNodeUrl);
-    const webIdUrl = webIdNode && getUrl(webIdNode, vcard.value);
-    url = webIdUrl;
-  } else {
-    url = getUrl(thing, foaf.openid);
+    return webIdNode && getUrl(webIdNode, vcard.value);
   }
-  return url;
+  return getUrl(thing, foaf.openid);
 }
 
 export async function getProfiles(people, fetch) {
   const profileResponses = await Promise.all(
     people.map(async ({ dataset, iri }) => {
-      const url = getWebId(dataset, iri);
+      const url = getWebIdUrl(dataset, iri);
       return getResource(url, fetch);
     })
   );
 
-  const profiles = profileResponses
-    .filter(({ error: e }) => !e)
+  return profileResponses
+    .filter(({ error }) => !error)
     .map(({ response }) => response)
-    .map(({ dataset, iri: webId }) => {
-      const thing = getThing(dataset, webId);
+    .map(({ dataset, iri }) => {
+      const thing = getThing(dataset, iri);
       const avatar = getUrl(thing, vcard.hasPhoto);
-      return addStringNoLocale(getThing(thing, webId), vcard.hasPhoto, avatar);
+      return addStringNoLocale(getThing(thing, iri), vcard.hasPhoto, avatar);
     });
-
-  return profiles;
 }
 
 export async function saveNewAddressBook(
@@ -309,7 +309,7 @@ export async function getIndexDatasetFromAddressBook(
 ) {
   const { respond, error } = createResponder();
   try {
-    const addressBookIri = getSourceUrl(addressBookDataset);
+    const addressBookIri = `${getSourceUrl(addressBookDataset)}#this`; // TODO: Ugly hack, should remove
     const addressBookThing = getThing(addressBookDataset, addressBookIri);
     const indexDatasetIri = getUrl(addressBookThing, indexFilePredicate);
     const indexFileDataset = await getSolidDataset(indexDatasetIri, { fetch });
@@ -390,22 +390,22 @@ export async function findContactInAddressBook(people, webId, fetch) {
 }
 
 export async function saveContact(
-  addressBookContainer,
+  addressBook,
+  addressBookContainerUrl,
   contactSchema,
   types,
   fetch
 ) {
   const { respond, error } = createResponder();
-  const addressBookContainerIri = getSourceUrl(addressBookContainer);
   const newContact = createContact(
-    addressBookContainerIri,
+    addressBookContainerUrl,
     contactSchema,
     types,
     createWebIdNodeFn
   );
   const { iri } = newContact;
 
-  const indexIri = joinPath(addressBookContainerIri, INDEX_FILE);
+  const indexIri = joinPath(addressBookContainerUrl, INDEX_FILE);
   const { indexFilePredicate } = TYPE_MAP[foaf.Person];
 
   const { response: contact, error: saveContactError } = await saveResource(
@@ -416,14 +416,14 @@ export async function saveContact(
   if (saveContactError) return error(saveContactError);
 
   const { response: contactIndex } = await getIndexDatasetFromAddressBook(
-    addressBookContainer,
+    addressBook,
     indexFilePredicate,
     fetch
   );
 
   const contactThing = defineThing(
     {
-      url: `${getSourceUrl(contact)}#this`,
+      url: `${getSourceUrl(contact)}#this`, // TODO: Ugly hack, should remove
     },
     (t) =>
       addStringNoLocale(t, vcard.fn, contactSchema.fn || contactSchema.name),

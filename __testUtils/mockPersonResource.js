@@ -25,14 +25,16 @@ import {
   asUrl,
   mockThingFrom,
 } from "@inrupt/solid-client";
-import { vcard, foaf, rdf } from "rdf-namespaces";
+import { vcard, foaf, rdf, space } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
 import { packageProfile } from "../src/solidClientHelpers/profile";
 
-export const aliceWebIdUrl = "http://example.com/alice#me";
+export const aliceProfileUrl = "http://alice.example.com/alice";
+export const aliceWebIdUrl = "http://alice.example.com/alice#me";
 export const aliceName = "Alice";
 export const aliceNick = "A";
-export const alicePhoto = "http://example.com/alice.jpg";
+export const alicePhoto = "http://alice.example.com/alice.jpg";
+export const alicePodRoot = "http://alice.example.com/";
 
 const VCARD_WEBID_PREDICATE = "https://www.w3.org/2006/vcard/ns#WebId";
 
@@ -55,7 +57,8 @@ export function mockPersonDatasetAlice() {
     (t) => addStringNoLocale(t, vcard.nickname, aliceNick),
     (t) => addUrl(t, vcard.hasPhoto, alicePhoto),
     (t) => addUrl(t, rdf.type, foaf.Person),
-    (t) => addUrl(t, vcard.url, mockWebIdNodeAlice.webIdNodeUrl)
+    (t) => addUrl(t, vcard.url, mockWebIdNodeAlice.webIdNodeUrl),
+    (t) => addUrl(t, space.storage, alicePodRoot)
   );
 }
 
@@ -63,9 +66,10 @@ export function mockProfileAlice() {
   return packageProfile(aliceWebIdUrl, mockPersonDatasetAlice());
 }
 
-export const bobWebIdUrl = "http://example.com/bob#me";
+export const bobWebIdUrl = "http://bob.example.com/bob#me";
 export const bobName = "Bob";
 export const bobNick = "B";
+export const bobPodRoot = "http://bob.example.com/";
 
 export function mockPersonDatasetBob() {
   return chain(
@@ -73,7 +77,8 @@ export function mockPersonDatasetBob() {
     (t) => addStringNoLocale(t, foaf.name, bobName),
     (t) => addStringNoLocale(t, foaf.nick, bobNick),
     (t) => addUrl(t, rdf.type, foaf.Person),
-    (t) => addUrl(t, foaf.openid, bobWebIdUrl)
+    (t) => addUrl(t, foaf.openid, bobWebIdUrl),
+    (t) => addUrl(t, space.storage, bobPodRoot)
   );
 }
 

@@ -22,27 +22,31 @@
 import { useEffect, useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
-import { contactsContainerIri, saveNewAddressBook } from "../../addressBook";
+import { getContactsIndexIri, saveNewAddressBook } from "../../addressBook";
 import { getResource } from "../../solidClientHelpers/resource";
 import { ERROR_CODES, isHTTPError } from "../../error";
+import useContactsContainerUrl from "../useContactsContainerUrl";
 
 export default function useAddressBook() {
   const [addressBook, setAddressBook] = useState(null);
   const [error, setError] = useState(null);
   const { session } = useSession();
   const { data: profile } = useAuthenticatedProfile();
+  const addressBookContainerUrl = useContactsContainerUrl();
 
   useEffect(() => {
-    if (!session.info.isLoggedIn || !profile) return;
-    const { pods, webId } = profile;
+    if (!session.info.isLoggedIn || !profile || !addressBookContainerUrl) {
+      return;
+    }
+    const { webId } = profile;
     const { fetch } = session;
-    const contactsIri = contactsContainerIri(pods[0]);
+    const contactsIndexIri = getContactsIndexIri(addressBookContainerUrl);
 
     (async () => {
       const {
         response: existingAddressBook,
         error: existingError,
-      } = await getResource(contactsIri, fetch);
+      } = await getResource(contactsIndexIri, fetch);
 
       if (existingAddressBook) {
         setAddressBook(existingAddressBook.dataset);
@@ -55,7 +59,7 @@ export default function useAddressBook() {
           error: newError,
         } = await saveNewAddressBook(
           {
-            iri: contactsIri,
+            iri: addressBookContainerUrl,
             owner: webId,
           },
           fetch
@@ -69,7 +73,7 @@ export default function useAddressBook() {
       }
       setError(existingError);
     })();
-  }, [session, profile]);
+  }, [session, profile, addressBookContainerUrl]);
 
   return [addressBook, error];
 }

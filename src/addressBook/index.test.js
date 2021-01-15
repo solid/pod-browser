@@ -28,11 +28,13 @@ import {
   mockSolidDatasetFrom,
   mockThingFrom,
   setThing,
+  setUrl,
 } from "@inrupt/solid-client";
 import * as resourceFns from "../solidClientHelpers/resource";
 import * as addressBookFns from ".";
 
 import {
+  aliceProfileUrl,
   aliceWebIdUrl,
   bobWebIdUrl,
   mockPersonDatasetAlice,
@@ -49,6 +51,7 @@ import {
   deleteContact,
   findContactInAddressBook,
   getContacts,
+  getContactsIndexIri,
   getGroups,
   getProfiles,
   getSchemaFunction,
@@ -395,17 +398,32 @@ describe("getContacts", () => {
   });
 });
 
-describe("getWebId", () => {
-  test("it returns the webId for a given person dataset", () => {
-    const personDataset = mockPersonDatasetAlice();
-    const mockPersonWebIdNode = mockWebIdNode("http://example.com/alice#me");
+describe("getWebIdUrl", () => {
+  it("returns the webId for a given person dataset", () => {
+    const webIdUrl = "http://example.com/alice#me";
+    const { webIdNode } = mockWebIdNode(webIdUrl);
+    const personDataset = chain(
+      mockSolidDatasetFrom("http://example.com/alice"),
+      (d) => setThing(d, mockPersonDatasetAlice()),
+      (d) => setThing(d, webIdNode)
+    );
 
-    jest
-      .spyOn(solidClientFns, "getThing")
-      .mockReturnValueOnce(mockPersonWebIdNode.webIdNode);
+    const webId = addressBookFns.getWebIdUrl(personDataset, aliceWebIdUrl);
+    expect(webId).toEqual(webIdUrl);
+  });
 
-    const webId = addressBookFns.getWebId(personDataset);
-    expect(webId).toEqual("http://example.com/alice#me");
+  it("offers fallback for foaf.openid", () => {
+    const foafId = "http://bobspod.com/#me";
+    const profile = chain(mockPersonDatasetBob(), (t) =>
+      setUrl(t, foaf.openid, foafId)
+    );
+    const personDataset = chain(
+      mockSolidDatasetFrom("https://example.com/bob"),
+      (d) => setThing(d, profile)
+    );
+
+    const webId = addressBookFns.getWebIdUrl(personDataset, bobWebIdUrl);
+    expect(webId).toEqual(foafId);
   });
 });
 
@@ -417,9 +435,12 @@ describe("getProfiles", () => {
   test("it fetches the profiles of the given people contacts", async () => {
     const fetch = jest.fn();
     const person1 = {
-      dataset: "Person 1",
-      iri: "https://user.example.com/contacts/Person/1234/index.ttl",
+      dataset: chain(mockSolidDatasetFrom(aliceProfileUrl), (d) =>
+        setThing(d, mockPersonDatasetAlice())
+      ),
+      iri: aliceWebIdUrl,
     };
+    // TODO: ONGOING WORK
     const mockWebIdNodePerson1 = mockWebIdNode(person1.iri);
     jest
       .spyOn(solidClientFns, "getSolidDataset")
@@ -631,8 +652,9 @@ describe("saveContact", () => {
 
 describe("deleteContact", () => {
   const addressBookUrl = "https://example.com/contacts";
+
   const contactContainerUrl = "http://example.com/contact/id-001/";
-  const contactUrl = `${contactContainerUrl}index.ttl`;
+  const contactUrl = getContactsIndexIri(contactContainerUrl);
   const mockContactToDelete = chain(
     solidClientFns.mockThingFrom(contactUrl),
     (t) => solidClientFns.addUrl(t, rdf.type, vcard.Individual),
@@ -648,10 +670,19 @@ describe("deleteContact", () => {
 
   const peopleIndexDataset = chain(
     solidClientFns.mockSolidDatasetFrom(peopleIndexIri),
-    (indexDataset) =>
-      solidClientFns.setThing(indexDataset, mockContactToDelete),
-    (indexDataset) =>
-      solidClientFns.setThing(indexDataset, mockPersonContactDataset())
+    (d) => solidClientFns.setThing(d, mockContactToDelete),
+    (d) => solidClientFns.setThing(d, mockPersonContactDataset())
+  );
+
+  const addressBookDataset = chain(
+    solidClientFns.mockSolidDatasetFrom(addressBookUrl),
+    (d) =>
+      setThing(
+        d,
+        chain(mockThingFrom(`${addressBookUrl}#this`), (t) =>
+          setUrl(t, vcardExtras("nameEmailIndex"), peopleIndexIri)
+        )
+      )
   );
 
   const updatedPeopleIndexDataset = chain(
@@ -669,7 +700,8 @@ describe("deleteContact", () => {
 
     jest
       .spyOn(solidClientFns, "getSolidDataset")
-      .mockResolvedValue(peopleIndexDataset);
+      .mockResolvedValueOnce(addressBookDataset)
+      .mockResolvedValueOnce(peopleIndexDataset);
 
     mockDeleteFile = jest
       .spyOn(solidClientFns, "deleteFile")
@@ -941,6 +973,12 @@ describe("contactsContainerIri", () => {
   });
 });
 
+describe("getContactsIndexIri", () => {
+  it("returns the URL for the central index file for contacts", () => {
+    expect(getContactsIndexIri("/contacts/")).toEqual("/contacts/index.ttl");
+  });
+});
+
 describe("getIndexDatasetFromAddressBook", () => {
   const addressBookIri = "https://user.example.com/contacts";
   const peopleIndexIri = `${addressBookIri}/people.ttl`;
@@ -954,7 +992,7 @@ describe("getIndexDatasetFromAddressBook", () => {
       setThing(
         d,
         chain(
-          mockThingFrom(addressBookIri),
+          mockThingFrom(`${addressBookIri}#this`),
           (t) => solidClientFns.addUrl(t, rdf.type, vcardExtras("AddressBook")),
           (t) => solidClientFns.addUrl(t, nameEmailIndex, peopleIndexIri)
         )
@@ -972,14 +1010,16 @@ describe("getIndexDatasetFromAddressBook", () => {
       .spyOn(solidClientFns, "getSolidDataset")
       .mockResolvedValueOnce(peopleIndexDataset);
 
-    const {
-      response: results,
-    } = await addressBookFns.getIndexDatasetFromAddressBook(
+    const { response } = await addressBookFns.getIndexDatasetFromAddressBook(
       addressBookDataset,
       nameEmailIndex,
       fetch
     );
-    expect(results).toBe(peopleIndexDataset);
+    expect(response).toBe(peopleIndexDataset);
+    expect(solidClientFns.getSolidDataset).toHaveBeenCalledWith(
+      peopleIndexIri,
+      { fetch }
+    );
   });
 
   it("returns an error if anything goes wrong", async () => {
