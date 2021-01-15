@@ -189,8 +189,9 @@ describe("createContact", () => {
     const things = getThingAll(dataset);
     const webId = things[0]; // always the first thing in this dataset
     const addressesThing = things[3];
-    const emailsAndPhones = things.flatMap((t) =>
-      getStringNoLocaleAll(t, vcard.value)
+    const emailsAndPhones = things.reduce(
+      (memo, t) => memo.concat(getStringNoLocaleAll(t, vcard.value)),
+      []
     );
 
     expect(getStringNoLocale(webId, vcard.fn)).toEqual("Test Person");
