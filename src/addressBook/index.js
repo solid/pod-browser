@@ -423,7 +423,7 @@ export async function saveContact(
 
   const contactThing = defineThing(
     {
-      url: `${getSourceUrl(contact)}#this`, // TODO: Ugly hack, should remove
+      url: `${getSourceUrl(contact)}#this`,
     },
     (t) =>
       addStringNoLocale(t, vcard.fn, contactSchema.fn || contactSchema.name),

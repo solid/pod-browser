@@ -573,13 +573,23 @@ describe("findContactInAddressBook", () => {
 });
 
 describe("saveContact", () => {
-  const addressBookIri = "https://user.example.com/contacts";
-  const mockAddressBook = solidClientFns.mockSolidDatasetFrom(addressBookIri);
+  const addressBookDatasetIri = "https://user.example.com/contacts";
+  const addressBookIri = `${addressBookDatasetIri}#this`;
   const webId = "https://user.example.com/card#me";
   const contactDataset = solidClientFns.mockSolidDatasetFrom(webId);
-  const peopleIndexIri = `${addressBookIri}/people.ttl`;
+  const peopleIndexIri = `${addressBookDatasetIri}/people.ttl`;
   const peopleIndexDataset = solidClientFns.mockSolidDatasetFrom(
     peopleIndexIri
+  );
+  const mockAddressBook = chain(
+    solidClientFns.mockSolidDatasetFrom(addressBookDatasetIri),
+    (d) =>
+      setThing(
+        d,
+        chain(mockThingFrom(addressBookIri), (t) =>
+          setUrl(t, vcardExtras("nameEmailIndex"), peopleIndexIri)
+        )
+      )
   );
   const schema = { webId, fn: "Test Person" };
   const errorMessage = "boom";
@@ -588,10 +598,6 @@ describe("saveContact", () => {
 
   beforeEach(() => {
     fetch = jest.fn();
-
-    jest
-      .spyOn(addressBookFns, "getIndexDatasetFromAddressBook")
-      .mockResolvedValue({ response: peopleIndexDataset });
 
     jest
       .spyOn(solidClientFns, "getSolidDataset")
@@ -611,14 +617,20 @@ describe("saveContact", () => {
 
     jest.spyOn(resourceFns, "getResource").mockResolvedValueOnce({
       response: {
-        iri: `${addressBookIri}/people.ttl`,
+        iri: `${addressBookDatasetIri}/people.ttl`,
         dataset: peopleIndexDataset,
       },
     });
 
     const {
       response: { contact, contacts },
-    } = await saveContact(mockAddressBook, schema, [foaf.Person], fetch);
+    } = await saveContact(
+      mockAddressBook,
+      addressBookDatasetIri,
+      schema,
+      [foaf.Person],
+      fetch
+    );
 
     expect(contact).toEqual(contactDataset);
     expect(contacts).toEqual(peopleIndexDataset);
@@ -632,7 +644,7 @@ describe("saveContact", () => {
 
     jest.spyOn(resourceFns, "getResource").mockResolvedValueOnce({
       response: {
-        iri: `${addressBookIri}/people.ttl`,
+        iri: `${addressBookDatasetIri}/people.ttl`,
         dataset: peopleIndexDataset,
       },
     });
@@ -641,6 +653,7 @@ describe("saveContact", () => {
       response: { contact, contacts },
     } = await saveContact(
       mockAddressBook,
+      addressBookDatasetIri,
       { webId, name: "Test Person" },
       [foaf.Person],
       fetch
@@ -657,6 +670,7 @@ describe("saveContact", () => {
 
     const { error } = await saveContact(
       mockAddressBook,
+      addressBookDatasetIri,
       schema,
       [foaf.Person],
       fetch
@@ -673,6 +687,7 @@ describe("saveContact", () => {
 
     const { error } = await saveContact(
       mockAddressBook,
+      addressBookDatasetIri,
       schema,
       [foaf.Person],
       fetch
