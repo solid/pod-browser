@@ -50,5 +50,11 @@ describe("getPolicyUrl", () => {
     expect(
       getPolicyUrl(mockSolidDatasetFrom(`${podUrl}public`), policies)
     ).toEqual("http://example.com/pb_policies/public.ttl");
+    expect(
+      getPolicyUrl(mockSolidDatasetFrom(`${podUrl}pb_policies/.ttl`), policies)
+    ).toEqual("http://example.com/pb_policies/pb_policies/.ttl.ttl");
+    expect(
+      getPolicyUrl(mockSolidDatasetFrom(`${podUrl}pb_policies/test/`), policies)
+    ).toEqual("http://example.com/pb_policies/pb_policies/test/.ttl");
   });
 });
