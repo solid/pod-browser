@@ -43,61 +43,6 @@ import {
   sharedStart,
 } from "./utils";
 
-const TIMESTAMP = new Date(Date.UTC(2020, 5, 2, 15, 59, 21));
-
-function createDataset(url, type = "http://www.w3.org/ns/ldp#BasicContainer") {
-  const {
-    // eslint-disable-next-line no-shadow
-    addUrl,
-    createSolidDataset,
-    createThing,
-    setDatetime,
-    setDecimal,
-    setInteger,
-    // eslint-disable-next-line no-shadow
-    setThing,
-  } = solidClientFns;
-  let publicContainer = createThing({ url });
-
-  publicContainer = addUrl(
-    publicContainer,
-    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-    type
-  );
-
-  publicContainer = addUrl(
-    publicContainer,
-    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-    "http://www.w3.org/ns/ldp#Container"
-  );
-
-  publicContainer = setDatetime(
-    publicContainer,
-    "http://purl.org/dc/terms/modified",
-    TIMESTAMP
-  );
-
-  publicContainer = addUrl(
-    publicContainer,
-    "http://www.w3.org/ns/ldp#contains",
-    "https://user.dev.inrupt.net/public/games/"
-  );
-
-  publicContainer = setDecimal(
-    publicContainer,
-    "http://www.w3.org/ns/posix/stat#mtime",
-    1591131561.195
-  );
-
-  publicContainer = setInteger(
-    publicContainer,
-    "http://www.w3.org/ns/posix/stat#size",
-    4096
-  );
-
-  return setThing(createSolidDataset(), publicContainer);
-}
-
 describe("createResponder", () => {
   test("it returns a function to respond with a data or with an error message", () => {
     const { respond, error } = createResponder();

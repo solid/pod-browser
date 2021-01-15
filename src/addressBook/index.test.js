@@ -23,10 +23,12 @@
 import { acl, dc, foaf, rdf, vcard } from "rdf-namespaces";
 import * as solidClientFns from "@inrupt/solid-client";
 import {
+  addUrl,
   asUrl,
   getThingAll,
   mockSolidDatasetFrom,
   mockThingFrom,
+  setStringNoLocale,
   setThing,
   setUrl,
 } from "@inrupt/solid-client";
@@ -230,21 +232,42 @@ describe("getGroups", () => {
   test("it fetches the groups for a given address book", async () => {
     const containerIri = "https://user.example.com/contacts";
     const fetch = jest.fn();
+    const groupsIndex = joinPath(containerIri, "groups.ttl");
+    const groupsIndexThing = `${groupsIndex}#this`;
 
-    jest
-      .spyOn(resourceFns, "getResource")
-      .mockResolvedValueOnce({ response: "dataset" });
+    const group1Url = "https://example.com/Group1.ttl";
+    const group2Url = "https://example.com/Group2.ttl";
 
-    jest
-      .spyOn(solidClientFns, "getStringNoLocaleAll")
-      .mockReturnValueOnce(["Group1", "Group2"]);
-
-    jest
-      .spyOn(solidClientFns, "getUrlAll")
-      .mockReturnValueOnce([
-        "https://example.com/Group1.ttl",
-        "https://example.com/Group2.ttl",
-      ]);
+    jest.spyOn(resourceFns, "getResource").mockResolvedValueOnce({
+      response: {
+        dataset: chain(
+          mockSolidDatasetFrom(groupsIndex),
+          (d) =>
+            setThing(
+              d,
+              chain(
+                mockThingFrom(groupsIndexThing),
+                (t) => setUrl(t, vcardExtras("includesGroup"), group1Url),
+                (t) => addUrl(t, vcardExtras("includesGroup"), group2Url)
+              )
+            ),
+          (d) =>
+            setThing(
+              d,
+              chain(mockThingFrom(group1Url), (t) =>
+                setStringNoLocale(t, vcard.fn, "Group1")
+              )
+            ),
+          (d) =>
+            setThing(
+              d,
+              chain(mockThingFrom(group2Url), (t) =>
+                setStringNoLocale(t, vcard.fn, "Group2")
+              )
+            )
+        ),
+      },
+    });
 
     const {
       response: [group1, group2],
@@ -416,15 +439,16 @@ describe("getContacts", () => {
 describe("getWebIdUrl", () => {
   it("returns the webId for a given person dataset", () => {
     const webIdUrl = "http://example.com/alice#me";
-    const { webIdNode } = mockWebIdNode(webIdUrl);
+    const { webIdNode } = mockWebIdNode(webIdUrl, aliceAlternativeWebIdUrl);
     const personDataset = chain(
       mockSolidDatasetFrom("http://example.com/alice"),
       (d) => setThing(d, mockPersonDatasetAlice()),
       (d) => setThing(d, webIdNode)
     );
 
-    const webId = addressBookFns.getWebIdUrl(personDataset, aliceWebIdUrl);
-    expect(webId).toEqual(webIdUrl);
+    expect(addressBookFns.getWebIdUrl(personDataset, aliceWebIdUrl)).toEqual(
+      webIdUrl
+    );
   });
 
   it("offers fallback for foaf.openid", () => {
@@ -437,8 +461,9 @@ describe("getWebIdUrl", () => {
       (d) => setThing(d, profile)
     );
 
-    const webId = addressBookFns.getWebIdUrl(personDataset, bobWebIdUrl);
-    expect(webId).toEqual(foafId);
+    expect(addressBookFns.getWebIdUrl(personDataset, bobWebIdUrl)).toEqual(
+      foafId
+    );
   });
 });
 
@@ -550,7 +575,10 @@ describe("findContactInAddressBook", () => {
   const webId2Url = bobWebIdUrl;
   const webId2 = mockPersonDatasetBob();
   const webId3Url = "http://example.com/#webId3";
-  const people = [{ dataset: webId1 }, { dataset: webId2 }];
+  const people = [
+    { dataset: webId1, iri: webId1Url },
+    { dataset: webId2, iri: webId2Url },
+  ];
   const fetch = "fetch";
 
   beforeEach(() => {

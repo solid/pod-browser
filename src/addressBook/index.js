@@ -29,7 +29,7 @@ import {
   deleteFile,
   getSolidDataset,
   getSourceUrl,
-  getStringNoLocaleAll,
+  getStringNoLocale,
   getThing,
   getThingAll,
   getUrl,
@@ -133,13 +133,13 @@ export async function getGroups(containerIri, fetch) {
   const { dataset } = groupsResponse;
   const groupsThingUrl = `${getSourceUrl(dataset)}#this`; // TODO: Ugly hack, should remove
   const groupsThing = getThing(dataset, groupsThingUrl);
-  const names = getStringNoLocaleAll(groupsThing, vcard.fn);
   const iris = getUrlAll(groupsThing, vcardExtras("includesGroup"));
 
-  const groups = iris.map((iri, i) => {
+  const groups = iris.map((iri) => {
+    const groupThing = getThing(dataset, iri);
     return {
       iri,
-      name: names[i],
+      name: getStringNoLocale(groupThing, vcard.fn),
     };
   });
 

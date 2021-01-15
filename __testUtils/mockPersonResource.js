@@ -31,9 +31,12 @@ import { packageProfile } from "../src/solidClientHelpers/profile";
 
 const VCARD_WEBID_PREDICATE = "https://www.w3.org/2006/vcard/ns#WebId";
 
-export function mockWebIdNode(webId) {
+export function mockWebIdNode(
+  webId,
+  nodeUrl = "https://example.org/contacts/Person/1234/index.ttl#4567"
+) {
   const webIdNode = chain(
-    mockThingFrom("https://example.org/contacts/Person/1234/index.ttl#4567"),
+    mockThingFrom(nodeUrl),
     (t) => addUrl(t, rdf.type, VCARD_WEBID_PREDICATE),
     (t) => addUrl(t, vcard.value, webId)
   );

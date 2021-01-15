@@ -24,9 +24,6 @@
 import {
   createSolidDataset,
   createThing,
-  getDatetime,
-  getDecimal,
-  getInteger,
   getSourceUrl,
   getThing,
   getUrlAll,
