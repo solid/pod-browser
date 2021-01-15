@@ -34,8 +34,13 @@ import * as resourceFns from "../solidClientHelpers/resource";
 import * as addressBookFns from ".";
 
 import {
+  aliceAlternativeProfileUrl,
+  aliceAlternativeWebIdUrl,
   aliceProfileUrl,
   aliceWebIdUrl,
+  bobAlternateProfileUrl,
+  bobAlternateWebIdUrl,
+  bobProfileUrl,
   bobWebIdUrl,
   mockPersonDatasetAlice,
   mockPersonDatasetBob,
@@ -440,43 +445,49 @@ describe("getProfiles", () => {
       ),
       iri: aliceWebIdUrl,
     };
-    // TODO: ONGOING WORK
-    const mockWebIdNodePerson1 = mockWebIdNode(person1.iri);
-    jest
-      .spyOn(solidClientFns, "getSolidDataset")
-      .mockReturnValueOnce(mockWebIdNodePerson1)
-      .mockReturnValue(undefined);
     const person2 = {
-      dataset: "Person 2",
-      iri: "https://user.example.com/contacts/Person/1234/index.ttl",
+      dataset: chain(mockSolidDatasetFrom(bobProfileUrl), (d) =>
+        setThing(d, mockPersonDatasetBob())
+      ),
+      iri: bobWebIdUrl,
     };
-    const expectedProfile1Url = "http://testperson.example.com/profile/card#me";
-    const expectedProfile2Url =
-      "http://anotherperson.example.com/profile/card#me";
 
     jest
       .spyOn(resourceFns, "getResource")
       .mockResolvedValueOnce({
         response: {
-          dataset: chain(mockSolidDatasetFrom(expectedProfile1Url), (d) =>
-            setThing(d, solidClientFns.mockThingFrom(expectedProfile1Url))
+          dataset: chain(
+            mockSolidDatasetFrom(aliceAlternativeProfileUrl),
+            (d) =>
+              setThing(
+                d,
+                chain(
+                  solidClientFns.mockThingFrom(aliceAlternativeWebIdUrl),
+                  (t) => setUrl(t, rdf.type, foaf.Person)
+                )
+              )
           ),
-          iri: expectedProfile1Url,
+          iri: aliceAlternativeWebIdUrl,
         },
       })
       .mockResolvedValueOnce({
         response: {
-          dataset: chain(mockSolidDatasetFrom(expectedProfile2Url), (d) =>
-            setThing(d, solidClientFns.mockThingFrom(expectedProfile2Url))
+          dataset: chain(mockSolidDatasetFrom(bobAlternateProfileUrl), (d) =>
+            setThing(
+              d,
+              chain(solidClientFns.mockThingFrom(bobAlternateWebIdUrl), (t) =>
+                setUrl(t, rdf.type, foaf.Person)
+              )
+            )
           ),
-          iri: expectedProfile2Url,
+          iri: bobAlternateWebIdUrl,
         },
       });
 
     const [profile1, profile2] = await getProfiles([person1, person2], fetch);
 
-    expect(asUrl(profile1)).toEqual(expectedProfile1Url);
-    expect(asUrl(profile2)).toEqual(expectedProfile2Url);
+    expect(asUrl(profile1)).toEqual(aliceAlternativeWebIdUrl);
+    expect(asUrl(profile2)).toEqual(bobAlternateWebIdUrl);
   });
 
   test("it filters out people for which the resource couldn't be fetched", async () => {
@@ -484,23 +495,34 @@ describe("getProfiles", () => {
     const person1Iri =
       "https://user.example.com/contacts/Person/1234/index.ttl";
     const person1 = {
-      dataset: mockSolidDatasetFrom(person1Iri),
+      dataset: chain(mockSolidDatasetFrom(person1Iri), (d) =>
+        setThing(
+          d,
+          chain(mockThingFrom(person1Iri), (t) =>
+            setUrl(t, rdf.type, foaf.Person)
+          )
+        )
+      ),
       iri: person1Iri,
     };
     const person2Iri =
       "https://user.example.com/contacts/Person/1234/index.ttl";
     const person2 = {
-      dataset: mockSolidDatasetFrom(person2Iri),
+      dataset: chain(mockSolidDatasetFrom(person2Iri), (d) =>
+        setThing(
+          d,
+          chain(mockThingFrom(person2Iri), (t) =>
+            setUrl(t, rdf.type, foaf.Person)
+          )
+        )
+      ),
       iri: person2Iri,
-    };
-    const expectedProfile = {
-      webId: "http://testperson.example.com/profile/card#me",
     };
 
     jest
       .spyOn(resourceFns, "getResource")
       .mockResolvedValueOnce({
-        response: { dataset: person1.dataset, iri: expectedProfile.webId },
+        response: { dataset: person1.dataset, iri: person1.iri },
       })
       .mockResolvedValueOnce({
         error: "There was an error",
