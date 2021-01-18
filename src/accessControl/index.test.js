@@ -26,16 +26,49 @@ import {
 } from "@inrupt/solid-client";
 import AcpAccessControlStrategy from "./acp";
 import WacAccessControlStrategy from "./wac";
-import { getAccessControl, hasAccess, noAccessPolicyError } from "./index";
+import {
+  getAccessControl,
+  hasAccess,
+  isAcp,
+  isWac,
+  noAccessPolicyError,
+} from "./index";
 
 const acp = solidClientFns.acp_v1;
 
 jest.mock("./acp");
 jest.mock("./wac");
 
+const resource = mockSolidDatasetFrom("http://example.com");
+
+describe("isAcp", () => {
+  beforeEach(() => jest.spyOn(acp, "hasLinkedAcr").mockReturnValue(true));
+
+  it("uses acp.hasLinkedAcr to determine whether a resource from a server uses ACP", () => {
+    expect(isAcp(resource)).toBeTruthy();
+    expect(acp.hasLinkedAcr).toHaveBeenCalledWith(resource);
+  });
+
+  it("returns false for non-instantiated ResourceInfo", () =>
+    expect(isAcp(null)).toBeFalsy());
+});
+
+describe("isWac", () => {
+  beforeEach(() =>
+    jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValue(true)
+  );
+
+  it("uses hasAccessibleAcl to determine whether a resource from a server uses WAC", () => {
+    expect(isWac(resource)).toBeTruthy();
+    expect(solidClientFns.hasAccessibleAcl).toHaveBeenCalledWith(resource);
+  });
+
+  it("returns false for non-instantiated ResourceInfo", () =>
+    expect(isWac(null)).toBeFalsy());
+});
+
 describe("getAccessControl", () => {
   let result;
-  const resource = "resource";
   const policiesContainer = "policiesContainer";
   const fetch = "fetch";
   const acpStrategy = "acpStrategy";
@@ -92,7 +125,6 @@ describe("getAccessControl", () => {
 
 describe("hasAccess", () => {
   it("checks whether resource is accessible either through ACP or WAC", () => {
-    const resource = mockSolidDatasetFrom("http://example.com");
     const resourceWithWac = addMockResourceAclTo(resource);
     const resourceWithAcp = acp.addMockAcrTo(resource);
     jest

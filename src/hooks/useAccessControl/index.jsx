@@ -21,19 +21,25 @@
 
 import { useEffect, useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
-import { getAccessControl } from "../../accessControl";
+import { getAccessControl, isAcp } from "../../accessControl";
 import usePoliciesContainer from "../usePoliciesContainer";
 
 export default function useAccessControl(resourceInfo) {
   const { fetch } = useSession();
   const [accessControl, setAccessControl] = useState(null);
-  const { policiesContainer, error: policiesError } = usePoliciesContainer();
-  const [error, setError] = useState(policiesError || null);
+  const {
+    policiesContainer,
+    error: policiesContainerError,
+  } = usePoliciesContainer();
+  const [error, setError] = useState(policiesContainerError || null);
 
   useEffect(() => {
-    if (!resourceInfo || policiesError || !policiesContainer) {
+    if (
+      !resourceInfo ||
+      (isAcp(resourceInfo) && (policiesContainerError || !policiesContainer))
+    ) {
       setAccessControl(null);
-      setError(policiesError || null);
+      setError(policiesContainerError || null);
       return;
     }
     setAccessControl(null);
@@ -47,7 +53,7 @@ export default function useAccessControl(resourceInfo) {
         setAccessControl(null);
         setError(accessControlError);
       });
-  }, [fetch, policiesContainer, policiesError, resourceInfo]);
+  }, [fetch, policiesContainer, policiesContainerError, resourceInfo]);
 
   return { accessControl, error };
 }

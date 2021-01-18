@@ -27,12 +27,13 @@ import mockSessionContextProvider from "../../../__testUtils/mockSessionContextP
 import mockSession from "../../../__testUtils/mockSession";
 
 jest.mock("../usePoliciesContainer");
+const mockedPoliciesContainerHook = usePoliciesContainer;
 
 describe("useAccessControl", () => {
   const accessControl = "accessControl";
   const resourceIri = "resourceIri";
-  const policiesContainer = "policiesContainer";
   const error = "error";
+
   let session;
   let wrapper;
 
@@ -40,50 +41,30 @@ describe("useAccessControl", () => {
     jest
       .spyOn(accessControlFns, "getAccessControl")
       .mockResolvedValue(accessControl);
-    usePoliciesContainer.mockReturnValue({ policiesContainer });
+    mockedPoliciesContainerHook.mockReturnValue({ policiesContainer: null });
     session = mockSession();
     wrapper = mockSessionContextProvider(session);
+    jest.spyOn(accessControlFns, "isAcp").mockReturnValue(false);
   });
 
   it("returns null if given no resourceUri", () => {
-    const { result } = renderHook(() => useAccessControl(null, session.fetch), {
+    const { result } = renderHook(() => useAccessControl(null), {
       wrapper,
     });
     expect(result.current.accessControl).toBeNull();
     expect(result.current.error).toBeNull();
   });
 
-  it("returns null if no policiesContainer", () => {
-    usePoliciesContainer.mockReturnValue({ policiesContainer: null });
-    const { result } = renderHook(() => useAccessControl(null, session.fetch), {
-      wrapper,
-    });
-    expect(result.current.accessControl).toBeNull();
-    expect(result.current.error).toBeNull();
-  });
-
-  it("returns accessControl if given resourceUri", async () => {
-    const { result, waitForNextUpdate } = renderHook(
+  it("sets accessControl and error to null while loading", async () => {
+    const { rerender, result, waitForNextUpdate } = renderHook(
       () => useAccessControl(resourceIri),
       { wrapper }
     );
     await waitForNextUpdate();
-    expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
-      resourceIri,
-      policiesContainer,
-      expect.any(Function)
-    );
-    expect(result.current.accessControl).toBe(accessControl);
-    expect(result.current.error).toBeNull();
-  });
-
-  it("returns error if usePolicies return error", async () => {
-    usePoliciesContainer.mockReturnValue({ error });
-    const { result } = renderHook(() => useAccessControl(resourceIri), {
-      wrapper,
-    });
+    expect(result.current.accessControl).not.toBeNull();
+    rerender(resourceIri + 2);
     expect(result.current.accessControl).toBeNull();
-    expect(result.current.error).toBe(error);
+    expect(result.current.error).toBeNull();
   });
 
   it("returns error if getAccessControl fails", async () => {
@@ -97,15 +78,73 @@ describe("useAccessControl", () => {
     expect(result.current.error).toBe(error);
   });
 
-  it("sets accessControl and error to null while loading", async () => {
-    const { rerender, result, waitForNextUpdate } = renderHook(
-      () => useAccessControl(resourceIri),
-      { wrapper }
-    );
-    await waitForNextUpdate();
-    expect(result.current.accessControl).not.toBeNull();
-    rerender(resourceIri + 2);
-    expect(result.current.accessControl).toBeNull();
-    expect(result.current.error).toBeNull();
+  describe("using WAC", () => {
+    it("returns accessControl if given resourceUri", async () => {
+      const { result, waitForNextUpdate } = renderHook(
+        () => useAccessControl(resourceIri),
+        { wrapper }
+      );
+      await waitForNextUpdate();
+      expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
+        resourceIri,
+        null,
+        expect.any(Function)
+      );
+      expect(result.current.accessControl).toBe(accessControl);
+      expect(result.current.error).toBeNull();
+    });
+
+    it("returns accessControl if usePolicies return error", async () => {
+      mockedPoliciesContainerHook.mockReturnValue({ error });
+      const { result, waitForNextUpdate } = renderHook(
+        () => useAccessControl(resourceIri),
+        { wrapper }
+      );
+      await waitForNextUpdate();
+      expect(result.current.accessControl).toBe(accessControl);
+      expect(result.current.error).toBeNull();
+    });
+  });
+
+  describe("using ACP", () => {
+    const policiesContainer = "policiesContainer";
+
+    beforeEach(() => {
+      mockedPoliciesContainerHook.mockReturnValue({ policiesContainer });
+      jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
+    });
+
+    it("returns accessControl if given resourceUri", async () => {
+      const { result, waitForNextUpdate } = renderHook(
+        () => useAccessControl(resourceIri),
+        { wrapper }
+      );
+      await waitForNextUpdate();
+      expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
+        resourceIri,
+        policiesContainer,
+        expect.any(Function)
+      );
+      expect(result.current.accessControl).toBe(accessControl);
+      expect(result.current.error).toBeNull();
+    });
+
+    it("returns null if given usePolicies return null", async () => {
+      mockedPoliciesContainerHook.mockReturnValue({ policiesContainer: null });
+      const { result } = renderHook(() => useAccessControl(resourceIri), {
+        wrapper,
+      });
+      expect(result.current.accessControl).toBeNull();
+      expect(result.current.error).toBeNull();
+    });
+
+    it("returns error if usePolicies return error", async () => {
+      mockedPoliciesContainerHook.mockReturnValue({ error });
+      const { result } = renderHook(() => useAccessControl(resourceIri), {
+        wrapper,
+      });
+      expect(result.current.accessControl).toBeNull();
+      expect(result.current.error).toBe(error);
+    });
   });
 });
