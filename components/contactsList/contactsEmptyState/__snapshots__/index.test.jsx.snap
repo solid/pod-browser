@@ -6,9 +6,9 @@ exports[`ContactsEmptyState it renders an empty state component 1`] = `
     class="PodBrowser-content"
   >
     <div
-      class="PodBrowser-container PodBrowser-empty-state-container"
+      class="PodBrowser-container PodBrowser-container--empty"
     >
-      <i
+      <span
         class="PodBrowser-icon-user-astronaut PodBrowser-icon-large"
       />
       <h1>

@@ -22,19 +22,10 @@
 import { createStyles } from "@solid/lit-prism-patterns";
 
 const styles = (theme) => {
-  return createStyles(theme, ["icons", "button", "content"], {
-    "empty-state-container": {
-      textAlign: "center",
-      paddingTop: "64px",
-      // eslint-disable-next-line no-dupe-keys
-      paddingTop: "min(64px, 20%)",
-      paddingBottom: "64px",
-      // eslint-disable-next-line no-dupe-keys
-      paddingBottom: "min(64px, 20%)",
-    },
+  return createStyles(theme, [], {
     "icon-large": {
-      fontSize: "64px",
-      color: "#0D6796",
+      ...theme.icons.iconColor("#0D6796"),
+      fontSize: 64,
     },
     "add-contact-button": {
       backgroundColor: theme.palette.primary.main,

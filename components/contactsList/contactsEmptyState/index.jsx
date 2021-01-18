@@ -24,7 +24,12 @@ import Link from "next/link";
 import clsx from "clsx";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Button, Content, Container } from "@inrupt/prism-react-components";
+import {
+  Button,
+  Content,
+  Container,
+  Icons,
+} from "@inrupt/prism-react-components";
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -37,10 +42,8 @@ export default function ContactsEmptyState() {
 
   return (
     <Content>
-      <Container
-        className={clsx(bem("container"), bem("empty-state-container"))}
-      >
-        <i className={clsx(bem("icon-user-astronaut"), bem("icon-large"))} />
+      <Container variant="empty">
+        <Icons name="user-astronaut" className={bem("icon-large")} />
         <h1>You don’t have any contacts yet!</h1>
         <p>Add a new contact to share files with.</p>
         <Link href="/contacts/add">
