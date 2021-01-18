@@ -23,25 +23,19 @@ import React from "react";
 
 import { fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
 import AgentAccess, { saveHandler } from "./index";
-
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import * as profileFns from "../../../../src/solidClientHelpers/profile";
 import { mockProfileAlice } from "../../../../__testUtils/mockPersonResource";
 
-jest.mock("../../../../src/solidClientHelpers/permissions");
 jest.mock("../../../../src/hooks/useFetchProfile");
 
 const webId = "https://example.com/profile/card#me";
 
 describe("AgentAccess", () => {
   const permission = {
-    acl: {
-      read: true,
-      write: true,
-      append: true,
-      control: true,
-    },
+    acl: createAccessMap(true, true, true, true),
     webId,
     profile: mockProfileAlice(),
   };
@@ -57,12 +51,7 @@ describe("AgentAccess", () => {
     const { asFragment } = renderWithTheme(
       <AgentAccess
         permission={{
-          acl: {
-            read: true,
-            write: true,
-            append: true,
-            control: true,
-          },
+          acl: createAccessMap(true, true, true, true),
           webId,
           profile: null,
           profileError: null,
@@ -77,12 +66,7 @@ describe("AgentAccess", () => {
     const { asFragment, getByTestId } = renderWithTheme(
       <AgentAccess
         permission={{
-          acl: {
-            read: true,
-            write: true,
-            append: true,
-            control: true,
-          },
+          acl: createAccessMap(true, true, true, true),
           webId,
           profile: null,
           profileError: "error",
@@ -97,12 +81,7 @@ describe("AgentAccess", () => {
     const { getByTestId } = renderWithTheme(
       <AgentAccess
         permission={{
-          acl: {
-            read: true,
-            write: true,
-            append: true,
-            control: true,
-          },
+          acl: createAccessMap(true, true, true, true),
           webId,
           profile: null,
           profileError: "error",
@@ -120,12 +99,7 @@ describe("AgentAccess", () => {
     const { getByTestId } = renderWithTheme(
       <AgentAccess
         permission={{
-          acl: {
-            read: true,
-            write: true,
-            append: true,
-            control: true,
-          },
+          acl: createAccessMap(true, true, true, true),
           webId,
           profile: null,
           profileError: "error",
@@ -146,12 +120,7 @@ describe("AgentAccess", () => {
     const { getByTestId, queryByTestId } = renderWithTheme(
       <AgentAccess
         permission={{
-          acl: {
-            read: true,
-            write: true,
-            append: true,
-            control: true,
-          },
+          acl: createAccessMap(true, true, true, true),
           webId,
           profile: null,
           profileError: "error",
@@ -170,12 +139,7 @@ describe("AgentAccess", () => {
     const { getByTestId, queryByTestId } = renderWithTheme(
       <AgentAccess
         permission={{
-          acl: {
-            read: true,
-            write: true,
-            append: true,
-            control: true,
-          },
+          acl: createAccessMap(true, true, true, true),
           webId,
           profile: null,
           profileError: "error",
@@ -194,12 +158,7 @@ describe("AgentAccess", () => {
     const { getByTestId, getByRole, queryByText } = renderWithTheme(
       <AgentAccess
         permission={{
-          acl: {
-            read: true,
-            write: true,
-            append: true,
-            control: true,
-          },
+          acl: createAccessMap(true, true, true, true),
           webId,
           profile: {
             avatar: null,
@@ -222,12 +181,7 @@ describe("AgentAccess", () => {
     const { getByTestId, queryByText } = renderWithTheme(
       <AgentAccess
         permission={{
-          acl: {
-            read: true,
-            write: true,
-            append: true,
-            control: true,
-          },
+          acl: createAccessMap(true, true, true, true),
           webId,
           profile: {
             avatar: null,
