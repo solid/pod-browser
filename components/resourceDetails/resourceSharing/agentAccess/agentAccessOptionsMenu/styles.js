@@ -44,8 +44,8 @@ export default function styles(theme) {
     switchTrack: {},
     button: {
       flexShrink: 0,
-      width: "30px",
-      height: "30px",
+      width: "1.875rem",
+      height: "1.875rem",
       color: theme.palette.text.secondary,
       backgroundColor: "transparent",
       border: "none",
@@ -63,7 +63,7 @@ export default function styles(theme) {
     },
     webIdContainer: {
       backgroundColor: theme.palette.grey[100],
-      fontSize: "10px",
+      fontSize: "0.625rem",
       fontWeight: 500,
       letterSpacing: 0,
       lineHeight: "13px",

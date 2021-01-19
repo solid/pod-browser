@@ -34,17 +34,18 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 const TESTCAFE_ID_ADD_AGENT_BUTTON = "add-agent-button";
 
+const BUTTON_TEXT_MAP = {
+  editors: { text: "Add Editors" },
+  viewers: { text: "Add Viewers" },
+  blocked: { text: "Block" },
+};
+
 // TODO: this component will trigger the opening of a modal, for now it is just a placeholder
 
 export default function AddAgentButton({ type, onClick }) {
   const classes = useStyles();
   const bem = useBem(useStyles());
 
-  const BUTTON_TEXT_MAP = {
-    editors: { text: "Add Editors" },
-    viewers: { text: "Add Viewers" },
-    blocked: { text: "Block" },
-  };
   const { text } = BUTTON_TEXT_MAP[type];
   return (
     <Button

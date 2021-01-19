@@ -20,38 +20,60 @@
  */
 
 export default function styles(theme) {
+  const WARNING_BACKGROUND_COLOR = "#FFF4E5";
+  const SEPARATOR_COLOR = "#E1CAAA";
   return {
-    nameAndAvatarContainer: {
-      padding: theme.spacing(0.8, 1.6),
-      color: "#000",
-      width: "100%",
-      display: "flex",
-      alignItems: "center",
-      flexDirection: "row",
-    },
     avatar: {
-      marginRight: theme.spacing(1.6),
-      width: "1.875rem",
-      height: "1.875rem",
+      marginRight: "1rem",
     },
     detailText: {
-      overflowWrap: "anywhere",
-      fontWeight: 500,
-      display: "flex",
-      fontSize: "1rem",
-      fontFamily: "inherit",
+      fontSize: "0.75rem",
       textAlign: "left",
-      justifyContent: "space-between",
-      alignItems: "center",
       flexGrow: 1,
-      flexDirection: "row",
     },
-    shareText: {
-      whiteSpace: "nowrap",
-      padding: theme.spacing(0.5),
-      color: theme.palette.text.secondary,
-      fontSize: "0.8125rem",
-      fontWeight: 500,
+    "alert-container": {
+      maxWidth: "100%",
+      backgroundColor: WARNING_BACKGROUND_COLOR,
+      padding: theme.spacing(0.7, 1.4),
+    },
+    action: {
+      padding: 0,
+      paddingRight: theme.spacing(0.5),
+    },
+    alertBox: {
+      width: "100%",
+      overflowWrap: "break-word",
+      padding: 0,
+    },
+    alertMessage: {
+      overflowWrap: "break-word",
+      fontSize: "14px",
+    },
+    "avatar-container": {
+      display: "flex",
+      maxWidth: "100%",
+      padding: 0,
+      "& p": {
+        overflowWrap: "break-word",
+        marginRight: theme.spacing(0.7, 1.6, 1.4, 0.7),
+        [theme.breakpoints.up("sm")]: {
+          overflowWrap: "anywhere",
+        },
+      },
+    },
+    "bold-button": {
+      fontWeight: "bold",
+      alignSelf: "right",
+    },
+    spinner: {
+      margin: theme.spacing(2),
+    },
+    separator: {
+      boxSizing: "border-box",
+      border: `1px solid ${SEPARATOR_COLOR}`,
+      margin: 0,
+      marginBottom: theme.spacing(0.8),
+      height: "1px",
     },
   };
 }
