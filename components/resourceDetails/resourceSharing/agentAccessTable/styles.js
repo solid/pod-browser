@@ -21,6 +21,13 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
+const EDITORS_ICON_COLOR = "#4CAF50";
+const EDITORS_ICON_BACKGROUND_COLOR = "#EDF7ED";
+const VIEWERS_ICON_COLOR = "#2196F3";
+const VIEWERS_ICON_BACKGROUND_COLOR = "#E8F4FD";
+const BLOCKED_ICON_COLOR = "#F44336";
+const BLOCKED_ICON_BACKGROUND_COLOR = "#FDECEA";
+
 export default function styles(theme) {
   return createStyles(theme, ["icons", "table"], {
     accordion: {
@@ -104,16 +111,16 @@ export default function styles(theme) {
       fontSize: theme.typography.h1.fontSize,
     },
     iconViewer: {
-      color: "#2196F3",
-      backgroundColor: "#E8F4FD",
+      color: VIEWERS_ICON_COLOR,
+      backgroundColor: VIEWERS_ICON_BACKGROUND_COLOR,
     },
     iconBlocked: {
-      color: "#F44336",
-      backgroundColor: "#FDECEA",
+      color: BLOCKED_ICON_COLOR,
+      backgroundColor: BLOCKED_ICON_BACKGROUND_COLOR,
     },
     iconEditor: {
-      color: "#4CAF50",
-      backgroundColor: "#EDF7ED",
+      color: EDITORS_ICON_COLOR,
+      backgroundColor: EDITORS_ICON_BACKGROUND_COLOR,
     },
     emptyStateTextContainer: {
       display: "flex",
