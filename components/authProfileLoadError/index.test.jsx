@@ -19,34 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useSession } from "@inrupt/solid-ui-react";
-import { useEffect } from "react";
-import Router from "next/router";
-import useAuthenticatedProfile from "../useAuthenticatedProfile";
-import usePodRootUri from "../usePodRootUri";
-import useResourceInfo from "../useResourceInfo";
-import { hasAccess } from "../../accessControl";
+import React from "react";
+import { renderWithTheme } from "../../__testUtils/withTheme";
+import AuthProfileLoadError from "./index";
 
-export default function useRedirectIfNoControlAccessToOwnPod(
-  resourceUrl,
-  location = "/access-required"
-) {
-  const { fetch, sessionRequestInProgress } = useSession();
-  const { data: profile } = useAuthenticatedProfile();
-  const podRootUri = usePodRootUri(resourceUrl, profile);
-  const profilePodUri =
-    podRootUri && profile
-      ? profile.pods.find((pod) => pod === podRootUri)
-      : null;
-  const { data: profilePod } = useResourceInfo(profilePodUri);
-
-  useEffect(() => {
-    if (sessionRequestInProgress || !profile || !profilePod) {
-      return;
-    }
-    if (hasAccess(profilePod)) {
-      return;
-    }
-    Router.push(location);
-  }, [sessionRequestInProgress, profile, location, fetch, profilePod]);
-}
+describe("AuthProfileLoadError", () => {
+  it("renders", () => {
+    const { asFragment } = renderWithTheme(<AuthProfileLoadError />);
+    expect(asFragment()).toMatchSnapshot();
+  });
+});

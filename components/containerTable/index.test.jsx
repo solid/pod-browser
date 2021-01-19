@@ -20,26 +20,45 @@
  */
 
 import React from "react";
-import { Container, PageHeader } from "@inrupt/prism-react-components";
 import { useRouter } from "next/router";
-import ResourceLink from "../resourceLink";
+import { renderWithTheme } from "../../__testUtils/withTheme";
+import ContainerTable from "./index";
 
-export const TESTCAFE_ID_ACCESS_FORBIDDEN = "access-forbidden";
+jest.mock("next/router");
+const mockedRouter = useRouter;
 
-export default function AccessForbidden() {
-  const router = useRouter();
-  return (
-    <div data-testid={TESTCAFE_ID_ACCESS_FORBIDDEN}>
-      <PageHeader title="No Access" />
-      <Container>
-        <p>
-          You don&#39;t have access to this resource:&nbsp;
-          <ResourceLink resourceIri={router.query.iri}>
-            {router.query.iri}
-          </ResourceLink>
-          .
-        </p>
-      </Container>
-    </div>
-  );
-}
+describe("ContainerTable", () => {
+  const containerPath = "containerPath";
+  const resourcePath = "resourcePath";
+
+  it("renders a table view without data", () => {
+    const data = [];
+
+    const { asFragment } = renderWithTheme(
+      <ContainerTable
+        containerPath={containerPath}
+        data={data}
+        resourcePath={resourcePath}
+      />
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("renders a table with data", () => {
+    mockedRouter.mockReturnValue({ query: { resourceIri: "test" } });
+    const data = [
+      { iri: "https://myaccount.mypodserver.com/inbox", name: "inbox" },
+      { iri: "https://myaccount.mypodserver.com/private", name: "private" },
+      { iri: "https://myaccount.mypodserver.com/note.txt", name: "note.txt" },
+    ];
+
+    const { asFragment } = renderWithTheme(
+      <ContainerTable
+        containerPath={containerPath}
+        data={data}
+        resourcePath={resourcePath}
+      />
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+});

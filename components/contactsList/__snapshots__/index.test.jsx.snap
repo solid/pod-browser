@@ -326,6 +326,7 @@ exports[`ContactsList renders spinner while useAddressBook is loading 1`] = `
   >
     <svg
       class="PodBrowser-loading-indicator"
+      data-testid="spinner"
       viewBox="22 22 44 44"
     >
       <circle
@@ -347,6 +348,7 @@ exports[`ContactsList renders spinner while useContacts is loading 1`] = `
   >
     <svg
       class="PodBrowser-loading-indicator"
+      data-testid="spinner"
       viewBox="22 22 44 44"
     >
       <circle
@@ -368,6 +370,7 @@ exports[`ContactsList renders spinner while useProfiles is loading 1`] = `
   >
     <svg
       class="PodBrowser-loading-indicator"
+      data-testid="spinner"
       viewBox="22 22 44 44"
     >
       <circle

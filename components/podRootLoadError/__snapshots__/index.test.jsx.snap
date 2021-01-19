@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ResourceNotFound renders 1`] = `
+exports[`PodRootLoadError renders 1`] = `
 <DocumentFragment>
   <div
-    data-testid="resource-not-found"
+    data-testid="pod-root-load-error"
   >
     <div
       class="PodBrowser-page-header"
@@ -11,7 +11,7 @@ exports[`ResourceNotFound renders 1`] = `
       <h1
         class="PodBrowser-page-header__title"
       >
-        Resource Not Found
+        Could not load your Pod
       </h1>
       <div
         class="PodBrowser-page-header__content"
@@ -24,13 +24,7 @@ exports[`ResourceNotFound renders 1`] = `
       class="PodBrowser-container"
     >
       <p>
-        Unable to find the resource: 
-        <a
-          href="/resource/[iri]"
-        >
-          https%3A%2F%2Fmypod.myhost.com
-        </a>
-        .
+        PodBrowser encountered an error while loading your Pod.
       </p>
     </div>
   </div>

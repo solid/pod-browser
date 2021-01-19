@@ -3,32 +3,36 @@
 exports[`AccessForbidden renders 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-page-header"
+    data-testid="access-forbidden"
   >
-    <h1
-      class="PodBrowser-page-header__title"
+    <div
+      class="PodBrowser-page-header"
     >
-      No Access
-    </h1>
-    <div
-      class="PodBrowser-page-header__content"
-    />
-    <div
-      class="PodBrowser-page-header__toolbar"
-    />
-  </div>
-  <div
-    class="PodBrowser-container"
-  >
-    <p>
-      You don't have access to this resource: 
-      <a
-        href="/resource/[iri]"
+      <h1
+        class="PodBrowser-page-header__title"
       >
-        https%3A%2F%2Fmypod.myhost.com
-      </a>
-      .
-    </p>
+        No Access
+      </h1>
+      <div
+        class="PodBrowser-page-header__content"
+      />
+      <div
+        class="PodBrowser-page-header__toolbar"
+      />
+    </div>
+    <div
+      class="PodBrowser-container"
+    >
+      <p>
+        You don't have access to this resource: 
+        <a
+          href="/resource/[iri]"
+        >
+          https%3A%2F%2Fmypod.myhost.com
+        </a>
+        .
+      </p>
+    </div>
   </div>
 </DocumentFragment>
 `;

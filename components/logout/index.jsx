@@ -24,11 +24,19 @@ import T from "prop-types";
 import { LogoutButton } from "@inrupt/solid-ui-react";
 import { hardRedirect } from "../../src/windowHelpers";
 
-const TESTCAFE_ID_LOGOUT_BUTTON = "logout-button";
+export const TESTCAFE_ID_LOGOUT_BUTTON = "logout-button";
+
+export function setupOnLogout() {
+  return () => {
+    sessionStorage.clear();
+    hardRedirect("/login");
+  };
+}
 
 export default function Logout({ children, className }) {
+  const onLogout = setupOnLogout();
   return (
-    <LogoutButton onLogout={() => hardRedirect("/login")}>
+    <LogoutButton onLogout={onLogout}>
       <button
         data-testid={TESTCAFE_ID_LOGOUT_BUTTON}
         className={className}

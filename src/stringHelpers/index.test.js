@@ -132,6 +132,9 @@ describe("getContainerUrl", () => {
   test("it returns the same url when passed a container url", () => {
     expect(getContainerUrl(containerUrl)).toEqual(containerUrl);
   });
+  it("allows passing undefined (can happen during build step)", () => {
+    expect(getContainerUrl(undefined)).toBeUndefined();
+  });
 });
 
 describe("getParentContainerUrl", () => {

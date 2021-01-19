@@ -108,6 +108,9 @@ export default function Bookmark({
       return;
     }
     const { dataset } = bookmarks;
+    if (!dataset) {
+      return;
+    }
     const bookmarkState = isBookmarked(iri, dataset);
     setBookmarked(bookmarkState);
     setDisabled(false);

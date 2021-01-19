@@ -20,6 +20,7 @@ exports[`DetailsLoading Renders a details error view 1`] = `
   >
     <svg
       class="PodBrowser-loading-indicator"
+      data-testid="spinner"
       viewBox="22 22 44 44"
     >
       <circle

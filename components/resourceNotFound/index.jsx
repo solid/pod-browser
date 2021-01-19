@@ -24,10 +24,12 @@ import { Container, PageHeader } from "@inrupt/prism-react-components";
 import { useRouter } from "next/router";
 import ResourceLink from "../resourceLink";
 
+export const TESTCAFE_ID_RESOURCE_NOT_FOUND = "resource-not-found";
+
 export default function ResourceNotFound() {
   const router = useRouter();
   return (
-    <>
+    <div data-testid={TESTCAFE_ID_RESOURCE_NOT_FOUND}>
       <PageHeader title="Resource Not Found" />
       <Container>
         <p>
@@ -38,6 +40,6 @@ export default function ResourceNotFound() {
           .
         </p>
       </Container>
-    </>
+    </div>
   );
 }

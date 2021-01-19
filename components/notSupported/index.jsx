@@ -23,10 +23,12 @@ import { Container, Content, PageHeader } from "@inrupt/prism-react-components";
 import React from "react";
 import { useRouter } from "next/router";
 
+export const TESTCAFE_ID_NOT_SUPPORTED = "not-supported";
+
 export default function NotSupported() {
   const router = useRouter();
   return (
-    <>
+    <div data-testid={TESTCAFE_ID_NOT_SUPPORTED}>
       <PageHeader title="Resource Not Supported" />
       <Container>
         <Content>
@@ -40,6 +42,6 @@ export default function NotSupported() {
           </p>
         </Content>
       </Container>
-    </>
+    </div>
   );
 }

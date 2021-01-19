@@ -24,12 +24,10 @@ import { useRouter } from "next/router";
 import { render } from "@testing-library/react";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import IndexPage from "./index";
-import useRedirectIfNoControlAccessToOwnPod from "../../../src/hooks/useRedirectIfNoControlAccessToOwnPod";
 import TestApp from "../../../__testUtils/testApp";
 
 jest.mock("../../../src/effects/auth");
 jest.mock("next/router");
-jest.mock("../../../src/hooks/useRedirectIfNoControlAccessToOwnPod");
 
 describe("Resource page", () => {
   beforeEach(() => {
@@ -56,14 +54,5 @@ describe("Resource page", () => {
       </TestApp>
     );
     expect(useRedirectIfLoggedOut).toHaveBeenCalled();
-  });
-
-  test("Redirects if the user does not have access to Pod", () => {
-    render(
-      <TestApp>
-        <IndexPage />
-      </TestApp>
-    );
-    expect(useRedirectIfNoControlAccessToOwnPod).toHaveBeenCalled();
   });
 });

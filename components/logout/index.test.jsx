@@ -24,7 +24,8 @@ import { render } from "@testing-library/react";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 
-import LogOutButton from "./index";
+import LogOutButton, { setupOnLogout } from "./index";
+import { hardRedirect } from "../../src/windowHelpers";
 
 jest.mock("../../src/windowHelpers");
 
@@ -40,5 +41,14 @@ describe("Logout button", () => {
     );
 
     expect(asFragment()).toMatchSnapshot();
+  });
+});
+
+describe("setupOnLogout", () => {
+  it("sets up a function that redirects and clear session storage", () => {
+    sessionStorage.setItem("test", "test");
+    expect(setupOnLogout()()).toBeUndefined();
+    expect(hardRedirect).toHaveBeenCalledWith("/login");
+    expect(sessionStorage.getItem("test")).toBeNull();
   });
 });

@@ -20,8 +20,12 @@
  */
 
 import React from "react";
-import AccessRequiredPage from "../components/pages/access-required";
+import { renderWithTheme } from "../../__testUtils/withTheme";
+import PodRootLoadError from "./index";
 
-export default function AccessRequired() {
-  return <AccessRequiredPage />;
-}
+describe("PodRootLoadError", () => {
+  it("renders", () => {
+    const { asFragment } = renderWithTheme(<PodRootLoadError />);
+    expect(asFragment()).toMatchSnapshot();
+  });
+});
