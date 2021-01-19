@@ -19,18 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles } from "@solid/lit-prism-patterns";
-
-export default function styles(theme) {
-  return createStyles(theme, ["icons", "button"], {
-    button: {
-      fontWeight: 800,
-      fontSize: "0.8125rem",
-      textDecoration: "none",
-    },
-    icon: {
-      color: theme.palette.primary.main,
-      margin: theme.spacing(0.5),
-    },
-  });
-}
+export default () => ({
+  details: {
+    display: "block",
+  },
+});

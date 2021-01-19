@@ -28,7 +28,7 @@ export default function styles(theme) {
       color: theme.palette.secondary.contrastText,
     },
     rounded: {
-      borderRadius: "4px",
+      borderRadius: theme.shape.borderRadius,
       boxShadow: `0 1px 4px 0 ${theme.palette.grey[500]}`,
     },
     title: {
@@ -50,13 +50,13 @@ export default function styles(theme) {
       flexDirection: "column",
     },
     description: {
-      fontSize: "12px",
+      fontSize: "0.8125rem",
     },
     permissionsContainer: {
       position: "relative",
       boxSizing: "border-box",
-      border: "1px solid #D8D8D8",
-      borderRadius: "4px",
+      border: `1px solid ${theme.palette.grey.A100}`,
+      borderRadius: theme.shape.borderRadius,
       fontSize: theme.typography.body2.fontSize,
       padding: 0,
       overflow: "auto",
@@ -101,7 +101,7 @@ export default function styles(theme) {
       padding: theme.spacing(1),
       borderRadius: "50%",
       marginRight: theme.spacing(1.6),
-      fontSize: "22px",
+      fontSize: theme.typography.h1.fontSize,
     },
     iconViewer: {
       color: "#2196F3",
@@ -131,7 +131,7 @@ export default function styles(theme) {
     tabsContainer: {
       paddingLeft: theme.spacing(1.2),
       paddingRight: theme.spacing(1.2),
-      borderBottom: "1px solid #D8D8D8",
+      borderBottom: `1px solid ${theme.palette.grey.A100}`,
     },
     tab: {
       textTransform: "none",
@@ -153,10 +153,10 @@ export default function styles(theme) {
       margin: theme.spacing(0.7, 1.2),
       border: "1px solid #D8D8D8",
       borderRadius: "10px",
-      height: "40px",
+      height: "2.5rem",
     },
     searchInput: {
-      fontSize: "14px",
+      fontSize: "0.8125rem",
       width: "100%",
       font: "inherit",
       fontWeight: 500,

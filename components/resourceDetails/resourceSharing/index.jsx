@@ -19,66 +19,58 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable camelcase, no-console, react/forbid-prop-types */
 
-import React, { useContext, useEffect, useState } from "react";
-import { CircularProgress } from "@material-ui/core";
-import { useSession } from "@inrupt/solid-ui-react";
-import { fetchProfile } from "../../../src/solidClientHelpers/profile";
-import AgentAccessTable from "./agentAccessTable";
-import AccessControlContext from "../../../src/contexts/accessControlContext";
-import usePermissions from "../../../src/hooks/usePermissions";
+import React, { useState } from "react";
+import T from "prop-types";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  CircularProgress,
+} from "@material-ui/core";
+import { ActionMenu, ActionMenuItem } from "@inrupt/prism-react-components";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
+import styles from "./styles";
+import AgentAccessList from "./agentAccessList";
+import AddPermissionUsingWebIdButton from "../../addPermissionUsingWebIdButton";
 
-export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
-  "agent-access-list-show-all";
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-function ResourceSharing() {
-  const { accessControl } = useContext(AccessControlContext);
-  const { permissions } = usePermissions(accessControl);
-  const { fetch } = useSession();
-  const [permissionsWithProfiles, setPermissionsWithProfiles] = useState(null);
+export default function SharingAccordion({ startLoading }) {
+  const actionMenuBem = ActionMenu.useBem();
+  const classes = useStyles();
+  const [loading, setLoading] = useState(startLoading);
 
-  useEffect(() => {
-    if (!permissions) return;
-    Promise.all(
-      permissions.map(async (p) => {
-        let profile;
-        let profileError;
-        try {
-          profile = await fetchProfile(p.webId, fetch);
-        } catch (error) {
-          profileError = error;
-        }
-        return {
-          ...p,
-          profile,
-          profileError,
-        };
-      })
-    ).then((completed) => setPermissionsWithProfiles(completed));
-  }, [permissions, fetch]);
-
-  if (!permissions || !permissionsWithProfiles)
-    return <CircularProgress color="primary" />;
-
-  // TODO: replace arrays with the new policies once they are available
-
-  const editors = permissionsWithProfiles
-    .filter((p) => p.acl.read && p.acl.write)
-    .sort();
-
-  const viewers = permissionsWithProfiles
-    .filter((p) => p.acl.read && !p.acl.write && !p.acl.append)
-    .sort();
-  const blocked = [];
+  if (loading) return <CircularProgress color="primary" />;
 
   return (
     <>
-      <AgentAccessTable permissions={editors} type="editors" />
-      <AgentAccessTable permissions={viewers} type="viewers" />
-      <AgentAccessTable permissions={blocked} type="blocked" />
+      <ActionMenu>
+        <ActionMenuItem>
+          <AddPermissionUsingWebIdButton
+            className={actionMenuBem("action-menu__trigger", "prompt")}
+            onLoading={setLoading}
+          />
+        </ActionMenuItem>
+      </ActionMenu>
+      <Accordion defaultExpanded>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          Individual permissions
+        </AccordionSummary>
+        <AccordionDetails className={classes.details}>
+          <AgentAccessList onLoading={setLoading} />
+        </AccordionDetails>
+      </Accordion>
     </>
   );
 }
 
-export default ResourceSharing;
+SharingAccordion.propTypes = {
+  startLoading: T.bool,
+};
+
+SharingAccordion.defaultProps = {
+  startLoading: false,
+};

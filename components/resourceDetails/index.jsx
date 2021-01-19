@@ -43,6 +43,7 @@ import ResourceSharing from "./resourceSharing";
 import { getIriPath } from "../../src/solidClientHelpers/utils";
 import { getResourceName } from "../../src/solidClientHelpers/resource";
 import AccessControlContext from "../../src/contexts/accessControlContext";
+import SharingAccordion from "./resourceSharing/sharingAccordion";
 
 const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
 const TESTCAFE_ID_DELETE_BUTTON = "delete-resource-button";
@@ -140,17 +141,30 @@ export default function ResourceDetails({
       </Accordion>
 
       {accessControl ? ( // only show when we know user has control access
-        <Accordion>
-          <AccordionSummary
-            expandIcon={expandIcon}
-            data-testid={TESTCAFE_ID_ACCORDION_PERMISSIONS}
-          >
-            Sharing
-          </AccordionSummary>
-          <AccordionDetails className={classes.accordionDetails}>
-            <ResourceSharing />
-          </AccordionDetails>
-        </Accordion>
+        <>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={expandIcon}
+              data-testid={TESTCAFE_ID_ACCORDION_PERMISSIONS}
+            >
+              Permissions
+            </AccordionSummary>
+            <AccordionDetails className={classes.accordionDetails}>
+              <ResourceSharing />
+            </AccordionDetails>
+          </Accordion>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={expandIcon}
+              data-testid={TESTCAFE_ID_ACCORDION_PERMISSIONS}
+            >
+              Sharing
+            </AccordionSummary>
+            <AccordionDetails className={classes.accordionDetails}>
+              <SharingAccordion />
+            </AccordionDetails>
+          </Accordion>
+        </>
       ) : null}
     </>
   );
