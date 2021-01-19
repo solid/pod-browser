@@ -108,3 +108,5 @@ dist
 out/
 
 .vercel
+
+.DS_Store
