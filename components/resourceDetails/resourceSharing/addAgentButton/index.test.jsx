@@ -21,25 +21,30 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
-
 import AddAgentButton from "./index";
-
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 
 describe("AddAgentButton", () => {
-  const onClick = jest.fn();
   it("renders a button with the correct text", () => {
-    const { asFragment } = renderWithTheme(
-      <AddAgentButton type="editors" onClick={onClick} />
-    );
+    const { asFragment } = renderWithTheme(<AddAgentButton type="editors" />);
     expect(asFragment()).toMatchSnapshot();
   });
-  it("calls onClick function when clicking the button", () => {
-    const { getByTestId } = renderWithTheme(
-      <AddAgentButton type="editors" onClick={onClick} />
+  it("opens modal when clicking the button", () => {
+    const { getByTestId, queryByTestId } = renderWithTheme(
+      <AddAgentButton type="editors" />
     );
     const button = getByTestId("add-agent-button");
     userEvent.click(button);
-    expect(onClick).toHaveBeenCalled();
+    expect(queryByTestId("agent-picker-modal")).not.toBeNull();
+  });
+  it("closes modal when clicking outside the modal", () => {
+    const { getByTestId, queryByTestId } = renderWithTheme(
+      <AddAgentButton type="editors" />
+    );
+    const button = getByTestId("add-agent-button");
+    userEvent.click(button);
+    const overlay = getByTestId("modal-overlay");
+    userEvent.click(overlay.firstChild);
+    expect(queryByTestId("agent-picker-modal")).toBeNull();
   });
 });

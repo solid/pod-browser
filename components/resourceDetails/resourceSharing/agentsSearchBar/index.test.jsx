@@ -20,15 +20,28 @@
  */
 
 import React from "react";
+import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import ResourceSharing from "./index";
 
-describe("AgentAccessList", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-  test("it renders three lists of empty permissions for editors, viewers and blocked", () => {
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
+import AgentsSearchBar from "./index";
+
+describe("AgentSearchBar", () => {
+  const handleFilterChange = jest.fn();
+  it("renders a search bar", () => {
+    const { asFragment } = renderWithTheme(
+      <AgentsSearchBar handleFilterChange={handleFilterChange} />
+    );
+
     expect(asFragment()).toMatchSnapshot();
+  });
+  it("triggers handleFilterChange when typing into the search input", () => {
+    const { getByTestId } = renderWithTheme(
+      <AgentsSearchBar handleFilterChange={handleFilterChange} />
+    );
+
+    const input = getByTestId("search-input");
+    userEvent.type(input, "A");
+
+    expect(handleFilterChange).toHaveBeenCalled();
   });
 });

@@ -22,54 +22,55 @@
 import { createStyles } from "@solid/lit-prism-patterns";
 
 export default function styles(theme) {
-  return createStyles(theme, ["icons"], {
-    infoButton: {
+  return createStyles(theme, ["icons", "button"], {
+    addAgentForm: {
+      display: "flex",
+      flexDirection: "row",
       padding: 0,
-      minWidth: "max-content",
     },
-    infoIcon: {
-      margin: theme.spacing(0.4),
-      color: theme.palette.info.main,
+    nameAndAvatarContainer: {
+      display: "flex",
+      alignItems: "Center",
     },
-    button: {
-      flexShrink: 0,
+    avatar: {
       width: "1.875rem",
       height: "1.875rem",
-      color: theme.palette.text.secondary,
-      backgroundColor: "transparent",
-      border: "none",
-      borderRadius: "50%",
-      margin: 0,
-      padding: 0,
-      cursor: "pointer",
-      "&&:hover": {
-        color: theme.palette.secondary.contrastText,
-        backgroundColor: theme.palette.grey[400],
-      },
+      margin: theme.spacing(0, 0.8),
     },
-    listItemText: {
-      fontWeight: 500,
+    detailText: {
+      fontFamily: theme.typography.body.fontFamily,
+      fontWeight: theme.typography.body.fontWeight,
+      minWidth: "20rem",
     },
-    webIdContainer: {
-      backgroundColor: theme.palette.grey[100],
-      fontSize: "0.625rem",
-      fontWeight: 500,
-      letterSpacing: 0,
-      lineHeight: "13px",
-      width: "100%",
+    button: {
+      fontSize: "0.875rem",
+      fontWeight: theme.typography.body1.fontWeight,
+      color: theme.palette.common.white,
+      backgroundColor: theme.palette.primary.main,
+      padding: theme.spacing(0.8, 0.7),
+      borderRadius: "10px",
+      maxHeight: "2.5rem",
+      margin: theme.spacing(0, 0.5),
+    },
+    searchBoxContainer: {
+      display: "flex",
+      border: "1px solid #D8D8D8",
+      borderRadius: "10px",
+      height: "2.5rem",
+      minWidth: "20rem",
+    },
+    searchInput: {
       height: "100%",
-      padding: theme.spacing(0.4, 1.2),
-      marginTop: 0,
+      fontSize: "0.8125rem",
+      width: "100%",
+      fontFamily: theme.typography.body.fontFamily,
+      fontWeight: theme.typography.body.fontWeight,
+      color: theme.palette.primary.text,
+      padding: theme.spacing(0.5),
     },
-    webIdContainerGutters: {
-      paddingLeft: 0,
-      paddingRight: 0,
-    },
-    webIdContainerRoot: {
-      paddingTop: 0,
-    },
-    listRoot: {
-      paddingTop: 0,
+    agentPickerFormContainer: {
+      display: "flex",
+      alignItems: "center",
     },
   });
 }

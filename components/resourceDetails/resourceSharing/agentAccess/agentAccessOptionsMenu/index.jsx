@@ -22,26 +22,24 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import {
-  Button,
   createStyles,
   List,
   ListItem,
   ListItemSecondaryAction,
   ListItemText,
   Popover,
-  Switch,
-  Tooltip,
 } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
 import styles from "./styles";
+import CanShareInfoTooltip from "../../canShareInfoTooltip";
+import CanShareToggleSwitch from "../../canShareToggleSwitch";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 const TESTCAFE_ID_MENU_BUTTON = "menu-button";
-const TESTCAFE_ID_CAN_SHARE_TOGGLE = "can-share-toggle";
 const TESTCAFE_ID_REMOVE_BUTTON = "remove-button";
 
 export default function AgentAccessOptionsMenu({
@@ -115,38 +113,12 @@ export default function AgentAccessOptionsMenu({
               disableTypography
               classes={{ primary: classes.listItemText }}
             >
-              Can Share
-              <Tooltip
-                title={`A person can share ${resourceName} with others or remove people who have
-          access.`}
-                arrow
-              >
-                <Button classes={{ root: classes.infoButton }}>
-                  <i
-                    className={clsx(
-                      bem("icon-info"),
-                      bem("icon"),
-                      classes.infoIcon
-                    )}
-                    alt="Info"
-                  />
-                </Button>
-              </Tooltip>
+              <CanShareInfoTooltip resourceName={resourceName} />
             </ListItemText>
             <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                data-testid={TESTCAFE_ID_CAN_SHARE_TOGGLE}
-                classes={{
-                  root: classes.switchRoot,
-                  switchBase: classes.switchBase,
-                  checked: classes.switchChecked,
-                  track: classes.switchTrack,
-                  thumb: classes.switchThumb,
-                }}
-                checked={canShare}
-                onChange={toggleShare}
-                inputProps={{ "aria-label": "Can Share Toggle" }}
+              <CanShareToggleSwitch
+                toggleShare={toggleShare}
+                canShare={canShare}
               />
             </ListItemSecondaryAction>
           </ListItem>

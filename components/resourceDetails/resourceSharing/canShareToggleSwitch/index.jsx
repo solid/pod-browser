@@ -20,15 +20,41 @@
  */
 
 import React from "react";
-import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import ResourceSharing from "./index";
+import PropTypes from "prop-types";
+import { createStyles, Switch } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 
-describe("AgentAccessList", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-  test("it renders three lists of empty permissions for editors, viewers and blocked", () => {
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
+import styles from "./styles";
+
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+const TESTCAFE_ID_CAN_SHARE_TOGGLE = "can-share-toggle";
+
+export default function CanShareToggleSwitch({ canShare, toggleShare }) {
+  const classes = useStyles();
+
+  return (
+    <Switch
+      edge="end"
+      data-testid={TESTCAFE_ID_CAN_SHARE_TOGGLE}
+      classes={{
+        root: classes.switchRoot,
+        switchBase: classes.switchBase,
+        checked: classes.switchChecked,
+        track: classes.switchTrack,
+        thumb: classes.switchThumb,
+      }}
+      checked={canShare}
+      onChange={toggleShare}
+      inputProps={{ "aria-label": "Can Share Toggle" }}
+    />
+  );
+}
+
+CanShareToggleSwitch.propTypes = {
+  canShare: PropTypes.bool,
+  toggleShare: PropTypes.func.isRequired,
+};
+
+CanShareToggleSwitch.defaultProps = {
+  canShare: false,
+};

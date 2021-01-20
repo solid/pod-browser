@@ -19,16 +19,28 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import ResourceSharing from "./index";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-describe("AgentAccessList", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
+const styles = (theme) => {
+  return createStyles(theme, ["button", "icons"], {
+    "icon-large": {
+      ...theme.icons.iconColor("#0D6796"),
+      fontSize: 64,
+    },
+    icon: {
+      color: theme.palette.common.white,
+      margin: theme.spacing(0.5),
+    },
+    "add-webId-button": {
+      padding: theme.spacing(0.2, 1.6),
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
+      fontWeight: theme.typography.fontWeightBold,
+      "& a, &:hover": {
+        textDecoration: "none",
+      },
+    },
   });
-  test("it renders three lists of empty permissions for editors, viewers and blocked", () => {
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
+};
+
+export default styles;

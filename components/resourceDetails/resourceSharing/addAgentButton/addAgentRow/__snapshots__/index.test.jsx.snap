@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddAgentRow when adding a new webId renders a row with an input for the first item in the array 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-agentPickerFormContainer"
+  >
+    <form
+      class="PodBrowser-addAgentForm"
+    >
+      <div
+        class="PodBrowser-searchBoxContainer"
+      >
+        <div
+          aria-label="Enter WebID"
+          class="PodBrowser-root PodBrowser-root PodBrowser-searchInput"
+        >
+          <div
+            class="PodBrowser-root PodBrowser-root PodBrowser-searchInput PodBrowser-formControl PodBrowser-formControl"
+            pattern="https://.+"
+            title="Must start with https://"
+          >
+            <input
+              aria-invalid="false"
+              class="PodBrowser-input PodBrowser-input"
+              data-testid="webid-input"
+              placeholder="Enter WebID"
+              required=""
+              type="url"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <button
+        class="PodBrowser-button PodBrowser-button"
+        data-testid="add-button"
+        type="submit"
+      >
+        Add
+      </button>
+    </form>
+  </div>
+</DocumentFragment>
+`;

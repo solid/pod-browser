@@ -19,16 +19,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import ResourceSharing from "./index";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-describe("AgentAccessList", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
+export default function styles(theme) {
+  return createStyles(theme, ["icons", "table"], {
+    searchBoxContainer: {
+      display: "flex",
+      margin: theme.spacing(0.7, 1.2),
+      border: "1px solid #D8D8D8",
+      borderRadius: "10px",
+      height: "2.5rem",
+    },
+    searchInput: {
+      fontSize: "0.8125rem",
+      width: "100%",
+      font: "inherit",
+      fontWeight: 500,
+      color: theme.palette.primary.text,
+    },
+    iconSearch: {
+      fontSize: theme.typography.body1.fontSize,
+    },
   });
-  test("it renders three lists of empty permissions for editors, viewers and blocked", () => {
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
+}

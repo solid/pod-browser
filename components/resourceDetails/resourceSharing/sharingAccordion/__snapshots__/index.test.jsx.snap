@@ -1,49 +1,226 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AgentAccessList it renders a spinner while loading permissions for access control 1`] = `
+exports[`AgentAccessList it renders three lists of empty permissions for editors, viewers and blocked 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-root PodBrowser-colorPrimary PodBrowser-indeterminate"
-    role="progressbar"
-    style="width: 40px; height: 40px;"
+    class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
   >
-    <svg
-      class="PodBrowser-svg"
-      viewBox="22 22 44 44"
+    <div
+      class="PodBrowser-headerContainer"
     >
-      <circle
-        class="PodBrowser-circle PodBrowser-circleIndeterminate"
-        cx="44"
-        cy="44"
-        fill="none"
-        r="20.2"
-        stroke-width="3.6"
+      <i
+        class="PodBrowser-icon-editor PodBrowser-icon PodBrowser-iconEditor"
       />
-    </svg>
+      <div
+        class="PodBrowser-textContainer"
+      >
+        <div
+          class="PodBrowser-titleAndButtonContainer"
+        >
+          <p
+            class="PodBrowser-title"
+          >
+            Editors
+          </p>
+          <button
+            class="PodBrowser-button PodBrowser-button--action PodBrowser-button"
+            data-testid="add-agent-button"
+          >
+            <i
+              alt="Add Editors Button"
+              class="PodBrowser-icon-add PodBrowser-icon"
+            />
+            Add Editors
+          </button>
+        </div>
+        <span
+          class="PodBrowser-description"
+        >
+          <p>
+            <b>
+              Can 
+            </b>
+            view, edit and delete this resource
+          </p>
+        </span>
+      </div>
+    </div>
+    <div
+      class="PodBrowser-container PodBrowser-entered"
+      style="min-height: 0px;"
+    >
+      <div
+        class="PodBrowser-wrapper"
+      >
+        <div
+          class="PodBrowser-wrapperInner"
+        >
+          <div
+            role="region"
+          >
+            <div
+              class="PodBrowser-permissionsContainer"
+            >
+              <span
+                class="PodBrowser-emptyStateTextContainer"
+              >
+                <p>
+                  No editors
+                </p>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</DocumentFragment>
-`;
-
-exports[`AgentAccessList it renders three lists of permissions for editors, viewers and blocked 1`] = `
-<DocumentFragment>
   <div
-    class="PodBrowser-root PodBrowser-colorPrimary PodBrowser-indeterminate"
-    role="progressbar"
-    style="width: 40px; height: 40px;"
+    class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
   >
-    <svg
-      class="PodBrowser-svg"
-      viewBox="22 22 44 44"
+    <div
+      class="PodBrowser-headerContainer"
     >
-      <circle
-        class="PodBrowser-circle PodBrowser-circleIndeterminate"
-        cx="44"
-        cy="44"
-        fill="none"
-        r="20.2"
-        stroke-width="3.6"
+      <i
+        class="PodBrowser-icon-view PodBrowser-icon PodBrowser-iconViewer"
       />
-    </svg>
+      <div
+        class="PodBrowser-textContainer"
+      >
+        <div
+          class="PodBrowser-titleAndButtonContainer"
+        >
+          <p
+            class="PodBrowser-title"
+          >
+            Viewers
+          </p>
+          <button
+            class="PodBrowser-button PodBrowser-button--action PodBrowser-button"
+            data-testid="add-agent-button"
+          >
+            <i
+              alt="Add Viewers Button"
+              class="PodBrowser-icon-add PodBrowser-icon"
+            />
+            Add Viewers
+          </button>
+        </div>
+        <span
+          class="PodBrowser-description"
+        >
+          <p>
+            <b>
+              Can 
+            </b>
+            view but
+            <b>
+               cannot 
+            </b>
+            edit or delete this resource
+          </p>
+        </span>
+      </div>
+    </div>
+    <div
+      class="PodBrowser-container PodBrowser-entered"
+      style="min-height: 0px;"
+    >
+      <div
+        class="PodBrowser-wrapper"
+      >
+        <div
+          class="PodBrowser-wrapperInner"
+        >
+          <div
+            role="region"
+          >
+            <div
+              class="PodBrowser-permissionsContainer"
+            >
+              <span
+                class="PodBrowser-emptyStateTextContainer"
+              >
+                <p>
+                  No viewers
+                </p>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+  >
+    <div
+      class="PodBrowser-headerContainer"
+    >
+      <i
+        class="PodBrowser-icon-block PodBrowser-icon PodBrowser-iconBlocked"
+      />
+      <div
+        class="PodBrowser-textContainer"
+      >
+        <div
+          class="PodBrowser-titleAndButtonContainer"
+        >
+          <p
+            class="PodBrowser-title"
+          >
+            Blocked
+          </p>
+          <button
+            class="PodBrowser-button PodBrowser-button--action PodBrowser-button"
+            data-testid="add-agent-button"
+          >
+            <i
+              alt="Block Button"
+              class="PodBrowser-icon-add PodBrowser-icon"
+            />
+            Block
+          </button>
+        </div>
+        <span
+          class="PodBrowser-description"
+        >
+          <p>
+            <b>
+              Cannot 
+            </b>
+            view this resource
+          </p>
+        </span>
+      </div>
+    </div>
+    <div
+      class="PodBrowser-container PodBrowser-entered"
+      style="min-height: 0px;"
+    >
+      <div
+        class="PodBrowser-wrapper"
+      >
+        <div
+          class="PodBrowser-wrapperInner"
+        >
+          <div
+            role="region"
+          >
+            <div
+              class="PodBrowser-permissionsContainer"
+            >
+              <span
+                class="PodBrowser-emptyStateTextContainer"
+              >
+                <p>
+                  No one is blocked
+                </p>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </DocumentFragment>
 `;

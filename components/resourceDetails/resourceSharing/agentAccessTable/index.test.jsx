@@ -23,103 +23,162 @@ import React from "react";
 import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import AgentAccessTable from "./index";
+import useNamedPolicyPermissions from "../../../../src/hooks/useNamedPolicyPermissions";
+import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
+
+jest.mock("../../../../src/hooks/useNamedPolicyPermissions");
+jest.mock("../../../../src/hooks/usePermissionsWithProfiles");
+
+const permissions = [
+  {
+    acl: {
+      read: true,
+      write: true,
+      append: false,
+      control: false,
+    },
+    webId: "https://example1.com/profile/card#me",
+    profile: {
+      avatar: null,
+      name: "Example 1",
+      types: ["https://schema.org/Person"],
+    },
+  },
+  {
+    acl: {
+      read: true,
+      write: true,
+      append: false,
+      control: false,
+    },
+    webId: "https://example2.com/profile/card#me",
+    profile: {
+      avatar: null,
+      name: "Example 2",
+      types: ["https://schema.org/Person"],
+    },
+  },
+  {
+    acl: {
+      read: true,
+      write: true,
+      append: false,
+      control: false,
+    },
+    webId: "https://example3.com/profile/card#me",
+    profile: {
+      avatar: null,
+      name: "Example 3",
+      types: ["https://schema.org/Person"],
+    },
+  },
+  {
+    acl: {
+      read: true,
+      write: true,
+      append: false,
+      control: false,
+    },
+    webId: "https://example4.com/profile/card#me",
+    profile: {
+      avatar: null,
+      name: "Example 4",
+      types: ["https://schema.org/Person"],
+    },
+  },
+];
+
+const sharePermissions = [
+  {
+    acl: {
+      read: true,
+      write: true,
+      append: true,
+      control: true,
+    },
+    webId: "https://example1.com/profile/card#me",
+    profile: {
+      avatar: null,
+      name: "Example 1",
+      types: ["https://schema.org/Person"],
+    },
+  },
+];
 
 describe("AgentAccessTable", () => {
-  const permissions = [
-    {
-      acl: {
-        read: true,
-        write: true,
-        append: true,
-        control: true,
-      },
-      webId: "https://example1.com/profile/card#me",
-      profile: {
-        avatar: null,
-        name: "Example 1",
-        types: ["https://schema.org/Person"],
-      },
-    },
-    {
-      acl: {
-        read: true,
-        write: true,
-        append: true,
-        control: true,
-      },
-      webId: "https://example2.com/profile/card#me",
-      profile: {
-        avatar: null,
-        name: "Example 2",
-        types: ["https://schema.org/Person"],
-      },
-    },
-    {
-      acl: {
-        read: true,
-        write: true,
-        append: true,
-        control: true,
-      },
-      webId: "https://example3.com/profile/card#me",
-      profile: {
-        avatar: null,
-        name: "Example 3",
-        types: ["https://schema.org/Person"],
-      },
-    },
-    {
-      acl: {
-        read: true,
-        write: true,
-        append: true,
-        control: true,
-      },
-      webId: "https://example4.com/profile/card#me",
-      profile: {
-        avatar: null,
-        name: "Example 4",
-        types: ["https://schema.org/Person"],
-      },
-    },
-  ];
   it("renders an empty list of permissions", () => {
     const type = "editors";
-    const { asFragment } = renderWithTheme(
-      <AgentAccessTable type={type} permissions={[]} />
-    );
+    useNamedPolicyPermissions.mockReturnValue({ data: [], mutate: jest.fn() });
+    usePermissionsWithProfiles.mockReturnValue({ permissionsWithProfiles: [] });
+    const { asFragment } = renderWithTheme(<AgentAccessTable type={type} />);
+
     expect(asFragment()).toMatchSnapshot();
   });
   it("renders a list of permissions", async () => {
+    useNamedPolicyPermissions.mockReturnValueOnce({
+      data: [
+        {
+          acl: {
+            read: true,
+            write: true,
+            append: false,
+            control: false,
+          },
+          webId: "https://example1.com/profile/card#me",
+          profile: {
+            avatar: null,
+            name: "Example 1",
+            types: ["https://schema.org/Person"],
+          },
+        },
+      ],
+      mutate: jest.fn(),
+    });
+    usePermissionsWithProfiles.mockReturnValue({
+      permissionsWithProfiles: [
+        {
+          acl: {
+            read: true,
+            write: true,
+            append: false,
+            control: false,
+          },
+          webId: "https://example1.com/profile/card#me",
+          profile: {
+            avatar: null,
+            name: "Example 1",
+            types: ["https://schema.org/Person"],
+          },
+        },
+      ],
+    });
+    useNamedPolicyPermissions.mockReturnValueOnce({
+      data: sharePermissions,
+      mutate: jest.fn(),
+    });
     const type = "editors";
     const { asFragment, queryAllByRole } = renderWithTheme(
-      <AgentAccessTable
-        type={type}
-        permissions={[
-          {
-            acl: {
-              read: true,
-              write: true,
-              append: true,
-              control: true,
-            },
-            webId: "https://example1.com/profile/card#me",
-            profile: {
-              avatar: null,
-              name: "Example 1",
-              types: ["https://schema.org/Person"],
-            },
-          },
-        ]}
-      />
+      <AgentAccessTable type={type} />
     );
+
     expect(queryAllByRole("cell")).toHaveLength(1);
     expect(asFragment()).toMatchSnapshot();
   });
   it("shows all permissions when clicking 'show all' button", async () => {
+    useNamedPolicyPermissions.mockReturnValueOnce({
+      data: permissions,
+      mutate: jest.fn(),
+    });
+    usePermissionsWithProfiles.mockReturnValue({
+      permissionsWithProfiles: permissions,
+    });
+    useNamedPolicyPermissions.mockReturnValueOnce({
+      data: sharePermissions,
+      mutate: jest.fn(),
+    });
     const type = "editors";
     const { queryAllByRole, getByTestId } = renderWithTheme(
-      <AgentAccessTable type={type} permissions={permissions} />
+      <AgentAccessTable type={type} />
     );
     const button = getByTestId("show-all-button");
     expect(queryAllByRole("cell")).toHaveLength(3);
@@ -127,6 +186,17 @@ describe("AgentAccessTable", () => {
     expect(queryAllByRole("cell")).toHaveLength(4);
   });
   it("shows first 3 permissions by default and when clicking the 'hide' button", async () => {
+    useNamedPolicyPermissions.mockReturnValueOnce({
+      data: permissions,
+      mutate: jest.fn(),
+    });
+    usePermissionsWithProfiles.mockReturnValue({
+      permissionsWithProfiles: permissions,
+    });
+    useNamedPolicyPermissions.mockReturnValueOnce({
+      data: sharePermissions,
+      mutate: jest.fn(),
+    });
     const type = "editors";
     const { queryAllByRole, getByTestId } = renderWithTheme(
       <AgentAccessTable type={type} permissions={permissions} />
@@ -140,6 +210,17 @@ describe("AgentAccessTable", () => {
     expect(queryAllByRole("cell")).toHaveLength(3);
   });
   it("renders a search box which filters by name or webId", () => {
+    useNamedPolicyPermissions.mockReturnValueOnce({
+      data: permissions,
+      mutate: jest.fn(),
+    });
+    usePermissionsWithProfiles.mockReturnValue({
+      permissionsWithProfiles: permissions,
+    });
+    useNamedPolicyPermissions.mockReturnValueOnce({
+      data: sharePermissions,
+      mutate: jest.fn(),
+    });
     const type = "editors";
     const { getByTestId, queryByText } = renderWithTheme(
       <AgentAccessTable type={type} permissions={permissions} />
@@ -151,41 +232,52 @@ describe("AgentAccessTable", () => {
   });
   // TODO: this will change once we have groups and a new way of filtering
   it("renders a set of tabs which filter by type", () => {
+    const permissionsWithTypes = [
+      {
+        acl: {
+          read: true,
+          write: true,
+          append: true,
+          control: true,
+        },
+        webId: "https://example1.com/profile/card#me",
+        profile: {
+          avatar: null,
+          name: "Example 1",
+          types: ["https://schema.org/Person"],
+        },
+      },
+      {
+        acl: {
+          read: true,
+          write: true,
+          append: true,
+          control: true,
+        },
+        webId: "https://example1.com/profile/card#me",
+        profile: {
+          avatar: null,
+          name: "Not a person",
+          types: ["Something else"],
+        },
+      },
+    ];
+
+    useNamedPolicyPermissions.mockReturnValueOnce({
+      data: permissionsWithTypes,
+      mutate: jest.fn(),
+    });
+    usePermissionsWithProfiles.mockReturnValue({
+      permissionsWithProfiles: permissionsWithTypes,
+    });
+    useNamedPolicyPermissions.mockReturnValueOnce({
+      data: sharePermissions,
+      mutate: jest.fn(),
+    });
+
     const type = "editors";
     const { getByTestId, queryByText } = renderWithTheme(
-      <AgentAccessTable
-        type={type}
-        permissions={[
-          {
-            acl: {
-              read: true,
-              write: true,
-              append: true,
-              control: true,
-            },
-            webId: "https://example1.com/profile/card#me",
-            profile: {
-              avatar: null,
-              name: "Example 1",
-              types: ["https://schema.org/Person"],
-            },
-          },
-          {
-            acl: {
-              read: true,
-              write: true,
-              append: true,
-              control: true,
-            },
-            webId: "https://example1.com/profile/card#me",
-            profile: {
-              avatar: null,
-              name: "Not a person",
-              types: ["Something else"],
-            },
-          },
-        ]}
-      />
+      <AgentAccessTable type={type} />
     );
     const tabPeople = getByTestId("tab-people");
     const tabGroups = getByTestId("tab-groups");

@@ -19,11 +19,6 @@ exports[`AgentAccess renders 1`] = `
       data-testid="agent-web-id"
     >
       Alice
-      <span
-        class="PodBrowser-shareText"
-      >
-        Can Share
-      </span>
     </p>
     <button
       class="PodBrowser-button"
@@ -112,11 +107,6 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
         data-testid="agent-web-id"
       >
         https://example.com/profile/card#me
-        <span
-          class="PodBrowser-shareText"
-        >
-          Can Share
-        </span>
       </p>
       <button
         class="PodBrowser-button"

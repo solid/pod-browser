@@ -21,73 +21,58 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
+const EDITORS_ICON_COLOR = "#4CAF50";
+const EDITORS_ICON_BACKGROUND_COLOR = "#EDF7ED";
+const VIEWERS_ICON_COLOR = "#2196F3";
+const VIEWERS_ICON_BACKGROUND_COLOR = "#E8F4FD";
+const BLOCKED_ICON_COLOR = "#F44336";
+const BLOCKED_ICON_BACKGROUND_COLOR = "#FDECEA";
+
 export default function styles(theme) {
   return createStyles(theme, ["icons", "table"], {
-    accordion: {
-      padding: theme.spacing(1.8, 1.6),
-      color: theme.palette.secondary.contrastText,
+    title: {
+      fontSize: theme.typography.h4.fontSize,
+      fontWeight: 800,
     },
-    rounded: {
-      borderRadius: theme.shape.borderRadius,
-      boxShadow: `0 1px 4px 0 ${theme.palette.grey[500]}`,
-    },
-    permissionsContainer: {
-      position: "relative",
-      boxSizing: "border-box",
-      border: `1px solid ${theme.palette.grey.A100}`,
-      borderRadius: theme.shape.borderRadius,
-      fontSize: theme.typography.body2.fontSize,
-      padding: 0,
-      overflow: "auto",
+    headerContainer: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      marginBottom: theme.spacing(1.6),
       "&& p": {
         padding: 0,
         margin: 0,
       },
     },
-    showAllButtonContainer: {
+    textContainer: {
       width: "100%",
-      background:
-        "linear-gradient(180deg, rgba(255,255,255,0) 0%, #FFFFFF 100%)",
-      position: "absolute",
-      textAlign: "center",
-      bottom: 0,
-      padding: theme.spacing(0.6, 0.7),
+      flexDirection: "column",
     },
-    showAllButton: {
-      cursor: "pointer",
-      width: "100%",
-      backgroundColor: "transparent",
-      border: "none",
-    },
-    expanded: {
-      position: "relative",
-    },
-    showAllText: {
-      textAlign: "center",
-      color: theme.palette.primary.main,
-      fontSize: "13px",
-    },
-    showAllButtonIcon: {
-      color: theme.palette.primary.main,
-      fontSize: "13px",
+    description: {
+      fontSize: "0.8125rem",
     },
     titleAndButtonContainer: {
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-between",
     },
-    emptyStateTextContainer: {
-      display: "flex",
-      flexDirection: "column",
-      padding: theme.spacing(0.7, 1.4),
-      textAlign: "center",
+    icon: {
+      padding: theme.spacing(1),
+      borderRadius: "50%",
+      marginRight: theme.spacing(1.6),
+      fontSize: theme.typography.h1.fontSize,
     },
-    "agents-table": {
-      padding: 0,
+    iconViewer: {
+      color: VIEWERS_ICON_COLOR,
+      backgroundColor: VIEWERS_ICON_BACKGROUND_COLOR,
     },
-    "agent-cell": {
-      whiteSpace: "break-spaces",
-      padding: 0,
+    iconBlocked: {
+      color: BLOCKED_ICON_COLOR,
+      backgroundColor: BLOCKED_ICON_BACKGROUND_COLOR,
+    },
+    iconEditor: {
+      color: EDITORS_ICON_COLOR,
+      backgroundColor: EDITORS_ICON_BACKGROUND_COLOR,
     },
   });
 }

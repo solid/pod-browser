@@ -19,16 +19,20 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import ResourceSharing from "./index";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-describe("AgentAccessList", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
+export default function styles(theme) {
+  return createStyles(theme, ["icons", "button"], {
+    canShareHeader: {
+      display: "flex",
+    },
+    infoButton: {
+      padding: 0,
+      minWidth: "max-content",
+    },
+    infoIcon: {
+      margin: theme.spacing(0.4),
+      color: theme.palette.info.main,
+    },
   });
-  test("it renders three lists of empty permissions for editors, viewers and blocked", () => {
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
+}

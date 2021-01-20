@@ -20,15 +20,29 @@
  */
 
 import React from "react";
-import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import ResourceSharing from "./index";
+import AgentPickerEmptyState from "./index";
+import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 
-describe("AgentAccessList", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-  test("it renders three lists of empty permissions for editors, viewers and blocked", () => {
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
+describe("AgentPickerEmptyState", () => {
+  const onClick = jest.fn();
+  it("renders an empty state container with a message and a button", () => {
+    const { asFragment } = renderWithTheme(
+      <AgentPickerEmptyState onClick={onClick} />
+    );
     expect(asFragment()).toMatchSnapshot();
+  });
+  it("renders an empty state message", () => {
+    const { getByText } = renderWithTheme(
+      <AgentPickerEmptyState onClick={onClick} />
+    );
+    const message = getByText("Add a new person with their WebId");
+    expect(message).toBeTruthy();
+  });
+  it("renders an 'add new contact' button", () => {
+    const { getByTestId } = renderWithTheme(
+      <AgentPickerEmptyState onClick={onClick} />
+    );
+    const button = getByTestId("empty-state-add-webid-button");
+    expect(button).toBeTruthy();
   });
 });

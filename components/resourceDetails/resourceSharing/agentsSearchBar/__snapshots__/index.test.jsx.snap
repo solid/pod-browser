@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AgentSearchBar renders a search bar 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-searchBoxContainer"
+  >
+    <button
+      aria-label="search"
+      class="PodBrowser-root PodBrowser-root"
+      tabindex="0"
+      type="submit"
+    >
+      <span
+        class="PodBrowser-label"
+      >
+        <i
+          alt="search icon"
+          aria-label="search"
+          class="PodBrowser-icon-search PodBrowser-iconSearch"
+        />
+      </span>
+      <span
+        class="PodBrowser-root"
+      />
+    </button>
+    <div
+      class="PodBrowser-root PodBrowser-searchInput"
+    >
+      <input
+        aria-label="Search by name or WebId"
+        class="PodBrowser-input"
+        data-testid="search-input"
+        placeholder="Search by name or WebId"
+        type="text"
+        value=""
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;

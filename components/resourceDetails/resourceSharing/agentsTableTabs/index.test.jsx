@@ -20,15 +20,33 @@
  */
 
 import React from "react";
+import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import ResourceSharing from "./index";
 
-describe("AgentAccessList", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-  test("it renders three lists of empty permissions for editors, viewers and blocked", () => {
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
+import AgentTableTabs from "./index";
+
+describe("AgentTableTabs", () => {
+  const handleTabChange = jest.fn();
+  it("renders tabs", () => {
+    const { asFragment } = renderWithTheme(
+      <AgentTableTabs
+        handleTabChange={handleTabChange}
+        selectedTabValue="Person"
+      />
+    );
+
     expect(asFragment()).toMatchSnapshot();
+  });
+  it("triggers handleTabChange when clicking on a tab", () => {
+    const { getByTestId } = renderWithTheme(
+      <AgentTableTabs
+        handleTabChange={handleTabChange}
+        selectedTabValue="Person"
+      />
+    );
+
+    const tabGroups = getByTestId("tab-groups");
+    userEvent.click(tabGroups);
+    expect(handleTabChange).toHaveBeenCalled();
   });
 });

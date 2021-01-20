@@ -32,7 +32,6 @@ import { Alert, Skeleton } from "@material-ui/lab";
 import styles from "./styles";
 import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
 import AgentProfileDetails from "./agentProfileDetails";
-import AlertContext from "../../../../src/contexts/alertContext";
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -40,35 +39,9 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const TESTCAFE_ID_TRY_AGAIN_BUTTON = "try-again-button";
 const TESTCAFE_ID_TRY_AGAIN_SPINNER = "try-again-spinner";
 
-export function saveHandler(
-  accessControl,
-  setLoading,
-  setAccess,
-  webId,
-  setSeverity,
-  setMessage,
-  setAlertOpen
-) {
-  return async (newAccess) => {
-    setAccess(newAccess);
-    setLoading(true);
-    if (!accessControl) return;
-    const { error } = await accessControl.savePermissionsForAgent(
-      webId,
-      newAccess
-    );
-
-    if (error) throw error;
-
-    setSeverity("success");
-    setMessage("Permissions have been updated!");
-    setAlertOpen(true);
-    setLoading(false);
-  };
-}
-
 export default function AgentAccess({
-  permission: { webId, acl, profile, profileError },
+  permission: { webId, acl, canShare, alias, profile, profileError },
+  mutatePermissions,
 }) {
   const { accessControl } = useContext(AccessControlContext);
   const classes = useStyles();
@@ -81,45 +54,29 @@ export default function AgentAccess({
   const [loading, setLoading] = useState(false);
   const resourceIri = getSourceUrl(dataset);
 
-  const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
-
-  const [access, setAccess] = useState(acl);
   const [localAccess, setLocalAccess] = useState(acl);
+  const [localCanShare, setLocalCanShare] = useState(canShare);
   const [localProfile, setLocalProfile] = useState(profile);
   const [localProfileError, setLocalProfileError] = useState(profileError);
 
-  const savePermissions = saveHandler(
-    accessControl,
-    setLoading,
-    setAccess,
-    webId,
-    setSeverity,
-    setMessage,
-    setAlertOpen
-  );
-
   const handleToggleShare = async (e) => {
     e.preventDefault();
-    if (!access) return;
-    const tempAccess = {
-      ...access,
-      control: !access.control,
-    };
-    setLocalAccess(tempAccess);
-    await savePermissions(tempAccess);
+    if (localCanShare) {
+      await accessControl.removeAgentFromNamedPolicy(webId, "canShare");
+      setLocalCanShare(false);
+    } else {
+      await accessControl.addAgentToNamedPolicy(webId, "canShare");
+      setLocalCanShare(true);
+    }
   };
 
   const handleRemovePermissions = async (e) => {
+    setLoading(true);
     e.preventDefault();
-    if (!access) return;
-    const tempAccess = {
-      read: false,
-      write: false,
-      append: false,
-      control: false,
-    };
+    await accessControl.removeAgentFromNamedPolicy(webId, alias);
+    setLoading(false);
+    mutatePermissions();
     setLocalAccess(null);
-    await savePermissions(tempAccess);
   };
 
   const handleRetryClick = async () => {
@@ -188,7 +145,7 @@ export default function AgentAccess({
         <AgentProfileDetails
           removePermissions={handleRemovePermissions}
           toggleShare={handleToggleShare}
-          canShare={localAccess.control}
+          canShare={localCanShare}
           webId={webId}
           resourceIri={resourceIri}
           profile={null}
@@ -215,7 +172,7 @@ export default function AgentAccess({
 
   return (
     <AgentProfileDetails
-      canShare={localAccess.control}
+      canShare={localCanShare}
       removePermissions={handleRemovePermissions}
       toggleShare={handleToggleShare}
       webId={webId}
@@ -227,4 +184,9 @@ export default function AgentAccess({
 
 AgentAccess.propTypes = {
   permission: T.object.isRequired,
+  mutatePermissions: T.func,
+};
+
+AgentAccess.defaultProps = {
+  mutatePermissions: () => {},
 };

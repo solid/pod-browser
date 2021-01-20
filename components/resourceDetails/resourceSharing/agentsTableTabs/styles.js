@@ -19,16 +19,29 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import ResourceSharing from "./index";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-describe("AgentAccessList", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
+export default function styles(theme) {
+  return createStyles(theme, ["icons", "table"], {
+    tabsContainer: {
+      paddingLeft: theme.spacing(1.2),
+      paddingRight: theme.spacing(1.2),
+      borderBottom: `1px solid ${theme.palette.grey.A100}`,
+    },
+    tab: {
+      textTransform: "none",
+      minWidth: "max-content",
+      fontFamily: theme.typography.body1.fontFamily,
+      fontSize: theme.typography.body1.fontSize,
+      color: theme.palette.primary.text,
+    },
+    selected: {
+      color: theme.palette.primary.main,
+    },
+    indicator: {
+      height: "3px",
+      width: "100%",
+      backgroundColor: theme.palette.primary.main,
+    },
   });
-  test("it renders three lists of empty permissions for editors, viewers and blocked", () => {
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
+}

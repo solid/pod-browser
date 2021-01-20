@@ -19,16 +19,32 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import ResourceSharing from "./index";
+import { useSession } from "@inrupt/solid-ui-react";
+import { useState, useEffect } from "react";
+import { fetchProfile } from "../../solidClientHelpers/profile";
 
-describe("AgentAccessList", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-  test("it renders three lists of empty permissions for editors, viewers and blocked", () => {
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
+export default function usePermissionsWithProfiles(permissions) {
+  const [permissionsWithProfiles, setPermissionsWithProfiles] = useState([]);
+  const { fetch } = useSession();
+
+  useEffect(() => {
+    if (!permissions) return;
+    Promise.all(
+      permissions.map(async (p) => {
+        let profile;
+        let profileError;
+        try {
+          profile = await fetchProfile(p.webId, fetch);
+        } catch (error) {
+          profileError = error;
+        }
+        return {
+          ...p,
+          profile,
+          profileError,
+        };
+      })
+    ).then((completed) => setPermissionsWithProfiles(completed));
+  }, [permissions, fetch]);
+  return { permissionsWithProfiles };
+}

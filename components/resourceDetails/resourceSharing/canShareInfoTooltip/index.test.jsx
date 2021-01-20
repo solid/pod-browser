@@ -21,14 +21,20 @@
 
 import React from "react";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import ResourceSharing from "./index";
 
-describe("AgentAccessList", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
+import CanShareInfoTooltip from "./index";
+
+describe("CanShareInfoTooltip", () => {
+  it("renders a Can Share info button with a tooltip with default text if resourceName is not available", () => {
+    const { asFragment } = renderWithTheme(<CanShareInfoTooltip />);
+
+    expect(asFragment()).toMatchSnapshot();
   });
-  test("it renders three lists of empty permissions for editors, viewers and blocked", () => {
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
+  it("renders a Can Share info button with resourceName if available", () => {
+    const { asFragment } = renderWithTheme(
+      <CanShareInfoTooltip resourceName="example resource" />
+    );
+
     expect(asFragment()).toMatchSnapshot();
   });
 });

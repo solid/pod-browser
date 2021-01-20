@@ -21,14 +21,17 @@
 
 import React from "react";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import ResourceSharing from "./index";
+import PolicyHeader from "./index";
 
-describe("AgentAccessList", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
+describe("PolicyHeader", () => {
+  test("it renders a Policy Header for editors with plural title for policy agents list", () => {
+    const { asFragment } = renderWithTheme(
+      <PolicyHeader type="editors" isPolicyList />
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
-  test("it renders three lists of empty permissions for editors, viewers and blocked", () => {
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
+  test("it renders a Policy Header for editors with singular title for agent picker", () => {
+    const { asFragment } = renderWithTheme(<PolicyHeader type="editors" />);
     expect(asFragment()).toMatchSnapshot();
   });
 });

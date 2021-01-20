@@ -150,7 +150,7 @@ exports[`AgentAccessTable renders a list of permissions 1`] = `
                     <i
                       alt="search icon"
                       aria-label="search"
-                      class="PodBrowser-icon-search PodBrowser-icon PodBrowser-iconSearch"
+                      class="PodBrowser-icon-search PodBrowser-iconSearch"
                     />
                   </span>
                   <span
@@ -206,11 +206,6 @@ exports[`AgentAccessTable renders a list of permissions 1`] = `
                           data-testid="agent-web-id"
                         >
                           Example 1
-                          <span
-                            class="PodBrowser-shareText"
-                          >
-                            Can Share
-                          </span>
                         </p>
                         <button
                           class="PodBrowser-button"

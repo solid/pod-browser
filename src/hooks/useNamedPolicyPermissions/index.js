@@ -19,16 +19,20 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import ResourceSharing from "./index";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import React, { useContext } from "react";
+import useSWR from "swr";
+import AccessControlContext from "../../contexts/accessControlContext";
 
-describe("AgentAccessList", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-  test("it renders three lists of empty permissions for editors, viewers and blocked", () => {
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
+export default function useNamedPolicyPermissions(policyName) {
+  const { accessControl } = useContext(AccessControlContext);
+
+  async function getPermissions() {
+    const permissions = await accessControl.getPermissionsForNamedPolicies(
+      policyName
+    );
+    return permissions;
+  }
+
+  return useSWR([accessControl, policyName], () => getPermissions());
+}
