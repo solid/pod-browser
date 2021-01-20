@@ -25,7 +25,7 @@ import PropTypes from "prop-types";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
-import { getUrlAll } from "@inrupt/solid-client";
+import { getThingAll, getUrl } from "@inrupt/solid-client";
 import styles from "./styles";
 import {
   addBookmark,
@@ -80,7 +80,9 @@ export const toggleBookmarkHandler = ({
 };
 
 const isBookmarked = (iri, dataset) => {
-  const listOfRecallsUrls = getUrlAll(dataset, RECALLS_PROPERTY_IRI);
+  const listOfRecallsUrls = getThingAll(dataset).map((t) =>
+    getUrl(t, RECALLS_PROPERTY_IRI)
+  );
   return listOfRecallsUrls.includes(iri);
 };
 

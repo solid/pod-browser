@@ -30,7 +30,11 @@ import {
   PageHeader,
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
-import { getSourceUrl, getStringNoLocale } from "@inrupt/solid-client";
+import {
+  getSourceUrl,
+  getStringNoLocale,
+  getThing,
+} from "@inrupt/solid-client";
 import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
 import { vcard, foaf } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";
@@ -44,7 +48,7 @@ import useProfiles from "../../src/hooks/useProfiles";
 import ContactsListSearch from "./contactsListSearch";
 import ProfileLink from "../profileLink";
 import { SearchProvider } from "../../src/contexts/searchContext";
-import { deleteContact, getWebId } from "../../src/addressBook";
+import { deleteContact, getWebIdUrl } from "../../src/addressBook";
 import ContactsDrawer from "./contactsDrawer";
 import ContactsEmptyState from "./contactsEmptyState";
 
@@ -105,13 +109,13 @@ function ContactsList() {
 
   useEffect(() => {
     if (selectedContactIndex === null) return;
-    const name = getStringNoLocale(
-      people[selectedContactIndex].dataset,
-      formattedNamePredicate
-    );
+    const contactDataset = people[selectedContactIndex].dataset;
+    const contactThingUrl = people[selectedContactIndex].iri;
+    const contactThing = getThing(contactDataset, contactThingUrl);
+    const name = getStringNoLocale(contactThing, formattedNamePredicate);
     setSelectedContactName(name);
     (async () => {
-      const webId = getWebId(people[selectedContactIndex].dataset, fetch);
+      const webId = getWebIdUrl(contactDataset, contactThingUrl);
       setSelectedContactWebId(webId);
     })();
   }, [selectedContactIndex, formattedNamePredicate, people, fetch]);

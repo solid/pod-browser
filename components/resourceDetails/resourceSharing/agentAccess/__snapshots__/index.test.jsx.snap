@@ -8,7 +8,7 @@ exports[`AgentAccess renders 1`] = `
     <img
       alt="Alice"
       class="PodBrowser-img"
-      src="http://example.com/alice.jpg"
+      src="http://alice.example.com/alice.jpg"
     />
   </div>
   <p
@@ -570,7 +570,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are d
     <img
       alt="Alice"
       class="PodBrowser-img"
-      src="http://example.com/alice.jpg"
+      src="http://alice.example.com/alice.jpg"
     />
   </div>
   <p

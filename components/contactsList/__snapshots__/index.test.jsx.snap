@@ -164,7 +164,7 @@ exports[`ContactsList renders page when people is loaded 1`] = `
               role="cell"
             >
               <a
-                href="/contacts/http%3A%2F%2Fexample.com%2Falice%23me"
+                href="/contacts/http%3A%2F%2Falice.example.com%2Falice%23me"
               >
                 Alice
               </a>
@@ -197,7 +197,7 @@ exports[`ContactsList renders page when people is loaded 1`] = `
               role="cell"
             >
               <a
-                href="/contacts/http%3A%2F%2Fexample.com%2Fbob%23me"
+                href="/contacts/http%3A%2F%2Fbob.example.com%2Fbob%23me"
               >
                 Bob
               </a>

@@ -24,9 +24,6 @@
 import {
   createSolidDataset,
   createThing,
-  getDatetime,
-  getDecimal,
-  getInteger,
   getSourceUrl,
   getThing,
   getUrlAll,
@@ -122,29 +119,6 @@ export function createResponder() {
   return { respond, error };
 }
 
-export function normalizeDataset(dataset, iri) {
-  const rawType = getUrlAll(
-    dataset,
-    "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
-  );
-
-  const mtime = getDecimal(dataset, namespace.mtime);
-  const modified = getDatetime(dataset, namespace.modified);
-  const size = getInteger(dataset, namespace.size);
-  const contains = getUrlAll(dataset, ldp.contains);
-  const types = displayTypes(rawType);
-
-  return {
-    contains,
-    iri,
-    modified,
-    mtime,
-    size,
-    types,
-    dataset,
-  };
-}
-
 export function chain(object, ...operations) {
   return operations.reduce((acc, transform) => {
     return transform(acc);
@@ -167,10 +141,6 @@ export function defineThing(options, ...operations) {
 
 export function defineDataset(options, ...operations) {
   return setThing(createSolidDataset(), defineThing(options, ...operations));
-}
-
-export function changeThing(thing, ...operations) {
-  return chain(thing, ...operations);
 }
 
 /**

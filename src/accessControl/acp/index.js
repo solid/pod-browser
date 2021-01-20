@@ -188,7 +188,7 @@ function getAllowApplyPolicy(policyUrl, mode) {
 }
 
 function ensureAccessControl(policyUrl, datasetWithAcr, changed) {
-  const accessControls = acp.getControlAll(datasetWithAcr);
+  const accessControls = acp.getAllControl(datasetWithAcr);
   const existingAccessControl = accessControls.find((ac) =>
     acp.getPolicyUrlAll(ac).find((url) => policyUrl === url)
   );
@@ -201,7 +201,7 @@ function ensureAccessControl(policyUrl, datasetWithAcr, changed) {
 }
 
 function ensureApplyControl(policyUrl, datasetWithAcr, changed) {
-  const accessControls = acp.getControlAll(datasetWithAcr);
+  const accessControls = acp.getAllControl(datasetWithAcr);
   const existingAccessControl = accessControls.find((ac) =>
     acp.getPolicyUrlAll(ac).find((url) => policyUrl === url)
   );

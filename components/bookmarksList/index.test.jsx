@@ -26,12 +26,10 @@ import mockBookmarks from "../../__testUtils/mockBookmarks";
 import mockBookmarksContextProvider from "../../__testUtils/mockBookmarksContextProvider";
 
 describe("BookmarksList", () => {
-  test("it renders a spinner if bookmarks are loading", async () => {
-    const bookmarks = null;
-    const setBookmarks = jest.fn();
+  it("renders a spinner if bookmarks are loading", () => {
     const BookmarksContextProvider = mockBookmarksContextProvider({
-      bookmarks,
-      setBookmarks,
+      bookmarks: null,
+      setBookmarks: jest.fn(),
     });
     const { asFragment } = renderWithTheme(
       <BookmarksContextProvider>
@@ -40,7 +38,8 @@ describe("BookmarksList", () => {
     );
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it renders a list of bookmarks", async () => {
+
+  it("renders a list of bookmarks", () => {
     const bookmarks = mockBookmarks();
     const setBookmarks = jest.fn();
     const BookmarksContextProvider = mockBookmarksContextProvider({

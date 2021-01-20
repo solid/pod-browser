@@ -37,6 +37,7 @@ import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import styles from "./styles";
 import { fetchProfile } from "../../src/solidClientHelpers/profile";
 import useContacts from "../../src/hooks/useContacts";
+import useContactsContainerUrl from "../../src/hooks/useContactsContainerUrl";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export const EXISTING_WEBID_ERROR_MESSAGE =
@@ -47,6 +48,7 @@ export const FETCH_PROFILE_FAILED_ERROR_MESSAGE =
 
 export function handleSubmit({
   addressBook,
+  addressBookContainerUrl,
   setAgentId,
   setIsLoading,
   alertError,
@@ -84,6 +86,7 @@ export function handleSubmit({
         const contact = { webId, fn: name };
         const { response, error } = await saveContact(
           addressBook,
+          addressBookContainerUrl,
           contact,
           types,
           fetch
@@ -98,7 +101,7 @@ export function handleSubmit({
       } else {
         alertError(NO_NAME_ERROR_MESSAGE);
       }
-    } catch {
+    } catch (error) {
       alertError(FETCH_PROFILE_FAILED_ERROR_MESSAGE);
     }
     setIsLoading(false);
@@ -119,6 +122,7 @@ export default function AddContact() {
     bem("container"),
     bem("container-view", menuOpen ? "menu-open" : null)
   );
+  const addressBookContainerUrl = useContactsContainerUrl();
   const [addressBook] = useAddressBook();
   const [isLoading, setIsLoading] = useState(false);
   const [agentId, setAgentId] = useState("");
@@ -135,6 +139,7 @@ export default function AddContact() {
 
   const onSubmit = handleSubmit({
     addressBook,
+    addressBookContainerUrl,
     setAgentId,
     setIsLoading,
     alertError,

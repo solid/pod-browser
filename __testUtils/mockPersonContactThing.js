@@ -19,38 +19,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { createContext } from "react";
-import PropTypes from "prop-types";
-import useBookmarks from "../../hooks/useBookmarks";
+import { addUrl, mockThingFrom } from "@inrupt/solid-client";
+import { vcard, rdf, foaf } from "rdf-namespaces";
+import { chain } from "../src/solidClientHelpers/utils";
 
-export const defaultBookmarksContext = {
-  bookmarks: null,
-  setBookmarks: () => {},
-};
+export const webIdUrl = "http://example.com/alice#me";
 
-const BookmarksContext = createContext(defaultBookmarksContext);
-
-function BookmarksContextProvider({ children }) {
-  const [bookmarks, setBookmarks] = useBookmarks();
-  return (
-    <BookmarksContext.Provider
-      value={{
-        bookmarks,
-        setBookmarks,
-      }}
-    >
-      {children}
-    </BookmarksContext.Provider>
+export default function mockPersonContactThing(url = webIdUrl) {
+  return chain(
+    mockThingFrom(url),
+    (t) => addUrl(t, rdf.type, vcard.Individual),
+    (t) => addUrl(t, foaf.openid, webIdUrl)
   );
 }
-
-BookmarksContextProvider.propTypes = {
-  children: PropTypes.node,
-};
-
-BookmarksContextProvider.defaultProps = {
-  children: null,
-};
-
-export { BookmarksContextProvider };
-export default BookmarksContext;

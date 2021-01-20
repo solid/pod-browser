@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`BookmarksList it renders a list of bookmarks 1`] = `
+exports[`BookmarksList renders a list of bookmarks 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-page-header"
@@ -164,7 +164,7 @@ exports[`BookmarksList it renders a list of bookmarks 1`] = `
 </DocumentFragment>
 `;
 
-exports[`BookmarksList it renders a spinner if bookmarks are loading 1`] = `
+exports[`BookmarksList renders a spinner if bookmarks are loading 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"

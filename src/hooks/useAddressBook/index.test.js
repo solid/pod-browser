@@ -26,16 +26,19 @@ import mockSession, {
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import useAddressBook from "./index";
 import { getResource } from "../../solidClientHelpers/resource";
-import { contactsContainerIri, saveNewAddressBook } from "../../addressBook";
+import * as addressBookFns from "../../addressBook";
+import useContactsContainerUrl from "../useContactsContainerUrl";
 
 jest.mock("../../solidClientHelpers/resource");
-jest.mock("../../addressBook/index");
+
+jest.mock("../useContactsContainerUrl");
+const mockedContactsContainerUrl = useContactsContainerUrl;
 
 describe("useAddressBook", () => {
   const contactsIri = "http://example.com/contacts/";
 
   beforeEach(() => {
-    contactsContainerIri.mockReturnValue(contactsIri);
+    mockedContactsContainerUrl.mockReturnValue(contactsIri);
   });
 
   describe("with an unauthenticated user", () => {
@@ -66,7 +69,10 @@ describe("useAddressBook", () => {
           wrapper,
         });
         await waitForNextUpdate();
-        expect(getResource).toHaveBeenCalledWith(contactsIri, session.fetch);
+        expect(getResource).toHaveBeenCalledWith(
+          addressBookFns.getContactsIndexIri(contactsIri),
+          session.fetch
+        );
       });
 
       it("should return the address book resource", async () => {
@@ -105,7 +111,7 @@ describe("useAddressBook", () => {
 
       it("should return a new address book resource", async () => {
         const dataset = 1337;
-        saveNewAddressBook.mockResolvedValue({
+        jest.spyOn(addressBookFns, "saveNewAddressBook").mockResolvedValue({
           response: {
             index: dataset,
           },
@@ -122,7 +128,9 @@ describe("useAddressBook", () => {
 
       it("should return error if anything goes wrong when creating new address book", async () => {
         const error = "Something went wrong";
-        saveNewAddressBook.mockResolvedValue({ error });
+        jest
+          .spyOn(addressBookFns, "saveNewAddressBook")
+          .mockResolvedValue({ error });
         const { result, waitForNextUpdate } = renderHook(
           () => useAddressBook(),
           {
