@@ -19,13 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export const ACP_ENABLED = "acpEnabled";
-export const acpEnabled = () => false;
+export const NEW_ACP_UI_ENABLED_FOR = [
+  "https://pod.inrupt.com/jacklawson/profile/card#me",
+];
+export const NEW_ACP_UI_ENABLED = "newAcpUIEnabled";
+export const newAcpUiEnabled = (session) => {
+  if (!session.info.isLoggedIn) {
+    return false;
+  }
 
-export const WAC_ENABLED = "wacEnabled";
-export const wacEnabled = () => true;
+  return NEW_ACP_UI_ENABLED_FOR.includes(session.info.webId);
+};
 
 export default () => ({
-  [ACP_ENABLED]: acpEnabled,
-  [WAC_ENABLED]: wacEnabled,
+  [NEW_ACP_UI_ENABLED]: newAcpUiEnabled,
 });
