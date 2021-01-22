@@ -25,8 +25,6 @@ import { useRouter } from "next/router";
 import { Drawer, Message } from "@inrupt/prism-react-components";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
-import FeatureContext from "../../src/contexts/featureFlagsContext";
-import { NEW_ACP_UI_ENABLED } from "../../src/featureFlags";
 import {
   getParentContainerUrl,
   stripQueryParams,
@@ -60,10 +58,6 @@ export function handleRedirectToParentContainer({ setMenuOpen, iri, router }) {
 
 export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
   const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
-
-  const { enabled } = useContext(FeatureContext);
-  const useNewAcpUi = enabled(NEW_ACP_UI_ENABLED);
-
   const router = useRouter();
   const {
     query: { action, resourceIri },
@@ -106,9 +100,6 @@ export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
       ) : (
         <AccessControlProvider accessControl={accessControl}>
           <DatasetProvider dataset={resourceInfo}>
-
-            <h1>{`New ACP UI Enabled: ${useNewAcpUi}`}</h1>
-
             <ResourceDetails
               onDelete={onUpdate}
               onDeleteCurrentContainer={onDeleteCurrentContainer}
