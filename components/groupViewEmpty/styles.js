@@ -19,22 +19,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useSession } from "@inrupt/solid-ui-react";
-import useSWR from "swr";
-import useAddressBook from "../useAddressBook";
-import { getContactAll } from "../../models/contact";
-
-export default function useContacts(types) {
-  const { fetch } = useSession();
-  const { data: addressBook, error: addressBookError } = useAddressBook();
-
-  return useSWR(
-    ["contacts", addressBook, ...types],
-    async () => {
-      if (!addressBook && !addressBookError) return null;
-      if (addressBookError) throw addressBookError;
-      return getContactAll(addressBook, types, fetch);
+export default function styles(theme) {
+  return {
+    "group-view-empty": {
+      marginTop: theme.spacing(7),
+      textAlign: "center",
     },
-    { errorRetryCount: 0 }
-  );
+    "icon-large": {
+      ...theme.icons.iconColor("#0D6796"),
+      fontSize: 64,
+    },
+  };
 }

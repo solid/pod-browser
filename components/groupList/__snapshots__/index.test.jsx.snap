@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GroupList renders an empty list when no groups is loaded 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="group-list"
+  >
+    <div
+      class="PodBrowser-group-list-header"
+    >
+      <div
+        class="PodBrowser-group-list-header__title"
+      >
+        Groups
+      </div>
+    </div>
+    <div
+      class="PodBrowser-group-list-empty"
+      data-testid="group-list-empty"
+    >
+      No groups
+    </div>
+  </div>
+</DocumentFragment>
+`;

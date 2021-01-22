@@ -19,22 +19,30 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useSession } from "@inrupt/solid-ui-react";
-import useSWR from "swr";
-import useAddressBook from "../useAddressBook";
-import { getContactAll } from "../../models/contact";
+import { GROUPS_PAGE_ENABLED } from "../src/featureFlags";
 
-export default function useContacts(types) {
-  const { fetch } = useSession();
-  const { data: addressBook, error: addressBookError } = useAddressBook();
-
-  return useSWR(
-    ["contacts", addressBook, ...types],
-    async () => {
-      if (!addressBook && !addressBookError) return null;
-      if (addressBookError) throw addressBookError;
-      return getContactAll(addressBook, types, fetch);
+export default function getMainMenuItems() {
+  return [
+    {
+      path: "/",
+      label: "Files",
+      icon: "icon-files",
     },
-    { errorRetryCount: 0 }
-  );
+    {
+      path: "/groups",
+      label: "Groups",
+      icon: "icon-users",
+      featureFlag: GROUPS_PAGE_ENABLED,
+    },
+    {
+      path: "/contacts",
+      label: "Contacts",
+      icon: "icon-users",
+    },
+    {
+      path: "/bookmarks",
+      label: "Bookmarks",
+      icon: "icon-star",
+    },
+  ];
 }

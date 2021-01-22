@@ -42,8 +42,8 @@ import Spinner from "../spinner";
 import styles from "./styles";
 
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
-import useAddressBook from "../../src/hooks/useAddressBook";
-import useContacts from "../../src/hooks/useContacts";
+import useAddressBookOld from "../../src/hooks/useAddressBookOld";
+import useContactsOld from "../../src/hooks/useContactsOld";
 import useProfiles from "../../src/hooks/useProfiles";
 import ContactsListSearch from "./contactsListSearch";
 import ProfileLink from "../profileLink";
@@ -89,12 +89,12 @@ function ContactsList() {
   const actionClass = PageHeader.usePageHeaderActionClassName();
   const [search, setSearch] = useState("");
 
-  const [addressBook, addressBookError] = useAddressBook();
+  const [addressBook, addressBookError] = useAddressBookOld();
   const {
     data: people,
     error: peopleError,
     mutate: peopleMutate,
-  } = useContacts(addressBook, foaf.Person);
+  } = useContactsOld(addressBook, foaf.Person);
   const profiles = useProfiles(people);
   const formattedNamePredicate = vcard.fn;
   const hasPhotoPredicate = vcard.hasPhoto;

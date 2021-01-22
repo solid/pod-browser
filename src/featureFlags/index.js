@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export const NEW_ACP_UI_ENABLED_FOR = [
+const webIdsWithAccessToFeatures = [
   "https://pod.inrupt.com/jacklawson/profile/card#me",
   "https://pod.inrupt.com/arneh/profile/card#me",
   "https://pod.inrupt.com/megoth/profile/card#me",
@@ -36,14 +36,22 @@ export const NEW_ACP_UI_ENABLED_FOR = [
   "https://pod-compat.inrupt.com/podbrowser/profile/card#me",
   "https://pod-compat.inrupt.com/podbrowser2/profile/card#me",
 ];
-export const NEW_ACP_UI_ENABLED = "newAcpUIEnabled";
-export const newAcpUiEnabled = (session) => {
-  return (
-    !!session.info.isLoggedIn &&
-    NEW_ACP_UI_ENABLED_FOR.includes(session.info.webId)
-  );
-};
+function enableForGivenWebIds(webIds) {
+  return (session) =>
+    session.info.isLoggedIn && webIds.includes(session.info.webId);
+}
 
-export default () => ({
-  [NEW_ACP_UI_ENABLED]: newAcpUiEnabled,
-});
+export const NEW_ACP_UI_ENABLED_FOR = webIdsWithAccessToFeatures;
+export const NEW_ACP_UI_ENABLED = "newAcpUIEnabled";
+export const newAcpUiEnabled = enableForGivenWebIds(NEW_ACP_UI_ENABLED_FOR);
+
+export const GROUPS_PAGE_ENABLED_FOR = webIdsWithAccessToFeatures;
+export const GROUPS_PAGE_ENABLED = "groupsPageEnabled";
+export const groupsPageEnabled = enableForGivenWebIds(GROUPS_PAGE_ENABLED_FOR);
+
+export default function FeatureFlags() {
+  return {
+    [NEW_ACP_UI_ENABLED]: newAcpUiEnabled,
+    [GROUPS_PAGE_ENABLED]: groupsPageEnabled,
+  };
+}

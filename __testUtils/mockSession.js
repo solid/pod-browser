@@ -38,6 +38,7 @@ export default function mockSession(options = {}) {
   // this instance is a normal, authenticated session
   // you can override the properties with what you need, but if you repeat something a lot
   // consider naming it and create a reusable mock function
+  const { webId, ...restOptions } = options;
   return {
     on: jest.fn(),
     handleIncomingRedirect: jest.fn().mockResolvedValue(null),
@@ -54,7 +55,7 @@ export default function mockSession(options = {}) {
       sessionId: "some-session-id",
       webId: options.webId || webIdUrl,
     }, // add more properties as needed
-    ...options,
+    ...restOptions,
   }; // add more properties as needed
 }
 

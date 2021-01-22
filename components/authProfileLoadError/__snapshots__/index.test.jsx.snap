@@ -13,12 +13,6 @@ exports[`AuthProfileLoadError renders 1`] = `
       >
         Failed loading your profile
       </h1>
-      <div
-        class="PodBrowser-page-header__content"
-      />
-      <div
-        class="PodBrowser-page-header__toolbar"
-      />
     </div>
     <div
       class="PodBrowser-container"

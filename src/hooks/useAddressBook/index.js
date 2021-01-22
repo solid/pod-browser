@@ -19,61 +19,44 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { useSession } from "@inrupt/solid-ui-react";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
-import { getContactsIndexIri, saveNewAddressBook } from "../../addressBook";
-import { getResource } from "../../solidClientHelpers/resource";
+import {
+  createAddressBook,
+  getAddressBookContainerUrl,
+  loadAddressBook,
+} from "../../models/addressBook";
 import { ERROR_CODES, isHTTPError } from "../../error";
-import useContactsContainerUrl from "../useContactsContainerUrl";
+
+export const ERROR_USE_ADDRESS_BOOK_NO_POD_ROOT =
+  "No pod root found for authenticated user";
 
 export default function useAddressBook() {
-  const [addressBook, setAddressBook] = useState(null);
-  const [error, setError] = useState(null);
-  const { session } = useSession();
-  const { data: profile } = useAuthenticatedProfile();
-  const addressBookContainerUrl = useContactsContainerUrl();
+  const { fetch } = useSession();
+  const {
+    data: authenticatedProfile,
+    error: authenticatedError,
+  } = useAuthenticatedProfile();
 
-  useEffect(() => {
-    if (!session.info.isLoggedIn || !profile || !addressBookContainerUrl) {
-      return;
-    }
-    const { webId } = profile;
-    const { fetch } = session;
-    const contactsIndexIri = getContactsIndexIri(addressBookContainerUrl);
-
-    (async () => {
-      const {
-        response: existingAddressBook,
-        error: existingError,
-      } = await getResource(contactsIndexIri, fetch);
-
-      if (existingAddressBook) {
-        setAddressBook(existingAddressBook.dataset);
-        return;
-      }
-
-      if (existingError && isHTTPError(existingError, ERROR_CODES.NOT_FOUND)) {
-        const {
-          response: newAddressBook,
-          error: newError,
-        } = await saveNewAddressBook(
-          {
-            iri: addressBookContainerUrl,
-            owner: webId,
-          },
-          fetch
-        );
-        if (newError) {
-          setError(newError);
-          return;
+  return useSWR(
+    ["addressBook", authenticatedProfile],
+    async () => {
+      if (!authenticatedProfile && !authenticatedError) return null;
+      if (authenticatedError) throw authenticatedError;
+      const podRootUrl = authenticatedProfile.pods[0];
+      if (!podRootUrl) throw new Error(ERROR_USE_ADDRESS_BOOK_NO_POD_ROOT);
+      const containerUrl = getAddressBookContainerUrl(podRootUrl);
+      try {
+        return await loadAddressBook(containerUrl, fetch);
+      } catch (error) {
+        if (isHTTPError(error, ERROR_CODES.NOT_FOUND)) {
+          // the address book is not yet created
+          return createAddressBook(containerUrl, authenticatedProfile.webId);
         }
-        setAddressBook(newAddressBook.index);
-        return;
+        throw error;
       }
-      setError(existingError);
-    })();
-  }, [session, profile, addressBookContainerUrl]);
-
-  return [addressBook, error];
+    },
+    { errorRetryCount: 0 }
+  );
 }

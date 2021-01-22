@@ -23,7 +23,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 import T from "prop-types";
 import { StylesProvider, ThemeProvider } from "@inrupt/prism-react-components";
-import FeatureContext from "../src/contexts/featureFlagsContext";
+import { FeatureProvider } from "../src/contexts/featureFlagsContext";
 import defaultTheme from "../src/theme";
 
 export default function WithTheme(props) {
@@ -47,9 +47,8 @@ WithTheme.defaultProps = {
 
 export const renderWithTheme = (children, theme = defaultTheme) => {
   return render(
-    // TODO: remove when removing feature flag
-    <FeatureContext.Provider value={{ enabled: () => true }}>
+    <FeatureProvider>
       <WithTheme theme={theme}>{children}</WithTheme>
-    </FeatureContext.Provider>
+    </FeatureProvider>
   );
 };

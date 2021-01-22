@@ -24,17 +24,17 @@ import { renderHook } from "@testing-library/react-hooks";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { SWRConfig } from "swr";
 import { foaf } from "rdf-namespaces";
-import useContacts from "./index";
+import useContactsOld from "./index";
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import * as addressBookFns from "../../addressBook";
 
-describe("useContacts", () => {
+describe("useContactsOld", () => {
   describe("with no address book", () => {
     it("should return undefined", () => {
       const session = mockSession();
       const wrapper = mockSessionContextProvider(session);
-      const { result } = renderHook(() => useContacts(null, foaf.Person), {
+      const { result } = renderHook(() => useContactsOld(null, foaf.Person), {
         wrapper,
       });
       expect(result.current).toMatchObject({
@@ -67,7 +67,7 @@ describe("useContacts", () => {
       jest.spyOn(addressBookFns, "getContacts").mockResolvedValue({ error });
 
       const { result, waitFor } = renderHook(
-        () => useContacts(addressBook, foaf.Person),
+        () => useContactsOld(addressBook, foaf.Person),
         {
           wrapper,
         }
@@ -85,7 +85,7 @@ describe("useContacts", () => {
       jest.spyOn(addressBookFns, "getContacts").mockResolvedValue({ response });
 
       const { result, waitFor } = renderHook(
-        () => useContacts(addressBook, foaf.Person),
+        () => useContactsOld(addressBook, foaf.Person),
         {
           wrapper,
         }

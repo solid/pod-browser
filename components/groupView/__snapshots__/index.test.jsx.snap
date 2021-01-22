@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GroupView renders an empty list when no groups is loaded 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="group-view"
+  >
+    <div
+      class="PodBrowser-group-view-empty"
+      data-testid="group-view-empty"
+    >
+      <span
+        class="PodBrowser-icon-users PodBrowser-icon-large"
+      />
+      <h2>
+        You don't have any groups yet!
+      </h2>
+      <p>
+        Create a new group to easily share files with.
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;

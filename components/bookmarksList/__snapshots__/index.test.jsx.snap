@@ -42,9 +42,6 @@ exports[`BookmarksList renders a list of bookmarks 1`] = `
         </div>
       </div>
     </div>
-    <div
-      class="PodBrowser-page-header__toolbar"
-    />
   </div>
   <div
     class="PodBrowser-container"

@@ -19,33 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { useSession } from "@inrupt/solid-ui-react";
-import { renderWithTheme } from "../../../__testUtils/withTheme";
-import MainNav, { TESTID_MAIN_NAV_ITEM } from "./index";
-import mockSession, {
-  mockUnauthenticatedSession,
-} from "../../../__testUtils/mockSession";
-import { GROUPS_PAGE_ENABLED_FOR } from "../../../src/featureFlags";
+import { renderWithTheme } from "../../__testUtils/withTheme";
+import GroupViewEmpty, { TESTID_GROUP_VIEW_EMPTY } from "./index";
 
-jest.mock("@inrupt/solid-ui-react");
-const mockedSessionHook = useSession;
-
-describe("MainNav", () => {
-  it("renders navigation", () => {
-    const session = mockUnauthenticatedSession();
-    mockedSessionHook.mockReturnValue({ session });
-
-    const { asFragment, getAllByTestId } = renderWithTheme(<MainNav />);
+describe("GroupViewEmpty", () => {
+  it("renders", () => {
+    const { asFragment, getByTestId } = renderWithTheme(<GroupViewEmpty />);
     expect(asFragment()).toMatchSnapshot();
-    expect(getAllByTestId(TESTID_MAIN_NAV_ITEM)).toHaveLength(3);
-  });
-
-  it("renders Group for people with the feature flag turned on", () => {
-    const session = mockSession({ webId: GROUPS_PAGE_ENABLED_FOR[0] });
-    mockedSessionHook.mockReturnValue({ session });
-
-    const { getAllByTestId } = renderWithTheme(<MainNav />);
-    expect(getAllByTestId(TESTID_MAIN_NAV_ITEM)).toHaveLength(4);
+    expect(getByTestId(TESTID_GROUP_VIEW_EMPTY)).toBeDefined();
   });
 });

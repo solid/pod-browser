@@ -19,33 +19,35 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { useSession } from "@inrupt/solid-ui-react";
-import { renderWithTheme } from "../../../__testUtils/withTheme";
-import MainNav, { TESTID_MAIN_NAV_ITEM } from "./index";
-import mockSession, {
-  mockUnauthenticatedSession,
-} from "../../../__testUtils/mockSession";
-import { GROUPS_PAGE_ENABLED_FOR } from "../../../src/featureFlags";
+import { renderWithTheme } from "../../__testUtils/withTheme";
+import GroupList, {
+  TESTID_GROUP_ERROR,
+  TESTID_GROUP_LIST_EMPTY,
+} from "./index";
+import useContacts from "../../src/hooks/useContacts";
+import { TESTID_SPINNER } from "../spinner";
 
-jest.mock("@inrupt/solid-ui-react");
-const mockedSessionHook = useSession;
+jest.mock("../../src/hooks/useContacts");
+const mockedContactsHook = useContacts;
 
-describe("MainNav", () => {
-  it("renders navigation", () => {
-    const session = mockUnauthenticatedSession();
-    mockedSessionHook.mockReturnValue({ session });
-
-    const { asFragment, getAllByTestId } = renderWithTheme(<MainNav />);
+describe("GroupList", () => {
+  it("renders an empty list when no groups is loaded", () => {
+    mockedContactsHook.mockReturnValue({ data: [] });
+    const { asFragment, getByTestId } = renderWithTheme(<GroupList />);
     expect(asFragment()).toMatchSnapshot();
-    expect(getAllByTestId(TESTID_MAIN_NAV_ITEM)).toHaveLength(3);
+    expect(getByTestId(TESTID_GROUP_LIST_EMPTY)).toBeDefined();
   });
 
-  it("renders Group for people with the feature flag turned on", () => {
-    const session = mockSession({ webId: GROUPS_PAGE_ENABLED_FOR[0] });
-    mockedSessionHook.mockReturnValue({ session });
+  it("renders a spinner while groups are loading", () => {
+    mockedContactsHook.mockReturnValue({});
+    const { getByTestId } = renderWithTheme(<GroupList />);
+    expect(getByTestId(TESTID_SPINNER)).toBeDefined();
+  });
 
-    const { getAllByTestId } = renderWithTheme(<MainNav />);
-    expect(getAllByTestId(TESTID_MAIN_NAV_ITEM)).toHaveLength(4);
+  it("renders an error if something goes wrong when loading groups", () => {
+    const errorMessage = "error";
+    mockedContactsHook.mockReturnValue({ error: new Error(errorMessage) });
+    const { getByTestId } = renderWithTheme(<GroupList />);
+    expect(getByTestId(TESTID_GROUP_ERROR).innerHTML).toContain(errorMessage);
   });
 });

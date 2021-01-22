@@ -11,9 +11,6 @@ exports[`ContainerPageHeader Renders view 1`] = `
       Files
     </h1>
     <div
-      class="PodBrowser-page-header__content"
-    />
-    <div
       class="PodBrowser-page-header__toolbar"
     >
       <div
