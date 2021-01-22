@@ -20,41 +20,82 @@
  */
 
 import { renderHook } from "@testing-library/react-hooks";
+import useSWR from "swr";
+import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import mockSession, {
   mockUnauthenticatedSession,
 } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import useAddressBook from "./index";
-import { getResource } from "../../solidClientHelpers/resource";
-import * as addressBookFns from "../../addressBook";
-import useContactsContainerUrl from "../useContactsContainerUrl";
+import * as resourceFns from "../../solidClientHelpers/resource";
+import mockAddressBook from "../../../__testUtils/mockAddressBook";
+import useAuthenticatedProfile from "../useAuthenticatedProfile";
+import { mockProfileAlice } from "../../../__testUtils/mockPersonResource";
+import { contactsContainerIri } from "../../addressBook";
+import * as addressBookModelFns from "../../models/addressBook";
+
+jest.mock("swr");
+const mockedSwrHook = useSWR;
+
+jest.mock("../useAuthenticatedProfile");
+const mockedAuthenticatedProfile = useAuthenticatedProfile;
 
 jest.mock("../../solidClientHelpers/resource");
 
-jest.mock("../useContactsContainerUrl");
-const mockedContactsContainerUrl = useContactsContainerUrl;
-
 describe("useAddressBook", () => {
-  const contactsIri = "http://example.com/contacts/";
+  const addressBook = mockAddressBook();
+  const dataset = mockSolidDatasetFrom("http://example.com");
+
+  let mockedLoadResources;
+  let mockedGetResource;
 
   beforeEach(() => {
-    mockedContactsContainerUrl.mockReturnValue(contactsIri);
+    mockedAuthenticatedProfile.mockReturnValue({ data: null });
+    mockedLoadResources = jest
+      .spyOn(addressBookModelFns, "loadAddressBook")
+      .mockResolvedValue(addressBook);
+    mockedGetResource = jest
+      .spyOn(resourceFns, "getResource")
+      .mockImplementation((iri) => ({
+        response: { iri, dataset },
+      }));
+  });
+
+  it("caches with SWR", () => {
+    const session = mockUnauthenticatedSession();
+    const wrapper = mockSessionContextProvider(session);
+    const data = "data";
+    const error = "error";
+    mockedSwrHook.mockReturnValue({ data, error });
+    const { result } = renderHook(() => useAddressBook(), {
+      wrapper,
+    });
+    expect(result.current).toEqual({ addressBook: data, error });
+    expect(mockedSwrHook).toHaveBeenCalledWith(
+      ["addressBook", session],
+      expect.any(Function)
+    );
   });
 
   describe("with an unauthenticated user", () => {
-    it("should not return any addressBook", () => {
+    it("should not return any addressBook", async () => {
       const session = mockUnauthenticatedSession();
       const wrapper = mockSessionContextProvider(session);
-      const { result } = renderHook(() => useAddressBook(), {
-        wrapper,
-      });
-      expect(result.current).toEqual([null, null]);
+      renderHook(() => useAddressBook(), { wrapper });
+      await expect(mockedSwrHook.mock.calls[0][1]()).resolves.toBeNull();
     });
   });
 
   describe("with an authenticated user", () => {
+    const authProfile = mockProfileAlice();
+    const authContactsIri = contactsContainerIri(authProfile.pods[0]);
+
     let session;
     let wrapper;
+
+    beforeEach(() => {
+      mockedAuthenticatedProfile.mockReturnValue({ data: authProfile });
+    });
 
     describe("with an existing address book", () => {
       beforeEach(() => {
@@ -62,83 +103,55 @@ describe("useAddressBook", () => {
         wrapper = mockSessionContextProvider(session);
       });
 
-      it("should call getResource", async () => {
-        const dataset = 42;
-        getResource.mockResolvedValue({ response: { dataset } });
-        const { waitForNextUpdate } = renderHook(() => useAddressBook(), {
-          wrapper,
-        });
-        await waitForNextUpdate();
-        expect(getResource).toHaveBeenCalledWith(
-          addressBookFns.getContactsIndexIri(contactsIri),
-          session.fetch
-        );
-      });
-
       it("should return the address book resource", async () => {
-        const dataset = 42;
-        getResource.mockResolvedValue({ response: { dataset } });
-        const { result, waitForNextUpdate } = renderHook(
-          () => useAddressBook(),
-          {
-            wrapper,
-          }
+        renderHook(() => useAddressBook(), { wrapper });
+        await expect(mockedSwrHook.mock.calls[0][1]()).resolves.toEqual(
+          addressBook
         );
-        await waitForNextUpdate();
-        expect(result.current).toEqual([dataset, null]);
+        expect(mockedGetResource).toHaveBeenCalledWith(
+          contactsContainerIri(authProfile.pods[0]),
+          expect.any(Function)
+        );
+        expect(addressBookModelFns.loadAddressBook).toHaveBeenCalledWith(
+          authContactsIri,
+          expect.any(Function)
+        );
       });
 
       it("should return error if anything goes wrong", async () => {
-        const error = "Something went wrong";
-        getResource.mockResolvedValue({ error });
-        const { result, waitForNextUpdate } = renderHook(
-          () => useAddressBook(),
-          {
-            wrapper,
-          }
-        );
-        await waitForNextUpdate();
-        expect(result.current).toEqual([null, error]);
+        const error = new Error("Something went wrong");
+        mockedGetResource.mockResolvedValue({ error });
+        renderHook(() => useAddressBook(), { wrapper });
+        await expect(mockedSwrHook.mock.calls[0][1]()).rejects.toEqual(error);
       });
     });
 
     describe("with address book missing", () => {
+      let saveNewAddressBook;
+
       beforeEach(() => {
         session = mockSession();
         wrapper = mockSessionContextProvider(session);
-        getResource.mockResolvedValue({ response: null, error: "404" });
+        mockedGetResource.mockResolvedValue({ response: null, error: "404" });
+        saveNewAddressBook = jest
+          .spyOn(addressBookModelFns, "saveNewAddressBook")
+          .mockResolvedValue(addressBook);
       });
 
       it("should return a new address book resource", async () => {
-        const dataset = 1337;
-        jest.spyOn(addressBookFns, "saveNewAddressBook").mockResolvedValue({
-          response: {
-            index: dataset,
-          },
-        });
-        const { result, waitForNextUpdate } = renderHook(
-          () => useAddressBook(),
-          {
-            wrapper,
-          }
+        renderHook(() => useAddressBook(), { wrapper });
+        await expect(mockedSwrHook.mock.calls[0][1]()).resolves.toEqual(
+          addressBook
         );
-        await waitForNextUpdate();
-        expect(result.current).toEqual([dataset, null]);
       });
 
       it("should return error if anything goes wrong when creating new address book", async () => {
-        const error = "Something went wrong";
-        jest
-          .spyOn(addressBookFns, "saveNewAddressBook")
-          .mockResolvedValue({ error });
-        const { result, waitForNextUpdate } = renderHook(
-          () => useAddressBook(),
-          {
-            wrapper,
-          }
-        );
-        await waitForNextUpdate();
-        expect(result.current).toEqual([null, error]);
+        const error = new Error("Something went wrong");
+        saveNewAddressBook.mockImplementation(() => {
+          throw error;
+        });
+        renderHook(() => useAddressBook(), { wrapper });
+        await expect(mockedSwrHook.mock.calls[0][1]()).rejects.toEqual(error);
       });
     });
   });

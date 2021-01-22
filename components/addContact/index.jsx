@@ -28,7 +28,6 @@ import Link from "next/link";
 import { useSession } from "@inrupt/solid-ui-react";
 import { foaf } from "rdf-namespaces";
 import Spinner from "../spinner";
-import { findContactInAddressBook, saveContact } from "../../src/addressBook";
 import useAddressBook from "../../src/hooks/useAddressBook";
 import AgentSearchForm from "../agentSearchForm";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
@@ -37,7 +36,8 @@ import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import styles from "./styles";
 import { fetchProfile } from "../../src/solidClientHelpers/profile";
 import useContacts from "../../src/hooks/useContacts";
-import useContactsContainerUrl from "../../src/hooks/useContactsContainerUrl";
+import { saveContact } from "../../src/models/contact";
+import { findContactInAddressBook } from "../../src/addressBook";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export const EXISTING_WEBID_ERROR_MESSAGE =
@@ -48,7 +48,6 @@ export const FETCH_PROFILE_FAILED_ERROR_MESSAGE =
 
 export function handleSubmit({
   addressBook,
-  addressBookContainerUrl,
   setAgentId,
   setIsLoading,
   alertError,
@@ -86,7 +85,6 @@ export function handleSubmit({
         const contact = { webId, fn: name };
         const { response, error } = await saveContact(
           addressBook,
-          addressBookContainerUrl,
           contact,
           types,
           fetch
@@ -122,8 +120,7 @@ export default function AddContact() {
     bem("container"),
     bem("container-view", menuOpen ? "menu-open" : null)
   );
-  const addressBookContainerUrl = useContactsContainerUrl();
-  const [addressBook] = useAddressBook();
+  const { addressBook, error } = useAddressBook();
   const [isLoading, setIsLoading] = useState(false);
   const [agentId, setAgentId] = useState("");
   const [dirtyForm, setDirtyForm] = useState(false);
@@ -133,13 +130,12 @@ export default function AddContact() {
     mutate: peopleMutate,
   } = useContacts(addressBook, foaf.Person);
 
-  if (peopleError) alertError(peopleError);
+  if (error || peopleError) alertError(error || peopleError);
 
   if (!webId || isLoading) return <Spinner />;
 
   const onSubmit = handleSubmit({
     addressBook,
-    addressBookContainerUrl,
     setAgentId,
     setIsLoading,
     alertError,

@@ -97,10 +97,16 @@ export function getOrCreateThing(dataset, iri) {
   return { thing: created, dataset: updatedDataset };
 }
 
+export function getBaseUrl(iri) {
+  const url = new URL(iri);
+  return url.origin + url.pathname;
+}
+
 export async function saveResource({ dataset, iri }, fetch) {
   const { respond, error } = createResponder();
   try {
-    const response = await saveSolidDatasetAt(iri, dataset, { fetch });
+    const baseIri = getSourceUrl(dataset) || getBaseUrl(iri);
+    const response = await saveSolidDatasetAt(baseIri, dataset, { fetch });
     return respond(response);
   } catch (e) {
     return error(e.message);

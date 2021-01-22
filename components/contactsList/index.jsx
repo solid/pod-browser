@@ -48,9 +48,10 @@ import useProfiles from "../../src/hooks/useProfiles";
 import ContactsListSearch from "./contactsListSearch";
 import ProfileLink from "../profileLink";
 import { SearchProvider } from "../../src/contexts/searchContext";
-import { deleteContact, getWebIdUrl } from "../../src/addressBook";
+import { getWebIdUrl } from "../../src/addressBook";
 import ContactsDrawer from "./contactsDrawer";
 import ContactsEmptyState from "./contactsEmptyState";
+import { deleteContact } from "../../src/models/contact";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -69,12 +70,7 @@ export function handleDeleteContact({
   return async () => {
     const selectedContact = people[selectedContactIndex];
 
-    await deleteContact(
-      getSourceUrl(addressBook),
-      selectedContact,
-      foaf.Person,
-      fetch
-    );
+    await deleteContact(addressBook, selectedContact, foaf.Person, fetch);
     peopleMutate();
     closeDrawer();
   };
@@ -89,7 +85,7 @@ function ContactsList() {
   const actionClass = PageHeader.usePageHeaderActionClassName();
   const [search, setSearch] = useState("");
 
-  const [addressBook, addressBookError] = useAddressBook();
+  const { addressBook, error: addressBookError } = useAddressBook();
   const {
     data: people,
     error: peopleError,
@@ -99,9 +95,7 @@ function ContactsList() {
   const formattedNamePredicate = vcard.fn;
   const hasPhotoPredicate = vcard.hasPhoto;
 
-  const {
-    session: { fetch },
-  } = useSession();
+  const { fetch } = useSession();
 
   const [selectedContactIndex, setSelectedContactIndex] = useState(null);
   const [selectedContactName, setSelectedContactName] = useState("");
@@ -130,7 +124,7 @@ function ContactsList() {
   // format things for the data table
   const contacts = profiles.map((p) => ({
     thing: p,
-    dataset: addressBook,
+    dataset: addressBook.people.dataset,
   }));
 
   const closeDrawer = handleClose(setSelectedContactIndex);

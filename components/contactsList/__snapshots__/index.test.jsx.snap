@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ContactsList renders error if useAddressBook returns error 1`] = `
+exports[`ContactsList renders error if mockedContactsHook returns error 1`] = `
 <DocumentFragment>
   error
 </DocumentFragment>
 `;
 
-exports[`ContactsList renders error if useContacts returns error 1`] = `
+exports[`ContactsList renders error if useAddressBook returns error 1`] = `
 <DocumentFragment>
   error
 </DocumentFragment>

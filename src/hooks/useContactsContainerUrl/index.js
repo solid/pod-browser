@@ -24,6 +24,7 @@ import { useSession } from "@inrupt/solid-ui-react";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import { contactsContainerIri } from "../../addressBook";
 
+// TODO: PROBABLY DELETE
 export default function useContactsContainerUrl() {
   const [addressBookContainer, setAddressBookContainer] = useState(null);
   const { session } = useSession();

@@ -211,19 +211,26 @@ describe("getOrCreateThing", () => {
 });
 
 describe("saveResource", () => {
-  test("it saves the given resource", async () => {
-    const fetch = jest.fn();
-    jest
-      .spyOn(SolidClientFns, "saveSolidDatasetAt")
-      .mockResolvedValueOnce("resource");
+  const baseIri = "http://example.com/";
+  const iri = "http://example.com/?foo=bar#someId";
+  const fetch = "fetch";
 
+  let mockedSaveResource;
+
+  beforeEach(() => {
+    mockedSaveResource = jest
+      .spyOn(SolidClientFns, "saveSolidDatasetAt")
+      .mockResolvedValue("resource");
+  });
+
+  it("saves the given resource", async () => {
     const { response } = await saveResource(
-      { dataset: "dataset", iri: "iri" },
+      { dataset: "dataset", iri: baseIri },
       fetch
     );
 
     expect(SolidClientFns.saveSolidDatasetAt).toHaveBeenCalledWith(
-      "iri",
+      baseIri,
       "dataset",
       { fetch }
     );
@@ -231,18 +238,40 @@ describe("saveResource", () => {
   });
 
   test("it returns an error response if the save fails", async () => {
-    jest
-      .spyOn(SolidClientFns, "saveSolidDatasetAt")
-      .mockImplementationOnce(() => {
-        throw new Error("boom");
-      });
+    mockedSaveResource.mockImplementation(() => {
+      throw new Error("boom");
+    });
 
     const { error } = await saveResource(
-      { dataset: "dataset", iri: "iri" },
+      { dataset: "dataset", iri: baseIri },
       jest.fn()
     );
 
     expect(error).toEqual("boom");
+  });
+
+  it("makes sure to use the IRI without queries and fragments", async () => {
+    const { response } = await saveResource({ dataset: "dataset", iri }, fetch);
+
+    expect(SolidClientFns.saveSolidDatasetAt).toHaveBeenCalledWith(
+      baseIri,
+      "dataset",
+      { fetch }
+    );
+    expect(response).toEqual("resource");
+  });
+
+  it("uses the source URL for dataset if available", async () => {
+    const datasetIri = "http://another.example.com";
+    const dataset = mockSolidDatasetFrom(datasetIri);
+    const { response } = await saveResource({ dataset, iri }, fetch);
+
+    expect(SolidClientFns.saveSolidDatasetAt).toHaveBeenCalledWith(
+      datasetIri,
+      dataset,
+      { fetch }
+    );
+    expect(response).toEqual("resource");
   });
 });
 

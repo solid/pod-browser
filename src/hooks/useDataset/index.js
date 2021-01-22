@@ -27,5 +27,7 @@ export const GET_DATASET = "getDataset";
 
 export default function useDataset(iri) {
   const { fetch } = useSession();
-  return useSWR([iri, GET_DATASET], () => getSolidDataset(iri, { fetch }));
+  return useSWR([iri, GET_DATASET], () =>
+    iri ? getSolidDataset(iri, { fetch }) : null
+  );
 }

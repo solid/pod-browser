@@ -19,61 +19,43 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useEffect, useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
+import useSWR from "swr";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
-import { getContactsIndexIri, saveNewAddressBook } from "../../addressBook";
+import { contactsContainerIri } from "../../addressBook";
 import { getResource } from "../../solidClientHelpers/resource";
 import { ERROR_CODES, isHTTPError } from "../../error";
-import useContactsContainerUrl from "../useContactsContainerUrl";
+import { loadAddressBook, saveNewAddressBook } from "../../models/addressBook";
 
 export default function useAddressBook() {
-  const [addressBook, setAddressBook] = useState(null);
-  const [error, setError] = useState(null);
-  const { session } = useSession();
+  const { session, fetch } = useSession();
   const { data: profile } = useAuthenticatedProfile();
-  const addressBookContainerUrl = useContactsContainerUrl();
 
-  useEffect(() => {
-    if (!session.info.isLoggedIn || !profile || !addressBookContainerUrl) {
-      return;
+  const { data, ...props } = useSWR(["addressBook", session], async () => {
+    if (!session.info.isLoggedIn || !profile) return null;
+    const { pods, webId } = profile;
+    const contactsIri = contactsContainerIri(pods[0]);
+    const {
+      response: existingAddressBook,
+      error: existingError,
+    } = await getResource(contactsIri, fetch);
+
+    if (existingAddressBook) {
+      return loadAddressBook(existingAddressBook.iri, fetch);
     }
-    const { webId } = profile;
-    const { fetch } = session;
-    const contactsIndexIri = getContactsIndexIri(addressBookContainerUrl);
 
-    (async () => {
-      const {
-        response: existingAddressBook,
-        error: existingError,
-      } = await getResource(contactsIndexIri, fetch);
+    if (existingError && isHTTPError(existingError, ERROR_CODES.NOT_FOUND)) {
+      debugger;
+      return saveNewAddressBook(
+        {
+          containerIri: contactsIri,
+          owner: webId,
+        },
+        fetch
+      );
+    }
 
-      if (existingAddressBook) {
-        setAddressBook(existingAddressBook.dataset);
-        return;
-      }
-
-      if (existingError && isHTTPError(existingError, ERROR_CODES.NOT_FOUND)) {
-        const {
-          response: newAddressBook,
-          error: newError,
-        } = await saveNewAddressBook(
-          {
-            iri: addressBookContainerUrl,
-            owner: webId,
-          },
-          fetch
-        );
-        if (newError) {
-          setError(newError);
-          return;
-        }
-        setAddressBook(newAddressBook.index);
-        return;
-      }
-      setError(existingError);
-    })();
-  }, [session, profile, addressBookContainerUrl]);
-
-  return [addressBook, error];
+    throw existingError;
+  });
+  return { addressBook: data, ...props };
 }
