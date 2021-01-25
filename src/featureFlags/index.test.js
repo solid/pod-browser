@@ -20,22 +20,37 @@
  */
 
 import rules, {
-  acpEnabled,
-  ACP_ENABLED,
-  wacEnabled,
-  WAC_ENABLED,
+  NEW_ACP_UI_ENABLED,
+  NEW_ACP_UI_ENABLED_FOR,
+  newAcpUiEnabled,
 } from "./index";
 
 describe("rules", () => {
   test("it indexes all rules", () => {
-    expect(Object.keys(rules())).toEqual([ACP_ENABLED, WAC_ENABLED]);
+    expect(Object.keys(rules())).toEqual([NEW_ACP_UI_ENABLED]);
   });
 
-  test("it has rules for acp", () => {
-    expect(acpEnabled()).toBe(false);
-  });
+  describe("new ACP UI enabled", () => {
+    test("it returns false for a logged out session", () => {
+      expect(newAcpUiEnabled({ info: { isLoggedIn: false } })).toBe(false);
+    });
 
-  test("it has rules for wac", () => {
-    expect(wacEnabled()).toBe(true);
+    test("it returns false for a session not in the enabled list", () => {
+      expect(
+        newAcpUiEnabled({
+          info: { webId: "https://pod.inrupt.com/fakename/card#me" },
+        })
+      ).toBe(false);
+    });
+
+    test("it returns true for a session in the enabled list", () => {
+      expect(
+        newAcpUiEnabled({
+          info: {
+            webId: NEW_ACP_UI_ENABLED_FOR[0],
+          },
+        })
+      ).toBe(false);
+    });
   });
 });

@@ -36,6 +36,8 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { ActionMenu, ActionMenuItem } from "@inrupt/prism-react-components";
 import { DatasetContext } from "@inrupt/solid-ui-react";
 import { getContentType, getSourceUrl } from "@inrupt/solid-client";
+import FeatureContext from "../../src/contexts/featureFlagsContext";
+import { NEW_ACP_UI_ENABLED } from "../../src/featureFlags";
 import styles from "./styles";
 import DeleteResourceButton from "../deleteResourceButton";
 import DownloadLink from "../downloadLink";
@@ -67,6 +69,8 @@ export default function ResourceDetails({
   const type = getContentType(dataset);
   const actionMenuBem = ActionMenu.useBem();
   const { accessControl } = useContext(AccessControlContext);
+  const { enabled } = useContext(FeatureContext);
+  const useNewAcpUi = enabled(NEW_ACP_UI_ENABLED);
 
   const expandIcon = <ExpandMoreIcon />;
   return (
@@ -153,17 +157,19 @@ export default function ResourceDetails({
               <ResourceSharing />
             </AccordionDetails>
           </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={expandIcon}
-              data-testid={TESTCAFE_ID_ACCORDION_PERMISSIONS}
-            >
-              Sharing
-            </AccordionSummary>
-            <AccordionDetails className={classes.accordionDetails}>
-              <SharingAccordion />
-            </AccordionDetails>
-          </Accordion>
+          {useNewAcpUi && (
+            <Accordion>
+              <AccordionSummary
+                expandIcon={expandIcon}
+                data-testid={TESTCAFE_ID_ACCORDION_PERMISSIONS}
+              >
+                Sharing
+              </AccordionSummary>
+              <AccordionDetails className={classes.accordionDetails}>
+                <SharingAccordion />
+              </AccordionDetails>
+            </Accordion>
+          )}
         </>
       ) : null}
     </>

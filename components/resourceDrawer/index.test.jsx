@@ -52,7 +52,9 @@ describe("ResourceDrawer view", () => {
 
   beforeEach(() => {
     fetch = jest.fn();
-    session = mockSession({ fetch });
+    session = mockSession({
+      fetch,
+    });
     SessionProvider = mockSessionContextProvider(session);
     accessControl = mockAccessControl();
 
