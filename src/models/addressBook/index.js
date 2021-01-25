@@ -55,22 +55,22 @@ import { ERROR_CODES, isHTTPError } from "../../error";
  */
 
 /* Model functions */
-export function getAddressBookMainIndexUrl(containerIri) {
-  return joinPath(containerIri, INDEX_FILE);
+export function getAddressBookMainIndexUrl(addressBook) {
+  return joinPath(addressBook.containerIri, INDEX_FILE);
 }
 
-export function getAddressBookGroupIndexUrl(containerIri) {
-  return joinPath(containerIri, GROUPS_INDEX_FILE);
+export function getAddressBookGroupIndexUrl(addressBook) {
+  return joinPath(addressBook.containerIri, GROUPS_INDEX_FILE);
 }
 
-export function getAddressBookPersonIndexUrl(containerIri) {
-  return joinPath(containerIri, PEOPLE_INDEX_FILE);
+export function getAddressBookPersonIndexUrl(addressBook) {
+  return joinPath(addressBook.containerIri, PEOPLE_INDEX_FILE);
 }
 
-export function createAddressBook({ containerIri, owner, title = "Contacts" }) {
-  const indexIri = getAddressBookMainIndexUrl(containerIri);
-  const peopleIri = getAddressBookPersonIndexUrl(containerIri);
-  const groupsIri = getAddressBookGroupIndexUrl(containerIri);
+export function createAddressBook(containerIri, owner, title = "Contacts") {
+  const indexIri = getAddressBookMainIndexUrl({ containerIri });
+  const peopleIri = getAddressBookPersonIndexUrl({ containerIri });
+  const groupsIri = getAddressBookGroupIndexUrl({ containerIri });
 
   return {
     containerIri,
@@ -107,7 +107,7 @@ export function getAddressBookIndex(addressBook, type) {
 }
 
 export async function loadAddressBook(containerIri, fetch) {
-  const mainIndexUrl = getAddressBookMainIndexUrl(containerIri);
+  const mainIndexUrl = getAddressBookMainIndexUrl({ containerIri });
   const mainIndexDataset = await getSolidDataset(mainIndexUrl, { fetch });
   const mainIndexThingUrl = `${mainIndexUrl}#this`;
   const mainIndex = getThing(mainIndexDataset, mainIndexThingUrl);
@@ -116,10 +116,10 @@ export async function loadAddressBook(containerIri, fetch) {
   }
   const groupsIndexUrl =
     getUrl(mainIndex, vcardExtras("groupIndex")) ||
-    getAddressBookGroupIndexUrl(containerIri);
+    getAddressBookGroupIndexUrl({ containerIri });
   const peopleIndexUrl =
     getUrl(mainIndex, vcardExtras("nameEmailIndex")) ||
-    getAddressBookPersonIndexUrl(containerIri);
+    getAddressBookPersonIndexUrl({ containerIri });
   const [groupsDataset, peopleDataset] = await Promise.all([
     getSolidDataset(groupsIndexUrl, { fetch }),
     getSolidDataset(peopleIndexUrl, { fetch }),
@@ -158,11 +158,7 @@ export async function saveNewAddressBook(
 
   if (existingAddressBook) throw new Error("Address book already exists.");
 
-  const newAddressBook = createAddressBook({
-    containerIri,
-    owner,
-    title,
-  });
+  const newAddressBook = createAddressBook(containerIri, owner, title);
 
   const { response: index, error: saveIndexError } = await saveResource(
     newAddressBook.index,

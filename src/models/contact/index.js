@@ -25,9 +25,7 @@ import {
   asUrl,
   deleteFile,
   getSourceUrl,
-  getThing,
   getThingAll,
-  getUrlAll,
   removeThing,
   setThing,
 } from "@inrupt/solid-client";
@@ -133,7 +131,7 @@ export async function saveContact(addressBook, contactSchema, types, fetch) {
   );
   const { iri } = newContact;
 
-  const indexIri = getAddressBookMainIndexUrl(addressBook.containerIri);
+  const indexIri = getAddressBookMainIndexUrl(addressBook);
 
   const {
     response: contactDataset,

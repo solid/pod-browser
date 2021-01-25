@@ -46,12 +46,11 @@ describe("useAddressBook", () => {
   const addressBook = mockAddressBook();
   const dataset = mockSolidDatasetFrom("http://example.com");
 
-  let mockedLoadResources;
   let mockedGetResource;
 
   beforeEach(() => {
     mockedAuthenticatedProfile.mockReturnValue({ data: null });
-    mockedLoadResources = jest
+    jest
       .spyOn(addressBookModelFns, "loadAddressBook")
       .mockResolvedValue(addressBook);
     mockedGetResource = jest

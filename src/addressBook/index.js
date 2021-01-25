@@ -24,8 +24,6 @@ import {
   addUrl,
   asUrl,
   createThing,
-  getSourceUrl,
-  getStringNoLocale,
   getThing,
   getThingAll,
   getUrl,
@@ -33,11 +31,7 @@ import {
 } from "@inrupt/solid-client";
 import { v4 as uuid } from "uuid";
 import { foaf, rdf, schema, vcard } from "rdf-namespaces";
-import {
-  chain,
-  createResponder,
-  defineThing,
-} from "../solidClientHelpers/utils";
+import { chain, defineThing } from "../solidClientHelpers/utils";
 import { getResource } from "../solidClientHelpers/resource";
 import { joinPath } from "../stringHelpers";
 
@@ -45,11 +39,13 @@ const CONTACTS_CONTAINER = "contacts/";
 
 const NAME_EMAIL_INDEX_PREDICATE =
   "http://www.w3.org/2006/vcard/ns#nameEmailIndex";
+const NAME_GROUP_INDEX_PREDICATE = "http://www.w3.org/2006/vcard/ns#groupIndex";
 
 export const INDEX_FILE = "index.ttl";
 export const PEOPLE_INDEX_FILE = "people.ttl";
 export const GROUPS_INDEX_FILE = "groups.ttl";
 export const PERSON_CONTAINER = "Person";
+export const GROUP_CONTAINER = "Group";
 
 export const VCARD_WEBID_PREDICATE = "https://www.w3.org/2006/vcard/ns#WebId";
 
@@ -65,6 +61,12 @@ export const TYPE_MAP = {
     container: PERSON_CONTAINER,
     indexFilePredicate: NAME_EMAIL_INDEX_PREDICATE,
     contactTypeIri: vcard.Individual,
+  },
+  [vcard.Group]: {
+    indexFile: GROUPS_INDEX_FILE,
+    container: GROUP_CONTAINER,
+    indexFilePredicate: NAME_GROUP_INDEX_PREDICATE,
+    contactTypeIri: vcard.Group,
   },
 };
 

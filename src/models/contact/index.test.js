@@ -32,7 +32,9 @@ import {
   saveContact,
 } from "./index";
 import { chain } from "../../solidClientHelpers/utils";
-import mockPersonContactThing from "../../../__testUtils/mockPersonContactThing";
+import mockPersonContactThing, {
+  addContactsToAddressBook,
+} from "../../../__testUtils/mockPersonContactThing";
 import * as resourceFns from "../../solidClientHelpers/resource";
 import mockAddressBook from "../../../__testUtils/mockAddressBook";
 
@@ -40,7 +42,6 @@ describe("createContact", () => {
   const addressBookIri = "https://user.example.com/contacts";
   const addressBook = mockAddressBook({ containerIri: addressBookIri });
   const webId = "https://user.example.com/card";
-  const { webIdNodeUrl } = mockWebIdNode(webId);
   const mockWebIdNodeFn = jest
     .spyOn(addressBookFns, "createWebIdNodeFn")
     .mockImplementation(mockWebIdNode);
@@ -274,9 +275,10 @@ describe("deleteContact", () => {
   let updatedPeopleIndexDataset;
 
   beforeEach(() => {
-    addressBook = mockAddressBook({
-      contacts: [mockContactToDelete, mockPersonContactThing()],
-    });
+    addressBook = addContactsToAddressBook(mockAddressBook(), [
+      mockContactToDelete,
+      mockPersonContactThing(),
+    ]);
     fetch = jest.fn();
 
     mockDeleteFile = jest
@@ -305,9 +307,11 @@ describe("deleteContact", () => {
     await deleteContact(addressBook, contactToDelete, foaf.Person, fetch);
 
     expect(mockSaveResource).toHaveBeenCalledWith(
-      { dataset: updatedPeopleIndexDataset, iri: addressBook.people.iri },
+      { dataset: expect.any(Object), iri: addressBook.people.iri },
       fetch
     );
+    const savedDataset = mockSaveResource.mock.calls[0][0].dataset;
+    expect(getThingAll(savedDataset)).toHaveLength(1);
   });
 
   it("throws an error if saving resource fails", async () => {

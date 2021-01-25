@@ -40,22 +40,21 @@ export default function mockAddressBook(options = {}) {
   const containerIri =
     options.containerIri || "https://user.example.com/contacts";
   const owner = options.owner || aliceWebIdUrl;
-  const contacts = options.contacts || [];
-  const groups = options.groups || [];
 
-  const indexUrl = getAddressBookMainIndexUrl(containerIri);
-  const groupsUrl = getAddressBookGroupIndexUrl(containerIri);
-  const peopleUrl = getAddressBookPersonIndexUrl(containerIri);
+  const indexUrl = getAddressBookMainIndexUrl({ containerIri });
+  const groupsUrl = getAddressBookGroupIndexUrl({ containerIri });
+  const peopleUrl = getAddressBookPersonIndexUrl({ containerIri });
 
+  const mainIndexIri = `${indexUrl}#this`;
   return {
     containerIri,
     index: {
-      iri: indexUrl,
+      iri: mainIndexIri,
       dataset: chain(mockSolidDatasetFrom(indexUrl), (d) =>
         setThing(
           d,
           chain(
-            mockThingFrom(`${indexUrl}#this`),
+            mockThingFrom(mainIndexIri),
             (t) => addUrl(t, rdf.type, vcardExtras("AddressBook")),
             (t) => addUrl(t, acl.owner, owner),
             (t) => addStringNoLocale(t, dc.title, "Contacts"),
@@ -67,17 +66,11 @@ export default function mockAddressBook(options = {}) {
     },
     groups: {
       iri: groupsUrl,
-      dataset: chain(
-        mockSolidDatasetFrom(groupsUrl),
-        ...groups.map((group) => (d) => setThing(d, group))
-      ),
+      dataset: mockSolidDatasetFrom(groupsUrl),
     },
     people: {
       iri: peopleUrl,
-      dataset: chain(
-        mockSolidDatasetFrom(peopleUrl),
-        ...contacts.map((contact) => (d) => setThing(d, contact))
-      ),
+      dataset: mockSolidDatasetFrom(peopleUrl),
     },
   };
 }

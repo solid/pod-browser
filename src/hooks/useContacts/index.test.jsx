@@ -52,8 +52,6 @@ describe("useContacts", () => {
 
     let session;
     let wrapper;
-    let mockedGetSolidDataset;
-    let mockedGetContacts;
 
     beforeEach(() => {
       session = mockSession();
@@ -64,12 +62,8 @@ describe("useContacts", () => {
           <SWRConfig value={{ dedupingInterval: 0 }}>{children}</SWRConfig>
         </SessionProvider>
       );
-      mockedGetSolidDataset = jest
-        .spyOn(solidClientFns, "getSolidDataset")
-        .mockResolvedValue(dataset);
-      mockedGetContacts = jest
-        .spyOn(addressBookFns, "getContacts")
-        .mockResolvedValue(response);
+      jest.spyOn(solidClientFns, "getSolidDataset").mockResolvedValue(dataset);
+      jest.spyOn(addressBookFns, "getContacts").mockResolvedValue(response);
     });
 
     it("return response if all is good", async () => {

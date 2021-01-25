@@ -45,7 +45,6 @@ export default function useAddressBook() {
     }
 
     if (existingError && isHTTPError(existingError, ERROR_CODES.NOT_FOUND)) {
-      debugger;
       return saveNewAddressBook(
         {
           containerIri: contactsIri,

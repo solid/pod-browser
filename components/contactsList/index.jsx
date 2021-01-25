@@ -30,11 +30,7 @@ import {
   PageHeader,
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
-import {
-  getSourceUrl,
-  getStringNoLocale,
-  getThing,
-} from "@inrupt/solid-client";
+import { getStringNoLocale, getThing } from "@inrupt/solid-client";
 import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
 import { vcard, foaf } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";

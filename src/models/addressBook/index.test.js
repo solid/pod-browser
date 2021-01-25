@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { acl, dc, foaf, ldp, rdf, schema } from "rdf-namespaces";
+import { acl, dc, foaf, rdf, schema } from "rdf-namespaces";
 import * as solidClientFns from "@inrupt/solid-client";
 import {
   getThingAll,
@@ -29,7 +29,6 @@ import {
   setThing,
   mockThingFrom,
   setUrl,
-  createSolidDataset,
 } from "@inrupt/solid-client";
 import * as resourceFns from "../../solidClientHelpers/resource";
 import {
@@ -44,25 +43,22 @@ import {
 import { vcardExtras } from "../../addressBook";
 import mockAddressBook from "../../../__testUtils/mockAddressBook";
 import { chain } from "../../solidClientHelpers/utils";
-import { ERROR_CODES } from "../../error";
 
 describe("createAddressBook", () => {
   it("creates all the datasets that an addressBook needs, with a default title", () => {
     const iri = "https://example.pod.com/contacts";
     const owner = "https://example.pod.com/card#me";
 
-    const { containerIri, people, groups, index } = createAddressBook({
-      containerIri: iri,
-      owner,
-    });
+    const { containerIri, people, groups, index } = createAddressBook(
+      iri,
+      owner
+    );
 
     expect(containerIri).toEqual(iri);
 
     expect(getThingAll(groups.dataset)).toHaveLength(0);
-    expect(groups.iri).toEqual(`${iri}/groups.ttl`);
 
     expect(getThingAll(people.dataset)).toHaveLength(0);
-    expect(people.iri).toEqual(`${iri}/people.ttl`);
 
     expect(index.iri).toEqual(`${iri}/index.ttl#this`);
     const mainIndexThing = getThingAll(index.dataset)[0];
@@ -84,19 +80,17 @@ describe("createAddressBook", () => {
     const owner = "https://example.pod.com/card#me";
     const title = "My Address Book";
 
-    const { containerIri, people, groups, index } = createAddressBook({
-      containerIri: iri,
+    const { containerIri, people, groups, index } = createAddressBook(
+      iri,
       owner,
-      title,
-    });
+      title
+    );
 
     expect(containerIri).toBe(iri);
 
     expect(getThingAll(groups.dataset)).toHaveLength(0);
-    expect(groups.iri).toEqual(`${iri}/groups.ttl`);
 
     expect(getThingAll(people.dataset)).toHaveLength(0);
-    expect(people.iri).toEqual(`${iri}/people.ttl`);
 
     expect(index.iri).toEqual(`${iri}/index.ttl#this`);
     const mainIndexThing = getThingAll(index.dataset)[0];
@@ -131,10 +125,10 @@ describe("getAddressBookIndex", () => {
 
 describe("loadAddressBook", () => {
   const containerIri = "http://example.com/contacts";
-  const mainIndexUrl = getAddressBookMainIndexUrl(containerIri);
+  const mainIndexUrl = getAddressBookMainIndexUrl({ containerIri });
   const mainIndexThingUrl = `${mainIndexUrl}#this`;
-  const groupsIndexUrl = getAddressBookGroupIndexUrl(containerIri);
-  const peopleIndexUrl = getAddressBookPersonIndexUrl(containerIri);
+  const groupsIndexUrl = getAddressBookGroupIndexUrl({ containerIri });
+  const peopleIndexUrl = getAddressBookPersonIndexUrl({ containerIri });
   const emptyDataset = mockSolidDatasetFrom("http://example.com");
   const fetch = "fetch";
   const existingDataset = chain(mockSolidDatasetFrom(mainIndexUrl), (d) =>
@@ -194,7 +188,7 @@ describe("saveNewAddressBook", () => {
   });
 
   it("saves a new address at the given iri, for the given owner, with a default title", async () => {
-    const addressBook = createAddressBook({ containerIri: iri, owner });
+    const addressBook = createAddressBook(iri, owner);
 
     jest
       .spyOn(resourceFns, "saveResource")
@@ -218,6 +212,7 @@ describe("saveNewAddressBook", () => {
       savePeopleArgs,
     ] = resourceFns.saveResource.mock.calls;
 
+    expect(saveIndexArgs[0].iri).toEqual(addressBook.index.iri);
     expect(saveIndexArgs[0].iri).toEqual(addressBook.index.iri);
     expect(saveGroupsArgs[0].iri).toEqual(addressBook.groups.iri);
     expect(savePeopleArgs[0].iri).toEqual(addressBook.people.iri);
