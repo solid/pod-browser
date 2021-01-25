@@ -196,10 +196,10 @@ describe("saveNewAddressBook", () => {
       .mockResolvedValueOnce({ response: addressBook.groups })
       .mockResolvedValueOnce({ response: addressBook.people });
 
-    const { containerIri, index, groups, people } = await saveNewAddressBook({
-      containerIri: iri,
-      owner,
-    });
+    const { containerIri, index, groups, people } = await saveNewAddressBook(
+      iri,
+      owner
+    );
 
     expect(containerIri).toBe(iri);
     expect(index).toEqual(addressBook.index);
@@ -225,9 +225,7 @@ describe("saveNewAddressBook", () => {
       .mockResolvedValueOnce({ error: error401 })
       .mockResolvedValueOnce({ error: error401 });
 
-    await expect(
-      saveNewAddressBook({ containerIri: iri, owner })
-    ).rejects.toEqual(
+    await expect(saveNewAddressBook(iri, owner, jest.fn())).rejects.toEqual(
       new Error("You do not have permission to create an address book")
     );
   });
@@ -237,9 +235,9 @@ describe("saveNewAddressBook", () => {
       response: "existing address book",
     });
 
-    await expect(
-      saveNewAddressBook({ containerIri: iri, owner }, jest.fn())
-    ).rejects.toEqual(new Error("Address book already exists."));
+    await expect(saveNewAddressBook(iri, owner, jest.fn())).rejects.toEqual(
+      new Error("Address book already exists.")
+    );
   });
 
   it("passes the error on if it isn't a 401 error", async () => {
@@ -249,9 +247,9 @@ describe("saveNewAddressBook", () => {
       .mockResolvedValueOnce({ error: error401 })
       .mockResolvedValueOnce({ error: error401 });
 
-    await expect(
-      saveNewAddressBook({ containerIri: iri, owner })
-    ).rejects.toEqual(error500);
+    await expect(saveNewAddressBook(iri, owner, jest.fn())).rejects.toEqual(
+      error500
+    );
   });
 
   it("returns an error if it fails to save group index", async () => {
@@ -261,9 +259,9 @@ describe("saveNewAddressBook", () => {
       .mockResolvedValueOnce({ error: error500 })
       .mockResolvedValueOnce({ response: "people" });
 
-    await expect(
-      saveNewAddressBook({ containerIri: iri, owner })
-    ).rejects.toEqual(error500);
+    await expect(saveNewAddressBook(iri, owner, jest.fn())).rejects.toEqual(
+      error500
+    );
   });
 
   it("returns an error if it fails to save people index", async () => {
@@ -273,8 +271,8 @@ describe("saveNewAddressBook", () => {
       .mockResolvedValueOnce({ response: "group" })
       .mockResolvedValueOnce({ error: error500 });
 
-    await expect(
-      saveNewAddressBook({ containerIri: iri, owner })
-    ).rejects.toEqual(error500);
+    await expect(saveNewAddressBook(iri, owner, jest.fn())).rejects.toEqual(
+      error500
+    );
   });
 });

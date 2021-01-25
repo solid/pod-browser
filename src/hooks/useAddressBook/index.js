@@ -45,13 +45,7 @@ export default function useAddressBook() {
     }
 
     if (existingError && isHTTPError(existingError, ERROR_CODES.NOT_FOUND)) {
-      return saveNewAddressBook(
-        {
-          containerIri: contactsIri,
-          owner: webId,
-        },
-        fetch
-      );
+      return saveNewAddressBook(contactsIri, webId, fetch);
     }
 
     throw existingError;

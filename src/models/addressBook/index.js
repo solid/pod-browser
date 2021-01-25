@@ -142,8 +142,10 @@ export async function loadAddressBook(containerIri, fetch) {
 }
 
 export async function saveNewAddressBook(
-  { containerIri, owner, title = "Contacts" },
-  fetch
+  containerIri,
+  owner,
+  fetch,
+  title = "Contacts"
 ) {
   const { response: existingAddressBook } = await getResource(
     containerIri,
