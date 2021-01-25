@@ -1,8 +1,10 @@
-PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
-PREFIX xsd:   <http://www.w3.org/2001/XMLSchema#>
+PREFIX vcard:   <http://www.w3.org/2006/vcard/ns#>
+PREFIX xsd:     <http://www.w3.org/2001/XMLSchema#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
 
 vcard:Group {
   vcard:fn xsd:string {1} ;
+  dcterms:description xsd:string ? ;
   vcard:hasMember vcard:Individual * OR vcard:Organization * ;
   ^vcard:includesGroup vcard:AddressBook
 }
