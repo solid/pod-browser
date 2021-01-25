@@ -165,7 +165,7 @@ describe("ContactsList", () => {
     expect(message).toBeTruthy();
   });
 
-  it("renders error if mockedContactsHook returns error", () => {
+  it("renders error if useContacts returns error", () => {
     mockedAddressBookHook.mockReturnValue({ addressBook });
     mockedContactsHook.mockReturnValue({
       data: undefined,
