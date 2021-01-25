@@ -34,7 +34,6 @@ import mockDetailsContextMenuProvider from "../../__testUtils/mockDetailsContext
 import useResourceInfo from "../../src/hooks/useResourceInfo";
 import useAccessControl from "../../src/hooks/useAccessControl";
 import mockAccessControl from "../../__testUtils/mockAccessControl";
-import FeatureContext from "../../src/contexts/featureFlagsContext";
 
 jest.mock("../../src/hooks/useResourceInfo");
 jest.mock("../../src/hooks/useAccessControl");
@@ -94,12 +93,9 @@ describe("ResourceDrawer view", () => {
     });
 
     const { asFragment } = renderWithTheme(
-      // TODO: remove when removing feature flag
-      <FeatureContext.Provider value={{ enabled: () => true }}>
-        <DetailsContext>
-          <ResourceDrawer />
-        </DetailsContext>
-      </FeatureContext.Provider>
+      <DetailsContext>
+        <ResourceDrawer />
+      </DetailsContext>
     );
 
     expect(asFragment()).toMatchSnapshot();
@@ -108,12 +104,9 @@ describe("ResourceDrawer view", () => {
   test("it renders a Contents view when the router query has an iri", () => {
     const { asFragment } = renderWithTheme(
       <SessionProvider>
-        {/* TODO: remove when removing feature flag */}
-        <FeatureContext.Provider value={{ enabled: () => true }}>
-          <DetailsMenuContext>
-            <ResourceDrawer />
-          </DetailsMenuContext>
-        </FeatureContext.Provider>
+        <DetailsMenuContext>
+          <ResourceDrawer />
+        </DetailsMenuContext>
       </SessionProvider>
     );
     expect(asFragment()).toMatchSnapshot();
@@ -130,12 +123,9 @@ describe("ResourceDrawer view", () => {
     });
     const { asFragment } = renderWithTheme(
       <SessionProvider>
-        {/* TODO: remove when removing feature flag */}
-        <FeatureContext.Provider value={{ enabled: () => true }}>
-          <DetailsMenuContext>
-            <ResourceDrawer />
-          </DetailsMenuContext>
-        </FeatureContext.Provider>
+        <DetailsMenuContext>
+          <ResourceDrawer />
+        </DetailsMenuContext>
       </SessionProvider>
     );
     expect(asFragment()).toMatchSnapshot();

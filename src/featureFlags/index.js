@@ -38,11 +38,10 @@ export const NEW_ACP_UI_ENABLED_FOR = [
 ];
 export const NEW_ACP_UI_ENABLED = "newAcpUIEnabled";
 export const newAcpUiEnabled = (session) => {
-  if (!session.info.isLoggedIn) {
-    return false;
-  }
-
-  return NEW_ACP_UI_ENABLED_FOR.includes(session.info.webId);
+  return (
+    !!session.info.isLoggedIn &&
+    NEW_ACP_UI_ENABLED_FOR.includes(session.info.webId)
+  );
 };
 
 export default () => ({
