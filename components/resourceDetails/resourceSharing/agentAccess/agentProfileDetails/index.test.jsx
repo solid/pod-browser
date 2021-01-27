@@ -19,38 +19,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import rules, {
-  NEW_ACP_UI_ENABLED,
-  NEW_ACP_UI_ENABLED_FOR,
-  newAcpUiEnabled,
-} from "./index";
+import React from "react";
+import AgentProfileDetails from "./index";
 
-describe("rules", () => {
-  test("it indexes all rules", () => {
-    expect(Object.keys(rules())).toEqual([NEW_ACP_UI_ENABLED]);
-  });
+import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 
-  describe("new ACP UI enabled", () => {
-    test("it returns false for a logged out session", () => {
-      expect(newAcpUiEnabled({ info: { isLoggedIn: false } })).toBe(false);
-    });
+const webId = "https://example.com/profile/card#me";
 
-    test("it returns false for a session not in the enabled list", () => {
-      expect(
-        newAcpUiEnabled({
-          info: { webId: "https://pod.inrupt.com/fakename/card#me" },
-        })
-      ).toBe(false);
-    });
+describe("AgentProfileDetails", () => {
+  const profile = {
+    avatar: null,
+    name: "Example Agent",
+    webId,
+  };
+  const toggleShare = jest.fn();
+  const removePermissions = jest.fn();
+  const resourceIri = "/iri/";
 
-    test("it returns true for a session in the enabled list", () => {
-      expect(
-        newAcpUiEnabled({
-          info: {
-            webId: NEW_ACP_UI_ENABLED_FOR[0],
-          },
-        })
-      ).toBe(false);
-    });
+  it("renders without error", () => {
+    const { asFragment } = renderWithTheme(
+      <AgentProfileDetails
+        removePermissions={removePermissions}
+        toggleShare={toggleShare}
+        profile={profile}
+        resourceIri={resourceIri}
+        webId={webId}
+      />
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 });

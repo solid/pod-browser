@@ -27,7 +27,7 @@ import { CircularProgress, List, ListItem } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { Button } from "@inrupt/prism-react-components";
 import styles from "./styles";
-import AgentAccess from "../agentAccess";
+import AgentAccess from "../agentAccessOld";
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
 import usePermissions from "../../../../src/hooks/usePermissions";
 

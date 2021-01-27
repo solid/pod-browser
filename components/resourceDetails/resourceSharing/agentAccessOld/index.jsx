@@ -21,38 +21,74 @@
 
 /* eslint-disable react/forbid-prop-types */
 
+// TODO: this component is kept here to keep the old Permissions accordion working. It can be removed after the old permissions accordion is gone.
+
 import React, { useContext, useState } from "react";
 import T from "prop-types";
-import { Button, CircularProgress, createStyles } from "@material-ui/core";
+import {
+  Avatar,
+  Button,
+  CircularProgress,
+  createStyles,
+  Typography,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
+import { Form, Button as PrismButton } from "@inrupt/prism-react-components";
 import { Alert, Skeleton } from "@material-ui/lab";
+import PermissionsForm from "../../../permissionsForm";
 import styles from "./styles";
-import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
-import AgentProfileDetails from "./agentProfileDetails";
+import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
+import {
+  displayProfileName,
+  fetchProfile,
+} from "../../../../src/solidClientHelpers/profile";
 import AlertContext from "../../../../src/contexts/alertContext";
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
+import useFetchProfile from "../../../../src/hooks/useFetchProfile";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
+const TESTCAFE_ID_AGENT_WEB_ID = "agent-web-id";
 const TESTCAFE_ID_TRY_AGAIN_BUTTON = "try-again-button";
 const TESTCAFE_ID_TRY_AGAIN_SPINNER = "try-again-spinner";
 
+export function submitHandler(
+  authenticatedWebId,
+  webId,
+  setOpen,
+  dialogId,
+  savePermissions,
+  tempAccess
+) {
+  return async (event) => {
+    event.preventDefault();
+    if (authenticatedWebId === webId) {
+      setOpen(dialogId);
+    } else {
+      await savePermissions(tempAccess);
+    }
+  };
+}
+
 export function saveHandler(
   accessControl,
-  setLoading,
+  onLoading,
   setAccess,
   webId,
+  setTempAccess,
   setSeverity,
   setMessage,
   setAlertOpen
 ) {
   return async (newAccess) => {
+    onLoading(true);
     setAccess(newAccess);
-    setLoading(true);
+
     if (!accessControl) return;
+
     const { error } = await accessControl.savePermissionsForAgent(
       webId,
       newAccess
@@ -60,92 +96,70 @@ export function saveHandler(
 
     if (error) throw error;
 
+    setTempAccess(null);
     setSeverity("success");
     setMessage("Permissions have been updated!");
     setAlertOpen(true);
-    setLoading(false);
+    onLoading(false);
   };
 }
 
-export default function AgentAccess({
-  permission: { webId, acl, profile, profileError },
-}) {
-  const { accessControl } = useContext(AccessControlContext);
+export function getDialogId(datasetIri) {
+  return `change-agent-access-${datasetIri}`;
+}
+
+export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
+  let { data: profile, error: profileError } = useFetchProfile(webId);
   const classes = useStyles();
   const {
-    session: { fetch },
+    session: {
+      info: { webId: authenticatedWebId },
+      fetch,
+    },
   } = useSession();
   const bem = useBem(useStyles());
+  const [access, setAccess] = useState(acl);
+  const [tempAccess, setTempAccess] = useState(acl);
   const { dataset } = useContext(DatasetContext);
-  const [isLoadingProfile, setIsLoadingProfile] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const resourceIri = getSourceUrl(dataset);
+  const { accessControl } = useContext(AccessControlContext);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { setOpen } = useContext(ConfirmationDialogContext);
 
   const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
-
-  const [access, setAccess] = useState(acl);
-  const [localAccess, setLocalAccess] = useState(acl);
-  const [localProfile, setLocalProfile] = useState(profile);
-  const [localProfileError, setLocalProfileError] = useState(profileError);
+  const dialogId = getDialogId(getSourceUrl(dataset));
 
   const savePermissions = saveHandler(
     accessControl,
-    setLoading,
+    onLoading,
     setAccess,
     webId,
+    setTempAccess,
     setSeverity,
     setMessage,
     setAlertOpen
   );
 
-  const handleToggleShare = async (e) => {
-    e.preventDefault();
-    if (!access) return;
-    const tempAccess = {
-      ...access,
-      control: !access.control,
-    };
-    setLocalAccess(tempAccess);
-    await savePermissions(tempAccess);
-  };
-
-  const handleRemovePermissions = async (e) => {
-    e.preventDefault();
-    if (!access) return;
-    const tempAccess = {
-      read: false,
-      write: false,
-      append: false,
-      control: false,
-    };
-    setLocalAccess(null);
-    await savePermissions(tempAccess);
-  };
+  const onSubmit = submitHandler(
+    authenticatedWebId,
+    webId,
+    setOpen,
+    dialogId,
+    savePermissions,
+    tempAccess
+  );
 
   const handleRetryClick = async () => {
     try {
-      setLocalProfile(await fetchProfile(webId, fetch));
-      setIsLoadingProfile(false);
-      setLocalProfileError(null);
+      profile = await fetchProfile(webId, fetch);
+      setIsLoading(false);
     } catch (error) {
-      setLocalProfileError(error);
-      setIsLoadingProfile(false);
+      profileError = error;
+      setIsLoading(false);
     }
   };
-  if (!localAccess) return null;
 
-  if (loading)
-    return (
-      <div className={classes.spinnerContainer}>
-        <CircularProgress
-          size={20}
-          className={bem("spinner")}
-          color="primary"
-        />
-      </div>
-    );
-
-  if (profileError && localProfileError) {
+  if (profileError) {
     const message = "Unable to load this profile";
     return (
       <div className={bem("alert-container")}>
@@ -154,12 +168,11 @@ export default function AgentAccess({
             root: classes.alertBox,
             message: classes.alertMessage,
             action: classes.action,
-            icon: classes.icon,
           }}
           severity="warning"
           action={
             // eslint-disable-next-line react/jsx-wrap-multilines
-            isLoadingProfile ? (
+            isLoading ? (
               <CircularProgress
                 data-testid={TESTCAFE_ID_TRY_AGAIN_SPINNER}
                 size={20}
@@ -173,7 +186,7 @@ export default function AgentAccess({
                 color="inherit"
                 size="small"
                 onClick={() => {
-                  setIsLoadingProfile(true);
+                  setIsLoading(true);
                   setTimeout(handleRetryClick, 750);
                 }}
               >
@@ -185,19 +198,32 @@ export default function AgentAccess({
           {message}
         </Alert>
         <div className={classes.separator} />
-        <AgentProfileDetails
-          removePermissions={handleRemovePermissions}
-          toggleShare={handleToggleShare}
-          canShare={localAccess.control}
-          webId={webId}
-          resourceIri={resourceIri}
-          profile={null}
-        />
+        <div className={bem("avatar-container")}>
+          <Avatar className={classes.avatar} alt={webId} src={null} />
+          <Typography
+            data-testid={TESTCAFE_ID_AGENT_WEB_ID}
+            className={classes.detailText}
+          >
+            {webId}
+          </Typography>
+          <Form onSubmit={onSubmit}>
+            <PermissionsForm
+              key={webId}
+              webId={webId}
+              acl={access}
+              onChange={setTempAccess}
+            >
+              <PrismButton onClick={onSubmit} type="submit">
+                Save
+              </PrismButton>
+            </PermissionsForm>
+          </Form>
+        </div>
       </div>
     );
   }
 
-  if (!localProfile) {
+  if (!profile) {
     return (
       <>
         <Skeleton
@@ -213,18 +239,39 @@ export default function AgentAccess({
     );
   }
 
+  const { avatar } = profile;
+  const name = displayProfileName(profile);
+
   return (
-    <AgentProfileDetails
-      canShare={localAccess.control}
-      removePermissions={handleRemovePermissions}
-      toggleShare={handleToggleShare}
-      webId={webId}
-      resourceIri={resourceIri}
-      profile={localProfile}
-    />
+    <>
+      <Avatar className={classes.avatar} alt={name} src={avatar} />
+      <Typography
+        data-testid={TESTCAFE_ID_AGENT_WEB_ID}
+        className={classes.detailText}
+      >
+        {name}
+      </Typography>
+      <Form onSubmit={onSubmit}>
+        <PermissionsForm
+          key={webId}
+          webId={webId}
+          acl={access}
+          onChange={setTempAccess}
+        >
+          <PrismButton onClick={onSubmit} type="submit">
+            Save
+          </PrismButton>
+        </PermissionsForm>
+      </Form>
+    </>
   );
 }
 
 AgentAccess.propTypes = {
   permission: T.object.isRequired,
+  onLoading: T.func,
+};
+
+AgentAccess.defaultProps = {
+  onLoading: () => {},
 };

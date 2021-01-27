@@ -38,7 +38,7 @@ import AddPermissionUsingWebIdButton from "../../addPermissionUsingWebIdButton";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function ResourceSharing({ startLoading }) {
+export default function SharingAccordion({ startLoading }) {
   const actionMenuBem = ActionMenu.useBem();
   const classes = useStyles();
   const [loading, setLoading] = useState(startLoading);
@@ -67,10 +67,10 @@ export default function ResourceSharing({ startLoading }) {
   );
 }
 
-ResourceSharing.propTypes = {
+SharingAccordion.propTypes = {
   startLoading: T.bool,
 };
 
-ResourceSharing.defaultProps = {
+SharingAccordion.defaultProps = {
   startLoading: false,
 };

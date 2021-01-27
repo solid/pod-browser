@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AgentAccessList it renders a spinner while loading permissions for access control 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-root PodBrowser-colorPrimary PodBrowser-indeterminate"
+    role="progressbar"
+    style="width: 40px; height: 40px;"
+  >
+    <svg
+      class="PodBrowser-svg"
+      viewBox="22 22 44 44"
+    >
+      <circle
+        class="PodBrowser-circle PodBrowser-circleIndeterminate"
+        cx="44"
+        cy="44"
+        fill="none"
+        r="20.2"
+        stroke-width="3.6"
+      />
+    </svg>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AgentAccessList it renders three lists of permissions for editors, viewers and blocked 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-root PodBrowser-colorPrimary PodBrowser-indeterminate"
+    role="progressbar"
+    style="width: 40px; height: 40px;"
+  >
+    <svg
+      class="PodBrowser-svg"
+      viewBox="22 22 44 44"
+    >
+      <circle
+        class="PodBrowser-circle PodBrowser-circleIndeterminate"
+        cx="44"
+        cy="44"
+        fill="none"
+        r="20.2"
+        stroke-width="3.6"
+      />
+    </svg>
+  </div>
+</DocumentFragment>
+`;

@@ -19,38 +19,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import rules, {
-  NEW_ACP_UI_ENABLED,
-  NEW_ACP_UI_ENABLED_FOR,
-  newAcpUiEnabled,
-} from "./index";
+import React from "react";
+import userEvent from "@testing-library/user-event";
 
-describe("rules", () => {
-  test("it indexes all rules", () => {
-    expect(Object.keys(rules())).toEqual([NEW_ACP_UI_ENABLED]);
+import AddAgentButton from "./index";
+
+import { renderWithTheme } from "../../../../__testUtils/withTheme";
+
+describe("AddAgentButton", () => {
+  const onClick = jest.fn();
+  it("renders a button with the correct text", () => {
+    const { asFragment } = renderWithTheme(
+      <AddAgentButton type="editors" onClick={onClick} />
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
-
-  describe("new ACP UI enabled", () => {
-    test("it returns false for a logged out session", () => {
-      expect(newAcpUiEnabled({ info: { isLoggedIn: false } })).toBe(false);
-    });
-
-    test("it returns false for a session not in the enabled list", () => {
-      expect(
-        newAcpUiEnabled({
-          info: { webId: "https://pod.inrupt.com/fakename/card#me" },
-        })
-      ).toBe(false);
-    });
-
-    test("it returns true for a session in the enabled list", () => {
-      expect(
-        newAcpUiEnabled({
-          info: {
-            webId: NEW_ACP_UI_ENABLED_FOR[0],
-          },
-        })
-      ).toBe(false);
-    });
+  it("calls onClick function when clicking the button", () => {
+    const { getByTestId } = renderWithTheme(
+      <AddAgentButton type="editors" onClick={onClick} />
+    );
+    const button = getByTestId("add-agent-button");
+    userEvent.click(button);
+    expect(onClick).toHaveBeenCalled();
   });
 });

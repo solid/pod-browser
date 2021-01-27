@@ -36,6 +36,8 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { ActionMenu, ActionMenuItem } from "@inrupt/prism-react-components";
 import { DatasetContext } from "@inrupt/solid-ui-react";
 import { getContentType, getSourceUrl } from "@inrupt/solid-client";
+import FeatureContext from "../../src/contexts/featureFlagsContext";
+import { NEW_ACP_UI_ENABLED } from "../../src/featureFlags";
 import styles from "./styles";
 import DeleteResourceButton from "../deleteResourceButton";
 import DownloadLink from "../downloadLink";
@@ -43,6 +45,7 @@ import ResourceSharing from "./resourceSharing";
 import { getIriPath } from "../../src/solidClientHelpers/utils";
 import { getResourceName } from "../../src/solidClientHelpers/resource";
 import AccessControlContext from "../../src/contexts/accessControlContext";
+import SharingAccordion from "./resourceSharing/sharingAccordion";
 
 const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
 const TESTCAFE_ID_DELETE_BUTTON = "delete-resource-button";
@@ -66,6 +69,8 @@ export default function ResourceDetails({
   const type = getContentType(dataset);
   const actionMenuBem = ActionMenu.useBem();
   const { accessControl } = useContext(AccessControlContext);
+  const { enabled } = useContext(FeatureContext);
+  const useNewAcpUi = enabled(NEW_ACP_UI_ENABLED);
 
   const expandIcon = <ExpandMoreIcon />;
   return (
@@ -140,17 +145,32 @@ export default function ResourceDetails({
       </Accordion>
 
       {accessControl ? ( // only show when we know user has control access
-        <Accordion>
-          <AccordionSummary
-            expandIcon={expandIcon}
-            data-testid={TESTCAFE_ID_ACCORDION_PERMISSIONS}
-          >
-            Permissions
-          </AccordionSummary>
-          <AccordionDetails className={classes.accordionDetails}>
-            <ResourceSharing />
-          </AccordionDetails>
-        </Accordion>
+        <>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={expandIcon}
+              data-testid={TESTCAFE_ID_ACCORDION_PERMISSIONS}
+            >
+              Permissions
+            </AccordionSummary>
+            <AccordionDetails className={classes.accordionDetails}>
+              <ResourceSharing />
+            </AccordionDetails>
+          </Accordion>
+          {useNewAcpUi && (
+            <Accordion>
+              <AccordionSummary
+                expandIcon={expandIcon}
+                data-testid={TESTCAFE_ID_ACCORDION_PERMISSIONS}
+              >
+                Sharing
+              </AccordionSummary>
+              <AccordionDetails className={classes.accordionDetails}>
+                <SharingAccordion />
+              </AccordionDetails>
+            </Accordion>
+          )}
+        </>
       ) : null}
     </>
   );

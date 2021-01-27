@@ -19,38 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import rules, {
-  NEW_ACP_UI_ENABLED,
-  NEW_ACP_UI_ENABLED_FOR,
-  newAcpUiEnabled,
-} from "./index";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-describe("rules", () => {
-  test("it indexes all rules", () => {
-    expect(Object.keys(rules())).toEqual([NEW_ACP_UI_ENABLED]);
+export default function styles(theme) {
+  return createStyles(theme, ["icons", "button"], {
+    button: {
+      fontWeight: 800,
+      fontSize: "0.8125rem",
+      textDecoration: "none",
+    },
+    icon: {
+      color: theme.palette.primary.main,
+      margin: theme.spacing(0.5),
+    },
   });
-
-  describe("new ACP UI enabled", () => {
-    test("it returns false for a logged out session", () => {
-      expect(newAcpUiEnabled({ info: { isLoggedIn: false } })).toBe(false);
-    });
-
-    test("it returns false for a session not in the enabled list", () => {
-      expect(
-        newAcpUiEnabled({
-          info: { webId: "https://pod.inrupt.com/fakename/card#me" },
-        })
-      ).toBe(false);
-    });
-
-    test("it returns true for a session in the enabled list", () => {
-      expect(
-        newAcpUiEnabled({
-          info: {
-            webId: NEW_ACP_UI_ENABLED_FOR[0],
-          },
-        })
-      ).toBe(false);
-    });
-  });
-});
+}

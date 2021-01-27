@@ -19,38 +19,35 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import rules, {
-  NEW_ACP_UI_ENABLED,
-  NEW_ACP_UI_ENABLED_FOR,
-  newAcpUiEnabled,
-} from "./index";
+import React from "react";
+import { renderWithTheme } from "../../../../__testUtils/withTheme";
+import ResourceSharing from "./index";
+import usePermissions from "../../../../src/hooks/usePermissions";
+import * as permissionHelpers from "../../../../src/solidClientHelpers/permissions";
 
-describe("rules", () => {
-  test("it indexes all rules", () => {
-    expect(Object.keys(rules())).toEqual([NEW_ACP_UI_ENABLED]);
+jest.mock("../../../../src/hooks/usePermissions");
+
+const { ACL } = permissionHelpers;
+const webId = "webId";
+const permission = {
+  webId,
+  alias: ACL.CONTROL.alias,
+  acl: ACL.CONTROL.acl,
+  profile: { webId },
+};
+
+describe("AgentAccessList", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
-
-  describe("new ACP UI enabled", () => {
-    test("it returns false for a logged out session", () => {
-      expect(newAcpUiEnabled({ info: { isLoggedIn: false } })).toBe(false);
-    });
-
-    test("it returns false for a session not in the enabled list", () => {
-      expect(
-        newAcpUiEnabled({
-          info: { webId: "https://pod.inrupt.com/fakename/card#me" },
-        })
-      ).toBe(false);
-    });
-
-    test("it returns true for a session in the enabled list", () => {
-      expect(
-        newAcpUiEnabled({
-          info: {
-            webId: NEW_ACP_UI_ENABLED_FOR[0],
-          },
-        })
-      ).toBe(false);
-    });
+  test("it renders three lists of permissions for editors, viewers and blocked", () => {
+    usePermissions.mockReturnValue({ permissions: [permission] });
+    const { asFragment } = renderWithTheme(<ResourceSharing />);
+    expect(asFragment()).toMatchSnapshot();
+  });
+  test("it renders a spinner while loading permissions for access control", () => {
+    usePermissions.mockReturnValue({ permissions: null });
+    const { asFragment } = renderWithTheme(<ResourceSharing />);
+    expect(asFragment()).toMatchSnapshot();
   });
 });

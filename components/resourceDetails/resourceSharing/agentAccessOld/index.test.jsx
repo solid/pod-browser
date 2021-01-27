@@ -20,73 +20,84 @@
  */
 
 import React from "react";
-
-import { fireEvent, waitFor } from "@testing-library/react";
+import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import { DatasetProvider } from "@inrupt/solid-ui-react";
+import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
-import AgentAccess, { saveHandler } from "./index";
+import AgentAccess, { getDialogId, saveHandler, submitHandler } from "./index";
+
+import mockSessionContextProvider from "../../../../__testUtils/mockSessionContextProvider";
+import mockSession from "../../../../__testUtils/mockSession";
+
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
+import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
+import useFetchProfile from "../../../../src/hooks/useFetchProfile";
 import * as profileFns from "../../../../src/solidClientHelpers/profile";
 import { mockProfileAlice } from "../../../../__testUtils/mockPersonResource";
 
+jest.mock("../../../../src/solidClientHelpers/permissions");
 jest.mock("../../../../src/hooks/useFetchProfile");
 
-const webId = "https://example.com/profile/card#me";
+const webId = "http://example.com/webId#me";
 
 describe("AgentAccess", () => {
   const permission = {
-    acl: createAccessMap(true, true, true, true),
+    acl: createAccessMap(),
     webId,
-    profile: mockProfileAlice(),
   };
+  const datasetUrl = "http://example.com/dataset";
+  const dataset = mockSolidDatasetFrom(datasetUrl);
+
+  beforeEach(() => {
+    useFetchProfile.mockReturnValue({ data: mockProfileAlice() });
+  });
 
   it("renders", () => {
     const { asFragment } = renderWithTheme(
-      <AgentAccess permission={permission} />
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} />
+      </DatasetProvider>
     );
     expect(asFragment()).toMatchSnapshot();
   });
 
+  it("fetches profile for webId", () => {
+    renderWithTheme(
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} />
+      </DatasetProvider>
+    );
+    expect(useFetchProfile).toHaveBeenCalledWith(webId);
+  });
+
   it("renders skeleton placeholders when profile is not available", () => {
+    useFetchProfile.mockReturnValue({ profile: null });
     const { asFragment } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: createAccessMap(true, true, true, true),
-          webId,
-          profile: null,
-          profileError: null,
-        }}
-      />
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} />
+      </DatasetProvider>
     );
 
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders an error message with a 'try again' button if it's unable to load profile", () => {
+    useFetchProfile.mockReturnValue({ error: "error" });
     const { asFragment, getByTestId } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: createAccessMap(true, true, true, true),
-          webId,
-          profile: null,
-          profileError: "error",
-        }}
-      />
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} />
+      </DatasetProvider>
     );
     expect(getByTestId("try-again-button")).toBeTruthy();
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders a spinner after clicking 'try again' button", async () => {
+    useFetchProfile.mockReturnValue({ error: "error" });
     const { getByTestId } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: createAccessMap(true, true, true, true),
-          webId,
-          profile: null,
-          profileError: "error",
-        }}
-      />
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} />
+      </DatasetProvider>
     );
     const button = getByTestId("try-again-button");
     userEvent.click(button);
@@ -95,16 +106,12 @@ describe("AgentAccess", () => {
   });
 
   it("tries to fetch the profile again when clicking 'try again' button", async () => {
+    useFetchProfile.mockReturnValue({ error: "error" });
     const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
     const { getByTestId } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: createAccessMap(true, true, true, true),
-          webId,
-          profile: null,
-          profileError: "error",
-        }}
-      />
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} />
+      </DatasetProvider>
     );
     const button = getByTestId("try-again-button");
     userEvent.click(button);
@@ -115,17 +122,13 @@ describe("AgentAccess", () => {
   });
 
   it("removes the spinner when fetching succeeds", async () => {
+    useFetchProfile.mockReturnValue({ error: "error" });
     const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
     fetchProfile.mockReturnValue("profile");
     const { getByTestId, queryByTestId } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: createAccessMap(true, true, true, true),
-          webId,
-          profile: null,
-          profileError: "error",
-        }}
-      />
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} />
+      </DatasetProvider>
     );
     const button = getByTestId("try-again-button");
     userEvent.click(button);
@@ -134,17 +137,13 @@ describe("AgentAccess", () => {
   });
 
   it("removes the spinner when fetching errors", async () => {
+    useFetchProfile.mockReturnValue({ error: "error" });
     const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
     fetchProfile.mockReturnValue("profile");
     const { getByTestId, queryByTestId } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: createAccessMap(true, true, true, true),
-          webId,
-          profile: null,
-          profileError: "error",
-        }}
-      />
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} />
+      </DatasetProvider>
     );
     const button = getByTestId("try-again-button");
     userEvent.click(button);
@@ -154,49 +153,65 @@ describe("AgentAccess", () => {
     );
     await waitFor(() => expect(queryByTestId("try-again-spinner")).toBeFalsy());
   });
-  it("unchecks shareToggle when clicking share toggle", () => {
-    const { getByTestId, getByRole, queryByText } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: createAccessMap(true, true, true, true),
-          webId,
-          profile: {
-            avatar: null,
-            name: "Example 1",
-          },
-          profileError: null,
-        }}
-      />
-    );
-    const menuButton = getByTestId("menu-button");
-    expect(queryByText("Can Share")).not.toBeNull();
-    userEvent.click(menuButton);
-    const canShareToggle = getByRole("checkbox");
-    userEvent.click(canShareToggle);
-    fireEvent.change(canShareToggle, { target: { checked: true } });
-    expect(canShareToggle).toHaveProperty("checked", true);
-    expect(queryByText("Can Share")).toBeNull();
+
+  describe("user tries to change access for themselves", () => {
+    it("checkboxes are disabled", () => {
+      const session = mockSession();
+      const SessionProvider = mockSessionContextProvider(session);
+
+      const { asFragment } = renderWithTheme(
+        <SessionProvider>
+          <DatasetProvider dataset={dataset}>
+            <AgentAccess permission={permission} webId={session.info.webId} />
+          </DatasetProvider>
+        </SessionProvider>
+      );
+      expect(asFragment()).toMatchSnapshot();
+    });
   });
-  it("removes permissions from list when clicking remove button", () => {
-    const { getByTestId, queryByText } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: createAccessMap(true, true, true, true),
-          webId,
-          profile: {
-            avatar: null,
-            name: "Example 1",
-          },
-          profileError: null,
-        }}
-      />
+
+  test("default value for onLoading", async () => {
+    useFetchProfile.mockReturnValue({ error: "error" });
+    const { getByTestId } = renderWithTheme(
+      <DatasetProvider dataset={dataset}>
+        <AgentAccess permission={permission} onLoading={undefined} />
+      </DatasetProvider>
     );
-    const menuButton = getByTestId("menu-button");
-    expect(queryByText("Example 1")).not.toBeNull();
-    userEvent.click(menuButton);
-    const removeButton = getByTestId("remove-button");
-    userEvent.click(removeButton);
-    expect(queryByText("Example 1")).toBeNull();
+    const button = getByTestId("try-again-button");
+    const { onLoading } = AgentAccess.defaultProps;
+    userEvent.click(button);
+
+    expect(onLoading).toBeInstanceOf(Function);
+  });
+});
+
+describe("getDialogId", () => {
+  it("generates dialogId", () =>
+    expect(getDialogId("foo")).toEqual("change-agent-access-foo"));
+});
+
+describe("submitHandler", () => {
+  let event;
+
+  beforeEach(() => {
+    event = { preventDefault: jest.fn() };
+  });
+
+  test("user changes their own permissions", () => {
+    const setOpen = jest.fn();
+    const dialogId = "dialogId";
+    submitHandler(42, 42, setOpen, dialogId)(event);
+
+    expect(event.preventDefault).toHaveBeenCalledWith();
+    expect(setOpen).toHaveBeenCalledWith(dialogId);
+  });
+  test("user changes someone else's permissions", () => {
+    const savePermissions = jest.fn();
+    const tempAccess = "tempAccess";
+    submitHandler(42, 1337, null, null, savePermissions, tempAccess)(event);
+
+    expect(event.preventDefault).toHaveBeenCalledWith();
+    expect(savePermissions).toHaveBeenCalledWith(tempAccess);
   });
 });
 
@@ -204,8 +219,9 @@ describe("saveHandler", () => {
   const accessControl = {
     savePermissionsForAgent: jest.fn().mockResolvedValue({}),
   };
-  let setLoading;
+  let onLoading;
   let setAccess;
+  let setTempAccess;
   let setSeverity;
   let setMessage;
   let setAlertOpen;
@@ -213,16 +229,18 @@ describe("saveHandler", () => {
   let savePermissions;
 
   beforeEach(() => {
-    setLoading = jest.fn();
+    onLoading = jest.fn();
     setAccess = jest.fn();
+    setTempAccess = jest.fn();
     setSeverity = jest.fn();
     setMessage = jest.fn();
     setAlertOpen = jest.fn();
     savePermissions = saveHandler(
       accessControl,
-      setLoading,
+      onLoading,
       setAccess,
       webId,
+      setTempAccess,
       setSeverity,
       setMessage,
       setAlertOpen
@@ -232,16 +250,17 @@ describe("saveHandler", () => {
   test("save is successful", async () => {
     await expect(savePermissions(newAccess)).resolves.toBeUndefined();
 
-    expect(setLoading).toHaveBeenCalledWith(true);
+    expect(onLoading).toHaveBeenCalledWith(true);
     expect(setAccess).toHaveBeenCalledWith(newAccess);
     expect(accessControl.savePermissionsForAgent).toHaveBeenCalledWith(
       webId,
       newAccess
     );
+    expect(setTempAccess).toHaveBeenCalledWith(null);
     expect(setSeverity).toHaveBeenCalledWith("success");
     expect(setMessage).toHaveBeenCalledWith("Permissions have been updated!");
     expect(setAlertOpen).toHaveBeenCalledWith(true);
-    expect(setLoading).toHaveBeenCalledWith(false);
+    expect(onLoading).toHaveBeenCalledWith(false);
   });
 
   test("save request fails", async () => {
@@ -250,7 +269,7 @@ describe("saveHandler", () => {
 
     await expect(savePermissions(newAccess)).rejects.toEqual(error);
 
-    expect(setLoading).toHaveBeenCalledWith(true);
+    expect(onLoading).toHaveBeenCalledWith(true);
     expect(setAccess).toHaveBeenCalledWith(newAccess);
     expect(accessControl.savePermissionsForAgent).toHaveBeenCalledWith(
       webId,

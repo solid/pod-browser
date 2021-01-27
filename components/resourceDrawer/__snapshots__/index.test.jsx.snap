@@ -358,6 +358,87 @@ exports[`ResourceDrawer view it renders a Contents view when the router query ha
             </div>
           </div>
         </div>
+        <div
+          class="PodBrowser-root PodBrowser-root PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+        >
+          <div
+            aria-disabled="false"
+            aria-expanded="false"
+            class="PodBrowser-root PodBrowser-root"
+            data-testid="accordion-resource-permissions-trigger"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="PodBrowser-content"
+            >
+              Sharing
+            </div>
+            <div
+              aria-disabled="false"
+              aria-hidden="true"
+              class="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-edgeEnd"
+            >
+              <span
+                class="PodBrowser-label"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="PodBrowser-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                  />
+                </svg>
+              </span>
+              <span
+                class="PodBrowser-root"
+              />
+            </div>
+          </div>
+          <div
+            class="PodBrowser-container PodBrowser-hidden"
+            style="min-height: 0px;"
+          >
+            <div
+              class="PodBrowser-wrapper"
+            >
+              <div
+                class="PodBrowser-wrapperInner"
+              >
+                <div
+                  role="region"
+                >
+                  <div
+                    class="PodBrowser-root PodBrowser-accordionDetails"
+                  >
+                    <div
+                      class="PodBrowser-root PodBrowser-colorPrimary PodBrowser-indeterminate"
+                      role="progressbar"
+                      style="width: 40px; height: 40px;"
+                    >
+                      <svg
+                        class="PodBrowser-svg"
+                        viewBox="22 22 44 44"
+                      >
+                        <circle
+                          class="PodBrowser-circle PodBrowser-circleIndeterminate"
+                          cx="44"
+                          cy="44"
+                          fill="none"
+                          r="20.2"
+                          stroke-width="3.6"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -722,6 +803,87 @@ exports[`ResourceDrawer view it renders a loading view when context has no iri 1
             </div>
           </div>
         </div>
+        <div
+          class="PodBrowser-root PodBrowser-root PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+        >
+          <div
+            aria-disabled="false"
+            aria-expanded="false"
+            class="PodBrowser-root PodBrowser-root"
+            data-testid="accordion-resource-permissions-trigger"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="PodBrowser-content"
+            >
+              Sharing
+            </div>
+            <div
+              aria-disabled="false"
+              aria-hidden="true"
+              class="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-edgeEnd"
+            >
+              <span
+                class="PodBrowser-label"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="PodBrowser-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                  />
+                </svg>
+              </span>
+              <span
+                class="PodBrowser-root"
+              />
+            </div>
+          </div>
+          <div
+            class="PodBrowser-container PodBrowser-hidden"
+            style="min-height: 0px;"
+          >
+            <div
+              class="PodBrowser-wrapper"
+            >
+              <div
+                class="PodBrowser-wrapperInner"
+              >
+                <div
+                  role="region"
+                >
+                  <div
+                    class="PodBrowser-root PodBrowser-accordionDetails"
+                  >
+                    <div
+                      class="PodBrowser-root PodBrowser-colorPrimary PodBrowser-indeterminate"
+                      role="progressbar"
+                      style="width: 40px; height: 40px;"
+                    >
+                      <svg
+                        class="PodBrowser-svg"
+                        viewBox="22 22 44 44"
+                      >
+                        <circle
+                          class="PodBrowser-circle PodBrowser-circleIndeterminate"
+                          cx="44"
+                          cy="44"
+                          fill="none"
+                          r="20.2"
+                          stroke-width="3.6"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1079,6 +1241,87 @@ exports[`ResourceDrawer view it renders without errors when iri contains spaces 
                           </div>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="PodBrowser-root PodBrowser-root PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+        >
+          <div
+            aria-disabled="false"
+            aria-expanded="false"
+            class="PodBrowser-root PodBrowser-root"
+            data-testid="accordion-resource-permissions-trigger"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="PodBrowser-content"
+            >
+              Sharing
+            </div>
+            <div
+              aria-disabled="false"
+              aria-hidden="true"
+              class="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-edgeEnd"
+            >
+              <span
+                class="PodBrowser-label"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="PodBrowser-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                  />
+                </svg>
+              </span>
+              <span
+                class="PodBrowser-root"
+              />
+            </div>
+          </div>
+          <div
+            class="PodBrowser-container PodBrowser-hidden"
+            style="min-height: 0px;"
+          >
+            <div
+              class="PodBrowser-wrapper"
+            >
+              <div
+                class="PodBrowser-wrapperInner"
+              >
+                <div
+                  role="region"
+                >
+                  <div
+                    class="PodBrowser-root PodBrowser-accordionDetails"
+                  >
+                    <div
+                      class="PodBrowser-root PodBrowser-colorPrimary PodBrowser-indeterminate"
+                      role="progressbar"
+                      style="width: 40px; height: 40px;"
+                    >
+                      <svg
+                        class="PodBrowser-svg"
+                        viewBox="22 22 44 44"
+                      >
+                        <circle
+                          class="PodBrowser-circle PodBrowser-circleIndeterminate"
+                          cx="44"
+                          cy="44"
+                          fill="none"
+                          r="20.2"
+                          stroke-width="3.6"
+                        />
+                      </svg>
                     </div>
                   </div>
                 </div>

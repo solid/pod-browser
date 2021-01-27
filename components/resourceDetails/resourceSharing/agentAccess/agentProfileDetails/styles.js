@@ -19,38 +19,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import rules, {
-  NEW_ACP_UI_ENABLED,
-  NEW_ACP_UI_ENABLED_FOR,
-  newAcpUiEnabled,
-} from "./index";
-
-describe("rules", () => {
-  test("it indexes all rules", () => {
-    expect(Object.keys(rules())).toEqual([NEW_ACP_UI_ENABLED]);
-  });
-
-  describe("new ACP UI enabled", () => {
-    test("it returns false for a logged out session", () => {
-      expect(newAcpUiEnabled({ info: { isLoggedIn: false } })).toBe(false);
-    });
-
-    test("it returns false for a session not in the enabled list", () => {
-      expect(
-        newAcpUiEnabled({
-          info: { webId: "https://pod.inrupt.com/fakename/card#me" },
-        })
-      ).toBe(false);
-    });
-
-    test("it returns true for a session in the enabled list", () => {
-      expect(
-        newAcpUiEnabled({
-          info: {
-            webId: NEW_ACP_UI_ENABLED_FOR[0],
-          },
-        })
-      ).toBe(false);
-    });
-  });
-});
+export default function styles(theme) {
+  return {
+    nameAndAvatarContainer: {
+      padding: theme.spacing(0.8, 1.6),
+      color: "#000",
+      width: "100%",
+      display: "flex",
+      alignItems: "center",
+      flexDirection: "row",
+    },
+    avatar: {
+      marginRight: theme.spacing(1.6),
+      width: "1.875rem",
+      height: "1.875rem",
+    },
+    detailText: {
+      overflowWrap: "anywhere",
+      fontWeight: 500,
+      display: "flex",
+      fontSize: "1rem",
+      fontFamily: "inherit",
+      textAlign: "left",
+      justifyContent: "space-between",
+      alignItems: "center",
+      flexGrow: 1,
+      flexDirection: "row",
+    },
+    shareText: {
+      whiteSpace: "nowrap",
+      padding: theme.spacing(0.5),
+      color: theme.palette.text.secondary,
+      fontSize: "0.8125rem",
+      fontWeight: 500,
+    },
+  };
+}

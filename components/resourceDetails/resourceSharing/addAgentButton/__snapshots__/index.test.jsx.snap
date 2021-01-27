@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddAgentButton renders a button with the correct text 1`] = `
+<DocumentFragment>
+  <button
+    class="PodBrowser-button PodBrowser-button--action PodBrowser-button"
+    data-testid="add-agent-button"
+  >
+    <i
+      alt="Add Editors Button"
+      class="PodBrowser-icon-add PodBrowser-icon"
+    />
+    Add Editors
+  </button>
+</DocumentFragment>
+`;

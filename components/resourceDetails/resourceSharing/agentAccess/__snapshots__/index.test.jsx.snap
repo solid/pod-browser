@@ -3,243 +3,39 @@
 exports[`AgentAccess renders 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-root PodBrowser-circle PodBrowser-avatar"
-  >
-    <img
-      alt="Alice"
-      class="PodBrowser-img"
-      src="http://alice.example.com/alice.jpg"
-    />
-  </div>
-  <p
-    class="PodBrowser-root PodBrowser-detailText PodBrowser-body1"
-    data-testid="agent-web-id"
-  >
-    Alice
-  </p>
-  <form
-    class="PodBrowser-form"
+    class="PodBrowser-nameAndAvatarContainer"
   >
     <div
-      class="PodBrowser-container"
+      class="PodBrowser-root PodBrowser-circle PodBrowser-avatar"
     >
-      <button
-        class="PodBrowser-root PodBrowser-root PodBrowser-text PodBrowser-summary"
-        data-testid="permissions-dropdown-button"
-        tabindex="0"
-        type="button"
-      >
-        <span
-          class="PodBrowser-label"
-        >
-          <span />
-          <span
-            class="PodBrowser-endIcon PodBrowser-iconSizeMedium"
-          >
-            <svg
-              aria-hidden="true"
-              class="PodBrowser-root"
-              focusable="false"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
-              />
-            </svg>
-          </span>
-        </span>
-        <span
-          class="PodBrowser-root"
-        />
-      </button>
-      <section
-        class="PodBrowser-selectionClosed"
-      >
-        <ul
-          class="PodBrowser-root PodBrowser-padding"
-        >
-          <li
-            class="PodBrowser-root PodBrowser-listItem PodBrowser-gutters"
-          >
-            <label
-              class="PodBrowser-root"
-              data-testid="permission-checkbox-view"
-            >
-              <span
-                aria-disabled="false"
-                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-checkbox PodBrowser-colorSecondary PodBrowser-colorSecondary"
-              >
-                <span
-                  class="PodBrowser-label"
-                >
-                  <input
-                    class="PodBrowser-input"
-                    data-indeterminate="false"
-                    name="view"
-                    type="checkbox"
-                    value=""
-                  />
-                  <svg
-                    aria-hidden="true"
-                    class="PodBrowser-root"
-                    focusable="false"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-                    />
-                  </svg>
-                </span>
-                <span
-                  class="PodBrowser-root"
-                />
-              </span>
-              <span
-                class="PodBrowser-root PodBrowser-label PodBrowser-label PodBrowser-body1"
-              >
-                View
-              </span>
-            </label>
-          </li>
-          <li
-            class="PodBrowser-root PodBrowser-listItem PodBrowser-gutters"
-          >
-            <label
-              class="PodBrowser-root"
-              data-testid="permission-checkbox-edit"
-            >
-              <span
-                aria-disabled="false"
-                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-checkbox PodBrowser-colorSecondary PodBrowser-colorSecondary"
-              >
-                <span
-                  class="PodBrowser-label"
-                >
-                  <input
-                    class="PodBrowser-input"
-                    data-indeterminate="false"
-                    name="edit"
-                    type="checkbox"
-                    value=""
-                  />
-                  <svg
-                    aria-hidden="true"
-                    class="PodBrowser-root"
-                    focusable="false"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-                    />
-                  </svg>
-                </span>
-                <span
-                  class="PodBrowser-root"
-                />
-              </span>
-              <span
-                class="PodBrowser-root PodBrowser-label PodBrowser-label PodBrowser-body1"
-              >
-                Edit
-              </span>
-            </label>
-          </li>
-          <li
-            class="PodBrowser-root PodBrowser-listItem PodBrowser-gutters"
-          >
-            <label
-              class="PodBrowser-root"
-              data-testid="permission-checkbox-append"
-            >
-              <span
-                aria-disabled="false"
-                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-checkbox PodBrowser-colorSecondary PodBrowser-colorSecondary"
-              >
-                <span
-                  class="PodBrowser-label"
-                >
-                  <input
-                    class="PodBrowser-input"
-                    data-indeterminate="false"
-                    name="append"
-                    type="checkbox"
-                    value=""
-                  />
-                  <svg
-                    aria-hidden="true"
-                    class="PodBrowser-root"
-                    focusable="false"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-                    />
-                  </svg>
-                </span>
-                <span
-                  class="PodBrowser-root"
-                />
-              </span>
-              <span
-                class="PodBrowser-root PodBrowser-label PodBrowser-label PodBrowser-body1"
-              >
-                Append
-              </span>
-            </label>
-          </li>
-          <li
-            class="PodBrowser-root PodBrowser-listItem PodBrowser-gutters"
-          >
-            <label
-              class="PodBrowser-root"
-              data-testid="permission-checkbox-control"
-            >
-              <span
-                aria-disabled="false"
-                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-checkbox PodBrowser-colorSecondary PodBrowser-colorSecondary"
-              >
-                <span
-                  class="PodBrowser-label"
-                >
-                  <input
-                    class="PodBrowser-input"
-                    data-indeterminate="false"
-                    name="control"
-                    type="checkbox"
-                    value=""
-                  />
-                  <svg
-                    aria-hidden="true"
-                    class="PodBrowser-root"
-                    focusable="false"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-                    />
-                  </svg>
-                </span>
-                <span
-                  class="PodBrowser-root"
-                />
-              </span>
-              <span
-                class="PodBrowser-root PodBrowser-label PodBrowser-label PodBrowser-body1"
-              >
-                Control
-              </span>
-            </label>
-          </li>
-        </ul>
-        <button
-          class="PodBrowser-button"
-          type="submit"
-        >
-          Save
-        </button>
-      </section>
+      <img
+        alt="https://example.com/profile/card#me"
+        class="PodBrowser-img"
+        src="http://alice.example.com/alice.jpg"
+      />
     </div>
-  </form>
+    <p
+      class="PodBrowser-root PodBrowser-detailText PodBrowser-body1 PodBrowser-detailText"
+      data-testid="agent-web-id"
+    >
+      Alice
+      <span
+        class="PodBrowser-shareText"
+      >
+        Can Share
+      </span>
+    </p>
+    <button
+      class="PodBrowser-button"
+      data-testid="menu-button"
+      type="button"
+    >
+      <i
+        alt="More Options Menu"
+        class="PodBrowser-icon-more"
+      />
+    </button>
+  </div>
 </DocumentFragment>
 `;
 
@@ -253,7 +49,7 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
       role="alert"
     >
       <div
-        class="PodBrowser-icon"
+        class="PodBrowser-icon PodBrowser-icon"
       >
         <svg
           aria-hidden="true"
@@ -295,7 +91,7 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
       class="PodBrowser-separator"
     />
     <div
-      class="PodBrowser-avatar-container"
+      class="PodBrowser-nameAndAvatarContainer"
     >
       <div
         class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
@@ -312,234 +108,26 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
         </svg>
       </div>
       <p
-        class="PodBrowser-root PodBrowser-detailText PodBrowser-body1"
+        class="PodBrowser-root PodBrowser-detailText PodBrowser-body1 PodBrowser-detailText"
         data-testid="agent-web-id"
       >
-        http://example.com/webId#me
-      </p>
-      <form
-        class="PodBrowser-form"
-      >
-        <div
-          class="PodBrowser-container"
+        https://example.com/profile/card#me
+        <span
+          class="PodBrowser-shareText"
         >
-          <button
-            class="PodBrowser-root PodBrowser-root PodBrowser-text PodBrowser-summary"
-            data-testid="permissions-dropdown-button"
-            tabindex="0"
-            type="button"
-          >
-            <span
-              class="PodBrowser-label"
-            >
-              <span />
-              <span
-                class="PodBrowser-endIcon PodBrowser-iconSizeMedium"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="PodBrowser-root"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
-                  />
-                </svg>
-              </span>
-            </span>
-            <span
-              class="PodBrowser-root"
-            />
-          </button>
-          <section
-            class="PodBrowser-selectionClosed"
-          >
-            <ul
-              class="PodBrowser-root PodBrowser-padding"
-            >
-              <li
-                class="PodBrowser-root PodBrowser-listItem PodBrowser-gutters"
-              >
-                <label
-                  class="PodBrowser-root"
-                  data-testid="permission-checkbox-view"
-                >
-                  <span
-                    aria-disabled="false"
-                    class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-checkbox PodBrowser-colorSecondary PodBrowser-colorSecondary"
-                  >
-                    <span
-                      class="PodBrowser-label"
-                    >
-                      <input
-                        class="PodBrowser-input"
-                        data-indeterminate="false"
-                        name="view"
-                        type="checkbox"
-                        value=""
-                      />
-                      <svg
-                        aria-hidden="true"
-                        class="PodBrowser-root"
-                        focusable="false"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-                        />
-                      </svg>
-                    </span>
-                    <span
-                      class="PodBrowser-root"
-                    />
-                  </span>
-                  <span
-                    class="PodBrowser-root PodBrowser-label PodBrowser-label PodBrowser-body1"
-                  >
-                    View
-                  </span>
-                </label>
-              </li>
-              <li
-                class="PodBrowser-root PodBrowser-listItem PodBrowser-gutters"
-              >
-                <label
-                  class="PodBrowser-root"
-                  data-testid="permission-checkbox-edit"
-                >
-                  <span
-                    aria-disabled="false"
-                    class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-checkbox PodBrowser-colorSecondary PodBrowser-colorSecondary"
-                  >
-                    <span
-                      class="PodBrowser-label"
-                    >
-                      <input
-                        class="PodBrowser-input"
-                        data-indeterminate="false"
-                        name="edit"
-                        type="checkbox"
-                        value=""
-                      />
-                      <svg
-                        aria-hidden="true"
-                        class="PodBrowser-root"
-                        focusable="false"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-                        />
-                      </svg>
-                    </span>
-                    <span
-                      class="PodBrowser-root"
-                    />
-                  </span>
-                  <span
-                    class="PodBrowser-root PodBrowser-label PodBrowser-label PodBrowser-body1"
-                  >
-                    Edit
-                  </span>
-                </label>
-              </li>
-              <li
-                class="PodBrowser-root PodBrowser-listItem PodBrowser-gutters"
-              >
-                <label
-                  class="PodBrowser-root"
-                  data-testid="permission-checkbox-append"
-                >
-                  <span
-                    aria-disabled="false"
-                    class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-checkbox PodBrowser-colorSecondary PodBrowser-colorSecondary"
-                  >
-                    <span
-                      class="PodBrowser-label"
-                    >
-                      <input
-                        class="PodBrowser-input"
-                        data-indeterminate="false"
-                        name="append"
-                        type="checkbox"
-                        value=""
-                      />
-                      <svg
-                        aria-hidden="true"
-                        class="PodBrowser-root"
-                        focusable="false"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-                        />
-                      </svg>
-                    </span>
-                    <span
-                      class="PodBrowser-root"
-                    />
-                  </span>
-                  <span
-                    class="PodBrowser-root PodBrowser-label PodBrowser-label PodBrowser-body1"
-                  >
-                    Append
-                  </span>
-                </label>
-              </li>
-              <li
-                class="PodBrowser-root PodBrowser-listItem PodBrowser-gutters"
-              >
-                <label
-                  class="PodBrowser-root"
-                  data-testid="permission-checkbox-control"
-                >
-                  <span
-                    aria-disabled="false"
-                    class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-checkbox PodBrowser-colorSecondary PodBrowser-colorSecondary"
-                  >
-                    <span
-                      class="PodBrowser-label"
-                    >
-                      <input
-                        class="PodBrowser-input"
-                        data-indeterminate="false"
-                        name="control"
-                        type="checkbox"
-                        value=""
-                      />
-                      <svg
-                        aria-hidden="true"
-                        class="PodBrowser-root"
-                        focusable="false"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-                        />
-                      </svg>
-                    </span>
-                    <span
-                      class="PodBrowser-root"
-                    />
-                  </span>
-                  <span
-                    class="PodBrowser-root PodBrowser-label PodBrowser-label PodBrowser-body1"
-                  >
-                    Control
-                  </span>
-                </label>
-              </li>
-            </ul>
-            <button
-              class="PodBrowser-button"
-              type="submit"
-            >
-              Save
-            </button>
-          </section>
-        </div>
-      </form>
+          Can Share
+        </span>
+      </p>
+      <button
+        class="PodBrowser-button"
+        data-testid="menu-button"
+        type="button"
+      >
+        <i
+          alt="More Options Menu"
+          class="PodBrowser-icon-more"
+        />
+      </button>
     </div>
   </div>
 </DocumentFragment>
@@ -548,255 +136,14 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
 exports[`AgentAccess renders skeleton placeholders when profile is not available 1`] = `
 <DocumentFragment>
   <span
-    class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-pulse"
+    class="PodBrowser-root PodBrowser-circle PodBrowser-pulse"
     style="width: 40px; height: 40px;"
   />
-  <div
-    class="PodBrowser-detailText"
-  >
+  <div>
     <span
       class="PodBrowser-root PodBrowser-text PodBrowser-pulse"
       style="width: 100px;"
     />
   </div>
-</DocumentFragment>
-`;
-
-exports[`AgentAccess user tries to change access for themselves checkboxes are disabled 1`] = `
-<DocumentFragment>
-  <div
-    class="PodBrowser-root PodBrowser-circle PodBrowser-avatar"
-  >
-    <img
-      alt="Alice"
-      class="PodBrowser-img"
-      src="http://alice.example.com/alice.jpg"
-    />
-  </div>
-  <p
-    class="PodBrowser-root PodBrowser-detailText PodBrowser-body1"
-    data-testid="agent-web-id"
-  >
-    Alice
-  </p>
-  <form
-    class="PodBrowser-form"
-  >
-    <div
-      class="PodBrowser-container"
-    >
-      <button
-        class="PodBrowser-root PodBrowser-root PodBrowser-text PodBrowser-summary"
-        data-testid="permissions-dropdown-button"
-        tabindex="0"
-        type="button"
-      >
-        <span
-          class="PodBrowser-label"
-        >
-          <span />
-          <span
-            class="PodBrowser-endIcon PodBrowser-iconSizeMedium"
-          >
-            <svg
-              aria-hidden="true"
-              class="PodBrowser-root"
-              focusable="false"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
-              />
-            </svg>
-          </span>
-        </span>
-        <span
-          class="PodBrowser-root"
-        />
-      </button>
-      <section
-        class="PodBrowser-selectionClosed"
-      >
-        <ul
-          class="PodBrowser-root PodBrowser-padding"
-        >
-          <li
-            class="PodBrowser-root PodBrowser-listItem PodBrowser-gutters"
-          >
-            <label
-              class="PodBrowser-root PodBrowser-disabled"
-              data-testid="permission-checkbox-view"
-            >
-              <span
-                aria-disabled="true"
-                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-checkbox PodBrowser-colorSecondary PodBrowser-disabled PodBrowser-disabled PodBrowser-colorSecondary PodBrowser-disabled PodBrowser-disabled"
-                tabindex="-1"
-              >
-                <span
-                  class="PodBrowser-label"
-                >
-                  <input
-                    class="PodBrowser-input"
-                    data-indeterminate="false"
-                    disabled=""
-                    name="view"
-                    type="checkbox"
-                    value=""
-                  />
-                  <svg
-                    aria-hidden="true"
-                    class="PodBrowser-root"
-                    focusable="false"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-                    />
-                  </svg>
-                </span>
-              </span>
-              <span
-                class="PodBrowser-root PodBrowser-label PodBrowser-label PodBrowser-disabled PodBrowser-body1"
-              >
-                View
-              </span>
-            </label>
-          </li>
-          <li
-            class="PodBrowser-root PodBrowser-listItem PodBrowser-gutters"
-          >
-            <label
-              class="PodBrowser-root PodBrowser-disabled"
-              data-testid="permission-checkbox-edit"
-            >
-              <span
-                aria-disabled="true"
-                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-checkbox PodBrowser-colorSecondary PodBrowser-disabled PodBrowser-disabled PodBrowser-colorSecondary PodBrowser-disabled PodBrowser-disabled"
-                tabindex="-1"
-              >
-                <span
-                  class="PodBrowser-label"
-                >
-                  <input
-                    class="PodBrowser-input"
-                    data-indeterminate="false"
-                    disabled=""
-                    name="edit"
-                    type="checkbox"
-                    value=""
-                  />
-                  <svg
-                    aria-hidden="true"
-                    class="PodBrowser-root"
-                    focusable="false"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-                    />
-                  </svg>
-                </span>
-              </span>
-              <span
-                class="PodBrowser-root PodBrowser-label PodBrowser-label PodBrowser-disabled PodBrowser-body1"
-              >
-                Edit
-              </span>
-            </label>
-          </li>
-          <li
-            class="PodBrowser-root PodBrowser-listItem PodBrowser-gutters"
-          >
-            <label
-              class="PodBrowser-root PodBrowser-disabled"
-              data-testid="permission-checkbox-append"
-            >
-              <span
-                aria-disabled="true"
-                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-checkbox PodBrowser-colorSecondary PodBrowser-disabled PodBrowser-disabled PodBrowser-colorSecondary PodBrowser-disabled PodBrowser-disabled"
-                tabindex="-1"
-              >
-                <span
-                  class="PodBrowser-label"
-                >
-                  <input
-                    class="PodBrowser-input"
-                    data-indeterminate="false"
-                    disabled=""
-                    name="append"
-                    type="checkbox"
-                    value=""
-                  />
-                  <svg
-                    aria-hidden="true"
-                    class="PodBrowser-root"
-                    focusable="false"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-                    />
-                  </svg>
-                </span>
-              </span>
-              <span
-                class="PodBrowser-root PodBrowser-label PodBrowser-label PodBrowser-disabled PodBrowser-body1"
-              >
-                Append
-              </span>
-            </label>
-          </li>
-          <li
-            class="PodBrowser-root PodBrowser-listItem PodBrowser-gutters"
-          >
-            <label
-              class="PodBrowser-root PodBrowser-disabled"
-              data-testid="permission-checkbox-control"
-            >
-              <span
-                aria-disabled="true"
-                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-checkbox PodBrowser-colorSecondary PodBrowser-disabled PodBrowser-disabled PodBrowser-colorSecondary PodBrowser-disabled PodBrowser-disabled"
-                tabindex="-1"
-              >
-                <span
-                  class="PodBrowser-label"
-                >
-                  <input
-                    class="PodBrowser-input"
-                    data-indeterminate="false"
-                    disabled=""
-                    name="control"
-                    type="checkbox"
-                    value=""
-                  />
-                  <svg
-                    aria-hidden="true"
-                    class="PodBrowser-root"
-                    focusable="false"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
-                    />
-                  </svg>
-                </span>
-              </span>
-              <span
-                class="PodBrowser-root PodBrowser-label PodBrowser-label PodBrowser-disabled PodBrowser-body1"
-              >
-                Control
-              </span>
-            </label>
-          </li>
-        </ul>
-        <button
-          class="PodBrowser-button"
-          type="submit"
-        >
-          Save
-        </button>
-      </section>
-    </div>
-  </form>
 </DocumentFragment>
 `;
