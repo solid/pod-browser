@@ -20,41 +20,82 @@
  */
 
 import { renderHook } from "@testing-library/react-hooks";
+import * as solidClientFns from "@inrupt/solid-client";
+import { mockSolidDatasetFrom, setUrl } from "@inrupt/solid-client";
+import { space } from "rdf-namespaces";
 import usePodRootUri from "./index";
+import useAuthenticatedProfile from "../useAuthenticatedProfile";
+import useResourceInfo from "../useResourceInfo";
+import useDataset from "../useDataset";
+import {
+  aliceWebIdUrl,
+  mockPersonDatasetAlice,
+} from "../../../__testUtils/mockPersonResource";
+
+jest.mock("../useAuthenticatedProfile");
+const mockedAuthenticatedProfileHook = useAuthenticatedProfile;
+
+jest.mock("../useResourceInfo");
+const mockedResourceInfoHook = useResourceInfo;
+
+jest.mock("../useDataset");
+const mockedDatasetHook = useDataset;
 
 const location = "https://foo.com/bar/baz";
 const locationWithNoEndingSlash = "https://bar.com";
+const podRoot = "https://foo.com/bar/";
 const profile = {
   webId: "webId",
-  pods: ["https://foo.com/bar/", locationWithNoEndingSlash],
+  pods: [podRoot, locationWithNoEndingSlash],
 };
+const resourceInfo = mockSolidDatasetFrom(location);
 
 describe("usePodRootUri", () => {
-  test("it will return undefined if location is undefined", () => {
-    const { result } = renderHook(() => usePodRootUri("undefined", null));
+  beforeEach(() => {
+    jest.spyOn(solidClientFns, "getPodOwner").mockReturnValue(aliceWebIdUrl);
+    mockedAuthenticatedProfileHook.mockReturnValue({
+      data: profile,
+    });
+    mockedResourceInfoHook.mockReturnValue({ data: resourceInfo });
+    mockedDatasetHook.mockReturnValue({
+      data: mockPersonDatasetAlice((t) => setUrl(t, space.storage, podRoot)),
+    });
+  });
+
+  it("will return null if location is undefined", () => {
+    const { result } = renderHook(() => usePodRootUri("undefined"));
     expect(result.current).toBeNull();
   });
 
-  test("it will guess storage URI if profile is null", () => {
-    const { result } = renderHook(() => usePodRootUri(location, null));
+  it("will use getPodOwner if profile.pods is empty", () => {
+    mockedAuthenticatedProfileHook.mockReturnValue({
+      data: { ...profile, pods: undefined },
+    });
+    const { result } = renderHook(() => usePodRootUri(location));
+    expect(result.current).toEqual(podRoot);
+  });
+
+  it("will use the domain of the location if getOwnerPod is unable to return info", () => {
+    mockedAuthenticatedProfileHook.mockReturnValue({
+      data: { ...profile, pods: undefined },
+    });
+    solidClientFns.getPodOwner.mockReturnValue(null);
+    const { result } = renderHook(() => usePodRootUri(location));
     expect(result.current).toEqual("https://foo.com/");
   });
 
-  test("it will guess storage URI if profile.pods is empty", () => {
-    const { result } = renderHook(() =>
-      usePodRootUri(location, { ...profile, pods: undefined })
-    );
+  it("will fallback to the domain of the location if owner's profile fails to load", () => {
+    mockedAuthenticatedProfileHook.mockReturnValue({
+      data: { ...profile, pods: undefined },
+    });
+    mockedDatasetHook.mockReturnValue({ error: new Error() });
+    const { result } = renderHook(() => usePodRootUri(location));
     expect(result.current).toEqual("https://foo.com/");
   });
 
-  test("it will use storage URI in profile if it matches location", () => {
-    const { result } = renderHook(() => usePodRootUri(location, profile));
-    expect(result.current).toEqual("https://foo.com/bar/");
-  });
-
-  test("it makes sure baseUri ends with slash", () => {
+  it("makes sure baseUri ends with slash", () => {
     const { result } = renderHook(() =>
-      usePodRootUri(locationWithNoEndingSlash, profile)
+      usePodRootUri(locationWithNoEndingSlash)
     );
     expect(result.current).toEqual("https://bar.com/");
   });

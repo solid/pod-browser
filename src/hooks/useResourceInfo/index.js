@@ -24,11 +24,11 @@ import { useSession } from "@inrupt/solid-ui-react";
 import useSWR from "swr";
 
 export const GET_RESOURCE_INFO = "getResourceInfo";
-export default function useResourceInfo(iri) {
+export default function useResourceInfo(iri, swrOptions = {}) {
   const { fetch } = useSession();
 
   return useSWR(
     iri && iri !== "undefined" ? [iri, GET_RESOURCE_INFO] : null,
-    () => getResourceInfo(iri, { fetch })
+    () => getResourceInfo(iri, { fetch }, swrOptions)
   );
 }

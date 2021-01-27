@@ -20,14 +20,14 @@
  */
 
 import {
+  asUrl,
   getSolidDataset,
   getStringNoLocale,
   getThing,
   getUrl,
-  asUrl,
   getUrlAll,
 } from "@inrupt/solid-client";
-import { space, vcard, foaf, rdf, schema } from "rdf-namespaces";
+import { foaf, rdf, schema, space, vcard } from "rdf-namespaces";
 
 export function displayProfileName({ nickname, name, webId }) {
   if (name) return name;
@@ -69,13 +69,22 @@ export function getProfileFromThing(contactThing) {
   return profileFn(contactThing);
 }
 
+export function getPodConnectedToProfile(profile, location) {
+  const pods = profile ? profile.pods || [] : [];
+  return pods.find((pod) => location.startsWith(pod));
+}
+
+export function locationIsConnectedToProfile(profile, location) {
+  return !!getPodConnectedToProfile(profile, location);
+}
+
 export function packageProfile(webId, dataset) {
   const profile = getThing(dataset, webId);
   return {
     ...getProfileFromPersonThing(profile),
     webId,
     dataset,
-    pods: getUrlAll(profile, space.storage),
+    pods: getUrlAll(profile, space.storage) || [],
   };
 }
 

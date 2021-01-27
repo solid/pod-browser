@@ -21,7 +21,8 @@
 
 import React from "react";
 import * as RouterFns from "next/router";
-import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import { addUrl, mockSolidDatasetFrom } from "@inrupt/solid-client";
+import { space } from "rdf-namespaces";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import Container from "./index";
 import useContainerResourceIris from "../../src/hooks/useContainerResourceIris";
@@ -40,30 +41,43 @@ import { TESTCAFE_ID_NOT_SUPPORTED } from "../notSupported";
 import { TESTID_SPINNER } from "../spinner";
 
 jest.mock("../../src/hooks/useDataset");
+const mockedDatasetHook = useDataset;
+
 jest.mock("../../src/hooks/useContainerResourceIris");
+const mockedContainerResourceIrisHook = useContainerResourceIris;
+
 jest.mock("../../src/hooks/useAuthenticatedProfile");
+const mockedAuthenticatedProfileHook = useAuthenticatedProfile;
+
 jest.mock("../../src/hooks/usePodRootUri");
+const mockedPodRootUriHook = usePodRootUri;
+
 jest.mock("../../src/hooks/useResourceInfo");
+const mockedResourceInfoHook = useResourceInfo;
+
 jest.mock("../../src/hooks/useAccessControl");
+const mockedAccessControlHook = useAccessControl;
 
 describe("Container view", () => {
   const iri = "https://example.com/container/";
   const container = mockSolidDatasetFrom(iri);
 
   beforeEach(() => {
-    useDataset.mockReturnValue({ data: container });
-    useAuthenticatedProfile.mockReturnValue({
-      data: mockProfileAlice(),
+    mockedDatasetHook.mockReturnValue({ data: container });
+    mockedAuthenticatedProfileHook.mockReturnValue({
+      data: mockProfileAlice((t) =>
+        addUrl(t, space.storage, "https://example.com/")
+      ),
     });
-    usePodRootUri.mockReturnValue(iri);
-    useResourceInfo.mockReturnValue({ data: container });
-    useAccessControl.mockReturnValue({});
+    mockedPodRootUriHook.mockReturnValue(iri);
+    mockedResourceInfoHook.mockReturnValue({ data: container });
+    mockedAccessControlHook.mockReturnValue({});
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "asPath",
       replace: jest.fn(),
       query: {},
     });
-    useContainerResourceIris.mockReturnValue({
+    mockedContainerResourceIrisHook.mockReturnValue({
       data: [
         "https://myaccount.mypodserver.com/inbox",
         "https://myaccount.mypodserver.com/private",
@@ -79,7 +93,7 @@ describe("Container view", () => {
   });
 
   test("Renders a spinner if data is loading", () => {
-    useContainerResourceIris.mockReturnValue({
+    mockedContainerResourceIrisHook.mockReturnValue({
       data: undefined,
       mutate: () => {},
     });
@@ -97,7 +111,7 @@ describe("Container view", () => {
   });
 
   it("renders Access Forbidden if the fetch for container returns 401", () => {
-    useDataset.mockReturnValue({
+    mockedDatasetHook.mockReturnValue({
       error: { message: "401" },
     });
     const { asFragment, getByTestId } = renderWithTheme(
@@ -108,7 +122,7 @@ describe("Container view", () => {
   });
 
   it("renders Access Forbidden if the fetch for container returns 403", () => {
-    useDataset.mockReturnValue({
+    mockedDatasetHook.mockReturnValue({
       error: { message: "403" },
     });
     const { asFragment, getByTestId } = renderWithTheme(
@@ -119,7 +133,7 @@ describe("Container view", () => {
   });
 
   it("renders Access Forbidden if the fetch for container returns 404", () => {
-    useDataset.mockReturnValue({
+    mockedDatasetHook.mockReturnValue({
       error: { message: "404" },
     });
     const { asFragment, getByTestId } = renderWithTheme(
@@ -130,7 +144,7 @@ describe("Container view", () => {
   });
 
   it("renders Not supported if the fetch for container returns 500", () => {
-    useDataset.mockReturnValue({
+    mockedDatasetHook.mockReturnValue({
       error: { message: "500" },
     });
     const { asFragment, getByTestId } = renderWithTheme(
@@ -142,7 +156,7 @@ describe("Container view", () => {
 
   it("renders Not Supported if resource loaded is not a container", () => {
     const resourceIri = "http://example.com/resource";
-    useDataset.mockReturnValue({
+    mockedDatasetHook.mockReturnValue({
       data: mockSolidDatasetFrom(resourceIri),
     });
     const { asFragment } = renderWithTheme(<Container iri={resourceIri} />);
@@ -150,7 +164,7 @@ describe("Container view", () => {
   });
 
   it("renders AuthProfileLoadError if fetching authenticated profile fails", () => {
-    useAuthenticatedProfile.mockReturnValue({ error: new Error() });
+    mockedAuthenticatedProfileHook.mockReturnValue({ error: new Error() });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
@@ -159,7 +173,7 @@ describe("Container view", () => {
   });
 
   it("renders PodRootLoadError if it fails to fetch resourceInfo for podRoot", () => {
-    useResourceInfo.mockReturnValue({ error: new Error() });
+    mockedResourceInfoHook.mockReturnValue({ error: new Error() });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
@@ -168,7 +182,7 @@ describe("Container view", () => {
   });
 
   it("renders NoControlError if it fails to get access control for podRoot", () => {
-    useAccessControl.mockReturnValue({ error: new Error() });
+    mockedAccessControlHook.mockReturnValue({ error: new Error() });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );

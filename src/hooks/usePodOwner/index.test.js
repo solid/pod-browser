@@ -21,85 +21,60 @@
 
 import { renderHook } from "@testing-library/react-hooks";
 import * as solidClientFns from "@inrupt/solid-client";
+import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import usePodOwner from ".";
+import usePodRootUri from "../usePodRootUri";
+import useResourceInfo from "../useResourceInfo";
 
-jest.mock("@inrupt/solid-client");
+jest.mock("../usePodRootUri");
+const mockedPodRootUriHook = usePodRootUri;
+
+jest.mock("../useResourceInfo");
+const mockedResourceInfoHook = useResourceInfo;
 
 describe("usePodOwner", () => {
-  test("it returns the pod owner if available", async () => {
-    const resourceInfo = {
-      internal_resourceInfo: {
-        sourceIri: "https://www.example.com",
-        linkedResources: {
-          "http://www.w3.org/ns/solid/terms#podOwner": [
-            "https://www.example.com/profile#WebId",
-          ],
-        },
-      },
-    };
+  const podRoot = "https://www.example.com";
+  const podOwner = "https://www.example.com/profile#WebId";
+  const hackedUri = "https://www.example.com/profile/card#me";
+  const resourceIri = "https://www.example.com";
+  const resourceInfo = mockSolidDatasetFrom(resourceIri);
 
-    jest
-      .spyOn(solidClientFns, "getResourceInfo")
-      .mockResolvedValue(resourceInfo);
-    jest
-      .spyOn(solidClientFns, "getPodOwner")
-      .mockReturnValue("https://www.example.com/profile#WebId");
-
-    const { result, waitForNextUpdate } = renderHook(() =>
-      usePodOwner({ resourceIri: "https://www.example.com" })
-    );
-    await waitForNextUpdate();
-    expect(result.current.podOwnerWebId).toEqual(
-      "https://www.example.com/profile#WebId"
-    );
+  beforeEach(() => {
+    mockedPodRootUriHook.mockReturnValue(podRoot);
+    jest.spyOn(solidClientFns, "getPodOwner").mockReturnValue(podOwner);
+    mockedResourceInfoHook.mockReturnValue({ data: resourceInfo, error: null });
   });
-  test("it returns the fallback profile iri if pod owner is not available", async () => {
-    const resourceInfo = {
-      internal_resourceInfo: {
-        sourceIri: "https://www.example.com",
-        linkedResources: {},
-      },
-    };
 
-    jest
-      .spyOn(solidClientFns, "getResourceInfo")
-      .mockResolvedValue(resourceInfo);
+  it("returns the pod owner if available", () => {
+    const { result } = renderHook(() => usePodOwner(resourceIri));
+    expect(result.current.podOwnerWebId).toEqual(podOwner);
+  });
+
+  it("returns the fallback profile iri if pod owner is not available", () => {
     jest.spyOn(solidClientFns, "getPodOwner").mockReturnValue(null);
 
-    const { result, waitForNextUpdate } = renderHook(() =>
-      usePodOwner({ resourceIri: "https://www.example.com" })
-    );
-    await waitForNextUpdate();
-    expect(result.current.podOwnerWebId).toEqual(
-      "https://www.example.com/profile/card#me"
-    );
+    const { result } = renderHook(() => usePodOwner(resourceIri));
+    expect(result.current.podOwnerWebId).toEqual(hackedUri);
   });
-  test("it sets webId and error to null and exits if resource Iri is undefined", async () => {
-    const resourceInfo = {
-      internal_resourceInfo: {
-        sourceIri: "https://www.example.com",
-        linkedResources: {
-          "http://www.w3.org/ns/solid/terms#podOwner": [
-            "https://www.example.com/profile#WebId",
-          ],
-        },
-      },
-    };
 
-    jest
-      .spyOn(solidClientFns, "getResourceInfo")
-      .mockResolvedValue(resourceInfo);
-    jest
-      .spyOn(solidClientFns, "getPodOwner")
-      .mockReturnValue("https://www.example.com/profile#WebId");
-
-    const { result, rerender, waitForNextUpdate } = renderHook(
-      ({ resourceIri }) => usePodOwner({ resourceIri }),
-      { initialProps: { resourceIri: "https://www.example.com " } }
-    );
-    await waitForNextUpdate();
-    expect(result.current.podOwnerWebId).not.toBeNull();
-    rerender({ resourceIri: undefined });
+  it("returns null if given resourceIri is undefined or null", () => {
+    const { result } = renderHook(() => usePodOwner(null));
     expect(result.current.podOwnerWebId).toBeNull();
+  });
+
+  it("returns an error if it fails to load resource", () => {
+    const error = new Error();
+    mockedResourceInfoHook.mockReturnValue({ data: null, error });
+    const { result } = renderHook(() => usePodOwner(resourceIri));
+    expect(result.current.podOwnerWebId).toBeNull();
+    expect(result.current.error).toBe(error);
+  });
+
+  it("returns fallback profile iri if error is 403", () => {
+    const error = new Error("403");
+    mockedResourceInfoHook.mockReturnValue({ data: null, error });
+    const { result } = renderHook(() => usePodOwner(resourceIri));
+    expect(result.current.podOwnerWebId).toBe(hackedUri);
+    expect(result.current.error).toBe(error);
   });
 });

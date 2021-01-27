@@ -23,10 +23,7 @@ import React, { useContext } from "react";
 import { render } from "@testing-library/react";
 import PodLocationContext, { PodLocationProvider } from "./index";
 import usePodRootUri from "../../hooks/usePodRootUri";
-import useAuthenticatedProfile from "../../hooks/useAuthenticatedProfile";
-import { mockProfileAlice } from "../../../__testUtils/mockPersonResource";
 
-jest.mock("../../hooks/useAuthenticatedProfile");
 jest.mock("../../hooks/usePodRootUri");
 
 function ChildComponent() {
@@ -43,9 +40,6 @@ describe("PodLocationContext", () => {
   test("it provides baseUri based on storages given in profile", () => {
     const baseUri = "https://foo.test/";
 
-    useAuthenticatedProfile.mockReturnValue({
-      data: mockProfileAlice(),
-    });
     usePodRootUri.mockReturnValue(baseUri);
 
     const currentUri = "https://foo.test/bar/baz";

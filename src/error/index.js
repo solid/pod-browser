@@ -103,5 +103,5 @@ export function hasError(error, errorRegexes) {
 }
 
 export function isHTTPError(error, code) {
-  return !!error.toString().match(new RegExp(code));
+  return error && !!error.toString().match(new RegExp(code));
 }

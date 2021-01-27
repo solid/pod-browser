@@ -24,9 +24,11 @@ import { schema, foaf, rdf } from "rdf-namespaces";
 import {
   displayProfileName,
   fetchProfile,
+  getPodConnectedToProfile,
   getProfileFromPersonThing,
   getProfileFromThing,
   getProfileFromThingError,
+  locationIsConnectedToProfile,
   TYPE_MAP,
 } from "./profile";
 import {
@@ -120,5 +122,35 @@ describe("getProfileFromThing", () => {
     expect(() => getProfileFromThing(person)).toThrow(
       getProfileFromThingError(person)
     );
+  });
+});
+
+describe("getPodConnectedToProfile", () => {
+  it("returns a profile's Pod to a location, if possible", () => {
+    const pod = "http://example.com/";
+    const podLocation = "http://example.com/test";
+    expect(getPodConnectedToProfile(null, podLocation)).toBeUndefined();
+    expect(getPodConnectedToProfile({}, podLocation)).toBeUndefined();
+    expect(
+      getPodConnectedToProfile(
+        { pods: ["http://another.pod.com/", pod] },
+        podLocation
+      )
+    ).toBe(pod);
+  });
+});
+
+describe("locationIsConnectedToProfile", () => {
+  it("returns whether or not a location is connected to a profile's listed Pods", () => {
+    const pod = "http://example.com/";
+    const podLocation = "http://example.com/test";
+    expect(locationIsConnectedToProfile(null, podLocation)).toBeFalsy();
+    expect(locationIsConnectedToProfile({}, podLocation)).toBeFalsy();
+    expect(
+      locationIsConnectedToProfile(
+        { pods: ["http://another.pod.com/", pod] },
+        podLocation
+      )
+    ).toBeTruthy();
   });
 });

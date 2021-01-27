@@ -19,40 +19,38 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useState, useEffect } from "react";
-import { getResourceInfo, getPodOwner } from "@inrupt/solid-client";
-import { useSession } from "@inrupt/solid-ui-react";
+import { useEffect, useState } from "react";
+import { getPodOwner } from "@inrupt/solid-client";
 import { joinPath } from "../../stringHelpers";
 import usePodRootUri from "../usePodRootUri";
 import { isHTTPError } from "../../error";
+import useResourceInfo from "../useResourceInfo";
 
 function hackProfileUri(podRoot) {
   return podRoot ? joinPath(podRoot, "profile/card#me") : null;
 }
 
-export default function usePodOwner({ resourceIri }) {
-  const { fetch } = useSession();
+export default function usePodOwner(resourceIri) {
   const [podOwnerWebId, setPodOwnerWebId] = useState(null);
   const [error, setError] = useState(null);
-  const podRoot = usePodRootUri(resourceIri, null);
+  const podRoot = usePodRootUri(resourceIri);
+  const { data: resourceInfo, error: resourceError } = useResourceInfo(
+    resourceIri
+  );
 
   useEffect(() => {
-    if (!resourceIri) {
-      setPodOwnerWebId(null);
-      setError(null);
+    if (resourceIri && isHTTPError(resourceError, 403)) {
+      setPodOwnerWebId(hackProfileUri(podRoot));
+      setError(resourceError);
       return;
     }
-    (async () => {
-      try {
-        const resourceInfo = await getResourceInfo(resourceIri, { fetch });
-        const webId = getPodOwner(resourceInfo) || hackProfileUri(podRoot);
-        setPodOwnerWebId(webId);
-        setError(null);
-      } catch (e) {
-        setPodOwnerWebId(isHTTPError(e, 403) ? hackProfileUri(podRoot) : null);
-        setError(e);
-      }
-    })();
-  }, [resourceIri, fetch, podRoot]);
+    if (!resourceIri || resourceError) {
+      setPodOwnerWebId(null);
+      setError(resourceError);
+      return;
+    }
+    setPodOwnerWebId(getPodOwner(resourceInfo) || hackProfileUri(podRoot));
+    setError(null);
+  }, [resourceIri, podRoot, resourceError, resourceInfo]);
   return { podOwnerWebId, error };
 }

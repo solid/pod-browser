@@ -23,11 +23,20 @@ import React from "react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import { PodLocationProvider } from "../../src/contexts/podLocationContext";
 import Breadcrumbs from "./index";
+import usePodRootUri from "../../src/hooks/usePodRootUri";
+import { TESTID_SPINNER } from "../spinner";
+
+jest.mock("../../src/hooks/usePodRootUri");
+const mockedPodRootUriHook = usePodRootUri;
 
 describe("Breadcrumbs view", () => {
+  beforeEach(() => {
+    mockedPodRootUriHook.mockReturnValue("https://www.mypodbrowser.com/");
+  });
+
   test("Renders a breadcrumbs view", () => {
     const { asFragment } = renderWithTheme(
-      <PodLocationProvider currentUri="https://www.mypodbrowser.com">
+      <PodLocationProvider currentUri="https://www.mypodbrowser.com/">
         <Breadcrumbs />
       </PodLocationProvider>
     );
@@ -68,5 +77,15 @@ describe("Breadcrumbs view", () => {
       </PodLocationProvider>
     );
     expect(queryByText(/location/i)).toBeDefined();
+  });
+
+  it("renders a spinner when baseUri is not loaded yet", () => {
+    mockedPodRootUriHook.mockReturnValue(null);
+    const { getByTestId } = renderWithTheme(
+      <PodLocationProvider currentUri="https://www.mypodbrowser.com/some/location">
+        <Breadcrumbs />
+      </PodLocationProvider>
+    );
+    expect(getByTestId(TESTID_SPINNER)).toBeDefined();
   });
 });
