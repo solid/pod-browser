@@ -20,27 +20,53 @@
  */
 
 import { useEffect, useState } from "react";
+import { getPodOwner } from "@inrupt/solid-client";
+import {
+  getPodConnectedToProfile,
+  packageProfile,
+} from "../../solidClientHelpers/profile";
+import useAuthenticatedProfile from "../useAuthenticatedProfile";
+import useResourceInfo from "../useResourceInfo";
+import useDataset from "../useDataset";
 
 function normalizeBaseUri(baseUri) {
   return baseUri[baseUri.length - 1] === "/" ? baseUri : `${baseUri}/`;
 }
 
-export default function usePodRootUri(location, profile) {
+export default function usePodRootUri(location) {
   const [rootUri, setRootUri] = useState(null);
+  const { data: profile } = useAuthenticatedProfile();
+  const { data: resourceInfo } = useResourceInfo(location, {
+    errorRetryCount: 0, // This usually returns a 403 when visiting someone else's Pod, so we don't want to retry that call
+  });
+  const [podOwnerUri, setPodOwnerUri] = useState(null);
+  const { data: podOwnerDataset, error: podOwnerError } = useDataset(
+    podOwnerUri
+  );
+
   useEffect(() => {
-    if (!location || location === "undefined") {
+    if (!location || location === "undefined" || !profile) {
       setRootUri(null);
       return;
     }
-    const profilePod = (profile ? profile.pods || [] : []).find((pod) =>
-      location.startsWith(pod)
-    );
+    const profilePod = getPodConnectedToProfile(profile, location);
     if (profilePod) {
       setRootUri(normalizeBaseUri(profilePod));
       return;
     }
-    const { origin } = new URL(location);
-    setRootUri(normalizeBaseUri(origin));
-  }, [location, profile]);
+    const podOwner = getPodOwner(resourceInfo);
+    setPodOwnerUri(podOwner);
+    if (!podOwner || podOwnerError) {
+      const { origin } = new URL(location);
+      setRootUri(normalizeBaseUri(origin));
+      return;
+    }
+    if (podOwner && podOwnerDataset) {
+      const podOwnerProfile = packageProfile(podOwner, podOwnerDataset);
+      const podOwnerPod = getPodConnectedToProfile(podOwnerProfile, location);
+      setRootUri(podOwnerPod);
+    }
+  }, [location, podOwnerDataset, podOwnerError, profile, resourceInfo]);
+
   return rootUri;
 }

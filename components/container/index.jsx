@@ -47,6 +47,7 @@ import useAccessControl from "../../src/hooks/useAccessControl";
 import PodRootLoadError from "../podRootLoadError";
 import ContainerTable from "../containerTable";
 import { isHTTPError } from "../../src/error";
+import { locationIsConnectedToProfile } from "../../src/solidClientHelpers/profile";
 
 export default function Container({ iri }) {
   useRedirectIfLoggedOut();
@@ -57,13 +58,11 @@ export default function Container({ iri }) {
     data: authenticatedProfile,
     error: authenticatedProfileError,
   } = useAuthenticatedProfile();
-  const podRootIri = usePodRootUri(iri, authenticatedProfile);
+  const podRootIri = usePodRootUri(iri);
   const { data: podRootResourceInfo, error: podRootError } = useResourceInfo(
     podRootIri
   );
   const { error: accessControlError } = useAccessControl(podRootResourceInfo);
-
-  const isAuthPod = iri?.startsWith(podRootIri);
 
   useEffect(() => {
     setResourcePath(iri);
@@ -90,7 +89,7 @@ export default function Container({ iri }) {
     }));
   }, [resourceIris]);
 
-  const loading = !resourceIris || !container || !iri;
+  if (!iri) return <Spinner />;
 
   if (containerError && isHTTPError(containerError.message, 401))
     return <AccessForbidden />;
@@ -100,11 +99,13 @@ export default function Container({ iri }) {
     return <ResourceNotFound />;
   if (containerError) return <NotSupported />;
   if (authenticatedProfileError) return <AuthProfileLoadError />;
-  if (isAuthPod && podRootError) return <PodRootLoadError />;
+  const locationIsInUsersPod = locationIsConnectedToProfile(
+    authenticatedProfile,
+    iri
+  );
+  if (podRootError && locationIsInUsersPod) return <PodRootLoadError />;
 
-  if (loading) {
-    return <Spinner />;
-  }
+  if (!resourceIris || !container || !podRootIri) return <Spinner />;
 
   if (!isContainer(container)) return <NotSupported />;
 
@@ -114,7 +115,7 @@ export default function Container({ iri }) {
         <PageHeader />
         <ContainerDetails mutate={mutate}>
           <ContainerSubHeader mutate={mutate} resourceList={data} />
-          {isAuthPod && accessControlError && (
+          {locationIsInUsersPod && accessControlError && (
             <NoControlWarning podRootIri={podRootIri} />
           )}
           <ContainerTable
@@ -129,5 +130,9 @@ export default function Container({ iri }) {
 }
 
 Container.propTypes = {
-  iri: T.string.isRequired,
+  iri: T.string,
+};
+
+Container.defaultProps = {
+  iri: null,
 };

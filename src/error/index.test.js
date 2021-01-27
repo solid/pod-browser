@@ -57,4 +57,8 @@ describe("isHTTPError", () => {
     expect(isHTTPError(new Error("Something with 500"), 404)).toBeFalsy();
     expect(isHTTPError(new Error("Something with 404"), 500)).toBeFalsy();
   });
+
+  it("accepts null for error", () => {
+    expect(isHTTPError(null, 404)).toBeFalsy();
+  });
 });

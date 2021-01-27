@@ -45,9 +45,26 @@ describe("useResourceInfo", () => {
   it("fetches data using getResourceInfo", () => {
     renderHook(() => useResourceInfo(iri));
     expect(useSWR.mock.calls[0][1]()).toBe(1337);
-    expect(solidClientFns.getResourceInfo).toHaveBeenCalledWith(iri, {
-      fetch: expect.any(Function),
-    });
+    expect(solidClientFns.getResourceInfo).toHaveBeenCalledWith(
+      iri,
+      {
+        fetch: expect.any(Function),
+      },
+      {}
+    );
+  });
+
+  it("allows passing options to useSWR", () => {
+    const swrOptions = { errorRetryCount: 0 };
+    renderHook(() => useResourceInfo(iri, swrOptions));
+    expect(useSWR.mock.calls[0][1]()).toBe(1337);
+    expect(solidClientFns.getResourceInfo).toHaveBeenCalledWith(
+      iri,
+      {
+        fetch: expect.any(Function),
+      },
+      swrOptions
+    );
   });
 
   it("handles string undefined being passed as iri", () => {

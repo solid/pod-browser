@@ -29,9 +29,7 @@ export default function usePodOwnerProfile() {
   const [profile, setProfile] = useState();
   const [error, setError] = useState();
   const router = useRouter();
-  const { podOwnerWebId, error: podOwnerError } = usePodOwner({
-    resourceIri: router.query.iri,
-  }); // passing in an object for testing purposes
+  const { podOwnerWebId, error: podOwnerError } = usePodOwner(router.query.iri);
   const { data: authProfile, error: authError } = useAuthenticatedProfile();
   const {
     data: ownerProfile,

@@ -53,7 +53,7 @@ export const alicePodRoot = "http://alice.example.com/";
 export const aliceAlternativeProfileUrl = "https://alice2.example.org/card";
 export const aliceAlternativeWebIdUrl = "https://alice2.example.org/card#me";
 
-export function mockPersonDatasetAlice() {
+export function mockPersonDatasetAlice(...operations) {
   return chain(
     mockThingFrom(aliceWebIdUrl),
     (t) => addStringNoLocale(t, vcard.fn, aliceName),
@@ -61,12 +61,13 @@ export function mockPersonDatasetAlice() {
     (t) => addUrl(t, vcard.hasPhoto, alicePhoto),
     (t) => addUrl(t, rdf.type, foaf.Person),
     (t) => addUrl(t, vcard.url, aliceAlternativeWebIdUrl),
-    (t) => addUrl(t, space.storage, alicePodRoot)
+    (t) => addUrl(t, space.storage, alicePodRoot),
+    ...operations
   );
 }
 
-export function mockProfileAlice() {
-  return packageProfile(aliceWebIdUrl, mockPersonDatasetAlice());
+export function mockProfileAlice(...operations) {
+  return packageProfile(aliceWebIdUrl, mockPersonDatasetAlice(...operations));
 }
 
 export const bobProfileUrl = "http://bob.example.com/bob";
