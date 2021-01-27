@@ -106,10 +106,6 @@ export async function createGroup(name, addressBook, fetch) {
   return {
     dataset: groupDataset,
     iri: groupThingUri,
-    props: {
-      name,
-      description: null,
-    },
   };
 }
 
@@ -122,9 +118,6 @@ export function getGroups(addressBook) {
     .map((t) => ({
       dataset: null,
       iri: asUrl(t),
-      props: {
-        name: getStringNoLocale(t, vcard.fn),
-      },
     }));
 }
 
@@ -134,9 +127,6 @@ export async function getGroup(groupUri, fetch) {
   return {
     dataset: groupDataset,
     iri: groupUri,
-    props: {
-      name: getStringNoLocale(groupThing, vcard.fn),
-    },
   };
 }
 
@@ -166,9 +156,6 @@ export async function updateGroup(group, name, addressBook, fetch) {
   return {
     dataset: savedDataset,
     iri: group.iri,
-    props: {
-      name,
-    },
   };
 }
 
@@ -185,7 +172,6 @@ export async function addMember(group, agentUri, fetch) {
   return {
     dataset: savedDataset,
     iri: group.iri,
-    props: group.props,
   };
 }
 
@@ -202,7 +188,6 @@ export async function removeMember(group, agentUri, fetch) {
   return {
     dataset: savedDataset,
     iri: group.iri,
-    props: group.props,
   };
 }
 

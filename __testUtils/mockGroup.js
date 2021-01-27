@@ -21,6 +21,8 @@
 
 import {
   addUrl,
+  getStringNoLocale,
+  getThing,
   mockSolidDatasetFrom,
   mockThingFrom,
   setStringNoLocale,
@@ -54,12 +56,15 @@ export function addGroupsToAddressBook(addressBook, groupsToAdd) {
       iri: addressBook.groups.iri,
       dataset: chain(
         addressBook.groups.dataset,
-        ...groupsToAdd.map((group) => (d) =>
-          setThing(d, mockGroupThing(group.props.name, group.iri))
-        ),
-        ...groupsToAdd.map((group) => (d) =>
-          setThing(d, mockIndexThing(addressBook, group.iri))
-        )
+        ...groupsToAdd.map(({ dataset, iri }) => (d) => {
+          const group = getThing(dataset, iri);
+          const name = getStringNoLocale(group, vcard.fn);
+          return setThing(d, mockGroupThing(name, iri));
+        }),
+        ...groupsToAdd.map((group) => {
+          console.log("GROUP", group);
+          return (d) => setThing(d, mockIndexThing(addressBook, group.iri));
+        })
       ),
     },
   };
@@ -88,8 +93,5 @@ export default function mockGroup(
         ),
       (d) => setThing(d, mockIndexThing(addressBook, groupThingUrl))
     ),
-    props: {
-      name,
-    },
   };
 }

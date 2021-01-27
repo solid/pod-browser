@@ -108,10 +108,6 @@ describe("createGroup", () => {
     expect(group).toEqual({
       dataset: group1Dataset,
       iri: group1Uri,
-      props: {
-        name: "test",
-        description: null,
-      },
     });
 
     // first save request is the group itself
@@ -161,13 +157,11 @@ describe("getGroups", () => {
     expect(group1).toEqual({
       iri: group1Uri,
       dataset: null,
-      props: mockedGroup1.props,
     });
 
     expect(group2).toEqual({
       iri: group2Uri,
       dataset: null,
-      props: mockedGroup2.props,
     });
   });
 });
@@ -198,9 +192,6 @@ describe("updateGroup", () => {
     ).resolves.toEqual({
       dataset: mockSolidDatasetFrom(mockedGroup1.iri),
       iri: mockedGroup1.iri,
-      props: {
-        name: newName,
-      },
     });
 
     // first save request is the group itself
@@ -233,7 +224,6 @@ describe("addMember", () => {
     await expect(group).resolves.toEqual({
       dataset: mockSolidDatasetFrom(group2DatasetUri),
       iri: mockedGroup2.iri,
-      props: mockedGroup2.props,
     });
 
     expect(
@@ -253,7 +243,6 @@ describe("removeMember", () => {
     await expect(group).resolves.toEqual({
       dataset: mockSolidDatasetFrom(group2DatasetUri),
       iri: mockedGroup2.iri,
-      props: mockedGroup2.props,
     });
 
     expect(
