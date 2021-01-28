@@ -48,12 +48,14 @@ export default function AgentAccessTable({ type }) {
     data: namedPermissions,
     mutate: mutatePermissions,
   } = useNamedPolicyPermissions(type);
+
   const { permissionsWithProfiles } = usePermissionsWithProfiles(
     namedPermissions
   );
-  const { namedPolicyPermissions: canShare } = useNamedPolicyPermissions(
-    "canShare"
-  );
+  const {
+    data: canShare,
+    mutate: mutateCanSharePermissions,
+  } = useNamedPolicyPermissions("canShare");
 
   const permissions = useMemo(() => {
     // remove this when deny policies are available
@@ -227,6 +229,7 @@ export default function AgentAccessTable({ type }) {
                         <AgentAccess
                           permission={details}
                           mutatePermissions={mutatePermissions}
+                          mutateCanShare={mutateCanSharePermissions}
                         />
                       </td>
                     </tr>

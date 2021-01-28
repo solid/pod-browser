@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddWebIdButton renders an Add WebID Button 1`] = `
+<DocumentFragment>
+  <button
+    class="PodBrowser-button PodBrowser-button--action PodBrowser-button"
+    data-testid="add-webid-button"
+  >
+    <i
+      alt="Add WebID Button"
+      class="PodBrowser-icon-add PodBrowser-icon"
+    />
+    Add WebId
+  </button>
+</DocumentFragment>
+`;

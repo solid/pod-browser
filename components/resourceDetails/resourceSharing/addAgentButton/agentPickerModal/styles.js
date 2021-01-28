@@ -51,20 +51,6 @@ export default function styles(theme) {
       justifyContent: "space-between",
       borderBottom: `1px solid ${theme.palette.grey.A100}`,
     },
-    button: {
-      height: "max-content",
-      fontWeight: 800,
-      fontSize: "0.8125rem",
-      textDecoration: "none",
-      borderRadius: "7px",
-      backgroundColor: "#F9F7FF",
-      whiteSpace: "nowrap",
-      padding: theme.spacing(0.2, 1.6),
-    },
-    icon: {
-      color: theme.palette.primary.main,
-      margin: theme.spacing(0.5),
-    },
     table: {
       width: "100%",
       padding: theme.spacing(1.6),

@@ -34,8 +34,6 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 import { Button } from "@inrupt/prism-react-components";
-import { useBem } from "@solid/lit-prism-patterns";
-import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import {
   DatasetContext,
@@ -69,13 +67,13 @@ import AgentPickerEmptyState from "../agentPickerEmptyState";
 import CanShareInfoTooltip from "../../canShareInfoTooltip";
 import styles from "./styles";
 import CanShareToggleSwitch from "../../canShareToggleSwitch";
+import AddWebIdButton from "./addWebIdButton";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const VCARD_WEBID_PREDICATE = "https://www.w3.org/2006/vcard/ns#WebId";
 const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
 const TESTCAFE_CONFIRM_BUTTON = "confirm-button";
 const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
-const TESTCAFE_ADD_WEBID_BUTTON = "add-webid-button";
 
 export default function AgentPickerModal({
   type,
@@ -90,15 +88,15 @@ export default function AgentPickerModal({
     error: peopleError,
     mutate: peopleMutate,
   } = useContacts(addressBook, foaf.Person);
+
   const classes = useStyles();
-  const bem = useBem(useStyles());
   const { session } = useSession();
   const { dataset } = useContext(DatasetContext);
   const resourceIri = getSourceUrl(dataset);
   const resourceName = getResourceName(resourceIri);
   const [selectedTabValue, setSelectedTabValue] = useState("");
   const { accessControl } = useContext(AccessControlContext);
-  const [canShare, setCanShare] = useState(false);
+  const [canShareWebIds, setCanShareWebIds] = useState([]);
   const [newAgentsWebIds, setNewAgentsWebIds] = useState([]);
   const [contactError, setContactError] = useState();
   const [contactsArray, setContactsArray] = useState([]);
@@ -106,7 +104,6 @@ export default function AgentPickerModal({
   const [placeholderDataset, setPlaceholderDataset] = useState(
     createSolidDataset()
   );
-  const [loading, setLoading] = useState();
   const [noAgentsAlert, setNoAgentsAlert] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -127,8 +124,8 @@ export default function AgentPickerModal({
     // todo: this will set the filter for the react SDK table once we have the multiselect agent picker
   };
 
-  const toggleCanShare = () => {
-    setCanShare(!canShare);
+  const toggleCanShare = (webId) => {
+    setCanShareWebIds([webId, ...canShareWebIds]);
   };
 
   const handleSaveContact = async (iri, fetch) => {
@@ -166,10 +163,9 @@ export default function AgentPickerModal({
       setNoAgentsAlert(true);
       return;
     }
-    setLoading(true);
     newAgentsWebIds.forEach(async (agentWebId) => {
       await accessControl.addAgentToNamedPolicy(agentWebId, type);
-      if (canShare) {
+      if (canShareWebIds.includes(agentWebId)) {
         await accessControl.addAgentToNamedPolicy(agentWebId, "canShare");
       }
 
@@ -178,7 +174,6 @@ export default function AgentPickerModal({
         setContactError(error); // setting the error in case we want to notify the user
       }
       mutatePermissions();
-      setLoading(false);
       onClose();
     });
   };
@@ -211,8 +206,6 @@ export default function AgentPickerModal({
 
   if (!contactsArray) return null;
 
-  if (loading) return <CircularProgress color="primary" />;
-
   return (
     <div
       className={classes.paper}
@@ -227,19 +220,7 @@ export default function AgentPickerModal({
             selectedTabValue={selectedTabValue}
             className={classes.modalTabsContainer}
           />
-          <Button
-            variant="action"
-            data-testid={TESTCAFE_ADD_WEBID_BUTTON}
-            className={classes.button}
-            disabled={addingWebId}
-            onClick={handleAddRow}
-          >
-            <i
-              className={clsx(bem("icon-add"), bem("icon"))}
-              alt={`${text} Button`}
-            />
-            Add WebId
-          </Button>
+          <AddWebIdButton onClick={handleAddRow} disabled={addingWebId} />
         </div>
         <AgentsSearchBar />
         {contactsArray.length ? (
@@ -291,13 +272,16 @@ export default function AgentPickerModal({
                   resourceName={resourceName}
                 />
               }
-              property={foaf.openid}
-              body={() => (
-                <CanShareToggleSwitch
-                  toggleShare={toggleCanShare}
-                  canShare={canShare}
-                />
-              )}
+              dataType="url"
+              property={VCARD_WEBID_PREDICATE}
+              body={({ value }) => {
+                return (
+                  <CanShareToggleSwitch
+                    toggleShare={() => toggleCanShare(value)}
+                    canShare={canShareWebIds.includes(value)}
+                  />
+                );
+              }}
             />
           </Table>
         ) : (

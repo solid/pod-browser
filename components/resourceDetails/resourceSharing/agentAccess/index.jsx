@@ -42,6 +42,7 @@ const TESTCAFE_ID_TRY_AGAIN_SPINNER = "try-again-spinner";
 export default function AgentAccess({
   permission: { webId, acl, canShare, alias, profile, profileError },
   mutatePermissions,
+  mutateCanShare,
 }) {
   const { accessControl } = useContext(AccessControlContext);
   const classes = useStyles();
@@ -63,9 +64,11 @@ export default function AgentAccess({
     e.preventDefault();
     if (localCanShare) {
       await accessControl.removeAgentFromNamedPolicy(webId, "canShare");
+      await mutateCanShare();
       setLocalCanShare(false);
     } else {
       await accessControl.addAgentToNamedPolicy(webId, "canShare");
+      await mutateCanShare();
       setLocalCanShare(true);
     }
   };
@@ -75,7 +78,7 @@ export default function AgentAccess({
     e.preventDefault();
     await accessControl.removeAgentFromNamedPolicy(webId, alias);
     setLoading(false);
-    mutatePermissions();
+    await mutatePermissions();
     setLocalAccess(null);
   };
 
@@ -185,8 +188,10 @@ export default function AgentAccess({
 AgentAccess.propTypes = {
   permission: T.object.isRequired,
   mutatePermissions: T.func,
+  mutateCanShare: T.func,
 };
 
 AgentAccess.defaultProps = {
   mutatePermissions: () => {},
+  mutateCanShare: () => {},
 };

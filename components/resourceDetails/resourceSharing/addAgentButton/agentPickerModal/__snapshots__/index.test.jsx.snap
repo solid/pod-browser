@@ -126,7 +126,7 @@ exports[`AgentPickerEmptyState renders a table with tabs, searchbox and an empty
           data-testid="add-webid-button"
         >
           <i
-            alt="Add Editors Button"
+            alt="Add WebID Button"
             class="PodBrowser-icon-add PodBrowser-icon"
           />
           Add WebId

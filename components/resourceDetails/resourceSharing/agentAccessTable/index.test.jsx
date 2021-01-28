@@ -263,14 +263,14 @@ describe("AgentAccessTable", () => {
       },
     ];
 
-    useNamedPolicyPermissions.mockReturnValueOnce({
+    useNamedPolicyPermissions.mockReturnValue({
       data: permissionsWithTypes,
       mutate: jest.fn(),
     });
     usePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: permissionsWithTypes,
     });
-    useNamedPolicyPermissions.mockReturnValueOnce({
+    useNamedPolicyPermissions.mockReturnValue({
       data: sharePermissions,
       mutate: jest.fn(),
     });
@@ -282,10 +282,10 @@ describe("AgentAccessTable", () => {
     const tabPeople = getByTestId("tab-people");
     const tabGroups = getByTestId("tab-groups");
     userEvent.click(tabPeople);
-    expect(queryByText("Not a person")).toBeNull();
     expect(queryByText("Example 1")).not.toBeNull();
+    expect(queryByText("Not a person")).toBeNull();
     userEvent.click(tabGroups);
-    expect(queryByText("Example 1")).toBeNull();
     expect(queryByText("No groups found")).not.toBeNull();
+    expect(queryByText("Example 1")).toBeNull();
   });
 });

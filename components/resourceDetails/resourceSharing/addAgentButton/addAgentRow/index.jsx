@@ -24,6 +24,7 @@ import PropTypes from "prop-types";
 import { useSession, useThing } from "@inrupt/solid-ui-react";
 import {
   Avatar,
+  CircularProgress,
   createStyles,
   TextField,
   Tooltip,
@@ -63,12 +64,14 @@ export default function AddAgentRow({
   const { thing } = useThing();
   const classes = useStyles();
   const [agentWebId, setAgentWebId] = useState("");
+  const [loading, setLoading] = useState(false);
   const [existingPermission, setExistingPermission] = useState();
   let agentName = thing && getStringNoLocale(thing, foaf.name);
   let agentAvatar = thing && getUrl(thing, vcard.hasPhoto);
   const displayedWebId = thing && getUrl(thing, VCARD_WEBID_PREDICATE);
 
   const handleAddAgentsWebIds = async (e) => {
+    setLoading(true);
     e.preventDefault();
     const existingWebId = permissions.filter((p) => p.webId === agentWebId);
     if (existingWebId.length) {
@@ -90,14 +93,18 @@ export default function AddAgentRow({
         if (avatar) {
           newThing = addUrl(newThing, vcard.hasPhoto, avatar);
         }
-        updateThing(newThing);
+        await updateThing(newThing);
+        setLoading(false);
       } else {
         newThing = addUrl(thing, VCARD_WEBID_PREDICATE, agentWebId); // temporarily storing this here to have a webId to display for these temporary rows
-        updateThing(newThing);
+        await updateThing(newThing);
+        setLoading(false);
       }
     } catch (error) {
       newThing = addUrl(thing, VCARD_WEBID_PREDICATE, agentWebId); // temporarily storing this here to have a webId to display for these temporary rows
-      updateThing(newThing);
+      await updateThing(newThing);
+      setLoading(false);
+
       agentName = null;
       agentAvatar = null;
     }
@@ -147,6 +154,7 @@ export default function AddAgentRow({
     );
   }
 
+  if (loading) return <CircularProgress color="primary" size={20} />;
   return (
     <Tooltip title={agentName ? displayedWebId : "Unable to load profile"}>
       <div className={classes.nameAndAvatarContainer}>
