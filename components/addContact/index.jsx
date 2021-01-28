@@ -36,8 +36,8 @@ import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import styles from "./styles";
 import { fetchProfile } from "../../src/solidClientHelpers/profile";
 import useContacts from "../../src/hooks/useContacts";
-import { saveContact } from "../../src/models/contact";
-import { findContactInAddressBook } from "../../src/addressBook";
+import { findContactInAddressBook } from "../../src/models/profile";
+import { savePerson } from "../../src/models/person";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export const EXISTING_WEBID_ERROR_MESSAGE =
@@ -83,7 +83,7 @@ export function handleSubmit({
 
       if (name) {
         const contact = { webId, fn: name };
-        const { response, error } = await saveContact(
+        const { response, error } = await savePerson(
           addressBook,
           contact,
           types,

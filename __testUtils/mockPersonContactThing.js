@@ -19,34 +19,60 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { addUrl, mockThingFrom, setThing, setUrl } from "@inrupt/solid-client";
+import {
+  addUrl,
+  asUrl,
+  mockThingFrom,
+  setStringNoLocale,
+  setThing,
+  setUrl,
+} from "@inrupt/solid-client";
 import { vcard, rdf, foaf } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
-import { vcardExtras } from "../src/addressBook";
+import { vcardExtras } from "../src/models/addressBook";
 
 export const webIdUrl = "http://example.com/alice#me";
 
-export function addContactsToAddressBook(addressBook, contactsToAdd) {
-  // TODO: Should probably be moved to a separate mockContact.js
-  const { people, ...rest } = addressBook;
-  return {
-    ...rest,
-    people: {
-      iri: addressBook.people.iri,
-      dataset: chain(
-        addressBook.groups.dataset,
-        ...contactsToAdd.map((contactThing) => (d) =>
-          setThing(
-            d,
-            chain(contactThing, (t) =>
-              setUrl(t, vcardExtras("inAddressBook"), addressBook.index.iri)
-            )
-          )
-        )
-      ),
-    },
-  };
+export function addMockedPersonThingsToIndexDataset(
+  dataset,
+  addressBook,
+  name,
+  personThingUrl
+) {
+  return chain(dataset, (d) =>
+    setThing(
+      d,
+      chain(
+        mockThingFrom(personThingUrl),
+        (t) => setUrl(t, rdf.type, vcard.Individual),
+        (t) => setStringNoLocale(t, vcard.fn, name),
+        (t) => setUrl(t, vcardExtras("inAddressBook"), asUrl(addressBook.thing))
+      )
+    )
+  );
 }
+
+// export function addContactsToAddressBook(addressBook, contactsToAdd) {
+//   // TODO: Should probably be moved to a separate mockContact.js
+//   const { people, ...rest } = addressBook;
+//   return {
+//     ...rest,
+//     people: {
+//       iri: addressBook.people.iri,
+//       dataset: chain(
+//         addressBook.groups.dataset,
+//         ...contactsToAdd.map((contactThing) => (d) =>
+//           setThing(
+//             d,
+//             chain(contactThing, (t) =>
+//               setUrl(t, vcardExtras("inAddressBook"), addressBook.index.iri)
+//             )
+//           )
+//         )
+//       ),
+//     },
+//   };
+// }
 
 export default function mockPersonContactThing(url = webIdUrl) {
   return chain(

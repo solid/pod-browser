@@ -34,10 +34,9 @@ import { useBem } from "@solid/lit-prism-patterns";
 import { Container } from "@inrupt/prism-react-components";
 import { CombinedDataProvider, Text, Image } from "@inrupt/solid-ui-react";
 
-import { vcardExtras } from "../../src/addressBook";
-
 import ContactInfoTable from "./contactInfoTable";
 import styles from "./styles";
+import { vcardExtras } from "../../src/models/addressBook";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 

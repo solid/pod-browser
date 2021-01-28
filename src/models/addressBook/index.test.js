@@ -19,260 +19,206 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { acl, dc, foaf, rdf, schema } from "rdf-namespaces";
+import { acl, dc, foaf, rdf, vcard } from "rdf-namespaces";
 import * as solidClientFns from "@inrupt/solid-client";
 import {
-  getThingAll,
   getStringNoLocale,
+  getThingAll,
   getUrl,
   mockSolidDatasetFrom,
-  setThing,
-  mockThingFrom,
-  setUrl,
 } from "@inrupt/solid-client";
 import * as resourceFns from "../../solidClientHelpers/resource";
 import {
+  ADDRESS_BOOK_ERROR_ALREADY_EXIST,
+  ADDRESS_BOOK_ERROR_NO_MAIN_INDEX,
+  ADDRESS_BOOK_ERROR_NO_PERMISSION_TO_CREATE,
   createAddressBook,
-  getAddressBookGroupIndexUrl,
-  getAddressBookIndex,
-  getAddressBookMainIndexUrl,
-  getAddressBookPersonIndexUrl,
-  saveNewAddressBook,
+  getAddressBookContainerIri,
+  getAddressBookIndexDefaultUrl,
+  getAddressBookIndexUrl,
+  GROUPS_INDEX_FILE,
+  INDEX_FILE,
   loadAddressBook,
+  PEOPLE_INDEX_FILE,
+  saveNewAddressBook,
+  vcardExtras,
 } from "./index";
-import { vcardExtras } from "../../addressBook";
-import mockAddressBook from "../../../__testUtils/mockAddressBook";
-import { chain } from "../../solidClientHelpers/utils";
+import mockAddressBook, {
+  mockAddressBookDataset,
+  mockAddressBookThing,
+} from "../../../__testUtils/mockAddressBook";
+import { joinPath } from "../../stringHelpers";
 
-describe("createAddressBook", () => {
-  it("creates all the datasets that an addressBook needs, with a default title", () => {
-    const iri = "https://example.pod.com/contacts";
-    const owner = "https://example.pod.com/card#me";
+const podIri = "https://example.pod.com/";
+const containerIri = "https://example.pod.com/contacts/";
 
-    const { containerIri, people, groups, index } = createAddressBook(
-      iri,
-      owner
-    );
-
-    expect(containerIri).toEqual(iri);
-
-    expect(getThingAll(groups.dataset)).toHaveLength(0);
-
-    expect(getThingAll(people.dataset)).toHaveLength(0);
-
-    expect(index.iri).toEqual(`${iri}/index.ttl#this`);
-    const mainIndexThing = getThingAll(index.dataset)[0];
-    expect(getStringNoLocale(mainIndexThing, dc.title)).toEqual("Contacts");
-    expect(getUrl(mainIndexThing, rdf.type)).toEqual(
-      vcardExtras("AddressBook")
-    );
-    expect(getUrl(mainIndexThing, acl.owner)).toEqual(owner);
-    expect(getUrl(mainIndexThing, vcardExtras("nameEmailIndex"))).toEqual(
-      "https://example.pod.com/contacts/people.ttl"
-    );
-    expect(getUrl(mainIndexThing, vcardExtras("groupIndex"))).toEqual(
-      "https://example.pod.com/contacts/groups.ttl"
-    );
+describe("getAddressBookContainerIri", () => {
+  it("returns the default container for address book", () => {
+    expect(getAddressBookContainerIri(podIri)).toEqual(containerIri);
   });
+});
 
-  it("creates all the datasets that an addressBook needs, with a given title", () => {
-    const iri = "https://example.pod.com/contacts";
-    const owner = "https://example.pod.com/card#me";
-    const title = "My Address Book";
-
-    const { containerIri, people, groups, index } = createAddressBook(
-      iri,
-      owner,
-      title
+describe("getAddressBookIndexDefaultUrl", () => {
+  it("returns the default URLs for the various indexes", () => {
+    expect(getAddressBookIndexDefaultUrl(containerIri)).toEqual(
+      joinPath(containerIri, INDEX_FILE)
     );
-
-    expect(containerIri).toBe(iri);
-
-    expect(getThingAll(groups.dataset)).toHaveLength(0);
-
-    expect(getThingAll(people.dataset)).toHaveLength(0);
-
-    expect(index.iri).toEqual(`${iri}/index.ttl#this`);
-    const mainIndexThing = getThingAll(index.dataset)[0];
-    expect(getStringNoLocale(mainIndexThing, dc.title)).toEqual(title);
-    expect(getUrl(mainIndexThing, rdf.type)).toEqual(
-      vcardExtras("AddressBook")
+    expect(getAddressBookIndexDefaultUrl(containerIri, vcard.Group)).toEqual(
+      joinPath(containerIri, GROUPS_INDEX_FILE)
     );
-    expect(getUrl(mainIndexThing, acl.owner)).toEqual(owner);
-    expect(getUrl(mainIndexThing, vcardExtras("nameEmailIndex"))).toEqual(
-      "https://example.pod.com/contacts/people.ttl"
-    );
-    expect(getUrl(mainIndexThing, vcardExtras("groupIndex"))).toEqual(
-      "https://example.pod.com/contacts/groups.ttl"
+    expect(getAddressBookIndexDefaultUrl(containerIri, foaf.Person)).toEqual(
+      joinPath(containerIri, PEOPLE_INDEX_FILE)
     );
   });
 });
 
-describe("getAddressBookIndex", () => {
-  const containerIri = "http://example.com/contacts";
+describe("getAddressBookIndexUrl", () => {
+  it("returns the URL that's stored in the model", () => {
+    const indexUrl = "https://example.com/myIndex.ttl";
+    const groupsUrl = "https://example.com/myGroups.ttl";
+    const peopleUrl = "https://example.com/myPeople.ttl";
+    const addressBook = mockAddressBook({
+      indexUrl,
+      groupsUrl,
+      peopleUrl,
+    });
+    expect(getAddressBookIndexUrl(addressBook)).toEqual(indexUrl);
+    expect(getAddressBookIndexUrl(addressBook, vcard.Group)).toEqual(groupsUrl);
+    expect(getAddressBookIndexUrl(addressBook, foaf.Person)).toEqual(peopleUrl);
+  });
 
-  it("returns a specific index based on type", () => {
-    const addressBook = mockAddressBook({ containerIri });
-    expect(getAddressBookIndex(addressBook)).toBe(addressBook.index);
-    expect(getAddressBookIndex(addressBook, foaf.Person)).toBe(
-      addressBook.people
+  it("returns default URLs if model data is missing", () => {
+    const addressBook = mockAddressBook({
+      containerIri,
+      indexUrl: null,
+      groupsUrl: null,
+      peopleUrl: null,
+    });
+    expect(getAddressBookIndexUrl(addressBook)).toEqual(
+      joinPath(containerIri, INDEX_FILE)
     );
-    expect(getAddressBookIndex(addressBook, schema.Person)).toBe(
-      addressBook.people
+    expect(getAddressBookIndexUrl(addressBook, vcard.Group)).toEqual(
+      joinPath(containerIri, GROUPS_INDEX_FILE)
     );
+    expect(getAddressBookIndexUrl(addressBook, foaf.Person)).toEqual(
+      joinPath(containerIri, PEOPLE_INDEX_FILE)
+    );
+  });
+});
+
+describe("createAddressBook", () => {
+  it("creates the main index, with a default title", () => {
+    const owner = "https://example.pod.com/card#me";
+
+    const addressBook = createAddressBook(containerIri, owner);
+
+    expect(addressBook.containerIri).toEqual(containerIri);
+
+    expect(getThingAll(addressBook.dataset)).toHaveLength(1);
+
+    expect(getStringNoLocale(addressBook.thing, dc.title)).toEqual("Contacts");
+    expect(getUrl(addressBook.thing, rdf.type)).toEqual(
+      vcardExtras("AddressBook")
+    );
+    expect(getUrl(addressBook.thing, acl.owner)).toEqual(owner);
+    expect(getUrl(addressBook.thing, vcardExtras("nameEmailIndex"))).toEqual(
+      "https://example.pod.com/contacts/people.ttl"
+    );
+    expect(getUrl(addressBook.thing, vcardExtras("groupIndex"))).toEqual(
+      "https://example.pod.com/contacts/groups.ttl"
+    );
+  });
+
+  it("can create with a given title", () => {
+    const owner = "https://example.pod.com/card#me";
+    const title = "My Address Book";
+
+    const addressBook = createAddressBook(containerIri, owner, title);
+
+    expect(addressBook.containerIri).toBe(containerIri);
+    expect(getStringNoLocale(addressBook.thing, dc.title)).toEqual(title);
   });
 });
 
 describe("loadAddressBook", () => {
-  const containerIri = "http://example.com/contacts";
-  const mainIndexUrl = getAddressBookMainIndexUrl({ containerIri });
-  const mainIndexThingUrl = `${mainIndexUrl}#this`;
-  const groupsIndexUrl = getAddressBookGroupIndexUrl({ containerIri });
-  const peopleIndexUrl = getAddressBookPersonIndexUrl({ containerIri });
-  const emptyDataset = mockSolidDatasetFrom("http://example.com");
+  const mainIndexUrl = getAddressBookIndexDefaultUrl(containerIri);
   const fetch = "fetch";
-  const existingDataset = chain(mockSolidDatasetFrom(mainIndexUrl), (d) =>
-    setThing(
-      d,
-      chain(
-        mockThingFrom(mainIndexThingUrl),
-        (t) => setUrl(t, vcardExtras("groupIndex"), groupsIndexUrl),
-        (t) => setUrl(t, vcardExtras("nameEmailIndex"), peopleIndexUrl)
-      )
-    )
+  const existingThing = mockAddressBookThing({ containerIri });
+  const existingDataset = mockAddressBookDataset(
+    { containerIri },
+    existingThing
   );
 
-  it("loads missing datasets for an address book", async () => {
+  it("loads the main index for an address book", async () => {
     jest
       .spyOn(solidClientFns, "getSolidDataset")
-      .mockResolvedValueOnce(existingDataset)
-      .mockResolvedValueOnce(emptyDataset)
-      .mockResolvedValueOnce(emptyDataset);
+      .mockResolvedValueOnce(existingDataset);
     await expect(loadAddressBook(containerIri, fetch)).resolves.toEqual({
       containerIri,
-      index: {
-        dataset: existingDataset,
-        iri: mainIndexThingUrl,
-      },
-      groups: {
-        dataset: emptyDataset,
-        iri: groupsIndexUrl,
-      },
-      people: {
-        dataset: emptyDataset,
-        iri: peopleIndexUrl,
-      },
+      dataset: existingDataset,
+      thing: existingThing,
     });
   });
 
   it("returns error if it main index is missing", async () => {
     jest
       .spyOn(solidClientFns, "getSolidDataset")
-      .mockResolvedValue(emptyDataset);
+      .mockResolvedValue(mockSolidDatasetFrom("http://example.com"));
     await expect(loadAddressBook(containerIri, fetch)).rejects.toEqual(
-      new Error("Unable to load main index")
+      new Error(ADDRESS_BOOK_ERROR_NO_MAIN_INDEX)
     );
   });
 });
 
 describe("saveNewAddressBook", () => {
-  const iri = "https://example.pod.com/contacts";
   const owner = "https://example.pod.com/card#me";
   const error401 = "401 Unauthorized";
+  const error404 = "404 Not found";
   const error500 = "500 Server error";
+  const fetch = jest.fn();
+  const addressBook = mockAddressBook({ containerIri });
+
+  let mockedGetSolidDataset;
+  let mockedSaveSolidDatasetAt;
 
   beforeEach(() => {
-    jest
-      .spyOn(resourceFns, "getResource")
-      .mockResolvedValue({ error: "There was an error" });
+    mockedGetSolidDataset = jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockRejectedValue(error404);
+    mockedSaveSolidDatasetAt = jest
+      .spyOn(solidClientFns, "saveSolidDatasetAt")
+      .mockResolvedValue(addressBook.dataset);
   });
 
   it("saves a new address at the given iri, for the given owner, with a default title", async () => {
-    const addressBook = createAddressBook(iri, owner);
+    const savedBook = await saveNewAddressBook(containerIri, owner, fetch);
 
-    jest
-      .spyOn(resourceFns, "saveResource")
-      .mockResolvedValueOnce({ response: addressBook.index })
-      .mockResolvedValueOnce({ response: addressBook.groups })
-      .mockResolvedValueOnce({ response: addressBook.people });
-
-    const { containerIri, index, groups, people } = await saveNewAddressBook(
-      iri,
-      owner
-    );
-
-    expect(containerIri).toBe(iri);
-    expect(index).toEqual(addressBook.index);
-    expect(groups).toEqual(addressBook.groups);
-    expect(people).toEqual(addressBook.people);
-
-    const [
-      saveIndexArgs,
-      saveGroupsArgs,
-      savePeopleArgs,
-    ] = resourceFns.saveResource.mock.calls;
-
-    expect(saveIndexArgs[0].iri).toEqual(addressBook.index.iri);
-    expect(saveIndexArgs[0].iri).toEqual(addressBook.index.iri);
-    expect(saveGroupsArgs[0].iri).toEqual(addressBook.groups.iri);
-    expect(savePeopleArgs[0].iri).toEqual(addressBook.people.iri);
+    expect(savedBook.containerIri).toBe(containerIri);
+    expect(savedBook.dataset).toEqual(addressBook.dataset);
+    expect(savedBook.thing).toEqual(addressBook.thing);
   });
 
   it("returns an error if the user is unauthorized", async () => {
-    jest
-      .spyOn(resourceFns, "saveResource")
-      .mockResolvedValueOnce({ error: error401 })
-      .mockResolvedValueOnce({ error: error401 })
-      .mockResolvedValueOnce({ error: error401 });
+    mockedSaveSolidDatasetAt.mockRejectedValue(error401);
 
-    await expect(saveNewAddressBook(iri, owner, jest.fn())).rejects.toEqual(
-      new Error("You do not have permission to create an address book")
-    );
+    await expect(
+      saveNewAddressBook(containerIri, owner, fetch)
+    ).rejects.toEqual(new Error(ADDRESS_BOOK_ERROR_NO_PERMISSION_TO_CREATE));
   });
 
   it("returns an error if the address book already exists", async () => {
-    resourceFns.getResource.mockResolvedValue({
-      response: "existing address book",
-    });
+    mockedGetSolidDataset.mockResolvedValue(mockSolidDatasetFrom(containerIri));
 
-    await expect(saveNewAddressBook(iri, owner, jest.fn())).rejects.toEqual(
-      new Error("Address book already exists.")
-    );
+    await expect(
+      saveNewAddressBook(containerIri, owner, fetch)
+    ).rejects.toEqual(new Error(ADDRESS_BOOK_ERROR_ALREADY_EXIST));
   });
 
   it("passes the error on if it isn't a 401 error", async () => {
-    jest
-      .spyOn(resourceFns, "saveResource")
-      .mockResolvedValueOnce({ error: error500 })
-      .mockResolvedValueOnce({ error: error401 })
-      .mockResolvedValueOnce({ error: error401 });
+    mockedSaveSolidDatasetAt.mockRejectedValue(error500);
 
-    await expect(saveNewAddressBook(iri, owner, jest.fn())).rejects.toEqual(
-      error500
-    );
-  });
-
-  it("returns an error if it fails to save group index", async () => {
-    jest
-      .spyOn(resourceFns, "saveResource")
-      .mockResolvedValueOnce({ response: "index" })
-      .mockResolvedValueOnce({ error: error500 })
-      .mockResolvedValueOnce({ response: "people" });
-
-    await expect(saveNewAddressBook(iri, owner, jest.fn())).rejects.toEqual(
-      error500
-    );
-  });
-
-  it("returns an error if it fails to save people index", async () => {
-    jest
-      .spyOn(resourceFns, "saveResource")
-      .mockResolvedValueOnce({ response: "index" })
-      .mockResolvedValueOnce({ response: "group" })
-      .mockResolvedValueOnce({ error: error500 });
-
-    await expect(saveNewAddressBook(iri, owner, jest.fn())).rejects.toEqual(
-      error500
-    );
+    await expect(
+      saveNewAddressBook(containerIri, owner, fetch)
+    ).rejects.toEqual(error500);
   });
 });

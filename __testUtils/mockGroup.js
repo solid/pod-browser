@@ -31,8 +31,8 @@ import {
 } from "@inrupt/solid-client";
 import { rdf, vcard } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
-import { vcardExtras } from "../src/addressBook";
 import { createGroupDatasetUrl } from "../src/models/group";
+import { vcardExtras } from "../src/models/addressBook";
 
 function mockGroupThing(name, groupThingUrl) {
   return chain(
@@ -43,32 +43,42 @@ function mockGroupThing(name, groupThingUrl) {
 }
 
 function mockIndexThing(addressBook, groupThingUrl) {
-  return chain(mockThingFrom(addressBook.index.iri), (t) =>
-    setUrl(t, vcardExtras("includesGroup"), groupThingUrl)
+  return setUrl(addressBook.thing, vcardExtras("includesGroup"), groupThingUrl);
+}
+
+export function addGroupToIndexDataset(
+  dataset,
+  addressBook,
+  name,
+  groupThingUrl
+) {
+  return chain(
+    dataset,
+    (d) => setThing(d, mockGroupThing(name, groupThingUrl)),
+    (d) => setThing(d, mockIndexThing(addressBook, groupThingUrl))
   );
 }
 
-export function addGroupsToAddressBook(addressBook, groupsToAdd) {
-  const { groups, ...rest } = addressBook;
-  return {
-    ...rest,
-    groups: {
-      iri: addressBook.groups.iri,
-      dataset: chain(
-        addressBook.groups.dataset,
-        ...groupsToAdd.map(({ dataset, iri }) => (d) => {
-          const group = getThing(dataset, iri);
-          const name = getStringNoLocale(group, vcard.fn);
-          return setThing(d, mockGroupThing(name, iri));
-        }),
-        ...groupsToAdd.map((group) => {
-          console.log("GROUP", group);
-          return (d) => setThing(d, mockIndexThing(addressBook, group.iri));
-        })
-      ),
-    },
-  };
-}
+// export function addGroupsToAddressBook(addressBook, groupsToAdd) {
+//   const { groups, ...rest } = addressBook;
+//   return {
+//     ...rest,
+//     groups: {
+//       iri: addressBook.groups.iri,
+//       dataset: chain(
+//         addressBook.groups.dataset,
+//         ...groupsToAdd.map(({ dataset, iri }) => (d) => {
+//           const group = getThing(dataset, iri);
+//           const name = getStringNoLocale(group, vcard.fn);
+//           return setThing(d, mockGroupThing(name, iri));
+//         }),
+//         ...groupsToAdd.map((group) => (d) =>
+//           setThing(d, mockIndexThing(addressBook, group.iri))
+//         )
+//       ),
+//     },
+//   };
+// }
 
 export default function mockGroup(
   addressBook,
@@ -77,21 +87,18 @@ export default function mockGroup(
 ) {
   const groupDatasetUrl = url || createGroupDatasetUrl(addressBook, id);
   const groupThingUrl = `${groupDatasetUrl}#this`;
+  const groupThing = chain(
+    mockGroupThing(name, groupThingUrl),
+    ...(members || []).map((agentUrl) => (t) =>
+      addUrl(t, vcard.hasMember, agentUrl)
+    )
+  );
   return {
-    iri: groupThingUrl,
     dataset: chain(
-      mockSolidDatasetFrom(groupThingUrl),
-      (d) =>
-        setThing(
-          d,
-          chain(
-            mockGroupThing(name, groupThingUrl),
-            ...(members || []).map((agentUrl) => (t) =>
-              addUrl(t, vcard.hasMember, agentUrl)
-            )
-          )
-        ),
+      mockSolidDatasetFrom(groupDatasetUrl),
+      (d) => setThing(d, groupThing),
       (d) => setThing(d, mockIndexThing(addressBook, groupThingUrl))
     ),
+    thing: groupThing,
   };
 }

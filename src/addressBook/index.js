@@ -19,132 +19,11 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import {
-  addStringNoLocale,
-  addUrl,
-  asUrl,
-  createThing,
-  getThing,
-  getThingAll,
-  getUrl,
-  getUrlAll,
-} from "@inrupt/solid-client";
+import { addStringNoLocale, addUrl } from "@inrupt/solid-client";
 import { v4 as uuid } from "uuid";
-import { foaf, rdf, schema, vcard } from "rdf-namespaces";
-import { chain, defineThing } from "../solidClientHelpers/utils";
-import { getResource } from "../solidClientHelpers/resource";
-import { joinPath } from "../stringHelpers";
-
-const CONTACTS_CONTAINER = "contacts/";
-
-const NAME_EMAIL_INDEX_PREDICATE =
-  "http://www.w3.org/2006/vcard/ns#nameEmailIndex";
-const NAME_GROUP_INDEX_PREDICATE = "http://www.w3.org/2006/vcard/ns#groupIndex";
-
-export const INDEX_FILE = "index.ttl";
-export const PEOPLE_INDEX_FILE = "people.ttl";
-export const GROUPS_INDEX_FILE = "groups.ttl";
-export const PERSON_CONTAINER = "Person";
-export const GROUP_CONTAINER = "Group";
-
-export const VCARD_WEBID_PREDICATE = "https://www.w3.org/2006/vcard/ns#WebId";
-
-export const TYPE_MAP = {
-  [foaf.Person]: {
-    indexFile: PEOPLE_INDEX_FILE,
-    container: PERSON_CONTAINER,
-    indexFilePredicate: NAME_EMAIL_INDEX_PREDICATE,
-    contactTypeIri: vcard.Individual,
-  },
-  [schema.Person]: {
-    indexFile: PEOPLE_INDEX_FILE,
-    container: PERSON_CONTAINER,
-    indexFilePredicate: NAME_EMAIL_INDEX_PREDICATE,
-    contactTypeIri: vcard.Individual,
-  },
-  [vcard.Group]: {
-    indexFile: GROUPS_INDEX_FILE,
-    container: GROUP_CONTAINER,
-    indexFilePredicate: NAME_GROUP_INDEX_PREDICATE,
-    contactTypeIri: vcard.Group,
-  },
-};
-
-export function vcardExtras(property) {
-  return `http://www.w3.org/2006/vcard/ns#${property}`;
-}
-
-export function contactsContainerIri(podRootIri) {
-  return joinPath(podRootIri, CONTACTS_CONTAINER);
-}
-
-export function getContactsIndexIri(contactsIri) {
-  return joinPath(contactsIri, INDEX_FILE);
-}
-
-export async function getContacts(indexFileDataset, contactTypeIri, fetch) {
-  if (!indexFileDataset) {
-    return [];
-  }
-  const contactsThings = getThingAll(indexFileDataset);
-
-  const contactsIris = contactsThings.map((t) => asUrl(t));
-
-  const contactsResponses = await Promise.all(
-    contactsIris.map((iri) => getResource(iri, fetch))
-  );
-
-  const contacts = contactsResponses
-    .filter(({ error: e }) => !e)
-    .map(({ response }) => response)
-    .filter(({ dataset, iri }) => {
-      const contactThing = getThing(dataset, iri);
-      return (
-        contactThing &&
-        getUrlAll(contactThing, rdf.type).includes(contactTypeIri)
-      );
-    });
-
-  return contacts;
-}
-
-export function getWebIdUrl(dataset, iri) {
-  const thing = getThing(dataset, iri);
-  const webIdNodeUrl = getUrl(thing, vcard.url);
-  if (webIdNodeUrl) {
-    const webIdNode = getThing(dataset, webIdNodeUrl);
-    return webIdNode && getUrl(webIdNode, vcard.value);
-  }
-  return getUrl(thing, foaf.openid);
-}
-
-export async function getProfiles(people, fetch) {
-  const profileResponses = await Promise.all(
-    people.map(async ({ dataset, iri }) => {
-      const url = getWebIdUrl(dataset, iri);
-      return getResource(url, fetch);
-    })
-  );
-
-  return profileResponses
-    .filter(({ error }) => !error)
-    .map(({ response }) => response)
-    .map(({ dataset, iri }) => {
-      const thing = getThing(dataset, iri);
-      const avatar = getUrl(thing, vcard.hasPhoto);
-      return addStringNoLocale(getThing(thing, iri), vcard.hasPhoto, avatar);
-    });
-}
-
-export const createWebIdNodeFn = (webId, iri) => {
-  const webIdNode = chain(
-    createThing(),
-    (t) => addUrl(t, rdf.type, VCARD_WEBID_PREDICATE),
-    (t) => addUrl(t, vcard.value, webId)
-  );
-  const webIdNodeUrl = asUrl(webIdNode, iri);
-  return { webIdNode, webIdNodeUrl };
-};
+import { foaf, rdf, vcard } from "rdf-namespaces";
+import { defineThing } from "../solidClientHelpers/utils";
+import { vcardExtras } from "../models/addressBook";
 
 export const schemaFunctionMappings = {
   webId: (v) => (t) => addUrl(t, vcard.url, v),
@@ -196,16 +75,4 @@ export function mapSchema(prefix) {
     const thing = defineThing({ name }, ...operations);
     return { name, thing };
   };
-}
-
-export function createContactTypeNotFoundError(contact) {
-  return new Error(`Contact is unsupported type: ${contact.type}`);
-}
-
-export async function findContactInAddressBook(people, webId, fetch) {
-  const profiles = await getProfiles(people, fetch); // TODO: Problematic? Means traversing all contacts and loading their WebId
-  const existingContact = profiles.filter(
-    (profile) => asUrl(profile) === webId
-  );
-  return existingContact;
 }

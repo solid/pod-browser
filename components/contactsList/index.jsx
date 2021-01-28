@@ -44,10 +44,10 @@ import useProfiles from "../../src/hooks/useProfiles";
 import ContactsListSearch from "./contactsListSearch";
 import ProfileLink from "../profileLink";
 import { SearchProvider } from "../../src/contexts/searchContext";
-import { getWebIdUrl } from "../../src/addressBook";
 import ContactsDrawer from "./contactsDrawer";
 import ContactsEmptyState from "./contactsEmptyState";
-import { deleteContact } from "../../src/models/contact";
+import { getWebIdUrl } from "../../src/models/contact";
+import { deletePerson } from "../../src/models/person";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -66,7 +66,7 @@ export function handleDeleteContact({
   return async () => {
     const selectedContact = people[selectedContactIndex];
 
-    await deleteContact(addressBook, selectedContact, foaf.Person, fetch);
+    await deletePerson(addressBook, selectedContact, foaf.Person, fetch);
     peopleMutate();
     closeDrawer();
   };

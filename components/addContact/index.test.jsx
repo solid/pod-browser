@@ -39,10 +39,6 @@ import AddContact, {
 } from "./index";
 import * as addressBookFns from "../../src/addressBook";
 import * as contactModelFns from "../../src/models/contact";
-import {
-  contactsContainerIri,
-  findContactInAddressBook,
-} from "../../src/addressBook";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import {
   aliceWebIdUrl,
@@ -50,6 +46,8 @@ import {
   mockProfileAlice,
 } from "../../__testUtils/mockPersonResource";
 import * as profileHelperFns from "../../src/solidClientHelpers/profile";
+import { findContactInAddressBook } from "../../src/models/profile";
+import { getAddressBookContainerIri } from "../../src/models/addressBook";
 
 describe("AddContact", () => {
   test("it renders the Add Contact form", () => {
@@ -182,7 +180,7 @@ describe("handleSubmit", () => {
       vcard.fn,
       "Alice"
     );
-    const contactsIri = contactsContainerIri("http://www.example.com/");
+    const contactsIri = getAddressBookContainerIri("http://www.example.com/");
     const people = mockSolidDatasetFrom(contactsIri);
     const peopleMutate = jest.fn();
     const peopleDatasetWithContact = setThing(people, personDataset);

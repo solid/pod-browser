@@ -25,9 +25,8 @@ import {
   createSolidDataset,
   createThing,
   getSolidDataset,
-  getStringNoLocale,
+  getSourceUrl,
   getThing,
-  getThingAll,
   getUrlAll,
   removeUrl,
   saveSolidDatasetAt,
@@ -39,20 +38,19 @@ import { rdf, vcard } from "rdf-namespaces";
 import { v4 as uuid } from "uuid";
 import { chain } from "../../solidClientHelpers/utils";
 import { joinPath } from "../../stringHelpers";
-import { TYPE_MAP, vcardExtras } from "../../addressBook";
-import { getAddressBookGroupIndexUrl } from "../addressBook";
-import { getBaseUrl } from "../../solidClientHelpers/resource";
+import { getAddressBookIndexUrl, TYPE_MAP, vcardExtras } from "../addressBook";
+import {
+  getBaseUrl,
+  updateOrCreateDataset,
+} from "../../solidClientHelpers/resource";
 
 /**
  * Contacts represent the dataset in a user's AddressBook, e.g. /contacts/Person/<unique-id>/index.ttl#this
  *
  * @typedef Group
  * @type {object}
- * @property {string} iri
- * @property {object | null} dataset
- * @property {object} props
- * @property {string} props.name
- * @property {string | null} props.description
+ * @property {object} thing - The group itself
+ * @property {object} dataset - The dataset that the group reside in (can be the groupIndex or the groupResource)
  */
 
 /* Model functions */
@@ -65,9 +63,7 @@ function createGroupThing(name, thingOptions) {
 }
 
 function createIndexThing(addressBook, groupThingUri) {
-  return chain(createThing({ url: addressBook.index.iri }), (t) =>
-    setUrl(t, vcardExtras("includesGroup"), groupThingUri)
-  );
+  return setUrl(addressBook.thing, vcardExtras("includesGroup"), groupThingUri);
 }
 
 export function createGroupDatasetUrl(addressBook, id = uuid()) {
@@ -78,7 +74,7 @@ export function createGroupDatasetUrl(addressBook, id = uuid()) {
 /**
  * Note that you might need to refresh the cache of group index after this, e.g. mutate SWR cache
  */
-export async function createGroup(name, addressBook, fetch) {
+export async function createGroup(addressBook, name, fetch) {
   const groupDatasetUri = createGroupDatasetUrl(addressBook);
   const groupThingUri = `${groupDatasetUri}#this`;
   // create the group resource itself
@@ -92,59 +88,42 @@ export async function createGroup(name, addressBook, fetch) {
     { fetch }
   );
   // link the group to the group index
-  const groupIndexUri = getAddressBookGroupIndexUrl(addressBook);
-  const groupIndexDataset = await getSolidDataset(groupIndexUri, { fetch });
-  await saveSolidDatasetAt(
+  const groupIndexUri = getAddressBookIndexUrl(addressBook, vcard.Group);
+  const groupThing = createGroupThing(name, { url: groupThingUri });
+  await updateOrCreateDataset(
     groupIndexUri,
-    chain(
-      groupIndexDataset,
-      (d) => setThing(d, createGroupThing(name, { url: groupThingUri })),
-      (d) => setThing(d, createIndexThing(addressBook, groupThingUri))
-    ),
-    { fetch }
+    fetch,
+    (d) => setThing(d, groupThing),
+    (d) => setThing(d, createIndexThing(addressBook, groupThingUri))
   );
   return {
     dataset: groupDataset,
-    iri: groupThingUri,
+    thing: groupThing,
   };
 }
 
-/**
- * Do not return the dataset of each group, must be loaded separately (e.g. using getGroup)
- */
-export function getGroups(addressBook) {
-  return getThingAll(addressBook.groups.dataset)
-    .filter((t) => getUrlAll(t, rdf.type).includes(vcard.Group))
-    .map((t) => ({
-      dataset: null,
-      iri: asUrl(t),
-    }));
-}
-
 export async function getGroup(groupUri, fetch) {
-  const groupDataset = await getSolidDataset(getBaseUrl(groupUri), { fetch });
-  const groupThing = getThing(groupDataset, groupUri);
+  const dataset = await getSolidDataset(getBaseUrl(groupUri), { fetch });
   return {
-    dataset: groupDataset,
-    iri: groupUri,
+    dataset,
+    thing: getThing(dataset, groupUri),
   };
 }
 
 /**
  * Note that you might need to refresh the cache of group index after this, e.g. mutate SWR cache
  */
-export async function updateGroup(group, name, addressBook, fetch) {
+export async function renameGroup(group, name, addressBook, fetch) {
+  // update the group itself
   const savedDataset = await saveSolidDatasetAt(
-    getBaseUrl(group.iri),
-    setThing(
-      group.dataset,
-      setStringNoLocale(getThing(group.dataset, group.iri), vcard.fn, name)
-    ),
+    getSourceUrl(group.dataset),
+    setThing(group.dataset, setStringNoLocale(group.thing, vcard.fn, name)),
     { fetch }
   );
-  const groupIndexUri = getAddressBookGroupIndexUrl(addressBook);
+  // update the group index
+  const groupIndexUri = getAddressBookIndexUrl(addressBook, vcard.Group);
   const groupIndexDataset = await getSolidDataset(groupIndexUri, { fetch });
-  const existingGroup = getThing(groupIndexDataset, group.iri);
+  const existingGroup = getThing(groupIndexDataset, asUrl(group.thing));
   await saveSolidDatasetAt(
     groupIndexUri,
     setThing(
@@ -155,49 +134,43 @@ export async function updateGroup(group, name, addressBook, fetch) {
   );
   return {
     dataset: savedDataset,
-    iri: group.iri,
+    thing: getThing(savedDataset, asUrl(group.thing)),
   };
 }
 
 /**
  * Note that you might need to refresh the cache of the specific group after this, e.g. mutate SWR cache
  */
-export async function addMember(group, agentUri, fetch) {
-  const groupThing = getThing(group.dataset, group.iri);
+export async function addGroupMember(group, agentUri, fetch) {
   const savedDataset = await saveSolidDatasetAt(
-    getBaseUrl(group.iri),
-    setThing(group.dataset, addUrl(groupThing, vcard.hasMember, agentUri)),
+    getSourceUrl(group.dataset),
+    setThing(group.dataset, addUrl(group.thing, vcard.hasMember, agentUri)),
     { fetch }
   );
   return {
     dataset: savedDataset,
-    iri: group.iri,
+    thing: getThing(savedDataset, asUrl(group.thing)),
   };
 }
 
 /**
  * Note that you might need to refresh the cache of the specific group after this, e.g. mutate SWR cache
  */
-export async function removeMember(group, agentUri, fetch) {
-  const groupThing = getThing(group.dataset, group.iri);
+export async function removeGroupMember(group, agentUri, fetch) {
   const savedDataset = await saveSolidDatasetAt(
-    getBaseUrl(group.iri),
-    setThing(group.dataset, removeUrl(groupThing, vcard.hasMember, agentUri)),
+    getSourceUrl(group.dataset),
+    setThing(group.dataset, removeUrl(group.thing, vcard.hasMember, agentUri)),
     { fetch }
   );
   return {
     dataset: savedDataset,
-    iri: group.iri,
+    thing: getThing(savedDataset, asUrl(group.thing)),
   };
 }
 
 /**
  * Do not return the dataset of each group member, must be loaded separately
  */
-export function getMembers(group) {
-  const groupThing = getThing(group.dataset, group.iri);
-  return getUrlAll(groupThing, vcard.hasMember).map((agentUrl) => ({
-    iri: agentUrl,
-    dataset: null,
-  }));
+export function getGroupMembers(group) {
+  return getUrlAll(group.thing, vcard.hasMember);
 }

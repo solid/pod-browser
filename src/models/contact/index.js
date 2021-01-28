@@ -20,173 +20,96 @@
  */
 
 import {
-  addStringNoLocale,
   addUrl,
-  asUrl,
-  deleteFile,
-  getSourceUrl,
+  createThing,
+  getThing,
   getThingAll,
-  removeThing,
-  setThing,
+  getUrl,
+  getUrlAll,
 } from "@inrupt/solid-client";
 import { foaf, rdf, vcard } from "rdf-namespaces";
-import { v4 as uuid } from "uuid";
-import {
-  getAddressBookIndex,
-  getAddressBookMainIndexUrl,
-} from "../addressBook";
-import { saveResource } from "../../solidClientHelpers/resource";
-import {
-  createResponder,
-  defineDataset,
-  defineThing,
-} from "../../solidClientHelpers/utils";
-import { joinPath } from "../../stringHelpers";
-import {
-  createWebIdNodeFn,
-  getSchemaOperations,
-  INDEX_FILE,
-  mapSchema,
-  TYPE_MAP,
-  vcardExtras,
-} from "../../addressBook";
+import { TYPE_MAP, VCARD_WEBID_PREDICATE } from "../addressBook";
+import { chain } from "../../solidClientHelpers/utils";
+import { getOrCreateResource } from "../resource";
 
 /**
  * Contacts represent the dataset in a user's AddressBook, e.g. /contacts/Person/<unique-id>/index.ttl#this
  *
  * @typedef Contact
  * @type {object}
- * @property {string} iri
- * @property {object} dataset
+ * @property {string} thing - The contact itself, be that a person, a group, or something else
+ * @property {object} dataset - The dataset that the thing lives in
  */
+
+/* Model constants */
+export const CONTACT_ERROR_NO_CONTACT_INDEX_TRIPLE =
+  "No contact index linked in main index of address book";
 
 /* Model functions */
 export function createContactTypeNotFoundError(contact) {
   return new Error(`Contact is unsupported type: ${contact.type}`);
 }
 
-export function createContact(
-  addressBook,
-  contactSchema,
-  types,
-  createWebIdNode = createWebIdNodeFn
-) {
-  // Find the first matching container mapping.
-  const containerMap = TYPE_MAP[types.find((type) => TYPE_MAP[type])];
-
-  if (!containerMap) {
-    throw createContactTypeNotFoundError(contactSchema);
+export async function getContactsIndex(addressBook, type, fetch) {
+  const indexIri = getUrl(addressBook.thing, TYPE_MAP[type].indexFilePredicate);
+  if (!indexIri) {
+    throw new Error(CONTACT_ERROR_NO_CONTACT_INDEX_TRIPLE);
   }
-
-  const { container } = containerMap;
-
-  const normalizedContact = {
-    emails: [],
-    addresses: [],
-    telephones: [],
-    ...contactSchema,
-  };
-
-  const id = uuid();
-  const iri = joinPath(addressBook.containerIri, container, id, INDEX_FILE);
-  const { webIdNode, webIdNodeUrl } = createWebIdNode(contactSchema.webId, iri);
-  const rootAttributeFns = getSchemaOperations(contactSchema, webIdNodeUrl);
-  const emails = normalizedContact.emails.map(mapSchema("email"));
-  const addresses = normalizedContact.addresses.map(mapSchema("address"));
-  const telephones = normalizedContact.telephones.map(mapSchema("telephone"));
-
-  const personDataset = defineDataset(
-    { name: "this" },
-    ...[(t) => addUrl(t, rdf.type, vcard.Individual), ...rootAttributeFns],
-    ...emails.map(({ name }) => {
-      return (t) => addUrl(t, vcard.hasEmail, [iri, name].join("#"));
-    }),
-    ...addresses.map(({ name }) => {
-      return (t) => addUrl(t, vcard.hasAddress, [iri, name].join("#"));
-    }),
-    ...telephones.map(({ name }) => {
-      return (t) => addUrl(t, vcard.hasTelephone, [iri, name].join("#"));
-    })
-  );
-  const dataset = [...emails, ...addresses, ...telephones].reduce(
-    (acc, { thing }) => {
-      return setThing(acc, thing);
-    },
-    personDataset
-  );
-
-  return {
-    iri,
-    dataset: setThing(dataset, webIdNode),
-  };
+  return getOrCreateResource(indexIri, fetch);
 }
 
-export async function saveContact(addressBook, contactSchema, types, fetch) {
-  const { respond, error } = createResponder();
-  const newContact = createContact(
-    addressBook,
-    contactSchema,
-    types,
-    createWebIdNodeFn
+export async function getContacts(addressBook, fetch, type) {
+  if (type) {
+    const { dataset } = await getContactsIndex(addressBook, type, fetch);
+    const { contactTypeIri } = TYPE_MAP[type];
+    return getThingAll(dataset)
+      .filter((contact) =>
+        getUrlAll(contact, rdf.type).includes(contactTypeIri)
+      )
+      .map((thing) => ({
+        thing,
+        dataset,
+      }));
+  }
+  const contactSets = await Promise.all(
+    [vcard.Group, foaf.Person].map((t) => getContacts(addressBook, fetch, t))
   );
-  const { iri } = newContact;
+  return contactSets.reduce((contacts, things) => contacts.concat(things));
 
-  const indexIri = getAddressBookMainIndexUrl(addressBook);
-
-  const {
-    response: contactDataset,
-    error: saveContactError,
-  } = await saveResource(newContact, fetch);
-
-  if (saveContactError) return error(saveContactError);
-
-  const contactThing = defineThing(
-    {
-      url: `${getSourceUrl(contactDataset)}#this`,
-    },
-    (t) =>
-      addStringNoLocale(t, vcard.fn, contactSchema.fn || contactSchema.name),
-    (t) => addUrl(t, vcardExtras("inAddressBook"), indexIri)
-  );
-
-  const contactIndex = getAddressBookIndex(addressBook, foaf.Person);
-  const { error: saveContactsError } = await saveResource(
-    {
-      dataset: setThing(contactIndex.dataset, contactThing),
-      iri: contactIndex.iri,
-    },
-    fetch
-  );
-
-  if (saveContactsError) return error(saveContactsError);
-  return respond({ iri, dataset: contactDataset });
+  // const contactsIris = contactsThings.map((t) => asUrl(t));
+  //
+  // const contactsResponses = await Promise.all(
+  //   contactsIris.map((iri) => getResource(iri, fetch))
+  // );
+  //
+  // const contacts = contactsResponses
+  //   .filter(({ error: e }) => !e)
+  //   .map(({ response }) => response)
+  //   .filter(({ dataset, iri }) => {
+  //     const contactThing = getThing(dataset, iri);
+  //     return (
+  //       contactThing &&
+  //       getUrlAll(contactThing, rdf.type).includes(contactTypeIri)
+  //     );
+  //   });
+  //
+  // return contacts;
 }
 
-export async function deleteContact(addressBook, contact, type, fetch) {
-  const { dataset, iri } = getAddressBookIndex(addressBook, type);
-
-  const contactsIndexThings = getThingAll(dataset);
-
-  const contactsIndexEntryToRemove = contactsIndexThings.find((thing) =>
-    asUrl(thing).includes(contact.iri)
-  );
-  const updatedContactsIndex = removeThing(dataset, contactsIndexEntryToRemove);
-  const updatedContactsIndexResponse = await saveResource(
-    { dataset: updatedContactsIndex, iri },
-    fetch
-  );
-
-  const contactContainerIri = contact.iri.substring(
-    0,
-    contact.iri.lastIndexOf("/") + 1
-  );
-
-  await deleteFile(contact.iri, { fetch });
-  await deleteFile(contactContainerIri, { fetch });
-
-  const { error: saveContactsError } = updatedContactsIndexResponse;
-
-  if (saveContactsError) {
-    throw saveContactsError;
+export function getWebIdUrl(dataset, iri) {
+  const thing = getThing(dataset, iri);
+  const webIdNodeUrl = getUrl(thing, vcard.url);
+  if (webIdNodeUrl) {
+    const webIdNode = getThing(dataset, webIdNodeUrl);
+    return webIdNode && getUrl(webIdNode, vcard.value);
   }
+  return getUrl(thing, foaf.openid);
+}
+
+export function createWebIdNode(webId) {
+  return chain(
+    createThing(),
+    (t) => addUrl(t, rdf.type, VCARD_WEBID_PREDICATE),
+    (t) => addUrl(t, vcard.value, webId)
+  );
 }

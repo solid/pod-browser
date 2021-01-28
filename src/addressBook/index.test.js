@@ -22,17 +22,16 @@
 import { foaf, rdf, vcard } from "rdf-namespaces";
 import * as solidClientFns from "@inrupt/solid-client";
 import {
+  asUrl,
   createThing,
   getStringNoLocale,
   getUrl,
-  asUrl,
   mockSolidDatasetFrom,
   mockThingFrom,
   setThing,
   setUrl,
 } from "@inrupt/solid-client";
 import * as resourceFns from "../solidClientHelpers/resource";
-import * as addressBookFns from ".";
 import {
   aliceAlternativeProfileUrl,
   aliceAlternativeWebIdUrl,
@@ -48,20 +47,18 @@ import {
 } from "../../__testUtils/mockPersonResource";
 import mockPersonContactThing from "../../__testUtils/mockPersonContactThing";
 import {
-  contactsContainerIri,
-  findContactInAddressBook,
   getContacts,
-  getContactsIndexIri,
-  getProfiles,
   getSchemaFunction,
   getSchemaOperations,
   mapSchema,
   schemaFunctionMappings,
   shortId,
-  vcardExtras,
 } from "./index";
 import { chain } from "../solidClientHelpers/utils";
 import { joinPath } from "../stringHelpers";
+import { findContactInAddressBook, getProfiles } from "../models/profile";
+import { getWebIdUrl } from "../models/contact";
+import { getAddressBookContainerIri, vcardExtras } from "../models/addressBook";
 
 describe("getSchemaFunction", () => {
   test("it returns a function for the given key, value", () => {
@@ -205,37 +202,6 @@ describe("getContacts", () => {
   it("returns an empty array if indexFileDataset is not given", async () => {
     const response = await getContacts();
     expect(response).toEqual([]);
-  });
-});
-
-describe("getWebIdUrl", () => {
-  it("returns the webId for a given person dataset", () => {
-    const webIdUrl = "http://example.com/alice#me";
-    const { webIdNode } = mockWebIdNode(webIdUrl, aliceAlternativeWebIdUrl);
-    const personDataset = chain(
-      mockSolidDatasetFrom("http://example.com/alice"),
-      (d) => setThing(d, mockPersonDatasetAlice()),
-      (d) => setThing(d, webIdNode)
-    );
-
-    expect(addressBookFns.getWebIdUrl(personDataset, aliceWebIdUrl)).toEqual(
-      webIdUrl
-    );
-  });
-
-  it("offers fallback for foaf.openid", () => {
-    const foafId = "http://bobspod.com/#me";
-    const profile = chain(mockPersonDatasetBob(), (t) =>
-      setUrl(t, foaf.openid, foafId)
-    );
-    const personDataset = chain(
-      mockSolidDatasetFrom("https://example.com/bob"),
-      (d) => setThing(d, profile)
-    );
-
-    expect(addressBookFns.getWebIdUrl(personDataset, bobWebIdUrl)).toEqual(
-      foafId
-    );
   });
 });
 
@@ -503,14 +469,8 @@ describe("vcardExtras", () => {
 
 describe("contactsContainerIri", () => {
   test("it appends the container path to the given iri", () => {
-    expect(contactsContainerIri("http://example.com")).toEqual(
+    expect(getAddressBookContainerIri("http://example.com")).toEqual(
       "http://example.com/contacts/"
     );
-  });
-});
-
-describe("getContactsIndexIri", () => {
-  it("returns the URL for the central index file for contacts", () => {
-    expect(getContactsIndexIri("/contacts/")).toEqual("/contacts/index.ttl");
   });
 });

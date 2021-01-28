@@ -22,18 +22,18 @@
 import useSWR from "swr";
 import { useSession } from "@inrupt/solid-ui-react";
 import { getSolidDataset } from "@inrupt/solid-client";
-import { getContacts, TYPE_MAP } from "../../addressBook";
-import { getAddressBookIndex } from "../../models/addressBook";
+import { getAddressBookIndex, TYPE_MAP } from "../../models/addressBook";
+import { getContacts } from "../../models/contact";
 
 export default function useContacts(addressBook, type) {
   const { fetch } = useSession();
   return useSWR(["contacts", addressBook], async () => {
     if (!addressBook) return [];
-    const { contactTypeIri } = TYPE_MAP[type];
-    const { iri } = getAddressBookIndex(addressBook, type);
+    // const { contactTypeIri } = TYPE_MAP[type];
+    // const { iri } = getAddressBookIndex(addressBook, type);
     // TODO: Want to move this into smarter loading features w/useAddressBook, but waiting because it's a bit too complex for now
     // Need to do it like this to be able to only load the people index when mutating or revalidating
-    const dataset = await getSolidDataset(iri, { fetch });
-    return getContacts(dataset, contactTypeIri, fetch);
+    // const dataset = await getSolidDataset(iri, { fetch });
+    return getContacts(addressBook, fetch, type);
   });
 }

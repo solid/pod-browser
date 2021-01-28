@@ -21,7 +21,7 @@
 
 import { useEffect, useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
-import { getProfiles } from "../../addressBook";
+import { getProfiles } from "../../models/profile";
 
 export default function useProfiles(people) {
   const [profiles, setProfiles] = useState(null);

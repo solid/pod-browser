@@ -31,8 +31,8 @@ import * as resourceFns from "../../solidClientHelpers/resource";
 import mockAddressBook from "../../../__testUtils/mockAddressBook";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import { mockProfileAlice } from "../../../__testUtils/mockPersonResource";
-import { contactsContainerIri } from "../../addressBook";
 import * as addressBookModelFns from "../../models/addressBook";
+import { getAddressBookContainerIri } from "../../models/addressBook";
 
 jest.mock("swr");
 const mockedSwrHook = useSWR;
@@ -87,7 +87,7 @@ describe("useAddressBook", () => {
 
   describe("with an authenticated user", () => {
     const authProfile = mockProfileAlice();
-    const authContactsIri = contactsContainerIri(authProfile.pods[0]);
+    const authContactsIri = getAddressBookContainerIri(authProfile.pods[0]);
 
     let session;
     let wrapper;
@@ -108,7 +108,7 @@ describe("useAddressBook", () => {
           addressBook
         );
         expect(mockedGetResource).toHaveBeenCalledWith(
-          contactsContainerIri(authProfile.pods[0]),
+          getAddressBookContainerIri(authProfile.pods[0]),
           expect.any(Function)
         );
         expect(addressBookModelFns.loadAddressBook).toHaveBeenCalledWith(

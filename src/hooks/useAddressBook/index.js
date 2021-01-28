@@ -22,10 +22,13 @@
 import { useSession } from "@inrupt/solid-ui-react";
 import useSWR from "swr";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
-import { contactsContainerIri } from "../../addressBook";
 import { getResource } from "../../solidClientHelpers/resource";
 import { ERROR_CODES, isHTTPError } from "../../error";
-import { loadAddressBook, saveNewAddressBook } from "../../models/addressBook";
+import {
+  getAddressBookContainerIri,
+  loadAddressBook,
+  saveNewAddressBook,
+} from "../../models/addressBook";
 
 export default function useAddressBook() {
   const { session, fetch } = useSession();
@@ -34,7 +37,7 @@ export default function useAddressBook() {
   const { data, ...props } = useSWR(["addressBook", session], async () => {
     if (!session.info.isLoggedIn || !profile) return null;
     const { pods, webId } = profile;
-    const contactsIri = contactsContainerIri(pods[0]);
+    const contactsIri = getAddressBookContainerIri(pods[0]);
     const {
       response: existingAddressBook,
       error: existingError,

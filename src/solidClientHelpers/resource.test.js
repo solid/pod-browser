@@ -38,11 +38,23 @@ import {
   getResourceName,
   saveResource,
   deleteResource,
+  getBaseUrl,
 } from "./resource";
 import { getPolicyUrl } from "./policies";
 import { chain } from "./utils";
 
 jest.mock("./policies");
+
+describe("getBaseUrl", () => {
+  it("returns the 'base' of a URL", () => {
+    expect(getBaseUrl("http://example.com")).toEqual("http://example.com/");
+    expect(getBaseUrl("http://example.com?foo#bar")).toEqual(
+      "http://example.com/"
+    );
+  });
+
+  it("allows passing null", () => expect(getBaseUrl(null)).toBeNull());
+});
 
 describe("getResource", () => {
   test("it returns a dataset and an iri", async () => {

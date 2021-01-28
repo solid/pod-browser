@@ -32,8 +32,8 @@ import {
 } from "@inrupt/solid-client";
 import { parseUrl } from "../stringHelpers";
 import { getPolicyUrl } from "./policies";
-import { createResponder, isContainerIri } from "./utils";
-import { isHTTPError } from "../error";
+import { chain, createResponder, isContainerIri } from "./utils";
+import { ERROR_CODES, isHTTPError } from "../error";
 
 export function getResourceName(iri) {
   let { pathname } = parseUrl(iri);
@@ -75,7 +75,7 @@ export async function getOrCreateDataset(iri, fetch) {
   const { respond, error } = createResponder();
   const { response, error: getError } = await getResource(iri, fetch);
   if (response) return respond(response.dataset);
-  if (getError && isHTTPError(getError, 404)) {
+  if (getError && isHTTPError(getError, ERROR_CODES.NOT_FOUND)) {
     try {
       return respond(
         await saveSolidDatasetAt(iri, createSolidDataset(), { fetch })
@@ -85,6 +85,18 @@ export async function getOrCreateDataset(iri, fetch) {
     }
   }
   return error(getError);
+}
+
+export async function updateOrCreateDataset(iri, fetch, ...operations) {
+  let dataset;
+  try {
+    dataset = await getSolidDataset(iri, { fetch });
+  } catch (error) {
+    if (isHTTPError(error, ERROR_CODES.NOT_FOUND))
+      dataset = createSolidDataset();
+    else throw error;
+  }
+  return saveSolidDatasetAt(iri, chain(dataset, ...operations), { fetch });
 }
 
 export function getOrCreateThing(dataset, iri) {
@@ -98,6 +110,7 @@ export function getOrCreateThing(dataset, iri) {
 }
 
 export function getBaseUrl(iri) {
+  if (!iri) return iri;
   const url = new URL(iri);
   return url.origin + url.pathname;
 }
