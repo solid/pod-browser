@@ -38,7 +38,7 @@ import AddContact, {
   NO_NAME_ERROR_MESSAGE,
 } from "./index";
 import * as addressBookFns from "../../src/addressBook";
-import * as contactModelFns from "../../src/models/contact";
+import { contactsContainerIri } from "../../src/addressBook";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import {
   aliceWebIdUrl,
@@ -46,8 +46,6 @@ import {
   mockProfileAlice,
 } from "../../__testUtils/mockPersonResource";
 import * as profileHelperFns from "../../src/solidClientHelpers/profile";
-import { findContactInAddressBook } from "../../src/models/profile";
-import { getAddressBookContainerIri } from "../../src/models/addressBook";
 
 describe("AddContact", () => {
   test("it renders the Add Contact form", () => {
@@ -118,7 +116,7 @@ describe("handleSubmit", () => {
       .spyOn(addressBookFns, "findContactInAddressBook")
       .mockResolvedValue([personDataset]);
     await handler("alreadyExistingWebId");
-    expect(findContactInAddressBook).toHaveBeenCalledWith(
+    expect(addressBookFns.findContactInAddressBook).toHaveBeenCalledWith(
       people,
       aliceWebIdUrl,
       session.fetch
@@ -128,7 +126,6 @@ describe("handleSubmit", () => {
     expect(alertError).toHaveBeenCalledWith(EXISTING_WEBID_ERROR_MESSAGE);
     expect(setDirtyForm).toHaveBeenCalledWith(true);
   });
-
   test("it alerts the user and exits if the webid doesn't have a name", async () => {
     const personUri = "http://example.com/marie#me";
     const mockProfile = { webId: personUri };
@@ -151,7 +148,6 @@ describe("handleSubmit", () => {
     expect(alertSuccess).not.toHaveBeenCalled();
     expect(alertError).toHaveBeenCalledWith(NO_NAME_ERROR_MESSAGE);
   });
-
   test("it alerts the user and exits if fetching the profile fails", async () => {
     const mockProfileError = new Error("error");
     const handler = handleSubmit({
@@ -172,7 +168,6 @@ describe("handleSubmit", () => {
     expect(alertSuccess).not.toHaveBeenCalled();
     expect(alertError).toHaveBeenCalledWith(FETCH_PROFILE_FAILED_ERROR_MESSAGE);
   });
-
   test("it saves a new contact", async () => {
     const personUri = "http://example.com/alice#me";
     const personDataset = addStringNoLocale(
@@ -180,7 +175,7 @@ describe("handleSubmit", () => {
       vcard.fn,
       "Alice"
     );
-    const contactsIri = getAddressBookContainerIri("http://www.example.com/");
+    const contactsIri = contactsContainerIri("http://www.example.com/");
     const people = mockSolidDatasetFrom(contactsIri);
     const peopleMutate = jest.fn();
     const peopleDatasetWithContact = setThing(people, personDataset);
@@ -200,7 +195,7 @@ describe("handleSubmit", () => {
       .spyOn(addressBookFns, "findContactInAddressBook")
       .mockResolvedValue([]);
     jest.spyOn(profileHelperFns, "fetchProfile").mockResolvedValue(mockProfile);
-    jest.spyOn(contactModelFns, "saveContact").mockResolvedValue({
+    jest.spyOn(addressBookFns, "saveContact").mockResolvedValue({
       response: peopleDatasetWithContact,
       error: null,
     });
@@ -213,7 +208,6 @@ describe("handleSubmit", () => {
     expect(alertError).not.toHaveBeenCalled();
     expect(setDirtyForm).toHaveBeenCalledWith(false);
   });
-
   test("it alerts the user if there is an error while creating the contact", async () => {
     const mockProfile = mockProfileAlice();
     const handler = handleSubmit({
@@ -229,7 +223,7 @@ describe("handleSubmit", () => {
     jest
       .spyOn(addressBookFns, "findContactInAddressBook")
       .mockResolvedValue([]);
-    jest.spyOn(contactModelFns, "saveContact").mockResolvedValue({
+    jest.spyOn(addressBookFns, "saveContact").mockResolvedValue({
       response: null,
       error: "There was an error saving the resource",
     });

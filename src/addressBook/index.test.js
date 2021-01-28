@@ -19,19 +19,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { foaf, rdf, vcard } from "rdf-namespaces";
+/* eslint-disable camelcase */
+import { acl, dc, foaf, rdf, vcard } from "rdf-namespaces";
 import * as solidClientFns from "@inrupt/solid-client";
 import {
+  addUrl,
   asUrl,
-  createThing,
-  getStringNoLocale,
-  getUrl,
+  getThingAll,
   mockSolidDatasetFrom,
   mockThingFrom,
+  setStringNoLocale,
   setThing,
   setUrl,
 } from "@inrupt/solid-client";
 import * as resourceFns from "../solidClientHelpers/resource";
+import * as addressBookFns from ".";
+
 import {
   aliceAlternativeProfileUrl,
   aliceAlternativeWebIdUrl,
@@ -46,19 +49,250 @@ import {
   mockWebIdNode,
 } from "../../__testUtils/mockPersonResource";
 import mockPersonContactThing from "../../__testUtils/mockPersonContactThing";
+
 import {
+  contactsContainerIri,
+  createAddressBook,
+  createContact,
+  createContactTypeNotFoundError,
+  deleteContact,
+  findContactInAddressBook,
   getContacts,
+  getContactsIndexIri,
+  getGroups,
+  getProfiles,
   getSchemaFunction,
   getSchemaOperations,
   mapSchema,
+  saveContact,
+  saveNewAddressBook,
   schemaFunctionMappings,
   shortId,
+  vcardExtras,
 } from "./index";
 import { chain } from "../solidClientHelpers/utils";
 import { joinPath } from "../stringHelpers";
-import { findContactInAddressBook, getProfiles } from "../models/profile";
-import { getWebIdUrl } from "../models/contact";
-import { getAddressBookContainerIri, vcardExtras } from "../models/addressBook";
+
+const {
+  createThing,
+  getStringNoLocale,
+  getStringNoLocaleAll,
+  getUrl,
+} = solidClientFns;
+
+describe("createAddressBook", () => {
+  test("it creates all the datasets that an addressBook needs, with a default title", () => {
+    const iri = "https://example.pod.com/contacts";
+    const owner = "https://example.pod.com/card#me";
+
+    const { people, groups, index } = createAddressBook({ iri, owner });
+
+    expect(getThingAll(groups.dataset)).toHaveLength(0);
+    expect(groups.iri).toEqual(`${iri}/groups.ttl`);
+
+    expect(getThingAll(people.dataset)).toHaveLength(0);
+    expect(people.iri).toEqual(`${iri}/people.ttl`);
+
+    const addressBookThing = getThingAll(index.dataset)[0]; // only add one subject
+    expect(index.iri).toEqual(`${iri}/index.ttl`);
+    expect(getStringNoLocale(addressBookThing, dc.title)).toEqual("Contacts");
+    expect(getUrl(addressBookThing, rdf.type)).toEqual(
+      vcardExtras("AddressBook")
+    );
+    expect(getUrl(addressBookThing, acl.owner)).toEqual(owner);
+    expect(getUrl(addressBookThing, vcardExtras("nameEmailIndex"))).toEqual(
+      "https://example.pod.com/contacts/people.ttl"
+    );
+    expect(getUrl(addressBookThing, vcardExtras("groupIndex"))).toEqual(
+      "https://example.pod.com/contacts/groups.ttl"
+    );
+  });
+
+  test("it creates all the datasets that an addressBook needs, with a given title", () => {
+    const iri = "https://example.pod.com/contacts";
+    const owner = "https://example.pod.com/card#me";
+    const title = "My Address Book";
+
+    const { people, groups, index } = createAddressBook({ iri, owner, title });
+
+    expect(getThingAll(groups.dataset)).toHaveLength(0);
+    expect(groups.iri).toEqual(`${iri}/groups.ttl`);
+
+    expect(getThingAll(people.dataset)).toHaveLength(0);
+    expect(people.iri).toEqual(`${iri}/people.ttl`);
+
+    const addressBookThing = getThingAll(index.dataset)[0]; // only add one subject
+    expect(index.iri).toEqual(`${iri}/index.ttl`);
+    expect(getStringNoLocale(addressBookThing, dc.title)).toEqual(title);
+    expect(getUrl(addressBookThing, rdf.type)).toEqual(
+      vcardExtras("AddressBook")
+    );
+    expect(getUrl(addressBookThing, acl.owner)).toEqual(owner);
+    expect(getUrl(addressBookThing, vcardExtras("nameEmailIndex"))).toEqual(
+      "https://example.pod.com/contacts/people.ttl"
+    );
+    expect(getUrl(addressBookThing, vcardExtras("groupIndex"))).toEqual(
+      "https://example.pod.com/contacts/groups.ttl"
+    );
+  });
+});
+
+describe("createContact", () => {
+  const addressBookIri = "https://user.example.com/contacts";
+  const webIdUrl = "https://user.example.com/card";
+  const mockedWebIdNode = mockWebIdNode(webIdUrl);
+  const { webIdNodeUrl } = mockedWebIdNode;
+  const mockWebIdNodeFn = jest
+    .spyOn(addressBookFns, "createWebIdNodeFn")
+    .mockImplementation(() => mockedWebIdNode);
+
+  test("it creates a new contact with a given schema object", () => {
+    const schema = {
+      webId: webIdUrl,
+      addresses: [
+        {
+          countryName: "Fake Country",
+          locality: "Fake Town",
+          postalCode: "55555",
+          region: "Fake State",
+          streetAddress: "123 Fake St.",
+        },
+      ],
+      fn: "Test Person",
+      emails: [
+        {
+          type: "Home",
+          value: "test@example.com",
+        },
+        {
+          type: "Work",
+          value: "test.person@example.com",
+        },
+      ],
+      telephones: [
+        {
+          type: "Home",
+          value: "555-555-5555",
+        },
+      ],
+      organizationName: "Test Company",
+      role: "Developer",
+    };
+
+    const { dataset } = createContact(
+      addressBookIri,
+      schema,
+      [foaf.Person],
+      mockWebIdNodeFn
+    );
+
+    const things = getThingAll(dataset);
+    const webId = things[0]; // always the first thing in this dataset
+    const addressesThing = things[3];
+    const emailsAndPhones = things.reduce(
+      (memo, t) => memo.concat(getStringNoLocaleAll(t, vcard.value)),
+      []
+    );
+
+    expect(getStringNoLocale(webId, vcard.fn)).toEqual("Test Person");
+    expect(mockWebIdNodeFn).toHaveBeenCalledWith(webIdUrl, expect.anything());
+    expect(getUrl(webId, vcard.url)).toEqual(webIdNodeUrl);
+    expect(getStringNoLocale(webId, vcardExtras("organization-name"))).toEqual(
+      "Test Company"
+    );
+    expect(getStringNoLocale(webId, vcard.role)).toEqual("Developer");
+    expect(emailsAndPhones).toContain("test@example.com");
+    expect(emailsAndPhones).toContain("test.person@example.com");
+    expect(emailsAndPhones).toContain("555-555-5555");
+    expect(
+      getStringNoLocale(addressesThing, vcardExtras("country-name"))
+    ).toEqual("Fake Country");
+    expect(getStringNoLocale(addressesThing, vcard.locality)).toEqual(
+      "Fake Town"
+    );
+    expect(
+      getStringNoLocale(addressesThing, vcardExtras("postal-code"))
+    ).toEqual("55555");
+    expect(getStringNoLocale(addressesThing, vcard.region)).toEqual(
+      "Fake State"
+    );
+    expect(
+      getStringNoLocale(addressesThing, vcardExtras("street-address"))
+    ).toEqual("123 Fake St.");
+  });
+
+  it("throws an error if no container is found", () => {
+    const contact = { type: "type" };
+    expect(() => createContact(addressBookIri, contact, [])).toThrow(
+      createContactTypeNotFoundError(contact)
+    );
+  });
+});
+
+describe("getGroups", () => {
+  test("it fetches the groups for a given address book", async () => {
+    const containerIri = "https://user.example.com/contacts";
+    const fetch = jest.fn();
+    const groupsIndex = joinPath(containerIri, "groups.ttl");
+    const groupsIndexThing = `${groupsIndex}#this`;
+
+    const group1Url = "https://example.com/Group1.ttl";
+    const group2Url = "https://example.com/Group2.ttl";
+
+    jest.spyOn(resourceFns, "getResource").mockResolvedValueOnce({
+      response: {
+        dataset: chain(
+          mockSolidDatasetFrom(groupsIndex),
+          (d) =>
+            setThing(
+              d,
+              chain(
+                mockThingFrom(groupsIndexThing),
+                (t) => setUrl(t, vcardExtras("includesGroup"), group1Url),
+                (t) => addUrl(t, vcardExtras("includesGroup"), group2Url)
+              )
+            ),
+          (d) =>
+            setThing(
+              d,
+              chain(mockThingFrom(group1Url), (t) =>
+                setStringNoLocale(t, vcard.fn, "Group1")
+              )
+            ),
+          (d) =>
+            setThing(
+              d,
+              chain(mockThingFrom(group2Url), (t) =>
+                setStringNoLocale(t, vcard.fn, "Group2")
+              )
+            )
+        ),
+      },
+    });
+
+    const {
+      response: [group1, group2],
+    } = await getGroups(containerIri, fetch);
+
+    expect(group1.iri).toEqual("https://example.com/Group1.ttl");
+    expect(group1.name).toEqual("Group1");
+    expect(group2.iri).toEqual("https://example.com/Group2.ttl");
+    expect(group2.name).toEqual("Group2");
+  });
+
+  test("it returns an error if the group index does not exist", async () => {
+    const containerIri = "https://user.example.com/contacts";
+    const fetch = jest.fn();
+
+    jest
+      .spyOn(resourceFns, "getResource")
+      .mockResolvedValueOnce({ error: "There was an error" });
+
+    const { error } = await getGroups(containerIri, fetch);
+
+    expect(error).toEqual("There was an error");
+  });
+});
 
 describe("getSchemaFunction", () => {
   test("it returns a function for the given key, value", () => {
@@ -155,11 +389,9 @@ describe("getContacts", () => {
       .mockResolvedValueOnce({ response: expectedPerson1 })
       .mockResolvedValueOnce({ response: expectedPerson2 });
 
-    const [person1, person2] = await getContacts(
-      mockIndexFileDataset,
-      vcard.Individual,
-      fetch
-    );
+    const {
+      response: [person1, person2],
+    } = await getContacts(mockIndexFileDataset, vcard.Individual, fetch);
 
     expect(person1).toEqual(expectedPerson1);
     expect(person2).toEqual(expectedPerson2);
@@ -190,7 +422,7 @@ describe("getContacts", () => {
       .mockResolvedValueOnce({ response: expectedPerson1 })
       .mockResolvedValueOnce({ error: "There was an error" });
 
-    const results = await getContacts(
+    const { response: results } = await getContacts(
       mockIndexFileDataset,
       vcard.Individual,
       fetch
@@ -200,8 +432,39 @@ describe("getContacts", () => {
   });
 
   it("returns an empty array if indexFileDataset is not given", async () => {
-    const response = await getContacts();
+    const { response } = await getContacts();
     expect(response).toEqual([]);
+  });
+});
+
+describe("getWebIdUrl", () => {
+  it("returns the webId for a given person dataset", () => {
+    const webIdUrl = "http://example.com/alice#me";
+    const { webIdNode } = mockWebIdNode(webIdUrl, aliceAlternativeWebIdUrl);
+    const personDataset = chain(
+      mockSolidDatasetFrom("http://example.com/alice"),
+      (d) => setThing(d, mockPersonDatasetAlice()),
+      (d) => setThing(d, webIdNode)
+    );
+
+    expect(addressBookFns.getWebIdUrl(personDataset, aliceWebIdUrl)).toEqual(
+      webIdUrl
+    );
+  });
+
+  it("offers fallback for foaf.openid", () => {
+    const foafId = "http://bobspod.com/#me";
+    const profile = chain(mockPersonDatasetBob(), (t) =>
+      setUrl(t, foaf.openid, foafId)
+    );
+    const personDataset = chain(
+      mockSolidDatasetFrom("https://example.com/bob"),
+      (d) => setThing(d, profile)
+    );
+
+    expect(addressBookFns.getWebIdUrl(personDataset, bobWebIdUrl)).toEqual(
+      foafId
+    );
   });
 });
 
@@ -338,6 +601,317 @@ describe("findContactInAddressBook", () => {
   });
 });
 
+describe("saveContact", () => {
+  const addressBookDatasetIri = "https://user.example.com/contacts";
+  const addressBookIri = `${addressBookDatasetIri}#this`;
+  const webId = "https://user.example.com/card#me";
+  const contactDataset = solidClientFns.mockSolidDatasetFrom(webId);
+  const peopleIndexIri = `${addressBookDatasetIri}/people.ttl`;
+  const peopleIndexDataset = solidClientFns.mockSolidDatasetFrom(
+    peopleIndexIri
+  );
+  const mockAddressBook = chain(
+    solidClientFns.mockSolidDatasetFrom(addressBookDatasetIri),
+    (d) =>
+      setThing(
+        d,
+        chain(mockThingFrom(addressBookIri), (t) =>
+          setUrl(t, vcardExtras("nameEmailIndex"), peopleIndexIri)
+        )
+      )
+  );
+  const schema = { webId, fn: "Test Person" };
+  const errorMessage = "boom";
+
+  let fetch;
+
+  beforeEach(() => {
+    fetch = jest.fn();
+
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValue(peopleIndexDataset);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+    jest.clearAllMocks();
+  });
+
+  it("saves the contact and the people index", async () => {
+    jest
+      .spyOn(resourceFns, "saveResource")
+      .mockResolvedValueOnce({ response: contactDataset })
+      .mockResolvedValueOnce({ response: peopleIndexDataset });
+
+    jest.spyOn(resourceFns, "getResource").mockResolvedValueOnce({
+      response: {
+        iri: `${addressBookDatasetIri}/people.ttl`,
+        dataset: peopleIndexDataset,
+      },
+    });
+
+    const {
+      response: { contact, contacts },
+    } = await saveContact(
+      mockAddressBook,
+      addressBookDatasetIri,
+      schema,
+      [foaf.Person],
+      fetch
+    );
+
+    expect(contact).toEqual(contactDataset);
+    expect(contacts).toEqual(peopleIndexDataset);
+  });
+
+  it("also handles schema.name", async () => {
+    jest
+      .spyOn(resourceFns, "saveResource")
+      .mockResolvedValueOnce({ response: contactDataset })
+      .mockResolvedValueOnce({ response: peopleIndexDataset });
+
+    jest.spyOn(resourceFns, "getResource").mockResolvedValueOnce({
+      response: {
+        iri: `${addressBookDatasetIri}/people.ttl`,
+        dataset: peopleIndexDataset,
+      },
+    });
+
+    const {
+      response: { contact, contacts },
+    } = await saveContact(
+      mockAddressBook,
+      addressBookDatasetIri,
+      { webId, name: "Test Person" },
+      [foaf.Person],
+      fetch
+    );
+
+    expect(contact).toEqual(contactDataset);
+    expect(contacts).toEqual(peopleIndexDataset);
+  });
+
+  it("returns an error if it can't save the new contact", async () => {
+    jest.spyOn(resourceFns, "saveResource").mockResolvedValue({
+      error: errorMessage,
+    });
+
+    const { error } = await saveContact(
+      mockAddressBook,
+      addressBookDatasetIri,
+      schema,
+      [foaf.Person],
+      fetch
+    );
+
+    expect(error).toEqual(errorMessage);
+  });
+
+  it("returns an error if it can't save the new contact to the index", async () => {
+    jest
+      .spyOn(resourceFns, "saveResource")
+      .mockResolvedValueOnce({ response: contactDataset })
+      .mockResolvedValueOnce({ error: errorMessage });
+
+    const { error } = await saveContact(
+      mockAddressBook,
+      addressBookDatasetIri,
+      schema,
+      [foaf.Person],
+      fetch
+    );
+
+    expect(error).toEqual(errorMessage);
+  });
+});
+
+describe("deleteContact", () => {
+  const addressBookUrl = "https://example.com/contacts";
+
+  const contactContainerUrl = "http://example.com/contact/id-001/";
+  const contactUrl = getContactsIndexIri(contactContainerUrl);
+  const mockContactToDelete = chain(
+    solidClientFns.mockThingFrom(contactUrl),
+    (t) => solidClientFns.addUrl(t, rdf.type, vcard.Individual),
+    (t) => solidClientFns.addUrl(t, foaf.openid, contactUrl)
+  );
+
+  const contactToDelete = {
+    iri: contactUrl,
+    dataset: mockContactToDelete,
+  };
+
+  const peopleIndexIri = `${addressBookUrl}/people.ttl`;
+
+  const peopleIndexDataset = chain(
+    solidClientFns.mockSolidDatasetFrom(peopleIndexIri),
+    (d) => solidClientFns.setThing(d, mockContactToDelete),
+    (d) => solidClientFns.setThing(d, mockPersonContactThing())
+  );
+
+  const addressBookDataset = chain(
+    solidClientFns.mockSolidDatasetFrom(addressBookUrl),
+    (d) =>
+      setThing(
+        d,
+        chain(mockThingFrom(`${addressBookUrl}#this`), (t) =>
+          setUrl(t, vcardExtras("nameEmailIndex"), peopleIndexIri)
+        )
+      )
+  );
+
+  const updatedPeopleIndexDataset = chain(
+    solidClientFns.mockSolidDatasetFrom(peopleIndexIri),
+    (indexDataset) =>
+      solidClientFns.setThing(indexDataset, mockPersonContactThing())
+  );
+
+  let fetch;
+  let mockDeleteFile;
+  let mockSaveResource;
+
+  beforeEach(() => {
+    fetch = jest.fn();
+
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValueOnce(addressBookDataset)
+      .mockResolvedValueOnce(peopleIndexDataset);
+
+    mockDeleteFile = jest
+      .spyOn(solidClientFns, "deleteFile")
+      .mockResolvedValue();
+
+    mockSaveResource = jest
+      .spyOn(resourceFns, "saveResource")
+      .mockResolvedValue(updatedPeopleIndexDataset);
+  });
+
+  afterEach(() => jest.restoreAllMocks());
+
+  test("it deletes the contact file and its containing folder", async () => {
+    await deleteContact(addressBookUrl, contactToDelete, foaf.Person, fetch);
+
+    expect(mockDeleteFile).toHaveBeenCalledTimes(2);
+    expect(mockDeleteFile).toHaveBeenNthCalledWith(1, contactUrl, { fetch });
+    expect(mockDeleteFile).toHaveBeenNthCalledWith(2, contactContainerUrl, {
+      fetch,
+    });
+  });
+
+  test("it updates the people index", async () => {
+    await deleteContact(addressBookUrl, contactToDelete, foaf.Person, fetch);
+
+    expect(mockSaveResource).toHaveBeenCalledWith(
+      { dataset: updatedPeopleIndexDataset, iri: peopleIndexIri },
+      fetch
+    );
+  });
+
+  it("throws an error if saving resource fails", async () => {
+    const error = "error";
+    mockSaveResource.mockResolvedValue({ error });
+
+    await expect(
+      deleteContact(addressBookUrl, contactToDelete, foaf.Person, fetch)
+    ).rejects.toEqual(error);
+  });
+});
+
+describe("saveNewAddressBook", () => {
+  const iri = "https://example.pod.com/contacts";
+  const owner = "https://example.pod.com/card#me";
+  const error401 = "401 Unauthorized";
+  const error500 = "500 Server error";
+
+  beforeEach(() => {
+    jest
+      .spyOn(resourceFns, "getResource")
+      .mockResolvedValue({ error: "There was an error" });
+  });
+
+  test("it saves a new address at the given iri, for the given owner, with a default title", async () => {
+    const addressBook = createAddressBook({ iri, owner });
+
+    jest
+      .spyOn(resourceFns, "saveResource")
+      .mockResolvedValueOnce({ response: addressBook.index })
+      .mockResolvedValueOnce({ response: addressBook.groups })
+      .mockResolvedValueOnce({ response: addressBook.people });
+
+    await saveNewAddressBook({ iri, owner });
+
+    const { calls } = resourceFns.saveResource.mock;
+
+    const [saveIndexArgs, saveGroupsArgs, savePeopleArgs] = calls;
+
+    expect(saveIndexArgs[0].iri).toEqual(addressBook.index.iri);
+    expect(saveGroupsArgs[0].iri).toEqual(addressBook.groups.iri);
+    expect(savePeopleArgs[0].iri).toEqual(addressBook.people.iri);
+  });
+
+  test("it returns an error if the user is unauthorized", async () => {
+    jest
+      .spyOn(resourceFns, "saveResource")
+      .mockResolvedValueOnce({ error: error401 })
+      .mockResolvedValueOnce({ error: error401 })
+      .mockResolvedValueOnce({ error: error401 });
+
+    const { error } = await saveNewAddressBook({ iri, owner });
+
+    expect(error).toEqual(
+      "You do not have permission to create an address book"
+    );
+  });
+
+  test("it returns an error if the address book already exists", async () => {
+    resourceFns.getResource.mockResolvedValue({
+      response: "existing address book",
+    });
+
+    const { error } = await saveNewAddressBook({ iri, owner }, jest.fn());
+
+    expect(error).toEqual("Address book already exists.");
+  });
+
+  it("passes the error on if it isn't a 401 error", async () => {
+    jest
+      .spyOn(resourceFns, "saveResource")
+      .mockResolvedValueOnce({ error: error500 })
+      .mockResolvedValueOnce({ error: error401 })
+      .mockResolvedValueOnce({ error: error401 });
+
+    const { error } = await saveNewAddressBook({ iri, owner });
+
+    expect(error).toEqual(error500);
+  });
+
+  it("returns an error if it fails to save group index", async () => {
+    jest
+      .spyOn(resourceFns, "saveResource")
+      .mockResolvedValueOnce({ response: "index" })
+      .mockResolvedValueOnce({ error: error500 })
+      .mockResolvedValueOnce({ response: "people" });
+
+    const { error } = await saveNewAddressBook({ iri, owner });
+
+    expect(error).toEqual(error500);
+  });
+
+  it("returns an error if it fails to save people index", async () => {
+    jest
+      .spyOn(resourceFns, "saveResource")
+      .mockResolvedValueOnce({ response: "index" })
+      .mockResolvedValueOnce({ response: "group" })
+      .mockResolvedValueOnce({ error: error500 });
+
+    const { error } = await saveNewAddressBook({ iri, owner });
+
+    expect(error).toEqual(error500);
+  });
+});
+
 describe("schemaFunctionMappings", () => {
   test("webId sets a vcard.url", () => {
     const webId = "https://user.example.com/card#me";
@@ -469,8 +1043,74 @@ describe("vcardExtras", () => {
 
 describe("contactsContainerIri", () => {
   test("it appends the container path to the given iri", () => {
-    expect(getAddressBookContainerIri("http://example.com")).toEqual(
+    expect(contactsContainerIri("http://example.com")).toEqual(
       "http://example.com/contacts/"
     );
+  });
+});
+
+describe("getContactsIndexIri", () => {
+  it("returns the URL for the central index file for contacts", () => {
+    expect(getContactsIndexIri("/contacts/")).toEqual("/contacts/index.ttl");
+  });
+});
+
+describe("getIndexDatasetFromAddressBook", () => {
+  const addressBookIri = "https://user.example.com/contacts";
+  const peopleIndexIri = `${addressBookIri}/people.ttl`;
+  const peopleIndexDataset = solidClientFns.mockSolidDatasetFrom(
+    peopleIndexIri
+  );
+  const nameEmailIndex = vcardExtras("nameEmailIndex");
+  const addressBookDataset = chain(
+    solidClientFns.mockSolidDatasetFrom(addressBookIri),
+    (d) =>
+      setThing(
+        d,
+        chain(
+          mockThingFrom(`${addressBookIri}#this`),
+          (t) => solidClientFns.addUrl(t, rdf.type, vcardExtras("AddressBook")),
+          (t) => solidClientFns.addUrl(t, nameEmailIndex, peopleIndexIri)
+        )
+      )
+  );
+
+  beforeAll(() => {
+    jest.restoreAllMocks();
+    jest.clearAllMocks();
+  });
+
+  test("it gets the index dataset for a given address book and predicate", async () => {
+    const fetch = jest.fn();
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValueOnce(peopleIndexDataset);
+
+    const { response } = await addressBookFns.getIndexDatasetFromAddressBook(
+      addressBookDataset,
+      nameEmailIndex,
+      fetch
+    );
+    expect(response).toBe(peopleIndexDataset);
+    expect(solidClientFns.getSolidDataset).toHaveBeenCalledWith(
+      peopleIndexIri,
+      { fetch }
+    );
+  });
+
+  it("returns an error if anything goes wrong", async () => {
+    const fetchError = new Error("error");
+    jest.spyOn(solidClientFns, "getSolidDataset").mockImplementation(() => {
+      throw fetchError;
+    });
+
+    const {
+      error,
+    } = await addressBookFns.getIndexDatasetFromAddressBook(
+      addressBookDataset,
+      nameEmailIndex,
+      () => {}
+    );
+    expect(error).toEqual(fetchError);
   });
 });

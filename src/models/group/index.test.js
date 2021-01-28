@@ -29,8 +29,6 @@ import {
   getUrl,
   getUrlAll,
   mockSolidDatasetFrom,
-  mockThingFrom,
-  setThing,
 } from "@inrupt/solid-client";
 import { v4 as uuid } from "uuid";
 import { rdf, vcard } from "rdf-namespaces/dist/index";
@@ -69,10 +67,7 @@ const group1Name = "Group 1";
 const mockedGroup1 = mockGroup(addressBook, group1Name, { id: "1234" });
 const group1DatasetUri = "https://example.com/contacts/Group/1234/index.ttl";
 const group1Uri = `${group1DatasetUri}#this`;
-const group1Thing = mockThingFrom(group1Uri);
-const group1Dataset = chain(mockSolidDatasetFrom(group1DatasetUri), (d) =>
-  setThing(d, group1Thing)
-);
+
 const group2Name = "Group 2";
 const mockedGroup2 = mockGroup(addressBook, group2Name, {
   id: "5678",
@@ -80,6 +75,7 @@ const mockedGroup2 = mockGroup(addressBook, group2Name, {
 });
 const group2DatasetUri = "https://example.com/contacts/Group/5678/index.ttl";
 const group2Uri = `${group2DatasetUri}#this`;
+
 const groupsDataset = chain(
   mockSolidDatasetFrom(groupsDatasetIri),
   (d) => addGroupToIndexDataset(d, addressBook, group1Name, group1Uri),

@@ -30,7 +30,11 @@ import {
   PageHeader,
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
-import { getStringNoLocale, getThing } from "@inrupt/solid-client";
+import {
+  getSourceUrl,
+  getStringNoLocale,
+  getThing,
+} from "@inrupt/solid-client";
 import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
 import { vcard, foaf } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";
@@ -44,10 +48,9 @@ import useProfiles from "../../src/hooks/useProfiles";
 import ContactsListSearch from "./contactsListSearch";
 import ProfileLink from "../profileLink";
 import { SearchProvider } from "../../src/contexts/searchContext";
+import { deleteContact, getWebIdUrl } from "../../src/addressBook";
 import ContactsDrawer from "./contactsDrawer";
 import ContactsEmptyState from "./contactsEmptyState";
-import { getWebIdUrl } from "../../src/models/contact";
-import { deletePerson } from "../../src/models/person";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -66,7 +69,12 @@ export function handleDeleteContact({
   return async () => {
     const selectedContact = people[selectedContactIndex];
 
-    await deletePerson(addressBook, selectedContact, foaf.Person, fetch);
+    await deleteContact(
+      getSourceUrl(addressBook),
+      selectedContact,
+      foaf.Person,
+      fetch
+    );
     peopleMutate();
     closeDrawer();
   };
@@ -81,7 +89,7 @@ function ContactsList() {
   const actionClass = PageHeader.usePageHeaderActionClassName();
   const [search, setSearch] = useState("");
 
-  const { addressBook, error: addressBookError } = useAddressBook();
+  const [addressBook, addressBookError] = useAddressBook();
   const {
     data: people,
     error: peopleError,
@@ -91,7 +99,9 @@ function ContactsList() {
   const formattedNamePredicate = vcard.fn;
   const hasPhotoPredicate = vcard.hasPhoto;
 
-  const { fetch } = useSession();
+  const {
+    session: { fetch },
+  } = useSession();
 
   const [selectedContactIndex, setSelectedContactIndex] = useState(null);
   const [selectedContactName, setSelectedContactName] = useState("");
@@ -120,7 +130,7 @@ function ContactsList() {
   // format things for the data table
   const contacts = profiles.map((p) => ({
     thing: p,
-    dataset: addressBook.people.dataset,
+    dataset: addressBook,
   }));
 
   const closeDrawer = handleClose(setSelectedContactIndex);

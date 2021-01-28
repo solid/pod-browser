@@ -24,7 +24,7 @@ import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import useProfiles from "./index";
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
-import { getProfiles } from "../../models/profile";
+import { getProfiles } from "../../addressBook";
 
 jest.mock("../../addressBook");
 

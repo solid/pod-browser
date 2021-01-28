@@ -19,16 +19,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { addUrl, mockThingFrom } from "@inrupt/solid-client";
-import { foaf, rdf, vcard } from "rdf-namespaces";
+import {
+  asUrl,
+  mockThingFrom,
+  setStringNoLocale,
+  setThing,
+  setUrl,
+} from "@inrupt/solid-client";
+import { rdf, vcard } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
+import { vcardExtras } from "../src/models/addressBook";
 
-export const webIdUrl = "http://example.com/alice#me";
-
-export default function mockPersonContactThing(url = webIdUrl) {
-  return chain(
-    mockThingFrom(url),
-    (t) => addUrl(t, rdf.type, vcard.Individual),
-    (t) => addUrl(t, foaf.openid, webIdUrl)
+// eslint-disable-next-line import/prefer-default-export
+export function addMockedPersonThingsToIndexDataset(
+  dataset,
+  addressBook,
+  name,
+  personThingUrl
+) {
+  return chain(dataset, (d) =>
+    setThing(
+      d,
+      chain(
+        mockThingFrom(personThingUrl),
+        (t) => setUrl(t, rdf.type, vcard.Individual),
+        (t) => setStringNoLocale(t, vcard.fn, name),
+        (t) => setUrl(t, vcardExtras("inAddressBook"), asUrl(addressBook.thing))
+      )
+    )
   );
 }

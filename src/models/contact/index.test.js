@@ -39,7 +39,6 @@ import {
 } from "./index";
 import { getAddressBookIndexUrl, VCARD_WEBID_PREDICATE } from "../addressBook";
 import { addGroupToIndexDataset } from "../../../__testUtils/mockGroup";
-import { addMockedPersonThingsToIndexDataset } from "../../../__testUtils/mockPersonContactThing";
 import {
   aliceAlternativeWebIdUrl,
   aliceWebIdUrl,
@@ -49,6 +48,7 @@ import {
   mockWebIdNode,
 } from "../../../__testUtils/mockPersonResource";
 import { chain } from "../../solidClientHelpers/utils";
+import { addMockedPersonThingsToIndexDataset } from "../../../__testUtils/mockPerson";
 
 const addressBook = mockAddressBook();
 const fetch = jest.fn();

@@ -23,6 +23,7 @@ import React from "react";
 import * as solidClientFns from "@inrupt/solid-client";
 import { foaf } from "rdf-namespaces";
 import { screen } from "@testing-library/react";
+import { deleteContact } from "../../src/addressBook";
 import useAddressBook from "../../src/hooks/useAddressBook";
 import useContacts from "../../src/hooks/useContacts";
 import useProfiles from "../../src/hooks/useProfiles";
@@ -34,31 +35,23 @@ import {
 } from "../../__testUtils/mockPersonResource";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
-import * as contactModelFns from "../../src/models/contact";
-import mockAddressBook from "../../__testUtils/mockAddressBook";
 
+jest.mock("../../src/addressBook");
 jest.mock("../../src/hooks/useAddressBook");
-const mockedAddressBookHook = useAddressBook;
-
 jest.mock("../../src/hooks/useContacts");
-const mockedContactsHook = useContacts;
-
 jest.mock("../../src/hooks/useProfiles");
-const mockedProfilesHook = useProfiles;
-
-const session = mockSession();
-const SessionProvider = mockSessionContextProvider(session);
-const addressBook = mockAddressBook();
 
 describe("ContactsList", () => {
+  const session = mockSession();
+  const SessionProvider = mockSessionContextProvider(session);
   it("renders spinner while useAddressBook is loading", () => {
-    mockedAddressBookHook.mockReturnValue({ addressBook: null });
-    mockedContactsHook.mockReturnValue({
+    useAddressBook.mockReturnValue([null, null]);
+    useContacts.mockReturnValue({
       data: undefined,
       error: undefined,
       mutate: () => {},
     });
-    mockedProfilesHook.mockReturnValue(null);
+    useProfiles.mockReturnValue(null);
 
     const { asFragment } = renderWithTheme(
       <SessionProvider>
@@ -66,18 +59,18 @@ describe("ContactsList", () => {
       </SessionProvider>
     );
     expect(asFragment()).toMatchSnapshot();
-    expect(mockedAddressBookHook).toHaveBeenCalledWith();
-    expect(mockedContactsHook).toHaveBeenCalledWith(null, foaf.Person);
+    expect(useAddressBook).toHaveBeenCalledWith();
+    expect(useContacts).toHaveBeenCalledWith(null, foaf.Person);
   });
 
   it("renders spinner while useContacts is loading", () => {
-    mockedAddressBookHook.mockReturnValue({ addressBook });
-    mockedContactsHook.mockReturnValue({
+    useAddressBook.mockReturnValue([42, null]);
+    useContacts.mockReturnValue({
       data: undefined,
       error: undefined,
       mutate: () => {},
     });
-    mockedProfilesHook.mockReturnValue(null);
+    useProfiles.mockReturnValue(null);
 
     const { asFragment } = renderWithTheme(
       <SessionProvider>
@@ -85,17 +78,17 @@ describe("ContactsList", () => {
       </SessionProvider>
     );
     expect(asFragment()).toMatchSnapshot();
-    expect(mockedContactsHook).toHaveBeenCalledWith(addressBook, foaf.Person);
+    expect(useContacts).toHaveBeenCalledWith(42, foaf.Person);
   });
 
   it("renders spinner while useProfiles is loading", () => {
-    mockedAddressBookHook.mockReturnValue({ addressBook });
-    mockedContactsHook.mockReturnValue({
+    useAddressBook.mockReturnValue([42, null]);
+    useContacts.mockReturnValue({
       data: "peopleData",
       error: undefined,
       mutate: () => {},
     });
-    mockedProfilesHook.mockReturnValue(null);
+    useProfiles.mockReturnValue(null);
 
     const { asFragment } = renderWithTheme(
       <SessionProvider>
@@ -103,15 +96,12 @@ describe("ContactsList", () => {
       </SessionProvider>
     );
     expect(asFragment()).toMatchSnapshot();
-    expect(mockedProfilesHook).toHaveBeenCalledWith("peopleData");
+    expect(useProfiles).toHaveBeenCalledWith("peopleData");
   });
 
   it("renders error if useAddressBook returns error", () => {
-    mockedAddressBookHook.mockReturnValue({
-      addressBook: null,
-      error: "error",
-    });
-    mockedContactsHook.mockReturnValue({
+    useAddressBook.mockReturnValue([null, "error"]);
+    useContacts.mockReturnValue({
       data: undefined,
       error: undefined,
       mutate: () => {},
@@ -126,13 +116,13 @@ describe("ContactsList", () => {
   });
 
   it("renders page when people is loaded", () => {
-    mockedAddressBookHook.mockReturnValue({ addressBook });
-    mockedContactsHook.mockReturnValue({
+    useAddressBook.mockReturnValue([42, null]);
+    useContacts.mockReturnValue({
       data: "peopleData",
       error: undefined,
       mutate: () => {},
     });
-    mockedProfilesHook.mockReturnValue([
+    useProfiles.mockReturnValue([
       mockPersonDatasetAlice(),
       mockPersonDatasetBob(),
     ]);
@@ -146,13 +136,13 @@ describe("ContactsList", () => {
   });
 
   it("renders empty state message when there are no contacts", () => {
-    mockedAddressBookHook.mockReturnValue({ addressBook });
-    mockedContactsHook.mockReturnValue({
+    useAddressBook.mockReturnValue([42, null]);
+    useContacts.mockReturnValue({
       data: "peopleData",
       error: undefined,
       mutate: () => {},
     });
-    mockedProfilesHook.mockReturnValue([]);
+    useProfiles.mockReturnValue([]);
 
     renderWithTheme(
       <SessionProvider>
@@ -166,8 +156,8 @@ describe("ContactsList", () => {
   });
 
   it("renders error if useContacts returns error", () => {
-    mockedAddressBookHook.mockReturnValue({ addressBook });
-    mockedContactsHook.mockReturnValue({
+    useAddressBook.mockReturnValue([42, null]);
+    useContacts.mockReturnValue({
       data: undefined,
       error: "error",
       mutate: () => {},
@@ -186,6 +176,7 @@ describe("handleDeleteContact", () => {
   it("returns a handler that deletes a contact, updates people data and closes drawer", async () => {
     const addressBookUrl = "http://example.com/contacts";
     const contact = "contact";
+    const addressBook = "address book";
     const closeDrawer = jest.fn();
     const fetch = jest.fn();
     const people = [contact];
@@ -193,9 +184,6 @@ describe("handleDeleteContact", () => {
     const selectedContactIndex = 0;
 
     jest.spyOn(solidClientFns, "getSourceUrl").mockReturnValue(addressBookUrl);
-    const deleteContact = jest
-      .spyOn(contactModelFns, "deleteContact")
-      .mockResolvedValue();
 
     const handler = handleDeleteContact({
       addressBook,
@@ -209,7 +197,7 @@ describe("handleDeleteContact", () => {
     await handler();
 
     expect(deleteContact).toHaveBeenCalledWith(
-      addressBook,
+      addressBookUrl,
       contact,
       foaf.Person,
       fetch

@@ -34,11 +34,6 @@ import {
 import { acl, dc, foaf, rdf, schema, vcard } from "rdf-namespaces";
 import { joinPath } from "../../stringHelpers";
 import { chain } from "../../solidClientHelpers/utils";
-import {
-  getBaseUrl,
-  getResource,
-  saveResource,
-} from "../../solidClientHelpers/resource";
 import { ERROR_CODES, isHTTPError } from "../../error";
 
 /**

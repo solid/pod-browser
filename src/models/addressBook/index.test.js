@@ -27,7 +27,6 @@ import {
   getUrl,
   mockSolidDatasetFrom,
 } from "@inrupt/solid-client";
-import * as resourceFns from "../../solidClientHelpers/resource";
 import {
   ADDRESS_BOOK_ERROR_ALREADY_EXIST,
   ADDRESS_BOOK_ERROR_NO_MAIN_INDEX,
@@ -141,7 +140,6 @@ describe("createAddressBook", () => {
 });
 
 describe("loadAddressBook", () => {
-  const mainIndexUrl = getAddressBookIndexDefaultUrl(containerIri);
   const fetch = "fetch";
   const existingThing = mockAddressBookThing({ containerIri });
   const existingDataset = mockAddressBookDataset(
