@@ -37,8 +37,8 @@ import { getOrCreateResource } from "../resource";
  *
  * @typedef Contact
  * @type {object}
- * @property {string} thing - The contact itself, be that a person, a group, or something else
  * @property {object} dataset - The dataset that the thing lives in
+ * @property {object} thing - The contact itself, be that a person, a group, or something else
  */
 
 /* Model constants */

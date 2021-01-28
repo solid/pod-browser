@@ -43,6 +43,16 @@ import { ERROR_CODES, isHTTPError } from "../../error";
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * Contacts represent the dataset in a user's AddressBook, e.g. /contacts/Person/<unique-id>/index.ttl#this
+ *
+ * @typedef Resouorce
+ * @type {object}
+ * @property {object} dataset - The dataset for the resource
+ * @property {object} iri - The IRI for the resource
+ */
+
+/* Model functions */
 // eslint-disable-next-line import/prefer-default-export
 export async function getOrCreateResource(iri, fetch) {
   try {

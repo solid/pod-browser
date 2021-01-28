@@ -40,8 +40,8 @@ import { ERROR_CODES, isHTTPError } from "../../error";
  * @typedef AddressBook
  * @type {object}
  * @property {string} containerIri - The address to the container
- * @property {object} thing - The thing that represents the main index itself
  * @property {object} dataset - The dataset the main index is stored in
+ * @property {object} thing - The thing that represents the main index itself
  */
 
 /* Model constants */
