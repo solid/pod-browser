@@ -38,7 +38,7 @@ import {
   createGroup,
   createGroupDatasetUrl,
   getGroup,
-  getGroupMembers,
+  getGroupMemberUrls,
   removeGroupMember,
   renameGroup,
 } from "./index";
@@ -252,10 +252,10 @@ describe("removeGroupMember", () => {
   });
 });
 
-describe("getGroupMembers", () => {
+describe("getGroupMemberUrls", () => {
   it("lists members from a group", () => {
-    expect(getGroupMembers(mockedGroup1)).toHaveLength(0);
-    const group2Members = getGroupMembers(mockedGroup2);
+    expect(getGroupMemberUrls(mockedGroup1)).toHaveLength(0);
+    const group2Members = getGroupMemberUrls(mockedGroup2);
     expect(group2Members).toHaveLength(1);
     expect(group2Members).toEqual([agent1]);
   });

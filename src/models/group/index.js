@@ -171,6 +171,6 @@ export async function removeGroupMember(group, agentUri, fetch) {
 /**
  * Do not return the dataset of each group member, must be loaded separately
  */
-export function getGroupMembers(group) {
+export function getGroupMemberUrls(group) {
   return getUrlAll(group.thing, vcard.hasMember);
 }
