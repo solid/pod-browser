@@ -21,14 +21,14 @@
 
 import React from "react";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import ResourceSharing from "./index";
+import SharingAccordion from "./index";
 
-describe("AgentAccessList", () => {
+describe("SharingAccordion", () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
   test("it renders three lists of empty permissions for editors, viewers and blocked", () => {
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
+    const { asFragment } = renderWithTheme(<SharingAccordion />);
     expect(asFragment()).toMatchSnapshot();
   });
 });

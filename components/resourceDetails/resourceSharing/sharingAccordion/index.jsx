@@ -27,7 +27,7 @@ import AgentAccessTable from "../agentAccessTable";
 export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
   "agent-access-list-show-all";
 
-function ResourceSharing() {
+function SharingAccordion() {
   return (
     <>
       <AgentAccessTable type="editors" />
@@ -37,4 +37,4 @@ function ResourceSharing() {
   );
 }
 
-export default ResourceSharing;
+export default SharingAccordion;
