@@ -25,7 +25,6 @@ import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   Checkbox,
-  CircularProgress,
   createStyles,
   Dialog,
   DialogActions,
@@ -74,6 +73,8 @@ const VCARD_WEBID_PREDICATE = "https://www.w3.org/2006/vcard/ns#WebId";
 const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
 const TESTCAFE_CONFIRM_BUTTON = "confirm-button";
 const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
+const TESTCAFE_CONFIRMATION_CANCEL_BUTTON = "confirmation-cancel-button";
+const TESTCAFE_CONFIRMATION_DIALOG = "confirmation-dialog";
 
 export default function AgentPickerModal({
   type,
@@ -106,6 +107,8 @@ export default function AgentPickerModal({
   );
   const [noAgentsAlert, setNoAgentsAlert] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const [globalFilter, setGlobalFilter] = useState("");
+  const [emptyRowCanShare, setEmptyRowCanShare] = useState(false);
 
   const handleClickOpenDialog = () => {
     if (!newAgentsWebIds.length) {
@@ -125,7 +128,15 @@ export default function AgentPickerModal({
   };
 
   const toggleCanShare = (webId) => {
-    setCanShareWebIds([webId, ...canShareWebIds]);
+    if (!webId) {
+      setEmptyRowCanShare(!emptyRowCanShare);
+    } else if (canShareWebIds.includes(webId)) {
+      setCanShareWebIds(
+        newAgentsWebIds.filter((agentWebId) => agentWebId !== webId)
+      );
+    } else {
+      setCanShareWebIds([webId, ...canShareWebIds]);
+    }
   };
 
   const handleSaveContact = async (iri, fetch) => {
@@ -156,6 +167,11 @@ export default function AgentPickerModal({
     }
     // eslint-disable-next-line consistent-return
     return { response, error };
+  };
+
+  const handleFilterChange = (e) => {
+    const { value } = e.target;
+    setGlobalFilter(value || undefined);
   };
 
   const handleSubmit = () => {
@@ -222,7 +238,7 @@ export default function AgentPickerModal({
           />
           <AddWebIdButton onClick={handleAddRow} disabled={addingWebId} />
         </div>
-        <AgentsSearchBar />
+        <AgentsSearchBar handleFilterChange={handleFilterChange} />
         {contactsArray.length ? (
           <Table things={contactsArray} className={classes.table}>
             <TableColumn
@@ -278,7 +294,9 @@ export default function AgentPickerModal({
                 return (
                   <CanShareToggleSwitch
                     toggleShare={() => toggleCanShare(value)}
-                    canShare={canShareWebIds.includes(value)}
+                    canShare={
+                      value ? canShareWebIds.includes(value) : emptyRowCanShare
+                    }
                   />
                 );
               }}
@@ -294,7 +312,7 @@ export default function AgentPickerModal({
         <Button
           variant="action"
           className={classes.cancelButton}
-          onClick={() => onClose()} // fill this
+          onClick={onClose}
         >
           Cancel
         </Button>
@@ -307,6 +325,7 @@ export default function AgentPickerModal({
           {text}
         </Button>
         <Dialog
+          data-testid={TESTCAFE_CONFIRMATION_DIALOG}
           open={openDialog}
           onClose={handleCloseDialog}
           aria-labelledby="Confirmation dialog"
@@ -317,7 +336,10 @@ export default function AgentPickerModal({
             classes={{ root: classes.dialogTitle }}
             disableTypography
           >
-            {`Change permissions for ${newAgentsWebIds.length} people`}
+            Change permissions for
+            {newAgentsWebIds.length === 1
+              ? " 1 person"
+              : ` ${newAgentsWebIds.length} people`}
             {/* this will change when we have groups */}
           </DialogTitle>
           <DialogContent>
@@ -325,12 +347,17 @@ export default function AgentPickerModal({
               classes={{ root: classes.dialogText }}
               id="alert-confirmation-dialog"
             >
-              {`Continuing will change ${newAgentsWebIds.length} people
-                permissions to ${type.charAt(0).toUpperCase() + type.slice(1)}`}
+              Continuing will change
+              {newAgentsWebIds.length === 1
+                ? " 1 person "
+                : ` ${newAgentsWebIds.length} people `}
+              permissions to
+              {type.charAt(0).toUpperCase() + type.slice(1)}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button
+              data-testid={TESTCAFE_CONFIRMATION_CANCEL_BUTTON}
               variant="action"
               className={classes.cancelButton}
               onClick={handleCloseDialog}

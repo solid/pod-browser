@@ -30,9 +30,9 @@ import { IconButton, InputBase, createStyles } from "@material-ui/core";
 import styles from "./styles";
 
 const TESTCAFE_ID_SEARCH_INPUT = "search-input";
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function AgentsSearchBar({ handleFilterChange }) {
-  const useStyles = makeStyles((theme) => createStyles(styles(theme)));
   const bem = useBem(useStyles());
 
   const classes = useStyles();

@@ -53,6 +53,7 @@ const TESTCAFE_ID_ACCORDION_ACTIONS = "accordion-resource-actions-trigger";
 const TESTCAFE_ID_ACCORDION_DETAILS = "accordion-resource-details-trigger";
 const TESTCAFE_ID_ACCORDION_PERMISSIONS =
   "accordion-resource-permissions-trigger";
+const TESTCAFE_ID_ACCORDION_SHARING = "accordion-resource-permissions-trigger";
 const TESTCAFE_ID_TITLE = "resource-title";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -161,7 +162,7 @@ export default function ResourceDetails({
             <Accordion>
               <AccordionSummary
                 expandIcon={expandIcon}
-                data-testid={TESTCAFE_ID_ACCORDION_PERMISSIONS}
+                data-testid={TESTCAFE_ID_ACCORDION_SHARING}
               >
                 Sharing
               </AccordionSummary>

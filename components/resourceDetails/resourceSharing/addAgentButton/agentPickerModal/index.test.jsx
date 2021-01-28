@@ -21,7 +21,9 @@
 
 import React from "react";
 import { act } from "react-test-renderer";
+import "@testing-library/jest-dom/extend-expect";
 import userEvent from "@testing-library/user-event";
+import { fireEvent } from "@testing-library/dom";
 import AgentPickerModal from "./index";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import mockAccessControl from "../../../../../__testUtils/mockAccessControl";
@@ -144,6 +146,8 @@ describe("AgentPickerEmptyState", () => {
     userEvent.click(addWebIdButton);
     const input = getByTestId("webid-input");
     userEvent.type(input, webId);
+    const toggle = getByTestId("can-share-toggle");
+    fireEvent.change(toggle, { target: { checked: true } });
     const addButton = getByTestId("add-button");
     userEvent.click(addButton);
 
@@ -153,45 +157,72 @@ describe("AgentPickerEmptyState", () => {
 
     expect(agentWebId).not.toBeNull();
   });
-  it("toggles can share for the webId to be entered when clickling the share toggle", async () => {
-    const { getByTestId, findByTestId, findByText } = renderWithTheme(
-      <AccessControlContext.Provider value={{ accessControl }}>
-        <AgentPickerModal
-          type="editors"
-          text="Add Editors"
-          onClose={onClose}
-          mutatePermissions={mutatePermissions}
-          permissions={permissions}
-        />
-      </AccessControlContext.Provider>
-    );
-
+  describe("toggleCanShare", () => {
     const name = "Example";
     const avatar = "https://someavatar.com";
     const webId = "https://somewebid.com";
 
-    const addWebIdButton = getByTestId("add-webid-button");
-    userEvent.click(addWebIdButton);
-    const toggle = getByTestId("can-share-toggle");
-    userEvent.click(toggle);
-    const input = getByTestId("webid-input");
-    userEvent.type(input, webId);
-    const addButton = getByTestId("add-button");
-    userEvent.click(addButton);
+    beforeEach(() => {
+      fetchProfile.mockResolvedValue({ name, avatar, webId });
+    });
+    it("toggles can share for an entered webId when clicking the share toggle", async () => {
+      const { getByTestId } = renderWithTheme(
+        <AccessControlContext.Provider value={{ accessControl }}>
+          <AgentPickerModal
+            type="editors"
+            text="Add Editors"
+            onClose={onClose}
+            mutatePermissions={mutatePermissions}
+            permissions={permissions}
+          />
+        </AccessControlContext.Provider>
+      );
 
-    await fetchProfile.mockResolvedValueOnce({ name, avatar, webId });
+      const addWebIdButton = getByTestId("add-webid-button");
+      userEvent.click(addWebIdButton);
+      const input = getByTestId("webid-input");
+      userEvent.type(input, webId);
+      const addButton = getByTestId("add-button");
+      userEvent.click(addButton);
+      const toggle = getByTestId("can-share-toggle");
+      fireEvent.change(toggle, { target: { checked: true } });
+      expect(toggle).toHaveProperty("checked", true);
+    });
 
-    const agentWebId = await findByTestId("agent-webid");
+    it("toggles can share for the webId to be entered when clicking the share toggle", async () => {
+      const { getByTestId, findByTestId, findByText } = renderWithTheme(
+        <AccessControlContext.Provider value={{ accessControl }}>
+          <AgentPickerModal
+            type="editors"
+            text="Add Editors"
+            onClose={onClose}
+            mutatePermissions={mutatePermissions}
+            permissions={permissions}
+          />
+        </AccessControlContext.Provider>
+      );
 
-    const submitWebIdsButton = getByTestId("submit-webids-button");
-    userEvent.click(submitWebIdsButton);
-    const confirmButton = getByTestId("confirm-button");
-    userEvent.click(confirmButton);
+      const addWebIdButton = getByTestId("add-webid-button");
+      userEvent.click(addWebIdButton);
+      const toggle = getByTestId("can-share-toggle");
+      userEvent.click(toggle);
+      const input = getByTestId("webid-input");
+      userEvent.type(input, webId);
+      const addButton = getByTestId("add-button");
+      userEvent.click(addButton);
 
-    const canShareText = findByText("Can Share");
+      const agentWebId = await findByTestId("agent-webid");
 
-    expect(canShareText).not.toBeNull();
+      const submitWebIdsButton = getByTestId("submit-webids-button");
+      userEvent.click(submitWebIdsButton);
+      const confirmButton = getByTestId("confirm-button");
+      userEvent.click(confirmButton);
 
-    expect(agentWebId).not.toBeNull();
+      const canShareText = findByText("Can Share");
+
+      expect(canShareText).not.toBeNull();
+
+      expect(agentWebId).not.toBeNull();
+    });
   });
 });

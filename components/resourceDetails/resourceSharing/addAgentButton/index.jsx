@@ -21,7 +21,7 @@
 
 /* eslint-disable react/forbid-prop-types */
 
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { createStyles, Modal } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
@@ -49,7 +49,7 @@ export default function AddAgentButton({
 }) {
   const classes = useStyles();
   const bem = useBem(useStyles());
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -59,21 +59,7 @@ export default function AddAgentButton({
     setOpen(false);
   };
 
-  const onClose = () => {
-    handleClose();
-  };
-
   const { text } = BUTTON_TEXT_MAP[type];
-
-  const body = (
-    <AgentPickerModal
-      type={type}
-      text={text}
-      onClose={onClose}
-      mutatePermissions={mutatePermissions}
-      permissions={permissions}
-    />
-  );
 
   return (
     <>
@@ -102,7 +88,13 @@ export default function AddAgentButton({
         aria-labelledby={`${text} Modal`}
         aria-describedby={`${text} for this resource`}
       >
-        {body}
+        <AgentPickerModal
+          type={type}
+          text={text}
+          onClose={handleClose}
+          mutatePermissions={mutatePermissions}
+          permissions={permissions}
+        />
       </Modal>
     </>
   );
