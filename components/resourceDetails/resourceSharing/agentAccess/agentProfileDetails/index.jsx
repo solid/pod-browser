@@ -57,7 +57,8 @@ export default function AgentProfileDetails({
         className={classes.detailText}
       >
         {profile ? displayProfileName(profile) : webId}
-        {canShare && <span className={classes.shareText}>Can Share</span>}
+        {/* hiding the canShare legend until we have the new canShare policy */}
+        {/* {canShare && <span className={classes.shareText}>Can Share</span>} */}
       </Typography>
       <AgentAccessOptionsMenu
         canShare={canShare}

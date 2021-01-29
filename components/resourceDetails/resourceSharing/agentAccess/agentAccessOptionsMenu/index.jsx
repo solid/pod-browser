@@ -108,7 +108,8 @@ export default function AgentAccessOptionsMenu({
               <p>{webId}</p>
             </ListItemText>
           </ListItem>
-          <ListItem>
+          {/* hiding the can share menu option until we have the new canShare policy */}
+          {/* <ListItem>
             <ListItemText
               disableTypography
               classes={{ primary: classes.listItemText }}
@@ -121,7 +122,7 @@ export default function AgentAccessOptionsMenu({
                 canShare={canShare}
               />
             </ListItemSecondaryAction>
-          </ListItem>
+          </ListItem> */}
           <ListItem
             data-testid={TESTCAFE_ID_REMOVE_BUTTON}
             button

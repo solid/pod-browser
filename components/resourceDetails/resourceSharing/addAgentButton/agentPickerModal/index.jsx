@@ -280,7 +280,8 @@ export default function AgentPickerModal({
                 );
               }}
             />
-            <TableColumn
+            {/* Hiding the toggle until we have the new canShare policy */}
+            {/* <TableColumn
               header={
                 // eslint-disable-next-line react/jsx-wrap-multilines
                 <CanShareInfoTooltip
@@ -300,7 +301,7 @@ export default function AgentPickerModal({
                   />
                 );
               }}
-            />
+            /> */}
           </Table>
         ) : (
           <AgentPickerEmptyState onClick={handleAddRow} />
