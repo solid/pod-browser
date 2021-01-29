@@ -524,7 +524,7 @@ export default class AcpAccessControlStrategy {
         policy: acp.setAllowModes(policy, acpMap),
         dataset,
       }),
-      ({ policy, dataset }) => setAgents(policy, dataset, webId, true), // wth is accessToMode, jesus
+
       ({ policy, dataset }) => acp.setPolicy(dataset, policy)
     );
     // saving changes to the policy resource

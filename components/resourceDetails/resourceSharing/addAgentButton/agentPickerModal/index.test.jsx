@@ -32,6 +32,8 @@ import { fetchProfile } from "../../../../../src/solidClientHelpers/profile";
 
 jest.mock("../../../../../src/solidClientHelpers/profile");
 
+// TODO: Un-comment toggle tests once we un-hide the toggle
+
 describe("AgentPickerEmptyState", () => {
   const onClose = jest.fn();
   const mutatePermissions = jest.fn();
@@ -146,8 +148,8 @@ describe("AgentPickerEmptyState", () => {
     userEvent.click(addWebIdButton);
     const input = getByTestId("webid-input");
     userEvent.type(input, webId);
-    const toggle = getByTestId("can-share-toggle");
-    fireEvent.change(toggle, { target: { checked: true } });
+    // const toggle = getByTestId("can-share-toggle");
+    // fireEvent.change(toggle, { target: { checked: true } });
     const addButton = getByTestId("add-button");
     userEvent.click(addButton);
 
@@ -157,72 +159,72 @@ describe("AgentPickerEmptyState", () => {
 
     expect(agentWebId).not.toBeNull();
   });
-  describe("toggleCanShare", () => {
-    const name = "Example";
-    const avatar = "https://someavatar.com";
-    const webId = "https://somewebid.com";
+  // describe("toggleCanShare", () => {
+  //   const name = "Example";
+  //   const avatar = "https://someavatar.com";
+  //   const webId = "https://somewebid.com";
 
-    beforeEach(() => {
-      fetchProfile.mockResolvedValue({ name, avatar, webId });
-    });
-    it("toggles can share for an entered webId when clicking the share toggle", async () => {
-      const { getByTestId } = renderWithTheme(
-        <AccessControlContext.Provider value={{ accessControl }}>
-          <AgentPickerModal
-            type="editors"
-            text="Add Editors"
-            onClose={onClose}
-            mutatePermissions={mutatePermissions}
-            permissions={permissions}
-          />
-        </AccessControlContext.Provider>
-      );
+  //   beforeEach(() => {
+  //     fetchProfile.mockResolvedValue({ name, avatar, webId });
+  //   });
+  //   it("toggles can share for an entered webId when clicking the share toggle", async () => {
+  //     const { getByTestId } = renderWithTheme(
+  //       <AccessControlContext.Provider value={{ accessControl }}>
+  //         <AgentPickerModal
+  //           type="editors"
+  //           text="Add Editors"
+  //           onClose={onClose}
+  //           mutatePermissions={mutatePermissions}
+  //           permissions={permissions}
+  //         />
+  //       </AccessControlContext.Provider>
+  //     );
 
-      const addWebIdButton = getByTestId("add-webid-button");
-      userEvent.click(addWebIdButton);
-      const input = getByTestId("webid-input");
-      userEvent.type(input, webId);
-      const addButton = getByTestId("add-button");
-      userEvent.click(addButton);
-      const toggle = getByTestId("can-share-toggle");
-      fireEvent.change(toggle, { target: { checked: true } });
-      expect(toggle).toHaveProperty("checked", true);
-    });
+  //     const addWebIdButton = getByTestId("add-webid-button");
+  //     userEvent.click(addWebIdButton);
+  //     const input = getByTestId("webid-input");
+  //     userEvent.type(input, webId);
+  //     const addButton = getByTestId("add-button");
+  //     userEvent.click(addButton);
+  //     const toggle = getByTestId("can-share-toggle");
+  //     fireEvent.change(toggle, { target: { checked: true } });
+  //     expect(toggle).toHaveProperty("checked", true);
+  //   });
 
-    it("toggles can share for the webId to be entered when clicking the share toggle", async () => {
-      const { getByTestId, findByTestId, findByText } = renderWithTheme(
-        <AccessControlContext.Provider value={{ accessControl }}>
-          <AgentPickerModal
-            type="editors"
-            text="Add Editors"
-            onClose={onClose}
-            mutatePermissions={mutatePermissions}
-            permissions={permissions}
-          />
-        </AccessControlContext.Provider>
-      );
+  //   it("toggles can share for the webId to be entered when clicking the share toggle", async () => {
+  //     const { getByTestId, findByTestId, findByText } = renderWithTheme(
+  //       <AccessControlContext.Provider value={{ accessControl }}>
+  //         <AgentPickerModal
+  //           type="editors"
+  //           text="Add Editors"
+  //           onClose={onClose}
+  //           mutatePermissions={mutatePermissions}
+  //           permissions={permissions}
+  //         />
+  //       </AccessControlContext.Provider>
+  //     );
 
-      const addWebIdButton = getByTestId("add-webid-button");
-      userEvent.click(addWebIdButton);
-      const toggle = getByTestId("can-share-toggle");
-      userEvent.click(toggle);
-      const input = getByTestId("webid-input");
-      userEvent.type(input, webId);
-      const addButton = getByTestId("add-button");
-      userEvent.click(addButton);
+  //     const addWebIdButton = getByTestId("add-webid-button");
+  //     userEvent.click(addWebIdButton);
+  //     const toggle = getByTestId("can-share-toggle");
+  //     userEvent.click(toggle);
+  //     const input = getByTestId("webid-input");
+  //     userEvent.type(input, webId);
+  //     const addButton = getByTestId("add-button");
+  //     userEvent.click(addButton);
 
-      const agentWebId = await findByTestId("agent-webid");
+  //     const agentWebId = await findByTestId("agent-webid");
 
-      const submitWebIdsButton = getByTestId("submit-webids-button");
-      userEvent.click(submitWebIdsButton);
-      const confirmButton = getByTestId("confirm-button");
-      userEvent.click(confirmButton);
+  //     const submitWebIdsButton = getByTestId("submit-webids-button");
+  //     userEvent.click(submitWebIdsButton);
+  //     const confirmButton = getByTestId("confirm-button");
+  //     userEvent.click(confirmButton);
 
-      const canShareText = findByText("Can Share");
+  //     const canShareText = findByText("Can Share");
 
-      expect(canShareText).not.toBeNull();
+  //     expect(canShareText).not.toBeNull();
 
-      expect(agentWebId).not.toBeNull();
-    });
-  });
+  //     expect(agentWebId).not.toBeNull();
+  //   });
+  // });
 });

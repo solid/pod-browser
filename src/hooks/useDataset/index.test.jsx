@@ -53,7 +53,8 @@ describe("useDataset", () => {
     expect(value.result.current).toBe(42);
     expect(useSWR).toHaveBeenCalledWith(
       [iri, GET_DATASET],
-      expect.any(Function)
+      expect.any(Function),
+      { refreshInterval: 0 }
     );
   });
   test("useSWR fetches data using getSolidDataset", () => {

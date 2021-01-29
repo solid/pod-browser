@@ -25,6 +25,8 @@ import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import AgentAccessOptionsMenu from "./index";
 
+// TODO: Un-comment toggle tests once we un-hide the toggle
+
 const toggleShare = jest.fn();
 const removePermissions = jest.fn();
 const resourceIri = "/iri/";
@@ -45,29 +47,29 @@ describe("AgentAccessOptionsMenu", () => {
     const menuButton = getByTestId("menu-button");
     userEvent.click(menuButton);
     expect(queryByText("WebId:")).toBeDefined();
-    expect(queryByText("Can Share")).toBeDefined();
-    const canShareToggle = getByTestId("can-share-toggle");
+    // expect(queryByText("Can Share")).toBeDefined();
+    // const canShareToggle = getByTestId("can-share-toggle");
     const removeButton = getByTestId("remove-button");
-    expect(canShareToggle).toBeDefined();
+    // expect(canShareToggle).toBeDefined();
     expect(removeButton).toBeDefined();
   });
-  test("it renders a 'can share' toggle which updates an agent's control access", () => {
-    const { getByTestId, getByRole } = renderWithTheme(
-      <AgentAccessOptionsMenu
-        resourceIri={resourceIri}
-        removePermissions={removePermissions}
-        toggleShare={toggleShare}
-        webId={webId}
-      />
-    );
-    const menuButton = getByTestId("menu-button");
-    userEvent.click(menuButton);
-    const canShareToggle = getByRole("checkbox");
-    userEvent.click(canShareToggle);
-    fireEvent.change(canShareToggle, { target: { checked: true } });
-    expect(toggleShare).toHaveBeenCalled();
-    expect(canShareToggle).toHaveProperty("checked", true);
-  });
+  // test("it renders a 'can share' toggle which updates an agent's control access", () => {
+  //   const { getByTestId, getByRole } = renderWithTheme(
+  //     <AgentAccessOptionsMenu
+  //       resourceIri={resourceIri}
+  //       removePermissions={removePermissions}
+  //       toggleShare={toggleShare}
+  //       webId={webId}
+  //     />
+  //   );
+  //   const menuButton = getByTestId("menu-button");
+  //   userEvent.click(menuButton);
+  //   const canShareToggle = getByRole("checkbox");
+  //   userEvent.click(canShareToggle);
+  //   fireEvent.change(canShareToggle, { target: { checked: true } });
+  //   expect(toggleShare).toHaveBeenCalled();
+  //   expect(canShareToggle).toHaveProperty("checked", true);
+  // });
   test("it renders a remove button which sets an agent's control accesses to false", () => {
     const { getByTestId } = renderWithTheme(
       <AgentAccessOptionsMenu
