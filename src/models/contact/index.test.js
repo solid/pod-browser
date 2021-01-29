@@ -22,70 +22,120 @@
 import * as solidClientFns from "@inrupt/solid-client";
 import {
   asUrl,
+  createSolidDataset,
+  getSourceUrl,
   getStringNoLocale,
+  getThingAll,
   getUrl,
   mockSolidDatasetFrom,
-  setThing,
-  setUrl,
 } from "@inrupt/solid-client";
-import { foaf, vcard, rdf } from "rdf-namespaces";
+import { foaf, vcard } from "rdf-namespaces";
 import mockAddressBook from "../../../__testUtils/mockAddressBook";
 import {
-  CONTACT_ERROR_NO_CONTACT_INDEX_TRIPLE,
-  createWebIdNode,
+  addContactIndexToAddressBook,
+  getContactIndexDefaultUrl,
+  getContactIndexUrl,
   getContacts,
-  getContactsIndex,
-  getWebIdUrl,
+  getContactsIndexDataset,
+  GROUPS_INDEX_FILE,
+  NAME_GROUP_INDEX_PREDICATE,
+  PEOPLE_INDEX_FILE,
 } from "./index";
-import { getAddressBookIndexUrl, VCARD_WEBID_PREDICATE } from "../addressBook";
 import { addGroupToIndexDataset } from "../../../__testUtils/mockGroup";
-import {
-  aliceAlternativeWebIdUrl,
-  aliceWebIdUrl,
-  bobWebIdUrl,
-  mockPersonDatasetAlice,
-  mockPersonDatasetBob,
-  mockWebIdNode,
-} from "../../../__testUtils/mockPersonResource";
-import { chain } from "../../solidClientHelpers/utils";
 import { addMockedPersonThingsToIndexDataset } from "../../../__testUtils/mockPerson";
+import { joinPath } from "../../stringHelpers";
 
-const addressBook = mockAddressBook();
+const containerIri = "https://example.pod.com/contacts/";
 const fetch = jest.fn();
 
-describe("getContactsIndex", () => {
-  it("returns the requested resource", async () => {
-    jest
-      .spyOn(solidClientFns, "getSolidDataset")
-      .mockImplementation((iri) => mockSolidDatasetFrom(iri));
+describe("getContactIndexDefaultUrl", () => {
+  it("returns the default URLs for the various indexes", () => {
+    expect(getContactIndexDefaultUrl(containerIri, vcard.Group)).toEqual(
+      joinPath(containerIri, GROUPS_INDEX_FILE)
+    );
+    expect(getContactIndexDefaultUrl(containerIri, foaf.Person)).toEqual(
+      joinPath(containerIri, PEOPLE_INDEX_FILE)
+    );
+  });
+});
 
-    const groupsIndex = await getContactsIndex(addressBook, vcard.Group, fetch);
-    const groupsIndexUrl = getAddressBookIndexUrl(addressBook, vcard.Group);
-    expect(groupsIndex).toEqual({
-      dataset: mockSolidDatasetFrom(groupsIndexUrl),
-      iri: groupsIndexUrl,
+describe("getContactIndexUrl", () => {
+  it("returns the URL that's stored in the model", () => {
+    const groupsUrl = "https://example.com/myGroups.ttl";
+    const peopleUrl = "https://example.com/myPeople.ttl";
+    const addressBook = mockAddressBook({
+      groupsUrl,
+      peopleUrl,
     });
-
-    const peopleIndex = await getContactsIndex(addressBook, foaf.Person, fetch);
-    const peopleIndexUrl = getAddressBookIndexUrl(addressBook, foaf.Person);
-    expect(peopleIndex).toEqual({
-      dataset: mockSolidDatasetFrom(peopleIndexUrl),
-      iri: peopleIndexUrl,
-    });
+    expect(getContactIndexUrl(addressBook, vcard.Group)).toEqual(groupsUrl);
+    expect(getContactIndexUrl(addressBook, foaf.Person)).toEqual(peopleUrl);
   });
 
-  it("throws an error if unable to find type index URL in main index", async () => {
-    const addressBookWithMissingIndexes = mockAddressBook({ peopleUrl: false });
+  it("returns default URLs if model data is missing", () => {
+    const addressBook = mockAddressBook({
+      containerIri,
+      groupsUrl: null,
+      peopleUrl: null,
+    });
+    expect(getContactIndexUrl(addressBook, vcard.Group)).toEqual(
+      joinPath(containerIri, GROUPS_INDEX_FILE)
+    );
+    expect(getContactIndexUrl(addressBook, foaf.Person)).toEqual(
+      joinPath(containerIri, PEOPLE_INDEX_FILE)
+    );
+  });
+});
+
+describe("getContactsIndexDataset", () => {
+  let mockedGetSolidDataset;
+
+  beforeEach(() => {
+    mockedGetSolidDataset = jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockImplementation((iri) => mockSolidDatasetFrom(iri));
+  });
+
+  it("returns the requested resource", async () => {
+    const addressBook = mockAddressBook();
+    const dataset = await getContactsIndexDataset(
+      addressBook,
+      vcard.Group,
+      fetch
+    );
+    const groupsIndexUrl = getContactIndexUrl(addressBook, vcard.Group);
+    expect(dataset).toEqual(mockSolidDatasetFrom(groupsIndexUrl));
+  });
+
+  it("returns a blank dataset if index is not linked to addressBook", async () => {
+    const addressBook = mockAddressBook({ peopleUrl: false });
     await expect(
-      getContactsIndex(addressBookWithMissingIndexes, foaf.Person, fetch)
-    ).rejects.toEqual(new Error(CONTACT_ERROR_NO_CONTACT_INDEX_TRIPLE));
+      getContactsIndexDataset(addressBook, foaf.Person, fetch)
+    ).resolves.toEqual(createSolidDataset());
+  });
+
+  it("returns a blank dataset if resource does not exist", async () => {
+    const addressBook = mockAddressBook();
+    mockedGetSolidDataset.mockRejectedValue("404");
+    await expect(
+      getContactsIndexDataset(addressBook, foaf.Person, fetch)
+    ).resolves.toEqual(createSolidDataset());
+  });
+
+  it("throws an error if call for resource returns anything other than 404", async () => {
+    const addressBook = mockAddressBook();
+    const error = "500";
+    mockedGetSolidDataset.mockRejectedValue(error);
+    await expect(
+      getContactsIndexDataset(addressBook, foaf.Person, fetch)
+    ).rejects.toEqual(error);
   });
 });
 
 describe("getContacts", () => {
+  const addressBook = mockAddressBook();
   const group1Url = "http://example.com/Group/group1/index.ttl#this";
   const group1Name = "Group 1";
-  const groupsDatasetIri = getAddressBookIndexUrl(addressBook, vcard.Group);
+  const groupsDatasetIri = getContactIndexUrl(addressBook, vcard.Group);
   const groupsDataset = addGroupToIndexDataset(
     mockSolidDatasetFrom(groupsDatasetIri),
     addressBook,
@@ -95,7 +145,7 @@ describe("getContacts", () => {
 
   const person1Url = "http://example.com/Person/person1/index.ttl#this";
   const person1Name = "Alice";
-  const peopleDatasetIri = getAddressBookIndexUrl(addressBook, foaf.Person);
+  const peopleDatasetIri = getContactIndexUrl(addressBook, foaf.Person);
   const peopleDataset = addMockedPersonThingsToIndexDataset(
     mockSolidDatasetFrom(peopleDatasetIri),
     addressBook,
@@ -143,39 +193,28 @@ describe("getContacts", () => {
   });
 });
 
-describe("getWebIdUrl", () => {
-  it("returns the webId for a given person dataset", () => {
-    const webIdUrl = "http://example.com/alice#me";
-    const { webIdNode } = mockWebIdNode(webIdUrl, aliceAlternativeWebIdUrl);
-    const personDataset = chain(
-      mockSolidDatasetFrom("http://example.com/alice"),
-      (d) => setThing(d, mockPersonDatasetAlice()),
-      (d) => setThing(d, webIdNode)
-    );
+describe("addContactIndexToAddressBook", () => {
+  const addressBook = mockAddressBook({ containerIri, groupsUrl: false });
+  let mockedSaveSolidDatasetAt;
 
-    expect(getWebIdUrl(personDataset, aliceWebIdUrl)).toEqual(webIdUrl);
+  beforeEach(() => {
+    mockedSaveSolidDatasetAt = jest
+      .spyOn(solidClientFns, "saveSolidDatasetAt")
+      .mockResolvedValue();
   });
 
-  it("offers fallback for foaf.openid", () => {
-    const foafId = "http://bobspod.com/#me";
-    const profile = chain(mockPersonDatasetBob(), (t) =>
-      setUrl(t, foaf.openid, foafId)
+  it("adds the contacts index to the address book", async () => {
+    const indexUrl = getContactIndexDefaultUrl(containerIri, vcard.Group);
+    await expect(
+      addContactIndexToAddressBook(addressBook, vcard.Group, fetch)
+    ).resolves.toEqual(indexUrl);
+    expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
+      getSourceUrl(addressBook.dataset),
+      expect.any(Object),
+      { fetch }
     );
-    const personDataset = chain(
-      mockSolidDatasetFrom("https://example.com/bob"),
-      (d) => setThing(d, profile)
-    );
-
-    expect(getWebIdUrl(personDataset, bobWebIdUrl)).toEqual(foafId);
-  });
-});
-
-describe("createWebIdNode", () => {
-  it("creates a webId node", () => {
-    const webId = "http://example.com/#me";
-    const webIdNode = createWebIdNode(webId);
-    expect(asUrl(webIdNode, "http://test.com/")).toMatch(/http:\/\/test.com\//);
-    expect(getUrl(webIdNode, rdf.type)).toEqual(VCARD_WEBID_PREDICATE);
-    expect(getUrl(webIdNode, vcard.value)).toEqual(webId);
+    const updatedDataset = mockedSaveSolidDatasetAt.mock.calls[0][1];
+    const [mainIndex] = getThingAll(updatedDataset);
+    expect(getUrl(mainIndex, NAME_GROUP_INDEX_PREDICATE)).toEqual(indexUrl);
   });
 });

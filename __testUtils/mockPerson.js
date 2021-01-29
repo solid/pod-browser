@@ -28,7 +28,7 @@ import {
 } from "@inrupt/solid-client";
 import { rdf, vcard } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
-import { vcardExtras } from "../src/models/addressBook";
+import { vcardExtras } from "../src/addressBook";
 
 // eslint-disable-next-line import/prefer-default-export
 export function addMockedPersonThingsToIndexDataset(

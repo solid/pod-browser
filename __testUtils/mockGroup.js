@@ -21,8 +21,6 @@
 
 import {
   addUrl,
-  getStringNoLocale,
-  getThing,
   mockSolidDatasetFrom,
   mockThingFrom,
   setStringNoLocale,
@@ -32,7 +30,7 @@ import {
 import { rdf, vcard } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
 import { createGroupDatasetUrl } from "../src/models/group";
-import { vcardExtras } from "../src/models/addressBook";
+import { vcardExtras } from "../src/addressBook";
 
 function mockGroupThing(name, groupThingUrl) {
   return chain(
@@ -58,27 +56,6 @@ export function addGroupToIndexDataset(
     (d) => setThing(d, mockIndexThing(addressBook, groupThingUrl))
   );
 }
-
-// export function addGroupsToAddressBook(addressBook, groupsToAdd) {
-//   const { groups, ...rest } = addressBook;
-//   return {
-//     ...rest,
-//     groups: {
-//       iri: addressBook.groups.iri,
-//       dataset: chain(
-//         addressBook.groups.dataset,
-//         ...groupsToAdd.map(({ dataset, iri }) => (d) => {
-//           const group = getThing(dataset, iri);
-//           const name = getStringNoLocale(group, vcard.fn);
-//           return setThing(d, mockGroupThing(name, iri));
-//         }),
-//         ...groupsToAdd.map((group) => (d) =>
-//           setThing(d, mockIndexThing(addressBook, group.iri))
-//         )
-//       ),
-//     },
-//   };
-// }
 
 export default function mockGroup(
   addressBook,

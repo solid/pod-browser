@@ -27,12 +27,11 @@ import {
   setThing,
 } from "@inrupt/solid-client";
 import { acl, dc, foaf, rdf, vcard } from "rdf-namespaces";
-import {
-  getAddressBookIndexDefaultUrl,
-  vcardExtras,
-} from "../src/models/addressBook";
 import { chain } from "../src/solidClientHelpers/utils";
 import { aliceWebIdUrl } from "./mockPersonResource";
+import { vcardExtras } from "../src/addressBook";
+import { getContactIndexDefaultUrl } from "../src/models/contact";
+import { getAddressBookIndexDefaultUrl } from "../src/models/addressBook";
 
 const defaultContainerIri = "https://user.example.com/contacts";
 
@@ -42,12 +41,11 @@ export function mockAddressBookThing(options = {}) {
   const indexUrl =
     options.indexUrl || getAddressBookIndexDefaultUrl(containerIri);
   const groupsUrl =
-    options.groupsUrl ??
-    getAddressBookIndexDefaultUrl(containerIri, vcard.Group);
+    options.groupsUrl ?? getContactIndexDefaultUrl(containerIri, vcard.Group);
   const peopleUrl =
-    options.peopleUrl ??
-    getAddressBookIndexDefaultUrl(containerIri, foaf.Person);
+    options.peopleUrl ?? getContactIndexDefaultUrl(containerIri, foaf.Person);
   const mainIndexIri = `${indexUrl}#this`;
+  debugger;
   return chain(
     mockThingFrom(mainIndexIri),
     (t) => addUrl(t, rdf.type, vcardExtras("AddressBook")),

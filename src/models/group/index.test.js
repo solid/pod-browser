@@ -49,15 +49,20 @@ import {
   aliceWebIdUrl,
   bobWebIdUrl,
 } from "../../../__testUtils/mockPersonResource";
-import { getAddressBookIndexUrl, vcardExtras } from "../addressBook";
 import { chain } from "../../solidClientHelpers/utils";
+import { vcardExtras } from "../../addressBook";
+import {
+  getContactIndexDefaultUrl,
+  getContactIndexUrl,
+  NAME_GROUP_INDEX_PREDICATE,
+} from "../contact";
 
 jest.mock("uuid");
 const mockedUuid = uuid;
 
-const addressBookContainerIri = "https://example.com/contacts/";
-const addressBook = mockAddressBook({ containerIri: addressBookContainerIri });
-const groupsDatasetIri = getAddressBookIndexUrl(addressBook, vcard.Group);
+const containerIri = "https://example.com/contacts/";
+const addressBook = mockAddressBook({ containerIri });
+const groupsDatasetIri = getContactIndexUrl(addressBook, vcard.Group);
 const fetch = jest.fn();
 
 const agent1 = aliceWebIdUrl;
@@ -134,10 +139,8 @@ describe("createGroup", () => {
     );
 
     // second save request is the group index
-    expect(
-      mockedSaveSolidDatasetAt
-    ).toHaveBeenCalledWith(
-      getAddressBookIndexUrl(addressBook, vcard.Group),
+    expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
+      getContactIndexUrl(addressBook, vcard.Group),
       expect.any(Object),
       { fetch }
     );
@@ -150,6 +153,26 @@ describe("createGroup", () => {
     const indexIncludesTriple = indexDatasetThings[1];
     expect(getUrl(indexIncludesTriple, vcardExtras("includesGroup"))).toEqual(
       group1Uri
+    );
+  });
+
+  it("will create the corresponding index on the fly and link it to the addressBook", async () => {
+    const addressBookWithoutIndex = mockAddressBook({
+      containerIri,
+      groupsUrl: false,
+    });
+    await expect(
+      createGroup(addressBookWithoutIndex, "test", fetch)
+    ).resolves.toBeDefined();
+    expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
+      getSourceUrl(addressBookWithoutIndex.dataset),
+      expect.any(Object),
+      { fetch }
+    );
+    const updatedDataset = mockedSaveSolidDatasetAt.mock.calls[1][1];
+    const [mainIndex] = getThingAll(updatedDataset);
+    expect(getUrl(mainIndex, NAME_GROUP_INDEX_PREDICATE)).toEqual(
+      getContactIndexDefaultUrl(containerIri, vcard.Group)
     );
   });
 });
@@ -199,10 +222,8 @@ describe("renameGroup", () => {
     expect(getStringNoLocale(groupThing, vcard.fn)).toEqual(newName);
 
     // second save request is the group index
-    expect(
-      mockedSaveSolidDatasetAt
-    ).toHaveBeenCalledWith(
-      getAddressBookIndexUrl(addressBook, vcard.Group),
+    expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
+      getContactIndexUrl(addressBook, vcard.Group),
       expect.any(Object),
       { fetch }
     );

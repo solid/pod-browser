@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { acl, dc, foaf, rdf, vcard } from "rdf-namespaces";
+import { acl, dc, rdf } from "rdf-namespaces";
 import * as solidClientFns from "@inrupt/solid-client";
 import {
   getStringNoLocale,
@@ -35,18 +35,16 @@ import {
   getAddressBookContainerIri,
   getAddressBookIndexDefaultUrl,
   getAddressBookIndexUrl,
-  GROUPS_INDEX_FILE,
-  INDEX_FILE,
   loadAddressBook,
-  PEOPLE_INDEX_FILE,
   saveNewAddressBook,
-  vcardExtras,
 } from "./index";
 import mockAddressBook, {
   mockAddressBookDataset,
   mockAddressBookThing,
 } from "../../../__testUtils/mockAddressBook";
 import { joinPath } from "../../stringHelpers";
+import { INDEX_FILE } from "../contact";
+import { vcardExtras } from "../../addressBook";
 
 const podIri = "https://example.pod.com/";
 const containerIri = "https://example.pod.com/contacts/";
@@ -62,45 +60,25 @@ describe("getAddressBookIndexDefaultUrl", () => {
     expect(getAddressBookIndexDefaultUrl(containerIri)).toEqual(
       joinPath(containerIri, INDEX_FILE)
     );
-    expect(getAddressBookIndexDefaultUrl(containerIri, vcard.Group)).toEqual(
-      joinPath(containerIri, GROUPS_INDEX_FILE)
-    );
-    expect(getAddressBookIndexDefaultUrl(containerIri, foaf.Person)).toEqual(
-      joinPath(containerIri, PEOPLE_INDEX_FILE)
-    );
   });
 });
 
 describe("getAddressBookIndexUrl", () => {
   it("returns the URL that's stored in the model", () => {
     const indexUrl = "https://example.com/myIndex.ttl";
-    const groupsUrl = "https://example.com/myGroups.ttl";
-    const peopleUrl = "https://example.com/myPeople.ttl";
     const addressBook = mockAddressBook({
       indexUrl,
-      groupsUrl,
-      peopleUrl,
     });
     expect(getAddressBookIndexUrl(addressBook)).toEqual(indexUrl);
-    expect(getAddressBookIndexUrl(addressBook, vcard.Group)).toEqual(groupsUrl);
-    expect(getAddressBookIndexUrl(addressBook, foaf.Person)).toEqual(peopleUrl);
   });
 
   it("returns default URLs if model data is missing", () => {
     const addressBook = mockAddressBook({
       containerIri,
       indexUrl: null,
-      groupsUrl: null,
-      peopleUrl: null,
     });
     expect(getAddressBookIndexUrl(addressBook)).toEqual(
       joinPath(containerIri, INDEX_FILE)
-    );
-    expect(getAddressBookIndexUrl(addressBook, vcard.Group)).toEqual(
-      joinPath(containerIri, GROUPS_INDEX_FILE)
-    );
-    expect(getAddressBookIndexUrl(addressBook, foaf.Person)).toEqual(
-      joinPath(containerIri, PEOPLE_INDEX_FILE)
     );
   });
 });
@@ -120,12 +98,6 @@ describe("createAddressBook", () => {
       vcardExtras("AddressBook")
     );
     expect(getUrl(addressBook.thing, acl.owner)).toEqual(owner);
-    expect(getUrl(addressBook.thing, vcardExtras("nameEmailIndex"))).toEqual(
-      "https://example.pod.com/contacts/people.ttl"
-    );
-    expect(getUrl(addressBook.thing, vcardExtras("groupIndex"))).toEqual(
-      "https://example.pod.com/contacts/groups.ttl"
-    );
   });
 
   it("can create with a given title", () => {

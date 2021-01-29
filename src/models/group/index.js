@@ -38,11 +38,16 @@ import { rdf, vcard } from "rdf-namespaces";
 import { v4 as uuid } from "uuid";
 import { chain } from "../../solidClientHelpers/utils";
 import { joinPath } from "../../stringHelpers";
-import { getAddressBookIndexUrl, TYPE_MAP, vcardExtras } from "../addressBook";
 import {
   getBaseUrl,
   updateOrCreateDataset,
 } from "../../solidClientHelpers/resource";
+import {
+  addContactIndexToAddressBook,
+  getContactIndexUrl,
+  TYPE_MAP,
+} from "../contact";
+import { vcardExtras } from "../../addressBook";
 
 /**
  * Contacts represent the dataset in a user's AddressBook, e.g. /contacts/Person/<unique-id>/index.ttl#this
@@ -72,12 +77,13 @@ export function createGroupDatasetUrl(addressBook, id = uuid()) {
 }
 
 /**
- * Note that you might need to refresh the cache of group index after this, e.g. mutate SWR cache
+ * Note that you need to refresh the cache of group index after this, e.g. mutate SWR cache
+ * You also need to refresh the cache of the address book
  */
 export async function createGroup(addressBook, name, fetch) {
+  // create the group resource itself
   const groupDatasetUri = createGroupDatasetUrl(addressBook);
   const groupThingUri = `${groupDatasetUri}#this`;
-  // create the group resource itself
   const groupDataset = await saveSolidDatasetAt(
     groupDatasetUri,
     chain(
@@ -88,7 +94,10 @@ export async function createGroup(addressBook, name, fetch) {
     { fetch }
   );
   // link the group to the group index
-  const groupIndexUri = getAddressBookIndexUrl(addressBook, vcard.Group);
+  const contactIndexUrl = getContactIndexUrl(addressBook, vcard.Group);
+  const groupIndexUri =
+    contactIndexUrl ||
+    (await addContactIndexToAddressBook(addressBook, vcard.Group, fetch));
   const groupThing = createGroupThing(name, { url: groupThingUri });
   await updateOrCreateDataset(
     groupIndexUri,
@@ -121,7 +130,7 @@ export async function renameGroup(group, name, addressBook, fetch) {
     { fetch }
   );
   // update the group index
-  const groupIndexUri = getAddressBookIndexUrl(addressBook, vcard.Group);
+  const groupIndexUri = getContactIndexUrl(addressBook, vcard.Group);
   const groupIndexDataset = await getSolidDataset(groupIndexUri, { fetch });
   const existingGroup = getThing(groupIndexDataset, asUrl(group.thing));
   await saveSolidDatasetAt(

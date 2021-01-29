@@ -27,14 +27,14 @@ import {
   getSolidDataset,
   getSourceUrl,
   getThing,
-  getUrl,
   saveSolidDatasetAt,
   setThing,
 } from "@inrupt/solid-client";
-import { acl, dc, foaf, rdf, schema, vcard } from "rdf-namespaces";
+import { acl, dc, rdf } from "rdf-namespaces";
 import { joinPath } from "../../stringHelpers";
 import { chain } from "../../solidClientHelpers/utils";
 import { ERROR_CODES, isHTTPError } from "../../error";
+import { vcardExtras } from "../../addressBook";
 
 /**
  * @typedef AddressBook
@@ -47,38 +47,6 @@ import { ERROR_CODES, isHTTPError } from "../../error";
 /* Model constants */
 const CONTACTS_CONTAINER = "contacts/";
 
-export function vcardExtras(property) {
-  return `http://www.w3.org/2006/vcard/ns#${property}`;
-}
-
-export const NAME_EMAIL_INDEX_PREDICATE = vcardExtras("nameEmailIndex");
-export const NAME_GROUP_INDEX_PREDICATE = vcardExtras("groupIndex");
-export const VCARD_WEBID_PREDICATE = vcardExtras("WebId");
-export const INDEX_FILE = "index.ttl";
-export const PEOPLE_INDEX_FILE = "people.ttl";
-export const GROUPS_INDEX_FILE = "groups.ttl";
-export const PERSON_CONTAINER = "Person";
-export const GROUP_CONTAINER = "Group";
-
-const person = {
-  indexFile: PEOPLE_INDEX_FILE,
-  container: PERSON_CONTAINER,
-  indexFilePredicate: NAME_EMAIL_INDEX_PREDICATE,
-  contactTypeIri: vcard.Individual,
-};
-const group = {
-  indexFile: GROUPS_INDEX_FILE,
-  container: GROUP_CONTAINER,
-  indexFilePredicate: NAME_GROUP_INDEX_PREDICATE,
-  contactTypeIri: vcard.Group,
-};
-export const TYPE_MAP = {
-  [foaf.Person]: person,
-  [schema.Person]: person,
-  [vcard.Group]: group,
-  [vcard.Individual]: person,
-};
-
 export const ADDRESS_BOOK_ERROR_ALREADY_EXIST = "Address book already exists.";
 export const ADDRESS_BOOK_ERROR_NO_MAIN_INDEX = "Unable to load main index";
 export const ADDRESS_BOOK_ERROR_NO_PERMISSION_TO_CREATE =
@@ -89,39 +57,23 @@ export function getAddressBookContainerIri(podRootIri) {
   return joinPath(podRootIri, CONTACTS_CONTAINER);
 }
 
-export function getAddressBookIndexDefaultUrl(containerIri, type) {
-  return joinPath(containerIri, type ? TYPE_MAP[type].indexFile : INDEX_FILE);
+export function getAddressBookIndexDefaultUrl(containerIri) {
+  return joinPath(containerIri, "index.ttl");
 }
 
-export function getAddressBookIndexUrl(addressBook, type) {
-  if (!type) {
-    return (
-      getSourceUrl(addressBook.dataset) ||
-      getAddressBookIndexDefaultUrl(addressBook.containerIri)
-    );
-  }
+export function getAddressBookIndexUrl(addressBook) {
   return (
-    getUrl(addressBook.thing, TYPE_MAP[type].indexFilePredicate) ||
-    getAddressBookIndexDefaultUrl(addressBook.containerIri, type)
+    getSourceUrl(addressBook.dataset) ||
+    getAddressBookIndexDefaultUrl(addressBook.containerIri)
   );
 }
 
 export function createAddressBook(containerIri, owner, title = "Contacts") {
-  const peopleDatasetIri = getAddressBookIndexDefaultUrl(
-    containerIri,
-    foaf.Person
-  );
-  const groupsDatasetIri = getAddressBookIndexDefaultUrl(
-    containerIri,
-    vcard.Group
-  );
   const thing = chain(
     createThing({ name: "this" }),
     (t) => addUrl(t, rdf.type, vcardExtras("AddressBook")),
     (t) => addUrl(t, acl.owner, owner),
-    (t) => addStringNoLocale(t, dc.title, title),
-    (t) => addUrl(t, vcardExtras("nameEmailIndex"), peopleDatasetIri),
-    (t) => addUrl(t, vcardExtras("groupIndex"), groupsDatasetIri)
+    (t) => addStringNoLocale(t, dc.title, title)
   );
   return {
     containerIri,
