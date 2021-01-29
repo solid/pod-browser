@@ -24,6 +24,7 @@ import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
 import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import * as routerFns from "next/router";
 import AgentAccess, { getDialogId, saveHandler, submitHandler } from "./index";
 
 import mockSessionContextProvider from "../../../../__testUtils/mockSessionContextProvider";
@@ -34,6 +35,7 @@ import { createAccessMap } from "../../../../src/solidClientHelpers/permissions"
 import useFetchProfile from "../../../../src/hooks/useFetchProfile";
 import * as profileFns from "../../../../src/solidClientHelpers/profile";
 import { mockProfileAlice } from "../../../../__testUtils/mockPersonResource";
+import { joinPath } from "../../../../src/stringHelpers";
 
 jest.mock("../../../../src/solidClientHelpers/permissions");
 jest.mock("../../../../src/hooks/useFetchProfile");
@@ -45,11 +47,17 @@ describe("AgentAccess", () => {
     acl: createAccessMap(),
     webId,
   };
-  const datasetUrl = "http://example.com/dataset";
+  const authUser = mockProfileAlice();
+  const datasetUrl = joinPath(authUser.pods[0], "dataset");
   const dataset = mockSolidDatasetFrom(datasetUrl);
 
+  let mockedRouterHook;
+
   beforeEach(() => {
-    useFetchProfile.mockReturnValue({ data: mockProfileAlice() });
+    useFetchProfile.mockReturnValue({ data: authUser });
+    mockedRouterHook = jest
+      .spyOn(routerFns, "useRouter")
+      .mockReturnValue({ query: { iri: datasetUrl } });
   });
 
   it("renders", () => {
@@ -168,6 +176,22 @@ describe("AgentAccess", () => {
       );
       expect(asFragment()).toMatchSnapshot();
     });
+
+    it("checkboxes are only disabled if the resource is connected to user's Pod", () => {
+      const randomUrl = "http://some-random-pod.com";
+      mockedRouterHook.mockReturnValue({ query: { iri: randomUrl } });
+      const session = mockSession();
+      const SessionProvider = mockSessionContextProvider(session);
+
+      const { asFragment } = renderWithTheme(
+        <SessionProvider>
+          <DatasetProvider dataset={dataset}>
+            <AgentAccess permission={permission} webId={session.info.webId} />
+          </DatasetProvider>
+        </SessionProvider>
+      );
+      expect(asFragment()).toMatchSnapshot();
+    });
   });
 
   test("default value for onLoading", async () => {
@@ -191,27 +215,54 @@ describe("getDialogId", () => {
 });
 
 describe("submitHandler", () => {
+  const tempAccess = "tempAccess";
+  const dialogId = "dialogId";
+
   let event;
+  let savePermissions;
+  let setOpen;
+  let setContent;
 
   beforeEach(() => {
     event = { preventDefault: jest.fn() };
+    savePermissions = jest.fn();
+    setOpen = jest.fn();
+    setContent = jest.fn();
   });
 
   test("user changes their own permissions", () => {
-    const setOpen = jest.fn();
-    const dialogId = "dialogId";
-    submitHandler(42, 42, setOpen, dialogId)(event);
+    submitHandler(
+      42,
+      42,
+      setOpen,
+      dialogId,
+      savePermissions,
+      tempAccess,
+      setContent
+    )(event);
 
     expect(event.preventDefault).toHaveBeenCalledWith();
     expect(setOpen).toHaveBeenCalledWith(dialogId);
+    expect(setContent).toHaveBeenCalledWith(
+      "You are about to change your own permissions. Are you sure?"
+    );
   });
+
   test("user changes someone else's permissions", () => {
-    const savePermissions = jest.fn();
-    const tempAccess = "tempAccess";
-    submitHandler(42, 1337, null, null, savePermissions, tempAccess)(event);
+    submitHandler(
+      42,
+      1337,
+      setOpen,
+      dialogId,
+      savePermissions,
+      tempAccess,
+      setContent
+    )(event);
 
     expect(event.preventDefault).toHaveBeenCalledWith();
+    expect(setOpen).not.toHaveBeenCalled();
     expect(savePermissions).toHaveBeenCalledWith(tempAccess);
+    expect(setContent).not.toHaveBeenCalled();
   });
 });
 

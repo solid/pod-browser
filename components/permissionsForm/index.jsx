@@ -26,12 +26,15 @@ import { Button, createStyles, List, makeStyles } from "@material-ui/core";
 import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUp from "@material-ui/icons/KeyboardArrowUp";
 import { useSession } from "@inrupt/solid-ui-react";
+import { useRouter } from "next/router";
 import PermissionCheckbox from "./permissionCheckbox";
 import {
   displayPermissions,
   ACL,
 } from "../../src/solidClientHelpers/permissions";
 import styles from "./styles";
+import useAuthenticatedProfile from "../../src/hooks/useAuthenticatedProfile";
+import { locationIsConnectedToProfile } from "../../src/solidClientHelpers/profile";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -66,9 +69,18 @@ export default function PermissionsForm({
 }) {
   const classes = useStyles();
   const { session } = useSession();
+  const { data: authenticatedProfile } = useAuthenticatedProfile();
+  const router = useRouter();
+  const { iri } = router.query;
+  const locationIsInUsersPod = locationIsConnectedToProfile(
+    authenticatedProfile,
+    iri
+  );
+
   const [access, setAccess] = useState(acl);
   const [formOpen, setFormOpen] = useState(false);
-  const disabled = propsDisabled ?? session.info.webId === webId;
+  const disabled =
+    propsDisabled ?? (session.info.webId === webId && locationIsInUsersPod);
 
   const setPermissionHandler = permissionHandler(access, setAccess, onChange);
 

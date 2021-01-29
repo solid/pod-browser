@@ -23,6 +23,7 @@ import React from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import userEvent from "@testing-library/user-event";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
+import * as routerFns from "next/router";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import * as permissionHelpers from "../../../../src/solidClientHelpers/permissions";
 import AgentAccessList from ".";
@@ -44,6 +45,12 @@ const permission = {
 };
 
 describe("AgentAccessList", () => {
+  beforeEach(() => {
+    jest
+      .spyOn(routerFns, "useRouter")
+      .mockReturnValue({ query: { iri: datasetUrl } });
+  });
+
   it("renders loading while loading permissions for access control", () => {
     usePermissions.mockReturnValue({ permissions: null });
     const { asFragment } = renderWithTheme(

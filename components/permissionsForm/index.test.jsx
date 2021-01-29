@@ -21,6 +21,7 @@
 
 /* eslint-disable camelcase */
 import React from "react";
+import * as routerFns from "next/router";
 import PermissionsForm, {
   arrowIcon,
   permissionHandler,
@@ -28,8 +29,23 @@ import PermissionsForm, {
 } from "./index";
 import { ACL, createAccessMap } from "../../src/solidClientHelpers/permissions";
 import { renderWithTheme } from "../../__testUtils/withTheme";
+import useAuthenticatedProfile from "../../src/hooks/useAuthenticatedProfile";
+import { mockProfileAlice } from "../../__testUtils/mockPersonResource";
+
+jest.mock("../../src/hooks/useAuthenticatedProfile");
+const mockedAuthenticationProfile = useAuthenticatedProfile;
 
 describe("PermissionsForm", () => {
+  const authProfile = mockProfileAlice();
+  const visitorIri = "http://some-random-pod.com/";
+
+  beforeEach(() => {
+    jest
+      .spyOn(routerFns, "useRouter")
+      .mockReturnValue({ query: { iri: visitorIri } });
+    mockedAuthenticationProfile.mockReturnValue({ data: authProfile });
+  });
+
   test("Renders a permissions form", () => {
     const acl = createAccessMap(true, true, true, true);
 
