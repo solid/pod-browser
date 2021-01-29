@@ -250,8 +250,12 @@ export default function AgentPickerModal({
                   type="checkbox"
                   color="primary"
                   size="medium"
-                  checked={index === 0 || newAgentsWebIds.includes(value)}
+                  checked={
+                    (index === 0 && addingWebId) ||
+                    newAgentsWebIds.includes(value)
+                  }
                   onChange={(e) => {
+                    if (index === 0 && addingWebId) return null;
                     return e.target.checked
                       ? setNewAgentsWebIds([value, ...newAgentsWebIds])
                       : setNewAgentsWebIds(
