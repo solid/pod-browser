@@ -56,7 +56,7 @@ import {
   saveContact,
 } from "../../../../../src/addressBook";
 import useAddressBook from "../../../../../src/hooks/useAddressBook";
-import useContacts from "../../../../../src/hooks/useContacts";
+import useContactsOld from "../../../../../src/hooks/useContactsOld";
 import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
 import PolicyHeader from "../../policyHeader";
 import AgentsTableTabs from "../../agentsTableTabs";
@@ -88,7 +88,7 @@ export default function AgentPickerModal({
     data: people,
     error: peopleError,
     mutate: peopleMutate,
-  } = useContacts(addressBook, foaf.Person);
+  } = useContactsOld(addressBook, foaf.Person);
 
   const classes = useStyles();
   const { session } = useSession();
