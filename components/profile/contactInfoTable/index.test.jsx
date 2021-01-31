@@ -163,7 +163,8 @@ describe("setupDeleteButtonCell", () => {
   it("returns a button if editable", () => {
     const removeRow = jest.fn();
     const bem = jest.fn();
-    const Button = setupDeleteButtonCell(true, removeRow, bem);
+    const typestr = "EMAIL";
+    const Button = setupDeleteButtonCell(true, typestr, removeRow, bem);
 
     const { asFragment, container } = render(
       <ThingProvider thing={thing}>
@@ -181,6 +182,7 @@ describe("setupDeleteButtonCell", () => {
   it("renders nothing if not editable", () => {
     const Component = setupDeleteButtonCell(
       false,
+      "EMAIL",
       () => {},
       () => {}
     );
