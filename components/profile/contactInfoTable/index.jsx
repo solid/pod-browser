@@ -255,14 +255,12 @@ export default function ContactTable({ editing, property, typestr }) {
             dataType="url"
             header={() => null}
           />
-          
           <TableColumn
             property={vcard.value}
             body={columnValueBody}
             dataType="url"
             header={() => null}
           />
-
           <TableColumn
             property={vcard.value}
             body={DeleteButtonCell}
