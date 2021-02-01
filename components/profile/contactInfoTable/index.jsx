@@ -62,11 +62,15 @@ import { chain } from "../../../src/solidClientHelpers/utils";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-const TESTCAFE_ID_DELETE_BUTTON = "profile-address-delete-button";
-const TESTCAFE_ID_EXISTING_VALUE = "profile-address-existing-value";
-const TESTCAFE_ID_NEW_BUTTON = "profile-address-new-button";
-export const TESTCAFE_ID_NEW_TYPE = "profile-address-new-type";
-const TESTCAFE_ID_NEW_VALUE = "profile-address-new-value";
+const TESTCAFE_ID_DELETE_BUTTON = "profile-<TYPE>-delete-button";
+const TESTCAFE_ID_EXISTING_TYPE = "profile-<TYPE>-existing-type";
+const TESTCAFE_ID_EXISTING_VALUE = "profile-<TYPE>-existing-value";
+const TESTCAFE_ID_ADD_BUTTON = "profile-<TYPE>-add-button";
+export const TESTCAFE_ID_NEW_TYPE = "profile-<TYPE>-new-type";
+const TESTCAFE_ID_NEW_VALUE = "profile-<TYPE>-new-value";
+
+export const CONTACT_INFO_TYPE_EMAIL = "email";
+export const CONTACT_INFO_TYPE_PHONE = "phone";
 
 const CONTACT_TYPE_LABEL_MAP = {
   [vcard.Home]: "Home",
@@ -129,7 +133,12 @@ export function setupRemoveRow(profile, property, saveHandler, dataset) {
   };
 }
 
-export function setupDeleteButtonCell(editing, removeRow, bem) {
+export function setupDeleteButtonCell(
+  editing,
+  contactInfoType,
+  removeRow,
+  bem
+) {
   return () => {
     const { thing: rowThing } = useThing();
 
@@ -142,7 +151,10 @@ export function setupDeleteButtonCell(editing, removeRow, bem) {
         onClick={() => removeRow(rowThing)}
         className={bem("button", "action")}
         type="button"
-        data-testid={TESTCAFE_ID_DELETE_BUTTON}
+        data-testid={TESTCAFE_ID_DELETE_BUTTON.replace(
+          "<TYPE>",
+          contactInfoType
+        )}
       >
         Delete
       </button>
@@ -156,11 +168,19 @@ export function setupRowProps(bem) {
   });
 }
 
-export function setupColumnTypeBody() {
+export function setupColumnTypeBody(contactInfoType) {
   // eslint-disable-next-line react/prop-types
   return ({ value }) => {
     const existingTypeValue = CONTACT_TYPE_LABEL_MAP[value] || value;
-    return <Typography title={value}>{existingTypeValue}</Typography>;
+    const datatestid = TESTCAFE_ID_EXISTING_TYPE.replace(
+      "<TYPE>",
+      contactInfoType
+    );
+    return (
+      <Typography title={value} data-testid={datatestid}>
+        {existingTypeValue}
+      </Typography>
+    );
   };
 }
 
@@ -170,7 +190,7 @@ export function setupOnSave(setDataset) {
   };
 }
 
-export function setupColumnValueBody(editing, bem, onSave) {
+export function setupColumnValueBody(editing, contactInfoType, bem, onSave) {
   return () => (
     <Typography>
       <Value
@@ -179,7 +199,10 @@ export function setupColumnValueBody(editing, bem, onSave) {
         dataType="url"
         inputProps={{
           className: bem("input"),
-          "data-testid": TESTCAFE_ID_EXISTING_VALUE,
+          "data-testid": TESTCAFE_ID_EXISTING_VALUE.replace(
+            "<TYPE>",
+            contactInfoType
+          ),
         }}
         property={vcard.value}
         onSave={onSave}
@@ -192,7 +215,7 @@ export function setupOnChange(setFn) {
   return (e) => setFn(e.target.value);
 }
 
-export default function ContactTable({ editing, property }) {
+export default function ContactTable({ editing, property, contactInfoType }) {
   const tableClass = PrismTable.useTableClass("table", "inherits");
   const classes = useStyles();
   const bem = useBem(classes);
@@ -222,12 +245,21 @@ export default function ContactTable({ editing, property }) {
   );
 
   const removeRow = setupRemoveRow(profile, property, saveHandler, dataset);
-
-  const DeleteButtonCell = setupDeleteButtonCell(editing, removeRow, bem);
+  const DeleteButtonCell = setupDeleteButtonCell(
+    editing,
+    contactInfoType,
+    removeRow,
+    bem
+  );
   const getRowProps = setupRowProps(bem);
-  const columnTypeBody = setupColumnTypeBody();
+  const columnTypeBody = setupColumnTypeBody(contactInfoType);
   const onSave = setupOnSave(setDataset);
-  const columnValueBody = setupColumnValueBody(editing, bem, onSave);
+  const columnValueBody = setupColumnValueBody(
+    editing,
+    contactInfoType,
+    bem,
+    onSave
+  );
   const newContactTypeOnChange = setupOnChange(setNewContactType);
   const newContactValueOnChange = setupOnChange(setNewContactValue);
 
@@ -245,14 +277,12 @@ export default function ContactTable({ editing, property }) {
             dataType="url"
             header={() => null}
           />
-
           <TableColumn
             property={vcard.value}
             body={columnValueBody}
             dataType="url"
             header={() => null}
           />
-
           <TableColumn
             property={vcard.value}
             body={DeleteButtonCell}
@@ -270,9 +300,10 @@ export default function ContactTable({ editing, property }) {
                 <Select
                   value={newContactType}
                   onChange={newContactTypeOnChange}
-                  inputProps={{
-                    "data-testid": TESTCAFE_ID_NEW_TYPE,
-                  }}
+                  data-testid={TESTCAFE_ID_NEW_TYPE.replace(
+                    "<TYPE>",
+                    contactInfoType
+                  )}
                 >
                   {Object.keys(CONTACT_TYPE_LABEL_MAP).map((iri) => (
                     <MenuItem key={iri} value={iri}>
@@ -289,7 +320,10 @@ export default function ContactTable({ editing, property }) {
                 value={newContactValue}
                 onChange={newContactValueOnChange}
                 className={bem("input")}
-                data-testid={TESTCAFE_ID_NEW_VALUE}
+                data-testid={TESTCAFE_ID_NEW_VALUE.replace(
+                  "<TYPE>",
+                  contactInfoType
+                )}
               />
             </Box>
 
@@ -298,7 +332,10 @@ export default function ContactTable({ editing, property }) {
                 type="button"
                 onClick={addContactDetail}
                 className={bem("button", "action")}
-                data-testid={TESTCAFE_ID_NEW_BUTTON}
+                data-testid={TESTCAFE_ID_ADD_BUTTON.replace(
+                  "<TYPE>",
+                  contactInfoType
+                )}
               >
                 Add
               </button>
@@ -313,6 +350,8 @@ export default function ContactTable({ editing, property }) {
 ContactTable.propTypes = {
   editing: T.bool,
   property: T.string.isRequired,
+  contactInfoType: T.oneOf([CONTACT_INFO_TYPE_EMAIL, CONTACT_INFO_TYPE_PHONE])
+    .isRequired,
 };
 
 ContactTable.defaultProps = {
