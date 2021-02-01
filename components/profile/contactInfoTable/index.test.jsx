@@ -32,6 +32,7 @@ import mockSessionContextProvider from "../../../__testUtils/mockSessionContextP
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 
 import ContactInfoTable, {
+  CONTACT_INFO_TYPE_EMAIL,
   DEFAULT_CONTACT_TYPE,
   PREFIX_MAP,
   setupAddContactDetail,
@@ -163,8 +164,12 @@ describe("setupDeleteButtonCell", () => {
   it("returns a button if editable", () => {
     const removeRow = jest.fn();
     const bem = jest.fn();
-    const typestr = "EMAIL";
-    const Button = setupDeleteButtonCell(true, typestr, removeRow, bem);
+    const Button = setupDeleteButtonCell(
+      true,
+      CONTACT_INFO_TYPE_EMAIL,
+      removeRow,
+      bem
+    );
 
     const { asFragment, container } = render(
       <ThingProvider thing={thing}>
@@ -182,7 +187,7 @@ describe("setupDeleteButtonCell", () => {
   it("renders nothing if not editable", () => {
     const Component = setupDeleteButtonCell(
       false,
-      "EMAIL",
+      CONTACT_INFO_TYPE_EMAIL,
       () => {},
       () => {}
     );

@@ -69,6 +69,9 @@ const TESTCAFE_ID_ADD_BUTTON = "profile-<TYPE>-add-button";
 export const TESTCAFE_ID_NEW_TYPE = "profile-<TYPE>-new-type";
 const TESTCAFE_ID_NEW_VALUE = "profile-<TYPE>-new-value";
 
+export const CONTACT_INFO_TYPE_EMAIL = "email";
+export const CONTACT_INFO_TYPE_PHONE = "phone";
+
 const CONTACT_TYPE_LABEL_MAP = {
   [vcard.Home]: "Home",
   [vcard.Work]: "Work",
@@ -130,7 +133,12 @@ export function setupRemoveRow(profile, property, saveHandler, dataset) {
   };
 }
 
-export function setupDeleteButtonCell(editing, typestr, removeRow, bem) {
+export function setupDeleteButtonCell(
+  editing,
+  contactInfoType,
+  removeRow,
+  bem
+) {
   return () => {
     const { thing: rowThing } = useThing();
 
@@ -143,7 +151,10 @@ export function setupDeleteButtonCell(editing, typestr, removeRow, bem) {
         onClick={() => removeRow(rowThing)}
         className={bem("button", "action")}
         type="button"
-        data-testid={TESTCAFE_ID_DELETE_BUTTON.replace("<TYPE>", typestr)}
+        data-testid={TESTCAFE_ID_DELETE_BUTTON.replace(
+          "<TYPE>",
+          contactInfoType
+        )}
       >
         Delete
       </button>
@@ -157,11 +168,14 @@ export function setupRowProps(bem) {
   });
 }
 
-export function setupColumnTypeBody(typestr) {
+export function setupColumnTypeBody(contactInfoType) {
   // eslint-disable-next-line react/prop-types
   return ({ value }) => {
     const existingTypeValue = CONTACT_TYPE_LABEL_MAP[value] || value;
-    const datatestid = TESTCAFE_ID_EXISTING_TYPE.replace("<TYPE>", typestr);
+    const datatestid = TESTCAFE_ID_EXISTING_TYPE.replace(
+      "<TYPE>",
+      contactInfoType
+    );
     return (
       <Typography title={value} data-testid={datatestid}>
         {existingTypeValue}
@@ -176,7 +190,7 @@ export function setupOnSave(setDataset) {
   };
 }
 
-export function setupColumnValueBody(editing, typestr, bem, onSave) {
+export function setupColumnValueBody(editing, contactInfoType, bem, onSave) {
   return () => (
     <Typography>
       <Value
@@ -185,7 +199,10 @@ export function setupColumnValueBody(editing, typestr, bem, onSave) {
         dataType="url"
         inputProps={{
           className: bem("input"),
-          "data-testid": TESTCAFE_ID_EXISTING_VALUE.replace("<TYPE>", typestr),
+          "data-testid": TESTCAFE_ID_EXISTING_VALUE.replace(
+            "<TYPE>",
+            contactInfoType
+          ),
         }}
         property={vcard.value}
         onSave={onSave}
@@ -198,7 +215,7 @@ export function setupOnChange(setFn) {
   return (e) => setFn(e.target.value);
 }
 
-export default function ContactTable({ editing, property, typestr }) {
+export default function ContactTable({ editing, property, contactInfoType }) {
   const tableClass = PrismTable.useTableClass("table", "inherits");
   const classes = useStyles();
   const bem = useBem(classes);
@@ -230,14 +247,19 @@ export default function ContactTable({ editing, property, typestr }) {
   const removeRow = setupRemoveRow(profile, property, saveHandler, dataset);
   const DeleteButtonCell = setupDeleteButtonCell(
     editing,
-    typestr,
+    contactInfoType,
     removeRow,
     bem
   );
   const getRowProps = setupRowProps(bem);
-  const columnTypeBody = setupColumnTypeBody(typestr);
+  const columnTypeBody = setupColumnTypeBody(contactInfoType);
   const onSave = setupOnSave(setDataset);
-  const columnValueBody = setupColumnValueBody(editing, typestr, bem, onSave);
+  const columnValueBody = setupColumnValueBody(
+    editing,
+    contactInfoType,
+    bem,
+    onSave
+  );
   const newContactTypeOnChange = setupOnChange(setNewContactType);
   const newContactValueOnChange = setupOnChange(setNewContactValue);
 
@@ -278,7 +300,10 @@ export default function ContactTable({ editing, property, typestr }) {
                 <Select
                   value={newContactType}
                   onChange={newContactTypeOnChange}
-                  data-testid={TESTCAFE_ID_NEW_TYPE.replace("<TYPE>", typestr)}
+                  data-testid={TESTCAFE_ID_NEW_TYPE.replace(
+                    "<TYPE>",
+                    contactInfoType
+                  )}
                 >
                   {Object.keys(CONTACT_TYPE_LABEL_MAP).map((iri) => (
                     <MenuItem key={iri} value={iri}>
@@ -295,7 +320,10 @@ export default function ContactTable({ editing, property, typestr }) {
                 value={newContactValue}
                 onChange={newContactValueOnChange}
                 className={bem("input")}
-                data-testid={TESTCAFE_ID_NEW_VALUE.replace("<TYPE>", typestr)}
+                data-testid={TESTCAFE_ID_NEW_VALUE.replace(
+                  "<TYPE>",
+                  contactInfoType
+                )}
               />
             </Box>
 
@@ -304,7 +332,10 @@ export default function ContactTable({ editing, property, typestr }) {
                 type="button"
                 onClick={addContactDetail}
                 className={bem("button", "action")}
-                data-testid={TESTCAFE_ID_ADD_BUTTON.replace("<TYPE>", typestr)}
+                data-testid={TESTCAFE_ID_ADD_BUTTON.replace(
+                  "<TYPE>",
+                  contactInfoType
+                )}
               >
                 Add
               </button>
@@ -319,7 +350,8 @@ export default function ContactTable({ editing, property, typestr }) {
 ContactTable.propTypes = {
   editing: T.bool,
   property: T.string.isRequired,
-  typestr: T.string.isRequired,
+  contactInfoType: T.oneOf([CONTACT_INFO_TYPE_EMAIL, CONTACT_INFO_TYPE_PHONE])
+    .isRequired,
 };
 
 ContactTable.defaultProps = {

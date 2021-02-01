@@ -36,7 +36,11 @@ import { CombinedDataProvider, Text, Image } from "@inrupt/solid-ui-react";
 
 import { vcardExtras } from "../../src/addressBook";
 
-import ContactInfoTable from "./contactInfoTable";
+import ContactInfoTable, {
+  CONTACT_INFO_TYPE_EMAIL,
+  CONTACT_INFO_TYPE_PHONE,
+} from "./contactInfoTable";
+
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -140,7 +144,7 @@ export default function Profile(props) {
               <ContactInfoTable
                 property={vcard.hasEmail}
                 editing={editing}
-                typestr="email"
+                contactInfoType={CONTACT_INFO_TYPE_EMAIL}
               />
             </Box>
 
@@ -149,7 +153,7 @@ export default function Profile(props) {
               <ContactInfoTable
                 property={vcard.hasTelephone}
                 editing={editing}
-                typestr="phone"
+                contactInfoType={CONTACT_INFO_TYPE_PHONE}
               />
             </Box>
           </CombinedDataProvider>
