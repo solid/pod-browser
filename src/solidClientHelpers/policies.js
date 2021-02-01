@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { getSourceUrl } from "@inrupt/solid-client";
+import { getSourceUrl, isContainer } from "@inrupt/solid-client";
 import { sharedStart } from "./utils";
 import { joinPath } from "../stringHelpers";
 
@@ -37,5 +37,22 @@ export function getPolicyUrl(resource, policiesContainerUrl) {
   );
   const matchingStart = sharedStart(resourceUrl, rootUrl);
   const path = `${resourceUrl.substr(matchingStart.length)}.ttl`;
+  return joinPath(getPoliciesContainerUrl(matchingStart), path);
+}
+
+export function getNamedPolicyResourceUrl(
+  resource,
+  policiesContainerUrl,
+  policyName
+) {
+  const resourceUrl = getSourceUrl(resource);
+  const rootUrl = policiesContainerUrl.substr(
+    0,
+    policiesContainerUrl.length - POLICIES_CONTAINER.length
+  );
+  const matchingStart = sharedStart(resourceUrl, rootUrl);
+  const path = isContainer(resource)
+    ? `${resourceUrl.substr(matchingStart.length)}.ttl.${policyName}.ttl`
+    : `${resourceUrl.substr(matchingStart.length)}/.ttl.${policyName}.ttl`;
   return joinPath(getPoliciesContainerUrl(matchingStart), path);
 }

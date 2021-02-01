@@ -37,6 +37,7 @@ import AcpAccessControlStrategy, {
 import {
   getPolicyUrl,
   getPoliciesContainerUrl,
+  getNamedPolicyResourceUrl,
 } from "../../solidClientHelpers/policies";
 import { createAccessMap } from "../../solidClientHelpers/permissions";
 import { chain } from "../../solidClientHelpers/utils";
@@ -59,10 +60,15 @@ const policyResourceUrl = getPolicyUrl(
   mockSolidDatasetFrom(resourceUrl),
   policiesContainerUrl
 );
+const editorsPolicyResourceUrl = getNamedPolicyResourceUrl(
+  mockSolidDatasetFrom(resourceUrl),
+  policiesContainerUrl,
+  "editors"
+);
 const readApplyPolicyUrl = `${policyResourceUrl}#readApplyPolicy`;
 const readPolicyRuleUrl = `${readApplyPolicyUrl}Rule`;
-const editorsPolicyUrl = `${policyResourceUrl}#editorsPolicy`;
-const editorsPolicyRuleUrl = `${editorsPolicyUrl}Rule`;
+const editorsPolicyUrl = `${editorsPolicyResourceUrl}#editorsPolicy`;
+const editorsPolicyRuleUrl = `${editorsPolicyResourceUrl}Rule`;
 const writeApplyPolicyUrl = `${policyResourceUrl}#writeApplyPolicy`;
 const writePolicyRuleUrl = `${writeApplyPolicyUrl}Rule`;
 const appendApplyPolicyUrl = `${policyResourceUrl}#appendApplyPolicy`;
@@ -117,7 +123,7 @@ describe("AcpAccessControlStrategy", () => {
     beforeEach(() => {
       acp = new AcpAccessControlStrategy(
         datasetWithAcr,
-        policiesContainer,
+        policiesContainerUrl,
         fetch
       );
     });
@@ -149,7 +155,7 @@ describe("AcpAccessControlStrategy", () => {
       );
 
       const policyDataset = chain(
-        mockSolidDatasetFrom(editorsPolicyRuleUrl),
+        mockSolidDatasetFrom(editorsPolicyResourceUrl),
         (d) => setThing(d, editorsPolicyRule),
         (d) => setThing(d, editorsPolicy)
       );
@@ -240,7 +246,7 @@ describe("AcpAccessControlStrategy", () => {
     beforeEach(() => {
       acp = new AcpAccessControlStrategy(
         datasetWithAcr,
-        policiesContainer,
+        policiesContainerUrl,
         fetch
       );
     });
