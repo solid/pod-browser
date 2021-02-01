@@ -75,7 +75,11 @@ describe("ContactInfoTable", () => {
     const { asFragment } = renderWithTheme(
       <SessionProvider>
         <ThingProvider thing={thing}>
-          <ContactInfoTable property={vcard.hasEmail} editing />
+          <ContactInfoTable
+            property={vcard.hasEmail}
+            editing
+            contactInfoType={CONTACT_INFO_TYPE_EMAIL}
+          />
         </ThingProvider>
       </SessionProvider>
     );
@@ -163,13 +167,9 @@ describe("setupDeleteButtonCell", () => {
 
   it("returns a button if editable", () => {
     const removeRow = jest.fn();
+    const contactInfoType = CONTACT_INFO_TYPE_EMAIL;
     const bem = jest.fn();
-    const Button = setupDeleteButtonCell(
-      true,
-      CONTACT_INFO_TYPE_EMAIL,
-      removeRow,
-      bem
-    );
+    const Button = setupDeleteButtonCell(true, contactInfoType, removeRow, bem);
 
     const { asFragment, container } = render(
       <ThingProvider thing={thing}>
@@ -185,9 +185,10 @@ describe("setupDeleteButtonCell", () => {
   });
 
   it("renders nothing if not editable", () => {
+    const contactInfoType = CONTACT_INFO_TYPE_EMAIL;
     const Component = setupDeleteButtonCell(
       false,
-      CONTACT_INFO_TYPE_EMAIL,
+      contactInfoType,
       () => {},
       () => {}
     );
@@ -213,13 +214,13 @@ describe("setupRowProps", () => {
 
 describe("setupColumnTypeBody", () => {
   it("sets up body for type", () => {
-    const columnTypeBody = setupColumnTypeBody();
+    const columnTypeBody = setupColumnTypeBody(CONTACT_INFO_TYPE_EMAIL);
     const { asFragment } = render(columnTypeBody({ value: vcard.Home }));
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("has a fallback if value is not valid", () => {
-    const columnTypeBody = setupColumnTypeBody();
+    const columnTypeBody = setupColumnTypeBody(CONTACT_INFO_TYPE_EMAIL);
     const { asFragment } = render(columnTypeBody({ value: "invalid" }));
     expect(asFragment()).toMatchSnapshot();
   });

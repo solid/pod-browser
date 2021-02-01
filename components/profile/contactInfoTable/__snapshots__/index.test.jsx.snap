@@ -78,7 +78,7 @@ exports[`ContactInfoTable renders an editable table of contact info 1`] = `
       >
         <div
           class="PodBrowser-root PodBrowser-root PodBrowser-formControl"
-          data-testid="profile-undefined-new-type"
+          data-testid="profile-email-new-type"
         >
           <div
             aria-haspopup="listbox"
@@ -126,7 +126,7 @@ exports[`ContactInfoTable renders an editable table of contact info 1`] = `
     >
       <input
         class="PodBrowser-input"
-        data-testid="profile-undefined-new-value"
+        data-testid="profile-email-new-value"
         label="Value"
         value=""
       />
@@ -136,7 +136,7 @@ exports[`ContactInfoTable renders an editable table of contact info 1`] = `
     >
       <button
         class="PodBrowser-button PodBrowser-button--action"
-        data-testid="profile-undefined-add-button"
+        data-testid="profile-email-add-button"
         type="button"
       >
         Add
@@ -150,7 +150,7 @@ exports[`setupColumnTypeBody has a fallback if value is not valid 1`] = `
 <DocumentFragment>
   <p
     class="MuiTypography-root MuiTypography-body1"
-    data-testid="profile-undefined-existing-type"
+    data-testid="profile-email-existing-type"
     title="invalid"
   >
     invalid
@@ -162,7 +162,7 @@ exports[`setupColumnTypeBody sets up body for type 1`] = `
 <DocumentFragment>
   <p
     class="MuiTypography-root MuiTypography-body1"
-    data-testid="profile-undefined-existing-type"
+    data-testid="profile-email-existing-type"
     title="http://www.w3.org/2006/vcard/ns#Home"
   >
     Home
