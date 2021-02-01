@@ -22,18 +22,33 @@
 /* eslint-disable camelcase */
 import React from "react";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
-import PermissionCheckbox from "./index";
+import PermissionCheckbox, { TESTCASE_ID_PERMISSION_CHECKBOX } from "./index";
 
 describe("PermissionCheckbox", () => {
-  test("it renders a permission checkbox", () => {
-    const onChange = jest.fn();
-    const label = "Read";
-    const value = true;
+  const onChange = jest.fn();
+  const label = "Read";
+  const value = true;
+  const checkboxTestId = TESTCASE_ID_PERMISSION_CHECKBOX + label.toLowerCase();
 
-    const { asFragment } = renderWithTheme(
+  it("renders a permission checkbox", () => {
+    const { asFragment, getByTestId } = renderWithTheme(
       <PermissionCheckbox value={value} label={label} onChange={onChange} />
     );
 
     expect(asFragment()).toMatchSnapshot();
+    expect(getByTestId(checkboxTestId).disabled).toBe(false);
+  });
+
+  it("can be disabled", () => {
+    const { getByTestId } = renderWithTheme(
+      <PermissionCheckbox
+        value={value}
+        label={label}
+        onChange={onChange}
+        disabled
+      />
+    );
+
+    expect(getByTestId(checkboxTestId).disabled).toBe(true);
   });
 });

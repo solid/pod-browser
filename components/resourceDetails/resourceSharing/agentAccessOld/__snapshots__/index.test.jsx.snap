@@ -63,7 +63,7 @@ exports[`AgentAccess renders 1`] = `
           >
             <label
               class="PodBrowser-root"
-              data-testid="permission-checkbox-view"
+              data-testid="permission-label-view"
             >
               <span
                 aria-disabled="false"
@@ -75,6 +75,7 @@ exports[`AgentAccess renders 1`] = `
                   <input
                     class="PodBrowser-input"
                     data-indeterminate="false"
+                    data-testid="permission-checkbox-view"
                     name="view"
                     type="checkbox"
                     value=""
@@ -106,7 +107,7 @@ exports[`AgentAccess renders 1`] = `
           >
             <label
               class="PodBrowser-root"
-              data-testid="permission-checkbox-edit"
+              data-testid="permission-label-edit"
             >
               <span
                 aria-disabled="false"
@@ -118,6 +119,7 @@ exports[`AgentAccess renders 1`] = `
                   <input
                     class="PodBrowser-input"
                     data-indeterminate="false"
+                    data-testid="permission-checkbox-edit"
                     name="edit"
                     type="checkbox"
                     value=""
@@ -149,7 +151,7 @@ exports[`AgentAccess renders 1`] = `
           >
             <label
               class="PodBrowser-root"
-              data-testid="permission-checkbox-append"
+              data-testid="permission-label-append"
             >
               <span
                 aria-disabled="false"
@@ -161,6 +163,7 @@ exports[`AgentAccess renders 1`] = `
                   <input
                     class="PodBrowser-input"
                     data-indeterminate="false"
+                    data-testid="permission-checkbox-append"
                     name="append"
                     type="checkbox"
                     value=""
@@ -192,7 +195,7 @@ exports[`AgentAccess renders 1`] = `
           >
             <label
               class="PodBrowser-root"
-              data-testid="permission-checkbox-control"
+              data-testid="permission-label-control"
             >
               <span
                 aria-disabled="false"
@@ -204,6 +207,7 @@ exports[`AgentAccess renders 1`] = `
                   <input
                     class="PodBrowser-input"
                     data-indeterminate="false"
+                    data-testid="permission-checkbox-control"
                     name="control"
                     type="checkbox"
                     value=""
@@ -363,7 +367,7 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
               >
                 <label
                   class="PodBrowser-root"
-                  data-testid="permission-checkbox-view"
+                  data-testid="permission-label-view"
                 >
                   <span
                     aria-disabled="false"
@@ -375,6 +379,7 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
                       <input
                         class="PodBrowser-input"
                         data-indeterminate="false"
+                        data-testid="permission-checkbox-view"
                         name="view"
                         type="checkbox"
                         value=""
@@ -406,7 +411,7 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
               >
                 <label
                   class="PodBrowser-root"
-                  data-testid="permission-checkbox-edit"
+                  data-testid="permission-label-edit"
                 >
                   <span
                     aria-disabled="false"
@@ -418,6 +423,7 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
                       <input
                         class="PodBrowser-input"
                         data-indeterminate="false"
+                        data-testid="permission-checkbox-edit"
                         name="edit"
                         type="checkbox"
                         value=""
@@ -449,7 +455,7 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
               >
                 <label
                   class="PodBrowser-root"
-                  data-testid="permission-checkbox-append"
+                  data-testid="permission-label-append"
                 >
                   <span
                     aria-disabled="false"
@@ -461,6 +467,7 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
                       <input
                         class="PodBrowser-input"
                         data-indeterminate="false"
+                        data-testid="permission-checkbox-append"
                         name="append"
                         type="checkbox"
                         value=""
@@ -492,7 +499,7 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
               >
                 <label
                   class="PodBrowser-root"
-                  data-testid="permission-checkbox-control"
+                  data-testid="permission-label-control"
                 >
                   <span
                     aria-disabled="false"
@@ -504,6 +511,7 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
                       <input
                         class="PodBrowser-input"
                         data-indeterminate="false"
+                        data-testid="permission-checkbox-control"
                         name="control"
                         type="checkbox"
                         value=""
@@ -625,7 +633,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are d
           >
             <label
               class="PodBrowser-root PodBrowser-disabled"
-              data-testid="permission-checkbox-view"
+              data-testid="permission-label-view"
             >
               <span
                 aria-disabled="true"
@@ -638,6 +646,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are d
                   <input
                     class="PodBrowser-input"
                     data-indeterminate="false"
+                    data-testid="permission-checkbox-view"
                     disabled=""
                     name="view"
                     type="checkbox"
@@ -667,7 +676,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are d
           >
             <label
               class="PodBrowser-root PodBrowser-disabled"
-              data-testid="permission-checkbox-edit"
+              data-testid="permission-label-edit"
             >
               <span
                 aria-disabled="true"
@@ -680,6 +689,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are d
                   <input
                     class="PodBrowser-input"
                     data-indeterminate="false"
+                    data-testid="permission-checkbox-edit"
                     disabled=""
                     name="edit"
                     type="checkbox"
@@ -709,7 +719,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are d
           >
             <label
               class="PodBrowser-root PodBrowser-disabled"
-              data-testid="permission-checkbox-append"
+              data-testid="permission-label-append"
             >
               <span
                 aria-disabled="true"
@@ -722,6 +732,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are d
                   <input
                     class="PodBrowser-input"
                     data-indeterminate="false"
+                    data-testid="permission-checkbox-append"
                     disabled=""
                     name="append"
                     type="checkbox"
@@ -751,7 +762,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are d
           >
             <label
               class="PodBrowser-root PodBrowser-disabled"
-              data-testid="permission-checkbox-control"
+              data-testid="permission-label-control"
             >
               <span
                 aria-disabled="true"
@@ -764,6 +775,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are d
                   <input
                     class="PodBrowser-input"
                     data-indeterminate="false"
+                    data-testid="permission-checkbox-control"
                     disabled=""
                     name="control"
                     type="checkbox"
@@ -864,7 +876,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are o
           >
             <label
               class="PodBrowser-root"
-              data-testid="permission-checkbox-view"
+              data-testid="permission-label-view"
             >
               <span
                 aria-disabled="false"
@@ -876,6 +888,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are o
                   <input
                     class="PodBrowser-input"
                     data-indeterminate="false"
+                    data-testid="permission-checkbox-view"
                     name="view"
                     type="checkbox"
                     value=""
@@ -907,7 +920,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are o
           >
             <label
               class="PodBrowser-root"
-              data-testid="permission-checkbox-edit"
+              data-testid="permission-label-edit"
             >
               <span
                 aria-disabled="false"
@@ -919,6 +932,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are o
                   <input
                     class="PodBrowser-input"
                     data-indeterminate="false"
+                    data-testid="permission-checkbox-edit"
                     name="edit"
                     type="checkbox"
                     value=""
@@ -950,7 +964,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are o
           >
             <label
               class="PodBrowser-root"
-              data-testid="permission-checkbox-append"
+              data-testid="permission-label-append"
             >
               <span
                 aria-disabled="false"
@@ -962,6 +976,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are o
                   <input
                     class="PodBrowser-input"
                     data-indeterminate="false"
+                    data-testid="permission-checkbox-append"
                     name="append"
                     type="checkbox"
                     value=""
@@ -993,7 +1008,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are o
           >
             <label
               class="PodBrowser-root"
-              data-testid="permission-checkbox-control"
+              data-testid="permission-label-control"
             >
               <span
                 aria-disabled="false"
@@ -1005,6 +1020,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are o
                   <input
                     class="PodBrowser-input"
                     data-indeterminate="false"
+                    data-testid="permission-checkbox-control"
                     name="control"
                     type="checkbox"
                     value=""
