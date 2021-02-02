@@ -32,55 +32,27 @@ import { Alert, Skeleton } from "@material-ui/lab";
 import styles from "./styles";
 import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
 import AgentProfileDetails from "./agentProfileDetails";
-import AccessControlContext from "../../../../src/contexts/accessControlContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 const TESTCAFE_ID_TRY_AGAIN_BUTTON = "try-again-button";
 const TESTCAFE_ID_TRY_AGAIN_SPINNER = "try-again-spinner";
 
-export default function AgentAccess({
-  permission: { webId, acl, canShare, alias, profile, profileError },
-  mutatePermissions,
-  mutateCanShare,
-}) {
-  const { accessControl } = useContext(AccessControlContext);
+export default function AgentAccess({ permission, mutatePermissions }) {
   const classes = useStyles();
   const {
     session: { fetch },
   } = useSession();
   const bem = useBem(useStyles());
+  const { webId, acl, profile, profileError } = permission;
   const { dataset } = useContext(DatasetContext);
   const [isLoadingProfile, setIsLoadingProfile] = useState(false);
   const [loading, setLoading] = useState(false);
   const resourceIri = getSourceUrl(dataset);
 
   const [localAccess, setLocalAccess] = useState(acl);
-  const [localCanShare, setLocalCanShare] = useState(canShare);
   const [localProfile, setLocalProfile] = useState(profile);
   const [localProfileError, setLocalProfileError] = useState(profileError);
-
-  const handleToggleShare = async (e) => {
-    e.preventDefault();
-    if (localCanShare) {
-      await accessControl.removeAgentFromNamedPolicy(webId, "canShare");
-      await mutateCanShare();
-      setLocalCanShare(false);
-    } else {
-      await accessControl.addAgentToNamedPolicy(webId, "canShare");
-      await mutateCanShare();
-      setLocalCanShare(true);
-    }
-  };
-
-  const handleRemovePermissions = async (e) => {
-    setLoading(true);
-    e.preventDefault();
-    await accessControl.removeAgentFromNamedPolicy(webId, alias);
-    setLoading(false);
-    await mutatePermissions();
-    setLocalAccess(null);
-  };
 
   const handleRetryClick = async () => {
     try {
@@ -92,6 +64,7 @@ export default function AgentAccess({
       setIsLoadingProfile(false);
     }
   };
+
   if (!localAccess) return null;
 
   if (loading)
@@ -146,12 +119,11 @@ export default function AgentAccess({
         </Alert>
         <div className={classes.separator} />
         <AgentProfileDetails
-          removePermissions={handleRemovePermissions}
-          toggleShare={handleToggleShare}
-          canShare={localCanShare}
-          webId={webId}
           resourceIri={resourceIri}
-          profile={null}
+          permission={permission}
+          setLoading={setLoading}
+          setLocalAccess={setLocalAccess}
+          mutatePermissions={mutatePermissions}
         />
       </div>
     );
@@ -175,12 +147,11 @@ export default function AgentAccess({
 
   return (
     <AgentProfileDetails
-      canShare={localCanShare}
-      removePermissions={handleRemovePermissions}
-      toggleShare={handleToggleShare}
-      webId={webId}
       resourceIri={resourceIri}
-      profile={localProfile}
+      permission={permission}
+      setLoading={setLoading}
+      setLocalAccess={setLocalAccess}
+      mutatePermissions={mutatePermissions}
     />
   );
 }
@@ -188,10 +159,8 @@ export default function AgentAccess({
 AgentAccess.propTypes = {
   permission: T.object.isRequired,
   mutatePermissions: T.func,
-  mutateCanShare: T.func,
 };
 
 AgentAccess.defaultProps = {
   mutatePermissions: () => {},
-  mutateCanShare: () => {},
 };

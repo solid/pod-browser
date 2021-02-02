@@ -95,14 +95,6 @@ export default function styles(theme) {
       backgroundColor: theme.palette.primary.main,
       padding: theme.spacing(1.4, 1.8),
     },
-    dialogTitle: {
-      fontSize: theme.typography.h2.fontSize,
-      fontWeight: theme.typography.h2.fontWeight,
-    },
-    dialogText: {
-      fontWeight: theme.typography.body.fontWeight,
-      fontFamily: theme.typography.body.fontFamily,
-    },
     capitalizedText: {
       textTransform: "capitalize",
     },

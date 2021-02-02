@@ -19,32 +19,30 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import AgentProfileDetails from "./index";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-import { renderWithTheme } from "../../../../../__testUtils/withTheme";
-
-const webId = "https://example.com/profile/card#me";
-
-describe("AgentProfileDetails", () => {
-  const profile = {
-    avatar: null,
-    name: "Example Agent",
-    webId,
-  };
-  const permission = { webId, profile, alias: "editors" };
-  const resourceIri = "/iri/";
-
-  it("renders without error", () => {
-    const { asFragment } = renderWithTheme(
-      <AgentProfileDetails
-        resourceIri={resourceIri}
-        permission={permission}
-        setLoading={jest.fn()}
-        setLocalAccess={jest.fn()}
-        mutatePermissions={jest.fn()}
-      />
-    );
-    expect(asFragment()).toMatchSnapshot();
+export default function styles(theme) {
+  return createStyles(theme, ["icons", "button"], {
+    cancelButton: {
+      fontSize: theme.typography.body1.fontSize,
+      fontWeight: theme.typography.body1.fontWeight,
+      padding: theme.spacing(1.4, 1.8),
+      backgroundColor: "transparent",
+    },
+    submitAgentsButton: {
+      fontSize: theme.typography.body1.fontSize,
+      fontWeight: theme.typography.body1.fontWeight,
+      color: theme.palette.common.white,
+      backgroundColor: theme.palette.primary.main,
+      padding: theme.spacing(1.4, 1.8),
+    },
+    dialogTitle: {
+      fontSize: theme.typography.h2.fontSize,
+      fontWeight: theme.typography.h2.fontWeight,
+    },
+    dialogText: {
+      fontWeight: theme.typography.body.fontWeight,
+      fontFamily: theme.typography.body.fontFamily,
+    },
   });
-});
+}

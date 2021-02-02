@@ -20,12 +20,12 @@
  */
 
 import React from "react";
-import { render } from "@testing-library/react";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import ConfirmationDialog from "./index";
 
 describe("ConfirmationDialog", () => {
   test("Renders a ConfirmationDialog", () => {
-    const { asFragment } = render(<ConfirmationDialog />);
+    const { asFragment } = renderWithTheme(<ConfirmationDialog />);
     expect(asFragment()).toMatchSnapshot();
   });
 });

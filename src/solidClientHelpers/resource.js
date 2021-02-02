@@ -23,15 +23,21 @@ import {
   createContainerAt,
   createSolidDataset,
   createThing,
+  deleteContainer,
   deleteFile,
   getSolidDataset,
   getSourceUrl,
   getThing,
+  isContainer,
   saveSolidDatasetAt,
   setThing,
 } from "@inrupt/solid-client";
 import { parseUrl } from "../stringHelpers";
-import { getPolicyUrl } from "./policies";
+import {
+  getNamedPolicyResourceUrl,
+  getPolicyUrl,
+  getResourcePoliciesContainerPath,
+} from "./policies";
 import { createResponder, isContainerIri } from "./utils";
 import { ERROR_CODES, isHTTPError } from "../error";
 
@@ -114,6 +120,20 @@ export async function saveResource({ dataset, iri }, fetch) {
   }
 }
 
+const deletePoliciesContainer = async (containerIri, fetch) => {
+  try {
+    await deleteContainer(containerIri, { fetch });
+  } catch (err) {
+    if (
+      !isHTTPError(err.message, 409) &&
+      !isHTTPError(err.message, 404) &&
+      !isHTTPError(err.message, 403)
+    ) {
+      throw err;
+    }
+  }
+};
+
 export async function deleteResource(
   resourceInfo,
   policiesContainerUrl,
@@ -125,12 +145,50 @@ export async function deleteResource(
   });
   if (!policiesContainerUrl) return;
   const policyUrl = getPolicyUrl(resourceInfo, policiesContainerUrl);
-  try {
-    if (!policyUrl) return;
-    await deleteFile(policyUrl, { fetch });
-  } catch (err) {
-    if (!isHTTPError(err.message, 404) && !isHTTPError(err.message, 403)) {
-      throw err;
-    }
-  }
+  const resourcePoliciesContainerPath = getResourcePoliciesContainerPath(
+    resourceInfo,
+    policiesContainerUrl
+  );
+
+  const editorsPolicyUrl = getNamedPolicyResourceUrl(
+    resourceInfo,
+    policiesContainerUrl,
+    "editors"
+  );
+  const viewersPolicyUrl = getNamedPolicyResourceUrl(
+    resourceInfo,
+    policiesContainerUrl,
+    "viewers"
+  );
+
+  if (!policyUrl && !editorsPolicyUrl && !viewersPolicyUrl) return;
+
+  const urlsToDelete = [
+    viewersPolicyUrl,
+    editorsPolicyUrl,
+    policyUrl,
+  ].filter((url) => Boolean(url));
+
+  Promise.allSettled(
+    urlsToDelete.map(async (url) => {
+      await deleteFile(url, { fetch });
+    })
+  )
+    .then(() => {
+      if (
+        resourcePoliciesContainerPath &&
+        isContainer(resourcePoliciesContainerPath)
+      ) {
+        deletePoliciesContainer(resourcePoliciesContainerPath, fetch);
+      }
+    })
+    .catch((err) => {
+      if (
+        !isHTTPError(err.message, 404) &&
+        !isHTTPError(err.message, 403) &&
+        !isHTTPError(err.message, 409)
+      ) {
+        throw err;
+      }
+    });
 }

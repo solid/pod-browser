@@ -30,6 +30,7 @@ import styles from "./styles";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 const TESTCAFE_ID_USER_MENU_BUTTON = "user-menu-button";
+const TESTCAFE_ID_USER_MENU = "user-menu";
 
 export default function UserMenu() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -68,6 +69,7 @@ export default function UserMenu() {
         <div
           className={bem("header-banner__aside-menu-popup")}
           id="UserMenu"
+          data-testid={TESTCAFE_ID_USER_MENU}
           aria-hidden={!userMenuOpen}
         >
           <ul className={bem("header-banner__user-menu")}>

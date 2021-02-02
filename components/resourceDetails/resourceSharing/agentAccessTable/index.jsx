@@ -49,26 +49,9 @@ export default function AgentAccessTable({ type }) {
     mutate: mutatePermissions,
   } = useNamedPolicyPermissions(type);
 
-  const { permissionsWithProfiles } = usePermissionsWithProfiles(
+  const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
     namedPermissions
   );
-  const {
-    data: canShare,
-    mutate: mutateCanSharePermissions,
-  } = useNamedPolicyPermissions("canShare");
-
-  const permissions = useMemo(() => {
-    // remove this when deny policies are available
-    if (type === "blocked") return [];
-    const canShareWebIds = canShare ? canShare.map((p) => p.webId) : [];
-
-    return permissionsWithProfiles.map((p) => {
-      return {
-        ...p,
-        canShare: canShareWebIds.includes(p.webId),
-      };
-    });
-  }, [permissionsWithProfiles, canShare, type]);
 
   const editorsDescription = (
     <p>
@@ -229,7 +212,6 @@ export default function AgentAccessTable({ type }) {
                         <AgentAccess
                           permission={details}
                           mutatePermissions={mutatePermissions}
-                          mutateCanShare={mutateCanSharePermissions}
                         />
                       </td>
                     </tr>

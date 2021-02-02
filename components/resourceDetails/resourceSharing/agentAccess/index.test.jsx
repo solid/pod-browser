@@ -21,29 +21,22 @@
 
 import React from "react";
 
-import { fireEvent, waitFor } from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
 import AgentAccess from "./index";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import * as profileFns from "../../../../src/solidClientHelpers/profile";
 import { mockProfileAlice } from "../../../../__testUtils/mockPersonResource";
-import mockAccessControl from "../../../../__testUtils/mockAccessControl";
-import AccessControlContext from "../../../../src/contexts/accessControlContext";
-
-// TODO: Un-comment toggle tests once we un-hide the toggle
 
 jest.mock("../../../../src/hooks/useFetchProfile");
 
 const webId = "https://example.com/profile/card#me";
 
-const accessControl = mockAccessControl();
-
 describe("AgentAccess", () => {
   const permission = {
     acl: createAccessMap(true, true, false, false),
     webId,
-    canShare: false,
     alias: "Editors",
     profile: mockProfileAlice(),
     profileError: undefined,
@@ -64,7 +57,6 @@ describe("AgentAccess", () => {
         permission={{
           acl: createAccessMap(true, true, false, false),
           webId,
-          canShare: false,
           alias: "Editors",
           profile: null,
           profileError: undefined,
@@ -82,7 +74,6 @@ describe("AgentAccess", () => {
         permission={{
           acl: createAccessMap(true, true, false, false),
           webId,
-          canShare: false,
           alias: "Editors",
           profile: null,
           profileError: "error",
@@ -100,7 +91,6 @@ describe("AgentAccess", () => {
         permission={{
           acl: createAccessMap(true, true, false, false),
           webId,
-          canShare: false,
           alias: "Editors",
           profile: null,
           profileError: "error",
@@ -121,7 +111,6 @@ describe("AgentAccess", () => {
         permission={{
           acl: createAccessMap(true, true, false, false),
           webId,
-          canShare: false,
           alias: "Editors",
           profile: null,
           profileError: "error",
@@ -145,7 +134,6 @@ describe("AgentAccess", () => {
         permission={{
           acl: createAccessMap(true, true, false, false),
           webId,
-          canShare: false,
           alias: "Editors",
           profile: null,
           profileError: "error",
@@ -167,7 +155,6 @@ describe("AgentAccess", () => {
         permission={{
           acl: createAccessMap(true, true, false, false),
           webId,
-          canShare: false,
           alias: "Editors",
           profile: null,
           profileError: "error",
@@ -182,58 +169,5 @@ describe("AgentAccess", () => {
       expect(fetchProfile).toHaveBeenCalledWith(webId, expect.anything())
     );
     await waitFor(() => expect(queryByTestId("try-again-spinner")).toBeFalsy());
-  });
-  // it("unchecks shareToggle when clicking share toggle", () => {
-  //   const { getByTestId, getByRole } = renderWithTheme(
-  //     <AccessControlContext.Provider value={{ accessControl }}>
-  //       <AgentAccess
-  //         permission={{
-  //           acl: createAccessMap(true, true, false, false),
-  //           webId,
-  //           canShare: true,
-  //           alias: "Editors",
-  //           profile: {
-  //             avatar: null,
-  //             name: "Example 1",
-  //           },
-  //           profileError: null,
-  //         }}
-  //         mutatePermissions={mutatePermissions}
-  //       />
-  //     </AccessControlContext.Provider>
-  //   );
-  //   const menuButton = getByTestId("menu-button");
-  //   userEvent.click(menuButton);
-  //   expect(getByTestId("can-share-info-button-label")).not.toBeNull();
-  //   const canShareToggle = getByRole("checkbox");
-  //   userEvent.click(canShareToggle);
-  //   fireEvent.change(canShareToggle, { target: { checked: false } });
-  //   expect(canShareToggle).toHaveProperty("checked", false);
-  // });
-  it("removes permissions from list when clicking remove button", () => {
-    const { getByTestId, queryByText } = renderWithTheme(
-      <AccessControlContext.Provider value={{ accessControl }}>
-        <AgentAccess
-          permission={{
-            acl: createAccessMap(true, true, false, false),
-            webId,
-            canShare: true,
-            alias: "Editors",
-            profile: {
-              avatar: null,
-              name: "Example 1",
-            },
-            profileError: null,
-          }}
-          mutatePermissions={mutatePermissions}
-        />
-      </AccessControlContext.Provider>
-    );
-    const menuButton = getByTestId("menu-button");
-    expect(queryByText("Example 1")).not.toBeNull();
-    userEvent.click(menuButton);
-    const removeButton = getByTestId("remove-button");
-    userEvent.click(removeButton);
-    expect(queryByText("Example 1")).toBeNull();
   });
 });

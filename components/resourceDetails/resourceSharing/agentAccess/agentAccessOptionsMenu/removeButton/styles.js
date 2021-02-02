@@ -19,32 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import AgentProfileDetails from "./index";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-import { renderWithTheme } from "../../../../../__testUtils/withTheme";
-
-const webId = "https://example.com/profile/card#me";
-
-describe("AgentProfileDetails", () => {
-  const profile = {
-    avatar: null,
-    name: "Example Agent",
-    webId,
-  };
-  const permission = { webId, profile, alias: "editors" };
-  const resourceIri = "/iri/";
-
-  it("renders without error", () => {
-    const { asFragment } = renderWithTheme(
-      <AgentProfileDetails
-        resourceIri={resourceIri}
-        permission={permission}
-        setLoading={jest.fn()}
-        setLocalAccess={jest.fn()}
-        mutatePermissions={jest.fn()}
-      />
-    );
-    expect(asFragment()).toMatchSnapshot();
+export default function styles(theme) {
+  return createStyles(theme, ["icons"], {
+    listRoot: {
+      paddingTop: 0,
+    },
   });
-});
+}

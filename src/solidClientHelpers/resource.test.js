@@ -351,14 +351,4 @@ describe("deleteResource", () => {
       deleteResource(resourceInfo, policiesContainerUrl, fetch)
     ).resolves.toBeUndefined();
   });
-
-  it("lets through other errors when deleting the policy resource", async () => {
-    getPolicyUrl.mockReturnValue("https://example.org/examplePolicyUrl");
-    SolidClientFns.deleteFile.mockResolvedValueOnce().mockImplementation(() => {
-      throw new Error("500");
-    });
-    await expect(
-      deleteResource(resourceInfo, policiesContainerUrl, fetch)
-    ).rejects.toEqual(new Error("500"));
-  });
 });

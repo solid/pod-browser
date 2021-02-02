@@ -23,15 +23,7 @@
 
 import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import {
-  Checkbox,
-  createStyles,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from "@material-ui/core";
+import { Checkbox, createStyles } from "@material-ui/core";
 import { Button } from "@inrupt/prism-react-components";
 import { makeStyles } from "@material-ui/styles";
 import {
@@ -63,18 +55,95 @@ import AgentsTableTabs from "../../agentsTableTabs";
 import AgentsSearchBar from "../../agentsSearchBar";
 import AddAgentRow from "../addAgentRow";
 import AgentPickerEmptyState from "../agentPickerEmptyState";
-import CanShareInfoTooltip from "../../canShareInfoTooltip";
 import styles from "./styles";
-import CanShareToggleSwitch from "../../canShareToggleSwitch";
 import AddWebIdButton from "./addWebIdButton";
+import ConfirmationDialogContext from "../../../../../src/contexts/confirmationDialogContext";
+
+export const handleSubmit = ({
+  newAgentsWebIds,
+  setNoAgentsAlert,
+  accessControl,
+  people,
+  addressBook,
+  mutatePermissions,
+  saveAgentToContacts,
+  onClose,
+  type,
+  fetch,
+}) => {
+  return () => {
+    if (!newAgentsWebIds.length) {
+      setNoAgentsAlert(true);
+      return;
+    }
+    newAgentsWebIds.forEach(async (agentWebId) => {
+      await accessControl.addAgentToNamedPolicy(agentWebId, type);
+      saveAgentToContacts(agentWebId, people, addressBook, fetch);
+      mutatePermissions();
+      onClose();
+    });
+  };
+};
+
+export const handleConfirmation = ({
+  open,
+  dialogId,
+  setConfirmationSetup,
+  setOpen,
+  setConfirmed,
+  handleSubmitNewWebIds,
+}) => {
+  return (confirmationSetup, confirmed) => {
+    if (open !== dialogId) return;
+    if (confirmationSetup && confirmed === null) return;
+    setConfirmationSetup(true);
+
+    if (confirmationSetup && confirmed) {
+      handleSubmitNewWebIds();
+    }
+
+    if (confirmationSetup && confirmed !== null) {
+      setConfirmed(null);
+      setOpen(null);
+      setConfirmationSetup(false);
+    }
+  };
+};
+
+export const handleSaveContact = async (iri, people, addressBook, fetch) => {
+  let response;
+  let error;
+
+  if (!iri) {
+    return;
+  }
+
+  try {
+    const { name, webId, types } = await fetchProfile(iri, fetch);
+    const existingContact = await findContactInAddressBook(
+      people,
+      webId,
+      fetch
+    );
+    if (existingContact.length) {
+      return;
+    }
+
+    if (name) {
+      const contact = { webId, fn: name };
+      response = await saveContact(addressBook, contact, types, fetch);
+    }
+  } catch (e) {
+    error = e; // setting the error in case we want to do something with it later (like displaying a notification to the user)
+  }
+  // eslint-disable-next-line consistent-return
+  return { response, error };
+};
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const VCARD_WEBID_PREDICATE = "https://www.w3.org/2006/vcard/ns#WebId";
 const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
-const TESTCAFE_CONFIRM_BUTTON = "confirm-button";
 const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
-const TESTCAFE_CONFIRMATION_CANCEL_BUTTON = "confirmation-cancel-button";
-const TESTCAFE_CONFIRMATION_DIALOG = "confirmation-dialog";
 
 export default function AgentPickerModal({
   type,
@@ -92,81 +161,35 @@ export default function AgentPickerModal({
 
   const classes = useStyles();
   const { session } = useSession();
+  const { fetch } = session;
   const { dataset } = useContext(DatasetContext);
   const resourceIri = getSourceUrl(dataset);
   const resourceName = getResourceName(resourceIri);
   const [selectedTabValue, setSelectedTabValue] = useState("");
   const { accessControl } = useContext(AccessControlContext);
-  const [canShareWebIds, setCanShareWebIds] = useState([]);
   const [newAgentsWebIds, setNewAgentsWebIds] = useState([]);
-  const [contactError, setContactError] = useState();
   const [contactsArray, setContactsArray] = useState([]);
   const [addingWebId, setAddingWebId] = useState(false);
   const [placeholderDataset, setPlaceholderDataset] = useState(
     createSolidDataset()
   );
   const [noAgentsAlert, setNoAgentsAlert] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
-  const [emptyRowCanShare, setEmptyRowCanShare] = useState(false);
+  const dialogId = "add-new-permissions";
+  const [confirmationSetup, setConfirmationSetup] = useState(false);
 
-  const handleClickOpenDialog = () => {
-    if (!newAgentsWebIds.length) {
-      setNoAgentsAlert(true);
-      return;
-    }
-    setOpenDialog(true);
-  };
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
+  const {
+    open,
+    confirmed,
+    setConfirmed,
+    setContent,
+    setOpen,
+    setTitle,
+  } = useContext(ConfirmationDialogContext);
 
   const handleTabChange = (e, newValue) => {
     setSelectedTabValue(newValue);
     // todo: this will set the filter for the react SDK table once we have the multiselect agent picker
-  };
-
-  const toggleCanShare = (webId) => {
-    if (!webId) {
-      setEmptyRowCanShare(!emptyRowCanShare);
-    } else if (canShareWebIds.includes(webId)) {
-      setCanShareWebIds(
-        newAgentsWebIds.filter((agentWebId) => agentWebId !== webId)
-      );
-    } else {
-      setCanShareWebIds([webId, ...canShareWebIds]);
-    }
-  };
-
-  const handleSaveContact = async (iri, fetch) => {
-    let response;
-    let error;
-
-    if (!iri) {
-      return;
-    }
-
-    try {
-      const { name, webId, types } = await fetchProfile(iri, fetch);
-      const existingContact = await findContactInAddressBook(
-        people,
-        webId,
-        fetch
-      );
-      if (existingContact.length) {
-        return;
-      }
-
-      if (name) {
-        const contact = { webId, fn: name };
-        response = await saveContact(addressBook, contact, types, fetch);
-      }
-    } catch (e) {
-      error = e; // setting the error in case we want to do something with it later (like displaying a notification to the user)
-    }
-    // eslint-disable-next-line consistent-return
-    return { response, error };
   };
 
   const handleFilterChange = (e) => {
@@ -174,25 +197,47 @@ export default function AgentPickerModal({
     setGlobalFilter(value || undefined);
   };
 
-  const handleSubmit = () => {
+  const handleSubmitNewWebIds = handleSubmit({
+    newAgentsWebIds,
+    setNoAgentsAlert,
+    accessControl,
+    people,
+    addressBook,
+    mutatePermissions,
+    saveAgentToContacts: handleSaveContact,
+    onClose,
+    type,
+    fetch,
+  });
+
+  const handleClickOpenDialog = () => {
     if (!newAgentsWebIds.length) {
       setNoAgentsAlert(true);
       return;
     }
-    newAgentsWebIds.forEach(async (agentWebId) => {
-      await accessControl.addAgentToNamedPolicy(agentWebId, type);
-      if (canShareWebIds.includes(agentWebId)) {
-        await accessControl.addAgentToNamedPolicy(agentWebId, "canShare");
-      }
-
-      const { response, error } = handleSaveContact(agentWebId, session.fetch);
-      if (error) {
-        setContactError(error); // setting the error in case we want to notify the user
-      }
-      mutatePermissions();
-      onClose();
-    });
+    const confirmationTitle = `Change permissions for ${
+      newAgentsWebIds.length === 1
+        ? "1 person"
+        : `${newAgentsWebIds.length} people`
+    }`;
+    const confirmationContent = `Continuing will change ${
+      newAgentsWebIds.length === 1
+        ? "1 person "
+        : `${newAgentsWebIds.length} people `
+    } permissions to ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+    setTitle(confirmationTitle);
+    setContent(confirmationContent);
+    setOpen(dialogId);
   };
+
+  const onConfirmation = handleConfirmation({
+    open,
+    dialogId,
+    setConfirmationSetup,
+    setOpen,
+    setConfirmed,
+    handleSubmitNewWebIds,
+  });
 
   const updateThing = (newThing) => {
     const updatedDataset = setThing(placeholderDataset, newThing);
@@ -208,6 +253,10 @@ export default function AgentPickerModal({
     });
     setContactsArray(contacts);
   }, [placeholderDataset]);
+
+  useEffect(() => {
+    onConfirmation(confirmationSetup, confirmed);
+  }, [confirmationSetup, confirmed, onConfirmation]);
 
   const handleAddRow = () => {
     setNoAgentsAlert(false);
@@ -284,28 +333,6 @@ export default function AgentPickerModal({
                 );
               }}
             />
-            {/* Hiding the toggle until we have the new canShare policy */}
-            {/* <TableColumn
-              header={
-                // eslint-disable-next-line react/jsx-wrap-multilines
-                <CanShareInfoTooltip
-                  className={classes.canShareTableHeader}
-                  resourceName={resourceName}
-                />
-              }
-              dataType="url"
-              property={VCARD_WEBID_PREDICATE}
-              body={({ value }) => {
-                return (
-                  <CanShareToggleSwitch
-                    toggleShare={() => toggleCanShare(value)}
-                    canShare={
-                      value ? canShareWebIds.includes(value) : emptyRowCanShare
-                    }
-                  />
-                );
-              }}
-            /> */}
           </Table>
         ) : (
           <AgentPickerEmptyState onClick={handleAddRow} />
@@ -329,58 +356,6 @@ export default function AgentPickerModal({
         >
           {text}
         </Button>
-        <Dialog
-          data-testid={TESTCAFE_CONFIRMATION_DIALOG}
-          open={openDialog}
-          onClose={handleCloseDialog}
-          aria-labelledby="Confirmation dialog"
-          aria-describedby="Confirm change in permissions"
-        >
-          <DialogTitle
-            id="alert-dialog-title"
-            classes={{ root: classes.dialogTitle }}
-            disableTypography
-          >
-            Change permissions for
-            {newAgentsWebIds.length === 1
-              ? " 1 person"
-              : ` ${newAgentsWebIds.length} people`}
-            {/* this will change when we have groups */}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText
-              classes={{ root: classes.dialogText }}
-              id="alert-confirmation-dialog"
-            >
-              Continuing will change
-              {newAgentsWebIds.length === 1
-                ? " 1 person "
-                : ` ${newAgentsWebIds.length} people `}
-              permissions to
-              {type.charAt(0).toUpperCase() + type.slice(1)}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              data-testid={TESTCAFE_CONFIRMATION_CANCEL_BUTTON}
-              variant="action"
-              className={classes.cancelButton}
-              onClick={handleCloseDialog}
-              color="primary"
-            >
-              Cancel
-            </Button>
-            <Button
-              data-testid={TESTCAFE_CONFIRM_BUTTON}
-              className={classes.submitAgentsButton}
-              onClick={handleSubmit}
-              color="primary"
-              autoFocus
-            >
-              Confirm
-            </Button>
-          </DialogActions>
-        </Dialog>
       </div>
     </div>
   );

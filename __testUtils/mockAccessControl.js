@@ -28,5 +28,6 @@ export default function mockAccessControl(
     savePermissionsForAgent: jest.fn().mockResolvedValue({ response: {} }),
     addAgentToNamedPolicy: jest.fn().mockResolvedValue({ response: {} }),
     getPermissionsForNamedPolicies: jest.fn().mockResolvedValue(permissions),
+    removeAgentFromNamedPolicy: jest.fn().mockResolvedValue({ response: {} }),
   };
 }
