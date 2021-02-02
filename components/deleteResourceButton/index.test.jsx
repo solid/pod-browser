@@ -22,7 +22,7 @@
 import React from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import DeleteResourceButton, { createDeleteHandler } from "./index";
-import usePoliciesContainer from "../../src/hooks/usePoliciesContainer";
+import usePoliciesContainerUrl from "../../src/hooks/usePoliciesContainerUrl";
 import {
   getResource,
   deleteResource,
@@ -31,7 +31,7 @@ import useResourceInfo from "../../src/hooks/useResourceInfo";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 
 jest.mock("../../src/hooks/useResourceInfo");
-jest.mock("../../src/hooks/usePoliciesContainer");
+jest.mock("../../src/hooks/usePoliciesContainerUrl");
 jest.mock("../../src/solidClientHelpers/resource");
 
 describe("Delete resource button", () => {
@@ -39,10 +39,7 @@ describe("Delete resource button", () => {
   const resourceIri = "iri";
 
   const policiesContainerUrl = "https://example.org/policies";
-  const mockPoliciesContainer = mockSolidDatasetFrom(policiesContainerUrl);
-  usePoliciesContainer.mockImplementation(() => ({
-    policiesContainer: mockPoliciesContainer,
-  }));
+  usePoliciesContainerUrl.mockImplementation(() => policiesContainerUrl);
   useResourceInfo.mockReturnValue("resource info");
   describe("it hooks works successfully", () => {
     let renderResult;

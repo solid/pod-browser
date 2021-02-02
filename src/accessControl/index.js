@@ -39,14 +39,18 @@ export function isWac(resourceInfo) {
   return resourceInfo && hasAccessibleAcl(resourceInfo);
 }
 
-export async function getAccessControl(resourceInfo, policiesContainer, fetch) {
+export async function getAccessControl(
+  resourceInfo,
+  policiesContainerUrl,
+  fetch
+) {
   if (isWac(resourceInfo)) {
     return WacAccessControlStrategy.init(resourceInfo, fetch);
   }
   if (isAcp(resourceInfo)) {
     return AcpAccessControlStrategy.init(
       resourceInfo,
-      policiesContainer,
+      policiesContainerUrl,
       fetch
     );
   }

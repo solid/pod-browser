@@ -23,40 +23,27 @@ import { useEffect, useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
 import { getAccessControl, isAcp } from "../../accessControl";
-import usePoliciesContainer from "../usePoliciesContainer";
+import usePoliciesContainerUrl from "../usePoliciesContainerUrl";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
-import { locationIsConnectedToProfile } from "../../solidClientHelpers/profile";
 
 export default function useAccessControl(resourceInfo) {
   const { fetch } = useSession();
   const { data: authenticatedProfile } = useAuthenticatedProfile();
   const [accessControl, setAccessControl] = useState(null);
-  const {
-    policiesContainer,
-    error: policiesContainerError,
-  } = usePoliciesContainer();
-  const [error, setError] = useState(policiesContainerError || null);
+  const policiesContainerUrl = usePoliciesContainerUrl(
+    resourceInfo && getSourceUrl(resourceInfo)
+  );
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const needsAccessToPoliciesContainer =
-      isAcp(resourceInfo) &&
-      locationIsConnectedToProfile(
-        authenticatedProfile,
-        getSourceUrl(resourceInfo)
-      );
-    const hasAccessToPoliciesContainer =
-      !policiesContainerError && policiesContainer;
-    if (
-      !resourceInfo ||
-      (needsAccessToPoliciesContainer && !hasAccessToPoliciesContainer)
-    ) {
+    if (!resourceInfo || (isAcp(resourceInfo) && !policiesContainerUrl)) {
       setAccessControl(null);
-      setError(policiesContainerError || null);
+      setError(null);
       return;
     }
     setAccessControl(null);
     setError(null);
-    getAccessControl(resourceInfo, policiesContainer, fetch)
+    getAccessControl(resourceInfo, policiesContainerUrl, fetch)
       .then((response) => {
         setAccessControl(response);
         setError(null);
@@ -65,13 +52,7 @@ export default function useAccessControl(resourceInfo) {
         setAccessControl(null);
         setError(accessControlError);
       });
-  }, [
-    authenticatedProfile,
-    fetch,
-    policiesContainer,
-    policiesContainerError,
-    resourceInfo,
-  ]);
+  }, [authenticatedProfile, fetch, policiesContainerUrl, resourceInfo]);
 
   return { accessControl, error };
 }

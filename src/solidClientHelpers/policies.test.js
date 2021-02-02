@@ -25,36 +25,41 @@ import { getPolicyUrl, getPoliciesContainerUrl } from "./policies";
 const podUrl = "http://example.com/";
 
 describe("getPolicyUrl", () => {
-  const policiesUrl = getPoliciesContainerUrl(podUrl);
-  const policies = mockSolidDatasetFrom(policiesUrl);
+  const containerUrl = getPoliciesContainerUrl(podUrl);
 
   it("returns corresponding policy URLs", () => {
-    expect(getPolicyUrl(mockSolidDatasetFrom(podUrl), policies)).toEqual(
+    expect(getPolicyUrl(mockSolidDatasetFrom(podUrl), containerUrl)).toEqual(
       "http://example.com/pb_policies/.ttl"
     );
     expect(
-      getPolicyUrl(mockSolidDatasetFrom(`${podUrl}test`), policies)
+      getPolicyUrl(mockSolidDatasetFrom(`${podUrl}test`), containerUrl)
     ).toEqual("http://example.com/pb_policies/test.ttl");
     expect(
-      getPolicyUrl(mockSolidDatasetFrom(`${podUrl}test.ttl`), policies)
+      getPolicyUrl(mockSolidDatasetFrom(`${podUrl}test.ttl`), containerUrl)
     ).toEqual("http://example.com/pb_policies/test.ttl.ttl");
     expect(
-      getPolicyUrl(mockSolidDatasetFrom(`${podUrl}foo/bar`), policies)
+      getPolicyUrl(mockSolidDatasetFrom(`${podUrl}foo/bar`), containerUrl)
     ).toEqual("http://example.com/pb_policies/foo/bar.ttl");
-    expect(getPolicyUrl(mockSolidDatasetFrom(policiesUrl), policies)).toEqual(
-      "http://example.com/pb_policies/pb_policies/.ttl"
-    );
     expect(
-      getPolicyUrl(mockSolidDatasetFrom(`${policiesUrl}test`), policies)
+      getPolicyUrl(mockSolidDatasetFrom(containerUrl), containerUrl)
+    ).toEqual("http://example.com/pb_policies/pb_policies/.ttl");
+    expect(
+      getPolicyUrl(mockSolidDatasetFrom(`${containerUrl}test`), containerUrl)
     ).toEqual("http://example.com/pb_policies/pb_policies/test.ttl");
     expect(
-      getPolicyUrl(mockSolidDatasetFrom(`${podUrl}public`), policies)
+      getPolicyUrl(mockSolidDatasetFrom(`${podUrl}public`), containerUrl)
     ).toEqual("http://example.com/pb_policies/public.ttl");
     expect(
-      getPolicyUrl(mockSolidDatasetFrom(`${podUrl}pb_policies/.ttl`), policies)
+      getPolicyUrl(
+        mockSolidDatasetFrom(`${podUrl}pb_policies/.ttl`),
+        containerUrl
+      )
     ).toEqual("http://example.com/pb_policies/pb_policies/.ttl.ttl");
     expect(
-      getPolicyUrl(mockSolidDatasetFrom(`${podUrl}pb_policies/test/`), policies)
+      getPolicyUrl(
+        mockSolidDatasetFrom(`${podUrl}pb_policies/test/`),
+        containerUrl
+      )
     ).toEqual("http://example.com/pb_policies/pb_policies/test/.ttl");
   });
 });

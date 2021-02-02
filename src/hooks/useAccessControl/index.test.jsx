@@ -23,15 +23,15 @@ import { renderHook } from "@testing-library/react-hooks";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import useAccessControl from "./index";
 import * as accessControlFns from "../../accessControl";
-import usePoliciesContainer from "../usePoliciesContainer";
+import usePoliciesContainerUrl from "../usePoliciesContainerUrl";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import mockSession from "../../../__testUtils/mockSession";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import { mockProfileAlice } from "../../../__testUtils/mockPersonResource";
 import { joinPath } from "../../stringHelpers";
 
-jest.mock("../usePoliciesContainer");
-const mockedPoliciesContainerHook = usePoliciesContainer;
+jest.mock("../usePoliciesContainerUrl");
+const mockedPoliciesContainerUrlHook = usePoliciesContainerUrl;
 
 jest.mock("../useAuthenticatedProfile");
 const mockedAuthenticatedProfileHook = useAuthenticatedProfile;
@@ -51,7 +51,7 @@ describe("useAccessControl", () => {
     jest
       .spyOn(accessControlFns, "getAccessControl")
       .mockResolvedValue(accessControl);
-    mockedPoliciesContainerHook.mockReturnValue({ policiesContainer: null });
+    mockedPoliciesContainerUrlHook.mockReturnValue(null);
     session = mockSession();
     wrapper = mockSessionContextProvider(session);
     jest.spyOn(accessControlFns, "isAcp").mockReturnValue(false);
@@ -106,24 +106,13 @@ describe("useAccessControl", () => {
       expect(result.current.accessControl).toBe(accessControl);
       expect(result.current.error).toBeNull();
     });
-
-    it("returns accessControl if usePolicies return error", async () => {
-      mockedPoliciesContainerHook.mockReturnValue({ error });
-      const { result, waitForNextUpdate } = renderHook(
-        () => useAccessControl(resourceInfo),
-        { wrapper }
-      );
-      await waitForNextUpdate();
-      expect(result.current.accessControl).toBe(accessControl);
-      expect(result.current.error).toBeNull();
-    });
   });
 
   describe("using ACP", () => {
-    const policiesContainer = "policiesContainer";
+    const policiesContainerUrl = "policiesContainer";
 
     beforeEach(() => {
-      mockedPoliciesContainerHook.mockReturnValue({ policiesContainer });
+      mockedPoliciesContainerUrlHook.mockReturnValue(policiesContainerUrl);
       jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
     });
 
@@ -135,7 +124,7 @@ describe("useAccessControl", () => {
       await waitForNextUpdate();
       expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
         resourceInfo,
-        policiesContainer,
+        policiesContainerUrl,
         expect.any(Function)
       );
       expect(result.current.accessControl).toBe(accessControl);
@@ -143,36 +132,10 @@ describe("useAccessControl", () => {
     });
 
     it("returns null if given usePolicies return null", async () => {
-      mockedPoliciesContainerHook.mockReturnValue({ policiesContainer: null });
       const { result } = renderHook(() => useAccessControl(resourceInfo), {
         wrapper,
       });
       expect(result.current.accessControl).toBeNull();
-      expect(result.current.error).toBeNull();
-    });
-
-    it("returns error if usePolicies return error", async () => {
-      mockedPoliciesContainerHook.mockReturnValue({ error });
-      const { result } = renderHook(() => useAccessControl(resourceInfo), {
-        wrapper,
-      });
-      expect(result.current.accessControl).toBeNull();
-      expect(result.current.error).toBe(error);
-    });
-
-    it("ignores error if policies container is not on authenticated user's Pod", async () => {
-      mockedPoliciesContainerHook.mockReturnValue({ error });
-      const resourceOnAnotherPod = mockSolidDatasetFrom(
-        "http://random-unaccessible-pod.com"
-      );
-      const { result, waitForNextUpdate } = renderHook(
-        () => useAccessControl(resourceOnAnotherPod),
-        {
-          wrapper,
-        }
-      );
-      await waitForNextUpdate();
-      expect(result.current.accessControl).toBe(accessControl);
       expect(result.current.error).toBeNull();
     });
   });
