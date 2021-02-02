@@ -54,7 +54,7 @@ export async function getContactIndexDataset(addressBook, type, fetch) {
 }
 
 export async function getContactAll(addressBook, types, fetch) {
-  const contacts = await Promise.all(
+  const contactsList = await Promise.all(
     types.map(async (type) => {
       const dataset = await getContactIndexDataset(addressBook, type, fetch);
       return getThingAll(dataset)
@@ -67,7 +67,7 @@ export async function getContactAll(addressBook, types, fetch) {
         }));
     })
   );
-  return contacts.flat();
+  return contactsList.reduce((memo, contacts) => memo.concat(contacts), []);
 }
 
 export async function addContactIndexToAddressBook(addressBook, type, fetch) {
