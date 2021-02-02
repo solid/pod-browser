@@ -21,11 +21,15 @@
 
 import { useEffect, useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
+import { getSourceUrl } from "@inrupt/solid-client";
 import { getAccessControl, isAcp } from "../../accessControl";
 import usePoliciesContainer from "../usePoliciesContainer";
+import useAuthenticatedProfile from "../useAuthenticatedProfile";
+import { locationIsConnectedToProfile } from "../../solidClientHelpers/profile";
 
 export default function useAccessControl(resourceInfo) {
   const { fetch } = useSession();
+  const { data: authenticatedProfile } = useAuthenticatedProfile();
   const [accessControl, setAccessControl] = useState(null);
   const {
     policiesContainer,
@@ -34,9 +38,17 @@ export default function useAccessControl(resourceInfo) {
   const [error, setError] = useState(policiesContainerError || null);
 
   useEffect(() => {
+    const needsAccessToPoliciesContainer =
+      isAcp(resourceInfo) &&
+      locationIsConnectedToProfile(
+        authenticatedProfile,
+        getSourceUrl(resourceInfo)
+      );
+    const hasAccessToPoliciesContainer =
+      !policiesContainerError && policiesContainer;
     if (
       !resourceInfo ||
-      (isAcp(resourceInfo) && (policiesContainerError || !policiesContainer))
+      (needsAccessToPoliciesContainer && !hasAccessToPoliciesContainer)
     ) {
       setAccessControl(null);
       setError(policiesContainerError || null);
@@ -53,7 +65,13 @@ export default function useAccessControl(resourceInfo) {
         setAccessControl(null);
         setError(accessControlError);
       });
-  }, [fetch, policiesContainer, policiesContainerError, resourceInfo]);
+  }, [
+    authenticatedProfile,
+    fetch,
+    policiesContainer,
+    policiesContainerError,
+    resourceInfo,
+  ]);
 
   return { accessControl, error };
 }
