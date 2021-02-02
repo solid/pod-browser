@@ -125,6 +125,7 @@ export const handleSaveContact = async (iri, people, addressBook, fetch) => {
       webId,
       fetch
     );
+
     if (existingContact.length) {
       return;
     }

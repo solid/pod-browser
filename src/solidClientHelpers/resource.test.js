@@ -39,6 +39,7 @@ import {
   saveResource,
   deleteResource,
   getBaseUrl,
+  deletePoliciesContainer,
 } from "./resource";
 import { getPolicyUrl } from "./policies";
 import { chain } from "./utils";
@@ -349,6 +350,34 @@ describe("deleteResource", () => {
     });
     await expect(
       deleteResource(resourceInfo, policiesContainerUrl, fetch)
+    ).resolves.toBeUndefined();
+  });
+});
+
+describe("deletePoliciesContainer", () => {
+  const mockDeleteContainer = jest
+    .spyOn(SolidClientFns, "deleteContainer")
+    .mockImplementation(jest.fn());
+
+  const fetch = jest.fn();
+  const containerIri = "https://example.org/policies/resource/";
+
+  test("it deletes the policies container", async () => {
+    await deletePoliciesContainer(containerIri, fetch);
+
+    expect(mockDeleteContainer).toHaveBeenCalledWith(containerIri, {
+      fetch,
+    });
+  });
+
+  it("ignores 403 errors when deleting the policy resource", async () => {
+    SolidClientFns.deleteContainer
+      .mockResolvedValueOnce()
+      .mockImplementation(() => {
+        throw new Error("403");
+      });
+    await expect(
+      deletePoliciesContainer(containerIri, fetch)
     ).resolves.toBeUndefined();
   });
 });

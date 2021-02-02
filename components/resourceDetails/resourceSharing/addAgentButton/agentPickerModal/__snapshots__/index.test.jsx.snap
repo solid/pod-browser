@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AgentPickerEmptyState renders a table with tabs, searchbox and an empty state message when there are no contacts 1`] = `
+exports[`AgentPickerModal renders a table with tabs, searchbox and an empty state message when there are no contacts 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-paper"

@@ -44,12 +44,70 @@ import ConfirmationDialogContext from "../../../../../src/contexts/confirmationD
 jest.mock("../../../../../src/solidClientHelpers/profile");
 jest.mock("../../../../../src/addressBook");
 
-describe("AgentPickerEmptyState", () => {
+describe("AgentPickerModal", () => {
   const onClose = jest.fn();
   const mutatePermissions = jest.fn();
   const permissions = [];
   const accessControl = mockAccessControl();
 
+  it("updates the temporary row with webId only when profile is unavailable", async () => {
+    const { getByTestId, findByText, findByTestId } = renderWithTheme(
+      <AccessControlContext.Provider value={{ accessControl }}>
+        <AgentPickerModal
+          type="editors"
+          text="Add Editors"
+          onClose={onClose}
+          mutatePermissions={mutatePermissions}
+          permissions={permissions}
+        />
+      </AccessControlContext.Provider>
+    );
+
+    const webId = "https://somewebid.com";
+
+    fetchProfile.mockRejectedValueOnce({ error: "error" });
+
+    const addWebIdButton = getByTestId("add-webid-button");
+    userEvent.click(addWebIdButton);
+    const input = await findByTestId("webid-input");
+    userEvent.type(input, webId);
+    const addButton = getByTestId("add-button");
+    userEvent.click(addButton);
+    const agentWebId = await findByText(webId);
+
+    expect(agentWebId).not.toBeNull();
+  });
+
+  it("updates the temporary row with profile data when available", async () => {
+    const { getByTestId, findByTestId, findByText } = renderWithTheme(
+      <AccessControlContext.Provider value={{ accessControl }}>
+        <AgentPickerModal
+          type="editors"
+          text="Add Editors"
+          onClose={onClose}
+          mutatePermissions={mutatePermissions}
+          permissions={permissions}
+        />
+      </AccessControlContext.Provider>
+    );
+
+    const name = "Example";
+    const avatar = "https://someavatar.com";
+    const webId = "https://somewebid.com";
+
+    fetchProfile.mockResolvedValueOnce({ name, avatar, webId });
+
+    const addWebIdButton = getByTestId("add-webid-button");
+    userEvent.click(addWebIdButton);
+    const input = await findByTestId("webid-input");
+    userEvent.type(input, webId);
+    const addButton = getByTestId("add-button");
+    userEvent.click(addButton);
+
+    const agentWebId = await findByText("Example");
+
+    expect(agentWebId).not.toBeNull();
+  });
   // update this when we actually pass the contacts to the table
   it("renders a table with tabs, searchbox and an empty state message when there are no contacts", () => {
     const { asFragment } = renderWithTheme(
@@ -83,63 +141,7 @@ describe("AgentPickerEmptyState", () => {
 
     expect(getByRole("alert")).not.toBeNull();
   });
-  it("updates the temporary row with profile data when available", async () => {
-    const { getByTestId, findByTestId } = renderWithTheme(
-      <AccessControlContext.Provider value={{ accessControl }}>
-        <AgentPickerModal
-          type="editors"
-          text="Add Editors"
-          onClose={onClose}
-          mutatePermissions={mutatePermissions}
-          permissions={permissions}
-        />
-      </AccessControlContext.Provider>
-    );
 
-    const name = "Example";
-    const avatar = "https://someavatar.com";
-    const webId = "https://somewebid.com";
-
-    const addWebIdButton = getByTestId("add-webid-button");
-    userEvent.click(addWebIdButton);
-    const input = await findByTestId("webid-input");
-    userEvent.type(input, webId);
-    const addButton = getByTestId("add-button");
-    userEvent.click(addButton);
-
-    await fetchProfile.mockResolvedValue({ name, avatar, webId });
-
-    const agentWebId = await findByTestId("agent-webid");
-
-    expect(agentWebId).not.toBeNull();
-  });
-  it("updates the temporary row with webId only when profile is unavailable", async () => {
-    const { getByTestId, findByText, findByTestId } = renderWithTheme(
-      <AccessControlContext.Provider value={{ accessControl }}>
-        <AgentPickerModal
-          type="editors"
-          text="Add Editors"
-          onClose={onClose}
-          mutatePermissions={mutatePermissions}
-          permissions={permissions}
-        />
-      </AccessControlContext.Provider>
-    );
-
-    const webId = "https://somewebid.com";
-
-    await fetchProfile.mockRejectedValue({ error: "error" });
-
-    const addWebIdButton = getByTestId("add-webid-button");
-    userEvent.click(addWebIdButton);
-    const input = await findByTestId("webid-input");
-    userEvent.type(input, webId);
-    const addButton = getByTestId("add-button");
-    userEvent.click(addButton);
-    const agentWebId = await findByText(webId);
-
-    expect(agentWebId).not.toBeNull();
-  });
   it("opens a confirmation dialog", async () => {
     const setOpen = jest.fn();
     const setTitle = jest.fn();
@@ -183,6 +185,33 @@ describe("AgentPickerEmptyState", () => {
     userEvent.click(submitWebIdsButton);
     expect(setTitle).toHaveBeenCalledWith("Change permissions for 1 person");
     expect(setOpen).toHaveBeenCalledWith("add-new-permissions");
+  });
+  it("renders a warning when trying to submit a webId that is already in the policy", async () => {
+    const webId = "https://somewebid.com";
+
+    const { getByTestId, findByText, findByTestId } = renderWithTheme(
+      <AccessControlContext.Provider value={{ accessControl }}>
+        <AgentPickerModal
+          type="editors"
+          text="Add Editors"
+          onClose={onClose}
+          mutatePermissions={mutatePermissions}
+          permissions={[{ webId }]}
+        />
+      </AccessControlContext.Provider>
+    );
+
+    const addWebIdButton = getByTestId("add-webid-button");
+    userEvent.click(addWebIdButton);
+    const input = await findByTestId("webid-input");
+    userEvent.type(input, webId);
+    const addButton = getByTestId("add-button");
+    userEvent.click(addButton);
+    const submitWebIdsButton = getByTestId("submit-webids-button");
+    userEvent.click(submitWebIdsButton);
+    await waitFor(() => {
+      expect(findByText("That WebID has already been added")).not.toBeNull();
+    });
   });
 });
 describe("handleConfirmation", () => {

@@ -41,4 +41,17 @@ describe("Profile page", () => {
 
     expect(asFragment()).toMatchSnapshot();
   });
+  test("returns null if session request is in progress", () => {
+    const sessionRequestInProgress = true;
+    const session = mockSession(sessionRequestInProgress);
+    const SessionProvider = mockSessionContextProvider(session);
+
+    const { asFragment } = renderWithTheme(
+      <SessionProvider>
+        <ProfilePage />
+      </SessionProvider>
+    );
+
+    expect(asFragment()).toMatchSnapshot();
+  });
 });

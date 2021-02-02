@@ -163,9 +163,10 @@ export default function AgentAccessTable({ type }) {
     setGlobalFilter(value || undefined);
   };
 
+  /* istanbul ignore next */
   const handleTabChange = (e, newValue) => {
     setSelectedTabValue(newValue);
-    // TODO: this filter will change once we have groups
+    // TODO: this filter will change once we have groups - ignoring from test coverage until it is functional
     setFilter("profile.types", newValue);
   };
 

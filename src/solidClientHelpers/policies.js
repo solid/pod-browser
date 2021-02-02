@@ -44,16 +44,7 @@ export function getResourcePoliciesContainerPath(
   resource,
   policiesContainerUrl
 ) {
-  const resourceUrl = getSourceUrl(resource);
-  const rootUrl = policiesContainerUrl.substr(
-    0,
-    policiesContainerUrl.length - POLICIES_CONTAINER.length
-  );
-  const matchingStart = sharedStart(resourceUrl, rootUrl);
-  const path = resourceUrl.substr(matchingStart.length);
-  return getContainerUrl(
-    joinPath(getPoliciesContainerUrl(matchingStart), path)
-  );
+  return getContainerUrl(getPolicyUrl(resource, policiesContainerUrl));
 }
 
 export function getNamedPolicyResourceUrl(

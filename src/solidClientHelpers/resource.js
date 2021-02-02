@@ -120,7 +120,7 @@ export async function saveResource({ dataset, iri }, fetch) {
   }
 }
 
-const deletePoliciesContainer = async (containerIri, fetch) => {
+export const deletePoliciesContainer = async (containerIri, fetch) => {
   try {
     await deleteContainer(containerIri, { fetch });
   } catch (err) {

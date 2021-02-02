@@ -68,6 +68,23 @@ describe("AgentAccess", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
+  it("returns null when no access", () => {
+    const { asFragment } = renderWithTheme(
+      <AgentAccess
+        permission={{
+          acl: null,
+          webId,
+          alias: "Editors",
+          profile: null,
+          profileError: undefined,
+        }}
+        mutatePermissions={mutatePermissions}
+      />
+    );
+
+    expect(asFragment()).toMatchSnapshot();
+  });
+
   it("renders an error message with a 'try again' button if it's unable to load profile", () => {
     const { asFragment, getByTestId } = renderWithTheme(
       <AgentAccess

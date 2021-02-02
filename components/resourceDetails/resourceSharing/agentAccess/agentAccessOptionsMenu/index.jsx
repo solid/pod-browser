@@ -53,6 +53,7 @@ export default function AgentAccessOptionsMenu({
     setMenuAnchorEl(event.currentTarget);
   };
 
+  /* istanbul ignore next */
   const handleClose = () => {
     setMenuAnchorEl(null);
   };
@@ -124,6 +125,7 @@ AgentAccessOptionsMenu.propTypes = {
   mutatePermissions: PropTypes.func,
 };
 
+/* istanbul ignore next */
 AgentAccessOptionsMenu.defaultProps = {
   resourceIri: null,
   setLoading: () => {},

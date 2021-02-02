@@ -20,3 +20,24 @@ exports[`Profile page Renders the profile page 1`] = `
   </div>
 </DocumentFragment>
 `;
+
+exports[`Profile page returns null if session request is in progress 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-container"
+  >
+    <div
+      class="PodBrowser-root PodBrowser-elevation1 PodBrowser-rounded"
+      style="margin-top: 1em;"
+    >
+      <div
+        class="PodBrowser-root PodBrowser-root"
+      >
+        <span>
+          Fetching data...
+        </span>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

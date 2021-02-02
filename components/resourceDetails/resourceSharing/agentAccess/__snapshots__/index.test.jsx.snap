@@ -142,3 +142,5 @@ exports[`AgentAccess renders skeleton placeholders when profile is not available
   </div>
 </DocumentFragment>
 `;
+
+exports[`AgentAccess returns null when no access 1`] = `<DocumentFragment />`;
