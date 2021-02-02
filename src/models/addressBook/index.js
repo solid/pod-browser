@@ -27,48 +27,39 @@ import {
   getSolidDataset,
   getSourceUrl,
   getThing,
-  saveSolidDatasetAt,
   setThing,
 } from "@inrupt/solid-client";
 import { acl, dc, rdf } from "rdf-namespaces";
 import { joinPath } from "../../stringHelpers";
 import { chain } from "../../solidClientHelpers/utils";
-import { ERROR_CODES, isHTTPError } from "../../error";
 import { vcardExtras } from "../../addressBook";
 
-/**
- * @typedef AddressBook
- * @type {object}
- * @property {string} containerIri - The address to the container
- * @property {object} dataset - The dataset the main index is stored in
- * @property {object} thing - The thing that represents the main index itself
+/*
+ * AddressBook is our Pod-wide accessible source for contacts
  */
 
 /* Model constants */
-const CONTACTS_CONTAINER = "contacts/";
-
-export const ADDRESS_BOOK_ERROR_ALREADY_EXIST = "Address book already exists.";
+export const CONTACTS_CONTAINER = "contacts/";
+export const INDEX_FILE = "index.ttl";
 export const ADDRESS_BOOK_ERROR_NO_MAIN_INDEX = "Unable to load main index";
-export const ADDRESS_BOOK_ERROR_NO_PERMISSION_TO_CREATE =
-  "You do not have permission to create an address book";
 
 /* Model functions */
-export function getAddressBookContainerIri(podRootIri) {
-  return joinPath(podRootIri, CONTACTS_CONTAINER);
+export function getAddressBookContainerUrl(podRootUrl) {
+  return joinPath(podRootUrl, CONTACTS_CONTAINER);
 }
 
-export function getAddressBookIndexDefaultUrl(containerIri) {
-  return joinPath(containerIri, "index.ttl");
+export function getAddressBookIndexDefaultUrl(containerUrl) {
+  return joinPath(containerUrl, INDEX_FILE);
 }
 
 export function getAddressBookIndexUrl(addressBook) {
   return (
     getSourceUrl(addressBook.dataset) ||
-    getAddressBookIndexDefaultUrl(addressBook.containerIri)
+    getAddressBookIndexDefaultUrl(addressBook.containerUrl)
   );
 }
 
-export function createAddressBook(containerIri, owner, title = "Contacts") {
+export function createAddressBook(containerUrl, owner, title = "Contacts") {
   const thing = chain(
     createThing({ name: "this" }),
     (t) => addUrl(t, rdf.type, vcardExtras("AddressBook")),
@@ -76,14 +67,14 @@ export function createAddressBook(containerIri, owner, title = "Contacts") {
     (t) => addStringNoLocale(t, dc.title, title)
   );
   return {
-    containerIri,
+    containerUrl,
     dataset: setThing(createSolidDataset(), thing),
     thing,
   };
 }
 
-export async function loadAddressBook(containerIri, fetch) {
-  const mainIndexUrl = getAddressBookIndexDefaultUrl(containerIri);
+export async function loadAddressBook(containerUrl, fetch) {
+  const mainIndexUrl = getAddressBookIndexDefaultUrl(containerUrl);
   const mainIndexDataset = await getSolidDataset(mainIndexUrl, { fetch });
   const mainIndexThingUrl = `${mainIndexUrl}#this`;
   const mainIndex = getThing(mainIndexDataset, mainIndexThingUrl);
@@ -91,42 +82,8 @@ export async function loadAddressBook(containerIri, fetch) {
     throw new Error(ADDRESS_BOOK_ERROR_NO_MAIN_INDEX);
   }
   return {
-    containerIri,
+    containerUrl,
     dataset: mainIndexDataset,
     thing: mainIndex,
   };
-}
-
-export async function saveNewAddressBook(
-  containerIri,
-  owner,
-  fetch,
-  title = "Contacts"
-) {
-  try {
-    await getSolidDataset(containerIri, { fetch });
-    throw new Error(ADDRESS_BOOK_ERROR_ALREADY_EXIST);
-  } catch (error) {
-    if (!isHTTPError(error, ERROR_CODES.NOT_FOUND)) throw error;
-  }
-
-  const newAddressBook = createAddressBook(containerIri, owner, title);
-  const mainIndexUrl = getAddressBookIndexUrl(newAddressBook);
-
-  try {
-    const dataset = await saveSolidDatasetAt(
-      mainIndexUrl,
-      newAddressBook.dataset,
-      {
-        fetch,
-      }
-    );
-    const thing = getThing(dataset, `${getSourceUrl(dataset)}#this`);
-    return { containerIri, dataset, thing };
-  } catch (error) {
-    if (isHTTPError(error, ERROR_CODES.UNAUTHORIZED)) {
-      throw new Error(ADDRESS_BOOK_ERROR_NO_PERMISSION_TO_CREATE);
-    }
-    throw error;
-  }
 }

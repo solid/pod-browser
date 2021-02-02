@@ -32,7 +32,7 @@ import { rdf } from "rdf-namespaces";
 import createContainer from "../../__testUtils/createContainer";
 import {
   getOrCreateContainer,
-  getOrCreateDataset,
+  getOrCreateDatasetOld,
   getOrCreateThing,
   getResource,
   getResourceName,
@@ -159,7 +159,7 @@ describe("getOrCreateDataset", () => {
     jest
       .spyOn(SolidClientFns, "getSolidDataset")
       .mockResolvedValue(existingResource);
-    const { response } = await getOrCreateDataset(iri, fetch);
+    const { response } = await getOrCreateDatasetOld(iri, fetch);
     expect(response).toBe(existingResource);
   });
 
@@ -170,7 +170,7 @@ describe("getOrCreateDataset", () => {
     jest
       .spyOn(SolidClientFns, "saveSolidDatasetAt")
       .mockResolvedValue(newResource);
-    const { response } = await getOrCreateDataset(iri, fetch);
+    const { response } = await getOrCreateDatasetOld(iri, fetch);
     expect(response).toBe(newResource);
   });
 
@@ -178,7 +178,7 @@ describe("getOrCreateDataset", () => {
     jest
       .spyOn(SolidClientFns, "getSolidDataset")
       .mockRejectedValue(new Error(cannotCreateError));
-    const { error } = await getOrCreateDataset(iri, fetch);
+    const { error } = await getOrCreateDatasetOld(iri, fetch);
     expect(error).toEqual(cannotCreateError);
   });
 
@@ -189,7 +189,7 @@ describe("getOrCreateDataset", () => {
     jest
       .spyOn(SolidClientFns, "saveSolidDatasetAt")
       .mockRejectedValue(new Error(cannotCreateError));
-    const { error } = await getOrCreateDataset(iri, fetch);
+    const { error } = await getOrCreateDatasetOld(iri, fetch);
     expect(error).toEqual(cannotCreateError);
   });
 });

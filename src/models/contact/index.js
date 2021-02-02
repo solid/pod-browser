@@ -20,9 +20,9 @@
  */
 
 import {
+  asUrl,
   createSolidDataset,
-  getSolidDataset,
-  getSourceUrl,
+  getThing,
   getThingAll,
   getUrl,
   getUrlAll,
@@ -30,100 +30,60 @@ import {
   setThing,
   setUrl,
 } from "@inrupt/solid-client";
-import { foaf, rdf, schema, vcard } from "rdf-namespaces";
-import { vcardExtras } from "../../addressBook";
+import { rdf } from "rdf-namespaces";
 import { joinPath } from "../../stringHelpers";
-import { ERROR_CODES, isHTTPError } from "../../error";
+import { getOrCreateDataset } from "../dataset";
+import { getAddressBookIndexUrl } from "../addressBook";
 
-/**
- * Contacts represent the dataset in a user's AddressBook, e.g. /contacts/Person/<unique-id>/index.ttl#this
- *
- * @typedef Contact
- * @type {object}
- * @property {object} dataset - The dataset that the thing lives in
- * @property {object} thing - The contact itself, be that a person, a group, or something else
+/*
+ * Contacts represent the agents or groups in a user's AddressBook
  */
 
-/* Model constants */
-export const NAME_EMAIL_INDEX_PREDICATE = vcardExtras("nameEmailIndex");
-export const NAME_GROUP_INDEX_PREDICATE = vcardExtras("groupIndex");
-export const INDEX_FILE = "index.ttl";
-export const PEOPLE_INDEX_FILE = "people.ttl";
-export const GROUPS_INDEX_FILE = "groups.ttl";
-export const PERSON_CONTAINER = "Person";
-export const GROUP_CONTAINER = "Group";
-const person = {
-  indexFile: PEOPLE_INDEX_FILE,
-  container: PERSON_CONTAINER,
-  indexFilePredicate: NAME_EMAIL_INDEX_PREDICATE,
-  contactTypeIri: vcard.Individual,
-};
-const group = {
-  indexFile: GROUPS_INDEX_FILE,
-  container: GROUP_CONTAINER,
-  indexFilePredicate: NAME_GROUP_INDEX_PREDICATE,
-  contactTypeIri: vcard.Group,
-};
-export const TYPE_MAP = {
-  [foaf.Person]: person,
-  [schema.Person]: person,
-  [vcard.Group]: group,
-  [vcard.Individual]: person,
-};
-export const CONTACT_ERROR_NO_CONTACT_INDEX_TRIPLE =
-  "No contact index linked in main index of address book";
-
 /* Model functions */
-async function getOrCreateDataset(iri, fetch) {
-  try {
-    return await getSolidDataset(iri, { fetch });
-  } catch (error) {
-    if (isHTTPError(error, ERROR_CODES.NOT_FOUND)) return createSolidDataset();
-    throw error;
-  }
-}
-
-export function getContactIndexDefaultUrl(containerIri, type) {
-  return joinPath(containerIri, TYPE_MAP[type].indexFile);
+export function getContactIndexDefaultUrl(containerUrl, type) {
+  return joinPath(containerUrl, type.indexFile);
 }
 
 export function getContactIndexUrl(addressBook, type) {
-  return getUrl(addressBook.thing, TYPE_MAP[type].indexFilePredicate);
+  return getUrl(addressBook.thing, type.indexFilePredicate);
 }
 
-export async function getContactsIndexDataset(addressBook, type, fetch) {
-  const indexIri = getUrl(addressBook.thing, TYPE_MAP[type].indexFilePredicate);
-  return indexIri ? getOrCreateDataset(indexIri, fetch) : createSolidDataset();
+export async function getContactIndexDataset(addressBook, type, fetch) {
+  const indexUrl = getUrl(addressBook.thing, type.indexFilePredicate);
+  return indexUrl ? getOrCreateDataset(indexUrl, fetch) : createSolidDataset();
 }
 
-export async function getContacts(addressBook, fetch, type) {
-  if (type) {
-    const dataset = await getContactsIndexDataset(addressBook, type, fetch);
-    const { contactTypeIri } = TYPE_MAP[type];
-    return getThingAll(dataset)
-      .filter((contact) =>
-        getUrlAll(contact, rdf.type).includes(contactTypeIri)
-      )
-      .map((thing) => ({
-        thing,
-        dataset,
-      }));
-  }
-  const contactSets = await Promise.all(
-    [vcard.Group, foaf.Person].map((t) => getContacts(addressBook, fetch, t))
+export async function getContactAll(addressBook, types, fetch) {
+  const contacts = await Promise.all(
+    types.map(async (type) => {
+      const dataset = await getContactIndexDataset(addressBook, type, fetch);
+      return getThingAll(dataset)
+        .filter((contact) =>
+          getUrlAll(contact, rdf.type).includes(type.contactTypeUrl)
+        )
+        .map((thing) => ({
+          thing,
+          dataset,
+        }));
+    })
   );
-  return contactSets.reduce((contacts, things) => contacts.concat(things));
+  return contacts.flat();
 }
 
 export async function addContactIndexToAddressBook(addressBook, type, fetch) {
-  const indexUrl = getContactIndexDefaultUrl(addressBook.containerIri, type);
-  await saveSolidDatasetAt(
-    getSourceUrl(addressBook.dataset),
+  const indexUrl = getContactIndexDefaultUrl(addressBook.containerUrl, type);
+  const datasetUrl = getAddressBookIndexUrl(addressBook);
+  const dataset = await saveSolidDatasetAt(
+    datasetUrl,
     setThing(
       addressBook.dataset,
-      setUrl(addressBook.thing, TYPE_MAP[type].indexFilePredicate, indexUrl)
+      setUrl(addressBook.thing, type.indexFilePredicate, indexUrl)
     ),
     { fetch }
   );
-  return indexUrl;
+  return {
+    containerUrl: addressBook.containerUrl,
+    dataset,
+    thing: getThing(dataset, asUrl(addressBook.thing, datasetUrl)),
+  };
 }

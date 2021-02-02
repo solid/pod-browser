@@ -20,61 +20,44 @@
  */
 
 import {
-  addUrl,
   asUrl,
-  getThing,
   mockSolidDatasetFrom,
   mockThingFrom,
-  removeUrl,
   setStringNoLocale,
   setThing,
   setUrl,
 } from "@inrupt/solid-client";
 import { rdf, vcard } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
+import { vcardExtras } from "../src/addressBook";
 import { getBaseUrl } from "../src/solidClientHelpers/resource";
 
-export function addMembersToMockedGroup(group, agentUrls) {
-  const dataset = chain(
-    group.dataset,
-    ...agentUrls.map((agentUrl) => (d) =>
-      setThing(d, setUrl(group.thing, vcard.hasMember, agentUrl))
-    )
-  );
-
-  return {
-    dataset,
-    thing: getThing(dataset, asUrl(group.thing)),
-  };
-}
-
-export function removeMembersFromMockedGroup(group, agentUrls) {
-  const dataset = chain(
-    group.dataset,
-    ...agentUrls.map((agentUrl) => (d) =>
-      setThing(d, removeUrl(group.thing, vcard.hasMember, agentUrl))
-    )
-  );
-
-  return {
-    dataset,
-    thing: getThing(dataset, asUrl(group.thing)),
-  };
-}
-
-export function mockGroupThing(name, url, { members } = {}) {
+function mockContactPersonThing(addressBook, personThingUrl, name) {
   return chain(
-    mockThingFrom(url),
-    (t) => setUrl(t, rdf.type, vcard.Group),
+    mockThingFrom(personThingUrl),
+    (t) => setUrl(t, rdf.type, vcard.Individual),
     (t) => setStringNoLocale(t, vcard.fn, name),
-    ...(members || []).map((agentUrl) => (t) =>
-      addUrl(t, vcard.hasMember, agentUrl)
-    )
+    (t) => setUrl(t, vcardExtras("inAddressBook"), asUrl(addressBook.thing))
   );
 }
 
-export default function mockGroup(name, url, options = {}) {
-  const thing = mockGroupThing(name, url, options);
-  const dataset = setThing(mockSolidDatasetFrom(getBaseUrl(url)), thing);
+// eslint-disable-next-line import/prefer-default-export
+export function addPersonToMockedIndexDataset(
+  dataset,
+  addressBook,
+  name,
+  personThingUrl
+) {
+  return chain(dataset, (d) =>
+    setThing(d, mockContactPersonThing(addressBook, personThingUrl, name))
+  );
+}
+
+export default function mockPersonContact(addressBook, personThingUrl, name) {
+  const thing = mockContactPersonThing(addressBook, personThingUrl, name);
+  const dataset = setThing(
+    mockSolidDatasetFrom(getBaseUrl(personThingUrl)),
+    thing
+  );
   return { dataset, thing };
 }

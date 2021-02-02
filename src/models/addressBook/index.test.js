@@ -28,37 +28,35 @@ import {
   mockSolidDatasetFrom,
 } from "@inrupt/solid-client";
 import {
-  ADDRESS_BOOK_ERROR_ALREADY_EXIST,
   ADDRESS_BOOK_ERROR_NO_MAIN_INDEX,
-  ADDRESS_BOOK_ERROR_NO_PERMISSION_TO_CREATE,
+  CONTACTS_CONTAINER,
   createAddressBook,
-  getAddressBookContainerIri,
+  getAddressBookContainerUrl,
   getAddressBookIndexDefaultUrl,
   getAddressBookIndexUrl,
+  INDEX_FILE,
   loadAddressBook,
-  saveNewAddressBook,
 } from "./index";
 import mockAddressBook, {
   mockAddressBookDataset,
   mockAddressBookThing,
 } from "../../../__testUtils/mockAddressBook";
 import { joinPath } from "../../stringHelpers";
-import { INDEX_FILE } from "../contact";
 import { vcardExtras } from "../../addressBook";
 
-const podIri = "https://example.pod.com/";
-const containerIri = "https://example.pod.com/contacts/";
+const podUrl = "https://example.pod.com/";
+const containerUrl = joinPath("https://example.pod.com/", CONTACTS_CONTAINER);
 
-describe("getAddressBookContainerIri", () => {
+describe("getAddressBookContainerUrl", () => {
   it("returns the default container for address book", () => {
-    expect(getAddressBookContainerIri(podIri)).toEqual(containerIri);
+    expect(getAddressBookContainerUrl(podUrl)).toEqual(containerUrl);
   });
 });
 
 describe("getAddressBookIndexDefaultUrl", () => {
   it("returns the default URLs for the various indexes", () => {
-    expect(getAddressBookIndexDefaultUrl(containerIri)).toEqual(
-      joinPath(containerIri, INDEX_FILE)
+    expect(getAddressBookIndexDefaultUrl(containerUrl)).toEqual(
+      joinPath(containerUrl, INDEX_FILE)
     );
   });
 });
@@ -74,11 +72,11 @@ describe("getAddressBookIndexUrl", () => {
 
   it("returns default URLs if model data is missing", () => {
     const addressBook = mockAddressBook({
-      containerIri,
+      containerUrl,
       indexUrl: null,
     });
     expect(getAddressBookIndexUrl(addressBook)).toEqual(
-      joinPath(containerIri, INDEX_FILE)
+      joinPath(containerUrl, INDEX_FILE)
     );
   });
 });
@@ -87,9 +85,9 @@ describe("createAddressBook", () => {
   it("creates the main index, with a default title", () => {
     const owner = "https://example.pod.com/card#me";
 
-    const addressBook = createAddressBook(containerIri, owner);
+    const addressBook = createAddressBook(containerUrl, owner);
 
-    expect(addressBook.containerIri).toEqual(containerIri);
+    expect(addressBook.containerUrl).toEqual(containerUrl);
 
     expect(getThingAll(addressBook.dataset)).toHaveLength(1);
 
@@ -104,18 +102,18 @@ describe("createAddressBook", () => {
     const owner = "https://example.pod.com/card#me";
     const title = "My Address Book";
 
-    const addressBook = createAddressBook(containerIri, owner, title);
+    const addressBook = createAddressBook(containerUrl, owner, title);
 
-    expect(addressBook.containerIri).toBe(containerIri);
+    expect(addressBook.containerUrl).toBe(containerUrl);
     expect(getStringNoLocale(addressBook.thing, dc.title)).toEqual(title);
   });
 });
 
 describe("loadAddressBook", () => {
   const fetch = "fetch";
-  const existingThing = mockAddressBookThing({ containerIri });
+  const existingThing = mockAddressBookThing({ containerUrl });
   const existingDataset = mockAddressBookDataset(
-    { containerIri },
+    { containerUrl },
     existingThing
   );
 
@@ -123,8 +121,8 @@ describe("loadAddressBook", () => {
     jest
       .spyOn(solidClientFns, "getSolidDataset")
       .mockResolvedValueOnce(existingDataset);
-    await expect(loadAddressBook(containerIri, fetch)).resolves.toEqual({
-      containerIri,
+    await expect(loadAddressBook(containerUrl, fetch)).resolves.toEqual({
+      containerUrl,
       dataset: existingDataset,
       thing: existingThing,
     });
@@ -134,61 +132,8 @@ describe("loadAddressBook", () => {
     jest
       .spyOn(solidClientFns, "getSolidDataset")
       .mockResolvedValue(mockSolidDatasetFrom("http://example.com"));
-    await expect(loadAddressBook(containerIri, fetch)).rejects.toEqual(
+    await expect(loadAddressBook(containerUrl, fetch)).rejects.toEqual(
       new Error(ADDRESS_BOOK_ERROR_NO_MAIN_INDEX)
     );
-  });
-});
-
-describe("saveNewAddressBook", () => {
-  const owner = "https://example.pod.com/card#me";
-  const error401 = "401 Unauthorized";
-  const error404 = "404 Not found";
-  const error500 = "500 Server error";
-  const fetch = jest.fn();
-  const addressBook = mockAddressBook({ containerIri });
-
-  let mockedGetSolidDataset;
-  let mockedSaveSolidDatasetAt;
-
-  beforeEach(() => {
-    mockedGetSolidDataset = jest
-      .spyOn(solidClientFns, "getSolidDataset")
-      .mockRejectedValue(error404);
-    mockedSaveSolidDatasetAt = jest
-      .spyOn(solidClientFns, "saveSolidDatasetAt")
-      .mockResolvedValue(addressBook.dataset);
-  });
-
-  it("saves a new address at the given iri, for the given owner, with a default title", async () => {
-    const savedBook = await saveNewAddressBook(containerIri, owner, fetch);
-
-    expect(savedBook.containerIri).toBe(containerIri);
-    expect(savedBook.dataset).toEqual(addressBook.dataset);
-    expect(savedBook.thing).toEqual(addressBook.thing);
-  });
-
-  it("returns an error if the user is unauthorized", async () => {
-    mockedSaveSolidDatasetAt.mockRejectedValue(error401);
-
-    await expect(
-      saveNewAddressBook(containerIri, owner, fetch)
-    ).rejects.toEqual(new Error(ADDRESS_BOOK_ERROR_NO_PERMISSION_TO_CREATE));
-  });
-
-  it("returns an error if the address book already exists", async () => {
-    mockedGetSolidDataset.mockResolvedValue(mockSolidDatasetFrom(containerIri));
-
-    await expect(
-      saveNewAddressBook(containerIri, owner, fetch)
-    ).rejects.toEqual(new Error(ADDRESS_BOOK_ERROR_ALREADY_EXIST));
-  });
-
-  it("passes the error on if it isn't a 401 error", async () => {
-    mockedSaveSolidDatasetAt.mockRejectedValue(error500);
-
-    await expect(
-      saveNewAddressBook(containerIri, owner, fetch)
-    ).rejects.toEqual(error500);
   });
 });

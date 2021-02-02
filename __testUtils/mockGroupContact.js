@@ -19,33 +19,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import {
-  asUrl,
-  mockThingFrom,
-  setStringNoLocale,
-  setThing,
-  setUrl,
-} from "@inrupt/solid-client";
-import { rdf, vcard } from "rdf-namespaces";
+import { mockSolidDatasetFrom, setThing, setUrl } from "@inrupt/solid-client";
 import { chain } from "../src/solidClientHelpers/utils";
+import { createGroupDatasetUrl } from "../src/models/contact/group";
 import { vcardExtras } from "../src/addressBook";
+import { mockGroupThing } from "./mockGroup";
 
-// eslint-disable-next-line import/prefer-default-export
-export function addMockedPersonThingsToIndexDataset(
+export function mockIndexThing(addressBook, groupThingUrl) {
+  return setUrl(addressBook.thing, vcardExtras("includesGroup"), groupThingUrl);
+}
+
+export function addGroupToMockedIndexDataset(
   dataset,
   addressBook,
   name,
-  personThingUrl
+  groupThingUrl
 ) {
-  return chain(dataset, (d) =>
-    setThing(
-      d,
-      chain(
-        mockThingFrom(personThingUrl),
-        (t) => setUrl(t, rdf.type, vcard.Individual),
-        (t) => setStringNoLocale(t, vcard.fn, name),
-        (t) => setUrl(t, vcardExtras("inAddressBook"), asUrl(addressBook.thing))
-      )
-    )
+  return chain(
+    dataset,
+    (d) => setThing(d, mockGroupThing(name, groupThingUrl)),
+    (d) => setThing(d, mockIndexThing(addressBook, groupThingUrl))
   );
+}
+
+export default function mockGroupContact(addressBook, name, { url, id } = {}) {
+  const groupDatasetUrl = url || createGroupDatasetUrl(addressBook, id);
+  const groupThingUrl = `${groupDatasetUrl}#this`;
+  const groupThing = mockGroupThing(name, groupThingUrl);
+  return {
+    dataset: chain(
+      mockSolidDatasetFrom(groupDatasetUrl),
+      (d) => setThing(d, groupThing),
+      (d) => setThing(d, mockIndexThing(addressBook, groupThingUrl))
+    ),
+    thing: groupThing,
+  };
 }
