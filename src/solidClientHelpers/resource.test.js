@@ -32,17 +32,29 @@ import { rdf } from "rdf-namespaces";
 import createContainer from "../../__testUtils/createContainer";
 import {
   getOrCreateContainer,
-  getOrCreateDataset,
+  getOrCreateDatasetOld,
   getOrCreateThing,
   getResource,
   getResourceName,
   saveResource,
   deleteResource,
+  getBaseUrl,
 } from "./resource";
 import { getPolicyUrl } from "./policies";
 import { chain } from "./utils";
 
 jest.mock("./policies");
+
+describe("getBaseUrl", () => {
+  it("returns the 'base' of a URL", () => {
+    expect(getBaseUrl("http://example.com")).toEqual("http://example.com/");
+    expect(getBaseUrl("http://example.com?foo#bar")).toEqual(
+      "http://example.com/"
+    );
+  });
+
+  it("allows passing null", () => expect(getBaseUrl(null)).toBeNull());
+});
 
 describe("getResource", () => {
   test("it returns a dataset and an iri", async () => {
@@ -147,7 +159,7 @@ describe("getOrCreateDataset", () => {
     jest
       .spyOn(SolidClientFns, "getSolidDataset")
       .mockResolvedValue(existingResource);
-    const { response } = await getOrCreateDataset(iri, fetch);
+    const { response } = await getOrCreateDatasetOld(iri, fetch);
     expect(response).toBe(existingResource);
   });
 
@@ -158,7 +170,7 @@ describe("getOrCreateDataset", () => {
     jest
       .spyOn(SolidClientFns, "saveSolidDatasetAt")
       .mockResolvedValue(newResource);
-    const { response } = await getOrCreateDataset(iri, fetch);
+    const { response } = await getOrCreateDatasetOld(iri, fetch);
     expect(response).toBe(newResource);
   });
 
@@ -166,7 +178,7 @@ describe("getOrCreateDataset", () => {
     jest
       .spyOn(SolidClientFns, "getSolidDataset")
       .mockRejectedValue(new Error(cannotCreateError));
-    const { error } = await getOrCreateDataset(iri, fetch);
+    const { error } = await getOrCreateDatasetOld(iri, fetch);
     expect(error).toEqual(cannotCreateError);
   });
 
@@ -177,7 +189,7 @@ describe("getOrCreateDataset", () => {
     jest
       .spyOn(SolidClientFns, "saveSolidDatasetAt")
       .mockRejectedValue(new Error(cannotCreateError));
-    const { error } = await getOrCreateDataset(iri, fetch);
+    const { error } = await getOrCreateDatasetOld(iri, fetch);
     expect(error).toEqual(cannotCreateError);
   });
 });
@@ -211,19 +223,26 @@ describe("getOrCreateThing", () => {
 });
 
 describe("saveResource", () => {
-  test("it saves the given resource", async () => {
-    const fetch = jest.fn();
-    jest
-      .spyOn(SolidClientFns, "saveSolidDatasetAt")
-      .mockResolvedValueOnce("resource");
+  const baseIri = "http://example.com/";
+  const iri = "http://example.com/?foo=bar#someId";
+  const fetch = "fetch";
 
+  let mockedSaveResource;
+
+  beforeEach(() => {
+    mockedSaveResource = jest
+      .spyOn(SolidClientFns, "saveSolidDatasetAt")
+      .mockResolvedValue("resource");
+  });
+
+  it("saves the given resource", async () => {
     const { response } = await saveResource(
-      { dataset: "dataset", iri: "iri" },
+      { dataset: "dataset", iri: baseIri },
       fetch
     );
 
     expect(SolidClientFns.saveSolidDatasetAt).toHaveBeenCalledWith(
-      "iri",
+      baseIri,
       "dataset",
       { fetch }
     );
@@ -231,18 +250,40 @@ describe("saveResource", () => {
   });
 
   test("it returns an error response if the save fails", async () => {
-    jest
-      .spyOn(SolidClientFns, "saveSolidDatasetAt")
-      .mockImplementationOnce(() => {
-        throw new Error("boom");
-      });
+    mockedSaveResource.mockImplementation(() => {
+      throw new Error("boom");
+    });
 
     const { error } = await saveResource(
-      { dataset: "dataset", iri: "iri" },
+      { dataset: "dataset", iri: baseIri },
       jest.fn()
     );
 
     expect(error).toEqual("boom");
+  });
+
+  it("makes sure to use the IRI without queries and fragments", async () => {
+    const { response } = await saveResource({ dataset: "dataset", iri }, fetch);
+
+    expect(SolidClientFns.saveSolidDatasetAt).toHaveBeenCalledWith(
+      baseIri,
+      "dataset",
+      { fetch }
+    );
+    expect(response).toEqual("resource");
+  });
+
+  it("uses the source URL for dataset if available", async () => {
+    const datasetIri = "http://another.example.com";
+    const dataset = mockSolidDatasetFrom(datasetIri);
+    const { response } = await saveResource({ dataset, iri }, fetch);
+
+    expect(SolidClientFns.saveSolidDatasetAt).toHaveBeenCalledWith(
+      datasetIri,
+      dataset,
+      { fetch }
+    );
+    expect(response).toEqual("resource");
   });
 });
 

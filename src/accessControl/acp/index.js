@@ -34,7 +34,7 @@ import {
   isEmptyAccess,
 } from "../../solidClientHelpers/permissions";
 import { chain, createResponder } from "../../solidClientHelpers/utils";
-import { getOrCreateDataset } from "../../solidClientHelpers/resource";
+import { getOrCreateDatasetOld } from "../../solidClientHelpers/resource";
 import { getPolicyUrl } from "../../solidClientHelpers/policies";
 import { isHTTPError } from "../../error";
 
@@ -381,7 +381,7 @@ export default class AcpAccessControlStrategy {
     const {
       response: policyDataset,
       error: getOrCreateError,
-    } = await getOrCreateDataset(this.#policyUrl, this.#fetch);
+    } = await getOrCreateDatasetOld(this.#policyUrl, this.#fetch);
 
     if (getOrCreateError) return error(getOrCreateError);
 

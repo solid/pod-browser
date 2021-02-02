@@ -19,16 +19,34 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { addUrl, mockThingFrom } from "@inrupt/solid-client";
-import { foaf, rdf, vcard } from "rdf-namespaces";
-import { chain } from "../src/solidClientHelpers/utils";
+import { v4 as uuid } from "uuid";
+import { vcard } from "rdf-namespaces";
+import { vcardExtras } from "../../../addressBook";
+import { joinPath } from "../../../stringHelpers";
+import { getContactAll } from "../index";
 
-export const webIdUrl = "http://example.com/alice#me";
+/**
+ * Person contacts represent the agents of type vcard:Individual, foaf:Person, schema:Person
+ * Their location are usually at /contacts/Person/<unique-id>/index.ttl#this
+ */
 
-export default function mockPersonContactThing(url = webIdUrl) {
-  return chain(
-    mockThingFrom(url),
-    (t) => addUrl(t, rdf.type, vcard.Individual),
-    (t) => addUrl(t, foaf.openid, webIdUrl)
-  );
+/* Model constants */
+export const PEOPLE_INDEX_FILE = "people.ttl";
+export const PERSON_CONTAINER = "Person";
+export const INDEX_FILE = "index.ttl";
+export const NAME_EMAIL_INDEX_PREDICATE = vcardExtras("nameEmailIndex");
+export const PERSON_CONTACT = {
+  container: PERSON_CONTAINER,
+  indexFile: PEOPLE_INDEX_FILE,
+  indexFilePredicate: NAME_EMAIL_INDEX_PREDICATE,
+  contactTypeUrl: vcard.Individual,
+};
+
+/* Model functions */
+export function createPersonDatasetUrl(addressBook, id = uuid()) {
+  return joinPath(addressBook.containerUrl, PERSON_CONTAINER, id, INDEX_FILE);
+}
+
+export async function getPersonAll(addressBook, fetch) {
+  return getContactAll(addressBook, [PERSON_CONTACT], fetch);
 }

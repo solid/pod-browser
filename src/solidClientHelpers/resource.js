@@ -33,7 +33,7 @@ import {
 import { parseUrl } from "../stringHelpers";
 import { getPolicyUrl } from "./policies";
 import { createResponder, isContainerIri } from "./utils";
-import { isHTTPError } from "../error";
+import { ERROR_CODES, isHTTPError } from "../error";
 
 export function getResourceName(iri) {
   let { pathname } = parseUrl(iri);
@@ -71,11 +71,11 @@ export async function getOrCreateContainer(iri, fetch) {
   return error(getError);
 }
 
-export async function getOrCreateDataset(iri, fetch) {
+export async function getOrCreateDatasetOld(iri, fetch) {
   const { respond, error } = createResponder();
   const { response, error: getError } = await getResource(iri, fetch);
   if (response) return respond(response.dataset);
-  if (getError && isHTTPError(getError, 404)) {
+  if (getError && isHTTPError(getError, ERROR_CODES.NOT_FOUND)) {
     try {
       return respond(
         await saveSolidDatasetAt(iri, createSolidDataset(), { fetch })
@@ -97,10 +97,17 @@ export function getOrCreateThing(dataset, iri) {
   return { thing: created, dataset: updatedDataset };
 }
 
+export function getBaseUrl(iri) {
+  if (!iri) return iri;
+  const url = new URL(iri);
+  return url.origin + url.pathname;
+}
+
 export async function saveResource({ dataset, iri }, fetch) {
   const { respond, error } = createResponder();
   try {
-    const response = await saveSolidDatasetAt(iri, dataset, { fetch });
+    const baseIri = getSourceUrl(dataset) || getBaseUrl(iri);
+    const response = await saveSolidDatasetAt(baseIri, dataset, { fetch });
     return respond(response);
   } catch (e) {
     return error(e.message);

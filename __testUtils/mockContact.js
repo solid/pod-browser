@@ -19,16 +19,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { addUrl, mockThingFrom } from "@inrupt/solid-client";
-import { foaf, rdf, vcard } from "rdf-namespaces";
-import { chain } from "../src/solidClientHelpers/utils";
+import { asUrl, getThing, setThing, setUrl } from "@inrupt/solid-client";
+import { getContactIndexDefaultUrl } from "../src/models/contact";
 
-export const webIdUrl = "http://example.com/alice#me";
-
-export default function mockPersonContactThing(url = webIdUrl) {
-  return chain(
-    mockThingFrom(url),
-    (t) => addUrl(t, rdf.type, vcard.Individual),
-    (t) => addUrl(t, foaf.openid, webIdUrl)
+// eslint-disable-next-line import/prefer-default-export
+export function addIndexToMockedAddressBook(addressBook, type, options = {}) {
+  const contactIndexDefaultUrl = getContactIndexDefaultUrl(
+    addressBook.containerUrl,
+    type
   );
+  const dataset = setThing(
+    addressBook.dataset,
+    setUrl(
+      addressBook.thing,
+      type.indexFilePredicate,
+      options.indexUrl || contactIndexDefaultUrl
+    )
+  );
+  // RETURNS ADDRESS BOOK
+  return {
+    containerUrl: addressBook.containerUrl,
+    dataset,
+    thing: getThing(dataset, asUrl(addressBook.thing)),
+  };
 }

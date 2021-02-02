@@ -19,16 +19,30 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { addUrl, mockThingFrom } from "@inrupt/solid-client";
-import { foaf, rdf, vcard } from "rdf-namespaces";
-import { chain } from "../src/solidClientHelpers/utils";
+import {
+  createSolidDataset,
+  getSolidDataset,
+  saveSolidDatasetAt,
+} from "@inrupt/solid-client";
+import { ERROR_CODES, isHTTPError } from "../../error";
+import { chain } from "../../solidClientHelpers/utils";
 
-export const webIdUrl = "http://example.com/alice#me";
+/*
+ * Datasets refer to SolidDataset from @inrupt/solid-client.
+ * This module adds some extra custom, handy functions.
+ */
 
-export default function mockPersonContactThing(url = webIdUrl) {
-  return chain(
-    mockThingFrom(url),
-    (t) => addUrl(t, rdf.type, vcard.Individual),
-    (t) => addUrl(t, foaf.openid, webIdUrl)
-  );
+/* Model functions */
+export async function getOrCreateDataset(url, fetch) {
+  try {
+    return await getSolidDataset(url, { fetch });
+  } catch (error) {
+    if (isHTTPError(error, ERROR_CODES.NOT_FOUND)) return createSolidDataset();
+    throw error;
+  }
+}
+
+export async function updateOrCreateDataset(url, fetch, ...operations) {
+  const dataset = await getOrCreateDataset(url, fetch);
+  return saveSolidDatasetAt(url, chain(dataset, ...operations), { fetch });
 }

@@ -19,16 +19,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { addUrl, mockThingFrom } from "@inrupt/solid-client";
-import { foaf, rdf, vcard } from "rdf-namespaces";
+import { mockSolidDatasetFrom, setThing, setUrl } from "@inrupt/solid-client";
 import { chain } from "../src/solidClientHelpers/utils";
+import { createGroupDatasetUrl } from "../src/models/contact/group";
+import { vcardExtras } from "../src/addressBook";
+import { mockGroupThing } from "./mockGroup";
 
-export const webIdUrl = "http://example.com/alice#me";
+export function mockIndexThing(addressBook, groupThingUrl) {
+  return setUrl(addressBook.thing, vcardExtras("includesGroup"), groupThingUrl);
+}
 
-export default function mockPersonContactThing(url = webIdUrl) {
+export function addGroupToMockedIndexDataset(
+  dataset,
+  addressBook,
+  name,
+  groupThingUrl
+) {
   return chain(
-    mockThingFrom(url),
-    (t) => addUrl(t, rdf.type, vcard.Individual),
-    (t) => addUrl(t, foaf.openid, webIdUrl)
+    dataset,
+    (d) => setThing(d, mockGroupThing(name, groupThingUrl)),
+    (d) => setThing(d, mockIndexThing(addressBook, groupThingUrl))
   );
+}
+
+export default function mockGroupContact(addressBook, name, { url, id } = {}) {
+  const groupDatasetUrl = url || createGroupDatasetUrl(addressBook, id);
+  const groupThingUrl = `${groupDatasetUrl}#this`;
+  const groupThing = mockGroupThing(name, groupThingUrl);
+  return {
+    dataset: chain(
+      mockSolidDatasetFrom(groupDatasetUrl),
+      (d) => setThing(d, groupThing),
+      (d) => setThing(d, mockIndexThing(addressBook, groupThingUrl))
+    ),
+    thing: groupThing,
+  };
 }

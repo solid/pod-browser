@@ -19,16 +19,45 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { addUrl, mockThingFrom } from "@inrupt/solid-client";
-import { foaf, rdf, vcard } from "rdf-namespaces";
+import {
+  asUrl,
+  mockSolidDatasetFrom,
+  mockThingFrom,
+  setStringNoLocale,
+  setThing,
+  setUrl,
+} from "@inrupt/solid-client";
+import { rdf, vcard } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
+import { vcardExtras } from "../src/addressBook";
+import { getBaseUrl } from "../src/solidClientHelpers/resource";
 
-export const webIdUrl = "http://example.com/alice#me";
-
-export default function mockPersonContactThing(url = webIdUrl) {
+function mockContactPersonThing(addressBook, personThingUrl, name) {
   return chain(
-    mockThingFrom(url),
-    (t) => addUrl(t, rdf.type, vcard.Individual),
-    (t) => addUrl(t, foaf.openid, webIdUrl)
+    mockThingFrom(personThingUrl),
+    (t) => setUrl(t, rdf.type, vcard.Individual),
+    (t) => setStringNoLocale(t, vcard.fn, name),
+    (t) => setUrl(t, vcardExtras("inAddressBook"), asUrl(addressBook.thing))
   );
+}
+
+// eslint-disable-next-line import/prefer-default-export
+export function addPersonToMockedIndexDataset(
+  dataset,
+  addressBook,
+  name,
+  personThingUrl
+) {
+  return chain(dataset, (d) =>
+    setThing(d, mockContactPersonThing(addressBook, personThingUrl, name))
+  );
+}
+
+export default function mockPersonContact(addressBook, personThingUrl, name) {
+  const thing = mockContactPersonThing(addressBook, personThingUrl, name);
+  const dataset = setThing(
+    mockSolidDatasetFrom(getBaseUrl(personThingUrl)),
+    thing
+  );
+  return { dataset, thing };
 }
