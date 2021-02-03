@@ -55,6 +55,7 @@ export function createAcpMap(read = false, write = false, append = false) {
 const acpMapForNamedApplyPolicies = {
   editors: createAcpMap(true, true),
   viewers: createAcpMap(true),
+  canShare: createAcpMap(true, true, true, true),
 };
 
 export function addAcpModes(existingAcpModes, newAcpModes) {
@@ -229,18 +230,6 @@ function ensureAccessControl(policyUrl, datasetWithAcr, changed) {
   };
 }
 
-function ensureApplyControlNamedPolicies(policyUrl, datasetWithAcr, changed) {
-  const accessControls = acpv2.getPolicyUrlAll(datasetWithAcr);
-  const existingAccessControl = accessControls.find((url) => policyUrl === url);
-
-  return {
-    changed: changed || !existingAccessControl,
-    acr: existingAccessControl
-      ? datasetWithAcr
-      : acpv2.addPolicyUrl(datasetWithAcr, policyUrl),
-  };
-}
-
 function ensureApplyControl(policyUrl, datasetWithAcr, changed) {
   let accessControls = [];
   try {
@@ -305,6 +294,7 @@ export default class AcpAccessControlStrategy {
       const policyDataset = await getSolidDataset(namedPolicyContainerUrl, {
         fetch: this.#fetch,
       });
+
       const modesAndAgents = getNamedPolicyModesAndAgents(
         getNamedPolicyUrl(namedPolicyContainerUrl, policyName),
         policyDataset
@@ -465,46 +455,48 @@ export default class AcpAccessControlStrategy {
         acr: this.#originalWithAcr,
         changed: false,
       },
-      ({ acr, changed }) =>
-        ensureApplyControlNamedPolicies(editorsPolicy, acr, changed),
-      ({ acr, changed }) =>
-        ensureApplyControlNamedPolicies(viewersPolicy, acr, changed)
+      ({ acr, changed }) => ensureApplyControl(editorsPolicy, acr, changed),
+      ({ acr, changed }) => ensureApplyControl(viewersPolicy, acr, changed)
     );
     if (originalChanged) {
-      this.#originalWithAcr = await acpv2.saveAcrFor(originalAcr, {
+      this.#originalWithAcr = await acp.saveAcrFor(originalAcr, {
         fetch: this.#fetch,
       });
     }
     // ensuring access controls for policy resource
-    const editorsPolicyDatasetWithAcr = await acpv2.getSolidDatasetWithAcr(
-      editorsPolicyResourceUrl,
-      { fetch: this.#fetch }
-    );
-    const viewersPolicyDatasetWithAcr = await acpv2.getSolidDatasetWithAcr(
-      viewersPolicyResourceUrl,
-      { fetch: this.#fetch }
-    );
-    // const canSharePolicy = getAllowApplyPolicy(this.#policyUrl, "canShare"); // omit for now until we have can share
+    try {
+      const editorsPolicyDatasetWithAcr = await acpv2.getSolidDatasetWithAcr(
+        editorsPolicyResourceUrl,
+        { fetch: this.#fetch }
+      );
+      const viewersPolicyDatasetWithAcr = await acpv2.getSolidDatasetWithAcr(
+        viewersPolicyResourceUrl,
+        { fetch: this.#fetch }
+      );
+      // const canSharePolicy = getAllowApplyPolicy(this.#policyUrl, "canShare"); // omit for now until we have can share
 
-    const { acr: editorsPolicyAcr, changed: editorsPolicyChanged } = chain(
-      {
-        acr: editorsPolicyDatasetWithAcr,
-        changed: false,
+      const { acr: editorsPolicyAcr, changed: editorsPolicyChanged } = chain(
+        {
+          acr: editorsPolicyDatasetWithAcr,
+          changed: false,
+        }
+        // ({ acr, changed }) => ensureApplyControl(canSharePolicy, acr, changed) // omit for now until we have can share
+      );
+      if (editorsPolicyChanged) {
+        await acpv2.saveAcrFor(editorsPolicyAcr, { fetch: this.#fetch });
       }
-      // ({ acr, changed }) => ensureApplyControl(canSharePolicy, acr, changed) // omit for now until we have can share
-    );
-    if (editorsPolicyChanged) {
-      await acpv2.saveAcrFor(editorsPolicyAcr, { fetch: this.#fetch });
-    }
-    const { acr: viewersPolicyAcr, changed: viewersPolicyChanged } = chain(
-      {
-        acr: viewersPolicyDatasetWithAcr,
-        changed: false,
+      const { acr: viewersPolicyAcr, changed: viewersPolicyChanged } = chain(
+        {
+          acr: viewersPolicyDatasetWithAcr,
+          changed: false,
+        }
+        // ({ acr, changed }) => ensureApplyControl(canSharePolicy, acr, changed) // omit for now until we have can share
+      );
+      if (viewersPolicyChanged) {
+        await acpv2.saveAcrFor(viewersPolicyAcr, { fetch: this.#fetch });
       }
-      // ({ acr, changed }) => ensureApplyControl(canSharePolicy, acr, changed) // omit for now until we have can share
-    );
-    if (viewersPolicyChanged) {
-      await acpv2.saveAcrFor(viewersPolicyAcr, { fetch: this.#fetch });
+    } catch (err) {
+      if (!isHTTPError(err.message, 404)) throw err;
     }
   }
 
@@ -535,13 +527,15 @@ export default class AcpAccessControlStrategy {
       { fetch: this.#fetch }
     );
     const controlAllowApply = getAllowApplyPolicy(this.#policyUrl, "control");
+    const canSharePolicy = getAllowApplyPolicy(this.#policyUrl, "canShare");
 
     const { acr: policyAcr, changed: policyChanged } = chain(
       {
         acr: policyDatasetWithAcr,
         changed: false,
       },
-      ({ acr, changed }) => ensureApplyControl(controlAllowApply, acr, changed)
+      ({ acr, changed }) => ensureApplyControl(controlAllowApply, acr, changed),
+      ({ acr, changed }) => ensureApplyControl(canSharePolicy, acr, changed)
     );
     if (policyChanged) {
       try {

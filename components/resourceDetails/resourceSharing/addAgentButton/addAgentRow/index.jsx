@@ -77,6 +77,7 @@ export default function AddAgentRow({
   index,
   setNewAgentsWebIds,
   newAgentsWebIds,
+  contactsArrayLength,
   setAddingWebId,
   setNoAgentsAlert,
   addingWebId,
@@ -99,7 +100,7 @@ export default function AddAgentRow({
     null;
   const displayedWebId =
     (thing &&
-      newAgentsWebIds.length > 0 &&
+      contactsArrayLength > 0 &&
       getUrl(thing, VCARD_WEBID_PREDICATE)) ||
     null;
 
@@ -186,6 +187,7 @@ AddAgentRow.propTypes = {
   newAgentsWebIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   setAddingWebId: PropTypes.func.isRequired,
   setNoAgentsAlert: PropTypes.func.isRequired,
+  contactsArrayLength: PropTypes.number.isRequired,
   addingWebId: PropTypes.bool.isRequired,
   updateThing: PropTypes.func.isRequired,
   permissions: PropTypes.arrayOf(PropTypes.shape()).isRequired,

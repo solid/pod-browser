@@ -256,6 +256,110 @@ describe("AgentPickerModal", () => {
     expect(setTitle).toHaveBeenCalledWith("Change permissions for 1 person");
     expect(setOpen).toHaveBeenCalledWith("add-new-permissions");
   });
+  it("renders the correct confimation message for more than 1 agent", async () => {
+    useNamedPolicyPermissions.mockReturnValue({
+      data: permissions,
+      mutate: jest.fn(),
+    });
+    usePermissionsWithProfiles.mockReturnValue({
+      permissionsWithProfiles: permissions,
+    });
+    const setOpen = jest.fn();
+    const setTitle = jest.fn();
+
+    const contextValue = {
+      confirmed: false,
+      content: null,
+      open: false,
+      setConfirmed: jest.fn(),
+      setContent: jest.fn(),
+      setOpen,
+      setTitle,
+      title: "Confirmation",
+    };
+    const { getByTestId, findByText, findByTestId } = renderWithTheme(
+      <ConfirmationDialogContext.Provider value={contextValue}>
+        <AccessControlContext.Provider value={{ accessControl }}>
+          <AgentPickerModal
+            type="editors"
+            text="Add Editors"
+            onClose={onClose}
+          />
+        </AccessControlContext.Provider>
+      </ConfirmationDialogContext.Provider>
+    );
+
+    const webId1 = "https://somewebid.com";
+    const webId2 = "https://someotherwebid.com";
+
+    jest
+      .spyOn(ProfileFns, "fetchProfile")
+      .mockRejectedValue({ error: "error" });
+
+    const addWebIdButton = getByTestId("add-webid-button");
+    userEvent.click(addWebIdButton);
+    const input = await findByTestId("webid-input");
+    userEvent.type(input, webId1);
+    const addButton = getByTestId("add-button");
+    userEvent.click(addButton);
+    await findByText(webId1);
+    expect(addWebIdButton).not.toBeDisabled();
+    userEvent.click(addWebIdButton);
+    const input2 = await findByTestId("webid-input");
+    userEvent.type(input2, webId2);
+    const addButton2 = getByTestId("add-button");
+    userEvent.click(addButton2);
+    await findByText(webId2);
+
+    const submitWebIdsButton = getByTestId("submit-webids-button");
+    userEvent.click(submitWebIdsButton);
+    expect(setTitle).toHaveBeenCalledWith("Change permissions for 2 people");
+    expect(setOpen).toHaveBeenCalledWith("add-new-permissions");
+  });
+  it("cannot uncheck checkbox for the agent being added", async () => {
+    useNamedPolicyPermissions.mockReturnValue({
+      data: permissions,
+      mutate: jest.fn(),
+    });
+    usePermissionsWithProfiles.mockReturnValue({
+      permissionsWithProfiles: permissions,
+    });
+    const setOpen = jest.fn();
+    const setTitle = jest.fn();
+
+    const contextValue = {
+      confirmed: false,
+      content: null,
+      open: false,
+      setConfirmed: jest.fn(),
+      setContent: jest.fn(),
+      setOpen,
+      setTitle,
+      title: "Confirmation",
+    };
+    const { getByTestId, getByRole } = renderWithTheme(
+      <ConfirmationDialogContext.Provider value={contextValue}>
+        <AccessControlContext.Provider value={{ accessControl }}>
+          <AgentPickerModal
+            type="editors"
+            text="Add Editors"
+            onClose={onClose}
+          />
+        </AccessControlContext.Provider>
+      </ConfirmationDialogContext.Provider>
+    );
+
+    jest
+      .spyOn(ProfileFns, "fetchProfile")
+      .mockRejectedValue({ error: "error" });
+
+    const addWebIdButton = getByTestId("add-webid-button");
+    userEvent.click(addWebIdButton);
+    const checkBox = getByRole("checkbox");
+    expect(checkBox).toBeChecked();
+    userEvent.click(checkBox);
+    expect(checkBox).toBeChecked();
+  });
   it("renders a warning when trying to submit a webId that is already in the policy", async () => {
     const webId = "https://somewebid.com";
     useNamedPolicyPermissions.mockReturnValue({
