@@ -32,6 +32,8 @@ import {
   saveSolidDatasetAt,
   setThing,
 } from "@inrupt/solid-client";
+// TODO: delete this when node 10 support drops"
+import "core-js/proposals/promise-all-settled";
 import { parseUrl } from "../stringHelpers";
 import {
   getNamedPolicyResourceUrl,
