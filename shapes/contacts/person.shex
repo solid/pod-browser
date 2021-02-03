@@ -1,18 +1,24 @@
 PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
 PREFIX xsd:   <http://www.w3.org/2001/XMLSchema#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
-PREFIX dc: <https://dublincore.org/specifications/dublin-core/dcmi-terms/#>
+# PREFIX dc: <https://dublincore.org/specifications/dublin-core/dcmi-terms/#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
-# We should store the preferred WebId for each person, since sameAs can be multiple WebIds
+# We should store the preferred WebID for each person, since owl:sameAs can be multiple WebIDs.
 
 vcard:Individual {
     vcard:fn xsd:string {1} ;
-    vcard:inAddressBook vcard:AddressBook + ;
+    
+    # This is intended to refer to the Individual's WebIDs, 
+    # or other 'types', such as...?
     vcard:url vcard:WebId {1}; 
+    
+    # What is this intended to refer to?
     vcard:hasUID xsd:string ? ;
+    
     vcard:hasName xsd:string ? ; # structured name
-    vcard:hasPhoto dc:Image * ;
+    vcard:hasPhoto dcterms:Image * ;
     vcard:hasRelated vcard:RelatedType * ;
     vcard:hasAddress vcard:Address * ;
     vcard:bday xsd:date ? ;
@@ -22,8 +28,22 @@ vcard:Individual {
     vcard:role xsd:string ? ;
     vcard:title xsd:string ? ;
     vcard:note xsd:string ? ;
+    
+    # These terms don't exist in vCard yet...
+    vcard:inAddressBook vcard:AddressBook + ;
 }
 
+# This term doesn't exist in vCard yet...
+# Big question - SHOULD something as fundamental as WebID be defined in vCard?
+#
+# An example of usage (in Turtle) showing the relation with 'vcard:url'
+# might be really useful here - for example, is this correct...?
+#   <tommy> a vcard:Individual ;
+#      vcard:url <https://pod.inrupt.com/tommy/profile/card#me> .
+# 
+#   <https://pod.inrupt.com/tommy/profile/card#me> a vcard:WebID ;
+#      vcard:value "????"^^xsd:string .
+#
 vcard:WebId {
     vcard:value xsd:string {1};
 }
