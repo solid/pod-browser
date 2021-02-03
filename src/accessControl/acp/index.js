@@ -205,8 +205,10 @@ function ensureApplyControl(policyUrl, datasetWithAcr, changed) {
   try {
     accessControls = acp.getAllControl(datasetWithAcr);
   } catch (error) {
-    // TODO: Handle this error
-    // It doesn't seem to affect the outcome though, so we'll leave it like this for now
+    // TODO: Handle this error (probably by replacing acp.getAllControl with newer ACP APIs)
+    // For some reason the inner working of acp.getAllControl fails to run a getThingAll on the
+    // datasetWithAcr. It doesn't seem to affect the outcome though, so we'll leave it like this
+    // for now
   }
   const existingAccessControl = accessControls.find((ac) =>
     acp.getPolicyUrlAll(ac).find((url) => policyUrl === url)
@@ -224,8 +226,10 @@ function ensureApplyControl(policyUrl, datasetWithAcr, changed) {
       chain(acp.createControl(), (ac) => acp.addPolicyUrl(ac, policyUrl))
     );
   } catch (error) {
-    // TODO: Handle this error
-    // It doesn't seem to affect the outcome though, so we'll leave it like this for now
+    // TODO: Handle this error (probably by replacing acp.setControl with newer ACP APIs)
+    // Same problem as noted above, but this time it's acp.setControl that fails to handle
+    // datasetWithAcr properly. It doesn't seem to affect the outcome though, so we'll leave
+    // it like this for now
   }
   return {
     changed: changed || !existingAccessControl,
@@ -391,7 +395,8 @@ export default class AcpAccessControlStrategy {
       try {
         await acp.saveAcrFor(policyAcr, { fetch: this.#fetch });
       } catch (error) {
-        // TODO: Handle this error
+        // TODO: Handle this error (probably by replacing acp.saveAcrFor with newer ACP APIs)
+        // Again, there is something in acp.saveAcrFor that fails to handle the policyAcr properly.
         // It doesn't seem to affect the outcome though, so we'll leave it like this for now
       }
     }
