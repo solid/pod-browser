@@ -29,10 +29,10 @@ const BLOCKED_ICON_COLOR = "#F44336";
 const BLOCKED_ICON_BACKGROUND_COLOR = "#FDECEA";
 
 export default function styles(theme) {
-  return createStyles(theme, ["icons", "table"], {
+  return createStyles(theme, ["icons"], {
     title: {
       fontSize: theme.typography.h4.fontSize,
-      fontWeight: 800,
+      fontWeight: theme.typography.fontWeightBold,
     },
     headerContainer: {
       display: "flex",

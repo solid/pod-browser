@@ -42,14 +42,14 @@ export default function AgentProfileDetails({
   mutatePermissions,
 }) {
   const classes = useStyles();
-  const { webId, profile, avatar } = permission;
+  const { webId, profile } = permission;
 
   return (
     <div className={classes.nameAndAvatarContainer}>
       <Avatar
         className={classes.avatar}
         alt={webId}
-        src={profile ? avatar : null}
+        src={profile ? profile.avatar : null}
       />
       <Typography
         classes={{ body1: classes.detailText }}

@@ -23,18 +23,24 @@ import React from "react";
 import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 
-import AgentTableTabs from "./index";
+import AgentTableTabs, {
+  TESTCAFE_ID_TAB_ALL,
+  TESTCAFE_ID_TAB_GROUPS,
+  TESTCAFE_ID_TAB_PEOPLE,
+} from "./index";
 
 describe("AgentTableTabs", () => {
   const handleTabChange = jest.fn();
   it("renders tabs", () => {
-    const { asFragment } = renderWithTheme(
+    const { asFragment, getByTestId } = renderWithTheme(
       <AgentTableTabs
         handleTabChange={handleTabChange}
         selectedTabValue="Person"
       />
     );
-
+    expect(getByTestId(TESTCAFE_ID_TAB_ALL)).toBeDefined();
+    expect(getByTestId(TESTCAFE_ID_TAB_GROUPS)).toBeDefined();
+    expect(getByTestId(TESTCAFE_ID_TAB_PEOPLE)).toBeDefined();
     expect(asFragment()).toMatchSnapshot();
   });
   it("triggers handleTabChange when clicking on a tab", () => {

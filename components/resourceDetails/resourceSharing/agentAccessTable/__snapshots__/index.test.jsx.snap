@@ -4,6 +4,7 @@ exports[`AgentAccessTable renders a list of permissions 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+    data-testid="agent-access-table"
   >
     <div
       class="PodBrowser-headerContainer"
@@ -27,7 +28,6 @@ exports[`AgentAccessTable renders a list of permissions 1`] = `
             data-testid="add-agent-button"
           >
             <i
-              alt="Add Editors Button"
               class="PodBrowser-icon-add PodBrowser-icon"
             />
             Add Editors
@@ -148,7 +148,6 @@ exports[`AgentAccessTable renders a list of permissions 1`] = `
                     class="PodBrowser-label"
                   >
                     <i
-                      alt="search icon"
                       aria-label="search"
                       class="PodBrowser-icon-search PodBrowser-iconSearch"
                     />
@@ -213,7 +212,6 @@ exports[`AgentAccessTable renders a list of permissions 1`] = `
                           type="button"
                         >
                           <i
-                            alt="More Options Menu"
                             class="PodBrowser-icon-more"
                           />
                         </button>
@@ -235,6 +233,7 @@ exports[`AgentAccessTable renders an empty list of permissions 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+    data-testid="agent-access-table"
   >
     <div
       class="PodBrowser-headerContainer"
@@ -258,7 +257,6 @@ exports[`AgentAccessTable renders an empty list of permissions 1`] = `
             data-testid="add-agent-button"
           >
             <i
-              alt="Add Editors Button"
               class="PodBrowser-icon-add PodBrowser-icon"
             />
             Add Editors

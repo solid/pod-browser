@@ -373,9 +373,7 @@ describe("deletePoliciesContainer", () => {
   it("ignores 403 errors when deleting the policy resource", async () => {
     SolidClientFns.deleteContainer
       .mockResolvedValueOnce()
-      .mockImplementation(() => {
-        throw new Error("403");
-      });
+      .mockRejectedValue("403");
     await expect(
       deletePoliciesContainer(containerIri, fetch)
     ).resolves.toBeUndefined();

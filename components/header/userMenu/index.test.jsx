@@ -20,7 +20,6 @@
  */
 
 import userEvent from "@testing-library/user-event";
-import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import UserMenu from "./index";

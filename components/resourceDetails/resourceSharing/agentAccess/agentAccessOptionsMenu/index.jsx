@@ -70,10 +70,7 @@ export default function AgentAccessOptionsMenu({
         className={classes.button}
         onClick={handleClick}
       >
-        <i
-          className={clsx(bem("icon-more"), bem("icon"))}
-          alt="More Options Menu"
-        />
+        <i className={clsx(bem("icon-more"), bem("icon"))} />
       </button>
       <Popover
         id={id}

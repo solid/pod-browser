@@ -22,13 +22,17 @@
 import React from "react";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import SharingAccordion from "./index";
+import { TESTCAFE_ID_AGENT_ACCESS_TABLE } from "../agentAccessTable";
 
 describe("SharingAccordion", () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
   test("it renders three lists of empty permissions for editors, viewers and blocked", () => {
-    const { asFragment } = renderWithTheme(<SharingAccordion />);
+    const { asFragment, queryAllByTestId } = renderWithTheme(
+      <SharingAccordion />
+    );
+    expect(queryAllByTestId(TESTCAFE_ID_AGENT_ACCESS_TABLE)).toHaveLength(3);
     expect(asFragment()).toMatchSnapshot();
   });
 });

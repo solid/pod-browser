@@ -15,7 +15,6 @@ exports[`AgentSearchBar renders a search bar 1`] = `
         class="PodBrowser-label"
       >
         <i
-          alt="search icon"
           aria-label="search"
           class="PodBrowser-icon-search PodBrowser-iconSearch"
         />

@@ -22,9 +22,9 @@
 import { createStyles } from "@solid/lit-prism-patterns";
 
 export default function styles(theme) {
-  return createStyles(theme, ["icons"], {
-    listRoot: {
-      paddingTop: 0,
+  return createStyles(theme, [], {
+    listItemText: {
+      fontWeight: theme.typography.body1.fontWeight,
     },
   });
 }

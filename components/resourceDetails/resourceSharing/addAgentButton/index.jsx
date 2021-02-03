@@ -30,6 +30,8 @@ import { makeStyles } from "@material-ui/styles";
 import { Button } from "@inrupt/prism-react-components";
 import AgentPickerModal from "./agentPickerModal";
 import styles from "./styles";
+import useNamedPolicyPermissions from "../../../../src/hooks/useNamedPolicyPermissions";
+import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -42,12 +44,16 @@ const BUTTON_TEXT_MAP = {
   blocked: { text: "Block" },
 };
 
-export default function AddAgentButton({
-  type,
-  mutatePermissions,
-  permissions,
-}) {
+export default function AddAgentButton({ type }) {
   const classes = useStyles();
+  const {
+    data: namedPermissions,
+    mutate: mutatePermissions,
+  } = useNamedPolicyPermissions(type);
+  const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
+    namedPermissions
+  );
+
   const bem = useBem(useStyles());
   const [open, setOpen] = useState(false);
 
@@ -69,10 +75,7 @@ export default function AddAgentButton({
         className={classes.button}
         onClick={handleOpen}
       >
-        <i
-          className={clsx(bem("icon-add"), bem("icon"))}
-          alt={`${text} Button`}
-        />
+        <i className={clsx(bem("icon-add"), bem("icon"))} />
         {text}
       </Button>
 
@@ -102,10 +105,4 @@ export default function AddAgentButton({
 
 AddAgentButton.propTypes = {
   type: PropTypes.string.isRequired,
-  mutatePermissions: PropTypes.func,
-  permissions: PropTypes.arrayOf(PropTypes.shape).isRequired,
-};
-
-AddAgentButton.defaultProps = {
-  mutatePermissions: () => {},
 };

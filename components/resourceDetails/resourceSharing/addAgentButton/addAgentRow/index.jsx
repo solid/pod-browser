@@ -42,12 +42,36 @@ import { foaf, vcard } from "rdf-namespaces";
 import styles from "./styles";
 import { chain } from "../../../../../src/solidClientHelpers/utils";
 import { fetchProfile } from "../../../../../src/solidClientHelpers/profile";
+import { vcardExtras } from "../../../../../src/addressBook";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-const VCARD_WEBID_PREDICATE = "https://www.w3.org/2006/vcard/ns#WebId";
+const VCARD_WEBID_PREDICATE = vcardExtras("WebId");
 const TESTCAFE_ID_WEBID_INPUT = "webid-input";
 const TESTCAFE_ID_ADD_WEBID_BUTTON = "add-button";
 const TESTCAFE_ID_AGENT_WEB_ID = "agent-webid";
+
+const updateThingForNewRow = async (agentWebId, thing, fetch) => {
+  let newThing;
+  try {
+    const profile = await fetchProfile(agentWebId, fetch);
+    if (profile) {
+      const { name, avatar, webId } = profile;
+      newThing = chain(
+        thing,
+        (t) => addStringNoLocale(t, foaf.name, name),
+        (t) => addUrl(t, VCARD_WEBID_PREDICATE, webId) // temporarily storing this here to have a webId to display for these temporary rows
+      );
+      if (avatar) {
+        newThing = addUrl(newThing, vcard.hasPhoto, avatar);
+      }
+    } else {
+      newThing = addUrl(thing, VCARD_WEBID_PREDICATE, agentWebId); // temporarily storing this here to have a webId to display for these temporary rows
+    }
+  } catch (error) {
+    newThing = addUrl(thing, VCARD_WEBID_PREDICATE, agentWebId); // temporarily storing this here to have a webId to display for these temporary rows
+  }
+  return newThing;
+};
 
 export default function AddAgentRow({
   index,
@@ -64,9 +88,20 @@ export default function AddAgentRow({
   const classes = useStyles();
   const [agentWebId, setAgentWebId] = useState("");
   const [existingPermission, setExistingPermission] = useState();
-  let agentName = thing && getStringNoLocale(thing, foaf.name);
-  let agentAvatar = thing && getUrl(thing, vcard.hasPhoto);
-  const displayedWebId = thing && getUrl(thing, VCARD_WEBID_PREDICATE);
+
+  const agentName =
+    (thing &&
+      newAgentsWebIds.length > 0 &&
+      getStringNoLocale(thing, foaf.name)) ||
+    null;
+  const agentAvatar =
+    (thing && newAgentsWebIds.length > 0 && getUrl(thing, vcard.hasPhoto)) ||
+    null;
+  const displayedWebId =
+    (thing &&
+      newAgentsWebIds.length > 0 &&
+      getUrl(thing, VCARD_WEBID_PREDICATE)) ||
+    null;
 
   const handleAddAgentsWebIds = async (e) => {
     e.preventDefault();
@@ -77,31 +112,8 @@ export default function AddAgentRow({
     }
     setNoAgentsAlert(false);
     setNewAgentsWebIds([...newAgentsWebIds, agentWebId]);
-    let newThing;
-    try {
-      const profile = await fetchProfile(agentWebId, fetch);
-      if (profile) {
-        const { name, avatar, webId } = profile;
-        newThing = chain(
-          thing,
-          (t) => addStringNoLocale(t, foaf.name, name),
-          (t) => addUrl(t, VCARD_WEBID_PREDICATE, webId) // temporarily storing this here to have a webId to display for these temporary rows
-        );
-        if (avatar) {
-          newThing = addUrl(newThing, vcard.hasPhoto, avatar);
-        }
-        await updateThing(newThing);
-      } else {
-        newThing = addUrl(thing, VCARD_WEBID_PREDICATE, agentWebId); // temporarily storing this here to have a webId to display for these temporary rows
-        await updateThing(newThing);
-      }
-    } catch (error) {
-      newThing = addUrl(thing, VCARD_WEBID_PREDICATE, agentWebId); // temporarily storing this here to have a webId to display for these temporary rows
-      await updateThing(newThing);
-
-      agentName = null;
-      agentAvatar = null;
-    }
+    const newThing = await updateThingForNewRow(agentWebId, thing, fetch);
+    updateThing(newThing);
     setAddingWebId(false);
   };
 

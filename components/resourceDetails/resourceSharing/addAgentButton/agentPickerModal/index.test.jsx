@@ -21,7 +21,6 @@
 
 import React from "react";
 import { waitFor } from "@testing-library/dom";
-import "@testing-library/jest-dom/extend-expect";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import userEvent from "@testing-library/user-event";
 import AgentPickerModal, {
@@ -29,43 +28,101 @@ import AgentPickerModal, {
   handleSaveContact,
   handleSubmit,
 } from "./index";
-import {
-  findContactInAddressBook,
-  saveContact,
-} from "../../../../../src/addressBook";
+import * as AddressBookFns from "../../../../../src/addressBook";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import mockAccessControl from "../../../../../__testUtils/mockAccessControl";
 import mockPersonContactThing from "../../../../../__testUtils/mockPersonContactThing";
 
 import AccessControlContext from "../../../../../src/contexts/accessControlContext";
-import { fetchProfile } from "../../../../../src/solidClientHelpers/profile";
+import * as ProfileFns from "../../../../../src/solidClientHelpers/profile";
 import ConfirmationDialogContext from "../../../../../src/contexts/confirmationDialogContext";
+import useNamedPolicyPermissions from "../../../../../src/hooks/useNamedPolicyPermissions";
+import usePermissionsWithProfiles from "../../../../../src/hooks/usePermissionsWithProfiles";
 
-jest.mock("../../../../../src/solidClientHelpers/profile");
-jest.mock("../../../../../src/addressBook");
+jest.mock("../../../../../src/hooks/useNamedPolicyPermissions");
+jest.mock("../../../../../src/hooks/usePermissionsWithProfiles");
+
+const permissions = [
+  {
+    acl: {
+      read: true,
+      write: true,
+      append: false,
+      control: false,
+    },
+    webId: "https://example1.com/profile/card#me",
+    profile: {
+      avatar: null,
+      name: "Example 1",
+      types: ["https://schema.org/Person"],
+    },
+  },
+  {
+    acl: {
+      read: true,
+      write: true,
+      append: false,
+      control: false,
+    },
+    webId: "https://example2.com/profile/card#me",
+    profile: {
+      avatar: null,
+      name: "Example 2",
+      types: ["https://schema.org/Person"],
+    },
+  },
+  {
+    acl: {
+      read: true,
+      write: true,
+      append: false,
+      control: false,
+    },
+    webId: "https://example3.com/profile/card#me",
+    profile: {
+      avatar: null,
+      name: "Example 3",
+      types: ["https://schema.org/Person"],
+    },
+  },
+  {
+    acl: {
+      read: true,
+      write: true,
+      append: false,
+      control: false,
+    },
+    webId: "https://example4.com/profile/card#me",
+    profile: {
+      avatar: null,
+      name: "Example 4",
+      types: ["https://schema.org/Person"],
+    },
+  },
+];
 
 describe("AgentPickerModal", () => {
   const onClose = jest.fn();
-  const mutatePermissions = jest.fn();
-  const permissions = [];
   const accessControl = mockAccessControl();
 
   it("updates the temporary row with webId only when profile is unavailable", async () => {
+    useNamedPolicyPermissions.mockReturnValue({
+      data: permissions,
+      mutate: jest.fn(),
+    });
+    usePermissionsWithProfiles.mockReturnValue({
+      permissionsWithProfiles: permissions,
+    });
+    const webId = "https://somewebid.com";
+    jest
+      .spyOn(ProfileFns, "fetchProfile")
+      .mockRejectedValueOnce({ error: "error" });
+
     const { getByTestId, findByText, findByTestId } = renderWithTheme(
       <AccessControlContext.Provider value={{ accessControl }}>
-        <AgentPickerModal
-          type="editors"
-          text="Add Editors"
-          onClose={onClose}
-          mutatePermissions={mutatePermissions}
-          permissions={permissions}
-        />
+        <AgentPickerModal type="editors" text="Add Editors" onClose={onClose} />
       </AccessControlContext.Provider>
     );
-
-    const webId = "https://somewebid.com";
-
-    fetchProfile.mockRejectedValueOnce({ error: "error" });
 
     const addWebIdButton = getByTestId("add-webid-button");
     userEvent.click(addWebIdButton);
@@ -79,15 +136,16 @@ describe("AgentPickerModal", () => {
   });
 
   it("updates the temporary row with profile data when available", async () => {
+    useNamedPolicyPermissions.mockReturnValue({
+      data: permissions,
+      mutate: jest.fn(),
+    });
+    usePermissionsWithProfiles.mockReturnValue({
+      permissionsWithProfiles: permissions,
+    });
     const { getByTestId, findByTestId, findByText } = renderWithTheme(
       <AccessControlContext.Provider value={{ accessControl }}>
-        <AgentPickerModal
-          type="editors"
-          text="Add Editors"
-          onClose={onClose}
-          mutatePermissions={mutatePermissions}
-          permissions={permissions}
-        />
+        <AgentPickerModal type="editors" text="Add Editors" onClose={onClose} />
       </AccessControlContext.Provider>
     );
 
@@ -95,7 +153,9 @@ describe("AgentPickerModal", () => {
     const avatar = "https://someavatar.com";
     const webId = "https://somewebid.com";
 
-    fetchProfile.mockResolvedValueOnce({ name, avatar, webId });
+    jest
+      .spyOn(ProfileFns, "fetchProfile")
+      .mockResolvedValueOnce({ name, avatar, webId });
 
     const addWebIdButton = getByTestId("add-webid-button");
     userEvent.click(addWebIdButton);
@@ -110,27 +170,30 @@ describe("AgentPickerModal", () => {
   });
   // update this when we actually pass the contacts to the table
   it("renders a table with tabs, searchbox and an empty state message when there are no contacts", () => {
-    const { asFragment } = renderWithTheme(
-      <AgentPickerModal
-        type="editors"
-        text="Add Editors"
-        onClose={onClose}
-        mutatePermissions={mutatePermissions}
-        permissions={permissions}
-      />
+    useNamedPolicyPermissions.mockReturnValue({
+      data: permissions,
+      mutate: jest.fn(),
+    });
+    usePermissionsWithProfiles.mockReturnValue({
+      permissionsWithProfiles: [],
+    });
+    const { asFragment, getByTestId } = renderWithTheme(
+      <AgentPickerModal type="editors" text="Add Editors" onClose={onClose} />
     );
     expect(asFragment()).toMatchSnapshot();
+    expect(getByTestId("empty-state-add-webid-button")).not.toBeNull();
   });
   it("renders a warning when trying to submit without adding a webId", () => {
+    useNamedPolicyPermissions.mockReturnValue({
+      data: permissions,
+      mutate: jest.fn(),
+    });
+    usePermissionsWithProfiles.mockReturnValue({
+      permissionsWithProfiles: permissions,
+    });
     const { getByTestId, getByRole } = renderWithTheme(
       <AccessControlContext.Provider value={{ accessControl }}>
-        <AgentPickerModal
-          type="editors"
-          text="Add Editors"
-          onClose={onClose}
-          mutatePermissions={mutatePermissions}
-          permissions={permissions}
-        />
+        <AgentPickerModal type="editors" text="Add Editors" onClose={onClose} />
       </AccessControlContext.Provider>
     );
 
@@ -143,6 +206,13 @@ describe("AgentPickerModal", () => {
   });
 
   it("opens a confirmation dialog", async () => {
+    useNamedPolicyPermissions.mockReturnValue({
+      data: permissions,
+      mutate: jest.fn(),
+    });
+    usePermissionsWithProfiles.mockReturnValue({
+      permissionsWithProfiles: permissions,
+    });
     const setOpen = jest.fn();
     const setTitle = jest.fn();
 
@@ -163,8 +233,6 @@ describe("AgentPickerModal", () => {
             type="editors"
             text="Add Editors"
             onClose={onClose}
-            mutatePermissions={mutatePermissions}
-            permissions={permissions}
           />
         </AccessControlContext.Provider>
       </ConfirmationDialogContext.Provider>
@@ -172,7 +240,9 @@ describe("AgentPickerModal", () => {
 
     const webId = "https://somewebid.com";
 
-    await fetchProfile.mockRejectedValue({ error: "error" });
+    jest
+      .spyOn(ProfileFns, "fetchProfile")
+      .mockRejectedValue({ error: "error" });
 
     const addWebIdButton = getByTestId("add-webid-button");
     userEvent.click(addWebIdButton);
@@ -188,16 +258,17 @@ describe("AgentPickerModal", () => {
   });
   it("renders a warning when trying to submit a webId that is already in the policy", async () => {
     const webId = "https://somewebid.com";
+    useNamedPolicyPermissions.mockReturnValue({
+      data: permissions,
+      mutate: jest.fn(),
+    });
+    usePermissionsWithProfiles.mockReturnValue({
+      permissionsWithProfiles: [{ webId }],
+    });
 
     const { getByTestId, findByText, findByTestId } = renderWithTheme(
       <AccessControlContext.Provider value={{ accessControl }}>
-        <AgentPickerModal
-          type="editors"
-          text="Add Editors"
-          onClose={onClose}
-          mutatePermissions={mutatePermissions}
-          permissions={[{ webId }]}
-        />
+        <AgentPickerModal type="editors" text="Add Editors" onClose={onClose} />
       </AccessControlContext.Provider>
     );
 
@@ -231,21 +302,21 @@ describe("handleConfirmation", () => {
     handleSubmitNewWebIds,
   });
 
-  test("it returns a handler which calls a function that the webIds when user confirms dialog", () => {
+  it("returns a handler which calls a function that the webIds when user confirms dialog", () => {
     handler(true, true);
 
     expect(handleSubmitNewWebIds).toHaveBeenCalled();
     expect(setConfirmed).toHaveBeenCalledWith(null);
     expect(setConfirmationSetup).toHaveBeenCalledWith(true);
   });
-  test("it returns a handler that exits when user cancels the operation", () => {
+  it("returns a handler that exits when user cancels the operation", () => {
     handler(true, false);
 
     expect(setOpen).toHaveBeenCalledWith(null);
     expect(handleSubmitNewWebIds).not.toHaveBeenCalled();
     expect(setConfirmed).toHaveBeenCalledWith(null);
   });
-  test("it returns a handler that exits when user starts confirmation but hasn't selected an option", () => {
+  it("returns a handler that exits when user starts confirmation but hasn't selected an option", () => {
     handler(true, null);
 
     expect(handleSubmitNewWebIds).not.toHaveBeenCalled();
@@ -264,7 +335,7 @@ describe("handleSubmit", () => {
   const type = "editors";
   const fetch = jest.fn();
 
-  test("it returns a handler that submits the new webIds", async () => {
+  it("returns a handler that submits the new webIds", async () => {
     const handler = handleSubmit({
       newAgentsWebIds: [webId],
       setNoAgentsAlert,
@@ -291,7 +362,7 @@ describe("handleSubmit", () => {
     expect(onClose).toHaveBeenCalled();
   });
 
-  test("it calls setNoAgentsAlert when array of agents if empty", () => {
+  it("calls setNoAgentsAlert when array of agents if empty", () => {
     const handler = handleSubmit({
       newAgentsWebIds: [],
       setNoAgentsAlert,
@@ -316,33 +387,41 @@ describe("handleSaveContact", () => {
   const addressBookUrl = "http://example.com/contacts/index.ttl";
   const addressBook = mockSolidDatasetFrom(addressBookUrl);
   const fetch = jest.fn();
-  test("it exits if no iri", () => {
+  it("exits if no iri", () => {
     handleSaveContact(null, people, addressBook, fetch);
 
-    expect(saveContact).not.toHaveBeenCalled();
+    expect(jest.spyOn(AddressBookFns, "saveContact")).not.toHaveBeenCalled();
   });
-  test("it cancels the operation if webId is already in contacts", () => {
+  it("cancels the operation if webId is already in contacts", () => {
     handleSaveContact(iri, people, addressBook, fetch);
     const name = "Example";
     const avatar = "https://someavatar.com";
     const webId = iri;
 
-    fetchProfile.mockResolvedValue({ name, avatar, webId });
+    jest
+      .spyOn(ProfileFns, "fetchProfile")
+      .mockResolvedValue({ name, avatar, webId });
 
-    findContactInAddressBook.mockResolvedValue([iri]);
+    jest
+      .spyOn(AddressBookFns, "findContactInAddressBook")
+      .mockResolvedValue([iri]);
 
-    expect(saveContact).not.toHaveBeenCalled();
+    expect(jest.spyOn(AddressBookFns, "saveContact")).not.toHaveBeenCalled();
   });
-  test("it saves the contact", () => {
+  it("saves the contact", () => {
     handleSaveContact(iri, people, addressBook, fetch);
     const name = "Example";
     const avatar = "https://someavatar.com";
     const webId = iri;
 
-    fetchProfile.mockResolvedValue({ name, avatar, webId });
+    jest
+      .spyOn(ProfileFns, "fetchProfile")
+      .mockResolvedValue({ name, avatar, webId });
 
-    findContactInAddressBook.mockResolvedValue([]);
+    jest
+      .spyOn(AddressBookFns, "findContactInAddressBook")
+      .mockResolvedValue([]);
 
-    expect(saveContact).not.toHaveBeenCalled();
+    expect(jest.spyOn(AddressBookFns, "saveContact")).not.toHaveBeenCalled();
   });
 });

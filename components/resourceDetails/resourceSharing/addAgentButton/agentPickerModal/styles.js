@@ -60,7 +60,7 @@ export default function styles(theme) {
         padding: theme.spacing(0.5),
         alignItems: "center",
         borderBottom: `1px solid ${theme.palette.grey.A100}`,
-        fontWeight: 600,
+        fontWeight: theme.typography.body1.fontWeight,
         color: theme.palette.text.primary,
       },
     },

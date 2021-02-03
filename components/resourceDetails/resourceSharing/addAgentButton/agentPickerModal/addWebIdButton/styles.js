@@ -29,7 +29,7 @@ export default function styles(theme) {
       fontSize: "0.8125rem",
       textDecoration: "none",
       borderRadius: "7px",
-      backgroundColor: "#F9F7FF",
+      backgroundColor: theme.palette.grey[50],
       whiteSpace: "nowrap",
       padding: theme.spacing(0.2, 1.6),
     },

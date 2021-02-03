@@ -46,10 +46,7 @@ export default function AddWebIdButton({ onClick, disabled }) {
       disabled={disabled}
       onClick={onClick}
     >
-      <i
-        className={clsx(bem("icon-add"), bem("icon"))}
-        alt="Add WebID Button"
-      />
+      <i className={clsx(bem("icon-add"), bem("icon"))} />
       Add WebId
     </Button>
   );

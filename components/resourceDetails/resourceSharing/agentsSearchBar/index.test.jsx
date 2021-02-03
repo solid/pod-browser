@@ -23,16 +23,16 @@ import React from "react";
 import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 
-import AgentsSearchBar from "./index";
+import AgentsSearchBar, { TESTCAFE_ID_SEARCH_INPUT } from "./index";
 
 describe("AgentSearchBar", () => {
   const handleFilterChange = jest.fn();
   it("renders a search bar", () => {
-    const { asFragment } = renderWithTheme(
+    const { asFragment, getByTestId } = renderWithTheme(
       <AgentsSearchBar handleFilterChange={handleFilterChange} />
     );
-
     expect(asFragment()).toMatchSnapshot();
+    expect(getByTestId(TESTCAFE_ID_SEARCH_INPUT)).toBeDefined();
   });
   it("triggers handleFilterChange when typing into the search input", () => {
     const { getByTestId } = renderWithTheme(

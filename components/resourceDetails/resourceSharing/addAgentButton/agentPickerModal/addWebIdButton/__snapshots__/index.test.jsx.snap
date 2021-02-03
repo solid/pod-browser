@@ -7,7 +7,6 @@ exports[`AddWebIdButton renders an Add WebID Button 1`] = `
     data-testid="add-webid-button"
   >
     <i
-      alt="Add WebID Button"
       class="PodBrowser-icon-add PodBrowser-icon"
     />
     Add WebId

@@ -20,7 +20,6 @@
  */
 
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
-import { container } from "@solid/lit-prism-patterns";
 import {
   getPolicyUrl,
   getPoliciesContainerUrl,

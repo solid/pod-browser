@@ -49,10 +49,7 @@ export default function AgentPickerEmptyState({ onClick }) {
           className={clsx(buttonBem("button"), bem("add-webId-button"))}
           onClick={onClick}
         >
-          <i
-            className={clsx(bem("icon-add"), bem("icon"))}
-            alt="Add WebID button"
-          />
+          <i className={clsx(bem("icon-add"), bem("icon"))} />
           Add WebId
         </Button>
       </Container>

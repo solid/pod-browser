@@ -46,6 +46,7 @@ import { fetchProfile } from "../../../../../src/solidClientHelpers/profile";
 import {
   findContactInAddressBook,
   saveContact,
+  vcardExtras,
 } from "../../../../../src/addressBook";
 import useAddressBook from "../../../../../src/hooks/useAddressBook";
 import useContactsOld from "../../../../../src/hooks/useContactsOld";
@@ -58,6 +59,8 @@ import AgentPickerEmptyState from "../agentPickerEmptyState";
 import styles from "./styles";
 import AddWebIdButton from "./addWebIdButton";
 import ConfirmationDialogContext from "../../../../../src/contexts/confirmationDialogContext";
+import useNamedPolicyPermissions from "../../../../../src/hooks/useNamedPolicyPermissions";
+import usePermissionsWithProfiles from "../../../../../src/hooks/usePermissionsWithProfiles";
 
 export const handleSubmit = ({
   newAgentsWebIds,
@@ -111,9 +114,6 @@ export const handleConfirmation = ({
 };
 
 export const handleSaveContact = async (iri, people, addressBook, fetch) => {
-  let response;
-  let error;
-
   if (!iri) {
     return;
   }
@@ -132,33 +132,29 @@ export const handleSaveContact = async (iri, people, addressBook, fetch) => {
 
     if (name) {
       const contact = { webId, fn: name };
-      response = await saveContact(addressBook, contact, types, fetch);
+      await saveContact(addressBook, contact, types, fetch);
     }
   } catch (e) {
-    error = e; // setting the error in case we want to do something with it later (like displaying a notification to the user)
+    // ignoring any errors during contact save
   }
-  // eslint-disable-next-line consistent-return
-  return { response, error };
 };
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-const VCARD_WEBID_PREDICATE = "https://www.w3.org/2006/vcard/ns#WebId";
+const VCARD_WEBID_PREDICATE = vcardExtras("WebId");
 const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
 const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
 
-export default function AgentPickerModal({
-  type,
-  text,
-  onClose,
-  mutatePermissions,
-  permissions,
-}) {
-  const [addressBook] = useAddressBook();
+export default function AgentPickerModal({ type, text, onClose }) {
   const {
-    data: people,
-    error: peopleError,
-    mutate: peopleMutate,
-  } = useContactsOld(addressBook, foaf.Person);
+    data: namedPermissions,
+    mutate: mutatePermissions,
+  } = useNamedPolicyPermissions(type);
+  const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
+    namedPermissions
+  );
+
+  const [addressBook] = useAddressBook();
+  const { data: people } = useContactsOld(addressBook, foaf.Person);
 
   const classes = useStyles();
   const { session } = useSession();
@@ -290,7 +286,11 @@ export default function AgentPickerModal({
         </div>
         <AgentsSearchBar handleFilterChange={handleFilterChange} />
         {contactsArray.length ? (
-          <Table things={contactsArray} className={classes.table}>
+          <Table
+            things={contactsArray}
+            className={classes.table}
+            filter={globalFilter}
+          >
             <TableColumn
               property={VCARD_WEBID_PREDICATE}
               dataType="url"
@@ -318,21 +318,19 @@ export default function AgentPickerModal({
             <TableColumn
               header={<span className={classes.tableHeader}>Name</span>}
               property={foaf.name}
-              body={({ row: { index } }) => {
-                return (
-                  <AddAgentRow
-                    type={type}
-                    index={index}
-                    setNewAgentsWebIds={setNewAgentsWebIds}
-                    newAgentsWebIds={newAgentsWebIds}
-                    setAddingWebId={setAddingWebId}
-                    addingWebId={addingWebId}
-                    setNoAgentsAlert={setNoAgentsAlert}
-                    updateThing={updateThing}
-                    permissions={permissions}
-                  />
-                );
-              }}
+              body={({ row: { index } }) => (
+                <AddAgentRow
+                  type={type}
+                  index={index}
+                  setNewAgentsWebIds={setNewAgentsWebIds}
+                  newAgentsWebIds={newAgentsWebIds}
+                  setAddingWebId={setAddingWebId}
+                  addingWebId={addingWebId}
+                  setNoAgentsAlert={setNoAgentsAlert}
+                  updateThing={updateThing}
+                  permissions={permissions}
+                />
+              )}
             />
           </Table>
         ) : (
@@ -364,13 +362,10 @@ export default function AgentPickerModal({
 
 AgentPickerModal.propTypes = {
   onClose: PropTypes.func,
-  mutatePermissions: PropTypes.func,
-  permissions: PropTypes.arrayOf(PropTypes.shape).isRequired,
   text: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
 };
 
 AgentPickerModal.defaultProps = {
   onClose: () => {},
-  mutatePermissions: () => {},
 };

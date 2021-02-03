@@ -28,9 +28,9 @@ import { makeStyles } from "@material-ui/styles";
 import { Tabs, Tab, createStyles } from "@material-ui/core";
 import styles from "./styles";
 
-const TESTCAFE_ID_TAB_ALL = "tab-all";
-const TESTCAFE_ID_TAB_PEOPLE = "tab-people";
-const TESTCAFE_ID_TAB_GROUPS = "tab-groups";
+export const TESTCAFE_ID_TAB_ALL = "tab-all";
+export const TESTCAFE_ID_TAB_PEOPLE = "tab-people";
+export const TESTCAFE_ID_TAB_GROUPS = "tab-groups";
 
 const tabs = [
   {

@@ -48,7 +48,7 @@ export default function CanShareInfoTooltip({ resourceName, className }) {
         <Button classes={{ root: classes.infoButton }}>
           <i
             className={clsx(bem("icon-info"), bem("icon"), classes.infoIcon)}
-            alt="Info"
+            aria-label="Info"
           />
         </Button>
       </Tooltip>

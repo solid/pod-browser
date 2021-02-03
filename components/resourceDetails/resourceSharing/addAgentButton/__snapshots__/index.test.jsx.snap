@@ -7,7 +7,6 @@ exports[`AddAgentButton renders a button with the correct text 1`] = `
     data-testid="add-agent-button"
   >
     <i
-      alt="Add Editors Button"
       class="PodBrowser-icon-add PodBrowser-icon"
     />
     Add Editors

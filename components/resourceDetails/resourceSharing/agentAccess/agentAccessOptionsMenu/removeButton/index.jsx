@@ -70,7 +70,7 @@ export const handleRemovePermissions = ({
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-const TESTCAFE_ID_REMOVE_BUTTON = "remove-button";
+export const TESTCAFE_ID_REMOVE_BUTTON = "remove-button";
 
 export default function RemoveButton({
   resourceIri,

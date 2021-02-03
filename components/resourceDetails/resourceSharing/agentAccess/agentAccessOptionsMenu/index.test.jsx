@@ -23,6 +23,7 @@ import React from "react";
 import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import AgentAccessOptionsMenu from "./index";
+import { TESTCAFE_ID_REMOVE_BUTTON } from "./removeButton";
 
 const resourceIri = "/iri/";
 const webId = "https://example.com/profile/card#me";
@@ -49,7 +50,7 @@ describe("AgentAccessOptionsMenu", () => {
     const menuButton = getByTestId("menu-button");
     userEvent.click(menuButton);
     expect(queryByText("WebId:")).toBeDefined();
-    const removeButton = getByTestId("remove-button");
+    const removeButton = getByTestId(TESTCAFE_ID_REMOVE_BUTTON);
     expect(removeButton).toBeDefined();
   });
 });

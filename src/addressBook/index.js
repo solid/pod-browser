@@ -59,7 +59,7 @@ const PEOPLE_INDEX_FILE = "people.ttl";
 const GROUPS_INDEX_FILE = "groups.ttl";
 const PERSON_CONTAINER = "Person";
 
-const VCARD_WEBID_PREDICATE = "https://www.w3.org/2006/vcard/ns#WebId";
+const VCARD_WEBID_PREDICATE = "http://www.w3.org/2006/vcard/ns#WebId";
 
 export const TYPE_MAP = {
   [foaf.Person]: {

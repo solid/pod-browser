@@ -31,7 +31,6 @@ exports[`AgentProfileDetails renders without error 1`] = `
       type="button"
     >
       <i
-        alt="More Options Menu"
         class="PodBrowser-icon-more"
       />
     </button>

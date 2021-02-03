@@ -29,7 +29,8 @@ import { makeStyles } from "@material-ui/styles";
 import { IconButton, InputBase, createStyles } from "@material-ui/core";
 import styles from "./styles";
 
-const TESTCAFE_ID_SEARCH_INPUT = "search-input";
+export const TESTCAFE_ID_SEARCH_INPUT = "search-input";
+
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function AgentsSearchBar({ handleFilterChange }) {
@@ -42,7 +43,6 @@ export default function AgentsSearchBar({ handleFilterChange }) {
         <i
           className={clsx(bem("icon-search"), bem("icon"), classes.iconSearch)}
           aria-label="search"
-          alt="search icon"
         />
       </IconButton>
       <InputBase

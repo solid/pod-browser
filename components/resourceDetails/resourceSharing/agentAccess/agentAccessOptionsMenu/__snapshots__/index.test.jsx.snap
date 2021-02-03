@@ -8,7 +8,6 @@ exports[`AgentAccessOptionsMenu it renders a button which triggers the opening o
     type="button"
   >
     <i
-      alt="More Options Menu"
       class="PodBrowser-icon-more"
     />
   </button>

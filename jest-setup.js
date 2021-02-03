@@ -19,20 +19,4 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles } from "@solid/lit-prism-patterns";
-
-export default function styles(theme) {
-  return createStyles(theme, [], {
-    switchBase: {
-      color: theme.palette.primary.main,
-      "&$switchChecked": {
-        color: theme.palette.primary.main,
-      },
-      "&$switchChecked + $switchTrack": {
-        backgroundColor: theme.palette.primary.main,
-      },
-    },
-    switchChecked: {},
-    switchTrack: {},
-  });
-}
+import "@testing-library/jest-dom";

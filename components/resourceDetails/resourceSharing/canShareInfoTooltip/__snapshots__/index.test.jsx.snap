@@ -21,7 +21,7 @@ exports[`CanShareInfoTooltip renders a Can Share info button with a tooltip with
         class="PodBrowser-label"
       >
         <i
-          alt="Info"
+          aria-label="Info"
           class="PodBrowser-icon-info PodBrowser-infoIcon"
         />
       </span>
@@ -54,7 +54,7 @@ exports[`CanShareInfoTooltip renders a Can Share info button with resourceName i
         class="PodBrowser-label"
       >
         <i
-          alt="Info"
+          aria-label="Info"
           class="PodBrowser-icon-info PodBrowser-infoIcon"
         />
       </span>

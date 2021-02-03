@@ -21,7 +21,6 @@ exports[`AgentPickerEmptyState renders an empty state container with a message a
         data-testid="empty-state-add-webid-button"
       >
         <i
-          alt="Add WebID button"
           class="PodBrowser-icon-add PodBrowser-icon"
         />
         Add WebId

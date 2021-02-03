@@ -42,6 +42,7 @@ import PolicyHeader from "../policyHeader";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const TESTCAFE_ID_SHOW_ALL_BUTTON = "show-all-button";
 const TESTCAFE_ID_HIDE_BUTTON = "hide-button";
+export const TESTCAFE_ID_AGENT_ACCESS_TABLE = "agent-access-table";
 
 export default function AgentAccessTable({ type }) {
   const {
@@ -174,6 +175,7 @@ export default function AgentAccessTable({ type }) {
     <Accordion
       defaultExpanded
       classes={{ root: classes.accordion, rounded: classes.rounded }}
+      data-testid={TESTCAFE_ID_AGENT_ACCESS_TABLE}
     >
       <PolicyHeader type={type} isPolicyList>
         <AddAgentButton

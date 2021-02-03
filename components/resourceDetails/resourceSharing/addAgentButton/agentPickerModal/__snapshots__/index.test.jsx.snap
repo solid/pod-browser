@@ -126,7 +126,6 @@ exports[`AgentPickerModal renders a table with tabs, searchbox and an empty stat
           data-testid="add-webid-button"
         >
           <i
-            alt="Add WebID Button"
             class="PodBrowser-icon-add PodBrowser-icon"
           />
           Add WebId
@@ -145,7 +144,6 @@ exports[`AgentPickerModal renders a table with tabs, searchbox and an empty stat
             class="PodBrowser-label"
           >
             <i
-              alt="search icon"
               aria-label="search"
               class="PodBrowser-icon-search PodBrowser-iconSearch"
             />
@@ -186,7 +184,6 @@ exports[`AgentPickerModal renders a table with tabs, searchbox and an empty stat
             data-testid="empty-state-add-webid-button"
           >
             <i
-              alt="Add WebID button"
               class="PodBrowser-icon-add PodBrowser-icon"
             />
             Add WebId

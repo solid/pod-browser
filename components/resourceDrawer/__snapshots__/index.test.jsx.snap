@@ -416,6 +416,7 @@ exports[`ResourceDrawer view it renders a Contents view when the router query ha
                   >
                     <div
                       class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+                      data-testid="agent-access-table"
                     >
                       <div
                         class="PodBrowser-headerContainer"
@@ -439,7 +440,6 @@ exports[`ResourceDrawer view it renders a Contents view when the router query ha
                               data-testid="add-agent-button"
                             >
                               <i
-                                alt="Add Editors Button"
                                 class="PodBrowser-icon-add PodBrowser-icon"
                               />
                               Add Editors
@@ -488,6 +488,7 @@ exports[`ResourceDrawer view it renders a Contents view when the router query ha
                     </div>
                     <div
                       class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+                      data-testid="agent-access-table"
                     >
                       <div
                         class="PodBrowser-headerContainer"
@@ -511,7 +512,6 @@ exports[`ResourceDrawer view it renders a Contents view when the router query ha
                               data-testid="add-agent-button"
                             >
                               <i
-                                alt="Add Viewers Button"
                                 class="PodBrowser-icon-add PodBrowser-icon"
                               />
                               Add Viewers
@@ -564,6 +564,7 @@ exports[`ResourceDrawer view it renders a Contents view when the router query ha
                     </div>
                     <div
                       class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+                      data-testid="agent-access-table"
                     >
                       <div
                         class="PodBrowser-headerContainer"
@@ -587,7 +588,6 @@ exports[`ResourceDrawer view it renders a Contents view when the router query ha
                               data-testid="add-agent-button"
                             >
                               <i
-                                alt="Block Button"
                                 class="PodBrowser-icon-add PodBrowser-icon"
                               />
                               Block
@@ -1064,6 +1064,7 @@ exports[`ResourceDrawer view it renders a loading view when context has no iri 1
                   >
                     <div
                       class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+                      data-testid="agent-access-table"
                     >
                       <div
                         class="PodBrowser-headerContainer"
@@ -1087,7 +1088,6 @@ exports[`ResourceDrawer view it renders a loading view when context has no iri 1
                               data-testid="add-agent-button"
                             >
                               <i
-                                alt="Add Editors Button"
                                 class="PodBrowser-icon-add PodBrowser-icon"
                               />
                               Add Editors
@@ -1136,6 +1136,7 @@ exports[`ResourceDrawer view it renders a loading view when context has no iri 1
                     </div>
                     <div
                       class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+                      data-testid="agent-access-table"
                     >
                       <div
                         class="PodBrowser-headerContainer"
@@ -1159,7 +1160,6 @@ exports[`ResourceDrawer view it renders a loading view when context has no iri 1
                               data-testid="add-agent-button"
                             >
                               <i
-                                alt="Add Viewers Button"
                                 class="PodBrowser-icon-add PodBrowser-icon"
                               />
                               Add Viewers
@@ -1212,6 +1212,7 @@ exports[`ResourceDrawer view it renders a loading view when context has no iri 1
                     </div>
                     <div
                       class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+                      data-testid="agent-access-table"
                     >
                       <div
                         class="PodBrowser-headerContainer"
@@ -1235,7 +1236,6 @@ exports[`ResourceDrawer view it renders a loading view when context has no iri 1
                               data-testid="add-agent-button"
                             >
                               <i
-                                alt="Block Button"
                                 class="PodBrowser-icon-add PodBrowser-icon"
                               />
                               Block
@@ -1713,6 +1713,7 @@ exports[`ResourceDrawer view it renders without errors when iri contains spaces 
                   >
                     <div
                       class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+                      data-testid="agent-access-table"
                     >
                       <div
                         class="PodBrowser-headerContainer"
@@ -1736,7 +1737,6 @@ exports[`ResourceDrawer view it renders without errors when iri contains spaces 
                               data-testid="add-agent-button"
                             >
                               <i
-                                alt="Add Editors Button"
                                 class="PodBrowser-icon-add PodBrowser-icon"
                               />
                               Add Editors
@@ -1785,6 +1785,7 @@ exports[`ResourceDrawer view it renders without errors when iri contains spaces 
                     </div>
                     <div
                       class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+                      data-testid="agent-access-table"
                     >
                       <div
                         class="PodBrowser-headerContainer"
@@ -1808,7 +1809,6 @@ exports[`ResourceDrawer view it renders without errors when iri contains spaces 
                               data-testid="add-agent-button"
                             >
                               <i
-                                alt="Add Viewers Button"
                                 class="PodBrowser-icon-add PodBrowser-icon"
                               />
                               Add Viewers
@@ -1861,6 +1861,7 @@ exports[`ResourceDrawer view it renders without errors when iri contains spaces 
                     </div>
                     <div
                       class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+                      data-testid="agent-access-table"
                     >
                       <div
                         class="PodBrowser-headerContainer"
@@ -1884,7 +1885,6 @@ exports[`ResourceDrawer view it renders without errors when iri contains spaces 
                               data-testid="add-agent-button"
                             >
                               <i
-                                alt="Block Button"
                                 class="PodBrowser-icon-add PodBrowser-icon"
                               />
                               Block
