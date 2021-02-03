@@ -30,7 +30,8 @@ import {
 } from "@material-ui/core";
 import styles from "../styles";
 
-const TESTCAFE_ID_PERMISSION_CHECKBOX = "permission-checkbox-";
+const TESTCAFE_ID_PERMISSION_LABEL = "permission-label-";
+export const TESTCASE_ID_PERMISSION_CHECKBOX = "permission-checkbox-";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -43,7 +44,7 @@ function PermissionCheckbox({ value, label, disabled, onChange }) {
     <ListItem className={classes.listItem}>
       <FormControlLabel
         classes={{ label: classes.label }}
-        data-testid={TESTCAFE_ID_PERMISSION_CHECKBOX + name}
+        data-testid={TESTCAFE_ID_PERMISSION_LABEL + name}
         label={label}
         control={(
           <Checkbox
@@ -52,6 +53,7 @@ function PermissionCheckbox({ value, label, disabled, onChange }) {
             name={name}
             onChange={onChange}
             disabled={disabled}
+            inputProps={{"data-testid": TESTCASE_ID_PERMISSION_CHECKBOX + name}}
           />
         )}
       />

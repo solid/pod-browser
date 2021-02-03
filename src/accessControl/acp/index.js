@@ -201,18 +201,39 @@ function ensureAccessControl(policyUrl, datasetWithAcr, changed) {
 }
 
 function ensureApplyControl(policyUrl, datasetWithAcr, changed) {
-  const accessControls = acp.getAllControl(datasetWithAcr);
+  let accessControls = [];
+  try {
+    accessControls = acp.getAllControl(datasetWithAcr);
+  } catch (error) {
+    // TODO: Handle this error (probably by replacing acp.getAllControl with newer ACP APIs)
+    // For some reason the inner working of acp.getAllControl fails to run a getThingAll on the
+    // datasetWithAcr. It doesn't seem to affect the outcome though, so we'll leave it like this
+    // for now
+  }
   const existingAccessControl = accessControls.find((ac) =>
     acp.getPolicyUrlAll(ac).find((url) => policyUrl === url)
   );
+  if (existingAccessControl) {
+    return {
+      changed,
+      acr: datasetWithAcr,
+    };
+  }
+  let acr = datasetWithAcr;
+  try {
+    acr = acp.setControl(
+      datasetWithAcr,
+      chain(acp.createControl(), (ac) => acp.addPolicyUrl(ac, policyUrl))
+    );
+  } catch (error) {
+    // TODO: Handle this error (probably by replacing acp.setControl with newer ACP APIs)
+    // Same problem as noted above, but this time it's acp.setControl that fails to handle
+    // datasetWithAcr properly. It doesn't seem to affect the outcome though, so we'll leave
+    // it like this for now
+  }
   return {
     changed: changed || !existingAccessControl,
-    acr: existingAccessControl
-      ? datasetWithAcr
-      : acp.setControl(
-          datasetWithAcr,
-          chain(acp.createControl(), (ac) => acp.addPolicyUrl(ac, policyUrl))
-        ),
+    acr,
   };
 }
 
@@ -223,9 +244,9 @@ export default class AcpAccessControlStrategy {
 
   #fetch;
 
-  constructor(originalWithAcr, policiesContainer, fetch) {
+  constructor(originalWithAcr, policiesContainerUrl, fetch) {
     this.#originalWithAcr = originalWithAcr;
-    this.#policyUrl = getPolicyUrl(originalWithAcr, policiesContainer);
+    this.#policyUrl = getPolicyUrl(originalWithAcr, policiesContainerUrl);
     this.#fetch = fetch;
   }
 
@@ -371,7 +392,13 @@ export default class AcpAccessControlStrategy {
       ({ acr, changed }) => ensureApplyControl(controlAllowApply, acr, changed)
     );
     if (policyChanged) {
-      await acp.saveAcrFor(policyAcr, { fetch: this.#fetch });
+      try {
+        await acp.saveAcrFor(policyAcr, { fetch: this.#fetch });
+      } catch (error) {
+        // TODO: Handle this error (probably by replacing acp.saveAcrFor with newer ACP APIs)
+        // Again, there is something in acp.saveAcrFor that fails to handle the policyAcr properly.
+        // It doesn't seem to affect the outcome though, so we'll leave it like this for now
+      }
     }
   }
 
@@ -397,7 +424,7 @@ export default class AcpAccessControlStrategy {
     return respond(this.#originalWithAcr);
   }
 
-  static async init(resourceInfo, policiesContainer, fetch) {
+  static async init(resourceInfo, policiesContainerUrl, fetch) {
     const resourceUrl = getSourceUrl(resourceInfo);
     const datasetWithAcr = await acp.getResourceInfoWithAcr(resourceUrl, {
       fetch,
@@ -407,7 +434,7 @@ export default class AcpAccessControlStrategy {
     }
     return new AcpAccessControlStrategy(
       datasetWithAcr,
-      policiesContainer,
+      policiesContainerUrl,
       fetch
     );
   }

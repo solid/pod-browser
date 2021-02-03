@@ -47,7 +47,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
         >
           <label
             class="PodBrowser-root"
-            data-testid="permission-checkbox-view"
+            data-testid="permission-label-view"
           >
             <span
               aria-disabled="false"
@@ -60,6 +60,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                   checked=""
                   class="PodBrowser-input"
                   data-indeterminate="false"
+                  data-testid="permission-checkbox-view"
                   name="view"
                   type="checkbox"
                   value=""
@@ -91,7 +92,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
         >
           <label
             class="PodBrowser-root"
-            data-testid="permission-checkbox-edit"
+            data-testid="permission-label-edit"
           >
             <span
               aria-disabled="false"
@@ -104,6 +105,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                   checked=""
                   class="PodBrowser-input"
                   data-indeterminate="false"
+                  data-testid="permission-checkbox-edit"
                   name="edit"
                   type="checkbox"
                   value=""
@@ -135,7 +137,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
         >
           <label
             class="PodBrowser-root"
-            data-testid="permission-checkbox-append"
+            data-testid="permission-label-append"
           >
             <span
               aria-disabled="false"
@@ -148,6 +150,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                   checked=""
                   class="PodBrowser-input"
                   data-indeterminate="false"
+                  data-testid="permission-checkbox-append"
                   name="append"
                   type="checkbox"
                   value=""
@@ -179,7 +182,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
         >
           <label
             class="PodBrowser-root"
-            data-testid="permission-checkbox-control"
+            data-testid="permission-label-control"
           >
             <span
               aria-disabled="false"
@@ -192,6 +195,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
                   checked=""
                   class="PodBrowser-input"
                   data-indeterminate="false"
+                  data-testid="permission-checkbox-control"
                   name="control"
                   type="checkbox"
                   value=""
@@ -301,7 +305,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
         >
           <label
             class="PodBrowser-root"
-            data-testid="permission-checkbox-view"
+            data-testid="permission-label-view"
           >
             <span
               aria-disabled="false"
@@ -314,6 +318,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                   checked=""
                   class="PodBrowser-input"
                   data-indeterminate="false"
+                  data-testid="permission-checkbox-view"
                   name="view"
                   type="checkbox"
                   value=""
@@ -345,7 +350,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
         >
           <label
             class="PodBrowser-root"
-            data-testid="permission-checkbox-edit"
+            data-testid="permission-label-edit"
           >
             <span
               aria-disabled="false"
@@ -358,6 +363,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                   checked=""
                   class="PodBrowser-input"
                   data-indeterminate="false"
+                  data-testid="permission-checkbox-edit"
                   name="edit"
                   type="checkbox"
                   value=""
@@ -389,7 +395,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
         >
           <label
             class="PodBrowser-root"
-            data-testid="permission-checkbox-append"
+            data-testid="permission-label-append"
           >
             <span
               aria-disabled="false"
@@ -402,6 +408,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                   checked=""
                   class="PodBrowser-input"
                   data-indeterminate="false"
+                  data-testid="permission-checkbox-append"
                   name="append"
                   type="checkbox"
                   value=""
@@ -433,7 +440,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
         >
           <label
             class="PodBrowser-root"
-            data-testid="permission-checkbox-control"
+            data-testid="permission-label-control"
           >
             <span
               aria-disabled="false"
@@ -445,6 +452,7 @@ exports[`PermissionsForm it returns null if control is false 1`] = `
                 <input
                   class="PodBrowser-input"
                   data-indeterminate="false"
+                  data-testid="permission-checkbox-control"
                   name="control"
                   type="checkbox"
                   value=""

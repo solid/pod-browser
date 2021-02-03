@@ -65,5 +65,9 @@ export default function AddAgentButton({ type, onClick }) {
 
 AddAgentButton.propTypes = {
   type: PropTypes.string.isRequired,
-  onClick: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
+};
+
+AddAgentButton.defaultProps = {
+  onClick: () => {},
 };

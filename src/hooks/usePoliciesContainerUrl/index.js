@@ -20,36 +20,16 @@
  */
 
 import { useEffect, useState } from "react";
-import { useSession } from "@inrupt/solid-ui-react";
-// eslint-disable-next-line camelcase
-import { acp_v1 } from "@inrupt/solid-client";
-import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import { getPoliciesContainerUrl } from "../../solidClientHelpers/policies";
-import { getOrCreateContainer } from "../../solidClientHelpers/resource";
-import useResourceInfo from "../useResourceInfo";
+import usePodRootUri from "../usePodRootUri";
 
-export default function usePoliciesContainer() {
-  const [policiesContainer, setPoliciesContainer] = useState();
-  const { fetch } = useSession();
-  const { data: profile } = useAuthenticatedProfile();
-  const podRootUri = profile?.pods[0];
-  const { data: podRoot, error: podRootError } = useResourceInfo(podRootUri);
-  const [error, setError] = useState(podRootError || null);
+export default function usePoliciesContainerUrl(resourceUrl) {
+  const [policiesContainerUrl, setPoliciesContainerUrl] = useState();
+  const rootUrl = usePodRootUri(resourceUrl);
 
   useEffect(() => {
-    if (!profile || podRootError || !podRoot || !acp_v1.hasLinkedAcr(podRoot)) {
-      setPoliciesContainer(null);
-      setError(podRootError || null);
-      return;
-    }
-    const policiesUri = getPoliciesContainerUrl(podRootUri);
-    getOrCreateContainer(policiesUri, fetch).then(
-      ({ response, error: createError }) => {
-        setPoliciesContainer(response || null);
-        setError(createError || null);
-      }
-    );
-  }, [fetch, podRoot, podRootError, podRootUri, profile]);
+    setPoliciesContainerUrl(rootUrl ? getPoliciesContainerUrl(rootUrl) : null);
+  }, [rootUrl]);
 
-  return { policiesContainer, error };
+  return policiesContainerUrl;
 }

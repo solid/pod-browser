@@ -21,9 +21,10 @@
 
 /* eslint-disable react/forbid-prop-types */
 
-// TODO: this component is kept here to keep the old Permissions accordion working. It can be removed after the old permissions accordion is gone.
+// TODO: this component is kept here to keep the old Permissions accordion working.
+// It can be removed after the old permissions accordion is gone.
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import {
   Avatar,
@@ -46,8 +47,8 @@ import {
   fetchProfile,
 } from "../../../../src/solidClientHelpers/profile";
 import AlertContext from "../../../../src/contexts/alertContext";
-import AccessControlContext from "../../../../src/contexts/accessControlContext";
 import useFetchProfile from "../../../../src/hooks/useFetchProfile";
+import AccessControlContext from "../../../../src/contexts/accessControlContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -61,11 +62,13 @@ export function submitHandler(
   setOpen,
   dialogId,
   savePermissions,
-  tempAccess
+  tempAccess,
+  setContent
 ) {
   return async (event) => {
     event.preventDefault();
     if (authenticatedWebId === webId) {
+      setContent("You are about to change your own permissions. Are you sure?");
       setOpen(dialogId);
     } else {
       await savePermissions(tempAccess);
@@ -87,7 +90,9 @@ export function saveHandler(
     onLoading(true);
     setAccess(newAccess);
 
-    if (!accessControl) return;
+    if (!accessControl) {
+      return;
+    }
 
     const { error } = await accessControl.savePermissionsForAgent(
       webId,
@@ -111,12 +116,8 @@ export function getDialogId(datasetIri) {
 export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
   let { data: profile, error: profileError } = useFetchProfile(webId);
   const classes = useStyles();
-  const {
-    session: {
-      info: { webId: authenticatedWebId },
-      fetch,
-    },
-  } = useSession();
+  const { fetch, session } = useSession();
+  const { webId: authenticatedWebId } = session.info;
   const bem = useBem(useStyles());
   const [access, setAccess] = useState(acl);
   const [tempAccess, setTempAccess] = useState(acl);
@@ -124,7 +125,9 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
   const { accessControl } = useContext(AccessControlContext);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { setOpen } = useContext(ConfirmationDialogContext);
+  const { confirmed, setContent, setOpen } = useContext(
+    ConfirmationDialogContext
+  );
 
   const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
   const dialogId = getDialogId(getSourceUrl(dataset));
@@ -140,13 +143,20 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
     setAlertOpen
   );
 
+  useEffect(() => {
+    if (!confirmed || authenticatedWebId !== webId) return;
+    // this triggers when a visitor changes their own permissions
+    savePermissions(tempAccess);
+  }, [authenticatedWebId, confirmed, savePermissions, tempAccess, webId]);
+
   const onSubmit = submitHandler(
     authenticatedWebId,
     webId,
     setOpen,
     dialogId,
     savePermissions,
-    tempAccess
+    tempAccess,
+    setContent
   );
 
   const handleRetryClick = async () => {

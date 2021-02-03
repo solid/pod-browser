@@ -54,10 +54,10 @@ const { mockSolidDatasetFrom, acp_v1: acpFns, setThing } = scFns;
 
 const podUrl = "http://example.com/";
 const resourceUrl = "http://example.com/resourceInfo";
-const policiesContainer = mockSolidDatasetFrom(getPoliciesContainerUrl(podUrl));
+const policiesContainerUrl = getPoliciesContainerUrl(podUrl);
 const policyResourceUrl = getPolicyUrl(
   mockSolidDatasetFrom(resourceUrl),
-  policiesContainer
+  policiesContainerUrl
 );
 const readApplyPolicyUrl = `${policyResourceUrl}#readApplyPolicy`;
 const readPolicyRuleUrl = `${readApplyPolicyUrl}Rule`;
@@ -86,7 +86,7 @@ describe("AcpAccessControlStrategy", () => {
         .mockResolvedValue(datasetWithAcr);
       acp = await AcpAccessControlStrategy.init(
         resourceInfo,
-        policiesContainer,
+        policiesContainerUrl,
         fetch
       );
     });
@@ -105,7 +105,7 @@ describe("AcpAccessControlStrategy", () => {
       const dataset = mockSolidDatasetFrom(datasetWithAcrUrl);
       acpFns.getResourceInfoWithAcr.mockResolvedValue(dataset);
       await expect(
-        AcpAccessControlStrategy.init(resourceInfo, policiesContainer, fetch)
+        AcpAccessControlStrategy.init(resourceInfo, policiesContainerUrl, fetch)
       ).rejects.toEqual(new Error(noAcrAccessError));
     });
   });
@@ -116,7 +116,7 @@ describe("AcpAccessControlStrategy", () => {
     beforeEach(() => {
       acp = new AcpAccessControlStrategy(
         datasetWithAcr,
-        policiesContainer,
+        policiesContainerUrl,
         fetch
       );
     });
@@ -196,7 +196,7 @@ describe("AcpAccessControlStrategy", () => {
     beforeEach(() => {
       acp = new AcpAccessControlStrategy(
         datasetWithAcr,
-        policiesContainer,
+        policiesContainerUrl,
         fetch
       );
     });

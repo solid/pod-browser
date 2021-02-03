@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PermissionCheckbox it renders a permission checkbox 1`] = `
+exports[`PermissionCheckbox renders a permission checkbox 1`] = `
 <DocumentFragment>
   <li
     class="PodBrowser-root PodBrowser-listItem PodBrowser-gutters"
   >
     <label
       class="PodBrowser-root"
-      data-testid="permission-checkbox-read"
+      data-testid="permission-label-read"
     >
       <span
         aria-disabled="false"
@@ -20,6 +20,7 @@ exports[`PermissionCheckbox it renders a permission checkbox 1`] = `
             checked=""
             class="PodBrowser-input"
             data-indeterminate="false"
+            data-testid="permission-checkbox-read"
             name="read"
             type="checkbox"
             value=""

@@ -24,7 +24,7 @@ import T from "prop-types";
 import { useRouter } from "next/router";
 import { useSession } from "@inrupt/solid-ui-react";
 import { getSourceIri, isContainer } from "@inrupt/solid-client";
-import usePoliciesContainer from "../../src/hooks/usePoliciesContainer";
+import usePoliciesContainerUrl from "../../src/hooks/usePoliciesContainerUrl";
 import AlertContext from "../../src/contexts/alertContext";
 import useResourceInfo from "../../src/hooks/useResourceInfo";
 import { deleteResource } from "../../src/solidClientHelpers/resource";
@@ -32,14 +32,14 @@ import DeleteButton from "../deleteButton";
 
 export function createDeleteHandler(
   resourceInfo,
-  policiesContainer,
+  policiesContainerUrl,
   onDelete,
   onDeleteCurrentContainer,
   router,
   fetch
 ) {
   return async () => {
-    await deleteResource(resourceInfo, policiesContainer, fetch);
+    await deleteResource(resourceInfo, policiesContainerUrl, fetch);
     const iri = getSourceIri(resourceInfo);
 
     if (isContainer(resourceInfo) && iri === router.query.iri) {
@@ -62,7 +62,7 @@ export default function DeleteResourceButton({
   const router = useRouter();
 
   const { alertError } = useContext(AlertContext);
-  const { policiesContainer } = usePoliciesContainer();
+  const policiesContainerUrl = usePoliciesContainerUrl(resourceIri);
   const { data: resourceInfo, error: resourceError } = useResourceInfo(
     resourceIri
   );
@@ -73,7 +73,7 @@ export default function DeleteResourceButton({
 
   const handleDelete = createDeleteHandler(
     resourceInfo,
-    policiesContainer,
+    policiesContainerUrl,
     onDelete,
     onDeleteCurrentContainer,
     router,

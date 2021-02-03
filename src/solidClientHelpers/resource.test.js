@@ -294,7 +294,7 @@ describe("deleteResource", () => {
 
   const fetch = jest.fn();
   const resourceIri = "https://example.org/example.txt";
-  const policiesContainer = "https://example.og/pb_policies/";
+  const policiesContainerUrl = "https://example.og/pb_policies/";
   const resourceInfo = mockSolidDatasetFrom(resourceIri);
 
   test("it won't try to delete policy if no policy container is given", async () => {
@@ -308,7 +308,7 @@ describe("deleteResource", () => {
   test("it deletes the given resource only when no policy is found", async () => {
     getPolicyUrl.mockReturnValue(null);
 
-    await deleteResource(resourceInfo, policiesContainer, fetch);
+    await deleteResource(resourceInfo, policiesContainerUrl, fetch);
 
     expect(mockDeleteFile).toHaveBeenCalledWith(resourceIri, {
       fetch,
@@ -319,7 +319,7 @@ describe("deleteResource", () => {
   test("it deletes the given resource and corresponding access policy if available", async () => {
     getPolicyUrl.mockReturnValue("https://example.org/examplePolicyUrl");
 
-    await deleteResource(resourceInfo, policiesContainer, fetch);
+    await deleteResource(resourceInfo, policiesContainerUrl, fetch);
 
     expect(mockDeleteFile).toHaveBeenCalledWith(resourceIri, {
       fetch,
@@ -338,7 +338,7 @@ describe("deleteResource", () => {
       throw new Error("403");
     });
     await expect(
-      deleteResource(resourceInfo, policiesContainer, fetch)
+      deleteResource(resourceInfo, policiesContainerUrl, fetch)
     ).resolves.toBeUndefined();
   });
 
@@ -348,7 +348,7 @@ describe("deleteResource", () => {
       throw new Error("404");
     });
     await expect(
-      deleteResource(resourceInfo, policiesContainer, fetch)
+      deleteResource(resourceInfo, policiesContainerUrl, fetch)
     ).resolves.toBeUndefined();
   });
 
@@ -358,7 +358,7 @@ describe("deleteResource", () => {
       throw new Error("500");
     });
     await expect(
-      deleteResource(resourceInfo, policiesContainer, fetch)
+      deleteResource(resourceInfo, policiesContainerUrl, fetch)
     ).rejects.toEqual(new Error("500"));
   });
 });

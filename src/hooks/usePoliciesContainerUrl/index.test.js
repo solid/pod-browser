@@ -19,23 +19,30 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { getSourceUrl } from "@inrupt/solid-client";
-import { sharedStart } from "./utils";
-import { joinPath } from "../stringHelpers";
+import { renderHook } from "@testing-library/react-hooks";
+import usePoliciesContainerUrl from "./index";
+import { getPoliciesContainerUrl } from "../../solidClientHelpers/policies";
+import usePodRootUri from "../usePodRootUri";
 
-const POLICIES_CONTAINER = "pb_policies/";
+jest.mock("../usePodRootUri");
+const mockedPodRootUri = usePodRootUri;
 
-export function getPoliciesContainerUrl(podRootUri) {
-  return joinPath(podRootUri, POLICIES_CONTAINER);
-}
+describe("usePoliciesContainerUrl", () => {
+  const podRootUrl = "http://example.com/";
+  const policiesContainerUrl = getPoliciesContainerUrl(podRootUrl);
 
-export function getPolicyUrl(resource, policiesContainerUrl) {
-  const resourceUrl = getSourceUrl(resource);
-  const rootUrl = policiesContainerUrl.substr(
-    0,
-    policiesContainerUrl.length - POLICIES_CONTAINER.length
-  );
-  const matchingStart = sharedStart(resourceUrl, rootUrl);
-  const path = `${resourceUrl.substr(matchingStart.length)}.ttl`;
-  return joinPath(getPoliciesContainerUrl(matchingStart), path);
-}
+  beforeEach(() => {
+    mockedPodRootUri.mockReturnValue(null);
+  });
+
+  it("returns null when podRootUrl is yet undetermined", () => {
+    const { result } = renderHook(() => usePoliciesContainerUrl(null));
+    expect(result.current).toBeNull();
+  });
+
+  it("returns response when podRootUrl is finished", async () => {
+    mockedPodRootUri.mockReturnValue(podRootUrl);
+    const { result } = renderHook(() => usePoliciesContainerUrl());
+    expect(result.current).toBe(policiesContainerUrl);
+  });
+});

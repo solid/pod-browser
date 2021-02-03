@@ -69,7 +69,7 @@ describe("isWac", () => {
 
 describe("getAccessControl", () => {
   let result;
-  const policiesContainer = "policiesContainer";
+  const policiesContainerUrl = "policiesContainer";
   const fetch = "fetch";
   const acpStrategy = "acpStrategy";
   const wacStrategy = "wacStrategy";
@@ -85,20 +85,20 @@ describe("getAccessControl", () => {
 
   it("throws error if no access link is found", async () => {
     await expect(
-      getAccessControl(resource, policiesContainer, fetch)
+      getAccessControl(resource, policiesContainerUrl, fetch)
     ).rejects.toEqual(new Error(noAccessPolicyError));
   });
 
   describe("ACP is supported", () => {
     beforeEach(async () => {
       acp.hasLinkedAcr.mockReturnValue(true);
-      result = await getAccessControl(resource, policiesContainer, fetch);
+      result = await getAccessControl(resource, policiesContainerUrl, fetch);
     });
 
     it("calls AcpAccessControlStrategy.init", () =>
       expect(AcpAccessControlStrategy.init).toHaveBeenCalledWith(
         resource,
-        policiesContainer,
+        policiesContainerUrl,
         fetch
       ));
 
@@ -109,7 +109,7 @@ describe("getAccessControl", () => {
   describe("WAC is supported", () => {
     beforeEach(async () => {
       solidClientFns.hasAccessibleAcl.mockReturnValue(true);
-      result = await getAccessControl(resource, policiesContainer, fetch);
+      result = await getAccessControl(resource, policiesContainerUrl, fetch);
     });
 
     it("calls WacAccessControlStrategy.init", () =>
