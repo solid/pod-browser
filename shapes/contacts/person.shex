@@ -1,22 +1,28 @@
-PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
-PREFIX xsd:   <http://www.w3.org/2001/XMLSchema#>
-PREFIX owl: <http://www.w3.org/2002/07/owl#>
-# PREFIX dc: <https://dublincore.org/specifications/dublin-core/dcmi-terms/#>
+PREFIX vcard:   <http://www.w3.org/2006/vcard/ns#>
+PREFIX xsd:     <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:     <http://www.w3.org/2002/07/owl#>
 PREFIX dcterms: <http://purl.org/dc/terms/>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
-# We should store the preferred WebID for each person, since owl:sameAs can be multiple WebIDs.
+# This shape describes the information we store when adding a person to an
+# address book. The resource it is used for represents a local copy of a
+# person's profile. We use the id "#this" to refer to the subject of the person.
+
+# This model is originally developed as part of the SolidOS/Data
+# Browser project, and we strive to keep it interoperable with their work.
+# Some custom terms have been introduced to vocabularies we think they could
+# belong to (e.g. vcard:inAddressBook). We'll make a note of the custom term
+# when used.
 
 vcard:Individual {
     vcard:fn xsd:string {1} ;
-    
-    # This is intended to refer to the Individual's WebIDs, 
-    # or other 'types', such as...?
-    vcard:url vcard:WebId {1}; 
-    
-    # What is this intended to refer to?
+
+    # vcard:WebId is a custom term
+    vcard:url vcard:WebId {1};
+
+    # Not sure if we use this anymore
     vcard:hasUID xsd:string ? ;
-    
+
     vcard:hasName xsd:string ? ; # structured name
     vcard:hasPhoto dcterms:Image * ;
     vcard:hasRelated vcard:RelatedType * ;
@@ -28,22 +34,16 @@ vcard:Individual {
     vcard:role xsd:string ? ;
     vcard:title xsd:string ? ;
     vcard:note xsd:string ? ;
-    
-    # These terms don't exist in vCard yet...
     vcard:inAddressBook vcard:AddressBook + ;
+    # vcard:inAddressBook is a custom term
+    # vcard:AddressBook is a custom class
 }
 
-# This term doesn't exist in vCard yet...
+# We store the preferred WebID for each person. The use of vcard:WebId
+# refer to the Individual's WebIDs, but the idea is that we could expand it
+# to refer to other type of unique identifiers later
+# vcard:WebId is a custom term
 # Big question - SHOULD something as fundamental as WebID be defined in vCard?
-#
-# An example of usage (in Turtle) showing the relation with 'vcard:url'
-# might be really useful here - for example, is this correct...?
-#   <tommy> a vcard:Individual ;
-#      vcard:url <https://pod.inrupt.com/tommy/profile/card#me> .
-# 
-#   <https://pod.inrupt.com/tommy/profile/card#me> a vcard:WebID ;
-#      vcard:value "????"^^xsd:string .
-#
 vcard:WebId {
     vcard:value xsd:string {1};
 }

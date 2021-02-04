@@ -3,6 +3,9 @@ PREFIX foaf:      <http://xmlns.com/foaf/0.1/>
 PREFIX terms:     <http://purl.org/dc/terms/>
 PREFIX xsd:       <https://www.w3.org/2001/XMLSchema#>
 
+# This shape describes some the information we store a bookmark. The
+# resource it is used describes multiple bookmarks.
+
 bookmark:Bookmark {
   terms:created xsd:dateTime {1} ;
   terms:title xsd:string {1} ;
