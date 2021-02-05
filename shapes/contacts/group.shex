@@ -6,7 +6,7 @@ PREFIX xsd:   <http://www.w3.org/2001/XMLSchema#>
 # (meaning the resource should only contain one group). We use the id "#this"
 # to refer to the subject of the group.
 
-# This model is originally developed as part of the
+# This model was originally developed as part of the
 # SolidOS/Data Browser project, and we strive to keep it interoperable with
 # their work. Some custom terms have been introduced to vocabularies we think
 # they could belong to (e.g. vcard:includesGroup). We'll make a note of the
