@@ -3,8 +3,9 @@ PREFIX foaf:      <http://xmlns.com/foaf/0.1/>
 PREFIX terms:     <http://purl.org/dc/terms/>
 PREFIX xsd:       <https://www.w3.org/2001/XMLSchema#>
 
-# This shape describes some the information we store a bookmark. The
-# resource it is used describes multiple bookmarks.
+# This shape describes the information we store for a bookmark. In PodBrowser
+# we store all bookmarks in the same resource (i.e. we don't store one bookmark
+# per resource, and then have another resource function as the index for them).
 
 bookmark:Bookmark {
   terms:created xsd:dateTime {1} ;
