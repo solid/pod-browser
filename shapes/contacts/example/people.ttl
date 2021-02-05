@@ -1,0 +1,10 @@
+@prefix :       <#>.
+@prefix vcard:  <http://www.w3.org/2006/vcard/ns#>.
+
+<Person/2d73ccc1-9d76-4398-8840-3c23a8ddf04c/index.ttl#this>
+    vcard:fn "Arne H (demo1)";
+    vcard:inAddressBook <index.ttl#this>.
+
+<Person/347429c1-e6b5-40c0-bd6f-61ba1265d357/index.ttl#this>
+    vcard:fn "Vincent";
+    vcard:inAddressBook <index.ttl>.

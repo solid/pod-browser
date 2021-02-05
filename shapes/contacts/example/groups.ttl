@@ -1,0 +1,21 @@
+@prefix : <#>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+
+<Group/Group_1.ttl#this>
+    a vcard:Group;
+    vcard:fn "Group 1".
+
+<Group/Group_2.ttl#this>
+    a vcard:Group;
+    vcard:fn "Group 2".
+
+<Group/TEst.ttl#this>
+    a vcard:Group;
+    vcard:fn "TEst".
+
+<index.ttl#this>
+    vcard:includesGroup
+        <Group/Group_1.ttl#this>,
+        <Group/Group_2.ttl#this>,
+        <Group/TEst.ttl#this>.
+

@@ -1,0 +1,10 @@
+@prefix :           <#>.
+@prefix acl:        <http://www.w3.org/ns/auth/acl#>.
+@prefix dcterms:    <http://purl.org/dc/elements/1.1/>.
+@prefix vcard:      <http://www.w3.org/2006/vcard/ns#>.
+
+:this a vcard:AddressBook;
+    acl:owner <https://megoth-demo3.inrupt.net/profile/card#me>;
+    dcterms:title "Contacts";
+    vcard:nameEmailIndex <people.ttl>;
+    vcard:groupIndex <groups.ttl>.

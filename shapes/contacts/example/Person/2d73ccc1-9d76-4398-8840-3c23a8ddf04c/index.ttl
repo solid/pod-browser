@@ -1,0 +1,15 @@
+@prefix :           <#>.
+@prefix dcterms:    <http://purl.org/dc/terms/>.
+@prefix XML:        <http://www.w3.org/2001/XMLSchema#>.
+@prefix vcard:      <http://www.w3.org/2006/vcard/ns#>.
+
+<>
+    dcterms:created "2021-02-04T06:19:42Z"^^XML:dateTime.
+
+:this
+    a vcard:Individual;
+    vcard:fn "Arne H (demo1)";
+    vcard:url [
+        a vcard:WebID;
+        vcard:value "https://megoth-demo1.inrupt.net/profile/card#me"
+    ].

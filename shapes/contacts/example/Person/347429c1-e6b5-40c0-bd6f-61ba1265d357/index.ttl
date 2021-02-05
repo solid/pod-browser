@@ -1,0 +1,11 @@
+@prefix :       <#>.
+@prefix vcard:  <http://www.w3.org/2006/vcard/ns#>.
+
+:this
+    a vcard:Individual;
+    vcard:url :16112499761464744406237652592;
+    vcard:fn "Vincent".
+
+:16112499761464744406237652592
+    a vcard:WebId;
+    vcard:value <https://vincentt.inrupt.net/profile/card#me>.
