@@ -3,8 +3,8 @@ PREFIX dc:    <http://purl.org/dc/elements/1.1/>
 PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
 PREFIX xsd:   <http://www.w3.org/2001/XMLSchema#>
 
-# This shape describes some of the information we store for an address book. The
-# resource it is used for is to describe a single address book. We use the id
+# This shape describes some of the information we store for an address book. It's
+# intended to represent a single address book. We use the ID
 # "#this" to refer to the subject of the address book.
 
 # This model is originally developed as part of the
