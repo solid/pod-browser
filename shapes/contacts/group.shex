@@ -20,3 +20,7 @@ vcard:Group {
   # vcard:AddressBook is a custom class
   ^vcard:includesGroup vcard:AddressBook
 }
+
+# Note that we also cache the name of each member, so that we don't have to
+# fetch the profile of each member to get their name. An example of this can
+# be seen in example/Group/Group_1.ttl.
