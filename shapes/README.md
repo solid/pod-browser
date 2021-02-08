@@ -18,8 +18,9 @@ stored in one file.
 ## Contacts
 
 Because there are some differences between the ShEx shapes we've described and
-previous work on SHACL shapes we wanted to explain the differences those shapes.
-Once they have been resolved, we might remove this README altogether.
+previous work on SHACL shapes we wanted to explain the differences between those
+shapes. Once these differences have been resolved, we might remove this README
+altogether.
 
 ### Address Book: Differences between ShEx and SHACL
 
@@ -32,15 +33,15 @@ differs from the ShEx shape in `contacts/address-book.shex`.
     - There can be one or more instances.
   - vcard:nameEmailIndex
     - There can be one or more instances.
-    - There is not a specific datatype set.
-  - vcard:vcard:groupIndex
-    - Using terms (sh:count, sh:FollowMe) that isn't formalized.
+    - There is no specific datatype set.
+  - vcard:groupIndex
+    - Uses terms (e.g., sh:count, sh:FollowMe) that aren't formalized.
     
 ### Group Index: Differences between ShEx and SHACL
 
 The following is how the SHACL shape in
 `https://raw.githubusercontent.com/solid/contacts-pane/master/shapes/contacts-shapes.ttl`
-differ from the ShEx shape in `contacts/group-index.shex`.
+differs from the ShEx shape in `contacts/group-index.shex`.
 
 - vcard:AddressBook
   - vcard:fn
@@ -53,7 +54,7 @@ differ from the ShEx shape in `contacts/group-index.shex`.
 
 The following is how the SHACL shape in
 `https://raw.githubusercontent.com/solid/contacts-pane/master/shapes/contacts-shapes.ttl`
-differ from the ShEx shape in `contacts/group.shex`.
+differs from the ShEx shape in `contacts/group.shex`.
 
 - vcard:AddressBook
   - vcard:includesGroup
@@ -66,19 +67,19 @@ differ from the ShEx shape in `contacts/group.shex`.
 
 The following is how the SHACL shape in
 `https://raw.githubusercontent.com/solid/contacts-pane/master/shapes/contacts-shapes.ttl`
-differ from the ShEx shape in `contacts/people-index.shex`.
+differs from the ShEx shape in `contacts/people-index.shex`.
 
 - vcard:Individual
   - vcard:inAddressBook
     - uses informal term sh:BackwardLink.
-    - minimum and maximum one instance of IRI (can be part of only one address
-      book).
+    - minimum and maximum one instance of IRI (i.e., can only be referenced from
+      one address book).
 
 ### Person: Differences between ShEx and SHACL
 
 The following is how the SHACL shape in
 `https://raw.githubusercontent.com/solid/contacts-pane/master/shapes/contacts-shapes.ttl`
-differ from the ShEx shape in `contacts/person.shex`.
+differs from the ShEx shape in `contacts/person.shex`.
 
 - vcard:Individual
   - is closed.
