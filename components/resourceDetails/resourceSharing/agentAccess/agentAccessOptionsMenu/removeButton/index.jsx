@@ -102,8 +102,8 @@ export default function RemoveButton({
   } = useContext(ConfirmationDialogContext);
 
   const handleOpenDialog = () => {
-    const text = `Remove
-    ${profile ? name : webId}'s access from ${resourceName}`;
+    // eslint-disable-next-line prettier/prettier
+    const text = `Remove ${profile ? name : webId}'s access from ${resourceName}`;
     setTitle(text);
     setOpen(dialogId);
   };

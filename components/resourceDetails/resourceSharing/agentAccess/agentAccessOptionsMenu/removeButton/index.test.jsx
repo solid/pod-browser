@@ -21,9 +21,10 @@
 
 import React from "react";
 import { waitFor } from "@testing-library/dom";
+import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../../../../../__testUtils/withTheme";
+import mockConfirmationDialogContextProvider from "../../../../../../__testUtils/mockConfirmationDialogContextProvider";
 import mockAccessControl from "../../../../../../__testUtils/mockAccessControl";
-
 import RemoveButton, {
   handleConfirmation,
   handleRemovePermissions,
@@ -31,16 +32,23 @@ import RemoveButton, {
 
 const resourceIri = "/iri/";
 const webId = "https://example.com/profile/card#me";
+const name = "Example Agent";
 const profile = {
   avatar: null,
-  name: "Example Agent",
+  name,
   webId,
 };
-const permission = { webId, profile, alias: "editors" };
+const permission = { webId, name, profile, alias: "editors" };
+const permissionWithoutProfile = {
+  webId,
+  name,
+  profile: null,
+  alias: "editors",
+};
 
 describe("AgentAccessOptionsMenu", () => {
   test("it renders a button which triggers the opening of the menu", () => {
-    const { asFragment } = renderWithTheme(
+    const { asFragment, getByTestId } = renderWithTheme(
       <RemoveButton
         resourceIri={resourceIri}
         permission={permission}
@@ -50,6 +58,60 @@ describe("AgentAccessOptionsMenu", () => {
       />
     );
     expect(asFragment()).toMatchSnapshot();
+    const button = getByTestId("remove-button");
+    expect(button).toBeDefined();
+  });
+  test("clicking on delete button calls setOpen with the correct id and setTitle with agent's name", () => {
+    const setOpen = jest.fn();
+    const setTitle = jest.fn();
+    const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
+      open: "remove-agent",
+      setOpen,
+      setTitle,
+      setContent: jest.fn(),
+      confirmed: null,
+    });
+    const { getByTestId } = renderWithTheme(
+      <ConfirmationDialogProvider>
+        <RemoveButton
+          resourceIri={resourceIri}
+          permission={permission}
+          setLoading={jest.fn()}
+          setLocalAccess={jest.fn()}
+          mutatePermissions={jest.fn()}
+        />
+      </ConfirmationDialogProvider>
+    );
+    const button = getByTestId("remove-button");
+    userEvent.click(button);
+    expect(setTitle).toHaveBeenCalledWith(`Remove ${name}'s access from iri`);
+    expect(setOpen).toHaveBeenCalledWith("remove-agent");
+  });
+  test("if no profile is available, setTitle is called with agent's webId", () => {
+    const setOpen = jest.fn();
+    const setTitle = jest.fn();
+    const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
+      open: "remove-agent",
+      setOpen,
+      setTitle,
+      setContent: jest.fn(),
+      confirmed: null,
+    });
+    const { getByTestId } = renderWithTheme(
+      <ConfirmationDialogProvider>
+        <RemoveButton
+          resourceIri={resourceIri}
+          permission={permissionWithoutProfile}
+          setLoading={jest.fn()}
+          setLocalAccess={jest.fn()}
+          mutatePermissions={jest.fn()}
+        />
+      </ConfirmationDialogProvider>
+    );
+    const button = getByTestId("remove-button");
+    userEvent.click(button);
+    expect(setTitle).toHaveBeenCalledWith(`Remove ${webId}'s access from iri`);
+    expect(setOpen).toHaveBeenCalledWith("remove-agent");
   });
 });
 describe("handleConfirmation", () => {
