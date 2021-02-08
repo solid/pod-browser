@@ -90,14 +90,8 @@ export default function AddAgentRow({
   const [agentWebId, setAgentWebId] = useState("");
   const [existingPermission, setExistingPermission] = useState();
 
-  const agentName =
-    (thing &&
-      newAgentsWebIds.length > 0 &&
-      getStringNoLocale(thing, foaf.name)) ||
-    null;
-  const agentAvatar =
-    (thing && newAgentsWebIds.length > 0 && getUrl(thing, vcard.hasPhoto)) ||
-    null;
+  const agentName = (thing && getStringNoLocale(thing, foaf.name)) || null;
+  const agentAvatar = (thing && getUrl(thing, vcard.hasPhoto)) || null;
   const displayedWebId =
     (thing &&
       contactsArrayLength > 0 &&
