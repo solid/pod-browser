@@ -104,37 +104,6 @@ const permissions = [
 describe("AgentPickerModal", () => {
   const onClose = jest.fn();
   const accessControl = mockAccessControl();
-
-  it("updates the temporary row with webId only when profile is unavailable", async () => {
-    useNamedPolicyPermissions.mockReturnValue({
-      data: permissions,
-      mutate: jest.fn(),
-    });
-    usePermissionsWithProfiles.mockReturnValue({
-      permissionsWithProfiles: permissions,
-    });
-    const webId = "https://somewebid.com";
-    jest
-      .spyOn(ProfileFns, "fetchProfile")
-      .mockRejectedValueOnce({ error: "error" });
-
-    const { getByTestId, findByText, findByTestId } = renderWithTheme(
-      <AccessControlContext.Provider value={{ accessControl }}>
-        <AgentPickerModal type="editors" text="Add Editors" onClose={onClose} />
-      </AccessControlContext.Provider>
-    );
-
-    const addWebIdButton = getByTestId("add-webid-button");
-    userEvent.click(addWebIdButton);
-    const input = await findByTestId("webid-input");
-    userEvent.type(input, webId);
-    const addButton = getByTestId("add-button");
-    userEvent.click(addButton);
-    const agentWebId = await findByText(webId);
-
-    expect(agentWebId).not.toBeNull();
-  });
-
   it("updates the temporary row with profile data when available", async () => {
     useNamedPolicyPermissions.mockReturnValue({
       data: permissions,
@@ -165,6 +134,35 @@ describe("AgentPickerModal", () => {
     userEvent.click(addButton);
 
     const agentWebId = await findByText("Example");
+
+    expect(agentWebId).not.toBeNull();
+  });
+  it("updates the temporary row with webId only when profile is unavailable", async () => {
+    useNamedPolicyPermissions.mockReturnValue({
+      data: permissions,
+      mutate: jest.fn(),
+    });
+    usePermissionsWithProfiles.mockReturnValue({
+      permissionsWithProfiles: permissions,
+    });
+    const webId = "https://somewebid.com";
+    jest
+      .spyOn(ProfileFns, "fetchProfile")
+      .mockRejectedValueOnce({ error: "error" });
+
+    const { getByTestId, findByText, findByTestId } = renderWithTheme(
+      <AccessControlContext.Provider value={{ accessControl }}>
+        <AgentPickerModal type="editors" text="Add Editors" onClose={onClose} />
+      </AccessControlContext.Provider>
+    );
+
+    const addWebIdButton = getByTestId("add-webid-button");
+    userEvent.click(addWebIdButton);
+    const input = await findByTestId("webid-input");
+    userEvent.type(input, webId);
+    const addButton = getByTestId("add-button");
+    userEvent.click(addButton);
+    const agentWebId = await findByText(webId);
 
     expect(agentWebId).not.toBeNull();
   });
@@ -204,7 +202,6 @@ describe("AgentPickerModal", () => {
 
     expect(getByRole("alert")).not.toBeNull();
   });
-
   it("opens a confirmation dialog", async () => {
     useNamedPolicyPermissions.mockReturnValue({
       data: permissions,
@@ -226,6 +223,11 @@ describe("AgentPickerModal", () => {
       setTitle,
       title: "Confirmation",
     };
+
+    jest
+      .spyOn(ProfileFns, "fetchProfile")
+      .mockRejectedValueOnce({ error: "error" });
+
     const { getByTestId, findByText, findByTestId } = renderWithTheme(
       <ConfirmationDialogContext.Provider value={contextValue}>
         <AccessControlContext.Provider value={{ accessControl }}>
@@ -239,10 +241,6 @@ describe("AgentPickerModal", () => {
     );
 
     const webId = "https://somewebid.com";
-
-    jest
-      .spyOn(ProfileFns, "fetchProfile")
-      .mockRejectedValue({ error: "error" });
 
     const addWebIdButton = getByTestId("add-webid-button");
     userEvent.click(addWebIdButton);
@@ -294,7 +292,7 @@ describe("AgentPickerModal", () => {
 
     jest
       .spyOn(ProfileFns, "fetchProfile")
-      .mockRejectedValue({ error: "error" });
+      .mockRejectedValueOnce({ error: "error" });
 
     const addWebIdButton = getByTestId("add-webid-button");
     userEvent.click(addWebIdButton);
@@ -351,7 +349,7 @@ describe("AgentPickerModal", () => {
 
     jest
       .spyOn(ProfileFns, "fetchProfile")
-      .mockRejectedValue({ error: "error" });
+      .mockRejectedValueOnce({ error: "error" });
 
     const addWebIdButton = getByTestId("add-webid-button");
     userEvent.click(addWebIdButton);

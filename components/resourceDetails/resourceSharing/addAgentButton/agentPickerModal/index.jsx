@@ -155,7 +155,7 @@ export default function AgentPickerModal({ type, text, onClose }) {
     namedPermissions
   );
 
-  const [addressBook] = useAddressBook();
+  const { data: addressBook } = useAddressBook();
   const { data: people } = useContactsOld(addressBook, foaf.Person);
 
   const classes = useStyles();
