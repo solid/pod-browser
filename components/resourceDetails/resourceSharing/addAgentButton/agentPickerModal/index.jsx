@@ -48,7 +48,7 @@ import {
   saveContact,
   vcardExtras,
 } from "../../../../../src/addressBook";
-import useAddressBook from "../../../../../src/hooks/useAddressBook";
+import useAddressBookOld from "../../../../../src/hooks/useAddressBookOld";
 import useContactsOld from "../../../../../src/hooks/useContactsOld";
 import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
 import PolicyHeader from "../../policyHeader";
@@ -155,9 +155,8 @@ export default function AgentPickerModal({ type, text, onClose }) {
     namedPermissions
   );
 
-  const { data: addressBook } = useAddressBook();
+  const [addressBook] = useAddressBookOld();
   const { data: people } = useContactsOld(addressBook, foaf.Person);
-
   const classes = useStyles();
   const { session } = useSession();
   const { fetch } = session;
