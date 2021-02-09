@@ -1,0 +1,36 @@
+prefix : <#>
+prefix vcard: <http://www.w3.org/2006/vcard/ns#>
+
+#
+# This is a Group-specific index.
+#
+# Here we cache (copy) some data from our 'contained' groups, in this case just
+# the formatted name of each group (and since they are 'copies', they can have
+# different values), and the fact that each is of `rdf:type` `vcard:Group`.
+#
+<./group1-work-colleague.ttl#this>
+    a vcard:Group ;
+    vcard:fn "Group 1 - all my work colleagues" .
+
+<./group2-friend.ttl#this>
+    a vcard:Group ;
+    vcard:fn "Group 2 - all my friends" .
+
+<./group3-soccer-team.ttl#this>
+    a vcard:Group ;
+    vcard:fn "Group 3 - my local soccer team" .
+
+<./group4-empty.ttl#this>
+    a vcard:Group ;
+    vcard:fn "Group 4 - which I expect to be empty" .
+
+
+<../addressBookWork/index.ttl#this>
+    vcard:includesGroup
+        <./group1-work-colleague.ttl#this> .
+
+<../addressBookFriend/index.ttl#this>
+    vcard:includesGroup
+        <./group2-friend.ttl#this> ,
+        <./group3-soccer-team.ttl#this> ,
+        <./group4-empty.ttl#this> .

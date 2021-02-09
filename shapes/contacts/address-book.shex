@@ -3,9 +3,9 @@ PREFIX dc:    <http://purl.org/dc/elements/1.1/>
 PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
 PREFIX xsd:   <http://www.w3.org/2001/XMLSchema#>
 
-# This shape describes some of the information we store for an address book. It's
-# intended to represent a single address book. We use the ID
-# "#this" to refer to the subject of the address book.
+# This shape describes some of the information we store for an address book.
+# It's intended to represent a single address book. We use the ID  "#this" to
+# refer to the subject of the address book.
 
 # This model was originally developed as part of the
 # SolidOS/Data Browser project, and we strive to keep it interoperable with

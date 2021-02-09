@@ -1,5 +1,34 @@
 # Shapes
 
+## Indexes
+
+We use the term 'index' throughout our modelling to refer to a single RDF
+resource that acts as a container for multiple 'contained' instances, where each
+contained instance may refer to an external resource, and may also contain
+copies of (some of the) data from that external resource 
+****
+(e.g., an instance may copy fields from an external resource, plus have a link
+to that external resouce).
+****
+
+
+We choose not to model these collections using either native RDF lists (e.g.,
+`rdf:Seq`), nor LDP containers, nor some existing list or set vocabulary (e.g.,
+such as Schema.org's [ItemList](https://schema.org/ItemList), or the Ordered
+List Ontology ([OLO](http://smiy.sourceforge.net/olo/spec/orderedlistontology.html))).
+The reasons for this were:
+ - Originally modelled around limitations of the first Solid server (NSS).
+ - Allows highly efficiency retrieval of contained resource data by having it
+   all in the index resource, and not make resource-by-resource requests.
+
+#### Example of index use
+
+For example, a single AddressBook resource may reference two indexes, one for
+the collection of emails addresses in that AddressBook (i.e., using the
+predicate `vcard:nameEmailIndex`), and one for the collection of groups in that
+AddressBook (i.e., using the predicate `vcard:groupIndex`).
+Each index resource 
+
 ## Bookmarks
 
 We've decided to keep the structure of bookmarks simple, only storing
@@ -18,9 +47,9 @@ stored in one file.
 ## Contacts
 
 Because there are some differences between the ShEx shapes we've described and
-previous work on SHACL shapes we wanted to explain the differences between those
-shapes. Once these differences have been resolved, we might remove this README
-altogether.
+previous work on SHACL shapes, we wanted to explain the differences between
+those shapes. Once these differences have all been resolved, we might remove
+this README altogether.
 
 ### Address Book: Differences between ShEx and SHACL
 
@@ -67,7 +96,7 @@ differs from the ShEx shape in `contacts/group.shex`.
 
 The following is how the SHACL shape in
 `https://raw.githubusercontent.com/solid/contacts-pane/master/shapes/contacts-shapes.ttl`
-differs from the ShEx shape in `contacts/people-index.shex`.
+differs from the ShEx shape in `contacts/person-index.shex`.
 
 - vcard:Individual
   - vcard:inAddressBook

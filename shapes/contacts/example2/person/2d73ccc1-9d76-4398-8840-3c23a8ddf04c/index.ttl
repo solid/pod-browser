@@ -1,0 +1,25 @@
+prefix :           <#>
+prefix dcterms:    <http://purl.org/dc/terms/>
+prefix XML:        <http://www.w3.org/2001/XMLSchema#>
+prefix vcard:      <http://www.w3.org/2006/vcard/ns#>
+
+# This data was generated when this 'Person' container was created initially
+# via Data Browser and rdflib.js.
+<>
+    dcterms:created "2021-02-04T06:19:42Z"^^XML:dateTime .
+
+#
+# Here we describe the actual entity - in this case a Person.
+#
+:this
+    a vcard:Individual ;
+    vcard:fn "Arne H - work colleague, friend and soccer striker" ;
+    vcard:url [
+        a vcard:WebID;
+        vcard:value "https://megoth-demo1.inrupt.net/profile/card#me"
+    ] ,
+    # Perhaps other forms of dereferencable URL's (but not email!)...
+    [
+        a vcard:DID;
+        vcard:value "did:sovrin:34537453453-2432424-23424324"
+    ] .
