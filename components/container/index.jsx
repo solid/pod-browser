@@ -70,7 +70,9 @@ export default function Container({ iri }) {
     setContainerPath(path);
   }, [iri]);
 
-  const { data: container, error: containerError } = useDataset(containerPath);
+  const { data: container, error: containerError } = useDataset(containerPath, {
+    refreshInterval: 0,
+  });
 
   const { data: resourceIris, mutate } = useContainerResourceIris(
     containerPath

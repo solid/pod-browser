@@ -176,7 +176,6 @@ export default function AgentPickerModal({ type, text, onClose }) {
   const [globalFilter, setGlobalFilter] = useState("");
   const dialogId = "add-new-permissions";
   const [confirmationSetup, setConfirmationSetup] = useState(false);
-
   const {
     open,
     confirmed,
