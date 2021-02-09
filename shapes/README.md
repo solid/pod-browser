@@ -1,33 +1,50 @@
 # Shapes
 
+## Structure of the Shapes contained here.
+
+This directory contains the following sub-directories, each containing ShEx
+Shapes and an `/example` folder showing demonstration Turtle files conforming
+to the relevant Shapes. The Turtle files are also used to demonstrate how
+instances of Pod Resources are expected to be interlinked
+
 ## Indexes
 
-We use the term 'index' throughout our modelling to refer to a single RDF
-resource that acts as a container for multiple 'contained' instances, where each
-contained instance may refer to an external resource, and may also contain
-copies of (some of the) data from that external resource 
-****
-(e.g., an instance may copy fields from an external resource, plus have a link
-to that external resouce).
-****
+We use the term 'index' throughout our modelling with two very different
+interpretations:
 
+ - Index in the sense of a single Pod resource containing a collection of
+   entities. E.g., a single Person-Index resource might contain a list of 50
+   Person instances, where each instance contains a reference (or link) to the
+   actual Person resource elsewhere in my Pod, but may also contain a copy of
+   the Person's name and profile image perhaps, directly in the index too.
+ - Index in the sense of a '_default resource to look for when navigating to a
+   Container_'. In much the same way as browsers will automatically look for a
+   resource named 'index.html' when browsing to a website, our modelling can
+   store resources named 'index.ttl' in the root of containers, which our
+   applications can then expect to contain app-specific information.
 
-We choose not to model these collections using either native RDF lists (e.g.,
+### Indexes as 'efficient containers for a collection of entities'
+
+We chose not to model these collections using either native RDF lists (e.g.,
 `rdf:Seq`), nor LDP containers, nor some existing list or set vocabulary (e.g.,
 such as Schema.org's [ItemList](https://schema.org/ItemList), or the Ordered
 List Ontology ([OLO](http://smiy.sourceforge.net/olo/spec/orderedlistontology.html))).
 The reasons for this were:
- - Originally modelled around limitations of the first Solid server (NSS).
- - Allows highly efficiency retrieval of contained resource data by having it
-   all in the index resource, and not make resource-by-resource requests.
+ - This was originally modelled around limitations of the first Solid server
+   (NSS).
+ - Efficiency reasons, i.e.,  where we wish to retrieve a collection of entities
+   in a single HTTP resource request (e.g., a list of people, perhaps with just
+   their first name and date-of-birth values), as opposed to needing to make
+   multiple HTTP requests, one for each Person resource in our list.
+
 
 #### Example of index use
 
 For example, a single AddressBook resource may reference two indexes, one for
-the collection of emails addresses in that AddressBook (i.e., using the
+the collection of email addresses in that AddressBook (i.e., using the
 predicate `vcard:nameEmailIndex`), and one for the collection of groups in that
 AddressBook (i.e., using the predicate `vcard:groupIndex`).
-Each index resource 
+
 
 ## Bookmarks
 

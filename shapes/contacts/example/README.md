@@ -1,7 +1,7 @@
-# Example Turtle files
+# Contacts-related Turtle files
 
 The example Turtle files here describe the structure and modelling of the
-following:
+following Contact-related concepts:
 
 ### Two address books
 
