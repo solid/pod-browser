@@ -48,8 +48,9 @@ export default function ConfirmationDialog() {
 
   return (
     <Dialog
+      classes={{ paperWidthFalse: classes.dialog }}
       data-testid={TESTCAFE_CONFIRMATION_DIALOG}
-      maxWidth="xs"
+      maxWidth={false}
       aria-labelledby="confirmation-dialog"
       open={!!open}
     >
@@ -64,7 +65,7 @@ export default function ConfirmationDialog() {
           {content}
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
+      <DialogActions classes={{ root: classes.dialogActions }}>
         <Button
           variant="action"
           data-testid={TESTCAFE_CONFIRMATION_CANCEL_BUTTON}

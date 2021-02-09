@@ -21,6 +21,8 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
+const WIDTH_DIALOG = 640;
+
 export default function styles(theme) {
   return createStyles(theme, ["icons", "button"], {
     cancelButton: {
@@ -35,6 +37,12 @@ export default function styles(theme) {
       color: theme.palette.common.white,
       backgroundColor: theme.palette.primary.main,
       padding: theme.spacing(1.4, 1.8),
+    },
+    dialog: {
+      width: WIDTH_DIALOG,
+    },
+    dialogActions: {
+      padding: theme.spacing(2.4),
     },
     dialogTitle: {
       fontSize: theme.typography.h2.fontSize,

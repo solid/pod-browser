@@ -21,9 +21,15 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
+const MODAL_MIN_WIDTH = 680;
+const MODAL_MIN_HEIGHT = 680;
+
 export default function styles(theme) {
   return createStyles(theme, ["icons", "button", "table"], {
     paper: {
+      minWidth: MODAL_MIN_WIDTH,
+      minHeight: MODAL_MIN_HEIGHT,
+      width: MODAL_MIN_WIDTH,
       display: "flex",
       flexDirection: "column",
       position: "absolute",
@@ -78,8 +84,11 @@ export default function styles(theme) {
       alignItems: "center",
     },
     buttonsContainer: {
-      padding: theme.spacing(2.4),
       display: "flex",
+      position: "fixed",
+      bottom: 0,
+      width: MODAL_MIN_WIDTH - theme.spacing(2.4) * 2 - theme.spacing(4), // substracting the padding of the buttons and the left and right padding of the modal
+      padding: theme.spacing(2.4),
       justifyContent: "space-between",
     },
     cancelButton: {

@@ -97,8 +97,8 @@ export default function AgentAccessOptionsMenu({
               disableTypography
               classes={{ root: classes.webIdContainer }}
             >
-              <b>WebId: </b>
-              <p>{webId}</p>
+              <b>WebID: </b>
+              <p className={classes.webId}>{webId}</p>
             </ListItemText>
           </ListItem>
           <RemoveButton
