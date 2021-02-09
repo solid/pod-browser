@@ -26,6 +26,7 @@ import {
   getSolidDataset,
   getSourceUrl,
   getThing,
+  getUrlAll,
   saveSolidDatasetAt,
   setStringNoLocale,
   setThing,
@@ -53,6 +54,7 @@ export const GROUP_CONTACT = {
   container: GROUP_CONTAINER,
   indexFilePredicate: NAME_GROUP_INDEX_PREDICATE,
   contactTypeUrl: vcard.Group,
+  isOfType: (contact) => getUrlAll(contact, rdf.type).includes(vcard.Group),
 };
 
 /* Model internal functions */

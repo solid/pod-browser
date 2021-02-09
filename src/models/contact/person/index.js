@@ -21,6 +21,7 @@
 
 import { v4 as uuid } from "uuid";
 import { vcard } from "rdf-namespaces";
+import { getUrl } from "@inrupt/solid-client";
 import { vcardExtras } from "../../../addressBook";
 import { joinPath } from "../../../stringHelpers";
 import { getContactAll } from "../index";
@@ -40,6 +41,7 @@ export const PERSON_CONTACT = {
   indexFile: PEOPLE_INDEX_FILE,
   indexFilePredicate: NAME_EMAIL_INDEX_PREDICATE,
   contactTypeUrl: vcard.Individual,
+  isOfType: (contact) => !!getUrl(contact, vcardExtras("inAddressBook")),
 };
 
 /* Model functions */

@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useSession, useThing } from "@inrupt/solid-ui-react";
 import {
@@ -43,6 +43,7 @@ import styles from "./styles";
 import { chain } from "../../../../../src/solidClientHelpers/utils";
 import { fetchProfile } from "../../../../../src/solidClientHelpers/profile";
 import { vcardExtras } from "../../../../../src/addressBook";
+import useContactProfile from "../../../../../src/hooks/useContactProfile";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const VCARD_WEBID_PREDICATE = vcardExtras("WebId");
@@ -89,14 +90,21 @@ export default function AddAgentRow({
   const classes = useStyles();
   const [agentWebId, setAgentWebId] = useState("");
   const [existingPermission, setExistingPermission] = useState();
-
-  const agentName = (thing && getStringNoLocale(thing, foaf.name)) || null;
-  const agentAvatar = (thing && getUrl(thing, vcard.hasPhoto)) || null;
-  const displayedWebId =
-    (thing &&
-      contactsArrayLength > 0 &&
-      getUrl(thing, VCARD_WEBID_PREDICATE)) ||
-    null;
+  const [agentName, setAgentName] = useState(null);
+  const [agentAvatar, setAgentAvatar] = useState(null);
+  const [displayedWebId, setDisplayedWebId] = useState(null);
+  const { data: profile } = useContactProfile(thing);
+  useEffect(() => {
+    if (profile) {
+      setAgentName(profile.name);
+      setAgentAvatar(profile.avatar);
+      setDisplayedWebId(profile.webId);
+    } else if (thing && !profile && contactsArrayLength > 0) {
+      setAgentName(getStringNoLocale(thing, foaf.name) || null);
+      setAgentAvatar(getUrl(thing, vcard.hasPhoto) || null);
+      setDisplayedWebId(getUrl(thing, VCARD_WEBID_PREDICATE));
+    }
+  }, [profile, thing, agentWebId, contactsArrayLength]);
 
   const handleAddAgentsWebIds = async (e) => {
     e.preventDefault();

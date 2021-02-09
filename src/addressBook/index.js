@@ -28,6 +28,7 @@ import {
   createThing,
   deleteFile,
   getSolidDataset,
+  getSourceIri,
   getSourceUrl,
   getStringNoLocale,
   getThing,
@@ -309,7 +310,7 @@ export async function getIndexDatasetFromAddressBook(
 ) {
   const { respond, error } = createResponder();
   try {
-    const addressBookIri = `${getSourceUrl(addressBookDataset)}#this`; // TODO: Ugly hack, should remove
+    const addressBookIri = `${getSourceIri(addressBookDataset)}#this`; // TODO: Ugly hack, should remove
     const addressBookThing = getThing(addressBookDataset, addressBookIri);
     const indexDatasetIri = getUrl(addressBookThing, indexFilePredicate);
     const indexFileDataset = await getSolidDataset(indexDatasetIri, { fetch });
@@ -379,6 +380,32 @@ export function createContact(
     iri,
     dataset,
   };
+}
+
+// TODO: keeping this separate to maintain functionality but will likely adapt the old function to take a type if we need to reuse it for groups
+export async function findPersonContactInAddressBook(
+  addressBook,
+  webId,
+  fetch
+) {
+  const { dataset: addressBookDataset } = addressBook;
+  const { indexFilePredicate } = TYPE_MAP[foaf.Person];
+
+  const { response: indexFileDataset } = await getIndexDatasetFromAddressBook(
+    addressBookDataset,
+    indexFilePredicate,
+    fetch
+  );
+  const { response: people } = await getContacts(
+    indexFileDataset,
+    foaf.Person,
+    fetch
+  );
+  const profiles = await getProfiles(people, fetch);
+  const existingContact = profiles.filter(
+    (profile) => asUrl(profile) === webId
+  );
+  return existingContact;
 }
 
 export async function findContactInAddressBook(people, webId, fetch) {
@@ -454,7 +481,7 @@ export async function deleteContact(
   const addressBook = await getSolidDataset(addressBookIri, {
     fetch,
   });
-  const { indexFilePredicate } = TYPE_MAP[type];
+  const { indexFilePredicate } = TYPE_MAP[foaf.Person];
   const { response: indexFileDataset } = await getIndexDatasetFromAddressBook(
     addressBook,
     indexFilePredicate,

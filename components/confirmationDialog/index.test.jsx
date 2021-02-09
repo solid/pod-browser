@@ -19,13 +19,48 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import userEvent from "@testing-library/user-event";
 import React from "react";
+import mockConfirmationDialogContextProvider from "../../__testUtils/mockConfirmationDialogContextProvider";
 import { renderWithTheme } from "../../__testUtils/withTheme";
-import ConfirmationDialog from "./index";
+import ConfirmationDialog, {
+  TESTCAFE_ID_CONFIRM_BUTTON,
+  TESTCAFE_ID_CONFIRMATION_CANCEL_BUTTON,
+} from "./index";
 
 describe("ConfirmationDialog", () => {
   test("Renders a ConfirmationDialog", () => {
     const { asFragment } = renderWithTheme(<ConfirmationDialog />);
     expect(asFragment()).toMatchSnapshot();
+  });
+  test("clicking on confirm button calls setConfirmed with true", () => {
+    const setConfirmed = jest.fn();
+    const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
+      open: "confirmation-dialog",
+      setConfirmed,
+    });
+    const { getByTestId } = renderWithTheme(
+      <ConfirmationDialogProvider>
+        <ConfirmationDialog />
+      </ConfirmationDialogProvider>
+    );
+    const button = getByTestId(TESTCAFE_ID_CONFIRM_BUTTON);
+    userEvent.click(button);
+    expect(setConfirmed).toHaveBeenCalledWith(true);
+  });
+  test("clicking on cancel button calls setConfirmed with true", () => {
+    const setConfirmed = jest.fn();
+    const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
+      open: "confirmation-dialog",
+      setConfirmed,
+    });
+    const { getByTestId } = renderWithTheme(
+      <ConfirmationDialogProvider>
+        <ConfirmationDialog />
+      </ConfirmationDialogProvider>
+    );
+    const button = getByTestId(TESTCAFE_ID_CONFIRMATION_CANCEL_BUTTON);
+    userEvent.click(button);
+    expect(setConfirmed).toHaveBeenCalledWith(false);
   });
 });

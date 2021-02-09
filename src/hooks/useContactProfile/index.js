@@ -21,19 +21,26 @@
 
 import { useSession } from "@inrupt/solid-ui-react";
 import useSWR from "swr";
-import useAddressBook from "../useAddressBook";
-import { getContactAll } from "../../models/contact";
+import { asUrl } from "@inrupt/solid-client";
+import { getResource } from "../../solidClientHelpers/resource";
+import { getWebIdUrl } from "../../addressBook";
+import { fetchProfile } from "../../solidClientHelpers/profile";
 
-export default function useContacts(types) {
+export default function useContactProfile(contact) {
   const { fetch } = useSession();
-  const { data: addressBook, error: addressBookError } = useAddressBook();
-  return useSWR(
-    ["contacts", addressBook, ...types],
-    async () => {
-      if (!addressBook && !addressBookError) return null;
-      if (addressBookError) throw addressBookError;
-      return getContactAll(addressBook, types, fetch);
-    },
-    { errorRetryCount: 0 }
-  );
+  let personThingUrl;
+  try {
+    personThingUrl = asUrl(contact);
+  } catch {
+    personThingUrl = null;
+  }
+  return useSWR(["contact", personThingUrl], async () => {
+    if (!personThingUrl) return null;
+    const {
+      response: { dataset, iri },
+    } = await getResource(personThingUrl, fetch);
+    const webId = getWebIdUrl(dataset, iri);
+    const fetchedProfile = await fetchProfile(webId, fetch);
+    return fetchedProfile;
+  });
 }

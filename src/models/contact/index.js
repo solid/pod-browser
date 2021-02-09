@@ -25,12 +25,10 @@ import {
   getThing,
   getThingAll,
   getUrl,
-  getUrlAll,
   saveSolidDatasetAt,
   setThing,
   setUrl,
 } from "@inrupt/solid-client";
-import { rdf } from "rdf-namespaces";
 import { joinPath } from "../../stringHelpers";
 import { getOrCreateDataset } from "../dataset";
 import { getAddressBookIndexUrl } from "../addressBook";
@@ -58,9 +56,7 @@ export async function getContactAll(addressBook, types, fetch) {
     types.map(async (type) => {
       const dataset = await getContactIndexDataset(addressBook, type, fetch);
       return getThingAll(dataset)
-        .filter((contact) =>
-          getUrlAll(contact, rdf.type).includes(type.contactTypeUrl)
-        )
+        .filter((contact) => type.isOfType(contact))
         .map((thing) => ({
           thing,
           dataset,

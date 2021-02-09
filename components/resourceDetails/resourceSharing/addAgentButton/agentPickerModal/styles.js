@@ -23,6 +23,7 @@ import { createStyles } from "@solid/lit-prism-patterns";
 
 const MODAL_MIN_WIDTH = 680;
 const MODAL_MIN_HEIGHT = 680;
+const TABLE_MAX_HEIGHT = 460;
 
 export default function styles(theme) {
   return createStyles(theme, ["icons", "button", "table"], {
@@ -50,6 +51,9 @@ export default function styles(theme) {
       borderRadius: theme.shape.borderRadius,
       border: `1px solid ${theme.palette.grey.A100}`,
       marginBottom: theme.spacing(2.4),
+      height: "100%",
+      maxHeight: TABLE_MAX_HEIGHT,
+      overflowY: "auto",
     },
     tabsAndAddButtonContainer: {
       display: "flex",
@@ -57,22 +61,30 @@ export default function styles(theme) {
       justifyContent: "space-between",
       borderBottom: `1px solid ${theme.palette.grey.A100}`,
     },
-    table: {
-      width: "100%",
-      padding: theme.spacing(1.6),
+    agentPickerTable: {
+      width: `calc(100% - ${theme.spacing(1.6) * 2}px)`,
+      boxSizing: "border-box",
+      marginLeft: theme.spacing(1.6),
+      marginRight: theme.spacing(1.6),
       "&& thead > tr": {
         minWidth: "100%",
         fontSize: theme.typography.caption.fontSize,
-        padding: theme.spacing(0.5),
         alignItems: "center",
         borderBottom: `1px solid ${theme.palette.grey.A100}`,
         fontWeight: theme.typography.body1.fontWeight,
         color: theme.palette.text.primary,
       },
+      "&& tbody tr": {
+        borderBottom: `1px solid ${theme.palette.grey.A100}`,
+      },
+      "&& tbody :last-child": {
+        borderBottom: "none",
+      },
     },
     tableHeader: {
       display: "flex",
       margin: 0,
+      padding: theme.spacing(0.5),
     },
     modalTabsContainer: {
       borderBottom: "none !important", // overriding the default border bottom so we can set it to the whole width of the container
@@ -93,6 +105,12 @@ export default function styles(theme) {
     },
     capitalizedText: {
       textTransform: "capitalize",
+    },
+    emptyStateTextContainer: {
+      display: "flex",
+      flexDirection: "column",
+      padding: theme.spacing(0.7, 1.4),
+      textAlign: "center",
     },
   });
 }

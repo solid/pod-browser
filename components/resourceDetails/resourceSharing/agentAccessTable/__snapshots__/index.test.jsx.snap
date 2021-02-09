@@ -34,7 +34,7 @@ exports[`AgentAccessTable renders a list of permissions 1`] = `
             <span
               class="PodBrowser-button__text"
             >
-              Add Editors
+              Edit Editors
             </span>
           </button>
         </div>
@@ -268,7 +268,7 @@ exports[`AgentAccessTable renders an empty list of permissions 1`] = `
             <span
               class="PodBrowser-button__text"
             >
-              Add Editors
+              Edit Editors
             </span>
           </button>
         </div>

@@ -34,7 +34,7 @@ exports[`SharingAccordion it renders three lists of empty permissions for editor
             <span
               class="PodBrowser-button__text"
             >
-              Add Editors
+              Edit Editors
             </span>
           </button>
         </div>
@@ -111,7 +111,7 @@ exports[`SharingAccordion it renders three lists of empty permissions for editor
             <span
               class="PodBrowser-button__text"
             >
-              Add Viewers
+              Edit Viewers
             </span>
           </button>
         </div>
@@ -192,7 +192,7 @@ exports[`SharingAccordion it renders three lists of empty permissions for editor
             <span
               class="PodBrowser-button__text"
             >
-              Block
+              Edit Blocked
             </span>
           </button>
         </div>

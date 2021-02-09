@@ -26,6 +26,7 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import { Tabs, Tab, createStyles } from "@material-ui/core";
+
 import styles from "./styles";
 
 export const TESTCAFE_ID_TAB_ALL = "tab-all";
@@ -36,17 +37,14 @@ const tabs = [
   {
     label: "All",
     testid: TESTCAFE_ID_TAB_ALL,
-    value: "",
   },
   {
     label: "People",
     testid: TESTCAFE_ID_TAB_PEOPLE,
-    value: "Person",
   },
   {
     label: "Groups",
     testid: TESTCAFE_ID_TAB_GROUPS,
-    value: "Group",
   },
 ];
 
@@ -54,6 +52,7 @@ export default function AgentsTableTabs({
   handleTabChange,
   selectedTabValue,
   className,
+  tabsValues,
 }) {
   const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -76,7 +75,7 @@ export default function AgentsTableTabs({
             }}
             label={tab.label}
             data-testid={tab.testid}
-            value={tab.value}
+            value={tabsValues[tab.label.toLowerCase()]}
           />
         ))}
       </Tabs>
@@ -86,7 +85,9 @@ export default function AgentsTableTabs({
 
 AgentsTableTabs.propTypes = {
   handleTabChange: PropTypes.func.isRequired,
-  selectedTabValue: PropTypes.string.isRequired,
+  selectedTabValue: PropTypes.oneOfType([PropTypes.shape(), PropTypes.string])
+    .isRequired,
+  tabsValues: PropTypes.shape().isRequired,
   className: PropTypes.string,
 };
 

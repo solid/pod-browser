@@ -22,11 +22,14 @@
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { useSession, useThing } from "@inrupt/solid-ui-react";
-import { createThing } from "@inrupt/solid-client";
+import { addUrl, createThing } from "@inrupt/solid-client";
 import AddAgentRow from "./index";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
+import useContactProfile from "../../../../../src/hooks/useContactProfile";
+import { vcardExtras } from "../../../../../src/addressBook";
 
 jest.mock("@inrupt/solid-ui-react");
+jest.mock("../../../../../src/hooks/useContactProfile");
 
 describe("AddAgentRow", () => {
   describe("when adding a new webId", () => {
@@ -34,6 +37,7 @@ describe("AddAgentRow", () => {
     beforeEach(() => {
       useThing.mockReturnValue({ thing: mockThing });
       useSession.mockReturnValue({ fetch: jest.fn() });
+      useContactProfile.mockReturnValue({ data: null });
     });
     const index = 0;
     const setNewAgentsWebIds = jest.fn();
@@ -118,6 +122,67 @@ describe("AddAgentRow", () => {
         "https://somewebid.com/",
         ...newAgentsWebIds,
       ]);
+    });
+  });
+  describe("with existing contacts", () => {
+    beforeEach(() => {
+      useSession.mockReturnValue({ fetch: jest.fn() });
+    });
+    const index = 0;
+    const setNewAgentsWebIds = jest.fn();
+    const newAgentsWebIds = [];
+    const setAddingWebId = jest.fn();
+    const setNoAgentsAlert = jest.fn();
+    const addingWebId = false;
+    const updateThing = jest.fn();
+
+    it("renders a row with the agent's name if profile is available", () => {
+      const mockThing = createThing();
+      useThing.mockReturnValue({ thing: mockThing });
+      useContactProfile.mockReturnValue({
+        data: { webId: "https://somewebid.org", name: "Example", avatar: null },
+      });
+      const { asFragment, getByTestId, queryByText } = renderWithTheme(
+        <AddAgentRow
+          index={index}
+          setNewAgentsWebIds={setNewAgentsWebIds}
+          newAgentsWebIds={newAgentsWebIds}
+          setAddingWebId={setAddingWebId}
+          setNoAgentsAlert={setNoAgentsAlert}
+          addingWebId={addingWebId}
+          updateThing={updateThing}
+          permissions={[]}
+        />
+      );
+      expect(asFragment()).toMatchSnapshot();
+      expect(queryByText("Example")).toBeDefined();
+      expect(getByTestId("agent-webid")).toBeDefined();
+    });
+    it("for newly added webids, if profile is unavailable it renders a row with the provided webId", () => {
+      const mockThing = addUrl(
+        createThing(),
+        vcardExtras("WebId"),
+        "https://somewebid.com"
+      );
+      useThing.mockReturnValue({ thing: mockThing });
+      useContactProfile.mockReturnValue({
+        data: null,
+      });
+      const { asFragment, getByTestId, queryByText } = renderWithTheme(
+        <AddAgentRow
+          index={1}
+          setNewAgentsWebIds={setNewAgentsWebIds}
+          newAgentsWebIds={newAgentsWebIds}
+          setAddingWebId={setAddingWebId}
+          setNoAgentsAlert={setNoAgentsAlert}
+          addingWebId={addingWebId}
+          updateThing={updateThing}
+          permissions={[]}
+        />
+      );
+      expect(asFragment()).toMatchSnapshot();
+      expect(queryByText("https://somewebid.com")).toBeDefined();
+      expect(getByTestId("agent-webid")).toBeDefined();
     });
   });
 });

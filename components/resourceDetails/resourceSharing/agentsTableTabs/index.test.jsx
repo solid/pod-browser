@@ -36,6 +36,7 @@ describe("AgentTableTabs", () => {
       <AgentTableTabs
         handleTabChange={handleTabChange}
         selectedTabValue="Person"
+        tabsValues={{ all: "", people: "Person", groups: "Group" }}
       />
     );
     expect(getByTestId(TESTCAFE_ID_TAB_ALL)).toBeDefined();
@@ -48,6 +49,7 @@ describe("AgentTableTabs", () => {
       <AgentTableTabs
         handleTabChange={handleTabChange}
         selectedTabValue="Person"
+        tabsValues={{ all: "", people: "Person", groups: "Group" }}
       />
     );
 

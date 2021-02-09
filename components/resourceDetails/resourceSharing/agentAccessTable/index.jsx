@@ -50,6 +50,7 @@ export default function AgentAccessTable({ type }) {
     mutate: mutatePermissions,
   } = useNamedPolicyPermissions(type);
 
+  // TODO: this will change when Groups are available, we will likely fetch profiles only for Individual permissions
   const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
     namedPermissions
   );
@@ -164,10 +165,9 @@ export default function AgentAccessTable({ type }) {
     setGlobalFilter(value || undefined);
   };
 
-  /* istanbul ignore next */
   const handleTabChange = (e, newValue) => {
     setSelectedTabValue(newValue);
-    // TODO: this filter will change once we have groups - ignoring from test coverage until it is functional
+    // TODO: this will change when Groups are available since we will not have profiles for Groups
     setFilter("profile.types", newValue);
   };
 
@@ -190,6 +190,7 @@ export default function AgentAccessTable({ type }) {
             <AgentsTableTabs
               handleTabChange={handleTabChange}
               selectedTabValue={selectedTabValue}
+              tabsValues={{ all: "", people: "Person", groups: "Group" }}
             />
             <AgentsSearchBar handleFilterChange={handleFilterChange} />
           </>
