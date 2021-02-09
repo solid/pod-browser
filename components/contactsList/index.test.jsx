@@ -24,8 +24,8 @@ import * as solidClientFns from "@inrupt/solid-client";
 import { foaf } from "rdf-namespaces";
 import { screen } from "@testing-library/react";
 import { deleteContact } from "../../src/addressBook";
-import useAddressBook from "../../src/hooks/useAddressBook";
-import useContacts from "../../src/hooks/useContacts";
+import useAddressBookOld from "../../src/hooks/useAddressBookOld";
+import useContactsOld from "../../src/hooks/useContactsOld";
 import useProfiles from "../../src/hooks/useProfiles";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import ContactsList, { handleDeleteContact } from "./index";
@@ -37,16 +37,16 @@ import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 
 jest.mock("../../src/addressBook");
-jest.mock("../../src/hooks/useAddressBook");
-jest.mock("../../src/hooks/useContacts");
+jest.mock("../../src/hooks/useAddressBookOld");
+jest.mock("../../src/hooks/useContactsOld");
 jest.mock("../../src/hooks/useProfiles");
 
 describe("ContactsList", () => {
   const session = mockSession();
   const SessionProvider = mockSessionContextProvider(session);
-  it("renders spinner while useAddressBook is loading", () => {
-    useAddressBook.mockReturnValue([null, null]);
-    useContacts.mockReturnValue({
+  it("renders spinner while useAddressBookOld is loading", () => {
+    useAddressBookOld.mockReturnValue([null, null]);
+    useContactsOld.mockReturnValue({
       data: undefined,
       error: undefined,
       mutate: () => {},
@@ -59,13 +59,13 @@ describe("ContactsList", () => {
       </SessionProvider>
     );
     expect(asFragment()).toMatchSnapshot();
-    expect(useAddressBook).toHaveBeenCalledWith();
-    expect(useContacts).toHaveBeenCalledWith(null, foaf.Person);
+    expect(useAddressBookOld).toHaveBeenCalledWith();
+    expect(useContactsOld).toHaveBeenCalledWith(null, foaf.Person);
   });
 
-  it("renders spinner while useContacts is loading", () => {
-    useAddressBook.mockReturnValue([42, null]);
-    useContacts.mockReturnValue({
+  it("renders spinner while useContactsOld is loading", () => {
+    useAddressBookOld.mockReturnValue([42, null]);
+    useContactsOld.mockReturnValue({
       data: undefined,
       error: undefined,
       mutate: () => {},
@@ -78,12 +78,12 @@ describe("ContactsList", () => {
       </SessionProvider>
     );
     expect(asFragment()).toMatchSnapshot();
-    expect(useContacts).toHaveBeenCalledWith(42, foaf.Person);
+    expect(useContactsOld).toHaveBeenCalledWith(42, foaf.Person);
   });
 
   it("renders spinner while useProfiles is loading", () => {
-    useAddressBook.mockReturnValue([42, null]);
-    useContacts.mockReturnValue({
+    useAddressBookOld.mockReturnValue([42, null]);
+    useContactsOld.mockReturnValue({
       data: "peopleData",
       error: undefined,
       mutate: () => {},
@@ -99,9 +99,9 @@ describe("ContactsList", () => {
     expect(useProfiles).toHaveBeenCalledWith("peopleData");
   });
 
-  it("renders error if useAddressBook returns error", () => {
-    useAddressBook.mockReturnValue([null, "error"]);
-    useContacts.mockReturnValue({
+  it("renders error if useAddressBookOld returns error", () => {
+    useAddressBookOld.mockReturnValue([null, "error"]);
+    useContactsOld.mockReturnValue({
       data: undefined,
       error: undefined,
       mutate: () => {},
@@ -116,8 +116,8 @@ describe("ContactsList", () => {
   });
 
   it("renders page when people is loaded", () => {
-    useAddressBook.mockReturnValue([42, null]);
-    useContacts.mockReturnValue({
+    useAddressBookOld.mockReturnValue([42, null]);
+    useContactsOld.mockReturnValue({
       data: "peopleData",
       error: undefined,
       mutate: () => {},
@@ -136,8 +136,8 @@ describe("ContactsList", () => {
   });
 
   it("renders empty state message when there are no contacts", () => {
-    useAddressBook.mockReturnValue([42, null]);
-    useContacts.mockReturnValue({
+    useAddressBookOld.mockReturnValue([42, null]);
+    useContactsOld.mockReturnValue({
       data: "peopleData",
       error: undefined,
       mutate: () => {},
@@ -156,8 +156,8 @@ describe("ContactsList", () => {
   });
 
   it("renders error if useContacts returns error", () => {
-    useAddressBook.mockReturnValue([42, null]);
-    useContacts.mockReturnValue({
+    useAddressBookOld.mockReturnValue([42, null]);
+    useContactsOld.mockReturnValue({
       data: undefined,
       error: "error",
       mutate: () => {},

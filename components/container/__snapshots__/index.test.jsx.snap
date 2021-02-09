@@ -35,12 +35,6 @@ exports[`Container view renders Access Forbidden if the fetch for container retu
       >
         No Access
       </h1>
-      <div
-        class="PodBrowser-page-header__content"
-      />
-      <div
-        class="PodBrowser-page-header__toolbar"
-      />
     </div>
     <div
       class="PodBrowser-container"
@@ -70,12 +64,6 @@ exports[`Container view renders Access Forbidden if the fetch for container retu
       >
         No Access
       </h1>
-      <div
-        class="PodBrowser-page-header__content"
-      />
-      <div
-        class="PodBrowser-page-header__toolbar"
-      />
     </div>
     <div
       class="PodBrowser-container"
@@ -105,12 +93,6 @@ exports[`Container view renders Access Forbidden if the fetch for container retu
       >
         Resource Not Found
       </h1>
-      <div
-        class="PodBrowser-page-header__content"
-      />
-      <div
-        class="PodBrowser-page-header__toolbar"
-      />
     </div>
     <div
       class="PodBrowser-container"
@@ -140,12 +122,6 @@ exports[`Container view renders AuthProfileLoadError if fetching authenticated p
       >
         Failed loading your profile
       </h1>
-      <div
-        class="PodBrowser-page-header__content"
-      />
-      <div
-        class="PodBrowser-page-header__toolbar"
-      />
     </div>
     <div
       class="PodBrowser-container"
@@ -168,12 +144,6 @@ exports[`Container view renders NoControlError if it fails to get access control
     >
       Files
     </h1>
-    <div
-      class="PodBrowser-page-header__content"
-    />
-    <div
-      class="PodBrowser-page-header__toolbar"
-    />
   </div>
   <div
     class="PodBrowser-drawer-container"
@@ -702,12 +672,6 @@ exports[`Container view renders Not Supported if resource loaded is not a contai
       >
         Resource Not Supported
       </h1>
-      <div
-        class="PodBrowser-page-header__content"
-      />
-      <div
-        class="PodBrowser-page-header__toolbar"
-      />
     </div>
     <div
       class="PodBrowser-container"
@@ -743,12 +707,6 @@ exports[`Container view renders Not supported if the fetch for container returns
       >
         Resource Not Supported
       </h1>
-      <div
-        class="PodBrowser-page-header__content"
-      />
-      <div
-        class="PodBrowser-page-header__toolbar"
-      />
     </div>
     <div
       class="PodBrowser-container"
@@ -784,12 +742,6 @@ exports[`Container view renders PodRootLoadError if it fails to fetch resourceIn
       >
         Could not load your Pod
       </h1>
-      <div
-        class="PodBrowser-page-header__content"
-      />
-      <div
-        class="PodBrowser-page-header__toolbar"
-      />
     </div>
     <div
       class="PodBrowser-container"
@@ -812,12 +764,6 @@ exports[`Container view renders a table 1`] = `
     >
       Files
     </h1>
-    <div
-      class="PodBrowser-page-header__content"
-    />
-    <div
-      class="PodBrowser-page-header__toolbar"
-    />
   </div>
   <div
     class="PodBrowser-drawer-container"

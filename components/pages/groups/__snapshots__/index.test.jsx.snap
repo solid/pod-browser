@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GroupsPage renders 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-page-header"
+  >
+    <h1
+      class="PodBrowser-page-header__title"
+    >
+      Groups
+    </h1>
+  </div>
+  <div
+    class="PodBrowser-container PodBrowser-groups-container"
+  >
+    <div
+      class="PodBrowser-groups-container__content PodBrowser-groups-container__content--list PodBrowser-groups-container__content--focus"
+    >
+      <div
+        data-testid="group-list"
+      >
+        <div
+          class="PodBrowser-group-list-header"
+        >
+          <div
+            class="PodBrowser-group-list-header__title"
+          >
+            Groups
+          </div>
+        </div>
+        <div
+          class="PodBrowser-group-list-empty"
+          data-testid="group-list-empty"
+        >
+          No groups
+        </div>
+      </div>
+    </div>
+    <div
+      class="PodBrowser-groups-container__content PodBrowser-groups-container__content--main"
+    >
+      <div
+        data-testid="group-view"
+      >
+        <div
+          class="PodBrowser-group-view-empty"
+          data-testid="group-view-empty"
+        >
+          <span
+            class="PodBrowser-icon-users PodBrowser-icon-large"
+          />
+          <h2>
+            You don't have any groups yet!
+          </h2>
+          <p>
+            Create a new group to easily share files with.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

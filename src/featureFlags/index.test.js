@@ -20,6 +20,9 @@
  */
 
 import rules, {
+  GROUPS_PAGE_ENABLED,
+  GROUPS_PAGE_ENABLED_FOR,
+  groupsPageEnabled,
   NEW_ACP_UI_ENABLED,
   NEW_ACP_UI_ENABLED_FOR,
   newAcpUiEnabled,
@@ -27,30 +30,65 @@ import rules, {
 
 describe("rules", () => {
   test("it indexes all rules", () => {
-    expect(Object.keys(rules())).toEqual([NEW_ACP_UI_ENABLED]);
+    expect(Object.keys(rules())).toEqual([
+      NEW_ACP_UI_ENABLED,
+      GROUPS_PAGE_ENABLED,
+    ]);
+  });
+});
+
+describe("NEW_ACP_UI_ENABLED", () => {
+  it("returns false for a logged out session", () => {
+    expect(newAcpUiEnabled({ info: { isLoggedIn: false } })).toBe(false);
   });
 
-  describe("new ACP UI enabled", () => {
-    test("it returns false for a logged out session", () => {
-      expect(newAcpUiEnabled({ info: { isLoggedIn: false } })).toBe(false);
-    });
+  it("returns false for a session not in the enabled list", () => {
+    expect(
+      newAcpUiEnabled({
+        info: {
+          isLoggedIn: true,
+          webId: "https://pod.inrupt.com/fakename/card#me",
+        },
+      })
+    ).toBe(false);
+  });
 
-    test("it returns false for a session not in the enabled list", () => {
-      expect(
-        newAcpUiEnabled({
-          info: { webId: "https://pod.inrupt.com/fakename/card#me" },
-        })
-      ).toBe(false);
-    });
+  it("returns true for a session in the enabled list", () => {
+    expect(
+      newAcpUiEnabled({
+        info: {
+          isLoggedIn: true,
+          webId: NEW_ACP_UI_ENABLED_FOR[0],
+        },
+      })
+    ).toBe(true);
+  });
+});
 
-    test("it returns true for a session in the enabled list", () => {
-      expect(
-        newAcpUiEnabled({
-          info: {
-            webId: NEW_ACP_UI_ENABLED_FOR[0],
-          },
-        })
-      ).toBe(false);
-    });
+describe("GROUPS_PAGE_ENABLED", () => {
+  it("returns false for a logged out session", () => {
+    expect(groupsPageEnabled({ info: { isLoggedIn: false } })).toBe(false);
+  });
+
+  it("returns false for a session not in the enabled list", () => {
+    expect(
+      groupsPageEnabled({
+        info: {
+          isLoggedIn: true,
+          webId: "https://pod.inrupt.com/fakename/card#me",
+        },
+      })
+    ).toBe(false);
+  });
+
+  it("returns true for a session in the enabled list", () => {
+    expect(
+      groupsPageEnabled({
+        info: {
+          isLoggedIn: true,
+          webId: GROUPS_PAGE_ENABLED_FOR[0],
+        },
+      })
+    ).toBe(true);
   });
 });

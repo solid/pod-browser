@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import clsx from "clsx";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
@@ -33,12 +33,19 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import styles from "./styles";
 import LogOutButton from "../../logout";
+import FeatureContext from "../../../src/contexts/featureFlagsContext";
+import getMainMenuItems from "../../../constants/mainMenu";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+const menuItems = getMainMenuItems();
 
 export default function MenuDrawer() {
   const bem = useBem(useStyles());
   const classes = useStyles();
+  const { enabled } = useContext(FeatureContext);
+  const menuItemsToShow = menuItems.filter(
+    ({ featureFlag }) => !featureFlag || enabled(featureFlag)
+  );
   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
@@ -71,29 +78,23 @@ export default function MenuDrawer() {
             </Button>
           </ListItem>
           <Divider />
-          {[
-            { text: "Files", icon: "icon-files", path: "/" },
-            { text: "Contacts", icon: "icon-users", path: "/contacts" },
-            { text: "Bookmarks", icon: "icon-star", path: "/bookmarks" },
-          ].map(({ text, icon, path }) => {
-            return (
-              <Link href={path} replace key={path}>
-                <ListItem button key={text} onClick={handleDrawerClose}>
-                  <ListItemIcon>
-                    <i
-                      className={clsx(bem(icon), bem("icon"))}
-                      aria-label={text}
-                    />
-                  </ListItemIcon>
-                  <ListItemText
-                    disableTypography
-                    primary={text}
-                    className={bem("menu-drawer-item__text")}
+          {menuItemsToShow.map(({ icon, label, path }) => (
+            <Link href={path} replace key={path}>
+              <ListItem button key={label} onClick={handleDrawerClose}>
+                <ListItemIcon>
+                  <i
+                    className={clsx(bem(icon), bem("icon"))}
+                    aria-label={label}
                   />
-                </ListItem>
-              </Link>
-            );
-          })}
+                </ListItemIcon>
+                <ListItemText
+                  disableTypography
+                  primary={label}
+                  className={bem("menu-drawer-item__text")}
+                />
+              </ListItem>
+            </Link>
+          ))}
           <Divider />
           <ListItem button key="profile" onClick={handleDrawerClose}>
             <Link href="/profile" replace>

@@ -13,12 +13,6 @@ exports[`ResourceNotFound renders 1`] = `
       >
         Resource Not Found
       </h1>
-      <div
-        class="PodBrowser-page-header__content"
-      />
-      <div
-        class="PodBrowser-page-header__toolbar"
-      />
     </div>
     <div
       class="PodBrowser-container"

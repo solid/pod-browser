@@ -13,45 +13,48 @@ exports[`MainNav renders navigation 1`] = `
       >
         <li
           class="PodBrowser-main-nav__item"
+          data-testid="main-nav-item"
         >
-          <button
+          <a
             class="PodBrowser-header-banner__aside-menu-trigger"
+            href="/"
             type="button"
           >
             <i
-              aria-label="Files"
               class="PodBrowser-icon-files PodBrowser-header-banner__aside-menu-trigger-icon"
             />
             Files
-          </button>
+          </a>
         </li>
         <li
           class="PodBrowser-main-nav__item"
+          data-testid="main-nav-item"
         >
-          <button
+          <a
             class="PodBrowser-header-banner__aside-menu-trigger"
+            href="/contacts"
             type="button"
           >
             <i
-              aria-label="Contacts"
               class="PodBrowser-icon-users PodBrowser-header-banner__aside-menu-trigger-icon"
             />
             Contacts
-          </button>
+          </a>
         </li>
         <li
           class="PodBrowser-main-nav__item"
+          data-testid="main-nav-item"
         >
-          <button
+          <a
             class="PodBrowser-header-banner__aside-menu-trigger"
+            href="/bookmarks"
             type="button"
           >
             <i
-              aria-label="Bookmarks"
               class="PodBrowser-icon-star PodBrowser-header-banner__aside-menu-trigger-icon"
             />
             Bookmarks
-          </button>
+          </a>
         </li>
       </ul>
     </nav>

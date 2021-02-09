@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GroupViewEmpty renders 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-group-view-empty"
+    data-testid="group-view-empty"
+  >
+    <span
+      class="PodBrowser-icon-users PodBrowser-icon-large"
+    />
+    <h2>
+      You don't have any groups yet!
+    </h2>
+    <p>
+      Create a new group to easily share files with.
+    </p>
+  </div>
+</DocumentFragment>
+`;

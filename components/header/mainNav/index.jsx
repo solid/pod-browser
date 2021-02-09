@@ -19,72 +19,52 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
+import React, { useContext } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
 import Link from "next/link";
 import { useBem } from "@solid/lit-prism-patterns";
 import styles from "./styles";
+import FeatureContext from "../../../src/contexts/featureFlagsContext";
+import getMainMenuItems from "../../../constants/mainMenu";
+
+export const TESTID_MAIN_NAV_ITEM = "main-nav-item";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+const menuItems = getMainMenuItems();
 
 export default function MainNav() {
   const bem = useBem(useStyles());
+  const { enabled } = useContext(FeatureContext);
+  const menuItemsToShow = menuItems.filter(
+    ({ featureFlag }) => !featureFlag || enabled(featureFlag)
+  );
   return (
     <div className={bem("main-nav-container")}>
       <nav className={bem("header-banner__main-nav")}>
         <ul className={bem("main-nav__list")}>
-          <li className={bem("main-nav__item")}>
-            <Link href="/" replace>
-              <button
-                className={bem("header-banner__aside-menu-trigger")}
-                type="button"
-              >
-                <i
-                  className={clsx(
-                    bem("icon-files"),
-                    bem("header-banner__aside-menu-trigger-icon")
-                  )}
-                  aria-label="Files"
-                />
-                Files
-              </button>
-            </Link>
-          </li>
-          <li className={bem("main-nav__item")}>
-            <Link href="/contacts" replace>
-              <button
-                className={bem("header-banner__aside-menu-trigger")}
-                type="button"
-              >
-                <i
-                  className={clsx(
-                    bem("icon-users"),
-                    bem("header-banner__aside-menu-trigger-icon")
-                  )}
-                  aria-label="Contacts"
-                />
-                Contacts
-              </button>
-            </Link>
-          </li>
-          <li className={bem("main-nav__item")}>
-            <Link href="/bookmarks" replace>
-              <button
-                className={bem("header-banner__aside-menu-trigger")}
-                type="button"
-              >
-                <i
-                  className={clsx(
-                    bem("icon-star"),
-                    bem("header-banner__aside-menu-trigger-icon")
-                  )}
-                  aria-label="Bookmarks"
-                />
-                Bookmarks
-              </button>
-            </Link>
-          </li>
+          {menuItemsToShow.map(({ path, icon, label }) => (
+            <li
+              className={bem("main-nav__item")}
+              key={path}
+              data-testid={TESTID_MAIN_NAV_ITEM}
+            >
+              <Link href={path} replace>
+                <a
+                  className={bem("header-banner__aside-menu-trigger")}
+                  type="button"
+                >
+                  <i
+                    className={clsx(
+                      bem(icon),
+                      bem("header-banner__aside-menu-trigger-icon")
+                    )}
+                  />
+                  {label}
+                </a>
+              </Link>
+            </li>
+          ))}
         </ul>
       </nav>
     </div>

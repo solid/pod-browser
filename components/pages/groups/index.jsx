@@ -20,32 +20,31 @@
  */
 
 import React from "react";
-import { useSession } from "@inrupt/solid-ui-react";
-import { renderWithTheme } from "../../../__testUtils/withTheme";
-import MainNav, { TESTID_MAIN_NAV_ITEM } from "./index";
-import mockSession, {
-  mockUnauthenticatedSession,
-} from "../../../__testUtils/mockSession";
-import { GROUPS_PAGE_ENABLED_FOR } from "../../../src/featureFlags";
+import { Container, PageHeader } from "@inrupt/prism-react-components";
+import { makeStyles } from "@material-ui/styles";
+import { createStyles } from "@material-ui/core";
+import { useBem } from "@solid/lit-prism-patterns";
+import styles from "./styles";
+import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
+import GroupList from "../../groupList";
+import GroupView from "../../groupView";
 
-jest.mock("@inrupt/solid-ui-react");
-const mockedSessionHook = useSession;
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-describe("MainNav", () => {
-  it("renders navigation", () => {
-    const session = mockUnauthenticatedSession();
-    mockedSessionHook.mockReturnValue({ session });
-
-    const { asFragment, getAllByTestId } = renderWithTheme(<MainNav />);
-    expect(asFragment()).toMatchSnapshot();
-    expect(getAllByTestId(TESTID_MAIN_NAV_ITEM)).toHaveLength(3);
-  });
-
-  it("renders Group for people with the feature flag turned on", () => {
-    const session = mockSession({ webId: GROUPS_PAGE_ENABLED_FOR[0] });
-    mockedSessionHook.mockReturnValue({ session });
-
-    const { getAllByTestId } = renderWithTheme(<MainNav />);
-    expect(getAllByTestId(TESTID_MAIN_NAV_ITEM)).toHaveLength(4);
-  });
-});
+export default function GroupsPage() {
+  useRedirectIfLoggedOut();
+  const bem = useBem(useStyles());
+  return (
+    <>
+      <PageHeader title="Groups" />
+      <Container className={bem("groups-container")}>
+        <div className={bem("groups-container__content", "list", "focus")}>
+          <GroupList />
+        </div>
+        <div className={bem("groups-container__content", "main")}>
+          <GroupView />
+        </div>
+      </Container>
+    </>
+  );
+}

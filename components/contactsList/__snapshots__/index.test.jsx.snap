@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ContactsList renders error if useAddressBook returns error 1`] = `
+exports[`ContactsList renders error if useAddressBookOld returns error 1`] = `
 <DocumentFragment>
   error
 </DocumentFragment>
@@ -319,7 +319,7 @@ exports[`ContactsList renders page when people is loaded 1`] = `
 </DocumentFragment>
 `;
 
-exports[`ContactsList renders spinner while useAddressBook is loading 1`] = `
+exports[`ContactsList renders spinner while useAddressBookOld is loading 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
@@ -341,7 +341,7 @@ exports[`ContactsList renders spinner while useAddressBook is loading 1`] = `
 </DocumentFragment>
 `;
 
-exports[`ContactsList renders spinner while useContacts is loading 1`] = `
+exports[`ContactsList renders spinner while useContactsOld is loading 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
