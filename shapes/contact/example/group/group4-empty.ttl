@@ -1,7 +1,7 @@
 prefix :       <#>
 prefix vcard:  <http://www.w3.org/2006/vcard/ns#>
 
-# This is simply an empty group (i.e., no members).
+# This is simply an empty group (i.e., no members, yet).
 :this
     a vcard:Group ;
     vcard:fn "Group 4 - empty, for now..." .

@@ -1,11 +1,41 @@
 # Shapes
 
-## Structure of the Shapes contained here.
+This document describes the overall contents of this Shape directory, and
+attempts to explain some of the rationale for the modelling.
 
-This directory contains the following sub-directories, each containing ShEx
-Shapes and an `/example` folder showing demonstration Turtle files conforming
-to the relevant Shapes. The Turtle files are also used to demonstrate how
-instances of Pod Resources are expected to be interlinked
+## Use of triples versus quads for user data
+
+Currently our modelling does not use quads for user data at all.
+
+Instead we propose to use Named Graphs to support various forms of meta-data
+that might be associated with any resource, for example, server-managed
+meta-data (e.g., the date/time the resource was created or last modified, or
+the backend storage node used, etc.), or Access Control List (ACL) data
+associated with the resource, or perhaps ShEx shapes the resource must conform
+to, or client-side meta-data associated with Non-RDF resources (e.g., the 'name'
+of a JPEG image resource, or the camera aperture settings of the image), etc.
+
+## Structure of the Shapes, and example Turtle contained here.
+
+This directory contains a `bookmark` directory and a `contact` directory. Each
+contains ShEx Shapes and an `/example` folder showing demonstration Turtle files
+conforming to the relevant Shapes.
+
+The Turtle files of the `contact` examples also demonstrate how instances of Pod
+Resources are currently interlinked (e.g., it demonstrates groups of people
+referenced from address books).
+
+## Use of the `#this` fragment identifier
+
+This modelling follows a naming convention whereby the fragment identifier
+`#this` can be used to denote the main RDF Subject in the dataset that makes up
+all the triples of a single Pod resource.
+
+For example, in `shapes/contact/example/group/group3-soccer-team.ttl` we use the
+`#this` fragment identifier on the RDF Subject of the triples associated with
+the Soccer Team Group itself. The resource is free to include triples using as
+many other RDF Subjects as it likes, but `#this` is intended to identify the
+main entity of the resource.
 
 ## Indexes
 
