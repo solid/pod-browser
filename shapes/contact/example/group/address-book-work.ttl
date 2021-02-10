@@ -1,0 +1,7 @@
+prefix :       <#>
+prefix vcard:  <http://www.w3.org/2006/vcard/ns#>
+
+:this
+    a vcard:Group ;
+    vcard:fn "Address Book - work" ;
+    vcard:hasMember <./group1-work-colleague.ttl#this> .
