@@ -1,16 +1,16 @@
 @prefix :       <#>.
 @prefix bookm:  <http://www.w3.org/2002/01/bookmark#>.
 @prefix terms:  <http://purl.org/dc/terms/>.
-@prefix XML:    <http://www.w3.org/2001/XMLSchema#>.
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#>.
 
 :16115748945888512870652861511
     a bookm:Bookmark;
-    terms:created "2021-01-25T11:41:34.589Z"^^XML:dateTime;
+    terms:created "2021-01-25T11:41:34.589Z"^^xsd:dateTime;
     terms:title "Solid Project";
     bookm:recalls <https://solidproject.org/>.
 
 :12391230834289702394820340982
     a bookm:Bookmark;
-    terms:created "2021-01-30T12:30:21.321Z"^^XML:dateTime;
+    terms:created "2021-01-30T12:30:21.321Z"^^xsd:dateTime;
     terms:title "Inrupt";
     bookm:recalls <https://inrupt.com/>.

@@ -8,16 +8,16 @@ prefix vcard:  <http://www.w3.org/2006/vcard/ns#>
 # can cache (or copy) specific data from each person to here in this index too
 # (so that we can access that data without having to read all the individual
 # people resources when just listing all the people with their names).
-<Person/2d73ccc1-9d76-4398-8840-3c23a8ddf04c/index.ttl#this>
+<person/2d73ccc1-9d76-4398-8840-3c23a8ddf04c/index.ttl#this>
     vcard:fn "Arne H" ;
     vcard:inAddressBook
              <../addressBookFriend/index.ttl#this> ,
              <../addressBookWork/index.ttl#this> .
 
-<Person/347429c1-e6b5-40c0-bd6f-61ba1265d357/index.ttl#this>
+<person/347429c1-e6b5-40c0-bd6f-61ba1265d357/index.ttl#this>
     vcard:fn "Vincent" ;
     vcard:inAddressBook <../addressBookWork/index.ttl#this> .
 
-<Person/76344edd-b1c7-67c2-ec3e-89ab5494e233/index.ttl#this>
+<person/76344edd-b1c7-67c2-ec3e-89ab5494e233/index.ttl#this>
     vcard:fn "Tommy Mc" ;
     vcard:inAddressBook <../addressBookFriend/index.ttl#this> .
