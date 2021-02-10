@@ -32,7 +32,7 @@ countries, and not using IRIs at all(!):
 
 # Shapes
 
-This remainder of this document describes the overall contents of this
+The remainder of this document describes the overall contents of this
 directory, and attempts to explain some of the rationale for the modelling.
 
 This directory also includes a series of Turtle files demonstrating expected
