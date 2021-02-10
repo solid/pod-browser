@@ -1,13 +1,48 @@
+# Solid User Profile
+
+We don't currently have a specific Shape defined for user profiles. But the
+original Solid specification provides good guidance on the basic requirements
+for the Profile Document expected to be returned when de-referencing a WebID.
+
+See here for details: https://github.com/solid/solid-spec#webid-profile-documents
+
+We'd certainly be open to ideas on how to model these basic discovery
+requirements differently, and also on how to model the actual human user profile
+information (such as date-of-birth, gender, address, etc.).
+
+## The 'country' problem?
+An interesting discussion point would be how to model something as seemingly
+trivial as the 'country' field of a user's address. If we take the ISO as just
+an example of a recognized 'authority' when referring to "countries of the
+world" (of course they are by no means the only such authority), then a problem
+arises in that the ISO do not provide IRIs for the countries they otherwise
+standardize identifiers for (e.g., 'ie' for Ireland, 'de' for Germany).
+
+(About 7 years ago I specifically asked the ISO if they might consider minting
+official IRIs for countries. Their reply was, literally, "**_We do not product
+any RDF formats, I am sorry"_**!)
+
+By way of example of how long-running a fundamental modelling question this is,
+see this mailing list thread I started 6 years ago (and specifically see the
+guidance from Martin Hepp, re-iterated in the final email from Bernard Vatant),
+which basically recommends just using the standardized string values for
+countries, and not using IRIs at all(!):
+- Martin Hepp: https://lists.w3.org/Archives/Public/public-vocabs/2015Mar/0165.html
+- Bernard Vatant (last email): https://lists.w3.org/Archives/Public/public-vocabs/2015Mar/0181.html
+
 # Shapes
 
-This document describes the overall contents of this Shape directory, and
-attempts to explain some of the rationale for the modelling.
+This remainder of this document describes the overall contents of this
+directory, and attempts to explain some of the rationale for the modelling.
 
-## Use of triples versus quads for user data
+This directory also includes a series of Turtle files demonstrating expected
+usage.
+
+### Note: Use of triples versus quads for user data
 
 Currently our modelling does not use quads for user data at all.
 
-Instead we propose to use Named Graphs to support various forms of meta-data
+Instead we propose using Named Graphs to support various forms of meta-data
 that might be associated with any resource, for example, server-managed
 meta-data (e.g., the date/time the resource was created or last modified, or
 the backend storage node used, etc.), or Access Control List (ACL) data
