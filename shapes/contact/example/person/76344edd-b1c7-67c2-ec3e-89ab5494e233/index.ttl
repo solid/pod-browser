@@ -7,11 +7,4 @@ prefix vcard:  <http://www.w3.org/2006/vcard/ns#>
 :this
     a vcard:Individual ;
     vcard:fn "Tommy - friend and goalkeeper extraordinaire" ;
-    vcard:url :56456268332379795455777077312 .
-
-#
-# Using a named node (as opposed to a Blank Node).
-#
-:56456268332379795455777077312
-    a vcard:WebId ;
-    vcard:value <https://tommy.inrupt.net/profile/card#me> .
+    vcard:hasWebID <https://tommy.inrupt.net/profile/card#me> .

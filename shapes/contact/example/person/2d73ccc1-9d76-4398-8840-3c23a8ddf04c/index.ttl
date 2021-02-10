@@ -14,12 +14,6 @@ prefix vcard:      <http://www.w3.org/2006/vcard/ns#>
 :this
     a vcard:Individual ;
     vcard:fn "Arne H - work colleague, friend and soccer striker" ;
-    vcard:url [
-        a vcard:WebID;
-        vcard:value "https://megoth-demo1.inrupt.net/profile/card#me"
-    ] ,
+    vcard:hasWebID "https://megoth-demo1.inrupt.net/profile/card#me" ;
     # Perhaps other forms of dereferencable URL's (but not email!)...
-    [
-        a vcard:DID;
-        vcard:value "did:sovrin:34537453453-2432424-23424324"
-    ] .
+    vcard:hasDID "did:sovrin:34537453453-2432424-23424324" .

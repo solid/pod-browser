@@ -7,11 +7,4 @@ prefix vcard:  <http://www.w3.org/2006/vcard/ns#>
 :this
     a vcard:Individual ;
     vcard:fn "Vincent T - work colleague" ;
-    vcard:url :16112499761464744406237652592 .
-
-#
-# Using a named node (as opposed to a Blank Node).
-#
-:16112499761464744406237652592
-    a vcard:WebId ;
-    vcard:value <https://vincentt.inrupt.net/profile/card#me> .
+    vcard:hasWebID <https://vincentt.inrupt.net/profile/card#me> .
