@@ -5,8 +5,8 @@ prefix vcard:  <http://www.w3.org/2006/vcard/ns#>
     a vcard:Group ;
     vcard:fn "Group 3 - local soccer team" ;
     vcard:hasMember
-        <../Person/2d73ccc1-9d76-4398-8840-3c23a8ddf04c/index.ttl#this> ,
-        <../Person/347429c1-e6b5-40c0-bd6f-61ba1265d357/index.ttl#this> .
+        <../person/2d73ccc1-9d76-4398-8840-3c23a8ddf04c/index.ttl#this> ,
+        <../person/347429c1-e6b5-40c0-bd6f-61ba1265d357/index.ttl#this> .
 
 <../addressBookFriend/index.ttl#this> vcard:includesGroup :this .
 

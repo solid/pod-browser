@@ -4,8 +4,8 @@ prefix vcard:  <http://www.w3.org/2006/vcard/ns#>
 :this
     a vcard:Group ;
     vcard:fn "Group 1 - my work colleagues" ;
-    vcard:hasMember <../Person/2d73ccc1-9d76-4398-8840-3c23a8ddf04c/index.ttl#this> ;
-    vcard:hasMember <../Person/347429c1-e6b5-40c0-bd6f-61ba1265d357/index.ttl#this> .
+    vcard:hasMember <../person/2d73ccc1-9d76-4398-8840-3c23a8ddf04c/index.ttl#this> ;
+    vcard:hasMember <../person/347429c1-e6b5-40c0-bd6f-61ba1265d357/index.ttl#this> .
 
 <../addressBookFriend/index.ttl#this> vcard:includesGroup :this .
 
@@ -14,7 +14,7 @@ prefix vcard:  <http://www.w3.org/2006/vcard/ns#>
 # so that we don't need to fetch each `vcard:hasMember` instance to get their
 # `vcard:fn` values.
 #
-<../person/`2d73ccc1-9d76-4398-8840-3c23a8ddf04c/index.ttl#this>
+<../person/2d73ccc1-9d76-4398-8840-3c23a8ddf04c/index.ttl#this>
     vcard:fn "Arne - who I work with" .
 
 <../person/347429c1-e6b5-40c0-bd6f-61ba1265d357/index.ttl#this>
