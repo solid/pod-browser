@@ -19,7 +19,7 @@ arises in that the ISO do not provide IRIs for the countries they otherwise
 standardize identifiers for (e.g., 'ie' for Ireland, 'de' for Germany).
 
 (About 7 years ago I specifically asked the ISO if they might consider minting
-official IRIs for countries. Their reply was, literally, "**_We do not product
+official IRIs for countries. Their reply was, literally, "**_We do not produce
 any RDF formats, I am sorry"_**!)
 
 By way of example of how long-running a fundamental modelling question this is,
