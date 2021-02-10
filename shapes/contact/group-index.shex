@@ -1,0 +1,20 @@
+PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
+PREFIX xsd:   <https://www.w3.org/2001/XMLSchema#>
+
+# This shape describes part of the information we store when adding a group to
+# an address book. The resource it is used for is an index of groups. There will
+# be multiple groups added in this resource, and each referring to the group
+# resource where there are more information on the group (e.g. members).
+
+# This model was originally developed as part of the
+# SolidOS/Data Browser project, and we strive to keep it interoperable with
+# their work. Some custom terms have been introduced to vocabularies we think
+# they could belong to (e.g. vcard:includesGroup). We'll make a note of the
+# custom term when used.
+
+vcard:Group {
+    vcard:fn xsd:string {1} ;
+    # vcard:includesGroup is a custom term
+    # vcard:AddressBook is a custom class
+    ^ vcard:includesGroup vcard:AddressBook ;
+}

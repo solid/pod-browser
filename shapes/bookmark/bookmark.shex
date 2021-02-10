@@ -3,6 +3,12 @@ PREFIX foaf:      <http://xmlns.com/foaf/0.1/>
 PREFIX terms:     <http://purl.org/dc/terms/>
 PREFIX xsd:       <https://www.w3.org/2001/XMLSchema#>
 
+#
+# This shape describes the information we store for a bookmark.
+# In Pod Browser we store all bookmarks within the one resource (as opposed to
+# storing one bookmark per resource and containing them all within an
+# `ldp:Container`).
+#
 bookmark:Bookmark {
   terms:created xsd:dateTime {1} ;
   terms:title xsd:string {1} ;

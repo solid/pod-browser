@@ -1,0 +1,73 @@
+PREFIX vcard:   <http://www.w3.org/2006/vcard/ns#>
+PREFIX xsd:     <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:     <http://www.w3.org/2002/07/owl#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+# This shape describes the information we store when adding a person to an
+# address book. The resource it is used for represents a local copy of a
+# person's profile. We use the id "#this" to refer to the subject of the person.
+
+# This model is originally developed as part of the SolidOS/Data
+# Browser project, and we strive to keep it interoperable with their work.
+# Some custom terms have been introduced to vocabularies we think they could
+# belong to (e.g. vcard:inAddressBook). We'll make a note of the custom term
+# when used.
+
+vcard:Individual {
+    vcard:fn xsd:string {1} ;
+
+    # vcard:WebId is a custom term
+    vcard:url vcard:WebId {1};
+
+    # Not sure if we use this anymore
+    vcard:hasUID xsd:string ? ;
+
+    vcard:hasName xsd:string ? ; # structured name
+    vcard:hasPhoto dcterms:Image * ;
+    vcard:hasRelated vcard:RelatedType * ;
+    vcard:hasAddress vcard:Address * ;
+    vcard:bday xsd:date ? ;
+    vcard:hasEmail vcard:Email * ;
+    vcard:hasTelephone vcard:Tel * ;
+    vcard:organization-name xsd:string ? ;
+    vcard:role xsd:string ? ;
+    vcard:title xsd:string ? ;
+    vcard:note xsd:string ? ;
+    vcard:inAddressBook vcard:AddressBook + ;
+    # vcard:inAddressBook is a custom term
+    # vcard:AddressBook is a custom class
+}
+
+# We store the preferred WebID for each person. The use of vcard:WebId
+# refer to the Individual's WebIDs, but the idea is that we could expand it
+# to refer to other type of unique identifiers later
+# vcard:WebId is a custom term
+# Big question - SHOULD something as fundamental as WebID be defined in vCard?
+vcard:WebId {
+    vcard:value xsd:string {1};
+}
+
+vcard:Address {
+    a [vcard:Home vcard:Work] {1} ;
+    vcard:street-address xsd:string {1} ;
+    vcard:locality xsd:string {1} ;
+    vcard:postal-code xsd:string {1} ;
+    vcard:region xsd:string {1} ;
+    vcard:country-name xsd:string {1} ;
+}
+
+vcard:Email {
+    a [vcard:Home vcard:Work] {1} ;
+    rdf:value xsd:string /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/ {1} ; # should have a `mailto` prefix
+}
+
+vcard:Tel {
+    a [vcard:Home vcard:Work vcard:Cell vcard:Fax vcard:Pager vcard:Text vcard:TextPhone vcard:Video vcard:Video vcard:Voice] {1} ;
+    rdf:value xsd:string /^\+?[0-9]+[0-9-]*[0-9]$/ {1} ; # should have a `tel` prefix
+}
+
+vcard:RelatedType EXTRA a {
+    a [vcard:Acquaintance vcard:Child vcard:Colleague vcard:Coworker vcard:Emergency vcard:Friend vcard:Neighbor vcard:Parent vcard:Sibling vcard:Spouse] ;
+    rdf:value vcard:Individual ;
+}

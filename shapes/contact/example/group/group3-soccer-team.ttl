@@ -1,0 +1,23 @@
+prefix :       <#>
+prefix vcard:  <http://www.w3.org/2006/vcard/ns#>
+
+:this
+    a vcard:Group ;
+    vcard:fn "Group 3 - local soccer team" ;
+    vcard:hasMember
+        <../person/2d73ccc1-9d76-4398-8840-3c23a8ddf04c/index.ttl#this> ,
+        <../person/347429c1-e6b5-40c0-bd6f-61ba1265d357/index.ttl#this> .
+
+<../addressBookFriend/index.ttl#this> vcard:includesGroup :this .
+
+#
+# This is caching some data from an external resource by copying it here (just
+# so that we don't need to fetch each `vcard:hasMember` instance to get their
+# `vcard:fn` values.
+#
+<../person/2d73ccc1-9d76-4398-8840-3c23a8ddf04c/index.ttl#this>
+    vcard:fn "Arne - soccer team striker!" .
+
+<../person/76344edd-b1c7-67c2-ec3e-89ab5494e233/index.ttl#this>
+    vcard:fn "Tommy - soccer team goalkeeper" .
+
