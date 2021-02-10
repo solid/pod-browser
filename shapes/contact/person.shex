@@ -17,8 +17,8 @@ PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 vcard:Individual {
     vcard:fn xsd:string {1} ;
 
-    # vcard:WebId is a custom term
-    vcard:url vcard:WebId {1};
+    # vcard:hasWebID is a custom term
+    vcard:hasWebID xsd:anyURI {1};
 
     # Not sure if we use this anymore
     vcard:hasUID xsd:string ? ;
@@ -37,15 +37,6 @@ vcard:Individual {
     vcard:inAddressBook vcard:AddressBook + ;
     # vcard:inAddressBook is a custom term
     # vcard:AddressBook is a custom class
-}
-
-# We store the preferred WebID for each person. The use of vcard:WebId
-# refer to the Individual's WebIDs, but the idea is that we could expand it
-# to refer to other type of unique identifiers later
-# vcard:WebId is a custom term
-# Big question - SHOULD something as fundamental as WebID be defined in vCard?
-vcard:WebId {
-    vcard:value xsd:string {1};
 }
 
 vcard:Address {
