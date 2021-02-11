@@ -28,6 +28,8 @@ module.exports = {
 
   setupFiles: ["jest-localstorage-mock"],
 
+  setupFilesAfterEnv: ["<rootDir>/jest-setup.js"],
+
   testPathIgnorePatterns: ["/node_modules/", "/__testUtils/"],
 
   transform: {

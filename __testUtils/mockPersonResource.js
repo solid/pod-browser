@@ -28,8 +28,9 @@ import {
 import { vcard, foaf, rdf, space } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
 import { packageProfile } from "../src/solidClientHelpers/profile";
+import { vcardExtras } from "../src/addressBook";
 
-const VCARD_WEBID_PREDICATE = "https://www.w3.org/2006/vcard/ns#WebId";
+const VCARD_WEBID_PREDICATE = vcardExtras("WebId");
 
 export function mockWebIdNode(
   webId,

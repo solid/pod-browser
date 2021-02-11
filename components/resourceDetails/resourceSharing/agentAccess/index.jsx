@@ -32,95 +32,27 @@ import { Alert, Skeleton } from "@material-ui/lab";
 import styles from "./styles";
 import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
 import AgentProfileDetails from "./agentProfileDetails";
-import AlertContext from "../../../../src/contexts/alertContext";
-import AccessControlContext from "../../../../src/contexts/accessControlContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 const TESTCAFE_ID_TRY_AGAIN_BUTTON = "try-again-button";
 const TESTCAFE_ID_TRY_AGAIN_SPINNER = "try-again-spinner";
 
-export function saveHandler(
-  accessControl,
-  setLoading,
-  setAccess,
-  webId,
-  setSeverity,
-  setMessage,
-  setAlertOpen
-) {
-  return async (newAccess) => {
-    setAccess(newAccess);
-    setLoading(true);
-    if (!accessControl) return;
-    const { error } = await accessControl.savePermissionsForAgent(
-      webId,
-      newAccess
-    );
-
-    if (error) throw error;
-
-    setSeverity("success");
-    setMessage("Permissions have been updated!");
-    setAlertOpen(true);
-    setLoading(false);
-  };
-}
-
-export default function AgentAccess({
-  permission: { webId, acl, profile, profileError },
-}) {
-  const { accessControl } = useContext(AccessControlContext);
+export default function AgentAccess({ permission, mutatePermissions }) {
   const classes = useStyles();
   const {
     session: { fetch },
   } = useSession();
   const bem = useBem(useStyles());
+  const { webId, acl, profile, profileError } = permission;
   const { dataset } = useContext(DatasetContext);
   const [isLoadingProfile, setIsLoadingProfile] = useState(false);
   const [loading, setLoading] = useState(false);
   const resourceIri = getSourceUrl(dataset);
 
-  const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
-
-  const [access, setAccess] = useState(acl);
   const [localAccess, setLocalAccess] = useState(acl);
   const [localProfile, setLocalProfile] = useState(profile);
   const [localProfileError, setLocalProfileError] = useState(profileError);
-
-  const savePermissions = saveHandler(
-    accessControl,
-    setLoading,
-    setAccess,
-    webId,
-    setSeverity,
-    setMessage,
-    setAlertOpen
-  );
-
-  const handleToggleShare = async (e) => {
-    e.preventDefault();
-    if (!access) return;
-    const tempAccess = {
-      ...access,
-      control: !access.control,
-    };
-    setLocalAccess(tempAccess);
-    await savePermissions(tempAccess);
-  };
-
-  const handleRemovePermissions = async (e) => {
-    e.preventDefault();
-    if (!access) return;
-    const tempAccess = {
-      read: false,
-      write: false,
-      append: false,
-      control: false,
-    };
-    setLocalAccess(null);
-    await savePermissions(tempAccess);
-  };
 
   const handleRetryClick = async () => {
     try {
@@ -132,6 +64,7 @@ export default function AgentAccess({
       setIsLoadingProfile(false);
     }
   };
+
   if (!localAccess) return null;
 
   if (loading)
@@ -186,12 +119,11 @@ export default function AgentAccess({
         </Alert>
         <div className={classes.separator} />
         <AgentProfileDetails
-          removePermissions={handleRemovePermissions}
-          toggleShare={handleToggleShare}
-          canShare={localAccess.control}
-          webId={webId}
           resourceIri={resourceIri}
-          profile={null}
+          permission={permission}
+          setLoading={setLoading}
+          setLocalAccess={setLocalAccess}
+          mutatePermissions={mutatePermissions}
         />
       </div>
     );
@@ -215,16 +147,20 @@ export default function AgentAccess({
 
   return (
     <AgentProfileDetails
-      canShare={localAccess.control}
-      removePermissions={handleRemovePermissions}
-      toggleShare={handleToggleShare}
-      webId={webId}
       resourceIri={resourceIri}
-      profile={localProfile}
+      permission={permission}
+      setLoading={setLoading}
+      setLocalAccess={setLocalAccess}
+      mutatePermissions={mutatePermissions}
     />
   );
 }
 
 AgentAccess.propTypes = {
   permission: T.object.isRequired,
+  mutatePermissions: T.func,
+};
+
+AgentAccess.defaultProps = {
+  mutatePermissions: () => {},
 };

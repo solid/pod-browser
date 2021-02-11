@@ -39,6 +39,7 @@ import {
   saveResource,
   deleteResource,
   getBaseUrl,
+  deletePoliciesContainer,
 } from "./resource";
 import { getPolicyUrl } from "./policies";
 import { chain } from "./utils";
@@ -351,14 +352,30 @@ describe("deleteResource", () => {
       deleteResource(resourceInfo, policiesContainerUrl, fetch)
     ).resolves.toBeUndefined();
   });
+});
 
-  it("lets through other errors when deleting the policy resource", async () => {
-    getPolicyUrl.mockReturnValue("https://example.org/examplePolicyUrl");
-    SolidClientFns.deleteFile.mockResolvedValueOnce().mockImplementation(() => {
-      throw new Error("500");
+describe("deletePoliciesContainer", () => {
+  const mockDeleteContainer = jest
+    .spyOn(SolidClientFns, "deleteContainer")
+    .mockImplementation(jest.fn());
+
+  const fetch = jest.fn();
+  const containerIri = "https://example.org/policies/resource/";
+
+  test("it deletes the policies container", async () => {
+    await deletePoliciesContainer(containerIri, fetch);
+
+    expect(mockDeleteContainer).toHaveBeenCalledWith(containerIri, {
+      fetch,
     });
+  });
+
+  it("ignores 403 errors when deleting the policy resource", async () => {
+    SolidClientFns.deleteContainer
+      .mockResolvedValueOnce()
+      .mockRejectedValue("403");
     await expect(
-      deleteResource(resourceInfo, policiesContainerUrl, fetch)
-    ).rejects.toEqual(new Error("500"));
+      deletePoliciesContainer(containerIri, fetch)
+    ).resolves.toBeUndefined();
   });
 });

@@ -21,33 +21,18 @@
 
 import React from "react";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import ResourceSharing from "./index";
-import usePermissions from "../../../../src/hooks/usePermissions";
-import * as permissionHelpers from "../../../../src/solidClientHelpers/permissions";
+import SharingAccordion from "./index";
+import { TESTCAFE_ID_AGENT_ACCESS_TABLE } from "../agentAccessTable";
 
-jest.mock("../../../../src/hooks/usePermissions");
-
-const { ACL } = permissionHelpers;
-const webId = "webId";
-const permission = {
-  webId,
-  alias: ACL.CONTROL.alias,
-  acl: ACL.CONTROL.acl,
-  profile: { webId },
-};
-
-describe("AgentAccessList", () => {
+describe("SharingAccordion", () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
-  test("it renders three lists of permissions for editors, viewers and blocked", () => {
-    usePermissions.mockReturnValue({ permissions: [permission] });
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
-    expect(asFragment()).toMatchSnapshot();
-  });
-  test("it renders a spinner while loading permissions for access control", () => {
-    usePermissions.mockReturnValue({ permissions: null });
-    const { asFragment } = renderWithTheme(<ResourceSharing />);
+  test("it renders three lists of empty permissions for editors, viewers and blocked", () => {
+    const { asFragment, queryAllByTestId } = renderWithTheme(
+      <SharingAccordion />
+    );
+    expect(queryAllByTestId(TESTCAFE_ID_AGENT_ACCESS_TABLE)).toHaveLength(3);
     expect(asFragment()).toMatchSnapshot();
   });
 });

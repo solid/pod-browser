@@ -120,6 +120,7 @@ exports[`Header with user logged in renders a header 1`] = `
         <div
           aria-hidden="true"
           class="PodBrowser-header-banner__aside-menu-popup"
+          data-testid="user-menu"
           id="UserMenu"
         >
           <ul

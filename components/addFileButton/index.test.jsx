@@ -22,7 +22,6 @@
 import React from "react";
 import * as SolidClientFns from "@inrupt/solid-client";
 import { act, render } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
 import userEvent from "@testing-library/user-event";
 import { PodLocationProvider } from "../../src/contexts/podLocationContext";
 import mockSession from "../../__testUtils/mockSession";

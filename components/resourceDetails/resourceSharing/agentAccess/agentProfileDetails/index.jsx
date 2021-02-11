@@ -35,14 +35,14 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const TESTCAFE_ID_AGENT_WEB_ID = "agent-web-id";
 
 export default function AgentProfileDetails({
-  toggleShare,
-  removePermissions,
-  canShare,
   resourceIri,
-  webId,
-  profile,
+  permission,
+  setLoading,
+  setLocalAccess,
+  mutatePermissions,
 }) {
   const classes = useStyles();
+  const { webId, profile } = permission;
 
   return (
     <div className={classes.nameAndAvatarContainer}>
@@ -57,28 +57,27 @@ export default function AgentProfileDetails({
         className={classes.detailText}
       >
         {profile ? displayProfileName(profile) : webId}
-        {canShare && <span className={classes.shareText}>Can Share</span>}
       </Typography>
       <AgentAccessOptionsMenu
-        canShare={canShare}
-        toggleShare={toggleShare}
-        removePermissions={removePermissions}
         resourceIri={resourceIri}
-        webId={webId}
+        permission={permission}
+        setLoading={setLoading}
+        setLocalAccess={setLocalAccess}
+        mutatePermissions={mutatePermissions}
       />
     </div>
   );
 }
 AgentProfileDetails.propTypes = {
-  toggleShare: T.func.isRequired,
-  removePermissions: T.func.isRequired,
-  canShare: T.bool,
   resourceIri: T.string.isRequired,
-  webId: T.string.isRequired,
-  profile: T.shape(),
+  permission: T.shape().isRequired,
+  setLoading: T.func,
+  setLocalAccess: T.func,
+  mutatePermissions: T.func,
 };
 
 AgentProfileDetails.defaultProps = {
-  profile: null,
-  canShare: false,
+  setLoading: () => {},
+  setLocalAccess: () => {},
+  mutatePermissions: () => {},
 };

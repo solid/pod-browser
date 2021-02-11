@@ -21,10 +21,10 @@
 
 import React from "react";
 
-import { fireEvent, waitFor } from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
-import AgentAccess, { saveHandler } from "./index";
+import AgentAccess from "./index";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import * as profileFns from "../../../../src/solidClientHelpers/profile";
 import { mockProfileAlice } from "../../../../__testUtils/mockPersonResource";
@@ -35,10 +35,14 @@ const webId = "https://example.com/profile/card#me";
 
 describe("AgentAccess", () => {
   const permission = {
-    acl: createAccessMap(true, true, true, true),
+    acl: createAccessMap(true, true, false, false),
     webId,
+    alias: "Editors",
     profile: mockProfileAlice(),
+    profileError: undefined,
   };
+
+  const mutatePermissions = jest.fn();
 
   it("renders", () => {
     const { asFragment } = renderWithTheme(
@@ -51,11 +55,30 @@ describe("AgentAccess", () => {
     const { asFragment } = renderWithTheme(
       <AgentAccess
         permission={{
-          acl: createAccessMap(true, true, true, true),
+          acl: createAccessMap(true, true, false, false),
           webId,
+          alias: "Editors",
           profile: null,
-          profileError: null,
+          profileError: undefined,
         }}
+        mutatePermissions={mutatePermissions}
+      />
+    );
+
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("returns null when no access", () => {
+    const { asFragment } = renderWithTheme(
+      <AgentAccess
+        permission={{
+          acl: null,
+          webId,
+          alias: "Editors",
+          profile: null,
+          profileError: undefined,
+        }}
+        mutatePermissions={mutatePermissions}
       />
     );
 
@@ -66,11 +89,13 @@ describe("AgentAccess", () => {
     const { asFragment, getByTestId } = renderWithTheme(
       <AgentAccess
         permission={{
-          acl: createAccessMap(true, true, true, true),
+          acl: createAccessMap(true, true, false, false),
           webId,
+          alias: "Editors",
           profile: null,
           profileError: "error",
         }}
+        mutatePermissions={mutatePermissions}
       />
     );
     expect(getByTestId("try-again-button")).toBeTruthy();
@@ -81,11 +106,13 @@ describe("AgentAccess", () => {
     const { getByTestId } = renderWithTheme(
       <AgentAccess
         permission={{
-          acl: createAccessMap(true, true, true, true),
+          acl: createAccessMap(true, true, false, false),
           webId,
+          alias: "Editors",
           profile: null,
           profileError: "error",
         }}
+        mutatePermissions={mutatePermissions}
       />
     );
     const button = getByTestId("try-again-button");
@@ -99,11 +126,13 @@ describe("AgentAccess", () => {
     const { getByTestId } = renderWithTheme(
       <AgentAccess
         permission={{
-          acl: createAccessMap(true, true, true, true),
+          acl: createAccessMap(true, true, false, false),
           webId,
+          alias: "Editors",
           profile: null,
           profileError: "error",
         }}
+        mutatePermissions={mutatePermissions}
       />
     );
     const button = getByTestId("try-again-button");
@@ -120,11 +149,13 @@ describe("AgentAccess", () => {
     const { getByTestId, queryByTestId } = renderWithTheme(
       <AgentAccess
         permission={{
-          acl: createAccessMap(true, true, true, true),
+          acl: createAccessMap(true, true, false, false),
           webId,
+          alias: "Editors",
           profile: null,
           profileError: "error",
         }}
+        mutatePermissions={mutatePermissions}
       />
     );
     const button = getByTestId("try-again-button");
@@ -139,11 +170,13 @@ describe("AgentAccess", () => {
     const { getByTestId, queryByTestId } = renderWithTheme(
       <AgentAccess
         permission={{
-          acl: createAccessMap(true, true, true, true),
+          acl: createAccessMap(true, true, false, false),
           webId,
+          alias: "Editors",
           profile: null,
           profileError: "error",
         }}
+        mutatePermissions={mutatePermissions}
       />
     );
     const button = getByTestId("try-again-button");
@@ -153,108 +186,5 @@ describe("AgentAccess", () => {
       expect(fetchProfile).toHaveBeenCalledWith(webId, expect.anything())
     );
     await waitFor(() => expect(queryByTestId("try-again-spinner")).toBeFalsy());
-  });
-  it("unchecks shareToggle when clicking share toggle", () => {
-    const { getByTestId, getByRole, queryByText } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: createAccessMap(true, true, true, true),
-          webId,
-          profile: {
-            avatar: null,
-            name: "Example 1",
-          },
-          profileError: null,
-        }}
-      />
-    );
-    const menuButton = getByTestId("menu-button");
-    expect(queryByText("Can Share")).not.toBeNull();
-    userEvent.click(menuButton);
-    const canShareToggle = getByRole("checkbox");
-    userEvent.click(canShareToggle);
-    fireEvent.change(canShareToggle, { target: { checked: true } });
-    expect(canShareToggle).toHaveProperty("checked", true);
-    expect(queryByText("Can Share")).toBeNull();
-  });
-  it("removes permissions from list when clicking remove button", () => {
-    const { getByTestId, queryByText } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: createAccessMap(true, true, true, true),
-          webId,
-          profile: {
-            avatar: null,
-            name: "Example 1",
-          },
-          profileError: null,
-        }}
-      />
-    );
-    const menuButton = getByTestId("menu-button");
-    expect(queryByText("Example 1")).not.toBeNull();
-    userEvent.click(menuButton);
-    const removeButton = getByTestId("remove-button");
-    userEvent.click(removeButton);
-    expect(queryByText("Example 1")).toBeNull();
-  });
-});
-
-describe("saveHandler", () => {
-  const accessControl = {
-    savePermissionsForAgent: jest.fn().mockResolvedValue({}),
-  };
-  let setLoading;
-  let setAccess;
-  let setSeverity;
-  let setMessage;
-  let setAlertOpen;
-  const newAccess = "newAccess";
-  let savePermissions;
-
-  beforeEach(() => {
-    setLoading = jest.fn();
-    setAccess = jest.fn();
-    setSeverity = jest.fn();
-    setMessage = jest.fn();
-    setAlertOpen = jest.fn();
-    savePermissions = saveHandler(
-      accessControl,
-      setLoading,
-      setAccess,
-      webId,
-      setSeverity,
-      setMessage,
-      setAlertOpen
-    );
-  });
-
-  test("save is successful", async () => {
-    await expect(savePermissions(newAccess)).resolves.toBeUndefined();
-
-    expect(setLoading).toHaveBeenCalledWith(true);
-    expect(setAccess).toHaveBeenCalledWith(newAccess);
-    expect(accessControl.savePermissionsForAgent).toHaveBeenCalledWith(
-      webId,
-      newAccess
-    );
-    expect(setSeverity).toHaveBeenCalledWith("success");
-    expect(setMessage).toHaveBeenCalledWith("Permissions have been updated!");
-    expect(setAlertOpen).toHaveBeenCalledWith(true);
-    expect(setLoading).toHaveBeenCalledWith(false);
-  });
-
-  test("save request fails", async () => {
-    const error = "error";
-    accessControl.savePermissionsForAgent.mockResolvedValue({ error });
-
-    await expect(savePermissions(newAccess)).rejects.toEqual(error);
-
-    expect(setLoading).toHaveBeenCalledWith(true);
-    expect(setAccess).toHaveBeenCalledWith(newAccess);
-    expect(accessControl.savePermissionsForAgent).toHaveBeenCalledWith(
-      webId,
-      newAccess
-    );
   });
 });

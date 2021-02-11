@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CanShareInfoTooltip renders a Can Share info button with a tooltip with default text if resourceName is not available 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-canShareHeader"
+  >
+    <span
+      data-testid="can-share-info-button-label"
+    >
+      Can Share
+    </span>
+    <button
+      class="PodBrowser-root PodBrowser-root PodBrowser-infoButton PodBrowser-text"
+      tabindex="0"
+      title="A person can share this resource with others or remove people who have
+        access."
+      type="button"
+    >
+      <span
+        class="PodBrowser-label"
+      >
+        <i
+          aria-label="Info"
+          class="PodBrowser-icon-info PodBrowser-infoIcon"
+        />
+      </span>
+      <span
+        class="PodBrowser-root"
+      />
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`CanShareInfoTooltip renders a Can Share info button with resourceName if available 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-canShareHeader"
+  >
+    <span
+      data-testid="can-share-info-button-label"
+    >
+      Can Share
+    </span>
+    <button
+      class="PodBrowser-root PodBrowser-root PodBrowser-infoButton PodBrowser-text"
+      tabindex="0"
+      title="A person can share example resource with others or remove people who have
+        access."
+      type="button"
+    >
+      <span
+        class="PodBrowser-label"
+      >
+        <i
+          aria-label="Info"
+          class="PodBrowser-icon-info PodBrowser-infoIcon"
+        />
+      </span>
+      <span
+        class="PodBrowser-root"
+      />
+    </button>
+  </div>
+</DocumentFragment>
+`;

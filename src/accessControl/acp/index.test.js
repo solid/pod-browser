@@ -37,6 +37,7 @@ import AcpAccessControlStrategy, {
 import {
   getPolicyUrl,
   getPoliciesContainerUrl,
+  getNamedPolicyResourceUrl,
 } from "../../solidClientHelpers/policies";
 import { createAccessMap } from "../../solidClientHelpers/permissions";
 import { chain } from "../../solidClientHelpers/utils";
@@ -59,8 +60,15 @@ const policyResourceUrl = getPolicyUrl(
   mockSolidDatasetFrom(resourceUrl),
   policiesContainerUrl
 );
+const editorsPolicyResourceUrl = getNamedPolicyResourceUrl(
+  mockSolidDatasetFrom(resourceUrl),
+  policiesContainerUrl,
+  "editors"
+);
 const readApplyPolicyUrl = `${policyResourceUrl}#readApplyPolicy`;
 const readPolicyRuleUrl = `${readApplyPolicyUrl}Rule`;
+const editorsPolicyUrl = `${editorsPolicyResourceUrl}#editorsPolicy`;
+const editorsPolicyRuleUrl = `${editorsPolicyResourceUrl}Rule`;
 const writeApplyPolicyUrl = `${policyResourceUrl}#writeApplyPolicy`;
 const writePolicyRuleUrl = `${writeApplyPolicyUrl}Rule`;
 const appendApplyPolicyUrl = `${policyResourceUrl}#appendApplyPolicy`;
@@ -71,7 +79,7 @@ const controlApplyPolicyUrl = `${policyResourceUrl}#controlApplyPolicy`;
 describe("AcpAccessControlStrategy", () => {
   const resourceInfoUrl = "http://example.com/resourceInfo";
   const resourceInfo = mockSolidDatasetFrom(resourceInfoUrl);
-  const fetch = "fetch";
+  const fetch = jest.fn();
   const datasetWithAcrUrl = resourceUrl;
   const datasetWithAcr = chain(mockSolidDatasetFrom(datasetWithAcrUrl), (d) =>
     acpFns.addMockAcrTo(d)
@@ -107,6 +115,63 @@ describe("AcpAccessControlStrategy", () => {
       await expect(
         AcpAccessControlStrategy.init(resourceInfo, policiesContainerUrl, fetch)
       ).rejects.toEqual(new Error(noAcrAccessError));
+    });
+  });
+  describe("getPermissionsForNamedPolicies", () => {
+    const webId = "http://example.com/agent1";
+
+    beforeEach(() => {
+      acp = new AcpAccessControlStrategy(
+        datasetWithAcr,
+        policiesContainerUrl,
+        fetch
+      );
+    });
+
+    it("returns an empty array if no policy resource is available", async () => {
+      jest.spyOn(scFns, "getSolidDataset").mockImplementation(() => {
+        throw new Error("404");
+      });
+      await expect(acp.getPermissionsForNamedPolicies()).resolves.toEqual([]);
+    });
+
+    it("throws an error if anything but 404 for the policy resource happens", async () => {
+      const error = new Error("500");
+      jest.spyOn(scFns, "getSolidDataset").mockImplementation(() => {
+        throw error;
+      });
+      await expect(acp.getPermissions()).rejects.toEqual(error);
+    });
+
+    it("normalizes the permissions retrieved from the policy resource", async () => {
+      const editorsPolicyRule = chain(
+        acpFns.createRule(editorsPolicyRuleUrl),
+        (r) => acpFns.addAgent(r, webId)
+      );
+      const editorsPolicy = chain(
+        acpFns.createPolicy(editorsPolicyUrl),
+        (p) => acpFns.setAllowModes(p, createAcpMap(true, true)),
+        (p) => acpFns.setRequiredRuleUrl(p, editorsPolicyRule)
+      );
+
+      const policyDataset = chain(
+        mockSolidDatasetFrom(editorsPolicyResourceUrl),
+        (d) => setThing(d, editorsPolicyRule),
+        (d) => setThing(d, editorsPolicy)
+      );
+      jest.spyOn(scFns, "getSolidDataset").mockResolvedValue(policyDataset);
+      const profile = mockProfileAlice();
+      jest.spyOn(profileFns, "fetchProfile").mockResolvedValue(profile);
+
+      await expect(
+        acp.getPermissionsForNamedPolicies("editors")
+      ).resolves.toEqual([
+        {
+          acl: createAccessMap(true, true, false, false),
+          alias: "editors",
+          webId,
+        },
+      ]);
     });
   });
 
@@ -172,6 +237,39 @@ describe("AcpAccessControlStrategy", () => {
           webId,
         },
       ]);
+    });
+  });
+
+  describe("addAgentToNamedPolicy", () => {
+    const webId = "http://example.com/agent1";
+
+    beforeEach(() => {
+      acp = new AcpAccessControlStrategy(
+        datasetWithAcr,
+        policiesContainerUrl,
+        fetch
+      );
+    });
+    it("fails if the policy resource returns something other than 404", async () => {
+      const error = "500";
+      jest.spyOn(scFns, "getSolidDataset").mockImplementation(() => {
+        throw new Error(error);
+      });
+      await expect(
+        acp.addAgentToNamedPolicy(webId, "editors")
+      ).resolves.toEqual({ error });
+    });
+
+    it("fails if the policy resources returns an error upon trying to create it", async () => {
+      jest.spyOn(scFns, "getSolidDataset").mockImplementation(() => {
+        throw new Error("404");
+      });
+      jest.spyOn(scFns, "saveSolidDatasetAt").mockImplementation(() => {
+        throw new Error("500");
+      });
+      await expect(
+        acp.addAgentToNamedPolicy(webId, "editors")
+      ).resolves.toEqual({ error: "500" });
     });
   });
 

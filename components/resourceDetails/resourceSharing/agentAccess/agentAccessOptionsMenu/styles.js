@@ -31,17 +31,6 @@ export default function styles(theme) {
       margin: theme.spacing(0.4),
       color: theme.palette.info.main,
     },
-    switchBase: {
-      color: theme.palette.primary.main,
-      "&$switchChecked": {
-        color: theme.palette.primary.main,
-      },
-      "&$switchChecked + $switchTrack": {
-        backgroundColor: theme.palette.primary.main,
-      },
-    },
-    switchChecked: {},
-    switchTrack: {},
     button: {
       flexShrink: 0,
       width: "1.875rem",
@@ -63,14 +52,18 @@ export default function styles(theme) {
     },
     webIdContainer: {
       backgroundColor: theme.palette.grey[100],
-      fontSize: "0.625rem",
+      fontSize: "0.75rem",
       fontWeight: 500,
       letterSpacing: 0,
       lineHeight: "13px",
       width: "100%",
       height: "100%",
-      padding: theme.spacing(0.4, 1.2),
+      padding: theme.spacing(0.8, 1.2),
       marginTop: 0,
+    },
+    webId: {
+      marginTop: "0.25rem",
+      marginBottom: "0.25rem",
     },
     webIdContainerGutters: {
       paddingLeft: 0,

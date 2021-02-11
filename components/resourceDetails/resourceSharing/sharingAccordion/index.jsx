@@ -21,64 +21,20 @@
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { useContext, useEffect, useState } from "react";
-import { CircularProgress } from "@material-ui/core";
-import { useSession } from "@inrupt/solid-ui-react";
-import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
+import React from "react";
 import AgentAccessTable from "../agentAccessTable";
-import AccessControlContext from "../../../../src/contexts/accessControlContext";
-import usePermissions from "../../../../src/hooks/usePermissions";
 
 export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
   "agent-access-list-show-all";
 
-function ResourceSharing() {
-  const { accessControl } = useContext(AccessControlContext);
-  const { permissions } = usePermissions(accessControl);
-  const { fetch } = useSession();
-  const [permissionsWithProfiles, setPermissionsWithProfiles] = useState(null);
-
-  useEffect(() => {
-    if (!permissions) return;
-    Promise.all(
-      permissions.map(async (p) => {
-        let profile;
-        let profileError;
-        try {
-          profile = await fetchProfile(p.webId, fetch);
-        } catch (error) {
-          profileError = error;
-        }
-        return {
-          ...p,
-          profile,
-          profileError,
-        };
-      })
-    ).then((completed) => setPermissionsWithProfiles(completed));
-  }, [permissions, fetch]);
-
-  if (!permissions || !permissionsWithProfiles)
-    return <CircularProgress color="primary" />;
-
-  // TODO: replace arrays with the new policies once they are available
-
-  const editors = permissionsWithProfiles
-    .filter((p) => p.acl.read && p.acl.write)
-    .sort();
-
-  const viewers = permissionsWithProfiles
-    .filter((p) => p.acl.read && !p.acl.write && !p.acl.append)
-    .sort();
-  const blocked = [];
-
+function SharingAccordion() {
   return (
     <>
-      <AgentAccessTable permissions={editors} type="editors" />
-      <AgentAccessTable permissions={viewers} type="viewers" />
-      <AgentAccessTable permissions={blocked} type="blocked" />
+      <AgentAccessTable type="editors" />
+      <AgentAccessTable type="viewers" />
+      <AgentAccessTable type="blocked" />
     </>
   );
 }
 
-export default ResourceSharing;
+export default SharingAccordion;

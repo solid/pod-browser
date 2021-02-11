@@ -1,0 +1,212 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AgentPickerModal renders a table with tabs, searchbox and an empty state message when there are no contacts 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-paper"
+    data-testid="agent-picker-modal"
+  >
+    <div
+      class="PodBrowser-title"
+    >
+      Add Editors for null
+    </div>
+    <div
+      class="PodBrowser-headerContainer"
+    >
+      <i
+        class="PodBrowser-icon-editor PodBrowser-icon PodBrowser-iconEditor"
+      />
+      <div
+        class="PodBrowser-textContainer"
+      >
+        <div
+          class="PodBrowser-titleAndButtonContainer"
+        >
+          <p
+            class="PodBrowser-title"
+          >
+            Editor
+          </p>
+        </div>
+        <span
+          class="PodBrowser-description"
+        >
+          <p>
+            <b>
+              Can 
+            </b>
+            view, edit and delete this resource
+          </p>
+        </span>
+      </div>
+    </div>
+    <div
+      class="PodBrowser-tableContainer"
+    >
+      <div
+        class="PodBrowser-tabsAndAddButtonContainer"
+      >
+        <div
+          class="PodBrowser-tabsContainer PodBrowser-modalTabsContainer"
+        >
+          <div
+            class="PodBrowser-root"
+          >
+            <div
+              class="PodBrowser-scroller PodBrowser-fixed"
+              style="overflow: hidden;"
+            >
+              <div
+                aria-label="Permissions Filter tabs"
+                class="PodBrowser-flexContainer"
+                role="tablist"
+              >
+                <button
+                  aria-selected="true"
+                  class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit PodBrowser-selected PodBrowser-selected"
+                  data-testid="tab-all"
+                  role="tab"
+                  tabindex="0"
+                  type="button"
+                >
+                  <span
+                    class="PodBrowser-wrapper"
+                  >
+                    All
+                  </span>
+                  <span
+                    class="PodBrowser-root"
+                  />
+                </button>
+                <button
+                  aria-selected="false"
+                  class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit"
+                  data-testid="tab-people"
+                  role="tab"
+                  tabindex="-1"
+                  type="button"
+                >
+                  <span
+                    class="PodBrowser-wrapper"
+                  >
+                    People
+                  </span>
+                  <span
+                    class="PodBrowser-root"
+                  />
+                </button>
+                <button
+                  aria-selected="false"
+                  class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit"
+                  data-testid="tab-groups"
+                  role="tab"
+                  tabindex="-1"
+                  type="button"
+                >
+                  <span
+                    class="PodBrowser-wrapper"
+                  >
+                    Groups
+                  </span>
+                  <span
+                    class="PodBrowser-root"
+                  />
+                </button>
+              </div>
+              <span
+                class="PodBrowser-root PodBrowser-colorSecondary PodBrowser-indicator PodBrowser-indicator"
+                style="left: 0px; width: 0px;"
+              />
+            </div>
+          </div>
+        </div>
+        <button
+          class="PodBrowser-button PodBrowser-button--action PodBrowser-button"
+          data-testid="add-webid-button"
+        >
+          <i
+            class="PodBrowser-icon-add PodBrowser-icon"
+          />
+          Add WebId
+        </button>
+      </div>
+      <div
+        class="PodBrowser-searchBoxContainer"
+      >
+        <button
+          aria-label="search"
+          class="PodBrowser-root PodBrowser-root"
+          tabindex="0"
+          type="submit"
+        >
+          <span
+            class="PodBrowser-label"
+          >
+            <i
+              aria-label="search"
+              class="PodBrowser-icon-search PodBrowser-iconSearch"
+            />
+          </span>
+          <span
+            class="PodBrowser-root"
+          />
+        </button>
+        <div
+          class="PodBrowser-root PodBrowser-searchInput"
+        >
+          <input
+            aria-label="Search by name or WebId"
+            class="PodBrowser-input"
+            data-testid="search-input"
+            placeholder="Search by name or WebId"
+            type="text"
+            value=""
+          />
+        </div>
+      </div>
+      <div
+        class="PodBrowser-content"
+      >
+        <div
+          class="PodBrowser-container PodBrowser-container--empty"
+        >
+          <span
+            class="PodBrowser-icon-user PodBrowser-icon-large"
+          />
+          <h2
+            class="text"
+          >
+            Add a new person with their WebId
+          </h2>
+          <button
+            class="PodBrowser-button PodBrowser-button PodBrowser-add-webId-button"
+            data-testid="empty-state-add-webid-button"
+          >
+            <i
+              class="PodBrowser-icon-add PodBrowser-icon"
+            />
+            Add WebId
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="PodBrowser-buttonsContainer"
+    >
+      <button
+        class="PodBrowser-button PodBrowser-button--action PodBrowser-cancelButton"
+      >
+        Cancel
+      </button>
+      <button
+        class="PodBrowser-button PodBrowser-submitAgentsButton"
+        data-testid="submit-webids-button"
+        type="button"
+      >
+        Add Editors
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;

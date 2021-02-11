@@ -27,30 +27,33 @@ import PropTypes from "prop-types";
 import { useFilters, useGlobalFilter, useTable } from "react-table";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
-import {
-  Accordion,
-  createStyles,
-  IconButton,
-  InputBase,
-  Tab,
-  Tabs,
-  Typography,
-} from "@material-ui/core";
+import { Accordion, createStyles, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
+import useNamedPolicyPermissions from "../../../../src/hooks/useNamedPolicyPermissions";
+import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
 import AgentAccess from "../agentAccess";
 import AddAgentButton from "../addAgentButton";
+import AgentsTableTabs from "../agentsTableTabs";
+import AgentsSearchBar from "../agentsSearchBar";
 
 import styles from "./styles";
+import PolicyHeader from "../policyHeader";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const TESTCAFE_ID_SHOW_ALL_BUTTON = "show-all-button";
 const TESTCAFE_ID_HIDE_BUTTON = "hide-button";
-const TESTCAFE_ID_SEARCH_INPUT = "search-input";
-const TESTCAFE_ID_TAB_ALL = "tab-all";
-const TESTCAFE_ID_TAB_PEOPLE = "tab-people";
-const TESTCAFE_ID_TAB_GROUPS = "tab-groups";
+export const TESTCAFE_ID_AGENT_ACCESS_TABLE = "agent-access-table";
 
-export default function AgentAccessTable({ permissions, type }) {
+export default function AgentAccessTable({ type }) {
+  const {
+    data: namedPermissions,
+    mutate: mutatePermissions,
+  } = useNamedPolicyPermissions(type);
+
+  const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
+    namedPermissions
+  );
+
   const editorsDescription = (
     <p>
       <b>Can </b>
@@ -105,13 +108,7 @@ export default function AgentAccessTable({ permissions, type }) {
   const [showAll, setShowAll] = useState(false);
   const [selectedTabValue, setSelectedTabValue] = useState("");
 
-  const {
-    title,
-    emptyStateText,
-    icon,
-    iconClassName,
-    description,
-  } = PERMISSIONS_TYPE_MAP[type];
+  const { emptyStateText } = PERMISSIONS_TYPE_MAP[type];
 
   const columns = useMemo(
     () => [
@@ -167,91 +164,34 @@ export default function AgentAccessTable({ permissions, type }) {
     setGlobalFilter(value || undefined);
   };
 
+  /* istanbul ignore next */
   const handleTabChange = (e, newValue) => {
     setSelectedTabValue(newValue);
-    // TODO: this filter will change once we have groups
+    // TODO: this filter will change once we have groups - ignoring from test coverage until it is functional
     setFilter("profile.types", newValue);
   };
-
-  const tabs = [
-    {
-      label: "All",
-      testid: TESTCAFE_ID_TAB_ALL,
-      value: "",
-    },
-    {
-      label: "People",
-      testid: TESTCAFE_ID_TAB_PEOPLE,
-      value: "Person",
-    },
-    {
-      label: "Groups",
-      testid: TESTCAFE_ID_TAB_GROUPS,
-      value: "Group",
-    },
-  ];
 
   return (
     <Accordion
       defaultExpanded
       classes={{ root: classes.accordion, rounded: classes.rounded }}
+      data-testid={TESTCAFE_ID_AGENT_ACCESS_TABLE}
     >
-      <div className={classes.headerContainer}>
-        <i className={clsx(bem(icon), bem("icon"), bem(iconClassName))} />
-        <div className={classes.textContainer}>
-          <div className={classes.titleAndButtonContainer}>
-            <p className={classes.title}>{title}</p>
-            <AddAgentButton type={type} />
-          </div>
-          <span className={classes.description}>{description}</span>
-        </div>
-      </div>
+      <PolicyHeader type={type} isPolicyList>
+        <AddAgentButton
+          type={type}
+          mutatePermissions={mutatePermissions}
+          permissions={permissions}
+        />
+      </PolicyHeader>
       <div className={classes.permissionsContainer}>
         {!!permissions.length && (
           <>
-            <div className={classes.tabsContainer}>
-              <Tabs
-                classes={{ indicator: classes.indicator }}
-                value={selectedTabValue}
-                onChange={handleTabChange}
-                aria-label="Permissions Filter tabs"
-              >
-                {tabs.map((tab) => (
-                  <Tab
-                    key={tab.label}
-                    classes={{
-                      root: classes.tab,
-                      selected: classes.selected,
-                    }}
-                    label={tab.label}
-                    data-testid={tab.testid}
-                    value={tab.value}
-                  />
-                ))}
-              </Tabs>
-            </div>
-            <div className={classes.searchBoxContainer}>
-              <IconButton type="submit" aria-label="search">
-                <i
-                  className={clsx(
-                    bem("icon-search"),
-                    bem("icon"),
-                    classes.iconSearch
-                  )}
-                  aria-label="search"
-                  alt="search icon"
-                />
-              </IconButton>
-              <InputBase
-                classes={{ root: classes.searchInput }}
-                placeholder="Search by name or WebId"
-                inputProps={{
-                  "aria-label": "Search by name or WebId",
-                  onChange: handleFilterChange,
-                  "data-testid": TESTCAFE_ID_SEARCH_INPUT,
-                }}
-              />
-            </div>
+            <AgentsTableTabs
+              handleTabChange={handleTabChange}
+              selectedTabValue={selectedTabValue}
+            />
+            <AgentsSearchBar handleFilterChange={handleFilterChange} />
           </>
         )}
         {permissions.length ? (
@@ -272,7 +212,10 @@ export default function AgentAccessTable({ permissions, type }) {
                           bem("agent-cell")
                         )}
                       >
-                        <AgentAccess permission={details} />
+                        <AgentAccess
+                          permission={details}
+                          mutatePermissions={mutatePermissions}
+                        />
                       </td>
                     </tr>
                   );
@@ -342,6 +285,5 @@ export default function AgentAccessTable({ permissions, type }) {
 }
 
 AgentAccessTable.propTypes = {
-  permissions: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   type: PropTypes.string.isRequired,
 };

@@ -22,51 +22,45 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import {
-  Button,
   createStyles,
   List,
   ListItem,
-  ListItemSecondaryAction,
   ListItemText,
   Popover,
-  Switch,
-  Tooltip,
 } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
-import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
+import RemoveButton from "./removeButton";
 import styles from "./styles";
 
+const TESTCAFE_ID_MENU_BUTTON = "menu-button";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-const TESTCAFE_ID_MENU_BUTTON = "menu-button";
-const TESTCAFE_ID_CAN_SHARE_TOGGLE = "can-share-toggle";
-const TESTCAFE_ID_REMOVE_BUTTON = "remove-button";
-
 export default function AgentAccessOptionsMenu({
-  toggleShare,
-  removePermissions,
-  canShare,
   resourceIri,
-  webId,
+  permission,
+  setLoading,
+  setLocalAccess,
+  mutatePermissions,
 }) {
-  const resourceName = getResourceName(resourceIri);
   const classes = useStyles();
   const bem = useBem(useStyles());
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const { webId } = permission;
 
   const handleClick = (event) => {
     setMenuAnchorEl(event.currentTarget);
   };
 
+  /* istanbul ignore next */
   const handleClose = () => {
     setMenuAnchorEl(null);
   };
 
-  const open = Boolean(menuAnchorEl);
+  const menuOpen = Boolean(menuAnchorEl);
 
-  const id = open ? "agent-access-options-menu" : undefined;
+  const id = menuOpen ? "agent-access-options-menu" : undefined;
 
   return (
     <>
@@ -76,14 +70,11 @@ export default function AgentAccessOptionsMenu({
         className={classes.button}
         onClick={handleClick}
       >
-        <i
-          className={clsx(bem("icon-more"), bem("icon"))}
-          alt="More Options Menu"
-        />
+        <i className={clsx(bem("icon-more"), bem("icon"))} />
       </button>
       <Popover
         id={id}
-        open={open}
+        open={menuOpen}
         anchorEl={menuAnchorEl}
         onClose={handleClose}
         anchorOrigin={{
@@ -106,62 +97,17 @@ export default function AgentAccessOptionsMenu({
               disableTypography
               classes={{ root: classes.webIdContainer }}
             >
-              <b>WebId: </b>
-              <p>{webId}</p>
+              <b>WebID: </b>
+              <p className={classes.webId}>{webId}</p>
             </ListItemText>
           </ListItem>
-          <ListItem>
-            <ListItemText
-              disableTypography
-              classes={{ primary: classes.listItemText }}
-            >
-              Can Share
-              <Tooltip
-                title={`A person can share ${resourceName} with others or remove people who have
-          access.`}
-                arrow
-              >
-                <Button classes={{ root: classes.infoButton }}>
-                  <i
-                    className={clsx(
-                      bem("icon-info"),
-                      bem("icon"),
-                      classes.infoIcon
-                    )}
-                    alt="Info"
-                  />
-                </Button>
-              </Tooltip>
-            </ListItemText>
-            <ListItemSecondaryAction>
-              <Switch
-                edge="end"
-                data-testid={TESTCAFE_ID_CAN_SHARE_TOGGLE}
-                classes={{
-                  root: classes.switchRoot,
-                  switchBase: classes.switchBase,
-                  checked: classes.switchChecked,
-                  track: classes.switchTrack,
-                  thumb: classes.switchThumb,
-                }}
-                checked={canShare}
-                onChange={toggleShare}
-                inputProps={{ "aria-label": "Can Share Toggle" }}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-          <ListItem
-            data-testid={TESTCAFE_ID_REMOVE_BUTTON}
-            button
-            onClick={removePermissions}
-          >
-            <ListItemText
-              disableTypography
-              classes={{ primary: classes.listItemText }}
-            >
-              Remove
-            </ListItemText>
-          </ListItem>
+          <RemoveButton
+            resourceIri={resourceIri}
+            permission={permission}
+            setLoading={setLoading}
+            setLocalAccess={setLocalAccess}
+            mutatePermissions={mutatePermissions}
+          />
         </List>
       </Popover>
     </>
@@ -169,13 +115,17 @@ export default function AgentAccessOptionsMenu({
 }
 
 AgentAccessOptionsMenu.propTypes = {
-  toggleShare: PropTypes.func.isRequired,
-  removePermissions: PropTypes.func.isRequired,
-  canShare: PropTypes.bool,
-  resourceIri: PropTypes.string.isRequired,
-  webId: PropTypes.string.isRequired,
+  resourceIri: PropTypes.string,
+  permission: PropTypes.shape().isRequired,
+  setLoading: PropTypes.func,
+  setLocalAccess: PropTypes.func,
+  mutatePermissions: PropTypes.func,
 };
 
+/* istanbul ignore next */
 AgentAccessOptionsMenu.defaultProps = {
-  canShare: false,
+  resourceIri: null,
+  setLoading: () => {},
+  setLocalAccess: () => {},
+  mutatePermissions: () => {},
 };

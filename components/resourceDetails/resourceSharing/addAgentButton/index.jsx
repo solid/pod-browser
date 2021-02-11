@@ -21,18 +21,22 @@
 
 /* eslint-disable react/forbid-prop-types */
 
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { createStyles } from "@material-ui/core";
+import { createStyles, Modal } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import { Button } from "@inrupt/prism-react-components";
+import AgentPickerModal from "./agentPickerModal";
 import styles from "./styles";
+import useNamedPolicyPermissions from "../../../../src/hooks/useNamedPolicyPermissions";
+import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 const TESTCAFE_ID_ADD_AGENT_BUTTON = "add-agent-button";
+const TESTCAFE_MODAL_OVERLAY = "modal-overlay";
 
 const BUTTON_TEXT_MAP = {
   editors: { text: "Add Editors" },
@@ -40,34 +44,65 @@ const BUTTON_TEXT_MAP = {
   blocked: { text: "Block" },
 };
 
-// TODO: this component will trigger the opening of a modal, for now it is just a placeholder
-
-export default function AddAgentButton({ type, onClick }) {
+export default function AddAgentButton({ type }) {
   const classes = useStyles();
+  const {
+    data: namedPermissions,
+    mutate: mutatePermissions,
+  } = useNamedPolicyPermissions(type);
+  const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
+    namedPermissions
+  );
+
   const bem = useBem(useStyles());
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const { text } = BUTTON_TEXT_MAP[type];
+
   return (
-    <Button
-      data-testid={TESTCAFE_ID_ADD_AGENT_BUTTON}
-      variant="action"
-      className={classes.button}
-      onClick={onClick}
-    >
-      <i
-        className={clsx(bem("icon-add"), bem("icon"))}
-        alt={`${text} Button`}
-      />
-      {text}
-    </Button>
+    <>
+      <Button
+        data-testid={TESTCAFE_ID_ADD_AGENT_BUTTON}
+        variant="action"
+        className={classes.button}
+        onClick={handleOpen}
+      >
+        <i className={clsx(bem("icon-add"), bem("icon"))} />
+        {text}
+      </Button>
+
+      <Modal
+        data-testid={TESTCAFE_MODAL_OVERLAY}
+        open={open}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        onClose={handleClose}
+        aria-labelledby={`${text} Modal`}
+        aria-describedby={`${text} for this resource`}
+      >
+        <AgentPickerModal
+          type={type}
+          text={text}
+          onClose={handleClose}
+          mutatePermissions={mutatePermissions}
+          permissions={permissions}
+        />
+      </Modal>
+    </>
   );
 }
 
 AddAgentButton.propTypes = {
   type: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
-};
-
-AddAgentButton.defaultProps = {
-  onClick: () => {},
 };

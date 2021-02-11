@@ -21,13 +21,6 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
-const EDITORS_ICON_COLOR = "#4CAF50";
-const EDITORS_ICON_BACKGROUND_COLOR = "#EDF7ED";
-const VIEWERS_ICON_COLOR = "#2196F3";
-const VIEWERS_ICON_BACKGROUND_COLOR = "#E8F4FD";
-const BLOCKED_ICON_COLOR = "#F44336";
-const BLOCKED_ICON_BACKGROUND_COLOR = "#FDECEA";
-
 export default function styles(theme) {
   return createStyles(theme, ["icons", "table"], {
     accordion: {
@@ -37,27 +30,6 @@ export default function styles(theme) {
     rounded: {
       borderRadius: theme.shape.borderRadius,
       boxShadow: `0 1px 4px 0 ${theme.palette.grey[500]}`,
-    },
-    title: {
-      fontSize: theme.typography.h4.fontSize,
-      fontWeight: 800,
-    },
-    headerContainer: {
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center",
-      marginBottom: theme.spacing(1.6),
-      "&& p": {
-        padding: 0,
-        margin: 0,
-      },
-    },
-    textContainer: {
-      width: "100%",
-      flexDirection: "column",
-    },
-    description: {
-      fontSize: "0.8125rem",
     },
     permissionsContainer: {
       position: "relative",
@@ -104,24 +76,6 @@ export default function styles(theme) {
       flexDirection: "row",
       justifyContent: "space-between",
     },
-    icon: {
-      padding: theme.spacing(1),
-      borderRadius: "50%",
-      marginRight: theme.spacing(1.6),
-      fontSize: theme.typography.h1.fontSize,
-    },
-    iconViewer: {
-      color: VIEWERS_ICON_COLOR,
-      backgroundColor: VIEWERS_ICON_BACKGROUND_COLOR,
-    },
-    iconBlocked: {
-      color: BLOCKED_ICON_COLOR,
-      backgroundColor: BLOCKED_ICON_BACKGROUND_COLOR,
-    },
-    iconEditor: {
-      color: EDITORS_ICON_COLOR,
-      backgroundColor: EDITORS_ICON_BACKGROUND_COLOR,
-    },
     emptyStateTextContainer: {
       display: "flex",
       flexDirection: "column",
@@ -134,43 +88,6 @@ export default function styles(theme) {
     "agent-cell": {
       whiteSpace: "break-spaces",
       padding: 0,
-    },
-    tabsContainer: {
-      paddingLeft: theme.spacing(1.2),
-      paddingRight: theme.spacing(1.2),
-      borderBottom: `1px solid ${theme.palette.grey.A100}`,
-    },
-    tab: {
-      textTransform: "none",
-      minWidth: "max-content",
-      fontFamily: theme.typography.body1.fontFamily,
-      fontSize: theme.typography.body1.fontSize,
-      color: theme.palette.primary.text,
-    },
-    selected: {
-      color: theme.palette.primary.main,
-    },
-    indicator: {
-      height: "3px",
-      width: "100%",
-      backgroundColor: theme.palette.primary.main,
-    },
-    searchBoxContainer: {
-      display: "flex",
-      margin: theme.spacing(0.7, 1.2),
-      border: "1px solid #D8D8D8",
-      borderRadius: "10px",
-      height: "2.5rem",
-    },
-    searchInput: {
-      fontSize: "0.8125rem",
-      width: "100%",
-      font: "inherit",
-      fontWeight: 500,
-      color: theme.palette.primary.text,
-    },
-    iconSearch: {
-      fontSize: theme.typography.body1.fontSize,
     },
   });
 }

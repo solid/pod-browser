@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AgentAccessOptionsMenu it renders a button which triggers the opening of the menu 1`] = `
+<DocumentFragment>
+  <div
+    aria-disabled="false"
+    class="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
+    data-testid="remove-button"
+    role="button"
+    tabindex="0"
+  >
+    <div
+      class="PodBrowser-root"
+    >
+      Remove
+    </div>
+    <span
+      class="PodBrowser-root"
+    />
+  </div>
+</DocumentFragment>
+`;

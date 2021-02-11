@@ -20,7 +20,11 @@
  */
 
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
-import { getPolicyUrl, getPoliciesContainerUrl } from "./policies";
+import {
+  getPolicyUrl,
+  getPoliciesContainerUrl,
+  getResourcePoliciesContainerPath,
+} from "./policies";
 
 const podUrl = "http://example.com/";
 
@@ -61,5 +65,18 @@ describe("getPolicyUrl", () => {
         containerUrl
       )
     ).toEqual("http://example.com/pb_policies/pb_policies/test/.ttl");
+  });
+});
+
+describe("getResourcePoliciesContainerPath", () => {
+  const policiesUrl = getPoliciesContainerUrl(podUrl);
+
+  it("returns corresponding policy resource container for a given resource", () => {
+    expect(
+      getResourcePoliciesContainerPath(
+        mockSolidDatasetFrom(`${podUrl}foo/`),
+        policiesUrl
+      )
+    ).toEqual("http://example.com/pb_policies/foo/");
   });
 });

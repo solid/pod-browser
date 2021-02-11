@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AgentPickerEmptyState renders an empty state container with a message and a button 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-content"
+  >
+    <div
+      class="PodBrowser-container PodBrowser-container--empty"
+    >
+      <span
+        class="PodBrowser-icon-user PodBrowser-icon-large"
+      />
+      <h2
+        class="text"
+      >
+        Add a new person with their WebId
+      </h2>
+      <button
+        class="PodBrowser-button PodBrowser-button PodBrowser-add-webId-button"
+        data-testid="empty-state-add-webid-button"
+      >
+        <i
+          class="PodBrowser-icon-add PodBrowser-icon"
+        />
+        Add WebId
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;

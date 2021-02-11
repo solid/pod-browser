@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import userEvent from "@testing-library/user-event";
 import React from "react";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import UserMenu from "./index";
@@ -29,5 +30,18 @@ describe("UserMenu", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  // TODO: Write test for the various ways to toggle the user menu
+  test("clicking on the user menu button opens the menu", () => {
+    const { getByTestId, queryByTestId } = renderWithTheme(<UserMenu />);
+    const button = getByTestId("user-menu-button");
+    userEvent.click(button);
+    expect(queryByTestId("user-menu")).not.toBeNull();
+  });
+  test("clicking the user menu again closes the menu", () => {
+    const { getByTestId, queryByTestId } = renderWithTheme(<UserMenu />);
+    const button = getByTestId("user-menu-button");
+    userEvent.click(button);
+    userEvent.click(button);
+
+    expect(queryByTestId("user-menu")).toHaveAttribute("aria-hidden", "true");
+  });
 });

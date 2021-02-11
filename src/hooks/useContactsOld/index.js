@@ -31,22 +31,28 @@ export default function useContactsOld(addressBook, type) {
   const {
     session: { fetch },
   } = useSession();
-  return useSWR(addressBook, async () => {
-    const { indexFilePredicate } = TYPE_MAP[type];
-    const { contactTypeIri } = TYPE_MAP[type];
-    const { response: indexFileDataset } = await getIndexDatasetFromAddressBook(
-      addressBook,
-      indexFilePredicate,
-      fetch
-    );
-    const { response, error } = await getContacts(
-      indexFileDataset,
-      contactTypeIri,
-      fetch
-    );
-    if (error) {
-      throw error;
-    }
-    return response;
-  });
+  return useSWR(
+    addressBook,
+    async () => {
+      const { indexFilePredicate } = TYPE_MAP[type];
+      const { contactTypeIri } = TYPE_MAP[type];
+      const {
+        response: indexFileDataset,
+      } = await getIndexDatasetFromAddressBook(
+        addressBook,
+        indexFilePredicate,
+        fetch
+      );
+      const { response, error } = await getContacts(
+        indexFileDataset,
+        contactTypeIri,
+        fetch
+      );
+      if (error) {
+        throw error;
+      }
+      return response;
+    },
+    { refreshInterval: 0 }
+  );
 }

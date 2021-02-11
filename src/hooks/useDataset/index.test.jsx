@@ -46,14 +46,17 @@ describe("useDataset", () => {
     );
     jest.spyOn(solidClientFns, "getSolidDataset");
     useSWR.mockReturnValue(42);
-    value = renderHook(() => useDataset(iri), { wrapper });
+    value = renderHook(() => useDataset(iri, { refreshInterval: 0 }), {
+      wrapper,
+    });
   });
 
   it("caches with SWR", () => {
     expect(value.result.current).toBe(42);
     expect(useSWR).toHaveBeenCalledWith(
       [iri, GET_DATASET],
-      expect.any(Function)
+      expect.any(Function),
+      { refreshInterval: 0 }
     );
   });
   test("useSWR fetches data using getSolidDataset", () => {

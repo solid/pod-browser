@@ -19,11 +19,6 @@ exports[`AgentAccess renders 1`] = `
       data-testid="agent-web-id"
     >
       Alice
-      <span
-        class="PodBrowser-shareText"
-      >
-        Can Share
-      </span>
     </p>
     <button
       class="PodBrowser-button"
@@ -31,7 +26,6 @@ exports[`AgentAccess renders 1`] = `
       type="button"
     >
       <i
-        alt="More Options Menu"
         class="PodBrowser-icon-more"
       />
     </button>
@@ -112,11 +106,6 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
         data-testid="agent-web-id"
       >
         https://example.com/profile/card#me
-        <span
-          class="PodBrowser-shareText"
-        >
-          Can Share
-        </span>
       </p>
       <button
         class="PodBrowser-button"
@@ -124,7 +113,6 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
         type="button"
       >
         <i
-          alt="More Options Menu"
           class="PodBrowser-icon-more"
         />
       </button>
@@ -147,3 +135,5 @@ exports[`AgentAccess renders skeleton placeholders when profile is not available
   </div>
 </DocumentFragment>
 `;
+
+exports[`AgentAccess returns null when no access 1`] = `<DocumentFragment />`;

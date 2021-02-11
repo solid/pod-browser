@@ -32,18 +32,17 @@ describe("AgentProfileDetails", () => {
     name: "Example Agent",
     webId,
   };
-  const toggleShare = jest.fn();
-  const removePermissions = jest.fn();
+  const permission = { webId, profile, alias: "editors" };
   const resourceIri = "/iri/";
 
   it("renders without error", () => {
     const { asFragment } = renderWithTheme(
       <AgentProfileDetails
-        removePermissions={removePermissions}
-        toggleShare={toggleShare}
-        profile={profile}
         resourceIri={resourceIri}
-        webId={webId}
+        permission={permission}
+        setLoading={jest.fn()}
+        setLocalAccess={jest.fn()}
+        mutatePermissions={jest.fn()}
       />
     );
     expect(asFragment()).toMatchSnapshot();

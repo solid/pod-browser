@@ -21,7 +21,7 @@
 
 import { getSourceUrl } from "@inrupt/solid-client";
 import { sharedStart } from "./utils";
-import { joinPath } from "../stringHelpers";
+import { getContainerUrl, joinPath } from "../stringHelpers";
 
 const POLICIES_CONTAINER = "pb_policies/";
 
@@ -37,5 +37,29 @@ export function getPolicyUrl(resource, policiesContainerUrl) {
   );
   const matchingStart = sharedStart(resourceUrl, rootUrl);
   const path = `${resourceUrl.substr(matchingStart.length)}.ttl`;
+  return joinPath(getPoliciesContainerUrl(matchingStart), path);
+}
+
+export function getResourcePoliciesContainerPath(
+  resource,
+  policiesContainerUrl
+) {
+  return getContainerUrl(getPolicyUrl(resource, policiesContainerUrl));
+}
+
+export function getNamedPolicyResourceUrl(
+  resource,
+  policiesContainerUrl,
+  policyName
+) {
+  const resourceUrl = getSourceUrl(resource);
+  const rootUrl = policiesContainerUrl.substr(
+    0,
+    policiesContainerUrl.length - POLICIES_CONTAINER.length
+  );
+  const matchingStart = sharedStart(resourceUrl, rootUrl);
+  const path = `${resourceUrl.substr(
+    matchingStart.length
+  )}.ttl.${policyName}.ttl`;
   return joinPath(getPoliciesContainerUrl(matchingStart), path);
 }

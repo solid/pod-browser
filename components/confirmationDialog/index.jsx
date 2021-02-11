@@ -20,41 +20,70 @@
  */
 
 import React, { useContext } from "react";
+import { makeStyles } from "@material-ui/styles";
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  createStyles,
+  DialogContentText,
 } from "@material-ui/core";
+import { Button } from "@inrupt/prism-react-components";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
+import styles from "./styles";
+
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+
+const TESTCAFE_CONFIRM_BUTTON = "confirm-button";
+const TESTCAFE_CONFIRMATION_CANCEL_BUTTON = "confirmation-cancel-button";
+const TESTCAFE_CONFIRMATION_DIALOG = "confirmation-dialog";
 
 export default function ConfirmationDialog() {
+  const classes = useStyles();
+
   const { open, title, content, setConfirmed } = useContext(
     ConfirmationDialogContext
   );
 
   return (
     <Dialog
-      disableBackdropClick
-      disableEscapeKeyDown
-      maxWidth="xs"
+      classes={{ paperWidthFalse: classes.dialog }}
+      data-testid={TESTCAFE_CONFIRMATION_DIALOG}
+      maxWidth={false}
       aria-labelledby="confirmation-dialog"
       open={!!open}
     >
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent dividers>{content}</DialogContent>
-      <DialogActions>
-        <Button autoFocus onClick={() => setConfirmed(false)}>
+      <DialogTitle disableTypography classes={{ root: classes.dialogTitle }}>
+        {title}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText
+          classes={{ root: classes.dialogText }}
+          id="alert-confirmation-dialog"
+        >
+          {content}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions classes={{ root: classes.dialogActions }}>
+        <Button
+          variant="action"
+          data-testid={TESTCAFE_CONFIRMATION_CANCEL_BUTTON}
+          className={classes.cancelButton}
+          autoFocus
+          onClick={() => setConfirmed(false)}
+        >
           Cancel
         </Button>
 
         <Button
+          data-testid={TESTCAFE_CONFIRM_BUTTON}
+          className={classes.submitAgentsButton}
           type="submit"
           color="primary"
           onClick={() => setConfirmed(true)}
         >
-          Ok
+          Confirm
         </Button>
       </DialogActions>
     </Dialog>
