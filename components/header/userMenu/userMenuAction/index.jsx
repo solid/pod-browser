@@ -19,19 +19,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles } from "@solid/lit-prism-patterns";
+import Link from "next/link";
+import { UserMenuButton, UserMenuLink } from "@inrupt/prism-react-components";
+import React from "react";
+import T from "prop-types";
 
-export default function styles(theme) {
-  return createStyles(theme, ["headerBanner", "icons"], {
-    userMenu: {
-      display: "none",
-      [theme.breakpoints.up("md")]: {
-        display: "flex",
-        justifySelf: "flex-end",
-      },
-    },
-    userMenu__trigger: {
-      marginRight: theme.spacing(-2),
-    },
-  });
+/* eslint react/jsx-props-no-spreading: off */
+
+export default function UserMenuAction({ href, ...action }) {
+  return href ? (
+    <Link href={href}>
+      <UserMenuLink {...action} />
+    </Link>
+  ) : (
+    <UserMenuButton {...action} />
+  );
 }
+
+UserMenuAction.propTypes = {
+  href: T.string,
+};
+
+UserMenuAction.defaultProps = {
+  href: null,
+};

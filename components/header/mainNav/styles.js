@@ -26,7 +26,7 @@ const styles = (theme) =>
     "main-nav-container": {
       display: "none",
       width: "100%",
-      [theme.breakpoints.up("sm")]: {
+      [theme.breakpoints.up("md")]: {
         display: "flex",
       },
     },

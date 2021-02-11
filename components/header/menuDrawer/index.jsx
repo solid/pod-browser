@@ -19,22 +19,25 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* eslint react/jsx-props-no-spreading:off */
+
 import React, { useContext, useState } from "react";
-import clsx from "clsx";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import Link from "next/link";
 import Drawer from "@material-ui/core/Drawer";
 import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import { Icons } from "@inrupt/prism-react-components";
 import styles from "./styles";
-import LogOutButton from "../../logout";
 import FeatureContext from "../../../src/contexts/featureFlagsContext";
 import getMainMenuItems from "../../../constants/mainMenu";
+import useUserMenu from "../../../src/hooks/useUserMenu";
+import MenuDrawerItem from "./menuDrawerItem";
+
+export const TESTID_MENU_DRAWER_BUTTON = "menu-drawer-button";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const menuItems = getMainMenuItems();
@@ -47,19 +50,18 @@ export default function MenuDrawer() {
     ({ featureFlag }) => !featureFlag || enabled(featureFlag)
   );
   const [open, setOpen] = useState(false);
+  const userMenu = useUserMenu();
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  const handleDrawerOpen = () => setOpen(true);
+  const handleDrawerClose = () => setOpen(false);
 
   return (
     <div className={classes.hamburgerMenu}>
-      <Button onClick={handleDrawerOpen}>
-        <i className={clsx(bem("icon-bars"), bem("icon"))} aria-label="Menu" />
+      <Button
+        onClick={handleDrawerOpen}
+        data-testid={TESTID_MENU_DRAWER_BUTTON}
+      >
+        <Icons name="bars" aria-label="Menu" />
       </Button>
       <Drawer
         anchor="top"
@@ -71,61 +73,33 @@ export default function MenuDrawer() {
           <ListItem button key="title">
             <ListItemText primary="Pod Browser" />
             <Button onClick={handleDrawerClose}>
-              <i
-                className={clsx(bem("icon-cancel"), bem("icon-close"))}
+              <Icons
+                name="cancel"
+                className={bem("icon-close")}
                 aria-label="Pod Browser"
               />
             </Button>
           </ListItem>
           <Divider />
-          {menuItemsToShow.map(({ icon, label, path }) => (
-            <Link href={path} replace key={path}>
-              <ListItem button key={label} onClick={handleDrawerClose}>
-                <ListItemIcon>
-                  <i
-                    className={clsx(bem(icon), bem("icon"))}
-                    aria-label={label}
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  disableTypography
-                  primary={label}
-                  className={bem("menu-drawer-item__text")}
-                />
-              </ListItem>
-            </Link>
+          {menuItemsToShow.map(({ path, ...action }) => (
+            <MenuDrawerItem
+              key={path}
+              href={path}
+              onClick={handleDrawerClose}
+              {...action}
+            />
           ))}
           <Divider />
-          <ListItem button key="profile" onClick={handleDrawerClose}>
-            <Link href="/profile" replace>
-              <a
-                className={clsx(
-                  bem("menu-drawer-item"),
-                  bem("menu-drawer-item__text"),
-                  bem("menu-drawer-item__link")
-                )}
-              >
-                Profile
-              </a>
-            </Link>
-          </ListItem>
-          <ListItem button key="logout" onClick={handleDrawerClose}>
-            <LogOutButton
-              className={clsx(
-                bem("header-banner__user-menu-item-trigger"),
-                bem("menu-drawer-item")
-              )}
-            >
-              <span
-                className={clsx(
-                  bem("menu-drawer-item__text"),
-                  bem("menu-drawer-item__link")
-                )}
-              >
-                Log out
-              </span>
-            </LogOutButton>
-          </ListItem>
+          {userMenu.map(({ onClick, ...action }) => (
+            <MenuDrawerItem
+              key={action.label}
+              onClick={() => {
+                handleDrawerClose();
+                onClick();
+              }}
+              {...action}
+            />
+          ))}
         </List>
       </Drawer>
     </div>

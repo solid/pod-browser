@@ -20,21 +20,42 @@
  */
 
 import React from "react";
+import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
-import MenuDrawer from "./index";
-import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
+import MenuDrawer, { TESTID_MENU_DRAWER_BUTTON } from "./index";
+import { mockAuthenticatedSession } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
+import { TESTID_USER_MENU_LOGOUT } from "../../../src/hooks/useUserMenu";
 
 describe("MenuDrawer", () => {
-  test("renders menu drawer", () => {
-    const session = mockUnauthenticatedSession();
-    const SessionProvider = mockSessionContextProvider(session);
+  let logout;
+  let session;
+  let SessionProvider;
 
-    const { asFragment } = renderWithTheme(
+  beforeEach(() => {
+    logout = jest.fn();
+    session = { logout, ...mockAuthenticatedSession() };
+    SessionProvider = mockSessionContextProvider(session);
+  });
+
+  it("renders menu drawer", () => {
+    const { asFragment, getByTestId } = renderWithTheme(
       <SessionProvider>
         <MenuDrawer />
       </SessionProvider>
     );
     expect(asFragment()).toMatchSnapshot();
+    expect(getByTestId(TESTID_MENU_DRAWER_BUTTON)).toBeDefined();
+  });
+
+  it("customizes onClick for buttons (e.g. for log out)", () => {
+    const { getByTestId } = renderWithTheme(
+      <SessionProvider>
+        <MenuDrawer />
+      </SessionProvider>
+    );
+    userEvent.click(getByTestId(TESTID_MENU_DRAWER_BUTTON));
+    userEvent.click(getByTestId(TESTID_USER_MENU_LOGOUT));
+    expect(logout).toHaveBeenCalled();
   });
 });

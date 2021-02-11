@@ -21,17 +21,20 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
-export default function styles(theme) {
-  return createStyles(theme, ["headerBanner", "icons"], {
-    userMenu: {
-      display: "none",
-      [theme.breakpoints.up("md")]: {
-        display: "flex",
-        justifySelf: "flex-end",
-      },
+const styles = (theme) =>
+  createStyles(theme, ["userMenu"], {
+    "menu-drawer-item": {
+      paddingBottom: theme.spacing(1),
+      paddingTop: theme.spacing(1),
     },
-    userMenu__trigger: {
-      marginRight: theme.spacing(-2),
+    "menu-drawer-item__icon-holder": {
+      minWidth: "1.5rem",
+    },
+    "menu-drawer-item__icon": theme.icons.iconColor(theme.palette.primary.main),
+    "menu-drawer-item__text": {
+      fontSize: theme.typography.body.fontSize,
+      fontWeight: theme.typography.fontWeightMedium,
     },
   });
-}
+
+export default styles;

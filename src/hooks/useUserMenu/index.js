@@ -19,19 +19,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles } from "@solid/lit-prism-patterns";
+import { useSession } from "@inrupt/solid-ui-react";
 
-export default function styles(theme) {
-  return createStyles(theme, ["headerBanner", "icons"], {
-    userMenu: {
-      display: "none",
-      [theme.breakpoints.up("md")]: {
-        display: "flex",
-        justifySelf: "flex-end",
-      },
+export const TESTID_USER_MENU_PROFILE = "user-menu-profile";
+export const TESTID_USER_MENU_LOGOUT = "user-menu-logout";
+
+export default function useUserMenu() {
+  const { logout } = useSession();
+  return [
+    {
+      href: "/profile",
+      icon: "user",
+      label: "Profile",
+      onClick: () => {},
+      "data-testid": TESTID_USER_MENU_PROFILE,
     },
-    userMenu__trigger: {
-      marginRight: theme.spacing(-2),
+    {
+      icon: "log-out",
+      label: "Log out",
+      onClick: () => logout(),
+      "data-testid": TESTID_USER_MENU_LOGOUT,
     },
-  });
+  ];
 }

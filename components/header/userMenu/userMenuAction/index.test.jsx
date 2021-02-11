@@ -19,38 +19,34 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import userEvent from "@testing-library/user-event";
-import React from "react";
-import { renderWithTheme } from "../../../__testUtils/withTheme";
-import UserMenu from "./index";
-import useAuthenticatedProfile from "../../../src/hooks/useAuthenticatedProfile";
-import { mockProfileAlice } from "../../../__testUtils/mockPersonResource";
-import { TESTID_SPINNER } from "../../spinner";
+import { renderWithTheme } from "../../../../__testUtils/withTheme";
+import UserMenuAction from "./index";
 
-jest.mock("../../../src/hooks/useAuthenticatedProfile");
-const mockedAuthenticatedProfileHook = useAuthenticatedProfile;
+describe("UserMenuAction", () => {
+  const icon = "user";
+  const label = "Test";
+  let onClick;
 
-describe("UserMenu", () => {
   beforeEach(() => {
-    mockedAuthenticatedProfileHook.mockReturnValue({
-      data: mockProfileAlice(),
-    });
+    onClick = jest.fn();
   });
 
-  test("renders a menu", () => {
-    const { asFragment } = renderWithTheme(<UserMenu />);
+  it("renders links", () => {
+    const { asFragment } = renderWithTheme(
+      <UserMenuAction
+        href="/test"
+        icon={icon}
+        label={label}
+        onClick={onClick}
+      />
+    );
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("renders a spinner while loading user profile", () => {
-    mockedAuthenticatedProfileHook.mockReturnValue({ data: null });
-    const { getByTestId } = renderWithTheme(<UserMenu />);
-    expect(getByTestId(TESTID_SPINNER)).toBeDefined();
-  });
-
-  it("renders fallback for name and user photo if not available", () => {
-    mockedAuthenticatedProfileHook.mockReturnValue({ data: {} });
-    const { asFragment } = renderWithTheme(<UserMenu />);
+  it("renders buttons", () => {
+    const { asFragment } = renderWithTheme(
+      <UserMenuAction icon={icon} label={label} onClick={onClick} />
+    );
     expect(asFragment()).toMatchSnapshot();
   });
 });

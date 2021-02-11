@@ -6,71 +6,157 @@ exports[`UserMenu renders a menu 1`] = `
     class="PodBrowser-userMenu"
   >
     <div
-      class="PodBrowser-header-banner__aside-menu PodBrowser-header-banner__aside-menu--popup"
+      class="PodBrowser-user-menu"
     >
       <button
         aria-controls="UserMenu"
-        aria-expanded="true"
+        aria-expanded="false"
         aria-haspopup="true"
-        class="PodBrowser-header-banner__aside-menu-trigger"
+        class="PodBrowser-user-menu__trigger PodBrowser-userMenu__trigger"
         data-testid="user-menu-button"
         type="button"
       >
-        <i
-          aria-label="User Menu"
-          class="PodBrowser-icon-user PodBrowser-header-banner__aside-menu-trigger-icon"
+        <span
+          class="PodBrowser-user-menu__trigger-profile-image"
+          style="background-image: url(http://alice.example.com/alice.jpg);"
+        >
+           
+        </span>
+        <span
+          class="PodBrowser-user-menu__trigger-label"
+        >
+          Alice
+        </span>
+        <span
+          class="PodBrowser-icon-caret-down PodBrowser-user-menu__trigger-chevron PodBrowser-user-menu__trigger-chevron--show"
+        />
+        <span
+          class="PodBrowser-icon-caret-up PodBrowser-user-menu__trigger-chevron"
         />
       </button>
       <div
         aria-hidden="true"
-        class="PodBrowser-header-banner__aside-menu-popup"
-        data-testid="user-menu"
+        class="PodBrowser-user-menu__popup"
         id="UserMenu"
       >
         <ul
-          class="PodBrowser-header-banner__user-menu"
+          class="PodBrowser-user-menu__list"
         >
           <li
-            class="PodBrowser-header-banner__user-menu-item"
-            style="z-index: 100;"
+            class="PodBrowser-user-menu__list-item"
           >
-            <button
-              class="PodBrowser-header-banner__user-menu-item-trigger"
-              type="button"
+            <a
+              class="PodBrowser-user-menu__list-item-trigger"
+              data-testid="user-menu-profile"
             >
-              <i
-                class="PodBrowser-icon-user PodBrowser-header-banner__user-menu-item-icon"
+              <span
+                class="PodBrowser-icon-user PodBrowser-user-menu__list-item-icon"
               />
               <span
-                class="PodBrowser-header-banner__user-menu-item-label"
+                class="PodBrowser-user-menu__list-item-label"
               >
                 Profile
               </span>
-            </button>
+            </a>
           </li>
           <li
-            class="PodBrowser-header-banner__user-menu-item"
-            style="z-index: 100;"
+            class="PodBrowser-user-menu__list-item"
           >
-            <div
-              role="button"
-              tabindex="0"
+            <button
+              class="PodBrowser-user-menu__list-item-trigger"
+              data-testid="user-menu-logout"
+              type="button"
             >
-              <button
-                class="PodBrowser-header-banner__user-menu-item-trigger"
-                data-testid="logout-button"
-                type="button"
+              <span
+                class="PodBrowser-icon-log-out PodBrowser-user-menu__list-item-icon"
+              />
+              <span
+                class="PodBrowser-user-menu__list-item-label"
               >
-                <i
-                  class="PodBrowser-icon-log-out PodBrowser-header-banner__user-menu-item-icon"
-                />
-                <span
-                  class="PodBrowser-header-banner__user-menu-item-label"
-                >
-                  Log out
-                </span>
-              </button>
-            </div>
+                Log out
+              </span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`UserMenu renders fallback for name and user photo if not available 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-userMenu"
+  >
+    <div
+      class="PodBrowser-user-menu"
+    >
+      <button
+        aria-controls="UserMenu"
+        aria-expanded="false"
+        aria-haspopup="true"
+        class="PodBrowser-user-menu__trigger PodBrowser-userMenu__trigger"
+        data-testid="user-menu-button"
+        type="button"
+      >
+        <span
+          class="PodBrowser-icon-user-circle PodBrowser-user-menu__trigger-icon"
+        />
+        <span
+          class="PodBrowser-user-menu__trigger-label"
+        >
+          Account
+        </span>
+        <span
+          class="PodBrowser-icon-caret-down PodBrowser-user-menu__trigger-chevron PodBrowser-user-menu__trigger-chevron--show"
+        />
+        <span
+          class="PodBrowser-icon-caret-up PodBrowser-user-menu__trigger-chevron"
+        />
+      </button>
+      <div
+        aria-hidden="true"
+        class="PodBrowser-user-menu__popup"
+        id="UserMenu"
+      >
+        <ul
+          class="PodBrowser-user-menu__list"
+        >
+          <li
+            class="PodBrowser-user-menu__list-item"
+          >
+            <a
+              class="PodBrowser-user-menu__list-item-trigger"
+              data-testid="user-menu-profile"
+            >
+              <span
+                class="PodBrowser-icon-user PodBrowser-user-menu__list-item-icon"
+              />
+              <span
+                class="PodBrowser-user-menu__list-item-label"
+              >
+                Profile
+              </span>
+            </a>
+          </li>
+          <li
+            class="PodBrowser-user-menu__list-item"
+          >
+            <button
+              class="PodBrowser-user-menu__list-item-trigger"
+              data-testid="user-menu-logout"
+              type="button"
+            >
+              <span
+                class="PodBrowser-icon-log-out PodBrowser-user-menu__list-item-icon"
+              />
+              <span
+                class="PodBrowser-user-menu__list-item-label"
+              >
+                Log out
+              </span>
+            </button>
           </li>
         </ul>
       </div>

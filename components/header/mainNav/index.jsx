@@ -21,52 +21,49 @@
 
 import React, { useContext } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
-import clsx from "clsx";
-import Link from "next/link";
 import { useBem } from "@solid/lit-prism-patterns";
+import {
+  MainNav as PrismMainNav,
+  MainNavLink,
+} from "@inrupt/prism-react-components";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import styles from "./styles";
 import FeatureContext from "../../../src/contexts/featureFlagsContext";
 import getMainMenuItems from "../../../constants/mainMenu";
 
-export const TESTID_MAIN_NAV_ITEM = "main-nav-item";
+/* eslint react/jsx-props-no-spreading: off */
+
+export const TESTID_MAIN_NAV = "main-nav";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const menuItems = getMainMenuItems();
 
 export default function MainNav() {
+  const router = useRouter();
   const bem = useBem(useStyles());
   const { enabled } = useContext(FeatureContext);
-  const menuItemsToShow = menuItems.filter(
-    ({ featureFlag }) => !featureFlag || enabled(featureFlag)
-  );
+  const links = menuItems
+    .filter(({ featureFlag }) => !featureFlag || enabled(featureFlag))
+    .map(({ path, label, pages, ...rest }) => {
+      return {
+        active: pages.includes(router.pathname),
+        href: path,
+        text: label,
+        ...rest,
+      };
+    });
   return (
     <div className={bem("main-nav-container")}>
-      <nav className={bem("header-banner__main-nav")}>
-        <ul className={bem("main-nav__list")}>
-          {menuItemsToShow.map(({ path, icon, label }) => (
-            <li
-              className={bem("main-nav__item")}
-              key={path}
-              data-testid={TESTID_MAIN_NAV_ITEM}
-            >
-              <Link href={path} replace>
-                <a
-                  className={bem("header-banner__aside-menu-trigger")}
-                  type="button"
-                >
-                  <i
-                    className={clsx(
-                      bem(icon),
-                      bem("header-banner__aside-menu-trigger-icon")
-                    )}
-                  />
-                  {label}
-                </a>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <PrismMainNav
+        links={links}
+        data-testid={TESTID_MAIN_NAV}
+        renderLink={(link) => (
+          <Link href={link.href}>
+            <MainNavLink {...link} />
+          </Link>
+        )}
+      />
     </div>
   );
 }

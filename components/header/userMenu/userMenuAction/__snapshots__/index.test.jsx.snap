@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserMenuAction renders buttons 1`] = `
+<DocumentFragment>
+  <button
+    class="PodBrowser-user-menu__list-item-trigger"
+    type="button"
+  >
+    <span
+      class="PodBrowser-icon-user PodBrowser-user-menu__list-item-icon"
+    />
+    <span
+      class="PodBrowser-user-menu__list-item-label"
+    >
+      Test
+    </span>
+  </button>
+</DocumentFragment>
+`;
+
+exports[`UserMenuAction renders links 1`] = `
+<DocumentFragment>
+  <a
+    class="PodBrowser-user-menu__list-item-trigger"
+  >
+    <span
+      class="PodBrowser-icon-user PodBrowser-user-menu__list-item-icon"
+    />
+    <span
+      class="PodBrowser-user-menu__list-item-label"
+    >
+      Test
+    </span>
+  </a>
+</DocumentFragment>
+`;

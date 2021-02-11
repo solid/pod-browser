@@ -19,43 +19,37 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
+import { renderHook } from "@testing-library/react-hooks";
 import { useSession } from "@inrupt/solid-ui-react";
-import { useRouter } from "next/router";
-import { renderWithTheme } from "../../../__testUtils/withTheme";
-import MainNav, { TESTID_MAIN_NAV } from "./index";
-import mockSession, {
-  mockUnauthenticatedSession,
-} from "../../../__testUtils/mockSession";
-import { GROUPS_PAGE_ENABLED_FOR } from "../../../src/featureFlags";
+import useUserMenu, {
+  TESTID_USER_MENU_LOGOUT,
+  TESTID_USER_MENU_PROFILE,
+} from "./index";
 
 jest.mock("@inrupt/solid-ui-react");
 const mockedSessionHook = useSession;
 
-jest.mock("next/router");
-const mockedRouterHook = useRouter;
+describe("useUserMenu", () => {
+  let logout;
 
-describe("MainNav", () => {
   beforeEach(() => {
-    mockedRouterHook.mockReturnValue({
-      pathname: "/resource/[iri]",
-    });
+    logout = jest.fn();
+    mockedSessionHook.mockReturnValue({ logout });
   });
 
-  it("renders navigation", () => {
-    const session = mockUnauthenticatedSession();
-    mockedSessionHook.mockReturnValue({ session });
-
-    const { asFragment, getByTestId } = renderWithTheme(<MainNav />);
-    expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTID_MAIN_NAV).querySelectorAll("li")).toHaveLength(3);
+  it("returns menu with profile and logout", () => {
+    const { result } = renderHook(() => useUserMenu());
+    expect(result.current).toHaveLength(2);
+    const testIds = result.current.map(({ "data-testid": testid }) => testid);
+    expect(testIds).toContain(TESTID_USER_MENU_PROFILE);
+    expect(testIds).toContain(TESTID_USER_MENU_LOGOUT);
   });
 
-  it("renders Group for people with the feature flag turned on", () => {
-    const session = mockSession({ webId: GROUPS_PAGE_ENABLED_FOR[0] });
-    mockedSessionHook.mockReturnValue({ session });
-
-    const { getByTestId } = renderWithTheme(<MainNav />);
-    expect(getByTestId(TESTID_MAIN_NAV).querySelectorAll("li")).toHaveLength(4);
+  test("log out button triggers logout", () => {
+    const { result } = renderHook(() => useUserMenu());
+    result.current
+      .find(({ "data-testid": testid }) => testid === TESTID_USER_MENU_LOGOUT)
+      .onClick();
+    expect(logout).toHaveBeenCalled();
   });
 });
