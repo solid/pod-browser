@@ -21,8 +21,8 @@
 
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import GroupsPage from "./index";
-import { TESTID_GROUP_LIST } from "../../groupList";
-import { TESTID_GROUP_VIEW } from "../../groupView";
+import { TESTCAFE_ID_GROUP_LIST } from "../../groupList";
+import { TESTCAFE_ID_GROUP_VIEW } from "../../groupView";
 import useContacts from "../../../src/hooks/useContacts";
 
 jest.mock("../../../src/hooks/useContacts");
@@ -33,7 +33,7 @@ describe("GroupsPage", () => {
     mockedContactsHook.mockReturnValue({ data: [] });
     const { asFragment, getByTestId } = renderWithTheme(<GroupsPage />);
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTID_GROUP_LIST)).toBeDefined();
-    expect(getByTestId(TESTID_GROUP_VIEW)).toBeDefined();
+    expect(getByTestId(TESTCAFE_ID_GROUP_LIST)).toBeDefined();
+    expect(getByTestId(TESTCAFE_ID_GROUP_VIEW)).toBeDefined();
   });
 });

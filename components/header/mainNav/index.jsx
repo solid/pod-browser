@@ -34,7 +34,7 @@ import getMainMenuItems from "../../../constants/mainMenu";
 
 /* eslint react/jsx-props-no-spreading: off */
 
-export const TESTID_MAIN_NAV = "main-nav";
+export const TESTCAFE_ID_MAIN_NAV = "main-nav";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const menuItems = getMainMenuItems();
@@ -57,7 +57,7 @@ export default function MainNav() {
     <div className={bem("main-nav-container")}>
       <PrismMainNav
         links={links}
-        data-testid={TESTID_MAIN_NAV}
+        data-testid={TESTCAFE_ID_MAIN_NAV}
         renderLink={(link) => (
           <Link href={link.href}>
             <MainNavLink {...link} />

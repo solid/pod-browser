@@ -23,7 +23,7 @@ import React from "react";
 import { useSession } from "@inrupt/solid-ui-react";
 import { useRouter } from "next/router";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
-import MainNav, { TESTID_MAIN_NAV } from "./index";
+import MainNav, { TESTCAFE_ID_MAIN_NAV } from "./index";
 import mockSession, {
   mockUnauthenticatedSession,
 } from "../../../__testUtils/mockSession";
@@ -48,7 +48,9 @@ describe("MainNav", () => {
 
     const { asFragment, getByTestId } = renderWithTheme(<MainNav />);
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTID_MAIN_NAV).querySelectorAll("li")).toHaveLength(3);
+    expect(
+      getByTestId(TESTCAFE_ID_MAIN_NAV).querySelectorAll("li")
+    ).toHaveLength(3);
   });
 
   it("renders Group for people with the feature flag turned on", () => {
@@ -56,6 +58,8 @@ describe("MainNav", () => {
     mockedSessionHook.mockReturnValue({ session });
 
     const { getByTestId } = renderWithTheme(<MainNav />);
-    expect(getByTestId(TESTID_MAIN_NAV).querySelectorAll("li")).toHaveLength(4);
+    expect(
+      getByTestId(TESTCAFE_ID_MAIN_NAV).querySelectorAll("li")
+    ).toHaveLength(4);
   });
 });

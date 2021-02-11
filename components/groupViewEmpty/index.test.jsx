@@ -20,12 +20,12 @@
  */
 
 import { renderWithTheme } from "../../__testUtils/withTheme";
-import GroupViewEmpty, { TESTID_GROUP_VIEW_EMPTY } from "./index";
+import GroupViewEmpty, { TESTCAFE_ID_GROUP_VIEW_EMPTY } from "./index";
 
 describe("GroupViewEmpty", () => {
   it("renders", () => {
     const { asFragment, getByTestId } = renderWithTheme(<GroupViewEmpty />);
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTID_GROUP_VIEW_EMPTY)).toBeDefined();
+    expect(getByTestId(TESTCAFE_ID_GROUP_VIEW_EMPTY)).toBeDefined();
   });
 });

@@ -21,9 +21,9 @@
 
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import useContacts from "../../src/hooks/useContacts";
-import { TESTID_SPINNER } from "../spinner";
-import GroupView, { TESTID_GROUP_VIEW_ERROR } from "./index";
-import { TESTID_GROUP_VIEW_EMPTY } from "../groupViewEmpty";
+import { TESTCAFE_ID_SPINNER } from "../spinner";
+import GroupView, { TESTCAFE_ID_GROUP_VIEW_ERROR } from "./index";
+import { TESTCAFE_ID_GROUP_VIEW_EMPTY } from "../groupViewEmpty";
 
 jest.mock("../../src/hooks/useContacts");
 const mockedContactsHook = useContacts;
@@ -33,20 +33,20 @@ describe("GroupView", () => {
     mockedContactsHook.mockReturnValue({ data: [] });
     const { asFragment, getByTestId } = renderWithTheme(<GroupView />);
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTID_GROUP_VIEW_EMPTY)).toBeDefined();
+    expect(getByTestId(TESTCAFE_ID_GROUP_VIEW_EMPTY)).toBeDefined();
   });
 
   it("renders a spinner while groups are loading", () => {
     mockedContactsHook.mockReturnValue({});
     const { getByTestId } = renderWithTheme(<GroupView />);
-    expect(getByTestId(TESTID_SPINNER)).toBeDefined();
+    expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
   });
 
   it("renders an error if something goes wrong when loading groups", () => {
     const errorMessage = "error";
     mockedContactsHook.mockReturnValue({ error: new Error(errorMessage) });
     const { getByTestId } = renderWithTheme(<GroupView />);
-    expect(getByTestId(TESTID_GROUP_VIEW_ERROR).innerHTML).toContain(
+    expect(getByTestId(TESTCAFE_ID_GROUP_VIEW_ERROR).innerHTML).toContain(
       errorMessage
     );
   });

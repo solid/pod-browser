@@ -21,8 +21,8 @@
 
 import { useSession } from "@inrupt/solid-ui-react";
 
-export const TESTID_USER_MENU_PROFILE = "user-menu-profile";
-export const TESTID_USER_MENU_LOGOUT = "user-menu-logout";
+export const TESTCAFE_ID_USER_MENU_PROFILE = "user-menu-profile";
+export const TESTCAFE_ID_USER_MENU_LOGOUT = "user-menu-logout";
 
 export default function useUserMenu() {
   const { logout } = useSession();
@@ -32,13 +32,13 @@ export default function useUserMenu() {
       icon: "user",
       label: "Profile",
       onClick: () => {},
-      "data-testid": TESTID_USER_MENU_PROFILE,
+      "data-testid": TESTCAFE_ID_USER_MENU_PROFILE,
     },
     {
       icon: "log-out",
       label: "Log out",
       onClick: () => logout(),
-      "data-testid": TESTID_USER_MENU_LOGOUT,
+      "data-testid": TESTCAFE_ID_USER_MENU_LOGOUT,
     },
   ];
 }

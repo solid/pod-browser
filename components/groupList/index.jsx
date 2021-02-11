@@ -31,28 +31,28 @@ import Spinner from "../spinner";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export const TESTID_GROUP_LIST = "group-list";
-export const TESTID_GROUP_LIST_EMPTY = "group-list-empty";
-export const TESTID_GROUP_ERROR = "group-list-error";
+export const TESTCAFE_ID_GROUP_LIST = "group-list";
+export const TESTCAFE_ID_GROUP_LIST_EMPTY = "group-list-empty";
+export const TESTCAFE_ID_GROUP_ERROR = "group-list-error";
 
 export default function GroupList() {
   const { data: contacts, error } = useContacts([GROUP_CONTACT]);
   const bem = useBem(useStyles());
   return (
-    <div data-testid={TESTID_GROUP_LIST}>
+    <div data-testid={TESTCAFE_ID_GROUP_LIST}>
       <div className={bem("group-list-header")}>
         <div className={bem("group-list-header__title")}>Groups</div>
       </div>
       {!contacts && !error && <Spinner />}
       {error && (
-        <Message variant="error" data-testid={TESTID_GROUP_ERROR}>
+        <Message variant="error" data-testid={TESTCAFE_ID_GROUP_ERROR}>
           {error.message}
         </Message>
       )}
       {contacts && !contacts.length && (
         <div
           className={bem("group-list-empty")}
-          data-testid={TESTID_GROUP_LIST_EMPTY}
+          data-testid={TESTCAFE_ID_GROUP_LIST_EMPTY}
         >
           No groups
         </div>

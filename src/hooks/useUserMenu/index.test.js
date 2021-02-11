@@ -22,8 +22,8 @@
 import { renderHook } from "@testing-library/react-hooks";
 import { useSession } from "@inrupt/solid-ui-react";
 import useUserMenu, {
-  TESTID_USER_MENU_LOGOUT,
-  TESTID_USER_MENU_PROFILE,
+  TESTCAFE_ID_USER_MENU_LOGOUT,
+  TESTCAFE_ID_USER_MENU_PROFILE,
 } from "./index";
 
 jest.mock("@inrupt/solid-ui-react");
@@ -41,14 +41,16 @@ describe("useUserMenu", () => {
     const { result } = renderHook(() => useUserMenu());
     expect(result.current).toHaveLength(2);
     const testIds = result.current.map(({ "data-testid": testid }) => testid);
-    expect(testIds).toContain(TESTID_USER_MENU_PROFILE);
-    expect(testIds).toContain(TESTID_USER_MENU_LOGOUT);
+    expect(testIds).toContain(TESTCAFE_ID_USER_MENU_PROFILE);
+    expect(testIds).toContain(TESTCAFE_ID_USER_MENU_LOGOUT);
   });
 
   test("log out button triggers logout", () => {
     const { result } = renderHook(() => useUserMenu());
     result.current
-      .find(({ "data-testid": testid }) => testid === TESTID_USER_MENU_LOGOUT)
+      .find(
+        ({ "data-testid": testid }) => testid === TESTCAFE_ID_USER_MENU_LOGOUT
+      )
       .onClick();
     expect(logout).toHaveBeenCalled();
   });
