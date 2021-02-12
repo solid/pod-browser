@@ -79,19 +79,17 @@ export const handleSubmit = ({
       setNoAgentsAlert(true);
       return;
     }
-    webIdsToDelete.forEach(async (agentWebId) => {
-      await accessControl.removeAgentFromNamedPolicy(agentWebId, type);
-      mutatePermissions();
-    });
-    newAgentsWebIds.forEach(async (agentWebId) => {
-      await accessControl.addAgentToNamedPolicy(agentWebId, type);
-      mutatePermissions();
-    });
-    Promise.allSettled(
-      newAgentsWebIds.map(async (agentWebId) =>
+    Promise.allSettled([
+      ...webIdsToDelete?.map(async (agentWebId) =>
+        accessControl.removeAgentFromNamedPolicy(agentWebId, type)
+      ),
+      ...newAgentsWebIds?.map(async (agentWebId) =>
+        accessControl.addAgentToNamedPolicy(agentWebId, type)
+      ),
+      ...newAgentsWebIds?.map(async (agentWebId) =>
         saveAgentToContacts(agentWebId, contacts, addressBook, fetch)
-      )
-    );
+      ),
+    ]).then(() => mutatePermissions());
     onClose();
   };
 };
@@ -362,7 +360,7 @@ export default function AgentPickerModal({ type, text, onClose }) {
         {!!contacts && !!contactsArray.length && (
           <Table
             things={contactsArray}
-            className={clsx(bem("table"), classes.agentPickerTable)}
+            className={clsx(bem("table"), bem("agentPickerTable"))}
             filter={globalFilter}
           >
             <TableColumn
@@ -409,7 +407,7 @@ export default function AgentPickerModal({ type, text, onClose }) {
           <span className={classes.emptyStateTextContainer}>
             <p>
               {`No ${
-                selectedTabValue.container === "Person" ? "people " : "groups "
+                selectedTabValue === PERSON_CONTACT ? "people " : "groups "
               } found`}
             </p>
           </span>

@@ -41,14 +41,17 @@ export default function WebIdCheckbox({
   const { thing } = useThing();
   const { data: profile } = useContactProfile(thing);
 
-  let webIdValue;
-  if (!value && profile) {
-    webIdValue = profile.webId;
-  } else if (value) {
-    webIdValue = value;
-  } else if (!value && index === 0) {
-    webIdValue = "";
-  }
+  const getWebIdValue = () => {
+    let webIdValue;
+    if (!value && profile) {
+      webIdValue = profile.webId;
+    } else if (value) {
+      webIdValue = value;
+    } else if (!value && index === 0) {
+      webIdValue = "";
+    }
+    return webIdValue;
+  };
 
   return (
     <Checkbox
@@ -56,14 +59,14 @@ export default function WebIdCheckbox({
       type="checkbox"
       color="primary"
       size="medium"
-      value={webIdValue}
+      value={getWebIdValue()}
       checked={
         (index === 0 && addingWebId) ||
-        newAgentsWebIds.includes(webIdValue) ||
-        (webIdsInPermissions.includes(webIdValue) &&
-          !webIdsToDelete.includes(webIdValue))
+        newAgentsWebIds.includes(getWebIdValue()) ||
+        (webIdsInPermissions.includes(getWebIdValue()) &&
+          !webIdsToDelete.includes(getWebIdValue()))
       }
-      onChange={(e) => toggleCheckbox(e, index, webIdValue)}
+      onChange={(e) => toggleCheckbox(e, index, getWebIdValue())}
     />
   );
 }

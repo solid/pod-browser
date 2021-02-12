@@ -26,14 +26,19 @@ import { getResource } from "../../solidClientHelpers/resource";
 import { getWebIdUrl } from "../../addressBook";
 import { fetchProfile } from "../../solidClientHelpers/profile";
 
-export default function useContactProfile(contact) {
-  const { fetch } = useSession();
+const getPersonThingUrl = (contact) => {
   let personThingUrl;
   try {
     personThingUrl = asUrl(contact);
   } catch {
     personThingUrl = null;
   }
+  return personThingUrl;
+};
+
+export default function useContactProfile(contact) {
+  const { fetch } = useSession();
+  const personThingUrl = getPersonThingUrl(contact);
   return useSWR(["contact", personThingUrl], async () => {
     if (!personThingUrl) return null;
     const {

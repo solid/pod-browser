@@ -153,13 +153,10 @@ export async function getContacts(indexFileDataset, contactTypeIri, fetch) {
     return respond([]);
   }
   const contactsThings = getThingAll(indexFileDataset);
-
   const contactsIris = contactsThings.map((t) => asUrl(t));
-
   const contactsResponses = await Promise.all(
     contactsIris.map((iri) => getResource(iri, fetch))
   );
-
   const contacts = contactsResponses
     .filter(({ error: e }) => !e)
     .map(({ response }) => response)
@@ -389,7 +386,7 @@ export async function findPersonContactInAddressBook(
   fetch
 ) {
   const { dataset: addressBookDataset } = addressBook;
-  const { indexFilePredicate } = TYPE_MAP[foaf.Person];
+  const { indexFilePredicate, contactTypeIri } = TYPE_MAP[foaf.Person];
 
   const { response: indexFileDataset } = await getIndexDatasetFromAddressBook(
     addressBookDataset,
@@ -398,7 +395,7 @@ export async function findPersonContactInAddressBook(
   );
   const { response: people } = await getContacts(
     indexFileDataset,
-    foaf.Person,
+    contactTypeIri,
     fetch
   );
   const profiles = await getProfiles(people, fetch);

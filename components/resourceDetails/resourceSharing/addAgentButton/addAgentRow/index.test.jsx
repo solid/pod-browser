@@ -125,9 +125,6 @@ describe("AddAgentRow", () => {
     });
   });
   describe("with existing contacts", () => {
-    beforeEach(() => {
-      useSession.mockReturnValue({ fetch: jest.fn() });
-    });
     const index = 0;
     const setNewAgentsWebIds = jest.fn();
     const newAgentsWebIds = [];
@@ -135,6 +132,10 @@ describe("AddAgentRow", () => {
     const setNoAgentsAlert = jest.fn();
     const addingWebId = false;
     const updateThing = jest.fn();
+
+    beforeEach(() => {
+      useSession.mockReturnValue({ fetch: jest.fn() });
+    });
 
     it("renders a row with the agent's name if profile is available", () => {
       const mockThing = createThing();
