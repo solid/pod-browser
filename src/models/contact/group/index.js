@@ -55,6 +55,7 @@ export const GROUP_CONTACT = {
   indexFilePredicate: NAME_GROUP_INDEX_PREDICATE,
   contactTypeUrl: vcard.Group,
   isOfType: (contact) => getUrlAll(contact, rdf.type).includes(vcard.Group),
+  // TODO: need to add a createContact function here to create Group contact
 };
 
 /* Model internal functions */

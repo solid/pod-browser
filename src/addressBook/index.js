@@ -350,7 +350,6 @@ export function createContact(
   const emails = normalizedContact.emails.map(mapSchema("email"));
   const addresses = normalizedContact.addresses.map(mapSchema("address"));
   const telephones = normalizedContact.telephones.map(mapSchema("telephone"));
-
   const person = defineThing(
     { name: "this" },
     ...[(t) => addUrl(t, rdf.type, vcard.Individual), ...rootAttributeFns],
@@ -377,32 +376,6 @@ export function createContact(
     iri,
     dataset,
   };
-}
-
-// TODO: keeping this separate to maintain functionality but will likely adapt the old function to take a type if we need to reuse it for groups
-export async function findPersonContactInAddressBook(
-  addressBook,
-  webId,
-  fetch
-) {
-  const { dataset: addressBookDataset } = addressBook;
-  const { indexFilePredicate, contactTypeIri } = TYPE_MAP[foaf.Person];
-
-  const { response: indexFileDataset } = await getIndexDatasetFromAddressBook(
-    addressBookDataset,
-    indexFilePredicate,
-    fetch
-  );
-  const { response: people } = await getContacts(
-    indexFileDataset,
-    contactTypeIri,
-    fetch
-  );
-  const profiles = await getProfiles(people, fetch);
-  const existingContact = profiles.filter(
-    (profile) => asUrl(profile) === webId
-  );
-  return existingContact;
 }
 
 export async function findContactInAddressBook(people, webId, fetch) {

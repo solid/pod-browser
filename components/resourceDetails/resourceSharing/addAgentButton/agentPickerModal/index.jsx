@@ -39,11 +39,7 @@ import { createThing, getSourceUrl } from "@inrupt/solid-client";
 import { vcard } from "rdf-namespaces";
 import AccessControlContext from "../../../../../src/contexts/accessControlContext";
 import { fetchProfile } from "../../../../../src/solidClientHelpers/profile";
-import {
-  findPersonContactInAddressBook,
-  saveContact,
-  vcardExtras,
-} from "../../../../../src/addressBook";
+import { vcardExtras } from "../../../../../src/addressBook";
 import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
 import PolicyHeader from "../../policyHeader";
 import AgentsTableTabs from "../../agentsTableTabs";
@@ -58,7 +54,11 @@ import useNamedPolicyPermissions from "../../../../../src/hooks/useNamedPolicyPe
 import usePermissionsWithProfiles from "../../../../../src/hooks/usePermissionsWithProfiles";
 import useContacts from "../../../../../src/hooks/useContacts";
 import { GROUP_CONTACT } from "../../../../../src/models/contact/group";
-import { PERSON_CONTACT } from "../../../../../src/models/contact/person";
+import {
+  PERSON_CONTACT,
+  findPersonContactInAddressBook,
+} from "../../../../../src/models/contact/person";
+import { saveContact } from "../../../../../src/models/contact";
 import useAddressBook from "../../../../../src/hooks/useAddressBook";
 
 export const handleSubmit = ({
@@ -66,7 +66,6 @@ export const handleSubmit = ({
   webIdsToDelete,
   setNoAgentsAlert,
   accessControl,
-  contacts,
   addressBook,
   mutatePermissions,
   saveAgentToContacts,
@@ -87,7 +86,7 @@ export const handleSubmit = ({
         accessControl.addAgentToNamedPolicy(agentWebId, type)
       ),
       ...newAgentsWebIds?.map(async (agentWebId) =>
-        saveAgentToContacts(agentWebId, contacts, addressBook, fetch)
+        saveAgentToContacts(agentWebId, addressBook, fetch)
       ),
     ]).then(() => mutatePermissions());
     onClose();
@@ -123,18 +122,14 @@ export const handleConfirmation = ({
   };
 };
 
-export const handleSaveContact = async (iri, contacts, addressBook, fetch) => {
-  const {
-    dataset: addressBookDataset,
-    containerUrl: addressBookContainerUrl,
-  } = addressBook;
+export const handleSaveContact = async (iri, addressBook, fetch) => {
   let error;
   if (!iri) {
     return;
   }
 
   try {
-    const { name, webId, types } = await fetchProfile(iri, fetch);
+    const { name, webId } = await fetchProfile(iri, fetch);
     // TODO: we will likely need to change this if we want to save groups on the fly as well
     const existingContact = await findPersonContactInAddressBook(
       addressBook,
@@ -147,13 +142,8 @@ export const handleSaveContact = async (iri, contacts, addressBook, fetch) => {
 
     if (name) {
       const contact = { webId, fn: name };
-      await saveContact(
-        addressBookDataset,
-        addressBookContainerUrl,
-        contact,
-        types,
-        fetch
-      );
+      // TODO: we will likely need to update this if we also want to create and save groups
+      await saveContact(addressBook, contact, PERSON_CONTACT, fetch);
     }
   } catch (e) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -227,7 +217,6 @@ export default function AgentPickerModal({ type, text, onClose }) {
     webIdsToDelete,
     setNoAgentsAlert,
     accessControl,
-    contacts,
     addressBook,
     mutatePermissions,
     saveAgentToContacts: handleSaveContact,

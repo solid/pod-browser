@@ -29,6 +29,7 @@ import AgentPickerModal, {
   handleSubmit,
 } from "./index";
 import * as AddressBookFns from "../../../../../src/addressBook";
+import * as personModelFunctions from "../../../../../src/models/contact/person";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import mockAccessControl from "../../../../../__testUtils/mockAccessControl";
 import mockPersonContact from "../../../../../__testUtils/mockPersonContact";
@@ -786,7 +787,7 @@ describe("handleSaveContact", () => {
       .mockResolvedValue({ name, avatar, webId });
 
     jest
-      .spyOn(AddressBookFns, "findPersonContactInAddressBook")
+      .spyOn(personModelFunctions, "findPersonContactInAddressBook")
       .mockResolvedValue([iri]);
 
     expect(jest.spyOn(AddressBookFns, "saveContact")).not.toHaveBeenCalled();
@@ -802,7 +803,7 @@ describe("handleSaveContact", () => {
       .mockResolvedValue({ name, avatar, webId });
 
     jest
-      .spyOn(AddressBookFns, "findPersonContactInAddressBook")
+      .spyOn(personModelFunctions, "findPersonContactInAddressBook")
       .mockResolvedValue([]);
 
     expect(jest.spyOn(AddressBookFns, "saveContact")).not.toHaveBeenCalled();
