@@ -30,6 +30,7 @@ import {
   setUrl,
 } from "@inrupt/solid-client";
 import * as resourceFns from "../../solidClientHelpers/resource";
+import * as profileFns from "../../solidClientHelpers/profile";
 import {
   aliceAlternativeWebIdUrl,
   aliceProfileUrl,
@@ -39,10 +40,11 @@ import {
   bobWebIdUrl,
   mockPersonDatasetAlice,
   mockPersonDatasetBob,
+  mockProfileAlice,
 } from "../../../__testUtils/mockPersonResource";
 import mockPersonContactThing from "../../../__testUtils/mockPersonContactThing";
 import { chain } from "../../solidClientHelpers/utils";
-import { getProfilesForPersonContacts } from "./index";
+import { getProfileForContact, getProfilesForPersonContacts } from "./index";
 
 describe("getProfilesForPersonContacts", () => {
   afterEach(() => {
@@ -114,6 +116,19 @@ describe("getProfilesForPersonContacts", () => {
         },
       });
 
+    jest
+      .spyOn(profileFns, "fetchProfile")
+      .mockResolvedValueOnce({
+        webId: aliceWebIdUrl,
+        avatar: null,
+        name: "Alice",
+      })
+      .mockResolvedValueOnce({
+        webId: bobWebIdUrl,
+        avatar: null,
+        name: "Bob",
+      });
+
     const [profile1, profile2] = await getProfilesForPersonContacts(
       [person1, person2],
       fetch
@@ -182,11 +197,32 @@ describe("getProfilesForPersonContacts", () => {
         error: "There was an error",
       });
 
+    jest.spyOn(profileFns, "fetchProfile").mockResolvedValueOnce({
+      webId: aliceWebIdUrl,
+      avatar: null,
+      name: "Alice",
+    });
+
     const profiles = await getProfilesForPersonContacts(
       [person1, person2],
       fetch
     );
 
     expect(profiles).toHaveLength(1);
+  });
+});
+
+describe("getProfileForContact", () => {
+  beforeEach(() => {
+    jest.spyOn(resourceFns, "getResource").mockResolvedValue({
+      response: { dataset: mockPersonDatasetAlice(), iri: aliceWebIdUrl },
+    });
+    jest
+      .spyOn(profileFns, "fetchProfile")
+      .mockResolvedValue(mockProfileAlice());
+  });
+  const person1Iri = "https://user.example.com/contacts/Person/1234/index.ttl";
+  it("returns a profile for a person contact url", async () => {
+    expect(await getProfileForContact(person1Iri)).toEqual(mockProfileAlice());
   });
 });

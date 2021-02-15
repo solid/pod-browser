@@ -82,29 +82,29 @@ export default function AddAgentRow({
   setAddingWebId,
   setNoAgentsAlert,
   addingWebId,
-  updateThing,
+  updateTemporaryRowThing,
   permissions,
 }) {
   const { fetch } = useSession();
-  const { thing } = useThing();
+  const { thing: temporaryRowThing } = useThing();
   const classes = useStyles();
   const [agentWebId, setAgentWebId] = useState("");
   const [existingPermission, setExistingPermission] = useState();
   const [agentName, setAgentName] = useState(null);
   const [agentAvatar, setAgentAvatar] = useState(null);
   const [displayedWebId, setDisplayedWebId] = useState(null);
-  const { data: profile } = useContactProfile(thing);
+  const { data: profile } = useContactProfile(temporaryRowThing);
   useEffect(() => {
     if (profile) {
       setAgentName(profile.name);
       setAgentAvatar(profile.avatar);
       setDisplayedWebId(profile.webId);
-    } else if (thing && !profile && contactsArrayLength > 0) {
-      setAgentName(getStringNoLocale(thing, foaf.name) || null);
-      setAgentAvatar(getUrl(thing, vcard.hasPhoto) || null);
-      setDisplayedWebId(getUrl(thing, VCARD_WEBID_PREDICATE));
+    } else if (temporaryRowThing && !profile && contactsArrayLength > 0) {
+      setAgentName(getStringNoLocale(temporaryRowThing, foaf.name) || null);
+      setAgentAvatar(getUrl(temporaryRowThing, vcard.hasPhoto) || null);
+      setDisplayedWebId(getUrl(temporaryRowThing, VCARD_WEBID_PREDICATE));
     }
-  }, [profile, thing, agentWebId, contactsArrayLength]);
+  }, [profile, temporaryRowThing, agentWebId, contactsArrayLength]);
 
   const handleAddAgentsWebIds = async (e) => {
     e.preventDefault();
@@ -115,8 +115,12 @@ export default function AddAgentRow({
     }
     setNoAgentsAlert(false);
     setNewAgentsWebIds([...newAgentsWebIds, agentWebId]);
-    const newThing = await updateThingForNewRow(agentWebId, thing, fetch);
-    updateThing(newThing);
+    const newThing = await updateThingForNewRow(
+      agentWebId,
+      temporaryRowThing,
+      fetch
+    );
+    updateTemporaryRowThing(newThing);
     setAddingWebId(false);
   };
 
@@ -192,6 +196,6 @@ AddAgentRow.propTypes = {
   setNoAgentsAlert: PropTypes.func.isRequired,
   contactsArrayLength: PropTypes.number.isRequired,
   addingWebId: PropTypes.bool.isRequired,
-  updateThing: PropTypes.func.isRequired,
+  updateTemporaryRowThing: PropTypes.func.isRequired,
   permissions: PropTypes.arrayOf(PropTypes.shape()).isRequired,
 };

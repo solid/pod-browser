@@ -24,7 +24,7 @@ import useSWR from "swr";
 import { useSession } from "@inrupt/solid-ui-react";
 import { createThing, mockThingFrom } from "@inrupt/solid-client";
 import useContactProfile from "./index";
-import * as profileFns from "../../solidClientHelpers/profile";
+import * as profileModel from "../../models/profile";
 import * as addressBookFns from "../../addressBook";
 import * as resourceFns from "../../solidClientHelpers/resource";
 
@@ -69,7 +69,7 @@ describe("useContactProfile", () => {
       .spyOn(addressBookFns, "getWebIdUrl")
       .mockReturnValue("https://example.org");
 
-    jest.spyOn(profileFns, "fetchProfile").mockResolvedValue(profile);
+    jest.spyOn(profileModel, "getProfileForContact").mockResolvedValue(profile);
 
     renderHook(() => useContactProfile(contactThing));
 

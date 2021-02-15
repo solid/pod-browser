@@ -104,10 +104,10 @@ export const handleConfirmation = ({
   handleSubmitNewWebIds,
 }) => {
   return (confirmationSetup, confirmed) => {
-    if (open !== dialogId) return;
-    if (confirmationSetup && confirmed === null) return;
     setConfirmationSetup(true);
 
+    if (open !== dialogId) return;
+    if (confirmationSetup && confirmed === null) return;
     if (confirmationSetup && confirmed) {
       handleSubmitNewWebIds();
     }
@@ -211,7 +211,6 @@ export default function AgentPickerModal({ type, text, onClose }) {
     const { value } = e.target;
     setGlobalFilter(value || undefined);
   };
-
   const handleSubmitNewWebIds = handleSubmit({
     newAgentsWebIds,
     webIdsToDelete,
@@ -226,7 +225,7 @@ export default function AgentPickerModal({ type, text, onClose }) {
   });
 
   const handleClickOpenDialog = () => {
-    if (!newAgentsWebIds.length) {
+    if (!newAgentsWebIds.length && !webIdsToDelete.length) {
       setNoAgentsAlert(true);
       return;
     }
@@ -256,7 +255,7 @@ export default function AgentPickerModal({ type, text, onClose }) {
     handleSubmitNewWebIds,
   });
 
-  const updateThing = (newThing) => {
+  const updateTemporaryRowThing = (newThing) => {
     const { dataset: addressBookDataset } = addressBook;
     const newItem = {
       thing: newThing,
@@ -382,7 +381,7 @@ export default function AgentPickerModal({ type, text, onClose }) {
                   setAddingWebId={setAddingWebId}
                   addingWebId={addingWebId}
                   setNoAgentsAlert={setNoAgentsAlert}
-                  updateThing={updateThing}
+                  updateTemporaryRowThing={updateTemporaryRowThing}
                   permissions={permissions}
                 />
               )}

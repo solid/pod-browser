@@ -29,13 +29,14 @@ import useContactProfile from "../../../../../src/hooks/useContactProfile";
 import { vcardExtras } from "../../../../../src/addressBook";
 
 jest.mock("@inrupt/solid-ui-react");
+const mockedThingHook = useThing;
 jest.mock("../../../../../src/hooks/useContactProfile");
 
 describe("AddAgentRow", () => {
   describe("when adding a new webId", () => {
     const mockThing = createThing();
     beforeEach(() => {
-      useThing.mockReturnValue({ thing: mockThing });
+      mockedThingHook.mockReturnValue({ thing: mockThing });
       useSession.mockReturnValue({ fetch: jest.fn() });
       useContactProfile.mockReturnValue({ data: null });
     });
@@ -45,7 +46,7 @@ describe("AddAgentRow", () => {
     const setAddingWebId = jest.fn();
     const setNoAgentsAlert = jest.fn();
     const addingWebId = true;
-    const updateThing = jest.fn();
+    const updateTemporaryRowThing = jest.fn();
     const permissions = [{ webId: "https://example.org/profile/card#me" }];
 
     it("renders a row with an input for the first item in the array", () => {
@@ -57,7 +58,7 @@ describe("AddAgentRow", () => {
           setAddingWebId={setAddingWebId}
           setNoAgentsAlert={setNoAgentsAlert}
           addingWebId={addingWebId}
-          updateThing={updateThing}
+          updateTemporaryRowThing={updateTemporaryRowThing}
           permissions={[]}
         />
       );
@@ -72,7 +73,7 @@ describe("AddAgentRow", () => {
           setAddingWebId={setAddingWebId}
           setNoAgentsAlert={setNoAgentsAlert}
           addingWebId={addingWebId}
-          updateThing={updateThing}
+          updateTemporaryRowThing={updateTemporaryRowThing}
           permissions={permissions}
         />
       );
@@ -92,7 +93,7 @@ describe("AddAgentRow", () => {
           setAddingWebId={setAddingWebId}
           setNoAgentsAlert={setNoAgentsAlert}
           addingWebId={addingWebId}
-          updateThing={updateThing}
+          updateTemporaryRowThing={updateTemporaryRowThing}
           permissions={permissions}
         />
       );
@@ -110,7 +111,7 @@ describe("AddAgentRow", () => {
           setAddingWebId={setAddingWebId}
           setNoAgentsAlert={setNoAgentsAlert}
           addingWebId={addingWebId}
-          updateThing={updateThing}
+          updateTemporaryRowThing={updateTemporaryRowThing}
           permissions={permissions}
         />
       );
@@ -131,7 +132,7 @@ describe("AddAgentRow", () => {
     const setAddingWebId = jest.fn();
     const setNoAgentsAlert = jest.fn();
     const addingWebId = false;
-    const updateThing = jest.fn();
+    const updateTemporaryRowThing = jest.fn();
 
     beforeEach(() => {
       useSession.mockReturnValue({ fetch: jest.fn() });
@@ -151,7 +152,7 @@ describe("AddAgentRow", () => {
           setAddingWebId={setAddingWebId}
           setNoAgentsAlert={setNoAgentsAlert}
           addingWebId={addingWebId}
-          updateThing={updateThing}
+          updateTemporaryRowThing={updateTemporaryRowThing}
           permissions={[]}
         />
       );
@@ -177,7 +178,7 @@ describe("AddAgentRow", () => {
           setAddingWebId={setAddingWebId}
           setNoAgentsAlert={setNoAgentsAlert}
           addingWebId={addingWebId}
-          updateThing={updateThing}
+          updateTemporaryRowThing={updateTemporaryRowThing}
           permissions={[]}
         />
       );

@@ -22,9 +22,7 @@
 import { useSession } from "@inrupt/solid-ui-react";
 import useSWR from "swr";
 import { asUrl } from "@inrupt/solid-client";
-import { getResource } from "../../solidClientHelpers/resource";
-import { getWebIdUrl } from "../../addressBook";
-import { fetchProfile } from "../../solidClientHelpers/profile";
+import { getProfileForContact } from "../../models/profile";
 
 const getPersonThingUrl = (contact) => {
   let personThingUrl;
@@ -41,11 +39,7 @@ export default function useContactProfile(contact) {
   const personThingUrl = getPersonThingUrl(contact);
   return useSWR(["contact", personThingUrl], async () => {
     if (!personThingUrl) return null;
-    const {
-      response: { dataset, iri },
-    } = await getResource(personThingUrl, fetch);
-    const webId = getWebIdUrl(dataset, iri);
-    const fetchedProfile = await fetchProfile(webId, fetch);
-    return fetchedProfile;
+    const profile = await getProfileForContact(personThingUrl, fetch);
+    return profile;
   });
 }
