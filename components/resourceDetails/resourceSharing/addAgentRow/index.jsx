@@ -40,10 +40,10 @@ import {
 } from "@inrupt/solid-client";
 import { foaf, vcard } from "rdf-namespaces";
 import styles from "./styles";
-import { chain } from "../../../../../src/solidClientHelpers/utils";
-import { fetchProfile } from "../../../../../src/solidClientHelpers/profile";
-import { vcardExtras } from "../../../../../src/addressBook";
-import useContactProfile from "../../../../../src/hooks/useContactProfile";
+import { chain } from "../../../../src/solidClientHelpers/utils";
+import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
+import { vcardExtras } from "../../../../src/addressBook";
+import useContactProfile from "../../../../src/hooks/useContactProfile";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const VCARD_WEBID_PREDICATE = vcardExtras("WebId");

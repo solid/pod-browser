@@ -23,25 +23,33 @@
 
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Modal } from "@material-ui/core";
+import { createStyles, Modal } from "@material-ui/core";
+import { useBem } from "@solid/lit-prism-patterns";
+import clsx from "clsx";
+import { makeStyles } from "@material-ui/styles";
 import { Button } from "@inrupt/prism-react-components";
 import AgentPickerModal from "../agentPickerModal";
+import styles from "./styles";
 import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
 import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
-import {
-  isCustomPolicy,
-  POLICIES_TYPE_MAP,
-} from "../../../../constants/policies";
 
-const TESTCAFE_ID_ADD_AGENT_BUTTON = "add-agent-button";
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+
+export const TESTCAFE_ID_ADVANCED_SHARING_BUTTON = "advanced-sharing-button";
 const TESTCAFE_ID_MODAL_OVERLAY = "modal-overlay";
 
-export default function AddAgentButton({ type, setLoading }) {
-  const { data: policyPermissions } = usePolicyPermissions(type);
+export default function AdvancedSharingButton({ setShowAdvancedSharing }) {
+  const defaultType = "viewAndAdd";
+  const classes = useStyles();
+  const {
+    data: customPermissions,
+    mutate: mutatePermissions,
+  } = usePolicyPermissions(defaultType);
   const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
-    policyPermissions
+    customPermissions
   );
 
+  const bem = useBem(useStyles());
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -52,17 +60,16 @@ export default function AddAgentButton({ type, setLoading }) {
     setOpen(false);
   };
 
-  const { editText } = POLICIES_TYPE_MAP[type];
-
   return (
     <>
       <Button
-        data-testid={TESTCAFE_ID_ADD_AGENT_BUTTON}
+        data-testid={TESTCAFE_ID_ADVANCED_SHARING_BUTTON}
         variant="text"
+        className={classes.sharingButton}
         onClick={handleOpen}
-        iconBefore="add"
       >
-        {editText}
+        <i className={clsx(bem("icon-settings"), bem("icon"))} />
+        Advanced Sharing
       </Button>
 
       <Modal
@@ -74,26 +81,26 @@ export default function AddAgentButton({ type, setLoading }) {
           justifyContent: "center",
         }}
         onClose={handleClose}
-        aria-labelledby={`${editText} Modal`}
-        aria-describedby={`${editText} for this resource`}
+        aria-labelledby="Advanced sharing modal"
+        aria-describedby="Advanced sharing for this resource"
       >
         <AgentPickerModal
-          type={type}
+          type={defaultType}
           onClose={handleClose}
-          setLoading={setLoading}
+          mutatePermissions={mutatePermissions}
           permissions={permissions}
-          advancedSharing={isCustomPolicy(type)}
+          advancedSharing
+          setShowAdvancedSharing={setShowAdvancedSharing}
         />
       </Modal>
     </>
   );
 }
 
-AddAgentButton.propTypes = {
-  type: PropTypes.string.isRequired,
-  setLoading: PropTypes.func,
+AdvancedSharingButton.propTypes = {
+  setShowAdvancedSharing: PropTypes.func,
 };
 
-AddAgentButton.defaultProps = {
-  setLoading: () => {},
+AdvancedSharingButton.defaultProps = {
+  setShowAdvancedSharing: () => {},
 };

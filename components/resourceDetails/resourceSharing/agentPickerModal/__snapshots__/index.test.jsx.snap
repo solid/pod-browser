@@ -251,7 +251,7 @@ exports[`AgentPickerModal with contacts renders a table with the available conta
               <span
                 class="PodBrowser-tableHeader"
               >
-                editor
+                Editor
               </span>
             </th>
             <th
@@ -406,7 +406,7 @@ exports[`AgentPickerModal with contacts renders a table with the available conta
       class="PodBrowser-buttonsContainer"
     >
       <button
-        class="PodBrowser-button PodBrowser-button--secondary"
+        class="PodBrowser-button PodBrowser-button--secondary PodBrowser-cancelButton"
         data-testid="cancel-webids-button"
       >
         <span
@@ -700,7 +700,7 @@ exports[`AgentPickerModal without contacts renders a table with tabs, searchbox 
       class="PodBrowser-buttonsContainer"
     >
       <button
-        class="PodBrowser-button PodBrowser-button--secondary"
+        class="PodBrowser-button PodBrowser-button--secondary PodBrowser-cancelButton"
         data-testid="cancel-webids-button"
       >
         <span

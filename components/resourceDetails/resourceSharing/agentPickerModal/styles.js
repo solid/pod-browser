@@ -23,7 +23,7 @@ import { createStyles } from "@solid/lit-prism-patterns";
 
 const MODAL_MIN_WIDTH = 680;
 const MODAL_MIN_HEIGHT = 680;
-const TABLE_MAX_HEIGHT = 460;
+const TABLE_MAX_HEIGHT = 450;
 const MOBILE_TABLE_MIN_HEIGHT = 300;
 
 export default function styles(theme) {

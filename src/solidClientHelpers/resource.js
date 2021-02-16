@@ -36,7 +36,7 @@ import {
 import "core-js/proposals/promise-all-settled";
 import { parseUrl } from "../stringHelpers";
 import {
-  getNamedPolicyResourceUrl,
+  getPolicyResourceUrl,
   getPolicyUrl,
   getResourcePoliciesContainerPath,
 } from "./policies";
@@ -152,12 +152,12 @@ export async function deleteResource(
     policiesContainerUrl
   );
 
-  const editorsPolicyUrl = getNamedPolicyResourceUrl(
+  const editorsPolicyUrl = getPolicyResourceUrl(
     resourceInfo,
     policiesContainerUrl,
     "editors"
   );
-  const viewersPolicyUrl = getNamedPolicyResourceUrl(
+  const viewersPolicyUrl = getPolicyResourceUrl(
     resourceInfo,
     policiesContainerUrl,
     "viewers"

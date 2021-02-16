@@ -28,31 +28,31 @@ import AgentPickerModal, {
   handleSaveContact,
   handleSubmit,
 } from "./index";
-import * as AddressBookFns from "../../../../../src/addressBook";
-import * as personModelFunctions from "../../../../../src/models/contact/person";
-import { renderWithTheme } from "../../../../../__testUtils/withTheme";
-import mockAccessControl from "../../../../../__testUtils/mockAccessControl";
-import mockPersonContact from "../../../../../__testUtils/mockPersonContact";
-import mockGroupContact from "../../../../../__testUtils/mockGroupContact";
-import mockAddressBook from "../../../../../__testUtils/mockAddressBook";
-import AccessControlContext from "../../../../../src/contexts/accessControlContext";
-import * as ProfileFns from "../../../../../src/solidClientHelpers/profile";
-import ConfirmationDialogContext from "../../../../../src/contexts/confirmationDialogContext";
-import useNamedPolicyPermissions from "../../../../../src/hooks/useNamedPolicyPermissions";
-import usePermissionsWithProfiles from "../../../../../src/hooks/usePermissionsWithProfiles";
-import useAddressBook from "../../../../../src/hooks/useAddressBook";
-import useContacts from "../../../../../src/hooks/useContacts";
+import * as AddressBookFns from "../../../../src/addressBook";
+import * as personModelFunctions from "../../../../src/models/contact/person";
+import { renderWithTheme } from "../../../../__testUtils/withTheme";
+import mockAccessControl from "../../../../__testUtils/mockAccessControl";
+import mockPersonContact from "../../../../__testUtils/mockPersonContact";
+import mockGroupContact from "../../../../__testUtils/mockGroupContact";
+import mockAddressBook from "../../../../__testUtils/mockAddressBook";
+import AccessControlContext from "../../../../src/contexts/accessControlContext";
+import * as ProfileFns from "../../../../src/solidClientHelpers/profile";
+import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
+import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
+import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
+import useAddressBook from "../../../../src/hooks/useAddressBook";
+import useContacts from "../../../../src/hooks/useContacts";
 
-jest.mock("../../../../../src/hooks/useAddressBook");
+jest.mock("../../../../src/hooks/useAddressBook");
 const mockedUseAddressBook = useAddressBook;
 
-jest.mock("../../../../../src/hooks/useNamedPolicyPermissions");
-const mockedUseNamedPolicyPermissions = useNamedPolicyPermissions;
+jest.mock("../../../../src/hooks/usePolicyPermissions");
+const mockedUsePolicyPermissions = usePolicyPermissions;
 
-jest.mock("../../../../../src/hooks/usePermissionsWithProfiles");
+jest.mock("../../../../src/hooks/usePermissionsWithProfiles");
 const mockedUsePermissionsWithProfiles = usePermissionsWithProfiles;
 
-jest.mock("../../../../../src/hooks/useContacts");
+jest.mock("../../../../src/hooks/useContacts");
 const mockedUseContacts = useContacts;
 
 const permissions = [
@@ -122,10 +122,12 @@ describe("handleSubmit", () => {
   const mutatePermissions = jest.fn();
   const saveAgentToContacts = jest.fn();
   const onClose = jest.fn();
-  const type = "editors";
   const fetch = jest.fn();
+  const advancedSharing = undefined;
+  const setShowAdvancedSharing = jest.fn();
 
   it("returns a handler that exits when user doesn not make any changes", async () => {
+    const policyName = "editors";
     const handler = handleSubmit({
       newAgentsWebIds: [],
       webIdsToDelete: [],
@@ -135,7 +137,9 @@ describe("handleSubmit", () => {
       saveAgentToContacts,
       onClose,
       setLoading,
-      type,
+      policyName,
+      advancedSharing,
+      setShowAdvancedSharing,
       fetch,
     });
     handler();
@@ -149,6 +153,7 @@ describe("handleSubmit", () => {
   });
 
   it("returns a handler that submits the new webIds", async () => {
+    const policyName = "editors";
     const handler = handleSubmit({
       newAgentsWebIds: [webId],
       webIdsToDelete: [],
@@ -158,7 +163,9 @@ describe("handleSubmit", () => {
       saveAgentToContacts,
       onClose,
       setLoading,
-      type,
+      policyName,
+      advancedSharing,
+      setShowAdvancedSharing,
       fetch,
     });
     handler();
@@ -166,16 +173,49 @@ describe("handleSubmit", () => {
     await waitFor(() => {
       expect(accessControl.addAgentToNamedPolicy).toHaveBeenCalledWith(
         webId,
-        type
+        policyName
       );
     });
 
+    expect(setShowAdvancedSharing).not.toHaveBeenCalled();
+    expect(saveAgentToContacts).toHaveBeenCalledWith(webId, addressBook, fetch);
+    expect(mutatePermissions).toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it("when advancedSharing is true, it calls the correct custom policy add function", async () => {
+    const policyName = "viewAndAdd";
+    const handler = handleSubmit({
+      newAgentsWebIds: [webId],
+      webIdsToDelete: [],
+      accessControl,
+      addressBook,
+      mutatePermissions,
+      saveAgentToContacts,
+      onClose,
+      setLoading,
+      policyName,
+      advancedSharing: true,
+      setShowAdvancedSharing,
+      fetch,
+    });
+    handler();
+
+    await waitFor(() => {
+      expect(accessControl.addAgentToCustomPolicy).toHaveBeenCalledWith(
+        webId,
+        policyName
+      );
+    });
+
+    expect(setShowAdvancedSharing).toHaveBeenCalledWith("viewAndAdd");
     expect(saveAgentToContacts).toHaveBeenCalledWith(webId, addressBook, fetch);
     expect(mutatePermissions).toHaveBeenCalled();
     expect(onClose).toHaveBeenCalled();
   });
 
   it("returns a handler that submits the webIdsToDelete", async () => {
+    const policyName = "editors";
     const handler = handleSubmit({
       newAgentsWebIds: [],
       webIdsToDelete: [webId],
@@ -185,7 +225,9 @@ describe("handleSubmit", () => {
       saveAgentToContacts,
       onClose,
       setLoading,
-      type,
+      policyName,
+      advancedSharing,
+      setShowAdvancedSharing,
       fetch,
     });
     handler();
@@ -193,10 +235,40 @@ describe("handleSubmit", () => {
     await waitFor(() => {
       expect(accessControl.removeAgentFromNamedPolicy).toHaveBeenCalledWith(
         webId,
-        type
+        policyName
       );
     });
 
+    expect(setShowAdvancedSharing).not.toHaveBeenCalled();
+    expect(mutatePermissions).toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalled();
+  });
+  it("when advancedSharing is true, it calls the correct custom policy remove function", async () => {
+    const policyName = "viewAndAdd";
+    const handler = handleSubmit({
+      newAgentsWebIds: [],
+      webIdsToDelete: [webId],
+      accessControl,
+      addressBook,
+      mutatePermissions,
+      saveAgentToContacts,
+      onClose,
+      setLoading,
+      policyName,
+      advancedSharing: true,
+      setShowAdvancedSharing,
+      fetch,
+    });
+    handler();
+
+    await waitFor(() => {
+      expect(accessControl.removeAgentFromCustomPolicy).toHaveBeenCalledWith(
+        webId,
+        policyName
+      );
+    });
+
+    expect(setShowAdvancedSharing).toHaveBeenCalledWith("viewAndAdd");
     expect(mutatePermissions).toHaveBeenCalled();
     expect(onClose).toHaveBeenCalled();
   });
@@ -314,7 +386,7 @@ describe("AgentPickerModal without contacts", () => {
       .spyOn(ProfileFns, "fetchProfile")
       .mockResolvedValue({ name, avatar, webId });
 
-    mockedUseNamedPolicyPermissions.mockReturnValue({
+    mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
@@ -344,7 +416,7 @@ describe("AgentPickerModal without contacts", () => {
   it("updates the temporary row with webId only when profile is unavailable", async () => {
     mockedUseContacts.mockReturnValue({ data: [] });
 
-    mockedUseNamedPolicyPermissions.mockReturnValue({
+    mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
@@ -379,7 +451,7 @@ describe("AgentPickerModal without contacts", () => {
   it("renders a table with tabs, searchbox and an empty state message when there are no contacts", () => {
     mockedUseContacts.mockReturnValue({ data: [] });
 
-    mockedUseNamedPolicyPermissions.mockReturnValue({
+    mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
@@ -399,7 +471,7 @@ describe("AgentPickerModal without contacts", () => {
   it("opens a confirmation dialog", async () => {
     mockedUseContacts.mockReturnValue({ data: [] });
 
-    mockedUseNamedPolicyPermissions.mockReturnValue({
+    mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
@@ -453,7 +525,7 @@ describe("AgentPickerModal without contacts", () => {
   it("renders the correct confimation message for more than 1 agent", async () => {
     mockedUseContacts.mockReturnValue({ data: [] });
 
-    mockedUseNamedPolicyPermissions.mockReturnValue({
+    mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
@@ -515,7 +587,7 @@ describe("AgentPickerModal without contacts", () => {
   it("cannot uncheck checkbox for the agent being added", async () => {
     mockedUseContacts.mockReturnValue({ data: [] });
 
-    mockedUseNamedPolicyPermissions.mockReturnValue({
+    mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
@@ -562,7 +634,7 @@ describe("AgentPickerModal without contacts", () => {
     mockedUseContacts.mockReturnValue({ data: [] });
 
     const webId = "https://somewebid.com";
-    mockedUseNamedPolicyPermissions.mockReturnValue({
+    mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
@@ -616,7 +688,7 @@ describe("AgentPickerModal with contacts", () => {
         ),
       ],
     });
-    mockedUseNamedPolicyPermissions.mockReturnValue({
+    mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
@@ -653,7 +725,7 @@ describe("AgentPickerModal with contacts", () => {
         mockGroupContact(emptyAddressBook, "Group 1", { id: "1234" }),
       ],
     });
-    mockedUseNamedPolicyPermissions.mockReturnValue({
+    mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
@@ -698,7 +770,7 @@ describe("AgentPickerModal with contacts", () => {
         mockGroupContact(emptyAddressBook, "Group 1", { id: "1234" }),
       ],
     });
-    mockedUseNamedPolicyPermissions.mockReturnValue({
+    mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
@@ -737,7 +809,7 @@ describe("AgentPickerModal with contacts", () => {
         ),
       ],
     });
-    mockedUseNamedPolicyPermissions.mockReturnValue({
+    mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
@@ -763,7 +835,7 @@ describe("AgentPickerModal with contacts", () => {
     mockedUseContacts.mockReturnValue({
       data: [mockGroupContact(emptyAddressBook, "Group 1", { id: "1234" })],
     });
-    mockedUseNamedPolicyPermissions.mockReturnValue({
+    mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });

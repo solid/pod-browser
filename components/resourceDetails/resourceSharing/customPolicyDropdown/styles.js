@@ -20,10 +20,29 @@
  */
 
 import { createStyles } from "@solid/lit-prism-patterns";
-import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
+
+const SETTINGS_ICON_COLOR = "#404040";
+const SETTINGS_BACKGROUND_COLOR = "#F5F5F5";
 
 export default function styles(theme) {
   return createStyles(theme, ["icons"], {
+    dropdown: {
+      display: "flex",
+      border: `1px solid ${theme.palette.grey.A100}`,
+      borderRadius: theme.shape.borderRadius,
+      marginBottom: theme.spacing(1.2),
+      padding: theme.spacing(1.2),
+      fontWeight: theme.typography.body.fontWeight,
+      fontFamily: theme.typography.body.fontFamily,
+      backgroundColor: theme.palette.background.paper,
+    },
+    menuItem: {
+      fontWeight: theme.typography.body.fontWeight,
+      fontFamily: theme.typography.body.fontFamily,
+    },
+    manuItemText: {
+      padding: 0,
+    },
     title: {
       fontSize: theme.typography.h4.fontSize,
       fontWeight: theme.typography.fontWeightBold,
@@ -33,16 +52,17 @@ export default function styles(theme) {
       flexDirection: "row",
       alignItems: "center",
       marginBottom: theme.spacing(1.6),
-      "&& p": {
-        padding: 0,
-        margin: 0,
-      },
     },
     textContainer: {
       width: "100%",
       flexDirection: "column",
     },
     description: {
+      "&& p": {
+        padding: 0,
+        margin: 0,
+        whiteSpace: "break-spaces",
+      },
       fontSize: "0.8125rem",
     },
     titleAndButtonContainer: {
@@ -50,27 +70,25 @@ export default function styles(theme) {
       flexDirection: "row",
       justifyContent: "space-between",
     },
-    icon: {
+    "icon-custom-policies": {
+      width: "1.5rem",
+      height: "1.5rem",
+      fontStretch: "unset",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      color: SETTINGS_ICON_COLOR,
+      backgroundColor: SETTINGS_BACKGROUND_COLOR,
       padding: theme.spacing(1),
       borderRadius: "50%",
       marginRight: theme.spacing(1.6),
       fontSize: theme.typography.h1.fontSize,
     },
-    iconViewer: {
-      color: POLICIES_TYPE_MAP.viewers.iconColor,
-      backgroundColor: POLICIES_TYPE_MAP.viewers.iconBackgroundColor,
-    },
-    iconBlocked: {
-      color: POLICIES_TYPE_MAP.blocked.iconColor,
-      backgroundColor: POLICIES_TYPE_MAP.blocked.iconBackgroundColor,
-    },
-    iconEditor: {
-      color: POLICIES_TYPE_MAP.editors.iconColor,
-      backgroundColor: POLICIES_TYPE_MAP.editors.iconBackgroundColor,
-    },
-    iconSettings: {
-      color: POLICIES_TYPE_MAP.custom.iconColor,
-      backgroundColor: POLICIES_TYPE_MAP.custom.iconBackgroundColor,
+    iconCaret: {
+      fontSize: "34px",
+      top: "25%",
+      color: theme.palette.text.primary,
+      marginRight: "1rem",
     },
   });
 }

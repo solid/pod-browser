@@ -19,20 +19,56 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { useContext } from "react";
-import useSWR from "swr";
-import AccessControlContext from "../../contexts/accessControlContext";
+/* eslint-disable react/forbid-prop-types */
 
-export default function useNamedPolicyPermissions(policyName) {
-  const { accessControl } = useContext(AccessControlContext);
+import React from "react";
 
-  async function getPermissions() {
-    const permissions = await accessControl.getPermissionsForNamedPolicies(
-      policyName
-    );
-    return permissions;
-  }
+export const ViewersDescription = () => (
+  <p>
+    <b>Can </b>
+    view but
+    <b> cannot </b>
+    edit or delete this resource
+  </p>
+);
 
-  return useSWR([accessControl, policyName], () => getPermissions());
-}
+export const EditorsDescription = () => (
+  <p>
+    <b>Can </b>
+    view, edit and delete this resource
+  </p>
+);
+
+export const BlockedDescription = () => (
+  <p>
+    <b>Cannot </b>
+    view this resource
+  </p>
+);
+
+export const ViewAndAddDescription = () => (
+  <p>
+    <b>Can </b>
+    view and add new content but
+    <b> cannot </b>
+    edit or delete existing content
+  </p>
+);
+
+export const EditOnlyDescription = () => (
+  <p>
+    <b>Can </b>
+    edit existing content but
+    <b> cannot </b>
+    view or delete existing content
+  </p>
+);
+
+export const AddOnlyDescription = () => (
+  <p>
+    <b>Can </b>
+    add new content but
+    <b> cannot </b>
+    view, edit or delete existing content
+  </p>
+);

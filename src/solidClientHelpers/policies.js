@@ -47,7 +47,7 @@ export function getResourcePoliciesContainerPath(
   return getContainerUrl(getPolicyUrl(resource, policiesContainerUrl));
 }
 
-export function getNamedPolicyResourceUrl(
+export function getPolicyResourceUrl(
   resource,
   policiesContainerUrl,
   policyName

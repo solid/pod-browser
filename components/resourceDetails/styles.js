@@ -24,6 +24,7 @@ import { content } from "@solid/lit-prism-patterns";
 const rules = {
   accordionDetails: {
     display: "block",
+    paddingBottom: "5rem",
   },
   centeredSection: {
     paddingLeft: "1rem",

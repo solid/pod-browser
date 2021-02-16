@@ -19,18 +19,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function mockAccessControl(
-  { permissions } = { permissions: [] }
-) {
-  return {
-    deleteFile: jest.fn().mockResolvedValue({ response: {} }),
-    getPermissions: jest.fn().mockResolvedValue(permissions),
-    savePermissionsForAgent: jest.fn().mockResolvedValue({ response: {} }),
-    addAgentToNamedPolicy: jest.fn().mockResolvedValue({ response: {} }),
-    addAgentToCustomPolicy: jest.fn().mockResolvedValue({ response: {} }),
-    getPermissionsForNamedPolicies: jest.fn().mockResolvedValue(permissions),
-    getPermissionsForCustomPolicies: jest.fn().mockResolvedValue(permissions),
-    removeAgentFromNamedPolicy: jest.fn().mockResolvedValue({ response: {} }),
-    removeAgentFromCustomPolicy: jest.fn().mockResolvedValue({ response: {} }),
-  };
+import { createStyles } from "@solid/lit-prism-patterns";
+
+export default function styles(theme) {
+  return createStyles(theme, ["icons", "button"], {
+    sharingButton: {
+      display: "flex",
+      alignItems: "center",
+      float: "right",
+      color: theme.palette.text.primary,
+      fontWeight: 800,
+      textTransform: "capitalize",
+      fontSize: "0.8125rem",
+      textDecoration: "none",
+    },
+    icon: {
+      color: theme.palette.text.primary,
+      margin: theme.spacing(0.5),
+    },
+  });
 }

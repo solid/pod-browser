@@ -21,18 +21,23 @@
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React from "react";
+import React, { useState } from "react";
 import AgentAccessTable from "../agentAccessTable";
+import AdvancedSharingButton from "../advancedSharingButton";
+import { namedPolicies } from "../../../../constants/policies";
 
 export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
   "agent-access-list-show-all";
 
 function SharingAccordion() {
+  const [showAdvancedSharing, setShowAdvancedSharing] = useState(null);
   return (
     <>
-      <AgentAccessTable type="editors" />
-      <AgentAccessTable type="viewers" />
-      <AgentAccessTable type="blocked" />
+      {namedPolicies.map(({ name }) => (
+        <AgentAccessTable type={name} />
+      ))}
+      {showAdvancedSharing && <AgentAccessTable type={showAdvancedSharing} />}
+      <AdvancedSharingButton setShowAdvancedSharing={setShowAdvancedSharing} />
     </>
   );
 }

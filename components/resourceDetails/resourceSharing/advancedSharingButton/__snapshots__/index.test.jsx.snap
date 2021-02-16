@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AdvancedSharingButton renders a button with the correct text 1`] = `
+<DocumentFragment>
+  <button
+    class="PodBrowser-button PodBrowser-button--text PodBrowser-sharingButton"
+    data-testid="advanced-sharing-button"
+  >
+    <span
+      class="PodBrowser-button__text"
+    >
+      <i
+        class="PodBrowser-icon-settings PodBrowser-icon"
+      />
+      Advanced Sharing
+    </span>
+  </button>
+</DocumentFragment>
+`;

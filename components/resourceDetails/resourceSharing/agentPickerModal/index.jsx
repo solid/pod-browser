@@ -36,31 +36,33 @@ import {
 } from "@inrupt/solid-ui-react";
 import { createThing, getSourceUrl } from "@inrupt/solid-client";
 import { vcard } from "rdf-namespaces";
-import { serializePromises } from "../../../../../src/solidClientHelpers/utils";
-import AccessControlContext from "../../../../../src/contexts/accessControlContext";
-import { fetchProfile } from "../../../../../src/solidClientHelpers/profile";
-import { vcardExtras } from "../../../../../src/addressBook";
-import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
-import PolicyHeader from "../../policyHeader";
-import AgentsTableTabs from "../../agentsTableTabs";
-import AgentsSearchBar from "../../agentsSearchBar";
-import MobileAgentsSearchBar from "../../mobileAgentsSearchBar";
+import { serializePromises } from "../../../../src/solidClientHelpers/utils";
+import AccessControlContext from "../../../../src/contexts/accessControlContext";
+import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
+import { vcardExtras } from "../../../../src/addressBook";
+import { getResourceName } from "../../../../src/solidClientHelpers/resource";
+import PolicyHeader from "../policyHeader";
+import AgentsTableTabs from "../agentsTableTabs";
+import AgentsSearchBar from "../agentsSearchBar";
+import MobileAgentsSearchBar from "../mobileAgentsSearchBar";
 import AddAgentRow from "../addAgentRow";
 import AgentPickerEmptyState from "../agentPickerEmptyState";
+import CustomPolicyDropdown from "../customPolicyDropdown";
 import styles from "./styles";
 import AddWebIdButton from "./addWebIdButton";
 import WebIdCheckbox from "./webIdCheckbox";
-import ConfirmationDialogContext from "../../../../../src/contexts/confirmationDialogContext";
-import useNamedPolicyPermissions from "../../../../../src/hooks/useNamedPolicyPermissions";
-import usePermissionsWithProfiles from "../../../../../src/hooks/usePermissionsWithProfiles";
-import useContacts from "../../../../../src/hooks/useContacts";
-import { GROUP_CONTACT } from "../../../../../src/models/contact/group";
+import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
+import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
+import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
+import useContacts from "../../../../src/hooks/useContacts";
+import { GROUP_CONTACT } from "../../../../src/models/contact/group";
 import {
   PERSON_CONTACT,
   findPersonContactInAddressBook,
   savePerson,
-} from "../../../../../src/models/contact/person";
-import useAddressBook from "../../../../../src/hooks/useAddressBook";
+} from "../../../../src/models/contact/person";
+import useAddressBook from "../../../../src/hooks/useAddressBook";
+import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
 
 export const handleSubmit = ({
   newAgentsWebIds,
@@ -71,7 +73,9 @@ export const handleSubmit = ({
   saveAgentToContacts,
   onClose,
   setLoading,
-  type,
+  policyName,
+  advancedSharing,
+  setShowAdvancedSharing,
   fetch,
 }) => {
   return () => {
@@ -81,12 +85,16 @@ export const handleSubmit = ({
     setLoading(true);
     const addPermissionsPromiseFactories = newAgentsWebIds?.map(
       (agentWebId) => () =>
-        accessControl.addAgentToNamedPolicy(agentWebId, type)
+        advancedSharing
+          ? accessControl.addAgentToCustomPolicy(agentWebId, policyName)
+          : accessControl.addAgentToNamedPolicy(agentWebId, policyName)
     );
 
     const removePermissionsPromiseFactories = webIdsToDelete?.map(
       (agentWebId) => () =>
-        accessControl.removeAgentFromNamedPolicy(agentWebId, type)
+        advancedSharing
+          ? accessControl.removeAgentFromCustomPolicy(agentWebId, policyName)
+          : accessControl.removeAgentFromNamedPolicy(agentWebId, policyName)
     );
 
     const addAgentsToContactsPromiseFactories = newAgentsWebIds?.map(
@@ -100,7 +108,9 @@ export const handleSubmit = ({
       mutatePermissions();
       setLoading(false);
     });
-
+    if (advancedSharing) {
+      setShowAdvancedSharing(policyName);
+    }
     onClose();
   };
 };
@@ -170,16 +180,25 @@ const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
 const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
 const TESTCAFE_CANCEL_WEBIDS_BUTTON = "cancel-webids-button";
 
-export default function AgentPickerModal({ type, text, onClose, setLoading }) {
-  const { editText, saveText } = text;
-  const {
-    data: namedPermissions,
-    mutate: mutatePermissions,
-  } = useNamedPolicyPermissions(type);
-  const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
-    namedPermissions
+export default function AgentPickerModal({
+  type,
+  onClose,
+  setLoading,
+  advancedSharing,
+  setShowAdvancedSharing,
+}) {
+  const [customPolicy, setCustomPolicy] = useState(
+    advancedSharing ? type : null
   );
-
+  const policyName = advancedSharing ? customPolicy : type;
+  const { header, saveText, titleSingular } = POLICIES_TYPE_MAP[policyName];
+  const {
+    data: policyPermissions,
+    mutate: mutatePermissions,
+  } = usePolicyPermissions(policyName);
+  const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
+    policyPermissions
+  );
   const { data: addressBook } = useAddressBook();
   const { data: contacts, error } = useContacts([
     GROUP_CONTACT,
@@ -233,7 +252,9 @@ export default function AgentPickerModal({ type, text, onClose, setLoading }) {
     saveAgentToContacts: handleSaveContact,
     onClose,
     setLoading,
-    type,
+    policyName,
+    advancedSharing,
+    setShowAdvancedSharing,
     fetch,
   });
 
@@ -252,7 +273,7 @@ export default function AgentPickerModal({ type, text, onClose, setLoading }) {
       newAgentsWebIds.length + webIdsToDelete.length === 1
         ? "1 person "
         : `${newAgentsWebIds.length + webIdsToDelete.length} people `
-    } permissions to ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+    } permissions to ${header}`;
     setTitle(confirmationTitle);
     setContent(confirmationContent);
     setOpen(dialogId);
@@ -344,8 +365,15 @@ export default function AgentPickerModal({ type, text, onClose, setLoading }) {
       className={classes.paper}
       data-testid={TESTCAFE_ID_ADD_AGENT_PICKER_MODAL}
     >
-      <div className={classes.title}>{`${editText} for ${resourceName}`}</div>
-      <PolicyHeader type={type} />
+      <div className={classes.title}>{`${header} for ${resourceName}`}</div>
+      {advancedSharing ? (
+        <CustomPolicyDropdown
+          setCustomPolicy={setCustomPolicy}
+          defaultValue={type}
+        />
+      ) : (
+        <PolicyHeader type={type} />
+      )}
       <div className={classes.tableContainer}>
         <div className={classes.tabsAndAddButtonContainer}>
           <AgentsTableTabs
@@ -389,9 +417,7 @@ export default function AgentPickerModal({ type, text, onClose, setLoading }) {
               dataType="url"
               header={
                 // eslint-disable-next-line react/jsx-wrap-multilines
-                <span className={classes.tableHeader}>
-                  {type.slice(0, type.length - 1)}
-                </span>
+                <span className={classes.tableHeader}>{titleSingular}</span>
               }
               body={({ value, row: { index } }) => (
                 <WebIdCheckbox
@@ -411,7 +437,7 @@ export default function AgentPickerModal({ type, text, onClose, setLoading }) {
               filterable
               body={({ row: { index } }) => (
                 <AddAgentRow
-                  type={type}
+                  type={policyName}
                   index={index}
                   setNewAgentsWebIds={setNewAgentsWebIds}
                   newAgentsWebIds={newAgentsWebIds}
@@ -442,8 +468,9 @@ export default function AgentPickerModal({ type, text, onClose, setLoading }) {
       <div className={classes.buttonsContainer}>
         <Button
           variant="secondary"
-          onClick={onClose}
           data-testid={TESTCAFE_CANCEL_WEBIDS_BUTTON}
+          className={classes.cancelButton}
+          onClick={onClose}
         >
           Cancel
         </Button>
@@ -461,11 +488,14 @@ export default function AgentPickerModal({ type, text, onClose, setLoading }) {
 AgentPickerModal.propTypes = {
   onClose: PropTypes.func,
   setLoading: PropTypes.func,
-  text: PropTypes.shape().isRequired,
   type: PropTypes.string.isRequired,
+  advancedSharing: PropTypes.bool,
+  setShowAdvancedSharing: PropTypes.func,
 };
 
 AgentPickerModal.defaultProps = {
   onClose: () => {},
   setLoading: () => {},
+  advancedSharing: false,
+  setShowAdvancedSharing: () => {},
 };

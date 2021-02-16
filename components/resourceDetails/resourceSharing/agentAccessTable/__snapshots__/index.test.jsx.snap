@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`AgentAccessTable does not render table at all if there aren't any permissions for a custom policy 1`] = `<DocumentFragment />`;
+
 exports[`AgentAccessTable renders a list of permissions 1`] = `
 <DocumentFragment>
   <div
@@ -233,7 +235,89 @@ exports[`AgentAccessTable renders a list of permissions 1`] = `
 </DocumentFragment>
 `;
 
-exports[`AgentAccessTable renders an empty list of permissions 1`] = `
+exports[`AgentAccessTable renders an empty list of permissions if permissions are unavailable 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+    data-testid="agent-access-table"
+  >
+    <div
+      class="PodBrowser-headerContainer"
+    >
+      <i
+        class="PodBrowser-icon-editor PodBrowser-icon PodBrowser-iconEditor"
+      />
+      <div
+        class="PodBrowser-textContainer"
+      >
+        <div
+          class="PodBrowser-titleAndButtonContainer"
+        >
+          <p
+            class="PodBrowser-title"
+          >
+            Editors
+          </p>
+          <button
+            class="PodBrowser-button PodBrowser-button--text"
+            data-testid="add-agent-button"
+            iconbefore="add"
+          >
+            <span
+              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+            />
+            <span
+              class="PodBrowser-button__text"
+            >
+              Edit Editors
+            </span>
+          </button>
+        </div>
+        <span
+          class="PodBrowser-description"
+        >
+          <p>
+            <b>
+              Can 
+            </b>
+            view, edit and delete this resource
+          </p>
+        </span>
+      </div>
+    </div>
+    <div
+      class="PodBrowser-container PodBrowser-entered"
+      style="min-height: 0px;"
+    >
+      <div
+        class="PodBrowser-wrapper"
+      >
+        <div
+          class="PodBrowser-wrapperInner"
+        >
+          <div
+            role="region"
+          >
+            <div
+              class="PodBrowser-permissionsContainer"
+            >
+              <span
+                class="PodBrowser-emptyStateTextContainer"
+              >
+                <p>
+                  No editors
+                </p>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AgentAccessTable renders an empty list of permissions if there are no permissions 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"

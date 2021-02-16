@@ -35,12 +35,16 @@ import {
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import useNamedPolicyPermissions from "../../../../src/hooks/useNamedPolicyPermissions";
+import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
 import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
 import AgentAccess from "../agentAccess";
 import AddAgentButton from "../addAgentButton";
 import AgentsTableTabs from "../agentsTableTabs";
 import AgentsSearchBar from "../agentsSearchBar";
+import {
+  isCustomPolicy,
+  POLICIES_TYPE_MAP,
+} from "../../../../constants/policies";
 
 import styles from "./styles";
 import PolicyHeader from "../policyHeader";
@@ -53,61 +57,14 @@ export const TESTCAFE_ID_AGENT_ACCESS_TABLE = "agent-access-table";
 export default function AgentAccessTable({ type }) {
   const [loading, setLoading] = useState(false);
   const {
-    data: namedPermissions,
+    data: policyPermissions,
     mutate: mutatePermissions,
-  } = useNamedPolicyPermissions(type);
+  } = usePolicyPermissions(type);
 
   // TODO: this will change when Groups are available, we will likely fetch profiles only for Individual permissions
   const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
-    namedPermissions
+    policyPermissions
   );
-
-  const editorsDescription = (
-    <p>
-      <b>Can </b>
-      view, edit and delete this resource
-    </p>
-  );
-
-  const viewersDescription = (
-    <p>
-      <b>Can </b>
-      view but
-      <b> cannot </b>
-      edit or delete this resource
-    </p>
-  );
-
-  const blockedDescription = (
-    <p>
-      <b>Cannot </b>
-      view this resource
-    </p>
-  );
-
-  const PERMISSIONS_TYPE_MAP = {
-    editors: {
-      icon: "icon-editor",
-      iconClassName: "iconEditor",
-      title: "Editors",
-      emptyStateText: "No editors",
-      description: editorsDescription,
-    },
-    viewers: {
-      icon: "icon-view",
-      iconClassName: "iconViewer",
-      title: "Viewers",
-      emptyStateText: "No viewers",
-      description: viewersDescription,
-    },
-    blocked: {
-      icon: "icon-block",
-      iconClassName: "iconBlocked",
-      title: "Blocked",
-      emptyStateText: "No one is blocked",
-      description: blockedDescription,
-    },
-  };
 
   const bem = useBem(useStyles());
 
@@ -115,8 +72,6 @@ export default function AgentAccessTable({ type }) {
 
   const [showAll, setShowAll] = useState(false);
   const [selectedTabValue, setSelectedTabValue] = useState("");
-
-  const { emptyStateText } = PERMISSIONS_TYPE_MAP[type];
 
   const columns = useMemo(
     () => [
@@ -178,6 +133,10 @@ export default function AgentAccessTable({ type }) {
     setFilter("profile.types", newValue);
   };
 
+  if (!permissions.length && isCustomPolicy(type)) return null;
+
+  const { emptyStateText } = POLICIES_TYPE_MAP[type];
+
   return (
     <Accordion
       defaultExpanded
@@ -234,15 +193,14 @@ export default function AgentAccessTable({ type }) {
                   );
                 })
               ) : (
-                <span className={classes.emptyStateTextContainer}>
-                  <p>
-                    {selectedTabValue === ""
-                      ? emptyStateText
-                      : `No ${
-                          selectedTabValue === "Person" ? "people " : "groups "
-                        } found`}
-                  </p>
-                </span>
+                <tr className={classes.emptyStateTextContainer}>
+                  <td>
+                    {selectedTabValue &&
+                      `No ${
+                        selectedTabValue === "Person" ? "people " : "groups "
+                      } found`}
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
