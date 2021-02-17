@@ -189,6 +189,7 @@ export default function AgentPickerModal({ type, text, onClose }) {
   const [newAgentsWebIds, setNewAgentsWebIds] = useState([]);
   const [webIdsToDelete, setWebIdsToDelete] = useState([]);
   const [contactsArray, setContactsArray] = useState([]);
+  const [filteredContacts, setFilteredContacts] = useState([]);
   const [addingWebId, setAddingWebId] = useState(false);
   const [noAgentsAlert, setNoAgentsAlert] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -277,13 +278,16 @@ export default function AgentPickerModal({ type, text, onClose }) {
       };
     });
     setContactsArray(contactsArrayForTable);
+  }, [contacts, addressBook]);
+
+  useEffect(() => {
     if (selectedTabValue) {
-      const filteredContacts = contactsArrayForTable.filter(({ thing }) =>
+      const filtered = contactsArray.filter(({ thing }) =>
         selectedTabValue.isOfType(thing)
       );
-      setContactsArray(filteredContacts);
+      setFilteredContacts(filtered);
     }
-  }, [contacts, addressBook, selectedTabValue]);
+  }, [contactsArray, selectedTabValue]);
 
   useEffect(() => {
     onConfirmation(confirmationSetup, confirmed);
@@ -300,6 +304,8 @@ export default function AgentPickerModal({ type, text, onClose }) {
     };
     setContactsArray([newItem, ...contactsArray]);
   };
+
+  const contactsForTable = selectedTabValue ? filteredContacts : contactsArray;
 
   const toggleCheckbox = (e, index, value) => {
     if (index === 0 && addingWebId) return null;
@@ -345,9 +351,9 @@ export default function AgentPickerModal({ type, text, onClose }) {
             <CircularProgress />
           </Container>
         )}
-        {!!contacts && !!contactsArray.length && (
+        {!!contacts && !!contactsForTable.length && (
           <Table
-            things={contactsArray}
+            things={contactsForTable}
             className={clsx(bem("table"), bem("agentPickerTable"))}
             filter={globalFilter}
           >
@@ -393,10 +399,10 @@ export default function AgentPickerModal({ type, text, onClose }) {
             />
           </Table>
         )}
-        {!!contacts && !contactsArray.length && !selectedTabValue && (
+        {!!contacts && !contactsForTable.length && !selectedTabValue && (
           <AgentPickerEmptyState onClick={handleAddRow} />
         )}
-        {!!contacts && !contactsArray.length && selectedTabValue && (
+        {!!contacts && !contactsForTable.length && selectedTabValue && (
           <span className={classes.emptyStateTextContainer}>
             <p>
               {`No ${
