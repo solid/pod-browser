@@ -98,7 +98,7 @@ export default function styles(theme) {
     },
     buttonsContainer: {
       display: "flex",
-      position: "fixed",
+      position: "absolute",
       bottom: 0,
       width: MODAL_MIN_WIDTH - theme.spacing(2.4) * 2 - theme.spacing(4), // substracting the padding of the buttons and the left and right padding of the modal
       padding: theme.spacing(2.4),
