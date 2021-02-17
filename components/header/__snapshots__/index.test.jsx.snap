@@ -1,5 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Header while user logged out renders only logo 1`] = `
+<DocumentFragment>
+  <header
+    class="PodBrowser-header-banner"
+  >
+    <div
+      class="PodBrowser-logoContainer"
+    >
+      <a
+        data-testid="header-banner-logo"
+        href="/"
+      >
+        <img
+          alt="Inrupt PodBrowser"
+          class="PodBrowser-header-banner__logo-image"
+          height="40"
+          src="/inrupt_logo-2020.svg"
+        />
+      </a>
+    </div>
+  </header>
+</DocumentFragment>
+`;
+
 exports[`Header with user logged in renders a header 1`] = `
 <DocumentFragment>
   <header
@@ -22,6 +46,7 @@ exports[`Header with user logged in renders a header 1`] = `
     </div>
     <div
       class="PodBrowser-hamburgerMenu"
+      data-testid="menu-drawer"
     >
       <button
         class="PodBrowser-root PodBrowser-root PodBrowser-text"
@@ -110,45 +135,84 @@ exports[`Header with user logged in renders a header 1`] = `
       </nav>
     </div>
     <div
-      class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
+      class="PodBrowser-userMenu"
+      data-testid="user-menu"
     >
-      <svg
-        class="PodBrowser-loading-indicator"
-        data-testid="spinner"
-        viewBox="22 22 44 44"
+      <div
+        class="PodBrowser-user-menu"
       >
-        <circle
-          cx="44"
-          cy="44"
-          fill="none"
-          r="20.2"
-          stroke-width="3.6"
-        />
-      </svg>
-    </div>
-  </header>
-</DocumentFragment>
-`;
-
-exports[`Header with user logged out renders nothing 1`] = `
-<DocumentFragment>
-  <header
-    class="PodBrowser-header-banner"
-  >
-    <div
-      class="PodBrowser-logoContainer"
-    >
-      <a
-        data-testid="header-banner-logo"
-        href="/"
-      >
-        <img
-          alt="Inrupt PodBrowser"
-          class="PodBrowser-header-banner__logo-image"
-          height="40"
-          src="/inrupt_logo-2020.svg"
-        />
-      </a>
+        <button
+          aria-controls="UserMenu"
+          aria-expanded="false"
+          aria-haspopup="true"
+          class="PodBrowser-user-menu__trigger PodBrowser-userMenu__trigger"
+          data-testid="user-menu-button"
+          type="button"
+        >
+          <span
+            class="PodBrowser-user-menu__trigger-profile-image"
+            style="background-image: url(http://alice.example.com/alice.jpg);"
+          >
+             
+          </span>
+          <span
+            class="PodBrowser-user-menu__trigger-label"
+          >
+            Alice
+          </span>
+          <span
+            class="PodBrowser-icon-caret-down PodBrowser-user-menu__trigger-chevron PodBrowser-user-menu__trigger-chevron--show"
+          />
+          <span
+            class="PodBrowser-icon-caret-up PodBrowser-user-menu__trigger-chevron"
+          />
+        </button>
+        <div
+          aria-hidden="true"
+          class="PodBrowser-user-menu__popup"
+          id="UserMenu"
+        >
+          <ul
+            class="PodBrowser-user-menu__list"
+          >
+            <li
+              class="PodBrowser-user-menu__list-item"
+            >
+              <a
+                class="PodBrowser-user-menu__list-item-trigger"
+                data-testid="user-menu-profile"
+              >
+                <span
+                  class="PodBrowser-icon-user PodBrowser-user-menu__list-item-icon"
+                />
+                <span
+                  class="PodBrowser-user-menu__list-item-label"
+                >
+                  Profile
+                </span>
+              </a>
+            </li>
+            <li
+              class="PodBrowser-user-menu__list-item"
+            >
+              <button
+                class="PodBrowser-user-menu__list-item-trigger"
+                data-testid="user-menu-logout"
+                type="button"
+              >
+                <span
+                  class="PodBrowser-icon-log-out PodBrowser-user-menu__list-item-icon"
+                />
+                <span
+                  class="PodBrowser-user-menu__list-item-label"
+                >
+                  Log out
+                </span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </header>
 </DocumentFragment>

@@ -37,6 +37,7 @@ import getMainMenuItems from "../../../constants/mainMenu";
 import useUserMenu from "../../../src/hooks/useUserMenu";
 import MenuDrawerItem from "./menuDrawerItem";
 
+export const TESTCAFE_ID_MENU_DRAWER = "menu-drawer";
 export const TESTCAFE_ID_MENU_DRAWER_BUTTON = "menu-drawer-button";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -56,7 +57,10 @@ export default function MenuDrawer() {
   const handleDrawerClose = () => setOpen(false);
 
   return (
-    <div className={classes.hamburgerMenu}>
+    <div
+      className={classes.hamburgerMenu}
+      data-testid={TESTCAFE_ID_MENU_DRAWER}
+    >
       <Button
         onClick={handleDrawerOpen}
         data-testid={TESTCAFE_ID_MENU_DRAWER_BUTTON}

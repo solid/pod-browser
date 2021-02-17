@@ -23,47 +23,67 @@ import React from "react";
 import { useRouter } from "next/router";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
-import Header from "./index";
+import Header, { TESTCAFE_ID_HEADER_LOGO } from "./index";
 import mockSession, {
+  mockAuthenticatedSession,
   mockUnauthenticatedSession,
 } from "../../__testUtils/mockSession";
+import { TESTCAFE_ID_USER_MENU } from "./userMenu";
+import { TESTCAFE_ID_MAIN_NAV } from "./mainNav";
+import { TESTCAFE_ID_MENU_DRAWER } from "./menuDrawer";
+import useAuthenticatedProfile from "../../src/hooks/useAuthenticatedProfile";
+import { mockProfileAlice } from "../../__testUtils/mockPersonResource";
 
 jest.mock("next/router");
+const mockedRouterHook = useRouter;
+
+jest.mock("../../src/hooks/useAuthenticatedProfile");
+const mockedAuthenticatedHook = useAuthenticatedProfile;
 
 describe("Header", () => {
   describe("with user logged in", () => {
     beforeEach(() => {
-      useRouter.mockImplementation(() => ({
+      mockedRouterHook.mockReturnValue({
         query: {
           iri: "https://mypod.myhost.com",
         },
-      }));
+      });
     });
-    test("renders a header", () => {
-      const session = mockSession();
-      const SessionProvider = mockSessionContextProvider(session);
 
-      const { asFragment } = renderWithTheme(
+    it("renders a header", () => {
+      const session = mockAuthenticatedSession();
+      const SessionProvider = mockSessionContextProvider(session);
+      mockedAuthenticatedHook.mockReturnValue({ data: mockProfileAlice() });
+
+      const { asFragment, queryByTestId } = renderWithTheme(
         <SessionProvider>
           <Header />
         </SessionProvider>
       );
       expect(asFragment()).toMatchSnapshot();
+      expect(queryByTestId(TESTCAFE_ID_HEADER_LOGO)).toBeDefined();
+      expect(queryByTestId(TESTCAFE_ID_MENU_DRAWER)).toBeDefined();
+      expect(queryByTestId(TESTCAFE_ID_MAIN_NAV)).toBeDefined();
+      expect(queryByTestId(TESTCAFE_ID_USER_MENU)).toBeDefined();
     });
   });
 
-  describe("with user logged out", () => {
-    test("renders nothing", () => {
+  describe("while user logged out", () => {
+    test("renders only logo", () => {
       const session = mockUnauthenticatedSession();
       const SessionProvider = mockSessionContextProvider(session);
 
-      const { asFragment } = renderWithTheme(
+      const { asFragment, queryByTestId } = renderWithTheme(
         <SessionProvider>
           <Header />
         </SessionProvider>
       );
 
       expect(asFragment()).toMatchSnapshot();
+      expect(queryByTestId(TESTCAFE_ID_HEADER_LOGO)).toBeDefined();
+      expect(queryByTestId(TESTCAFE_ID_MENU_DRAWER)).toBeNull();
+      expect(queryByTestId(TESTCAFE_ID_MAIN_NAV)).toBeNull();
+      expect(queryByTestId(TESTCAFE_ID_USER_MENU)).toBeNull();
     });
   });
 });

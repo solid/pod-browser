@@ -34,7 +34,7 @@ import UserMenuAction from "./userMenuAction";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 const TESTCAFE_ID_USER_MENU_BUTTON = "user-menu-button";
-const TESTCAFE_ID_USER_MENU = "user-menu";
+export const TESTCAFE_ID_USER_MENU = "user-menu";
 
 export default function UserMenu() {
   const bem = useBem(useStyles());
@@ -44,7 +44,7 @@ export default function UserMenu() {
   if (!authenticatedProfile) return <Spinner />;
 
   return (
-    <div className={bem("userMenu")}>
+    <div className={bem("userMenu")} data-testid={TESTCAFE_ID_USER_MENU}>
       <PrismUserMenu
         className={bem("userMenu__trigger")}
         label={authenticatedProfile.name || "Account"}

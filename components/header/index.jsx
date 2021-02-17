@@ -31,7 +31,7 @@ import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-const TESTCAFE_ID_HEADER_LOGO = "header-banner-logo";
+export const TESTCAFE_ID_HEADER_LOGO = "header-banner-logo";
 
 export default function Header() {
   const { session } = useSession();

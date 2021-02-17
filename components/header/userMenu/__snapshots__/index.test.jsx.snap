@@ -4,6 +4,7 @@ exports[`UserMenu renders a menu 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-userMenu"
+    data-testid="user-menu"
   >
     <div
       class="PodBrowser-user-menu"
@@ -88,6 +89,7 @@ exports[`UserMenu renders fallback for name and user photo if not available 1`] 
 <DocumentFragment>
   <div
     class="PodBrowser-userMenu"
+    data-testid="user-menu"
   >
     <div
       class="PodBrowser-user-menu"
