@@ -77,6 +77,12 @@ const addressBookWithPeopleIndex = addIndexToMockedAddressBook(
 );
 const person1 = mockPersonContact(emptyAddressBook, person1Url, person1Name);
 
+describe("isOfType", () => {
+  it("returns true if contact is a group", () => {
+    expect(PERSON_CONTACT.isOfType(person1.thing)).toBe(true);
+  });
+});
+
 describe("createPersonDatasetUrl", () => {
   it("creates a unique person URL", () => {
     mockedUuid.mockReturnValueOnce("1234").mockReturnValueOnce("5678");

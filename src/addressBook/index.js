@@ -307,7 +307,7 @@ export async function getIndexDatasetFromAddressBook(
 ) {
   const { respond, error } = createResponder();
   try {
-    const addressBookIri = `${getSourceIri(addressBookDataset)}#this`; // TODO: Ugly hack, should remove
+    const addressBookIri = `${getSourceUrl(addressBookDataset)}#this`; // TODO: Ugly hack, should remove
     const addressBookThing = getThing(addressBookDataset, addressBookIri);
     const indexDatasetIri = getUrl(addressBookThing, indexFilePredicate);
     const indexFileDataset = await getSolidDataset(indexDatasetIri, { fetch });
