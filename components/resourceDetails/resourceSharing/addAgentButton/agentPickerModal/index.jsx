@@ -354,7 +354,12 @@ export default function AgentPickerModal({ type, text, onClose }) {
             <TableColumn
               property={VCARD_WEBID_PREDICATE}
               dataType="url"
-              header={<span className={classes.tableHeader}>Editor</span>}
+              header={
+                // eslint-disable-next-line react/jsx-wrap-multilines
+                <span className={classes.tableHeader}>
+                  {type.slice(0, type.length - 1)}
+                </span>
+              }
               body={({ value, row: { index } }) => (
                 <WebIdCheckbox
                   value={value}

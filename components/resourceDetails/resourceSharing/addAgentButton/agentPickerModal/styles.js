@@ -85,6 +85,7 @@ export default function styles(theme) {
       display: "flex",
       margin: 0,
       padding: theme.spacing(0.5),
+      textTransform: "capitalize",
     },
     modalTabsContainer: {
       borderBottom: "none !important", // overriding the default border bottom so we can set it to the whole width of the container
