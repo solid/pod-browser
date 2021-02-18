@@ -57,8 +57,8 @@ import { GROUP_CONTACT } from "../../../../../src/models/contact/group";
 import {
   PERSON_CONTACT,
   findPersonContactInAddressBook,
+  savePerson,
 } from "../../../../../src/models/contact/person";
-import { saveContact } from "../../../../../src/models/contact";
 import useAddressBook from "../../../../../src/hooks/useAddressBook";
 
 export const handleSubmit = ({
@@ -143,7 +143,7 @@ export const handleSaveContact = async (iri, addressBook, fetch) => {
     if (name) {
       const contact = { webId, fn: name };
       // TODO: we will likely need to update this if we also want to create and save groups
-      await saveContact(addressBook, contact, PERSON_CONTACT, fetch);
+      await savePerson(addressBook, contact, PERSON_CONTACT, fetch);
     }
   } catch (e) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

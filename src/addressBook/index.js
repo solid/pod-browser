@@ -28,7 +28,6 @@ import {
   createThing,
   deleteFile,
   getSolidDataset,
-  getSourceIri,
   getSourceUrl,
   getStringNoLocale,
   getThing,

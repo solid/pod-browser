@@ -20,22 +20,13 @@
  */
 
 import {
-  addStringNoLocale,
-  addUrl,
-  asUrl,
   createSolidDataset,
-  getSourceUrl,
-  getThing,
   getThingAll,
   getUrl,
   saveSolidDatasetAt,
   setThing,
   setUrl,
 } from "@inrupt/solid-client";
-import { vcard } from "rdf-namespaces";
-import { createResponder, defineThing } from "../../solidClientHelpers/utils";
-import { vcardExtras } from "../../addressBook";
-import { saveResource } from "../../solidClientHelpers/resource";
 import { joinPath } from "../../stringHelpers";
 import { getOrCreateDataset } from "../dataset";
 import { getAddressBookIndexUrl } from "../addressBook";
@@ -74,60 +65,27 @@ export async function getContactAll(addressBook, types, fetch) {
 }
 
 export async function addContactIndexToAddressBook(addressBook, type, fetch) {
-  const indexUrl = getContactIndexDefaultUrl(addressBook.containerUrl, type);
-  const datasetUrl = getAddressBookIndexUrl(addressBook);
-  const dataset = await saveSolidDatasetAt(
-    datasetUrl,
-    setThing(
-      addressBook.dataset,
-      setUrl(addressBook.thing, type.indexFilePredicate, indexUrl)
-    ),
-    { fetch }
-  );
+  let updatedAddressBook = addressBook;
+  let indexUrl = getContactIndexUrl(addressBook, type);
+  if (!indexUrl) {
+    const newIndexUrl = getContactIndexDefaultUrl(
+      addressBook.containerUrl,
+      type
+    );
+    const datasetUrl = getAddressBookIndexUrl(addressBook);
+    updatedAddressBook = await saveSolidDatasetAt(
+      datasetUrl,
+      setThing(
+        addressBook.dataset,
+        setUrl(addressBook.thing, type.indexFilePredicate, newIndexUrl)
+      ),
+      { fetch }
+    );
+    indexUrl = getContactIndexUrl(updatedAddressBook, type);
+  }
+
   return {
-    containerUrl: addressBook.containerUrl,
-    dataset,
-    thing: getThing(dataset, asUrl(addressBook.thing, datasetUrl)),
+    updatedAddressBook,
+    indexUrl,
   };
-}
-
-export async function saveContact(addressBook, contactSchema, type, fetch) {
-  const { respond, error } = createResponder();
-  const { containerUrl: addressBookContainerUrl } = addressBook;
-  const indexIri = getContactIndexUrl(addressBook, type);
-  const newContact = await type.createContact(
-    addressBookContainerUrl,
-    contactSchema
-  );
-  const { iri } = newContact;
-  const { response: contact, error: saveContactError } = await saveResource(
-    newContact,
-    fetch
-  );
-  if (saveContactError) return error(saveContactError);
-
-  const contactIndex = await getContactIndexDataset(addressBook, type, fetch);
-
-  const contactThing = defineThing(
-    {
-      url: `${getSourceUrl(contact)}#this`,
-    },
-    (t) =>
-      addStringNoLocale(t, vcard.fn, contactSchema.fn || contactSchema.name),
-    (t) => addUrl(t, vcardExtras("inAddressBook"), indexIri)
-  );
-
-  const contactIndexIri = getSourceUrl(contactIndex);
-  const contactResource = {
-    dataset: setThing(contactIndex, contactThing),
-    iri: contactIndexIri,
-  };
-
-  const { response: contacts, error: saveContactsError } = await saveResource(
-    contactResource,
-    fetch
-  );
-
-  if (saveContactsError) return error(saveContactsError);
-  return respond({ iri, contact, contacts });
 }

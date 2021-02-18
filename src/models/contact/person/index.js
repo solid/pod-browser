@@ -22,12 +22,15 @@
 import { v4 as uuid } from "uuid";
 import { vcard, foaf, rdf } from "rdf-namespaces";
 import {
+  addStringNoLocale,
   addUrl,
   asUrl,
   createSolidDataset,
   createThing,
+  getSourceUrl,
   getThing,
   getUrl,
+  saveSolidDatasetAt,
   setThing,
 } from "@inrupt/solid-client";
 import {
@@ -36,10 +39,11 @@ import {
   vcardExtras,
 } from "../../../addressBook";
 import { joinPath } from "../../../stringHelpers";
-import { getContactAll } from "../index";
+import { addContactIndexToAddressBook, getContactAll } from "../index";
 // eslint-disable-next-line import/no-cycle
 import { getProfilesForPersonContacts } from "../../profile";
 import { chain, defineThing } from "../../../solidClientHelpers/utils";
+import { updateOrCreateDataset } from "../../dataset";
 
 /**
  * Person contacts represent the agents of type vcard:Individual, foaf:Person, schema:Person
@@ -90,7 +94,9 @@ export function createWebIdNode(webId, iri) {
   return { webIdNode, webIdNodeUrl };
 }
 
-export async function createPersonContact(addressBookContainerUrl, contact) {
+export function createPersonContact(addressBook, contact) {
+  const { containerUrl: addressBookContainerUrl } = addressBook;
+
   const normalizedContact = {
     emails: [],
     addresses: [],
@@ -136,6 +142,39 @@ export async function createPersonContact(addressBookContainerUrl, contact) {
   return {
     iri,
     dataset,
+  };
+}
+
+export async function savePerson(addressBook, contactSchema, type, fetch) {
+  const indexIri = asUrl(addressBook.thing);
+  const newContact = type.createContact(addressBook, contactSchema);
+  const { iri, dataset } = newContact;
+  const personDataset = await saveSolidDatasetAt(iri, dataset, { fetch });
+  const personThing = defineThing(
+    {
+      url: `${getSourceUrl(personDataset)}#this`,
+    },
+    (t) =>
+      addStringNoLocale(t, vcard.fn, contactSchema.fn || contactSchema.name),
+    (t) => addUrl(t, vcardExtras("inAddressBook"), indexIri)
+  );
+
+  const {
+    updatedAddressBook,
+    indexUrl: personIndexUrl,
+  } = await addContactIndexToAddressBook(addressBook, PERSON_CONTACT, fetch);
+
+  const indexDataset = await updateOrCreateDataset(personIndexUrl, fetch, (d) =>
+    setThing(d, personThing)
+  );
+
+  return {
+    addressBook: updatedAddressBook,
+    person: {
+      dataset: personDataset,
+      thing: personThing,
+    },
+    personIndex: indexDataset,
   };
 }
 

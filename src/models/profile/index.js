@@ -19,13 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { vcard } from "rdf-namespaces";
-import {
-  addStringNoLocale,
-  asUrl,
-  getThing,
-  getUrl,
-} from "@inrupt/solid-client";
+import { asUrl, getThing } from "@inrupt/solid-client";
 import { fetchProfile } from "../../solidClientHelpers/profile";
 import { getResource } from "../../solidClientHelpers/resource";
 // eslint-disable-next-line import/no-cycle
@@ -58,7 +52,6 @@ export async function getProfilesForPersonContacts(people, fetch) {
     .map(({ response }) => response)
     .map(({ dataset, iri }) => {
       const thing = getThing(dataset, iri);
-      const avatar = getUrl(thing, vcard.hasPhoto);
-      return addStringNoLocale(getThing(thing, iri), vcard.hasPhoto, avatar);
+      return thing;
     });
 }

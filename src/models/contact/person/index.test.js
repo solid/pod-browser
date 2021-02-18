@@ -39,6 +39,7 @@ import {
   findPersonContactInAddressBook,
   getWebIdUrl,
   getPersonAll,
+  savePerson,
 } from "./index";
 import * as contactModel from "..";
 import * as profileModel from "../../profile";
@@ -55,7 +56,7 @@ const mockedUuid = uuid;
 
 const containerUrl = "https://example.com/contacts/";
 const emptyAddressBook = mockAddressBook({ containerUrl });
-const peopleIndexDatasetUrl = "https://example.com/people.ttl";
+const peopleIndexDatasetUrl = "https://example.com/contacts/people.ttl";
 const fetch = jest.fn();
 
 const person1DatasetUrl = "https://example.com/contacts/Person/1234/index.ttl";
@@ -136,7 +137,7 @@ describe("getWebIdUrl", () => {
 });
 
 describe("createPersonContact", () => {
-  const addressBookIri = "https://user.example.com/contacts";
+  const addressBook = mockAddressBook();
   const webIdUrl = "https://user.example.com/card";
 
   beforeEach(() => {
@@ -179,7 +180,7 @@ describe("createPersonContact", () => {
       role: "Developer",
     };
 
-    const { dataset } = await createPersonContact(addressBookIri, schema);
+    const { dataset } = createPersonContact(addressBook, schema);
 
     const things = solidClientFns.getThingAll(dataset);
     const webId = things[0]; // always the first thing in this dataset
@@ -227,6 +228,86 @@ describe("createPersonContact", () => {
         vcardExtras("street-address")
       )
     ).toEqual("123 Fake St.");
+  });
+});
+
+describe("savePerson", () => {
+  const contactSchema = {
+    webId: "https://example.org/profile/card#me",
+    fn: "Example",
+  };
+  const mockedPerson = mockPersonContact(
+    emptyAddressBook,
+    person1Url,
+    "Example"
+  );
+
+  let mockedSaveSolidDatasetAt;
+
+  beforeEach(() => {
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockImplementation((url) => mockSolidDatasetFrom(url));
+    mockedUuid.mockReturnValue("1234");
+    mockedSaveSolidDatasetAt = jest
+      .spyOn(solidClientFns, "saveSolidDatasetAt")
+      .mockImplementation((url) => mockSolidDatasetFrom(url));
+  });
+
+  it("creates a person and adds it to the index", async () => {
+    mockedSaveSolidDatasetAt
+      .mockResolvedValueOnce(mockedPerson.dataset)
+      .mockResolvedValueOnce(mockSolidDatasetFrom(peopleIndexDatasetUrl));
+
+    const { addressBook, person } = await savePerson(
+      addressBookWithPeopleIndex,
+      contactSchema,
+      PERSON_CONTACT,
+      fetch
+    );
+    expect(person).toEqual(mockedPerson);
+    expect(addressBook).toBe(addressBookWithPeopleIndex);
+
+    expect(mockedSaveSolidDatasetAt).toHaveBeenCalledTimes(2);
+
+    expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
+      person1DatasetUrl,
+      expect.any(Object),
+      { fetch }
+    );
+  });
+
+  it("will create the corresponding index and link it to the addressBook", async () => {
+    mockedSaveSolidDatasetAt
+      .mockResolvedValueOnce(mockedPerson.dataset)
+      .mockResolvedValueOnce(addressBookWithPeopleIndex);
+
+    const { addressBook, person } = await savePerson(
+      addressBookWithPeopleIndex,
+      contactSchema,
+      PERSON_CONTACT,
+      fetch
+    );
+    expect(addressBook).toEqual(addressBookWithPeopleIndex);
+    expect(person).toEqual(mockedPerson);
+
+    expect(mockedSaveSolidDatasetAt).toHaveBeenCalledTimes(2);
+
+    expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
+      person1DatasetUrl,
+      expect.any(Object),
+      { fetch }
+    );
+
+    expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
+      peopleIndexDatasetUrl,
+      expect.any(Object),
+      { fetch }
+    );
+    const updatedDataset = mockedSaveSolidDatasetAt.mock.calls[1][1];
+    expect(solidClientFns.getSourceUrl(updatedDataset)).toEqual(
+      contactModel.getContactIndexDefaultUrl(containerUrl, PERSON_CONTACT)
+    );
   });
 });
 

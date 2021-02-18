@@ -94,17 +94,11 @@ export async function saveGroup(addressBook, name, fetch) {
     { fetch }
   );
   // then link the group to the group index
-  let updatedAddressBook = addressBook;
-  let groupIndexUrl = getContactIndexUrl(addressBook, GROUP_CONTACT);
-  if (!groupIndexUrl) {
-    // add the index to the Address Book if it doesn't already exist
-    updatedAddressBook = await addContactIndexToAddressBook(
-      addressBook,
-      GROUP_CONTACT,
-      fetch
-    );
-    groupIndexUrl = getContactIndexUrl(updatedAddressBook, GROUP_CONTACT);
-  }
+  const {
+    updatedAddressBook,
+    indexUrl: groupIndexUrl,
+  } = await addContactIndexToAddressBook(addressBook, GROUP_CONTACT, fetch);
+
   const groupThing = createGroupThing(name, { url: groupThingUrl });
   const indexDataset = await updateOrCreateDataset(
     groupIndexUrl,

@@ -37,9 +37,7 @@ import {
   getContactIndexDataset,
   getContactIndexDefaultUrl,
   getContactIndexUrl,
-  saveContact,
 } from "./index";
-import * as resourceFns from "../../solidClientHelpers/resource";
 import { addGroupToMockedIndexDataset } from "../../../__testUtils/mockGroupContact";
 import { addPersonToMockedIndexDataset } from "../../../__testUtils/mockPersonContact";
 import { joinPath } from "../../stringHelpers";
@@ -237,13 +235,16 @@ describe("addContactIndexToAddressBook", () => {
   beforeEach(() => {
     mockedSaveSolidDatasetAt = jest
       .spyOn(solidClientFns, "saveSolidDatasetAt")
-      .mockResolvedValue(addressBookWithGroups.dataset);
+      .mockResolvedValue(addressBookWithGroups);
   });
 
   it("adds the contacts index to the address book", async () => {
     await expect(
       addContactIndexToAddressBook(addressBook, GROUP_CONTACT, fetch)
-    ).resolves.toEqual(addressBookWithGroups);
+    ).resolves.toEqual({
+      indexUrl: "https://example.pod.com/contacts/groups.ttl",
+      updatedAddressBook: addressBookWithGroups,
+    });
     expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
       getSourceUrl(addressBook.dataset),
       expect.any(Object),
@@ -260,112 +261,14 @@ describe("addContactIndexToAddressBook", () => {
     const newAddressBook = createAddressBook(containerUrl, webIdUrl);
     await expect(
       addContactIndexToAddressBook(newAddressBook, GROUP_CONTACT, fetch)
-    ).resolves.toEqual(addressBookWithGroups);
+    ).resolves.toEqual({
+      indexUrl: "https://example.pod.com/contacts/groups.ttl",
+      updatedAddressBook: addressBookWithGroups,
+    });
     expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
       getSourceUrl(addressBook.dataset),
       expect.any(Object),
       { fetch }
     );
-  });
-});
-// TODO: this currently only tests Person type until we have Groups
-describe("saveContact", () => {
-  const groupsUrl = "https://example.com/myGroups.ttl";
-  const peopleUrl = "https://example.com/myPeople.ttl";
-  const addressBook = chain(
-    mockAddressBook(),
-    (a) =>
-      addIndexToMockedAddressBook(a, PERSON_CONTACT, { indexUrl: peopleUrl }),
-    (a) =>
-      addIndexToMockedAddressBook(a, GROUP_CONTACT, { indexUrl: groupsUrl })
-  );
-  const addressBookDatasetIri = "https://user.example.com/contacts";
-  const webId = "https://user.example.com/card#me";
-  const contactDataset = solidClientFns.mockSolidDatasetFrom(webId);
-  const peopleIndexIri = `${addressBookDatasetIri}/people.ttl`;
-  const peopleIndexDataset = solidClientFns.mockSolidDatasetFrom(
-    peopleIndexIri
-  );
-
-  const schema = { webId, fn: "Test Person" };
-  const errorMessage = "boom";
-
-  beforeEach(() => {
-    jest
-      .spyOn(solidClientFns, "getSolidDataset")
-      .mockResolvedValue(peopleIndexDataset);
-  });
-
-  it("saves the contact and the people index", async () => {
-    jest
-      .spyOn(resourceFns, "saveResource")
-      .mockResolvedValueOnce({ response: contactDataset })
-      .mockResolvedValueOnce({ response: peopleIndexDataset });
-
-    jest.spyOn(resourceFns, "getResource").mockResolvedValueOnce({
-      response: {
-        iri: `${addressBookDatasetIri}/people.ttl`,
-        dataset: peopleIndexDataset,
-      },
-    });
-
-    const {
-      response: { contact, contacts },
-    } = await saveContact(addressBook, schema, PERSON_CONTACT, fetch);
-
-    expect(contact).toEqual(contactDataset);
-    expect(contacts).toEqual(peopleIndexDataset);
-  });
-
-  it("also handles schema.name", async () => {
-    jest
-      .spyOn(resourceFns, "saveResource")
-      .mockResolvedValueOnce({ response: contactDataset })
-      .mockResolvedValueOnce({ response: peopleIndexDataset });
-
-    jest.spyOn(resourceFns, "getResource").mockResolvedValueOnce({
-      response: {
-        iri: `${addressBookDatasetIri}/people.ttl`,
-        dataset: peopleIndexDataset,
-      },
-    });
-
-    const {
-      response: { contact, contacts },
-    } = await saveContact(addressBook, schema, PERSON_CONTACT, fetch);
-
-    expect(contact).toEqual(contactDataset);
-    expect(contacts).toEqual(peopleIndexDataset);
-  });
-
-  it("returns an error if it can't save the new contact", async () => {
-    jest.spyOn(resourceFns, "saveResource").mockResolvedValue({
-      error: errorMessage,
-    });
-
-    const { error } = await saveContact(
-      addressBook,
-      schema,
-      PERSON_CONTACT,
-      fetch
-    );
-
-    expect(error).toEqual(errorMessage);
-  });
-
-  it("returns an error if it can't save the new contact to the index", async () => {
-    jest
-      .spyOn(resourceFns, "saveResource")
-      .mockResolvedValueOnce({ response: contactDataset })
-      .mockResolvedValueOnce({ error: errorMessage });
-
-    const { error } = await saveContact(
-      addressBook,
-      schema,
-      PERSON_CONTACT,
-      fetch
-    );
-
-    expect(error).toEqual(errorMessage);
   });
 });
