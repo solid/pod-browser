@@ -99,7 +99,11 @@ export default function AddAgentRow({
       setAgentAvatar(profile.avatar);
       setDisplayedWebId(profile.webId);
     } else if (temporaryRowThing && !profile && contactsArrayLength > 0) {
-      setAgentName(getStringNoLocale(temporaryRowThing, foaf.name) || null);
+      setAgentName(
+        getStringNoLocale(temporaryRowThing, foaf.name) ||
+          getStringNoLocale(temporaryRowThing, vcard.fn) ||
+          null
+      );
       setAgentAvatar(getUrl(temporaryRowThing, vcard.hasPhoto) || null);
       setDisplayedWebId(getUrl(temporaryRowThing, VCARD_WEBID_PREDICATE));
     }

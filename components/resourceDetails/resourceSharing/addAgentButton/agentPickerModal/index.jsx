@@ -310,7 +310,7 @@ export default function AgentPickerModal({ type, text, onClose, setLoading }) {
       );
       setFilteredContacts(filtered);
     }
-  }, [contactsArray, selectedTabValue]);
+  }, [contactsArray, selectedTabValue, globalFilter]);
 
   useEffect(() => {
     onConfirmation(confirmationSetup, confirmed);
@@ -324,6 +324,9 @@ export default function AgentPickerModal({ type, text, onClose, setLoading }) {
       thing: emptyThing,
       dataset: addressBookDataset,
     };
+    if (selectedTabValue) {
+      setFilteredContacts([newItem, ...filteredContacts]);
+    }
     setContactsArray([newItem, ...contactsArray]);
   };
 
@@ -423,7 +426,7 @@ export default function AgentPickerModal({ type, text, onClose, setLoading }) {
         {!!contacts && !contactsForTable.length && !selectedTabValue && (
           <AgentPickerEmptyState onClick={handleAddRow} />
         )}
-        {!!contacts && !contactsForTable.length && selectedTabValue && (
+        {!!contacts && !contactsForTable.length && !!selectedTabValue && (
           <span className={classes.emptyStateTextContainer}>
             <p>
               {`No ${
