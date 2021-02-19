@@ -147,6 +147,7 @@ export default function AddAgentRow({
             data-testid={TESTCAFE_ID_ADD_WEBID_BUTTON}
             className={classes.button}
             type="submit"
+            variant="with-input"
           >
             Add
           </Button>

@@ -91,19 +91,6 @@ export default function styles(theme) {
       padding: theme.spacing(2.4),
       justifyContent: "space-between",
     },
-    cancelButton: {
-      fontSize: theme.typography.body1.fontSize,
-      fontWeight: theme.typography.body1.fontWeight,
-      padding: theme.spacing(1.4, 1.8),
-      backgroundColor: "transparent",
-    },
-    submitAgentsButton: {
-      fontSize: theme.typography.body1.fontSize,
-      fontWeight: theme.typography.body1.fontWeight,
-      color: theme.palette.common.white,
-      backgroundColor: theme.palette.primary.main,
-      padding: theme.spacing(1.4, 1.8),
-    },
     capitalizedText: {
       textTransform: "capitalize",
     },

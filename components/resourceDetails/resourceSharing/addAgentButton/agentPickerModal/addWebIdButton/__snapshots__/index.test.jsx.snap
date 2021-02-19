@@ -3,15 +3,16 @@
 exports[`AddWebIdButton renders an Add WebID Button 1`] = `
 <DocumentFragment>
   <button
-    class="PodBrowser-button PodBrowser-button"
+    class="PodBrowser-button PodBrowser-button--small PodBrowser-button"
     data-testid="add-webid-button"
+    iconbefore="add"
   >
+    <span
+      class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+    />
     <span
       class="PodBrowser-button__text"
     >
-      <i
-        class="PodBrowser-icon-add PodBrowser-icon"
-      />
       Add WebId
     </span>
   </button>

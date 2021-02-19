@@ -33,7 +33,7 @@ exports[`AddAgentRow when adding a new webId renders a row with an input for the
         </div>
       </div>
       <button
-        class="PodBrowser-button PodBrowser-button"
+        class="PodBrowser-button PodBrowser-button--with-input PodBrowser-button"
         data-testid="add-button"
         type="submit"
       >

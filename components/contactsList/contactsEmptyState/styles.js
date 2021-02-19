@@ -27,14 +27,6 @@ const styles = (theme) => {
       ...theme.icons.iconColor("#0D6796"),
       fontSize: 64,
     },
-    "add-contact-button": {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
-      fontWeight: theme.typography.fontWeightBold,
-      "& a, &:hover": {
-        textDecoration: "none",
-      },
-    },
   });
 };
 

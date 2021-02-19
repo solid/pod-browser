@@ -24,15 +24,16 @@ exports[`SharingAccordion it renders three lists of empty permissions for editor
             Editors
           </p>
           <button
-            class="PodBrowser-button PodBrowser-button"
+            class="PodBrowser-button PodBrowser-button--text"
             data-testid="add-agent-button"
+            iconbefore="add"
           >
+            <span
+              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+            />
             <span
               class="PodBrowser-button__text"
             >
-              <i
-                class="PodBrowser-icon-add PodBrowser-icon"
-              />
               Add Editors
             </span>
           </button>
@@ -100,15 +101,16 @@ exports[`SharingAccordion it renders three lists of empty permissions for editor
             Viewers
           </p>
           <button
-            class="PodBrowser-button PodBrowser-button"
+            class="PodBrowser-button PodBrowser-button--text"
             data-testid="add-agent-button"
+            iconbefore="add"
           >
+            <span
+              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+            />
             <span
               class="PodBrowser-button__text"
             >
-              <i
-                class="PodBrowser-icon-add PodBrowser-icon"
-              />
               Add Viewers
             </span>
           </button>
@@ -180,15 +182,16 @@ exports[`SharingAccordion it renders three lists of empty permissions for editor
             Blocked
           </p>
           <button
-            class="PodBrowser-button PodBrowser-button"
+            class="PodBrowser-button PodBrowser-button--text"
             data-testid="add-agent-button"
+            iconbefore="add"
           >
+            <span
+              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+            />
             <span
               class="PodBrowser-button__text"
             >
-              <i
-                class="PodBrowser-icon-add PodBrowser-icon"
-              />
               Block
             </span>
           </button>

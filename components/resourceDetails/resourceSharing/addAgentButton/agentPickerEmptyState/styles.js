@@ -27,19 +27,6 @@ const styles = (theme) => {
       ...theme.icons.iconColor("#0D6796"),
       fontSize: 64,
     },
-    icon: {
-      color: theme.palette.common.white,
-      margin: theme.spacing(0.5),
-    },
-    "add-webId-button": {
-      padding: theme.spacing(0.2, 1.6),
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
-      fontWeight: theme.typography.fontWeightBold,
-      "& a, &:hover": {
-        textDecoration: "none",
-      },
-    },
   });
 };
 

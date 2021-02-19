@@ -24,15 +24,16 @@ exports[`AgentAccessTable renders a list of permissions 1`] = `
             Editors
           </p>
           <button
-            class="PodBrowser-button PodBrowser-button"
+            class="PodBrowser-button PodBrowser-button--text"
             data-testid="add-agent-button"
+            iconbefore="add"
           >
+            <span
+              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+            />
             <span
               class="PodBrowser-button__text"
             >
-              <i
-                class="PodBrowser-icon-add PodBrowser-icon"
-              />
               Add Editors
             </span>
           </button>
@@ -257,15 +258,16 @@ exports[`AgentAccessTable renders an empty list of permissions 1`] = `
             Editors
           </p>
           <button
-            class="PodBrowser-button PodBrowser-button"
+            class="PodBrowser-button PodBrowser-button--text"
             data-testid="add-agent-button"
+            iconbefore="add"
           >
+            <span
+              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+            />
             <span
               class="PodBrowser-button__text"
             >
-              <i
-                class="PodBrowser-icon-add PodBrowser-icon"
-              />
               Add Editors
             </span>
           </button>

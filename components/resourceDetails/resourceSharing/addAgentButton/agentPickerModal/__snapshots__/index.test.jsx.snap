@@ -122,15 +122,16 @@ exports[`AgentPickerModal renders a table with tabs, searchbox and an empty stat
           </div>
         </div>
         <button
-          class="PodBrowser-button PodBrowser-button"
+          class="PodBrowser-button PodBrowser-button--small PodBrowser-button"
           data-testid="add-webid-button"
+          iconbefore="add"
         >
+          <span
+            class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+          />
           <span
             class="PodBrowser-button__text"
           >
-            <i
-              class="PodBrowser-icon-add PodBrowser-icon"
-            />
             Add WebId
           </span>
         </button>
@@ -184,15 +185,16 @@ exports[`AgentPickerModal renders a table with tabs, searchbox and an empty stat
             Add a new person with their WebId
           </h2>
           <button
-            class="PodBrowser-button PodBrowser-button PodBrowser-add-webId-button"
+            class="PodBrowser-button PodBrowser-button--small"
             data-testid="empty-state-add-webid-button"
+            iconbefore="add"
           >
+            <span
+              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+            />
             <span
               class="PodBrowser-button__text"
             >
-              <i
-                class="PodBrowser-icon-add PodBrowser-icon"
-              />
               Add WebId
             </span>
           </button>
@@ -203,7 +205,8 @@ exports[`AgentPickerModal renders a table with tabs, searchbox and an empty stat
       class="PodBrowser-buttonsContainer"
     >
       <button
-        class="PodBrowser-button PodBrowser-cancelButton"
+        class="PodBrowser-button PodBrowser-button--secondary"
+        data-testid="cancel-webids-button"
       >
         <span
           class="PodBrowser-button__text"
@@ -212,9 +215,8 @@ exports[`AgentPickerModal renders a table with tabs, searchbox and an empty stat
         </span>
       </button>
       <button
-        class="PodBrowser-button PodBrowser-submitAgentsButton"
+        class="PodBrowser-button"
         data-testid="submit-webids-button"
-        type="button"
       >
         <span
           class="PodBrowser-button__text"

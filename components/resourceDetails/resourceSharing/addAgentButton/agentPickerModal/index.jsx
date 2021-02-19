@@ -143,8 +143,10 @@ export const handleSaveContact = async (iri, people, addressBook, fetch) => {
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const VCARD_WEBID_PREDICATE = vcardExtras("WebId");
+
 const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
 const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
+const TESTCAFE_CANCEL_WEBIDS_BUTTON = "cancel-webids-button";
 
 export default function AgentPickerModal({ type, text, onClose }) {
   const {
@@ -342,16 +344,14 @@ export default function AgentPickerModal({ type, text, onClose }) {
       {noAgentsAlert && <Alert severity="error">Please select {type}</Alert>}
       <div className={classes.buttonsContainer}>
         <Button
-          variant="action"
-          className={classes.cancelButton}
+          variant="secondary"
           onClick={onClose}
+          data-testid={TESTCAFE_CANCEL_WEBIDS_BUTTON}
         >
           Cancel
         </Button>
         <Button
           data-testid={TESTCAFE_SUBMIT_WEBIDS_BUTTON}
-          className={classes.submitAgentsButton}
-          type="button"
           onClick={handleClickOpenDialog}
         >
           {text}

@@ -21,14 +21,13 @@
 
 import React from "react";
 import Link from "next/link";
-import clsx from "clsx";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import {
-  Button,
   Content,
   Container,
   Icons,
+  LinkButton,
 } from "@inrupt/prism-react-components";
 import styles from "./styles";
 
@@ -38,7 +37,6 @@ const TESTCAFE_ID_ADD_NEW_CONTACT_BUTTON = "add-new-contact-button";
 
 export default function ContactsEmptyState() {
   const bem = useBem(useStyles());
-  const buttonBem = Button.useBem();
 
   return (
     <Content>
@@ -47,12 +45,13 @@ export default function ContactsEmptyState() {
         <h1>You don’t have any contacts yet!</h1>
         <p>Add a new contact to share files with.</p>
         <Link href="/contacts/add">
-          <a
+          <LinkButton
             data-testid={TESTCAFE_ID_ADD_NEW_CONTACT_BUTTON}
-            className={clsx(buttonBem("button"), bem("add-contact-button"))}
+            variant="small"
+            iconBefore="add"
           >
             Add new contact
-          </a>
+          </LinkButton>
         </Link>
       </Container>
     </Content>

@@ -17,15 +17,16 @@ exports[`AgentPickerEmptyState renders an empty state container with a message a
         Add a new person with their WebId
       </h2>
       <button
-        class="PodBrowser-button PodBrowser-button PodBrowser-add-webId-button"
+        class="PodBrowser-button PodBrowser-button--small"
         data-testid="empty-state-add-webid-button"
+        iconbefore="add"
       >
+        <span
+          class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+        />
         <span
           class="PodBrowser-button__text"
         >
-          <i
-            class="PodBrowser-icon-add PodBrowser-icon"
-          />
           Add WebId
         </span>
       </button>
