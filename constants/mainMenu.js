@@ -21,28 +21,41 @@
 
 import { GROUPS_PAGE_ENABLED } from "../src/featureFlags";
 
+export const TESTCAFE_ID_MAIN_MENU_FILES = "main-menu-files";
+export const TESTCAFE_ID_MAIN_MENU_GROUPS = "main-menu-groups";
+export const TESTCAFE_ID_MAIN_MENU_CONTACTS = "main-menu-contacts";
+export const TESTCAFE_ID_MAIN_MENU_BOOKMARKS = "main-menu-bookmarks";
+
 export default function getMainMenuItems() {
   return [
     {
       path: "/",
       label: "Files",
-      icon: "icon-files",
+      icon: "files",
+      pages: ["/resource/[iri]"],
+      "data-testid": TESTCAFE_ID_MAIN_MENU_FILES,
     },
     {
       path: "/groups",
       label: "Groups",
-      icon: "icon-users",
+      icon: "users",
       featureFlag: GROUPS_PAGE_ENABLED,
+      pages: ["/groups"],
+      "data-testid": TESTCAFE_ID_MAIN_MENU_GROUPS,
     },
     {
       path: "/contacts",
       label: "Contacts",
-      icon: "icon-users",
+      icon: "address-book",
+      pages: ["/contacts", "/contacts/add", "/contacts/[webId]"],
+      "data-testid": TESTCAFE_ID_MAIN_MENU_CONTACTS,
     },
     {
       path: "/bookmarks",
       label: "Bookmarks",
-      icon: "icon-star",
+      icon: "star",
+      pages: ["/bookmarks"],
+      "data-testid": TESTCAFE_ID_MAIN_MENU_BOOKMARKS,
     },
   ];
 }

@@ -21,8 +21,9 @@
 
 import React from "react";
 import { useSession } from "@inrupt/solid-ui-react";
+import { useRouter } from "next/router";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
-import MainNav, { TESTID_MAIN_NAV_ITEM } from "./index";
+import MainNav, { TESTCAFE_ID_MAIN_NAV } from "./index";
 import mockSession, {
   mockUnauthenticatedSession,
 } from "../../../__testUtils/mockSession";
@@ -31,21 +32,34 @@ import { GROUPS_PAGE_ENABLED_FOR } from "../../../src/featureFlags";
 jest.mock("@inrupt/solid-ui-react");
 const mockedSessionHook = useSession;
 
+jest.mock("next/router");
+const mockedRouterHook = useRouter;
+
 describe("MainNav", () => {
+  beforeEach(() => {
+    mockedRouterHook.mockReturnValue({
+      pathname: "/resource/[iri]",
+    });
+  });
+
   it("renders navigation", () => {
     const session = mockUnauthenticatedSession();
     mockedSessionHook.mockReturnValue({ session });
 
-    const { asFragment, getAllByTestId } = renderWithTheme(<MainNav />);
+    const { asFragment, getByTestId } = renderWithTheme(<MainNav />);
     expect(asFragment()).toMatchSnapshot();
-    expect(getAllByTestId(TESTID_MAIN_NAV_ITEM)).toHaveLength(3);
+    expect(
+      getByTestId(TESTCAFE_ID_MAIN_NAV).querySelectorAll("li")
+    ).toHaveLength(3);
   });
 
   it("renders Group for people with the feature flag turned on", () => {
     const session = mockSession({ webId: GROUPS_PAGE_ENABLED_FOR[0] });
     mockedSessionHook.mockReturnValue({ session });
 
-    const { getAllByTestId } = renderWithTheme(<MainNav />);
-    expect(getAllByTestId(TESTID_MAIN_NAV_ITEM)).toHaveLength(4);
+    const { getByTestId } = renderWithTheme(<MainNav />);
+    expect(
+      getByTestId(TESTCAFE_ID_MAIN_NAV).querySelectorAll("li")
+    ).toHaveLength(4);
   });
 });

@@ -43,6 +43,14 @@ const styles = (theme, indicatorWidth, indicatorLabelWidth) => {
       color: theme.palette.primary.main,
       textTransform: "uppercase",
     },
+    indicatorLabelYour: {
+      display: "none",
+    },
+    "indicatorLabelYour--isOwnPod": {
+      [theme.breakpoints.up("md")]: {
+        display: "inline",
+      },
+    },
     indicatorChevron: {
       paddingLeft: "0.5em",
       color: theme.palette.primary.main,
@@ -81,6 +89,11 @@ const styles = (theme, indicatorWidth, indicatorLabelWidth) => {
         textOverflow: "ellipsis",
         overflow: "hidden",
         whiteSpace: "nowrap",
+      },
+    },
+    "indicatorName--isOwnPod": {
+      [theme.breakpoints.up("md")]: {
+        display: "none",
       },
     },
     popoverMenu: {

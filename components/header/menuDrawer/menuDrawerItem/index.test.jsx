@@ -19,13 +19,34 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { renderWithTheme } from "../../__testUtils/withTheme";
-import GroupViewEmpty, { TESTCAFE_ID_GROUP_VIEW_EMPTY } from "./index";
+import { renderWithTheme } from "../../../../__testUtils/withTheme";
+import MenuDrawerItem from "./index";
 
-describe("GroupViewEmpty", () => {
-  it("renders", () => {
-    const { asFragment, getByTestId } = renderWithTheme(<GroupViewEmpty />);
+describe("MenuDrawerItem", () => {
+  const icon = "user";
+  const label = "Test";
+  let onClick;
+
+  beforeEach(() => {
+    onClick = jest.fn();
+  });
+
+  it("renders links", () => {
+    const { asFragment } = renderWithTheme(
+      <MenuDrawerItem
+        href="/test"
+        icon={icon}
+        label={label}
+        onClick={onClick}
+      />
+    );
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_GROUP_VIEW_EMPTY)).toBeDefined();
+  });
+
+  it("renders buttons", () => {
+    const { asFragment } = renderWithTheme(
+      <MenuDrawerItem icon={icon} label={label} onClick={onClick} />
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 });

@@ -4,18 +4,20 @@ exports[`MenuDrawer renders menu drawer 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-hamburgerMenu"
+    data-testid="menu-drawer"
   >
     <button
       class="PodBrowser-root PodBrowser-root PodBrowser-text"
+      data-testid="menu-drawer-button"
       tabindex="0"
       type="button"
     >
       <span
         class="PodBrowser-label"
       >
-        <i
+        <span
           aria-label="Menu"
-          class="PodBrowser-icon-bars PodBrowser-icon"
+          class="PodBrowser-icon-bars"
         />
       </span>
       <span

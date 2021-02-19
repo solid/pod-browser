@@ -26,16 +26,16 @@ import { GROUP_CONTACT } from "../../src/models/contact/group";
 import GroupViewEmpty from "../groupViewEmpty";
 import Spinner from "../spinner";
 
-export const TESTID_GROUP_VIEW = "group-view";
-export const TESTID_GROUP_VIEW_ERROR = "group-view-error";
+export const TESTCAFE_ID_GROUP_VIEW = "group-view";
+export const TESTCAFE_ID_GROUP_VIEW_ERROR = "group-view-error";
 
 export default function GroupView() {
   const { data: contacts, error } = useContacts([GROUP_CONTACT]);
   return (
-    <div data-testid={TESTID_GROUP_VIEW}>
+    <div data-testid={TESTCAFE_ID_GROUP_VIEW}>
       {!contacts && !error && <Spinner />}
       {error && (
-        <Message variant="error" data-testid={TESTID_GROUP_VIEW_ERROR}>
+        <Message variant="error" data-testid={TESTCAFE_ID_GROUP_VIEW_ERROR}>
           {error.message}
         </Message>
       )}

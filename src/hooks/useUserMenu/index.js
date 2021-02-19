@@ -19,13 +19,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { renderWithTheme } from "../../__testUtils/withTheme";
-import GroupViewEmpty, { TESTCAFE_ID_GROUP_VIEW_EMPTY } from "./index";
+import { useSession } from "@inrupt/solid-ui-react";
 
-describe("GroupViewEmpty", () => {
-  it("renders", () => {
-    const { asFragment, getByTestId } = renderWithTheme(<GroupViewEmpty />);
-    expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_GROUP_VIEW_EMPTY)).toBeDefined();
-  });
-});
+export const TESTCAFE_ID_USER_MENU_PROFILE = "user-menu-profile";
+export const TESTCAFE_ID_USER_MENU_LOGOUT = "user-menu-logout";
+
+export default function useUserMenu() {
+  const { logout } = useSession();
+  return [
+    {
+      href: "/profile",
+      icon: "user",
+      label: "Profile",
+      onClick: () => {},
+      "data-testid": TESTCAFE_ID_USER_MENU_PROFILE,
+    },
+    {
+      icon: "log-out",
+      label: "Log out",
+      onClick: () => logout(),
+      "data-testid": TESTCAFE_ID_USER_MENU_LOGOUT,
+    },
+  ];
+}

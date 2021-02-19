@@ -19,103 +19,41 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
-import Router from "next/router";
+import React from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
+import { UserMenu as PrismUserMenu } from "@inrupt/prism-react-components";
 import { useBem } from "@solid/lit-prism-patterns";
-import clsx from "clsx";
-import LogOutButton from "../../logout";
 import styles from "./styles";
+import useAuthenticatedProfile from "../../../src/hooks/useAuthenticatedProfile";
+import Spinner from "../../spinner";
+import useUserMenu from "../../../src/hooks/useUserMenu";
+import UserMenuAction from "./userMenuAction";
+
+/* eslint react/jsx-props-no-spreading: off */
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 const TESTCAFE_ID_USER_MENU_BUTTON = "user-menu-button";
-const TESTCAFE_ID_USER_MENU = "user-menu";
+export const TESTCAFE_ID_USER_MENU = "user-menu";
 
 export default function UserMenu() {
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const bem = useBem(useStyles());
-  const classes = useStyles();
+  const { data: authenticatedProfile } = useAuthenticatedProfile();
+  const menu = useUserMenu();
 
-  const toggleMenu = () => setUserMenuOpen(!userMenuOpen);
-  const handleMenuOpen = () => setUserMenuOpen(true);
-  const handleMenuClose = () => setUserMenuOpen(false);
+  if (!authenticatedProfile) return <Spinner />;
 
   return (
-    <div className={classes.userMenu}>
-      <div
-        className={bem("header-banner__aside-menu", "popup")}
-        onMouseEnter={handleMenuOpen}
-        onMouseLeave={handleMenuClose}
-      >
-        <button
-          data-testid={TESTCAFE_ID_USER_MENU_BUTTON}
-          className={bem("header-banner__aside-menu-trigger")}
-          type="button"
-          aria-haspopup="true"
-          aria-controls="UserMenu"
-          aria-expanded={!userMenuOpen}
-          onClick={toggleMenu}
-        >
-          <i
-            className={clsx(
-              bem("icon-user"),
-              bem("header-banner__aside-menu-trigger-icon")
-            )}
-            aria-label="User Menu"
-          />
-        </button>
-
-        <div
-          className={bem("header-banner__aside-menu-popup")}
-          id="UserMenu"
-          data-testid={TESTCAFE_ID_USER_MENU}
-          aria-hidden={!userMenuOpen}
-        >
-          <ul className={bem("header-banner__user-menu")}>
-            <li
-              className={bem("header-banner__user-menu-item")}
-              style={{ zIndex: 100 }}
-            >
-              <button
-                type="button"
-                className={bem("header-banner__user-menu-item-trigger")}
-                onClick={() => Router.push("/profile")}
-              >
-                <i
-                  className={clsx(
-                    bem("icon-user"),
-                    bem("header-banner__user-menu-item-icon")
-                  )}
-                />
-                <span className={bem("header-banner__user-menu-item-label")}>
-                  Profile
-                </span>
-              </button>
-            </li>
-            <li
-              className={bem("header-banner__user-menu-item")}
-              style={{ zIndex: 100 }}
-            >
-              <LogOutButton
-                className={bem("header-banner__user-menu-item-trigger")}
-              >
-                <>
-                  <i
-                    className={clsx(
-                      bem("icon-log-out"),
-                      bem("header-banner__user-menu-item-icon")
-                    )}
-                  />
-                  <span className={bem("header-banner__user-menu-item-label")}>
-                    Log out
-                  </span>
-                </>
-              </LogOutButton>
-            </li>
-          </ul>
-        </div>
-      </div>
+    <div className={bem("userMenu")} data-testid={TESTCAFE_ID_USER_MENU}>
+      <PrismUserMenu
+        className={bem("userMenu__trigger")}
+        label={authenticatedProfile.name || "Account"}
+        imgSrc={authenticatedProfile.avatar}
+        menu={menu}
+        menuId="UserMenu"
+        data-testid={TESTCAFE_ID_USER_MENU_BUTTON}
+        renderAction={(action) => <UserMenuAction {...action} />}
+      />
     </div>
   );
 }

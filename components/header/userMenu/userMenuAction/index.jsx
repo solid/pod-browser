@@ -19,13 +19,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { renderWithTheme } from "../../__testUtils/withTheme";
-import GroupViewEmpty, { TESTCAFE_ID_GROUP_VIEW_EMPTY } from "./index";
+import Link from "next/link";
+import { UserMenuButton, UserMenuLink } from "@inrupt/prism-react-components";
+import React from "react";
+import T from "prop-types";
 
-describe("GroupViewEmpty", () => {
-  it("renders", () => {
-    const { asFragment, getByTestId } = renderWithTheme(<GroupViewEmpty />);
-    expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_GROUP_VIEW_EMPTY)).toBeDefined();
-  });
-});
+/* eslint react/jsx-props-no-spreading: off */
+
+export default function UserMenuAction({ href, ...action }) {
+  return href ? (
+    <Link href={href}>
+      <UserMenuLink {...action} />
+    </Link>
+  ) : (
+    <UserMenuButton {...action} />
+  );
+}
+
+UserMenuAction.propTypes = {
+  href: T.string,
+};
+
+UserMenuAction.defaultProps = {
+  href: null,
+};

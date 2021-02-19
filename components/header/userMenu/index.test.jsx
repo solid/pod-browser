@@ -23,25 +23,34 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import UserMenu from "./index";
+import useAuthenticatedProfile from "../../../src/hooks/useAuthenticatedProfile";
+import { mockProfileAlice } from "../../../__testUtils/mockPersonResource";
+import { TESTCAFE_ID_SPINNER } from "../../spinner";
+
+jest.mock("../../../src/hooks/useAuthenticatedProfile");
+const mockedAuthenticatedProfileHook = useAuthenticatedProfile;
 
 describe("UserMenu", () => {
+  beforeEach(() => {
+    mockedAuthenticatedProfileHook.mockReturnValue({
+      data: mockProfileAlice(),
+    });
+  });
+
   test("renders a menu", () => {
     const { asFragment } = renderWithTheme(<UserMenu />);
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("clicking on the user menu button opens the menu", () => {
-    const { getByTestId, queryByTestId } = renderWithTheme(<UserMenu />);
-    const button = getByTestId("user-menu-button");
-    userEvent.click(button);
-    expect(queryByTestId("user-menu")).not.toBeNull();
+  it("renders a spinner while loading user profile", () => {
+    mockedAuthenticatedProfileHook.mockReturnValue({ data: null });
+    const { getByTestId } = renderWithTheme(<UserMenu />);
+    expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
   });
-  test("clicking the user menu again closes the menu", () => {
-    const { getByTestId, queryByTestId } = renderWithTheme(<UserMenu />);
-    const button = getByTestId("user-menu-button");
-    userEvent.click(button);
-    userEvent.click(button);
 
-    expect(queryByTestId("user-menu")).toHaveAttribute("aria-hidden", "true");
+  it("renders fallback for name and user photo if not available", () => {
+    mockedAuthenticatedProfileHook.mockReturnValue({ data: {} });
+    const { asFragment } = renderWithTheme(<UserMenu />);
+    expect(asFragment()).toMatchSnapshot();
   });
 });

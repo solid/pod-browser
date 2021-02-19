@@ -28,14 +28,14 @@ import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export const TESTID_GROUP_VIEW_EMPTY = "group-view-empty";
+export const TESTCAFE_ID_GROUP_VIEW_EMPTY = "group-view-empty";
 
 export default function GroupViewEmpty() {
   const bem = useBem(useStyles());
   return (
     <div
       className={bem("group-view-empty")}
-      data-testid={TESTID_GROUP_VIEW_EMPTY}
+      data-testid={TESTCAFE_ID_GROUP_VIEW_EMPTY}
     >
       <Icons name="users" className={bem("icon-large")} />
       <h2>You don&apos;t have any groups yet!</h2>

@@ -32,10 +32,13 @@ import {
   ListItemIcon,
 } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
+import { Icons } from "@inrupt/prism-react-components";
 import usePodOwnerProfile from "../../src/hooks/usePodOwnerProfile";
 import PodNavigatorPopover from "./podNavigatorPopover";
 import Bookmark from "../bookmark";
 import styles from "./styles";
+import { locationIsConnectedToProfile } from "../../src/solidClientHelpers/profile";
+import useAuthenticatedProfile from "../../src/hooks/useAuthenticatedProfile";
 
 const TESTCAFE_ID_POD_INDICATOR = "pod-indicator";
 const TESTCAFE_ID_POD_NAVIGATE_TRIGGER = "pod-indicator-prompt";
@@ -54,7 +57,6 @@ export default function PodIndicator() {
   const useStyles = makeStyles((theme) =>
     createStyles(styles(theme, indicatorWidth, indicatorLabelWidth))
   );
-  const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [navigatorAnchor, setNavigatorAnchor] = useState(null);
   const bem = useBem(useStyles());
@@ -71,8 +73,10 @@ export default function PodIndicator() {
     setDisplayNavigator(true);
     handleClose();
   };
-  const ref = createRef(null);
-  const indicatorLabelRef = createRef(null);
+  const ref = createRef();
+  const indicatorLabelRef = createRef();
+  const { data: authenticatedProfile } = useAuthenticatedProfile();
+  const isOwnPod = locationIsConnectedToProfile(authenticatedProfile, podIri);
 
   useEffect(() => {
     const width = ref.current.offsetWidth || 0;
@@ -88,7 +92,7 @@ export default function PodIndicator() {
   return (
     <div
       data-testid={TESTCAFE_ID_POD_INDICATOR}
-      className={classes.indicator}
+      className={bem("indicator")}
       ref={ref}
     >
       {loading ? (
@@ -100,19 +104,23 @@ export default function PodIndicator() {
           type="button"
           aria-describedby={id}
           onClick={handleClick}
-          className={classes.indicatorPrompt}
+          className={bem("indicatorPrompt")}
           title={profileName}
         >
-          <span className={classes.indicatorLabel}>
+          <span className={bem("indicatorLabel")}>
+            <span className={bem("indicatorLabelYour", { isOwnPod })}>
+              Your&nbsp;
+            </span>
             Pod
-            <i
-              className={clsx(
-                bem(open ? "icon-caret-up" : "icon-caret-down"),
-                classes.indicatorChevron
-              )}
+            <Icons
+              name={open ? "caret-up" : "caret-down"}
+              className={bem("indicatorChevron")}
             />
           </span>
-          <span className={classes.indicatorName} ref={indicatorLabelRef}>
+          <span
+            className={bem("indicatorName", { isOwnPod })}
+            ref={indicatorLabelRef}
+          >
             {profileName}
           </span>
         </button>
@@ -127,7 +135,7 @@ export default function PodIndicator() {
         <Popover
           id={id}
           classes={{
-            paper: classes.popoverMenu,
+            paper: bem("popoverMenu"),
           }}
           open={open}
           anchorEl={anchorEl}
@@ -141,7 +149,7 @@ export default function PodIndicator() {
             horizontal: "left",
           }}
         >
-          <List classes={{ root: classes.list }}>
+          <List classes={{ root: bem("list") }}>
             <Bookmark
               iri={podIri}
               menuItem
@@ -153,9 +161,9 @@ export default function PodIndicator() {
               button
               key="change-pod"
               onClick={handleOpenNavigator}
-              classes={{ root: classes.menuItem }}
+              classes={{ root: bem("menuItem") }}
             >
-              <ListItemIcon classes={{ root: classes.itemIcon }}>
+              <ListItemIcon classes={{ root: bem("itemIcon") }}>
                 <i
                   className={clsx(bem("icon-move"), bem("icon"))}
                   aria-label="Change pod"

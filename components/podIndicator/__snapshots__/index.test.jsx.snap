@@ -16,8 +16,13 @@ exports[`PodIndicator it renders the pod indicator with the correct name with a 
       <span
         class="PodBrowser-indicatorLabel"
       >
+        <span
+          class="PodBrowser-indicatorLabelYour"
+        >
+          Your 
+        </span>
         Pod
-        <i
+        <span
           class="PodBrowser-icon-caret-down PodBrowser-indicatorChevron"
         />
       </span>
@@ -47,8 +52,13 @@ exports[`PodIndicator it renders the pod indicator with the correct name with a 
       <span
         class="PodBrowser-indicatorLabel"
       >
+        <span
+          class="PodBrowser-indicatorLabelYour"
+        >
+          Your 
+        </span>
         Pod
-        <i
+        <span
           class="PodBrowser-icon-caret-down PodBrowser-indicatorChevron"
         />
       </span>

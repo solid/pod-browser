@@ -19,13 +19,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { renderWithTheme } from "../../__testUtils/withTheme";
-import GroupViewEmpty, { TESTCAFE_ID_GROUP_VIEW_EMPTY } from "./index";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-describe("GroupViewEmpty", () => {
-  it("renders", () => {
-    const { asFragment, getByTestId } = renderWithTheme(<GroupViewEmpty />);
-    expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_GROUP_VIEW_EMPTY)).toBeDefined();
+const styles = (theme) =>
+  createStyles(theme, ["userMenu"], {
+    "menu-drawer-item": {
+      paddingBottom: theme.spacing(1),
+      paddingTop: theme.spacing(1),
+    },
+    "menu-drawer-item__icon-holder": {
+      minWidth: "1.5rem",
+    },
+    "menu-drawer-item__icon": theme.icons.iconColor(theme.palette.primary.main),
+    "menu-drawer-item__text": {
+      fontSize: theme.typography.body.fontSize,
+      fontWeight: theme.typography.fontWeightMedium,
+    },
   });
-});
+
+export default styles;

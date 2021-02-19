@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MenuDrawerItem renders buttons 1`] = `
+<DocumentFragment>
+  <div
+    aria-disabled="false"
+    class="PodBrowser-root PodBrowser-root PodBrowser-menu-drawer-item PodBrowser-gutters PodBrowser-button"
+    role="button"
+    tabindex="0"
+  >
+    <div
+      class="PodBrowser-root PodBrowser-menu-drawer-item__icon-holder"
+    >
+      <span
+        class="PodBrowser-icon-user PodBrowser-menu-drawer-item__icon"
+      />
+    </div>
+    <div
+      class="PodBrowser-root PodBrowser-user-menu__trigger PodBrowser-menu-drawer-item__text"
+    >
+      Test
+    </div>
+    <span
+      class="PodBrowser-root"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`MenuDrawerItem renders links 1`] = `
+<DocumentFragment>
+  <li
+    class="PodBrowser-root PodBrowser-menu-drawer-item PodBrowser-gutters"
+  >
+    <div
+      class="PodBrowser-root PodBrowser-menu-drawer-item__icon-holder"
+    >
+      <span
+        class="PodBrowser-icon-user PodBrowser-menu-drawer-item__icon"
+      />
+    </div>
+    <div
+      class="PodBrowser-root PodBrowser-user-menu__trigger PodBrowser-menu-drawer-item__text"
+    >
+      Test
+    </div>
+  </li>
+</DocumentFragment>
+`;

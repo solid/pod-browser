@@ -1,5 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Header while user logged out renders only logo 1`] = `
+<DocumentFragment>
+  <header
+    class="PodBrowser-header-banner"
+  >
+    <div
+      class="PodBrowser-logoContainer"
+    >
+      <a
+        data-testid="header-banner-logo"
+        href="/"
+      >
+        <img
+          alt="Inrupt PodBrowser"
+          class="PodBrowser-header-banner__logo-image"
+          height="40"
+          src="/inrupt_logo-2020.svg"
+        />
+      </a>
+    </div>
+  </header>
+</DocumentFragment>
+`;
+
 exports[`Header with user logged in renders a header 1`] = `
 <DocumentFragment>
   <header
@@ -22,18 +46,20 @@ exports[`Header with user logged in renders a header 1`] = `
     </div>
     <div
       class="PodBrowser-hamburgerMenu"
+      data-testid="menu-drawer"
     >
       <button
         class="PodBrowser-root PodBrowser-root PodBrowser-text"
+        data-testid="menu-drawer-button"
         tabindex="0"
         type="button"
       >
         <span
           class="PodBrowser-label"
         >
-          <i
+          <span
             aria-label="Menu"
-            class="PodBrowser-icon-bars PodBrowser-icon"
+            class="PodBrowser-icon-bars"
           />
         </span>
         <span
@@ -45,54 +71,64 @@ exports[`Header with user logged in renders a header 1`] = `
       class="PodBrowser-main-nav-container"
     >
       <nav
-        class="PodBrowser-header-banner__main-nav"
+        class="PodBrowser-main-nav"
+        data-testid="main-nav"
       >
         <ul
           class="PodBrowser-main-nav__list"
         >
           <li
             class="PodBrowser-main-nav__item"
-            data-testid="main-nav-item"
           >
             <a
-              class="PodBrowser-header-banner__aside-menu-trigger"
+              class="PodBrowser-main-nav__link"
+              data-testid="main-menu-files"
               href="/"
-              type="button"
             >
-              <i
-                class="PodBrowser-icon-files PodBrowser-header-banner__aside-menu-trigger-icon"
+              <span
+                class="PodBrowser-icon-files PodBrowser-main-nav__icon"
               />
-              Files
+              <span
+                class="PodBrowser-main-nav__label"
+              >
+                Files
+              </span>
             </a>
           </li>
           <li
             class="PodBrowser-main-nav__item"
-            data-testid="main-nav-item"
           >
             <a
-              class="PodBrowser-header-banner__aside-menu-trigger"
+              class="PodBrowser-main-nav__link"
+              data-testid="main-menu-contacts"
               href="/contacts"
-              type="button"
             >
-              <i
-                class="PodBrowser-icon-users PodBrowser-header-banner__aside-menu-trigger-icon"
+              <span
+                class="PodBrowser-icon-address-book PodBrowser-main-nav__icon"
               />
-              Contacts
+              <span
+                class="PodBrowser-main-nav__label"
+              >
+                Contacts
+              </span>
             </a>
           </li>
           <li
             class="PodBrowser-main-nav__item"
-            data-testid="main-nav-item"
           >
             <a
-              class="PodBrowser-header-banner__aside-menu-trigger"
+              class="PodBrowser-main-nav__link"
+              data-testid="main-menu-bookmarks"
               href="/bookmarks"
-              type="button"
             >
-              <i
-                class="PodBrowser-icon-star PodBrowser-header-banner__aside-menu-trigger-icon"
+              <span
+                class="PodBrowser-icon-star PodBrowser-main-nav__icon"
               />
-              Bookmarks
+              <span
+                class="PodBrowser-main-nav__label"
+              >
+                Bookmarks
+              </span>
             </a>
           </li>
         </ul>
@@ -100,101 +136,83 @@ exports[`Header with user logged in renders a header 1`] = `
     </div>
     <div
       class="PodBrowser-userMenu"
+      data-testid="user-menu"
     >
       <div
-        class="PodBrowser-header-banner__aside-menu PodBrowser-header-banner__aside-menu--popup"
+        class="PodBrowser-user-menu"
       >
         <button
           aria-controls="UserMenu"
-          aria-expanded="true"
+          aria-expanded="false"
           aria-haspopup="true"
-          class="PodBrowser-header-banner__aside-menu-trigger"
+          class="PodBrowser-user-menu__trigger PodBrowser-userMenu__trigger"
           data-testid="user-menu-button"
           type="button"
         >
-          <i
-            aria-label="User Menu"
-            class="PodBrowser-icon-user PodBrowser-header-banner__aside-menu-trigger-icon"
+          <span
+            class="PodBrowser-user-menu__trigger-profile-image"
+            style="background-image: url(http://alice.example.com/alice.jpg);"
+          >
+             
+          </span>
+          <span
+            class="PodBrowser-user-menu__trigger-label"
+          >
+            Alice
+          </span>
+          <span
+            class="PodBrowser-icon-caret-down PodBrowser-user-menu__trigger-chevron PodBrowser-user-menu__trigger-chevron--show"
+          />
+          <span
+            class="PodBrowser-icon-caret-up PodBrowser-user-menu__trigger-chevron"
           />
         </button>
         <div
           aria-hidden="true"
-          class="PodBrowser-header-banner__aside-menu-popup"
-          data-testid="user-menu"
+          class="PodBrowser-user-menu__popup"
           id="UserMenu"
         >
           <ul
-            class="PodBrowser-header-banner__user-menu"
+            class="PodBrowser-user-menu__list"
           >
             <li
-              class="PodBrowser-header-banner__user-menu-item"
-              style="z-index: 100;"
+              class="PodBrowser-user-menu__list-item"
             >
-              <button
-                class="PodBrowser-header-banner__user-menu-item-trigger"
-                type="button"
+              <a
+                class="PodBrowser-user-menu__list-item-trigger"
+                data-testid="user-menu-profile"
               >
-                <i
-                  class="PodBrowser-icon-user PodBrowser-header-banner__user-menu-item-icon"
+                <span
+                  class="PodBrowser-icon-user PodBrowser-user-menu__list-item-icon"
                 />
                 <span
-                  class="PodBrowser-header-banner__user-menu-item-label"
+                  class="PodBrowser-user-menu__list-item-label"
                 >
                   Profile
                 </span>
-              </button>
+              </a>
             </li>
             <li
-              class="PodBrowser-header-banner__user-menu-item"
-              style="z-index: 100;"
+              class="PodBrowser-user-menu__list-item"
             >
-              <div
-                role="button"
-                tabindex="0"
+              <button
+                class="PodBrowser-user-menu__list-item-trigger"
+                data-testid="user-menu-logout"
+                type="button"
               >
-                <button
-                  class="PodBrowser-header-banner__user-menu-item-trigger"
-                  data-testid="logout-button"
-                  type="button"
+                <span
+                  class="PodBrowser-icon-log-out PodBrowser-user-menu__list-item-icon"
+                />
+                <span
+                  class="PodBrowser-user-menu__list-item-label"
                 >
-                  <i
-                    class="PodBrowser-icon-log-out PodBrowser-header-banner__user-menu-item-icon"
-                  />
-                  <span
-                    class="PodBrowser-header-banner__user-menu-item-label"
-                  >
-                    Log out
-                  </span>
-                </button>
-              </div>
+                  Log out
+                </span>
+              </button>
             </li>
           </ul>
         </div>
       </div>
-    </div>
-  </header>
-</DocumentFragment>
-`;
-
-exports[`Header with user logged out renders nothing 1`] = `
-<DocumentFragment>
-  <header
-    class="PodBrowser-header-banner"
-  >
-    <div
-      class="PodBrowser-logoContainer"
-    >
-      <a
-        data-testid="header-banner-logo"
-        href="/"
-      >
-        <img
-          alt="Inrupt PodBrowser"
-          class="PodBrowser-header-banner__logo-image"
-          height="40"
-          src="/inrupt_logo-2020.svg"
-        />
-      </a>
     </div>
   </header>
 </DocumentFragment>

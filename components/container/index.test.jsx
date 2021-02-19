@@ -38,7 +38,7 @@ import { TESTCAFE_ID_NO_CONTROL_ERROR } from "../noControlWarning";
 import { TESTCAFE_ID_ACCESS_FORBIDDEN } from "../accessForbidden";
 import { TESTCAFE_ID_RESOURCE_NOT_FOUND } from "../resourceNotFound";
 import { TESTCAFE_ID_NOT_SUPPORTED } from "../notSupported";
-import { TESTID_SPINNER } from "../spinner";
+import { TESTCAFE_ID_SPINNER } from "../spinner";
 
 jest.mock("../../src/hooks/useDataset");
 const mockedDatasetHook = useDataset;
@@ -102,12 +102,12 @@ describe("Container view", () => {
       <Container iri={iri} />
     );
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTID_SPINNER)).toBeDefined();
+    expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
   });
 
   it("renders a spinner if iri is undefined (can happen during build step)", () => {
     const { getByTestId } = renderWithTheme(<Container iri={undefined} />);
-    expect(getByTestId(TESTID_SPINNER)).toBeDefined();
+    expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
   });
 
   it("renders Access Forbidden if the fetch for container returns 401", () => {

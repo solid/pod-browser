@@ -25,10 +25,13 @@ export default function styles(theme) {
   return createStyles(theme, ["headerBanner", "icons"], {
     userMenu: {
       display: "none",
-      [theme.breakpoints.up("sm")]: {
+      [theme.breakpoints.up("md")]: {
         display: "flex",
         justifySelf: "flex-end",
       },
+    },
+    userMenu__trigger: {
+      marginRight: theme.spacing(-2),
     },
   });
 }

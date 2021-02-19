@@ -19,13 +19,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { renderWithTheme } from "../../__testUtils/withTheme";
-import GroupViewEmpty, { TESTCAFE_ID_GROUP_VIEW_EMPTY } from "./index";
+import { renderHook } from "@testing-library/react-hooks";
+import { useSession } from "@inrupt/solid-ui-react";
+import useUserMenu, {
+  TESTCAFE_ID_USER_MENU_LOGOUT,
+  TESTCAFE_ID_USER_MENU_PROFILE,
+} from "./index";
 
-describe("GroupViewEmpty", () => {
-  it("renders", () => {
-    const { asFragment, getByTestId } = renderWithTheme(<GroupViewEmpty />);
-    expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_GROUP_VIEW_EMPTY)).toBeDefined();
+jest.mock("@inrupt/solid-ui-react");
+const mockedSessionHook = useSession;
+
+describe("useUserMenu", () => {
+  let logout;
+
+  beforeEach(() => {
+    logout = jest.fn();
+    mockedSessionHook.mockReturnValue({ logout });
+  });
+
+  it("returns menu with profile and logout", () => {
+    const { result } = renderHook(() => useUserMenu());
+    expect(result.current).toHaveLength(2);
+    const testIds = result.current.map(({ "data-testid": testid }) => testid);
+    expect(testIds).toContain(TESTCAFE_ID_USER_MENU_PROFILE);
+    expect(testIds).toContain(TESTCAFE_ID_USER_MENU_LOGOUT);
+  });
+
+  test("log out button triggers logout", () => {
+    const { result } = renderHook(() => useUserMenu());
+    result.current
+      .find(
+        ({ "data-testid": testid }) => testid === TESTCAFE_ID_USER_MENU_LOGOUT
+      )
+      .onClick();
+    expect(logout).toHaveBeenCalled();
   });
 });
