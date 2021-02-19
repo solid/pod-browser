@@ -166,7 +166,7 @@ export const handleSaveContact = async (iri, addressBook, fetch) => {
     if (name) {
       const contact = { webId, fn: name };
       // TODO: we will likely need to update this if we also want to create and save groups
-      await savePerson(addressBook, contact, PERSON_CONTACT, fetch);
+      await savePerson(addressBook, contact, fetch);
     }
   } catch (e) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -196,6 +196,7 @@ export default function AgentPickerModal({ type, text, onClose, setLoading }) {
     GROUP_CONTACT,
     PERSON_CONTACT,
   ]);
+
   const webIdsInPermissions = permissions.map((p) => p.webId);
 
   const bem = useBem(useStyles());

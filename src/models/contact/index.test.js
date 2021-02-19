@@ -243,7 +243,7 @@ describe("addContactIndexToAddressBook", () => {
       addContactIndexToAddressBook(addressBook, GROUP_CONTACT, fetch)
     ).resolves.toEqual({
       indexUrl: "https://example.pod.com/contacts/groups.ttl",
-      updatedAddressBook: addressBookWithGroups,
+      addressBook: addressBookWithGroups,
     });
     expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
       getSourceUrl(addressBook.dataset),
@@ -263,7 +263,7 @@ describe("addContactIndexToAddressBook", () => {
       addContactIndexToAddressBook(newAddressBook, GROUP_CONTACT, fetch)
     ).resolves.toEqual({
       indexUrl: "https://example.pod.com/contacts/groups.ttl",
-      updatedAddressBook: addressBookWithGroups,
+      addressBook: addressBookWithGroups,
     });
     expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
       getSourceUrl(addressBook.dataset),

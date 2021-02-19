@@ -22,8 +22,6 @@
 import { v4 as uuid } from "uuid";
 import * as solidClientFns from "@inrupt/solid-client";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
-import { vcard } from "rdf-namespaces";
-import { vcardExtras } from "../../../addressBook";
 import {
   aliceAlternativeWebIdUrl,
   aliceWebIdUrl,
@@ -34,7 +32,6 @@ import {
 } from "../../../../__testUtils/mockPersonResource";
 import {
   PERSON_CONTACT,
-  createPersonContact,
   createPersonDatasetUrl,
   findPersonContactInAddressBook,
   getWebIdUrl,
@@ -50,9 +47,13 @@ import { addIndexToMockedAddressBook } from "../../../../__testUtils/mockContact
 import mockPersonContact, {
   addPersonToMockedIndexDataset,
 } from "../../../../__testUtils/mockPersonContact";
+// import { fetchProfile } from "../../../solidClientHelpers/profile";
 
 jest.mock("uuid");
 const mockedUuid = uuid;
+
+// jest.mock("../../../solidClientHelpers/profile");
+// const mockedFetchProfile = fetchProfile;
 
 const containerUrl = "https://example.com/contacts/";
 const emptyAddressBook = mockAddressBook({ containerUrl });
@@ -136,105 +137,14 @@ describe("getWebIdUrl", () => {
   });
 });
 
-describe("createPersonContact", () => {
-  const addressBook = mockAddressBook();
-  const webIdUrl = "https://user.example.com/card";
-
-  beforeEach(() => {
-    mockedUuid
-      .mockReturnValue("1234")
-      .mockReturnValueOnce("5678")
-      .mockReturnValueOnce("9012");
-  });
-
-  test("it creates a new contact with a given schema object", async () => {
-    const schema = {
-      webId: webIdUrl,
-      addresses: [
-        {
-          countryName: "Fake Country",
-          locality: "Fake Town",
-          postalCode: "55555",
-          region: "Fake State",
-          streetAddress: "123 Fake St.",
-        },
-      ],
-      fn: "Test Person",
-      emails: [
-        {
-          type: "Home",
-          value: "test@example.com",
-        },
-        {
-          type: "Work",
-          value: "test.person@example.com",
-        },
-      ],
-      telephones: [
-        {
-          type: "Home",
-          value: "555-555-5555",
-        },
-      ],
-      organizationName: "Test Company",
-      role: "Developer",
-    };
-
-    const { dataset } = createPersonContact(addressBook, schema);
-
-    const things = solidClientFns.getThingAll(dataset);
-    const webId = things[0]; // always the first thing in this dataset
-    const addressesThing = things[4];
-    const emailsAndPhones = things.reduce(
-      (memo, t) =>
-        memo.concat(solidClientFns.getStringNoLocaleAll(t, vcard.value)),
-      []
-    );
-    const webIdThing = things[1];
-    expect(solidClientFns.getUrl(webIdThing, vcard.value)).toEqual(webIdUrl);
-    expect(solidClientFns.getStringNoLocale(webId, vcard.fn)).toEqual(
-      "Test Person"
-    );
-    expect(
-      solidClientFns.getStringNoLocale(webId, vcardExtras("organization-name"))
-    ).toEqual("Test Company");
-    expect(solidClientFns.getStringNoLocale(webId, vcard.role)).toEqual(
-      "Developer"
-    );
-    expect(emailsAndPhones).toContain("test@example.com");
-    expect(emailsAndPhones).toContain("test.person@example.com");
-    expect(emailsAndPhones).toContain("555-555-5555");
-    expect(
-      solidClientFns.getStringNoLocale(
-        addressesThing,
-        vcardExtras("country-name")
-      )
-    ).toEqual("Fake Country");
-    expect(
-      solidClientFns.getStringNoLocale(addressesThing, vcard.locality)
-    ).toEqual("Fake Town");
-    expect(
-      solidClientFns.getStringNoLocale(
-        addressesThing,
-        vcardExtras("postal-code")
-      )
-    ).toEqual("55555");
-    expect(
-      solidClientFns.getStringNoLocale(addressesThing, vcard.region)
-    ).toEqual("Fake State");
-    expect(
-      solidClientFns.getStringNoLocale(
-        addressesThing,
-        vcardExtras("street-address")
-      )
-    ).toEqual("123 Fake St.");
-  });
-});
-
 describe("savePerson", () => {
   const contactSchema = {
     webId: "https://example.org/profile/card#me",
     fn: "Example",
+  };
+  const contactSchemaWithName = {
+    webId: "https://example.org/profile/card#me",
+    name: "Example",
   };
   const mockedPerson = mockPersonContact(
     emptyAddressBook,
@@ -262,7 +172,28 @@ describe("savePerson", () => {
     const { addressBook, person } = await savePerson(
       addressBookWithPeopleIndex,
       contactSchema,
-      PERSON_CONTACT,
+      fetch
+    );
+    expect(person).toEqual(mockedPerson);
+    expect(addressBook).toBe(addressBookWithPeopleIndex);
+
+    expect(mockedSaveSolidDatasetAt).toHaveBeenCalledTimes(2);
+
+    expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
+      person1DatasetUrl,
+      expect.any(Object),
+      { fetch }
+    );
+  });
+
+  it("creates a person if passed schema has name instead of fn", async () => {
+    mockedSaveSolidDatasetAt
+      .mockResolvedValueOnce(mockedPerson.dataset)
+      .mockResolvedValueOnce(mockSolidDatasetFrom(peopleIndexDatasetUrl));
+
+    const { addressBook, person } = await savePerson(
+      addressBookWithPeopleIndex,
+      contactSchemaWithName,
       fetch
     );
     expect(person).toEqual(mockedPerson);
@@ -285,7 +216,6 @@ describe("savePerson", () => {
     const { addressBook, person } = await savePerson(
       addressBookWithPeopleIndex,
       contactSchema,
-      PERSON_CONTACT,
       fetch
     );
     expect(addressBook).toEqual(addressBookWithPeopleIndex);
@@ -324,8 +254,8 @@ describe("findPersonContactInAddressBook", () => {
     { dataset: webId2, thing: person2Thing },
   ];
   const profiles = [
-    solidClientFns.mockThingFrom(webId1Url),
-    solidClientFns.mockThingFrom(webId2Url),
+    { webId: webId1Url, avatar: null, name: "Alice" },
+    { webId: webId2Url, avatar: null, name: "Bob" },
   ];
 
   beforeEach(() => {
@@ -341,7 +271,7 @@ describe("findPersonContactInAddressBook", () => {
       webId1Url,
       fetch
     );
-    expect(solidClientFns.asUrl(profile1)).toEqual(webId1Url);
+    expect(profile1.webId).toEqual(webId1Url);
   });
 
   it("returns an empty list if no profile is found", async () => {

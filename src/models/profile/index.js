@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { asUrl, getThing } from "@inrupt/solid-client";
+import { asUrl } from "@inrupt/solid-client";
 import { fetchProfile } from "../../solidClientHelpers/profile";
 import { getResource } from "../../solidClientHelpers/resource";
 // eslint-disable-next-line import/no-cycle
@@ -38,20 +38,8 @@ export async function getProfileForContact(personContactUrl, fetch) {
   return fetchedProfile;
 }
 export async function getProfilesForPersonContacts(people, fetch) {
-  const peopleThings = await Promise.all(
-    people.map(({ thing }) => getResource(asUrl(thing), fetch))
+  const responses = await Promise.all(
+    people.map(({ thing }) => getProfileForContact(asUrl(thing), fetch))
   );
-  const profileResponses = await Promise.all(
-    peopleThings.map(async ({ response: { dataset, iri } }) => {
-      const url = getWebIdUrl(dataset, iri);
-      return getResource(url, fetch);
-    })
-  );
-  return profileResponses
-    .filter(({ error }) => !error)
-    .map(({ response }) => response)
-    .map(({ dataset, iri }) => {
-      const thing = getThing(dataset, iri);
-      return thing;
-    });
+  return responses.filter((profile) => profile);
 }

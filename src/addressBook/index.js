@@ -450,7 +450,7 @@ export async function deleteContact(
   const addressBook = await getSolidDataset(addressBookIri, {
     fetch,
   });
-  const { indexFilePredicate } = TYPE_MAP[foaf.Person];
+  const { indexFilePredicate } = TYPE_MAP[type];
   const { response: indexFileDataset } = await getIndexDatasetFromAddressBook(
     addressBook,
     indexFilePredicate,

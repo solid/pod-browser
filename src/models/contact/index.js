@@ -85,7 +85,7 @@ export async function addContactIndexToAddressBook(addressBook, type, fetch) {
   }
 
   return {
-    updatedAddressBook,
+    addressBook: updatedAddressBook,
     indexUrl,
   };
 }

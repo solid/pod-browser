@@ -23,7 +23,6 @@
 import { foaf, rdf } from "rdf-namespaces";
 import * as solidClientFns from "@inrupt/solid-client";
 import {
-  asUrl,
   mockSolidDatasetFrom,
   mockThingFrom,
   setThing,
@@ -45,6 +44,10 @@ import {
 import mockPersonContactThing from "../../../__testUtils/mockPersonContactThing";
 import { chain } from "../../solidClientHelpers/utils";
 import { getProfileForContact, getProfilesForPersonContacts } from "./index";
+import { fetchProfile } from "../../solidClientHelpers/profile";
+
+jest.mock("../../solidClientHelpers/profile");
+const mockedFetchProfile = fetchProfile;
 
 describe("getProfilesForPersonContacts", () => {
   afterEach(() => {
@@ -116,12 +119,11 @@ describe("getProfilesForPersonContacts", () => {
         },
       });
 
-    jest
-      .spyOn(profileFns, "fetchProfile")
+    mockedFetchProfile
       .mockResolvedValueOnce({
         webId: aliceWebIdUrl,
         avatar: null,
-        name: "Alice",
+        name: "Moo",
       })
       .mockResolvedValueOnce({
         webId: bobWebIdUrl,
@@ -134,8 +136,8 @@ describe("getProfilesForPersonContacts", () => {
       fetch
     );
 
-    expect(asUrl(profile1)).toEqual(aliceWebIdUrl);
-    expect(asUrl(profile2)).toEqual(bobWebIdUrl);
+    expect(profile1.webId).toEqual(aliceWebIdUrl);
+    expect(profile2.webId).toEqual(bobWebIdUrl);
   });
 
   test("it filters out people for which the resource couldn't be fetched", async () => {
@@ -197,7 +199,7 @@ describe("getProfilesForPersonContacts", () => {
         error: "There was an error",
       });
 
-    jest.spyOn(profileFns, "fetchProfile").mockResolvedValueOnce({
+    mockedFetchProfile.mockResolvedValueOnce({
       webId: aliceWebIdUrl,
       avatar: null,
       name: "Alice",

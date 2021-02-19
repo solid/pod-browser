@@ -61,8 +61,6 @@ export const PERSON_CONTACT = {
   indexFilePredicate: NAME_EMAIL_INDEX_PREDICATE,
   contactTypeUrl: vcard.Individual,
   isOfType: (contact) => !!getUrl(contact, vcardExtras("inAddressBook")),
-  // eslint-disable-next-line no-use-before-define
-  createContact: createPersonContact,
 };
 
 /* Model functions */
@@ -94,7 +92,7 @@ export function createWebIdNode(webId, iri) {
   return { webIdNode, webIdNodeUrl };
 }
 
-export function createPersonContact(addressBook, contact) {
+function createPersonContact(addressBook, contact) {
   const { containerUrl: addressBookContainerUrl } = addressBook;
 
   const normalizedContact = {
@@ -145,9 +143,9 @@ export function createPersonContact(addressBook, contact) {
   };
 }
 
-export async function savePerson(addressBook, contactSchema, type, fetch) {
+export async function savePerson(addressBook, contactSchema, fetch) {
   const indexIri = asUrl(addressBook.thing);
-  const newContact = type.createContact(addressBook, contactSchema);
+  const newContact = createPersonContact(addressBook, contactSchema);
   const { iri, dataset } = newContact;
   const personDataset = await saveSolidDatasetAt(iri, dataset, { fetch });
   const personThing = defineThing(
@@ -160,7 +158,7 @@ export async function savePerson(addressBook, contactSchema, type, fetch) {
   );
 
   const {
-    updatedAddressBook,
+    addressBook: updatedAddressBook,
     indexUrl: personIndexUrl,
   } = await addContactIndexToAddressBook(addressBook, PERSON_CONTACT, fetch);
 
@@ -185,8 +183,6 @@ export async function findPersonContactInAddressBook(
 ) {
   const people = await getPersonAll(addressBook, fetch);
   const profiles = await getProfilesForPersonContacts(people, fetch);
-  const existingContact = profiles.filter(
-    (profile) => asUrl(profile) === webId
-  );
+  const existingContact = profiles.filter((profile) => profile.webId === webId);
   return existingContact;
 }

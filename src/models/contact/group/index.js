@@ -55,7 +55,6 @@ export const GROUP_CONTACT = {
   indexFilePredicate: NAME_GROUP_INDEX_PREDICATE,
   contactTypeUrl: vcard.Group,
   isOfType: (contact) => getUrlAll(contact, rdf.type).includes(vcard.Group),
-  // TODO: need to add a createContact function here to create Group contact
 };
 
 /* Model internal functions */
@@ -95,7 +94,7 @@ export async function saveGroup(addressBook, name, fetch) {
   );
   // then link the group to the group index
   const {
-    updatedAddressBook,
+    addressBook: updatedAddressBook,
     indexUrl: groupIndexUrl,
   } = await addContactIndexToAddressBook(addressBook, GROUP_CONTACT, fetch);
 
