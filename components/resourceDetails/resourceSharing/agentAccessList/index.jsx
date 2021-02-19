@@ -64,7 +64,7 @@ function AgentAccessList({ onLoading }) {
         <Button
           data-testid={TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL}
           onClick={() => setShowAll(true)}
-          variant="action"
+          variant="small"
         >
           Show all
         </Button>

@@ -168,8 +168,7 @@ describe("setupDeleteButtonCell", () => {
   it("returns a button if editable", () => {
     const removeRow = jest.fn();
     const contactInfoType = CONTACT_INFO_TYPE_EMAIL;
-    const bem = jest.fn();
-    const Button = setupDeleteButtonCell(true, contactInfoType, removeRow, bem);
+    const Button = setupDeleteButtonCell(true, contactInfoType, removeRow);
 
     const { asFragment, container } = render(
       <ThingProvider thing={thing}>
@@ -178,7 +177,6 @@ describe("setupDeleteButtonCell", () => {
     );
 
     expect(asFragment()).toMatchSnapshot();
-    expect(bem).toHaveBeenCalledWith("button", "action");
 
     userEvent.click(container.querySelector("button"));
     expect(removeRow).toHaveBeenCalledWith(thing);

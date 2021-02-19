@@ -160,15 +160,15 @@ export default function AddFolderFlyout({ onSave, className, resourceList }) {
 
   return (
     <>
-      <button
-        type="button"
+      <Button
         aria-describedby={id}
         data-testid={TESTCAFE_ID_ADD_FOLDER_BUTTON}
         className={className}
         onClick={handleClick}
+        variant="small"
       >
         Create Folder
-      </button>
+      </Button>
       <Popover
         data-testid={id}
         open={open}

@@ -236,10 +236,14 @@ exports[`AgentAccess renders 1`] = `
           </li>
         </ul>
         <button
-          class="PodBrowser-button"
+          class="PodBrowser-button PodBrowser-button--secondary"
           type="submit"
         >
-          Save
+          <span
+            class="PodBrowser-button__text"
+          >
+            Save
+          </span>
         </button>
       </section>
     </div>
@@ -540,10 +544,14 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
               </li>
             </ul>
             <button
-              class="PodBrowser-button"
+              class="PodBrowser-button PodBrowser-button--secondary"
               type="submit"
             >
-              Save
+              <span
+                class="PodBrowser-button__text"
+              >
+                Save
+              </span>
             </button>
           </section>
         </div>
@@ -802,10 +810,14 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are d
           </li>
         </ul>
         <button
-          class="PodBrowser-button"
+          class="PodBrowser-button PodBrowser-button--secondary"
           type="submit"
         >
-          Save
+          <span
+            class="PodBrowser-button__text"
+          >
+            Save
+          </span>
         </button>
       </section>
     </div>
@@ -1049,10 +1061,14 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are o
           </li>
         </ul>
         <button
-          class="PodBrowser-button"
+          class="PodBrowser-button PodBrowser-button--secondary"
           type="submit"
         >
-          Save
+          <span
+            class="PodBrowser-button__text"
+          >
+            Save
+          </span>
         </button>
       </section>
     </div>

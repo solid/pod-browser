@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { PageHeader as PrismPageHeader } from "@inrupt/prism-react-components";
+import { Button } from "@inrupt/prism-react-components";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import T from "prop-types";
@@ -33,8 +33,9 @@ import AddFolderFlyout from "../addFolderFlyout";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function ContainerSubHeader({ mutate, resourceList }) {
-  const pageHeaderAction = PrismPageHeader.usePageHeaderActionClassName();
   const bem = useBem(useStyles());
+  const buttonBem = Button.useBem();
+  const pageHeaderAction = buttonBem("button", "small");
   return (
     <div className={bem("sub-header")}>
       <Breadcrumbs />
@@ -45,7 +46,6 @@ export default function ContainerSubHeader({ mutate, resourceList }) {
           resourceList={resourceList}
           className={pageHeaderAction}
         />
-
         <AddFileButton
           onSave={mutate}
           resourceList={resourceList}

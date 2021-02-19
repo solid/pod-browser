@@ -24,7 +24,12 @@
 import React, { useContext, useState } from "react";
 import T from "prop-types";
 import { createStyles, makeStyles, Popover } from "@material-ui/core";
-import { InputGroup, Label, Message } from "@inrupt/prism-react-components";
+import {
+  Button,
+  InputGroup,
+  Label,
+  Message,
+} from "@inrupt/prism-react-components";
 import AgentSearchForm from "../agentSearchForm";
 import PermissionsForm from "../permissionsForm";
 import {
@@ -135,15 +140,16 @@ export default function AddPermissionUsingWebIdButton({
 
   return (
     <>
-      <button
+      <Button
+        variant="small"
+        iconAfter="caret-right"
         aria-describedby={id}
-        type="button"
         {...buttonProps}
         onClick={handleClick}
         data-testid={TESTCAFE_ID_ADD_USER_WITH_WEBID_BUTTON}
       >
         Add with WebId
-      </button>
+      </Button>
       <Popover
         id={id}
         classes={classes}

@@ -15,12 +15,16 @@ exports[`ContactsDrawer renders 1`] = `
           class="PodBrowser-drawer__article"
         >
           <button
-            class="PodBrowser-button PodBrowser-button--text"
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
           >
             <span
-              class="PodBrowser-icon-cancel"
-            />
-             Close
+              class="PodBrowser-button__text"
+            >
+              <span
+                class="PodBrowser-icon-cancel"
+              />
+               Close
+            </span>
           </button>
         </div>
         <div
@@ -85,6 +89,7 @@ exports[`ContactsDrawer renders 1`] = `
                         class="PodBrowser-action-menu__item"
                       >
                         <a
+                          class="PodBrowser-action-menu__trigger"
                           href="/contacts/https%3A%2F%2Fexample.com%2Fprofile%23alice"
                         >
                           View Profile

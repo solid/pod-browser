@@ -67,20 +67,16 @@ export default function ConfirmationDialog() {
       </DialogContent>
       <DialogActions classes={{ root: classes.dialogActions }}>
         <Button
-          variant="action"
+          variant="secondary"
           data-testid={TESTCAFE_CONFIRMATION_CANCEL_BUTTON}
-          className={classes.cancelButton}
           autoFocus
           onClick={() => setConfirmed(false)}
         >
           Cancel
         </Button>
-
         <Button
           data-testid={TESTCAFE_CONFIRM_BUTTON}
-          className={classes.submitAgentsButton}
           type="submit"
-          color="primary"
           onClick={() => setConfirmed(true)}
         >
           Confirm

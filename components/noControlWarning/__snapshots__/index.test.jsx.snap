@@ -78,10 +78,14 @@ exports[`NoControlWarning renders 1`] = `
         data-testid="no-control-close-button"
       >
         <span
-          aria-label="Close message"
-          class="PodBrowser-icon-cancel"
-          role="img"
-        />
+          class="PodBrowser-button__text"
+        >
+          <span
+            aria-label="Close message"
+            class="PodBrowser-icon-cancel"
+            role="img"
+          />
+        </span>
       </button>
     </div>
   </div>

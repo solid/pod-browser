@@ -15,12 +15,16 @@ exports[`ResourceDrawer view it renders a Contents view when the router query ha
           class="PodBrowser-drawer__article"
         >
           <button
-            class="PodBrowser-button PodBrowser-button--text"
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
           >
             <span
-              class="PodBrowser-icon-cancel"
-            />
-             Close
+              class="PodBrowser-button__text"
+            >
+              <span
+                class="PodBrowser-icon-cancel"
+              />
+               Close
+            </span>
           </button>
         </div>
         <section
@@ -264,11 +268,18 @@ exports[`ResourceDrawer view it renders a Contents view when the router query ha
                         class="PodBrowser-action-menu__item"
                       >
                         <button
-                          class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--prompt"
+                          class="PodBrowser-button PodBrowser-button--small"
                           data-testid="permissions-add-user-with-webid-button"
-                          type="button"
+                          iconafter="caret-right"
                         >
-                          Add with WebId
+                          <span
+                            class="PodBrowser-button__text"
+                          >
+                            Add with WebId
+                          </span>
+                          <span
+                            class="PodBrowser-icon-caret-right PodBrowser-button__icon PodBrowser-button__icon--after"
+                          />
                         </button>
                       </li>
                     </ul>
@@ -379,12 +390,16 @@ exports[`ResourceDrawer view it renders a loading view when context has no iri 1
           class="PodBrowser-drawer__article"
         >
           <button
-            class="PodBrowser-button PodBrowser-button--text"
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
           >
             <span
-              class="PodBrowser-icon-cancel"
-            />
-             Close
+              class="PodBrowser-button__text"
+            >
+              <span
+                class="PodBrowser-icon-cancel"
+              />
+               Close
+            </span>
           </button>
         </div>
         <section
@@ -628,11 +643,18 @@ exports[`ResourceDrawer view it renders a loading view when context has no iri 1
                         class="PodBrowser-action-menu__item"
                       >
                         <button
-                          class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--prompt"
+                          class="PodBrowser-button PodBrowser-button--small"
                           data-testid="permissions-add-user-with-webid-button"
-                          type="button"
+                          iconafter="caret-right"
                         >
-                          Add with WebId
+                          <span
+                            class="PodBrowser-button__text"
+                          >
+                            Add with WebId
+                          </span>
+                          <span
+                            class="PodBrowser-icon-caret-right PodBrowser-button__icon PodBrowser-button__icon--after"
+                          />
                         </button>
                       </li>
                     </ul>
@@ -743,12 +765,16 @@ exports[`ResourceDrawer view it renders without errors when iri contains spaces 
           class="PodBrowser-drawer__article"
         >
           <button
-            class="PodBrowser-button PodBrowser-button--text"
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
           >
             <span
-              class="PodBrowser-icon-cancel"
-            />
-             Close
+              class="PodBrowser-button__text"
+            >
+              <span
+                class="PodBrowser-icon-cancel"
+              />
+               Close
+            </span>
           </button>
         </div>
         <section
@@ -992,11 +1018,18 @@ exports[`ResourceDrawer view it renders without errors when iri contains spaces 
                         class="PodBrowser-action-menu__item"
                       >
                         <button
-                          class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--prompt"
+                          class="PodBrowser-button PodBrowser-button--small"
                           data-testid="permissions-add-user-with-webid-button"
-                          type="button"
+                          iconafter="caret-right"
                         >
-                          Add with WebId
+                          <span
+                            class="PodBrowser-button__text"
+                          >
+                            Add with WebId
+                          </span>
+                          <span
+                            class="PodBrowser-icon-caret-right PodBrowser-button__icon PodBrowser-button__icon--after"
+                          />
                         </button>
                       </li>
                     </ul>
@@ -1107,12 +1140,16 @@ exports[`ResourceDrawer view renders a specific error message if resource fails 
           class="PodBrowser-drawer__article"
         >
           <button
-            class="PodBrowser-button PodBrowser-button--text"
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
           >
             <span
-              class="PodBrowser-icon-cancel"
-            />
-             Close
+              class="PodBrowser-button__text"
+            >
+              <span
+                class="PodBrowser-icon-cancel"
+              />
+               Close
+            </span>
           </button>
         </div>
         <div
@@ -1147,12 +1184,16 @@ exports[`ResourceDrawer view renders an error message if resource fails to load 
           class="PodBrowser-drawer__article"
         >
           <button
-            class="PodBrowser-button PodBrowser-button--text"
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
           >
             <span
-              class="PodBrowser-icon-cancel"
-            />
-             Close
+              class="PodBrowser-button__text"
+            >
+              <span
+                class="PodBrowser-icon-cancel"
+              />
+               Close
+            </span>
           </button>
         </div>
         <div
