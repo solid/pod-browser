@@ -107,6 +107,189 @@ const permissions = [
   },
 ];
 
+describe("handleSubmit", () => {
+  const webId = "https://example.org";
+  const setLoading = jest.fn();
+  const accessControl = mockAccessControl();
+  const addressBook = mockSolidDatasetFrom("https://example.org/addressBook");
+  const mutatePermissions = jest.fn();
+  const saveAgentToContacts = jest.fn();
+  const onClose = jest.fn();
+  const type = "editors";
+  const fetch = jest.fn();
+
+  it("returns a handler that exits when user doesn not make any changes", async () => {
+    const handler = handleSubmit({
+      newAgentsWebIds: [],
+      webIdsToDelete: [],
+      accessControl,
+      addressBook,
+      mutatePermissions,
+      saveAgentToContacts,
+      onClose,
+      setLoading,
+      type,
+      fetch,
+    });
+    handler();
+
+    await waitFor(() => {
+      expect(accessControl.addAgentToNamedPolicy).not.toHaveBeenCalled();
+    });
+
+    expect(saveAgentToContacts).not.toHaveBeenCalled();
+    expect(mutatePermissions).not.toHaveBeenCalled();
+  });
+
+  it("returns a handler that submits the new webIds", async () => {
+    const handler = handleSubmit({
+      newAgentsWebIds: [webId],
+      webIdsToDelete: [],
+      accessControl,
+      addressBook,
+      mutatePermissions,
+      saveAgentToContacts,
+      onClose,
+      setLoading,
+      type,
+      fetch,
+    });
+    handler();
+
+    await waitFor(() => {
+      expect(accessControl.addAgentToNamedPolicy).toHaveBeenCalledWith(
+        webId,
+        type
+      );
+    });
+
+    expect(saveAgentToContacts).toHaveBeenCalledWith(webId, addressBook, fetch);
+    expect(mutatePermissions).toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it("returns a handler that submits the webIdsToDelete", async () => {
+    const handler = handleSubmit({
+      newAgentsWebIds: [],
+      webIdsToDelete: [webId],
+      accessControl,
+      addressBook,
+      mutatePermissions,
+      saveAgentToContacts,
+      onClose,
+      setLoading,
+      type,
+      fetch,
+    });
+    handler();
+
+    await waitFor(() => {
+      expect(accessControl.removeAgentFromNamedPolicy).toHaveBeenCalledWith(
+        webId,
+        type
+      );
+    });
+
+    expect(mutatePermissions).toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalled();
+  });
+});
+
+describe("handleConfirmation", () => {
+  const dialogId = "dialogId";
+  const setOpen = jest.fn();
+  const handleSubmitNewWebIds = jest.fn();
+  const setConfirmed = jest.fn();
+  const setTitle = jest.fn();
+  const setContent = jest.fn();
+  const setConfirmationSetup = jest.fn();
+  const open = dialogId;
+
+  const handler = handleConfirmation({
+    open,
+    dialogId,
+    setConfirmationSetup,
+    setOpen,
+    setContent,
+    setTitle,
+    setConfirmed,
+    handleSubmitNewWebIds,
+  });
+
+  it("returns a handler which calls a function that submits the webIds when user confirms dialog", () => {
+    handler(true, true);
+
+    expect(handleSubmitNewWebIds).toHaveBeenCalled();
+    expect(setConfirmed).toHaveBeenCalledWith(null);
+    expect(setConfirmationSetup).toHaveBeenCalledWith(true);
+    expect(setTitle).toHaveBeenCalledWith(null);
+    expect(setContent).toHaveBeenCalledWith(null);
+  });
+  it("returns a handler that exits when user cancels the operation", () => {
+    handler(true, false);
+
+    expect(setOpen).toHaveBeenCalledWith(null);
+    expect(handleSubmitNewWebIds).not.toHaveBeenCalled();
+    expect(setConfirmed).toHaveBeenCalledWith(null);
+  });
+  it("returns a handler that exits when user starts confirmation but hasn't selected an option", () => {
+    handler(true, null);
+
+    expect(handleSubmitNewWebIds).not.toHaveBeenCalled();
+  });
+});
+
+describe("handleSaveContact", () => {
+  const iri = "https://example.org";
+  const contacts = [
+    mockPersonContact(
+      mockAddressBook(),
+      "https://example.org/contacts/Person/1234/",
+      "Example 1"
+    ),
+  ];
+  const addressBookUrl = "http://example.com/contacts/index.ttl";
+  const addressBook = mockSolidDatasetFrom(addressBookUrl);
+  const fetch = jest.fn();
+  it("exits if no iri", () => {
+    handleSaveContact(null, contacts, addressBook, fetch);
+
+    expect(jest.spyOn(AddressBookFns, "saveContact")).not.toHaveBeenCalled();
+  });
+  it("cancels the operation if webId is already in contacts", () => {
+    handleSaveContact(iri, contacts, addressBook, fetch);
+    const name = "Example";
+    const avatar = "https://someavatar.com";
+    const webId = iri;
+
+    jest
+      .spyOn(ProfileFns, "fetchProfile")
+      .mockResolvedValue({ name, avatar, webId });
+
+    jest
+      .spyOn(personModelFunctions, "findPersonContactInAddressBook")
+      .mockResolvedValue([iri]);
+
+    expect(jest.spyOn(AddressBookFns, "saveContact")).not.toHaveBeenCalled();
+  });
+  it("saves the contact", () => {
+    handleSaveContact(iri, contacts, addressBook, fetch);
+    const name = "Example";
+    const avatar = "https://someavatar.com";
+    const webId = iri;
+
+    jest
+      .spyOn(ProfileFns, "fetchProfile")
+      .mockResolvedValue({ name, avatar, webId });
+
+    jest
+      .spyOn(personModelFunctions, "findPersonContactInAddressBook")
+      .mockResolvedValue([]);
+
+    expect(jest.spyOn(AddressBookFns, "saveContact")).not.toHaveBeenCalled();
+  });
+});
+
 describe("AgentPickerModal without contacts", () => {
   beforeEach(() => {
     useAddressBook.mockReturnValue({ data: mockAddressBook() });
@@ -205,33 +388,6 @@ describe("AgentPickerModal without contacts", () => {
     );
     expect(asFragment()).toMatchSnapshot();
     expect(getByTestId("empty-state-add-webid-button")).not.toBeNull();
-  });
-  it("renders a warning when trying to submit without adding a webId", () => {
-    useContacts.mockReturnValue({ data: [] });
-
-    useNamedPolicyPermissions.mockReturnValue({
-      data: permissions,
-      mutate: jest.fn(),
-    });
-    usePermissionsWithProfiles.mockReturnValue({
-      permissionsWithProfiles: permissions,
-    });
-    const { getByTestId, getByRole } = renderWithTheme(
-      <AccessControlContext.Provider value={{ accessControl }}>
-        <AgentPickerModal
-          type="editors"
-          text={{ editText: "Edit Editors", saveText: "Save Editors" }}
-          onClose={onClose}
-        />
-      </AccessControlContext.Provider>
-    );
-
-    const addWebIdButton = getByTestId("add-webid-button");
-    userEvent.click(addWebIdButton);
-    const submitWebIdsButton = getByTestId("submit-webids-button");
-    userEvent.click(submitWebIdsButton);
-
-    expect(getByRole("alert")).not.toBeNull();
   });
   it("opens a confirmation dialog", async () => {
     useContacts.mockReturnValue({ data: [] });
@@ -619,193 +775,5 @@ describe("AgentPickerModal with contacts", () => {
     // TODO: we will call this testid differently when we have groups
     expect(queryAllByTestId("agent-webid")).toHaveLength(0);
     expect(queryByText("No people found")).not.toBeNull();
-  });
-});
-
-describe("handleConfirmation", () => {
-  const dialogId = "dialogId";
-  const setOpen = jest.fn();
-  const handleSubmitNewWebIds = jest.fn();
-  const setConfirmed = jest.fn();
-  const setTitle = jest.fn();
-  const setContent = jest.fn();
-  const setConfirmationSetup = jest.fn();
-  const open = dialogId;
-
-  const handler = handleConfirmation({
-    open,
-    dialogId,
-    setConfirmationSetup,
-    setOpen,
-    setContent,
-    setTitle,
-    setConfirmed,
-    handleSubmitNewWebIds,
-  });
-
-  it("returns a handler which calls a function that submits the webIds when user confirms dialog", () => {
-    handler(true, true);
-
-    expect(handleSubmitNewWebIds).toHaveBeenCalled();
-    expect(setConfirmed).toHaveBeenCalledWith(null);
-    expect(setConfirmationSetup).toHaveBeenCalledWith(true);
-    expect(setTitle).toHaveBeenCalledWith(null);
-    expect(setContent).toHaveBeenCalledWith(null);
-  });
-  it("returns a handler that exits when user cancels the operation", () => {
-    handler(true, false);
-
-    expect(setOpen).toHaveBeenCalledWith(null);
-    expect(handleSubmitNewWebIds).not.toHaveBeenCalled();
-    expect(setConfirmed).toHaveBeenCalledWith(null);
-  });
-  it("returns a handler that exits when user starts confirmation but hasn't selected an option", () => {
-    handler(true, null);
-
-    expect(handleSubmitNewWebIds).not.toHaveBeenCalled();
-  });
-});
-
-describe("handleSubmit", () => {
-  const webId = "https://example.org";
-  const setNoAgentsAlert = jest.fn();
-  const accessControl = mockAccessControl();
-  const contacts = [
-    mockPersonContact(
-      mockAddressBook(),
-      "https://example.org/contacts/Person/1234/",
-      "Example 1"
-    ),
-  ];
-  const addressBook = mockSolidDatasetFrom("https://example.org/addressBook");
-  const mutatePermissions = jest.fn();
-  const saveAgentToContacts = jest.fn();
-  const onClose = jest.fn();
-  const type = "editors";
-  const fetch = jest.fn();
-
-  it("returns a handler that submits the new webIds", async () => {
-    const handler = handleSubmit({
-      newAgentsWebIds: [webId],
-      webIdsToDelete: [],
-      setNoAgentsAlert,
-      accessControl,
-      contacts,
-      addressBook,
-      mutatePermissions,
-      saveAgentToContacts,
-      onClose,
-      type,
-      fetch,
-    });
-    handler();
-
-    await waitFor(() => {
-      expect(accessControl.addAgentToNamedPolicy).toHaveBeenCalledWith(
-        webId,
-        type
-      );
-    });
-
-    expect(saveAgentToContacts).toHaveBeenCalled();
-    expect(mutatePermissions).toHaveBeenCalled();
-    expect(onClose).toHaveBeenCalled();
-  });
-
-  it("returns a handler that submits the webIdsToDelete", async () => {
-    const handler = handleSubmit({
-      newAgentsWebIds: [],
-      webIdsToDelete: [webId],
-      setNoAgentsAlert,
-      accessControl,
-      contacts,
-      addressBook,
-      mutatePermissions,
-      saveAgentToContacts,
-      onClose,
-      type,
-      fetch,
-    });
-    handler();
-
-    await waitFor(() => {
-      expect(accessControl.removeAgentFromNamedPolicy).toHaveBeenCalledWith(
-        webId,
-        type
-      );
-    });
-
-    expect(mutatePermissions).toHaveBeenCalled();
-    expect(onClose).toHaveBeenCalled();
-  });
-
-  it("calls setNoAgentsAlert when array of agents if empty", () => {
-    const handler = handleSubmit({
-      newAgentsWebIds: [],
-      webIdsToDelete: [],
-      setNoAgentsAlert,
-      accessControl,
-      contacts,
-      addressBook,
-      mutatePermissions,
-      saveAgentToContacts,
-      onClose,
-      type,
-      fetch,
-    });
-    handler();
-
-    expect(setNoAgentsAlert).toHaveBeenCalledWith(true);
-  });
-});
-
-describe("handleSaveContact", () => {
-  const iri = "https://example.org";
-  const contacts = [
-    mockPersonContact(
-      mockAddressBook(),
-      "https://example.org/contacts/Person/1234/",
-      "Example 1"
-    ),
-  ];
-  const addressBookUrl = "http://example.com/contacts/index.ttl";
-  const addressBook = mockSolidDatasetFrom(addressBookUrl);
-  const fetch = jest.fn();
-  it("exits if no iri", () => {
-    handleSaveContact(null, contacts, addressBook, fetch);
-
-    expect(jest.spyOn(AddressBookFns, "saveContact")).not.toHaveBeenCalled();
-  });
-  it("cancels the operation if webId is already in contacts", () => {
-    handleSaveContact(iri, contacts, addressBook, fetch);
-    const name = "Example";
-    const avatar = "https://someavatar.com";
-    const webId = iri;
-
-    jest
-      .spyOn(ProfileFns, "fetchProfile")
-      .mockResolvedValue({ name, avatar, webId });
-
-    jest
-      .spyOn(personModelFunctions, "findPersonContactInAddressBook")
-      .mockResolvedValue([iri]);
-
-    expect(jest.spyOn(AddressBookFns, "saveContact")).not.toHaveBeenCalled();
-  });
-  it("saves the contact", () => {
-    handleSaveContact(iri, contacts, addressBook, fetch);
-    const name = "Example";
-    const avatar = "https://someavatar.com";
-    const webId = iri;
-
-    jest
-      .spyOn(ProfileFns, "fetchProfile")
-      .mockResolvedValue({ name, avatar, webId });
-
-    jest
-      .spyOn(personModelFunctions, "findPersonContactInAddressBook")
-      .mockResolvedValue([]);
-
-    expect(jest.spyOn(AddressBookFns, "saveContact")).not.toHaveBeenCalled();
   });
 });

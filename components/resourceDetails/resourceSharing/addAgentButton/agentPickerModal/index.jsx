@@ -34,7 +34,6 @@ import {
   TableColumn,
   useSession,
 } from "@inrupt/solid-ui-react";
-import { Alert } from "@material-ui/lab";
 import { createThing, getSourceUrl } from "@inrupt/solid-client";
 import { vcard } from "rdf-namespaces";
 import AccessControlContext from "../../../../../src/contexts/accessControlContext";
@@ -61,34 +60,58 @@ import {
 } from "../../../../../src/models/contact/person";
 import useAddressBook from "../../../../../src/hooks/useAddressBook";
 
+function serializePromises(promiseFactories, postResolveActions) {
+  promiseFactories
+    .reduce((promise, func) => {
+      return promise.then((result) =>
+        func()?.then(Array.prototype.concat.bind(result))
+      );
+    }, Promise.resolve([]))
+    .then(() => postResolveActions());
+}
+
 export const handleSubmit = ({
   newAgentsWebIds,
   webIdsToDelete,
-  setNoAgentsAlert,
   accessControl,
   addressBook,
   mutatePermissions,
   saveAgentToContacts,
   onClose,
+  setLoading,
   type,
   fetch,
 }) => {
   return () => {
     if (!newAgentsWebIds.length && !webIdsToDelete.length) {
-      setNoAgentsAlert(true);
       return;
     }
-    Promise.allSettled([
-      ...webIdsToDelete?.map(async (agentWebId) =>
-        accessControl.removeAgentFromNamedPolicy(agentWebId, type)
-      ),
-      ...newAgentsWebIds?.map(async (agentWebId) =>
+    setLoading(true);
+    const addPermissionsPromiseFactories = newAgentsWebIds?.map(
+      (agentWebId) => () =>
         accessControl.addAgentToNamedPolicy(agentWebId, type)
-      ),
-      ...newAgentsWebIds?.map(async (agentWebId) =>
-        saveAgentToContacts(agentWebId, addressBook, fetch)
-      ),
-    ]).then(() => mutatePermissions());
+    );
+
+    const removePermissionsPromiseFactories = webIdsToDelete?.map(
+      (agentWebId) => () =>
+        accessControl.removeAgentFromNamedPolicy(agentWebId, type)
+    );
+
+    const addAgentsToContactsPromiseFactories = newAgentsWebIds?.map(
+      (agentWebId) => () => saveAgentToContacts(agentWebId, addressBook, fetch)
+    );
+    serializePromises(
+      [
+        ...addPermissionsPromiseFactories,
+        ...removePermissionsPromiseFactories,
+        ...addAgentsToContactsPromiseFactories,
+      ],
+      () => {
+        mutatePermissions();
+        setLoading(false);
+      }
+    );
+
     onClose();
   };
 };
@@ -158,7 +181,7 @@ const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
 const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
 const TESTCAFE_CANCEL_WEBIDS_BUTTON = "cancel-webids-button";
 
-export default function AgentPickerModal({ type, text, onClose }) {
+export default function AgentPickerModal({ type, text, onClose, setLoading }) {
   const { editText, saveText } = text;
   const {
     data: namedPermissions,
@@ -191,7 +214,6 @@ export default function AgentPickerModal({ type, text, onClose }) {
   const [contactsArray, setContactsArray] = useState([]);
   const [filteredContacts, setFilteredContacts] = useState([]);
   const [addingWebId, setAddingWebId] = useState(false);
-  const [noAgentsAlert, setNoAgentsAlert] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
   const dialogId = "add-new-permissions";
   const [confirmationSetup, setConfirmationSetup] = useState(false);
@@ -215,19 +237,20 @@ export default function AgentPickerModal({ type, text, onClose }) {
   const handleSubmitNewWebIds = handleSubmit({
     newAgentsWebIds,
     webIdsToDelete,
-    setNoAgentsAlert,
     accessControl,
     addressBook,
     mutatePermissions,
     saveAgentToContacts: handleSaveContact,
     onClose,
+    setLoading,
     type,
     fetch,
   });
 
   const handleClickOpenDialog = () => {
     if (!newAgentsWebIds.length && !webIdsToDelete.length) {
-      setNoAgentsAlert(true);
+      onClose();
+      setConfirmed(false);
       return;
     }
     const confirmationTitle = `Change permissions for ${
@@ -269,7 +292,7 @@ export default function AgentPickerModal({ type, text, onClose }) {
   };
 
   useEffect(() => {
-    if (!contacts) return;
+    if (!contacts || !addressBook) return;
     const { dataset: addressBookDataset } = addressBook;
     const contactsArrayForTable = contacts.map(({ thing }) => {
       return {
@@ -294,7 +317,6 @@ export default function AgentPickerModal({ type, text, onClose }) {
   }, [confirmationSetup, confirmed, onConfirmation]);
 
   const handleAddRow = () => {
-    setNoAgentsAlert(false);
     setAddingWebId(true);
     const emptyThing = createThing();
     const { dataset: addressBookDataset } = addressBook;
@@ -391,7 +413,6 @@ export default function AgentPickerModal({ type, text, onClose }) {
                   contactsArrayLength={contactsArray.length}
                   setAddingWebId={setAddingWebId}
                   addingWebId={addingWebId}
-                  setNoAgentsAlert={setNoAgentsAlert}
                   updateTemporaryRowThing={updateTemporaryRowThing}
                   permissions={permissions}
                 />
@@ -413,7 +434,6 @@ export default function AgentPickerModal({ type, text, onClose }) {
         )}
       </div>
       {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-      {noAgentsAlert && <Alert severity="error">Please select {type}</Alert>}
       <div className={classes.buttonsContainer}>
         <Button
           variant="secondary"
@@ -435,10 +455,12 @@ export default function AgentPickerModal({ type, text, onClose }) {
 
 AgentPickerModal.propTypes = {
   onClose: PropTypes.func,
+  setLoading: PropTypes.func,
   text: PropTypes.shape().isRequired,
   type: PropTypes.string.isRequired,
 };
 
 AgentPickerModal.defaultProps = {
   onClose: () => {},
+  setLoading: () => {},
 };

@@ -80,7 +80,6 @@ export default function AddAgentRow({
   newAgentsWebIds,
   contactsArrayLength,
   setAddingWebId,
-  setNoAgentsAlert,
   addingWebId,
   updateTemporaryRowThing,
   permissions,
@@ -113,7 +112,6 @@ export default function AddAgentRow({
       setExistingPermission(true);
       return;
     }
-    setNoAgentsAlert(false);
     setNewAgentsWebIds([...newAgentsWebIds, agentWebId]);
     const newThing = await updateThingForNewRow(
       agentWebId,
@@ -193,7 +191,6 @@ AddAgentRow.propTypes = {
   setNewAgentsWebIds: PropTypes.func.isRequired,
   newAgentsWebIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   setAddingWebId: PropTypes.func.isRequired,
-  setNoAgentsAlert: PropTypes.func.isRequired,
   contactsArrayLength: PropTypes.number.isRequired,
   addingWebId: PropTypes.bool.isRequired,
   updateTemporaryRowThing: PropTypes.func.isRequired,

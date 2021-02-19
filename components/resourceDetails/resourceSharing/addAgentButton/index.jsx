@@ -38,11 +38,8 @@ const BUTTON_TEXT_MAP = {
   blocked: { editText: "Edit Blocked", saveText: "Save Blocked" },
 };
 
-export default function AddAgentButton({ type }) {
-  const {
-    data: namedPermissions,
-    mutate: mutatePermissions,
-  } = useNamedPolicyPermissions(type);
+export default function AddAgentButton({ type, setLoading }) {
+  const { data: namedPermissions } = useNamedPolicyPermissions(type);
   const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
     namedPermissions
   );
@@ -86,7 +83,7 @@ export default function AddAgentButton({ type }) {
           type={type}
           text={BUTTON_TEXT_MAP[type]}
           onClose={handleClose}
-          mutatePermissions={mutatePermissions}
+          setLoading={setLoading}
           permissions={permissions}
         />
       </Modal>
@@ -96,4 +93,9 @@ export default function AddAgentButton({ type }) {
 
 AddAgentButton.propTypes = {
   type: PropTypes.string.isRequired,
+  setLoading: PropTypes.func,
+};
+
+AddAgentButton.defaultProps = {
+  setLoading: () => {},
 };
