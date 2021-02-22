@@ -12,7 +12,7 @@ exports[`ResourceDrawer view it renders a Contents view when the router query ha
         class="PodBrowser-drawer__content-wrapper"
       >
         <div
-          class="PodBrowser-drawer__article"
+          class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
         >
           <button
             class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
@@ -387,7 +387,7 @@ exports[`ResourceDrawer view it renders a loading view when context has no iri 1
         class="PodBrowser-drawer__content-wrapper"
       >
         <div
-          class="PodBrowser-drawer__article"
+          class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
         >
           <button
             class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
@@ -762,7 +762,7 @@ exports[`ResourceDrawer view it renders without errors when iri contains spaces 
         class="PodBrowser-drawer__content-wrapper"
       >
         <div
-          class="PodBrowser-drawer__article"
+          class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
         >
           <button
             class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
@@ -1137,7 +1137,7 @@ exports[`ResourceDrawer view renders a specific error message if resource fails 
         class="PodBrowser-drawer__content-wrapper"
       >
         <div
-          class="PodBrowser-drawer__article"
+          class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
         >
           <button
             class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
@@ -1181,7 +1181,7 @@ exports[`ResourceDrawer view renders an error message if resource fails to load 
         class="PodBrowser-drawer__content-wrapper"
       >
         <div
-          class="PodBrowser-drawer__article"
+          class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
         >
           <button
             class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"

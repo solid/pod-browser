@@ -470,7 +470,7 @@ exports[`Container view renders NoControlError if it fails to get access control
           class="PodBrowser-drawer__content-wrapper"
         >
           <div
-            class="PodBrowser-drawer__article"
+            class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
           >
             <button
               class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
@@ -1014,7 +1014,7 @@ exports[`Container view renders a table 1`] = `
           class="PodBrowser-drawer__content-wrapper"
         >
           <div
-            class="PodBrowser-drawer__article"
+            class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
           >
             <button
               class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
