@@ -19,39 +19,29 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function styles(theme) {
-  return {
-    "groups-container": {
-      flexGrow: 1,
-      margin: theme.spacing(1, 0),
-      [theme.breakpoints.up("sm")]: {
-        display: "flex",
-        gap: "1rem",
-      },
-    },
-    "groups-container__content": {
-      display: "none",
-      [theme.breakpoints.up("sm")]: {
-        border: "solid 1px",
-        borderColor: theme.palette.grey["200"],
-        borderRadius: 8,
-        boxShadow: "0 4px 12px 1px rgba(208,208,208,0.22)",
-        display: "block",
-      },
-    },
-    "groups-container__content--focus": {
-      display: "block",
-    },
-    "groups-container__content--list": {
-      [theme.breakpoints.up("sm")]: {
-        maxWidth: 360,
-        width: "50%",
-      },
-    },
-    "groups-container__content--main": {
-      [theme.breakpoints.up("sm")]: {
-        flexGrow: 1,
-      },
-    },
-  };
+import { Icons } from "@inrupt/prism-react-components";
+import React from "react";
+import { useBem } from "@solid/lit-prism-patterns";
+import { makeStyles } from "@material-ui/styles";
+import { createStyles } from "@material-ui/core";
+import styles from "./styles";
+import CreateGroupButton from "../../createGroupButton";
+
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+
+export const TESTCAFE_ID_GROUP_VIEW_EMPTY = "group-view-empty";
+
+export default function GroupViewEmpty() {
+  const bem = useBem(useStyles());
+  return (
+    <div
+      className={bem("group-view-empty")}
+      data-testid={TESTCAFE_ID_GROUP_VIEW_EMPTY}
+    >
+      <Icons name="users" className={bem("icon-large")} />
+      <h2>You don&apos;t have any groups yet!</h2>
+      <p>Create a new group to easily share files with.</p>
+      <CreateGroupButton>Create New Group</CreateGroupButton>
+    </div>
+  );
 }

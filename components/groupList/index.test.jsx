@@ -20,12 +20,10 @@
  */
 
 import { renderWithTheme } from "../../__testUtils/withTheme";
-import GroupList, {
-  TESTCAFE_ID_GROUP_ERROR,
-  TESTCAFE_ID_GROUP_LIST_EMPTY,
-} from "./index";
+import GroupList, { TESTCAFE_ID_GROUP_ERROR } from "./index";
 import useContacts from "../../src/hooks/useContacts";
 import { TESTCAFE_ID_SPINNER } from "../spinner";
+import { TESTCAFE_ID_GROUP_LIST_EMPTY } from "./groupListEmpty";
 
 jest.mock("../../src/hooks/useContacts");
 const mockedContactsHook = useContacts;

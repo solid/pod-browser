@@ -19,39 +19,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function styles(theme) {
-  return {
-    "groups-container": {
-      flexGrow: 1,
-      margin: theme.spacing(1, 0),
-      [theme.breakpoints.up("sm")]: {
-        display: "flex",
-        gap: "1rem",
-      },
-    },
-    "groups-container__content": {
-      display: "none",
-      [theme.breakpoints.up("sm")]: {
-        border: "solid 1px",
-        borderColor: theme.palette.grey["200"],
-        borderRadius: 8,
-        boxShadow: "0 4px 12px 1px rgba(208,208,208,0.22)",
-        display: "block",
-      },
-    },
-    "groups-container__content--focus": {
-      display: "block",
-    },
-    "groups-container__content--list": {
-      [theme.breakpoints.up("sm")]: {
-        maxWidth: 360,
-        width: "50%",
-      },
-    },
-    "groups-container__content--main": {
-      [theme.breakpoints.up("sm")]: {
-        flexGrow: 1,
-      },
-    },
-  };
+import { Message } from "@inrupt/prism-react-components";
+import React from "react";
+import T from "prop-types";
+
+export const TESTCAFE_ID_ERROR_MESSAGE = "error-message";
+
+export default function ErrorMessage({ error }) {
+  return (
+    <Message variant="error" data-testid={TESTCAFE_ID_ERROR_MESSAGE}>
+      {error.message}
+    </Message>
+  );
 }
+
+ErrorMessage.propTypes = {
+  error: T.shape({
+    message: T.string,
+  }).isRequired,
+};

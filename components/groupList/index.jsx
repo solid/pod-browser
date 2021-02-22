@@ -19,43 +19,66 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
+import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/styles";
 import { createStyles } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Message } from "@inrupt/prism-react-components";
-import useContacts from "../../src/hooks/useContacts";
-import { GROUP_CONTACT } from "../../src/models/contact/group";
+import { Icons } from "@inrupt/prism-react-components";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import styles from "./styles";
 import Spinner from "../spinner";
+import CreateGroupButton from "../createGroupButton";
+import { getGroupName, getGroupUrl } from "../../src/models/group";
+import ErrorMessage from "../errorMessage";
+import GroupListEmpty from "./groupListEmpty";
+import ContactsContext from "../../src/contexts/contactsContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export const TESTCAFE_ID_GROUP_LIST = "group-list";
-export const TESTCAFE_ID_GROUP_LIST_EMPTY = "group-list-empty";
-export const TESTCAFE_ID_GROUP_ERROR = "group-list-error";
 
 export default function GroupList() {
-  const { data: contacts, error } = useContacts([GROUP_CONTACT]);
+  const { contactsSWR } = useContext(ContactsContext);
+  const { data: groups, error } = contactsSWR;
+  console.log("TEST", groups?.length);
   const bem = useBem(useStyles());
+  const router = useRouter();
+  const selectedGroupUrl = router.query.iri;
   return (
     <div data-testid={TESTCAFE_ID_GROUP_LIST}>
       <div className={bem("group-list-header")}>
         <div className={bem("group-list-header__title")}>Groups</div>
+        <CreateGroupButton iconBefore="add" variant="small">
+          New Group
+        </CreateGroupButton>
       </div>
-      {!contacts && !error && <Spinner />}
-      {error && (
-        <Message variant="error" data-testid={TESTCAFE_ID_GROUP_ERROR}>
-          {error.message}
-        </Message>
-      )}
-      {contacts && !contacts.length && (
-        <div
-          className={bem("group-list-empty")}
-          data-testid={TESTCAFE_ID_GROUP_LIST_EMPTY}
-        >
-          No groups
-        </div>
+      {!groups && !error && <Spinner />}
+      {error && <ErrorMessage error={error} />}
+      {groups && !groups.length && <GroupListEmpty />}
+      {groups && groups.length && (
+        <ul className={bem("group-list")}>
+          {groups.map((group, index) => {
+            const groupUrl = getGroupUrl(group);
+            const groupName = getGroupName(group);
+            const selected = selectedGroupUrl
+              ? selectedGroupUrl === groupUrl
+              : index === 0;
+            return (
+              <li className={bem("group-list__item")}>
+                <Link href={`/groups/${encodeURIComponent(groupUrl)}`}>
+                  <a className={bem("group-list__link", { selected })}>
+                    <Icons
+                      name="users"
+                      className={bem("group-list__icon", { selected })}
+                    />
+                    <span className={bem("group-list__text")}>{groupName}</span>
+                  </a>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       )}
     </div>
   );

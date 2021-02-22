@@ -23,7 +23,7 @@ import { renderWithTheme } from "../../__testUtils/withTheme";
 import useContacts from "../../src/hooks/useContacts";
 import { TESTCAFE_ID_SPINNER } from "../spinner";
 import GroupView, { TESTCAFE_ID_GROUP_VIEW_ERROR } from "./index";
-import { TESTCAFE_ID_GROUP_VIEW_EMPTY } from "../groupViewEmpty";
+import { TESTCAFE_ID_GROUP_VIEW_EMPTY } from "./groupViewEmpty";
 
 jest.mock("../../src/hooks/useContacts");
 const mockedContactsHook = useContacts;
