@@ -24,7 +24,7 @@ import { useRouter } from "next/router";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import Header, { TESTCAFE_ID_HEADER_LOGO } from "./index";
-import mockSession, {
+import {
   mockAuthenticatedSession,
   mockUnauthenticatedSession,
 } from "../../__testUtils/mockSession";
