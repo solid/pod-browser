@@ -30,7 +30,9 @@ import {
   mockSolidDatasetFrom,
 } from "@inrupt/solid-client";
 import { vcard } from "rdf-namespaces";
-import mockAddressBook from "../../../__testUtils/mockAddressBook";
+import mockAddressBook, {
+  mockEmptyAddressBook,
+} from "../../../__testUtils/mockAddressBook";
 import {
   addContactIndexToAddressBook,
   getContactAll,
@@ -235,7 +237,7 @@ describe("addContactIndexToAddressBook", () => {
   beforeEach(() => {
     mockedSaveSolidDatasetAt = jest
       .spyOn(solidClientFns, "saveSolidDatasetAt")
-      .mockResolvedValue(addressBookWithGroups);
+      .mockResolvedValue(addressBookWithGroups.dataset);
   });
 
   it("adds the contacts index to the address book", async () => {
@@ -258,7 +260,7 @@ describe("addContactIndexToAddressBook", () => {
   });
 
   it("also handles newly created address books (without any saved datasets)", async () => {
-    const newAddressBook = createAddressBook(containerUrl, webIdUrl);
+    const newAddressBook = mockEmptyAddressBook(containerUrl, webIdUrl);
     await expect(
       addContactIndexToAddressBook(newAddressBook, GROUP_CONTACT, fetch)
     ).resolves.toEqual({

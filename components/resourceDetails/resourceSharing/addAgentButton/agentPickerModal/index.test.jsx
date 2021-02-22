@@ -44,9 +44,16 @@ import useAddressBook from "../../../../../src/hooks/useAddressBook";
 import useContacts from "../../../../../src/hooks/useContacts";
 
 jest.mock("../../../../../src/hooks/useAddressBook");
+const mockedUseAddressBook = useAddressBook;
+
 jest.mock("../../../../../src/hooks/useNamedPolicyPermissions");
+const mockedUseNamedPolicyPermissions = useNamedPolicyPermissions;
+
 jest.mock("../../../../../src/hooks/usePermissionsWithProfiles");
+const mockedUsePermissionsWithProfiles = usePermissionsWithProfiles;
+
 jest.mock("../../../../../src/hooks/useContacts");
+const mockedUseContacts = useContacts;
 
 const permissions = [
   {
@@ -292,7 +299,7 @@ describe("handleSaveContact", () => {
 
 describe("AgentPickerModal without contacts", () => {
   beforeEach(() => {
-    useAddressBook.mockReturnValue({ data: mockAddressBook() });
+    mockedUseAddressBook.mockReturnValue({ data: mockAddressBook() });
   });
   const onClose = jest.fn();
   const accessControl = mockAccessControl();
@@ -301,17 +308,17 @@ describe("AgentPickerModal without contacts", () => {
     const name = "Example";
     const avatar = "https://someavatar.com";
     const webId = "https://somewebid.com";
-    useContacts.mockReturnValue({ data: [] });
+    mockedUseContacts.mockReturnValue({ data: [] });
 
     jest
       .spyOn(ProfileFns, "fetchProfile")
       .mockResolvedValue({ name, avatar, webId });
 
-    useNamedPolicyPermissions.mockReturnValue({
+    mockedUseNamedPolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
-    usePermissionsWithProfiles.mockReturnValue({
+    mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: permissions,
     });
     const { getByTestId, findByTestId, findByText } = renderWithTheme(
@@ -335,13 +342,13 @@ describe("AgentPickerModal without contacts", () => {
     expect(agentWebId).not.toBeNull();
   });
   it("updates the temporary row with webId only when profile is unavailable", async () => {
-    useContacts.mockReturnValue({ data: [] });
+    mockedUseContacts.mockReturnValue({ data: [] });
 
-    useNamedPolicyPermissions.mockReturnValue({
+    mockedUseNamedPolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
-    usePermissionsWithProfiles.mockReturnValue({
+    mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: permissions,
     });
     const webId = "https://somewebid.com";
@@ -370,13 +377,13 @@ describe("AgentPickerModal without contacts", () => {
     expect(agentWebId).not.toBeNull();
   });
   it("renders a table with tabs, searchbox and an empty state message when there are no contacts", () => {
-    useContacts.mockReturnValue({ data: [] });
+    mockedUseContacts.mockReturnValue({ data: [] });
 
-    useNamedPolicyPermissions.mockReturnValue({
+    mockedUseNamedPolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
-    usePermissionsWithProfiles.mockReturnValue({
+    mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: [],
     });
     const { asFragment, getByTestId } = renderWithTheme(
@@ -390,13 +397,13 @@ describe("AgentPickerModal without contacts", () => {
     expect(getByTestId("empty-state-add-webid-button")).not.toBeNull();
   });
   it("opens a confirmation dialog", async () => {
-    useContacts.mockReturnValue({ data: [] });
+    mockedUseContacts.mockReturnValue({ data: [] });
 
-    useNamedPolicyPermissions.mockReturnValue({
+    mockedUseNamedPolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
-    usePermissionsWithProfiles.mockReturnValue({
+    mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: permissions,
     });
     const setOpen = jest.fn();
@@ -444,13 +451,13 @@ describe("AgentPickerModal without contacts", () => {
     expect(setOpen).toHaveBeenCalledWith("add-new-permissions");
   });
   it("renders the correct confimation message for more than 1 agent", async () => {
-    useContacts.mockReturnValue({ data: [] });
+    mockedUseContacts.mockReturnValue({ data: [] });
 
-    useNamedPolicyPermissions.mockReturnValue({
+    mockedUseNamedPolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
-    usePermissionsWithProfiles.mockReturnValue({
+    mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: permissions,
     });
     const setOpen = jest.fn();
@@ -506,13 +513,13 @@ describe("AgentPickerModal without contacts", () => {
     expect(setOpen).toHaveBeenCalledWith("add-new-permissions");
   });
   it("cannot uncheck checkbox for the agent being added", async () => {
-    useContacts.mockReturnValue({ data: [] });
+    mockedUseContacts.mockReturnValue({ data: [] });
 
-    useNamedPolicyPermissions.mockReturnValue({
+    mockedUseNamedPolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
-    usePermissionsWithProfiles.mockReturnValue({
+    mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: permissions,
     });
     const setOpen = jest.fn();
@@ -552,14 +559,14 @@ describe("AgentPickerModal without contacts", () => {
     expect(checkBox).toBeChecked();
   });
   it("renders a warning when trying to submit a webId that is already in the policy", async () => {
-    useContacts.mockReturnValue({ data: [] });
+    mockedUseContacts.mockReturnValue({ data: [] });
 
     const webId = "https://somewebid.com";
-    useNamedPolicyPermissions.mockReturnValue({
+    mockedUseNamedPolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
-    usePermissionsWithProfiles.mockReturnValue({
+    mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: [{ webId }],
     });
 
@@ -590,12 +597,12 @@ describe("AgentPickerModal without contacts", () => {
 describe("AgentPickerModal with contacts", () => {
   beforeEach(() => {
     jest.resetAllMocks();
-    useAddressBook.mockReturnValue({ data: mockAddressBook() });
+    mockedUseAddressBook.mockReturnValue({ data: mockAddressBook() });
   });
 
   const onClose = jest.fn();
   it("renders a table with the available contacts", () => {
-    useContacts.mockReturnValue({
+    mockedUseContacts.mockReturnValue({
       data: [
         mockPersonContact(
           mockAddressBook(),
@@ -609,11 +616,11 @@ describe("AgentPickerModal with contacts", () => {
         ),
       ],
     });
-    useNamedPolicyPermissions.mockReturnValue({
+    mockedUseNamedPolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
-    usePermissionsWithProfiles.mockReturnValue({
+    mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: [],
     });
     const { asFragment, queryAllByTestId } = renderWithTheme(
@@ -631,7 +638,7 @@ describe("AgentPickerModal with contacts", () => {
   it("search bar filters by name", () => {
     const containerUrl = "https://example.com/contacts/";
     const emptyAddressBook = mockAddressBook({ containerUrl });
-    useContacts.mockReturnValue({
+    mockedUseContacts.mockReturnValue({
       data: [
         mockPersonContact(
           emptyAddressBook,
@@ -646,11 +653,11 @@ describe("AgentPickerModal with contacts", () => {
         mockGroupContact(emptyAddressBook, "Group 1", { id: "1234" }),
       ],
     });
-    useNamedPolicyPermissions.mockReturnValue({
+    mockedUseNamedPolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
-    usePermissionsWithProfiles.mockReturnValue({
+    mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: [],
     });
     const {
@@ -676,7 +683,7 @@ describe("AgentPickerModal with contacts", () => {
   it("clicking the tabs filters by person or group contact", () => {
     const containerUrl = "https://example.com/contacts/";
     const emptyAddressBook = mockAddressBook({ containerUrl });
-    useContacts.mockReturnValue({
+    mockedUseContacts.mockReturnValue({
       data: [
         mockPersonContact(
           emptyAddressBook,
@@ -691,11 +698,11 @@ describe("AgentPickerModal with contacts", () => {
         mockGroupContact(emptyAddressBook, "Group 1", { id: "1234" }),
       ],
     });
-    useNamedPolicyPermissions.mockReturnValue({
+    mockedUseNamedPolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
-    usePermissionsWithProfiles.mockReturnValue({
+    mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: [],
     });
     const { getByTestId, queryAllByTestId } = renderWithTheme(
@@ -716,7 +723,7 @@ describe("AgentPickerModal with contacts", () => {
   it("clicking on group tab with no results renders correct empty state text", () => {
     const containerUrl = "https://example.com/contacts/";
     const emptyAddressBook = mockAddressBook({ containerUrl });
-    useContacts.mockReturnValue({
+    mockedUseContacts.mockReturnValue({
       data: [
         mockPersonContact(
           emptyAddressBook,
@@ -730,11 +737,11 @@ describe("AgentPickerModal with contacts", () => {
         ),
       ],
     });
-    useNamedPolicyPermissions.mockReturnValue({
+    mockedUseNamedPolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
-    usePermissionsWithProfiles.mockReturnValue({
+    mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: [],
     });
     const { getByTestId, queryAllByTestId, queryByText } = renderWithTheme(
@@ -753,14 +760,14 @@ describe("AgentPickerModal with contacts", () => {
   it("clicking on people tab with no results renders correct empty state text", () => {
     const containerUrl = "https://example.com/contacts/";
     const emptyAddressBook = mockAddressBook({ containerUrl });
-    useContacts.mockReturnValue({
+    mockedUseContacts.mockReturnValue({
       data: [mockGroupContact(emptyAddressBook, "Group 1", { id: "1234" })],
     });
-    useNamedPolicyPermissions.mockReturnValue({
+    mockedUseNamedPolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
-    usePermissionsWithProfiles.mockReturnValue({
+    mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: [],
     });
     const { getByTestId, queryAllByTestId, queryByText } = renderWithTheme(

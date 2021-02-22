@@ -36,6 +36,7 @@ import {
 } from "@inrupt/solid-ui-react";
 import { createThing, getSourceUrl } from "@inrupt/solid-client";
 import { vcard } from "rdf-namespaces";
+import { serializePromises } from "../../../../../src/solidClientHelpers/utils";
 import AccessControlContext from "../../../../../src/contexts/accessControlContext";
 import { fetchProfile } from "../../../../../src/solidClientHelpers/profile";
 import { vcardExtras } from "../../../../../src/addressBook";
@@ -59,16 +60,6 @@ import {
   savePerson,
 } from "../../../../../src/models/contact/person";
 import useAddressBook from "../../../../../src/hooks/useAddressBook";
-
-function serializePromises(promiseFactories, postResolveActions) {
-  promiseFactories
-    .reduce((promise, func) => {
-      return promise.then((result) =>
-        func()?.then(Array.prototype.concat.bind(result))
-      );
-    }, Promise.resolve([]))
-    .then(() => postResolveActions());
-}
 
 export const handleSubmit = ({
   newAgentsWebIds,
@@ -100,17 +91,14 @@ export const handleSubmit = ({
     const addAgentsToContactsPromiseFactories = newAgentsWebIds?.map(
       (agentWebId) => () => saveAgentToContacts(agentWebId, addressBook, fetch)
     );
-    serializePromises(
-      [
-        ...addPermissionsPromiseFactories,
-        ...removePermissionsPromiseFactories,
-        ...addAgentsToContactsPromiseFactories,
-      ],
-      () => {
-        mutatePermissions();
-        setLoading(false);
-      }
-    );
+    serializePromises([
+      ...addPermissionsPromiseFactories,
+      ...removePermissionsPromiseFactories,
+      ...addAgentsToContactsPromiseFactories,
+    ]).then(() => {
+      mutatePermissions();
+      setLoading(false);
+    });
 
     onClose();
   };

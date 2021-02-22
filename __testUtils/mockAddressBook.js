@@ -22,6 +22,7 @@
 import {
   addStringNoLocale,
   addUrl,
+  createSolidDataset,
   mockSolidDatasetFrom,
   mockThingFrom,
   setThing,
@@ -65,5 +66,19 @@ export default function mockAddressBook(options = {}) {
     containerUrl,
     thing,
     dataset: mockAddressBookDataset(options, thing),
+  };
+}
+
+export function mockEmptyAddressBook(containerUrl, owner, title = "Contacts") {
+  const thing = chain(
+    mockAddressBookThing({ containerUrl, owner }),
+    (t) => addUrl(t, rdf.type, vcardExtras("AddressBook")),
+    (t) => addUrl(t, acl.owner, owner),
+    (t) => addStringNoLocale(t, dc.title, title)
+  );
+  return {
+    containerUrl,
+    dataset: setThing(createSolidDataset(), thing),
+    thing,
   };
 }

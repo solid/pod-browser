@@ -169,7 +169,7 @@ describe("saveGroup", () => {
   it("will create the corresponding index on the fly and link it to the addressBook", async () => {
     mockedSaveSolidDatasetAt
       .mockResolvedValueOnce(newGroup.dataset)
-      .mockResolvedValueOnce(addressBookWithGroupIndex)
+      .mockResolvedValueOnce(addressBookWithGroupIndex.dataset)
       .mockResolvedValueOnce(groupIndexWithGroup1Dataset);
 
     const { addressBook, group, groupIndex } = await saveGroup(

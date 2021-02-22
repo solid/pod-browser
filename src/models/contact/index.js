@@ -20,7 +20,9 @@
  */
 
 import {
+  asUrl,
   createSolidDataset,
+  getThing,
   getThingAll,
   getUrl,
   saveSolidDatasetAt,
@@ -73,7 +75,7 @@ export async function addContactIndexToAddressBook(addressBook, type, fetch) {
       type
     );
     const datasetUrl = getAddressBookIndexUrl(addressBook);
-    updatedAddressBook = await saveSolidDatasetAt(
+    const updatedAddressBookDataset = await saveSolidDatasetAt(
       datasetUrl,
       setThing(
         addressBook.dataset,
@@ -81,6 +83,11 @@ export async function addContactIndexToAddressBook(addressBook, type, fetch) {
       ),
       { fetch }
     );
+    updatedAddressBook = {
+      containerUrl: addressBook.containerUrl,
+      dataset: updatedAddressBookDataset,
+      thing: getThing(updatedAddressBookDataset, asUrl(addressBook.thing)),
+    };
     indexUrl = getContactIndexUrl(updatedAddressBook, type);
   }
 
