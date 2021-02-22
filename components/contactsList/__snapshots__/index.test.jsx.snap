@@ -216,15 +216,19 @@ exports[`ContactsList renders page when people is loaded 1`] = `
           class="PodBrowser-drawer__content-wrapper"
         >
           <div
-            class="PodBrowser-drawer__article"
+            class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
           >
             <button
-              class="PodBrowser-button PodBrowser-button--text"
+              class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
             >
               <span
-                class="PodBrowser-icon-cancel"
-              />
-               Close
+                class="PodBrowser-button__text"
+              >
+                <span
+                  class="PodBrowser-icon-cancel"
+                />
+                 Close
+              </span>
             </button>
           </div>
           <div
@@ -289,6 +293,7 @@ exports[`ContactsList renders page when people is loaded 1`] = `
                           class="PodBrowser-action-menu__item"
                         >
                           <a
+                            class="PodBrowser-action-menu__trigger"
                             href="/contacts"
                           >
                             View Profile

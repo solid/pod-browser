@@ -223,7 +223,7 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
               acl={access}
               onChange={setTempAccess}
             >
-              <PrismButton onClick={onSubmit} type="submit">
+              <PrismButton onClick={onSubmit} type="submit" variant="secondary">
                 Save
               </PrismButton>
             </PermissionsForm>
@@ -268,7 +268,7 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
           acl={access}
           onChange={setTempAccess}
         >
-          <PrismButton onClick={onSubmit} type="submit">
+          <PrismButton onClick={onSubmit} type="submit" variant="secondary">
             Save
           </PrismButton>
         </PermissionsForm>

@@ -56,7 +56,7 @@ import {
   createStyles,
 } from "@material-ui/core";
 
-import { Table as PrismTable } from "@inrupt/prism-react-components";
+import { Button, Table as PrismTable } from "@inrupt/prism-react-components";
 import styles from "./styles";
 import { chain } from "../../../src/solidClientHelpers/utils";
 
@@ -133,12 +133,7 @@ export function setupRemoveRow(profile, property, saveHandler, dataset) {
   };
 }
 
-export function setupDeleteButtonCell(
-  editing,
-  contactInfoType,
-  removeRow,
-  bem
-) {
+export function setupDeleteButtonCell(editing, contactInfoType, removeRow) {
   return () => {
     const { thing: rowThing } = useThing();
 
@@ -147,17 +142,16 @@ export function setupDeleteButtonCell(
     }
 
     return (
-      <button
+      <Button
         onClick={() => removeRow(rowThing)}
-        className={bem("button", "action")}
-        type="button"
         data-testid={TESTCAFE_ID_DELETE_BUTTON.replace(
           "<TYPE>",
           contactInfoType
         )}
+        variant="secondary"
       >
         Delete
-      </button>
+      </Button>
     );
   };
 }
@@ -248,8 +242,7 @@ export default function ContactTable({ editing, property, contactInfoType }) {
   const DeleteButtonCell = setupDeleteButtonCell(
     editing,
     contactInfoType,
-    removeRow,
-    bem
+    removeRow
   );
   const getRowProps = setupRowProps(bem);
   const columnTypeBody = setupColumnTypeBody(contactInfoType);
@@ -328,17 +321,16 @@ export default function ContactTable({ editing, property, contactInfoType }) {
             </Box>
 
             <Box width="8.25em" textAlign="center">
-              <button
-                type="button"
+              <Button
                 onClick={addContactDetail}
-                className={bem("button", "action")}
+                variant="secondary"
                 data-testid={TESTCAFE_ID_ADD_BUTTON.replace(
                   "<TYPE>",
                   contactInfoType
                 )}
               >
                 Add
-              </button>
+              </Button>
             </Box>
           </Box>
         </>

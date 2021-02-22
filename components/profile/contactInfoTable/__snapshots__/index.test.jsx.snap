@@ -135,11 +135,14 @@ exports[`ContactInfoTable renders an editable table of contact info 1`] = `
       class="PodBrowser-root PodBrowser-root"
     >
       <button
-        class="PodBrowser-button PodBrowser-button--action"
+        class="PodBrowser-button PodBrowser-button--secondary"
         data-testid="profile-email-add-button"
-        type="button"
       >
-        Add
+        <span
+          class="PodBrowser-button__text"
+        >
+          Add
+        </span>
       </button>
     </div>
   </div>
@@ -199,10 +202,14 @@ exports[`setupDeleteButtonCell renders nothing if not editable 1`] = `<DocumentF
 exports[`setupDeleteButtonCell returns a button if editable 1`] = `
 <DocumentFragment>
   <button
+    class="makeStyles-button-1545 makeStyles-button--secondary-1550"
     data-testid="profile-email-delete-button"
-    type="button"
   >
-    Delete
+    <span
+      class="makeStyles-button__text-1549"
+    >
+      Delete
+    </span>
   </button>
 </DocumentFragment>
 `;

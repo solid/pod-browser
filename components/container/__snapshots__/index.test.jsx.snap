@@ -175,21 +175,24 @@ exports[`Container view renders NoControlError if it fails to get access control
           class="PodBrowser-actions-container"
         >
           <a
-            class="PodBrowser-page-header__action"
+            class="PodBrowser-button PodBrowser-button--small"
             data-testid="folder-details-button"
             href="/resource/[iri]?action=details&resourceIri="
           >
             Folder Details
           </a>
           <button
-            class="PodBrowser-page-header__action"
+            class="PodBrowser-button PodBrowser-button--small PodBrowser-button PodBrowser-button--small"
             data-testid="add-folder-button"
-            type="button"
           >
-            Create Folder
+            <span
+              class="PodBrowser-button__text"
+            >
+              Create Folder
+            </span>
           </button>
           <label
-            class="PodBrowser-page-header__action"
+            class="PodBrowser-button PodBrowser-button--small"
             data-testid="upload-file-button"
             for="upload-file-input"
             tabindex="0"
@@ -280,10 +283,14 @@ exports[`Container view renders NoControlError if it fails to get access control
             data-testid="no-control-close-button"
           >
             <span
-              aria-label="Close message"
-              class="PodBrowser-icon-cancel"
-              role="img"
-            />
+              class="PodBrowser-button__text"
+            >
+              <span
+                aria-label="Close message"
+                class="PodBrowser-icon-cancel"
+                role="img"
+              />
+            </span>
           </button>
         </div>
       </div>
@@ -463,15 +470,19 @@ exports[`Container view renders NoControlError if it fails to get access control
           class="PodBrowser-drawer__content-wrapper"
         >
           <div
-            class="PodBrowser-drawer__article"
+            class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
           >
             <button
-              class="PodBrowser-button PodBrowser-button--text"
+              class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
             >
               <span
-                class="PodBrowser-icon-cancel"
-              />
-               Close
+                class="PodBrowser-button__text"
+              >
+                <span
+                  class="PodBrowser-icon-cancel"
+                />
+                 Close
+              </span>
             </button>
           </div>
           <section
@@ -795,21 +806,24 @@ exports[`Container view renders a table 1`] = `
           class="PodBrowser-actions-container"
         >
           <a
-            class="PodBrowser-page-header__action"
+            class="PodBrowser-button PodBrowser-button--small"
             data-testid="folder-details-button"
             href="/resource/[iri]?action=details&resourceIri="
           >
             Folder Details
           </a>
           <button
-            class="PodBrowser-page-header__action"
+            class="PodBrowser-button PodBrowser-button--small PodBrowser-button PodBrowser-button--small"
             data-testid="add-folder-button"
-            type="button"
           >
-            Create Folder
+            <span
+              class="PodBrowser-button__text"
+            >
+              Create Folder
+            </span>
           </button>
           <label
-            class="PodBrowser-page-header__action"
+            class="PodBrowser-button PodBrowser-button--small"
             data-testid="upload-file-button"
             for="upload-file-input"
             tabindex="0"
@@ -1000,15 +1014,19 @@ exports[`Container view renders a table 1`] = `
           class="PodBrowser-drawer__content-wrapper"
         >
           <div
-            class="PodBrowser-drawer__article"
+            class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
           >
             <button
-              class="PodBrowser-button PodBrowser-button--text"
+              class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
             >
               <span
-                class="PodBrowser-icon-cancel"
-              />
-               Close
+                class="PodBrowser-button__text"
+              >
+                <span
+                  class="PodBrowser-icon-cancel"
+                />
+                 Close
+              </span>
             </button>
           </div>
           <section

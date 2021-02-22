@@ -3,10 +3,18 @@
 exports[`AddPermissionUsingWebIdButton renders 1`] = `
 <DocumentFragment>
   <button
+    class="PodBrowser-button PodBrowser-button--small"
     data-testid="permissions-add-user-with-webid-button"
-    type="button"
+    iconafter="caret-right"
   >
-    Add with WebId
+    <span
+      class="PodBrowser-button__text"
+    >
+      Add with WebId
+    </span>
+    <span
+      class="PodBrowser-icon-caret-right PodBrowser-button__icon PodBrowser-button__icon--after"
+    />
   </button>
 </DocumentFragment>
 `;

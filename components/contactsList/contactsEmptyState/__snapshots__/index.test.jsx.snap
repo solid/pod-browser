@@ -18,11 +18,18 @@ exports[`ContactsEmptyState it renders an empty state component 1`] = `
         Add a new contact to share files with.
       </p>
       <a
-        class="PodBrowser-button PodBrowser-add-contact-button"
+        class="PodBrowser-button PodBrowser-button--small"
         data-testid="add-new-contact-button"
-        href="/contacts/add"
+        iconbefore="add"
       >
-        Add new contact
+        <span
+          class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+        />
+        <span
+          class="PodBrowser-button__text"
+        >
+          Add new contact
+        </span>
       </a>
     </div>
   </div>

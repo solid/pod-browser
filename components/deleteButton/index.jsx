@@ -145,7 +145,7 @@ export default function DeleteButton({
   return (
     <button
       type="button"
-      className={clsx(bem("button", "action"))}
+      className={clsx(bem("button"))}
       data-testid={TESTCAFE_ID_DELETE_BUTTON}
       {...buttonProps}
       onClick={() => setOpen(dialogId)}

@@ -9,11 +9,18 @@ exports[`ResourceSharing it renders the sharing action component 1`] = `
       class="PodBrowser-action-menu__item"
     >
       <button
-        class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--prompt"
+        class="PodBrowser-button PodBrowser-button--small"
         data-testid="permissions-add-user-with-webid-button"
-        type="button"
+        iconafter="caret-right"
       >
-        Add with WebId
+        <span
+          class="PodBrowser-button__text"
+        >
+          Add with WebId
+        </span>
+        <span
+          class="PodBrowser-icon-caret-right PodBrowser-button__icon PodBrowser-button__icon--after"
+        />
       </button>
     </li>
   </ul>

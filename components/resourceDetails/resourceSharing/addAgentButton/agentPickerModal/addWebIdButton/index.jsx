@@ -24,8 +24,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { createStyles } from "@material-ui/core";
-import { useBem } from "@solid/lit-prism-patterns";
-import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import { Button } from "@inrupt/prism-react-components";
 import styles from "./styles";
@@ -35,18 +33,16 @@ const TESTCAFE_ADD_WEBID_BUTTON = "add-webid-button";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function AddWebIdButton({ onClick, disabled }) {
-  const bem = useBem(useStyles());
   const classes = useStyles();
-
   return (
     <Button
-      variant="action"
+      variant="small"
       data-testid={TESTCAFE_ADD_WEBID_BUTTON}
       className={classes.button}
       disabled={disabled}
       onClick={onClick}
+      iconBefore="add"
     >
-      <i className={clsx(bem("icon-add"), bem("icon"))} />
       Add WebId
     </Button>
   );

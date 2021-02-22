@@ -25,19 +25,6 @@ const WIDTH_DIALOG = 640;
 
 export default function styles(theme) {
   return createStyles(theme, ["icons", "button"], {
-    cancelButton: {
-      fontSize: theme.typography.body1.fontSize,
-      fontWeight: theme.typography.body1.fontWeight,
-      padding: theme.spacing(1.4, 1.8),
-      backgroundColor: "transparent",
-    },
-    submitAgentsButton: {
-      fontSize: theme.typography.body1.fontSize,
-      fontWeight: theme.typography.body1.fontWeight,
-      color: theme.palette.common.white,
-      backgroundColor: theme.palette.primary.main,
-      padding: theme.spacing(1.4, 1.8),
-    },
     dialog: {
       width: WIDTH_DIALOG,
     },

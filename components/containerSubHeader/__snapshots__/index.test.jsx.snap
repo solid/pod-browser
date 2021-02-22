@@ -26,21 +26,24 @@ exports[`ContainerSubHeader Renders subheader 1`] = `
       class="PodBrowser-actions-container"
     >
       <a
-        class="PodBrowser-page-header__action"
+        class="PodBrowser-button PodBrowser-button--small"
         data-testid="folder-details-button"
         href="/resource/[iri]?action=details&resourceIri="
       >
         Folder Details
       </a>
       <button
-        class="PodBrowser-page-header__action"
+        class="PodBrowser-button PodBrowser-button--small PodBrowser-button PodBrowser-button--small"
         data-testid="add-folder-button"
-        type="button"
       >
-        Create Folder
+        <span
+          class="PodBrowser-button__text"
+        >
+          Create Folder
+        </span>
       </button>
       <label
-        class="PodBrowser-page-header__action"
+        class="PodBrowser-button PodBrowser-button--small"
         data-testid="upload-file-button"
         for="upload-file-input"
         tabindex="0"

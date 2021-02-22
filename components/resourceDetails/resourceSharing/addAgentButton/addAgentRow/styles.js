@@ -43,12 +43,7 @@ export default function styles(theme) {
       minWidth: "20rem",
     },
     button: {
-      fontSize: "0.875rem",
-      fontWeight: theme.typography.body1.fontWeight,
-      color: theme.palette.common.white,
-      backgroundColor: theme.palette.primary.main,
-      padding: theme.spacing(0.8, 0.7),
-      borderRadius: "10px",
+      padding: theme.spacing(0.8, 1),
       maxHeight: "2.5rem",
       margin: theme.spacing(0, 0.5),
     },

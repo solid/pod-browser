@@ -24,13 +24,18 @@ exports[`SharingAccordion it renders three lists of empty permissions for editor
             Editors
           </p>
           <button
-            class="PodBrowser-button PodBrowser-button--action PodBrowser-button"
+            class="PodBrowser-button PodBrowser-button--text"
             data-testid="add-agent-button"
+            iconbefore="add"
           >
-            <i
-              class="PodBrowser-icon-add PodBrowser-icon"
+            <span
+              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
             />
-            Add Editors
+            <span
+              class="PodBrowser-button__text"
+            >
+              Add Editors
+            </span>
           </button>
         </div>
         <span
@@ -96,13 +101,18 @@ exports[`SharingAccordion it renders three lists of empty permissions for editor
             Viewers
           </p>
           <button
-            class="PodBrowser-button PodBrowser-button--action PodBrowser-button"
+            class="PodBrowser-button PodBrowser-button--text"
             data-testid="add-agent-button"
+            iconbefore="add"
           >
-            <i
-              class="PodBrowser-icon-add PodBrowser-icon"
+            <span
+              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
             />
-            Add Viewers
+            <span
+              class="PodBrowser-button__text"
+            >
+              Add Viewers
+            </span>
           </button>
         </div>
         <span
@@ -172,13 +182,18 @@ exports[`SharingAccordion it renders three lists of empty permissions for editor
             Blocked
           </p>
           <button
-            class="PodBrowser-button PodBrowser-button--action PodBrowser-button"
+            class="PodBrowser-button PodBrowser-button--text"
             data-testid="add-agent-button"
+            iconbefore="add"
           >
-            <i
-              class="PodBrowser-icon-add PodBrowser-icon"
+            <span
+              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
             />
-            Block
+            <span
+              class="PodBrowser-button__text"
+            >
+              Block
+            </span>
           </button>
         </div>
         <span

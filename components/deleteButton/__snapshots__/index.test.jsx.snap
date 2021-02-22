@@ -3,7 +3,7 @@
 exports[`Delete button it renders a delete button 1`] = `
 <DocumentFragment>
   <button
-    class="PodBrowser-button PodBrowser-button--action"
+    class="PodBrowser-button"
     data-testid="delete-button"
     type="button"
   />

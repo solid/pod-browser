@@ -21,7 +21,6 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import clsx from "clsx";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import {
@@ -37,7 +36,6 @@ const TESTCAFE_ID_EMPTY_STATE_ADD_WEBID_BUTTON = "empty-state-add-webid-button";
 
 export default function AgentPickerEmptyState({ onClick }) {
   const bem = useBem(useStyles());
-  const buttonBem = Button.useBem();
 
   return (
     <Content>
@@ -46,10 +44,10 @@ export default function AgentPickerEmptyState({ onClick }) {
         <h2 className="text">Add a new person with their WebId</h2>
         <Button
           data-testid={TESTCAFE_ID_EMPTY_STATE_ADD_WEBID_BUTTON}
-          className={clsx(buttonBem("button"), bem("add-webId-button"))}
           onClick={onClick}
+          iconBefore="add"
+          variant="small"
         >
-          <i className={clsx(bem("icon-add"), bem("icon"))} />
           Add WebId
         </Button>
       </Container>

@@ -64,7 +64,11 @@ exports[`AddContact it renders the Add Contact form 1`] = `
         data-testid="add-agent-button"
         type="submit"
       >
-        Add Contact
+        <span
+          class="PodBrowser-button__text"
+        >
+          Add Contact
+        </span>
       </button>
     </form>
   </div>

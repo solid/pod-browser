@@ -25,11 +25,11 @@ import { createStyles, makeStyles } from "@material-ui/styles";
 import { useRouter } from "next/router";
 import { getResourceInfo, getSourceIri } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
-import { Button, Box, Popover } from "@material-ui/core";
+import { Popover } from "@material-ui/core";
 import {
+  Button,
   Form,
-  Label,
-  Message,
+  InputGroup,
   SimpleInput,
 } from "@inrupt/prism-react-components";
 import styles from "./styles";
@@ -131,37 +131,32 @@ export default function PodNavigatorPopover({
       }}
     >
       <Form onSubmit={onSubmit}>
-        <Label id="PodNavigator">Go to Pod</Label>
-        {invalidUrlField ? (
-          <Message variant="invalid">Please enter valid URL</Message>
-        ) : null}
-        <Box display="flex" alignItems="center">
-          <Box width="100%">
-            <SimpleInput
-              id="PodNavigator"
-              data-testid={TESTCAFE_ID_POD_NAVIGATE_INPUT}
-              value={url}
-              onChange={(event) => setUrl(event.target.value)}
-              placeholder="Enter Pod URI"
-              type="url"
-              pattern="https://.*"
-              title="Must start with https://"
-              required={invalidUrlField}
-            />
-          </Box>
-          <Box>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              size="large"
-              data-testid={TESTCAFE_ID_POD_NAVIGATE_BUTTON}
-              id={TESTCAFE_ID_POD_NAVIGATE_BUTTON}
-            >
-              Go
-            </Button>
-          </Box>
-        </Box>
+        <InputGroup
+          id="PodNavigator"
+          label="Go to Pod"
+          invalidMessage={invalidUrlField && "Please enter valid URL"}
+          variant="with-button"
+        >
+          <SimpleInput
+            id="PodNavigator"
+            data-testid={TESTCAFE_ID_POD_NAVIGATE_INPUT}
+            value={url}
+            onChange={(event) => setUrl(event.target.value)}
+            placeholder="Enter Pod URI"
+            type="url"
+            pattern="https://.*"
+            title="Must start with https://"
+            required={invalidUrlField}
+          />
+          <Button
+            variant="with-input"
+            type="submit"
+            data-testid={TESTCAFE_ID_POD_NAVIGATE_BUTTON}
+            id={TESTCAFE_ID_POD_NAVIGATE_BUTTON}
+          >
+            Go
+          </Button>
+        </InputGroup>
       </Form>
     </Popover>
   );

@@ -19,30 +19,32 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles } from "@solid/lit-prism-patterns";
-
-const styles = (theme) =>
-  createStyles(theme, [], {
-    "sub-header": {
-      [theme.breakpoints.up("sm")]: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-      },
+const styles = (theme) => ({
+  "sub-header": {
+    [theme.breakpoints.up("sm")]: {
       display: "flex",
-      flexDirection: "column-reverse",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
     },
-    "actions-container": {
-      [theme.breakpoints.up("sm")]: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-      },
+    display: "flex",
+    flexDirection: "column-reverse",
+  },
+  "actions-container": {
+    display: "flex",
+    gap: "2px",
+    flexDirection: "column",
+    marginTop: theme.spacing(0.5),
+    [theme.breakpoints.up("sm")]: {
       display: "flex",
-      flexDirection: "column",
+      flexDirection: "row",
+      gap: "1rem",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginTop: 0,
+      marginLeft: theme.spacing(0.5),
     },
-  });
+  },
+});
 
 export default styles;

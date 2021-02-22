@@ -39,7 +39,6 @@ import AddPermissionUsingWebIdButton from "../../addPermissionUsingWebIdButton";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function ResourceSharing({ startLoading }) {
-  const actionMenuBem = ActionMenu.useBem();
   const classes = useStyles();
   const [loading, setLoading] = useState(startLoading);
 
@@ -49,10 +48,7 @@ export default function ResourceSharing({ startLoading }) {
     <>
       <ActionMenu>
         <ActionMenuItem>
-          <AddPermissionUsingWebIdButton
-            className={actionMenuBem("action-menu__trigger", "prompt")}
-            onLoading={setLoading}
-          />
+          <AddPermissionUsingWebIdButton onLoading={setLoading} />
         </ActionMenuItem>
       </ActionMenu>
       <Accordion defaultExpanded>
