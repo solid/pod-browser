@@ -24,7 +24,23 @@ import { createStyles } from "@solid/lit-prism-patterns";
 export default function styles(theme) {
   return createStyles(theme, ["icons", "button"], {
     button: {
-      marginRight: theme.spacing(1.2),
+      [theme.breakpoints.down("xs")]: {
+        marginTop: "0.5rem",
+        width: "max-content",
+        alignSelf: "flex-end",
+      },
+      height: "max-content",
+      fontWeight: 800,
+      fontSize: "0.8125rem",
+      textDecoration: "none",
+      borderRadius: "7px",
+      backgroundColor: theme.palette.grey[50],
+      whiteSpace: "nowrap",
+      padding: theme.spacing(0.2, 1.6),
+    },
+    icon: {
+      color: theme.palette.primary.main,
+      margin: theme.spacing(0.5),
     },
   });
 }

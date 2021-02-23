@@ -21,19 +21,42 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
+const SEARCH_BOX_HEIGHT = 50;
+
 export default function styles(theme) {
   return createStyles(theme, ["icons", "table"], {
     searchBoxContainer: {
-      [theme.breakpoints.down("xs")]: {
-        display: "none",
-      },
-      display: "flex",
+      display: "none",
       margin: theme.spacing(0.7, 1.2),
       border: `1px solid ${theme.palette.grey.A100}`,
       borderRadius: "10px",
       height: "2.5rem",
+      [theme.breakpoints.down("xs")]: {
+        border: "none",
+        display: "flex",
+        "&.expanded": {
+          boxShadow: `0px 0px 0px 1px ${theme.palette.primary.main} inset`,
+          display: "flex",
+          height: SEARCH_BOX_HEIGHT,
+          borderRadius: "5px",
+          border: `1px solid ${theme.palette.grey.A100}`,
+          position: "absolute",
+          backgroundColor: theme.palette.background.paper,
+          right: theme.spacing(0.25),
+          left: theme.spacing(0.25),
+        },
+        "&.hidden": {
+          width: "min-content",
+        },
+      },
     },
     searchInput: {
+      [theme.breakpoints.down("xs")]: {
+        visibility: "hidden",
+        "&.expanded": {
+          visibility: "visible",
+        },
+      },
       fontSize: "0.8125rem",
       width: "100%",
       font: "inherit",
@@ -42,6 +65,18 @@ export default function styles(theme) {
     },
     iconSearch: {
       fontSize: theme.typography.body1.fontSize,
+    },
+    iconCloseExpanded: {
+      display: "none",
+      [theme.breakpoints.down("xs")]: {
+        display: "flex",
+        fontSize: theme.typography.body1.fontSize,
+        position: "relative",
+        paddingRight: "1rem",
+      },
+    },
+    iconCloseHidden: {
+      display: "none",
     },
   });
 }

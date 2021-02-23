@@ -24,10 +24,18 @@ import { createStyles } from "@solid/lit-prism-patterns";
 const MODAL_MIN_WIDTH = 680;
 const MODAL_MIN_HEIGHT = 680;
 const TABLE_MAX_HEIGHT = 460;
+const MOBILE_TABLE_MIN_HEIGHT = 300;
 
 export default function styles(theme) {
   return createStyles(theme, ["icons", "button", "table"], {
     paper: {
+      [theme.breakpoints.down("xs")]: {
+        minWidth: "100vw",
+        minHeight: "100vh",
+        width: "100vw",
+        height: "100vh",
+        padding: theme.spacing(2, 1.4, 3),
+      },
       minWidth: MODAL_MIN_WIDTH,
       minHeight: MODAL_MIN_HEIGHT,
       width: MODAL_MIN_WIDTH,
@@ -45,6 +53,9 @@ export default function styles(theme) {
       marginBottom: theme.spacing(1.2),
     },
     tableContainer: {
+      [theme.breakpoints.down("xs")]: {
+        minHeight: MOBILE_TABLE_MIN_HEIGHT,
+      },
       display: "flex",
       flexDirection: "column",
       backgroundColor: theme.palette.common.white,
@@ -97,12 +108,42 @@ export default function styles(theme) {
       alignItems: "center",
     },
     buttonsContainer: {
+      [theme.breakpoints.down("xs")]: {
+        display: "flex",
+        position: "relative",
+        alignItems: "center",
+        flexDirection: "column-reverse",
+        width: "100%",
+        maxWidth: "100%",
+        padding: 0,
+      },
       display: "flex",
       position: "absolute",
       bottom: 0,
       width: MODAL_MIN_WIDTH - theme.spacing(2.4) * 2 - theme.spacing(4), // substracting the padding of the buttons and the left and right padding of the modal
       padding: theme.spacing(2.4),
       justifyContent: "space-between",
+    },
+    cancelButton: {
+      [theme.breakpoints.down("xs")]: {
+        textAlign: "center",
+        width: "100%",
+      },
+      fontSize: theme.typography.body1.fontSize,
+      fontWeight: theme.typography.body1.fontWeight,
+      padding: theme.spacing(1.4, 1.8),
+      backgroundColor: "transparent",
+    },
+    submitAgentsButton: {
+      [theme.breakpoints.down("xs")]: {
+        textAlign: "center",
+        width: "100%",
+      },
+      fontSize: theme.typography.body1.fontSize,
+      fontWeight: theme.typography.body1.fontWeight,
+      color: theme.palette.common.white,
+      backgroundColor: theme.palette.primary.main,
+      padding: theme.spacing(1.4, 1.8),
     },
     capitalizedText: {
       textTransform: "capitalize",
@@ -112,6 +153,18 @@ export default function styles(theme) {
       flexDirection: "column",
       padding: theme.spacing(0.7, 1.4),
       textAlign: "center",
+    },
+    mobileOnly: {
+      [theme.breakpoints.down("xs")]: {
+        display: "block",
+      },
+      display: "none",
+    },
+    desktopOnly: {
+      [theme.breakpoints.down("xs")]: {
+        display: "none",
+      },
+      display: "flex",
     },
   });
 }

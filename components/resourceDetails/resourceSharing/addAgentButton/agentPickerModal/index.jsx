@@ -44,6 +44,7 @@ import { getResourceName } from "../../../../../src/solidClientHelpers/resource"
 import PolicyHeader from "../../policyHeader";
 import AgentsTableTabs from "../../agentsTableTabs";
 import AgentsSearchBar from "../../agentsSearchBar";
+import MobileAgentsSearchBar from "../../mobileAgentsSearchBar";
 import AddAgentRow from "../addAgentRow";
 import AgentPickerEmptyState from "../agentPickerEmptyState";
 import styles from "./styles";
@@ -357,9 +358,21 @@ export default function AgentPickerModal({ type, text, onClose, setLoading }) {
               groups: GROUP_CONTACT,
             }}
           />
-          <AddWebIdButton onClick={handleAddRow} disabled={addingWebId} />
+          <MobileAgentsSearchBar handleFilterChange={handleFilterChange} />
+
+          <AddWebIdButton
+            onClick={handleAddRow}
+            disabled={addingWebId}
+            className={classes.desktopOnly}
+          />
         </div>
         <AgentsSearchBar handleFilterChange={handleFilterChange} />
+
+        <AddWebIdButton
+          onClick={handleAddRow}
+          disabled={addingWebId}
+          className={classes.mobileOnly}
+        />
         {!contacts && !error && (
           <Container variant="empty">
             <CircularProgress />
