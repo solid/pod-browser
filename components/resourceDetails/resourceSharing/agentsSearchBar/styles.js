@@ -24,10 +24,10 @@ import { createStyles } from "@solid/lit-prism-patterns";
 export default function styles(theme) {
   return createStyles(theme, ["icons", "table"], {
     searchBoxContainer: {
-      [theme.breakpoints.down("xs")]: {
-        display: "none",
+      [theme.breakpoints.up("sm")]: {
+        display: "flex",
       },
-      display: "flex",
+      display: "none",
       margin: theme.spacing(0.7, 1.2),
       border: `1px solid ${theme.palette.grey.A100}`,
       borderRadius: "10px",

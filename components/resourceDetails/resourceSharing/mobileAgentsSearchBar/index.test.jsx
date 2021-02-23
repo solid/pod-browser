@@ -21,7 +21,6 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import { waitFor } from "@testing-library/dom";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import MobileAgentsSearchBar, {
   TESTCAFE_ID_MOBILE_SEARCH_INPUT,
@@ -29,7 +28,7 @@ import MobileAgentsSearchBar, {
   TESTCAFE_ID_CLOSE_BUTTON,
 } from "./index";
 
-describe("AgentSearchBar", () => {
+describe("MobileAgentSearchBar", () => {
   const handleFilterChange = jest.fn();
   it("renders a search icon", () => {
     const { asFragment, getByTestId } = renderWithTheme(
@@ -37,7 +36,9 @@ describe("AgentSearchBar", () => {
     );
     expect(asFragment()).toMatchSnapshot();
     expect(getByTestId(TESTCAFE_ID_SEARCH_BUTTON)).toBeDefined();
-    expect(getByTestId(TESTCAFE_ID_MOBILE_SEARCH_INPUT)).not.toBeVisible();
+    expect(getByTestId(TESTCAFE_ID_MOBILE_SEARCH_INPUT)).toHaveClass(
+      "PodBrowser-searchInput--hidden"
+    );
   });
   it("clicking the icon expands the search bar", () => {
     const { asFragment, getByTestId } = renderWithTheme(
@@ -46,8 +47,8 @@ describe("AgentSearchBar", () => {
     expect(asFragment()).toMatchSnapshot();
     const button = getByTestId(TESTCAFE_ID_SEARCH_BUTTON);
     userEvent.click(button);
-    waitFor(() =>
-      expect(getByTestId(TESTCAFE_ID_MOBILE_SEARCH_INPUT)).toBeVisible()
+    expect(getByTestId(TESTCAFE_ID_MOBILE_SEARCH_INPUT)).toHaveClass(
+      "PodBrowser-searchInput--expanded"
     );
   });
   it("clicking the close icon hides the search bar", () => {
@@ -59,9 +60,8 @@ describe("AgentSearchBar", () => {
     userEvent.click(searchButton);
     const closeButton = getByTestId(TESTCAFE_ID_CLOSE_BUTTON);
     userEvent.click(closeButton);
-
-    waitFor(() =>
-      expect(getByTestId(TESTCAFE_ID_MOBILE_SEARCH_INPUT)).not.toBeVisible()
+    expect(getByTestId(TESTCAFE_ID_MOBILE_SEARCH_INPUT)).toHaveClass(
+      "PodBrowser-searchInput--hidden"
     );
   });
   it("triggers handleFilterChange when typing into the search input", () => {

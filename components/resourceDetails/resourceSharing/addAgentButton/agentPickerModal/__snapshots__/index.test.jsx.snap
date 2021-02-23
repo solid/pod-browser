@@ -122,7 +122,7 @@ exports[`AgentPickerModal with contacts renders a table with the available conta
           </div>
         </div>
         <div
-          class="PodBrowser-searchBoxContainer hidden"
+          class="PodBrowser-searchBoxContainer--hidden"
         >
           <button
             aria-label="search"
@@ -144,11 +144,11 @@ exports[`AgentPickerModal with contacts renders a table with the available conta
             />
           </button>
           <div
-            class="PodBrowser-root PodBrowser-searchInput hidden"
+            class="PodBrowser-root PodBrowser-searchInput--hidden PodBrowser-focused"
           >
             <input
               aria-label="Search by name or WebId"
-              class="PodBrowser-input"
+              class="PodBrowser-input PodBrowser-searchInput--hidden"
               data-testid="mobile-search-input"
               placeholder="Search by name or WebId"
               type="text"
@@ -176,7 +176,7 @@ exports[`AgentPickerModal with contacts renders a table with the available conta
           </button>
         </div>
         <button
-          class="PodBrowser-button PodBrowser-button PodBrowser-desktopOnly"
+          class="PodBrowser-button PodBrowser-button--secondary PodBrowser-button PodBrowser-desktopOnly"
           data-testid="add-webid-button"
           iconbefore="add"
         >
@@ -225,8 +225,8 @@ exports[`AgentPickerModal with contacts renders a table with the available conta
         </div>
       </div>
       <button
-        class="PodBrowser-button PodBrowser-button PodBrowser-mobileOnly"
-        data-testid="add-webid-button-mobile"
+        class="PodBrowser-button PodBrowser-button--secondary PodBrowser-button PodBrowser-mobileOnly"
+        data-testid="add-web-id-button-mobile"
         iconbefore="add"
       >
         <span
@@ -554,7 +554,7 @@ exports[`AgentPickerModal without contacts renders a table with tabs, searchbox 
           </div>
         </div>
         <div
-          class="PodBrowser-searchBoxContainer hidden"
+          class="PodBrowser-searchBoxContainer--hidden"
         >
           <button
             aria-label="search"
@@ -576,11 +576,11 @@ exports[`AgentPickerModal without contacts renders a table with tabs, searchbox 
             />
           </button>
           <div
-            class="PodBrowser-root PodBrowser-searchInput hidden"
+            class="PodBrowser-root PodBrowser-searchInput--hidden PodBrowser-focused"
           >
             <input
               aria-label="Search by name or WebId"
-              class="PodBrowser-input"
+              class="PodBrowser-input PodBrowser-searchInput--hidden"
               data-testid="mobile-search-input"
               placeholder="Search by name or WebId"
               type="text"
@@ -608,7 +608,7 @@ exports[`AgentPickerModal without contacts renders a table with tabs, searchbox 
           </button>
         </div>
         <button
-          class="PodBrowser-button PodBrowser-button PodBrowser-desktopOnly"
+          class="PodBrowser-button PodBrowser-button--secondary PodBrowser-button PodBrowser-desktopOnly"
           data-testid="add-webid-button"
           iconbefore="add"
         >
@@ -657,8 +657,8 @@ exports[`AgentPickerModal without contacts renders a table with tabs, searchbox 
         </div>
       </div>
       <button
-        class="PodBrowser-button PodBrowser-button PodBrowser-mobileOnly"
-        data-testid="add-webid-button-mobile"
+        class="PodBrowser-button PodBrowser-button--secondary PodBrowser-button PodBrowser-mobileOnly"
+        data-testid="add-web-id-button-mobile"
         iconbefore="add"
       >
         <span

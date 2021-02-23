@@ -25,38 +25,46 @@ const SEARCH_BOX_HEIGHT = 50;
 
 export default function styles(theme) {
   return createStyles(theme, ["icons", "table"], {
-    searchBoxContainer: {
-      display: "none",
-      margin: theme.spacing(0.7, 1.2),
-      border: `1px solid ${theme.palette.grey.A100}`,
-      borderRadius: "10px",
-      height: "2.5rem",
-      [theme.breakpoints.down("xs")]: {
-        border: "none",
-        display: "flex",
-        "&.expanded": {
-          boxShadow: `0px 0px 0px 1px ${theme.palette.primary.main} inset`,
-          display: "flex",
-          height: SEARCH_BOX_HEIGHT,
-          borderRadius: "5px",
-          border: `1px solid ${theme.palette.grey.A100}`,
-          position: "absolute",
-          backgroundColor: theme.palette.background.paper,
-          right: theme.spacing(0.25),
-          left: theme.spacing(0.25),
-        },
-        "&.hidden": {
-          width: "min-content",
-        },
+    [theme.breakpoints.up("sm")]: {
+      "searchBoxContainer--hidden": {
+        display: "none !important",
+      },
+      "searchBoxContainer--expanded": {
+        display: "none !important",
       },
     },
-    searchInput: {
-      [theme.breakpoints.down("xs")]: {
-        visibility: "hidden",
-        "&.expanded": {
-          visibility: "visible",
-        },
+    "searchBoxContainer--hidden": {
+      display: "flex",
+      border: "none",
+      margin: theme.spacing(0.7, 1.2),
+      width: "min-content",
+    },
+    "searchBoxContainer--expanded": {
+      margin: theme.spacing(0.7, 1.2),
+      boxShadow: `0px 0px 0px 1px ${theme.palette.primary.main} inset`,
+      display: "flex",
+      height: SEARCH_BOX_HEIGHT,
+      borderRadius: "5px",
+      position: "absolute",
+      backgroundColor: theme.palette.background.paper,
+      right: theme.spacing(0.25),
+      left: theme.spacing(0.25),
+      [theme.breakpoints.up("sm")]: {
+        border: `1px solid ${theme.palette.grey.A100}`,
+        borderRadius: "10px",
+        height: "2.5rem",
       },
+    },
+    "searchInput--hidden": {
+      visibility: "hidden",
+      fontSize: "0.8125rem",
+      width: "100%",
+      font: "inherit",
+      fontWeight: 500,
+      color: theme.palette.primary.text,
+    },
+    "searchInput--expanded": {
+      visibility: "visible",
       fontSize: "0.8125rem",
       width: "100%",
       font: "inherit",
@@ -67,12 +75,12 @@ export default function styles(theme) {
       fontSize: theme.typography.body1.fontSize,
     },
     iconCloseExpanded: {
-      display: "none",
-      [theme.breakpoints.down("xs")]: {
-        display: "flex",
-        fontSize: theme.typography.body1.fontSize,
-        position: "relative",
-        paddingRight: "1rem",
+      display: "flex",
+      fontSize: theme.typography.body1.fontSize,
+      position: "relative",
+      paddingRight: "1rem",
+      [theme.breakpoints.up("sm")]: {
+        display: "none",
       },
     },
     iconCloseHidden: {

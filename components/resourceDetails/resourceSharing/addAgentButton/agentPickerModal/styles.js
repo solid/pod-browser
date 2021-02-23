@@ -29,16 +29,13 @@ const MOBILE_TABLE_MIN_HEIGHT = 300;
 export default function styles(theme) {
   return createStyles(theme, ["icons", "button", "table"], {
     paper: {
-      [theme.breakpoints.down("xs")]: {
-        minWidth: "100vw",
-        minHeight: "100vh",
-        width: "100vw",
-        height: "100vh",
-        padding: theme.spacing(2, 1.4, 3),
+      [theme.breakpoints.up("sm")]: {
+        minWidth: MODAL_MIN_WIDTH,
+        minHeight: MODAL_MIN_HEIGHT,
+        height: "auto",
+        width: MODAL_MIN_WIDTH,
+        padding: theme.spacing(2, 4, 3),
       },
-      minWidth: MODAL_MIN_WIDTH,
-      minHeight: MODAL_MIN_HEIGHT,
-      width: MODAL_MIN_WIDTH,
       display: "flex",
       flexDirection: "column",
       position: "absolute",
@@ -46,15 +43,20 @@ export default function styles(theme) {
       borderRadius: theme.shape.borderRadius,
       boxShadow:
         "0 9px 46px 8px rgba(0,0,0,0.12), 0 24px 38px 3px rgba(0,0,0,0.14), 0 11px 15px -7px rgba(0,0,0,0.2)",
-      padding: theme.spacing(2, 4, 3),
+      minWidth: "100vw",
+      minHeight: "100vh",
+      width: "100vw",
+      height: "100vh",
+      padding: theme.spacing(2, 1.4, 3),
     },
     title: {
       ...theme.typography.h1,
       marginBottom: theme.spacing(1.2),
     },
     tableContainer: {
-      [theme.breakpoints.down("xs")]: {
-        minHeight: MOBILE_TABLE_MIN_HEIGHT,
+      minHeight: MOBILE_TABLE_MIN_HEIGHT,
+      [theme.breakpoints.up("xs")]: {
+        minHeight: "unset",
       },
       display: "flex",
       flexDirection: "column",
@@ -88,6 +90,9 @@ export default function styles(theme) {
       "&& tbody tr": {
         borderBottom: `1px solid ${theme.palette.grey.A100}`,
       },
+      "&& tbody td": {
+        maxWidth: "100%",
+      },
       "&& tbody :last-child": {
         borderBottom: "none",
       },
@@ -108,42 +113,45 @@ export default function styles(theme) {
       alignItems: "center",
     },
     buttonsContainer: {
-      [theme.breakpoints.down("xs")]: {
-        display: "flex",
-        position: "relative",
-        alignItems: "center",
-        flexDirection: "column-reverse",
-        width: "100%",
-        maxWidth: "100%",
-        padding: 0,
-      },
       display: "flex",
-      position: "absolute",
+      flexDirection: "column-reverse",
+      position: "relative",
       bottom: 0,
-      width: MODAL_MIN_WIDTH - theme.spacing(2.4) * 2 - theme.spacing(4), // substracting the padding of the buttons and the left and right padding of the modal
-      padding: theme.spacing(2.4),
+      width: "100%",
+      padding: 0,
+      alignItems: "center",
       justifyContent: "space-between",
+      [theme.breakpoints.up("sm")]: {
+        display: "flex",
+        position: "absolute",
+        flexDirection: "row",
+        width: MODAL_MIN_WIDTH - theme.spacing(2.4) * 2 - theme.spacing(4), // substracting the padding of the buttons and the left and right padding of the modal
+        maxWidth: "100%",
+        padding: theme.spacing(2.4),
+      },
     },
     cancelButton: {
-      [theme.breakpoints.down("xs")]: {
-        textAlign: "center",
-        width: "100%",
-      },
+      textAlign: "center",
+      width: "100%",
       fontSize: theme.typography.body1.fontSize,
       fontWeight: theme.typography.body1.fontWeight,
       padding: theme.spacing(1.4, 1.8),
       backgroundColor: "transparent",
+      [theme.breakpoints.up("sm")]: {
+        width: "max-content",
+      },
     },
     submitAgentsButton: {
-      [theme.breakpoints.down("xs")]: {
-        textAlign: "center",
-        width: "100%",
-      },
+      textAlign: "center",
+      width: "100%",
       fontSize: theme.typography.body1.fontSize,
       fontWeight: theme.typography.body1.fontWeight,
       color: theme.palette.common.white,
       backgroundColor: theme.palette.primary.main,
       padding: theme.spacing(1.4, 1.8),
+      [theme.breakpoints.up("sm")]: {
+        width: "max-content",
+      },
     },
     capitalizedText: {
       textTransform: "capitalize",
@@ -154,17 +162,18 @@ export default function styles(theme) {
       padding: theme.spacing(0.7, 1.4),
       textAlign: "center",
     },
+    // hopefully we can remove these once we figure out how to test the Hidden component from MUI so we can use that instead
     mobileOnly: {
-      [theme.breakpoints.down("xs")]: {
-        display: "block",
-      },
-      display: "none",
-    },
-    desktopOnly: {
-      [theme.breakpoints.down("xs")]: {
+      [theme.breakpoints.up("sm")]: {
         display: "none",
       },
       display: "flex",
+    },
+    desktopOnly: {
+      [theme.breakpoints.up("sm")]: {
+        display: "flex",
+      },
+      display: "none",
     },
   });
 }

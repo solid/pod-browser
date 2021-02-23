@@ -1,62 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AgentSearchBar clicking the close icon hides the search bar 1`] = `
+exports[`MobileAgentSearchBar clicking the close icon hides the search bar 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-searchBoxContainer hidden"
-  >
-    <button
-      aria-label="search"
-      class="PodBrowser-root PodBrowser-root"
-      data-testid="search-button"
-      tabindex="0"
-      type="button"
-    >
-      <span
-        class="PodBrowser-label"
-      >
-        <i
-          aria-label="search"
-          class="PodBrowser-icon-search PodBrowser-iconSearch"
-        />
-      </span>
-    </button>
-    <div
-      class="PodBrowser-root PodBrowser-searchInput hidden"
-    >
-      <input
-        aria-label="Search by name or WebId"
-        class="PodBrowser-input"
-        data-testid="mobile-search-input"
-        placeholder="Search by name or WebId"
-        type="text"
-        value=""
-      />
-    </div>
-    <button
-      aria-label="close"
-      class="PodBrowser-root PodBrowser-root PodBrowser-iconCloseHidden"
-      data-testid="close-button"
-      tabindex="0"
-      type="button"
-    >
-      <span
-        class="PodBrowser-label"
-      >
-        <i
-          aria-label="close"
-          class="PodBrowser-icon-cancel hidden"
-        />
-      </span>
-    </button>
-  </div>
-</DocumentFragment>
-`;
-
-exports[`AgentSearchBar clicking the icon expands the search bar 1`] = `
-<DocumentFragment>
-  <div
-    class="PodBrowser-searchBoxContainer hidden"
+    class="PodBrowser-searchBoxContainer--hidden"
   >
     <button
       aria-label="search"
@@ -78,11 +25,11 @@ exports[`AgentSearchBar clicking the icon expands the search bar 1`] = `
       />
     </button>
     <div
-      class="PodBrowser-root PodBrowser-searchInput hidden"
+      class="PodBrowser-root PodBrowser-searchInput--hidden PodBrowser-focused"
     >
       <input
         aria-label="Search by name or WebId"
-        class="PodBrowser-input"
+        class="PodBrowser-input PodBrowser-searchInput--hidden"
         data-testid="mobile-search-input"
         placeholder="Search by name or WebId"
         type="text"
@@ -112,10 +59,10 @@ exports[`AgentSearchBar clicking the icon expands the search bar 1`] = `
 </DocumentFragment>
 `;
 
-exports[`AgentSearchBar renders a search icon 1`] = `
+exports[`MobileAgentSearchBar clicking the icon expands the search bar 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-searchBoxContainer hidden"
+    class="PodBrowser-searchBoxContainer--hidden"
   >
     <button
       aria-label="search"
@@ -137,11 +84,70 @@ exports[`AgentSearchBar renders a search icon 1`] = `
       />
     </button>
     <div
-      class="PodBrowser-root PodBrowser-searchInput hidden"
+      class="PodBrowser-root PodBrowser-searchInput--hidden PodBrowser-focused"
     >
       <input
         aria-label="Search by name or WebId"
-        class="PodBrowser-input"
+        class="PodBrowser-input PodBrowser-searchInput--hidden"
+        data-testid="mobile-search-input"
+        placeholder="Search by name or WebId"
+        type="text"
+        value=""
+      />
+    </div>
+    <button
+      aria-label="close"
+      class="PodBrowser-root PodBrowser-root PodBrowser-iconCloseHidden"
+      data-testid="close-button"
+      tabindex="0"
+      type="button"
+    >
+      <span
+        class="PodBrowser-label"
+      >
+        <i
+          aria-label="close"
+          class="PodBrowser-icon-cancel hidden"
+        />
+      </span>
+      <span
+        class="PodBrowser-root"
+      />
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`MobileAgentSearchBar renders a search icon 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-searchBoxContainer--hidden"
+  >
+    <button
+      aria-label="search"
+      class="PodBrowser-root PodBrowser-root"
+      data-testid="search-button"
+      tabindex="0"
+      type="button"
+    >
+      <span
+        class="PodBrowser-label"
+      >
+        <i
+          aria-label="search"
+          class="PodBrowser-icon-search PodBrowser-iconSearch"
+        />
+      </span>
+      <span
+        class="PodBrowser-root"
+      />
+    </button>
+    <div
+      class="PodBrowser-root PodBrowser-searchInput--hidden PodBrowser-focused"
+    >
+      <input
+        aria-label="Search by name or WebId"
+        class="PodBrowser-input PodBrowser-searchInput--hidden"
         data-testid="mobile-search-input"
         placeholder="Search by name or WebId"
         type="text"

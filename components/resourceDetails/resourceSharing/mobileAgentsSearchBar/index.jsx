@@ -21,7 +21,7 @@
 
 /* eslint-disable react/forbid-prop-types */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
@@ -39,12 +39,20 @@ export default function MobileAgentsSearchBar({ handleFilterChange }) {
   const bem = useBem(useStyles());
   const [expanded, setExpanded] = useState(false);
   const classes = useStyles();
+  const textInput = React.createRef();
+
+  useEffect(() => {
+    if (expanded) {
+      textInput.current.focus();
+    }
+  }, [expanded, textInput]);
+
   return (
     <div
-      className={clsx(
-        classes.searchBoxContainer,
-        expanded ? "expanded" : "hidden"
-      )}
+      className={
+        (bem("searchBoxContainer"),
+        bem("searchBoxContainer", expanded ? "expanded" : "hidden"))
+      }
     >
       <IconButton
         data-testid={TESTCAFE_ID_SEARCH_BUTTON}
@@ -58,13 +66,15 @@ export default function MobileAgentsSearchBar({ handleFilterChange }) {
         />
       </IconButton>
       <InputBase
-        classes={{ root: classes.searchInput }}
-        className={expanded ? "expanded" : "hidden"}
+        autoFocus
+        className={clsx(bem("searchInput", expanded ? "expanded" : "hidden"))}
         placeholder="Search by name or WebId"
         inputProps={{
+          className: clsx(bem("searchInput", expanded ? "expanded" : "hidden")),
           "data-testid": TESTCAFE_ID_MOBILE_SEARCH_INPUT,
           "aria-label": "Search by name or WebId",
           onChange: handleFilterChange,
+          ref: textInput,
         }}
       />
       <IconButton
