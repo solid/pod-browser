@@ -20,6 +20,7 @@
  */
 
 import {
+  addUrl,
   asUrl,
   createSolidDataset,
   createThing,
@@ -31,7 +32,6 @@ import {
   setStringNoLocale,
   setThing,
   setUrl,
-  solidDatasetAsMarkdown,
 } from "@inrupt/solid-client";
 import { rdf, vcard } from "rdf-namespaces";
 import { v4 as uuid } from "uuid";
@@ -68,11 +68,15 @@ function createGroupThing(name, thingOptions) {
   );
 }
 
-function createIndexThing(addressBook, groupThingUrl) {
-  return setUrl(
+function createIndexThing(indexDataset, addressBook, groupThingUrl) {
+  const addressBookThingUrl = getAddressBookThingUrl(addressBook);
+  const addressBookInDataset =
+    getThing(indexDataset, addressBookThingUrl) ||
     createThing({
-      url: getAddressBookThingUrl(addressBook),
-    }),
+      url: addressBookThingUrl,
+    });
+  return addUrl(
+    addressBookInDataset,
     vcardExtras("includesGroup"),
     groupThingUrl
   );
@@ -96,7 +100,7 @@ export async function saveGroup(addressBook, name, fetch) {
     chain(
       createSolidDataset(),
       (d) => setThing(d, createGroupThing(name, { name: "this" })),
-      (d) => setThing(d, createIndexThing(addressBook, groupThingUrl))
+      (d) => setThing(d, createIndexThing(d, addressBook, groupThingUrl))
     ),
     { fetch }
   );
@@ -116,7 +120,7 @@ export async function saveGroup(addressBook, name, fetch) {
     groupIndexUrl,
     fetch,
     (d) => setThing(d, createGroupThing(name, { url: groupThingUrl })),
-    (d) => setThing(d, createIndexThing(addressBook, groupThingUrl))
+    (d) => setThing(d, createIndexThing(d, addressBook, groupThingUrl))
   );
   return {
     addressBook: updatedAddressBook,

@@ -85,7 +85,7 @@ describe("getContactsIndexDataset", () => {
   });
 
   it("returns the requested resource", async () => {
-    const dataset = await getContactIndex(
+    const index = await getContactIndex(
       addressBookWithGroupIndex,
       GROUP_CONTACT,
       fetch
@@ -94,20 +94,29 @@ describe("getContactsIndexDataset", () => {
       addressBookWithGroupIndex,
       GROUP_CONTACT
     );
-    expect(dataset).toEqual(mockSolidDatasetFrom(groupsIndexUrl));
+    expect(index).toEqual({
+      dataset: mockSolidDatasetFrom(groupsIndexUrl),
+      type: GROUP_CONTACT,
+    });
   });
 
   it("returns a blank dataset if index is not linked to addressBook", async () => {
     await expect(
       getContactIndex(addressBook, GROUP_CONTACT, fetch)
-    ).resolves.toEqual(createSolidDataset());
+    ).resolves.toEqual({
+      dataset: createSolidDataset(),
+      type: GROUP_CONTACT,
+    });
   });
 
   it("returns a blank dataset if resource does not exist", async () => {
     mockedGetSolidDataset.mockRejectedValue("404");
     await expect(
       getContactIndex(addressBookWithGroupIndex, GROUP_CONTACT, fetch)
-    ).resolves.toEqual(createSolidDataset());
+    ).resolves.toEqual({
+      dataset: createSolidDataset(),
+      type: GROUP_CONTACT,
+    });
   });
 
   it("throws an error if call for resource returns anything other than 404", async () => {

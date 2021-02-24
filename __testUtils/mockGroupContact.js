@@ -19,14 +19,29 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { mockSolidDatasetFrom, setThing, setUrl } from "@inrupt/solid-client";
+import {
+  addUrl,
+  asUrl,
+  getThing,
+  mockSolidDatasetFrom,
+  mockThingFrom,
+  setThing,
+} from "@inrupt/solid-client";
 import { chain } from "../src/solidClientHelpers/utils";
 import { createGroupDatasetUrl } from "../src/models/contact/group";
 import { vcardExtras } from "../src/addressBook";
 import { mockGroupThing } from "./mockGroup";
+import { getAddressBookDatasetUrl } from "../src/models/addressBook";
 
-export function mockIndexThing(addressBook, groupThingUrl) {
-  return setUrl(addressBook.thing, vcardExtras("includesGroup"), groupThingUrl);
+export function mockIndexThing(indexDataset, addressBook, groupThingUrl) {
+  const addressBookThingUrl = asUrl(
+    addressBook.thing,
+    getAddressBookDatasetUrl(addressBook)
+  );
+  const addressBookThing =
+    getThing(indexDataset, addressBookThingUrl) ||
+    mockThingFrom(addressBookThingUrl);
+  return addUrl(addressBookThing, vcardExtras("includesGroup"), groupThingUrl);
 }
 
 export function addGroupToMockedIndexDataset(
@@ -38,7 +53,7 @@ export function addGroupToMockedIndexDataset(
   return chain(
     dataset,
     (d) => setThing(d, mockGroupThing(name, groupThingUrl)),
-    (d) => setThing(d, mockIndexThing(addressBook, groupThingUrl))
+    (d) => setThing(d, mockIndexThing(d, addressBook, groupThingUrl))
   );
 }
 
@@ -50,7 +65,7 @@ export default function mockGroupContact(addressBook, name, { url, id } = {}) {
     dataset: chain(
       mockSolidDatasetFrom(groupDatasetUrl),
       (d) => setThing(d, groupThing),
-      (d) => setThing(d, mockIndexThing(addressBook, groupThingUrl))
+      (d) => setThing(d, mockIndexThing(d, addressBook, groupThingUrl))
     ),
     thing: groupThing,
   };

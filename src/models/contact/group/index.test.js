@@ -23,9 +23,13 @@ import * as solidClientFns from "@inrupt/solid-client";
 import {
   getSourceUrl,
   getStringNoLocale,
+  getThing,
   getThingAll,
   getUrl,
+  getUrlAll,
   mockSolidDatasetFrom,
+  solidDatasetAsMarkdown,
+  thingAsMarkdown,
 } from "@inrupt/solid-client";
 import { v4 as uuid } from "uuid";
 import { rdf, vcard } from "rdf-namespaces/dist/index";
@@ -46,6 +50,7 @@ import { vcardExtras } from "../../../addressBook";
 import { getContactIndexDefaultUrl, getContactIndexUrl } from "../collection";
 import { addIndexToMockedAddressBook } from "../../../../__testUtils/mockContact";
 import mockGroup from "../../../../__testUtils/mockGroup";
+import { getAddressBookThingUrl } from "../../addressBook";
 
 jest.mock("uuid");
 const mockedUuid = uuid;
@@ -62,17 +67,34 @@ const mockedGroup1 = mockGroupContact(emptyAddressBook, group1Name, {
 const group1DatasetUrl = "https://example.com/contacts/Group/1234/index.ttl";
 const group1Url = `${group1DatasetUrl}#this`;
 
+const group2Name = "Group 2";
 const group2DatasetUrl = "https://example.com/contacts/Group/5678/index.ttl";
+const group2Url = `${group2DatasetUrl}#this`;
 
 const groupIndexWithGroup1Dataset = chain(
   mockSolidDatasetFrom(groupsDatasetUrl),
   (d) =>
     addGroupToMockedIndexDataset(d, emptyAddressBook, group1Name, group1Url)
 );
+const groupIndexWithGroup2Dataset = chain(
+  mockSolidDatasetFrom(groupsDatasetUrl),
+  (d) =>
+    addGroupToMockedIndexDataset(d, emptyAddressBook, group2Name, group2Url)
+);
 const addressBookWithGroupIndex = addIndexToMockedAddressBook(
   emptyAddressBook,
   GROUP_CONTACT,
   { indexUrl: groupsDatasetUrl }
+);
+const groupIndexWithGroup1And2Dataset = chain(
+  groupIndexWithGroup1Dataset,
+  (d) =>
+    addGroupToMockedIndexDataset(
+      d,
+      addressBookWithGroupIndex,
+      group2Name,
+      group2Url
+    )
 );
 
 let mockedSaveSolidDatasetAt;
@@ -109,16 +131,15 @@ describe("saveGroup", () => {
   const groupName = "test";
   const newGroup = mockGroup(groupName, group1Url);
 
-  beforeEach(() => {
-    jest
-      .spyOn(solidClientFns, "getSolidDataset")
-      .mockImplementation((url) => mockSolidDatasetFrom(url));
-  });
+  beforeEach(() => {});
 
   it("creates a group and adds it to the index", async () => {
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockImplementation(() => groupIndexWithGroup2Dataset);
     mockedSaveSolidDatasetAt
       .mockResolvedValueOnce(newGroup.dataset)
-      .mockResolvedValueOnce(groupIndexWithGroup1Dataset);
+      .mockResolvedValueOnce(groupIndexWithGroup1And2Dataset);
 
     const { addressBook, group, groupIndex } = await saveGroup(
       addressBookWithGroupIndex,
@@ -127,7 +148,10 @@ describe("saveGroup", () => {
     );
     expect(group).toEqual(newGroup);
     expect(addressBook).toBe(addressBookWithGroupIndex);
-    expect(groupIndex).toBe(groupIndexWithGroup1Dataset);
+    expect(groupIndex).toEqual({
+      dataset: groupIndexWithGroup1And2Dataset,
+      type: GROUP_CONTACT,
+    });
 
     expect(mockedSaveSolidDatasetAt).toHaveBeenCalledTimes(2);
 
@@ -144,9 +168,9 @@ describe("saveGroup", () => {
     expect(getUrl(groupThing, rdf.type)).toEqual(vcard.Group);
     expect(getStringNoLocale(groupThing, vcard.fn)).toEqual("test");
     const groupIncludesTriple = groupDatasetThings[1];
-    expect(getUrl(groupIncludesTriple, vcardExtras("includesGroup"))).toEqual(
-      group1Url
-    );
+    expect(
+      getUrlAll(groupIncludesTriple, vcardExtras("includesGroup"))
+    ).toEqual([group1Url]);
 
     // second save request is the group index
     expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
@@ -154,19 +178,21 @@ describe("saveGroup", () => {
       expect.any(Object),
       { fetch }
     );
-    const indexDatasetThings = getThingAll(
-      mockedSaveSolidDatasetAt.mock.calls[1][1]
-    ); // TODO: Remove when we have support for getThingLocal
-    const indexThing = indexDatasetThings[0];
+    const indexDataset = mockedSaveSolidDatasetAt.mock.calls[1][1];
+    const indexThing = getThing(indexDataset, group1Url);
     expect(getUrl(indexThing, rdf.type)).toEqual(vcard.Group);
     expect(getStringNoLocale(indexThing, vcard.fn)).toEqual("test");
-    const indexIncludesTriple = indexDatasetThings[1];
-    expect(getUrl(indexIncludesTriple, vcardExtras("includesGroup"))).toEqual(
-      group1Url
+    const addressBookInIndex = getThing(
+      indexDataset,
+      getAddressBookThingUrl(addressBookWithGroupIndex)
     );
+    expect(
+      getUrlAll(addressBookInIndex, vcardExtras("includesGroup"))
+    ).toEqual([group2Url, group1Url]);
   });
 
   it("will create the corresponding index on the fly and link it to the addressBook", async () => {
+    jest.spyOn(solidClientFns, "getSolidDataset").mockRejectedValue("404");
     mockedSaveSolidDatasetAt
       .mockResolvedValueOnce(newGroup.dataset)
       .mockResolvedValueOnce(addressBookWithGroupIndex.dataset)
@@ -179,7 +205,10 @@ describe("saveGroup", () => {
     );
     expect(addressBook).toEqual(addressBookWithGroupIndex);
     expect(group).toEqual(newGroup);
-    expect(groupIndex).toEqual(groupIndexWithGroup1Dataset);
+    expect(groupIndex).toEqual({
+      dataset: groupIndexWithGroup1Dataset,
+      type: GROUP_CONTACT,
+    });
 
     expect(mockedSaveSolidDatasetAt).toHaveBeenCalledTimes(3);
 
@@ -244,7 +273,10 @@ describe("renameGroup", () => {
       fetch
     );
     expect(group).toEqual(mockUpdatedGroup);
-    expect(groupIndex).toBe(groupIndexWithGroup1Dataset);
+    expect(groupIndex).toEqual({
+      dataset: groupIndexWithGroup1Dataset,
+      type: GROUP_CONTACT,
+    });
 
     // first save request is the group itself
     expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
