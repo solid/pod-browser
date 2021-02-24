@@ -61,9 +61,9 @@ export default function GroupDetailsName({ groupUrl }) {
   const fieldId = "GroupName";
   const { data: addressBook, error: addressBookError } = useAddressBook();
   const { fetch } = useSession();
-  const { error: groupsError, mutate: mutateGroups } = useContacts([
-    GROUP_CONTACT,
-  ]);
+  const { error: groupsError, mutate: mutateGroups } = useContacts(
+    GROUP_CONTACT
+  );
 
   useEffect(() => {
     if (!group) return;

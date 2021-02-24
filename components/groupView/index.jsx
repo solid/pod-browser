@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function GroupView() {
   const bem = useBem(useStyles());
-  const { data: groups, error: groupsError } = useContacts([GROUP_CONTACT]);
+  const { data: groups, error: groupsError } = useContacts(GROUP_CONTACT);
   const sortedGroups = groups?.sort((a, b) =>
     getGroupName(a) < getGroupName(b) ? -1 : 1
   );

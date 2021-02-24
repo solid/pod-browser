@@ -33,15 +33,15 @@ function reduceToString(array) {
   );
 }
 
-export default function useContacts(types) {
+export default function useContacts(type) {
   const { fetch } = useSession();
   const { data: addressBook, error: addressBookError } = useAddressBook();
   return useSWR(
-    ["contacts", addressBook, ...types],
+    ["contacts", addressBook, type],
     async () => {
       if (!addressBook && !addressBookError) return null;
       if (addressBookError) throw addressBookError;
-      return getContactAll(addressBook, types, fetch);
+      return getContactAll(addressBook, [type], fetch);
     },
     {
       // revalidateOnMount: true,

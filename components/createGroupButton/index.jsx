@@ -42,7 +42,7 @@ export default function CreateGroupButton({ children, ...props }) {
     data: groups,
     error: groupsError,
     mutate: mutateGroups,
-  } = useContacts([GROUP_CONTACT]);
+  } = useContacts(GROUP_CONTACT);
   const { fetch } = useSession();
   const router = useRouter();
   const [processing, setProcessing] = useState(false);

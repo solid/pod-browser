@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export const TESTCAFE_ID_GROUP_LIST = "group-list";
 
 export default function GroupList() {
-  const { data: groups, error } = useContacts([GROUP_CONTACT]);
+  const { data: groups, error } = useContacts(GROUP_CONTACT);
   const bem = useBem(useStyles());
   const router = useRouter();
   const selectedGroupUrl = router.query.iri;
