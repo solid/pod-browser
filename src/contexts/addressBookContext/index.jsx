@@ -19,9 +19,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import GroupDetailsName from "./groupDetailsName";
+import React, { createContext } from "react";
+import T from "prop-types";
+import useAddressBook from "../../hooks/useAddressBook";
 
-export default function GroupDetails() {
-  return <GroupDetailsName />;
+const AddressBookContext = createContext(null);
+
+export default AddressBookContext;
+
+export function AddressBookProvider({ children }) {
+  const addressBook = useAddressBook();
+  return (
+    <AddressBookContext.Provider value={addressBook}>
+      {children}
+    </AddressBookContext.Provider>
+  );
 }
+
+AddressBookProvider.propTypes = {
+  children: T.node,
+};
+
+AddressBookProvider.defaultProps = {
+  children: null,
+};

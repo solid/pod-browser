@@ -34,13 +34,14 @@ import ErrorMessage from "../errorMessage";
 import GroupListEmpty from "./groupListEmpty";
 import useContacts from "../../src/hooks/useContacts";
 import { GROUP_CONTACT } from "../../src/models/contact/group";
+import GroupAllContext from "../../src/contexts/groupAllContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export const TESTCAFE_ID_GROUP_LIST = "group-list";
 
 export default function GroupList() {
-  const { data: groups, error } = useContacts(GROUP_CONTACT);
+  const { data: groups, error } = useContext(GroupAllContext);
   const bem = useBem(useStyles());
   const router = useRouter();
   const selectedGroupUrl = router.query.iri;

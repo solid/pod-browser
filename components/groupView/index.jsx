@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
+import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/styles";
 import { createStyles } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
@@ -34,6 +34,8 @@ import ErrorMessage from "../errorMessage";
 import GroupDetails from "../groupDetails";
 import { getSelectedGroupOrFallbackGroupUrl } from "../../src/models/groupPage";
 import { getGroupName } from "../../src/models/group";
+import GroupAllContext from "../../src/contexts/groupAllContext";
+import GroupContext from "../../src/contexts/groupContext";
 
 export const TESTCAFE_ID_GROUP_VIEW = "group-view";
 
@@ -41,25 +43,19 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function GroupView() {
   const bem = useBem(useStyles());
-  const { data: groups, error: groupsError } = useContacts(GROUP_CONTACT);
-  const sortedGroups = groups?.sort((a, b) =>
-    getGroupName(a) < getGroupName(b) ? -1 : 1
-  );
+  const { data: groups, error: groupsError } = useContext(GroupAllContext);
   const router = useRouter();
-  const selectedGroupUrl = getSelectedGroupOrFallbackGroupUrl(
-    router.query.iri,
-    sortedGroups
-  );
-  const { data: group, error: groupError } = useGroup(selectedGroupUrl);
+  const selectedGroupUrl = router.query.iri;
+  const { data: group, error: groupError } = useContext(GroupContext);
   const isLoading =
     (!groups && !groupsError) || (selectedGroupUrl && !group && !groupError);
   const error = groupsError || groupError;
   return (
     <div className={bem("group-view")} data-testid={TESTCAFE_ID_GROUP_VIEW}>
       {isLoading && <Spinner />}
-      {error && <ErrorMessage error={error} />}
-      {group && !isLoading && <GroupDetails groupUrl={selectedGroupUrl} />}
-      {!group && !isLoading && <GroupViewEmpty />}
+      {!isLoading && error && <ErrorMessage error={error} />}
+      {!isLoading && group && <GroupDetails />}
+      {!isLoading && !group && <GroupViewEmpty />}
     </div>
   );
 }

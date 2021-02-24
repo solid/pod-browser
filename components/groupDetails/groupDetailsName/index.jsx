@@ -21,7 +21,7 @@
 
 /* eslint react/forbid-prop-types: off */
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import { useRouter } from "next/router";
 import { useSession } from "@inrupt/solid-ui-react";
@@ -43,15 +43,18 @@ import useGroup from "../../../src/hooks/useGroup";
 import ErrorMessage from "../../errorMessage";
 import useContacts from "../../../src/hooks/useContacts";
 import { getContactAllFromContactsIndex } from "../../../src/models/contact";
+import GroupAllContext from "../../../src/contexts/groupAllContext";
+import AddressBookContext from "../../../src/contexts/addressBookContext";
+import GroupContext from "../../../src/contexts/groupContext";
 
 const TESTCAFE_ID_GROUP_NAME_FIELD = "group-name-field";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function GroupDetailsName({ groupUrl }) {
+export default function GroupDetailsName() {
   const router = useRouter();
-  const { data: group, error: groupError, mutate: mutateGroup } = useGroup(
-    groupUrl
+  const { data: group, error: groupError, mutate: mutateGroup } = useContext(
+    GroupContext
   );
   const justCreated = router.query.created === "";
   const [editing, setEditing] = useState(true);
@@ -59,10 +62,12 @@ export default function GroupDetailsName({ groupUrl }) {
   const bem = useBem(useStyles());
   const [groupName, setGroupName] = useState("");
   const fieldId = "GroupName";
-  const { data: addressBook, error: addressBookError } = useAddressBook();
+  const { data: addressBook, error: addressBookError } = useContext(
+    AddressBookContext
+  );
   const { fetch } = useSession();
-  const { error: groupsError, mutate: mutateGroups } = useContacts(
-    GROUP_CONTACT
+  const { error: groupsError, mutate: mutateGroups } = useContext(
+    GroupAllContext
   );
 
   useEffect(() => {

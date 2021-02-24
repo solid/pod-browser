@@ -19,9 +19,34 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import GroupDetailsName from "./groupDetailsName";
+import React, { createContext, useContext } from "react";
+import T from "prop-types";
+import { useRouter } from "next/router";
+import useGroup from "../../hooks/useGroup";
+import { getGroupName } from "../../models/group";
+import { getSelectedGroupOrFallbackGroupUrl } from "../../models/groupPage";
+import GroupAllContext from "../groupAllContext";
 
-export default function GroupDetails() {
-  return <GroupDetailsName />;
+const GroupContext = createContext(null);
+
+export default GroupContext;
+
+export function GroupProvider({ children }) {
+  const { data: groups } = useContext(GroupAllContext);
+  const sortedGroups = groups?.sort((a, b) =>
+    getGroupName(a) < getGroupName(b) ? -1 : 1
+  );
+  const router = useRouter();
+  const groupUrl = getSelectedGroupOrFallbackGroupUrl(
+    router.query.iri,
+    sortedGroups
+  );
+  const group = useGroup(groupUrl);
+  return (
+    <GroupContext.Provider value={group}>{children}</GroupContext.Provider>
+  );
 }
+
+GroupProvider.propTypes = {
+  children: T.node.isRequired,
+};

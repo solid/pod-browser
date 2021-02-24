@@ -19,9 +19,28 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import GroupDetailsName from "./groupDetailsName";
+import React, { createContext } from "react";
+import T from "prop-types";
+import useContacts from "../../hooks/useContacts";
+import { GROUP_CONTACT } from "../../models/contact/group";
 
-export default function GroupDetails() {
-  return <GroupDetailsName />;
+const GroupAllContext = createContext(null);
+
+export default GroupAllContext;
+
+export function GroupAllProvider({ children }) {
+  const groups = useContacts(GROUP_CONTACT);
+  return (
+    <GroupAllContext.Provider value={groups}>
+      {children}
+    </GroupAllContext.Provider>
+  );
 }
+
+GroupAllProvider.propTypes = {
+  children: T.node,
+};
+
+GroupAllProvider.defaultProps = {
+  children: null,
+};

@@ -21,7 +21,7 @@
 
 /* eslint react/jsx-props-no-spreading:off */
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button } from "@inrupt/prism-react-components";
 import T from "prop-types";
 import { useSession } from "@inrupt/solid-ui-react";
@@ -31,18 +31,21 @@ import { GROUP_CONTACT, saveGroup } from "../../src/models/contact/group";
 import useAddressBook from "../../src/hooks/useAddressBook";
 import { getGroupUrl } from "../../src/models/group";
 import Spinner from "../spinner";
+import AddressBookContext from "../../src/contexts/addressBookContext";
+import GroupAllContext from "../../src/contexts/groupAllContext";
+import { getContactAllFromContactsIndex } from "../../src/models/contact";
+import GroupContext from "../../src/contexts/groupContext";
 
 export default function CreateGroupButton({ children, ...props }) {
   const {
     data: addressBook,
     error: addressBookError,
     mutate: mutateAddressBook,
-  } = useAddressBook();
-  const {
-    data: groups,
-    error: groupsError,
-    mutate: mutateGroups,
-  } = useContacts(GROUP_CONTACT);
+  } = useContext(AddressBookContext);
+  const { data: groups, error: groupsError, mutate: mutateGroups } = useContext(
+    GroupAllContext
+  );
+  const { mutate: mutateGroup } = useContext(GroupContext);
   const { fetch } = useSession();
   const router = useRouter();
   const [processing, setProcessing] = useState(false);
@@ -52,12 +55,17 @@ export default function CreateGroupButton({ children, ...props }) {
     if (processing) return;
     setProcessing(true);
     const groupName = `Group ${groups.length + 1}`;
-    const { addressBook: updatedAddressBook, group } = await saveGroup(
-      addressBook,
-      groupName,
-      fetch
-    );
-    await Promise.all([mutateAddressBook(updatedAddressBook), mutateGroups()]);
+    const {
+      addressBook: updatedAddressBook,
+      group,
+      groupIndex,
+    } = await saveGroup(addressBook, groupName, fetch);
+    const updatedGroups = getContactAllFromContactsIndex(groupIndex);
+    await Promise.all([
+      mutateAddressBook(updatedAddressBook),
+      mutateGroups(updatedGroups),
+      mutateGroup(group),
+    ]);
     const groupUrl = getGroupUrl(group);
     await router.push(`/groups/${encodeURIComponent(groupUrl)}?created`);
     setProcessing(false);

@@ -29,6 +29,9 @@ import styles from "./styles";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import GroupList from "../../groupList";
 import GroupView from "../../groupView";
+import { GroupAllProvider } from "../../../src/contexts/groupAllContext";
+import { AddressBookProvider } from "../../../src/contexts/addressBookContext";
+import { GroupProvider } from "../../../src/contexts/groupContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -39,24 +42,28 @@ export default function GroupsPage() {
   const groupIsSelected = !!router.query.iri;
 
   return (
-    <>
-      <PageHeader title="Groups" />
-      <Container className={bem("groups-container")}>
-        <div
-          className={bem("groups-container__content", "list", {
-            focus: !groupIsSelected,
-          })}
-        >
-          <GroupList />
-        </div>
-        <div
-          className={bem("groups-container__content", "main", {
-            focus: groupIsSelected,
-          })}
-        >
-          <GroupView />
-        </div>
-      </Container>
-    </>
+    <AddressBookProvider>
+      <GroupAllProvider>
+        <GroupProvider>
+          <PageHeader title="Groups" />
+          <Container className={bem("groups-container")}>
+            <div
+              className={bem("groups-container__content", "list", {
+                focus: !groupIsSelected,
+              })}
+            >
+              <GroupList />
+            </div>
+            <div
+              className={bem("groups-container__content", "main", {
+                focus: groupIsSelected,
+              })}
+            >
+              <GroupView />
+            </div>
+          </Container>
+        </GroupProvider>
+      </GroupAllProvider>
+    </AddressBookProvider>
   );
 }
