@@ -40,11 +40,11 @@ export default function AddWebIdButton({ onClick, disabled, className }) {
     <Button
       variant="secondary"
       data-testid={
-        className && className.includes("mobileOnly")
+        className?.includes("mobileOnly")
           ? TESTCAFE_ADD_WEBID_BUTTON_MOBILE
           : TESTCAFE_ADD_WEBID_BUTTON
       }
-      className={clsx(classes.button, className && className)}
+      className={clsx(classes.button, className)}
       disabled={disabled}
       onClick={onClick}
       iconBefore="add"

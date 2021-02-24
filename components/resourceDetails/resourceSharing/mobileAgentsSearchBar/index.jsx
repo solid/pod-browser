@@ -49,10 +49,7 @@ export default function MobileAgentsSearchBar({ handleFilterChange }) {
 
   return (
     <div
-      className={
-        (bem("searchBoxContainer"),
-        bem("searchBoxContainer", expanded ? "expanded" : "hidden"))
-      }
+      className={bem("searchBoxContainer", expanded ? "expanded" : "hidden")}
     >
       <IconButton
         data-testid={TESTCAFE_ID_SEARCH_BUTTON}
