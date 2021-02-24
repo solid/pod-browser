@@ -40,7 +40,9 @@ export default function styles(theme) {
     detailText: {
       fontFamily: theme.typography.body.fontFamily,
       fontWeight: theme.typography.body.fontWeight,
-      minWidth: "20rem",
+      [theme.breakpoints.up("sm")]: {
+        minWidth: "20rem",
+      },
     },
     button: {
       padding: theme.spacing(0.8, 1),
@@ -52,7 +54,10 @@ export default function styles(theme) {
       border: `1px solid ${theme.palette.grey.A100}`,
       borderRadius: "10px",
       height: "2.5rem",
-      minWidth: "20rem",
+      minWidth: "calc(100% - 25px)",
+      [theme.breakpoints.up("sm")]: {
+        minWidth: "20rem",
+      },
     },
     searchInput: {
       height: "100%",

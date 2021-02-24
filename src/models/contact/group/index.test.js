@@ -84,6 +84,13 @@ beforeEach(() => {
     .mockImplementation((url) => mockSolidDatasetFrom(url));
 });
 
+describe("isOfType", () => {
+  it("returns true if contact is a group", () => {
+    const { thing: mockGroupThing } = mockGroup(group1Name, group1Url);
+    expect(GROUP_CONTACT.isOfType(mockGroupThing)).toBe(true);
+  });
+});
+
 describe("createGroupDatasetUrl", () => {
   it("creates a unique group URL", () => {
     mockedUuid.mockReturnValueOnce("1234").mockReturnValueOnce("5678");

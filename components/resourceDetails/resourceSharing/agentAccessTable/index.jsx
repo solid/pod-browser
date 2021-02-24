@@ -26,8 +26,14 @@ import React, { useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { useFilters, useGlobalFilter, useTable } from "react-table";
 import { useBem } from "@solid/lit-prism-patterns";
+import { Container } from "@inrupt/prism-react-components";
 import clsx from "clsx";
-import { Accordion, createStyles, Typography } from "@material-ui/core";
+import {
+  Accordion,
+  CircularProgress,
+  createStyles,
+  Typography,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import useNamedPolicyPermissions from "../../../../src/hooks/useNamedPolicyPermissions";
 import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
@@ -45,11 +51,13 @@ const TESTCAFE_ID_HIDE_BUTTON = "hide-button";
 export const TESTCAFE_ID_AGENT_ACCESS_TABLE = "agent-access-table";
 
 export default function AgentAccessTable({ type }) {
+  const [loading, setLoading] = useState(false);
   const {
     data: namedPermissions,
     mutate: mutatePermissions,
   } = useNamedPolicyPermissions(type);
 
+  // TODO: this will change when Groups are available, we will likely fetch profiles only for Individual permissions
   const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
     namedPermissions
   );
@@ -164,10 +172,9 @@ export default function AgentAccessTable({ type }) {
     setGlobalFilter(value || undefined);
   };
 
-  /* istanbul ignore next */
   const handleTabChange = (e, newValue) => {
     setSelectedTabValue(newValue);
-    // TODO: this filter will change once we have groups - ignoring from test coverage until it is functional
+    // TODO: this will change when Groups are available since we will not have profiles for Groups
     setFilter("profile.types", newValue);
   };
 
@@ -180,7 +187,7 @@ export default function AgentAccessTable({ type }) {
       <PolicyHeader type={type} isPolicyList>
         <AddAgentButton
           type={type}
-          mutatePermissions={mutatePermissions}
+          setLoading={setLoading}
           permissions={permissions}
         />
       </PolicyHeader>
@@ -190,11 +197,17 @@ export default function AgentAccessTable({ type }) {
             <AgentsTableTabs
               handleTabChange={handleTabChange}
               selectedTabValue={selectedTabValue}
+              tabsValues={{ all: "", people: "Person", groups: "Group" }}
             />
             <AgentsSearchBar handleFilterChange={handleFilterChange} />
           </>
         )}
-        {permissions.length ? (
+        {loading && (
+          <Container variant="empty">
+            <CircularProgress />
+          </Container>
+        )}
+        {!loading && permissions.length ? (
           <table
             className={clsx(bem("table"), bem("agents-table"))}
             {...getTableProps()}
@@ -235,10 +248,10 @@ export default function AgentAccessTable({ type }) {
           </table>
         ) : (
           <span className={classes.emptyStateTextContainer}>
-            <p>{emptyStateText}</p>
+            {!loading && <p>{emptyStateText}</p>}
           </span>
         )}
-        {permissions.length > 3 && (
+        {!loading && permissions.length > 3 && (
           <div
             className={clsx(
               classes.showAllButtonContainer,

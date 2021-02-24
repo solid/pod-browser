@@ -19,43 +19,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles } from "@solid/lit-prism-patterns";
+import { useSession } from "@inrupt/solid-ui-react";
+import useSWR from "swr";
+import { asUrl } from "@inrupt/solid-client";
+import { getProfileForContact } from "../../models/profile";
 
-export default function styles(theme) {
-  return createStyles(theme, ["icons", "button"], {
-    mobile: {
-      [theme.breakpoints.up("sm")]: {
-        display: "none",
-      },
-      display: "flex",
-    },
-    desktop: {
-      [theme.breakpoints.up("sm")]: {
-        display: "flex",
-      },
-      display: "none",
-    },
-    button: {
-      marginTop: "0.5rem",
-      width: "max-content",
-      alignSelf: "flex-end",
-      height: "max-content",
-      fontWeight: 800,
-      fontSize: "0.8125rem",
-      textDecoration: "none",
-      borderRadius: "7px",
-      backgroundColor: theme.palette.grey[50],
-      whiteSpace: "nowrap",
-      alignItems: "center",
-      padding: theme.spacing(0.2, 1.6),
-      [theme.breakpoints.up("sm")]: {
-        marginTop: "unset",
-        alignSelf: "center",
-      },
-    },
-    icon: {
-      color: theme.palette.primary.main,
-      margin: theme.spacing(0.5),
-    },
+const getPersonThingUrl = (contact) => {
+  let personThingUrl;
+  try {
+    personThingUrl = asUrl(contact);
+  } catch {
+    personThingUrl = null;
+  }
+  return personThingUrl;
+};
+
+export default function useContactProfile(contact) {
+  const { fetch } = useSession();
+  const personThingUrl = getPersonThingUrl(contact);
+  return useSWR(["contact", personThingUrl], async () => {
+    if (!personThingUrl) return null;
+    const profile = await getProfileForContact(personThingUrl, fetch);
+    return profile;
   });
 }

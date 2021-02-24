@@ -25,12 +25,10 @@ import {
   getThing,
   getThingAll,
   getUrl,
-  getUrlAll,
   saveSolidDatasetAt,
   setThing,
   setUrl,
 } from "@inrupt/solid-client";
-import { rdf } from "rdf-namespaces";
 import { joinPath } from "../../stringHelpers";
 import { getOrCreateDataset } from "../dataset";
 import { getAddressBookIndexUrl } from "../addressBook";
@@ -58,9 +56,7 @@ export async function getContactAll(addressBook, types, fetch) {
     types.map(async (type) => {
       const dataset = await getContactIndexDataset(addressBook, type, fetch);
       return getThingAll(dataset)
-        .filter((contact) =>
-          getUrlAll(contact, rdf.type).includes(type.contactTypeUrl)
-        )
+        .filter((contact) => type.isOfType(contact))
         .map((thing) => ({
           thing,
           dataset,
@@ -71,19 +67,32 @@ export async function getContactAll(addressBook, types, fetch) {
 }
 
 export async function addContactIndexToAddressBook(addressBook, type, fetch) {
-  const indexUrl = getContactIndexDefaultUrl(addressBook.containerUrl, type);
-  const datasetUrl = getAddressBookIndexUrl(addressBook);
-  const dataset = await saveSolidDatasetAt(
-    datasetUrl,
-    setThing(
-      addressBook.dataset,
-      setUrl(addressBook.thing, type.indexFilePredicate, indexUrl)
-    ),
-    { fetch }
-  );
+  let updatedAddressBook = addressBook;
+  let indexUrl = getContactIndexUrl(addressBook, type);
+  if (!indexUrl) {
+    const newIndexUrl = getContactIndexDefaultUrl(
+      addressBook.containerUrl,
+      type
+    );
+    const datasetUrl = getAddressBookIndexUrl(addressBook);
+    const updatedAddressBookDataset = await saveSolidDatasetAt(
+      datasetUrl,
+      setThing(
+        addressBook.dataset,
+        setUrl(addressBook.thing, type.indexFilePredicate, newIndexUrl)
+      ),
+      { fetch }
+    );
+    updatedAddressBook = {
+      containerUrl: addressBook.containerUrl,
+      dataset: updatedAddressBookDataset,
+      thing: getThing(updatedAddressBookDataset, asUrl(addressBook.thing)),
+    };
+    indexUrl = getContactIndexUrl(updatedAddressBook, type);
+  }
+
   return {
-    containerUrl: addressBook.containerUrl,
-    dataset,
-    thing: getThing(dataset, asUrl(addressBook.thing, datasetUrl)),
+    addressBook: updatedAddressBook,
+    indexUrl,
   };
 }

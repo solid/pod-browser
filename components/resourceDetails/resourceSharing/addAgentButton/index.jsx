@@ -24,26 +24,22 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Modal } from "@material-ui/core";
-import { useBem } from "@solid/lit-prism-patterns";
 import { Button } from "@inrupt/prism-react-components";
 import AgentPickerModal from "./agentPickerModal";
 import useNamedPolicyPermissions from "../../../../src/hooks/useNamedPolicyPermissions";
 import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
 
 const TESTCAFE_ID_ADD_AGENT_BUTTON = "add-agent-button";
-const TESTCAFE_MODAL_OVERLAY = "modal-overlay";
+const TESTCAFE_ID_MODAL_OVERLAY = "modal-overlay";
 
 const BUTTON_TEXT_MAP = {
-  editors: { text: "Add Editors" },
-  viewers: { text: "Add Viewers" },
-  blocked: { text: "Block" },
+  editors: { editText: "Edit Editors", saveText: "Save Editors" },
+  viewers: { editText: "Edit Viewers", saveText: "Save Viewers" },
+  blocked: { editText: "Edit Blocked", saveText: "Save Blocked" },
 };
 
-export default function AddAgentButton({ type }) {
-  const {
-    data: namedPermissions,
-    mutate: mutatePermissions,
-  } = useNamedPolicyPermissions(type);
+export default function AddAgentButton({ type, setLoading }) {
+  const { data: namedPermissions } = useNamedPolicyPermissions(type);
   const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
     namedPermissions
   );
@@ -58,7 +54,7 @@ export default function AddAgentButton({ type }) {
     setOpen(false);
   };
 
-  const { text } = BUTTON_TEXT_MAP[type];
+  const { editText } = BUTTON_TEXT_MAP[type];
 
   return (
     <>
@@ -68,11 +64,11 @@ export default function AddAgentButton({ type }) {
         onClick={handleOpen}
         iconBefore="add"
       >
-        {text}
+        {editText}
       </Button>
 
       <Modal
-        data-testid={TESTCAFE_MODAL_OVERLAY}
+        data-testid={TESTCAFE_ID_MODAL_OVERLAY}
         open={open}
         style={{
           display: "flex",
@@ -80,14 +76,14 @@ export default function AddAgentButton({ type }) {
           justifyContent: "center",
         }}
         onClose={handleClose}
-        aria-labelledby={`${text} Modal`}
-        aria-describedby={`${text} for this resource`}
+        aria-labelledby={`${editText} Modal`}
+        aria-describedby={`${editText} for this resource`}
       >
         <AgentPickerModal
           type={type}
-          text={text}
+          text={BUTTON_TEXT_MAP[type]}
           onClose={handleClose}
-          mutatePermissions={mutatePermissions}
+          setLoading={setLoading}
           permissions={permissions}
         />
       </Modal>
@@ -97,4 +93,9 @@ export default function AddAgentButton({ type }) {
 
 AddAgentButton.propTypes = {
   type: PropTypes.string.isRequired,
+  setLoading: PropTypes.func,
+};
+
+AddAgentButton.defaultProps = {
+  setLoading: () => {},
 };

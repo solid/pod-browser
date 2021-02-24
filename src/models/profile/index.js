@@ -19,43 +19,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles } from "@solid/lit-prism-patterns";
+import { asUrl } from "@inrupt/solid-client";
+import { fetchProfile } from "../../solidClientHelpers/profile";
+import { getResource } from "../../solidClientHelpers/resource";
+// eslint-disable-next-line import/no-cycle
+import { getWebIdUrl } from "../contact/person";
 
-export default function styles(theme) {
-  return createStyles(theme, ["icons", "button"], {
-    mobile: {
-      [theme.breakpoints.up("sm")]: {
-        display: "none",
-      },
-      display: "flex",
-    },
-    desktop: {
-      [theme.breakpoints.up("sm")]: {
-        display: "flex",
-      },
-      display: "none",
-    },
-    button: {
-      marginTop: "0.5rem",
-      width: "max-content",
-      alignSelf: "flex-end",
-      height: "max-content",
-      fontWeight: 800,
-      fontSize: "0.8125rem",
-      textDecoration: "none",
-      borderRadius: "7px",
-      backgroundColor: theme.palette.grey[50],
-      whiteSpace: "nowrap",
-      alignItems: "center",
-      padding: theme.spacing(0.2, 1.6),
-      [theme.breakpoints.up("sm")]: {
-        marginTop: "unset",
-        alignSelf: "center",
-      },
-    },
-    icon: {
-      color: theme.palette.primary.main,
-      margin: theme.spacing(0.5),
-    },
-  });
+/* Model constants */
+
+/* Model functions */
+
+export async function getProfileForContact(personContactUrl, fetch) {
+  const {
+    response: { dataset, iri },
+  } = await getResource(personContactUrl, fetch);
+  const webId = getWebIdUrl(dataset, iri);
+  const fetchedProfile = await fetchProfile(webId, fetch);
+  return fetchedProfile;
+}
+export async function getProfilesForPersonContacts(people, fetch) {
+  const responses = await Promise.all(
+    people.map(({ thing }) => getProfileForContact(asUrl(thing), fetch))
+  );
+  return responses.filter((profile) => profile);
 }

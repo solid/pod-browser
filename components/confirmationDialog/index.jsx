@@ -35,9 +35,10 @@ import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-const TESTCAFE_CONFIRM_BUTTON = "confirm-button";
-const TESTCAFE_CONFIRMATION_CANCEL_BUTTON = "confirmation-cancel-button";
-const TESTCAFE_CONFIRMATION_DIALOG = "confirmation-dialog";
+export const TESTCAFE_ID_CONFIRM_BUTTON = "confirm-button";
+export const TESTCAFE_ID_CONFIRMATION_CANCEL_BUTTON =
+  "confirmation-cancel-button";
+export const TESTCAFE_ID_CONFIRMATION_DIALOG = "confirmation-dialog";
 
 export default function ConfirmationDialog() {
   const classes = useStyles();
@@ -49,7 +50,7 @@ export default function ConfirmationDialog() {
   return (
     <Dialog
       classes={{ paperWidthFalse: classes.dialog }}
-      data-testid={TESTCAFE_CONFIRMATION_DIALOG}
+      data-testid={TESTCAFE_ID_CONFIRMATION_DIALOG}
       maxWidth={false}
       aria-labelledby="confirmation-dialog"
       open={!!open}
@@ -68,14 +69,16 @@ export default function ConfirmationDialog() {
       <DialogActions classes={{ root: classes.dialogActions }}>
         <Button
           variant="secondary"
-          data-testid={TESTCAFE_CONFIRMATION_CANCEL_BUTTON}
+          data-testid={TESTCAFE_ID_CONFIRMATION_CANCEL_BUTTON}
+          className={classes.cancelButton}
           autoFocus
           onClick={() => setConfirmed(false)}
         >
           Cancel
         </Button>
         <Button
-          data-testid={TESTCAFE_CONFIRM_BUTTON}
+          data-testid={TESTCAFE_ID_CONFIRM_BUTTON}
+          className={classes.submitAgentsButton}
           type="submit"
           onClick={() => setConfirmed(true)}
         >

@@ -30,7 +30,9 @@ import {
   mockSolidDatasetFrom,
 } from "@inrupt/solid-client";
 import { vcard } from "rdf-namespaces";
-import mockAddressBook from "../../../__testUtils/mockAddressBook";
+import mockAddressBook, {
+  mockEmptyAddressBook,
+} from "../../../__testUtils/mockAddressBook";
 import {
   addContactIndexToAddressBook,
   getContactAll,
@@ -241,7 +243,10 @@ describe("addContactIndexToAddressBook", () => {
   it("adds the contacts index to the address book", async () => {
     await expect(
       addContactIndexToAddressBook(addressBook, GROUP_CONTACT, fetch)
-    ).resolves.toEqual(addressBookWithGroups);
+    ).resolves.toEqual({
+      indexUrl: "https://example.pod.com/contacts/groups.ttl",
+      addressBook: addressBookWithGroups,
+    });
     expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
       getSourceUrl(addressBook.dataset),
       expect.any(Object),
@@ -255,10 +260,13 @@ describe("addContactIndexToAddressBook", () => {
   });
 
   it("also handles newly created address books (without any saved datasets)", async () => {
-    const newAddressBook = createAddressBook(containerUrl, webIdUrl);
+    const newAddressBook = mockEmptyAddressBook(containerUrl, webIdUrl);
     await expect(
       addContactIndexToAddressBook(newAddressBook, GROUP_CONTACT, fetch)
-    ).resolves.toEqual(addressBookWithGroups);
+    ).resolves.toEqual({
+      indexUrl: "https://example.pod.com/contacts/groups.ttl",
+      addressBook: addressBookWithGroups,
+    });
     expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
       getSourceUrl(addressBook.dataset),
       expect.any(Object),

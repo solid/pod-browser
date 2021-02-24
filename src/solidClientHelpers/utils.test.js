@@ -40,6 +40,7 @@ import {
   getTypes,
   isContainerIri,
   namespace,
+  serializePromises,
   sharedStart,
 } from "./utils";
 
@@ -252,5 +253,19 @@ describe("sharedStart", () => {
     expect(sharedStart("foo", "bar")).toEqual("");
     expect(sharedStart("bar", "baz", "bam")).toEqual("ba");
     expect(sharedStart(undefined, "baz")).toEqual("");
+  });
+});
+
+describe("serializePromises", () => {
+  const asyncFn = async (str) => {
+    return new Promise((resolve) => resolve(str));
+  };
+  it("takes an array of promise factories and resolves them sequentially", async () => {
+    const strings = ["example1", "example2", "example3"];
+    const promiseFactories = strings.map((str) => () => asyncFn(str));
+    serializePromises(promiseFactories);
+    await expect(promiseFactories[0]()).resolves.toBe("example1");
+    await expect(promiseFactories[1]()).resolves.toBe("example2");
+    await expect(promiseFactories[2]()).resolves.toBe("example3");
   });
 });

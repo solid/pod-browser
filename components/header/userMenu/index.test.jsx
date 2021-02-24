@@ -19,7 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import userEvent from "@testing-library/user-event";
 import React from "react";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import UserMenu from "./index";

@@ -152,13 +152,10 @@ export async function getContacts(indexFileDataset, contactTypeIri, fetch) {
     return respond([]);
   }
   const contactsThings = getThingAll(indexFileDataset);
-
   const contactsIris = contactsThings.map((t) => asUrl(t));
-
   const contactsResponses = await Promise.all(
     contactsIris.map((iri) => getResource(iri, fetch))
   );
-
   const contacts = contactsResponses
     .filter(({ error: e }) => !e)
     .map(({ response }) => response)
@@ -352,7 +349,6 @@ export function createContact(
   const emails = normalizedContact.emails.map(mapSchema("email"));
   const addresses = normalizedContact.addresses.map(mapSchema("address"));
   const telephones = normalizedContact.telephones.map(mapSchema("telephone"));
-
   const person = defineThing(
     { name: "this" },
     ...[(t) => addUrl(t, rdf.type, vcard.Individual), ...rootAttributeFns],

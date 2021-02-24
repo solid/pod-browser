@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useSession, useThing } from "@inrupt/solid-ui-react";
 import {
@@ -43,6 +43,7 @@ import styles from "./styles";
 import { chain } from "../../../../../src/solidClientHelpers/utils";
 import { fetchProfile } from "../../../../../src/solidClientHelpers/profile";
 import { vcardExtras } from "../../../../../src/addressBook";
+import useContactProfile from "../../../../../src/hooks/useContactProfile";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const VCARD_WEBID_PREDICATE = vcardExtras("WebId");
@@ -79,24 +80,34 @@ export default function AddAgentRow({
   newAgentsWebIds,
   contactsArrayLength,
   setAddingWebId,
-  setNoAgentsAlert,
   addingWebId,
-  updateThing,
+  updateTemporaryRowThing,
   permissions,
 }) {
   const { fetch } = useSession();
-  const { thing } = useThing();
+  const { thing: temporaryRowThing } = useThing();
   const classes = useStyles();
   const [agentWebId, setAgentWebId] = useState("");
   const [existingPermission, setExistingPermission] = useState();
-
-  const agentName = (thing && getStringNoLocale(thing, foaf.name)) || null;
-  const agentAvatar = (thing && getUrl(thing, vcard.hasPhoto)) || null;
-  const displayedWebId =
-    (thing &&
-      contactsArrayLength > 0 &&
-      getUrl(thing, VCARD_WEBID_PREDICATE)) ||
-    null;
+  const [agentName, setAgentName] = useState(null);
+  const [agentAvatar, setAgentAvatar] = useState(null);
+  const [displayedWebId, setDisplayedWebId] = useState(null);
+  const { data: profile } = useContactProfile(temporaryRowThing);
+  useEffect(() => {
+    if (profile) {
+      setAgentName(profile.name);
+      setAgentAvatar(profile.avatar);
+      setDisplayedWebId(profile.webId);
+    } else if (temporaryRowThing && !profile && contactsArrayLength > 0) {
+      setAgentName(
+        getStringNoLocale(temporaryRowThing, foaf.name) ||
+          getStringNoLocale(temporaryRowThing, vcard.fn) ||
+          null
+      );
+      setAgentAvatar(getUrl(temporaryRowThing, vcard.hasPhoto) || null);
+      setDisplayedWebId(getUrl(temporaryRowThing, VCARD_WEBID_PREDICATE));
+    }
+  }, [profile, temporaryRowThing, agentWebId, contactsArrayLength]);
 
   const handleAddAgentsWebIds = async (e) => {
     e.preventDefault();
@@ -105,10 +116,13 @@ export default function AddAgentRow({
       setExistingPermission(true);
       return;
     }
-    setNoAgentsAlert(false);
     setNewAgentsWebIds([...newAgentsWebIds, agentWebId]);
-    const newThing = await updateThingForNewRow(agentWebId, thing, fetch);
-    updateThing(newThing);
+    const newThing = await updateThingForNewRow(
+      agentWebId,
+      temporaryRowThing,
+      fetch
+    );
+    updateTemporaryRowThing(newThing);
     setAddingWebId(false);
   };
 
@@ -181,9 +195,8 @@ AddAgentRow.propTypes = {
   setNewAgentsWebIds: PropTypes.func.isRequired,
   newAgentsWebIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   setAddingWebId: PropTypes.func.isRequired,
-  setNoAgentsAlert: PropTypes.func.isRequired,
   contactsArrayLength: PropTypes.number.isRequired,
   addingWebId: PropTypes.bool.isRequired,
-  updateThing: PropTypes.func.isRequired,
+  updateTemporaryRowThing: PropTypes.func.isRequired,
   permissions: PropTypes.arrayOf(PropTypes.shape()).isRequired,
 };

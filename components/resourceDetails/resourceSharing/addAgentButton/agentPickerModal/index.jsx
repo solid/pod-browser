@@ -23,8 +23,10 @@
 
 import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Checkbox, createStyles } from "@material-ui/core";
-import { Button } from "@inrupt/prism-react-components";
+import { CircularProgress, createStyles } from "@material-ui/core";
+import { useBem } from "@solid/lit-prism-patterns";
+import clsx from "clsx";
+import { Button, Container } from "@inrupt/prism-react-components";
 import { makeStyles } from "@material-ui/styles";
 import {
   DatasetContext,
@@ -32,59 +34,74 @@ import {
   TableColumn,
   useSession,
 } from "@inrupt/solid-ui-react";
-import { Alert } from "@material-ui/lab";
-import {
-  createSolidDataset,
-  createThing,
-  getSourceUrl,
-  getThingAll,
-  setThing,
-} from "@inrupt/solid-client";
-import { foaf } from "rdf-namespaces";
+import { createThing, getSourceUrl } from "@inrupt/solid-client";
+import { vcard } from "rdf-namespaces";
+import { serializePromises } from "../../../../../src/solidClientHelpers/utils";
 import AccessControlContext from "../../../../../src/contexts/accessControlContext";
 import { fetchProfile } from "../../../../../src/solidClientHelpers/profile";
-import {
-  findContactInAddressBook,
-  saveContact,
-  vcardExtras,
-} from "../../../../../src/addressBook";
-import useAddressBookOld from "../../../../../src/hooks/useAddressBookOld";
-import useContactsOld from "../../../../../src/hooks/useContactsOld";
+import { vcardExtras } from "../../../../../src/addressBook";
 import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
 import PolicyHeader from "../../policyHeader";
 import AgentsTableTabs from "../../agentsTableTabs";
 import AgentsSearchBar from "../../agentsSearchBar";
+import MobileAgentsSearchBar from "../../mobileAgentsSearchBar";
 import AddAgentRow from "../addAgentRow";
 import AgentPickerEmptyState from "../agentPickerEmptyState";
 import styles from "./styles";
 import AddWebIdButton from "./addWebIdButton";
+import WebIdCheckbox from "./webIdCheckbox";
 import ConfirmationDialogContext from "../../../../../src/contexts/confirmationDialogContext";
 import useNamedPolicyPermissions from "../../../../../src/hooks/useNamedPolicyPermissions";
 import usePermissionsWithProfiles from "../../../../../src/hooks/usePermissionsWithProfiles";
+import useContacts from "../../../../../src/hooks/useContacts";
+import { GROUP_CONTACT } from "../../../../../src/models/contact/group";
+import {
+  PERSON_CONTACT,
+  findPersonContactInAddressBook,
+  savePerson,
+} from "../../../../../src/models/contact/person";
+import useAddressBook from "../../../../../src/hooks/useAddressBook";
 
 export const handleSubmit = ({
   newAgentsWebIds,
-  setNoAgentsAlert,
+  webIdsToDelete,
   accessControl,
-  people,
   addressBook,
   mutatePermissions,
   saveAgentToContacts,
   onClose,
+  setLoading,
   type,
   fetch,
 }) => {
   return () => {
-    if (!newAgentsWebIds.length) {
-      setNoAgentsAlert(true);
+    if (!newAgentsWebIds.length && !webIdsToDelete.length) {
       return;
     }
-    newAgentsWebIds.forEach(async (agentWebId) => {
-      await accessControl.addAgentToNamedPolicy(agentWebId, type);
-      saveAgentToContacts(agentWebId, people, addressBook, fetch);
+    setLoading(true);
+    const addPermissionsPromiseFactories = newAgentsWebIds?.map(
+      (agentWebId) => () =>
+        accessControl.addAgentToNamedPolicy(agentWebId, type)
+    );
+
+    const removePermissionsPromiseFactories = webIdsToDelete?.map(
+      (agentWebId) => () =>
+        accessControl.removeAgentFromNamedPolicy(agentWebId, type)
+    );
+
+    const addAgentsToContactsPromiseFactories = newAgentsWebIds?.map(
+      (agentWebId) => () => saveAgentToContacts(agentWebId, addressBook, fetch)
+    );
+    serializePromises([
+      ...addPermissionsPromiseFactories,
+      ...removePermissionsPromiseFactories,
+      ...addAgentsToContactsPromiseFactories,
+    ]).then(() => {
       mutatePermissions();
-      onClose();
+      setLoading(false);
     });
+
+    onClose();
   };
 };
 
@@ -94,13 +111,15 @@ export const handleConfirmation = ({
   setConfirmationSetup,
   setOpen,
   setConfirmed,
+  setContent,
+  setTitle,
   handleSubmitNewWebIds,
 }) => {
   return (confirmationSetup, confirmed) => {
-    if (open !== dialogId) return;
-    if (confirmationSetup && confirmed === null) return;
     setConfirmationSetup(true);
 
+    if (open !== dialogId) return;
+    if (confirmationSetup && confirmed === null) return;
     if (confirmationSetup && confirmed) {
       handleSubmitNewWebIds();
     }
@@ -109,31 +128,34 @@ export const handleConfirmation = ({
       setConfirmed(null);
       setOpen(null);
       setConfirmationSetup(false);
+      setContent(null);
+      setTitle(null);
     }
   };
 };
 
-export const handleSaveContact = async (iri, people, addressBook, fetch) => {
+export const handleSaveContact = async (iri, addressBook, fetch) => {
   let error;
   if (!iri) {
     return;
   }
 
   try {
-    const { name, webId, types } = await fetchProfile(iri, fetch);
-    const existingContact = await findContactInAddressBook(
-      people,
+    const { name, webId } = await fetchProfile(iri, fetch);
+    // TODO: we will likely need to change this if we want to save groups on the fly as well
+    const existingContact = await findPersonContactInAddressBook(
+      addressBook,
       webId,
       fetch
     );
-
     if (existingContact.length) {
       return;
     }
 
     if (name) {
       const contact = { webId, fn: name };
-      await saveContact(addressBook, contact, types, fetch);
+      // TODO: we will likely need to update this if we also want to create and save groups
+      await savePerson(addressBook, contact, fetch);
     }
   } catch (e) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -148,7 +170,8 @@ const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
 const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
 const TESTCAFE_CANCEL_WEBIDS_BUTTON = "cancel-webids-button";
 
-export default function AgentPickerModal({ type, text, onClose }) {
+export default function AgentPickerModal({ type, text, onClose, setLoading }) {
+  const { editText, saveText } = text;
   const {
     data: namedPermissions,
     mutate: mutatePermissions,
@@ -157,9 +180,18 @@ export default function AgentPickerModal({ type, text, onClose }) {
     namedPermissions
   );
 
-  const [addressBook] = useAddressBookOld();
-  const { data: people } = useContactsOld(addressBook, foaf.Person);
+  const { data: addressBook } = useAddressBook();
+  const { data: contacts, error } = useContacts([
+    GROUP_CONTACT,
+    PERSON_CONTACT,
+  ]);
+
+  const webIdsInPermissions = permissions.map((p) => p.webId);
+
+  const bem = useBem(useStyles());
+
   const classes = useStyles();
+
   const { session } = useSession();
   const { fetch } = session;
   const { dataset } = useContext(DatasetContext);
@@ -168,12 +200,10 @@ export default function AgentPickerModal({ type, text, onClose }) {
   const [selectedTabValue, setSelectedTabValue] = useState("");
   const { accessControl } = useContext(AccessControlContext);
   const [newAgentsWebIds, setNewAgentsWebIds] = useState([]);
+  const [webIdsToDelete, setWebIdsToDelete] = useState([]);
   const [contactsArray, setContactsArray] = useState([]);
+  const [filteredContacts, setFilteredContacts] = useState([]);
   const [addingWebId, setAddingWebId] = useState(false);
-  const [placeholderDataset, setPlaceholderDataset] = useState(
-    createSolidDataset()
-  );
-  const [noAgentsAlert, setNoAgentsAlert] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
   const dialogId = "add-new-permissions";
   const [confirmationSetup, setConfirmationSetup] = useState(false);
@@ -186,45 +216,42 @@ export default function AgentPickerModal({ type, text, onClose }) {
     setTitle,
   } = useContext(ConfirmationDialogContext);
 
-  /* istanbul ignore next */
   const handleTabChange = (e, newValue) => {
     setSelectedTabValue(newValue);
-    // todo: this will set the filter for the react SDK table once we have the multiselect agent picker, ignoring until we can test that it renders changes
   };
 
-  /* istanbul ignore next */
   const handleFilterChange = (e) => {
     const { value } = e.target;
-    setGlobalFilter(value || undefined); // ignoring until we can test that it renders changes
+    setGlobalFilter(value || undefined);
   };
-
   const handleSubmitNewWebIds = handleSubmit({
     newAgentsWebIds,
-    setNoAgentsAlert,
+    webIdsToDelete,
     accessControl,
-    people,
     addressBook,
     mutatePermissions,
     saveAgentToContacts: handleSaveContact,
     onClose,
+    setLoading,
     type,
     fetch,
   });
 
   const handleClickOpenDialog = () => {
-    if (!newAgentsWebIds.length) {
-      setNoAgentsAlert(true);
+    if (!newAgentsWebIds.length && !webIdsToDelete.length) {
+      onClose();
+      setConfirmed(false);
       return;
     }
     const confirmationTitle = `Change permissions for ${
-      newAgentsWebIds.length === 1
+      newAgentsWebIds.length + webIdsToDelete.length === 1
         ? "1 person"
-        : `${newAgentsWebIds.length} people`
+        : `${newAgentsWebIds.length + webIdsToDelete.length} people`
     }`;
     const confirmationContent = `Continuing will change ${
-      newAgentsWebIds.length === 1
+      newAgentsWebIds.length + webIdsToDelete.length === 1
         ? "1 person "
-        : `${newAgentsWebIds.length} people `
+        : `${newAgentsWebIds.length + webIdsToDelete.length} people `
     } permissions to ${type.charAt(0).toUpperCase() + type.slice(1)}`;
     setTitle(confirmationTitle);
     setContent(confirmationContent);
@@ -237,52 +264,87 @@ export default function AgentPickerModal({ type, text, onClose }) {
     setConfirmationSetup,
     setOpen,
     setConfirmed,
+    setContent,
+    setTitle,
     handleSubmitNewWebIds,
   });
 
-  const updateThing = (newThing) => {
-    const updatedDataset = setThing(placeholderDataset, newThing);
-    setPlaceholderDataset(updatedDataset);
+  const updateTemporaryRowThing = (newThing) => {
+    const { dataset: addressBookDataset } = addressBook;
+    const newItem = {
+      thing: newThing,
+      dataset: addressBookDataset,
+    };
+    setContactsArray([
+      newItem,
+      ...contactsArray.slice(1, contactsArray.length),
+    ]);
   };
 
   useEffect(() => {
-    const contacts = getThingAll(placeholderDataset).map((t) => {
+    if (!contacts || !addressBook) return;
+    const { dataset: addressBookDataset } = addressBook;
+    const contactsArrayForTable = contacts.map(({ thing }) => {
       return {
-        dataset: placeholderDataset,
-        thing: t,
+        thing,
+        dataset: addressBookDataset,
       };
     });
-    setContactsArray(contacts);
-  }, [placeholderDataset]);
+    setContactsArray(contactsArrayForTable);
+  }, [contacts, addressBook]);
+
+  useEffect(() => {
+    if (selectedTabValue) {
+      const filtered = contactsArray.filter(({ thing }) =>
+        selectedTabValue.isOfType(thing)
+      );
+      setFilteredContacts(filtered);
+    }
+  }, [contactsArray, selectedTabValue, globalFilter]);
 
   useEffect(() => {
     onConfirmation(confirmationSetup, confirmed);
   }, [confirmationSetup, confirmed, onConfirmation]);
 
   const handleAddRow = () => {
-    setNoAgentsAlert(false);
     setAddingWebId(true);
     const emptyThing = createThing();
+    const { dataset: addressBookDataset } = addressBook;
     const newItem = {
-      dataset: placeholderDataset,
       thing: emptyThing,
+      dataset: addressBookDataset,
     };
+    if (selectedTabValue) {
+      setFilteredContacts([newItem, ...filteredContacts]);
+    }
     setContactsArray([newItem, ...contactsArray]);
   };
 
+  const contactsForTable = selectedTabValue ? filteredContacts : contactsArray;
+
   const toggleCheckbox = (e, index, value) => {
     if (index === 0 && addingWebId) return null;
+    if (
+      !webIdsToDelete.includes(value) &&
+      webIdsInPermissions.includes(value)
+    ) {
+      setWebIdsToDelete([value, ...webIdsToDelete]);
+    } else if (
+      webIdsToDelete.includes(value) &&
+      webIdsInPermissions.includes(value)
+    ) {
+      setWebIdsToDelete(webIdsToDelete.filter((webId) => webId !== value));
+    }
     return e.target.checked
       ? setNewAgentsWebIds([value, ...newAgentsWebIds])
       : setNewAgentsWebIds(newAgentsWebIds.filter((webId) => webId !== value));
   };
-
   return (
     <div
       className={classes.paper}
       data-testid={TESTCAFE_ID_ADD_AGENT_PICKER_MODAL}
     >
-      <div className={classes.title}>{`${text} for ${resourceName}`}</div>
+      <div className={classes.title}>{`${editText} for ${resourceName}`}</div>
       <PolicyHeader type={type} />
       <div className={classes.tableContainer}>
         <div className={classes.tabsAndAddButtonContainer}>
@@ -290,36 +352,63 @@ export default function AgentPickerModal({ type, text, onClose }) {
             handleTabChange={handleTabChange}
             selectedTabValue={selectedTabValue}
             className={classes.modalTabsContainer}
+            tabsValues={{
+              all: "",
+              people: PERSON_CONTACT,
+              groups: GROUP_CONTACT,
+            }}
           />
-          <AddWebIdButton onClick={handleAddRow} disabled={addingWebId} />
+          <MobileAgentsSearchBar handleFilterChange={handleFilterChange} />
+
+          <AddWebIdButton
+            onClick={handleAddRow}
+            disabled={addingWebId}
+            className={classes.desktopOnly}
+          />
         </div>
         <AgentsSearchBar handleFilterChange={handleFilterChange} />
-        {contactsArray.length ? (
+
+        <AddWebIdButton
+          onClick={handleAddRow}
+          disabled={addingWebId}
+          className={classes.mobileOnly}
+        />
+        {!contacts && !error && (
+          <Container variant="empty">
+            <CircularProgress />
+          </Container>
+        )}
+        {!!contacts && !!contactsForTable.length && (
           <Table
-            things={contactsArray}
-            className={classes.table}
+            things={contactsForTable}
+            className={clsx(bem("table"), bem("agentPickerTable"))}
             filter={globalFilter}
           >
             <TableColumn
               property={VCARD_WEBID_PREDICATE}
               dataType="url"
-              header={<span className={classes.tableHeader}>Editor</span>}
+              header={
+                // eslint-disable-next-line react/jsx-wrap-multilines
+                <span className={classes.tableHeader}>
+                  {type.slice(0, type.length - 1)}
+                </span>
+              }
               body={({ value, row: { index } }) => (
-                <Checkbox
-                  type="checkbox"
-                  color="primary"
-                  size="medium"
-                  checked={
-                    (index === 0 && addingWebId) ||
-                    newAgentsWebIds.includes(value)
-                  }
-                  onChange={(e) => toggleCheckbox(e, index, value)}
+                <WebIdCheckbox
+                  value={value}
+                  index={index}
+                  addingWebId={addingWebId}
+                  toggleCheckbox={toggleCheckbox}
+                  newAgentsWebIds={newAgentsWebIds}
+                  webIdsInPermissions={webIdsInPermissions}
+                  webIdsToDelete={webIdsToDelete}
                 />
               )}
             />
             <TableColumn
               header={<span className={classes.tableHeader}>Name</span>}
-              property={foaf.name}
+              property={vcard.fn}
+              filterable
               body={({ row: { index } }) => (
                 <AddAgentRow
                   type={type}
@@ -329,19 +418,27 @@ export default function AgentPickerModal({ type, text, onClose }) {
                   contactsArrayLength={contactsArray.length}
                   setAddingWebId={setAddingWebId}
                   addingWebId={addingWebId}
-                  setNoAgentsAlert={setNoAgentsAlert}
-                  updateThing={updateThing}
+                  updateTemporaryRowThing={updateTemporaryRowThing}
                   permissions={permissions}
                 />
               )}
             />
           </Table>
-        ) : (
+        )}
+        {!!contacts && !contactsForTable.length && !selectedTabValue && (
           <AgentPickerEmptyState onClick={handleAddRow} />
+        )}
+        {!!contacts && !contactsForTable.length && !!selectedTabValue && (
+          <span className={classes.emptyStateTextContainer}>
+            <p>
+              {`No ${
+                selectedTabValue === PERSON_CONTACT ? "people " : "groups "
+              } found`}
+            </p>
+          </span>
         )}
       </div>
       {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-      {noAgentsAlert && <Alert severity="error">Please select {type}</Alert>}
       <div className={classes.buttonsContainer}>
         <Button
           variant="secondary"
@@ -354,7 +451,7 @@ export default function AgentPickerModal({ type, text, onClose }) {
           data-testid={TESTCAFE_SUBMIT_WEBIDS_BUTTON}
           onClick={handleClickOpenDialog}
         >
-          {text}
+          {saveText}
         </Button>
       </div>
     </div>
@@ -363,10 +460,12 @@ export default function AgentPickerModal({ type, text, onClose }) {
 
 AgentPickerModal.propTypes = {
   onClose: PropTypes.func,
-  text: PropTypes.string.isRequired,
+  setLoading: PropTypes.func,
+  text: PropTypes.shape().isRequired,
   type: PropTypes.string.isRequired,
 };
 
 AgentPickerModal.defaultProps = {
   onClose: () => {},
+  setLoading: () => {},
 };

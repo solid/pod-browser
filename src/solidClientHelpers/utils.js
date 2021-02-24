@@ -156,3 +156,11 @@ export function sharedStart(...strings) {
   while (i < L && a1.charAt(i) === a2.charAt(i)) i++;
   return a1.substring(0, i);
 }
+
+export async function serializePromises(promiseFactories) {
+  return promiseFactories.reduce((promise, func) => {
+    return promise.then((result) =>
+      func()?.then(Array.prototype.concat.bind(result))
+    );
+  }, Promise.resolve([]));
+}

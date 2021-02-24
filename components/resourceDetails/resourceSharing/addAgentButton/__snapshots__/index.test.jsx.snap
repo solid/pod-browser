@@ -13,7 +13,7 @@ exports[`AddAgentButton renders a button with the correct text 1`] = `
     <span
       class="PodBrowser-button__text"
     >
-      Add Editors
+      Edit Editors
     </span>
   </button>
 </DocumentFragment>
