@@ -20,7 +20,7 @@
  */
 
 import { asUrl, getThing, setThing, setUrl } from "@inrupt/solid-client";
-import { getContactIndexDefaultUrl } from "../src/models/contact";
+import { getContactIndexDefaultUrl } from "../src/models/contact/index/collection";
 
 // eslint-disable-next-line import/prefer-default-export
 export function addIndexToMockedAddressBook(addressBook, type, options = {}) {

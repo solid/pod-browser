@@ -45,7 +45,7 @@ export default function MainNav() {
   const { enabled } = useContext(FeatureContext);
   const links = menuItems
     .filter(({ featureFlag }) => !featureFlag || enabled(featureFlag))
-    .map(({ path, label, pages, ...rest }) => {
+    .map(({ featureFlag, path, label, pages, ...rest }) => {
       return {
         active: pages.includes(router.pathname),
         href: path,

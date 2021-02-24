@@ -32,19 +32,26 @@ import CreateGroupButton from "../createGroupButton";
 import { getGroupName, getGroupUrl } from "../../src/models/group";
 import ErrorMessage from "../errorMessage";
 import GroupListEmpty from "./groupListEmpty";
-import ContactsContext from "../../src/contexts/contactsContext";
+import useContacts from "../../src/hooks/useContacts";
+import { GROUP_CONTACT } from "../../src/models/contact/group";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export const TESTCAFE_ID_GROUP_LIST = "group-list";
 
 export default function GroupList() {
-  const { contactsSWR } = useContext(ContactsContext);
-  const { data: groups, error } = contactsSWR;
-  console.log("TEST", groups?.length);
+  const { data: groups, error } = useContacts([GROUP_CONTACT]);
   const bem = useBem(useStyles());
   const router = useRouter();
   const selectedGroupUrl = router.query.iri;
+  const sortedGroups = groups?.sort((a, b) =>
+    getGroupName(a) < getGroupName(b) ? -1 : 1
+  );
+  console.log(
+    "GROUPS",
+    groups?.map((g) => getGroupName(g)),
+    sortedGroups?.map((g) => getGroupName(g))
+  );
   return (
     <div data-testid={TESTCAFE_ID_GROUP_LIST}>
       <div className={bem("group-list-header")}>
@@ -55,17 +62,17 @@ export default function GroupList() {
       </div>
       {!groups && !error && <Spinner />}
       {error && <ErrorMessage error={error} />}
-      {groups && !groups.length && <GroupListEmpty />}
-      {groups && groups.length && (
+      {groups && groups.length === 0 && <GroupListEmpty />}
+      {groups && groups.length > 0 && (
         <ul className={bem("group-list")}>
-          {groups.map((group, index) => {
+          {sortedGroups.map((group, index) => {
             const groupUrl = getGroupUrl(group);
             const groupName = getGroupName(group);
             const selected = selectedGroupUrl
               ? selectedGroupUrl === groupUrl
               : index === 0;
             return (
-              <li className={bem("group-list__item")}>
+              <li className={bem("group-list__item")} key={groupUrl}>
                 <Link href={`/groups/${encodeURIComponent(groupUrl)}`}>
                   <a className={bem("group-list__link", { selected })}>
                     <Icons

@@ -23,6 +23,5 @@ import React from "react";
 import GroupsPage from "../../components/pages/groups";
 
 export default function Group() {
-  console.log("TEST");
   return <GroupsPage />;
 }

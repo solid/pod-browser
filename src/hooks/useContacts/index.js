@@ -21,8 +21,17 @@
 
 import { useSession } from "@inrupt/solid-ui-react";
 import useSWR from "swr";
+import { thingAsMarkdown } from "@inrupt/solid-client";
 import useAddressBook from "../useAddressBook";
 import { getContactAll } from "../../models/contact";
+import { compareArray } from "../../models/array";
+
+function reduceToString(array) {
+  return array.reduce(
+    (memo, item) => memo.concat(thingAsMarkdown(item.thing)),
+    ""
+  );
+}
 
 export default function useContacts(types) {
   const { fetch } = useSession();
@@ -34,6 +43,35 @@ export default function useContacts(types) {
       if (addressBookError) throw addressBookError;
       return getContactAll(addressBook, types, fetch);
     },
-    { errorRetryCount: 0 }
+    {
+      // revalidateOnMount: true,
+      // revalidateOnFocus: false,
+      // revalidateOnReconnect: false,
+      // refreshInterval: 0,
+      shouldRetryOnError: false,
+      // errorRetryCount: 0,
+      compare: (a, b) =>
+        compareArray(a, b, (c, d) => reduceToString(c) === reduceToString(d)),
+      // compare: (a, b) => {
+      //   if (typeof a === "undefined") {
+      //     return typeof b === "undefined";
+      //   }
+      //   if (typeof b === "undefined") {
+      //     return typeof a === "undefined";
+      //   }
+      //   if (!Array.isArray(a) || !Array.isArray(b)) {
+      //     return false;
+      //   }
+      //   if (a.length !== b.length) {
+      //     return false;
+      //   }
+      //   const reduce = reduceToString(a) === reduceToString(b);
+      //   // if (!reduce) {
+      //   //   console.log("COMPARE ARRAY A", reduceToString(a));
+      //   //   console.log("COMPARE ARRAY B", reduceToString(b));
+      //   // }
+      //   return reduce;
+      // },
+    }
   );
 }

@@ -43,7 +43,7 @@ import mockGroupContact, {
 } from "../../../../__testUtils/mockGroupContact";
 import { chain } from "../../../solidClientHelpers/utils";
 import { vcardExtras } from "../../../addressBook";
-import { getContactIndexDefaultUrl, getContactIndexUrl } from "../index";
+import { getContactIndexDefaultUrl, getContactIndexUrl } from "../collection";
 import { addIndexToMockedAddressBook } from "../../../../__testUtils/mockContact";
 import mockGroup from "../../../../__testUtils/mockGroup";
 

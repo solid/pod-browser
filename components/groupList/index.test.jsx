@@ -20,10 +20,11 @@
  */
 
 import { renderWithTheme } from "../../__testUtils/withTheme";
-import GroupList, { TESTCAFE_ID_GROUP_ERROR } from "./index";
+import GroupList from "./index";
 import useContacts from "../../src/hooks/useContacts";
 import { TESTCAFE_ID_SPINNER } from "../spinner";
 import { TESTCAFE_ID_GROUP_LIST_EMPTY } from "./groupListEmpty";
+import { TESTCAFE_ID_ERROR_MESSAGE } from "../errorMessage";
 
 jest.mock("../../src/hooks/useContacts");
 const mockedContactsHook = useContacts;
@@ -46,7 +47,7 @@ describe("GroupList", () => {
     const errorMessage = "error";
     mockedContactsHook.mockReturnValue({ error: new Error(errorMessage) });
     const { getByTestId } = renderWithTheme(<GroupList />);
-    expect(getByTestId(TESTCAFE_ID_GROUP_ERROR).innerHTML).toContain(
+    expect(getByTestId(TESTCAFE_ID_ERROR_MESSAGE).innerHTML).toContain(
       errorMessage
     );
   });

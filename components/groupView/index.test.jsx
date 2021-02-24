@@ -22,8 +22,9 @@
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import useContacts from "../../src/hooks/useContacts";
 import { TESTCAFE_ID_SPINNER } from "../spinner";
-import GroupView, { TESTCAFE_ID_GROUP_VIEW_ERROR } from "./index";
+import GroupView from "./index";
 import { TESTCAFE_ID_GROUP_VIEW_EMPTY } from "./groupViewEmpty";
+import { TESTCAFE_ID_ERROR_MESSAGE } from "../errorMessage";
 
 jest.mock("../../src/hooks/useContacts");
 const mockedContactsHook = useContacts;
@@ -46,7 +47,7 @@ describe("GroupView", () => {
     const errorMessage = "error";
     mockedContactsHook.mockReturnValue({ error: new Error(errorMessage) });
     const { getByTestId } = renderWithTheme(<GroupView />);
-    expect(getByTestId(TESTCAFE_ID_GROUP_VIEW_ERROR).innerHTML).toContain(
+    expect(getByTestId(TESTCAFE_ID_ERROR_MESSAGE).innerHTML).toContain(
       errorMessage
     );
   });

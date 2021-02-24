@@ -21,28 +21,20 @@
 
 /* eslint react/forbid-prop-types: off */
 
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import T from "prop-types";
 import { useRouter } from "next/router";
-import { vcard } from "rdf-namespaces";
-import {
-  DatasetProvider,
-  ThingProvider,
-  useSession,
-  Value,
-} from "@inrupt/solid-ui-react";
+import { useSession } from "@inrupt/solid-ui-react";
 import {
   Button,
   Form,
-  Input,
   InputGroup,
   SimpleInput,
 } from "@inrupt/prism-react-components";
 import { makeStyles } from "@material-ui/styles";
 import { createStyles } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
-import { mutate } from "swr";
-import { getGroupName, getGroupUrl } from "../../../src/models/group";
+import { getGroupName } from "../../../src/models/group";
 import styles from "./styles";
 import Spinner from "../../spinner";
 import { GROUP_CONTACT, renameGroup } from "../../../src/models/contact/group";
@@ -50,50 +42,57 @@ import useAddressBook from "../../../src/hooks/useAddressBook";
 import useGroup from "../../../src/hooks/useGroup";
 import ErrorMessage from "../../errorMessage";
 import useContacts from "../../../src/hooks/useContacts";
-import ContactsContext from "../../../src/contexts/contactsContext";
+import { getContactAllFromContactsIndex } from "../../../src/models/contact";
 
 const TESTCAFE_ID_GROUP_NAME_FIELD = "group-name-field";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function GroupDetailsName({ group }) {
+export default function GroupDetailsName({ groupUrl }) {
   const router = useRouter();
+  const { data: group, error: groupError, mutate: mutateGroup } = useGroup(
+    groupUrl
+  );
   const justCreated = router.query.created === "";
   const [editing, setEditing] = useState(true);
   const [processing, setProcessing] = useState(false);
   const bem = useBem(useStyles());
-  const [groupName, setGroupName] = useState(getGroupName(group));
+  const [groupName, setGroupName] = useState("");
   const fieldId = "GroupName";
   const { data: addressBook, error: addressBookError } = useAddressBook();
   const { fetch } = useSession();
-  const { error: groupError, mutate: mutateGroup } = useGroup(
-    getGroupUrl(group)
-  );
-  const {
-    contactsSWR: { error: groupsError, mutate: mutateGroups },
-  } = useContext(ContactsContext);
+  const { error: groupsError, mutate: mutateGroups } = useContacts([
+    GROUP_CONTACT,
+  ]);
+
+  useEffect(() => {
+    if (!group) return;
+    setGroupName(getGroupName(group));
+  }, [group]);
 
   const onSubmit = async (event) => {
     event.preventDefault();
     if (processing) return;
     setProcessing(true);
 
-    const { group: updatedGroup } = await renameGroup(
+    const { group: updatedGroup, groupIndex } = await renameGroup(
       addressBook,
       group,
       groupName,
       fetch
     );
-    await mutateGroups();
-    // await mutateAddressBook();
-    // await mutateGroups();
-    // await mutateGroup(updatedGroup);
-
+    const updatedGroups = getContactAllFromContactsIndex(groupIndex);
+    console.log(
+      "UPDATED GROUPS",
+      updatedGroups?.map((g) => getGroupName(g))
+    );
+    await Promise.all([mutateGroup(updatedGroup), mutateGroups(updatedGroups)]);
     setProcessing(false);
-    // setEditing(false);
   };
 
-  if (processing) return <Spinner />;
+  const loading = processing || !group;
+
+  if (loading) return <Spinner />;
 
   const error = addressBookError || groupError || groupsError;
 
@@ -104,7 +103,7 @@ export default function GroupDetailsName({ group }) {
       <InputGroup id={fieldId} label="Group Name" variant="with-button">
         <SimpleInput
           id={fieldId}
-          defaultValue={groupName}
+          value={groupName}
           onChange={(event) => setGroupName(event.target.value)}
           variant="with-button"
           data-testid={TESTCAFE_ID_GROUP_NAME_FIELD}
@@ -120,8 +119,5 @@ export default function GroupDetailsName({ group }) {
 }
 
 GroupDetailsName.propTypes = {
-  group: T.shape({
-    dataset: T.object.isRequired,
-    thing: T.object.isRequired,
-  }).isRequired,
+  groupUrl: T.string.isRequired,
 };

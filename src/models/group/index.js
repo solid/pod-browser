@@ -51,6 +51,10 @@ export function getGroupUrl(group) {
   return asUrl(group.thing);
 }
 
+export function getFirstGroupUrl(groups) {
+  return groups && groups[0] ? getGroupUrl(groups[0]) : null;
+}
+
 export function getGroupName(group) {
   return getStringNoLocale(group.thing, vcard.fn);
 }

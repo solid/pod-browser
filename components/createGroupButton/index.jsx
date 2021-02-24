@@ -41,7 +41,7 @@ export default function CreateGroupButton({ children, ...props }) {
   const {
     data: groups,
     error: groupsError,
-    mutate: mutateGroup,
+    mutate: mutateGroups,
   } = useContacts([GROUP_CONTACT]);
   const { fetch } = useSession();
   const router = useRouter();
@@ -57,8 +57,7 @@ export default function CreateGroupButton({ children, ...props }) {
       groupName,
       fetch
     );
-    await mutateAddressBook(updatedAddressBook);
-    await mutateGroup();
+    await Promise.all([mutateAddressBook(updatedAddressBook), mutateGroups()]);
     const groupUrl = getGroupUrl(group);
     await router.push(`/groups/${encodeURIComponent(groupUrl)}?created`);
     setProcessing(false);

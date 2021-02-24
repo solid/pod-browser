@@ -19,16 +19,25 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint react/forbid-prop-types: off */
+import { thingAsMarkdown } from "@inrupt/solid-client";
 
-import React from "react";
-import T from "prop-types";
-import GroupDetailsName from "./groupDetailsName";
-
-export default function GroupDetails({ groupUrl }) {
-  return <GroupDetailsName groupUrl={groupUrl} />;
+function defaultCompareFn(a, b) {
+  return a.reduce((memo, item) => memo && b.indexOf(item) !== -1, true);
 }
 
-GroupDetails.propTypes = {
-  groupUrl: T.string.isRequired,
-};
+// eslint-disable-next-line import/prefer-default-export
+export function compareArray(a, b, customCompareFn = defaultCompareFn) {
+  if (typeof a === "undefined") {
+    return typeof b === "undefined";
+  }
+  if (typeof b === "undefined") {
+    return typeof a === "undefined";
+  }
+  if (!Array.isArray(a) || !Array.isArray(b)) {
+    return false;
+  }
+  if (a.length !== b.length) {
+    return false;
+  }
+  return customCompareFn(a, b);
+}

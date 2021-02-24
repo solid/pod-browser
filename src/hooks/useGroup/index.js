@@ -25,8 +25,15 @@ import { getGroup } from "../../models/group";
 
 export default function useGroup(groupUrl) {
   const { fetch } = useSession();
-  return useSWR(["group", groupUrl], () => {
-    if (!groupUrl) return null;
-    return getGroup(groupUrl, fetch);
-  });
+  return useSWR(
+    ["group", groupUrl],
+    async () => {
+      if (!groupUrl) return null;
+      return getGroup(groupUrl, fetch);
+    },
+    {
+      errorRetryCount: 0,
+      refreshInterval: 0,
+    }
+  );
 }

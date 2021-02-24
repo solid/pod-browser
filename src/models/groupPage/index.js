@@ -19,16 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint react/forbid-prop-types: off */
+import { getGroupUrl } from "../group";
 
-import React from "react";
-import T from "prop-types";
-import GroupDetailsName from "./groupDetailsName";
-
-export default function GroupDetails({ groupUrl }) {
-  return <GroupDetailsName groupUrl={groupUrl} />;
+// eslint-disable-next-line import/prefer-default-export
+export function getSelectedGroupOrFallbackGroupUrl(groupUrl, groups) {
+  return groupUrl || (groups && groups[0] ? getGroupUrl(groups[0]) : null);
 }
-
-GroupDetails.propTypes = {
-  groupUrl: T.string.isRequired,
-};

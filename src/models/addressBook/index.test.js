@@ -33,7 +33,7 @@ import {
   createAddressBook,
   getAddressBookContainerUrl,
   getAddressBookIndexDefaultUrl,
-  getAddressBookIndexUrl,
+  getAddressBookDatasetUrl,
   INDEX_FILE,
   loadAddressBook,
 } from "./index";
@@ -61,13 +61,13 @@ describe("getAddressBookIndexDefaultUrl", () => {
   });
 });
 
-describe("getAddressBookIndexUrl", () => {
+describe("getAddressBookDatasetUrl", () => {
   it("returns the URL that's stored in the model", () => {
     const indexUrl = "https://example.com/myIndex.ttl";
     const addressBook = mockAddressBook({
       indexUrl,
     });
-    expect(getAddressBookIndexUrl(addressBook)).toEqual(indexUrl);
+    expect(getAddressBookDatasetUrl(addressBook)).toEqual(indexUrl);
   });
 
   it("returns default URLs if model data is missing", () => {
@@ -75,7 +75,7 @@ describe("getAddressBookIndexUrl", () => {
       containerUrl,
       indexUrl: null,
     });
-    expect(getAddressBookIndexUrl(addressBook)).toEqual(
+    expect(getAddressBookDatasetUrl(addressBook)).toEqual(
       joinPath(containerUrl, INDEX_FILE)
     );
   });
