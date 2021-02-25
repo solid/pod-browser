@@ -33,7 +33,6 @@ export default function useGroup(groupUrl) {
     },
     {
       errorRetryCount: 0,
-      refreshInterval: 0,
     }
   );
 }

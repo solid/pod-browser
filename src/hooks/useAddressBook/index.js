@@ -59,7 +59,6 @@ export default function useAddressBook() {
     },
     {
       errorRetryCount: 0,
-      refreshInterval: 0,
     }
   );
 }

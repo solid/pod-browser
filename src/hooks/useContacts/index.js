@@ -28,9 +28,13 @@ export default function useContacts(types) {
   const { fetch } = useSession();
   const { data: addressBook, error: addressBookError } = useAddressBook();
 
-  return useSWR(["contacts", addressBook, ...types], async () => {
-    if (!addressBook && !addressBookError) return null;
-    if (addressBookError) throw addressBookError;
-    return getContactAll(addressBook, types, fetch);
-  });
+  return useSWR(
+    ["contacts", addressBook, ...types],
+    async () => {
+      if (!addressBook && !addressBookError) return null;
+      if (addressBookError) throw addressBookError;
+      return getContactAll(addressBook, types, fetch);
+    },
+    { errorRetryCount: 0 }
+  );
 }
