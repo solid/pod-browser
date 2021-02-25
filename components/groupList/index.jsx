@@ -46,11 +46,6 @@ export default function GroupList() {
   const sortedGroups = groups?.sort((a, b) =>
     getGroupName(a) < getGroupName(b) ? -1 : 1
   );
-  console.log(
-    "GROUPS",
-    groups?.map((g) => getGroupName(g)),
-    sortedGroups?.map((g) => getGroupName(g))
-  );
   return (
     <div data-testid={TESTCAFE_ID_GROUP_LIST}>
       <div className={bem("group-list-header")}>

@@ -84,10 +84,6 @@ export default function GroupDetailsName() {
       fetch
     );
     const updatedGroups = getContactAllFromContactsIndex(groupIndex);
-    console.log(
-      "UPDATED GROUPS",
-      updatedGroups?.map((g) => getGroupName(g))
-    );
     await Promise.all([mutateGroup(updatedGroup), mutateGroups(updatedGroups)]);
     setProcessing(false);
   };
