@@ -37,6 +37,8 @@ import GroupAllContext from "../../src/contexts/groupAllContext";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export const TESTCAFE_ID_GROUP_LIST = "group-list";
+export const TESTCAFE_ID_GROUP_LIST_ITEM = "group-list-item";
+export const TESTCAFE_ID_GROUP_LIST_LINK = "group-list-link";
 
 export default function GroupList() {
   const { data: groups, error } = useContext(GroupAllContext);
@@ -46,6 +48,7 @@ export default function GroupList() {
   const sortedGroups = groups?.sort((a, b) =>
     getGroupName(a) < getGroupName(b) ? -1 : 1
   );
+  const loading = !groups && !error;
   return (
     <div data-testid={TESTCAFE_ID_GROUP_LIST}>
       <div className={bem("group-list-header")}>
@@ -54,10 +57,10 @@ export default function GroupList() {
           New Group
         </CreateGroupButton>
       </div>
-      {!groups && !error && <Spinner />}
+      {loading && <Spinner />}
       {error && <ErrorMessage error={error} />}
-      {groups && groups.length === 0 && <GroupListEmpty />}
-      {groups && groups.length > 0 && (
+      {!error && groups && groups.length === 0 && <GroupListEmpty />}
+      {!error && groups && groups.length > 0 && (
         <ul className={bem("group-list")}>
           {sortedGroups.map((group, index) => {
             const groupUrl = getGroupUrl(group);
@@ -66,9 +69,16 @@ export default function GroupList() {
               ? selectedGroupUrl === groupUrl
               : index === 0;
             return (
-              <li className={bem("group-list__item")} key={groupUrl}>
+              <li
+                className={bem("group-list__item")}
+                key={groupUrl}
+                data-testid={TESTCAFE_ID_GROUP_LIST_ITEM}
+              >
                 <Link href={`/groups/${encodeURIComponent(groupUrl)}`}>
-                  <a className={bem("group-list__link", { selected })}>
+                  <a
+                    className={bem("group-list__link", { selected })}
+                    data-testid={TESTCAFE_ID_GROUP_LIST_LINK}
+                  >
                     <Icons
                       name="users"
                       className={bem("group-list__icon", { selected })}
