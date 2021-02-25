@@ -19,9 +19,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { getGroupUrl } from "../group";
+import React, { useContext } from "react";
+import { render } from "@testing-library/react";
+import useAddressBook from "../../hooks/useAddressBook";
+import AddressBookContext, { AddressBookProvider } from "./index";
 
-// eslint-disable-next-line import/prefer-default-export
-export function getSelectedGroupOrFallbackGroupUrl(groupUrl, groups) {
-  return groupUrl || (groups && groups[0] ? getGroupUrl(groups[0]) : null);
+jest.mock("../../hooks/useAddressBook");
+const mockedAddressBookHook = useAddressBook;
+
+const TESTID = "test";
+
+function ChildComponent() {
+  const addressBook = useContext(AddressBookContext);
+  return <div data-testid={TESTID}>{addressBook}</div>;
 }
+
+describe("AddressBookContext", () => {
+  it("exposes whatever useAddressBook returns", () => {
+    const addressBook = "test";
+    mockedAddressBookHook.mockReturnValue(addressBook);
+    const { getByTestId } = render(
+      <AddressBookProvider>
+        <ChildComponent />
+      </AddressBookProvider>
+    );
+    expect(getByTestId(TESTID).innerHTML).toEqual(addressBook);
+    expect(mockedAddressBookHook).toHaveBeenCalledWith();
+  });
+});

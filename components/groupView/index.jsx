@@ -24,16 +24,11 @@ import { makeStyles } from "@material-ui/styles";
 import { createStyles } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import { useRouter } from "next/router";
-import useContacts from "../../src/hooks/useContacts";
-import { GROUP_CONTACT } from "../../src/models/contact/group";
 import GroupViewEmpty from "./groupViewEmpty";
 import Spinner from "../spinner";
 import styles from "./styles";
-import useGroup from "../../src/hooks/useGroup";
 import ErrorMessage from "../errorMessage";
 import GroupDetails from "../groupDetails";
-import { getSelectedGroupOrFallbackGroupUrl } from "../../src/models/groupPage";
-import { getGroupName } from "../../src/models/group";
 import GroupAllContext from "../../src/contexts/groupAllContext";
 import GroupContext from "../../src/contexts/groupContext";
 

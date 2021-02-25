@@ -23,8 +23,7 @@ import React, { createContext, useContext } from "react";
 import T from "prop-types";
 import { useRouter } from "next/router";
 import useGroup from "../../hooks/useGroup";
-import { getGroupName } from "../../models/group";
-import { getSelectedGroupOrFallbackGroupUrl } from "../../models/groupPage";
+import { getGroupName, getGroupUrl } from "../../models/group";
 import GroupAllContext from "../groupAllContext";
 
 const GroupContext = createContext(null);
@@ -37,10 +36,9 @@ export function GroupProvider({ children }) {
     getGroupName(a) < getGroupName(b) ? -1 : 1
   );
   const router = useRouter();
-  const groupUrl = getSelectedGroupOrFallbackGroupUrl(
-    router.query.iri,
-    sortedGroups
-  );
+  const groupUrl =
+    router.query.iri ||
+    (sortedGroups && sortedGroups[0] ? getGroupUrl(sortedGroups[0]) : null); // TODO: Tried sortedGroup?[0] ? ... : ..., but ESLint don't accept it
   const group = useGroup(groupUrl);
   return (
     <GroupContext.Provider value={group}>{children}</GroupContext.Provider>

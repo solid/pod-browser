@@ -32,8 +32,6 @@ import CreateGroupButton from "../createGroupButton";
 import { getGroupName, getGroupUrl } from "../../src/models/group";
 import ErrorMessage from "../errorMessage";
 import GroupListEmpty from "./groupListEmpty";
-import useContacts from "../../src/hooks/useContacts";
-import { GROUP_CONTACT } from "../../src/models/contact/group";
 import GroupAllContext from "../../src/contexts/groupAllContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));

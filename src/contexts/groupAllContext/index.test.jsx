@@ -19,28 +19,32 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { createContext } from "react";
-import T from "prop-types";
+import React, { useContext } from "react";
+import { render } from "@testing-library/react";
+import GroupAllContext, { GroupAllProvider } from "./index";
 import useContacts from "../../hooks/useContacts";
 import { GROUP_CONTACT } from "../../models/contact/group";
 
-const GroupAllContext = createContext(null);
+jest.mock("../../hooks/useContacts");
+const mockContactsHook = useContacts;
 
-export default GroupAllContext;
+const TESTID = "test";
 
-export function GroupAllProvider({ children }) {
-  const groups = useContacts([GROUP_CONTACT]);
-  return (
-    <GroupAllContext.Provider value={groups}>
-      {children}
-    </GroupAllContext.Provider>
-  );
+function ChildComponent() {
+  const groupAll = useContext(GroupAllContext);
+  return <div data-testid={TESTID}>{groupAll}</div>;
 }
 
-GroupAllProvider.propTypes = {
-  children: T.node,
-};
-
-GroupAllProvider.defaultProps = {
-  children: null,
-};
+describe("GroupAllContext", () => {
+  it("exposes whatever useAddressBook returns", () => {
+    const groupAll = "test";
+    mockContactsHook.mockReturnValue(groupAll);
+    const { getByTestId } = render(
+      <GroupAllProvider>
+        <ChildComponent />
+      </GroupAllProvider>
+    );
+    expect(getByTestId(TESTID).innerHTML).toEqual(groupAll);
+    expect(mockContactsHook).toHaveBeenCalledWith([GROUP_CONTACT]);
+  });
+});
