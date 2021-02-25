@@ -25,13 +25,14 @@ import { getSolidDataset } from "@inrupt/solid-client";
 
 export const GET_DATASET = "getDataset";
 
-export default function useDataset(iri, options) {
-  const fetchDataset = (datasetIri, fetch) => {
-    if (!datasetIri) {
-      return null;
-    }
-    return getSolidDataset(datasetIri, { fetch });
-  };
+export default function useDataset(url, options = {}) {
   const { fetch } = useSession();
-  return useSWR([iri, GET_DATASET], () => fetchDataset(iri, fetch), options);
+  return useSWR(
+    [url, GET_DATASET],
+    async () => {
+      if (!url) return null;
+      return getSolidDataset(url, { fetch });
+    },
+    options
+  );
 }
