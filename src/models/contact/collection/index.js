@@ -39,22 +39,6 @@ import { getOrCreateDataset } from "../../dataset";
  */
 
 /* Model functions */
-export function compareContactIndexArray(a, b) {
-  if (typeof a === "undefined") {
-    return typeof b === "undefined";
-  }
-  if (typeof b === "undefined") {
-    return typeof a === "undefined";
-  }
-  if (!Array.isArray(a) || !Array.isArray(b)) {
-    return false;
-  }
-  if (a.length !== b.length) {
-    return false;
-  }
-  return a.reduce((memo, item) => memo && b.indexOf(item) !== -1, true);
-}
-
 export function getContactIndexDefaultUrl(containerUrl, type) {
   return joinPath(containerUrl, type.indexFile);
 }
@@ -72,12 +56,6 @@ export async function getContactIndex(addressBook, type, fetch) {
     dataset,
     type,
   };
-}
-
-export async function getContactIndexAll(addressBook, types, fetch) {
-  return Promise.all(
-    types.map(async (type) => getContactIndex(addressBook, type, fetch))
-  );
 }
 
 export async function addContactIndexToAddressBook(addressBook, type, fetch) {

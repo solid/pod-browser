@@ -36,13 +36,17 @@ import {
   getAddressBookDatasetUrl,
   INDEX_FILE,
   loadAddressBook,
+  getAddressBookThingUrl,
 } from "./index";
 import mockAddressBook, {
+  defaultAddressBookThingUrl,
+  defaultContainerUrl,
   mockAddressBookDataset,
   mockAddressBookThing,
 } from "../../../__testUtils/mockAddressBook";
 import { joinPath } from "../../stringHelpers";
 import { vcardExtras } from "../../addressBook";
+import { aliceWebIdUrl } from "../../../__testUtils/mockPersonResource";
 
 const podUrl = "https://example.pod.com/";
 const containerUrl = joinPath("https://example.pod.com/", CONTACTS_CONTAINER);
@@ -61,6 +65,20 @@ describe("getAddressBookIndexDefaultUrl", () => {
   });
 });
 
+describe("getAddressBookThingUrl", () => {
+  it("returns URL for persistent address books", () => {
+    expect(getAddressBookThingUrl(mockAddressBook())).toEqual(
+      defaultAddressBookThingUrl
+    );
+  });
+
+  it("returns URL for address book not yet saved", () => {
+    expect(
+      getAddressBookThingUrl(createAddressBook(containerUrl, aliceWebIdUrl))
+    ).toEqual(`${joinPath(containerUrl, INDEX_FILE)}#this`);
+  });
+});
+
 describe("getAddressBookDatasetUrl", () => {
   it("returns the URL that's stored in the model", () => {
     const indexUrl = "https://example.com/myIndex.ttl";
@@ -71,10 +89,7 @@ describe("getAddressBookDatasetUrl", () => {
   });
 
   it("returns default URLs if model data is missing", () => {
-    const addressBook = mockAddressBook({
-      containerUrl,
-      indexUrl: null,
-    });
+    const addressBook = createAddressBook(containerUrl, aliceWebIdUrl);
     expect(getAddressBookDatasetUrl(addressBook)).toEqual(
       joinPath(containerUrl, INDEX_FILE)
     );

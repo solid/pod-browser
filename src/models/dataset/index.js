@@ -23,7 +23,6 @@ import {
   createSolidDataset,
   getSolidDataset,
   saveSolidDatasetAt,
-  solidDatasetAsMarkdown,
 } from "@inrupt/solid-client";
 import { ERROR_CODES, isHTTPError } from "../../error";
 import { chain } from "../../solidClientHelpers/utils";
@@ -46,18 +45,4 @@ export async function getOrCreateDataset(url, fetch) {
 export async function updateOrCreateDataset(url, fetch, ...operations) {
   const dataset = await getOrCreateDataset(url, fetch);
   return saveSolidDatasetAt(url, chain(dataset, ...operations), { fetch });
-}
-
-export function compareDataset(a, b) {
-  // TODO: Write away after datasets can be compared "out of the box"
-  if (typeof a === "undefined") {
-    return typeof b === "undefined";
-  }
-  if (typeof b === "undefined") {
-    return typeof a === "undefined";
-  }
-  if (a === null || b === null) {
-    return a === b;
-  }
-  return solidDatasetAsMarkdown(a) === solidDatasetAsMarkdown(b);
 }
