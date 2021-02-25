@@ -19,35 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { createStyles, Hidden } from "@material-ui/core";
-import { LinkButton } from "@inrupt/prism-react-components";
-import Link from "next/link";
-import { makeStyles } from "@material-ui/styles";
-import { useBem } from "@solid/lit-prism-patterns";
-import GroupDetailsName from "./groupDetailsName";
-import styles from "./styles";
-
-export const TESTCAFE_ID_GROUP_DETAILS = "group-details";
-export const TESTCAFE_ID_GROUP_DETAILS_BACK_LINK = "group-details-back-link";
-
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-
-export default function GroupDetails() {
-  const bem = useBem(useStyles());
-  return (
-    <div data-testid={TESTCAFE_ID_GROUP_DETAILS}>
-      <Link href="/groups">
-        <LinkButton
-          variant="text"
-          iconBefore="caret-left"
-          className={bem("group-details-back-link")}
-          data-testid={TESTCAFE_ID_GROUP_DETAILS_BACK_LINK}
-        >
-          All Groups
-        </LinkButton>
-      </Link>
-      <GroupDetailsName />
-    </div>
-  );
+export default function styles(theme) {
+  return {
+    "group-details-back-link": {
+      paddingLeft: 0,
+      [theme.breakpoints.up("sm")]: {
+        display: "none",
+      },
+    },
+  };
 }

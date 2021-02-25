@@ -22,7 +22,9 @@
 export default function styles(theme) {
   return {
     "group-view": {
-      padding: theme.spacing(2.4),
+      [theme.breakpoints.up("sm")]: {
+        padding: theme.spacing(2.4),
+      },
     },
   };
 }

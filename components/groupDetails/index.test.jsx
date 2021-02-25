@@ -26,7 +26,10 @@ import useContacts from "../../src/hooks/useContacts";
 import useGroup from "../../src/hooks/useGroup";
 import mockGroup from "../../__testUtils/mockGroup";
 import renderGroupsPage from "../../__testUtils/renderGroupsPage";
-import GroupDetails, { TESTCAFE_ID_GROUP_DETAILS } from "./index";
+import GroupDetails, {
+  TESTCAFE_ID_GROUP_DETAILS,
+  TESTCAFE_ID_GROUP_DETAILS_BACK_LINK,
+} from "./index";
 
 jest.mock("../../src/hooks/useAddressBook");
 const mockedAddressBookHook = useAddressBook;
@@ -56,5 +59,6 @@ describe("GroupDetails", () => {
     const { asFragment, getByTestId } = renderGroupsPage(<GroupDetails />);
     expect(asFragment()).toMatchSnapshot();
     expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS)).toBeDefined();
+    expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_BACK_LINK)).toBeDefined();
   });
 });

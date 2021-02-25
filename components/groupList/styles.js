@@ -26,7 +26,9 @@ export default function styles(theme) {
       alignItems: "center",
       display: "flex",
       marginBottom: theme.spacing(1),
-      padding: theme.spacing(1.6, 2.4, 1.2, 2.4),
+      [theme.breakpoints.up("sm")]: {
+        padding: theme.spacing(1.6, 2.4, 1.2, 2.4),
+      },
     },
     "group-list-header__title": {
       ...theme.typography.h5,
@@ -42,21 +44,28 @@ export default function styles(theme) {
       color: theme.palette.text.primary,
       display: "block",
       borderLeft: `solid 3px transparent`,
-      padding: theme.spacing(1.6, 2.4, 1.6, 2.1),
       textDecoration: "none",
+      padding: theme.spacing(1.6, 0),
+      [theme.breakpoints.up("sm")]: {
+        padding: theme.spacing(1.6, 2.4),
+      },
     },
     "group-list__link--selected": {
-      background: lightPrimaryColor,
-      borderColor: theme.palette.primary.dark,
-      color: theme.palette.primary.main,
-      fontWeight: theme.typography.fontWeightBold,
+      [theme.breakpoints.up("sm")]: {
+        background: lightPrimaryColor,
+        borderColor: theme.palette.primary.dark,
+        color: theme.palette.primary.main,
+        fontWeight: theme.typography.fontWeightBold,
+      },
     },
     "group-list__icon": {
       fontSize: "0.8125rem",
     },
-    "group-list__icon--selected": theme.icons.iconColor(
-      theme.palette.primary.main
-    ),
+    "group-list__icon--selected": {
+      [theme.breakpoints.up("sm")]: theme.icons.iconColor(
+        theme.palette.primary.main
+      ),
+    },
     "group-list__text": {
       paddingLeft: theme.spacing(1.4),
     },

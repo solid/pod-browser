@@ -5,6 +5,20 @@ exports[`GroupDetails renders 1`] = `
   <div
     data-testid="group-details"
   >
+    <a
+      class="PodBrowser-button PodBrowser-button--text PodBrowser-group-details-back-link"
+      data-testid="group-details-back-link"
+      iconbefore="caret-left"
+    >
+      <span
+        class="PodBrowser-icon-caret-left PodBrowser-button__icon PodBrowser-button__icon--before"
+      />
+      <span
+        class="PodBrowser-button__text"
+      >
+        All Groups
+      </span>
+    </a>
     <div
       class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
     >
