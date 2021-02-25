@@ -19,8 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { getThingAll, getUrlAll } from "@inrupt/solid-client";
-import { rdf } from "rdf-namespaces";
+import { getThingAll } from "@inrupt/solid-client";
 import { getContactIndex } from "./collection";
 
 /*
@@ -31,9 +30,7 @@ import { getContactIndex } from "./collection";
 export function getContactAllFromContactsIndex(contactIndex) {
   const { dataset, type } = contactIndex;
   return getThingAll(dataset)
-    .filter((contact) =>
-      getUrlAll(contact, rdf.type).includes(type.contactTypeUrl)
-    )
+    .filter((contact) => type.isOfType(contact))
     .map((thing) => ({
       thing,
       dataset,
