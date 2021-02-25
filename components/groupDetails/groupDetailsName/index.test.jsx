@@ -103,6 +103,19 @@ describe("GroupDetailsName", () => {
     expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_NAME_FIELD).value).toEqual(
       group1Name
     );
+    expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_NAME_FIELD)).not.toBe(
+      document.activeElement
+    );
+  });
+
+  it("sets focus on input field when newly created", () => {
+    mockedRouterHook.mockReturnValue({
+      query: { iri: group1Url, created: "" },
+    });
+    const { getByTestId } = renderGroupsPage(<GroupDetailsName />);
+    expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_NAME_FIELD)).toBe(
+      document.activeElement
+    );
   });
 
   it("renders a spinner while loading group", () => {

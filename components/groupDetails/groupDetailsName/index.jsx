@@ -32,6 +32,7 @@ import {
 import { makeStyles } from "@material-ui/styles";
 import { createStyles } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
+import { useRouter } from "next/router";
 import { getGroupName } from "../../../src/models/group";
 import styles from "./styles";
 import Spinner from "../../spinner";
@@ -52,6 +53,7 @@ export const MESSAGE_GROUP_DETAILS_NAME_REQUIRED = "Name is required";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function GroupDetailsName() {
+  const router = useRouter();
   const { data: group, error: groupError, mutate: mutateGroup } = useContext(
     GroupContext
   );
@@ -115,6 +117,7 @@ export default function GroupDetailsName() {
           variant="with-button"
           data-testid={TESTCAFE_ID_GROUP_DETAILS_NAME_FIELD}
           required
+          autoFocus={router.query.created !== undefined}
         />
         <Button
           variant="with-input"
