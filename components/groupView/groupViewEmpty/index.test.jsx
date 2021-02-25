@@ -19,12 +19,35 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { renderWithTheme } from "../../../__testUtils/withTheme";
+import { useRouter } from "next/router";
 import GroupViewEmpty, { TESTCAFE_ID_GROUP_VIEW_EMPTY } from "./index";
+import renderGroupsPage from "../../../__testUtils/renderGroupsPage";
+import useAddressBook from "../../../src/hooks/useAddressBook";
+import useContacts from "../../../src/hooks/useContacts";
+import useGroup from "../../../src/hooks/useGroup";
+
+jest.mock("../../../src/hooks/useAddressBook");
+const mockedAddressBookHook = useAddressBook;
+
+jest.mock("../../../src/hooks/useContacts");
+const mockedContactsHook = useContacts;
+
+jest.mock("../../../src/hooks/useGroup");
+const mockedGroupHook = useGroup;
+
+jest.mock("next/router");
+const mockedRouterHook = useRouter;
 
 describe("GroupViewEmpty", () => {
+  beforeEach(() => {
+    mockedAddressBookHook.mockReturnValue({});
+    mockedContactsHook.mockReturnValue({});
+    mockedGroupHook.mockReturnValue({});
+    mockedRouterHook.mockReturnValue({ query: {} });
+  });
+
   it("renders", () => {
-    const { asFragment, getByTestId } = renderWithTheme(<GroupViewEmpty />);
+    const { asFragment, getByTestId } = renderGroupsPage(<GroupViewEmpty />);
     expect(asFragment()).toMatchSnapshot();
     expect(getByTestId(TESTCAFE_ID_GROUP_VIEW_EMPTY)).toBeDefined();
   });
