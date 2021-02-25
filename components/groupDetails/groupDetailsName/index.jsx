@@ -44,17 +44,19 @@ import GroupAllContext from "../../../src/contexts/groupAllContext";
 import AddressBookContext from "../../../src/contexts/addressBookContext";
 import GroupContext from "../../../src/contexts/groupContext";
 
-const TESTCAFE_ID_GROUP_NAME_FIELD = "group-name-field";
+export const TESTCAFE_ID_GROUP_DETAILS_NAME = "group-details-name";
+export const TESTCAFE_ID_GROUP_DETAILS_NAME_FIELD = "group-details-name-field";
+export const TESTCAFE_ID_GROUP_DETAILS_NAME_BUTTON =
+  "group-details-name-button";
+
+export const MESSAGE_GROUP_DETAILS_NAME_REQUIRED = "Name is required";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function GroupDetailsName() {
-  const router = useRouter();
   const { data: group, error: groupError, mutate: mutateGroup } = useContext(
     GroupContext
   );
-  const justCreated = router.query.created === "";
-  const [editing, setEditing] = useState(true);
   const [processing, setProcessing] = useState(false);
   const bem = useBem(useStyles());
   const [groupName, setGroupName] = useState("");
@@ -74,7 +76,7 @@ export default function GroupDetailsName() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    if (processing) return;
+    if (!groupName) return;
     setProcessing(true);
 
     const { group: updatedGroup, groupIndex } = await renameGroup(
@@ -96,22 +98,34 @@ export default function GroupDetailsName() {
 
   if (error) return <ErrorMessage error={error} />;
 
-  return editing ? (
-    <Form onSubmit={onSubmit} className={bem("group-details-name")}>
-      <InputGroup id={fieldId} label="Group Name" variant="with-button">
+  return (
+    <Form
+      onSubmit={onSubmit}
+      className={bem("group-details-name")}
+      data-testid={TESTCAFE_ID_GROUP_DETAILS_NAME}
+    >
+      <InputGroup
+        id={fieldId}
+        label="Group Name"
+        variant="with-button"
+        invalidMessage={groupName ? null : MESSAGE_GROUP_DETAILS_NAME_REQUIRED}
+      >
         <SimpleInput
           id={fieldId}
           value={groupName}
           onChange={(event) => setGroupName(event.target.value)}
           variant="with-button"
-          data-testid={TESTCAFE_ID_GROUP_NAME_FIELD}
+          data-testid={TESTCAFE_ID_GROUP_DETAILS_NAME_FIELD}
+          required
         />
-        <Button variant="with-input" type="submit">
+        <Button
+          variant="with-input"
+          type="submit"
+          data-testid={TESTCAFE_ID_GROUP_DETAILS_NAME_BUTTON}
+        >
           Save
         </Button>
       </InputGroup>
     </Form>
-  ) : (
-    <div>{groupName}</div>
   );
 }
