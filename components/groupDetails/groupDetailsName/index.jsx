@@ -115,7 +115,3 @@ export default function GroupDetailsName() {
     <div>{groupName}</div>
   );
 }
-
-GroupDetailsName.propTypes = {
-  groupUrl: T.string.isRequired,
-};

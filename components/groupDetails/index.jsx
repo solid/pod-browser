@@ -22,6 +22,12 @@
 import React from "react";
 import GroupDetailsName from "./groupDetailsName";
 
+export const TESTCAFE_ID_GROUP_DETAILS = "group-details";
+
 export default function GroupDetails() {
-  return <GroupDetailsName />;
+  return (
+    <div data-testid={TESTCAFE_ID_GROUP_DETAILS}>
+      <GroupDetailsName />
+    </div>
+  );
 }

@@ -48,9 +48,9 @@ export default function GroupView() {
   return (
     <div className={bem("group-view")} data-testid={TESTCAFE_ID_GROUP_VIEW}>
       {isLoading && <Spinner />}
-      {!isLoading && error && <ErrorMessage error={error} />}
-      {!isLoading && group && <GroupDetails />}
-      {!isLoading && !group && <GroupViewEmpty />}
+      {error && <ErrorMessage error={error} />}
+      {!isLoading && !error && group && <GroupDetails />}
+      {!isLoading && !error && !group && <GroupViewEmpty />}
     </div>
   );
 }

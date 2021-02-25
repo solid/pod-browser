@@ -1,24 +1,46 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GroupView renders an empty list when no groups is loaded 1`] = `
+exports[`GroupView renders an empty list when no groups are loaded 1`] = `
 <DocumentFragment>
   <div
+    class="PodBrowser-group-view"
     data-testid="group-view"
   >
-    <div
-      class="PodBrowser-group-view-empty"
-      data-testid="group-view-empty"
+    <form
+      class="PodBrowser-form PodBrowser-group-details-name"
     >
-      <span
-        class="PodBrowser-icon-users PodBrowser-icon-large"
-      />
-      <h2>
-        You don't have any groups yet!
-      </h2>
-      <p>
-        Create a new group to easily share files with.
-      </p>
-    </div>
+      <div
+        class="PodBrowser-input-group"
+      >
+        <label
+          class="PodBrowser-label"
+          for="GroupName"
+        >
+          Group Name
+        </label>
+        <div
+          class="PodBrowser-input-group__inner PodBrowser-input-group__inner--with-button"
+        >
+          <input
+            class="PodBrowser-input"
+            data-testid="group-name-field"
+            id="GroupName"
+            type="text"
+            value="Group 1"
+          />
+          <button
+            class="PodBrowser-button PodBrowser-button--with-input"
+            type="submit"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              Save
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
 </DocumentFragment>
 `;
