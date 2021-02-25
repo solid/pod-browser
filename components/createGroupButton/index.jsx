@@ -34,6 +34,8 @@ import GroupAllContext from "../../src/contexts/groupAllContext";
 import { getContactAllFromContactsIndex } from "../../src/models/contact";
 import GroupContext from "../../src/contexts/groupContext";
 
+export const TESTCAFE_ID_CREATE_GROUP_BUTTON = "create-group-button";
+
 export default function CreateGroupButton({ children, ...props }) {
   const {
     data: addressBook,
@@ -50,7 +52,6 @@ export default function CreateGroupButton({ children, ...props }) {
 
   const onClick = async (event) => {
     event.preventDefault();
-    if (processing) return;
     setProcessing(true);
     const groupName = `Group ${groups.length + 1}`;
     const {
@@ -69,13 +70,17 @@ export default function CreateGroupButton({ children, ...props }) {
     setProcessing(false);
   };
 
-  if ((!groups && !groupsError) || (!addressBook && !addressBookError))
-    return null;
-
+  const loading =
+    (!groups && !groupsError) || (!addressBook && !addressBookError);
+  if (loading) return null;
   if (processing) return <Spinner />;
 
   return (
-    <Button {...props} onClick={onClick}>
+    <Button
+      {...props}
+      data-testid={TESTCAFE_ID_CREATE_GROUP_BUTTON}
+      onClick={onClick}
+    >
       {children}
     </Button>
   );
