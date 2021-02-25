@@ -28,8 +28,6 @@ import {
   getUrl,
   getUrlAll,
   mockSolidDatasetFrom,
-  solidDatasetAsMarkdown,
-  thingAsMarkdown,
 } from "@inrupt/solid-client";
 import { v4 as uuid } from "uuid";
 import { rdf, vcard } from "rdf-namespaces/dist/index";

@@ -20,10 +20,7 @@
  */
 
 import { useRouter } from "next/router";
-import GroupList, {
-  TESTCAFE_ID_GROUP_LIST_ITEM,
-  TESTCAFE_ID_GROUP_LIST_LINK,
-} from "./index";
+import GroupList, { TESTCAFE_ID_GROUP_LIST_ITEM } from "./index";
 import useContacts from "../../src/hooks/useContacts";
 import { TESTCAFE_ID_SPINNER } from "../spinner";
 import { TESTCAFE_ID_GROUP_LIST_EMPTY } from "./groupListEmpty";

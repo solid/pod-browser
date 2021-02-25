@@ -25,7 +25,7 @@ import { render } from "@testing-library/react";
 import useGroup from "../../hooks/useGroup";
 import useContacts from "../../hooks/useContacts";
 import mockGroup from "../../../__testUtils/mockGroup";
-import GroupAllContext, { GroupAllProvider } from "../groupAllContext";
+import { GroupAllProvider } from "../groupAllContext";
 import { GROUP_CONTACT } from "../../models/contact/group";
 import GroupContext, { GroupProvider } from "./index";
 import { getGroupName } from "../../models/group";

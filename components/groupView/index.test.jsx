@@ -20,7 +20,6 @@
  */
 
 import { useRouter } from "next/router";
-import { renderWithTheme } from "../../__testUtils/withTheme";
 import useContacts from "../../src/hooks/useContacts";
 import { TESTCAFE_ID_SPINNER } from "../spinner";
 import GroupView from "./index";

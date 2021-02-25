@@ -40,7 +40,6 @@ import {
 } from "./index";
 import mockAddressBook, {
   defaultAddressBookThingUrl,
-  defaultContainerUrl,
   mockAddressBookDataset,
   mockAddressBookThing,
 } from "../../../__testUtils/mockAddressBook";

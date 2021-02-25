@@ -22,8 +22,6 @@
 /* eslint react/forbid-prop-types: off */
 
 import React, { useContext, useEffect, useState } from "react";
-import T from "prop-types";
-import { useRouter } from "next/router";
 import { useSession } from "@inrupt/solid-ui-react";
 import {
   Button,
