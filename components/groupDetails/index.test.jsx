@@ -19,37 +19,42 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import { useRouter } from "next/router";
-import { renderWithTheme } from "../../../__testUtils/withTheme";
-import GroupsPage from "./index";
-import { TESTCAFE_ID_GROUP_LIST } from "../../groupList";
-import { TESTCAFE_ID_GROUP_VIEW } from "../../groupView";
-import useContacts from "../../../src/hooks/useContacts";
-import useAddressBook from "../../../src/hooks/useAddressBook";
-import useGroup from "../../../src/hooks/useGroup";
-import mockAddressBook from "../../../__testUtils/mockAddressBook";
+import useAddressBook from "../../src/hooks/useAddressBook";
+import useContacts from "../../src/hooks/useContacts";
+import useGroup from "../../src/hooks/useGroup";
+import mockGroup from "../../__testUtils/mockGroup";
+import renderGroupsPage from "../../__testUtils/renderGroupsPage";
+import GroupDetails, { TESTCAFE_ID_GROUP_DETAILS } from "./index";
 
-jest.mock("../../../src/hooks/useAddressBook");
+jest.mock("../../src/hooks/useAddressBook");
 const mockedAddressBookHook = useAddressBook;
 
-jest.mock("../../../src/hooks/useContacts");
+jest.mock("../../src/hooks/useContacts");
 const mockedContactsHook = useContacts;
 
-jest.mock("../../../src/hooks/useGroup");
+jest.mock("../../src/hooks/useGroup");
 const mockedGroupHook = useGroup;
 
 jest.mock("next/router");
 const mockedRouterHook = useRouter;
 
-describe("GroupsPage", () => {
+const group1Name = "Group 1";
+const group1Url = "http://example.com/group1.ttl#this";
+const group1 = mockGroup(group1Name, group1Url);
+
+describe("GroupDetails", () => {
+  beforeEach(() => {
+    mockedAddressBookHook.mockReturnValue({});
+    mockedContactsHook.mockReturnValue({ data: [group1] });
+    mockedGroupHook.mockReturnValue({});
+    mockedRouterHook.mockReturnValue({ query: { iri: group1Url } });
+  });
+
   it("renders", () => {
-    mockedRouterHook.mockReturnValue({ query: {} });
-    mockedAddressBookHook.mockReturnValue({ data: mockAddressBook() });
-    mockedContactsHook.mockReturnValue({ data: [] });
-    mockedGroupHook.mockReturnValue({ data: null });
-    const { asFragment, getByTestId } = renderWithTheme(<GroupsPage />);
+    const { asFragment, getByTestId } = renderGroupsPage(<GroupDetails />);
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_GROUP_LIST)).toBeDefined();
-    expect(getByTestId(TESTCAFE_ID_GROUP_VIEW)).toBeDefined();
+    expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS)).toBeDefined();
   });
 });
