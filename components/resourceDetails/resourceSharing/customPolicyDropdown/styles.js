@@ -85,7 +85,7 @@ export default function styles(theme) {
       fontSize: theme.typography.h1.fontSize,
     },
     iconCaret: {
-      fontSize: "34px",
+      fontSize: "2.125rem",
       top: "25%",
       color: theme.palette.text.primary,
       marginRight: "1rem",

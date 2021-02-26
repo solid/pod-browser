@@ -28,7 +28,7 @@ export default function styles(theme) {
       alignItems: "center",
       float: "right",
       color: theme.palette.text.primary,
-      fontWeight: 800,
+      fontWeight: theme.typography.fontWeightBold,
       textTransform: "capitalize",
       fontSize: "0.8125rem",
       textDecoration: "none",
