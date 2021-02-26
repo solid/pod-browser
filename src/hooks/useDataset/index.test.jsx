@@ -23,47 +23,52 @@ import React from "react";
 import useSWR from "swr";
 import * as solidClientFns from "@inrupt/solid-client";
 import { renderHook } from "@testing-library/react-hooks";
+import { useSession } from "@inrupt/solid-ui-react";
 import useDataset, { GET_DATASET } from "./index";
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
-import mockFetch from "../../../__testUtils/mockFetch";
-import mockResponse from "../../../__testUtils/mockResponse";
 
 jest.mock("swr");
+const mockedSwrHook = useSWR;
+
+jest.mock("@inrupt/solid-ui-react");
+const mockedSessionHook = useSession;
 
 describe("useDataset", () => {
   const iri = "http://example.com";
-  let value;
+  const response = 1337;
+  const fetch = jest.fn();
+  const swrResponse = 42;
 
   beforeEach(() => {
-    const fetch = mockFetch({
-      [iri]: () => mockResponse(200),
-    });
-    const session = mockSession({ fetch });
-    const SessionProvider = mockSessionContextProvider(session);
-    const wrapper = ({ children }) => (
-      <SessionProvider>{children}</SessionProvider>
-    );
-    jest.spyOn(solidClientFns, "getSolidDataset");
-    useSWR.mockReturnValue(42);
-    value = renderHook(() => useDataset(iri, { refreshInterval: 0 }), {
-      wrapper,
-    });
+    mockedSessionHook.mockReturnValue({ fetch });
+    jest.spyOn(solidClientFns, "getSolidDataset").mockResolvedValue(response);
+    mockedSwrHook.mockReturnValue(swrResponse);
   });
 
   it("caches with SWR", () => {
-    expect(value.result.current).toBe(42);
+    const value = renderHook(() => useDataset(iri, { refreshInterval: 0 }));
+    expect(value.result.current).toBe(swrResponse);
     expect(useSWR).toHaveBeenCalledWith(
       [iri, GET_DATASET],
       expect.any(Function),
       { refreshInterval: 0 }
     );
   });
-  test("useSWR fetches data using getSolidDataset", () => {
-    useSWR.mock.calls[0][1]();
-    expect(solidClientFns.getSolidDataset).toHaveBeenCalledWith(
-      iri,
-      expect.any(Object)
+
+  test("useSWR fetches data using getSolidDataset", async () => {
+    renderHook(() => useDataset(iri));
+    await expect(useSWR.mock.calls[0][1]()).resolves.toBe(response);
+    expect(solidClientFns.getSolidDataset).toHaveBeenCalledWith(iri, { fetch });
+    expect(useSWR).toHaveBeenCalledWith(
+      [iri, GET_DATASET],
+      expect.any(Function),
+      {}
     );
+  });
+
+  it("returns null if no URL is given", async () => {
+    renderHook(() => useDataset(null));
+    await expect(useSWR.mock.calls[0][1]()).resolves.toBeNull();
   });
 });
