@@ -26,7 +26,6 @@ exports[`SharingAccordion it renders three lists of empty permissions for editor
           <button
             class="PodBrowser-button PodBrowser-button--text"
             data-testid="add-agent-button"
-            iconbefore="add"
           >
             <span
               class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
@@ -103,7 +102,6 @@ exports[`SharingAccordion it renders three lists of empty permissions for editor
           <button
             class="PodBrowser-button PodBrowser-button--text"
             data-testid="add-agent-button"
-            iconbefore="add"
           >
             <span
               class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
@@ -184,7 +182,6 @@ exports[`SharingAccordion it renders three lists of empty permissions for editor
           <button
             class="PodBrowser-button PodBrowser-button--text"
             data-testid="add-agent-button"
-            iconbefore="add"
           >
             <span
               class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"

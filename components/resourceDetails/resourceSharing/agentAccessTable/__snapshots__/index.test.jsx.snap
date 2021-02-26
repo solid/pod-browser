@@ -26,7 +26,6 @@ exports[`AgentAccessTable renders a list of permissions 1`] = `
           <button
             class="PodBrowser-button PodBrowser-button--text"
             data-testid="add-agent-button"
-            iconbefore="add"
           >
             <span
               class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
@@ -260,7 +259,6 @@ exports[`AgentAccessTable renders an empty list of permissions 1`] = `
           <button
             class="PodBrowser-button PodBrowser-button--text"
             data-testid="add-agent-button"
-            iconbefore="add"
           >
             <span
               class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"

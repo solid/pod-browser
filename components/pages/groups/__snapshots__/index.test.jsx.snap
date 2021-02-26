@@ -31,7 +31,6 @@ exports[`GroupsPage renders 1`] = `
           <button
             class="PodBrowser-button PodBrowser-button--small"
             data-testid="create-group-button"
-            iconbefore="add"
           >
             <span
               class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"

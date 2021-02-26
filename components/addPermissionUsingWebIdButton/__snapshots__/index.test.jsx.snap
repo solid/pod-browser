@@ -5,7 +5,6 @@ exports[`AddPermissionUsingWebIdButton renders 1`] = `
   <button
     class="PodBrowser-button PodBrowser-button--small"
     data-testid="permissions-add-user-with-webid-button"
-    iconafter="caret-right"
   >
     <span
       class="PodBrowser-button__text"
