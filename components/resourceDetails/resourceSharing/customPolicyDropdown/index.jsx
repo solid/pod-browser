@@ -25,6 +25,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useBem } from "@solid/lit-prism-patterns";
+import { Icons } from "@inrupt/prism-react-components";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import clsx from "clsx";
 import {
@@ -78,13 +79,7 @@ export default function CustomPolicyDropdown({
         return (
           <MenuItem value={name} classes={{ root: classes.menuItem }}>
             <ListItemIcon>
-              <i
-                className={clsx(
-                  bem("icon"),
-                  bem("icon-custom-policies"),
-                  bem("icon-settings")
-                )}
-              />
+              <Icons name="settings" className={bem("icon-custom-policies")} />
             </ListItemIcon>
             <ListItemText
               disableTypography

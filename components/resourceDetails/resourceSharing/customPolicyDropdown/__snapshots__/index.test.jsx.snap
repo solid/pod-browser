@@ -15,8 +15,8 @@ exports[`CustomPolicyDropdown it renders a dropdown with the custom policies as 
       <div
         class="PodBrowser-root"
       >
-        <i
-          class="PodBrowser-icon-custom-policies PodBrowser-icon-settings"
+        <span
+          class="PodBrowser-icon-settings PodBrowser-icon-custom-policies"
         />
       </div>
       <div

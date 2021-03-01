@@ -73,7 +73,6 @@ const permissions = [
   },
 ];
 
-
 describe("AgentAccessTable", () => {
   it("renders an empty list of permissions if there are no permissions", () => {
     const type = "editors";
