@@ -234,18 +234,22 @@ exports[`SharingAccordion it renders three lists of empty permissions for editor
       </div>
     </div>
   </div>
-  <button
-    class="PodBrowser-button PodBrowser-button--text PodBrowser-sharingButton"
-    data-testid="advanced-sharing-button"
+  <div
+    class="PodBrowser-sharingButtonContainer"
   >
-    <span
-      class="PodBrowser-button__text"
+    <button
+      class="PodBrowser-button PodBrowser-button--text PodBrowser-sharingButton"
+      data-testid="advanced-sharing-button"
     >
-      <i
-        class="PodBrowser-icon-settings PodBrowser-icon"
-      />
-      Advanced Sharing
-    </span>
-  </button>
+      <span
+        class="PodBrowser-button__text"
+      >
+        <i
+          class="PodBrowser-icon-settings PodBrowser-icon"
+        />
+        Advanced Sharing
+      </span>
+    </button>
+  </div>
 </DocumentFragment>
 `;

@@ -90,8 +90,8 @@ export default function CustomPolicyDropdown({
               disableTypography
               classes={{ root: classes.menuItemText }}
             >
-              <div className={classes.title}>{title}</div>
-              <div className={classes.description}>
+              <div className={bem("title")}>{title}</div>
+              <div className={bem("description")}>
                 <DescriptionComponent />
               </div>
             </ListItemText>

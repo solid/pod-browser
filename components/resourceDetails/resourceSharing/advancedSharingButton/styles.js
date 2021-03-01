@@ -23,10 +23,13 @@ import { createStyles } from "@solid/lit-prism-patterns";
 
 export default function styles(theme) {
   return createStyles(theme, ["icons", "button"], {
+    sharingButtonContainer: {
+      display: "flex",
+      justifyContent: "flex-end",
+    },
     sharingButton: {
       display: "flex",
       alignItems: "center",
-      float: "right",
       color: theme.palette.text.primary,
       fontWeight: theme.typography.fontWeightBold,
       textTransform: "capitalize",

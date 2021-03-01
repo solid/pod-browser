@@ -24,6 +24,7 @@ import userEvent from "@testing-library/user-event";
 import { waitFor } from "@testing-library/dom";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import AgentAccessTable from "./index";
+import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
 import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
 import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
 
@@ -35,12 +36,7 @@ const mockedUsePermissionsWithProfiles = usePermissionsWithProfiles;
 
 const permissions = [
   {
-    acl: {
-      read: true,
-      write: true,
-      append: false,
-      control: false,
-    },
+    acl: createAccessMap(true, true, false, false),
     webId: "https://example1.com/profile/card#me",
     profile: {
       avatar: null,
@@ -49,12 +45,7 @@ const permissions = [
     },
   },
   {
-    acl: {
-      read: true,
-      write: true,
-      append: false,
-      control: false,
-    },
+    acl: createAccessMap(true, true, false, false),
     webId: "https://example2.com/profile/card#me",
     profile: {
       avatar: null,
@@ -63,12 +54,7 @@ const permissions = [
     },
   },
   {
-    acl: {
-      read: true,
-      write: true,
-      append: false,
-      control: false,
-    },
+    acl: createAccessMap(true, true, false, false),
     webId: "https://example3.com/profile/card#me",
     profile: {
       avatar: null,
@@ -77,12 +63,7 @@ const permissions = [
     },
   },
   {
-    acl: {
-      read: true,
-      write: true,
-      append: false,
-      control: false,
-    },
+    acl: createAccessMap(true, true, false, false),
     webId: "https://example4.com/profile/card#me",
     profile: {
       avatar: null,
@@ -92,22 +73,6 @@ const permissions = [
   },
 ];
 
-const sharePermissions = [
-  {
-    acl: {
-      read: true,
-      write: true,
-      append: true,
-      control: true,
-    },
-    webId: "https://example1.com/profile/card#me",
-    profile: {
-      avatar: null,
-      name: "Example 1",
-      types: ["https://schema.org/Person"],
-    },
-  },
-];
 
 describe("AgentAccessTable", () => {
   it("renders an empty list of permissions if there are no permissions", () => {
@@ -148,12 +113,7 @@ describe("AgentAccessTable", () => {
     mockedUsePolicyPermissions.mockReturnValueOnce({
       data: [
         {
-          acl: {
-            read: true,
-            write: true,
-            append: false,
-            control: false,
-          },
+          acl: createAccessMap(true, true, false, false),
           webId: "https://example1.com/profile/card#me",
           profile: {
             avatar: null,
@@ -167,12 +127,7 @@ describe("AgentAccessTable", () => {
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: [
         {
-          acl: {
-            read: true,
-            write: true,
-            append: false,
-            control: false,
-          },
+          acl: createAccessMap(true, true, false, false),
           webId: "https://example1.com/profile/card#me",
           profile: {
             avatar: null,
@@ -181,10 +136,6 @@ describe("AgentAccessTable", () => {
           },
         },
       ],
-    });
-    mockedUsePolicyPermissions.mockReturnValueOnce({
-      data: sharePermissions,
-      mutate: jest.fn(),
     });
     const type = "editors";
     const { asFragment, queryAllByRole } = renderWithTheme(
@@ -202,10 +153,6 @@ describe("AgentAccessTable", () => {
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: permissions,
     });
-    mockedUsePolicyPermissions.mockReturnValueOnce({
-      data: sharePermissions,
-      mutate: jest.fn(),
-    });
     const type = "editors";
     const { queryAllByRole, getByTestId } = renderWithTheme(
       <AgentAccessTable type={type} />
@@ -222,10 +169,6 @@ describe("AgentAccessTable", () => {
     });
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: permissions,
-    });
-    mockedUsePolicyPermissions.mockReturnValueOnce({
-      data: sharePermissions,
-      mutate: jest.fn(),
     });
     const type = "editors";
     const { queryAllByRole, getByTestId } = renderWithTheme(
@@ -247,10 +190,6 @@ describe("AgentAccessTable", () => {
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: permissions,
     });
-    mockedUsePolicyPermissions.mockReturnValueOnce({
-      data: sharePermissions,
-      mutate: jest.fn(),
-    });
     const type = "editors";
     const { getByTestId, queryByText } = renderWithTheme(
       <AgentAccessTable type={type} permissions={permissions} />
@@ -264,12 +203,7 @@ describe("AgentAccessTable", () => {
   it("renders a set of tabs which filter by Group type", () => {
     const permissionsWithTypes = [
       {
-        acl: {
-          read: true,
-          write: true,
-          append: true,
-          control: true,
-        },
+        acl: createAccessMap(true, true, false, false),
         webId: "https://example1.com/profile/card#me",
         profile: {
           avatar: null,
@@ -278,12 +212,7 @@ describe("AgentAccessTable", () => {
         },
       },
       {
-        acl: {
-          read: true,
-          write: true,
-          append: true,
-          control: true,
-        },
+        acl: createAccessMap(true, true, false, false),
         webId: "https://example1.com/profile/card#me",
         profile: {
           avatar: null,
@@ -299,10 +228,6 @@ describe("AgentAccessTable", () => {
     });
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: permissionsWithTypes,
-    });
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: sharePermissions,
-      mutate: jest.fn(),
     });
 
     const type = "editors";
@@ -321,12 +246,7 @@ describe("AgentAccessTable", () => {
   it("renders a set of tabs which filter by People type", () => {
     const permissionsWithTypes = [
       {
-        acl: {
-          read: true,
-          write: true,
-          append: true,
-          control: true,
-        },
+        acl: createAccessMap(true, true, false, false),
         webId: "https://example1.com/profile/card#me",
         profile: {
           avatar: null,
@@ -335,12 +255,7 @@ describe("AgentAccessTable", () => {
         },
       },
       {
-        acl: {
-          read: true,
-          write: true,
-          append: true,
-          control: true,
-        },
+        acl: createAccessMap(true, true, false, false),
         webId: "https://example1.com/profile/card#me",
         profile: {
           avatar: null,
@@ -356,10 +271,6 @@ describe("AgentAccessTable", () => {
     });
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: permissionsWithTypes,
-    });
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: sharePermissions,
-      mutate: jest.fn(),
     });
 
     const type = "editors";

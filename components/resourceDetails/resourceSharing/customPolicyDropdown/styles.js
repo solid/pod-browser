@@ -40,7 +40,7 @@ export default function styles(theme) {
       fontWeight: theme.typography.body.fontWeight,
       fontFamily: theme.typography.body.fontFamily,
     },
-    manuItemText: {
+    menuItemText: {
       padding: 0,
     },
     title: {

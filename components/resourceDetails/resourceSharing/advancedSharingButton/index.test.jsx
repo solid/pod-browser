@@ -21,7 +21,10 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import AdvancedSharingButton from "./index";
+import AdvancedSharingButton, {
+  TESTCAFE_ID_ADVANCED_SHARING_BUTTON,
+  TESTCAFE_ID_MODAL_OVERLAY,
+} from "./index";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 
 describe("AdvancedSharingButton", () => {
@@ -44,9 +47,9 @@ describe("AdvancedSharingButton", () => {
     const { getByTestId, queryByTestId } = renderWithTheme(
       <AdvancedSharingButton setShowAdvancedSharing={setShowAdvancedSharing} />
     );
-    const button = getByTestId("advanced-sharing-button");
+    const button = getByTestId(TESTCAFE_ID_ADVANCED_SHARING_BUTTON);
     userEvent.click(button);
-    const overlay = getByTestId("modal-overlay");
+    const overlay = getByTestId(TESTCAFE_ID_MODAL_OVERLAY);
     userEvent.click(overlay.firstChild);
     expect(queryByTestId("agent-picker-modal")).toBeNull();
   });

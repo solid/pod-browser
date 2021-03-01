@@ -36,10 +36,7 @@ import {
 } from "../../solidClientHelpers/permissions";
 import { chain, createResponder } from "../../solidClientHelpers/utils";
 import { getOrCreateDatasetOld } from "../../solidClientHelpers/resource";
-import {
-  getPolicyUrl,
-  getPolicyResourceUrl,
-} from "../../solidClientHelpers/policies";
+import { getPolicyUrl, getPolicyResourceUrl } from "../../models/policy";
 import { isHTTPError } from "../../error";
 
 export const noAcrAccessError =

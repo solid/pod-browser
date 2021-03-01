@@ -36,7 +36,7 @@ import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWith
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export const TESTCAFE_ID_ADVANCED_SHARING_BUTTON = "advanced-sharing-button";
-const TESTCAFE_ID_MODAL_OVERLAY = "modal-overlay";
+export const TESTCAFE_ID_MODAL_OVERLAY = "advanced-sharing-modal-overlay";
 
 export default function AdvancedSharingButton({ setShowAdvancedSharing }) {
   const defaultType = "viewAndAdd";
@@ -61,7 +61,7 @@ export default function AdvancedSharingButton({ setShowAdvancedSharing }) {
   };
 
   return (
-    <>
+    <div className={classes.sharingButtonContainer}>
       <Button
         data-testid={TESTCAFE_ID_ADVANCED_SHARING_BUTTON}
         variant="text"
@@ -93,7 +93,7 @@ export default function AdvancedSharingButton({ setShowAdvancedSharing }) {
           setShowAdvancedSharing={setShowAdvancedSharing}
         />
       </Modal>
-    </>
+    </div>
   );
 }
 

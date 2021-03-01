@@ -21,7 +21,10 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import AddAgentButton from "./index";
+import AddAgentButton, {
+  TESTCAFE_ID_ADD_AGENT_BUTTON,
+  TESTCAFE_ID_MODAL_OVERLAY,
+} from "./index";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 
 describe("AddAgentButton", () => {
@@ -41,9 +44,9 @@ describe("AddAgentButton", () => {
     const { getByTestId, queryByTestId } = renderWithTheme(
       <AddAgentButton type="editors" />
     );
-    const button = getByTestId("add-agent-button");
+    const button = getByTestId(TESTCAFE_ID_ADD_AGENT_BUTTON);
     userEvent.click(button);
-    const overlay = getByTestId("modal-overlay");
+    const overlay = getByTestId(TESTCAFE_ID_MODAL_OVERLAY);
     userEvent.click(overlay.firstChild);
     expect(queryByTestId("agent-picker-modal")).toBeNull();
   });

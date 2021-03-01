@@ -33,8 +33,8 @@ import {
   POLICIES_TYPE_MAP,
 } from "../../../../constants/policies";
 
-const TESTCAFE_ID_ADD_AGENT_BUTTON = "add-agent-button";
-const TESTCAFE_ID_MODAL_OVERLAY = "modal-overlay";
+export const TESTCAFE_ID_ADD_AGENT_BUTTON = "add-agent-button";
+export const TESTCAFE_ID_MODAL_OVERLAY = "agent-picker-modal-overlay";
 
 export default function AddAgentButton({ type, setLoading }) {
   const { data: policyPermissions } = usePolicyPermissions(type);

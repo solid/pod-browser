@@ -20,7 +20,7 @@ exports[`CustomPolicyDropdown it renders a dropdown with the custom policies as 
         />
       </div>
       <div
-        class="PodBrowser-root"
+        class="PodBrowser-root PodBrowser-menuItemText"
       >
         <div
           class="PodBrowser-title"

@@ -41,7 +41,7 @@ describe("CustomPolicyDropdown", () => {
   });
   test("selecting another option calls setCustomPolicy with the correct value", () => {
     const setCustomPolicy = jest.fn();
-    const { getByTestId, queryAllByRole } = renderWithTheme(
+    const { getByTestId, queryAllByRole, queryByRole } = renderWithTheme(
       <CustomPolicyDropdown
         setCustomPolicy={setCustomPolicy}
         defaultValue="viewAndAdd"
@@ -53,5 +53,6 @@ describe("CustomPolicyDropdown", () => {
     expect(options).toHaveLength(3);
     userEvent.click(options[1]);
     expect(setCustomPolicy).toHaveBeenCalledWith("editOnly");
+    expect(queryByRole("option")).toBeNull();
   });
 });
