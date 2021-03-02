@@ -20,7 +20,8 @@
  */
 
 export default function styles(theme) {
-  const lightPrimaryColor = "#F1EDFF"; // TODO: THIS MUST BE MOVED TO PRISM
+  const lightPrimaryColor = "#633DCC"; // TODO: THIS MUST BE MOVED TO PRISM
+  const lightPrimaryBackgroundColor = "#F1EDFF"; // TODO: THIS MUST BE MOVED TO PRISM
   return {
     "group-list-header": {
       alignItems: "center",
@@ -52,9 +53,10 @@ export default function styles(theme) {
     },
     "group-list__link--selected": {
       [theme.breakpoints.up("sm")]: {
-        background: lightPrimaryColor,
-        borderColor: theme.palette.primary.dark,
-        color: theme.palette.primary.main,
+        background: lightPrimaryBackgroundColor,
+        borderColor: lightPrimaryColor,
+        color: lightPrimaryColor,
+        fontFamily: theme.typography.body1.fontFamily,
         fontWeight: theme.typography.fontWeightBold,
       },
     },
