@@ -39,11 +39,15 @@ import {
   vcardExtras,
 } from "../../../addressBook";
 import { joinPath } from "../../../stringHelpers";
-import { addContactIndexToAddressBook, getContactAll } from "../index";
+import { getContactAll } from "../index";
 // eslint-disable-next-line import/no-cycle
 import { getProfilesForPersonContacts } from "../../profile";
 import { chain, defineThing } from "../../../solidClientHelpers/utils";
 import { updateOrCreateDataset } from "../../dataset";
+import {
+  addContactIndexToAddressBook,
+  getContactIndexUrl,
+} from "../collection";
 
 /**
  * Person contacts represent the agents of type vcard:Individual, foaf:Person, schema:Person
@@ -157,10 +161,16 @@ export async function savePerson(addressBook, contactSchema, fetch) {
     (t) => addUrl(t, vcardExtras("inAddressBook"), indexIri)
   );
 
-  const {
-    addressBook: updatedAddressBook,
-    indexUrl: personIndexUrl,
-  } = await addContactIndexToAddressBook(addressBook, PERSON_CONTACT, fetch);
+  let updatedAddressBook = addressBook;
+  let personIndexUrl = getContactIndexUrl(addressBook, PERSON_CONTACT);
+  if (!personIndexUrl) {
+    updatedAddressBook = await addContactIndexToAddressBook(
+      addressBook,
+      PERSON_CONTACT,
+      fetch
+    );
+    personIndexUrl = getContactIndexUrl(updatedAddressBook, PERSON_CONTACT);
+  }
 
   const indexDataset = await updateOrCreateDataset(personIndexUrl, fetch, (d) =>
     setThing(d, personThing)

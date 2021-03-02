@@ -20,16 +20,54 @@
  */
 
 export default function styles(theme) {
+  const lightPrimaryColor = "#F1EDFF"; // TODO: THIS MUST BE MOVED TO PRISM
   return {
     "group-list-header": {
+      alignItems: "center",
       display: "flex",
       marginBottom: theme.spacing(1),
+      [theme.breakpoints.up("sm")]: {
+        padding: theme.spacing(1.6, 2.4, 1.2, 2.4),
+      },
     },
-    "group-list-header__title": theme.typography.h5,
-    "group-list-empty": {
-      color: theme.palette.grey["600"],
-      margin: theme.spacing(2, 0),
-      textAlign: "center",
+    "group-list-header__title": {
+      ...theme.typography.h5,
+      flexGrow: 1,
+    },
+    "group-list": {
+      listStyle: "none",
+      margin: 0,
+      padding: 0,
+    },
+    "group-list__item": {},
+    "group-list__link": {
+      color: theme.palette.text.primary,
+      display: "block",
+      borderLeft: `solid 3px transparent`,
+      textDecoration: "none",
+      padding: theme.spacing(1.6, 0),
+      [theme.breakpoints.up("sm")]: {
+        padding: theme.spacing(1.6, 2.4),
+      },
+    },
+    "group-list__link--selected": {
+      [theme.breakpoints.up("sm")]: {
+        background: lightPrimaryColor,
+        borderColor: theme.palette.primary.dark,
+        color: theme.palette.primary.main,
+        fontWeight: theme.typography.fontWeightBold,
+      },
+    },
+    "group-list__icon": {
+      fontSize: "0.8125rem",
+    },
+    "group-list__icon--selected": {
+      [theme.breakpoints.up("sm")]: theme.icons.iconColor(
+        theme.palette.primary.main
+      ),
+    },
+    "group-list__text": {
+      paddingLeft: theme.spacing(1.4),
     },
   };
 }

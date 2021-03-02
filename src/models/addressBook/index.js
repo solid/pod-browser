@@ -22,6 +22,7 @@
 import {
   addStringNoLocale,
   addUrl,
+  asUrl,
   createSolidDataset,
   createThing,
   getSolidDataset,
@@ -52,7 +53,15 @@ export function getAddressBookIndexDefaultUrl(containerUrl) {
   return joinPath(containerUrl, INDEX_FILE);
 }
 
-export function getAddressBookIndexUrl(addressBook) {
+export function getAddressBookThingUrl(addressBook) {
+  try {
+    return asUrl(addressBook.thing);
+  } catch {
+    return `${getAddressBookIndexDefaultUrl(addressBook.containerUrl)}#this`;
+  }
+}
+
+export function getAddressBookDatasetUrl(addressBook) {
   return (
     getSourceUrl(addressBook.dataset) ||
     getAddressBookIndexDefaultUrl(addressBook.containerUrl)

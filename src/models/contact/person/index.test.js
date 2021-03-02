@@ -47,6 +47,7 @@ import { addIndexToMockedAddressBook } from "../../../../__testUtils/mockContact
 import mockPersonContact, {
   addPersonToMockedIndexDataset,
 } from "../../../../__testUtils/mockPersonContact";
+import { getContactIndexDefaultUrl } from "../collection";
 // import { fetchProfile } from "../../../solidClientHelpers/profile";
 
 jest.mock("uuid");
@@ -167,7 +168,10 @@ describe("savePerson", () => {
   it("creates a person and adds it to the index", async () => {
     mockedSaveSolidDatasetAt
       .mockResolvedValueOnce(mockedPerson.dataset)
-      .mockResolvedValueOnce(mockSolidDatasetFrom(peopleIndexDatasetUrl));
+      .mockResolvedValueOnce({
+        dataset: mockSolidDatasetFrom(peopleIndexDatasetUrl),
+        type: PERSON_CONTACT,
+      });
 
     const { addressBook, person } = await savePerson(
       addressBookWithPeopleIndex,
@@ -236,7 +240,7 @@ describe("savePerson", () => {
     );
     const updatedDataset = mockedSaveSolidDatasetAt.mock.calls[1][1];
     expect(solidClientFns.getSourceUrl(updatedDataset)).toEqual(
-      contactModel.getContactIndexDefaultUrl(containerUrl, PERSON_CONTACT)
+      getContactIndexDefaultUrl(containerUrl, PERSON_CONTACT)
     );
   });
 });

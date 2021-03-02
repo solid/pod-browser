@@ -5,7 +5,6 @@ exports[`AddWebIdButton renders an Add WebID Button 1`] = `
   <button
     class="PodBrowser-button PodBrowser-button--secondary PodBrowser-button"
     data-testid="add-webid-button"
-    iconbefore="add"
   >
     <span
       class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"

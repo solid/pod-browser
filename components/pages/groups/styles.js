@@ -37,7 +37,6 @@ export default function styles(theme) {
         borderRadius: 8,
         boxShadow: "0 4px 12px 1px rgba(208,208,208,0.22)",
         display: "block",
-        padding: theme.spacing(2.4),
       },
     },
     "groups-container__content--focus": {

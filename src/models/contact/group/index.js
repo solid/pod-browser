@@ -20,6 +20,7 @@
  */
 
 import {
+  addUrl,
   asUrl,
   createSolidDataset,
   createThing,
@@ -38,11 +39,12 @@ import { chain } from "../../../solidClientHelpers/utils";
 import { joinPath } from "../../../stringHelpers";
 import {
   addContactIndexToAddressBook,
-  getContactAll,
   getContactIndexUrl,
-} from "../index";
+} from "../collection";
 import { vcardExtras } from "../../../addressBook";
 import { updateOrCreateDataset } from "../../dataset";
+import { getContactAll } from "../index";
+import { getAddressBookThingUrl } from "../../addressBook";
 
 /* Model constants */
 export const NAME_GROUP_INDEX_PREDICATE = vcardExtras("groupIndex");
@@ -66,8 +68,18 @@ function createGroupThing(name, thingOptions) {
   );
 }
 
-function createIndexThing(addressBook, groupThingUrl) {
-  return setUrl(addressBook.thing, vcardExtras("includesGroup"), groupThingUrl);
+function createIndexThing(indexDataset, addressBook, groupThingUrl) {
+  const addressBookThingUrl = getAddressBookThingUrl(addressBook);
+  const addressBookInDataset =
+    getThing(indexDataset, addressBookThingUrl) ||
+    createThing({
+      url: addressBookThingUrl,
+    });
+  return addUrl(
+    addressBookInDataset,
+    vcardExtras("includesGroup"),
+    groupThingUrl
+  );
 }
 
 /* Model functions */
@@ -88,30 +100,38 @@ export async function saveGroup(addressBook, name, fetch) {
     chain(
       createSolidDataset(),
       (d) => setThing(d, createGroupThing(name, { name: "this" })),
-      (d) => setThing(d, createIndexThing(addressBook, groupThingUrl))
+      (d) => setThing(d, createIndexThing(d, addressBook, groupThingUrl))
     ),
     { fetch }
   );
   // then link the group to the group index
-  const {
-    addressBook: updatedAddressBook,
-    indexUrl: groupIndexUrl,
-  } = await addContactIndexToAddressBook(addressBook, GROUP_CONTACT, fetch);
-
-  const groupThing = createGroupThing(name, { url: groupThingUrl });
+  let updatedAddressBook = addressBook;
+  let groupIndexUrl = getContactIndexUrl(addressBook, GROUP_CONTACT);
+  if (!groupIndexUrl) {
+    // add the index to the Address Book if it doesn't already exist
+    updatedAddressBook = await addContactIndexToAddressBook(
+      addressBook,
+      GROUP_CONTACT,
+      fetch
+    );
+    groupIndexUrl = getContactIndexUrl(updatedAddressBook, GROUP_CONTACT);
+  }
   const indexDataset = await updateOrCreateDataset(
     groupIndexUrl,
     fetch,
-    (d) => setThing(d, groupThing),
-    (d) => setThing(d, createIndexThing(addressBook, groupThingUrl))
+    (d) => setThing(d, createGroupThing(name, { url: groupThingUrl })),
+    (d) => setThing(d, createIndexThing(d, addressBook, groupThingUrl))
   );
   return {
     addressBook: updatedAddressBook,
     group: {
       dataset: groupDataset,
-      thing: groupThing,
+      thing: getThing(groupDataset, groupThingUrl),
     },
-    groupIndex: indexDataset,
+    groupIndex: {
+      dataset: indexDataset,
+      type: GROUP_CONTACT,
+    },
   };
 }
 
@@ -146,6 +166,9 @@ export async function renameGroup(addressBook, group, name, fetch) {
       dataset: savedDataset,
       thing: getThing(savedDataset, asUrl(group.thing)),
     },
-    groupIndex: indexDataset,
+    groupIndex: {
+      dataset: indexDataset,
+      type: GROUP_CONTACT,
+    },
   };
 }

@@ -270,7 +270,6 @@ exports[`ResourceDrawer view it renders a Contents view when the router query ha
                         <button
                           class="PodBrowser-button PodBrowser-button--small"
                           data-testid="permissions-add-user-with-webid-button"
-                          iconafter="caret-right"
                         >
                           <span
                             class="PodBrowser-button__text"
@@ -645,7 +644,6 @@ exports[`ResourceDrawer view it renders a loading view when context has no iri 1
                         <button
                           class="PodBrowser-button PodBrowser-button--small"
                           data-testid="permissions-add-user-with-webid-button"
-                          iconafter="caret-right"
                         >
                           <span
                             class="PodBrowser-button__text"
@@ -1020,7 +1018,6 @@ exports[`ResourceDrawer view it renders without errors when iri contains spaces 
                         <button
                           class="PodBrowser-button PodBrowser-button--small"
                           data-testid="permissions-add-user-with-webid-button"
-                          iconafter="caret-right"
                         >
                           <span
                             class="PodBrowser-button__text"

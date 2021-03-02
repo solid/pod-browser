@@ -19,27 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { Icons } from "@inrupt/prism-react-components";
-import React from "react";
-import { useBem } from "@solid/lit-prism-patterns";
-import { makeStyles } from "@material-ui/styles";
-import { createStyles } from "@material-ui/core";
-import styles from "./styles";
-
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-
-export const TESTCAFE_ID_GROUP_VIEW_EMPTY = "group-view-empty";
-
-export default function GroupViewEmpty() {
-  const bem = useBem(useStyles());
-  return (
-    <div
-      className={bem("group-view-empty")}
-      data-testid={TESTCAFE_ID_GROUP_VIEW_EMPTY}
-    >
-      <Icons name="users" className={bem("icon-large")} />
-      <h2>You don&apos;t have any groups yet!</h2>
-      <p>Create a new group to easily share files with.</p>
-    </div>
-  );
+export default function styles(theme) {
+  return {
+    "group-details-back-link": {
+      paddingLeft: 0,
+      [theme.breakpoints.up("sm")]: {
+        display: "none",
+      },
+    },
+  };
 }

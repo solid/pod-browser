@@ -24,27 +24,46 @@ import { Container, PageHeader } from "@inrupt/prism-react-components";
 import { makeStyles } from "@material-ui/styles";
 import { createStyles } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
+import { useRouter } from "next/router";
 import styles from "./styles";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import GroupList from "../../groupList";
 import GroupView from "../../groupView";
+import { GroupAllProvider } from "../../../src/contexts/groupAllContext";
+import { AddressBookProvider } from "../../../src/contexts/addressBookContext";
+import { GroupProvider } from "../../../src/contexts/groupContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function GroupsPage() {
   useRedirectIfLoggedOut();
   const bem = useBem(useStyles());
+  const router = useRouter();
+  const groupIsSelected = !!router.query.iri;
+
   return (
-    <>
-      <PageHeader title="Groups" />
-      <Container className={bem("groups-container")}>
-        <div className={bem("groups-container__content", "list", "focus")}>
-          <GroupList />
-        </div>
-        <div className={bem("groups-container__content", "main")}>
-          <GroupView />
-        </div>
-      </Container>
-    </>
+    <AddressBookProvider>
+      <GroupAllProvider>
+        <GroupProvider>
+          <PageHeader title="Groups" />
+          <Container className={bem("groups-container")}>
+            <div
+              className={bem("groups-container__content", "list", {
+                focus: !groupIsSelected,
+              })}
+            >
+              <GroupList />
+            </div>
+            <div
+              className={bem("groups-container__content", "main", {
+                focus: groupIsSelected,
+              })}
+            >
+              <GroupView />
+            </div>
+          </Container>
+        </GroupProvider>
+      </GroupAllProvider>
+    </AddressBookProvider>
   );
 }

@@ -26,6 +26,8 @@ import {
   addGroupMember,
   getGroup,
   getGroupMemberUrlAll,
+  getGroupName,
+  getGroupUrl,
   removeGroupMember,
 } from "./index";
 import {
@@ -67,6 +69,18 @@ describe("getGroup", () => {
 
   it("loads a specific group", async () => {
     await expect(getGroup(group1Url, fetch)).resolves.toEqual(mockedGroup1);
+  });
+});
+
+describe("getGroupUrl", () => {
+  it("returns URL for group", () => {
+    expect(getGroupUrl(mockedGroup1)).toEqual(group1Url);
+  });
+});
+
+describe("getGroupName", () => {
+  it("returns name for group", () => {
+    expect(getGroupName(mockedGroup1)).toEqual(group1Name);
   });
 });
 
@@ -113,7 +127,7 @@ describe("removeGroupMember", () => {
   });
 });
 
-describe("getGroupMemberUrls", () => {
+describe("getGroupMemberUrlAll", () => {
   it("lists members from a group", () => {
     expect(getGroupMemberUrlAll(mockedGroup1)).toHaveLength(0);
     const group2Members = getGroupMemberUrlAll(mockedGroup2);

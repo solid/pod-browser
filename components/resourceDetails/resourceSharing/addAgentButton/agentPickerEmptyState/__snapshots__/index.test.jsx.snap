@@ -19,7 +19,6 @@ exports[`AgentPickerEmptyState renders an empty state container with a message a
       <button
         class="PodBrowser-button PodBrowser-button--small"
         data-testid="empty-state-add-webid-button"
-        iconbefore="add"
       >
         <span
           class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"

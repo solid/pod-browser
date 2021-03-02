@@ -19,13 +19,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { renderWithTheme } from "../../__testUtils/withTheme";
-import GroupViewEmpty, { TESTCAFE_ID_GROUP_VIEW_EMPTY } from "./index";
+import React, { useContext } from "react";
+import { render } from "@testing-library/react";
+import useAddressBook from "../../hooks/useAddressBook";
+import AddressBookContext, { AddressBookProvider } from "./index";
 
-describe("GroupViewEmpty", () => {
-  it("renders", () => {
-    const { asFragment, getByTestId } = renderWithTheme(<GroupViewEmpty />);
-    expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_GROUP_VIEW_EMPTY)).toBeDefined();
+jest.mock("../../hooks/useAddressBook");
+const mockedAddressBookHook = useAddressBook;
+
+const TESTID = "test";
+
+function ChildComponent() {
+  const addressBook = useContext(AddressBookContext);
+  return <div data-testid={TESTID}>{addressBook}</div>;
+}
+
+describe("AddressBookContext", () => {
+  it("exposes whatever useAddressBook returns", () => {
+    const addressBook = "test";
+    mockedAddressBookHook.mockReturnValue(addressBook);
+    const { getByTestId } = render(
+      <AddressBookProvider>
+        <ChildComponent />
+      </AddressBookProvider>
+    );
+    expect(getByTestId(TESTID).innerHTML).toEqual(addressBook);
+    expect(mockedAddressBookHook).toHaveBeenCalledWith();
   });
 });

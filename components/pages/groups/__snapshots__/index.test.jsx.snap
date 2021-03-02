@@ -28,6 +28,19 @@ exports[`GroupsPage renders 1`] = `
           >
             Groups
           </div>
+          <button
+            class="PodBrowser-button PodBrowser-button--small"
+            data-testid="create-group-button"
+          >
+            <span
+              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+            />
+            <span
+              class="PodBrowser-button__text"
+            >
+              New Group
+            </span>
+          </button>
         </div>
         <div
           class="PodBrowser-group-list-empty"
@@ -41,6 +54,7 @@ exports[`GroupsPage renders 1`] = `
       class="PodBrowser-groups-container__content PodBrowser-groups-container__content--main"
     >
       <div
+        class="PodBrowser-group-view"
         data-testid="group-view"
       >
         <div
@@ -56,6 +70,16 @@ exports[`GroupsPage renders 1`] = `
           <p>
             Create a new group to easily share files with.
           </p>
+          <button
+            class="PodBrowser-button"
+            data-testid="create-group-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              Create New Group
+            </span>
+          </button>
         </div>
       </div>
     </div>

@@ -5,7 +5,6 @@ exports[`AddAgentButton renders a button with the correct text 1`] = `
   <button
     class="PodBrowser-button PodBrowser-button--text"
     data-testid="add-agent-button"
-    iconbefore="add"
   >
     <span
       class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"

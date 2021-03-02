@@ -19,80 +19,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import {
-  asUrl,
-  createSolidDataset,
-  getThing,
-  getThingAll,
-  getUrl,
-  saveSolidDatasetAt,
-  setThing,
-  setUrl,
-} from "@inrupt/solid-client";
-import { joinPath } from "../../stringHelpers";
-import { getOrCreateDataset } from "../dataset";
-import { getAddressBookIndexUrl } from "../addressBook";
+import { getThingAll } from "@inrupt/solid-client";
+import { getContactIndex } from "./collection";
 
 /*
  * Contacts represent the agents or groups in a user's AddressBook
  */
 
 /* Model functions */
-export function getContactIndexDefaultUrl(containerUrl, type) {
-  return joinPath(containerUrl, type.indexFile);
+export function getContactAllFromContactsIndex(contactIndex) {
+  const { dataset, type } = contactIndex;
+  return getThingAll(dataset)
+    .filter((contact) => type.isOfType(contact))
+    .map((thing) => ({
+      thing,
+      dataset,
+    }));
 }
 
-export function getContactIndexUrl(addressBook, type) {
-  return getUrl(addressBook.thing, type.indexFilePredicate);
-}
-
-export async function getContactIndexDataset(addressBook, type, fetch) {
-  const indexUrl = getUrl(addressBook.thing, type.indexFilePredicate);
-  return indexUrl ? getOrCreateDataset(indexUrl, fetch) : createSolidDataset();
+export function getContactAllFromContactIndexArray(contactIndexArray) {
+  return contactIndexArray
+    .map((index) => getContactAllFromContactsIndex(index))
+    .reduce((memo, contacts) => memo.concat(contacts), []);
 }
 
 export async function getContactAll(addressBook, types, fetch) {
-  const contactsList = await Promise.all(
-    types.map(async (type) => {
-      const dataset = await getContactIndexDataset(addressBook, type, fetch);
-      return getThingAll(dataset)
-        .filter((contact) => type.isOfType(contact))
-        .map((thing) => ({
-          thing,
-          dataset,
-        }));
-    })
+  const contactIndexArray = await Promise.all(
+    types.map(async (type) => getContactIndex(addressBook, type, fetch))
   );
-  return contactsList.reduce((memo, contacts) => memo.concat(contacts), []);
-}
-
-export async function addContactIndexToAddressBook(addressBook, type, fetch) {
-  let updatedAddressBook = addressBook;
-  let indexUrl = getContactIndexUrl(addressBook, type);
-  if (!indexUrl) {
-    const newIndexUrl = getContactIndexDefaultUrl(
-      addressBook.containerUrl,
-      type
-    );
-    const datasetUrl = getAddressBookIndexUrl(addressBook);
-    const updatedAddressBookDataset = await saveSolidDatasetAt(
-      datasetUrl,
-      setThing(
-        addressBook.dataset,
-        setUrl(addressBook.thing, type.indexFilePredicate, newIndexUrl)
-      ),
-      { fetch }
-    );
-    updatedAddressBook = {
-      containerUrl: addressBook.containerUrl,
-      dataset: updatedAddressBookDataset,
-      thing: getThing(updatedAddressBookDataset, asUrl(addressBook.thing)),
-    };
-    indexUrl = getContactIndexUrl(updatedAddressBook, type);
-  }
-
-  return {
-    addressBook: updatedAddressBook,
-    indexUrl,
-  };
+  return getContactAllFromContactIndexArray(contactIndexArray);
 }

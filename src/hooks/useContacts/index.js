@@ -27,6 +27,7 @@ import { getContactAll } from "../../models/contact";
 export default function useContacts(types) {
   const { fetch } = useSession();
   const { data: addressBook, error: addressBookError } = useAddressBook();
+
   return useSWR(
     ["contacts", addressBook, ...types],
     async () => {

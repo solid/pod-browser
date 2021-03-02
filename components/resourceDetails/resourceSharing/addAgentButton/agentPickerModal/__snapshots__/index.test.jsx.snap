@@ -178,7 +178,6 @@ exports[`AgentPickerModal with contacts renders a table with the available conta
         <button
           class="PodBrowser-button PodBrowser-button--secondary PodBrowser-button PodBrowser-desktopOnly"
           data-testid="add-webid-button"
-          iconbefore="add"
         >
           <span
             class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
@@ -227,7 +226,6 @@ exports[`AgentPickerModal with contacts renders a table with the available conta
       <button
         class="PodBrowser-button PodBrowser-button--secondary PodBrowser-button PodBrowser-mobileOnly"
         data-testid="add-web-id-button-mobile"
-        iconbefore="add"
       >
         <span
           class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
@@ -610,7 +608,6 @@ exports[`AgentPickerModal without contacts renders a table with tabs, searchbox 
         <button
           class="PodBrowser-button PodBrowser-button--secondary PodBrowser-button PodBrowser-desktopOnly"
           data-testid="add-webid-button"
-          iconbefore="add"
         >
           <span
             class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
@@ -659,7 +656,6 @@ exports[`AgentPickerModal without contacts renders a table with tabs, searchbox 
       <button
         class="PodBrowser-button PodBrowser-button--secondary PodBrowser-button PodBrowser-mobileOnly"
         data-testid="add-web-id-button-mobile"
-        iconbefore="add"
       >
         <span
           class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
@@ -687,7 +683,6 @@ exports[`AgentPickerModal without contacts renders a table with tabs, searchbox 
           <button
             class="PodBrowser-button PodBrowser-button--small"
             data-testid="empty-state-add-webid-button"
-            iconbefore="add"
           >
             <span
               class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"

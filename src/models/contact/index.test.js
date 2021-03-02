@@ -22,27 +22,14 @@
 import * as solidClientFns from "@inrupt/solid-client";
 import {
   asUrl,
-  createSolidDataset,
-  getSourceUrl,
   getStringNoLocale,
-  getThingAll,
-  getUrl,
   mockSolidDatasetFrom,
 } from "@inrupt/solid-client";
 import { vcard } from "rdf-namespaces";
-import mockAddressBook, {
-  mockEmptyAddressBook,
-} from "../../../__testUtils/mockAddressBook";
-import {
-  addContactIndexToAddressBook,
-  getContactAll,
-  getContactIndexDataset,
-  getContactIndexDefaultUrl,
-  getContactIndexUrl,
-} from "./index";
+import mockAddressBook from "../../../__testUtils/mockAddressBook";
+import { getContactAll } from "./index";
 import { addGroupToMockedIndexDataset } from "../../../__testUtils/mockGroupContact";
 import { addPersonToMockedIndexDataset } from "../../../__testUtils/mockPersonContact";
-import { joinPath } from "../../stringHelpers";
 import { PERSON_CONTACT } from "./person";
 import { addIndexToMockedAddressBook } from "../../../__testUtils/mockContact";
 import { GROUP_CONTACT } from "./group";
@@ -52,80 +39,6 @@ import { webIdUrl } from "../../../__testUtils/mockSession";
 
 const containerUrl = "https://example.pod.com/contacts/";
 const fetch = jest.fn();
-
-describe("getContactIndexDefaultUrl", () => {
-  it("returns the default URL for the various indexes", () => {
-    const indexFile = "test.ttl";
-    expect(getContactIndexDefaultUrl(containerUrl, { indexFile })).toEqual(
-      joinPath(containerUrl, indexFile)
-    );
-  });
-});
-
-describe("getContactIndexUrl", () => {
-  it("returns the URL that's stored in the model", () => {
-    const groupsUrl = "https://example.com/myGroups.ttl";
-    const peopleUrl = "https://example.com/myPeople.ttl";
-    const addressBook = chain(
-      mockAddressBook(),
-      (a) =>
-        addIndexToMockedAddressBook(a, PERSON_CONTACT, { indexUrl: peopleUrl }),
-      (a) =>
-        addIndexToMockedAddressBook(a, GROUP_CONTACT, { indexUrl: groupsUrl })
-    );
-    expect(getContactIndexUrl(addressBook, GROUP_CONTACT)).toEqual(groupsUrl);
-    expect(getContactIndexUrl(addressBook, PERSON_CONTACT)).toEqual(peopleUrl);
-  });
-});
-
-describe("getContactsIndexDataset", () => {
-  const addressBook = mockAddressBook();
-  const addressBookWithGroupIndex = chain(addressBook, (a) =>
-    addIndexToMockedAddressBook(a, GROUP_CONTACT)
-  );
-
-  let mockedGetSolidDataset;
-
-  beforeEach(() => {
-    mockedGetSolidDataset = jest
-      .spyOn(solidClientFns, "getSolidDataset")
-      .mockImplementation((url) => mockSolidDatasetFrom(url));
-  });
-
-  it("returns the requested resource", async () => {
-    const dataset = await getContactIndexDataset(
-      addressBookWithGroupIndex,
-      GROUP_CONTACT,
-      fetch
-    );
-    const groupsIndexUrl = getContactIndexUrl(
-      addressBookWithGroupIndex,
-      GROUP_CONTACT
-    );
-    expect(dataset).toEqual(mockSolidDatasetFrom(groupsIndexUrl));
-  });
-
-  it("returns a blank dataset if index is not linked to addressBook", async () => {
-    await expect(
-      getContactIndexDataset(addressBook, GROUP_CONTACT, fetch)
-    ).resolves.toEqual(createSolidDataset());
-  });
-
-  it("returns a blank dataset if resource does not exist", async () => {
-    mockedGetSolidDataset.mockRejectedValue("404");
-    await expect(
-      getContactIndexDataset(addressBookWithGroupIndex, GROUP_CONTACT, fetch)
-    ).resolves.toEqual(createSolidDataset());
-  });
-
-  it("throws an error if call for resource returns anything other than 404", async () => {
-    const error = "500";
-    mockedGetSolidDataset.mockRejectedValue(error);
-    await expect(
-      getContactIndexDataset(addressBookWithGroupIndex, GROUP_CONTACT, fetch)
-    ).rejects.toEqual(error);
-  });
-});
 
 describe("getContactAll", () => {
   const addressBook = mockAddressBook();
@@ -223,54 +136,5 @@ describe("getContactAll", () => {
     await expect(
       getContactAll(newAddressBook, [GROUP_CONTACT, PERSON_CONTACT], fetch)
     ).resolves.toEqual([]);
-  });
-});
-
-describe("addContactIndexToAddressBook", () => {
-  const addressBook = mockAddressBook({ containerUrl });
-  const addressBookWithGroups = addIndexToMockedAddressBook(
-    addressBook,
-    GROUP_CONTACT
-  );
-  let mockedSaveSolidDatasetAt;
-
-  beforeEach(() => {
-    mockedSaveSolidDatasetAt = jest
-      .spyOn(solidClientFns, "saveSolidDatasetAt")
-      .mockResolvedValue(addressBookWithGroups.dataset);
-  });
-
-  it("adds the contacts index to the address book", async () => {
-    await expect(
-      addContactIndexToAddressBook(addressBook, GROUP_CONTACT, fetch)
-    ).resolves.toEqual({
-      indexUrl: "https://example.pod.com/contacts/groups.ttl",
-      addressBook: addressBookWithGroups,
-    });
-    expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
-      getSourceUrl(addressBook.dataset),
-      expect.any(Object),
-      { fetch }
-    );
-    const updatedDataset = mockedSaveSolidDatasetAt.mock.calls[0][1];
-    const [mainIndex] = getThingAll(updatedDataset);
-    expect(getUrl(mainIndex, GROUP_CONTACT.indexFilePredicate)).toEqual(
-      getContactIndexDefaultUrl(containerUrl, GROUP_CONTACT)
-    );
-  });
-
-  it("also handles newly created address books (without any saved datasets)", async () => {
-    const newAddressBook = mockEmptyAddressBook(containerUrl, webIdUrl);
-    await expect(
-      addContactIndexToAddressBook(newAddressBook, GROUP_CONTACT, fetch)
-    ).resolves.toEqual({
-      indexUrl: "https://example.pod.com/contacts/groups.ttl",
-      addressBook: addressBookWithGroups,
-    });
-    expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
-      getSourceUrl(addressBook.dataset),
-      expect.any(Object),
-      { fetch }
-    );
   });
 });

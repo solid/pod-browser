@@ -45,7 +45,9 @@ export default function MainNav() {
   const { enabled } = useContext(FeatureContext);
   const links = menuItems
     .filter(({ featureFlag }) => !featureFlag || enabled(featureFlag))
-    .map(({ path, label, pages, ...rest }) => {
+    // We want to take out the featureFlag property so it ain't rendered to the HTML
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .map(({ featureFlag, path, label, pages, ...rest }) => {
       return {
         active: pages.includes(router.pathname),
         href: path,

@@ -40,7 +40,7 @@ export default function getMainMenuItems() {
       label: "Groups",
       icon: "users",
       featureFlag: GROUPS_PAGE_ENABLED,
-      pages: ["/groups"],
+      pages: ["/groups", "/groups/[iri]"],
       "data-testid": TESTCAFE_ID_MAIN_MENU_GROUPS,
     },
     {

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GroupList renders an empty list when no groups is loaded 1`] = `
+exports[`GroupList renders a list of groups 1`] = `
 <DocumentFragment>
   <div
     data-testid="group-list"
@@ -14,12 +14,48 @@ exports[`GroupList renders an empty list when no groups is loaded 1`] = `
         Groups
       </div>
     </div>
-    <div
-      class="PodBrowser-group-list-empty"
-      data-testid="group-list-empty"
+    <ul
+      class="PodBrowser-group-list"
     >
-      No groups
-    </div>
+      <li
+        class="PodBrowser-group-list__item"
+        data-testid="group-list-item"
+      >
+        <a
+          class="PodBrowser-group-list__link PodBrowser-group-list__link--selected"
+          data-testid="group-list-link"
+          href="/groups/http%3A%2F%2Fexample.com%2Fgroup1.ttl%23this"
+        >
+          <span
+            class="PodBrowser-icon-users PodBrowser-group-list__icon PodBrowser-group-list__icon--selected"
+          />
+          <span
+            class="PodBrowser-group-list__text"
+          >
+            Group 1
+          </span>
+        </a>
+      </li>
+      <li
+        class="PodBrowser-group-list__item"
+        data-testid="group-list-item"
+      >
+        <a
+          class="PodBrowser-group-list__link"
+          data-testid="group-list-link"
+          href="/groups/http%3A%2F%2Fexample.com%2Fgroup2.ttl%23this"
+        >
+          <span
+            class="PodBrowser-icon-users PodBrowser-group-list__icon"
+          />
+          <span
+            class="PodBrowser-group-list__text"
+          >
+            Group 2
+          </span>
+        </a>
+      </li>
+    </ul>
   </div>
 </DocumentFragment>
 `;

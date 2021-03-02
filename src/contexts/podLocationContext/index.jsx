@@ -38,11 +38,12 @@ function PodLocationProvider({ children, currentUri }) {
 
 PodLocationProvider.propTypes = {
   children: T.node,
-  currentUri: T.string.isRequired,
+  currentUri: T.string,
 };
 
 PodLocationProvider.defaultProps = {
   children: null,
+  currentUri: null,
 };
 
 export { PodLocationProvider };

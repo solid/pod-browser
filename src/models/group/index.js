@@ -24,6 +24,7 @@ import {
   asUrl,
   getSolidDataset,
   getSourceUrl,
+  getStringNoLocale,
   getThing,
   getUrlAll,
   removeUrl,
@@ -44,6 +45,14 @@ export async function getGroup(groupUrl, fetch) {
     dataset,
     thing: getThing(dataset, groupUrl),
   };
+}
+
+export function getGroupUrl(group) {
+  return asUrl(group.thing);
+}
+
+export function getGroupName(group) {
+  return getStringNoLocale(group.thing, vcard.fn);
 }
 
 /**

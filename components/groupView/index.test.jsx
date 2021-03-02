@@ -19,34 +19,72 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { renderWithTheme } from "../../__testUtils/withTheme";
+import { useRouter } from "next/router";
 import useContacts from "../../src/hooks/useContacts";
 import { TESTCAFE_ID_SPINNER } from "../spinner";
-import GroupView, { TESTCAFE_ID_GROUP_VIEW_ERROR } from "./index";
-import { TESTCAFE_ID_GROUP_VIEW_EMPTY } from "../groupViewEmpty";
+import GroupView from "./index";
+import { TESTCAFE_ID_GROUP_VIEW_EMPTY } from "./groupViewEmpty";
+import { TESTCAFE_ID_ERROR_MESSAGE } from "../errorMessage";
+import useAddressBook from "../../src/hooks/useAddressBook";
+import useGroup from "../../src/hooks/useGroup";
+import mockGroup from "../../__testUtils/mockGroup";
+import renderGroupsPage from "../../__testUtils/renderGroupsPage";
+import { TESTCAFE_ID_GROUP_DETAILS } from "../groupDetails";
+
+jest.mock("../../src/hooks/useAddressBook");
+const mockedAddressBookHook = useAddressBook;
 
 jest.mock("../../src/hooks/useContacts");
 const mockedContactsHook = useContacts;
 
+jest.mock("../../src/hooks/useGroup");
+const mockedGroupHook = useGroup;
+
+jest.mock("next/router");
+const mockedRouterHook = useRouter;
+
+const group1Name = "Group 1";
+const group1Url = "http://example.com/group1.ttl#this";
+const group1 = mockGroup(group1Name, group1Url);
+
 describe("GroupView", () => {
-  it("renders an empty list when no groups is loaded", () => {
+  beforeEach(() => {
+    mockedAddressBookHook.mockReturnValue({});
+    mockedContactsHook.mockReturnValue({ data: [group1] });
+    mockedGroupHook.mockReturnValue({ data: group1 });
+    mockedRouterHook.mockReturnValue({ query: { iri: group1Url } });
+  });
+
+  it("renders group details", () => {
+    const { getByTestId } = renderGroupsPage(<GroupView />);
+    expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS)).toBeDefined();
+  });
+
+  it("renders an empty list when no groups are loaded", () => {
+    mockedRouterHook.mockReturnValue({ query: {} });
     mockedContactsHook.mockReturnValue({ data: [] });
-    const { asFragment, getByTestId } = renderWithTheme(<GroupView />);
-    expect(asFragment()).toMatchSnapshot();
+    mockedGroupHook.mockReturnValue({ data: null });
+    const { getByTestId } = renderGroupsPage(<GroupView />);
     expect(getByTestId(TESTCAFE_ID_GROUP_VIEW_EMPTY)).toBeDefined();
   });
 
   it("renders a spinner while groups are loading", () => {
     mockedContactsHook.mockReturnValue({});
-    const { getByTestId } = renderWithTheme(<GroupView />);
+    const { getByTestId } = renderGroupsPage(<GroupView />);
+    expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
+  });
+
+  it("renders a spinner while group is loading", () => {
+    mockedGroupHook.mockReturnValue({});
+    const { getByTestId } = renderGroupsPage(<GroupView />);
     expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
   });
 
   it("renders an error if something goes wrong when loading groups", () => {
     const errorMessage = "error";
     mockedContactsHook.mockReturnValue({ error: new Error(errorMessage) });
-    const { getByTestId } = renderWithTheme(<GroupView />);
-    expect(getByTestId(TESTCAFE_ID_GROUP_VIEW_ERROR).innerHTML).toContain(
+    const { getByTestId } = renderGroupsPage(<GroupView />);
+    expect(getByTestId(TESTCAFE_ID_ERROR_MESSAGE).innerHTML).toContain(
       errorMessage
     );
   });

@@ -19,27 +19,38 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { Message } from "@inrupt/prism-react-components";
-import useContacts from "../../src/hooks/useContacts";
-import { GROUP_CONTACT } from "../../src/models/contact/group";
-import GroupViewEmpty from "../groupViewEmpty";
+import React, { useContext } from "react";
+import { makeStyles } from "@material-ui/styles";
+import { createStyles } from "@material-ui/core";
+import { useBem } from "@solid/lit-prism-patterns";
+import { useRouter } from "next/router";
+import GroupViewEmpty from "./groupViewEmpty";
 import Spinner from "../spinner";
+import styles from "./styles";
+import ErrorMessage from "../errorMessage";
+import GroupDetails from "../groupDetails";
+import GroupAllContext from "../../src/contexts/groupAllContext";
+import GroupContext from "../../src/contexts/groupContext";
 
 export const TESTCAFE_ID_GROUP_VIEW = "group-view";
-export const TESTCAFE_ID_GROUP_VIEW_ERROR = "group-view-error";
+
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function GroupView() {
-  const { data: contacts, error } = useContacts([GROUP_CONTACT]);
+  const bem = useBem(useStyles());
+  const { data: groups, error: groupsError } = useContext(GroupAllContext);
+  const router = useRouter();
+  const selectedGroupUrl = router.query.iri;
+  const { data: group, error: groupError } = useContext(GroupContext);
+  const isLoading =
+    (!groups && !groupsError) || (selectedGroupUrl && !group && !groupError);
+  const error = groupsError || groupError;
   return (
-    <div data-testid={TESTCAFE_ID_GROUP_VIEW}>
-      {!contacts && !error && <Spinner />}
-      {error && (
-        <Message variant="error" data-testid={TESTCAFE_ID_GROUP_VIEW_ERROR}>
-          {error.message}
-        </Message>
-      )}
-      {contacts && !contacts.length && <GroupViewEmpty />}
+    <div className={bem("group-view")} data-testid={TESTCAFE_ID_GROUP_VIEW}>
+      {isLoading && <Spinner />}
+      {error && <ErrorMessage error={error} />}
+      {!isLoading && !error && group && <GroupDetails />}
+      {!isLoading && !error && !group && <GroupViewEmpty />}
     </div>
   );
 }

@@ -32,8 +32,14 @@ import { chain } from "../src/solidClientHelpers/utils";
 import { aliceWebIdUrl } from "./mockPersonResource";
 import { vcardExtras } from "../src/addressBook";
 import { getAddressBookIndexDefaultUrl } from "../src/models/addressBook";
+import { joinPath } from "../src/stringHelpers";
 
-const defaultContainerUrl = "https://user.example.com/contacts";
+export const defaultContainerUrl = "https://user.example.com/contacts";
+export const defaultAddressBookDatasetUrl = joinPath(
+  defaultContainerUrl,
+  "index.ttl"
+);
+export const defaultAddressBookThingUrl = `${defaultAddressBookDatasetUrl}#this`;
 
 export function mockAddressBookThing(options = {}) {
   const containerUrl = options.containerUrl || defaultContainerUrl;
