@@ -35,7 +35,6 @@ import {
   ModalTitle,
   ModalContainer,
 } from "@inrupt/prism-react-components";
-import { removeStringNoLocale, setStringNoLocale } from "@inrupt/solid-client";
 import { vcard } from "rdf-namespaces/dist/index";
 import { getGroupDescription, getGroupName } from "../../../src/models/group";
 import Spinner from "../../spinner";
@@ -57,6 +56,9 @@ export const TESTCAFE_ID_GROUP_DETAILS_MODAL_CANCEL_BUTTON =
   "group-details-modal-cancel-button";
 
 export const MESSAGE_GROUP_DETAILS_MODAL_NAME_REQUIRED = "Name is required";
+
+export const LIMITATION_GROUP_DETAILS_MODAL_NAME_MAX_LENGTH = 50;
+export const LIMITATION_GROUP_DETAILS_MODAL_DESCRIPTION_MAX_LENGTH = 250;
 
 export default function GroupDetailsModal({ handleClose, open }) {
   const {
@@ -140,6 +142,7 @@ export default function GroupDetailsModal({ handleClose, open }) {
               onChange={(event) => setGroupName(event.target.value)}
               data-testid={TESTCAFE_ID_GROUP_DETAILS_MODAL_NAME_FIELD}
               required
+              maxLength={LIMITATION_GROUP_DETAILS_MODAL_NAME_MAX_LENGTH}
               autoFocus
             />
             <Textarea
@@ -148,6 +151,7 @@ export default function GroupDetailsModal({ handleClose, open }) {
               value={groupDescription}
               onChange={(event) => setGroupDescription(event.target.value)}
               data-testid={TESTCAFE_ID_GROUP_DETAILS_MODAL_DESCRIPTION_FIELD}
+              maxLength={LIMITATION_GROUP_DETAILS_MODAL_DESCRIPTION_MAX_LENGTH}
             />
           </Form>
         </ModalBody>

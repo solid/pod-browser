@@ -37,6 +37,8 @@ import * as contactGroupFns from "../../../src/models/contact/group";
 import mockGroupIndex from "../../../__testUtils/mockGroupIndex";
 import { getContactAllFromContactsIndex } from "../../../src/models/contact";
 import GroupDetailsModal, {
+  LIMITATION_GROUP_DETAILS_MODAL_DESCRIPTION_MAX_LENGTH,
+  LIMITATION_GROUP_DETAILS_MODAL_NAME_MAX_LENGTH,
   MESSAGE_GROUP_DETAILS_MODAL_NAME_REQUIRED,
   TESTCAFE_ID_GROUP_DETAILS_MODAL,
   TESTCAFE_ID_GROUP_DETAILS_MODAL_CANCEL_BUTTON,
@@ -65,8 +67,9 @@ const fetch = jest.fn();
 
 const group1Name = "Group 1";
 const group1Url = "http://example.com/group1.ttl#this";
+const group1Description = "Old description";
 const group1 = mockGroup(group1Name, group1Url, {
-  description: "Old description",
+  description: group1Description,
 });
 
 const updatedGroup = mockGroup("New name", group1Url, {
@@ -117,6 +120,22 @@ describe("GroupDetailsModal", () => {
     expect(
       getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL_NAME_FIELD).value
     ).toEqual(group1Name);
+    expect(
+      getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL_NAME_FIELD).getAttribute(
+        "maxlength"
+      )
+    ).toEqual(LIMITATION_GROUP_DETAILS_MODAL_NAME_MAX_LENGTH.toString());
+    expect(
+      getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL_DESCRIPTION_FIELD)
+    ).toBeDefined();
+    expect(
+      getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL_DESCRIPTION_FIELD).value
+    ).toEqual(group1Description);
+    expect(
+      getByTestId(
+        TESTCAFE_ID_GROUP_DETAILS_MODAL_DESCRIPTION_FIELD
+      ).getAttribute("maxlength")
+    ).toEqual(LIMITATION_GROUP_DETAILS_MODAL_DESCRIPTION_MAX_LENGTH.toString());
   });
 
   it("sets focus on name input field", () => {
