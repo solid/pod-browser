@@ -19,34 +19,29 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function styles(theme) {
-  return {
-    "group-details": {
-      display: "flex",
-    },
-    "group-details__main-content": {
-      flexGrow: 1,
-    },
-    "group-details__back-link": {
-      paddingLeft: 0,
-      [theme.breakpoints.up("sm")]: {
-        display: "none",
-      },
-    },
-    "group-details__action-button": {},
-    "group-details__title": {
-      marginTop: 0,
-    },
-    "group-details__description": {
-      "&&": {
-        color: "black",
-        fontSize: "0.8125rem",
-      },
-    },
-    "group-details__description--fallback": {
-      "&&": {
-        color: theme.palette.text.primary,
-      },
-    },
-  };
+/* eslint react/forbid-prop-types: off, react/jsx-props-no-spreading: off */
+
+import React from "react";
+import { Button } from "@inrupt/prism-react-components";
+import GroupDetailsModal from "../groupDetailsModal";
+
+export const TESTCAFE_ID_GROUP_DETAILS_EDIT_BUTTON =
+  "group-details-edit-button";
+
+export default function GroupDetailsEditButton(props) {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  return (
+    <>
+      <Button
+        onClick={handleOpen}
+        data-testid={TESTCAFE_ID_GROUP_DETAILS_EDIT_BUTTON}
+        {...props}
+      >
+        Edit Group Details
+      </Button>
+      <GroupDetailsModal handleClose={handleClose} open={open} />
+    </>
+  );
 }

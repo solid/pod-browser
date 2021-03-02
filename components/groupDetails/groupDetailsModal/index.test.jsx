@@ -24,23 +24,26 @@ import { useRouter } from "next/router";
 import { useSession } from "@inrupt/solid-ui-react";
 import userEvent from "@testing-library/user-event";
 import { waitFor } from "@testing-library/react";
+import { vcard } from "rdf-namespaces";
 import useAddressBook from "../../../src/hooks/useAddressBook";
 import useContacts from "../../../src/hooks/useContacts";
 import useGroup from "../../../src/hooks/useGroup";
 import mockGroup from "../../../__testUtils/mockGroup";
 import mockAddressBook from "../../../__testUtils/mockAddressBook";
 import renderGroupsPage from "../../../__testUtils/renderGroupsPage";
-import GroupDetailsName, {
-  MESSAGE_GROUP_DETAILS_NAME_REQUIRED,
-  TESTCAFE_ID_GROUP_DETAILS_NAME,
-  TESTCAFE_ID_GROUP_DETAILS_NAME_BUTTON,
-  TESTCAFE_ID_GROUP_DETAILS_NAME_FIELD,
-} from "./index";
 import { TESTCAFE_ID_SPINNER } from "../../spinner";
 import { TESTCAFE_ID_ERROR_MESSAGE } from "../../errorMessage";
 import * as contactGroupFns from "../../../src/models/contact/group";
 import mockGroupIndex from "../../../__testUtils/mockGroupIndex";
 import { getContactAllFromContactsIndex } from "../../../src/models/contact";
+import GroupDetailsModal, {
+  MESSAGE_GROUP_DETAILS_MODAL_NAME_REQUIRED,
+  TESTCAFE_ID_GROUP_DETAILS_MODAL,
+  TESTCAFE_ID_GROUP_DETAILS_MODAL_CANCEL_BUTTON,
+  TESTCAFE_ID_GROUP_DETAILS_MODAL_DESCRIPTION_FIELD,
+  TESTCAFE_ID_GROUP_DETAILS_MODAL_NAME_FIELD,
+  TESTCAFE_ID_GROUP_DETAILS_MODAL_SAVE_BUTTON,
+} from "./index";
 
 jest.mock("../../../src/hooks/useAddressBook");
 const mockedAddressBookHook = useAddressBook;
@@ -62,19 +65,26 @@ const fetch = jest.fn();
 
 const group1Name = "Group 1";
 const group1Url = "http://example.com/group1.ttl#this";
-const group1 = mockGroup(group1Name, group1Url);
-const updatedGroup = mockGroup("New name", group1Url);
+const group1 = mockGroup(group1Name, group1Url, {
+  description: "Old description",
+});
+
+const updatedGroup = mockGroup("New name", group1Url, {
+  description: "New description",
+});
 const updatedGroupIndex = mockGroupIndex(addressBook, [updatedGroup]);
 
-describe("GroupDetailsName", () => {
+describe("GroupDetailsModal", () => {
   let mutateAddressBook;
   let mutateGroups;
   let mutateGroup;
+  let handleClose;
 
   beforeEach(() => {
     mutateAddressBook = jest.fn();
     mutateGroups = jest.fn();
     mutateGroup = jest.fn();
+    handleClose = jest.fn();
 
     mockedAddressBookHook.mockReturnValue({
       data: addressBook,
@@ -96,38 +106,42 @@ describe("GroupDetailsName", () => {
   });
 
   it("renders a form", () => {
-    const { asFragment, getByTestId } = renderGroupsPage(<GroupDetailsName />);
+    const { asFragment, getByTestId } = renderGroupsPage(
+      <GroupDetailsModal open handleClose={handleClose} />
+    );
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_NAME)).toBeDefined();
-    expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_NAME_FIELD)).toBeDefined();
-    expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_NAME_FIELD).value).toEqual(
-      group1Name
-    );
-    expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_NAME_FIELD)).not.toBe(
-      document.activeElement
-    );
+    expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL)).toBeDefined();
+    expect(
+      getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL_NAME_FIELD)
+    ).toBeDefined();
+    expect(
+      getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL_NAME_FIELD).value
+    ).toEqual(group1Name);
   });
 
-  it("sets focus on input field when newly created", () => {
-    mockedRouterHook.mockReturnValue({
-      query: { iri: group1Url, created: "" },
-    });
-    const { getByTestId } = renderGroupsPage(<GroupDetailsName />);
-    expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_NAME_FIELD)).toBe(
+  it("sets focus on name input field", () => {
+    const { getByTestId } = renderGroupsPage(
+      <GroupDetailsModal open handleClose={handleClose} />
+    );
+    expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL_NAME_FIELD)).toBe(
       document.activeElement
     );
   });
 
   it("renders a spinner while loading group", () => {
-    mockedGroupHook.mockReturnValue({});
-    const { getByTestId } = renderGroupsPage(<GroupDetailsName />);
+    mockedGroupHook.mockReturnValue({ isValidating: true });
+    const { getByTestId } = renderGroupsPage(
+      <GroupDetailsModal open handleClose={handleClose} />
+    );
     expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
   });
 
   it("renders an error if something goes wrong", () => {
     const errorMessage = "error";
     mockedContactsHook.mockReturnValue({ error: new Error(errorMessage) });
-    const { getByTestId } = renderGroupsPage(<GroupDetailsName />);
+    const { getByTestId } = renderGroupsPage(
+      <GroupDetailsModal open handleClose={handleClose} />
+    );
     expect(getByTestId(TESTCAFE_ID_ERROR_MESSAGE)).toBeDefined();
   });
 
@@ -143,23 +157,30 @@ describe("GroupDetailsName", () => {
         });
     });
 
-    it("updates the name of the group", async () => {
-      const { getByTestId } = renderGroupsPage(<GroupDetailsName />);
+    it("updates the name and description of the group", async () => {
+      const { getByTestId } = renderGroupsPage(
+        <GroupDetailsModal open handleClose={handleClose} />
+      );
       userEvent.type(
-        getByTestId(TESTCAFE_ID_GROUP_DETAILS_NAME_FIELD),
+        getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL_DESCRIPTION_FIELD),
+        "{selectall}{del}New description"
+      );
+      userEvent.type(
+        getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL_NAME_FIELD),
         "{selectall}{del}New name{enter}"
       );
 
       await waitFor(() => {
-        expect(
-          getByTestId(TESTCAFE_ID_GROUP_DETAILS_NAME_BUTTON)
-        ).toBeDefined();
+        expect(handleClose).toHaveBeenCalledWith();
       });
       expect(mockedRenameGroup).toHaveBeenCalledWith(
         addressBook,
         group1,
         "New name",
-        fetch
+        fetch,
+        {
+          [vcard.note]: "New description",
+        }
       );
       expect(mutateGroup).toHaveBeenCalledWith(updatedGroup);
       expect(mutateGroups).toHaveBeenCalledWith(
@@ -168,29 +189,53 @@ describe("GroupDetailsName", () => {
     });
 
     it("renders a spinner while processing", async () => {
-      const { getByTestId } = renderGroupsPage(<GroupDetailsName />);
+      const { getByTestId } = renderGroupsPage(
+        <GroupDetailsModal open handleClose={handleClose} />
+      );
       userEvent.type(
-        getByTestId(TESTCAFE_ID_GROUP_DETAILS_NAME_FIELD),
+        getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL_NAME_FIELD),
         "{selectall}{del}New name{enter}"
       );
 
       expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
 
       await waitFor(() => {
-        expect(
-          getByTestId(TESTCAFE_ID_GROUP_DETAILS_NAME_BUTTON)
-        ).toBeDefined();
+        expect(handleClose).toHaveBeenCalledWith();
       });
     });
 
     it("won't allow empty names", () => {
-      const { getByTestId, getByText } = renderGroupsPage(<GroupDetailsName />);
+      const { getByTestId, getByText } = renderGroupsPage(
+        <GroupDetailsModal open handleClose={handleClose} />
+      );
       userEvent.type(
-        getByTestId(TESTCAFE_ID_GROUP_DETAILS_NAME_FIELD),
+        getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL_NAME_FIELD),
         "{selectall}{del}{enter}"
       );
-      expect(getByText(MESSAGE_GROUP_DETAILS_NAME_REQUIRED)).toBeDefined();
+      expect(
+        getByText(MESSAGE_GROUP_DETAILS_MODAL_NAME_REQUIRED)
+      ).toBeDefined();
       expect(mockedRenameGroup).not.toHaveBeenCalled();
     });
+
+    it("also submits form by clicking the Save button", async () => {
+      const { getByTestId } = renderGroupsPage(
+        <GroupDetailsModal open handleClose={handleClose} />
+      );
+      userEvent.click(getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL_SAVE_BUTTON));
+
+      await waitFor(() => {
+        expect(handleClose).toHaveBeenCalledWith();
+      });
+      expect(mockedRenameGroup).toHaveBeenCalled();
+    });
+  });
+
+  it("calls handleClose when clicking the Cancel button", () => {
+    const { getByTestId } = renderGroupsPage(
+      <GroupDetailsModal open handleClose={handleClose} />
+    );
+    userEvent.click(getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL_CANCEL_BUTTON));
+    expect(handleClose).toHaveBeenCalledWith();
   });
 });

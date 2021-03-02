@@ -57,10 +57,11 @@ export function addGroupToMockedIndexDataset(
   );
 }
 
-export default function mockGroupContact(addressBook, name, { url, id } = {}) {
+export default function mockGroupContact(addressBook, name, options = {}) {
+  const { url, id } = options;
   const groupDatasetUrl = url || createGroupDatasetUrl(addressBook, id);
   const groupThingUrl = `${groupDatasetUrl}#this`;
-  const groupThing = mockGroupThing(name, groupThingUrl);
+  const groupThing = mockGroupThing(name, groupThingUrl, options);
   return {
     dataset: chain(
       mockSolidDatasetFrom(groupDatasetUrl),

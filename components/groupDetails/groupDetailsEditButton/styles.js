@@ -19,10 +19,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function styles() {
+export default function styles(theme) {
   return {
-    "group-details-name": {
-      maxWidth: 300,
+    "group-details-edit-button": {},
+    "group-details-edit-button__modal": {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    "group-details-edit-button__modal-body": {
+      backgroundColor: theme.palette.grey["400"],
     },
   };
 }

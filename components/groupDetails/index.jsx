@@ -19,35 +19,88 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
+import React, { useContext } from "react";
 import { createStyles, Hidden } from "@material-ui/core";
-import { LinkButton } from "@inrupt/prism-react-components";
+import {
+  ActionButton,
+  Content,
+  LinkButton,
+} from "@inrupt/prism-react-components";
 import Link from "next/link";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import GroupDetailsName from "./groupDetailsName";
 import styles from "./styles";
+import GroupDetailsEditButton from "./groupDetailsEditButton";
+import GroupContext from "../../src/contexts/groupContext";
+import Spinner from "../spinner";
+import { getGroupDescription, getGroupName } from "../../src/models/group";
 
 export const TESTCAFE_ID_GROUP_DETAILS = "group-details";
 export const TESTCAFE_ID_GROUP_DETAILS_BACK_LINK = "group-details-back-link";
+export const TESTCAFE_ID_GROUP_DETAILS_NAME = "group-details-name";
+export const TESTCAFE_ID_GROUP_DETAILS_DESCRIPTION =
+  "group-details-description";
+
+export const MESSAGE_GROUP_DETAILS_DESCRIPTION_FALLBACK =
+  "(Optional) Add a group description";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function GroupDetails() {
   const bem = useBem(useStyles());
+  const { data: group, isValidating: groupIsValidating } = useContext(
+    GroupContext
+  );
+
+  const loading = groupIsValidating;
+  if (loading) return <Spinner />;
+
+  const groupDescription = getGroupDescription(group);
   return (
-    <div data-testid={TESTCAFE_ID_GROUP_DETAILS}>
-      <Link href="/groups">
-        <LinkButton
-          variant="text"
-          iconBefore="caret-left"
-          className={bem("group-details-back-link")}
-          data-testid={TESTCAFE_ID_GROUP_DETAILS_BACK_LINK}
-        >
-          All Groups
-        </LinkButton>
-      </Link>
-      <GroupDetailsName />
+    <div
+      data-testid={TESTCAFE_ID_GROUP_DETAILS}
+      className={bem("group-details")}
+    >
+      <div className={bem("group-details__main-content")}>
+        <Link href="/groups">
+          <LinkButton
+            variant="text"
+            iconBefore="caret-left"
+            className={bem("group-details__back-link")}
+            data-testid={TESTCAFE_ID_GROUP_DETAILS_BACK_LINK}
+          >
+            All Groups
+          </LinkButton>
+        </Link>
+        <Content>
+          <h1
+            className={bem("group-details__title")}
+            data-testid={TESTCAFE_ID_GROUP_DETAILS_NAME}
+          >
+            {getGroupName(group)}
+          </h1>
+          {groupDescription ? (
+            <p
+              className={bem("group-details__description")}
+              data-testid={TESTCAFE_ID_GROUP_DETAILS_DESCRIPTION}
+            >
+              {groupDescription}
+            </p>
+          ) : (
+            <p
+              className={bem("group-details__description", "fallback")}
+              data-testid={TESTCAFE_ID_GROUP_DETAILS_DESCRIPTION}
+            >
+              {MESSAGE_GROUP_DETAILS_DESCRIPTION_FALLBACK}
+            </p>
+          )}
+        </Content>
+      </div>
+      <div className={bem("group-details__action-button")}>
+        <ActionButton>
+          <GroupDetailsEditButton variant="in-menu" />
+        </ActionButton>
+      </div>
     </div>
   );
 }

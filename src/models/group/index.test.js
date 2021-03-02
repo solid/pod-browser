@@ -19,12 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { getThing, getUrlAll } from "@inrupt/solid-client";
+import { getThing, getUrlAll, setStringNoLocale } from "@inrupt/solid-client";
 import { vcard } from "rdf-namespaces/dist/index";
 import * as solidClientFns from "@inrupt/solid-client";
 import {
   addGroupMember,
   getGroup,
+  getGroupDescription,
   getGroupMemberUrlAll,
   getGroupName,
   getGroupUrl,
@@ -46,8 +47,11 @@ const agent2 = bobWebIdUrl;
 
 const group1Name = "Group 1";
 const group1DatasetUrl = "https://example.com/contacts/Group/1234/index.ttl";
+const group1Description = "Some description";
 const group1Url = `${group1DatasetUrl}#this`;
-const mockedGroup1 = mockGroup(group1Name, group1Url);
+const mockedGroup1 = mockGroup(group1Name, group1Url, {
+  description: group1Description,
+});
 
 const group2Name = "Group 2";
 const group2DatasetUrl = "https://example.com/contacts/Group/5678/index.ttl";
@@ -81,6 +85,16 @@ describe("getGroupUrl", () => {
 describe("getGroupName", () => {
   it("returns name for group", () => {
     expect(getGroupName(mockedGroup1)).toEqual(group1Name);
+  });
+});
+
+describe("getGroupDescription", () => {
+  it("returns description for group", () => {
+    expect(getGroupDescription(mockedGroup1)).toEqual(group1Description);
+  });
+
+  it("returns empty string if no description is available", () => {
+    expect(getGroupDescription(mockedGroup2)).toEqual("");
   });
 });
 

@@ -20,6 +20,7 @@
  */
 
 import {
+  addStringNoLocale,
   addUrl,
   asUrl,
   createSolidDataset,
@@ -28,6 +29,7 @@ import {
   getSourceUrl,
   getThing,
   getUrlAll,
+  removeStringNoLocale,
   saveSolidDatasetAt,
   setStringNoLocale,
   setThing,
@@ -45,6 +47,7 @@ import { vcardExtras } from "../../../addressBook";
 import { updateOrCreateDataset } from "../../dataset";
 import { getContactAll } from "../index";
 import { getAddressBookThingUrl } from "../../addressBook";
+import { getGroupDescription } from "../../group";
 
 /* Model constants */
 export const NAME_GROUP_INDEX_PREDICATE = vcardExtras("groupIndex");
@@ -142,11 +145,28 @@ export async function getGroupAll(addressBook, fetch) {
 /**
  * Note that you might need to refresh the cache of group index after this, e.g. mutate SWR cache
  */
-export async function renameGroup(addressBook, group, name, fetch) {
+export async function renameGroup(
+  addressBook,
+  group,
+  name,
+  fetch,
+  optionalFields = {}
+) {
   // update the group itself
+  const updatedGroup = chain(
+    group.thing,
+    (t) => setStringNoLocale(t, vcard.fn, name),
+    ...[
+      (t) => removeStringNoLocale(t, vcard.note, getGroupDescription(group)),
+      (t) =>
+        optionalFields[vcard.note]
+          ? addStringNoLocale(t, vcard.note, optionalFields[vcard.note])
+          : t,
+    ]
+  );
   const savedDataset = await saveSolidDatasetAt(
     getSourceUrl(group.dataset),
-    setThing(group.dataset, setStringNoLocale(group.thing, vcard.fn, name)),
+    setThing(group.dataset, updatedGroup),
     { fetch }
   );
   // update the group index

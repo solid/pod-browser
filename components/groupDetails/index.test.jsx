@@ -27,9 +27,13 @@ import useGroup from "../../src/hooks/useGroup";
 import mockGroup from "../../__testUtils/mockGroup";
 import renderGroupsPage from "../../__testUtils/renderGroupsPage";
 import GroupDetails, {
+  MESSAGE_GROUP_DETAILS_DESCRIPTION_FALLBACK,
   TESTCAFE_ID_GROUP_DETAILS,
   TESTCAFE_ID_GROUP_DETAILS_BACK_LINK,
+  TESTCAFE_ID_GROUP_DETAILS_DESCRIPTION,
+  TESTCAFE_ID_GROUP_DETAILS_NAME,
 } from "./index";
+import { TESTCAFE_ID_SPINNER } from "../spinner";
 
 jest.mock("../../src/hooks/useAddressBook");
 const mockedAddressBookHook = useAddressBook;
@@ -44,14 +48,21 @@ jest.mock("next/router");
 const mockedRouterHook = useRouter;
 
 const group1Name = "Group 1";
+const group1Description = "Group 1 description";
 const group1Url = "http://example.com/group1.ttl#this";
-const group1 = mockGroup(group1Name, group1Url);
+const group1 = mockGroup(group1Name, group1Url, {
+  description: group1Description,
+});
+
+const group2Name = "Group 2";
+const group2Url = "http://example.com/group2.ttl#this";
+const group2 = mockGroup(group1Name, group1Url);
 
 describe("GroupDetails", () => {
   beforeEach(() => {
     mockedAddressBookHook.mockReturnValue({});
     mockedContactsHook.mockReturnValue({ data: [group1] });
-    mockedGroupHook.mockReturnValue({});
+    mockedGroupHook.mockReturnValue({ data: group1 });
     mockedRouterHook.mockReturnValue({ query: { iri: group1Url } });
   });
 
@@ -60,5 +71,27 @@ describe("GroupDetails", () => {
     expect(asFragment()).toMatchSnapshot();
     expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS)).toBeDefined();
     expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_BACK_LINK)).toBeDefined();
+    expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_NAME).innerHTML).toContain(
+      group1Name
+    );
+    expect(
+      getByTestId(TESTCAFE_ID_GROUP_DETAILS_DESCRIPTION).innerHTML
+    ).toContain(group1Description);
+  });
+
+  it("renders a spinner while loading", () => {
+    mockedGroupHook.mockReturnValue({ isValidating: true });
+    const { getByTestId } = renderGroupsPage(<GroupDetails />);
+    expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
+  });
+
+  it("offers a fallback for groups without description", () => {
+    mockedContactsHook.mockReturnValue({ data: [group2] });
+    mockedGroupHook.mockReturnValue({ data: group2 });
+    mockedRouterHook.mockReturnValue({ query: { iri: group2Url } });
+    const { getByTestId } = renderGroupsPage(<GroupDetails />);
+    expect(
+      getByTestId(TESTCAFE_ID_GROUP_DETAILS_DESCRIPTION).innerHTML
+    ).toContain(MESSAGE_GROUP_DETAILS_DESCRIPTION_FALLBACK);
   });
 });

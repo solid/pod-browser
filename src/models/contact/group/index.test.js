@@ -28,6 +28,7 @@ import {
   getUrl,
   getUrlAll,
   mockSolidDatasetFrom,
+  setStringNoLocale,
 } from "@inrupt/solid-client";
 import { v4 as uuid } from "uuid";
 import { rdf, vcard } from "rdf-namespaces/dist/index";
@@ -250,20 +251,29 @@ describe("getGroupAll", () => {
 
 describe("renameGroup", () => {
   const newName = "New name";
+  const newDescription = "Some description";
   const mockUpdatedGroup = mockGroupContact(emptyAddressBook, newName, {
     id: "1234",
   });
+  const mockUpdatedGroupWithDescription = mockGroupContact(
+    emptyAddressBook,
+    newName,
+    {
+      id: "1234",
+      description: newDescription,
+    }
+  );
 
   beforeEach(() => {
     jest
       .spyOn(solidClientFns, "getSolidDataset")
       .mockResolvedValue(groupIndexWithGroup1Dataset);
-    mockedSaveSolidDatasetAt
-      .mockResolvedValueOnce(mockUpdatedGroup.dataset)
-      .mockResolvedValueOnce(groupIndexWithGroup1Dataset);
   });
 
   it("updates the group itself and the index", async () => {
+    mockedSaveSolidDatasetAt
+      .mockResolvedValueOnce(mockUpdatedGroup.dataset)
+      .mockResolvedValueOnce(groupIndexWithGroup1Dataset);
     const { group, groupIndex } = await renameGroup(
       addressBookWithGroupIndex,
       mockedGroup1,
@@ -287,6 +297,7 @@ describe("renameGroup", () => {
     ); // TODO: Remove when we have support for getThingLocal
     const groupThing = groupDatasetThings[1];
     expect(getStringNoLocale(groupThing, vcard.fn)).toEqual(newName);
+    expect(getStringNoLocale(groupThing, vcard.note)).toBeNull();
 
     // second save request is the group index
     expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
@@ -299,5 +310,35 @@ describe("renameGroup", () => {
     ); // TODO: Remove when we have support for getThingLocal
     const indexThing = indexDatasetThings[1];
     expect(getStringNoLocale(indexThing, vcard.fn)).toEqual(newName);
+    expect(getStringNoLocale(indexThing, vcard.note)).toBeNull();
+  });
+
+  it("also allows updating the description", async () => {
+    mockedSaveSolidDatasetAt
+      .mockResolvedValueOnce(mockUpdatedGroupWithDescription.dataset)
+      .mockResolvedValueOnce(groupIndexWithGroup1Dataset);
+    const { group } = await renameGroup(
+      addressBookWithGroupIndex,
+      mockedGroup1,
+      newName,
+      fetch,
+      {
+        [vcard.note]: newDescription,
+      }
+    );
+    expect(group).toEqual(mockUpdatedGroupWithDescription);
+
+    // first save request is the group itself
+    expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
+      group1DatasetUrl,
+      expect.any(Object),
+      { fetch }
+    );
+    const groupDatasetThings = getThingAll(
+      mockedSaveSolidDatasetAt.mock.calls[0][1]
+    ); // TODO: Remove when we have support for getThingLocal
+    const groupThing = groupDatasetThings[1];
+    expect(getStringNoLocale(groupThing, vcard.fn)).toEqual(newName);
+    expect(getStringNoLocale(groupThing, vcard.note)).toEqual(newDescription);
   });
 });
