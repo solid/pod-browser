@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { getThing, getUrlAll, setStringNoLocale } from "@inrupt/solid-client";
+import { getThing, getUrlAll } from "@inrupt/solid-client";
 import { vcard } from "rdf-namespaces/dist/index";
 import * as solidClientFns from "@inrupt/solid-client";
 import {

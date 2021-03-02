@@ -20,7 +20,7 @@
  */
 
 import React, { useContext } from "react";
-import { createStyles, Hidden } from "@material-ui/core";
+import { createStyles } from "@material-ui/core";
 import {
   ActionButton,
   Content,

@@ -20,7 +20,6 @@ exports[`ContactsEmptyState it renders an empty state component 1`] = `
       <a
         class="PodBrowser-button PodBrowser-button--small"
         data-testid="add-new-contact-button"
-        iconbefore="add"
       >
         <span
           class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"

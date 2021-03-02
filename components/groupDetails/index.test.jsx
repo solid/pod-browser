@@ -56,7 +56,7 @@ const group1 = mockGroup(group1Name, group1Url, {
 
 const group2Name = "Group 2";
 const group2Url = "http://example.com/group2.ttl#this";
-const group2 = mockGroup(group1Name, group1Url);
+const group2 = mockGroup(group2Name, group2Url);
 
 describe("GroupDetails", () => {
   beforeEach(() => {
