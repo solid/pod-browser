@@ -38,7 +38,6 @@ import GroupAllContext from "../../../src/contexts/groupAllContext";
 import AddressBookContext from "../../../src/contexts/addressBookContext";
 import Spinner from "../../spinner";
 import { deleteGroup } from "../../../src/models/contact/group";
-import { getContactAllFromContactsIndex } from "../../../src/models/contact";
 
 export const TESTCAFE_ID_GROUP_DELETE_MODAL = "group-delete-modal";
 export const TESTCAFE_ID_GROUP_DELETE_MODAL_TITLE = "group-delete-modal-title";

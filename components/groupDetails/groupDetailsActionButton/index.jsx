@@ -22,7 +22,7 @@
 /* eslint react/jsx-props-no-spreading: off */
 
 import { ActionButton, Button } from "@inrupt/prism-react-components";
-import React, { createRef, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Divider } from "@material-ui/core";
 import GroupDetailsModal from "../groupDetailsModal";
 import GroupDeleteModal from "../groupDeleteModal";

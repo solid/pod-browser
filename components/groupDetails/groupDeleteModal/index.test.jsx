@@ -23,7 +23,6 @@ import React from "react";
 import { useSession } from "@inrupt/solid-ui-react";
 import { useRouter } from "next/router";
 import userEvent from "@testing-library/user-event";
-import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { waitFor } from "@testing-library/react";
 import useAddressBook from "../../../src/hooks/useAddressBook";
 import useContacts from "../../../src/hooks/useContacts";
@@ -40,9 +39,6 @@ import GroupDeleteModal, {
   TESTCAFE_ID_GROUP_DELETE_MODAL_TITLE,
 } from "./index";
 import * as contactGroupModelFns from "../../../src/models/contact/group";
-import { chain } from "../../../src/solidClientHelpers/utils";
-import { addGroupToMockedIndexDataset } from "../../../__testUtils/mockGroupContact";
-import { GROUP_CONTACT } from "../../../src/models/contact/group";
 import { TESTCAFE_ID_SPINNER } from "../../spinner";
 
 jest.mock("../../../src/hooks/useAddressBook");
@@ -66,17 +62,6 @@ const fetch = jest.fn();
 const group1Name = "Group 1";
 const group1Url = "http://example.com/group1.ttl#this";
 const group1 = mockGroup(group1Name, group1Url);
-
-const group2Name = "Group 2";
-const group2DatasetUrl = "https://example.com/contacts/Group/5678/index.ttl";
-const group2Url = `${group2DatasetUrl}#this`;
-const group2 = mockGroup(group2Name, group2Url);
-
-const groupsDatasetUrl = "https://example.com/groups.ttl";
-const groupIndexWithGroup2Dataset = chain(
-  mockSolidDatasetFrom(groupsDatasetUrl),
-  (d) => addGroupToMockedIndexDataset(d, addressBook, group2Name, group2Url)
-);
 
 describe("GroupDeleteModal", () => {
   let mutateGroups;
@@ -138,10 +123,7 @@ describe("GroupDeleteModal", () => {
     beforeEach(() => {
       mockedDeleteGroup = jest
         .spyOn(contactGroupModelFns, "deleteGroup")
-        .mockResolvedValue({
-          dataset: groupIndexWithGroup2Dataset,
-          type: GROUP_CONTACT,
-        });
+        .mockResolvedValue({});
     });
 
     it("deletes the group, updates dependencies, and redirects", async () => {

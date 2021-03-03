@@ -42,11 +42,7 @@ import {
 import { ldp, rdf, vcard } from "rdf-namespaces";
 import { v4 as uuid } from "uuid";
 import { chain } from "../../../solidClientHelpers/utils";
-import {
-  getContainerUrl,
-  getParentContainerUrl,
-  joinPath,
-} from "../../../stringHelpers";
+import { getContainerUrl, joinPath } from "../../../stringHelpers";
 import {
   addContactIndexToAddressBook,
   getContactIndexUrl,
