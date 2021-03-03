@@ -43,7 +43,9 @@ export default function styles(theme) {
     "group-list__item": {},
     "group-list__link": {
       color: theme.palette.text.primary,
-      display: "block",
+      display: "flex",
+      gap: theme.spacing(1.4),
+      alignItems: "center",
       borderLeft: `solid 3px transparent`,
       textDecoration: "none",
       padding: theme.spacing(1.6, 0),
@@ -69,7 +71,7 @@ export default function styles(theme) {
       ),
     },
     "group-list__text": {
-      paddingLeft: theme.spacing(1.4),
+      wordBreak: "break-all",
     },
   };
 }
