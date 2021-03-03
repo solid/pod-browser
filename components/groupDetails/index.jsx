@@ -30,6 +30,7 @@ import GroupContext from "../../src/contexts/groupContext";
 import Spinner from "../spinner";
 import { getGroupDescription, getGroupName } from "../../src/models/group";
 import GroupDetailsActionButton from "./groupDetailsActionButton";
+import GroupAllContext from "../../src/contexts/groupAllContext";
 
 export const TESTCAFE_ID_GROUP_DETAILS = "group-details";
 export const TESTCAFE_ID_GROUP_DETAILS_BACK_LINK = "group-details-back-link";
@@ -46,9 +47,10 @@ export default function GroupDetails() {
   const { data: group, isValidating: groupIsValidating } = useContext(
     GroupContext
   );
+  const { isValidating: groupAllIsValidating } = useContext(GroupAllContext);
   const bem = useBem(useStyles());
 
-  const loading = groupIsValidating;
+  const loading = groupIsValidating || groupAllIsValidating;
   if (loading) return <Spinner />;
 
   const groupDescription = getGroupDescription(group);
