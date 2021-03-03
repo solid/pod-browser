@@ -55,6 +55,8 @@ export const TESTCAFE_ID_GROUP_DETAILS_MODAL_SAVE_BUTTON =
 export const TESTCAFE_ID_GROUP_DETAILS_MODAL_CANCEL_BUTTON =
   "group-details-modal-cancel-button";
 
+const ID_GROUP_DETAILS_TITLE = "GroupDetailsTitle";
+
 export const MESSAGE_GROUP_DETAILS_MODAL_NAME_REQUIRED = "Name is required";
 
 export const LIMITATION_GROUP_DETAILS_MODAL_NAME_MAX_LENGTH = 50;
@@ -127,9 +129,10 @@ export default function GroupDetailsModal({ handleClose, open }) {
       open={open}
       onClose={handleClose}
       data-testid={TESTCAFE_ID_GROUP_DETAILS_MODAL}
+      aria-labelledby={ID_GROUP_DETAILS_TITLE}
     >
       <ModalContainer>
-        <ModalTitle>Edit Group Details</ModalTitle>
+        <ModalTitle id={ID_GROUP_DETAILS_TITLE}>Edit Group Details</ModalTitle>
         <ModalBody>
           <Form onSubmit={onSubmit}>
             <Input

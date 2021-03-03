@@ -21,19 +21,15 @@
 
 import React, { useContext } from "react";
 import { createStyles } from "@material-ui/core";
-import {
-  ActionButton,
-  Content,
-  LinkButton,
-} from "@inrupt/prism-react-components";
+import { Content, LinkButton } from "@inrupt/prism-react-components";
 import Link from "next/link";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import styles from "./styles";
-import GroupDetailsEditButton from "./groupDetailsEditButton";
 import GroupContext from "../../src/contexts/groupContext";
 import Spinner from "../spinner";
 import { getGroupDescription, getGroupName } from "../../src/models/group";
+import GroupDetailsActionButton from "./groupDetailsActionButton";
 
 export const TESTCAFE_ID_GROUP_DETAILS = "group-details";
 export const TESTCAFE_ID_GROUP_DETAILS_BACK_LINK = "group-details-back-link";
@@ -47,10 +43,10 @@ export const MESSAGE_GROUP_DETAILS_DESCRIPTION_FALLBACK =
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function GroupDetails() {
-  const bem = useBem(useStyles());
   const { data: group, isValidating: groupIsValidating } = useContext(
     GroupContext
   );
+  const bem = useBem(useStyles());
 
   const loading = groupIsValidating;
   if (loading) return <Spinner />;
@@ -96,11 +92,9 @@ export default function GroupDetails() {
           )}
         </Content>
       </div>
-      <div className={bem("group-details__action-button")}>
-        <ActionButton>
-          <GroupDetailsEditButton variant="in-menu" />
-        </ActionButton>
-      </div>
+      <GroupDetailsActionButton
+        className={bem("group-details__action-button")}
+      />
     </div>
   );
 }

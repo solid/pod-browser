@@ -23,9 +23,6 @@ import React from "react";
 import { useRouter } from "next/router";
 import userEvent from "@testing-library/user-event";
 import renderGroupsPage from "../../../__testUtils/renderGroupsPage";
-import GroupDetailsEditButton, {
-  TESTCAFE_ID_GROUP_DETAILS_EDIT_BUTTON,
-} from "./index";
 import useAddressBook from "../../../src/hooks/useAddressBook";
 import useContacts from "../../../src/hooks/useContacts";
 import useGroup from "../../../src/hooks/useGroup";
@@ -34,6 +31,9 @@ import {
   TESTCAFE_ID_GROUP_DETAILS_MODAL,
   TESTCAFE_ID_GROUP_DETAILS_MODAL_CANCEL_BUTTON,
 } from "../groupDetailsModal";
+import GroupDetailsActionButton, {
+  TESTCAFE_ID_GROUP_DETAILS_ACTION_BUTTON_EDIT_ACTION,
+} from "./index";
 
 jest.mock("../../../src/hooks/useAddressBook");
 const mockedAddressBookHook = useAddressBook;
@@ -51,7 +51,7 @@ const group1Name = "Group 1";
 const group1Url = "http://example.com/group1.ttl#this";
 const group1 = mockGroup(group1Name, group1Url);
 
-describe("GroupDetailsEditButton", () => {
+describe("GroupDetailsActionButton", () => {
   beforeEach(() => {
     mockedAddressBookHook.mockReturnValue({});
     mockedContactsHook.mockReturnValue({ data: [group1] });
@@ -61,18 +61,22 @@ describe("GroupDetailsEditButton", () => {
 
   it("renders", () => {
     const { asFragment, getByTestId } = renderGroupsPage(
-      <GroupDetailsEditButton />
+      <GroupDetailsActionButton />
     );
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_EDIT_BUTTON)).toBeDefined();
+    expect(
+      getByTestId(TESTCAFE_ID_GROUP_DETAILS_ACTION_BUTTON_EDIT_ACTION)
+    ).toBeDefined();
   });
 
   it("opens GroupDetailsModal", () => {
     const { getByTestId, queryByTestId } = renderGroupsPage(
-      <GroupDetailsEditButton />
+      <GroupDetailsActionButton />
     );
     expect(queryByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL)).toBeNull();
-    userEvent.click(getByTestId(TESTCAFE_ID_GROUP_DETAILS_EDIT_BUTTON));
+    userEvent.click(
+      getByTestId(TESTCAFE_ID_GROUP_DETAILS_ACTION_BUTTON_EDIT_ACTION)
+    );
     expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL)).toBeDefined();
     userEvent.click(getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL_CANCEL_BUTTON));
     expect(queryByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL)).toBeNull();
