@@ -106,10 +106,9 @@ describe("GroupDeleteModal", () => {
   });
 
   it("renders", () => {
-    const { asFragment, getByTestId } = renderGroupsPage(
+    const { getByTestId } = renderGroupsPage(
       <GroupDeleteModal open handleClose={handleClose} />
     );
-    expect(asFragment()).toMatchSnapshot();
     expect(getByTestId(TESTCAFE_ID_GROUP_DELETE_MODAL)).toBeDefined();
     expect(
       getByTestId(TESTCAFE_ID_GROUP_DELETE_MODAL_TITLE).innerHTML

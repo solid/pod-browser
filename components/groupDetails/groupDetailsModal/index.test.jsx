@@ -109,10 +109,9 @@ describe("GroupDetailsModal", () => {
   });
 
   it("renders a form", () => {
-    const { asFragment, getByTestId } = renderGroupsPage(
+    const { getByTestId } = renderGroupsPage(
       <GroupDetailsModal open handleClose={handleClose} />
     );
-    expect(asFragment()).toMatchSnapshot();
     expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL)).toBeDefined();
     expect(
       getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL_NAME_FIELD)
