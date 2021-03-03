@@ -25,20 +25,28 @@ import {
   asUrl,
   createSolidDataset,
   createThing,
+  deleteContainer,
+  deleteFile,
   getSolidDataset,
   getSourceUrl,
   getThing,
   getUrlAll,
   removeStringNoLocale,
+  removeThing,
+  removeUrl,
   saveSolidDatasetAt,
   setStringNoLocale,
   setThing,
   setUrl,
 } from "@inrupt/solid-client";
-import { rdf, vcard } from "rdf-namespaces";
+import { ldp, rdf, vcard } from "rdf-namespaces";
 import { v4 as uuid } from "uuid";
 import { chain } from "../../../solidClientHelpers/utils";
-import { joinPath } from "../../../stringHelpers";
+import {
+  getContainerUrl,
+  getParentContainerUrl,
+  joinPath,
+} from "../../../stringHelpers";
 import {
   addContactIndexToAddressBook,
   getContactIndexUrl,
@@ -190,5 +198,50 @@ export async function renameGroup(
       dataset: indexDataset,
       type: GROUP_CONTACT,
     },
+  };
+}
+
+export async function deleteGroup(addressBook, group, fetch) {
+  // first remove the group from the group index
+  const groupUrl = asUrl(group.thing);
+  const groupIndexUrl = getContactIndexUrl(addressBook, GROUP_CONTACT);
+  const groupIndexDataset = await getSolidDataset(groupIndexUrl, { fetch });
+  const updatedGroupIndexDataset = await saveSolidDatasetAt(
+    groupIndexUrl,
+    chain(
+      groupIndexDataset,
+      (d) => removeThing(d, groupUrl), // remove the cached data about group
+      (d) =>
+        setThing(
+          d,
+          chain(
+            getThing(groupIndexDataset, asUrl(addressBook.thing)),
+            (t) => removeUrl(t, vcardExtras("includesGroup"), groupUrl) // remove the includesGroup reference to group
+          )
+        )
+    ),
+    { fetch }
+  );
+  // then remove the group itself
+  await deleteFile(groupUrl, { fetch });
+  // remove the container, if it's empty
+  const groupContainerUrl = getContainerUrl(groupUrl);
+  const groupContainerDataset = await getSolidDataset(groupContainerUrl, {
+    fetch,
+  });
+  const groupContainerThing = getThing(
+    groupContainerDataset,
+    groupContainerUrl,
+    { fetch }
+  );
+  const groupContainerHasChildren =
+    getUrlAll(groupContainerThing, ldp.contains).length > 0;
+  if (!groupContainerHasChildren) {
+    await deleteContainer(groupContainerUrl, { fetch });
+  }
+  // then return the updated version of the group index
+  return {
+    dataset: updatedGroupIndexDataset,
+    type: GROUP_CONTACT,
   };
 }

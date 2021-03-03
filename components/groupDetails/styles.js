@@ -36,13 +36,11 @@ export default function styles(theme) {
     "group-details__action-button": {},
     "group-details__title": {
       marginTop: 0,
-      wordBreak: "break-all",
     },
     "group-details__description": {
       "&&": {
         color: "black",
         fontSize: "0.8125rem",
-        wordBreak: "break-all",
       },
     },
     "group-details__description--fallback": {

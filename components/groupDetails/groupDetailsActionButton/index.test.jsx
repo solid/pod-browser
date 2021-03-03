@@ -32,8 +32,13 @@ import {
   TESTCAFE_ID_GROUP_DETAILS_MODAL_CANCEL_BUTTON,
 } from "../groupDetailsModal";
 import GroupDetailsActionButton, {
+  TESTCAFE_ID_GROUP_DETAILS_ACTION_BUTTON_DELETE_ACTION,
   TESTCAFE_ID_GROUP_DETAILS_ACTION_BUTTON_EDIT_ACTION,
 } from "./index";
+import {
+  TESTCAFE_ID_GROUP_DELETE_MODAL,
+  TESTCAFE_ID_GROUP_DELETE_MODAL_CANCEL_BUTTON,
+} from "../groupDeleteModal";
 
 jest.mock("../../../src/hooks/useAddressBook");
 const mockedAddressBookHook = useAddressBook;
@@ -55,7 +60,7 @@ describe("GroupDetailsActionButton", () => {
   beforeEach(() => {
     mockedAddressBookHook.mockReturnValue({});
     mockedContactsHook.mockReturnValue({ data: [group1] });
-    mockedGroupHook.mockReturnValue({});
+    mockedGroupHook.mockReturnValue({ data: group1 });
     mockedRouterHook.mockReturnValue({ query: { iri: group1Url } });
   });
 
@@ -80,5 +85,18 @@ describe("GroupDetailsActionButton", () => {
     expect(getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL)).toBeDefined();
     userEvent.click(getByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL_CANCEL_BUTTON));
     expect(queryByTestId(TESTCAFE_ID_GROUP_DETAILS_MODAL)).toBeNull();
+  });
+
+  it("opens GroupDeleteModal", () => {
+    const { getByTestId, queryByTestId } = renderGroupsPage(
+      <GroupDetailsActionButton />
+    );
+    expect(queryByTestId(TESTCAFE_ID_GROUP_DELETE_MODAL)).toBeNull();
+    userEvent.click(
+      getByTestId(TESTCAFE_ID_GROUP_DETAILS_ACTION_BUTTON_DELETE_ACTION)
+    );
+    expect(getByTestId(TESTCAFE_ID_GROUP_DELETE_MODAL)).toBeDefined();
+    userEvent.click(getByTestId(TESTCAFE_ID_GROUP_DELETE_MODAL_CANCEL_BUTTON));
+    expect(queryByTestId(TESTCAFE_ID_GROUP_DELETE_MODAL)).toBeNull();
   });
 });
