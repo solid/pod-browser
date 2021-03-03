@@ -62,14 +62,17 @@ export function removeMembersFromMockedGroup(group, agentUrls) {
   };
 }
 
-export function mockGroupThing(name, url, { members } = {}) {
+export function mockGroupThing(name, url, { description, members } = {}) {
   return chain(
     mockThingFrom(url),
     (t) => setUrl(t, rdf.type, vcard.Group),
     (t) => setStringNoLocale(t, vcard.fn, name),
     ...(members || []).map((agentUrl) => (t) =>
       addUrl(t, vcard.hasMember, agentUrl)
-    )
+    ),
+    ...[
+      description ? (t) => setStringNoLocale(t, vcard.note, description) : null,
+    ].filter((fn) => !!fn)
   );
 }
 

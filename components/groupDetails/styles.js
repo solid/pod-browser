@@ -21,10 +21,33 @@
 
 export default function styles(theme) {
   return {
-    "group-details-back-link": {
+    "group-details": {
+      display: "flex",
+    },
+    "group-details__main-content": {
+      flexGrow: 1,
+    },
+    "group-details__back-link": {
       paddingLeft: 0,
       [theme.breakpoints.up("sm")]: {
         display: "none",
+      },
+    },
+    "group-details__action-button": {},
+    "group-details__title": {
+      marginTop: 0,
+      wordBreak: "break-all",
+    },
+    "group-details__description": {
+      "&&": {
+        color: "black",
+        fontSize: "0.8125rem",
+        wordBreak: "break-all",
+      },
+    },
+    "group-details__description--fallback": {
+      "&&": {
+        color: theme.palette.text.primary,
       },
     },
   };

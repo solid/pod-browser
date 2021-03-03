@@ -55,6 +55,10 @@ export function getGroupName(group) {
   return getStringNoLocale(group.thing, vcard.fn);
 }
 
+export function getGroupDescription(group) {
+  return getStringNoLocale(group.thing, vcard.note) || "";
+}
+
 /**
  * Note that you might need to refresh the cache of the specific group after this, e.g. mutate SWR cache
  */

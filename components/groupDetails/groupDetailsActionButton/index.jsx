@@ -19,10 +19,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function styles() {
-  return {
-    "group-details-name": {
-      maxWidth: 300,
-    },
-  };
+/* eslint react/jsx-props-no-spreading: off */
+
+import { ActionButton, Button } from "@inrupt/prism-react-components";
+import React from "react";
+import GroupDetailsModal from "../groupDetailsModal";
+
+export const TESTCAFE_ID_GROUP_DETAILS_ACTION_BUTTON_EDIT_ACTION =
+  "group-details-action-button-edit-action";
+
+export default function GroupDetailsActionButton(props) {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  return (
+    <div {...props}>
+      <ActionButton>
+        <Button
+          onClick={handleOpen}
+          data-testid={TESTCAFE_ID_GROUP_DETAILS_ACTION_BUTTON_EDIT_ACTION}
+          variant="in-menu"
+        >
+          Edit Group Details
+        </Button>
+      </ActionButton>
+      <GroupDetailsModal handleClose={handleClose} open={open} />
+    </div>
+  );
 }

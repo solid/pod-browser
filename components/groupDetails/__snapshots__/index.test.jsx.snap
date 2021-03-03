@@ -3,38 +3,57 @@
 exports[`GroupDetails renders 1`] = `
 <DocumentFragment>
   <div
+    class="PodBrowser-group-details"
     data-testid="group-details"
   >
-    <a
-      class="PodBrowser-button PodBrowser-button--text PodBrowser-group-details-back-link"
-      data-testid="group-details-back-link"
-      iconbefore="caret-left"
-    >
-      <span
-        class="PodBrowser-icon-caret-left PodBrowser-button__icon PodBrowser-button__icon--before"
-      />
-      <span
-        class="PodBrowser-button__text"
-      >
-        All Groups
-      </span>
-    </a>
     <div
-      class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
+      class="PodBrowser-group-details__main-content"
     >
-      <svg
-        class="PodBrowser-loading-indicator"
-        data-testid="spinner"
-        viewBox="22 22 44 44"
+      <a
+        class="PodBrowser-button PodBrowser-button--text PodBrowser-group-details__back-link"
+        data-testid="group-details-back-link"
       >
-        <circle
-          cx="44"
-          cy="44"
-          fill="none"
-          r="20.2"
-          stroke-width="3.6"
+        <span
+          class="PodBrowser-icon-caret-left PodBrowser-button__icon PodBrowser-button__icon--before"
         />
-      </svg>
+        <span
+          class="PodBrowser-button__text"
+        >
+          All Groups
+        </span>
+      </a>
+      <div
+        class="PodBrowser-content"
+      >
+        <h1
+          class="PodBrowser-group-details__title"
+          data-testid="group-details-name"
+        >
+          Group 1
+        </h1>
+        <p
+          class="PodBrowser-group-details__description"
+          data-testid="group-details-description"
+        >
+          Group 1 description
+        </p>
+      </div>
+    </div>
+    <div
+      class="PodBrowser-group-details__action-button"
+    >
+      <button
+        class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+      >
+        <span
+          class="PodBrowser-button__text"
+        >
+          <span
+            aria-label="Show menu"
+            class="PodBrowser-icon-more"
+          />
+        </span>
+      </button>
     </div>
   </div>
 </DocumentFragment>

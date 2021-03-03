@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GroupDetailsActionButton renders 1`] = `
+<DocumentFragment>
+  <div>
+    <button
+      class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+    >
+      <span
+        class="PodBrowser-button__text"
+      >
+        <span
+          aria-label="Show menu"
+          class="PodBrowser-icon-more"
+        />
+      </span>
+    </button>
+  </div>
+</DocumentFragment>
+`;
