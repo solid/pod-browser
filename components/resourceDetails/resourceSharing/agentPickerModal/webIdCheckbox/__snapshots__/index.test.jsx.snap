@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`WebIdCheckbox renders a checkbox with the corrext value 1`] = `
+exports[`WebIdCheckbox renders a checkbox with the correct value 1`] = `
 <DocumentFragment>
   <span
     aria-disabled="false"

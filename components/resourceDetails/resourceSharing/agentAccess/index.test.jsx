@@ -26,165 +26,199 @@ import userEvent from "@testing-library/user-event";
 import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
 import AgentAccess from "./index";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import * as profileFns from "../../../../src/solidClientHelpers/profile";
+import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
 import { mockProfileAlice } from "../../../../__testUtils/mockPersonResource";
+import { PUBLIC_AGENT_PREDICATE } from "../../../../src/models/contact/public";
+import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../src/models/contact/authenticated";
 
-jest.mock("../../../../src/hooks/useFetchProfile");
+jest.mock("../../../../src/solidClientHelpers/profile");
+const mockedFetchProfile = fetchProfile;
 
 const webId = "https://example.com/profile/card#me";
 
 describe("AgentAccess", () => {
-  const permission = {
-    acl: createAccessMap(true, true, false, false),
-    webId,
-    alias: "Editors",
-    profile: mockProfileAlice(),
-    profileError: undefined,
-  };
-
   const mutatePermissions = jest.fn();
 
-  it("renders", () => {
-    const { asFragment } = renderWithTheme(
-      <AgentAccess permission={permission} />
-    );
-    expect(asFragment()).toMatchSnapshot();
+  describe("with profile", () => {
+    beforeEach(() => {
+      mockedFetchProfile.mockReturnValue(mockProfileAlice());
+    });
+    const permission = {
+      acl: createAccessMap(true, true, false, false),
+      webId,
+      alias: "Editors",
+      type: "agent",
+    };
+
+    it("renders", () => {
+      const { asFragment } = renderWithTheme(
+        <AgentAccess permission={permission} />
+      );
+      expect(asFragment()).toMatchSnapshot();
+    });
   });
-
-  it("renders skeleton placeholders when profile is not available", () => {
-    const { asFragment } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: createAccessMap(true, true, false, false),
-          webId,
-          alias: "Editors",
-          profile: null,
-          profileError: undefined,
-        }}
-        mutatePermissions={mutatePermissions}
-      />
-    );
-
-    expect(asFragment()).toMatchSnapshot();
+  describe("for public agent", () => {
+    const permission = {
+      acl: createAccessMap(true, true, false, false),
+      webId: PUBLIC_AGENT_PREDICATE,
+      alias: "Editors",
+      type: "public",
+    };
+    it("renders correctly", () => {
+      const { asFragment } = renderWithTheme(
+        <AgentAccess permission={permission} />
+      );
+      expect(asFragment()).toMatchSnapshot();
+    });
   });
-
-  it("returns null when no access", () => {
-    const { asFragment } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: null,
-          webId,
-          alias: "Editors",
-          profile: null,
-          profileError: undefined,
-        }}
-        mutatePermissions={mutatePermissions}
-      />
-    );
-
-    expect(asFragment()).toMatchSnapshot();
+  describe("for authenticated agent", () => {
+    const permission = {
+      acl: createAccessMap(true, true, false, false),
+      webId: AUTHENTICATED_AGENT_PREDICATE,
+      alias: "Editors",
+      type: "authenticated",
+    };
+    it("renders correctly", () => {
+      const { asFragment } = renderWithTheme(
+        <AgentAccess permission={permission} />
+      );
+      expect(asFragment()).toMatchSnapshot();
+    });
   });
+  describe("without profile", () => {
+    it("renders skeleton placeholders when profile is not available", () => {
+      beforeEach(() => {
+        mockedFetchProfile.mockRejectedValue("error");
+      });
+      const { asFragment } = renderWithTheme(
+        <AgentAccess
+          permission={{
+            acl: createAccessMap(true, true, false, false),
+            webId,
+            alias: "Editors",
+            type: "agent",
+          }}
+          mutatePermissions={mutatePermissions}
+        />
+      );
 
-  it("renders an error message with a 'try again' button if it's unable to load profile", () => {
-    const { asFragment, getByTestId } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: createAccessMap(true, true, false, false),
-          webId,
-          alias: "Editors",
-          profile: null,
-          profileError: "error",
-        }}
-        mutatePermissions={mutatePermissions}
-      />
-    );
-    expect(getByTestId("try-again-button")).toBeTruthy();
-    expect(asFragment()).toMatchSnapshot();
-  });
+      expect(asFragment()).toMatchSnapshot();
+    });
+    it("returns null when no access", () => {
+      const { asFragment } = renderWithTheme(
+        <AgentAccess
+          permission={{
+            acl: null,
+            webId,
+            alias: "Editors",
+            type: "agent",
+          }}
+          mutatePermissions={mutatePermissions}
+        />
+      );
 
-  it("renders a spinner after clicking 'try again' button", async () => {
-    const { getByTestId } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: createAccessMap(true, true, false, false),
-          webId,
-          alias: "Editors",
-          profile: null,
-          profileError: "error",
-        }}
-        mutatePermissions={mutatePermissions}
-      />
-    );
-    const button = getByTestId("try-again-button");
-    userEvent.click(button);
+      expect(asFragment()).toMatchSnapshot();
+    });
 
-    expect(getByTestId("try-again-spinner")).toBeTruthy();
-  });
+    it("renders an error message with a 'try again' button if it's unable to load profile", () => {
+      const { asFragment, findByTestId } = renderWithTheme(
+        <AgentAccess
+          permission={{
+            acl: createAccessMap(true, true, false, false),
+            webId,
+            alias: "Editors",
+            type: "agent",
+          }}
+          mutatePermissions={mutatePermissions}
+        />
+      );
+      expect(findByTestId("try-again-button")).toBeTruthy();
+      expect(asFragment()).toMatchSnapshot();
+    });
 
-  it("tries to fetch the profile again when clicking 'try again' button", async () => {
-    const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
-    const { getByTestId } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: createAccessMap(true, true, false, false),
-          webId,
-          alias: "Editors",
-          profile: null,
-          profileError: "error",
-        }}
-        mutatePermissions={mutatePermissions}
-      />
-    );
-    const button = getByTestId("try-again-button");
-    userEvent.click(button);
+    it("renders a spinner after clicking 'try again' button", async () => {
+      const { findByTestId } = renderWithTheme(
+        <AgentAccess
+          permission={{
+            acl: createAccessMap(true, true, false, false),
+            webId,
+            alias: "Editors",
+            type: "agent",
+          }}
+          mutatePermissions={mutatePermissions}
+        />
+      );
+      const button = await findByTestId("try-again-button");
+      userEvent.click(button);
 
-    await waitFor(() =>
-      expect(fetchProfile).toHaveBeenCalledWith(webId, expect.anything())
-    );
-  });
+      expect(findByTestId("try-again-spinner")).toBeTruthy();
+    });
 
-  it("removes the spinner when fetching succeeds", async () => {
-    const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
-    fetchProfile.mockReturnValue("profile");
-    const { getByTestId, queryByTestId } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: createAccessMap(true, true, false, false),
-          webId,
-          alias: "Editors",
-          profile: null,
-          profileError: "error",
-        }}
-        mutatePermissions={mutatePermissions}
-      />
-    );
-    const button = getByTestId("try-again-button");
-    userEvent.click(button);
+    it("tries to fetch the profile again when clicking 'try again' button", async () => {
+      const { findByTestId } = renderWithTheme(
+        <AgentAccess
+          permission={{
+            acl: createAccessMap(true, true, false, false),
+            webId,
+            alias: "Editors",
+            type: "agent",
+          }}
+          mutatePermissions={mutatePermissions}
+        />
+      );
+      const button = await findByTestId("try-again-button");
+      userEvent.click(button);
 
-    await waitFor(() => expect(queryByTestId("try-again-spinner")).toBeFalsy());
-  });
+      await waitFor(() =>
+        expect(fetchProfile).toHaveBeenCalledWith(webId, expect.anything())
+      );
+    });
 
-  it("removes the spinner when fetching errors", async () => {
-    const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
-    fetchProfile.mockReturnValue("profile");
-    const { getByTestId, queryByTestId } = renderWithTheme(
-      <AgentAccess
-        permission={{
-          acl: createAccessMap(true, true, false, false),
-          webId,
-          alias: "Editors",
-          profile: null,
-          profileError: "error",
-        }}
-        mutatePermissions={mutatePermissions}
-      />
-    );
-    const button = getByTestId("try-again-button");
-    userEvent.click(button);
+    it("removes the spinner when fetching succeeds", async () => {
+      const { findByTestId, queryByTestId } = renderWithTheme(
+        <AgentAccess
+          permission={{
+            acl: createAccessMap(true, true, false, false),
+            webId,
+            alias: "Editors",
+            type: "agent",
+          }}
+          mutatePermissions={mutatePermissions}
+        />
+      );
+      const button = await findByTestId("try-again-button");
+      userEvent.click(button);
 
-    await waitFor(() =>
-      expect(fetchProfile).toHaveBeenCalledWith(webId, expect.anything())
-    );
-    await waitFor(() => expect(queryByTestId("try-again-spinner")).toBeFalsy());
+      mockedFetchProfile.mockResolvedValueOnce("profile");
+
+      await waitFor(() =>
+        expect(queryByTestId("try-again-spinner")).toBeFalsy()
+      );
+    });
+
+    it("removes the spinner when fetching errors", async () => {
+      const { getByTestId, queryByTestId } = renderWithTheme(
+        <AgentAccess
+          permission={{
+            acl: createAccessMap(true, true, false, false),
+            webId,
+            alias: "Editors",
+            type: "agent",
+          }}
+          mutatePermissions={mutatePermissions}
+        />
+      );
+      await waitFor(() => {
+        const button = getByTestId("try-again-button");
+        userEvent.click(button);
+      });
+
+      await waitFor(() =>
+        expect(fetchProfile).toHaveBeenCalledWith(webId, expect.anything())
+      );
+      await waitFor(() =>
+        expect(queryByTestId("try-again-spinner")).toBeFalsy()
+      );
+    });
   });
 });

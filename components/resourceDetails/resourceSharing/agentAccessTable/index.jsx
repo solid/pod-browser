@@ -22,7 +22,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { useFilters, useGlobalFilter, useTable } from "react-table";
 import { useBem } from "@solid/lit-prism-patterns";
@@ -36,7 +36,6 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
-import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
 import AgentAccess from "../agentAccess";
 import AddAgentButton from "../addAgentButton";
 import AgentsTableTabs from "../agentsTableTabs";
@@ -56,14 +55,17 @@ export const TESTCAFE_ID_AGENT_ACCESS_TABLE = "agent-access-table";
 
 export default function AgentAccessTable({ type }) {
   const [loading, setLoading] = useState(false);
+  const [permissions, setPermissions] = useState([]);
   const {
-    data: policyPermissions,
+    data: namedPermissions,
     mutate: mutatePermissions,
   } = usePolicyPermissions(type);
-  // TODO: this will change when Groups are available, we will likely fetch profiles only for Individual permissions
-  const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
-    policyPermissions
-  );
+
+  useEffect(() => {
+    if (!namedPermissions) return;
+    setPermissions(namedPermissions);
+  }, [namedPermissions]);
+
   const bem = useBem(useStyles());
 
   const classes = useStyles();
@@ -75,7 +77,7 @@ export default function AgentAccessTable({ type }) {
     () => [
       {
         header: "",
-        accessor: "profile.name",
+        accessor: "name",
         disableSortBy: true,
         modifiers: ["align-center", "width-preview"],
       },
@@ -87,7 +89,7 @@ export default function AgentAccessTable({ type }) {
       },
       {
         header: "",
-        accessor: "profile.types",
+        accessor: "type",
         disableSortBy: true,
         modifiers: ["align-center", "width-preview"],
       },
@@ -128,7 +130,7 @@ export default function AgentAccessTable({ type }) {
   const handleTabChange = (e, newValue) => {
     setSelectedTabValue(newValue);
     // TODO: this will change when Groups are available since we will not have profiles for Groups
-    setFilter("profile.types", newValue);
+    setFilter("type", newValue);
   };
 
   if (!permissions.length && isCustomPolicy(type)) return null;
@@ -154,7 +156,7 @@ export default function AgentAccessTable({ type }) {
             <AgentsTableTabs
               handleTabChange={handleTabChange}
               selectedTabValue={selectedTabValue}
-              tabsValues={{ all: "", people: "Person", groups: "Group" }}
+              tabsValues={{ all: "", people: "agent", groups: "group" }}
             />
             <AgentsSearchBar handleFilterChange={handleFilterChange} />
           </>

@@ -38,6 +38,9 @@ import { chain, createResponder } from "../../solidClientHelpers/utils";
 import { getOrCreateDatasetOld } from "../../solidClientHelpers/resource";
 import { getPolicyUrl, getPolicyResourceUrl } from "../../models/policy";
 import { isHTTPError } from "../../error";
+import { PUBLIC_AGENT_PREDICATE } from "../../models/contact/public";
+import { AUTHENTICATED_AGENT_PREDICATE } from "../../models/contact/authenticated";
+import { isCustomPolicy } from "../../../constants/policies";
 
 export const noAcrAccessError =
   "No access to Access Control Resource for this resource";
@@ -79,10 +82,11 @@ export function convertAcpToAcl(access) {
   );
 }
 
-export function getOrCreatePermission(permissions, webId) {
+export function getOrCreatePermission(permissions, webId, type) {
   const permission = permissions[webId] ?? {
     webId,
   };
+  permission.type = type;
   permission.acp = permission.acp ?? {
     apply: createAcpMap(),
     access: createAcpMap(),
@@ -145,8 +149,53 @@ export function setAgents(policy, policyDataset, webId, accessToMode) {
   };
 }
 
-//  this is for the new named and custom policies
-export function getModesAndAgentsForPolicy(policyUrl, policyDataset) {
+export function setPublicAgent(dataset, policy, access) {
+  const rulesUrls = acp.getRequiredRuleUrlAll(policy);
+  const { existing, rules } = getRulesOrCreate(rulesUrls, policy, dataset);
+  const modifiedRules = rules.map((rule) => {
+    const modifiedRule = acpv2.setPublic(rule, access);
+    return modifiedRule;
+  });
+  const [modifiedDataset] = modifiedRules.map((modifiedRule) => {
+    return setThing(dataset, modifiedRule);
+  });
+  const [modifiedPolicy] = existing
+    ? modifiedRules.map((modifiedRule) =>
+        acpv2.setRequiredRuleUrl(policy, modifiedRule)
+      )
+    : modifiedRules.map((modifiedRule) =>
+        acpv2.addRequiredRuleUrl(policy, modifiedRule)
+      );
+  return {
+    policy: modifiedPolicy,
+    dataset: modifiedDataset,
+  };
+}
+
+export function setAuthenticatedAgent(dataset, policy, access) {
+  const rulesUrls = acp.getRequiredRuleUrlAll(policy);
+  const { existing, rules } = getRulesOrCreate(rulesUrls, policy, dataset);
+  const modifiedRules = rules.map((rule) => {
+    const modifiedRule = acpv2.setAuthenticated(rule, access);
+    return modifiedRule;
+  });
+  const [modifiedDataset] = modifiedRules.map((modifiedRule) => {
+    return setThing(dataset, modifiedRule);
+  });
+  const [modifiedPolicy] = existing
+    ? modifiedRules.map((modifiedRule) =>
+        acpv2.setRequiredRuleUrl(policy, modifiedRule)
+      )
+    : modifiedRules.map((modifiedRule) =>
+        acpv2.addRequiredRuleUrl(policy, modifiedRule)
+      );
+  return {
+    policy: modifiedPolicy,
+    dataset: modifiedDataset,
+  };
+}
+
+export function getNamedPolicyModesAndAgents(policyUrl, policyDataset) {
   const policy = acpv2.getPolicy(policyDataset, policyUrl);
   if (!policy) return { modes: {}, agents: [] };
   const modes = acpv2.getAllowModes(policy);
@@ -157,10 +206,30 @@ export function getModesAndAgentsForPolicy(policyUrl, policyDataset) {
     (memo, rule) => memo.concat(acpv2.getAgentAll(rule)),
     []
   );
+  const [authenticatedStatus] = rules.map((rule) =>
+    acpv2.hasAuthenticated(rule)
+  );
+  if (authenticatedStatus) {
+    agents.unshift(AUTHENTICATED_AGENT_PREDICATE);
+  }
+  const [publicStatus] = rules.map((rule) => acpv2.hasPublic(rule));
+  if (publicStatus) {
+    agents.unshift(PUBLIC_AGENT_PREDICATE);
+  }
   return {
     modes,
     agents,
   };
+}
+
+export function getAgentType(webId) {
+  if (webId === PUBLIC_AGENT_PREDICATE) {
+    return "public";
+  }
+  if (webId === AUTHENTICATED_AGENT_PREDICATE) {
+    return "authenticated";
+  }
+  return "agent";
 }
 
 // this is from old permissions
@@ -302,22 +371,28 @@ export default class AcpAccessControlStrategy {
       const policyDataset = await getSolidDataset(namedPolicyContainerUrl, {
         fetch: this.#fetch,
       });
-
-      const modesAndAgents = getModesAndAgentsForPolicy(
+      const modesAndAgents = getNamedPolicyModesAndAgents(
         getNamedPolicyUrl(namedPolicyContainerUrl, policyName),
         policyDataset
       );
       [modesAndAgents].forEach(({ modes, agents }) =>
         agents.forEach((webId) => {
-          const permission = getOrCreatePermission(permissions, webId);
+          // TODO: when we have groups we can pass a "group" type here
+          const agentType = getAgentType(webId);
+          const permission = getOrCreatePermission(
+            permissions,
+            webId,
+            agentType
+          );
           permission.acp.apply = addAcpModes(permission.acp.apply, modes);
           permissions[webId] = permission;
         })
       );
       // normalize permissions
-      return Object.values(permissions).map(({ acp: access, webId }) => {
+      return Object.values(permissions).map(({ acp: access, webId, type }) => {
         const acl = convertAcpToAcl(access);
         return {
+          type,
           acl,
           alias: policyName,
           webId,
@@ -343,21 +418,28 @@ export default class AcpAccessControlStrategy {
         fetch: this.#fetch,
       });
 
-      const modesAndAgents = getModesAndAgentsForPolicy(
+      const modesAndAgents = getNamedPolicyModesAndAgents(
         getCustomPolicyUrl(customPolicyContainerUrl, policyName),
         policyDataset
       );
       [modesAndAgents].forEach(({ modes, agents }) =>
         agents.forEach((webId) => {
-          const permission = getOrCreatePermission(permissions, webId);
+          // TODO: when we have groups we can pass a "group" type here
+          const agentType = getAgentType(webId);
+          const permission = getOrCreatePermission(
+            permissions,
+            webId,
+            agentType
+          );
           permission.acp.apply = addAcpModes(permission.acp.apply, modes);
           permissions[webId] = permission;
         })
       );
       // normalize permissions
-      return Object.values(permissions).map(({ acp: access, webId }) => {
+      return Object.values(permissions).map(({ acp: access, webId, type }) => {
         const acl = convertAcpToAcl(access);
         return {
+          type,
           acl,
           alias: policyName,
           webId,
@@ -675,6 +757,82 @@ export default class AcpAccessControlStrategy {
         // It doesn't seem to affect the outcome though, so we'll leave it like this for now
       }
     }
+  }
+
+  async setRulePublic(policyName, access) {
+    const namedPolicyContainerUrl = getPolicyResourceUrl(
+      this.#originalWithAcr,
+      this.#policiesContainerUrl,
+      policyName
+    );
+
+    const { respond, error } = createResponder();
+    const {
+      response: policyDataset,
+      error: getOrCreateError,
+    } = await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
+
+    if (getOrCreateError) return error(getOrCreateError);
+    const policyUrl = isCustomPolicy(policyName)
+      ? getCustomPolicyUrl(namedPolicyContainerUrl, policyName)
+      : getNamedPolicyUrl(namedPolicyContainerUrl, policyName);
+    const acpMap = isCustomPolicy(policyName)
+      ? acpMapForCustomApplyPolicies[policyName]
+      : acpMapForNamedApplyPolicies[policyName];
+    const updatedDataset = chain(
+      getOrCreatePolicy(policyDataset, policyUrl),
+      ({ policy, dataset }) => ({
+        policy: acpv2.setAllowModes(policy, acpMap),
+        dataset,
+      }),
+      ({ policy, dataset }) => setPublicAgent(dataset, policy, access),
+      ({ policy, dataset }) => acpv2.setPolicy(dataset, policy)
+    );
+    // saving changes to the policy resource
+    await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
+      fetch: this.#fetch,
+    });
+    // saving changes to the ACRs
+    await this.ensureAccessControlAllNamedPolicies();
+    return respond(this.#originalWithAcr);
+  }
+
+  async setRuleAuthenticated(policyName, access) {
+    const namedPolicyContainerUrl = getPolicyResourceUrl(
+      this.#originalWithAcr,
+      this.#policiesContainerUrl,
+      policyName
+    );
+
+    const { respond, error } = createResponder();
+    const {
+      response: policyDataset,
+      error: getOrCreateError,
+    } = await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
+
+    if (getOrCreateError) return error(getOrCreateError);
+    const policyUrl = isCustomPolicy(policyName)
+      ? getCustomPolicyUrl(namedPolicyContainerUrl, policyName)
+      : getNamedPolicyUrl(namedPolicyContainerUrl, policyName);
+    const acpMap = isCustomPolicy(policyName)
+      ? acpMapForCustomApplyPolicies[policyName]
+      : acpMapForNamedApplyPolicies[policyName];
+    const updatedDataset = chain(
+      getOrCreatePolicy(policyDataset, policyUrl),
+      ({ policy, dataset }) => ({
+        policy: acpv2.setAllowModes(policy, acpMap),
+        dataset,
+      }),
+      ({ policy, dataset }) => setAuthenticatedAgent(dataset, policy, access),
+      ({ policy, dataset }) => acpv2.setPolicy(dataset, policy)
+    );
+    // saving changes to the policy resource
+    await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
+      fetch: this.#fetch,
+    });
+    // saving changes to the ACRs
+    await this.ensureAccessControlAllNamedPolicies();
+    return respond(this.#originalWithAcr);
   }
 
   async addAgentToNamedPolicy(webId, policyName) {

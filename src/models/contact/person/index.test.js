@@ -48,13 +48,9 @@ import mockPersonContact, {
   addPersonToMockedIndexDataset,
 } from "../../../../__testUtils/mockPersonContact";
 import { getContactIndexDefaultUrl } from "../collection";
-// import { fetchProfile } from "../../../solidClientHelpers/profile";
 
 jest.mock("uuid");
 const mockedUuid = uuid;
-
-// jest.mock("../../../solidClientHelpers/profile");
-// const mockedFetchProfile = fetchProfile;
 
 const containerUrl = "https://example.com/contacts/";
 const emptyAddressBook = mockAddressBook({ containerUrl });

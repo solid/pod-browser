@@ -23,6 +23,8 @@ import React from "react";
 import AgentProfileDetails from "./index";
 
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
+import { PUBLIC_AGENT_PREDICATE } from "../../../../../src/models/contact/public";
+import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../../src/models/contact/authenticated";
 
 const webId = "https://example.com/profile/card#me";
 
@@ -32,19 +34,68 @@ describe("AgentProfileDetails", () => {
     name: "Example Agent",
     webId,
   };
-  const permission = { webId, profile, alias: "editors" };
+  const permission = { webId, alias: "editors", type: "agent" };
   const resourceIri = "/iri/";
+
+  const publicProfile = {
+    webId: PUBLIC_AGENT_PREDICATE,
+  };
+  const publicPermission = {
+    webId: PUBLIC_AGENT_PREDICATE,
+    alias: "editors",
+    type: "public",
+  };
+
+  const authenticatedProfile = {
+    webId: AUTHENTICATED_AGENT_PREDICATE,
+  };
+  const authenticatedPermission = {
+    webId: AUTHENTICATED_AGENT_PREDICATE,
+    alias: "editors",
+    type: "authenticated",
+  };
 
   it("renders without error", () => {
     const { asFragment } = renderWithTheme(
       <AgentProfileDetails
         resourceIri={resourceIri}
         permission={permission}
+        profile={profile}
         setLoading={jest.fn()}
         setLocalAccess={jest.fn()}
         mutatePermissions={jest.fn()}
       />
     );
     expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("renders correctly for public agent", () => {
+    const { asFragment, queryByText } = renderWithTheme(
+      <AgentProfileDetails
+        resourceIri={resourceIri}
+        permission={publicPermission}
+        profile={publicProfile}
+        setLoading={jest.fn()}
+        setLocalAccess={jest.fn()}
+        mutatePermissions={jest.fn()}
+      />
+    );
+    expect(asFragment()).toMatchSnapshot();
+    expect(queryByText("Anyone")).not.toBeNull();
+  });
+
+  it("renders correctly for authenticated agent", () => {
+    const { asFragment, queryByText } = renderWithTheme(
+      <AgentProfileDetails
+        resourceIri={resourceIri}
+        permission={authenticatedPermission}
+        profile={authenticatedProfile}
+        setLoading={jest.fn()}
+        setLocalAccess={jest.fn()}
+        mutatePermissions={jest.fn()}
+      />
+    );
+    expect(asFragment()).toMatchSnapshot();
+    expect(queryByText("Anyone signed in")).not.toBeNull();
   });
 });
