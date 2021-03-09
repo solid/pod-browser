@@ -28,9 +28,12 @@ import {
   getUrl,
   getUrlAll,
   mockSolidDatasetFrom,
+  mockThingFrom,
+  setThing,
+  setUrl,
 } from "@inrupt/solid-client";
 import { v4 as uuid } from "uuid";
-import { rdf, vcard } from "rdf-namespaces/dist/index";
+import { ldp, rdf, vcard } from "rdf-namespaces";
 import mockAddressBook from "../../../../__testUtils/mockAddressBook";
 import {
   saveGroup,
@@ -39,6 +42,7 @@ import {
   renameGroup,
   GROUP_CONTACT,
   getGroupAll,
+  deleteGroup,
 } from "./index";
 import mockGroupContact, {
   addGroupToMockedIndexDataset,
@@ -49,6 +53,7 @@ import { getContactIndexDefaultUrl, getContactIndexUrl } from "../collection";
 import { addIndexToMockedAddressBook } from "../../../../__testUtils/mockContact";
 import mockGroup from "../../../../__testUtils/mockGroup";
 import { getAddressBookThingUrl } from "../../addressBook";
+import { getContainerUrl } from "../../../stringHelpers";
 
 jest.mock("uuid");
 const mockedUuid = uuid;
@@ -92,6 +97,27 @@ const groupIndexWithGroup1And2Dataset = chain(
       addressBookWithGroupIndex,
       group2Name,
       group2Url
+    )
+);
+const group1ContainerUrl = getContainerUrl(group1DatasetUrl);
+const group1ContainerDataset = chain(
+  mockSolidDatasetFrom(group1ContainerUrl),
+  (d) =>
+    setThing(
+      d,
+      chain(mockThingFrom(group1ContainerUrl), (t) =>
+        setUrl(t, rdf.type, ldp.Container)
+      )
+    )
+);
+const group1ContainerWithChildrenDataset = chain(
+  mockSolidDatasetFrom(group1ContainerUrl),
+  (d) =>
+    setThing(
+      d,
+      chain(mockThingFrom(group1ContainerUrl), (t) =>
+        setUrl(t, ldp.contains, group2Url)
+      )
     )
 );
 
@@ -339,5 +365,62 @@ describe("renameGroup", () => {
     const groupThing = groupDatasetThings[1];
     expect(getStringNoLocale(groupThing, vcard.fn)).toEqual(newName);
     expect(getStringNoLocale(groupThing, vcard.note)).toEqual(newDescription);
+  });
+});
+
+describe("deleteGroup", () => {
+  let mockedGetSolidDataset;
+  let mockedDeleteFile;
+  let mockedDeleteContainer;
+
+  beforeEach(() => {
+    mockedSaveSolidDatasetAt.mockResolvedValueOnce(
+      groupIndexWithGroup2Dataset.dataset
+    );
+    mockedDeleteFile = jest
+      .spyOn(solidClientFns, "deleteFile")
+      .mockResolvedValue({});
+    mockedDeleteContainer = jest
+      .spyOn(solidClientFns, "deleteContainer")
+      .mockResolvedValue({});
+  });
+
+  it("deletes the group and its entry in the group index", async () => {
+    mockedGetSolidDataset = jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValueOnce(groupIndexWithGroup1And2Dataset)
+      .mockResolvedValueOnce(group1ContainerDataset);
+    await expect(
+      deleteGroup(addressBookWithGroupIndex, mockedGroup1, fetch)
+    ).resolves.toEqual({
+      dataset: groupIndexWithGroup2Dataset.dataset,
+      type: GROUP_CONTACT,
+    });
+    expect(mockedGetSolidDataset).toHaveBeenCalledWith(groupsDatasetUrl, {
+      fetch,
+    });
+    expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
+      groupsDatasetUrl,
+      groupIndexWithGroup2Dataset,
+      { fetch }
+    );
+    expect(mockedDeleteFile).toHaveBeenCalledWith(group1Url, { fetch });
+    expect(mockedGetSolidDataset).toHaveBeenCalledWith(group1ContainerUrl, {
+      fetch,
+    });
+    expect(mockedDeleteContainer).toHaveBeenCalledWith(group1ContainerUrl, {
+      fetch,
+    });
+  });
+
+  it("avoids deleting container if it still has children", async () => {
+    mockedGetSolidDataset = jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValueOnce(groupIndexWithGroup1And2Dataset)
+      .mockResolvedValueOnce(group1ContainerWithChildrenDataset);
+    await expect(
+      deleteGroup(addressBookWithGroupIndex, mockedGroup1, fetch)
+    ).resolves.toBeDefined();
+    expect(mockedDeleteContainer).not.toHaveBeenCalled();
   });
 });
