@@ -24,19 +24,15 @@ import { Button } from "@inrupt/prism-react-components";
 import GroupAddMembersModal from "../groupAddMembersModal";
 
 export default function GroupAddMembersButton() {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <>
-      <Button
-        variant="small"
-        iconBefore="add"
-        onClick={handleOpen}
-      >
-        Add to Group
+      <Button variant="small" onClick={handleOpen}>
+        Edit Group
       </Button>
       <GroupAddMembersModal open={open} handleClose={handleClose} />
     </>

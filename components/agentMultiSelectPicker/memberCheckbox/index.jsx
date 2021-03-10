@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint react/jsx-props-no-spreading:off */
+/* eslint react/jsx-props-no-spreading:off, react/forbid-prop-types:off */
 
 import React from "react";
 import PropTypes from "prop-types";
@@ -61,7 +61,6 @@ export default function MemberCheckbox({
 
 MemberCheckbox.propTypes = {
   onChange: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
   selected: PropTypes.object.isRequired,
   disabled: PropTypes.arrayOf(PropTypes.string),
 };

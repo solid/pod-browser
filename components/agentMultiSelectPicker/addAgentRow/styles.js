@@ -23,33 +23,16 @@ import { createStyles } from "@solid/lit-prism-patterns";
 
 export default function styles(theme) {
   return createStyles(theme, ["icons", "button"], {
-    addAgentForm: {
+    "add-agent-row": {
+      display: "flex",
+      alignItems: "center",
+    },
+    "add-agent-row__form": {
       display: "flex",
       flexDirection: "row",
       padding: 0,
     },
-    nameAndAvatarContainer: {
-      display: "flex",
-      alignItems: "Center",
-    },
-    avatar: {
-      width: "1.875rem",
-      height: "1.875rem",
-      margin: theme.spacing(0, 0.8),
-    },
-    detailText: {
-      fontFamily: theme.typography.body.fontFamily,
-      fontWeight: theme.typography.body.fontWeight,
-      [theme.breakpoints.up("sm")]: {
-        minWidth: "20rem",
-      },
-    },
-    button: {
-      padding: theme.spacing(0.8, 1),
-      maxHeight: "2.5rem",
-      margin: theme.spacing(0, 0.5),
-    },
-    searchBoxContainer: {
+    "add-agent-row__search": {
       display: "flex",
       border: `1px solid ${theme.palette.grey.A100}`,
       borderRadius: "10px",
@@ -59,7 +42,7 @@ export default function styles(theme) {
         minWidth: "20rem",
       },
     },
-    searchInput: {
+    "add-agent-row__search-input": {
       height: "100%",
       fontSize: "0.8125rem",
       width: "100%",
@@ -68,9 +51,10 @@ export default function styles(theme) {
       color: theme.palette.primary.text,
       padding: theme.spacing(0.5),
     },
-    agentPickerFormContainer: {
-      display: "flex",
-      alignItems: "center",
+    "add-agent-row__button": {
+      padding: theme.spacing(0.8, 1),
+      maxHeight: "2.5rem",
+      margin: theme.spacing(0, 0.5),
     },
   });
 }

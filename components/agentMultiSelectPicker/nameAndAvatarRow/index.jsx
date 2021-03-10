@@ -19,23 +19,49 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* eslint react/jsx-props-no-spreading: off, react/forbid-prop-types: off */
+
 import React from "react";
-import Skeleton from "@material-ui/lab/Skeleton";
+import T from "prop-types";
+import { createStyles, Tooltip, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import { createStyles } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
-import styles from "../nameAndAvatarRow/styles";
+import Avatar from "../../avatar";
+import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function SkeletonRow() {
+const TESTCAFE_ID_AGENT_WEB_ID = "agent-webid";
+
+export default function NameAndAvatarRow({ name, originalUrl, avatarProps }) {
   const bem = useBem(useStyles());
   return (
-    <div className={bem("name-and-avatar")}>
-      <Skeleton className={bem("name-and-avatar__avatar")} variant="circle" />
-      <div className={bem("name-and-avatar__detail-text")}>
-        <Skeleton variant="text" width={100} />
+    <Tooltip title={originalUrl || "Unable to load profile"}>
+      <div className={bem("name-and-avatar")}>
+        <Avatar
+          className={bem("name-and-avatar__avatar")}
+          alt={originalUrl}
+          {...avatarProps}
+        />
+        <Typography
+          classes={{ body1: bem("name-and-avatar__detail-text") }}
+          data-testid={TESTCAFE_ID_AGENT_WEB_ID}
+          className={bem("name-and-avatar__detail-text")}
+        >
+          {name || originalUrl}
+        </Typography>
       </div>
-    </div>
+    </Tooltip>
   );
 }
+
+NameAndAvatarRow.propTypes = {
+  avatarProps: T.object,
+  name: T.string,
+  originalUrl: T.string.isRequired,
+};
+
+NameAndAvatarRow.defaultProps = {
+  avatarProps: {},
+  name: null,
+};

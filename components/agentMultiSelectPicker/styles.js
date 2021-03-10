@@ -21,43 +21,13 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
-const MODAL_MIN_WIDTH = 680;
-const MODAL_MIN_HEIGHT = 680;
 const TABLE_MAX_HEIGHT = 460;
 const MOBILE_TABLE_MIN_HEIGHT = 300;
 
 export default function styles(theme) {
   return createStyles(theme, ["icons", "button", "table"], {
-    paper: {
-      [theme.breakpoints.up("sm")]: {
-        minWidth: MODAL_MIN_WIDTH,
-        minHeight: MODAL_MIN_HEIGHT,
-        height: "auto",
-        width: MODAL_MIN_WIDTH,
-        padding: theme.spacing(2, 4, 3),
-      },
-      display: "flex",
-      flexDirection: "column",
-      position: "absolute",
-      backgroundColor: theme.palette.grey[50],
-      borderRadius: theme.shape.borderRadius,
-      boxShadow:
-        "0 9px 46px 8px rgba(0,0,0,0.12), 0 24px 38px 3px rgba(0,0,0,0.14), 0 11px 15px -7px rgba(0,0,0,0.2)",
-      minWidth: "100vw",
-      minHeight: "100vh",
-      width: "100vw",
-      height: "100vh",
-      padding: theme.spacing(2, 1.4, 3),
-    },
-    title: {
-      ...theme.typography.h1,
-      marginBottom: theme.spacing(1.2),
-    },
-    tableContainer: {
+    "agent-multi-select-picker": {
       minHeight: MOBILE_TABLE_MIN_HEIGHT,
-      [theme.breakpoints.up("xs")]: {
-        minHeight: "unset",
-      },
       display: "flex",
       flexDirection: "column",
       backgroundColor: theme.palette.common.white,
@@ -67,14 +37,17 @@ export default function styles(theme) {
       height: "100%",
       maxHeight: TABLE_MAX_HEIGHT,
       overflowY: "auto",
+      [theme.breakpoints.up("xs")]: {
+        minHeight: "unset",
+      },
     },
-    tabsAndAddButtonContainer: {
+    "agent-multi-select-picker__tabs-and-button-container": {
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
       borderBottom: `1px solid ${theme.palette.grey.A100}`,
     },
-    agentPickerTable: {
+    "agent-multi-select-picker__agent-table": {
       width: `calc(100% - ${theme.spacing(1.6) * 2}px)`,
       boxSizing: "border-box",
       marginLeft: theme.spacing(1.6),
@@ -97,83 +70,33 @@ export default function styles(theme) {
         borderBottom: "none",
       },
     },
-    tableHeader: {
+    "agent-multi-select-picker__table-header": {
       display: "flex",
       margin: 0,
       padding: theme.spacing(0.5),
       textTransform: "capitalize",
     },
-    modalTabsContainer: {
+    "agent-multi-select-picker__tabs": {
       borderBottom: "none !important", // overriding the default border bottom so we can set it to the whole width of the container
     },
-    canShareTableHeader: {
-      display: "flex",
-      margin: 0,
-      alignSelf: "flex-end",
-      alignItems: "center",
-    },
-    buttonsContainer: {
-      display: "flex",
-      flexDirection: "column-reverse",
-      position: "relative",
-      bottom: 0,
-      width: "100%",
-      padding: 0,
-      alignItems: "center",
-      justifyContent: "space-between",
-      [theme.breakpoints.up("sm")]: {
-        display: "flex",
-        position: "absolute",
-        flexDirection: "row",
-        width: MODAL_MIN_WIDTH - theme.spacing(2.4) * 2 - theme.spacing(4), // substracting the padding of the buttons and the left and right padding of the modal
-        maxWidth: "100%",
-        padding: theme.spacing(2.4),
-      },
-    },
-    cancelButton: {
-      textAlign: "center",
-      width: "100%",
-      fontSize: theme.typography.body1.fontSize,
-      fontWeight: theme.typography.body1.fontWeight,
-      padding: theme.spacing(1.4, 1.8),
-      backgroundColor: "transparent",
-      [theme.breakpoints.up("sm")]: {
-        width: "max-content",
-      },
-    },
-    submitAgentsButton: {
-      textAlign: "center",
-      width: "100%",
-      fontSize: theme.typography.body1.fontSize,
-      fontWeight: theme.typography.body1.fontWeight,
-      color: theme.palette.common.white,
-      backgroundColor: theme.palette.primary.main,
-      padding: theme.spacing(1.4, 1.8),
-      [theme.breakpoints.up("sm")]: {
-        width: "max-content",
-      },
-    },
-    capitalizedText: {
-      textTransform: "capitalize",
-    },
-    emptyStateTextContainer: {
+    "agent-multi-select-picker__empty": {
       display: "flex",
       flexDirection: "column",
       padding: theme.spacing(0.7, 1.4),
       textAlign: "center",
     },
     // hopefully we can remove these once we figure out how to test the Hidden component from MUI so we can use that instead
-    mobileOnly: {
+    "agent-multi-select-picker__mobile-only": {
+      display: "flex",
       [theme.breakpoints.up("sm")]: {
         display: "none",
       },
-      display: "flex",
     },
-    desktopOnly: {
+    "agent-multi-select-picker__desktop-only": {
+      display: "none",
       [theme.breakpoints.up("sm")]: {
         display: "flex",
       },
-      display: "none",
     },
   });
 }

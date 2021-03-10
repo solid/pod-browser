@@ -112,7 +112,9 @@ export default function GroupDetails() {
         <h2>Temporary: Group members (only URL for now)</h2>
         <ul>
           {members.map((url) => (
-            <li key={url}>{url}</li>
+            <li key={url} style={{ wordBreak: "break-word" }}>
+              {url}
+            </li>
           ))}
         </ul>
       </div>

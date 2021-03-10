@@ -59,6 +59,7 @@ export default function AgentMultiSelectPicker({
   onChange,
   selected,
   disabled,
+  checkboxHeadLabel,
 }) {
   const { fetch } = useSession();
   const { data: addressBook } = useAddressBook();
@@ -71,20 +72,6 @@ export default function AgentMultiSelectPicker({
   );
   const [unselectedContacts, setUnselectedContacts] = useState({});
 
-  // const getSelectedChange = (selectedChange) =>
-  //   Object.entries(selectedChange).reduce((memo, [key, value]) => {
-  //     if (!selected.includes(key)) {
-  //       return Object.assign(memo, { [key]: value });
-  //     }
-  //     return memo;
-  //   }, {});
-  // const getUnselectedChange = (unselectedChange) =>
-  //   Object.entries(unselectedChange).reduce((memo, [key, value]) => {
-  //     if (selected.includes(key)) {
-  //       return Object.assign(memo, { [key]: value });
-  //     }
-  //     return memo;
-  //   });
   const getFinalChangeMap = (changeMap, shouldInclude) => {
     const entries = Object.entries(changeMap);
     return entries.length
@@ -96,6 +83,7 @@ export default function AgentMultiSelectPicker({
         }, {})
       : {};
   };
+
   const getChangedMaps = (model, checked) => {
     const originalUrl = model.type.getOriginalUrl(model);
     if (checked) {
@@ -157,22 +145,6 @@ export default function AgentMultiSelectPicker({
       getFinalChangeMap(selectedChange, false),
       getFinalChangeMap(unselectedChange, true)
     );
-    // console.log("toggleCheckbox", memberUrl, checked);
-    // if (index === 0 && addingWebId) return null;
-    // if (
-    //   !webIdsToDelete.includes(value) &&
-    //   webIdsInPermissions.includes(value)
-    // ) {
-    //   setWebIdsToDelete([value, ...webIdsToDelete]);
-    // } else if (
-    //   webIdsToDelete.includes(value) &&
-    //   webIdsInPermissions.includes(value)
-    // ) {
-    //   setWebIdsToDelete(webIdsToDelete.filter((webId) => webId !== value));
-    // }
-    // return e.target.checked
-    //   ? setNewAgentsWebIds([value, ...newAgentsWebIds])
-    //   : setNewAgentsWebIds(newAgentsWebIds.filter((webId) => webId !== value));
   };
 
   const handleNewAgentSubmit = async (agentUrl) => {
@@ -197,12 +169,14 @@ export default function AgentMultiSelectPicker({
   };
 
   return (
-    <div className={bem("tableContainer")}>
-      <div className={bem("tabsAndAddButtonContainer")}>
+    <div className={bem("agent-multi-select-picker")}>
+      <div
+        className={bem("agent-multi-select-picker__tabs-and-button-container")}
+      >
         <AgentsTableTabs
           handleTabChange={handleTabChange}
           selectedTabValue={selectedTabValue}
-          className={bem("modalTabsContainer")}
+          className={bem("agent-multi-select-picker__tabs")}
           tabsValues={{
             all: "",
             people: PERSON_CONTACT,
@@ -210,11 +184,17 @@ export default function AgentMultiSelectPicker({
           }}
         />
         <MobileAgentsSearchBar handleFilterChange={handleFilterChange} />
-        <AddWebIdButton onClick={handleAddRow} className={bem("desktopOnly")} />
+        <AddWebIdButton
+          onClick={handleAddRow}
+          className={bem("agent-multi-select-picker__desktop-only")}
+        />
       </div>
       <AgentsSearchBar handleFilterChange={handleFilterChange} />
 
-      <AddWebIdButton onClick={handleAddRow} className={bem("mobileOnly")} />
+      <AddWebIdButton
+        onClick={handleAddRow}
+        className={bem("agent-multi-select-picker__mobile-only")}
+      />
       {!contactsToShow && (
         <Container variant="empty">
           <CircularProgress />
@@ -223,7 +203,10 @@ export default function AgentMultiSelectPicker({
       {!!contactsToShow && contactsToShow?.length > 0 && (
         <Table
           things={contactsToShow}
-          className={clsx(bem("table"), bem("agentPickerTable"))}
+          className={clsx(
+            bem("table"),
+            bem("agent-multi-select-picker__agent-table")
+          )}
           filter={globalFilter}
         >
           <TableColumn
@@ -231,7 +214,9 @@ export default function AgentMultiSelectPicker({
             dataType="url"
             header={
               // eslint-disable-next-line react/jsx-wrap-multilines
-              <span className={bem("tableHeader")}>TYPE</span>
+              <span className={bem("agent-multi-select-picker__table-header")}>
+                {checkboxHeadLabel}
+              </span>
             }
             body={() => (
               <MemberCheckbox
@@ -242,7 +227,12 @@ export default function AgentMultiSelectPicker({
             )}
           />
           <TableColumn
-            header={<span className={bem("tableHeader")}>Name</span>}
+            header={
+              // eslint-disable-next-line react/jsx-wrap-multilines
+              <span className={bem("agent-multi-select-picker__table-header")}>
+                Name
+              </span>
+            }
             property={vcard.fn}
             filterable
             body={() => <MemberRow onNewAgentSubmit={handleNewAgentSubmit} />}
@@ -252,7 +242,7 @@ export default function AgentMultiSelectPicker({
       {!!contacts &&
         contactsForTable.length === 0 &&
         (selectedTabValue.searchNoResult ? (
-          <span className={bem("emptyStateTextContainer")}>
+          <span className={bem("agent-multi-select-picker__empty")}>
             <p>{selectedTabValue.searchNoResult}</p>
           </span>
         ) : (
@@ -267,9 +257,11 @@ AgentMultiSelectPicker.propTypes = {
   disabled: T.arrayOf(T.string),
   onChange: T.func.isRequired,
   selected: T.arrayOf(T.string).isRequired,
+  checkboxHeadLabel: T.string,
 };
 
 AgentMultiSelectPicker.defaultProps = {
   contacts: [],
   disabled: [],
+  checkboxHeadLabel: "Select",
 };

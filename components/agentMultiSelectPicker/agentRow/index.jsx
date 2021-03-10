@@ -19,21 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint react/jsx-props-no-spreading: off */
-
 import React from "react";
 import { useThing } from "@inrupt/solid-ui-react";
-import { createStyles, Tooltip, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
 import SkeletonRow from "../skeletonRow";
 import ErrorMessage from "../../errorMessage";
-import Avatar from "../../avatar";
-import styles from "./styles";
 import useContactProfile from "../../../src/hooks/useContactProfile";
-
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-
-const TESTCAFE_ID_AGENT_WEB_ID = "agent-webid";
+import NameAndAvatarRow from "../nameAndAvatarRow";
 
 export default function AgentRow() {
   const { thing } = useThing();
@@ -42,8 +33,6 @@ export default function AgentRow() {
     shouldRetryOnError: false,
   });
 
-  const classes = useStyles();
-
   if (!contactFull || isValidating) return <SkeletonRow />;
   if (error) return <ErrorMessage error={error} />;
 
@@ -51,17 +40,10 @@ export default function AgentRow() {
   const name = contactFull.type?.getName(contactFull);
   const avatarProps = contactFull.type?.getAvatarProps(contactFull);
   return (
-    <Tooltip title={originalUrl || "Unable to load profile"}>
-      <div className={classes.nameAndAvatarContainer}>
-        <Avatar className={classes.avatar} alt={originalUrl} {...avatarProps} />
-        <Typography
-          classes={{ body1: classes.detailText }}
-          data-testid={TESTCAFE_ID_AGENT_WEB_ID}
-          className={classes.detailText}
-        >
-          {name || originalUrl}
-        </Typography>
-      </div>
-    </Tooltip>
+    <NameAndAvatarRow
+      originalUrl={originalUrl}
+      name={name}
+      avatarProps={avatarProps}
+    />
   );
 }
