@@ -23,54 +23,21 @@ import { createStyles } from "@solid/lit-prism-patterns";
 
 export default function styles(theme) {
   return createStyles(theme, ["icons", "button"], {
-    addAgentForm: {
-      display: "flex",
-      flexDirection: "row",
-      padding: 0,
-    },
-    nameAndAvatarContainer: {
+    "name-and-avatar": {
       display: "flex",
       alignItems: "Center",
     },
-    avatar: {
+    "name-and-avatar__avatar": {
       width: "1.875rem",
       height: "1.875rem",
       margin: theme.spacing(0, 0.8),
     },
-    detailText: {
+    "name-and-avatar__detail-text": {
       fontFamily: theme.typography.body.fontFamily,
       fontWeight: theme.typography.body.fontWeight,
       [theme.breakpoints.up("sm")]: {
         minWidth: "20rem",
       },
-    },
-    button: {
-      padding: theme.spacing(0.8, 1),
-      maxHeight: "2.5rem",
-      margin: theme.spacing(0, 0.5),
-    },
-    searchBoxContainer: {
-      display: "flex",
-      border: `1px solid ${theme.palette.grey.A100}`,
-      borderRadius: "10px",
-      height: "2.5rem",
-      minWidth: "calc(100% - 25px)",
-      [theme.breakpoints.up("sm")]: {
-        minWidth: "20rem",
-      },
-    },
-    searchInput: {
-      height: "100%",
-      fontSize: "0.8125rem",
-      width: "100%",
-      fontFamily: theme.typography.body.fontFamily,
-      fontWeight: theme.typography.body.fontWeight,
-      color: theme.palette.primary.text,
-      padding: theme.spacing(0.5),
-    },
-    agentPickerFormContainer: {
-      display: "flex",
-      alignItems: "center",
     },
   });
 }
