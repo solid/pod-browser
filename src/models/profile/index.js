@@ -19,17 +19,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { asUrl } from "@inrupt/solid-client";
+import {
+  asUrl,
+  getSolidDataset,
+  getStringNoLocale,
+  getThing,
+  getUrl,
+} from "@inrupt/solid-client";
+import { foaf, vcard } from "rdf-namespaces";
 import { fetchProfile } from "../../solidClientHelpers/profile";
-import { getResource } from "../../solidClientHelpers/resource";
+import { getBaseUrl, getResource } from "../../solidClientHelpers/resource";
 // eslint-disable-next-line import/no-cycle
-import { getWebIdUrl } from "../contact/person";
+import { getWebIdUrl, PERSON_CONTACT } from "../contact/person";
 
 /* Model constants */
 
 /* Model functions */
-
-export async function getProfileForContact(personContactUrl, fetch) {
+export async function getProfileForContactOld(personContactUrl, fetch) {
   const {
     response: { dataset, iri },
   } = await getResource(personContactUrl, fetch);
@@ -37,9 +43,41 @@ export async function getProfileForContact(personContactUrl, fetch) {
   const fetchedProfile = await fetchProfile(webId, fetch);
   return fetchedProfile;
 }
-export async function getProfilesForPersonContacts(people, fetch) {
+
+export async function getProfilesForPersonContactsOld(people, fetch) {
   const responses = await Promise.all(
-    people.map(({ thing }) => getProfileForContact(asUrl(thing), fetch))
+    people.map(({ thing }) => getProfileForContactOld(asUrl(thing), fetch))
   );
   return responses.filter((profile) => profile);
+}
+
+export async function getProfileForContactThing(contactThing, fetch) {
+  const localProfileUrl = asUrl(contactThing);
+  const localProfileDatasetUrl = getBaseUrl(localProfileUrl);
+  const localProfileDataset = await getSolidDataset(localProfileDatasetUrl, {
+    fetch,
+  });
+  const localProfileThing = getThing(localProfileDataset, localProfileUrl);
+  const webIdUrl = getWebIdUrl({
+    dataset: localProfileDataset,
+    thing: localProfileThing,
+  });
+  const dataset = await getSolidDataset(webIdUrl, { fetch });
+  const thing = getThing(dataset, webIdUrl);
+  return {
+    dataset,
+    thing,
+    type: PERSON_CONTACT,
+  };
+}
+
+export function getPersonPhotoUrl(person) {
+  return getUrl(person.thing, vcard.hasPhoto);
+}
+
+export function getPersonName(person) {
+  return (
+    getStringNoLocale(person.thing, vcard.fn) ||
+    getStringNoLocale(person.thing, foaf.name)
+  );
 }

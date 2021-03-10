@@ -51,7 +51,7 @@ import { vcardExtras } from "../../../addressBook";
 import { updateOrCreateDataset } from "../../dataset";
 import { getContactAll } from "../index";
 import { getAddressBookThingUrl } from "../../addressBook";
-import { getGroupDescription } from "../../group";
+import { getGroupDescription, getGroupName } from "../../group";
 
 /* Model constants */
 export const NAME_GROUP_INDEX_PREDICATE = vcardExtras("groupIndex");
@@ -63,7 +63,13 @@ export const GROUP_CONTACT = {
   container: GROUP_CONTAINER,
   indexFilePredicate: NAME_GROUP_INDEX_PREDICATE,
   contactTypeUrl: vcard.Group,
-  isOfType: (contact) => getUrlAll(contact, rdf.type).includes(vcard.Group),
+  isOfType: (thing) => getUrlAll(thing, rdf.type).includes(vcard.Group),
+  searchNoResult: "No groups found",
+  getOriginalUrl: (contact) => asUrl(contact.thing),
+  getName: (contact) => getGroupName(contact),
+  getAvatarProps: (contact) => ({
+    icon: "users",
+  }),
 };
 
 /* Model internal functions */

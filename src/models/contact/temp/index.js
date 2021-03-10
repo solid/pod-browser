@@ -19,22 +19,20 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useSession } from "@inrupt/solid-ui-react";
-import useSWR from "swr";
-import useAddressBook from "../useAddressBook";
-import { getContactAll } from "../../models/contact";
+import { rdf, vcard } from "rdf-namespaces";
+import { asUrl, getUrl, getUrlAll } from "@inrupt/solid-client";
+import { vcardExtras } from "../../../addressBook";
+import { getPersonName, getPersonPhotoUrl } from "../../profile";
+import { getWebIdUrl } from "../person";
 
-export default function useContacts(types, swrOptions = {}) {
-  const { fetch } = useSession();
-  const { data: addressBook, error: addressBookError } = useAddressBook();
-
-  return useSWR(
-    ["contacts", addressBook, ...types],
-    async () => {
-      if (!addressBook && !addressBookError) return null;
-      if (addressBookError) throw addressBookError;
-      return getContactAll(addressBook, types, fetch);
-    },
-    swrOptions
-  );
-}
+// eslint-disable-next-line import/prefer-default-export
+export const TEMP_CONTACT = {
+  isOfType: (thing) =>
+    getUrlAll(thing, rdf.type).includes(vcardExtras("TempIndividual")),
+  getOriginalUrl: (contact) => asUrl(contact.thing),
+  getName: (contact) => getPersonName(contact),
+  getAvatarProps: (contact) => ({
+    icon: "user",
+    src: getPersonPhotoUrl(contact),
+  }),
+};

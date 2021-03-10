@@ -21,20 +21,18 @@
 
 import { useSession } from "@inrupt/solid-ui-react";
 import useSWR from "swr";
-import useAddressBook from "../useAddressBook";
-import { getContactAll } from "../../models/contact";
+import { getProfileForContactOld } from "../../models/profile";
+import { getContactUrl } from "../../models/contact";
 
-export default function useContacts(types, swrOptions = {}) {
+export default function useContactProfile(contactThing, options = {}) {
   const { fetch } = useSession();
-  const { data: addressBook, error: addressBookError } = useAddressBook();
-
+  const personThingUrl = getContactUrl(contactThing);
   return useSWR(
-    ["contacts", addressBook, ...types],
+    ["contact", personThingUrl],
     async () => {
-      if (!addressBook && !addressBookError) return null;
-      if (addressBookError) throw addressBookError;
-      return getContactAll(addressBook, types, fetch);
+      if (!personThingUrl) return null;
+      return getProfileForContactOld(personThingUrl, fetch);
     },
-    swrOptions
+    options
   );
 }

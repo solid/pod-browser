@@ -19,22 +19,28 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useSession } from "@inrupt/solid-ui-react";
-import useSWR from "swr";
-import useAddressBook from "../useAddressBook";
-import { getContactAll } from "../../models/contact";
+/* eslint react/jsx-props-no-spreading:off */
 
-export default function useContacts(types, swrOptions = {}) {
-  const { fetch } = useSession();
-  const { data: addressBook, error: addressBookError } = useAddressBook();
+import React from "react";
+import { Icons } from "@inrupt/prism-react-components";
+import { Avatar as MuiAvatar } from "@material-ui/core";
+import T from "prop-types";
 
-  return useSWR(
-    ["contacts", addressBook, ...types],
-    async () => {
-      if (!addressBook && !addressBookError) return null;
-      if (addressBookError) throw addressBookError;
-      return getContactAll(addressBook, types, fetch);
-    },
-    swrOptions
+export default function Avatar({ src, icon, ...props }) {
+  return src ? (
+    <MuiAvatar src={src} {...props} />
+  ) : (
+    <MuiAvatar {...props}>
+      <Icons name={icon} />
+    </MuiAvatar>
   );
 }
+
+Avatar.propTypes = {
+  icon: T.string.isRequired,
+  src: T.string,
+};
+
+Avatar.defaultProps = {
+  src: null,
+};

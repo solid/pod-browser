@@ -19,21 +19,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useSession } from "@inrupt/solid-ui-react";
 import useSWR from "swr";
-import useAddressBook from "../useAddressBook";
-import { getContactAll } from "../../models/contact";
+import { useDataset, useSession, useThing } from "@inrupt/solid-ui-react";
+import { getContactFullFromContactThing } from "../../models/contact";
+import { TEMP_CONTACT } from "../../models/contact/temp";
 
-export default function useContacts(types, swrOptions = {}) {
+export default function useContactFull(swrOptions = {}) {
   const { fetch } = useSession();
-  const { data: addressBook, error: addressBookError } = useAddressBook();
-
+  const { thing } = useThing();
+  const { dataset } = useDataset();
   return useSWR(
-    ["contacts", addressBook, ...types],
+    ["contactFull", thing],
     async () => {
-      if (!addressBook && !addressBookError) return null;
-      if (addressBookError) throw addressBookError;
-      return getContactAll(addressBook, types, fetch);
+      if (TEMP_CONTACT.isOfType(thing)) {
+        return { dataset, thing, type: TEMP_CONTACT };
+      }
+      return getContactFullFromContactThing(thing, fetch);
     },
     swrOptions
   );

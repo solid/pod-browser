@@ -19,22 +19,29 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useSession } from "@inrupt/solid-ui-react";
-import useSWR from "swr";
-import useAddressBook from "../useAddressBook";
-import { getContactAll } from "../../models/contact";
+/* eslint react/jsx-props-no-spreading: off */
 
-export default function useContacts(types, swrOptions = {}) {
-  const { fetch } = useSession();
-  const { data: addressBook, error: addressBookError } = useAddressBook();
+import React from "react";
+import { useThing } from "@inrupt/solid-ui-react";
+import T from "prop-types";
+import AddAgentRow from "../addAgentRow";
+import { getContactUrl } from "../../../src/models/contact";
+import AgentRow from "../agentRow";
+import GroupRow from "../groupRow";
+import { GROUP_CONTACT } from "../../../src/models/contact/group";
+import { TEMP_CONTACT } from "../../../src/models/contact/temp";
+import TempRow from "../tempRow";
 
-  return useSWR(
-    ["contacts", addressBook, ...types],
-    async () => {
-      if (!addressBook && !addressBookError) return null;
-      if (addressBookError) throw addressBookError;
-      return getContactAll(addressBook, types, fetch);
-    },
-    swrOptions
-  );
+export default function MemberRow({ onNewAgentSubmit }) {
+  const { thing } = useThing();
+  const contactUrl = getContactUrl(thing);
+
+  if (!contactUrl) return <AddAgentRow onNewAgentSubmit={onNewAgentSubmit} />;
+  if (TEMP_CONTACT.isOfType(thing)) return <TempRow />;
+  if (GROUP_CONTACT.isOfType(thing)) return <GroupRow />;
+  return <AgentRow />;
 }
+
+MemberRow.propTypes = {
+  onNewAgentSubmit: T.func.isRequired,
+};

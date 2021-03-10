@@ -19,22 +19,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useSession } from "@inrupt/solid-ui-react";
-import useSWR from "swr";
-import useAddressBook from "../useAddressBook";
-import { getContactAll } from "../../models/contact";
+import React from "react";
+import Skeleton from "@material-ui/lab/Skeleton";
+import { makeStyles } from "@material-ui/styles";
+import { createStyles } from "@material-ui/core";
+import styles from "./styles";
 
-export default function useContacts(types, swrOptions = {}) {
-  const { fetch } = useSession();
-  const { data: addressBook, error: addressBookError } = useAddressBook();
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-  return useSWR(
-    ["contacts", addressBook, ...types],
-    async () => {
-      if (!addressBook && !addressBookError) return null;
-      if (addressBookError) throw addressBookError;
-      return getContactAll(addressBook, types, fetch);
-    },
-    swrOptions
+export default function SkeletonRow() {
+  const classes = useStyles();
+  return (
+    <>
+      <Skeleton className={classes.avatar} variant="circle" />
+      <div className={classes.detailText}>
+        <Skeleton variant="text" width={100} />
+      </div>
+    </>
   );
 }
