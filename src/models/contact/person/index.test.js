@@ -36,7 +36,7 @@ import {
   findPersonContactInAddressBook,
   getWebIdUrl,
   getPersonAll,
-  savePerson,
+  savePersonWithSchema,
 } from "./index";
 import * as contactModel from "..";
 import * as profileModel from "../../profile";
@@ -173,7 +173,7 @@ describe("savePerson", () => {
         type: PERSON_CONTACT,
       });
 
-    const { addressBook, person } = await savePerson(
+    const { addressBook, person } = await savePersonWithSchema(
       addressBookWithPeopleIndex,
       contactSchema,
       fetch
@@ -195,7 +195,7 @@ describe("savePerson", () => {
       .mockResolvedValueOnce(mockedPerson.dataset)
       .mockResolvedValueOnce(mockSolidDatasetFrom(peopleIndexDatasetUrl));
 
-    const { addressBook, person } = await savePerson(
+    const { addressBook, person } = await savePersonWithSchema(
       addressBookWithPeopleIndex,
       contactSchemaWithName,
       fetch
@@ -217,7 +217,7 @@ describe("savePerson", () => {
       .mockResolvedValueOnce(mockedPerson.dataset)
       .mockResolvedValueOnce(addressBookWithPeopleIndex);
 
-    const { addressBook, person } = await savePerson(
+    const { addressBook, person } = await savePersonWithSchema(
       addressBookWithPeopleIndex,
       contactSchema,
       fetch

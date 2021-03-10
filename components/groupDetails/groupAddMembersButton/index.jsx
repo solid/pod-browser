@@ -19,22 +19,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useSession } from "@inrupt/solid-ui-react";
-import useSWR from "swr";
-import useAddressBook from "../useAddressBook";
-import { getContactAll } from "../../models/contact";
+import React from "react";
+import { Button } from "@inrupt/prism-react-components";
+import GroupAddMembersModal from "../groupAddMembersModal";
 
-export default function useContacts(types, swrOptions = {}) {
-  const { fetch } = useSession();
-  const { data: addressBook, error: addressBookError } = useAddressBook();
+export default function GroupAddMembersButton() {
+  const [open, setOpen] = React.useState(true);
 
-  return useSWR(
-    ["contacts", addressBook, ...types],
-    async () => {
-      if (!addressBook && !addressBookError) return null;
-      if (addressBookError) throw addressBookError;
-      return getContactAll(addressBook, types, fetch);
-    },
-    swrOptions
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  return (
+    <>
+      <Button
+        variant="small"
+        iconBefore="add"
+        onClick={handleOpen}
+      >
+        Add to Group
+      </Button>
+      <GroupAddMembersModal open={open} handleClose={handleClose} />
+    </>
   );
 }

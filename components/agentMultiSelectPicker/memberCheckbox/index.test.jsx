@@ -23,7 +23,7 @@ import React from "react";
 import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../../../../../__testUtils/withTheme";
 import useContactProfile from "../../../../../../src/hooks/useContactProfileOld";
-import WebIdCheckbox, { TESTCAFE_ID_WEBID_CHECKBOX } from "./index";
+import MemberCheckbox, { TESTCAFE_ID_WEBID_CHECKBOX } from "./index";
 
 jest.mock("../../../../../../src/hooks/useContactProfileOld");
 
@@ -41,7 +41,7 @@ describe("WebIdCheckbox", () => {
     useContactProfile.mockReturnValue({ data: null });
 
     const { asFragment, getByTestId } = renderWithTheme(
-      <WebIdCheckbox
+      <MemberCheckbox
         value={value}
         index={index}
         addingWebId={addingWebId}
@@ -61,7 +61,7 @@ describe("WebIdCheckbox", () => {
       data: { webId: "https://example.org" },
     });
     const { getByTestId } = renderWithTheme(
-      <WebIdCheckbox
+      <MemberCheckbox
         value={null}
         index={index}
         addingWebId={addingWebId}
@@ -80,7 +80,7 @@ describe("WebIdCheckbox", () => {
       data: null,
     });
     const { getByTestId } = renderWithTheme(
-      <WebIdCheckbox
+      <MemberCheckbox
         value={null}
         index={0}
         addingWebId={addingWebId}
@@ -99,7 +99,7 @@ describe("WebIdCheckbox", () => {
       data: { webId },
     });
     const { getByTestId } = renderWithTheme(
-      <WebIdCheckbox
+      <MemberCheckbox
         value={null}
         index={0}
         addingWebId={addingWebId}
@@ -118,7 +118,7 @@ describe("WebIdCheckbox", () => {
       data: { webId },
     });
     const { getByTestId } = renderWithTheme(
-      <WebIdCheckbox
+      <MemberCheckbox
         value={null}
         index={index}
         addingWebId={addingWebId}

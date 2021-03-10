@@ -25,7 +25,7 @@ import React from "react";
 import { useThing } from "@inrupt/solid-ui-react";
 import PropTypes from "prop-types";
 import { Checkbox } from "@material-ui/core";
-import useContactProfile from "../../../../../../src/hooks/useContactProfile";
+import useContactProfile from "../../../../../../src/hooks/useContactProfileOld";
 
 export const TESTCAFE_ID_WEBID_CHECKBOX = "webid-checkbox";
 

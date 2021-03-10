@@ -30,18 +30,25 @@ import {
   getSourceUrl,
   getThing,
   getUrl,
+  getUrlAll,
   saveSolidDatasetAt,
   setThing,
 } from "@inrupt/solid-client";
+import React from "react";
 import {
   getSchemaOperations,
   mapSchema,
   vcardExtras,
 } from "../../../addressBook";
 import { joinPath } from "../../../stringHelpers";
+// eslint-disable-next-line import/no-cycle
 import { getContactAll } from "../index";
 // eslint-disable-next-line import/no-cycle
-import { getProfilesForPersonContacts } from "../../profile";
+import {
+  getPersonName,
+  getPersonPhotoUrl,
+  getProfilesForPersonContactsOld,
+} from "../../profile";
 import { chain, defineThing } from "../../../solidClientHelpers/utils";
 import { updateOrCreateDataset } from "../../dataset";
 import {
@@ -64,10 +71,25 @@ export const PERSON_CONTACT = {
   indexFile: PEOPLE_INDEX_FILE,
   indexFilePredicate: NAME_EMAIL_INDEX_PREDICATE,
   contactTypeUrl: vcard.Individual,
-  isOfType: (contact) => !!getUrl(contact, vcardExtras("inAddressBook")),
+  isOfType: (thing) =>
+    !!getUrl(thing, vcardExtras("inAddressBook")) ||
+    getUrlAll(thing, rdf.type).includes(vcard.Individual),
+  searchNoResult: "No people found",
+  // eslint-disable-next-line no-use-before-define
+  getOriginalUrl: (contact) => getWebIdUrl(contact),
+  getName: (contact) => getPersonName(contact),
+  // eslint-disable-next-line no-use-before-define
+  getAvatarProps: (contact) => getPersonAvatarProps(contact),
 };
 
 /* Model functions */
+export function getPersonAvatarProps(contact) {
+  return {
+    icon: "user",
+    src: getPersonPhotoUrl(contact),
+  };
+}
+
 export function createPersonDatasetUrl(addressBook, id = uuid()) {
   return joinPath(addressBook.containerUrl, PERSON_CONTAINER, id, INDEX_FILE);
 }
@@ -76,8 +98,8 @@ export async function getPersonAll(addressBook, fetch) {
   return getContactAll(addressBook, [PERSON_CONTACT], fetch);
 }
 
-export function getWebIdUrl(dataset, iri) {
-  const thing = getThing(dataset, iri);
+export function getWebIdUrl(contact) {
+  const { dataset, thing } = contact;
   const webIdNodeUrl = getUrl(thing, vcard.url);
   if (webIdNodeUrl) {
     const webIdNode = getThing(dataset, webIdNodeUrl);
@@ -96,14 +118,14 @@ export function createWebIdNode(webId, iri) {
   return { webIdNode, webIdNodeUrl };
 }
 
-function createPersonContact(addressBook, contact) {
+function createPersonContactWithSchema(addressBook, contactSchema) {
   const { containerUrl: addressBookContainerUrl } = addressBook;
 
   const normalizedContact = {
     emails: [],
     addresses: [],
     telephones: [],
-    ...contact,
+    ...contactSchema,
   };
 
   const id = uuid();
@@ -113,8 +135,8 @@ function createPersonContact(addressBook, contact) {
     id,
     INDEX_FILE
   );
-  const { webIdNode, webIdNodeUrl } = createWebIdNode(contact.webId, iri);
-  const rootAttributeFns = getSchemaOperations(contact, webIdNodeUrl);
+  const { webIdNode, webIdNodeUrl } = createWebIdNode(contactSchema.webId, iri);
+  const rootAttributeFns = getSchemaOperations(contactSchema, webIdNodeUrl);
   const emails = normalizedContact.emails.map(mapSchema("email"));
   const addresses = normalizedContact.addresses.map(mapSchema("address"));
   const telephones = normalizedContact.telephones.map(mapSchema("telephone"));
@@ -147,9 +169,9 @@ function createPersonContact(addressBook, contact) {
   };
 }
 
-export async function savePerson(addressBook, contactSchema, fetch) {
+export async function savePersonWithSchema(addressBook, contactSchema, fetch) {
   const indexIri = asUrl(addressBook.thing);
-  const newContact = createPersonContact(addressBook, contactSchema);
+  const newContact = createPersonContactWithSchema(addressBook, contactSchema);
   const { iri, dataset } = newContact;
   const personDataset = await saveSolidDatasetAt(iri, dataset, { fetch });
   const personThing = defineThing(
@@ -192,7 +214,7 @@ export async function findPersonContactInAddressBook(
   fetch
 ) {
   const people = await getPersonAll(addressBook, fetch);
-  const profiles = await getProfilesForPersonContacts(people, fetch);
+  const profiles = await getProfilesForPersonContactsOld(people, fetch);
   const existingContact = profiles.filter((profile) => profile.webId === webId);
   return existingContact;
 }

@@ -43,7 +43,7 @@ import styles from "./styles";
 import { chain } from "../../../../../src/solidClientHelpers/utils";
 import { fetchProfile } from "../../../../../src/solidClientHelpers/profile";
 import { vcardExtras } from "../../../../../src/addressBook";
-import useContactProfile from "../../../../../src/hooks/useContactProfile";
+import useContactProfile from "../../../../../src/hooks/useContactProfileOld";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const VCARD_WEBID_PREDICATE = vcardExtras("WebId");

@@ -33,6 +33,7 @@ import {
 } from "@inrupt/solid-client";
 import { vcard } from "rdf-namespaces";
 import { getBaseUrl } from "../../solidClientHelpers/resource";
+import { chain } from "../../solidClientHelpers/utils";
 
 /*
  * A group might refer to a group in the address book, but could also live outside of it
@@ -59,6 +60,8 @@ export function getGroupDescription(group) {
   return getStringNoLocale(group.thing, vcard.note) || "";
 }
 
+export async function getGroupFromGroupContact(groupContact, fetch) {}
+
 /**
  * Note that you might need to refresh the cache of the specific group after this, e.g. mutate SWR cache
  */
@@ -81,6 +84,34 @@ export async function removeGroupMember(group, agentUrl, fetch) {
   const savedDataset = await saveSolidDatasetAt(
     getSourceUrl(group.dataset),
     setThing(group.dataset, removeUrl(group.thing, vcard.hasMember, agentUrl)),
+    { fetch }
+  );
+  return {
+    dataset: savedDataset,
+    thing: getThing(savedDataset, asUrl(group.thing)),
+  };
+}
+
+/**
+ * Note that you might need to refresh the cache of the specific group after this, e.g. mutate SWR cache
+ */
+export async function updateGroupMembers(
+  group,
+  membersToAdd,
+  membersToRemove,
+  fetch
+) {
+  const updatedGroup = chain(
+    group.thing,
+    ...[]
+      .concat(membersToAdd.map((url) => (t) => addUrl(t, vcard.hasMember, url)))
+      .concat(
+        membersToRemove.map((url) => (t) => removeUrl(t, vcard.hasMember, url))
+      )
+  );
+  const savedDataset = await saveSolidDatasetAt(
+    getSourceUrl(group.dataset),
+    setThing(group.dataset, updatedGroup),
     { fetch }
   );
   return {
