@@ -19,10 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import {
   Button,
-  FormModal,
   Modal,
   ModalBody,
   ModalButtonsContainer,
@@ -62,8 +61,12 @@ export default function GroupAddMembersModal({ open, handleClose }) {
       errorRetryCount: 0,
     }
   );
-  const [selectedChanged, setSelectedChanged] = useState({});
-  const [unselectedChanged, setUnselectedChanged] = useState({});
+  const selectedChanged = useRef();
+  selectedChanged.current = {};
+  const unselectedChanged = useRef();
+  unselectedChanged.current = {};
+  // const [selectedChanged, setSelectedChanged] = useState({});
+  // const [unselectedChanged, setUnselectedChanged] = useState({});
   const [processing, setProcessing] = useState(false);
 
   if (isValidating) return <Spinner />;
@@ -72,13 +75,15 @@ export default function GroupAddMembersModal({ open, handleClose }) {
   const selected = getGroupMemberUrlAll(group);
 
   const handleChange = (selectedChange, unselectedChange) => {
-    setSelectedChanged(selectedChange);
-    setUnselectedChanged(unselectedChange);
+    selectedChanged.current = selectedChange;
+    unselectedChanged.current = unselectedChange;
   };
 
   const handleSubmit = async () => {
     setProcessing(true);
-    const newContacts = Object.values(selectedChanged).filter((model) =>
+    const finalSelected = selectedChanged.current || {};
+    const finalUnselected = unselectedChanged.current || {};
+    const newContacts = Object.values(finalSelected).filter((model) =>
       TEMP_CONTACT.isOfType(model.thing)
     );
     if (newContacts.length) {
@@ -106,8 +111,8 @@ export default function GroupAddMembersModal({ open, handleClose }) {
       await mutateContacts();
     }
     // update group members
-    const membersToAdd = Object.keys(selectedChanged);
-    const membersToRemove = Object.keys(unselectedChanged);
+    const membersToAdd = Object.keys(finalSelected);
+    const membersToRemove = Object.keys(finalUnselected);
     const updatedGroup = await updateGroupMembers(
       group,
       membersToAdd,
@@ -116,6 +121,8 @@ export default function GroupAddMembersModal({ open, handleClose }) {
     );
     await mutateGroup(updatedGroup);
     setProcessing(false);
+    selectedChanged.current = {};
+    unselectedChanged.current = {};
     handleClose();
   };
 

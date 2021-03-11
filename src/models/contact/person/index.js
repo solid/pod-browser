@@ -58,6 +58,7 @@ import {
   getContactIndexUrl,
 } from "../collection";
 import { getBaseUrl } from "../../../solidClientHelpers/resource";
+import { EXTERNAL_CONTACT } from "../external";
 
 /**
  * Person contacts represent the agents of type vcard:Individual, foaf:Person, schema:Person
@@ -229,6 +230,6 @@ export async function getProfileForContactThing(contactThing, fetch) {
   return {
     dataset,
     thing,
-    type: PERSON_CONTACT,
+    type: EXTERNAL_CONTACT,
   };
 }
