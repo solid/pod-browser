@@ -33,6 +33,7 @@ import {
   createThing,
   getSolidDataset,
   getThing,
+  removeUrl,
 } from "@inrupt/solid-client";
 import AgentsTableTabs from "../resourceDetails/resourceSharing/agentsTableTabs";
 import { PERSON_CONTACT } from "../../src/models/contact/person";
@@ -152,8 +153,10 @@ export default function AgentMultiSelectPicker({
     const agentDataset = await getSolidDataset(agentDatasetUrl, { fetch });
     const agentThing = getThing(agentDataset, agentUrl);
     const tempAgent = {
-      thing: chain(agentThing, (t) =>
-        addUrl(t, rdf.type, vcardExtras("TempIndividual"))
+      thing: chain(
+        agentThing,
+        (t) => addUrl(t, rdf.type, vcardExtras("TempIndividual")),
+        (t) => removeUrl(t, rdf.type, vcard.Individual)
       ),
       dataset: agentDataset,
       type: TEMP_CONTACT,

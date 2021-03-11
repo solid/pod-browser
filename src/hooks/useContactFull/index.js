@@ -23,6 +23,8 @@ import useSWR from "swr";
 import { useDataset, useSession, useThing } from "@inrupt/solid-ui-react";
 import { getContactFullFromContactThing } from "../../models/contact";
 import { TEMP_CONTACT } from "../../models/contact/temp";
+import { PERSON_CONTACT } from "../../models/contact/person";
+import { GROUP_CONTACT } from "../../models/contact/group";
 
 export default function useContactFull(swrOptions = {}) {
   const { fetch } = useSession();
@@ -34,7 +36,11 @@ export default function useContactFull(swrOptions = {}) {
       if (TEMP_CONTACT.isOfType(thing)) {
         return { dataset, thing, type: TEMP_CONTACT };
       }
-      return getContactFullFromContactThing(thing, fetch);
+      return getContactFullFromContactThing(
+        thing,
+        [PERSON_CONTACT, GROUP_CONTACT],
+        fetch
+      );
     },
     swrOptions
   );

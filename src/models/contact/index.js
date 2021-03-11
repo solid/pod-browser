@@ -27,8 +27,6 @@ import {
 } from "@inrupt/solid-client";
 import { getContactIndex } from "./collection";
 import { getBaseUrl } from "../../solidClientHelpers/resource";
-import { PERSON_CONTACT } from "./person";
-import { GROUP_CONTACT } from "./group";
 
 /*
  * Contacts represent the agents or groups in a user's AddressBook
@@ -36,6 +34,7 @@ import { GROUP_CONTACT } from "./group";
 
 /* Model functions */
 export function getContactUrl(contactThing) {
+  // a safe way of getting URL for a contact -  we might pass in a contact that hasn't been saved yet
   try {
     return asUrl(contactThing); // TODO: Remove when isThingLocal works properly
   } catch {
@@ -43,19 +42,21 @@ export function getContactUrl(contactThing) {
   }
 }
 
-export function getContactType(contactThing) {
-  return [PERSON_CONTACT, GROUP_CONTACT].find((type) =>
-    type.isOfType(contactThing)
-  );
+export function getContactType(contactThing, types) {
+  return types.find((type) => type.isOfType(contactThing));
 }
 
-export async function getContactFullFromContactThing(contactThing, fetch) {
+export async function getContactFullFromContactThing(
+  contactThing,
+  types,
+  fetch
+) {
   const contactUrl = getContactUrl(contactThing);
   if (!contactUrl) return null;
   const contactDatasetUrl = getBaseUrl(contactUrl);
   const dataset = await getSolidDataset(contactDatasetUrl, { fetch });
   const thing = getThing(dataset, contactUrl);
-  const type = getContactType(thing);
+  const type = getContactType(thing, types);
   return {
     dataset,
     thing,
@@ -74,7 +75,7 @@ export function getContactAllFromContactsIndex(contactIndex) {
     }));
 }
 
-export function getContactAllFromContactIndexArray(contactIndexArray) {
+function getContactAllFromContactIndexArray(contactIndexArray) {
   return contactIndexArray
     .map((index) => getContactAllFromContactsIndex(index))
     .reduce((memo, contacts) => memo.concat(contacts), []);
@@ -91,7 +92,7 @@ export async function getOriginalUrlForContactAll(addressBook, types, fetch) {
   const contactAll = await getContactAll(addressBook, types, fetch);
   const contactFullAll = await Promise.all(
     contactAll.map(async (contact) =>
-      getContactFullFromContactThing(contact.thing, fetch)
+      getContactFullFromContactThing(contact.thing, types, fetch)
     )
   );
   return contactFullAll.map((contact) => contact.type.getOriginalUrl(contact));

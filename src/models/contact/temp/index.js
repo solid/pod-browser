@@ -19,11 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { rdf, vcard } from "rdf-namespaces";
-import { asUrl, getUrl, getUrlAll } from "@inrupt/solid-client";
+import { rdf } from "rdf-namespaces";
+import { asUrl, getUrlAll } from "@inrupt/solid-client";
 import { vcardExtras } from "../../../addressBook";
 import { getPersonName, getPersonPhotoUrl } from "../../profile";
-import { getWebIdUrl } from "../person";
 
 // eslint-disable-next-line import/prefer-default-export
 export const TEMP_CONTACT = {

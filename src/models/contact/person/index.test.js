@@ -34,7 +34,6 @@ import {
   PERSON_CONTACT,
   createPersonDatasetUrl,
   findPersonContactInAddressBook,
-  getWebIdUrl,
   getPersonAll,
   savePersonWithSchema,
 } from "./index";
@@ -48,6 +47,7 @@ import mockPersonContact, {
   addPersonToMockedIndexDataset,
 } from "../../../../__testUtils/mockPersonContact";
 import { getContactIndexDefaultUrl } from "../collection";
+import { getWebIdUrl } from "../../profile";
 // import { fetchProfile } from "../../../solidClientHelpers/profile";
 
 jest.mock("uuid");
