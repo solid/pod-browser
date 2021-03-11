@@ -22,7 +22,6 @@
 import { createSolidDataset, createThing } from "@inrupt/solid-client";
 import { getContactUrl } from "../index";
 
-// eslint-disable-next-line import/prefer-default-export
 export const UNREGISTERED_CONTACT = {
   isOfType: (thing) => getContactUrl(thing) === null,
   getOriginalUrl: () => null,
