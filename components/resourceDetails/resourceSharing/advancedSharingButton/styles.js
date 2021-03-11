@@ -19,20 +19,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { useContext } from "react";
-import useSWR from "swr";
-import AccessControlContext from "../../contexts/accessControlContext";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-export default function useNamedPolicyPermissions(policyName) {
-  const { accessControl } = useContext(AccessControlContext);
-
-  async function getPermissions() {
-    const permissions = await accessControl.getPermissionsForNamedPolicies(
-      policyName
-    );
-    return permissions;
-  }
-
-  return useSWR([accessControl, policyName], () => getPermissions());
+export default function styles(theme) {
+  return createStyles(theme, ["icons", "button"], {
+    sharingButtonContainer: {
+      display: "flex",
+      justifyContent: "flex-end",
+    },
+    sharingButton: {
+      display: "flex",
+      alignItems: "center",
+      color: theme.palette.text.primary,
+      fontWeight: theme.typography.fontWeightBold,
+      textTransform: "capitalize",
+      fontSize: "0.8125rem",
+      textDecoration: "none",
+    },
+    icon: {
+      color: theme.palette.text.primary,
+      margin: theme.spacing(0.5),
+    },
+  });
 }

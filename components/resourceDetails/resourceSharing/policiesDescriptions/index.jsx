@@ -19,18 +19,56 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function mockAccessControl(
-  { permissions } = { permissions: [] }
-) {
-  return {
-    deleteFile: jest.fn().mockResolvedValue({ response: {} }),
-    getPermissions: jest.fn().mockResolvedValue(permissions),
-    savePermissionsForAgent: jest.fn().mockResolvedValue({ response: {} }),
-    addAgentToNamedPolicy: jest.fn().mockResolvedValue({ response: {} }),
-    addAgentToCustomPolicy: jest.fn().mockResolvedValue({ response: {} }),
-    getPermissionsForNamedPolicies: jest.fn().mockResolvedValue(permissions),
-    getPermissionsForCustomPolicies: jest.fn().mockResolvedValue(permissions),
-    removeAgentFromNamedPolicy: jest.fn().mockResolvedValue({ response: {} }),
-    removeAgentFromCustomPolicy: jest.fn().mockResolvedValue({ response: {} }),
-  };
-}
+/* eslint-disable react/forbid-prop-types */
+
+import React from "react";
+
+export const ViewersDescription = () => (
+  <p>
+    <b>Can </b>
+    view but
+    <b> cannot </b>
+    edit or delete this resource
+  </p>
+);
+
+export const EditorsDescription = () => (
+  <p>
+    <b>Can </b>
+    view, edit and delete this resource
+  </p>
+);
+
+export const BlockedDescription = () => (
+  <p>
+    <b>Cannot </b>
+    view this resource
+  </p>
+);
+
+export const ViewAndAddDescription = () => (
+  <p>
+    <b>Can </b>
+    view and add new content but
+    <b> cannot </b>
+    edit or delete existing content
+  </p>
+);
+
+export const EditOnlyDescription = () => (
+  <p>
+    <b>Can </b>
+    edit existing content but
+    <b> cannot </b>
+    view or delete existing content
+  </p>
+);
+
+export const AddOnlyDescription = () => (
+  <p>
+    <b>Can </b>
+    add new content but
+    <b> cannot </b>
+    view, edit or delete existing content
+  </p>
+);

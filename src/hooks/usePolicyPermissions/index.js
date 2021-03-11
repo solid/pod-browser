@@ -19,18 +19,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function mockAccessControl(
-  { permissions } = { permissions: [] }
-) {
-  return {
-    deleteFile: jest.fn().mockResolvedValue({ response: {} }),
-    getPermissions: jest.fn().mockResolvedValue(permissions),
-    savePermissionsForAgent: jest.fn().mockResolvedValue({ response: {} }),
-    addAgentToNamedPolicy: jest.fn().mockResolvedValue({ response: {} }),
-    addAgentToCustomPolicy: jest.fn().mockResolvedValue({ response: {} }),
-    getPermissionsForNamedPolicies: jest.fn().mockResolvedValue(permissions),
-    getPermissionsForCustomPolicies: jest.fn().mockResolvedValue(permissions),
-    removeAgentFromNamedPolicy: jest.fn().mockResolvedValue({ response: {} }),
-    removeAgentFromCustomPolicy: jest.fn().mockResolvedValue({ response: {} }),
-  };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import React, { useContext } from "react";
+import useSWR from "swr";
+import AccessControlContext from "../../contexts/accessControlContext";
+import { isCustomPolicy } from "../../../constants/policies";
+
+export default function usePolicyPermissions(policyName) {
+  const isCustom = isCustomPolicy(policyName);
+  const { accessControl } = useContext(AccessControlContext);
+
+  async function getPermissions() {
+    const permissions = isCustom
+      ? await accessControl.getPermissionsForCustomPolicies(policyName)
+      : await accessControl.getPermissionsForNamedPolicies(policyName);
+    return permissions;
+  }
+
+  return useSWR([accessControl, policyName], () => getPermissions());
 }

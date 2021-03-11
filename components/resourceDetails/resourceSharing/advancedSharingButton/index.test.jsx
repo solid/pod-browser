@@ -21,30 +21,33 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import AddAgentButton, {
-  TESTCAFE_ID_ADD_AGENT_BUTTON,
+import AdvancedSharingButton, {
+  TESTCAFE_ID_ADVANCED_SHARING_BUTTON,
   TESTCAFE_ID_MODAL_OVERLAY,
 } from "./index";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 
-describe("AddAgentButton", () => {
+describe("AdvancedSharingButton", () => {
+  const setShowAdvancedSharing = jest.fn();
   it("renders a button with the correct text", () => {
-    const { asFragment } = renderWithTheme(<AddAgentButton type="editors" />);
+    const { asFragment } = renderWithTheme(
+      <AdvancedSharingButton setShowAdvancedSharing={setShowAdvancedSharing} />
+    );
     expect(asFragment()).toMatchSnapshot();
   });
   it("opens modal when clicking the button", () => {
     const { getByTestId, queryByTestId } = renderWithTheme(
-      <AddAgentButton type="editors" />
+      <AdvancedSharingButton setShowAdvancedSharing={setShowAdvancedSharing} />
     );
-    const button = getByTestId("add-agent-button");
+    const button = getByTestId("advanced-sharing-button");
     userEvent.click(button);
     expect(queryByTestId("agent-picker-modal")).not.toBeNull();
   });
   it("closes modal when clicking outside the modal", () => {
     const { getByTestId, queryByTestId } = renderWithTheme(
-      <AddAgentButton type="editors" />
+      <AdvancedSharingButton setShowAdvancedSharing={setShowAdvancedSharing} />
     );
-    const button = getByTestId(TESTCAFE_ID_ADD_AGENT_BUTTON);
+    const button = getByTestId(TESTCAFE_ID_ADVANCED_SHARING_BUTTON);
     userEvent.click(button);
     const overlay = getByTestId(TESTCAFE_ID_MODAL_OVERLAY);
     userEvent.click(overlay.firstChild);

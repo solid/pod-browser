@@ -36,10 +36,7 @@ import {
 } from "../../solidClientHelpers/permissions";
 import { chain, createResponder } from "../../solidClientHelpers/utils";
 import { getOrCreateDatasetOld } from "../../solidClientHelpers/resource";
-import {
-  getPolicyUrl,
-  getNamedPolicyResourceUrl,
-} from "../../solidClientHelpers/policies";
+import { getPolicyUrl, getPolicyResourceUrl } from "../../models/policy";
 import { isHTTPError } from "../../error";
 
 export const noAcrAccessError =
@@ -55,7 +52,12 @@ export function createAcpMap(read = false, write = false, append = false) {
 const acpMapForNamedApplyPolicies = {
   editors: createAcpMap(true, true),
   viewers: createAcpMap(true),
-  canShare: createAcpMap(true, true, true, true),
+};
+
+const acpMapForCustomApplyPolicies = {
+  viewAndAdd: createAcpMap(true, false, true),
+  editOnly: createAcpMap(false, true),
+  addOnly: createAcpMap(false, false, true),
 };
 
 export function addAcpModes(existingAcpModes, newAcpModes) {
@@ -143,7 +145,8 @@ export function setAgents(policy, policyDataset, webId, accessToMode) {
   };
 }
 
-export function getNamedPolicyModesAndAgents(policyUrl, policyDataset) {
+//  this is for the new named and custom policies
+export function getModesAndAgentsForPolicy(policyUrl, policyDataset) {
   const policy = acpv2.getPolicy(policyDataset, policyUrl);
   if (!policy) return { modes: {}, agents: [] };
   const modes = acpv2.getAllowModes(policy);
@@ -160,6 +163,7 @@ export function getNamedPolicyModesAndAgents(policyUrl, policyDataset) {
   };
 }
 
+// this is from old permissions
 export function getPolicyModesAndAgents(policyUrls, policyDataset) {
   return policyUrls
     .map((url) => acpv2.getPolicy(policyDataset, url))
@@ -214,6 +218,10 @@ function getAllowApplyPolicy(policyUrl, mode) {
 }
 
 function getNamedPolicyUrl(policyUrl, name) {
+  return `${policyUrl}#${name}Policy`;
+}
+
+function getCustomPolicyUrl(policyUrl, name) {
   return `${policyUrl}#${name}Policy`;
 }
 
@@ -284,7 +292,7 @@ export default class AcpAccessControlStrategy {
   }
 
   async getPermissionsForNamedPolicies(policyName) {
-    const namedPolicyContainerUrl = getNamedPolicyResourceUrl(
+    const namedPolicyContainerUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
       policyName
@@ -295,8 +303,48 @@ export default class AcpAccessControlStrategy {
         fetch: this.#fetch,
       });
 
-      const modesAndAgents = getNamedPolicyModesAndAgents(
+      const modesAndAgents = getModesAndAgentsForPolicy(
         getNamedPolicyUrl(namedPolicyContainerUrl, policyName),
+        policyDataset
+      );
+      [modesAndAgents].forEach(({ modes, agents }) =>
+        agents.forEach((webId) => {
+          const permission = getOrCreatePermission(permissions, webId);
+          permission.acp.apply = addAcpModes(permission.acp.apply, modes);
+          permissions[webId] = permission;
+        })
+      );
+      // normalize permissions
+      return Object.values(permissions).map(({ acp: access, webId }) => {
+        const acl = convertAcpToAcl(access);
+        return {
+          acl,
+          alias: policyName,
+          webId,
+        };
+      });
+    } catch (error) {
+      if (isHTTPError(error.message, 403) || isHTTPError(error.message, 404)) {
+        return [];
+      }
+      throw error;
+    }
+  }
+
+  async getPermissionsForCustomPolicies(policyName) {
+    const customPolicyContainerUrl = getPolicyResourceUrl(
+      this.#originalWithAcr,
+      this.#policiesContainerUrl,
+      policyName
+    );
+    const permissions = {};
+    try {
+      const policyDataset = await getSolidDataset(customPolicyContainerUrl, {
+        fetch: this.#fetch,
+      });
+
+      const modesAndAgents = getModesAndAgentsForPolicy(
+        getCustomPolicyUrl(customPolicyContainerUrl, policyName),
         policyDataset
       );
       [modesAndAgents].forEach(({ modes, agents }) =>
@@ -432,12 +480,12 @@ export default class AcpAccessControlStrategy {
 
   async ensureAccessControlAllNamedPolicies() {
     // ensuring access controls for original resource
-    const editorsPolicyResourceUrl = getNamedPolicyResourceUrl(
+    const editorsPolicyResourceUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
       "editors"
     );
-    const viewersPolicyResourceUrl = getNamedPolicyResourceUrl(
+    const viewersPolicyResourceUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
       "viewers"
@@ -473,27 +521,108 @@ export default class AcpAccessControlStrategy {
         viewersPolicyResourceUrl,
         { fetch: this.#fetch }
       );
-      // const canSharePolicy = getAllowApplyPolicy(this.#policyUrl, "canShare"); // omit for now until we have can share
 
-      const { acr: editorsPolicyAcr, changed: editorsPolicyChanged } = chain(
-        {
-          acr: editorsPolicyDatasetWithAcr,
-          changed: false,
-        }
-        // ({ acr, changed }) => ensureApplyControl(canSharePolicy, acr, changed) // omit for now until we have can share
-      );
+      const { acr: editorsPolicyAcr, changed: editorsPolicyChanged } = chain({
+        acr: editorsPolicyDatasetWithAcr,
+        changed: false,
+      });
       if (editorsPolicyChanged) {
         await acpv2.saveAcrFor(editorsPolicyAcr, { fetch: this.#fetch });
       }
-      const { acr: viewersPolicyAcr, changed: viewersPolicyChanged } = chain(
-        {
-          acr: viewersPolicyDatasetWithAcr,
-          changed: false,
-        }
-        // ({ acr, changed }) => ensureApplyControl(canSharePolicy, acr, changed) // omit for now until we have can share
-      );
+      const { acr: viewersPolicyAcr, changed: viewersPolicyChanged } = chain({
+        acr: viewersPolicyDatasetWithAcr,
+        changed: false,
+      });
       if (viewersPolicyChanged) {
         await acpv2.saveAcrFor(viewersPolicyAcr, { fetch: this.#fetch });
+      }
+    } catch (err) {
+      if (!isHTTPError(err.message, 404)) throw err;
+    }
+  }
+
+  async ensureAccessControlAllCustomPolicies() {
+    // ensuring access controls for original resource
+    const viewAndAddPolicyResourceUrl = getPolicyResourceUrl(
+      this.#originalWithAcr,
+      this.#policiesContainerUrl,
+      "viewAndAdd"
+    );
+    const editOnlyPolicyResourceUrl = getPolicyResourceUrl(
+      this.#originalWithAcr,
+      this.#policiesContainerUrl,
+      "editOnly"
+    );
+    const addOnlyPolicyResourceUrl = getPolicyResourceUrl(
+      this.#originalWithAcr,
+      this.#policiesContainerUrl,
+      "addOnly"
+    );
+    const viewAndAddPolicy = getCustomPolicyUrl(
+      viewAndAddPolicyResourceUrl,
+      "viewAndAdd"
+    );
+    const editOnlyPolicy = getCustomPolicyUrl(
+      editOnlyPolicyResourceUrl,
+      "editOnly"
+    );
+    const addOnlyPolicy = getCustomPolicyUrl(
+      addOnlyPolicyResourceUrl,
+      "addOnly"
+    );
+
+    const { acr: originalAcr, changed: originalChanged } = chain(
+      {
+        acr: this.#originalWithAcr,
+        changed: false,
+      },
+      ({ acr, changed }) => ensureApplyControl(viewAndAddPolicy, acr, changed),
+      ({ acr, changed }) => ensureApplyControl(editOnlyPolicy, acr, changed),
+      ({ acr, changed }) => ensureApplyControl(addOnlyPolicy, acr, changed)
+    );
+    if (originalChanged) {
+      this.#originalWithAcr = await acp.saveAcrFor(originalAcr, {
+        fetch: this.#fetch,
+      });
+    }
+    // ensuring access controls for policy resource
+    try {
+      const viewAndAddPolicyDatasetWithAcr = await acpv2.getSolidDatasetWithAcr(
+        viewAndAddPolicyResourceUrl,
+        { fetch: this.#fetch }
+      );
+      const editOnlyPolicyDatasetWithAcr = await acpv2.getSolidDatasetWithAcr(
+        editOnlyPolicyResourceUrl,
+        { fetch: this.#fetch }
+      );
+      const addOnlyPolicyDatasetWithAcr = await acpv2.getSolidDatasetWithAcr(
+        addOnlyPolicyResourceUrl,
+        { fetch: this.#fetch }
+      );
+
+      const {
+        acr: viewAndAddPolicyAcr,
+        changed: viewAndAddPolicyChanged,
+      } = chain({
+        acr: viewAndAddPolicyDatasetWithAcr,
+        changed: false,
+      });
+      if (viewAndAddPolicyChanged) {
+        await acpv2.saveAcrFor(viewAndAddPolicyAcr, { fetch: this.#fetch });
+      }
+      const { acr: editOnlyPolicyAcr, changed: editOnlyPolicyChanged } = chain({
+        acr: editOnlyPolicyDatasetWithAcr,
+        changed: false,
+      });
+      if (editOnlyPolicyChanged) {
+        await acpv2.saveAcrFor(editOnlyPolicyAcr, { fetch: this.#fetch });
+      }
+      const { acr: addOnlyPolicyAcr, changed: addOnlyPolicyChanged } = chain({
+        acr: addOnlyPolicyDatasetWithAcr,
+        changed: false,
+      });
+      if (addOnlyPolicyChanged) {
+        await acpv2.saveAcrFor(addOnlyPolicyAcr, { fetch: this.#fetch });
       }
     } catch (err) {
       if (!isHTTPError(err.message, 404)) throw err;
@@ -549,7 +678,7 @@ export default class AcpAccessControlStrategy {
   }
 
   async addAgentToNamedPolicy(webId, policyName) {
-    const namedPolicyContainerUrl = getNamedPolicyResourceUrl(
+    const namedPolicyContainerUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
       policyName
@@ -560,7 +689,6 @@ export default class AcpAccessControlStrategy {
       response: policyDataset,
       error: getOrCreateError,
     } = await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
-
     if (getOrCreateError) return error(getOrCreateError);
     const policyUrl = getNamedPolicyUrl(namedPolicyContainerUrl, policyName);
     const acpMap = acpMapForNamedApplyPolicies[policyName];
@@ -573,17 +701,53 @@ export default class AcpAccessControlStrategy {
       ({ policy, dataset }) => setAgents(policy, dataset, webId, true),
       ({ policy, dataset }) => acpv2.setPolicy(dataset, policy)
     );
+
     // saving changes to the policy resource
     await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
       fetch: this.#fetch,
     });
     // saving changes to the ACRs
     await this.ensureAccessControlAllNamedPolicies();
+    await this.ensureAccessControlAllCustomPolicies();
+    return respond(this.#originalWithAcr);
+  }
+
+  async addAgentToCustomPolicy(webId, policyName) {
+    const customPolicyContainerUrl = getPolicyResourceUrl(
+      this.#originalWithAcr,
+      this.#policiesContainerUrl,
+      policyName
+    );
+
+    const { respond, error } = createResponder();
+    const {
+      response: policyDataset,
+      error: getOrCreateError,
+    } = await getOrCreateDatasetOld(customPolicyContainerUrl, this.#fetch);
+
+    if (getOrCreateError) return error(getOrCreateError);
+    const policyUrl = getNamedPolicyUrl(customPolicyContainerUrl, policyName);
+    const acpMap = acpMapForCustomApplyPolicies[policyName];
+    const updatedDataset = chain(
+      getOrCreatePolicy(policyDataset, policyUrl),
+      ({ policy, dataset }) => ({
+        policy: acpv2.setAllowModes(policy, acpMap),
+        dataset,
+      }),
+      ({ policy, dataset }) => setAgents(policy, dataset, webId, true),
+      ({ policy, dataset }) => acpv2.setPolicy(dataset, policy)
+    );
+    // saving changes to the policy resource
+    await saveSolidDatasetAt(customPolicyContainerUrl, updatedDataset, {
+      fetch: this.#fetch,
+    });
+    // saving changes to the ACRs
+    await this.ensureAccessControlAllCustomPolicies();
     return respond(this.#originalWithAcr);
   }
 
   async removeAgentFromNamedPolicy(webId, policyName) {
-    const namedPolicyContainerUrl = getNamedPolicyResourceUrl(
+    const namedPolicyContainerUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
       policyName
@@ -594,7 +758,6 @@ export default class AcpAccessControlStrategy {
       response: policyDataset,
       error: getOrCreateError,
     } = await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
-
     if (getOrCreateError) return error(getOrCreateError);
 
     const policyUrl = getNamedPolicyUrl(namedPolicyContainerUrl, policyName);
@@ -605,13 +768,45 @@ export default class AcpAccessControlStrategy {
       const modifiedRule = acp.removeAgent(rule, webId);
       return setThing(policyDataset, modifiedRule);
     });
-
     // saving changes to the policy resource
     await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
       fetch: this.#fetch,
     });
     // saving changes to the ACRs
     await this.ensureAccessControlAllNamedPolicies();
+    return respond(this.#originalWithAcr);
+  }
+
+  async removeAgentFromCustomPolicy(webId, policyName) {
+    const customPolicyContainerUrl = getPolicyResourceUrl(
+      this.#originalWithAcr,
+      this.#policiesContainerUrl,
+      policyName
+    );
+    const { respond, error } = createResponder();
+
+    const {
+      response: policyDataset,
+      error: getOrCreateError,
+    } = await getOrCreateDatasetOld(customPolicyContainerUrl, this.#fetch);
+
+    if (getOrCreateError) return error(getOrCreateError);
+
+    const policyUrl = getCustomPolicyUrl(customPolicyContainerUrl, policyName);
+    const policy = acp.getPolicy(policyDataset, policyUrl);
+    const rulesUrls = acp.getRequiredRuleUrlAll(policy);
+    const [updatedDataset] = rulesUrls.map((ruleUrl) => {
+      const rule = acp.getRule(policyDataset, ruleUrl);
+      const modifiedRule = acp.removeAgent(rule, webId);
+      return setThing(policyDataset, modifiedRule);
+    });
+
+    // saving changes to the policy resource
+    await saveSolidDatasetAt(customPolicyContainerUrl, updatedDataset, {
+      fetch: this.#fetch,
+    });
+    // saving changes to the ACRs
+    await this.ensureAccessControlAllCustomPolicies();
     return respond(this.#originalWithAcr);
   }
 

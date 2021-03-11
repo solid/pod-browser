@@ -20,29 +20,28 @@
  */
 
 import React from "react";
-import AgentPickerEmptyState from "./index";
+import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 
-describe("AgentPickerEmptyState", () => {
+import AddWebIdButton from "./index";
+
+describe("AddWebIdButton", () => {
   const onClick = jest.fn();
-  it("renders an empty state container with a message and a button", () => {
+  it("renders an Add WebID Button", () => {
     const { asFragment } = renderWithTheme(
-      <AgentPickerEmptyState onClick={onClick} />
+      <AddWebIdButton onClick={onclick} />
     );
+
     expect(asFragment()).toMatchSnapshot();
   });
-  it("renders an empty state message", () => {
-    const { getByText } = renderWithTheme(
-      <AgentPickerEmptyState onClick={onClick} />
-    );
-    const message = getByText("Add a new person with their WebId");
-    expect(message).toBeTruthy();
-  });
-  it("renders an 'add new contact' button", () => {
+  it("triggers onClick when button is clicked", () => {
     const { getByTestId } = renderWithTheme(
-      <AgentPickerEmptyState onClick={onClick} />
+      <AddWebIdButton onClick={onClick} />
     );
-    const button = getByTestId("empty-state-add-webid-button");
-    expect(button).toBeTruthy();
+
+    const button = getByTestId("add-webid-button");
+    userEvent.click(button);
+
+    expect(onClick).toHaveBeenCalled();
   });
 });

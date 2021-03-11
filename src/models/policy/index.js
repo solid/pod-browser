@@ -20,8 +20,8 @@
  */
 
 import { getSourceUrl } from "@inrupt/solid-client";
-import { sharedStart } from "./utils";
-import { getContainerUrl, joinPath } from "../stringHelpers";
+import { sharedStart } from "../../solidClientHelpers/utils";
+import { getContainerUrl, joinPath } from "../../stringHelpers";
 
 const POLICIES_CONTAINER = "pb_policies/";
 

@@ -28,62 +28,13 @@ import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
+import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
 
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function PolicyHeader({ children, type, isPolicyList }) {
-  const editorsDescription = (
-    <p>
-      <b>Can </b>
-      view, edit and delete this resource
-    </p>
-  );
-
-  const viewersDescription = (
-    <p>
-      <b>Can </b>
-      view but
-      <b> cannot </b>
-      edit or delete this resource
-    </p>
-  );
-
-  const blockedDescription = (
-    <p>
-      <b>Cannot </b>
-      view this resource
-    </p>
-  );
-
-  const PERMISSIONS_TYPE_MAP = {
-    editors: {
-      icon: "icon-editor",
-      iconClassName: "iconEditor",
-      titlePlural: "Editors",
-      titleSingular: "Editor",
-      emptyStateText: "No editors",
-      description: editorsDescription,
-    },
-    viewers: {
-      icon: "icon-view",
-      iconClassName: "iconViewer",
-      titlePlural: "Viewers",
-      titleSingular: "Viewer",
-      emptyStateText: "No viewers",
-      description: viewersDescription,
-    },
-    blocked: {
-      icon: "icon-block",
-      iconClassName: "iconBlocked",
-      titlePlural: "Blocked",
-      titleSingular: "Blocked",
-      emptyStateText: "No one is blocked",
-      description: blockedDescription,
-    },
-  };
-
   const bem = useBem(useStyles());
 
   const classes = useStyles();
@@ -93,8 +44,8 @@ export default function PolicyHeader({ children, type, isPolicyList }) {
     titleSingular,
     icon,
     iconClassName,
-    description,
-  } = PERMISSIONS_TYPE_MAP[type];
+    DescriptionComponent,
+  } = POLICIES_TYPE_MAP[type];
 
   return (
     <div className={classes.headerContainer}>
@@ -106,7 +57,9 @@ export default function PolicyHeader({ children, type, isPolicyList }) {
           </p>
           {children}
         </div>
-        <span className={classes.description}>{description}</span>
+        <span className={classes.description}>
+          <DescriptionComponent />
+        </span>
       </div>
     </div>
   );

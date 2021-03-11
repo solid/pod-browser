@@ -40,7 +40,7 @@ export default function styles(theme) {
       width: "max-content",
       alignSelf: "flex-end",
       height: "max-content",
-      fontWeight: 800,
+      fontWeight: theme.typography.fontWeightBold,
       fontSize: "0.8125rem",
       textDecoration: "none",
       borderRadius: "7px",

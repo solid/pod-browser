@@ -23,6 +23,8 @@
 
 import React from "react";
 import AgentAccessTable from "../agentAccessTable";
+import AdvancedSharingButton from "../advancedSharingButton";
+import { namedPolicies, customPolicies } from "../../../../constants/policies";
 
 export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
   "agent-access-list-show-all";
@@ -30,9 +32,10 @@ export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
 function SharingAccordion() {
   return (
     <>
-      <AgentAccessTable type="editors" />
-      <AgentAccessTable type="viewers" />
-      <AgentAccessTable type="blocked" />
+      {namedPolicies.concat(customPolicies).map(({ name }) => (
+        <AgentAccessTable type={name} />
+      ))}
+      <AdvancedSharingButton />
     </>
   );
 }

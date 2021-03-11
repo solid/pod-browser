@@ -21,18 +21,45 @@
 
 import React from "react";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
+import mockPersonContact from "../../../../__testUtils/mockPersonContact";
+import mockAddressBook from "../../../../__testUtils/mockAddressBook";
 import SharingAccordion from "./index";
 import { TESTCAFE_ID_AGENT_ACCESS_TABLE } from "../agentAccessTable";
+import { TESTCAFE_ID_ADVANCED_SHARING_BUTTON } from "../advancedSharingButton";
+import useContacts from "../../../../src/hooks/useContacts";
+import useAddressBook from "../../../../src/hooks/useAddressBook";
+
+jest.mock("../../../../src/hooks/useContacts");
+const mockedUseContacts = useContacts;
+
+jest.mock("../../../../src/hooks/useAddressBook");
+const mockedUseAddressBook = useAddressBook;
 
 describe("SharingAccordion", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
+  beforeEach(() => {
+    mockedUseAddressBook.mockReturnValue({ data: mockAddressBook() });
+    mockedUseContacts.mockReturnValue({
+      data: [
+        mockPersonContact(
+          mockAddressBook(),
+          "https://example.org/contacts/Person/1234/",
+          "Example 1"
+        ),
+        mockPersonContact(
+          mockAddressBook(),
+          "https://example.org/contacts/Person/3456/",
+          "Example 2"
+        ),
+      ],
+    });
   });
-  test("it renders three lists of empty permissions for editors, viewers and blocked", () => {
-    const { asFragment, queryAllByTestId } = renderWithTheme(
+  // Note: since the permissions cannot be mocked reliably for the custom policies, those tested separately in the table component
+  test("it renders three lists of named policies for editors, viewers and blocked and an Advanced Sharing button", () => {
+    const { asFragment, queryAllByTestId, queryByTestId } = renderWithTheme(
       <SharingAccordion />
     );
     expect(queryAllByTestId(TESTCAFE_ID_AGENT_ACCESS_TABLE)).toHaveLength(3);
+    expect(queryByTestId(TESTCAFE_ID_ADVANCED_SHARING_BUTTON)).not.toBeNull();
     expect(asFragment()).toMatchSnapshot();
   });
 });
