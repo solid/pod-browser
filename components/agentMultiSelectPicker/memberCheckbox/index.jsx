@@ -26,6 +26,7 @@ import PropTypes from "prop-types";
 import { Checkbox } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import useContactFull from "../../../src/hooks/useContactFull";
+import { UNREGISTERED_CONTACT } from "../../../src/models/contact/unregistered";
 
 export const TESTCAFE_ID_WEBID_CHECKBOX = "webid-checkbox";
 
@@ -41,7 +42,7 @@ export default function MemberCheckbox({
   });
   const value = contactFull?.type?.getOriginalUrl(contactFull);
   const [checked, setChecked] = useState(
-    !value || selected[value] !== undefined
+    contactFull?.type === UNREGISTERED_CONTACT || selected[value] !== undefined
   );
 
   if (isValidating) return <Skeleton variant="rect" width={28} height={28} />;

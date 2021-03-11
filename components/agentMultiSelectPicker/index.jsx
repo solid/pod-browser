@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import T from "prop-types";
 import { Container } from "@inrupt/prism-react-components";
 import { CircularProgress, createStyles } from "@material-ui/core";
@@ -51,6 +51,7 @@ import { getContactUrl } from "../../src/models/contact";
 import { chain } from "../../src/solidClientHelpers/utils";
 import { TEMP_CONTACT } from "../../src/models/contact/temp";
 import { getBaseUrl } from "../../src/solidClientHelpers/resource";
+import { createUnregisteredContact } from "../../src/models/contact/unregistered";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const VCARD_WEBID_PREDICATE = vcardExtras("WebId");
@@ -68,10 +69,41 @@ export default function AgentMultiSelectPicker({
   const [selectedTabValue, setSelectedTabValue] = useState("");
   const [globalFilter, setGlobalFilter] = useState("");
   const [contactsToShow, setContactsToShow] = useState(contacts);
-  const [selectedContacts, setSelectedContacts] = useState(
-    selected.reduce((memo, url) => Object.assign(memo, { [url]: null }), {})
+
+  const initialSelected = selected.reduce(
+    (memo, url) => Object.assign(memo, { [url]: null }),
+    {}
   );
+  // const selectedContacts = useRef();
+  // selectedContacts.current = initialSelected;
+  // selectedContacts.current = selected.reduce(
+  //   (memo, url) => Object.assign(memo, { [url]: null }),
+  //   {}
+  // );
+  // const unselectedContacts = useRef();
+  // unselectedContacts.current = {};
+  // unselectedContacts.current = {};
+  // useEffect(() => {
+  //   console.log("TEST", selected);
+  //   selectedContacts.current = selected.reduce(
+  //     (memo, url) => Object.assign(memo, { [url]: null }),
+  //     {}
+  //   );
+  //   unselectedContacts.current = {};
+  // }, [selected]);
+  const [selectedContacts, setSelectedContacts] = useState(initialSelected);
   const [unselectedContacts, setUnselectedContacts] = useState({});
+
+  useEffect(() => {
+    if (selectedTabValue) {
+      const filtered = contacts.filter(({ thing }) =>
+        selectedTabValue.isOfType(thing)
+      );
+      setContactsToShow(filtered);
+      return;
+    }
+    setContactsToShow(contacts);
+  }, [contacts, selectedTabValue]);
 
   const getFinalChangeMap = (changeMap, shouldInclude) => {
     const entries = Object.entries(changeMap);
@@ -90,17 +122,26 @@ export default function AgentMultiSelectPicker({
     if (checked) {
       const selectedChange = {
         [originalUrl]: model,
+        // ...selectedContacts.current,
         ...selectedContacts,
       };
-      delete unselectedContacts[originalUrl];
-      return [selectedChange, unselectedContacts];
+      const {
+        [originalUrl]: urlToRemove,
+        ...rest
+        // } = unselectedContacts.current;
+      } = unselectedContacts;
+      // delete unselectedContacts[originalUrl];
+      return [selectedChange, rest];
     }
     const unselectedChange = {
       [originalUrl]: model,
+      // ...unselectedContacts.current,
       ...unselectedContacts,
     };
-    delete selectedContacts[originalUrl];
-    return [selectedContacts, unselectedChange];
+    // const { [originalUrl]: urlToRemove, ...rest } = selectedContacts.current;
+    const { [originalUrl]: urlToRemove, ...rest } = selectedContacts;
+    // delete selectedContacts[originalUrl];
+    return [rest, unselectedChange];
   };
 
   const handleTabChange = (event, newValue) => {
@@ -113,25 +154,9 @@ export default function AgentMultiSelectPicker({
 
   const handleAddRow = () => {
     if (contactsToShow[0] && !getContactUrl(contactsToShow[0].thing)) return;
-    const newItem = {
-      thing: createThing(),
-      dataset: addressBook,
-    };
+    const newItem = createUnregisteredContact();
     setContactsToShow([newItem, ...contactsToShow]);
   };
-
-  useEffect(() => {
-    if (selectedTabValue) {
-      const filtered = contacts.filter(({ thing }) =>
-        selectedTabValue.isOfType(thing)
-      );
-      setContactsToShow(filtered);
-      return;
-    }
-    setContactsToShow(contacts);
-  }, [contacts, selectedTabValue]);
-
-  useEffect(() => {}, []);
 
   const contactsForTable = selectedTabValue ? contactsToShow : contacts;
 
@@ -140,6 +165,8 @@ export default function AgentMultiSelectPicker({
       model,
       event.target.checked
     );
+    // selectedContacts.current = selectedChange;
+    // unselectedContacts.current = unselectedChange;
     setSelectedContacts(selectedChange);
     setUnselectedContacts(unselectedChange);
     onChange(
@@ -163,6 +190,8 @@ export default function AgentMultiSelectPicker({
     };
     setContactsToShow([tempAgent, ...contactsToShow.slice(1)]);
     const [selectedChange, unselectedChange] = getChangedMaps(tempAgent, true);
+    // selectedContacts.current = selectedChange;
+    // unselectedContacts.current = unselectedChange;
     setSelectedContacts(selectedChange);
     setUnselectedContacts(unselectedChange);
     onChange(
@@ -170,6 +199,9 @@ export default function AgentMultiSelectPicker({
       getFinalChangeMap(unselectedChange, true)
     );
   };
+
+  console.log("contactsToShow", selectedContacts);
+  // console.log("contactsToShow", selectedContacts.current);
 
   return (
     <div className={bem("agent-multi-select-picker")}>
@@ -223,6 +255,7 @@ export default function AgentMultiSelectPicker({
             }
             body={() => (
               <MemberCheckbox
+                // selected={selectedContacts.current}
                 selected={selectedContacts}
                 disabled={disabled}
                 onChange={toggleCheckbox}
