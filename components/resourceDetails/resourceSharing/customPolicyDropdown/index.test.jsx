@@ -39,6 +39,21 @@ describe("CustomPolicyDropdown", () => {
     expect(asFragment()).toMatchSnapshot();
     expect(getByText("View & Add")).not.toBeNull();
   });
+  test("dropdown is disabled if editing is true", () => {
+    const setCustomPolicy = jest.fn();
+    const { asFragment, getByText, getByTestId } = renderWithTheme(
+      <CustomPolicyDropdown
+        setCustomPolicy={setCustomPolicy}
+        defaultValue="viewAndAdd"
+        editing
+      />
+    );
+    expect(asFragment()).toMatchSnapshot();
+    expect(getByText("View & Add")).not.toBeNull();
+    expect(
+      getByTestId(TESTCAFE_ID_CUSTOM_POLICY_DROPDOWN).firstChild
+    ).toHaveAttribute("aria-disabled");
+  });
   test("selecting another option calls setCustomPolicy with the correct value", () => {
     const setCustomPolicy = jest.fn();
     const { getByTestId, queryAllByRole, queryByRole } = renderWithTheme(

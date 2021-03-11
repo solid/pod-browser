@@ -20,8 +20,6 @@
  */
 
 import React from "react";
-import userEvent from "@testing-library/user-event";
-import { waitFor, within } from "@testing-library/react";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import mockPersonContact from "../../../../__testUtils/mockPersonContact";
 import mockAddressBook from "../../../../__testUtils/mockAddressBook";
@@ -30,7 +28,6 @@ import { TESTCAFE_ID_AGENT_ACCESS_TABLE } from "../agentAccessTable";
 import { TESTCAFE_ID_ADVANCED_SHARING_BUTTON } from "../advancedSharingButton";
 import useContacts from "../../../../src/hooks/useContacts";
 import useAddressBook from "../../../../src/hooks/useAddressBook";
-import { TESTCAFE_ID_CUSTOM_POLICY_DROPDOWN } from "../customPolicyDropdown";
 
 jest.mock("../../../../src/hooks/useContacts");
 const mockedUseContacts = useContacts;
@@ -56,71 +53,13 @@ describe("SharingAccordion", () => {
       ],
     });
   });
-  test("it renders three lists of empty permissions for editors, viewers and blocked, and an Advanced Sharing button", () => {
+  // Note: since the permissions cannot be mocked reliably for the custom policies, those tested separately in the table component
+  test("it renders three lists of named policies for editors, viewers and blocked and an Advanced Sharing button", () => {
     const { asFragment, queryAllByTestId, queryByTestId } = renderWithTheme(
       <SharingAccordion />
     );
     expect(queryAllByTestId(TESTCAFE_ID_AGENT_ACCESS_TABLE)).toHaveLength(3);
     expect(queryByTestId(TESTCAFE_ID_ADVANCED_SHARING_BUTTON)).not.toBeNull();
     expect(asFragment()).toMatchSnapshot();
-  });
-  test("after editing view & add policy, the permissions for the edited policy are displayed", () => {
-    const {
-      getByTestId,
-      queryAllByTestId,
-      queryByText,
-      queryAllByRole,
-    } = renderWithTheme(<SharingAccordion />);
-    const advancedSharingButton = getByTestId(
-      TESTCAFE_ID_ADVANCED_SHARING_BUTTON
-    );
-    userEvent.click(advancedSharingButton);
-    const checkboxes = queryAllByRole("checkbox");
-    userEvent.click(checkboxes[0]);
-    userEvent.click(checkboxes[1]);
-    const submitButton = getByTestId("submit-webids-button");
-    userEvent.click(submitButton);
-    waitFor(() => {
-      const renderedTables = queryAllByTestId(TESTCAFE_ID_AGENT_ACCESS_TABLE);
-      expect(renderedTables).toHaveLength(4);
-      const title = queryByText("View & Add");
-      const description = queryByText(
-        "Can view and add new content but cannot edit or delete existing content"
-      );
-      expect(title).not.toBeNull();
-      expect(description).not.toBeNull();
-    });
-  });
-  test("after changing the selected custom policy in dropdown and editing it, the permissions for the edited policy are displayed", () => {
-    const {
-      getByTestId,
-      queryAllByTestId,
-      queryByText,
-      queryAllByRole,
-    } = renderWithTheme(<SharingAccordion />);
-    const advancedSharingButton = getByTestId(
-      TESTCAFE_ID_ADVANCED_SHARING_BUTTON
-    );
-    userEvent.click(advancedSharingButton);
-    const dropdown = getByTestId(TESTCAFE_ID_CUSTOM_POLICY_DROPDOWN);
-    userEvent.click(within(dropdown).getByRole("button"));
-    expect(queryAllByRole("option")).toHaveLength(3);
-    const editOnlyOption = queryAllByRole("option")[1];
-    userEvent.click(editOnlyOption);
-    const checkboxes = queryAllByRole("checkbox");
-    userEvent.click(checkboxes[0]);
-    userEvent.click(checkboxes[1]);
-    const submitButton = getByTestId("submit-webids-button");
-    userEvent.click(submitButton);
-    waitFor(() => {
-      const renderedTables = queryAllByTestId(TESTCAFE_ID_AGENT_ACCESS_TABLE);
-      expect(renderedTables).toHaveLength(4);
-      const title = queryByText("Edit Only");
-      const description = queryByText(
-        "Can edit existing content but cannot view or delete existing content"
-      );
-      expect(title).not.toBeNull();
-      expect(description).not.toBeNull();
-    });
   });
 });

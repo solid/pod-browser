@@ -37,6 +37,7 @@ export const TESTCAFE_ID_ADD_AGENT_BUTTON = "add-agent-button";
 export const TESTCAFE_ID_MODAL_OVERLAY = "agent-picker-modal-overlay";
 
 export default function AddAgentButton({ type, setLoading }) {
+  const [editing, setEditing] = useState();
   const { data: policyPermissions } = usePolicyPermissions(type);
   const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
     policyPermissions
@@ -45,10 +46,12 @@ export default function AddAgentButton({ type, setLoading }) {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
+    setEditing(true);
     setOpen(true);
   };
 
   const handleClose = () => {
+    setEditing(false);
     setOpen(false);
   };
 
@@ -83,6 +86,7 @@ export default function AddAgentButton({ type, setLoading }) {
           setLoading={setLoading}
           permissions={permissions}
           advancedSharing={isCustomPolicy(type)}
+          editing={editing}
         />
       </Modal>
     </>

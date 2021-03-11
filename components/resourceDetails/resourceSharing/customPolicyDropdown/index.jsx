@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export default function CustomPolicyDropdown({
   setCustomPolicy,
   defaultValue,
+  editing,
 }) {
   const bem = useBem(useStyles());
   const classes = useStyles();
@@ -63,6 +64,7 @@ export default function CustomPolicyDropdown({
 
   return (
     <Select
+      disabled={editing}
       data-testid={TESTCAFE_ID_CUSTOM_POLICY_DROPDOWN}
       value={selectedValue}
       onChange={handleSelectPolicy}
@@ -100,9 +102,11 @@ export default function CustomPolicyDropdown({
 CustomPolicyDropdown.propTypes = {
   setCustomPolicy: PropTypes.func,
   defaultValue: PropTypes.string,
+  editing: PropTypes.bool,
 };
 
 CustomPolicyDropdown.defaultProps = {
   setCustomPolicy: () => {},
   defaultValue: "viewAndAdd",
+  editing: false,
 };

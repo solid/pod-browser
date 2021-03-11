@@ -60,12 +60,10 @@ export default function AgentAccessTable({ type }) {
     data: policyPermissions,
     mutate: mutatePermissions,
   } = usePolicyPermissions(type);
-
   // TODO: this will change when Groups are available, we will likely fetch profiles only for Individual permissions
   const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
     policyPermissions
   );
-
   const bem = useBem(useStyles());
 
   const classes = useStyles();

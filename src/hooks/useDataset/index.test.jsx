@@ -19,14 +19,11 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
 import useSWR from "swr";
 import * as solidClientFns from "@inrupt/solid-client";
 import { renderHook } from "@testing-library/react-hooks";
 import { useSession } from "@inrupt/solid-ui-react";
 import useDataset, { GET_DATASET } from "./index";
-import mockSession from "../../../__testUtils/mockSession";
-import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 
 jest.mock("swr");
 const mockedSwrHook = useSWR;

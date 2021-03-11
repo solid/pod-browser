@@ -75,7 +75,6 @@ export const handleSubmit = ({
   setLoading,
   policyName,
   advancedSharing,
-  setShowAdvancedSharing,
   fetch,
 }) => {
   return () => {
@@ -108,9 +107,6 @@ export const handleSubmit = ({
       mutatePermissions();
       setLoading(false);
     });
-    if (advancedSharing) {
-      setShowAdvancedSharing(policyName);
-    }
     onClose();
   };
 };
@@ -185,7 +181,7 @@ export default function AgentPickerModal({
   onClose,
   setLoading,
   advancedSharing,
-  setShowAdvancedSharing,
+  editing,
 }) {
   const [customPolicy, setCustomPolicy] = useState(
     advancedSharing ? type : null
@@ -254,7 +250,6 @@ export default function AgentPickerModal({
     setLoading,
     policyName,
     advancedSharing,
-    setShowAdvancedSharing,
     fetch,
   });
 
@@ -370,6 +365,7 @@ export default function AgentPickerModal({
         <CustomPolicyDropdown
           setCustomPolicy={setCustomPolicy}
           defaultValue={type}
+          editing={editing}
         />
       ) : (
         <PolicyHeader type={type} />
@@ -490,12 +486,12 @@ AgentPickerModal.propTypes = {
   setLoading: PropTypes.func,
   type: PropTypes.string.isRequired,
   advancedSharing: PropTypes.bool,
-  setShowAdvancedSharing: PropTypes.func,
+  editing: PropTypes.bool,
 };
 
 AgentPickerModal.defaultProps = {
   onClose: () => {},
   setLoading: () => {},
   advancedSharing: false,
-  setShowAdvancedSharing: () => {},
+  editing: false,
 };

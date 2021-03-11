@@ -23,7 +23,7 @@ import React from "react";
 import userEvent from "@testing-library/user-event";
 import { waitFor } from "@testing-library/dom";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import AgentAccessTable from "./index";
+import AgentAccessTable, { TESTCAFE_ID_AGENT_ACCESS_TABLE } from "./index";
 import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
 import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
 import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
@@ -74,7 +74,7 @@ const permissions = [
 ];
 
 describe("AgentAccessTable", () => {
-  it("renders an empty list of permissions if there are no permissions", () => {
+  it("renders an empty list of permissions if there are no permissions and the policy is not custom", () => {
     const type = "editors";
     mockedUsePolicyPermissions.mockReturnValue({
       data: [],
@@ -104,9 +104,12 @@ describe("AgentAccessTable", () => {
       data: [],
       mutate: jest.fn(),
     });
-    const { asFragment } = renderWithTheme(<AgentAccessTable type={type} />);
+    const { asFragment, queryByTestId } = renderWithTheme(
+      <AgentAccessTable type={type} />
+    );
 
     expect(asFragment()).toMatchSnapshot();
+    expect(queryByTestId(TESTCAFE_ID_AGENT_ACCESS_TABLE)).toBeNull();
   });
   it("renders a list of permissions", async () => {
     mockedUsePolicyPermissions.mockReturnValueOnce({

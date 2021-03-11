@@ -124,7 +124,6 @@ describe("handleSubmit", () => {
   const onClose = jest.fn();
   const fetch = jest.fn();
   const advancedSharing = undefined;
-  const setShowAdvancedSharing = jest.fn();
 
   it("returns a handler that exits when user doesn not make any changes", async () => {
     const policyName = "editors";
@@ -139,7 +138,6 @@ describe("handleSubmit", () => {
       setLoading,
       policyName,
       advancedSharing,
-      setShowAdvancedSharing,
       fetch,
     });
     handler();
@@ -165,7 +163,6 @@ describe("handleSubmit", () => {
       setLoading,
       policyName,
       advancedSharing,
-      setShowAdvancedSharing,
       fetch,
     });
     handler();
@@ -177,7 +174,6 @@ describe("handleSubmit", () => {
       );
     });
 
-    expect(setShowAdvancedSharing).not.toHaveBeenCalled();
     expect(saveAgentToContacts).toHaveBeenCalledWith(webId, addressBook, fetch);
     expect(mutatePermissions).toHaveBeenCalled();
     expect(onClose).toHaveBeenCalled();
@@ -196,7 +192,6 @@ describe("handleSubmit", () => {
       setLoading,
       policyName,
       advancedSharing: true,
-      setShowAdvancedSharing,
       fetch,
     });
     handler();
@@ -208,7 +203,6 @@ describe("handleSubmit", () => {
       );
     });
 
-    expect(setShowAdvancedSharing).toHaveBeenCalledWith("viewAndAdd");
     expect(saveAgentToContacts).toHaveBeenCalledWith(webId, addressBook, fetch);
     expect(mutatePermissions).toHaveBeenCalled();
     expect(onClose).toHaveBeenCalled();
@@ -227,7 +221,6 @@ describe("handleSubmit", () => {
       setLoading,
       policyName,
       advancedSharing,
-      setShowAdvancedSharing,
       fetch,
     });
     handler();
@@ -239,7 +232,6 @@ describe("handleSubmit", () => {
       );
     });
 
-    expect(setShowAdvancedSharing).not.toHaveBeenCalled();
     expect(mutatePermissions).toHaveBeenCalled();
     expect(onClose).toHaveBeenCalled();
   });
@@ -256,7 +248,6 @@ describe("handleSubmit", () => {
       setLoading,
       policyName,
       advancedSharing: true,
-      setShowAdvancedSharing,
       fetch,
     });
     handler();
@@ -268,7 +259,6 @@ describe("handleSubmit", () => {
       );
     });
 
-    expect(setShowAdvancedSharing).toHaveBeenCalledWith("viewAndAdd");
     expect(mutatePermissions).toHaveBeenCalled();
     expect(onClose).toHaveBeenCalled();
   });

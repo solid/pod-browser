@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SharingAccordion it renders three lists of empty permissions for editors, viewers and blocked, and an Advanced Sharing button 1`] = `
+exports[`SharingAccordion it renders three lists of named policies for editors, viewers and blocked and an Advanced Sharing button 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"

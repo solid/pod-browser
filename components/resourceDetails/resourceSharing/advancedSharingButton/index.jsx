@@ -22,7 +22,6 @@
 /* eslint-disable react/forbid-prop-types */
 
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { createStyles, Modal } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
@@ -38,13 +37,14 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export const TESTCAFE_ID_ADVANCED_SHARING_BUTTON = "advanced-sharing-button";
 export const TESTCAFE_ID_MODAL_OVERLAY = "advanced-sharing-modal-overlay";
 
-export default function AdvancedSharingButton({ setShowAdvancedSharing }) {
+export default function AdvancedSharingButton() {
   const defaultType = "viewAndAdd";
   const classes = useStyles();
   const {
     data: customPermissions,
     mutate: mutatePermissions,
   } = usePolicyPermissions(defaultType);
+
   const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
     customPermissions
   );
@@ -90,17 +90,8 @@ export default function AdvancedSharingButton({ setShowAdvancedSharing }) {
           mutatePermissions={mutatePermissions}
           permissions={permissions}
           advancedSharing
-          setShowAdvancedSharing={setShowAdvancedSharing}
         />
       </Modal>
     </div>
   );
 }
-
-AdvancedSharingButton.propTypes = {
-  setShowAdvancedSharing: PropTypes.func,
-};
-
-AdvancedSharingButton.defaultProps = {
-  setShowAdvancedSharing: () => {},
-};
