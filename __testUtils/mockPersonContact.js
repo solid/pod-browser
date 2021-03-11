@@ -31,6 +31,7 @@ import { vcard } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
 import { vcardExtras } from "../src/addressBook";
 import { getBaseUrl } from "../src/solidClientHelpers/resource";
+import { PERSON_CONTACT } from "../src/models/contact/person";
 
 function mockContactPersonThing(addressBook, personThingUrl, name) {
   return chain(
@@ -58,5 +59,5 @@ export default function mockPersonContact(addressBook, personThingUrl, name) {
     mockSolidDatasetFrom(getBaseUrl(personThingUrl)),
     thing
   );
-  return { dataset, thing };
+  return { dataset, thing, type: PERSON_CONTACT };
 }

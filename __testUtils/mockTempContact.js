@@ -19,35 +19,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { createContext, useContext } from "react";
-import T from "prop-types";
-import { useRouter } from "next/router";
-import useGroup from "../../hooks/useGroup";
-import { getGroupName, getGroupUrl } from "../../models/group";
-import GroupAllContext from "../groupAllContext";
+import { addUrl, getUrl, removeUrl, setThing } from "@inrupt/solid-client";
+import { rdf, vcard } from "rdf-namespaces";
+import { chain } from "../src/solidClientHelpers/utils";
+import { vcardExtras } from "../src/addressBook";
+import { TEMP_CONTACT } from "../src/models/contact/temp";
 
-const GroupContext = createContext(null);
-
-export default GroupContext;
-
-export function GroupProvider({ children }) {
-  const { data: groups } = useContext(GroupAllContext);
-  const sortedGroups = groups?.sort((a, b) =>
-    getGroupName(a) < getGroupName(b) ? -1 : 1
+export default function mockTempContact(personContact) {
+  const addressBookUrl = getUrl(
+    personContact.thing,
+    vcardExtras("inAddressBook")
   );
-  const router = useRouter();
-  const groupUrl =
-    router.query.iri ||
-    (sortedGroups && sortedGroups[0] ? getGroupUrl(sortedGroups[0]) : null); // TODO: Tried sortedGroup?[0] ? ... : ..., but ESLint don't accept it
-  const group = useGroup(groupUrl, {
-    revalidateOnFocus: false,
-    errorRetryCount: 0,
-  });
-  return (
-    <GroupContext.Provider value={group}>{children}</GroupContext.Provider>
+  const thing = chain(
+    personContact.thing,
+    (t) => addUrl(t, rdf.type, vcardExtras("TempIndividual")),
+    (t) => removeUrl(t, rdf.type, vcard.Individual),
+    (t) => removeUrl(t, vcardExtras("inAddressBook"), addressBookUrl)
   );
+  const dataset = setThing(personContact.dataset, thing);
+  return {
+    dataset,
+    thing,
+    type: TEMP_CONTACT,
+  };
 }
-
-GroupProvider.propTypes = {
-  children: T.node.isRequired,
-};

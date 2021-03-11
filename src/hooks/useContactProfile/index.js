@@ -21,7 +21,7 @@
 
 import { useSession } from "@inrupt/solid-ui-react";
 import useSWR from "swr";
-import { getProfileForContactThing } from "../../models/profile";
+import { getProfileForContactThing } from "../../models/contact/person";
 
 export default function useContactProfile(contactThing, swrOptions = {}) {
   const { fetch } = useSession();

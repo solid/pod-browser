@@ -58,10 +58,11 @@ export default function NameAndAvatarRow({ name, originalUrl, avatarProps }) {
 NameAndAvatarRow.propTypes = {
   avatarProps: T.object,
   name: T.string,
-  originalUrl: T.string.isRequired,
+  originalUrl: T.string,
 };
 
 NameAndAvatarRow.defaultProps = {
   avatarProps: {},
   name: null,
+  originalUrl: null,
 };

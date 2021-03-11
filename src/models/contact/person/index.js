@@ -19,14 +19,17 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* eslint no-use-before-define:off */
+
 import { v4 as uuid } from "uuid";
-import { vcard, foaf, rdf } from "rdf-namespaces";
+import { rdf, vcard } from "rdf-namespaces";
 import {
   addStringNoLocale,
   addUrl,
   asUrl,
   createSolidDataset,
   createThing,
+  getSolidDataset,
   getSourceUrl,
   getThing,
   getUrl,
@@ -41,13 +44,12 @@ import {
   vcardExtras,
 } from "../../../addressBook";
 import { joinPath } from "../../../stringHelpers";
-// eslint-disable-next-line import/no-cycle
 import { getContactAll } from "../index";
-// eslint-disable-next-line import/no-cycle
 import {
   getPersonName,
   getPersonPhotoUrl,
   getProfilesForPersonContactsOld,
+  getWebIdUrl,
 } from "../../profile";
 import { chain, defineThing } from "../../../solidClientHelpers/utils";
 import { updateOrCreateDataset } from "../../dataset";
@@ -55,6 +57,7 @@ import {
   addContactIndexToAddressBook,
   getContactIndexUrl,
 } from "../collection";
+import { getBaseUrl } from "../../../solidClientHelpers/resource";
 
 /**
  * Person contacts represent the agents of type vcard:Individual, foaf:Person, schema:Person
@@ -75,10 +78,8 @@ export const PERSON_CONTACT = {
     !!getUrl(thing, vcardExtras("inAddressBook")) ||
     getUrlAll(thing, rdf.type).includes(vcard.Individual),
   searchNoResult: "No people found",
-  // eslint-disable-next-line no-use-before-define
   getOriginalUrl: (contact) => getWebIdUrl(contact),
   getName: (contact) => getPersonName(contact),
-  // eslint-disable-next-line no-use-before-define
   getAvatarProps: (contact) => getPersonAvatarProps(contact),
 };
 
@@ -98,16 +99,6 @@ export async function getPersonAll(addressBook, fetch) {
   return getContactAll(addressBook, [PERSON_CONTACT], fetch);
 }
 
-export function getWebIdUrl(contact) {
-  const { dataset, thing } = contact;
-  const webIdNodeUrl = getUrl(thing, vcard.url);
-  if (webIdNodeUrl) {
-    const webIdNode = getThing(dataset, webIdNodeUrl);
-    return webIdNode && getUrl(webIdNode, vcard.value);
-  }
-  return getUrl(thing, foaf.openid);
-}
-
 export function createWebIdNode(webId, iri) {
   const webIdNode = chain(
     createThing(),
@@ -118,6 +109,8 @@ export function createWebIdNode(webId, iri) {
   return { webIdNode, webIdNodeUrl };
 }
 
+// Deprecated
+// TODO: We want to write out the uses of schema - avoid this if you can
 function createPersonContactWithSchema(addressBook, contactSchema) {
   const { containerUrl: addressBookContainerUrl } = addressBook;
 
@@ -169,6 +162,8 @@ function createPersonContactWithSchema(addressBook, contactSchema) {
   };
 }
 
+// Deprecated
+// TODO: We want to write out the uses of schema - avoid this if you can
 export async function savePersonWithSchema(addressBook, contactSchema, fetch) {
   const indexIri = asUrl(addressBook.thing);
   const newContact = createPersonContactWithSchema(addressBook, contactSchema);
@@ -215,6 +210,25 @@ export async function findPersonContactInAddressBook(
 ) {
   const people = await getPersonAll(addressBook, fetch);
   const profiles = await getProfilesForPersonContactsOld(people, fetch);
-  const existingContact = profiles.filter((profile) => profile.webId === webId);
-  return existingContact;
+  return profiles.filter((profile) => profile.webId === webId);
+}
+
+export async function getProfileForContactThing(contactThing, fetch) {
+  const localProfileUrl = asUrl(contactThing);
+  const localProfileDatasetUrl = getBaseUrl(localProfileUrl);
+  const localProfileDataset = await getSolidDataset(localProfileDatasetUrl, {
+    fetch,
+  });
+  const localProfileThing = getThing(localProfileDataset, localProfileUrl);
+  const webIdUrl = getWebIdUrl({
+    dataset: localProfileDataset,
+    thing: localProfileThing,
+  });
+  const dataset = await getSolidDataset(webIdUrl, { fetch });
+  const thing = getThing(dataset, webIdUrl);
+  return {
+    dataset,
+    thing,
+    type: PERSON_CONTACT,
+  };
 }

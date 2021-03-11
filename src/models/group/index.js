@@ -36,7 +36,7 @@ import { getBaseUrl } from "../../solidClientHelpers/resource";
 import { chain } from "../../solidClientHelpers/utils";
 
 /*
- * A group might refer to a group in the address book, but could also live outside of it
+ * A group might refer to a group in the address book, but could also live outside of it.
  */
 
 /* Model functions */
@@ -59,8 +59,6 @@ export function getGroupName(group) {
 export function getGroupDescription(group) {
   return getStringNoLocale(group.thing, vcard.note) || "";
 }
-
-export async function getGroupFromGroupContact(groupContact, fetch) {}
 
 /**
  * Note that you might need to refresh the cache of the specific group after this, e.g. mutate SWR cache

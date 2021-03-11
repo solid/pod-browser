@@ -22,26 +22,102 @@
 import * as solidClientFns from "@inrupt/solid-client";
 import {
   asUrl,
+  createThing,
   getStringNoLocale,
   mockSolidDatasetFrom,
+  mockThingFrom,
 } from "@inrupt/solid-client";
 import { vcard } from "rdf-namespaces";
 import mockAddressBook from "../../../__testUtils/mockAddressBook";
-import { getContactAll } from "./index";
-import { addGroupToMockedIndexDataset } from "../../../__testUtils/mockGroupContact";
-import { addPersonToMockedIndexDataset } from "../../../__testUtils/mockPersonContact";
+import {
+  getContactAll,
+  getContactAllFromContactsIndex,
+  getContactFullFromContactThing,
+  getContactType,
+  getContactUrl,
+} from "./index";
+import mockGroupContact, {
+  addGroupToMockedIndexDataset,
+} from "../../../__testUtils/mockGroupContact";
+import mockPersonContact, {
+  addPersonToMockedIndexDataset,
+} from "../../../__testUtils/mockPersonContact";
 import { PERSON_CONTACT } from "./person";
 import { addIndexToMockedAddressBook } from "../../../__testUtils/mockContact";
 import { GROUP_CONTACT } from "./group";
 import { chain } from "../../solidClientHelpers/utils";
 import { createAddressBook } from "../addressBook";
 import { webIdUrl } from "../../../__testUtils/mockSession";
+import mockTempContact from "../../../__testUtils/mockTempContact";
+import { TEMP_CONTACT } from "./temp";
+import {
+  aliceProfileUrl,
+  aliceWebIdUrl,
+} from "../../../__testUtils/mockPersonResource";
+import mockGroupIndex from "../../../__testUtils/mockGroupIndex";
 
 const containerUrl = "https://example.pod.com/contacts/";
 const fetch = jest.fn();
 
+const addressBook = mockAddressBook();
+const personDatasetUrl = aliceProfileUrl;
+const personUrl = aliceWebIdUrl;
+const personName = "Person 1";
+const person = mockPersonContact(addressBook, personUrl, personName);
+const group = mockGroupContact(addressBook, "Group");
+const temp = mockTempContact(person);
+
+const allTypes = [PERSON_CONTACT, GROUP_CONTACT, TEMP_CONTACT];
+
+const groupIndex = mockGroupIndex(addressBook, [group]);
+
+describe("getContactUrl", () => {
+  it("returns the URL for a contact thing", () => {
+    const url = "http://example.com";
+    expect(getContactUrl(mockThingFrom(url))).toEqual(url);
+  });
+
+  it("returns null for non-persistent things", () => {
+    expect(getContactUrl(createThing())).toBeNull();
+  });
+});
+
+describe("getContactType", () => {
+  it("returns the type for the various contact types", () => {
+    expect(getContactType(person.thing, allTypes)).toEqual(PERSON_CONTACT);
+    expect(getContactType(person.thing, [GROUP_CONTACT])).toBeUndefined();
+    expect(getContactType(group.thing, allTypes)).toEqual(GROUP_CONTACT);
+    expect(getContactType(temp.thing, allTypes)).toEqual(TEMP_CONTACT);
+  });
+});
+
+describe("getContactFullFromContactThing", () => {
+  it("returns null for unsaved contacts", async () => {
+    await expect(
+      getContactFullFromContactThing(createThing(), allTypes, fetch)
+    ).resolves.toBeNull();
+  });
+
+  it("returns the dataset for the full version of a contact entry", async () => {
+    const mockedGetSolidDataset = jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValue(person.dataset);
+    await expect(
+      getContactFullFromContactThing(person.thing, allTypes, fetch)
+    ).resolves.toEqual(person);
+    expect(mockedGetSolidDataset).toHaveBeenCalledWith(personDatasetUrl, {
+      fetch,
+    });
+  });
+});
+
+describe("getContactAllFromContactsIndex", () => {
+  it("returns all contacts from the index", () => {
+    expect(getContactAllFromContactsIndex(groupIndex)).toEqual([group]);
+  });
+});
+
 describe("getContactAll", () => {
-  const addressBook = mockAddressBook();
   const group1Url = "http://example.com/Group/group1/index.ttl#this";
   const group1Name = "Group 1";
   const groupsDatasetUrl = "https://example.com/groups.ttl";
@@ -137,4 +213,8 @@ describe("getContactAll", () => {
       getContactAll(newAddressBook, [GROUP_CONTACT, PERSON_CONTACT], fetch)
     ).resolves.toEqual([]);
   });
+});
+
+describe("getOriginalUrlForContactAll", () => {
+  //
 });

@@ -21,7 +21,7 @@
 
 /* eslint react/jsx-props-no-spreading:off, react/forbid-prop-types:off */
 
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Checkbox } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
@@ -39,10 +39,17 @@ export default function MemberCheckbox({
     revalidateOnFocus: false,
     shouldRetryOnError: false,
   });
+  const value = contactFull?.type?.getOriginalUrl(contactFull);
+  const [checked, setChecked] = useState(
+    !value || selected[value] !== undefined
+  );
 
   if (isValidating) return <Skeleton variant="rect" width={28} height={28} />;
 
-  const value = contactFull?.type?.getOriginalUrl(contactFull);
+  const handleChange = (event) => {
+    setChecked(event.target.checked);
+    onChange(event, contactFull);
+  };
 
   return (
     <Checkbox
@@ -51,9 +58,9 @@ export default function MemberCheckbox({
       color="primary"
       size="medium"
       value={value}
-      checked={!value || selected[value] !== undefined}
+      checked={checked}
       disabled={disabled.includes(value)}
-      onChange={(event) => onChange(event, contactFull)}
+      onChange={handleChange}
       {...props}
     />
   );

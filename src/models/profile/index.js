@@ -21,20 +21,27 @@
 
 import {
   asUrl,
-  getSolidDataset,
   getStringNoLocale,
   getThing,
   getUrl,
 } from "@inrupt/solid-client";
 import { foaf, vcard } from "rdf-namespaces";
 import { fetchProfile } from "../../solidClientHelpers/profile";
-import { getBaseUrl, getResource } from "../../solidClientHelpers/resource";
-// eslint-disable-next-line import/no-cycle
-import { getWebIdUrl, PERSON_CONTACT } from "../contact/person";
+import { getResource } from "../../solidClientHelpers/resource";
 
 /* Model constants */
 
 /* Model functions */
+export function getWebIdUrl(contact) {
+  const { dataset, thing } = contact;
+  const webIdNodeUrl = getUrl(thing, vcard.url);
+  if (webIdNodeUrl) {
+    const webIdNode = getThing(dataset, webIdNodeUrl);
+    return webIdNode && getUrl(webIdNode, vcard.value);
+  }
+  return getUrl(thing, foaf.openid);
+}
+
 export async function getProfileForContactOld(personContactUrl, fetch) {
   const {
     response: { dataset, iri },
@@ -49,26 +56,6 @@ export async function getProfilesForPersonContactsOld(people, fetch) {
     people.map(({ thing }) => getProfileForContactOld(asUrl(thing), fetch))
   );
   return responses.filter((profile) => profile);
-}
-
-export async function getProfileForContactThing(contactThing, fetch) {
-  const localProfileUrl = asUrl(contactThing);
-  const localProfileDatasetUrl = getBaseUrl(localProfileUrl);
-  const localProfileDataset = await getSolidDataset(localProfileDatasetUrl, {
-    fetch,
-  });
-  const localProfileThing = getThing(localProfileDataset, localProfileUrl);
-  const webIdUrl = getWebIdUrl({
-    dataset: localProfileDataset,
-    thing: localProfileThing,
-  });
-  const dataset = await getSolidDataset(webIdUrl, { fetch });
-  const thing = getThing(dataset, webIdUrl);
-  return {
-    dataset,
-    thing,
-    type: PERSON_CONTACT,
-  };
 }
 
 export function getPersonPhotoUrl(person) {

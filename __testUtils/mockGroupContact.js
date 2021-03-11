@@ -28,7 +28,10 @@ import {
   setThing,
 } from "@inrupt/solid-client";
 import { chain } from "../src/solidClientHelpers/utils";
-import { createGroupDatasetUrl } from "../src/models/contact/group";
+import {
+  createGroupDatasetUrl,
+  GROUP_CONTACT,
+} from "../src/models/contact/group";
 import { vcardExtras } from "../src/addressBook";
 import { mockGroupThing } from "./mockGroup";
 import { getAddressBookDatasetUrl } from "../src/models/addressBook";
@@ -69,5 +72,6 @@ export default function mockGroupContact(addressBook, name, options = {}) {
       (d) => setThing(d, mockIndexThing(d, addressBook, groupThingUrl))
     ),
     thing: groupThing,
+    type: GROUP_CONTACT,
   };
 }
