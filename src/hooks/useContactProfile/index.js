@@ -22,11 +22,13 @@
 import { useSession } from "@inrupt/solid-ui-react";
 import useSWR from "swr";
 import { getProfileForContactThing } from "../../models/contact/person";
+import { getContactUrl } from "../../models/contact";
 
 export default function useContactProfile(contactThing, swrOptions = {}) {
   const { fetch } = useSession();
+  const contactUrl = getContactUrl(contactThing);
   return useSWR(
-    ["contact", contactThing],
+    ["contactProfile", contactUrl],
     async () => {
       if (!contactThing) return null;
       return getProfileForContactThing(contactThing, fetch);

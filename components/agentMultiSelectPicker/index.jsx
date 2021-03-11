@@ -49,9 +49,12 @@ import MemberCheckbox from "./memberCheckbox";
 import MemberRow from "./memberRow";
 import { getContactUrl } from "../../src/models/contact";
 import { chain } from "../../src/solidClientHelpers/utils";
-import { TEMP_CONTACT } from "../../src/models/contact/temp";
+import { createTempContact, TEMP_CONTACT } from "../../src/models/contact/temp";
 import { getBaseUrl } from "../../src/solidClientHelpers/resource";
-import { createUnregisteredContact } from "../../src/models/contact/unregistered";
+import {
+  createUnregisteredContact,
+  UNREGISTERED_CONTACT,
+} from "../../src/models/contact/unregistered";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const VCARD_WEBID_PREDICATE = vcardExtras("WebId");
@@ -64,23 +67,24 @@ export default function AgentMultiSelectPicker({
   checkboxHeadLabel,
 }) {
   const { fetch } = useSession();
-  const { data: addressBook } = useAddressBook();
+  // const { data: addressBook } = useAddressBook();
   const bem = useBem(useStyles());
   const [selectedTabValue, setSelectedTabValue] = useState("");
   const [globalFilter, setGlobalFilter] = useState("");
   const [contactsToShow, setContactsToShow] = useState(contacts);
+  const [selectedFake, setSelectedFake] = useState([]);
 
   const initialSelected = selected.reduce(
     (memo, url) => Object.assign(memo, { [url]: null }),
     {}
   );
-  // const selectedContacts = useRef();
+  const selectedContacts = useRef(initialSelected);
   // selectedContacts.current = initialSelected;
   // selectedContacts.current = selected.reduce(
   //   (memo, url) => Object.assign(memo, { [url]: null }),
   //   {}
   // );
-  // const unselectedContacts = useRef();
+  const unselectedContacts = useRef({});
   // unselectedContacts.current = {};
   // unselectedContacts.current = {};
   // useEffect(() => {
@@ -91,8 +95,8 @@ export default function AgentMultiSelectPicker({
   //   );
   //   unselectedContacts.current = {};
   // }, [selected]);
-  const [selectedContacts, setSelectedContacts] = useState(initialSelected);
-  const [unselectedContacts, setUnselectedContacts] = useState({});
+  // const [selectedContacts, setSelectedContacts] = useState(initialSelected);
+  // const [unselectedContacts, setUnselectedContacts] = useState({});
 
   useEffect(() => {
     if (selectedTabValue) {
@@ -117,31 +121,42 @@ export default function AgentMultiSelectPicker({
       : {};
   };
 
-  const getChangedMaps = (model, checked) => {
+  const getChangedSelection = (model, checked) => {
     const originalUrl = model.type.getOriginalUrl(model);
     if (checked) {
       const selectedChange = {
         [originalUrl]: model,
-        // ...selectedContacts.current,
-        ...selectedContacts,
+        ...selectedContacts.current,
+        // ...selectedContacts,
       };
       const {
         [originalUrl]: urlToRemove,
-        ...rest
-        // } = unselectedContacts.current;
-      } = unselectedContacts;
-      // delete unselectedContacts[originalUrl];
-      return [selectedChange, rest];
+        ...unselectedChange
+      } = unselectedContacts.current;
+      // const {
+      //   [originalUrl]: urlToRemove,
+      //   ...unselectedChange
+      // } = unselectedContacts;
+      return [selectedChange, unselectedChange, selectedFake];
     }
     const unselectedChange = {
       [originalUrl]: model,
-      // ...unselectedContacts.current,
-      ...unselectedContacts,
+      ...unselectedContacts.current,
+      // ...unselectedContacts,
     };
-    // const { [originalUrl]: urlToRemove, ...rest } = selectedContacts.current;
-    const { [originalUrl]: urlToRemove, ...rest } = selectedContacts;
-    // delete selectedContacts[originalUrl];
-    return [rest, unselectedChange];
+    // const { [originalUrl]: urlToRemove, ...selectedChange } = selectedContacts;
+    const {
+      [originalUrl]: urlToRemove,
+      ...selectedChange
+    } = selectedContacts.current;
+    if (selectedFake.includes(originalUrl)) {
+      const index = selectedFake.indexOf(originalUrl);
+      const newSelectedFake = selectedFake
+        .slice(0, index)
+        .concat(selectedFake.slice(index + 1));
+      return [selectedChange, unselectedChange, newSelectedFake];
+    }
+    return [selectedChange, unselectedChange, selectedFake];
   };
 
   const handleTabChange = (event, newValue) => {
@@ -153,7 +168,12 @@ export default function AgentMultiSelectPicker({
   };
 
   const handleAddRow = () => {
-    if (contactsToShow[0] && !getContactUrl(contactsToShow[0].thing)) return;
+    if (
+      contactsToShow[0] &&
+      UNREGISTERED_CONTACT.isOfType(contactsToShow[0].thing)
+    ) {
+      return;
+    }
     const newItem = createUnregisteredContact();
     setContactsToShow([newItem, ...contactsToShow]);
   };
@@ -161,46 +181,44 @@ export default function AgentMultiSelectPicker({
   const contactsForTable = selectedTabValue ? contactsToShow : contacts;
 
   const toggleCheckbox = (event, model) => {
-    const [selectedChange, unselectedChange] = getChangedMaps(
-      model,
-      event.target.checked
-    );
-    // selectedContacts.current = selectedChange;
-    // unselectedContacts.current = unselectedChange;
-    setSelectedContacts(selectedChange);
-    setUnselectedContacts(unselectedChange);
+    const [
+      selectedChange,
+      unselectedChange,
+      selectionFakeChange,
+    ] = getChangedSelection(model, event.target.checked);
+    selectedContacts.current = selectedChange;
+    unselectedContacts.current = unselectedChange;
+    // setSelectedContacts(selectedChange);
+    // setUnselectedContacts(unselectedChange);
     onChange(
       getFinalChangeMap(selectedChange, false),
       getFinalChangeMap(unselectedChange, true)
     );
+    setSelectedFake(selectionFakeChange);
   };
 
   const handleNewAgentSubmit = async (agentUrl) => {
     const agentDatasetUrl = getBaseUrl(agentUrl);
     const agentDataset = await getSolidDataset(agentDatasetUrl, { fetch });
     const agentThing = getThing(agentDataset, agentUrl);
-    const tempAgent = {
-      thing: chain(
-        agentThing,
-        (t) => addUrl(t, rdf.type, vcardExtras("TempIndividual")),
-        (t) => removeUrl(t, rdf.type, vcard.Individual)
-      ),
-      dataset: agentDataset,
-      type: TEMP_CONTACT,
-    };
+    const tempAgent = createTempContact(agentThing, agentDataset);
     setContactsToShow([tempAgent, ...contactsToShow.slice(1)]);
-    const [selectedChange, unselectedChange] = getChangedMaps(tempAgent, true);
-    // selectedContacts.current = selectedChange;
-    // unselectedContacts.current = unselectedChange;
-    setSelectedContacts(selectedChange);
-    setUnselectedContacts(unselectedChange);
+    const [selectedChange, unselectedChange] = getChangedSelection(
+      tempAgent,
+      true
+    );
+    selectedContacts.current = selectedChange;
+    unselectedContacts.current = unselectedChange;
+    setSelectedFake(selectedFake.concat(agentUrl));
+    // setSelectedContacts(selectedChange);
+    // setUnselectedContacts(unselectedChange);
     onChange(
       getFinalChangeMap(selectedChange, false),
       getFinalChangeMap(unselectedChange, true)
     );
   };
 
-  console.log("contactsToShow", selectedContacts);
+  // console.log("contactsToShow", contactsToShow);
   // console.log("contactsToShow", selectedContacts.current);
 
   return (
@@ -255,10 +273,17 @@ export default function AgentMultiSelectPicker({
             }
             body={() => (
               <MemberCheckbox
-                // selected={selectedContacts.current}
-                selected={selectedContacts}
+                selected={selectedContacts.current}
+                // selected={selectedContacts}
+                selectedFake={selectedFake}
                 disabled={disabled}
                 onChange={toggleCheckbox}
+                // isChecked={(originalUrl) => {
+                //   return (
+                //     originalUrl === undefined ||
+                //     selectedContacts[originalUrl] !== undefined
+                //   );
+                // }}
               />
             )}
           />

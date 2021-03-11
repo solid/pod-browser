@@ -21,10 +21,11 @@
 
 /* eslint react/jsx-props-no-spreading:off, react/forbid-prop-types:off */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Checkbox } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
+import { useThing } from "@inrupt/solid-ui-react";
 import useContactFull from "../../../src/hooks/useContactFull";
 import { UNREGISTERED_CONTACT } from "../../../src/models/contact/unregistered";
 
@@ -33,17 +34,28 @@ export const TESTCAFE_ID_WEBID_CHECKBOX = "webid-checkbox";
 export default function MemberCheckbox({
   selected,
   disabled,
+  // isChecked,
   onChange,
+  selectedFake,
   ...props
 }) {
+  const { thing } = useThing();
   const { data: contactFull, isValidating } = useContactFull({
     revalidateOnFocus: false,
     shouldRetryOnError: false,
   });
-  const value = contactFull?.type?.getOriginalUrl(contactFull);
+  const originalUrl = contactFull?.type?.getOriginalUrl(contactFull);
   const [checked, setChecked] = useState(
-    contactFull?.type === UNREGISTERED_CONTACT || selected[value] !== undefined
+    UNREGISTERED_CONTACT.isOfType(thing) || selected[originalUrl] !== undefined
   );
+  useEffect(() => {
+    setChecked(checked || selectedFake.includes(originalUrl));
+  }, [checked, originalUrl, selectedFake]);
+
+  // useEffect(() => {
+  //   if (isValidating) return;
+  //   setChecked(isChecked(originalUrl));
+  // }, [isChecked, isValidating, originalUrl]);
 
   if (isValidating) return <Skeleton variant="rect" width={28} height={28} />;
 
@@ -58,9 +70,9 @@ export default function MemberCheckbox({
       type="checkbox"
       color="primary"
       size="medium"
-      value={value}
+      value={originalUrl}
       checked={checked}
-      disabled={disabled.includes(value)}
+      disabled={disabled.includes(originalUrl)}
       onChange={handleChange}
       {...props}
     />
@@ -70,7 +82,9 @@ export default function MemberCheckbox({
 MemberCheckbox.propTypes = {
   onChange: PropTypes.func.isRequired,
   selected: PropTypes.object.isRequired,
+  selectedFake: PropTypes.arrayOf(PropTypes.string).isRequired,
   disabled: PropTypes.arrayOf(PropTypes.string),
+  // isChecked: PropTypes.func.isRequired,
 };
 
 MemberCheckbox.defaultProps = {

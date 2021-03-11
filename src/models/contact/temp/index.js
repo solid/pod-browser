@@ -19,15 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { rdf } from "rdf-namespaces";
-import { asUrl, getUrlAll } from "@inrupt/solid-client";
+import { rdf, vcard } from "rdf-namespaces";
+import {
+  addUrl,
+  asUrl,
+  getUrlAll,
+  removeUrl,
+  setThing,
+} from "@inrupt/solid-client";
 import { vcardExtras } from "../../../addressBook";
 import { getPersonName, getPersonPhotoUrl } from "../../profile";
+import { chain } from "../../../solidClientHelpers/utils";
 
-// eslint-disable-next-line import/prefer-default-export
 export const TEMP_CONTACT = {
   isOfType: (thing) =>
-    getUrlAll(thing, rdf.type).includes(vcardExtras("TempIndividual")),
+    thing && getUrlAll(thing, rdf.type).includes(vcardExtras("TempIndividual")),
   getOriginalUrl: (contact) => asUrl(contact.thing),
   getName: (contact) => getPersonName(contact),
   getAvatarProps: (contact) => ({
@@ -35,3 +41,17 @@ export const TEMP_CONTACT = {
     src: getPersonPhotoUrl(contact),
   }),
 };
+
+export function createTempContact(originalThing, originalDataset) {
+  const thing = chain(
+    originalThing,
+    (t) => addUrl(t, rdf.type, vcardExtras("TempIndividual")),
+    (t) => removeUrl(t, rdf.type, vcard.Individual)
+  );
+  const dataset = setThing(originalDataset, thing);
+  return {
+    thing,
+    dataset,
+    type: TEMP_CONTACT,
+  };
+}

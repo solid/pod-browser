@@ -19,8 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint react/jsx-props-no-spreading: off */
-
 import React from "react";
 import { useThing } from "@inrupt/solid-ui-react";
 import T from "prop-types";
