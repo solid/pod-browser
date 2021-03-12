@@ -52,9 +52,7 @@ export default function MemberCheckbox({
     [originalUrl, selected, thing]
   );
   const [checked, setChecked] = useState(isChecked());
-  useEffect(() => {
-    setChecked(isChecked());
-  }, [isChecked]);
+  useEffect(() => setChecked(isChecked()), [isChecked]);
 
   // useEffect(() => {
   //   if (isValidating) return;

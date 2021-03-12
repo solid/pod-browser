@@ -33,7 +33,7 @@ export default function styles(theme) {
       backgroundColor: theme.palette.common.white,
       borderRadius: theme.shape.borderRadius,
       border: `1px solid ${theme.palette.grey.A100}`,
-      marginBottom: theme.spacing(2.4),
+      marginBottom: theme.spacing(0.8),
       height: "100%",
       maxHeight: TABLE_MAX_HEIGHT,
       overflowY: "auto",

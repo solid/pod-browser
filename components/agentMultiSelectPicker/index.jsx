@@ -19,22 +19,17 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import T from "prop-types";
 import { Container } from "@inrupt/prism-react-components";
 import { CircularProgress, createStyles } from "@material-ui/core";
 import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
 import clsx from "clsx";
-import { rdf, vcard } from "rdf-namespaces";
+import { vcard } from "rdf-namespaces";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import {
-  addUrl,
-  createThing,
-  getSolidDataset,
-  getThing,
-  removeUrl,
-} from "@inrupt/solid-client";
+import { getSolidDataset, getThing } from "@inrupt/solid-client";
+import { Pagination } from "@material-ui/lab";
 import AgentsTableTabs from "../resourceDetails/resourceSharing/agentsTableTabs";
 import { PERSON_CONTACT } from "../../src/models/contact/person";
 import { GROUP_CONTACT } from "../../src/models/contact/group";
@@ -43,12 +38,9 @@ import AddWebIdButton from "../resourceDetails/resourceSharing/addAgentButton/ag
 import AgentsSearchBar from "../resourceDetails/resourceSharing/agentsSearchBar";
 import AgentPickerEmptyState from "../resourceDetails/resourceSharing/addAgentButton/agentPickerEmptyState";
 import styles from "./styles";
-import useAddressBook from "../../src/hooks/useAddressBook";
 import { vcardExtras } from "../../src/addressBook";
 import MemberCheckbox from "./memberCheckbox";
 import MemberRow from "./memberRow";
-import { getContactUrl } from "../../src/models/contact";
-import { chain } from "../../src/solidClientHelpers/utils";
 import { createTempContact, TEMP_CONTACT } from "../../src/models/contact/temp";
 import { getBaseUrl } from "../../src/solidClientHelpers/resource";
 import {
@@ -58,6 +50,21 @@ import {
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const VCARD_WEBID_PREDICATE = vcardExtras("WebId");
+const NUM_CONTACTS_PER_PAGE = 2;
+
+function getNumPages(contacts) {
+  return Math.ceil(contacts.length / NUM_CONTACTS_PER_PAGE);
+}
+
+function getExtraItems(contacts) {
+  const tempItems = contacts.filter((contact) =>
+    TEMP_CONTACT.isOfType(contact.thing)
+  );
+  const unregisteredItems = contacts.filter((contact) =>
+    UNREGISTERED_CONTACT.isOfType(contact.thing)
+  );
+  return tempItems.concat(unregisteredItems);
+}
 
 export default function AgentMultiSelectPicker({
   contacts,
@@ -67,47 +74,38 @@ export default function AgentMultiSelectPicker({
   checkboxHeadLabel,
 }) {
   const { fetch } = useSession();
-  // const { data: addressBook } = useAddressBook();
   const bem = useBem(useStyles());
-  const [selectedTabValue, setSelectedTabValue] = useState("");
+  const [tab, setTab] = useState("");
   const [globalFilter, setGlobalFilter] = useState("");
-  const [contactsToShow, setContactsToShow] = useState(contacts);
   const [selectedFake, setSelectedFake] = useState([]);
+  const [pages, setPages] = useState(getNumPages(contacts));
+  const [page, setPage] = useState(1);
+  const [showPagination, setShowPagination] = useState(pages > 1);
+  const [contactsToShow, setContactsToShow] = useState(
+    contacts.slice(0, NUM_CONTACTS_PER_PAGE)
+  );
 
   const initialSelected = selected.reduce(
     (memo, url) => Object.assign(memo, { [url]: null }),
     {}
   );
   const selectedContacts = useRef(initialSelected);
-  // selectedContacts.current = initialSelected;
-  // selectedContacts.current = selected.reduce(
-  //   (memo, url) => Object.assign(memo, { [url]: null }),
-  //   {}
-  // );
   const unselectedContacts = useRef({});
-  // unselectedContacts.current = {};
-  // unselectedContacts.current = {};
-  // useEffect(() => {
-  //   console.log("TEST", selected);
-  //   selectedContacts.current = selected.reduce(
-  //     (memo, url) => Object.assign(memo, { [url]: null }),
-  //     {}
-  //   );
-  //   unselectedContacts.current = {};
-  // }, [selected]);
-  // const [selectedContacts, setSelectedContacts] = useState(initialSelected);
-  // const [unselectedContacts, setUnselectedContacts] = useState({});
+
+  const getSelection = useCallback(() => {
+    const extraItems = getExtraItems(contactsToShow);
+    return extraItems.concat(
+      tab ? contacts.filter(({ thing }) => tab.isOfType(thing)) : contacts
+    );
+  }, [contacts, contactsToShow, tab]);
 
   useEffect(() => {
-    if (selectedTabValue) {
-      const filtered = contacts.filter(({ thing }) =>
-        selectedTabValue.isOfType(thing)
-      );
-      setContactsToShow(filtered);
-      return;
-    }
-    setContactsToShow(contacts);
-  }, [contacts, selectedTabValue]);
+    const selection = getSelection();
+    const end = globalFilter ? selection.length : NUM_CONTACTS_PER_PAGE;
+    setContactsToShow(selection.slice(0, end));
+    setPage(1);
+    setPages(getNumPages(selection));
+  }, [getSelection, globalFilter]);
 
   const getFinalChangeMap = (changeMap, shouldInclude) => {
     const entries = Object.entries(changeMap);
@@ -127,24 +125,17 @@ export default function AgentMultiSelectPicker({
       const selectedChange = {
         [originalUrl]: model,
         ...selectedContacts.current,
-        // ...selectedContacts,
       };
       const {
         [originalUrl]: urlToRemove,
         ...unselectedChange
       } = unselectedContacts.current;
-      // const {
-      //   [originalUrl]: urlToRemove,
-      //   ...unselectedChange
-      // } = unselectedContacts;
       return [selectedChange, unselectedChange, selectedFake];
     }
     const unselectedChange = {
       [originalUrl]: model,
       ...unselectedContacts.current,
-      // ...unselectedContacts,
     };
-    // const { [originalUrl]: urlToRemove, ...selectedChange } = selectedContacts;
     const {
       [originalUrl]: urlToRemove,
       ...selectedChange
@@ -160,11 +151,21 @@ export default function AgentMultiSelectPicker({
   };
 
   const handleTabChange = (event, newValue) => {
-    setSelectedTabValue(newValue);
+    setTab(newValue);
   };
 
   const handleFilterChange = (event) => {
-    setGlobalFilter(event.target.value || undefined);
+    const filter = event.target.value || "";
+    const selection = getSelection();
+    setShowPagination(!filter);
+    setGlobalFilter(filter);
+    if (filter) {
+      setContactsToShow(selection);
+      return;
+    }
+    setContactsToShow(selection.slice(0, NUM_CONTACTS_PER_PAGE));
+    setPages(getNumPages(selection));
+    setPage(1);
   };
 
   const handleAddRow = () => {
@@ -175,10 +176,11 @@ export default function AgentMultiSelectPicker({
       return;
     }
     const newItem = createUnregisteredContact();
-    setContactsToShow([newItem, ...contactsToShow]);
+    const newContacts = [newItem, ...getSelection()];
+    setPages(getNumPages(newContacts));
+    setPage(1);
+    setContactsToShow(newContacts.slice(0, NUM_CONTACTS_PER_PAGE));
   };
-
-  const contactsForTable = selectedTabValue ? contactsToShow : contacts;
 
   const toggleCheckbox = (event, model) => {
     const [
@@ -188,8 +190,6 @@ export default function AgentMultiSelectPicker({
     ] = getChangedSelection(model, event.target.checked);
     selectedContacts.current = selectedChange;
     unselectedContacts.current = unselectedChange;
-    // setSelectedContacts(selectedChange);
-    // setUnselectedContacts(unselectedChange);
     onChange(
       getFinalChangeMap(selectedChange, false),
       getFinalChangeMap(unselectedChange, true)
@@ -202,7 +202,10 @@ export default function AgentMultiSelectPicker({
     const agentDataset = await getSolidDataset(agentDatasetUrl, { fetch });
     const agentThing = getThing(agentDataset, agentUrl);
     const tempAgent = createTempContact(agentThing, agentDataset);
-    setContactsToShow([tempAgent, ...contactsToShow.slice(1)]);
+    const newContacts = [tempAgent, ...contactsToShow.slice(1)];
+    setPages(getNumPages(newContacts));
+    setPage(1);
+    setContactsToShow(newContacts.slice(0, NUM_CONTACTS_PER_PAGE));
     const [selectedChange, unselectedChange] = getChangedSelection(
       tempAgent,
       true
@@ -210,106 +213,117 @@ export default function AgentMultiSelectPicker({
     selectedContacts.current = selectedChange;
     unselectedContacts.current = unselectedChange;
     setSelectedFake(selectedFake.concat(agentUrl));
-    // setSelectedContacts(selectedChange);
-    // setUnselectedContacts(unselectedChange);
     onChange(
       getFinalChangeMap(selectedChange, false),
       getFinalChangeMap(unselectedChange, true)
     );
   };
 
-  // console.log("contactsToShow", contactsToShow);
-  // console.log("contactsToShow", selectedContacts.current);
+  const handlePaginationChange = (event, value) => {
+    const start = NUM_CONTACTS_PER_PAGE * (value - 1);
+    const end = NUM_CONTACTS_PER_PAGE * value;
+    const selection = getSelection();
+    setContactsToShow(selection.slice(start, end));
+    setPages(getNumPages(selection));
+    setPage(value);
+  };
 
   return (
-    <div className={bem("agent-multi-select-picker")}>
-      <div
-        className={bem("agent-multi-select-picker__tabs-and-button-container")}
-      >
-        <AgentsTableTabs
-          handleTabChange={handleTabChange}
-          selectedTabValue={selectedTabValue}
-          className={bem("agent-multi-select-picker__tabs")}
-          tabsValues={{
-            all: "",
-            people: PERSON_CONTACT,
-            groups: GROUP_CONTACT,
-          }}
-        />
-        <MobileAgentsSearchBar handleFilterChange={handleFilterChange} />
+    <>
+      <div className={bem("agent-multi-select-picker")}>
+        <div
+          className={bem(
+            "agent-multi-select-picker__tabs-and-button-container"
+          )}
+        >
+          <AgentsTableTabs
+            handleTabChange={handleTabChange}
+            selectedTabValue={tab}
+            className={bem("agent-multi-select-picker__tabs")}
+            tabsValues={{
+              all: "",
+              people: PERSON_CONTACT,
+              groups: GROUP_CONTACT,
+            }}
+          />
+          <MobileAgentsSearchBar handleFilterChange={handleFilterChange} />
+          <AddWebIdButton
+            onClick={handleAddRow}
+            className={bem("agent-multi-select-picker__desktop-only")}
+          />
+        </div>
+        <AgentsSearchBar handleFilterChange={handleFilterChange} />
+
         <AddWebIdButton
           onClick={handleAddRow}
-          className={bem("agent-multi-select-picker__desktop-only")}
+          className={bem("agent-multi-select-picker__mobile-only")}
         />
-      </div>
-      <AgentsSearchBar handleFilterChange={handleFilterChange} />
-
-      <AddWebIdButton
-        onClick={handleAddRow}
-        className={bem("agent-multi-select-picker__mobile-only")}
-      />
-      {!contactsToShow && (
-        <Container variant="empty">
-          <CircularProgress />
-        </Container>
-      )}
-      {!!contactsToShow && contactsToShow?.length > 0 && (
-        <Table
-          things={contactsToShow}
-          className={clsx(
-            bem("table"),
-            bem("agent-multi-select-picker__agent-table")
-          )}
-          filter={globalFilter}
-        >
-          <TableColumn
-            property={VCARD_WEBID_PREDICATE}
-            dataType="url"
-            header={
-              // eslint-disable-next-line react/jsx-wrap-multilines
-              <span className={bem("agent-multi-select-picker__table-header")}>
-                {checkboxHeadLabel}
-              </span>
-            }
-            body={() => (
-              <MemberCheckbox
-                selected={selectedContacts.current}
-                // selected={selectedContacts}
-                // selectedFake={selectedFake}
-                disabled={disabled}
-                onChange={toggleCheckbox}
-                // isChecked={(originalUrl) => {
-                //   return (
-                //     originalUrl === undefined ||
-                //     selectedContacts[originalUrl] !== undefined
-                //   );
-                // }}
-              />
+        {!contactsToShow && (
+          <Container variant="empty">
+            <CircularProgress />
+          </Container>
+        )}
+        {!!contactsToShow && contactsToShow?.length > 0 && (
+          <Table
+            things={contactsToShow}
+            className={clsx(
+              bem("table"),
+              bem("agent-multi-select-picker__agent-table")
             )}
-          />
-          <TableColumn
-            header={
-              // eslint-disable-next-line react/jsx-wrap-multilines
-              <span className={bem("agent-multi-select-picker__table-header")}>
-                Name
-              </span>
-            }
-            property={vcard.fn}
-            filterable
-            body={() => <MemberRow onNewAgentSubmit={handleNewAgentSubmit} />}
-          />
-        </Table>
+            filter={globalFilter}
+          >
+            <TableColumn
+              property={VCARD_WEBID_PREDICATE}
+              dataType="url"
+              header={
+                // eslint-disable-next-line react/jsx-wrap-multilines
+                <span
+                  className={bem("agent-multi-select-picker__table-header")}
+                >
+                  {checkboxHeadLabel}
+                </span>
+              }
+              body={() => (
+                <MemberCheckbox
+                  selected={selectedContacts.current}
+                  disabled={disabled}
+                  onChange={toggleCheckbox}
+                />
+              )}
+            />
+            <TableColumn
+              header={
+                // eslint-disable-next-line react/jsx-wrap-multilines
+                <span
+                  className={bem("agent-multi-select-picker__table-header")}
+                >
+                  Name
+                </span>
+              }
+              property={vcard.fn}
+              filterable
+              body={() => <MemberRow onNewAgentSubmit={handleNewAgentSubmit} />}
+            />
+          </Table>
+        )}
+        {contactsToShow.length === 0 &&
+          (tab.searchNoResult ? (
+            <span className={bem("agent-multi-select-picker__empty")}>
+              <p>{tab.searchNoResult}</p>
+            </span>
+          ) : (
+            <AgentPickerEmptyState onClick={handleAddRow} />
+          ))}
+      </div>
+      {showPagination && (
+        <Pagination
+          count={pages}
+          page={page}
+          shape="rounded"
+          onChange={handlePaginationChange}
+        />
       )}
-      {!!contacts &&
-        contactsForTable.length === 0 &&
-        (selectedTabValue.searchNoResult ? (
-          <span className={bem("agent-multi-select-picker__empty")}>
-            <p>{selectedTabValue.searchNoResult}</p>
-          </span>
-        ) : (
-          <AgentPickerEmptyState onClick={handleAddRow} />
-        ))}
-    </div>
+    </>
   );
 }
 
