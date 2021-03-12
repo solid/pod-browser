@@ -35,6 +35,7 @@ import {
   getContactFullFromContactThing,
   getContactType,
   getContactUrl,
+  getOriginalUrlForContactAll,
 } from "./index";
 import mockGroupContact, {
   addGroupToMockedIndexDataset,
@@ -55,21 +56,56 @@ import {
   aliceWebIdUrl,
 } from "../../../__testUtils/mockPersonResource";
 import mockGroupIndex from "../../../__testUtils/mockGroupIndex";
+import { getBaseUrl } from "../../solidClientHelpers/resource";
 
 const containerUrl = "https://example.pod.com/contacts/";
 const fetch = jest.fn();
 
 const addressBook = mockAddressBook();
-const personDatasetUrl = aliceProfileUrl;
-const personUrl = aliceWebIdUrl;
-const personName = "Person 1";
-const person = mockPersonContact(addressBook, personUrl, personName);
-const group = mockGroupContact(addressBook, "Group");
-const temp = mockTempContact(person);
 
 const allTypes = [PERSON_CONTACT, GROUP_CONTACT, TEMP_CONTACT];
 
-const groupIndex = mockGroupIndex(addressBook, [group]);
+const group1Url = "http://example.com/Group/group1/index.ttl#this";
+const group1DatasetUrl = getBaseUrl(group1Url);
+const group1Name = "Group 1";
+const group1 = mockGroupContact(addressBook, group1Name, { url: group1Url });
+const groupsDatasetUrl = "https://example.com/groups.ttl";
+const groupsDataset = addGroupToMockedIndexDataset(
+  mockSolidDatasetFrom(groupsDatasetUrl),
+  addressBook,
+  group1Name,
+  group1Url
+);
+const groupIndex = mockGroupIndex(addressBook, [group1]);
+
+const person1Url = "http://example.com/Person/person1/index.ttl#this";
+const person1OriginalUrl = aliceWebIdUrl;
+const person1DatasetUrl = getBaseUrl(person1Url);
+const person1Name = "Alice";
+const person1 = mockPersonContact(addressBook, person1Url, person1Name, {
+  originalUrl: person1OriginalUrl,
+});
+const peopleDatasetUrl = "https://example.com/people.ttl";
+const peopleDataset = addPersonToMockedIndexDataset(
+  mockSolidDatasetFrom(peopleDatasetUrl),
+  addressBook,
+  person1Name,
+  person1Url
+);
+
+const temp = mockTempContact(person1);
+
+const addressBookWithIndices = chain(
+  addressBook,
+  (a) =>
+    addIndexToMockedAddressBook(a, GROUP_CONTACT, {
+      indexUrl: groupsDatasetUrl,
+    }),
+  (a) =>
+    addIndexToMockedAddressBook(a, PERSON_CONTACT, {
+      indexUrl: peopleDatasetUrl,
+    })
+);
 
 describe("getContactUrl", () => {
   it("returns the URL for a contact thing", () => {
@@ -84,9 +120,9 @@ describe("getContactUrl", () => {
 
 describe("getContactType", () => {
   it("returns the type for the various contact types", () => {
-    expect(getContactType(person.thing, allTypes)).toEqual(PERSON_CONTACT);
-    expect(getContactType(person.thing, [GROUP_CONTACT])).toBeUndefined();
-    expect(getContactType(group.thing, allTypes)).toEqual(GROUP_CONTACT);
+    expect(getContactType(person1.thing, allTypes)).toEqual(PERSON_CONTACT);
+    expect(getContactType(person1.thing, [GROUP_CONTACT])).toBeUndefined();
+    expect(getContactType(group1.thing, allTypes)).toEqual(GROUP_CONTACT);
     expect(getContactType(temp.thing, allTypes)).toEqual(TEMP_CONTACT);
   });
 });
@@ -101,11 +137,11 @@ describe("getContactFullFromContactThing", () => {
   it("returns the dataset for the full version of a contact entry", async () => {
     const mockedGetSolidDataset = jest
       .spyOn(solidClientFns, "getSolidDataset")
-      .mockResolvedValue(person.dataset);
+      .mockResolvedValue(person1.dataset);
     await expect(
-      getContactFullFromContactThing(person.thing, allTypes, fetch)
-    ).resolves.toEqual(person);
-    expect(mockedGetSolidDataset).toHaveBeenCalledWith(personDatasetUrl, {
+      getContactFullFromContactThing(person1.thing, allTypes, fetch)
+    ).resolves.toEqual(person1);
+    expect(mockedGetSolidDataset).toHaveBeenCalledWith(person1DatasetUrl, {
       fetch,
     });
   });
@@ -113,43 +149,11 @@ describe("getContactFullFromContactThing", () => {
 
 describe("getContactAllFromContactsIndex", () => {
   it("returns all contacts from the index", () => {
-    expect(getContactAllFromContactsIndex(groupIndex)).toEqual([group]);
+    expect(getContactAllFromContactsIndex(groupIndex)).toEqual([group1]);
   });
 });
 
 describe("getContactAll", () => {
-  const group1Url = "http://example.com/Group/group1/index.ttl#this";
-  const group1Name = "Group 1";
-  const groupsDatasetUrl = "https://example.com/groups.ttl";
-  const groupsDataset = addGroupToMockedIndexDataset(
-    mockSolidDatasetFrom(groupsDatasetUrl),
-    addressBook,
-    group1Name,
-    group1Url
-  );
-
-  const person1Url = "http://example.com/Person/person1/index.ttl#this";
-  const person1Name = "Alice";
-  const peopleDatasetUrl = "https://example.com/people.ttl";
-  const peopleDataset = addPersonToMockedIndexDataset(
-    mockSolidDatasetFrom(peopleDatasetUrl),
-    addressBook,
-    person1Name,
-    person1Url
-  );
-
-  const addressBookWithIndices = chain(
-    addressBook,
-    (a) =>
-      addIndexToMockedAddressBook(a, GROUP_CONTACT, {
-        indexUrl: groupsDatasetUrl,
-      }),
-    (a) =>
-      addIndexToMockedAddressBook(a, PERSON_CONTACT, {
-        indexUrl: peopleDatasetUrl,
-      })
-  );
-
   beforeEach(() => {
     jest.spyOn(solidClientFns, "getSolidDataset").mockImplementation((url) => {
       switch (url) {
@@ -170,10 +174,10 @@ describe("getContactAll", () => {
       fetch
     );
     expect(groups).toHaveLength(1);
-    const [group1] = groups;
-    expect(asUrl(group1.thing)).toEqual(group1Url);
-    expect(getStringNoLocale(group1.thing, vcard.fn)).toEqual(group1Name);
-    expect(group1.dataset).toBe(groupsDataset);
+    const [group] = groups;
+    expect(asUrl(group.thing)).toEqual(group1Url);
+    expect(getStringNoLocale(group.thing, vcard.fn)).toEqual(group1Name);
+    expect(group.dataset).toBe(groupsDataset);
   });
 
   it("returns people with PERSON_CONTACT", async () => {
@@ -183,10 +187,10 @@ describe("getContactAll", () => {
       fetch
     );
     expect(people).toHaveLength(1);
-    const [person1] = people;
-    expect(asUrl(person1.thing)).toEqual(person1Url);
-    expect(getStringNoLocale(person1.thing, vcard.fn)).toEqual(person1Name);
-    expect(person1.dataset).toBe(peopleDataset);
+    const [person] = people;
+    expect(asUrl(person.thing)).toEqual(person1Url);
+    expect(getStringNoLocale(person.thing, vcard.fn)).toEqual(person1Name);
+    expect(person.dataset).toBe(peopleDataset);
   });
 
   it("combines contacts if multiple types are given", async () => {
@@ -196,9 +200,9 @@ describe("getContactAll", () => {
       fetch
     );
     expect(contacts).toHaveLength(2);
-    const [group1, person1] = contacts;
-    expect(group1.dataset).toBe(groupsDataset);
-    expect(person1.dataset).toBe(peopleDataset);
+    const [group, person] = contacts;
+    expect(group.dataset).toBe(groupsDataset);
+    expect(person.dataset).toBe(peopleDataset);
   });
 
   it("returns an empty list for address book without indices", async () => {
@@ -216,5 +220,30 @@ describe("getContactAll", () => {
 });
 
 describe("getOriginalUrlForContactAll", () => {
-  //
+  beforeEach(() => {
+    jest.spyOn(solidClientFns, "getSolidDataset").mockImplementation((url) => {
+      switch (url) {
+        case groupsDatasetUrl:
+          return groupsDataset;
+        case peopleDatasetUrl:
+          return peopleDataset;
+        case group1DatasetUrl:
+          return group1.dataset;
+        case person1DatasetUrl:
+          return person1.dataset;
+        default:
+          throw new Error(`Index not found: ${url}`);
+      }
+    });
+  });
+
+  it("gets the URLs of all contacts in the types specified", async () => {
+    await expect(
+      getOriginalUrlForContactAll(
+        addressBookWithIndices,
+        [GROUP_CONTACT, PERSON_CONTACT],
+        fetch
+      )
+    ).resolves.toEqual([group1Url, person1OriginalUrl]);
+  });
 });

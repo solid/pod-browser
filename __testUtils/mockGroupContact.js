@@ -35,6 +35,7 @@ import {
 import { vcardExtras } from "../src/addressBook";
 import { mockGroupThing } from "./mockGroup";
 import { getAddressBookDatasetUrl } from "../src/models/addressBook";
+import { getBaseUrl } from "../src/solidClientHelpers/resource";
 
 export function mockIndexThing(indexDataset, addressBook, groupThingUrl) {
   const addressBookThingUrl = asUrl(
@@ -62,7 +63,8 @@ export function addGroupToMockedIndexDataset(
 
 export default function mockGroupContact(addressBook, name, options = {}) {
   const { url, id } = options;
-  const groupDatasetUrl = url || createGroupDatasetUrl(addressBook, id);
+  const groupDatasetUrl =
+    getBaseUrl(url) || createGroupDatasetUrl(addressBook, id);
   const groupThingUrl = `${groupDatasetUrl}#this`;
   const groupThing = mockGroupThing(name, groupThingUrl, options);
   return {
