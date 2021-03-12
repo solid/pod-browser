@@ -21,7 +21,7 @@
 
 /* eslint react/jsx-props-no-spreading:off, react/forbid-prop-types:off */
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Checkbox } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
@@ -36,7 +36,7 @@ export default function MemberCheckbox({
   disabled,
   // isChecked,
   onChange,
-  selectedFake,
+  // selectedFake,
   ...props
 }) {
   const { thing } = useThing();
@@ -45,12 +45,16 @@ export default function MemberCheckbox({
     shouldRetryOnError: false,
   });
   const originalUrl = contactFull?.type?.getOriginalUrl(contactFull);
-  const [checked, setChecked] = useState(
-    UNREGISTERED_CONTACT.isOfType(thing) || selected[originalUrl] !== undefined
+  const isChecked = useCallback(
+    () =>
+      UNREGISTERED_CONTACT.isOfType(thing) ||
+      selected[originalUrl] !== undefined,
+    [originalUrl, selected, thing]
   );
+  const [checked, setChecked] = useState(isChecked());
   useEffect(() => {
-    setChecked(checked || selectedFake.includes(originalUrl));
-  }, [checked, originalUrl, selectedFake]);
+    setChecked(isChecked());
+  }, [isChecked]);
 
   // useEffect(() => {
   //   if (isValidating) return;
@@ -82,7 +86,7 @@ export default function MemberCheckbox({
 MemberCheckbox.propTypes = {
   onChange: PropTypes.func.isRequired,
   selected: PropTypes.object.isRequired,
-  selectedFake: PropTypes.arrayOf(PropTypes.string).isRequired,
+  // selectedFake: PropTypes.arrayOf(PropTypes.string).isRequired,
   disabled: PropTypes.arrayOf(PropTypes.string),
   // isChecked: PropTypes.func.isRequired,
 };
