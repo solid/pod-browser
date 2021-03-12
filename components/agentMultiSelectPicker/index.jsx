@@ -275,7 +275,7 @@ export default function AgentMultiSelectPicker({
               <MemberCheckbox
                 selected={selectedContacts.current}
                 // selected={selectedContacts}
-                selectedFake={selectedFake}
+                // selectedFake={selectedFake}
                 disabled={disabled}
                 onChange={toggleCheckbox}
                 // isChecked={(originalUrl) => {
