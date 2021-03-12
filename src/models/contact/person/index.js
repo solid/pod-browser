@@ -199,6 +199,7 @@ export async function savePersonWithSchema(addressBook, contactSchema, fetch) {
     person: {
       dataset: personDataset,
       thing: personThing,
+      type: PERSON_CONTACT,
     },
     personIndex: indexDataset,
   };

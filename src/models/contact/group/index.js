@@ -195,6 +195,7 @@ export async function renameGroup(
     group: {
       dataset: savedDataset,
       thing: getThing(savedDataset, asUrl(group.thing)),
+      type: GROUP_CONTACT,
     },
     groupIndex: {
       dataset: indexDataset,

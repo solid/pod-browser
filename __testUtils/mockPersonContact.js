@@ -44,7 +44,7 @@ function mockContactPersonThing(
     mockThingFrom(personThingUrl),
     (t) => setStringNoLocale(t, vcard.fn, name),
     (t) => setUrl(t, vcardExtras("inAddressBook"), asUrl(addressBook.thing)),
-    (t) => setUrl(t, foaf.openid, originalUrl)
+    ...(originalUrl ? [(t) => setUrl(t, foaf.openid, originalUrl)] : [])
   );
 }
 
