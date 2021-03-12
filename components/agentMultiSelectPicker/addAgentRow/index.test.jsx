@@ -24,13 +24,13 @@ import userEvent from "@testing-library/user-event";
 import { useSession, useThing } from "@inrupt/solid-ui-react";
 import { addUrl, createThing } from "@inrupt/solid-client";
 import AddAgentRow from "./index";
-import { renderWithTheme } from "../../../../../__testUtils/withTheme";
-import useContactProfile from "../../../../../src/hooks/useContactProfileOld";
-import { vcardExtras } from "../../../../../src/addressBook";
+import useContactProfile from "../../../src/hooks/useContactProfileOld";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
+import { vcardExtras } from "../../../src/addressBook";
 
 jest.mock("@inrupt/solid-ui-react");
 const mockedThingHook = useThing;
-jest.mock("../../../../../src/hooks/useContactProfileOld");
+jest.mock("../../../src/hooks/useContactProfileOld");
 
 describe("AddAgentRow", () => {
   describe("when adding a new webId", () => {

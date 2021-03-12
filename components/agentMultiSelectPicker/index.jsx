@@ -39,9 +39,7 @@ import AgentsTableTabs from "../resourceDetails/resourceSharing/agentsTableTabs"
 import { PERSON_CONTACT } from "../../src/models/contact/person";
 import { GROUP_CONTACT } from "../../src/models/contact/group";
 import MobileAgentsSearchBar from "../resourceDetails/resourceSharing/mobileAgentsSearchBar";
-import AddWebIdButton from "../resourceDetails/resourceSharing/addAgentButton/agentPickerModal/addWebIdButton";
 import AgentsSearchBar from "../resourceDetails/resourceSharing/agentsSearchBar";
-import AgentPickerEmptyState from "../resourceDetails/resourceSharing/addAgentButton/agentPickerEmptyState";
 import styles from "./styles";
 import useAddressBook from "../../src/hooks/useAddressBook";
 import { vcardExtras } from "../../src/addressBook";
@@ -55,6 +53,8 @@ import {
   createUnregisteredContact,
   UNREGISTERED_CONTACT,
 } from "../../src/models/contact/unregistered";
+import AddWebIdButton from "../resourceDetails/resourceSharing/agentPickerModal/addWebIdButton";
+import AgentPickerEmptyState from "../resourceDetails/resourceSharing/agentPickerEmptyState";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const VCARD_WEBID_PREDICATE = vcardExtras("WebId");

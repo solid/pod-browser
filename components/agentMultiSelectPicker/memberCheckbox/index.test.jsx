@@ -21,9 +21,9 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import { renderWithTheme } from "../../../../../../__testUtils/withTheme";
-import useContactProfile from "../../../../../../src/hooks/useContactProfileOld";
 import MemberCheckbox, { TESTCAFE_ID_WEBID_CHECKBOX } from "./index";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
+import useContactProfile from "../../../src/hooks/useContactProfile";
 
 jest.mock("../../../../../../src/hooks/useContactProfileOld");
 

@@ -217,7 +217,7 @@ describe("getProfilesForPersonContacts", () => {
   });
 });
 
-describe("getProfileForContact", () => {
+describe("getProfileForContactOld", () => {
   beforeEach(() => {
     jest.spyOn(resourceFns, "getResource").mockResolvedValue({
       response: { dataset: mockPersonDatasetAlice(), iri: aliceWebIdUrl },

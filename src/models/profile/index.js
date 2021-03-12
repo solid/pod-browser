@@ -28,6 +28,7 @@ import {
 import { foaf, vcard } from "rdf-namespaces";
 import { fetchProfile } from "../../solidClientHelpers/profile";
 import { getResource } from "../../solidClientHelpers/resource";
+import { getWebIdUrl as getWebIdUrlOld } from "../../addressBook";
 
 /* Model constants */
 
@@ -46,7 +47,7 @@ export async function getProfileForContactOld(personContactUrl, fetch) {
   const {
     response: { dataset, iri },
   } = await getResource(personContactUrl, fetch);
-  const webId = getWebIdUrl(dataset, iri);
+  const webId = getWebIdUrlOld(dataset, iri);
   const fetchedProfile = await fetchProfile(webId, fetch);
   return fetchedProfile;
 }
