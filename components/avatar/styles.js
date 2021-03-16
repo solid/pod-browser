@@ -19,37 +19,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint react/jsx-props-no-spreading:off */
+import { createStyles } from "@solid/lit-prism-patterns";
 
-import React from "react";
-import { Icons } from "@inrupt/prism-react-components";
-import { makeStyles } from "@material-ui/styles";
-import { useBem } from "@solid/lit-prism-patterns";
-import { Avatar as MuiAvatar, createStyles } from "@material-ui/core";
-import T from "prop-types";
-import styles from "./styles";
+const PUBLIC_ICON_COLOR = "#2196F3";
+const PUBLIC_ICON_BACKGROUND_COLOR = "#E8F4FD";
+const AUTHENTICATED_ICON_COLOR = "#4CAF50";
+const AUTHENTICATED_ICON_BACKGROUND_COLOR = "#EDF7ED";
 
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-
-export default function Avatar({ src, icon, variant, ...props }) {
-  const bem = useBem(useStyles());
-  return src ? (
-    <MuiAvatar src={src} {...props} />
-  ) : (
-    <MuiAvatar {...props}>
-      <Icons name={icon} className={bem("avatar__icon", variant)} />
-    </MuiAvatar>
-  );
+export default function styles(theme) {
+  return createStyles(theme, ["icons", "button"], {
+    avatar__icon: {
+      color: "white",
+    },
+    "avatar__icon--public": {
+      fontSize: "0.875rem",
+      display: "flex",
+      width: "1.875rem",
+      height: "1.875rem",
+      alignItems: "center",
+      justifyContent: "center",
+      color: PUBLIC_ICON_COLOR,
+      backgroundColor: PUBLIC_ICON_BACKGROUND_COLOR,
+      borderRadius: "50%",
+    },
+    "avatar__icon--authenticated": {
+      fontSize: "0.875rem",
+      display: "flex",
+      width: "1.875rem",
+      height: "1.875rem",
+      alignItems: "center",
+      justifyContent: "center",
+      color: AUTHENTICATED_ICON_COLOR,
+      backgroundColor: AUTHENTICATED_ICON_BACKGROUND_COLOR,
+      borderRadius: "50%",
+    },
+  });
 }
-
-Avatar.propTypes = {
-  icon: T.string,
-  src: T.string,
-  variant: T.string,
-};
-
-Avatar.defaultProps = {
-  icon: "user",
-  src: null,
-  variant: null,
-};

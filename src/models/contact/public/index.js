@@ -30,9 +30,6 @@ import {
 import { foaf } from "rdf-namespaces";
 import { chain } from "../../../solidClientHelpers/utils";
 
-const PUBLIC_ICON_COLOR = "#2196F3";
-const PUBLIC_ICON_BACKGROUND_COLOR = "#E8F4FD";
-
 const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 export const PUBLIC_AGENT_PREDICATE =
   "http://www.w3.org/ns/solid/acp#PublicAgent";
@@ -44,17 +41,7 @@ export const PUBLIC_AGENT = {
   getAvatarProps: () => ({
     icon: "globe",
     src: null,
-    iconStyle: {
-      fontSize: "0.875rem",
-      display: "flex",
-      width: "1.875rem",
-      height: "1.875rem",
-      alignItems: "center",
-      justifyContent: "center",
-      color: PUBLIC_ICON_COLOR,
-      backgroundColor: PUBLIC_ICON_BACKGROUND_COLOR,
-      borderRadius: "50%",
-    },
+    variant: "public",
   }),
 };
 

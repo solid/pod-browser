@@ -19,7 +19,7 @@ exports[`Avatar renders an avatar with a user icon when no src is available 1`] 
     class="PodBrowser-root PodBrowser-circle PodBrowser-colorDefault"
   >
     <span
-      class="PodBrowser-icon-user"
+      class="PodBrowser-icon-user PodBrowser-avatar__icon"
     />
   </div>
 </DocumentFragment>

@@ -30,9 +30,6 @@ import {
 import { foaf } from "rdf-namespaces";
 import { chain } from "../../../solidClientHelpers/utils";
 
-const AUTHENTICATED_ICON_COLOR = "#4CAF50";
-const AUTHENTICATED_ICON_BACKGROUND_COLOR = "#EDF7ED";
-
 const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 export const AUTHENTICATED_AGENT_PREDICATE =
   "http://www.w3.org/ns/solid/acp#AuthenticatedAgent";
@@ -44,17 +41,7 @@ export const AUTHENTICATED_AGENT = {
   getAvatarProps: () => ({
     icon: "user-lock",
     src: null,
-    iconStyle: {
-      fontSize: "0.875rem",
-      display: "flex",
-      width: "1.875rem",
-      height: "1.875rem",
-      alignItems: "center",
-      justifyContent: "center",
-      color: AUTHENTICATED_ICON_COLOR,
-      backgroundColor: AUTHENTICATED_ICON_BACKGROUND_COLOR,
-      borderRadius: "50%",
-    },
+    variant: "authenticated",
   }),
 };
 

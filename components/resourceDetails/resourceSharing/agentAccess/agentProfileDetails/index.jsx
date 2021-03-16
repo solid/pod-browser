@@ -66,8 +66,6 @@ export default function AgentProfileDetails({
 
     return {
       src: profile?.avatar,
-      icon: "user",
-      iconStyle: { color: "#fff" },
     };
   };
 

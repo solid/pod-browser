@@ -9,8 +9,7 @@ exports[`AgentAccess for authenticated agent renders correctly 1`] = `
       class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
     >
       <span
-        class="PodBrowser-icon-user-lock"
-        style="font-size: 0.875rem; display: flex; width: 1.875rem; height: 1.875rem; align-items: center; justify-content: center; color: rgb(76, 175, 80); background-color: rgb(237, 247, 237); border-radius: 50%;"
+        class="PodBrowser-icon-user-lock PodBrowser-avatar__icon PodBrowser-avatar__icon--authenticated"
       />
     </div>
     <p
@@ -39,8 +38,7 @@ exports[`AgentAccess for public agent renders correctly 1`] = `
       class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
     >
       <span
-        class="PodBrowser-icon-globe"
-        style="font-size: 0.875rem; display: flex; width: 1.875rem; height: 1.875rem; align-items: center; justify-content: center; color: rgb(33, 150, 243); background-color: rgb(232, 244, 253); border-radius: 50%;"
+        class="PodBrowser-icon-globe PodBrowser-avatar__icon PodBrowser-avatar__icon--public"
       />
     </div>
     <p
