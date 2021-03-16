@@ -140,6 +140,7 @@ export const handleSubmit = ({
 export const handleConfirmation = ({
   open,
   dialogId,
+  bypassDialog,
   setConfirmationSetup,
   setOpen,
   setConfirmed,
@@ -149,7 +150,10 @@ export const handleConfirmation = ({
 }) => {
   return (confirmationSetup, confirmed) => {
     setConfirmationSetup(true);
-
+    if (bypassDialog) {
+      setConfirmed(true);
+      handleSubmitNewWebIds();
+    }
     if (open !== dialogId) return;
     if (confirmationSetup && confirmed === null) return;
     if (confirmationSetup && confirmed) {
@@ -239,6 +243,7 @@ export default function AgentPickerModal({
   const { accessControl } = useContext(AccessControlContext);
   const [newAgentsWebIds, setNewAgentsWebIds] = useState([]);
   const [webIdsToDelete, setWebIdsToDelete] = useState([]);
+  const [bypassDialog, setBypassDialog] = useState(false);
   const [contactsArray, setContactsArray] = useState([]);
   const [filteredContacts, setFilteredContacts] = useState([]);
   const [addingWebId, setAddingWebId] = useState(false);
@@ -293,7 +298,10 @@ export default function AgentPickerModal({
         webId !== AUTHENTICATED_AGENT_PREDICATE
     );
     if (!filteredNewWebIds.length && !filteredWebIdsToDelete.length) {
-      setConfirmed(true);
+      setTitle(null);
+      setContent(null);
+      setOpen(null);
+      setBypassDialog(true);
     }
     const confirmationTitle = `Change permissions for ${
       filteredNewWebIds.length + filteredWebIdsToDelete.length === 1
@@ -313,6 +321,7 @@ export default function AgentPickerModal({
   const onConfirmation = handleConfirmation({
     open,
     dialogId,
+    bypassDialog,
     setConfirmationSetup,
     setOpen,
     setConfirmed,
