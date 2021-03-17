@@ -39,18 +39,16 @@ import AccessControlContext from "../../../../src/contexts/accessControlContext"
 import * as ProfileFns from "../../../../src/solidClientHelpers/profile";
 import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
 import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
-import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
 import useAddressBook from "../../../../src/hooks/useAddressBook";
 import useContacts from "../../../../src/hooks/useContacts";
+import { PUBLIC_AGENT_PREDICATE } from "../../../../src/models/contact/public";
+import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../src/models/contact/authenticated";
 
 jest.mock("../../../../src/hooks/useAddressBook");
 const mockedUseAddressBook = useAddressBook;
 
 jest.mock("../../../../src/hooks/usePolicyPermissions");
 const mockedUsePolicyPermissions = usePolicyPermissions;
-
-jest.mock("../../../../src/hooks/usePermissionsWithProfiles");
-const mockedUsePermissionsWithProfiles = usePermissionsWithProfiles;
 
 jest.mock("../../../../src/hooks/useContacts");
 const mockedUseContacts = useContacts;
@@ -208,6 +206,64 @@ describe("handleSubmit", () => {
     expect(onClose).toHaveBeenCalled();
   });
 
+  it("when webId is public agent url, it calls the corresponding setRulePublic with the correct value", async () => {
+    const policyName = "editors";
+    const handler = handleSubmit({
+      newAgentsWebIds: [PUBLIC_AGENT_PREDICATE],
+      webIdsToDelete: [],
+      accessControl,
+      addressBook,
+      mutatePermissions,
+      saveAgentToContacts,
+      onClose,
+      setLoading,
+      policyName,
+      advancedSharing: true,
+      fetch,
+    });
+    handler();
+
+    await waitFor(() => {
+      expect(accessControl.setRulePublic).toHaveBeenCalledWith(
+        policyName,
+        true
+      );
+    });
+
+    expect(saveAgentToContacts).not.toHaveBeenCalledWith();
+    expect(mutatePermissions).toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it("when webId is authenticated agent url, it calls the corresponding setRuleAuthenticated with the correct value", async () => {
+    const policyName = "editors";
+    const handler = handleSubmit({
+      newAgentsWebIds: [AUTHENTICATED_AGENT_PREDICATE],
+      webIdsToDelete: [],
+      accessControl,
+      addressBook,
+      mutatePermissions,
+      saveAgentToContacts,
+      onClose,
+      setLoading,
+      policyName,
+      advancedSharing: true,
+      fetch,
+    });
+    handler();
+
+    await waitFor(() => {
+      expect(accessControl.setRuleAuthenticated).toHaveBeenCalledWith(
+        policyName,
+        true
+      );
+    });
+
+    expect(saveAgentToContacts).not.toHaveBeenCalledWith();
+    expect(mutatePermissions).toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalled();
+  });
+
   it("returns a handler that submits the webIdsToDelete", async () => {
     const policyName = "editors";
     const handler = handleSubmit({
@@ -256,6 +312,61 @@ describe("handleSubmit", () => {
       expect(accessControl.removeAgentFromCustomPolicy).toHaveBeenCalledWith(
         webId,
         policyName
+      );
+    });
+
+    expect(mutatePermissions).toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalled();
+  });
+  it("when webId to be deleted is public agent url, it calls the corresponding setRulePublic with the correct value", async () => {
+    const policyName = "editors";
+    const handler = handleSubmit({
+      newAgentsWebIds: [],
+      webIdsToDelete: [PUBLIC_AGENT_PREDICATE],
+      accessControl,
+      addressBook,
+      mutatePermissions,
+      saveAgentToContacts,
+      onClose,
+      setLoading,
+      policyName,
+      advancedSharing: true,
+      fetch,
+    });
+    handler();
+
+    await waitFor(() => {
+      expect(accessControl.setRulePublic).toHaveBeenCalledWith(
+        policyName,
+        false
+      );
+    });
+
+    expect(mutatePermissions).toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it("when webId to be deleted is authenticated agent url, it calls the corresponding setRuleAuthenticated with the correct value", async () => {
+    const policyName = "editors";
+    const handler = handleSubmit({
+      newAgentsWebIds: [],
+      webIdsToDelete: [AUTHENTICATED_AGENT_PREDICATE],
+      accessControl,
+      addressBook,
+      mutatePermissions,
+      saveAgentToContacts,
+      onClose,
+      setLoading,
+      policyName,
+      advancedSharing: true,
+      fetch,
+    });
+    handler();
+
+    await waitFor(() => {
+      expect(accessControl.setRuleAuthenticated).toHaveBeenCalledWith(
+        policyName,
+        false
       );
     });
 
@@ -380,9 +491,6 @@ describe("AgentPickerModal without contacts", () => {
       data: permissions,
       mutate: jest.fn(),
     });
-    mockedUsePermissionsWithProfiles.mockReturnValue({
-      permissionsWithProfiles: permissions,
-    });
     const { getByTestId, findByTestId, findByText } = renderWithTheme(
       <AccessControlContext.Provider value={{ accessControl }}>
         <AgentPickerModal
@@ -410,9 +518,6 @@ describe("AgentPickerModal without contacts", () => {
       data: permissions,
       mutate: jest.fn(),
     });
-    mockedUsePermissionsWithProfiles.mockReturnValue({
-      permissionsWithProfiles: permissions,
-    });
     const webId = "https://somewebid.com";
     jest
       .spyOn(ProfileFns, "fetchProfile")
@@ -438,17 +543,14 @@ describe("AgentPickerModal without contacts", () => {
 
     expect(agentWebId).not.toBeNull();
   });
-  it("renders a table with tabs, searchbox and an empty state message when there are no contacts", () => {
+  it("renders a table with tabs, searchbox, 'Anyone' and 'Anyone signed in' when there are no contacts", () => {
     mockedUseContacts.mockReturnValue({ data: [] });
 
     mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
-    mockedUsePermissionsWithProfiles.mockReturnValue({
-      permissionsWithProfiles: [],
-    });
-    const { asFragment, getByTestId } = renderWithTheme(
+    const { asFragment, queryAllByTestId } = renderWithTheme(
       <AgentPickerModal
         type="editors"
         text={{ editText: "Edit Editors", saveText: "Save Editors" }}
@@ -456,7 +558,11 @@ describe("AgentPickerModal without contacts", () => {
       />
     );
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId("empty-state-add-webid-button")).not.toBeNull();
+    expect(queryAllByTestId("agent-webid")).toHaveLength(2);
+    expect(queryAllByTestId("agent-webid")[0]).toHaveTextContent("Anyone");
+    expect(queryAllByTestId("agent-webid")[1]).toHaveTextContent(
+      "Anyone signed in"
+    );
   });
   it("opens a confirmation dialog", async () => {
     mockedUseContacts.mockReturnValue({ data: [] });
@@ -464,9 +570,6 @@ describe("AgentPickerModal without contacts", () => {
     mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
-    });
-    mockedUsePermissionsWithProfiles.mockReturnValue({
-      permissionsWithProfiles: permissions,
     });
     const setOpen = jest.fn();
     const setTitle = jest.fn();
@@ -512,15 +615,56 @@ describe("AgentPickerModal without contacts", () => {
     expect(setTitle).toHaveBeenCalledWith("Change permissions for 1 person");
     expect(setOpen).toHaveBeenCalledWith("add-new-permissions");
   });
-  it("renders the correct confimation message for more than 1 agent", async () => {
+  it("confirms without dialog if webIds to be added are only public and/or authenticated agents", async () => {
     mockedUseContacts.mockReturnValue({ data: [] });
 
     mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
-    mockedUsePermissionsWithProfiles.mockReturnValue({
-      permissionsWithProfiles: permissions,
+    const setOpen = jest.fn();
+    const setTitle = jest.fn();
+    const setConfirmed = jest.fn();
+
+    const contextValue = {
+      confirmed: false,
+      content: null,
+      open: false,
+      setConfirmed,
+      setContent: jest.fn(),
+      setOpen,
+      setTitle,
+      title: "Confirmation",
+    };
+
+    jest
+      .spyOn(ProfileFns, "fetchProfile")
+      .mockRejectedValueOnce({ error: "error" });
+
+    const { getByTestId, getAllByRole } = renderWithTheme(
+      <ConfirmationDialogContext.Provider value={contextValue}>
+        <AccessControlContext.Provider value={{ accessControl }}>
+          <AgentPickerModal
+            type="editors"
+            text={{ editText: "Edit Editors", saveText: "Save Editors" }}
+            onClose={onClose}
+          />
+        </AccessControlContext.Provider>
+      </ConfirmationDialogContext.Provider>
+    );
+
+    const checkBoxes = getAllByRole("checkbox");
+    userEvent.click(checkBoxes[0]);
+    const submitWebIdsButton = getByTestId("submit-webids-button");
+    userEvent.click(submitWebIdsButton);
+    expect(setConfirmed).toHaveBeenCalledWith(true);
+  });
+  it("renders the correct confimation message for more than 1 agent", async () => {
+    mockedUseContacts.mockReturnValue({ data: [] });
+
+    mockedUsePolicyPermissions.mockReturnValue({
+      data: permissions,
+      mutate: jest.fn(),
     });
     const setOpen = jest.fn();
     const setTitle = jest.fn();
@@ -581,9 +725,6 @@ describe("AgentPickerModal without contacts", () => {
       data: permissions,
       mutate: jest.fn(),
     });
-    mockedUsePermissionsWithProfiles.mockReturnValue({
-      permissionsWithProfiles: permissions,
-    });
     const setOpen = jest.fn();
     const setTitle = jest.fn();
 
@@ -597,7 +738,7 @@ describe("AgentPickerModal without contacts", () => {
       setTitle,
       title: "Confirmation",
     };
-    const { getByTestId, getByRole } = renderWithTheme(
+    const { getByTestId, getAllByRole } = renderWithTheme(
       <ConfirmationDialogContext.Provider value={contextValue}>
         <AccessControlContext.Provider value={{ accessControl }}>
           <AgentPickerModal
@@ -615,10 +756,10 @@ describe("AgentPickerModal without contacts", () => {
 
     const addWebIdButton = getByTestId("add-webid-button");
     userEvent.click(addWebIdButton);
-    const checkBox = getByRole("checkbox");
-    expect(checkBox).toBeChecked();
-    userEvent.click(checkBox);
-    expect(checkBox).toBeChecked();
+    const checkBoxes = getAllByRole("checkbox");
+    expect(checkBoxes[0]).toBeChecked();
+    userEvent.click(checkBoxes[0]);
+    expect(checkBoxes[0]).toBeChecked();
   });
   it("renders a warning when trying to submit a webId that is already in the policy", async () => {
     mockedUseContacts.mockReturnValue({ data: [] });
@@ -628,10 +769,6 @@ describe("AgentPickerModal without contacts", () => {
       data: permissions,
       mutate: jest.fn(),
     });
-    mockedUsePermissionsWithProfiles.mockReturnValue({
-      permissionsWithProfiles: [{ webId }],
-    });
-
     const { getByTestId, findByText, findByTestId } = renderWithTheme(
       <AccessControlContext.Provider value={{ accessControl }}>
         <AgentPickerModal
@@ -663,7 +800,7 @@ describe("AgentPickerModal with contacts", () => {
   });
 
   const onClose = jest.fn();
-  it("renders a table with the available contacts", () => {
+  it("renders a table with the available contacts, Anyone and Anyone signed in", () => {
     mockedUseContacts.mockReturnValue({
       data: [
         mockPersonContact(
@@ -681,9 +818,6 @@ describe("AgentPickerModal with contacts", () => {
     mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
-    });
-    mockedUsePermissionsWithProfiles.mockReturnValue({
-      permissionsWithProfiles: [],
     });
     const { asFragment, queryAllByTestId } = renderWithTheme(
       <AgentPickerModal
@@ -719,9 +853,6 @@ describe("AgentPickerModal with contacts", () => {
       data: permissions,
       mutate: jest.fn(),
     });
-    mockedUsePermissionsWithProfiles.mockReturnValue({
-      permissionsWithProfiles: [],
-    });
     const {
       getByTestId,
       queryAllByTestId,
@@ -740,7 +871,7 @@ describe("AgentPickerModal with contacts", () => {
     expect(findByText("Example 1")).not.toBeNull();
     expect(queryByText("Example 2")).toBeNull();
     userEvent.clear(searchBar);
-    expect(queryAllByTestId("agent-webid")).toHaveLength(3);
+    expect(queryAllByTestId("agent-webid")).toHaveLength(5);
   });
   it("clicking the tabs filters by person or group contact", () => {
     const containerUrl = "https://example.com/contacts/";
@@ -763,9 +894,6 @@ describe("AgentPickerModal with contacts", () => {
     mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
-    });
-    mockedUsePermissionsWithProfiles.mockReturnValue({
-      permissionsWithProfiles: [],
     });
     const { getByTestId, queryAllByTestId } = renderWithTheme(
       <AgentPickerModal
@@ -803,9 +931,6 @@ describe("AgentPickerModal with contacts", () => {
       data: permissions,
       mutate: jest.fn(),
     });
-    mockedUsePermissionsWithProfiles.mockReturnValue({
-      permissionsWithProfiles: [],
-    });
     const { getByTestId, queryAllByTestId, queryByText } = renderWithTheme(
       <AgentPickerModal
         type="editors"
@@ -828,9 +953,6 @@ describe("AgentPickerModal with contacts", () => {
     mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
-    });
-    mockedUsePermissionsWithProfiles.mockReturnValue({
-      permissionsWithProfiles: [],
     });
     const { getByTestId, queryAllByTestId, queryByText } = renderWithTheme(
       <AgentPickerModal

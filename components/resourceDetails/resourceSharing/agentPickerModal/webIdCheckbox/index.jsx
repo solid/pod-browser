@@ -23,11 +23,13 @@
 
 import React from "react";
 import { useThing } from "@inrupt/solid-ui-react";
+import { getUrl } from "@inrupt/solid-client";
 import PropTypes from "prop-types";
 import { Checkbox } from "@material-ui/core";
 import useContactProfile from "../../../../../src/hooks/useContactProfile";
 
 export const TESTCAFE_ID_WEBID_CHECKBOX = "webid-checkbox";
+const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 
 export default function WebIdCheckbox({
   value,
@@ -40,17 +42,34 @@ export default function WebIdCheckbox({
 }) {
   const { thing } = useThing();
   const { data: profile } = useContactProfile(thing);
+  const agentIdentifier = thing && getUrl(thing, AGENT_PREDICATE); // todo: add corresponding groupIdentifier when adding groups
 
-  const getWebIdValue = () => {
-    let webIdValue;
-    if (!value && profile) {
-      webIdValue = profile.webId;
-    } else if (value) {
-      webIdValue = value;
-    } else if (!value && index === 0) {
-      webIdValue = "";
+  const getAgentIdentifierValue = () => {
+    let agentIdentifierValue;
+    if (!agentIdentifier && profile) {
+      agentIdentifierValue = profile.webId;
+    } else if (agentIdentifier) {
+      agentIdentifierValue = value;
+    } else if (!agentIdentifier && index === 0) {
+      agentIdentifierValue = "";
     }
-    return webIdValue;
+    return agentIdentifierValue;
+  };
+
+  const shouldBeChecked = () => {
+    if (index === 0 && addingWebId) {
+      return true;
+    }
+    if (newAgentsWebIds.includes(getAgentIdentifierValue())) {
+      return true;
+    }
+    if (
+      webIdsInPermissions.includes(getAgentIdentifierValue()) &&
+      !webIdsToDelete.includes(getAgentIdentifierValue())
+    ) {
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -59,14 +78,9 @@ export default function WebIdCheckbox({
       type="checkbox"
       color="primary"
       size="medium"
-      value={getWebIdValue()}
-      checked={
-        (index === 0 && addingWebId) ||
-        newAgentsWebIds.includes(getWebIdValue()) ||
-        (webIdsInPermissions.includes(getWebIdValue()) &&
-          !webIdsToDelete.includes(getWebIdValue()))
-      }
-      onChange={(e) => toggleCheckbox(e, index, getWebIdValue())}
+      value={getAgentIdentifierValue()}
+      checked={shouldBeChecked()}
+      onChange={(e) => toggleCheckbox(e, index, getAgentIdentifierValue())}
     />
   );
 }

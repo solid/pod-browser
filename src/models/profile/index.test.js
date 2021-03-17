@@ -43,7 +43,11 @@ import {
 } from "../../../__testUtils/mockPersonResource";
 import mockPersonContactThing from "../../../__testUtils/mockPersonContactThing";
 import { chain } from "../../solidClientHelpers/utils";
-import { getProfileForContact, getProfilesForPersonContacts } from "./index";
+import {
+  getProfile,
+  getProfileForContact,
+  getProfilesForPersonContacts,
+} from "./index";
 import { fetchProfile } from "../../solidClientHelpers/profile";
 
 jest.mock("../../solidClientHelpers/profile");
@@ -226,5 +230,24 @@ describe("getProfileForContact", () => {
   const person1Iri = "https://user.example.com/contacts/Person/1234/index.ttl";
   it("returns a profile for a person contact url", async () => {
     expect(await getProfileForContact(person1Iri)).toEqual(mockProfileAlice());
+  });
+});
+
+describe("getProfile", () => {
+  it("returns a profile for a given webId", async () => {
+    jest
+      .spyOn(profileFns, "fetchProfile")
+      .mockResolvedValue(mockProfileAlice());
+    expect(await getProfile(aliceWebIdUrl)).toEqual({
+      profile: mockProfileAlice(),
+      profileError: undefined,
+    });
+  });
+  it("returns a profile error if fetching profile fails", async () => {
+    jest.spyOn(profileFns, "fetchProfile").mockRejectedValue("error");
+    expect(await getProfile(aliceWebIdUrl)).toEqual({
+      profile: undefined,
+      profileError: "error",
+    });
   });
 });

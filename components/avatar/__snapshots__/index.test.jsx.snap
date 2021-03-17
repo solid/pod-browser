@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Avatar renders an avatar with a profile picture src is available 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-root PodBrowser-circle"
+  >
+    <img
+      class="PodBrowser-img"
+      src="https://example.org/image.jpg"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Avatar renders an avatar with a user icon when no src is available 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-root PodBrowser-circle PodBrowser-colorDefault"
+  >
+    <span
+      class="PodBrowser-icon-user PodBrowser-avatar__icon"
+    />
+  </div>
+</DocumentFragment>
+`;

@@ -19,40 +19,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { createStyles } from "@solid/lit-prism-patterns";
+
+const PUBLIC_ICON_COLOR = "#2196F3";
+const PUBLIC_ICON_BACKGROUND_COLOR = "#E8F4FD";
+const AUTHENTICATED_ICON_COLOR = "#4CAF50";
+const AUTHENTICATED_ICON_BACKGROUND_COLOR = "#EDF7ED";
+
 export default function styles(theme) {
-  return {
-    nameAndAvatarContainer: {
-      padding: theme.spacing(0.8, 1.6),
-      color: "#000",
-      width: "100%",
-      display: "flex",
-      alignItems: "center",
-      flexDirection: "row",
+  return createStyles(theme, ["icons", "button"], {
+    avatar__icon: {
+      color: "white",
     },
-    avatar: {
-      marginRight: theme.spacing(1.6),
+    "avatar__icon--public": {
+      fontSize: "0.875rem",
+      display: "flex",
       width: "1.875rem",
       height: "1.875rem",
-      fontSize: "0.875rem",
-    },
-    detailText: {
-      overflowWrap: "anywhere",
-      fontWeight: 500,
-      display: "flex",
-      fontSize: "1rem",
-      fontFamily: "inherit",
-      textAlign: "left",
-      justifyContent: "space-between",
       alignItems: "center",
-      flexGrow: 1,
-      flexDirection: "row",
+      justifyContent: "center",
+      color: PUBLIC_ICON_COLOR,
+      backgroundColor: PUBLIC_ICON_BACKGROUND_COLOR,
+      borderRadius: "50%",
     },
-    shareText: {
-      whiteSpace: "nowrap",
-      padding: theme.spacing(0.5),
-      color: theme.palette.text.secondary,
-      fontSize: "0.8125rem",
-      fontWeight: 500,
+    "avatar__icon--authenticated": {
+      fontSize: "0.875rem",
+      display: "flex",
+      width: "1.875rem",
+      height: "1.875rem",
+      alignItems: "center",
+      justifyContent: "center",
+      color: AUTHENTICATED_ICON_COLOR,
+      backgroundColor: AUTHENTICATED_ICON_BACKGROUND_COLOR,
+      borderRadius: "50%",
     },
-  };
+  });
 }

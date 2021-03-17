@@ -19,40 +19,47 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function styles(theme) {
+import {
+  addStringNoLocale,
+  addUrl,
+  createThing,
+  getStringNoLocale,
+  getUrl,
+  setThing,
+} from "@inrupt/solid-client";
+import { foaf } from "rdf-namespaces";
+import { chain } from "../../../solidClientHelpers/utils";
+
+const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
+export const PUBLIC_AGENT_PREDICATE =
+  "http://www.w3.org/ns/solid/acp#PublicAgent";
+
+export const PUBLIC_AGENT = {
+  isOfType: (thing) =>
+    thing && getUrl(thing, AGENT_PREDICATE) === PUBLIC_AGENT_PREDICATE,
+  getName: (thing) => getStringNoLocale(thing, foaf.name),
+  getAvatarProps: () => ({
+    icon: "globe",
+    src: null,
+    variant: "public",
+  }),
+};
+
+export const createPublicAgent = (dataset) => {
+  const thing = chain(
+    createThing(),
+    (t) =>
+      addUrl(
+        t,
+        "http://www.w3.org/ns/solid/acp#agent",
+        "http://www.w3.org/ns/solid/acp#PublicAgent"
+      ),
+    (t) => addStringNoLocale(t, foaf.name, "Anyone")
+  );
+  const updatedDataset = setThing(dataset, thing);
   return {
-    nameAndAvatarContainer: {
-      padding: theme.spacing(0.8, 1.6),
-      color: "#000",
-      width: "100%",
-      display: "flex",
-      alignItems: "center",
-      flexDirection: "row",
-    },
-    avatar: {
-      marginRight: theme.spacing(1.6),
-      width: "1.875rem",
-      height: "1.875rem",
-      fontSize: "0.875rem",
-    },
-    detailText: {
-      overflowWrap: "anywhere",
-      fontWeight: 500,
-      display: "flex",
-      fontSize: "1rem",
-      fontFamily: "inherit",
-      textAlign: "left",
-      justifyContent: "space-between",
-      alignItems: "center",
-      flexGrow: 1,
-      flexDirection: "row",
-    },
-    shareText: {
-      whiteSpace: "nowrap",
-      padding: theme.spacing(0.5),
-      color: theme.palette.text.secondary,
-      fontSize: "0.8125rem",
-      fontWeight: 500,
-    },
+    thing,
+    dataset: updatedDataset,
+    type: PUBLIC_AGENT,
   };
-}
+};

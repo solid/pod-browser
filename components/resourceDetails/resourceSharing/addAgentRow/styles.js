@@ -21,6 +21,12 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
+const PUBLIC_ICON_COLOR = "#2196F3";
+const PUBLIC_ICON_BACKGROUND_COLOR = "#E8F4FD";
+
+const AUTHENTICATED_ICON_COLOR = "#4CAF50";
+const AUTHENTICATED_ICON_BACKGROUND_COLOR = "#EDF7ED";
+
 export default function styles(theme) {
   return createStyles(theme, ["icons", "button"], {
     addAgentForm: {
@@ -71,6 +77,28 @@ export default function styles(theme) {
     agentPickerFormContainer: {
       display: "flex",
       alignItems: "center",
+    },
+    publicIcon: {
+      display: "flex",
+      width: "1.875rem",
+      height: "1.875rem",
+      alignItems: "center",
+      justifyContent: "center",
+      color: PUBLIC_ICON_COLOR,
+      backgroundColor: PUBLIC_ICON_BACKGROUND_COLOR,
+      borderRadius: "50%",
+      margin: theme.spacing(0, 0.8),
+    },
+    authenticatedIcon: {
+      display: "flex",
+      width: "1.875rem",
+      height: "1.875rem",
+      alignItems: "center",
+      justifyContent: "center",
+      color: AUTHENTICATED_ICON_COLOR,
+      backgroundColor: AUTHENTICATED_ICON_BACKGROUND_COLOR,
+      borderRadius: "50%",
+      margin: theme.spacing(0, 0.8),
     },
   });
 }

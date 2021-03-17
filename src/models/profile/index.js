@@ -43,3 +43,14 @@ export async function getProfilesForPersonContacts(people, fetch) {
   );
   return responses.filter((profile) => profile);
 }
+
+export async function getProfile(webId, fetch) {
+  let profile;
+  let profileError;
+  try {
+    profile = await fetchProfile(webId, fetch);
+  } catch (error) {
+    profileError = error;
+  }
+  return { profile, profileError };
+}

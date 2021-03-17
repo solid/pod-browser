@@ -19,40 +19,19 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function styles(theme) {
-  return {
-    nameAndAvatarContainer: {
-      padding: theme.spacing(0.8, 1.6),
-      color: "#000",
-      width: "100%",
-      display: "flex",
-      alignItems: "center",
-      flexDirection: "row",
-    },
-    avatar: {
-      marginRight: theme.spacing(1.6),
-      width: "1.875rem",
-      height: "1.875rem",
-      fontSize: "0.875rem",
-    },
-    detailText: {
-      overflowWrap: "anywhere",
-      fontWeight: 500,
-      display: "flex",
-      fontSize: "1rem",
-      fontFamily: "inherit",
-      textAlign: "left",
-      justifyContent: "space-between",
-      alignItems: "center",
-      flexGrow: 1,
-      flexDirection: "row",
-    },
-    shareText: {
-      whiteSpace: "nowrap",
-      padding: theme.spacing(0.5),
-      color: theme.palette.text.secondary,
-      fontSize: "0.8125rem",
-      fontWeight: 500,
-    },
-  };
-}
+import React from "react";
+import { renderWithTheme } from "../../__testUtils/withTheme";
+import Avatar from "./index";
+
+describe("Avatar", () => {
+  it("renders an avatar with a user icon when no src is available", () => {
+    const { asFragment } = renderWithTheme(<Avatar icon="user" />);
+    expect(asFragment()).toMatchSnapshot();
+  });
+  it("renders an avatar with a profile picture src is available", () => {
+    const { asFragment } = renderWithTheme(
+      <Avatar src="https://example.org/image.jpg" icon="user" />
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+});

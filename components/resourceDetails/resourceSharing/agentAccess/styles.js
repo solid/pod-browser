@@ -63,5 +63,9 @@ export default function styles(theme) {
       marginBottom: theme.spacing(0.8),
       height: "1px",
     },
+    loadingStateContainer: {
+      display: "flex",
+      alignItems: "center",
+    },
   };
 }

@@ -28,7 +28,6 @@ import { isCustomPolicy } from "../../../constants/policies";
 export default function usePolicyPermissions(policyName) {
   const isCustom = isCustomPolicy(policyName);
   const { accessControl } = useContext(AccessControlContext);
-
   async function getPermissions() {
     const permissions = isCustom
       ? await accessControl.getPermissionsForCustomPolicies(policyName)

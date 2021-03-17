@@ -32,5 +32,7 @@ export default function mockAccessControl(
     getPermissionsForCustomPolicies: jest.fn().mockResolvedValue(permissions),
     removeAgentFromNamedPolicy: jest.fn().mockResolvedValue({ response: {} }),
     removeAgentFromCustomPolicy: jest.fn().mockResolvedValue({ response: {} }),
+    setRulePublic: jest.fn().mockResolvedValue({ response: {} }),
+    setRuleAuthenticated: jest.fn().mockResolvedValue({ response: {} }),
   };
 }

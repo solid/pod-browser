@@ -19,40 +19,37 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function styles(theme) {
-  return {
-    nameAndAvatarContainer: {
-      padding: theme.spacing(0.8, 1.6),
-      color: "#000",
-      width: "100%",
-      display: "flex",
-      alignItems: "center",
-      flexDirection: "row",
-    },
-    avatar: {
-      marginRight: theme.spacing(1.6),
-      width: "1.875rem",
-      height: "1.875rem",
-      fontSize: "0.875rem",
-    },
-    detailText: {
-      overflowWrap: "anywhere",
-      fontWeight: 500,
-      display: "flex",
-      fontSize: "1rem",
-      fontFamily: "inherit",
-      textAlign: "left",
-      justifyContent: "space-between",
-      alignItems: "center",
-      flexGrow: 1,
-      flexDirection: "row",
-    },
-    shareText: {
-      whiteSpace: "nowrap",
-      padding: theme.spacing(0.5),
-      color: theme.palette.text.secondary,
-      fontSize: "0.8125rem",
-      fontWeight: 500,
-    },
-  };
+/* eslint react/jsx-props-no-spreading:off */
+
+import React from "react";
+import { Icons } from "@inrupt/prism-react-components";
+import { makeStyles } from "@material-ui/styles";
+import { useBem } from "@solid/lit-prism-patterns";
+import { Avatar as MuiAvatar, createStyles } from "@material-ui/core";
+import T from "prop-types";
+import styles from "./styles";
+
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+
+export default function Avatar({ src, icon, variant, ...props }) {
+  const bem = useBem(useStyles());
+  return src ? (
+    <MuiAvatar src={src} {...props} />
+  ) : (
+    <MuiAvatar {...props}>
+      <Icons name={icon} className={bem("avatar__icon", variant)} />
+    </MuiAvatar>
+  );
 }
+
+Avatar.propTypes = {
+  icon: T.string,
+  src: T.string,
+  variant: T.string,
+};
+
+Avatar.defaultProps = {
+  icon: "user",
+  src: null,
+  variant: null,
+};

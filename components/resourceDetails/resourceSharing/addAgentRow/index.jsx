@@ -30,7 +30,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import { Button } from "@inrupt/prism-react-components";
+import { Button, Icons } from "@inrupt/prism-react-components";
 
 import {
   addStringNoLocale,
@@ -42,11 +42,12 @@ import { foaf, vcard } from "rdf-namespaces";
 import styles from "./styles";
 import { chain } from "../../../../src/solidClientHelpers/utils";
 import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
-import { vcardExtras } from "../../../../src/addressBook";
 import useContactProfile from "../../../../src/hooks/useContactProfile";
+import { PUBLIC_AGENT_PREDICATE } from "../../../../src/models/contact/public";
+import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../src/models/contact/authenticated";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-const VCARD_WEBID_PREDICATE = vcardExtras("WebId");
+const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 const TESTCAFE_ID_WEBID_INPUT = "webid-input";
 const TESTCAFE_ID_ADD_WEBID_BUTTON = "add-button";
 const TESTCAFE_ID_AGENT_WEB_ID = "agent-webid";
@@ -60,16 +61,16 @@ const updateThingForNewRow = async (agentWebId, thing, fetch) => {
       newThing = chain(
         thing,
         (t) => addStringNoLocale(t, foaf.name, name),
-        (t) => addUrl(t, VCARD_WEBID_PREDICATE, webId) // temporarily storing this here to have a webId to display for these temporary rows
+        (t) => addUrl(t, AGENT_PREDICATE, webId) // temporarily storing this here to have a webId to display for these temporary rows
       );
       if (avatar) {
         newThing = addUrl(newThing, vcard.hasPhoto, avatar);
       }
     } else {
-      newThing = addUrl(thing, VCARD_WEBID_PREDICATE, agentWebId); // temporarily storing this here to have a webId to display for these temporary rows
+      newThing = addUrl(thing, AGENT_PREDICATE, agentWebId); // temporarily storing this here to have a webId to display for these temporary rows
     }
   } catch (error) {
-    newThing = addUrl(thing, VCARD_WEBID_PREDICATE, agentWebId); // temporarily storing this here to have a webId to display for these temporary rows
+    newThing = addUrl(thing, AGENT_PREDICATE, agentWebId); // temporarily storing this here to have a webId to display for these temporary rows
   }
   return newThing;
 };
@@ -105,7 +106,7 @@ export default function AddAgentRow({
           null
       );
       setAgentAvatar(getUrl(temporaryRowThing, vcard.hasPhoto) || null);
-      setDisplayedWebId(getUrl(temporaryRowThing, VCARD_WEBID_PREDICATE));
+      setDisplayedWebId(getUrl(temporaryRowThing, AGENT_PREDICATE));
     }
   }, [profile, temporaryRowThing, agentWebId, contactsArrayLength]);
 
@@ -170,14 +171,48 @@ export default function AddAgentRow({
     );
   }
 
+  if (
+    displayedWebId === PUBLIC_AGENT_PREDICATE ||
+    displayedWebId === AUTHENTICATED_AGENT_PREDICATE
+  ) {
+    return (
+      <Tooltip
+        title={
+          displayedWebId === PUBLIC_AGENT_PREDICATE
+            ? "Anyone on the internet will be able to access this resource"
+            : "Anyone signed in with a WebID will be able to access this resource"
+        }
+      >
+        <div className={classes.nameAndAvatarContainer}>
+          {displayedWebId === PUBLIC_AGENT_PREDICATE ? (
+            <Icons name="globe" className={classes.publicIcon} />
+          ) : (
+            <Icons name="user-lock" className={classes.authenticatedIcon} />
+          )}
+          <Typography
+            classes={{ body1: classes.detailText }}
+            data-testid={TESTCAFE_ID_AGENT_WEB_ID}
+            className={classes.detailText}
+          >
+            {agentName || displayedWebId}
+          </Typography>
+        </div>
+      </Tooltip>
+    );
+  }
+
   return (
     <Tooltip title={agentName ? displayedWebId : "Unable to load profile"}>
       <div className={classes.nameAndAvatarContainer}>
-        <Avatar
-          className={classes.avatar}
-          alt={displayedWebId}
-          src={agentAvatar || null}
-        />
+        {displayedWebId === PUBLIC_AGENT_PREDICATE ? (
+          <Icons name="globe" className={classes.publicIcon} />
+        ) : (
+          <Avatar
+            className={classes.avatar}
+            alt={displayedWebId}
+            src={agentAvatar || null}
+          />
+        )}
         <Typography
           classes={{ body1: classes.detailText }}
           data-testid={TESTCAFE_ID_AGENT_WEB_ID}

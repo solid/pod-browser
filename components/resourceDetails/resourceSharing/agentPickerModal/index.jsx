@@ -39,7 +39,6 @@ import { vcard } from "rdf-namespaces";
 import { serializePromises } from "../../../../src/solidClientHelpers/utils";
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
 import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
-import { vcardExtras } from "../../../../src/addressBook";
 import { getResourceName } from "../../../../src/solidClientHelpers/resource";
 import PolicyHeader from "../policyHeader";
 import AgentsTableTabs from "../agentsTableTabs";
@@ -53,7 +52,6 @@ import AddWebIdButton from "./addWebIdButton";
 import WebIdCheckbox from "./webIdCheckbox";
 import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
 import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
-import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
 import useContacts from "../../../../src/hooks/useContacts";
 import { GROUP_CONTACT } from "../../../../src/models/contact/group";
 import {
@@ -63,6 +61,14 @@ import {
 } from "../../../../src/models/contact/person";
 import useAddressBook from "../../../../src/hooks/useAddressBook";
 import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
+import {
+  createPublicAgent,
+  PUBLIC_AGENT_PREDICATE,
+} from "../../../../src/models/contact/public";
+import {
+  createAuthenticatedAgent,
+  AUTHENTICATED_AGENT_PREDICATE,
+} from "../../../../src/models/contact/authenticated";
 
 export const handleSubmit = ({
   newAgentsWebIds,
@@ -83,22 +89,42 @@ export const handleSubmit = ({
     }
     setLoading(true);
     const addPermissionsPromiseFactories = newAgentsWebIds?.map(
-      (agentWebId) => () =>
-        advancedSharing
+      (agentWebId) => () => {
+        if (PUBLIC_AGENT_PREDICATE === agentWebId) {
+          return accessControl.setRulePublic(policyName, true);
+        }
+        if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {
+          return accessControl.setRuleAuthenticated(policyName, true);
+        }
+        return advancedSharing
           ? accessControl.addAgentToCustomPolicy(agentWebId, policyName)
-          : accessControl.addAgentToNamedPolicy(agentWebId, policyName)
+          : accessControl.addAgentToNamedPolicy(agentWebId, policyName);
+      }
     );
 
     const removePermissionsPromiseFactories = webIdsToDelete?.map(
-      (agentWebId) => () =>
-        advancedSharing
+      (agentWebId) => () => {
+        if (PUBLIC_AGENT_PREDICATE === agentWebId) {
+          return accessControl.setRulePublic(policyName, false);
+        }
+        if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {
+          return accessControl.setRuleAuthenticated(policyName, false);
+        }
+        return advancedSharing
           ? accessControl.removeAgentFromCustomPolicy(agentWebId, policyName)
-          : accessControl.removeAgentFromNamedPolicy(agentWebId, policyName)
+          : accessControl.removeAgentFromNamedPolicy(agentWebId, policyName);
+      }
     );
 
-    const addAgentsToContactsPromiseFactories = newAgentsWebIds?.map(
-      (agentWebId) => () => saveAgentToContacts(agentWebId, addressBook, fetch)
-    );
+    const addAgentsToContactsPromiseFactories = newAgentsWebIds
+      ?.filter(
+        (webId) =>
+          webId !== PUBLIC_AGENT_PREDICATE &&
+          webId !== AUTHENTICATED_AGENT_PREDICATE
+      )
+      .map((agentWebId) => () =>
+        saveAgentToContacts(agentWebId, addressBook, fetch)
+      );
     serializePromises([
       ...addPermissionsPromiseFactories,
       ...removePermissionsPromiseFactories,
@@ -114,6 +140,7 @@ export const handleSubmit = ({
 export const handleConfirmation = ({
   open,
   dialogId,
+  bypassDialog,
   setConfirmationSetup,
   setOpen,
   setConfirmed,
@@ -123,7 +150,10 @@ export const handleConfirmation = ({
 }) => {
   return (confirmationSetup, confirmed) => {
     setConfirmationSetup(true);
-
+    if (bypassDialog) {
+      setConfirmed(true);
+      handleSubmitNewWebIds();
+    }
     if (open !== dialogId) return;
     if (confirmationSetup && confirmed === null) return;
     if (confirmationSetup && confirmed) {
@@ -170,7 +200,7 @@ export const handleSaveContact = async (iri, addressBook, fetch) => {
 };
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-const VCARD_WEBID_PREDICATE = vcardExtras("WebId");
+const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 
 const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
 const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
@@ -188,20 +218,17 @@ export default function AgentPickerModal({
   );
   const policyName = advancedSharing ? customPolicy : type;
   const { header, saveText, titleSingular } = POLICIES_TYPE_MAP[policyName];
-  const {
-    data: policyPermissions,
-    mutate: mutatePermissions,
-  } = usePolicyPermissions(policyName);
-  const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
-    policyPermissions
+  const { data: permissions, mutate: mutatePermissions } = usePolicyPermissions(
+    policyName
   );
+
   const { data: addressBook } = useAddressBook();
   const { data: contacts, error } = useContacts([
     GROUP_CONTACT,
     PERSON_CONTACT,
   ]);
 
-  const webIdsInPermissions = permissions.map((p) => p.webId);
+  const webIdsInPermissions = permissions?.map((p) => p.webId);
 
   const bem = useBem(useStyles());
 
@@ -216,6 +243,7 @@ export default function AgentPickerModal({
   const { accessControl } = useContext(AccessControlContext);
   const [newAgentsWebIds, setNewAgentsWebIds] = useState([]);
   const [webIdsToDelete, setWebIdsToDelete] = useState([]);
+  const [bypassDialog, setBypassDialog] = useState(false);
   const [contactsArray, setContactsArray] = useState([]);
   const [filteredContacts, setFilteredContacts] = useState([]);
   const [addingWebId, setAddingWebId] = useState(false);
@@ -259,15 +287,31 @@ export default function AgentPickerModal({
       setConfirmed(false);
       return;
     }
+    const filteredNewWebIds = newAgentsWebIds.filter(
+      (webId) =>
+        webId !== PUBLIC_AGENT_PREDICATE &&
+        webId !== AUTHENTICATED_AGENT_PREDICATE
+    );
+    const filteredWebIdsToDelete = webIdsToDelete.filter(
+      (webId) =>
+        webId !== PUBLIC_AGENT_PREDICATE &&
+        webId !== AUTHENTICATED_AGENT_PREDICATE
+    );
+    if (!filteredNewWebIds.length && !filteredWebIdsToDelete.length) {
+      setTitle(null);
+      setContent(null);
+      setOpen(null);
+      setBypassDialog(true);
+    }
     const confirmationTitle = `Change permissions for ${
-      newAgentsWebIds.length + webIdsToDelete.length === 1
+      filteredNewWebIds.length + filteredWebIdsToDelete.length === 1
         ? "1 person"
-        : `${newAgentsWebIds.length + webIdsToDelete.length} people`
+        : `${newAgentsWebIds.length + filteredWebIdsToDelete.length} people`
     }`;
     const confirmationContent = `Continuing will change ${
-      newAgentsWebIds.length + webIdsToDelete.length === 1
+      filteredNewWebIds.length + filteredWebIdsToDelete.length === 1
         ? "1 person "
-        : `${newAgentsWebIds.length + webIdsToDelete.length} people `
+        : `${filteredNewWebIds.length + filteredWebIdsToDelete.length} people `
     } permissions to ${header}`;
     setTitle(confirmationTitle);
     setContent(confirmationContent);
@@ -277,6 +321,7 @@ export default function AgentPickerModal({
   const onConfirmation = handleConfirmation({
     open,
     dialogId,
+    bypassDialog,
     setConfirmationSetup,
     setOpen,
     setConfirmed,
@@ -300,12 +345,15 @@ export default function AgentPickerModal({
   useEffect(() => {
     if (!contacts || !addressBook) return;
     const { dataset: addressBookDataset } = addressBook;
+    const publicAgent = createPublicAgent(addressBookDataset);
+    const authenticatedAgent = createAuthenticatedAgent(addressBookDataset);
     const contactsArrayForTable = contacts.map(({ thing }) => {
       return {
         thing,
         dataset: addressBookDataset,
       };
     });
+    contactsArrayForTable.unshift(publicAgent, authenticatedAgent);
     setContactsArray(contactsArrayForTable);
   }, [contacts, addressBook]);
 
@@ -337,7 +385,6 @@ export default function AgentPickerModal({
   };
 
   const contactsForTable = selectedTabValue ? filteredContacts : contactsArray;
-
   const toggleCheckbox = (e, index, value) => {
     if (index === 0 && addingWebId) return null;
     if (
@@ -409,7 +456,7 @@ export default function AgentPickerModal({
             filter={globalFilter}
           >
             <TableColumn
-              property={VCARD_WEBID_PREDICATE}
+              property={AGENT_PREDICATE}
               dataType="url"
               header={
                 // eslint-disable-next-line react/jsx-wrap-multilines
