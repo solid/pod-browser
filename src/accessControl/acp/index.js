@@ -307,6 +307,31 @@ function ensureAccessControl(policyUrl, datasetWithAcr, changed) {
   };
 }
 
+function ensureApplyMembers(policyUrl, datasetWithAcr, changed) {
+  const existingAccessControl = acpv2
+    .getMemberAcrPolicyUrlAll(datasetWithAcr)
+    .find((url) => policyUrl === url);
+  if (existingAccessControl) {
+    return {
+      changed,
+      acr: datasetWithAcr,
+    };
+  }
+  let acr = datasetWithAcr;
+  try {
+    acr = acpv2.addMemberPolicyUrl(acr, policyUrl);
+  } catch (error) {
+    // TODO: Handle this error (probably by replacing acp.setControl with newer ACP APIs)
+    // Same problem as noted above, but this time it's acp.setControl that fails to handle
+    // datasetWithAcr properly. It doesn't seem to affect the outcome though, so we'll leave
+    // it like this for now
+  }
+  return {
+    changed: changed || !existingAccessControl,
+    acr,
+  };
+}
+
 function ensureApplyControl(policyUrl, datasetWithAcr, changed) {
   let accessControls = [];
   try {
@@ -586,7 +611,9 @@ export default class AcpAccessControlStrategy {
         changed: false,
       },
       ({ acr, changed }) => ensureApplyControl(editorsPolicy, acr, changed),
-      ({ acr, changed }) => ensureApplyControl(viewersPolicy, acr, changed)
+      ({ acr, changed }) => ensureApplyControl(viewersPolicy, acr, changed),
+      ({ acr, changed }) => ensureApplyMembers(editorsPolicy, acr, changed),
+      ({ acr, changed }) => ensureApplyMembers(viewersPolicy, acr, changed)
     );
     if (originalChanged) {
       this.#originalWithAcr = await acp.saveAcrFor(originalAcr, {
@@ -604,17 +631,17 @@ export default class AcpAccessControlStrategy {
         { fetch: this.#fetch }
       );
 
-      const { acr: editorsPolicyAcr, changed: editorsPolicyChanged } = chain({
+      const { acr: editorsPolicyAcr, changed: editorsPolicyChanged } = {
         acr: editorsPolicyDatasetWithAcr,
         changed: false,
-      });
+      };
       if (editorsPolicyChanged) {
         await acpv2.saveAcrFor(editorsPolicyAcr, { fetch: this.#fetch });
       }
-      const { acr: viewersPolicyAcr, changed: viewersPolicyChanged } = chain({
+      const { acr: viewersPolicyAcr, changed: viewersPolicyChanged } = {
         acr: viewersPolicyDatasetWithAcr,
         changed: false,
-      });
+      };
       if (viewersPolicyChanged) {
         await acpv2.saveAcrFor(viewersPolicyAcr, { fetch: this.#fetch });
       }
@@ -660,7 +687,10 @@ export default class AcpAccessControlStrategy {
       },
       ({ acr, changed }) => ensureApplyControl(viewAndAddPolicy, acr, changed),
       ({ acr, changed }) => ensureApplyControl(editOnlyPolicy, acr, changed),
-      ({ acr, changed }) => ensureApplyControl(addOnlyPolicy, acr, changed)
+      ({ acr, changed }) => ensureApplyControl(addOnlyPolicy, acr, changed),
+      ({ acr, changed }) => ensureApplyMembers(viewAndAddPolicy, acr, changed),
+      ({ acr, changed }) => ensureApplyMembers(editOnlyPolicy, acr, changed),
+      ({ acr, changed }) => ensureApplyMembers(addOnlyPolicy, acr, changed)
     );
     if (originalChanged) {
       this.#originalWithAcr = await acp.saveAcrFor(originalAcr, {
@@ -682,27 +712,24 @@ export default class AcpAccessControlStrategy {
         { fetch: this.#fetch }
       );
 
-      const {
-        acr: viewAndAddPolicyAcr,
-        changed: viewAndAddPolicyChanged,
-      } = chain({
+      const { acr: viewAndAddPolicyAcr, changed: viewAndAddPolicyChanged } = {
         acr: viewAndAddPolicyDatasetWithAcr,
         changed: false,
-      });
+      };
       if (viewAndAddPolicyChanged) {
         await acpv2.saveAcrFor(viewAndAddPolicyAcr, { fetch: this.#fetch });
       }
-      const { acr: editOnlyPolicyAcr, changed: editOnlyPolicyChanged } = chain({
+      const { acr: editOnlyPolicyAcr, changed: editOnlyPolicyChanged } = {
         acr: editOnlyPolicyDatasetWithAcr,
         changed: false,
-      });
+      };
       if (editOnlyPolicyChanged) {
         await acpv2.saveAcrFor(editOnlyPolicyAcr, { fetch: this.#fetch });
       }
-      const { acr: addOnlyPolicyAcr, changed: addOnlyPolicyChanged } = chain({
+      const { acr: addOnlyPolicyAcr, changed: addOnlyPolicyChanged } = {
         acr: addOnlyPolicyDatasetWithAcr,
         changed: false,
-      });
+      };
       if (addOnlyPolicyChanged) {
         await acpv2.saveAcrFor(addOnlyPolicyAcr, { fetch: this.#fetch });
       }
@@ -866,7 +893,6 @@ export default class AcpAccessControlStrategy {
     });
     // saving changes to the ACRs
     await this.ensureAccessControlAllNamedPolicies();
-    await this.ensureAccessControlAllCustomPolicies();
     return respond(this.#originalWithAcr);
   }
 
