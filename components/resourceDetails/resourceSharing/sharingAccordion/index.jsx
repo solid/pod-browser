@@ -22,19 +22,29 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React from "react";
+import { useRouter } from "next/router";
+import { Alert } from "@material-ui/lab";
 import AgentAccessTable from "../agentAccessTable";
 import AdvancedSharingButton from "../advancedSharingButton";
 import { namedPolicies, customPolicies } from "../../../../constants/policies";
+import { isContainerIri } from "../../../../src/solidClientHelpers/utils";
 
 export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
   "agent-access-list-show-all";
 
 function SharingAccordion() {
+  const router = useRouter();
+  const isContainer = isContainerIri(router.query.resourceIri);
   return (
     <>
       {namedPolicies.concat(customPolicies).map(({ name }) => (
         <AgentAccessTable type={name} />
       ))}
+      {isContainer && (
+        <Alert icon={false} severity="info">
+          Sharing applies to all items in this folder
+        </Alert>
+      )}
       <AdvancedSharingButton />
     </>
   );
