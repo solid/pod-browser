@@ -20,7 +20,6 @@
  */
 
 import React from "react";
-import { useRouter } from "next/router";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import mockPersonContact from "../../../../__testUtils/mockPersonContact";
 import mockAddressBook from "../../../../__testUtils/mockAddressBook";
@@ -30,9 +29,6 @@ import { TESTCAFE_ID_ADVANCED_SHARING_BUTTON } from "../advancedSharingButton";
 import useContacts from "../../../../src/hooks/useContacts";
 import useAddressBook from "../../../../src/hooks/useAddressBook";
 
-jest.mock("next/router");
-const mockedUseRouter = useRouter;
-
 jest.mock("../../../../src/hooks/useContacts");
 const mockedUseContacts = useContacts;
 
@@ -41,9 +37,6 @@ const mockedUseAddressBook = useAddressBook;
 
 describe("SharingAccordion", () => {
   beforeEach(() => {
-    mockedUseRouter.mockReturnValue({
-      query: { resourceIri: "/resource.txt" },
-    });
     mockedUseAddressBook.mockReturnValue({ data: mockAddressBook() });
     mockedUseContacts.mockReturnValue({
       data: [
@@ -60,43 +53,13 @@ describe("SharingAccordion", () => {
       ],
     });
   });
-  // Note: since the permissions cannot be mocked reliably for the custom policies, those are tested separately in the table component
-  it("renders three lists of named policies for editors, viewers and blocked and an Advanced Sharing button", () => {
+  // Note: since the permissions cannot be mocked reliably for the custom policies, those tested separately in the table component
+  test("it renders three lists of named policies for editors, viewers and blocked and an Advanced Sharing button", () => {
     const { asFragment, queryAllByTestId, queryByTestId } = renderWithTheme(
       <SharingAccordion />
     );
     expect(queryAllByTestId(TESTCAFE_ID_AGENT_ACCESS_TABLE)).toHaveLength(3);
     expect(queryByTestId(TESTCAFE_ID_ADVANCED_SHARING_BUTTON)).not.toBeNull();
     expect(asFragment()).toMatchSnapshot();
-  });
-  describe("when resource is a container", () => {
-    beforeEach(() => {
-      mockedUseRouter.mockReturnValue({
-        query: { resourceIri: "/container/" },
-      });
-      mockedUseAddressBook.mockReturnValue({ data: mockAddressBook() });
-      mockedUseContacts.mockReturnValue({
-        data: [
-          mockPersonContact(
-            mockAddressBook(),
-            "https://example.org/contacts/Person/1234/",
-            "Example 1"
-          ),
-          mockPersonContact(
-            mockAddressBook(),
-            "https://example.org/contacts/Person/3456/",
-            "Example 2"
-          ),
-        ],
-      });
-    });
-    // Note: since the permissions cannot be mocked reliably for the custom policies, those are tested separately in the table component
-    it("renders an info box which alerts the user that sharing applies to all items inside a folder", () => {
-      const { asFragment, queryByText } = renderWithTheme(<SharingAccordion />);
-      expect(asFragment()).toMatchSnapshot();
-      expect(
-        queryByText("Sharing applies to all items in this folder")
-      ).not.toBeNull();
-    });
   });
 });
