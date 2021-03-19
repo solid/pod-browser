@@ -49,6 +49,7 @@ import {
 import { isHTTPError } from "../../error";
 import { PUBLIC_AGENT_PREDICATE } from "../../models/contact/public";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../models/contact/authenticated";
+import { namedPolicies } from "../../../constants/policies";
 
 export const noAcrAccessError =
   "No access to Access Control Resource for this resource";
@@ -71,6 +72,26 @@ const acpMapForCustomApplyPolicies = {
   addOnly: createAcpMap(false, false, true),
 };
 
+export const getPolicyNameFromAccess = (access) => {
+  const { read, write, append } = access;
+  if (read && write && !append) {
+    return "editors";
+  }
+  if (read && !write && !append) {
+    return "viewers";
+  }
+  if (read && append && !write) {
+    return "viewAndAdd";
+  }
+  if (append && !write && !write) {
+    return "addOnly";
+  }
+  if (write && !append && !read) {
+    return "editOnly";
+  }
+  return null;
+};
+
 export function addAcpModes(existingAcpModes, newAcpModes) {
   return existingAcpModes
     ? createAcpMap(
@@ -90,11 +111,19 @@ export function convertAcpToAcl(access) {
   );
 }
 
-export function getOrCreatePermission(permissions, webId, type) {
+export function getOrCreatePermission(
+  permissions,
+  webId,
+  type,
+  inherited = false
+) {
   const permission = permissions[webId] ?? {
     webId,
   };
-  permission.type = type;
+  if (type) {
+    permission.type = type;
+  }
+  permission.inherited = inherited;
   permission.acp = permission.acp ?? {
     apply: createAcpMap(),
     access: createAcpMap(),
@@ -317,7 +346,7 @@ function ensureAccessControl(policyUrl, datasetWithAcr, changed) {
 
 function ensureApplyMembers(policyUrl, datasetWithAcr, changed) {
   const existingAccessControl = acpv2
-    .getMemberAcrPolicyUrlAll(datasetWithAcr)
+    .getMemberPolicyUrlAll(datasetWithAcr)
     .find((url) => policyUrl === url);
   if (existingAccessControl) {
     return {
@@ -393,6 +422,78 @@ export default class AcpAccessControlStrategy {
     this.#fetch = fetch;
   }
 
+  getInheritedPoliciesUrlsForResource() {
+    // get all policies that apply to this resource
+    const policies = acpv2.getPolicyUrlAll(this.#originalWithAcr);
+    // filter out owner and own resource policies
+    const namedPolicyUrls = namedPolicies.map(({ name }) => {
+      const containerUrl = getPolicyResourceUrl(
+        this.#originalWithAcr,
+        this.#policiesContainerUrl,
+        name
+      );
+      return getNamedPolicyUrl(containerUrl, name);
+    });
+    const inheritedPoliciesUrls = policies.filter(
+      (policyUrl) =>
+        !namedPolicyUrls.includes(policyUrl) && !policyUrl.includes("#Owner")
+    );
+    return inheritedPoliciesUrls;
+  }
+
+  async getInheritedPermissionsForResource() {
+    const policiesUrls = this.getInheritedPoliciesUrlsForResource();
+    if (!policiesUrls.length) return [];
+    try {
+      const modesAndAgents = await Promise.all(
+        policiesUrls.map(async (url) => {
+          const dataset = await getSolidDataset(url, {
+            fetch: this.#fetch,
+          });
+          const modesAndAgentsForUrl = getNamedPolicyModesAndAgents(
+            url,
+            dataset
+          );
+          return modesAndAgentsForUrl;
+        })
+      );
+      const permissions = [];
+      modesAndAgents.forEach(({ modes, agents }) =>
+        agents.forEach((webId) => {
+          // TODO: when we have groups we can pass a "group" type here
+          const agentType = getAgentType(webId);
+          const inherited = true;
+          const permission = getOrCreatePermission(
+            permissions,
+            webId,
+            agentType,
+            inherited
+          );
+          permission.acp.apply = addAcpModes(permission.acp.apply, modes);
+          permissions[webId] = permission;
+        })
+      );
+      // normalize permissions
+      return Object.values(permissions).map(
+        ({ acp: access, webId, type, inherited }) => {
+          const acl = convertAcpToAcl(access);
+          return {
+            type,
+            acl,
+            alias: getPolicyNameFromAccess(acl),
+            webId,
+            inherited,
+          };
+        }
+      );
+    } catch (error) {
+      if (isHTTPError(error.message, 403) || isHTTPError(error.message, 404)) {
+        return [];
+      }
+      throw error;
+    }
+  }
+
   async getPermissionsForNamedPolicies(policyName) {
     const namedPolicyContainerUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
@@ -400,7 +501,13 @@ export default class AcpAccessControlStrategy {
       policyName
     );
     const permissions = {};
+    let inheritedPermissionsForNamedPolicy = [];
     try {
+      const allInheritedPermissions = await this.getInheritedPermissionsForResource();
+      inheritedPermissionsForNamedPolicy = allInheritedPermissions.filter(
+        ({ alias }) => alias === policyName
+      );
+
       const policyDataset = await getSolidDataset(namedPolicyContainerUrl, {
         fetch: this.#fetch,
       });
@@ -422,18 +529,22 @@ export default class AcpAccessControlStrategy {
         })
       );
       // normalize permissions
-      return Object.values(permissions).map(({ acp: access, webId, type }) => {
-        const acl = convertAcpToAcl(access);
-        return {
-          type,
-          acl,
-          alias: policyName,
-          webId,
-        };
-      });
+
+      const normalizedPermissions = Object.values(permissions).map(
+        ({ acp: access, webId, type }) => {
+          const acl = convertAcpToAcl(access);
+          return {
+            type,
+            acl,
+            alias: policyName,
+            webId,
+          };
+        }
+      );
+      return normalizedPermissions.concat(inheritedPermissionsForNamedPolicy);
     } catch (error) {
       if (isHTTPError(error.message, 403) || isHTTPError(error.message, 404)) {
-        return [];
+        return inheritedPermissionsForNamedPolicy || [];
       }
       throw error;
     }
@@ -446,7 +557,13 @@ export default class AcpAccessControlStrategy {
       policyName
     );
     const permissions = {};
+    let inheritedPermissionsForCustomPolicy = [];
     try {
+      const allInheritedPermissions = await this.getInheritedPermissionsForResource();
+      inheritedPermissionsForCustomPolicy = allInheritedPermissions.filter(
+        ({ alias }) => alias === policyName
+      );
+
       const policyDataset = await getSolidDataset(customPolicyContainerUrl, {
         fetch: this.#fetch,
       });
@@ -469,18 +586,21 @@ export default class AcpAccessControlStrategy {
         })
       );
       // normalize permissions
-      return Object.values(permissions).map(({ acp: access, webId, type }) => {
-        const acl = convertAcpToAcl(access);
-        return {
-          type,
-          acl,
-          alias: policyName,
-          webId,
-        };
-      });
+      const normalizedPermissions = Object.values(permissions).map(
+        ({ acp: access, webId, type }) => {
+          const acl = convertAcpToAcl(access);
+          return {
+            type,
+            acl,
+            alias: policyName,
+            webId,
+          };
+        }
+      );
+      return normalizedPermissions.concat(inheritedPermissionsForCustomPolicy);
     } catch (error) {
       if (isHTTPError(error.message, 403) || isHTTPError(error.message, 404)) {
-        return [];
+        return inheritedPermissionsForCustomPolicy || [];
       }
       throw error;
     }

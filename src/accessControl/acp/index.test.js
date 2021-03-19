@@ -28,6 +28,7 @@ import AcpAccessControlStrategy, {
   getAgentType,
   getNamedPolicyModesAndAgents,
   getOrCreatePermission,
+  getPolicyNameFromAccess,
   getOrCreatePolicy,
   getPolicyModesAndAgents,
   getRulesOrCreate,
@@ -133,6 +134,7 @@ describe("AcpAccessControlStrategy", () => {
       ).rejects.toEqual(new Error(noAcrAccessError));
     });
   });
+
   describe("getPermissionsForNamedPolicies", () => {
     const webId = "http://example.com/agent1";
 
@@ -248,6 +250,74 @@ describe("AcpAccessControlStrategy", () => {
           alias: "viewAndAdd",
           webId,
           type: "agent",
+        },
+      ]);
+    });
+  });
+
+  describe("getInheritedPermissionsForResource", () => {
+    const webId = "http://example.com/agent1";
+
+    beforeEach(() => {
+      acp = new AcpAccessControlStrategy(
+        datasetWithAcr,
+        policiesContainerUrl,
+        fetch
+      );
+    });
+
+    it("returns an empty array if no policy resource is available", async () => {
+      jest.spyOn(scFns, "getSolidDataset").mockImplementation(() => {
+        throw new Error("404");
+      });
+      await expect(acp.getInheritedPermissionsForResource()).resolves.toEqual(
+        []
+      );
+    });
+
+    it("throws an error if anything but 404 for the policy resource happens", async () => {
+      jest
+        .spyOn(acp, "getInheritedPoliciesUrlsForResource")
+        .mockReturnValue(["https://example.com/policies/policyDataset"]);
+      const error = new Error("500");
+      jest.spyOn(scFns, "getSolidDataset").mockImplementation(() => {
+        throw error;
+      });
+      await expect(acp.getInheritedPermissionsForResource()).rejects.toEqual(
+        error
+      );
+    });
+
+    it("normalizes the permissions retrieved from the policy resource", async () => {
+      const editorsPolicyRule = chain(
+        acpFns.createRule(editorsPolicyRuleUrl),
+        (r) => acpFns.addAgent(r, webId)
+      );
+      const editorsPolicy = chain(
+        acpFns.createPolicy(editorsPolicyUrl),
+        (p) => acpFns.setAllowModes(p, createAcpMap(true, true)),
+        (p) => acpFns.setRequiredRuleUrl(p, editorsPolicyRule)
+      );
+
+      const policyDataset = chain(
+        mockSolidDatasetFrom(editorsPolicyResourceUrl),
+        (d) => setThing(d, editorsPolicyRule),
+        (d) => setThing(d, editorsPolicy)
+      );
+      jest
+        .spyOn(acp, "getInheritedPoliciesUrlsForResource")
+        .mockReturnValue([editorsPolicyUrl]);
+      jest.spyOn(scFns, "getSolidDataset").mockResolvedValue(policyDataset);
+      const profile = mockProfileAlice();
+      jest.spyOn(profileFns, "fetchProfile").mockResolvedValue(profile);
+
+      await expect(acp.getInheritedPermissionsForResource()).resolves.toEqual([
+        {
+          acl: createAccessMap(true, true, false, false),
+          alias: "editors",
+          webId,
+          type: "agent",
+          inherited: true,
         },
       ]);
     });
@@ -1158,6 +1228,25 @@ describe("getAgentType", () => {
   });
 });
 
+describe("getPolicyNameFromAccess", () => {
+  const readAccess = createAcpMap(true);
+  const readWriteAccess = createAcpMap(true, true);
+  const readAppendAccess = createAcpMap(true, false, true);
+  const writeAccess = createAcpMap(false, true, false);
+  const appendAccess = createAcpMap(false, false, true);
+  it("returns the correct policy name for a given access map", () => {
+    expect(getPolicyNameFromAccess(readAccess)).toEqual("viewers");
+    expect(getPolicyNameFromAccess(readWriteAccess)).toEqual("editors");
+    expect(getPolicyNameFromAccess(readAppendAccess)).toEqual("viewAndAdd");
+    expect(getPolicyNameFromAccess(writeAccess)).toEqual("editOnly");
+    expect(getPolicyNameFromAccess(appendAccess)).toEqual("addOnly");
+  });
+  it("returns null if type of access is not covered", () => {
+    const readWriteAppendAccess = createAcpMap(true, true, true);
+    expect(getPolicyNameFromAccess(readWriteAppendAccess)).toBeNull();
+  });
+});
+
 describe("addAcpModes", () => {
   it("combines modes", () => {
     expect(addAcpModes(undefined, createAcpMap(true, false, true))).toEqual(
@@ -1252,6 +1341,7 @@ describe("getOrCreatePermission", () => {
       access: createAcpMap(),
     },
     webId,
+    inherited: false,
   };
   it("creates a new permission if none exist", () => {
     expect(getOrCreatePermission({}, webId)).toEqual(blankPermission);
