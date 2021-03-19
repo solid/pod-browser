@@ -30,12 +30,16 @@ import { getWebIdUrl } from "../contact/person";
 /* Model functions */
 
 export async function getProfileForContact(personContactUrl, fetch) {
-  const {
-    response: { dataset, iri },
-  } = await getResource(personContactUrl, fetch);
-  const webId = getWebIdUrl(dataset, iri);
-  const fetchedProfile = await fetchProfile(webId, fetch);
-  return fetchedProfile;
+  try {
+    const {
+      response: { dataset, iri },
+    } = await getResource(personContactUrl, fetch);
+    const webId = getWebIdUrl(dataset, iri);
+    const fetchedProfile = await fetchProfile(webId, fetch);
+    return fetchedProfile;
+  } catch (e) {
+    return null;
+  }
 }
 export async function getProfilesForPersonContacts(people, fetch) {
   const responses = await Promise.all(
