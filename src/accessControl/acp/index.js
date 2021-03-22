@@ -436,8 +436,10 @@ export default class AcpAccessControlStrategy {
     });
     const inheritedPoliciesUrls = policies.filter(
       (policyUrl) =>
-        !namedPolicyUrls.includes(policyUrl) && !policyUrl.includes("#Owner")
+        !namedPolicyUrls.includes(policyUrl) &&
+        policyUrl.startsWith(this.#policiesContainerUrl)
     );
+
     return inheritedPoliciesUrls;
   }
 
@@ -457,7 +459,7 @@ export default class AcpAccessControlStrategy {
           return modesAndAgentsForUrl;
         })
       );
-      const permissions = [];
+      const permissions = {};
       modesAndAgents.forEach(({ modes, agents }) =>
         agents.forEach((webId) => {
           // TODO: when we have groups we can pass a "group" type here
