@@ -49,7 +49,7 @@ import {
 import { isHTTPError } from "../../error";
 import { PUBLIC_AGENT_PREDICATE } from "../../models/contact/public";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../models/contact/authenticated";
-import { namedPolicies } from "../../../constants/policies";
+import { namedPolicies, POLICIES_TYPE_MAP } from "../../../constants/policies";
 
 export const noAcrAccessError =
   "No access to Access Control Resource for this resource";
@@ -75,19 +75,19 @@ const acpMapForCustomApplyPolicies = {
 export const getPolicyNameFromAccess = (access) => {
   const { read, write, append } = access;
   if (read && write && !append) {
-    return "editors";
+    return POLICIES_TYPE_MAP.editors.name;
   }
   if (read && !write && !append) {
-    return "viewers";
+    return POLICIES_TYPE_MAP.viewers.name;
   }
   if (read && append && !write) {
-    return "viewAndAdd";
+    return POLICIES_TYPE_MAP.viewAndAdd.name;
   }
   if (append && !write && !write) {
-    return "addOnly";
+    return POLICIES_TYPE_MAP.addOnly.name;
   }
   if (write && !append && !read) {
-    return "editOnly";
+    return POLICIES_TYPE_MAP.editOnly.name;
   }
   return null;
 };
