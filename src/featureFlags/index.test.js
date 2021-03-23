@@ -23,45 +23,11 @@ import rules, {
   GROUPS_PAGE_ENABLED,
   GROUPS_PAGE_ENABLED_FOR,
   groupsPageEnabled,
-  NEW_ACP_UI_ENABLED,
-  NEW_ACP_UI_ENABLED_FOR,
-  newAcpUiEnabled,
 } from "./index";
 
 describe("rules", () => {
   test("it indexes all rules", () => {
-    expect(Object.keys(rules())).toEqual([
-      NEW_ACP_UI_ENABLED,
-      GROUPS_PAGE_ENABLED,
-    ]);
-  });
-});
-
-describe("NEW_ACP_UI_ENABLED", () => {
-  it("returns false for a logged out session", () => {
-    expect(newAcpUiEnabled({ info: { isLoggedIn: false } })).toBe(false);
-  });
-
-  it("returns false for a session not in the enabled list", () => {
-    expect(
-      newAcpUiEnabled({
-        info: {
-          isLoggedIn: true,
-          webId: "https://pod.inrupt.com/fakename/card#me",
-        },
-      })
-    ).toBe(false);
-  });
-
-  it("returns true for a session in the enabled list", () => {
-    expect(
-      newAcpUiEnabled({
-        info: {
-          isLoggedIn: true,
-          webId: NEW_ACP_UI_ENABLED_FOR[0],
-        },
-      })
-    ).toBe(true);
+    expect(Object.keys(rules())).toEqual([GROUPS_PAGE_ENABLED]);
   });
 });
 
