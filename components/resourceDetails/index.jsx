@@ -36,8 +36,6 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { ActionMenu, ActionMenuItem } from "@inrupt/prism-react-components";
 import { DatasetContext } from "@inrupt/solid-ui-react";
 import { getContentType, getSourceUrl } from "@inrupt/solid-client";
-import FeatureContext from "../../src/contexts/featureFlagsContext";
-import { NEW_ACP_UI_ENABLED } from "../../src/featureFlags";
 import styles from "./styles";
 import DeleteResourceButton from "../deleteResourceButton";
 import DownloadLink from "../downloadLink";
@@ -46,15 +44,16 @@ import { getIriPath } from "../../src/solidClientHelpers/utils";
 import { getResourceName } from "../../src/solidClientHelpers/resource";
 import AccessControlContext from "../../src/contexts/accessControlContext";
 import SharingAccordion from "./resourceSharing/sharingAccordion";
+import { isAcp, isWac } from "../../src/accessControl";
 import useLocalStorage from "../../src/hooks/useLocalStorage";
 
 const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
 const TESTCAFE_ID_DELETE_BUTTON = "delete-resource-button";
 const TESTCAFE_ID_ACCORDION_ACTIONS = "accordion-resource-actions-trigger";
 const TESTCAFE_ID_ACCORDION_DETAILS = "accordion-resource-details-trigger";
-const TESTCAFE_ID_ACCORDION_PERMISSIONS =
-  "accordion-resource-permissions-trigger";
-const TESTCAFE_ID_ACCORDION_SHARING = "accordion-resource-permissions-trigger";
+export const TESTCAFE_ID_ACCORDION_PERMISSIONS =
+  "accordion-resource-permissions";
+export const TESTCAFE_ID_ACCORDION_SHARING = "accordion-resource-sharing";
 const TESTCAFE_ID_TITLE = "resource-title";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -75,8 +74,6 @@ export default function ResourceDetails({
   const type = getContentType(dataset);
   const actionMenuBem = ActionMenu.useBem();
   const { accessControl } = useContext(AccessControlContext);
-  const { enabled } = useContext(FeatureContext);
-  const useNewAcpUi = enabled(NEW_ACP_UI_ENABLED);
   const [actionsAccordion, setActionsAccordion] = useLocalStorage(
     getAccordionKey(dataset, "actions"),
     true
@@ -93,6 +90,8 @@ export default function ResourceDetails({
     getAccordionKey(dataset, "sharing"),
     false
   );
+  const useAcp = isAcp(dataset);
+  const useWac = isWac(dataset);
 
   const expandIcon = <ExpandMoreIcon />;
   return (
@@ -172,23 +171,25 @@ export default function ResourceDetails({
         </AccordionDetails>
       </Accordion>
 
-      {accessControl ? ( // only show when we know user has control access
+      {accessControl && ( // only show when we know user has control access
         <>
-          <Accordion
-            expanded={permissionsAccordion}
-            onChange={() => setPermissionsAccordion(!permissionsAccordion)}
-          >
-            <AccordionSummary
-              expandIcon={expandIcon}
-              data-testid={TESTCAFE_ID_ACCORDION_PERMISSIONS}
+          {useWac && (
+            <Accordion
+              expanded={permissionsAccordion}
+              onChange={() => setPermissionsAccordion(!permissionsAccordion)}
             >
-              Permissions
-            </AccordionSummary>
-            <AccordionDetails className={classes.accordionDetails}>
-              <ResourceSharing />
-            </AccordionDetails>
-          </Accordion>
-          {useNewAcpUi && (
+              <AccordionSummary
+                expandIcon={expandIcon}
+                data-testid={TESTCAFE_ID_ACCORDION_PERMISSIONS}
+              >
+                Permissions
+              </AccordionSummary>
+              <AccordionDetails className={classes.accordionDetails}>
+                <ResourceSharing />
+              </AccordionDetails>
+            </Accordion>
+          )}
+          {useAcp && (
             <Accordion
               expanded={sharingAccordion}
               onChange={() => setSharingAccordion(!sharingAccordion)}
@@ -205,7 +206,7 @@ export default function ResourceDetails({
             </Accordion>
           )}
         </>
-      ) : null}
+      )}
     </>
   );
 }
