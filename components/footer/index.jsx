@@ -37,7 +37,7 @@ export default function Footer({ atlassianFeedbackWidth }) {
       "data-testid": TESTCAFE_ID_TOS_LINK,
     },
   ];
-  const texts = [{ text: "Copyright 2020 Inrupt, inc." }];
+  const texts = [{ text: "Copyright 2021 Inrupt, inc." }];
   const style = atlassianFeedbackWidth
     ? {
         paddingRight: atlassianFeedbackWidth + theme.spacing(1),
