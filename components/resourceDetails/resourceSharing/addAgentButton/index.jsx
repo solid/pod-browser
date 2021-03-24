@@ -28,10 +28,8 @@ import { Button } from "@inrupt/prism-react-components";
 import AgentPickerModal from "../agentPickerModal";
 import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
 import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
-import {
-  isCustomPolicy,
-  POLICIES_TYPE_MAP,
-} from "../../../../constants/policies";
+import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
+import { isCustomPolicy } from "../../../../src/models/policy";
 
 export const TESTCAFE_ID_ADD_AGENT_BUTTON = "add-agent-button";
 export const TESTCAFE_ID_MODAL_OVERLAY = "agent-picker-modal-overlay";

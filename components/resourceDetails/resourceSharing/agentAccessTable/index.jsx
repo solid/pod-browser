@@ -26,7 +26,11 @@ import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { useFilters, useGlobalFilter, useTable } from "react-table";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Container } from "@inrupt/prism-react-components";
+import {
+  ActionButton,
+  Button,
+  Container,
+} from "@inrupt/prism-react-components";
 import clsx from "clsx";
 import {
   Accordion,
@@ -40,13 +44,12 @@ import AgentAccess from "../agentAccess";
 import AddAgentButton from "../addAgentButton";
 import AgentsTableTabs from "../agentsTableTabs";
 import AgentsSearchBar from "../agentsSearchBar";
-import {
-  isCustomPolicy,
-  POLICIES_TYPE_MAP,
-} from "../../../../constants/policies";
+import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
 
 import styles from "./styles";
 import PolicyHeader from "../policyHeader";
+import PolicyActionButton from "../policyActionButton";
+import { isCustomPolicy } from "../../../../src/models/policy";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const TESTCAFE_ID_SHOW_ALL_BUTTON = "show-all-button";
@@ -144,11 +147,14 @@ export default function AgentAccessTable({ type }) {
       data-testid={TESTCAFE_ID_AGENT_ACCESS_TABLE}
     >
       <PolicyHeader type={type} isPolicyList>
-        <AddAgentButton
-          type={type}
-          setLoading={setLoading}
-          permissions={permissions}
-        />
+        <>
+          <AddAgentButton
+            type={type}
+            setLoading={setLoading}
+            permissions={permissions}
+          />
+          <PolicyActionButton permissions={permissions} type={type} />
+        </>
       </PolicyHeader>
       <div className={classes.permissionsContainer}>
         {!!permissions.length && (

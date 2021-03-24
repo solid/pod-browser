@@ -22,12 +22,12 @@
 /* eslint-disable react/jsx-filename-extension */
 
 import {
-  ViewersDescription,
-  EditorsDescription,
-  BlockedDescription,
-  ViewAndAddDescription,
-  EditOnlyDescription,
   AddOnlyDescription,
+  BlockedDescription,
+  EditOnlyDescription,
+  EditorsDescription,
+  ViewAndAddDescription,
+  ViewersDescription,
 } from "../components/resourceDetails/resourceSharing/policiesDescriptions";
 
 // Constants used for policies UI
@@ -73,6 +73,7 @@ export const POLICIES_TYPE_MAP = {
     titlePlural: "Editors",
     titleSingular: "Editor",
     emptyStateText: "No editors",
+    removeButtonLabel: "Remove Editors",
     DescriptionComponent: EditorsDescription,
   },
   viewers: {
@@ -88,6 +89,7 @@ export const POLICIES_TYPE_MAP = {
     titlePlural: "Viewers",
     titleSingular: "Viewer",
     emptyStateText: "No viewers",
+    removeButtonLabel: "Remove Viewers",
     DescriptionComponent: ViewersDescription,
   },
   blocked: {
@@ -103,6 +105,7 @@ export const POLICIES_TYPE_MAP = {
     titlePlural: "Blocked",
     titleSingular: "Blocked",
     emptyStateText: "No one is blocked",
+    removeButtonLabel: "Remove Blocked",
     DescriptionComponent: BlockedDescription,
   },
   viewAndAdd: {
@@ -111,6 +114,7 @@ export const POLICIES_TYPE_MAP = {
     title: "View & Add",
     titlePlural: "View & Add",
     titleSingular: "View & Add",
+    removeButtonLabel: "Remove View & Add",
     DescriptionComponent: ViewAndAddDescription,
   },
   editOnly: {
@@ -119,6 +123,7 @@ export const POLICIES_TYPE_MAP = {
     title: "Edit Only",
     titlePlural: "Edit Only",
     titleSingular: "Edit Only",
+    removeButtonLabel: "Remove Edit Only",
     DescriptionComponent: EditOnlyDescription,
   },
   addOnly: {
@@ -127,6 +132,7 @@ export const POLICIES_TYPE_MAP = {
     title: "Add Only",
     titlePlural: "Add Only",
     titleSingular: "Add Only",
+    removeButtonLabel: "Remove Add Only",
     DescriptionComponent: AddOnlyDescription,
   },
 };
@@ -143,7 +149,3 @@ const {
 export const customPolicies = [viewAndAdd, editOnly, addOnly];
 
 export const namedPolicies = [editors, viewers, blocked];
-
-export function isCustomPolicy(type) {
-  return !!customPolicies.filter((policy) => policy.name === type).length;
-}

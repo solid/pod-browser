@@ -36,11 +36,14 @@ import {
 } from "../../solidClientHelpers/permissions";
 import { chain, createResponder } from "../../solidClientHelpers/utils";
 import { getOrCreateDatasetOld } from "../../solidClientHelpers/resource";
-import { getPolicyUrl, getPolicyResourceUrl } from "../../models/policy";
+import {
+  getPolicyUrl,
+  getPolicyResourceUrl,
+  isCustomPolicy,
+} from "../../models/policy";
 import { isHTTPError } from "../../error";
 import { PUBLIC_AGENT_PREDICATE } from "../../models/contact/public";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../models/contact/authenticated";
-import { isCustomPolicy } from "../../../constants/policies";
 
 export const noAcrAccessError =
   "No access to Access Control Resource for this resource";

@@ -19,21 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { useContext } from "react";
-import useSWR from "swr";
-import AccessControlContext from "../../contexts/accessControlContext";
-import { isCustomPolicy } from "../../models/policy";
+import React from "react";
 
-export default function usePolicyPermissions(policyName) {
-  const isCustom = isCustomPolicy(policyName);
-  const { accessControl } = useContext(AccessControlContext);
-  async function getPermissions() {
-    const permissions = isCustom
-      ? await accessControl.getPermissionsForCustomPolicies(policyName)
-      : await accessControl.getPermissionsForNamedPolicies(policyName);
-    return permissions;
-  }
-
-  return useSWR([accessControl, policyName], () => getPermissions());
+export default function PolicyRemoveModal() {
+  return <div>test</div>;
 }
