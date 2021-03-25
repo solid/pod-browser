@@ -68,15 +68,19 @@ export default function styles(theme) {
       fontSize: theme.typography.button.fontSize,
     },
     "login-form": {
+      [theme.breakpoints.up("sm")]: {
+        minWidth: 420,
+        maxWidth: 600,
+        padding: theme.spacing(5),
+      },
       textAlign: "center",
       fontStyle: "normal",
       marginBottom: theme.spacing(2.4),
       background: theme.palette.background.default,
       borderRadius: theme.shape.borderRadius,
+      padding: theme.spacing(1),
       boxShadow: "0px 2px 4px 0px rgba(0,0,0,0.3)",
-      padding: theme.spacing(5),
-      minWidth: 420,
-      maxWidth: 600,
+      width: "100%",
       "& h3": {
         fontFamily: theme.typography.h3.fontFamily,
         textTransform: "uppercase",

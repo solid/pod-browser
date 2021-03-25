@@ -44,6 +44,10 @@ const styles = (theme) =>
       "& p": {
         marginBottom: theme.spacing(3),
       },
+      [theme.breakpoints.up("sm")]: {
+        padding: 0,
+        paddingTop: 60, // magic number - same as height of header
+      },
     },
     "login-page__title": {
       fontStyle: "normal",
@@ -56,11 +60,14 @@ const styles = (theme) =>
     "links-container": {
       fontStyle: "normal",
       padding: theme.spacing(5, 0),
-      minWidth: 420,
-      maxWidth: 600,
+      width: "100%",
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
+      [theme.breakpoints.up("sm")]: {
+        minWidth: 420,
+        maxWidth: 600,
+      },
     },
     "links-container__text": {
       display: "flex",

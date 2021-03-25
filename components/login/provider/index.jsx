@@ -50,7 +50,7 @@ const TESTCAFE_ID_GO_BUTTON = "go-button";
 export function setupOnProviderChange(setProviderIri) {
   return (e, newValue) => {
     if (typeof newValue === "string") {
-      if (newValue.startsWith("https://")) {
+      if (newValue.startsWith("https://") || newValue.startsWith("http://")) {
         setProviderIri(newValue);
       } else {
         setProviderIri(`https://${newValue}`);
@@ -60,7 +60,6 @@ export function setupOnProviderChange(setProviderIri) {
     }
   };
 }
-
 export function setupLoginHandler(login) {
   return async (event) => {
     event.preventDefault();
