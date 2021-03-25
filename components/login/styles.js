@@ -22,17 +22,72 @@
 import { createStyles } from "@solid/lit-prism-patterns";
 
 export default function styles(theme) {
-  return createStyles(theme, ["button", "content"], {
+  return createStyles(theme, ["button"], {
+    separator__wrap: {
+      height: "2rem",
+      margin: theme.spacing(4.8, 1.2),
+      position: "relative",
+      boxSizing: "border-box",
+    },
+    "separator__centre-line": {
+      textAlign: "center",
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      width: "100%",
+      transform: "translate(-50%, -50%)",
+      "&:before": {
+        content: '""',
+        position: "absolute",
+        width: "100%",
+        height: 1,
+        top: "50%",
+        left: 0,
+        zIndex: -1,
+        background: theme.palette.grey.A100,
+      },
+      "& span": {
+        fontSize: "0.75rem",
+        fontFamily: theme.typography.body1.fontFamily,
+        color: theme.palette.grey[700],
+        textTransform: "uppercase",
+        backgroundColor: theme.palette.background.default,
+        padding: "1rem",
+        display: "inline-block",
+      },
+    },
+    "provider-login-container": {
+      display: "none",
+    },
+    "provider-login-container--visible": {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "flex-start",
+    },
+    "info-button": {
+      fontSize: theme.typography.button.fontSize,
+    },
     "login-form": {
+      textAlign: "center",
+      fontStyle: "normal",
+      marginBottom: theme.spacing(2.4),
       background: theme.palette.background.default,
       borderRadius: theme.shape.borderRadius,
       boxShadow: "0px 2px 4px 0px rgba(0,0,0,0.3)",
       padding: theme.spacing(5),
       minWidth: 420,
       maxWidth: 600,
+      "& h3": {
+        fontFamily: theme.typography.h3.fontFamily,
+        textTransform: "uppercase",
+        fontSize: "0.75rem",
+      },
     },
-    "login-form__what-is-solid": {
-      margin: 0,
+    "login-form__button": {
+      width: "100%",
+    },
+    "login-form__logo": {
+      marginBottom: theme.spacing(2.4),
     },
   });
 }

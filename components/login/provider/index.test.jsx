@@ -70,13 +70,14 @@ describe("ProviderLogin form", () => {
 
   it("allows setting idp with query param", () => {
     const iri = "http://example.com";
+    const label = "example.com";
     useIdpFromQuery.mockReturnValue({
       iri,
-      label: "example.com",
+      label,
     });
     const { getByTestId } = renderWithTheme(<ProviderLogin />);
     const input = getByTestId(TESTCAFE_ID_LOGIN_FIELD).querySelector("input");
-    expect(input.value).toEqual(iri);
+    expect(input.value).toEqual(label);
     expect(document.activeElement).toEqual(input);
   });
 });
@@ -84,8 +85,26 @@ describe("ProviderLogin form", () => {
 describe("setupOnProviderChange", () => {
   it("sets up event handler", () => {
     const setProviderIri = jest.fn();
+    setupOnProviderChange(setProviderIri)({}, "string");
+    expect(setProviderIri).toHaveBeenCalledWith("https://string");
+  });
+  it("calls setProviderIri with provided string if user providers a correct URL", () => {
+    const setProviderIri = jest.fn();
+    setupOnProviderChange(setProviderIri)({}, "https://string");
+    expect(setProviderIri).toHaveBeenCalledWith("https://string");
+  });
+  it("calls setProviderIri with correct iri when passed an object from the autocomplete options", () => {
+    const setProviderIri = jest.fn();
+    setupOnProviderChange(setProviderIri)(
+      {},
+      { iri: "https://example.com", label: "example.com" }
+    );
+    expect(setProviderIri).toHaveBeenCalledWith("https://example.com");
+  });
+  it("calls setProviderIri with null for other values", () => {
+    const setProviderIri = jest.fn();
     setupOnProviderChange(setProviderIri)({}, 42);
-    expect(setProviderIri).toHaveBeenCalledWith(42);
+    expect(setProviderIri).toHaveBeenCalledWith(null);
   });
 });
 
@@ -121,14 +140,6 @@ describe("getErrorMessage", () => {
     expect(
       getErrorMessage(new Error("Not allowed to request resource"))
     ).toEqual("This URL is not a Solid Identity Provider."));
-  it("handles when value is not a value for Chrome and Edge", () =>
-    expect(getErrorMessage(new Error("Invalid URL"))).toEqual(
-      "This value is not a URL. Please fill out a valid Solid Identity Provider."
-    ));
-  it("handles when value is not a value for Firefox", () =>
-    expect(getErrorMessage(new Error("URL constructor"))).toEqual(
-      "This value is not a URL. Please fill out a valid Solid Identity Provider."
-    ));
   it("handles when value is empty", () =>
     expect(getErrorMessage(new Error("sessionId"))).toEqual(
       "Please provide a URL. Please fill out a valid Solid Identity Provider."

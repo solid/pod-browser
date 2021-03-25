@@ -1,14 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`getIdentityProviders returns a map of providers 1`] = `
-Object {
-  "broker.pod.inrupt.com": Object {
-    "iri": "https://broker.pod.inrupt.com/",
-    "label": "broker.pod.inrupt.com",
+exports[`getIdentityProviders returns an array of providers 1`] = `
+Array [
+  Object {
+    "iri": "https://solidcommunity.net/",
+    "label": "Solidcommunity.net",
+    "logo": "inrupt_logo-2020.svg",
   },
-  "inrupt.net": Object {
+  Object {
+    "iri": "https://solidweb.org/",
+    "label": "Solidweb.org",
+    "logo": "solid-logo.svg",
+  },
+  Object {
     "iri": "https://inrupt.net/",
     "label": "inrupt.net",
+    "logo": "solid-logo.svg",
   },
-}
+]
 `;

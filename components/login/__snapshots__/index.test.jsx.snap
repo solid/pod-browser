@@ -1,25 +1,99 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Login form Renders a login form, with button bound to swapLoginType 1`] = `
+exports[`Login form renders a login page with a sign in button and a 'Sign in with other provider' button 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-login-form"
   >
-    <form>
+    <h3
+      data-testid="login-title"
+    >
+      Sign in with
+    </h3>
+    <img
+      alt="Inrupt PodBrowser"
+      class="PodBrowser-login-form__logo"
+      src="/pod-spaces-logo.svg"
+      width="160"
+    />
+    <div
+      role="button"
+      tabindex="0"
+    >
+      <button
+        class="PodBrowser-button PodBrowser-login-form__button"
+        data-testid="login-button"
+        type="submit"
+      >
+        <span
+          class="PodBrowser-button__text"
+        >
+          Sign In
+        </span>
+      </button>
+    </div>
+    <div
+      class="PodBrowser-separator__wrap"
+    >
+      <h2
+        class="PodBrowser-separator__centre-line"
+      >
+        <span>
+          Or
+        </span>
+      </h2>
+    </div>
+    <button
+      class="PodBrowser-button PodBrowser-button--secondary"
+      data-testid="other-providers-button"
+    >
+      <span
+        class="PodBrowser-button__text"
+      >
+        Sign in with other provider
+      </span>
+      <span
+        class="PodBrowser-icon-caret-down PodBrowser-button__icon PodBrowser-button__icon--after"
+      />
+    </button>
+    <div
+      class="PodBrowser-provider-login-container"
+    >
       <div
-        class="PodBrowser-root PodBrowser-root"
+        class="PodBrowser-infoTooltipContainer PodBrowser-info-button"
+      >
+        <span
+          data-testid="info-button-label"
+        >
+          Where is your Pod hosted?
+        </span>
+        <button
+          class="PodBrowser-root PodBrowser-root PodBrowser-infoButton PodBrowser-text"
+          tabindex="0"
+          title="This is where you signed up for a Solid Pod"
+          type="button"
+        >
+          <span
+            class="PodBrowser-label"
+          >
+            <i
+              aria-label="Info"
+              class="PodBrowser-icon-info PodBrowser-infoIcon"
+            />
+          </span>
+          <span
+            class="PodBrowser-root"
+          />
+        </button>
+      </div>
+      <form
+        class="PodBrowser-provider-login__form"
       >
         <div
-          class="PodBrowser-root PodBrowser-root"
+          class="PodBrowser-provider-login__wrapper"
         >
-          <h3
-            data-testid="login-title"
-          >
-            Log In
-          </h3>
           <div
-            class="PodBrowser-root"
-            style="max-width: 320px; width: 100%;"
+            class="PodBrowser-root PodBrowser-selectionBox"
           >
             <div
               aria-expanded="false"
@@ -27,17 +101,9 @@ exports[`Login form Renders a login form, with button bound to swapLoginType 1`]
               role="combobox"
             >
               <div
-                class="PodBrowser-root PodBrowser-root PodBrowser-marginNormal PodBrowser-fullWidth"
+                class="PodBrowser-root PodBrowser-root PodBrowser-fullWidth"
                 data-testid="login-field"
               >
-                <label
-                  class="PodBrowser-root PodBrowser-root PodBrowser-formControl PodBrowser-animated PodBrowser-outlined"
-                  data-shrink="false"
-                  for="provider-select"
-                  id="provider-select-label"
-                >
-                  Select ID provider
-                </label>
                 <div
                   class="PodBrowser-root PodBrowser-root PodBrowser-inputRoot PodBrowser-fullWidth PodBrowser-formControl PodBrowser-adornedEnd PodBrowser-adornedEnd"
                 >
@@ -49,7 +115,7 @@ exports[`Login form Renders a login form, with button bound to swapLoginType 1`]
                     class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd"
                     id="provider-select"
                     spellcheck="false"
-                    type="url"
+                    type="text"
                     value=""
                   />
                   <div
@@ -84,12 +150,14 @@ exports[`Login form Renders a login form, with button bound to swapLoginType 1`]
                   <fieldset
                     aria-hidden="true"
                     class="PodBrowser-root PodBrowser-notchedOutline"
+                    style="padding-left: 8px;"
                   >
                     <legend
-                      class="PodBrowser-legendLabelled"
+                      class="PodBrowser-legend"
+                      style="width: 0.01px;"
                     >
                       <span>
-                        Select ID provider
+                        ​
                       </span>
                     </legend>
                   </fieldset>
@@ -102,16 +170,20 @@ exports[`Login form Renders a login form, with button bound to swapLoginType 1`]
             tabindex="0"
           >
             <button
-              class="PodBrowser-button"
-              data-testid="login-button"
+              class="PodBrowser-button PodBrowser-provider-login__button"
+              data-testid="go-button"
               type="submit"
             >
-              Log In
+              <span
+                class="PodBrowser-button__text"
+              >
+                Go
+              </span>
             </button>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </DocumentFragment>
 `;

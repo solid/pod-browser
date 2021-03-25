@@ -21,41 +21,61 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
+// TODO: move these new colors to Prism
+const LOGIN_BACKGROUND_COLOR = "#FCFEFF";
+const TITLE_COLOR = "#0D6796";
+
 const styles = (theme) =>
   createStyles(theme, ["content"], {
     "login-page": {
+      textAlign: "center",
       flexGrow: 1,
       flexShrink: 0,
-      background:
-        "linear-gradient(135deg, rgb(124, 77, 255) 0%, rgb(24, 169, 230) 50%, rgb(1, 201, 234) 100%)",
-      backgroundRepeat: "no-repeat",
+      backgroundColor: LOGIN_BACKGROUND_COLOR,
+      color: theme.palette.grey[800],
       boxSizing: "border-box",
       height: "100%",
       paddingTop: 60, // magic number - same as height of header
-      position: "relative",
-      "&::before": {
-        content: '""',
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundImage: "url('/background-pattern.svg')",
-        filter: "opacity(30%)",
-      },
-    },
-    "login-page__container": {
+      fontStyle: "italic",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
       position: "relative",
+      "& p": {
+        marginBottom: theme.spacing(3),
+      },
     },
     "login-page__title": {
-      color: theme.palette.background.default,
-      fontSize: "1.75rem",
+      fontStyle: "normal",
+      color: TITLE_COLOR,
+      fontSize: "2.3125rem",
       letterSpacing: 1.4,
       lineHeight: "40px",
-      margin: theme.spacing(5, 0),
+      margin: theme.spacing(0.7, 0),
+    },
+    "links-container": {
+      fontStyle: "normal",
+      padding: theme.spacing(5, 0),
+      minWidth: 420,
+      maxWidth: 600,
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+    },
+    "links-container__text": {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: theme.spacing(11.6),
+    },
+    "links-container__list": {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    "links-container__button": {
+      padding: theme.spacing(0, 1),
     },
   });
 

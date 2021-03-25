@@ -19,22 +19,29 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function getIdentityProviders() {
-  return [
-    {
-      logo: "inrupt_logo-2020.svg",
-      label: "Solidcommunity.net",
-      iri: "https://solidcommunity.net/",
+import { createStyles } from "@solid/lit-prism-patterns";
+
+export default function styles(theme) {
+  return createStyles(theme, ["button"], {
+    "provider-login__form": {
+      width: "100%",
     },
-    {
-      logo: "solid-logo.svg",
-      label: "Solidweb.org",
-      iri: "https://solidweb.org/",
+    "provider-login__wrapper": {
+      display: "flex",
+      position: "relative",
+      width: "100%",
+      flexDirection: "row",
+      alignItems: "center",
     },
-    {
-      logo: "solid-logo.svg",
-      label: "inrupt.net",
-      iri: "https://inrupt.net/",
+    "provider-login__button": {
+      display: "flex",
+      minWidth: "max-content",
+      position: "absolute",
+      top: 0,
+      margin: theme.spacing(0, 0.4),
     },
-  ];
+    selectionBox: {
+      width: "80%",
+    },
+  });
 }

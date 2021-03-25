@@ -20,9 +20,11 @@
  */
 
 import React from "react";
-import Login from "./index";
+import userEvent from "@testing-library/user-event";
+import Login, { TESTCAFE_ID_OTHER_PROVIDERS_BUTTON } from "./index";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import useIdpFromQuery from "../../src/hooks/useIdpFromQuery";
+import { TESTCAFE_ID_LOGIN_FIELD } from "./provider";
 
 jest.mock("../../src/hooks/useIdpFromQuery");
 
@@ -31,8 +33,14 @@ describe("Login form", () => {
     useIdpFromQuery.mockReturnValue(null);
   });
 
-  test("Renders a login form, with button bound to swapLoginType", () => {
+  it("renders a login page with a sign in button and a 'Sign in with other provider' button", () => {
     const { asFragment } = renderWithTheme(<Login />);
     expect(asFragment()).toMatchSnapshot();
+  });
+  it("clicking the 'other providers' button displays a form", () => {
+    const { getByTestId } = renderWithTheme(<Login />);
+    const button = getByTestId(TESTCAFE_ID_OTHER_PROVIDERS_BUTTON);
+    userEvent.click(button);
+    expect(getByTestId(TESTCAFE_ID_LOGIN_FIELD)).not.toBeNull();
   });
 });
