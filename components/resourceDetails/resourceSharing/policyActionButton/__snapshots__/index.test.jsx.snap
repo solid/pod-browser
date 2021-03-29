@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PolicyActionButton renders an action button that displays a menu with a disabled 'remove all' option when there are no permissions 1`] = `
+<DocumentFragment>
+  <button
+    class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+  >
+    <span
+      class="PodBrowser-button__text"
+    >
+      <span
+        aria-label="Show menu for policy"
+        class="PodBrowser-icon-more"
+      />
+    </span>
+  </button>
+</DocumentFragment>
+`;
+
+exports[`PolicyActionButton renders an error if policy type is not recognized 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-message PodBrowser-message--error"
+    data-testid="error-message"
+  >
+    <div
+      class="PodBrowser-message__main"
+    >
+      Type of policy not recognized
+    </div>
+  </div>
+</DocumentFragment>
+`;

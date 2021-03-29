@@ -38,6 +38,18 @@ exports[`AgentAccessTable renders a list of permissions 1`] = `
               Edit Editors
             </span>
           </button>
+          <button
+            class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                aria-label="Show menu for policy"
+                class="PodBrowser-icon-more"
+              />
+            </span>
+          </button>
         </div>
         <span
           class="PodBrowser-description"
@@ -252,6 +264,18 @@ exports[`AgentAccessTable renders an empty list of permissions if permissions ar
               Edit Editors
             </span>
           </button>
+          <button
+            class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                aria-label="Show menu for policy"
+                class="PodBrowser-icon-more"
+              />
+            </span>
+          </button>
         </div>
         <span
           class="PodBrowser-description"
@@ -331,6 +355,18 @@ exports[`AgentAccessTable renders an empty list of permissions if there are no p
               class="PodBrowser-button__text"
             >
               Edit Editors
+            </span>
+          </button>
+          <button
+            class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                aria-label="Show menu for policy"
+                class="PodBrowser-icon-more"
+              />
             </span>
           </button>
         </div>

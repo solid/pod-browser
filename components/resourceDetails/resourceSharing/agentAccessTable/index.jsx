@@ -26,11 +26,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { useFilters, useGlobalFilter, useTable } from "react-table";
 import { useBem } from "@solid/lit-prism-patterns";
-import {
-  ActionButton,
-  Button,
-  Container,
-} from "@inrupt/prism-react-components";
+import { Container } from "@inrupt/prism-react-components";
 import clsx from "clsx";
 import {
   Accordion,
@@ -153,7 +149,12 @@ export default function AgentAccessTable({ type }) {
             setLoading={setLoading}
             permissions={permissions}
           />
-          <PolicyActionButton permissions={permissions} type={type} />
+          <PolicyActionButton
+            permissions={permissions}
+            mutatePermissions={mutatePermissions}
+            setLoading={setLoading}
+            type={type}
+          />
         </>
       </PolicyHeader>
       <div className={classes.permissionsContainer}>

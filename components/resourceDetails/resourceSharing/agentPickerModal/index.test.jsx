@@ -123,7 +123,7 @@ describe("handleSubmit", () => {
   const fetch = jest.fn();
   const advancedSharing = undefined;
 
-  it("returns a handler that exits when user doesn not make any changes", async () => {
+  it("returns a handler that exits when user does not make any changes", async () => {
     const policyName = "editors";
     const handler = handleSubmit({
       newAgentsWebIds: [],

@@ -36,6 +36,18 @@ exports[`SharingAccordion renders three lists of named policies for editors, vie
               Edit Editors
             </span>
           </button>
+          <button
+            class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                aria-label="Show menu for policy"
+                class="PodBrowser-icon-more"
+              />
+            </span>
+          </button>
         </div>
         <span
           class="PodBrowser-description"
@@ -110,6 +122,18 @@ exports[`SharingAccordion renders three lists of named policies for editors, vie
               class="PodBrowser-button__text"
             >
               Edit Viewers
+            </span>
+          </button>
+          <button
+            class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                aria-label="Show menu for policy"
+                class="PodBrowser-icon-more"
+              />
             </span>
           </button>
         </div>
@@ -190,6 +214,18 @@ exports[`SharingAccordion renders three lists of named policies for editors, vie
               class="PodBrowser-button__text"
             >
               Edit Blocked
+            </span>
+          </button>
+          <button
+            class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                aria-label="Show menu for policy"
+                class="PodBrowser-icon-more"
+              />
             </span>
           </button>
         </div>
@@ -290,6 +326,18 @@ exports[`SharingAccordion when resource is a container renders an info box which
               Edit Editors
             </span>
           </button>
+          <button
+            class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                aria-label="Show menu for policy"
+                class="PodBrowser-icon-more"
+              />
+            </span>
+          </button>
         </div>
         <span
           class="PodBrowser-description"
@@ -364,6 +412,18 @@ exports[`SharingAccordion when resource is a container renders an info box which
               class="PodBrowser-button__text"
             >
               Edit Viewers
+            </span>
+          </button>
+          <button
+            class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                aria-label="Show menu for policy"
+                class="PodBrowser-icon-more"
+              />
             </span>
           </button>
         </div>
@@ -444,6 +504,18 @@ exports[`SharingAccordion when resource is a container renders an info box which
               class="PodBrowser-button__text"
             >
               Edit Blocked
+            </span>
+          </button>
+          <button
+            class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                aria-label="Show menu for policy"
+                class="PodBrowser-icon-more"
+              />
             </span>
           </button>
         </div>
