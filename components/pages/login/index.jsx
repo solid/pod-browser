@@ -41,14 +41,14 @@ const links = [
     "data-testid": TESTCAFE_ID_TOS_LINK,
   },
   {
-    href: "https://inrupt.com/terms-of-service",
+    href: "https://inrupt.com/privacy-policy/",
     text: "Privacy Policy",
     rel: "noreferrer",
     target: "_blank",
     "data-testid": TESTCAFE_ID_TOS_LINK,
   },
   {
-    href: "https://inrupt.com/terms-of-service",
+    href: "https://inrupt.atlassian.net/servicedesk/customer/portal/7",
     text: "Help",
     rel: "noreferrer",
     target: "_blank",
@@ -66,11 +66,13 @@ export default function Login() {
       <h1 className={clsx(bem("content-h1"), bem("login-page__title"))}>
         PodBrowser
       </h1>
-      <p>View and manage data in your Pod</p>
+      <p className={bem("login-page__text")}>
+        View and manage data in your Pod
+      </p>
       <LoginForm />
       <div className={bem("links-container")}>
         <div className={bem("links-container__text")}>
-          Need a pod?
+          Need a Pod?
           <a
             href="https://signup.pod.inrupt.com/"
             variant="secondary"
@@ -84,7 +86,12 @@ export default function Login() {
         </div>
         <div className={bem("links-container__list")}>
           {links.map(({ href, text, target, rel }) => (
-            <a href={href} target={target} rel={rel}>
+            <a
+              className={bem("links-container__link")}
+              href={href}
+              target={target}
+              rel={rel}
+            >
               {text}
             </a>
           ))}

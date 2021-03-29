@@ -25,7 +25,7 @@ export default function styles(theme) {
   return createStyles(theme, ["button"], {
     separator__wrap: {
       height: "2rem",
-      margin: theme.spacing(4.8, 1.2),
+      margin: theme.spacing(2.4, 1.2),
       position: "relative",
       boxSizing: "border-box",
     },
@@ -52,12 +52,13 @@ export default function styles(theme) {
         color: theme.palette.grey[700],
         textTransform: "uppercase",
         backgroundColor: theme.palette.background.default,
-        padding: "1rem",
+        padding: "0.5rem 1rem",
         display: "inline-block",
       },
     },
     "provider-login-container": {
       display: "none",
+      paddingTop: theme.spacing(1.6),
     },
     "provider-login-container--visible": {
       display: "flex",
@@ -69,18 +70,16 @@ export default function styles(theme) {
     },
     "login-form": {
       [theme.breakpoints.up("sm")]: {
-        minWidth: 420,
-        maxWidth: 600,
-        padding: theme.spacing(5),
+        maxWidth: 400,
+        padding: theme.spacing(3.2),
       },
       textAlign: "center",
       fontStyle: "normal",
       marginBottom: theme.spacing(2.4),
       background: theme.palette.background.default,
       borderRadius: theme.shape.borderRadius,
-      padding: theme.spacing(1),
+      padding: theme.spacing(2.4),
       boxShadow: "0px 2px 4px 0px rgba(0,0,0,0.3)",
-      width: "100%",
       "& h3": {
         fontFamily: theme.typography.h3.fontFamily,
         textTransform: "uppercase",

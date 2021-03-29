@@ -35,7 +35,7 @@ const styles = (theme) =>
       color: theme.palette.grey[800],
       boxSizing: "border-box",
       height: "100%",
-      paddingTop: 60, // magic number - same as height of header
+      paddingTop: theme.spacing(2),
       fontStyle: "italic",
       display: "flex",
       flexDirection: "column",
@@ -46,7 +46,7 @@ const styles = (theme) =>
       },
       [theme.breakpoints.up("sm")]: {
         padding: 0,
-        paddingTop: 60, // magic number - same as height of header
+        paddingTop: theme.spacing(2),
       },
     },
     "login-page__title": {
@@ -57,16 +57,21 @@ const styles = (theme) =>
       lineHeight: "40px",
       margin: theme.spacing(0.7, 0),
     },
+    "login-page__text": {
+      marginTop: 0,
+    },
     "links-container": {
       fontStyle: "normal",
-      padding: theme.spacing(5, 0),
       width: "100%",
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
+      padding: theme.spacing(0, 3.2),
+      marginBottom: theme.spacing(2),
       [theme.breakpoints.up("sm")]: {
         minWidth: 420,
         maxWidth: 600,
+        padding: 0,
       },
     },
     "links-container__text": {
@@ -74,7 +79,8 @@ const styles = (theme) =>
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
-      marginBottom: theme.spacing(11.6),
+      marginBottom: theme.spacing(6.4),
+      paddingTop: theme.spacing(2.4),
     },
     "links-container__list": {
       display: "flex",
@@ -83,6 +89,9 @@ const styles = (theme) =>
     },
     "links-container__button": {
       padding: theme.spacing(0, 1),
+    },
+    "links-container__link": {
+      color: TITLE_COLOR,
     },
   });
 

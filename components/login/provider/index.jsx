@@ -76,10 +76,10 @@ export function setupErrorHandler(setLoginError) {
 export function getErrorMessage(error) {
   const postFix = " Please fill out a valid Solid Identity Provider.";
   if (hasError(error, ERROR_REGEXES.INVALID_IDP)) {
-    return `This URL is not a Solid Identity Provider.`;
+    return "This URL is not a Solid Identity Provider.";
   }
   if (hasError(error, ERROR_REGEXES.HANDLER_NOT_FOUND)) {
-    return `Please provide a URL.${postFix}`;
+    return "Please fill out a valid Solid Identity Provider.";
   }
   return `We were unable to log in with this URL.${postFix}`;
 }

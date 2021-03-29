@@ -142,6 +142,6 @@ describe("getErrorMessage", () => {
     ).toEqual("This URL is not a Solid Identity Provider."));
   it("handles when value is empty", () =>
     expect(getErrorMessage(new Error("sessionId"))).toEqual(
-      "Please provide a URL. Please fill out a valid Solid Identity Provider."
+      "Please fill out a valid Solid Identity Provider."
     ));
 });

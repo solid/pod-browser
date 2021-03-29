@@ -22,7 +22,7 @@
 export default function getIdentityProviders() {
   return [
     {
-      logo: "inrupt_logo-2020.svg",
+      logo: "solid-logo.svg",
       label: "Solidcommunity.net",
       iri: "https://solidcommunity.net/",
     },
@@ -32,7 +32,7 @@ export default function getIdentityProviders() {
       iri: "https://solidweb.org/",
     },
     {
-      logo: "solid-logo.svg",
+      logo: "inrupt_logo-2020.svg",
       label: "inrupt.net",
       iri: "https://inrupt.net/",
     },

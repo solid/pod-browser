@@ -5,7 +5,7 @@ Array [
   Object {
     "iri": "https://solidcommunity.net/",
     "label": "Solidcommunity.net",
-    "logo": "inrupt_logo-2020.svg",
+    "logo": "solid-logo.svg",
   },
   Object {
     "iri": "https://solidweb.org/",
@@ -15,7 +15,7 @@ Array [
   Object {
     "iri": "https://inrupt.net/",
     "label": "inrupt.net",
-    "logo": "solid-logo.svg",
+    "logo": "inrupt_logo-2020.svg",
   },
 ]
 `;

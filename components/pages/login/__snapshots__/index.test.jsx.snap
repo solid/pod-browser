@@ -10,7 +10,9 @@ exports[`Login page Renders a login button 1`] = `
     >
       PodBrowser
     </h1>
-    <p>
+    <p
+      class="PodBrowser-login-page__text"
+    >
       View and manage data in your Pod
     </p>
     <div
@@ -202,7 +204,7 @@ exports[`Login page Renders a login button 1`] = `
       <div
         class="PodBrowser-links-container__text"
       >
-        Need a pod?
+        Need a Pod?
         <a
           class="PodBrowser-links-container__button PodBrowser-button PodBrowser-button--secondary"
           href="https://signup.pod.inrupt.com/"
@@ -215,6 +217,7 @@ exports[`Login page Renders a login button 1`] = `
         class="PodBrowser-links-container__list"
       >
         <a
+          class="PodBrowser-links-container__link"
           href="https://inrupt.com/terms-of-service"
           rel="noreferrer"
           target="_blank"
@@ -222,14 +225,16 @@ exports[`Login page Renders a login button 1`] = `
           Terms of Use
         </a>
         <a
-          href="https://inrupt.com/terms-of-service"
+          class="PodBrowser-links-container__link"
+          href="https://inrupt.com/privacy-policy/"
           rel="noreferrer"
           target="_blank"
         >
           Privacy Policy
         </a>
         <a
-          href="https://inrupt.com/terms-of-service"
+          class="PodBrowser-links-container__link"
+          href="https://inrupt.atlassian.net/servicedesk/customer/portal/7"
           rel="noreferrer"
           target="_blank"
         >
