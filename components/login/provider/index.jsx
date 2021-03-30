@@ -148,6 +148,7 @@ export default function Provider({ defaultError }) {
                 error={!!loginError}
                 margin="none"
                 variant="outlined"
+                type="url"
                 aria-describedby={loginError ? "login-error-text" : null}
                 data-testid={TESTCAFE_ID_LOGIN_FIELD}
                 ref={loginFieldRef}

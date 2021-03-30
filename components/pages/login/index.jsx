@@ -87,6 +87,7 @@ export default function Login() {
         <div className={bem("links-container__list")}>
           {links.map(({ href, text, target, rel }) => (
             <a
+              key={text}
               className={bem("links-container__link")}
               href={href}
               target={target}

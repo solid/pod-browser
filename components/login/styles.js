@@ -28,6 +28,7 @@ export default function styles(theme) {
       margin: theme.spacing(2.4, 1.2),
       position: "relative",
       boxSizing: "border-box",
+      marginBottom: theme.spacing(3.2),
     },
     "separator__centre-line": {
       textAlign: "center",

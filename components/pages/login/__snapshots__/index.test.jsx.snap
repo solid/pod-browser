@@ -128,7 +128,7 @@ exports[`Login page Renders a login button 1`] = `
                       class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd"
                       id="provider-select"
                       spellcheck="false"
-                      type="text"
+                      type="url"
                       value=""
                     />
                     <div

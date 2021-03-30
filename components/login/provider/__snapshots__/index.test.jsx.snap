@@ -32,7 +32,7 @@ exports[`ProviderLogin form renders a validation error if login fails 1`] = `
                 class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd"
                 id="provider-select"
                 spellcheck="false"
-                type="text"
+                type="url"
                 value=""
               />
               <div
@@ -141,7 +141,7 @@ exports[`ProviderLogin form renders a webid login form 1`] = `
                 class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd"
                 id="provider-select"
                 spellcheck="false"
-                type="text"
+                type="url"
                 value=""
               />
               <div

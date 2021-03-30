@@ -67,11 +67,13 @@ const styles = (theme) =>
       flexDirection: "column",
       justifyContent: "center",
       padding: theme.spacing(0, 3.2),
+      paddingBottom: theme.spacing(12.8),
       marginBottom: theme.spacing(2),
       [theme.breakpoints.up("sm")]: {
         minWidth: 420,
         maxWidth: 600,
         padding: 0,
+        paddingBottom: theme.spacing(12.8),
       },
     },
     "links-container__text": {

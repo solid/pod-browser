@@ -115,7 +115,7 @@ exports[`Login form renders a login page with a sign in button and a 'Sign in wi
                     class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd"
                     id="provider-select"
                     spellcheck="false"
-                    type="text"
+                    type="url"
                     value=""
                   />
                   <div

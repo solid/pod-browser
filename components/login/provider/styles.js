@@ -35,6 +35,7 @@ export default function styles(theme) {
     },
     "provider-login__button": {
       display: "flex",
+      whiteSpace: "nowrap",
       minWidth: "max-content",
       position: "absolute",
       top: 0,
