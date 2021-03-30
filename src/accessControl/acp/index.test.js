@@ -409,8 +409,6 @@ describe("AcpAccessControlStrategy", () => {
 
   describe("removeAgentFromNamedPolicy", () => {
     const webId = "http://example.com/agent1";
-    const editorsPolicy = scFns.mockThingFrom(editorsPolicyUrl);
-
     beforeEach(() => {
       acp = new AcpAccessControlStrategy(
         datasetWithAcr,
@@ -440,6 +438,23 @@ describe("AcpAccessControlStrategy", () => {
       ).resolves.toEqual({ error: "500" });
     });
     it("returns the modified datasetWithAcr after removing agent from policy", async () => {
+      const webId1 = "http://example.com/agent1";
+      const webId2 = "http://example.com/agent2";
+      const editorsPolicyRule = chain(
+        acpFns.createRule(editorsPolicyRuleUrl),
+        (r) => acpFns.addAgent(r, webId1),
+        (r) => acpFns.addAgent(r, webId2)
+      );
+      const policy = chain(
+        acpFns.createPolicy(editorsPolicyUrl),
+        (p) => acpFns.setAllowModes(p, createAcpMap(true, true)),
+        (p) => acpFns.setRequiredRuleUrl(p, editorsPolicyRule)
+      );
+      const policyDataset = chain(
+        mockSolidDatasetFrom(policyResourceUrl),
+        (d) => setThing(d, editorsPolicyRule),
+        (d) => setThing(d, policy)
+      );
       const editorsAC = chain(
         acpFns.createControl(),
         (ac) => acpFns.addPolicyUrl(ac, editorsPolicyUrl),
@@ -448,10 +463,9 @@ describe("AcpAccessControlStrategy", () => {
       jest.spyOn(scFns, "getSolidDataset").mockImplementation(() => {
         throw new Error("404");
       });
-      jest.spyOn(acpFns2, "getPolicy").mockReturnValue(editorsPolicy);
-      const policyResource = chain(
-        mockSolidDatasetFrom(policyResourceUrl),
-        (d) => acpFns.addMockAcrTo(d)
+      jest.spyOn(acpFns2, "getPolicy").mockReturnValue(policy);
+      const policyResource = chain(policyDataset, (d) =>
+        acpFns.addMockAcrTo(d)
       );
       const datasetWithAcrEditors = chain(datasetWithAcr, (d) =>
         acpFns.setControl(d, editorsAC)
@@ -471,6 +485,7 @@ describe("AcpAccessControlStrategy", () => {
       jest
         .spyOn(scFns, "saveSolidDatasetAt")
         .mockImplementation(() => policyResource);
+      jest.spyOn(scFns, "deleteFile").mockResolvedValue("deleted");
 
       await expect(
         await acp.removeAgentFromNamedPolicy(webId, "editors")
@@ -486,13 +501,8 @@ describe("AcpAccessControlStrategy", () => {
           fetch,
         }
       );
-      const datasetWithAcrControlApply = chain(
-        policyResource,
-        (d) => acpFns.addAcrPolicyUrl(d, controlApplyPolicyUrl),
-        (d) => acpFns.addMemberAcrPolicyUrl(d, controlApplyPolicyUrl)
-      );
       expect(acpFns.saveAcrFor).toHaveBeenCalledWith(
-        datasetWithAcrControlApply,
+        datasetWithAcrControlAccess,
         {
           fetch,
         }
