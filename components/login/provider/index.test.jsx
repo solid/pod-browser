@@ -85,25 +85,33 @@ describe("ProviderLogin form", () => {
 describe("setupOnProviderChange", () => {
   it("sets up event handler", () => {
     const setProviderIri = jest.fn();
-    setupOnProviderChange(setProviderIri)({}, "string");
+    const setLoginError = jest.fn();
+    setupOnProviderChange(setProviderIri, setLoginError)({}, "string");
+    expect(setLoginError).toHaveBeenCalledWith(null);
     expect(setProviderIri).toHaveBeenCalledWith("https://string");
   });
   it("calls setProviderIri with provided string if user providers a correct URL", () => {
     const setProviderIri = jest.fn();
-    setupOnProviderChange(setProviderIri)({}, "https://string");
+    const setLoginError = jest.fn();
+    setupOnProviderChange(setProviderIri, setLoginError)({}, "https://string");
+    expect(setLoginError).toHaveBeenCalledWith(null);
     expect(setProviderIri).toHaveBeenCalledWith("https://string");
   });
   it("calls setProviderIri with correct iri when passed an object from the autocomplete options", () => {
     const setProviderIri = jest.fn();
-    setupOnProviderChange(setProviderIri)(
+    const setLoginError = jest.fn();
+    setupOnProviderChange(setProviderIri, setLoginError)(
       {},
       { iri: "https://example.com", label: "example.com" }
     );
+    expect(setLoginError).toHaveBeenCalledWith(null);
     expect(setProviderIri).toHaveBeenCalledWith("https://example.com");
   });
   it("calls setProviderIri with null for other values", () => {
     const setProviderIri = jest.fn();
-    setupOnProviderChange(setProviderIri)({}, 42);
+    const setLoginError = jest.fn();
+    setupOnProviderChange(setProviderIri, setLoginError)({}, 42);
+    expect(setLoginError).toHaveBeenCalledWith(null);
     expect(setProviderIri).toHaveBeenCalledWith(null);
   });
 });

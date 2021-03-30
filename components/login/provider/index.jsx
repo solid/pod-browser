@@ -47,8 +47,9 @@ const providers = getIdentityProviders();
 export const TESTCAFE_ID_LOGIN_FIELD = "login-field";
 const TESTCAFE_ID_GO_BUTTON = "go-button";
 
-export function setupOnProviderChange(setProviderIri) {
+export function setupOnProviderChange(setProviderIri, setLoginError) {
   return (e, newValue) => {
+    setLoginError(null);
     if (typeof newValue === "string") {
       if (newValue.startsWith("https://") || newValue.startsWith("http://")) {
         setProviderIri(newValue);
@@ -105,7 +106,7 @@ export default function Provider({ defaultError }) {
     clientName: "Inrupt PodBrowser",
   };
 
-  const onProviderChange = setupOnProviderChange(setProviderIri);
+  const onProviderChange = setupOnProviderChange(setProviderIri, setLoginError);
   const handleLogin = setupLoginHandler(login);
   const onError = setupErrorHandler(setLoginError);
 
