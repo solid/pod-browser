@@ -1016,23 +1016,20 @@ export default class AcpAccessControlStrategy {
     const isLastAgent = !agents.length;
     if (isLastAgent) {
       // remove the rule
-      rulesUrls.forEach(async (ruleUrl) => {
-        const modifiedPolicy = acpv2.removeRequiredRuleUrl(policy, ruleUrl);
-        const modifiedPolicyRulesUrls = acpv2.getRequiredRuleUrlAll(
-          modifiedPolicy
-        );
-        // if there are no rules left in the policy
-        if (!modifiedPolicyRulesUrls.length) {
-          await deleteFile(policyUrl, { fetch: this.#fetch });
-          // if policies container is a container and it's empty, remove it too
-          if (
-            customPolicyContainerUrl &&
-            isContainer(customPolicyContainerUrl)
-          ) {
-            deletePoliciesContainer(customPolicyContainerUrl, fetch);
-          }
-        }
+      const [modifiedPolicy] = rulesUrls.map((ruleUrl) => {
+        return acpv2.removeRequiredRuleUrl(policy, ruleUrl);
       });
+      const modifiedPolicyRulesUrls = acpv2.getRequiredRuleUrlAll(
+        modifiedPolicy
+      );
+      // if there are no rules left in the policy
+      if (!modifiedPolicyRulesUrls.length) {
+        await deleteFile(policyUrl, { fetch: this.#fetch });
+        // if policies container is a container and it's empty, remove it too
+        if (customPolicyContainerUrl && isContainer(customPolicyContainerUrl)) {
+          deletePoliciesContainer(customPolicyContainerUrl, fetch);
+        }
+      }
     }
 
     // saving changes to the policy resource
