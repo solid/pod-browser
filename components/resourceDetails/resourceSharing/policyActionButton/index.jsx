@@ -74,22 +74,26 @@ export const handleRemoveAllAgents = ({
   webIds,
   setLoading,
   accessControl,
-  type,
+  policyToDelete,
   mutatePermissions,
 }) => {
   return () => {
+    if (!policyToDelete) return;
     setLoading(true);
     const removePermissionsPromiseFactories = webIds?.map(
       (agentWebId) => () => {
         if (PUBLIC_AGENT_PREDICATE === agentWebId) {
-          return accessControl.setRulePublic(type, false);
+          return accessControl.setRulePublic(policyToDelete, false);
         }
         if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {
-          return accessControl.setRuleAuthenticated(type, false);
+          return accessControl.setRuleAuthenticated(policyToDelete, false);
         }
-        return isNamedPolicy(type)
-          ? accessControl.removeAgentFromNamedPolicy(agentWebId, type)
-          : accessControl.removeAgentFromCustomPolicy(agentWebId, type);
+        return isNamedPolicy(policyToDelete)
+          ? accessControl.removeAgentFromNamedPolicy(agentWebId, policyToDelete)
+          : accessControl.removeAgentFromCustomPolicy(
+              agentWebId,
+              policyToDelete
+            );
       }
     );
     serializePromises(removePermissionsPromiseFactories).then(() => {
@@ -109,6 +113,7 @@ export default function PolicyActionButton({
   const disableRemoveButton = permissions.length === 0 && isNamedPolicy(type);
   const policyType = getPolicyType(type);
   const dialogId = "remove-policy";
+  const [policyToDelete, setPolicyToDelete] = useState();
   const { dataset } = useContext(DatasetContext);
   const resourceIri = getSourceUrl(dataset);
   const resourceName = resourceIri
@@ -127,6 +132,7 @@ export default function PolicyActionButton({
   const [confirmationSetup, setConfirmationSetup] = useState(false);
 
   const handleClickOpenDialog = () => {
+    setPolicyToDelete(type);
     const confirmationTitle = `Remove ${policyTitle} access from ${resourceName}?`;
     const confirmationContent = `Everyone will be removed from the ${policyTitle} list.`;
     setTitle(confirmationTitle);
@@ -134,13 +140,15 @@ export default function PolicyActionButton({
     setOpen(dialogId);
   };
 
-  const webIds = permissions.map(({ webId }) => webId);
+  const webIds = permissions
+    .filter(({ alias }) => alias === policyToDelete)
+    .map(({ webId }) => webId);
 
   const removeAllAgents = handleRemoveAllAgents({
     webIds,
     setLoading,
     accessControl,
-    type,
+    policyToDelete,
     mutatePermissions,
   });
 

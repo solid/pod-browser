@@ -209,7 +209,7 @@ describe("handleRemoveAllAgents", () => {
       webIds: [webId1, webId2],
       setLoading,
       accessControl,
-      type: policyName,
+      policyToDelete: policyName,
       mutatePermissions,
     });
     handler();
@@ -234,7 +234,7 @@ describe("handleRemoveAllAgents", () => {
       webIds: [webId1, webId2],
       setLoading,
       accessControl,
-      type: policyName,
+      policyToDelete: policyName,
       mutatePermissions,
     });
     handler();
@@ -258,7 +258,7 @@ describe("handleRemoveAllAgents", () => {
       webIds: [PUBLIC_AGENT_PREDICATE],
       setLoading,
       accessControl,
-      type: policyName,
+      policyToDelete: policyName,
       mutatePermissions,
     });
     handler();
@@ -280,7 +280,7 @@ describe("handleRemoveAllAgents", () => {
       webIds: [AUTHENTICATED_AGENT_PREDICATE],
       setLoading,
       accessControl,
-      type: policyName,
+      policyToDelete: policyName,
       mutatePermissions,
     });
     handler();
