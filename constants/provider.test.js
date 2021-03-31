@@ -22,7 +22,7 @@
 import getIdentityProviders from "./provider";
 
 describe("getIdentityProviders", () => {
-  it("returns a map of providers", () => {
+  it("returns an array of providers", () => {
     const providers = getIdentityProviders();
     expect(Object.values(providers).length).toBeTruthy();
     expect(providers).toMatchSnapshot();

@@ -21,6 +21,7 @@
 
 import React from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
+import { Button } from "@inrupt/prism-react-components";
 import clsx from "clsx";
 import { useBem } from "@solid/lit-prism-patterns";
 import { useRedirectIfLoggedIn } from "../../../src/effects/auth";
@@ -28,18 +29,74 @@ import LoginForm from "../../login";
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+const TESTCAFE_ID_TOS_LINK = "tos-link";
+
+// TODO: temporarily adding the links here until we implement the new footer design
+const links = [
+  {
+    href: "https://inrupt.com/terms-of-service",
+    text: "Terms of Use",
+    rel: "noreferrer",
+    target: "_blank",
+    "data-testid": TESTCAFE_ID_TOS_LINK,
+  },
+  {
+    href: "https://inrupt.com/privacy-policy/",
+    text: "Privacy Policy",
+    rel: "noreferrer",
+    target: "_blank",
+    "data-testid": TESTCAFE_ID_TOS_LINK,
+  },
+  {
+    href: "https://inrupt.atlassian.net/servicedesk/customer/portal/7",
+    text: "Help",
+    rel: "noreferrer",
+    target: "_blank",
+    "data-testid": TESTCAFE_ID_TOS_LINK,
+  },
+];
 
 export default function Login() {
   useRedirectIfLoggedIn();
   const bem = useBem(useStyles());
+  const buttonBem = Button.useBem();
 
   return (
     <div className={bem("login-page")}>
-      <div className={bem("login-page__container")}>
-        <h1 className={clsx(bem("content-h1"), bem("login-page__title"))}>
-          Hi! Welcome to Solid.
-        </h1>
-        <LoginForm />
+      <h1 className={clsx(bem("content-h1"), bem("login-page__title"))}>
+        PodBrowser
+      </h1>
+      <p className={bem("login-page__text")}>
+        View and manage data in your Pod
+      </p>
+      <LoginForm />
+      <div className={bem("links-container")}>
+        <div className={bem("links-container__text")}>
+          Need a Pod?
+          <a
+            href="https://signup.pod.inrupt.com/"
+            variant="secondary"
+            className={clsx(
+              bem("links-container__button"),
+              buttonBem("button", "secondary")
+            )}
+          >
+            Sign up
+          </a>
+        </div>
+        <div className={bem("links-container__list")}>
+          {links.map(({ href, text, target, rel }) => (
+            <a
+              key={text}
+              className={bem("links-container__link")}
+              href={href}
+              target={target}
+              rel={rel}
+            >
+              {text}
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -19,22 +19,20 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { renderWithTheme } from "../../../../__testUtils/withTheme";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-import CanShareInfoTooltip from "./index";
-
-describe("CanShareInfoTooltip", () => {
-  it("renders a Can Share info button with a tooltip with default text if resourceName is not available", () => {
-    const { asFragment } = renderWithTheme(<CanShareInfoTooltip />);
-
-    expect(asFragment()).toMatchSnapshot();
+export default function styles(theme) {
+  return createStyles(theme, ["icons", "button"], {
+    infoTooltipContainer: {
+      display: "flex",
+    },
+    infoButton: {
+      padding: 0,
+      minWidth: "max-content",
+    },
+    infoIcon: {
+      margin: theme.spacing(0.4),
+      color: theme.palette.info.main,
+    },
   });
-  it("renders a Can Share info button with resourceName if available", () => {
-    const { asFragment } = renderWithTheme(
-      <CanShareInfoTooltip resourceName="example resource" />
-    );
-
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
+}

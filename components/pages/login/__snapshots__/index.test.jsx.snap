@@ -5,124 +5,241 @@ exports[`Login page Renders a login button 1`] = `
   <div
     class="PodBrowser-login-page"
   >
-    <div
-      class="PodBrowser-login-page__container"
+    <h1
+      class="PodBrowser-content-h1 PodBrowser-login-page__title"
     >
-      <h1
-        class="PodBrowser-content-h1 PodBrowser-login-page__title"
+      PodBrowser
+    </h1>
+    <p
+      class="PodBrowser-login-page__text"
+    >
+      View and manage data in your Pod
+    </p>
+    <div
+      class="PodBrowser-login-form"
+    >
+      <h3
+        data-testid="login-title"
       >
-        Hi! Welcome to Solid.
-      </h1>
+        Sign in with
+      </h3>
+      <img
+        alt="Inrupt PodBrowser"
+        class="PodBrowser-login-form__logo"
+        src="/pod-spaces-logo.svg"
+        width="160"
+      />
       <div
-        class="PodBrowser-login-form"
+        role="button"
+        tabindex="0"
       >
-        <form>
+        <button
+          class="PodBrowser-button PodBrowser-login-form__button"
+          data-testid="login-button"
+          type="submit"
+        >
+          <span
+            class="PodBrowser-button__text"
+          >
+            Sign In
+          </span>
+        </button>
+      </div>
+      <div
+        class="PodBrowser-separator__wrap"
+      >
+        <h2
+          class="PodBrowser-separator__centre-line"
+        >
+          <span>
+            Or
+          </span>
+        </h2>
+      </div>
+      <button
+        class="PodBrowser-button PodBrowser-button--secondary"
+        data-testid="other-providers-button"
+      >
+        <span
+          class="PodBrowser-button__text"
+        >
+          Sign in with other provider
+        </span>
+        <span
+          class="PodBrowser-icon-caret-down PodBrowser-button__icon PodBrowser-button__icon--after"
+        />
+      </button>
+      <div
+        class="PodBrowser-provider-login-container"
+      >
+        <div
+          class="PodBrowser-infoTooltipContainer PodBrowser-info-button"
+        >
+          <span
+            data-testid="info-button-label"
+          >
+            Where is your Pod hosted?
+          </span>
+          <button
+            class="PodBrowser-root PodBrowser-root PodBrowser-infoButton PodBrowser-text"
+            tabindex="0"
+            title="This is where you signed up for a Solid Pod"
+            type="button"
+          >
+            <span
+              class="PodBrowser-label"
+            >
+              <i
+                aria-label="Info"
+                class="PodBrowser-icon-info PodBrowser-infoIcon"
+              />
+            </span>
+            <span
+              class="PodBrowser-root"
+            />
+          </button>
+        </div>
+        <form
+          class="PodBrowser-provider-login__form"
+        >
           <div
-            class="PodBrowser-root PodBrowser-root"
+            class="PodBrowser-provider-login__wrapper"
           >
             <div
-              class="PodBrowser-root PodBrowser-root"
+              class="PodBrowser-root PodBrowser-selectionBox"
             >
-              <h3
-                data-testid="login-title"
-              >
-                Log In
-              </h3>
               <div
-                class="PodBrowser-root"
-                style="max-width: 320px; width: 100%;"
+                aria-expanded="false"
+                class="PodBrowser-root PodBrowser-hasClearIcon"
+                role="combobox"
               >
                 <div
-                  aria-expanded="false"
-                  class="PodBrowser-root PodBrowser-hasClearIcon"
-                  role="combobox"
+                  class="PodBrowser-root PodBrowser-root PodBrowser-fullWidth"
+                  data-testid="login-field"
                 >
                   <div
-                    class="PodBrowser-root PodBrowser-root PodBrowser-marginNormal PodBrowser-fullWidth"
-                    data-testid="login-field"
+                    class="PodBrowser-root PodBrowser-root PodBrowser-inputRoot PodBrowser-fullWidth PodBrowser-formControl PodBrowser-adornedEnd PodBrowser-adornedEnd"
                   >
-                    <label
-                      class="PodBrowser-root PodBrowser-root PodBrowser-formControl PodBrowser-animated PodBrowser-outlined"
-                      data-shrink="false"
-                      for="provider-select"
-                      id="provider-select-label"
-                    >
-                      Select ID provider
-                    </label>
+                    <input
+                      aria-autocomplete="list"
+                      aria-invalid="false"
+                      autocapitalize="none"
+                      autocomplete="off"
+                      class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd"
+                      id="provider-select"
+                      spellcheck="false"
+                      type="url"
+                      value=""
+                    />
                     <div
-                      class="PodBrowser-root PodBrowser-root PodBrowser-inputRoot PodBrowser-fullWidth PodBrowser-formControl PodBrowser-adornedEnd PodBrowser-adornedEnd"
+                      class="PodBrowser-endAdornment"
                     >
-                      <input
-                        aria-autocomplete="list"
-                        aria-invalid="false"
-                        autocapitalize="none"
-                        autocomplete="off"
-                        class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd"
-                        id="provider-select"
-                        spellcheck="false"
-                        type="url"
-                        value=""
-                      />
-                      <div
-                        class="PodBrowser-endAdornment"
+                      <button
+                        aria-label="Clear"
+                        class="PodBrowser-root PodBrowser-root PodBrowser-clearIndicator"
+                        tabindex="-1"
+                        title="Clear"
+                        type="button"
                       >
-                        <button
-                          aria-label="Clear"
-                          class="PodBrowser-root PodBrowser-root PodBrowser-clearIndicator"
-                          tabindex="-1"
-                          title="Clear"
-                          type="button"
+                        <span
+                          class="PodBrowser-label"
                         >
-                          <span
-                            class="PodBrowser-label"
+                          <svg
+                            aria-hidden="true"
+                            class="PodBrowser-root PodBrowser-fontSizeSmall"
+                            focusable="false"
+                            viewBox="0 0 24 24"
                           >
-                            <svg
-                              aria-hidden="true"
-                              class="PodBrowser-root PodBrowser-fontSizeSmall"
-                              focusable="false"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-                              />
-                            </svg>
-                          </span>
-                          <span
-                            class="PodBrowser-root"
-                          />
-                        </button>
-                      </div>
-                      <fieldset
-                        aria-hidden="true"
-                        class="PodBrowser-root PodBrowser-notchedOutline"
-                      >
-                        <legend
-                          class="PodBrowser-legendLabelled"
-                        >
-                          <span>
-                            Select ID provider
-                          </span>
-                        </legend>
-                      </fieldset>
+                            <path
+                              d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                            />
+                          </svg>
+                        </span>
+                        <span
+                          class="PodBrowser-root"
+                        />
+                      </button>
                     </div>
+                    <fieldset
+                      aria-hidden="true"
+                      class="PodBrowser-root PodBrowser-notchedOutline"
+                      style="padding-left: 8px;"
+                    >
+                      <legend
+                        class="PodBrowser-legend"
+                        style="width: 0.01px;"
+                      >
+                        <span>
+                          ​
+                        </span>
+                      </legend>
+                    </fieldset>
                   </div>
                 </div>
               </div>
-              <div
-                role="button"
-                tabindex="0"
+            </div>
+            <div
+              role="button"
+              tabindex="0"
+            >
+              <button
+                class="PodBrowser-button PodBrowser-provider-login__button"
+                data-testid="go-button"
+                type="submit"
               >
-                <button
-                  class="PodBrowser-button"
-                  data-testid="login-button"
-                  type="submit"
+                <span
+                  class="PodBrowser-button__text"
                 >
-                  Log In
-                </button>
-              </div>
+                  Go
+                </span>
+              </button>
             </div>
           </div>
         </form>
+      </div>
+    </div>
+    <div
+      class="PodBrowser-links-container"
+    >
+      <div
+        class="PodBrowser-links-container__text"
+      >
+        Need a Pod?
+        <a
+          class="PodBrowser-links-container__button PodBrowser-button PodBrowser-button--secondary"
+          href="https://signup.pod.inrupt.com/"
+          variant="secondary"
+        >
+          Sign up
+        </a>
+      </div>
+      <div
+        class="PodBrowser-links-container__list"
+      >
+        <a
+          class="PodBrowser-links-container__link"
+          href="https://inrupt.com/terms-of-service"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Terms of Use
+        </a>
+        <a
+          class="PodBrowser-links-container__link"
+          href="https://inrupt.com/privacy-policy/"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Privacy Policy
+        </a>
+        <a
+          class="PodBrowser-links-container__link"
+          href="https://inrupt.atlassian.net/servicedesk/customer/portal/7"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Help
+        </a>
       </div>
     </div>
   </div>

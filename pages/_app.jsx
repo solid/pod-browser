@@ -49,7 +49,6 @@ import { FeatureProvider } from "../src/contexts/featureFlagsContext";
 import Notification from "../components/notification";
 import ConfirmationDialog from "../components/confirmationDialog";
 import PodBrowserHeader from "../components/header";
-import PodBrowserFooter from "../components/footer";
 
 import "./styles.css";
 
@@ -77,9 +76,6 @@ if (process.env.NEXT_PUBLIC_MATOMO_URL_BASE) {
 }
 
 const atlassianFeedbackId = process.env.NEXT_PUBLIC_ATLASSIAN_FEEDBACK_ID;
-const atlassianFeedbackWidth = atlassianFeedbackId
-  ? parseInt(process.env.NEXT_PUBLIC_ATLASSIAN_FEEDBACK_WIDTH, 10) || 50
-  : null;
 
 const jss = create(preset());
 
@@ -151,12 +147,6 @@ export default function App(props) {
                       <main className={bem("app-layout__main")}>
                         <Component {...pageProps} />
                       </main>
-
-                      <div className={bem("app-layout__footer")}>
-                        <PodBrowserFooter
-                          atlassianFeedbackWidth={atlassianFeedbackWidth}
-                        />
-                      </div>
                     </div>
                     <Notification />
                     <ConfirmationDialog />

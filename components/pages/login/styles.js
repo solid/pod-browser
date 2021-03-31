@@ -21,41 +21,79 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
+// TODO: move these new colors to Prism
+const LOGIN_BACKGROUND_COLOR = "#FCFEFF";
+const TITLE_COLOR = "#0D6796";
+
 const styles = (theme) =>
   createStyles(theme, ["content"], {
     "login-page": {
+      textAlign: "center",
       flexGrow: 1,
       flexShrink: 0,
-      background:
-        "linear-gradient(135deg, rgb(124, 77, 255) 0%, rgb(24, 169, 230) 50%, rgb(1, 201, 234) 100%)",
-      backgroundRepeat: "no-repeat",
+      backgroundColor: LOGIN_BACKGROUND_COLOR,
+      color: theme.palette.grey[800],
       boxSizing: "border-box",
       height: "100%",
-      paddingTop: 60, // magic number - same as height of header
-      position: "relative",
-      "&::before": {
-        content: '""',
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundImage: "url('/background-pattern.svg')",
-        filter: "opacity(30%)",
-      },
-    },
-    "login-page__container": {
+      paddingTop: theme.spacing(2),
+      fontStyle: "italic",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
       position: "relative",
+      "& p": {
+        marginBottom: theme.spacing(3),
+      },
+      [theme.breakpoints.up("sm")]: {
+        padding: 0,
+        paddingTop: theme.spacing(2),
+      },
     },
     "login-page__title": {
-      color: theme.palette.background.default,
-      fontSize: "1.75rem",
+      fontStyle: "normal",
+      color: TITLE_COLOR,
+      fontSize: "2.3125rem",
       letterSpacing: 1.4,
       lineHeight: "40px",
-      margin: theme.spacing(5, 0),
+      margin: theme.spacing(0.7, 0),
+    },
+    "login-page__text": {
+      marginTop: 0,
+    },
+    "links-container": {
+      fontStyle: "normal",
+      width: "100%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      padding: theme.spacing(0, 3.2),
+      paddingBottom: theme.spacing(12.8),
+      marginBottom: theme.spacing(2),
+      [theme.breakpoints.up("sm")]: {
+        minWidth: 420,
+        maxWidth: 600,
+        padding: 0,
+        paddingBottom: theme.spacing(12.8),
+      },
+    },
+    "links-container__text": {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: theme.spacing(6.4),
+      paddingTop: theme.spacing(2.4),
+    },
+    "links-container__list": {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    "links-container__button": {
+      padding: theme.spacing(0, 1),
+    },
+    "links-container__link": {
+      color: TITLE_COLOR,
     },
   });
 

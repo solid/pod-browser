@@ -24,14 +24,14 @@
 import React, { createRef, useEffect, useState } from "react";
 import T from "prop-types";
 import {
-  Box,
   FormControl,
   FormHelperText,
   TextField,
   useTheme,
 } from "@material-ui/core";
+import { makeStyles, createStyles } from "@material-ui/styles";
 import { Autocomplete } from "@material-ui/lab";
-
+import { useBem } from "@solid/lit-prism-patterns";
 import { LoginButton, useSession } from "@inrupt/solid-ui-react";
 
 import { Button } from "@inrupt/prism-react-components";
@@ -39,18 +39,28 @@ import { generateRedirectUrl } from "../../../src/windowHelpers";
 import getIdentityProviders from "../../../constants/provider";
 import { ERROR_REGEXES, hasError } from "../../../src/error";
 import useIdpFromQuery from "../../../src/hooks/useIdpFromQuery";
+import styles from "./styles";
+
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 const providers = getIdentityProviders();
-const TESTCAFE_ID_LOGIN_TITLE = "login-title";
 export const TESTCAFE_ID_LOGIN_FIELD = "login-field";
-const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
+const TESTCAFE_ID_GO_BUTTON = "go-button";
 
-export function setupOnProviderChange(setProviderIri) {
+export function setupOnProviderChange(setProviderIri, setLoginError) {
   return (e, newValue) => {
-    setProviderIri(newValue);
+    setLoginError(null);
+    if (typeof newValue === "string") {
+      if (newValue.startsWith("https://") || newValue.startsWith("http://")) {
+        setProviderIri(newValue);
+      } else {
+        setProviderIri(`https://${newValue}`);
+      }
+    } else {
+      setProviderIri(newValue?.iri || null);
+    }
   };
 }
-
 export function setupLoginHandler(login) {
   return async (event) => {
     event.preventDefault();
@@ -67,26 +77,22 @@ export function setupErrorHandler(setLoginError) {
 export function getErrorMessage(error) {
   const postFix = " Please fill out a valid Solid Identity Provider.";
   if (hasError(error, ERROR_REGEXES.INVALID_IDP)) {
-    return `This URL is not a Solid Identity Provider.`;
-  }
-  if (hasError(error, ERROR_REGEXES.INVALID_URL)) {
-    return `This value is not a URL.${postFix}`;
+    return "This URL is not a Solid Identity Provider.";
   }
   if (hasError(error, ERROR_REGEXES.HANDLER_NOT_FOUND)) {
-    return `Please provide a URL.${postFix}`;
+    return "Please fill out a valid Solid Identity Provider.";
   }
   return `We were unable to log in with this URL.${postFix}`;
 }
 
 export default function Provider({ defaultError }) {
-  const buttonBem = Button.useBem();
+  const bem = useBem(useStyles());
+  const classes = useStyles();
   const { login } = useSession();
   const [loginError, setLoginError] = useState(defaultError);
   const theme = useTheme();
   const idp = useIdpFromQuery();
-  const [providerIri, setProviderIri] = useState(
-    Object.values(providers)[0]?.iri
-  );
+  const [providerIri, setProviderIri] = useState();
   const loginFieldRef = createRef();
 
   useEffect(() => {
@@ -100,71 +106,81 @@ export default function Provider({ defaultError }) {
     clientName: "Inrupt PodBrowser",
   };
 
-  const onProviderChange = setupOnProviderChange(setProviderIri);
+  const onProviderChange = setupOnProviderChange(setProviderIri, setLoginError);
   const handleLogin = setupLoginHandler(login);
   const onError = setupErrorHandler(setLoginError);
 
-  const providersWithIdp = idp ? { [idp.label]: idp, ...providers } : providers;
-
+  const providersWithIdp = idp ? [idp, ...providers] : providers;
   return (
-    <form onSubmit={handleLogin}>
-      <Box my={2}>
-        <Box mt={2}>
-          <h3 data-testid={TESTCAFE_ID_LOGIN_TITLE}>Log In</h3>
-
-          <FormControl
-            error={!!loginError}
-            style={{ maxWidth: 320, width: "100%" }}
-          >
-            <Autocomplete
-              onChange={onProviderChange}
-              onInputChange={onProviderChange}
-              id="provider-select"
-              freeSolo
-              options={Object.values(providersWithIdp).map(
-                (provider) => provider.iri
-              )}
-              value={idp ? providerIri : null}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  error={!!loginError}
-                  label="Select ID provider"
-                  margin="normal"
-                  variant="outlined"
-                  type="url"
-                  aria-describedby={loginError ? "login-error-text" : null}
-                  data-testid={TESTCAFE_ID_LOGIN_FIELD}
-                  ref={loginFieldRef}
-                />
-              )}
-            />
-            {loginError ? (
-              <FormHelperText
-                id="login-error-text"
-                style={{ marginBottom: theme.spacing(1) }}
-              >
-                {getErrorMessage(loginError)}
-              </FormHelperText>
-            ) : null}
-          </FormControl>
-
-          <LoginButton
-            oidcIssuer={providerIri}
-            redirectUrl={generateRedirectUrl("")}
-            authOptions={authOptions}
-            onError={onError}
-          >
-            <button
-              data-testid={TESTCAFE_ID_LOGIN_BUTTON}
-              type="submit"
-              className={buttonBem("button", "primary")}
+    <form onSubmit={handleLogin} className={bem("provider-login__form")}>
+      <div className={bem("provider-login__wrapper")}>
+        <FormControl
+          classes={{ root: classes.selectionBox }}
+          error={!!loginError}
+        >
+          <Autocomplete
+            onChange={onProviderChange}
+            onInputChange={onProviderChange}
+            id="provider-select"
+            freeSolo
+            options={providersWithIdp}
+            getOptionLabel={(option) => option.label}
+            renderOption={(option) => {
+              return (
+                <>
+                  {option.logo ? (
+                    <img
+                      src={`../${option.logo}`}
+                      width={20}
+                      style={{ margin: "1rem" }}
+                      alt={option.label}
+                    />
+                  ) : (
+                    <div style={{ minWidth: "20px", padding: "1.6rem" }} />
+                  )}
+                  {option.label}
+                </>
+              );
+            }}
+            inputValue={idp?.label || providerIri}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                error={!!loginError}
+                margin="none"
+                variant="outlined"
+                type="url"
+                aria-describedby={loginError ? "login-error-text" : null}
+                data-testid={TESTCAFE_ID_LOGIN_FIELD}
+                ref={loginFieldRef}
+              />
+            )}
+          />
+          {loginError ? (
+            <FormHelperText
+              id="login-error-text"
+              style={{ marginBottom: theme.spacing(1) }}
             >
-              Log In
-            </button>
-          </LoginButton>
-        </Box>
-      </Box>
+              {getErrorMessage(loginError)}
+            </FormHelperText>
+          ) : null}
+        </FormControl>
+        <LoginButton
+          oidcIssuer={providerIri}
+          redirectUrl={generateRedirectUrl("")}
+          authOptions={authOptions}
+          onError={onError}
+        >
+          <Button
+            variant="primary"
+            data-testid={TESTCAFE_ID_GO_BUTTON}
+            type="submit"
+            className={bem("provider-login__button")}
+          >
+            Go
+          </Button>
+        </LoginButton>
+      </div>
     </form>
   );
 }

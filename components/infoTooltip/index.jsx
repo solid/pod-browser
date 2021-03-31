@@ -30,21 +30,17 @@ import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-const TESTCAFE_ID_CAN_SHARE_INFO_BUTTON_LABEL = "can-share-info-button-label";
+const TESTCAFE_ID_INFO_BUTTON_LABEL = "info-button-label";
 
-export default function CanShareInfoTooltip({ resourceName, className }) {
+export default function InfoTooltip({ tooltipText, label, className }) {
   const classes = useStyles();
   const bem = useBem(useStyles());
   return (
-    <div className={clsx(classes.canShareHeader, className)}>
-      <span data-testid={TESTCAFE_ID_CAN_SHARE_INFO_BUTTON_LABEL}>
-        Can Share
-      </span>
-      <Tooltip
-        title={`A person can share ${resourceName} with others or remove people who have
-        access.`}
-        arrow
-      >
+    <div className={clsx(classes.infoTooltipContainer, className)}>
+      {label && (
+        <span data-testid={TESTCAFE_ID_INFO_BUTTON_LABEL}>{label}</span>
+      )}
+      <Tooltip title={tooltipText} arrow>
         <Button classes={{ root: classes.infoButton }}>
           <i
             className={clsx(bem("icon-info"), bem("icon"), classes.infoIcon)}
@@ -56,12 +52,13 @@ export default function CanShareInfoTooltip({ resourceName, className }) {
   );
 }
 
-CanShareInfoTooltip.propTypes = {
-  resourceName: PropTypes.string,
+InfoTooltip.propTypes = {
+  tooltipText: PropTypes.string.isRequired,
   className: PropTypes.string,
+  label: PropTypes.string,
 };
 
-CanShareInfoTooltip.defaultProps = {
-  resourceName: "this resource",
+InfoTooltip.defaultProps = {
   className: null,
+  label: null,
 };

@@ -19,20 +19,24 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles } from "@solid/lit-prism-patterns";
+import React from "react";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 
-export default function styles(theme) {
-  return createStyles(theme, ["icons", "button"], {
-    canShareHeader: {
-      display: "flex",
-    },
-    infoButton: {
-      padding: 0,
-      minWidth: "max-content",
-    },
-    infoIcon: {
-      margin: theme.spacing(0.4),
-      color: theme.palette.info.main,
-    },
+import InfoTooltip from "./index";
+
+describe("InfoTooltip", () => {
+  it("renders an info button with a tooltip", () => {
+    const { asFragment } = renderWithTheme(
+      <InfoTooltip tooltipText="example tooltip text" />
+    );
+
+    expect(asFragment()).toMatchSnapshot();
   });
-}
+  it("renders an info button with a label if available", () => {
+    const { asFragment } = renderWithTheme(
+      <InfoTooltip tooltipText="example tooltip text" label="Label text" />
+    );
+
+    expect(asFragment()).toMatchSnapshot();
+  });
+});

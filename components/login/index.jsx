@@ -19,21 +19,79 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-
+import React, { useState } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
+import { Button } from "@inrupt/prism-react-components";
+import { LoginButton } from "@inrupt/solid-ui-react";
 import { useBem } from "@solid/lit-prism-patterns";
+import InfoTooltip from "../infoTooltip";
 import ProviderLogin from "./provider";
 import styles from "./styles";
+import { generateRedirectUrl } from "../../src/windowHelpers";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
+const TESTCAFE_ID_LOGIN_TITLE = "login-title";
+export const TESTCAFE_ID_OTHER_PROVIDERS_BUTTON = "other-providers-button";
+const PROVIDER_IRI = "https://broker.pod.inrupt.com/";
+
+const authOptions = {
+  clientName: "Inrupt PodBrowser",
+};
 
 export default function Login() {
   const bem = useBem(useStyles());
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownIcon = isOpen ? "caret-up" : "caret-down";
+
+  const toggleOpenDropdown = () => setIsOpen(!isOpen);
+  const INFO_TOOLTIP_TEXT = "This is where you signed up for a Solid Pod";
+  const INFO_BUTTON_LABEL = "Where is your Pod hosted?";
 
   return (
     <div className={bem("login-form")}>
-      <ProviderLogin />
+      <h3 data-testid={TESTCAFE_ID_LOGIN_TITLE}>Sign in with</h3>
+      <img
+        width={160}
+        src="/pod-spaces-logo.svg"
+        alt="Inrupt PodBrowser"
+        className={bem("login-form__logo")}
+      />
+      <LoginButton
+        oidcIssuer={PROVIDER_IRI}
+        redirectUrl={generateRedirectUrl("")}
+        authOptions={authOptions}
+      >
+        <Button
+          variant="primary"
+          data-testid={TESTCAFE_ID_LOGIN_BUTTON}
+          type="submit"
+          className={bem("login-form__button")}
+        >
+          Sign In
+        </Button>
+      </LoginButton>
+      <div className={bem("separator__wrap")}>
+        <h2 className={bem("separator__centre-line")}>
+          <span>Or</span>
+        </h2>
+      </div>
+      <Button
+        variant="secondary"
+        iconAfter={dropdownIcon}
+        onClick={toggleOpenDropdown}
+        data-testid={TESTCAFE_ID_OTHER_PROVIDERS_BUTTON}
+      >
+        Sign in with other provider
+      </Button>
+      <div className={bem("provider-login-container", isOpen && "visible")}>
+        <InfoTooltip
+          label={INFO_BUTTON_LABEL}
+          tooltipText={INFO_TOOLTIP_TEXT}
+          className={bem("info-button")}
+        />
+        <ProviderLogin />
+      </div>
     </div>
   );
 }
