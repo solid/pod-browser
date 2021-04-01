@@ -106,7 +106,7 @@ export default function DeleteButton({
   function onDeleteError(e) {
     setSeverity("error");
     if (isHTTPError(e, 409)) {
-      setMessage(`Cannot delete ${resourceIri} as it still contains files`);
+      setMessage(`Cannot delete ${resourceIri} as it still contains files.`);
     } else {
       setMessage(e.toString());
     }
