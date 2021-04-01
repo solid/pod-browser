@@ -140,6 +140,7 @@ export const POLICIES_TYPE_MAP = {
 const {
   editors,
   viewers,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   blocked,
   viewAndAdd,
   editOnly,
@@ -148,4 +149,5 @@ const {
 
 export const customPolicies = [viewAndAdd, editOnly, addOnly];
 
-export const namedPolicies = [editors, viewers, blocked];
+// TODO: add blocked to this list once we have deny policies
+export const namedPolicies = [editors, viewers];

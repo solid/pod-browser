@@ -61,11 +61,11 @@ describe("SharingAccordion", () => {
     });
   });
   // Note: since the permissions cannot be mocked reliably for the custom policies, those are tested separately in the table component
-  it("renders three lists of named policies for editors, viewers and blocked and an Advanced Sharing button", () => {
+  it("renders two lists of named policies for editors and viewers and an Advanced Sharing button", () => {
     const { asFragment, queryAllByTestId, queryByTestId } = renderWithTheme(
       <SharingAccordion />
     );
-    expect(queryAllByTestId(TESTCAFE_ID_AGENT_ACCESS_TABLE)).toHaveLength(3);
+    expect(queryAllByTestId(TESTCAFE_ID_AGENT_ACCESS_TABLE)).toHaveLength(2);
     expect(queryByTestId(TESTCAFE_ID_ADVANCED_SHARING_BUTTON)).not.toBeNull();
     expect(asFragment()).toMatchSnapshot();
   });
