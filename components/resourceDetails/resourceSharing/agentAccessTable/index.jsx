@@ -56,14 +56,14 @@ export default function AgentAccessTable({ type }) {
   const [loading, setLoading] = useState(false);
   const [permissions, setPermissions] = useState([]);
   const {
-    data: namedPermissions,
+    data: policyPermissions,
     mutate: mutatePermissions,
   } = usePolicyPermissions(type);
 
   useEffect(() => {
-    if (!namedPermissions) return;
-    setPermissions(namedPermissions);
-  }, [namedPermissions]);
+    if (!policyPermissions) return;
+    setPermissions(policyPermissions);
+  }, [policyPermissions]);
 
   const bem = useBem(useStyles());
 
