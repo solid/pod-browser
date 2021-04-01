@@ -148,4 +148,5 @@ const {
 
 export const customPolicies = [viewAndAdd, editOnly, addOnly];
 
-export const namedPolicies = [editors, viewers, blocked];
+// TODO: add blocked to this list once we have deny policies
+export const namedPolicies = [editors, viewers];
