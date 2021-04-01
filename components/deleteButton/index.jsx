@@ -27,6 +27,7 @@ import T from "prop-types";
 import AlertContext from "../../src/contexts/alertContext";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
 import styles from "./styles";
+import { isHTTPError } from "../../src/error";
 
 const TESTCAFE_ID_DELETE_BUTTON = "delete-button";
 
@@ -87,6 +88,7 @@ export default function DeleteButton({
   dialogId,
   onDelete,
   successMessage,
+  resourceIri,
   ...buttonProps
 }) {
   const bem = useBem(useStyles());
@@ -103,7 +105,11 @@ export default function DeleteButton({
 
   function onDeleteError(e) {
     setSeverity("error");
-    setMessage(e.toString());
+    if (isHTTPError(e, 409)) {
+      setMessage(`Cannot delete ${resourceIri} as it still contains files`);
+    } else {
+      setMessage(e.toString());
+    }
     setAlertOpen(true);
   }
 
@@ -159,4 +165,5 @@ DeleteButton.propTypes = {
   dialogId: T.string.isRequired,
   onDelete: T.func.isRequired,
   successMessage: T.string.isRequired,
+  resourceIri: T.string.isRequired,
 };

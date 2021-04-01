@@ -86,6 +86,7 @@ export default function DeleteResourceButton({
       confirmationContent={`Are you sure you wish to delete ${name}?`}
       dialogId={`delete-resource-${resourceIri}`}
       onDelete={handleDelete}
+      resourceIri={resourceIri}
       successMessage={`${name} was successfully deleted.`}
       {...buttonProps}
     >
