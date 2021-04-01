@@ -29,6 +29,10 @@ import ConfirmationDialogContext from "../../../../../../src/contexts/confirmati
 import styles from "./styles";
 import { PUBLIC_AGENT_PREDICATE } from "../../../../../../src/models/contact/public";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../../../src/models/contact/authenticated";
+import {
+  permissionPropType,
+  profilePropType,
+} from "../../../../../../constants/propTypes";
 
 export const handleConfirmation = ({
   open,
@@ -169,24 +173,8 @@ export default function RemoveButton({
 
 RemoveButton.propTypes = {
   resourceIri: PropTypes.string.isRequired,
-  permission: PropTypes.shape({
-    type: PropTypes.string,
-    acl: PropTypes.shape({
-      read: PropTypes.bool,
-      write: PropTypes.bool,
-      append: PropTypes.bool,
-      control: PropTypes.bool,
-    }),
-    webId: PropTypes.string.isRequired,
-    alias: PropTypes.string,
-  }).isRequired,
-  profile: PropTypes.shape({
-    avatar: PropTypes.string,
-    name: PropTypes.string,
-    nickname: PropTypes.string,
-    webId: PropTypes.string,
-    types: PropTypes.arrayOf(PropTypes.string),
-  }),
+  permission: permissionPropType.isRequired,
+  profile: profilePropType,
   setLoading: PropTypes.func,
   setLocalAccess: PropTypes.func,
   mutatePermissions: PropTypes.func,

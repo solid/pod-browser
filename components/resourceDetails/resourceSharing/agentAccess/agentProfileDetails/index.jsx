@@ -38,6 +38,10 @@ import styles from "./styles";
 import { displayProfileName } from "../../../../../src/solidClientHelpers/profile";
 import Avatar from "../../../../avatar";
 import AgentAccessOptionsMenu from "../agentAccessOptionsMenu";
+import {
+  permissionPropType,
+  profilePropType,
+} from "../../../../../constants/propTypes";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -110,24 +114,8 @@ export default function AgentProfileDetails({
 }
 AgentProfileDetails.propTypes = {
   resourceIri: T.string.isRequired,
-  permission: T.shape({
-    type: T.string,
-    acl: T.shape({
-      read: T.bool,
-      write: T.bool,
-      append: T.bool,
-      control: T.bool,
-    }),
-    webId: T.string.isRequired,
-    alias: T.string,
-  }).isRequired,
-  profile: T.shape({
-    avatar: T.string,
-    name: T.string,
-    nickname: T.string,
-    webId: T.string,
-    types: T.arrayOf(T.string),
-  }),
+  permission: permissionPropType.isRequired,
+  profile: profilePropType,
   setLoading: T.func,
   setLocalAccess: T.func,
   mutatePermissions: T.func,
