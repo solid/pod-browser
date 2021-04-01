@@ -54,8 +54,8 @@ exports[`AddContact it renders the Add Contact form 1`] = `
       <input
         class="PodBrowser-input"
         id="id1"
-        pattern="https://.+"
-        title="Must start with https://"
+        pattern="https:\\\\/\\\\/\\\\S+"
+        title="Must be a valid URL that starts with https:// and does not contain spaces"
         type="url"
         value=""
       />
