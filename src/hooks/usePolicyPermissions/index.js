@@ -23,7 +23,7 @@
 import React, { useContext } from "react";
 import useSWR from "swr";
 import AccessControlContext from "../../contexts/accessControlContext";
-import { isCustomPolicy } from "../../../constants/policies";
+import { isCustomPolicy } from "../../models/policy";
 
 export default function usePolicyPermissions(policyName) {
   const isCustom = isCustomPolicy(policyName);

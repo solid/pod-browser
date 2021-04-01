@@ -27,6 +27,7 @@ export default function styles(theme) {
     title: {
       fontSize: theme.typography.h4.fontSize,
       fontWeight: theme.typography.fontWeightBold,
+      flexGrow: 1,
     },
     headerContainer: {
       display: "flex",
@@ -48,7 +49,7 @@ export default function styles(theme) {
     titleAndButtonContainer: {
       display: "flex",
       flexDirection: "row",
-      justifyContent: "space-between",
+      alignItems: "center",
     },
     icon: {
       padding: theme.spacing(1),

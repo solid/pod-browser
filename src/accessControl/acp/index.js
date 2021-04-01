@@ -23,8 +23,10 @@ import {
   acp_v1 as acp,
   acp_v2 as acpv2,
   asUrl,
+  deleteFile,
   getSolidDataset,
   getSourceUrl,
+  isContainer,
   saveSolidDatasetAt,
   setThing,
 } from "@inrupt/solid-client";
@@ -35,12 +37,18 @@ import {
   isEmptyAccess,
 } from "../../solidClientHelpers/permissions";
 import { chain, createResponder } from "../../solidClientHelpers/utils";
-import { getOrCreateDatasetOld } from "../../solidClientHelpers/resource";
-import { getPolicyUrl, getPolicyResourceUrl } from "../../models/policy";
+import {
+  deletePoliciesContainer,
+  getOrCreateDatasetOld,
+} from "../../solidClientHelpers/resource";
+import {
+  getPolicyUrl,
+  getPolicyResourceUrl,
+  isCustomPolicy,
+} from "../../models/policy";
 import { isHTTPError } from "../../error";
 import { PUBLIC_AGENT_PREDICATE } from "../../models/contact/public";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../models/contact/authenticated";
-import { isCustomPolicy } from "../../../constants/policies";
 
 export const noAcrAccessError =
   "No access to Access Control Resource for this resource";
@@ -945,13 +953,32 @@ export default class AcpAccessControlStrategy {
     if (getOrCreateError) return error(getOrCreateError);
 
     const policyUrl = getNamedPolicyUrl(namedPolicyContainerUrl, policyName);
-    const policy = acp.getPolicy(policyDataset, policyUrl);
-    const rulesUrls = acp.getRequiredRuleUrlAll(policy);
+    const policy = acpv2.getPolicy(policyDataset, policyUrl);
+    const rulesUrls = acpv2.getRequiredRuleUrlAll(policy);
     const [updatedDataset] = rulesUrls.map((ruleUrl) => {
-      const rule = acp.getRule(policyDataset, ruleUrl);
-      const modifiedRule = acp.removeAgent(rule, webId);
+      const rule = acpv2.getRule(policyDataset, ruleUrl);
+      const modifiedRule = acpv2.removeAgent(rule, webId);
       return setThing(policyDataset, modifiedRule);
     });
+    const { agents } = getNamedPolicyModesAndAgents(policyUrl, updatedDataset);
+    const isLastAgent = !agents.length;
+    if (isLastAgent) {
+      // remove the rule
+      const [modifiedPolicy] = rulesUrls.map((ruleUrl) => {
+        return acpv2.removeRequiredRuleUrl(policy, ruleUrl);
+      });
+      const modifiedPolicyRulesUrls = acpv2.getRequiredRuleUrlAll(
+        modifiedPolicy
+      );
+      // if there are no rules left in the policy
+      if (!modifiedPolicyRulesUrls.length) {
+        await deleteFile(policyUrl, { fetch: this.#fetch });
+        // if policies container is a container and it's empty, remove it too
+        if (namedPolicyContainerUrl && isContainer(namedPolicyContainerUrl)) {
+          deletePoliciesContainer(namedPolicyContainerUrl, fetch);
+        }
+      }
+    }
     // saving changes to the policy resource
     await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
       fetch: this.#fetch,
@@ -977,13 +1004,33 @@ export default class AcpAccessControlStrategy {
     if (getOrCreateError) return error(getOrCreateError);
 
     const policyUrl = getCustomPolicyUrl(customPolicyContainerUrl, policyName);
-    const policy = acp.getPolicy(policyDataset, policyUrl);
-    const rulesUrls = acp.getRequiredRuleUrlAll(policy);
+    const policy = acpv2.getPolicy(policyDataset, policyUrl);
+    const rulesUrls = acpv2.getRequiredRuleUrlAll(policy);
     const [updatedDataset] = rulesUrls.map((ruleUrl) => {
-      const rule = acp.getRule(policyDataset, ruleUrl);
-      const modifiedRule = acp.removeAgent(rule, webId);
+      const rule = acpv2.getRule(policyDataset, ruleUrl);
+      const modifiedRule = acpv2.removeAgent(rule, webId);
       return setThing(policyDataset, modifiedRule);
     });
+
+    const { agents } = getNamedPolicyModesAndAgents(policyUrl, updatedDataset);
+    const isLastAgent = !agents.length;
+    if (isLastAgent) {
+      // remove the rule
+      const [modifiedPolicy] = rulesUrls.map((ruleUrl) => {
+        return acpv2.removeRequiredRuleUrl(policy, ruleUrl);
+      });
+      const modifiedPolicyRulesUrls = acpv2.getRequiredRuleUrlAll(
+        modifiedPolicy
+      );
+      // if there are no rules left in the policy
+      if (!modifiedPolicyRulesUrls.length) {
+        await deleteFile(policyUrl, { fetch: this.#fetch });
+        // if policies container is a container and it's empty, remove it too
+        if (customPolicyContainerUrl && isContainer(customPolicyContainerUrl)) {
+          deletePoliciesContainer(customPolicyContainerUrl, fetch);
+        }
+      }
+    }
 
     // saving changes to the policy resource
     await saveSolidDatasetAt(customPolicyContainerUrl, updatedDataset, {
@@ -1007,6 +1054,7 @@ export default class AcpAccessControlStrategy {
     const updatedDataset = isEmptyAccess(access)
       ? removePermissionsForAgent(webId, policyDataset)
       : this.updatePermissionsForAgent(webId, access, policyDataset);
+
     // saving changes to the policy resource
     await saveSolidDatasetAt(this.#policyUrl, updatedDataset, {
       fetch: this.#fetch,

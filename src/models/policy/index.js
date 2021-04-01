@@ -22,6 +22,11 @@
 import { getSourceUrl } from "@inrupt/solid-client";
 import { sharedStart } from "../../solidClientHelpers/utils";
 import { getContainerUrl, joinPath } from "../../stringHelpers";
+import {
+  customPolicies,
+  namedPolicies,
+  POLICIES_TYPE_MAP,
+} from "../../../constants/policies";
 
 const POLICIES_CONTAINER = "pb_policies/";
 
@@ -62,4 +67,16 @@ export function getPolicyResourceUrl(
     matchingStart.length
   )}.ttl.${policyName}.ttl`;
   return joinPath(getPoliciesContainerUrl(matchingStart), path);
+}
+
+export function getPolicyType(type) {
+  return POLICIES_TYPE_MAP[type];
+}
+
+export function isCustomPolicy(type) {
+  return customPolicies.find((policy) => policy.name === type) !== undefined;
+}
+
+export function isNamedPolicy(type) {
+  return namedPolicies.find((policy) => policy.name === type) !== undefined;
 }
