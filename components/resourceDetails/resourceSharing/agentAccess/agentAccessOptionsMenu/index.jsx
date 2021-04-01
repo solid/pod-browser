@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export default function AgentAccessOptionsMenu({
   resourceIri,
   permission,
+  profile,
   setLoading,
   setLocalAccess,
   mutatePermissions,
@@ -103,6 +104,7 @@ export default function AgentAccessOptionsMenu({
           </ListItem>
           <RemoveButton
             resourceIri={resourceIri}
+            profile={profile}
             permission={permission}
             setLoading={setLoading}
             setLocalAccess={setLocalAccess}
@@ -118,6 +120,13 @@ AgentAccessOptionsMenu.propTypes = {
   resourceIri: PropTypes.string,
   permission: PropTypes.shape().isRequired,
   setLoading: PropTypes.func,
+  profile: PropTypes.shape({
+    avatar: PropTypes.string,
+    name: PropTypes.string,
+    nickname: PropTypes.string,
+    webId: PropTypes.string,
+    types: PropTypes.arrayOf(PropTypes.string),
+  }),
   setLocalAccess: PropTypes.func,
   mutatePermissions: PropTypes.func,
 };
@@ -126,6 +135,7 @@ AgentAccessOptionsMenu.propTypes = {
 AgentAccessOptionsMenu.defaultProps = {
   resourceIri: null,
   setLoading: () => {},
+  profile: null,
   setLocalAccess: () => {},
   mutatePermissions: () => {},
 };

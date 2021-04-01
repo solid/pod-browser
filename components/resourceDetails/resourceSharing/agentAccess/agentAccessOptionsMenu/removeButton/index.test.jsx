@@ -38,13 +38,7 @@ const profile = {
   name,
   webId,
 };
-const permission = { webId, name, profile, alias: "editors" };
-const permissionWithoutProfile = {
-  webId,
-  name,
-  profile: null,
-  alias: "editors",
-};
+const permission = { webId, alias: "editors" };
 
 describe("AgentAccessOptionsMenu", () => {
   test("it renders a button which triggers the opening of the menu", () => {
@@ -52,6 +46,7 @@ describe("AgentAccessOptionsMenu", () => {
       <RemoveButton
         resourceIri={resourceIri}
         permission={permission}
+        profile={profile}
         setLoading={jest.fn()}
         setLocalAccess={jest.fn()}
         mutatePermissions={jest.fn()}
@@ -76,6 +71,7 @@ describe("AgentAccessOptionsMenu", () => {
         <RemoveButton
           resourceIri={resourceIri}
           permission={permission}
+          profile={profile}
           setLoading={jest.fn()}
           setLocalAccess={jest.fn()}
           mutatePermissions={jest.fn()}
@@ -101,7 +97,8 @@ describe("AgentAccessOptionsMenu", () => {
       <ConfirmationDialogProvider>
         <RemoveButton
           resourceIri={resourceIri}
-          permission={permissionWithoutProfile}
+          permission={permission}
+          profile={null}
           setLoading={jest.fn()}
           setLocalAccess={jest.fn()}
           mutatePermissions={jest.fn()}
@@ -122,14 +119,17 @@ describe("handleConfirmation", () => {
   const policyName = "editors";
   const setConfirmationSetup = jest.fn();
   const open = dialogId;
+  const setConfirmText = jest.fn();
 
   const handler = handleConfirmation({
     open,
     dialogId,
+    byPassDialog: false,
     setConfirmationSetup,
     setOpen,
     setConfirmed,
     handleRemoveAgent,
+    setConfirmText,
   });
 
   test("it returns a handler that submits the webIds when user confirms dialog", () => {
@@ -138,6 +138,25 @@ describe("handleConfirmation", () => {
     expect(handleRemoveAgent).toHaveBeenCalled();
     expect(setConfirmed).toHaveBeenCalledWith(null);
     expect(setConfirmationSetup).toHaveBeenCalledWith(true);
+    expect(setConfirmText).toHaveBeenCalledWith(null);
+  });
+
+  test("it returns a handler that submits the webIds of bypassDialog is true", () => {
+    const bypassDialogHandle = handleConfirmation({
+      open,
+      dialogId,
+      byPassDialog: true,
+      setConfirmationSetup,
+      setOpen,
+      setConfirmed,
+      handleRemoveAgent,
+      setConfirmText,
+    });
+    bypassDialogHandle(webId, policyName, true, true);
+
+    expect(handleRemoveAgent).toHaveBeenCalledWith(webId, policyName);
+    expect(setConfirmationSetup).toHaveBeenCalledWith(true);
+    expect(setConfirmText).toHaveBeenCalledWith(null);
   });
   test("it returns a handler that exits when user cancels the operation", () => {
     handler(webId, policyName, true, false);
@@ -145,6 +164,7 @@ describe("handleConfirmation", () => {
     expect(setOpen).toHaveBeenCalledWith(null);
     expect(handleRemoveAgent).not.toHaveBeenCalled();
     expect(setConfirmed).toHaveBeenCalledWith(null);
+    expect(setConfirmText).toHaveBeenCalledWith(null);
   });
   test("it returns a handler that exits when user starts confirmation but hasn't selected an option", () => {
     handler(webId, policyName, true, null);

@@ -27,19 +27,27 @@ import { getResourceName } from "../../../../../../src/solidClientHelpers/resour
 import AccessControlContext from "../../../../../../src/contexts/accessControlContext";
 import ConfirmationDialogContext from "../../../../../../src/contexts/confirmationDialogContext";
 import styles from "./styles";
+import { PUBLIC_AGENT_PREDICATE } from "../../../../../../src/models/contact/public";
+import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../../../src/models/contact/authenticated";
 
 export const handleConfirmation = ({
   open,
   dialogId,
+  bypassDialog,
   setConfirmationSetup,
   setOpen,
   setConfirmed,
   handleRemoveAgent,
+  setConfirmText,
 }) => {
   return (webId, alias, confirmationSetup, confirmed) => {
+    setConfirmationSetup(true);
+    if (bypassDialog) {
+      setConfirmed(true);
+      handleRemoveAgent(webId, alias);
+    }
     if (open !== dialogId) return;
     if (confirmationSetup && confirmed === null) return;
-    setConfirmationSetup(true);
 
     if (confirmationSetup && confirmed) {
       handleRemoveAgent(webId, alias);
@@ -50,6 +58,7 @@ export const handleConfirmation = ({
       setOpen(null);
       setConfirmationSetup(false);
     }
+    setConfirmText(null);
   };
 };
 
@@ -61,6 +70,12 @@ export const handleRemovePermissions = ({
 }) => {
   return async (agentWebId, policyName) => {
     setLoading(true);
+    if (PUBLIC_AGENT_PREDICATE === agentWebId) {
+      accessControl.setRulePublic(policyName, false);
+    }
+    if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {
+      accessControl.setRuleAuthenticated(policyName, false);
+    }
     await accessControl.removeAgentFromNamedPolicy(agentWebId, policyName);
     setLoading(false);
     await mutatePermissions();
@@ -74,7 +89,8 @@ export const TESTCAFE_ID_REMOVE_BUTTON = "remove-button";
 
 export default function RemoveButton({
   resourceIri,
-  permission: { webId, name, alias, profile },
+  permission: { webId, alias },
+  profile,
   setLoading,
   setLocalAccess,
   mutatePermissions,
@@ -83,8 +99,8 @@ export default function RemoveButton({
   const resourceName = getResourceName(resourceIri);
   const classes = useStyles();
   const dialogId = "remove-agent";
+  const [bypassDialog, setBypassDialog] = useState(false);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
-
   const handleRemoveAgent = handleRemovePermissions({
     setLoading,
     accessControl,
@@ -99,11 +115,21 @@ export default function RemoveButton({
     setOpen,
     title,
     setTitle,
+    setConfirmText,
   } = useContext(ConfirmationDialogContext);
 
   const handleOpenDialog = () => {
+    setConfirmText("Remove");
     // eslint-disable-next-line prettier/prettier
-    const text = `Remove ${profile ? name : webId}'s access from ${resourceName}`;
+    if (
+      PUBLIC_AGENT_PREDICATE === webId ||
+      AUTHENTICATED_AGENT_PREDICATE === webId
+    ) {
+      setBypassDialog(true);
+    }
+    const text = `Remove ${
+      profile?.name || webId
+    }'s access from ${resourceName}`;
     setTitle(text);
     setOpen(dialogId);
   };
@@ -111,12 +137,14 @@ export default function RemoveButton({
   const onConfirmation = handleConfirmation({
     open,
     dialogId,
+    bypassDialog,
     confirmationSetup,
     confirmed,
     setConfirmationSetup,
     setOpen,
     setConfirmed,
     handleRemoveAgent,
+    setConfirmText,
   });
 
   useEffect(() => {
@@ -141,7 +169,24 @@ export default function RemoveButton({
 
 RemoveButton.propTypes = {
   resourceIri: PropTypes.string.isRequired,
-  permission: PropTypes.shape().isRequired,
+  permission: PropTypes.shape({
+    type: PropTypes.string,
+    acl: PropTypes.shape({
+      read: PropTypes.bool,
+      write: PropTypes.bool,
+      append: PropTypes.bool,
+      control: PropTypes.bool,
+    }),
+    webId: PropTypes.string.isRequired,
+    alias: PropTypes.string,
+  }).isRequired,
+  profile: PropTypes.shape({
+    avatar: PropTypes.string,
+    name: PropTypes.string,
+    nickname: PropTypes.string,
+    webId: PropTypes.string,
+    types: PropTypes.arrayOf(PropTypes.string),
+  }),
   setLoading: PropTypes.func,
   setLocalAccess: PropTypes.func,
   mutatePermissions: PropTypes.func,
@@ -150,5 +195,6 @@ RemoveButton.propTypes = {
 RemoveButton.defaultProps = {
   setLoading: () => {},
   setLocalAccess: () => {},
+  profile: null,
   mutatePermissions: () => {},
 };

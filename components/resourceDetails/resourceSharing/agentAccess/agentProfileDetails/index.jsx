@@ -83,7 +83,6 @@ export default function AgentProfileDetails({
     }
     return profile;
   };
-
   const localProfile = getLocalProfile(permission);
   const avatarProps = getAvatarProps(permission);
 
@@ -111,8 +110,24 @@ export default function AgentProfileDetails({
 }
 AgentProfileDetails.propTypes = {
   resourceIri: T.string.isRequired,
-  permission: T.shape().isRequired,
-  profile: T.shape(),
+  permission: T.shape({
+    type: T.string,
+    acl: T.shape({
+      read: T.bool,
+      write: T.bool,
+      append: T.bool,
+      control: T.bool,
+    }),
+    webId: T.string.isRequired,
+    alias: T.string,
+  }).isRequired,
+  profile: T.shape({
+    avatar: T.string,
+    name: T.string,
+    nickname: T.string,
+    webId: T.string,
+    types: T.arrayOf(T.string),
+  }),
   setLoading: T.func,
   setLocalAccess: T.func,
   mutatePermissions: T.func,
