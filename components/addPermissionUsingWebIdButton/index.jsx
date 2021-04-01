@@ -161,7 +161,7 @@ export default function AddPermissionUsingWebIdButton({
           horizontal: "center",
         }}
         transformOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "center",
         }}
       >
