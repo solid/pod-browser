@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SharingAccordion renders three lists of named policies for editors, viewers and blocked and an Advanced Sharing button 1`] = `
+exports[`SharingAccordion renders two lists of named policies for editors and viewers and an Advanced Sharing button 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
@@ -174,94 +174,6 @@ exports[`SharingAccordion renders three lists of named policies for editors, vie
               >
                 <p>
                   No viewers
-                </p>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div
-    class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
-    data-testid="agent-access-table"
-  >
-    <div
-      class="PodBrowser-headerContainer"
-    >
-      <i
-        class="PodBrowser-icon-block PodBrowser-icon PodBrowser-iconBlocked"
-      />
-      <div
-        class="PodBrowser-textContainer"
-      >
-        <div
-          class="PodBrowser-titleAndButtonContainer"
-        >
-          <p
-            class="PodBrowser-title"
-          >
-            Blocked
-          </p>
-          <button
-            class="PodBrowser-button PodBrowser-button--text"
-            data-testid="add-agent-button"
-          >
-            <span
-              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
-            />
-            <span
-              class="PodBrowser-button__text"
-            >
-              Edit Blocked
-            </span>
-          </button>
-          <button
-            class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
-          >
-            <span
-              class="PodBrowser-button__text"
-            >
-              <span
-                aria-label="Show menu for policy"
-                class="PodBrowser-icon-more"
-              />
-            </span>
-          </button>
-        </div>
-        <span
-          class="PodBrowser-description"
-        >
-          <p>
-            <b>
-              Cannot 
-            </b>
-            view this resource
-          </p>
-        </span>
-      </div>
-    </div>
-    <div
-      class="PodBrowser-container PodBrowser-entered"
-      style="min-height: 0px;"
-    >
-      <div
-        class="PodBrowser-wrapper"
-      >
-        <div
-          class="PodBrowser-wrapperInner"
-        >
-          <div
-            role="region"
-          >
-            <div
-              class="PodBrowser-permissionsContainer"
-            >
-              <span
-                class="PodBrowser-emptyStateTextContainer"
-              >
-                <p>
-                  No one is blocked
                 </p>
               </span>
             </div>
@@ -464,94 +376,6 @@ exports[`SharingAccordion when resource is a container renders an info box which
               >
                 <p>
                   No viewers
-                </p>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div
-    class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
-    data-testid="agent-access-table"
-  >
-    <div
-      class="PodBrowser-headerContainer"
-    >
-      <i
-        class="PodBrowser-icon-block PodBrowser-icon PodBrowser-iconBlocked"
-      />
-      <div
-        class="PodBrowser-textContainer"
-      >
-        <div
-          class="PodBrowser-titleAndButtonContainer"
-        >
-          <p
-            class="PodBrowser-title"
-          >
-            Blocked
-          </p>
-          <button
-            class="PodBrowser-button PodBrowser-button--text"
-            data-testid="add-agent-button"
-          >
-            <span
-              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
-            />
-            <span
-              class="PodBrowser-button__text"
-            >
-              Edit Blocked
-            </span>
-          </button>
-          <button
-            class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
-          >
-            <span
-              class="PodBrowser-button__text"
-            >
-              <span
-                aria-label="Show menu for policy"
-                class="PodBrowser-icon-more"
-              />
-            </span>
-          </button>
-        </div>
-        <span
-          class="PodBrowser-description"
-        >
-          <p>
-            <b>
-              Cannot 
-            </b>
-            view this resource
-          </p>
-        </span>
-      </div>
-    </div>
-    <div
-      class="PodBrowser-container PodBrowser-entered"
-      style="min-height: 0px;"
-    >
-      <div
-        class="PodBrowser-wrapper"
-      >
-        <div
-          class="PodBrowser-wrapperInner"
-        >
-          <div
-            role="region"
-          >
-            <div
-              class="PodBrowser-permissionsContainer"
-            >
-              <span
-                class="PodBrowser-emptyStateTextContainer"
-              >
-                <p>
-                  No one is blocked
                 </p>
               </span>
             </div>

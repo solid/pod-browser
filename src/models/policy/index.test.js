@@ -107,11 +107,12 @@ describe("getPolicyResourceUrl", () => {
   });
 });
 
+// TODO: add blocked to named policies list once we have deny policies
+
 describe("getPolicyType", () => {
   it("returns something for known policy types", () => {
     expect(getPolicyType("editors")).toBeDefined();
     expect(getPolicyType("viewers")).toBeDefined();
-    expect(getPolicyType("blocked")).toBeDefined();
     expect(getPolicyType("viewAndAdd")).toBeDefined();
     expect(getPolicyType("editOnly")).toBeDefined();
     expect(getPolicyType("addOnly")).toBeDefined();
@@ -123,7 +124,6 @@ describe("isCustomPolicy", () => {
   it("returns true for custom policies", () => {
     expect(isCustomPolicy("editors")).toBe(false);
     expect(isCustomPolicy("viewers")).toBe(false);
-    expect(isCustomPolicy("blocked")).toBe(false);
     expect(isCustomPolicy("viewAndAdd")).toBe(true);
     expect(isCustomPolicy("editOnly")).toBe(true);
     expect(isCustomPolicy("addOnly")).toBe(true);
@@ -134,7 +134,6 @@ describe("isNamedPolicy", () => {
   it("returns true for named policies", () => {
     expect(isNamedPolicy("editors")).toBe(true);
     expect(isNamedPolicy("viewers")).toBe(true);
-    expect(isNamedPolicy("blocked")).toBe(true);
     expect(isNamedPolicy("viewAndAdd")).toBe(false);
     expect(isNamedPolicy("editOnly")).toBe(false);
     expect(isNamedPolicy("addOnly")).toBe(false);
