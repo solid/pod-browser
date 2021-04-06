@@ -21,7 +21,7 @@
 
 import PropTypes from "prop-types";
 
-export const permissionPropType = PropTypes.shape({
+export const permission = PropTypes.shape({
   type: PropTypes.string,
   acl: PropTypes.shape({
     read: PropTypes.bool,
@@ -33,7 +33,7 @@ export const permissionPropType = PropTypes.shape({
   alias: PropTypes.string,
 });
 
-export const profilePropType = PropTypes.shape({
+export const profile = PropTypes.shape({
   avatar: PropTypes.string,
   name: PropTypes.string,
   nickname: PropTypes.string,

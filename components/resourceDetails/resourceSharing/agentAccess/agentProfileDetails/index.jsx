@@ -39,8 +39,8 @@ import { displayProfileName } from "../../../../../src/solidClientHelpers/profil
 import Avatar from "../../../../avatar";
 import AgentAccessOptionsMenu from "../agentAccessOptionsMenu";
 import {
-  permissionPropType,
-  profilePropType,
+  permission as permissionPropType,
+  profile as profilePropType,
 } from "../../../../../constants/propTypes";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));

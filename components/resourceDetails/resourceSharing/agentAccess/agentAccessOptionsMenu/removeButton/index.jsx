@@ -30,8 +30,8 @@ import styles from "./styles";
 import { PUBLIC_AGENT_PREDICATE } from "../../../../../../src/models/contact/public";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../../../src/models/contact/authenticated";
 import {
-  permissionPropType,
-  profilePropType,
+  permission as permissionPropType,
+  profile as profilePropType,
 } from "../../../../../../constants/propTypes";
 
 export const handleConfirmation = ({

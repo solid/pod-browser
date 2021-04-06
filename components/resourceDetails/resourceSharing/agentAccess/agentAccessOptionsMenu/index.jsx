@@ -33,7 +33,7 @@ import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import RemoveButton from "./removeButton";
 import styles from "./styles";
-import { profilePropType } from "../../../../../constants/propTypes";
+import { profile as profilePropType } from "../../../../../constants/propTypes";
 
 export const TESTCAFE_ID_MENU_BUTTON = "menu-button";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
