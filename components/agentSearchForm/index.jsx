@@ -138,8 +138,8 @@ export default function AgentSearchForm({
         onChange={handleChange}
         value={value}
         type="url"
-        pattern="https://.+"
-        title="Must start with https://"
+        pattern="https:\/\/\S+"
+        title="Must be a valid URL that starts with https:// and does not contain spaces"
         onBlur={onBlur}
         required={invalidWebIdField}
         variant={existingWebId || isPodOwner ? "invalid" : null}
