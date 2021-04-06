@@ -64,7 +64,6 @@ describe("AgentProfileDetails", () => {
         profile={profile}
         setLoading={jest.fn()}
         setLocalAccess={jest.fn()}
-        mutatePermissions={jest.fn()}
       />
     );
     expect(asFragment()).toMatchSnapshot();
@@ -77,7 +76,6 @@ describe("AgentProfileDetails", () => {
         profile={profile}
         setLoading={jest.fn()}
         setLocalAccess={jest.fn()}
-        mutatePermissions={jest.fn()}
       />
     );
     expect(asFragment()).toMatchSnapshot();
@@ -97,7 +95,6 @@ describe("AgentProfileDetails", () => {
         profile={profile}
         setLoading={jest.fn()}
         setLocalAccess={jest.fn()}
-        mutatePermissions={jest.fn()}
       />
     );
     expect(asFragment()).toMatchSnapshot();
@@ -112,7 +109,6 @@ describe("AgentProfileDetails", () => {
         profile={publicProfile}
         setLoading={jest.fn()}
         setLocalAccess={jest.fn()}
-        mutatePermissions={jest.fn()}
       />
     );
     expect(asFragment()).toMatchSnapshot();
@@ -127,7 +123,6 @@ describe("AgentProfileDetails", () => {
         profile={authenticatedProfile}
         setLoading={jest.fn()}
         setLocalAccess={jest.fn()}
-        mutatePermissions={jest.fn()}
       />
     );
     expect(asFragment()).toMatchSnapshot();

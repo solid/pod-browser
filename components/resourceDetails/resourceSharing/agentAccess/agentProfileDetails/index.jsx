@@ -53,7 +53,6 @@ export default function AgentProfileDetails({
   profile,
   setLoading,
   setLocalAccess,
-  mutatePermissions,
 }) {
   const classes = useStyles();
 
@@ -107,7 +106,6 @@ export default function AgentProfileDetails({
           permission={permission}
           setLoading={setLoading}
           setLocalAccess={setLocalAccess}
-          mutatePermissions={mutatePermissions}
         />
       ) : null}
     </div>
@@ -119,12 +117,10 @@ AgentProfileDetails.propTypes = {
   profile: profilePropType,
   setLoading: T.func,
   setLocalAccess: T.func,
-  mutatePermissions: T.func,
 };
 
 AgentProfileDetails.defaultProps = {
   setLoading: () => {},
   setLocalAccess: () => {},
-  mutatePermissions: () => {},
   profile: null,
 };

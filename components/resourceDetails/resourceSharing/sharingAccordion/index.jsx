@@ -38,7 +38,7 @@ function SharingAccordion() {
   return (
     <>
       {namedPolicies.concat(customPolicies).map(({ name }) => (
-        <AgentAccessTable type={name} />
+        <AgentAccessTable type={name} key={name} />
       ))}
       {isContainer && (
         <Alert icon={false} severity="info">

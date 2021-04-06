@@ -40,10 +40,7 @@ export const TESTCAFE_ID_MODAL_OVERLAY = "advanced-sharing-modal-overlay";
 export default function AdvancedSharingButton() {
   const defaultType = "viewAndAdd";
   const classes = useStyles();
-  const {
-    data: customPermissions,
-    mutate: mutatePermissions,
-  } = usePolicyPermissions(defaultType);
+  const { data: customPermissions } = usePolicyPermissions(defaultType);
 
   const { permissionsWithProfiles: permissions } = usePermissionsWithProfiles(
     customPermissions
@@ -87,8 +84,8 @@ export default function AdvancedSharingButton() {
         <AgentPickerModal
           type={defaultType}
           onClose={handleClose}
-          mutatePermissions={mutatePermissions}
           permissions={permissions}
+          setLoading={() => {}}
           advancedSharing
         />
       </Modal>

@@ -21,7 +21,7 @@
 
 /* eslint-disable react/forbid-prop-types */
 
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, forwardRef } from "react";
 import PropTypes from "prop-types";
 import { CircularProgress, createStyles } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
@@ -69,21 +69,22 @@ import {
   createAuthenticatedAgent,
   AUTHENTICATED_AGENT_PREDICATE,
 } from "../../../../src/models/contact/authenticated";
+import ResourceInfoContext from "../../../../src/contexts/resourceInfoContext";
 
 export const handleSubmit = ({
   newAgentsWebIds,
   webIdsToDelete,
   accessControl,
   addressBook,
-  mutatePermissions,
+  mutateResourceInfo,
   saveAgentToContacts,
   onClose,
   setLoading,
   policyName,
-  advancedSharing,
   fetch,
 }) => {
-  return () => {
+  return async () => {
+    onClose();
     if (!newAgentsWebIds.length && !webIdsToDelete.length) {
       return;
     }
@@ -96,9 +97,7 @@ export const handleSubmit = ({
         if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {
           return accessControl.setRuleAuthenticated(policyName, true);
         }
-        return advancedSharing
-          ? accessControl.addAgentToCustomPolicy(agentWebId, policyName)
-          : accessControl.addAgentToNamedPolicy(agentWebId, policyName);
+        return accessControl.addAgentToPolicy(agentWebId, policyName);
       }
     );
 
@@ -110,9 +109,7 @@ export const handleSubmit = ({
         if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {
           return accessControl.setRuleAuthenticated(policyName, false);
         }
-        return advancedSharing
-          ? accessControl.removeAgentFromCustomPolicy(agentWebId, policyName)
-          : accessControl.removeAgentFromNamedPolicy(agentWebId, policyName);
+        return accessControl.removeAgentFromPolicy(agentWebId, policyName);
       }
     );
 
@@ -125,15 +122,15 @@ export const handleSubmit = ({
       .map((agentWebId) => () =>
         saveAgentToContacts(agentWebId, addressBook, fetch)
       );
-    serializePromises([
+    const args = await serializePromises([
       ...addPermissionsPromiseFactories,
       ...removePermissionsPromiseFactories,
       ...addAgentsToContactsPromiseFactories,
-    ]).then(() => {
-      mutatePermissions();
-      setLoading(false);
-    });
-    onClose();
+    ]);
+    const responses = args.filter((res) => typeof res !== "undefined");
+    const { response: latestAcr } = responses[responses.length - 1];
+    await mutateResourceInfo(latestAcr, false);
+    setLoading(false);
   };
 };
 
@@ -206,13 +203,10 @@ const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
 const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
 const TESTCAFE_CANCEL_WEBIDS_BUTTON = "cancel-webids-button";
 
-export default function AgentPickerModal({
-  type,
-  onClose,
-  setLoading,
-  advancedSharing,
-  editing,
-}) {
+function AgentPickerModal(
+  { type, onClose, setLoading, advancedSharing, editing },
+  ref
+) {
   const [customPolicy, setCustomPolicy] = useState(
     advancedSharing ? type : null
   );
@@ -221,6 +215,7 @@ export default function AgentPickerModal({
   const { data: permissions, mutate: mutatePermissions } = usePolicyPermissions(
     policyName
   );
+  const { mutate: mutateResourceInfo } = useContext(ResourceInfoContext);
 
   const { data: addressBook } = useAddressBook();
   const { data: contacts, error } = useContacts([
@@ -273,6 +268,7 @@ export default function AgentPickerModal({
     accessControl,
     addressBook,
     mutatePermissions,
+    mutateResourceInfo,
     saveAgentToContacts: handleSaveContact,
     onClose,
     setLoading,
@@ -406,6 +402,7 @@ export default function AgentPickerModal({
     <div
       className={classes.paper}
       data-testid={TESTCAFE_ID_ADD_AGENT_PICKER_MODAL}
+      ref={ref}
     >
       <div className={classes.title}>{`${header} for ${resourceName}`}</div>
       {advancedSharing ? (
@@ -527,6 +524,9 @@ export default function AgentPickerModal({
     </div>
   );
 }
+
+const AgentPickerModalRef = forwardRef(AgentPickerModal);
+export default AgentPickerModalRef;
 
 AgentPickerModal.propTypes = {
   onClose: PropTypes.func,

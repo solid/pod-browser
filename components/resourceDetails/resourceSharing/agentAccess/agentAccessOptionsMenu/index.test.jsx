@@ -42,7 +42,6 @@ describe("AgentAccessOptionsMenu", () => {
         permission={permission}
         setLoading={jest.fn}
         setLocalAccess={jest.fn}
-        mutatePermissions={jest.fn}
       />
     );
     expect(asFragment()).toMatchSnapshot();

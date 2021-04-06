@@ -37,8 +37,6 @@ const mockedFetchProfile = fetchProfile;
 const webId = "https://example.com/profile/card#me";
 
 describe("AgentAccess", () => {
-  const mutatePermissions = jest.fn();
-
   describe("with profile", () => {
     beforeEach(() => {
       mockedFetchProfile.mockReturnValue(mockProfileAlice());
@@ -98,7 +96,6 @@ describe("AgentAccess", () => {
             alias: "Editors",
             type: "agent",
           }}
-          mutatePermissions={mutatePermissions}
         />
       );
 
@@ -113,7 +110,6 @@ describe("AgentAccess", () => {
             alias: "Editors",
             type: "agent",
           }}
-          mutatePermissions={mutatePermissions}
         />
       );
 
@@ -129,7 +125,6 @@ describe("AgentAccess", () => {
             alias: "Editors",
             type: "agent",
           }}
-          mutatePermissions={mutatePermissions}
         />
       );
       expect(findByTestId("try-again-button")).toBeTruthy();
@@ -145,7 +140,6 @@ describe("AgentAccess", () => {
             alias: "Editors",
             type: "agent",
           }}
-          mutatePermissions={mutatePermissions}
         />
       );
       const button = await findByTestId("try-again-button");
@@ -163,7 +157,6 @@ describe("AgentAccess", () => {
             alias: "Editors",
             type: "agent",
           }}
-          mutatePermissions={mutatePermissions}
         />
       );
       const button = await findByTestId("try-again-button");
@@ -183,7 +176,6 @@ describe("AgentAccess", () => {
             alias: "Editors",
             type: "agent",
           }}
-          mutatePermissions={mutatePermissions}
         />
       );
       const button = await findByTestId("try-again-button");
@@ -205,7 +197,6 @@ describe("AgentAccess", () => {
             alias: "Editors",
             type: "agent",
           }}
-          mutatePermissions={mutatePermissions}
         />
       );
       await waitFor(() => {

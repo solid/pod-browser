@@ -41,3 +41,12 @@ export const profile = PropTypes.shape({
   webId: PropTypes.string,
   types: PropTypes.arrayOf(PropTypes.string),
 });
+
+export const swrResponse = PropTypes.shape({
+  // eslint-disable-next-line react/forbid-prop-types
+  data: PropTypes.any,
+  // eslint-disable-next-line react/forbid-prop-types
+  error: PropTypes.object,
+  isValidating: PropTypes.bool.isRequired,
+  mutate: PropTypes.func.isRequired,
+});

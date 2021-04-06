@@ -44,7 +44,6 @@ export default function AgentAccessOptionsMenu({
   profile,
   setLoading,
   setLocalAccess,
-  mutatePermissions,
 }) {
   const classes = useStyles();
   const bem = useBem(useStyles());
@@ -109,7 +108,6 @@ export default function AgentAccessOptionsMenu({
             permission={permission}
             setLoading={setLoading}
             setLocalAccess={setLocalAccess}
-            mutatePermissions={mutatePermissions}
           />
         </List>
       </Popover>
@@ -123,7 +121,6 @@ AgentAccessOptionsMenu.propTypes = {
   setLoading: PropTypes.func,
   profile: profilePropType,
   setLocalAccess: PropTypes.func,
-  mutatePermissions: PropTypes.func,
 };
 
 /* istanbul ignore next */
@@ -132,5 +129,4 @@ AgentAccessOptionsMenu.defaultProps = {
   setLoading: () => {},
   profile: null,
   setLocalAccess: () => {},
-  mutatePermissions: () => {},
 };

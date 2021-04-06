@@ -35,6 +35,7 @@ import { serializePromises } from "../../../../src/solidClientHelpers/utils";
 import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
 import { getResourceName } from "../../../../src/solidClientHelpers/resource";
 import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
+import ResourceInfoContext from "../../../../src/contexts/resourceInfoContext";
 
 export const handleConfirmation = ({
   open,
@@ -75,9 +76,9 @@ export const handleRemoveAllAgents = ({
   setLoading,
   accessControl,
   policyToDelete,
-  mutatePermissions,
+  mutateResourceInfo,
 }) => {
-  return () => {
+  return async () => {
     if (!policyToDelete) return;
     setLoading(true);
     const removePermissionsPromiseFactories = webIds?.map(
@@ -88,27 +89,18 @@ export const handleRemoveAllAgents = ({
         if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {
           return accessControl.setRuleAuthenticated(policyToDelete, false);
         }
-        return isNamedPolicy(policyToDelete)
-          ? accessControl.removeAgentFromNamedPolicy(agentWebId, policyToDelete)
-          : accessControl.removeAgentFromCustomPolicy(
-              agentWebId,
-              policyToDelete
-            );
+        return accessControl.removeAgentFromPolicy(agentWebId, policyToDelete);
       }
     );
-    serializePromises(removePermissionsPromiseFactories).then(() => {
-      mutatePermissions();
-      setLoading(false);
-    });
+    const args = await serializePromises(removePermissionsPromiseFactories);
+    const responses = args.filter((res) => typeof res !== "undefined");
+    const { response: latestAcr } = responses[responses.length - 1];
+    await mutateResourceInfo(latestAcr, false);
+    setLoading(false);
   };
 };
 
-export default function PolicyActionButton({
-  permissions,
-  mutatePermissions,
-  setLoading,
-  type,
-}) {
+export default function PolicyActionButton({ permissions, setLoading, type }) {
   const { accessControl } = useContext(AccessControlContext);
   const disableRemoveButton = permissions.length === 0 && isNamedPolicy(type);
   const policyType = getPolicyType(type);
@@ -129,6 +121,7 @@ export default function PolicyActionButton({
     setOpen,
     setTitle,
   } = useContext(ConfirmationDialogContext);
+  const { mutate: mutateResourceInfo } = useContext(ResourceInfoContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
 
   const handleClickOpenDialog = () => {
@@ -149,7 +142,7 @@ export default function PolicyActionButton({
     setLoading,
     accessControl,
     policyToDelete,
-    mutatePermissions,
+    mutateResourceInfo,
   });
 
   const onConfirmation = handleConfirmation({
@@ -192,13 +185,11 @@ export default function PolicyActionButton({
 
 PolicyActionButton.propTypes = {
   permissions: T.arrayOf(T.object),
-  mutatePermissions: T.func,
   setLoading: T.func,
   type: T.string.isRequired,
 };
 
 PolicyActionButton.defaultPtops = {
   permissions: [],
-  mutatePermissions: () => {},
   setLoading: () => {},
 };

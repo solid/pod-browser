@@ -19,16 +19,28 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useContext } from "react";
-import useSWR from "swr";
-import AccessControlContext from "../../contexts/accessControlContext";
+import React, { createContext } from "react";
+import T from "prop-types";
+import { swrResponse as swrResponsePropType } from "../../../constants/propTypes";
 
-export default function usePolicyPermissions(policyName, options = {}) {
-  const { accessControl } = useContext(AccessControlContext);
+const ResourceInfoContext = createContext({
+  data: null,
+  error: null,
+  isValidating: true,
+  mutate: () => {},
+});
 
-  return useSWR(
-    [accessControl, policyName],
-    async () => accessControl.getPermissionsForPolicy(policyName),
-    options
+export default ResourceInfoContext;
+
+export function ResourceInfoProvider({ children, swr }) {
+  return (
+    <ResourceInfoContext.Provider value={swr}>
+      {children}
+    </ResourceInfoContext.Provider>
   );
 }
+
+ResourceInfoProvider.propTypes = {
+  children: T.node.isRequired,
+  swr: swrResponsePropType.isRequired,
+};

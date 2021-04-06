@@ -38,7 +38,7 @@ function ChildComponent() {
   );
 }
 
-describe("PodLocationContext", () => {
+describe("FeatureFlagsContext", () => {
   let SessionProvider;
 
   beforeEach(() => {
