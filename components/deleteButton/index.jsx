@@ -88,7 +88,7 @@ export default function DeleteButton({
   dialogId,
   onDelete,
   successMessage,
-  resourceIri,
+  resourceName,
   ...buttonProps
 }) {
   const bem = useBem(useStyles());
@@ -106,7 +106,7 @@ export default function DeleteButton({
   function onDeleteError(e) {
     setSeverity("error");
     if (isHTTPError(e, 409)) {
-      setMessage(`Cannot delete ${resourceIri} as it still contains files.`);
+      setMessage(`${resourceName} has files in it and cannot be deleted.`);
     } else {
       setMessage(e.toString());
     }
@@ -165,5 +165,5 @@ DeleteButton.propTypes = {
   dialogId: T.string.isRequired,
   onDelete: T.func.isRequired,
   successMessage: T.string.isRequired,
-  resourceIri: T.string.isRequired,
+  resourceName: T.string.isRequired,
 };

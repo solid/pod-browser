@@ -60,7 +60,6 @@ export default function DeleteResourceButton({
 }) {
   const { fetch } = useSession();
   const router = useRouter();
-
   const { alertError } = useContext(AlertContext);
   const policiesContainerUrl = usePoliciesContainerUrl(resourceIri);
   const { data: resourceInfo, error: resourceError } = useResourceInfo(
@@ -86,7 +85,7 @@ export default function DeleteResourceButton({
       confirmationContent={`Are you sure you wish to delete ${name}?`}
       dialogId={`delete-resource-${resourceIri}`}
       onDelete={handleDelete}
-      resourceIri={resourceIri}
+      resourceName={name}
       successMessage={`${name} was successfully deleted.`}
       {...buttonProps}
     >
