@@ -25,6 +25,7 @@ import AgentProfileDetails from "./index";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import { PUBLIC_AGENT_PREDICATE } from "../../../../../src/models/contact/public";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../../src/models/contact/authenticated";
+import { TESTCAFE_ID_MENU_BUTTON } from "../agentAccessOptionsMenu";
 
 const webId = "https://example.com/profile/card#me";
 
@@ -67,6 +68,40 @@ describe("AgentProfileDetails", () => {
       />
     );
     expect(asFragment()).toMatchSnapshot();
+  });
+  it("renders action button for non-inherited permissions", () => {
+    const { asFragment, getByTestId } = renderWithTheme(
+      <AgentProfileDetails
+        resourceIri={resourceIri}
+        permission={permission}
+        profile={profile}
+        setLoading={jest.fn()}
+        setLocalAccess={jest.fn()}
+        mutatePermissions={jest.fn()}
+      />
+    );
+    expect(asFragment()).toMatchSnapshot();
+    expect(getByTestId(TESTCAFE_ID_MENU_BUTTON)).not.toBeNull();
+  });
+  it("does not render action button for inherited permissions", () => {
+    const inheritedPermission = {
+      webId,
+      alias: "editors",
+      type: "agent",
+      inherited: true,
+    };
+    const { asFragment, queryByTestId } = renderWithTheme(
+      <AgentProfileDetails
+        resourceIri={resourceIri}
+        permission={inheritedPermission}
+        profile={profile}
+        setLoading={jest.fn()}
+        setLocalAccess={jest.fn()}
+        mutatePermissions={jest.fn()}
+      />
+    );
+    expect(asFragment()).toMatchSnapshot();
+    expect(queryByTestId(TESTCAFE_ID_MENU_BUTTON)).toBeNull();
   });
 
   it("renders correctly for public agent", () => {

@@ -1,5 +1,58 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`AgentProfileDetails does not render action button for inherited permissions 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-nameAndAvatarContainer"
+  >
+    <div
+      class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+    >
+      <span
+        class="PodBrowser-icon-user PodBrowser-avatar__icon"
+      />
+    </div>
+    <p
+      class="PodBrowser-root PodBrowser-detailText PodBrowser-body1 PodBrowser-detailText"
+      data-testid="agent-web-id"
+    >
+      Example Agent
+    </p>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AgentProfileDetails renders action button for non-inherited permissions 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-nameAndAvatarContainer"
+  >
+    <div
+      class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+    >
+      <span
+        class="PodBrowser-icon-user PodBrowser-avatar__icon"
+      />
+    </div>
+    <p
+      class="PodBrowser-root PodBrowser-detailText PodBrowser-body1 PodBrowser-detailText"
+      data-testid="agent-web-id"
+    >
+      Example Agent
+    </p>
+    <button
+      class="PodBrowser-button"
+      data-testid="menu-button"
+      type="button"
+    >
+      <i
+        class="PodBrowser-icon-more"
+      />
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`AgentProfileDetails renders correctly for authenticated agent 1`] = `
 <DocumentFragment>
   <div
