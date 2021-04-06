@@ -66,6 +66,7 @@ export default function PermissionsForm({
   disabled: propsDisabled,
   onChange,
   webId,
+  isMenu,
 }) {
   const classes = useStyles();
   const { session } = useSession();
@@ -86,16 +87,20 @@ export default function PermissionsForm({
 
   return (
     <div className={classes.container}>
-      <Button
-        data-testid={TESTCAFE_ID_PERMISSIONS_DROPDOWN_BUTTON}
-        className={classes.summary}
-        onClick={toggleOpen(formOpen, setFormOpen)}
-        endIcon={arrowIcon(formOpen)}
-      >
-        <span>{displayPermissions(access)}</span>
-      </Button>
+      {!isMenu ? (
+        <Button
+          data-testid={TESTCAFE_ID_PERMISSIONS_DROPDOWN_BUTTON}
+          className={classes.summary}
+          onClick={toggleOpen(formOpen, setFormOpen)}
+          endIcon={arrowIcon(formOpen)}
+        >
+          <span>{displayPermissions(access)}</span>
+        </Button>
+      ) : null}
       <section
-        className={formOpen ? classes.selectionOpen : classes.selectionClosed}
+        className={
+          formOpen || isMenu ? classes.selectionOpen : classes.selectionClosed
+        }
       >
         <List>
           <PermissionCheckbox
@@ -140,6 +145,7 @@ PermissionsForm.propTypes = {
     append: T.bool.isRequired,
     control: T.bool.isRequired,
   }),
+  isMenu: T.bool,
   webId: T.string,
   children: T.node,
   disabled: T.bool,
@@ -153,6 +159,7 @@ PermissionsForm.defaultProps = {
     append: false,
     control: false,
   },
+  isMenu: false,
   children: null,
   disabled: null,
   webId: null,

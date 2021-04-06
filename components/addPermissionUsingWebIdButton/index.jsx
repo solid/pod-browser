@@ -155,9 +155,10 @@ export default function AddPermissionUsingWebIdButton({
         classes={classes}
         open={open}
         anchorEl={anchorEl}
+        getContentAnchorEl={null}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "bottom",
+          vertical: "top",
           horizontal: "center",
         }}
         transformOrigin={{
@@ -176,6 +177,7 @@ export default function AddPermissionUsingWebIdButton({
           <InputGroup>
             <Label>Assign permissions</Label>
             <PermissionsForm
+              isMenu
               acl={access}
               onChange={setAccess}
               disabled={disabled}
