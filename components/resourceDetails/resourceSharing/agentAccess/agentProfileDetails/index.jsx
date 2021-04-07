@@ -103,6 +103,7 @@ export default function AgentProfileDetails({
       {!permission.inherited ? (
         <AgentAccessOptionsMenu
           resourceIri={resourceIri}
+          profile={profile}
           permission={permission}
           setLoading={setLoading}
           setLocalAccess={setLocalAccess}
