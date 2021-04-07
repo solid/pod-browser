@@ -48,6 +48,24 @@ describe("ConfirmationDialog", () => {
     userEvent.click(button);
     expect(setConfirmed).toHaveBeenCalledWith(true);
   });
+  test("when cancelText and confirmText are null, it displays default values", () => {
+    const setConfirmed = jest.fn();
+    const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
+      open: "confirmation-dialog",
+      setConfirmed,
+      confirmText: null,
+      cancelText: null,
+    });
+    const { getByText } = renderWithTheme(
+      <ConfirmationDialogProvider>
+        <ConfirmationDialog />
+      </ConfirmationDialogProvider>
+    );
+    const confirmButton = getByText("Confirm");
+    expect(confirmButton).not.toBeNull();
+    const cancelButton = getByText("Cancel");
+    expect(cancelButton).not.toBeNull();
+  });
   test("clicking on cancel button calls setConfirmed with true", () => {
     const setConfirmed = jest.fn();
     const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({

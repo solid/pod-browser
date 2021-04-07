@@ -31,6 +31,7 @@ export const permission = PropTypes.shape({
   }),
   webId: PropTypes.string.isRequired,
   alias: PropTypes.string,
+  inherited: PropTypes.bool,
 });
 
 export const profile = PropTypes.shape({
