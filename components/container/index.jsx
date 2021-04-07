@@ -33,9 +33,9 @@ import ContainerDetails from "../containerDetails";
 import { BookmarksContextProvider } from "../../src/contexts/bookmarksContext";
 import AccessForbidden from "../accessForbidden";
 import ResourceNotFound from "../resourceNotFound";
-import useDataset from "../../src/hooks/useDataset";
+import useContainer from "../../src/hooks/useContainer";
 import NotSupported from "../notSupported";
-import useContainerResourceIris from "../../src/hooks/useContainerResourceIris";
+import { getContainerResourceIris } from "../../src/models/container";
 import { getContainerUrl } from "../../src/stringHelpers";
 import ContainerSubHeader from "../containerSubHeader";
 import usePodRootUri from "../../src/hooks/usePodRootUri";
@@ -70,13 +70,14 @@ export default function Container({ iri }) {
     setContainerPath(path);
   }, [iri]);
 
-  const { data: container, error: containerError } = useDataset(containerPath, {
-    refreshInterval: 0,
-  });
-
-  const { data: resourceIris, mutate } = useContainerResourceIris(
-    containerPath
+  const { data: container, error: containerError, mutate } = useContainer(
+    containerPath,
+    {
+      refreshInterval: 0,
+    }
   );
+
+  const resourceIris = container && getContainerResourceIris(container);
 
   const data = useMemo(() => {
     if (!resourceIris) {
@@ -109,7 +110,10 @@ export default function Container({ iri }) {
 
   if (!resourceIris || !container || !podRootIri) return <Spinner />;
 
-  if (!isContainer(container)) return <NotSupported />;
+  const { dataset: containerDataset } = container;
+
+  if (containerDataset && !isContainer(containerDataset))
+    return <NotSupported />;
 
   return (
     <>
