@@ -254,7 +254,7 @@ describe("handleFileSelect", () => {
     resourceList,
   });
 
-  test("it returns a handler that uploads a file", async () => {
+  test("it returns a handler that uploads a file", () => {
     handler({ target: { files: [file] } });
 
     expect(setIsUploading).toHaveBeenCalled();
@@ -262,7 +262,7 @@ describe("handleFileSelect", () => {
     expect(saveUploadedFile).toHaveBeenCalled();
   });
 
-  test("it returns a handler that exits if there are no files", async () => {
+  test("it returns a handler that exits if there are no files", () => {
     handler({ target: { files: [] } });
 
     expect(setIsUploading).not.toHaveBeenCalled();
@@ -271,7 +271,7 @@ describe("handleFileSelect", () => {
     expect(setAlertOpen).not.toHaveBeenCalled();
   });
 
-  test("it returns a handler that returns an error if not successful", async () => {
+  test("it returns a handler that returns an error if not successful", () => {
     handler({ target: { files: ["something else"] } });
 
     expect(setSeverity).toHaveBeenCalledWith("error");
