@@ -34,7 +34,7 @@ import { makeStyles } from "@material-ui/styles";
 import RemoveButton from "./removeButton";
 import styles from "./styles";
 
-const TESTCAFE_ID_MENU_BUTTON = "menu-button";
+export const TESTCAFE_ID_MENU_BUTTON = "menu-button";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function AgentAccessOptionsMenu({

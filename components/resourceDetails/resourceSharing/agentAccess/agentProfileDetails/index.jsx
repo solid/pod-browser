@@ -97,13 +97,15 @@ export default function AgentProfileDetails({
       >
         {localProfile ? displayProfileName(localProfile) : webId}
       </Typography>
-      <AgentAccessOptionsMenu
-        resourceIri={resourceIri}
-        permission={permission}
-        setLoading={setLoading}
-        setLocalAccess={setLocalAccess}
-        mutatePermissions={mutatePermissions}
-      />
+      {!permission.inherited ? (
+        <AgentAccessOptionsMenu
+          resourceIri={resourceIri}
+          permission={permission}
+          setLoading={setLoading}
+          setLocalAccess={setLocalAccess}
+          mutatePermissions={mutatePermissions}
+        />
+      ) : null}
     </div>
   );
 }
