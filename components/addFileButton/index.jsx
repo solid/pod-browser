@@ -107,22 +107,15 @@ export function handleFileSelect({
   resourceList,
 }) {
   return (e) => {
+    if (!e.target.files.length) return;
     try {
-      if (e.target.files.length) {
-        setIsUploading(true);
-        const uploadedFile = e.target.files["0"];
-        setFile(uploadedFile);
-        try {
-          const existingFile = !!resourceList.find(
-            (file) => file.name === normalizeSafeFileName(uploadedFile.name)
-          );
-          saveUploadedFile(uploadedFile, existingFile);
-        } catch (error) {
-          setSeverity("error");
-          setMessage(error.toString());
-          setAlertOpen(true);
-        }
-      }
+      setIsUploading(true);
+      const uploadedFile = e.target.files["0"];
+      setFile(uploadedFile);
+      const existingFile = !!resourceList.find(
+        (file) => file.name === normalizeSafeFileName(uploadedFile.name)
+      );
+      saveUploadedFile(uploadedFile, existingFile);
     } catch (error) {
       setSeverity("error");
       setMessage(error.toString());
