@@ -33,6 +33,7 @@ import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import RemoveButton from "./removeButton";
 import styles from "./styles";
+import { profile as profilePropType } from "../../../../../constants/propTypes";
 
 export const TESTCAFE_ID_MENU_BUTTON = "menu-button";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -40,6 +41,7 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export default function AgentAccessOptionsMenu({
   resourceIri,
   permission,
+  profile,
   setLoading,
   setLocalAccess,
   mutatePermissions,
@@ -103,6 +105,7 @@ export default function AgentAccessOptionsMenu({
           </ListItem>
           <RemoveButton
             resourceIri={resourceIri}
+            profile={profile}
             permission={permission}
             setLoading={setLoading}
             setLocalAccess={setLocalAccess}
@@ -118,6 +121,7 @@ AgentAccessOptionsMenu.propTypes = {
   resourceIri: PropTypes.string,
   permission: PropTypes.shape().isRequired,
   setLoading: PropTypes.func,
+  profile: profilePropType,
   setLocalAccess: PropTypes.func,
   mutatePermissions: PropTypes.func,
 };
@@ -126,6 +130,7 @@ AgentAccessOptionsMenu.propTypes = {
 AgentAccessOptionsMenu.defaultProps = {
   resourceIri: null,
   setLoading: () => {},
+  profile: null,
   setLocalAccess: () => {},
   mutatePermissions: () => {},
 };

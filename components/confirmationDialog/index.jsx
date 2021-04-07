@@ -43,9 +43,14 @@ export const TESTCAFE_ID_CONFIRMATION_DIALOG = "confirmation-dialog";
 export default function ConfirmationDialog() {
   const classes = useStyles();
 
-  const { open, title, content, setConfirmed } = useContext(
-    ConfirmationDialogContext
-  );
+  const {
+    open,
+    title,
+    content,
+    setConfirmed,
+    cancelText,
+    confirmText,
+  } = useContext(ConfirmationDialogContext);
 
   return (
     <Dialog
@@ -74,7 +79,7 @@ export default function ConfirmationDialog() {
           autoFocus
           onClick={() => setConfirmed(false)}
         >
-          Cancel
+          {cancelText || "Cancel"}
         </Button>
         <Button
           data-testid={TESTCAFE_ID_CONFIRM_BUTTON}
@@ -82,7 +87,7 @@ export default function ConfirmationDialog() {
           type="submit"
           onClick={() => setConfirmed(true)}
         >
-          Confirm
+          {confirmText || "Confirm"}
         </Button>
       </DialogActions>
     </Dialog>

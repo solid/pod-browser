@@ -38,6 +38,10 @@ import styles from "./styles";
 import { displayProfileName } from "../../../../../src/solidClientHelpers/profile";
 import Avatar from "../../../../avatar";
 import AgentAccessOptionsMenu from "../agentAccessOptionsMenu";
+import {
+  permission as permissionPropType,
+  profile as profilePropType,
+} from "../../../../../constants/propTypes";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -83,7 +87,6 @@ export default function AgentProfileDetails({
     }
     return profile;
   };
-
   const localProfile = getLocalProfile(permission);
   const avatarProps = getAvatarProps(permission);
 
@@ -100,6 +103,7 @@ export default function AgentProfileDetails({
       {!permission.inherited ? (
         <AgentAccessOptionsMenu
           resourceIri={resourceIri}
+          profile={profile}
           permission={permission}
           setLoading={setLoading}
           setLocalAccess={setLocalAccess}
@@ -111,8 +115,8 @@ export default function AgentProfileDetails({
 }
 AgentProfileDetails.propTypes = {
   resourceIri: T.string.isRequired,
-  permission: T.shape().isRequired,
-  profile: T.shape(),
+  permission: permissionPropType.isRequired,
+  profile: profilePropType,
   setLoading: T.func,
   setLocalAccess: T.func,
   mutatePermissions: T.func,
