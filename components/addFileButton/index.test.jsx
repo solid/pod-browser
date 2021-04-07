@@ -181,6 +181,30 @@ describe("handleSaveResource", () => {
     expect(setAlertOpen).toHaveBeenCalledWith(true);
   });
 
+  test("it returns a handler that gives feedback to user if an error occurs", async () => {
+    const fileName = "myfile.txt";
+    const newFilePath = currentUri + encodeURIComponent(fileName);
+
+    jest
+      .spyOn(SolidClientFns, "overwriteFile")
+      .mockRejectedValueOnce("There was an error");
+
+    await handler(file);
+
+    expect(SolidClientFns.overwriteFile).toHaveBeenCalledWith(
+      newFilePath,
+      file,
+      {
+        type: file.type,
+        fetch,
+      }
+    );
+
+    expect(setSeverity).toHaveBeenCalledWith("error");
+    expect(setMessage).toHaveBeenCalledWith("There was an error");
+    expect(setAlertOpen).toHaveBeenCalledWith(true);
+  });
+
   it("handles resources that starts with a dash", async () => {
     const fileName = "-starting-with-a-dash-";
     const fileWithDash = new File(["test"], fileName, {
@@ -231,15 +255,24 @@ describe("handleFileSelect", () => {
   });
 
   test("it returns a handler that uploads a file", async () => {
-    await handler({ target: { files: [file] } });
+    handler({ target: { files: [file] } });
 
     expect(setIsUploading).toHaveBeenCalled();
     expect(setFile).toHaveBeenCalled();
     expect(saveUploadedFile).toHaveBeenCalled();
   });
 
+  test("it returns a handler that exits if there are no files", async () => {
+    handler({ target: { files: [] } });
+
+    expect(setIsUploading).not.toHaveBeenCalled();
+    expect(setSeverity).not.toHaveBeenCalledWith();
+    expect(setMessage).not.toHaveBeenCalled();
+    expect(setAlertOpen).not.toHaveBeenCalled();
+  });
+
   test("it returns a handler that returns an error if not successful", async () => {
-    await handler();
+    handler({ target: { files: ["something else"] } });
 
     expect(setSeverity).toHaveBeenCalledWith("error");
     expect(setMessage).toHaveBeenCalled();

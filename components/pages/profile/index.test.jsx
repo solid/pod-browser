@@ -43,8 +43,11 @@ describe("Profile page", () => {
   });
   test("returns null if session request is in progress", () => {
     const sessionRequestInProgress = true;
-    const session = mockSession(sessionRequestInProgress);
-    const SessionProvider = mockSessionContextProvider(session);
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(
+      session,
+      sessionRequestInProgress
+    );
 
     const { asFragment } = renderWithTheme(
       <SessionProvider>
