@@ -21,7 +21,7 @@
 
 import * as solidClientFns from "@inrupt/solid-client";
 import { mockContainer } from "../../../__testUtils/mockContainer";
-import { getContainer, getContainerResourceIris } from "./index";
+import { getContainer, getContainerResourceUrlAll } from "./index";
 
 const containerUrl = "http://example.com/container/";
 const fetch = jest.fn();
@@ -44,10 +44,10 @@ describe("getContainer", () => {
   });
 });
 
-describe("getContainerResourceIris", () => {
+describe("getContainerResourceUrlAll", () => {
   it("returns the iris for resources in the container", () => {
-    expect(getContainerResourceIris(container)).toHaveLength(2);
-    expect(getContainerResourceIris(container)[0]).toEqual(iri1);
-    expect(getContainerResourceIris(container)[1]).toEqual(iri2);
+    expect(getContainerResourceUrlAll(container)).toHaveLength(2);
+    expect(getContainerResourceUrlAll(container)[0]).toEqual(iri1);
+    expect(getContainerResourceUrlAll(container)[1]).toEqual(iri2);
   });
 });

@@ -30,6 +30,6 @@ export async function getContainer(url, { fetch }) {
   return { dataset, thing };
 }
 
-export function getContainerResourceIris({ thing }) {
+export function getContainerResourceUrlAll({ thing }) {
   return getIriAll(thing, ldp.contains);
 }

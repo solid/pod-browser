@@ -33,7 +33,7 @@ import useResourceInfo from "../../src/hooks/useResourceInfo";
 import useAccessControl from "../../src/hooks/useAccessControl";
 import { mockContainer } from "../../__testUtils/mockContainer";
 import { mockModel } from "../../__testUtils/mockModel";
-import { getContainerResourceIris } from "../../src/models/container";
+import { getContainerResourceUrlAll } from "../../src/models/container";
 import { TESTCAFE_ID_AUTH_PROFILE_LOAD_ERROR } from "../authProfileLoadError";
 import { TESTCAFE_ID_POD_ROOT_LOAD_ERROR } from "../podRootLoadError";
 import { TESTCAFE_ID_NO_CONTROL_ERROR } from "../noControlWarning";
@@ -46,7 +46,7 @@ jest.mock("../../src/hooks/useContainer");
 const mockedContainerHook = useContainer;
 
 jest.mock("../../src/models/container");
-const mockedGetContainerResourceIris = getContainerResourceIris;
+const mockedGetContainerResourceUrlAll = getContainerResourceUrlAll;
 
 jest.mock("../../src/hooks/useAuthenticatedProfile");
 const mockedAuthenticatedProfileHook = useAuthenticatedProfile;
@@ -80,7 +80,7 @@ describe("Container view", () => {
       replace: jest.fn(),
       query: {},
     });
-    mockedGetContainerResourceIris.mockReturnValue([
+    mockedGetContainerResourceUrlAll.mockReturnValue([
       "https://myaccount.mypodserver.com/inbox",
       "https://myaccount.mypodserver.com/private",
       "https://myaccount.mypodserver.com/note.txt",
@@ -93,7 +93,7 @@ describe("Container view", () => {
   });
 
   test("Renders a spinner if data is loading", () => {
-    mockedGetContainerResourceIris.mockReturnValue(undefined);
+    mockedGetContainerResourceUrlAll.mockReturnValue(undefined);
 
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />

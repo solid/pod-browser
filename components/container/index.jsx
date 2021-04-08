@@ -35,7 +35,7 @@ import AccessForbidden from "../accessForbidden";
 import ResourceNotFound from "../resourceNotFound";
 import useContainer from "../../src/hooks/useContainer";
 import NotSupported from "../notSupported";
-import { getContainerResourceIris } from "../../src/models/container";
+import { getContainerResourceUrlAll } from "../../src/models/container";
 import { getContainerUrl } from "../../src/stringHelpers";
 import ContainerSubHeader from "../containerSubHeader";
 import usePodRootUri from "../../src/hooks/usePodRootUri";
@@ -77,7 +77,7 @@ export default function Container({ iri }) {
     }
   );
 
-  const resourceIris = container && getContainerResourceIris(container);
+  const resourceIris = container && getContainerResourceUrlAll(container);
 
   const data = useMemo(() => {
     if (!resourceIris) {
