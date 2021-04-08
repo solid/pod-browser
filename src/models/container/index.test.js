@@ -20,9 +20,7 @@
  */
 
 import * as solidClientFns from "@inrupt/solid-client";
-import { mockSolidDatasetFrom } from "@inrupt/solid-client";
-import { ldp } from "rdf-namespaces";
-import { chain } from "../../solidClientHelpers/utils";
+import { mockContainer } from "../../../__testUtils/mockContainer";
 import { getContainer, getContainerResourceIris } from "./index";
 
 const containerUrl = "http://example.com/container/";
@@ -31,15 +29,8 @@ const error500 = "500 Server error";
 const iri1 = "http://example.com/foo";
 const iri2 = "http://example.com/bar";
 
-const thing = chain(
-  solidClientFns.mockThingFrom(containerUrl),
-  (t) => solidClientFns.addUrl(t, ldp.contains, iri1),
-  (t) => solidClientFns.addUrl(t, ldp.contains, iri2)
-);
-const dataset = chain(mockSolidDatasetFrom(containerUrl), (t) =>
-  solidClientFns.setThing(t, thing)
-);
-const container = { dataset, thing };
+const container = mockContainer(containerUrl, [iri1, iri2]);
+const { dataset } = container;
 
 describe("getContainer", () => {
   it("returns the dataset if available", async () => {

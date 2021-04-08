@@ -21,12 +21,7 @@
 
 import React from "react";
 import * as RouterFns from "next/router";
-import {
-  addUrl,
-  createThing,
-  mockSolidDatasetFrom,
-  setThing,
-} from "@inrupt/solid-client";
+import { addUrl } from "@inrupt/solid-client";
 import { space } from "rdf-namespaces";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import Container from "./index";
@@ -36,8 +31,9 @@ import { mockProfileAlice } from "../../__testUtils/mockPersonResource";
 import usePodRootUri from "../../src/hooks/usePodRootUri";
 import useResourceInfo from "../../src/hooks/useResourceInfo";
 import useAccessControl from "../../src/hooks/useAccessControl";
+import { mockContainer } from "../../__testUtils/mockContainer";
+import { mockModel } from "../../__testUtils/mockModel";
 import { getContainerResourceIris } from "../../src/models/container";
-import { chain } from "../../src/solidClientHelpers/utils";
 import { TESTCAFE_ID_AUTH_PROFILE_LOAD_ERROR } from "../authProfileLoadError";
 import { TESTCAFE_ID_POD_ROOT_LOAD_ERROR } from "../podRootLoadError";
 import { TESTCAFE_ID_NO_CONTROL_ERROR } from "../noControlWarning";
@@ -66,9 +62,8 @@ const mockedAccessControlHook = useAccessControl;
 
 describe("Container view", () => {
   const iri = "https://example.com/container/";
-  const thing = createThing({ url: iri });
-  const dataset = chain(mockSolidDatasetFrom(iri), (t) => setThing(t, thing));
-  const container = { dataset, thing };
+  const container = mockContainer(iri);
+  const { dataset } = container;
 
   beforeEach(() => {
     mockedContainerHook.mockReturnValue({ data: container, mutate: jest.fn() });
@@ -114,7 +109,7 @@ describe("Container view", () => {
 
   it("renders Access Forbidden if the fetch for container returns 401", () => {
     mockedContainerHook.mockReturnValue({
-      error: { message: "401" },
+      error: new Error("401"),
     });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
@@ -125,7 +120,7 @@ describe("Container view", () => {
 
   it("renders Access Forbidden if the fetch for container returns 403", () => {
     mockedContainerHook.mockReturnValue({
-      error: { message: "403" },
+      error: new Error("403"),
     });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
@@ -136,7 +131,7 @@ describe("Container view", () => {
 
   it("renders Access Forbidden if the fetch for container returns 404", () => {
     mockedContainerHook.mockReturnValue({
-      error: { message: "404" },
+      error: new Error("404"),
     });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
@@ -147,7 +142,7 @@ describe("Container view", () => {
 
   it("renders Not supported if the fetch for container returns 500", () => {
     mockedContainerHook.mockReturnValue({
-      error: { message: "500" },
+      error: new Error("500"),
     });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
@@ -159,7 +154,7 @@ describe("Container view", () => {
   it("renders Not Supported if resource loaded is not a container", () => {
     const resourceIri = "http://example.com/resource";
     mockedContainerHook.mockReturnValue({
-      data: { dataset: mockSolidDatasetFrom(resourceIri) },
+      data: mockModel(resourceIri),
       mutate: jest.fn(),
     });
     const { asFragment } = renderWithTheme(<Container iri={resourceIri} />);
