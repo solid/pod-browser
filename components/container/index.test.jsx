@@ -78,7 +78,7 @@ describe("Container view", () => {
       ),
     });
     mockedPodRootUriHook.mockReturnValue(iri);
-    mockedResourceInfoHook.mockReturnValue({ data: container });
+    mockedResourceInfoHook.mockReturnValue({ data: dataset });
     mockedAccessControlHook.mockReturnValue({});
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "asPath",
