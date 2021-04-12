@@ -33,3 +33,57 @@ export function generateRedirectUrl(path) {
 export function hardRedirect(path) {
   window.location.href = path;
 }
+
+export function getFakeLocalStorage() {
+  let memoryStore = {};
+  return {
+    getItem: (key) => memoryStore[key] ?? null,
+    setItem: (key, value) => {
+      memoryStore[key] = value.toString();
+    },
+    removeItem: (key) => {
+      delete memoryStore[key];
+    },
+    clear: () => {
+      memoryStore = {};
+    },
+  };
+}
+
+export function getLocalStorage() {
+  if (typeof window !== "undefined") {
+    return window.localStorage;
+  }
+  return getFakeLocalStorage();
+}
+
+export function getFakeConsole() {
+  const noop = () => {};
+  return {
+    assert: noop,
+    clear: noop,
+    count: noop,
+    countReset: noop,
+    debug: noop,
+    dir: noop,
+    dirxml: noop,
+    error: noop,
+    group: noop,
+    groupEnd: noop,
+    info: noop,
+    log: noop,
+    table: noop,
+    time: noop,
+    timeEnd: noop,
+    timeLog: noop,
+    trace: noop,
+    warn: noop,
+  };
+}
+
+export function getConsole() {
+  if (typeof window !== "undefined") {
+    return window.console;
+  }
+  return getFakeConsole();
+}
