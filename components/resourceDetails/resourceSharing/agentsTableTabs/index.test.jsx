@@ -53,7 +53,7 @@ describe("AgentTableTabs", () => {
       />
     );
 
-    const tabGroups = getByTestId("tab-groups");
+    const tabGroups = getByTestId(TESTCAFE_ID_TAB_GROUPS);
     userEvent.click(tabGroups);
     expect(handleTabChange).toHaveBeenCalled();
   });

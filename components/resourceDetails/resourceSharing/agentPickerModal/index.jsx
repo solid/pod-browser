@@ -41,9 +41,7 @@ import AccessControlContext from "../../../../src/contexts/accessControlContext"
 import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
 import { getResourceName } from "../../../../src/solidClientHelpers/resource";
 import PolicyHeader from "../policyHeader";
-import AgentsTableTabs from "../agentsTableTabs";
 import AgentsSearchBar from "../agentsSearchBar";
-import MobileAgentsSearchBar from "../mobileAgentsSearchBar";
 import AddAgentRow from "../addAgentRow";
 import AgentPickerEmptyState from "../agentPickerEmptyState";
 import CustomPolicyDropdown from "../customPolicyDropdown";
@@ -200,7 +198,7 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 
 const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
-const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
+export const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
 const TESTCAFE_CANCEL_WEBIDS_BUTTON = "cancel-webids-button";
 
 function AgentPickerModal(
@@ -234,13 +232,15 @@ function AgentPickerModal(
   const { dataset } = useContext(DatasetContext);
   const resourceIri = getSourceUrl(dataset);
   const resourceName = getResourceName(resourceIri);
-  const [selectedTabValue, setSelectedTabValue] = useState("");
+  // TODO: Uncomment to reintroduce tabs
+  // const [selectedTabValue, setSelectedTabValue] = useState("");
   const { accessControl } = useContext(AccessControlContext);
   const [newAgentsWebIds, setNewAgentsWebIds] = useState([]);
   const [webIdsToDelete, setWebIdsToDelete] = useState([]);
   const [bypassDialog, setBypassDialog] = useState(false);
   const [contactsArray, setContactsArray] = useState([]);
-  const [filteredContacts, setFilteredContacts] = useState([]);
+  // TODO: Uncomment to reintroduce tabs
+  // const [filteredContacts, setFilteredContacts] = useState([]);
   const [addingWebId, setAddingWebId] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
   const dialogId = "add-new-permissions";
@@ -254,9 +254,10 @@ function AgentPickerModal(
     setTitle,
   } = useContext(ConfirmationDialogContext);
 
-  const handleTabChange = (e, newValue) => {
-    setSelectedTabValue(newValue);
-  };
+  // TODO: Uncomment to reintroduce tabs
+  // const handleTabChange = (e, newValue) => {
+  //   setSelectedTabValue(newValue);
+  // };
 
   const handleFilterChange = (e) => {
     const { value } = e.target;
@@ -353,14 +354,15 @@ function AgentPickerModal(
     setContactsArray(contactsArrayForTable);
   }, [contacts, addressBook]);
 
-  useEffect(() => {
-    if (selectedTabValue) {
-      const filtered = contactsArray.filter(({ thing }) =>
-        selectedTabValue.isOfType(thing)
-      );
-      setFilteredContacts(filtered);
-    }
-  }, [contactsArray, selectedTabValue, globalFilter]);
+  // TODO: Uncomment to reintroduce tabs
+  // useEffect(() => {
+  //   if (selectedTabValue) {
+  //     const filtered = contactsArray.filter(({ thing }) =>
+  //       selectedTabValue.isOfType(thing)
+  //     );
+  //     setFilteredContacts(filtered);
+  //   }
+  // }, [contactsArray, selectedTabValue, globalFilter]);
 
   useEffect(() => {
     onConfirmation(confirmationSetup, confirmed);
@@ -374,13 +376,16 @@ function AgentPickerModal(
       thing: emptyThing,
       dataset: addressBookDataset,
     };
-    if (selectedTabValue) {
-      setFilteredContacts([newItem, ...filteredContacts]);
-    }
+    // TODO: Uncomment to reintroduce tabs
+    // if (selectedTabValue) {
+    //   setFilteredContacts([newItem, ...filteredContacts]);
+    // }
     setContactsArray([newItem, ...contactsArray]);
   };
 
-  const contactsForTable = selectedTabValue ? filteredContacts : contactsArray;
+  const contactsForTable = contactsArray;
+  // TODO: Uncomment to reintroduce tabs
+  // const contactsForTable = selectedTabValue ? filteredContacts : contactsArray;
   const toggleCheckbox = (e, index, value) => {
     if (index === 0 && addingWebId) return null;
     if (
@@ -415,32 +420,10 @@ function AgentPickerModal(
         <PolicyHeader type={type} />
       )}
       <div className={classes.tableContainer}>
-        <div className={classes.tabsAndAddButtonContainer}>
-          <AgentsTableTabs
-            handleTabChange={handleTabChange}
-            selectedTabValue={selectedTabValue}
-            className={classes.modalTabsContainer}
-            tabsValues={{
-              all: "",
-              people: PERSON_CONTACT,
-              groups: GROUP_CONTACT,
-            }}
-          />
-          <MobileAgentsSearchBar handleFilterChange={handleFilterChange} />
-
-          <AddWebIdButton
-            onClick={handleAddRow}
-            disabled={addingWebId}
-            className={classes.desktopOnly}
-          />
-        </div>
         <AgentsSearchBar handleFilterChange={handleFilterChange} />
-
-        <AddWebIdButton
-          onClick={handleAddRow}
-          disabled={addingWebId}
-          className={classes.mobileOnly}
-        />
+        <div className={classes.addWebIdButtonContainer}>
+          <AddWebIdButton onClick={handleAddRow} disabled={addingWebId} />
+        </div>
         {!contacts && !error && (
           <Container variant="empty">
             <CircularProgress />
@@ -491,20 +474,22 @@ function AgentPickerModal(
             />
           </Table>
         )}
-        {!!contacts && !contactsForTable.length && !selectedTabValue && (
+        {/* TODO: Uncomment to reintroduce tabs */}
+        {/* {!!contacts && !contactsForTable.length && !selectedTabValue && ( */}
+        {!!contacts && !contactsForTable.length && (
           <AgentPickerEmptyState onClick={handleAddRow} />
         )}
-        {!!contacts && !contactsForTable.length && !!selectedTabValue && (
-          <span className={classes.emptyStateTextContainer}>
-            <p>
-              {`No ${
-                selectedTabValue === PERSON_CONTACT ? "people " : "groups "
-              } found`}
-            </p>
-          </span>
-        )}
+        {/* TODO: Uncomment to reintroduce tabs */}
+        {/* {!!contacts && !contactsForTable.length && !!selectedTabValue && ( */}
+        {/*  <span className={classes.emptyStateTextContainer}> */}
+        {/*    <p> */}
+        {/*      {`No ${ */}
+        {/*        selectedTabValue === PERSON_CONTACT ? "people " : "groups " */}
+        {/*      } found`} */}
+        {/*    </p> */}
+        {/*  </span> */}
+        {/* )} */}
       </div>
-      {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
       <div className={classes.buttonsContainer}>
         <Button
           variant="secondary"
