@@ -27,6 +27,11 @@ import AgentAccessTable, { TESTCAFE_ID_AGENT_ACCESS_TABLE } from "./index";
 import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
 import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
 import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
+import { TESTCAFE_ID_SEARCH_INPUT } from "../agentsSearchBar";
+import {
+  TESTCAFE_ID_TAB_GROUPS,
+  TESTCAFE_ID_TAB_PEOPLE,
+} from "../agentsTableTabs";
 
 jest.mock("../../../../src/hooks/usePolicyPermissions");
 const mockedUsePolicyPermissions = usePolicyPermissions;
@@ -197,7 +202,7 @@ describe("AgentAccessTable", () => {
     );
     waitFor(() => {
       expect(queryByText("Example 2")).not.toBeNull();
-      const searchInput = getByTestId("search-input");
+      const searchInput = getByTestId(TESTCAFE_ID_SEARCH_INPUT);
       userEvent.type(searchInput, "2");
       expect(queryByText("Example 4")).toBeNull();
       expect(queryByText("Example 2")).not.toBeNull();
@@ -235,8 +240,8 @@ describe("AgentAccessTable", () => {
       <AgentAccessTable type={type} />
     );
     waitFor(() => {
-      const tabPeople = getByTestId("tab-people");
-      const tabGroups = getByTestId("tab-groups");
+      const tabPeople = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
+      const tabGroups = getByTestId(TESTCAFE_ID_TAB_GROUPS);
       userEvent.click(tabPeople);
       expect(queryByText("Example 1")).not.toBeNull();
       expect(queryByText("Not a person")).toBeNull();
@@ -279,8 +284,8 @@ describe("AgentAccessTable", () => {
     );
 
     waitFor(() => {
-      const tabPeople = getByTestId("tab-people");
-      const tabGroups = getByTestId("tab-groups");
+      const tabPeople = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
+      const tabGroups = getByTestId(TESTCAFE_ID_TAB_GROUPS);
       userEvent.click(tabPeople);
       expect(queryByText("No people found")).not.toBeNull();
       expect(queryByText("Not a person")).toBeNull();

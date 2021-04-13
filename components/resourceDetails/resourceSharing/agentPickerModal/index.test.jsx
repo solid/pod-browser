@@ -27,6 +27,7 @@ import AgentPickerModal, {
   handleConfirmation,
   handleSaveContact,
   handleSubmit,
+  TESTCAFE_SUBMIT_WEBIDS_BUTTON,
 } from "./index";
 import * as AddressBookFns from "../../../../src/addressBook";
 import * as personModelFunctions from "../../../../src/models/contact/person";
@@ -43,6 +44,16 @@ import useAddressBook from "../../../../src/hooks/useAddressBook";
 import useContacts from "../../../../src/hooks/useContacts";
 import { PUBLIC_AGENT_PREDICATE } from "../../../../src/models/contact/public";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../src/models/contact/authenticated";
+import {
+  TESTCAFE_ID_ADD_WEBID_BUTTON,
+  TESTCAFE_ID_WEBID_INPUT,
+} from "../addAgentRow";
+import { TESTCAFE_ADD_WEBID_BUTTON } from "./addWebIdButton";
+import { TESTCAFE_ID_SEARCH_INPUT } from "../agentsSearchBar";
+import {
+  TESTCAFE_ID_TAB_GROUPS,
+  TESTCAFE_ID_TAB_PEOPLE,
+} from "../agentsTableTabs";
 
 jest.mock("../../../../src/hooks/useAddressBook");
 const mockedUseAddressBook = useAddressBook;
@@ -437,7 +448,6 @@ describe("handleSaveContact", () => {
     expect(jest.spyOn(AddressBookFns, "saveContact")).not.toHaveBeenCalled();
   });
   it("cancels the operation if webId is already in contacts", () => {
-    handleSaveContact(iri, contacts, addressBook, fetch);
     const name = "Example";
     const avatar = "https://someavatar.com";
     const webId = iri;
@@ -450,10 +460,11 @@ describe("handleSaveContact", () => {
       .spyOn(personModelFunctions, "findPersonContactInAddressBook")
       .mockResolvedValue([iri]);
 
+    handleSaveContact(iri, contacts, addressBook, fetch);
+
     expect(jest.spyOn(AddressBookFns, "saveContact")).not.toHaveBeenCalled();
   });
   it("saves the contact", () => {
-    handleSaveContact(iri, contacts, addressBook, fetch);
     const name = "Example";
     const avatar = "https://someavatar.com";
     const webId = iri;
@@ -466,6 +477,8 @@ describe("handleSaveContact", () => {
       .spyOn(personModelFunctions, "findPersonContactInAddressBook")
       .mockResolvedValue([]);
 
+    handleSaveContact(iri, contacts, addressBook, fetch);
+
     expect(jest.spyOn(AddressBookFns, "saveContact")).not.toHaveBeenCalled();
   });
 });
@@ -476,6 +489,37 @@ describe("AgentPickerModal without contacts", () => {
   });
   const onClose = jest.fn();
   const accessControl = mockAccessControl();
+
+  it("simply closes the modal if no agents are selected", async () => {
+    mockedUseContacts.mockReturnValue({ data: [] });
+    mockedUsePolicyPermissions.mockReturnValue({
+      data: permissions,
+      mutate: jest.fn(),
+    });
+
+    const setConfirmed = jest.fn();
+    const contextValue = {
+      setConfirmed,
+    };
+
+    const { getByTestId } = renderWithTheme(
+      <ConfirmationDialogContext.Provider value={contextValue}>
+        <AccessControlContext.Provider value={{ accessControl }}>
+          <AgentPickerModal
+            type="editors"
+            text={{ editText: "Edit Editors", saveText: "Save Editors" }}
+            onClose={onClose}
+          />
+        </AccessControlContext.Provider>
+      </ConfirmationDialogContext.Provider>
+    );
+
+    const submitButton = getByTestId(TESTCAFE_SUBMIT_WEBIDS_BUTTON);
+    userEvent.click(submitButton);
+
+    expect(onClose).toHaveBeenCalledWith();
+    expect(setConfirmed).toHaveBeenCalledWith(false);
+  });
 
   it("updates the temporary row with profile data when available", async () => {
     const name = "Example";
@@ -500,11 +544,11 @@ describe("AgentPickerModal without contacts", () => {
         />
       </AccessControlContext.Provider>
     );
-    const addWebIdButton = getByTestId("add-webid-button");
+    const addWebIdButton = getByTestId(TESTCAFE_ADD_WEBID_BUTTON);
     userEvent.click(addWebIdButton);
-    const input = await findByTestId("webid-input");
+    const input = await findByTestId(TESTCAFE_ID_WEBID_INPUT);
     userEvent.type(input, webId);
-    const addButton = getByTestId("add-button");
+    const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
     userEvent.click(addButton);
 
     const agentWebId = await findByText("Example");
@@ -533,11 +577,11 @@ describe("AgentPickerModal without contacts", () => {
       </AccessControlContext.Provider>
     );
 
-    const addWebIdButton = getByTestId("add-webid-button");
+    const addWebIdButton = getByTestId(TESTCAFE_ADD_WEBID_BUTTON);
     userEvent.click(addWebIdButton);
-    const input = await findByTestId("webid-input");
+    const input = await findByTestId(TESTCAFE_ID_WEBID_INPUT);
     userEvent.type(input, webId);
-    const addButton = getByTestId("add-button");
+    const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
     userEvent.click(addButton);
     const agentWebId = await findByText(webId);
 
@@ -603,14 +647,14 @@ describe("AgentPickerModal without contacts", () => {
 
     const webId = "https://somewebid.com";
 
-    const addWebIdButton = getByTestId("add-webid-button");
+    const addWebIdButton = getByTestId(TESTCAFE_ADD_WEBID_BUTTON);
     userEvent.click(addWebIdButton);
-    const input = await findByTestId("webid-input");
+    const input = await findByTestId(TESTCAFE_ID_WEBID_INPUT);
     userEvent.type(input, webId);
-    const addButton = getByTestId("add-button");
+    const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
     userEvent.click(addButton);
     await findByText(webId);
-    const submitWebIdsButton = getByTestId("submit-webids-button");
+    const submitWebIdsButton = getByTestId(TESTCAFE_SUBMIT_WEBIDS_BUTTON);
     userEvent.click(submitWebIdsButton);
     expect(setTitle).toHaveBeenCalledWith("Change permissions for 1 person");
     expect(setOpen).toHaveBeenCalledWith("add-new-permissions");
@@ -655,7 +699,7 @@ describe("AgentPickerModal without contacts", () => {
 
     const checkBoxes = getAllByRole("checkbox");
     userEvent.click(checkBoxes[0]);
-    const submitWebIdsButton = getByTestId("submit-webids-button");
+    const submitWebIdsButton = getByTestId(TESTCAFE_SUBMIT_WEBIDS_BUTTON);
     userEvent.click(submitWebIdsButton);
     expect(setConfirmed).toHaveBeenCalledWith(true);
   });
@@ -698,22 +742,22 @@ describe("AgentPickerModal without contacts", () => {
       .spyOn(ProfileFns, "fetchProfile")
       .mockRejectedValueOnce({ error: "error" });
 
-    const addWebIdButton = getByTestId("add-webid-button");
+    const addWebIdButton = getByTestId(TESTCAFE_ADD_WEBID_BUTTON);
     userEvent.click(addWebIdButton);
-    const input = await findByTestId("webid-input");
+    const input = await findByTestId(TESTCAFE_ID_WEBID_INPUT);
     userEvent.type(input, webId1);
-    const addButton = getByTestId("add-button");
+    const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
     userEvent.click(addButton);
     await findByText(webId1);
     expect(addWebIdButton).not.toBeDisabled();
     userEvent.click(addWebIdButton);
-    const input2 = await findByTestId("webid-input");
+    const input2 = await findByTestId(TESTCAFE_ID_WEBID_INPUT);
     userEvent.type(input2, webId2);
-    const addButton2 = getByTestId("add-button");
+    const addButton2 = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
     userEvent.click(addButton2);
     await findByText(webId2);
 
-    const submitWebIdsButton = getByTestId("submit-webids-button");
+    const submitWebIdsButton = getByTestId(TESTCAFE_SUBMIT_WEBIDS_BUTTON);
     userEvent.click(submitWebIdsButton);
     expect(setTitle).toHaveBeenCalledWith("Change permissions for 2 people");
     expect(setOpen).toHaveBeenCalledWith("add-new-permissions");
@@ -754,7 +798,7 @@ describe("AgentPickerModal without contacts", () => {
       .spyOn(ProfileFns, "fetchProfile")
       .mockRejectedValueOnce({ error: "error" });
 
-    const addWebIdButton = getByTestId("add-webid-button");
+    const addWebIdButton = getByTestId(TESTCAFE_ADD_WEBID_BUTTON);
     userEvent.click(addWebIdButton);
     const checkBoxes = getAllByRole("checkbox");
     expect(checkBoxes[0]).toBeChecked();
@@ -779,13 +823,13 @@ describe("AgentPickerModal without contacts", () => {
       </AccessControlContext.Provider>
     );
 
-    const addWebIdButton = getByTestId("add-webid-button");
+    const addWebIdButton = getByTestId(TESTCAFE_ADD_WEBID_BUTTON);
     userEvent.click(addWebIdButton);
-    const input = await findByTestId("webid-input");
+    const input = await findByTestId(TESTCAFE_ID_WEBID_INPUT);
     userEvent.type(input, webId);
-    const addButton = getByTestId("add-button");
+    const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
     userEvent.click(addButton);
-    const submitWebIdsButton = getByTestId("submit-webids-button");
+    const submitWebIdsButton = getByTestId(TESTCAFE_SUBMIT_WEBIDS_BUTTON);
     userEvent.click(submitWebIdsButton);
     await waitFor(() => {
       expect(findByText("That WebID has already been added")).not.toBeNull();
@@ -865,7 +909,7 @@ describe("AgentPickerModal with contacts", () => {
         onClose={onClose}
       />
     );
-    const searchBar = getByTestId("search-input");
+    const searchBar = getByTestId(TESTCAFE_ID_SEARCH_INPUT);
     userEvent.type(searchBar, "Example 1");
     expect(queryAllByTestId("agent-webid")).toHaveLength(1);
     expect(findByText("Example 1")).not.toBeNull();
@@ -873,7 +917,7 @@ describe("AgentPickerModal with contacts", () => {
     userEvent.clear(searchBar);
     expect(queryAllByTestId("agent-webid")).toHaveLength(5);
   });
-  it("clicking the tabs filters by person or group contact", () => {
+  it.skip("clicking the tabs filters by person or group contact", () => {
     const containerUrl = "https://example.com/contacts/";
     const emptyAddressBook = mockAddressBook({ containerUrl });
     mockedUseContacts.mockReturnValue({
@@ -902,15 +946,15 @@ describe("AgentPickerModal with contacts", () => {
         onClose={onClose}
       />
     );
-    const peopleTab = getByTestId("tab-people");
+    const peopleTab = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
     userEvent.click(peopleTab);
     expect(queryAllByTestId("agent-webid")).toHaveLength(2);
-    const groupsTab = getByTestId("tab-groups");
+    const groupsTab = getByTestId(TESTCAFE_ID_TAB_GROUPS);
     userEvent.click(groupsTab);
     // TODO: we will call this testid differently when we have groups
     expect(queryAllByTestId("agent-webid")).toHaveLength(1);
   });
-  it("clicking on group tab with no results renders correct empty state text", () => {
+  it.skip("clicking on group tab with no results renders correct empty state text", () => {
     const containerUrl = "https://example.com/contacts/";
     const emptyAddressBook = mockAddressBook({ containerUrl });
     mockedUseContacts.mockReturnValue({
@@ -938,13 +982,13 @@ describe("AgentPickerModal with contacts", () => {
         onClose={onClose}
       />
     );
-    const groupsTab = getByTestId("tab-groups");
+    const groupsTab = getByTestId(TESTCAFE_ID_TAB_GROUPS);
     userEvent.click(groupsTab);
     // TODO: we will call this testid differently when we have groups
     expect(queryAllByTestId("agent-webid")).toHaveLength(0);
     expect(queryByText("No groups found")).not.toBeNull();
   });
-  it("clicking on people tab with no results renders correct empty state text", () => {
+  it.skip("clicking on people tab with no results renders correct empty state text", () => {
     const containerUrl = "https://example.com/contacts/";
     const emptyAddressBook = mockAddressBook({ containerUrl });
     mockedUseContacts.mockReturnValue({
@@ -961,7 +1005,7 @@ describe("AgentPickerModal with contacts", () => {
         onClose={onClose}
       />
     );
-    const peopleTab = getByTestId("tab-people");
+    const peopleTab = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
     userEvent.click(peopleTab);
     // TODO: we will call this testid differently when we have groups
     expect(queryAllByTestId("agent-webid")).toHaveLength(0);

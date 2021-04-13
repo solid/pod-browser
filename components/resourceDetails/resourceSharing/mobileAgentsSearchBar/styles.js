@@ -45,8 +45,8 @@ export default function styles(theme) {
       display: "flex",
       height: SEARCH_BOX_HEIGHT,
       borderRadius: "5px",
-      position: "absolute",
       backgroundColor: theme.palette.background.paper,
+      width: "100%",
       right: theme.spacing(0.25),
       left: theme.spacing(0.25),
       [theme.breakpoints.up("sm")]: {

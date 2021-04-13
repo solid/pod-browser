@@ -23,7 +23,7 @@ import React from "react";
 import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 
-import AddWebIdButton from "./index";
+import AddWebIdButton, { TESTCAFE_ADD_WEBID_BUTTON } from "./index";
 
 describe("AddWebIdButton", () => {
   const onClick = jest.fn();
@@ -39,7 +39,7 @@ describe("AddWebIdButton", () => {
       <AddWebIdButton onClick={onClick} />
     );
 
-    const button = getByTestId("add-webid-button");
+    const button = getByTestId(TESTCAFE_ADD_WEBID_BUTTON);
     userEvent.click(button);
 
     expect(onClick).toHaveBeenCalled();

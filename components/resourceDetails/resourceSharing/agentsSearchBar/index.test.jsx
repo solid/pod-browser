@@ -39,7 +39,7 @@ describe("AgentSearchBar", () => {
       <AgentsSearchBar handleFilterChange={handleFilterChange} />
     );
 
-    const input = getByTestId("search-input");
+    const input = getByTestId(TESTCAFE_ID_SEARCH_INPUT);
     userEvent.type(input, "A");
 
     expect(handleFilterChange).toHaveBeenCalled();

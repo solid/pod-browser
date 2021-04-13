@@ -29,7 +29,7 @@ import { makeStyles } from "@material-ui/styles";
 import { Button } from "@inrupt/prism-react-components";
 import styles from "./styles";
 
-const TESTCAFE_ADD_WEBID_BUTTON = "add-webid-button";
+export const TESTCAFE_ADD_WEBID_BUTTON = "add-webid-button";
 const TESTCAFE_ADD_WEBID_BUTTON_MOBILE = "add-web-id-button-mobile";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
