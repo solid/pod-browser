@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const webIdsWithAccessToAcpUI = [
+const webIdsWithAccessToFeatures = [
   "https://pod.inrupt.com/jacklawson/profile/card#me",
   "https://pod.inrupt.com/arneh/profile/card#me",
   "https://pod.inrupt.com/megoth/profile/card#me",
@@ -40,17 +40,16 @@ const webIdsWithAccessToAcpUI = [
   "https://testsharepat.inrupt.net/profile/card#me",
   "https://pod.inrupt.com/acoburn/profile/card#me",
 ];
-const webIdsWithAccessToGroupsUI = ["https://notareal~webId.com"];
 function enableForGivenWebIds(webIds) {
   return (session) =>
     session.info.isLoggedIn && webIds.includes(session.info.webId);
 }
 
-export const NEW_ACP_UI_ENABLED_FOR = webIdsWithAccessToAcpUI;
+export const NEW_ACP_UI_ENABLED_FOR = webIdsWithAccessToFeatures;
 export const NEW_ACP_UI_ENABLED = "newAcpUIEnabled";
 export const newAcpUiEnabled = enableForGivenWebIds(NEW_ACP_UI_ENABLED_FOR);
 
-export const GROUPS_PAGE_ENABLED_FOR = webIdsWithAccessToGroupsUI;
+export const GROUPS_PAGE_ENABLED_FOR = webIdsWithAccessToFeatures;
 export const GROUPS_PAGE_ENABLED = "groupsPageEnabled";
 export const groupsPageEnabled = enableForGivenWebIds(GROUPS_PAGE_ENABLED_FOR);
 

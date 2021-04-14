@@ -22,7 +22,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { useFilters, useGlobalFilter, useTable } from "react-table";
 import { useBem } from "@solid/lit-prism-patterns";
@@ -46,8 +46,6 @@ import styles from "./styles";
 import PolicyHeader from "../policyHeader";
 import PolicyActionButton from "../policyActionButton";
 import { isCustomPolicy } from "../../../../src/models/policy";
-import FeatureContext from "../../../../src/contexts/featureFlagsContext";
-import { GROUPS_PAGE_ENABLED } from "../../../../src/featureFlags";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const TESTCAFE_ID_SHOW_ALL_BUTTON = "show-all-button";
@@ -55,7 +53,6 @@ const TESTCAFE_ID_HIDE_BUTTON = "hide-button";
 export const TESTCAFE_ID_AGENT_ACCESS_TABLE = "agent-access-table";
 
 export default function AgentAccessTable({ type }) {
-  const { enabled } = useContext(FeatureContext);
   const [loading, setLoading] = useState(false);
   const [permissions, setPermissions] = useState([]);
   const { data: policyPermissions } = usePolicyPermissions(type);
@@ -71,7 +68,6 @@ export default function AgentAccessTable({ type }) {
 
   const [showAll, setShowAll] = useState(false);
   const [selectedTabValue, setSelectedTabValue] = useState("");
-  const groupsAreEnabled = enabled(GROUPS_PAGE_ENABLED);
 
   const columns = useMemo(
     () => [
@@ -160,13 +156,11 @@ export default function AgentAccessTable({ type }) {
       <div className={classes.permissionsContainer}>
         {!!permissions.length && (
           <>
-            {groupsAreEnabled && (
-              <AgentsTableTabs
-                handleTabChange={handleTabChange}
-                selectedTabValue={selectedTabValue}
-                tabsValues={{ all: "", people: "agent", groups: "group" }}
-              />
-            )}
+            <AgentsTableTabs
+              handleTabChange={handleTabChange}
+              selectedTabValue={selectedTabValue}
+              tabsValues={{ all: "", people: "agent", groups: "group" }}
+            />
             <AgentsSearchBar handleFilterChange={handleFilterChange} />
           </>
         )}
