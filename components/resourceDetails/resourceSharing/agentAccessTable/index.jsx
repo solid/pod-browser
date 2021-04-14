@@ -156,11 +156,12 @@ export default function AgentAccessTable({ type }) {
       <div className={classes.permissionsContainer}>
         {!!permissions.length && (
           <>
-            <AgentsTableTabs
-              handleTabChange={handleTabChange}
-              selectedTabValue={selectedTabValue}
-              tabsValues={{ all: "", people: "agent", groups: "group" }}
-            />
+            {/* TODO: Uncomment to reintroduce tabs */}
+            {/* <AgentsTableTabs */}
+            {/*  handleTabChange={handleTabChange} */}
+            {/*  selectedTabValue={selectedTabValue} */}
+            {/*  tabsValues={{ all: "", people: "agent", groups: "group" }} */}
+            {/* /> */}
             <AgentsSearchBar handleFilterChange={handleFilterChange} />
           </>
         )}

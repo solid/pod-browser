@@ -202,7 +202,7 @@ describe("AgentAccessTable", () => {
     });
   });
 
-  it("renders a set of tabs which filter by Group type", () => {
+  it.skip("renders a set of tabs which filter by Group type", () => {
     const permissionsWithTypes = [
       {
         type: "agent",
@@ -243,7 +243,7 @@ describe("AgentAccessTable", () => {
       expect(queryByText("Example 1")).toBeNull();
     });
   });
-  it("renders a set of tabs which filter by People type", () => {
+  it.skip("renders a set of tabs which filter by People type", () => {
     const permissionsWithTypes = [
       {
         acl: createAccessMap(true, true, false, false),
