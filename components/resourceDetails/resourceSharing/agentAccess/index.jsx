@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const TESTCAFE_ID_TRY_AGAIN_BUTTON = "try-again-button";
 const TESTCAFE_ID_TRY_AGAIN_SPINNER = "try-again-spinner";
 
-export default function AgentAccess({ permission, mutatePermissions }) {
+export default function AgentAccess({ permission }) {
   const classes = useStyles();
   const {
     session: { fetch },
@@ -149,7 +149,6 @@ export default function AgentAccess({ permission, mutatePermissions }) {
           profile={localProfile}
           setLoading={setLoading}
           setLocalAccess={setLocalAccess}
-          mutatePermissions={mutatePermissions}
         />
       </div>
     );
@@ -178,16 +177,12 @@ export default function AgentAccess({ permission, mutatePermissions }) {
       profile={localProfile}
       setLoading={setLoading}
       setLocalAccess={setLocalAccess}
-      mutatePermissions={mutatePermissions}
     />
   );
 }
 
 AgentAccess.propTypes = {
   permission: T.object.isRequired,
-  mutatePermissions: T.func,
 };
 
-AgentAccess.defaultProps = {
-  mutatePermissions: () => {},
-};
+AgentAccess.defaultProps = {};

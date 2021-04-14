@@ -55,10 +55,7 @@ export const TESTCAFE_ID_AGENT_ACCESS_TABLE = "agent-access-table";
 export default function AgentAccessTable({ type }) {
   const [loading, setLoading] = useState(false);
   const [permissions, setPermissions] = useState([]);
-  const {
-    data: policyPermissions,
-    mutate: mutatePermissions,
-  } = usePolicyPermissions(type);
+  const { data: policyPermissions } = usePolicyPermissions(type);
 
   useEffect(() => {
     if (!policyPermissions) return;
@@ -151,7 +148,6 @@ export default function AgentAccessTable({ type }) {
           />
           <PolicyActionButton
             permissions={permissions}
-            mutatePermissions={mutatePermissions}
             setLoading={setLoading}
             type={type}
           />
@@ -191,10 +187,7 @@ export default function AgentAccessTable({ type }) {
                           bem("agent-cell")
                         )}
                       >
-                        <AgentAccess
-                          permission={details}
-                          mutatePermissions={mutatePermissions}
-                        />
+                        <AgentAccess permission={details} />
                       </td>
                     </tr>
                   );

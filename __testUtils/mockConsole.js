@@ -19,16 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useContext } from "react";
-import useSWR from "swr";
-import AccessControlContext from "../../contexts/accessControlContext";
+import { getFakeConsole } from "../src/windowHelpers";
 
-export default function usePolicyPermissions(policyName, options = {}) {
-  const { accessControl } = useContext(AccessControlContext);
-
-  return useSWR(
-    [accessControl, policyName],
-    async () => accessControl.getPermissionsForPolicy(policyName),
-    options
-  );
+export default function mockConsole() {
+  const console = getFakeConsole();
+  Object.keys(console).forEach((methodName) => jest.spyOn(console, methodName));
+  return console;
 }

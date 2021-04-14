@@ -33,6 +33,7 @@ import {
   permission as permissionPropType,
   profile as profilePropType,
 } from "../../../../../../constants/propTypes";
+import ResourceInfoContext from "../../../../../../src/contexts/resourceInfoContext";
 
 export const handleConfirmation = ({
   open,
@@ -69,8 +70,8 @@ export const handleConfirmation = ({
 export const handleRemovePermissions = ({
   setLoading,
   accessControl,
-  mutatePermissions,
   setLocalAccess,
+  mutateResourceInfo,
 }) => {
   return async (agentWebId, policyName) => {
     setLoading(true);
@@ -80,9 +81,12 @@ export const handleRemovePermissions = ({
     if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {
       accessControl.setRuleAuthenticated(policyName, false);
     }
-    await accessControl.removeAgentFromNamedPolicy(agentWebId, policyName);
+    const { response: updatedAcr } = await accessControl.removeAgentFromPolicy(
+      agentWebId,
+      policyName
+    );
+    await mutateResourceInfo(updatedAcr, false);
     setLoading(false);
-    await mutatePermissions();
     setLocalAccess(null);
   };
 };
@@ -97,9 +101,9 @@ export default function RemoveButton({
   profile,
   setLoading,
   setLocalAccess,
-  mutatePermissions,
 }) {
   const { accessControl } = useContext(AccessControlContext);
+  const { mutate: mutateResourceInfo } = useContext(ResourceInfoContext);
   const resourceName = getResourceName(resourceIri);
   const classes = useStyles();
   const dialogId = "remove-agent";
@@ -108,8 +112,8 @@ export default function RemoveButton({
   const handleRemoveAgent = handleRemovePermissions({
     setLoading,
     accessControl,
-    mutatePermissions,
     setLocalAccess,
+    mutateResourceInfo,
   });
 
   const {
@@ -177,12 +181,10 @@ RemoveButton.propTypes = {
   profile: profilePropType,
   setLoading: PropTypes.func,
   setLocalAccess: PropTypes.func,
-  mutatePermissions: PropTypes.func,
 };
 
 RemoveButton.defaultProps = {
   setLoading: () => {},
   setLocalAccess: () => {},
   profile: null,
-  mutatePermissions: () => {},
 };

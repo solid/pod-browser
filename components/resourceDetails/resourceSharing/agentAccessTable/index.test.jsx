@@ -90,7 +90,6 @@ describe("AgentAccessTable", () => {
     const type = "editors";
     mockedUsePolicyPermissions.mockReturnValue({
       data: [],
-      mutate: jest.fn(),
     });
     const { asFragment } = renderWithTheme(<AgentAccessTable type={type} />);
 
@@ -101,7 +100,6 @@ describe("AgentAccessTable", () => {
     mockedUsePolicyPermissions.mockReturnValue({
       error: "error",
       data: undefined,
-      mutate: jest.fn(),
     });
     const { asFragment } = renderWithTheme(<AgentAccessTable type={type} />);
 
@@ -111,7 +109,6 @@ describe("AgentAccessTable", () => {
     const type = "viewAndAdd";
     mockedUsePolicyPermissions.mockReturnValue({
       data: [],
-      mutate: jest.fn(),
     });
     const { asFragment, queryByTestId } = renderWithTheme(
       <AgentAccessTable type={type} />
@@ -128,7 +125,6 @@ describe("AgentAccessTable", () => {
           webId: "https://example1.com/profile/card#me",
         },
       ],
-      mutate: jest.fn(),
     });
     mockedFetchProfile.mockReturnValue({ profile: profile1 });
     const type = "editors";
@@ -142,7 +138,6 @@ describe("AgentAccessTable", () => {
   it("shows all permissions when clicking 'show all' button", async () => {
     mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
-      mutate: jest.fn(),
     });
     mockedFetchProfile
       .mockReturnValueOnce({ profile: profile1 })
@@ -162,7 +157,6 @@ describe("AgentAccessTable", () => {
   it("shows first 3 permissions by default and when clicking the 'hide' button", async () => {
     mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
-      mutate: jest.fn(),
     });
     mockedFetchProfile
       .mockReturnValueOnce({ profile: profile1 })
@@ -184,7 +178,6 @@ describe("AgentAccessTable", () => {
   it("renders a search box which filters by name or webId", () => {
     mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
-      mutate: jest.fn(),
     });
     mockedFetchProfile
       .mockReturnValueOnce({ profile: profile1 })
@@ -220,7 +213,6 @@ describe("AgentAccessTable", () => {
 
     mockedUsePolicyPermissions.mockReturnValue({
       data: permissionsWithTypes,
-      mutate: jest.fn(),
     });
     mockedFetchProfile
       .mockReturnValueOnce({ profile: profile1 })
@@ -261,7 +253,6 @@ describe("AgentAccessTable", () => {
 
     mockedUsePolicyPermissions.mockReturnValue({
       data: permissionsWithTypes,
-      mutate: jest.fn(),
     });
     mockedFetchProfile
       .mockReturnValueOnce({ profile: profile1 })

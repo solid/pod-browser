@@ -21,7 +21,8 @@
 
 import React from "react";
 import { waitFor } from "@testing-library/dom";
-import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+// eslint-disable-next-line camelcase
+import { acp_v2, mockSolidDatasetFrom } from "@inrupt/solid-client";
 import userEvent from "@testing-library/user-event";
 import AgentPickerModal, {
   handleConfirmation,
@@ -52,6 +53,8 @@ const mockedUsePolicyPermissions = usePolicyPermissions;
 
 jest.mock("../../../../src/hooks/useContacts");
 const mockedUseContacts = useContacts;
+
+const resourceUrl = "http://example.com/resource";
 
 const permissions = [
   {
@@ -115,13 +118,19 @@ const permissions = [
 describe("handleSubmit", () => {
   const webId = "https://example.org";
   const setLoading = jest.fn();
+  const acr = acp_v2.mockAcrFor(resourceUrl);
   const accessControl = mockAccessControl();
+  accessControl.addAgentToPolicy.mockResolvedValue({ response: acr });
+  accessControl.removeAgentFromPolicy.mockResolvedValue({ response: acr });
+  accessControl.setRulePublic.mockResolvedValue({ response: acr });
+  accessControl.setRuleAuthenticated.mockResolvedValue({ response: acr });
   const addressBook = mockSolidDatasetFrom("https://example.org/addressBook");
-  const mutatePermissions = jest.fn();
+  const mutateResourceInfo = jest.fn();
   const saveAgentToContacts = jest.fn();
   const onClose = jest.fn();
   const fetch = jest.fn();
-  const advancedSharing = undefined;
+
+  beforeEach(() => {});
 
   it("returns a handler that exits when user does not make any changes", async () => {
     const policyName = "editors";
@@ -130,22 +139,21 @@ describe("handleSubmit", () => {
       webIdsToDelete: [],
       accessControl,
       addressBook,
-      mutatePermissions,
+      mutateResourceInfo,
       saveAgentToContacts,
       onClose,
       setLoading,
       policyName,
-      advancedSharing,
       fetch,
     });
     handler();
 
     await waitFor(() => {
-      expect(accessControl.addAgentToNamedPolicy).not.toHaveBeenCalled();
+      expect(accessControl.addAgentToPolicy).not.toHaveBeenCalled();
     });
 
     expect(saveAgentToContacts).not.toHaveBeenCalled();
-    expect(mutatePermissions).not.toHaveBeenCalled();
+    expect(mutateResourceInfo).not.toHaveBeenCalled();
   });
 
   it("returns a handler that submits the new webIds", async () => {
@@ -155,54 +163,24 @@ describe("handleSubmit", () => {
       webIdsToDelete: [],
       accessControl,
       addressBook,
-      mutatePermissions,
+      mutateResourceInfo,
       saveAgentToContacts,
       onClose,
       setLoading,
       policyName,
-      advancedSharing,
       fetch,
     });
     handler();
 
     await waitFor(() => {
-      expect(accessControl.addAgentToNamedPolicy).toHaveBeenCalledWith(
+      expect(accessControl.addAgentToPolicy).toHaveBeenCalledWith(
         webId,
         policyName
       );
     });
 
     expect(saveAgentToContacts).toHaveBeenCalledWith(webId, addressBook, fetch);
-    expect(mutatePermissions).toHaveBeenCalled();
-    expect(onClose).toHaveBeenCalled();
-  });
-
-  it("when advancedSharing is true, it calls the correct custom policy add function", async () => {
-    const policyName = "viewAndAdd";
-    const handler = handleSubmit({
-      newAgentsWebIds: [webId],
-      webIdsToDelete: [],
-      accessControl,
-      addressBook,
-      mutatePermissions,
-      saveAgentToContacts,
-      onClose,
-      setLoading,
-      policyName,
-      advancedSharing: true,
-      fetch,
-    });
-    handler();
-
-    await waitFor(() => {
-      expect(accessControl.addAgentToCustomPolicy).toHaveBeenCalledWith(
-        webId,
-        policyName
-      );
-    });
-
-    expect(saveAgentToContacts).toHaveBeenCalledWith(webId, addressBook, fetch);
-    expect(mutatePermissions).toHaveBeenCalled();
+    expect(mutateResourceInfo).toHaveBeenCalledWith(acr, false);
     expect(onClose).toHaveBeenCalled();
   });
 
@@ -213,12 +191,11 @@ describe("handleSubmit", () => {
       webIdsToDelete: [],
       accessControl,
       addressBook,
-      mutatePermissions,
+      mutateResourceInfo,
       saveAgentToContacts,
       onClose,
       setLoading,
       policyName,
-      advancedSharing: true,
       fetch,
     });
     handler();
@@ -231,7 +208,7 @@ describe("handleSubmit", () => {
     });
 
     expect(saveAgentToContacts).not.toHaveBeenCalledWith();
-    expect(mutatePermissions).toHaveBeenCalled();
+    expect(mutateResourceInfo).toHaveBeenCalledWith(acr, false);
     expect(onClose).toHaveBeenCalled();
   });
 
@@ -242,12 +219,11 @@ describe("handleSubmit", () => {
       webIdsToDelete: [],
       accessControl,
       addressBook,
-      mutatePermissions,
+      mutateResourceInfo,
       saveAgentToContacts,
       onClose,
       setLoading,
       policyName,
-      advancedSharing: true,
       fetch,
     });
     handler();
@@ -260,7 +236,7 @@ describe("handleSubmit", () => {
     });
 
     expect(saveAgentToContacts).not.toHaveBeenCalledWith();
-    expect(mutatePermissions).toHaveBeenCalled();
+    expect(mutateResourceInfo).toHaveBeenCalledWith(acr, false);
     expect(onClose).toHaveBeenCalled();
   });
 
@@ -271,51 +247,23 @@ describe("handleSubmit", () => {
       webIdsToDelete: [webId],
       accessControl,
       addressBook,
-      mutatePermissions,
+      mutateResourceInfo,
       saveAgentToContacts,
       onClose,
       setLoading,
       policyName,
-      advancedSharing,
       fetch,
     });
     handler();
 
     await waitFor(() => {
-      expect(accessControl.removeAgentFromNamedPolicy).toHaveBeenCalledWith(
+      expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledWith(
         webId,
         policyName
       );
     });
 
-    expect(mutatePermissions).toHaveBeenCalled();
-    expect(onClose).toHaveBeenCalled();
-  });
-  it("when advancedSharing is true, it calls the correct custom policy remove function", async () => {
-    const policyName = "viewAndAdd";
-    const handler = handleSubmit({
-      newAgentsWebIds: [],
-      webIdsToDelete: [webId],
-      accessControl,
-      addressBook,
-      mutatePermissions,
-      saveAgentToContacts,
-      onClose,
-      setLoading,
-      policyName,
-      advancedSharing: true,
-      fetch,
-    });
-    handler();
-
-    await waitFor(() => {
-      expect(accessControl.removeAgentFromCustomPolicy).toHaveBeenCalledWith(
-        webId,
-        policyName
-      );
-    });
-
-    expect(mutatePermissions).toHaveBeenCalled();
+    expect(mutateResourceInfo).toHaveBeenCalledWith(acr, false);
     expect(onClose).toHaveBeenCalled();
   });
   it("when webId to be deleted is public agent url, it calls the corresponding setRulePublic with the correct value", async () => {
@@ -325,12 +273,11 @@ describe("handleSubmit", () => {
       webIdsToDelete: [PUBLIC_AGENT_PREDICATE],
       accessControl,
       addressBook,
-      mutatePermissions,
+      mutateResourceInfo,
       saveAgentToContacts,
       onClose,
       setLoading,
       policyName,
-      advancedSharing: true,
       fetch,
     });
     handler();
@@ -342,7 +289,7 @@ describe("handleSubmit", () => {
       );
     });
 
-    expect(mutatePermissions).toHaveBeenCalled();
+    expect(mutateResourceInfo).toHaveBeenCalledWith(acr, false);
     expect(onClose).toHaveBeenCalled();
   });
 
@@ -353,12 +300,11 @@ describe("handleSubmit", () => {
       webIdsToDelete: [AUTHENTICATED_AGENT_PREDICATE],
       accessControl,
       addressBook,
-      mutatePermissions,
+      mutateResourceInfo,
       saveAgentToContacts,
       onClose,
       setLoading,
       policyName,
-      advancedSharing: true,
       fetch,
     });
     handler();
@@ -370,7 +316,7 @@ describe("handleSubmit", () => {
       );
     });
 
-    expect(mutatePermissions).toHaveBeenCalled();
+    expect(mutateResourceInfo).toHaveBeenCalledWith(acr, false);
     expect(onClose).toHaveBeenCalled();
   });
 });
@@ -476,6 +422,7 @@ describe("AgentPickerModal without contacts", () => {
   });
   const onClose = jest.fn();
   const accessControl = mockAccessControl();
+  const setLoading = jest.fn();
 
   it("updates the temporary row with profile data when available", async () => {
     const name = "Example";
@@ -497,6 +444,7 @@ describe("AgentPickerModal without contacts", () => {
           type="editors"
           text={{ editText: "Edit Editors", saveText: "Save Editors" }}
           onClose={onClose}
+          setLoading={setLoading}
         />
       </AccessControlContext.Provider>
     );
@@ -529,6 +477,7 @@ describe("AgentPickerModal without contacts", () => {
           type="editors"
           text={{ editText: "Edit Editors", saveText: "Save Editors" }}
           onClose={onClose}
+          setLoading={setLoading}
         />
       </AccessControlContext.Provider>
     );
@@ -555,6 +504,7 @@ describe("AgentPickerModal without contacts", () => {
         type="editors"
         text={{ editText: "Edit Editors", saveText: "Save Editors" }}
         onClose={onClose}
+        setLoading={setLoading}
       />
     );
     expect(asFragment()).toMatchSnapshot();
@@ -596,6 +546,7 @@ describe("AgentPickerModal without contacts", () => {
             type="editors"
             text={{ editText: "Edit Editors", saveText: "Save Editors" }}
             onClose={onClose}
+            setLoading={setLoading}
           />
         </AccessControlContext.Provider>
       </ConfirmationDialogContext.Provider>
@@ -648,6 +599,7 @@ describe("AgentPickerModal without contacts", () => {
             type="editors"
             text={{ editText: "Edit Editors", saveText: "Save Editors" }}
             onClose={onClose}
+            setLoading={setLoading}
           />
         </AccessControlContext.Provider>
       </ConfirmationDialogContext.Provider>
@@ -659,7 +611,7 @@ describe("AgentPickerModal without contacts", () => {
     userEvent.click(submitWebIdsButton);
     expect(setConfirmed).toHaveBeenCalledWith(true);
   });
-  it("renders the correct confimation message for more than 1 agent", async () => {
+  it("renders the correct confirmation message for more than 1 agent", async () => {
     mockedUseContacts.mockReturnValue({ data: [] });
 
     mockedUsePolicyPermissions.mockReturnValue({
@@ -686,6 +638,7 @@ describe("AgentPickerModal without contacts", () => {
             type="editors"
             text={{ editText: "Edit Editors", saveText: "Save Editors" }}
             onClose={onClose}
+            setLoading={setLoading}
           />
         </AccessControlContext.Provider>
       </ConfirmationDialogContext.Provider>
@@ -745,6 +698,7 @@ describe("AgentPickerModal without contacts", () => {
             type="editors"
             text={{ editText: "Edit Editors", saveText: "Save Editors" }}
             onClose={onClose}
+            setLoading={setLoading}
           />
         </AccessControlContext.Provider>
       </ConfirmationDialogContext.Provider>
@@ -775,6 +729,7 @@ describe("AgentPickerModal without contacts", () => {
           type="editors"
           text={{ editText: "Edit Editors", saveText: "Save Editors" }}
           onClose={onClose}
+          setLoading={setLoading}
         />
       </AccessControlContext.Provider>
     );

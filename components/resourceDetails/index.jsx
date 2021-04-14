@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   Accordion,
   AccordionDetails,
@@ -46,6 +46,7 @@ import { getIriPath } from "../../src/solidClientHelpers/utils";
 import { getResourceName } from "../../src/solidClientHelpers/resource";
 import AccessControlContext from "../../src/contexts/accessControlContext";
 import SharingAccordion from "./resourceSharing/sharingAccordion";
+import useLocalStorage from "../../src/hooks/useLocalStorage";
 
 const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
 const TESTCAFE_ID_DELETE_BUTTON = "delete-resource-button";
@@ -57,6 +58,10 @@ const TESTCAFE_ID_ACCORDION_SHARING = "accordion-resource-permissions-trigger";
 const TESTCAFE_ID_TITLE = "resource-title";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+
+function getAccordionKey(dataset, name) {
+  return `${getSourceUrl(dataset)}-${name}`;
+}
 
 export default function ResourceDetails({
   onDelete,
@@ -72,6 +77,22 @@ export default function ResourceDetails({
   const { accessControl } = useContext(AccessControlContext);
   const { enabled } = useContext(FeatureContext);
   const useNewAcpUi = enabled(NEW_ACP_UI_ENABLED);
+  const [actionsAccordion, setActionsAccordion] = useLocalStorage(
+    getAccordionKey(dataset, "actions"),
+    true
+  );
+  const [detailsAccordion, setDetailsAccordion] = useLocalStorage(
+    getAccordionKey(dataset, "details"),
+    false
+  );
+  const [permissionsAccordion, setPermissionsAccordion] = useLocalStorage(
+    getAccordionKey(dataset, "permissions"),
+    false
+  );
+  const [sharingAccordion, setSharingAccordion] = useLocalStorage(
+    getAccordionKey(dataset, "sharing"),
+    false
+  );
 
   const expandIcon = <ExpandMoreIcon />;
   return (
@@ -88,7 +109,10 @@ export default function ResourceDetails({
 
       <Divider />
 
-      <Accordion defaultExpanded>
+      <Accordion
+        expanded={actionsAccordion}
+        onChange={() => setActionsAccordion(!actionsAccordion)}
+      >
         <AccordionSummary
           expandIcon={expandIcon}
           data-testid={TESTCAFE_ID_ACCORDION_ACTIONS}
@@ -120,7 +144,10 @@ export default function ResourceDetails({
         </AccordionDetails>
       </Accordion>
 
-      <Accordion>
+      <Accordion
+        expanded={detailsAccordion}
+        onChange={() => setDetailsAccordion(!detailsAccordion)}
+      >
         <AccordionSummary
           expandIcon={expandIcon}
           data-testid={TESTCAFE_ID_ACCORDION_DETAILS}
@@ -147,7 +174,10 @@ export default function ResourceDetails({
 
       {accessControl ? ( // only show when we know user has control access
         <>
-          <Accordion>
+          <Accordion
+            expanded={permissionsAccordion}
+            onChange={() => setPermissionsAccordion(!permissionsAccordion)}
+          >
             <AccordionSummary
               expandIcon={expandIcon}
               data-testid={TESTCAFE_ID_ACCORDION_PERMISSIONS}
@@ -159,7 +189,10 @@ export default function ResourceDetails({
             </AccordionDetails>
           </Accordion>
           {useNewAcpUi && (
-            <Accordion>
+            <Accordion
+              expanded={sharingAccordion}
+              onChange={() => setSharingAccordion(!sharingAccordion)}
+            >
               <AccordionSummary
                 expandIcon={expandIcon}
                 data-testid={TESTCAFE_ID_ACCORDION_SHARING}

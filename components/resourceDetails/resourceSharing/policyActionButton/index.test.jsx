@@ -67,7 +67,6 @@ describe("PolicyActionButton", () => {
       },
     },
   ];
-  const mutatePermissions = jest.fn();
   const setLoading = jest.fn();
   const type = "editors";
   it("renders an action button that displays a menu with a disabled 'remove all' option when there are no permissions", () => {
@@ -75,7 +74,6 @@ describe("PolicyActionButton", () => {
       <PolicyActionButton
         type={type}
         permissions={permissionsEmpty}
-        mutatePermissions={mutatePermissions}
         setLoading={setLoading}
       />
     );
@@ -90,7 +88,6 @@ describe("PolicyActionButton", () => {
       <PolicyActionButton
         type={type}
         permissions={permissions}
-        mutatePermissions={mutatePermissions}
         setLoading={setLoading}
       />
     );
@@ -104,7 +101,6 @@ describe("PolicyActionButton", () => {
       <PolicyActionButton
         type="examplePolicy"
         permissions={permissionsEmpty}
-        mutatePermissions={mutatePermissions}
         setLoading={setLoading}
       />
     );
@@ -133,7 +129,6 @@ describe("PolicyActionButton", () => {
         <PolicyActionButton
           type={type}
           permissions={permissions}
-          mutatePermissions={mutatePermissions}
           setLoading={setLoading}
         />
       </ConfirmationDialogContext.Provider>
@@ -200,7 +195,7 @@ describe("handleRemoveAllAgents", () => {
   const webId2 = "https://example2.org";
   const setLoading = jest.fn();
   const accessControl = mockAccessControl();
-  const mutatePermissions = jest.fn();
+  const mutateResourceInfo = jest.fn();
   const saveAgentToContacts = jest.fn();
 
   it("returns a handler that removes the webIds", async () => {
@@ -210,22 +205,22 @@ describe("handleRemoveAllAgents", () => {
       setLoading,
       accessControl,
       policyToDelete: policyName,
-      mutatePermissions,
+      mutateResourceInfo,
     });
     handler();
 
     await waitFor(() => {
-      expect(accessControl.removeAgentFromNamedPolicy).toHaveBeenCalledWith(
+      expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledWith(
         webId1,
         policyName
       );
-      expect(accessControl.removeAgentFromNamedPolicy).toHaveBeenCalledWith(
+      expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledWith(
         webId2,
         policyName
       );
     });
 
-    expect(mutatePermissions).toHaveBeenCalled();
+    expect(mutateResourceInfo).toHaveBeenCalled();
   });
 
   it("calls the corresponding custom policy function when the policy is a custom policy", async () => {
@@ -235,21 +230,21 @@ describe("handleRemoveAllAgents", () => {
       setLoading,
       accessControl,
       policyToDelete: policyName,
-      mutatePermissions,
+      mutateResourceInfo,
     });
     handler();
 
     await waitFor(() => {
-      expect(accessControl.removeAgentFromCustomPolicy).toHaveBeenCalledWith(
+      expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledWith(
         webId1,
         policyName
       );
-      expect(accessControl.removeAgentFromCustomPolicy).toHaveBeenCalledWith(
+      expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledWith(
         webId2,
         policyName
       );
     });
-    expect(mutatePermissions).toHaveBeenCalled();
+    expect(mutateResourceInfo).toHaveBeenCalled();
   });
 
   it("when webId is public agent url, it calls the corresponding setRulePublic with the correct value", async () => {
@@ -259,7 +254,7 @@ describe("handleRemoveAllAgents", () => {
       setLoading,
       accessControl,
       policyToDelete: policyName,
-      mutatePermissions,
+      mutateResourceInfo,
     });
     handler();
 
@@ -271,7 +266,7 @@ describe("handleRemoveAllAgents", () => {
     });
 
     expect(saveAgentToContacts).not.toHaveBeenCalledWith();
-    expect(mutatePermissions).toHaveBeenCalled();
+    expect(mutateResourceInfo).toHaveBeenCalled();
   });
 
   it("when webId is authenticated agent url, it calls the corresponding setRuleAuthenticated with the correct value", async () => {
@@ -281,7 +276,7 @@ describe("handleRemoveAllAgents", () => {
       setLoading,
       accessControl,
       policyToDelete: policyName,
-      mutatePermissions,
+      mutateResourceInfo,
     });
     handler();
 
@@ -293,6 +288,6 @@ describe("handleRemoveAllAgents", () => {
     });
 
     expect(saveAgentToContacts).not.toHaveBeenCalledWith();
-    expect(mutatePermissions).toHaveBeenCalled();
+    expect(mutateResourceInfo).toHaveBeenCalled();
   });
 });

@@ -79,7 +79,11 @@ export default function CustomPolicyDropdown({
     >
       {customPolicies.map(({ name, title, DescriptionComponent }) => {
         return (
-          <MenuItem value={name} classes={{ root: classes.menuItem }}>
+          <MenuItem
+            value={name}
+            classes={{ root: classes.menuItem }}
+            key={name}
+          >
             <ListItemIcon>
               <Icons name="settings" className={bem("icon-custom-policies")} />
             </ListItemIcon>

@@ -253,6 +253,7 @@ describe("sharedStart", () => {
     expect(sharedStart("foo", "bar")).toEqual("");
     expect(sharedStart("bar", "baz", "bam")).toEqual("ba");
     expect(sharedStart(undefined, "baz")).toEqual("");
+    expect(sharedStart(undefined, undefined)).toEqual("");
   });
 });
 

@@ -22,6 +22,8 @@
 import React from "react";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
+// eslint-disable-next-line camelcase
+import { acp_v2 } from "@inrupt/solid-client";
 import { renderWithTheme } from "../../../../../../__testUtils/withTheme";
 import mockConfirmationDialogContextProvider from "../../../../../../__testUtils/mockConfirmationDialogContextProvider";
 import mockAccessControl from "../../../../../../__testUtils/mockAccessControl";
@@ -29,8 +31,11 @@ import RemoveButton, {
   handleConfirmation,
   handleRemovePermissions,
 } from "./index";
+import { PUBLIC_AGENT_PREDICATE } from "../../../../../../src/models/contact/public";
+import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../../../src/models/contact/authenticated";
 
 const resourceIri = "/iri/";
+const resourceUrl = "http://example.com/resource";
 const webId = "https://example.com/profile/card#me";
 const name = "Example Agent";
 const profile = {
@@ -49,7 +54,6 @@ describe("AgentAccessOptionsMenu", () => {
         profile={profile}
         setLoading={jest.fn()}
         setLocalAccess={jest.fn()}
-        mutatePermissions={jest.fn()}
       />
     );
     expect(asFragment()).toMatchSnapshot();
@@ -74,7 +78,6 @@ describe("AgentAccessOptionsMenu", () => {
           profile={profile}
           setLoading={jest.fn()}
           setLocalAccess={jest.fn()}
-          mutatePermissions={jest.fn()}
         />
       </ConfirmationDialogProvider>
     );
@@ -101,7 +104,6 @@ describe("AgentAccessOptionsMenu", () => {
           profile={null}
           setLoading={jest.fn()}
           setLocalAccess={jest.fn()}
-          mutatePermissions={jest.fn()}
         />
       </ConfirmationDialogProvider>
     );
@@ -124,7 +126,7 @@ describe("handleConfirmation", () => {
   const handler = handleConfirmation({
     open,
     dialogId,
-    byPassDialog: false,
+    bypassDialog: false,
     setConfirmationSetup,
     setOpen,
     setConfirmed,
@@ -145,7 +147,7 @@ describe("handleConfirmation", () => {
     const bypassDialogHandle = handleConfirmation({
       open,
       dialogId,
-      byPassDialog: true,
+      bypassDialog: true,
       setConfirmationSetup,
       setOpen,
       setConfirmed,
@@ -176,15 +178,20 @@ describe("handleConfirmation", () => {
 describe("handleRemovePermissions", () => {
   const setLoading = jest.fn();
   const accessControl = mockAccessControl();
-  const mutatePermissions = jest.fn();
+  const mutateResourceInfo = jest.fn();
   const setLocalAccess = jest.fn();
   const policyName = "editors";
+  const acr = acp_v2.mockAcrFor(resourceUrl);
 
   const handler = handleRemovePermissions({
     setLoading,
     accessControl,
-    mutatePermissions,
+    mutateResourceInfo,
     setLocalAccess,
+  });
+
+  beforeEach(() => {
+    accessControl.removeAgentFromPolicy.mockResolvedValue({ response: acr });
   });
 
   test("it returns a handler that removes the agent", async () => {
@@ -192,12 +199,45 @@ describe("handleRemovePermissions", () => {
 
     expect(setLoading).toHaveBeenCalledWith(true);
     await waitFor(() => {
-      expect(accessControl.removeAgentFromNamedPolicy).toHaveBeenCalledWith(
+      expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledWith(
         webId,
         policyName
       );
     });
-    expect(mutatePermissions).toHaveBeenCalled();
+    expect(mutateResourceInfo).toHaveBeenCalledWith(acr, false);
+    expect(setLocalAccess).toHaveBeenCalledWith(null);
+  });
+
+  it("handles the public agent", async () => {
+    handler(PUBLIC_AGENT_PREDICATE, policyName);
+
+    expect(setLoading).toHaveBeenCalledWith(true);
+    await waitFor(() => {
+      expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledWith(
+        PUBLIC_AGENT_PREDICATE,
+        policyName
+      );
+    });
+    expect(accessControl.setRulePublic).toHaveBeenCalledWith(policyName, false);
+    expect(mutateResourceInfo).toHaveBeenCalledWith(acr, false);
+    expect(setLocalAccess).toHaveBeenCalledWith(null);
+  });
+
+  it("handles the authenticated agent", async () => {
+    handler(AUTHENTICATED_AGENT_PREDICATE, policyName);
+
+    expect(setLoading).toHaveBeenCalledWith(true);
+    await waitFor(() => {
+      expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledWith(
+        AUTHENTICATED_AGENT_PREDICATE,
+        policyName
+      );
+    });
+    expect(accessControl.setRuleAuthenticated).toHaveBeenCalledWith(
+      policyName,
+      false
+    );
+    expect(mutateResourceInfo).toHaveBeenCalledWith(acr, false);
     expect(setLocalAccess).toHaveBeenCalledWith(null);
   });
 });

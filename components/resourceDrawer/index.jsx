@@ -35,6 +35,7 @@ import useAccessControl from "../../src/hooks/useAccessControl";
 import { AccessControlProvider } from "../../src/contexts/accessControlContext";
 import useResourceInfo from "../../src/hooks/useResourceInfo";
 import { isHTTPError } from "../../src/error";
+import { ResourceInfoProvider } from "../../src/contexts/resourceInfoContext";
 
 export function handleCloseDrawer({ setMenuOpen, router }) {
   return async () => {
@@ -62,9 +63,11 @@ export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
   const {
     query: { action, resourceIri },
   } = router;
-  const { data: resourceInfo, error: resourceError } = useResourceInfo(
-    resourceIri
-  );
+  const resourceInfoSwrResponse = useResourceInfo(resourceIri, {
+    revalidateOnFocus: false,
+    shouldRetryOnError: false,
+  });
+  const { data: resourceInfo, error: resourceError } = resourceInfoSwrResponse;
   const { accessControl, error: accessControlError } = useAccessControl(
     resourceInfo
   );
@@ -98,14 +101,16 @@ export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
       {loading ? (
         <DetailsLoading iri={resourceIri} />
       ) : (
-        <AccessControlProvider accessControl={accessControl}>
-          <DatasetProvider dataset={resourceInfo}>
-            <ResourceDetails
-              onDelete={onUpdate}
-              onDeleteCurrentContainer={onDeleteCurrentContainer}
-            />
-          </DatasetProvider>
-        </AccessControlProvider>
+        <ResourceInfoProvider swr={resourceInfoSwrResponse}>
+          <AccessControlProvider accessControl={accessControl}>
+            <DatasetProvider dataset={resourceInfo}>
+              <ResourceDetails
+                onDelete={onUpdate}
+                onDeleteCurrentContainer={onDeleteCurrentContainer}
+              />
+            </DatasetProvider>
+          </AccessControlProvider>
+        </ResourceInfoProvider>
       )}
     </Drawer>
   );

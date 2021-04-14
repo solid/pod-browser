@@ -38,6 +38,7 @@ const webIdsWithAccessToFeatures = [
   "https://pod.inrupt.com/docsteam/profile/card#me",
   "https://pod.inrupt.com/vincent/profile/card#me",
   "https://testsharepat.inrupt.net/profile/card#me",
+  "https://pod.inrupt.com/acoburn/profile/card#me",
 ];
 function enableForGivenWebIds(webIds) {
   return (session) =>

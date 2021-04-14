@@ -158,9 +158,9 @@ export function sharedStart(...strings) {
 }
 
 export async function serializePromises(promiseFactories) {
-  return promiseFactories.reduce((promise, func) => {
-    return promise.then((result) =>
-      func()?.then(Array.prototype.concat.bind(result))
-    );
+  return promiseFactories.reduce(async (promise, func) => {
+    const oldResult = await promise;
+    const newResult = await func();
+    return oldResult.concat(newResult);
   }, Promise.resolve([]));
 }
