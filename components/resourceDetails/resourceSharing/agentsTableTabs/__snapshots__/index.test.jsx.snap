@@ -4,6 +4,7 @@ exports[`AgentTableTabs renders tabs 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-tabsContainer"
+    data-testid="agent-table-tabs"
   >
     <div
       class="PodBrowser-root"
@@ -20,7 +21,7 @@ exports[`AgentTableTabs renders tabs 1`] = `
           <button
             aria-selected="false"
             class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit"
-            data-testid="tab-all"
+            data-testid="agent-table-tabs-all"
             role="tab"
             tabindex="-1"
             type="button"
@@ -37,7 +38,7 @@ exports[`AgentTableTabs renders tabs 1`] = `
           <button
             aria-selected="true"
             class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit PodBrowser-selected PodBrowser-selected"
-            data-testid="tab-people"
+            data-testid="agent-table-tabs-people"
             role="tab"
             tabindex="0"
             type="button"
@@ -54,7 +55,7 @@ exports[`AgentTableTabs renders tabs 1`] = `
           <button
             aria-selected="false"
             class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit"
-            data-testid="tab-groups"
+            data-testid="agent-table-tabs-groups"
             role="tab"
             tabindex="-1"
             type="button"
