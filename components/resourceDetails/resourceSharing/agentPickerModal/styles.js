@@ -77,7 +77,9 @@ export default function styles(theme) {
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      // borderBottom: `1px solid ${theme.palette.grey.A100}`,
+    },
+    "tabsAndAddButtonContainer--with-tabs": {
+      borderBottom: `1px solid ${theme.palette.grey.A100}`,
     },
     agentPickerTable: {
       width: `calc(100% - ${theme.spacing(1.6) * 2}px)`,

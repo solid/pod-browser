@@ -55,6 +55,12 @@ export default function styles(theme) {
         height: "2.5rem",
       },
     },
+    "searchBoxContainer--can-be-hidden": {
+      "&$searchBoxContainer--expanded": {
+        position: "absolute",
+        width: "auto",
+      },
+    },
     "searchInput--hidden": {
       visibility: "hidden",
       fontSize: "0.8125rem",

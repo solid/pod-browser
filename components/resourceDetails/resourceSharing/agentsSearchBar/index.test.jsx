@@ -21,12 +21,23 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
+import { useSession } from "@inrupt/solid-ui-react";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
-
 import AgentsSearchBar, { TESTCAFE_ID_SEARCH_INPUT } from "./index";
+import mockSession from "../../../../__testUtils/mockSession";
+import { GROUPS_PAGE_ENABLED_FOR } from "../../../../src/featureFlags";
+
+jest.mock("@inrupt/solid-ui-react");
+const mockedSessionHook = useSession;
 
 describe("AgentSearchBar", () => {
   const handleFilterChange = jest.fn();
+
+  beforeEach(() => {
+    const session = mockSession();
+    mockedSessionHook.mockReturnValue({ session });
+  });
+
   it("renders a search bar", () => {
     const { asFragment, getByTestId } = renderWithTheme(
       <AgentsSearchBar handleFilterChange={handleFilterChange} />
@@ -43,5 +54,13 @@ describe("AgentSearchBar", () => {
     userEvent.type(input, "A");
 
     expect(handleFilterChange).toHaveBeenCalled();
+  });
+  it("renders slightly different view with Group UI enabled", () => {
+    const session = mockSession({ webId: GROUPS_PAGE_ENABLED_FOR[0] });
+    mockedSessionHook.mockReturnValue({ session });
+    const { asFragment } = renderWithTheme(
+      <AgentsSearchBar handleFilterChange={handleFilterChange} />
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 });

@@ -21,13 +21,15 @@
 
 /* eslint-disable react/forbid-prop-types */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import { IconButton, InputBase, createStyles } from "@material-ui/core";
 import styles from "./styles";
+import FeatureContext from "../../../../src/contexts/featureFlagsContext";
+import { GROUPS_PAGE_ENABLED } from "../../../../src/featureFlags";
 
 export const TESTCAFE_ID_MOBILE_SEARCH_INPUT = "mobile-search-input";
 export const TESTCAFE_ID_SEARCH_BUTTON = "search-button";
@@ -36,10 +38,12 @@ export const TESTCAFE_ID_CLOSE_BUTTON = "close-button";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function MobileAgentsSearchBar({ handleFilterChange }) {
+  const { enabled } = useContext(FeatureContext);
   const bem = useBem(useStyles());
   const [expanded, setExpanded] = useState(false);
   const classes = useStyles();
   const textInput = React.createRef();
+  const useGroupUI = enabled(GROUPS_PAGE_ENABLED);
 
   useEffect(() => {
     if (expanded) {
@@ -49,7 +53,11 @@ export default function MobileAgentsSearchBar({ handleFilterChange }) {
 
   return (
     <div
-      className={bem("searchBoxContainer", expanded ? "expanded" : "hidden")}
+      className={bem("searchBoxContainer", {
+        expanded,
+        hidden: !expanded,
+        "can-be-hidden": useGroupUI,
+      })}
     >
       <IconButton
         data-testid={TESTCAFE_ID_SEARCH_BUTTON}

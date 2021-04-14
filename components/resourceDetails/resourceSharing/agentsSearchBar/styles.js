@@ -30,6 +30,12 @@ export default function styles(theme) {
       borderRadius: "10px",
       height: "2.5rem",
     },
+    "searchBoxContainer--can-be-hidden": {
+      display: "none",
+      [theme.breakpoints.up("sm")]: {
+        display: "flex",
+      },
+    },
     searchInput: {
       fontSize: "0.8125rem",
       width: "100%",

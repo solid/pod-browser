@@ -21,24 +21,32 @@
 
 /* eslint-disable react/forbid-prop-types */
 
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import { IconButton, InputBase, createStyles } from "@material-ui/core";
 import styles from "./styles";
+import FeatureContext from "../../../../src/contexts/featureFlagsContext";
+import { GROUPS_PAGE_ENABLED } from "../../../../src/featureFlags";
 
 export const TESTCAFE_ID_SEARCH_INPUT = "search-input";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function AgentsSearchBar({ handleFilterChange }) {
-  const bem = useBem(useStyles());
-
+  const { enabled } = useContext(FeatureContext);
   const classes = useStyles();
+  const bem = useBem(classes);
+  const useGroupUI = enabled(GROUPS_PAGE_ENABLED);
+
   return (
-    <div className={classes.searchBoxContainer}>
+    <div
+      className={bem("searchBoxContainer", {
+        "can-be-hidden": useGroupUI,
+      })}
+    >
       <IconButton type="submit" aria-label="search">
         <i
           className={clsx(bem("icon-search"), bem("icon"), classes.iconSearch)}

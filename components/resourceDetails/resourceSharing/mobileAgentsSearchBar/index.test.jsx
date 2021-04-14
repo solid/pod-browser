@@ -21,15 +21,27 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
+import { useSession } from "@inrupt/solid-ui-react";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import MobileAgentsSearchBar, {
   TESTCAFE_ID_MOBILE_SEARCH_INPUT,
   TESTCAFE_ID_SEARCH_BUTTON,
   TESTCAFE_ID_CLOSE_BUTTON,
 } from "./index";
+import mockSession from "../../../../__testUtils/mockSession";
+import { GROUPS_PAGE_ENABLED_FOR } from "../../../../src/featureFlags";
+
+jest.mock("@inrupt/solid-ui-react");
+const mockedSessionHook = useSession;
 
 describe("MobileAgentSearchBar", () => {
   const handleFilterChange = jest.fn();
+
+  beforeEach(() => {
+    const session = mockSession();
+    mockedSessionHook.mockReturnValue({ session });
+  });
+
   it("renders a search icon", () => {
     const { asFragment, getByTestId } = renderWithTheme(
       <MobileAgentsSearchBar handleFilterChange={handleFilterChange} />
@@ -73,5 +85,13 @@ describe("MobileAgentSearchBar", () => {
     userEvent.type(input, "A");
 
     expect(handleFilterChange).toHaveBeenCalled();
+  });
+  it("renders slightly different view with Groups UI enabled", () => {
+    const session = mockSession({ webId: GROUPS_PAGE_ENABLED_FOR[0] });
+    mockedSessionHook.mockReturnValue({ session });
+    const { asFragment } = renderWithTheme(
+      <MobileAgentsSearchBar handleFilterChange={handleFilterChange} />
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 });

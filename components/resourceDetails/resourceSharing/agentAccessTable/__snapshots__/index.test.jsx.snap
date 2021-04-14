@@ -155,7 +155,7 @@ exports[`AgentAccessTable renders a list of permissions 1`] = `
                 </div>
               </div>
               <div
-                class="PodBrowser-searchBoxContainer"
+                class="PodBrowser-searchBoxContainer PodBrowser-searchBoxContainer--can-be-hidden"
               >
                 <button
                   aria-label="search"
