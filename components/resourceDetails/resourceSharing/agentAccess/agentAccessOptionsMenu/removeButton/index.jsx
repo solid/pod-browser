@@ -87,7 +87,6 @@ export const handleRemovePermissions = ({
     );
     await mutateResourceInfo(updatedAcr, false);
     setLoading(false);
-    // await mutatePermissions();
     setLocalAccess(null);
   };
 };
