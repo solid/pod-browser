@@ -29,9 +29,10 @@ import { Tabs, Tab, createStyles } from "@material-ui/core";
 
 import styles from "./styles";
 
-export const TESTCAFE_ID_TAB_ALL = "tab-all";
-export const TESTCAFE_ID_TAB_PEOPLE = "tab-people";
-export const TESTCAFE_ID_TAB_GROUPS = "tab-groups";
+export const TESTCAFE_ID_TAB = "agent-table-tabs";
+export const TESTCAFE_ID_TAB_ALL = "agent-table-tabs-all";
+export const TESTCAFE_ID_TAB_PEOPLE = "agent-table-tabs-people";
+export const TESTCAFE_ID_TAB_GROUPS = "agent-table-tabs-groups";
 
 const tabs = [
   {
@@ -59,7 +60,10 @@ export default function AgentsTableTabs({
   const classes = useStyles();
 
   return (
-    <div className={clsx(classes.tabsContainer, className)}>
+    <div
+      className={clsx(classes.tabsContainer, className)}
+      data-testid={TESTCAFE_ID_TAB}
+    >
       <Tabs
         classes={{ indicator: classes.indicator }}
         value={selectedTabValue}
