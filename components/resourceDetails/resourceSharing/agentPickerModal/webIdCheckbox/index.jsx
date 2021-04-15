@@ -21,12 +21,17 @@
 
 /* eslint-disable react/forbid-prop-types */
 
-import React from "react";
+import React, { useCallback } from "react";
 import { useThing } from "@inrupt/solid-ui-react";
 import { getUrl } from "@inrupt/solid-client";
 import PropTypes from "prop-types";
 import { Checkbox } from "@material-ui/core";
 import useContactProfile from "../../../../../src/hooks/useContactProfile";
+import { permission as permissionPropType } from "../../../../../constants/propTypes";
+import {
+  getWebIdsFromInheritedPermissions,
+  getWebIdsFromPermissions,
+} from "../../../../../src/accessControl/acp";
 
 export const TESTCAFE_ID_WEBID_CHECKBOX = "webid-checkbox";
 const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
@@ -35,16 +40,19 @@ export default function WebIdCheckbox({
   value,
   index,
   addingWebId,
+  permissions,
   toggleCheckbox,
   newAgentsWebIds,
-  webIdsInPermissions,
   webIdsToDelete,
 }) {
   const { thing } = useThing();
   const { data: profile } = useContactProfile(thing);
   const agentIdentifier = thing && getUrl(thing, AGENT_PREDICATE); // todo: add corresponding groupIdentifier when adding groups
-
-  const getAgentIdentifierValue = () => {
+  const webIdsInPermissions = getWebIdsFromPermissions(permissions);
+  const webIdsFromInheritedPermissions = getWebIdsFromInheritedPermissions(
+    permissions
+  );
+  const agentId = useCallback(() => {
     let agentIdentifierValue;
     if (!agentIdentifier && profile) {
       agentIdentifierValue = profile.webId;
@@ -54,33 +62,43 @@ export default function WebIdCheckbox({
       agentIdentifierValue = "";
     }
     return agentIdentifierValue;
-  };
-
-  const shouldBeChecked = () => {
+  }, [agentIdentifier, index, profile, value]);
+  const checked = useCallback(() => {
     if (index === 0 && addingWebId) {
       return true;
     }
-    if (newAgentsWebIds.includes(getAgentIdentifierValue())) {
+    if (newAgentsWebIds.includes(agentId())) {
       return true;
     }
     if (
-      webIdsInPermissions.includes(getAgentIdentifierValue()) &&
-      !webIdsToDelete.includes(getAgentIdentifierValue())
+      webIdsInPermissions.includes(agentId()) &&
+      !webIdsToDelete.includes(agentId())
     ) {
       return true;
     }
     return false;
-  };
-
+  }, [
+    addingWebId,
+    agentId,
+    index,
+    newAgentsWebIds,
+    webIdsInPermissions,
+    webIdsToDelete,
+  ]);
+  const disabled = useCallback(
+    () => webIdsFromInheritedPermissions.indexOf(agentId()) !== -1,
+    [agentId, webIdsFromInheritedPermissions]
+  );
   return (
     <Checkbox
       inputProps={{ "data-testid": TESTCAFE_ID_WEBID_CHECKBOX }}
       type="checkbox"
       color="primary"
       size="medium"
-      value={getAgentIdentifierValue()}
-      checked={shouldBeChecked()}
-      onChange={(e) => toggleCheckbox(e, index, getAgentIdentifierValue())}
+      value={agentId()}
+      disabled={disabled()}
+      checked={checked()}
+      onChange={(e) => toggleCheckbox(e, index, agentId())}
     />
   );
 }
@@ -89,17 +107,17 @@ WebIdCheckbox.propTypes = {
   value: PropTypes.string,
   index: PropTypes.number.isRequired,
   addingWebId: PropTypes.bool,
+  permissions: PropTypes.arrayOf(permissionPropType),
   toggleCheckbox: PropTypes.func,
   newAgentsWebIds: PropTypes.arrayOf(PropTypes.string),
-  webIdsInPermissions: PropTypes.arrayOf(PropTypes.string),
   webIdsToDelete: PropTypes.arrayOf(PropTypes.string),
 };
 
 WebIdCheckbox.defaultProps = {
   value: null,
   addingWebId: false,
+  permissions: [],
   toggleCheckbox: () => {},
   newAgentsWebIds: [],
-  webIdsInPermissions: [],
   webIdsToDelete: [],
 };

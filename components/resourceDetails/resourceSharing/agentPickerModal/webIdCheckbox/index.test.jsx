@@ -36,8 +36,15 @@ describe("WebIdCheckbox", () => {
   const addingWebId = false;
   const toggleCheckbox = jest.fn();
   const newAgentsWebIds = [];
-  const webIdsInPermissions = [];
+  const permissions = [];
   const webIdsToDelete = [];
+
+  beforeEach(() => {
+    mockedUseContactProfile.mockReturnValue({
+      data: { webId },
+    });
+  });
+
   test("renders a checkbox with the correct value", () => {
     mockedUseContactProfile.mockReturnValue({
       data: { webId: "https://somewebid.com" },
@@ -50,7 +57,7 @@ describe("WebIdCheckbox", () => {
         addingWebId={addingWebId}
         toggleCheckbox={toggleCheckbox}
         newAgentsWebIds={newAgentsWebIds}
-        webIdsInPermissions={webIdsInPermissions}
+        permissions={permissions}
         webIdsToDelete={webIdsToDelete}
       />
     );
@@ -70,7 +77,7 @@ describe("WebIdCheckbox", () => {
         addingWebId={addingWebId}
         toggleCheckbox={toggleCheckbox}
         newAgentsWebIds={newAgentsWebIds}
-        webIdsInPermissions={webIdsInPermissions}
+        permissions={permissions}
         webIdsToDelete={webIdsToDelete}
       />
     );
@@ -89,7 +96,7 @@ describe("WebIdCheckbox", () => {
         addingWebId={addingWebId}
         toggleCheckbox={toggleCheckbox}
         newAgentsWebIds={newAgentsWebIds}
-        webIdsInPermissions={webIdsInPermissions}
+        permissions={permissions}
         webIdsToDelete={webIdsToDelete}
       />
     );
@@ -98,9 +105,6 @@ describe("WebIdCheckbox", () => {
     expect(checkbox).toHaveAttribute("value", "");
   });
   test("checkbox is checked if agent is already in permissions", () => {
-    mockedUseContactProfile.mockReturnValue({
-      data: { webId },
-    });
     const { getByTestId } = renderWithTheme(
       <WebIdCheckbox
         value={null}
@@ -108,7 +112,7 @@ describe("WebIdCheckbox", () => {
         addingWebId={addingWebId}
         toggleCheckbox={toggleCheckbox}
         newAgentsWebIds={newAgentsWebIds}
-        webIdsInPermissions={[webId]}
+        permissions={[{ webId }]}
         webIdsToDelete={webIdsToDelete}
       />
     );
@@ -117,9 +121,6 @@ describe("WebIdCheckbox", () => {
     expect(checkbox).toBeChecked();
   });
   test("calls toggleCheckbox on click with the correct values", () => {
-    mockedUseContactProfile.mockReturnValue({
-      data: { webId },
-    });
     const { getByTestId } = renderWithTheme(
       <WebIdCheckbox
         value={null}
@@ -127,7 +128,7 @@ describe("WebIdCheckbox", () => {
         addingWebId={addingWebId}
         toggleCheckbox={toggleCheckbox}
         newAgentsWebIds={newAgentsWebIds}
-        webIdsInPermissions={[webId]}
+        permissions={[{ webId }]}
         webIdsToDelete={webIdsToDelete}
       />
     );
@@ -138,5 +139,21 @@ describe("WebIdCheckbox", () => {
       index,
       webId
     );
+  });
+  it("disables checkbox if permission came from inherited policy", () => {
+    const { getByTestId } = renderWithTheme(
+      <WebIdCheckbox
+        value={null}
+        index={index}
+        addingWebId={addingWebId}
+        toggleCheckbox={toggleCheckbox}
+        newAgentsWebIds={newAgentsWebIds}
+        permissions={[{ webId, inherited: true }]}
+        webIdsToDelete={webIdsToDelete}
+      />
+    );
+    const checkbox = getByTestId(TESTCAFE_ID_WEBID_CHECKBOX);
+    userEvent.click(checkbox);
+    expect(toggleCheckbox).not.toHaveBeenCalled();
   });
 });
