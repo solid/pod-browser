@@ -61,7 +61,7 @@ export default function AddAgentButton({ type, setLoading }) {
         data-testid={TESTCAFE_ID_ADD_AGENT_BUTTON}
         variant="text"
         onClick={handleOpen}
-        iconBefore="add"
+        iconBefore="edit"
       >
         {editText}
       </Button>

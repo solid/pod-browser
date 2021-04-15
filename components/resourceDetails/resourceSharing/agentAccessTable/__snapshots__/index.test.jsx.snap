@@ -30,7 +30,7 @@ exports[`AgentAccessTable renders a list of permissions 1`] = `
             data-testid="add-agent-button"
           >
             <span
-              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+              class="PodBrowser-icon-edit PodBrowser-button__icon PodBrowser-button__icon--before"
             />
             <span
               class="PodBrowser-button__text"
@@ -182,7 +182,7 @@ exports[`AgentAccessTable renders an empty list of permissions if permissions ar
             data-testid="add-agent-button"
           >
             <span
-              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+              class="PodBrowser-icon-edit PodBrowser-button__icon PodBrowser-button__icon--before"
             />
             <span
               class="PodBrowser-button__text"
@@ -275,7 +275,7 @@ exports[`AgentAccessTable renders an empty list of permissions if there are no p
             data-testid="add-agent-button"
           >
             <span
-              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+              class="PodBrowser-icon-edit PodBrowser-button__icon PodBrowser-button__icon--before"
             />
             <span
               class="PodBrowser-button__text"
