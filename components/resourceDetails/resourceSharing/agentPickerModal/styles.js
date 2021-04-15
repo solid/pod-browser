@@ -53,6 +53,11 @@ export default function styles(theme) {
       ...theme.typography.h1,
       marginBottom: theme.spacing(1.2),
     },
+    addWebIdButtonContainer: {
+      display: "flex",
+      justifyContent: "flex-end",
+      margin: theme.spacing(0, 1.2),
+    },
     tableContainer: {
       minHeight: MOBILE_TABLE_MIN_HEIGHT,
       [theme.breakpoints.up("xs")]: {
@@ -72,7 +77,7 @@ export default function styles(theme) {
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      borderBottom: `1px solid ${theme.palette.grey.A100}`,
+      // borderBottom: `1px solid ${theme.palette.grey.A100}`,
     },
     agentPickerTable: {
       width: `calc(100% - ${theme.spacing(1.6) * 2}px)`,

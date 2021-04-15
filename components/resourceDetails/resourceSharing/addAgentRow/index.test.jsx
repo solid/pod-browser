@@ -23,7 +23,10 @@ import React from "react";
 import userEvent from "@testing-library/user-event";
 import { useSession, useThing } from "@inrupt/solid-ui-react";
 import { addUrl, createThing } from "@inrupt/solid-client";
-import AddAgentRow from "./index";
+import AddAgentRow, {
+  TESTCAFE_ID_ADD_WEBID_BUTTON,
+  TESTCAFE_ID_WEBID_INPUT,
+} from "./index";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import useContactProfile from "../../../../src/hooks/useContactProfile";
 import { vcardExtras } from "../../../../src/addressBook";
@@ -79,8 +82,8 @@ describe("AddAgentRow", () => {
           permissions={permissions}
         />
       );
-      const input = getByTestId("webid-input");
-      const addButton = getByTestId("add-button");
+      const input = getByTestId(TESTCAFE_ID_WEBID_INPUT);
+      const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
       userEvent.type(input, "https://example.org/profile/card#me");
       userEvent.click(addButton);
       const errorText = getByText("That WebID has already been added");
@@ -99,7 +102,7 @@ describe("AddAgentRow", () => {
           permissions={permissions}
         />
       );
-      const input = getByTestId("webid-input");
+      const input = getByTestId(TESTCAFE_ID_WEBID_INPUT);
       userEvent.type(input, "");
       const errorText = queryByText("That WebID has already been added");
       expect(errorText).toBeNull();
@@ -117,9 +120,9 @@ describe("AddAgentRow", () => {
           permissions={permissions}
         />
       );
-      const input = getByTestId("webid-input");
+      const input = getByTestId(TESTCAFE_ID_WEBID_INPUT);
       userEvent.type(input, "https://somewebid.com/");
-      const addButton = getByTestId("add-button");
+      const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
       userEvent.click(addButton);
       expect(setNewAgentsWebIds).toHaveBeenCalledWith([
         "https://somewebid.com/",

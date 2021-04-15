@@ -48,8 +48,8 @@ import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../src/models/contact/au
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
-const TESTCAFE_ID_WEBID_INPUT = "webid-input";
-const TESTCAFE_ID_ADD_WEBID_BUTTON = "add-button";
+export const TESTCAFE_ID_WEBID_INPUT = "webid-input";
+export const TESTCAFE_ID_ADD_WEBID_BUTTON = "add-button";
 const TESTCAFE_ID_AGENT_WEB_ID = "agent-webid";
 
 const updateThingForNewRow = async (agentWebId, thing, fetch) => {
