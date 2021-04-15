@@ -22,13 +22,27 @@
 import React from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
+import * as routerFns from "next/router";
 import { renderWithTheme } from "../../__testUtils/withTheme";
-import ResourceDetails from "./index";
+import ResourceDetails, {
+  TESTCAFE_ID_ACCORDION_PERMISSIONS,
+  TESTCAFE_ID_ACCORDION_SHARING,
+} from "./index";
+import mockAccessControl from "../../__testUtils/mockAccessControl";
+import { AccessControlProvider } from "../../src/contexts/accessControlContext";
+import * as accessControlFns from "../../src/accessControl";
+
+const accessControl = mockAccessControl();
+const dataset = mockSolidDatasetFrom("http://example.com/container/");
 
 describe("Resource details", () => {
-  test("it renders container details", () => {
-    const dataset = mockSolidDatasetFrom("http://example.com/container/");
+  beforeEach(() => {
+    jest
+      .spyOn(routerFns, "useRouter")
+      .mockReturnValue({ query: { resourceIri: "" } });
+  });
 
+  it("renders container details", () => {
     const { asFragment } = renderWithTheme(
       <DatasetProvider dataset={dataset}>
         <ResourceDetails />
@@ -36,16 +50,43 @@ describe("Resource details", () => {
     );
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it renders a decoded container name", () => {
-    const dataset = mockSolidDatasetFrom(
+
+  it("renders a decoded container name", () => {
+    const datasetWithDecodedContainerName = mockSolidDatasetFrom(
       "http://example.com/Some%20container/"
     );
 
     const { asFragment } = renderWithTheme(
-      <DatasetProvider dataset={dataset}>
+      <DatasetProvider dataset={datasetWithDecodedContainerName}>
         <ResourceDetails />
       </DatasetProvider>
     );
     expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("renders Permissions component for WAC-supporting Solid servers", () => {
+    jest.spyOn(accessControlFns, "isWac").mockReturnValue(true);
+    const { asFragment, getByTestId } = renderWithTheme(
+      <AccessControlProvider accessControl={accessControl}>
+        <DatasetProvider dataset={dataset}>
+          <ResourceDetails />
+        </DatasetProvider>
+      </AccessControlProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
+    expect(getByTestId(TESTCAFE_ID_ACCORDION_PERMISSIONS)).toBeDefined();
+  });
+
+  it("renders Sharing component for ACP-supporting Solid servers", () => {
+    jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
+    const { asFragment, getByTestId } = renderWithTheme(
+      <AccessControlProvider accessControl={accessControl}>
+        <DatasetProvider dataset={dataset}>
+          <ResourceDetails />
+        </DatasetProvider>
+      </AccessControlProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
+    expect(getByTestId(TESTCAFE_ID_ACCORDION_SHARING)).toBeDefined();
   });
 });

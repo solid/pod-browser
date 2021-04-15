@@ -45,17 +45,12 @@ function enableForGivenWebIds(webIds) {
     session.info.isLoggedIn && webIds.includes(session.info.webId);
 }
 
-export const NEW_ACP_UI_ENABLED_FOR = webIdsWithAccessToFeatures;
-export const NEW_ACP_UI_ENABLED = "newAcpUIEnabled";
-export const newAcpUiEnabled = enableForGivenWebIds(NEW_ACP_UI_ENABLED_FOR);
-
 export const GROUPS_PAGE_ENABLED_FOR = webIdsWithAccessToFeatures;
 export const GROUPS_PAGE_ENABLED = "groupsPageEnabled";
 export const groupsPageEnabled = enableForGivenWebIds(GROUPS_PAGE_ENABLED_FOR);
 
 export default function FeatureFlags() {
   return {
-    [NEW_ACP_UI_ENABLED]: newAcpUiEnabled,
     [GROUPS_PAGE_ENABLED]: groupsPageEnabled,
   };
 }
