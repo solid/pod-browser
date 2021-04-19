@@ -32,7 +32,7 @@ import ResourceDrawer, {
 jest.mock("../resourceDrawer");
 
 describe("ContainerDetails", () => {
-  let mutate;
+  let update;
   let onUpdateFn;
   let onDeleteCurrentContainerFn;
   let handleCloseDrawerFn;
@@ -66,9 +66,9 @@ describe("ContainerDetails", () => {
       () => handleRedirectToParentContainerFn
     );
 
-    mutate = jest.fn();
+    update = jest.fn();
 
-    renderResult = render(<ContainerDetails mutate={mutate} />);
+    renderResult = render(<ContainerDetails update={update} />);
   });
 
   test("Renders view", () => {
@@ -78,7 +78,7 @@ describe("ContainerDetails", () => {
   describe("when DetailsContextMenu.onUpdate is called", () => {
     beforeEach(() => onUpdateFn());
 
-    test("it calls mutate", () => expect(mutate).toHaveBeenCalled());
+    test("it calls mutate", () => expect(update).toHaveBeenCalled());
     test("it calls handleCloseDrawerFn", () =>
       expect(handleCloseDrawerFn).toHaveBeenCalled());
   });
@@ -86,7 +86,7 @@ describe("ContainerDetails", () => {
   describe("when onDeleteCurrentContainer is called", () => {
     beforeEach(() => onDeleteCurrentContainerFn());
 
-    test("it calls mutate", () => expect(mutate).toHaveBeenCalled());
+    test("it calls mutate", () => expect(update).toHaveBeenCalled());
     test("it calls handleRedirectToParentContainerFn", () =>
       expect(handleRedirectToParentContainerFn).toHaveBeenCalled());
   });

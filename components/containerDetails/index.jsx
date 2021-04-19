@@ -29,18 +29,18 @@ import ResourceDrawer, {
 } from "../resourceDrawer";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 
-export default function ContainerDetails({ children, mutate }) {
+export default function ContainerDetails({ children, update }) {
   const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
   const router = useRouter();
 
   const drawer = (
     <ResourceDrawer
       onUpdate={() => {
-        mutate();
+        update();
         handleCloseDrawer({ setMenuOpen, router })();
       }}
       onDeleteCurrentContainer={(iri) => {
-        mutate();
+        update();
         handleRedirectToParentContainer({ setMenuOpen, iri, router })();
       }}
     />
@@ -55,7 +55,7 @@ export default function ContainerDetails({ children, mutate }) {
 
 ContainerDetails.propTypes = {
   children: T.node,
-  mutate: T.func.isRequired,
+  update: T.func.isRequired,
 };
 
 ContainerDetails.defaultProps = {

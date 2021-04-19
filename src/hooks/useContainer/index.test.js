@@ -19,16 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import useSWR from "swr";
 import * as solidClientFns from "@inrupt/solid-client";
 import { renderHook } from "@testing-library/react-hooks";
 import { useSession } from "@inrupt/solid-ui-react";
 import * as containerModelFns from "../../models/container";
-import useContainer, { GET_CONTAINER } from "./index";
+import useContainer from "./index";
 import { chain } from "../../solidClientHelpers/utils";
-
-jest.mock("swr");
-const mockedSwrHook = useSWR;
 
 jest.mock("@inrupt/solid-ui-react");
 const mockedSessionHook = useSession;
@@ -36,7 +32,6 @@ const mockedSessionHook = useSession;
 describe("useContainer", () => {
   const iri = "http://example.com/container/";
   const fetch = jest.fn();
-  const swrResponse = 42;
   const thing = solidClientFns.createThing({ url: iri });
   const dataset = chain(solidClientFns.mockSolidDatasetFrom(iri), (t) =>
     solidClientFns.setThing(t, thing)
@@ -46,32 +41,17 @@ describe("useContainer", () => {
   beforeEach(() => {
     mockedSessionHook.mockReturnValue({ fetch });
     jest.spyOn(containerModelFns, "getContainer").mockResolvedValue(container);
-    mockedSwrHook.mockReturnValue(swrResponse);
   });
 
-  it("caches with SWR", () => {
-    const value = renderHook(() => useContainer(iri, { refreshInterval: 0 }));
-    expect(value.result.current).toBe(swrResponse);
-    expect(useSWR).toHaveBeenCalledWith(
-      [iri, GET_CONTAINER],
-      expect.any(Function),
-      { refreshInterval: 0 }
-    );
-  });
-
-  it("useSWR fetches data using getSolidDataset", async () => {
-    renderHook(() => useContainer(iri));
-    await expect(useSWR.mock.calls[0][1]()).resolves.toBe(container);
+  it("fetches data using getSolidDataset", async () => {
+    const { result, waitForNextUpdate } = renderHook(() => useContainer(iri));
+    await waitForNextUpdate();
+    expect(result.current.data).toBe(container);
     expect(containerModelFns.getContainer).toHaveBeenCalledWith(iri, { fetch });
-    expect(useSWR).toHaveBeenCalledWith(
-      [iri, GET_CONTAINER],
-      expect.any(Function),
-      {}
-    );
   });
 
   it("returns null if no URL is given", async () => {
-    renderHook(() => useContainer(null));
-    await expect(useSWR.mock.calls[0][1]()).resolves.toBeNull();
+    const { result } = renderHook(() => useContainer(null));
+    expect(result.current.data).toBeNull();
   });
 });

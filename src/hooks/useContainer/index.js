@@ -20,19 +20,44 @@
  */
 
 import { useSession } from "@inrupt/solid-ui-react";
-import useSWR from "swr";
+import { useEffect, useState } from "react";
+import { getContainerUrl } from "../../stringHelpers";
 import { getContainer } from "../../models/container";
 
-export const GET_CONTAINER = "getContainer";
-
-export default function useContainer(url, options = {}) {
+export default function useContainer(iri) {
   const { fetch } = useSession();
-  return useSWR(
-    [url, GET_CONTAINER],
-    async () => {
-      if (!url) return null;
-      return getContainer(url, { fetch });
-    },
-    options
-  );
+  const url = getContainerUrl(iri);
+  const [container, setContainer] = useState(null);
+  const [containerError, setContainerError] = useState(null);
+  const [isFetching, setIsFetching] = useState(false);
+
+  useEffect(() => {
+    if (!url) return;
+    async function fetchContainer() {
+      setIsFetching(true);
+      try {
+        const initialData = await getContainer(url, { fetch });
+        setContainer(initialData);
+        setContainerError(null);
+        setIsFetching(false);
+      } catch (e) {
+        setContainer(null);
+        setContainerError(e);
+        setIsFetching(false);
+      }
+    }
+    fetchContainer();
+  }, [url, fetch]);
+
+  async function update() {
+    const updatedContainer = await getContainer(url, { fetch });
+    setContainer(updatedContainer);
+  }
+
+  return {
+    data: container,
+    error: containerError,
+    update,
+    isFetching,
+  };
 }
