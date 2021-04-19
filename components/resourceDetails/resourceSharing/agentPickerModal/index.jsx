@@ -68,6 +68,7 @@ import {
   AUTHENTICATED_AGENT_PREDICATE,
 } from "../../../../src/models/contact/authenticated";
 import ResourceInfoContext from "../../../../src/contexts/resourceInfoContext";
+import { getWebIdsFromPermissions } from "../../../../src/accessControl/acp";
 
 export const handleSubmit = ({
   newAgentsWebIds,
@@ -221,7 +222,7 @@ function AgentPickerModal(
     PERSON_CONTACT,
   ]);
 
-  const webIdsInPermissions = permissions?.map((p) => p.webId);
+  const webIdsInPermissions = getWebIdsFromPermissions(permissions);
 
   const bem = useBem(useStyles());
 
@@ -447,9 +448,9 @@ function AgentPickerModal(
                   value={value}
                   index={index}
                   addingWebId={addingWebId}
+                  permissions={permissions}
                   toggleCheckbox={toggleCheckbox}
                   newAgentsWebIds={newAgentsWebIds}
-                  webIdsInPermissions={webIdsInPermissions}
                   webIdsToDelete={webIdsToDelete}
                 />
               )}

@@ -462,6 +462,16 @@ export async function getPodBrowserPermissions(
   }
 }
 
+export function getWebIdsFromPermissions(permissions) {
+  return (permissions || []).map(({ webId }) => webId);
+}
+
+export function getWebIdsFromInheritedPermissions(permissions) {
+  return getWebIdsFromPermissions(
+    (permissions || []).filter(({ inherited }) => inherited)
+  );
+}
+
 export default class AcpAccessControlStrategy {
   #originalWithAcr;
 

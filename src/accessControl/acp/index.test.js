@@ -36,6 +36,8 @@ import AcpAccessControlStrategy, {
   removePermissionsForAgent,
   setAgents,
   getNamedPolicyModesAndAgents,
+  getWebIdsFromPermissions,
+  getWebIdsFromInheritedPermissions,
 } from "./index";
 import {
   getPolicyUrl,
@@ -1279,5 +1281,29 @@ describe("removePermissionsForAgent", () => {
         .getRuleAll(updatedDataset)
         .reduce((memo, rule) => memo.concat(acpFns.getAgentAll(rule)), [])
     ).toEqual([agent2]);
+  });
+});
+
+describe("getWebIdsFromPermissions", () => {
+  it("returns WebID from list of permissions", () => {
+    const webId = "http://example.com/card#me";
+    expect(getWebIdsFromPermissions([])).toEqual([]);
+    expect(getWebIdsFromPermissions([{ webId }])).toEqual([webId]);
+    expect(getWebIdsFromPermissions(null)).toEqual([]);
+  });
+});
+
+describe("getWebIdsFromInheritedPermissions", () => {
+  it("returns WebID from list of inherited permissions", () => {
+    const webId1 = "http://example.com/card1#me";
+    const webId2 = "http://example.com/card2#me";
+    expect(getWebIdsFromInheritedPermissions([])).toEqual([]);
+    expect(
+      getWebIdsFromInheritedPermissions([
+        { webId: webId1, inherited: true },
+        { webId: webId2 },
+      ])
+    ).toEqual([webId1]);
+    expect(getWebIdsFromInheritedPermissions(null)).toEqual([]);
   });
 });
