@@ -33,9 +33,9 @@ import ContainerDetails from "../containerDetails";
 import { BookmarksContextProvider } from "../../src/contexts/bookmarksContext";
 import AccessForbidden from "../accessForbidden";
 import ResourceNotFound from "../resourceNotFound";
-import useDataset from "../../src/hooks/useDataset";
+import useContainer from "../../src/hooks/useContainer";
 import NotSupported from "../notSupported";
-import useContainerResourceIris from "../../src/hooks/useContainerResourceIris";
+import { getContainerResourceUrlAll } from "../../src/models/container";
 import { getContainerUrl } from "../../src/stringHelpers";
 import ContainerSubHeader from "../containerSubHeader";
 import usePodRootUri from "../../src/hooks/usePodRootUri";
@@ -51,9 +51,7 @@ import { locationIsConnectedToProfile } from "../../src/solidClientHelpers/profi
 
 export default function Container({ iri }) {
   useRedirectIfLoggedOut();
-  const encodedContainerPathIri = getContainerUrl(iri);
-  const [containerPath, setContainerPath] = useState(encodedContainerPathIri);
-  const [resourcePath, setResourcePath] = useState(iri);
+  const [resourceUrls, setResourceUrls] = useState();
   const {
     data: authenticatedProfile,
     error: authenticatedProfileError,
@@ -64,32 +62,30 @@ export default function Container({ iri }) {
   );
   const { error: accessControlError } = useAccessControl(podRootResourceInfo);
 
+  const {
+    data: container,
+    error: containerError,
+    update,
+    isFetching,
+  } = useContainer(iri);
+
   useEffect(() => {
-    setResourcePath(iri);
-    const path = getContainerUrl(iri);
-    setContainerPath(path);
-  }, [iri]);
-
-  const { data: container, error: containerError } = useDataset(containerPath, {
-    refreshInterval: 0,
-  });
-
-  const { data: resourceIris, mutate } = useContainerResourceIris(
-    containerPath
-  );
+    const urls = container && getContainerResourceUrlAll(container);
+    setResourceUrls(urls);
+  }, [container]);
 
   const data = useMemo(() => {
-    if (!resourceIris) {
+    if (!resourceUrls) {
       return [];
     }
 
-    return resourceIris.map((rIri) => ({
+    return resourceUrls.map((rIri) => ({
       iri: rIri,
       name: getResourceName(rIri),
       filename: getResourceName(rIri)?.toLowerCase(),
       type: renderResourceType(rIri),
     }));
-  }, [resourceIris]);
+  }, [resourceUrls]);
 
   if (!iri) return <Spinner />;
 
@@ -107,24 +103,31 @@ export default function Container({ iri }) {
   );
   if (podRootError && locationIsInUsersPod) return <PodRootLoadError />;
 
-  if (!resourceIris || !container || !podRootIri) return <Spinner />;
+  if (!resourceUrls || !container || !podRootIri) return <Spinner />;
 
-  if (!isContainer(container)) return <NotSupported />;
+  const { dataset: containerDataset } = container;
+
+  if (containerDataset && !isContainer(containerDataset))
+    return <NotSupported />;
 
   return (
     <>
       <BookmarksContextProvider>
         <PageHeader />
-        <ContainerDetails mutate={mutate}>
-          <ContainerSubHeader mutate={mutate} resourceList={data} />
+        <ContainerDetails update={update}>
+          <ContainerSubHeader update={update} resourceList={data} />
           {locationIsInUsersPod && accessControlError && (
             <NoControlWarning podRootIri={podRootIri} />
           )}
-          <ContainerTable
-            containerPath={containerPath}
-            data={data}
-            resourcePath={resourcePath}
-          />
+          {isFetching ? (
+            <Spinner />
+          ) : (
+            <ContainerTable
+              containerPath={getContainerUrl(iri)}
+              data={data}
+              resourcePath={iri}
+            />
+          )}
         </ContainerDetails>
       </BookmarksContextProvider>
     </>

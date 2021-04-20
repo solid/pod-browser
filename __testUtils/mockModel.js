@@ -19,45 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
-import T from "prop-types";
-import { DrawerContainer } from "@inrupt/prism-react-components";
-import { useRouter } from "next/router";
-import ResourceDrawer, {
-  handleCloseDrawer,
-  handleRedirectToParentContainer,
-} from "../resourceDrawer";
-import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
+import {
+  mockSolidDatasetFrom,
+  mockThingFrom,
+  setThing,
+} from "@inrupt/solid-client";
+import { chain } from "../src/solidClientHelpers/utils";
+import { getBaseUrl } from "../src/solidClientHelpers/resource";
 
-export default function ContainerDetails({ children, update }) {
-  const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
-  const router = useRouter();
-
-  const drawer = (
-    <ResourceDrawer
-      onUpdate={() => {
-        update();
-        handleCloseDrawer({ setMenuOpen, router })();
-      }}
-      onDeleteCurrentContainer={(iri) => {
-        update();
-        handleRedirectToParentContainer({ setMenuOpen, iri, router })();
-      }}
-    />
-  );
-
-  return (
-    <DrawerContainer drawer={drawer} open={menuOpen}>
-      {children}
-    </DrawerContainer>
-  );
+// eslint-disable-next-line import/prefer-default-export
+export function mockModel(thingUrl, ...operations) {
+  const datasetUrl = getBaseUrl(thingUrl);
+  const dataset = mockSolidDatasetFrom(datasetUrl);
+  const thing = chain(mockThingFrom(thingUrl), ...operations);
+  return {
+    dataset: setThing(dataset, thing),
+    thing,
+  };
 }
-
-ContainerDetails.propTypes = {
-  children: T.node,
-  update: T.func.isRequired,
-};
-
-ContainerDetails.defaultProps = {
-  children: null,
-};

@@ -19,45 +19,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
-import T from "prop-types";
-import { DrawerContainer } from "@inrupt/prism-react-components";
-import { useRouter } from "next/router";
-import ResourceDrawer, {
-  handleCloseDrawer,
-  handleRedirectToParentContainer,
-} from "../resourceDrawer";
-import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
+import { addUrl } from "@inrupt/solid-client";
+import { ldp } from "rdf-namespaces";
+import { mockModel } from "./mockModel";
 
-export default function ContainerDetails({ children, update }) {
-  const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
-  const router = useRouter();
-
-  const drawer = (
-    <ResourceDrawer
-      onUpdate={() => {
-        update();
-        handleCloseDrawer({ setMenuOpen, router })();
-      }}
-      onDeleteCurrentContainer={(iri) => {
-        update();
-        handleRedirectToParentContainer({ setMenuOpen, iri, router })();
-      }}
-    />
-  );
-
-  return (
-    <DrawerContainer drawer={drawer} open={menuOpen}>
-      {children}
-    </DrawerContainer>
+// eslint-disable-next-line import/prefer-default-export
+export function mockContainer(url, children = []) {
+  return mockModel(
+    url,
+    ...children.map((child) => (t) => addUrl(t, ldp.contains, child))
   );
 }
-
-ContainerDetails.propTypes = {
-  children: T.node,
-  update: T.func.isRequired,
-};
-
-ContainerDetails.defaultProps = {
-  children: null,
-};

@@ -32,7 +32,7 @@ import AddFolderFlyout from "../addFolderFlyout";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function ContainerSubHeader({ mutate, resourceList }) {
+export default function ContainerSubHeader({ update, resourceList }) {
   const bem = useBem(useStyles());
   const buttonBem = Button.useBem();
   const pageHeaderAction = buttonBem("button", "small");
@@ -42,12 +42,12 @@ export default function ContainerSubHeader({ mutate, resourceList }) {
       <div className={bem("actions-container")}>
         <ContainerDetails className={pageHeaderAction} />
         <AddFolderFlyout
-          onSave={mutate}
+          onSave={update}
           resourceList={resourceList}
           className={pageHeaderAction}
         />
         <AddFileButton
-          onSave={mutate}
+          onSave={update}
           resourceList={resourceList}
           className={pageHeaderAction}
         />
@@ -57,7 +57,7 @@ export default function ContainerSubHeader({ mutate, resourceList }) {
 }
 
 ContainerSubHeader.propTypes = {
-  mutate: T.func,
+  update: T.func,
   resourceList: T.arrayOf(
     T.shape({
       iri: T.string.isRequired,
@@ -67,6 +67,6 @@ ContainerSubHeader.propTypes = {
 };
 
 ContainerSubHeader.defaultProps = {
-  mutate: () => null,
+  update: () => null,
   resourceList: [],
 };

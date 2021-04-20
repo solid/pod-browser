@@ -19,24 +19,17 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable camelcase */
-import useSWR from "swr";
+import { getIriAll, getSolidDataset, getThing } from "@inrupt/solid-client";
 import { ldp } from "rdf-namespaces";
 
-import { getIriAll, getSolidDataset, getThing } from "@inrupt/solid-client";
-import { useSession } from "@inrupt/solid-ui-react";
+/* Model functions */
 
-async function fetchContainerResourceIris(containerIri, fetch) {
-  const litDataset = await getSolidDataset(containerIri, { fetch });
-  const container = getThing(litDataset, containerIri);
-  return getIriAll(container, ldp.contains);
+export async function getContainer(url, { fetch }) {
+  const dataset = await getSolidDataset(url, { fetch });
+  const thing = getThing(dataset, url);
+  return { dataset, thing };
 }
 
-export const GET_CONTAINER_RESOURCE_IRIS = "getContainerResourceIris";
-export default function useContainerResourceIris(iri) {
-  const { fetch } = useSession();
-
-  return useSWR([iri, GET_CONTAINER_RESOURCE_IRIS], () =>
-    fetchContainerResourceIris(iri, fetch)
-  );
+export function getContainerResourceUrlAll({ thing }) {
+  return getIriAll(thing, ldp.contains);
 }
