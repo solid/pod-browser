@@ -771,7 +771,7 @@ exports[`Resource details renders Sharing component for ACP-supporting Solid ser
                         data-testid="add-agent-button"
                       >
                         <span
-                          class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+                          class="PodBrowser-icon-edit PodBrowser-button__icon PodBrowser-button__icon--before"
                         />
                         <span
                           class="PodBrowser-button__text"
@@ -859,7 +859,7 @@ exports[`Resource details renders Sharing component for ACP-supporting Solid ser
                         data-testid="add-agent-button"
                       >
                         <span
-                          class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+                          class="PodBrowser-icon-edit PodBrowser-button__icon PodBrowser-button__icon--before"
                         />
                         <span
                           class="PodBrowser-button__text"

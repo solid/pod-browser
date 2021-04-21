@@ -28,7 +28,7 @@ exports[`SharingAccordion renders two lists of named policies for editors and vi
             data-testid="add-agent-button"
           >
             <span
-              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+              class="PodBrowser-icon-edit PodBrowser-button__icon PodBrowser-button__icon--before"
             />
             <span
               class="PodBrowser-button__text"
@@ -116,7 +116,7 @@ exports[`SharingAccordion renders two lists of named policies for editors and vi
             data-testid="add-agent-button"
           >
             <span
-              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+              class="PodBrowser-icon-edit PodBrowser-button__icon PodBrowser-button__icon--before"
             />
             <span
               class="PodBrowser-button__text"
@@ -230,7 +230,7 @@ exports[`SharingAccordion when resource is a container renders an info box which
             data-testid="add-agent-button"
           >
             <span
-              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+              class="PodBrowser-icon-edit PodBrowser-button__icon PodBrowser-button__icon--before"
             />
             <span
               class="PodBrowser-button__text"
@@ -318,7 +318,7 @@ exports[`SharingAccordion when resource is a container renders an info box which
             data-testid="add-agent-button"
           >
             <span
-              class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+              class="PodBrowser-icon-edit PodBrowser-button__icon PodBrowser-button__icon--before"
             />
             <span
               class="PodBrowser-button__text"
