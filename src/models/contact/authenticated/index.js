@@ -36,6 +36,7 @@ export const AUTHENTICATED_AGENT_PREDICATE =
 
 export const AUTHENTICATED_AGENT_TYPE = "authenticated";
 export const AUTHENTICATED_AGENT_NAME = "Anyone signed in";
+export const AUTHENTICATED_AGENT_TYPE = "authenticated";
 
 export const AUTHENTICATED_AGENT = {
   isOfType: (thing) =>
