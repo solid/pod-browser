@@ -62,7 +62,7 @@ describe("AgentAccess", () => {
 
   it("renders", () => {
     const { asFragment } = renderWithTheme(
-      <DatasetProvider dataset={dataset}>
+      <DatasetProvider solidDataset={dataset}>
         <AgentAccess permission={permission} />
       </DatasetProvider>
     );
@@ -71,7 +71,7 @@ describe("AgentAccess", () => {
 
   it("fetches profile for webId", () => {
     renderWithTheme(
-      <DatasetProvider dataset={dataset}>
+      <DatasetProvider solidDataset={dataset}>
         <AgentAccess permission={permission} />
       </DatasetProvider>
     );
@@ -81,7 +81,7 @@ describe("AgentAccess", () => {
   it("renders skeleton placeholders when profile is not available", () => {
     useFetchProfile.mockReturnValue({ profile: null });
     const { asFragment } = renderWithTheme(
-      <DatasetProvider dataset={dataset}>
+      <DatasetProvider solidDataset={dataset}>
         <AgentAccess permission={permission} />
       </DatasetProvider>
     );
@@ -92,7 +92,7 @@ describe("AgentAccess", () => {
   it("renders an error message with a 'try again' button if it's unable to load profile", () => {
     useFetchProfile.mockReturnValue({ error: "error" });
     const { asFragment, getByTestId } = renderWithTheme(
-      <DatasetProvider dataset={dataset}>
+      <DatasetProvider solidDataset={dataset}>
         <AgentAccess permission={permission} />
       </DatasetProvider>
     );
@@ -103,7 +103,7 @@ describe("AgentAccess", () => {
   it("renders a spinner after clicking 'try again' button", async () => {
     useFetchProfile.mockReturnValue({ error: "error" });
     const { getByTestId } = renderWithTheme(
-      <DatasetProvider dataset={dataset}>
+      <DatasetProvider solidDataset={dataset}>
         <AgentAccess permission={permission} />
       </DatasetProvider>
     );
@@ -117,7 +117,7 @@ describe("AgentAccess", () => {
     useFetchProfile.mockReturnValue({ error: "error" });
     const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
     const { getByTestId } = renderWithTheme(
-      <DatasetProvider dataset={dataset}>
+      <DatasetProvider solidDataset={dataset}>
         <AgentAccess permission={permission} />
       </DatasetProvider>
     );
@@ -134,7 +134,7 @@ describe("AgentAccess", () => {
     const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
     fetchProfile.mockReturnValue("profile");
     const { getByTestId, queryByTestId } = renderWithTheme(
-      <DatasetProvider dataset={dataset}>
+      <DatasetProvider solidDataset={dataset}>
         <AgentAccess permission={permission} />
       </DatasetProvider>
     );
@@ -149,7 +149,7 @@ describe("AgentAccess", () => {
     const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
     fetchProfile.mockReturnValue("profile");
     const { getByTestId, queryByTestId } = renderWithTheme(
-      <DatasetProvider dataset={dataset}>
+      <DatasetProvider solidDataset={dataset}>
         <AgentAccess permission={permission} />
       </DatasetProvider>
     );
@@ -169,7 +169,7 @@ describe("AgentAccess", () => {
 
       const { asFragment } = renderWithTheme(
         <SessionProvider>
-          <DatasetProvider dataset={dataset}>
+          <DatasetProvider solidDataset={dataset}>
             <AgentAccess permission={permission} webId={session.info.webId} />
           </DatasetProvider>
         </SessionProvider>
@@ -185,7 +185,7 @@ describe("AgentAccess", () => {
 
       const { asFragment } = renderWithTheme(
         <SessionProvider>
-          <DatasetProvider dataset={dataset}>
+          <DatasetProvider solidDataset={dataset}>
             <AgentAccess permission={permission} webId={session.info.webId} />
           </DatasetProvider>
         </SessionProvider>
@@ -197,7 +197,7 @@ describe("AgentAccess", () => {
   test("default value for onLoading", async () => {
     useFetchProfile.mockReturnValue({ error: "error" });
     const { getByTestId } = renderWithTheme(
-      <DatasetProvider dataset={dataset}>
+      <DatasetProvider solidDataset={dataset}>
         <AgentAccess permission={permission} onLoading={undefined} />
       </DatasetProvider>
     );

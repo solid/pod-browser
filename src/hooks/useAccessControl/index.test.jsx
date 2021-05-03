@@ -21,6 +21,7 @@
 
 import { renderHook } from "@testing-library/react-hooks";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import { useSession } from "@inrupt/solid-ui-react";
 import useAccessControl from "./index";
 import * as accessControlFns from "../../accessControl";
 import usePoliciesContainerUrl from "../usePoliciesContainerUrl";
@@ -35,6 +36,9 @@ const mockedPoliciesContainerUrlHook = usePoliciesContainerUrl;
 
 jest.mock("../useAuthenticatedProfile");
 const mockedAuthenticatedProfileHook = useAuthenticatedProfile;
+
+jest.mock("@inrupt/solid-ui-react");
+const mockedUseSession = useSession;
 
 describe("useAccessControl", () => {
   const authenticatedProfile = mockProfileAlice();
@@ -54,6 +58,7 @@ describe("useAccessControl", () => {
     mockedPoliciesContainerUrlHook.mockReturnValue(null);
     session = mockSession();
     wrapper = mockSessionContextProvider(session);
+    mockedUseSession.mockReturnValue(session);
     jest.spyOn(accessControlFns, "isAcp").mockReturnValue(false);
     mockedAuthenticatedProfileHook.mockReturnValue({
       data: authenticatedProfile,
@@ -76,7 +81,7 @@ describe("useAccessControl", () => {
     await waitForNextUpdate();
     expect(result.current.accessControl).not.toBeNull();
     rerender(resourceInfo + 2);
-    expect(result.current.accessControl).toBeNull();
+    expect(result.all[0].accessControl).toBeNull(); // checking that the first render sets accessControl to null
     expect(result.current.error).toBeNull();
   });
 

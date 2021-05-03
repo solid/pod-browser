@@ -139,7 +139,10 @@ describe("ResourceDrawer view", () => {
         </DetailsMenuContext>
       </SessionProvider>
     );
-    expect(useResourceInfo).toHaveBeenCalledWith(encodeURI(iri));
+    expect(useResourceInfo).toHaveBeenCalledWith(encodeURI(iri), {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    });
   });
 
   it("uses access control", () => {

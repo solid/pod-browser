@@ -21,11 +21,15 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
+import { useSession } from "@inrupt/solid-ui-react";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import MenuDrawer, { TESTCAFE_ID_MENU_DRAWER_BUTTON } from "./index";
 import { mockAuthenticatedSession } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import { TESTCAFE_ID_USER_MENU_LOGOUT } from "../../../src/hooks/useUserMenu";
+
+jest.mock("@inrupt/solid-ui-react");
+const mockedUseSession = useSession;
 
 describe("MenuDrawer", () => {
   let logout;
@@ -34,8 +38,9 @@ describe("MenuDrawer", () => {
 
   beforeEach(() => {
     logout = jest.fn();
-    session = { logout, ...mockAuthenticatedSession() };
+    session = { ...mockAuthenticatedSession() };
     SessionProvider = mockSessionContextProvider(session);
+    mockedUseSession.mockReturnValue({ session, logout });
   });
 
   it("renders menu drawer", () => {

@@ -20,9 +20,16 @@
  */
 
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, act, screen } from "@testing-library/react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
-import Profile, { setupErrorComponent } from "./index";
+import mockSession from "../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
+import Profile, {
+  setupErrorComponent,
+  TESTCAFE_ID_NAME_FIELD,
+  TESTCAFE_ID_ORG_FIELD,
+  TESTCAFE_ID_ROLE_FIELD,
+} from "./index";
 
 const profileIri = "https://example.com/profile/card#me";
 
@@ -33,10 +40,19 @@ describe("Profile", () => {
   });
 
   test("renders an editable profile", () => {
-    const { asFragment } = renderWithTheme(
-      <Profile profileIri={profileIri} editing />
-    );
-    expect(asFragment()).toMatchSnapshot();
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
+    act(() => {
+      const { asFragment } = renderWithTheme(
+        <SessionProvider>
+          <Profile profileIri={profileIri} editing />
+        </SessionProvider>
+      );
+      expect(asFragment()).toMatchSnapshot();
+    });
+    expect(screen.findByTestId(TESTCAFE_ID_NAME_FIELD)).not.toBeNull();
+    expect(screen.findByTestId(TESTCAFE_ID_ROLE_FIELD)).not.toBeNull();
+    expect(screen.findByTestId(TESTCAFE_ID_ORG_FIELD)).not.toBeNull();
   });
 });
 

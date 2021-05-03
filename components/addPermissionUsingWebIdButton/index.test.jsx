@@ -37,7 +37,7 @@ const dataset = mockSolidDatasetFrom(datasetUrl);
 describe("AddPermissionUsingWebIdButton", () => {
   it("renders", () => {
     const { asFragment } = renderWithTheme(
-      <DatasetProvider dataset={dataset}>
+      <DatasetProvider solidDataset={dataset}>
         <AddPermissionUsingWebIdButton />
       </DatasetProvider>
     );

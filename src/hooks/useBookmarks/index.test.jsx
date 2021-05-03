@@ -21,27 +21,36 @@
 
 import { act, renderHook } from "@testing-library/react-hooks";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
-import { SessionProvider } from "@inrupt/solid-ui-react";
+import { useSession } from "@inrupt/solid-ui-react";
 import React from "react";
 import mockSession, {
   mockUnauthenticatedSession,
 } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
+import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import useBookmarks from "./index";
 import * as resourceFns from "../../solidClientHelpers/resource";
 import * as bookmarkFns from "../../solidClientHelpers/bookmarks";
 import AlertContext from "../../contexts/alertContext";
 
+jest.mock("@inrupt/solid-ui-react");
+const mockedUseSession = useSession;
+
+jest.mock("../useAuthenticatedProfile");
+const mockedUseAuthenticatedProfile = useAuthenticatedProfile;
+
 describe("useBookmarks", () => {
   const bookmarksIri = "http://example.com/bookmarks/index.ttl";
+  const podUri = "http://example.com/";
 
   describe("with an unauthenticated user", () => {
     it("should not return any bookmarks", () => {
       const session = mockUnauthenticatedSession();
-      const wrapper = mockSessionContextProvider(session);
-      const { result } = renderHook(() => useBookmarks(), {
-        wrapper,
+      mockedUseSession.mockReturnValue({ session });
+      mockedUseAuthenticatedProfile.mockReturnValue({
+        data: null,
       });
+      const { result } = renderHook(() => useBookmarks());
       expect(result.current[0]).toBeUndefined();
     });
   });
@@ -50,7 +59,6 @@ describe("useBookmarks", () => {
     const dataset = mockSolidDatasetFrom(bookmarksIri);
 
     let session;
-    let wrapper;
     let setMessage;
     let setAlertOpen;
     let setSeverity;
@@ -60,16 +68,10 @@ describe("useBookmarks", () => {
       setMessage = jest.fn();
       setAlertOpen = jest.fn();
       setSeverity = jest.fn();
-      // eslint-disable-next-line react/prop-types
-      wrapper = ({ children }) => (
-        <SessionProvider sessionId="test-session" session={session}>
-          <AlertContext.Provider
-            value={{ setMessage, setAlertOpen, setSeverity }}
-          >
-            {children}
-          </AlertContext.Provider>
-        </SessionProvider>
-      );
+      mockedUseSession.mockReturnValue({ session });
+      mockedUseAuthenticatedProfile.mockReturnValue({
+        data: { pods: [podUri] },
+      });
     });
 
     describe("with an existing bookmarks index", () => {
@@ -77,12 +79,11 @@ describe("useBookmarks", () => {
         jest
           .spyOn(resourceFns, "getResource")
           .mockResolvedValue({ response: { dataset } });
+        mockedUseSession.mockReturnValue({ session });
       });
 
       it("should call getResource", async () => {
-        const { waitForNextUpdate } = renderHook(() => useBookmarks(), {
-          wrapper,
-        });
+        const { waitForNextUpdate } = renderHook(() => useBookmarks());
         await waitForNextUpdate();
         expect(resourceFns.getResource).toHaveBeenCalledWith(
           bookmarksIri,
@@ -91,17 +92,13 @@ describe("useBookmarks", () => {
       });
 
       it("should return the bookmarks resource", async () => {
-        const { result, waitForNextUpdate } = renderHook(() => useBookmarks(), {
-          wrapper,
-        });
+        const { result, waitForNextUpdate } = renderHook(() => useBookmarks());
         await waitForNextUpdate();
         expect(result.current[0].dataset).toEqual(dataset);
       });
 
       it("reeturns a refresh function", async () => {
-        const { result, waitForNextUpdate } = renderHook(() => useBookmarks(), {
-          wrapper,
-        });
+        const { result, waitForNextUpdate } = renderHook(() => useBookmarks());
         await waitForNextUpdate();
         expect(resourceFns.getResource).toHaveBeenCalledTimes(1);
         act(() => {
@@ -124,29 +121,36 @@ describe("useBookmarks", () => {
       });
 
       it("should return a new bookmarks resource", async () => {
+        const { result, waitForNextUpdate } = renderHook(() => useBookmarks());
+
+        await waitForNextUpdate();
+        expect(result.current[0].dataset).toEqual(dataset);
+      });
+      it("notifies user about error", async () => {
+        const error = new Error("error");
+        jest.spyOn(resourceFns, "getResource").mockRejectedValue(error);
+        const SessionProvider = mockSessionContextProvider(session);
+        const wrapper = ({ children }) => (
+          <SessionProvider sessionId="test-session" session={session}>
+            <AlertContext.Provider
+              value={{ setMessage, setAlertOpen, setSeverity }}
+            >
+              {children}
+            </AlertContext.Provider>
+          </SessionProvider>
+        );
+
         const { result, waitForNextUpdate } = renderHook(() => useBookmarks(), {
           wrapper,
         });
 
         await waitForNextUpdate();
-        expect(result.current[0].dataset).toEqual(dataset);
+
+        expect(result.current[0]).toEqual([]);
+        expect(setSeverity).toHaveBeenCalledWith("error");
+        expect(setMessage).toHaveBeenCalledWith(error);
+        expect(setAlertOpen).toHaveBeenCalledWith(true);
       });
-    });
-
-    it("notifies user about error", async () => {
-      const error = new Error("error");
-      jest.spyOn(resourceFns, "getResource").mockRejectedValue(error);
-
-      const { result, waitForNextUpdate } = renderHook(() => useBookmarks(), {
-        wrapper,
-      });
-
-      await waitForNextUpdate();
-
-      expect(result.current[0]).toEqual([]);
-      expect(setSeverity).toHaveBeenCalledWith("error");
-      expect(setMessage).toHaveBeenCalledWith(error);
-      expect(setAlertOpen).toHaveBeenCalledWith(true);
     });
   });
 });

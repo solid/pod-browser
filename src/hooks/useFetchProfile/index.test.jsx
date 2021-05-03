@@ -22,12 +22,15 @@
 import React from "react";
 import useSWR from "swr";
 import { renderHook } from "@testing-library/react-hooks";
+import { useSession } from "@inrupt/solid-ui-react";
 import mockSession, { webIdUrl } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import * as profileHelpers from "../../solidClientHelpers/profile";
 import useFetchProfile, { FETCH_PROFILE } from "./index";
 
 jest.mock("swr");
+jest.mock("@inrupt/solid-ui-react");
+const mockedUseSession = useSession;
 
 describe("useFetchProfile", () => {
   const webId = webIdUrl;
@@ -36,6 +39,7 @@ describe("useFetchProfile", () => {
   beforeEach(() => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
+    mockedUseSession.mockReturnValue(session);
     const wrapper = ({ children }) => (
       <SessionProvider>{children}</SessionProvider>
     );

@@ -25,6 +25,8 @@ import {
   getThing,
   mockSolidDatasetFrom,
   mockThingFrom,
+  removeThing,
+  removeUrl,
   setThing,
 } from "@inrupt/solid-client";
 import { chain } from "../src/solidClientHelpers/utils";
@@ -54,6 +56,27 @@ export function addGroupToMockedIndexDataset(
     dataset,
     (d) => setThing(d, mockGroupThing(name, groupThingUrl)),
     (d) => setThing(d, mockIndexThing(d, addressBook, groupThingUrl))
+  );
+}
+
+export function removeGroupFromMockedIndexDataset(
+  dataset,
+  addressBook,
+  groupIndex,
+  groupThing,
+  groupThingUrl
+) {
+  return chain(
+    dataset,
+    (d) => removeThing(d, groupThing),
+    (d) =>
+      setThing(
+        d,
+        chain(
+          getThing(groupIndex, asUrl(addressBook.thing)),
+          (t) => removeUrl(t, vcardExtras("includesGroup"), groupThingUrl) // remove the includesGroup reference to group
+        )
+      )
   );
 }
 

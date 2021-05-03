@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
   Accordion,
   AccordionDetails,
@@ -50,7 +50,8 @@ import useLocalStorage from "../../src/hooks/useLocalStorage";
 const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
 const TESTCAFE_ID_DELETE_BUTTON = "delete-resource-button";
 const TESTCAFE_ID_ACCORDION_ACTIONS = "accordion-resource-actions-trigger";
-const TESTCAFE_ID_ACCORDION_DETAILS = "accordion-resource-details-trigger";
+export const TESTCAFE_ID_ACCORDION_DETAILS =
+  "accordion-resource-details-trigger";
 export const TESTCAFE_ID_ACCORDION_PERMISSIONS =
   "accordion-resource-permissions";
 export const TESTCAFE_ID_ACCORDION_SHARING = "accordion-resource-sharing";
@@ -66,7 +67,7 @@ export default function ResourceDetails({
   onDelete,
   onDeleteCurrentContainer,
 }) {
-  const { dataset } = useContext(DatasetContext);
+  const { solidDataset: dataset } = useContext(DatasetContext);
   const datasetUrl = getSourceUrl(dataset);
   const classes = useStyles();
   const name = getIriPath(datasetUrl);

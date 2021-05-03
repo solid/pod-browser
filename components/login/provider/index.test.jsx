@@ -20,10 +20,10 @@
  */
 
 import React from "react";
+import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
-
 import ProviderLogin, {
   getErrorMessage,
   setupErrorHandler,
@@ -47,7 +47,7 @@ describe("ProviderLogin form", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("calls the login function upon submitting the form", () => {
+  it("calls the login function upon submitting the form", async () => {
     const session = mockUnauthenticatedSession();
     const SessionProvider = mockSessionContextProvider(session);
     const { login } = session;
@@ -58,7 +58,9 @@ describe("ProviderLogin form", () => {
     );
     const loginInput = getByTestId(TESTCAFE_ID_LOGIN_FIELD);
     userEvent.type(loginInput, "{enter}");
-    expect(login).toHaveBeenCalled();
+    waitFor(() => {
+      expect(login).toHaveBeenCalled();
+    });
   });
 
   it("renders a validation error if login fails", () => {

@@ -64,7 +64,7 @@ describe("AgentAccessList", () => {
     const accessControl = mockAccessControl();
     const { asFragment } = renderWithTheme(
       <AccessControlProvider accessControl={accessControl}>
-        <DatasetProvider dataset={dataset}>
+        <DatasetProvider solidDataset={dataset}>
           <AgentAccessList />
         </DatasetProvider>
       </AccessControlProvider>
@@ -79,7 +79,7 @@ describe("AgentAccessList", () => {
     });
     const { asFragment } = renderWithTheme(
       <AccessControlProvider accessControl={accessControl}>
-        <DatasetProvider dataset={dataset}>
+        <DatasetProvider solidDataset={dataset}>
           <AgentAccessList />
         </DatasetProvider>
       </AccessControlProvider>
@@ -95,7 +95,7 @@ describe("AgentAccessList", () => {
     });
     const { getByTestId, getAllByRole } = renderWithTheme(
       <AccessControlProvider accessControl={accessControl}>
-        <DatasetProvider dataset={dataset}>
+        <DatasetProvider solidDataset={dataset}>
           <AgentAccessList />
         </DatasetProvider>
       </AccessControlProvider>

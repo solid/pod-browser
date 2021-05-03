@@ -26,6 +26,7 @@ export const TESTCAFE_ID_USER_MENU_LOGOUT = "user-menu-logout";
 
 export default function useUserMenu() {
   const { logout } = useSession();
+
   return [
     {
       href: "/profile",

@@ -45,9 +45,9 @@ import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-const TESTCAFE_ID_NAME_FIELD = "profile-name-field";
-const TESTCAFE_ID_ROLE_FIELD = "profile-role-field";
-const TESTCAFE_ID_ORG_FIELD = "profile-org-field";
+export const TESTCAFE_ID_NAME_FIELD = "profile-name-field";
+export const TESTCAFE_ID_ROLE_FIELD = "profile-role-field";
+export const TESTCAFE_ID_ORG_FIELD = "profile-org-field";
 
 export function setupErrorComponent(bem) {
   return () => (

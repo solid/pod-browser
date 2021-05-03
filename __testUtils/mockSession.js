@@ -43,7 +43,7 @@ export default function mockSession(options = {}) {
     on: jest.fn(),
     handleIncomingRedirect: jest.fn().mockResolvedValue(null),
     fetch: mockFetch({
-      [options.webId || webIdUrl]: () => mockResponse(200, profileTurtle),
+      [webId || webIdUrl]: () => mockResponse(200, profileTurtle),
       [storageUrl]: () =>
         mockResponse(200, storageTurtle, {
           Link: `<${storageAclUrl}>; rel="acl"`,
