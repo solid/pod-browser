@@ -20,13 +20,19 @@
  */
 
 import React from "react";
-import { render, act, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
+import * as solidClientFns from "@inrupt/solid-client";
 import { renderWithTheme } from "../../__testUtils/withTheme";
+import {
+  aliceWebIdUrl,
+  mockPersonDatasetAlice,
+} from "../../__testUtils/mockPersonResource";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import Profile, {
   setupErrorComponent,
   TESTCAFE_ID_NAME_FIELD,
+  TESTCAFE_ID_NAME_TITLE,
   TESTCAFE_ID_ORG_FIELD,
   TESTCAFE_ID_ROLE_FIELD,
 } from "./index";
@@ -34,25 +40,44 @@ import Profile, {
 const profileIri = "https://example.com/profile/card#me";
 
 describe("Profile", () => {
-  test("renders a profile", () => {
-    const { asFragment } = renderWithTheme(<Profile profileIri={profileIri} />);
+  const profileDataset = mockPersonDatasetAlice();
+  const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+
+  beforeEach(() => {
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValue(profileDataset);
+    jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
+  });
+
+  test("renders a profile", async () => {
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
+    const { asFragment, findByTestId } = renderWithTheme(
+      <SessionProvider>
+        <Profile profileIri={profileIri} />
+      </SessionProvider>
+    );
+    await expect(findByTestId(TESTCAFE_ID_NAME_TITLE)).resolves.not.toBeNull();
+    expect(await findByTestId(TESTCAFE_ID_NAME_TITLE)).toHaveTextContent(
+      "Alice"
+    );
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("renders an editable profile", () => {
+  test("renders an editable profile", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
-    act(() => {
-      const { asFragment } = renderWithTheme(
-        <SessionProvider>
-          <Profile profileIri={profileIri} editing />
-        </SessionProvider>
-      );
-      expect(asFragment()).toMatchSnapshot();
-    });
-    expect(screen.findByTestId(TESTCAFE_ID_NAME_FIELD)).not.toBeNull();
-    expect(screen.findByTestId(TESTCAFE_ID_ROLE_FIELD)).not.toBeNull();
-    expect(screen.findByTestId(TESTCAFE_ID_ORG_FIELD)).not.toBeNull();
+    const { asFragment, findByTestId } = renderWithTheme(
+      <SessionProvider>
+        <Profile profileIri={profileIri} editing />
+      </SessionProvider>
+    );
+    await expect(findByTestId(TESTCAFE_ID_NAME_FIELD)).resolves.not.toBeNull();
+    await expect(findByTestId(TESTCAFE_ID_ROLE_FIELD)).resolves.not.toBeNull();
+    await expect(findByTestId(TESTCAFE_ID_ORG_FIELD)).resolves.not.toBeNull();
+
+    expect(asFragment()).toMatchSnapshot();
   });
 });
 

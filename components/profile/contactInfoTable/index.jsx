@@ -217,13 +217,13 @@ export default function ContactTable({ editing, property, contactInfoType }) {
   const [newContactType, setNewContactType] = useState(DEFAULT_CONTACT_TYPE);
   const [newContactValue, setNewContactValue] = useState("");
   const { fetch } = useSession();
-  const { dataset, setDataset } = useContext(DatasetContext);
-  const { thing: profile } = useThing();
 
-  const contactDetailUrls = getUrlAll(profile, property);
-  const contactDetailThings = contactDetailUrls.map((url) => ({
+  const { solidDataset: dataset, setDataset } = useContext(DatasetContext);
+  const { thing: profile } = useThing();
+  const contactDetailUrls = profile && getUrlAll(profile, property);
+  const contactDetailThings = contactDetailUrls?.map((url) => ({
     dataset,
-    thing: getThing(dataset, url),
+    thing: dataset && getThing(dataset, url),
   }));
 
   const saveHandler = setupSaveHandler(fetch, setDataset);
@@ -255,6 +255,10 @@ export default function ContactTable({ editing, property, contactInfoType }) {
   );
   const newContactTypeOnChange = setupOnChange(setNewContactType);
   const newContactValueOnChange = setupOnChange(setNewContactValue);
+
+  if (!dataset) {
+    return null;
+  }
 
   return (
     <>
