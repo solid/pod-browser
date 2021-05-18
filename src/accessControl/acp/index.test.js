@@ -463,7 +463,7 @@ describe("AcpAccessControlStrategy", () => {
         }
       );
     });
-    it("deletes rule and policy is agent is the last one on the list", async () => {
+    it("deletes rule and policy if agent is the last one on the list", async () => {
       const mockedRemoveRule = jest.spyOn(acpFns3, "removeAllOfRuleUrl");
       const mockedDeleteFile = jest
         .spyOn(scFns, "deleteFile")

@@ -331,8 +331,7 @@ function getPolicyUrlName(policyUrl, name) {
 
 function ensureAccessControl(policyUrl, datasetWithAcr, changed) {
   const policies = acp.getPolicyUrlAll(datasetWithAcr);
-  const existingPolicies = policies.find((url) => policyUrl === url);
-  if (existingPolicies) {
+  if (policies.includes(policyUrl)) {
     return {
       changed,
       acr: datasetWithAcr,
@@ -340,7 +339,7 @@ function ensureAccessControl(policyUrl, datasetWithAcr, changed) {
   }
   const acr = acp.addAcrPolicyUrl(datasetWithAcr, policyUrl);
   return {
-    changed: changed || !existingPolicies,
+    changed: true,
     acr,
   };
 }
