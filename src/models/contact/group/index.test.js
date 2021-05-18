@@ -46,6 +46,7 @@ import {
 } from "./index";
 import mockGroupContact, {
   addGroupToMockedIndexDataset,
+  removeGroupFromMockedIndexDataset,
 } from "../../../../__testUtils/mockGroupContact";
 import { chain } from "../../../solidClientHelpers/utils";
 import { vcardExtras } from "../../../addressBook";
@@ -97,6 +98,18 @@ const groupIndexWithGroup1And2Dataset = chain(
       addressBookWithGroupIndex,
       group2Name,
       group2Url
+    )
+);
+const group1Thing = getThing(groupIndexWithGroup1And2Dataset, group1Url);
+const groupIndexAfterRemovingGroup1 = chain(
+  groupIndexWithGroup1And2Dataset,
+  (d) =>
+    removeGroupFromMockedIndexDataset(
+      d,
+      addressBookWithGroupIndex,
+      groupIndexWithGroup1And2Dataset,
+      group1Thing,
+      group1Url
     )
 );
 const group1ContainerUrl = getContainerUrl(group1DatasetUrl);
@@ -320,7 +333,7 @@ describe("renameGroup", () => {
     const groupDatasetThings = getThingAll(
       mockedSaveSolidDatasetAt.mock.calls[0][1]
     ); // TODO: Remove when we have support for getThingLocal
-    const groupThing = groupDatasetThings[1];
+    const groupThing = groupDatasetThings[0];
     expect(getStringNoLocale(groupThing, vcard.fn)).toEqual(newName);
     expect(getStringNoLocale(groupThing, vcard.note)).toBeNull();
 
@@ -333,7 +346,7 @@ describe("renameGroup", () => {
     const indexDatasetThings = getThingAll(
       mockedSaveSolidDatasetAt.mock.calls[1][1]
     ); // TODO: Remove when we have support for getThingLocal
-    const indexThing = indexDatasetThings[1];
+    const indexThing = indexDatasetThings[0];
     expect(getStringNoLocale(indexThing, vcard.fn)).toEqual(newName);
     expect(getStringNoLocale(indexThing, vcard.note)).toBeNull();
   });
@@ -362,7 +375,7 @@ describe("renameGroup", () => {
     const groupDatasetThings = getThingAll(
       mockedSaveSolidDatasetAt.mock.calls[0][1]
     ); // TODO: Remove when we have support for getThingLocal
-    const groupThing = groupDatasetThings[1];
+    const groupThing = groupDatasetThings[0];
     expect(getStringNoLocale(groupThing, vcard.fn)).toEqual(newName);
     expect(getStringNoLocale(groupThing, vcard.note)).toEqual(newDescription);
   });
@@ -374,9 +387,7 @@ describe("deleteGroup", () => {
   let mockedDeleteContainer;
 
   beforeEach(() => {
-    mockedSaveSolidDatasetAt.mockResolvedValueOnce(
-      groupIndexWithGroup2Dataset.dataset
-    );
+    mockedSaveSolidDatasetAt.mockResolvedValueOnce(groupIndexWithGroup2Dataset);
     mockedDeleteFile = jest
       .spyOn(solidClientFns, "deleteFile")
       .mockResolvedValue({});
@@ -393,7 +404,7 @@ describe("deleteGroup", () => {
     await expect(
       deleteGroup(addressBookWithGroupIndex, mockedGroup1, fetch)
     ).resolves.toEqual({
-      dataset: groupIndexWithGroup2Dataset.dataset,
+      dataset: groupIndexWithGroup2Dataset,
       type: GROUP_CONTACT,
     });
     expect(mockedGetSolidDataset).toHaveBeenCalledWith(groupsDatasetUrl, {
@@ -401,7 +412,7 @@ describe("deleteGroup", () => {
     });
     expect(mockedSaveSolidDatasetAt).toHaveBeenCalledWith(
       groupsDatasetUrl,
-      groupIndexWithGroup2Dataset,
+      groupIndexAfterRemovingGroup1,
       { fetch }
     );
     expect(mockedDeleteFile).toHaveBeenCalledWith(group1Url, { fetch });

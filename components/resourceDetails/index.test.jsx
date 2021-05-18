@@ -44,7 +44,7 @@ describe("Resource details", () => {
 
   it("renders container details", () => {
     const { asFragment } = renderWithTheme(
-      <DatasetProvider dataset={dataset}>
+      <DatasetProvider solidDataset={dataset}>
         <ResourceDetails />
       </DatasetProvider>
     );
@@ -57,7 +57,7 @@ describe("Resource details", () => {
     );
 
     const { asFragment } = renderWithTheme(
-      <DatasetProvider dataset={datasetWithDecodedContainerName}>
+      <DatasetProvider solidDataset={datasetWithDecodedContainerName}>
         <ResourceDetails />
       </DatasetProvider>
     );
@@ -68,7 +68,7 @@ describe("Resource details", () => {
     jest.spyOn(accessControlFns, "isWac").mockReturnValue(true);
     const { asFragment, getByTestId } = renderWithTheme(
       <AccessControlProvider accessControl={accessControl}>
-        <DatasetProvider dataset={dataset}>
+        <DatasetProvider solidDataset={dataset}>
           <ResourceDetails />
         </DatasetProvider>
       </AccessControlProvider>
@@ -81,7 +81,7 @@ describe("Resource details", () => {
     jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
     const { asFragment, getByTestId } = renderWithTheme(
       <AccessControlProvider accessControl={accessControl}>
-        <DatasetProvider dataset={dataset}>
+        <DatasetProvider solidDataset={dataset}>
           <ResourceDetails />
         </DatasetProvider>
       </AccessControlProvider>

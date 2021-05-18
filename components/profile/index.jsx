@@ -45,9 +45,10 @@ import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-const TESTCAFE_ID_NAME_FIELD = "profile-name-field";
-const TESTCAFE_ID_ROLE_FIELD = "profile-role-field";
-const TESTCAFE_ID_ORG_FIELD = "profile-org-field";
+export const TESTCAFE_ID_NAME_TITLE = "profile-name-title";
+export const TESTCAFE_ID_NAME_FIELD = "profile-name-field";
+export const TESTCAFE_ID_ROLE_FIELD = "profile-role-field";
+export const TESTCAFE_ID_ORG_FIELD = "profile-org-field";
 
 export function setupErrorComponent(bem) {
   return () => (
@@ -90,7 +91,7 @@ export default function Profile(props) {
               </Box>
 
               <Box p={2}>
-                <h3>
+                <h3 data-testid={TESTCAFE_ID_NAME_TITLE}>
                   <Text property={vcard.fn} />
                 </h3>
               </Box>
@@ -142,6 +143,7 @@ export default function Profile(props) {
             <Box mt={4}>
               <InputLabel>Email Addresses</InputLabel>
               <ContactInfoTable
+                datasetIri={profileIri}
                 property={vcard.hasEmail}
                 editing={editing}
                 contactInfoType={CONTACT_INFO_TYPE_EMAIL}
@@ -151,6 +153,7 @@ export default function Profile(props) {
             <Box mt={4}>
               <InputLabel>Phone Numbers</InputLabel>
               <ContactInfoTable
+                datasetIri={profileIri}
                 property={vcard.hasTelephone}
                 editing={editing}
                 contactInfoType={CONTACT_INFO_TYPE_PHONE}

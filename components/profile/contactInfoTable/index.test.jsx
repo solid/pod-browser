@@ -22,15 +22,13 @@
 import React from "react";
 import { rdf, vcard } from "rdf-namespaces";
 import * as scFns from "@inrupt/solid-client";
-import { ThingProvider } from "@inrupt/solid-ui-react";
-
+import { CombinedDataProvider, ThingProvider } from "@inrupt/solid-ui-react";
 import { addUrl, getThingAll, getUrl, setThing } from "@inrupt/solid-client";
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
-
 import ContactInfoTable, {
   CONTACT_INFO_TYPE_EMAIL,
   DEFAULT_CONTACT_TYPE,
@@ -45,25 +43,31 @@ import ContactInfoTable, {
   setupRowProps,
   setupSaveHandler,
 } from "./index";
+import useDataset from "../../../src/hooks/useDataset";
+
+jest.mock("../../../src/hooks/useDataset");
+const mockedUseDataset = useDataset;
 
 const { mockSolidDatasetFrom, mockThingFrom } = scFns;
 const dataset = mockSolidDatasetFrom("http://example.com/dataset");
 const profile = mockThingFrom("http://example.com/profile#this");
+beforeEach(() => {
+  mockedUseDataset.mockReturnValue();
+});
 
 describe("ContactInfoTable", () => {
-  test("renders a table of contact info", () => {
+  test("renders a table of contact info", async () => {
     const session = mockSession({ fetch });
     const SessionProvider = mockSessionContextProvider(session);
     const thing = mockThingFrom("http://example.com/alice#me");
-
-    const { asFragment } = renderWithTheme(
+    const { asFragment, findByRole } = renderWithTheme(
       <SessionProvider>
-        <ThingProvider thing={thing}>
+        <CombinedDataProvider solidDataset={dataset} thing={thing}>
           <ContactInfoTable property={vcard.hasEmail} />
-        </ThingProvider>
+        </CombinedDataProvider>
       </SessionProvider>
     );
-
+    await expect(findByRole("table")).resolves.not.toBeNull();
     expect(asFragment()).toMatchSnapshot();
   });
 
@@ -74,13 +78,13 @@ describe("ContactInfoTable", () => {
 
     const { asFragment } = renderWithTheme(
       <SessionProvider>
-        <ThingProvider thing={thing}>
+        <CombinedDataProvider solidDataset={dataset} thing={thing}>
           <ContactInfoTable
             property={vcard.hasEmail}
             editing
             contactInfoType={CONTACT_INFO_TYPE_EMAIL}
           />
-        </ThingProvider>
+        </CombinedDataProvider>
       </SessionProvider>
     );
 

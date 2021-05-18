@@ -20,11 +20,14 @@
  */
 
 import { renderHook } from "@testing-library/react-hooks";
+import * as solidUiReactFns from "@inrupt/solid-ui-react";
 import mockSession, {
   mockUnauthenticatedSession,
+  webIdUrl,
 } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import useAddressBookOld from "./index";
+import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import { getResource } from "../../solidClientHelpers/resource";
 import * as addressBookFns from "../../addressBook";
 import useContactsContainerUrl from "../useContactsContainerUrl";
@@ -33,6 +36,9 @@ jest.mock("../../solidClientHelpers/resource");
 
 jest.mock("../useContactsContainerUrl");
 const mockedContactsContainerUrl = useContactsContainerUrl;
+
+jest.mock("../useAuthenticatedProfile");
+const mockedUseAuthenticatedProfile = useAuthenticatedProfile;
 
 describe("useAddressBookOld", () => {
   const contactsIri = "http://example.com/contacts/";
@@ -44,6 +50,10 @@ describe("useAddressBookOld", () => {
   describe("with an unauthenticated user", () => {
     it("should not return any addressBook", () => {
       const session = mockUnauthenticatedSession();
+      const mockedUseSession = jest.spyOn(solidUiReactFns, "useSession");
+      mockedUseSession.mockReturnValue({ session });
+      mockedUseAuthenticatedProfile.mockReturnValue({ data: null });
+
       const wrapper = mockSessionContextProvider(session);
       const { result } = renderHook(() => useAddressBookOld(), {
         wrapper,
@@ -55,20 +65,23 @@ describe("useAddressBookOld", () => {
   describe("with an authenticated user", () => {
     let session;
     let wrapper;
+    const profile = { webId: webIdUrl };
 
     describe("with an existing address book", () => {
       beforeEach(() => {
         session = mockSession();
         wrapper = mockSessionContextProvider(session);
+        const mockedUseSession = jest.spyOn(solidUiReactFns, "useSession");
+        mockedUseSession.mockReturnValue({ session });
+        mockedUseAuthenticatedProfile.mockReturnValue({ data: profile });
       });
 
-      it("should call getResource", async () => {
+      it("should call getResource", () => {
         const dataset = 42;
         getResource.mockResolvedValue({ response: { dataset } });
-        const { waitForNextUpdate } = renderHook(() => useAddressBookOld(), {
+        renderHook(() => useAddressBookOld(), {
           wrapper,
         });
-        await waitForNextUpdate();
         expect(getResource).toHaveBeenCalledWith(
           addressBookFns.getContactsIndexIri(contactsIri),
           session.fetch
@@ -78,6 +91,8 @@ describe("useAddressBookOld", () => {
       it("should return the address book resource", async () => {
         const dataset = 42;
         getResource.mockResolvedValue({ response: { dataset } });
+        const mockedUseSession = jest.spyOn(solidUiReactFns, "useSession");
+        mockedUseSession.mockReturnValue({ session });
         const { result, waitForNextUpdate } = renderHook(
           () => useAddressBookOld(),
           {
@@ -91,6 +106,8 @@ describe("useAddressBookOld", () => {
       it("should return error if anything goes wrong", async () => {
         const error = "Something went wrong";
         getResource.mockResolvedValue({ error });
+        const mockedUseSession = jest.spyOn(solidUiReactFns, "useSession");
+        mockedUseSession.mockReturnValue({ session });
         const { result, waitForNextUpdate } = renderHook(
           () => useAddressBookOld(),
           {
@@ -106,6 +123,8 @@ describe("useAddressBookOld", () => {
       beforeEach(() => {
         session = mockSession();
         wrapper = mockSessionContextProvider(session);
+        const mockedUseSession = jest.spyOn(solidUiReactFns, "useSession");
+        mockedUseSession.mockReturnValue({ session });
         getResource.mockResolvedValue({ response: null, error: "404" });
       });
 
@@ -131,6 +150,8 @@ describe("useAddressBookOld", () => {
         jest
           .spyOn(addressBookFns, "saveNewAddressBook")
           .mockResolvedValue({ error });
+        const mockedUseSession = jest.spyOn(solidUiReactFns, "useSession");
+        mockedUseSession.mockReturnValue({ session });
         const { result, waitForNextUpdate } = renderHook(
           () => useAddressBookOld(),
           {

@@ -93,7 +93,6 @@ export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
       </Drawer>
     );
   }
-
   const loading = (!accessControl && !accessControlError) || !resourceInfo;
 
   return (
@@ -103,7 +102,7 @@ export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
       ) : (
         <ResourceInfoProvider swr={resourceInfoSwrResponse}>
           <AccessControlProvider accessControl={accessControl}>
-            <DatasetProvider dataset={resourceInfo}>
+            <DatasetProvider solidDataset={resourceInfo}>
               <ResourceDetails
                 onDelete={onUpdate}
                 onDeleteCurrentContainer={onDeleteCurrentContainer}

@@ -188,12 +188,11 @@ describe("createContact", () => {
 
     const things = getThingAll(dataset);
     const webId = things[0]; // always the first thing in this dataset
-    const addressesThing = things[3];
+    const addressesThing = things[4];
     const emailsAndPhones = things.reduce(
       (memo, t) => memo.concat(getStringNoLocaleAll(t, vcard.value)),
       []
     );
-
     expect(getStringNoLocale(webId, vcard.fn)).toEqual("Test Person");
     expect(mockWebIdNodeFn).toHaveBeenCalledWith(webIdUrl, expect.anything());
     expect(getUrl(webId, vcard.url)).toEqual(webIdNodeUrl);
