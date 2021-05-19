@@ -34,6 +34,8 @@ const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 export const PUBLIC_AGENT_PREDICATE =
   "http://www.w3.org/ns/solid/acp#PublicAgent";
 
+export const PUBLIC_AGENT_TYPE = "public";
+
 export const PUBLIC_AGENT = {
   isOfType: (thing) =>
     thing && getUrl(thing, AGENT_PREDICATE) === PUBLIC_AGENT_PREDICATE,
