@@ -27,14 +27,14 @@ import { MatomoProvider, createInstance } from "@datapunt/matomo-tracker-react";
 
 import PropTypes from "prop-types";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import { create } from "jss";
 import preset from "jss-preset-default";
 
 import { appLayout, useBem } from "@solid/lit-prism-patterns";
-import { SessionProvider } from "@inrupt/solid-ui-react";
+import { SessionProvider, useSession } from "@inrupt/solid-ui-react";
 import {
   createStyles,
   makeStyles,
@@ -136,7 +136,11 @@ export default function App(props) {
       <MatomoProvider value={matomoInstance}>
         <StylesProvider jss={jss}>
           <ThemeProvider theme={theme}>
-            <SessionProvider sessionId="pod-browser" restorePreviousSession>
+            <SessionProvider
+              sessionId="pod-browser"
+              restorePreviousSession
+              onSessionRestore={(url) => router.push(url)}
+            >
               <FeatureProvider>
                 <AlertProvider>
                   <ConfirmationDialogProvider>
