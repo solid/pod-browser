@@ -27,14 +27,14 @@ import { MatomoProvider, createInstance } from "@datapunt/matomo-tracker-react";
 
 import PropTypes from "prop-types";
 import Head from "next/head";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import { create } from "jss";
 import preset from "jss-preset-default";
 
 import { appLayout, useBem } from "@solid/lit-prism-patterns";
-import { SessionProvider, useSession } from "@inrupt/solid-ui-react";
+import { SessionProvider } from "@inrupt/solid-ui-react";
 import {
   createStyles,
   makeStyles,
@@ -96,7 +96,8 @@ export function hasSolidAuthClientHash() {
 export default function App(props) {
   const { Component, pageProps } = props;
   const bem = useBem(useStyles());
-  const { pathname, asPath } = useRouter();
+  const router = useRouter();
+  const { pathname, asPath } = router;
 
   useEffect(() => {
     // Remove injected serverside JSS
