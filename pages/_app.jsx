@@ -96,7 +96,8 @@ export function hasSolidAuthClientHash() {
 export default function App(props) {
   const { Component, pageProps } = props;
   const bem = useBem(useStyles());
-  const { pathname, asPath } = useRouter();
+  const router = useRouter();
+  const { pathname, asPath } = router;
 
   useEffect(() => {
     // Remove injected serverside JSS
@@ -136,7 +137,11 @@ export default function App(props) {
       <MatomoProvider value={matomoInstance}>
         <StylesProvider jss={jss}>
           <ThemeProvider theme={theme}>
-            <SessionProvider sessionId="pod-browser">
+            <SessionProvider
+              sessionId="pod-browser"
+              restorePreviousSession
+              onSessionRestore={(url) => router.push(url)}
+            >
               <FeatureProvider>
                 <AlertProvider>
                   <ConfirmationDialogProvider>
