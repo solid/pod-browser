@@ -21,12 +21,11 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import T from "prop-types";
-
-import { isContainer } from "@inrupt/solid-client";
+import { getSourceUrl, isContainer } from "@inrupt/solid-client";
+import { useSession } from "@inrupt/solid-ui-react";
 import { renderResourceType } from "../containerTableRow";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import { getResourceName } from "../../src/solidClientHelpers/resource";
-
 import Spinner from "../spinner";
 import PageHeader from "../containerPageHeader";
 import ContainerDetails from "../containerDetails";
@@ -51,7 +50,8 @@ import { locationIsConnectedToProfile } from "../../src/solidClientHelpers/profi
 
 export default function Container({ iri }) {
   useRedirectIfLoggedOut();
-  const [resourceUrls, setResourceUrls] = useState();
+  const { sessionRequestInProgress } = useSession();
+  const [resourceUrls, setResourceUrls] = useState(null);
   const {
     data: authenticatedProfile,
     error: authenticatedProfileError,
@@ -70,9 +70,10 @@ export default function Container({ iri }) {
   } = useContainer(iri);
 
   useEffect(() => {
+    if (container && getSourceUrl(container.dataset) !== iri) return;
     const urls = container && getContainerResourceUrlAll(container);
     setResourceUrls(urls);
-  }, [container]);
+  }, [container, iri]);
 
   const data = useMemo(() => {
     if (!resourceUrls) {
@@ -95,8 +96,9 @@ export default function Container({ iri }) {
     return <AccessForbidden />;
   if (containerError && isHTTPError(containerError.message, 404))
     return <ResourceNotFound />;
-  if (containerError) return <NotSupported />;
+  if (containerError && !sessionRequestInProgress) return <NotSupported />;
   if (authenticatedProfileError) return <AuthProfileLoadError />;
+
   const locationIsInUsersPod = locationIsConnectedToProfile(
     authenticatedProfile,
     iri

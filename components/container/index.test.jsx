@@ -23,7 +23,10 @@ import React from "react";
 import * as RouterFns from "next/router";
 import { addUrl } from "@inrupt/solid-client";
 import { space } from "rdf-namespaces";
+import * as solidUiReactFns from "@inrupt/solid-ui-react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
+import mockSession from "../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import Container from "./index";
 import useContainer from "../../src/hooks/useContainer";
 import useAuthenticatedProfile from "../../src/hooks/useAuthenticatedProfile";
@@ -66,7 +69,11 @@ describe("Container view", () => {
   const { dataset } = container;
 
   beforeEach(() => {
-    mockedContainerHook.mockReturnValue({ data: container, mutate: jest.fn() });
+    mockedContainerHook.mockReturnValue({
+      data: container,
+      mutate: jest.fn(),
+      update: jest.fn(),
+    });
     mockedAuthenticatedProfileHook.mockReturnValue({
       data: mockProfileAlice((t) =>
         addUrl(t, space.storage, "https://example.com/")
@@ -87,7 +94,7 @@ describe("Container view", () => {
     ]);
   });
 
-  it("renders a table", () => {
+  test("renders a table", () => {
     const { asFragment } = renderWithTheme(<Container iri={iri} />);
     expect(asFragment()).toMatchSnapshot();
   });
@@ -141,12 +148,17 @@ describe("Container view", () => {
   });
 
   it("renders Not supported if the fetch for container returns 500", () => {
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
     mockedContainerHook.mockReturnValue({
       error: new Error("500"),
     });
     const { asFragment, getByTestId } = renderWithTheme(
-      <Container iri={iri} />
+      <SessionProvider>
+        <Container iri={iri} />
+      </SessionProvider>
     );
+
     expect(asFragment()).toMatchSnapshot();
     expect(getByTestId(TESTCAFE_ID_NOT_SUPPORTED)).toBeDefined();
   });
