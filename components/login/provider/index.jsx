@@ -64,6 +64,7 @@ export function setupOnProviderChange(setProviderIri, setLoginError) {
 export function setupLoginHandler(login) {
   return async (event) => {
     event.preventDefault();
+    console.log("CALLING LOGIN");
     login();
   };
 }
