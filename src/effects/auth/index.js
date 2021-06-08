@@ -34,6 +34,8 @@ export async function redirectBasedOnSessionState(
   redirectIfSessionState,
   location
 ) {
+  console.log("Redirecting based on session state", { sessionIsLoggedIn, sessionRequestInProgress, location });
+  debugger;
   if (sessionRequestInProgress) {
     return;
   }
