@@ -137,7 +137,11 @@ export default function App(props) {
       <MatomoProvider value={matomoInstance}>
         <StylesProvider jss={jss}>
           <ThemeProvider theme={theme}>
-            <SessionProvider sessionId="pod-browser">
+            <SessionProvider
+              sessionId="pod-browser"
+              restorePreviousSession
+              onSessionRestore={(url) => router.push(url)}
+            >
               <FeatureProvider>
                 <AlertProvider>
                   <ConfirmationDialogProvider>
