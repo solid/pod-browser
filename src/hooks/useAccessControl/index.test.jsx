@@ -27,15 +27,11 @@ import * as accessControlFns from "../../accessControl";
 import usePoliciesContainerUrl from "../usePoliciesContainerUrl";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import mockSession from "../../../__testUtils/mockSession";
-import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import { mockProfileAlice } from "../../../__testUtils/mockPersonResource";
 import { joinPath } from "../../stringHelpers";
 
 jest.mock("../usePoliciesContainerUrl");
 const mockedPoliciesContainerUrlHook = usePoliciesContainerUrl;
-
-jest.mock("../useAuthenticatedProfile");
-const mockedAuthenticatedProfileHook = useAuthenticatedProfile;
 
 jest.mock("@inrupt/solid-ui-react");
 const mockedUseSession = useSession;
@@ -60,9 +56,6 @@ describe("useAccessControl", () => {
     wrapper = mockSessionContextProvider(session);
     mockedUseSession.mockReturnValue(session);
     jest.spyOn(accessControlFns, "isAcp").mockReturnValue(false);
-    mockedAuthenticatedProfileHook.mockReturnValue({
-      data: authenticatedProfile,
-    });
   });
 
   it("returns null if given no resourceUri", () => {

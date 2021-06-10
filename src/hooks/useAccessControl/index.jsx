@@ -24,11 +24,9 @@ import { useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
 import { getAccessControl, isAcp } from "../../accessControl";
 import usePoliciesContainerUrl from "../usePoliciesContainerUrl";
-import useAuthenticatedProfile from "../useAuthenticatedProfile";
 
 export default function useAccessControl(resourceInfo) {
   const { fetch } = useSession();
-  const { data: authenticatedProfile } = useAuthenticatedProfile();
   const [accessControl, setAccessControl] = useState(null);
   const policiesContainerUrl = usePoliciesContainerUrl(
     resourceInfo && getSourceUrl(resourceInfo)
@@ -52,7 +50,7 @@ export default function useAccessControl(resourceInfo) {
         setAccessControl(null);
         setError(accessControlError);
       });
-  }, [authenticatedProfile, fetch, policiesContainerUrl, resourceInfo]);
+  }, [fetch, policiesContainerUrl, resourceInfo]);
 
   return { accessControl, error };
 }
