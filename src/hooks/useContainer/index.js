@@ -49,9 +49,22 @@ export default function useContainer(iri) {
     fetchContainer();
   }, [url, fetch]);
 
-  async function update() {
-    const updatedContainer = await getContainer(url, { fetch });
-    setContainer(updatedContainer);
+  async function update(deletingCurrentContainer = false) {
+    setIsFetching(true);
+    try {
+      const updatedContainer = await getContainer(url, { fetch });
+      setContainer(updatedContainer);
+      setContainerError(null);
+      setIsFetching(false);
+    } catch (e) {
+      if (!deletingCurrentContainer) {
+        setContainerError(e);
+      } else {
+        setContainerError(null);
+      }
+      setContainer(null);
+      setIsFetching(false);
+    }
   }
 
   return {

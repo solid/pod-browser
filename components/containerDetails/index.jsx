@@ -40,7 +40,8 @@ export default function ContainerDetails({ children, update }) {
         handleCloseDrawer({ setMenuOpen, router })();
       }}
       onDeleteCurrentContainer={(iri) => {
-        update();
+        const deletingCurrentContainer = true;
+        update(deletingCurrentContainer);
         handleRedirectToParentContainer({ setMenuOpen, iri, router })();
       }}
     />

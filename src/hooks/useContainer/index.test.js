@@ -20,7 +20,7 @@
  */
 
 import * as solidClientFns from "@inrupt/solid-client";
-import { renderHook } from "@testing-library/react-hooks";
+import { act, renderHook } from "@testing-library/react-hooks";
 import { useSession } from "@inrupt/solid-ui-react";
 import * as containerModelFns from "../../models/container";
 import useContainer from "./index";
@@ -40,10 +40,10 @@ describe("useContainer", () => {
 
   beforeEach(() => {
     mockedSessionHook.mockReturnValue({ fetch });
-    jest.spyOn(containerModelFns, "getContainer").mockResolvedValue(container);
   });
 
   it("fetches data using getSolidDataset", async () => {
+    jest.spyOn(containerModelFns, "getContainer").mockResolvedValue(container);
     const { result, waitForNextUpdate } = renderHook(() => useContainer(iri));
     await waitForNextUpdate();
     expect(result.current.data).toBe(container);
@@ -51,7 +51,57 @@ describe("useContainer", () => {
   });
 
   it("returns null if no URL is given", async () => {
+    jest.spyOn(containerModelFns, "getContainer").mockResolvedValue(container);
     const { result } = renderHook(() => useContainer(null));
     expect(result.current.data).toBeNull();
+  });
+
+  it("returns an update function that fetches data using getSolidDataset", async () => {
+    jest.spyOn(containerModelFns, "getContainer").mockResolvedValue(container);
+    const { result, waitForNextUpdate } = renderHook(() => useContainer(iri));
+    const { update } = result.current;
+    act(() => update());
+    await waitForNextUpdate();
+    expect(result.current.data).toBe(container);
+    expect(containerModelFns.getContainer).toHaveBeenCalledWith(iri, { fetch });
+  });
+
+  it("returns an error if fetching fails", async () => {
+    jest
+      .spyOn(containerModelFns, "getContainer")
+      .mockRejectedValue(new Error("error"));
+    const { result, waitForNextUpdate } = renderHook(() => useContainer(iri));
+    await waitForNextUpdate();
+    expect(result.current.error.message).toBe("error");
+    expect(containerModelFns.getContainer).toHaveBeenCalledWith(iri, { fetch });
+  });
+
+  it("returns an error if fetching fails when calling update", async () => {
+    jest
+      .spyOn(containerModelFns, "getContainer")
+      .mockRejectedValue(new Error("error"));
+    const { result, waitForNextUpdate } = renderHook(() => useContainer(iri));
+    await waitForNextUpdate();
+    const { update } = result.current;
+    act(() => update());
+    await waitForNextUpdate();
+    expect(result.current.error.message).toBe("error");
+    expect(containerModelFns.getContainer).toHaveBeenCalledWith(iri, { fetch });
+  });
+
+  it("does not return an error if fetching fails when calling update when deleting current container", async () => {
+    jest
+      .spyOn(containerModelFns, "getContainer")
+      .mockRejectedValue(new Error("error"));
+    const { result, waitForNextUpdate } = renderHook(() => useContainer(iri));
+    await waitForNextUpdate();
+    const { update } = result.current;
+    const deletingCurrentContainer = true;
+    act(() => {
+      update(deletingCurrentContainer);
+    });
+    await waitForNextUpdate();
+    expect(result.current.error).toBeNull();
+    expect(containerModelFns.getContainer).toHaveBeenCalledWith(iri, { fetch });
   });
 });
