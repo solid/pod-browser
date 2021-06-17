@@ -125,7 +125,7 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
   const { accessControl } = useContext(AccessControlContext);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { confirmed, setContent, setOpen } = useContext(
+  const { open, confirmed, setContent, setOpen } = useContext(
     ConfirmationDialogContext
   );
 
@@ -144,10 +144,18 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
   );
 
   useEffect(() => {
-    if (!confirmed || authenticatedWebId !== webId) return;
+    if (open !== dialogId || !confirmed || authenticatedWebId !== webId) return;
     // this triggers when a visitor changes their own permissions
     savePermissions(tempAccess);
-  }, [authenticatedWebId, confirmed, savePermissions, tempAccess, webId]);
+  }, [
+    authenticatedWebId,
+    confirmed,
+    savePermissions,
+    tempAccess,
+    webId,
+    dialogId,
+    open,
+  ]);
 
   const onSubmit = submitHandler(
     authenticatedWebId,
