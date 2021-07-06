@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const providers = getIdentityProviders();
 export const TESTCAFE_ID_LOGIN_FIELD = "login-field";
 const TESTCAFE_ID_GO_BUTTON = "go-button";
-const CLIENT_APP_WEBID = "https://podbrowser.inrupt.com/app-profile.ttl#app";
+const CLIENT_APP_WEBID = "https://podbrowser.inrupt.com/app.jsonld#id";
 
 export function setupOnProviderChange(setProviderIri, setLoginError) {
   return (e, newValue) => {

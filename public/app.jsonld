@@ -1,0 +1,9 @@
+{
+    "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
+
+    "client_id": "https://podbrowser.inrupt.com/app.jsonld#id",
+    "redirect_uris": ["https://podbrowser.inrupt.com/"],
+    "client_name": "Inrupt PodBrowser",
+    "grant_types": ["refresh_token", "authorization_code"],
+    "response_types": ["code"]
+}

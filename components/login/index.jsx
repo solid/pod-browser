@@ -34,7 +34,7 @@ const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
 const TESTCAFE_ID_LOGIN_TITLE = "login-title";
 export const TESTCAFE_ID_OTHER_PROVIDERS_BUTTON = "other-providers-button";
 const PROVIDER_IRI = "https://broker.pod.inrupt.com/";
-const CLIENT_APP_WEBID = "https://podbrowser.inrupt.com/app-profile.ttl#app";
+const CLIENT_APP_WEBID = "https://podbrowser.inrupt.com/app.jsonld#id";
 
 const authOptions = {
   clientName: "Inrupt PodBrowser",
