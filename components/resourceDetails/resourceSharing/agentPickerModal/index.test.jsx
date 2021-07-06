@@ -51,10 +51,6 @@ import {
 } from "../addAgentRow";
 import { TESTCAFE_ADD_WEBID_BUTTON } from "./addWebIdButton";
 import { TESTCAFE_ID_SEARCH_INPUT } from "../agentsSearchBar";
-import {
-  TESTCAFE_ID_TAB_GROUPS,
-  TESTCAFE_ID_TAB_PEOPLE,
-} from "../agentsTableTabs";
 
 jest.mock("../../../../src/hooks/useAddressBook");
 const mockedUseAddressBook = useAddressBook;
@@ -872,98 +868,99 @@ describe("AgentPickerModal with contacts", () => {
     userEvent.clear(searchBar);
     expect(queryAllByTestId("agent-webid")).toHaveLength(5);
   });
-  it.skip("clicking the tabs filters by person or group contact", () => {
-    const containerUrl = "https://example.com/contacts/";
-    const emptyAddressBook = mockAddressBook({ containerUrl });
-    mockedUseContacts.mockReturnValue({
-      data: [
-        mockPersonContact(
-          emptyAddressBook,
-          "https://example.org/contacts/Person/1234/",
-          "Example 1"
-        ),
-        mockPersonContact(
-          emptyAddressBook,
-          "https://example.org/contacts/Person/3456/",
-          "Example 2"
-        ),
-        mockGroupContact(emptyAddressBook, "Group 1", { id: "1234" }),
-      ],
-    });
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: permissions,
-      mutate: jest.fn(),
-    });
-    const { getByTestId, queryAllByTestId } = renderWithTheme(
-      <AgentPickerModal
-        type="editors"
-        text={{ editText: "Edit Editors", saveText: "Save Editors" }}
-        onClose={onClose}
-      />
-    );
-    const peopleTab = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
-    userEvent.click(peopleTab);
-    expect(queryAllByTestId("agent-webid")).toHaveLength(2);
-    const groupsTab = getByTestId(TESTCAFE_ID_TAB_GROUPS);
-    userEvent.click(groupsTab);
-    // TODO: we will call this testid differently when we have groups
-    expect(queryAllByTestId("agent-webid")).toHaveLength(1);
-  });
-  it.skip("clicking on group tab with no results renders correct empty state text", () => {
-    const containerUrl = "https://example.com/contacts/";
-    const emptyAddressBook = mockAddressBook({ containerUrl });
-    mockedUseContacts.mockReturnValue({
-      data: [
-        mockPersonContact(
-          emptyAddressBook,
-          "https://example.org/contacts/Person/1234/",
-          "Example 1"
-        ),
-        mockPersonContact(
-          emptyAddressBook,
-          "https://example.org/contacts/Person/3456/",
-          "Example 2"
-        ),
-      ],
-    });
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: permissions,
-      mutate: jest.fn(),
-    });
-    const { getByTestId, queryAllByTestId, queryByText } = renderWithTheme(
-      <AgentPickerModal
-        type="editors"
-        text={{ editText: "Edit Editors", saveText: "Save Editors" }}
-        onClose={onClose}
-      />
-    );
-    const groupsTab = getByTestId(TESTCAFE_ID_TAB_GROUPS);
-    userEvent.click(groupsTab);
-    // TODO: we will call this testid differently when we have groups
-    expect(queryAllByTestId("agent-webid")).toHaveLength(0);
-    expect(queryByText("No groups found")).not.toBeNull();
-  });
-  it.skip("clicking on people tab with no results renders correct empty state text", () => {
-    const containerUrl = "https://example.com/contacts/";
-    const emptyAddressBook = mockAddressBook({ containerUrl });
-    mockedUseContacts.mockReturnValue({
-      data: [mockGroupContact(emptyAddressBook, "Group 1", { id: "1234" })],
-    });
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: permissions,
-      mutate: jest.fn(),
-    });
-    const { getByTestId, queryAllByTestId, queryByText } = renderWithTheme(
-      <AgentPickerModal
-        type="editors"
-        text={{ editText: "Edit Editors", saveText: "Save Editors" }}
-        onClose={onClose}
-      />
-    );
-    const peopleTab = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
-    userEvent.click(peopleTab);
-    // TODO: we will call this testid differently when we have groups
-    expect(queryAllByTestId("agent-webid")).toHaveLength(0);
-    expect(queryByText("No people found")).not.toBeNull();
-  });
+  // TODO: the tabs have slightly changed so these tests need to be updated when the agent tabs are restored
+  // it.skip("clicking the tabs filters by person or group contact", () => {
+  //   const containerUrl = "https://example.com/contacts/";
+  //   const emptyAddressBook = mockAddressBook({ containerUrl });
+  //   mockedUseContacts.mockReturnValue({
+  //     data: [
+  //       mockPersonContact(
+  //         emptyAddressBook,
+  //         "https://example.org/contacts/Person/1234/",
+  //         "Example 1"
+  //       ),
+  //       mockPersonContact(
+  //         emptyAddressBook,
+  //         "https://example.org/contacts/Person/3456/",
+  //         "Example 2"
+  //       ),
+  //       mockGroupContact(emptyAddressBook, "Group 1", { id: "1234" }),
+  //     ],
+  //   });
+  //   mockedUsePolicyPermissions.mockReturnValue({
+  //     data: permissions,
+  //     mutate: jest.fn(),
+  //   });
+  //   const { getByTestId, queryAllByTestId } = renderWithTheme(
+  //     <AgentPickerModal
+  //       type="editors"
+  //       text={{ editText: "Edit Editors", saveText: "Save Editors" }}
+  //       onClose={onClose}
+  //     />
+  //   );
+  //   const peopleTab = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
+  //   userEvent.click(peopleTab);
+  //   expect(queryAllByTestId("agent-webid")).toHaveLength(2);
+  //   const groupsTab = getByTestId(TESTCAFE_ID_TAB_GROUPS);
+  //   userEvent.click(groupsTab);
+  //   // TODO: we will call this testid differently when we have groups
+  //   expect(queryAllByTestId("agent-webid")).toHaveLength(1);
+  // });
+  // it.skip("clicking on group tab with no results renders correct empty state text", () => {
+  //   const containerUrl = "https://example.com/contacts/";
+  //   const emptyAddressBook = mockAddressBook({ containerUrl });
+  //   mockedUseContacts.mockReturnValue({
+  //     data: [
+  //       mockPersonContact(
+  //         emptyAddressBook,
+  //         "https://example.org/contacts/Person/1234/",
+  //         "Example 1"
+  //       ),
+  //       mockPersonContact(
+  //         emptyAddressBook,
+  //         "https://example.org/contacts/Person/3456/",
+  //         "Example 2"
+  //       ),
+  //     ],
+  //   });
+  //   mockedUsePolicyPermissions.mockReturnValue({
+  //     data: permissions,
+  //     mutate: jest.fn(),
+  //   });
+  //   const { getByTestId, queryAllByTestId, queryByText } = renderWithTheme(
+  //     <AgentPickerModal
+  //       type="editors"
+  //       text={{ editText: "Edit Editors", saveText: "Save Editors" }}
+  //       onClose={onClose}
+  //     />
+  //   );
+  //   const groupsTab = getByTestId(TESTCAFE_ID_TAB_GROUPS);
+  //   userEvent.click(groupsTab);
+  //   // TODO: we will call this testid differently when we have groups
+  //   expect(queryAllByTestId("agent-webid")).toHaveLength(0);
+  //   expect(queryByText("No groups found")).not.toBeNull();
+  // });
+  // it.skip("clicking on people tab with no results renders correct empty state text", () => {
+  //   const containerUrl = "https://example.com/contacts/";
+  //   const emptyAddressBook = mockAddressBook({ containerUrl });
+  //   mockedUseContacts.mockReturnValue({
+  //     data: [mockGroupContact(emptyAddressBook, "Group 1", { id: "1234" })],
+  //   });
+  //   mockedUsePolicyPermissions.mockReturnValue({
+  //     data: permissions,
+  //     mutate: jest.fn(),
+  //   });
+  //   const { getByTestId, queryAllByTestId, queryByText } = renderWithTheme(
+  //     <AgentPickerModal
+  //       type="editors"
+  //       text={{ editText: "Edit Editors", saveText: "Save Editors" }}
+  //       onClose={onClose}
+  //     />
+  //   );
+  //   const peopleTab = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
+  //   userEvent.click(peopleTab);
+  //   // TODO: we will call this testid differently when we have groups
+  //   expect(queryAllByTestId("agent-webid")).toHaveLength(0);
+  //   expect(queryByText("No people found")).not.toBeNull();
+  // });
 });

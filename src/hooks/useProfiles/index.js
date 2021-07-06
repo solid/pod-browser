@@ -23,22 +23,22 @@ import { useEffect, useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
 import { getProfiles } from "../../addressBook";
 
-export default function useProfiles(people) {
+export default function useProfiles(contacts) {
   const [profiles, setProfiles] = useState(null);
   const {
     session: { fetch },
   } = useSession();
 
   useEffect(() => {
-    if (!people) {
+    if (!contacts) {
       setProfiles(null);
       return;
     }
     (async () => {
-      const profilesResponse = await getProfiles(people, fetch);
+      const profilesResponse = await getProfiles(contacts, fetch);
       setProfiles(profilesResponse);
     })();
-  }, [fetch, people]);
+  }, [fetch, contacts]);
 
   return profiles;
 }

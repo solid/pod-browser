@@ -19,42 +19,30 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import useSWR from "swr";
-import { useSession } from "@inrupt/solid-ui-react";
-import { foaf } from "rdf-namespaces";
-import {
-  getContacts,
-  getIndexDatasetFromAddressBook,
-  TYPE_MAP,
-} from "../../addressBook";
+import { ThingProvider } from "@inrupt/solid-ui-react";
+import { mockThingFrom } from "@inrupt/solid-client";
+import React from "react";
+import { renderWithTheme } from "../../__testUtils/withTheme";
+import mockPersonContactThing from "../../__testUtils/mockPersonContactThing";
+import AgentAvatar from "./index";
 
-export default function useContactsOld(addressBook, type) {
-  const {
-    session: { fetch },
-  } = useSession();
-
-  return useSWR(
-    addressBook,
-    async () => {
-      const { indexFilePredicate } = TYPE_MAP[type];
-      const { contactTypeIri } = TYPE_MAP[type];
-      const {
-        response: indexFileDataset,
-      } = await getIndexDatasetFromAddressBook(
-        addressBook,
-        indexFilePredicate,
-        fetch
-      );
-      const { response, error } = await getContacts(
-        indexFileDataset,
-        contactTypeIri,
-        fetch
-      );
-      if (error) {
-        throw error;
-      }
-      return response;
-    },
-    { refreshInterval: 0 }
-  );
-}
+describe("AgentAvatar", () => {
+  it("renders avatar for person contact", () => {
+    const contact = mockPersonContactThing("https://examplewebid.com");
+    const { asFragment } = renderWithTheme(
+      <ThingProvider thing={contact}>
+        <AgentAvatar imageUrl="https://example.org" altText="alt text" />
+      </ThingProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+  it("renders fallback icon for app contact", () => {
+    const thing = mockThingFrom("https://someappwebid.com");
+    const { asFragment } = renderWithTheme(
+      <ThingProvider thing={thing}>
+        <AgentAvatar imageUrl="https://example.org" altText="alt text" />
+      </ThingProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+});

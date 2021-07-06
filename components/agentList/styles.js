@@ -19,42 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import useSWR from "swr";
-import { useSession } from "@inrupt/solid-ui-react";
-import { foaf } from "rdf-namespaces";
-import {
-  getContacts,
-  getIndexDatasetFromAddressBook,
-  TYPE_MAP,
-} from "../../addressBook";
+import { createStyles, table } from "@solid/lit-prism-patterns";
 
-export default function useContactsOld(addressBook, type) {
-  const {
-    session: { fetch },
-  } = useSession();
-
-  return useSWR(
-    addressBook,
-    async () => {
-      const { indexFilePredicate } = TYPE_MAP[type];
-      const { contactTypeIri } = TYPE_MAP[type];
-      const {
-        response: indexFileDataset,
-      } = await getIndexDatasetFromAddressBook(
-        addressBook,
-        indexFilePredicate,
-        fetch
-      );
-      const { response, error } = await getContacts(
-        indexFileDataset,
-        contactTypeIri,
-        fetch
-      );
-      if (error) {
-        throw error;
-      }
-      return response;
+const styles = (theme) => {
+  const tableStyles = table.styles(theme);
+  return createStyles(theme, ["table", "icons"], {
+    table: {
+      "& tbody td": {
+        "&:first-child": tableStyles["table__body-cell--width-preview"],
+      },
+      "& tbody a": tableStyles.table__link,
     },
-    { refreshInterval: 0 }
-  );
-}
+    "name-header": {
+      textTransform: "uppercase",
+    },
+  });
+};
+
+export default styles;

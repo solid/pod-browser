@@ -21,40 +21,54 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import { renderWithTheme } from "../../../../__testUtils/withTheme";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 
-import AgentTableTabs, {
-  TESTCAFE_ID_TAB_ALL,
-  TESTCAFE_ID_TAB_GROUPS,
-  TESTCAFE_ID_TAB_PEOPLE,
-} from "./index";
+import Tabs from "./index";
 
-describe("AgentTableTabs", () => {
+const tabs = [
+  {
+    label: "All",
+    testid: "tab-all",
+    value: "all",
+  },
+  {
+    label: "People",
+    testid: "tab-people",
+    value: "person",
+  },
+  {
+    label: "Apps",
+    testid: "tab-apps",
+    value: "app", // this string for now until we define what type the app contact will be
+  },
+];
+
+describe("Tabs", () => {
   const handleTabChange = jest.fn();
   it("renders tabs", () => {
     const { asFragment, getByTestId } = renderWithTheme(
-      <AgentTableTabs
+      <Tabs
         handleTabChange={handleTabChange}
         selectedTabValue="Person"
-        tabsValues={{ all: "", people: "Person", groups: "Group" }}
+        tabs={tabs}
       />
     );
-    expect(getByTestId(TESTCAFE_ID_TAB_ALL)).toBeDefined();
-    expect(getByTestId(TESTCAFE_ID_TAB_GROUPS)).toBeDefined();
-    expect(getByTestId(TESTCAFE_ID_TAB_PEOPLE)).toBeDefined();
+    expect(getByTestId("tab-all")).toBeDefined();
+    expect(getByTestId("tab-people")).toBeDefined();
+    expect(getByTestId("tab-apps")).toBeDefined();
     expect(asFragment()).toMatchSnapshot();
   });
   it("triggers handleTabChange when clicking on a tab", () => {
     const { getByTestId } = renderWithTheme(
-      <AgentTableTabs
+      <Tabs
         handleTabChange={handleTabChange}
         selectedTabValue="Person"
-        tabsValues={{ all: "", people: "Person", groups: "Group" }}
+        tabs={tabs}
       />
     );
 
-    const tabGroups = getByTestId(TESTCAFE_ID_TAB_GROUPS);
-    userEvent.click(tabGroups);
+    const tabPeople = getByTestId("tab-people");
+    userEvent.click(tabPeople);
     expect(handleTabChange).toHaveBeenCalled();
   });
 });

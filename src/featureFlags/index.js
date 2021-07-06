@@ -39,6 +39,7 @@ const webIdsWithAccessToFeatures = [
   "https://pod.inrupt.com/vincent/profile/card#me",
   "https://testsharepat.inrupt.net/profile/card#me",
   "https://pod.inrupt.com/acoburn/profile/card#me",
+  "https://pod.inrupt.com/norbertn/profile/card#me",
 ];
 function enableForGivenWebIds(webIds) {
   return (session) =>
@@ -46,11 +47,17 @@ function enableForGivenWebIds(webIds) {
 }
 
 export const GROUPS_PAGE_ENABLED_FOR = webIdsWithAccessToFeatures;
+export const PRIVACY_PAGE_ENABLED_FOR = webIdsWithAccessToFeatures;
 export const GROUPS_PAGE_ENABLED = "groupsPageEnabled";
+export const PRIVACY_PAGE_ENABLED = "privacyPageEnabled";
 export const groupsPageEnabled = enableForGivenWebIds(GROUPS_PAGE_ENABLED_FOR);
+export const privacyPageEnabled = enableForGivenWebIds(
+  PRIVACY_PAGE_ENABLED_FOR
+);
 
 export default function FeatureFlags() {
   return {
     [GROUPS_PAGE_ENABLED]: groupsPageEnabled,
+    [PRIVACY_PAGE_ENABLED]: privacyPageEnabled,
   };
 }

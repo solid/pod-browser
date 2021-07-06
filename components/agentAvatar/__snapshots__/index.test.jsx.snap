@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AgentAvatar renders avatar for person contact 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-root PodBrowser-circle PodBrowser-avatar"
+  >
+    <img
+      alt="alt text"
+      class="PodBrowser-img"
+      src="https://example.org"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AgentAvatar renders fallback icon for app contact 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-root PodBrowser-circle PodBrowser-avatar"
+  >
+    <img
+      alt="alt text"
+      class="PodBrowser-img"
+      src="https://example.org"
+    />
+  </div>
+</DocumentFragment>
+`;

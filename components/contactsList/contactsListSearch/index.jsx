@@ -26,7 +26,8 @@ import React, { useContext } from "react";
 import T from "prop-types";
 import Router from "next/router";
 import { Autocomplete } from "@material-ui/lab";
-import { createStyles, TextField } from "@material-ui/core";
+import { createStyles, InputAdornment, TextField } from "@material-ui/core";
+import { Icons } from "@inrupt/prism-react-components";
 import { makeStyles } from "@material-ui/styles";
 import { getProfileFromThing } from "../../../src/solidClientHelpers/profile";
 import SearchContext from "../../../src/contexts/searchContext";
@@ -86,6 +87,14 @@ export default function ContactsListSearch({ people }) {
           {...params}
           margin="dense"
           variant="outlined"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Icons name="search" />
+              </InputAdornment>
+            ),
+          }}
+          // eslint-disable-next-line react/jsx-no-duplicate-props
           inputProps={{
             ...params.inputProps,
             "data-testid": TESTCAFE_ID_CONTACTS_SEARCH,

@@ -19,42 +19,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import useSWR from "swr";
-import { useSession } from "@inrupt/solid-ui-react";
-import { foaf } from "rdf-namespaces";
-import {
-  getContacts,
-  getIndexDatasetFromAddressBook,
-  TYPE_MAP,
-} from "../../addressBook";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-export default function useContactsOld(addressBook, type) {
-  const {
-    session: { fetch },
-  } = useSession();
-
-  return useSWR(
-    addressBook,
-    async () => {
-      const { indexFilePredicate } = TYPE_MAP[type];
-      const { contactTypeIri } = TYPE_MAP[type];
-      const {
-        response: indexFileDataset,
-      } = await getIndexDatasetFromAddressBook(
-        addressBook,
-        indexFilePredicate,
-        fetch
-      );
-      const { response, error } = await getContacts(
-        indexFileDataset,
-        contactTypeIri,
-        fetch
-      );
-      if (error) {
-        throw error;
-      }
-      return response;
+export default function styles(theme) {
+  return createStyles(theme, ["icons", "table"], {
+    tabsContainer: {
+      display: "flex",
+      justifyContent: "space-between",
+      paddingLeft: theme.spacing(1.2),
+      paddingRight: theme.spacing(1.2),
+      borderBottom: `1px solid ${theme.palette.grey.A100}`,
     },
-    { refreshInterval: 0 }
-  );
+    tab: {
+      textTransform: "none",
+      minWidth: "max-content",
+      fontFamily: theme.typography.body1.fontFamily,
+      fontSize: theme.typography.body1.fontSize,
+      color: theme.palette.primary.text,
+    },
+    selected: {
+      color: theme.palette.primary.main,
+    },
+    indicator: {
+      height: "3px",
+      width: "100%",
+      backgroundColor: theme.palette.primary.main,
+    },
+  });
 }

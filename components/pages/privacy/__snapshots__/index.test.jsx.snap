@@ -1,0 +1,268 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PrivacyPage renders 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-tabsContainer"
+  >
+    <div
+      class="PodBrowser-root"
+    >
+      <div
+        class="PodBrowser-scroller PodBrowser-fixed"
+        style="overflow: hidden;"
+      >
+        <div
+          aria-label="Filter tabs"
+          class="PodBrowser-flexContainer"
+          role="tablist"
+        >
+          <button
+            aria-selected="true"
+            class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit PodBrowser-selected PodBrowser-selected"
+            data-testid="tab-all"
+            role="tab"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="PodBrowser-wrapper"
+            >
+              All
+            </span>
+            <span
+              class="PodBrowser-root"
+            />
+          </button>
+          <button
+            aria-selected="false"
+            class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit"
+            data-testid="tab-people"
+            role="tab"
+            tabindex="-1"
+            type="button"
+          >
+            <span
+              class="PodBrowser-wrapper"
+            >
+              People
+            </span>
+            <span
+              class="PodBrowser-root"
+            />
+          </button>
+          <button
+            aria-selected="false"
+            class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit"
+            data-testid="tab-apps"
+            role="tab"
+            tabindex="-1"
+            type="button"
+          >
+            <span
+              class="PodBrowser-wrapper"
+            >
+              Apps
+            </span>
+            <span
+              class="PodBrowser-root"
+            />
+          </button>
+        </div>
+        <span
+          class="PodBrowser-root PodBrowser-colorSecondary PodBrowser-indicator PodBrowser-indicator"
+          style="left: 0px; width: 0px;"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    class="PodBrowser-drawer-container"
+  >
+    <div
+      class="PodBrowser-drawer-container__content"
+    >
+      <table
+        class="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
+        role="table"
+      >
+        <thead>
+          <tr
+            role="row"
+          >
+            <th
+              colspan="1"
+              role="columnheader"
+            />
+            <th
+              colspan="1"
+              role="columnheader"
+              style="cursor: pointer;"
+              title="Toggle SortBy"
+            >
+              Name
+            </th>
+            <th
+              colspan="1"
+              role="columnheader"
+              style="cursor: pointer;"
+              title="Toggle SortBy"
+            >
+              WebID
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          role="rowgroup"
+        >
+          <tr
+            class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
+            role="row"
+            tabindex="0"
+          >
+            <td
+              role="cell"
+            >
+              <div
+                class="PodBrowser-root PodBrowser-circle PodBrowser-appAvatar PodBrowser-colorDefault"
+              >
+                <span
+                  class="PodBrowser-icon-project-diagram PodBrowser-appAvatar"
+                />
+              </div>
+            </td>
+            <td
+              role="cell"
+            >
+              <a
+                href="/contacts/https%3A%2F%2Fmockappurl.com"
+              >
+                Mock App
+              </a>
+            </td>
+            <td
+              role="cell"
+            >
+              https://mockappurl.com
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <section
+      class="PodBrowser-drawer"
+    >
+      <div
+        class="PodBrowser-drawer__content"
+      >
+        <div
+          class="PodBrowser-drawer__content-wrapper"
+        >
+          <div
+            class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
+          >
+            <button
+              class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
+            >
+              <span
+                class="PodBrowser-button__text"
+              >
+                <span
+                  class="PodBrowser-icon-cancel"
+                />
+                 Close
+              </span>
+            </button>
+          </div>
+          <div
+            class="PodBrowser-root PodBrowser-root PodBrowser-expanded PodBrowser-elevation1"
+          >
+            <div
+              aria-disabled="false"
+              aria-expanded="true"
+              class="PodBrowser-root PodBrowser-root PodBrowser-expanded"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="PodBrowser-content PodBrowser-expanded"
+              >
+                Actions
+              </div>
+              <div
+                aria-disabled="false"
+                aria-hidden="true"
+                class="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-expanded PodBrowser-edgeEnd"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="PodBrowser-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                    />
+                  </svg>
+                </span>
+                <span
+                  class="PodBrowser-root"
+                />
+              </div>
+            </div>
+            <div
+              class="PodBrowser-container PodBrowser-entered"
+              style="min-height: 0px;"
+            >
+              <div
+                class="PodBrowser-wrapper"
+              >
+                <div
+                  class="PodBrowser-wrapperInner"
+                >
+                  <div
+                    role="region"
+                  >
+                    <div
+                      class="PodBrowser-root"
+                    >
+                      <ul
+                        class="PodBrowser-action-menu"
+                      >
+                        <li
+                          class="PodBrowser-action-menu__item"
+                        >
+                          <a
+                            class="PodBrowser-action-menu__trigger"
+                            href="/contacts"
+                          >
+                            View Profile
+                          </a>
+                        </li>
+                        <li
+                          class="PodBrowser-action-menu__item"
+                        >
+                          <button
+                            class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                            data-testid="delete-button"
+                            type="button"
+                          >
+                            Delete
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</DocumentFragment>
+`;
