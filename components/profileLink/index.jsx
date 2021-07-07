@@ -42,8 +42,8 @@ export default function ProfileLink(props) {
     getStringNoLocale(thing, vcard.fn) || getStringNoLocale(thing, foaf.name);
 
   return (
-    <Link href="/contacts/[show]" as={buildProfileLink(profileIri)}>
-      {name}
+    <Link href={buildProfileLink(profileIri)}>
+      <a>{name}</a>
     </Link>
   );
 }
