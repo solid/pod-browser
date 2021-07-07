@@ -199,7 +199,7 @@ function ContactsList() {
             <TableColumn
               property={hasPhotoPredicate}
               header=""
-              datatype="url"
+              dataType="url"
               body={({ value, row }) => {
                 return (
                   <Avatar

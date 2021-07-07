@@ -21,7 +21,6 @@
 
 import useSWR from "swr";
 import { useSession } from "@inrupt/solid-ui-react";
-import { foaf } from "rdf-namespaces";
 import {
   getContacts,
   getIndexDatasetFromAddressBook,
