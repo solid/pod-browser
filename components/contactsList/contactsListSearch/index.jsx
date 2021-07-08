@@ -24,7 +24,7 @@
 
 import React, { useContext } from "react";
 import T from "prop-types";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { Autocomplete } from "@material-ui/lab";
 import { createStyles, InputAdornment, TextField } from "@material-ui/core";
 import { Icons } from "@inrupt/prism-react-components";
@@ -37,11 +37,11 @@ import styles from "./styles";
 export const TESTCAFE_ID_CONTACTS_SEARCH = "contacts-search";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export function setupOnChange(setSearch) {
+export function setupOnChange(setSearch, route) {
   return (event, search) => {
     // If a row was selected, use the object with webid
     if (search && search.webId) {
-      Router.push(buildProfileLink(search.webId));
+      Router.push(buildProfileLink(search.webId, route));
     }
 
     // Otherwise, use the string value
@@ -62,11 +62,12 @@ export function setupGetOptionLabel() {
 }
 
 export default function ContactsListSearch({ people }) {
+  const { route } = useRouter();
   const { setSearch } = useContext(SearchContext);
   const classes = useStyles();
 
   const profiles = people.map(getProfileFromThing);
-  const onChange = setupOnChange(setSearch);
+  const onChange = setupOnChange(setSearch, route);
   const filterOptions = setupFilterOptions();
   const getOptionLabel = setupGetOptionLabel();
 

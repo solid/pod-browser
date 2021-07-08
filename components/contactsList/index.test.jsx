@@ -21,6 +21,7 @@
 
 import React from "react";
 import * as solidClientFns from "@inrupt/solid-client";
+import { useRouter } from "next/router";
 import { foaf } from "rdf-namespaces";
 import { screen } from "@testing-library/react";
 import { deleteContact } from "../../src/addressBook";
@@ -40,8 +41,16 @@ jest.mock("../../src/addressBook");
 jest.mock("../../src/hooks/useAddressBookOld");
 jest.mock("../../src/hooks/useContactsOld");
 jest.mock("../../src/hooks/useProfiles");
+jest.mock("next/router");
+
+const mockedUseRouter = useRouter;
 
 describe("ContactsList", () => {
+  beforeEach(() => {
+    mockedUseRouter.mockReturnValue({
+      route: "/contacts",
+    });
+  });
   const session = mockSession();
   const SessionProvider = mockSessionContextProvider(session);
   it("renders spinner while useAddressBookOld is loading", () => {

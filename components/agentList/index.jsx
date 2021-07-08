@@ -35,7 +35,6 @@ import {
   createThing,
   getSourceUrl,
   getStringNoLocale,
-  getThing,
   getUrl,
 } from "@inrupt/solid-client";
 import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
@@ -53,8 +52,8 @@ import useProfiles from "../../src/hooks/useProfiles";
 import ProfileLink from "../profileLink";
 import SearchContext from "../../src/contexts/searchContext";
 import { deleteContact, vcardExtras } from "../../src/addressBook";
-import ContactsDrawer from "../contactsList/contactsDrawer";
 import ContactsEmptyState from "../contactsList/contactsEmptyState";
+import AgentsDrawer from "./agentsDrawer";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -137,14 +136,12 @@ function AgentList({ contactType, setSearchValues }) {
 
   useEffect(() => {
     if (selectedContactIndex === null) return;
-    const contactDataset = contacts[selectedContactIndex].dataset;
-    const contactThingUrl = contacts[selectedContactIndex].iri;
-    const contactThing = getThing(contactDataset, contactThingUrl);
+    const contactThing = profilesForTable[selectedContactIndex];
     const name = getStringNoLocale(contactThing, formattedNamePredicate);
     setSelectedContactName(name);
     const webId = getUrl(contactThing, vcardExtras("WebId"));
     setSelectedContactWebId(webId);
-  }, [selectedContactIndex, formattedNamePredicate, contacts, fetch]);
+  }, [selectedContactIndex, formattedNamePredicate, profilesForTable, fetch]);
 
   if (addressBookError) return addressBookError;
   if (contactsError) return contactsError;
@@ -170,7 +167,7 @@ function AgentList({ contactType, setSearchValues }) {
   });
 
   const drawer = (
-    <ContactsDrawer
+    <AgentsDrawer
       open={selectedContactIndex !== null}
       onClose={closeDrawer}
       onDelete={deleteSelectedContact}

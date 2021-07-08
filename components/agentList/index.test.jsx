@@ -21,6 +21,7 @@
 
 import React from "react";
 import * as solidClientFns from "@inrupt/solid-client";
+import { useRouter } from "next/router";
 import { foaf } from "rdf-namespaces";
 import { screen, waitFor } from "@testing-library/react";
 import * as addressBookFns from "../../src/addressBook";
@@ -44,7 +45,9 @@ import { mockAddressBookDataset } from "../../__testUtils/mockAddressBook";
 jest.mock("../../src/hooks/useAddressBookOld");
 jest.mock("../../src/hooks/useContactsOld");
 jest.mock("../../src/hooks/useProfiles");
+jest.mock("next/router");
 
+const mockedUseRouter = useRouter;
 const mockUseAddressBook = useAddressBookOld;
 const mockUseContacts = useContactsOld;
 const mockUseProfiles = useProfiles;
@@ -52,6 +55,11 @@ const mockUseProfiles = useProfiles;
 const setSearchValues = jest.fn();
 
 describe("AgentList", () => {
+  beforeEach(() => {
+    mockedUseRouter.mockReturnValue({
+      route: "/privacy",
+    });
+  });
   const session = mockSession();
   const SessionProvider = mockSessionContextProvider(session);
   it("renders spinner while useAddressBookOld is loading", () => {

@@ -20,6 +20,7 @@
  */
 
 import React from "react";
+import { useRouter } from "next/router";
 import { fireEvent, waitFor } from "@testing-library/react";
 import PrivacyPage, {
   TESTCAFE_ID_TAB_ALL,
@@ -38,11 +39,18 @@ import {
 
 jest.mock("../../../src/hooks/useAddressBookOld");
 jest.mock("../../../src/hooks/useContactsOld");
+jest.mock("next/router");
 
+const mockedUseRouter = useRouter;
 const mockUseAddressBook = useAddressBookOld;
 const mockUseContacts = useContactsOld;
 
 describe("PrivacyPage", () => {
+  beforeEach(() => {
+    mockedUseRouter.mockReturnValue({
+      route: "/contacts",
+    });
+  });
   const people = [mockProfileBob(), mockProfileAlice()];
   it("renders", () => {
     mockUseAddressBook.mockReturnValue(["addressBook", null]);

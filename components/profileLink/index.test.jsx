@@ -20,12 +20,17 @@
  */
 
 import React from "react";
+import { useRouter } from "next/router";
 import { render } from "@testing-library/react";
 import { mockThingFrom, setStringNoLocale } from "@inrupt/solid-client";
 import { ThingProvider } from "@inrupt/solid-ui-react";
 import { foaf, vcard } from "rdf-namespaces";
 import ProfileLink, { buildProfileLink } from "./index";
 import { chain } from "../../src/solidClientHelpers/utils";
+
+jest.mock("next/router");
+
+const mockedUseRouter = useRouter;
 
 const alice = chain(mockThingFrom("https://example.com/alice"), (t) =>
   setStringNoLocale(t, vcard.fn, "Alice")
@@ -36,6 +41,11 @@ const bob = chain(mockThingFrom("https://example.com/bob"), (t) =>
 const iri = "/iri with spaces";
 
 describe("ProfileLink", () => {
+  beforeEach(() => {
+    mockedUseRouter.mockReturnValue({
+      route: "/contacts",
+    });
+  });
   it("supports rendering name from vcard.fn", () => {
     const { asFragment } = render(
       <ThingProvider thing={alice}>
@@ -57,7 +67,7 @@ describe("ProfileLink", () => {
 
 describe("buildProfileLink", () => {
   it("generates a valid path", () => {
-    expect(buildProfileLink(iri)).toEqual(
+    expect(buildProfileLink(iri, "/contacts")).toEqual(
       `/contacts/${encodeURIComponent(iri)}`
     );
   });
