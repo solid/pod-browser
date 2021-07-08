@@ -20,9 +20,7 @@
  */
 
 import React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react";
-import TestApp from "../../../__testUtils/testApp";
-import mockPersonContact from "../../../__testUtils/mockPersonContact";
+import { fireEvent, waitFor } from "@testing-library/react";
 import PrivacyPage, {
   TESTCAFE_ID_TAB_ALL,
   TESTCAFE_ID_TAB_APPS,

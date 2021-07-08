@@ -106,7 +106,7 @@ function AgentList({ contactType, setSearchValues }) {
   const profiles = useProfiles(contacts);
   const [profilesForTable, setProfilesForTable] = useState([]);
 
-  // temporarily doing this manually for dev purposes until we have audit list
+  // FIXME: temporarily doing this manually for dev purposes until we have audit list
   useEffect(() => {
     if (profiles) {
       setProfilesForTable(profiles);

@@ -31,6 +31,9 @@ import { SearchProvider } from "../../../src/contexts/searchContext";
 export const TESTCAFE_ID_TAB_ALL = "tab-all";
 export const TESTCAFE_ID_TAB_PEOPLE = "tab-people";
 export const TESTCAFE_ID_TAB_APPS = "tab-apps";
+const PERSON_CONTACT_TYPE = foaf.Person;
+// FIXME: replace with app contact type iri
+const APP_CONTACT_TYPE = "app"; // this string for now until we define what type the app contact will be
 
 export default function PrivacyPage() {
   useRedirectIfLoggedOut();
@@ -47,18 +50,18 @@ export default function PrivacyPage() {
     {
       label: "People",
       testid: TESTCAFE_ID_TAB_PEOPLE,
-      value: foaf.Person,
+      value: PERSON_CONTACT_TYPE,
     },
     {
       label: "Apps",
       testid: TESTCAFE_ID_TAB_APPS,
-      value: "app", // this string for now until we define what type the app contact will be
+      value: APP_CONTACT_TYPE,
     },
   ];
 
   const handleTabChange = (event, value) => {
     setSelectedTabValue(value);
-    // for now until we do display a contact list with apps
+    // FIXME: for now until we do display a contact list with apps
     if (value === "app") {
       setSearchValues(null);
     }

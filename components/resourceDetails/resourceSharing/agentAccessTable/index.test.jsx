@@ -198,89 +198,91 @@ describe("AgentAccessTable", () => {
     });
   });
   // TODO: tabs have slightly changed so these tests need to be updated when tabs are restores
-  // it.skip("renders a set of tabs which filter by Group type", () => {
-  //   const permissionsWithTypes = [
-  //     {
-  //       type: "agent",
-  //       acl: createAccessMap(true, true, false, false),
-  //       webId: "https://example1.com/profile/card#me",
-  //     },
-  //     {
-  //       type: "group",
-  //       acl: createAccessMap(true, true, false, false),
-  //       webId: "https://example-group.com/profile/card#me",
-  //     },
-  //   ];
+  it.skip("renders a set of tabs which filter by Group type", () => {
+    const permissionsWithTypes = [
+      {
+        type: "agent",
+        acl: createAccessMap(true, true, false, false),
+        webId: "https://example1.com/profile/card#me",
+      },
+      {
+        type: "group",
+        acl: createAccessMap(true, true, false, false),
+        webId: "https://example-group.com/profile/card#me",
+      },
+    ];
 
-  //   mockedUsePolicyPermissions.mockReturnValue({
-  //     data: permissionsWithTypes,
-  //     mutate: jest.fn(),
-  //   });
-  //   mockedFetchProfile
-  //     .mockReturnValueOnce({ profile: profile1 })
-  //     .mockReturnValueOnce({
-  //       profile: {
-  //         avatar: null,
-  //         name: "Not a person",
-  //       },
-  //     });
-  //   const type = "editors";
-  //   const { getByTestId, queryByText } = renderWithTheme(
-  //     <AgentAccessTable type={type} />
-  //   );
-  //   waitFor(() => {
-  //     const tabPeople = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
-  //     const tabGroups = getByTestId(TESTCAFE_ID_TAB_GROUPS);
-  //     userEvent.click(tabPeople);
-  //     expect(queryByText("Example 1")).not.toBeNull();
-  //     expect(queryByText("Not a person")).toBeNull();
-  //     userEvent.click(tabGroups);
-  //     expect(queryByText("No groups found")).not.toBeNull();
-  //     expect(queryByText("Example 1")).toBeNull();
-  //   });
-  // });
-  // it.skip("renders a set of tabs which filter by People type", () => {
-  //   const permissionsWithTypes = [
-  //     {
-  //       acl: createAccessMap(true, true, false, false),
-  //       webId: "https://example1.com/profile/card#me",
-  //       type: "agent",
-  //     },
-  //     {
-  //       acl: createAccessMap(true, true, false, false),
-  //       webId: "https://example-group.com/profile/card#me",
-  //       type: "group",
-  //     },
-  //   ];
+    mockedUsePolicyPermissions.mockReturnValue({
+      data: permissionsWithTypes,
+      mutate: jest.fn(),
+    });
+    mockedFetchProfile
+      .mockReturnValueOnce({ profile: profile1 })
+      .mockReturnValueOnce({
+        profile: {
+          avatar: null,
+          name: "Not a person",
+        },
+      });
+    const type = "editors";
+    const { getByTestId, queryByText } = renderWithTheme(
+      <AgentAccessTable type={type} />
+    );
+    waitFor(() => {
+      // FIXME: change these test ids
+      const tabPeople = getByTestId("tab-people");
+      const tabGroups = getByTestId("tab-groups");
+      userEvent.click(tabPeople);
+      expect(queryByText("Example 1")).not.toBeNull();
+      expect(queryByText("Not a person")).toBeNull();
+      userEvent.click(tabGroups);
+      expect(queryByText("No groups found")).not.toBeNull();
+      expect(queryByText("Example 1")).toBeNull();
+    });
+  });
+  it.skip("renders a set of tabs which filter by People type", () => {
+    const permissionsWithTypes = [
+      {
+        acl: createAccessMap(true, true, false, false),
+        webId: "https://example1.com/profile/card#me",
+        type: "agent",
+      },
+      {
+        acl: createAccessMap(true, true, false, false),
+        webId: "https://example-group.com/profile/card#me",
+        type: "group",
+      },
+    ];
 
-  //   mockedUsePolicyPermissions.mockReturnValue({
-  //     data: permissionsWithTypes,
-  //     mutate: jest.fn(),
-  //   });
-  //   mockedFetchProfile
-  //     .mockReturnValueOnce({ profile: profile1 })
-  //     .mockReturnValueOnce({
-  //       profile: {
-  //         avatar: null,
-  //         name: "Not a person",
-  //         types: ["Something else"],
-  //       },
-  //     });
+    mockedUsePolicyPermissions.mockReturnValue({
+      data: permissionsWithTypes,
+      mutate: jest.fn(),
+    });
+    mockedFetchProfile
+      .mockReturnValueOnce({ profile: profile1 })
+      .mockReturnValueOnce({
+        profile: {
+          avatar: null,
+          name: "Not a person",
+          types: ["Something else"],
+        },
+      });
 
-  //   const type = "editors";
-  //   const { getByTestId, queryByText } = renderWithTheme(
-  //     <AgentAccessTable type={type} />
-  //   );
+    const type = "editors";
+    const { getByTestId, queryByText } = renderWithTheme(
+      <AgentAccessTable type={type} />
+    );
 
-  //   waitFor(() => {
-  //     const tabPeople = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
-  //     const tabGroups = getByTestId(TESTCAFE_ID_TAB_GROUPS);
-  //     userEvent.click(tabPeople);
-  //     expect(queryByText("No people found")).not.toBeNull();
-  //     expect(queryByText("Not a person")).toBeNull();
-  //     userEvent.click(tabGroups);
-  //     expect(queryByText("Example 1")).not.toBeNull();
-  //     expect(queryByText("Example 2")).not.toBeNull();
-  //   });
-  // });
+    waitFor(() => {
+      // FIXME: change these test ids
+      const tabPeople = getByTestId("tab-people");
+      const tabGroups = getByTestId("tab-groups");
+      userEvent.click(tabPeople);
+      expect(queryByText("No people found")).not.toBeNull();
+      expect(queryByText("Not a person")).toBeNull();
+      userEvent.click(tabGroups);
+      expect(queryByText("Example 1")).not.toBeNull();
+      expect(queryByText("Example 2")).not.toBeNull();
+    });
+  });
 });
