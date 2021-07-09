@@ -20,40 +20,25 @@
  */
 
 import React from "react";
-import T from "prop-types";
-import Link from "next/link";
-import { useThing } from "@inrupt/solid-ui-react";
-import { getStringNoLocale, asUrl } from "@inrupt/solid-client";
-import { vcard, foaf } from "rdf-namespaces";
-import { useRouter } from "next/router";
+import AgentsDrawer from "./index";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 
-export function buildProfileLink(webId, route) {
-  return `${route}/${encodeURIComponent(webId)}`;
-}
+describe("AgentsDrawer", () => {
+  const onClose = () => {};
+  const onDelete = () => {};
+  const selectedContactName = "Alice";
+  const profileIri = "https://example.com/profile#alice";
 
-export default function ProfileLink(props) {
-  const { route } = useRouter();
-  const { webId } = props;
-  const { thing } = useThing();
-
-  // Pass in an iri, or use the thing from context (such as for the contacts list)
-  const profileIri = webId || asUrl(thing);
-
-  // TODO remove this once react-sdk allows property fallbacks
-  const name =
-    getStringNoLocale(thing, vcard.fn) || getStringNoLocale(thing, foaf.name);
-
-  return (
-    <Link href={buildProfileLink(profileIri, route)}>
-      <a>{name}</a>
-    </Link>
-  );
-}
-
-ProfileLink.propTypes = {
-  webId: T.string,
-};
-
-ProfileLink.defaultProps = {
-  webId: null,
-};
+  it("renders", () => {
+    const { asFragment } = renderWithTheme(
+      <AgentsDrawer
+        open
+        onClose={onClose}
+        onDelete={onDelete}
+        selectedContactName={selectedContactName}
+        profileIri={profileIri}
+      />
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+});

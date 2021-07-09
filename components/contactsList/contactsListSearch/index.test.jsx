@@ -21,7 +21,7 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import { SearchProvider } from "../../../src/contexts/searchContext";
 import ContactsListSearch, {
@@ -38,7 +38,14 @@ import { buildProfileLink } from "../../profileLink";
 
 jest.mock("next/router");
 
+const mockedUseRouter = useRouter;
+
 describe("ContactsListSearch", () => {
+  beforeEach(() => {
+    mockedUseRouter.mockReturnValue({
+      route: "/contacts",
+    });
+  });
   it("renders form if people are still loading", () => {
     const { asFragment } = renderWithTheme(
       <SearchProvider>

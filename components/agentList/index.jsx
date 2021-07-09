@@ -19,41 +19,50 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import clsx from "clsx";
-import Link from "next/link";
-import { Avatar, createStyles } from "@material-ui/core";
+import { createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import {
   DrawerContainer,
-  PageHeader,
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
 import {
+  addStringNoLocale,
+  addUrl,
+  createThing,
   getSourceUrl,
   getStringNoLocale,
-  getThing,
+  getUrl,
 } from "@inrupt/solid-client";
 import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
 import { vcard, foaf } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";
 import Spinner from "../spinner";
+import AgentAvatar from "../agentAvatar";
 import styles from "./styles";
 
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import useAddressBookOld from "../../src/hooks/useAddressBookOld";
 import useContactsOld from "../../src/hooks/useContactsOld";
+import { chain } from "../../src/solidClientHelpers/utils";
 import useProfiles from "../../src/hooks/useProfiles";
-import ContactsListSearch from "./contactsListSearch";
 import ProfileLink from "../profileLink";
-import { SearchProvider } from "../../src/contexts/searchContext";
-import { deleteContact, getWebIdUrl } from "../../src/addressBook";
-import ContactsDrawer from "./contactsDrawer";
-import ContactsEmptyState from "./contactsEmptyState";
+import SearchContext from "../../src/contexts/searchContext";
+import { deleteContact, vcardExtras } from "../../src/addressBook";
+import ContactsEmptyState from "../contactsList/contactsEmptyState";
+import AgentsDrawer from "./agentsDrawer";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
+// termporarily using mock data for apps for dev purposes until we have audit list
+const mockApp = chain(
+  createThing({ url: "https://mockappurl.com" }),
+  (t) => addStringNoLocale(t, vcard.fn, "Mock App"),
+  (t) => addUrl(t, vcardExtras("WebId"), "https://mockappurl.com")
+);
 export function handleClose(setSelectedContactIndex) {
   return () => setSelectedContactIndex(null);
 }
@@ -80,22 +89,35 @@ export function handleDeleteContact({
   };
 }
 
-function ContactsList() {
+function AgentList({ contactType, setSearchValues }) {
   useRedirectIfLoggedOut();
-
   const tableClass = PrismTable.useTableClass("table", "inherits");
   const classes = useStyles();
   const bem = useBem(classes);
-  const actionClass = PageHeader.usePageHeaderActionClassName();
-  const [search, setSearch] = useState("");
+  const { search } = useContext(SearchContext);
 
   const [addressBook, addressBookError] = useAddressBookOld();
   const {
-    data: people,
-    error: peopleError,
-    mutate: peopleMutate,
+    data: contacts,
+    error: contactsError,
+    mutate: contactsMutate,
   } = useContactsOld(addressBook, foaf.Person);
-  const profiles = useProfiles(people);
+  const profiles = useProfiles(contacts);
+  const [profilesForTable, setProfilesForTable] = useState([]);
+
+  // FIXME: temporarily doing this manually for dev purposes until we have audit list
+  useEffect(() => {
+    if (profiles) {
+      setProfilesForTable(profiles);
+    }
+    if (contactType === "all") {
+      setProfilesForTable(profiles ? [...profiles, mockApp] : [mockApp]);
+    }
+    if (contactType === "app") {
+      setProfilesForTable([mockApp]);
+    }
+  }, [profiles, contactType]);
+
   const formattedNamePredicate = vcard.fn;
   const hasPhotoPredicate = vcard.hasPhoto;
 
@@ -108,27 +130,28 @@ function ContactsList() {
   const [selectedContactWebId, setSelectedContactWebId] = useState("");
 
   useEffect(() => {
+    if (!contacts) return;
+    setSearchValues(contacts);
+  }, [contacts, setSearchValues]);
+
+  useEffect(() => {
     if (selectedContactIndex === null) return;
-    const contactDataset = people[selectedContactIndex].dataset;
-    const contactThingUrl = people[selectedContactIndex].iri;
-    const contactThing = getThing(contactDataset, contactThingUrl);
+    const contactThing = profilesForTable[selectedContactIndex];
     const name = getStringNoLocale(contactThing, formattedNamePredicate);
     setSelectedContactName(name);
-    (async () => {
-      const webId = getWebIdUrl(contactDataset, contactThingUrl);
-      setSelectedContactWebId(webId);
-    })();
-  }, [selectedContactIndex, formattedNamePredicate, people, fetch]);
+    const webId = getUrl(contactThing, vcardExtras("WebId"));
+    setSelectedContactWebId(webId);
+  }, [selectedContactIndex, formattedNamePredicate, profilesForTable, fetch]);
 
   if (addressBookError) return addressBookError;
-  if (peopleError) return peopleError;
+  if (contactsError) return contactsError;
 
-  const isLoading = !addressBook || !people || !profiles;
+  const isLoading = !addressBook;
 
   if (isLoading) return <Spinner />;
 
   // format things for the data table
-  const contacts = profiles.map((p) => ({
+  const contactsForTable = profilesForTable.map((p) => ({
     thing: p,
     dataset: addressBook,
   }));
@@ -138,13 +161,13 @@ function ContactsList() {
     addressBook,
     closeDrawer,
     fetch,
-    people,
-    peopleMutate,
+    contacts,
+    contactsMutate,
     selectedContactIndex,
   });
 
   const drawer = (
-    <ContactsDrawer
+    <AgentsDrawer
       open={selectedContactIndex !== null}
       onClose={closeDrawer}
       onDelete={deleteSelectedContact}
@@ -153,79 +176,72 @@ function ContactsList() {
     />
   );
 
+  if (!contactsForTable.length) {
+    return <ContactsEmptyState />;
+  }
   return (
-    <SearchProvider setSearch={setSearch}>
-      <PageHeader
-        title="Contacts"
-        actions={[
-          <Link href="/contacts/add">
-            <a className={actionClass}>Add new contact</a>
-          </Link>,
-        ]}
+    <DrawerContainer drawer={drawer} open={selectedContactIndex !== null}>
+      <Table
+        things={contactsForTable}
+        className={clsx(tableClass, bem("table"))}
+        filter={search}
+        ascIndicator={<SortedTableCarat sorted />}
+        descIndicator={<SortedTableCarat sorted sortedDesc />}
+        getRowProps={(row, contact) => {
+          return {
+            tabIndex: "0",
+            className: clsx(
+              bem(
+                "table__body-row",
+                "selectable",
+                contact === profilesForTable[selectedContactIndex]
+                  ? "selected"
+                  : null
+              )
+            ),
+            onKeyUp: (event) => {
+              if (event.key === "Enter") setSelectedContactIndex(row.index);
+            },
+            onClick: () => {
+              setSelectedContactIndex(row.index);
+            },
+          };
+        }}
       >
-        <ContactsListSearch people={profiles} />
-      </PageHeader>
-      {!contacts.length ? (
-        <ContactsEmptyState />
-      ) : (
-        <DrawerContainer drawer={drawer} open={selectedContactIndex !== null}>
-          <Table
-            things={contacts}
-            className={clsx(tableClass, bem("table"))}
-            filter={search}
-            ascIndicator={<SortedTableCarat sorted />}
-            descIndicator={<SortedTableCarat sorted sortedDesc />}
-            getRowProps={(row, contact) => {
-              return {
-                tabIndex: "0",
-                className: clsx(
-                  bem(
-                    "table__body-row",
-                    "selectable",
-                    contact === profiles[selectedContactIndex]
-                      ? "selected"
-                      : null
-                  )
-                ),
-                onKeyUp: (event) => {
-                  if (event.key === "Enter") setSelectedContactIndex(row.index);
-                },
-                onClick: () => {
-                  setSelectedContactIndex(row.index);
-                },
-              };
-            }}
-          >
-            <TableColumn
-              property={hasPhotoPredicate}
-              header=""
-              dataType="url"
-              body={({ value, row }) => {
-                return (
-                  <Avatar
-                    className={bem("avatar")}
-                    alt={row.values.col1 || "Contact avatar"}
-                    src={value}
-                  />
-                );
-              }}
-            />
-            <TableColumn
-              property={formattedNamePredicate}
-              header="Name"
-              filterable
-              sortable
-              body={ProfileLink}
-            />
-          </Table>
-        </DrawerContainer>
-      )}
-    </SearchProvider>
+        <TableColumn
+          property={hasPhotoPredicate}
+          header=""
+          dataType="url"
+          body={({ value, row }) => (
+            <AgentAvatar imageUrl={value} altText={row.values.col1} />
+          )}
+        />
+        <TableColumn
+          property={formattedNamePredicate}
+          header="Name"
+          filterable
+          sortable
+          body={ProfileLink}
+        />
+        <TableColumn
+          property={vcardExtras("WebId")}
+          header="WebID"
+          dataType="url"
+          filterable
+          sortable
+        />
+      </Table>
+    </DrawerContainer>
   );
 }
 
-ContactsList.propTypes = {};
+AgentList.propTypes = {
+  contactType: PropTypes.string,
+  setSearchValues: PropTypes.func.isRequired,
+};
 
-ContactsList.defaultProps = {};
+AgentList.defaultProps = {
+  contactType: "",
+};
 
-export default ContactsList;
+export default AgentList;

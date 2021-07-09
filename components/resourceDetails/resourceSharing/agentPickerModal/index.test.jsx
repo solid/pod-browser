@@ -51,10 +51,6 @@ import {
 } from "../addAgentRow";
 import { TESTCAFE_ADD_WEBID_BUTTON } from "./addWebIdButton";
 import { TESTCAFE_ID_SEARCH_INPUT } from "../agentsSearchBar";
-import {
-  TESTCAFE_ID_TAB_GROUPS,
-  TESTCAFE_ID_TAB_PEOPLE,
-} from "../agentsTableTabs";
 
 jest.mock("../../../../src/hooks/useAddressBook");
 const mockedUseAddressBook = useAddressBook;
@@ -872,6 +868,7 @@ describe("AgentPickerModal with contacts", () => {
     userEvent.clear(searchBar);
     expect(queryAllByTestId("agent-webid")).toHaveLength(5);
   });
+  // TODO: the tabs have slightly changed so these tests need to be updated when the agent tabs are restored
   it.skip("clicking the tabs filters by person or group contact", () => {
     const containerUrl = "https://example.com/contacts/";
     const emptyAddressBook = mockAddressBook({ containerUrl });
@@ -901,10 +898,11 @@ describe("AgentPickerModal with contacts", () => {
         onClose={onClose}
       />
     );
-    const peopleTab = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
+    // FIXME: change these test ids
+    const peopleTab = getByTestId("tab-people");
+    const groupsTab = getByTestId("tab-groups");
     userEvent.click(peopleTab);
     expect(queryAllByTestId("agent-webid")).toHaveLength(2);
-    const groupsTab = getByTestId(TESTCAFE_ID_TAB_GROUPS);
     userEvent.click(groupsTab);
     // TODO: we will call this testid differently when we have groups
     expect(queryAllByTestId("agent-webid")).toHaveLength(1);
@@ -937,7 +935,8 @@ describe("AgentPickerModal with contacts", () => {
         onClose={onClose}
       />
     );
-    const groupsTab = getByTestId(TESTCAFE_ID_TAB_GROUPS);
+    // FIXME: change these test id
+    const groupsTab = getByTestId("tab-groups");
     userEvent.click(groupsTab);
     // TODO: we will call this testid differently when we have groups
     expect(queryAllByTestId("agent-webid")).toHaveLength(0);
@@ -960,7 +959,8 @@ describe("AgentPickerModal with contacts", () => {
         onClose={onClose}
       />
     );
-    const peopleTab = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
+    // FIXME: change these test id
+    const peopleTab = getByTestId("tab-people");
     userEvent.click(peopleTab);
     // TODO: we will call this testid differently when we have groups
     expect(queryAllByTestId("agent-webid")).toHaveLength(0);

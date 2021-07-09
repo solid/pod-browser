@@ -11,49 +11,27 @@ exports[`ContactsListSearch render profiles when people are loaded 1`] = `
       class="PodBrowser-root PodBrowser-root PodBrowser-marginDense PodBrowser-fullWidth"
     >
       <div
-        class="PodBrowser-root PodBrowser-root PodBrowser-inputRoot PodBrowser-searchInput PodBrowser-fullWidth PodBrowser-formControl PodBrowser-adornedEnd PodBrowser-adornedEnd PodBrowser-marginDense PodBrowser-marginDense"
+        class="PodBrowser-root PodBrowser-root PodBrowser-fullWidth PodBrowser-formControl PodBrowser-adornedStart PodBrowser-adornedStart PodBrowser-marginDense PodBrowser-marginDense"
       >
+        <div
+          class="PodBrowser-root PodBrowser-positionStart PodBrowser-marginDense"
+        >
+          <span
+            class="PodBrowser-icon-search"
+          />
+        </div>
         <input
           aria-autocomplete="list"
           aria-invalid="false"
           autocapitalize="none"
           autocomplete="off"
-          class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd PodBrowser-inputMarginDense PodBrowser-inputMarginDense"
+          class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedStart PodBrowser-inputAdornedStart PodBrowser-inputMarginDense PodBrowser-inputMarginDense"
           data-testid="contacts-search"
           id="ContactsSearch"
           spellcheck="false"
           type="text"
           value=""
         />
-        <div
-          class="PodBrowser-endAdornment"
-        >
-          <button
-            aria-label="Clear"
-            class="PodBrowser-root PodBrowser-root PodBrowser-clearIndicator"
-            tabindex="-1"
-            title="Clear"
-            type="button"
-          >
-            <span
-              class="PodBrowser-label"
-            >
-              <svg
-                aria-hidden="true"
-                class="PodBrowser-root PodBrowser-fontSizeSmall"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-                />
-              </svg>
-            </span>
-            <span
-              class="PodBrowser-root"
-            />
-          </button>
-        </div>
         <fieldset
           aria-hidden="true"
           class="PodBrowser-root PodBrowser-notchedOutline"
@@ -85,49 +63,27 @@ exports[`ContactsListSearch renders form if people are still loading 1`] = `
       class="PodBrowser-root PodBrowser-root PodBrowser-marginDense PodBrowser-fullWidth"
     >
       <div
-        class="PodBrowser-root PodBrowser-root PodBrowser-inputRoot PodBrowser-searchInput PodBrowser-fullWidth PodBrowser-formControl PodBrowser-adornedEnd PodBrowser-adornedEnd PodBrowser-marginDense PodBrowser-marginDense"
+        class="PodBrowser-root PodBrowser-root PodBrowser-fullWidth PodBrowser-formControl PodBrowser-adornedStart PodBrowser-adornedStart PodBrowser-marginDense PodBrowser-marginDense"
       >
+        <div
+          class="PodBrowser-root PodBrowser-positionStart PodBrowser-marginDense"
+        >
+          <span
+            class="PodBrowser-icon-search"
+          />
+        </div>
         <input
           aria-autocomplete="list"
           aria-invalid="false"
           autocapitalize="none"
           autocomplete="off"
-          class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd PodBrowser-inputMarginDense PodBrowser-inputMarginDense"
+          class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedStart PodBrowser-inputAdornedStart PodBrowser-inputMarginDense PodBrowser-inputMarginDense"
           data-testid="contacts-search"
           id="ContactsSearch"
           spellcheck="false"
           type="text"
           value=""
         />
-        <div
-          class="PodBrowser-endAdornment"
-        >
-          <button
-            aria-label="Clear"
-            class="PodBrowser-root PodBrowser-root PodBrowser-clearIndicator"
-            tabindex="-1"
-            title="Clear"
-            type="button"
-          >
-            <span
-              class="PodBrowser-label"
-            >
-              <svg
-                aria-hidden="true"
-                class="PodBrowser-root PodBrowser-fontSizeSmall"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-                />
-              </svg>
-            </span>
-            <span
-              class="PodBrowser-root"
-            />
-          </button>
-        </div>
         <fieldset
           aria-hidden="true"
           class="PodBrowser-root PodBrowser-notchedOutline"

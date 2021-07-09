@@ -53,13 +53,13 @@ describe("MainNav", () => {
     ).toHaveLength(3);
   });
 
-  it("renders Group for people with the feature flag turned on", () => {
+  it("renders Group and Privacy for people with the feature flag turned on", () => {
     const session = mockSession({ webId: GROUPS_PAGE_ENABLED_FOR[0] });
     mockedSessionHook.mockReturnValue({ session });
 
     const { getByTestId } = renderWithTheme(<MainNav />);
     expect(
       getByTestId(TESTCAFE_ID_MAIN_NAV).querySelectorAll("li")
-    ).toHaveLength(4);
+    ).toHaveLength(5);
   });
 });

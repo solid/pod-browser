@@ -20,40 +20,32 @@
  */
 
 import React from "react";
-import T from "prop-types";
-import Link from "next/link";
-import { useThing } from "@inrupt/solid-ui-react";
-import { getStringNoLocale, asUrl } from "@inrupt/solid-client";
-import { vcard, foaf } from "rdf-namespaces";
 import { useRouter } from "next/router";
+import Link from "next/link";
+import {
+  BackToNav,
+  BackToNavLink,
+  Container,
+} from "@inrupt/prism-react-components";
+import Profile from "../../../profile";
+import { useRedirectIfLoggedOut } from "../../../../src/effects/auth";
 
-export function buildProfileLink(webId, route) {
-  return `${route}/${encodeURIComponent(webId)}`;
-}
+export default function AgentShow() {
+  useRedirectIfLoggedOut();
+  const router = useRouter();
+  const decodedIri = decodeURIComponent(router.query.webId);
 
-export default function ProfileLink(props) {
-  const { route } = useRouter();
-  const { webId } = props;
-  const { thing } = useThing();
-
-  // Pass in an iri, or use the thing from context (such as for the contacts list)
-  const profileIri = webId || asUrl(thing);
-
-  // TODO remove this once react-sdk allows property fallbacks
-  const name =
-    getStringNoLocale(thing, vcard.fn) || getStringNoLocale(thing, foaf.name);
-
-  return (
-    <Link href={buildProfileLink(profileIri, route)}>
-      <a>{name}</a>
+  const link = (
+    <Link href="/privacy" passHref>
+      <BackToNavLink>privacy</BackToNavLink>
     </Link>
   );
+  return (
+    <>
+      <Container>
+        <BackToNav link={link} />
+      </Container>
+      <Profile profileIri={decodedIri} />
+    </>
+  );
 }
-
-ProfileLink.propTypes = {
-  webId: T.string,
-};
-
-ProfileLink.defaultProps = {
-  webId: null,
-};

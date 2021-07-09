@@ -202,11 +202,11 @@ exports[`setupDeleteButtonCell renders nothing if not editable 1`] = `<DocumentF
 exports[`setupDeleteButtonCell returns a button if editable 1`] = `
 <DocumentFragment>
   <button
-    class="makeStyles-button-1547 makeStyles-button--secondary-1553"
+    class="makeStyles-button-1549 makeStyles-button--secondary-1555"
     data-testid="profile-email-delete-button"
   >
     <span
-      class="makeStyles-button__text-1551"
+      class="makeStyles-button__text-1553"
     >
       Delete
     </span>

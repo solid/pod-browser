@@ -28,10 +28,6 @@ import { createAccessMap } from "../../../../src/solidClientHelpers/permissions"
 import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
 import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
 import { TESTCAFE_ID_SEARCH_INPUT } from "../agentsSearchBar";
-import {
-  TESTCAFE_ID_TAB_GROUPS,
-  TESTCAFE_ID_TAB_PEOPLE,
-} from "../agentsTableTabs";
 
 jest.mock("../../../../src/hooks/usePolicyPermissions");
 const mockedUsePolicyPermissions = usePolicyPermissions;
@@ -201,7 +197,7 @@ describe("AgentAccessTable", () => {
       expect(queryByText("Example 2")).not.toBeNull();
     });
   });
-
+  // TODO: tabs have slightly changed so these tests need to be updated when tabs are restores
   it.skip("renders a set of tabs which filter by Group type", () => {
     const permissionsWithTypes = [
       {
@@ -233,8 +229,9 @@ describe("AgentAccessTable", () => {
       <AgentAccessTable type={type} />
     );
     waitFor(() => {
-      const tabPeople = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
-      const tabGroups = getByTestId(TESTCAFE_ID_TAB_GROUPS);
+      // FIXME: change these test ids
+      const tabPeople = getByTestId("tab-people");
+      const tabGroups = getByTestId("tab-groups");
       userEvent.click(tabPeople);
       expect(queryByText("Example 1")).not.toBeNull();
       expect(queryByText("Not a person")).toBeNull();
@@ -277,8 +274,9 @@ describe("AgentAccessTable", () => {
     );
 
     waitFor(() => {
-      const tabPeople = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
-      const tabGroups = getByTestId(TESTCAFE_ID_TAB_GROUPS);
+      // FIXME: change these test ids
+      const tabPeople = getByTestId("tab-people");
+      const tabGroups = getByTestId("tab-groups");
       userEvent.click(tabPeople);
       expect(queryByText("No people found")).not.toBeNull();
       expect(queryByText("Not a person")).toBeNull();

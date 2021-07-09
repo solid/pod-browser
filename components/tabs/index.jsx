@@ -25,46 +25,27 @@ import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
-import { Tabs, Tab, createStyles } from "@material-ui/core";
+import { Tabs as MuiTabs, Tab, createStyles } from "@material-ui/core";
 
 import styles from "./styles";
 
-export const TESTCAFE_ID_TAB_ALL = "tab-all";
-export const TESTCAFE_ID_TAB_PEOPLE = "tab-people";
-export const TESTCAFE_ID_TAB_GROUPS = "tab-groups";
-
-const tabs = [
-  {
-    label: "All",
-    testid: TESTCAFE_ID_TAB_ALL,
-  },
-  {
-    label: "People",
-    testid: TESTCAFE_ID_TAB_PEOPLE,
-  },
-  {
-    label: "Groups",
-    testid: TESTCAFE_ID_TAB_GROUPS,
-  },
-];
-
-export default function AgentsTableTabs({
+export default function Tabs({
   handleTabChange,
   selectedTabValue,
   className,
-  tabsValues,
+  tabs,
+  children,
 }) {
   const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-
   const classes = useStyles();
 
   return (
     <div className={clsx(classes.tabsContainer, className)}>
-      <Tabs
+      <MuiTabs
         classes={{ indicator: classes.indicator }}
         value={selectedTabValue}
         onChange={handleTabChange}
-        aria-label="Permissions Filter tabs"
+        aria-label="Filter tabs"
       >
         {tabs.map((tab) => (
           <Tab
@@ -75,22 +56,31 @@ export default function AgentsTableTabs({
             }}
             label={tab.label}
             data-testid={tab.testid}
-            value={tabsValues[tab.label.toLowerCase()]}
+            value={tab.value}
           />
         ))}
-      </Tabs>
+      </MuiTabs>
+      {children}
     </div>
   );
 }
 
-AgentsTableTabs.propTypes = {
+Tabs.propTypes = {
   handleTabChange: PropTypes.func.isRequired,
-  selectedTabValue: PropTypes.oneOfType([PropTypes.shape(), PropTypes.string])
-    .isRequired,
-  tabsValues: PropTypes.shape().isRequired,
+  selectedTabValue: PropTypes.string,
+  tabs: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      testid: PropTypes.string,
+      value: PropTypes.string,
+    })
+  ).isRequired,
   className: PropTypes.string,
+  children: PropTypes.node,
 };
 
-AgentsTableTabs.defaultProps = {
+Tabs.defaultProps = {
   className: null,
+  selectedTabValue: null,
+  children: null,
 };

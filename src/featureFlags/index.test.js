@@ -21,13 +21,19 @@
 
 import rules, {
   GROUPS_PAGE_ENABLED,
+  PRIVACY_PAGE_ENABLED_FOR,
+  PRIVACY_PAGE_ENABLED,
   GROUPS_PAGE_ENABLED_FOR,
   groupsPageEnabled,
+  privacyPageEnabled,
 } from "./index";
 
 describe("rules", () => {
   test("it indexes all rules", () => {
-    expect(Object.keys(rules())).toEqual([GROUPS_PAGE_ENABLED]);
+    expect(Object.keys(rules())).toEqual([
+      GROUPS_PAGE_ENABLED,
+      PRIVACY_PAGE_ENABLED,
+    ]);
   });
 });
 
@@ -53,6 +59,34 @@ describe("GROUPS_PAGE_ENABLED", () => {
         info: {
           isLoggedIn: true,
           webId: GROUPS_PAGE_ENABLED_FOR[0],
+        },
+      })
+    ).toBe(true);
+  });
+});
+
+describe("PRIVACY_PAGE_ENABLED", () => {
+  it("returns false for a logged out session", () => {
+    expect(privacyPageEnabled({ info: { isLoggedIn: false } })).toBe(false);
+  });
+
+  it("returns false for a session not in the enabled list", () => {
+    expect(
+      privacyPageEnabled({
+        info: {
+          isLoggedIn: true,
+          webId: "https://pod.inrupt.com/fakename/card#me",
+        },
+      })
+    ).toBe(false);
+  });
+
+  it("returns true for a session in the enabled list", () => {
+    expect(
+      privacyPageEnabled({
+        info: {
+          isLoggedIn: true,
+          webId: PRIVACY_PAGE_ENABLED_FOR[0],
         },
       })
     ).toBe(true);

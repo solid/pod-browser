@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AgentsDrawer renders 1`] = `
+<DocumentFragment>
+  <section
+    class="PodBrowser-drawer PodBrowser-drawer--open"
+  >
+    <div
+      class="PodBrowser-drawer__content"
+    >
+      <div
+        class="PodBrowser-drawer__content-wrapper"
+      >
+        <div
+          class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
+        >
+          <button
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                class="PodBrowser-icon-cancel"
+              />
+               Close
+            </span>
+          </button>
+        </div>
+        <div
+          class="PodBrowser-root PodBrowser-root PodBrowser-expanded PodBrowser-elevation1"
+        >
+          <div
+            aria-disabled="false"
+            aria-expanded="true"
+            class="PodBrowser-root PodBrowser-root PodBrowser-expanded"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="PodBrowser-content PodBrowser-expanded"
+            >
+              Actions
+            </div>
+            <div
+              aria-disabled="false"
+              aria-hidden="true"
+              class="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-expanded PodBrowser-edgeEnd"
+            >
+              <span
+                class="PodBrowser-label"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="PodBrowser-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                  />
+                </svg>
+              </span>
+              <span
+                class="PodBrowser-root"
+              />
+            </div>
+          </div>
+          <div
+            class="PodBrowser-container PodBrowser-entered"
+            style="min-height: 0px;"
+          >
+            <div
+              class="PodBrowser-wrapper"
+            >
+              <div
+                class="PodBrowser-wrapperInner"
+              >
+                <div
+                  role="region"
+                >
+                  <div
+                    class="PodBrowser-root"
+                  >
+                    <ul
+                      class="PodBrowser-action-menu"
+                    >
+                      <li
+                        class="PodBrowser-action-menu__item"
+                      >
+                        <a
+                          class="PodBrowser-action-menu__trigger"
+                          href="/privacy/https%3A%2F%2Fexample.com%2Fprofile%23alice"
+                        >
+                          View Profile
+                        </a>
+                      </li>
+                      <li
+                        class="PodBrowser-action-menu__item"
+                      >
+                        <button
+                          class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                          data-testid="delete-button"
+                          type="button"
+                        >
+                          Delete
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</DocumentFragment>
+`;

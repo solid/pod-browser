@@ -23,7 +23,6 @@ import React from "react";
 import * as RouterFns from "next/router";
 import { addUrl } from "@inrupt/solid-client";
 import { space } from "rdf-namespaces";
-import * as solidUiReactFns from "@inrupt/solid-ui-react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";

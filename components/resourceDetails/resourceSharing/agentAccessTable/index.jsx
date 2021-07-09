@@ -38,7 +38,7 @@ import { makeStyles } from "@material-ui/styles";
 import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
 import AgentAccess from "../agentAccess";
 import AddAgentButton from "../addAgentButton";
-import AgentsTableTabs from "../agentsTableTabs";
+import Tabs from "../../../tabs";
 import AgentsSearchBar from "../agentsSearchBar";
 import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
 
@@ -157,10 +157,10 @@ export default function AgentAccessTable({ type }) {
         {!!permissions.length && (
           <>
             {/* TODO: Uncomment to reintroduce tabs */}
-            {/* <AgentsTableTabs */}
+            {/* <Tabs */}
             {/*  handleTabChange={handleTabChange} */}
             {/*  selectedTabValue={selectedTabValue} */}
-            {/*  tabsValues={{ all: "", people: "agent", groups: "group" }} */}
+            {/*  tabs={[{ label: "All", value: "all", testid: TESTCAFE_ID_TAB_ALL },  { label: "People", value: "agent", testid: TESTCAFE_ID_TAB_PEOPLE }, { label: "Groups", value: "group", testid: TESTCAFE_ID_TAB_GROUPS } }]} */}
             {/* /> */}
             <AgentsSearchBar handleFilterChange={handleFilterChange} />
           </>

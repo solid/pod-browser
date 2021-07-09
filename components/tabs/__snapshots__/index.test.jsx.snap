@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AgentTableTabs renders tabs 1`] = `
+exports[`Tabs renders tabs 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-tabsContainer"
@@ -13,7 +13,7 @@ exports[`AgentTableTabs renders tabs 1`] = `
         style="overflow: hidden;"
       >
         <div
-          aria-label="Permissions Filter tabs"
+          aria-label="Filter tabs"
           class="PodBrowser-flexContainer"
           role="tablist"
         >
@@ -35,11 +35,11 @@ exports[`AgentTableTabs renders tabs 1`] = `
             />
           </button>
           <button
-            aria-selected="true"
-            class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit PodBrowser-selected PodBrowser-selected"
+            aria-selected="false"
+            class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit"
             data-testid="tab-people"
             role="tab"
-            tabindex="0"
+            tabindex="-1"
             type="button"
           >
             <span
@@ -54,7 +54,7 @@ exports[`AgentTableTabs renders tabs 1`] = `
           <button
             aria-selected="false"
             class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit"
-            data-testid="tab-groups"
+            data-testid="tab-apps"
             role="tab"
             tabindex="-1"
             type="button"
@@ -62,7 +62,7 @@ exports[`AgentTableTabs renders tabs 1`] = `
             <span
               class="PodBrowser-wrapper"
             >
-              Groups
+              Apps
             </span>
             <span
               class="PodBrowser-root"

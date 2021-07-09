@@ -20,40 +20,34 @@
  */
 
 import React from "react";
-import T from "prop-types";
-import Link from "next/link";
-import { useThing } from "@inrupt/solid-ui-react";
-import { getStringNoLocale, asUrl } from "@inrupt/solid-client";
-import { vcard, foaf } from "rdf-namespaces";
-import { useRouter } from "next/router";
+import * as RouterFns from "next/router";
+import { renderWithTheme } from "../../../../__testUtils/withTheme";
+import mockSessionContextProvider from "../../../../__testUtils/mockSessionContextProvider";
+import mockSession from "../../../../__testUtils/mockSession";
 
-export function buildProfileLink(webId, route) {
-  return `${route}/${encodeURIComponent(webId)}`;
-}
+import AgentPage from "./index";
 
-export default function ProfileLink(props) {
-  const { route } = useRouter();
-  const { webId } = props;
-  const { thing } = useThing();
+jest.mock("../../../../src/effects/auth");
 
-  // Pass in an iri, or use the thing from context (such as for the contacts list)
-  const profileIri = webId || asUrl(thing);
+describe("Agent show page", () => {
+  test("Renders the Agent show page", () => {
+    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
+      asPath: "/pathname/",
+      replace: jest.fn(),
+      query: {
+        webId: "https://example.com/profile/card#me",
+      },
+    });
 
-  // TODO remove this once react-sdk allows property fallbacks
-  const name =
-    getStringNoLocale(thing, vcard.fn) || getStringNoLocale(thing, foaf.name);
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
 
-  return (
-    <Link href={buildProfileLink(profileIri, route)}>
-      <a>{name}</a>
-    </Link>
-  );
-}
+    const { asFragment } = renderWithTheme(
+      <SessionProvider>
+        <AgentPage />
+      </SessionProvider>
+    );
 
-ProfileLink.propTypes = {
-  webId: T.string,
-};
-
-ProfileLink.defaultProps = {
-  webId: null,
-};
+    expect(asFragment()).toMatchSnapshot();
+  });
+});

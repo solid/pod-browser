@@ -20,40 +20,43 @@
  */
 
 import React from "react";
-import T from "prop-types";
-import Link from "next/link";
+import PropTypes from "prop-types";
 import { useThing } from "@inrupt/solid-ui-react";
-import { getStringNoLocale, asUrl } from "@inrupt/solid-client";
-import { vcard, foaf } from "rdf-namespaces";
-import { useRouter } from "next/router";
+import { makeStyles } from "@material-ui/styles";
+import { Icons } from "@inrupt/prism-react-components";
+import { Avatar, createStyles } from "@material-ui/core";
+import { getUrl } from "@inrupt/solid-client";
+import { rdf } from "rdf-namespaces";
+import styles from "./styles";
 
-export function buildProfileLink(webId, route) {
-  return `${route}/${encodeURIComponent(webId)}`;
-}
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function ProfileLink(props) {
-  const { route } = useRouter();
-  const { webId } = props;
+export default function AgentAvatar({ imageUrl, altText }) {
   const { thing } = useThing();
-
-  // Pass in an iri, or use the thing from context (such as for the contacts list)
-  const profileIri = webId || asUrl(thing);
-
-  // TODO remove this once react-sdk allows property fallbacks
-  const name =
-    getStringNoLocale(thing, vcard.fn) || getStringNoLocale(thing, foaf.name);
-
+  const classes = useStyles();
+  const contactType = getUrl(thing, rdf.type) || "app";
+  if (!imageUrl && contactType === "app") {
+    return (
+      <Avatar className={classes.appAvatar} alt={altText || "Contact avatar"}>
+        <Icons className={classes.appAvatar} name="project-diagram" />
+      </Avatar>
+    );
+  }
   return (
-    <Link href={buildProfileLink(profileIri, route)}>
-      <a>{name}</a>
-    </Link>
+    <Avatar
+      className={classes.avatar}
+      alt={altText || "Contact avatar"}
+      src={imageUrl}
+    />
   );
 }
 
-ProfileLink.propTypes = {
-  webId: T.string,
+AgentAvatar.propTypes = {
+  imageUrl: PropTypes.string,
+  altText: PropTypes.string,
 };
 
-ProfileLink.defaultProps = {
-  webId: null,
+AgentAvatar.defaultProps = {
+  imageUrl: null,
+  altText: "Contact avatar",
 };

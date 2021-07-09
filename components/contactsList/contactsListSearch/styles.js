@@ -22,6 +22,7 @@
 export default function styles(theme) {
   return {
     search: {
+      minWidth: 300,
       maxWidth: 450,
     },
     searchInput: {

@@ -21,27 +21,24 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
-export default function styles(theme) {
-  return createStyles(theme, ["icons", "table"], {
-    tabsContainer: {
-      paddingLeft: theme.spacing(1.2),
-      paddingRight: theme.spacing(1.2),
-      borderBottom: `1px solid ${theme.palette.grey.A100}`,
+const styles = (theme) => {
+  return createStyles(theme, [], {
+    avatar: {
+      width: "30px",
+      height: "30px",
     },
-    tab: {
-      textTransform: "none",
-      minWidth: "max-content",
-      fontFamily: theme.typography.body1.fontFamily,
-      fontSize: theme.typography.body1.fontSize,
-      color: theme.palette.primary.text,
-    },
-    selected: {
+    appAvatar: {
+      textAlign: "center",
+      width: "30px",
+      height: "30px",
+      padding: theme.spacing(1),
+      borderRadius: "50%",
+      marginRight: theme.spacing(0.4),
+      fontSize: theme.typography.h6.fontSize,
       color: theme.palette.primary.main,
-    },
-    indicator: {
-      height: "3px",
-      width: "100%",
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: "#F1EDFF",
     },
   });
-}
+};
+
+export default styles;

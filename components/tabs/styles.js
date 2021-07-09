@@ -19,41 +19,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import T from "prop-types";
-import Link from "next/link";
-import { useThing } from "@inrupt/solid-ui-react";
-import { getStringNoLocale, asUrl } from "@inrupt/solid-client";
-import { vcard, foaf } from "rdf-namespaces";
-import { useRouter } from "next/router";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-export function buildProfileLink(webId, route) {
-  return `${route}/${encodeURIComponent(webId)}`;
+export default function styles(theme) {
+  return createStyles(theme, ["icons", "table"], {
+    tabsContainer: {
+      display: "flex",
+      justifyContent: "space-between",
+      paddingLeft: theme.spacing(1.2),
+      paddingRight: theme.spacing(1.2),
+      borderBottom: `1px solid ${theme.palette.grey.A100}`,
+    },
+    tab: {
+      textTransform: "none",
+      minWidth: "max-content",
+      fontFamily: theme.typography.body1.fontFamily,
+      fontSize: theme.typography.body1.fontSize,
+      color: theme.palette.primary.text,
+    },
+    selected: {
+      color: theme.palette.primary.main,
+    },
+    indicator: {
+      height: "3px",
+      width: "100%",
+      backgroundColor: theme.palette.primary.main,
+    },
+  });
 }
-
-export default function ProfileLink(props) {
-  const { route } = useRouter();
-  const { webId } = props;
-  const { thing } = useThing();
-
-  // Pass in an iri, or use the thing from context (such as for the contacts list)
-  const profileIri = webId || asUrl(thing);
-
-  // TODO remove this once react-sdk allows property fallbacks
-  const name =
-    getStringNoLocale(thing, vcard.fn) || getStringNoLocale(thing, foaf.name);
-
-  return (
-    <Link href={buildProfileLink(profileIri, route)}>
-      <a>{name}</a>
-    </Link>
-  );
-}
-
-ProfileLink.propTypes = {
-  webId: T.string,
-};
-
-ProfileLink.defaultProps = {
-  webId: null,
-};

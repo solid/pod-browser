@@ -190,8 +190,8 @@ export async function getProfiles(people, fetch) {
     .map(({ response }) => response)
     .map(({ dataset, iri }) => {
       const thing = getThing(dataset, iri);
-      const avatar = getUrl(thing, vcard.hasPhoto);
-      return addStringNoLocale(getThing(thing, iri), vcard.hasPhoto, avatar);
+      const thingWithWebId = addUrl(thing, vcardExtras("WebId"), iri);
+      return thingWithWebId;
     });
 }
 

@@ -31,6 +31,7 @@ export default function useContactsOld(addressBook, type) {
   const {
     session: { fetch },
   } = useSession();
+
   return useSWR(
     addressBook,
     async () => {

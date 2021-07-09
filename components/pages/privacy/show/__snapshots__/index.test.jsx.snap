@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Agent show page Renders the Agent show page 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-container"
+  >
+    <nav
+      class="PodBrowser-back-to-nav"
+    >
+      <span
+        class="PodBrowser-icon-caret-left PodBrowser-back-to-nav__caret"
+      />
+      <a
+        class="PodBrowser-back-to-nav__link"
+        href="/privacy"
+      >
+        Back to privacy
+      </a>
+    </nav>
+  </div>
+  <div
+    class="PodBrowser-container"
+  >
+    <div
+      class="PodBrowser-root PodBrowser-elevation1 PodBrowser-rounded"
+      style="margin-top: 1em;"
+    >
+      <div
+        class="PodBrowser-root PodBrowser-root"
+      >
+        <span>
+          Fetching data...
+        </span>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

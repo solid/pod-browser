@@ -19,41 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import T from "prop-types";
-import Link from "next/link";
-import { useThing } from "@inrupt/solid-ui-react";
-import { getStringNoLocale, asUrl } from "@inrupt/solid-client";
-import { vcard, foaf } from "rdf-namespaces";
-import { useRouter } from "next/router";
+import { createStyles, table } from "@solid/lit-prism-patterns";
 
-export function buildProfileLink(webId, route) {
-  return `${route}/${encodeURIComponent(webId)}`;
-}
-
-export default function ProfileLink(props) {
-  const { route } = useRouter();
-  const { webId } = props;
-  const { thing } = useThing();
-
-  // Pass in an iri, or use the thing from context (such as for the contacts list)
-  const profileIri = webId || asUrl(thing);
-
-  // TODO remove this once react-sdk allows property fallbacks
-  const name =
-    getStringNoLocale(thing, vcard.fn) || getStringNoLocale(thing, foaf.name);
-
-  return (
-    <Link href={buildProfileLink(profileIri, route)}>
-      <a>{name}</a>
-    </Link>
-  );
-}
-
-ProfileLink.propTypes = {
-  webId: T.string,
+const styles = (theme) => {
+  const tableStyles = table.styles(theme);
+  return createStyles(theme, ["table", "icons"], {
+    table: {
+      "& tbody td": {
+        "&:first-child": tableStyles["table__body-cell--width-preview"],
+      },
+      "& tbody a": tableStyles.table__link,
+    },
+    "name-header": {
+      textTransform: "uppercase",
+    },
+  });
 };
 
-ProfileLink.defaultProps = {
-  webId: null,
-};
+export default styles;

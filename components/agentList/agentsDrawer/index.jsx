@@ -36,7 +36,7 @@ import { ExpandMore } from "@material-ui/icons";
 import DeleteContactButton from "../../deleteContactButton";
 import { buildProfileLink } from "../../profileLink";
 
-export default function ContactsDrawer({
+export default function AgentsDrawer({
   open,
   onClose,
   onDelete,
@@ -51,7 +51,7 @@ export default function ContactsDrawer({
         <AccordionDetails>
           <ActionMenu>
             <ActionMenuItem>
-              <Link href={buildProfileLink(profileIri, "/contacts")}>
+              <Link href={buildProfileLink(profileIri, "/privacy")}>
                 <a className={actionMenuBem("action-menu__trigger")}>
                   View Profile
                 </a>
@@ -71,7 +71,7 @@ export default function ContactsDrawer({
   );
 }
 
-ContactsDrawer.propTypes = {
+AgentsDrawer.propTypes = {
   open: T.bool.isRequired,
   onClose: T.func.isRequired,
   onDelete: T.func.isRequired,
