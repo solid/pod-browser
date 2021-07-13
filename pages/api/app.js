@@ -20,9 +20,9 @@
  */
 
 export default function handler(req, res) {
-  const clientId = process.env.NEXT_PUBLIC_VERCEL_URL
-    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/app`
-    : "http://www.w3.org/ns/solid/terms#PublicOidcClient";
+  const clientId = req.headers.host.includes("localhost")
+    ? "http://www.w3.org/ns/solid/terms#PublicOidcClient"
+    : `https://${req.headers.host}/api/app`;
   res.status(200).json({
     "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
     client_id: clientId,
