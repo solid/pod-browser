@@ -35,13 +35,19 @@ const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
 const TESTCAFE_ID_LOGIN_TITLE = "login-title";
 export const TESTCAFE_ID_OTHER_PROVIDERS_BUTTON = "other-providers-button";
 const PROVIDER_IRI = "https://broker.pod.inrupt.com/";
-const CLIENT_APP_WEBID =
-  "https://pod-browser-git-feature-app-authentication-inrupt.vercel.app/app.jsonld#id";
+const hostname =
+  typeof window !== "undefined" && window.location.origin
+    ? window.location.origin
+    : "";
+const CLIENT_APP_WEBID = hostname.includes("localhost")
+  ? "http://www.w3.org/ns/solid/terms#PublicOidcClient"
+  : `${hostname}/api/app`;
 
 export default function Login() {
   const bem = useBem(useStyles());
   const [isOpen, setIsOpen] = useState(false);
   const dropdownIcon = isOpen ? "caret-up" : "caret-down";
+  console.log(generateRedirectUrl(""));
 
   const toggleOpenDropdown = () => setIsOpen(!isOpen);
   const INFO_TOOLTIP_TEXT = "This is where you signed up for a Solid Pod";
