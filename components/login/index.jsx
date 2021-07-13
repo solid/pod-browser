@@ -47,7 +47,6 @@ export default function Login() {
   const bem = useBem(useStyles());
   const [isOpen, setIsOpen] = useState(false);
   const dropdownIcon = isOpen ? "caret-up" : "caret-down";
-  console.log(generateRedirectUrl(""));
 
   const toggleOpenDropdown = () => setIsOpen(!isOpen);
   const INFO_TOOLTIP_TEXT = "This is where you signed up for a Solid Pod";
