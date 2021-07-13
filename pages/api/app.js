@@ -26,7 +26,7 @@ export default function handler(req, res) {
   res.status(200).json({
     "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
     client_id: clientId,
-    redirect_uris: [`https://${req.headers.host}`],
+    redirect_uris: [`https://${req.headers.host}/`],
     client_name: "Inrupt PodBrowser",
     grant_types: ["refresh_token", "authorization_code"],
     response_types: ["code"],
