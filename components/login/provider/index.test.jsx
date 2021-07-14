@@ -27,7 +27,6 @@ import mockSessionContextProvider from "../../../__testUtils/mockSessionContextP
 import ProviderLogin, {
   getErrorMessage,
   setupErrorHandler,
-  setupLoginHandler,
   setupOnProviderChange,
   TESTCAFE_ID_LOGIN_FIELD,
 } from "./index";
@@ -115,16 +114,6 @@ describe("setupOnProviderChange", () => {
     setupOnProviderChange(setProviderIri, setLoginError)({}, 42);
     expect(setLoginError).toHaveBeenCalledWith(null);
     expect(setProviderIri).toHaveBeenCalledWith(null);
-  });
-});
-
-describe("setupLoginHandler", () => {
-  it("sets up event handler", () => {
-    const login = jest.fn();
-    const event = { preventDefault: jest.fn() };
-    setupLoginHandler(login)(event);
-    expect(event.preventDefault).toHaveBeenCalledWith();
-    expect(login).toHaveBeenCalledWith();
   });
 });
 

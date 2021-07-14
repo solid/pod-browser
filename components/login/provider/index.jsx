@@ -32,7 +32,7 @@ import {
 import { makeStyles, createStyles } from "@material-ui/styles";
 import { Autocomplete } from "@material-ui/lab";
 import { useBem } from "@solid/lit-prism-patterns";
-import { LoginButton, useSession } from "@inrupt/solid-ui-react";
+import { LoginButton } from "@inrupt/solid-ui-react";
 
 import { Button } from "@inrupt/prism-react-components";
 import { checkOidcSupport } from "../../../src/hooks/useClientId";
@@ -96,12 +96,11 @@ export function getErrorMessage(error) {
 export default function Provider({ defaultError }) {
   const bem = useBem(useStyles());
   const classes = useStyles();
-  const { login } = useSession();
   const [loginError, setLoginError] = useState(defaultError);
   const theme = useTheme();
   const idp = useIdpFromQuery();
   const [providerIri, setProviderIri] = useState();
-  const oidcRef = useRef();
+  const oidcRef = useRef(false);
   const [authOptions, setAuthOptions] = useState({
     clientName: "Inrupt PodBrowser",
   });
@@ -128,12 +127,11 @@ export default function Provider({ defaultError }) {
   }, [providerIri]);
 
   const onProviderChange = setupOnProviderChange(setProviderIri, setLoginError);
-  const handleLogin = setupLoginHandler(login);
   const onError = setupErrorHandler(setLoginError);
 
   const providersWithIdp = idp ? [idp, ...providers] : providers;
   return (
-    <form onSubmit={handleLogin} className={bem("provider-login__form")}>
+    <form className={bem("provider-login__form")}>
       <div className={bem("provider-login__wrapper")}>
         <FormControl
           classes={{ root: classes.selectionBox }}
