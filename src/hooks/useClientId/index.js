@@ -21,25 +21,28 @@
 
 import { useEffect, useState } from "react";
 
+export const checkOidcSupport = async (providerIri) => {
+  try {
+    const fetchUrl = providerIri?.endsWith("/")
+      ? `${providerIri}.well-known/openid-configuration`
+      : `${providerIri}/.well-known/openid-configuration`;
+    const res = await fetch(fetchUrl);
+    const { solid_oidc_supported: solidOidcSupported } = await res.json();
+    return (
+      solidOidcSupported &&
+      solidOidcSupported === "https://solidproject.org/TR/solid-oidc"
+    );
+  } catch {
+    return false;
+  }
+};
+
 export default function useClientId(providerIri) {
   const [response, setResponse] = useState(null);
-  const [error, setError] = useState(null);
   useEffect(() => {
-    const checkOidcSupport = async () => {
-      try {
-        const res = await fetch(
-          `${providerIri}/.well-known/openid-configuration`
-        );
-        const { solid_oidc_supported: solidOidcSupported } = await res.json();
-        setResponse(
-          solidOidcSupported &&
-            solidOidcSupported === "https://solidproject.org/TR/solid-oidc"
-        );
-      } catch {
-        setError("Fetching failed");
-      }
-    };
-    checkOidcSupport();
+    checkOidcSupport(providerIri).then((res) => {
+      setResponse(res);
+    });
   }, [providerIri]);
-  return { response, error };
+  return { response };
 }

@@ -30,6 +30,12 @@ export function generateRedirectUrl(path) {
   return "";
 }
 
+export function getCurrentHostname() {
+  return typeof window !== "undefined" && window.location.origin
+    ? window.location.origin
+    : "";
+}
+
 export function hardRedirect(path) {
   window.location.href = path;
 }

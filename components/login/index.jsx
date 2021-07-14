@@ -27,7 +27,10 @@ import { useBem } from "@solid/lit-prism-patterns";
 import InfoTooltip from "../infoTooltip";
 import ProviderLogin from "./provider";
 import styles from "./styles";
-import { generateRedirectUrl } from "../../src/windowHelpers";
+import {
+  generateRedirectUrl,
+  getCurrentHostname,
+} from "../../src/windowHelpers";
 import useClientId from "../../src/hooks/useClientId";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -35,10 +38,7 @@ const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
 const TESTCAFE_ID_LOGIN_TITLE = "login-title";
 export const TESTCAFE_ID_OTHER_PROVIDERS_BUTTON = "other-providers-button";
 const PROVIDER_IRI = "https://broker.pod.inrupt.com/";
-const hostname =
-  typeof window !== "undefined" && window.location.origin
-    ? window.location.origin
-    : "";
+const hostname = getCurrentHostname();
 const CLIENT_APP_WEBID = hostname.includes("localhost")
   ? "http://www.w3.org/ns/solid/terms#PublicOidcClient"
   : `${hostname}/api/app`;
