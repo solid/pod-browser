@@ -26,41 +26,13 @@ import { useBem } from "@solid/lit-prism-patterns";
 import T from "prop-types";
 import AlertContext from "../../src/contexts/alertContext";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
+import ConfirmationDialog from "../confirmationDialog";
 import styles from "./styles";
 import { isHTTPError } from "../../src/error";
 
-const TESTCAFE_ID_DELETE_BUTTON = "delete-button";
+export const TESTCAFE_ID_DELETE_BUTTON = "delete-button";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-
-export function handleConfirmation({
-  dialogId,
-  open,
-  setOpen,
-  setConfirmed,
-  deleteResource,
-  setTitle,
-  setContent,
-  setConfirmationSetup,
-}) {
-  return (confirmationSetup, confirmed, title, content) => {
-    if (open !== dialogId) return;
-    if (confirmationSetup && confirmed === null) return;
-    setTitle(title);
-    setContent(<p>{content}</p>);
-    setConfirmationSetup(true);
-
-    if (confirmationSetup && confirmed) {
-      deleteResource();
-    }
-
-    if (confirmationSetup && confirmed !== null) {
-      setConfirmed(null);
-      setOpen(null);
-      setConfirmationSetup(false);
-    }
-  };
-}
 
 export function handleDeleteResource({
   onDelete,
@@ -122,40 +94,48 @@ export default function DeleteButton({
     successMessage,
   });
 
-  const onConfirmation = handleConfirmation({
-    dialogId,
-    open,
-    setOpen,
-    setConfirmed,
-    deleteResource,
-    setTitle,
-    setContent,
-    setConfirmationSetup,
-  });
-
   useEffect(() => {
-    onConfirmation(
-      confirmationSetup,
-      confirmed,
-      confirmationTitle,
-      confirmationContent
-    );
+    if (open !== dialogId) return;
+    if (confirmationSetup && confirmed === null) return;
+    setTitle(confirmationTitle);
+    setContent(<p>{confirmationContent}</p>);
+    setConfirmationSetup(true);
+
+    if (confirmationSetup && confirmed) {
+      deleteResource();
+    }
+
+    if (confirmationSetup && confirmed !== null) {
+      setConfirmed(null);
+      setOpen(null);
+      setConfirmationSetup(false);
+    }
   }, [
-    confirmationSetup,
-    confirmed,
-    onConfirmation,
+    deleteResource,
+    open,
+    dialogId,
     confirmationTitle,
     confirmationContent,
+    setConfirmationSetup,
+    confirmed,
+    confirmationSetup,
+    setContent,
+    setConfirmed,
+    setOpen,
+    setTitle,
   ]);
 
   return (
-    <button
-      type="button"
-      className={clsx(bem("button"))}
-      data-testid={TESTCAFE_ID_DELETE_BUTTON}
-      {...buttonProps}
-      onClick={() => setOpen(dialogId)}
-    />
+    <>
+      <button
+        type="button"
+        className={clsx(bem("button"))}
+        data-testid={TESTCAFE_ID_DELETE_BUTTON}
+        {...buttonProps}
+        onClick={() => setOpen(dialogId)}
+      />
+      <ConfirmationDialog />
+    </>
   );
 }
 

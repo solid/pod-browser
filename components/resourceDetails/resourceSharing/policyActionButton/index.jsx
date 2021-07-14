@@ -33,38 +33,10 @@ import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../src/models/contact/au
 import { PUBLIC_AGENT_PREDICATE } from "../../../../src/models/contact/public";
 import { serializePromises } from "../../../../src/solidClientHelpers/utils";
 import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
+import ConfirmationDialog from "../../../confirmationDialog";
 import { getResourceName } from "../../../../src/solidClientHelpers/resource";
 import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
 import ResourceInfoContext from "../../../../src/contexts/resourceInfoContext";
-
-export const handleConfirmation = ({
-  open,
-  dialogId,
-  setConfirmationSetup,
-  setOpen,
-  setConfirmed,
-  setContent,
-  setTitle,
-  removeAllAgents,
-  webIds,
-}) => {
-  return (confirmationSetup, confirmed) => {
-    setConfirmationSetup(true);
-    if (open !== dialogId) return;
-    if (confirmationSetup && confirmed === null) return;
-    if (confirmationSetup && confirmed) {
-      removeAllAgents(webIds);
-    }
-
-    if (confirmationSetup && confirmed !== null) {
-      setConfirmed(null);
-      setOpen(null);
-      setConfirmationSetup(false);
-      setContent(null);
-      setTitle(null);
-    }
-  };
-};
 
 export const TEXT_POLICY_ACTION_BUTTON_DISABLED_REMOVE_BUTTON =
   "There's no one to remove";
@@ -106,7 +78,7 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
   const policyType = getPolicyType(type);
   const dialogId = "remove-policy";
   const [policyToDelete, setPolicyToDelete] = useState();
-  const { dataset } = useContext(DatasetContext);
+  const { solidDataset: dataset } = useContext(DatasetContext);
   const resourceIri = getSourceUrl(dataset);
   const resourceName = resourceIri
     ? getResourceName(resourceIri)
@@ -145,21 +117,34 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
     mutateResourceInfo,
   });
 
-  const onConfirmation = handleConfirmation({
+  useEffect(() => {
+    setConfirmationSetup(true);
+    if (open !== dialogId) return;
+    if (confirmationSetup && confirmed === null) return;
+    if (confirmationSetup && confirmed) {
+      removeAllAgents(webIds);
+    }
+
+    if (confirmationSetup && confirmed !== null) {
+      setConfirmed(null);
+      setOpen(null);
+      setConfirmationSetup(false);
+      setContent(null);
+      setTitle(null);
+    }
+  }, [
     open,
     dialogId,
     setConfirmationSetup,
+    confirmationSetup,
     setOpen,
     setConfirmed,
+    confirmed,
     setContent,
     setTitle,
     removeAllAgents,
     webIds,
-  });
-
-  useEffect(() => {
-    onConfirmation(confirmationSetup, confirmed);
-  }, [confirmationSetup, confirmed, onConfirmation]);
+  ]);
 
   if (!policyType)
     return <ErrorMessage error={new Error("Type of policy not recognized")} />;
@@ -179,6 +164,7 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
       >
         {policyType.removeButtonLabel}
       </Button>
+      <ConfirmationDialog />
     </ActionButton>
   );
 }

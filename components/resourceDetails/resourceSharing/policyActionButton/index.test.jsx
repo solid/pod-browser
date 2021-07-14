@@ -22,10 +22,10 @@
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { waitFor } from "@testing-library/dom";
+import { acp_v3 as acp } from "@inrupt/solid-client";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
+import { ConfirmationDialogProvider } from "../../../../src/contexts/confirmationDialogContext";
 import PolicyActionButton, {
-  handleConfirmation,
   handleRemoveAllAgents,
   TESTCAFE_ID_REMOVE_POLICY_BUTTON,
   TEXT_POLICY_ACTION_BUTTON_DISABLED_REMOVE_BUTTON,
@@ -34,9 +34,21 @@ import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../src/models/contact/au
 import mockAccessControl from "../../../../__testUtils/mockAccessControl";
 
 import { PUBLIC_AGENT_PREDICATE } from "../../../../src/models/contact/public";
+import {
+  TESTCAFE_ID_CONFIRMATION_CANCEL_BUTTON,
+  TESTCAFE_ID_CONFIRMATION_DIALOG,
+  TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
+  TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE,
+  TESTCAFE_ID_CONFIRM_BUTTON,
+} from "../../../confirmationDialog";
+import AccessControlContext from "../../../../src/contexts/accessControlContext";
+import * as helperFns from "../../../../src/solidClientHelpers/utils";
 
 describe("PolicyActionButton", () => {
   const permissionsEmpty = [];
+  const webId1 = "https://example1.com/profile/card#me";
+  const webId2 = "https://example2.com/profile/card#me";
+  const iri = "https://example2.com/resource.txt";
   const permissions = [
     {
       acl: {
@@ -45,7 +57,7 @@ describe("PolicyActionButton", () => {
         append: false,
         control: false,
       },
-      webId: "https://example1.com/profile/card#me",
+      webId: webId1,
       profile: {
         avatar: null,
         name: "Example 1",
@@ -59,7 +71,7 @@ describe("PolicyActionButton", () => {
         append: false,
         control: false,
       },
-      webId: "https://example2.com/profile/card#me",
+      webId: webId2,
       profile: {
         avatar: null,
         name: "Example 2",
@@ -108,85 +120,82 @@ describe("PolicyActionButton", () => {
     const error = getByTestId("error-message");
     expect(error).not.toBeNull();
   });
-  it("opens a confirmation dialog", async () => {
-    const setOpen = jest.fn();
-    const setTitle = jest.fn();
-    const setContent = jest.fn();
-
-    const contextValue = {
-      confirmed: false,
-      content: null,
-      open: false,
-      setConfirmed: jest.fn(),
-      setContent,
-      setOpen,
-      setTitle,
-      title: "Confirmation",
-    };
-
+  it("opens a confirmation dialog with the correct title and content", async () => {
     const { getByTestId } = renderWithTheme(
-      <ConfirmationDialogContext.Provider value={contextValue}>
+      <ConfirmationDialogProvider>
         <PolicyActionButton
           type={type}
           permissions={permissions}
           setLoading={setLoading}
         />
-      </ConfirmationDialogContext.Provider>
+      </ConfirmationDialogProvider>
     );
 
     const button = getByTestId(TESTCAFE_ID_REMOVE_POLICY_BUTTON);
     userEvent.click(button);
-    expect(setTitle).toHaveBeenCalledWith(
-      "Remove Editors access from this resource?"
+    const dialog = getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+    expect(dialog).toBeInTheDocument();
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE)
+    ).toHaveTextContent("Remove Editors access from this resource?");
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
+    ).toHaveTextContent("Everyone will be removed from the Editors list.");
+  });
+  it("closes the dialog when Cancel button is clicked", async () => {
+    const { getByTestId } = renderWithTheme(
+      <ConfirmationDialogProvider>
+        <PolicyActionButton
+          type={type}
+          permissions={permissions}
+          setLoading={setLoading}
+        />
+      </ConfirmationDialogProvider>
     );
-    expect(setContent).toHaveBeenCalledWith(
-      "Everyone will be removed from the Editors list."
+
+    const button = getByTestId(TESTCAFE_ID_REMOVE_POLICY_BUTTON);
+    userEvent.click(button);
+    const dialog = getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+    expect(dialog).toBeInTheDocument();
+    const cancelButton = getByTestId(TESTCAFE_ID_CONFIRMATION_CANCEL_BUTTON);
+    userEvent.click(cancelButton);
+    waitFor(() => expect(dialog).not.toBeInTheDocument());
+  });
+  it("removes all agents if Confirm button is clicked", async () => {
+    const accessControl = mockAccessControl();
+    const acr = acp.mockAcrFor(iri);
+    jest
+      .spyOn(helperFns, "serializePromises")
+      .mockResolvedValueOnce([{ response: acr }]);
+    const { getByTestId } = renderWithTheme(
+      <AccessControlContext.Provider value={{ accessControl }}>
+        <ConfirmationDialogProvider>
+          <PolicyActionButton
+            type={type}
+            permissions={permissions}
+            setLoading={setLoading}
+          />
+        </ConfirmationDialogProvider>
+      </AccessControlContext.Provider>
     );
-    expect(setOpen).toHaveBeenCalledWith("remove-policy");
-  });
-});
 
-describe("handleConfirmation", () => {
-  const dialogId = "dialogId";
-  const setOpen = jest.fn();
-  const removeAllAgents = jest.fn();
-  const setConfirmed = jest.fn();
-  const setTitle = jest.fn();
-  const setContent = jest.fn();
-  const setConfirmationSetup = jest.fn();
-  const open = dialogId;
-
-  const handler = handleConfirmation({
-    open,
-    dialogId,
-    setConfirmationSetup,
-    setOpen,
-    setContent,
-    setTitle,
-    setConfirmed,
-    removeAllAgents,
-  });
-  it("returns a handler that exits when user starts confirmation but hasn't selected an option", () => {
-    handler(true, null);
-
-    expect(removeAllAgents).not.toHaveBeenCalled();
-  });
-
-  it("returns a handler which calls a function that submits the webIds when user confirms dialog", () => {
-    handler(true, true);
-
-    expect(removeAllAgents).toHaveBeenCalled();
-    expect(setConfirmed).toHaveBeenCalledWith(null);
-    expect(setConfirmationSetup).toHaveBeenCalledWith(true);
-    expect(setTitle).toHaveBeenCalledWith(null);
-    expect(setContent).toHaveBeenCalledWith(null);
-  });
-  it("returns a handler that exits when user cancels the operation", () => {
-    handler(true, false);
-
-    expect(setOpen).toHaveBeenCalledWith(null);
-    expect(removeAllAgents).not.toHaveBeenCalled();
-    expect(setConfirmed).toHaveBeenCalledWith(null);
+    const button = getByTestId(TESTCAFE_ID_REMOVE_POLICY_BUTTON);
+    userEvent.click(button);
+    const dialog = getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+    expect(dialog).toBeInTheDocument();
+    const confirmButton = getByTestId(TESTCAFE_ID_CONFIRM_BUTTON);
+    userEvent.click(confirmButton);
+    waitFor(() => {
+      expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledTimes(2);
+      expect(accessControl.removeAgentFromPolicy).toHaveBeenLastCalledWith(
+        webId1,
+        "editors"
+      );
+      expect(accessControl.removeAgentFromPolicy).toHaveBeenLastCalledWith(
+        webId2,
+        "editors"
+      );
+    });
   });
 });
 

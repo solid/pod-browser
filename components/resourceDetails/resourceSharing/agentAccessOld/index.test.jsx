@@ -25,7 +25,13 @@ import { DatasetProvider } from "@inrupt/solid-ui-react";
 import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import * as routerFns from "next/router";
-import AgentAccess, { getDialogId, saveHandler, submitHandler } from "./index";
+import AgentAccess, {
+  getDialogId,
+  OWN_PERMISSIONS_WARNING_PERMISSION,
+  saveHandler,
+  submitHandler,
+  TESTCAFE_ID_PERMISSIONS_FORM_SUBMIT_BUTTON,
+} from "./index";
 
 import mockSessionContextProvider from "../../../../__testUtils/mockSessionContextProvider";
 import mockSession from "../../../../__testUtils/mockSession";
@@ -36,6 +42,11 @@ import useFetchProfile from "../../../../src/hooks/useFetchProfile";
 import * as profileFns from "../../../../src/solidClientHelpers/profile";
 import { mockProfileAlice } from "../../../../__testUtils/mockPersonResource";
 import { joinPath } from "../../../../src/stringHelpers";
+import {
+  TESTCAFE_ID_CONFIRMATION_DIALOG,
+  TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
+} from "../../../confirmationDialog";
+import { ConfirmationDialogProvider } from "../../../../src/contexts/confirmationDialogContext";
 
 jest.mock("../../../../src/solidClientHelpers/permissions");
 jest.mock("../../../../src/hooks/useFetchProfile");
@@ -45,6 +56,10 @@ const webId = "http://example.com/webId#me";
 describe("AgentAccess", () => {
   const permission = {
     acl: createAccessMap(),
+    webId,
+  };
+  const readPermission = {
+    acl: createAccessMap(true),
     webId,
   };
   const authUser = mockProfileAlice();
@@ -191,6 +206,39 @@ describe("AgentAccess", () => {
         </SessionProvider>
       );
       expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("displays a confirmation dialog with correct content for a resource not connected to the user's Pod", async () => {
+      const randomUrl = "http://some-random-pod.com";
+      mockedRouterHook.mockReturnValue({ query: { iri: randomUrl } });
+      const session = mockSession();
+      const SessionProvider = mockSessionContextProvider(session);
+
+      const { findByTestId, getAllByRole, getByTestId } = renderWithTheme(
+        <SessionProvider>
+          <DatasetProvider solidDataset={dataset}>
+            <ConfirmationDialogProvider>
+              <AgentAccess
+                permission={readPermission}
+                webId={session.info.webId}
+              />
+            </ConfirmationDialogProvider>
+          </DatasetProvider>
+        </SessionProvider>
+      );
+      const dropdownButton = getByTestId("permissions-dropdown-button");
+      userEvent.click(dropdownButton);
+      const checkbox = getAllByRole("checkbox")[0];
+      userEvent.click(checkbox);
+      const submitButton = getByTestId(
+        TESTCAFE_ID_PERMISSIONS_FORM_SUBMIT_BUTTON
+      );
+      userEvent.click(submitButton);
+      const dialog = await findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+      expect(dialog).toBeInTheDocument();
+      expect(
+        getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
+      ).toHaveTextContent(OWN_PERMISSIONS_WARNING_PERMISSION);
     });
   });
 

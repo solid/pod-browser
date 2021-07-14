@@ -47,7 +47,7 @@ export default function AgentAccess({ permission }) {
   } = useSession();
   const bem = useBem(useStyles());
   const { webId, acl } = permission;
-  const { dataset } = useContext(DatasetContext);
+  const { solidDataset: dataset } = useContext(DatasetContext);
   const [isLoadingProfile, setIsLoadingProfile] = useState(false);
   const [loading, setLoading] = useState(false);
   const resourceIri = getSourceUrl(dataset);
