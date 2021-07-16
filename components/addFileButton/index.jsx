@@ -140,10 +140,10 @@ export default function AddFileButton({ className, onSave, resourceList }) {
   const {
     confirmed,
     open,
-    setConfirmed,
     setContent,
     setOpen,
     setTitle,
+    closeDialog,
   } = useContext(ConfirmationDialogContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
   const [file, setFile] = useState(null);
@@ -190,19 +190,10 @@ export default function AddFileButton({ className, onSave, resourceList }) {
     }
 
     if (confirmed !== null) {
-      setOpen(null);
-      setConfirmed(null);
+      closeDialog();
       setConfirmationSetup(false);
     }
-  }, [
-    confirmationSetup,
-    confirmed,
-    saveResource,
-    setConfirmed,
-    setOpen,
-    file,
-    open,
-  ]);
+  }, [confirmationSetup, confirmed, saveResource, closeDialog, file, open]);
 
   return (
     <>

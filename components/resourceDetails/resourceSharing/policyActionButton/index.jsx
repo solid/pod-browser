@@ -88,10 +88,10 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
   const {
     open,
     confirmed,
-    setConfirmed,
     setContent,
     setOpen,
     setTitle,
+    closeDialog,
   } = useContext(ConfirmationDialogContext);
   const { mutate: mutateResourceInfo } = useContext(ResourceInfoContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
@@ -126,24 +126,18 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
     }
 
     if (confirmationSetup && confirmed !== null) {
-      setConfirmed(null);
-      setOpen(null);
+      closeDialog();
       setConfirmationSetup(false);
-      setContent(null);
-      setTitle(null);
     }
   }, [
     open,
     dialogId,
     setConfirmationSetup,
     confirmationSetup,
-    setOpen,
-    setConfirmed,
     confirmed,
-    setContent,
-    setTitle,
     removeAllAgents,
     webIds,
+    closeDialog,
   ]);
 
   if (!policyType)

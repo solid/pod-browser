@@ -35,6 +35,7 @@ export const defaultConfirmationDialogContext = {
   confirmText: "Confirm",
   setCancelText: () => {},
   setConfirmText: () => {},
+  closeDialog: () => {},
 };
 const ConfirmationDialogContext = createContext(
   defaultConfirmationDialogContext
@@ -49,6 +50,13 @@ function ConfirmationDialogProvider({ children }) {
   const [cancelText, setCancelText] = useState("Cancel");
   const [confirmText, setConfirmText] = useState("Confirm");
   const [confirmed, setConfirmed] = useState(null);
+
+  const closeDialog = () => {
+    setConfirmed(null);
+    setOpen(null);
+    setContent(null);
+    setTitle(null);
+  };
 
   return (
     <ConfirmationDialogContext.Provider
@@ -65,6 +73,7 @@ function ConfirmationDialogProvider({ children }) {
         setCancelText,
         confirmText,
         setConfirmText,
+        closeDialog,
       }}
     >
       {children}

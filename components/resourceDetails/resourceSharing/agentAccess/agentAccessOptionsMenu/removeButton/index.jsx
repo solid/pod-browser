@@ -94,6 +94,7 @@ export default function RemoveButton({
     title,
     setTitle,
     setConfirmText,
+    closeDialog,
   } = useContext(ConfirmationDialogContext);
 
   const handleOpenDialog = () => {
@@ -126,8 +127,7 @@ export default function RemoveButton({
     }
 
     if (confirmationSetup && confirmed !== null) {
-      setConfirmed(null);
-      setOpen(null);
+      closeDialog();
       setConfirmationSetup(false);
     }
     setConfirmText(null);
@@ -142,8 +142,8 @@ export default function RemoveButton({
     setConfirmationSetup,
     setConfirmText,
     handleRemoveAgent,
-    setOpen,
     open,
+    closeDialog,
   ]);
 
   return (

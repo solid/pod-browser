@@ -69,10 +69,10 @@ export default function DeleteButton({
   const {
     confirmed,
     open,
-    setConfirmed,
     setContent,
     setOpen,
     setTitle,
+    closeDialog,
   } = useContext(ConfirmationDialogContext);
 
   function onDeleteError(e) {
@@ -106,8 +106,7 @@ export default function DeleteButton({
     }
 
     if (confirmationSetup && confirmed !== null) {
-      setConfirmed(null);
-      setOpen(null);
+      closeDialog();
       setConfirmationSetup(false);
     }
   }, [
@@ -120,9 +119,8 @@ export default function DeleteButton({
     confirmed,
     confirmationSetup,
     setContent,
-    setConfirmed,
-    setOpen,
     setTitle,
+    closeDialog,
   ]);
 
   return (

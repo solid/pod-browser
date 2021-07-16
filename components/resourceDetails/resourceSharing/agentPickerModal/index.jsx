@@ -221,6 +221,7 @@ function AgentPickerModal(
     setContent,
     setOpen,
     setTitle,
+    closeDialog,
   } = useContext(ConfirmationDialogContext);
 
   // TODO: Uncomment to reintroduce tabs
@@ -334,23 +335,18 @@ function AgentPickerModal(
     }
 
     if (confirmationSetup && confirmed !== null) {
-      setConfirmed(null);
-      setOpen(null);
+      closeDialog();
       setConfirmationSetup(false);
-      setContent(null);
-      setTitle(null);
     }
   }, [
     open,
     bypassDialog,
     setConfirmationSetup,
     confirmationSetup,
-    setOpen,
     setConfirmed,
     confirmed,
-    setContent,
-    setTitle,
     handleSubmitNewWebIds,
+    closeDialog,
   ]);
 
   const handleAddRow = () => {
