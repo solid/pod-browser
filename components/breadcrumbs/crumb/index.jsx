@@ -40,7 +40,7 @@ export default function Crumb({ crumb, isLink }) {
         )}
       />
       {isLink ? (
-        <Link href="/resource/[iri]" as={crumb.uri}>
+        <Link href={crumb.uri}>
           <a className={bem("breadcrumb__link")}>
             <span className={bem("breadcrumb__prefix")}>Back to </span>
             {crumb.label}

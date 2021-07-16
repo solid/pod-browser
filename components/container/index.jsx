@@ -47,6 +47,7 @@ import PodRootLoadError from "../podRootLoadError";
 import ContainerTable from "../containerTable";
 import { isHTTPError } from "../../src/error";
 import { locationIsConnectedToProfile } from "../../src/solidClientHelpers/profile";
+import { isContainerIri } from "../../src/solidClientHelpers/utils";
 
 export default function Container({ iri }) {
   useRedirectIfLoggedOut();
@@ -70,7 +71,13 @@ export default function Container({ iri }) {
   } = useContainer(iri);
 
   useEffect(() => {
-    if (container && getSourceUrl(container.dataset) !== iri) return;
+    if (
+      !iri ||
+      (container &&
+        isContainerIri(iri) &&
+        getSourceUrl(container.dataset) !== iri)
+    )
+      return;
     const urls = container && getContainerResourceUrlAll(container);
     setResourceUrls(urls);
   }, [container, iri]);
