@@ -488,84 +488,34 @@ describe("getProfiles", () => {
     };
 
     jest
-      .spyOn(resourceFns, "getResource")
+      .spyOn(resourceFns, "getProfileResource")
       .mockResolvedValueOnce({
-        response: {
-          dataset: chain(
-            mockSolidDatasetFrom(aliceAlternativeProfileUrl),
-            (d) =>
-              setThing(
-                d,
-                chain(
-                  solidClientFns.mockThingFrom(aliceAlternativeWebIdUrl),
-                  (t) => setUrl(t, rdf.type, foaf.Person)
-                )
-              )
-          ),
-          iri: aliceAlternativeWebIdUrl,
-        },
+        dataset: chain(mockSolidDatasetFrom(aliceAlternativeProfileUrl), (d) =>
+          setThing(
+            d,
+            chain(solidClientFns.mockThingFrom(aliceAlternativeWebIdUrl), (t) =>
+              setUrl(t, rdf.type, foaf.Person)
+            )
+          )
+        ),
+        iri: aliceAlternativeWebIdUrl,
       })
       .mockResolvedValueOnce({
-        response: {
-          dataset: chain(mockSolidDatasetFrom(bobAlternateProfileUrl), (d) =>
-            setThing(
-              d,
-              chain(solidClientFns.mockThingFrom(bobAlternateWebIdUrl), (t) =>
-                setUrl(t, rdf.type, foaf.Person)
-              )
+        dataset: chain(mockSolidDatasetFrom(bobAlternateProfileUrl), (d) =>
+          setThing(
+            d,
+            chain(solidClientFns.mockThingFrom(bobAlternateWebIdUrl), (t) =>
+              setUrl(t, rdf.type, foaf.Person)
             )
-          ),
-          iri: bobAlternateWebIdUrl,
-        },
+          )
+        ),
+        iri: bobAlternateWebIdUrl,
       });
 
     const [profile1, profile2] = await getProfiles([person1, person2], fetch);
 
     expect(asUrl(profile1)).toEqual(aliceAlternativeWebIdUrl);
     expect(asUrl(profile2)).toEqual(bobAlternateWebIdUrl);
-  });
-
-  test("it filters out people for which the resource couldn't be fetched", async () => {
-    const fetch = jest.fn();
-    const person1Iri =
-      "https://user.example.com/contacts/Person/1234/index.ttl";
-    const person1 = {
-      dataset: chain(mockSolidDatasetFrom(person1Iri), (d) =>
-        setThing(
-          d,
-          chain(mockThingFrom(person1Iri), (t) =>
-            setUrl(t, rdf.type, foaf.Person)
-          )
-        )
-      ),
-      iri: person1Iri,
-    };
-    const person2Iri =
-      "https://user.example.com/contacts/Person/1234/index.ttl";
-    const person2 = {
-      dataset: chain(mockSolidDatasetFrom(person2Iri), (d) =>
-        setThing(
-          d,
-          chain(mockThingFrom(person2Iri), (t) =>
-            setUrl(t, rdf.type, foaf.Person)
-          )
-        )
-      ),
-      iri: person2Iri,
-    };
-
-    jest
-      .spyOn(resourceFns, "getResource")
-      .mockResolvedValueOnce({
-        response: { dataset: person1.dataset, iri: person1.iri },
-      })
-      .mockResolvedValueOnce({
-        error: "There was an error",
-      });
-
-    const profiles = await getProfiles([person1, person2], fetch);
-
-    expect(profiles).toHaveLength(1);
   });
 });
 
@@ -583,9 +533,9 @@ describe("findContactInAddressBook", () => {
 
   beforeEach(() => {
     jest
-      .spyOn(resourceFns, "getResource")
-      .mockResolvedValueOnce({ response: { dataset: webId1, iri: webId1Url } })
-      .mockResolvedValueOnce({ response: { dataset: webId2, iri: webId2Url } });
+      .spyOn(resourceFns, "getProfileResource")
+      .mockResolvedValueOnce({ dataset: webId1, iri: webId1Url })
+      .mockResolvedValueOnce({ dataset: webId2, iri: webId2Url });
   });
 
   it("finds a given WebId from a list of profiles fetched from a list of datasets about people", async () => {
@@ -1051,6 +1001,20 @@ describe("contactsContainerIri", () => {
 describe("getContactsIndexIri", () => {
   it("returns the URL for the central index file for contacts", () => {
     expect(getContactsIndexIri("/contacts/")).toEqual("/contacts/index.ttl");
+  });
+});
+
+describe("getProfileIriFromContactThing", () => {
+  it("returns correct webId for a persisted contact Thing", () => {
+    const thing = mockPersonDatasetAlice();
+    expect(addressBookFns.getProfileIriFromContactThing(thing)).toBe(
+      aliceWebIdUrl
+    );
+  });
+  it("returns correct webId for a contact Thing that is not persisted", () => {
+    const webId = "https://somewebid.com/";
+    const thing = addUrl(createThing(), vcardExtras("WebId"), webId);
+    expect(addressBookFns.getProfileIriFromContactThing(thing)).toBe(webId);
   });
 });
 
