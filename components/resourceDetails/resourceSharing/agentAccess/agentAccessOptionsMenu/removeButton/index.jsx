@@ -34,38 +34,7 @@ import {
   profile as profilePropType,
 } from "../../../../../../constants/propTypes";
 import ResourceInfoContext from "../../../../../../src/contexts/resourceInfoContext";
-
-export const handleConfirmation = ({
-  open,
-  dialogId,
-  bypassDialog,
-  setConfirmationSetup,
-  setOpen,
-  setConfirmed,
-  handleRemoveAgent,
-  setConfirmText,
-}) => {
-  return (webId, alias, confirmationSetup, confirmed) => {
-    setConfirmationSetup(true);
-    if (bypassDialog) {
-      setConfirmed(true);
-      handleRemoveAgent(webId, alias);
-    }
-    if (open !== dialogId) return;
-    if (confirmationSetup && confirmed === null) return;
-
-    if (confirmationSetup && confirmed) {
-      handleRemoveAgent(webId, alias);
-    }
-
-    if (confirmationSetup && confirmed !== null) {
-      setConfirmed(null);
-      setOpen(null);
-      setConfirmationSetup(false);
-    }
-    setConfirmText(null);
-  };
-};
+import ConfirmationDialog from "../../../../../confirmationDialog";
 
 export const handleRemovePermissions = ({
   setLoading,
@@ -94,6 +63,8 @@ export const handleRemovePermissions = ({
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export const TESTCAFE_ID_REMOVE_BUTTON = "remove-button";
+export const DIALOG_ID = "remove-agent";
+export const CONFIRMATION_TEXT = "Remove";
 
 export default function RemoveButton({
   resourceIri,
@@ -106,7 +77,6 @@ export default function RemoveButton({
   const { mutate: mutateResourceInfo } = useContext(ResourceInfoContext);
   const resourceName = getResourceName(resourceIri);
   const classes = useStyles();
-  const dialogId = "remove-agent";
   const [bypassDialog, setBypassDialog] = useState(false);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
   const handleRemoveAgent = handleRemovePermissions({
@@ -124,10 +94,11 @@ export default function RemoveButton({
     title,
     setTitle,
     setConfirmText,
+    closeDialog,
   } = useContext(ConfirmationDialogContext);
 
   const handleOpenDialog = () => {
-    setConfirmText("Remove");
+    setConfirmText(CONFIRMATION_TEXT);
     // eslint-disable-next-line prettier/prettier
     if (
       PUBLIC_AGENT_PREDICATE === webId ||
@@ -139,25 +110,41 @@ export default function RemoveButton({
       profile?.name || webId
     }'s access from ${resourceName}`;
     setTitle(text);
-    setOpen(dialogId);
+    setOpen(DIALOG_ID);
   };
 
-  const onConfirmation = handleConfirmation({
-    open,
-    dialogId,
-    bypassDialog,
+  useEffect(() => {
+    setConfirmationSetup(true);
+    if (bypassDialog) {
+      setConfirmed(true);
+      handleRemoveAgent(webId, alias);
+    }
+    if (open !== DIALOG_ID) return;
+    if (confirmationSetup && confirmed === null) return;
+
+    if (confirmationSetup && confirmed) {
+      handleRemoveAgent(webId, alias);
+    }
+
+    if (confirmationSetup && confirmed !== null) {
+      closeDialog();
+      setConfirmationSetup(false);
+    }
+    setConfirmText(null);
+  }, [
     confirmationSetup,
     confirmed,
-    setConfirmationSetup,
-    setOpen,
+    title,
+    webId,
+    alias,
+    bypassDialog,
     setConfirmed,
-    handleRemoveAgent,
+    setConfirmationSetup,
     setConfirmText,
-  });
-
-  useEffect(() => {
-    onConfirmation(webId, alias, confirmationSetup, confirmed);
-  }, [confirmationSetup, confirmed, onConfirmation, title, webId, alias]);
+    handleRemoveAgent,
+    open,
+    closeDialog,
+  ]);
 
   return (
     <ListItem
@@ -171,6 +158,7 @@ export default function RemoveButton({
       >
         Remove
       </ListItemText>
+      <ConfirmationDialog />
     </ListItem>
   );
 }

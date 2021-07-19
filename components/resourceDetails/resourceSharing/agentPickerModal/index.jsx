@@ -49,6 +49,7 @@ import styles from "./styles";
 import AddWebIdButton from "./addWebIdButton";
 import WebIdCheckbox from "./webIdCheckbox";
 import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
+import ConfirmationDialog from "../../../confirmationDialog";
 import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
 import useContacts from "../../../../src/hooks/useContacts";
 import { GROUP_CONTACT } from "../../../../src/models/contact/group";
@@ -69,6 +70,12 @@ import {
 } from "../../../../src/models/contact/authenticated";
 import ResourceInfoContext from "../../../../src/contexts/resourceInfoContext";
 import { getWebIdsFromPermissions } from "../../../../src/accessControl/acp";
+
+const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
+const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
+export const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
+const TESTCAFE_CANCEL_WEBIDS_BUTTON = "cancel-webids-button";
+export const DIALOG_ID = "add-new-permissions";
 
 export const handleSubmit = ({
   newAgentsWebIds,
@@ -133,39 +140,6 @@ export const handleSubmit = ({
   };
 };
 
-export const handleConfirmation = ({
-  open,
-  dialogId,
-  bypassDialog,
-  setConfirmationSetup,
-  setOpen,
-  setConfirmed,
-  setContent,
-  setTitle,
-  handleSubmitNewWebIds,
-}) => {
-  return (confirmationSetup, confirmed) => {
-    setConfirmationSetup(true);
-    if (bypassDialog) {
-      setConfirmed(true);
-      handleSubmitNewWebIds();
-    }
-    if (open !== dialogId) return;
-    if (confirmationSetup && confirmed === null) return;
-    if (confirmationSetup && confirmed) {
-      handleSubmitNewWebIds();
-    }
-
-    if (confirmationSetup && confirmed !== null) {
-      setConfirmed(null);
-      setOpen(null);
-      setConfirmationSetup(false);
-      setContent(null);
-      setTitle(null);
-    }
-  };
-};
-
 export const handleSaveContact = async (iri, addressBook, fetch) => {
   let error;
   if (!iri) {
@@ -196,11 +170,6 @@ export const handleSaveContact = async (iri, addressBook, fetch) => {
 };
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
-
-const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
-export const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
-const TESTCAFE_CANCEL_WEBIDS_BUTTON = "cancel-webids-button";
 
 function AgentPickerModal(
   { type, onClose, setLoading, advancedSharing, editing },
@@ -230,7 +199,7 @@ function AgentPickerModal(
 
   const { session } = useSession();
   const { fetch } = session;
-  const { dataset } = useContext(DatasetContext);
+  const { solidDataset: dataset } = useContext(DatasetContext);
   const resourceIri = getSourceUrl(dataset);
   const resourceName = getResourceName(resourceIri);
   // TODO: Uncomment to reintroduce tabs
@@ -244,7 +213,6 @@ function AgentPickerModal(
   // const [filteredContacts, setFilteredContacts] = useState([]);
   const [addingWebId, setAddingWebId] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
-  const dialogId = "add-new-permissions";
   const [confirmationSetup, setConfirmationSetup] = useState(false);
   const {
     open,
@@ -253,6 +221,7 @@ function AgentPickerModal(
     setContent,
     setOpen,
     setTitle,
+    closeDialog,
   } = useContext(ConfirmationDialogContext);
 
   // TODO: Uncomment to reintroduce tabs
@@ -313,20 +282,8 @@ function AgentPickerModal(
     } permissions to ${header}`;
     setTitle(confirmationTitle);
     setContent(confirmationContent);
-    setOpen(dialogId);
+    setOpen(DIALOG_ID);
   };
-
-  const onConfirmation = handleConfirmation({
-    open,
-    dialogId,
-    bypassDialog,
-    setConfirmationSetup,
-    setOpen,
-    setConfirmed,
-    setContent,
-    setTitle,
-    handleSubmitNewWebIds,
-  });
 
   const updateTemporaryRowThing = (newThing) => {
     const { dataset: addressBookDataset } = addressBook;
@@ -366,8 +323,31 @@ function AgentPickerModal(
   // }, [contactsArray, selectedTabValue, globalFilter]);
 
   useEffect(() => {
-    onConfirmation(confirmationSetup, confirmed);
-  }, [confirmationSetup, confirmed, onConfirmation]);
+    setConfirmationSetup(true);
+    if (bypassDialog) {
+      setConfirmed(true);
+      handleSubmitNewWebIds();
+    }
+    if (open !== DIALOG_ID) return;
+    if (confirmationSetup && confirmed === null) return;
+    if (confirmationSetup && confirmed) {
+      handleSubmitNewWebIds();
+    }
+
+    if (confirmationSetup && confirmed !== null) {
+      closeDialog();
+      setConfirmationSetup(false);
+    }
+  }, [
+    open,
+    bypassDialog,
+    setConfirmationSetup,
+    confirmationSetup,
+    setConfirmed,
+    confirmed,
+    handleSubmitNewWebIds,
+    closeDialog,
+  ]);
 
   const handleAddRow = () => {
     setAddingWebId(true);
@@ -506,6 +486,7 @@ function AgentPickerModal(
         >
           {saveText}
         </Button>
+        <ConfirmationDialog />
       </div>
     </div>
   );

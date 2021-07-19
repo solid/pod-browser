@@ -21,21 +21,29 @@
 
 import React from "react";
 import * as SolidClientFns from "@inrupt/solid-client";
-import { act, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { act, screen } from "@testing-library/react";
+import { renderWithTheme } from "../../__testUtils/withTheme";
 import { PodLocationProvider } from "../../src/contexts/podLocationContext";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import AlertContext from "../../src/contexts/alertContext";
 import AddFileButton, {
-  DUPLICATE_DIALOG_ID,
   TESTCAFE_ID_UPLOAD_BUTTON,
   TESTCAFE_ID_UPLOAD_INPUT,
-  handleConfirmation,
   handleFileSelect,
   handleSaveResource,
   handleUploadedFile,
+  CONFIRMATION_MESSAGE,
 } from "./index";
+import {
+  TESTCAFE_ID_CONFIRMATION_DIALOG,
+  TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
+  TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE,
+  TESTCAFE_ID_CONFIRM_BUTTON,
+} from "../confirmationDialog";
+import TestApp from "../../__testUtils/testApp";
+import { ConfirmationDialogProvider } from "../../src/contexts/confirmationDialogContext";
 
 const currentUri = "https://www.mypodbrowser.com/";
 const file = new File(["file contents"], "myfile.txt", {
@@ -44,24 +52,23 @@ const file = new File(["file contents"], "myfile.txt", {
 
 describe("AddFileButton", () => {
   const newFilePath = currentUri + file.name;
-
   const session = mockSession();
   const SessionProvider = mockSessionContextProvider(session);
   let onSave;
   let setAlertOpen;
-  let renderResult;
+  const setMessage = jest.fn();
+  const setSeverity = jest.fn();
 
   beforeEach(() => {
     setAlertOpen = jest.fn();
-    const setMessage = jest.fn();
-    const setSeverity = jest.fn();
     onSave = jest.fn();
-
     jest
       .spyOn(SolidClientFns, "overwriteFile")
       .mockResolvedValue(SolidClientFns.mockSolidDatasetFrom(newFilePath));
+  });
 
-    renderResult = render(
+  test("Renders an add file button", () => {
+    const { asFragment } = renderWithTheme(
       <AlertContext.Provider
         value={{
           setAlertOpen,
@@ -76,38 +83,81 @@ describe("AddFileButton", () => {
         </PodLocationProvider>
       </AlertContext.Provider>
     );
-  });
-
-  test("Renders an add file button", () => {
-    expect(renderResult.asFragment()).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("Handles focus correctly on click", () => {
-    const label = renderResult.getByTestId(TESTCAFE_ID_UPLOAD_BUTTON);
+    const { getByTestId } = renderWithTheme(
+      <AlertContext.Provider
+        value={{
+          setAlertOpen,
+          setMessage,
+          setSeverity,
+        }}
+      >
+        <PodLocationProvider currentUri={currentUri}>
+          <SessionProvider>
+            <AddFileButton onSave={onSave} />
+          </SessionProvider>
+        </PodLocationProvider>
+      </AlertContext.Provider>
+    );
+    const label = getByTestId(TESTCAFE_ID_UPLOAD_BUTTON);
     userEvent.tab();
     expect(label).toHaveFocus();
 
     userEvent.click(label);
 
-    const input = renderResult.getByTestId(TESTCAFE_ID_UPLOAD_INPUT);
+    const input = getByTestId(TESTCAFE_ID_UPLOAD_INPUT);
     expect(input).toHaveFocus();
   });
 
   test("Handles focus correctly on enter", () => {
-    const label = renderResult.getByTestId(TESTCAFE_ID_UPLOAD_BUTTON);
+    const { getByTestId } = renderWithTheme(
+      <AlertContext.Provider
+        value={{
+          setAlertOpen,
+          setMessage,
+          setSeverity,
+        }}
+      >
+        <PodLocationProvider currentUri={currentUri}>
+          <SessionProvider>
+            <AddFileButton onSave={onSave} />
+          </SessionProvider>
+        </PodLocationProvider>
+      </AlertContext.Provider>
+    );
+    const label = getByTestId(TESTCAFE_ID_UPLOAD_BUTTON);
     userEvent.tab();
     expect(label).toHaveFocus();
 
     userEvent.type(label, "{enter}");
 
-    const input = renderResult.getByTestId(TESTCAFE_ID_UPLOAD_INPUT);
+    const input = getByTestId(TESTCAFE_ID_UPLOAD_INPUT);
     expect(input).toHaveFocus();
   });
 
   test("Uploads a file", async () => {
+    const { getByTestId } = renderWithTheme(
+      <AlertContext.Provider
+        value={{
+          setAlertOpen,
+          setMessage,
+          setSeverity,
+        }}
+      >
+        <PodLocationProvider currentUri={currentUri}>
+          <SessionProvider>
+            <AddFileButton onSave={onSave} />
+          </SessionProvider>
+        </PodLocationProvider>
+      </AlertContext.Provider>
+    );
+    const input = getByTestId(TESTCAFE_ID_UPLOAD_INPUT);
     await act(async () => {
-      userEvent.click(renderResult.container.querySelector("input"));
-      userEvent.upload(renderResult.container.querySelector("input"), file);
+      userEvent.click(input);
+      userEvent.upload(input, file);
     });
 
     expect(SolidClientFns.overwriteFile).toHaveBeenCalledWith(
@@ -121,6 +171,80 @@ describe("AddFileButton", () => {
 
     expect(onSave).toHaveBeenCalled();
     expect(setAlertOpen).toHaveBeenCalled();
+  });
+  test("displays a confirmation dialog with the correct title and message when trying to upload a duplicate file", async () => {
+    const resourceList = [
+      {
+        iri: `${currentUri}myfile.txt`,
+        name: "myfile.txt",
+        filename: "myfile.txt",
+        type: "Resource",
+      },
+    ];
+    const { getByTestId } = renderWithTheme(
+      <TestApp>
+        <AddFileButton onSave={onSave} resourceList={resourceList} />
+      </TestApp>
+    );
+    const input = getByTestId(TESTCAFE_ID_UPLOAD_INPUT);
+    await act(async () => {
+      userEvent.click(input);
+      userEvent.upload(input, file);
+    });
+    const dialog = await screen.findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+    expect(dialog).toBeInTheDocument();
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE)
+    ).toHaveTextContent("File myfile.txt already exists");
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
+    ).toHaveTextContent(CONFIRMATION_MESSAGE);
+  });
+  test("if dialog is confirmed, it overwrites file", async () => {
+    const resourceList = [
+      {
+        iri: `${currentUri}myfile.txt`,
+        name: "myfile.txt",
+        filename: "myfile.txt",
+        type: "Resource",
+      },
+    ];
+    const { getByTestId } = renderWithTheme(
+      <PodLocationProvider currentUri={currentUri}>
+        <SessionProvider>
+          <ConfirmationDialogProvider>
+            <AddFileButton onSave={onSave} resourceList={resourceList} />
+          </ConfirmationDialogProvider>
+        </SessionProvider>
+      </PodLocationProvider>
+    );
+    const input = getByTestId(TESTCAFE_ID_UPLOAD_INPUT);
+    await act(async () => {
+      userEvent.click(input);
+      userEvent.upload(input, file);
+    });
+    const dialog = await screen.findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+
+    expect(dialog).toBeInTheDocument();
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE)
+    ).toHaveTextContent("File myfile.txt already exists");
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
+    ).toHaveTextContent("Do you want to replace it?");
+    const confirmButton = getByTestId(TESTCAFE_ID_CONFIRM_BUTTON);
+    act(() => {
+      userEvent.click(confirmButton);
+    });
+
+    expect(SolidClientFns.overwriteFile).toHaveBeenCalledWith(
+      newFilePath,
+      file,
+      {
+        type: file.type,
+        fetch: session.fetch,
+      }
+    );
   });
 });
 
@@ -307,34 +431,5 @@ describe("handleUploadedFile", () => {
     expect(setContent).toHaveBeenCalled();
     expect(setTitle).toHaveBeenCalled();
     expect(setConfirmationSetup).toHaveBeenCalled();
-  });
-});
-
-describe("handleConfirmation", () => {
-  const setOpen = jest.fn();
-  const saveResource = jest.fn();
-  const setConfirmed = jest.fn();
-  const setConfirmationSetup = jest.fn();
-
-  const handler = handleConfirmation({
-    setOpen,
-    setConfirmed,
-    saveResource,
-    setConfirmationSetup,
-  });
-
-  test("it returns a handler that saves the file when user confirms dialog", () => {
-    handler(true, true, file, DUPLICATE_DIALOG_ID);
-
-    expect(setOpen).toHaveBeenCalled();
-    expect(saveResource).toHaveBeenCalled();
-    expect(setConfirmed).toHaveBeenCalled();
-    expect(setConfirmationSetup).toHaveBeenCalled();
-  });
-  test("it returns a handler that exits when user cancels the operation", () => {
-    handler(true, false, file, DUPLICATE_DIALOG_ID);
-
-    expect(saveResource).not.toHaveBeenCalled();
-    expect(setConfirmed).toHaveBeenCalledWith(null);
   });
 });

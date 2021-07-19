@@ -39,6 +39,10 @@ export const TESTCAFE_ID_CONFIRM_BUTTON = "confirm-button";
 export const TESTCAFE_ID_CONFIRMATION_CANCEL_BUTTON =
   "confirmation-cancel-button";
 export const TESTCAFE_ID_CONFIRMATION_DIALOG = "confirmation-dialog";
+export const TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE =
+  "confirmation-dialog-title";
+export const TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT =
+  "confirmation-dialog-content";
 
 export default function ConfirmationDialog() {
   const classes = useStyles();
@@ -60,11 +64,16 @@ export default function ConfirmationDialog() {
       aria-labelledby="confirmation-dialog"
       open={!!open}
     >
-      <DialogTitle disableTypography classes={{ root: classes.dialogTitle }}>
+      <DialogTitle
+        data-testid={TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE}
+        disableTypography
+        classes={{ root: classes.dialogTitle }}
+      >
         {title}
       </DialogTitle>
       <DialogContent>
         <DialogContentText
+          data-testid={TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT}
           classes={{ root: classes.dialogText }}
           id="alert-confirmation-dialog"
         >

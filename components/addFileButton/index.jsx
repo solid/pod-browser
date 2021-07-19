@@ -19,6 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+
 import React, { useContext, useEffect, useRef, useState } from "react";
 import T from "prop-types";
 import { overwriteFile } from "@inrupt/solid-client";
@@ -27,11 +29,14 @@ import PodLocationContext from "../../src/contexts/podLocationContext";
 import AlertContext from "../../src/contexts/alertContext";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
 import { joinPath } from "../../src/stringHelpers";
+import ConfirmationDialog from "../confirmationDialog";
 
 export const TESTCAFE_ID_UPLOAD_BUTTON = "upload-file-button";
 export const TESTCAFE_ID_UPLOAD_INPUT = "upload-file-input";
 
 export const DUPLICATE_DIALOG_ID = "upload-duplicate-file";
+
+export const CONFIRMATION_MESSAGE = "Do you want to replace it?";
 
 function normalizeSafeFileName(fileName) {
   return fileName.replace(/^-/, "");
@@ -87,7 +92,7 @@ export function handleUploadedFile({
       setTitle(
         `File ${normalizeSafeFileName(uploadedFile.name)} already exists`
       );
-      setContent(<p>Do you want to replace it?</p>);
+      setContent(CONFIRMATION_MESSAGE);
       setConfirmationSetup(true);
       setIsUploading(false);
     } else {
@@ -126,28 +131,6 @@ export function handleFileSelect({
   };
 }
 
-export function handleConfirmation({
-  setOpen,
-  setConfirmed,
-  saveResource,
-  setConfirmationSetup,
-}) {
-  return (confirmationSetup, confirmed, file, open) => {
-    if (confirmationSetup && confirmed === null && open === DUPLICATE_DIALOG_ID)
-      return;
-
-    if (confirmationSetup && confirmed && open === DUPLICATE_DIALOG_ID) {
-      saveResource(file);
-    }
-
-    if (confirmed !== null) {
-      setOpen(null);
-      setConfirmed(null);
-      setConfirmationSetup(false);
-    }
-  };
-}
-
 export default function AddFileButton({ className, onSave, resourceList }) {
   const { session } = useSession();
   const { fetch } = session;
@@ -157,10 +140,10 @@ export default function AddFileButton({ className, onSave, resourceList }) {
   const {
     confirmed,
     open,
-    setConfirmed,
     setContent,
     setOpen,
     setTitle,
+    closeDialog,
   } = useContext(ConfirmationDialogContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
   const [file, setFile] = useState(null);
@@ -198,49 +181,53 @@ export default function AddFileButton({ className, onSave, resourceList }) {
     resourceList,
   });
 
-  const onConfirmation = handleConfirmation({
-    setOpen,
-    setConfirmed,
-    saveResource,
-    setConfirmationSetup,
-    open,
-  });
-
   useEffect(() => {
-    onConfirmation(confirmationSetup, confirmed, file, open);
-  }, [confirmationSetup, confirmed, onConfirmation, file, open]);
+    if (confirmationSetup && confirmed === null && open === DUPLICATE_DIALOG_ID)
+      return;
+
+    if (confirmationSetup && confirmed && open === DUPLICATE_DIALOG_ID) {
+      saveResource(file);
+    }
+
+    if (confirmed !== null) {
+      closeDialog();
+      setConfirmationSetup(false);
+    }
+  }, [confirmationSetup, confirmed, saveResource, closeDialog, file, open]);
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-    <label
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-      tabIndex="0"
-      htmlFor="upload-file-input"
-      className={className}
-      data-testid={TESTCAFE_ID_UPLOAD_BUTTON}
-      disabled={isUploading}
-      onClick={(e) => {
-        e.target.value = null;
-      }}
-      onKeyUp={(e) => {
-        if (e.key === "Enter") {
-          if (ref.current) {
-            ref.current.click();
-          }
+    <>
+      <label
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+        tabIndex="0"
+        htmlFor="upload-file-input"
+        className={className}
+        data-testid={TESTCAFE_ID_UPLOAD_BUTTON}
+        disabled={isUploading}
+        onClick={(e) => {
           e.target.value = null;
-        }
-      }}
-    >
-      {isUploading ? "Uploading..." : "Upload File"}
-      <input
-        ref={ref}
-        id="upload-file-input"
-        data-testid={TESTCAFE_ID_UPLOAD_INPUT}
-        type="file"
-        style={{ display: "none" }}
-        onChange={onFileSelect}
-      />
-    </label>
+        }}
+        onKeyUp={(e) => {
+          if (e.key === "Enter") {
+            if (ref.current) {
+              ref.current.click();
+            }
+            e.target.value = null;
+          }
+        }}
+      >
+        {isUploading ? "Uploading..." : "Upload File"}
+        <input
+          ref={ref}
+          id="upload-file-input"
+          data-testid={TESTCAFE_ID_UPLOAD_INPUT}
+          type="file"
+          style={{ display: "none" }}
+          onChange={onFileSelect}
+        />
+      </label>
+      <ConfirmationDialog />
+    </>
   );
 }
 

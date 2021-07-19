@@ -237,6 +237,7 @@ exports[`AgentAccess renders 1`] = `
         </ul>
         <button
           class="PodBrowser-button PodBrowser-button--secondary"
+          data-testid="permissions-form-submit-button"
           type="submit"
         >
           <span
@@ -545,6 +546,7 @@ exports[`AgentAccess renders an error message with a 'try again' button if it's 
             </ul>
             <button
               class="PodBrowser-button PodBrowser-button--secondary"
+              data-testid="permissions-form-submit-button"
               type="submit"
             >
               <span
@@ -811,6 +813,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are d
         </ul>
         <button
           class="PodBrowser-button PodBrowser-button--secondary"
+          data-testid="permissions-form-submit-button"
           type="submit"
         >
           <span
@@ -1062,6 +1065,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are o
         </ul>
         <button
           class="PodBrowser-button PodBrowser-button--secondary"
+          data-testid="permissions-form-submit-button"
           type="submit"
         >
           <span

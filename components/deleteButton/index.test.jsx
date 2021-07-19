@@ -23,11 +23,17 @@ import React from "react";
 import userEvent from "@testing-library/user-event";
 
 import DeleteButton, {
+  TESTCAFE_ID_DELETE_BUTTON,
   handleDeleteResource,
-  handleConfirmation,
 } from "./index";
-import mockConfirmationDialogContextProvider from "../../__testUtils/mockConfirmationDialogContextProvider";
 import { renderWithTheme } from "../../__testUtils/withTheme";
+import { ConfirmationDialogProvider } from "../../src/contexts/confirmationDialogContext";
+import {
+  TESTCAFE_ID_CONFIRMATION_DIALOG,
+  TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
+  TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE,
+  TESTCAFE_ID_CONFIRM_BUTTON,
+} from "../confirmationDialog";
 
 jest.mock("@inrupt/solid-client");
 
@@ -49,16 +55,8 @@ describe("Delete button", () => {
     );
     expect(asFragment()).toMatchSnapshot();
   });
-  test("clicking on delete button calls setOpen with the correct id", () => {
-    const setOpen = jest.fn();
-    const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
-      open: dialogId,
-      setOpen,
-      setTitle: jest.fn(),
-      setContent: jest.fn(),
-      confirmed: null,
-    });
-    const { container } = renderWithTheme(
+  test("clicking on delete button opens a confirmation dialog with the correct title and content", () => {
+    const { getByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <DeleteButton
           onDelete={jest.fn()}
@@ -69,9 +67,35 @@ describe("Delete button", () => {
         />
       </ConfirmationDialogProvider>
     );
-    const deletebutton = container.querySelector("button");
+    const deletebutton = getByTestId(TESTCAFE_ID_DELETE_BUTTON);
     userEvent.click(deletebutton);
-    expect(setOpen).toHaveBeenCalledWith(dialogId);
+    const dialog = getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+    expect(dialog).toBeInTheDocument();
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE)
+    ).toHaveTextContent(confirmationTitle);
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
+    ).toHaveTextContent(confirmationContent);
+  });
+  test("if confirmation dialog is confirmed, it deletes the resource", () => {
+    const onDelete = jest.fn();
+    const { getByTestId } = renderWithTheme(
+      <ConfirmationDialogProvider>
+        <DeleteButton
+          onDelete={onDelete}
+          confirmationTitle={confirmationTitle}
+          confirmationContent={confirmationContent}
+          dialogId={dialogId}
+          successMessage={successMessage}
+        />
+      </ConfirmationDialogProvider>
+    );
+    const deletebutton = getByTestId(TESTCAFE_ID_DELETE_BUTTON);
+    userEvent.click(deletebutton);
+    const confirmButton = getByTestId(TESTCAFE_ID_CONFIRM_BUTTON);
+    userEvent.click(confirmButton);
+    expect(onDelete).toHaveBeenCalled();
   });
 });
 
@@ -137,49 +161,5 @@ describe("handleDeleteResource", () => {
 
     await handler();
     expect(onDeleteError).toHaveBeenCalledWith(error);
-  });
-});
-describe("handleConfirmation", () => {
-  const setOpen = jest.fn();
-  const deleteResource = jest.fn();
-  const setConfirmed = jest.fn();
-  const setTitle = jest.fn();
-  const setContent = jest.fn();
-  const setConfirmationSetup = jest.fn();
-  const open = dialogId;
-
-  const handler = handleConfirmation({
-    dialogId,
-    open,
-    setOpen,
-    setConfirmed,
-    deleteResource,
-    setTitle,
-    setContent,
-    setConfirmationSetup,
-  });
-
-  test("it returns a handler that deletes the file when user confirms dialog", async () => {
-    await handler(true, true, confirmationTitle, confirmationContent);
-
-    expect(setOpen).toHaveBeenCalledWith(null);
-    expect(deleteResource).toHaveBeenCalled();
-    expect(setConfirmed).toHaveBeenCalledWith(null);
-    expect(setTitle).toHaveBeenCalledWith(confirmationTitle);
-    expect(setContent).toHaveBeenCalledWith(<p>{confirmationContent}</p>);
-    expect(setConfirmationSetup).toHaveBeenCalledWith(true);
-  });
-  test("it returns a handler that exits when user cancels the operation", async () => {
-    await handler(true, false, confirmationTitle, confirmationContent);
-
-    expect(deleteResource).not.toHaveBeenCalled();
-    expect(setConfirmed).toHaveBeenCalledWith(null);
-  });
-  test("it returns a handler that exits when user starts confirmation but hasn't selected an option", async () => {
-    await handler(true, null, confirmationTitle, confirmationContent);
-
-    expect(deleteResource).not.toHaveBeenCalled();
-    expect(setTitle).not.toHaveBeenCalled();
-    expect(setContent).not.toHaveBeenCalled();
   });
 });

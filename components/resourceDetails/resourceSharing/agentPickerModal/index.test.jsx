@@ -25,7 +25,6 @@ import { waitFor } from "@testing-library/dom";
 import { acp_v2, mockSolidDatasetFrom } from "@inrupt/solid-client";
 import userEvent from "@testing-library/user-event";
 import AgentPickerModal, {
-  handleConfirmation,
   handleSaveContact,
   handleSubmit,
   TESTCAFE_SUBMIT_WEBIDS_BUTTON,
@@ -39,7 +38,12 @@ import mockGroupContact from "../../../../__testUtils/mockGroupContact";
 import mockAddressBook from "../../../../__testUtils/mockAddressBook";
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
 import * as ProfileFns from "../../../../src/solidClientHelpers/profile";
-import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
+import { ConfirmationDialogProvider } from "../../../../src/contexts/confirmationDialogContext";
+import {
+  TESTCAFE_ID_CONFIRMATION_DIALOG,
+  TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
+  TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE,
+} from "../../../confirmationDialog";
 import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
 import useAddressBook from "../../../../src/hooks/useAddressBook";
 import useContacts from "../../../../src/hooks/useContacts";
@@ -328,50 +332,6 @@ describe("handleSubmit", () => {
   });
 });
 
-describe("handleConfirmation", () => {
-  const dialogId = "dialogId";
-  const setOpen = jest.fn();
-  const handleSubmitNewWebIds = jest.fn();
-  const setConfirmed = jest.fn();
-  const setTitle = jest.fn();
-  const setContent = jest.fn();
-  const setConfirmationSetup = jest.fn();
-  const open = dialogId;
-
-  const handler = handleConfirmation({
-    open,
-    dialogId,
-    setConfirmationSetup,
-    setOpen,
-    setContent,
-    setTitle,
-    setConfirmed,
-    handleSubmitNewWebIds,
-  });
-
-  it("returns a handler which calls a function that submits the webIds when user confirms dialog", () => {
-    handler(true, true);
-
-    expect(handleSubmitNewWebIds).toHaveBeenCalled();
-    expect(setConfirmed).toHaveBeenCalledWith(null);
-    expect(setConfirmationSetup).toHaveBeenCalledWith(true);
-    expect(setTitle).toHaveBeenCalledWith(null);
-    expect(setContent).toHaveBeenCalledWith(null);
-  });
-  it("returns a handler that exits when user cancels the operation", () => {
-    handler(true, false);
-
-    expect(setOpen).toHaveBeenCalledWith(null);
-    expect(handleSubmitNewWebIds).not.toHaveBeenCalled();
-    expect(setConfirmed).toHaveBeenCalledWith(null);
-  });
-  it("returns a handler that exits when user starts confirmation but hasn't selected an option", () => {
-    handler(true, null);
-
-    expect(handleSubmitNewWebIds).not.toHaveBeenCalled();
-  });
-});
-
 describe("handleSaveContact", () => {
   const iri = "https://example.org";
   const contacts = [
@@ -439,14 +399,8 @@ describe("AgentPickerModal without contacts", () => {
       data: permissions,
       mutate: jest.fn(),
     });
-
-    const setConfirmed = jest.fn();
-    const contextValue = {
-      setConfirmed,
-    };
-
     const { getByTestId } = renderWithTheme(
-      <ConfirmationDialogContext.Provider value={contextValue}>
+      <ConfirmationDialogProvider>
         <AccessControlContext.Provider value={{ accessControl }}>
           <AgentPickerModal
             type="editors"
@@ -454,14 +408,13 @@ describe("AgentPickerModal without contacts", () => {
             onClose={onClose}
           />
         </AccessControlContext.Provider>
-      </ConfirmationDialogContext.Provider>
+      </ConfirmationDialogProvider>
     );
 
     const submitButton = getByTestId(TESTCAFE_SUBMIT_WEBIDS_BUTTON);
     userEvent.click(submitButton);
 
     expect(onClose).toHaveBeenCalledWith();
-    expect(setConfirmed).toHaveBeenCalledWith(false);
   });
 
   it("updates the temporary row with profile data when available", async () => {
@@ -554,42 +507,27 @@ describe("AgentPickerModal without contacts", () => {
       "Anyone signed in"
     );
   });
-  it("opens a confirmation dialog", async () => {
+  it("opens a confirmation dialog with correct title and content", async () => {
     mockedUseContacts.mockReturnValue({ data: [] });
-
     mockedUsePolicyPermissions.mockReturnValue({
       data: permissions,
       mutate: jest.fn(),
     });
-    const setOpen = jest.fn();
-    const setTitle = jest.fn();
-
-    const contextValue = {
-      confirmed: false,
-      content: null,
-      open: false,
-      setConfirmed: jest.fn(),
-      setContent: jest.fn(),
-      setOpen,
-      setTitle,
-      title: "Confirmation",
-    };
-
     jest
       .spyOn(ProfileFns, "fetchProfile")
       .mockRejectedValueOnce({ error: "error" });
 
     const { getByTestId, findByText, findByTestId } = renderWithTheme(
-      <ConfirmationDialogContext.Provider value={contextValue}>
-        <AccessControlContext.Provider value={{ accessControl }}>
+      <AccessControlContext.Provider value={{ accessControl }}>
+        <ConfirmationDialogProvider>
           <AgentPickerModal
             type="editors"
             text={{ editText: "Edit Editors", saveText: "Save Editors" }}
             onClose={onClose}
             setLoading={setLoading}
           />
-        </AccessControlContext.Provider>
-      </ConfirmationDialogContext.Provider>
+        </ConfirmationDialogProvider>
+      </AccessControlContext.Provider>
     );
 
     const webId = "https://somewebid.com";
@@ -603,53 +541,11 @@ describe("AgentPickerModal without contacts", () => {
     await findByText(webId);
     const submitWebIdsButton = getByTestId(TESTCAFE_SUBMIT_WEBIDS_BUTTON);
     userEvent.click(submitWebIdsButton);
-    expect(setTitle).toHaveBeenCalledWith("Change permissions for 1 person");
-    expect(setOpen).toHaveBeenCalledWith("add-new-permissions");
-  });
-  it("confirms without dialog if webIds to be added are only public and/or authenticated agents", async () => {
-    mockedUseContacts.mockReturnValue({ data: [] });
-
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: permissions,
-      mutate: jest.fn(),
-    });
-    const setOpen = jest.fn();
-    const setTitle = jest.fn();
-    const setConfirmed = jest.fn();
-
-    const contextValue = {
-      confirmed: false,
-      content: null,
-      open: false,
-      setConfirmed,
-      setContent: jest.fn(),
-      setOpen,
-      setTitle,
-      title: "Confirmation",
-    };
-
-    jest
-      .spyOn(ProfileFns, "fetchProfile")
-      .mockRejectedValueOnce({ error: "error" });
-
-    const { getByTestId, getAllByRole } = renderWithTheme(
-      <ConfirmationDialogContext.Provider value={contextValue}>
-        <AccessControlContext.Provider value={{ accessControl }}>
-          <AgentPickerModal
-            type="editors"
-            text={{ editText: "Edit Editors", saveText: "Save Editors" }}
-            onClose={onClose}
-            setLoading={setLoading}
-          />
-        </AccessControlContext.Provider>
-      </ConfirmationDialogContext.Provider>
-    );
-
-    const checkBoxes = getAllByRole("checkbox");
-    userEvent.click(checkBoxes[0]);
-    const submitWebIdsButton = getByTestId(TESTCAFE_SUBMIT_WEBIDS_BUTTON);
-    userEvent.click(submitWebIdsButton);
-    expect(setConfirmed).toHaveBeenCalledWith(true);
+    const dialog = await findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+    expect(dialog).toBeInTheDocument();
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE)
+    ).toHaveTextContent("Change permissions for 1 person");
   });
   it("renders the correct confirmation message for more than 1 agent", async () => {
     mockedUseContacts.mockReturnValue({ data: [] });
@@ -658,21 +554,9 @@ describe("AgentPickerModal without contacts", () => {
       data: permissions,
       mutate: jest.fn(),
     });
-    const setOpen = jest.fn();
-    const setTitle = jest.fn();
 
-    const contextValue = {
-      confirmed: false,
-      content: null,
-      open: false,
-      setConfirmed: jest.fn(),
-      setContent: jest.fn(),
-      setOpen,
-      setTitle,
-      title: "Confirmation",
-    };
     const { getByTestId, findByText, findByTestId } = renderWithTheme(
-      <ConfirmationDialogContext.Provider value={contextValue}>
+      <ConfirmationDialogProvider>
         <AccessControlContext.Provider value={{ accessControl }}>
           <AgentPickerModal
             type="editors"
@@ -681,7 +565,7 @@ describe("AgentPickerModal without contacts", () => {
             setLoading={setLoading}
           />
         </AccessControlContext.Provider>
-      </ConfirmationDialogContext.Provider>
+      </ConfirmationDialogProvider>
     );
 
     const webId1 = "https://somewebid.com";
@@ -708,31 +592,32 @@ describe("AgentPickerModal without contacts", () => {
 
     const submitWebIdsButton = getByTestId(TESTCAFE_SUBMIT_WEBIDS_BUTTON);
     userEvent.click(submitWebIdsButton);
-    expect(setTitle).toHaveBeenCalledWith("Change permissions for 2 people");
-    expect(setOpen).toHaveBeenCalledWith("add-new-permissions");
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE)
+    ).toHaveTextContent("Change permissions for 2 people");
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
+    ).toHaveTextContent(
+      "Continuing will change 2 people permissions to Edit Editors"
+    );
   });
-  it("cannot uncheck checkbox for the agent being added", async () => {
+  it("confirms without dialog if webIds to be added are only public and/or authenticated agents", async () => {
     mockedUseContacts.mockReturnValue({ data: [] });
 
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: permissions,
+    mockedUsePolicyPermissions.mockReturnValueOnce({
+      data: [
+        { webId: PUBLIC_AGENT_PREDICATE, alias: "editors" },
+        { webId: AUTHENTICATED_AGENT_PREDICATE, alias: "editors" },
+      ],
       mutate: jest.fn(),
     });
-    const setOpen = jest.fn();
-    const setTitle = jest.fn();
 
-    const contextValue = {
-      confirmed: false,
-      content: null,
-      open: false,
-      setConfirmed: jest.fn(),
-      setContent: jest.fn(),
-      setOpen,
-      setTitle,
-      title: "Confirmation",
-    };
+    jest
+      .spyOn(ProfileFns, "fetchProfile")
+      .mockRejectedValueOnce({ error: "error" });
+
     const { getByTestId, getAllByRole } = renderWithTheme(
-      <ConfirmationDialogContext.Provider value={contextValue}>
+      <ConfirmationDialogProvider>
         <AccessControlContext.Provider value={{ accessControl }}>
           <AgentPickerModal
             type="editors"
@@ -741,7 +626,38 @@ describe("AgentPickerModal without contacts", () => {
             setLoading={setLoading}
           />
         </AccessControlContext.Provider>
-      </ConfirmationDialogContext.Provider>
+      </ConfirmationDialogProvider>
+    );
+
+    const checkBoxes = getAllByRole("checkbox");
+    userEvent.click(checkBoxes[0]);
+    const submitWebIdsButton = getByTestId(TESTCAFE_SUBMIT_WEBIDS_BUTTON);
+    userEvent.click(submitWebIdsButton);
+    waitFor(() =>
+      expect(
+        getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)
+      ).not.toBeInTheDocument()
+    );
+  });
+  it("cannot uncheck checkbox for the agent being added", async () => {
+    mockedUseContacts.mockReturnValue({ data: [] });
+
+    mockedUsePolicyPermissions.mockReturnValue({
+      data: permissions,
+      mutate: jest.fn(),
+    });
+
+    const { getByTestId, getAllByRole } = renderWithTheme(
+      <ConfirmationDialogProvider>
+        <AccessControlContext.Provider value={{ accessControl }}>
+          <AgentPickerModal
+            type="editors"
+            text={{ editText: "Edit Editors", saveText: "Save Editors" }}
+            onClose={onClose}
+            setLoading={setLoading}
+          />
+        </AccessControlContext.Provider>
+      </ConfirmationDialogProvider>
     );
 
     jest

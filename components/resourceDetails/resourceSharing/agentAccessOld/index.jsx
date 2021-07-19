@@ -42,6 +42,7 @@ import { Alert, Skeleton } from "@material-ui/lab";
 import PermissionsForm from "../../../permissionsForm";
 import styles from "./styles";
 import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
+import ConfirmationDialog from "../../../confirmationDialog";
 import {
   displayProfileName,
   fetchProfile,
@@ -55,6 +56,10 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const TESTCAFE_ID_AGENT_WEB_ID = "agent-web-id";
 const TESTCAFE_ID_TRY_AGAIN_BUTTON = "try-again-button";
 const TESTCAFE_ID_TRY_AGAIN_SPINNER = "try-again-spinner";
+export const TESTCAFE_ID_PERMISSIONS_FORM_SUBMIT_BUTTON =
+  "permissions-form-submit-button";
+export const OWN_PERMISSIONS_WARNING_PERMISSION =
+  "You are about to change your own permissions. Are you sure?";
 
 export function submitHandler(
   authenticatedWebId,
@@ -68,7 +73,7 @@ export function submitHandler(
   return async (event) => {
     event.preventDefault();
     if (authenticatedWebId === webId) {
-      setContent("You are about to change your own permissions. Are you sure?");
+      setContent(OWN_PERMISSIONS_WARNING_PERMISSION);
       setOpen(dialogId);
     } else {
       await savePermissions(tempAccess);
@@ -121,7 +126,7 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
   const bem = useBem(useStyles());
   const [access, setAccess] = useState(acl);
   const [tempAccess, setTempAccess] = useState(acl);
-  const { dataset } = useContext(DatasetContext);
+  const { solidDataset: dataset } = useContext(DatasetContext);
   const { accessControl } = useContext(AccessControlContext);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -231,12 +236,18 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
               acl={access}
               onChange={setTempAccess}
             >
-              <PrismButton onClick={onSubmit} type="submit" variant="secondary">
+              <PrismButton
+                onClick={onSubmit}
+                type="submit"
+                variant="secondary"
+                data-testid={TESTCAFE_ID_PERMISSIONS_FORM_SUBMIT_BUTTON}
+              >
                 Save
               </PrismButton>
             </PermissionsForm>
           </Form>
         </div>
+        <ConfirmationDialog />
       </div>
     );
   }
@@ -276,11 +287,17 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
           acl={access}
           onChange={setTempAccess}
         >
-          <PrismButton onClick={onSubmit} type="submit" variant="secondary">
+          <PrismButton
+            onClick={onSubmit}
+            type="submit"
+            variant="secondary"
+            data-testid={TESTCAFE_ID_PERMISSIONS_FORM_SUBMIT_BUTTON}
+          >
             Save
           </PrismButton>
         </PermissionsForm>
       </Form>
+      <ConfirmationDialog />
     </>
   );
 }

@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import mockConfirmationDialogContextProvider from "../../__testUtils/mockConfirmationDialogContextProvider";
@@ -45,7 +46,7 @@ describe("ConfirmationDialog", () => {
       </ConfirmationDialogProvider>
     );
     const button = getByTestId(TESTCAFE_ID_CONFIRM_BUTTON);
-    userEvent.click(button);
+    act(() => userEvent.click(button));
     expect(setConfirmed).toHaveBeenCalledWith(true);
   });
   test("when cancelText and confirmText are null, it displays default values", () => {
@@ -66,7 +67,7 @@ describe("ConfirmationDialog", () => {
     const cancelButton = getByText("Cancel");
     expect(cancelButton).not.toBeNull();
   });
-  test("clicking on cancel button calls setConfirmed with true", () => {
+  test("clicking on cancel button calls setConfirmed with false", () => {
     const setConfirmed = jest.fn();
     const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
       open: "confirmation-dialog",
@@ -78,7 +79,7 @@ describe("ConfirmationDialog", () => {
       </ConfirmationDialogProvider>
     );
     const button = getByTestId(TESTCAFE_ID_CONFIRMATION_CANCEL_BUTTON);
-    userEvent.click(button);
+    act(() => userEvent.click(button));
     expect(setConfirmed).toHaveBeenCalledWith(false);
   });
 });
