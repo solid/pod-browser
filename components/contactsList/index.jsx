@@ -114,10 +114,8 @@ function ContactsList() {
     const contactThing = getThing(contactDataset, contactThingUrl);
     const name = getStringNoLocale(contactThing, formattedNamePredicate);
     setSelectedContactName(name);
-    (async () => {
-      const webId = getWebIdUrl(contactDataset, contactThingUrl);
-      setSelectedContactWebId(webId);
-    })();
+    const webId = getWebIdUrl(contactDataset, contactThingUrl);
+    setSelectedContactWebId(webId);
   }, [selectedContactIndex, formattedNamePredicate, people, fetch]);
 
   if (addressBookError) return addressBookError;

@@ -12,6 +12,293 @@ exports[`ContactsList renders error if useContacts returns error 1`] = `
 </DocumentFragment>
 `;
 
+exports[`ContactsList renders page when people is loaded 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-page-header"
+  >
+    <h1
+      class="PodBrowser-page-header__title"
+    >
+      Contacts
+    </h1>
+    <div
+      class="PodBrowser-page-header__content"
+    >
+      <div
+        aria-expanded="false"
+        class="PodBrowser-root PodBrowser-search PodBrowser-hasClearIcon"
+        role="combobox"
+      >
+        <div
+          class="PodBrowser-root PodBrowser-root PodBrowser-marginDense PodBrowser-fullWidth"
+        >
+          <div
+            class="PodBrowser-root PodBrowser-root PodBrowser-fullWidth PodBrowser-formControl PodBrowser-adornedStart PodBrowser-adornedStart PodBrowser-marginDense PodBrowser-marginDense"
+          >
+            <div
+              class="PodBrowser-root PodBrowser-positionStart PodBrowser-marginDense"
+            >
+              <span
+                class="PodBrowser-icon-search"
+              />
+            </div>
+            <input
+              aria-autocomplete="list"
+              aria-invalid="false"
+              autocapitalize="none"
+              autocomplete="off"
+              class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedStart PodBrowser-inputAdornedStart PodBrowser-inputMarginDense PodBrowser-inputMarginDense"
+              data-testid="contacts-search"
+              id="ContactsSearch"
+              spellcheck="false"
+              type="text"
+              value=""
+            />
+            <fieldset
+              aria-hidden="true"
+              class="PodBrowser-root PodBrowser-notchedOutline"
+              style="padding-left: 8px;"
+            >
+              <legend
+                class="PodBrowser-legend"
+                style="width: 0.01px;"
+              >
+                <span>
+                  ​
+                </span>
+              </legend>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="PodBrowser-page-header__toolbar"
+    >
+      <a
+        class="PodBrowser-page-header__action"
+        href="/contacts/add"
+      >
+        Add new contact
+      </a>
+    </div>
+  </div>
+  <div
+    class="PodBrowser-drawer-container"
+  >
+    <div
+      class="PodBrowser-drawer-container__content"
+    >
+      <table
+        class="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
+        role="table"
+      >
+        <thead>
+          <tr
+            role="row"
+          >
+            <th
+              colspan="1"
+              role="columnheader"
+            />
+            <th
+              colspan="1"
+              role="columnheader"
+              style="cursor: pointer;"
+              title="Toggle SortBy"
+            >
+              Name
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          role="rowgroup"
+        >
+          <tr
+            class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
+            role="row"
+            tabindex="0"
+          >
+            <td
+              role="cell"
+            >
+              <div
+                class="PodBrowser-root PodBrowser-circle PodBrowser-avatar"
+              >
+                <img
+                  alt="Alice"
+                  class="PodBrowser-img"
+                  src="http://alice.example.com/alice.jpg"
+                />
+              </div>
+            </td>
+            <td
+              role="cell"
+            >
+              <a
+                data-testid="profile-link"
+                href="/contacts/http%3A%2F%2Falice.example.com%2Falice%23me"
+              >
+                Alice
+              </a>
+            </td>
+          </tr>
+          <tr
+            class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
+            role="row"
+            tabindex="0"
+          >
+            <td
+              role="cell"
+            >
+              <div
+                class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="PodBrowser-root PodBrowser-fallback"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                  />
+                </svg>
+              </div>
+            </td>
+            <td
+              role="cell"
+            >
+              <a
+                data-testid="profile-link"
+                href="/contacts/http%3A%2F%2Fbob.example.com%2Fbob%23me"
+              >
+                Bob
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <section
+      class="PodBrowser-drawer"
+    >
+      <div
+        class="PodBrowser-drawer__content"
+      >
+        <div
+          class="PodBrowser-drawer__content-wrapper"
+        >
+          <div
+            class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
+          >
+            <button
+              class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
+            >
+              <span
+                class="PodBrowser-button__text"
+              >
+                <span
+                  class="PodBrowser-icon-cancel"
+                />
+                 Close
+              </span>
+            </button>
+          </div>
+          <div
+            class="PodBrowser-root PodBrowser-root PodBrowser-expanded PodBrowser-elevation1"
+          >
+            <div
+              aria-disabled="false"
+              aria-expanded="true"
+              class="PodBrowser-root PodBrowser-root PodBrowser-expanded"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="PodBrowser-content PodBrowser-expanded"
+              >
+                Actions
+              </div>
+              <div
+                aria-disabled="false"
+                aria-hidden="true"
+                class="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-expanded PodBrowser-edgeEnd"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="PodBrowser-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                    />
+                  </svg>
+                </span>
+                <span
+                  class="PodBrowser-root"
+                />
+              </div>
+            </div>
+            <div
+              class="PodBrowser-container PodBrowser-entered"
+              style="min-height: 0px;"
+            >
+              <div
+                class="PodBrowser-wrapper"
+              >
+                <div
+                  class="PodBrowser-wrapperInner"
+                >
+                  <div
+                    role="region"
+                  >
+                    <div
+                      class="PodBrowser-root"
+                    >
+                      <ul
+                        class="PodBrowser-action-menu"
+                      >
+                        <li
+                          class="PodBrowser-action-menu__item"
+                        >
+                          <a
+                            class="PodBrowser-action-menu__trigger"
+                            href="/contacts"
+                          >
+                            View Profile
+                          </a>
+                        </li>
+                        <li
+                          class="PodBrowser-action-menu__item"
+                        >
+                          <button
+                            class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
+                            data-testid="delete-button"
+                            type="button"
+                          >
+                            Delete
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`ContactsList renders spinner while useAddressBookOld is loading 1`] = `
 <DocumentFragment>
   <div

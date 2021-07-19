@@ -40,6 +40,7 @@ import {
   deleteResource,
   getBaseUrl,
   deletePoliciesContainer,
+  getProfileResource,
 } from "./resource";
 import { getPolicyUrl } from "./policies";
 import { chain } from "./utils";
@@ -78,6 +79,31 @@ describe("getResource", () => {
     const { error } = await getResource(iri, jest.fn());
 
     expect(error).toEqual("boom");
+  });
+});
+
+describe("getProfileResource", () => {
+  test("it returns a dataset and an iri", async () => {
+    const profile = createContainer();
+    jest
+      .spyOn(SolidClientFns, "getSolidDataset")
+      .mockResolvedValueOnce(profile);
+    const webId = "https://user.example.com";
+    const { dataset, iri } = await getProfileResource(webId, jest.fn());
+
+    expect(iri).toEqual(webId);
+    expect(dataset).toEqual(profile);
+  });
+
+  test("it returns an error message and iri for the requested profile when it throws an error", async () => {
+    jest.spyOn(SolidClientFns, "getSolidDataset").mockImplementationOnce(() => {
+      throw new Error("boom");
+    });
+    const webId = "https://user.example.com";
+    const { error, iri } = await getProfileResource(webId, jest.fn());
+
+    expect(error).toEqual("boom");
+    expect(iri).toEqual(webId);
   });
 });
 

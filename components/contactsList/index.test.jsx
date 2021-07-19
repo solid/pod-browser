@@ -24,7 +24,7 @@ import * as solidClientFns from "@inrupt/solid-client";
 import { useRouter } from "next/router";
 import { foaf } from "rdf-namespaces";
 import { screen, waitFor } from "@testing-library/react";
-import { deleteContact } from "../../src/addressBook";
+import * as addressBookFns from "../../src/addressBook";
 import useAddressBookOld from "../../src/hooks/useAddressBookOld";
 import useContactsOld from "../../src/hooks/useContactsOld";
 import useProfiles from "../../src/hooks/useProfiles";
@@ -40,7 +40,6 @@ import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import { TESTCAFE_ID_PROFILE_LINK } from "../profileLink";
 
-jest.mock("../../src/addressBook");
 jest.mock("../../src/hooks/useAddressBookOld");
 jest.mock("../../src/hooks/useContactsOld");
 jest.mock("../../src/hooks/useProfiles");
@@ -127,7 +126,7 @@ describe("ContactsList", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("renders page when people is loaded", () => {
+  it("renders page when people is loaded", async () => {
     useAddressBookOld.mockReturnValue([42, null]);
     useContactsOld.mockReturnValue({
       data: "peopleData",
@@ -138,13 +137,13 @@ describe("ContactsList", () => {
       mockPersonDatasetAlice(),
       mockPersonDatasetBob(),
     ]);
-
     const { asFragment, getAllByTestId } = renderWithTheme(
       <SessionProvider>
         <ContactsList />
       </SessionProvider>
     );
-    waitFor(() => {
+
+    await waitFor(() => {
       expect(getAllByTestId(TESTCAFE_ID_PROFILE_LINK)[0]).toHaveAttribute(
         "href",
         `/contacts/${encodeURIComponent(aliceWebIdUrl)}`
@@ -152,6 +151,37 @@ describe("ContactsList", () => {
       expect(getAllByTestId(TESTCAFE_ID_PROFILE_LINK)[1]).toHaveAttribute(
         "href",
         `/contacts/${encodeURIComponent(bobWebIdUrl)}`
+      );
+    });
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("renders webId for failed profiles and name for successfully fetched profiles", () => {
+    useAddressBookOld.mockReturnValue([42, null]);
+    const webId = "https://somewebid.com";
+    const contact = solidClientFns.addUrl(
+      solidClientFns.createThing(),
+      addressBookFns.vcardExtras(webId),
+      webId
+    );
+    useContactsOld.mockReturnValue({
+      data: "peopleData",
+      error: undefined,
+      mutate: () => {},
+    });
+    useProfiles.mockReturnValue([mockPersonDatasetAlice(), contact]);
+
+    const { asFragment, getAllByTestId } = renderWithTheme(
+      <SessionProvider>
+        <ContactsList />
+      </SessionProvider>
+    );
+    waitFor(() => {
+      expect(getAllByTestId(TESTCAFE_ID_PROFILE_LINK)[0]).toHaveTextContent(
+        "Alice"
+      );
+      expect(getAllByTestId(TESTCAFE_ID_PROFILE_LINK)[1]).toHaveAttribute(
+        webId
       );
       expect(asFragment()).toMatchSnapshot();
     });
@@ -196,8 +226,11 @@ describe("ContactsList", () => {
 
 describe("handleDeleteContact", () => {
   it("returns a handler that deletes a contact, updates people data and closes drawer", async () => {
+    const mockDeleteContact = jest
+      .spyOn(addressBookFns, "deleteContact")
+      .mockImplementation(() => null);
     const addressBookUrl = "http://example.com/contacts";
-    const contact = "contact";
+    const contact = mockPersonDatasetAlice();
     const addressBook = "address book";
     const closeDrawer = jest.fn();
     const fetch = jest.fn();
@@ -218,7 +251,7 @@ describe("handleDeleteContact", () => {
 
     await handler();
 
-    expect(deleteContact).toHaveBeenCalledWith(
+    expect(mockDeleteContact).toHaveBeenCalledWith(
       addressBookUrl,
       contact,
       foaf.Person,

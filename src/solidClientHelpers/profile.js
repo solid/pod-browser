@@ -20,7 +20,6 @@
  */
 
 import {
-  asUrl,
   getSolidDataset,
   getStringNoLocale,
   getThing,
@@ -28,7 +27,7 @@ import {
   getUrlAll,
 } from "@inrupt/solid-client";
 import { foaf, rdf, schema, space, vcard } from "rdf-namespaces";
-import { getProfileIriFromContactThing, vcardExtras } from "../addressBook";
+import { getProfileIriFromContactThing } from "../addressBook";
 
 export function displayProfileName({ nickname, name, webId }) {
   if (name) return name;
@@ -56,12 +55,7 @@ export const TYPE_MAP = {
 };
 
 export function getProfileFromThingError(contactThing) {
-  let contact;
-  try {
-    contact = asUrl(contactThing);
-  } catch (e) {
-    contact = getUrl(contactThing, vcardExtras("WebId"));
-  }
+  const contact = getProfileIriFromContactThing(contactThing);
   return new Error(`Cannot handle profile for contact: ${contact}`);
 }
 
