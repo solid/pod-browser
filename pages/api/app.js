@@ -19,16 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+function buildAppProfile(hostname, clientId) {
+  return {
+    "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
+    client_id: clientId,
+    redirect_uris: [hostname],
+    client_name: "Inrupt PodBrowser",
+    grant_types: ["refresh_token", "authorization_code"],
+    response_types: ["code"],
+  };
+}
+
 export default function handler(req, res) {
   const clientId = req.headers.host.includes("localhost")
     ? "http://www.w3.org/ns/solid/terms#PublicOidcClient"
     : `https://${req.headers.host}/api/app`;
-  res.status(200).json({
-    "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
-    client_id: clientId,
-    redirect_uris: [`https://${req.headers.host}/`],
-    client_name: "Inrupt PodBrowser",
-    grant_types: ["refresh_token", "authorization_code"],
-    response_types: ["code"],
-  });
+  const hostname = `https://${req.headers.host}/`;
+  res.status(200).json(buildAppProfile(hostname, clientId));
 }
