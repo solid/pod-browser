@@ -21,17 +21,16 @@
 
 import { useEffect, useState } from "react";
 
+const OPENID_CONFIGURATION_IRI = "/.well-known/openid-configuration";
+const OIDC_SUPPORTED = "https://solidproject.org/TR/solid-oidc";
+
 export const checkOidcSupport = async (providerIri) => {
+  const trimmedProviderIri = providerIri?.replace(/\/$/, "");
   try {
-    const fetchUrl = providerIri?.endsWith("/")
-      ? `${providerIri}.well-known/openid-configuration`
-      : `${providerIri}/.well-known/openid-configuration`;
+    const fetchUrl = `${trimmedProviderIri}${OPENID_CONFIGURATION_IRI}`;
     const res = await fetch(fetchUrl);
     const { solid_oidc_supported: solidOidcSupported } = await res.json();
-    return (
-      solidOidcSupported &&
-      solidOidcSupported === "https://solidproject.org/TR/solid-oidc"
-    );
+    return solidOidcSupported && solidOidcSupported === OIDC_SUPPORTED;
   } catch {
     return false;
   }

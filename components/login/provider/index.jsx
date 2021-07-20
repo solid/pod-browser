@@ -118,7 +118,7 @@ export default function Provider({ defaultError }) {
     if (providerIri) {
       oidcRef.current = checkOidcSupport(providerIri);
 
-      if (oidcRef.current) {
+      if (oidcRef.current === true) {
         setAuthOptions({
           clientName: "Inrupt PodBrowser",
           clientId: CLIENT_APP_WEBID,

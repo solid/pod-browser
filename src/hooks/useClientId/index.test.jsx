@@ -57,7 +57,4 @@ describe("useClientId tests", () => {
     await waitForNextUpdate();
     expect(result.current.response).toBe(true);
   });
-
-  it.todo("handles loading state correctly");
-  it.todo("handles error state correctly");
 });
