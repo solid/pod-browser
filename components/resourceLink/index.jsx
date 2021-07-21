@@ -36,8 +36,7 @@ export default function ResourceLink(props) {
 
   return (
     <Link
-      href={urlForResourceAction(action, resourceIriToDisplay, undefined)}
-      as={urlForResourceAction(
+      href={urlForResourceAction(
         action,
         resourceIriToDisplay,
         containerIriToUseAsBase

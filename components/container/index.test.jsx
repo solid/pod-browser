@@ -64,6 +64,7 @@ const mockedAccessControlHook = useAccessControl;
 
 describe("Container view", () => {
   const iri = "https://example.com/container/";
+  const resourceIri = "https://example.com/container/resource.txt";
   const container = mockContainer(iri);
   const { dataset } = container;
 
@@ -95,6 +96,11 @@ describe("Container view", () => {
 
   test("renders a table", () => {
     const { asFragment } = renderWithTheme(<Container iri={iri} />);
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  test("renders a table for parent container if iri is a resource", () => {
+    const { asFragment } = renderWithTheme(<Container iri={resourceIri} />);
     expect(asFragment()).toMatchSnapshot();
   });
 
@@ -163,7 +169,6 @@ describe("Container view", () => {
   });
 
   it("renders Not Supported if resource loaded is not a container", () => {
-    const resourceIri = "http://example.com/resource";
     mockedContainerHook.mockReturnValue({
       data: mockModel(resourceIri),
       mutate: jest.fn(),
