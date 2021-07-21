@@ -28,16 +28,16 @@ const LOCALHOST_RESPONSE = {
   client_id: "http://www.w3.org/ns/solid/terms#PublicOidcClient",
   client_name: "Inrupt PodBrowser",
   grant_types: ["refresh_token", "authorization_code"],
-  redirect_uris: ["https://http://localhost:3000/"],
+  redirect_uris: ["https://localhost:3000/"],
   response_types: ["code"],
 };
 
 const PODBROWSER_RESPONSE = {
   "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
-  client_id: "https://https://podbrowser.inrupt.com/api/app",
+  client_id: "https://podbrowser.inrupt.com/api/app",
   client_name: "Inrupt PodBrowser",
   grant_types: ["refresh_token", "authorization_code"],
-  redirect_uris: ["https://https://podbrowser.inrupt.com/"],
+  redirect_uris: ["https://podbrowser.inrupt.com/"],
   response_types: ["code"],
 };
 
@@ -61,7 +61,7 @@ describe("/api/app handler tests", () => {
   });
 
   test("responds with 200 and correct json for localhost", async () => {
-    req.headers = { host: "http://localhost:3000" };
+    req.headers = { host: "localhost:3000" };
     nock(/api/).get(/app$/).reply(200, LOCALHOST_RESPONSE);
     handler(req, res);
 
@@ -75,7 +75,7 @@ describe("/api/app handler tests", () => {
   });
 
   test("responds with 200 and correct json for podBrowser", async () => {
-    req.headers = { host: "https://podbrowser.inrupt.com" };
+    req.headers = { host: "podbrowser.inrupt.com" };
     nock(/api/).get(/app$/).reply(200, PODBROWSER_RESPONSE);
     handler(req, res);
 
