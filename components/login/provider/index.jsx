@@ -56,7 +56,7 @@ const CLIENT_APP_WEBID = hostname?.includes("localhost")
   : `${hostname}/api/app`;
 
 export function setupOnProviderChange(setProviderIri, setLoginError) {
-  return async (e, newValue) => {
+  return (e, newValue) => {
     setLoginError(null);
     if (typeof newValue === "string") {
       if (newValue.startsWith("https://") || newValue.startsWith("http://")) {
