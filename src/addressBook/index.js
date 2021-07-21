@@ -45,7 +45,11 @@ import {
   defineDataset,
   defineThing,
 } from "../solidClientHelpers/utils";
-import { getResource, saveResource } from "../solidClientHelpers/resource";
+import {
+  getProfileResource,
+  getResource,
+  saveResource,
+} from "../solidClientHelpers/resource";
 import { joinPath } from "../stringHelpers";
 import { ERROR_CODES, isHTTPError } from "../error";
 
@@ -181,18 +185,27 @@ export async function getProfiles(people, fetch) {
   const profileResponses = await Promise.all(
     people.map(async ({ dataset, iri }) => {
       const url = getWebIdUrl(dataset, iri);
-      return getResource(url, fetch);
+      return getProfileResource(url, fetch);
     })
   );
 
-  return profileResponses
-    .filter(({ error }) => !error)
-    .map(({ response }) => response)
-    .map(({ dataset, iri }) => {
-      const thing = getThing(dataset, iri);
-      const thingWithWebId = addUrl(thing, vcardExtras("WebId"), iri);
-      return thingWithWebId;
-    });
+  return profileResponses.map(({ dataset, iri, error }) => {
+    const thing = error
+      ? addUrl(createThing(), rdf.type, foaf.Person)
+      : getThing(dataset, iri);
+    const thingWithWebId = addUrl(thing, vcardExtras("WebId"), iri);
+    return thingWithWebId;
+  });
+}
+
+export function getProfileIriFromContactThing(contactThing) {
+  try {
+    const profileIri = asUrl(contactThing);
+    return profileIri;
+  } catch (e) {
+    const profileIri = getUrl(contactThing, vcardExtras("WebId"));
+    return profileIri;
+  }
 }
 
 export async function saveNewAddressBook(
@@ -379,10 +392,9 @@ export function createContact(
 
 export async function findContactInAddressBook(people, webId, fetch) {
   const profiles = await getProfiles(people, fetch);
-  const existingContact = profiles.filter(
-    (profile) => asUrl(profile) === webId
+  return profiles.filter(
+    (profile) => webId === getProfileIriFromContactThing(profile)
   );
-  return existingContact;
 }
 
 export async function saveContact(

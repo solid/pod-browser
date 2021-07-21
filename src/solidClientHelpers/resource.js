@@ -65,6 +65,16 @@ export async function getResource(iri, fetch) {
   }
 }
 
+export async function getProfileResource(iri, fetch) {
+  try {
+    const dataset = await getSolidDataset(iri, { fetch });
+    const resource = { dataset, iri };
+    return resource;
+  } catch (e) {
+    return { error: e.message, iri };
+  }
+}
+
 export async function getOrCreateContainer(iri, fetch) {
   const { respond, error } = createResponder();
   const { response, error: getError } = await getResource(iri, fetch);

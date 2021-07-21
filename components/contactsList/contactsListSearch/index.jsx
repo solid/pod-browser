@@ -24,6 +24,8 @@
 
 import React, { useContext } from "react";
 import T from "prop-types";
+import { getUrl } from "@inrupt/solid-client";
+import { rdf, foaf } from "rdf-namespaces";
 import Router, { useRouter } from "next/router";
 import { Autocomplete } from "@material-ui/lab";
 import { createStyles, InputAdornment, TextField } from "@material-ui/core";
@@ -66,7 +68,9 @@ export default function ContactsListSearch({ people }) {
   const { setSearch } = useContext(SearchContext);
   const classes = useStyles();
 
-  const profiles = people.map(getProfileFromThing);
+  const profiles = people
+    .filter((profile) => !!getUrl(profile, rdf.type) === foaf.Person)
+    .map(getProfileFromThing);
   const onChange = setupOnChange(setSearch, route);
   const filterOptions = setupFilterOptions();
   const getOptionLabel = setupGetOptionLabel();

@@ -29,6 +29,7 @@ import {
   InputLabel,
   createStyles,
 } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { Container } from "@inrupt/prism-react-components";
@@ -42,6 +43,7 @@ import ContactInfoTable, {
 } from "./contactInfoTable";
 
 import styles from "./styles";
+import { isHTTPError } from "../../src/error";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -65,6 +67,15 @@ export default function Profile(props) {
 
   // TODO replace with toast error or something?
   if (error) {
+    if (isHTTPError(error, 404)) {
+      return (
+        <Container>
+          <Alert severity="error">
+            {`Cannot fetch profile for this WebID: ${profileIri}`}
+          </Alert>
+        </Container>
+      );
+    }
     return error.toString();
   }
 

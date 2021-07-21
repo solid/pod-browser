@@ -135,6 +135,7 @@ exports[`PrivacyPage renders 1`] = `
               role="cell"
             >
               <a
+                data-testid="profile-link"
                 href="/contacts/https%3A%2F%2Fmockappurl.com"
               >
                 Mock App

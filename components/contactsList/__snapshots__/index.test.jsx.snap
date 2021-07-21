@@ -137,6 +137,7 @@ exports[`ContactsList renders page when people is loaded 1`] = `
               role="cell"
             >
               <a
+                data-testid="profile-link"
                 href="/contacts/http%3A%2F%2Falice.example.com%2Falice%23me"
               >
                 Alice
@@ -170,6 +171,7 @@ exports[`ContactsList renders page when people is loaded 1`] = `
               role="cell"
             >
               <a
+                data-testid="profile-link"
                 href="/contacts/http%3A%2F%2Fbob.example.com%2Fbob%23me"
               >
                 Bob

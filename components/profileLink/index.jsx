@@ -23,9 +23,12 @@ import React from "react";
 import T from "prop-types";
 import Link from "next/link";
 import { useThing } from "@inrupt/solid-ui-react";
-import { getStringNoLocale, asUrl } from "@inrupt/solid-client";
+import { getStringNoLocale } from "@inrupt/solid-client";
 import { vcard, foaf } from "rdf-namespaces";
 import { useRouter } from "next/router";
+import { getProfileIriFromContactThing } from "../../src/addressBook";
+
+export const TESTCAFE_ID_PROFILE_LINK = "profile-link";
 
 export function buildProfileLink(webId, route) {
   return `${route}/${encodeURIComponent(webId)}`;
@@ -35,17 +38,20 @@ export default function ProfileLink(props) {
   const { route } = useRouter();
   const { webId } = props;
   const { thing } = useThing();
+  const contact = getProfileIriFromContactThing(thing);
 
   // Pass in an iri, or use the thing from context (such as for the contacts list)
-  const profileIri = webId || asUrl(thing);
+  const profileIri = webId || contact;
 
   // TODO remove this once react-sdk allows property fallbacks
   const name =
-    getStringNoLocale(thing, vcard.fn) || getStringNoLocale(thing, foaf.name);
+    getStringNoLocale(thing, vcard.fn) ||
+    getStringNoLocale(thing, foaf.name) ||
+    profileIri;
 
   return (
     <Link href={buildProfileLink(profileIri, route)}>
-      <a>{name}</a>
+      <a data-testid={TESTCAFE_ID_PROFILE_LINK}>{name}</a>
     </Link>
   );
 }
