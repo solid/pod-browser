@@ -413,7 +413,7 @@ export async function saveContact(
   );
   const { iri } = newContact;
 
-  const indexIri = joinPath(addressBookContainerUrl, INDEX_FILE);
+  const indexIri = joinPath(addressBookContainerUrl, INDEX_FILE, "#this"); // FIXME: hack, should use the new address book model and get the url from there
   const { indexFilePredicate } = TYPE_MAP[foaf.Person];
 
   const { response: contact, error: saveContactError } = await saveResource(
