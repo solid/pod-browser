@@ -9,16 +9,12 @@ exports[`Agent show page Renders the Agent show page 1`] = `
       class="PodBrowser-request-container__content PodBrowser-request-container__content--main"
     >
       <h2
-        class="PodBrowser-request-container__header-text PodBrowser-request-container__header-text--center"
+        class="PodBrowser-root PodBrowser-body1 PodBrowser-alignCenter"
       >
-        <p
-          class="PodBrowser-root PodBrowser-body1"
-        >
-          Allow [test-request] access?
-        </p>
+        Allow [agent name] access?
       </h2>
       <p>
-        [general purpose string]
+        test-request
       </p>
       <div
         class=""
