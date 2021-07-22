@@ -49,7 +49,7 @@ export default function getMainMenuItems() {
       label: "Privacy",
       icon: "user-shield",
       featureFlag: PRIVACY_PAGE_ENABLED,
-      pages: ["/privacy"],
+      pages: ["/privacy", "/privace/consent/[rid]"],
       "data-testid": TESTCAFE_ID_MAIN_MENU_PRIVACY,
     },
     {

@@ -55,6 +55,9 @@ export const groupsPageEnabled = enableForGivenWebIds(GROUPS_PAGE_ENABLED_FOR);
 export const privacyPageEnabled = enableForGivenWebIds(
   PRIVACY_PAGE_ENABLED_FOR
 );
+export const consentPageEnabled = enableForGivenWebIds(
+  PRIVACY_PAGE_ENABLED_FOR
+);
 
 export default function FeatureFlags() {
   return {

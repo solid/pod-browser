@@ -21,6 +21,7 @@
 
 import { schema } from "rdf-namespaces";
 import React, { useState } from "react";
+import Link from "next/link";
 import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import AgentList from "../../agentList";
@@ -82,6 +83,9 @@ export default function PrivacyPage() {
             contactType={selectedTabValue}
             setSearchValues={setSearchValues}
           />
+          <Link href="/privacy/consent/test-request">
+            <a>View test request</a>
+          </Link>
         </>
       </SearchProvider>
     </DetailsMenuProvider>
