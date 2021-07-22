@@ -19,10 +19,11 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { schema } from "rdf-namespaces";
 import React from "react";
 
-import AgentShowPage from "../../components/pages/privacy/show";
+import AgentShowPage from "../../../components/pages/privacy/show";
 
 export default function ContactShow() {
-  return <AgentShowPage />;
+  return <AgentShowPage type={schema.SoftwareApplication} />;
 }

@@ -20,33 +20,18 @@
  */
 
 import React from "react";
+import { vcard } from "rdf-namespaces";
 import T from "prop-types";
 
-import { schema } from "rdf-namespaces";
-import PersonProfile from "./personProfile";
-import AppProfile from "./appProfile";
-
-export const TESTCAFE_ID_NAME_TITLE = "profile-name-title";
-export const TESTCAFE_ID_NAME_FIELD = "profile-name-field";
-export const TESTCAFE_ID_ROLE_FIELD = "profile-role-field";
-export const TESTCAFE_ID_ORG_FIELD = "profile-org-field";
-
-export default function Profile(props) {
-  const { profileIri, editing, type } = props;
-
-  if (type === schema.SoftwareApplication) {
-    return <AppProfile />;
-  }
-
-  return <PersonProfile profileIri={profileIri} editing={editing} />;
+export default function TypeBody({ id }) {
+  const tableItems = [
+    { property: vcard.url, title: "Website" },
+    { property: vcard.hasTelephone, title: "Telephone" },
+    { property: vcard.hasEmail, title: "E-mail" },
+  ];
+  const type = tableItems[id].title;
+  return <b>{type}</b>;
 }
-
-Profile.propTypes = {
-  profileIri: T.string.isRequired,
-  editing: T.bool,
-  type: T.string.isRequired,
-};
-
-Profile.defaultProps = {
-  editing: false,
+TypeBody.propTypes = {
+  id: T.string.isRequired,
 };

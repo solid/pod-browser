@@ -20,33 +20,9 @@
  */
 
 import React from "react";
-import T from "prop-types";
 
-import { schema } from "rdf-namespaces";
-import PersonProfile from "./personProfile";
-import AppProfile from "./appProfile";
+import AgentShowPage from "../../../components/pages/privacy/show";
 
-export const TESTCAFE_ID_NAME_TITLE = "profile-name-title";
-export const TESTCAFE_ID_NAME_FIELD = "profile-name-field";
-export const TESTCAFE_ID_ROLE_FIELD = "profile-role-field";
-export const TESTCAFE_ID_ORG_FIELD = "profile-org-field";
-
-export default function Profile(props) {
-  const { profileIri, editing, type } = props;
-
-  if (type === schema.SoftwareApplication) {
-    return <AppProfile />;
-  }
-
-  return <PersonProfile profileIri={profileIri} editing={editing} />;
+export default function ContactShow() {
+  return <AgentShowPage />;
 }
-
-Profile.propTypes = {
-  profileIri: T.string.isRequired,
-  editing: T.bool,
-  type: T.string.isRequired,
-};
-
-Profile.defaultProps = {
-  editing: false,
-};

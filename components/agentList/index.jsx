@@ -29,14 +29,7 @@ import {
   DrawerContainer,
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
-import {
-  addStringNoLocale,
-  addUrl,
-  createThing,
-  getSourceUrl,
-  getStringNoLocale,
-  getUrl,
-} from "@inrupt/solid-client";
+import { getSourceUrl, getStringNoLocale, getUrl } from "@inrupt/solid-client";
 import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
 import { vcard, foaf } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";
@@ -47,7 +40,7 @@ import styles from "./styles";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import useAddressBookOld from "../../src/hooks/useAddressBookOld";
 import useContactsOld from "../../src/hooks/useContactsOld";
-import { chain } from "../../src/solidClientHelpers/utils";
+import { mockApp } from "../../__testUtils/mockApp";
 import useProfiles from "../../src/hooks/useProfiles";
 import ProfileLink from "../profileLink";
 import SearchContext from "../../src/contexts/searchContext";
@@ -57,12 +50,8 @@ import AgentsDrawer from "./agentsDrawer";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-// termporarily using mock data for apps for dev purposes until we have audit list
-const mockApp = chain(
-  createThing({ url: "https://mockappurl.com" }),
-  (t) => addStringNoLocale(t, vcard.fn, "Mock App"),
-  (t) => addUrl(t, vcardExtras("WebId"), "https://mockappurl.com")
-);
+// temporarily using mock data for apps for dev purposes until we have audit list
+const app = mockApp();
 export function handleClose(setSelectedContactIndex) {
   return () => setSelectedContactIndex(null);
 }
@@ -115,10 +104,10 @@ function AgentList({ contactType, setSearchValues }) {
       setProfilesForTable(profiles);
     }
     if (contactType === "all") {
-      setProfilesForTable(profiles ? [...profiles, mockApp] : [mockApp]);
+      setProfilesForTable(profiles ? [...profiles, app] : [app]);
     }
     if (contactType === "app") {
-      setProfilesForTable([mockApp]);
+      setProfilesForTable([app]);
     }
   }, [profiles, contactType]);
 
@@ -158,6 +147,7 @@ function AgentList({ contactType, setSearchValues }) {
   const contactsForTable = profilesForTable.map((p) => ({
     thing: p,
     dataset: addressBook,
+    type: contactType,
   }));
 
   const closeDrawer = handleClose(setSelectedContactIndex);
@@ -175,6 +165,7 @@ function AgentList({ contactType, setSearchValues }) {
       open={selectedContactIndex !== null}
       onClose={closeDrawer}
       onDelete={deleteSelectedContact}
+      contactType={contactType}
       selectedContactName={selectedContactName}
       profileIri={selectedContactWebId}
     />

@@ -21,6 +21,7 @@
 
 import React from "react";
 import { useRouter } from "next/router";
+import { schema } from "rdf-namespaces";
 import Link from "next/link";
 import {
   BackToNav,
@@ -45,7 +46,7 @@ export default function ContactShow() {
       <Container>
         <BackToNav link={link} />
       </Container>
-      <Profile profileIri={decodedIri} />
+      <Profile profileIri={decodedIri} type={schema.Person} />
     </>
   );
 }

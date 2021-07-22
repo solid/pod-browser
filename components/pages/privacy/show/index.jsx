@@ -20,6 +20,7 @@
  */
 
 import React from "react";
+import T from "prop-types";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import {
@@ -30,7 +31,7 @@ import {
 import Profile from "../../../profile";
 import { useRedirectIfLoggedOut } from "../../../../src/effects/auth";
 
-export default function AgentShow() {
+export default function AgentShow({ type }) {
   useRedirectIfLoggedOut();
   const router = useRouter();
   const decodedIri = decodeURIComponent(router.query.webId);
@@ -45,7 +46,11 @@ export default function AgentShow() {
       <Container>
         <BackToNav link={link} />
       </Container>
-      <Profile profileIri={decodedIri} />
+      <Profile profileIri={decodedIri} type={type} />
     </>
   );
 }
+
+AgentShow.propTypes = {
+  type: T.string.isRequired,
+};

@@ -66,9 +66,14 @@ describe("ProfileLink", () => {
 });
 
 describe("buildProfileLink", () => {
-  it("generates a valid path", () => {
+  it("generates a valid path when path is contacts", () => {
     expect(buildProfileLink(iri, "/contacts")).toEqual(
       `/contacts/${encodeURIComponent(iri)}`
+    );
+  });
+  it("generates a valid path when path is privacy", () => {
+    expect(buildProfileLink(iri, "/privacy", "app")).toEqual(
+      `/privacy/app/${encodeURIComponent(iri)}`
     );
   });
 });

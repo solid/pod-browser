@@ -23,15 +23,18 @@ import React from "react";
 import T from "prop-types";
 import Link from "next/link";
 import { useThing } from "@inrupt/solid-ui-react";
-import { getStringNoLocale } from "@inrupt/solid-client";
-import { vcard, foaf } from "rdf-namespaces";
+import { getStringNoLocale, getUrl } from "@inrupt/solid-client";
+import { vcard, foaf, rdf, schema } from "rdf-namespaces";
 import { useRouter } from "next/router";
 import { getProfileIriFromContactThing } from "../../src/addressBook";
 
 export const TESTCAFE_ID_PROFILE_LINK = "profile-link";
 
-export function buildProfileLink(webId, route) {
-  return `${route}/${encodeURIComponent(webId)}`;
+export function buildProfileLink(webId, route, path) {
+  if (route === "/contacts") {
+    return `${route}/${encodeURIComponent(webId)}`;
+  }
+  return `${route}/${path}/${encodeURIComponent(webId)}`;
 }
 
 export default function ProfileLink(props) {
@@ -40,6 +43,8 @@ export default function ProfileLink(props) {
   const { thing } = useThing();
   const contact = getProfileIriFromContactThing(thing);
 
+  const type = getUrl(thing, rdf.type);
+  const path = type === schema.Person ? "person" : "app";
   // Pass in an iri, or use the thing from context (such as for the contacts list)
   const profileIri = webId || contact;
 
@@ -50,7 +55,7 @@ export default function ProfileLink(props) {
     profileIri;
 
   return (
-    <Link href={buildProfileLink(profileIri, route)}>
+    <Link href={buildProfileLink(profileIri, route, path)}>
       <a data-testid={TESTCAFE_ID_PROFILE_LINK}>{name}</a>
     </Link>
   );

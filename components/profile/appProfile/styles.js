@@ -19,34 +19,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import T from "prop-types";
+import { createStyles } from "@solid/lit-prism-patterns";
 
-import { schema } from "rdf-namespaces";
-import PersonProfile from "./personProfile";
-import AppProfile from "./appProfile";
-
-export const TESTCAFE_ID_NAME_TITLE = "profile-name-title";
-export const TESTCAFE_ID_NAME_FIELD = "profile-name-field";
-export const TESTCAFE_ID_ROLE_FIELD = "profile-role-field";
-export const TESTCAFE_ID_ORG_FIELD = "profile-org-field";
-
-export default function Profile(props) {
-  const { profileIri, editing, type } = props;
-
-  if (type === schema.SoftwareApplication) {
-    return <AppProfile />;
-  }
-
-  return <PersonProfile profileIri={profileIri} editing={editing} />;
-}
-
-Profile.propTypes = {
-  profileIri: T.string.isRequired,
-  editing: T.bool,
-  type: T.string.isRequired,
+const styles = (theme) => {
+  return createStyles(theme, ["back-to-nav", "input"], {
+    avatar: {
+      width: "64px",
+      height: "64px",
+    },
+    appAvatar: {
+      textAlign: "center",
+      padding: theme.spacing(1),
+      borderRadius: "50%",
+      fontSize: theme.typography.h5.fontSize,
+      color: theme.palette.primary.main,
+      backgroundColor: "#F1EDFF",
+    },
+  });
 };
 
-Profile.defaultProps = {
-  editing: false,
-};
+export default styles;

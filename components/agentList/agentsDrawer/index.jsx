@@ -22,6 +22,7 @@
 import React from "react";
 import Link from "next/link";
 import T from "prop-types";
+import { schema } from "rdf-namespaces";
 import {
   ActionMenu,
   ActionMenuItem,
@@ -42,8 +43,10 @@ export default function AgentsDrawer({
   onDelete,
   selectedContactName,
   profileIri,
+  contactType,
 }) {
   const actionMenuBem = ActionMenu.useBem();
+  const path = contactType === schema.Person ? "person" : "app";
   return (
     <Drawer open={open} close={onClose}>
       <Accordion defaultExpanded square>
@@ -51,7 +54,7 @@ export default function AgentsDrawer({
         <AccordionDetails>
           <ActionMenu>
             <ActionMenuItem>
-              <Link href={buildProfileLink(profileIri, "/privacy")}>
+              <Link href={buildProfileLink(profileIri, "/privacy", path)}>
                 <a className={actionMenuBem("action-menu__trigger")}>
                   View Profile
                 </a>
@@ -77,4 +80,5 @@ AgentsDrawer.propTypes = {
   onDelete: T.func.isRequired,
   selectedContactName: T.string.isRequired,
   profileIri: T.string.isRequired,
+  contactType: T.string.isRequired,
 };
