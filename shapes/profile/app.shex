@@ -23,6 +23,8 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     // rdfs:comment  "A string containing the URI where the application’s logo is available."@en ;
   oidc:tos_uri IRI ?
     // rdfs:comment  "A string containing the URI where the application’s terms of service are available."@en ;
+  oidc:policy_uri IRI ?
+    // rdfs:comment  "A string containing the URI where the application’s privacy policy are available."@en ;
   oidc:default_max_age xsd:integer ? 
    // rdfs:comment "A number that indicates the maximum time, in seconds, that a user can remain authenticated. "@en ;
    oidc:contacts IRI *
