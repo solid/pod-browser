@@ -22,7 +22,8 @@
 import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import Link from "next/link";
-import { Avatar, createStyles } from "@material-ui/core";
+import T from "prop-types";
+import { createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import {
@@ -47,6 +48,7 @@ import useContactsOld from "../../src/hooks/useContactsOld";
 import useProfiles from "../../src/hooks/useProfiles";
 import ContactsListSearch from "./contactsListSearch";
 import ProfileLink from "../profileLink";
+import AgentAvatar from "../agentAvatar";
 import { SearchProvider } from "../../src/contexts/searchContext";
 import { deleteContact, getWebIdUrl } from "../../src/addressBook";
 import ContactsDrawer from "./contactsDrawer";
@@ -57,6 +59,10 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export function handleClose(setSelectedContactIndex) {
   return () => setSelectedContactIndex(null);
 }
+
+const RowAvatar = ({ value, row }) => (
+  <AgentAvatar altText={row.values.col1} imageUrl={value} />
+);
 
 export function handleDeleteContact({
   addressBook,
@@ -198,15 +204,7 @@ function ContactsList() {
               property={hasPhotoPredicate}
               header=""
               dataType="url"
-              body={({ value, row }) => {
-                return (
-                  <Avatar
-                    className={bem("avatar")}
-                    alt={row.values.col1 || "Contact avatar"}
-                    src={value}
-                  />
-                );
-              }}
+              body={RowAvatar}
             />
             <TableColumn
               property={formattedNamePredicate}
@@ -222,8 +220,18 @@ function ContactsList() {
   );
 }
 
-ContactsList.propTypes = {};
+RowAvatar.propTypes = {
+  value: T.string,
+  row: T.shape({
+    values: T.shape({
+      col1: T.string,
+    }),
+  }),
+};
 
-ContactsList.defaultProps = {};
+RowAvatar.defaultProps = {
+  value: null,
+  row: null,
+};
 
 export default ContactsList;
