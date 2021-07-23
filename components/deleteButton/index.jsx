@@ -143,5 +143,9 @@ DeleteButton.propTypes = {
   dialogId: T.string.isRequired,
   onDelete: T.func.isRequired,
   successMessage: T.string.isRequired,
-  resourceName: T.string.isRequired,
+  resourceName: T.string,
+};
+
+DeleteButton.defaultProps = {
+  resourceName: "this resource",
 };
