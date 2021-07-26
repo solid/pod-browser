@@ -28,10 +28,10 @@ import { createAccessMap } from "../../../../src/solidClientHelpers/permissions"
 import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
 import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
 import { TESTCAFE_ID_SEARCH_INPUT } from "../agentsSearchBar";
-import {
-  TESTCAFE_ID_TAB_PEOPLE,
-  TESTCAFE_ID_TAB_GROUPS,
-} from "../agentsTableTabs";
+// import {
+//   TESTCAFE_ID_TAB_PEOPLE,
+//   TESTCAFE_ID_TAB_GROUPS,
+// } from "../agentsTableTabs";
 import {
   PUBLIC_AGENT_PREDICATE,
   PUBLIC_AGENT_TYPE,
