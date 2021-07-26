@@ -23,7 +23,15 @@ import React from "react";
 import { useRouter } from "next/router";
 import { Container, Icons, Button } from "@inrupt/prism-react-components";
 import { makeStyles } from "@material-ui/styles";
-import { createStyles, Typography, Switch } from "@material-ui/core";
+import {
+  createStyles,
+  Typography,
+  Switch,
+  FormGroup,
+  FormControl,
+  FormControlLabel,
+  Link,
+} from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import { useRedirectIfLoggedOut } from "../../../../src/effects/auth";
 import styles from "./styles";
@@ -39,40 +47,237 @@ export default function ContactShow() {
   return (
     <>
       <Container className={bem("request-container")}>
-        <div className={bem("request-container__content", "main")}>
-          <Typography
-            component="h2"
-            align="center"
-            className={bem("header-text")}
-          >
+        <form className={bem("request-container__content", "main")}>
+          <Typography component="h2" align="center" variant="h2">
             Allow [agent name] access?
           </Typography>
           <p>{requestId}</p>
-          <div className={bem("request-container__section")}>
-            <div>
-              <h3 className={bem("request-container__header-text", "small")}>
-                <span>
-                  <Icons name="edit" className={bem("icon-small")} />
-                  [agent name] wants to create, edit or delete
-                </span>
-                <Button
-                  variant="secondary"
-                  className={bem("request-container__button", "small")}
-                >
+          <FormControl
+            component="fieldset"
+            className={bem("request-container__section")}
+          >
+            <legend className={bem("request-container__header-text", "small")}>
+              <span>
+                <Icons name="edit" className={bem("icon-small")} />
+                [agent name] wants to create, edit or delete
+              </span>
+              <Button
+                variant="secondary"
+                className={bem("request-container__button", "small")}
+              >
+                <Typography component="span" variant="body2">
                   Select all
-                </Button>
-              </h3>
-            </div>
-            <div className={bem("request-container__section", "box")}>
-              Your Pod
-              <Switch
-                color="default"
-                inputProps={{ "aria-label": "checkbox for [some purpose]" }}
+                </Typography>
+              </Button>
+            </legend>
+            <FormGroup
+              aria-label="position"
+              row
+              className={bem("request-container__section", "box")}
+            >
+              <FormControlLabel
+                value="start"
+                control={<Switch color="primary" />}
+                label={
+                  // eslint-disable-next-line react/jsx-wrap-multilines
+                  <Typography variant="body2">
+                    <Icons name="app" className={bem("icon-small")} />
+                    Your Pod
+                  </Typography>
+                }
+                labelPlacement="start"
+                className={bem("box__content")}
               />
-            </div>
+            </FormGroup>
+          </FormControl>
+          <FormControl
+            component="fieldset"
+            className={bem("request-container__section")}
+          >
+            <legend className={bem("request-container__header-text", "small")}>
+              <span>
+                <Icons name="view" className={bem("icon-small")} />
+                [agent name] wants to view
+              </span>
+              <Button
+                variant="secondary"
+                className={bem("request-container__button", "small")}
+              >
+                <Typography component="span" variant="body2">
+                  Select all
+                </Typography>
+              </Button>
+            </legend>
+            <FormGroup
+              aria-label="position"
+              row
+              className={bem("request-container__section", "box")}
+            >
+              <FormControlLabel
+                value="start"
+                control={<Switch color="primary" />}
+                label={
+                  // eslint-disable-next-line react/jsx-wrap-multilines
+                  <Typography variant="body2">
+                    <Icons name="folder" className={bem("icon-small")} />
+                    folder_name
+                  </Typography>
+                }
+                labelPlacement="start"
+                className={bem("box__content")}
+              />
+              <FormControlLabel
+                value="start"
+                control={<Switch color="primary" />}
+                label={<Typography variant="body2">Item 2</Typography>}
+                labelPlacement="start"
+                className={bem("box__content")}
+              />
+            </FormGroup>
+          </FormControl>
+          <FormControl
+            component="fieldset"
+            className={bem("request-container__section")}
+          >
+            <legend className={bem("request-container__header-text", "small")}>
+              <span>
+                <Icons name="add" className={bem("icon-small")} />
+                [agent name] wants to add to
+              </span>
+              <Button
+                variant="secondary"
+                className={bem("request-container__button", "small")}
+              >
+                <Typography component="span" variant="body2">
+                  Select all
+                </Typography>
+              </Button>
+            </legend>
+            <FormGroup
+              aria-label="position"
+              row
+              className={bem("request-container__section", "box")}
+            >
+              <FormControlLabel
+                value="start"
+                control={<Switch color="primary" />}
+                label={<Typography variant="body2">folder_name</Typography>}
+                labelPlacement="start"
+                className={bem("box__content")}
+              />
+            </FormGroup>
+          </FormControl>
+          <FormControl
+            component="fieldset"
+            className={bem("request-container__section")}
+          >
+            <legend className={bem("request-container__header-text", "small")}>
+              <span>
+                <Icons name="user" className={bem("icon-small")} />
+                [agent name] wants add or remove people from
+              </span>
+              <Button
+                variant="secondary"
+                className={bem("request-container__button", "small")}
+              >
+                <Typography component="span" variant="body2">
+                  Select all
+                </Typography>
+              </Button>
+            </legend>
+            <FormGroup
+              aria-label="position"
+              row
+              className={bem("request-container__section", "box")}
+            >
+              <FormControlLabel
+                value="start"
+                control={<Switch color="primary" />}
+                label={<Typography variant="body2">file_name</Typography>}
+                labelPlacement="start"
+                className={bem("box__content")}
+              />
+              <FormControlLabel
+                value="start"
+                control={<Switch color="primary" />}
+                label={<Typography variant="body2">file_name</Typography>}
+                labelPlacement="start"
+                className={bem("box__content")}
+              />
+            </FormGroup>
+          </FormControl>
+          <FormControl
+            component="fieldset"
+            className={bem("request-container__section")}
+          >
+            <legend className={bem("request-container__header-text", "small")}>
+              <span>
+                <Icons name="users" className={bem("icon-small")} />
+                [agent name] wants see who else can view
+              </span>
+              <Button
+                variant="secondary"
+                className={bem("request-container__button", "small")}
+              >
+                <Typography component="span" variant="body2">
+                  Select all
+                </Typography>
+              </Button>
+            </legend>
+            <FormGroup
+              aria-label="position"
+              row
+              className={bem("request-container__section", "box")}
+            >
+              <FormControlLabel
+                value="start"
+                control={<Switch color="primary" />}
+                label={<Typography variant="body2">Your Pod</Typography>}
+                labelPlacement="start"
+                className={bem("box__content")}
+              />
+            </FormGroup>
+          </FormControl>
+          <div className={bem("form__controls")}>
+            <Button
+              variant="secondary"
+              className={bem("request-container__button")}
+            >
+              Deny all access
+            </Button>
+            <Button className={bem("request-container__button")}>
+              Confirm Access
+            </Button>
           </div>
+        </form>
+        <div className={bem("request-container__content")}>
+          <Typography
+            component="h3"
+            align="center"
+            variant="h3"
+            className={bem("heading__uppercase")}
+          >
+            About this application
+          </Typography>
+          <Typography component="p" align="center" variant="body2">
+            <Icons className={bem("avatar")} name="project-diagram" />
+            agent_name
+          </Typography>
+          <Typography className={bem("footer__links")}>
+            <Link href="/" variant="body2" className={bem("link")}>
+              <Icons name="globe" className={bem("icon-small", "primary")} />
+              Website
+            </Link>
+            <Link href="/" variant="body2">
+              <Icons name="webid" className={bem("icon-small", "primary")} />
+              Privacy
+            </Link>
+            <Link href="/" variant="body2">
+              <Icons name="doc" className={bem("icon-small", "primary")} />
+              Terms of Service
+            </Link>
+          </Typography>
         </div>
-        <div className={bem("request-container__content")}>TODO</div>
       </Container>
     </>
   );
