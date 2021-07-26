@@ -37,24 +37,37 @@ export default function styles(theme) {
       borderRadius: 8,
       boxShadow: "0 4px 12px 1px rgba(208,208,208,0.22)",
       display: "block",
-      padding: theme.spacing(1.6, 2.4, 1.2, 2.4),
+      padding: theme.spacing(2.4),
       width: 600,
       minHeight: 50,
     },
 
-    "request-container__content--main": {
-      flexGrow: 1,
-    },
-
-    "request-container__section--box": {
-      border: "solid 1px",
-      borderColor: theme.palette.grey["200"],
+    "request-container__section": {
+      padding: 0,
+      border: 0,
+      width: "100%",
       borderRadius: 4,
       display: "flex",
+      flexGrow: "1",
+      margin: 0,
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
+      marginBottom: "1rem",
+    },
+
+    "request-container__section--box": {
+      width: "100%",
+      border: "solid 1px",
+      borderColor: theme.palette.grey["200"],
       padding: theme.spacing(0.6, 1.2, 0.6, 1.2),
+    },
+
+    box__content: {
+      width: "100%",
+      display: "flex",
+      justifyContent: "space-between",
+      fontWeight: "normal",
     },
 
     "request-container__section-header": {
@@ -64,6 +77,7 @@ export default function styles(theme) {
     "request-container__button--small": {
       fontSize: "0.8rem",
       textTransform: "capitalize",
+      padding: theme.spacing(0.6),
     },
 
     "request-container__header-text": {
@@ -73,11 +87,12 @@ export default function styles(theme) {
       alignItems: "baseline",
       fontSize: "1.4rem",
       margin: "0",
+      width: "100%",
     },
 
     "request-container__header-text--small": {
-      fontSize: "1rem",
-      fontWeight: "normal",
+      fontSize: "0.8125rem",
+      fontFamily: theme.typography.body2.fontFamily,
     },
 
     "request-container__header-text--center": {
@@ -88,6 +103,42 @@ export default function styles(theme) {
       ...theme.icons.iconColor(theme.palette.info.main),
       fontSize: 16,
       marginRight: "0.5rem",
+    },
+
+    "icon-small--primary": {
+      color: theme.palette.primary.main,
+    },
+
+    form__controls: {
+      display: "flex",
+      justifyContent: "space-between",
+    },
+
+    heading__uppercase: {
+      textTransform: "uppercase",
+      marginBottom: theme.spacing(1),
+    },
+
+    footer__links: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginTop: theme.spacing(2),
+    },
+
+    avatar: {
+      textAlign: "center",
+      width: "30px",
+      height: "30px",
+      padding: theme.spacing(1),
+      borderRadius: "50%",
+      marginRight: theme.spacing(0.4),
+      fontSize: theme.typography.h6.fontSize,
+      color: theme.palette.primary.main,
+      backgroundColor: "#F1EDFF",
+      display: "inline-block",
+      position: "relative",
+      left: 0,
+      top: 0,
     },
   };
 }
