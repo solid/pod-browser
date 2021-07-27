@@ -30,8 +30,11 @@ import styles from "./styles";
 import {
   generateRedirectUrl,
   getCurrentHostname,
+  getCurrentOrigin,
 } from "../../src/windowHelpers";
+import { isLocalhost } from "../../src/stringHelpers";
 import useClientId from "../../src/hooks/useClientId";
+import { CLIENT_NAME, PUBLIC_OIDC_CLIENT } from "../../constants/constants";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
@@ -39,9 +42,9 @@ const TESTCAFE_ID_LOGIN_TITLE = "login-title";
 export const TESTCAFE_ID_OTHER_PROVIDERS_BUTTON = "other-providers-button";
 const PROVIDER_IRI = "https://broker.pod.inrupt.com/";
 const hostname = getCurrentHostname();
-const CLIENT_APP_WEBID = hostname.includes("localhost")
-  ? "http://www.w3.org/ns/solid/terms#PublicOidcClient"
-  : `${hostname}/api/app`;
+const CLIENT_APP_WEBID = isLocalhost(hostname)
+  ? PUBLIC_OIDC_CLIENT
+  : `${getCurrentOrigin()}/api/app`;
 
 export default function Login() {
   const bem = useBem(useStyles());
@@ -55,7 +58,7 @@ export default function Login() {
   const oidcSupported = useClientId(PROVIDER_IRI);
 
   const authOptions = {
-    clientName: "Inrupt PodBrowser",
+    clientName: CLIENT_NAME,
     clientId: oidcSupported.response ? CLIENT_APP_WEBID : null,
   };
 

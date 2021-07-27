@@ -21,7 +21,9 @@
 
 import React from "react";
 import { waitFor } from "@testing-library/dom";
+import { act } from "@testing-library/react-hooks";
 import userEvent from "@testing-library/user-event";
+import { fireEvent } from "@testing-library/react";
 import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import ProviderLogin, {
@@ -30,7 +32,9 @@ import ProviderLogin, {
   setupLoginHandler,
   setupOnProviderChange,
   TESTCAFE_ID_LOGIN_FIELD,
+  TESTCAFE_ID_GO_BUTTON,
 } from "./index";
+import * as useClientId from "../../../src/hooks/useClientId";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import useIdpFromQuery from "../../../src/hooks/useIdpFromQuery";
 
@@ -81,6 +85,27 @@ describe("ProviderLogin form", () => {
     const input = getByTestId(TESTCAFE_ID_LOGIN_FIELD).querySelector("input");
     expect(input.value).toEqual(label);
     expect(document.activeElement).toEqual(input);
+  });
+
+  it("calls checkOidcSupported method with the correct value on change", async () => {
+    const iri = "http://example.com";
+    const label = "example.com";
+    useIdpFromQuery.mockReturnValue({
+      iri,
+      label,
+    });
+
+    const checkOidcSupportSpy = jest.spyOn(useClientId, "checkOidcSupport");
+    const { getByTestId } = renderWithTheme(<ProviderLogin />);
+    const input = getByTestId(TESTCAFE_ID_LOGIN_FIELD).querySelector("input");
+    expect(input.value).toEqual(label);
+
+    fireEvent.change(input, {
+      target: { value: "https://broker.pod.inrupt.com" },
+    });
+    expect(checkOidcSupportSpy).toHaveBeenCalledWith(
+      "https://broker.pod.inrupt.com"
+    );
   });
 });
 

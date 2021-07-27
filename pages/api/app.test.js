@@ -27,18 +27,14 @@ const LOCALHOST_RESPONSE = {
   "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
   client_id: "http://www.w3.org/ns/solid/terms#PublicOidcClient",
   client_name: "Inrupt PodBrowser",
-  grant_types: ["refresh_token", "authorization_code"],
   redirect_uris: ["https://localhost:3000/"],
-  response_types: ["code"],
 };
 
 const PODBROWSER_RESPONSE = {
   "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
   client_id: "https://podbrowser.inrupt.com/api/app",
   client_name: "Inrupt PodBrowser",
-  grant_types: ["refresh_token", "authorization_code"],
   redirect_uris: ["https://podbrowser.inrupt.com/"],
-  response_types: ["code"],
 };
 
 describe("/api/app handler tests", () => {

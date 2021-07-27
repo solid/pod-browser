@@ -21,7 +21,7 @@
 
 /* eslint react/jsx-props-no-spreading: 0 */
 
-import React, { createRef, useRef, useEffect, useState } from "react";
+import React, { createRef, useEffect, useState } from "react";
 import T from "prop-types";
 import {
   FormControl,
@@ -39,21 +39,24 @@ import { checkOidcSupport } from "../../../src/hooks/useClientId";
 import {
   generateRedirectUrl,
   getCurrentHostname,
+  getCurrentOrigin,
 } from "../../../src/windowHelpers";
+import { isLocalhost } from "../../../src/stringHelpers";
 import getIdentityProviders from "../../../constants/provider";
 import { ERROR_REGEXES, hasError } from "../../../src/error";
 import useIdpFromQuery from "../../../src/hooks/useIdpFromQuery";
 import styles from "./styles";
+import { CLIENT_NAME, PUBLIC_OIDC_CLIENT } from "../../../constants/constants";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 const providers = getIdentityProviders();
 export const TESTCAFE_ID_LOGIN_FIELD = "login-field";
-const TESTCAFE_ID_GO_BUTTON = "go-button";
+export const TESTCAFE_ID_GO_BUTTON = "go-button";
 const hostname = getCurrentHostname();
-const CLIENT_APP_WEBID = hostname?.includes("localhost")
-  ? "http://www.w3.org/ns/solid/terms#PublicOidcClient"
-  : `${hostname}/api/app`;
+const CLIENT_APP_WEBID = isLocalhost(hostname)
+  ? PUBLIC_OIDC_CLIENT
+  : `${getCurrentOrigin()}/api/app`;
 
 export function setupOnProviderChange(setProviderIri, setLoginError) {
   return (e, newValue) => {
@@ -101,9 +104,8 @@ export default function Provider({ defaultError }) {
   const theme = useTheme();
   const idp = useIdpFromQuery();
   const [providerIri, setProviderIri] = useState();
-  const oidcRef = useRef();
   const [authOptions, setAuthOptions] = useState({
-    clientName: "Inrupt PodBrowser",
+    clientName: CLIENT_NAME,
   });
   const loginFieldRef = createRef();
 
@@ -116,16 +118,17 @@ export default function Provider({ defaultError }) {
 
   useEffect(() => {
     if (providerIri) {
-      oidcRef.current = checkOidcSupport(providerIri);
-
-      if (oidcRef.current === true) {
-        setAuthOptions({
-          clientName: "Inrupt PodBrowser",
-          clientId: CLIENT_APP_WEBID,
-        });
-      }
+      checkOidcSupport(providerIri).then((res) => {
+        if (res === true) {
+          setAuthOptions({ ...authOptions, clientId: CLIENT_APP_WEBID });
+        } else {
+          setAuthOptions({
+            clientName: CLIENT_NAME,
+          });
+        }
+      });
     }
-  }, [providerIri]);
+  }, [authOptions, providerIri]);
 
   const onProviderChange = setupOnProviderChange(setProviderIri, setLoginError);
   const handleLogin = setupLoginHandler(login);

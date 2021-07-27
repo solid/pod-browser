@@ -31,9 +31,18 @@ export function generateRedirectUrl(path) {
 }
 
 export function getCurrentHostname() {
-  return typeof window !== "undefined" && window.location.origin
-    ? window.location.origin
+  return typeof window !== "undefined" && window.location.hostname
+    ? window.location.hostname
     : "";
+}
+
+export function getCurrentOrigin() {
+  if (typeof window !== "undefined") {
+    const currentOrigin = window.location.origin;
+    return currentOrigin;
+  }
+
+  return "";
 }
 
 export function hardRedirect(path) {
