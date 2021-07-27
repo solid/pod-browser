@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 const providers = getIdentityProviders();
 export const TESTCAFE_ID_LOGIN_FIELD = "login-field";
-export const TESTCAFE_ID_GO_BUTTON = "go-button";
+const TESTCAFE_ID_GO_BUTTON = "go-button";
 const hostname = getCurrentHostname();
 const CLIENT_APP_WEBID = isLocalhost(hostname)
   ? PUBLIC_OIDC_CLIENT

@@ -32,7 +32,6 @@ import ProviderLogin, {
   setupLoginHandler,
   setupOnProviderChange,
   TESTCAFE_ID_LOGIN_FIELD,
-  TESTCAFE_ID_GO_BUTTON,
 } from "./index";
 import * as useClientId from "../../../src/hooks/useClientId";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
