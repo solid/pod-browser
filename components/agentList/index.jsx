@@ -50,6 +50,8 @@ import AgentsDrawer from "./agentsDrawer";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
+export const TESTCAFE_ID_AGENT_DRAWER = "agent-details-drawer";
+
 // temporarily using mock data for apps for dev purposes until we have audit list
 const app = mockApp();
 export function handleClose(setSelectedContactIndex) {
@@ -165,6 +167,7 @@ function AgentList({ contactType, setSearchValues }) {
 
   const drawer = (
     <AgentsDrawer
+      data-testid={TESTCAFE_ID_AGENT_DRAWER}
       open={selectedContactIndex !== null}
       onClose={closeDrawer}
       onDelete={deleteSelectedContact}

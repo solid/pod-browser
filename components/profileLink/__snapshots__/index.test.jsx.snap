@@ -1,5 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ProfileLink renders correct path for privacy contacts 1`] = `
+<DocumentFragment>
+  <a
+    data-testid="profile-link"
+    href="/privacy/person/https%3A%2F%2Fexample.com%2Fbob"
+  >
+    Bob
+  </a>
+</DocumentFragment>
+`;
+
+exports[`ProfileLink renders iri if name is not found 1`] = `
+<DocumentFragment>
+  <a
+    data-testid="profile-link"
+    href="/contacts/https%3A%2F%2Fmockiri.com"
+  >
+    https://mockiri.com
+  </a>
+</DocumentFragment>
+`;
+
 exports[`ProfileLink supports rendering name from foaf.name 1`] = `
 <DocumentFragment>
   <a
