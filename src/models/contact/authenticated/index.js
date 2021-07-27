@@ -34,6 +34,7 @@ const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 export const AUTHENTICATED_AGENT_PREDICATE =
   "http://www.w3.org/ns/solid/acp#AuthenticatedAgent";
 
+export const AUTHENTICATED_AGENT_NAME = "Anyone signed in";
 export const AUTHENTICATED_AGENT_TYPE = "authenticated";
 
 export const AUTHENTICATED_AGENT = {
