@@ -24,6 +24,8 @@ import userEvent from "@testing-library/user-event";
 import { useSession, useThing } from "@inrupt/solid-ui-react";
 import { addUrl, createThing } from "@inrupt/solid-client";
 import AddAgentRow, {
+  EXISTING_WEBID_ERROR_MESSAGE,
+  OWN_WEBID_ERROR_MESSAGE,
   TESTCAFE_ID_ADD_WEBID_BUTTON,
   TESTCAFE_ID_WEBID_INPUT,
 } from "./index";
@@ -42,7 +44,10 @@ describe("AddAgentRow", () => {
     const mockThing = createThing();
     beforeEach(() => {
       mockedThingHook.mockReturnValue({ thing: mockThing });
-      useSession.mockReturnValue({ fetch: jest.fn() });
+      useSession.mockReturnValue({
+        fetch: jest.fn(),
+        session: { info: { webId: "https://podownerwebid.com/" } },
+      });
       mockedUseContactProfile.mockReturnValue({ data: null });
     });
     const index = 0;
@@ -86,7 +91,27 @@ describe("AddAgentRow", () => {
       const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
       userEvent.type(input, "https://example.org/profile/card#me");
       userEvent.click(addButton);
-      const errorText = getByText("That WebID has already been added");
+      const errorText = getByText(EXISTING_WEBID_ERROR_MESSAGE);
+      expect(errorText).not.toBeNull();
+    });
+    it("renders a validation error if added webId is own webId", () => {
+      const { getByTestId, getByText } = renderWithTheme(
+        <AddAgentRow
+          index={index}
+          setNewAgentsWebIds={setNewAgentsWebIds}
+          newAgentsWebIds={newAgentsWebIds}
+          setAddingWebId={setAddingWebId}
+          setNoAgentsAlert={setNoAgentsAlert}
+          addingWebId={addingWebId}
+          updateTemporaryRowThing={updateTemporaryRowThing}
+          permissions={permissions}
+        />
+      );
+      const input = getByTestId(TESTCAFE_ID_WEBID_INPUT);
+      const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
+      userEvent.type(input, "https://podownerwebid.com/");
+      userEvent.click(addButton);
+      const errorText = getByText(OWN_WEBID_ERROR_MESSAGE);
       expect(errorText).not.toBeNull();
     });
     it("clears error when changing input again", () => {

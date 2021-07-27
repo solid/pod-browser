@@ -21,7 +21,6 @@ exports[`AddAgentRow when adding a new webId renders a row with an input for the
             title="Must start with https://"
           >
             <input
-              aria-invalid="false"
               class="PodBrowser-input PodBrowser-input"
               data-testid="webid-input"
               placeholder="Enter WebID"

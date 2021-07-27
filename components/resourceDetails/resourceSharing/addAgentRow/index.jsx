@@ -51,6 +51,9 @@ const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 export const TESTCAFE_ID_WEBID_INPUT = "webid-input";
 export const TESTCAFE_ID_ADD_WEBID_BUTTON = "add-button";
 const TESTCAFE_ID_AGENT_WEB_ID = "agent-webid";
+export const OWN_WEBID_ERROR_MESSAGE =
+  "You cannot add your own WebID to permissions";
+export const EXISTING_WEBID_ERROR_MESSAGE = "That WebID has already been added";
 
 const updateThingForNewRow = async (agentWebId, thing, fetch) => {
   let newThing;
@@ -85,15 +88,16 @@ export default function AddAgentRow({
   updateTemporaryRowThing,
   permissions,
 }) {
-  const { fetch } = useSession();
+  const { session, fetch } = useSession();
   const { thing: temporaryRowThing } = useThing();
   const classes = useStyles();
   const [agentWebId, setAgentWebId] = useState("");
-  const [existingPermission, setExistingPermission] = useState();
   const [agentName, setAgentName] = useState(null);
   const [agentAvatar, setAgentAvatar] = useState(null);
   const [displayedWebId, setDisplayedWebId] = useState(null);
   const { data: profile } = useContactProfile(temporaryRowThing);
+  const [addingError, setAddingError] = useState(null);
+
   useEffect(() => {
     if (profile) {
       setAgentName(profile.name);
@@ -112,9 +116,13 @@ export default function AddAgentRow({
 
   const handleAddAgentsWebIds = async (e) => {
     e.preventDefault();
+    if (agentWebId === session.info.webId) {
+      setAddingError(OWN_WEBID_ERROR_MESSAGE);
+      return;
+    }
     const existingWebId = permissions.filter((p) => p.webId === agentWebId);
     if (existingWebId.length) {
-      setExistingPermission(true);
+      setAddingError(EXISTING_WEBID_ERROR_MESSAGE);
       return;
     }
     setNewAgentsWebIds([...newAgentsWebIds, agentWebId]);
@@ -136,12 +144,10 @@ export default function AddAgentRow({
               aria-label="Enter WebID"
               placeholder="Enter WebID"
               value={agentWebId}
-              error={existingPermission}
-              helperText={
-                existingPermission ? "That WebID has already been added" : null
-              }
+              error={addingError}
+              helperText={addingError}
               onChange={(e) => {
-                setExistingPermission(false);
+                setAddingError(null);
                 setAgentWebId(e.target.value);
               }}
               classes={{ root: classes.searchInput }}
