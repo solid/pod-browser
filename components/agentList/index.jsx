@@ -31,7 +31,7 @@ import {
 } from "@inrupt/prism-react-components";
 import { getSourceUrl, getStringNoLocale, getUrl } from "@inrupt/solid-client";
 import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
-import { vcard, foaf } from "rdf-namespaces";
+import { vcard, foaf, schema } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";
 import Spinner from "../spinner";
 import AgentAvatar from "../agentAvatar";
@@ -106,7 +106,7 @@ function AgentList({ contactType, setSearchValues }) {
     if (contactType === "all") {
       setProfilesForTable(profiles ? [...profiles, app] : [app]);
     }
-    if (contactType === "app") {
+    if (contactType === schema.SoftwareApplication) {
       setProfilesForTable([app]);
     }
   }, [profiles, contactType]);

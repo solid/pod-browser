@@ -46,6 +46,7 @@ export default function AgentsDrawer({
   contactType,
 }) {
   const actionMenuBem = ActionMenu.useBem();
+
   const path = contactType === schema.Person ? "person" : "app";
   return (
     <Drawer open={open} close={onClose}>
