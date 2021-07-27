@@ -238,7 +238,7 @@ exports[`PrivacyPage renders 1`] = `
                         >
                           <a
                             class="PodBrowser-action-menu__trigger"
-                            href="/privacy"
+                            href="/privacy/app"
                           >
                             View Profile
                           </a>

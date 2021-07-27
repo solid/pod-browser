@@ -22,9 +22,9 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { render } from "@testing-library/react";
-import { mockThingFrom, setStringNoLocale } from "@inrupt/solid-client";
+import { addUrl, mockThingFrom, setStringNoLocale } from "@inrupt/solid-client";
 import { ThingProvider } from "@inrupt/solid-ui-react";
-import { foaf, vcard } from "rdf-namespaces";
+import { foaf, rdf, vcard, schema } from "rdf-namespaces";
 import ProfileLink, { buildProfileLink } from "./index";
 import { chain } from "../../src/solidClientHelpers/utils";
 
@@ -35,8 +35,10 @@ const mockedUseRouter = useRouter;
 const alice = chain(mockThingFrom("https://example.com/alice"), (t) =>
   setStringNoLocale(t, vcard.fn, "Alice")
 );
-const bob = chain(mockThingFrom("https://example.com/bob"), (t) =>
-  setStringNoLocale(t, foaf.name, "Bob")
+const bob = chain(
+  mockThingFrom("https://example.com/bob"),
+  (t) => setStringNoLocale(t, foaf.name, "Bob"),
+  (t) => addUrl(t, rdf.type, schema.Person)
 );
 const iri = "/iri with spaces";
 
@@ -63,12 +65,38 @@ describe("ProfileLink", () => {
     );
     expect(asFragment()).toMatchSnapshot();
   });
+
+  it("renders iri if name is not found", () => {
+    const { asFragment } = render(
+      <ThingProvider thing={mockThingFrom("https://mockiri.com")}>
+        <ProfileLink />
+      </ThingProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("renders correct path for privacy contacts", () => {
+    mockedUseRouter.mockReturnValueOnce({
+      route: "/privacy",
+    });
+    const { asFragment } = render(
+      <ThingProvider thing={bob}>
+        <ProfileLink />
+      </ThingProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
 });
 
 describe("buildProfileLink", () => {
-  it("generates a valid path", () => {
+  it("generates a valid path when path is contacts", () => {
     expect(buildProfileLink(iri, "/contacts")).toEqual(
       `/contacts/${encodeURIComponent(iri)}`
+    );
+  });
+  it("generates a valid path when path is privacy", () => {
+    expect(buildProfileLink(iri, "/privacy", "app")).toEqual(
+      `/privacy/app/${encodeURIComponent(iri)}`
     );
   });
 });

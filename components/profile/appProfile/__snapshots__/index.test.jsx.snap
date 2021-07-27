@@ -1,27 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Profile renders a person profile 1`] = `
-<DocumentFragment>
-  <div
-    class="PodBrowser-container"
-  >
-    <div
-      class="PodBrowser-root PodBrowser-elevation1 PodBrowser-rounded"
-      style="margin-top: 1em;"
-    >
-      <div
-        class="PodBrowser-root PodBrowser-root"
-      >
-        <span>
-          Fetching data...
-        </span>
-      </div>
-    </div>
-  </div>
-</DocumentFragment>
-`;
-
-exports[`Profile renders an app profile 1`] = `
+exports[`App Profile renders a mock app profile 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-container"
@@ -160,7 +139,7 @@ exports[`Profile renders an app profile 1`] = `
                 <td
                   role="cell"
                 >
-                  https://alice2.example.org/card#me
+                  https://examplewebsite.com
                 </td>
               </tr>
               <tr
@@ -175,7 +154,9 @@ exports[`Profile renders an app profile 1`] = `
                 </td>
                 <td
                   role="cell"
-                />
+                >
+                  555-5555
+                </td>
               </tr>
               <tr
                 role="row"
@@ -189,13 +170,27 @@ exports[`Profile renders an app profile 1`] = `
                 </td>
                 <td
                   role="cell"
-                />
+                >
+                  example@email.com
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`setupErrorComponent renders 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiAvatar-root MuiAvatar-circle appAvatar MuiAvatar-colorDefault"
+  >
+    <span
+      class="makeStyles-icon-project-diagram-1521 appAvatar"
+    />
   </div>
 </DocumentFragment>
 `;

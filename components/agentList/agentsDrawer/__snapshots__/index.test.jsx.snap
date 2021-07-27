@@ -90,7 +90,7 @@ exports[`AgentsDrawer renders 1`] = `
                       >
                         <a
                           class="PodBrowser-action-menu__trigger"
-                          href="/privacy/https%3A%2F%2Fexample.com%2Fprofile%23alice"
+                          href="/privacy/app/https%3A%2F%2Fexample.com%2Fprofile%23alice"
                         >
                           View Profile
                         </a>

@@ -20,20 +20,27 @@
  */
 
 import React from "react";
+import { render } from "@testing-library/react";
 import * as solidClientFns from "@inrupt/solid-client";
 import { schema } from "rdf-namespaces";
-import { renderWithTheme } from "../../__testUtils/withTheme";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
 import {
   aliceWebIdUrl,
   mockPersonDatasetAlice,
-} from "../../__testUtils/mockPersonResource";
-import mockSession from "../../__testUtils/mockSession";
-import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
-import Profile from "./index";
+} from "../../../__testUtils/mockPersonResource";
+import mockSession from "../../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
+import PersonProfile, {
+  TESTCAFE_ID_NAME_FIELD,
+  TESTCAFE_ID_NAME_TITLE,
+  TESTCAFE_ID_ORG_FIELD,
+  TESTCAFE_ID_ROLE_FIELD,
+} from "../index";
+import { setupErrorComponent } from ".";
 
 const profileIri = "https://example.com/profile/card#me";
 
-describe("Profile", () => {
+describe("Person Profile", () => {
   const profileDataset = mockPersonDatasetAlice();
   const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
 
@@ -44,28 +51,41 @@ describe("Profile", () => {
     jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
   });
 
-  test("renders a person profile", async () => {
+  test("renders a profile", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
-    const { asFragment } = renderWithTheme(
+    const { asFragment, findByTestId } = renderWithTheme(
       <SessionProvider>
-        <Profile profileIri={profileIri} type={schema.Person} />
+        <PersonProfile profileIri={profileIri} type={schema.Person} />
       </SessionProvider>
+    );
+    await expect(findByTestId(TESTCAFE_ID_NAME_TITLE)).resolves.not.toBeNull();
+    expect(await findByTestId(TESTCAFE_ID_NAME_TITLE)).toHaveTextContent(
+      "Alice"
     );
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("renders an app profile", async () => {
+  test("renders an editable profile", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
-    const { asFragment } = renderWithTheme(
+    const { asFragment, findByTestId } = renderWithTheme(
       <SessionProvider>
-        <Profile
-          profileIri="https://mockappurl.com"
-          type={schema.SoftwareApplication}
-        />
+        <PersonProfile profileIri={profileIri} editing type={schema.Person} />
       </SessionProvider>
     );
+    await expect(findByTestId(TESTCAFE_ID_NAME_FIELD)).resolves.not.toBeNull();
+    await expect(findByTestId(TESTCAFE_ID_ROLE_FIELD)).resolves.not.toBeNull();
+    await expect(findByTestId(TESTCAFE_ID_ORG_FIELD)).resolves.not.toBeNull();
+
+    expect(asFragment()).toMatchSnapshot();
+  });
+});
+
+describe("setupErrorComponent", () => {
+  it("renders", () => {
+    const bem = (value) => value;
+    const { asFragment } = render(setupErrorComponent(bem)());
     expect(asFragment()).toMatchSnapshot();
   });
 });

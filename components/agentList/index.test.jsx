@@ -21,8 +21,9 @@
 
 import React from "react";
 import * as solidClientFns from "@inrupt/solid-client";
+import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
-import { foaf } from "rdf-namespaces";
+import { foaf, schema } from "rdf-namespaces";
 import { screen, waitFor } from "@testing-library/react";
 import * as addressBookFns from "../../src/addressBook";
 import useAddressBookOld from "../../src/hooks/useAddressBookOld";
@@ -39,7 +40,10 @@ import {
 } from "../../__testUtils/mockPersonResource";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
-import AgentList, { handleDeleteContact } from "./index";
+import AgentList, {
+  handleDeleteContact,
+  TESTCAFE_ID_AGENT_DRAWER,
+} from "./index";
 import { mockAddressBookDataset } from "../../__testUtils/mockAddressBook";
 
 jest.mock("../../src/hooks/useAddressBookOld");
@@ -199,7 +203,10 @@ describe("AgentList", () => {
 
     const { getByText } = renderWithTheme(
       <SessionProvider>
-        <AgentList contactType="app" setSearchValues={setSearchValues} />
+        <AgentList
+          contactType={schema.SoftwareApplication}
+          setSearchValues={setSearchValues}
+        />
       </SessionProvider>
     );
     waitFor(() => {
@@ -248,6 +255,32 @@ describe("AgentList", () => {
     );
     waitFor(() => {
       expect(getByText("Mock App")).toBeInTheDocument();
+    });
+  });
+
+  it("opens details drawer when clicking on a contact row", async () => {
+    mockUseAddressBook.mockReturnValue([null, null]);
+    mockUseContacts.mockReturnValue({
+      data: null,
+      error: undefined,
+      mutate: () => {},
+    });
+    mockUseProfiles.mockReturnValue(null);
+
+    const { getByRole, getByText } = renderWithTheme(
+      <SessionProvider>
+        <AgentList
+          contactType={schema.SoftwareApplication}
+          setSearchValues={setSearchValues}
+        />
+      </SessionProvider>
+    );
+    waitFor(() => {
+      expect(getByText("Mock App")).toBeInTheDocument();
+      const row = getByRole("row");
+      userEvent.click(row);
+      expect(TESTCAFE_ID_AGENT_DRAWER).toBeInTheDocument();
+      expect(TESTCAFE_ID_AGENT_DRAWER).toHaveTextContent("Mock App");
     });
   });
 

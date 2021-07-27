@@ -76,7 +76,7 @@ exports[`AgentList renders page when people is loaded 1`] = `
             >
               <a
                 data-testid="profile-link"
-                href="/privacy/http%3A%2F%2Falice.example.com%2Falice%23me"
+                href="/privacy/app/http%3A%2F%2Falice.example.com%2Falice%23me"
               >
                 Alice
               </a>
@@ -113,7 +113,7 @@ exports[`AgentList renders page when people is loaded 1`] = `
             >
               <a
                 data-testid="profile-link"
-                href="/privacy/http%3A%2F%2Fbob.example.com%2Fbob%23me"
+                href="/privacy/app/http%3A%2F%2Fbob.example.com%2Fbob%23me"
               >
                 Bob
               </a>
@@ -213,7 +213,7 @@ exports[`AgentList renders page when people is loaded 1`] = `
                         >
                           <a
                             class="PodBrowser-action-menu__trigger"
-                            href="/privacy"
+                            href="/privacy/app"
                           >
                             View Profile
                           </a>

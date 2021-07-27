@@ -29,16 +29,9 @@ import {
   DrawerContainer,
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
-import {
-  addStringNoLocale,
-  addUrl,
-  createThing,
-  getSourceUrl,
-  getStringNoLocale,
-  getUrl,
-} from "@inrupt/solid-client";
+import { getSourceUrl, getStringNoLocale, getUrl } from "@inrupt/solid-client";
 import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
-import { vcard, foaf } from "rdf-namespaces";
+import { vcard, foaf, schema, rdf } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";
 import Spinner from "../spinner";
 import AgentAvatar from "../agentAvatar";
@@ -47,7 +40,7 @@ import styles from "./styles";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import useAddressBookOld from "../../src/hooks/useAddressBookOld";
 import useContactsOld from "../../src/hooks/useContactsOld";
-import { chain } from "../../src/solidClientHelpers/utils";
+import { mockApp } from "../../__testUtils/mockApp";
 import useProfiles from "../../src/hooks/useProfiles";
 import ProfileLink from "../profileLink";
 import SearchContext from "../../src/contexts/searchContext";
@@ -57,12 +50,10 @@ import AgentsDrawer from "./agentsDrawer";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-// termporarily using mock data for apps for dev purposes until we have audit list
-const mockApp = chain(
-  createThing({ url: "https://mockappurl.com" }),
-  (t) => addStringNoLocale(t, vcard.fn, "Mock App"),
-  (t) => addUrl(t, vcardExtras("WebId"), "https://mockappurl.com")
-);
+export const TESTCAFE_ID_AGENT_DRAWER = "agent-details-drawer";
+
+// temporarily using mock data for apps for dev purposes until we have audit list
+const app = mockApp();
 export function handleClose(setSelectedContactIndex) {
   return () => setSelectedContactIndex(null);
 }
@@ -96,6 +87,7 @@ export function handleDeleteContact({
 function AgentList({ contactType, setSearchValues }) {
   useRedirectIfLoggedOut();
   const tableClass = PrismTable.useTableClass("table", "inherits");
+  const [agentType, setAgentType] = useState(null);
   const classes = useStyles();
   const bem = useBem(classes);
   const { search } = useContext(SearchContext);
@@ -115,10 +107,10 @@ function AgentList({ contactType, setSearchValues }) {
       setProfilesForTable(profiles);
     }
     if (contactType === "all") {
-      setProfilesForTable(profiles ? [...profiles, mockApp] : [mockApp]);
+      setProfilesForTable(profiles ? [...profiles, app] : [app]);
     }
-    if (contactType === "app") {
-      setProfilesForTable([mockApp]);
+    if (contactType === schema.SoftwareApplication) {
+      setProfilesForTable([app]);
     }
   }, [profiles, contactType]);
 
@@ -142,6 +134,8 @@ function AgentList({ contactType, setSearchValues }) {
     if (selectedContactIndex === null) return;
     const contactThing = profilesForTable[selectedContactIndex];
     const name = getStringNoLocale(contactThing, formattedNamePredicate);
+    const type = getUrl(contactThing, rdf.type);
+    setAgentType(type);
     setSelectedContactName(name);
     const webId = getUrl(contactThing, vcardExtras("WebId"));
     setSelectedContactWebId(webId);
@@ -158,6 +152,7 @@ function AgentList({ contactType, setSearchValues }) {
   const contactsForTable = profilesForTable.map((p) => ({
     thing: p,
     dataset: addressBook,
+    type: contactType,
   }));
 
   const closeDrawer = handleClose(setSelectedContactIndex);
@@ -172,9 +167,11 @@ function AgentList({ contactType, setSearchValues }) {
 
   const drawer = (
     <AgentsDrawer
+      data-testid={TESTCAFE_ID_AGENT_DRAWER}
       open={selectedContactIndex !== null}
       onClose={closeDrawer}
       onDelete={deleteSelectedContact}
+      agentType={agentType}
       selectedContactName={selectedContactName}
       profileIri={selectedContactWebId}
     />

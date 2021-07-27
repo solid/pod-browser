@@ -26,7 +26,7 @@ import { makeStyles } from "@material-ui/styles";
 import { Icons } from "@inrupt/prism-react-components";
 import { Avatar, createStyles } from "@material-ui/core";
 import { getUrl } from "@inrupt/solid-client";
-import { rdf } from "rdf-namespaces";
+import { rdf, schema } from "rdf-namespaces";
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -34,10 +34,10 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export default function AgentAvatar({ imageUrl, altText }) {
   const { thing } = useThing();
   const classes = useStyles();
-  const contactType = getUrl(thing, rdf.type) || "app";
-  if (!imageUrl && contactType === "app") {
+  const contactType = getUrl(thing, rdf.type);
+  if (!imageUrl && contactType === schema.SoftwareApplication) {
     return (
-      <Avatar className={classes.appAvatar} alt={altText || "Contact avatar"}>
+      <Avatar className={classes.appAvatar}>
         <Icons className={classes.appAvatar} name="project-diagram" />
       </Avatar>
     );

@@ -20,10 +20,10 @@
  */
 
 import { ThingProvider } from "@inrupt/solid-ui-react";
-import { mockThingFrom } from "@inrupt/solid-client";
 import React from "react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockPersonContactThing from "../../__testUtils/mockPersonContactThing";
+import { mockApp } from "../../__testUtils/mockApp";
 import AgentAvatar from "./index";
 
 describe("AgentAvatar", () => {
@@ -36,11 +36,20 @@ describe("AgentAvatar", () => {
     );
     expect(asFragment()).toMatchSnapshot();
   });
+  it("adds default alt text for contact if none is passed", () => {
+    const contact = mockPersonContactThing("https://examplewebid.com");
+    const { getByRole } = renderWithTheme(
+      <ThingProvider thing={contact}>
+        <AgentAvatar imageUrl="https://example.org" />
+      </ThingProvider>
+    );
+    expect(getByRole("img")).toHaveAttribute("alt", "Contact avatar");
+  });
   it("renders fallback icon for app contact", () => {
-    const thing = mockThingFrom("https://someappwebid.com");
+    const app = mockApp();
     const { asFragment } = renderWithTheme(
-      <ThingProvider thing={thing}>
-        <AgentAvatar imageUrl="https://example.org" altText="alt text" />
+      <ThingProvider thing={app}>
+        <AgentAvatar />
       </ThingProvider>
     );
     expect(asFragment()).toMatchSnapshot();

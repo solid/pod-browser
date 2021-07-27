@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { foaf } from "rdf-namespaces";
+import { schema } from "rdf-namespaces";
 import React, { useState } from "react";
 import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
@@ -31,9 +31,9 @@ import { SearchProvider } from "../../../src/contexts/searchContext";
 export const TESTCAFE_ID_TAB_ALL = "tab-all";
 export const TESTCAFE_ID_TAB_PEOPLE = "tab-people";
 export const TESTCAFE_ID_TAB_APPS = "tab-apps";
-const PERSON_CONTACT_TYPE = foaf.Person;
+const PERSON_CONTACT_TYPE = schema.Person;
 // FIXME: replace with app contact type iri
-const APP_CONTACT_TYPE = "app"; // this string for now until we define what type the app contact will be
+const APP_CONTACT_TYPE = schema.SoftwareApplication; // this string for now until we define what type the app contact will be
 
 export default function PrivacyPage() {
   useRedirectIfLoggedOut();
@@ -62,7 +62,7 @@ export default function PrivacyPage() {
   const handleTabChange = (event, value) => {
     setSelectedTabValue(value);
     // FIXME: for now until we do display a contact list with apps
-    if (value === "app") {
+    if (value === APP_CONTACT_TYPE) {
       setSearchValues(null);
     }
   };
