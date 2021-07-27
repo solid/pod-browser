@@ -67,6 +67,10 @@ export function handleClose(setSelectedContactIndex) {
   return () => setSelectedContactIndex(null);
 }
 
+const RowAvatar = ({ value, row }) => (
+  <AgentAvatar altText={row.values.col1} imageUrl={value} />
+);
+
 export function handleDeleteContact({
   addressBook,
   closeDrawer,
@@ -212,9 +216,7 @@ function AgentList({ contactType, setSearchValues }) {
           property={hasPhotoPredicate}
           header=""
           dataType="url"
-          body={({ value, row }) => (
-            <AgentAvatar imageUrl={value} altText={row.values.col1} />
-          )}
+          body={RowAvatar}
         />
         <TableColumn
           property={formattedNamePredicate}
@@ -242,6 +244,20 @@ AgentList.propTypes = {
 
 AgentList.defaultProps = {
   contactType: "",
+};
+
+RowAvatar.propTypes = {
+  value: PropTypes.string,
+  row: PropTypes.shape({
+    values: PropTypes.shape({
+      col1: PropTypes.string,
+    }),
+  }),
+};
+
+RowAvatar.defaultProps = {
+  value: null,
+  row: null,
 };
 
 export default AgentList;
