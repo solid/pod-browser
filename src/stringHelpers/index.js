@@ -69,6 +69,6 @@ export function getParentContainerUrl(url) {
     : parts.slice(0, -1).join("/").concat("/");
 }
 
-export function isLocalhost(url) {
-  return url === "localhost";
+export function isLocalhost(hostname) {
+  return hostname === "localhost";
 }
