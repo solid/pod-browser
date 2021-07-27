@@ -31,7 +31,7 @@ import {
 } from "@inrupt/prism-react-components";
 import { getSourceUrl, getStringNoLocale, getUrl } from "@inrupt/solid-client";
 import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
-import { vcard, foaf, schema } from "rdf-namespaces";
+import { vcard, foaf, schema, rdf } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";
 import Spinner from "../spinner";
 import AgentAvatar from "../agentAvatar";
@@ -85,6 +85,7 @@ export function handleDeleteContact({
 function AgentList({ contactType, setSearchValues }) {
   useRedirectIfLoggedOut();
   const tableClass = PrismTable.useTableClass("table", "inherits");
+  const [agentType, setAgentType] = useState(null);
   const classes = useStyles();
   const bem = useBem(classes);
   const { search } = useContext(SearchContext);
@@ -131,6 +132,8 @@ function AgentList({ contactType, setSearchValues }) {
     if (selectedContactIndex === null) return;
     const contactThing = profilesForTable[selectedContactIndex];
     const name = getStringNoLocale(contactThing, formattedNamePredicate);
+    const type = getUrl(contactThing, rdf.type);
+    setAgentType(type);
     setSelectedContactName(name);
     const webId = getUrl(contactThing, vcardExtras("WebId"));
     setSelectedContactWebId(webId);
@@ -165,7 +168,7 @@ function AgentList({ contactType, setSearchValues }) {
       open={selectedContactIndex !== null}
       onClose={closeDrawer}
       onDelete={deleteSelectedContact}
-      contactType={contactType}
+      agentType={agentType}
       selectedContactName={selectedContactName}
       profileIri={selectedContactWebId}
     />

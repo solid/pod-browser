@@ -43,11 +43,11 @@ export default function AgentsDrawer({
   onDelete,
   selectedContactName,
   profileIri,
-  contactType,
+  agentType,
 }) {
   const actionMenuBem = ActionMenu.useBem();
 
-  const path = contactType === schema.Person ? "person" : "app";
+  const path = agentType === schema.Person ? "person" : "app";
   return (
     <Drawer open={open} close={onClose}>
       <Accordion defaultExpanded square>
@@ -81,5 +81,5 @@ AgentsDrawer.propTypes = {
   onDelete: T.func.isRequired,
   selectedContactName: T.string.isRequired,
   profileIri: T.string.isRequired,
-  contactType: T.string.isRequired,
+  agentType: T.string.isRequired,
 };
