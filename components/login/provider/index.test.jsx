@@ -21,7 +21,6 @@
 
 import React from "react";
 import { waitFor } from "@testing-library/dom";
-import { act } from "@testing-library/react-hooks";
 import userEvent from "@testing-library/user-event";
 import { fireEvent } from "@testing-library/react";
 import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
