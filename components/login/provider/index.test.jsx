@@ -95,7 +95,7 @@ describe("ProviderLogin form", () => {
 
     const checkOidcSupportSpy = jest
       .spyOn(useClientId, "checkOidcSupport")
-      .mockImplementation(async () => true);
+      .mockResolvedValue(true);
     const { getByTestId } = renderWithTheme(<ProviderLogin />);
     const input = getByTestId(TESTCAFE_ID_LOGIN_FIELD).querySelector("input");
     expect(input.value).toEqual(label);
