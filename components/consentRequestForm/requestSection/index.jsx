@@ -42,6 +42,10 @@ export default function RequestSection(props) {
 
   const [requestModes, setRequestModes] = useState([]);
 
+  const [isChecked, setIsChecked] = useState(
+    new Array(sectionDetails.forPersonalData.length).fill(false)
+  );
+
   const buildModeString = (modeArray, conjunction) => {
     const l = modeArray.length;
     let arrayCopy = modeArray;
@@ -60,6 +64,20 @@ export default function RequestSection(props) {
     }
   }, [sectionDetails]);
 
+  const toggleAllSwitches = () => {
+    const updatedAllCheckedState = isChecked.map(() => true);
+
+    setIsChecked(updatedAllCheckedState);
+  };
+
+  const handleOnChange = (position) => {
+    const updatedCheckedState = isChecked.map((item, index) =>
+      index === position ? !item : item
+    );
+
+    setIsChecked(updatedCheckedState);
+  };
+
   return (
     <>
       <FormControl
@@ -67,13 +85,14 @@ export default function RequestSection(props) {
         className={bem("request-container__section")}
       >
         <legend className={bem("request-container__header-text", "small")}>
-          <span>
-            <Icons name="edit" className={bem("icon-small")} />
+          <Icons name="edit" className={bem("icon-small")} />
+          <span className={bem("header__content")}>
             {`${agentName} wants to ${requestModes}`}
           </span>
           <Button
             variant="secondary"
             type="button"
+            onClick={toggleAllSwitches}
             className={bem("request-container__button", "small")}
           >
             <Typography component="span" variant="body2">
@@ -86,19 +105,34 @@ export default function RequestSection(props) {
           row
           className={bem("request-container__section", "box")}
         >
-          <FormControlLabel
-            value="start"
-            control={<Switch color="primary" />}
-            label={
-              // eslint-disable-next-line react/jsx-wrap-multilines
-              <Typography variant="body2">
-                <Icons name="app" className={bem("icon-small")} />
-                Your Pod
-              </Typography>
-            }
-            labelPlacement="start"
-            className={bem("box__content")}
-          />
+          {sectionDetails.forPersonalData &&
+            sectionDetails.forPersonalData.map((resource, index) => {
+              return (
+                <FormControlLabel
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={index}
+                  value="start"
+                  // eslint-disable-next-line prettier/prettier
+                  control={
+                    <Switch
+                      checked={isChecked[index]}
+                      onChange={() => handleOnChange(index)}
+                      color="primary"
+                    />
+                    // eslint-disable-next-line prettier/prettier
+                  }
+                  label={
+                    // eslint-disable-next-line react/jsx-wrap-multilines
+                    <Typography variant="body2">
+                      <Icons name="app" className={bem("icon-small")} />
+                      {resource}
+                    </Typography>
+                  }
+                  labelPlacement="start"
+                  className={bem("box__content")}
+                />
+              );
+            })}
         </FormGroup>
       </FormControl>
     </>
@@ -107,5 +141,6 @@ export default function RequestSection(props) {
 
 RequestSection.propTypes = {
   agentName: T.string.isRequired,
-  sectionDetails: T.objectOf(T.string).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  sectionDetails: T.object.isRequired,
 };

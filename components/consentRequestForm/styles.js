@@ -26,10 +26,8 @@ export default function styles(theme) {
       flexDirection: "column",
       margin: theme.spacing(1, 0),
       alignItems: "center",
-      [theme.breakpoints.up("sm")]: {
-        display: "flex",
-        gap: "1rem",
-      },
+      display: "flex",
+      gap: "1rem",
     },
     "request-container__content": {
       border: "solid 1px",
@@ -85,11 +83,14 @@ export default function styles(theme) {
     "request-container__header-text": {
       display: "flex",
       flexDirection: "row",
-      justifyContent: "space-between",
       alignItems: "baseline",
       fontSize: "1.4rem",
       margin: "0",
       width: "100%",
+    },
+
+    header__content: {
+      flexGrow: 1,
     },
 
     "request-container__header-text--small": {
@@ -114,6 +115,9 @@ export default function styles(theme) {
     form__controls: {
       display: "flex",
       justifyContent: "space-between",
+      [theme.breakpoints.down("md")]: {
+        flexDirection: "column-reverse",
+      },
     },
 
     heading__uppercase: {

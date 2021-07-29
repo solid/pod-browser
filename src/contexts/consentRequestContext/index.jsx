@@ -23,7 +23,7 @@ import React, { createContext } from "react";
 import T from "prop-types";
 
 const defaultValues = {
-  consentRequest: "",
+  consentRequest: {},
   setConsentRequest: () => {},
 };
 const ConsentRequestContext = createContext(defaultValues);
@@ -44,7 +44,8 @@ function ConsentRequestProvider({
 
 ConsentRequestProvider.propTypes = {
   children: T.node.isRequired,
-  consentRequest: {},
+  // eslint-disable-next-line react/forbid-prop-types
+  consentRequest: T.object,
   setConsentRequest: T.func,
 };
 

@@ -26,10 +26,8 @@ export default function styles(theme) {
       flexDirection: "column",
       margin: theme.spacing(1, 0),
       alignItems: "center",
-      [theme.breakpoints.up("sm")]: {
-        display: "flex",
-        gap: "1rem",
-      },
+      display: "flex",
+      gap: "1rem",
     },
     "request-container__content": {
       border: "solid 1px",

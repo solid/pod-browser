@@ -26,10 +26,8 @@ export default function styles(theme) {
       flexDirection: "column",
       margin: theme.spacing(1, 0),
       alignItems: "center",
-      [theme.breakpoints.up("sm")]: {
-        display: "flex",
-        gap: "1rem",
-      },
+      display: "flex",
+      gap: "1rem",
     },
     "request-container__content": {
       border: "solid 1px",
@@ -124,6 +122,19 @@ export default function styles(theme) {
       display: "flex",
       justifyContent: "space-between",
       marginTop: theme.spacing(2),
+      [theme.breakpoints.down("md")]: {
+        flexDirection: "column",
+        alignItems: "baseline",
+        width: "fit-content",
+        margin: "1rem auto",
+      },
+    },
+
+    footer__link: {
+      [theme.breakpoints.down("md")]: {
+        display: "block",
+        height: "2rem",
+      },
     },
 
     avatar: {
