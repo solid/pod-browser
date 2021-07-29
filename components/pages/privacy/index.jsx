@@ -83,7 +83,7 @@ export default function PrivacyPage() {
             contactType={selectedTabValue}
             setSearchValues={setSearchValues}
           />
-          <Link href="/privacy/consent/test-request">
+          <Link href="/privacy/consent/requests/test-request">
             <a>View test request</a>
           </Link>
         </>
