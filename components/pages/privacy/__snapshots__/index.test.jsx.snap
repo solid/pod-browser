@@ -266,7 +266,7 @@ exports[`PrivacyPage renders 1`] = `
     </section>
   </div>
   <a
-    href="/privacy/consent/test-request"
+    href="/privacy/consent/requests/test-request"
   >
     View test request
   </a>
