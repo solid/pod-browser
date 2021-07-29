@@ -68,18 +68,24 @@ export default function ConsentShow() {
             agent_name
           </Typography>
           <Typography className={bem("footer__links")}>
-            <Link href="/" variant="body2" className={bem("link")}>
-              <Icons name="globe" className={bem("icon-small", "primary")} />
-              Website
-            </Link>
-            <Link href="/" variant="body2">
-              <Icons name="webid" className={bem("icon-small", "primary")} />
-              Privacy
-            </Link>
-            <Link href="/" variant="body2">
-              <Icons name="doc" className={bem("icon-small", "primary")} />
-              Terms of Service
-            </Link>
+            <span className={bem("footer__link")}>
+              <Link href="/" variant="body2">
+                <Icons name="globe" className={bem("icon-small", "primary")} />
+                Website
+              </Link>
+            </span>
+            <span className={bem("footer__link")}>
+              <Link href="/" variant="body2">
+                <Icons name="webid" className={bem("icon-small", "primary")} />
+                Privacy
+              </Link>
+            </span>
+            <span className={bem("footer__link")}>
+              <Link href="/" variant="body2">
+                <Icons name="doc" className={bem("icon-small", "primary")} />
+                Terms of Service
+              </Link>
+            </span>
           </Typography>
         </div>
       </Container>
