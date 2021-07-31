@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Agent show page Renders the Agent show page 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-container PodBrowser-request-container"
+  >
+    <form
+      class="PodBrowser-request-container__content"
+    >
+      <h2
+        class="PodBrowser-root PodBrowser-h2 PodBrowser-alignCenter"
+      >
+        Allow undefined access?
+      </h2>
+      <p>
+        test-request
+      </p>
+      <div
+        class="PodBrowser-form__controls"
+      >
+        <button
+          class="PodBrowser-button PodBrowser-button--secondary"
+        >
+          <span
+            class="PodBrowser-button__text"
+          >
+            Deny all access
+          </span>
+        </button>
+        <button
+          class="PodBrowser-button"
+          type="submit"
+        >
+          <span
+            class="PodBrowser-button__text"
+          >
+            Confirm Access
+          </span>
+        </button>
+      </div>
+    </form>
+    <div
+      class="PodBrowser-request-container__content"
+    >
+      <h3
+        class="PodBrowser-root PodBrowser-heading__uppercase PodBrowser-h3 PodBrowser-alignCenter"
+      >
+        About this application
+      </h3>
+      <p
+        class="PodBrowser-root PodBrowser-body2 PodBrowser-alignCenter"
+      >
+        <span
+          class="PodBrowser-icon-project-diagram PodBrowser-avatar"
+        />
+        agent_name
+      </p>
+      <p
+        class="PodBrowser-root PodBrowser-footer__links PodBrowser-body1"
+      >
+        <span
+          class="PodBrowser-footer__link"
+        >
+          <a
+            class="PodBrowser-root PodBrowser-root PodBrowser-underlineHover PodBrowser-body2 PodBrowser-colorPrimary"
+            href="/"
+          >
+            <span
+              class="PodBrowser-icon-globe PodBrowser-icon-small PodBrowser-icon-small--primary"
+            />
+            Website
+          </a>
+        </span>
+        <span
+          class="PodBrowser-footer__link"
+        >
+          <a
+            class="PodBrowser-root PodBrowser-root PodBrowser-underlineHover PodBrowser-body2 PodBrowser-colorPrimary"
+            href="/"
+          >
+            <span
+              class="PodBrowser-icon-webid PodBrowser-icon-small PodBrowser-icon-small--primary"
+            />
+            Privacy
+          </a>
+        </span>
+        <span
+          class="PodBrowser-footer__link"
+        >
+          <a
+            class="PodBrowser-root PodBrowser-root PodBrowser-underlineHover PodBrowser-body2 PodBrowser-colorPrimary"
+            href="/"
+          >
+            <span
+              class="PodBrowser-icon-doc PodBrowser-icon-small PodBrowser-icon-small--primary"
+            />
+            Terms of Service
+          </a>
+        </span>
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;

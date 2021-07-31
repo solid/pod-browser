@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`consentRequestContext Renders initial context data 1`] = `
+<DocumentFragment>
+  <div
+    id="consentRequest"
+  >
+    Consent Request initial
+  </div>
+</DocumentFragment>
+`;

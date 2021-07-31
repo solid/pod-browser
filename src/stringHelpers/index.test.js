@@ -22,6 +22,8 @@
 import {
   parseUrl,
   isUrl,
+  isLocalhost,
+  buildModeString,
   stripQueryParams,
   normalizeContainerUrl,
   joinPath,
@@ -146,5 +148,31 @@ describe("getParentContainerUrl", () => {
   const nestedContainerUrl = "https://www.example.org/stuff/nested/";
   test("it returns the url of the parent container of a given container", () => {
     expect(getParentContainerUrl(nestedContainerUrl)).toEqual(containerUrl);
+  });
+});
+
+describe("isLocalhost", () => {
+  test("it returns true when called with 'localhost' ", () => {
+    expect(isLocalhost("localhost")).toEqual(true);
+  });
+  test("it returns false when called with string not matching 'localhost' ", () => {
+    expect(isLocalhost("not localhost")).toEqual(false);
+  });
+});
+
+describe("buildModesString", () => {
+  test("it returns same string if called with one item", () => {
+    const modesArray = ["item"];
+    expect(buildModeString(modesArray, "and")).toEqual("item");
+  });
+  test("it returns correct string when called with an array of 2 items", () => {
+    const modesArray = ["item", "item2"];
+    expect(buildModeString(modesArray, "and")).toEqual("item and item2");
+  });
+  test("it returns correct string when called with an array of more than 2 items", () => {
+    const modesArray = ["item", "item2", "item3"];
+    expect(buildModeString(modesArray, "and")).toEqual(
+      "item, item2, and item3"
+    );
   });
 });

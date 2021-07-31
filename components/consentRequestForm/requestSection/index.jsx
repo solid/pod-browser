@@ -32,7 +32,10 @@ import {
   FormControlLabel,
 } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
+import { buildModeString } from "../../../src/stringHelpers";
 import styles from "../styles";
+
+export const TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON = "request-select-all";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -46,22 +49,8 @@ export default function RequestSection(props) {
     new Array(sectionDetails.forPersonalData.length).fill(false)
   );
 
-  const buildModeString = (modeArray, conjunction) => {
-    const l = modeArray.length;
-    let arrayCopy = modeArray;
-    if (l < 2) return arrayCopy[0];
-    if (l < 3) return arrayCopy.join(` ${conjunction} `);
-    arrayCopy = arrayCopy.slice();
-    arrayCopy[l - 1] = `${conjunction} ${arrayCopy[l - 1]}`;
-    return arrayCopy.join(", ");
-  };
-
   useEffect(() => {
-    if (sectionDetails) {
-      setRequestModes(
-        buildModeString(sectionDetails.mode, "and ").toLowerCase()
-      );
-    }
+    setRequestModes(buildModeString(sectionDetails.mode, "and").toLowerCase());
   }, [sectionDetails]);
 
   const toggleAllSwitches = () => {
@@ -90,6 +79,7 @@ export default function RequestSection(props) {
             {`${agentName} wants to ${requestModes}`}
           </span>
           <Button
+            data-testid={TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON}
             variant="secondary"
             type="button"
             onClick={toggleAllSwitches}
@@ -113,14 +103,14 @@ export default function RequestSection(props) {
                   key={index}
                   value="start"
                   // eslint-disable-next-line prettier/prettier
-                  control={
+                  control={(
                     <Switch
                       checked={isChecked[index]}
                       onChange={() => handleOnChange(index)}
                       color="primary"
                     />
                     // eslint-disable-next-line prettier/prettier
-                  }
+                  )}
                   label={
                     // eslint-disable-next-line react/jsx-wrap-multilines
                     <Typography variant="body2">

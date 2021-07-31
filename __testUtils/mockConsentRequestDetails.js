@@ -32,19 +32,27 @@ async function getConsentRequestDetails() {
     issuanceDate: "2021-05-26T16:40:03Z",
     expirationDate: "2021-06-23T16:40:03Z",
     credentialSubject: {
-      id: "[agent-name]",
+      id: "[https://pod.inrupt.com/bob/profile/card#me]",
       inbox: "https://pod.inrupt.com/bob/inbox/",
       hasConsent: [
         {
           mode: ["Read", "Write"],
           hasStatus: "ConsentStatusRequested",
-          forPersonalData: ["data", "data-2", "data-3"],
+          forPersonalData: [
+            "https://pod.inrupt.com/alice/private/data",
+            "https://pod.inrupt.com/alice/private/data-2",
+            "https://pod.inrupt.com/alice/private/data-3",
+          ],
           forPurpose: "https://example.com/SomeSpecificPurpose",
         },
         {
           mode: ["view"],
           hasStatus: "ConsentStatusRequested",
-          forPersonalData: ["data", "data-2", "data-3"],
+          forPersonalData: [
+            "https://pod.inrupt.com/alice/private/data",
+            "https://pod.inrupt.com/alice/private/data-2",
+            "https://pod.inrupt.com/alice/private/data-3",
+          ],
           forPurpose: "https://example.com/SomeSpecificPurpose",
         },
       ],
