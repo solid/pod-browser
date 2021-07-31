@@ -27,7 +27,7 @@ import mockSession from "../../../../../__testUtils/mockSession";
 
 import ConsentPage from "./index";
 
-jest.mock("../../../../src/effects/auth");
+jest.mock("../../../../../src/effects/auth");
 
 describe("Agent show page", () => {
   test("Renders the Agent show page", () => {

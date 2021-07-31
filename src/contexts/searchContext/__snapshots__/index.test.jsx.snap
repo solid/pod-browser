@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchContext Renders initial context data 1`] = `
+<DocumentFragment>
+  <div
+    id="Search"
+  >
+    foo
+  </div>
+</DocumentFragment>
+`;

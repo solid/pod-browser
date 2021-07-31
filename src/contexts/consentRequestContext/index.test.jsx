@@ -21,25 +21,44 @@
 
 import React, { useContext } from "react";
 import { render } from "@testing-library/react";
-import SearchContext, { SearchProvider } from "./index";
+import ConsentRequestContext, { ConsentRequestProvider } from "./index";
 
 function ChildComponent() {
-  const { search, setSearch } = useContext(SearchContext);
-  setSearch("bar");
-  return <div id="Search">{search}</div>;
+  const { consentRequest, setConsentRequest } = useContext(
+    ConsentRequestContext
+  );
+  setConsentRequest({ agentName: "Consent Request Details" });
+  return <div id="consentRequest">{consentRequest.agentName}</div>;
 }
 
-describe("SearchContext", () => {
-  test("it provides search and setSearch", () => {
-    const search = "foo";
-    const setSearch = jest.fn();
-    const { container } = render(
-      <SearchProvider search={search} setSearch={setSearch}>
+describe("consentRequestContext", () => {
+  test("Renders initial context data", () => {
+    const consentRequest = { agentName: "Consent Request initial" };
+    const { asFragment } = render(
+      <ConsentRequestProvider consentRequest={consentRequest}>
         <ChildComponent />
-      </SearchProvider>
+      </ConsentRequestProvider>
     );
 
-    expect(container.querySelector("#Search").innerHTML).toEqual(search);
-    expect(setSearch).toHaveBeenCalledWith("bar");
+    expect(asFragment()).toMatchSnapshot();
+  });
+  test("it provides consentRequest and setConsentRequest", () => {
+    const consentRequest = { agentName: "Consent Request initial" };
+    const setConsentRequest = jest.fn();
+    const { container } = render(
+      <ConsentRequestProvider
+        consentRequest={consentRequest}
+        setConsentRequest={setConsentRequest}
+      >
+        <ChildComponent />
+      </ConsentRequestProvider>
+    );
+
+    expect(container.querySelector("#consentRequest").innerHTML).toEqual(
+      consentRequest.agentName
+    );
+    expect(setConsentRequest).toHaveBeenCalledWith({
+      agentName: "Consent Request Details",
+    });
   });
 });

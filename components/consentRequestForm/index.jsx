@@ -20,17 +20,10 @@
  */
 
 import React, { useContext } from "react";
-import { Icons, Button } from "@inrupt/prism-react-components";
+import { Button } from "@inrupt/prism-react-components";
 import { useRouter } from "next/router";
 import { makeStyles } from "@material-ui/styles";
-import {
-  createStyles,
-  Typography,
-  Switch,
-  FormGroup,
-  FormControl,
-  FormControlLabel,
-} from "@material-ui/core";
+import { createStyles, Typography } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import ConsentRequestContext from "../../src/contexts/consentRequestContext";
 import RequestSection from "./requestSection";
@@ -56,7 +49,7 @@ export default function ConsentRequestFrom() {
         {/* FIXME: place this in a loop when we know the data structure */}
         {consentRequest?.credentialSubject?.hasConsent &&
           agentName &&
-          consentRequest.credentialSubject.hasConsent.map((consent, index) => {
+          consentRequest.credentialSubject.hasConsent.map((consent) => {
             return (
               <RequestSection agentName={agentName} sectionDetails={consent} />
             );

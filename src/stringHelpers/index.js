@@ -72,3 +72,13 @@ export function getParentContainerUrl(url) {
 export function isLocalhost(hostname) {
   return hostname === "localhost";
 }
+
+export function buildModeString(modeArray, conjunction) {
+  const l = modeArray.length;
+  let arrayCopy = modeArray;
+  if (l < 2) return arrayCopy[0];
+  if (l < 3) return arrayCopy.join(` ${conjunction} `);
+  arrayCopy = arrayCopy.slice();
+  arrayCopy[l - 1] = `${conjunction} ${arrayCopy[l - 1]}`;
+  return arrayCopy.join(", ");
+}
