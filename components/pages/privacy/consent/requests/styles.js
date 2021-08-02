@@ -47,7 +47,7 @@ export default function styles(theme) {
       width: "100%",
       borderRadius: 4,
       display: "flex",
-      flexGrow: "1",
+      flexGrow: 1,
       margin: 0,
       flexDirection: "row",
       alignItems: "center",
@@ -85,7 +85,7 @@ export default function styles(theme) {
       justifyContent: "space-between",
       alignItems: "baseline",
       fontSize: "1.4rem",
-      margin: "0",
+      margin: 0,
       width: "100%",
     },
 
@@ -100,7 +100,7 @@ export default function styles(theme) {
 
     "icon-small": {
       ...theme.icons.iconColor(theme.palette.info.main),
-      fontSize: 16,
+      fontSize: "1rem",
       marginRight: "0.5rem",
     },
 

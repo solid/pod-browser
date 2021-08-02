@@ -85,7 +85,7 @@ export default function styles(theme) {
       flexDirection: "row",
       alignItems: "baseline",
       fontSize: "1.4rem",
-      margin: "0",
+      margin: 0,
       width: "100%",
     },
 
@@ -104,7 +104,7 @@ export default function styles(theme) {
 
     "icon-small": {
       ...theme.icons.iconColor(theme.palette.info.main),
-      fontSize: 16,
+      fontSize: "1rem",
       marginRight: "0.5rem",
     },
 
