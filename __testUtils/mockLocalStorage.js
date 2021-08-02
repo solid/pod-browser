@@ -19,19 +19,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import PropTypes from "prop-types";
-
-import LoginPage from "../components/pages/login";
-
-export default function Login({ history }) {
-  return <LoginPage history={history} />;
+export default function mockLocalStorage() {
+  const store = {};
+  return {
+    getItem(key) {
+      return store[key];
+    },
+    setItem(key, value) {
+      store[key] = value.toString();
+    },
+  };
 }
-
-Login.propTypes = {
-  history: PropTypes.arrayOf(PropTypes.string),
-};
-
-Login.defaultProps = {
-  history: [],
-};

@@ -27,23 +27,27 @@ import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 
 import { resourceHref } from "../../../src/navigator";
 import usePodIrisFromWebId from "../../../src/hooks/usePodIrisFromWebId";
+import usePreviousPage from "../../../src/hooks/usePreviousPage";
 
 export default function Home() {
-  useRedirectIfLoggedOut();
-
   const router = useRouter();
+  const previousPage = usePreviousPage();
+  useRedirectIfLoggedOut(previousPage);
+
   const { session } = useSession();
   const { webId = "" } = session.info;
   const { data: podIris = [] } = usePodIrisFromWebId(webId);
   const [podIri] = podIris;
 
   useEffect(() => {
-    if (podIri) {
+    if (previousPage) {
+      router.push(previousPage);
+    } else if (podIri) {
       router.replace("/resource/[iri]", resourceHref(podIri)).catch((e) => {
         throw e;
       });
     }
-  }, [podIri, router]);
+  }, [podIri, router, previousPage]);
 
   return null;
 }

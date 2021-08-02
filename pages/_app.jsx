@@ -21,7 +21,7 @@
 
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import * as Sentry from "@sentry/node";
 import { MatomoProvider, createInstance } from "@datapunt/matomo-tracker-react";
 
@@ -97,7 +97,7 @@ export default function App(props) {
   const bem = useBem(useStyles());
   const router = useRouter();
   const { pathname, asPath } = router;
-
+  const [history, setHistory] = useState([]);
   useEffect(() => {
     // Remove injected serverside JSS
     const jssStyles = document.querySelector("#jss-server-side");
@@ -113,6 +113,7 @@ export default function App(props) {
     matomoInstance?.trackPageView({
       href: pathname,
     });
+    setHistory((prevState) => [...prevState, asPath]);
   }, [pathname, asPath]);
 
   return (
@@ -149,7 +150,7 @@ export default function App(props) {
                       <PodBrowserHeader />
 
                       <main className={bem("app-layout__main")}>
-                        <Component {...pageProps} />
+                        <Component {...pageProps} history={history} />
                       </main>
                     </div>
                     <Notification />

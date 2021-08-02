@@ -19,19 +19,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 
-import LoginPage from "../components/pages/login";
-
-export default function Login({ history }) {
-  return <LoginPage history={history} />;
+export default function usePreviousPage() {
+  const [previousPage, setPreviousPage] = useState(null);
+  useEffect(() => {
+    if (!localStorage) return;
+    const url = localStorage.getItem("previousPage");
+    setPreviousPage(url);
+  }, []);
+  return previousPage;
 }
-
-Login.propTypes = {
-  history: PropTypes.arrayOf(PropTypes.string),
-};
-
-Login.defaultProps = {
-  history: [],
-};

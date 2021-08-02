@@ -33,13 +33,50 @@ describe("Login page", () => {
     useIdpFromQuery.mockReturnValue(null);
   });
 
-  test("Renders a login button", () => {
+  it("renders a login button", () => {
     const { asFragment } = renderWithTheme(<LoginPage />);
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("Redirects if the user is logged out", () => {
+  it("redirects if the user is logged out", () => {
     renderWithTheme(<LoginPage />);
     expect(useRedirectIfLoggedIn).toHaveBeenCalled();
+  });
+
+  it("redirects with correct location if logged out", () => {
+    const previousPage = "https://pod.example.com/someresource.txt";
+    renderWithTheme(<LoginPage history={[previousPage, "/login"]} />);
+    expect(useRedirectIfLoggedIn).toHaveBeenCalledWith(previousPage);
+  });
+
+  it("sets previous page in local storage is available", () => {
+    const previousPage = "https://pod.example.com/someresource.txt";
+    const mockedLocalStorage = {
+      setItem: jest.fn(),
+    };
+    Object.defineProperty(window, "localStorage", {
+      value: mockedLocalStorage,
+      writable: true,
+    });
+    renderWithTheme(<LoginPage history={[previousPage, "/login"]} />);
+
+    expect(mockedLocalStorage.setItem).toHaveBeenCalledWith(
+      "previousPage",
+      previousPage
+    );
+  });
+
+  it("does not call setItem if local storage unavailable", () => {
+    const previousPage = "https://pod.example.com/someresource.txt";
+    const mockedLocalStorage = {
+      setItem: jest.fn(),
+    };
+    Object.defineProperty(window, "localStorage", {
+      value: undefined,
+      writable: true,
+    });
+    renderWithTheme(<LoginPage history={[previousPage, "/login"]} />);
+
+    expect(mockedLocalStorage.setItem).not.toHaveBeenCalled();
   });
 });

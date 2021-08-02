@@ -28,10 +28,12 @@ import IndexPage from "./index";
 import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
 import { resourceHref } from "../../../src/navigator";
 import usePodIrisFromWebId from "../../../src/hooks/usePodIrisFromWebId";
+import usePreviousPage from "../../../src/hooks/usePreviousPage";
 import TestApp from "../../../__testUtils/testApp";
 
 jest.mock("../../../src/effects/auth");
 jest.mock("../../../src/hooks/usePodIrisFromWebId");
+jest.mock("../../../src/hooks/usePreviousPage");
 jest.mock("next/router");
 
 describe("Index page", () => {
@@ -76,6 +78,22 @@ describe("Index page", () => {
       "/resource/[iri]",
       resourceHref(podIri)
     );
+  });
+
+  test("Redirects to the previous page if it is available", () => {
+    const push = jest.fn().mockResolvedValue(undefined);
+    const previousPage = "https://pod.example.com/someresource.txt";
+
+    nextRouterFns.useRouter.mockReturnValue({ push });
+    usePreviousPage.mockReturnValue(previousPage);
+
+    render(
+      <TestApp>
+        <IndexPage />
+      </TestApp>
+    );
+
+    expect(push).toHaveBeenCalledWith(previousPage);
   });
 
   test("Redirects if the user is logged out", () => {
