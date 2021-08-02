@@ -158,7 +158,7 @@ describe("createContact", () => {
           streetAddress: "123 Fake St.",
         },
       ],
-      fn: "Test Person",
+      name: "Test Person",
       emails: [
         {
           type: "Home",
@@ -193,7 +193,7 @@ describe("createContact", () => {
       (memo, t) => memo.concat(getStringNoLocaleAll(t, vcard.value)),
       []
     );
-    expect(getStringNoLocale(webId, vcard.fn)).toEqual("Test Person");
+    expect(getStringNoLocale(webId, foaf.name)).toEqual("Test Person");
     expect(mockWebIdNodeFn).toHaveBeenCalledWith(webIdUrl, expect.anything());
     expect(getUrl(webId, vcard.url)).toEqual(webIdNodeUrl);
     expect(getStringNoLocale(webId, vcardExtras("organization-name"))).toEqual(
@@ -255,14 +255,14 @@ describe("getGroups", () => {
             setThing(
               d,
               chain(mockThingFrom(group1Url), (t) =>
-                setStringNoLocale(t, vcard.fn, "Group1")
+                setStringNoLocale(t, foaf.name, "Group1")
               )
             ),
           (d) =>
             setThing(
               d,
               chain(mockThingFrom(group2Url), (t) =>
-                setStringNoLocale(t, vcard.fn, "Group2")
+                setStringNoLocale(t, foaf.name, "Group2")
               )
             )
         ),
@@ -317,12 +317,12 @@ describe("getSchemaFunction", () => {
 
 describe("mapSchema", () => {
   test("it maps the schema to a thing with a generated name with a prefix", () => {
-    const schema = { fn: "test" };
+    const schema = { name: "test" };
     const fn = mapSchema("prefix");
     const { name, thing } = fn(schema);
 
     expect(name).toMatch(/prefix-[\w\d]{7}/);
-    expect(getStringNoLocale(thing, vcard.fn)).toEqual("test");
+    expect(getStringNoLocale(thing, foaf.name)).toEqual("test");
   });
 });
 

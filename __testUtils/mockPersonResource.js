@@ -57,7 +57,7 @@ export const aliceAlternativeWebIdUrl = "https://alice2.example.org/card#me";
 export function mockPersonDatasetAlice(...operations) {
   return chain(
     mockThingFrom(aliceWebIdUrl),
-    (t) => addStringNoLocale(t, vcard.fn, aliceName),
+    (t) => addStringNoLocale(t, foaf.name, aliceName),
     (t) => addStringNoLocale(t, vcard.nickname, aliceNick),
     (t) => addUrl(t, vcard.hasPhoto, alicePhoto),
     (t) => addUrl(t, rdf.type, foaf.Person),

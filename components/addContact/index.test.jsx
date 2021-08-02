@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { vcard } from "rdf-namespaces";
+import { foaf } from "rdf-namespaces";
 import {
   addStringNoLocale,
   mockSolidDatasetFrom,
@@ -172,7 +172,7 @@ describe("handleSubmit", () => {
     const personUri = "http://example.com/alice#me";
     const personDataset = addStringNoLocale(
       mockThingFrom(personUri),
-      vcard.fn,
+      foaf.name,
       "Alice"
     );
     const contactsIri = contactsContainerIri("http://www.example.com/");

@@ -27,7 +27,7 @@ import {
   setStringNoLocale,
   setThing,
 } from "@inrupt/solid-client";
-import { vcard } from "rdf-namespaces/dist/index";
+import { foaf } from "rdf-namespaces/dist/index";
 import { getOrCreateDataset, updateOrCreateDataset } from "./index";
 
 const resourceUrl = "http://example.com/random.ttl";
@@ -68,7 +68,7 @@ describe("getOrCreateDataset", () => {
 describe("updateOrCreateDataset", () => {
   const existingThing = setStringNoLocale(
     mockThingFrom("http://example.com/random.ttl#foo"),
-    vcard.fn,
+    foaf.name,
     "Test 1"
   );
   const existingDataset = setThing(
@@ -77,7 +77,7 @@ describe("updateOrCreateDataset", () => {
   );
   const newThing = setStringNoLocale(
     mockThingFrom("http://example.com/random.ttl#bar"),
-    vcard.fn,
+    foaf.name,
     "Test 2"
   );
 

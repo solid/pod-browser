@@ -157,7 +157,7 @@ export async function savePerson(addressBook, contactSchema, fetch) {
       url: `${getSourceUrl(personDataset)}#this`,
     },
     (t) =>
-      addStringNoLocale(t, vcard.fn, contactSchema.fn || contactSchema.name),
+      addStringNoLocale(t, foaf.name, contactSchema.fn || contactSchema.name),
     (t) => addUrl(t, vcardExtras("inAddressBook"), indexIri)
   );
 

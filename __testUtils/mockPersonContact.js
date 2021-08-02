@@ -27,7 +27,7 @@ import {
   setThing,
   setUrl,
 } from "@inrupt/solid-client";
-import { vcard } from "rdf-namespaces";
+import { foaf } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
 import { vcardExtras } from "../src/addressBook";
 import { getBaseUrl } from "../src/solidClientHelpers/resource";
@@ -35,7 +35,7 @@ import { getBaseUrl } from "../src/solidClientHelpers/resource";
 function mockContactPersonThing(addressBook, personThingUrl, name) {
   return chain(
     mockThingFrom(personThingUrl),
-    (t) => setStringNoLocale(t, vcard.fn, name),
+    (t) => setStringNoLocale(t, foaf.name, name),
     (t) => setUrl(t, vcardExtras("inAddressBook"), asUrl(addressBook.thing))
   );
 }

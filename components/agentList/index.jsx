@@ -114,7 +114,7 @@ function AgentList({ contactType, setSearchValues }) {
     }
   }, [profiles, contactType]);
 
-  const formattedNamePredicate = vcard.fn;
+  const namePredicate = foaf.name;
   const hasPhotoPredicate = vcard.hasPhoto;
 
   const {
@@ -133,13 +133,13 @@ function AgentList({ contactType, setSearchValues }) {
   useEffect(() => {
     if (selectedContactIndex === null) return;
     const contactThing = profilesForTable[selectedContactIndex];
-    const name = getStringNoLocale(contactThing, formattedNamePredicate);
+    const name = getStringNoLocale(contactThing, namePredicate);
     const type = getUrl(contactThing, rdf.type);
     setAgentType(type);
     setSelectedContactName(name);
     const webId = getUrl(contactThing, vcardExtras("WebId"));
     setSelectedContactWebId(webId);
-  }, [selectedContactIndex, formattedNamePredicate, profilesForTable, fetch]);
+  }, [selectedContactIndex, namePredicate, profilesForTable, fetch]);
 
   if (addressBookError) return addressBookError;
   if (contactsError) return contactsError;
@@ -216,7 +216,7 @@ function AgentList({ contactType, setSearchValues }) {
           body={RowAvatar}
         />
         <TableColumn
-          property={formattedNamePredicate}
+          property={namePredicate}
           header="Name"
           filterable
           sortable

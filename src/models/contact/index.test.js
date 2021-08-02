@@ -25,7 +25,7 @@ import {
   getStringNoLocale,
   mockSolidDatasetFrom,
 } from "@inrupt/solid-client";
-import { vcard } from "rdf-namespaces";
+import { foaf } from "rdf-namespaces";
 import mockAddressBook from "../../../__testUtils/mockAddressBook";
 import { getContactAll } from "./index";
 import { addGroupToMockedIndexDataset } from "../../../__testUtils/mockGroupContact";
@@ -96,7 +96,7 @@ describe("getContactAll", () => {
     expect(groups).toHaveLength(1);
     const [group1] = groups;
     expect(asUrl(group1.thing)).toEqual(group1Url);
-    expect(getStringNoLocale(group1.thing, vcard.fn)).toEqual(group1Name);
+    expect(getStringNoLocale(group1.thing, foaf.name)).toEqual(group1Name);
     expect(group1.dataset).toBe(groupsDataset);
   });
 
@@ -109,7 +109,7 @@ describe("getContactAll", () => {
     expect(people).toHaveLength(1);
     const [person1] = people;
     expect(asUrl(person1.thing)).toEqual(person1Url);
-    expect(getStringNoLocale(person1.thing, vcard.fn)).toEqual(person1Name);
+    expect(getStringNoLocale(person1.thing, foaf.name)).toEqual(person1Name);
     expect(person1.dataset).toBe(peopleDataset);
   });
 

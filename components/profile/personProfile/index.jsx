@@ -21,7 +21,7 @@
 
 import React, { useState } from "react";
 import T from "prop-types";
-import { vcard } from "rdf-namespaces";
+import { foaf, vcard } from "rdf-namespaces";
 import {
   Avatar,
   Box,
@@ -98,7 +98,7 @@ export default function PersonProfile({ profileIri, editing }) {
 
               <Box p={2}>
                 <h3 data-testid={TESTCAFE_ID_NAME_TITLE}>
-                  <Text property={vcard.fn} />
+                  <Text property={foaf.name} />
                 </h3>
               </Box>
             </Box>
@@ -109,7 +109,7 @@ export default function PersonProfile({ profileIri, editing }) {
               <Box>
                 <InputLabel>Name</InputLabel>
                 <Text
-                  property={vcard.fn}
+                  property={foaf.name}
                   edit={editing}
                   autosave
                   inputProps={{

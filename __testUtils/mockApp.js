@@ -24,11 +24,9 @@ import {
   addUrl,
   createSolidDataset,
   createThing,
-  setStringNoLocale,
   setThing,
-  setUrl,
 } from "@inrupt/solid-client";
-import { vcard, rdf, schema } from "rdf-namespaces";
+import { vcard, rdf, schema, foaf } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
 import { vcardExtras } from "../src/addressBook";
 
@@ -44,7 +42,7 @@ export const APP_TOS_URL = "https://mockappurl.com/terms-of-service";
 
 const contactThing = chain(
   createThing({ url: "https://mockappurl.com#contacts" }),
-  (t) => addStringNoLocale(t, vcard.fn, "Example Contact"),
+  (t) => addStringNoLocale(t, foaf.name, "Example Contact"),
   (t) => addStringNoLocale(t, vcard.hasTelephone, "555-5555"),
   (t) => addStringNoLocale(t, vcard.hasEmail, "example@email.com"),
   (t) => addUrl(t, vcard.url, "https://examplewebsite.com")
@@ -55,7 +53,7 @@ const dataset = setThing(createSolidDataset(), contactThing);
 export function mockApp() {
   return chain(
     createThing({ url: APP_WEBID }),
-    (t) => addStringNoLocale(t, vcard.fn, "Mock App"),
+    (t) => addStringNoLocale(t, foaf.name, "Mock App"),
     (t) => addUrl(t, vcardExtras("WebId"), APP_WEBID),
     (t) => addUrl(t, rdf.type, schema.SoftwareApplication), // just guessing what the type might be for apps
     (t) => addUrl(t, TOS_PREDICATE, APP_TOS_URL),

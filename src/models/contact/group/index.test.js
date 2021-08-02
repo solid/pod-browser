@@ -33,7 +33,7 @@ import {
   setUrl,
 } from "@inrupt/solid-client";
 import { v4 as uuid } from "uuid";
-import { ldp, rdf, vcard } from "rdf-namespaces";
+import { foaf, ldp, rdf, vcard } from "rdf-namespaces";
 import mockAddressBook from "../../../../__testUtils/mockAddressBook";
 import {
   saveGroup,
@@ -203,7 +203,7 @@ describe("saveGroup", () => {
     ); // TODO: Remove when we have support for getThingLocal
     const groupThing = groupDatasetThings[0];
     expect(getUrl(groupThing, rdf.type)).toEqual(vcard.Group);
-    expect(getStringNoLocale(groupThing, vcard.fn)).toEqual("test");
+    expect(getStringNoLocale(groupThing, foaf.name)).toEqual("test");
     const groupIncludesTriple = groupDatasetThings[1];
     expect(
       getUrlAll(groupIncludesTriple, vcardExtras("includesGroup"))
@@ -218,7 +218,7 @@ describe("saveGroup", () => {
     const indexDataset = mockedSaveSolidDatasetAt.mock.calls[1][1];
     const indexThing = getThing(indexDataset, group1Url);
     expect(getUrl(indexThing, rdf.type)).toEqual(vcard.Group);
-    expect(getStringNoLocale(indexThing, vcard.fn)).toEqual("test");
+    expect(getStringNoLocale(indexThing, foaf.name)).toEqual("test");
     const addressBookInIndex = getThing(
       indexDataset,
       getAddressBookThingUrl(addressBookWithGroupIndex)
@@ -334,7 +334,7 @@ describe("renameGroup", () => {
       mockedSaveSolidDatasetAt.mock.calls[0][1]
     ); // TODO: Remove when we have support for getThingLocal
     const groupThing = groupDatasetThings[0];
-    expect(getStringNoLocale(groupThing, vcard.fn)).toEqual(newName);
+    expect(getStringNoLocale(groupThing, foaf.name)).toEqual(newName);
     expect(getStringNoLocale(groupThing, vcard.note)).toBeNull();
 
     // second save request is the group index
@@ -347,7 +347,7 @@ describe("renameGroup", () => {
       mockedSaveSolidDatasetAt.mock.calls[1][1]
     ); // TODO: Remove when we have support for getThingLocal
     const indexThing = indexDatasetThings[0];
-    expect(getStringNoLocale(indexThing, vcard.fn)).toEqual(newName);
+    expect(getStringNoLocale(indexThing, foaf.name)).toEqual(newName);
     expect(getStringNoLocale(indexThing, vcard.note)).toBeNull();
   });
 
@@ -376,7 +376,7 @@ describe("renameGroup", () => {
       mockedSaveSolidDatasetAt.mock.calls[0][1]
     ); // TODO: Remove when we have support for getThingLocal
     const groupThing = groupDatasetThings[0];
-    expect(getStringNoLocale(groupThing, vcard.fn)).toEqual(newName);
+    expect(getStringNoLocale(groupThing, foaf.name)).toEqual(newName);
     expect(getStringNoLocale(groupThing, vcard.note)).toEqual(newDescription);
   });
 });

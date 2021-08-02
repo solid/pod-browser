@@ -35,7 +35,7 @@ import {
   useSession,
 } from "@inrupt/solid-ui-react";
 import { createThing, getSourceUrl } from "@inrupt/solid-client";
-import { vcard } from "rdf-namespaces";
+import { foaf } from "rdf-namespaces";
 import { serializePromises } from "../../../../src/solidClientHelpers/utils";
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
 import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
@@ -437,7 +437,7 @@ function AgentPickerModal(
             />
             <TableColumn
               header={<span className={classes.tableHeader}>Name</span>}
-              property={vcard.fn}
+              property={foaf.name}
               filterable
               body={({ row: { index } }) => (
                 <AddAgentRow

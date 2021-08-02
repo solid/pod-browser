@@ -143,7 +143,7 @@ export async function getGroups(containerIri, fetch) {
     const groupThing = getThing(dataset, iri);
     return {
       iri,
-      name: getStringNoLocale(groupThing, vcard.fn),
+      name: getStringNoLocale(groupThing, foaf.name),
     };
   });
 
@@ -434,7 +434,7 @@ export async function saveContact(
       url: `${getSourceUrl(contact)}#this`,
     },
     (t) =>
-      addStringNoLocale(t, vcard.fn, contactSchema.fn || contactSchema.name),
+      addStringNoLocale(t, foaf.name, contactSchema.fn || contactSchema.name),
     (t) => addUrl(t, vcardExtras("inAddressBook"), indexIri)
   );
 
