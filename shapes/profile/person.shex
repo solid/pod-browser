@@ -53,6 +53,16 @@ srs:SolidProfileShape EXTRA a {
     // rdfs:comment  "A registry of all types used on the user's Pod (for public access)" ;
   foaf:knows IRI *
     // rdfs:comment  "A list of WebIds for all the people this user knows." ;
+  solid:preferredObjectPronoun xsd:string ?
+    // rdfs:comment  "A string for the person's preferred object pronoun" ;
+  solid:preferredRelativePronoun xsd:string ?
+    // rdfs:comment  "A string for the person's preferred relative pronoun" ;
+  solid:preferredSubjectPronoun xsd:string ?
+    // rdfs:comment  "A string for the person's preferred subject pronoun";
+  schema:description xsd:string ?
+    // rdfs:comment  "A short bio of the person";
+  schema:skills IRI *
+    // rdfs:comment  "A list of skills the person has";
 }
 
 srs:AddressShape {
