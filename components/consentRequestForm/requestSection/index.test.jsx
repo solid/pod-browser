@@ -38,7 +38,7 @@ const sectionDetails = {
 describe("consentRequestContext", () => {
   test("Renders initial context data", async () => {
     const { asFragment } = renderWithTheme(
-      <RequestSection agentName="Elon Musk" sectionDetails={sectionDetails} />
+      <RequestSection agentName="agent_name" sectionDetails={sectionDetails} />
     );
 
     expect(asFragment()).toMatchSnapshot();
@@ -46,7 +46,7 @@ describe("consentRequestContext", () => {
 
   test("it selects all switches in a section", () => {
     const { getByTestId, getAllByRole } = renderWithTheme(
-      <RequestSection agentName="Elon Musk" sectionDetails={sectionDetails} />
+      <RequestSection agentName="agent_name" sectionDetails={sectionDetails} />
     );
 
     const selectAll = getByTestId(TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON);
@@ -64,7 +64,7 @@ describe("consentRequestContext", () => {
 
   test("it selects a single switch when clicked", () => {
     const { getAllByRole } = renderWithTheme(
-      <RequestSection agentName="Elon Musk" sectionDetails={sectionDetails} />
+      <RequestSection agentName="agent_name" sectionDetails={sectionDetails} />
     );
 
     const switches = getAllByRole("checkbox");

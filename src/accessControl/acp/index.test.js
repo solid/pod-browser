@@ -27,7 +27,7 @@ import AcpAccessControlStrategy, {
   createAcpMap,
   getAgentType,
   getOrCreatePermission,
-  getPolicyNameFromAccess,
+  getPolicyDetailFromAccess,
   getOrCreatePolicy,
   getPolicyModesAndAgents,
   getRulesOrCreate,
@@ -844,22 +844,26 @@ describe("getAgentType", () => {
   });
 });
 
-describe("getPolicyNameFromAccess", () => {
+describe("getPolicyDetailFromAccess", () => {
   const readAccess = createAcpMap(true);
   const readWriteAccess = createAcpMap(true, true);
   const readAppendAccess = createAcpMap(true, false, true);
   const writeAccess = createAcpMap(false, true, false);
   const appendAccess = createAcpMap(false, false, true);
   it("returns the correct policy name for a given access map", () => {
-    expect(getPolicyNameFromAccess(readAccess)).toEqual("viewers");
-    expect(getPolicyNameFromAccess(readWriteAccess)).toEqual("editors");
-    expect(getPolicyNameFromAccess(readAppendAccess)).toEqual("viewAndAdd");
-    expect(getPolicyNameFromAccess(writeAccess)).toEqual("editOnly");
-    expect(getPolicyNameFromAccess(appendAccess)).toEqual("addOnly");
+    expect(getPolicyDetailFromAccess(readAccess, "name")).toEqual("viewers");
+    expect(getPolicyDetailFromAccess(readWriteAccess, "name")).toEqual(
+      "editors"
+    );
+    expect(getPolicyDetailFromAccess(readAppendAccess, "name")).toEqual(
+      "viewAndAdd"
+    );
+    expect(getPolicyDetailFromAccess(writeAccess, "name")).toEqual("editOnly");
+    expect(getPolicyDetailFromAccess(appendAccess, "name")).toEqual("addOnly");
   });
   it("returns null if type of access is not covered", () => {
     const readWriteAppendAccess = createAcpMap(true, true, true);
-    expect(getPolicyNameFromAccess(readWriteAppendAccess)).toBeNull();
+    expect(getPolicyDetailFromAccess(readWriteAppendAccess, "name")).toBeNull();
   });
 });
 
