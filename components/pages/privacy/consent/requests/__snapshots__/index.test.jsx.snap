@@ -82,7 +82,7 @@ exports[`Agent show page Renders the Agent show page 1`] = `
             <span
               class="PodBrowser-icon-webid PodBrowser-icon-small PodBrowser-icon-small--primary"
             />
-            Privacy policy
+            Privacy Policy
           </a>
         </span>
         <span
