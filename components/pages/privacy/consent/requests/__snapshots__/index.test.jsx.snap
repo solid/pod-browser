@@ -9,7 +9,7 @@ exports[`Agent show page Renders the Agent show page 1`] = `
       class="PodBrowser-request-container__content"
     >
       <h2
-        class="PodBrowser-root PodBrowser-h2 PodBrowser-alignCenter"
+        class="PodBrowser-root PodBrowser-h1 PodBrowser-alignCenter"
       >
         Allow undefined access?
       </h2>
@@ -82,7 +82,7 @@ exports[`Agent show page Renders the Agent show page 1`] = `
             <span
               class="PodBrowser-icon-webid PodBrowser-icon-small PodBrowser-icon-small--primary"
             />
-            Privacy
+            Privacy policy
           </a>
         </span>
         <span

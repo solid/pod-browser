@@ -25,7 +25,7 @@ exports[`consentRequestContext Renders initial context data 1`] = `
           class="PodBrowser-button__text"
         >
           <span
-            class="PodBrowser-root PodBrowser-body2"
+            class="PodBrowser-root PodBrowser-caption"
           >
             Select all
           </span>
