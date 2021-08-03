@@ -85,7 +85,7 @@ export default function RequestSection(props) {
             onClick={toggleAllSwitches}
             className={bem("request-container__button", "small")}
           >
-            <Typography component="span" variant="body2">
+            <Typography component="span" variant="caption">
               Select all
             </Typography>
           </Button>

@@ -42,7 +42,7 @@ export default function ConsentRequestFrom() {
   return (
     <>
       <form className={bem("request-container__content", "main")}>
-        <Typography component="h2" align="center" variant="h2">
+        <Typography component="h2" align="center" variant="h1">
           {`Allow ${agentName} access?`}
         </Typography>
         <p>{requestId}</p>

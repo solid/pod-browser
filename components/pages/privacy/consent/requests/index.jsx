@@ -77,7 +77,7 @@ export default function ConsentShow() {
             <span className={bem("footer__link")}>
               <Link href="/" variant="body2">
                 <Icons name="webid" className={bem("icon-small", "primary")} />
-                Privacy
+                Privacy policy
               </Link>
             </span>
             <span className={bem("footer__link")}>
