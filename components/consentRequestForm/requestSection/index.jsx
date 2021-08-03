@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import T from "prop-types";
 import { Icons, Button } from "@inrupt/prism-react-components";
 import { makeStyles } from "@material-ui/styles";
@@ -32,7 +32,7 @@ import {
   FormControlLabel,
 } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
-import { buildModeString } from "../../../src/stringHelpers";
+import { getPolicyDetailFromAccess } from "../../../src/accessControl/acp";
 import styles from "../styles";
 
 export const TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON = "request-select-all";
@@ -43,15 +43,15 @@ export default function RequestSection(props) {
   const { agentName, sectionDetails } = props;
   const bem = useBem(useStyles());
 
-  const [requestModes, setRequestModes] = useState([]);
-
   const [isChecked, setIsChecked] = useState(
     new Array(sectionDetails.forPersonalData.length).fill(false)
   );
 
-  useEffect(() => {
-    setRequestModes(buildModeString(sectionDetails.mode, "and").toLowerCase());
-  }, [sectionDetails]);
+  const modesObject = {
+    read: sectionDetails.mode.some((el) => el === "Read"),
+    write: sectionDetails.mode.some((el) => el === "Write"),
+    append: sectionDetails.mode.some((el) => el === "Append"),
+  };
 
   const toggleAllSwitches = () => {
     const updatedAllCheckedState = isChecked.map(() => true);
@@ -74,9 +74,15 @@ export default function RequestSection(props) {
         className={bem("request-container__section")}
       >
         <legend className={bem("request-container__header-text", "small")}>
-          <Icons name="edit" className={bem("icon-small")} />
+          <Icons
+            name={getPolicyDetailFromAccess(modesObject, "iconName")}
+            className={bem("icon-small")}
+          />
           <span className={bem("header__content")}>
-            {`${agentName} wants to ${requestModes}`}
+            {`${agentName} ${getPolicyDetailFromAccess(
+              modesObject,
+              "titleConsent"
+            )}`}
           </span>
           <Button
             data-testid={TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON}
@@ -97,6 +103,9 @@ export default function RequestSection(props) {
         >
           {sectionDetails.forPersonalData &&
             sectionDetails.forPersonalData.map((resource, index) => {
+              // for each resource check isContainer, and if true set flag and pass custom switch
+              // to retrieve subsequent resources using getContainedResourceUrlAll
+              // list them all while checkking if any of them are also containers
               return (
                 <FormControlLabel
                   // eslint-disable-next-line react/no-array-index-key

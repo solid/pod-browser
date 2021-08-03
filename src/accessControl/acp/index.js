@@ -74,22 +74,22 @@ const acpMapForApplyPolicies = {
   addOnly: createAcpMap(false, false, true),
 };
 
-export const getPolicyNameFromAccess = (access) => {
+export const getPolicyDetailFromAccess = (access, label) => {
   const { read, write, append } = access;
   if (read && write && !append) {
-    return POLICIES_TYPE_MAP.editors.name;
+    return POLICIES_TYPE_MAP.editors[label];
   }
   if (read && !write && !append) {
-    return POLICIES_TYPE_MAP.viewers.name;
+    return POLICIES_TYPE_MAP.viewers[label];
   }
   if (read && append && !write) {
-    return POLICIES_TYPE_MAP.viewAndAdd.name;
+    return POLICIES_TYPE_MAP.viewAndAdd[label];
   }
   if (append && !write && !write) {
-    return POLICIES_TYPE_MAP.addOnly.name;
+    return POLICIES_TYPE_MAP.addOnly[label];
   }
   if (write && !append && !read) {
-    return POLICIES_TYPE_MAP.editOnly.name;
+    return POLICIES_TYPE_MAP.editOnly[label];
   }
   return null;
 };
@@ -415,7 +415,7 @@ export async function getPodBrowserPermissions(
               access: createAcpMap(),
             };
             const acl = convertAcpToAcl(access);
-            const alias = getPolicyNameFromAccess(acl);
+            const alias = getPolicyDetailFromAccess(acl, "name");
             const directPolicyUrl = getPolicyResourceUrl(
               resourceWithAcr,
               policiesContainerUrl,
