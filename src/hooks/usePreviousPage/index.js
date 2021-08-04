@@ -26,7 +26,7 @@ export default function usePreviousPage() {
   useEffect(() => {
     if (!localStorage) return;
     const url = localStorage.getItem("previousPage");
-    setPreviousPage(url);
+    setPreviousPage(url || null);
   }, []);
   return previousPage;
 }

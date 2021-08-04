@@ -92,12 +92,19 @@ export function hasSolidAuthClientHash() {
   return false;
 }
 
+const updateHistory = (prevState, path) => {
+  return [...prevState, path].filter(
+    (historyItem) => historyItem !== "/undefined"
+  );
+};
+
 export default function App(props) {
   const { Component, pageProps } = props;
   const bem = useBem(useStyles());
   const router = useRouter();
   const { pathname, asPath } = router;
   const [history, setHistory] = useState([]);
+
   useEffect(() => {
     // Remove injected serverside JSS
     const jssStyles = document.querySelector("#jss-server-side");
@@ -113,7 +120,7 @@ export default function App(props) {
     matomoInstance?.trackPageView({
       href: pathname,
     });
-    setHistory((prevState) => [...prevState, asPath]);
+    setHistory((prevState) => updateHistory(prevState, asPath));
   }, [pathname, asPath]);
 
   return (

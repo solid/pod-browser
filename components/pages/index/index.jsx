@@ -32,22 +32,26 @@ import usePreviousPage from "../../../src/hooks/usePreviousPage";
 export default function Home() {
   const router = useRouter();
   const previousPage = usePreviousPage();
-  useRedirectIfLoggedOut(previousPage);
+  useRedirectIfLoggedOut();
 
   const { session } = useSession();
   const { webId = "" } = session.info;
   const { data: podIris = [] } = usePodIrisFromWebId(webId);
   const [podIri] = podIris;
+  const redirectUrl = previousPage || null;
 
   useEffect(() => {
-    if (previousPage) {
-      router.push(previousPage);
-    } else if (podIri) {
+    if (redirectUrl && redirectUrl !== "/") {
+      router.push(redirectUrl).catch((e) => {
+        throw e;
+      });
+    }
+    if (podIri) {
       router.replace("/resource/[iri]", resourceHref(podIri)).catch((e) => {
         throw e;
       });
     }
-  }, [podIri, router, previousPage]);
+  }, [podIri, router, redirectUrl]);
 
   return null;
 }

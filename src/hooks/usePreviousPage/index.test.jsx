@@ -33,9 +33,9 @@ describe("usePreviousPage", () => {
         writable: true,
       });
     });
-    it("returns undefined when no previousPage is available in local storage", () => {
+    it("returns null when no previousPage is available in local storage", () => {
       const { result } = renderHook(() => usePreviousPage());
-      expect(result.current).toBeUndefined();
+      expect(result.current).toBeNull();
     });
 
     it("returns previous page url when available in local storage", async () => {

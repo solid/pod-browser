@@ -82,9 +82,10 @@ describe("Index page", () => {
 
   test("Redirects to the previous page if it is available", () => {
     const push = jest.fn().mockResolvedValue(undefined);
-    const previousPage = "https://pod.example.com/someresource.txt";
+    const replace = jest.fn().mockResolvedValue(undefined);
+    const previousPage = "/resource/https://pod.example.com/someresource.txt";
 
-    nextRouterFns.useRouter.mockReturnValue({ push });
+    nextRouterFns.useRouter.mockReturnValue({ push, replace });
     usePreviousPage.mockReturnValue(previousPage);
 
     render(
@@ -97,6 +98,11 @@ describe("Index page", () => {
   });
 
   test("Redirects if the user is logged out", () => {
+    usePreviousPage.mockReturnValue(null);
+    const replace = jest.fn().mockResolvedValue(undefined);
+
+    nextRouterFns.useRouter.mockReturnValue({ replace });
+
     render(
       <TestApp session={mockUnauthenticatedSession()}>
         <IndexPage />
