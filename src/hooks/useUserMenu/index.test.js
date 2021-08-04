@@ -19,8 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { waitFor } from "@testing-library/dom";
 import { renderHook } from "@testing-library/react-hooks";
 import { useSession } from "@inrupt/solid-ui-react";
+import { useRouter } from "next/router";
 import useUserMenu, {
   TESTCAFE_ID_USER_MENU_LOGOUT,
   TESTCAFE_ID_USER_MENU_PROFILE,
@@ -28,13 +30,17 @@ import useUserMenu, {
 
 jest.mock("@inrupt/solid-ui-react");
 const mockedSessionHook = useSession;
+jest.mock("next/router");
+const mockedUseRouter = useRouter;
 
 describe("useUserMenu", () => {
   let logout;
+  const push = jest.fn();
 
   beforeEach(() => {
     logout = jest.fn();
     mockedSessionHook.mockReturnValue({ logout });
+    mockedUseRouter.mockReturnValue({ push });
   });
 
   it("returns menu with profile and logout", () => {
@@ -45,7 +51,11 @@ describe("useUserMenu", () => {
     expect(testIds).toContain(TESTCAFE_ID_USER_MENU_LOGOUT);
   });
 
-  test("log out button triggers logout", () => {
+  test("log out button triggers logout and redirect", () => {
+    mockedSessionHook.mockReturnValueOnce({
+      logout,
+      session: { info: { isLoggedIn: false } },
+    });
     const { result } = renderHook(() => useUserMenu());
     result.current
       .find(
@@ -53,5 +63,9 @@ describe("useUserMenu", () => {
       )
       .onClick();
     expect(logout).toHaveBeenCalled();
+
+    waitFor(() => {
+      expect(push).toHaveBeenCalledWith("/login");
+    });
   });
 });

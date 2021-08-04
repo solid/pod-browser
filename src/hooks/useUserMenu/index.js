@@ -20,12 +20,21 @@
  */
 
 import { useSession } from "@inrupt/solid-ui-react";
+import { useRouter } from "next/router";
 
 export const TESTCAFE_ID_USER_MENU_PROFILE = "user-menu-profile";
 export const TESTCAFE_ID_USER_MENU_LOGOUT = "user-menu-logout";
 
 export default function useUserMenu() {
-  const { logout } = useSession();
+  const { logout, session } = useSession();
+  const router = useRouter();
+
+  async function handleLogout() {
+    await logout();
+    if (!session.info.isLoggedIn) {
+      router.push("/login");
+    }
+  }
 
   return [
     {
@@ -38,7 +47,7 @@ export default function useUserMenu() {
     {
       icon: "log-out",
       label: "Log out",
-      onClick: () => logout(),
+      onClick: handleLogout,
       "data-testid": TESTCAFE_ID_USER_MENU_LOGOUT,
     },
   ];
