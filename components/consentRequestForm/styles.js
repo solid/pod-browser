@@ -47,7 +47,7 @@ export default function styles(theme) {
       width: "100%",
       borderRadius: 4,
       display: "flex",
-      flexGrow: "1",
+      flexGrow: 1,
       margin: 0,
       flexDirection: "row",
       alignItems: "center",
