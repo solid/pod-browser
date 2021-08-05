@@ -67,6 +67,9 @@ export default function styles(theme) {
       display: "flex",
       justifyContent: "space-between",
       fontWeight: "normal",
+      marginLeft: 0,
+      paddingLeft: "1rem",
+      boxSizing: "border-box",
     },
 
     "request-container__section-header": {
@@ -110,6 +113,25 @@ export default function styles(theme) {
 
     "icon-small--primary": {
       color: theme.palette.primary.main,
+    },
+
+    "icon-small--padded": {
+      marginLeft: "0.5rem",
+    },
+
+    "dropdown-caret": {
+      border: "none",
+      background: "transparent",
+      cursor: "pointer",
+    },
+
+    "full-width": {
+      display: "block",
+      width: "100%",
+    },
+
+    "full-width--padded-left": {
+      paddingLeft: "1.5rem",
     },
 
     form__controls: {

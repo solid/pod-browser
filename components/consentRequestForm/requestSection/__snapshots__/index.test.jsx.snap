@@ -52,7 +52,7 @@ exports[`consentRequestContext Renders initial context data 1`] = `
               <input
                 class="PodBrowser-input PodBrowser-input"
                 type="checkbox"
-                value="start"
+                value="https://pod.inrupt.com/alice/private/data"
               />
               <span
                 class="PodBrowser-thumb"
@@ -73,7 +73,7 @@ exports[`consentRequestContext Renders initial context data 1`] = `
             class="PodBrowser-root PodBrowser-body2"
           >
             <span
-              class="PodBrowser-icon-app PodBrowser-icon-small"
+              class="PodBrowser-icon-file PodBrowser-icon-small"
             />
             https://pod.inrupt.com/alice/private/data
           </p>
@@ -95,7 +95,7 @@ exports[`consentRequestContext Renders initial context data 1`] = `
               <input
                 class="PodBrowser-input PodBrowser-input"
                 type="checkbox"
-                value="start"
+                value="https://pod.inrupt.com/alice/private/data-2/"
               />
               <span
                 class="PodBrowser-thumb"
@@ -116,9 +116,18 @@ exports[`consentRequestContext Renders initial context data 1`] = `
             class="PodBrowser-root PodBrowser-body2"
           >
             <span
-              class="PodBrowser-icon-app PodBrowser-icon-small"
+              class="PodBrowser-icon-folder PodBrowser-icon-small"
             />
-            https://pod.inrupt.com/alice/private/data-2
+            https://pod.inrupt.com/alice/private/data-2/
+            <button
+              class="PodBrowser-dropdown-caret"
+              data-testid="expand-section"
+              type="button"
+            >
+              <span
+                class="PodBrowser-icon-caret-down PodBrowser-icon-small--padded"
+              />
+            </button>
           </p>
         </span>
       </label>
@@ -138,7 +147,7 @@ exports[`consentRequestContext Renders initial context data 1`] = `
               <input
                 class="PodBrowser-input PodBrowser-input"
                 type="checkbox"
-                value="start"
+                value="https://pod.inrupt.com/alice/private/data-3"
               />
               <span
                 class="PodBrowser-thumb"
@@ -159,7 +168,7 @@ exports[`consentRequestContext Renders initial context data 1`] = `
             class="PodBrowser-root PodBrowser-body2"
           >
             <span
-              class="PodBrowser-icon-app PodBrowser-icon-small"
+              class="PodBrowser-icon-file PodBrowser-icon-small"
             />
             https://pod.inrupt.com/alice/private/data-3
           </p>

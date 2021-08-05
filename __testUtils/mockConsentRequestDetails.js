@@ -39,7 +39,7 @@ async function getConsentRequestDetails() {
           mode: ["Read", "Write"],
           hasStatus: "ConsentStatusRequested",
           forPersonalData: [
-            "https://pod.inrupt.com/alice/private/data",
+            "https://pod.inrupt.com/alice/private/data/",
             "https://pod.inrupt.com/alice/private/data-2",
             "https://pod.inrupt.com/alice/private/data-3",
           ],
@@ -50,7 +50,7 @@ async function getConsentRequestDetails() {
           hasStatus: "ConsentStatusRequested",
           forPersonalData: [
             "https://pod.inrupt.com/alice/private/data",
-            "https://pod.inrupt.com/alice/private/data-2",
+            "https://pod.inrupt.com/alice/private/data-2/",
             "https://pod.inrupt.com/alice/private/data-3",
           ],
           forPurpose: "https://example.com/SomeSpecificPurpose",
