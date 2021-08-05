@@ -22,14 +22,17 @@
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
-import RequestSection, { TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON } from "./index";
+import RequestSection, {
+  TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON,
+  TESTCAFE_ID_REQUEST_EXPAND_SECTION_BUTTON,
+} from "./index";
 
 const sectionDetails = {
   mode: ["Read", "Write"],
   hasStatus: "ConsentStatusRequested",
   forPersonalData: [
     "https://pod.inrupt.com/alice/private/data",
-    "https://pod.inrupt.com/alice/private/data-2",
+    "https://pod.inrupt.com/alice/private/data-2/",
     "https://pod.inrupt.com/alice/private/data-3",
   ],
   forPurpose: "https://example.com/SomeSpecificPurpose",
@@ -60,6 +63,30 @@ describe("consentRequestContext", () => {
       switches.length
     );
     expect(selectAll).toHaveFocus();
+  });
+
+  test("it expands a sub-section and selects switch in it", () => {
+    const { getByTestId, getAllByRole } = renderWithTheme(
+      <RequestSection agentName="agent_name" sectionDetails={sectionDetails} />
+    );
+
+    const expandSection = getByTestId(
+      TESTCAFE_ID_REQUEST_EXPAND_SECTION_BUTTON
+    );
+    const switches = getAllByRole("checkbox", { checked: false });
+    expect(getAllByRole("checkbox", { checked: false })).toHaveLength(
+      switches.length
+    );
+
+    userEvent.click(expandSection);
+    expect(getAllByRole("checkbox")).toHaveLength(switches.length + 3);
+
+    const updatedSwitches = getAllByRole("checkbox", { checked: false });
+
+    userEvent.click(updatedSwitches[4]);
+    expect(getAllByRole("checkbox", { checked: false })).toHaveLength(
+      updatedSwitches.length - 1
+    );
   });
 
   test("it selects a single switch when clicked", () => {

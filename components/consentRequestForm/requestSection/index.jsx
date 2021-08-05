@@ -19,26 +19,237 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import T from "prop-types";
 import { Icons, Button } from "@inrupt/prism-react-components";
 import { makeStyles } from "@material-ui/styles";
 import {
   createStyles,
   Typography,
-  Switch,
   FormGroup,
   FormControl,
   FormControlLabel,
+  Switch,
 } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import { getPolicyDetailFromAccess } from "../../../src/accessControl/acp";
 import styles from "../styles";
 
 export const TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON = "request-select-all";
+export const TESTCAFE_ID_REQUEST_EXPAND_SECTION_BUTTON = "expand-section";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
+const ResourceSwitch = (props) => {
+  const { resourceIri, isChecked, handleOnChange, index } = props;
+  const bem = useBem(useStyles());
+
+  return (
+    <FormControlLabel
+      // eslint-disable-next-line react/no-array-index-key
+      key={index}
+      value={resourceIri}
+      // eslint-disable-next-line prettier/prettier
+      control={(
+        <Switch
+          checked={isChecked[index]}
+          onChange={() => handleOnChange(index)}
+          color="primary"
+        />
+        // eslint-disable-next-line prettier/prettier
+      )}
+      label={
+        // eslint-disable-next-line react/jsx-wrap-multilines
+        <Typography variant="body2">
+          <Icons name="file" className={bem("icon-small")} />
+          {resourceIri}
+        </Typography>
+      }
+      labelPlacement="start"
+      className={bem("box__content")}
+    />
+  );
+};
+
+ResourceSwitch.propTypes = {
+  resourceIri: T.string.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  isChecked: T.array.isRequired,
+  handleOnChange: T.func.isRequired,
+  index: T.number.isRequired,
+};
+
+const renderSwitch = (
+  resourceIri,
+  index,
+  isChecked,
+  handleOnChange,
+  overrideCheck = false
+) => {
+  // FIXME replace this with an actual solid-client isContainer check
+  // for each resource check isContainer, and if true set flag and pass custom switch
+  // to retrieve subsequent resources using getContainedResourceUrlAll
+  // list them all while checkking if any of them are also containers
+  const isContainer = resourceIri.slice(-1) === "/"; // temp way to detect folders vs resources
+
+  if (isContainer) {
+    return (
+      <ContainerSwitch
+        key={index}
+        resourceIri={resourceIri}
+        isChecked={isChecked}
+        handleOnChange={handleOnChange}
+        index={index}
+        overrideCheck={overrideCheck}
+      />
+    );
+  }
+  return (
+    <ResourceSwitch
+      key={index}
+      resourceIri={resourceIri}
+      isChecked={isChecked}
+      handleOnChange={handleOnChange}
+      index={index}
+    />
+  );
+};
+
+const RequestSubSection = (props) => {
+  const { resourceIri, overrideCheck } = props;
+
+  // FIXME based on the resourceIri retrieve all resources in this container and replace the mock list below
+  const mockedResources = [
+    "https://pod.inrupt.com/alice/private/data4",
+    "https://pod.inrupt.com/alice/private/data5",
+    resourceIri,
+  ];
+
+  const [isChecked, setIsChecked] = useState(
+    new Array(mockedResources.length).fill(false)
+  );
+
+  const toggleAllSwitches = () => {
+    const updatedAllCheckedState = isChecked.map(() => overrideCheck);
+    setIsChecked(updatedAllCheckedState);
+  };
+
+  useEffect(() => {
+    toggleAllSwitches();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [overrideCheck]);
+
+  const handleOnChange = (position) => {
+    const updatedCheckedState = isChecked.map((item, index) =>
+      index === position ? !item : item
+    );
+
+    setIsChecked(updatedCheckedState);
+  };
+
+  return (
+    <>
+      {mockedResources.map((containerResourceIri, index) => {
+        return renderSwitch(
+          containerResourceIri,
+          index,
+          isChecked,
+          handleOnChange,
+          overrideCheck
+        );
+      })}
+    </>
+  );
+};
+
+RequestSubSection.defaultProps = {
+  overrideCheck: false,
+};
+
+RequestSubSection.propTypes = {
+  resourceIri: T.string.isRequired,
+  overrideCheck: T.bool,
+};
+
+const ContainerSwitch = (props) => {
+  const {
+    resourceIri,
+    isChecked,
+    handleOnChange,
+    index,
+    overrideCheck,
+  } = props;
+  const bem = useBem(useStyles());
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [containerChecked, setContainerChecked] = useState(overrideCheck);
+
+  useEffect(() => {
+    setContainerChecked(overrideCheck);
+  }, [overrideCheck, isChecked]);
+
+  return (
+    <>
+      <FormControlLabel
+        // eslint-disable-next-line react/no-array-index-key
+        key={index}
+        value={resourceIri}
+        // eslint-disable-next-line prettier/prettier
+        control={(
+          <Switch
+            checked={isChecked[index]}
+            onChange={() => {
+              handleOnChange(index);
+              setContainerChecked(!containerChecked);
+            }}
+            color="primary"
+          />
+          // eslint-disable-next-line prettier/prettier
+        )}
+        label={
+          // eslint-disable-next-line react/jsx-wrap-multilines
+          <Typography variant="body2">
+            <Icons name="folder" className={bem("icon-small")} />
+            {resourceIri}
+            <button
+              data-testid={TESTCAFE_ID_REQUEST_EXPAND_SECTION_BUTTON}
+              type="button"
+              className={bem("dropdown-caret")}
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              <Icons
+                name={isExpanded ? "caret-up" : "caret-down"}
+                className={bem("icon-small--padded")}
+              />
+            </button>
+          </Typography>
+        }
+        labelPlacement="start"
+        className={bem("box__content")}
+      />
+      {isExpanded && (
+        <div className={bem("full-width", "padded-left")}>
+          <RequestSubSection
+            resourceIri={resourceIri}
+            overrideCheck={isChecked[index]}
+          />
+        </div>
+      )}
+    </>
+  );
+};
+
+ContainerSwitch.propTypes = {
+  resourceIri: T.string.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  isChecked: T.array.isRequired,
+  overrideCheck: T.bool,
+  handleOnChange: T.func.isRequired,
+  index: T.number.isRequired,
+};
+
+ContainerSwitch.defaultProps = {
+  overrideCheck: false,
+};
 export default function RequestSection(props) {
   const { agentName, sectionDetails } = props;
   const bem = useBem(useStyles());
@@ -55,7 +266,6 @@ export default function RequestSection(props) {
 
   const toggleAllSwitches = () => {
     const updatedAllCheckedState = isChecked.map(() => true);
-
     setIsChecked(updatedAllCheckedState);
   };
 
@@ -63,7 +273,6 @@ export default function RequestSection(props) {
     const updatedCheckedState = isChecked.map((item, index) =>
       index === position ? !item : item
     );
-
     setIsChecked(updatedCheckedState);
   };
 
@@ -102,34 +311,12 @@ export default function RequestSection(props) {
           className={bem("request-container__section", "box")}
         >
           {sectionDetails.forPersonalData &&
-            sectionDetails.forPersonalData.map((resource, index) => {
-              // for each resource check isContainer, and if true set flag and pass custom switch
-              // to retrieve subsequent resources using getContainedResourceUrlAll
-              // list them all while checkking if any of them are also containers
-              return (
-                <FormControlLabel
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={index}
-                  value="start"
-                  // eslint-disable-next-line prettier/prettier
-                  control={(
-                    <Switch
-                      checked={isChecked[index]}
-                      onChange={() => handleOnChange(index)}
-                      color="primary"
-                    />
-                    // eslint-disable-next-line prettier/prettier
-                  )}
-                  label={
-                    // eslint-disable-next-line react/jsx-wrap-multilines
-                    <Typography variant="body2">
-                      <Icons name="app" className={bem("icon-small")} />
-                      {resource}
-                    </Typography>
-                  }
-                  labelPlacement="start"
-                  className={bem("box__content")}
-                />
+            sectionDetails.forPersonalData.map((resourceIri, index) => {
+              return renderSwitch(
+                resourceIri,
+                index,
+                isChecked,
+                handleOnChange
               );
             })}
         </FormGroup>
