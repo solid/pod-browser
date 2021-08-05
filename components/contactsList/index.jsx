@@ -102,7 +102,7 @@ function ContactsList() {
     mutate: peopleMutate,
   } = useContactsOld(addressBook, foaf.Person);
   const profiles = useProfiles(people);
-  const formattedNamePredicate = vcard.fn;
+  const formattedNamePredicate = foaf.name;
   const hasPhotoPredicate = vcard.hasPhoto;
 
   const {

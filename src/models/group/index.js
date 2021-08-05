@@ -31,7 +31,7 @@ import {
   saveSolidDatasetAt,
   setThing,
 } from "@inrupt/solid-client";
-import { vcard } from "rdf-namespaces";
+import { foaf, vcard } from "rdf-namespaces";
 import { getBaseUrl } from "../../solidClientHelpers/resource";
 
 /*
@@ -52,7 +52,7 @@ export function getGroupUrl(group) {
 }
 
 export function getGroupName(group) {
-  return getStringNoLocale(group.thing, vcard.fn);
+  return getStringNoLocale(group.thing, foaf.name);
 }
 
 export function getGroupDescription(group) {

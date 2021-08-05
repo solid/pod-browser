@@ -30,7 +30,7 @@ import {
   setThing,
   setUrl,
 } from "@inrupt/solid-client";
-import { rdf, vcard } from "rdf-namespaces";
+import { foaf, rdf, vcard } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
 import { getBaseUrl } from "../src/solidClientHelpers/resource";
 
@@ -66,7 +66,7 @@ export function mockGroupThing(name, url, { description, members } = {}) {
   return chain(
     mockThingFrom(url),
     (t) => setUrl(t, rdf.type, vcard.Group),
-    (t) => setStringNoLocale(t, vcard.fn, name),
+    (t) => setStringNoLocale(t, foaf.name, name),
     ...(members || []).map((agentUrl) => (t) =>
       addUrl(t, vcard.hasMember, agentUrl)
     ),

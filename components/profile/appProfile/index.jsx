@@ -20,7 +20,7 @@
  */
 
 import React, { useState } from "react";
-import { vcard } from "rdf-namespaces";
+import { foaf, vcard } from "rdf-namespaces";
 import clsx from "clsx";
 import { getThing, getUrl } from "@inrupt/solid-client";
 import {
@@ -116,7 +116,7 @@ export default function AppProfile() {
 
                 <Box p={2}>
                   <h3 data-testid={TESTCAFE_ID_NAME_TITLE}>
-                    <Text property={vcard.fn} />
+                    <Text property={foaf.name} />
                   </h3>
                 </Box>
               </Box>

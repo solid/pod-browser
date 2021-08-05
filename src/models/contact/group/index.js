@@ -39,7 +39,7 @@ import {
   setThing,
   setUrl,
 } from "@inrupt/solid-client";
-import { ldp, rdf, vcard } from "rdf-namespaces";
+import { ldp, rdf, vcard, foaf } from "rdf-namespaces";
 import { v4 as uuid } from "uuid";
 import { chain } from "../../../solidClientHelpers/utils";
 import { getContainerUrl, joinPath } from "../../../stringHelpers";
@@ -71,7 +71,7 @@ function createGroupThing(name, thingOptions) {
   return chain(
     createThing(thingOptions),
     (t) => setUrl(t, rdf.type, vcard.Group),
-    (t) => setStringNoLocale(t, vcard.fn, name)
+    (t) => setStringNoLocale(t, foaf.name, name)
   );
 }
 
@@ -159,7 +159,7 @@ export async function renameGroup(
   // update the group itself
   const updatedGroup = chain(
     group.thing,
-    (t) => setStringNoLocale(t, vcard.fn, name),
+    (t) => setStringNoLocale(t, foaf.name, name),
     ...[
       (t) => removeStringNoLocale(t, vcard.note, getGroupDescription(group)),
       (t) =>
@@ -181,7 +181,7 @@ export async function renameGroup(
     groupIndexUrl,
     setThing(
       groupIndexDataset,
-      setStringNoLocale(existingGroup, vcard.fn, name)
+      setStringNoLocale(existingGroup, foaf.name, name)
     ),
     { fetch }
   );

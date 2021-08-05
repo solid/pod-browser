@@ -50,8 +50,8 @@ export default function ProfileLink(props) {
 
   // TODO remove this once react-sdk allows property fallbacks
   const name =
-    getStringNoLocale(thing, vcard.fn) ||
     getStringNoLocale(thing, foaf.name) ||
+    getStringNoLocale(thing, vcard.fn) ||
     profileIri;
 
   return (

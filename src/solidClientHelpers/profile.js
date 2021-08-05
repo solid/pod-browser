@@ -39,8 +39,8 @@ export function getProfileFromPersonThing(profileThing) {
   return {
     avatar: getUrl(profileThing, vcard.hasPhoto),
     name:
-      getStringNoLocale(profileThing, vcard.fn) ||
-      getStringNoLocale(profileThing, foaf.name),
+      getStringNoLocale(profileThing, foaf.name) ||
+      getStringNoLocale(profileThing, vcard.fn),
     nickname:
       getStringNoLocale(profileThing, vcard.nickname) ||
       getStringNoLocale(profileThing, foaf.nick),
