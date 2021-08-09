@@ -73,7 +73,7 @@ exports[`consentRequestContext Renders initial context data 1`] = `
             class="PodBrowser-root PodBrowser-body2"
           >
             <span
-              class="PodBrowser-icon-file PodBrowser-icon-small"
+              class="PodBrowser-icon-file PodBrowser-icon-small PodBrowser-icon-small--dark"
             />
             https://pod.inrupt.com/alice/private/data
           </p>
@@ -116,7 +116,7 @@ exports[`consentRequestContext Renders initial context data 1`] = `
             class="PodBrowser-root PodBrowser-body2"
           >
             <span
-              class="PodBrowser-icon-folder PodBrowser-icon-small"
+              class="PodBrowser-icon-folder PodBrowser-icon-small PodBrowser-icon-small--dark"
             />
             https://pod.inrupt.com/alice/private/data-2/
             <button
@@ -168,7 +168,7 @@ exports[`consentRequestContext Renders initial context data 1`] = `
             class="PodBrowser-root PodBrowser-body2"
           >
             <span
-              class="PodBrowser-icon-file PodBrowser-icon-small"
+              class="PodBrowser-icon-file PodBrowser-icon-small PodBrowser-icon-small--dark"
             />
             https://pod.inrupt.com/alice/private/data-3
           </p>

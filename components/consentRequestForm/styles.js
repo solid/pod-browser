@@ -111,6 +111,10 @@ export default function styles(theme) {
       marginRight: "0.5rem",
     },
 
+    "icon-small--dark": {
+      ...theme.icons.iconColor("#0D6796"),
+    },
+
     "icon-small--primary": {
       color: theme.palette.primary.main,
     },
