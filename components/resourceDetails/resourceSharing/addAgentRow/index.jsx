@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useSession, useThing } from "@inrupt/solid-ui-react";
 import {
@@ -45,6 +45,7 @@ import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
 import useContactProfile from "../../../../src/hooks/useContactProfile";
 import { PUBLIC_AGENT_PREDICATE } from "../../../../src/models/contact/public";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../src/models/contact/authenticated";
+import PermissionsContext from "../../../../src/contexts/permissionsContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
@@ -80,15 +81,18 @@ const updateThingForNewRow = async (agentWebId, thing, fetch) => {
 
 export default function AddAgentRow({
   index,
-  setNewAgentsWebIds,
-  newAgentsWebIds,
   contactsArrayLength,
-  setAddingWebId,
-  addingWebId,
   updateTemporaryRowThing,
-  permissions,
+  type,
 }) {
   const { session, fetch } = useSession();
+  const {
+    permissions,
+    newAgentsWebIds,
+    setAddingWebId,
+    addingWebId,
+    setNewAgentsWebIds,
+  } = useContext(PermissionsContext);
   const { thing: temporaryRowThing } = useThing();
   const classes = useStyles();
   const [agentWebId, setAgentWebId] = useState("");
@@ -120,7 +124,9 @@ export default function AddAgentRow({
       setAddingError(OWN_WEBID_ERROR_MESSAGE);
       return;
     }
-    const existingWebId = permissions.filter((p) => p.webId === agentWebId);
+    const existingWebId = permissions.filter(
+      (p) => p.webId === agentWebId && p.alias === type
+    );
     if (existingWebId.length) {
       setAddingError(EXISTING_WEBID_ERROR_MESSAGE);
       return;
@@ -144,7 +150,7 @@ export default function AddAgentRow({
               aria-label="Enter WebID"
               placeholder="Enter WebID"
               value={agentWebId}
-              error={addingError}
+              error={!!addingError}
               helperText={addingError}
               onChange={(e) => {
                 setAddingError(null);
@@ -233,11 +239,7 @@ export default function AddAgentRow({
 
 AddAgentRow.propTypes = {
   index: PropTypes.number.isRequired,
-  setNewAgentsWebIds: PropTypes.func.isRequired,
-  newAgentsWebIds: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setAddingWebId: PropTypes.func.isRequired,
   contactsArrayLength: PropTypes.number.isRequired,
-  addingWebId: PropTypes.bool.isRequired,
   updateTemporaryRowThing: PropTypes.func.isRequired,
-  permissions: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  type: PropTypes.string.isRequired,
 };

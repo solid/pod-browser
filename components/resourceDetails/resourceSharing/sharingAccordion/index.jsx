@@ -21,13 +21,14 @@
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React from "react";
+import React, { useContext } from "react";
 import { useRouter } from "next/router";
 import { Alert } from "@material-ui/lab";
 import AgentAccessTable from "../agentAccessTable";
 import AdvancedSharingButton from "../advancedSharingButton";
 import { namedPolicies, customPolicies } from "../../../../constants/policies";
 import { isContainerIri } from "../../../../src/solidClientHelpers/utils";
+import { PermissionsContextProvider } from "../../../../src/contexts/permissionsContext";
 
 export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
   "agent-access-list-show-all";
@@ -35,8 +36,9 @@ export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
 function SharingAccordion() {
   const router = useRouter();
   const isContainer = isContainerIri(router.query.resourceIri);
+
   return (
-    <>
+    <PermissionsContextProvider>
       {namedPolicies.concat(customPolicies).map(({ name }) => (
         <AgentAccessTable type={name} key={name} />
       ))}
@@ -46,7 +48,7 @@ function SharingAccordion() {
         </Alert>
       )}
       <AdvancedSharingButton />
-    </>
+    </PermissionsContextProvider>
   );
 }
 

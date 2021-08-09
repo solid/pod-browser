@@ -70,6 +70,9 @@ import {
 } from "../../../../src/models/contact/authenticated";
 import ResourceInfoContext from "../../../../src/contexts/resourceInfoContext";
 import { getWebIdsFromPermissions } from "../../../../src/accessControl/acp";
+import PermissionsContext, {
+  PermissionsContextProvider,
+} from "../../../../src/contexts/permissionsContext";
 
 const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
@@ -77,7 +80,24 @@ export const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
 const TESTCAFE_CANCEL_WEBIDS_BUTTON = "cancel-webids-button";
 export const DIALOG_ID = "add-new-permissions";
 
+export const removeExistingAgentFromOtherPolicies = ({
+  permissions,
+  newPolicy,
+  agentWebId,
+  accessControl,
+}) => {
+  const existingPermission = permissions.filter(
+    (p) => p.webId === agentWebId && p.alias !== newPolicy
+  );
+  if (existingPermission.length) {
+    existingPermission.map((ep) =>
+      accessControl.removeAgentFromPolicy(ep.webId, ep.alias)
+    );
+  }
+};
+
 export const handleSubmit = ({
+  permissions,
   newAgentsWebIds,
   webIdsToDelete,
   accessControl,
@@ -95,6 +115,16 @@ export const handleSubmit = ({
       return;
     }
     setLoading(true);
+    const existingPoliciesPromiseFactories = newAgentsWebIds?.map(
+      (agentWebId) => () => {
+        removeExistingAgentFromOtherPolicies({
+          permissions,
+          newPolicy: policyName,
+          agentWebId,
+          accessControl,
+        });
+      }
+    );
     const addPermissionsPromiseFactories = newAgentsWebIds?.map(
       (agentWebId) => () => {
         if (PUBLIC_AGENT_PREDICATE === agentWebId) {
@@ -129,6 +159,7 @@ export const handleSubmit = ({
         saveAgentToContacts(agentWebId, addressBook, fetch)
       );
     const args = await serializePromises([
+      ...existingPoliciesPromiseFactories,
       ...addPermissionsPromiseFactories,
       ...removePermissionsPromiseFactories,
       ...addAgentsToContactsPromiseFactories,
@@ -180,9 +211,17 @@ function AgentPickerModal(
   );
   const policyName = advancedSharing ? customPolicy : type;
   const { header, saveText, titleSingular } = POLICIES_TYPE_MAP[policyName];
-  const { data: permissions, mutate: mutatePermissions } = usePolicyPermissions(
-    policyName
-  );
+
+  const {
+    permissions: allPermissions,
+    newAgentsWebIds,
+    setNewAgentsWebIds,
+    webIdsToDelete,
+    setWebIdsToDelete,
+    setAddingWebId,
+    addingWebId,
+  } = useContext(PermissionsContext);
+  const permissions = allPermissions?.filter((p) => p.alias === type);
   const { mutate: mutateResourceInfo } = useContext(ResourceInfoContext);
 
   const { data: addressBook } = useAddressBook();
@@ -205,13 +244,11 @@ function AgentPickerModal(
   // TODO: Uncomment to reintroduce tabs
   // const [selectedTabValue, setSelectedTabValue] = useState("");
   const { accessControl } = useContext(AccessControlContext);
-  const [newAgentsWebIds, setNewAgentsWebIds] = useState([]);
-  const [webIdsToDelete, setWebIdsToDelete] = useState([]);
+
   const [bypassDialog, setBypassDialog] = useState(false);
   const [contactsArray, setContactsArray] = useState([]);
   // TODO: Uncomment to reintroduce tabs
   // const [filteredContacts, setFilteredContacts] = useState([]);
-  const [addingWebId, setAddingWebId] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
   const [confirmationSetup, setConfirmationSetup] = useState(false);
   const {
@@ -234,11 +271,11 @@ function AgentPickerModal(
     setGlobalFilter(value || undefined);
   };
   const handleSubmitNewWebIds = handleSubmit({
+    permissions: allPermissions,
     newAgentsWebIds,
     webIdsToDelete,
     accessControl,
     addressBook,
-    mutatePermissions,
     mutateResourceInfo,
     saveAgentToContacts: handleSaveContact,
     onClose,
@@ -427,11 +464,7 @@ function AgentPickerModal(
                 <WebIdCheckbox
                   value={value}
                   index={index}
-                  addingWebId={addingWebId}
-                  permissions={permissions}
                   toggleCheckbox={toggleCheckbox}
-                  newAgentsWebIds={newAgentsWebIds}
-                  webIdsToDelete={webIdsToDelete}
                 />
               )}
             />
@@ -443,13 +476,8 @@ function AgentPickerModal(
                 <AddAgentRow
                   type={policyName}
                   index={index}
-                  setNewAgentsWebIds={setNewAgentsWebIds}
-                  newAgentsWebIds={newAgentsWebIds}
                   contactsArrayLength={contactsArray.length}
-                  setAddingWebId={setAddingWebId}
-                  addingWebId={addingWebId}
                   updateTemporaryRowThing={updateTemporaryRowThing}
-                  permissions={permissions}
                 />
               )}
             />

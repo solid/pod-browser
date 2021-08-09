@@ -19,18 +19,24 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function mockAccessControl(
-  { permissions } = { permissions: [] }
-) {
-  return {
-    deleteFile: jest.fn().mockResolvedValue({ response: {} }),
-    getPermissions: jest.fn().mockResolvedValue(permissions),
-    savePermissionsForAgent: jest.fn().mockResolvedValue({ response: {} }),
-    addAgentToPolicy: jest.fn().mockResolvedValue({ response: {} }),
-    getAllPermissionsForResource: jest.fn().mockResolvedValue(permissions),
-    getPermissionsForPolicy: jest.fn().mockResolvedValue(permissions),
-    removeAgentFromPolicy: jest.fn().mockResolvedValue({ response: {} }),
-    setRulePublic: jest.fn().mockResolvedValue({ response: {} }),
-    setRuleAuthenticated: jest.fn().mockResolvedValue({ response: {} }),
-  };
+import { useState, useEffect, useContext } from "react";
+import AccessControlContext from "../../contexts/accessControlContext";
+
+export default function useAllPermissions() {
+  const { accessControl } = useContext(AccessControlContext);
+  const [permissions, setPermissions] = useState(null);
+
+  useEffect(() => {
+    if (!accessControl) {
+      setPermissions(null);
+      return;
+    }
+    accessControl
+      .getAllPermissionsForResource()
+      .then((normalizedPermissions) => {
+        setPermissions(normalizedPermissions.reverse());
+      });
+  }, [accessControl]);
+
+  return { permissions };
 }

@@ -21,30 +21,28 @@
 
 /* eslint-disable react/forbid-prop-types */
 
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import { useThing } from "@inrupt/solid-ui-react";
 import { getUrl } from "@inrupt/solid-client";
 import PropTypes from "prop-types";
 import { Checkbox } from "@material-ui/core";
 import useContactProfile from "../../../../../src/hooks/useContactProfile";
-import { permission as permissionPropType } from "../../../../../constants/propTypes";
 import {
   getWebIdsFromInheritedPermissions,
   getWebIdsFromPermissions,
 } from "../../../../../src/accessControl/acp";
+import PermissionsContext from "../../../../../src/contexts/permissionsContext";
 
 export const TESTCAFE_ID_WEBID_CHECKBOX = "webid-checkbox";
 const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 
-export default function WebIdCheckbox({
-  value,
-  index,
-  addingWebId,
-  permissions,
-  toggleCheckbox,
-  newAgentsWebIds,
-  webIdsToDelete,
-}) {
+export default function WebIdCheckbox({ value, index, toggleCheckbox }) {
+  const {
+    permissions,
+    addingWebId,
+    newAgentsWebIds,
+    webIdsToDelete,
+  } = useContext(PermissionsContext);
   const { thing } = useThing();
   const { data: profile } = useContactProfile(thing);
   const agentIdentifier = thing && getUrl(thing, AGENT_PREDICATE); // todo: add corresponding groupIdentifier when adding groups
@@ -52,6 +50,7 @@ export default function WebIdCheckbox({
   const webIdsFromInheritedPermissions = getWebIdsFromInheritedPermissions(
     permissions
   );
+
   const agentId = useCallback(() => {
     let agentIdentifierValue;
     if (!agentIdentifier && profile) {
@@ -63,6 +62,7 @@ export default function WebIdCheckbox({
     }
     return agentIdentifierValue;
   }, [agentIdentifier, index, profile, value]);
+
   const checked = useCallback(() => {
     if (index === 0 && addingWebId) {
       return true;
@@ -89,6 +89,7 @@ export default function WebIdCheckbox({
     () => webIdsFromInheritedPermissions.indexOf(agentId()) !== -1,
     [agentId, webIdsFromInheritedPermissions]
   );
+
   return (
     <Checkbox
       inputProps={{ "data-testid": TESTCAFE_ID_WEBID_CHECKBOX }}
@@ -106,18 +107,10 @@ export default function WebIdCheckbox({
 WebIdCheckbox.propTypes = {
   value: PropTypes.string,
   index: PropTypes.number.isRequired,
-  addingWebId: PropTypes.bool,
-  permissions: PropTypes.arrayOf(permissionPropType),
   toggleCheckbox: PropTypes.func,
-  newAgentsWebIds: PropTypes.arrayOf(PropTypes.string),
-  webIdsToDelete: PropTypes.arrayOf(PropTypes.string),
 };
 
 WebIdCheckbox.defaultProps = {
   value: null,
-  addingWebId: false,
-  permissions: [],
   toggleCheckbox: () => {},
-  newAgentsWebIds: [],
-  webIdsToDelete: [],
 };
