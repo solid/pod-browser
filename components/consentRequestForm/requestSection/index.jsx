@@ -61,7 +61,7 @@ const ResourceSwitch = (props) => {
       label={
         // eslint-disable-next-line react/jsx-wrap-multilines
         <Typography variant="body2">
-          <Icons name="file" className={bem("icon-small")} />
+          <Icons name="file" className={bem("icon-small", "dark")} />
           {resourceIri}
         </Typography>
       }
@@ -208,7 +208,7 @@ const ContainerSwitch = (props) => {
         label={
           // eslint-disable-next-line react/jsx-wrap-multilines
           <Typography variant="body2">
-            <Icons name="folder" className={bem("icon-small")} />
+            <Icons name="folder" className={bem("icon-small", "dark")} />
             {resourceIri}
             <button
               data-testid={TESTCAFE_ID_REQUEST_EXPAND_SECTION_BUTTON}
