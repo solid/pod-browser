@@ -21,7 +21,7 @@
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { useContext } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Alert } from "@material-ui/lab";
 import AgentAccessTable from "../agentAccessTable";
@@ -36,18 +36,24 @@ export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
 function SharingAccordion() {
   const router = useRouter();
   const isContainer = isContainerIri(router.query.resourceIri);
+  const [loading, setLoading] = useState(false);
 
   return (
     <PermissionsContextProvider>
       {namedPolicies.concat(customPolicies).map(({ name }) => (
-        <AgentAccessTable type={name} key={name} />
+        <AgentAccessTable
+          type={name}
+          key={name}
+          loading={loading}
+          setLoading={setLoading}
+        />
       ))}
       {isContainer && (
         <Alert icon={false} severity="info">
           Sharing applies to all items in this folder
         </Alert>
       )}
-      <AdvancedSharingButton />
+      <AdvancedSharingButton loading={loading} setLoading={setLoading} />
     </PermissionsContextProvider>
   );
 }

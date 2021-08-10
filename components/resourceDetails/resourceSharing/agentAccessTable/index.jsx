@@ -55,9 +55,8 @@ const TESTCAFE_ID_SHOW_ALL_BUTTON = "show-all-button";
 const TESTCAFE_ID_HIDE_BUTTON = "hide-button";
 export const TESTCAFE_ID_AGENT_ACCESS_TABLE = "agent-access-table";
 
-export default function AgentAccessTable({ type }) {
+export default function AgentAccessTable({ type, loading, setLoading }) {
   const { permissions } = useContext(PermissionsContext);
-  const [loading, setLoading] = useState(false);
   const [tablePermissions, setTablePermissions] = useState([]);
   const [policyPermissions, setPolicyPermissions] = useState([]);
   const { permissionsWithProfiles } = usePermissionsWithProfiles(
@@ -279,4 +278,6 @@ export default function AgentAccessTable({ type }) {
 
 AgentAccessTable.propTypes = {
   type: PropTypes.string.isRequired,
+  loading: PropTypes.bool.isRequired,
+  setLoading: PropTypes.func.isRequired,
 };

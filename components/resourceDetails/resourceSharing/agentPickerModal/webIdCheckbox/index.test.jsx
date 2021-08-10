@@ -56,6 +56,7 @@ describe("WebIdCheckbox", () => {
           value={value}
           index={index}
           toggleCheckbox={toggleCheckbox}
+          type="editors"
         />
       </PermissionsContextProvider>
     );
@@ -74,6 +75,7 @@ describe("WebIdCheckbox", () => {
           value={null}
           index={index}
           toggleCheckbox={toggleCheckbox}
+          type="editors"
         />
       </PermissionsContextProvider>
     );
@@ -87,7 +89,12 @@ describe("WebIdCheckbox", () => {
     });
     const { getByTestId } = renderWithTheme(
       <PermissionsContextProvider>
-        <WebIdCheckbox value={null} index={0} toggleCheckbox={toggleCheckbox} />
+        <WebIdCheckbox
+          value={null}
+          index={0}
+          toggleCheckbox={toggleCheckbox}
+          type="editors"
+        />
       </PermissionsContextProvider>
     );
     const checkbox = getByTestId(TESTCAFE_ID_WEBID_CHECKBOX);
@@ -97,7 +104,12 @@ describe("WebIdCheckbox", () => {
   test("checkbox is checked if agent is already in permissions", () => {
     const { getByTestId } = renderWithTheme(
       <PermissionsContextProvider>
-        <WebIdCheckbox value={null} index={0} toggleCheckbox={toggleCheckbox} />
+        <WebIdCheckbox
+          value={null}
+          index={0}
+          toggleCheckbox={toggleCheckbox}
+          type="editors"
+        />
       </PermissionsContextProvider>
     );
     const checkbox = getByTestId(TESTCAFE_ID_WEBID_CHECKBOX);
@@ -111,6 +123,7 @@ describe("WebIdCheckbox", () => {
           value={null}
           index={index}
           toggleCheckbox={toggleCheckbox}
+          type="editors"
         />
       </PermissionsContextProvider>
     );
@@ -132,6 +145,7 @@ describe("WebIdCheckbox", () => {
           value={inheritedAccessWebId}
           index={index}
           toggleCheckbox={toggleCheckbox}
+          type="editors"
         />
       </PermissionsContextProvider>
     );

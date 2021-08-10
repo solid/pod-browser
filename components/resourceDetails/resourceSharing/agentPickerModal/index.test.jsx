@@ -371,6 +371,37 @@ describe("handleSubmit", () => {
       );
     });
   });
+
+  it("when assing a webId to advanced policies, if webId is already in a different policy it removes it from the existing policy before adding it to the new one", async () => {
+    const agentWebId = "https://example4.com/profile/card#me";
+    const oldPolicyName = "editors";
+    const newPolicyName = "viewAndAdd";
+    const handler = handleSubmit({
+      permissions,
+      newAgentsWebIds: [agentWebId],
+      webIdsToDelete: [],
+      accessControl,
+      addressBook,
+      mutateResourceInfo,
+      saveAgentToContacts,
+      onClose,
+      setLoading,
+      policyName: newPolicyName,
+      fetch,
+    });
+    handler();
+
+    await waitFor(() => {
+      expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledWith(
+        agentWebId,
+        oldPolicyName
+      );
+      expect(accessControl.addAgentToPolicy).toHaveBeenCalledWith(
+        agentWebId,
+        newPolicyName
+      );
+    });
+  });
 });
 
 describe("handleSaveContact", () => {
@@ -824,10 +855,6 @@ describe("AgentPickerModal with contacts", () => {
         mockGroupContact(emptyAddressBook, "Group 1", { id: "1234" }),
       ],
     });
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: permissions,
-      mutate: jest.fn(),
-    });
     const { getByTestId, queryAllByTestId } = renderWithTheme(
       <AgentPickerModal
         type="editors"
@@ -861,10 +888,6 @@ describe("AgentPickerModal with contacts", () => {
         ),
       ],
     });
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: permissions,
-      mutate: jest.fn(),
-    });
     const { getByTestId, queryAllByTestId, queryByText } = renderWithTheme(
       <AgentPickerModal
         type="editors"
@@ -884,10 +907,6 @@ describe("AgentPickerModal with contacts", () => {
     const emptyAddressBook = mockAddressBook({ containerUrl });
     mockedUseContacts.mockReturnValue({
       data: [mockGroupContact(emptyAddressBook, "Group 1", { id: "1234" })],
-    });
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: permissions,
-      mutate: jest.fn(),
     });
     const { getByTestId, queryAllByTestId, queryByText } = renderWithTheme(
       <AgentPickerModal

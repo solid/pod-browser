@@ -36,9 +36,9 @@ import PermissionsContext from "../../../../../src/contexts/permissionsContext";
 export const TESTCAFE_ID_WEBID_CHECKBOX = "webid-checkbox";
 const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 
-export default function WebIdCheckbox({ value, index, toggleCheckbox }) {
+export default function WebIdCheckbox({ value, index, toggleCheckbox, type }) {
   const {
-    permissions,
+    permissions: allPermissions,
     addingWebId,
     newAgentsWebIds,
     webIdsToDelete,
@@ -46,6 +46,7 @@ export default function WebIdCheckbox({ value, index, toggleCheckbox }) {
   const { thing } = useThing();
   const { data: profile } = useContactProfile(thing);
   const agentIdentifier = thing && getUrl(thing, AGENT_PREDICATE); // todo: add corresponding groupIdentifier when adding groups
+  const permissions = allPermissions?.filter((p) => p.alias === type);
   const webIdsInPermissions = getWebIdsFromPermissions(permissions);
   const webIdsFromInheritedPermissions = getWebIdsFromInheritedPermissions(
     permissions
@@ -108,6 +109,7 @@ WebIdCheckbox.propTypes = {
   value: PropTypes.string,
   index: PropTypes.number.isRequired,
   toggleCheckbox: PropTypes.func,
+  type: PropTypes.string.isRequired,
 };
 
 WebIdCheckbox.defaultProps = {

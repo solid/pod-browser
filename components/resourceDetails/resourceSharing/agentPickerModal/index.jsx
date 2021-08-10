@@ -462,6 +462,7 @@ function AgentPickerModal(
                   value={value}
                   index={index}
                   toggleCheckbox={toggleCheckbox}
+                  type={type}
                 />
               )}
             />
