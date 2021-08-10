@@ -35,8 +35,8 @@ import PersonProfile, {
   TESTCAFE_ID_NAME_TITLE,
   TESTCAFE_ID_ORG_FIELD,
   TESTCAFE_ID_ROLE_FIELD,
-} from "../index";
-import { setupErrorComponent } from ".";
+  setupErrorComponent,
+} from "./index";
 
 const profileIri = "https://example.com/profile/card#me";
 
