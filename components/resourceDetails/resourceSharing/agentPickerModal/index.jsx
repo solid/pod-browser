@@ -50,7 +50,6 @@ import AddWebIdButton from "./addWebIdButton";
 import WebIdCheckbox from "./webIdCheckbox";
 import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
 import ConfirmationDialog from "../../../confirmationDialog";
-import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
 import useContacts from "../../../../src/hooks/useContacts";
 import { GROUP_CONTACT } from "../../../../src/models/contact/group";
 import {
@@ -70,9 +69,7 @@ import {
 } from "../../../../src/models/contact/authenticated";
 import ResourceInfoContext from "../../../../src/contexts/resourceInfoContext";
 import { getWebIdsFromPermissions } from "../../../../src/accessControl/acp";
-import PermissionsContext, {
-  PermissionsContextProvider,
-} from "../../../../src/contexts/permissionsContext";
+import PermissionsContext from "../../../../src/contexts/permissionsContext";
 
 const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";

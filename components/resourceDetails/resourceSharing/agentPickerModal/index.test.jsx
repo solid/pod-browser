@@ -24,7 +24,6 @@ import { waitFor } from "@testing-library/dom";
 // eslint-disable-next-line camelcase
 import { acp_v2, mockSolidDatasetFrom } from "@inrupt/solid-client";
 import userEvent from "@testing-library/user-event";
-import { act } from "react-dom/test-utils";
 import AgentPickerModal, {
   handleSaveContact,
   handleSubmit,
@@ -46,8 +45,6 @@ import {
   TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
   TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE,
 } from "../../../confirmationDialog";
-import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
-import useAllPermissions from "../../../../src/hooks/useAllPermissions";
 import useAddressBook from "../../../../src/hooks/useAddressBook";
 import useContacts from "../../../../src/hooks/useContacts";
 import { PUBLIC_AGENT_PREDICATE } from "../../../../src/models/contact/public";
@@ -61,9 +58,6 @@ import { TESTCAFE_ID_SEARCH_INPUT } from "../agentsSearchBar";
 
 jest.mock("../../../../src/hooks/useAddressBook");
 const mockedUseAddressBook = useAddressBook;
-
-jest.mock("../../../../src/hooks/usePolicyPermissions");
-const mockedUsePolicyPermissions = usePolicyPermissions;
 
 jest.mock("../../../../src/hooks/useContacts");
 const mockedUseContacts = useContacts;
@@ -322,6 +316,7 @@ describe("handleSubmit", () => {
   it("when webId to be deleted is authenticated agent url, it calls the corresponding setRuleAuthenticated with the correct value", async () => {
     const policyName = "editors";
     const handler = handleSubmit({
+      permissions,
       newAgentsWebIds: [],
       webIdsToDelete: [AUTHENTICATED_AGENT_PREDICATE],
       accessControl,
@@ -344,6 +339,37 @@ describe("handleSubmit", () => {
 
     expect(mutateResourceInfo).toHaveBeenCalledWith(acr, false);
     expect(onClose).toHaveBeenCalled();
+  });
+
+  it("when webId is already in a different policy it removes it from the existing policy before adding it to the new one", async () => {
+    const agentWebId = "https://example4.com/profile/card#me";
+    const oldPolicyName = "editors";
+    const newPolicyName = "viewers";
+    const handler = handleSubmit({
+      permissions,
+      newAgentsWebIds: [agentWebId],
+      webIdsToDelete: [],
+      accessControl,
+      addressBook,
+      mutateResourceInfo,
+      saveAgentToContacts,
+      onClose,
+      setLoading,
+      policyName: newPolicyName,
+      fetch,
+    });
+    handler();
+
+    await waitFor(() => {
+      expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledWith(
+        agentWebId,
+        oldPolicyName
+      );
+      expect(accessControl.addAgentToPolicy).toHaveBeenCalledWith(
+        agentWebId,
+        newPolicyName
+      );
+    });
   });
 });
 
