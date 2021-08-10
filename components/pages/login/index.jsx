@@ -67,7 +67,9 @@ export default function Login({ history }) {
 
   useEffect(() => {
     if (!localStorage) return;
-    localStorage.setItem("previousPage", previousPage);
+    if (previousPage) {
+      localStorage.setItem("previousPage", previousPage);
+    }
   }, [previousPage]);
 
   return (
