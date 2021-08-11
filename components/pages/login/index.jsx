@@ -19,7 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { Button } from "@inrupt/prism-react-components";
 import clsx from "clsx";
@@ -56,10 +57,20 @@ const links = [
   },
 ];
 
-export default function Login() {
-  useRedirectIfLoggedIn();
+export default function Login({ history }) {
+  const filteredHistory = history.slice(0, history.indexOf("/login"));
+  const previousPage = filteredHistory[filteredHistory.length - 1];
+  const redirectUrl = previousPage || "/";
+  useRedirectIfLoggedIn(redirectUrl);
   const bem = useBem(useStyles());
   const buttonBem = Button.useBem();
+
+  useEffect(() => {
+    if (!localStorage) return;
+    if (previousPage) {
+      localStorage.setItem("previousPage", previousPage);
+    }
+  }, [previousPage]);
 
   return (
     <div className={bem("login-page")}>
@@ -101,3 +112,11 @@ export default function Login() {
     </div>
   );
 }
+
+Login.propTypes = {
+  history: PropTypes.arrayOf(PropTypes.string),
+};
+
+Login.defaultProps = {
+  history: [],
+};

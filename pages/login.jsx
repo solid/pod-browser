@@ -20,9 +20,18 @@
  */
 
 import React from "react";
+import PropTypes from "prop-types";
 
 import LoginPage from "../components/pages/login";
 
-export default function Login() {
-  return <LoginPage />;
+export default function Login({ history }) {
+  return <LoginPage history={history} />;
 }
+
+Login.propTypes = {
+  history: PropTypes.arrayOf(PropTypes.string),
+};
+
+Login.defaultProps = {
+  history: [],
+};

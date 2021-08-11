@@ -28,10 +28,12 @@ import IndexPage from "./index";
 import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
 import { resourceHref } from "../../../src/navigator";
 import usePodIrisFromWebId from "../../../src/hooks/usePodIrisFromWebId";
+import usePreviousPage from "../../../src/hooks/usePreviousPage";
 import TestApp from "../../../__testUtils/testApp";
 
 jest.mock("../../../src/effects/auth");
 jest.mock("../../../src/hooks/usePodIrisFromWebId");
+jest.mock("../../../src/hooks/usePreviousPage");
 jest.mock("next/router");
 
 describe("Index page", () => {
@@ -78,7 +80,29 @@ describe("Index page", () => {
     );
   });
 
+  test("Redirects to the previous page if it is available", () => {
+    const push = jest.fn().mockResolvedValue(undefined);
+    const replace = jest.fn().mockResolvedValue(undefined);
+    const previousPage = "/resource/https://pod.example.com/someresource.txt";
+
+    nextRouterFns.useRouter.mockReturnValue({ push, replace });
+    usePreviousPage.mockReturnValue(previousPage);
+
+    render(
+      <TestApp>
+        <IndexPage />
+      </TestApp>
+    );
+
+    expect(push).toHaveBeenCalledWith(previousPage);
+  });
+
   test("Redirects if the user is logged out", () => {
+    usePreviousPage.mockReturnValue(null);
+    const replace = jest.fn().mockResolvedValue(undefined);
+
+    nextRouterFns.useRouter.mockReturnValue({ replace });
+
     render(
       <TestApp session={mockUnauthenticatedSession()}>
         <IndexPage />

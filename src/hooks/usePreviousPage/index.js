@@ -19,39 +19,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useEffect } from "react";
-import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-import { useSession } from "@inrupt/solid-ui-react";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-
-import { resourceHref } from "../../../src/navigator";
-import usePodIrisFromWebId from "../../../src/hooks/usePodIrisFromWebId";
-import usePreviousPage from "../../../src/hooks/usePreviousPage";
-
-export default function Home() {
-  const router = useRouter();
-  const previousPage = usePreviousPage();
-  useRedirectIfLoggedOut();
-
-  const { session } = useSession();
-  const { webId = "" } = session.info;
-  const { data: podIris = [] } = usePodIrisFromWebId(webId);
-  const [podIri] = podIris;
-  const redirectUrl = previousPage || null;
-
+export default function usePreviousPage() {
+  const [previousPage, setPreviousPage] = useState(null);
   useEffect(() => {
-    if (redirectUrl && redirectUrl !== "/") {
-      router.push(redirectUrl).catch((e) => {
-        throw e;
-      });
-    }
-    if (podIri) {
-      router.replace("/resource/[iri]", resourceHref(podIri)).catch((e) => {
-        throw e;
-      });
-    }
-  }, [podIri, router, redirectUrl]);
-
-  return null;
+    if (!localStorage) return;
+    const url = localStorage.getItem("previousPage");
+    setPreviousPage(url || null);
+  }, []);
+  return previousPage;
 }
