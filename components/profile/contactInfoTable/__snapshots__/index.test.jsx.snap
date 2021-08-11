@@ -29,7 +29,38 @@ exports[`ContactInfoTable renders a table of contact info 1`] = `
       </thead>
       <tbody
         role="rowgroup"
-      />
+      >
+        <tr
+          class="PodBrowser-table__body-row"
+          role="row"
+        >
+          <td
+            role="cell"
+          >
+            <p
+              class="PodBrowser-root PodBrowser-body1"
+              data-testid="profile-email-existing-type"
+              title="http://www.w3.org/2006/vcard/ns#Home"
+            >
+              Home
+            </p>
+          </td>
+          <td
+            role="cell"
+          >
+            <p
+              class="PodBrowser-root PodBrowser-body1"
+            >
+              <span>
+                Error: No value found for property.
+              </span>
+            </p>
+          </td>
+          <td
+            role="cell"
+          />
+        </tr>
+      </tbody>
     </table>
   </div>
 </DocumentFragment>
@@ -64,7 +95,52 @@ exports[`ContactInfoTable renders an editable table of contact info 1`] = `
       </thead>
       <tbody
         role="rowgroup"
-      />
+      >
+        <tr
+          class="PodBrowser-table__body-row"
+          role="row"
+        >
+          <td
+            role="cell"
+          >
+            <p
+              class="PodBrowser-root PodBrowser-body1"
+              data-testid="profile-email-existing-type"
+              title="http://www.w3.org/2006/vcard/ns#Home"
+            >
+              Home
+            </p>
+          </td>
+          <td
+            role="cell"
+          >
+            <p
+              class="PodBrowser-root PodBrowser-body1"
+            >
+              <input
+                class="PodBrowser-input"
+                data-testid="profile-email-existing-value"
+                type="url"
+                value=""
+              />
+            </p>
+          </td>
+          <td
+            role="cell"
+          >
+            <button
+              class="PodBrowser-button PodBrowser-button--secondary"
+              data-testid="profile-email-delete-button"
+            >
+              <span
+                class="PodBrowser-button__text"
+              >
+                Delete
+              </span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </div>
   <div
@@ -179,7 +255,7 @@ exports[`setupColumnValueBody renders for editing mode 1`] = `
     class="MuiTypography-root MuiTypography-body1"
   >
     <span>
-      fetching data in progress
+      Error: Thing not found as property or in context
     </span>
   </p>
 </DocumentFragment>
@@ -191,7 +267,7 @@ exports[`setupColumnValueBody renders for read-only mode 1`] = `
     class="MuiTypography-root MuiTypography-body1"
   >
     <span>
-      fetching data in progress
+      Error: Thing not found as property or in context
     </span>
   </p>
 </DocumentFragment>

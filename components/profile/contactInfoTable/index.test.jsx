@@ -28,6 +28,11 @@ import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
+import {
+  mockPersonDatasetAlice,
+  mockPersonDatasetAliceWithEmail,
+  mockProfileAliceWithEmail,
+} from "../../../__testUtils/mockPersonResource";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import ContactInfoTable, {
   CONTACT_INFO_TYPE_EMAIL,
@@ -43,27 +48,24 @@ import ContactInfoTable, {
   setupRowProps,
   setupSaveHandler,
 } from "./index";
-import useDataset from "../../../src/hooks/useDataset";
-
-jest.mock("../../../src/hooks/useDataset");
-const mockedUseDataset = useDataset;
 
 const { mockSolidDatasetFrom, mockThingFrom } = scFns;
-const dataset = mockSolidDatasetFrom("http://example.com/dataset");
-const profile = mockThingFrom("http://example.com/profile#this");
-beforeEach(() => {
-  mockedUseDataset.mockReturnValue();
-});
+const dataset = mockSolidDatasetFrom("https://example.org");
+const profile = mockPersonDatasetAlice();
 
 describe("ContactInfoTable", () => {
   test("renders a table of contact info", async () => {
     const session = mockSession({ fetch });
+    const profileDataset = mockPersonDatasetAliceWithEmail();
     const SessionProvider = mockSessionContextProvider(session);
-    const thing = mockThingFrom("http://example.com/alice#me");
+    const thing = mockProfileAliceWithEmail();
     const { asFragment, findByRole } = renderWithTheme(
       <SessionProvider>
-        <CombinedDataProvider solidDataset={dataset} thing={thing}>
-          <ContactInfoTable property={vcard.hasEmail} />
+        <CombinedDataProvider solidDataset={profileDataset} thing={thing}>
+          <ContactInfoTable
+            property={vcard.hasEmail}
+            contactInfoType={CONTACT_INFO_TYPE_EMAIL}
+          />
         </CombinedDataProvider>
       </SessionProvider>
     );
@@ -74,11 +76,12 @@ describe("ContactInfoTable", () => {
   test("renders an editable table of contact info", () => {
     const session = mockSession({ fetch });
     const SessionProvider = mockSessionContextProvider(session);
-    const thing = mockThingFrom("http://example.com/alice#me");
+    const thing = mockProfileAliceWithEmail();
+    const profileDataset = mockPersonDatasetAliceWithEmail();
 
     const { asFragment } = renderWithTheme(
       <SessionProvider>
-        <CombinedDataProvider solidDataset={dataset} thing={thing}>
+        <CombinedDataProvider solidDataset={profileDataset} thing={thing}>
           <ContactInfoTable
             property={vcard.hasEmail}
             editing

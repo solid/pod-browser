@@ -24,10 +24,7 @@ import { render } from "@testing-library/react";
 import * as solidClientFns from "@inrupt/solid-client";
 import { schema } from "rdf-namespaces";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
-import {
-  aliceWebIdUrl,
-  mockPersonDatasetAlice,
-} from "../../../__testUtils/mockPersonResource";
+import { mockPersonDatasetAlice } from "../../../__testUtils/mockPersonResource";
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import PersonProfile, {
@@ -41,8 +38,11 @@ import PersonProfile, {
 const profileIri = "https://example.com/profile/card#me";
 
 describe("Person Profile", () => {
-  const profileDataset = mockPersonDatasetAlice();
-  const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+  const profileThing = mockPersonDatasetAlice();
+  const profileDataset = solidClientFns.setThing(
+    mockPersonDatasetAlice(),
+    profileThing
+  );
 
   beforeEach(() => {
     jest

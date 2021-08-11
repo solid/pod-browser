@@ -23,12 +23,15 @@ import {
   addStringNoLocale,
   addUrl,
   asUrl,
+  mockSolidDatasetFrom,
   mockThingFrom,
+  setThing,
 } from "@inrupt/solid-client";
 import { vcard, foaf, rdf, space } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
 import { packageProfile } from "../src/solidClientHelpers/profile";
 import { vcardExtras } from "../src/addressBook";
+import { DEFAULT_CONTACT_TYPE } from "../components/profile/contactInfoTable";
 
 const VCARD_WEBID_PREDICATE = vcardExtras("WebId");
 
@@ -53,6 +56,8 @@ export const alicePhoto = "http://alice.example.com/alice.jpg";
 export const alicePodRoot = "http://alice.example.com/";
 export const aliceAlternativeProfileUrl = "https://alice2.example.org/card";
 export const aliceAlternativeWebIdUrl = "https://alice2.example.org/card#me";
+export const aliceEmail = "alice@example.com";
+const aliceEmailNodeUrl = `${aliceWebIdUrl}#email`;
 
 export function mockPersonDatasetAlice(...operations) {
   return chain(
@@ -65,6 +70,32 @@ export function mockPersonDatasetAlice(...operations) {
     (t) => addUrl(t, space.storage, alicePodRoot),
     ...operations
   );
+}
+
+const aliceEmailNode = chain(
+  mockThingFrom(aliceEmailNodeUrl),
+  (t) => addStringNoLocale(t, vcard.value, aliceEmail),
+  (t) => addUrl(t, rdf.type, DEFAULT_CONTACT_TYPE)
+);
+
+export const mockProfileAliceWithEmail = () => {
+  return chain(
+    mockThingFrom(aliceWebIdUrl),
+    (t) => addStringNoLocale(t, foaf.name, aliceName),
+    (t) => addStringNoLocale(t, vcard.nickname, aliceNick),
+    (t) => addUrl(t, vcard.hasPhoto, alicePhoto),
+    (t) => addUrl(t, rdf.type, foaf.Person),
+    (t) => addUrl(t, vcard.url, aliceAlternativeWebIdUrl),
+    (t) => addUrl(t, space.storage, alicePodRoot),
+    (t) => addUrl(t, vcard.hasEmail, aliceEmailNodeUrl)
+  );
+};
+
+export function mockPersonDatasetAliceWithEmail() {
+  const dataset = mockSolidDatasetFrom(aliceWebIdUrl);
+  const profile = mockProfileAliceWithEmail();
+  const datasetWithEmail = setThing(dataset, aliceEmailNode);
+  return setThing(datasetWithEmail, profile);
 }
 
 export function mockProfileAlice(...operations) {

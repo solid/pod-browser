@@ -220,6 +220,7 @@ export default function ContactTable({ editing, property, contactInfoType }) {
 
   const { solidDataset: dataset, setDataset } = useContext(DatasetContext);
   const { thing: profile } = useThing();
+
   const contactDetailUrls = profile && getUrlAll(profile, property);
   const contactDetailThings = contactDetailUrls?.map((url) => ({
     dataset,

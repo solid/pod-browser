@@ -116,6 +116,7 @@ export default function PersonProfile({ profileIri, editing }) {
                     className: bem("input"),
                     "data-testid": TESTCAFE_ID_NAME_FIELD,
                   }}
+                  errorComponent={() => <span />}
                 />
               </Box>
 
@@ -129,6 +130,7 @@ export default function PersonProfile({ profileIri, editing }) {
                     "data-testid": TESTCAFE_ID_ROLE_FIELD,
                   }}
                   autosave
+                  errorComponent={() => <span />}
                 />
               </Box>
 
@@ -142,6 +144,7 @@ export default function PersonProfile({ profileIri, editing }) {
                     "data-testid": TESTCAFE_ID_ORG_FIELD,
                   }}
                   autosave
+                  errorComponent={() => <span />}
                 />
               </Box>
             </Box>

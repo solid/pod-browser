@@ -96,34 +96,7 @@ exports[`Person Profile renders a profile 1`] = `
           </label>
           <div
             class="PodBrowser-root PodBrowser-root"
-          >
-            <table
-              class="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
-              role="table"
-            >
-              <thead>
-                <tr
-                  role="row"
-                >
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                </tr>
-              </thead>
-              <tbody
-                role="rowgroup"
-              />
-            </table>
-          </div>
+          />
         </div>
         <div
           class="PodBrowser-root PodBrowser-root"
@@ -135,34 +108,7 @@ exports[`Person Profile renders a profile 1`] = `
           </label>
           <div
             class="PodBrowser-root PodBrowser-root"
-          >
-            <table
-              class="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
-              role="table"
-            >
-              <thead>
-                <tr
-                  role="row"
-                >
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                </tr>
-              </thead>
-              <tbody
-                role="rowgroup"
-              />
-            </table>
-          </div>
+          />
         </div>
       </div>
     </div>
@@ -279,34 +225,7 @@ exports[`Person Profile renders an editable profile 1`] = `
           </label>
           <div
             class="PodBrowser-root PodBrowser-root"
-          >
-            <table
-              class="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
-              role="table"
-            >
-              <thead>
-                <tr
-                  role="row"
-                >
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                </tr>
-              </thead>
-              <tbody
-                role="rowgroup"
-              />
-            </table>
-          </div>
+          />
           <div
             class="PodBrowser-root PodBrowser-root"
           >
@@ -397,34 +316,7 @@ exports[`Person Profile renders an editable profile 1`] = `
           </label>
           <div
             class="PodBrowser-root PodBrowser-root"
-          >
-            <table
-              class="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
-              role="table"
-            >
-              <thead>
-                <tr
-                  role="row"
-                >
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                </tr>
-              </thead>
-              <tbody
-                role="rowgroup"
-              />
-            </table>
-          </div>
+          />
           <div
             class="PodBrowser-root PodBrowser-root"
           >
