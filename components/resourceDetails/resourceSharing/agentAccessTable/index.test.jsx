@@ -25,8 +25,8 @@ import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import AgentAccessTable, { TESTCAFE_ID_AGENT_ACCESS_TABLE } from "./index";
 import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
-import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
 import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
+import mockPermissionsContextProvider from "../../../../__testUtils/mockPermissionsContextProvider";
 import { TESTCAFE_ID_SEARCH_INPUT } from "../agentsSearchBar";
 // import {
 //   TESTCAFE_ID_TAB_PEOPLE,
@@ -41,11 +41,13 @@ import {
   AUTHENTICATED_AGENT_TYPE,
 } from "../../../../src/models/contact/authenticated";
 
-jest.mock("../../../../src/hooks/usePolicyPermissions");
-const mockedUsePolicyPermissions = usePolicyPermissions;
-
 jest.mock("../../../../src/hooks/usePermissionsWithProfiles");
 const mockedUsePermissionsWithProfiles = usePermissionsWithProfiles;
+
+const PermissionsContextProvider = mockPermissionsContextProvider();
+const EmptyPermissionsContextProvider = mockPermissionsContextProvider({
+  permissions: [],
+});
 
 const profile1 = {
   avatar: null,
@@ -139,10 +141,6 @@ const permissionsWithProfilesMixedTypes = [
 ];
 describe("AgentAccessTable with agents", () => {
   beforeEach(() => {
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: permissions,
-      mutate: jest.fn(),
-    });
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles,
     });
@@ -150,23 +148,24 @@ describe("AgentAccessTable with agents", () => {
   it("renders a list of permissions", async () => {
     const type = "editors";
     const { asFragment, queryAllByRole } = renderWithTheme(
-      <AgentAccessTable type={type} />
+      <PermissionsContextProvider>
+        <AgentAccessTable type={type} />
+      </PermissionsContextProvider>
     );
 
     expect(queryAllByRole("cell")).toHaveLength(3);
     expect(asFragment()).toMatchSnapshot();
   });
   it("shows all permissions when clicking 'show all' button", async () => {
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: permissions,
-    });
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles,
     });
 
     const type = "editors";
     const { queryAllByRole, getByTestId } = renderWithTheme(
-      <AgentAccessTable type={type} />
+      <PermissionsContextProvider>
+        <AgentAccessTable type={type} />
+      </PermissionsContextProvider>
     );
     const button = getByTestId("show-all-button");
     expect(queryAllByRole("cell")).toHaveLength(3);
@@ -174,9 +173,6 @@ describe("AgentAccessTable with agents", () => {
     expect(queryAllByRole("cell")).toHaveLength(4);
   });
   it("agents appear in alphabetical order with public and authenticated first", async () => {
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: permissions,
-    });
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: [
         publicPermission,
@@ -187,7 +183,9 @@ describe("AgentAccessTable with agents", () => {
 
     const type = "editors";
     const { queryAllByRole, getByTestId } = renderWithTheme(
-      <AgentAccessTable type={type} />
+      <PermissionsContextProvider>
+        <AgentAccessTable type={type} />
+      </PermissionsContextProvider>
     );
     const button = getByTestId("show-all-button");
     expect(queryAllByRole("cell")).toHaveLength(3);
@@ -202,15 +200,14 @@ describe("AgentAccessTable with agents", () => {
     expect(cells[5]).toHaveTextContent("Example D");
   });
   it("shows first 3 permissions by default and when clicking the 'hide' button", async () => {
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: permissions,
-    });
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles,
     });
     const type = "editors";
     const { queryAllByRole, getByTestId } = renderWithTheme(
-      <AgentAccessTable type={type} permissions={permissions} />
+      <PermissionsContextProvider>
+        <AgentAccessTable type={type} />
+      </PermissionsContextProvider>
     );
     const showAllButton = getByTestId("show-all-button");
     expect(queryAllByRole("cell")).toHaveLength(3);
@@ -221,16 +218,15 @@ describe("AgentAccessTable with agents", () => {
     expect(queryAllByRole("cell")).toHaveLength(3);
   });
   it("renders a search box which filters by name or webId", () => {
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: permissions,
-    });
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles,
     });
 
     const type = "editors";
     const { getByTestId, queryByText } = renderWithTheme(
-      <AgentAccessTable type={type} permissions={permissions} />
+      <PermissionsContextProvider>
+        <AgentAccessTable type={type} />
+      </PermissionsContextProvider>
     );
     waitFor(() => {
       expect(queryByText("Example 2")).not.toBeNull();
@@ -255,10 +251,6 @@ describe("AgentAccessTable with agents", () => {
       },
     ];
 
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: permissionsWithTypes,
-      mutate: jest.fn(),
-    });
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: permissionsWithProfilesMixedTypes,
     });
@@ -292,10 +284,6 @@ describe("AgentAccessTable with agents", () => {
       },
     ];
 
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: permissionsWithTypes,
-      mutate: jest.fn(),
-    });
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: permissionsWithProfilesMixedTypes,
     });
@@ -321,36 +309,33 @@ describe("AgentAccessTable with agents", () => {
 describe("AgentAccessTable without agents", () => {
   it("renders an empty list of permissions if there are no permissions and the policy is not custom", () => {
     const type = "editors";
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: [],
-      mutate: jest.fn(),
-    });
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: [],
     });
-    const { asFragment } = renderWithTheme(<AgentAccessTable type={type} />);
+    const { asFragment } = renderWithTheme(
+      <EmptyPermissionsContextProvider>
+        <AgentAccessTable type={type} />
+      </EmptyPermissionsContextProvider>
+    );
 
     expect(asFragment()).toMatchSnapshot();
   });
   it("renders an empty list of permissions if permissions are unavailable", () => {
     const type = "editors";
-    mockedUsePolicyPermissions.mockReturnValue({
-      error: "error",
-      data: undefined,
-      mutate: jest.fn(),
-    });
-    const { asFragment } = renderWithTheme(<AgentAccessTable type={type} />);
+    const { asFragment } = renderWithTheme(
+      <EmptyPermissionsContextProvider>
+        <AgentAccessTable type={type} />
+      </EmptyPermissionsContextProvider>
+    );
 
     expect(asFragment()).toMatchSnapshot();
   });
   it("does not render table at all if there aren't any permissions for a custom policy", () => {
     const type = "viewAndAdd";
-    mockedUsePolicyPermissions.mockReturnValue({
-      data: [],
-      mutate: jest.fn(),
-    });
     const { asFragment, queryByTestId } = renderWithTheme(
-      <AgentAccessTable type={type} />
+      <EmptyPermissionsContextProvider>
+        <AgentAccessTable type={type} />
+      </EmptyPermissionsContextProvider>
     );
 
     expect(asFragment()).toMatchSnapshot();

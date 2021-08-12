@@ -21,6 +21,7 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
+import { waitFor } from "@testing-library/dom";
 import { useSession, useThing } from "@inrupt/solid-ui-react";
 import { addUrl, createThing } from "@inrupt/solid-client";
 import AddAgentRow, {
@@ -30,6 +31,7 @@ import AddAgentRow, {
   TESTCAFE_ID_WEBID_INPUT,
 } from "./index";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
+import mockPermissionsContextProvider from "../../../../__testUtils/mockPermissionsContextProvider";
 import useContactProfile from "../../../../src/hooks/useContactProfile";
 import { vcardExtras } from "../../../../src/addressBook";
 
@@ -38,6 +40,13 @@ const mockedThingHook = useThing;
 
 jest.mock("../../../../src/hooks/useContactProfile");
 const mockedUseContactProfile = useContactProfile;
+const permissions = [{ webId: "https://example.org/profile/card#me" }];
+const setNewAgentsWebIds = jest.fn();
+const PermissionsContextProvider = mockPermissionsContextProvider({
+  permissions,
+  addingWebId: true,
+  setNewAgentsWebIds,
+});
 
 describe("AddAgentRow", () => {
   describe("when adding a new webId", () => {
@@ -51,61 +60,59 @@ describe("AddAgentRow", () => {
       mockedUseContactProfile.mockReturnValue({ data: null });
     });
     const index = 0;
-    const setNewAgentsWebIds = jest.fn();
-    const newAgentsWebIds = [];
-    const setAddingWebId = jest.fn();
     const setNoAgentsAlert = jest.fn();
-    const addingWebId = true;
     const updateTemporaryRowThing = jest.fn();
-    const permissions = [{ webId: "https://example.org/profile/card#me" }];
-
+    const contactsArrayLength = 0;
     it("renders a row with an input for the first item in the array", () => {
+      const EmptyPermissionsContextProvider = mockPermissionsContextProvider({
+        permissions: [],
+        addingWebId: true,
+      });
       const { asFragment } = renderWithTheme(
-        <AddAgentRow
-          index={index}
-          setNewAgentsWebIds={setNewAgentsWebIds}
-          newAgentsWebIds={newAgentsWebIds}
-          setAddingWebId={setAddingWebId}
-          setNoAgentsAlert={setNoAgentsAlert}
-          addingWebId={addingWebId}
-          updateTemporaryRowThing={updateTemporaryRowThing}
-          permissions={[]}
-        />
+        <EmptyPermissionsContextProvider>
+          <AddAgentRow
+            contactsArrayLength={contactsArrayLength}
+            type="editors"
+            index={index}
+            setNoAgentsAlert={setNoAgentsAlert}
+            updateTemporaryRowThing={updateTemporaryRowThing}
+          />
+        </EmptyPermissionsContextProvider>
       );
       expect(asFragment()).toMatchSnapshot();
     });
     it("renders a validation error if added webId is already in permissions", () => {
       const { getByTestId, getByText } = renderWithTheme(
-        <AddAgentRow
-          index={index}
-          setNewAgentsWebIds={setNewAgentsWebIds}
-          newAgentsWebIds={newAgentsWebIds}
-          setAddingWebId={setAddingWebId}
-          setNoAgentsAlert={setNoAgentsAlert}
-          addingWebId={addingWebId}
-          updateTemporaryRowThing={updateTemporaryRowThing}
-          permissions={permissions}
-        />
+        <PermissionsContextProvider>
+          <AddAgentRow
+            contactsArrayLength={contactsArrayLength}
+            type="editors"
+            index={index}
+            setNoAgentsAlert={setNoAgentsAlert}
+            updateTemporaryRowThing={updateTemporaryRowThing}
+          />
+        </PermissionsContextProvider>
       );
       const input = getByTestId(TESTCAFE_ID_WEBID_INPUT);
       const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
-      userEvent.type(input, "https://example.org/profile/card#me");
+      userEvent.type(input, "https://example1.org/profile/card#me");
       userEvent.click(addButton);
-      const errorText = getByText(EXISTING_WEBID_ERROR_MESSAGE);
-      expect(errorText).not.toBeNull();
+      waitFor(() => {
+        const errorText = getByText(EXISTING_WEBID_ERROR_MESSAGE);
+        expect(errorText).not.toBeNull();
+      });
     });
     it("renders a validation error if added webId is own webId", () => {
       const { getByTestId, getByText } = renderWithTheme(
-        <AddAgentRow
-          index={index}
-          setNewAgentsWebIds={setNewAgentsWebIds}
-          newAgentsWebIds={newAgentsWebIds}
-          setAddingWebId={setAddingWebId}
-          setNoAgentsAlert={setNoAgentsAlert}
-          addingWebId={addingWebId}
-          updateTemporaryRowThing={updateTemporaryRowThing}
-          permissions={permissions}
-        />
+        <PermissionsContextProvider>
+          <AddAgentRow
+            contactsArrayLength={contactsArrayLength}
+            type="editors"
+            index={index}
+            setNoAgentsAlert={setNoAgentsAlert}
+            updateTemporaryRowThing={updateTemporaryRowThing}
+          />
+        </PermissionsContextProvider>
       );
       const input = getByTestId(TESTCAFE_ID_WEBID_INPUT);
       const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
@@ -116,16 +123,16 @@ describe("AddAgentRow", () => {
     });
     it("clears error when changing input again", () => {
       const { getByTestId, queryByText } = renderWithTheme(
-        <AddAgentRow
-          index={index}
-          setNewAgentsWebIds={setNewAgentsWebIds}
-          newAgentsWebIds={newAgentsWebIds}
-          setAddingWebId={setAddingWebId}
-          setNoAgentsAlert={setNoAgentsAlert}
-          addingWebId={addingWebId}
-          updateTemporaryRowThing={updateTemporaryRowThing}
-          permissions={permissions}
-        />
+        <PermissionsContextProvider>
+          <AddAgentRow
+            contactsArrayLength={contactsArrayLength}
+            type="editors"
+            index={index}
+            setNoAgentsAlert={setNoAgentsAlert}
+            updateTemporaryRowThing={updateTemporaryRowThing}
+            permissions={permissions}
+          />
+        </PermissionsContextProvider>
       );
       const input = getByTestId(TESTCAFE_ID_WEBID_INPUT);
       userEvent.type(input, "");
@@ -134,16 +141,16 @@ describe("AddAgentRow", () => {
     });
     it("adds webId to webIds array on submit", () => {
       const { getByTestId } = renderWithTheme(
-        <AddAgentRow
-          index={index}
-          setNewAgentsWebIds={setNewAgentsWebIds}
-          newAgentsWebIds={newAgentsWebIds}
-          setAddingWebId={setAddingWebId}
-          setNoAgentsAlert={setNoAgentsAlert}
-          addingWebId={addingWebId}
-          updateTemporaryRowThing={updateTemporaryRowThing}
-          permissions={permissions}
-        />
+        <PermissionsContextProvider>
+          <AddAgentRow
+            contactsArrayLength={contactsArrayLength}
+            type="editors"
+            index={index}
+            setNoAgentsAlert={setNoAgentsAlert}
+            updateTemporaryRowThing={updateTemporaryRowThing}
+            permissions={permissions}
+          />
+        </PermissionsContextProvider>
       );
       const input = getByTestId(TESTCAFE_ID_WEBID_INPUT);
       userEvent.type(input, "https://somewebid.com/");
@@ -151,18 +158,14 @@ describe("AddAgentRow", () => {
       userEvent.click(addButton);
       expect(setNewAgentsWebIds).toHaveBeenCalledWith([
         "https://somewebid.com/",
-        ...newAgentsWebIds,
       ]);
     });
   });
   describe("with existing contacts", () => {
     const index = 0;
-    const setNewAgentsWebIds = jest.fn();
-    const newAgentsWebIds = [];
-    const setAddingWebId = jest.fn();
     const setNoAgentsAlert = jest.fn();
-    const addingWebId = false;
     const updateTemporaryRowThing = jest.fn();
+    const contactsArrayLength = 1;
 
     beforeEach(() => {
       useSession.mockReturnValue({ fetch: jest.fn() });
@@ -174,17 +177,20 @@ describe("AddAgentRow", () => {
       mockedUseContactProfile.mockReturnValue({
         data: { webId: "https://somewebid.org", name: "Example", avatar: null },
       });
+      const EmptyPermissionsContextProvider = mockPermissionsContextProvider({
+        permissions: [],
+        addingWebId: false,
+      });
       const { asFragment, getByTestId, queryByText } = renderWithTheme(
-        <AddAgentRow
-          index={index}
-          setNewAgentsWebIds={setNewAgentsWebIds}
-          newAgentsWebIds={newAgentsWebIds}
-          setAddingWebId={setAddingWebId}
-          setNoAgentsAlert={setNoAgentsAlert}
-          addingWebId={addingWebId}
-          updateTemporaryRowThing={updateTemporaryRowThing}
-          permissions={[]}
-        />
+        <EmptyPermissionsContextProvider>
+          <AddAgentRow
+            contactsArrayLength={contactsArrayLength}
+            type="editors"
+            index={index}
+            setNoAgentsAlert={setNoAgentsAlert}
+            updateTemporaryRowThing={updateTemporaryRowThing}
+          />
+        </EmptyPermissionsContextProvider>
       );
       expect(asFragment()).toMatchSnapshot();
       expect(queryByText("Example")).toBeDefined();
@@ -200,17 +206,21 @@ describe("AddAgentRow", () => {
       mockedUseContactProfile.mockReturnValue({
         data: null,
       });
+      const EmptyPermissionsContextProvider = mockPermissionsContextProvider({
+        permissions: [],
+        addingWebId: false,
+      });
       const { asFragment, getByTestId, queryByText } = renderWithTheme(
-        <AddAgentRow
-          index={1}
-          setNewAgentsWebIds={setNewAgentsWebIds}
-          newAgentsWebIds={newAgentsWebIds}
-          setAddingWebId={setAddingWebId}
-          setNoAgentsAlert={setNoAgentsAlert}
-          addingWebId={addingWebId}
-          updateTemporaryRowThing={updateTemporaryRowThing}
-          permissions={[]}
-        />
+        <EmptyPermissionsContextProvider>
+          <AddAgentRow
+            contactsArrayLength={contactsArrayLength}
+            type="editors"
+            index={1}
+            setNewAgentsWebIds={setNewAgentsWebIds}
+            setNoAgentsAlert={setNoAgentsAlert}
+            updateTemporaryRowThing={updateTemporaryRowThing}
+          />
+        </EmptyPermissionsContextProvider>
       );
       expect(asFragment()).toMatchSnapshot();
       expect(queryByText("https://somewebid.com")).toBeDefined();

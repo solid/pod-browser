@@ -86,7 +86,7 @@ export const getPolicyDetailFromAccess = (access, label) => {
     return POLICIES_TYPE_MAP.viewAndAdd[label];
   }
   if (append && !write && !read) {
-    return POLICIES_TYPE_MAP.addOnly[label];
+    return POLICIES_TYPE_MAP.addOnly.name;
   }
   if (write && !append && !read) {
     return POLICIES_TYPE_MAP.editOnly[label];
@@ -465,6 +465,15 @@ export default class AcpAccessControlStrategy {
     this.#policyUrl = getPolicyUrl(originalWithAcr, policiesContainerUrl);
     this.#policiesContainerUrl = policiesContainerUrl;
     this.#fetch = fetch;
+  }
+
+  async getAllPermissionsForResource() {
+    const allPermissions = await getPodBrowserPermissions(
+      this.#originalWithAcr,
+      this.#policiesContainerUrl,
+      this.#fetch
+    );
+    return allPermissions;
   }
 
   async getPermissionsForPolicy(policyName) {

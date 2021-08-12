@@ -22,7 +22,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { useFilters, useGlobalFilter, useTable } from "react-table";
 import { useBem } from "@solid/lit-prism-patterns";
@@ -35,7 +35,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import usePolicyPermissions from "../../../../src/hooks/usePolicyPermissions";
 import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
 import AgentAccess from "../agentAccess";
 import AddAgentButton from "../addAgentButton";
@@ -49,19 +48,27 @@ import PolicyActionButton from "../policyActionButton";
 import { isCustomPolicy } from "../../../../src/models/policy";
 import { PUBLIC_AGENT_TYPE } from "../../../../src/models/contact/public";
 import { AUTHENTICATED_AGENT_TYPE } from "../../../../src/models/contact/authenticated";
+import PermissionsContext from "../../../../src/contexts/permissionsContext";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const TESTCAFE_ID_SHOW_ALL_BUTTON = "show-all-button";
 const TESTCAFE_ID_HIDE_BUTTON = "hide-button";
 export const TESTCAFE_ID_AGENT_ACCESS_TABLE = "agent-access-table";
 
-export default function AgentAccessTable({ type }) {
-  const [loading, setLoading] = useState(false);
-  const [permissions, setPermissions] = useState([]);
-  const { data: policyPermissions } = usePolicyPermissions(type);
+export default function AgentAccessTable({ type, loading, setLoading }) {
+  const { permissions } = useContext(PermissionsContext);
+  const [tablePermissions, setTablePermissions] = useState([]);
+  const [policyPermissions, setPolicyPermissions] = useState([]);
   const { permissionsWithProfiles } = usePermissionsWithProfiles(
     policyPermissions
   );
+
+  useEffect(() => {
+    const filteredPermissions =
+      permissions?.filter((permission) => permission.alias === type) || null;
+    if (!filteredPermissions) return;
+    setPolicyPermissions(filteredPermissions);
+  }, [permissions, type]);
 
   useEffect(() => {
     if (!permissionsWithProfiles) return;
@@ -73,7 +80,7 @@ export default function AgentAccessTable({ type }) {
       .sort((a, b) => {
         return a.profile?.name.localeCompare(b.profile?.name);
       });
-    setPermissions(publicAndAuth.concat(sorted));
+    setTablePermissions(publicAndAuth.concat(sorted));
   }, [permissionsWithProfiles]);
 
   const bem = useBem(useStyles());
@@ -105,12 +112,12 @@ export default function AgentAccessTable({ type }) {
   );
 
   const data = useMemo(() => {
-    if (!permissions) {
+    if (!tablePermissions) {
       return [];
     }
 
-    return showAll ? permissions : permissions.slice(0, 3);
-  }, [permissions, showAll]);
+    return showAll ? tablePermissions : tablePermissions.slice(0, 3);
+  }, [tablePermissions, showAll]);
 
   const {
     getTableProps,
@@ -142,7 +149,7 @@ export default function AgentAccessTable({ type }) {
     setFilter("type", newValue);
   };
 
-  if (!permissions.length && isCustomPolicy(type)) return null;
+  if (!tablePermissions.length && isCustomPolicy(type)) return null;
 
   const { emptyStateText } = POLICIES_TYPE_MAP[type];
 
@@ -157,17 +164,17 @@ export default function AgentAccessTable({ type }) {
           <AddAgentButton
             type={type}
             setLoading={setLoading}
-            permissions={permissions}
+            permissions={tablePermissions}
           />
           <PolicyActionButton
-            permissions={permissions}
+            permissions={tablePermissions}
             setLoading={setLoading}
             type={type}
           />
         </>
       </PolicyHeader>
       <div className={classes.permissionsContainer}>
-        {!!permissions.length && (
+        {!!tablePermissions.length && (
           <>
             {/* TODO: Uncomment to reintroduce tabs */}
             {/* <Tabs */}
@@ -183,7 +190,7 @@ export default function AgentAccessTable({ type }) {
             <CircularProgress />
           </Container>
         )}
-        {!loading && permissions.length ? (
+        {!loading && tablePermissions.length ? (
           <table
             className={clsx(bem("table"), bem("agents-table"))}
             {...getTableProps()}
@@ -223,7 +230,7 @@ export default function AgentAccessTable({ type }) {
             {!loading && <p>{emptyStateText}</p>}
           </span>
         )}
-        {!loading && permissions.length > 3 && (
+        {!loading && tablePermissions.length > 3 && (
           <div
             className={clsx(
               classes.showAllButtonContainer,
@@ -251,7 +258,7 @@ export default function AgentAccessTable({ type }) {
                   </span>
                 ) : (
                   <span>
-                    Show all ({permissions.length}){" "}
+                    Show all ({tablePermissions.length}){" "}
                     <i
                       className={clsx(
                         bem("icon-caret-down"),
@@ -271,4 +278,6 @@ export default function AgentAccessTable({ type }) {
 
 AgentAccessTable.propTypes = {
   type: PropTypes.string.isRequired,
+  loading: PropTypes.bool.isRequired,
+  setLoading: PropTypes.func.isRequired,
 };

@@ -19,16 +19,24 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useContext } from "react";
-import useSWR from "swr";
+import { useState, useEffect, useContext } from "react";
 import AccessControlContext from "../../contexts/accessControlContext";
 
-export default function usePolicyPermissions(policyName, options = {}) {
+export default function useAllPermissions() {
   const { accessControl } = useContext(AccessControlContext);
+  const [permissions, setPermissions] = useState(null);
 
-  return useSWR(
-    [accessControl, policyName],
-    async () => accessControl.getPermissionsForPolicy(policyName),
-    options
-  );
+  useEffect(() => {
+    if (!accessControl) {
+      setPermissions(null);
+      return;
+    }
+    accessControl
+      .getAllPermissionsForResource()
+      .then((normalizedPermissions) => {
+        setPermissions(normalizedPermissions.reverse());
+      });
+  }, [accessControl]);
+
+  return { permissions };
 }
