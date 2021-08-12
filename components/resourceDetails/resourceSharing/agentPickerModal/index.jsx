@@ -207,7 +207,9 @@ function AgentPickerModal(
     advancedSharing ? type : null
   );
   const policyName = advancedSharing ? customPolicy : type;
-  const { header, saveText, titleSingular } = POLICIES_TYPE_MAP[policyName];
+  const { header, saveText, titleSingular, title } = POLICIES_TYPE_MAP[
+    policyName
+  ];
 
   const {
     permissions: allPermissions,
@@ -313,7 +315,7 @@ function AgentPickerModal(
       filteredNewWebIds.length + filteredWebIdsToDelete.length === 1
         ? "1 person "
         : `${filteredNewWebIds.length + filteredWebIdsToDelete.length} people `
-    } permissions to ${header}`;
+    } permissions to ${title}`;
     setTitle(confirmationTitle);
     setContent(confirmationContent);
     setOpen(DIALOG_ID);
