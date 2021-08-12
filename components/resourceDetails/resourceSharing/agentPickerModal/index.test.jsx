@@ -754,7 +754,7 @@ describe("AgentPickerModal without contacts", () => {
     expect(
       getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
     ).toHaveTextContent(
-      "Continuing will change 2 people permissions to Edit Editors"
+      "Continuing will change 2 people permissions to Editors"
     );
   });
 });
