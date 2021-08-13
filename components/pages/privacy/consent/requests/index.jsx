@@ -21,6 +21,8 @@
 
 import React, { useState, useEffect } from "react";
 import { Container, Icons } from "@inrupt/prism-react-components";
+import { getStringNoLocale, getThing, getUrl } from "@inrupt/solid-client";
+import { foaf, vcard } from "rdf-namespaces";
 import { makeStyles } from "@material-ui/styles";
 import { createStyles, Typography, Link } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
@@ -28,6 +30,13 @@ import { useRedirectIfLoggedOut } from "../../../../../src/effects/auth";
 import { ConsentRequestProvider } from "../../../../../src/contexts/consentRequestContext";
 import styles from "./styles";
 import ConsentRequestForm from "../../../../consentRequestForm";
+import {
+  CONTACTS_PREDICATE,
+  mockApp,
+  mockAppDataset,
+  POLICY_PREDICATE,
+  TOS_PREDICATE,
+} from "../../../../../__testUtils/mockApp";
 
 // FIXME: When we hook up the API, replace this with actual API call
 import getConsentRequestDetails from "../../../../../__testUtils/mockConsentRequestDetails";
@@ -38,6 +47,16 @@ export default function ConsentShow() {
   useRedirectIfLoggedOut();
   const bem = useBem(useStyles());
   const [consentRequest, setConsentRequest] = useState(null);
+
+  // FIXME: using a mock for the app profile - we will fetch profile later
+  const agentDataset = mockAppDataset();
+  const agentProfile = mockApp();
+  const agentContactsUrl = getUrl(agentProfile, CONTACTS_PREDICATE);
+  const agentContacts = getThing(agentDataset, agentContactsUrl);
+  const agentName = getStringNoLocale(agentProfile, foaf.name);
+  const agentUrl = getUrl(agentContacts, vcard.url);
+  const agentTOS = getUrl(agentProfile, TOS_PREDICATE);
+  const agentPolicy = getUrl(agentProfile, POLICY_PREDICATE);
 
   useEffect(() => {
     if (!consentRequest) {
@@ -65,23 +84,23 @@ export default function ConsentShow() {
           </Typography>
           <Typography component="p" align="center" variant="body2">
             <Icons className={bem("avatar")} name="project-diagram" />
-            agent_name
+            {agentName}
           </Typography>
           <Typography className={bem("footer__links")}>
             <span className={bem("footer__link")}>
-              <Link href="/" variant="body2">
+              <Link href={agentUrl} variant="body2">
                 <Icons name="globe" className={bem("icon-small", "primary")} />
                 Website
               </Link>
             </span>
             <span className={bem("footer__link")}>
-              <Link href="/" variant="body2">
+              <Link href={agentPolicy} variant="body2">
                 <Icons name="webid" className={bem("icon-small", "primary")} />
                 Privacy Policy
               </Link>
             </span>
             <span className={bem("footer__link")}>
-              <Link href="/" variant="body2">
+              <Link href={agentTOS} variant="body2">
                 <Icons name="doc" className={bem("icon-small", "primary")} />
                 Terms of Service
               </Link>

@@ -19,33 +19,54 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* eslint-disable react/jsx-one-expression-per-line */
+
 import React, { useContext } from "react";
 import { Button } from "@inrupt/prism-react-components";
+import { getStringNoLocale } from "@inrupt/solid-client";
+import { foaf } from "rdf-namespaces";
 import { useRouter } from "next/router";
 import { makeStyles } from "@material-ui/styles";
 import { createStyles, Typography } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import ConsentRequestContext from "../../src/contexts/consentRequestContext";
+import InfoTooltip from "../infoTooltip";
 import RequestSection from "./requestSection";
 import styles from "./styles";
+import { mockApp } from "../../__testUtils/mockApp";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function ConsentRequestFrom() {
-  const bem = useBem(useStyles());
+  const classes = useStyles();
+  const bem = useBem(classes);
   const router = useRouter();
   const requestId = decodeURIComponent(router.query.id);
   const { consentRequest } = useContext(ConsentRequestContext);
   // FIXME: When we hook up the API, request the profile and get the agent name
-  const agentName = consentRequest?.credentialSubject?.id;
+  const agentWebId = consentRequest?.credentialSubject?.id;
+
+  // FIXME: using a mock for the app profile - we will fetch profile later
+  const agentProfile = mockApp();
+  const agentName = getStringNoLocale(agentProfile, foaf.name);
+  const purposeUrl =
+    consentRequest?.credentialSubject?.hasConsent[0].forPurpose; // getting the first in this array for now
+  // FIXME: we will later fetch the description from the purpose Url
+  const purposeDescription = "Some Specific Purpose";
 
   return (
     <>
       <form className={bem("request-container__content", "main")}>
         <Typography component="h2" align="center" variant="h1">
-          {`Allow ${agentName} access?`}
+          <span className={bem("agent-name")}>
+            Allow {agentName}
+            <InfoTooltip tooltipText={`WebID: ${agentWebId}`} />
+            access?
+          </span>
         </Typography>
-        <p>{requestId}</p>
+        <span className={bem("purpose")}>
+          {purposeDescription} <InfoTooltip tooltipText={purposeUrl} />
+        </span>
         {/* FIXME: place this in a loop when we know the data structure */}
         {consentRequest?.credentialSubject?.hasConsent &&
           agentName &&

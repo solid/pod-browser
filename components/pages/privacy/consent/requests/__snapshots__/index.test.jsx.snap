@@ -11,11 +11,61 @@ exports[`Agent show page Renders the Agent show page 1`] = `
       <h2
         class="PodBrowser-root PodBrowser-h1 PodBrowser-alignCenter"
       >
-        Allow undefined access?
+        <span
+          class="PodBrowser-agent-name"
+        >
+          Allow Mock App
+          <div
+            class="PodBrowser-infoTooltipContainer"
+          >
+            <button
+              class="PodBrowser-root PodBrowser-root PodBrowser-infoButton PodBrowser-text"
+              tabindex="0"
+              title="WebID: undefined"
+              type="button"
+            >
+              <span
+                class="PodBrowser-label"
+              >
+                <i
+                  aria-label="Info"
+                  class="PodBrowser-icon-info PodBrowser-infoIcon"
+                />
+              </span>
+              <span
+                class="PodBrowser-root"
+              />
+            </button>
+          </div>
+          access?
+        </span>
       </h2>
-      <p>
-        test-request
-      </p>
+      <span
+        class="PodBrowser-purpose"
+      >
+        Some Specific Purpose 
+        <div
+          class="PodBrowser-infoTooltipContainer"
+        >
+          <button
+            class="PodBrowser-root PodBrowser-root PodBrowser-infoButton PodBrowser-text"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="PodBrowser-label"
+            >
+              <i
+                aria-label="Info"
+                class="PodBrowser-icon-info PodBrowser-infoIcon"
+              />
+            </span>
+            <span
+              class="PodBrowser-root"
+            />
+          </button>
+        </div>
+      </span>
       <div
         class="PodBrowser-form__controls"
       >
@@ -54,7 +104,7 @@ exports[`Agent show page Renders the Agent show page 1`] = `
         <span
           class="PodBrowser-icon-project-diagram PodBrowser-avatar"
         />
-        agent_name
+        Mock App
       </p>
       <p
         class="PodBrowser-root PodBrowser-footer__links PodBrowser-body1"
@@ -64,7 +114,7 @@ exports[`Agent show page Renders the Agent show page 1`] = `
         >
           <a
             class="PodBrowser-root PodBrowser-root PodBrowser-underlineHover PodBrowser-body2 PodBrowser-colorPrimary"
-            href="/"
+            href="https://examplewebsite.com"
           >
             <span
               class="PodBrowser-icon-globe PodBrowser-icon-small PodBrowser-icon-small--primary"
@@ -77,7 +127,7 @@ exports[`Agent show page Renders the Agent show page 1`] = `
         >
           <a
             class="PodBrowser-root PodBrowser-root PodBrowser-underlineHover PodBrowser-body2 PodBrowser-colorPrimary"
-            href="/"
+            href="https://mockappurl.com/privacy-policy"
           >
             <span
               class="PodBrowser-icon-webid PodBrowser-icon-small PodBrowser-icon-small--primary"
@@ -90,7 +140,7 @@ exports[`Agent show page Renders the Agent show page 1`] = `
         >
           <a
             class="PodBrowser-root PodBrowser-root PodBrowser-underlineHover PodBrowser-body2 PodBrowser-colorPrimary"
-            href="/"
+            href="https://mockappurl.com/terms-of-service"
           >
             <span
               class="PodBrowser-icon-doc PodBrowser-icon-small PodBrowser-icon-small--primary"

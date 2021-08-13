@@ -172,5 +172,14 @@ export default function styles(theme) {
       left: 0,
       top: 0,
     },
+    "agent-name": {
+      display: "flex",
+      justifyContent: "center",
+    },
+    purpose: {
+      display: "flex",
+      justifyContent: "flex-start",
+      padding: "1rem",
+    },
   };
 }
