@@ -30,10 +30,13 @@ import {
   FormControl,
   FormControlLabel,
   Switch,
+  Tooltip,
 } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import { getPolicyDetailFromAccess } from "../../../src/accessControl/acp";
 import styles from "../styles";
+import { isContainerIri } from "../../../src/solidClientHelpers/utils";
+import { getResourceName } from "../../../src/solidClientHelpers/resource";
 
 export const TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON = "request-select-all";
 export const TESTCAFE_ID_REQUEST_EXPAND_SECTION_BUTTON = "expand-section";
@@ -50,19 +53,22 @@ const ResourceSwitch = (props) => {
       key={index}
       value={resourceIri}
       // eslint-disable-next-line prettier/prettier
-      control={(
+      control={
+        // eslint-disable-next-line react/jsx-wrap-multilines
         <Switch
           checked={isChecked[index]}
           onChange={() => handleOnChange(index)}
           color="primary"
         />
         // eslint-disable-next-line prettier/prettier
-      )}
+      }
       label={
         // eslint-disable-next-line react/jsx-wrap-multilines
         <Typography variant="body2">
           <Icons name="file" className={bem("icon-small", "dark")} />
-          {resourceIri}
+          <Tooltip title={resourceIri} arrow>
+            <span>{getResourceName(resourceIri)}</span>
+          </Tooltip>
         </Typography>
       }
       labelPlacement="start"
@@ -86,13 +92,7 @@ const renderSwitch = (
   handleOnChange,
   overrideCheck = false
 ) => {
-  // FIXME replace this with an actual solid-client isContainer check
-  // for each resource check isContainer, and if true set flag and pass custom switch
-  // to retrieve subsequent resources using getContainedResourceUrlAll
-  // list them all while checkking if any of them are also containers
-  const isContainer = resourceIri.slice(-1) === "/"; // temp way to detect folders vs resources
-
-  if (isContainer) {
+  if (isContainerIri(resourceIri)) {
     return (
       <ContainerSwitch
         key={index}
@@ -194,7 +194,8 @@ const ContainerSwitch = (props) => {
         key={index}
         value={resourceIri}
         // eslint-disable-next-line prettier/prettier
-        control={(
+        control={
+          // eslint-disable-next-line react/jsx-wrap-multilines
           <Switch
             checked={isChecked[index]}
             onChange={() => {
@@ -204,12 +205,14 @@ const ContainerSwitch = (props) => {
             color="primary"
           />
           // eslint-disable-next-line prettier/prettier
-        )}
+        }
         label={
           // eslint-disable-next-line react/jsx-wrap-multilines
           <Typography variant="body2">
             <Icons name="folder" className={bem("icon-small", "dark")} />
-            {resourceIri}
+            <Tooltip title={resourceIri} arrow>
+              <span>{getResourceName(resourceIri)}</span>
+            </Tooltip>
             <button
               data-testid={TESTCAFE_ID_REQUEST_EXPAND_SECTION_BUTTON}
               type="button"

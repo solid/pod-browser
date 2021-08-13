@@ -25,7 +25,6 @@ import React, { useContext } from "react";
 import { Button } from "@inrupt/prism-react-components";
 import { getStringNoLocale } from "@inrupt/solid-client";
 import { foaf } from "rdf-namespaces";
-import { useRouter } from "next/router";
 import { makeStyles } from "@material-ui/styles";
 import { createStyles, Typography } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
@@ -40,8 +39,6 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export default function ConsentRequestFrom() {
   const classes = useStyles();
   const bem = useBem(classes);
-  const router = useRouter();
-  const requestId = decodeURIComponent(router.query.id);
   const { consentRequest } = useContext(ConsentRequestContext);
   // FIXME: When we hook up the API, request the profile and get the agent name
   const agentWebId = consentRequest?.credentialSubject?.id;
