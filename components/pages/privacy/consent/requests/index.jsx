@@ -21,7 +21,12 @@
 
 import React, { useState, useEffect } from "react";
 import { Container, Icons } from "@inrupt/prism-react-components";
-import { getStringNoLocale, getThing, getUrl } from "@inrupt/solid-client";
+import {
+  asUrl,
+  getStringNoLocale,
+  getThing,
+  getUrl,
+} from "@inrupt/solid-client";
 import { foaf, vcard } from "rdf-namespaces";
 import { makeStyles } from "@material-ui/styles";
 import { createStyles, Typography, Link } from "@material-ui/core";
@@ -51,6 +56,7 @@ export default function ConsentShow() {
   // FIXME: using a mock for the app profile - we will fetch profile later
   const agentDataset = mockAppDataset();
   const agentProfile = mockApp();
+  const agentWebId = asUrl(agentProfile);
   const agentContactsUrl = getUrl(agentProfile, CONTACTS_PREDICATE);
   const agentContacts = getThing(agentDataset, agentContactsUrl);
   const agentName = getStringNoLocale(agentProfile, foaf.name);
@@ -82,29 +88,47 @@ export default function ConsentShow() {
           >
             About this application
           </Typography>
-          <Typography component="p" align="center" variant="body2">
+          <div className={bem("app-name")}>
             <Icons className={bem("avatar")} name="project-diagram" />
-            {agentName}
-          </Typography>
+            <Typography align="center" variant="body2">
+              <span className={bem("footer__link")}>
+                <Link href={agentWebId} variant="body2">
+                  {agentName}
+                </Link>
+              </span>
+            </Typography>
+          </div>
           <Typography className={bem("footer__links")}>
-            <span className={bem("footer__link")}>
-              <Link href={agentUrl} variant="body2">
-                <Icons name="globe" className={bem("icon-small", "primary")} />
-                Website
-              </Link>
-            </span>
-            <span className={bem("footer__link")}>
-              <Link href={agentPolicy} variant="body2">
-                <Icons name="webid" className={bem("icon-small", "primary")} />
-                Privacy Policy
-              </Link>
-            </span>
-            <span className={bem("footer__link")}>
-              <Link href={agentTOS} variant="body2">
-                <Icons name="doc" className={bem("icon-small", "primary")} />
-                Terms of Service
-              </Link>
-            </span>
+            {agentUrl && (
+              <span className={bem("footer__link")}>
+                <Link href={agentUrl} variant="body2">
+                  <Icons
+                    name="globe"
+                    className={bem("icon-small", "primary")}
+                  />
+                  Website
+                </Link>
+              </span>
+            )}
+            {agentPolicy && (
+              <span className={bem("footer__link")}>
+                <Link href={agentPolicy} variant="body2">
+                  <Icons
+                    name="webid"
+                    className={bem("icon-small", "primary")}
+                  />
+                  Privacy Policy
+                </Link>
+              </span>
+            )}
+            {agentTOS && (
+              <span className={bem("footer__link")}>
+                <Link href={agentTOS} variant="body2">
+                  <Icons name="doc" className={bem("icon-small", "primary")} />
+                  Terms of Service
+                </Link>
+              </span>
+            )}
           </Typography>
         </div>
       </Container>

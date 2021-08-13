@@ -152,5 +152,10 @@ export default function styles(theme) {
       left: 0,
       top: 0,
     },
+    "app-name": {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "baseline",
+    },
   };
 }
