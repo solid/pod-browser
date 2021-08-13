@@ -125,7 +125,7 @@ export default function AppProfile() {
 
               <Box mt={2}>
                 <Box>
-                  <InputLabel>App WebId</InputLabel>
+                  <InputLabel>App WebID</InputLabel>
                   <Value
                     property={vcardExtras("WebId")}
                     dataType="url"
