@@ -40,9 +40,6 @@ export default function ConsentRequestFrom() {
   const classes = useStyles();
   const bem = useBem(classes);
   const { consentRequest } = useContext(ConsentRequestContext);
-  // FIXME: When we hook up the API, request the profile and get the agent name
-  const agentWebId = consentRequest?.credentialSubject?.id;
-
   // FIXME: using a mock for the app profile - we will fetch profile later
   const agentProfile = mockApp();
   const agentName = getStringNoLocale(agentProfile, foaf.name);
@@ -55,11 +52,7 @@ export default function ConsentRequestFrom() {
     <>
       <form className={bem("request-container__content", "main")}>
         <Typography component="h2" align="center" variant="h1">
-          <span className={bem("agent-name")}>
-            Allow {agentName}
-            <InfoTooltip tooltipText={`WebID: ${agentWebId}`} />
-            access?
-          </span>
+          <span className={bem("agent-name")}>Allow {agentName} access?</span>
         </Typography>
         <span className={bem("purpose")}>
           {purposeDescription} <InfoTooltip tooltipText={purposeUrl} />
