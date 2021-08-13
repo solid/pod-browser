@@ -122,19 +122,22 @@ export default function styles(theme) {
       display: "flex",
       justifyContent: "space-between",
       marginTop: theme.spacing(2),
-      [theme.breakpoints.down("md")]: {
-        flexDirection: "column",
+      flexDirection: "column",
+      alignContent: "center",
+      alignItems: "flex-start",
+      margin: "1rem auto",
+      maxWidth: "max-content",
+      [theme.breakpoints.up("sm")]: {
+        flexDirection: "row",
         alignItems: "baseline",
-        width: "fit-content",
         margin: "1rem auto",
+        maxWidth: "100%",
       },
     },
 
     footer__link: {
-      [theme.breakpoints.down("md")]: {
-        display: "block",
-        height: "2rem",
-      },
+      display: "block",
+      height: "2rem",
     },
 
     avatar: {

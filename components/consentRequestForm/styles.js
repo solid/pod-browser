@@ -140,9 +140,10 @@ export default function styles(theme) {
 
     form__controls: {
       display: "flex",
+      flexDirection: "column-reverse",
       justifyContent: "space-between",
-      [theme.breakpoints.down("md")]: {
-        flexDirection: "column-reverse",
+      [theme.breakpoints.up("sm")]: {
+        flexDirection: "row",
       },
     },
 
