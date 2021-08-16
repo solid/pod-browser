@@ -32,8 +32,8 @@ async function getConsentRequestDetails() {
     issuanceDate: "2021-05-26T16:40:03Z",
     expirationDate: "2021-06-23T16:40:03Z",
     credentialSubject: {
-      id: "[https://pod.inrupt.com/bob/profile/card#me]",
-      inbox: "https://pod.inrupt.com/bob/inbox/",
+      id: "https://mockappurl.com",
+      inbox: "https://mockappurl.com/inbox/",
       hasConsent: [
         {
           mode: ["Read", "Write"],

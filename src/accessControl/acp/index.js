@@ -86,7 +86,7 @@ export const getPolicyDetailFromAccess = (access, label) => {
     return POLICIES_TYPE_MAP.viewAndAdd[label];
   }
   if (append && !write && !read) {
-    return POLICIES_TYPE_MAP.addOnly.name;
+    return POLICIES_TYPE_MAP.addOnly[label];
   }
   if (write && !append && !read) {
     return POLICIES_TYPE_MAP.editOnly[label];

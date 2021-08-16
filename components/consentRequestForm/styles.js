@@ -140,9 +140,10 @@ export default function styles(theme) {
 
     form__controls: {
       display: "flex",
+      flexDirection: "column-reverse",
       justifyContent: "space-between",
-      [theme.breakpoints.down("md")]: {
-        flexDirection: "column-reverse",
+      [theme.breakpoints.up("sm")]: {
+        flexDirection: "row",
       },
     },
 
@@ -171,6 +172,15 @@ export default function styles(theme) {
       position: "relative",
       left: 0,
       top: 0,
+    },
+    "agent-name": {
+      display: "flex",
+      justifyContent: "center",
+    },
+    purpose: {
+      display: "flex",
+      justifyContent: "flex-start",
+      padding: "1rem",
     },
   };
 }

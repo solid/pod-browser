@@ -52,7 +52,7 @@ exports[`App Profile renders a mock app profile 1`] = `
             <label
               class="PodBrowser-root PodBrowser-root PodBrowser-animated"
             >
-              App WebId
+              App WebID
             </label>
             <span
               data-testid="app-webid-field"
