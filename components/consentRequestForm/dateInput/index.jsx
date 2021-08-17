@@ -58,7 +58,7 @@ export default function DateInput(props) {
     if (expirationDate) {
       setSelectedDate(new Date(expirationDate));
     }
-  }, [expirationDate]);
+  }, [expirationDate, setSelectedDate]);
 
   return (
     <div className={bem("date-container")}>
