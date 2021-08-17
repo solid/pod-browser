@@ -24,6 +24,7 @@ import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockConsentRequestContext from "../../__testUtils/mockConsentRequestContext";
 import ConsentRequestForm, {
+  TESTCAFE_ID_CONSENT_REQUEST_DENY_BUTTON,
   TESTCAFE_ID_CONSENT_REQUEST_SUBMIT_BUTTON,
 } from "./index";
 import { TESTCAFE_ID_CONFIRMATION_DIALOG } from "../confirmationDialog";
@@ -69,5 +70,20 @@ describe("Consent Request Form", () => {
     await expect(findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)).rejects.toEqual(
       expect.anything()
     );
+  });
+  test("displays the confirmation dialog regardless of the state of the toggles when clicking 'Deny All Access' button", async () => {
+    const { getByTestId, getAllByRole } = renderWithTheme(
+      <ConfirmationDialogProvider>
+        <ConsentRequestContextProvider>
+          <ConsentRequestForm />
+        </ConsentRequestContextProvider>
+      </ConfirmationDialogProvider>
+    );
+    const toggle = getAllByRole("checkbox")[0];
+    userEvent.click(toggle);
+    const button = getByTestId(TESTCAFE_ID_CONSENT_REQUEST_DENY_BUTTON);
+    userEvent.click(button);
+    const dialog = getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+    expect(dialog).toBeInTheDocument();
   });
 });

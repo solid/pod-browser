@@ -592,6 +592,7 @@ exports[`Consent Request Form Renders a consent request form 1`] = `
     >
       <button
         class="PodBrowser-button PodBrowser-button--secondary"
+        data-testid="consent-request-deny-button"
       >
         <span
           class="PodBrowser-button__text"

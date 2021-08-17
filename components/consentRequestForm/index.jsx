@@ -76,8 +76,6 @@ export default function ConsentRequestFrom() {
 
   const DIALOG_CONTENT = `${agentName} will not have access to anything in your Pod.`;
 
-  const [confirmationSetup, setConfirmationSetup] = useState(false);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (selectedAccess.length) {
@@ -153,6 +151,7 @@ export default function ConsentRequestFrom() {
           })}
         <div className={bem("form__controls")}>
           <Button
+            data-testid={TESTCAFE_ID_CONSENT_REQUEST_DENY_BUTTON}
             variant="secondary"
             className={bem("request-container__button")}
             onClick={handleDenyAccess}
