@@ -36,6 +36,7 @@ import { mockApp } from "../../__testUtils/mockApp";
 import {
   getPurposeString,
   getPurposeUrl,
+  getRequestedAccesses,
 } from "../../src/models/consent/request";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
 import ConfirmationDialog from "../confirmationDialog";
@@ -103,6 +104,8 @@ export default function ConsentRequestFrom() {
     }
   }, [confirmationSetup, confirmed, closeDialog, open]);
 
+  const requestedAccesses = getRequestedAccesses(consentRequest);
+
   return (
     <>
       <form
@@ -116,9 +119,9 @@ export default function ConsentRequestFrom() {
           {purposeDescription} <InfoTooltip tooltipText={purposeUrl} />
         </span>
         {/* FIXME: place this in a loop when we know the data structure */}
-        {consentRequest?.credentialSubject?.hasConsent &&
+        {requestedAccesses &&
           agentName &&
-          consentRequest.credentialSubject.hasConsent.map((consent, index) => {
+          requestedAccesses.map((consent, index) => {
             return (
               <RequestSection
                 // eslint-disable-next-line react/no-array-index-key

@@ -35,3 +35,15 @@ export function getPurposeString() {
 export function getPurposeUrl(consentRequest) {
   return consentRequest?.credentialSubject?.hasConsent[0].forPurpose; // getting the first item in the array for now
 }
+
+export function getRequestedAccesses(consentRequest) {
+  return consentRequest?.credentialSubject?.hasConsent;
+}
+
+export function getRequestedResourcesIris(sectionDetails) {
+  return sectionDetails.forPersonalData;
+}
+
+export function getAccessMode(sectionDetails) {
+  return sectionDetails.mode;
+}

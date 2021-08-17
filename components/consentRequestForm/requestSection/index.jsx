@@ -39,6 +39,10 @@ import {
   isContainerIri,
   uniqueObjects,
 } from "../../../src/solidClientHelpers/utils";
+import {
+  getAccessMode,
+  getRequestedResourcesIris,
+} from "../../../src/models/consent/request";
 import { getResourceName } from "../../../src/solidClientHelpers/resource";
 
 export const TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON = "request-select-all";
@@ -329,10 +333,12 @@ ContainerSwitch.defaultProps = {
 };
 export default function RequestSection(props) {
   const { agentName, sectionDetails, setSelectedAccess } = props;
+  const requestedResourcesIris = getRequestedResourcesIris(sectionDetails);
+  const accessMode = getAccessMode(sectionDetails);
   const bem = useBem(useStyles());
 
   const [isChecked, setIsChecked] = useState(
-    new Array(sectionDetails.forPersonalData.length).fill(false)
+    new Array(requestedResourcesIris.length).fill(false)
   );
 
   const [allTogglesSelected, setAllTogglesSelected] = useState(
@@ -341,12 +347,12 @@ export default function RequestSection(props) {
 
   const modesObject = useMemo(() => {
     return {
-      read: sectionDetails.mode.some((el) => el === "Read"),
-      write: sectionDetails.mode.some((el) => el === "Write"),
-      append: sectionDetails.mode.some((el) => el === "Append"),
-      control: sectionDetails.mode.some((el) => el === "Control"),
+      read: accessMode.some((el) => el === "Read"),
+      write: accessMode.some((el) => el === "Write"),
+      append: accessMode.some((el) => el === "Append"),
+      control: accessMode.some((el) => el === "Control"),
     };
-  }, [sectionDetails]);
+  }, [accessMode]);
 
   useEffect(() => {
     setAllTogglesSelected(
@@ -359,12 +365,12 @@ export default function RequestSection(props) {
       return {
         checked,
         accessModes: modesObject,
-        resourceIri: sectionDetails.forPersonalData[index],
+        resourceIri: requestedResourcesIris[index],
         index,
       };
     });
     setSelectedAccess((prevState) => removeExistingValues(prevState, accesses));
-  }, [sectionDetails, modesObject, isChecked, setSelectedAccess]);
+  }, [requestedResourcesIris, modesObject, isChecked, setSelectedAccess]);
 
   const toggleAllSwitches = () => {
     const updatedAllCheckedState = isChecked.map(() => !allTogglesSelected);
@@ -412,8 +418,8 @@ export default function RequestSection(props) {
           row
           className={bem("request-container__section", "box")}
         >
-          {sectionDetails.forPersonalData &&
-            sectionDetails.forPersonalData.map((resourceIri, index) => {
+          {requestedResourcesIris &&
+            requestedResourcesIris.map((resourceIri, index) => {
               return renderSwitch(
                 resourceIri,
                 index,
