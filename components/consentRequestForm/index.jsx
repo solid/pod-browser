@@ -22,11 +22,18 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 
 import React, { useContext, useEffect, useState } from "react";
-import { Button } from "@inrupt/prism-react-components";
+import { Button, Icons } from "@inrupt/prism-react-components";
 import { getStringNoLocale } from "@inrupt/solid-client";
 import { foaf } from "rdf-namespaces";
+import { format } from "date-fns";
+import { DatePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/styles";
-import { createStyles, Typography } from "@material-ui/core";
+import {
+  createStyles,
+  Typography,
+  IconButton,
+  InputBase,
+} from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import ConsentRequestContext from "../../src/contexts/consentRequestContext";
 import InfoTooltip from "../infoTooltip";
@@ -122,6 +129,29 @@ export default function ConsentRequestFrom() {
   }, [confirmationSetup, confirmed, closeDialog, open]);
 
   const requestedAccesses = getRequestedAccesses(consentRequest);
+  const expirationDate = consentRequest?.expirationDate;
+  // FIXME: we will later fetch the expiry date from the consent details
+  const purposeDescription = "Some Specific Purpose";
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const [datepickerOpen, setDatepickerOpen] = useState(false);
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    setDatepickerOpen(false);
+  };
+
+  const setDateForever = () => {
+    setSelectedDate(null);
+    setDatepickerOpen(false);
+  };
+
+  useEffect(() => {
+    if (expirationDate) {
+      setSelectedDate(new Date(expirationDate));
+    }
+  }, [expirationDate]);
 
   return (
     <>
@@ -136,6 +166,53 @@ export default function ConsentRequestFrom() {
           {purposeDescription}{" "}
           <InfoTooltip tooltipText={purposeUrl || "Purpose"} />
         </span>
+        <span className={bem("request-container__header-text", "small")}>
+          {`${agentName} will have access until`}
+        </span>
+        <div className={bem("date-container")}>
+          <InputBase
+            classes={{ root: bem("date-input") }}
+            placeholder="Consent expiry date"
+            value={
+              selectedDate ? format(selectedDate, "MMMM' 'd', 'Y") : "Forever"
+            }
+            inputProps={{
+              // "data-testid": TESTCAFE_ID_SEARCH_INPUT,
+              "aria-label": "Consent expiry date",
+              readonly: "readonly",
+            }}
+          />
+          <IconButton
+            type="button"
+            aria-label="Set expiry date"
+            edge="end"
+            onClick={() => setDatepickerOpen(!datepickerOpen)}
+          >
+            <Icons name="calendar" className={bem("icon-small--primary")} />
+          </IconButton>
+          {datepickerOpen && (
+            <div className={bem("date-picker")}>
+              <DatePicker
+                orientation="portrait"
+                clearLabel="forever"
+                variant="static"
+                disablePast
+                format="MM/dd/yyyy"
+                margin="normal"
+                value={selectedDate}
+                onChange={handleDateChange}
+              />
+              <Button
+                type="button"
+                variant="small"
+                onClick={() => setDateForever()}
+                className={bem("request-container__button", "full-width")}
+              >
+                Forever
+              </Button>
+            </div>
+          )}
+        </div>
         {/* FIXME: place this in a loop when we know the data structure */}
         {requestedAccesses &&
           agentName &&

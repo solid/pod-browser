@@ -83,6 +83,24 @@ export default function styles(theme) {
       whiteSpace: "nowrap",
     },
 
+    "request-container__button--full-width": {
+      display: "flex",
+      position: "relative",
+      flexGrow: 1,
+      margin: "0 1rem 1rem 1rem",
+      flexDirection: "column",
+      alignItems: "center",
+      "&:before": {
+        display: "block",
+        content: '""',
+        position: "absolute",
+        width: "100%",
+        height: 1,
+        bottom: "3rem",
+        backgroundColor: theme.palette.grey["300"],
+      },
+    },
+
     "request-container__header-text": {
       display: "flex",
       flexDirection: "row",
@@ -117,6 +135,7 @@ export default function styles(theme) {
 
     "icon-small--primary": {
       color: theme.palette.primary.main,
+      margin: 0,
     },
 
     "icon-small--padded": {
@@ -181,6 +200,45 @@ export default function styles(theme) {
       display: "flex",
       justifyContent: "flex-start",
       padding: "1rem",
+    },
+
+    "date-container": {
+      display: "flex",
+      padding: theme.spacing(0.7, 1.2),
+      border: `1px solid ${theme.palette.grey.A100}`,
+      borderRadius: "10px",
+      height: "2.5rem",
+      marginBottom: "1rem",
+      marginTop: "0.5rem",
+      position: "relative",
+      maxWidth: 300,
+    },
+
+    "date-input": {
+      fontSize: "0.8125rem",
+      width: "100%",
+      font: "inherit",
+      fontWeight: 500,
+      color: theme.palette.primary.text,
+    },
+
+    "date-picker": {
+      maxWidth: 320,
+      borderRadius: 4,
+      boxShadow: `0 4px 8px 0 ${theme.palette.grey[500]}`,
+      overflow: "hidden",
+      display: "flex",
+      flexDirection: "column",
+      position: "absolute",
+      left: 0,
+      top: "calc(100% + 0.5rem)",
+      zIndex: 2,
+      backgroundColor: "white",
+    },
+
+    "date-picker__container": {
+      padding: "1rem",
+      overflow: "hidden",
     },
   };
 }
