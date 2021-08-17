@@ -30,7 +30,7 @@ function getConsentRequestDetails() {
     type: ["VerifiableCredential", "SolidCredential", "SolidConsentRequest"],
     issuer: "https://consent.pod.inrupt.com",
     issuanceDate: "2021-05-26T16:40:03Z",
-    expirationDate: "2021-06-23T16:40:03Z",
+    expirationDate: "2022-06-23T16:40:03Z",
     credentialSubject: {
       id: "https://mockappurl.com",
       inbox: "https://mockappurl.com/inbox/",

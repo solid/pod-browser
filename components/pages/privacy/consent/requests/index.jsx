@@ -31,6 +31,8 @@ import { foaf, vcard } from "rdf-namespaces";
 import { makeStyles } from "@material-ui/styles";
 import { createStyles, Typography, Link } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
+import DateFnsUtils from "@date-io/date-fns";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { useRedirectIfLoggedOut } from "../../../../../src/effects/auth";
 import { ConsentRequestProvider } from "../../../../../src/contexts/consentRequestContext";
 import styles from "./styles";
@@ -76,61 +78,66 @@ export default function ConsentShow() {
       consentRequest={consentRequest}
       setConsentRequest={setConsentRequest}
     >
-      <Container className={bem("request-container")}>
-        <ConsentRequestForm />
-        <div className={bem("request-container__content")}>
-          <Typography
-            component="h3"
-            align="center"
-            variant="h3"
-            className={bem("heading__uppercase")}
-          >
-            About this application
-          </Typography>
-          <div className={bem("app-name")}>
-            <Icons className={bem("avatar")} name="project-diagram" />
-            <Typography align="center" variant="body2">
-              <span className={bem("footer__link")}>
-                <Link href={agentWebId} variant="body2">
-                  {agentName}
-                </Link>
-              </span>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <Container className={bem("request-container")}>
+          <ConsentRequestForm />
+          <div className={bem("request-container__content")}>
+            <Typography
+              component="h3"
+              align="center"
+              variant="h3"
+              className={bem("heading__uppercase")}
+            >
+              About this application
+            </Typography>
+            <div className={bem("app-name")}>
+              <Icons className={bem("avatar")} name="project-diagram" />
+              <Typography align="center" variant="body2">
+                <span className={bem("footer__link")}>
+                  <Link href={agentWebId} variant="body2">
+                    {agentName}
+                  </Link>
+                </span>
+              </Typography>
+            </div>
+            <Typography className={bem("footer__links")}>
+              {agentUrl && (
+                <span className={bem("footer__link")}>
+                  <Link href={agentUrl} variant="body2">
+                    <Icons
+                      name="globe"
+                      className={bem("icon-small", "primary")}
+                    />
+                    Website
+                  </Link>
+                </span>
+              )}
+              {agentPolicy && (
+                <span className={bem("footer__link")}>
+                  <Link href={agentPolicy} variant="body2">
+                    <Icons
+                      name="webid"
+                      className={bem("icon-small", "primary")}
+                    />
+                    Privacy Policy
+                  </Link>
+                </span>
+              )}
+              {agentTOS && (
+                <span className={bem("footer__link")}>
+                  <Link href={agentTOS} variant="body2">
+                    <Icons
+                      name="doc"
+                      className={bem("icon-small", "primary")}
+                    />
+                    Terms of Service
+                  </Link>
+                </span>
+              )}
             </Typography>
           </div>
-          <Typography className={bem("footer__links")}>
-            {agentUrl && (
-              <span className={bem("footer__link")}>
-                <Link href={agentUrl} variant="body2">
-                  <Icons
-                    name="globe"
-                    className={bem("icon-small", "primary")}
-                  />
-                  Website
-                </Link>
-              </span>
-            )}
-            {agentPolicy && (
-              <span className={bem("footer__link")}>
-                <Link href={agentPolicy} variant="body2">
-                  <Icons
-                    name="webid"
-                    className={bem("icon-small", "primary")}
-                  />
-                  Privacy Policy
-                </Link>
-              </span>
-            )}
-            {agentTOS && (
-              <span className={bem("footer__link")}>
-                <Link href={agentTOS} variant="body2">
-                  <Icons name="doc" className={bem("icon-small", "primary")} />
-                  Terms of Service
-                </Link>
-              </span>
-            )}
-          </Typography>
-        </div>
-      </Container>
+        </Container>
+      </MuiPickersUtilsProvider>
     </ConsentRequestProvider>
   );
 }
