@@ -27,7 +27,6 @@ import { renderWithTheme } from "../../../__testUtils/withTheme";
 import { ConsentRequestProvider } from "../../../src/contexts/consentRequestContext";
 import ConsentRequestFrom from "../index";
 import {
-  TESTCAFE_ID_DATE_INPUT,
   TESTCAFE_ID_FOREVER_BUTTON,
   TESTCAFE_ID_DATE_PICKER_CALENDAR_BUTTON,
 } from "./index";
