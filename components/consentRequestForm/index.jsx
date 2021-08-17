@@ -131,8 +131,6 @@ export default function ConsentRequestFrom() {
   const requestedAccesses = getRequestedAccesses(consentRequest);
   const expirationDate = consentRequest?.expirationDate;
   // FIXME: we will later fetch the expiry date from the consent details
-  const purposeDescription = "Some Specific Purpose";
-
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const [datepickerOpen, setDatepickerOpen] = useState(false);
@@ -179,7 +177,7 @@ export default function ConsentRequestFrom() {
             inputProps={{
               // "data-testid": TESTCAFE_ID_SEARCH_INPUT,
               "aria-label": "Consent expiry date",
-              readonly: "readonly",
+              readOnly: "readonly",
             }}
           />
           <IconButton

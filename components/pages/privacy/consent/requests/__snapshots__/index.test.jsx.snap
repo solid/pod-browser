@@ -44,6 +44,44 @@ exports[`Consent Page Renders the Consent page 1`] = `
           </button>
         </div>
       </span>
+      <span
+        class="PodBrowser-request-container__header-text PodBrowser-request-container__header-text--small"
+      >
+        Mock App will have access until
+      </span>
+      <div
+        class="PodBrowser-date-container"
+      >
+        <div
+          class="PodBrowser-root PodBrowser-date-input"
+        >
+          <input
+            aria-label="Consent expiry date"
+            class="PodBrowser-input"
+            placeholder="Consent expiry date"
+            readonly="readonly"
+            type="text"
+            value="June 23, 2022"
+          />
+        </div>
+        <button
+          aria-label="Set expiry date"
+          class="PodBrowser-root PodBrowser-root PodBrowser-edgeEnd"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="PodBrowser-label"
+          >
+            <span
+              class="PodBrowser-icon-calendar PodBrowser-icon-small--primary"
+            />
+          </span>
+          <span
+            class="PodBrowser-root"
+          />
+        </button>
+      </div>
       <fieldset
         class="PodBrowser-root PodBrowser-request-container__section"
       >
