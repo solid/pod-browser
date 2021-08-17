@@ -136,9 +136,7 @@ const renderSwitch = (
         key={index}
         resourceIri={resourceIri}
         isChecked={isChecked}
-        handleOnChange={() => {
-          handleOnChange(index);
-        }}
+        handleOnChange={() => handleOnChange(index)}
         index={index}
         overrideCheck={overrideCheck}
         setSelectedAccess={setSelectedAccess}
@@ -151,9 +149,7 @@ const renderSwitch = (
       key={index}
       resourceIri={resourceIri}
       isChecked={isChecked}
-      handleOnChange={() => {
-        handleOnChange(index);
-      }}
+      handleOnChange={() => handleOnChange(index)}
       index={index}
       setSelectedAccess={setSelectedAccess}
       modesObject={modesObject}

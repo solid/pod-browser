@@ -116,7 +116,8 @@ export default function ConsentRequestFrom() {
           <span className={bem("agent-name")}>Allow {agentName} access?</span>
         </Typography>
         <span className={bem("purpose")}>
-          {purposeDescription} <InfoTooltip tooltipText={purposeUrl} />
+          {purposeDescription}{" "}
+          <InfoTooltip tooltipText={purposeUrl || "Purpose"} />
         </span>
         {/* FIXME: place this in a loop when we know the data structure */}
         {requestedAccesses &&
