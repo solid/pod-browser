@@ -104,7 +104,7 @@ const permissions = [
   },
 ];
 
-export default function mockBookmarksContextProvider(value) {
+export default function mockPermissionsContextProvider(value) {
   function PermissionsContextProvider({ children }) {
     const [newAgentsWebIds, setNewAgentsWebIds] = useState(
       value?.newAgentsWebIds || []

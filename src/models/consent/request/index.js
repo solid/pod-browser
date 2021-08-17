@@ -19,35 +19,19 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import * as RouterFns from "next/router";
-import { renderWithTheme } from "../../../../../__testUtils/withTheme";
-import mockSessionContextProvider from "../../../../../__testUtils/mockSessionContextProvider";
-import mockSession from "../../../../../__testUtils/mockSession";
+// TODO: replace with solid-client functions
+// TODO: replace mock data with real data
 
-import ConsentPage from "./index";
+/* Model constants */
 
-jest.mock("../../../../../src/effects/auth");
+export const MOCK_PURPOSE_STRING = "Some Specific Purpose";
 
-describe("Consent Page", () => {
-  test("Renders the Consent page", () => {
-    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
-      asPath: "/pathname/",
-      replace: jest.fn(),
-      query: {
-        id: "test-request",
-      },
-    });
+/* Model functions */
 
-    const session = mockSession();
-    const SessionProvider = mockSessionContextProvider(session);
+export function getPurposeString() {
+  return MOCK_PURPOSE_STRING;
+}
 
-    const { asFragment } = renderWithTheme(
-      <SessionProvider>
-        <ConsentPage />
-      </SessionProvider>
-    );
-
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
+export function getPurposeUrl(consentRequest) {
+  return consentRequest?.credentialSubject?.hasConsent[0].forPurpose; // getting the first item in the array for now
+}

@@ -59,6 +59,11 @@ import { POLICIES_TYPE_MAP } from "../../../constants/policies";
 export const noAcrAccessError =
   "No access to Access Control Resource for this resource";
 
+const CONTROL_ACCESS_CONSENT = {
+  titleConsent: "wants to add or remove people from",
+  iconName: "user",
+};
+
 export function createAcpMap(read = false, write = false, append = false) {
   return {
     [ACL.READ.key]: read,
@@ -75,7 +80,7 @@ const acpMapForApplyPolicies = {
 };
 
 export const getPolicyDetailFromAccess = (access, label) => {
-  const { read, write, append } = access;
+  const { read, write, append, control } = access;
   if (read && write && !append) {
     return POLICIES_TYPE_MAP.editors[label];
   }
@@ -90,6 +95,9 @@ export const getPolicyDetailFromAccess = (access, label) => {
   }
   if (write && !append && !read) {
     return POLICIES_TYPE_MAP.editOnly[label];
+  }
+  if (control) {
+    return CONTROL_ACCESS_CONSENT[label];
   }
   return null;
 };

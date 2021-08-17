@@ -19,35 +19,36 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import * as RouterFns from "next/router";
-import { renderWithTheme } from "../../../../../__testUtils/withTheme";
-import mockSessionContextProvider from "../../../../../__testUtils/mockSessionContextProvider";
-import mockSession from "../../../../../__testUtils/mockSession";
+import React, { useState } from "react";
+import T from "prop-types";
+import ConsentRequestContext from "../src/contexts/consentRequestContext";
+import getConsentRequestDetails from "./mockConsentRequestDetails";
 
-import ConsentPage from "./index";
+const defaultConsentRequest = getConsentRequestDetails();
 
-jest.mock("../../../../../src/effects/auth");
+export default function mockConsentRequestContext() {
+  function ConsentRequestContextProvider({ children }) {
+    const [consentRequest, setConsentRequest] = useState(defaultConsentRequest);
 
-describe("Consent Page", () => {
-  test("Renders the Consent page", () => {
-    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
-      asPath: "/pathname/",
-      replace: jest.fn(),
-      query: {
-        id: "test-request",
-      },
-    });
-
-    const session = mockSession();
-    const SessionProvider = mockSessionContextProvider(session);
-
-    const { asFragment } = renderWithTheme(
-      <SessionProvider>
-        <ConsentPage />
-      </SessionProvider>
+    return (
+      <ConsentRequestContext.Provider
+        value={{
+          consentRequest,
+          setConsentRequest,
+        }}
+      >
+        {children}
+      </ConsentRequestContext.Provider>
     );
+  }
 
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
+  ConsentRequestContextProvider.propTypes = {
+    children: T.node,
+  };
+
+  ConsentRequestContextProvider.defaultProps = {
+    children: null,
+  };
+
+  return ConsentRequestContextProvider;
+}

@@ -66,9 +66,8 @@ export default function ConsentShow() {
 
   useEffect(() => {
     if (!consentRequest) {
-      getConsentRequestDetails().then((res) => {
-        setConsentRequest(res);
-      });
+      const request = getConsentRequestDetails();
+      setConsentRequest(request);
     }
   }, [consentRequest]);
 

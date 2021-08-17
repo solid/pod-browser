@@ -25,6 +25,7 @@ import { renderWithTheme } from "../../../__testUtils/withTheme";
 import RequestSection, {
   TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON,
   TESTCAFE_ID_REQUEST_EXPAND_SECTION_BUTTON,
+  removeExistingValues,
 } from "./index";
 
 const sectionDetails = {
@@ -38,18 +39,27 @@ const sectionDetails = {
   forPurpose: "https://example.com/SomeSpecificPurpose",
 };
 
-describe("consentRequestContext", () => {
+describe("Request Section", () => {
+  const setSelectedAccess = jest.fn();
   test("Renders initial context data", async () => {
     const { asFragment } = renderWithTheme(
-      <RequestSection agentName="agent_name" sectionDetails={sectionDetails} />
+      <RequestSection
+        agentName="agent_name"
+        sectionDetails={sectionDetails}
+        setSelectedAccess={setSelectedAccess}
+      />
     );
 
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it selects all switches in a section", () => {
-    const { getByTestId, getAllByRole } = renderWithTheme(
-      <RequestSection agentName="agent_name" sectionDetails={sectionDetails} />
+  test("it selects all switches in a section and displays 'Deny all' in the toggle title", () => {
+    const { getByTestId, getAllByRole, getByText } = renderWithTheme(
+      <RequestSection
+        agentName="agent_name"
+        sectionDetails={sectionDetails}
+        setSelectedAccess={setSelectedAccess}
+      />
     );
 
     const selectAll = getByTestId(TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON);
@@ -63,11 +73,17 @@ describe("consentRequestContext", () => {
       switches.length
     );
     expect(selectAll).toHaveFocus();
+
+    expect(getByText("Deny all")).toBeInTheDocument();
   });
 
   test("it expands a sub-section and selects switch in it", () => {
     const { getByTestId, getAllByRole } = renderWithTheme(
-      <RequestSection agentName="agent_name" sectionDetails={sectionDetails} />
+      <RequestSection
+        agentName="agent_name"
+        sectionDetails={sectionDetails}
+        setSelectedAccess={setSelectedAccess}
+      />
     );
 
     const expandSection = getByTestId(
@@ -91,7 +107,11 @@ describe("consentRequestContext", () => {
 
   test("it selects a single switch when clicked", () => {
     const { getAllByRole } = renderWithTheme(
-      <RequestSection agentName="agent_name" sectionDetails={sectionDetails} />
+      <RequestSection
+        agentName="agent_name"
+        sectionDetails={sectionDetails}
+        setSelectedAccess={setSelectedAccess}
+      />
     );
 
     const switches = getAllByRole("checkbox");
@@ -101,6 +121,86 @@ describe("consentRequestContext", () => {
     userEvent.click(switches[0]);
     expect(getAllByRole("checkbox", { checked: false })).toHaveLength(
       switches.length - 1
+    );
+  });
+
+  test("switches all to unchecked when clicky deny all", () => {
+    const { getByTestId, getAllByRole, getByText } = renderWithTheme(
+      <RequestSection
+        agentName="agent_name"
+        sectionDetails={sectionDetails}
+        setSelectedAccess={setSelectedAccess}
+      />
+    );
+
+    const selectAll = getByTestId(TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON);
+    const switches = getAllByRole("checkbox");
+    expect(getAllByRole("checkbox", { checked: false })).toHaveLength(
+      switches.length
+    );
+
+    userEvent.click(selectAll);
+    expect(getAllByRole("checkbox", { checked: true })).toHaveLength(
+      switches.length
+    );
+    expect(selectAll).toHaveFocus();
+
+    const denyAllButton = getByText("Deny all");
+    userEvent.click(denyAllButton);
+    expect(getAllByRole("checkbox", { checked: false })).toHaveLength(
+      switches.length
+    );
+  });
+});
+
+describe("removeExistingValues", () => {
+  test("returns array of accesses after removing those checked to false in newer accesses and adding newly checked ones", () => {
+    const previousAccess = [
+      {
+        index: 0,
+        checked: true,
+        accessModes: { read: true, write: false, append: false },
+        resourceIri: "https://example.org",
+      },
+      {
+        index: 1,
+        checked: true,
+        accessModes: { read: true, write: false, append: false },
+        resourceIri: "https://example.org",
+      },
+    ];
+
+    const newAccess = [
+      {
+        index: 0,
+        checked: false,
+        accessModes: { read: true, write: false, append: false },
+        resourceIri: "https://example.org",
+      },
+      {
+        index: 4,
+        checked: true,
+        accessModes: { read: true, write: false, append: false },
+        resourceIri: "https://example.org",
+      },
+    ];
+
+    const expectedResult = [
+      {
+        index: 1,
+        checked: true,
+        accessModes: { read: true, write: false, append: false },
+        resourceIri: "https://example.org",
+      },
+      {
+        index: 4,
+        checked: true,
+        accessModes: { read: true, write: false, append: false },
+        resourceIri: "https://example.org",
+      },
+    ];
+    expect(removeExistingValues(previousAccess, newAccess)).toEqual(
+      expectedResult
     );
   });
 });

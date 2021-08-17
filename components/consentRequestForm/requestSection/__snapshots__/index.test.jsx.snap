@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`consentRequestContext Renders initial context data 1`] = `
+exports[`Request Section Renders initial context data 1`] = `
 <DocumentFragment>
   <fieldset
     class="PodBrowser-root PodBrowser-request-container__section"
