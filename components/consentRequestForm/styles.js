@@ -87,7 +87,7 @@ export default function styles(theme) {
       display: "flex",
       position: "relative",
       flexGrow: 1,
-      margin: "0 1rem 1rem 1rem",
+      margin: "1rem",
       flexDirection: "column",
       alignItems: "center",
       "&:before": {
@@ -206,7 +206,7 @@ export default function styles(theme) {
       display: "flex",
       padding: theme.spacing(0.7, 1.2),
       border: `1px solid ${theme.palette.grey.A100}`,
-      borderRadius: "10px",
+      borderRadius: 10,
       height: "2.5rem",
       marginBottom: "1rem",
       marginTop: "0.5rem",
@@ -215,11 +215,15 @@ export default function styles(theme) {
     },
 
     "date-input": {
-      fontSize: "0.8125rem",
+      fontSize: "1rem",
       width: "100%",
       font: "inherit",
       fontWeight: 500,
       color: theme.palette.primary.text,
+    },
+
+    "date-button": {
+      padding: 0,
     },
 
     "date-picker": {
