@@ -76,6 +76,8 @@ export default function ConsentRequestFrom() {
 
   const DIALOG_CONTENT = `${agentName} will not have access to anything in your Pod.`;
 
+  const [confirmationSetup, setConfirmationSetup] = useState(false);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (selectedAccess.length) {
@@ -87,6 +89,7 @@ export default function ConsentRequestFrom() {
     setTitle(NO_ACCESS_DIALOG_TITLE);
     setConfirmText(CONFIRM_TEXT);
     setContent(DIALOG_CONTENT);
+    setContent(`${agentName} will not have access to anything in your Pod`);
   };
 
   useEffect(() => {
