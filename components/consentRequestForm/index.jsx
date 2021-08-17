@@ -92,6 +92,13 @@ export default function ConsentRequestFrom() {
     setContent(`${agentName} will not have access to anything in your Pod`);
   };
 
+  const handleDenyAccess = () => {
+    setConfirmationSetup(true);
+    setOpen(CONSENT_REQUEST_NO_ACCESS_DIALOG);
+    setTitle(NO_ACCESS_DIALOG_TITLE);
+    setContent(`${agentName} will not have access to anything in your Pod`);
+  };
+
   useEffect(() => {
     if (
       confirmationSetup &&
@@ -148,6 +155,7 @@ export default function ConsentRequestFrom() {
           <Button
             variant="secondary"
             className={bem("request-container__button")}
+            onClick={handleDenyAccess}
           >
             Deny all access
           </Button>
