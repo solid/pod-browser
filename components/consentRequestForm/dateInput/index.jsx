@@ -21,7 +21,7 @@
 
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { Button, Icons } from "@inrupt/prism-react-components";
 import { format } from "date-fns";
 import T from "prop-types";
@@ -53,15 +53,34 @@ export default function DateInput(props) {
   const { consentRequest } = useContext(ConsentRequestContext);
   const expirationDate = consentRequest?.expirationDate;
   // FIXME: we will later fetch the expiry date from the consent details
+  const node = useRef();
+
+  const handleClick = (e) => {
+    if (node?.current?.contains(e.target)) {
+      // inside click
+      return;
+    }
+    // outside click
+    setDatepickerOpen(false);
+  };
 
   useEffect(() => {
     if (expirationDate) {
-      setSelectedDate(new Date(expirationDate));
+      setSelectedDate(expirationDate);
     }
   }, [expirationDate, setSelectedDate]);
 
+  useEffect(() => {
+    // add when mounted
+    document.addEventListener("mousedown", handleClick);
+    // return function to be called when unmounted
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
+  });
+
   return (
-    <div className={bem("date-container")}>
+    <div ref={node} className={bem("date-container")}>
       <InputBase
         classes={{ root: bem("date-input") }}
         placeholder="Consent expiry date"
@@ -69,7 +88,7 @@ export default function DateInput(props) {
         inputProps={{
           "data-testid": TESTCAFE_ID_DATE_INPUT,
           "aria-label": "Consent expiry date",
-          readonly: "readonly",
+          readOnly: "readonly",
         }}
       />
       <IconButton
@@ -107,8 +126,12 @@ export default function DateInput(props) {
   );
 }
 
+DateInput.defaultProps = {
+  selectedDate: null,
+};
+
 DateInput.propTypes = {
-  selectedDate: T.string.isRequired,
+  selectedDate: T.string,
   setSelectedDate: T.func.isRequired,
   datepickerOpen: T.bool.isRequired,
   setDatepickerOpen: T.func.isRequired,

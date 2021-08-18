@@ -60,7 +60,7 @@ exports[`Consent Page Renders the Consent page 1`] = `
             class="PodBrowser-input"
             data-testid="date-input-field"
             placeholder="Consent expiry date"
-            readonly="readonly"
+            readonly=""
             type="text"
             value="June 23, 2022"
           />
