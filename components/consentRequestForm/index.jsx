@@ -44,6 +44,7 @@ import ConfirmationDialog from "../confirmationDialog";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 const NO_ACCESS_DIALOG_TITLE = "Your haven't selected any access";
+const DENY_ACCESS_DIALOG_TITLE = "Deny all access?";
 export const CONSENT_REQUEST_NO_ACCESS_DIALOG =
   "consent-request-no-access-dialog";
 export const TESTCAFE_ID_CONSENT_REQUEST_SUBMIT_BUTTON =
@@ -51,6 +52,7 @@ export const TESTCAFE_ID_CONSENT_REQUEST_SUBMIT_BUTTON =
 export const TESTCAFE_ID_CONSENT_REQUEST_DENY_BUTTON =
   "consent-request-deny-button";
 const CONFIRM_TEXT = "Continue with no access";
+const DENY_TEXT = "Deny All Access";
 
 export default function ConsentRequestFrom() {
   const classes = useStyles();
@@ -87,14 +89,14 @@ export default function ConsentRequestFrom() {
     setTitle(NO_ACCESS_DIALOG_TITLE);
     setConfirmText(CONFIRM_TEXT);
     setContent(DIALOG_CONTENT);
-    setContent(`${agentName} will not have access to anything in your Pod`);
   };
 
   const handleDenyAccess = () => {
     setConfirmationSetup(true);
+    setTitle(DENY_ACCESS_DIALOG_TITLE);
+    setConfirmText(DENY_TEXT);
+    setContent(DIALOG_CONTENT);
     setOpen(CONSENT_REQUEST_NO_ACCESS_DIALOG);
-    setTitle(NO_ACCESS_DIALOG_TITLE);
-    setContent(`${agentName} will not have access to anything in your Pod`);
   };
 
   useEffect(() => {
@@ -153,6 +155,7 @@ export default function ConsentRequestFrom() {
           <Button
             data-testid={TESTCAFE_ID_CONSENT_REQUEST_DENY_BUTTON}
             variant="secondary"
+            type="button"
             className={bem("request-container__button")}
             onClick={handleDenyAccess}
           >
