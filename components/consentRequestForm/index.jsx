@@ -48,6 +48,9 @@ export const CONSENT_REQUEST_NO_ACCESS_DIALOG =
   "consent-request-no-access-dialog";
 export const TESTCAFE_ID_CONSENT_REQUEST_SUBMIT_BUTTON =
   "consent-request-submit-button";
+export const TESTCAFE_ID_CONSENT_REQUEST_DENY_BUTTON =
+  "consent-request-deny-button";
+const CONFIRM_TEXT = "Continue with no access";
 
 export default function ConsentRequestFrom() {
   const classes = useStyles();
@@ -67,8 +70,11 @@ export default function ConsentRequestFrom() {
     setOpen,
     setTitle,
     closeDialog,
+    setConfirmText,
   } = useContext(ConfirmationDialogContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
+
+  const DIALOG_CONTENT = `${agentName} will not have access to anything in your Pod.`;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -79,7 +85,8 @@ export default function ConsentRequestFrom() {
     setConfirmationSetup(true);
     setOpen(CONSENT_REQUEST_NO_ACCESS_DIALOG);
     setTitle(NO_ACCESS_DIALOG_TITLE);
-    setContent(`${agentName} will not have access to anything in your Pod`);
+    setConfirmText(CONFIRM_TEXT);
+    setContent(DIALOG_CONTENT);
   };
 
   useEffect(() => {
