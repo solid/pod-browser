@@ -22,7 +22,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 
 import React, { useContext, useEffect, useRef } from "react";
-import { Button, Icons } from "@inrupt/prism-react-components";
+import { Button, Icons, useOutsideClick } from "@inrupt/prism-react-components";
 import { format } from "date-fns";
 import T from "prop-types";
 import { DatePicker } from "@material-ui/pickers";
@@ -53,16 +53,9 @@ export default function DateInput(props) {
   const { consentRequest } = useContext(ConsentRequestContext);
   const expirationDate = consentRequest?.expirationDate;
   // FIXME: we will later fetch the expiry date from the consent details
-  const node = useRef();
+  const clickRef = useRef();
 
-  const handleClick = (e) => {
-    if (node?.current?.contains(e.target)) {
-      // inside click
-      return;
-    }
-    // outside click
-    setDatepickerOpen(false);
-  };
+  useOutsideClick(clickRef, () => setDatepickerOpen(false));
 
   useEffect(() => {
     if (expirationDate) {
@@ -70,17 +63,8 @@ export default function DateInput(props) {
     }
   }, [expirationDate, setSelectedDate]);
 
-  useEffect(() => {
-    // add when mounted
-    document.addEventListener("mousedown", handleClick);
-    // return function to be called when unmounted
-    return () => {
-      document.removeEventListener("mousedown", handleClick);
-    };
-  });
-
   return (
-    <div ref={node} className={bem("date-container")}>
+    <div ref={clickRef} className={bem("date-container")}>
       <InputBase
         classes={{ root: bem("date-input") }}
         placeholder="Consent expiry date"
@@ -103,6 +87,7 @@ export default function DateInput(props) {
       {datepickerOpen && (
         <div className={bem("date-picker")}>
           <DatePicker
+            disableToolbar
             orientation="portrait"
             variant="static"
             disablePast
