@@ -595,6 +595,8 @@ exports[`Consent Page Renders the Consent page 1`] = `
       >
         <button
           class="PodBrowser-button PodBrowser-button--secondary"
+          data-testid="consent-request-deny-button"
+          type="button"
         >
           <span
             class="PodBrowser-button__text"
