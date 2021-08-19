@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-async function getConsentRequestDetails() {
+function getConsentRequestDetails() {
   return {
     "@context": [
       "https://www.w3.org/2018/credentials/v1",
@@ -57,6 +57,12 @@ async function getConsentRequestDetails() {
         },
         {
           mode: ["Append"],
+          hasStatus: "ConsentStatusRequested",
+          forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
+          forPurpose: "https://example.com/SomeSpecificPurpose",
+        },
+        {
+          mode: ["Control"],
           hasStatus: "ConsentStatusRequested",
           forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
           forPurpose: "https://example.com/SomeSpecificPurpose",

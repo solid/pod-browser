@@ -21,7 +21,7 @@
 
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button } from "@inrupt/prism-react-components";
 import { getStringNoLocale } from "@inrupt/solid-client";
 import { foaf } from "rdf-namespaces";
@@ -33,36 +33,112 @@ import InfoTooltip from "../infoTooltip";
 import RequestSection from "./requestSection";
 import styles from "./styles";
 import { mockApp } from "../../__testUtils/mockApp";
+import {
+  getPurposeString,
+  getPurposeUrl,
+  getRequestedAccesses,
+} from "../../src/models/consent/request";
+import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
+import ConfirmationDialog from "../confirmationDialog";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+
+const NO_ACCESS_DIALOG_TITLE = "Your haven't selected any access";
+export const CONSENT_REQUEST_NO_ACCESS_DIALOG =
+  "consent-request-no-access-dialog";
+export const TESTCAFE_ID_CONSENT_REQUEST_SUBMIT_BUTTON =
+  "consent-request-submit-button";
+export const TESTCAFE_ID_CONSENT_REQUEST_DENY_BUTTON =
+  "consent-request-deny-button";
+const CONFIRM_TEXT = "Continue with no access";
 
 export default function ConsentRequestFrom() {
   const classes = useStyles();
   const bem = useBem(classes);
   const { consentRequest } = useContext(ConsentRequestContext);
+  const [selectedAccess, setSelectedAccess] = useState([]);
   // FIXME: using a mock for the app profile - we will fetch profile later
   const agentProfile = mockApp();
   const agentName = getStringNoLocale(agentProfile, foaf.name);
-  const purposeUrl =
-    consentRequest?.credentialSubject?.hasConsent[0].forPurpose; // getting the first in this array for now
+  const purposeUrl = getPurposeUrl(consentRequest);
   // FIXME: we will later fetch the description from the purpose Url
-  const purposeDescription = "Some Specific Purpose";
+  const purposeDescription = getPurposeString();
+  const {
+    confirmed,
+    open,
+    setContent,
+    setOpen,
+    setTitle,
+    closeDialog,
+    setConfirmText,
+  } = useContext(ConfirmationDialogContext);
+  const [confirmationSetup, setConfirmationSetup] = useState(false);
+
+  const DIALOG_CONTENT = `${agentName} will not have access to anything in your Pod.`;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (selectedAccess.length) {
+      setConfirmationSetup(false);
+      return;
+    }
+    setConfirmationSetup(true);
+    setOpen(CONSENT_REQUEST_NO_ACCESS_DIALOG);
+    setTitle(NO_ACCESS_DIALOG_TITLE);
+    setConfirmText(CONFIRM_TEXT);
+    setContent(DIALOG_CONTENT);
+  };
+
+  useEffect(() => {
+    if (
+      confirmationSetup &&
+      confirmed === null &&
+      open === CONSENT_REQUEST_NO_ACCESS_DIALOG
+    )
+      return;
+
+    if (
+      confirmationSetup &&
+      confirmed &&
+      open === CONSENT_REQUEST_NO_ACCESS_DIALOG
+    ) {
+      closeDialog(); // FIXME: do something with the access request
+    }
+
+    if (confirmed !== null) {
+      closeDialog();
+      setConfirmationSetup(false);
+    }
+  }, [confirmationSetup, confirmed, closeDialog, open]);
+
+  const requestedAccesses = getRequestedAccesses(consentRequest);
 
   return (
     <>
-      <form className={bem("request-container__content", "main")}>
+      <form
+        className={bem("request-container__content", "main")}
+        onSubmit={handleSubmit}
+      >
         <Typography component="h2" align="center" variant="h1">
           <span className={bem("agent-name")}>Allow {agentName} access?</span>
         </Typography>
         <span className={bem("purpose")}>
-          {purposeDescription} <InfoTooltip tooltipText={purposeUrl} />
+          {purposeDescription}{" "}
+          <InfoTooltip tooltipText={purposeUrl || "Purpose"} />
         </span>
         {/* FIXME: place this in a loop when we know the data structure */}
-        {consentRequest?.credentialSubject?.hasConsent &&
+        {requestedAccesses &&
           agentName &&
-          consentRequest.credentialSubject.hasConsent.map((consent) => {
+          requestedAccesses.map((consent, index) => {
             return (
-              <RequestSection agentName={agentName} sectionDetails={consent} />
+              <RequestSection
+                // eslint-disable-next-line react/no-array-index-key
+                key={`consent-request-section-${index}`}
+                agentName={agentName}
+                sectionDetails={consent}
+                selectedAccess={selectedAccess}
+                setSelectedAccess={setSelectedAccess}
+              />
             );
           })}
         <div className={bem("form__controls")}>
@@ -72,11 +148,16 @@ export default function ConsentRequestFrom() {
           >
             Deny all access
           </Button>
-          <Button type="submit" className={bem("request-container__button")}>
+          <Button
+            data-testid={TESTCAFE_ID_CONSENT_REQUEST_SUBMIT_BUTTON}
+            type="submit"
+            className={bem("request-container__button")}
+          >
             Confirm Access
           </Button>
         </div>
       </form>
+      <ConfirmationDialog />
     </>
   );
 }

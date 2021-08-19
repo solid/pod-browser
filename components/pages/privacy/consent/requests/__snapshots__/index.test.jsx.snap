@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Agent show page Renders the Agent show page 1`] = `
+exports[`Consent Page Renders the Consent page 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-container PodBrowser-request-container"
@@ -27,6 +27,7 @@ exports[`Agent show page Renders the Agent show page 1`] = `
           <button
             class="PodBrowser-root PodBrowser-root PodBrowser-infoButton PodBrowser-text"
             tabindex="0"
+            title="https://example.com/SomeSpecificPurpose"
             type="button"
           >
             <span
@@ -43,6 +44,552 @@ exports[`Agent show page Renders the Agent show page 1`] = `
           </button>
         </div>
       </span>
+      <fieldset
+        class="PodBrowser-root PodBrowser-request-container__section"
+      >
+        <legend
+          class="PodBrowser-request-container__header-text PodBrowser-request-container__header-text--small"
+        >
+          <span
+            class="PodBrowser-icon-edit PodBrowser-icon-small"
+          />
+          <span
+            class="PodBrowser-header__content"
+          >
+            Mock App wants to create, edit, or delete
+          </span>
+          <button
+            class="PodBrowser-button PodBrowser-button--secondary PodBrowser-request-container__button--small"
+            data-testid="request-select-all"
+            type="button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                class="PodBrowser-root PodBrowser-caption"
+              >
+                Select all
+              </span>
+            </span>
+          </button>
+        </legend>
+        <div
+          aria-label="position"
+          class="PodBrowser-root PodBrowser-request-container__section PodBrowser-request-container__section--box PodBrowser-row"
+        >
+          <label
+            class="PodBrowser-root PodBrowser-box__content PodBrowser-labelPlacementStart"
+          >
+            <span
+              class="PodBrowser-root"
+            >
+              <span
+                aria-disabled="false"
+                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-switchBase PodBrowser-colorPrimary"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <input
+                    class="PodBrowser-input PodBrowser-input"
+                    type="checkbox"
+                    value="https://pod.inrupt.com/alice/private/data/"
+                  />
+                  <span
+                    class="PodBrowser-thumb"
+                  />
+                </span>
+                <span
+                  class="PodBrowser-root"
+                />
+              </span>
+              <span
+                class="PodBrowser-track"
+              />
+            </span>
+            <span
+              class="PodBrowser-root PodBrowser-label PodBrowser-body1"
+            >
+              <p
+                class="PodBrowser-root PodBrowser-body2"
+              >
+                <span
+                  class="PodBrowser-icon-folder PodBrowser-icon-small PodBrowser-icon-small--dark"
+                />
+                <span
+                  class=""
+                  title="https://pod.inrupt.com/alice/private/data/"
+                >
+                  data
+                </span>
+                <button
+                  class="PodBrowser-dropdown-caret"
+                  data-testid="expand-section"
+                  type="button"
+                >
+                  <span
+                    class="PodBrowser-icon-caret-down PodBrowser-icon-small--padded"
+                  />
+                </button>
+              </p>
+            </span>
+          </label>
+          <label
+            class="PodBrowser-root PodBrowser-box__content PodBrowser-labelPlacementStart"
+          >
+            <span
+              class="PodBrowser-root"
+            >
+              <span
+                aria-disabled="false"
+                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-switchBase PodBrowser-colorPrimary"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <input
+                    class="PodBrowser-input PodBrowser-input"
+                    type="checkbox"
+                    value="https://pod.inrupt.com/alice/private/data-2"
+                  />
+                  <span
+                    class="PodBrowser-thumb"
+                  />
+                </span>
+                <span
+                  class="PodBrowser-root"
+                />
+              </span>
+              <span
+                class="PodBrowser-track"
+              />
+            </span>
+            <span
+              class="PodBrowser-root PodBrowser-label PodBrowser-body1"
+            >
+              <p
+                class="PodBrowser-root PodBrowser-body2"
+              >
+                <span
+                  class="PodBrowser-icon-file PodBrowser-icon-small PodBrowser-icon-small--dark"
+                />
+                <span
+                  class=""
+                  title="https://pod.inrupt.com/alice/private/data-2"
+                >
+                  data-2
+                </span>
+              </p>
+            </span>
+          </label>
+          <label
+            class="PodBrowser-root PodBrowser-box__content PodBrowser-labelPlacementStart"
+          >
+            <span
+              class="PodBrowser-root"
+            >
+              <span
+                aria-disabled="false"
+                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-switchBase PodBrowser-colorPrimary"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <input
+                    class="PodBrowser-input PodBrowser-input"
+                    type="checkbox"
+                    value="https://pod.inrupt.com/alice/private/data-3"
+                  />
+                  <span
+                    class="PodBrowser-thumb"
+                  />
+                </span>
+                <span
+                  class="PodBrowser-root"
+                />
+              </span>
+              <span
+                class="PodBrowser-track"
+              />
+            </span>
+            <span
+              class="PodBrowser-root PodBrowser-label PodBrowser-body1"
+            >
+              <p
+                class="PodBrowser-root PodBrowser-body2"
+              >
+                <span
+                  class="PodBrowser-icon-file PodBrowser-icon-small PodBrowser-icon-small--dark"
+                />
+                <span
+                  class=""
+                  title="https://pod.inrupt.com/alice/private/data-3"
+                >
+                  data-3
+                </span>
+              </p>
+            </span>
+          </label>
+        </div>
+      </fieldset>
+      <fieldset
+        class="PodBrowser-root PodBrowser-request-container__section"
+      >
+        <legend
+          class="PodBrowser-request-container__header-text PodBrowser-request-container__header-text--small"
+        >
+          <span
+            class="PodBrowser-icon-view PodBrowser-icon-small"
+          />
+          <span
+            class="PodBrowser-header__content"
+          >
+            Mock App wants to see
+          </span>
+          <button
+            class="PodBrowser-button PodBrowser-button--secondary PodBrowser-request-container__button--small"
+            data-testid="request-select-all"
+            type="button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                class="PodBrowser-root PodBrowser-caption"
+              >
+                Select all
+              </span>
+            </span>
+          </button>
+        </legend>
+        <div
+          aria-label="position"
+          class="PodBrowser-root PodBrowser-request-container__section PodBrowser-request-container__section--box PodBrowser-row"
+        >
+          <label
+            class="PodBrowser-root PodBrowser-box__content PodBrowser-labelPlacementStart"
+          >
+            <span
+              class="PodBrowser-root"
+            >
+              <span
+                aria-disabled="false"
+                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-switchBase PodBrowser-colorPrimary"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <input
+                    class="PodBrowser-input PodBrowser-input"
+                    type="checkbox"
+                    value="https://pod.inrupt.com/alice/private/data"
+                  />
+                  <span
+                    class="PodBrowser-thumb"
+                  />
+                </span>
+                <span
+                  class="PodBrowser-root"
+                />
+              </span>
+              <span
+                class="PodBrowser-track"
+              />
+            </span>
+            <span
+              class="PodBrowser-root PodBrowser-label PodBrowser-body1"
+            >
+              <p
+                class="PodBrowser-root PodBrowser-body2"
+              >
+                <span
+                  class="PodBrowser-icon-file PodBrowser-icon-small PodBrowser-icon-small--dark"
+                />
+                <span
+                  class=""
+                  title="https://pod.inrupt.com/alice/private/data"
+                >
+                  data
+                </span>
+              </p>
+            </span>
+          </label>
+          <label
+            class="PodBrowser-root PodBrowser-box__content PodBrowser-labelPlacementStart"
+          >
+            <span
+              class="PodBrowser-root"
+            >
+              <span
+                aria-disabled="false"
+                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-switchBase PodBrowser-colorPrimary"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <input
+                    class="PodBrowser-input PodBrowser-input"
+                    type="checkbox"
+                    value="https://pod.inrupt.com/alice/private/data-2/"
+                  />
+                  <span
+                    class="PodBrowser-thumb"
+                  />
+                </span>
+                <span
+                  class="PodBrowser-root"
+                />
+              </span>
+              <span
+                class="PodBrowser-track"
+              />
+            </span>
+            <span
+              class="PodBrowser-root PodBrowser-label PodBrowser-body1"
+            >
+              <p
+                class="PodBrowser-root PodBrowser-body2"
+              >
+                <span
+                  class="PodBrowser-icon-folder PodBrowser-icon-small PodBrowser-icon-small--dark"
+                />
+                <span
+                  class=""
+                  title="https://pod.inrupt.com/alice/private/data-2/"
+                >
+                  data-2
+                </span>
+                <button
+                  class="PodBrowser-dropdown-caret"
+                  data-testid="expand-section"
+                  type="button"
+                >
+                  <span
+                    class="PodBrowser-icon-caret-down PodBrowser-icon-small--padded"
+                  />
+                </button>
+              </p>
+            </span>
+          </label>
+          <label
+            class="PodBrowser-root PodBrowser-box__content PodBrowser-labelPlacementStart"
+          >
+            <span
+              class="PodBrowser-root"
+            >
+              <span
+                aria-disabled="false"
+                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-switchBase PodBrowser-colorPrimary"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <input
+                    class="PodBrowser-input PodBrowser-input"
+                    type="checkbox"
+                    value="https://pod.inrupt.com/alice/private/data-3"
+                  />
+                  <span
+                    class="PodBrowser-thumb"
+                  />
+                </span>
+                <span
+                  class="PodBrowser-root"
+                />
+              </span>
+              <span
+                class="PodBrowser-track"
+              />
+            </span>
+            <span
+              class="PodBrowser-root PodBrowser-label PodBrowser-body1"
+            >
+              <p
+                class="PodBrowser-root PodBrowser-body2"
+              >
+                <span
+                  class="PodBrowser-icon-file PodBrowser-icon-small PodBrowser-icon-small--dark"
+                />
+                <span
+                  class=""
+                  title="https://pod.inrupt.com/alice/private/data-3"
+                >
+                  data-3
+                </span>
+              </p>
+            </span>
+          </label>
+        </div>
+      </fieldset>
+      <fieldset
+        class="PodBrowser-root PodBrowser-request-container__section"
+      >
+        <legend
+          class="PodBrowser-request-container__header-text PodBrowser-request-container__header-text--small"
+        >
+          <span
+            class="PodBrowser-icon-folder PodBrowser-icon-small"
+          />
+          <span
+            class="PodBrowser-header__content"
+          >
+            Mock App wants to add to
+          </span>
+          <button
+            class="PodBrowser-button PodBrowser-button--secondary PodBrowser-request-container__button--small"
+            data-testid="request-select-all"
+            type="button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                class="PodBrowser-root PodBrowser-caption"
+              >
+                Select all
+              </span>
+            </span>
+          </button>
+        </legend>
+        <div
+          aria-label="position"
+          class="PodBrowser-root PodBrowser-request-container__section PodBrowser-request-container__section--box PodBrowser-row"
+        >
+          <label
+            class="PodBrowser-root PodBrowser-box__content PodBrowser-labelPlacementStart"
+          >
+            <span
+              class="PodBrowser-root"
+            >
+              <span
+                aria-disabled="false"
+                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-switchBase PodBrowser-colorPrimary"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <input
+                    class="PodBrowser-input PodBrowser-input"
+                    type="checkbox"
+                    value="https://pod.inrupt.com/alice/private/data"
+                  />
+                  <span
+                    class="PodBrowser-thumb"
+                  />
+                </span>
+                <span
+                  class="PodBrowser-root"
+                />
+              </span>
+              <span
+                class="PodBrowser-track"
+              />
+            </span>
+            <span
+              class="PodBrowser-root PodBrowser-label PodBrowser-body1"
+            >
+              <p
+                class="PodBrowser-root PodBrowser-body2"
+              >
+                <span
+                  class="PodBrowser-icon-file PodBrowser-icon-small PodBrowser-icon-small--dark"
+                />
+                <span
+                  class=""
+                  title="https://pod.inrupt.com/alice/private/data"
+                >
+                  data
+                </span>
+              </p>
+            </span>
+          </label>
+        </div>
+      </fieldset>
+      <fieldset
+        class="PodBrowser-root PodBrowser-request-container__section"
+      >
+        <legend
+          class="PodBrowser-request-container__header-text PodBrowser-request-container__header-text--small"
+        >
+          <span
+            class="PodBrowser-icon-user PodBrowser-icon-small"
+          />
+          <span
+            class="PodBrowser-header__content"
+          >
+            Mock App wants to add or remove people from
+          </span>
+          <button
+            class="PodBrowser-button PodBrowser-button--secondary PodBrowser-request-container__button--small"
+            data-testid="request-select-all"
+            type="button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                class="PodBrowser-root PodBrowser-caption"
+              >
+                Select all
+              </span>
+            </span>
+          </button>
+        </legend>
+        <div
+          aria-label="position"
+          class="PodBrowser-root PodBrowser-request-container__section PodBrowser-request-container__section--box PodBrowser-row"
+        >
+          <label
+            class="PodBrowser-root PodBrowser-box__content PodBrowser-labelPlacementStart"
+          >
+            <span
+              class="PodBrowser-root"
+            >
+              <span
+                aria-disabled="false"
+                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-switchBase PodBrowser-colorPrimary"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <input
+                    class="PodBrowser-input PodBrowser-input"
+                    type="checkbox"
+                    value="https://pod.inrupt.com/alice/private/data"
+                  />
+                  <span
+                    class="PodBrowser-thumb"
+                  />
+                </span>
+                <span
+                  class="PodBrowser-root"
+                />
+              </span>
+              <span
+                class="PodBrowser-track"
+              />
+            </span>
+            <span
+              class="PodBrowser-root PodBrowser-label PodBrowser-body1"
+            >
+              <p
+                class="PodBrowser-root PodBrowser-body2"
+              >
+                <span
+                  class="PodBrowser-icon-file PodBrowser-icon-small PodBrowser-icon-small--dark"
+                />
+                <span
+                  class=""
+                  title="https://pod.inrupt.com/alice/private/data"
+                >
+                  data
+                </span>
+              </p>
+            </span>
+          </label>
+        </div>
+      </fieldset>
       <div
         class="PodBrowser-form__controls"
       >
@@ -57,6 +604,7 @@ exports[`Agent show page Renders the Agent show page 1`] = `
         </button>
         <button
           class="PodBrowser-button"
+          data-testid="consent-request-submit-button"
           type="submit"
         >
           <span

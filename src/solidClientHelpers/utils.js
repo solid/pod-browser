@@ -164,3 +164,7 @@ export async function serializePromises(promiseFactories) {
     return oldResult.concat(newResult);
   }, Promise.resolve([]));
 }
+
+export function uniqueObjects(array) {
+  return Array.from(new Set(array.map(JSON.stringify))).map(JSON.parse);
+}
