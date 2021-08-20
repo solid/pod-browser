@@ -24,20 +24,36 @@
 
 /* Model constants */
 
-export const MOCK_PURPOSE_STRING = "Some Specific Purpose";
+export const MOCK_PURPOSES_DESCRIPTIONS = {
+  "https://example.com/SomeSpecificPurpose": "Some Specific Purpose",
+  "https://example.com/SomeSpecificPurposeA": "Another Purpose",
+  "https://example.com/SomeSpecificPurposeB": "A Different Purpose",
+};
 
 /* Model functions */
 
-export function getPurposeString() {
-  return MOCK_PURPOSE_STRING;
+export function getPurposeString(url) {
+  return MOCK_PURPOSES_DESCRIPTIONS[url];
 }
 
-export function getPurposeUrl(consentRequest) {
+export function getPurposeUrls(consentRequest) {
+  if (!consentRequest) return null;
   return consentRequest?.credentialSubject?.hasConsent[0].forPurpose; // getting the first item in the array for now
 }
 
 export function getExpiryDate(consentRequest) {
   return consentRequest?.expirationDate;
+}
+
+export function getPurposes(consentRequest) {
+  const urls = getPurposeUrls(consentRequest);
+  if (!urls) return null;
+  return urls.map((url) => {
+    return {
+      url,
+      description: getPurposeString(url),
+    };
+  });
 }
 
 export function getRequestedAccesses(consentRequest) {

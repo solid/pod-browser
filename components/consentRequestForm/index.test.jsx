@@ -24,16 +24,30 @@ import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockConsentRequestContext from "../../__testUtils/mockConsentRequestContext";
 import ConsentRequestForm, {
+  DENY_ACCESS_DIALOG_TITLE,
+  NO_ACCESS_DIALOG_TITLE,
+  NO_PURPOSE_TITLE,
   TESTCAFE_ID_CONSENT_REQUEST_DENY_BUTTON,
   TESTCAFE_ID_CONSENT_REQUEST_SUBMIT_BUTTON,
 } from "./index";
-import { TESTCAFE_ID_CONFIRMATION_DIALOG } from "../confirmationDialog";
+import {
+  TESTCAFE_ID_CONFIRMATION_DIALOG,
+  TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
+  TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE,
+} from "../confirmationDialog";
 import { ConfirmationDialogProvider } from "../../src/contexts/confirmationDialogContext";
+import { getConsentRequestDetailsOnePurpose } from "../../__testUtils/mockConsentRequestDetails";
+import { TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT } from "./purposeCheckBox";
+import { TESTCAFE_ID_CONSENT_ACCESS_SWITCH } from "./requestSection";
 
 const ConsentRequestContextProvider = mockConsentRequestContext();
+const consentRequestWithOnePurpose = getConsentRequestDetailsOnePurpose();
+const ConsentRequestContextProviderOnePurpose = mockConsentRequestContext(
+  consentRequestWithOnePurpose
+);
 
 describe("Consent Request Form", () => {
-  test("Renders a consent request form", () => {
+  test("Renders a consent request form with multiple purposes", () => {
     const { asFragment } = renderWithTheme(
       <ConsentRequestContextProvider>
         <ConsentRequestForm />
@@ -42,28 +56,72 @@ describe("Consent Request Form", () => {
 
     expect(asFragment()).toMatchSnapshot();
   });
-  test("when submitting form without selecting access, it displays a confirmation dialog", () => {
-    const { getByTestId } = renderWithTheme(
+  test("Renders a consent request form with only one purpose", () => {
+    const { asFragment } = renderWithTheme(
+      <ConsentRequestContextProviderOnePurpose>
+        <ConsentRequestForm />
+      </ConsentRequestContextProviderOnePurpose>
+    );
+
+    expect(asFragment()).toMatchSnapshot();
+  });
+  test("when submitting form without selecting access and at least one purpose selected, it displays a confirmation dialog with the correct title and content", () => {
+    const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentRequestContextProvider>
           <ConsentRequestForm />
         </ConsentRequestContextProvider>
       </ConfirmationDialogProvider>
     );
+    const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
+    userEvent.click(purpose);
     const button = getByTestId(TESTCAFE_ID_CONSENT_REQUEST_SUBMIT_BUTTON);
     userEvent.click(button);
     const dialog = getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
     expect(dialog).toBeInTheDocument();
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE)
+    ).toHaveTextContent(NO_ACCESS_DIALOG_TITLE);
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
+    ).toHaveTextContent(
+      "Mock App will not have access to anything in your Pod."
+    );
   });
-  test("does not display confirmation dialog if at least one access is selected", async () => {
-    const { getByTestId, getAllByRole, findByTestId } = renderWithTheme(
+  test("when submitting form without selecting purpose and at least one access selected, it displays a confirmation dialog with the correct title and content", () => {
+    const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentRequestContextProvider>
           <ConsentRequestForm />
         </ConsentRequestContextProvider>
       </ConfirmationDialogProvider>
     );
-    const toggle = getAllByRole("checkbox")[0];
+    const toggle = getAllByTestId(TESTCAFE_ID_CONSENT_ACCESS_SWITCH)[0];
+    userEvent.click(toggle);
+    const button = getByTestId(TESTCAFE_ID_CONSENT_REQUEST_SUBMIT_BUTTON);
+    userEvent.click(button);
+    const dialog = getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+    expect(dialog).toBeInTheDocument();
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE)
+    ).toHaveTextContent(NO_PURPOSE_TITLE);
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
+    ).toHaveTextContent(
+      "At least one purpose needs to be selected to approve access for Mock App"
+    );
+  });
+  test("does not display confirmation dialog if at least one access and one purpose are selected", async () => {
+    const { getByTestId, findByTestId, getAllByTestId } = renderWithTheme(
+      <ConfirmationDialogProvider>
+        <ConsentRequestContextProvider>
+          <ConsentRequestForm />
+        </ConsentRequestContextProvider>
+      </ConfirmationDialogProvider>
+    );
+    const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
+    userEvent.click(purpose);
+    const toggle = getAllByTestId(TESTCAFE_ID_CONSENT_ACCESS_SWITCH)[0];
     userEvent.click(toggle);
     const button = getByTestId(TESTCAFE_ID_CONSENT_REQUEST_SUBMIT_BUTTON);
     userEvent.click(button);
@@ -71,19 +129,29 @@ describe("Consent Request Form", () => {
       expect.anything()
     );
   });
-  test("displays the confirmation dialog regardless of the state of the toggles when clicking 'Deny All Access' button", async () => {
-    const { getByTestId, getAllByRole } = renderWithTheme(
+  test("displays the confirmation dialog with the correct title and content regardless of the state of the toggles when clicking 'Deny All Access' button", async () => {
+    const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentRequestContextProvider>
           <ConsentRequestForm />
         </ConsentRequestContextProvider>
       </ConfirmationDialogProvider>
     );
-    const toggle = getAllByRole("checkbox")[0];
+    const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
+    userEvent.click(purpose);
+    const toggle = getAllByTestId(TESTCAFE_ID_CONSENT_ACCESS_SWITCH)[0];
     userEvent.click(toggle);
     const button = getByTestId(TESTCAFE_ID_CONSENT_REQUEST_DENY_BUTTON);
     userEvent.click(button);
     const dialog = getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
     expect(dialog).toBeInTheDocument();
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE)
+    ).toHaveTextContent(DENY_ACCESS_DIALOG_TITLE);
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
+    ).toHaveTextContent(
+      "Mock App will not have access to anything in your Pod."
+    );
   });
 });

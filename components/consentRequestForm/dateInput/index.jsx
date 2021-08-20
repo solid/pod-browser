@@ -91,7 +91,6 @@ export default function DateInput(props) {
             disableToolbar
             orientation="portrait"
             variant="static"
-            disablePast
             format="MM/dd/yyyy"
             margin="normal"
             value={selectedDate}
