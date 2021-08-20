@@ -26,14 +26,15 @@ import { getContainer } from "../../models/container";
 
 export default function useContainer(iri) {
   const session = useSession();
+  const { sessionRequestInProgress } = session;
   const url = getContainerUrl(iri);
 
   async function fetchContainer(fetch) {
     return getContainer(url, { fetch });
   }
 
-  return useSWR(["container", url], async () => {
-    if (!url) return null;
+  return useSWR(["container", url, sessionRequestInProgress], async () => {
+    if (!url || sessionRequestInProgress) return null;
     return fetchContainer(session.fetch);
   });
 }
