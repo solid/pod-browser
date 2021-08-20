@@ -66,7 +66,7 @@ export default function Container({ iri }) {
   const {
     data: container,
     error: containerError,
-    update,
+    mutate: update,
     isFetching,
   } = useContainer(iri);
 

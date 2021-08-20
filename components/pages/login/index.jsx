@@ -58,8 +58,8 @@ const links = [
 ];
 
 export default function Login({ history }) {
-  const filteredHistory = history;
-  const previousPage = filteredHistory[filteredHistory.length - 2];
+  const filteredHistory = history.slice(0, history.indexOf("/login"));
+  const previousPage = filteredHistory[filteredHistory.length - 1];
   const redirectUrl = previousPage || "/";
   useRedirectIfLoggedIn(redirectUrl);
   const bem = useBem(useStyles());
