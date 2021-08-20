@@ -237,7 +237,7 @@ export default function styles(theme) {
       left: 0,
       top: "calc(100% + 0.5rem)",
       zIndex: 2,
-      backgroundColor: "white",
+      backgroundColor: theme.palette.background.paper,
     },
 
     "date-picker__container": {

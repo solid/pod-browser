@@ -30,6 +30,7 @@ import { makeStyles } from "@material-ui/styles";
 import { createStyles, IconButton, InputBase } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import ConsentRequestContext from "../../../src/contexts/consentRequestContext";
+import { getExpiryDate } from "../../../src/models/consent/request";
 import styles from "../styles";
 
 export const TESTCAFE_ID_DATE_INPUT = "date-input-field";
@@ -51,7 +52,7 @@ export default function DateInput(props) {
   const classes = useStyles();
   const bem = useBem(classes);
   const { consentRequest } = useContext(ConsentRequestContext);
-  const expirationDate = consentRequest?.expirationDate;
+  const expirationDate = getExpiryDate(consentRequest);
   // FIXME: we will later fetch the expiry date from the consent details
   const clickRef = useRef();
 
