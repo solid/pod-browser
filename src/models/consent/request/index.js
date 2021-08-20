@@ -36,6 +36,10 @@ export function getPurposeUrl(consentRequest) {
   return consentRequest?.credentialSubject?.hasConsent[0].forPurpose; // getting the first item in the array for now
 }
 
+export function getExpiryDate(consentRequest) {
+  return consentRequest?.expirationDate;
+}
+
 export function getRequestedAccesses(consentRequest) {
   return consentRequest?.credentialSubject?.hasConsent;
 }
