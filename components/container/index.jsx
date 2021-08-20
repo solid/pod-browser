@@ -67,7 +67,7 @@ export default function Container({ iri }) {
     data: container,
     error: containerError,
     mutate: update,
-    isFetching,
+    isValidating,
   } = useContainer(iri);
 
   useEffect(() => {
@@ -95,7 +95,7 @@ export default function Container({ iri }) {
     }));
   }, [resourceUrls]);
 
-  if (!iri) return <Spinner />;
+  if (!iri || isValidating) return <Spinner />;
 
   if (containerError && isHTTPError(containerError.message, 401))
     return <AccessForbidden />;
@@ -128,7 +128,7 @@ export default function Container({ iri }) {
           {locationIsInUsersPod && accessControlError && (
             <NoControlWarning podRootIri={podRootIri} />
           )}
-          {isFetching ? (
+          {isValidating ? (
             <Spinner />
           ) : (
             <ContainerTable

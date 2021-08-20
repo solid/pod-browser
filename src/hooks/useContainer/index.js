@@ -21,7 +21,6 @@
 
 import useSWR from "swr";
 import { useSession } from "@inrupt/solid-ui-react";
-import { useEffect, useState } from "react";
 import { getContainerUrl } from "../../stringHelpers";
 import { getContainer } from "../../models/container";
 
@@ -33,7 +32,7 @@ export default function useContainer(iri) {
     return getContainer(url, { fetch });
   }
 
-  return useSWR(["container"], async () => {
+  return useSWR(["container", url], async () => {
     if (!url) return null;
     return fetchContainer(session.fetch);
   });
