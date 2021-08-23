@@ -112,6 +112,7 @@ export function handleFileSelect({
   resourceList,
 }) {
   return (e) => {
+    console.log(e.target.files);
     if (!e.target.files.length) return;
     try {
       setIsUploading(true);
