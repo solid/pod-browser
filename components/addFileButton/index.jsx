@@ -111,7 +111,9 @@ export function handleFileSelect({
   setAlertOpen,
   resourceList,
 }) {
+  console.log("handleFileSelect is called");
   return (e) => {
+    console.log(e);
     console.log(e.target.files);
     if (!e.target.files.length) return;
     try {
