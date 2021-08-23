@@ -170,12 +170,9 @@ export default function AddFileButton({ className, onSave, resourceList }) {
   });
 
   const onFileSelect = handleFileSelect({
-    fetch,
-    currentUri,
     setIsUploading,
     setFile,
     saveUploadedFile,
-    saveResource,
     setSeverity,
     setMessage,
     setAlertOpen,
