@@ -62,7 +62,8 @@ describe("useContainer", () => {
     expect(result.current).toEqual(swrResponse);
     expect(mockedSwrHook).toHaveBeenCalledWith(
       ["container", containerUrl, false],
-      expect.any(Function)
+      expect.any(Function),
+      { errorRetryInterval: 2000, refreshInterval: 0, revalidateOnFocus: false }
     );
   });
 

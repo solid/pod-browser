@@ -33,8 +33,12 @@ export default function useContainer(iri) {
     return getContainer(url, { fetch });
   }
 
-  return useSWR(["container", url, sessionRequestInProgress], async () => {
-    if (!url || sessionRequestInProgress) return null;
-    return fetchContainer(session.fetch);
-  });
+  return useSWR(
+    ["container", url, sessionRequestInProgress],
+    async () => {
+      if (!url || sessionRequestInProgress) return null;
+      return fetchContainer(session.fetch);
+    },
+    { revalidateOnFocus: false, refreshInterval: 0, errorRetryInterval: 2000 }
+  );
 }

@@ -111,10 +111,7 @@ export function handleFileSelect({
   setAlertOpen,
   resourceList,
 }) {
-  console.log("handleFileSelect is called");
   return (e) => {
-    console.log(e);
-    console.log(e.target.files);
     if (!e.target.files.length) return;
     try {
       setIsUploading(true);
@@ -150,7 +147,7 @@ export default function AddFileButton({ className, onSave, resourceList }) {
   } = useContext(ConfirmationDialogContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
   const [file, setFile] = useState(null);
-  const ref = useRef();
+  const ref = useRef(null);
 
   const saveResource = handleSaveResource({
     fetch,
@@ -172,9 +169,12 @@ export default function AddFileButton({ className, onSave, resourceList }) {
   });
 
   const onFileSelect = handleFileSelect({
+    fetch,
+    currentUri,
     setIsUploading,
     setFile,
     saveUploadedFile,
+    saveResource,
     setSeverity,
     setMessage,
     setAlertOpen,
@@ -205,6 +205,9 @@ export default function AddFileButton({ className, onSave, resourceList }) {
         data-testid={TESTCAFE_ID_UPLOAD_BUTTON}
         disabled={isUploading}
         onClick={(e) => {
+          if (ref.current) {
+            setIsUploading(true);
+          }
           e.target.value = null;
         }}
         onKeyUp={(e) => {
@@ -223,7 +226,10 @@ export default function AddFileButton({ className, onSave, resourceList }) {
           data-testid={TESTCAFE_ID_UPLOAD_INPUT}
           type="file"
           style={{ display: "none" }}
-          onChange={onFileSelect}
+          onChange={(e) => {
+            onFileSelect(e);
+            e.target.value = null;
+          }}
         />
       </label>
       <ConfirmationDialog />
