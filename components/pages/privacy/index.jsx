@@ -20,7 +20,8 @@
  */
 
 import { schema } from "rdf-namespaces";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSession } from "@inrupt/solid-ui-react";
 import Link from "next/link";
 import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
@@ -41,6 +42,8 @@ export default function PrivacyPage() {
   const [search, setSearch] = useState("");
   const [searchValues, setSearchValues] = useState(null);
   const [selectedTabValue, setSelectedTabValue] = useState("all");
+  const { fetch, session } = useSession();
+  const podRoot = session.info.webId;
 
   const tabs = [
     {
@@ -67,6 +70,35 @@ export default function PrivacyPage() {
       setSearchValues(null);
     }
   };
+
+  const query = `
+  {
+    pod( iri: "${podRoot}") {
+      agentsWithAccess,
+      resources,
+      name,
+      id,
+      identifier,
+      accessType,
+      accessByAgent(agent: "https://norbertiam.inrupt.net/profile/card#me") {
+        agent
+        allow
+        deny
+        resource
+      },
+    }
+  }
+  `;
+
+  useEffect(() => {
+    fetch("https://access.pod.inrupt.com/graphql/", {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({ query }),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  }, []);
 
   return (
     <DetailsMenuProvider>
