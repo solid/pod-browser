@@ -41,6 +41,7 @@ import DateInput from "./dateInput";
 import styles from "./styles";
 import { mockApp } from "../../__testUtils/mockApp";
 import {
+  getExpiryDate,
   getPurposes,
   getRequestedAccesses,
 } from "../../src/models/consent/request";
@@ -85,6 +86,14 @@ export default function ConsentRequestFrom() {
     setOmitCancelButton,
   } = useContext(ConfirmationDialogContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
+
+  const requestedAccesses = getRequestedAccesses(consentRequest);
+  // FIXME: we will later fetch the expiry date from the consent details
+
+  const expirationDate = getExpiryDate(consentRequest);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const [datepickerOpen, setDatepickerOpen] = useState(false);
 
   const DIALOG_CONTENT = `${agentName} will not have access to anything in your Pod.`;
   const NO_PURPOSE_CONTENT = `At least one purpose needs to be selected to approve access for ${agentName}`;
@@ -142,13 +151,6 @@ export default function ConsentRequestFrom() {
       setConfirmationSetup(false);
     }
   }, [confirmationSetup, confirmed, closeDialog, open]);
-
-  const requestedAccesses = getRequestedAccesses(consentRequest);
-  const expirationDate = consentRequest?.expirationDate;
-  // FIXME: we will later fetch the expiry date from the consent details
-  const [selectedDate, setSelectedDate] = useState(new Date());
-
-  const [datepickerOpen, setDatepickerOpen] = useState(false);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
