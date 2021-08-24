@@ -19,38 +19,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
-import T from "prop-types";
-import ConsentRequestContext from "../src/contexts/consentRequestContext";
-import getConsentRequestDetails from "./mockConsentRequestDetails";
+import userEvent from "@testing-library/user-event";
+import React from "react";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
+import PurposeCheckbox, { TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT } from "./index";
 
-const defaultConsentRequest = getConsentRequestDetails();
-
-export default function mockConsentRequestContext(request) {
-  function ConsentRequestContextProvider({ children }) {
-    const [consentRequest, setConsentRequest] = useState(
-      request || defaultConsentRequest
+describe("Purpose Checkbox", () => {
+  const handleSelectPurpose = jest.fn();
+  test("renders a checkbox", () => {
+    const { asFragment } = renderWithTheme(
+      <PurposeCheckbox
+        url="url"
+        description="test"
+        handleSelectPurpose={handleSelectPurpose}
+      />
     );
-
-    return (
-      <ConsentRequestContext.Provider
-        value={{
-          consentRequest,
-          setConsentRequest,
-        }}
-      >
-        {children}
-      </ConsentRequestContext.Provider>
+    expect(asFragment()).toMatchSnapshot();
+  });
+  test("calls handleSelectPurpose on click", () => {
+    const { getByTestId } = renderWithTheme(
+      <PurposeCheckbox
+        url="url"
+        description="test"
+        handleSelectPurpose={handleSelectPurpose}
+      />
     );
-  }
-
-  ConsentRequestContextProvider.propTypes = {
-    children: T.node,
-  };
-
-  ConsentRequestContextProvider.defaultProps = {
-    children: null,
-  };
-
-  return ConsentRequestContextProvider;
-}
+    const checkbox = getByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT);
+    userEvent.click(checkbox);
+    expect(handleSelectPurpose).toHaveBeenCalled();
+  });
+});

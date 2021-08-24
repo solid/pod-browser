@@ -67,6 +67,22 @@ describe("ConfirmationDialog", () => {
     const cancelButton = getByText("Cancel");
     expect(cancelButton).not.toBeNull();
   });
+  test("when omitCancelButton is true, it displays only confirm button", async () => {
+    const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
+      open: "confirmation-dialog",
+      omitCancelButton: true,
+    });
+    const { getByText, findByTestId } = renderWithTheme(
+      <ConfirmationDialogProvider>
+        <ConfirmationDialog />
+      </ConfirmationDialogProvider>
+    );
+    const confirmButton = getByText("Confirm");
+    expect(confirmButton).not.toBeNull();
+    await expect(
+      findByTestId(TESTCAFE_ID_CONFIRMATION_CANCEL_BUTTON)
+    ).rejects.toEqual(expect.anything());
+  });
   test("clicking on cancel button calls setConfirmed with false", () => {
     const setConfirmed = jest.fn();
     const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({

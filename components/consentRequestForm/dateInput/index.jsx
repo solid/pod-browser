@@ -117,7 +117,7 @@ DateInput.defaultProps = {
 };
 
 DateInput.propTypes = {
-  selectedDate: T.string,
+  selectedDate: T.instanceOf(Date),
   setSelectedDate: T.func.isRequired,
   datepickerOpen: T.bool.isRequired,
   setDatepickerOpen: T.func.isRequired,

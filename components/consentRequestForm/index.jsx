@@ -26,7 +26,13 @@ import { Button } from "@inrupt/prism-react-components";
 import { getStringNoLocale } from "@inrupt/solid-client";
 import { foaf } from "rdf-namespaces";
 import { makeStyles } from "@material-ui/styles";
-import { createStyles, Typography } from "@material-ui/core";
+import {
+  createStyles,
+  ListItem,
+  Typography,
+  List,
+  FormControlLabel,
+} from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import ConsentRequestContext from "../../src/contexts/consentRequestContext";
 import InfoTooltip from "../infoTooltip";
@@ -35,25 +41,27 @@ import DateInput from "./dateInput";
 import styles from "./styles";
 import { mockApp } from "../../__testUtils/mockApp";
 import {
-  getPurposeString,
-  getPurposeUrl,
+  getExpiryDate,
+  getPurposes,
   getRequestedAccesses,
 } from "../../src/models/consent/request";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
 import ConfirmationDialog from "../confirmationDialog";
+import PurposeCheckbox from "./purposeCheckBox";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-const NO_ACCESS_DIALOG_TITLE = "Your haven't selected any access";
-const DENY_ACCESS_DIALOG_TITLE = "Deny all access?";
+export const NO_ACCESS_DIALOG_TITLE = "Your haven't selected any access";
+export const DENY_ACCESS_DIALOG_TITLE = "Deny all access?";
 export const CONSENT_REQUEST_NO_ACCESS_DIALOG =
   "consent-request-no-access-dialog";
 export const TESTCAFE_ID_CONSENT_REQUEST_SUBMIT_BUTTON =
   "consent-request-submit-button";
 export const TESTCAFE_ID_CONSENT_REQUEST_DENY_BUTTON =
   "consent-request-deny-button";
-const CONFIRM_TEXT = "Continue with no access";
-const DENY_TEXT = "Deny All Access";
+export const CONFIRM_TEXT = "Continue with no access";
+export const DENY_TEXT = "Deny All Access";
+export const NO_PURPOSE_TITLE = "Select a purpose";
 
 export default function ConsentRequestFrom() {
   const classes = useStyles();
@@ -63,9 +71,10 @@ export default function ConsentRequestFrom() {
   // FIXME: using a mock for the app profile - we will fetch profile later
   const agentProfile = mockApp();
   const agentName = getStringNoLocale(agentProfile, foaf.name);
-  const purposeUrl = getPurposeUrl(consentRequest);
+  const purposes = getPurposes(consentRequest);
+  const [selectedPurposes, setSelectedPurposes] = useState([]);
+
   // FIXME: we will later fetch the description from the purpose Url
-  const purposeDescription = getPurposeString();
   const {
     confirmed,
     open,
@@ -74,26 +83,47 @@ export default function ConsentRequestFrom() {
     setTitle,
     closeDialog,
     setConfirmText,
+    setOmitCancelButton,
   } = useContext(ConfirmationDialogContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
 
+  const requestedAccesses = getRequestedAccesses(consentRequest);
+  // FIXME: we will later fetch the expiry date from the consent details
+
+  const expirationDate = getExpiryDate(consentRequest);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const [datepickerOpen, setDatepickerOpen] = useState(false);
+
   const DIALOG_CONTENT = `${agentName} will not have access to anything in your Pod.`;
+  const NO_PURPOSE_CONTENT = `At least one purpose needs to be selected to approve access for ${agentName}`;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (selectedAccess.length) {
+    if (selectedAccess.length && selectedPurposes.length) {
       setConfirmationSetup(false);
       return;
     }
-    setConfirmationSetup(true);
-    setOpen(CONSENT_REQUEST_NO_ACCESS_DIALOG);
-    setTitle(NO_ACCESS_DIALOG_TITLE);
-    setConfirmText(CONFIRM_TEXT);
-    setContent(DIALOG_CONTENT);
+    if (!selectedPurposes.length) {
+      setConfirmationSetup(true);
+      setOpen(CONSENT_REQUEST_NO_ACCESS_DIALOG);
+      setTitle(NO_PURPOSE_TITLE);
+      setConfirmText("Ok");
+      setOmitCancelButton(true);
+      setContent(NO_PURPOSE_CONTENT);
+    } else if (!selectedAccess.length) {
+      setConfirmationSetup(true);
+      setOmitCancelButton(false);
+      setOpen(CONSENT_REQUEST_NO_ACCESS_DIALOG);
+      setTitle(NO_ACCESS_DIALOG_TITLE);
+      setConfirmText(CONFIRM_TEXT);
+      setContent(DIALOG_CONTENT);
+    }
   };
 
   const handleDenyAccess = () => {
     setConfirmationSetup(true);
+    setOmitCancelButton(false);
     setTitle(DENY_ACCESS_DIALOG_TITLE);
     setConfirmText(DENY_TEXT);
     setContent(DIALOG_CONTENT);
@@ -122,13 +152,6 @@ export default function ConsentRequestFrom() {
     }
   }, [confirmationSetup, confirmed, closeDialog, open]);
 
-  const requestedAccesses = getRequestedAccesses(consentRequest);
-  const expirationDate = consentRequest?.expirationDate;
-  // FIXME: we will later fetch the expiry date from the consent details
-  const [selectedDate, setSelectedDate] = useState(new Date());
-
-  const [datepickerOpen, setDatepickerOpen] = useState(false);
-
   const handleDateChange = (date) => {
     setSelectedDate(date);
     setDatepickerOpen(false);
@@ -144,6 +167,15 @@ export default function ConsentRequestFrom() {
       setSelectedDate(new Date(expirationDate));
     }
   }, [expirationDate]);
+  const handleSelectPurpose = (e) => {
+    if (e.target.checked) {
+      setSelectedPurposes((prevState) => [...prevState, e.target.value]);
+    } else {
+      setSelectedPurposes((prevState) =>
+        prevState.filter((value) => value !== e.target.value)
+      );
+    }
+  };
 
   return (
     <>
@@ -154,10 +186,35 @@ export default function ConsentRequestFrom() {
         <Typography component="h2" align="center" variant="h1">
           <span className={bem("agent-name")}>Allow {agentName} access?</span>
         </Typography>
-        <span className={bem("purpose")}>
-          {purposeDescription}{" "}
-          <InfoTooltip tooltipText={purposeUrl || "Purpose"} />
-        </span>
+        {purposes?.length === 1 ? (
+          <span className={bem("purpose")}>
+            {purposes[0].description}{" "}
+            <InfoTooltip tooltipText={purposes[0].url || "Purpose"} />
+          </span>
+        ) : (
+          <div className={bem("purposes-container")}>
+            Select the purposes you wish to allow:
+            <List>
+              {purposes?.map(({ url, description }) => (
+                <ListItem key={url} className={bem("list-item")}>
+                  <FormControlLabel
+                    classes={{ label: classes.purposeLabel }}
+                    label={description}
+                    control={
+                      // eslint-disable-next-line react/jsx-wrap-multilines
+                      <PurposeCheckbox
+                        classes={classes}
+                        url={url}
+                        description={description}
+                        handleSelectPurpose={handleSelectPurpose}
+                      />
+                    }
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </div>
+        )}
         <span className={bem("request-container__header-text", "small")}>
           {`${agentName} will have access until`}
         </span>

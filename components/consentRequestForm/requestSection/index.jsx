@@ -47,6 +47,7 @@ import { getResourceName } from "../../../src/solidClientHelpers/resource";
 
 export const TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON = "request-select-all";
 export const TESTCAFE_ID_REQUEST_EXPAND_SECTION_BUTTON = "expand-section";
+export const TESTCAFE_ID_CONSENT_ACCESS_SWITCH = "consent-access-switch";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -266,6 +267,9 @@ const ContainerSwitch = (props) => {
             onChange={() => {
               handleOnChange(index);
               setContainerChecked(!containerChecked);
+            }}
+            inputProps={{
+              "data-testid": TESTCAFE_ID_CONSENT_ACCESS_SWITCH,
             }}
             color="primary"
           />

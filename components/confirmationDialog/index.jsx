@@ -54,6 +54,7 @@ export default function ConfirmationDialog() {
     setConfirmed,
     cancelText,
     confirmText,
+    omitCancelButton,
   } = useContext(ConfirmationDialogContext);
 
   return (
@@ -81,15 +82,17 @@ export default function ConfirmationDialog() {
         </DialogContentText>
       </DialogContent>
       <DialogActions classes={{ root: classes.dialogActions }}>
-        <Button
-          variant="secondary"
-          data-testid={TESTCAFE_ID_CONFIRMATION_CANCEL_BUTTON}
-          className={classes.cancelButton}
-          autoFocus
-          onClick={() => setConfirmed(false)}
-        >
-          {cancelText || "Cancel"}
-        </Button>
+        {!omitCancelButton && (
+          <Button
+            variant="secondary"
+            data-testid={TESTCAFE_ID_CONFIRMATION_CANCEL_BUTTON}
+            className={classes.cancelButton}
+            autoFocus
+            onClick={() => setConfirmed(false)}
+          >
+            {cancelText || "Cancel"}
+          </Button>
+        )}
         <Button
           data-testid={TESTCAFE_ID_CONFIRM_BUTTON}
           className={classes.submitAgentsButton}

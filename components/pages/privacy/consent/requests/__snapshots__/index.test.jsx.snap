@@ -17,33 +17,114 @@ exports[`Consent Page Renders the Consent page 1`] = `
           Allow Mock App access?
         </span>
       </h2>
-      <span
-        class="PodBrowser-purpose"
+      <div
+        class="PodBrowser-purposes-container"
       >
-        Some Specific Purpose 
-        <div
-          class="PodBrowser-infoTooltipContainer"
+        Select the purposes you wish to allow:
+        <ul
+          class="PodBrowser-root PodBrowser-padding"
         >
-          <button
-            class="PodBrowser-root PodBrowser-root PodBrowser-infoButton PodBrowser-text"
-            tabindex="0"
-            title="https://example.com/SomeSpecificPurpose"
-            type="button"
+          <li
+            class="PodBrowser-root PodBrowser-list-item PodBrowser-gutters"
           >
-            <span
-              class="PodBrowser-label"
-            >
-              <i
-                aria-label="Info"
-                class="PodBrowser-icon-info PodBrowser-infoIcon"
-              />
-            </span>
-            <span
+            <label
               class="PodBrowser-root"
-            />
-          </button>
-        </div>
-      </span>
+            >
+              <span
+                aria-disabled="false"
+                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-colorPrimary PodBrowser-root PodBrowser-colorPrimary"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <input
+                    class="PodBrowser-input"
+                    data-indeterminate="false"
+                    data-testid="purpose-checkbox-input"
+                    name="Some Specific Purpose"
+                    type="checkbox"
+                    value="https://example.com/SomeSpecificPurpose"
+                  />
+                  <span
+                    class="PodBrowser-icon"
+                  />
+                </span>
+              </span>
+              <span
+                class="PodBrowser-root PodBrowser-label PodBrowser-purposeLabel PodBrowser-body1"
+              >
+                Some Specific Purpose
+              </span>
+            </label>
+          </li>
+          <li
+            class="PodBrowser-root PodBrowser-list-item PodBrowser-gutters"
+          >
+            <label
+              class="PodBrowser-root"
+            >
+              <span
+                aria-disabled="false"
+                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-colorPrimary PodBrowser-root PodBrowser-colorPrimary"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <input
+                    class="PodBrowser-input"
+                    data-indeterminate="false"
+                    data-testid="purpose-checkbox-input"
+                    name="Another Purpose"
+                    type="checkbox"
+                    value="https://example.com/SomeSpecificPurposeA"
+                  />
+                  <span
+                    class="PodBrowser-icon"
+                  />
+                </span>
+              </span>
+              <span
+                class="PodBrowser-root PodBrowser-label PodBrowser-purposeLabel PodBrowser-body1"
+              >
+                Another Purpose
+              </span>
+            </label>
+          </li>
+          <li
+            class="PodBrowser-root PodBrowser-list-item PodBrowser-gutters"
+          >
+            <label
+              class="PodBrowser-root"
+            >
+              <span
+                aria-disabled="false"
+                class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-colorPrimary PodBrowser-root PodBrowser-colorPrimary"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <input
+                    class="PodBrowser-input"
+                    data-indeterminate="false"
+                    data-testid="purpose-checkbox-input"
+                    name="A Different Purpose"
+                    type="checkbox"
+                    value="https://example.com/SomeSpecificPurposeB"
+                  />
+                  <span
+                    class="PodBrowser-icon"
+                  />
+                </span>
+              </span>
+              <span
+                class="PodBrowser-root PodBrowser-label PodBrowser-purposeLabel PodBrowser-body1"
+              >
+                A Different Purpose
+              </span>
+            </label>
+          </li>
+        </ul>
+      </div>
       <span
         class="PodBrowser-request-container__header-text PodBrowser-request-container__header-text--small"
       >
@@ -133,6 +214,7 @@ exports[`Consent Page Renders the Consent page 1`] = `
                 >
                   <input
                     class="PodBrowser-input PodBrowser-input"
+                    data-testid="consent-access-switch"
                     type="checkbox"
                     value="https://pod.inrupt.com/alice/private/data/"
                   />
@@ -370,6 +452,7 @@ exports[`Consent Page Renders the Consent page 1`] = `
                 >
                   <input
                     class="PodBrowser-input PodBrowser-input"
+                    data-testid="consent-access-switch"
                     type="checkbox"
                     value="https://pod.inrupt.com/alice/private/data-2/"
                   />

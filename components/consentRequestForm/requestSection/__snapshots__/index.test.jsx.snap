@@ -99,6 +99,7 @@ exports[`Request Section Renders initial context data 1`] = `
             >
               <input
                 class="PodBrowser-input PodBrowser-input"
+                data-testid="consent-access-switch"
                 type="checkbox"
                 value="https://pod.inrupt.com/alice/private/data-2/"
               />
