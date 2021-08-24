@@ -19,39 +19,101 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { useSession } from "@inrupt/solid-ui-react";
 import * as solidClientFns from "@inrupt/solid-client";
 import { renderHook } from "@testing-library/react-hooks";
-import { useSession } from "@inrupt/solid-ui-react";
-import * as containerModelFns from "../../models/container";
+import useSWR from "swr";
 import useContainer from "./index";
-import { chain } from "../../solidClientHelpers/utils";
+import { ERROR_CODES } from "../../error";
+import createContainer from "../../../__testUtils/createContainer";
 
 jest.mock("@inrupt/solid-ui-react");
 const mockedSessionHook = useSession;
 
+jest.mock("swr");
+const mockedSwrHook = useSWR;
+
 describe("useContainer", () => {
-  const iri = "http://example.com/container/";
   const fetch = jest.fn();
-  const thing = solidClientFns.createThing({ url: iri });
-  const dataset = chain(solidClientFns.mockSolidDatasetFrom(iri), (t) =>
-    solidClientFns.setThing(t, thing)
+  const containerUrl = "https://example.org/container/";
+  const containerDataset = createContainer(containerUrl);
+  const containerThing = solidClientFns.getThing(
+    containerDataset,
+    containerUrl
   );
-  const container = { dataset, thing };
+  const container = { dataset: containerDataset, thing: containerThing };
+  const swrResponse = 42;
+
+  let mockedGetSolidDataset;
 
   beforeEach(() => {
-    mockedSessionHook.mockReturnValue({ fetch });
-    jest.spyOn(containerModelFns, "getContainer").mockResolvedValue(container);
+    mockedSwrHook.mockReturnValue(swrResponse);
   });
 
-  it("fetches data using getSolidDataset", async () => {
-    const { result, waitForNextUpdate } = renderHook(() => useContainer(iri));
-    await waitForNextUpdate();
-    expect(result.current.data).toBe(container);
-    expect(containerModelFns.getContainer).toHaveBeenCalledWith(iri, { fetch });
+  it("uses SWR to cache", () => {
+    mockedGetSolidDataset = jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValue(containerDataset);
+    mockedSessionHook.mockReturnValue({
+      fetch,
+      sessionRequestInProgress: false,
+    });
+    const { result } = renderHook(() => useContainer(containerUrl));
+    expect(result.current).toEqual(swrResponse);
+    expect(mockedSwrHook).toHaveBeenCalledWith(
+      ["container", containerUrl, false],
+      expect.any(Function),
+      { errorRetryInterval: 2000, refreshInterval: 0, revalidateOnFocus: false }
+    );
   });
 
-  it("returns null if no URL is given", async () => {
-    const { result } = renderHook(() => useContainer(null));
-    expect(result.current.data).toBeNull();
+  it("loads container", async () => {
+    mockedGetSolidDataset = jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValue(containerDataset);
+    mockedSessionHook.mockReturnValue({
+      fetch,
+      sessionRequestInProgress: false,
+    });
+    renderHook(() => useContainer(containerUrl));
+    await expect(mockedSwrHook.mock.calls[0][1]()).resolves.toEqual(container);
+  });
+
+  it("throws an error if container cannot be fetched", async () => {
+    const error = "error";
+
+    mockedGetSolidDataset = jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockRejectedValue(error);
+    mockedSessionHook.mockReturnValue({
+      fetch,
+      sessionRequestInProgress: false,
+    });
+    renderHook(() => useContainer(containerUrl));
+    await expect(mockedSwrHook.mock.calls[0][1]()).rejects.toEqual(error);
+  });
+
+  it("throws an error if it there's something wrong when fetching the container", async () => {
+    mockedSessionHook.mockReturnValue({
+      fetch,
+      sessionRequestInProgress: false,
+    });
+    mockedGetSolidDataset.mockRejectedValue(ERROR_CODES.FORBIDDEN);
+    renderHook(() => useContainer(containerUrl));
+    await expect(mockedSwrHook.mock.calls[0][1]()).rejects.toEqual(
+      ERROR_CODES.FORBIDDEN
+    );
+  });
+
+  it("returns null while session is in progress", async () => {
+    mockedGetSolidDataset = jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValue(containerDataset);
+    mockedSessionHook.mockReturnValue({
+      fetch,
+      sessionRequestInProgress: true,
+    });
+    renderHook(() => useContainer(containerUrl));
+    await expect(mockedSwrHook.mock.calls[0][1]()).resolves.toBeNull();
   });
 });

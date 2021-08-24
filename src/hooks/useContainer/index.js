@@ -19,45 +19,26 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import useSWR from "swr";
 import { useSession } from "@inrupt/solid-ui-react";
-import { useEffect, useState } from "react";
 import { getContainerUrl } from "../../stringHelpers";
 import { getContainer } from "../../models/container";
 
 export default function useContainer(iri) {
-  const { fetch } = useSession();
+  const session = useSession();
+  const { sessionRequestInProgress } = session;
   const url = getContainerUrl(iri);
-  const [container, setContainer] = useState(null);
-  const [containerError, setContainerError] = useState(null);
-  const [isFetching, setIsFetching] = useState(false);
 
-  useEffect(() => {
-    if (!url) return;
-    async function fetchContainer() {
-      setIsFetching(true);
-      try {
-        const initialData = await getContainer(url, { fetch });
-        setContainer(initialData);
-        setContainerError(null);
-        setIsFetching(false);
-      } catch (e) {
-        setContainer(null);
-        setContainerError(e);
-        setIsFetching(false);
-      }
-    }
-    fetchContainer();
-  }, [url, fetch]);
-
-  async function update() {
-    const updatedContainer = await getContainer(url, { fetch });
-    setContainer(updatedContainer);
+  async function fetchContainer(fetch) {
+    return getContainer(url, { fetch });
   }
 
-  return {
-    data: container,
-    error: containerError,
-    update,
-    isFetching,
-  };
+  return useSWR(
+    ["container", url, sessionRequestInProgress],
+    async () => {
+      if (!url || sessionRequestInProgress) return null;
+      return fetchContainer(session.fetch);
+    },
+    { revalidateOnFocus: false, refreshInterval: 0, errorRetryInterval: 2000 }
+  );
 }
