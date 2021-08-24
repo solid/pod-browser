@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { Button } from "@inrupt/prism-react-components";
 import { LoginButton } from "@inrupt/solid-ui-react";
@@ -35,6 +35,7 @@ import {
 import { isLocalhost } from "../../src/stringHelpers";
 import useClientId from "../../src/hooks/useClientId";
 import { CLIENT_NAME, PUBLIC_OIDC_CLIENT } from "../../constants/constants";
+import useIdpFromQuery from "../../src/hooks/useIdpFromQuery";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
@@ -48,9 +49,10 @@ const CLIENT_APP_WEBID = isLocalhost(hostname)
 
 export default function Login() {
   const bem = useBem(useStyles());
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownIcon = isOpen ? "caret-up" : "caret-down";
 
+  const idp = useIdpFromQuery();
+  const [isOpen, setIsOpen] = useState(!!idp);
+  const dropdownIcon = isOpen ? "caret-up" : "caret-down";
   const toggleOpenDropdown = () => setIsOpen(!isOpen);
   const INFO_TOOLTIP_TEXT = "This is where you signed up for a Solid Pod";
   const INFO_BUTTON_LABEL = "Where is your Pod hosted?";
@@ -61,6 +63,11 @@ export default function Login() {
     clientName: CLIENT_NAME,
     clientId: oidcSupported.response ? CLIENT_APP_WEBID : null,
   };
+
+  useEffect(() => {
+    if (!idp) return;
+    setIsOpen(true);
+  }, [idp]);
 
   return (
     <div className={bem("login-form")}>
@@ -104,7 +111,7 @@ export default function Login() {
           tooltipText={INFO_TOOLTIP_TEXT}
           className={bem("info-button")}
         />
-        <ProviderLogin />
+        <ProviderLogin provider={idp} />
       </div>
     </div>
   );

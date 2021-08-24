@@ -44,7 +44,6 @@ import {
 import { isLocalhost } from "../../../src/stringHelpers";
 import getIdentityProviders from "../../../constants/provider";
 import { ERROR_REGEXES, hasError } from "../../../src/error";
-import useIdpFromQuery from "../../../src/hooks/useIdpFromQuery";
 import styles from "./styles";
 import { CLIENT_NAME, PUBLIC_OIDC_CLIENT } from "../../../constants/constants";
 
@@ -60,6 +59,7 @@ const CLIENT_APP_WEBID = isLocalhost(hostname)
 
 export function setupOnProviderChange(setProviderIri, setLoginError) {
   return (e, newValue) => {
+    e.preventDefault();
     setLoginError(null);
     if (typeof newValue === "string") {
       if (newValue.startsWith("https://") || newValue.startsWith("http://")) {
@@ -72,10 +72,15 @@ export function setupOnProviderChange(setProviderIri, setLoginError) {
     }
   };
 }
-export function setupLoginHandler(login) {
+export function setupLoginHandler(login, setLoginError, providerIri) {
   return async (event) => {
     event.preventDefault();
-    login();
+    try {
+      await login({ oidcIssuer: providerIri });
+      setLoginError(null);
+    } catch (error) {
+      setLoginError(error);
+    }
   };
 }
 
@@ -96,31 +101,33 @@ export function getErrorMessage(error) {
   return `We were unable to log in with this URL.${postFix}`;
 }
 
-export default function Provider({ defaultError }) {
+export default function Provider({ defaultError, provider }) {
   const bem = useBem(useStyles());
   const classes = useStyles();
   const { login } = useSession();
   const [loginError, setLoginError] = useState(defaultError);
   const theme = useTheme();
-  const idp = useIdpFromQuery();
-  const [providerIri, setProviderIri] = useState();
+  const [providerIri, setProviderIri] = useState(provider?.iri || "");
   const [authOptions, setAuthOptions] = useState({
     clientName: CLIENT_NAME,
   });
   const loginFieldRef = createRef();
 
   useEffect(() => {
-    if (idp) {
-      setProviderIri(idp.iri);
-      loginFieldRef.current?.querySelector("input")?.focus();
-    }
-  }, [idp, loginFieldRef]);
+    if (!provider) return;
+    loginFieldRef.current?.querySelector("input").focus();
+  }, [provider, loginFieldRef]);
 
   useEffect(() => {
     if (providerIri) {
       checkOidcSupport(providerIri).then((res) => {
         if (res === true) {
-          setAuthOptions({ ...authOptions, clientId: CLIENT_APP_WEBID });
+          setAuthOptions((prevState) => {
+            return {
+              ...prevState,
+              clientId: CLIENT_APP_WEBID,
+            };
+          });
         } else {
           setAuthOptions({
             clientName: CLIENT_NAME,
@@ -128,13 +135,19 @@ export default function Provider({ defaultError }) {
         }
       });
     }
-  }, [authOptions, providerIri]);
+  }, [providerIri]);
 
   const onProviderChange = setupOnProviderChange(setProviderIri, setLoginError);
-  const handleLogin = setupLoginHandler(login);
+  const handleLogin = setupLoginHandler(login, setLoginError, providerIri);
   const onError = setupErrorHandler(setLoginError);
+  const providersWithIdp = provider ? [provider, ...providers] : providers;
+  const [inputValue, setInputValue] = useState(provider?.label || "");
 
-  const providersWithIdp = idp ? [idp, ...providers] : providers;
+  const handleChange = (e) => {
+    e.preventDefault();
+    setInputValue(e.target.value);
+  };
+
   return (
     <form onSubmit={handleLogin} className={bem("provider-login__form")}>
       <div className={bem("provider-login__wrapper")}>
@@ -144,11 +157,12 @@ export default function Provider({ defaultError }) {
         >
           <Autocomplete
             onChange={onProviderChange}
-            onInputChange={onProviderChange}
             id="provider-select"
             freeSolo
             options={providersWithIdp}
-            getOptionLabel={(option) => option.label}
+            getOptionLabel={(option) => option.label ?? option}
+            value={provider?.iri || providerIri}
+            autoSelect
             renderOption={(option) => {
               return (
                 <>
@@ -166,19 +180,27 @@ export default function Provider({ defaultError }) {
                 </>
               );
             }}
-            inputValue={idp?.label || providerIri}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                error={!!loginError}
-                margin="none"
-                variant="outlined"
-                type="url"
-                aria-describedby={loginError ? "login-error-text" : null}
-                data-testid={TESTCAFE_ID_LOGIN_FIELD}
-                ref={loginFieldRef}
-              />
-            )}
+            renderInput={(params) => {
+              return (
+                <TextField
+                  onChange={handleChange}
+                  {...params}
+                  error={!!loginError}
+                  margin="none"
+                  variant="outlined"
+                  type="url"
+                  aria-describedby={loginError ? "login-error-text" : null}
+                  data-testid={TESTCAFE_ID_LOGIN_FIELD}
+                  ref={loginFieldRef}
+                  value={inputValue}
+                  onKeyUp={(e) => {
+                    if (e.key === "Enter") {
+                      handleLogin(e);
+                    }
+                  }}
+                />
+              );
+            }}
           />
           {loginError ? (
             <FormHelperText
@@ -200,6 +222,7 @@ export default function Provider({ defaultError }) {
             data-testid={TESTCAFE_ID_GO_BUTTON}
             type="submit"
             className={bem("provider-login__button")}
+            onClick={() => setProviderIri(inputValue)}
           >
             Go
           </Button>
@@ -212,8 +235,13 @@ export default function Provider({ defaultError }) {
 Provider.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   defaultError: T.object,
+  provider: T.shape({
+    iri: T.string,
+    label: T.string,
+  }),
 };
 
 Provider.defaultProps = {
   defaultError: null,
+  provider: null,
 };
