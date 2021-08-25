@@ -72,13 +72,16 @@ export function setupOnProviderChange(setProviderIri, setLoginError) {
     }
   };
 }
-export function setupLoginHandler(login, setLoginError, providerIri) {
-  return async (event) => {
-    event.preventDefault();
+export function setupLoginHandler(login, setLoginError) {
+  return async (e, providerIri) => {
+    e.preventDefault();
     try {
       await login({ oidcIssuer: providerIri });
       setLoginError(null);
     } catch (error) {
+      if (!e.target.value && !providerIri) {
+        return;
+      }
       setLoginError(error);
     }
   };
@@ -138,19 +141,18 @@ export default function Provider({ defaultError, provider }) {
   }, [providerIri]);
 
   const onProviderChange = setupOnProviderChange(setProviderIri, setLoginError);
-  const handleLogin = setupLoginHandler(login, setLoginError, providerIri);
+  const handleLogin = setupLoginHandler(login, setLoginError);
   const onError = setupErrorHandler(setLoginError);
   const providersWithIdp = provider ? [provider, ...providers] : providers;
   const [inputValue, setInputValue] = useState(provider?.label || "");
 
   const handleChange = (e) => {
-    e.preventDefault();
     setInputValue(e.target.value);
   };
 
   return (
     <form
-      onSubmit={() => handleLogin({ oidcIssuer: providerIri })}
+      onSubmit={(e) => handleLogin(e, providerIri)}
       className={bem("provider-login__form")}
     >
       <div className={bem("provider-login__wrapper")}>
@@ -198,7 +200,7 @@ export default function Provider({ defaultError, provider }) {
                   value={inputValue}
                   onKeyUp={(e) => {
                     if (e.key === "Enter") {
-                      handleLogin(e);
+                      handleLogin(e, providerIri);
                     }
                   }}
                 />

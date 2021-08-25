@@ -22,7 +22,6 @@
 import React from "react";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import { fireEvent } from "@testing-library/react";
 import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import ProviderLogin, {
@@ -173,7 +172,7 @@ describe("setupLoginHandler", () => {
     const setLoginError = jest.fn();
     const providerIri = "https://example.org";
     const event = { preventDefault: jest.fn() };
-    setupLoginHandler(login, setLoginError, providerIri)(event);
+    setupLoginHandler(login, setLoginError, providerIri)(event, providerIri);
     expect(event.preventDefault).toHaveBeenCalled();
     expect(login).toHaveBeenCalledWith({ oidcIssuer: providerIri });
   });
