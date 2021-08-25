@@ -149,7 +149,10 @@ export default function Provider({ defaultError, provider }) {
   };
 
   return (
-    <form onSubmit={handleLogin} className={bem("provider-login__form")}>
+    <form
+      onSubmit={() => handleLogin({ oidcIssuer: providerIri })}
+      className={bem("provider-login__form")}
+    >
       <div className={bem("provider-login__wrapper")}>
         <FormControl
           classes={{ root: classes.selectionBox }}
