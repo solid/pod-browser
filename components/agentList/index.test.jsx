@@ -20,41 +20,27 @@
  */
 
 import React from "react";
-import * as solidClientFns from "@inrupt/solid-client";
-import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
 import { foaf, schema } from "rdf-namespaces";
 import { screen, waitFor } from "@testing-library/react";
-import * as addressBookFns from "../../src/addressBook";
-import useAddressBookOld from "../../src/hooks/useAddressBookOld";
-import useContactsOld from "../../src/hooks/useContactsOld";
-import useProfiles from "../../src/hooks/useProfiles";
+import useAgentsProfiles from "../../src/hooks/useAgentsProfiles";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import {
   aliceWebIdUrl,
   bobWebIdUrl,
   mockPersonDatasetAlice,
   mockPersonDatasetBob,
-  mockProfileAlice,
-  mockProfileBob,
 } from "../../__testUtils/mockPersonResource";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
-import AgentList, {
-  handleDeleteContact,
-  TESTCAFE_ID_AGENT_DRAWER,
-} from "./index";
-import { mockAddressBookDataset } from "../../__testUtils/mockAddressBook";
+import AgentList from "./index";
+import { mockApp } from "../../__testUtils/mockApp";
 
-jest.mock("../../src/hooks/useAddressBookOld");
-jest.mock("../../src/hooks/useContactsOld");
-jest.mock("../../src/hooks/useProfiles");
+jest.mock("../../src/hooks/useAgentsProfiles");
 jest.mock("next/router");
 
 const mockedUseRouter = useRouter;
-const mockUseAddressBook = useAddressBookOld;
-const mockUseContacts = useContactsOld;
-const mockUseProfiles = useProfiles;
+const mockUseAgentsProfiles = useAgentsProfiles;
 
 const setSearchValues = jest.fn();
 
@@ -66,76 +52,12 @@ describe("AgentList", () => {
   });
   const session = mockSession();
   const SessionProvider = mockSessionContextProvider(session);
-  it("renders spinner while useAddressBookOld is loading", () => {
-    mockUseAddressBook.mockReturnValue([null, null]);
-    mockUseContacts.mockReturnValue({
-      data: undefined,
-      error: undefined,
-      mutate: () => {},
-    });
-    mockUseProfiles.mockReturnValue(null);
-
-    const { asFragment } = renderWithTheme(
-      <SessionProvider>
-        <AgentList
-          contactType={foaf.Person}
-          setSearchValues={setSearchValues}
-        />
-      </SessionProvider>
-    );
-    expect(asFragment()).toMatchSnapshot();
-    expect(mockUseAddressBook).toHaveBeenCalledWith();
-    expect(mockUseContacts).toHaveBeenCalledWith(null, foaf.Person);
-  });
-
-  it("renders spinner while useContactsOld is loading", () => {
-    mockUseAddressBook.mockReturnValue([42, null]);
-    mockUseContacts.mockReturnValue({
-      data: undefined,
-      error: undefined,
-      mutate: () => {},
-    });
-    mockUseProfiles.mockReturnValue(null);
-
-    const { asFragment } = renderWithTheme(
-      <SessionProvider>
-        <AgentList
-          contactType={foaf.Person}
-          setSearchValues={setSearchValues}
-        />
-      </SessionProvider>
-    );
-    expect(asFragment()).toMatchSnapshot();
-    expect(mockUseContacts).toHaveBeenCalledWith(42, foaf.Person);
-  });
-
-  it("renders spinner while useProfiles is loading", () => {
-    mockUseAddressBook.mockReturnValue([42, null]);
-    mockUseContacts.mockReturnValue({
-      data: "peopleData",
-      error: undefined,
-      mutate: () => {},
-    });
-    mockUseProfiles.mockReturnValue(null);
-
-    const { asFragment } = renderWithTheme(
-      <SessionProvider>
-        <AgentList
-          contactType={foaf.Person}
-          setSearchValues={setSearchValues}
-        />
-      </SessionProvider>
-    );
-    expect(asFragment()).toMatchSnapshot();
-    expect(mockUseProfiles).toHaveBeenCalledWith("peopleData");
-  });
-
-  it("renders error if useAddressBookOld returns error", () => {
-    mockUseAddressBook.mockReturnValue([null, "error"]);
-    mockUseContacts.mockReturnValue({
-      data: undefined,
-      error: undefined,
-      mutate: () => {},
+  const agents = [mockPersonDatasetBob(), mockPersonDatasetAlice(), mockApp()];
+  it("renders spinner while agent profiles are loading", () => {
+    mockUseAgentsProfiles.mockReturnValue({
+      data: null,
+      error: null,
+      isValidating: true,
     });
 
     const { asFragment } = renderWithTheme(
@@ -149,17 +71,12 @@ describe("AgentList", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("renders page when people is loaded", () => {
-    mockUseAddressBook.mockReturnValue([42, null]);
-    mockUseContacts.mockReturnValue({
-      data: "peopleData",
-      error: undefined,
-      mutate: () => {},
+  it("renders page when agents is loaded", () => {
+    mockUseAgentsProfiles.mockReturnValue({
+      data: agents,
+      error: null,
+      isValidating: true,
     });
-    mockUseProfiles.mockReturnValue([
-      mockPersonDatasetAlice(),
-      mockPersonDatasetBob(),
-    ]);
 
     const { asFragment } = renderWithTheme(
       <SessionProvider>
@@ -172,14 +89,12 @@ describe("AgentList", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("sets search values when people is loaded", () => {
-    mockUseAddressBook.mockReturnValue([null, null]);
-    mockUseContacts.mockReturnValue({
-      data: "peopleData",
-      error: undefined,
-      mutate: () => {},
+  it("sets search values when agents are loaded", () => {
+    mockUseAgentsProfiles.mockReturnValue({
+      data: ["agentsData"],
+      error: null,
+      isValidating: true,
     });
-    mockUseProfiles.mockReturnValue(null);
 
     renderWithTheme(
       <SessionProvider>
@@ -189,17 +104,15 @@ describe("AgentList", () => {
         />
       </SessionProvider>
     );
-    expect(setSearchValues).toHaveBeenCalledWith("peopleData");
+    expect(setSearchValues).toHaveBeenCalledWith(["agentsData"]);
   });
 
   it("renders apps when type is app", () => {
-    mockUseAddressBook.mockReturnValue([null, null]);
-    mockUseContacts.mockReturnValue({
-      data: null,
-      error: undefined,
-      mutate: () => {},
+    mockUseAgentsProfiles.mockReturnValue({
+      data: agents,
+      error: null,
+      isValidating: true,
     });
-    mockUseProfiles.mockReturnValue(null);
 
     const { getByText } = renderWithTheme(
       <SessionProvider>
@@ -215,17 +128,11 @@ describe("AgentList", () => {
   });
 
   it("renders apps along with people when type is all", () => {
-    const people = [mockProfileBob(), mockProfileAlice()];
-    mockUseAddressBook.mockReturnValue([null, null]);
-    mockUseContacts.mockReturnValue({
-      data: people,
-      error: undefined,
-      mutate: () => {},
+    mockUseAgentsProfiles.mockReturnValue({
+      data: agents,
+      error: null,
+      isValidating: true,
     });
-    mockUseProfiles.mockReturnValue([
-      mockPersonDatasetAlice(),
-      mockPersonDatasetBob(),
-    ]);
 
     const { getByText } = renderWithTheme(
       <SessionProvider>
@@ -240,13 +147,11 @@ describe("AgentList", () => {
   });
 
   it("renders only apps if no people available when type is all", () => {
-    mockUseAddressBook.mockReturnValue([null, null]);
-    mockUseContacts.mockReturnValue({
-      data: null,
-      error: undefined,
-      mutate: () => {},
+    mockUseAgentsProfiles.mockReturnValue({
+      data: [mockApp()],
+      error: null,
+      isValidating: true,
     });
-    mockUseProfiles.mockReturnValue(null);
 
     const { getByText } = renderWithTheme(
       <SessionProvider>
@@ -258,40 +163,12 @@ describe("AgentList", () => {
     });
   });
 
-  it("opens details drawer when clicking on a contact row", async () => {
-    mockUseAddressBook.mockReturnValue([null, null]);
-    mockUseContacts.mockReturnValue({
+  it("renders empty state message when there are no agents", () => {
+    mockUseAgentsProfiles.mockReturnValue({
       data: null,
       error: undefined,
       mutate: () => {},
     });
-    mockUseProfiles.mockReturnValue(null);
-
-    const { getByRole, getByText } = renderWithTheme(
-      <SessionProvider>
-        <AgentList
-          contactType={schema.SoftwareApplication}
-          setSearchValues={setSearchValues}
-        />
-      </SessionProvider>
-    );
-    waitFor(() => {
-      expect(getByText("Mock App")).toBeInTheDocument();
-      const row = getByRole("row");
-      userEvent.click(row);
-      expect(TESTCAFE_ID_AGENT_DRAWER).toBeInTheDocument();
-      expect(TESTCAFE_ID_AGENT_DRAWER).toHaveTextContent("Mock App");
-    });
-  });
-
-  it("renders empty state message when there are no contacts", () => {
-    mockUseAddressBook.mockReturnValue([42, null]);
-    mockUseContacts.mockReturnValue({
-      data: "peopleData",
-      error: undefined,
-      mutate: () => {},
-    });
-    mockUseProfiles.mockReturnValue([]);
 
     renderWithTheme(
       <SessionProvider>
@@ -302,66 +179,8 @@ describe("AgentList", () => {
       </SessionProvider>
     );
 
-    const message = screen.getByText("You don’t have any contacts yet!");
+    const message = screen.getByText("No one else has access to your Pod");
 
     expect(message).toBeTruthy();
-  });
-
-  it("renders error if useContacts returns error", () => {
-    mockUseAddressBook.mockReturnValue([42, null]);
-    mockUseContacts.mockReturnValue({
-      data: undefined,
-      error: "error",
-      mutate: () => {},
-    });
-
-    const { asFragment } = renderWithTheme(
-      <SessionProvider>
-        <AgentList
-          contactType={foaf.Person}
-          setSearchValues={setSearchValues}
-        />
-      </SessionProvider>
-    );
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
-
-describe("handleDeleteContact", () => {
-  it("returns a handler that deletes a contact, updates people data and closes drawer", async () => {
-    const addressBookUrl = "http://example.com/contacts";
-    const contact = "contact";
-    const addressBook = mockAddressBookDataset();
-    const closeDrawer = jest.fn();
-    const fetch = jest.fn();
-    const people = [contact];
-    const peopleMutate = jest.fn();
-    const selectedContactIndex = 0;
-
-    jest.spyOn(solidClientFns, "getSourceUrl").mockReturnValue(addressBookUrl);
-
-    const mockDeleteContact = jest
-      .spyOn(addressBookFns, "deleteContact")
-      .mockImplementation(() => null);
-
-    const handler = handleDeleteContact({
-      addressBook,
-      closeDrawer,
-      fetch,
-      people,
-      peopleMutate,
-      selectedContactIndex,
-    });
-
-    await handler();
-
-    expect(mockDeleteContact).toHaveBeenCalledWith(
-      addressBookUrl,
-      contact,
-      foaf.Person,
-      fetch
-    );
-    expect(peopleMutate).toHaveBeenCalled();
-    expect(closeDrawer).toHaveBeenCalled();
   });
 });

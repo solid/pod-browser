@@ -27,34 +27,30 @@ import PrivacyPage, {
   TESTCAFE_ID_TAB_APPS,
   TESTCAFE_ID_TAB_PEOPLE,
 } from "./index";
-import useAddressBookOld from "../../../src/hooks/useAddressBookOld";
-import useContactsOld from "../../../src/hooks/useContactsOld";
+import useAgentsProfiles from "../../../src/hooks/useAgentsProfiles";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import {
   aliceWebIdUrl,
   bobWebIdUrl,
-  mockProfileAlice,
-  mockProfileBob,
+  mockPersonDatasetAlice,
+  mockPersonDatasetBob,
 } from "../../../__testUtils/mockPersonResource";
 
-jest.mock("../../../src/hooks/useAddressBookOld");
-jest.mock("../../../src/hooks/useContactsOld");
+jest.mock("../../../src/hooks/useAgentsProfiles");
 jest.mock("next/router");
 
 const mockedUseRouter = useRouter;
-const mockUseAddressBook = useAddressBookOld;
-const mockUseContacts = useContactsOld;
+const mockUseAgentsProfiles = useAgentsProfiles;
 
 describe("PrivacyPage", () => {
   beforeEach(() => {
     mockedUseRouter.mockReturnValue({
-      route: "/contacts",
+      route: "/privacy",
     });
   });
-  const people = [mockProfileBob(), mockProfileAlice()];
-  it("renders", () => {
-    mockUseAddressBook.mockReturnValue(["addressBook", null]);
-    mockUseContacts.mockReturnValue({
+  const people = [mockPersonDatasetBob(), mockPersonDatasetAlice()];
+  it("renders empty state if there's no agents to show", () => {
+    mockUseAgentsProfiles.mockReturnValue({
       data: null,
       error: null,
       mutate: jest.fn(),
@@ -63,8 +59,7 @@ describe("PrivacyPage", () => {
     expect(asFragment()).toMatchSnapshot();
   });
   it("renders people list when selecting people tab", () => {
-    mockUseAddressBook.mockReturnValue(["addressBook", null]);
-    mockUseContacts.mockReturnValue({
+    mockUseAgentsProfiles.mockReturnValue({
       data: people,
       error: null,
       mutate: jest.fn(),
@@ -78,8 +73,7 @@ describe("PrivacyPage", () => {
     });
   });
   it("renders app list when selecting apps tab", () => {
-    mockUseAddressBook.mockReturnValue(["addressBook", null]);
-    mockUseContacts.mockReturnValue({
+    mockUseAgentsProfiles.mockReturnValue({
       data: null,
       error: null,
       mutate: jest.fn(),
@@ -91,8 +85,7 @@ describe("PrivacyPage", () => {
     expect(getByText("https://mockappurl.com")).toBeInTheDocument();
   });
   it("renders both people and app lists when selecting all tab", () => {
-    mockUseAddressBook.mockReturnValue(["addressBook", null]);
-    mockUseContacts.mockReturnValue({
+    mockUseAgentsProfiles.mockReturnValue({
       data: people,
       error: null,
       mutate: jest.fn(),
