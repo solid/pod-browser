@@ -77,34 +77,32 @@ export default function PersonProfile({ profileIri, editing }) {
   const errorComponent = setupErrorComponent(bem);
 
   return (
-    <Container>
-      <Paper style={{ marginTop: "1em" }}>
-        <Box p={2}>
-          <CombinedDataProvider
-            datasetUrl={profileIri}
-            thingUrl={profileIri}
-            onError={setError}
-          >
-            <Box alignItems="center" display="flex">
-              <Box>
-                <Avatar className={classes.avatar}>
-                  <Image
-                    property={vcard.hasPhoto}
-                    width={120}
-                    errorComponent={errorComponent}
-                  />
-                </Avatar>
-              </Box>
+    <CombinedDataProvider
+      datasetUrl={profileIri}
+      thingUrl={profileIri}
+      onError={setError}
+    >
+      <Container>
+        <Box alignItems="center" display="flex">
+          <Box>
+            <Avatar className={classes.avatar}>
+              <Image
+                property={vcard.hasPhoto}
+                width={120}
+                errorComponent={errorComponent}
+              />
+            </Avatar>
+          </Box>
 
-              <Box p={2}>
-                <h3 data-testid={TESTCAFE_ID_NAME_TITLE}>
-                  <Text property={foaf.name} />
-                </h3>
-              </Box>
-            </Box>
+          <Box p={2}>
+            <h3 data-testid={TESTCAFE_ID_NAME_TITLE}>
+              <Text property={foaf.name} />
+            </h3>
+          </Box>
+        </Box>
 
-            <hr />
-
+        <Paper style={{ marginTop: "1em" }}>
+          <Box p={2}>
             <Box mt={2}>
               <Box>
                 <InputLabel>Name</InputLabel>
@@ -165,10 +163,10 @@ export default function PersonProfile({ profileIri, editing }) {
                 contactInfoType={CONTACT_INFO_TYPE_PHONE}
               />
             </Box>
-          </CombinedDataProvider>
-        </Box>
-      </Paper>
-    </Container>
+          </Box>
+        </Paper>
+      </Container>
+    </CombinedDataProvider>
   );
 }
 

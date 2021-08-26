@@ -86,6 +86,9 @@ export default function PrivacyPage() {
           <Link href="/privacy/consent/requests/test-request">
             <a>View test request</a>
           </Link>
+          <Link href="/privacy/access/https%3A%2F%2Fnorbertiam.inrupt.net%2Fprofile%2Fcard%23me">
+            <a>View test request</a>
+          </Link>
         </>
       </SearchProvider>
     </DetailsMenuProvider>
