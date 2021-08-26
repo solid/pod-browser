@@ -22,7 +22,6 @@
 import React from "react";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import { fireEvent } from "@testing-library/react";
 import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import ProviderLogin, {
@@ -49,6 +48,15 @@ describe("ProviderLogin form", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
+  it("renders a webid login form with a pre-populated input if idp is available from query", () => {
+    const iri = "http://example.com";
+    const label = "example.com";
+    const { asFragment } = renderWithTheme(
+      <ProviderLogin provider={{ iri, label }} />
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+
   it("calls the login function upon submitting the form", async () => {
     const session = mockUnauthenticatedSession();
     const SessionProvider = mockSessionContextProvider(session);
@@ -66,43 +74,49 @@ describe("ProviderLogin form", () => {
   });
 
   it("renders a validation error if login fails", () => {
+    const session = mockUnauthenticatedSession();
+    const SessionProvider = mockSessionContextProvider(session);
     const { asFragment } = renderWithTheme(
-      <ProviderLogin defaultError={new Error()} />
+      <SessionProvider>
+        <ProviderLogin defaultError={new Error()} />
+      </SessionProvider>
     );
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("allows setting idp with query param", () => {
+    const session = mockUnauthenticatedSession();
+    const SessionProvider = mockSessionContextProvider(session);
     const iri = "http://example.com";
     const label = "example.com";
-    useIdpFromQuery.mockReturnValue({
-      iri,
-      label,
-    });
-    const { getByTestId } = renderWithTheme(<ProviderLogin />);
+    const { getByTestId } = renderWithTheme(
+      <SessionProvider>
+        <ProviderLogin provider={{ iri, label }} />
+      </SessionProvider>
+    );
     const input = getByTestId(TESTCAFE_ID_LOGIN_FIELD).querySelector("input");
-    expect(input.value).toEqual(label);
+    expect(input.value).toEqual(iri);
     expect(document.activeElement).toEqual(input);
   });
 
   it("calls checkOidcSupported method with the correct value on change", async () => {
+    const session = mockUnauthenticatedSession();
+    const SessionProvider = mockSessionContextProvider(session);
     const iri = "http://example.com";
     const label = "example.com";
-    useIdpFromQuery.mockReturnValue({
-      iri,
-      label,
-    });
-
-    const checkOidcSupportSpy = jest
-      .spyOn(useClientId, "checkOidcSupport")
-      .mockResolvedValue(true);
-    const { getByTestId } = renderWithTheme(<ProviderLogin />);
+    const checkOidcSupportSpy = jest.spyOn(useClientId, "checkOidcSupport");
+    const { getByTestId, getByLabelText } = renderWithTheme(
+      <SessionProvider>
+        <ProviderLogin provider={{ iri, label }} />
+      </SessionProvider>
+    );
+    expect(checkOidcSupportSpy).toHaveBeenCalledWith(iri);
     const input = getByTestId(TESTCAFE_ID_LOGIN_FIELD).querySelector("input");
-    expect(input.value).toEqual(label);
-
-    fireEvent.change(input, {
-      target: { value: "https://broker.pod.inrupt.com" },
-    });
+    expect(input.value).toEqual(iri);
+    const clearButton = getByLabelText("Clear");
+    userEvent.click(clearButton);
+    userEvent.type(input, "https://broker.pod.inrupt.com");
+    userEvent.type(input, "{enter}");
     expect(checkOidcSupportSpy).toHaveBeenCalledWith(
       "https://broker.pod.inrupt.com"
     );
@@ -113,14 +127,20 @@ describe("setupOnProviderChange", () => {
   it("sets up event handler", () => {
     const setProviderIri = jest.fn();
     const setLoginError = jest.fn();
-    setupOnProviderChange(setProviderIri, setLoginError)({}, "string");
+    setupOnProviderChange(setProviderIri, setLoginError)(
+      { preventDefault: jest.fn() },
+      "string"
+    );
     expect(setLoginError).toHaveBeenCalledWith(null);
     expect(setProviderIri).toHaveBeenCalledWith("https://string");
   });
   it("calls setProviderIri with provided string if user providers a correct URL", () => {
     const setProviderIri = jest.fn();
     const setLoginError = jest.fn();
-    setupOnProviderChange(setProviderIri, setLoginError)({}, "https://string");
+    setupOnProviderChange(setProviderIri, setLoginError)(
+      { preventDefault: jest.fn() },
+      "https://string"
+    );
     expect(setLoginError).toHaveBeenCalledWith(null);
     expect(setProviderIri).toHaveBeenCalledWith("https://string");
   });
@@ -128,7 +148,7 @@ describe("setupOnProviderChange", () => {
     const setProviderIri = jest.fn();
     const setLoginError = jest.fn();
     setupOnProviderChange(setProviderIri, setLoginError)(
-      {},
+      { preventDefault: jest.fn() },
       { iri: "https://example.com", label: "example.com" }
     );
     expect(setLoginError).toHaveBeenCalledWith(null);
@@ -137,7 +157,10 @@ describe("setupOnProviderChange", () => {
   it("calls setProviderIri with null for other values", () => {
     const setProviderIri = jest.fn();
     const setLoginError = jest.fn();
-    setupOnProviderChange(setProviderIri, setLoginError)({}, 42);
+    setupOnProviderChange(setProviderIri, setLoginError)(
+      { preventDefault: jest.fn() },
+      42
+    );
     expect(setLoginError).toHaveBeenCalledWith(null);
     expect(setProviderIri).toHaveBeenCalledWith(null);
   });
@@ -146,10 +169,12 @@ describe("setupOnProviderChange", () => {
 describe("setupLoginHandler", () => {
   it("sets up event handler", () => {
     const login = jest.fn();
+    const setLoginError = jest.fn();
+    const providerIri = "https://example.org";
     const event = { preventDefault: jest.fn() };
-    setupLoginHandler(login)(event);
-    expect(event.preventDefault).toHaveBeenCalledWith();
-    expect(login).toHaveBeenCalledWith();
+    setupLoginHandler(login, setLoginError, providerIri)(event, providerIri);
+    expect(event.preventDefault).toHaveBeenCalled();
+    expect(login).toHaveBeenCalledWith({ oidcIssuer: providerIri });
   });
 });
 

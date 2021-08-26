@@ -136,7 +136,7 @@ exports[`Login page renders a login button 1`] = `
                     >
                       <button
                         aria-label="Clear"
-                        class="PodBrowser-root PodBrowser-root PodBrowser-clearIndicator"
+                        class="PodBrowser-root PodBrowser-root PodBrowser-clearIndicator PodBrowser-clearIndicatorDirty"
                         tabindex="-1"
                         title="Clear"
                         type="button"

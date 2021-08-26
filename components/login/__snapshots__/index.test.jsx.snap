@@ -123,7 +123,7 @@ exports[`Login form renders a login page with a sign in button and a 'Sign in wi
                   >
                     <button
                       aria-label="Clear"
-                      class="PodBrowser-root PodBrowser-root PodBrowser-clearIndicator"
+                      class="PodBrowser-root PodBrowser-root PodBrowser-clearIndicator PodBrowser-clearIndicatorDirty"
                       tabindex="-1"
                       title="Clear"
                       type="button"
