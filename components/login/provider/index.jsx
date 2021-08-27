@@ -132,8 +132,11 @@ export default function Provider({ defaultError, provider }) {
             };
           });
         } else {
-          setAuthOptions({
-            clientName: CLIENT_NAME,
+          setAuthOptions((prevState) => {
+            return {
+              ...prevState,
+              clientName: CLIENT_NAME,
+            };
           });
         }
       });

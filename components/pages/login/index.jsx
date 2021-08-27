@@ -58,7 +58,9 @@ const links = [
 ];
 
 export default function Login({ history }) {
-  const filteredHistory = history.slice(0, history.indexOf("/login"));
+  const filteredHistory = history
+    .slice(0, history.indexOf("/login"))
+    .filter((item) => !item.startsWith("/?code="));
   const previousPage = filteredHistory[filteredHistory.length - 1];
   const redirectUrl = previousPage || "/";
   useRedirectIfLoggedIn(redirectUrl);
