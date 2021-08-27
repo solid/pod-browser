@@ -25,7 +25,7 @@ import clsx from "clsx";
 import { createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Table as PrismTable } from "@inrupt/prism-react-components";
+import { Container, Table as PrismTable } from "@inrupt/prism-react-components";
 import { asUrl, createSolidDataset } from "@inrupt/solid-client";
 import {
   Table,
@@ -156,52 +156,56 @@ function AgentList({ contactType, setSearchValues }) {
   }
 
   return (
-    <Table
-      things={agentsForTable}
-      className={clsx(tableClass, bem("table"))}
-      filter={search}
-      ascIndicator={<SortedTableCarat sorted />}
-      descIndicator={<SortedTableCarat sorted sortedDesc />}
-      getRowProps={(row, contact) => {
-        return {
-          tabIndex: "0",
-          className: clsx(
-            bem(
-              "table__body-row",
-              "selectable",
-              contact === agentsForTable[selectedAgentIndex] ? "selected" : null
-            )
-          ),
-          onKeyUp: (event) => {
-            if (event.key === "Enter") setSelectedAgentIndex(row.index);
-          },
-          onClick: () => {
-            setSelectedAgentIndex(row.index);
-          },
-        };
-      }}
-    >
-      <TableColumn
-        property={hasPhotoPredicate}
-        header=""
-        dataType="url"
-        body={RowAvatar}
-      />
-      <TableColumn
-        property={namePredicate}
-        header="Name"
-        filterable
-        sortable
-        body={ProfileLink}
-      />
-      <TableColumn
-        property={namePredicate}
-        header="WebID"
-        body={WebIdRow}
-        filterable
-        sortable
-      />
-    </Table>
+    <Container>
+      <Table
+        things={agentsForTable}
+        className={clsx(tableClass, bem("table"))}
+        filter={search}
+        ascIndicator={<SortedTableCarat sorted />}
+        descIndicator={<SortedTableCarat sorted sortedDesc />}
+        getRowProps={(row, contact) => {
+          return {
+            tabIndex: "0",
+            className: clsx(
+              bem(
+                "table__body-row",
+                "selectable",
+                contact === agentsForTable[selectedAgentIndex]
+                  ? "selected"
+                  : null
+              )
+            ),
+            onKeyUp: (event) => {
+              if (event.key === "Enter") setSelectedAgentIndex(row.index);
+            },
+            onClick: () => {
+              setSelectedAgentIndex(row.index);
+            },
+          };
+        }}
+      >
+        <TableColumn
+          property={hasPhotoPredicate}
+          header=""
+          dataType="url"
+          body={RowAvatar}
+        />
+        <TableColumn
+          property={namePredicate}
+          header="Name"
+          filterable
+          sortable
+          body={ProfileLink}
+        />
+        <TableColumn
+          property={namePredicate}
+          header="WebID"
+          body={WebIdRow}
+          filterable
+          sortable
+        />
+      </Table>
+    </Container>
   );
 }
 
