@@ -25,28 +25,30 @@ import clsx from "clsx";
 import { createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
+import { Container, Table as PrismTable } from "@inrupt/prism-react-components";
+import { asUrl, createSolidDataset } from "@inrupt/solid-client";
 import {
-  DrawerContainer,
-  Table as PrismTable,
-} from "@inrupt/prism-react-components";
-import { getSourceUrl, getStringNoLocale, getUrl } from "@inrupt/solid-client";
-import { Table, TableColumn, useSession } from "@inrupt/solid-ui-react";
-import { vcard, foaf, schema, rdf } from "rdf-namespaces";
+  Table,
+  TableColumn,
+  useSession,
+  useThing,
+} from "@inrupt/solid-ui-react";
+import { vcard, foaf, schema } from "rdf-namespaces";
 import SortedTableCarat from "../sortedTableCarat";
 import Spinner from "../spinner";
 import AgentAvatar from "../agentAvatar";
 import styles from "./styles";
 
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
-import useAddressBookOld from "../../src/hooks/useAddressBookOld";
-import useContactsOld from "../../src/hooks/useContactsOld";
 import { mockApp } from "../../__testUtils/mockApp";
-import useProfiles from "../../src/hooks/useProfiles";
 import ProfileLink from "../profileLink";
 import SearchContext from "../../src/contexts/searchContext";
-import { deleteContact, vcardExtras } from "../../src/addressBook";
-import ContactsEmptyState from "../contactsList/contactsEmptyState";
-import AgentsDrawer from "./agentsDrawer";
+import usePodRootUri from "../../src/hooks/usePodRootUri";
+import useAgentsProfiles from "../../src/hooks/useAgentsProfiles";
+import AgentsEmptyState from "./emptyState";
+
+const namePredicate = foaf.name;
+const hasPhotoPredicate = vcard.hasPhoto;
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -54,136 +56,109 @@ export const TESTCAFE_ID_AGENT_DRAWER = "agent-details-drawer";
 
 // temporarily using mock data for apps for dev purposes until we have audit list
 const app = mockApp();
-export function handleClose(setSelectedContactIndex) {
-  return () => setSelectedContactIndex(null);
-}
 
 const RowAvatar = ({ value, row }) => (
   <AgentAvatar altText={row.values.col1} imageUrl={value} />
 );
 
-export function handleDeleteContact({
-  addressBook,
-  closeDrawer,
-  fetch,
-  people,
-  peopleMutate,
-  selectedContactIndex,
-}) {
-  return async () => {
-    const selectedContact = people[selectedContactIndex];
-
-    await deleteContact(
-      getSourceUrl(addressBook),
-      selectedContact,
-      foaf.Person,
-      fetch
-    );
-    peopleMutate();
-    closeDrawer();
-  };
-}
+const WebIdRow = () => {
+  const { thing } = useThing();
+  return asUrl(thing);
+};
 
 function AgentList({ contactType, setSearchValues }) {
   useRedirectIfLoggedOut();
   const tableClass = PrismTable.useTableClass("table", "inherits");
-  const [agentType, setAgentType] = useState(null);
   const classes = useStyles();
   const bem = useBem(classes);
   const { search } = useContext(SearchContext);
-
-  const [addressBook, addressBookError] = useAddressBookOld();
-  const {
-    data: contacts,
-    error: contactsError,
-    mutate: contactsMutate,
-  } = useContactsOld(addressBook, foaf.Person);
-  const profiles = useProfiles(contacts);
-  const [profilesForTable, setProfilesForTable] = useState([]);
-
-  // FIXME: temporarily doing this manually for dev purposes until we have audit list
-  useEffect(() => {
-    if (profiles) {
-      setProfilesForTable(profiles);
-    }
-    if (contactType === "all") {
-      setProfilesForTable(profiles ? [...profiles, app] : [app]);
-    }
-    if (contactType === schema.SoftwareApplication) {
-      setProfilesForTable([app]);
-    }
-  }, [profiles, contactType]);
-
-  const namePredicate = foaf.name;
-  const hasPhotoPredicate = vcard.hasPhoto;
-
-  const {
-    session: { fetch },
-  } = useSession();
-
-  const [selectedContactIndex, setSelectedContactIndex] = useState(null);
-  const [selectedContactName, setSelectedContactName] = useState("");
-  const [selectedContactWebId, setSelectedContactWebId] = useState("");
+  const { session, fetch } = useSession();
+  const [selectedAgentIndex, setSelectedAgentIndex] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [agents, setAgents] = useState([]);
+  const [agentsError, setAgentsError] = useState(null);
+  const podRoot = usePodRootUri(session.info.webId);
+  const [agentsForTable, setAgentsForTable] = useState([]);
+  const { data: profiles, isValidating } = useAgentsProfiles(agents);
 
   useEffect(() => {
-    if (!contacts) return;
-    setSearchValues(contacts);
-  }, [contacts, setSearchValues]);
+    setLoading(true);
+    (async () => {
+      const dataset = createSolidDataset();
+      if (contactType === schema.SoftwareApplication) {
+        setAgentsForTable([{ dataset, thing: app }]);
+        setLoading(false);
+        return;
+      }
+      if (!profiles) return;
+      const things = profiles
+        .map((thing) => {
+          return {
+            dataset,
+            thing,
+          };
+        })
+        .filter(({ thing }) => !!thing);
+      if (!things) return;
+      setAgentsForTable(things);
+      setLoading(false);
+
+      if (contactType === "all") {
+        setAgentsForTable(
+          things
+            ? [...things, { dataset, thing: app }]
+            : [{ dataset, thing: app }]
+        );
+        setLoading(false);
+      }
+    })();
+  }, [profiles, contactType, fetch]);
+
+  const query = `
+  {
+    pod(iri: "${podRoot}") {
+      agentsWithAccess,
+      accessType,
+    }
+  }
+  `;
+  useEffect(() => {
+    if (!podRoot) return;
+    fetch("https://access.pod.inrupt.com/graphql/", {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({ query }),
+    })
+      .then((response) => response.json())
+      .catch((error) => setAgentsError(error))
+      .then(({ data }) => {
+        if (!data) return;
+        const { agentsWithAccess } = data.pod;
+        setAgents(
+          agentsWithAccess.filter((webId) => webId !== session.info.webId)
+        );
+      });
+  }, [query, podRoot, fetch, session]);
 
   useEffect(() => {
-    if (selectedContactIndex === null) return;
-    const contactThing = profilesForTable[selectedContactIndex];
-    const name = getStringNoLocale(contactThing, namePredicate);
-    const type = getUrl(contactThing, rdf.type);
-    setAgentType(type);
-    setSelectedContactName(name);
-    const webId = getUrl(contactThing, vcardExtras("WebId"));
-    setSelectedContactWebId(webId);
-  }, [selectedContactIndex, namePredicate, profilesForTable, fetch]);
+    if (!profiles) return;
+    setSearchValues(profiles);
+  }, [profiles, setSearchValues]);
 
-  if (addressBookError) return addressBookError;
-  if (contactsError) return contactsError;
+  if (agentsError) return agentsError.toString();
 
-  const isLoading = !addressBook;
+  const isLoading = loading || !agents || isValidating;
 
   if (isLoading) return <Spinner />;
 
-  // format things for the data table
-  const contactsForTable = profilesForTable.map((p) => ({
-    thing: p,
-    dataset: addressBook,
-    type: contactType,
-  }));
-
-  const closeDrawer = handleClose(setSelectedContactIndex);
-  const deleteSelectedContact = handleDeleteContact({
-    addressBook,
-    closeDrawer,
-    fetch,
-    contacts,
-    contactsMutate,
-    selectedContactIndex,
-  });
-
-  const drawer = (
-    <AgentsDrawer
-      data-testid={TESTCAFE_ID_AGENT_DRAWER}
-      open={selectedContactIndex !== null}
-      onClose={closeDrawer}
-      onDelete={deleteSelectedContact}
-      agentType={agentType}
-      selectedContactName={selectedContactName}
-      profileIri={selectedContactWebId}
-    />
-  );
-
-  if (!contactsForTable.length) {
-    return <ContactsEmptyState />;
+  if (!agentsForTable.length && !agentsError) {
+    return <AgentsEmptyState />;
   }
+
   return (
-    <DrawerContainer drawer={drawer} open={selectedContactIndex !== null}>
+    <Container>
       <Table
-        things={contactsForTable}
+        things={agentsForTable}
         className={clsx(tableClass, bem("table"))}
         filter={search}
         ascIndicator={<SortedTableCarat sorted />}
@@ -195,16 +170,16 @@ function AgentList({ contactType, setSearchValues }) {
               bem(
                 "table__body-row",
                 "selectable",
-                contact === profilesForTable[selectedContactIndex]
+                contact === agentsForTable[selectedAgentIndex]
                   ? "selected"
                   : null
               )
             ),
             onKeyUp: (event) => {
-              if (event.key === "Enter") setSelectedContactIndex(row.index);
+              if (event.key === "Enter") setSelectedAgentIndex(row.index);
             },
             onClick: () => {
-              setSelectedContactIndex(row.index);
+              setSelectedAgentIndex(row.index);
             },
           };
         }}
@@ -223,14 +198,14 @@ function AgentList({ contactType, setSearchValues }) {
           body={ProfileLink}
         />
         <TableColumn
-          property={vcardExtras("WebId")}
+          property={namePredicate}
           header="WebID"
-          dataType="url"
+          body={WebIdRow}
           filterable
           sortable
         />
       </Table>
-    </DrawerContainer>
+    </Container>
   );
 }
 
