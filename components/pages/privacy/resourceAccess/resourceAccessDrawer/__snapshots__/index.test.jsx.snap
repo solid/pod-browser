@@ -1,0 +1,164 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ResourceDrawer Renders the ResourceDrawer with correct title and access list 1`] = `
+<DocumentFragment>
+  <section
+    class="PodBrowser-drawer PodBrowser-drawer--open"
+  >
+    <div
+      class="PodBrowser-drawer__content"
+    >
+      <div
+        class="PodBrowser-drawer__content-wrapper"
+      >
+        <div
+          class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
+        >
+          <button
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                class="PodBrowser-icon-cancel"
+              />
+               Close
+            </span>
+          </button>
+        </div>
+        <div
+          class="PodBrowser-access-details--wrapper"
+        >
+          <span
+            class="PodBrowser-access-details--title"
+          >
+            <span
+              class="PodBrowser-icon-folder PodBrowser-access-details--icon"
+            />
+            <h2>
+              resource
+            </h2>
+          </span>
+          <section
+            class="PodBrowser-access-details--section"
+          >
+            <h3
+              class="PodBrowser-access-details--section-header"
+            >
+              Access
+            </h3>
+            <hr
+              class="PodBrowser-access-details--separator"
+            />
+            <ul
+              class="PodBrowser-root PodBrowser-padding"
+            >
+              <li
+                class="PodBrowser-root PodBrowser-gutters"
+              >
+                <div
+                  class="PodBrowser-root PodBrowser-listItemIcon"
+                >
+                  <span
+                    class="PodBrowser-icon-view PodBrowser-access-details--section-icon"
+                  />
+                </div>
+                <div
+                  class="PodBrowser-root PodBrowser-listItemText PodBrowser-multiline"
+                >
+                  <span
+                    class="PodBrowser-root PodBrowser-primary PodBrowser-listItemTitleText PodBrowser-body1 PodBrowser-displayBlock"
+                  >
+                    View
+                  </span>
+                  <p
+                    class="PodBrowser-root PodBrowser-secondary PodBrowser-listItemSecondaryText PodBrowser-body2 PodBrowser-colorTextSecondary PodBrowser-displayBlock"
+                  >
+                    Can see this resource
+                  </p>
+                </div>
+              </li>
+              <li
+                class="PodBrowser-root PodBrowser-gutters"
+              >
+                <div
+                  class="PodBrowser-root PodBrowser-listItemIcon"
+                >
+                  <span
+                    class="PodBrowser-icon-editor PodBrowser-access-details--section-icon"
+                  />
+                </div>
+                <div
+                  class="PodBrowser-root PodBrowser-listItemText PodBrowser-multiline"
+                >
+                  <span
+                    class="PodBrowser-root PodBrowser-primary PodBrowser-listItemTitleText PodBrowser-body1 PodBrowser-displayBlock"
+                  >
+                    Edit
+                  </span>
+                  <p
+                    class="PodBrowser-root PodBrowser-secondary PodBrowser-listItemSecondaryText PodBrowser-body2 PodBrowser-colorTextSecondary PodBrowser-displayBlock"
+                  >
+                    Can change, download or delete this resource
+                  </p>
+                </div>
+              </li>
+              <li
+                class="PodBrowser-root PodBrowser-gutters"
+              >
+                <div
+                  class="PodBrowser-root PodBrowser-listItemIcon"
+                >
+                  <span
+                    class="PodBrowser-icon-add PodBrowser-access-details--section-icon"
+                  />
+                </div>
+                <div
+                  class="PodBrowser-root PodBrowser-listItemText PodBrowser-multiline"
+                >
+                  <span
+                    class="PodBrowser-root PodBrowser-primary PodBrowser-listItemTitleText PodBrowser-body1 PodBrowser-displayBlock"
+                  >
+                    Add
+                  </span>
+                  <p
+                    class="PodBrowser-root PodBrowser-secondary PodBrowser-listItemSecondaryText PodBrowser-body2 PodBrowser-colorTextSecondary PodBrowser-displayBlock"
+                  >
+                    Can upload to this resource
+                  </p>
+                </div>
+              </li>
+              <li
+                class="PodBrowser-root PodBrowser-gutters"
+              >
+                <div
+                  class="PodBrowser-root PodBrowser-listItemIcon"
+                >
+                  <span
+                    class="PodBrowser-icon-user PodBrowser-access-details--section-icon"
+                  />
+                </div>
+                <div
+                  class="PodBrowser-root PodBrowser-listItemText PodBrowser-multiline"
+                >
+                  <span
+                    class="PodBrowser-root PodBrowser-primary PodBrowser-listItemTitleText PodBrowser-body1 PodBrowser-displayBlock"
+                  >
+                    Share
+                  </span>
+                  <p
+                    class="PodBrowser-root PodBrowser-secondary PodBrowser-listItemSecondaryText PodBrowser-body2 PodBrowser-colorTextSecondary PodBrowser-displayBlock"
+                  >
+                    Can share this resource with others
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+</DocumentFragment>
+`;

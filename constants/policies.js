@@ -57,6 +57,34 @@ const customPolicyVariables = {
   emptyStateText: "",
 };
 
+export const ACP_TYPE_MAP = {
+  write: {
+    name: "Edit",
+    icon: "editor",
+    description: "Can change, download or delete this resource",
+  },
+  read: {
+    name: "View",
+    icon: "view",
+    description: "Can see this resource",
+  },
+  append: {
+    name: "Add",
+    icon: "add",
+    description: "Can upload to this resource",
+  },
+  control: {
+    name: "Share",
+    icon: "user",
+    description: "Can share this resource with others",
+  },
+  accessToAcr: {
+    name: "View Sharing",
+    icon: "users",
+    description: "Can see who else has access to this resource",
+  },
+};
+
 // eslint-disable-next-line import/prefer-default-export
 export const POLICIES_TYPE_MAP = {
   custom: customPolicyVariables,

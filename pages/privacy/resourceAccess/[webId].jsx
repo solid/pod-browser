@@ -20,40 +20,9 @@
  */
 
 import React from "react";
-import { schema } from "rdf-namespaces";
-import AgentsDrawer from "./index";
-import { renderWithTheme } from "../../../__testUtils/withTheme";
 
-describe("AgentsDrawer", () => {
-  const onClose = () => {};
-  const onDelete = () => {};
-  const selectedContactName = "Alice";
-  const profileIri = "https://example.com/profile#alice";
+import AgentResourceAccessShowPage from "../../../components/pages/privacy/resourceAccess/show";
 
-  it("renders for a Person", () => {
-    const { asFragment } = renderWithTheme(
-      <AgentsDrawer
-        open
-        onClose={onClose}
-        onDelete={onDelete}
-        selectedContactName={selectedContactName}
-        profileIri={profileIri}
-        agentType={schema.Person}
-      />
-    );
-    expect(asFragment()).toMatchSnapshot();
-  });
-  it("renders for an App", () => {
-    const { asFragment } = renderWithTheme(
-      <AgentsDrawer
-        open
-        onClose={onClose}
-        onDelete={onDelete}
-        selectedContactName={selectedContactName}
-        profileIri={profileIri}
-        agentType={schema.SoftwareApplication}
-      />
-    );
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
+export default function AgentResourceAccessShow() {
+  return <AgentResourceAccessShowPage />;
+}

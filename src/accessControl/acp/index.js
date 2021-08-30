@@ -54,7 +54,7 @@ import {
   AUTHENTICATED_AGENT_PREDICATE,
   AUTHENTICATED_AGENT_TYPE,
 } from "../../models/contact/authenticated";
-import { POLICIES_TYPE_MAP } from "../../../constants/policies";
+import { ACP_TYPE_MAP, POLICIES_TYPE_MAP } from "../../../constants/policies";
 
 export const noAcrAccessError =
   "No access to Access Control Resource for this resource";
@@ -77,6 +77,16 @@ const acpMapForApplyPolicies = {
   viewAndAdd: createAcpMap(true, false, true),
   editOnly: createAcpMap(false, true),
   addOnly: createAcpMap(false, false, true),
+};
+
+export const getAcpAccessDetails = (access) => {
+  const { read, write, append, control } = access;
+  const key =
+    (read && "read") ||
+    (write && "write") ||
+    (append && "append") ||
+    (control && "control");
+  return ACP_TYPE_MAP[key];
 };
 
 export const getPolicyDetailFromAccess = (access, label) => {

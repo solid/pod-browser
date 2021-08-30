@@ -20,40 +20,40 @@
  */
 
 import React from "react";
-import { schema } from "rdf-namespaces";
-import AgentsDrawer from "./index";
-import { renderWithTheme } from "../../../__testUtils/withTheme";
+import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 
-describe("AgentsDrawer", () => {
-  const onClose = () => {};
-  const onDelete = () => {};
-  const selectedContactName = "Alice";
-  const profileIri = "https://example.com/profile#alice";
+import ResourceDrawer from "./index";
 
-  it("renders for a Person", () => {
+jest.mock("../../../../../src/effects/auth");
+
+describe("ResourceDrawer", () => {
+  test("Renders the ResourceDrawer with correct title and access list", () => {
+    const onClose = jest.fn();
+    const webId = "https://example.com/profile/card#me";
+    const resourceIri = "https://example.com/resource/";
+    const accessList = [
+      {
+        agent: webId,
+        allow: [
+          "http://www.w3.org/ns/solid/acp#Read",
+          "http://www.w3.org/ns/solid/acp#Write",
+          "http://www.w3.org/ns/solid/acp#Append",
+          "http://www.w3.org/ns/solid/acp#Control",
+        ],
+        deny: [],
+        resource: resourceIri,
+      },
+    ];
+
     const { asFragment } = renderWithTheme(
-      <AgentsDrawer
+      <ResourceDrawer
         open
         onClose={onClose}
-        onDelete={onDelete}
-        selectedContactName={selectedContactName}
-        profileIri={profileIri}
-        agentType={schema.Person}
+        accessList={accessList}
+        resourceIri={resourceIri}
       />
     );
-    expect(asFragment()).toMatchSnapshot();
-  });
-  it("renders for an App", () => {
-    const { asFragment } = renderWithTheme(
-      <AgentsDrawer
-        open
-        onClose={onClose}
-        onDelete={onDelete}
-        selectedContactName={selectedContactName}
-        profileIri={profileIri}
-        agentType={schema.SoftwareApplication}
-      />
-    );
+
     expect(asFragment()).toMatchSnapshot();
   });
 });
