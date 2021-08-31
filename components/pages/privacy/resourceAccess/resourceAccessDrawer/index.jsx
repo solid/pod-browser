@@ -74,7 +74,7 @@ export default function ResourceAccessDrawer({
     return getAcpAccessDetails(mode);
   });
   const order = ["View", "Edit", "Add", "Share", "View Sharing"];
-  const sortedAccessDetails = accessDetails.sort((a, b) => {
+  const sortedAccessDetails = accessDetails?.sort((a, b) => {
     return order.indexOf(a.name) - order.indexOf(b.name);
   });
   const resourceName = resourceIri && getResourceName(resourceIri);
