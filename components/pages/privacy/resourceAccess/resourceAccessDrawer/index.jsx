@@ -73,7 +73,10 @@ export default function ResourceAccessDrawer({
   const accessDetails = modes?.map((mode) => {
     return getAcpAccessDetails(mode);
   });
-
+  const order = ["View", "Edit", "Add", "Share", "View Sharing"];
+  const sortedAccessDetails = accessDetails.sort((a, b) => {
+    return order.indexOf(a.name) - order.indexOf(b.name);
+  });
   const resourceName = resourceIri && getResourceName(resourceIri);
   return (
     <Drawer open={open} close={onClose}>
@@ -91,7 +94,7 @@ export default function ResourceAccessDrawer({
           <h3 className={bem("access-details", "section-header")}>Access</h3>
           <hr className={bem("access-details", "separator")} />
           <List>
-            {accessDetails?.map(({ name, icon, description }) => {
+            {sortedAccessDetails?.map(({ name, icon, description }) => {
               return (
                 <ListItem key={name}>
                   <ListItemIcon classes={{ root: classes.listItemIcon }}>
