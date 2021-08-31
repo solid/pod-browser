@@ -41,7 +41,7 @@ import styles from "./styles";
 
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import { mockApp } from "../../__testUtils/mockApp";
-import ProfileLink from "../profileLink";
+import AgentResourceAccessLink from "../agentResourceAccessLink";
 import SearchContext from "../../src/contexts/searchContext";
 import usePodRootUri from "../../src/hooks/usePodRootUri";
 import useAgentsProfiles from "../../src/hooks/useAgentsProfiles";
@@ -195,7 +195,7 @@ function AgentList({ contactType, setSearchValues }) {
           header="Name"
           filterable
           sortable
-          body={ProfileLink}
+          body={AgentResourceAccessLink}
         />
         <TableColumn
           property={namePredicate}
