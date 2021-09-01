@@ -39,6 +39,11 @@ const styles = (theme) => {
       fontWeight: theme.typography.body2.fontWeight,
       color: "#000",
     },
+    container: {
+      width: "100%",
+      maxWidth: theme.breakpoints.width("md"),
+      margin: "0 auto",
+    },
   });
 };
 

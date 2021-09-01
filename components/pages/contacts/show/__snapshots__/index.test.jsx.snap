@@ -19,21 +19,8 @@ exports[`Contact show page Renders the Contact show page 1`] = `
       </a>
     </nav>
   </div>
-  <div
-    class="PodBrowser-container"
-  >
-    <div
-      class="PodBrowser-root PodBrowser-elevation1 PodBrowser-rounded"
-      style="margin-top: 1em;"
-    >
-      <div
-        class="PodBrowser-root PodBrowser-root"
-      >
-        <span>
-          Fetching data...
-        </span>
-      </div>
-    </div>
-  </div>
+  <span>
+    Fetching data...
+  </span>
 </DocumentFragment>
 `;
