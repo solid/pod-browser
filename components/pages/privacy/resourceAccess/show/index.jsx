@@ -22,26 +22,75 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useEffect, useState, useMemo } from "react";
-import { useSession } from "@inrupt/solid-ui-react";
+import {
+  CombinedDataProvider,
+  useSession,
+  Text,
+  Image,
+} from "@inrupt/solid-ui-react";
+import { useRouter } from "next/router";
+import T from "prop-types";
+import { makeStyles } from "@material-ui/styles";
 import { useTable } from "react-table";
 import clsx from "clsx";
-import { useRouter } from "next/router";
+import { foaf, vcard } from "rdf-namespaces";
 import {
   DrawerContainer,
   Table as PrismTable,
+  BackToNav,
+  BackToNavLink,
 } from "@inrupt/prism-react-components";
+import { Avatar, Box, Typography, createStyles } from "@material-ui/core";
+import Link from "next/link";
 import { useRedirectIfLoggedOut } from "../../../../../src/effects/auth";
+import Tabs from "../../../../tabs";
 import usePodRootUri from "../../../../../src/hooks/usePodRootUri";
 import ResourceAccessDrawer from "../resourceAccessDrawer";
 import Spinner from "../../../../spinner";
+import styles from "./styles";
+
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+
+export const TESTCAFE_ID_TAB_PERMISSIONS = "permissions-tab";
+export const TESTCAFE_ID_TAB_PROFILE = "profile-tab";
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...other}
+    >
+      {value === index && (
+        <Box p={1} mt={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: T.node.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  index: T.any.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  value: T.any.isRequired,
+};
 
 export default function AgentResourceAccessShowPage() {
+  useRedirectIfLoggedOut();
+  const router = useRouter();
+  const decodedIri = decodeURIComponent(router.query.webId);
   const tableClass = PrismTable.useTableClass("table", "inherits");
   const bem = PrismTable.useBem();
   useRedirectIfLoggedOut();
-  const router = useRouter();
   const { session, fetch } = useSession();
-  const decodedIri = decodeURIComponent(router.query.webId);
   const podRoot = usePodRootUri(session.info.webId);
   const [resources, setResources] = useState([]);
   const [accessList, setAccessList] = useState([]);
@@ -49,6 +98,32 @@ export default function AgentResourceAccessShowPage() {
   const [selectedAccessList, setSelectedAccessList] = useState(null);
   const [resourcesError, setResourcesError] = useState(null);
   const [shouldUpdate, setShouldUpdate] = useState(false);
+  const [selectedTabValue, setSelectedTabValue] = useState("Permissions");
+
+  const link = (
+    <Link href="/privacy" passHref>
+      <BackToNavLink>privacy</BackToNavLink>
+    </Link>
+  );
+
+  const handleTabChange = (event, newValue) => {
+    setSelectedTabValue(newValue);
+  };
+
+  const classes = useStyles();
+
+  const tabs = [
+    {
+      label: "Permissions",
+      testid: TESTCAFE_ID_TAB_PERMISSIONS,
+      value: "Permissions",
+    },
+    {
+      label: "Profile",
+      testid: TESTCAFE_ID_TAB_PROFILE,
+      value: "Profile",
+    },
+  ];
 
   const query = `
   {
@@ -59,7 +134,7 @@ export default function AgentResourceAccessShowPage() {
         resource
         }
     }
- }
+  }
   `;
   useEffect(() => {
     if (!podRoot) return;
@@ -134,28 +209,66 @@ export default function AgentResourceAccessShowPage() {
   }
 
   return (
-    <DrawerContainer drawer={drawer} open={selectedResourceIndex !== null}>
-      <div>
-        <h3>
-          FIXME: Ignore this page while testing - it will be replaced with
-          SOLIDOS-322
-        </h3>
-        <table className={clsx(tableClass, bem("table"))} {...getTableProps()}>
-          <tbody className={bem("table__body")} {...getTableBodyProps()}>
-            {data.map((resource, i) => {
-              return (
-                <tr
-                  key={resource}
-                  className={bem("table__body-row")}
-                  onClick={() => setSelectedResourceIndex(i)}
+    <CombinedDataProvider datasetUrl={decodedIri} thingUrl={decodedIri}>
+      <DrawerContainer drawer={drawer} open={selectedResourceIndex !== null}>
+        <div className={classes.container}>
+          <BackToNav link={link} />
+          <Box alignItems="center" display="flex">
+            <Box>
+              <Avatar className={classes.avatar}>
+                <Image
+                  property={vcard.hasPhoto}
+                  width={120}
+                  // errorComponent={errorComponent}
+                />
+              </Avatar>
+            </Box>
+
+            <Box p={2}>
+              <h3>
+                <Text className={classes.avatarText} property={foaf.name} />
+                <a
+                  className={classes.headerLink}
+                  href={decodedIri}
+                  rel="noreferrer"
+                  target="_blank"
                 >
-                  <td className={bem("table__body-cell")}>{resource}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    </DrawerContainer>
+                  {decodedIri}
+                </a>
+              </h3>
+            </Box>
+          </Box>
+          <Tabs
+            tabs={tabs}
+            handleTabChange={handleTabChange}
+            selectedTabValue={selectedTabValue}
+          />
+          <TabPanel value={selectedTabValue} index="Permissions">
+            <h3>Table layout to be added as part of 322</h3>
+            <table
+              className={clsx(tableClass, bem("table"))}
+              {...getTableProps()}
+            >
+              <tbody className={bem("table__body")} {...getTableBodyProps()}>
+                {data.map((resource, i) => {
+                  return (
+                    <tr
+                      key={resource}
+                      className={bem("table__body-row")}
+                      onClick={() => setSelectedResourceIndex(i)}
+                    >
+                      <td className={bem("table__body-cell")}>{resource}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </TabPanel>
+          <TabPanel value={selectedTabValue} index="Profile">
+            <h3>Profile</h3>
+          </TabPanel>
+        </div>
+      </DrawerContainer>
+    </CombinedDataProvider>
   );
 }
