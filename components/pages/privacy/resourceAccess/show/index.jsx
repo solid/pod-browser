@@ -22,27 +22,23 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useEffect, useState, useMemo } from "react";
-import {
-  CombinedDataProvider,
-  useSession,
-  Text,
-  Image,
-} from "@inrupt/solid-ui-react";
+import { CombinedDataProvider, useSession } from "@inrupt/solid-ui-react";
 import { useRouter } from "next/router";
 import T from "prop-types";
 import { makeStyles } from "@material-ui/styles";
 import { useTable } from "react-table";
 import clsx from "clsx";
-import { foaf, vcard } from "rdf-namespaces";
 import {
   DrawerContainer,
   Table as PrismTable,
   BackToNav,
   BackToNavLink,
 } from "@inrupt/prism-react-components";
-import { Avatar, Box, Typography, createStyles } from "@material-ui/core";
+import { Box, createStyles } from "@material-ui/core";
 import Link from "next/link";
 import { useRedirectIfLoggedOut } from "../../../../../src/effects/auth";
+import PersonAvatar from "../../../../profile/personAvatar";
+import PersonProfile from "../../../../profile/personProfile";
 import Tabs from "../../../../tabs";
 import usePodRootUri from "../../../../../src/hooks/usePodRootUri";
 import ResourceAccessDrawer from "../resourceAccessDrawer";
@@ -68,7 +64,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box p={1} mt={3}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -213,31 +209,7 @@ export default function AgentResourceAccessShowPage() {
       <DrawerContainer drawer={drawer} open={selectedResourceIndex !== null}>
         <div className={classes.container}>
           <BackToNav link={link} />
-          <Box alignItems="center" display="flex">
-            <Box>
-              <Avatar className={classes.avatar}>
-                <Image
-                  property={vcard.hasPhoto}
-                  width={120}
-                  // errorComponent={errorComponent}
-                />
-              </Avatar>
-            </Box>
-
-            <Box p={2}>
-              <h3>
-                <Text className={classes.avatarText} property={foaf.name} />
-                <a
-                  className={classes.headerLink}
-                  href={decodedIri}
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  {decodedIri}
-                </a>
-              </h3>
-            </Box>
-          </Box>
+          <PersonAvatar profileIri={decodedIri} />
           <Tabs
             tabs={tabs}
             handleTabChange={handleTabChange}
@@ -265,7 +237,7 @@ export default function AgentResourceAccessShowPage() {
             </table>
           </TabPanel>
           <TabPanel value={selectedTabValue} index="Profile">
-            <h3>Profile</h3>
+            <PersonProfile profileIri={decodedIri} />
           </TabPanel>
         </div>
       </DrawerContainer>

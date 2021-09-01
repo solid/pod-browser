@@ -43,9 +43,19 @@ exports[`Person Profile renders a profile 1`] = `
             <h3
               data-testid="profile-name-title"
             >
-              <span>
+              <span
+                class="PodBrowser-avatarText"
+              >
                 Alice
               </span>
+              <a
+                class="PodBrowser-headerLink"
+                href="https://example.com/profile/card#me"
+                rel="noreferrer"
+                target="_blank"
+              >
+                https://example.com/profile/card#me
+              </a>
             </h3>
           </div>
         </div>
@@ -213,9 +223,19 @@ exports[`Person Profile renders an editable profile 1`] = `
             <h3
               data-testid="profile-name-title"
             >
-              <span>
+              <span
+                class="PodBrowser-avatarText"
+              >
                 Alice
               </span>
+              <a
+                class="PodBrowser-headerLink"
+                href="https://example.com/profile/card#me"
+                rel="noreferrer"
+                target="_blank"
+              >
+                https://example.com/profile/card#me
+              </a>
             </h3>
           </div>
         </div>

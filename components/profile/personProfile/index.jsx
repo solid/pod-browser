@@ -19,22 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
+import React from "react";
 import T from "prop-types";
 import { foaf, vcard } from "rdf-namespaces";
-import {
-  Avatar,
-  Box,
-  Paper,
-  InputLabel,
-  createStyles,
-} from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import { Avatar, Box, InputLabel, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Container } from "@inrupt/prism-react-components";
-import { CombinedDataProvider, Text, Image } from "@inrupt/solid-ui-react";
-import { isHTTPError } from "../../../src/error";
+import { Text } from "@inrupt/solid-ui-react";
 import { vcardExtras } from "../../../src/addressBook";
 import ContactInfoTable, {
   CONTACT_INFO_TYPE_EMAIL,
@@ -57,118 +48,71 @@ export function setupErrorComponent(bem) {
 }
 
 export default function PersonProfile({ profileIri, editing }) {
-  const [error, setError] = useState(null);
-
   const classes = useStyles();
   const bem = useBem(classes);
-  // TODO replace with toast error or something?
-  if (error) {
-    if (isHTTPError(error, 404)) {
-      return (
-        <Container>
-          <Alert severity="error">
-            {`Cannot fetch profile for this WebID: ${profileIri}`}
-          </Alert>
-        </Container>
-      );
-    }
-    return error.toString();
-  }
-  const errorComponent = setupErrorComponent(bem);
-
   return (
-    <Container>
-      <Paper style={{ marginTop: "1em" }}>
-        <Box p={2}>
-          <CombinedDataProvider
-            datasetUrl={profileIri}
-            thingUrl={profileIri}
-            onError={setError}
-          >
-            <Box alignItems="center" display="flex">
-              <Box>
-                <Avatar className={classes.avatar}>
-                  <Image
-                    property={vcard.hasPhoto}
-                    width={120}
-                    errorComponent={errorComponent}
-                  />
-                </Avatar>
-              </Box>
-
-              <Box p={2}>
-                <h3 data-testid={TESTCAFE_ID_NAME_TITLE}>
-                  <Text property={foaf.name} />
-                </h3>
-              </Box>
-            </Box>
-
-            <hr />
-
-            <Box mt={2}>
-              <Box>
-                <InputLabel>Name</InputLabel>
-                <Text
-                  property={foaf.name}
-                  edit={editing}
-                  autosave
-                  inputProps={{
-                    className: bem("input"),
-                    "data-testid": TESTCAFE_ID_NAME_FIELD,
-                  }}
-                />
-              </Box>
-
-              <Box mt={1}>
-                <InputLabel>Role</InputLabel>
-                <Text
-                  property={vcard.role}
-                  edit={editing}
-                  inputProps={{
-                    className: bem("input"),
-                    "data-testid": TESTCAFE_ID_ROLE_FIELD,
-                  }}
-                  autosave
-                />
-              </Box>
-
-              <Box mt={1}>
-                <InputLabel>Organization</InputLabel>
-                <Text
-                  property={vcardExtras("organization-name")}
-                  edit={editing}
-                  inputProps={{
-                    className: bem("input"),
-                    "data-testid": TESTCAFE_ID_ORG_FIELD,
-                  }}
-                  autosave
-                />
-              </Box>
-            </Box>
-
-            <Box mt={4}>
-              <InputLabel>Email Addresses</InputLabel>
-              <ContactInfoTable
-                datasetIri={profileIri}
-                property={vcard.hasEmail}
-                editing={editing}
-                contactInfoType={CONTACT_INFO_TYPE_EMAIL}
-              />
-            </Box>
-
-            <Box mt={4}>
-              <InputLabel>Phone Numbers</InputLabel>
-              <ContactInfoTable
-                datasetIri={profileIri}
-                property={vcard.hasTelephone}
-                editing={editing}
-                contactInfoType={CONTACT_INFO_TYPE_PHONE}
-              />
-            </Box>
-          </CombinedDataProvider>
+    <>
+      <Box mt={2}>
+        <Box>
+          <InputLabel>Name</InputLabel>
+          <Text
+            property={foaf.name}
+            edit={editing}
+            autosave
+            inputProps={{
+              className: bem("input"),
+              "data-testid": TESTCAFE_ID_NAME_FIELD,
+            }}
+          />
         </Box>
-      </Paper>
-    </Container>
+
+        <Box mt={1}>
+          <InputLabel>Role</InputLabel>
+          <Text
+            property={vcard.role}
+            edit={editing}
+            inputProps={{
+              className: bem("input"),
+              "data-testid": TESTCAFE_ID_ROLE_FIELD,
+            }}
+            autosave
+          />
+        </Box>
+
+        <Box mt={1}>
+          <InputLabel>Organization</InputLabel>
+          <Text
+            property={vcardExtras("organization-name")}
+            edit={editing}
+            inputProps={{
+              className: bem("input"),
+              "data-testid": TESTCAFE_ID_ORG_FIELD,
+            }}
+            autosave
+          />
+        </Box>
+      </Box>
+
+      <Box mt={4}>
+        <InputLabel>Email Addresses</InputLabel>
+        <ContactInfoTable
+          datasetIri={profileIri}
+          property={vcard.hasEmail}
+          editing={editing}
+          contactInfoType={CONTACT_INFO_TYPE_EMAIL}
+        />
+      </Box>
+
+      <Box mt={4}>
+        <InputLabel>Phone Numbers</InputLabel>
+        <ContactInfoTable
+          datasetIri={profileIri}
+          property={vcard.hasTelephone}
+          editing={editing}
+          contactInfoType={CONTACT_INFO_TYPE_PHONE}
+        />
+      </Box>
+    </>
   );
 }
 
