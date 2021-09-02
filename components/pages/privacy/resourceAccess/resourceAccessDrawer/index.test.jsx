@@ -20,30 +20,44 @@
  */
 
 import React from "react";
+import userEvent from "@testing-library/user-event";
+import { waitFor } from "@testing-library/dom";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
+import mockAccessControl from "../../../../../__testUtils/mockAccessControl";
 
-import ResourceDrawer from "./index";
+import ResourceDrawer, {
+  TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON,
+} from "./index";
+import useAccessControl from "../../../../../src/hooks/useAccessControl";
 
 jest.mock("../../../../../src/effects/auth");
+jest.mock("../../../../../src/hooks/useAccessControl");
+const mockedUseAccessControl = useAccessControl;
 
 describe("ResourceDrawer", () => {
+  const accessControl = mockAccessControl();
+  beforeEach(() => {
+    mockedUseAccessControl.mockReturnValue({
+      accessControl,
+    });
+  });
+  const webId = "https://example.com/profile/card#me";
+  const resourceIri = "https://example.com/resource/";
+  const accessList = [
+    {
+      agent: webId,
+      allow: [
+        "http://www.w3.org/ns/solid/acp#Read",
+        "http://www.w3.org/ns/solid/acp#Write",
+        "http://www.w3.org/ns/solid/acp#Append",
+        "http://www.w3.org/ns/solid/acp#Control",
+      ],
+      deny: [],
+      resource: resourceIri,
+    },
+  ];
   test("Renders the ResourceDrawer with correct title and access list", () => {
     const onClose = jest.fn();
-    const webId = "https://example.com/profile/card#me";
-    const resourceIri = "https://example.com/resource/";
-    const accessList = [
-      {
-        agent: webId,
-        allow: [
-          "http://www.w3.org/ns/solid/acp#Read",
-          "http://www.w3.org/ns/solid/acp#Write",
-          "http://www.w3.org/ns/solid/acp#Append",
-          "http://www.w3.org/ns/solid/acp#Control",
-        ],
-        deny: [],
-        resource: resourceIri,
-      },
-    ];
 
     const { asFragment } = renderWithTheme(
       <ResourceDrawer
@@ -55,5 +69,34 @@ describe("ResourceDrawer", () => {
     );
 
     expect(asFragment()).toMatchSnapshot();
+  });
+  test("clicking the remove access button calls the remove access function with the corrects values and closes the drawer", async () => {
+    const onClose = jest.fn();
+    const accessListEditors = [
+      {
+        agent: webId,
+        allow: [
+          "http://www.w3.org/ns/solid/acp#Read",
+          "http://www.w3.org/ns/solid/acp#Write",
+        ],
+        deny: [],
+        resource: resourceIri,
+      },
+    ];
+    const { getByTestId } = renderWithTheme(
+      <ResourceDrawer
+        open
+        onClose={onClose}
+        accessList={accessListEditors}
+        resourceIri={resourceIri}
+      />
+    );
+    const button = getByTestId(TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON);
+    userEvent.click(button);
+    expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledWith(
+      webId,
+      "editors"
+    );
+    await waitFor(() => expect(onClose).toHaveBeenCalled());
   });
 });

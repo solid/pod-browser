@@ -33,6 +33,7 @@ import {
 import { useRedirectIfLoggedOut } from "../../../../../src/effects/auth";
 import usePodRootUri from "../../../../../src/hooks/usePodRootUri";
 import ResourceAccessDrawer from "../resourceAccessDrawer";
+import Spinner from "../../../../spinner";
 
 export default function AgentResourceAccessShowPage() {
   const tableClass = PrismTable.useTableClass("table", "inherits");
@@ -47,6 +48,7 @@ export default function AgentResourceAccessShowPage() {
   const [selectedResourceIndex, setSelectedResourceIndex] = useState(null);
   const [selectedAccessList, setSelectedAccessList] = useState(null);
   const [resourcesError, setResourcesError] = useState(null);
+  const [shouldUpdate, setShouldUpdate] = useState(false);
 
   const query = `
   {
@@ -54,7 +56,6 @@ export default function AgentResourceAccessShowPage() {
         accessByAgent(agent: "${decodedIri}" ) {
         agent
         allow
-        deny
         resource
         }
     }
@@ -81,8 +82,9 @@ export default function AgentResourceAccessShowPage() {
           ...new Set(data.pod.accessByAgent.map(({ resource }) => resource)),
         ];
         setResources(resourceList);
+        setShouldUpdate(false);
       });
-  }, [query, podRoot, fetch, session]);
+  }, [query, podRoot, fetch, session, shouldUpdate]);
 
   useEffect(() => {
     const selectedAccess = accessList.filter(
@@ -98,6 +100,7 @@ export default function AgentResourceAccessShowPage() {
       onClose={() => setSelectedResourceIndex(null)}
       resourceIri={resources[selectedResourceIndex]}
       agentWebId={decodedIri}
+      setShouldUpdate={setShouldUpdate}
     />
   );
 
@@ -117,13 +120,17 @@ export default function AgentResourceAccessShowPage() {
       return [];
     }
     // showing the first 3 resources for dev purposes
-    return resources.slice(0, 3);
+    return resources;
   }, [resources]);
 
   const { getTableProps, getTableBodyProps } = useTable({ columns, data });
 
   if (resourcesError) {
     return resourcesError.toString();
+  }
+
+  if (shouldUpdate) {
+    return <Spinner />;
   }
 
   return (
