@@ -22,7 +22,7 @@
 import React from "react";
 import T from "prop-types";
 import { foaf, vcard } from "rdf-namespaces";
-import { Avatar, Box, InputLabel, createStyles } from "@material-ui/core";
+import { Box, InputLabel, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { Text } from "@inrupt/solid-ui-react";
@@ -36,16 +36,9 @@ import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export const TESTCAFE_ID_NAME_TITLE = "profile-name-title";
 export const TESTCAFE_ID_NAME_FIELD = "profile-name-field";
 export const TESTCAFE_ID_ROLE_FIELD = "profile-role-field";
 export const TESTCAFE_ID_ORG_FIELD = "profile-org-field";
-
-export function setupErrorComponent(bem) {
-  return () => (
-    <Avatar className={bem("avatar")} alt="Contact photo placeholder" />
-  );
-}
 
 export default function PersonProfile({ profileIri, editing }) {
   const classes = useStyles();

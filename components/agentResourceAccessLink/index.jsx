@@ -23,14 +23,17 @@ import React from "react";
 import T from "prop-types";
 import Link from "next/link";
 import { useThing } from "@inrupt/solid-ui-react";
-import { getStringNoLocale } from "@inrupt/solid-client";
-import { vcard, foaf } from "rdf-namespaces";
+import { getStringNoLocale, getUrl } from "@inrupt/solid-client";
+import { vcard, foaf, rdf, schema } from "rdf-namespaces";
 import { useRouter } from "next/router";
 import { getProfileIriFromContactThing } from "../../src/addressBook";
 
 export const TESTCAFE_ID_RESOURCE_ACCESS_LINK = "resource-access-link";
 
-export function buildResourcesLink(webId, route) {
+export function buildResourcesLink(webId, route, path) {
+  if (path === "app") {
+    return `${route}/${path}/${encodeURIComponent(webId)}`;
+  }
   return `${route}/resourceAccess/${encodeURIComponent(webId)}`;
 }
 
@@ -40,6 +43,8 @@ export default function AgentResourceAccessLink(props) {
   const { thing } = useThing();
   const contact = getProfileIriFromContactThing(thing);
 
+  const type = getUrl(thing, rdf.type);
+  const path = type === schema.Person ? "person" : "app";
   // Pass in an iri, or use the thing from context (such as for the contacts list)
   const profileIri = webId || contact;
 
@@ -50,7 +55,7 @@ export default function AgentResourceAccessLink(props) {
     profileIri;
 
   return (
-    <Link href={buildResourcesLink(profileIri, route)}>
+    <Link href={buildResourcesLink(profileIri, route, path)}>
       <a data-testid={TESTCAFE_ID_RESOURCE_ACCESS_LINK}>{name}</a>
     </Link>
   );

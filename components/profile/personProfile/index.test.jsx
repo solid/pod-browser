@@ -20,7 +20,6 @@
  */
 
 import React from "react";
-import { render } from "@testing-library/react";
 import * as solidClientFns from "@inrupt/solid-client";
 import { schema } from "rdf-namespaces";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
@@ -36,7 +35,6 @@ import PersonProfile, {
   TESTCAFE_ID_ORG_FIELD,
   TESTCAFE_ID_ROLE_FIELD,
 } from "../index";
-import { setupErrorComponent } from ".";
 
 const profileIri = "https://example.com/profile/card#me";
 
@@ -78,14 +76,6 @@ describe("Person Profile", () => {
     await expect(findByTestId(TESTCAFE_ID_ROLE_FIELD)).resolves.not.toBeNull();
     await expect(findByTestId(TESTCAFE_ID_ORG_FIELD)).resolves.not.toBeNull();
 
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
-
-describe("setupErrorComponent", () => {
-  it("renders", () => {
-    const bem = (value) => value;
-    const { asFragment } = render(setupErrorComponent(bem)());
     expect(asFragment()).toMatchSnapshot();
   });
 });

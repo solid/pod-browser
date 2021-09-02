@@ -26,6 +26,7 @@ const styles = (theme) => {
     avatar: {
       width: "64px",
       height: "64px",
+      background: "transparent",
     },
     appAvatar: {
       textAlign: "center",
@@ -34,6 +35,18 @@ const styles = (theme) => {
       fontSize: theme.typography.h5.fontSize,
       color: theme.palette.primary.main,
       backgroundColor: "#F1EDFF",
+    },
+    avatarText: {
+      fontFamily: theme.typography.h1.fontFamily,
+      fontSize: "1.5rem",
+      color: theme.palette.secondary.contrastText,
+    },
+    headerLink: {
+      display: "block",
+      fontFamily: theme.typography.body2.fontFamily,
+      fontSize: "1rem",
+      fontWeight: theme.typography.body2.fontWeight,
+      color: theme.palette.secondary.contrastText,
     },
   });
 };

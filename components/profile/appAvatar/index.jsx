@@ -21,6 +21,7 @@
 
 import React, { useState } from "react";
 import { foaf } from "rdf-namespaces";
+import T from "prop-types";
 import { Avatar, Box, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
@@ -43,9 +44,6 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export const TESTCAFE_ID_NAME_TITLE = "app-name-title";
 export const TESTCAFE_ID_NAME_FIELD = "app-name-field";
-export const TESTCAFE_ID_WEBID_FIELD = "app-webid-field";
-export const TESTCAFE_ID_TOS_FIELD = "app-tos-field";
-export const TESTCAFE_ID_POLICY_FIELD = "app-policy-field";
 
 export function setupErrorComponent(bem) {
   return () => (
@@ -59,7 +57,7 @@ export function setupErrorComponent(bem) {
 const app = mockApp();
 const dataset = mockAppDataset();
 
-export default function AppAvatar() {
+export default function AppAvatar({ profileIri }) {
   const [error, setError] = useState(null);
 
   const classes = useStyles();
@@ -76,7 +74,7 @@ export default function AppAvatar() {
       <ThingProvider thing={app} onError={setError}>
         <Box alignItems="center" display="flex">
           <Box>
-            <Avatar className={classes.appAvatar} alt="Contact avatar">
+            <Avatar className={classes.avatar} alt="Contact avatar">
               <Image
                 property={LOGO_PREDICATE}
                 width={120}
@@ -87,7 +85,15 @@ export default function AppAvatar() {
 
           <Box p={2}>
             <h3 data-testid={TESTCAFE_ID_NAME_TITLE}>
-              <Text property={foaf.name} />
+              <Text className={classes.avatarText} property={foaf.name} />
+              <a
+                className={classes.headerLink}
+                href={profileIri}
+                rel="noreferrer"
+                target="_blank"
+              >
+                {profileIri}
+              </a>
             </h3>
           </Box>
         </Box>
@@ -95,3 +101,7 @@ export default function AppAvatar() {
     </DatasetProvider>
   );
 }
+
+AppAvatar.propTypes = {
+  profileIri: T.string.isRequired,
+};

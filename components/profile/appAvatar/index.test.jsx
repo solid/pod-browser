@@ -20,39 +20,37 @@
  */
 
 import React from "react";
+import { render } from "@testing-library/react";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
-import AppProfile, {
-  TESTCAFE_ID_WEBID_FIELD,
-  TESTCAFE_ID_TOS_FIELD,
-  TESTCAFE_ID_POLICY_FIELD,
+import AppAvatar, {
+  setupErrorComponent,
+  TESTCAFE_ID_NAME_TITLE,
 } from "./index";
-import {
-  APP_POLICY_URL,
-  APP_TOS_URL,
-  APP_WEBID,
-} from "../../../__testUtils/mockApp";
 
-describe("App Profile", () => {
+describe("App Avatar", () => {
   // FIXME: for now this renders only one possibility - need to update once we're not hardcoding the mock app
-  test("renders a mock app profile", async () => {
+  test("renders a mock app avatar", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
     const { asFragment, findByTestId } = renderWithTheme(
       <SessionProvider>
-        <AppProfile />
+        <AppAvatar />
       </SessionProvider>
     );
-    expect(await findByTestId(TESTCAFE_ID_WEBID_FIELD)).toHaveTextContent(
-      APP_WEBID
+    await expect(findByTestId(TESTCAFE_ID_NAME_TITLE)).resolves.not.toBeNull();
+    expect(await findByTestId(TESTCAFE_ID_NAME_TITLE)).toHaveTextContent(
+      "Mock App"
     );
-    expect(await findByTestId(TESTCAFE_ID_TOS_FIELD)).toHaveTextContent(
-      APP_TOS_URL
-    );
-    expect(await findByTestId(TESTCAFE_ID_POLICY_FIELD)).toHaveTextContent(
-      APP_POLICY_URL
-    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+});
+
+describe("setupErrorComponent", () => {
+  it("renders", () => {
+    const bem = (value) => value;
+    const { asFragment } = render(setupErrorComponent(bem)());
     expect(asFragment()).toMatchSnapshot();
   });
 });

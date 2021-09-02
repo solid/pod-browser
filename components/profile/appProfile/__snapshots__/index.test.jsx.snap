@@ -3,194 +3,138 @@
 exports[`App Profile renders a mock app profile 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-container"
+    class="PodBrowser-root PodBrowser-root"
   >
     <div
-      class="PodBrowser-root PodBrowser-elevation1 PodBrowser-rounded"
-      style="margin-top: 1em;"
+      class="PodBrowser-root PodBrowser-root"
     >
-      <div
-        class="PodBrowser-root PodBrowser-root"
+      <label
+        class="PodBrowser-root PodBrowser-root PodBrowser-animated"
       >
-        <div
-          class="PodBrowser-root PodBrowser-root"
-        >
-          <div
-            class="PodBrowser-root PodBrowser-root"
-          >
-            <div
-              class="PodBrowser-root PodBrowser-circle PodBrowser-appAvatar PodBrowser-colorDefault"
-            >
-              <div
-                class="PodBrowser-root PodBrowser-circle PodBrowser-appAvatar PodBrowser-colorDefault"
-              >
-                <span
-                  class="PodBrowser-icon-project-diagram PodBrowser-appAvatar"
-                />
-              </div>
-            </div>
-          </div>
-          <div
-            class="PodBrowser-root PodBrowser-root"
-          >
-            <h3
-              data-testid="app-name-title"
-            >
-              <span>
-                Mock App
-              </span>
-            </h3>
-          </div>
-        </div>
-        <hr />
-        <div
-          class="PodBrowser-root PodBrowser-root"
-        >
-          <div
-            class="PodBrowser-root PodBrowser-root"
-          >
-            <label
-              class="PodBrowser-root PodBrowser-root PodBrowser-animated"
-            >
-              App WebID
-            </label>
-            <span
-              data-testid="app-webid-field"
-            >
-              https://mockappurl.com
-            </span>
-          </div>
-        </div>
-        <div
-          class="PodBrowser-root PodBrowser-root"
-        >
-          <div
-            class="PodBrowser-root PodBrowser-root"
-          >
-            <label
-              class="PodBrowser-root PodBrowser-root PodBrowser-animated"
-            >
-              Terms of Service
-            </label>
-            <span
-              data-testid="app-tos-field"
-            >
-              https://mockappurl.com/terms-of-service
-            </span>
-          </div>
-        </div>
-        <div
-          class="PodBrowser-root PodBrowser-root"
-        >
-          <div
-            class="PodBrowser-root PodBrowser-root"
-          >
-            <label
-              class="PodBrowser-root PodBrowser-root PodBrowser-animated"
-            >
-              Privacy Policy
-            </label>
-            <span
-              data-testid="app-policy-field"
-            >
-              https://mockappurl.com/privacy-policy
-            </span>
-          </div>
-        </div>
-        <div
-          class="PodBrowser-root PodBrowser-root"
-        >
-          <label
-            class="PodBrowser-root PodBrowser-root PodBrowser-animated"
-          >
-            Contact Support
-          </label>
-          <table
-            class="PodBrowser-table  PodBrowser-table--inherits"
-            role="table"
-          >
-            <thead>
-              <tr
-                role="row"
-              >
-                <th
-                  colspan="1"
-                  role="columnheader"
-                />
-                <th
-                  colspan="1"
-                  role="columnheader"
-                />
-              </tr>
-            </thead>
-            <tbody
-              role="rowgroup"
-            >
-              <tr
-                role="row"
-              >
-                <td
-                  role="cell"
-                >
-                  <b>
-                    Website
-                  </b>
-                </td>
-                <td
-                  role="cell"
-                >
-                  https://examplewebsite.com
-                </td>
-              </tr>
-              <tr
-                role="row"
-              >
-                <td
-                  role="cell"
-                >
-                  <b>
-                    Telephone
-                  </b>
-                </td>
-                <td
-                  role="cell"
-                >
-                  555-5555
-                </td>
-              </tr>
-              <tr
-                role="row"
-              >
-                <td
-                  role="cell"
-                >
-                  <b>
-                    E-mail
-                  </b>
-                </td>
-                <td
-                  role="cell"
-                >
-                  example@email.com
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+        App WebID
+      </label>
+      <span
+        data-testid="app-webid-field"
+      >
+        https://mockappurl.com
+      </span>
     </div>
   </div>
-</DocumentFragment>
-`;
-
-exports[`setupErrorComponent renders 1`] = `
-<DocumentFragment>
   <div
-    class="MuiAvatar-root MuiAvatar-circle appAvatar MuiAvatar-colorDefault"
+    class="PodBrowser-root PodBrowser-root"
   >
-    <span
-      class="makeStyles-icon-project-diagram-1521 appAvatar"
-    />
+    <div
+      class="PodBrowser-root PodBrowser-root"
+    >
+      <label
+        class="PodBrowser-root PodBrowser-root PodBrowser-animated"
+      >
+        Terms of Service
+      </label>
+      <span
+        data-testid="app-tos-field"
+      >
+        https://mockappurl.com/terms-of-service
+      </span>
+    </div>
+  </div>
+  <div
+    class="PodBrowser-root PodBrowser-root"
+  >
+    <div
+      class="PodBrowser-root PodBrowser-root"
+    >
+      <label
+        class="PodBrowser-root PodBrowser-root PodBrowser-animated"
+      >
+        Privacy Policy
+      </label>
+      <span
+        data-testid="app-policy-field"
+      >
+        https://mockappurl.com/privacy-policy
+      </span>
+    </div>
+  </div>
+  <div
+    class="PodBrowser-root PodBrowser-root"
+  >
+    <label
+      class="PodBrowser-root PodBrowser-root PodBrowser-animated"
+    >
+      Contact Support
+    </label>
+    <table
+      class="PodBrowser-table  PodBrowser-table--inherits"
+      role="table"
+    >
+      <thead>
+        <tr
+          role="row"
+        >
+          <th
+            colspan="1"
+            role="columnheader"
+          />
+          <th
+            colspan="1"
+            role="columnheader"
+          />
+        </tr>
+      </thead>
+      <tbody
+        role="rowgroup"
+      >
+        <tr
+          role="row"
+        >
+          <td
+            role="cell"
+          >
+            <b>
+              Website
+            </b>
+          </td>
+          <td
+            role="cell"
+          >
+            https://examplewebsite.com
+          </td>
+        </tr>
+        <tr
+          role="row"
+        >
+          <td
+            role="cell"
+          >
+            <b>
+              Telephone
+            </b>
+          </td>
+          <td
+            role="cell"
+          >
+            555-5555
+          </td>
+        </tr>
+        <tr
+          role="row"
+        >
+          <td
+            role="cell"
+          >
+            <b>
+              E-mail
+            </b>
+          </td>
+          <td
+            role="cell"
+          >
+            example@email.com
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </DocumentFragment>
 `;
