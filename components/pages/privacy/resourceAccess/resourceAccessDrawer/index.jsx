@@ -54,7 +54,7 @@ export const TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON =
 export const REMOVE_ACCESS_CONFIRMATION_DIALOG =
   "remove-access-confirmation-dialog";
 
-const getAllowModes = (accessList) => {
+export const getAllowModes = (accessList) => {
   if (!accessList) return null;
   const accessModes = [
     ...new Set(

@@ -42,7 +42,37 @@ const styles = (theme) => {
     container: {
       width: "100%",
       maxWidth: theme.breakpoints.width("md"),
+      paddingTop: theme.spacing(1),
       margin: "0 auto",
+    },
+    "access-details--icon": {
+      fontSize: "1.5rem",
+      display: "flex",
+      alignItems: "center",
+      background: "linear-gradient(to right, #0D6796, #33B2D3)",
+      "-webkit-background-clip": "text",
+      color: "transparent",
+    },
+    table__container: {
+      border: "solid 1px",
+      borderColor: theme.palette.grey["200"],
+      boxShadow: "0 4px 12px 1px rgba(208,208,208,0.22)",
+    },
+    table__header: {
+      borderBottom: "1px solid",
+      borderBottomColor: theme.palette.grey["200"],
+    },
+    "table__head-cell": {
+      padding: "1em",
+    },
+    "table__body-row": {
+      "&:hover": {
+        cursor: "pointer",
+        background: theme.palette.grey["50"],
+      },
+    },
+    "table__body-cell": {
+      width: "2em",
     },
   });
 };
