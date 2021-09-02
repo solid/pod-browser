@@ -20,39 +20,52 @@
  */
 
 import React from "react";
+import { render } from "@testing-library/react";
+import * as solidClientFns from "@inrupt/solid-client";
+import { schema } from "rdf-namespaces";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
+import {
+  aliceWebIdUrl,
+  mockPersonDatasetAlice,
+} from "../../../__testUtils/mockPersonResource";
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
-import AppProfile, {
-  TESTCAFE_ID_WEBID_FIELD,
-  TESTCAFE_ID_TOS_FIELD,
-  TESTCAFE_ID_POLICY_FIELD,
-} from "./index";
-import {
-  APP_POLICY_URL,
-  APP_TOS_URL,
-  APP_WEBID,
-} from "../../../__testUtils/mockApp";
+import PersonAvatar, { TESTCAFE_ID_NAME_TITLE } from "../index";
+import { setupErrorComponent } from ".";
 
-describe("App Profile", () => {
-  // FIXME: for now this renders only one possibility - need to update once we're not hardcoding the mock app
-  test("renders a mock app profile", async () => {
+const profileIri = "https://example.com/profile/card#me";
+
+describe("Person Profile", () => {
+  const profileDataset = mockPersonDatasetAlice();
+  const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+
+  beforeEach(() => {
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValue(profileDataset);
+    jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
+  });
+
+  test("renders a profile", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
     const { asFragment, findByTestId } = renderWithTheme(
       <SessionProvider>
-        <AppProfile />
+        <PersonAvatar profileIri={profileIri} type={schema.Person} />
       </SessionProvider>
     );
-    expect(await findByTestId(TESTCAFE_ID_WEBID_FIELD)).toHaveTextContent(
-      APP_WEBID
+    await expect(findByTestId(TESTCAFE_ID_NAME_TITLE)).resolves.not.toBeNull();
+    expect(await findByTestId(TESTCAFE_ID_NAME_TITLE)).toHaveTextContent(
+      "Alice"
     );
-    expect(await findByTestId(TESTCAFE_ID_TOS_FIELD)).toHaveTextContent(
-      APP_TOS_URL
-    );
-    expect(await findByTestId(TESTCAFE_ID_POLICY_FIELD)).toHaveTextContent(
-      APP_POLICY_URL
-    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+});
+
+describe("setupErrorComponent", () => {
+  it("renders", () => {
+    const bem = (value) => value;
+    const { asFragment } = render(setupErrorComponent(bem)());
     expect(asFragment()).toMatchSnapshot();
   });
 });

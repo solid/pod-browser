@@ -22,8 +22,8 @@
 import { schema } from "rdf-namespaces";
 import React from "react";
 
-import AgentShowPage from "../../../components/pages/privacy/show";
+import AgentResourceAccessShowPage from "../../../components/pages/privacy/resourceAccess/show";
 
 export default function ContactShow() {
-  return <AgentShowPage type={schema.SoftwareApplication} />;
+  return <AgentResourceAccessShowPage type={schema.SoftwareApplication} />;
 }

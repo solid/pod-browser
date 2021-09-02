@@ -25,6 +25,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { CombinedDataProvider, useSession } from "@inrupt/solid-ui-react";
 import { useRouter } from "next/router";
 import T from "prop-types";
+import { schema } from "rdf-namespaces";
 import { makeStyles } from "@material-ui/styles";
 import { useTable } from "react-table";
 import clsx from "clsx";
@@ -38,7 +39,9 @@ import { Box, createStyles } from "@material-ui/core";
 import Link from "next/link";
 import { useRedirectIfLoggedOut } from "../../../../../src/effects/auth";
 import PersonAvatar from "../../../../profile/personAvatar";
+import AppAvatar from "../../../../profile/appAvatar";
 import PersonProfile from "../../../../profile/personProfile";
+import AppProfile from "../../../../profile/appProfile";
 import Tabs from "../../../../tabs";
 import usePodRootUri from "../../../../../src/hooks/usePodRootUri";
 import ResourceAccessDrawer from "../resourceAccessDrawer";
@@ -79,7 +82,7 @@ TabPanel.propTypes = {
   value: T.any.isRequired,
 };
 
-export default function AgentResourceAccessShowPage() {
+export default function AgentResourceAccessShowPage({ type }) {
   useRedirectIfLoggedOut();
   const router = useRouter();
   const decodedIri = decodeURIComponent(router.query.webId);
@@ -203,13 +206,36 @@ export default function AgentResourceAccessShowPage() {
   if (shouldUpdate) {
     return <Spinner />;
   }
+  const ConditionalWrapper = ({ condition, wrapper, children }) =>
+    condition ? wrapper(children) : children;
+
+  const renderAvatar = () => {
+    if (type === schema.SoftwareApplication) {
+      return <AppAvatar profileIri={decodedIri} />;
+    }
+    return <PersonAvatar profileIri={decodedIri} />;
+  };
+
+  const renderProfile = () => {
+    if (type === schema.SoftwareApplication) {
+      return <AppProfile profileIri={decodedIri} />;
+    }
+    return <PersonProfile profileIri={decodedIri} />;
+  };
 
   return (
-    <CombinedDataProvider datasetUrl={decodedIri} thingUrl={decodedIri}>
+    <ConditionalWrapper
+      condition={type !== schema.SoftwareApplication}
+      wrapper={(children) => (
+        <CombinedDataProvider datasetUrl={decodedIri} thingUrl={decodedIri}>
+          {children}
+        </CombinedDataProvider>
+      )}
+    >
       <DrawerContainer drawer={drawer} open={selectedResourceIndex !== null}>
         <div className={classes.container}>
           <BackToNav link={link} />
-          <PersonAvatar profileIri={decodedIri} />
+          {renderAvatar()}
           <Tabs
             tabs={tabs}
             handleTabChange={handleTabChange}
@@ -237,10 +263,14 @@ export default function AgentResourceAccessShowPage() {
             </table>
           </TabPanel>
           <TabPanel value={selectedTabValue} index="Profile">
-            <PersonProfile profileIri={decodedIri} />
+            {renderProfile()}
           </TabPanel>
         </div>
       </DrawerContainer>
-    </CombinedDataProvider>
+    </ConditionalWrapper>
   );
 }
+
+AgentResourceAccessShowPage.propTypes = {
+  type: T.string.isRequired,
+};

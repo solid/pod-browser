@@ -15,7 +15,7 @@ exports[`AgentResourceAccessLink renders iri if name is not found 1`] = `
 <DocumentFragment>
   <a
     data-testid="resource-access-link"
-    href="/privacy/resourceAccess/https%3A%2F%2Fmockiri.com"
+    href="/privacy/app/https%3A%2F%2Fmockiri.com"
   >
     https://mockiri.com
   </a>
@@ -37,7 +37,7 @@ exports[`AgentResourceAccessLink supports rendering name from vcard.fn 1`] = `
 <DocumentFragment>
   <a
     data-testid="resource-access-link"
-    href="/privacy/resourceAccess/https%3A%2F%2Fexample.com%2Falice"
+    href="/privacy/app/https%3A%2F%2Fexample.com%2Falice"
   >
     Alice
   </a>

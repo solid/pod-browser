@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App Avatar renders a mock app avatar 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-root PodBrowser-root"
+  >
+    <div
+      class="PodBrowser-root PodBrowser-root"
+    >
+      <div
+        class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+      >
+        <div
+          class="PodBrowser-root PodBrowser-circle PodBrowser-appAvatar PodBrowser-colorDefault"
+        >
+          <span
+            class="PodBrowser-icon-project-diagram PodBrowser-appAvatar"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      class="PodBrowser-root PodBrowser-root"
+    >
+      <h3
+        data-testid="app-name-title"
+      >
+        <span
+          class="PodBrowser-avatarText"
+        >
+          Mock App
+        </span>
+        <a
+          class="PodBrowser-headerLink"
+          rel="noreferrer"
+          target="_blank"
+        />
+      </h3>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`setupErrorComponent renders 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiAvatar-root MuiAvatar-circle appAvatar MuiAvatar-colorDefault"
+  >
+    <span
+      class="makeStyles-icon-project-diagram-1521 appAvatar"
+    />
+  </div>
+</DocumentFragment>
+`;
