@@ -27,13 +27,15 @@ import { useRouter } from "next/router";
 import T from "prop-types";
 import { schema } from "rdf-namespaces";
 import { makeStyles } from "@material-ui/styles";
-import { useTable } from "react-table";
+import { useSortBy, useTable } from "react-table";
 import clsx from "clsx";
+import { useBem } from "@solid/lit-prism-patterns";
 import {
   DrawerContainer,
   Table as PrismTable,
   BackToNav,
   BackToNavLink,
+  Icons,
 } from "@inrupt/prism-react-components";
 import { Box, createStyles } from "@material-ui/core";
 import Link from "next/link";
@@ -44,8 +46,12 @@ import PersonProfile from "../../../../profile/personProfile";
 import AppProfile from "../../../../profile/appProfile";
 import Tabs from "../../../../tabs";
 import usePodRootUri from "../../../../../src/hooks/usePodRootUri";
-import ResourceAccessDrawer from "../resourceAccessDrawer";
 import Spinner from "../../../../spinner";
+import ResourceAccessDrawer, { getAllowModes } from "../resourceAccessDrawer";
+import SortedTableCarat from "../../../../sortedTableCarat";
+import { getAcpAccessDetails } from "../../../../../src/accessControl/acp";
+import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
+import { isContainerIri } from "../../../../../src/solidClientHelpers/utils";
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -87,7 +93,6 @@ export default function AgentResourceAccessShowPage({ type }) {
   const router = useRouter();
   const decodedIri = decodeURIComponent(router.query.webId);
   const tableClass = PrismTable.useTableClass("table", "inherits");
-  const bem = PrismTable.useBem();
   useRedirectIfLoggedOut();
   const { session, fetch } = useSession();
   const podRoot = usePodRootUri(session.info.webId);
@@ -110,6 +115,7 @@ export default function AgentResourceAccessShowPage({ type }) {
   };
 
   const classes = useStyles();
+  const bem = useBem(classes);
 
   const tabs = [
     {
@@ -181,9 +187,16 @@ export default function AgentResourceAccessShowPage({ type }) {
   const columns = useMemo(
     () => [
       {
-        header: "",
+        header: "Icon",
+        accessor: "icon",
+        disableSortBy: true,
+      },
+      {
+        Header: "Name",
         accessor: "resource",
-        modifiers: ["align-center", "width-preview"],
+      },
+      {
+        Header: "Access",
       },
     ],
     []
@@ -197,7 +210,20 @@ export default function AgentResourceAccessShowPage({ type }) {
     return resources;
   }, [resources]);
 
-  const { getTableProps, getTableBodyProps } = useTable({ columns, data });
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+  } = useTable(
+    {
+      columns,
+      data,
+      defaultCanSort: true,
+    },
+    useSortBy
+  );
 
   if (resourcesError) {
     return resourcesError.toString();
@@ -206,6 +232,7 @@ export default function AgentResourceAccessShowPage({ type }) {
   if (shouldUpdate) {
     return <Spinner />;
   }
+  // FIXME: using a conditional dataset provider wrapper while we mock app profiles
   const ConditionalWrapper = ({ condition, wrapper, children }) =>
     condition ? wrapper(children) : children;
 
@@ -242,25 +269,84 @@ export default function AgentResourceAccessShowPage({ type }) {
             selectedTabValue={selectedTabValue}
           />
           <TabPanel value={selectedTabValue} index="Permissions">
-            <h3>Table layout to be added as part of 322</h3>
-            <table
-              className={clsx(tableClass, bem("table"))}
-              {...getTableProps()}
-            >
-              <tbody className={bem("table__body")} {...getTableBodyProps()}>
-                {data.map((resource, i) => {
-                  return (
+            <div>
+              <table
+                className={clsx(tableClass, bem("table__container"))}
+                {...getTableProps()}
+              >
+                <thead className={bem("table__header")}>
+                  {headerGroups.map((headerGroup) => (
                     <tr
-                      key={resource}
-                      className={bem("table__body-row")}
-                      onClick={() => setSelectedResourceIndex(i)}
+                      key={headerGroup.id}
+                      className={bem("table__header-row")}
+                      {...headerGroup.getHeaderGroupProps()}
                     >
-                      <td className={bem("table__body-cell")}>{resource}</td>
+                      {headerGroup.headers.map((column) => (
+                        <td
+                          key={column.id}
+                          className={bem("table__head-cell")}
+                          {...column.getHeaderProps(
+                            column.getSortByToggleProps()
+                          )}
+                        >
+                          {column.render("Header")}
+                          {` `}
+                          <SortedTableCarat
+                            sorted={column.isSorted}
+                            sortedDesc={column.isSortedDesc}
+                          />
+                        </td>
+                      ))}
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                  ))}
+                </thead>
+                <tbody {...getTableBodyProps()}>
+                  {rows.map((row, i) => {
+                    prepareRow(row);
+                    const details = row.original;
+                    const resourceName = details && getResourceName(details);
+                    const resurceAccess = accessList.filter(
+                      ({ resource }) => resource === row.original
+                    );
+                    const allowModes = getAllowModes(resurceAccess);
+                    const modes = allowModes?.map((mode) => {
+                      return {
+                        read: !!mode.includes("Read"),
+                        write: !!mode.includes("Write"),
+                        append: !!mode.includes("Append"),
+                        control: !!mode.includes("Control"),
+                      };
+                    });
+                    const accessDetails = modes?.map((mode) => {
+                      return getAcpAccessDetails(mode);
+                    });
+                    const accessDetailsName = accessDetails?.map(
+                      ({ name }) => name
+                    );
+                    return (
+                      <tr
+                        key={details}
+                        className={bem("table__body-row")}
+                        onClick={() => setSelectedResourceIndex(i)}
+                      >
+                        <td className={bem("table__body-cell")}>
+                          <Icons
+                            name={
+                              details && isContainerIri(details)
+                                ? "folder"
+                                : "file"
+                            }
+                            className={bem("access-details", "icon")}
+                          />
+                        </td>
+                        <td>{resourceName}</td>
+                        <td>{accessDetailsName?.join(", ")}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </TabPanel>
           <TabPanel value={selectedTabValue} index="Profile">
             {renderProfile()}
