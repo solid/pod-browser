@@ -37,6 +37,8 @@ export const defaultConfirmationDialogContext = {
   setConfirmText: () => {},
   closeDialog: () => {},
   omitCancelButton: false,
+  setIsDangerousAction: () => {},
+  isDangerousAction: false,
 };
 const ConfirmationDialogContext = createContext(
   defaultConfirmationDialogContext
@@ -52,6 +54,7 @@ function ConfirmationDialogProvider({ children }) {
   const [confirmText, setConfirmText] = useState("Confirm");
   const [confirmed, setConfirmed] = useState(null);
   const [omitCancelButton, setOmitCancelButton] = useState(false);
+  const [isDangerousAction, setIsDangerousAction] = useState(false);
 
   const closeDialog = () => {
     setConfirmed(null);
@@ -78,6 +81,8 @@ function ConfirmationDialogProvider({ children }) {
         closeDialog,
         omitCancelButton,
         setOmitCancelButton,
+        isDangerousAction,
+        setIsDangerousAction,
       }}
     >
       {children}
