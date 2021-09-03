@@ -39,5 +39,8 @@ export default function styles(theme) {
       fontWeight: theme.typography.body.fontWeight,
       fontFamily: theme.typography.body.fontFamily,
     },
+    dangerButton: {
+      backgroundColor: theme.palette.error.main,
+    },
   });
 }

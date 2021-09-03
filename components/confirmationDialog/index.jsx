@@ -55,6 +55,7 @@ export default function ConfirmationDialog() {
     cancelText,
     confirmText,
     omitCancelButton,
+    isDangerousAction,
   } = useContext(ConfirmationDialogContext);
 
   return (
@@ -95,7 +96,11 @@ export default function ConfirmationDialog() {
         )}
         <Button
           data-testid={TESTCAFE_ID_CONFIRM_BUTTON}
-          className={classes.submitAgentsButton}
+          className={
+            isDangerousAction
+              ? classes.dangerButton
+              : classes.submitAgentsButton
+          }
           type="submit"
           onClick={() => setConfirmed(true)}
         >

@@ -25,6 +25,9 @@ export default function styles(theme) {
   return {
     "access-details--wrapper": {
       padding: "1.5rem",
+      height: "100vh",
+      display: "flex",
+      flexDirection: "column",
     },
     "access-details--title": {
       display: "flex",
@@ -76,6 +79,16 @@ export default function styles(theme) {
     },
     listItemText: {
       marginTop: 0,
+    },
+    "access-details--remove-access-button": {
+      border: "none",
+      background: "transparent",
+      color: theme.palette.error.main,
+      textDecoration: "underline",
+      fontSize: "1rem",
+      cursor: "pointer",
+      textAlign: "left",
+      justifySelf: "flex-end",
     },
   };
 }
