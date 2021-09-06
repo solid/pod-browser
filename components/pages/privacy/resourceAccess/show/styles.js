@@ -56,7 +56,13 @@ const styles = (theme) => {
     table__container: {
       border: "solid 1px",
       borderColor: theme.palette.grey["200"],
+      borderCollapse: "collapse",
       boxShadow: "0 4px 12px 1px rgba(208,208,208,0.22)",
+      borderRadius: 8,
+    },
+    table: {
+      borderCollapse: "collapse",
+      borderRadius: 8,
     },
     table__header: {
       borderBottom: "1px solid",
@@ -69,6 +75,9 @@ const styles = (theme) => {
       "&:hover": {
         cursor: "pointer",
         background: theme.palette.grey["50"],
+      },
+      "&:last-child": {
+        borderBottom: 0,
       },
     },
     "table__body-cell": {
