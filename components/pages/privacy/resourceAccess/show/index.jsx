@@ -269,16 +269,15 @@ export default function AgentResourceAccessShowPage({ type }) {
             selectedTabValue={selectedTabValue}
           />
           <TabPanel value={selectedTabValue} index="Permissions">
-            <div>
+            <div className={bem("table__container")}>
               <table
-                className={clsx(tableClass, bem("table__container"))}
+                className={clsx(tableClass, bem("table"))}
                 {...getTableProps()}
               >
                 <thead className={bem("table__header")}>
                   {headerGroups.map((headerGroup) => (
                     <tr
                       key={headerGroup.id}
-                      className={bem("table__header-row")}
                       {...headerGroup.getHeaderGroupProps()}
                     >
                       {headerGroup.headers.map((column) => (
