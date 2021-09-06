@@ -206,59 +206,59 @@ export default function ResourceAccessDrawer({
     }
   }, [confirmationSetup, confirmed, closeDialog, dialogOpen, removeAccess]);
 
-  if (!accessControl && !accessControlError) {
-    return <Spinner />;
-  }
   return (
     <Drawer open={open} close={onClose}>
-      <div className={bem("access-details", "wrapper")}>
-        <span className={bem("access-details", "title")}>
-          <Icons
-            name={
-              resourceIri && isContainerIri(resourceIri) ? "folder" : "file"
-            }
-            className={bem("access-details", "icon")}
-          />
-          <h2>{resourceName}</h2>
-        </span>
-        <section className={bem("access-details", "section")}>
-          <h3 className={bem("access-details", "section-header")}>Access</h3>
-          <hr className={bem("access-details", "separator")} />
-          <List>
-            {sortedAccessDetails?.map(({ name, icon, description }) => {
-              return (
-                <ListItem key={name}>
-                  <ListItemIcon classes={{ root: classes.listItemIcon }}>
-                    <Icons
-                      name={icon}
-                      className={bem("access-details", "section-icon")}
+      {!accessControl && !accessControlError && <Spinner />}
+      {accessControl && (
+        <div className={bem("access-details", "wrapper")}>
+          <span className={bem("access-details", "title")}>
+            <Icons
+              name={
+                resourceIri && isContainerIri(resourceIri) ? "folder" : "file"
+              }
+              className={bem("access-details", "icon")}
+            />
+            <h2>{resourceName}</h2>
+          </span>
+          <section className={bem("access-details", "section")}>
+            <h3 className={bem("access-details", "section-header")}>Access</h3>
+            <hr className={bem("access-details", "separator")} />
+            <List>
+              {sortedAccessDetails?.map(({ name, icon, description }) => {
+                return (
+                  <ListItem key={name}>
+                    <ListItemIcon classes={{ root: classes.listItemIcon }}>
+                      <Icons
+                        name={icon}
+                        className={bem("access-details", "section-icon")}
+                      />
+                    </ListItemIcon>
+                    <ListItemText
+                      classes={{
+                        root: classes.listItemText,
+                        primary: classes.listItemTitleText,
+                        secondary: classes.listItemSecondaryText,
+                      }}
+                      key={name}
+                      primary={name}
+                      secondary={description}
                     />
-                  </ListItemIcon>
-                  <ListItemText
-                    classes={{
-                      root: classes.listItemText,
-                      primary: classes.listItemTitleText,
-                      secondary: classes.listItemSecondaryText,
-                    }}
-                    key={name}
-                    primary={name}
-                    secondary={description}
-                  />
-                </ListItem>
-              );
-            })}
-          </List>
-        </section>
-        <button
-          className={bem("access-details", "remove-access-button")}
-          type="button"
-          onClick={handleConfirmation}
-          data-testid={TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON}
-        >
-          Remove Access to {resourceName}
-        </button>
-        <ConfirmationDialog />
-      </div>
+                  </ListItem>
+                );
+              })}
+            </List>
+          </section>
+          <button
+            className={bem("access-details", "remove-access-button")}
+            type="button"
+            onClick={handleConfirmation}
+            data-testid={TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON}
+          >
+            Remove Access to {resourceName}
+          </button>
+          <ConfirmationDialog />
+        </div>
+      )}
     </Drawer>
   );
 }
