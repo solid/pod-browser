@@ -89,9 +89,14 @@ describe("AgentResourceAccessLink", () => {
 });
 
 describe("buildProfileLink", () => {
-  it("generates a valid path", () => {
+  it("generates a valid path for person", () => {
     expect(buildResourcesLink(iri, "/privacy", "person")).toEqual(
       `/privacy/person/${encodeURIComponent(iri)}`
+    );
+  });
+  it("generates a valid path for app", () => {
+    expect(buildResourcesLink(iri, "/privacy", "app")).toEqual(
+      `/privacy/app/${encodeURIComponent(iri)}`
     );
   });
 });

@@ -19,6 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+const lightPrimaryBackgroundColor = "#F1EDFF";
+
 export default function styles(theme) {
   return {
     "request-container": {
@@ -186,7 +188,7 @@ export default function styles(theme) {
       marginRight: theme.spacing(0.4),
       fontSize: theme.typography.h6.fontSize,
       color: theme.palette.primary.main,
-      backgroundColor: "#F1EDFF",
+      backgroundColor: lightPrimaryBackgroundColor,
       display: "inline-block",
       position: "relative",
       left: 0,

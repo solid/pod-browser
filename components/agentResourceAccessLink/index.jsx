@@ -35,7 +35,7 @@ export function buildResourcesLink(webId, route, path) {
 }
 
 export function isPerson(type) {
-  return type === schema.Person || type === foaf.Person ? "person" : "app";
+  return type === schema.Person || type === foaf.Person;
 }
 
 export default function AgentResourceAccessLink(props) {
@@ -45,7 +45,7 @@ export default function AgentResourceAccessLink(props) {
   const contact = getProfileIriFromContactThing(thing);
 
   const type = getUrl(thing, rdf.type);
-  const path = isPerson(type);
+  const path = isPerson(type) ? "person" : "app";
   // Pass in an iri, or use the thing from context (such as for the contacts list)
   const profileIri = webId || contact;
 
