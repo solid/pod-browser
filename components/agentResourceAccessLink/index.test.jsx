@@ -90,8 +90,8 @@ describe("AgentResourceAccessLink", () => {
 
 describe("buildProfileLink", () => {
   it("generates a valid path", () => {
-    expect(buildResourcesLink(iri, "/privacy")).toEqual(
-      `/privacy/resourceAccess/${encodeURIComponent(iri)}`
+    expect(buildResourcesLink(iri, "/privacy", "person")).toEqual(
+      `/privacy/person/${encodeURIComponent(iri)}`
     );
   });
 });

@@ -4,7 +4,7 @@ exports[`AgentResourceAccessLink renders correct path for privacy contacts 1`] =
 <DocumentFragment>
   <a
     data-testid="resource-access-link"
-    href="/privacy/resourceAccess/https%3A%2F%2Fexample.com%2Fbob"
+    href="/privacy/person/https%3A%2F%2Fexample.com%2Fbob"
   >
     Bob
   </a>
@@ -26,7 +26,7 @@ exports[`AgentResourceAccessLink supports rendering name from foaf.name 1`] = `
 <DocumentFragment>
   <a
     data-testid="resource-access-link"
-    href="/privacy/resourceAccess/https%3A%2F%2Fexample.com%2Fbob"
+    href="/privacy/person/https%3A%2F%2Fexample.com%2Fbob"
   >
     Bob
   </a>

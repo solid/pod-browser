@@ -20,9 +20,9 @@
  */
 
 import React from "react";
-
-import AgentShowPage from "../../../components/pages/privacy/show";
+import { schema } from "rdf-namespaces";
+import AgentResourceAccessShowPage from "../../../components/pages/privacy/resourceAccess/show";
 
 export default function ContactShow() {
-  return <AgentShowPage />;
+  return <AgentResourceAccessShowPage type={schema.Person} />;
 }
