@@ -22,10 +22,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useEffect, useState, useMemo } from "react";
-import { CombinedDataProvider, useSession } from "@inrupt/solid-ui-react";
+import { CombinedDataProvider, useSession, Text } from "@inrupt/solid-ui-react";
 import { useRouter } from "next/router";
 import T from "prop-types";
-import { schema } from "rdf-namespaces";
+import { schema, foaf } from "rdf-namespaces";
 import { makeStyles } from "@material-ui/styles";
 import { useSortBy, useTable } from "react-table";
 import clsx from "clsx";
@@ -58,6 +58,7 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export const TESTCAFE_ID_TAB_PERMISSIONS = "permissions-tab";
 export const TESTCAFE_ID_TAB_PROFILE = "profile-tab";
+export const USER_ACCESS_STRING = "has access to these resources";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -269,83 +270,95 @@ export default function AgentResourceAccessShowPage({ type }) {
             selectedTabValue={selectedTabValue}
           />
           <TabPanel value={selectedTabValue} index="Permissions">
-            <div className={bem("table__container")}>
-              <table
-                className={clsx(tableClass, bem("table"))}
-                {...getTableProps()}
-              >
-                <thead className={bem("table__header")}>
-                  {headerGroups.map((headerGroup) => (
-                    <tr
-                      key={headerGroup.id}
-                      {...headerGroup.getHeaderGroupProps()}
-                    >
-                      {headerGroup.headers.map((column) => (
-                        <td
-                          key={column.id}
-                          className={bem("table__head-cell")}
-                          {...column.getHeaderProps(
-                            column.getSortByToggleProps()
-                          )}
-                        >
-                          {column.render("Header")}
-                          {` `}
-                          <SortedTableCarat
-                            sorted={column.isSorted}
-                            sortedDesc={column.isSortedDesc}
-                          />
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </thead>
-                <tbody {...getTableBodyProps()}>
-                  {rows.map((row, i) => {
-                    prepareRow(row);
-                    const details = row.original;
-                    const resourceName = details && getResourceName(details);
-                    const resurceAccess = accessList.filter(
-                      ({ resource }) => resource === row.original
-                    );
-                    const allowModes = getAllowModes(resurceAccess);
-                    const modes = allowModes?.map((mode) => {
-                      return {
-                        read: !!mode.includes("Read"),
-                        write: !!mode.includes("Write"),
-                        append: !!mode.includes("Append"),
-                        control: !!mode.includes("Control"),
-                      };
-                    });
-                    const accessDetails = modes?.map((mode) => {
-                      return getAcpAccessDetails(mode);
-                    });
-                    const accessDetailsName = accessDetails?.map(
-                      ({ name }) => name
-                    );
-                    return (
+            <p>
+              {/* FIXME: Temporary workaround for mockApp name since there is no dataset */}
+              {type === schema.SoftwareApplication && <span>MockApp</span>}
+              {type !== schema.SoftwareApplication && (
+                <Text property={foaf.name} />
+              )}
+              {` `}
+              {USER_ACCESS_STRING}
+            </p>
+            {resources.length === 0 && <Spinner />}
+            {resources.length !== 0 && (
+              <div className={bem("table__container")}>
+                <table
+                  className={clsx(tableClass, bem("table"))}
+                  {...getTableProps()}
+                >
+                  <thead className={bem("table__header")}>
+                    {headerGroups.map((headerGroup) => (
                       <tr
-                        key={details}
-                        className={bem("table__body-row")}
-                        onClick={() => setSelectedResourceIndex(i)}
+                        key={headerGroup.id}
+                        {...headerGroup.getHeaderGroupProps()}
                       >
-                        <td className={bem("table__body-cell")}>
-                          <Icons
-                            name={
-                              details && isContainerIri(details)
-                                ? "folder"
-                                : "file"
-                            }
-                            className={bem("access-details", "icon")}
-                          />
-                        </td>
-                        <td>{resourceName}</td>
-                        <td>{accessDetailsName?.join(", ")}</td>
+                        {headerGroup.headers.map((column) => (
+                          <td
+                            key={column.id}
+                            className={bem("table__head-cell")}
+                            {...column.getHeaderProps(
+                              column.getSortByToggleProps()
+                            )}
+                          >
+                            {column.render("Header")}
+                            {` `}
+                            <SortedTableCarat
+                              sorted={column.isSorted}
+                              sortedDesc={column.isSortedDesc}
+                            />
+                          </td>
+                        ))}
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                    ))}
+                  </thead>
+                  <tbody {...getTableBodyProps()}>
+                    {rows.map((row, i) => {
+                      prepareRow(row);
+                      const details = row.original;
+                      const resourceName = details && getResourceName(details);
+                      const resurceAccess = accessList.filter(
+                        ({ resource }) => resource === row.original
+                      );
+                      const allowModes = getAllowModes(resurceAccess);
+                      const modes = allowModes?.map((mode) => {
+                        return {
+                          read: !!mode.includes("Read"),
+                          write: !!mode.includes("Write"),
+                          append: !!mode.includes("Append"),
+                          control: !!mode.includes("Control"),
+                        };
+                      });
+                      const accessDetails = modes?.map((mode) => {
+                        return getAcpAccessDetails(mode);
+                      });
+                      const accessDetailsName = accessDetails?.map(
+                        ({ name }) => name
+                      );
+                      return (
+                        <tr
+                          key={details}
+                          className={bem("table__body-row")}
+                          onClick={() => setSelectedResourceIndex(i)}
+                        >
+                          <td className={bem("table__body-cell")}>
+                            <Icons
+                              name={
+                                details && isContainerIri(details)
+                                  ? "folder"
+                                  : "file"
+                              }
+                              className={bem("access-details", "icon")}
+                            />
+                          </td>
+                          <td>{resourceName}</td>
+                          <td>{accessDetailsName?.join(", ")}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </TabPanel>
           <TabPanel value={selectedTabValue} index="Profile">
             {renderProfile()}
