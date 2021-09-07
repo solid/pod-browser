@@ -21,7 +21,7 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
-const lightPrimaryBackgroundColor = "#F1EDFF";
+const lightPrimaryBackgroundColor = "#F1EDFF"; // TODO: THIS MUST BE MOVED TO PRISM
 
 const styles = (theme) => {
   return createStyles(theme, [], {
