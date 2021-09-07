@@ -21,6 +21,8 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
+const lightPrimaryBackgroundColor = "#F1EDFF";
+
 const styles = (theme) => {
   return createStyles(theme, ["back-to-nav", "input"], {
     avatar: {
@@ -34,7 +36,7 @@ const styles = (theme) => {
       borderRadius: "50%",
       fontSize: theme.typography.h5.fontSize,
       color: theme.palette.primary.main,
-      backgroundColor: "#F1EDFF",
+      backgroundColor: lightPrimaryBackgroundColor,
     },
     avatarText: {
       fontFamily: theme.typography.h1.fontFamily,

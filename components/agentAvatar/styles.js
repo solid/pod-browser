@@ -21,6 +21,8 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
+const lightPrimaryBackgroundColor = "#F1EDFF";
+
 const styles = (theme) => {
   return createStyles(theme, [], {
     avatar: {
@@ -36,7 +38,7 @@ const styles = (theme) => {
       marginRight: theme.spacing(0.4),
       fontSize: theme.typography.h6.fontSize,
       color: theme.palette.primary.main,
-      backgroundColor: "#F1EDFF",
+      backgroundColor: lightPrimaryBackgroundColor,
     },
   });
 };
