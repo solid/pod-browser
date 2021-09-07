@@ -31,10 +31,11 @@ import { getProfileIriFromContactThing } from "../../src/addressBook";
 export const TESTCAFE_ID_RESOURCE_ACCESS_LINK = "resource-access-link";
 
 export function buildResourcesLink(webId, route, path) {
-  if (path === "app") {
-    return `${route}/${path}/${encodeURIComponent(webId)}`;
-  }
-  return `${route}/resourceAccess/${encodeURIComponent(webId)}`;
+  return `${route}/${path}/${encodeURIComponent(webId)}`;
+}
+
+export function isPerson(type) {
+  return type === schema.Person || type === foaf.Person ? "person" : "app";
 }
 
 export default function AgentResourceAccessLink(props) {
@@ -44,7 +45,7 @@ export default function AgentResourceAccessLink(props) {
   const contact = getProfileIriFromContactThing(thing);
 
   const type = getUrl(thing, rdf.type);
-  const path = type === schema.Person ? "person" : "app";
+  const path = isPerson(type);
   // Pass in an iri, or use the thing from context (such as for the contacts list)
   const profileIri = webId || contact;
 
