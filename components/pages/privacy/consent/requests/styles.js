@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const lightPrimaryBackgroundColor = "#F1EDFF";
+const lightPrimaryBackgroundColor = "#F1EDFF"; // TODO: THIS MUST BE MOVED TO PRISM
 
 export default function styles(theme) {
   return {
