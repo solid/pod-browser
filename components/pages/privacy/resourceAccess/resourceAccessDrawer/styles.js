@@ -25,7 +25,6 @@ export default function styles(theme) {
   return {
     "access-details--wrapper": {
       padding: "1.5rem",
-      height: "100vh",
       display: "flex",
       flexDirection: "column",
     },

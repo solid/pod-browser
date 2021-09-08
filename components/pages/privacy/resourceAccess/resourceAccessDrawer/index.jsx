@@ -207,7 +207,7 @@ export default function ResourceAccessDrawer({
   }, [confirmationSetup, confirmed, closeDialog, dialogOpen, removeAccess]);
 
   return (
-    <Drawer open={open} close={onClose}>
+    <Drawer anchor="top" open={open} close={onClose}>
       {!accessControl && !accessControlError && <Spinner />}
       {accessControl && (
         <div className={bem("access-details", "wrapper")}>
