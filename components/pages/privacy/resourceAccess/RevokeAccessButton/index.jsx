@@ -23,30 +23,18 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
-import { Drawer, Icons } from "@inrupt/prism-react-components";
-import {
-  createStyles,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-} from "@material-ui/core";
+import { createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import {
-  getAcpAccessDetails,
-  getPolicyDetailFromAccess,
-} from "../../../../../src/accessControl/acp";
+import { Button } from "@inrupt/prism-react-components";
+import { getPolicyDetailFromAccess } from "../../../../../src/accessControl/acp";
 import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
 import styles from "./styles";
-import { isContainerIri } from "../../../../../src/solidClientHelpers/utils";
-import { getParentContainerUrl } from "../../../../../src/stringHelpers";
 import useAccessControl from "../../../../../src/hooks/useAccessControl";
 import useResourceInfo from "../../../../../src/hooks/useResourceInfo";
 import AlertContext from "../../../../../src/contexts/alertContext";
 import ConfirmationDialogContext from "../../../../../src/contexts/confirmationDialogContext";
 import useAgentProfile from "../../../../../src/hooks/useAgentProfile";
-import Spinner from "../../../../spinner";
 
 export const TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON =
   "access-details-remove-button";
@@ -109,12 +97,11 @@ const handleRemoveAccess = ({
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function ResourceAccessDrawer({
-  open,
+export default function RevokeAccessButton({
+  variant,
   onClose,
   accessList,
   resourceIri,
-  podRoot,
   setShouldUpdate,
 }) {
   const classes = useStyles();
@@ -123,11 +110,9 @@ export default function ResourceAccessDrawer({
     revalidateOnFocus: false,
     shouldRetryOnError: false,
   });
-  const { accessControl, accessControlError } = useAccessControl(resourceInfo);
+  const { accessControl } = useAccessControl(resourceInfo);
   const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
   const resourceName = resourceIri && getResourceName(resourceIri);
-  const resourcePath =
-    resourceIri && getParentContainerUrl(resourceIri)?.replace(podRoot, "");
   const [agentWebId, setAgentWebId] = useState(
     accessList && accessList[0]?.agent
   );
@@ -144,15 +129,6 @@ export default function ResourceAccessDrawer({
     setIsDangerousAction,
   } = useContext(ConfirmationDialogContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
-  const allowModes = getAllowModes(accessList);
-  const modes = allowModes?.map((mode) => {
-    return {
-      read: !!mode.includes("Read"),
-      write: !!mode.includes("Write"),
-      append: !!mode.includes("Append"),
-      control: !!mode.includes("Control"),
-    };
-  });
 
   const removeAccess = handleRemoveAccess({
     accessList,
@@ -179,14 +155,6 @@ export default function ResourceAccessDrawer({
     setContent(`${agentName} will not be able to access ${resourceName}`);
   };
 
-  const accessDetails = modes?.map((mode) => {
-    return getAcpAccessDetails(mode);
-  });
-  const order = ["View", "Edit", "Add", "Share", "View Sharing"];
-  const sortedAccessDetails = accessDetails?.sort((a, b) => {
-    return order.indexOf(a.name) - order.indexOf(b.name);
-  });
-
   useEffect(() => {
     if (
       confirmationSetup &&
@@ -210,72 +178,18 @@ export default function ResourceAccessDrawer({
   }, [confirmationSetup, confirmed, closeDialog, dialogOpen, removeAccess]);
 
   return (
-    <Drawer anchor="top" open={open} close={onClose}>
-      {!accessControl && !accessControlError && <Spinner />}
-      {accessControl && (
-        <div className={bem("access-details", "wrapper")}>
-          <span className={bem("access-details", "title")}>
-            <span className={bem("access-details", "resource-info")}>
-              <p>{decodeURIComponent(resourcePath)}</p>
-              <h2>
-                {" "}
-                <Icons
-                  name={
-                    resourceIri && isContainerIri(resourceIri)
-                      ? "folder"
-                      : "file"
-                  }
-                  className={bem("access-details", "icon")}
-                />
-                {resourceName}
-              </h2>
-            </span>
-          </span>
-          <section className={bem("access-details", "section")}>
-            <h3 className={bem("access-details", "section-header")}>Access</h3>
-            <hr className={bem("access-details", "separator")} />
-            <List>
-              {sortedAccessDetails?.map(({ name, icon, description }) => {
-                return (
-                  <ListItem key={name}>
-                    <ListItemIcon classes={{ root: classes.listItemIcon }}>
-                      <Icons
-                        name={icon}
-                        className={bem("access-details", "section-icon")}
-                      />
-                    </ListItemIcon>
-                    <ListItemText
-                      classes={{
-                        root: classes.listItemText,
-                        primary: classes.listItemTitleText,
-                        secondary: classes.listItemSecondaryText,
-                      }}
-                      key={name}
-                      primary={name}
-                      secondary={description}
-                    />
-                  </ListItem>
-                );
-              })}
-            </List>
-          </section>
-          <button
-            className={bem("access-details", "remove-access-button")}
-            type="button"
-            onClick={handleConfirmation}
-            data-testid={TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON}
-          >
-            Remove Access to {resourceName}
-          </button>
-          {/* <ConfirmationDialog /> */}
-        </div>
-      )}
-    </Drawer>
+    <Button
+      variant={variant}
+      className={bem("revoke-button")}
+      data-testid={TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON}
+      onClick={() => handleConfirmation()}
+    >
+      Revoke Access
+    </Button>
   );
 }
 
-ResourceAccessDrawer.propTypes = {
-  open: T.bool.isRequired,
+RevokeAccessButton.propTypes = {
   accessList: T.arrayOf(
     T.shape({
       agent: T.string,
@@ -286,13 +200,13 @@ ResourceAccessDrawer.propTypes = {
   ),
   onClose: T.func.isRequired,
   resourceIri: T.string,
-  podRoot: T.string,
+  variant: T.string,
   setShouldUpdate: T.func,
 };
 
-ResourceAccessDrawer.defaultProps = {
+RevokeAccessButton.defaultProps = {
   accessList: [],
   resourceIri: null,
-  podRoot: null,
+  variant: null,
   setShouldUpdate: () => {},
 };

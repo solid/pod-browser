@@ -29,7 +29,7 @@ import ResourceDrawer, {
   TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON,
 } from "./index";
 import useAccessControl from "../../../../../src/hooks/useAccessControl";
-import {
+import ConfirmationDialog, {
   TESTCAFE_ID_CONFIRMATION_DIALOG,
   TESTCAFE_ID_CONFIRM_BUTTON,
 } from "../../../../confirmationDialog";
@@ -96,6 +96,7 @@ describe("ResourceDrawer", () => {
           accessList={accessListEditors}
           resourceIri={resourceIri}
         />
+        <ConfirmationDialog />
       </ConfirmationDialogProvider>
     );
     const button = getByTestId(TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON);
@@ -125,6 +126,7 @@ describe("ResourceDrawer", () => {
           accessList={accessListEditors}
           resourceIri={resourceIri}
         />
+        <ConfirmationDialog />
       </ConfirmationDialogProvider>
     );
     const button = getByTestId(TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON);
