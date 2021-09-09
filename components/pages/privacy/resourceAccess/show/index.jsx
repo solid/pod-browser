@@ -31,14 +31,18 @@ import { useSortBy, useTable } from "react-table";
 import clsx from "clsx";
 import { useBem } from "@solid/lit-prism-patterns";
 import {
-  DrawerContainer,
-  Table as PrismTable,
+  ActionButton,
+  Button,
   BackToNav,
   BackToNavLink,
+  DrawerContainer,
   Icons,
+  Table as PrismTable,
 } from "@inrupt/prism-react-components";
-import { Box, createStyles } from "@material-ui/core";
+import { Box, createStyles, Divider } from "@material-ui/core";
 import Link from "next/link";
+import ConfirmationDialog from "../../../../confirmationDialog";
+import { handleAction } from "../../../../containerTableRow";
 import { useRedirectIfLoggedOut } from "../../../../../src/effects/auth";
 import PersonAvatar from "../../../../profile/personAvatar";
 import AppAvatar from "../../../../profile/appAvatar";
@@ -47,6 +51,7 @@ import AppProfile from "../../../../profile/appProfile";
 import Tabs from "../../../../tabs";
 import usePodRootUri from "../../../../../src/hooks/usePodRootUri";
 import Spinner from "../../../../spinner";
+import RevokeAccessButton from "../RevokeAccessButton";
 import ResourceAccessDrawer, { getAllowModes } from "../resourceAccessDrawer";
 import SortedTableCarat from "../../../../sortedTableCarat";
 import { getAcpAccessDetails } from "../../../../../src/accessControl/acp";
@@ -201,6 +206,11 @@ export default function AgentResourceAccessShowPage({ type }) {
       {
         Header: "Access",
       },
+      {
+        header: "Actions",
+        accessor: "actions",
+        disableSortBy: true,
+      },
     ],
     []
   );
@@ -345,8 +355,11 @@ export default function AgentResourceAccessShowPage({ type }) {
                       return (
                         <tr
                           key={details}
-                          className={bem("table__body-row")}
-                          onClick={() => setSelectedResourceIndex(i)}
+                          className={`${
+                            selectedResourceIndex === i
+                              ? bem("table__body-row", "active")
+                              : bem("table__body-row")
+                          }`}
                         >
                           <td className={bem("table__body-cell")}>
                             <Icons
@@ -364,6 +377,34 @@ export default function AgentResourceAccessShowPage({ type }) {
                             {decodeURIComponent(resourcePathAndName)}
                           </td>
                           <td>{accessDetailsName?.join(", ")}</td>
+                          <td className={bem("table__body-cell")}>
+                            <ActionButton>
+                              <Button
+                                variant="in-menu"
+                                onClick={() => setSelectedResourceIndex(i)}
+                              >
+                                Details
+                              </Button>
+                              <Button
+                                onClick={handleAction(
+                                  resources[i],
+                                  podRoot,
+                                  router
+                                )}
+                                variant="in-menu"
+                              >
+                                View Resource
+                              </Button>
+                              <Divider />
+                              <RevokeAccessButton
+                                variant="in-menu"
+                                onClose={() => setSelectedResourceIndex(null)}
+                                accessList={resurceAccess}
+                                resourceIri={resources[i]}
+                                setShouldUpdate={setShouldUpdate}
+                              />
+                            </ActionButton>
+                          </td>
                         </tr>
                       );
                     })}
@@ -375,6 +416,7 @@ export default function AgentResourceAccessShowPage({ type }) {
           <TabPanel value={selectedTabValue} index="Profile">
             {renderProfile()}
           </TabPanel>
+          <ConfirmationDialog />
         </div>
       </DrawerContainer>
     </ConditionalWrapper>

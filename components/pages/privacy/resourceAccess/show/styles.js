@@ -21,6 +21,9 @@
 
 import { createStyles } from "@solid/lit-prism-patterns";
 
+const secondaryTeal80 = "#3D85AB";
+const secondaryTeal10 = "#E6EFF4";
+
 const styles = (theme) => {
   return createStyles(theme, ["back-to-nav", "input"], {
     avatar: {
@@ -59,6 +62,7 @@ const styles = (theme) => {
       borderCollapse: "collapse",
       boxShadow: "0 4px 12px 1px rgba(208,208,208,0.22)",
       borderRadius: 8,
+      paddingBottom: "0.5em",
     },
     table: {
       borderCollapse: "collapse",
@@ -72,13 +76,21 @@ const styles = (theme) => {
       padding: "1em",
     },
     "table__body-row": {
+      borderBottom: "0 !important",
+      borderTop: "1px solid",
+      borderTopColor: theme.palette.grey["200"],
+      position: "relative",
       "&:hover": {
-        cursor: "pointer",
+        // cursor: "pointer",
         background: theme.palette.grey["50"],
       },
       "&:last-child": {
         borderBottom: 0,
       },
+    },
+    "table__body-row--active": {
+      border: `2px solid ${secondaryTeal80} !important`,
+      backgroundColor: secondaryTeal10,
     },
     "table__body-cell": {
       width: "2em",
