@@ -36,6 +36,16 @@ export default function styles(theme) {
         fontFamily: theme.typography.h2.fontFamily,
       },
     },
+    "access-details--resource-info": {
+      position: "relative",
+      padding: "1em 0",
+      "& p": {
+        fontSize: "0.8125rem",
+        position: "absolute",
+        top: 0,
+        margin: 0,
+      },
+    },
     "access-details--icon": {
       fontSize: "1.5rem",
       display: "flex",

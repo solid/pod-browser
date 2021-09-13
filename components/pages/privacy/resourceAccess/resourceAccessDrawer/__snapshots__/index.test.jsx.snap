@@ -36,9 +36,16 @@ exports[`ResourceDrawer Renders the ResourceDrawer with correct title and access
             <span
               class="PodBrowser-icon-folder PodBrowser-access-details--icon"
             />
-            <h2>
-              resource
-            </h2>
+            <span
+              class="PodBrowser-access-details--resource-info"
+            >
+              <p>
+                https://example.com/
+              </p>
+              <h2>
+                resource
+              </h2>
+            </span>
           </span>
           <section
             class="PodBrowser-access-details--section"

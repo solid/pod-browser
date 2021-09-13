@@ -181,6 +181,7 @@ export default function AgentResourceAccessShowPage({ type }) {
       open={selectedResourceIndex !== null}
       onClose={() => setSelectedResourceIndex(null)}
       resourceIri={resources[selectedResourceIndex]}
+      podRoot={podRoot}
       agentWebId={decodedIri}
       setShouldUpdate={setShouldUpdate}
     />
@@ -317,6 +318,12 @@ export default function AgentResourceAccessShowPage({ type }) {
                       prepareRow(row);
                       const details = row.original;
                       const resourceName = details && getResourceName(details);
+                      const resourcePath = getParentContainerUrl(
+                        details
+                      ).replace(podRoot, "");
+                      const resourcePathAndName = `${
+                        resourcePath + resourceName.trim()
+                      }`;
                       const resurceAccess = accessList.filter(
                         ({ resource }) => resource === row.original
                       );
@@ -351,13 +358,7 @@ export default function AgentResourceAccessShowPage({ type }) {
                               className={bem("access-details", "icon")}
                             />
                           </td>
-                          <td>
-                            {`${getParentContainerUrl(details).replace(
-                              podRoot,
-                              ""
-                            )}
-                          ${resourceName}`}
-                          </td>
+                          <td>{resourcePathAndName}</td>
                           <td>{accessDetailsName?.join(", ")}</td>
                         </tr>
                       );

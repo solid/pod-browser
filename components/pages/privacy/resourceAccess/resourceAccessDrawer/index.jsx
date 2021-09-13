@@ -40,6 +40,7 @@ import {
 import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
 import styles from "./styles";
 import { isContainerIri } from "../../../../../src/solidClientHelpers/utils";
+import { getParentContainerUrl } from "../../../../../src/stringHelpers";
 import useAccessControl from "../../../../../src/hooks/useAccessControl";
 import useResourceInfo from "../../../../../src/hooks/useResourceInfo";
 import AlertContext from "../../../../../src/contexts/alertContext";
@@ -114,6 +115,7 @@ export default function ResourceAccessDrawer({
   onClose,
   accessList,
   resourceIri,
+  podRoot,
   setShouldUpdate,
 }) {
   const classes = useStyles();
@@ -125,6 +127,8 @@ export default function ResourceAccessDrawer({
   const { accessControl, accessControlError } = useAccessControl(resourceInfo);
   const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
   const resourceName = resourceIri && getResourceName(resourceIri);
+  const resourcePath =
+    resourceIri && getParentContainerUrl(resourceIri)?.replace(podRoot, "");
   const [agentWebId, setAgentWebId] = useState(
     accessList && accessList[0]?.agent
   );
@@ -218,7 +222,10 @@ export default function ResourceAccessDrawer({
               }
               className={bem("access-details", "icon")}
             />
-            <h2>{resourceName}</h2>
+            <span className={bem("access-details", "resource-info")}>
+              <p>{resourcePath}</p>
+              <h2>{resourceName}</h2>
+            </span>
           </span>
           <section className={bem("access-details", "section")}>
             <h3 className={bem("access-details", "section-header")}>Access</h3>
@@ -275,11 +282,13 @@ ResourceAccessDrawer.propTypes = {
   ),
   onClose: T.func.isRequired,
   resourceIri: T.string,
+  podRoot: T.string,
   setShouldUpdate: T.func,
 };
 
 ResourceAccessDrawer.defaultProps = {
   accessList: [],
   resourceIri: null,
+  podRoot: null,
   setShouldUpdate: () => {},
 };
