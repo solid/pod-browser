@@ -20,7 +20,7 @@
  */
 
 /* eslint-disable react/jsx-props-no-spreading */
-
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useEffect, useState, useMemo } from "react";
 import { CombinedDataProvider, useSession, Text } from "@inrupt/solid-ui-react";
 import { useRouter } from "next/router";
@@ -334,10 +334,10 @@ export default function AgentResourceAccessShowPage({ type }) {
                       const resourcePathAndName = `${
                         resourcePath + resourceName.trim()
                       }`;
-                      const resurceAccess = accessList.filter(
+                      const resourceAccess = accessList.filter(
                         ({ resource }) => resource === row.original
                       );
-                      const allowModes = getAllowModes(resurceAccess);
+                      const allowModes = getAllowModes(resourceAccess);
                       const modes = allowModes?.map((mode) => {
                         return {
                           read: !!mode.includes("Read"),
@@ -373,6 +373,8 @@ export default function AgentResourceAccessShowPage({ type }) {
                           </td>
                           <td
                             className={bem("table__body-cell", "interactive")}
+                            onClick={() => setSelectedResourceIndex(i)}
+                            onKeyDown={() => setSelectedResourceIndex(i)}
                           >
                             {decodeURIComponent(resourcePathAndName)}
                           </td>
@@ -388,7 +390,7 @@ export default function AgentResourceAccessShowPage({ type }) {
                               <Button
                                 onClick={handleAction(
                                   resources[i],
-                                  podRoot,
+                                  getParentContainerUrl(details),
                                   router
                                 )}
                                 variant="in-menu"
@@ -399,7 +401,7 @@ export default function AgentResourceAccessShowPage({ type }) {
                               <RevokeAccessButton
                                 variant="in-menu"
                                 onClose={() => setSelectedResourceIndex(null)}
-                                accessList={resurceAccess}
+                                accessList={resourceAccess}
                                 resourceIri={resources[i]}
                                 setShouldUpdate={setShouldUpdate}
                               />
