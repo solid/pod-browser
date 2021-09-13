@@ -52,6 +52,7 @@ import SortedTableCarat from "../../../../sortedTableCarat";
 import { getAcpAccessDetails } from "../../../../../src/accessControl/acp";
 import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
 import { isContainerIri } from "../../../../../src/solidClientHelpers/utils";
+import { getParentContainerUrl } from "../../../../../src/stringHelpers";
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -350,7 +351,13 @@ export default function AgentResourceAccessShowPage({ type }) {
                               className={bem("access-details", "icon")}
                             />
                           </td>
-                          <td>{resourceName}</td>
+                          <td>
+                            {`${getParentContainerUrl(details).replace(
+                              podRoot,
+                              ""
+                            )}
+                          ${resourceName}`}
+                          </td>
                           <td>{accessDetailsName?.join(", ")}</td>
                         </tr>
                       );
