@@ -267,7 +267,6 @@ export default function ResourceAccessDrawer({
           >
             Remove Access to {resourceName}
           </button>
-          {/* <ConfirmationDialog /> */}
         </div>
       )}
     </Drawer>
