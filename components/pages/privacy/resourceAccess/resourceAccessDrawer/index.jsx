@@ -217,7 +217,7 @@ export default function ResourceAccessDrawer({
         <div className={bem("access-details", "wrapper")}>
           <span className={bem("access-details", "title")}>
             <span className={bem("access-details", "resource-info")}>
-              <p>{resourcePath}</p>
+              <p>{decodeURIComponent(resourcePath)}</p>
               <h2>
                 {" "}
                 <Icons
