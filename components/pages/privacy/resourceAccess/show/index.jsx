@@ -361,7 +361,7 @@ export default function AgentResourceAccessShowPage({ type }) {
                           <td
                             className={bem("table__body-cell", "interactive")}
                           >
-                            {resourcePathAndName}
+                            {decodeURIComponent(resourcePathAndName)}
                           </td>
                           <td>{accessDetailsName?.join(", ")}</td>
                         </tr>
