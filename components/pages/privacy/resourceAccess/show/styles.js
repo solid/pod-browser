@@ -83,6 +83,18 @@ const styles = (theme) => {
     "table__body-cell": {
       width: "2em",
     },
+
+    "table__body-cell--interactive": {
+      width: "auto",
+      maxWidth: "650px",
+      cursor: "pointer",
+      textDecoration: "underline",
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      direction: "rtl",
+      textAlign: "left",
+    },
   });
 };
 

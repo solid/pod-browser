@@ -31,19 +31,26 @@ export default function styles(theme) {
     "access-details--title": {
       display: "flex",
       "& h2": {
-        padding: 0,
+        padding: "0 0 0 2rem",
         margin: 0,
         fontFamily: theme.typography.h2.fontFamily,
+        position: "relative",
+        "& > *": {
+          position: "absolute",
+          left: 0,
+          top: "0.3rem",
+        },
       },
     },
     "access-details--resource-info": {
-      position: "relative",
-      padding: "1em 0",
+      flexGrow: 1,
+      "& > *": {
+        paddingLeft: "2rem",
+      },
       "& p": {
         fontSize: "0.8125rem",
-        position: "absolute",
-        top: 0,
         margin: 0,
+        cursor: "pointer",
       },
     },
     "access-details--icon": {
