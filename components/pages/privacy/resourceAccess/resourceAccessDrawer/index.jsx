@@ -216,15 +216,20 @@ export default function ResourceAccessDrawer({
       {accessControl && (
         <div className={bem("access-details", "wrapper")}>
           <span className={bem("access-details", "title")}>
-            <Icons
-              name={
-                resourceIri && isContainerIri(resourceIri) ? "folder" : "file"
-              }
-              className={bem("access-details", "icon")}
-            />
             <span className={bem("access-details", "resource-info")}>
               <p>{resourcePath}</p>
-              <h2>{resourceName}</h2>
+              <h2>
+                {" "}
+                <Icons
+                  name={
+                    resourceIri && isContainerIri(resourceIri)
+                      ? "folder"
+                      : "file"
+                  }
+                  className={bem("access-details", "icon")}
+                />
+                {resourceName}
+              </h2>
             </span>
           </span>
           <section className={bem("access-details", "section")}>

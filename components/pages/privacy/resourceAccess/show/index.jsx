@@ -358,7 +358,11 @@ export default function AgentResourceAccessShowPage({ type }) {
                               className={bem("access-details", "icon")}
                             />
                           </td>
-                          <td>{resourcePathAndName}</td>
+                          <td
+                            className={bem("table__body-cell", "interactive")}
+                          >
+                            {resourcePathAndName}
+                          </td>
                           <td>{accessDetailsName?.join(", ")}</td>
                         </tr>
                       );
