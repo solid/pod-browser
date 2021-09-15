@@ -29,7 +29,6 @@ export default function styles(theme) {
       flexDirection: "column",
     },
     "access-details--title": {
-      display: "flex",
       "& h2": {
         padding: "0 0 0 2rem",
         margin: 0,
@@ -50,7 +49,7 @@ export default function styles(theme) {
       "& p": {
         fontSize: "0.8125rem",
         margin: 0,
-        cursor: "pointer",
+        wordWrap: "break-word",
       },
     },
     "access-details--icon": {
