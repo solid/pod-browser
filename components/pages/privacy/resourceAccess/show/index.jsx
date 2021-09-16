@@ -39,6 +39,7 @@ import {
 } from "@inrupt/prism-react-components";
 import { Box, createStyles } from "@material-ui/core";
 import Link from "next/link";
+import { getSolidDataset } from "@inrupt/solid-client";
 import { useRedirectIfLoggedOut } from "../../../../../src/effects/auth";
 import PersonAvatar from "../../../../profile/personAvatar";
 import AppAvatar from "../../../../profile/appAvatar";
@@ -53,6 +54,7 @@ import { getAcpAccessDetails } from "../../../../../src/accessControl/acp";
 import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
 import { isContainerIri } from "../../../../../src/solidClientHelpers/utils";
 import { getParentContainerUrl } from "../../../../../src/stringHelpers";
+import { getJsonLdParser } from "../../../../../src/formats/jsonLd";
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -105,6 +107,7 @@ export default function AgentResourceAccessShowPage({ type }) {
   const [resourcesError, setResourcesError] = useState(null);
   const [shouldUpdate, setShouldUpdate] = useState(false);
   const [selectedTabValue, setSelectedTabValue] = useState("Permissions");
+  const [jsonLdDataset, setJsonLdDataset] = useState(null);
 
   const link = (
     <Link href="/privacy" passHref>
@@ -166,6 +169,15 @@ export default function AgentResourceAccessShowPage({ type }) {
         setResources(resourceList);
         setShouldUpdate(false);
       });
+
+    setJsonLdDataset(
+      getSolidDataset("https://localhost:3000/jsonLdTest.jsonld", {
+        fetch,
+        parsers: {
+          "application/ld+json": getJsonLdParser(),
+        },
+      })
+    );
   }, [query, podRoot, fetch, session, shouldUpdate]);
 
   useEffect(() => {
@@ -173,7 +185,8 @@ export default function AgentResourceAccessShowPage({ type }) {
       ({ resource }) => resource === resources[selectedResourceIndex]
     );
     setSelectedAccessList(selectedAccess);
-  }, [accessList, resources, selectedResourceIndex]);
+    console.log("jsonLdDataset", jsonLdDataset);
+  }, [accessList, jsonLdDataset, resources, selectedResourceIndex]);
 
   const drawer = (
     <ResourceAccessDrawer

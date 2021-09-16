@@ -23,6 +23,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Icons } from "@inrupt/prism-react-components";
 import {
   asUrl,
+  getSolidDataset,
   getStringNoLocale,
   getThing,
   getUrl,
