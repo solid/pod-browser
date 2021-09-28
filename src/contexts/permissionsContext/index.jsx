@@ -26,10 +26,13 @@ import useAllPermissions from "../../hooks/useAllPermissions";
 export const defaultPermissionsContext = {
   permissions: [],
   newAgentsWebIds: [],
+  /* istanbul ignore next */
   setNewAgentsWebIds: () => {},
   webIdsToDelete: [],
+  /* istanbul ignore next */
   setWebIdsToDelete: () => {},
   addingWebId: false,
+  /* istanbul ignore next */
   setAddingWebId: () => {},
 };
 

@@ -22,32 +22,43 @@
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { waitFor } from "@testing-library/dom";
+import * as SolidClientFns from "@inrupt/solid-client";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import mockAccessControl from "../../../../../__testUtils/mockAccessControl";
-
-import ResourceDrawer, {
-  TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON,
-} from "./index";
+import ResourceDrawer from "./index";
 import useAccessControl from "../../../../../src/hooks/useAccessControl";
+import { getAccessControl } from "../../../../../src/accessControl";
 import ConfirmationDialog, {
   TESTCAFE_ID_CONFIRMATION_DIALOG,
   TESTCAFE_ID_CONFIRM_BUTTON,
 } from "../../../../confirmationDialog";
 import { ConfirmationDialogProvider } from "../../../../../src/contexts/confirmationDialogContext";
+import mockSession from "../../../../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../../../../__testUtils/mockSessionContextProvider";
+import { TESTCAFE_ID_REVOKE_ACCESS_BUTTON } from "../revokeAccessButton";
 
 jest.mock("../../../../../src/effects/auth");
 jest.mock("../../../../../src/hooks/useAccessControl");
 const mockedUseAccessControl = useAccessControl;
+jest.mock("../../../../../src/accessControl");
+const mockedGetAccessControl = getAccessControl;
+
+const webId = "https://example.com/profile/card#me";
+const resourceIri = "https://example.com/resource/";
+const session = mockSession();
+const SessionProvider = mockSessionContextProvider(session);
+const mockResource = SolidClientFns.mockSolidDatasetFrom(resourceIri);
 
 describe("ResourceDrawer", () => {
   const accessControl = mockAccessControl();
   beforeEach(() => {
-    mockedUseAccessControl.mockReturnValue({
-      accessControl,
-    });
+    mockedUseAccessControl.mockReturnValue({ accessControl });
+    mockedGetAccessControl.mockResolvedValue(accessControl);
+    jest
+      .spyOn(SolidClientFns, "getResourceInfo")
+      .mockResolvedValue(mockResource);
   });
-  const webId = "https://example.com/profile/card#me";
-  const resourceIri = "https://example.com/resource/";
+
   const accessList = [
     {
       agent: webId,
@@ -99,7 +110,7 @@ describe("ResourceDrawer", () => {
         <ConfirmationDialog />
       </ConfirmationDialogProvider>
     );
-    const button = getByTestId(TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON);
+    const button = getByTestId(TESTCAFE_ID_REVOKE_ACCESS_BUTTON);
     userEvent.click(button);
     await waitFor(() => {
       expect(getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)).toBeInTheDocument();
@@ -120,26 +131,30 @@ describe("ResourceDrawer", () => {
     ];
     const { getByTestId, findByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
-        <ResourceDrawer
-          open
-          onClose={onClose}
-          accessList={accessListEditors}
-          resourceIri={resourceIri}
-        />
-        <ConfirmationDialog />
+        <SessionProvider>
+          <ResourceDrawer
+            open
+            onClose={onClose}
+            accessList={accessListEditors}
+            resourceIri={resourceIri}
+          />
+          <ConfirmationDialog />
+        </SessionProvider>
       </ConfirmationDialogProvider>
     );
-    const button = getByTestId(TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON);
+    const button = getByTestId(TESTCAFE_ID_REVOKE_ACCESS_BUTTON);
     userEvent.click(button);
     await waitFor(() => {
       expect(getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)).toBeInTheDocument();
     });
     const confirmationButton = await findByTestId(TESTCAFE_ID_CONFIRM_BUTTON);
     userEvent.click(confirmationButton);
-    expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledWith(
-      webId,
-      "editors"
-    );
-    await waitFor(() => expect(onClose).toHaveBeenCalled());
+    await waitFor(() => {
+      expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledWith(
+        webId,
+        "editors"
+      );
+      expect(onClose).toHaveBeenCalled();
+    });
   });
 });

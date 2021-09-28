@@ -19,28 +19,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles } from "@solid/lit-prism-patterns";
+import React from "react";
+import { useRouter } from "next/router";
+import { renderWithTheme } from "../../../../../../__testUtils/withTheme";
+import TabPanel from "./index";
 
-const styles = (theme) => {
-  return createStyles(theme, ["back-to-nav", "input"], {
-    "revoke-button": {
-      color: theme.palette.error.main,
-      textDecoration: "underline",
-      background: "none",
-      border: "none",
-      cursor: "pointer",
-      textAlign: "left",
-    },
-    "revoke-button__drawer": {
-      color: theme.palette.error.main,
-      textDecoration: "underline",
-      background: "none",
-      border: "none",
-      cursor: "pointer",
-      textAlign: "left",
-      fontSize: "1rem",
-    },
+jest.mock("next/router");
+
+const mockedUseRouter = useRouter;
+const agentWebId = "https://example.com/profile/card#me";
+
+describe("Tab Panel", () => {
+  beforeEach(() => {
+    mockedUseRouter.mockReturnValue({
+      query: {
+        webId: agentWebId,
+      },
+    });
   });
-};
+  test("it renders permissions panel", () => {
+    const { asFragment } = renderWithTheme(
+      <TabPanel panelName="Permissions" />
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+  test("it renders profile panel", () => {
+    const { asFragment } = renderWithTheme(<TabPanel panelName="Profile" />);
 
-export default styles;
+    expect(asFragment()).toMatchSnapshot();
+  });
+});

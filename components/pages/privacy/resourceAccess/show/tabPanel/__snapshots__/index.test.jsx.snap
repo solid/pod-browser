@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tab Panel it renders permissions panel 1`] = `
+<DocumentFragment>
+  <div
+    aria-labelledby="simple-tab-Permissions"
+    hidden=""
+    id="simple-tabpanel-Permissions"
+    role="tabpanel"
+  />
+</DocumentFragment>
+`;
+
+exports[`Tab Panel it renders profile panel 1`] = `
+<DocumentFragment>
+  <div
+    aria-labelledby="simple-tab-Profile"
+    hidden=""
+    id="simple-tabpanel-Profile"
+    role="tabpanel"
+  />
+</DocumentFragment>
+`;

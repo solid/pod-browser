@@ -19,28 +19,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createStyles } from "@solid/lit-prism-patterns";
+import React from "react";
+import { Box } from "@material-ui/core";
+import T from "prop-types";
 
-const styles = (theme) => {
-  return createStyles(theme, ["back-to-nav", "input"], {
-    "revoke-button": {
-      color: theme.palette.error.main,
-      textDecoration: "underline",
-      background: "none",
-      border: "none",
-      cursor: "pointer",
-      textAlign: "left",
-    },
-    "revoke-button__drawer": {
-      color: theme.palette.error.main,
-      textDecoration: "underline",
-      background: "none",
-      border: "none",
-      cursor: "pointer",
-      textAlign: "left",
-      fontSize: "1rem",
-    },
-  });
+export default function TabPanel(props) {
+  const { children, value, panelName, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== panelName}
+      id={`simple-tabpanel-${panelName}`}
+      aria-labelledby={`simple-tab-${panelName}`}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...other}
+    >
+      {value === panelName && (
+        <Box p={1} mt={3}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: T.node.isRequired,
+  panelName: T.string.isRequired,
+  value: T.string.isRequired,
 };
-
-export default styles;
