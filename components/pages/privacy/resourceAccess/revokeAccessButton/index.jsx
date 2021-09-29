@@ -144,7 +144,9 @@ export default function RevokeAccessButton({
   const podRoot = usePodRootUri(session.info.webId);
   const policiesContainer = podRoot && getPoliciesContainerUrl(podRoot);
   const resourceName =
-    resources.length === 1 ? getResourceName(resources[0]) : "your pod";
+    resources.length === 1
+      ? getResourceName(resources[0])
+      : "anything in your pod";
 
   const removeAccess = handleRemoveAccess({
     resources,
@@ -167,8 +169,14 @@ export default function RevokeAccessButton({
     setConfirmationSetup(true);
     setOpen(REMOVE_ACCESS_CONFIRMATION_DIALOG);
     setIsDangerousAction(true);
-    setTitle(`Revoke access to ${resourceName}`);
-    setConfirmText("Revoke Access");
+    setTitle(
+      resources.length === 1
+        ? `Revoke access to ${resourceName}`
+        : `Revoke access from ${agentName}`
+    );
+    setConfirmText(
+      resources.length === 1 ? "Revoke Access" : "Revoke All Access"
+    );
     setContent(`${agentName} will not be able to access ${resourceName}`);
   };
 
@@ -210,17 +218,13 @@ export default function RevokeAccessButton({
   return (
     <button
       type="button"
-      className={
-        variant === "drawer"
-          ? bem(`revoke-button__drawer`)
-          : bem("revoke-button")
-      }
+      className={bem("revoke-button")}
       data-testid={TESTCAFE_ID_REVOKE_ACCESS_BUTTON}
       onClick={handleConfirmation}
     >
       {resources.length > 1
         ? "Revoke All Access"
-        : `Remove Access to ${resourceName}`}
+        : `Remove Access to ${resourceName}?`}
     </button>
   );
 }

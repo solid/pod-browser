@@ -30,14 +30,6 @@ const styles = (theme) => {
       border: "none",
       cursor: "pointer",
       textAlign: "left",
-    },
-    "revoke-button__drawer": {
-      color: theme.palette.error.main,
-      textDecoration: "underline",
-      background: "none",
-      border: "none",
-      cursor: "pointer",
-      textAlign: "left",
       fontSize: "1rem",
     },
   });

@@ -15,11 +15,11 @@ exports[`RevokeAccessButton it renders correct text for Revoke All Access button
 exports[`RevokeAccessButton it renders correct text for drawer button 1`] = `
 <DocumentFragment>
   <button
-    class="PodBrowser-revoke-button__drawer"
+    class="PodBrowser-revoke-button"
     data-testid="revoke-access-button"
     type="button"
   >
-    Remove Access to resource.txt
+    Remove Access to resource.txt?
   </button>
 </DocumentFragment>
 `;

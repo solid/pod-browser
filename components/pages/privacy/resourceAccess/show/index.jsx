@@ -406,9 +406,8 @@ export default function AgentResourceAccessShowPage({ type }) {
                   <RevokeAccessButton
                     variant="all-access"
                     /* istanbul ignore next */
-                    onClose={() => setSelectedResourceIndex(null)}
+                    onClose={() => router.push("/privacy")}
                     accessList={accessList}
-                    setShouldUpdate={setShouldUpdate}
                     resources={resources}
                   />
                 </div>
