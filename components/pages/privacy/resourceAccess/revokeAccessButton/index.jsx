@@ -51,7 +51,7 @@ export const REMOVE_ACCESS_CONFIRMATION_DIALOG =
 
 export const SINGLE_ACCESS_MESSAGE = "Revoke Access";
 export const ALL_ACCESS_MESSAGE = "Revoke All Access";
-export const ACCESS_TO_POD_MESSAGE = "anything in your pod";
+export const ACCESS_TO_POD_MESSAGE = "anything in your Pod.";
 
 export const getAllowModes = (accessList) => {
   if (!accessList) return null;
@@ -175,13 +175,13 @@ export default function RevokeAccessButton({
     setIsDangerousAction(true);
     setTitle(
       resources.length === 1
-        ? `Revoke access to ${resourceName}`
-        : `Revoke access from ${agentName}`
+        ? `Revoke access to ${resourceName}?`
+        : `Revoke access from ${agentName}?`
     );
     setConfirmText(
       resources.length === 1 ? SINGLE_ACCESS_MESSAGE : ALL_ACCESS_MESSAGE
     );
-    setContent(`${agentName} will not be able to access ${resourceName}`);
+    setContent(`${agentName} will not be able to access ${resourceName}.`);
   };
 
   useEffect(() => {
