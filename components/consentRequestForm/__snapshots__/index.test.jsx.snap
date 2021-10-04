@@ -38,7 +38,7 @@ exports[`Consent Request Form Renders a consent request form with multiple purpo
                   class="PodBrowser-input"
                   data-indeterminate="false"
                   data-testid="purpose-checkbox-input"
-                  name="Some Specific Purpose"
+                  name="https://example.com/SomeSpecificPurpose"
                   type="checkbox"
                   value="https://example.com/SomeSpecificPurpose"
                 />
@@ -50,7 +50,7 @@ exports[`Consent Request Form Renders a consent request form with multiple purpo
             <span
               class="PodBrowser-root PodBrowser-label PodBrowser-purposeLabel PodBrowser-body1"
             >
-              Some Specific Purpose
+              https://example.com/SomeSpecificPurpose
             </span>
           </label>
         </li>
@@ -71,7 +71,7 @@ exports[`Consent Request Form Renders a consent request form with multiple purpo
                   class="PodBrowser-input"
                   data-indeterminate="false"
                   data-testid="purpose-checkbox-input"
-                  name="Another Purpose"
+                  name="https://example.com/SomeSpecificPurposeA"
                   type="checkbox"
                   value="https://example.com/SomeSpecificPurposeA"
                 />
@@ -83,7 +83,7 @@ exports[`Consent Request Form Renders a consent request form with multiple purpo
             <span
               class="PodBrowser-root PodBrowser-label PodBrowser-purposeLabel PodBrowser-body1"
             >
-              Another Purpose
+              https://example.com/SomeSpecificPurposeA
             </span>
           </label>
         </li>
@@ -104,7 +104,7 @@ exports[`Consent Request Form Renders a consent request form with multiple purpo
                   class="PodBrowser-input"
                   data-indeterminate="false"
                   data-testid="purpose-checkbox-input"
-                  name="A Different Purpose"
+                  name="https://example.com/SomeSpecificPurposeB"
                   type="checkbox"
                   value="https://example.com/SomeSpecificPurposeB"
                 />
@@ -116,7 +116,7 @@ exports[`Consent Request Form Renders a consent request form with multiple purpo
             <span
               class="PodBrowser-root PodBrowser-label PodBrowser-purposeLabel PodBrowser-body1"
             >
-              A Different Purpose
+              https://example.com/SomeSpecificPurposeB
             </span>
           </label>
         </li>
@@ -754,33 +754,11 @@ exports[`Consent Request Form Renders a consent request form with only one purpo
         Allow Mock App access?
       </span>
     </h2>
-    <span
-      class="PodBrowser-purpose"
+    <div
+      class="PodBrowser-purposes-container"
     >
-      Some Specific Purpose 
-      <div
-        class="PodBrowser-infoTooltipContainer"
-      >
-        <button
-          class="PodBrowser-root PodBrowser-root PodBrowser-infoButton PodBrowser-text"
-          tabindex="0"
-          title="https://example.com/SomeSpecificPurpose"
-          type="button"
-        >
-          <span
-            class="PodBrowser-label"
-          >
-            <i
-              aria-label="Info"
-              class="PodBrowser-icon-info PodBrowser-infoIcon"
-            />
-          </span>
-          <span
-            class="PodBrowser-root"
-          />
-        </button>
-      </div>
-    </span>
+      https://example.com/SomeSpecificPurpose
+    </div>
     <span
       class="PodBrowser-request-container__header-text PodBrowser-request-container__header-text--small"
     >

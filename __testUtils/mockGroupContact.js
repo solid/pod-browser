@@ -80,14 +80,19 @@ export function removeGroupFromMockedIndexDataset(
   );
 }
 
-export default function mockGroupContact(addressBook, name, options = {}) {
+export default function mockGroupContact({
+  addressBook,
+  name,
+  indexUrl = null,
+  options = {},
+}) {
   const { url, id } = options;
   const groupDatasetUrl = url || createGroupDatasetUrl(addressBook, id);
   const groupThingUrl = `${groupDatasetUrl}#this`;
   const groupThing = mockGroupThing(name, groupThingUrl, options);
   return {
     dataset: chain(
-      mockSolidDatasetFrom(groupDatasetUrl),
+      mockSolidDatasetFrom(indexUrl || groupDatasetUrl),
       (d) => setThing(d, groupThing),
       (d) => setThing(d, mockIndexThing(d, addressBook, groupThingUrl))
     ),

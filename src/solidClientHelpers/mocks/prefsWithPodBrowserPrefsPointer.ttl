@@ -1,5 +1,5 @@
 @prefix pb: <https://inrupt.com/podbrowser#>.
 @prefix sp: <http://www.w3.org/ns/pim/space#>.
 
-<> a sp:ConfigurationFile ;
-   pb:preferencesFile <./podBrowserPrefs.ttl> .
+<http://example.com/settings/prefs.ttl> a sp:ConfigurationFile ;
+   pb:preferencesFile <http://example.com/settings/podBrowserPrefs.ttl> .

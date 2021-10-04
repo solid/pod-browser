@@ -65,8 +65,12 @@ const groupsDatasetUrl = "https://example.com/groups.ttl";
 const fetch = jest.fn();
 
 const group1Name = "Group 1";
-const mockedGroup1 = mockGroupContact(emptyAddressBook, group1Name, {
-  id: "1234",
+const mockedGroup1 = mockGroupContact({
+  addressBook: emptyAddressBook,
+  name: group1Name,
+  options: {
+    id: "1234",
+  },
 });
 const group1DatasetUrl = "https://example.com/contacts/Group/1234/index.ttl";
 const group1Url = `${group1DatasetUrl}#this`;
@@ -264,13 +268,21 @@ describe("saveGroup", () => {
 });
 
 describe("getGroupAll", () => {
+  const mockedGroup = mockGroupContact({
+    addressBook: emptyAddressBook,
+    name: group1Name,
+    indexUrl: "https://example.com/groups.ttl",
+    options: {
+      id: "1234",
+    },
+  });
   it("lists all groups", async () => {
     jest
       .spyOn(solidClientFns, "getSolidDataset")
       .mockResolvedValue(groupIndexWithGroup1Dataset);
     await expect(
       getGroupAll(addressBookWithGroupIndex, fetch)
-    ).resolves.toEqual([mockedGroup1]);
+    ).resolves.toEqual([mockedGroup]);
   });
 
   it("lists no groups for address book with no group index", async () => {
@@ -290,17 +302,21 @@ describe("getGroupAll", () => {
 describe("renameGroup", () => {
   const newName = "New name";
   const newDescription = "Some description";
-  const mockUpdatedGroup = mockGroupContact(emptyAddressBook, newName, {
-    id: "1234",
+  const mockUpdatedGroup = mockGroupContact({
+    addressBook: emptyAddressBook,
+    name: newName,
+    options: {
+      id: "1234",
+    },
   });
-  const mockUpdatedGroupWithDescription = mockGroupContact(
-    emptyAddressBook,
-    newName,
-    {
+  const mockUpdatedGroupWithDescription = mockGroupContact({
+    addressBook: emptyAddressBook,
+    name: newName,
+    options: {
       id: "1234",
       description: newDescription,
-    }
-  );
+    },
+  });
 
   beforeEach(() => {
     jest

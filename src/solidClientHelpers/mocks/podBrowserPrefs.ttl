@@ -1,6 +1,6 @@
 @prefix dct: <http://purl.org/dc/terms/>.
 @prefix sp: <http://www.w3.org/ns/pim/space#>.
 
-<> a <sp#ConfigurationFile> ;
+<http://example.com/settings/podBrowserPrefs.ttl> a <sp#ConfigurationFile> ;
    dct:title "Preferences file".
 

@@ -41,12 +41,14 @@ import {
 } from "../../../../../__testUtils/mockApp";
 import { getRequestorWebId } from "../../../../../src/models/consent/request";
 import { getProfileResource } from "../../../../../src/solidClientHelpers/resource";
+import Spinner from "../../../../spinner";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function ConsentShow() {
   useRedirectIfLoggedOut();
-  const { fetch } = useSession();
+  const { session } = useSession();
+  const { fetch } = session;
   const router = useRouter();
   const { id } = router.query;
   const bem = useBem(useStyles());
@@ -54,6 +56,7 @@ export default function ConsentShow() {
   const agentWebId = getRequestorWebId(consentRequest);
   const [agentDetails, setAgentDetails] = useState({});
   const { agentName, agentUrl, agentPolicy, agentTOS } = agentDetails || null;
+
   useEffect(() => {
     fetch(id).then(async (response) => {
       const request = await response.json();
@@ -83,6 +86,8 @@ export default function ConsentShow() {
       });
     })();
   }, [agentWebId, fetch, consentRequest]);
+
+  if (!agentName || !consentRequest) return <Spinner />;
 
   return (
     <ConsentRequestProvider

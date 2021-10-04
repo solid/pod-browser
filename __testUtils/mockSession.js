@@ -43,12 +43,15 @@ export default function mockSession(options = {}) {
     on: jest.fn(),
     handleIncomingRedirect: jest.fn().mockResolvedValue(null),
     fetch: mockFetch({
-      [webId || webIdUrl]: () => mockResponse(200, profileTurtle),
+      [webId || webIdUrl]: () =>
+        mockResponse(200, profileTurtle, { "Content-Type": "text/turtle" }),
       [storageUrl]: () =>
         mockResponse(200, storageTurtle, {
           Link: `<${storageAclUrl}>; rel="acl"`,
+          "Content-Type": "text/turtle",
         }),
-      [storageAclUrl]: () => mockResponse(200, storageAclTurtle),
+      [storageAclUrl]: () =>
+        mockResponse(200, storageAclTurtle, { "Content-Type": "text/turtle" }),
     }),
     info: {
       isLoggedIn: true,

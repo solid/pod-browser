@@ -21,7 +21,7 @@
 
 import { renderHook } from "@testing-library/react-hooks";
 import * as RouterFns from "next/router";
-import { addUrl } from "@inrupt/solid-client";
+import { addUrl, setThing } from "@inrupt/solid-client";
 import { space } from "rdf-namespaces/dist/index";
 import usePodOwnerProfile from "./index";
 import usePodOwner from "../usePodOwner/index";
@@ -30,6 +30,7 @@ import {
   mockPersonDatasetBob,
   aliceWebIdUrl,
   bobWebIdUrl,
+  mockPersonThingBob,
 } from "../../../__testUtils/mockPersonResource";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import useFetchProfile from "../useFetchProfile";
@@ -89,10 +90,9 @@ describe("usePodOwnerProfile", () => {
   });
 
   it("returns the authenticated user profile if Pod is listed in their profile", () => {
-    const authProfileWithStorageDataset = addUrl(
-      authDataset,
-      space.storage,
-      podUrl
+    const authProfileWithStorageDataset = setThing(
+      mockPersonDatasetBob(),
+      addUrl(mockPersonThingBob(), space.storage, podUrl)
     );
     const authProfileWithStorageProfile = packageProfile(
       bobWebIdUrl,

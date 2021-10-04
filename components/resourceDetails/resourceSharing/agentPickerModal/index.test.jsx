@@ -407,11 +407,11 @@ describe("handleSubmit", () => {
 describe("handleSaveContact", () => {
   const iri = "https://example.org";
   const contacts = [
-    mockPersonContact(
-      mockAddressBook(),
-      "https://example.org/contacts/Person/1234/",
-      "Example 1"
-    ),
+    mockPersonContact({
+      addressBook: mockAddressBook(),
+      personThingUrl: "https://example.org/contacts/Person/1234/",
+      name: "Example 1",
+    }),
   ];
   const addressBookUrl = "http://example.com/contacts/index.ttl";
   const addressBook = mockSolidDatasetFrom(addressBookUrl);
@@ -762,19 +762,20 @@ describe("AgentPickerModal without contacts", () => {
 describe("AgentPickerModal with contacts", () => {
   const onClose = jest.fn();
   it("renders a table with the available contacts, Anyone and Anyone signed in", async () => {
+    const addressBook = mockAddressBook();
     mockedUseAddressBook.mockReturnValue({ data: mockAddressBook() });
     mockedUseContacts.mockReturnValue({
       data: [
-        mockPersonContact(
-          mockAddressBook(),
-          "https://example.org/contacts/Person/1234/",
-          "Example 1"
-        ),
-        mockPersonContact(
-          mockAddressBook(),
-          "https://example.org/contacts/Person/3456/",
-          "Example 2"
-        ),
+        mockPersonContact({
+          addressBook,
+          personThingUrl: "https://example.org/contacts/Person/1234/",
+          name: "Example 1",
+        }),
+        mockPersonContact({
+          addressBook,
+          personThingUrl: "https://example.org/contacts/Person/3456/",
+          name: "Example 2",
+        }),
       ],
     });
     const { asFragment, queryAllByTestId } = renderWithTheme(
@@ -796,17 +797,21 @@ describe("AgentPickerModal with contacts", () => {
     const emptyAddressBook = mockAddressBook({ containerUrl });
     mockedUseContacts.mockReturnValue({
       data: [
-        mockPersonContact(
-          emptyAddressBook,
-          "https://example.org/contacts/Person/1234/",
-          "Example 1"
-        ),
-        mockPersonContact(
-          emptyAddressBook,
-          "https://example.org/contacts/Person/3456/",
-          "Example 2"
-        ),
-        mockGroupContact(emptyAddressBook, "Group 1", { id: "1234" }),
+        mockPersonContact({
+          addressBook: emptyAddressBook,
+          personThingUrl: "https://example.org/contacts/Person/1234/",
+          name: "Example 1",
+        }),
+        mockPersonContact({
+          addressBook: emptyAddressBook,
+          personThingUrl: "https://example.org/contacts/Person/3456/",
+          name: "Example 2",
+        }),
+        mockGroupContact({
+          addressBook: emptyAddressBook,
+          name: "Group 1",
+          options: { id: "1234" },
+        }),
       ],
     });
 

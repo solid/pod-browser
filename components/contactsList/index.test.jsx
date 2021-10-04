@@ -34,7 +34,8 @@ import {
   aliceWebIdUrl,
   bobWebIdUrl,
   mockPersonDatasetAlice,
-  mockPersonDatasetBob,
+  mockPersonThingAlice,
+  mockPersonThingBob,
 } from "../../__testUtils/mockPersonResource";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
@@ -133,10 +134,7 @@ describe("ContactsList", () => {
       error: undefined,
       mutate: () => {},
     });
-    useProfiles.mockReturnValue([
-      mockPersonDatasetAlice(),
-      mockPersonDatasetBob(),
-    ]);
+    useProfiles.mockReturnValue([mockPersonThingAlice(), mockPersonThingBob()]);
     const { asFragment, getAllByTestId } = renderWithTheme(
       <SessionProvider>
         <ContactsList />
@@ -169,7 +167,7 @@ describe("ContactsList", () => {
       error: undefined,
       mutate: () => {},
     });
-    useProfiles.mockReturnValue([mockPersonDatasetAlice(), contact]);
+    useProfiles.mockReturnValue([mockPersonThingAlice(), contact]);
 
     const { asFragment, getAllByTestId } = renderWithTheme(
       <SessionProvider>

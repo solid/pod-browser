@@ -345,13 +345,12 @@ export default function RequestSection(props) {
   const modesObject = useMemo(() => {
     if (!accessMode) return {};
     return {
-      read: accessMode.some((el) => el === "Read"),
-      write: accessMode.some((el) => el === "Write"),
-      append: accessMode.some((el) => el === "Append"),
-      control: accessMode.some((el) => el === "Control"),
+      read: accessMode.some((el) => el.includes("Read")),
+      write: accessMode.some((el) => el.includes("Write")),
+      append: accessMode.some((el) => el.includes("Append")),
+      control: accessMode.some((el) => el.includes("Control")),
     };
   }, [accessMode]);
-
   useEffect(() => {
     if (!requestedResourcesIris || !requestedResourcesIris.length) return;
     setIsChecked(new Array(requestedResourcesIris.length).fill(false));

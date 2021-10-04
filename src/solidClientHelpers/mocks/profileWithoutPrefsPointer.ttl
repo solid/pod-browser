@@ -1,4 +1,4 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix schem: <http://schema.org/>.
 
-<> a schem:Person, foaf:Person .
+<http://example.com/webid> a schem:Person, foaf:Person .

@@ -28,6 +28,7 @@ import {
   bobWebIdUrl,
   mockPersonDatasetAlice,
   mockPersonDatasetBob,
+  mockPersonThingAlice,
   mockWebIdNode,
 } from "../../../../__testUtils/mockPersonResource";
 import {
@@ -74,7 +75,12 @@ const addressBookWithPeopleIndex = addIndexToMockedAddressBook(
   PERSON_CONTACT,
   { indexUrl: peopleIndexDatasetUrl }
 );
-const person1 = mockPersonContact(emptyAddressBook, person1Url, person1Name);
+const person1 = mockPersonContact({
+  addressBook: emptyAddressBook,
+  indexUrl: peopleIndexDatasetUrl,
+  personThingUrl: person1Url,
+  name: person1Name,
+});
 
 describe("isOfType", () => {
   it("returns true if contact is a group", () => {
@@ -100,7 +106,8 @@ describe("getPersonAll", () => {
   it("lists all people", async () => {
     jest
       .spyOn(solidClientFns, "getSolidDataset")
-      .mockResolvedValue(personIndexWithPerson1Dataset);
+      .mockResolvedValueOnce(personIndexWithPerson1Dataset);
+
     await expect(
       getPersonAll(addressBookWithPeopleIndex, fetch)
     ).resolves.toEqual([person1]);
@@ -125,8 +132,8 @@ describe("getWebIdUrl", () => {
     const webIdUrl = "http://example.com/alice#me";
     const { webIdNode } = mockWebIdNode(webIdUrl, aliceAlternativeWebIdUrl);
     const personDataset = chain(
-      mockSolidDatasetFrom("http://example.com/alice"),
-      (d) => solidClientFns.setThing(d, mockPersonDatasetAlice()),
+      mockPersonDatasetAlice(),
+      (d) => solidClientFns.setThing(d, mockPersonThingAlice()),
       (d) => solidClientFns.setThing(d, webIdNode)
     );
 
@@ -143,11 +150,11 @@ describe("savePerson", () => {
     webId: "https://example.org/profile/card#me",
     name: "Example",
   };
-  const mockedPerson = mockPersonContact(
-    emptyAddressBook,
-    person1Url,
-    "Example"
-  );
+  const mockedPerson = mockPersonContact({
+    addressBook: emptyAddressBook,
+    personThingUrl: person1Url,
+    name: "Example",
+  });
 
   let mockedSaveSolidDatasetAt;
 
@@ -246,9 +253,15 @@ describe("findPersonContactInAddressBook", () => {
   const webId1Url = aliceWebIdUrl;
   const webId2Url = bobWebIdUrl;
   const webId1 = mockPersonDatasetAlice();
-  const person1Thing = mockPersonContact(addressBook, person1Url);
+  const person1Thing = mockPersonContact({
+    addressBook,
+    personThingUrl: person1Url,
+  });
   const webId2 = mockPersonDatasetBob();
-  const person2Thing = mockPersonContact(addressBook, person2Url);
+  const person2Thing = mockPersonContact({
+    addressBook,
+    personThingUrl: person2Url,
+  });
   const people = [
     { dataset: webId1, thing: person1Thing },
     { dataset: webId2, thing: person2Thing },

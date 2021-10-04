@@ -40,7 +40,7 @@ import DateInput from "./dateInput";
 import styles from "./styles";
 import {
   getExpiryDate,
-  getPurposeString,
+  getPurposeUrls,
   getRequestedAccesses,
 } from "../../src/models/consent/request";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
@@ -66,7 +66,7 @@ export default function ConsentRequestForm({ agentDetails }) {
   const bem = useBem(classes);
   const { consentRequest } = useContext(ConsentRequestContext);
   const [selectedAccess, setSelectedAccess] = useState([]);
-  const purposes = getPurposeString(consentRequest);
+  const purposes = getPurposeUrls(consentRequest);
   const [selectedPurposes, setSelectedPurposes] = useState([]);
   const { agentName } = agentDetails || null;
 
@@ -189,26 +189,32 @@ export default function ConsentRequestForm({ agentDetails }) {
           </span>
         ) : (
           <div className={bem("purposes-container")}>
-            Select the purposes you wish to allow:
-            <List>
-              {purposes?.map(({ url, description }) => (
-                <ListItem key={url} className={bem("list-item")}>
-                  <FormControlLabel
-                    classes={{ label: classes.purposeLabel }}
-                    label={description}
-                    control={
-                      // eslint-disable-next-line react/jsx-wrap-multilines
-                      <PurposeCheckbox
-                        classes={classes}
-                        url={url}
-                        description={description}
-                        handleSelectPurpose={handleSelectPurpose}
+            {Array.isArray(purposes) ? (
+              <>
+                Select the purposes you wish to allow:
+                <List>
+                  {purposes?.map((url) => (
+                    <ListItem key={url} className={bem("list-item")}>
+                      <FormControlLabel
+                        classes={{ label: classes.purposeLabel }}
+                        label={url}
+                        control={
+                          // eslint-disable-next-line react/jsx-wrap-multilines
+                          <PurposeCheckbox
+                            classes={classes}
+                            url={url}
+                            description={url}
+                            handleSelectPurpose={handleSelectPurpose}
+                          />
+                        }
                       />
-                    }
-                  />
-                </ListItem>
-              ))}
-            </List>
+                    </ListItem>
+                  ))}
+                </List>
+              </>
+            ) : (
+              purposes
+            )}
           </div>
         )}
         <span className={bem("request-container__header-text", "small")}>

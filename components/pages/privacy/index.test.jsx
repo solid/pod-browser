@@ -32,8 +32,8 @@ import { renderWithTheme } from "../../../__testUtils/withTheme";
 import {
   aliceWebIdUrl,
   bobWebIdUrl,
-  mockPersonDatasetAlice,
-  mockPersonDatasetBob,
+  mockPersonThingAlice,
+  mockPersonThingBob,
 } from "../../../__testUtils/mockPersonResource";
 
 jest.mock("../../../src/hooks/useAgentsProfiles");
@@ -48,7 +48,7 @@ describe("PrivacyPage", () => {
       route: "/privacy",
     });
   });
-  const people = [mockPersonDatasetBob(), mockPersonDatasetAlice()];
+  const people = [mockPersonThingBob(), mockPersonThingAlice()];
   it("renders empty state if there's no agents to show", () => {
     mockUseAgentsProfiles.mockReturnValue({
       data: null,

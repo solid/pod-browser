@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { getSolidDataset, mockThingFrom, setUrl } from "@inrupt/solid-client";
+import * as solidClientFns from "@inrupt/solid-client";
 import { schema, foaf, rdf } from "rdf-namespaces";
 import {
   displayProfileName,
@@ -32,8 +32,8 @@ import {
   TYPE_MAP,
 } from "./profile";
 import {
-  mockPersonDatasetAlice,
-  mockPersonDatasetBob,
+  mockPersonThingAlice,
+  mockPersonThingBob,
   mockProfileAlice,
   mockProfileBob,
 } from "../../__testUtils/mockPersonResource";
@@ -63,10 +63,13 @@ describe("displayProfileName", () => {
 describe("fetchProfile", () => {
   it("fetches a profile and its information", async () => {
     const profileWebId = webIdUrl;
-    const { fetch } = mockSession();
+    const session = mockSession();
+    const { fetch } = session;
+    const dataset = await solidClientFns.getSolidDataset(profileWebId, {
+      fetch,
+    });
 
     const profile = await fetchProfile(profileWebId, fetch);
-    const dataset = await getSolidDataset(profileWebId, { fetch });
 
     expect(profile.webId).toEqual(profileWebId);
     expect(profile.name).toEqual("Test Testersen");
@@ -81,7 +84,7 @@ describe("fetchProfile", () => {
 describe("getProfileFromPersonThing", () => {
   test("it maps people into profiles", async () => {
     const alice = mockProfileAlice();
-    expect(getProfileFromPersonThing(mockPersonDatasetAlice())).toEqual({
+    expect(getProfileFromPersonThing(mockPersonThingAlice())).toEqual({
       avatar: alice.avatar,
       name: alice.name,
       nickname: alice.nickname,
@@ -90,7 +93,7 @@ describe("getProfileFromPersonThing", () => {
     });
 
     const bob = mockProfileBob();
-    expect(getProfileFromPersonThing(mockPersonDatasetBob())).toEqual({
+    expect(getProfileFromPersonThing(mockPersonThingBob())).toEqual({
       avatar: bob.avatar,
       name: bob.name,
       nickname: bob.nickname,
@@ -102,18 +105,22 @@ describe("getProfileFromPersonThing", () => {
 
 describe("getProfileFromThing", () => {
   const personIri = "http://example.com/#person";
-  const person = mockThingFrom(personIri);
+  const person = solidClientFns.mockThingFrom(personIri);
 
   it("handles foaf:Person", () => {
     jest.spyOn(TYPE_MAP, foaf.Person).mockReturnValue(42);
-    const profile = chain(person, (t) => setUrl(t, rdf.type, foaf.Person));
+    const profile = chain(person, (t) =>
+      solidClientFns.setUrl(t, rdf.type, foaf.Person)
+    );
     expect(getProfileFromThing(profile)).toBe(42);
     expect(TYPE_MAP[foaf.Person]).toHaveBeenCalledWith(profile);
   });
 
   it("handles schema:Person", () => {
     jest.spyOn(TYPE_MAP, schema.Person).mockReturnValue(1337);
-    const profile = chain(person, (t) => setUrl(t, rdf.type, schema.Person));
+    const profile = chain(person, (t) =>
+      solidClientFns.setUrl(t, rdf.type, schema.Person)
+    );
     expect(getProfileFromThing(profile)).toBe(1337);
     expect(TYPE_MAP[schema.Person]).toHaveBeenCalledWith(profile);
   });

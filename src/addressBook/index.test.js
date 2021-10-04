@@ -46,6 +46,8 @@ import {
   bobWebIdUrl,
   mockPersonDatasetAlice,
   mockPersonDatasetBob,
+  mockPersonThingAlice,
+  mockPersonThingBob,
   mockWebIdNode,
 } from "../../__testUtils/mockPersonResource";
 import mockPersonContactThing from "../../__testUtils/mockPersonContactThing";
@@ -86,11 +88,10 @@ describe("createAddressBook", () => {
     const owner = "https://example.pod.com/card#me";
 
     const { people, groups, index } = createAddressBook({ iri, owner });
-
-    expect(getThingAll(groups.dataset)).toHaveLength(0);
+    expect(getThingAll(groups.dataset)).toHaveLength(1); // only a local node in empty addressBook
     expect(groups.iri).toEqual(`${iri}/groups.ttl`);
 
-    expect(getThingAll(people.dataset)).toHaveLength(0);
+    expect(getThingAll(people.dataset)).toHaveLength(1); // only a local node in empty addressBook
     expect(people.iri).toEqual(`${iri}/people.ttl`);
 
     const addressBookThing = getThingAll(index.dataset)[0]; // only add one subject
@@ -115,10 +116,10 @@ describe("createAddressBook", () => {
 
     const { people, groups, index } = createAddressBook({ iri, owner, title });
 
-    expect(getThingAll(groups.dataset)).toHaveLength(0);
+    expect(getThingAll(groups.dataset)).toHaveLength(1); // only a local node in empty addressBook
     expect(groups.iri).toEqual(`${iri}/groups.ttl`);
 
-    expect(getThingAll(people.dataset)).toHaveLength(0);
+    expect(getThingAll(people.dataset)).toHaveLength(1); // only a local node in empty addressBook
     expect(people.iri).toEqual(`${iri}/people.ttl`);
 
     const addressBookThing = getThingAll(index.dataset)[0]; // only add one subject
@@ -188,7 +189,7 @@ describe("createContact", () => {
 
     const things = getThingAll(dataset);
     const webId = things[0]; // always the first thing in this dataset
-    const addressesThing = things[4];
+    const addressesThing = things[3];
     const emailsAndPhones = things.reduce(
       (memo, t) => memo.concat(getStringNoLocaleAll(t, vcard.value)),
       []
@@ -360,8 +361,8 @@ describe("getContacts", () => {
       "https://user.example.com/contacts/people.ttl";
     const mockIndexFileDataset = chain(
       solidClientFns.mockSolidDatasetFrom(mockIndexFileDatasetIri),
-      (d) => solidClientFns.setThing(d, mockPersonDatasetAlice()),
-      (d) => solidClientFns.setThing(d, mockPersonDatasetBob())
+      (d) => solidClientFns.setThing(d, mockPersonThingAlice()),
+      (d) => solidClientFns.setThing(d, mockPersonThingBob())
     );
 
     const personContainer1 = "https://user.example.com/contacts/Person/1234/";
@@ -411,8 +412,8 @@ describe("getContacts", () => {
       "https://user.example.com/contacts/people.ttl";
     const mockIndexFileDataset = chain(
       solidClientFns.mockSolidDatasetFrom(mockIndexFileDatasetIri),
-      (d) => solidClientFns.setThing(d, mockPersonDatasetAlice()),
-      (d) => solidClientFns.setThing(d, mockPersonDatasetBob())
+      (d) => solidClientFns.setThing(d, mockPersonThingAlice()),
+      (d) => solidClientFns.setThing(d, mockPersonThingBob())
     );
     const fetch = jest.fn();
 
@@ -442,7 +443,7 @@ describe("getWebIdUrl", () => {
     const { webIdNode } = mockWebIdNode(webIdUrl, aliceAlternativeWebIdUrl);
     const personDataset = chain(
       mockSolidDatasetFrom("http://example.com/alice"),
-      (d) => setThing(d, mockPersonDatasetAlice()),
+      (d) => setThing(d, mockPersonThingAlice()),
       (d) => setThing(d, webIdNode)
     );
 
@@ -453,7 +454,7 @@ describe("getWebIdUrl", () => {
 
   it("offers fallback for foaf.openid", () => {
     const foafId = "http://bobspod.com/#me";
-    const profile = chain(mockPersonDatasetBob(), (t) =>
+    const profile = chain(mockPersonThingBob(), (t) =>
       setUrl(t, foaf.openid, foafId)
     );
     const personDataset = chain(
@@ -476,13 +477,13 @@ describe("getProfiles", () => {
     const fetch = jest.fn();
     const person1 = {
       dataset: chain(mockSolidDatasetFrom(aliceProfileUrl), (d) =>
-        setThing(d, mockPersonDatasetAlice())
+        setThing(d, mockPersonThingAlice())
       ),
       iri: aliceWebIdUrl,
     };
     const person2 = {
       dataset: chain(mockSolidDatasetFrom(bobProfileUrl), (d) =>
-        setThing(d, mockPersonDatasetBob())
+        setThing(d, mockPersonThingBob())
       ),
       iri: bobWebIdUrl,
     };
@@ -1006,7 +1007,7 @@ describe("getContactsIndexIri", () => {
 
 describe("getProfileIriFromContactThing", () => {
   it("returns correct webId for a persisted contact Thing", () => {
-    const thing = mockPersonDatasetAlice();
+    const thing = mockPersonThingAlice();
     expect(addressBookFns.getProfileIriFromContactThing(thing)).toBe(
       aliceWebIdUrl
     );
