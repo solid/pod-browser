@@ -57,7 +57,7 @@ export function getPurposes(consentRequest) {
 }
 
 export function getRequestedAccesses(consentRequest) {
-  return consentRequest?.credentialSubject?.hasConsent;
+  return [consentRequest?.credentialSubject?.hasConsent];
 }
 
 export function getRequestedResourcesIris(sectionDetails) {
@@ -66,4 +66,8 @@ export function getRequestedResourcesIris(sectionDetails) {
 
 export function getAccessMode(sectionDetails) {
   return sectionDetails.mode;
+}
+
+export function getRequestorWebId(consentRequest) {
+  return consentRequest?.credentialSubject?.id;
 }

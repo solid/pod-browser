@@ -22,9 +22,8 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 
 import React, { useContext, useEffect, useState } from "react";
+import T from "prop-types";
 import { Button } from "@inrupt/prism-react-components";
-import { getStringNoLocale } from "@inrupt/solid-client";
-import { foaf } from "rdf-namespaces";
 import { makeStyles } from "@material-ui/styles";
 import {
   createStyles,
@@ -39,10 +38,9 @@ import InfoTooltip from "../infoTooltip";
 import RequestSection from "./requestSection";
 import DateInput from "./dateInput";
 import styles from "./styles";
-import { mockApp } from "../../__testUtils/mockApp";
 import {
   getExpiryDate,
-  getPurposes,
+  getPurposeString,
   getRequestedAccesses,
 } from "../../src/models/consent/request";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
@@ -63,16 +61,14 @@ export const CONFIRM_TEXT = "Continue with no access";
 export const DENY_TEXT = "Deny All Access";
 export const NO_PURPOSE_TITLE = "Select a purpose";
 
-export default function ConsentRequestFrom() {
+export default function ConsentRequestForm({ agentDetails }) {
   const classes = useStyles();
   const bem = useBem(classes);
   const { consentRequest } = useContext(ConsentRequestContext);
   const [selectedAccess, setSelectedAccess] = useState([]);
-  // FIXME: using a mock for the app profile - we will fetch profile later
-  const agentProfile = mockApp();
-  const agentName = getStringNoLocale(agentProfile, foaf.name);
-  const purposes = getPurposes(consentRequest);
+  const purposes = getPurposeString(consentRequest);
   const [selectedPurposes, setSelectedPurposes] = useState([]);
+  const { agentName } = agentDetails || null;
 
   // FIXME: we will later fetch the description from the purpose Url
   const {
@@ -264,3 +260,16 @@ export default function ConsentRequestFrom() {
     </>
   );
 }
+
+ConsentRequestForm.propTypes = {
+  agentDetails: T.shape({
+    agentName: T.string,
+    agentUrl: T.string,
+    agentTOS: T.string,
+    agentPolicy: T.string,
+  }),
+};
+
+ConsentRequestForm.defaultProps = {
+  agentDetails: {},
+};

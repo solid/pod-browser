@@ -39,6 +39,7 @@ const APP_CONTACT_TYPE = schema.SoftwareApplication; // this string for now unti
 export default function PrivacyPage() {
   useRedirectIfLoggedOut();
   const [search, setSearch] = useState("");
+  const [requestUrl, setRequestUrl] = useState(null);
   const [searchValues, setSearchValues] = useState(null);
   const [selectedTabValue, setSelectedTabValue] = useState("all");
 
@@ -67,7 +68,9 @@ export default function PrivacyPage() {
       setSearchValues(null);
     }
   };
-
+  const handleChangeRequestUrl = (e) => {
+    setRequestUrl(e.target.value);
+  };
   return (
     <DetailsMenuProvider>
       <SearchProvider search={search} setSearch={setSearch}>
@@ -83,8 +86,28 @@ export default function PrivacyPage() {
             contactType={selectedTabValue}
             setSearchValues={setSearchValues}
           />
-          <Link href="/privacy/consent/requests/test-request">
-            <a>View test request</a>
+          <div>
+            <label htmlFor="test-request">
+              Enter Consent Request Url
+              <input
+                type="url"
+                name="test-url"
+                value={requestUrl}
+                onChange={handleChangeRequestUrl}
+              />
+            </label>
+          </div>
+          {requestUrl && (
+            <Link
+              href={`/privacy/consent/requests/${encodeURIComponent(
+                requestUrl
+              )}`}
+            >
+              <a>View test request</a>
+            </Link>
+          )}
+          <Link href="/privacy/consent/generate">
+            <a>Generate consent request</a>
           </Link>
         </>
       </SearchProvider>

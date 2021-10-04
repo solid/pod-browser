@@ -44,6 +44,7 @@ import {
   getRequestedResourcesIris,
 } from "../../../src/models/consent/request";
 import { getResourceName } from "../../../src/solidClientHelpers/resource";
+import Spinner from "../../spinner";
 
 export const TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON = "request-select-all";
 export const TESTCAFE_ID_REQUEST_EXPAND_SECTION_BUTTON = "expand-section";
@@ -333,19 +334,16 @@ ContainerSwitch.defaultProps = {
 };
 export default function RequestSection(props) {
   const { agentName, sectionDetails, setSelectedAccess } = props;
-  const requestedResourcesIris = getRequestedResourcesIris(sectionDetails);
-  const accessMode = getAccessMode(sectionDetails);
+  const requestedResourcesIris =
+    sectionDetails && getRequestedResourcesIris(sectionDetails);
+  const accessMode = sectionDetails && getAccessMode(sectionDetails);
   const bem = useBem(useStyles());
+  const [isChecked, setIsChecked] = useState([]);
 
-  const [isChecked, setIsChecked] = useState(
-    new Array(requestedResourcesIris.length).fill(false)
-  );
-
-  const [allTogglesSelected, setAllTogglesSelected] = useState(
-    isChecked.filter((toggle) => toggle === true).length === isChecked.length
-  );
+  const [allTogglesSelected, setAllTogglesSelected] = useState(false);
 
   const modesObject = useMemo(() => {
+    if (!accessMode) return {};
     return {
       read: accessMode.some((el) => el === "Read"),
       write: accessMode.some((el) => el === "Write"),
@@ -355,12 +353,19 @@ export default function RequestSection(props) {
   }, [accessMode]);
 
   useEffect(() => {
+    if (!requestedResourcesIris || !requestedResourcesIris.length) return;
+    setIsChecked(new Array(requestedResourcesIris.length).fill(false));
+  }, [requestedResourcesIris]);
+
+  useEffect(() => {
+    if (!isChecked) return;
     setAllTogglesSelected(
       isChecked.filter((toggle) => toggle === true).length === isChecked.length
     );
   }, [isChecked]);
 
   useEffect(() => {
+    if (!isChecked) return;
     const accesses = isChecked.map((checked, index) => {
       return {
         checked,
@@ -383,6 +388,13 @@ export default function RequestSection(props) {
     );
     setIsChecked(updatedCheckedState);
   };
+  if (
+    !sectionDetails ||
+    !requestedResourcesIris ||
+    isChecked === null ||
+    isChecked === undefined
+  )
+    return <Spinner />;
 
   return (
     <>

@@ -26,7 +26,7 @@ import {
   getUrl,
   getUrlAll,
 } from "@inrupt/solid-client";
-import { foaf, rdf, schema, space, vcard } from "rdf-namespaces";
+import { foaf, rdf, schema, space, vcard, ldp } from "rdf-namespaces";
 import { getProfileIriFromContactThing } from "../addressBook";
 
 export function displayProfileName({ nickname, name, webId }) {
@@ -86,6 +86,7 @@ export function packageProfile(webId, dataset) {
     webId,
     dataset,
     pods: getUrlAll(profile, space.storage) || [],
+    inbox: getUrl(profile, ldp.inbox),
   };
 }
 
