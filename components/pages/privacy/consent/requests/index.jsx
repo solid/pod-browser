@@ -56,7 +56,6 @@ export default function ConsentShow() {
   const agentWebId = getRequestorWebId(consentRequest);
   const [agentDetails, setAgentDetails] = useState({});
   const { agentName, agentUrl, agentPolicy, agentTOS } = agentDetails || null;
-
   useEffect(() => {
     if (!requestVc) return;
     const req = JSON.parse(atob(requestVc));
