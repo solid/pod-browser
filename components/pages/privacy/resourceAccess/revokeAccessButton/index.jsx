@@ -49,6 +49,10 @@ export const TESTCAFE_ID_REVOKE_ACCESS_BUTTON = "revoke-access-button";
 export const REMOVE_ACCESS_CONFIRMATION_DIALOG =
   "remove-access-confirmation-dialog";
 
+export const SINGLE_ACCESS_MESSAGE = "Revoke Access";
+export const ALL_ACCESS_MESSAGE = "Revoke All Access";
+export const ACCESS_TO_POD_MESSAGE = "anything in your pod";
+
 export const getAllowModes = (accessList) => {
   if (!accessList) return null;
   const accessModes = [
@@ -146,7 +150,7 @@ export default function RevokeAccessButton({
   const resourceName =
     resources.length === 1
       ? getResourceName(resources[0])
-      : "anything in your pod";
+      : ACCESS_TO_POD_MESSAGE;
 
   const removeAccess = handleRemoveAccess({
     resources,
@@ -175,7 +179,7 @@ export default function RevokeAccessButton({
         : `Revoke access from ${agentName}`
     );
     setConfirmText(
-      resources.length === 1 ? "Revoke Access" : "Revoke All Access"
+      resources.length === 1 ? SINGLE_ACCESS_MESSAGE : ALL_ACCESS_MESSAGE
     );
     setContent(`${agentName} will not be able to access ${resourceName}`);
   };
@@ -223,7 +227,7 @@ export default function RevokeAccessButton({
       onClick={handleConfirmation}
     >
       {resources.length > 1
-        ? "Revoke All Access"
+        ? ALL_ACCESS_MESSAGE
         : `Remove Access to ${resourceName}?`}
     </button>
   );
