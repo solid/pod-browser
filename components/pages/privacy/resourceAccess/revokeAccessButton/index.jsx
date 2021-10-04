@@ -181,7 +181,7 @@ export default function RevokeAccessButton({
     setConfirmText(
       resources.length === 1 ? SINGLE_ACCESS_MESSAGE : ALL_ACCESS_MESSAGE
     );
-    setContent(`${agentName} will not be able to access ${resourceName}.`);
+    setContent(`${agentName} will not be able to access ${resourceName}`);
   };
 
   useEffect(() => {
