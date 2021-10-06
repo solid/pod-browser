@@ -63,6 +63,8 @@ export default function AppAvatar({ profileIri }) {
   const classes = useStyles();
   const bem = useBem(classes);
   // TODO replace with toast error or something?
+  // Ignoring this line for coverage until there are actually errors
+  /* istanbul ignore next */
   if (error) {
     return error.toString();
   }

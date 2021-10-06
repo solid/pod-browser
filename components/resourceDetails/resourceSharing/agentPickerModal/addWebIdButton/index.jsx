@@ -39,6 +39,7 @@ export default function AddWebIdButton({ onClick, disabled, className }) {
   return (
     <Button
       variant="secondary"
+      /* istanbul ignore next */
       data-testid={
         className?.includes("mobileOnly")
           ? TESTCAFE_ADD_WEBID_BUTTON_MOBILE

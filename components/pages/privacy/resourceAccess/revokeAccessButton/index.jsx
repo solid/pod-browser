@@ -22,7 +22,10 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 
 import React, { useContext, useEffect, useState } from "react";
+import clsx from "clsx";
 import T from "prop-types";
+import { getResourceInfo } from "@inrupt/solid-client";
+import { useSession } from "@inrupt/solid-ui-react";
 import { createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
@@ -30,17 +33,25 @@ import { Button } from "@inrupt/prism-react-components";
 import { getPolicyDetailFromAccess } from "../../../../../src/accessControl/acp";
 import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
 import styles from "./styles";
-import useAccessControl from "../../../../../src/hooks/useAccessControl";
-import useResourceInfo from "../../../../../src/hooks/useResourceInfo";
 import AlertContext from "../../../../../src/contexts/alertContext";
 import ConfirmationDialogContext from "../../../../../src/contexts/confirmationDialogContext";
 import useAgentProfile from "../../../../../src/hooks/useAgentProfile";
+import { isHTTPError } from "../../../../../src/error";
+import { getAccessControl } from "../../../../../src/accessControl";
+import usePodRootUri from "../../../../../src/hooks/usePodRootUri";
+import { getPoliciesContainerUrl } from "../../../../../src/solidClientHelpers/policies";
 
 export const TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON =
   "access-details-remove-button";
 
+export const TESTCAFE_ID_REVOKE_ACCESS_BUTTON = "revoke-access-button";
+
 export const REMOVE_ACCESS_CONFIRMATION_DIALOG =
   "remove-access-confirmation-dialog";
+
+export const SINGLE_ACCESS_MESSAGE = "Revoke Access";
+export const ALL_ACCESS_MESSAGE = "Revoke All Access";
+export const ACCESS_TO_POD_MESSAGE = "anything in your Pod.";
 
 export const getAllowModes = (accessList) => {
   if (!accessList) return null;
@@ -56,17 +67,19 @@ export const getAllowModes = (accessList) => {
   return accessModes;
 };
 
-const handleRemoveAccess = ({
+export const handleRemoveAccess = ({
+  resources,
+  policiesContainer,
   accessList,
-  accessControl,
   agentWebId,
   setShouldUpdate,
-  setSeverity,
-  setMessage,
-  setAlertOpen,
+  alertError,
+  alertSuccess,
   onClose,
+  fetch,
 }) => {
   return () => {
+    if (!resources) return;
     const acpMaps = accessList?.map(({ allow }) => {
       return {
         read: !!allow.includes("http://www.w3.org/ns/solid/acp#Read"),
@@ -78,19 +91,26 @@ const handleRemoveAccess = ({
     const policyNames = acpMaps.map((acpMap) =>
       getPolicyDetailFromAccess(acpMap, "name")
     );
-    policyNames.map(async (policy) => {
-      try {
-        await accessControl.removeAgentFromPolicy(agentWebId, policy);
-        setShouldUpdate(true);
-        setSeverity("success");
-        setMessage(`${agentWebId}'s access succesfully revoked`);
-      } catch (e) {
-        setSeverity("error");
-        setMessage(e.toString());
-        setAlertOpen(true);
-      } finally {
-        onClose();
-      }
+    resources.map(async (url) => {
+      const resource = await getResourceInfo(url, { fetch });
+      const accessControl = await getAccessControl(
+        resource,
+        policiesContainer,
+        fetch
+      );
+      policyNames.map(async (policy) => {
+        try {
+          await accessControl.removeAgentFromPolicy(agentWebId, policy);
+          setShouldUpdate(true);
+        } catch (e) {
+          if (!isHTTPError(e, 404)) {
+            alertError(e.toString());
+          }
+        } finally {
+          alertSuccess(`${agentWebId}'s access succesfully revoked`);
+          onClose();
+        }
+      });
     });
   };
 };
@@ -99,23 +119,19 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function RevokeAccessButton({
   variant,
+  resources,
   onClose,
   accessList,
-  resourceIri,
   setShouldUpdate,
 }) {
   const classes = useStyles();
   const bem = useBem(classes);
-  const { data: resourceInfo } = useResourceInfo(resourceIri, {
-    revalidateOnFocus: false,
-    shouldRetryOnError: false,
-  });
-  const { accessControl } = useAccessControl(resourceInfo);
-  const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
-  const resourceName = resourceIri && getResourceName(resourceIri);
+  const { alertError, alertSuccess } = useContext(AlertContext);
   const [agentWebId, setAgentWebId] = useState(
     accessList && accessList[0]?.agent
   );
+  const { session } = useSession();
+  const { fetch } = session;
   const { data: agentProfile } = useAgentProfile(agentWebId);
   const agentName = agentProfile?.name || agentWebId;
   const {
@@ -129,16 +145,23 @@ export default function RevokeAccessButton({
     setIsDangerousAction,
   } = useContext(ConfirmationDialogContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
+  const podRoot = usePodRootUri(session.info.webId);
+  const policiesContainer = podRoot && getPoliciesContainerUrl(podRoot);
+  const resourceName =
+    resources.length === 1
+      ? getResourceName(resources[0])
+      : ACCESS_TO_POD_MESSAGE;
 
   const removeAccess = handleRemoveAccess({
+    resources,
+    policiesContainer,
     accessList,
-    accessControl,
     agentWebId,
     setShouldUpdate,
-    setSeverity,
-    setMessage,
-    setAlertOpen,
+    alertError,
+    alertSuccess,
     onClose,
+    fetch,
   });
 
   useEffect(() => {
@@ -150,8 +173,14 @@ export default function RevokeAccessButton({
     setConfirmationSetup(true);
     setOpen(REMOVE_ACCESS_CONFIRMATION_DIALOG);
     setIsDangerousAction(true);
-    setTitle(`Revoke access to ${resourceName}`);
-    setConfirmText("Revoke Access");
+    setTitle(
+      resources.length === 1
+        ? `Revoke access to ${resourceName}?`
+        : `Revoke access from ${agentName}?`
+    );
+    setConfirmText(
+      resources.length === 1 ? SINGLE_ACCESS_MESSAGE : ALL_ACCESS_MESSAGE
+    );
     setContent(`${agentName} will not be able to access ${resourceName}`);
   };
 
@@ -177,15 +206,30 @@ export default function RevokeAccessButton({
     }
   }, [confirmationSetup, confirmed, closeDialog, dialogOpen, removeAccess]);
 
+  if (variant === "in-menu") {
+    return (
+      <Button
+        type="button"
+        variant={variant}
+        className={clsx(bem(`revoke-button`))}
+        data-testid={TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON}
+        onClick={handleConfirmation}
+      >
+        Revoke access
+      </Button>
+    );
+  }
   return (
-    <Button
-      variant={variant}
+    <button
+      type="button"
       className={bem("revoke-button")}
-      data-testid={TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON}
-      onClick={() => handleConfirmation()}
+      data-testid={TESTCAFE_ID_REVOKE_ACCESS_BUTTON}
+      onClick={handleConfirmation}
     >
-      Revoke Access
-    </Button>
+      {resources.length > 1
+        ? ALL_ACCESS_MESSAGE
+        : `Remove Access to ${resourceName}?`}
+    </button>
   );
 }
 
@@ -199,14 +243,13 @@ RevokeAccessButton.propTypes = {
     })
   ),
   onClose: T.func.isRequired,
-  resourceIri: T.string,
+  resources: T.arrayOf(T.string).isRequired,
   variant: T.string,
   setShouldUpdate: T.func,
 };
 
 RevokeAccessButton.defaultProps = {
   accessList: [],
-  resourceIri: null,
   variant: null,
   setShouldUpdate: () => {},
 };

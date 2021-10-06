@@ -21,7 +21,7 @@
 
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import T from "prop-types";
 import { Drawer, Icons } from "@inrupt/prism-react-components";
 import {
@@ -33,19 +33,14 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import {
-  getAcpAccessDetails,
-  getPolicyDetailFromAccess,
-} from "../../../../../src/accessControl/acp";
+import { getAcpAccessDetails } from "../../../../../src/accessControl/acp";
 import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
 import styles from "./styles";
 import { isContainerIri } from "../../../../../src/solidClientHelpers/utils";
 import { getParentContainerUrl } from "../../../../../src/stringHelpers";
 import useAccessControl from "../../../../../src/hooks/useAccessControl";
 import useResourceInfo from "../../../../../src/hooks/useResourceInfo";
-import AlertContext from "../../../../../src/contexts/alertContext";
-import ConfirmationDialogContext from "../../../../../src/contexts/confirmationDialogContext";
-import useAgentProfile from "../../../../../src/hooks/useAgentProfile";
+import RevokeAccessButton from "../revokeAccessButton";
 import Spinner from "../../../../spinner";
 
 export const TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON =
@@ -68,45 +63,6 @@ export const getAllowModes = (accessList) => {
   return accessModes;
 };
 
-const handleRemoveAccess = ({
-  accessList,
-  accessControl,
-  agentWebId,
-  setShouldUpdate,
-  setSeverity,
-  setMessage,
-  setAlertOpen,
-  onClose,
-}) => {
-  return () => {
-    const acpMaps = accessList?.map(({ allow }) => {
-      return {
-        read: !!allow.includes("http://www.w3.org/ns/solid/acp#Read"),
-        write: !!allow.includes("http://www.w3.org/ns/solid/acp#Write"),
-        append: !!allow.includes("http://www.w3.org/ns/solid/acp#Append"),
-        control: !!allow.includes("http://www.w3.org/ns/solid/acp#Control"),
-      };
-    });
-    const policyNames = acpMaps.map((acpMap) =>
-      getPolicyDetailFromAccess(acpMap, "name")
-    );
-    policyNames.map(async (policy) => {
-      try {
-        await accessControl.removeAgentFromPolicy(agentWebId, policy);
-        setShouldUpdate(true);
-        setSeverity("success");
-        setMessage(`${agentWebId}'s access succesfully revoked`);
-      } catch (e) {
-        setSeverity("error");
-        setMessage(e.toString());
-        setAlertOpen(true);
-      } finally {
-        onClose();
-      }
-    });
-  };
-};
-
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function ResourceAccessDrawer({
@@ -124,26 +80,10 @@ export default function ResourceAccessDrawer({
     shouldRetryOnError: false,
   });
   const { accessControl, accessControlError } = useAccessControl(resourceInfo);
-  const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
   const resourceName = resourceIri && getResourceName(resourceIri);
   const resourcePath =
     resourceIri && getParentContainerUrl(resourceIri)?.replace(podRoot, "");
-  const [agentWebId, setAgentWebId] = useState(
-    accessList && accessList[0]?.agent
-  );
-  const { data: agentProfile } = useAgentProfile(agentWebId);
-  const agentName = agentProfile?.name || agentWebId;
-  const {
-    confirmed,
-    open: dialogOpen,
-    setContent,
-    setOpen,
-    setTitle,
-    closeDialog,
-    setConfirmText,
-    setIsDangerousAction,
-  } = useContext(ConfirmationDialogContext);
-  const [confirmationSetup, setConfirmationSetup] = useState(false);
+
   const allowModes = getAllowModes(accessList);
   const modes = allowModes?.map((mode) => {
     return {
@@ -154,31 +94,6 @@ export default function ResourceAccessDrawer({
     };
   });
 
-  const removeAccess = handleRemoveAccess({
-    accessList,
-    accessControl,
-    agentWebId,
-    setShouldUpdate,
-    setSeverity,
-    setMessage,
-    setAlertOpen,
-    onClose,
-  });
-
-  useEffect(() => {
-    if (!accessList || !accessList.length) return;
-    setAgentWebId(accessList[0]?.agent);
-  }, [accessList]);
-
-  const handleConfirmation = () => {
-    setConfirmationSetup(true);
-    setOpen(REMOVE_ACCESS_CONFIRMATION_DIALOG);
-    setIsDangerousAction(true);
-    setTitle(`Revoke access to ${resourceName}`);
-    setConfirmText("Revoke Access");
-    setContent(`${agentName} will not be able to access ${resourceName}`);
-  };
-
   const accessDetails = modes?.map((mode) => {
     return getAcpAccessDetails(mode);
   });
@@ -186,28 +101,6 @@ export default function ResourceAccessDrawer({
   const sortedAccessDetails = accessDetails?.sort((a, b) => {
     return order.indexOf(a.name) - order.indexOf(b.name);
   });
-
-  useEffect(() => {
-    if (
-      confirmationSetup &&
-      confirmed === null &&
-      dialogOpen === REMOVE_ACCESS_CONFIRMATION_DIALOG
-    )
-      return;
-
-    if (
-      confirmationSetup &&
-      confirmed &&
-      dialogOpen === REMOVE_ACCESS_CONFIRMATION_DIALOG
-    ) {
-      removeAccess();
-    }
-
-    if (confirmed !== null) {
-      closeDialog();
-      setConfirmationSetup(false);
-    }
-  }, [confirmationSetup, confirmed, closeDialog, dialogOpen, removeAccess]);
 
   return (
     <Drawer anchor="top" open={open} close={onClose}>
@@ -259,14 +152,13 @@ export default function ResourceAccessDrawer({
               })}
             </List>
           </section>
-          <button
-            className={bem("access-details", "remove-access-button")}
-            type="button"
-            onClick={handleConfirmation}
-            data-testid={TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON}
-          >
-            Remove Access to {resourceName}
-          </button>
+          <RevokeAccessButton
+            variant="drawer"
+            resources={[resourceIri]}
+            onClose={onClose}
+            accessList={accessList}
+            setShouldUpdate={setShouldUpdate}
+          />
         </div>
       )}
     </Drawer>

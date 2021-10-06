@@ -63,6 +63,7 @@ const styles = (theme) => {
       boxShadow: "0 4px 12px 1px rgba(208,208,208,0.22)",
       borderRadius: 8,
       paddingBottom: "0.5em",
+      marginBottom: "1.5rem",
     },
     table: {
       borderCollapse: "collapse",
@@ -79,9 +80,8 @@ const styles = (theme) => {
       borderBottom: "0 !important",
       borderTop: "1px solid",
       borderTopColor: theme.palette.grey["200"],
-      position: "relative",
       "&:hover": {
-        // cursor: "pointer",
+        cursor: "pointer",
         background: theme.palette.grey["50"],
       },
       "&:last-child": {
@@ -106,6 +106,9 @@ const styles = (theme) => {
       textOverflow: "ellipsis",
       direction: "rtl",
       textAlign: "left",
+    },
+    "revoke-button__container": {
+      paddingBottom: "2rem",
     },
   });
 };

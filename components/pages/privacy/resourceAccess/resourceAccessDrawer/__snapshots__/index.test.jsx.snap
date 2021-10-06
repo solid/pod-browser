@@ -165,11 +165,11 @@ exports[`ResourceDrawer Renders the ResourceDrawer with correct title and access
             </ul>
           </section>
           <button
-            class="PodBrowser-access-details--remove-access-button"
-            data-testid="access-details-remove-button"
+            class="PodBrowser-revoke-button"
+            data-testid="revoke-access-button"
             type="button"
           >
-            Remove Access to resource
+            Remove Access to resource?
           </button>
         </div>
       </div>

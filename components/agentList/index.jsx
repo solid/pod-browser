@@ -90,6 +90,7 @@ function AgentList({ contactType, setSearchValues }) {
         setLoading(false);
         return;
       }
+      /* istanbul ignore next */
       if (!profiles) return;
       const things = profiles
         .map((thing) => {
@@ -99,11 +100,13 @@ function AgentList({ contactType, setSearchValues }) {
           };
         })
         .filter(({ thing }) => !!thing);
+      /* istanbul ignore next */
       if (!things) return;
       setAgentsForTable(things);
       setLoading(false);
 
       if (contactType === "all") {
+        /* istanbul ignore next */
         setAgentsForTable(
           things
             ? [...things, { dataset, thing: app }]
@@ -123,7 +126,9 @@ function AgentList({ contactType, setSearchValues }) {
   }
   `;
   useEffect(() => {
+    /* istanbul ignore next */
     if (!podRoot) return;
+    /* istanbul ignore next */
     fetch("https://access.pod.inrupt.com/graphql/", {
       method: "POST",
       headers: { "Content-type": "application/json" },
@@ -145,6 +150,7 @@ function AgentList({ contactType, setSearchValues }) {
     setSearchValues(profiles);
   }, [profiles, setSearchValues]);
 
+  /* istanbul ignore next */
   if (agentsError) return agentsError.toString();
 
   const isLoading = loading || !agents || isValidating;

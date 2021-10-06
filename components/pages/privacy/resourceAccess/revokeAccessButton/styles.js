@@ -26,6 +26,11 @@ const styles = (theme) => {
     "revoke-button": {
       color: theme.palette.error.main,
       textDecoration: "underline",
+      background: "none",
+      border: "none",
+      cursor: "pointer",
+      textAlign: "left",
+      fontSize: "1rem",
     },
   });
 };
