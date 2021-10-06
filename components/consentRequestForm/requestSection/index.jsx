@@ -94,7 +94,7 @@ const ResourceSwitch = (props) => {
       control={
         // eslint-disable-next-line react/jsx-wrap-multilines
         <Switch
-          checked={isChecked[index]}
+          checked={isChecked[index] ?? false}
           onChange={() => handleOnChange(index)}
           color="primary"
         />
@@ -264,7 +264,7 @@ const ContainerSwitch = (props) => {
         control={
           // eslint-disable-next-line react/jsx-wrap-multilines
           <Switch
-            checked={isChecked[index]}
+            checked={isChecked[index] ?? false}
             onChange={() => {
               handleOnChange(index);
               setContainerChecked(!containerChecked);

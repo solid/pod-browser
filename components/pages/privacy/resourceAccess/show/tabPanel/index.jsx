@@ -45,7 +45,11 @@ export default function TabPanel(props) {
 }
 
 TabPanel.propTypes = {
-  children: T.node.isRequired,
+  children: T.node,
   panelName: T.string.isRequired,
   value: T.string.isRequired,
+};
+
+TabPanel.defaultProps = {
+  children: null,
 };
