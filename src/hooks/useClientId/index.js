@@ -37,11 +37,11 @@ export const checkOidcSupport = async (providerIri) => {
 };
 
 export default function useClientId(providerIri) {
-  const [response, setResponse] = useState(null);
+  const [isSupported, setIsSupported] = useState(null);
   useEffect(() => {
     checkOidcSupport(providerIri).then((res) => {
-      setResponse(res);
+      setIsSupported(res);
     });
   }, [providerIri]);
-  return { response };
+  return isSupported;
 }
