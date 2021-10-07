@@ -1,5 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`MainNav renders Group for people with the feature flag turned on 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-main-nav-container"
+  >
+    <nav
+      class="PodBrowser-main-nav"
+      data-testid="main-nav"
+    >
+      <ul
+        class="PodBrowser-main-nav__list"
+      />
+    </nav>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`MainNav renders navigation 1`] = `
 <DocumentFragment>
   <div
@@ -11,62 +28,7 @@ exports[`MainNav renders navigation 1`] = `
     >
       <ul
         class="PodBrowser-main-nav__list"
-      >
-        <li
-          class="PodBrowser-main-nav__item"
-        >
-          <a
-            class="PodBrowser-main-nav__link PodBrowser-main-nav__link--active"
-            data-testid="main-menu-files"
-            href="/"
-          >
-            <span
-              class="PodBrowser-icon-files PodBrowser-main-nav__icon"
-            />
-            <span
-              class="PodBrowser-main-nav__label"
-            >
-              Files
-            </span>
-          </a>
-        </li>
-        <li
-          class="PodBrowser-main-nav__item"
-        >
-          <a
-            class="PodBrowser-main-nav__link"
-            data-testid="main-menu-contacts"
-            href="/contacts"
-          >
-            <span
-              class="PodBrowser-icon-address-book PodBrowser-main-nav__icon"
-            />
-            <span
-              class="PodBrowser-main-nav__label"
-            >
-              Contacts
-            </span>
-          </a>
-        </li>
-        <li
-          class="PodBrowser-main-nav__item"
-        >
-          <a
-            class="PodBrowser-main-nav__link"
-            data-testid="main-menu-bookmarks"
-            href="/bookmarks"
-          >
-            <span
-              class="PodBrowser-icon-star PodBrowser-main-nav__icon"
-            />
-            <span
-              class="PodBrowser-main-nav__label"
-            >
-              Bookmarks
-            </span>
-          </a>
-        </li>
-      </ul>
+      />
     </nav>
   </div>
 </DocumentFragment>

@@ -18,6 +18,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+import { getWellKnownSolid, getThingAll, getIri } from "@inrupt/solid-client";
 
 const webIdsWithAccessToFeatures = [
   "https://pod.inrupt.com/jacklawson/profile/card#me",
@@ -30,7 +31,6 @@ const webIdsWithAccessToFeatures = [
   "https://pod.inrupt.com/virginiabalseiro/profile/card#me",
   "https://pod.inrupt.com/fraubalseiro/profile/card#me",
   "https://virginiabalseiro.inrupt.net/profile/card#me",
-  "https://pod.inrupt.com/womenofsolid/profile/card#me",
   "https://pod.inrupt.com/gandalfcat/profile/card#me",
   "https://pod.inrupt.com/efe/profile/card#me",
   "https://podbrowser.inrupt.net/profile/card#me",
@@ -51,13 +51,47 @@ function enableForGivenWebIds(webIds) {
     session.info.isLoggedIn && webIds.includes(session.info.webId);
 }
 
+function enableForGivenServerCapability(webIds, capability) {
+  async function checkServerCapability(session, fetch) {
+    let capabilityEnabled = null;
+    try {
+      if (typeof window !== "undefined") {
+        const welKnownData = await getWellKnownSolid(session.info.webId, {
+          fetch,
+        });
+        const wellKnownSubjects = getThingAll(welKnownData, {
+          acceptBlankNodes: true,
+        });
+        const wellKnownSubject = wellKnownSubjects[0];
+        capabilityEnabled = getIri(wellKnownSubject, capability);
+      }
+      return (
+        (session.info.isLoggedIn && webIds.includes(session.info.webId)) ||
+        !!capabilityEnabled
+      );
+    } catch (error) {
+      // returning false here to prevent the page showing in case something goes wrong with the checks
+      // FIXME: add some better error handling here if needed
+      return false;
+    }
+  }
+
+  return (session, fetch) => checkServerCapability(session, fetch);
+}
+
 export const GROUPS_PAGE_ENABLED_FOR = webIdsWithAccessToFeatures;
 export const PRIVACY_PAGE_ENABLED_FOR = webIdsWithAccessToFeatures;
 export const GROUPS_PAGE_ENABLED = "groupsPageEnabled";
 export const PRIVACY_PAGE_ENABLED = "privacyPageEnabled";
+export const PRIVACY_PAGE_ENABLED_SERVER = "privacyPageEnabledServer";
+export const GRAPHQL_ENABLED = "http://inrupt.com/ns/ess#graphqlEndpoint";
 export const groupsPageEnabled = enableForGivenWebIds(GROUPS_PAGE_ENABLED_FOR);
 export const privacyPageEnabled = enableForGivenWebIds(
   PRIVACY_PAGE_ENABLED_FOR
+);
+export const privacyPageEnabledServer = enableForGivenServerCapability(
+  PRIVACY_PAGE_ENABLED_FOR,
+  GRAPHQL_ENABLED
 );
 export const consentPageEnabled = enableForGivenWebIds(
   PRIVACY_PAGE_ENABLED_FOR
@@ -67,5 +101,6 @@ export default function FeatureFlags() {
   return {
     [GROUPS_PAGE_ENABLED]: groupsPageEnabled,
     [PRIVACY_PAGE_ENABLED]: privacyPageEnabled,
+    [PRIVACY_PAGE_ENABLED_SERVER]: privacyPageEnabledServer,
   };
 }

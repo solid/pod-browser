@@ -19,8 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
-import { render } from "@testing-library/react";
+import React, { useContext, useState, useEffect } from "react";
+import { render, waitFor } from "@testing-library/react";
 import rules from "../../featureFlags";
 import FeatureContext, { defaultContext, FeatureProvider } from "./index";
 import mockSession from "../../../__testUtils/mockSession";
@@ -30,10 +30,21 @@ jest.mock("../../featureFlags");
 
 function ChildComponent() {
   const { enabled } = useContext(FeatureContext);
+  const [featureToggle, setFeatureToggle] = useState(false);
+
+  useEffect(() => {
+    const resolveToggle = async () => {
+      const getToggle = await enabled("test");
+      setFeatureToggle(getToggle);
+    };
+    resolveToggle();
+  }, [enabled]);
 
   return (
     <>
-      <div data-testid="test">{enabled("test").toString()}</div>
+      {featureToggle && (
+        <div data-testid="test">{featureToggle.toString()}</div>
+      )}
     </>
   );
 }
@@ -50,19 +61,21 @@ describe("FeatureFlagsContext", () => {
     expect(defaultContext.enabled()).toBe(false);
   });
 
-  it("can read feature flags", () => {
+  it("can read feature flags", async () => {
     rules.mockReturnValue({
       test: () => true,
     });
 
-    const { getByTestId } = render(
+    const { asFragment, getByTestId } = render(
       <SessionProvider>
         <FeatureProvider>
           <ChildComponent />
         </FeatureProvider>
       </SessionProvider>
     );
-
-    expect(getByTestId("test").innerHTML).toEqual("true");
+    expect(asFragment).toMatchSnapshot();
+    await waitFor(() => {
+      expect(getByTestId("test").innerHTML).toEqual("true");
+    });
   });
 });
