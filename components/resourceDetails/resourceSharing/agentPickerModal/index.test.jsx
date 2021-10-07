@@ -613,7 +613,7 @@ describe("AgentPickerModal without contacts", () => {
       .spyOn(ProfileFns, "fetchProfile")
       .mockRejectedValueOnce({ error: "error" });
 
-    const { getByTestId, getAllByRole, queryByTestId } = renderWithTheme(
+    const { getByTestId, findAllByRole, queryByTestId } = renderWithTheme(
       <PermissionsContextProvider>
         <ConfirmationDialogProvider>
           <AccessControlContext.Provider value={{ accessControl }}>
@@ -627,10 +627,8 @@ describe("AgentPickerModal without contacts", () => {
         </ConfirmationDialogProvider>
       </PermissionsContextProvider>
     );
-    await waitFor(() => {
-      const checkBoxes = getAllByRole("checkbox");
-      userEvent.click(checkBoxes[0]);
-    });
+    const checkBoxes = await findAllByRole("checkbox");
+    userEvent.click(checkBoxes[0]);
     const submitWebIdsButton = getByTestId(TESTCAFE_SUBMIT_WEBIDS_BUTTON);
 
     userEvent.click(submitWebIdsButton);
@@ -647,7 +645,7 @@ describe("AgentPickerModal without contacts", () => {
       .spyOn(ProfileFns, "fetchProfile")
       .mockRejectedValue({ error: "error" });
 
-    const { getByTestId, getByText } = renderWithTheme(
+    const { getByTestId, findByText } = renderWithTheme(
       <AccessControlContext.Provider value={{ accessControl }}>
         <PermissionsContextProvider>
           <AgentPickerModal
@@ -666,10 +664,7 @@ describe("AgentPickerModal without contacts", () => {
     const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
     userEvent.click(addButton);
 
-    await waitFor(() => {
-      const agentWebId = getByText(webId);
-      expect(agentWebId).not.toBeNull();
-    });
+    await expect(findByText(webId)).resolves.not.toBeNull();
   });
 
   it("cannot uncheck checkbox for the agent being added", async () => {
