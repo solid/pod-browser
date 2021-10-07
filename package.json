@@ -12,7 +12,7 @@
     "dev": "node server.js",
     "lint": "eslint pages components constants src --ext .js,.jsx",
     "start": "next start",
-    "test": "jest --runInBand"
+    "test": "NODE_OPTIONS=--max_old_space_size=4096 jest"
   },
   "repository": {
     "type": "git",
