@@ -12,7 +12,7 @@
     "dev": "node server.js",
     "lint": "eslint pages components constants src --ext .js,.jsx",
     "start": "next start",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "repository": {
     "type": "git",
