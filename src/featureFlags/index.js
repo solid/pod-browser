@@ -72,7 +72,7 @@ function enableForGivenServerCapability(webIds, capability) {
     } catch (error) {
       // returning false here to prevent the page showing in case something goes wrong with the checks
       // FIXME: add some better error handling here if needed
-      return false;
+      return session.info.isLoggedIn && webIds.includes(session.info.webId);
     }
   }
 

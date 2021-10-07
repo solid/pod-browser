@@ -56,7 +56,7 @@ describe("MainNav", () => {
     });
   });
 
-  it("renders Group for people with the feature flag turned on", async () => {
+  it("renders Group and Privacy for people with the feature flag turned on", async () => {
     const session = mockSession({ webId: GROUPS_PAGE_ENABLED_FOR[0] });
     mockedSessionHook.mockReturnValue({ session });
 
@@ -65,9 +65,7 @@ describe("MainNav", () => {
     await waitFor(() => {
       expect(
         getByTestId(TESTCAFE_ID_MAIN_NAV).querySelectorAll("li")
-      ).toHaveLength(4);
+      ).toHaveLength(5);
     });
   });
-
-  test.todo("Renders Privacy for people with the feature flag turned on");
 });
