@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`MainNav renders Group for people with the feature flag turned on 1`] = `
+exports[`MainNav renders Group and Privacy for people with the feature flag turned on 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-main-nav-container"
