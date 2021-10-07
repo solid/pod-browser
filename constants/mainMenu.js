@@ -19,7 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { GROUPS_PAGE_ENABLED, PRIVACY_PAGE_ENABLED } from "../src/featureFlags";
+import {
+  GROUPS_PAGE_ENABLED,
+  PRIVACY_PAGE_ENABLED_SERVER,
+} from "../src/featureFlags";
 
 export const TESTCAFE_ID_MAIN_MENU_FILES = "main-menu-files";
 export const TESTCAFE_ID_MAIN_MENU_GROUPS = "main-menu-groups";
@@ -48,7 +51,7 @@ export default function getMainMenuItems() {
       path: "/privacy",
       label: "Privacy",
       icon: "user-shield",
-      featureFlag: PRIVACY_PAGE_ENABLED,
+      featureFlag: PRIVACY_PAGE_ENABLED_SERVER,
       pages: ["/privacy", "/privacy/consent/requests/[id]"],
       "data-testid": TESTCAFE_ID_MAIN_MENU_PRIVACY,
     },

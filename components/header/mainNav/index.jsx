@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import {
@@ -39,15 +39,35 @@ export const TESTCAFE_ID_MAIN_NAV = "main-nav";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const menuItems = getMainMenuItems();
 
+function removeFeatureFlaggedItems(items, enabled) {
+  return Promise.all(
+    items.map(async ({ featureFlag, ...rest }) => {
+      const active = !featureFlag || (await enabled(featureFlag));
+      return {
+        activePage: active,
+        ...rest,
+      };
+    })
+  );
+}
+
+export async function createNewLinks(items, enabled) {
+  const links = await removeFeatureFlaggedItems(items, enabled);
+  return links;
+}
+
 export default function MainNav() {
   const router = useRouter();
   const bem = useBem(useStyles());
   const { enabled } = useContext(FeatureContext);
-  const links = menuItems
-    .filter(({ featureFlag }) => !featureFlag || enabled(featureFlag))
-    // We want to take out the featureFlag property so it ain't rendered to the HTML
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    .map(({ featureFlag, path, label, pages, ...rest }) => {
+  const [activeLinks, setActiveLinks] = useState([]);
+  useEffect(() => {
+    createNewLinks(menuItems, enabled).then((data) => setActiveLinks(data));
+  }, [enabled]);
+  const links = activeLinks
+    .filter(({ activePage }) => activePage)
+    .map(({ featureFlag, activePage, path, label, pages, ...rest }) => {
+      // extracting featureFlag and activePage props as we don't want them added to the html
       return {
         active: pages.includes(router.pathname),
         href: path,
@@ -55,6 +75,7 @@ export default function MainNav() {
         ...rest,
       };
     });
+
   return (
     <div className={bem("main-nav-container")}>
       <PrismMainNav

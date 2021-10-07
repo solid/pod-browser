@@ -21,7 +21,7 @@
 
 /* eslint react/jsx-props-no-spreading:off */
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import Drawer from "@material-ui/core/Drawer";
@@ -36,6 +36,7 @@ import FeatureContext from "../../../src/contexts/featureFlagsContext";
 import getMainMenuItems from "../../../constants/mainMenu";
 import useUserMenu from "../../../src/hooks/useUserMenu";
 import MenuDrawerItem from "./menuDrawerItem";
+import { createNewLinks } from "../mainNav/index";
 
 export const TESTCAFE_ID_MENU_DRAWER = "menu-drawer";
 export const TESTCAFE_ID_MENU_DRAWER_BUTTON = "menu-drawer-button";
@@ -47,9 +48,11 @@ export default function MenuDrawer() {
   const bem = useBem(useStyles());
   const classes = useStyles();
   const { enabled } = useContext(FeatureContext);
-  const menuItemsToShow = menuItems.filter(
-    ({ featureFlag }) => !featureFlag || enabled(featureFlag)
-  );
+  const [activeLinks, setActiveLinks] = useState([]);
+  useEffect(() => {
+    createNewLinks(menuItems, enabled).then((data) => setActiveLinks(data));
+  }, [enabled]);
+  const menuItemsToShow = activeLinks.filter(({ activePage }) => activePage);
   const [open, setOpen] = useState(false);
   const userMenu = useUserMenu();
 

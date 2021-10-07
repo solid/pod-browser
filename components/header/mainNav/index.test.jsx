@@ -22,6 +22,7 @@
 import React from "react";
 import { useSession } from "@inrupt/solid-ui-react";
 import { useRouter } from "next/router";
+import { waitFor } from "@testing-library/react";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import MainNav, { TESTCAFE_ID_MAIN_NAV } from "./index";
 import mockSession, {
@@ -42,24 +43,31 @@ describe("MainNav", () => {
     });
   });
 
-  it("renders navigation", () => {
+  it("renders navigation", async () => {
     const session = mockUnauthenticatedSession();
     mockedSessionHook.mockReturnValue({ session });
 
     const { asFragment, getByTestId } = renderWithTheme(<MainNav />);
     expect(asFragment()).toMatchSnapshot();
-    expect(
-      getByTestId(TESTCAFE_ID_MAIN_NAV).querySelectorAll("li")
-    ).toHaveLength(3);
+    await waitFor(() => {
+      expect(
+        getByTestId(TESTCAFE_ID_MAIN_NAV).querySelectorAll("li")
+      ).toHaveLength(3);
+    });
   });
 
-  it("renders Group and Privacy for people with the feature flag turned on", () => {
+  it("renders Group for people with the feature flag turned on", async () => {
     const session = mockSession({ webId: GROUPS_PAGE_ENABLED_FOR[0] });
     mockedSessionHook.mockReturnValue({ session });
 
-    const { getByTestId } = renderWithTheme(<MainNav />);
-    expect(
-      getByTestId(TESTCAFE_ID_MAIN_NAV).querySelectorAll("li")
-    ).toHaveLength(5);
+    const { asFragment, getByTestId } = renderWithTheme(<MainNav />);
+    expect(asFragment()).toMatchSnapshot();
+    await waitFor(() => {
+      expect(
+        getByTestId(TESTCAFE_ID_MAIN_NAV).querySelectorAll("li")
+      ).toHaveLength(4);
+    });
   });
+
+  test.todo("Renders Privacy for people with the feature flag turned on");
 });

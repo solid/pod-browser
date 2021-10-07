@@ -24,6 +24,7 @@ import rules, {
   PRIVACY_PAGE_ENABLED_FOR,
   PRIVACY_PAGE_ENABLED,
   GROUPS_PAGE_ENABLED_FOR,
+  PRIVACY_PAGE_ENABLED_SERVER,
   groupsPageEnabled,
   privacyPageEnabled,
 } from "./index";
@@ -33,6 +34,7 @@ describe("rules", () => {
     expect(Object.keys(rules())).toEqual([
       GROUPS_PAGE_ENABLED,
       PRIVACY_PAGE_ENABLED,
+      PRIVACY_PAGE_ENABLED_SERVER,
     ]);
   });
 });

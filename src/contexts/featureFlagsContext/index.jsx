@@ -29,15 +29,16 @@ export const defaultContext = {
 };
 const FeatureContext = createContext(defaultContext);
 
-export function isEnabled(session, rule, extraContext) {
-  return rules()[rule](session, extraContext);
+export async function isEnabled(session, fetch, rule, extraContext) {
+  const result = await rules()[rule](session, fetch, extraContext);
+  return result;
 }
 
 export function FeatureProvider({ children }) {
-  const { session } = useSession();
+  const { session, fetch } = useSession();
 
   const sessionBoundEnabled = (rule, extraContext) =>
-    isEnabled(session, rule, extraContext);
+    isEnabled(session, fetch, rule, extraContext);
 
   // Pass the current session in as context.
   return (
