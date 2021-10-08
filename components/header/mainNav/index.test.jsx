@@ -48,12 +48,12 @@ describe("MainNav", () => {
     mockedSessionHook.mockReturnValue({ session });
 
     const { asFragment, getByTestId } = renderWithTheme(<MainNav />);
-    expect(asFragment()).toMatchSnapshot();
     await waitFor(() => {
       expect(
         getByTestId(TESTCAFE_ID_MAIN_NAV).querySelectorAll("li")
       ).toHaveLength(3);
     });
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders Group and Privacy for people with the feature flag turned on", async () => {
@@ -61,11 +61,11 @@ describe("MainNav", () => {
     mockedSessionHook.mockReturnValue({ session });
 
     const { asFragment, getByTestId } = renderWithTheme(<MainNav />);
-    expect(asFragment()).toMatchSnapshot();
     await waitFor(() => {
       expect(
         getByTestId(TESTCAFE_ID_MAIN_NAV).querySelectorAll("li")
       ).toHaveLength(5);
+      expect(asFragment()).toMatchSnapshot();
     });
   });
 });
