@@ -31,9 +31,8 @@ import { getWebIdUrl } from "../contact/person";
 
 export async function getProfileForContact(personContactUrl, fetch) {
   try {
-    const {
-      response: { dataset, iri },
-    } = await getResource(personContactUrl, fetch);
+    const { response } = await getResource(personContactUrl, fetch);
+    const { dataset, iri } = response;
     const webId = getWebIdUrl(dataset, iri);
     const fetchedProfile = await fetchProfile(webId, fetch);
     return fetchedProfile;

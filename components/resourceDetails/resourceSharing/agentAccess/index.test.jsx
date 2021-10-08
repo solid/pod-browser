@@ -234,9 +234,11 @@ describe("AgentAccess", () => {
       await waitFor(() =>
         expect(fetchProfileSpy).toHaveBeenCalledWith(webId, expect.anything())
       );
-      await waitFor(() =>
-        expect(queryByTestId("try-again-spinner")).toBeFalsy()
-      );
+      await waitFor(() => {
+        fetchProfileSpy.mockResolvedValue(null);
+
+        expect(queryByTestId("try-again-spinner")).toBeFalsy();
+      });
     });
   });
 });

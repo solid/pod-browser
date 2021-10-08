@@ -362,7 +362,7 @@ export function createContact(
   const emails = normalizedContact.emails.map(mapSchema("email"));
   const addresses = normalizedContact.addresses.map(mapSchema("address"));
   const telephones = normalizedContact.telephones.map(mapSchema("telephone"));
-  const person = defineThing(
+  const person = defineDataset(
     { name: "this" },
     ...[(t) => addUrl(t, rdf.type, vcard.Individual), ...rootAttributeFns],
     ...emails.map(({ name }) => {

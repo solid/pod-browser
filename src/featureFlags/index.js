@@ -30,6 +30,7 @@ const webIdsWithAccessToFeatures = [
   "https://pod.inrupt.com/virginiabalseiro/profile/card#me",
   "https://pod.inrupt.com/fraubalseiro/profile/card#me",
   "https://virginiabalseiro.inrupt.net/profile/card#me",
+  "https://pod.inrupt.com/womenofsolid/profile/card#me",
   "https://pod.inrupt.com/gandalfcat/profile/card#me",
   "https://pod.inrupt.com/efe/profile/card#me",
   "https://podbrowser.inrupt.net/profile/card#me",

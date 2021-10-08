@@ -52,10 +52,15 @@ export function addPersonToMockedIndexDataset(
   );
 }
 
-export default function mockPersonContact(addressBook, personThingUrl, name) {
+export default function mockPersonContact({
+  addressBook,
+  indexUrl,
+  personThingUrl,
+  name,
+}) {
   const thing = mockContactPersonThing(addressBook, personThingUrl, name);
   const dataset = setThing(
-    mockSolidDatasetFrom(getBaseUrl(personThingUrl)),
+    mockSolidDatasetFrom(indexUrl ?? getBaseUrl(personThingUrl)),
     thing
   );
   return { dataset, thing };

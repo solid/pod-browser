@@ -1,3 +1,3 @@
 @prefix sp: <http://www.w3.org/ns/pim/space#>.
 
-<> a <sp#ConfigurationFile> .
+<http://example.com/settings/prefs.ttl> a <sp#ConfigurationFile> .

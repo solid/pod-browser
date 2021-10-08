@@ -59,33 +59,6 @@ describe("ResourceDrawer", () => {
       .mockResolvedValue(mockResource);
   });
 
-  const accessList = [
-    {
-      agent: webId,
-      allow: [
-        "http://www.w3.org/ns/solid/acp#Read",
-        "http://www.w3.org/ns/solid/acp#Write",
-        "http://www.w3.org/ns/solid/acp#Append",
-        "http://www.w3.org/ns/solid/acp#Control",
-      ],
-      deny: [],
-      resource: resourceIri,
-    },
-  ];
-  test("Renders the ResourceDrawer with correct title and access list", () => {
-    const onClose = jest.fn();
-
-    const { asFragment } = renderWithTheme(
-      <ResourceDrawer
-        open
-        onClose={onClose}
-        accessList={accessList}
-        resourceIri={resourceIri}
-      />
-    );
-
-    expect(asFragment()).toMatchSnapshot();
-  });
   test("clicking the remove access button displays confirmation dialog", async () => {
     const onClose = jest.fn();
     const accessListEditors = [
@@ -156,5 +129,30 @@ describe("ResourceDrawer", () => {
       );
       expect(onClose).toHaveBeenCalled();
     });
+  });
+  test("Renders the ResourceDrawer with correct title and access list", () => {
+    const accessList = [
+      {
+        agent: webId,
+        allow: [
+          "http://www.w3.org/ns/solid/acp#Read",
+          "http://www.w3.org/ns/solid/acp#Write",
+          "http://www.w3.org/ns/solid/acp#Append",
+          "http://www.w3.org/ns/solid/acp#Control",
+        ],
+        deny: [],
+        resource: resourceIri,
+      },
+    ];
+    const onClose = jest.fn();
+    const { asFragment } = renderWithTheme(
+      <ResourceDrawer
+        open
+        onClose={onClose}
+        accessList={accessList}
+        resourceIri={resourceIri}
+      />
+    );
+    expect(asFragment()).toMatchSnapshot();
   });
 });

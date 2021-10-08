@@ -23,7 +23,9 @@ import {
   addStringNoLocale,
   addUrl,
   asUrl,
+  mockSolidDatasetFrom,
   mockThingFrom,
+  setThing,
 } from "@inrupt/solid-client";
 import { vcard, foaf, rdf, space } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
@@ -54,7 +56,7 @@ export const alicePodRoot = "http://alice.example.com/";
 export const aliceAlternativeProfileUrl = "https://alice2.example.org/card";
 export const aliceAlternativeWebIdUrl = "https://alice2.example.org/card#me";
 
-export function mockPersonDatasetAlice(...operations) {
+export function mockPersonThingAlice(...operations) {
   return chain(
     mockThingFrom(aliceWebIdUrl),
     (t) => addStringNoLocale(t, foaf.name, aliceName),
@@ -64,6 +66,13 @@ export function mockPersonDatasetAlice(...operations) {
     (t) => addUrl(t, vcard.url, aliceAlternativeWebIdUrl),
     (t) => addUrl(t, space.storage, alicePodRoot),
     ...operations
+  );
+}
+
+export function mockPersonDatasetAlice(...operations) {
+  return setThing(
+    mockSolidDatasetFrom(aliceWebIdUrl),
+    mockPersonThingAlice(...operations)
   );
 }
 
@@ -79,7 +88,7 @@ export const bobPodRoot = "http://bob.example.com/";
 export const bobAlternateProfileUrl = "https://bob2.example.org/card";
 export const bobAlternateWebIdUrl = "https://bob2.example.org/card#me";
 
-export function mockPersonDatasetBob() {
+export function mockPersonThingBob() {
   return chain(
     mockThingFrom(bobWebIdUrl),
     (t) => addStringNoLocale(t, foaf.name, bobName),
@@ -88,6 +97,10 @@ export function mockPersonDatasetBob() {
     (t) => addUrl(t, foaf.openid, bobAlternateWebIdUrl),
     (t) => addUrl(t, space.storage, bobPodRoot)
   );
+}
+
+export function mockPersonDatasetBob() {
+  return setThing(mockSolidDatasetFrom(bobWebIdUrl), mockPersonThingBob());
 }
 
 export function mockProfileBob() {

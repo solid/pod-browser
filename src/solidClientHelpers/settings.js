@@ -22,7 +22,6 @@
 import {
   addStringNoLocale,
   addUrl,
-  createThing,
   getResourceInfo,
   getSolidDataset,
   getThing,
@@ -33,7 +32,7 @@ import {
 } from "@inrupt/solid-client";
 import { title } from "rdf-namespaces/dist/dct";
 import { type } from "rdf-namespaces/dist/rdf";
-import { namespace } from "./utils";
+import { defineDataset, namespace } from "./utils";
 
 async function getUserSettingsUrl(webId, { fetch }) {
   const profileResource = await getSolidDataset(webId, { fetch });
@@ -58,18 +57,13 @@ async function getOrCreatePodBrowserSettingsResourceUrl(
     }
   }
   // if error is 404, then create resource
-  const newSettings = createThing({ url: podBrowserSettingsUrl });
-  const settingsWithTitle = addStringNoLocale(
-    newSettings,
-    title,
-    "Pod Browser Preferences File"
+  const newSettings = defineDataset(
+    { url: podBrowserSettingsUrl },
+    (t) => addStringNoLocale(t, title, "Pod Browser Preferences File"),
+    (t) => addUrl(t, type, namespace.ConfigurationFile)
   );
-  const settingsWithType = addUrl(
-    settingsWithTitle,
-    type,
-    namespace.ConfigurationFile
-  );
-  await saveSolidDatasetAt(podBrowserSettingsUrl, settingsWithType, {
+
+  await saveSolidDatasetAt(podBrowserSettingsUrl, newSettings, {
     fetch,
   });
   return podBrowserSettingsUrl;

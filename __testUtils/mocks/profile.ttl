@@ -1,10 +1,10 @@
-@prefix : <#>.
+@prefix : <http://example.com/webId#>.
 @prefix solid: <http://www.w3.org/ns/solid/terms#>.
 @prefix doc: <./>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix schem: <http://schema.org/>.
 @prefix sp: <http://www.w3.org/ns/pim/space#>.
-@prefix podRoot: </>.
+@prefix podRoot: <http://example.com/>.
 @prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
 
 doc:card a foaf:PersonalProfileDocument; foaf:maker :me; foaf:primaryTopic :me .
@@ -13,9 +13,9 @@ doc:card a foaf:PersonalProfileDocument; foaf:maker :me; foaf:primaryTopic :me .
     a schem:Person, foaf:Person;
     foaf:name "Test Testersen";
     foaf:nick "Testy";
-    vcard:hasPhoto </photo.jpg>;
-    sp:preferencesFile </settings/prefs.ttl>;
+    vcard:hasPhoto <http://example.com/photo.jpg>;
+    sp:preferencesFile <http://example.com/settings/prefs.ttl>;
     sp:storage podRoot:;
     solid:account podRoot:;
-    solid:privateTypeIndex </settings/privateTypeIndex.ttl>;
-    solid:publicTypeIndex </settings/publicTypeIndex.ttl> .
+    solid:privateTypeIndex <http://example.com/settings/privateTypeIndex.ttl>;
+    solid:publicTypeIndex <http://example.com/settings/publicTypeIndex.ttl> .

@@ -31,8 +31,8 @@ import ContactsListSearch, {
   TESTCAFE_ID_CONTACTS_SEARCH,
 } from "./index";
 import {
-  mockPersonDatasetAlice,
-  mockPersonDatasetBob,
+  mockPersonThingAlice,
+  mockPersonThingBob,
 } from "../../../__testUtils/mockPersonResource";
 import { buildProfileLink } from "../../profileLink";
 
@@ -59,7 +59,7 @@ describe("ContactsListSearch", () => {
     const { asFragment } = renderWithTheme(
       <SearchProvider>
         <ContactsListSearch
-          people={[mockPersonDatasetAlice(), mockPersonDatasetBob()]}
+          people={[mockPersonThingAlice(), mockPersonThingBob()]}
         />
       </SearchProvider>
     );

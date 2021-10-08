@@ -43,7 +43,7 @@ export function getConsentRequestDetailsOnePurpose() {
             "https://pod.inrupt.com/alice/private/data-2",
             "https://pod.inrupt.com/alice/private/data-3",
           ],
-          forPurpose: ["https://example.com/SomeSpecificPurpose"],
+          forPurpose: "https://example.com/SomeSpecificPurpose",
         },
         {
           mode: ["Read"],

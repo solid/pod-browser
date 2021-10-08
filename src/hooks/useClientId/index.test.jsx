@@ -55,6 +55,6 @@ describe("useClientId tests", () => {
     });
 
     await waitForNextUpdate();
-    expect(result.current.response).toBe(true);
+    expect(result.current).toBe(true);
   });
 });

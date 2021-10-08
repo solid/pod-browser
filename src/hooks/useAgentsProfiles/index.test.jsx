@@ -29,6 +29,8 @@ import {
   mockPersonDatasetAlice,
   bobWebIdUrl,
   aliceWebIdUrl,
+  mockPersonThingBob,
+  mockPersonThingAlice,
 } from "../../../__testUtils/mockPersonResource";
 
 jest.mock("@inrupt/solid-ui-react");
@@ -37,7 +39,7 @@ const mockedSessionHook = useSession;
 jest.mock("swr");
 const mockedSwrHook = useSWR;
 const agentsWebIds = [bobWebIdUrl, aliceWebIdUrl];
-const people = [mockPersonDatasetBob(), mockPersonDatasetAlice()];
+const people = [mockPersonThingBob(), mockPersonThingAlice()];
 describe("useAgentsProfiles", () => {
   const fetch = jest.fn();
   const swrResponse = 42;
@@ -78,7 +80,7 @@ describe("useAgentsProfiles", () => {
       useAgentsProfiles([bobWebIdUrl, "https://somewebidthatfails.com"])
     );
     await expect(mockedSwrHook.mock.calls[0][1]()).resolves.toEqual([
-      mockPersonDatasetBob(),
+      mockPersonThingBob(),
       null,
     ]);
   });

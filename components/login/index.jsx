@@ -39,7 +39,7 @@ import useIdpFromQuery from "../../src/hooks/useIdpFromQuery";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
-const TESTCAFE_ID_LOGIN_TITLE = "login-title";
+export const TESTCAFE_ID_LOGIN_TITLE = "login-title";
 export const TESTCAFE_ID_OTHER_PROVIDERS_BUTTON = "other-providers-button";
 const PROVIDER_IRI = "https://broker.pod.inrupt.com/";
 const hostname = getCurrentHostname();
@@ -61,7 +61,7 @@ export default function Login() {
 
   const authOptions = {
     clientName: CLIENT_NAME,
-    clientId: oidcSupported.response ? CLIENT_APP_WEBID : null,
+    clientId: oidcSupported ? CLIENT_APP_WEBID : null,
   };
 
   useEffect(() => {
@@ -105,14 +105,16 @@ export default function Login() {
       >
         Sign in with other provider
       </Button>
-      <div className={bem("provider-login-container", isOpen && "visible")}>
-        <InfoTooltip
-          label={INFO_BUTTON_LABEL}
-          tooltipText={INFO_TOOLTIP_TEXT}
-          className={bem("info-button")}
-        />
-        <ProviderLogin provider={idp} />
-      </div>
+      {isOpen && (
+        <div className={bem("provider-login-container", "visible")}>
+          <InfoTooltip
+            label={INFO_BUTTON_LABEL}
+            tooltipText={INFO_TOOLTIP_TEXT}
+            className={bem("info-button")}
+          />
+          <ProviderLogin provider={idp} />
+        </div>
+      )}
     </div>
   );
 }

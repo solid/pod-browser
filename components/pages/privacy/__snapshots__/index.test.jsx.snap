@@ -93,10 +93,22 @@ exports[`PrivacyPage renders empty state if there's no agents to show 1`] = `
       />
     </svg>
   </div>
+  <div>
+    <label
+      for="test-request"
+    >
+      Enter Consent Request Url
+      <input
+        name="test-url"
+        type="url"
+        value=""
+      />
+    </label>
+  </div>
   <a
-    href="/privacy/consent/requests/test-request"
+    href="/privacy/consent/generate"
   >
-    View test request
+    Generate consent request
   </a>
 </DocumentFragment>
 `;

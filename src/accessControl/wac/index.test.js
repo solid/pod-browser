@@ -30,17 +30,16 @@ import { ACL, createAccessMap } from "../../solidClientHelpers/permissions";
 import WacAccessControlStrategy, { noAclError } from "./index";
 import { chain } from "../../solidClientHelpers/utils";
 
-const url = "http://example.com";
-const fetch = () => {};
-const resourceInfo = mockSolidDatasetFrom(url);
-const resourceInfoWithAcl = chain(
-  mockSolidDatasetFrom(url),
-  (d) => addMockResourceAclTo(d),
-  (d) => addMockFallbackAclTo(d)
-);
-
 describe("WacAccessControlStrategy", () => {
   let wac;
+  const url = "http://example.com/dataset";
+  const fetch = () => {};
+  const resourceInfo = mockSolidDatasetFrom(url);
+  const resourceInfoWithAcl = chain(
+    mockSolidDatasetFrom(url),
+    (d) => addMockResourceAclTo(d),
+    (d) => addMockFallbackAclTo(d)
+  );
 
   beforeEach(() => {
     jest
@@ -205,12 +204,11 @@ describe("WacAccessControlStrategy", () => {
     const iri = "http://example.com/dataset";
     const webId = "webId";
     const access = createAccessMap(true, true, true, true);
-    const dataset = mockSolidDatasetFrom(iri);
     const aclDataset = mockSolidDatasetFrom(iri);
     const updatedAcl = mockSolidDatasetFrom(iri);
 
     beforeEach(async () => {
-      wac = await WacAccessControlStrategy.init(resourceInfo, fetch);
+      wac = await WacAccessControlStrategy.init(resourceInfoWithAcl, fetch);
     });
 
     test("it saves the new permissions for specific resource", async () => {
@@ -227,26 +225,26 @@ describe("WacAccessControlStrategy", () => {
         .mockImplementationOnce(jest.fn().mockResolvedValueOnce("aclDataset"));
       jest
         .spyOn(solidClientFns, "getResourceInfoWithAcl")
-        .mockResolvedValueOnce("datasetWithAcl");
+        .mockResolvedValueOnce(resourceInfoWithAcl);
 
       const { response } = await wac.savePermissionsForAgent(webId, access);
 
-      expect(solidClientFns.getResourceAcl).toHaveBeenCalledWith(dataset);
+      expect(solidClientFns.getResourceAcl).toHaveBeenCalledWith(
+        resourceInfoWithAcl
+      );
       expect(solidClientFns.setAgentResourceAccess).toHaveBeenCalledWith(
         aclDataset,
         webId,
         access
       );
-      expect(solidClientFns.saveAclFor).toHaveBeenCalledWith(
-        dataset,
-        updatedAcl,
-        { fetch }
-      );
+      expect(
+        solidClientFns.saveAclFor
+      ).toHaveBeenCalledWith(resourceInfoWithAcl, updatedAcl, { fetch });
       expect(solidClientFns.getResourceInfoWithAcl).toHaveBeenCalledWith(url, {
         fetch,
       });
 
-      expect(response).toEqual("datasetWithAcl");
+      expect(response).toEqual(resourceInfoWithAcl);
     });
 
     test("it saves the new permissions based on fallback resource", async () => {
@@ -269,18 +267,16 @@ describe("WacAccessControlStrategy", () => {
       const { response } = await wac.savePermissionsForAgent(webId, access);
 
       expect(solidClientFns.createAclFromFallbackAcl).toHaveBeenCalledWith(
-        dataset
+        resourceInfoWithAcl
       );
       expect(solidClientFns.setAgentResourceAccess).toHaveBeenCalledWith(
         aclDataset,
         webId,
         access
       );
-      expect(solidClientFns.saveAclFor).toHaveBeenCalledWith(
-        dataset,
-        updatedAcl,
-        { fetch }
-      );
+      expect(
+        solidClientFns.saveAclFor
+      ).toHaveBeenCalledWith(resourceInfoWithAcl, updatedAcl, { fetch });
       expect(solidClientFns.getResourceInfoWithAcl).toHaveBeenCalledWith(url, {
         fetch,
       });

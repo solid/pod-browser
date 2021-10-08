@@ -20,36 +20,8 @@
  */
 
 import React from "react";
-import { Box } from "@material-ui/core";
-import T from "prop-types";
+import GenerateConsentRequest from "../../../components/pages/privacy/consent/requests/generate-consent-request";
 
-export default function TabPanel(props) {
-  const { children, value, panelName, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== panelName}
-      id={`simple-tabpanel-${panelName}`}
-      aria-labelledby={`simple-tab-${panelName}`}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...other}
-    >
-      {value === panelName && (
-        <Box p={1} mt={3}>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
+export default function GenerateConsentRequestPage() {
+  return <GenerateConsentRequest />;
 }
-
-TabPanel.propTypes = {
-  children: T.node,
-  panelName: T.string.isRequired,
-  value: T.string.isRequired,
-};
-
-TabPanel.defaultProps = {
-  children: null,
-};

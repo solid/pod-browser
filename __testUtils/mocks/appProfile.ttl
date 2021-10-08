@@ -1,0 +1,13 @@
+@prefix : <https://mockappurl.com>.
+@prefix ldp: <http://www.w3.org/ns/ldp#>.
+@prefix schem: <http://schema.org/>.
+@prefix oidc: <http://www.w3.org/ns/solid/oidc#>.
+
+:app
+    a schem:SoftwaReApplication;
+    oidc:client_name "Mock App";
+    oidc:tos_uri <http://mockappurl.com/tos>;
+    oidc:policy_uri <http://mockappurl.com/privacy-policy>;
+    oidc:client <http://mockappurl.com>;
+    oidc:contacts <http://mockappurl.com/contact>;
+    ldp:inbox <http://mockappurl.com/inbox>;

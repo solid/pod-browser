@@ -40,6 +40,7 @@ jest.mock("../../../../src/hooks/useAddressBook");
 const mockedUseAddressBook = useAddressBook;
 
 describe("SharingAccordion", () => {
+  const addressBook = mockAddressBook();
   beforeEach(() => {
     mockedUseRouter.mockReturnValue({
       query: { resourceIri: "/resource.txt" },
@@ -47,16 +48,16 @@ describe("SharingAccordion", () => {
     mockedUseAddressBook.mockReturnValue({ data: mockAddressBook() });
     mockedUseContacts.mockReturnValue({
       data: [
-        mockPersonContact(
-          mockAddressBook(),
-          "https://example.org/contacts/Person/1234/",
-          "Example 1"
-        ),
-        mockPersonContact(
-          mockAddressBook(),
-          "https://example.org/contacts/Person/3456/",
-          "Example 2"
-        ),
+        mockPersonContact({
+          addressBook,
+          personThingUrl: "https://example.org/contacts/Person/1234/",
+          name: "Example 1",
+        }),
+        mockPersonContact({
+          addressBook,
+          personThingUrl: "https://example.org/contacts/Person/3456/",
+          name: "Example 2",
+        }),
       ],
     });
   });
@@ -77,16 +78,16 @@ describe("SharingAccordion", () => {
       mockedUseAddressBook.mockReturnValue({ data: mockAddressBook() });
       mockedUseContacts.mockReturnValue({
         data: [
-          mockPersonContact(
-            mockAddressBook(),
-            "https://example.org/contacts/Person/1234/",
-            "Example 1"
-          ),
-          mockPersonContact(
-            mockAddressBook(),
-            "https://example.org/contacts/Person/3456/",
-            "Example 2"
-          ),
+          mockPersonContact({
+            addressBook,
+            personThingUrl: "https://example.org/contacts/Person/1234/",
+            name: "Example 1",
+          }),
+          mockPersonContact({
+            addressBook,
+            personThingUrl: "https://example.org/contacts/Person/3456/",
+            name: "Example 2",
+          }),
         ],
       });
     });

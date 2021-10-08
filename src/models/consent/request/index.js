@@ -32,32 +32,21 @@ export const MOCK_PURPOSES_DESCRIPTIONS = {
 
 /* Model functions */
 
-export function getPurposeString(url) {
-  return MOCK_PURPOSES_DESCRIPTIONS[url];
-}
-
 export function getPurposeUrls(consentRequest) {
   if (!consentRequest) return null;
-  return consentRequest?.credentialSubject?.hasConsent[0].forPurpose; // getting the first item in the array for now
+  return Array.isArray(consentRequest?.credentialSubject?.hasConsent)
+    ? consentRequest?.credentialSubject?.hasConsent[0].forPurpose // getting first item in array for now
+    : consentRequest?.credentialSubject?.hasConsent.forPurpose;
 }
 
 export function getExpiryDate(consentRequest) {
   return consentRequest?.expirationDate;
 }
 
-export function getPurposes(consentRequest) {
-  const urls = getPurposeUrls(consentRequest);
-  if (!urls) return null;
-  return urls.map((url) => {
-    return {
-      url,
-      description: getPurposeString(url),
-    };
-  });
-}
-
 export function getRequestedAccesses(consentRequest) {
-  return consentRequest?.credentialSubject?.hasConsent;
+  return Array.isArray(consentRequest?.credentialSubject?.hasConsent)
+    ? consentRequest?.credentialSubject?.hasConsent
+    : [consentRequest?.credentialSubject?.hasConsent];
 }
 
 export function getRequestedResourcesIris(sectionDetails) {
@@ -66,4 +55,8 @@ export function getRequestedResourcesIris(sectionDetails) {
 
 export function getAccessMode(sectionDetails) {
   return sectionDetails.mode;
+}
+
+export function getRequestorWebId(consentRequest) {
+  return consentRequest?.credentialSubject?.id;
 }

@@ -21,26 +21,35 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import Login, { TESTCAFE_ID_OTHER_PROVIDERS_BUTTON } from "./index";
+import Login, {
+  TESTCAFE_ID_OTHER_PROVIDERS_BUTTON,
+  TESTCAFE_ID_LOGIN_TITLE,
+} from "./index";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import useIdpFromQuery from "../../src/hooks/useIdpFromQuery";
+import useClientId from "../../src/hooks/useClientId";
 import { TESTCAFE_ID_LOGIN_FIELD } from "./provider";
 
 jest.mock("../../src/hooks/useIdpFromQuery");
+const mockedUseIdpFromQuery = useIdpFromQuery;
+jest.mock("../../src/hooks/useClientId");
+const mockedUseClientId = useClientId;
 
 describe("Login form", () => {
   beforeEach(() => {
-    useIdpFromQuery.mockReturnValue(null);
+    mockedUseIdpFromQuery.mockReturnValue(null);
+    mockedUseClientId.mockReturnValue(false);
   });
 
-  it("renders a login page with a sign in button and a 'Sign in with other provider' button", () => {
-    const { asFragment } = renderWithTheme(<Login />);
+  it("renders a login page with a sign in button and a 'Sign in with other provider' button", async () => {
+    const { asFragment, findByTestId } = renderWithTheme(<Login />);
+    await expect(findByTestId(TESTCAFE_ID_LOGIN_TITLE)).resolves.not.toBeNull();
     expect(asFragment()).toMatchSnapshot();
   });
-  it("clicking the 'other providers' button displays a form", () => {
-    const { getByTestId } = renderWithTheme(<Login />);
+  it("clicking the 'other providers' button displays a form", async () => {
+    const { findByTestId, getByTestId } = renderWithTheme(<Login />);
     const button = getByTestId(TESTCAFE_ID_OTHER_PROVIDERS_BUTTON);
     userEvent.click(button);
-    expect(getByTestId(TESTCAFE_ID_LOGIN_FIELD)).not.toBeNull();
+    await expect(findByTestId(TESTCAFE_ID_LOGIN_FIELD)).resolves.not.toBeNull();
   });
 });

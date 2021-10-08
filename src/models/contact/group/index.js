@@ -168,6 +168,7 @@ export async function renameGroup(
           : t,
     ]
   );
+
   const savedDataset = await saveSolidDatasetAt(
     getSourceUrl(group.dataset),
     setThing(group.dataset, updatedGroup),

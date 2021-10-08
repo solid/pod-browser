@@ -20,13 +20,10 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { useSession } from "@inrupt/solid-ui-react";
+import { useRouter } from "next/router";
 import { Container, Icons } from "@inrupt/prism-react-components";
-import {
-  asUrl,
-  getStringNoLocale,
-  getThing,
-  getUrl,
-} from "@inrupt/solid-client";
+import { getStringNoLocale, getThing, getUrl } from "@inrupt/solid-client";
 import { foaf, vcard } from "rdf-namespaces";
 import { makeStyles } from "@material-ui/styles";
 import { createStyles, Typography, Link } from "@material-ui/core";
@@ -39,39 +36,58 @@ import styles from "./styles";
 import ConsentRequestForm from "../../../../consentRequestForm";
 import {
   CONTACTS_PREDICATE,
-  mockApp,
-  mockAppDataset,
   POLICY_PREDICATE,
   TOS_PREDICATE,
 } from "../../../../../__testUtils/mockApp";
-
-// FIXME: When we hook up the API, replace this with actual API call
-import getConsentRequestDetails from "../../../../../__testUtils/mockConsentRequestDetails";
+import { getRequestorWebId } from "../../../../../src/models/consent/request";
+import { getProfileResource } from "../../../../../src/solidClientHelpers/resource";
+import Spinner from "../../../../spinner";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function ConsentShow() {
   useRedirectIfLoggedOut();
+  const { session } = useSession();
+  const { fetch } = session;
+  const router = useRouter();
+  const { id } = router.query;
   const bem = useBem(useStyles());
   const [consentRequest, setConsentRequest] = useState(null);
-
-  // FIXME: using a mock for the app profile - we will fetch profile later
-  const agentDataset = mockAppDataset();
-  const agentProfile = mockApp();
-  const agentWebId = asUrl(agentProfile);
-  const agentContactsUrl = getUrl(agentProfile, CONTACTS_PREDICATE);
-  const agentContacts = getThing(agentDataset, agentContactsUrl);
-  const agentName = getStringNoLocale(agentProfile, foaf.name);
-  const agentUrl = getUrl(agentContacts, vcard.url);
-  const agentTOS = getUrl(agentProfile, TOS_PREDICATE);
-  const agentPolicy = getUrl(agentProfile, POLICY_PREDICATE);
+  const agentWebId = getRequestorWebId(consentRequest);
+  const [agentDetails, setAgentDetails] = useState({});
+  const { agentName, agentUrl, agentPolicy, agentTOS } = agentDetails || null;
 
   useEffect(() => {
-    if (!consentRequest) {
-      const request = getConsentRequestDetails();
+    fetch(id).then(async (response) => {
+      const request = await response.json();
       setConsentRequest(request);
-    }
-  }, [consentRequest]);
+    });
+  }, [id, fetch]);
+
+  useEffect(() => {
+    if (!consentRequest) return;
+    (async () => {
+      const { dataset: profileDataset } = await getProfileResource(
+        agentWebId,
+        fetch
+      );
+      const agentProfile =
+        profileDataset && getThing(profileDataset, agentWebId);
+      const agentContactsUrl =
+        agentProfile && getUrl(agentProfile, CONTACTS_PREDICATE);
+      const agentContacts = agentContactsUrl
+        ? getThing(profileDataset, agentContactsUrl)
+        : null;
+      setAgentDetails({
+        agentName: agentProfile && getStringNoLocale(agentProfile, foaf.name),
+        agentUrl: agentContacts ? getUrl(agentContacts, vcard.url) : null,
+        agentTOS: agentProfile && getUrl(agentProfile, TOS_PREDICATE),
+        agentPolicy: agentProfile && getUrl(agentProfile, POLICY_PREDICATE),
+      });
+    })();
+  }, [agentWebId, fetch, consentRequest]);
+
+  if (!agentName || !consentRequest) return <Spinner />;
 
   return (
     <ConsentRequestProvider
@@ -80,7 +96,7 @@ export default function ConsentShow() {
     >
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Container className={bem("request-container")}>
-          <ConsentRequestForm />
+          <ConsentRequestForm agentDetails={agentDetails} />
           <div className={bem("request-container__content")}>
             <Typography
               component="h3"

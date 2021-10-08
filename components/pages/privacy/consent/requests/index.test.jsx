@@ -21,33 +21,46 @@
 
 import React from "react";
 import * as RouterFns from "next/router";
+import { waitFor } from "@testing-library/dom";
+import * as resourceHelpers from "../../../../../src/solidClientHelpers/resource";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../../../../__testUtils/mockSessionContextProvider";
-import mockSession from "../../../../../__testUtils/mockSession";
-
 import ConsentPage from "./index";
+import mockFetch from "../../../../../__testUtils/mockFetch";
+import getConsentRequestDetails from "../../../../../__testUtils/mockConsentRequestDetails";
+import { mockAppDataset } from "../../../../../__testUtils/mockApp";
+import mockResponse from "../../../../../__testUtils/mockResponse";
 
 jest.mock("../../../../../src/effects/auth");
 
 describe("Consent Page", () => {
-  test("Renders the Consent page", () => {
+  test("Renders the Consent page", async () => {
+    const consentRequestId = "https://example.org/test-request";
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
       replace: jest.fn(),
       query: {
-        id: "test-request",
+        id: consentRequestId,
       },
     });
 
-    const session = mockSession();
+    const fetch = mockFetch({
+      [consentRequestId]: () =>
+        mockResponse(200, JSON.stringify(getConsentRequestDetails())),
+    });
+    const session = { fetch };
     const SessionProvider = mockSessionContextProvider(session);
 
-    const { asFragment } = renderWithTheme(
+    jest.spyOn(resourceHelpers, "getProfileResource").mockResolvedValue({
+      dataset: mockAppDataset(),
+    });
+
+    const { asFragment, getByText } = renderWithTheme(
       <SessionProvider>
         <ConsentPage />
       </SessionProvider>
     );
-
+    await waitFor(() => expect(getByText("Mock App")).toBeInTheDocument());
     expect(asFragment()).toMatchSnapshot();
   });
 });

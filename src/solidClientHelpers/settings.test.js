@@ -31,10 +31,10 @@ import prefsWithoutPBPrefsPointer from "./mocks/prefsWithoutPodBrowserPrefsPoint
 import podBrowserPrefs from "./mocks/podBrowserPrefs.ttl";
 
 describe("getOrCreateSettings", () => {
-  const root = "http://localhost";
-  const webId = "http://localhost/webid";
-  const prefs = "http://localhost/settings/prefs.ttl";
-  const pbPrefs = "http://localhost/settings/podBrowserPrefs.ttl";
+  const root = "http://example.com";
+  const webId = "http://example.com/webid";
+  const prefs = "http://example.com/settings/prefs.ttl";
+  const pbPrefs = "http://example.com/settings/podBrowserPrefs.ttl";
 
   let session;
   let mockedPbPrefsResource;
@@ -91,7 +91,7 @@ describe("getOrCreateSettings", () => {
 
     it("creates pointer to PodBrowserPrefs.ttl in prefs.ttl", () => {
       expect(prefsFetchSpy).toHaveBeenCalledWith(prefs, {
-        body: ` INSERT DATA {<http://localhost/settings/prefs.ttl> <https://inrupt.com/podbrowser#preferencesFile> <http://localhost/settings/podBrowserPrefs.ttl>.};`,
+        body: ` INSERT DATA {<http://example.com/settings/prefs.ttl> <https://inrupt.com/podbrowser#preferencesFile> <http://example.com/settings/podBrowserPrefs.ttl>.};`,
         headers: {
           "Content-Type": "application/sparql-update",
         },
@@ -136,7 +136,7 @@ describe("getOrCreateSettings", () => {
 
     it("creates PodBrowserPrefs.ttl", () =>
       expect(pbPrefsPutSpy).toHaveBeenCalledWith(pbPrefs, {
-        body: `<http://localhost/settings/podBrowserPrefs.ttl> <http://purl.org/dc/terms/title> "Pod Browser Preferences File";
+        body: `<http://example.com/settings/podBrowserPrefs.ttl> <http://purl.org/dc/terms/title> "Pod Browser Preferences File";
     a <http://www.w3.org/ns/pim/space#ConfigurationFile>.
 `,
         headers: {

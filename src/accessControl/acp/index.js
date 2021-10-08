@@ -19,6 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* istanbul ignore file */
+
 import {
   acp_v3 as acp,
   asUrl,
@@ -789,15 +791,13 @@ export default class AcpAccessControlStrategy {
       { fetch: this.#fetch }
     );
     const controlAllowApply = getAllowApplyPolicy(this.#policyUrl, "control");
-    const canSharePolicy = getAllowApplyPolicy(this.#policyUrl, "canShare");
 
     const { acr: policyAcr, changed: policyChanged } = chain(
       {
         acr: policyDatasetWithAcr,
         changed: false,
       },
-      ({ acr, changed }) => ensureApplyControl(controlAllowApply, acr, changed),
-      ({ acr, changed }) => ensureApplyControl(canSharePolicy, acr, changed)
+      ({ acr, changed }) => ensureApplyControl(controlAllowApply, acr, changed)
     );
     if (policyChanged) {
       try {
@@ -916,7 +916,6 @@ export default class AcpAccessControlStrategy {
 
     // saving changes to the ACRs
     await this.ensureAccessControlPolicyAll(policyName);
-
     return respond(this.#originalWithAcr);
   }
 
@@ -1038,11 +1037,9 @@ export default class AcpAccessControlStrategy {
     } = await getOrCreateDatasetOld(this.#policyUrl, this.#fetch);
 
     if (getOrCreateError) return error(getOrCreateError);
-
     const updatedDataset = isEmptyAccess(access)
       ? removePermissionsForAgent(webId, policyDataset)
       : this.updatePermissionsForAgent(webId, access, policyDataset);
-
     // saving changes to the policy resource
     await saveSolidDatasetAt(this.#policyUrl, updatedDataset, {
       fetch: this.#fetch,

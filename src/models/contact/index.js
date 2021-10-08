@@ -31,10 +31,12 @@ export function getContactAllFromContactsIndex(contactIndex) {
   const { dataset, type } = contactIndex;
   return getThingAll(dataset)
     .filter((contact) => type.isOfType(contact))
-    .map((thing) => ({
-      thing,
-      dataset,
-    }));
+    .map((thing) => {
+      return {
+        thing,
+        dataset,
+      };
+    });
 }
 
 export function getContactAllFromContactIndexArray(contactIndexArray) {

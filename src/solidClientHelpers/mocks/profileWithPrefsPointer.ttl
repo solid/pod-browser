@@ -2,5 +2,5 @@
 @prefix schem: <http://schema.org/>.
 @prefix sp: <http://www.w3.org/ns/pim/space#>.
 
-<> a schem:Person, foaf:Person;
-   sp:preferencesFile </settings/prefs.ttl> .
+<http://example.com/webid> a schem:Person, foaf:Person;
+   sp:preferencesFile <http://example.com/settings/prefs.ttl> .
