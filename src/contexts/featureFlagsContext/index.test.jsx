@@ -66,14 +66,13 @@ describe("FeatureFlagsContext", () => {
       test: () => true,
     });
 
-    const { asFragment, getByTestId } = render(
+    const { getByTestId } = render(
       <SessionProvider>
         <FeatureProvider>
           <ChildComponent />
         </FeatureProvider>
       </SessionProvider>
     );
-    expect(asFragment).toMatchSnapshot();
     await waitFor(() => {
       expect(getByTestId("test").innerHTML).toEqual("true");
     });
