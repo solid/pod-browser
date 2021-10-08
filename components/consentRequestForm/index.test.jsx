@@ -21,7 +21,10 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
+import { useRouter } from "next/router";
+import * as consentFns from "@inrupt/solid-client-consent";
 import { renderWithTheme } from "../../__testUtils/withTheme";
+import getSignedVc from "../../__testUtils/mockSignedVc";
 import mockConsentRequestContext from "../../__testUtils/mockConsentRequestContext";
 import ConsentRequestForm, {
   DENY_ACCESS_DIALOG_TITLE,
@@ -40,6 +43,9 @@ import { getConsentRequestDetailsOnePurpose } from "../../__testUtils/mockConsen
 import { TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT } from "./purposeCheckBox";
 import { TESTCAFE_ID_CONSENT_ACCESS_SWITCH } from "./requestSection";
 
+jest.mock("next/router");
+const mockedUseRouter = useRouter;
+
 const ConsentRequestContextProvider = mockConsentRequestContext();
 const consentRequestWithOnePurpose = getConsentRequestDetailsOnePurpose();
 const ConsentRequestContextProviderOnePurpose = mockConsentRequestContext(
@@ -53,6 +59,14 @@ const agentDetails = {
 };
 
 describe("Consent Request Form", () => {
+  const push = jest.fn();
+  const signedVc = getSignedVc();
+  beforeEach(() => {
+    mockedUseRouter.mockReturnValue({
+      query: { redirectUrl: "/privacy/" },
+      push,
+    });
+  });
   test("Renders a consent request form with multiple purposes", () => {
     const { asFragment } = renderWithTheme(
       <ConsentRequestContextProvider>
@@ -72,6 +86,9 @@ describe("Consent Request Form", () => {
     expect(asFragment()).toMatchSnapshot();
   });
   test("when submitting form without selecting access and at least one purpose selected, it displays a confirmation dialog with the correct title and content", () => {
+    jest
+      .spyOn(consentFns, "approveAccessRequestWithConsent")
+      .mockResolvedValue(signedVc);
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentRequestContextProvider>
@@ -117,7 +134,7 @@ describe("Consent Request Form", () => {
       "At least one purpose needs to be selected to approve access for Mock App"
     );
   });
-  test("does not display confirmation dialog if at least one access and one purpose are selected", async () => {
+  test("does not display confirmation dialog if at least one access and one purpose are selected and redirects with correct params", async () => {
     const { getByTestId, findByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentRequestContextProvider>
@@ -133,6 +150,9 @@ describe("Consent Request Form", () => {
     userEvent.click(button);
     await expect(findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)).rejects.toEqual(
       expect.anything()
+    );
+    expect(push).toHaveBeenLastCalledWith(
+      `/privacy/?signedVcUrl=${signedVc.id}`
     );
   });
   test("displays the confirmation dialog with the correct title and content regardless of the state of the toggles when clicking 'Deny All Access' button", async () => {

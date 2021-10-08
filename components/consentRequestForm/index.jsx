@@ -23,8 +23,10 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
+import { approveAccessRequestWithConsent } from "@inrupt/solid-client-consent";
 import { Button } from "@inrupt/prism-react-components";
 import { makeStyles } from "@material-ui/styles";
+import { useRouter } from "next/router";
 import {
   createStyles,
   ListItem,
@@ -42,6 +44,8 @@ import {
   getExpiryDate,
   getPurposeUrls,
   getRequestedAccesses,
+  getRequestorWebId,
+  getVcId,
 } from "../../src/models/consent/request";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
 import ConfirmationDialog from "../confirmationDialog";
@@ -64,10 +68,17 @@ export const NO_PURPOSE_TITLE = "Select a purpose";
 export default function ConsentRequestForm({ agentDetails }) {
   const classes = useStyles();
   const bem = useBem(classes);
+  const router = useRouter();
+  const { redirectUrl } = router.query;
   const { consentRequest } = useContext(ConsentRequestContext);
   const [selectedAccess, setSelectedAccess] = useState([]);
   const purposes = getPurposeUrls(consentRequest);
-  const [selectedPurposes, setSelectedPurposes] = useState([]);
+  const [selectedPurposes, setSelectedPurposes] = useState(
+    !Array.isArray(purposes) ? purposes : []
+  );
+  const selectedResources = selectedAccess.map(
+    ({ resourceIri }) => resourceIri
+  );
   const { agentName } = agentDetails || null;
 
   // FIXME: we will later fetch the description from the purpose Url
@@ -93,12 +104,21 @@ export default function ConsentRequestForm({ agentDetails }) {
 
   const DIALOG_CONTENT = `${agentName} will not have access to anything in your Pod.`;
   const NO_PURPOSE_CONTENT = `At least one purpose needs to be selected to approve access for ${agentName}`;
-
-  const handleSubmit = (e) => {
+  const requestor = getRequestorWebId(consentRequest);
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedAccess.length && selectedPurposes.length) {
-      setConfirmationSetup(false);
-      return;
+      const signedVc = await approveAccessRequestWithConsent(
+        consentRequest,
+        requestor,
+        selectedAccess.accessModes,
+        selectedResources.length === 1
+          ? selectedResources[0]
+          : selectedResources
+      );
+      if (signedVc) {
+        router.push(`${redirectUrl}?signedVcUrl=${getVcId(signedVc)}`);
+      }
     }
     if (!selectedPurposes.length) {
       setConfirmationSetup(true);

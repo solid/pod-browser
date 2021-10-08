@@ -38,13 +38,14 @@ export default function GenerateConsentRequest() {
   const { data: profile } = useFetchProfile(session.info.webId);
   async function generateRequest(e) {
     e.preventDefault();
+    if (!profile) return;
     const vc = await requestAccessWithConsent({
       requestor: session.info.webId,
       resourceOwner: owner,
       access: { read: true },
       resources,
       purpose: "https://example.org/someSpecificPurpose",
-      requestorInboxUrl: profile ?? profile.inbox,
+      requestorInboxUrl: profile.inbox,
       options,
     });
     setConsentId(vc.id);

@@ -20,8 +20,8 @@
  */
 
 import React from "react";
+import { CombinedDataProvider } from "@inrupt/solid-ui-react";
 import * as solidClientFns from "@inrupt/solid-client";
-import { schema } from "rdf-namespaces";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import {
   aliceWebIdUrl,
@@ -32,9 +32,7 @@ import mockSessionContextProvider from "../../../__testUtils/mockSessionContextP
 import PersonProfile, {
   TESTCAFE_ID_NAME_FIELD,
   TESTCAFE_ID_NAME_TITLE,
-  TESTCAFE_ID_ORG_FIELD,
-  TESTCAFE_ID_ROLE_FIELD,
-} from "../index";
+} from "./index";
 
 const profileIri = "https://example.com/profile/card#me";
 
@@ -54,28 +52,18 @@ describe("Person Profile", () => {
     const SessionProvider = mockSessionContextProvider(session);
     const { asFragment, findByTestId } = renderWithTheme(
       <SessionProvider>
-        <PersonProfile profileIri={profileIri} type={schema.Person} />
+        <CombinedDataProvider
+          solidDataset={profileDataset}
+          thing={profileThing}
+        >
+          <PersonProfile profileIri={profileIri} />
+        </CombinedDataProvider>
       </SessionProvider>
     );
     await expect(findByTestId(TESTCAFE_ID_NAME_TITLE)).resolves.not.toBeNull();
-    expect(await findByTestId(TESTCAFE_ID_NAME_TITLE)).toHaveTextContent(
+    expect(await findByTestId(TESTCAFE_ID_NAME_FIELD)).toHaveTextContent(
       "Alice"
     );
-    expect(asFragment()).toMatchSnapshot();
-  });
-
-  test("renders an editable profile", async () => {
-    const session = mockSession();
-    const SessionProvider = mockSessionContextProvider(session);
-    const { asFragment, findByTestId } = renderWithTheme(
-      <SessionProvider>
-        <PersonProfile profileIri={profileIri} editing type={schema.Person} />
-      </SessionProvider>
-    );
-    await expect(findByTestId(TESTCAFE_ID_NAME_FIELD)).resolves.not.toBeNull();
-    await expect(findByTestId(TESTCAFE_ID_ROLE_FIELD)).resolves.not.toBeNull();
-    await expect(findByTestId(TESTCAFE_ID_ORG_FIELD)).resolves.not.toBeNull();
-
     expect(asFragment()).toMatchSnapshot();
   });
 });
