@@ -21,6 +21,7 @@
 
 import React from "react";
 import { useRouter } from "next/router";
+import { waitFor } from "@testing-library/react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import Header, { TESTCAFE_ID_HEADER_LOGO } from "./index";
@@ -50,7 +51,7 @@ describe("Header", () => {
       });
     });
 
-    it("renders a header", () => {
+    it("renders a header", async () => {
       const session = mockAuthenticatedSession();
       const SessionProvider = mockSessionContextProvider(session);
       mockedAuthenticatedHook.mockReturnValue({ data: mockProfileAlice() });
@@ -60,11 +61,13 @@ describe("Header", () => {
           <Header />
         </SessionProvider>
       );
+      await waitFor(() => {
+        expect(queryByTestId(TESTCAFE_ID_HEADER_LOGO)).toBeDefined();
+        expect(queryByTestId(TESTCAFE_ID_MENU_DRAWER)).toBeDefined();
+        expect(queryByTestId(TESTCAFE_ID_MAIN_NAV)).toBeDefined();
+        expect(queryByTestId(TESTCAFE_ID_USER_MENU)).toBeDefined();
+      });
       expect(asFragment()).toMatchSnapshot();
-      expect(queryByTestId(TESTCAFE_ID_HEADER_LOGO)).toBeDefined();
-      expect(queryByTestId(TESTCAFE_ID_MENU_DRAWER)).toBeDefined();
-      expect(queryByTestId(TESTCAFE_ID_MAIN_NAV)).toBeDefined();
-      expect(queryByTestId(TESTCAFE_ID_USER_MENU)).toBeDefined();
     });
   });
 
