@@ -36,7 +36,7 @@ import FeatureContext from "../../../src/contexts/featureFlagsContext";
 import getMainMenuItems from "../../../constants/mainMenu";
 import useUserMenu from "../../../src/hooks/useUserMenu";
 import MenuDrawerItem from "./menuDrawerItem";
-import { createNewLinks } from "../mainNav/index";
+import { filterMenuLinks } from "../mainNav/index";
 
 export const TESTCAFE_ID_MENU_DRAWER = "menu-drawer";
 export const TESTCAFE_ID_MENU_DRAWER_BUTTON = "menu-drawer-button";
@@ -50,7 +50,7 @@ export default function MenuDrawer() {
   const { enabled } = useContext(FeatureContext);
   const [activeLinks, setActiveLinks] = useState([]);
   useEffect(() => {
-    createNewLinks(menuItems, enabled).then((data) => setActiveLinks(data));
+    filterMenuLinks(menuItems, enabled).then((data) => setActiveLinks(data));
   }, [enabled]);
   const menuItemsToShow = activeLinks.filter(({ activePage }) => activePage);
   const [open, setOpen] = useState(false);

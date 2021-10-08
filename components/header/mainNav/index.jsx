@@ -51,7 +51,7 @@ function removeFeatureFlaggedItems(items, enabled) {
   );
 }
 
-export async function createNewLinks(items, enabled) {
+export async function filterMenuLinks(items, enabled) {
   const links = await removeFeatureFlaggedItems(items, enabled);
   return links;
 }
@@ -62,7 +62,7 @@ export default function MainNav() {
   const { enabled } = useContext(FeatureContext);
   const [activeLinks, setActiveLinks] = useState([]);
   useEffect(() => {
-    createNewLinks(menuItems, enabled).then((data) => setActiveLinks(data));
+    filterMenuLinks(menuItems, enabled).then((data) => setActiveLinks(data));
   }, [enabled]);
   const links = activeLinks
     .filter(({ activePage }) => activePage)
