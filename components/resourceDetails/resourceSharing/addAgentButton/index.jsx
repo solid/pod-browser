@@ -23,7 +23,7 @@
 
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Modal } from "@material-ui/core";
+import { DialogContent, Modal } from "@material-ui/core";
 import { Button } from "@inrupt/prism-react-components";
 import AgentPickerModal from "../agentPickerModal";
 import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
@@ -72,13 +72,16 @@ export default function AddAgentButton({ type, setLoading }) {
         aria-labelledby={`${editText} Modal`}
         aria-describedby={`${editText} for this resource`}
       >
-        <AgentPickerModal
-          type={type}
-          onClose={handleClose}
-          setLoading={setLoading}
-          advancedSharing={isCustomPolicy(type)}
-          editing={editing}
-        />
+        <DialogContent>
+          {" "}
+          <AgentPickerModal
+            type={type}
+            onClose={handleClose}
+            setLoading={setLoading}
+            advancedSharing={isCustomPolicy(type)}
+            editing={editing}
+          />
+        </DialogContent>
       </Modal>
     </>
   );
