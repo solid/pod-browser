@@ -76,12 +76,13 @@ describe("useAddressBookOld", () => {
         mockedUseAuthenticatedProfile.mockReturnValue({ data: profile });
       });
 
-      it("should call getResource", () => {
+      it("should call getResource", async () => {
         const dataset = 42;
         getResource.mockResolvedValue({ response: { dataset } });
-        renderHook(() => useAddressBookOld(), {
+        const { waitForNextUpdate } = renderHook(() => useAddressBookOld(), {
           wrapper,
         });
+        await waitForNextUpdate();
         expect(getResource).toHaveBeenCalledWith(
           addressBookFns.getContactsIndexIri(contactsIri),
           session.fetch
