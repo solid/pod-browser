@@ -19,12 +19,42 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { DatasetContext } from "@inrupt/solid-ui-react";
 import { useState, useEffect, useContext } from "react";
+import { getPolicyDetailFromAccess } from "../../accessControl/acp";
+import {
+  getRequestedAccesses,
+  getRequestorWebId,
+} from "../../models/consent/request";
 import AccessControlContext from "../../contexts/accessControlContext";
+import useConsentBasedAccessForResource from "../useConsentBasedAccessForResource";
+
+const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
+  const requestedAccessModes = consentBasedPermissions.map((vc) => {
+    return {
+      accessMode: getRequestedAccesses(vc),
+      vc,
+    };
+  });
+  const normalizedPermissions = requestedAccessModes.map((accessMode, vc) => {
+    return {
+      type: "agent",
+      acl: accessMode,
+      webId: getRequestorWebId(vc),
+      alias: getPolicyDetailFromAccess(accessMode, "name"),
+      inherited: false,
+      vc,
+    };
+  });
+  return normalizedPermissions;
+};
 
 export default function useAllPermissions() {
   const { accessControl } = useContext(AccessControlContext);
+  const { datasetUrl } = useContext(DatasetContext);
+  const consentBasedPermissions = useConsentBasedAccessForResource(datasetUrl);
   const [permissions, setPermissions] = useState(null);
+  const [consentPermissions, setConsentPermissions] = useState(null);
 
   useEffect(() => {
     if (!accessControl) {
@@ -36,7 +66,11 @@ export default function useAllPermissions() {
       .then((normalizedPermissions) => {
         setPermissions(normalizedPermissions.reverse());
       });
-  }, [accessControl]);
+    const normalizedConsentPermissions =
+      consentBasedPermissions ??
+      normalizeConsentBasedPermissions(consentBasedPermissions);
+    setConsentPermissions(normalizedConsentPermissions);
+  }, [accessControl, consentBasedPermissions]);
 
-  return { permissions };
+  return { permissions: permissions?.concat(consentPermissions) };
 }
