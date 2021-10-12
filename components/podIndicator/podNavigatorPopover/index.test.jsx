@@ -19,7 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
+import React, { createRef } from "react";
+import { waitFor } from "@testing-library/dom";
 import * as solidClientFns from "@inrupt/solid-client";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import PodNavigatorPopover, {
@@ -30,14 +31,23 @@ import PodNavigatorPopover, {
 import { resourceHref } from "../../../src/navigator";
 
 describe("PodNavigatorPopover", () => {
-  test("renders a pod navigator popover", () => {
-    const { asFragment } = renderWithTheme(
-      <PodNavigatorPopover
-        anchor={{}}
-        setDisplayNavigator={jest.fn()}
-        popoverWidth={100}
-      />
+  test("renders a pod navigator popover", async () => {
+    const ref = createRef();
+    const { asFragment, getByText } = renderWithTheme(
+      <div>
+        <button type="button" ref={ref}>
+          Anchor button
+        </button>
+        <PodNavigatorPopover
+          anchor={ref}
+          setDisplayNavigator={jest.fn()}
+          popoverWidth={100}
+        />
+      </div>
     );
+    await waitFor(() => {
+      expect(getByText("Anchor button")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
   describe("submitHandler", () => {

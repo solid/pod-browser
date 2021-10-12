@@ -1,3 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PodNavigatorPopover renders a pod navigator popover 1`] = `<DocumentFragment />`;
+exports[`PodNavigatorPopover renders a pod navigator popover 1`] = `
+<DocumentFragment>
+  <div>
+    <button
+      type="button"
+    >
+      Anchor button
+    </button>
+  </div>
+</DocumentFragment>
+`;
