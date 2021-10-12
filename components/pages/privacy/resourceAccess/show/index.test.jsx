@@ -20,11 +20,17 @@
  */
 
 import React from "react";
+import * as solidClientFns from "@inrupt/solid-client";
+import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { schema } from "rdf-namespaces";
 import { useRouter } from "next/router";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import AgentResourceAccessShowPage, { TESTCAFE_ID_TAB_PROFILE } from "./index";
+import {
+  aliceWebIdUrl,
+  mockPersonDatasetAlice,
+} from "../../../../../__testUtils/mockPersonResource";
 
 jest.mock("next/router");
 
@@ -32,23 +38,37 @@ const mockedUseRouter = useRouter;
 const agentWebId = "https://example.com/profile/card#me";
 
 describe("Resource access show page", () => {
+  const profileDataset = mockPersonDatasetAlice();
+  const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+
   beforeEach(() => {
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValue(profileDataset);
+    jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
     mockedUseRouter.mockReturnValue({
       query: {
         webId: agentWebId,
       },
     });
   });
-  test("it renders a resource access page for a person", () => {
-    const { asFragment } = renderWithTheme(
+
+  test("it renders a resource access page for a person", async () => {
+    const { asFragment, getByText } = renderWithTheme(
       <AgentResourceAccessShowPage type={schema.Person} />
     );
+    await waitFor(() => {
+      expect(getByText("Permissions")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it renders a resource access page for an app", () => {
-    const { asFragment } = renderWithTheme(
+  test("it renders a resource access page for an app", async () => {
+    const { asFragment, getByText } = renderWithTheme(
       <AgentResourceAccessShowPage type={schema.SoftwareApplication} />
     );
+    await waitFor(() => {
+      expect(getByText("Permissions")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
   test("renders profile when clicking on profile tab", () => {

@@ -40,7 +40,6 @@ import {
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
 import { createStyles, Divider } from "@material-ui/core";
-import Link from "next/link";
 import ConfirmationDialog from "../../../../confirmationDialog";
 import { handleAction } from "../../../../containerTableRow";
 import { useRedirectIfLoggedOut } from "../../../../../src/effects/auth";
@@ -83,11 +82,7 @@ export default function AgentResourceAccessShowPage({ type }) {
   const [shouldUpdate, setShouldUpdate] = useState(false);
   const [selectedTabValue, setSelectedTabValue] = useState("Permissions");
 
-  const link = (
-    <Link href="/privacy" passHref>
-      <BackToNavLink>privacy</BackToNavLink>
-    </Link>
-  );
+  const link = <BackToNavLink href="/privacy">privacy</BackToNavLink>;
 
   const handleTabChange = (event, newValue) => {
     setSelectedTabValue(newValue);
