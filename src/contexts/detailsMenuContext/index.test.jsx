@@ -19,13 +19,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { render } from "@testing-library/react";
 import DetailsMenuContext, { DetailsMenuProvider } from "./index";
 
 function ChildComponent() {
   const { menuOpen, setMenuOpen } = useContext(DetailsMenuContext);
-  setMenuOpen(true);
+  useEffect(() => {
+    setMenuOpen(true);
+  }, [setMenuOpen]);
   return <div id="menuOpen">{menuOpen ? "true" : "false"}</div>;
 }
 
