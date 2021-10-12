@@ -99,7 +99,7 @@ export default function AgentProfileDetails({
       >
         {localProfile ? displayProfileName(localProfile) : webId}
       </Typography>
-      {!permission.inherited ? (
+      {!permission.inherited && !permission.vc ? (
         <AgentAccessOptionsMenu
           resourceIri={resourceIri}
           profile={profile}
