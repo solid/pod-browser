@@ -21,7 +21,7 @@
 
 import React from "react";
 import { useRouter } from "next/router";
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import IndexPage from "./index";
 import TestApp from "../../../__testUtils/testApp";
@@ -33,26 +33,31 @@ describe("Resource page", () => {
   beforeEach(() => {
     useRouter.mockImplementation(() => ({
       query: {
-        iri: "https://mypod.myhost.com",
+        iri: "https://mypod.myhost.com/",
       },
     }));
   });
 
-  test("Renders the resource page", () => {
-    const { asFragment } = render(
+  test("Renders the resource page", async () => {
+    const { asFragment, getByText } = render(
       <TestApp>
         <IndexPage />
       </TestApp>
     );
+    await waitFor(() => {
+      expect(getByText("Resource Not Supported")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("Redirects if the user is logged out", () => {
+  test("Redirects if the user is logged out", async () => {
     render(
       <TestApp>
         <IndexPage />
       </TestApp>
     );
-    expect(useRedirectIfLoggedOut).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(useRedirectIfLoggedOut).toHaveBeenCalled();
+    });
   });
 });

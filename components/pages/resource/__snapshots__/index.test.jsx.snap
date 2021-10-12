@@ -3,21 +3,38 @@
 exports[`Resource page Renders the resource page 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
+    data-testid="not-supported"
   >
-    <svg
-      class="PodBrowser-loading-indicator"
-      data-testid="spinner"
-      viewBox="22 22 44 44"
+    <div
+      class="PodBrowser-page-header"
     >
-      <circle
-        cx="44"
-        cy="44"
-        fill="none"
-        r="20.2"
-        stroke-width="3.6"
-      />
-    </svg>
+      <h1
+        class="PodBrowser-page-header__title"
+      >
+        Resource Not Supported
+      </h1>
+    </div>
+    <div
+      class="PodBrowser-container"
+    >
+      <div
+        class="PodBrowser-content"
+      >
+        <p>
+          PodBrowser can only show resources that are Solid containers.
+        </p>
+        <p>
+          <span>
+            Navigate to the resource directly (this will navigate away from PodBrowser): 
+          </span>
+          <a
+            href="https://mypod.myhost.com/"
+          >
+            https://mypod.myhost.com/
+          </a>
+        </p>
+      </div>
+    </div>
   </div>
 </DocumentFragment>
 `;
