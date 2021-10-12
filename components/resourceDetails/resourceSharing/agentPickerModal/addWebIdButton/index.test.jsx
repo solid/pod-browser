@@ -29,7 +29,7 @@ describe("AddWebIdButton", () => {
   const onClick = jest.fn();
   it("renders an Add WebID Button", () => {
     const { asFragment } = renderWithTheme(
-      <AddWebIdButton onClick={onclick} />
+      <AddWebIdButton onClick={onClick} />
     );
 
     expect(asFragment()).toMatchSnapshot();

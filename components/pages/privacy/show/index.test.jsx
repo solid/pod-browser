@@ -20,6 +20,7 @@
  */
 
 import React from "react";
+import { waitFor } from "@testing-library/dom";
 import * as solidClientFns from "@inrupt/solid-client";
 import * as RouterFns from "next/router";
 import { schema } from "rdf-namespaces";
@@ -31,7 +32,6 @@ import {
   mockPersonDatasetAlice,
   aliceWebIdUrl,
 } from "../../../../__testUtils/mockPersonResource";
-import { waitFor } from "@testing-library/dom";
 
 jest.mock("../../../../src/effects/auth");
 
