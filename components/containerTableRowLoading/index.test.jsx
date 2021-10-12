@@ -26,7 +26,11 @@ import ContainerTableRowSkeleton from "./index";
 describe("ContainerTableRowSkeleton", () => {
   test("Renders a ContainerTableRowSkeleton", () => {
     const { asFragment } = render(
-      <ContainerTableRowSkeleton iri="https://example.com/resource" />
+      <table>
+        <tbody>
+          <ContainerTableRowSkeleton iri="https://example.com/resource" />
+        </tbody>
+      </table>
     );
     expect(asFragment()).toMatchSnapshot();
   });

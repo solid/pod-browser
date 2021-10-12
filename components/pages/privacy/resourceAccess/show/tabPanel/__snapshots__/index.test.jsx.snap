@@ -4,10 +4,13 @@ exports[`Tab Panel it renders permissions panel 1`] = `
 <DocumentFragment>
   <div
     aria-labelledby="simple-tab-Permissions"
-    hidden=""
     id="simple-tabpanel-Permissions"
     role="tabpanel"
-  />
+  >
+    <div
+      class="PodBrowser-root PodBrowser-root"
+    />
+  </div>
 </DocumentFragment>
 `;
 
@@ -15,9 +18,12 @@ exports[`Tab Panel it renders profile panel 1`] = `
 <DocumentFragment>
   <div
     aria-labelledby="simple-tab-Profile"
-    hidden=""
     id="simple-tabpanel-Profile"
     role="tabpanel"
-  />
+  >
+    <div
+      class="PodBrowser-root PodBrowser-root"
+    />
+  </div>
 </DocumentFragment>
 `;
