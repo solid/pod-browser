@@ -20,6 +20,7 @@
  */
 
 import React from "react";
+import { waitFor } from "@testing-library/dom";
 import * as solidClientFns from "@inrupt/solid-client";
 import { schema } from "rdf-namespaces";
 import { renderWithTheme } from "../../__testUtils/withTheme";
@@ -47,15 +48,18 @@ describe("Profile", () => {
   test("renders a person profile", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
-    const { asFragment } = renderWithTheme(
+    const { asFragment, queryAllByText } = renderWithTheme(
       <SessionProvider>
         <Profile profileIri={profileIri} type={schema.Person} />
       </SessionProvider>
     );
+    await waitFor(() => {
+      expect(queryAllByText("Alice")).toHaveLength(2);
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("renders an app profile", async () => {
+  test("renders an app profile", () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
     const { asFragment } = renderWithTheme(
