@@ -3,21 +3,148 @@
 exports[`AgentList renders page when agents is loaded 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
+    class="PodBrowser-container"
   >
-    <svg
-      class="PodBrowser-loading-indicator"
-      data-testid="spinner"
-      viewBox="22 22 44 44"
+    <table
+      class="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
+      role="table"
     >
-      <circle
-        cx="44"
-        cy="44"
-        fill="none"
-        r="20.2"
-        stroke-width="3.6"
-      />
-    </svg>
+      <thead>
+        <tr
+          role="row"
+        >
+          <th
+            colspan="1"
+            role="columnheader"
+          />
+          <th
+            colspan="1"
+            role="columnheader"
+            style="cursor: pointer;"
+            title="Toggle SortBy"
+          >
+            Name
+          </th>
+          <th
+            colspan="1"
+            role="columnheader"
+            style="cursor: pointer;"
+            title="Toggle SortBy"
+          >
+            WebID
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        role="rowgroup"
+      >
+        <tr
+          class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
+          role="row"
+          tabindex="0"
+        >
+          <td
+            role="cell"
+          >
+            <div
+              class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+            >
+              <svg
+                aria-hidden="true"
+                class="PodBrowser-root PodBrowser-fallback"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                />
+              </svg>
+            </div>
+          </td>
+          <td
+            role="cell"
+          >
+            <a
+              data-testid="resource-access-link"
+              href="/privacy/person/http%3A%2F%2Fbob.example.com%2Fbob%23me"
+            >
+              Bob
+            </a>
+          </td>
+          <td
+            role="cell"
+          >
+            http://bob.example.com/bob#me
+          </td>
+        </tr>
+        <tr
+          class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
+          role="row"
+          tabindex="0"
+        >
+          <td
+            role="cell"
+          >
+            <div
+              class="PodBrowser-root PodBrowser-circle PodBrowser-avatar"
+            >
+              <img
+                alt="Alice"
+                class="PodBrowser-img"
+                src="http://alice.example.com/alice.jpg"
+              />
+            </div>
+          </td>
+          <td
+            role="cell"
+          >
+            <a
+              data-testid="resource-access-link"
+              href="/privacy/person/http%3A%2F%2Falice.example.com%2Falice%23me"
+            >
+              Alice
+            </a>
+          </td>
+          <td
+            role="cell"
+          >
+            http://alice.example.com/alice#me
+          </td>
+        </tr>
+        <tr
+          class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
+          role="row"
+          tabindex="0"
+        >
+          <td
+            role="cell"
+          >
+            <div
+              class="PodBrowser-root PodBrowser-circle PodBrowser-appAvatar PodBrowser-colorDefault"
+            >
+              <span
+                class="PodBrowser-icon-project-diagram PodBrowser-appAvatar"
+              />
+            </div>
+          </td>
+          <td
+            role="cell"
+          >
+            <a
+              data-testid="resource-access-link"
+              href="/privacy/app/https%3A%2F%2Fmockappurl.com"
+            >
+              Mock App
+            </a>
+          </td>
+          <td
+            role="cell"
+          >
+            https://mockappurl.com
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </DocumentFragment>
 `;
