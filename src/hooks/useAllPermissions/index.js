@@ -67,6 +67,7 @@ const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
 
 export default function useAllPermissions() {
   const { accessControl } = useContext(AccessControlContext);
+<<<<<<< HEAD
   const { solidDataset: dataset } = useContext(DatasetContext);
   const datasetUrl = getSourceUrl(dataset);
   const {
@@ -75,6 +76,12 @@ export default function useAllPermissions() {
   const [acpPermissions, setAcpPermissions] = useState([]);
   const [permissions, setPermissions] = useState(null);
   const [consentPermissions, setConsentPermissions] = useState([]);
+=======
+  const { datasetUrl } = useContext(DatasetContext);
+  const consentBasedPermissions = useConsentBasedAccessForResource(datasetUrl);
+  const [permissions, setPermissions] = useState(null);
+  const [consentPermissions, setConsentPermissions] = useState(null);
+>>>>>>> Feat: display consent based agents in Sharing panel
 
   useEffect(() => {
     if (!accessControl) {
@@ -86,6 +93,7 @@ export default function useAllPermissions() {
       .then((normalizedPermissions) => {
         setAcpPermissions(normalizedPermissions.reverse());
       });
+<<<<<<< HEAD
     const normalizedConsentPermissions = consentBasedPermissions
       ? normalizeConsentBasedPermissions(consentBasedPermissions)
       : [];
@@ -100,4 +108,13 @@ export default function useAllPermissions() {
   return {
     permissions,
   };
+=======
+    const normalizedConsentPermissions =
+      consentBasedPermissions ??
+      normalizeConsentBasedPermissions(consentBasedPermissions);
+    setConsentPermissions(normalizedConsentPermissions);
+  }, [accessControl, consentBasedPermissions]);
+
+  return { permissions: permissions?.concat(consentPermissions) };
+>>>>>>> Feat: display consent based agents in Sharing panel
 }
