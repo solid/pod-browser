@@ -22,7 +22,6 @@
 import React from "react";
 import T from "prop-types";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import {
   BackToNav,
   BackToNavLink,
@@ -36,11 +35,7 @@ export default function AgentShow({ type }) {
   const router = useRouter();
   const decodedIri = decodeURIComponent(router.query.webId);
 
-  const link = (
-    <Link href="/privacy" passHref>
-      <BackToNavLink>privacy</BackToNavLink>
-    </Link>
-  );
+  const link = <BackToNavLink href="/privacy">privacy</BackToNavLink>;
   return (
     <>
       <Container>
