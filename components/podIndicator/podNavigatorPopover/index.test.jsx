@@ -19,7 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { createRef } from "react";
+import React from "react";
+import { render } from "@testing-library/react";
 import { waitFor } from "@testing-library/dom";
 import * as solidClientFns from "@inrupt/solid-client";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
@@ -27,26 +28,32 @@ import PodNavigatorPopover, {
   submitHandler,
   closeHandler,
   clickHandler,
+  TESTCAFE_ID_POD_NAVIGATE_INPUT,
 } from "./index";
 import { resourceHref } from "../../../src/navigator";
 
 describe("PodNavigatorPopover", () => {
+  let anchorEl;
+  beforeEach(() => {
+    const { getByText } = render(
+      <button type="button" id="pod-indicator-prompt">
+        Anchor button
+      </button>
+    );
+    anchorEl = getByText("Anchor button");
+  });
   test("renders a pod navigator popover", async () => {
-    const ref = createRef();
-    const { asFragment, getByText } = renderWithTheme(
+    const { asFragment, getByTestId } = renderWithTheme(
       <div>
-        <button type="button" ref={ref}>
-          Anchor button
-        </button>
         <PodNavigatorPopover
-          anchor={ref}
+          anchor={anchorEl}
           setDisplayNavigator={jest.fn()}
           popoverWidth={100}
         />
       </div>
     );
     await waitFor(() => {
-      expect(getByText("Anchor button")).toBeInTheDocument();
+      expect(getByTestId(TESTCAFE_ID_POD_NAVIGATE_INPUT)).toBeInTheDocument();
     });
     expect(asFragment()).toMatchSnapshot();
   });

@@ -36,7 +36,7 @@ import styles from "./styles";
 import { resourceHref } from "../../../src/navigator";
 import { normalizeContainerUrl } from "../../../src/stringHelpers";
 
-const TESTCAFE_ID_POD_NAVIGATE_INPUT = "pod-navigate-input";
+export const TESTCAFE_ID_POD_NAVIGATE_INPUT = "pod-navigate-input";
 const TESTCAFE_ID_POD_NAVIGATE_BUTTON = "pod-navigate-button";
 
 export const clickHandler = (setAnchorEl) => (event) =>
