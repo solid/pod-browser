@@ -427,15 +427,6 @@ exports[`AgentAccessTable with consent based agents renders a list of permission
                         >
                           Mock App
                         </p>
-                        <button
-                          class="PodBrowser-button"
-                          data-testid="menu-button"
-                          type="button"
-                        >
-                          <i
-                            class="PodBrowser-icon-more"
-                          />
-                        </button>
                       </div>
                     </td>
                   </tr>
