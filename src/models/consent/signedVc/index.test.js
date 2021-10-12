@@ -19,22 +19,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useState, useEffect } from "react";
-import { getAccessWithConsentAll } from "@inrupt/solid-client-consent";
+import getSignedVc from "../../../../__testUtils/mockSignedVc";
 
-export default function useConsentBasedAccessForResource(resource) {
-  const [permissions, setPermissions] = useState(null);
+import getRequestedAccessesFromSignedVc from "./index";
 
-  useEffect(() => {
-    if (!resource) {
-      setPermissions(null);
-      return;
-    }
-    const access = getAccessWithConsentAll({
-      resources: [resource],
+const signedVc = getSignedVc();
+
+describe("getRequestedAccessesFromSignedVc", () => {
+  test("it returns requested accesses", () => {
+    const accesses = getRequestedAccessesFromSignedVc(signedVc);
+    expect(accesses).toEqual({
+      mode: ["http://www.w3.org/ns/auth/acl#Read"],
+      hasStatus: "https://w3id.org/GConsent#ConsentStatusExplicitlyGiven",
+      forPersonalData: [
+        "https://example.com/resource1",
+        "https://example.com/resource2",
+      ],
+      forPurpose: [
+        "https://example.org/someSpecificPurpose",
+        "https://example.org/someSpecificPurpose2",
+      ],
+      isProvidedTo: "https://pod.inrupt.com/virginiabalseiro/profile/card#me",
     });
-    setPermissions(access);
-  }, [resource]);
-
-  return { permissions };
-}
+  });
+});

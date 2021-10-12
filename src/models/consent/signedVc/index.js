@@ -19,22 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useState, useEffect } from "react";
-import { getAccessWithConsentAll } from "@inrupt/solid-client-consent";
-
-export default function useConsentBasedAccessForResource(resource) {
-  const [permissions, setPermissions] = useState(null);
-
-  useEffect(() => {
-    if (!resource) {
-      setPermissions(null);
-      return;
-    }
-    const access = getAccessWithConsentAll({
-      resources: [resource],
-    });
-    setPermissions(access);
-  }, [resource]);
-
-  return { permissions };
+export default function getRequestedAccessesFromSignedVc(signedVc) {
+  return Array.isArray(signedVc?.credentialSubject?.providedConsent.mode)
+    ? signedVc?.credentialSubject?.providedConsent
+    : [signedVc?.credentialSubject?.providedConsent];
 }

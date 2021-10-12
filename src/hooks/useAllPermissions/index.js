@@ -22,27 +22,40 @@
 import { DatasetContext } from "@inrupt/solid-ui-react";
 import { useState, useEffect, useContext } from "react";
 import { getPolicyDetailFromAccess } from "../../accessControl/acp";
-import {
-  getRequestedAccesses,
-  getRequestorWebId,
-} from "../../models/consent/request";
+import { getRequestorWebId } from "../../models/consent/request";
 import AccessControlContext from "../../contexts/accessControlContext";
 import useConsentBasedAccessForResource from "../useConsentBasedAccessForResource";
+import getRequestedAccessesFromSignedVc from "../../models/consent/signedVc";
 
 const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
+  if (!consentBasedPermissions) return [];
   const requestedAccessModes = consentBasedPermissions.map((vc) => {
+    const accessMode = {
+      read: getRequestedAccessesFromSignedVc(vc).mode.some((el) =>
+        el.includes("Read")
+      ),
+      write: getRequestedAccessesFromSignedVc(vc).mode.some((el) =>
+        el.includes("Write")
+      ),
+      append: getRequestedAccessesFromSignedVc(vc).mode.some((el) =>
+        el.includes("Append")
+      ),
+      control: getRequestedAccessesFromSignedVc(vc).mode.some((el) =>
+        el.includes("Control")
+      ),
+    };
     return {
-      accessMode: getRequestedAccesses(vc),
+      acl: accessMode,
       vc,
     };
   });
-  const normalizedPermissions = requestedAccessModes.map((accessMode, vc) => {
+
+  const normalizedPermissions = requestedAccessModes.map(({ acl, vc }) => {
     return {
       type: "agent",
-      acl: accessMode,
+      acl,
       webId: getRequestorWebId(vc),
-      alias: getPolicyDetailFromAccess(accessMode, "name"),
-      inherited: false,
+      alias: getPolicyDetailFromAccess(acl, "name"),
       vc,
     };
   });
@@ -52,9 +65,12 @@ const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
 export default function useAllPermissions() {
   const { accessControl } = useContext(AccessControlContext);
   const { datasetUrl } = useContext(DatasetContext);
-  const consentBasedPermissions = useConsentBasedAccessForResource(datasetUrl);
+  const {
+    permissions: consentBasedPermissions,
+  } = useConsentBasedAccessForResource(datasetUrl);
+  const [acpPermissions, setAcpPermissions] = useState([]);
   const [permissions, setPermissions] = useState(null);
-  const [consentPermissions, setConsentPermissions] = useState(null);
+  const [consentPermissions, setConsentPermissions] = useState([]);
 
   useEffect(() => {
     if (!accessControl) {
@@ -64,13 +80,20 @@ export default function useAllPermissions() {
     accessControl
       .getAllPermissionsForResource()
       .then((normalizedPermissions) => {
-        setPermissions(normalizedPermissions.reverse());
+        setAcpPermissions(normalizedPermissions.reverse());
       });
-    const normalizedConsentPermissions =
-      consentBasedPermissions ??
-      normalizeConsentBasedPermissions(consentBasedPermissions);
+    const normalizedConsentPermissions = consentBasedPermissions
+      ? normalizeConsentBasedPermissions(consentBasedPermissions)
+      : [];
     setConsentPermissions(normalizedConsentPermissions);
   }, [accessControl, consentBasedPermissions]);
 
-  return { permissions: permissions?.concat(consentPermissions) };
+  useEffect(() => {
+    if (!acpPermissions.length && !consentPermissions.length) return;
+    setPermissions([...acpPermissions, ...consentPermissions]);
+  }, [acpPermissions, consentPermissions]);
+
+  return {
+    permissions,
+  };
 }

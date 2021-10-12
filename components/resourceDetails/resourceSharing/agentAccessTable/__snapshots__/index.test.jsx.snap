@@ -252,6 +252,204 @@ exports[`AgentAccessTable with agents renders a list of permissions 1`] = `
 </DocumentFragment>
 `;
 
+exports[`AgentAccessTable with consent based agents renders a list of permissions including consent based agent 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+    data-testid="agent-access-table"
+  >
+    <div
+      class="PodBrowser-headerContainer"
+    >
+      <i
+        class="PodBrowser-icon-editor PodBrowser-icon PodBrowser-iconEditor"
+      />
+      <div
+        class="PodBrowser-textContainer"
+      >
+        <div
+          class="PodBrowser-titleAndButtonContainer"
+        >
+          <p
+            class="PodBrowser-title"
+          >
+            Editors
+          </p>
+          <button
+            class="PodBrowser-button PodBrowser-button--text"
+            data-testid="add-agent-button"
+          >
+            <span
+              class="PodBrowser-icon-edit PodBrowser-button__icon PodBrowser-button__icon--before"
+            />
+            <span
+              class="PodBrowser-button__text"
+            >
+              Edit Editors
+            </span>
+          </button>
+          <button
+            class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                aria-label="Show menu for policy"
+                class="PodBrowser-icon-more"
+              />
+            </span>
+          </button>
+        </div>
+        <span
+          class="PodBrowser-description"
+        >
+          <p>
+            <b>
+              Can 
+            </b>
+            view, edit and delete this resource
+          </p>
+        </span>
+      </div>
+    </div>
+    <div
+      class="PodBrowser-container PodBrowser-entered"
+      style="min-height: 0px;"
+    >
+      <div
+        class="PodBrowser-wrapper"
+      >
+        <div
+          class="PodBrowser-wrapperInner"
+        >
+          <div
+            role="region"
+          >
+            <div
+              class="PodBrowser-permissionsContainer"
+            >
+              <div
+                class="PodBrowser-searchBoxContainer"
+              >
+                <button
+                  aria-label="search"
+                  class="PodBrowser-root PodBrowser-root"
+                  tabindex="0"
+                  type="submit"
+                >
+                  <span
+                    class="PodBrowser-label"
+                  >
+                    <i
+                      aria-label="search"
+                      class="PodBrowser-icon-search PodBrowser-iconSearch"
+                    />
+                  </span>
+                  <span
+                    class="PodBrowser-root"
+                  />
+                </button>
+                <div
+                  class="PodBrowser-root PodBrowser-searchInput"
+                >
+                  <input
+                    aria-label="Search by name or WebId"
+                    class="PodBrowser-input"
+                    data-testid="search-input"
+                    placeholder="Search by name or WebId"
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <table
+                class="PodBrowser-table PodBrowser-agents-table"
+                role="table"
+              >
+                <tbody
+                  class="PodBrowser-table__body"
+                  role="rowgroup"
+                >
+                  <tr
+                    class="PodBrowser-table__body-row"
+                  >
+                    <td
+                      class="PodBrowser-table__body-cell PodBrowser-agent-cell"
+                    >
+                      <div
+                        class="PodBrowser-nameAndAvatarContainer"
+                      >
+                        <div
+                          class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+                        >
+                          <span
+                            class="PodBrowser-icon-user PodBrowser-avatar__icon"
+                          />
+                        </div>
+                        <p
+                          class="PodBrowser-root PodBrowser-detailText PodBrowser-body1 PodBrowser-detailText"
+                          data-testid="agent-web-id"
+                        >
+                          Example A
+                        </p>
+                        <button
+                          class="PodBrowser-button"
+                          data-testid="menu-button"
+                          type="button"
+                        >
+                          <i
+                            class="PodBrowser-icon-more"
+                          />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr
+                    class="PodBrowser-table__body-row"
+                  >
+                    <td
+                      class="PodBrowser-table__body-cell PodBrowser-agent-cell"
+                    >
+                      <div
+                        class="PodBrowser-nameAndAvatarContainer"
+                      >
+                        <div
+                          class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+                        >
+                          <span
+                            class="PodBrowser-icon-user PodBrowser-avatar__icon"
+                          />
+                        </div>
+                        <p
+                          class="PodBrowser-root PodBrowser-detailText PodBrowser-body1 PodBrowser-detailText"
+                          data-testid="agent-web-id"
+                        >
+                          Mock App
+                        </p>
+                        <button
+                          class="PodBrowser-button"
+                          data-testid="menu-button"
+                          type="button"
+                        >
+                          <i
+                            class="PodBrowser-icon-more"
+                          />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`AgentAccessTable without agents does not render table at all if there aren't any permissions for a custom policy 1`] = `<DocumentFragment />`;
 
 exports[`AgentAccessTable without agents renders an empty list of permissions if permissions are unavailable 1`] = `

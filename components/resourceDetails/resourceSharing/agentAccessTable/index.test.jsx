@@ -27,6 +27,8 @@ import AgentAccessTable, { TESTCAFE_ID_AGENT_ACCESS_TABLE } from "./index";
 import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
 import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
 import mockPermissionsContextProvider from "../../../../__testUtils/mockPermissionsContextProvider";
+import getSignedVc from "../../../../__testUtils/mockSignedVc";
+import { mockApp } from "../../../../__testUtils/mockApp";
 import { TESTCAFE_ID_SEARCH_INPUT } from "../agentsSearchBar";
 // import {
 //   TESTCAFE_ID_TAB_PEOPLE,
@@ -77,7 +79,15 @@ const profile4 = {
   types: ["https://schema.org/Person"],
 };
 
+const appProfile = {
+  avatar: null,
+  name: "Mock App",
+  types: ["https://schema.org/SoftwareApplication"],
+};
+
 const profiles = [profile1, profile2, profile3, profile4];
+
+const profilesWithApp = [profile1, appProfile];
 
 const publicPermission = {
   acl: createAccessMap(true, true, false, false),
@@ -114,12 +124,35 @@ const permissions = [
   },
 ];
 
+const permissionsWithConsentAgent = [
+  {
+    acl: createAccessMap(true, true, false, false),
+    webId: "https://example1.com/profile/card#me",
+    type: "agent",
+  },
+  {
+    acl: createAccessMap(true, true, false, false),
+    webId: "https://mockapp.com/app#id",
+    type: "agent",
+    vc: getSignedVc(),
+  },
+];
+
 const permissionsWithProfiles = permissions.map((p, i) => {
   return {
     ...p,
     profile: profiles[i],
   };
 });
+
+const permissionsWithConsentWithProfiles = permissionsWithConsentAgent.map(
+  (p, i) => {
+    return {
+      ...p,
+      profile: profilesWithApp[i],
+    };
+  }
+);
 
 const permissionsWithProfilesMixedTypes = [
   {
@@ -304,6 +337,25 @@ describe("AgentAccessTable with agents", () => {
       expect(queryByText("Example 1")).not.toBeNull();
       expect(queryByText("Example 2")).not.toBeNull();
     });
+  });
+});
+describe("AgentAccessTable with consent based agents", () => {
+  beforeEach(() => {
+    mockedUsePermissionsWithProfiles.mockReturnValue({
+      permissionsWithProfiles: permissionsWithConsentWithProfiles,
+    });
+  });
+
+  it("renders a list of permissions including consent based agent", async () => {
+    const type = "editors";
+    const { asFragment, queryAllByRole } = renderWithTheme(
+      <PermissionsContextProvider>
+        <AgentAccessTable type={type} />
+      </PermissionsContextProvider>
+    );
+
+    expect(queryAllByRole("cell")).toHaveLength(2);
+    expect(asFragment()).toMatchSnapshot();
   });
 });
 describe("AgentAccessTable without agents", () => {
