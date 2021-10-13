@@ -41,7 +41,7 @@ export default function PrivacyPage() {
   const router = useRouter();
   useRedirectIfLoggedOut();
   const [search, setSearch] = useState("");
-  const [requestUrl, setRequestUrl] = useState(null);
+  const [request, setRequest] = useState(null);
   const [searchValues, setSearchValues] = useState(null);
   const [selectedTabValue, setSelectedTabValue] = useState("all");
 
@@ -71,7 +71,7 @@ export default function PrivacyPage() {
     }
   };
   const handleChangeRequestUrl = (e) => {
-    setRequestUrl(e.target.value);
+    setRequest(e.target.value);
   };
   const redirectUrl = router.asPath;
 
@@ -96,15 +96,15 @@ export default function PrivacyPage() {
               <input
                 type="url"
                 name="test-url"
-                value={requestUrl}
+                value={request}
                 onChange={handleChangeRequestUrl}
               />
             </label>
           </div>
-          {requestUrl && (
+          {request && (
             <Link
               href={`/privacy/consent/requests/${encodeURIComponent(
-                requestUrl
+                request
               )}?redirectUrl=${redirectUrl}`}
             >
               <a>View test request</a>

@@ -21,7 +21,10 @@
 
 import React, { useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
-import { requestAccessWithConsent } from "@inrupt/solid-client-consent";
+import {
+  requestAccessWithConsent,
+  redirectToConsentManagementUi,
+} from "@inrupt/solid-client-consent";
 import { useRedirectIfLoggedOut } from "../../../../../../src/effects/auth";
 import useFetchProfile from "../../../../../../src/hooks/useFetchProfile";
 import Spinner from "../../../../../spinner";
@@ -31,7 +34,6 @@ export default function GenerateConsentRequest() {
   const { session } = useSession();
   const { fetch } = session;
   const options = { fetch };
-  const [consentId, setConsentId] = useState(null);
   const [resources, setResources] = useState([]);
   const [owner, setOwner] = useState([]);
   const [resource, setResource] = useState([]);
@@ -48,7 +50,19 @@ export default function GenerateConsentRequest() {
       requestorInboxUrl: profile.inbox,
       options,
     });
-    setConsentId(vc.id);
+    if (vc) {
+      redirectToConsentManagementUi(
+        vc,
+        `https://localhost:3000//privacy/?signedVcUrl=${encodeURIComponent(
+          vc.id
+        )}`,
+        {
+          fallbackConsentManagementUi: `https://localhost:3000/privacy/consent/requests/${encodeURIComponent(
+            vc.id
+          )}`,
+        }
+      );
+    }
   }
 
   const handleSetOwner = (e) => {
@@ -103,7 +117,6 @@ export default function GenerateConsentRequest() {
         </div>
         <button type="submit">Generate consent request</button>
       </form>
-      <span>{consentId}</span>
     </>
   );
 }
