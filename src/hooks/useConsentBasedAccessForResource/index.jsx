@@ -20,12 +20,8 @@
  */
 
 import { useState, useEffect } from "react";
-<<<<<<< HEAD
 import { getAccessWithConsentAll } from "@inrupt/solid-client-access-grants";
 import { useSession } from "@inrupt/solid-ui-react";
-=======
-import { getAccessWithConsentAll } from "@inrupt/solid-client-consent";
->>>>>>> add tests
 
 export default function useConsentBasedAccessForResource(resourceUrl) {
   const [permissions, setPermissions] = useState(null);
@@ -37,7 +33,6 @@ export default function useConsentBasedAccessForResource(resourceUrl) {
       setPermissions(null);
       return;
     }
-<<<<<<< HEAD
     (async () => {
       try {
         const access = await getAccessWithConsentAll(resourceUrl, { fetch });
@@ -47,13 +42,6 @@ export default function useConsentBasedAccessForResource(resourceUrl) {
       }
     })();
   }, [resourceUrl, fetch]);
-=======
-    const access = getAccessWithConsentAll({
-      resources: [resource],
-    });
-    setPermissions(access);
-  }, [resource]);
->>>>>>> add tests
 
   return { permissions, permissionsError };
 }
