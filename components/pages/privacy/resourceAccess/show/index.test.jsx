@@ -54,20 +54,20 @@ describe("Resource access show page", () => {
   });
 
   test("it renders a resource access page for a person", async () => {
-    const { asFragment, getByText } = renderWithTheme(
+    const { asFragment, getAllByText } = renderWithTheme(
       <AgentResourceAccessShowPage type={schema.Person} />
     );
     await waitFor(() => {
-      expect(getByText("Permissions")).toBeInTheDocument();
+      expect(getAllByText("Alice")).toHaveLength(2);
     });
     expect(asFragment()).toMatchSnapshot();
   });
   test("it renders a resource access page for an app", async () => {
-    const { asFragment, getByText } = renderWithTheme(
+    const { asFragment, getAllByText } = renderWithTheme(
       <AgentResourceAccessShowPage type={schema.SoftwareApplication} />
     );
     await waitFor(() => {
-      expect(getByText("Permissions")).toBeInTheDocument();
+      expect(getAllByText("Mock App")).toHaveLength(1);
     });
     expect(asFragment()).toMatchSnapshot();
   });
