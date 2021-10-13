@@ -102,6 +102,7 @@ exports[`AgentAccess without profile renders a skeleton while loading profile 1`
   >
     <span
       class="PodBrowser-root PodBrowser-circle PodBrowser-pulse"
+      data-testid="skeleton-placeholder"
       style="width: 40px; height: 40px;"
     />
     <div>
@@ -202,6 +203,7 @@ exports[`AgentAccess without profile renders skeleton placeholders when profile 
   >
     <span
       class="PodBrowser-root PodBrowser-circle PodBrowser-pulse"
+      data-testid="skeleton-placeholder"
       style="width: 40px; height: 40px;"
     />
     <div>

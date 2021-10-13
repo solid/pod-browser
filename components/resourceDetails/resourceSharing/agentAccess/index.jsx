@@ -43,8 +43,10 @@ import {
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-const TESTCAFE_ID_TRY_AGAIN_BUTTON = "try-again-button";
-const TESTCAFE_ID_TRY_AGAIN_SPINNER = "try-again-spinner";
+export const TESTCAFE_ID_TRY_AGAIN_BUTTON = "try-again-button";
+export const TESTCAFE_ID_TRY_AGAIN_SPINNER = "try-again-spinner";
+export const TESTCAFE_ID_SKELETON_PLACEHOLDER = "skeleton-placeholder";
+export const PROFILE_ERROR_MESSAGE = "Unable to load this profile";
 
 export default function AgentAccess({ permission }) {
   const classes = useStyles();
@@ -76,12 +78,12 @@ export default function AgentAccess({ permission }) {
       profileError: fetchedProfileError,
     } = await getProfile(webId, fetch);
     if (fetchedProfile) {
+      setLocalProfile(profile);
       setIsLoadingProfile(false);
-      setLocalProfile(profile, true);
     }
     if (profileError) {
-      setIsLoadingProfile(false);
       setLocalProfileError(fetchedProfileError);
+      setIsLoadingProfile(false);
     }
   };
 
@@ -99,7 +101,6 @@ export default function AgentAccess({ permission }) {
     );
 
   if (localProfileError) {
-    const message = "Unable to load this profile";
     return (
       <div className={bem("alert-container")}>
         <Alert
@@ -135,7 +136,7 @@ export default function AgentAccess({ permission }) {
             )
           }
         >
-          {message}
+          {PROFILE_ERROR_MESSAGE}
         </Alert>
         <div className={classes.separator} />
         <AgentProfileDetails
@@ -153,6 +154,7 @@ export default function AgentAccess({ permission }) {
     return (
       <div className={classes.loadingStateContainer}>
         <Skeleton
+          data-testid={TESTCAFE_ID_SKELETON_PLACEHOLDER}
           className={classes.avatar}
           variant="circle"
           width={40}
