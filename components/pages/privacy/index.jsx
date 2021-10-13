@@ -20,6 +20,7 @@
  */
 
 import { schema } from "rdf-namespaces";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Link from "next/link";
 import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
@@ -37,6 +38,7 @@ const PERSON_CONTACT_TYPE = schema.Person;
 const APP_CONTACT_TYPE = schema.SoftwareApplication; // this string for now until we define what type the app contact will be
 
 export default function PrivacyPage() {
+  const router = useRouter();
   useRedirectIfLoggedOut();
   const [search, setSearch] = useState("");
   const [requestUrl, setRequestUrl] = useState(null);
@@ -71,6 +73,8 @@ export default function PrivacyPage() {
   const handleChangeRequestUrl = (e) => {
     setRequestUrl(e.target.value);
   };
+  const redirectUrl = router.asPath;
+
   return (
     <DetailsMenuProvider>
       <SearchProvider search={search} setSearch={setSearch}>
@@ -101,7 +105,7 @@ export default function PrivacyPage() {
             <Link
               href={`/privacy/consent/requests/${encodeURIComponent(
                 requestUrl
-              )}`}
+              )}?redirectUrl=${redirectUrl}`}
             >
               <a>View test request</a>
             </Link>

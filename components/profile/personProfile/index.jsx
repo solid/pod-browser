@@ -37,6 +37,7 @@ import styles from "./styles";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export const TESTCAFE_ID_NAME_FIELD = "profile-name-field";
+export const TESTCAFE_ID_NAME_TITLE = "profile-name-title";
 export const TESTCAFE_ID_ROLE_FIELD = "profile-role-field";
 export const TESTCAFE_ID_ORG_FIELD = "profile-org-field";
 
@@ -47,8 +48,9 @@ export default function PersonProfile({ profileIri, editing }) {
     <>
       <Box mt={2}>
         <Box>
-          <InputLabel>Name</InputLabel>
+          <InputLabel data-testid={TESTCAFE_ID_NAME_TITLE}>Name</InputLabel>
           <Text
+            data-testid={TESTCAFE_ID_NAME_FIELD}
             property={foaf.name}
             edit={editing}
             autosave

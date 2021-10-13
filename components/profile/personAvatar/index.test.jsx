@@ -30,12 +30,11 @@ import {
 } from "../../../__testUtils/mockPersonResource";
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
-import PersonAvatar, { TESTCAFE_ID_NAME_TITLE } from "../index";
-import { setupErrorComponent } from ".";
+import PersonAvatar, { setupErrorComponent } from "./index";
 
 const profileIri = "https://example.com/profile/card#me";
 
-describe("Person Profile", () => {
+describe("Person Avatar", () => {
   const profileDataset = mockPersonDatasetAlice();
   const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
 
@@ -46,17 +45,13 @@ describe("Person Profile", () => {
     jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
   });
 
-  test("renders a profile", async () => {
+  test("renders a person avatar", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
-    const { asFragment, findByTestId } = renderWithTheme(
+    const { asFragment } = renderWithTheme(
       <SessionProvider>
-        <PersonAvatar profileIri={profileIri} type={schema.Person} />
+        <PersonAvatar profileIri={profileIri} />
       </SessionProvider>
-    );
-    await expect(findByTestId(TESTCAFE_ID_NAME_TITLE)).resolves.not.toBeNull();
-    expect(await findByTestId(TESTCAFE_ID_NAME_TITLE)).toHaveTextContent(
-      "Alice"
     );
     expect(asFragment()).toMatchSnapshot();
   });

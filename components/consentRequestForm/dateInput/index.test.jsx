@@ -21,6 +21,7 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
+import { useRouter } from "next/router";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
@@ -32,8 +33,17 @@ import {
 } from "./index";
 
 const ConsentRequestContextProvider = mockConsentRequestContext();
+jest.mock("next/router");
+const mockedUseRouter = useRouter;
 
 describe("DateInput component", () => {
+  const push = jest.fn();
+  beforeEach(() => {
+    mockedUseRouter.mockReturnValue({
+      query: { redirectUrl: "/privacy/" },
+      push,
+    });
+  });
   test("Opens datepicker when calendar is clicked", () => {
     const { getByTestId } = renderWithTheme(
       <ConsentRequestContextProvider>

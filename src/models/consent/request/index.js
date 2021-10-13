@@ -60,3 +60,7 @@ export function getAccessMode(sectionDetails) {
 export function getRequestorWebId(consentRequest) {
   return consentRequest?.credentialSubject?.id;
 }
+
+export function getVcId(vc) {
+  return vc?.id;
+}
