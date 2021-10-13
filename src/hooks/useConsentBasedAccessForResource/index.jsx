@@ -30,10 +30,10 @@ export default function useConsentBasedAccessForResource(resource) {
       setPermissions(null);
       return;
     }
-    const access = getAccessWithConsentAll({
-      resources: [resource],
-    });
-    setPermissions(access);
+    (async () => {
+      const access = await getAccessWithConsentAll(resource);
+      setPermissions(access);
+    })();
   }, [resource]);
 
   return { permissions };
