@@ -23,7 +23,7 @@
 
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { createStyles, DialogContent, Modal } from "@material-ui/core";
+import { createStyles, Modal } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
@@ -75,15 +75,13 @@ export default function AdvancedSharingButton({ loading, setLoading }) {
         aria-labelledby="Advanced sharing modal"
         aria-describedby="Advanced sharing for this resource"
       >
-        <DialogContent>
-          <AgentPickerModal
-            type={defaultType}
-            onClose={handleClose}
-            advancedSharing
-            loading={loading}
-            setLoading={setLoading}
-          />
-        </DialogContent>
+        <AgentPickerModal
+          type={defaultType}
+          onClose={handleClose}
+          advancedSharing
+          loading={loading}
+          setLoading={setLoading}
+        />
       </Modal>
     </div>
   );
