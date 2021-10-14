@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
 import {
   requestAccessWithConsent,
@@ -36,8 +36,16 @@ export default function GenerateConsentRequest() {
   const options = { fetch };
   const [resources, setResources] = useState([]);
   const [owner, setOwner] = useState([]);
+  const [origin, setOrigin] = useState(null);
   const [resource, setResource] = useState([]);
   const { data: profile } = useFetchProfile(session.info.webId);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setOrigin(window.location.origin);
+    }
+  }, []);
+
   async function generateRequest(e) {
     e.preventDefault();
     if (!profile) return;
@@ -50,14 +58,12 @@ export default function GenerateConsentRequest() {
       requestorInboxUrl: profile.inbox,
       options,
     });
-    if (vc) {
+    if (vc && origin) {
       redirectToConsentManagementUi(
         vc,
-        `https://localhost:3000//privacy/?signedVcUrl=${encodeURIComponent(
-          vc.id
-        )}`,
+        `${origin}/privacy/?signedVcUrl=${encodeURIComponent(vc.id)}`,
         {
-          fallbackConsentManagementUi: `https://localhost:3000/privacy/consent/requests/${encodeURIComponent(
+          fallbackConsentManagementUi: `${origin}/privacy/consent/requests/${encodeURIComponent(
             vc.id
           )}`,
         }
