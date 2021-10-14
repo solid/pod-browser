@@ -33,9 +33,6 @@ import { joinPath } from "../../stringHelpers";
 jest.mock("../usePoliciesContainerUrl");
 const mockedPoliciesContainerUrlHook = usePoliciesContainerUrl;
 
-jest.mock("@inrupt/solid-ui-react");
-const mockedUseSession = useSession;
-
 describe("useAccessControl", () => {
   const authenticatedProfile = mockProfileAlice();
 
@@ -44,17 +41,17 @@ describe("useAccessControl", () => {
   const resourceInfo = mockSolidDatasetFrom(resourceUrl);
   const error = "error";
 
-  let session;
-  let wrapper;
+  const session = mockSession();
+  const SessionProvider = mockSessionContextProvider(session);
+  const wrapper = ({ children }) => (
+    <SessionProvider>{children}</SessionProvider>
+  );
 
   beforeEach(() => {
     jest
       .spyOn(accessControlFns, "getAccessControl")
       .mockResolvedValue(accessControl);
     mockedPoliciesContainerUrlHook.mockReturnValue(null);
-    session = mockSession();
-    wrapper = mockSessionContextProvider(session);
-    mockedUseSession.mockReturnValue(session);
     jest.spyOn(accessControlFns, "isAcp").mockReturnValue(false);
   });
 

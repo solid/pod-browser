@@ -20,7 +20,12 @@
  */
 
 // eslint-disable-next-line camelcase
-import { hasAccessibleAcl, acp_v1 as acp } from "@inrupt/solid-client";
+import {
+  hasAccessibleAcl,
+  acp_v1 as acp,
+  acp_v3 as acp3,
+  getSourceUrl,
+} from "@inrupt/solid-client";
 import WacAccessControlStrategy from "./wac";
 import AcpAccessControlStrategy from "./acp";
 
@@ -31,12 +36,17 @@ export function hasAccess(resourceInfo) {
   return hasAccessibleAcl(resourceInfo) || acp.hasLinkedAcr(resourceInfo);
 }
 
-export function isAcp(resourceInfo) {
-  return resourceInfo && acp.hasLinkedAcr(resourceInfo);
+export function isAcp(resourceUrl, fetch) {
+  if (!fetch) return false;
+  return resourceUrl && acp3.isAcpControlled(resourceUrl, { fetch });
 }
 
-export function isWac(resourceInfo) {
-  return resourceInfo && hasAccessibleAcl(resourceInfo);
+export function isWac(resourceUrl, resourceInfo, fetch) {
+  return (
+    resourceUrl &&
+    !acp3.isAcpControlled(resourceUrl, { fetch }) &&
+    hasAccessibleAcl(resourceInfo)
+  );
 }
 
 export async function getAccessControl(
@@ -44,10 +54,11 @@ export async function getAccessControl(
   policiesContainerUrl,
   fetch
 ) {
-  if (isWac(resourceInfo)) {
+  const resourceUrl = getSourceUrl(resourceInfo);
+  if (isWac(resourceUrl, resourceInfo, fetch)) {
     return WacAccessControlStrategy.init(resourceInfo, fetch);
   }
-  if (isAcp(resourceInfo)) {
+  if (isAcp(resourceUrl, fetch)) {
     return AcpAccessControlStrategy.init(
       resourceInfo,
       policiesContainerUrl,
