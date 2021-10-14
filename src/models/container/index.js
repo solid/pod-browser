@@ -31,5 +31,6 @@ export async function getContainer(url, { fetch }) {
 }
 
 export function getContainerResourceUrlAll({ thing }) {
+  if (!thing) return [];
   return getIriAll(thing, ldp.contains);
 }
