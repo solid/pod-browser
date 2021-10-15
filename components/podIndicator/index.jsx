@@ -33,7 +33,6 @@ import {
 } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { Icons } from "@inrupt/prism-react-components";
-import usePodOwnerProfile from "../../src/hooks/usePodOwnerProfile";
 import PodNavigatorPopover from "./podNavigatorPopover";
 import Bookmark from "../bookmark";
 import styles from "./styles";
@@ -60,10 +59,8 @@ export default function PodIndicator() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [navigatorAnchor, setNavigatorAnchor] = useState(null);
   const bem = useBem(useStyles());
-  const { profile, error: profileError } = usePodOwnerProfile();
-  const loading = !profile && !profileError;
   const podIri = router.query.iri;
-  const profileName = profile ? profile.name : "Unknown";
+  const loading = !podIri;
   const open = Boolean(anchorEl);
   const id = open ? "pod-indicator-menu" : undefined;
   const handleClick = clickHandler(setAnchorEl);
@@ -105,7 +102,7 @@ export default function PodIndicator() {
           aria-describedby={id}
           onClick={handleClick}
           className={bem("indicatorPrompt")}
-          title={profileName}
+          title={podIri}
         >
           <span className={bem("indicatorLabel")}>
             <span className={bem("indicatorLabelYour", { isOwnPod })}>
@@ -121,7 +118,7 @@ export default function PodIndicator() {
             className={bem("indicatorName", { isOwnPod })}
             ref={indicatorLabelRef}
           >
-            {profileName}
+            {podIri}
           </span>
         </button>
       )}
@@ -155,7 +152,7 @@ export default function PodIndicator() {
               menuItem
               addText="Bookmark Pod"
               removeText="Remove Pod Bookmark"
-              profileName={profileName}
+              profileName={podIri}
             />
             <ListItem
               button

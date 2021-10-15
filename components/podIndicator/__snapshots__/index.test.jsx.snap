@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PodIndicator it renders the pod indicator with the correct name with a formatted name 1`] = `
+exports[`PodIndicator it renders the pod indicator with the pod iri 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-indicator"
@@ -10,7 +10,7 @@ exports[`PodIndicator it renders the pod indicator with the correct name with a 
       class="PodBrowser-indicatorPrompt"
       data-testid="pod-indicator-prompt"
       id="pod-indicator-prompt"
-      title="Alice"
+      title="https%3A%2F%2Fmypod.myhost.com"
       type="button"
     >
       <span
@@ -29,43 +29,7 @@ exports[`PodIndicator it renders the pod indicator with the correct name with a 
       <span
         class="PodBrowser-indicatorName"
       >
-        Alice
-      </span>
-    </button>
-  </div>
-</DocumentFragment>
-`;
-
-exports[`PodIndicator it renders the pod indicator with the correct name with a name 1`] = `
-<DocumentFragment>
-  <div
-    class="PodBrowser-indicator"
-    data-testid="pod-indicator"
-  >
-    <button
-      class="PodBrowser-indicatorPrompt"
-      data-testid="pod-indicator-prompt"
-      id="pod-indicator-prompt"
-      title="Bob"
-      type="button"
-    >
-      <span
-        class="PodBrowser-indicatorLabel"
-      >
-        <span
-          class="PodBrowser-indicatorLabelYour"
-        >
-          Your 
-        </span>
-        Pod
-        <span
-          class="PodBrowser-icon-caret-down PodBrowser-indicatorChevron"
-        />
-      </span>
-      <span
-        class="PodBrowser-indicatorName"
-      >
-        Bob
+        https%3A%2F%2Fmypod.myhost.com
       </span>
     </button>
   </div>

@@ -47,6 +47,7 @@ const styles = (theme, indicatorWidth, indicatorLabelWidth) => {
       display: "none",
     },
     "indicatorLabelYour--isOwnPod": {
+      display: "inline",
       [theme.breakpoints.up("md")]: {
         display: "inline",
       },

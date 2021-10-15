@@ -23,14 +23,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import PodIndicator, { clickHandler, closeHandler } from "./index";
-import {
-  mockPersonDatasetAlice,
-  mockPersonDatasetBob,
-  aliceWebIdUrl,
-  bobWebIdUrl,
-} from "../../__testUtils/mockPersonResource";
 import usePodOwnerProfile from "../../src/hooks/usePodOwnerProfile";
-import { packageProfile } from "../../src/solidClientHelpers/profile";
 
 jest.mock("next/router");
 jest.mock("../../src/hooks/usePodOwnerProfile");
@@ -44,25 +37,9 @@ describe("PodIndicator", () => {
     }));
   });
 
-  test("it renders the pod indicator with the correct name with a formatted name", async () => {
-    const userProfile = mockPersonDatasetAlice();
-    usePodOwnerProfile.mockReturnValue({
-      profile: packageProfile(aliceWebIdUrl, userProfile),
-      error: null,
-    });
+  test("it renders the pod indicator with the pod iri", async () => {
     const { asFragment, queryByText } = renderWithTheme(<PodIndicator />);
-    expect(queryByText("Alice")).toBeDefined();
-    expect(asFragment()).toMatchSnapshot();
-  });
-
-  test("it renders the pod indicator with the correct name with a name", async () => {
-    const userProfile = mockPersonDatasetBob();
-    usePodOwnerProfile.mockReturnValue({
-      profile: packageProfile(bobWebIdUrl, userProfile),
-      error: null,
-    });
-    const { asFragment, queryByText } = renderWithTheme(<PodIndicator />);
-    expect(queryByText("Bob")).toBeDefined();
+    expect(queryByText("https://mypod.myhost.com")).toBeDefined();
     expect(asFragment()).toMatchSnapshot();
   });
 

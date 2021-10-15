@@ -17,10 +17,32 @@ exports[`ContainerPageHeader Renders view 1`] = `
         class="PodBrowser-indicator"
         data-testid="pod-indicator"
       >
-        <span
-          class="PodBrowser-root PodBrowser-text PodBrowser-pulse"
-          style="width: 100px; display: inline-block;"
-        />
+        <button
+          class="PodBrowser-indicatorPrompt"
+          data-testid="pod-indicator-prompt"
+          id="pod-indicator-prompt"
+          title="https://mypod.myhost.com"
+          type="button"
+        >
+          <span
+            class="PodBrowser-indicatorLabel"
+          >
+            <span
+              class="PodBrowser-indicatorLabelYour"
+            >
+              Your 
+            </span>
+            Pod
+            <span
+              class="PodBrowser-icon-caret-down PodBrowser-indicatorChevron"
+            />
+          </span>
+          <span
+            class="PodBrowser-indicatorName"
+          >
+            https://mypod.myhost.com
+          </span>
+        </button>
       </div>
     </div>
   </div>
