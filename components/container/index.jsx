@@ -51,7 +51,8 @@ import { isContainerIri } from "../../src/solidClientHelpers/utils";
 
 export default function Container({ iri }) {
   useRedirectIfLoggedOut();
-  const { sessionRequestInProgress } = useSession();
+  const { sessionRequestInProgress, session } = useSession();
+  console.log(session.info.webId)
   const [resourceUrls, setResourceUrls] = useState(null);
   const {
     data: authenticatedProfile,

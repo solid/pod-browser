@@ -21,9 +21,12 @@
 
 import { useState, useEffect } from "react";
 import { getAccessWithConsentAll } from "@inrupt/solid-client-consent";
+import { getSourceUrl } from "@inrupt/solid-client";
+import { useSession } from "@inrupt/solid-ui-react";
 
 export default function useConsentBasedAccessForResource(resource) {
   const [permissions, setPermissions] = useState(null);
+  const { fetch } = useSession();
 
   useEffect(() => {
     if (!resource) {
@@ -31,10 +34,11 @@ export default function useConsentBasedAccessForResource(resource) {
       return;
     }
     (async () => {
-      const access = await getAccessWithConsentAll(resource);
+      const url = getSourceUrl(resource);
+      const access = await getAccessWithConsentAll(url, { fetch });
       setPermissions(access);
     })();
-  }, [resource]);
+  }, [resource, fetch]);
 
   return { permissions };
 }
