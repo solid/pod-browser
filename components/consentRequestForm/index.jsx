@@ -34,6 +34,7 @@ import {
   List,
   FormControlLabel,
 } from "@material-ui/core";
+import { useSession } from "@inrupt/solid-ui-react";
 import { useBem } from "@solid/lit-prism-patterns";
 import ConsentRequestContext from "../../src/contexts/consentRequestContext";
 import InfoTooltip from "../infoTooltip";
@@ -69,6 +70,7 @@ export default function ConsentRequestForm({ agentDetails }) {
   const classes = useStyles();
   const bem = useBem(classes);
   const router = useRouter();
+  const { session } = useSession();
   const { redirectUrl } = router.query;
   const { consentRequest } = useContext(ConsentRequestContext);
   const [selectedAccess, setSelectedAccess] = useState([]);
@@ -109,12 +111,13 @@ export default function ConsentRequestForm({ agentDetails }) {
     e.preventDefault();
     if (selectedAccess.length && selectedPurposes.length) {
       const signedVc = await approveAccessRequestWithConsent(
+        session.info.webId,
         consentRequest,
-        requestor,
-        selectedAccess.accessModes,
-        selectedResources.length === 1
-          ? selectedResources[0]
-          : selectedResources
+        {
+          requestor,
+          access: selectedAccess.accessModes,
+          resources: selectedResources,
+        }
       );
       if (signedVc) {
         await router.push(`${redirectUrl}?signedVcUrl=${getVcId(signedVc)}`);
