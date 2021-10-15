@@ -32,6 +32,7 @@ import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import RemoveButton from "./removeButton";
+import ConsentDetailsButton from "./consentDetailsButton";
 import styles from "./styles";
 import { profile as profilePropType } from "../../../../../constants/propTypes";
 
@@ -102,6 +103,7 @@ export default function AgentAccessOptionsMenu({
               <p className={classes.webId}>{webId}</p>
             </ListItemText>
           </ListItem>
+          <ConsentDetailsButton resourceIri={resourceIri} agentWebId={webId} />
           <RemoveButton
             resourceIri={resourceIri}
             profile={profile}
