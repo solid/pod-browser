@@ -26,10 +26,8 @@ import * as resourceHelpers from "../../../../../src/solidClientHelpers/resource
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../../../../__testUtils/mockSessionContextProvider";
 import ConsentPage from "./index";
-import mockFetch from "../../../../../__testUtils/mockFetch";
 import getConsentRequestDetails from "../../../../../__testUtils/mockConsentRequestDetails";
 import { mockAppDataset } from "../../../../../__testUtils/mockApp";
-import mockResponse from "../../../../../__testUtils/mockResponse";
 
 jest.mock("../../../../../src/effects/auth");
 
@@ -41,13 +39,11 @@ describe("Consent Page", () => {
       replace: jest.fn(),
       query: {
         id: consentRequestId,
+        requestVc: btoa(JSON.stringify(getConsentRequestDetails())),
       },
     });
 
-    const fetch = mockFetch({
-      [consentRequestId]: () =>
-        mockResponse(200, JSON.stringify(getConsentRequestDetails())),
-    });
+    const fetch = jest.fn();
     const session = { fetch };
     const SessionProvider = mockSessionContextProvider(session);
 

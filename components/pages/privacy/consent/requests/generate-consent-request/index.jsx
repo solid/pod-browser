@@ -19,9 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
-import { requestAccessWithConsent } from "@inrupt/solid-client-consent";
+import {
+  requestAccessWithConsent,
+  redirectToConsentManagementUi,
+} from "@inrupt/solid-client-consent";
 import { useRedirectIfLoggedOut } from "../../../../../../src/effects/auth";
 import useFetchProfile from "../../../../../../src/hooks/useFetchProfile";
 import Spinner from "../../../../../spinner";
@@ -31,11 +34,18 @@ export default function GenerateConsentRequest() {
   const { session } = useSession();
   const { fetch } = session;
   const options = { fetch };
-  const [consentId, setConsentId] = useState(null);
   const [resources, setResources] = useState([]);
   const [owner, setOwner] = useState([]);
+  const [origin, setOrigin] = useState(null);
   const [resource, setResource] = useState([]);
   const { data: profile } = useFetchProfile(session.info.webId);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setOrigin(window.location.origin);
+    }
+  }, []);
+
   async function generateRequest(e) {
     e.preventDefault();
     if (!profile) return;
@@ -48,7 +58,17 @@ export default function GenerateConsentRequest() {
       requestorInboxUrl: profile.inbox,
       options,
     });
-    setConsentId(vc.id);
+    if (vc && origin) {
+      redirectToConsentManagementUi(
+        vc,
+        `${origin}/privacy/?signedVcUrl=${encodeURIComponent(vc.id)}`,
+        {
+          fallbackConsentManagementUi: `${origin}/privacy/consent/requests/${encodeURIComponent(
+            vc.id
+          )}`,
+        }
+      );
+    }
   }
 
   const handleSetOwner = (e) => {
@@ -103,7 +123,6 @@ export default function GenerateConsentRequest() {
         </div>
         <button type="submit">Generate consent request</button>
       </form>
-      <span>{consentId}</span>
     </>
   );
 }

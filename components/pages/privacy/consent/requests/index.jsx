@@ -50,7 +50,7 @@ export default function ConsentShow() {
   const { session } = useSession();
   const { fetch } = session;
   const router = useRouter();
-  const { id } = router.query;
+  const { requestVc } = router.query;
   const bem = useBem(useStyles());
   const [consentRequest, setConsentRequest] = useState(null);
   const agentWebId = getRequestorWebId(consentRequest);
@@ -58,11 +58,10 @@ export default function ConsentShow() {
   const { agentName, agentUrl, agentPolicy, agentTOS } = agentDetails || null;
 
   useEffect(() => {
-    fetch(id).then(async (response) => {
-      const request = await response.json();
-      setConsentRequest(request);
-    });
-  }, [id, fetch]);
+    if (!requestVc) return;
+    const req = JSON.parse(atob(requestVc));
+    setConsentRequest(req);
+  }, [requestVc, fetch]);
 
   useEffect(() => {
     if (!consentRequest) return;
