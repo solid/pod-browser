@@ -66,13 +66,15 @@ export default function ConfirmationDialog() {
       aria-labelledby="confirmation-dialog"
       open={!!open}
     >
-      <DialogTitle
-        data-testid={TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE}
-        disableTypography
-        classes={{ root: classes.dialogTitle }}
-      >
-        {title}
-      </DialogTitle>
+      {title && (
+        <DialogTitle
+          data-testid={TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE}
+          disableTypography
+          classes={{ root: classes.dialogTitle }}
+        >
+          {title}
+        </DialogTitle>
+      )}
       <DialogContent>
         <DialogContentText
           data-testid={TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT}
