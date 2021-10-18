@@ -137,7 +137,7 @@ function AgentList({ contactType, setSearchValues }) {
       .then((response) => response.json())
       .catch((error) => setAgentsError(error))
       .then(({ data }) => {
-        if (!data) return;
+        if (!data || !data.pod) return;
         const { agentsWithAccess } = data.pod;
         setAgents(
           agentsWithAccess.filter((webId) => webId !== session.info.webId)

@@ -21,7 +21,6 @@
 
 import { renderHook } from "@testing-library/react-hooks";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
-import { useSession } from "@inrupt/solid-ui-react";
 import useAccessControl from "./index";
 import * as accessControlFns from "../../accessControl";
 import usePoliciesContainerUrl from "../usePoliciesContainerUrl";

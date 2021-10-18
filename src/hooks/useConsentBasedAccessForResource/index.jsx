@@ -36,7 +36,6 @@ export default function useConsentBasedAccessForResource(resource) {
     (async () => {
       const url = getSourceUrl(resource);
       const access = await getAccessWithConsentAll(url, { fetch });
-      console.log(access)
       setPermissions(access);
     })();
   }, [resource, fetch]);

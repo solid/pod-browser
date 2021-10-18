@@ -22,7 +22,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import * as solidClientFns from "@inrupt/solid-client";
-import { schema } from "rdf-namespaces";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import {
   aliceWebIdUrl,
