@@ -22,6 +22,7 @@
 import React from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
+import * as solidClientFns from "@inrupt/solid-client";
 import * as routerFns from "next/router";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import ResourceDetails, {
@@ -35,6 +36,8 @@ import * as accessControlFns from "../../src/accessControl";
 const accessControl = mockAccessControl();
 const dataset = mockSolidDatasetFrom("http://example.com/container/");
 
+const acpFns = solidClientFns.acp_v3;
+
 describe("Resource details", () => {
   beforeEach(() => {
     jest
@@ -43,6 +46,8 @@ describe("Resource details", () => {
   });
 
   it("renders container details", () => {
+    jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
+    jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(true);
     const { asFragment } = renderWithTheme(
       <DatasetProvider solidDataset={dataset}>
         <ResourceDetails />
@@ -52,6 +57,8 @@ describe("Resource details", () => {
   });
 
   it("renders a decoded container name", () => {
+    jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
+    jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(true);
     const datasetWithDecodedContainerName = mockSolidDatasetFrom(
       "http://example.com/Some%20container/"
     );
@@ -66,6 +73,7 @@ describe("Resource details", () => {
 
   it("renders Permissions component for WAC-supporting Solid servers", () => {
     jest.spyOn(accessControlFns, "isWac").mockReturnValue(true);
+    jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(false);
     const { asFragment, getByTestId } = renderWithTheme(
       <AccessControlProvider accessControl={accessControl}>
         <DatasetProvider solidDataset={dataset}>
@@ -79,6 +87,7 @@ describe("Resource details", () => {
 
   it("renders Sharing component for ACP-supporting Solid servers", () => {
     jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
+    jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(true);
     const { asFragment, getByTestId } = renderWithTheme(
       <AccessControlProvider accessControl={accessControl}>
         <DatasetProvider solidDataset={dataset}>
