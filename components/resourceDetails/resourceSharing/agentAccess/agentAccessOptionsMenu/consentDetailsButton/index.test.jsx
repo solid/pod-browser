@@ -20,30 +20,38 @@
  */
 
 import React from "react";
-import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
+import * as solidClientFns from "@inrupt/solid-client";
 import { renderWithTheme } from "../../../../../../__testUtils/withTheme";
-import mockAccessControl from "../../../../../../__testUtils/mockAccessControl";
 import ConsentDetailsButton, { TESTCAFE_ID_VIEW_DETAILS_BUTTON } from "./index";
+import {
+  aliceWebIdUrl,
+  mockPersonDatasetAlice,
+} from "../../../../../../__testUtils/mockPersonResource";
 import { ConfirmationDialogProvider } from "../../../../../../src/contexts/confirmationDialogContext";
 import ConfirmationDialog, {
-  TESTCAFE_ID_CONFIRM_BUTTON,
   TESTCAFE_ID_CONFIRMATION_DIALOG,
-  TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE,
 } from "../../../../../confirmationDialog";
-import AccessControlContext from "../../../../../../src/contexts/accessControlContext";
 
 const resourceIri = "/iri/";
-const resourceUrl = "http://example.com/resource";
 const webId = "https://example.com/profile/card#me";
-const name = "Example Agent";
 
-describe("AgentAccessOptionsMenu", () => {
-  test("it renders a button which triggers the opening of the modal", () => {
-    const { asFragment, getByTestId } = renderWithTheme(
+describe("View consent details button and modal", () => {
+  const profileDataset = mockPersonDatasetAlice();
+  const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+  beforeEach(() => {
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValue(profileDataset);
+    jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
+    jest.spyOn(solidClientFns, "getUrl").mockReturnValue("schema.Person");
+  });
+
+  test("it renders a button which triggers the opening of the modal", async () => {
+    const { baseElement, getByTestId } = renderWithTheme(
       <ConsentDetailsButton resourceIri={resourceIri} agentWebId={webId} />
     );
-    expect(asFragment()).toMatchSnapshot();
+    expect(baseElement).toMatchSnapshot();
     const button = getByTestId(TESTCAFE_ID_VIEW_DETAILS_BUTTON);
     expect(button).toBeDefined();
   });
