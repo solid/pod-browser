@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AgentAccessOptionsMenu clicking on view details button renders a confirmation dialog with the correct data 1`] = `
+exports[`View consent details button and modal clicking on view details button renders a confirmation dialog with the correct data 1`] = `
 <body
   style="padding-right: 0px; overflow: hidden;"
 >
@@ -108,23 +108,25 @@ exports[`AgentAccessOptionsMenu clicking on view details button renders a confir
 </body>
 `;
 
-exports[`AgentAccessOptionsMenu it renders a button which triggers the opening of the modal 1`] = `
-<DocumentFragment>
-  <div
-    aria-disabled="false"
-    class="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
-    data-testid="view-details-button"
-    role="button"
-    tabindex="0"
-  >
+exports[`View consent details button and modal it renders a button which triggers the opening of the modal 1`] = `
+<body>
+  <div>
     <div
-      class="PodBrowser-root"
+      aria-disabled="false"
+      class="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
+      data-testid="view-details-button"
+      role="button"
+      tabindex="0"
     >
-      View Details
+      <div
+        class="PodBrowser-root"
+      >
+        View Details
+      </div>
+      <span
+        class="PodBrowser-root"
+      />
     </div>
-    <span
-      class="PodBrowser-root"
-    />
   </div>
-</DocumentFragment>
+</body>
 `;
