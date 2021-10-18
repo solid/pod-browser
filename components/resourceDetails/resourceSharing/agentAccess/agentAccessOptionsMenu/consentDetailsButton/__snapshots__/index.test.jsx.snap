@@ -1,0 +1,130 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AgentAccessOptionsMenu clicking on view details button renders a confirmation dialog with the correct data 1`] = `
+<body
+  style="padding-right: 0px; overflow: hidden;"
+>
+  <div
+    aria-hidden="true"
+  >
+    <div
+      aria-disabled="false"
+      class="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
+      data-testid="view-details-button"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="PodBrowser-root"
+      >
+        View Details
+      </div>
+      <span
+        class="PodBrowser-root"
+      >
+        <span
+          class="PodBrowser-ripple PodBrowser-rippleVisible"
+          style="width: 2.8284271247461903px; height: 2.8284271247461903px; top: -1.4142135623730951px; left: -1.4142135623730951px;"
+        >
+          <span
+            class="PodBrowser-child PodBrowser-childLeaving"
+          />
+        </span>
+      </span>
+    </div>
+  </div>
+  <div
+    class="PodBrowser-root"
+    data-testid="confirmation-dialog"
+    role="presentation"
+    style="position: fixed; z-index: 1300; right: 0px; bottom: 0px; top: 0px; left: 0px;"
+  >
+    <div
+      aria-hidden="true"
+      class="PodBrowser-root"
+      style="opacity: 1; webkit-transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;"
+    />
+    <div
+      data-test="sentinelStart"
+      tabindex="0"
+    />
+    <div
+      class="PodBrowser-container PodBrowser-scrollPaper"
+      role="none presentation"
+      style="opacity: 1; webkit-transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;"
+      tabindex="-1"
+    >
+      <div
+        aria-labelledby="confirmation-dialog"
+        class="PodBrowser-root PodBrowser-paper PodBrowser-paperScrollPaper PodBrowser-paperWidthFalse PodBrowser-dialog PodBrowser-elevation24 PodBrowser-rounded"
+        role="dialog"
+      >
+        
+        <div
+          class="PodBrowser-root"
+        >
+          <p
+            class="PodBrowser-root PodBrowser-root PodBrowser-dialogText PodBrowser-body1 PodBrowser-colorTextSecondary"
+            data-testid="confirmation-dialog-content"
+            id="alert-confirmation-dialog"
+          >
+            <span>
+              Fetching data...
+            </span>
+          </p>
+        </div>
+        <div
+          class="PodBrowser-root PodBrowser-dialogActions PodBrowser-spacing"
+        >
+          <button
+            class="PodBrowser-button PodBrowser-button--secondary"
+            data-testid="confirmation-cancel-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              Done
+            </span>
+          </button>
+          <button
+            class="PodBrowser-button PodBrowser-dangerButton"
+            data-testid="confirm-button"
+            type="submit"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              Revoke Access to iri
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      data-test="sentinelEnd"
+      tabindex="0"
+    />
+  </div>
+</body>
+`;
+
+exports[`AgentAccessOptionsMenu it renders a button which triggers the opening of the modal 1`] = `
+<DocumentFragment>
+  <div
+    aria-disabled="false"
+    class="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
+    data-testid="view-details-button"
+    role="button"
+    tabindex="0"
+  >
+    <div
+      class="PodBrowser-root"
+    >
+      View Details
+    </div>
+    <span
+      class="PodBrowser-root"
+    />
+  </div>
+</DocumentFragment>
+`;
