@@ -26,7 +26,8 @@ import { getAccessControl, isAcp } from "../../accessControl";
 import usePoliciesContainerUrl from "../usePoliciesContainerUrl";
 
 export default function useAccessControl(resourceInfo) {
-  const { fetch } = useSession();
+  const { session } = useSession();
+  const { fetch } = session;
   const [accessControl, setAccessControl] = useState(null);
   const policiesContainerUrl = usePoliciesContainerUrl(
     resourceInfo && getSourceUrl(resourceInfo)
@@ -34,7 +35,11 @@ export default function useAccessControl(resourceInfo) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!resourceInfo || (isAcp(resourceInfo) && !policiesContainerUrl)) {
+    if (
+      !resourceInfo ||
+      (isAcp(resourceInfo) && !policiesContainerUrl) ||
+      !session.info.isLoggedIn
+    ) {
       setAccessControl(null);
       setError(null);
       return;
@@ -50,7 +55,7 @@ export default function useAccessControl(resourceInfo) {
         setAccessControl(null);
         setError(accessControlError);
       });
-  }, [fetch, policiesContainerUrl, resourceInfo]);
+  }, [fetch, policiesContainerUrl, resourceInfo, session]);
 
   return { accessControl, error };
 }

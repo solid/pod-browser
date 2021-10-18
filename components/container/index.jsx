@@ -58,6 +58,7 @@ export default function Container({ iri }) {
     error: authenticatedProfileError,
   } = useAuthenticatedProfile();
   const podRootIri = usePodRootUri(iri);
+  const [noControlError, setNoControlError] = useState(null);
   const { data: podRootResourceInfo, error: podRootError } = useResourceInfo(
     podRootIri
   );
@@ -69,7 +70,6 @@ export default function Container({ iri }) {
     mutate: update,
     isValidating,
   } = useContainer(iri);
-
   useEffect(() => {
     if (
       !iri ||
@@ -81,6 +81,10 @@ export default function Container({ iri }) {
     const urls = container && getContainerResourceUrlAll(container);
     setResourceUrls(urls);
   }, [container, iri]);
+
+  useEffect(() => {
+    setNoControlError(accessControlError);
+  }, [accessControlError]);
 
   const data = useMemo(() => {
     if (!resourceUrls) {
@@ -110,6 +114,7 @@ export default function Container({ iri }) {
     authenticatedProfile,
     iri
   );
+
   if (podRootError && locationIsInUsersPod) return <PodRootLoadError />;
 
   if (!resourceUrls || !container || !podRootIri) return <Spinner />;
@@ -125,7 +130,7 @@ export default function Container({ iri }) {
         <PageHeader />
         <ContainerDetails update={update}>
           <ContainerSubHeader update={update} resourceList={data} />
-          {locationIsInUsersPod && accessControlError && (
+          {locationIsInUsersPod && noControlError && (
             <NoControlWarning podRootIri={podRootIri} />
           )}
           {isValidating ? (

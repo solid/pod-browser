@@ -35,36 +35,35 @@ import {
 } from "./index";
 
 const acp = solidClientFns.acp_v1;
+const acp3 = solidClientFns.acp_v3;
 
 jest.mock("./acp");
 jest.mock("./wac");
 
+const resourceIri = "http://example.com";
 const resource = mockSolidDatasetFrom("http://example.com");
 
 describe("isAcp", () => {
-  beforeEach(() => jest.spyOn(acp, "hasLinkedAcr").mockReturnValue(true));
+  beforeEach(() => jest.spyOn(acp3, "isAcpControlled").mockReturnValue(true));
 
-  it("uses acp.hasLinkedAcr to determine whether a resource from a server uses ACP", () => {
-    expect(isAcp(resource)).toBeTruthy();
-    expect(acp.hasLinkedAcr).toHaveBeenCalledWith(resource);
+  it("uses acp3.isAcpControlled to determine whether a resource from a server uses ACP", () => {
+    const fetch = jest.fn();
+    expect(isAcp(resourceIri, fetch)).toBeTruthy();
+    expect(acp3.isAcpControlled).toHaveBeenCalledWith(resourceIri, { fetch });
   });
-
-  it("returns false for non-instantiated ResourceInfo", () =>
-    expect(isAcp(null)).toBeFalsy());
 });
-
 describe("isWac", () => {
-  beforeEach(() =>
-    jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValue(true)
-  );
-
-  it("uses hasAccessibleAcl to determine whether a resource from a server uses WAC", () => {
-    expect(isWac(resource)).toBeTruthy();
-    expect(solidClientFns.hasAccessibleAcl).toHaveBeenCalledWith(resource);
+  beforeEach(() => {
+    jest.spyOn(acp3, "isAcpControlled").mockReturnValue(false);
+    jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValue(true);
   });
-
-  it("returns false for non-instantiated ResourceInfo", () =>
-    expect(isWac(null)).toBeFalsy());
+  const fetch = jest.fn();
+  it("uses acp3.isAcpControlled and hasAccessibleAcl to determine whether a resource from a server uses WAC", () => {
+    expect(isWac(resourceIri, resource, fetch)).toBeTruthy();
+    expect(acp3.isAcpControlled).toHaveBeenCalledWith(resourceIri, {
+      fetch,
+    });
+  });
 });
 
 describe("getAccessControl", () => {
@@ -83,7 +82,7 @@ describe("getAccessControl", () => {
 
   afterEach(() => jest.restoreAllMocks());
 
-  it("throws error if no access link is found", async () => {
+  it("throws error if no ACL is found", async () => {
     await expect(
       getAccessControl(resource, policiesContainerUrl, fetch)
     ).rejects.toEqual(new Error(noAccessPolicyError));
@@ -108,6 +107,7 @@ describe("getAccessControl", () => {
 
   describe("WAC is supported", () => {
     beforeEach(async () => {
+      jest.spyOn(acp3, "isAcpControlled").mockReturnValue(false);
       solidClientFns.hasAccessibleAcl.mockReturnValue(true);
       result = await getAccessControl(resource, policiesContainerUrl, fetch);
     });
