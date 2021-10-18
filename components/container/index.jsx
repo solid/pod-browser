@@ -62,7 +62,9 @@ export default function Container({ iri }) {
   const { data: podRootResourceInfo, error: podRootError } = useResourceInfo(
     podRootIri
   );
-  const { error: accessControlError } = useAccessControl(podRootResourceInfo);
+  const { error: accessControlError, accessControl } = useAccessControl(
+    podRootResourceInfo
+  );
 
   const {
     data: container,
@@ -70,21 +72,24 @@ export default function Container({ iri }) {
     mutate: update,
     isValidating,
   } = useContainer(iri);
+
   useEffect(() => {
     if (
       !iri ||
       (container &&
         isContainerIri(iri) &&
-        getSourceUrl(container.dataset) !== iri)
+        getSourceUrl(container.dataset) !== iri) ||
+      !accessControl
     )
       return;
     const urls = container && getContainerResourceUrlAll(container);
     setResourceUrls(urls);
-  }, [container, iri]);
+  }, [container, accessControl, iri]);
 
   useEffect(() => {
-    setNoControlError(accessControlError);
-  }, [accessControlError]);
+    if (!accessControl && !accessControlError)
+      setNoControlError(accessControlError);
+  }, [accessControlError, accessControl]);
 
   const data = useMemo(() => {
     if (!resourceUrls) {
