@@ -30,10 +30,10 @@ import ConfirmationDialogContext from "../../../../../../src/contexts/confirmati
 import ConsentDetailsModalContent from "./consentDetailsModalContent";
 import styles from "./styles";
 
-export const TESTCAFE_ID_REVOKE_ACCESS_BUTTON = "revoke-access-button";
+export const TESTCAFE_ID_VIEW_DETAILS_BUTTON = "view-details-button";
 
-export const REMOVE_ACCESS_CONFIRMATION_DIALOG =
-  "remove-access-confirmation-dialog";
+export const VIEW_DETAILS_CONFIRMATION_DIALOG =
+  "view-details-confirmation-dialog";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -52,7 +52,7 @@ export default function ConsentDetailsButton({ agentWebId, resourceIri }) {
 
   const openModal = () => {
     setIsDangerousAction(true);
-    setOpen(REMOVE_ACCESS_CONFIRMATION_DIALOG);
+    setOpen(VIEW_DETAILS_CONFIRMATION_DIALOG);
     setTitle(``);
     setCancelText("Done");
     setConfirmText(`Revoke Access to ${resourceName}`);
@@ -67,7 +67,7 @@ export default function ConsentDetailsButton({ agentWebId, resourceIri }) {
 
   return (
     <ListItem
-      data-testid={TESTCAFE_ID_REVOKE_ACCESS_BUTTON}
+      data-testid={TESTCAFE_ID_VIEW_DETAILS_BUTTON}
       button
       onClick={openModal}
     >
