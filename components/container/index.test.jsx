@@ -21,6 +21,7 @@
 
 import React from "react";
 import * as RouterFns from "next/router";
+import { waitFor } from "@testing-library/dom";
 import { addUrl } from "@inrupt/solid-client";
 import { space } from "rdf-namespaces";
 import { renderWithTheme } from "../../__testUtils/withTheme";
@@ -43,6 +44,8 @@ import { TESTCAFE_ID_ACCESS_FORBIDDEN } from "../accessForbidden";
 import { TESTCAFE_ID_RESOURCE_NOT_FOUND } from "../resourceNotFound";
 import { TESTCAFE_ID_NOT_SUPPORTED } from "../notSupported";
 import { TESTCAFE_ID_SPINNER } from "../spinner";
+import { TESTCAFE_ID_CONTAINER_TABLE } from "../containerTable";
+import mockAccessControl from "../../__testUtils/mockAccessControl";
 
 jest.mock("../../src/hooks/useContainer");
 const mockedContainerHook = useContainer;
@@ -81,7 +84,9 @@ describe("Container view", () => {
     });
     mockedPodRootUriHook.mockReturnValue(iri);
     mockedResourceInfoHook.mockReturnValue({ data: dataset });
-    mockedAccessControlHook.mockReturnValue({});
+    mockedAccessControlHook.mockReturnValue({
+      accessControl: mockAccessControl(),
+    });
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "asPath",
       replace: jest.fn(),

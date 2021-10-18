@@ -4,6 +4,7 @@ exports[`ContainerTable renders a table view without data 1`] = `
 <DocumentFragment>
   <table
     class="PodBrowser-table"
+    data-testid="container-table"
     role="table"
   >
     <thead
@@ -70,6 +71,7 @@ exports[`ContainerTable renders a table with data 1`] = `
 <DocumentFragment>
   <table
     class="PodBrowser-table"
+    data-testid="container-table"
     role="table"
   >
     <thead

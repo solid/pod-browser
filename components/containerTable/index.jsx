@@ -30,6 +30,8 @@ import { Table } from "@inrupt/prism-react-components";
 import ContainerTableRow from "../containerTableRow";
 import SortedTableCarat from "../sortedTableCarat";
 
+export const TESTCAFE_ID_CONTAINER_TABLE = "container-table";
+
 export default function ContainerTable({ containerPath, data, resourcePath }) {
   const bem = Table.useBem();
 
@@ -75,7 +77,11 @@ export default function ContainerTable({ containerPath, data, resourcePath }) {
   );
 
   return (
-    <table className={clsx(bem("table"))} {...getTableProps()}>
+    <table
+      className={clsx(bem("table"))}
+      {...getTableProps()}
+      data-testid={TESTCAFE_ID_CONTAINER_TABLE}
+    >
       <thead className={bem("table__header")}>
         {headerGroups.map((headerGroup) => (
           <tr
