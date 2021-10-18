@@ -92,11 +92,6 @@ const styles = (theme, indicatorWidth, indicatorLabelWidth) => {
         whiteSpace: "nowrap",
       },
     },
-    "indicatorName--isOwnPod": {
-      [theme.breakpoints.up("md")]: {
-        display: "none",
-      },
-    },
     popoverMenu: {
       maxWidth: `max(${indicatorWidth}px, 170px)`,
       minWidth: "128px",
