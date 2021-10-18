@@ -37,7 +37,7 @@ export default function useAccessControl(resourceInfo) {
   useEffect(() => {
     if (
       !resourceInfo ||
-      (isAcp(resourceInfo) && !policiesContainerUrl) ||
+      (isAcp(getSourceUrl(resourceInfo), fetch) && !policiesContainerUrl) ||
       !session.info.isLoggedIn
     ) {
       setAccessControl(null);
