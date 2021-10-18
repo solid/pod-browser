@@ -101,7 +101,8 @@ const updateHistory = (prevState, path) => {
 export default function App(props) {
   const { Component, pageProps } = props;
   const bem = useBem(useStyles());
-  const { router, pathname, asPath } = useRouter();
+  const router = useRouter();
+  const { pathname, asPath } = router;
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
