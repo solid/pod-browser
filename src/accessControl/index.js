@@ -37,6 +37,7 @@ export function hasAccess(resourceInfo) {
 }
 
 export function isAcp(resourceUrl, fetch) {
+  if (!fetch) return false;
   return resourceUrl && acp3.isAcpControlled(resourceUrl, { fetch });
 }
 

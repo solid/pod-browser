@@ -47,7 +47,7 @@ describe("Resource details", () => {
       .mockReturnValue({ query: { resourceIri: "" }, push: jest.fn() });
   });
 
-  it.skip("renders container details", async () => {
+  it("renders container details", async () => {
     jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
     jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(true);
     const { asFragment, getByText } = renderWithTheme(
