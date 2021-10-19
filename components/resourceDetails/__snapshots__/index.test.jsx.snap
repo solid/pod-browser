@@ -312,24 +312,8 @@ exports[`Resource details renders Permissions component for WAC-supporting Solid
                         <div
                           class="PodBrowser-root PodBrowser-details"
                         >
-                          <div
-                            class="PodBrowser-root PodBrowser-colorPrimary PodBrowser-indeterminate"
-                            role="progressbar"
-                            style="width: 40px; height: 40px;"
-                          >
-                            <svg
-                              class="PodBrowser-svg"
-                              viewBox="22 22 44 44"
-                            >
-                              <circle
-                                class="PodBrowser-circle PodBrowser-circleIndeterminate"
-                                cx="44"
-                                cy="44"
-                                fill="none"
-                                r="20.2"
-                                stroke-width="3.6"
-                              />
-                            </svg>
+                          <div>
+                            No access granted to individuals yet
                           </div>
                         </div>
                       </div>
@@ -917,24 +901,8 @@ exports[`Resource details renders Sharing component for ACP-supporting Solid ser
                         <div
                           class="PodBrowser-root PodBrowser-details"
                         >
-                          <div
-                            class="PodBrowser-root PodBrowser-colorPrimary PodBrowser-indeterminate"
-                            role="progressbar"
-                            style="width: 40px; height: 40px;"
-                          >
-                            <svg
-                              class="PodBrowser-svg"
-                              viewBox="22 22 44 44"
-                            >
-                              <circle
-                                class="PodBrowser-circle PodBrowser-circleIndeterminate"
-                                cx="44"
-                                cy="44"
-                                fill="none"
-                                r="20.2"
-                                stroke-width="3.6"
-                              />
-                            </svg>
+                          <div>
+                            No access granted to individuals yet
                           </div>
                         </div>
                       </div>
