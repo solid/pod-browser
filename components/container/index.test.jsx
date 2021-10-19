@@ -86,7 +86,6 @@ describe("Container view", () => {
       asPath: "asPath",
       replace: jest.fn(),
       query: {},
-      push: jest.fn(),
     });
     mockedGetContainerResourceUrlAll.mockReturnValue([
       "https://myaccount.mypodserver.com/inbox",
