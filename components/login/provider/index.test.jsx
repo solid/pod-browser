@@ -37,9 +37,6 @@ import useIdpFromQuery from "../../../src/hooks/useIdpFromQuery";
 
 jest.mock("../../../src/windowHelpers");
 jest.mock("../../../src/hooks/useIdpFromQuery");
-jest.mock("next/router", () => ({
-  useRouter: jest.fn().mockReturnValue(() => ({ push: jest.fn() })),
-}));
 
 describe("ProviderLogin form", () => {
   beforeEach(() => {

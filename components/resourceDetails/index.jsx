@@ -68,8 +68,7 @@ export default function ResourceDetails({
   onDeleteCurrentContainer,
 }) {
   const { solidDataset: dataset } = useContext(DatasetContext);
-  const { session } = useSession();
-  const { fetch } = session;
+  const { fetch } = useSession();
   const datasetUrl = getSourceUrl(dataset);
   const classes = useStyles();
   const name = getIriPath(datasetUrl);
