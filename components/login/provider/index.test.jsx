@@ -22,7 +22,6 @@
 import React from "react";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import { useRouter } from "next/router";
 import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import ProviderLogin, {
@@ -38,12 +37,13 @@ import useIdpFromQuery from "../../../src/hooks/useIdpFromQuery";
 
 jest.mock("../../../src/windowHelpers");
 jest.mock("../../../src/hooks/useIdpFromQuery");
-jest.mock("next/router");
+jest.mock("next/router", () => ({
+  useRouter: jest.fn().mockReturnValue(() => ({ push: jest.fn() })),
+}));
 
 describe("ProviderLogin form", () => {
   beforeEach(() => {
     useIdpFromQuery.mockReturnValue(null);
-    useRouter.mockReturnValue({ push: jest.fn() });
   });
 
   it("renders a webid login form", () => {
