@@ -117,7 +117,7 @@ export default function ConsentRequestForm({ agentDetails }) {
           : selectedResources
       );
       if (signedVc) {
-        await router.push(`${redirectUrl}?signedVcUrl=${getVcId(signedVc)}`);
+        router.push(`${redirectUrl}?signedVcUrl=${getVcId(signedVc)}`);
       }
     }
     /* istanbul ignore next */
