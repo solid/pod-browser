@@ -21,6 +21,7 @@
 
 import React from "react";
 import * as RouterFns from "next/router";
+import { act } from "@testing-library/react-hooks";
 import * as solidClientFns from "@inrupt/solid-client";
 import { waitFor } from "@testing-library/dom";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
@@ -60,8 +61,7 @@ describe("ResourceDrawer view", () => {
     });
     SessionProvider = mockSessionContextProvider(session);
     accessControl = mockAccessControl();
-    jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
-    jest.spyOn(acp3, "isAcpControlled").mockReturnValue(true);
+
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
       replace: jest.fn(),
@@ -80,11 +80,11 @@ describe("ResourceDrawer view", () => {
     });
   });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
   test("it renders a loading view when context has no iri", async () => {
+    act(() => {
+      jest.spyOn(accessControlFns, "isAcp").mockResolvedValue(true);
+      jest.spyOn(acp3, "isAcpControlled").mockResolvedValue(true);
+    });
     const DetailsContext = mockDetailsContextMenuProvider({
       menuOpen: true,
       setMenuOpen: jest.fn,
@@ -108,17 +108,28 @@ describe("ResourceDrawer view", () => {
   });
 
   test("it renders a Contents view when the router query has an iri", async () => {
-    const { asFragment } = renderWithTheme(
+    act(() => {
+      jest.spyOn(accessControlFns, "isAcp").mockResolvedValue(true);
+      jest.spyOn(acp3, "isAcpControlled").mockResolvedValue(true);
+    });
+    const { asFragment, getByText } = renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
           <ResourceDrawer />
         </DetailsMenuContext>
       </SessionProvider>
     );
+    await waitFor(() => {
+      expect(getByText("Details")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
   test("it renders without errors when iri contains spaces", async () => {
+    act(() => {
+      jest.spyOn(accessControlFns, "isAcp").mockResolvedValue(true);
+      jest.spyOn(acp3, "isAcpControlled").mockResolvedValue(true);
+    });
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
       replace: jest.fn(),
@@ -141,6 +152,10 @@ describe("ResourceDrawer view", () => {
   });
 
   it("uses resource dataset", () => {
+    act(() => {
+      jest.spyOn(accessControlFns, "isAcp").mockResolvedValue(true);
+      jest.spyOn(acp3, "isAcpControlled").mockResolvedValue(true);
+    });
     renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
@@ -155,6 +170,10 @@ describe("ResourceDrawer view", () => {
   });
 
   it("uses access control", () => {
+    act(() => {
+      jest.spyOn(accessControlFns, "isAcp").mockResolvedValue(true);
+      jest.spyOn(acp3, "isAcpControlled").mockResolvedValue(true);
+    });
     renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
@@ -166,6 +185,10 @@ describe("ResourceDrawer view", () => {
   });
 
   it("renders a specific error message if resource fails with 403", async () => {
+    act(() => {
+      jest.spyOn(accessControlFns, "isAcp").mockResolvedValue(true);
+      jest.spyOn(acp3, "isAcpControlled").mockResolvedValue(true);
+    });
     useResourceInfo.mockReturnValue({ error: new Error("403") });
 
     const { asFragment, getByText } = renderWithTheme(
@@ -184,6 +207,10 @@ describe("ResourceDrawer view", () => {
   });
 
   it("renders an error message if resource fails to load", async () => {
+    act(() => {
+      jest.spyOn(accessControlFns, "isAcp").mockResolvedValue(true);
+      jest.spyOn(acp3, "isAcpControlled").mockResolvedValue(true);
+    });
     useResourceInfo.mockReturnValue({ error: new Error("error") });
 
     const { asFragment, getByText } = renderWithTheme(

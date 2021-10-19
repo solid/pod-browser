@@ -52,7 +52,7 @@ describe("useAccessControl", () => {
       .spyOn(accessControlFns, "getAccessControl")
       .mockResolvedValue(accessControl);
     mockedPoliciesContainerUrlHook.mockReturnValue(null);
-    jest.spyOn(accessControlFns, "isAcp").mockReturnValue(false);
+    jest.spyOn(accessControlFns, "isAcp").mockResolvedValue(false);
   });
 
   it("returns null if given no resourceUri", () => {
@@ -108,7 +108,7 @@ describe("useAccessControl", () => {
 
     beforeEach(() => {
       mockedPoliciesContainerUrlHook.mockReturnValue(policiesContainerUrl);
-      jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
+      jest.spyOn(accessControlFns, "isAcp").mockResolvedValue(true);
     });
 
     it("returns accessControl if given resourceUri", async () => {

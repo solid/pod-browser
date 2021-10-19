@@ -20,6 +20,7 @@
  */
 
 import React from "react";
+import { waitFor } from "@testing-library/dom";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
 import * as routerFns from "next/router";
@@ -64,7 +65,7 @@ describe("Resource details", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("renders Permissions component for WAC-supporting Solid servers", () => {
+  it("renders Permissions component for WAC-supporting Solid servers", async () => {
     jest.spyOn(accessControlFns, "isWac").mockReturnValue(true);
     const { asFragment, getByTestId } = renderWithTheme(
       <AccessControlProvider accessControl={accessControl}>
@@ -73,11 +74,13 @@ describe("Resource details", () => {
         </DatasetProvider>
       </AccessControlProvider>
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_ACCORDION_PERMISSIONS)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_ACCORDION_PERMISSIONS)).toBeDefined();
   });
 
-  it("renders Sharing component for ACP-supporting Solid servers", () => {
+  it("renders Sharing component for ACP-supporting Solid servers", async () => {
     jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
     const { asFragment, getByTestId } = renderWithTheme(
       <AccessControlProvider accessControl={accessControl}>
@@ -86,7 +89,9 @@ describe("Resource details", () => {
         </DatasetProvider>
       </AccessControlProvider>
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_ACCORDION_SHARING)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_ACCORDION_SHARING)).toBeDefined();
   });
 });
