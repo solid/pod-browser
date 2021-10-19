@@ -91,8 +91,8 @@ export default function ResourceDetails({
     getAccordionKey(dataset, "sharing"),
     false
   );
-  const useAcp = isAcp(dataset);
-  const useWac = isWac(dataset);
+  const useAcp = isAcp(datasetUrl, fetch);
+  const useWac = isWac(datasetUrl, dataset, fetch);
 
   const expandIcon = <ExpandMoreIcon />;
   return (

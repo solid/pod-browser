@@ -35,7 +35,8 @@ export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
 
 function SharingAccordion() {
   const router = useRouter();
-  const isContainer = isContainerIri(router.query.resourceIri);
+  const iri = router.query.resourceIri;
+  const isContainer = iri && isContainerIri(iri);
   const [loading, setLoading] = useState(false);
 
   return (

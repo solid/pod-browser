@@ -21,7 +21,8 @@
 
 import React from "react";
 import * as RouterFns from "next/router";
-
+import * as solidClientFns from "@inrupt/solid-client";
+import { waitFor } from "@testing-library/dom";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
@@ -34,12 +35,14 @@ import mockDetailsContextMenuProvider from "../../__testUtils/mockDetailsContext
 import useResourceInfo from "../../src/hooks/useResourceInfo";
 import useAccessControl from "../../src/hooks/useAccessControl";
 import mockAccessControl from "../../__testUtils/mockAccessControl";
+import * as accessControlFns from "../../src/accessControl";
 
 jest.mock("../../src/hooks/useResourceInfo");
 jest.mock("../../src/hooks/useAccessControl");
 
 const iri = "/iri/";
 const iriWithSpaces = "/iri with spaces/";
+const acp3 = solidClientFns.acp_v3;
 
 describe("ResourceDrawer view", () => {
   const resourceInfo = mockSolidDatasetFrom(iri);
@@ -57,7 +60,8 @@ describe("ResourceDrawer view", () => {
     });
     SessionProvider = mockSessionContextProvider(session);
     accessControl = mockAccessControl();
-
+    jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
+    jest.spyOn(acp3, "isAcpControlled").mockReturnValue(true);
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
       replace: jest.fn(),
@@ -80,7 +84,7 @@ describe("ResourceDrawer view", () => {
     jest.restoreAllMocks();
   });
 
-  test("it renders a loading view when context has no iri", () => {
+  test("it renders a loading view when context has no iri", async () => {
     const DetailsContext = mockDetailsContextMenuProvider({
       menuOpen: true,
       setMenuOpen: jest.fn,
@@ -92,16 +96,18 @@ describe("ResourceDrawer view", () => {
       query: {},
     });
 
-    const { asFragment } = renderWithTheme(
+    const { asFragment, getByText } = renderWithTheme(
       <DetailsContext>
         <ResourceDrawer />
       </DetailsContext>
     );
-
+    await waitFor(() => {
+      expect(getByText("Details")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it renders a Contents view when the router query has an iri", () => {
+  test("it renders a Contents view when the router query has an iri", async () => {
     const { asFragment } = renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
@@ -112,7 +118,7 @@ describe("ResourceDrawer view", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it renders without errors when iri contains spaces", () => {
+  test("it renders without errors when iri contains spaces", async () => {
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
       replace: jest.fn(),
@@ -121,13 +127,16 @@ describe("ResourceDrawer view", () => {
         action: "details",
       },
     });
-    const { asFragment } = renderWithTheme(
+    const { asFragment, getByText } = renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
           <ResourceDrawer />
         </DetailsMenuContext>
       </SessionProvider>
     );
+    await waitFor(() => {
+      expect(getByText("iri")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
@@ -156,29 +165,39 @@ describe("ResourceDrawer view", () => {
     expect(useAccessControl).toHaveBeenCalledWith(resourceInfo);
   });
 
-  it("renders a specific error message if resource fails with 403", () => {
+  it("renders a specific error message if resource fails with 403", async () => {
     useResourceInfo.mockReturnValue({ error: new Error("403") });
 
-    const { asFragment } = renderWithTheme(
+    const { asFragment, getByText } = renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
           <ResourceDrawer />
         </DetailsMenuContext>
       </SessionProvider>
     );
+    await waitFor(() => {
+      expect(
+        getByText("You do not have access to this resource.")
+      ).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("renders an error message if resource fails to load", () => {
+  it("renders an error message if resource fails to load", async () => {
     useResourceInfo.mockReturnValue({ error: new Error("error") });
 
-    const { asFragment } = renderWithTheme(
+    const { asFragment, getByText } = renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
           <ResourceDrawer />
         </DetailsMenuContext>
       </SessionProvider>
     );
+    await waitFor(() => {
+      expect(
+        getByText("We had a problem loading the resource.")
+      ).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 });
