@@ -21,24 +21,27 @@
 
 import { useState, useEffect } from "react";
 import { getAccessWithConsentAll } from "@inrupt/solid-client-consent";
-import { getSourceUrl } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
 
-export default function useConsentBasedAccessForResource(resource) {
+export default function useConsentBasedAccessForResource(resourceUrl) {
   const [permissions, setPermissions] = useState(null);
+  const [permissionsError, setPermissionsError] = useState(null);
   const { fetch } = useSession();
 
   useEffect(() => {
-    if (!resource) {
+    if (!resourceUrl) {
       setPermissions(null);
       return;
     }
     (async () => {
-      const url = getSourceUrl(resource);
-      const access = await getAccessWithConsentAll(url, { fetch });
-      setPermissions(access);
+      try {
+        const access = await getAccessWithConsentAll(resourceUrl, { fetch });
+        setPermissions(access);
+      } catch (err) {
+        setPermissionsError(err);
+      }
     })();
-  }, [resource, fetch]);
+  }, [resourceUrl, fetch]);
 
-  return { permissions };
+  return { permissions, permissionsError };
 }

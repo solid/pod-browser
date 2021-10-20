@@ -19,8 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function getRequestedAccessesFromSignedVc(signedVc) {
+export function getRequestedAccessesFromSignedVc(signedVc) {
   return Array.isArray(signedVc?.credentialSubject?.providedConsent.mode)
     ? signedVc?.credentialSubject?.providedConsent
     : [signedVc?.credentialSubject?.providedConsent];
+}
+
+export function getRequestorWebIdFromSignedVc(signedVc) {
+  return signedVc?.credentialSubject?.providedConsent?.isProvidedTo;
 }

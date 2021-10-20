@@ -21,7 +21,7 @@
 
 import getSignedVc from "../../../../__testUtils/mockSignedVc";
 
-import getRequestedAccessesFromSignedVc from "./index";
+import { getRequestedAccessesFromSignedVc } from "./index";
 
 const signedVc = getSignedVc();
 
@@ -39,7 +39,7 @@ describe("getRequestedAccessesFromSignedVc", () => {
         "https://example.org/someSpecificPurpose",
         "https://example.org/someSpecificPurpose2",
       ],
-      isProvidedTo: "https://pod.inrupt.com/virginiabalseiro/profile/card#me",
+      isProvidedTo: "https://mockapp.com/app#id",
     });
   });
 });

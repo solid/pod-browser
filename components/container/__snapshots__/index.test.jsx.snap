@@ -1209,6 +1209,265 @@ exports[`Container view renders a table 1`] = `
               </div>
             </div>
           </div>
+          <div
+            class="PodBrowser-root PodBrowser-root PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+          >
+            <div
+              aria-disabled="false"
+              aria-expanded="false"
+              class="PodBrowser-root PodBrowser-root"
+              data-testid="accordion-resource-sharing"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="PodBrowser-content"
+              >
+                Sharing
+              </div>
+              <div
+                aria-disabled="false"
+                aria-hidden="true"
+                class="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-edgeEnd"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="PodBrowser-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                    />
+                  </svg>
+                </span>
+                <span
+                  class="PodBrowser-root"
+                />
+              </div>
+            </div>
+            <div
+              class="PodBrowser-container PodBrowser-hidden"
+              style="min-height: 0px;"
+            >
+              <div
+                class="PodBrowser-wrapper"
+              >
+                <div
+                  class="PodBrowser-wrapperInner"
+                >
+                  <div
+                    role="region"
+                  >
+                    <div
+                      class="PodBrowser-root PodBrowser-accordionDetails"
+                    >
+                      <div
+                        class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+                        data-testid="agent-access-table"
+                      >
+                        <div
+                          class="PodBrowser-headerContainer"
+                        >
+                          <i
+                            class="PodBrowser-icon-editor PodBrowser-icon PodBrowser-iconEditor"
+                          />
+                          <div
+                            class="PodBrowser-textContainer"
+                          >
+                            <div
+                              class="PodBrowser-titleAndButtonContainer"
+                            >
+                              <p
+                                class="PodBrowser-title"
+                              >
+                                Editors
+                              </p>
+                              <button
+                                class="PodBrowser-button PodBrowser-button--text"
+                                data-testid="add-agent-button"
+                              >
+                                <span
+                                  class="PodBrowser-icon-edit PodBrowser-button__icon PodBrowser-button__icon--before"
+                                />
+                                <span
+                                  class="PodBrowser-button__text"
+                                >
+                                  Edit Editors
+                                </span>
+                              </button>
+                              <button
+                                class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+                              >
+                                <span
+                                  class="PodBrowser-button__text"
+                                >
+                                  <span
+                                    aria-label="Show menu for policy"
+                                    class="PodBrowser-icon-more"
+                                  />
+                                </span>
+                              </button>
+                            </div>
+                            <span
+                              class="PodBrowser-description"
+                            >
+                              <p>
+                                <b>
+                                  Can 
+                                </b>
+                                view, edit and delete this resource
+                              </p>
+                            </span>
+                          </div>
+                        </div>
+                        <div
+                          class="PodBrowser-container PodBrowser-entered"
+                          style="min-height: 0px;"
+                        >
+                          <div
+                            class="PodBrowser-wrapper"
+                          >
+                            <div
+                              class="PodBrowser-wrapperInner"
+                            >
+                              <div
+                                role="region"
+                              >
+                                <div
+                                  class="PodBrowser-permissionsContainer"
+                                >
+                                  <span
+                                    class="PodBrowser-emptyStateTextContainer"
+                                  >
+                                    <p>
+                                      No editors
+                                    </p>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+                        data-testid="agent-access-table"
+                      >
+                        <div
+                          class="PodBrowser-headerContainer"
+                        >
+                          <i
+                            class="PodBrowser-icon-view PodBrowser-icon PodBrowser-iconViewer"
+                          />
+                          <div
+                            class="PodBrowser-textContainer"
+                          >
+                            <div
+                              class="PodBrowser-titleAndButtonContainer"
+                            >
+                              <p
+                                class="PodBrowser-title"
+                              >
+                                Viewers
+                              </p>
+                              <button
+                                class="PodBrowser-button PodBrowser-button--text"
+                                data-testid="add-agent-button"
+                              >
+                                <span
+                                  class="PodBrowser-icon-edit PodBrowser-button__icon PodBrowser-button__icon--before"
+                                />
+                                <span
+                                  class="PodBrowser-button__text"
+                                >
+                                  Edit Viewers
+                                </span>
+                              </button>
+                              <button
+                                class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+                              >
+                                <span
+                                  class="PodBrowser-button__text"
+                                >
+                                  <span
+                                    aria-label="Show menu for policy"
+                                    class="PodBrowser-icon-more"
+                                  />
+                                </span>
+                              </button>
+                            </div>
+                            <span
+                              class="PodBrowser-description"
+                            >
+                              <p>
+                                <b>
+                                  Can 
+                                </b>
+                                view but
+                                <b>
+                                   cannot 
+                                </b>
+                                edit or delete this resource
+                              </p>
+                            </span>
+                          </div>
+                        </div>
+                        <div
+                          class="PodBrowser-container PodBrowser-entered"
+                          style="min-height: 0px;"
+                        >
+                          <div
+                            class="PodBrowser-wrapper"
+                          >
+                            <div
+                              class="PodBrowser-wrapperInner"
+                            >
+                              <div
+                                role="region"
+                              >
+                                <div
+                                  class="PodBrowser-permissionsContainer"
+                                >
+                                  <span
+                                    class="PodBrowser-emptyStateTextContainer"
+                                  >
+                                    <p>
+                                      No viewers
+                                    </p>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="PodBrowser-sharingButtonContainer"
+                      >
+                        <button
+                          class="PodBrowser-button PodBrowser-button--text PodBrowser-sharingButton"
+                          data-testid="advanced-sharing-button"
+                        >
+                          <span
+                            class="PodBrowser-button__text"
+                          >
+                            <i
+                              class="PodBrowser-icon-settings PodBrowser-icon"
+                            />
+                            Advanced Sharing
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1653,6 +1912,265 @@ exports[`Container view renders a table for parent container if iri is a resourc
                           </li>
                         </ul>
                       </section>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="PodBrowser-root PodBrowser-root PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+          >
+            <div
+              aria-disabled="false"
+              aria-expanded="false"
+              class="PodBrowser-root PodBrowser-root"
+              data-testid="accordion-resource-sharing"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="PodBrowser-content"
+              >
+                Sharing
+              </div>
+              <div
+                aria-disabled="false"
+                aria-hidden="true"
+                class="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-edgeEnd"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="PodBrowser-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                    />
+                  </svg>
+                </span>
+                <span
+                  class="PodBrowser-root"
+                />
+              </div>
+            </div>
+            <div
+              class="PodBrowser-container PodBrowser-hidden"
+              style="min-height: 0px;"
+            >
+              <div
+                class="PodBrowser-wrapper"
+              >
+                <div
+                  class="PodBrowser-wrapperInner"
+                >
+                  <div
+                    role="region"
+                  >
+                    <div
+                      class="PodBrowser-root PodBrowser-accordionDetails"
+                    >
+                      <div
+                        class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+                        data-testid="agent-access-table"
+                      >
+                        <div
+                          class="PodBrowser-headerContainer"
+                        >
+                          <i
+                            class="PodBrowser-icon-editor PodBrowser-icon PodBrowser-iconEditor"
+                          />
+                          <div
+                            class="PodBrowser-textContainer"
+                          >
+                            <div
+                              class="PodBrowser-titleAndButtonContainer"
+                            >
+                              <p
+                                class="PodBrowser-title"
+                              >
+                                Editors
+                              </p>
+                              <button
+                                class="PodBrowser-button PodBrowser-button--text"
+                                data-testid="add-agent-button"
+                              >
+                                <span
+                                  class="PodBrowser-icon-edit PodBrowser-button__icon PodBrowser-button__icon--before"
+                                />
+                                <span
+                                  class="PodBrowser-button__text"
+                                >
+                                  Edit Editors
+                                </span>
+                              </button>
+                              <button
+                                class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+                              >
+                                <span
+                                  class="PodBrowser-button__text"
+                                >
+                                  <span
+                                    aria-label="Show menu for policy"
+                                    class="PodBrowser-icon-more"
+                                  />
+                                </span>
+                              </button>
+                            </div>
+                            <span
+                              class="PodBrowser-description"
+                            >
+                              <p>
+                                <b>
+                                  Can 
+                                </b>
+                                view, edit and delete this resource
+                              </p>
+                            </span>
+                          </div>
+                        </div>
+                        <div
+                          class="PodBrowser-container PodBrowser-entered"
+                          style="min-height: 0px;"
+                        >
+                          <div
+                            class="PodBrowser-wrapper"
+                          >
+                            <div
+                              class="PodBrowser-wrapperInner"
+                            >
+                              <div
+                                role="region"
+                              >
+                                <div
+                                  class="PodBrowser-permissionsContainer"
+                                >
+                                  <span
+                                    class="PodBrowser-emptyStateTextContainer"
+                                  >
+                                    <p>
+                                      No editors
+                                    </p>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+                        data-testid="agent-access-table"
+                      >
+                        <div
+                          class="PodBrowser-headerContainer"
+                        >
+                          <i
+                            class="PodBrowser-icon-view PodBrowser-icon PodBrowser-iconViewer"
+                          />
+                          <div
+                            class="PodBrowser-textContainer"
+                          >
+                            <div
+                              class="PodBrowser-titleAndButtonContainer"
+                            >
+                              <p
+                                class="PodBrowser-title"
+                              >
+                                Viewers
+                              </p>
+                              <button
+                                class="PodBrowser-button PodBrowser-button--text"
+                                data-testid="add-agent-button"
+                              >
+                                <span
+                                  class="PodBrowser-icon-edit PodBrowser-button__icon PodBrowser-button__icon--before"
+                                />
+                                <span
+                                  class="PodBrowser-button__text"
+                                >
+                                  Edit Viewers
+                                </span>
+                              </button>
+                              <button
+                                class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+                              >
+                                <span
+                                  class="PodBrowser-button__text"
+                                >
+                                  <span
+                                    aria-label="Show menu for policy"
+                                    class="PodBrowser-icon-more"
+                                  />
+                                </span>
+                              </button>
+                            </div>
+                            <span
+                              class="PodBrowser-description"
+                            >
+                              <p>
+                                <b>
+                                  Can 
+                                </b>
+                                view but
+                                <b>
+                                   cannot 
+                                </b>
+                                edit or delete this resource
+                              </p>
+                            </span>
+                          </div>
+                        </div>
+                        <div
+                          class="PodBrowser-container PodBrowser-entered"
+                          style="min-height: 0px;"
+                        >
+                          <div
+                            class="PodBrowser-wrapper"
+                          >
+                            <div
+                              class="PodBrowser-wrapperInner"
+                            >
+                              <div
+                                role="region"
+                              >
+                                <div
+                                  class="PodBrowser-permissionsContainer"
+                                >
+                                  <span
+                                    class="PodBrowser-emptyStateTextContainer"
+                                  >
+                                    <p>
+                                      No viewers
+                                    </p>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="PodBrowser-sharingButtonContainer"
+                      >
+                        <button
+                          class="PodBrowser-button PodBrowser-button--text PodBrowser-sharingButton"
+                          data-testid="advanced-sharing-button"
+                        >
+                          <span
+                            class="PodBrowser-button__text"
+                          >
+                            <i
+                              class="PodBrowser-icon-settings PodBrowser-icon"
+                            />
+                            Advanced Sharing
+                          </span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

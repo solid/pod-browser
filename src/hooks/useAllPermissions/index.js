@@ -23,10 +23,12 @@ import { DatasetContext } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
 import { useState, useEffect, useContext } from "react";
 import { getPolicyDetailFromAccess } from "../../accessControl/acp";
-import { getRequestorWebId } from "../../models/consent/request";
 import AccessControlContext from "../../contexts/accessControlContext";
 import useConsentBasedAccessForResource from "../useConsentBasedAccessForResource";
-import getRequestedAccessesFromSignedVc from "../../models/consent/signedVc";
+import {
+  getRequestedAccessesFromSignedVc,
+  getRequestorWebIdFromSignedVc,
+} from "../../models/consent/signedVc";
 
 const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
   if (!consentBasedPermissions) return [];
@@ -55,7 +57,7 @@ const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
     return {
       type: "agent",
       acl,
-      webId: getRequestorWebId(vc),
+      webId: getRequestorWebIdFromSignedVc(vc),
       alias: getPolicyDetailFromAccess(acl, "name"),
       vc,
     };
