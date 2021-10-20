@@ -25,8 +25,6 @@ import { waitFor } from "@testing-library/react";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import userEvent from "@testing-library/user-event";
-import { mockSolidDatasetFrom } from "@inrupt/solid-client";
-import { act } from "@testing-library/react-hooks";
 import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
 import AgentAccess, {
   PROFILE_ERROR_MESSAGE,
@@ -296,33 +294,6 @@ describe("AgentAccess", () => {
       fetchProfileSpy.mockRejectedValue(null);
       await waitFor(() => {
         expect(queryByTestId("try-again-spinner")).toBeFalsy();
-      });
-    });
-    it.skip("tries to fetch the profile again when clicking 'try again' button", async () => {
-      jest.useFakeTimers();
-      const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
-      const { getByTestId, queryByTestId } = renderWithTheme(
-        <DatasetProvider solidDataset={dataset}>
-          <AgentAccess
-            permission={{
-              acl: createAccessMap(true, true, false, false),
-              webId,
-              alias: "Editors",
-              type: "agent",
-              profile: null,
-              profileError: "error",
-            }}
-          />
-        </DatasetProvider>
-      );
-      const button = getByTestId("try-again-button");
-      userEvent.click(button);
-      act(() => {
-        jest.advanceTimersByTime(1500);
-      });
-      expect(fetchProfileSpy).toHaveBeenCalledWith(webId, expect.anything());
-      await waitFor(() => {
-        expect(queryByTestId("try-again-spinner")).not.toBeInTheDocument();
       });
     });
   });
