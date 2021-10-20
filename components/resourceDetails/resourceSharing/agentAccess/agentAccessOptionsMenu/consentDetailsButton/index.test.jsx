@@ -33,6 +33,7 @@ import { ConfirmationDialogProvider } from "../../../../../../src/contexts/confi
 import ConfirmationDialog, {
   TESTCAFE_ID_CONFIRMATION_DIALOG,
 } from "../../../../../confirmationDialog";
+import { TESTCAFE_ID_CONSENT_DETAILS_CONTENT } from "./consentDetailsModalContent";
 
 const webId = "https://example.com/profile/card#me";
 
@@ -73,6 +74,7 @@ describe("View consent details button and modal", () => {
     userEvent.click(button);
     const dialog = await findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
     expect(dialog).toBeInTheDocument();
+    await findByTestId(TESTCAFE_ID_CONSENT_DETAILS_CONTENT);
     expect(baseElement).toMatchSnapshot();
   });
 });

@@ -32,8 +32,33 @@ export const permission = PropTypes.shape({
   webId: PropTypes.string.isRequired,
   alias: PropTypes.string,
   inherited: PropTypes.bool,
-  // eslint-disable-next-line react/forbid-prop-types
-  vc: PropTypes.object,
+  vc: PropTypes.shape({
+    "@context": PropTypes.arrayOf(PropTypes.string),
+    credentialSubject: PropTypes.shape({
+      hasConsent: PropTypes.shape({
+        mode: PropTypes.arrayOf(PropTypes.string),
+        hasStatus: PropTypes.string,
+        forPersonalData: PropTypes.arrayOf(PropTypes.string),
+        forPurpose: PropTypes.arrayOf(PropTypes.string),
+        isProvidedTo: PropTypes.string,
+      }),
+      id: PropTypes.string,
+      inbox: PropTypes.string,
+    }),
+    id: PropTypes.string,
+    issuanceDate: PropTypes.string,
+    expirationDate: PropTypes.string,
+    issuer: PropTypes.string,
+    proof: PropTypes.shape({
+      created: PropTypes.string,
+      domain: PropTypes.string,
+      proofPurpose: PropTypes.string,
+      proofValue: PropTypes.string,
+      type: PropTypes.string,
+      verificationMethod: PropTypes.string,
+    }),
+    type: PropTypes.string,
+  }),
 });
 
 export const profile = PropTypes.shape({

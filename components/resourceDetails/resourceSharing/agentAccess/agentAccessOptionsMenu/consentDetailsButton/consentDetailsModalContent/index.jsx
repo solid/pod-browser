@@ -49,6 +49,8 @@ import {
 } from "../../../../../../../src/models/consent/request";
 import styles from "./styles";
 
+export const TESTCAFE_ID_CONSENT_DETAILS_CONTENT = "consent-details-content";
+
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function ConsentDetailsModalContent({
@@ -94,83 +96,84 @@ export default function ConsentDetailsModalContent({
   }
 
   return (
-    <CombinedDataProvider
-      datasetUrl={agentWebId}
-      thingUrl={agentWebId}
-      onError={setError}
+    <div
+      className={bem("access-details", "wrapper")}
+      data-testid={TESTCAFE_ID_CONSENT_DETAILS_CONTENT}
     >
-      <div className={bem("access-details", "wrapper")}>
-        <span className={bem("access-details", "title")}>
-          <h2>
+      <span className={bem("access-details", "title")}>
+        <h2>
+          <CombinedDataProvider
+            datasetUrl={agentWebId}
+            thingUrl={agentWebId}
+            onError={setError}
+          >
             <ModalAvatar profileIri={agentWebId} closeDialog={closeDialog} />
-          </h2>
-        </span>
-        <section className={bem("access-details", "section")}>
-          <h3 className={bem("access-details", "section-header")}>Access</h3>
-          <hr className={bem("access-details", "separator")} />
-          <List>
-            {sortedAccessDetails?.map(({ name, icon, description }) => {
-              return (
-                <ListItem key={name}>
-                  <ListItemIcon classes={{ root: classes.listItemIcon }}>
-                    <Icons
-                      name={icon}
-                      className={bem("access-details", "section-icon")}
-                    />
-                  </ListItemIcon>
-                  <ListItemText
-                    classes={{
-                      root: classes.listItemText,
-                      primary: classes.listItemTitleText,
-                      secondary: classes.listItemSecondaryText,
-                    }}
-                    key={name}
-                    primary={name}
-                    secondary={description}
+          </CombinedDataProvider>
+        </h2>
+      </span>
+      <section className={bem("access-details", "section")}>
+        <h3 className={bem("access-details", "section-header")}>Access</h3>
+        <hr className={bem("access-details", "separator")} />
+        <List>
+          {sortedAccessDetails?.map(({ name, icon, description }) => {
+            return (
+              <ListItem key={name}>
+                <ListItemIcon classes={{ root: classes.listItemIcon }}>
+                  <Icons
+                    name={icon}
+                    className={bem("access-details", "section-icon")}
                   />
-                </ListItem>
-              );
-            })}
+                </ListItemIcon>
+                <ListItemText
+                  classes={{
+                    root: classes.listItemText,
+                    primary: classes.listItemTitleText,
+                    secondary: classes.listItemSecondaryText,
+                  }}
+                  key={name}
+                  primary={name}
+                  secondary={description}
+                />
+              </ListItem>
+            );
+          })}
+        </List>
+      </section>
+      <section className={bem("access-details", "section")}>
+        <h3 className={bem("access-details", "section-header")}>Approved On</h3>
+        <hr className={bem("access-details", "separator")} />
+        <p>{issuanceDate}</p>
+      </section>
+      <section className={bem("access-details", "section")}>
+        <h3 className={bem("access-details", "section-header")}>Purpose</h3>
+        <hr className={bem("access-details", "separator")} />
+        <div className={bem("purposes-container")}>
+          <List>
+            {purposes?.map((purpose) => (
+              <ListItem key={purpose} className={bem("list-item")}>
+                <span className={bem("purpose")}>
+                  {purpose.url || "Commercial interest"}{" "}
+                  <InfoTooltip tooltipText={purpose.url || purpose} />
+                </span>
+              </ListItem>
+            ))}
           </List>
-        </section>
+        </div>
+        <p>Commercial Interest</p>
+      </section>
+      {expirationDate && (
         <section className={bem("access-details", "section")}>
           <h3 className={bem("access-details", "section-header")}>
-            Approved On
+            Access Duration
           </h3>
           <hr className={bem("access-details", "separator")} />
-          <p>{issuanceDate}</p>
+          <p>
+            <Text className={classes.avatarText} property={foaf.name} /> has
+            access until <strong>{expirationDate}</strong>.
+          </p>
         </section>
-        <section className={bem("access-details", "section")}>
-          <h3 className={bem("access-details", "section-header")}>Purpose</h3>
-          <hr className={bem("access-details", "separator")} />
-          <div className={bem("purposes-container")}>
-            <List>
-              {purposes?.map((purpose) => (
-                <ListItem key={purpose} className={bem("list-item")}>
-                  <span className={bem("purpose")}>
-                    {purpose.url || "Commercial interest"}{" "}
-                    <InfoTooltip tooltipText={purpose.url || purpose} />
-                  </span>
-                </ListItem>
-              ))}
-            </List>
-          </div>
-          <p>Commercial Interest</p>
-        </section>
-        {expirationDate && (
-          <section className={bem("access-details", "section")}>
-            <h3 className={bem("access-details", "section-header")}>
-              Access Duration
-            </h3>
-            <hr className={bem("access-details", "separator")} />
-            <p>
-              <Text className={classes.avatarText} property={foaf.name} /> has
-              access until <strong>{expirationDate}</strong>.
-            </p>
-          </section>
-        )}
-      </div>
-    </CombinedDataProvider>
+      )}
+    </div>
   );
 }
 
