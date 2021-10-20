@@ -47,7 +47,7 @@ describe("Person Avatar", () => {
     jest.spyOn(solidClientFns, "getUrl").mockReturnValue("schema.Person");
   });
 
-  test("renders a person avatar", async () => {
+  test("renders an avatar", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
     const { baseElement, findByTestId } = renderWithTheme(
