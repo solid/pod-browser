@@ -32,6 +32,8 @@ export const permission = PropTypes.shape({
   webId: PropTypes.string.isRequired,
   alias: PropTypes.string,
   inherited: PropTypes.bool,
+  // eslint-disable-next-line react/forbid-prop-types
+  vc: PropTypes.object,
 });
 
 export const profile = PropTypes.shape({
