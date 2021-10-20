@@ -49,6 +49,7 @@ export default ConfirmationDialogContext;
 function ConfirmationDialogProvider({ children }) {
   const [open, setOpen] = useState(null);
   const [content, setContent] = useState(null);
+  const [customContentWrapper, setCustomContentWrapper] = useState(false);
   const [title, setTitle] = useState("Confirmation");
   const [cancelText, setCancelText] = useState("Cancel");
   const [confirmText, setConfirmText] = useState("Confirm");
@@ -69,10 +70,12 @@ function ConfirmationDialogProvider({ children }) {
         content,
         confirmed,
         open,
+        customContentWrapper,
         setContent,
         setConfirmed,
         setOpen,
         setTitle,
+        setCustomContentWrapper,
         title,
         cancelText,
         setCancelText,

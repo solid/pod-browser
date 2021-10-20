@@ -103,7 +103,7 @@ export default function AgentAccessOptionsMenu({
               <p className={classes.webId}>{webId}</p>
             </ListItemText>
           </ListItem>
-          <ConsentDetailsButton resourceIri={resourceIri} agentWebId={webId} />
+          {permission.vc && <ConsentDetailsButton permission={permission} />}
           <RemoveButton
             resourceIri={resourceIri}
             profile={profile}

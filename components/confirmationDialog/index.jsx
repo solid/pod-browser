@@ -51,6 +51,7 @@ export default function ConfirmationDialog() {
     open,
     title,
     content,
+    customContentWrapper,
     setConfirmed,
     cancelText,
     confirmText,
@@ -76,13 +77,16 @@ export default function ConfirmationDialog() {
         </DialogTitle>
       )}
       <DialogContent>
-        <DialogContentText
-          data-testid={TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT}
-          classes={{ root: classes.dialogText }}
-          id="alert-confirmation-dialog"
-        >
-          {content}
-        </DialogContentText>
+        {!customContentWrapper && (
+          <DialogContentText
+            data-testid={TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT}
+            classes={{ root: classes.dialogText }}
+            id="alert-confirmation-dialog"
+          >
+            {content}
+          </DialogContentText>
+        )}
+        {customContentWrapper && <div>{content}</div>}
       </DialogContent>
       <DialogActions classes={{ root: classes.dialogActions }}>
         {!omitCancelButton && (

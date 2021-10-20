@@ -63,15 +63,13 @@ exports[`View consent details button and modal clicking on view details button r
         <div
           class="PodBrowser-root"
         >
-          <p
-            class="PodBrowser-root PodBrowser-root PodBrowser-dialogText PodBrowser-body1 PodBrowser-colorTextSecondary"
-            data-testid="confirmation-dialog-content"
-            id="alert-confirmation-dialog"
-          >
-            <span>
-              Fetching data...
-            </span>
-          </p>
+          <div>
+            <div>
+              <span>
+                Fetching data...
+              </span>
+            </div>
+          </div>
         </div>
         <div
           class="PodBrowser-root PodBrowser-dialogActions PodBrowser-spacing"
@@ -94,7 +92,7 @@ exports[`View consent details button and modal clicking on view details button r
             <span
               class="PodBrowser-button__text"
             >
-              Revoke Access to iri
+              Revoke Access to null
             </span>
           </button>
         </div>

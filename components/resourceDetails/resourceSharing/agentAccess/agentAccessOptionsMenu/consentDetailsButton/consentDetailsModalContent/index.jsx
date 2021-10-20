@@ -36,27 +36,57 @@ import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { CombinedDataProvider, Text } from "@inrupt/solid-ui-react";
 import { Alert } from "@material-ui/lab";
+import { format } from "date-fns";
+import { getAcpAccessDetails } from "../../../../../../../src/accessControl/acp";
 import { isHTTPError } from "../../../../../../../src/error";
-import styles from "./styles";
+import { permission as permissionPropType } from "../../../../../../../constants/propTypes";
 import ModalAvatar from "../consentDetailsModalAvatar";
+import InfoTooltip from "../../../../../../infoTooltip";
+import {
+  getExpiryDate,
+  getIssuanceDate,
+  getPurposeUrls,
+} from "../../../../../../../src/models/consent/request";
+import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function ConsentDetailsModalContent({
-  agentWebId,
-  resourceIri,
+  permission,
   closeDialog,
 }) {
   const classes = useStyles();
   const bem = useBem(classes);
   const [error, setError] = useState(null);
+  const { vc, webId: agentWebId } = permission;
 
-  // TODO replace with toast error or something?
+  const allowModes = vc?.credentialSubject?.hasConsent?.mode;
+  const modes = allowModes?.map((mode) => {
+    return {
+      read: !!mode.includes("Read"),
+      write: !!mode.includes("Write"),
+      append: !!mode.includes("Append"),
+      control: !!mode.includes("Control"),
+    };
+  });
+
+  const accessDetails = modes?.map((mode) => {
+    return getAcpAccessDetails(mode);
+  });
+  const order = ["View", "Edit", "Add", "Share", "View Sharing"];
+  const sortedAccessDetails = accessDetails?.sort((a, b) => {
+    return order.indexOf(a.name) - order.indexOf(b.name);
+  });
+
+  const expirationDate = format(new Date(getExpiryDate(vc)), "MMMM' 'd', 'Y");
+  const issuanceDate = format(new Date(getIssuanceDate(vc)), "M/dd/Y");
+  const purposes = getPurposeUrls(vc);
+
   if (error) {
     if (isHTTPError(error, 404)) {
       return (
         <Alert severity="error">
-          {`Cannot fetch avatar for this WebID: ${agentWebId}`}
+          {`Cannot fetch consent data for this WebID: ${agentWebId}`}
         </Alert>
       );
     }
@@ -75,28 +105,32 @@ export default function ConsentDetailsModalContent({
             <ModalAvatar profileIri={agentWebId} closeDialog={closeDialog} />
           </h2>
         </span>
-        {/* FIXME: display all below details based on retrieved VC */}
         <section className={bem("access-details", "section")}>
           <h3 className={bem("access-details", "section-header")}>Access</h3>
           <hr className={bem("access-details", "separator")} />
           <List>
-            <ListItem>
-              <ListItemIcon classes={{ root: classes.listItemIcon }}>
-                <Icons
-                  name="view"
-                  className={bem("access-details", "section-icon")}
-                />
-              </ListItemIcon>
-              <ListItemText
-                classes={{
-                  root: classes.listItemText,
-                  primary: classes.listItemTitleText,
-                  secondary: classes.listItemSecondaryText,
-                }}
-                primary="View"
-                secondary="can see this resource"
-              />
-            </ListItem>
+            {sortedAccessDetails?.map(({ name, icon, description }) => {
+              return (
+                <ListItem key={name}>
+                  <ListItemIcon classes={{ root: classes.listItemIcon }}>
+                    <Icons
+                      name={icon}
+                      className={bem("access-details", "section-icon")}
+                    />
+                  </ListItemIcon>
+                  <ListItemText
+                    classes={{
+                      root: classes.listItemText,
+                      primary: classes.listItemTitleText,
+                      secondary: classes.listItemSecondaryText,
+                    }}
+                    key={name}
+                    primary={name}
+                    secondary={description}
+                  />
+                </ListItem>
+              );
+            })}
           </List>
         </section>
         <section className={bem("access-details", "section")}>
@@ -104,34 +138,43 @@ export default function ConsentDetailsModalContent({
             Approved On
           </h3>
           <hr className={bem("access-details", "separator")} />
-          <p>3/12/2020</p>
+          <p>{issuanceDate}</p>
         </section>
         <section className={bem("access-details", "section")}>
           <h3 className={bem("access-details", "section-header")}>Purpose</h3>
           <hr className={bem("access-details", "separator")} />
+          <div className={bem("purposes-container")}>
+            <List>
+              {purposes?.map((purpose) => (
+                <ListItem key={purpose} className={bem("list-item")}>
+                  <span className={bem("purpose")}>
+                    {purpose.url || "Commercial interest"}{" "}
+                    <InfoTooltip tooltipText={purpose.url || purpose} />
+                  </span>
+                </ListItem>
+              ))}
+            </List>
+          </div>
           <p>Commercial Interest</p>
         </section>
-        <section className={bem("access-details", "section")}>
-          <h3 className={bem("access-details", "section-header")}>
-            Access Duration
-          </h3>
-          <hr className={bem("access-details", "separator")} />
-          <p>
-            <Text className={classes.avatarText} property={foaf.name} /> has
-            access until <strong>May 20, 2022</strong>
-          </p>
-        </section>
+        {expirationDate && (
+          <section className={bem("access-details", "section")}>
+            <h3 className={bem("access-details", "section-header")}>
+              Access Duration
+            </h3>
+            <hr className={bem("access-details", "separator")} />
+            <p>
+              <Text className={classes.avatarText} property={foaf.name} /> has
+              access until <strong>{expirationDate}</strong>.
+            </p>
+          </section>
+        )}
       </div>
     </CombinedDataProvider>
   );
 }
 
 ConsentDetailsModalContent.propTypes = {
-  agentWebId: T.string.isRequired,
-  resourceIri: T.string,
+  permission: permissionPropType.isRequired,
   closeDialog: T.func.isRequired,
-};
-
-ConsentDetailsModalContent.defaultProps = {
-  resourceIri: null,
 };

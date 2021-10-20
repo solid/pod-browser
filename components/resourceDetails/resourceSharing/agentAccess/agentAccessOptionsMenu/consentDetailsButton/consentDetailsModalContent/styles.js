@@ -102,5 +102,9 @@ export default function styles(theme) {
       textAlign: "left",
       justifySelf: "flex-end",
     },
+    purpose: {
+      display: "flex",
+      justifyContent: "flex-start",
+    },
   };
 }

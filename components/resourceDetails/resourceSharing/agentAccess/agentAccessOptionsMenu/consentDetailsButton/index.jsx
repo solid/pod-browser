@@ -26,6 +26,7 @@ import T from "prop-types";
 import { createStyles, ListItem, ListItemText } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { getResourceName } from "../../../../../../src/solidClientHelpers/resource";
+import { permission as permissionPropType } from "../../../../../../constants/propTypes";
 import ConfirmationDialogContext from "../../../../../../src/contexts/confirmationDialogContext";
 import ConsentDetailsModalContent from "./consentDetailsModalContent";
 import styles from "./styles";
@@ -37,10 +38,11 @@ export const VIEW_DETAILS_CONFIRMATION_DIALOG =
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function ConsentDetailsButton({ agentWebId, resourceIri }) {
+export default function ConsentDetailsButton({ resourceIri, permission }) {
   const classes = useStyles();
   const {
     setContent,
+    setCustomContentWrapper,
     setOpen,
     setTitle,
     setConfirmText,
@@ -52,16 +54,18 @@ export default function ConsentDetailsButton({ agentWebId, resourceIri }) {
 
   const openModal = () => {
     setIsDangerousAction(true);
+    setCustomContentWrapper(true);
     setOpen(VIEW_DETAILS_CONFIRMATION_DIALOG);
     setTitle(``);
     setCancelText("Done");
     setConfirmText(`Revoke Access to ${resourceName}`);
     setContent(
-      <ConsentDetailsModalContent
-        agentWebId={agentWebId}
-        resourceIri={resourceIri}
-        closeDialog={closeDialog}
-      />
+      <div>
+        <ConsentDetailsModalContent
+          permission={permission}
+          closeDialog={closeDialog}
+        />
+      </div>
     );
   };
 
@@ -82,8 +86,8 @@ export default function ConsentDetailsButton({ agentWebId, resourceIri }) {
 }
 
 ConsentDetailsButton.propTypes = {
-  agentWebId: T.string.isRequired,
   resourceIri: T.string,
+  permission: permissionPropType.isRequired,
 };
 
 ConsentDetailsButton.defaultProps = {

@@ -28,13 +28,20 @@ import {
   aliceWebIdUrl,
   mockPersonDatasetAlice,
 } from "../../../../../../__testUtils/mockPersonResource";
+import getSignedVc from "../../../../../../__testUtils/mockSignedVc";
 import { ConfirmationDialogProvider } from "../../../../../../src/contexts/confirmationDialogContext";
 import ConfirmationDialog, {
   TESTCAFE_ID_CONFIRMATION_DIALOG,
 } from "../../../../../confirmationDialog";
 
-const resourceIri = "/iri/";
 const webId = "https://example.com/profile/card#me";
+
+const permission = {
+  webId,
+  alias: "Editors",
+  type: "agent",
+  vc: getSignedVc(),
+};
 
 describe("View consent details button and modal", () => {
   const profileDataset = mockPersonDatasetAlice();
@@ -49,7 +56,7 @@ describe("View consent details button and modal", () => {
 
   test("it renders a button which triggers the opening of the modal", async () => {
     const { baseElement, getByTestId } = renderWithTheme(
-      <ConsentDetailsButton resourceIri={resourceIri} agentWebId={webId} />
+      <ConsentDetailsButton permission={permission} />
     );
     expect(baseElement).toMatchSnapshot();
     const button = getByTestId(TESTCAFE_ID_VIEW_DETAILS_BUTTON);
@@ -58,7 +65,7 @@ describe("View consent details button and modal", () => {
   test("clicking on view details button renders a confirmation dialog with the correct data", async () => {
     const { baseElement, getByTestId, findByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
-        <ConsentDetailsButton resourceIri={resourceIri} agentWebId={webId} />
+        <ConsentDetailsButton permission={permission} />
         <ConfirmationDialog />
       </ConfirmationDialogProvider>
     );

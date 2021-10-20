@@ -39,6 +39,10 @@ export function getPurposeUrls(consentRequest) {
     : consentRequest?.credentialSubject?.hasConsent.forPurpose;
 }
 
+export function getIssuanceDate(consentRequest) {
+  return consentRequest?.issuanceDate;
+}
+
 export function getExpiryDate(consentRequest) {
   return consentRequest?.expirationDate;
 }
