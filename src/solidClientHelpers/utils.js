@@ -81,6 +81,7 @@ export const namespace = {
 };
 
 export function isContainerIri(iri) {
+  if (!iri) return false;
   return iri.charAt(iri.length - 1) === "/";
 }
 

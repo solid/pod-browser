@@ -21,8 +21,9 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import { findByTestId, waitFor } from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 import { acp_v3 as acp } from "@inrupt/solid-client";
+import * as solidClientFns from "@inrupt/solid-client";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import { ConfirmationDialogProvider } from "../../../../src/contexts/confirmationDialogContext";
 import PolicyActionButton, {
@@ -44,7 +45,12 @@ import {
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
 import * as helperFns from "../../../../src/solidClientHelpers/utils";
 
+const acpFns = solidClientFns.acp_v3;
+
 describe("PolicyActionButton", () => {
+  beforeEach(() => {
+    jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(true);
+  });
   const permissionsEmpty = [];
   const webId1 = "https://example1.com/profile/card#me";
   const webId2 = "https://example2.com/profile/card#me";

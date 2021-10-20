@@ -112,7 +112,7 @@ export default function AgentProfileDetails({
   );
 }
 AgentProfileDetails.propTypes = {
-  resourceIri: T.string.isRequired,
+  resourceIri: T.string,
   permission: permissionPropType.isRequired,
   profile: profilePropType,
   setLoading: T.func,
@@ -120,6 +120,7 @@ AgentProfileDetails.propTypes = {
 };
 
 AgentProfileDetails.defaultProps = {
+  resourceIri: null,
   setLoading: () => {},
   setLocalAccess: () => {},
   profile: null,

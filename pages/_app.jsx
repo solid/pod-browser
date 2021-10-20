@@ -147,7 +147,9 @@ export default function App(props) {
             <SessionProvider
               sessionId="pod-browser"
               restorePreviousSession
-              onSessionRestore={(url) => router.push(url)}
+              onSessionRestore={async (url) => {
+                await router.push(url);
+              }}
             >
               <FeatureProvider>
                 <AlertProvider>

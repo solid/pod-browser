@@ -20,8 +20,10 @@
  */
 
 import React from "react";
+import { waitFor } from "@testing-library/dom";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
+import * as solidClientFns from "@inrupt/solid-client";
 import * as routerFns from "next/router";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import ResourceDetails, {
@@ -31,41 +33,55 @@ import ResourceDetails, {
 import mockAccessControl from "../../__testUtils/mockAccessControl";
 import { AccessControlProvider } from "../../src/contexts/accessControlContext";
 import * as accessControlFns from "../../src/accessControl";
+import mockPermissionsContextProvider from "../../__testUtils/mockPermissionsContextProvider";
 
 const accessControl = mockAccessControl();
 const dataset = mockSolidDatasetFrom("http://example.com/container/");
+
+const acpFns = solidClientFns.acp_v3;
 
 describe("Resource details", () => {
   beforeEach(() => {
     jest
       .spyOn(routerFns, "useRouter")
-      .mockReturnValue({ query: { resourceIri: "" } });
+      .mockReturnValue({ query: { resourceIri: "" }, push: jest.fn() });
   });
 
-  it("renders container details", () => {
-    const { asFragment } = renderWithTheme(
+  it("renders container details", async () => {
+    jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
+    jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(true);
+    const { asFragment, getByText } = renderWithTheme(
       <DatasetProvider solidDataset={dataset}>
         <ResourceDetails />
       </DatasetProvider>
     );
+    await waitFor(() => {
+      expect(getByText("container")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("renders a decoded container name", () => {
+  it("renders a decoded container name", async () => {
+    jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
+    jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(true);
     const datasetWithDecodedContainerName = mockSolidDatasetFrom(
       "http://example.com/Some%20container/"
     );
 
-    const { asFragment } = renderWithTheme(
+    const { asFragment, getByText } = renderWithTheme(
       <DatasetProvider solidDataset={datasetWithDecodedContainerName}>
         <ResourceDetails />
       </DatasetProvider>
     );
+    await waitFor(() => {
+      expect(getByText("Some container")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("renders Permissions component for WAC-supporting Solid servers", () => {
+  it("renders Permissions component for WAC-supporting Solid servers", async () => {
     jest.spyOn(accessControlFns, "isWac").mockReturnValue(true);
+    jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(false);
     const { asFragment, getByTestId } = renderWithTheme(
       <AccessControlProvider accessControl={accessControl}>
         <DatasetProvider solidDataset={dataset}>
@@ -73,20 +89,29 @@ describe("Resource details", () => {
         </DatasetProvider>
       </AccessControlProvider>
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_ACCORDION_PERMISSIONS)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_ACCORDION_PERMISSIONS)).toBeDefined();
   });
 
-  it("renders Sharing component for ACP-supporting Solid servers", () => {
+  it("renders Sharing component for ACP-supporting Solid servers", async () => {
     jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
-    const { asFragment, getByTestId } = renderWithTheme(
+    jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(true);
+    const PermissionsContextProvider = mockPermissionsContextProvider();
+    const { asFragment, getByTestId, getByText } = renderWithTheme(
       <AccessControlProvider accessControl={accessControl}>
         <DatasetProvider solidDataset={dataset}>
-          <ResourceDetails />
+          <PermissionsContextProvider>
+            <ResourceDetails />
+          </PermissionsContextProvider>
         </DatasetProvider>
       </AccessControlProvider>
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_ACCORDION_SHARING)).toBeDefined();
+      expect(getByText("Sharing")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_ACCORDION_SHARING)).toBeDefined();
   });
 });

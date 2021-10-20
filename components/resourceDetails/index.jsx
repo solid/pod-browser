@@ -34,7 +34,7 @@ import { makeStyles } from "@material-ui/styles";
 import T from "prop-types";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { ActionMenu, ActionMenuItem } from "@inrupt/prism-react-components";
-import { DatasetContext } from "@inrupt/solid-ui-react";
+import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
 import { getContentType, getSourceUrl } from "@inrupt/solid-client";
 import styles from "./styles";
 import DeleteResourceButton from "../deleteResourceButton";
@@ -68,6 +68,8 @@ export default function ResourceDetails({
   onDeleteCurrentContainer,
 }) {
   const { solidDataset: dataset } = useContext(DatasetContext);
+  const { session } = useSession();
+  const { fetch } = session;
   const datasetUrl = getSourceUrl(dataset);
   const classes = useStyles();
   const name = getIriPath(datasetUrl);
@@ -91,8 +93,8 @@ export default function ResourceDetails({
     getAccordionKey(dataset, "sharing"),
     false
   );
-  const useAcp = isAcp(dataset);
-  const useWac = isWac(dataset);
+  const useAcp = isAcp(datasetUrl, fetch);
+  const useWac = isWac(datasetUrl, dataset, fetch);
 
   const expandIcon = <ExpandMoreIcon />;
   return (

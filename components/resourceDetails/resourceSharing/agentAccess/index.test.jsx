@@ -22,7 +22,10 @@
 import React from "react";
 
 import { waitFor } from "@testing-library/react";
+import { DatasetProvider } from "@inrupt/solid-ui-react";
 import userEvent from "@testing-library/user-event";
+import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import { act } from "@testing-library/react-hooks";
 import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
 import AgentAccess from "./index";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
@@ -34,6 +37,7 @@ import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../src/models/contact/au
 jest.mock("../../../../src/hooks/useAgentProfile");
 
 const webId = "https://example.com/profile/card#me";
+const dataset = mockSolidDatasetFrom("http://example.com/container/");
 
 describe("AgentAccess", () => {
   describe("with profile", () => {
@@ -45,10 +49,15 @@ describe("AgentAccess", () => {
       profile: mockProfileAlice(),
     };
 
-    it("renders", () => {
-      const { asFragment } = renderWithTheme(
-        <AgentAccess permission={permission} />
+    it("renders", async () => {
+      const { asFragment, getByText } = renderWithTheme(
+        <DatasetProvider solidDataset={dataset}>
+          <AgentAccess permission={permission} />
+        </DatasetProvider>
       );
+      await waitFor(() => {
+        expect(getByText("Alice")).toBeInTheDocument();
+      });
       expect(asFragment()).toMatchSnapshot();
     });
   });
@@ -59,10 +68,15 @@ describe("AgentAccess", () => {
       alias: "Editors",
       type: "public",
     };
-    it("renders correctly", () => {
-      const { asFragment } = renderWithTheme(
-        <AgentAccess permission={permission} />
+    it("renders correctly", async () => {
+      const { asFragment, getByText } = renderWithTheme(
+        <DatasetProvider solidDataset={dataset}>
+          <AgentAccess permission={permission} />
+        </DatasetProvider>
       );
+      await waitFor(() => {
+        expect(getByText("Anyone")).toBeInTheDocument();
+      });
       expect(asFragment()).toMatchSnapshot();
     });
   });
@@ -73,40 +87,49 @@ describe("AgentAccess", () => {
       alias: "Editors",
       type: "authenticated",
     };
-    it("renders correctly", () => {
-      const { asFragment } = renderWithTheme(
-        <AgentAccess permission={permission} />
+    it("renders correctly", async () => {
+      const { asFragment, getByText } = renderWithTheme(
+        <DatasetProvider solidDataset={dataset}>
+          <AgentAccess permission={permission} />
+        </DatasetProvider>
       );
+      await waitFor(() => {
+        expect(getByText("Anyone signed in")).toBeInTheDocument();
+      });
       expect(asFragment()).toMatchSnapshot();
     });
   });
   describe("without profile", () => {
     it("renders skeleton placeholders when profile is not available", () => {
       const { asFragment } = renderWithTheme(
-        <AgentAccess
-          permission={{
-            acl: createAccessMap(true, true, false, false),
-            webId,
-            alias: "Editors",
-            type: "agent",
-            profile: undefined,
-            profileError: undefined,
-          }}
-        />
+        <DatasetProvider solidDataset={dataset}>
+          <AgentAccess
+            permission={{
+              acl: createAccessMap(true, true, false, false),
+              webId,
+              alias: "Editors",
+              type: "agent",
+              profile: undefined,
+              profileError: undefined,
+            }}
+          />
+        </DatasetProvider>
       );
 
       expect(asFragment()).toMatchSnapshot();
     });
     it("returns null when no access", () => {
       const { asFragment } = renderWithTheme(
-        <AgentAccess
-          permission={{
-            acl: null,
-            webId,
-            alias: "Editors",
-            type: "agent",
-          }}
-        />
+        <DatasetProvider solidDataset={dataset}>
+          <AgentAccess
+            permission={{
+              acl: null,
+              webId,
+              alias: "Editors",
+              type: "agent",
+            }}
+          />
+        </DatasetProvider>
       );
 
       expect(asFragment()).toMatchSnapshot();
@@ -114,32 +137,36 @@ describe("AgentAccess", () => {
 
     it("renders a skeleton while loading profile", async () => {
       const { asFragment } = renderWithTheme(
-        <AgentAccess
-          permission={{
-            acl: createAccessMap(true, true, false, false),
-            webId,
-            alias: "Editors",
-            type: "agent",
-            profile: undefined,
-            profileError: undefined,
-          }}
-        />
+        <DatasetProvider solidDataset={dataset}>
+          <AgentAccess
+            permission={{
+              acl: createAccessMap(true, true, false, false),
+              webId,
+              alias: "Editors",
+              type: "agent",
+              profile: undefined,
+              profileError: undefined,
+            }}
+          />
+        </DatasetProvider>
       );
       expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders an error message with a 'try again' button if it's unable to load profile", () => {
       const { asFragment, findByTestId } = renderWithTheme(
-        <AgentAccess
-          permission={{
-            acl: createAccessMap(true, true, false, false),
-            webId,
-            alias: "Editors",
-            type: "agent",
-            profile: null,
-            profileError: "error",
-          }}
-        />
+        <DatasetProvider solidDataset={dataset}>
+          <AgentAccess
+            permission={{
+              acl: createAccessMap(true, true, false, false),
+              webId,
+              alias: "Editors",
+              type: "agent",
+              profile: null,
+              profileError: "error",
+            }}
+          />
+        </DatasetProvider>
       );
       expect(findByTestId("try-again-button")).toBeTruthy();
       expect(asFragment()).toMatchSnapshot();
@@ -147,16 +174,18 @@ describe("AgentAccess", () => {
 
     it("renders a spinner after clicking 'try again' button", async () => {
       const { findByTestId } = renderWithTheme(
-        <AgentAccess
-          permission={{
-            acl: createAccessMap(true, true, false, false),
-            webId,
-            alias: "Editors",
-            type: "agent",
-            profile: null,
-            profileError: "error",
-          }}
-        />
+        <DatasetProvider solidDataset={dataset}>
+          <AgentAccess
+            permission={{
+              acl: createAccessMap(true, true, false, false),
+              webId,
+              alias: "Editors",
+              type: "agent",
+              profile: null,
+              profileError: "error",
+            }}
+          />
+        </DatasetProvider>
       );
       const button = await findByTestId("try-again-button");
       userEvent.click(button);
@@ -167,16 +196,18 @@ describe("AgentAccess", () => {
     it("tries to fetch the profile again when clicking 'try again' button", async () => {
       const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
       const { findByTestId } = renderWithTheme(
-        <AgentAccess
-          permission={{
-            acl: createAccessMap(true, true, false, false),
-            webId,
-            alias: "Editors",
-            type: "agent",
-            profile: null,
-            profileError: "error",
-          }}
-        />
+        <DatasetProvider solidDataset={dataset}>
+          <AgentAccess
+            permission={{
+              acl: createAccessMap(true, true, false, false),
+              webId,
+              alias: "Editors",
+              type: "agent",
+              profile: null,
+              profileError: "error",
+            }}
+          />
+        </DatasetProvider>
       );
       const button = await findByTestId("try-again-button");
       userEvent.click(button);
@@ -190,16 +221,18 @@ describe("AgentAccess", () => {
       const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
 
       const { findByTestId, queryByTestId } = renderWithTheme(
-        <AgentAccess
-          permission={{
-            acl: createAccessMap(true, true, false, false),
-            webId,
-            alias: "Editors",
-            type: "agent",
-            profile: null,
-            profileError: "error",
-          }}
-        />
+        <DatasetProvider solidDataset={dataset}>
+          <AgentAccess
+            permission={{
+              acl: createAccessMap(true, true, false, false),
+              webId,
+              alias: "Editors",
+              type: "agent",
+              profile: null,
+              profileError: "error",
+            }}
+          />
+        </DatasetProvider>
       );
       const button = await findByTestId("try-again-button");
       userEvent.click(button);
@@ -215,28 +248,29 @@ describe("AgentAccess", () => {
     it("removes the spinner when fetching errors", async () => {
       const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
       const { getByTestId, queryByTestId } = renderWithTheme(
-        <AgentAccess
-          permission={{
-            acl: createAccessMap(true, true, false, false),
-            webId,
-            alias: "Editors",
-            type: "agent",
-            profile: null,
-            profileError: "error",
-          }}
-        />
+        <DatasetProvider solidDataset={dataset}>
+          <AgentAccess
+            permission={{
+              acl: createAccessMap(true, true, false, false),
+              webId,
+              alias: "Editors",
+              type: "agent",
+              profile: null,
+              profileError: "error",
+            }}
+          />
+        </DatasetProvider>
       );
-      await waitFor(() => {
-        const button = getByTestId("try-again-button");
-        userEvent.click(button);
-      });
+      const button = getByTestId("try-again-button");
+      userEvent.click(button);
 
       await waitFor(() =>
         expect(fetchProfileSpy).toHaveBeenCalledWith(webId, expect.anything())
       );
-      await waitFor(() => {
+      act(() => {
         fetchProfileSpy.mockResolvedValue(null);
-
+      });
+      await waitFor(() => {
         expect(queryByTestId("try-again-spinner")).toBeFalsy();
       });
     });
