@@ -59,7 +59,6 @@ export default function ConsentDetailsModalContent({
 }) {
   const classes = useStyles();
   const bem = useBem(classes);
-  const [error, setError] = useState(null);
   const { vc, webId: agentWebId } = permission;
 
   const allowModes = vc?.credentialSubject?.providedConsent?.mode;
@@ -79,8 +78,9 @@ export default function ConsentDetailsModalContent({
   const sortedAccessDetails = accessDetails?.sort((a, b) => {
     return order.indexOf(a.name) - order.indexOf(b.name);
   });
-
-  const expirationDate = format(new Date(getExpiryDate(vc)), "MMMM' 'd', 'Y");
+  const expirationDate = getExpiryDate(vc)
+    ? format(new Date(getExpiryDate(vc)), "MMMM' 'd', 'Y")
+    : false;
   const issuanceDate = format(new Date(getIssuanceDate(vc)), "M/dd/Y");
   const purposes = getPurposeUrlsFromSignedVc(vc);
 
@@ -133,18 +133,22 @@ export default function ConsentDetailsModalContent({
         <h3 className={bem("access-details", "section-header")}>Purpose</h3>
         <hr className={bem("access-details", "separator")} />
         <div className={bem("purposes-container")}>
-          <List>
-            {purposes?.map((purpose) => (
-              <ListItem key={purpose} className={bem("list-item")}>
-                <span className={bem("purpose")}>
-                  {purpose.url || "Commercial interest"}{" "}
-                  <InfoTooltip tooltipText={purpose.url || purpose} />
-                </span>
-              </ListItem>
-            ))}
-          </List>
+          {Array.isArray(purposes) ? (
+            <List>
+              {purposes?.map((purpose) => (
+                <ListItem key={purpose} className={bem("list-item")}>
+                  <span className={bem("purpose")}>
+                    {purpose} <InfoTooltip tooltipText={purpose} />
+                  </span>
+                </ListItem>
+              ))}
+            </List>
+          ) : (
+            <span className={bem("purpose")}>
+              {purposes} <InfoTooltip tooltipText={purposes} />
+            </span>
+          )}
         </div>
-        <p>Commercial Interest</p>
       </section>
       {expirationDate && (
         <section className={bem("access-details", "section")}>

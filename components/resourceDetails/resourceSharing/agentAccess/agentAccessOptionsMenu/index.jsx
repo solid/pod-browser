@@ -103,14 +103,17 @@ export default function AgentAccessOptionsMenu({
               <p className={classes.webId}>{webId}</p>
             </ListItemText>
           </ListItem>
-          {permission.vc && <ConsentDetailsButton permission={permission} />}
-          <RemoveButton
-            resourceIri={resourceIri}
-            profile={profile}
-            permission={permission}
-            setLoading={setLoading}
-            setLocalAccess={setLocalAccess}
-          />
+          {permission.vc ? (
+            <ConsentDetailsButton permission={permission} />
+          ) : (
+            <RemoveButton
+              resourceIri={resourceIri}
+              profile={profile}
+              permission={permission}
+              setLoading={setLoading}
+              setLocalAccess={setLocalAccess}
+            />
+          )}
         </List>
       </Popover>
     </>
