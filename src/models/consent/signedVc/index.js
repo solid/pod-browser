@@ -28,3 +28,10 @@ export function getRequestedAccessesFromSignedVc(signedVc) {
 export function getRequestorWebIdFromSignedVc(signedVc) {
   return signedVc?.credentialSubject?.providedConsent?.isProvidedTo;
 }
+
+export function getPurposeUrlsFromSignedVc(signedVc) {
+  if (!signedVc) return null;
+  return Array.isArray(signedVc?.credentialSubject?.providedConsent)
+    ? signedVc?.credentialSubject?.providedConsent[0].forPurpose // getting first item in array for now
+    : signedVc?.credentialSubject?.providedConsent.forPurpose;
+}

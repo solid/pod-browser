@@ -27,13 +27,8 @@ export default function getSignedVc() {
       "https://consent.pod.inrupt.com/credentials/v1",
     ],
     credentialSubject: {
-      hasConsent: {
-        mode: [
-          "http://www.w3.org/ns/auth/acl#Read",
-          "http://www.w3.org/ns/auth/acl#Write",
-          "http://www.w3.org/ns/auth/acl#Append",
-          "http://www.w3.org/ns/auth/acl#Control",
-        ],
+      providedConsent: {
+        mode: ["http://www.w3.org/ns/auth/acl#Read"],
         hasStatus: "https://w3id.org/GConsent#ConsentStatusExplicitlyGiven",
         forPersonalData: [
           "https://example.com/resource1",

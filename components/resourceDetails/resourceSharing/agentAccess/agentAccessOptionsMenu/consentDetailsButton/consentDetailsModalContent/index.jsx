@@ -45,8 +45,8 @@ import InfoTooltip from "../../../../../../infoTooltip";
 import {
   getExpiryDate,
   getIssuanceDate,
-  getPurposeUrls,
 } from "../../../../../../../src/models/consent/request";
+import { getPurposeUrlsFromSignedVc } from "../../../../../../../src/models/consent/signedVc";
 import styles from "./styles";
 
 export const TESTCAFE_ID_CONSENT_DETAILS_CONTENT = "consent-details-content";
@@ -62,7 +62,7 @@ export default function ConsentDetailsModalContent({
   const [error, setError] = useState(null);
   const { vc, webId: agentWebId } = permission;
 
-  const allowModes = vc?.credentialSubject?.hasConsent?.mode;
+  const allowModes = vc?.credentialSubject?.providedConsent?.mode;
   const modes = allowModes?.map((mode) => {
     return {
       read: !!mode.includes("Read"),
@@ -82,18 +82,7 @@ export default function ConsentDetailsModalContent({
 
   const expirationDate = format(new Date(getExpiryDate(vc)), "MMMM' 'd', 'Y");
   const issuanceDate = format(new Date(getIssuanceDate(vc)), "M/dd/Y");
-  const purposes = getPurposeUrls(vc);
-
-  if (error) {
-    if (isHTTPError(error, 404)) {
-      return (
-        <Alert severity="error">
-          {`Cannot fetch consent data for this WebID: ${agentWebId}`}
-        </Alert>
-      );
-    }
-    return error.toString();
-  }
+  const purposes = getPurposeUrlsFromSignedVc(vc);
 
   return (
     <div
@@ -102,11 +91,7 @@ export default function ConsentDetailsModalContent({
     >
       <span className={bem("access-details", "title")}>
         <h2>
-          <CombinedDataProvider
-            datasetUrl={agentWebId}
-            thingUrl={agentWebId}
-            onError={setError}
-          >
+          <CombinedDataProvider datasetUrl={agentWebId} thingUrl={agentWebId}>
             <ModalAvatar profileIri={agentWebId} closeDialog={closeDialog} />
           </CombinedDataProvider>
         </h2>

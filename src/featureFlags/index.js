@@ -46,6 +46,7 @@ const webIdsWithAccessToFeatures = [
   "https://pod.inrupt.com/norbertn/profile/card#me",
   "https://pod.inrupt.com/vctestalice1/profile/card#me",
   "https://pod.inrupt.com/zwifi/profile/card#me",
+  "https://id.dev-next.inrupt.com/norbertdev3",
 ];
 function enableForGivenWebIds(webIds) {
   return (session) =>
