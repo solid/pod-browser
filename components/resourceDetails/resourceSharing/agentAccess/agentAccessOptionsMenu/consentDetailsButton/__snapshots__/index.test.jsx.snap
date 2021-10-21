@@ -148,7 +148,7 @@ exports[`View consent details button and modal clicking on view details button r
                         <span
                           class="PodBrowser-purpose"
                         >
-                          Commercial interest
+                          https://example.org/someSpecificPurpose
                            
                           <div
                             class="PodBrowser-infoTooltipContainer"
@@ -180,7 +180,7 @@ exports[`View consent details button and modal clicking on view details button r
                         <span
                           class="PodBrowser-purpose"
                         >
-                          Commercial interest
+                          https://example.org/someSpecificPurpose2
                            
                           <div
                             class="PodBrowser-infoTooltipContainer"
@@ -208,9 +208,6 @@ exports[`View consent details button and modal clicking on view details button r
                       </li>
                     </ul>
                   </div>
-                  <p>
-                    Commercial Interest
-                  </p>
                 </section>
                 <section
                   class="PodBrowser-access-details--section"
