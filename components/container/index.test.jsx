@@ -117,60 +117,78 @@ describe("Container view", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("renders a table for parent container if iri is a resource", () => {
-    const { asFragment } = renderWithTheme(<Container iri={resourceIri} />);
+  test("renders a table for parent container if iri is a resource", async () => {
+    mockedGetContainerResourceUrlAll.mockReturnValue([
+      "https://myaccount.mypodserver.com/resource.txt",
+    ]);
+    const { asFragment, getByText } = renderWithTheme(
+      <Container iri={resourceIri} />
+    );
+    await waitFor(() => {
+      expect(getByText("resource.txt")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("Renders a spinner if data is loading", () => {
+  test("Renders a spinner if data is loading", async () => {
     mockedGetContainerResourceUrlAll.mockReturnValue(undefined);
 
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
   });
 
-  it("renders a spinner if iri is undefined (can happen during build step)", () => {
+  it("renders a spinner if iri is undefined (can happen during build step)", async () => {
     const { getByTestId } = renderWithTheme(<Container iri={undefined} />);
-    expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
+    });
   });
 
-  it("renders Access Forbidden if the fetch for container returns 401", () => {
+  it("renders Access Forbidden if the fetch for container returns 401", async () => {
     mockedContainerHook.mockReturnValue({
       error: new Error("401"),
     });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_ACCESS_FORBIDDEN)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_ACCESS_FORBIDDEN)).toBeDefined();
   });
 
-  it("renders Access Forbidden if the fetch for container returns 403", () => {
+  it("renders Access Forbidden if the fetch for container returns 403", async () => {
     mockedContainerHook.mockReturnValue({
       error: new Error("403"),
     });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_ACCESS_FORBIDDEN)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_ACCESS_FORBIDDEN)).toBeDefined();
   });
 
-  it("renders Access Forbidden if the fetch for container returns 404", () => {
+  it("renders Not Found if the fetch for container returns 404", async () => {
     mockedContainerHook.mockReturnValue({
       error: new Error("404"),
     });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_RESOURCE_NOT_FOUND)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_RESOURCE_NOT_FOUND)).toBeDefined();
   });
 
-  it("renders Not supported if the fetch for container returns 500", () => {
+  it("renders Not supported if the fetch for container returns 500", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
     mockedContainerHook.mockReturnValue({
@@ -181,44 +199,56 @@ describe("Container view", () => {
         <Container iri={iri} />
       </SessionProvider>
     );
-
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_NOT_SUPPORTED)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_NOT_SUPPORTED)).toBeDefined();
   });
 
-  it("renders Not Supported if resource loaded is not a container", () => {
+  it("renders Not Supported if resource loaded is not a container", async () => {
     mockedContainerHook.mockReturnValue({
       data: mockModel(resourceIri),
       mutate: jest.fn(),
     });
-    const { asFragment } = renderWithTheme(<Container iri={resourceIri} />);
+    const { asFragment, getByTestId } = renderWithTheme(
+      <Container iri={resourceIri} />
+    );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_NOT_SUPPORTED)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("renders AuthProfileLoadError if fetching authenticated profile fails", () => {
+  it("renders AuthProfileLoadError if fetching authenticated profile fails", async () => {
     mockedAuthenticatedProfileHook.mockReturnValue({ error: new Error() });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_AUTH_PROFILE_LOAD_ERROR)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_AUTH_PROFILE_LOAD_ERROR)).toBeDefined();
   });
 
-  it("renders PodRootLoadError if it fails to fetch resourceInfo for podRoot", () => {
+  it("renders PodRootLoadError if it fails to fetch resourceInfo for podRoot", async () => {
     mockedResourceInfoHook.mockReturnValue({ error: new Error() });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_POD_ROOT_LOAD_ERROR)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_POD_ROOT_LOAD_ERROR)).toBeDefined();
   });
 
-  it("renders NoControlError if it fails to get access control for podRoot", () => {
+  it("renders NoControlError if it fails to get access control for podRoot", async () => {
     mockedAccessControlHook.mockReturnValue({ error: new Error() });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_NO_CONTROL_ERROR)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_NO_CONTROL_ERROR)).toBeDefined();
   });
 });

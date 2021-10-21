@@ -80,35 +80,6 @@ exports[`Container view renders Access Forbidden if the fetch for container retu
 </DocumentFragment>
 `;
 
-exports[`Container view renders Access Forbidden if the fetch for container returns 404 1`] = `
-<DocumentFragment>
-  <div
-    data-testid="resource-not-found"
-  >
-    <div
-      class="PodBrowser-page-header"
-    >
-      <h1
-        class="PodBrowser-page-header__title"
-      >
-        Resource Not Found
-      </h1>
-    </div>
-    <div
-      class="PodBrowser-container"
-    >
-      <p>
-        Unable to find the resource: 
-        <a
-          href="/resource/[iri]"
-        />
-        .
-      </p>
-    </div>
-  </div>
-</DocumentFragment>
-`;
-
 exports[`Container view renders AuthProfileLoadError if fetching authenticated profile fails 1`] = `
 <DocumentFragment>
   <div
@@ -667,6 +638,35 @@ exports[`Container view renders NoControlError if it fails to get access control
         </div>
       </div>
     </section>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Container view renders Not Found if the fetch for container returns 404 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="resource-not-found"
+  >
+    <div
+      class="PodBrowser-page-header"
+    >
+      <h1
+        class="PodBrowser-page-header__title"
+      >
+        Resource Not Found
+      </h1>
+    </div>
+    <div
+      class="PodBrowser-container"
+    >
+      <p>
+        Unable to find the resource: 
+        <a
+          href="/resource/[iri]"
+        />
+        .
+      </p>
+    </div>
   </div>
 </DocumentFragment>
 `;
@@ -1628,83 +1628,7 @@ exports[`Container view renders a table for parent container if iri is a resourc
             <td
               class="PodBrowser-table__body-cell"
             >
-              inbox
-            </td>
-            <td
-              class="PodBrowser-table__body-cell"
-            >
-              Resource
-            </td>
-          </tr>
-          <tr
-            class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
-            tabindex="0"
-          >
-            <td
-              class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
-            >
-              <button
-                class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
-                data-testid="bookmark-button"
-                disabled=""
-                type="button"
-              >
-                <i
-                  alt="bookmark button"
-                  aria-label="bookmark"
-                  class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
-                />
-              </button>
-            </td>
-            <td
-              class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
-            >
-              <i
-                class="PodBrowser-icon-file PodBrowser-resource-icon"
-              />
-            </td>
-            <td
-              class="PodBrowser-table__body-cell"
-            >
-              private
-            </td>
-            <td
-              class="PodBrowser-table__body-cell"
-            >
-              Resource
-            </td>
-          </tr>
-          <tr
-            class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
-            tabindex="0"
-          >
-            <td
-              class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
-            >
-              <button
-                class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
-                data-testid="bookmark-button"
-                disabled=""
-                type="button"
-              >
-                <i
-                  alt="bookmark button"
-                  aria-label="bookmark"
-                  class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
-                />
-              </button>
-            </td>
-            <td
-              class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
-            >
-              <i
-                class="PodBrowser-icon-file PodBrowser-resource-icon"
-              />
-            </td>
-            <td
-              class="PodBrowser-table__body-cell"
-            >
-              note.txt
+              resource.txt
             </td>
             <td
               class="PodBrowser-table__body-cell"
