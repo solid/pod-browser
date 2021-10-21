@@ -104,7 +104,10 @@ export default function AgentAccessOptionsMenu({
             </ListItemText>
           </ListItem>
           {permission.vc ? (
-            <ConsentDetailsButton permission={permission} />
+            <ConsentDetailsButton
+              resourceIri={resourceIri}
+              permission={permission}
+            />
           ) : (
             <RemoveButton
               resourceIri={resourceIri}
