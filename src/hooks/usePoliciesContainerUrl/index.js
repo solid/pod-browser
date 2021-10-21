@@ -19,17 +19,19 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { acp_v3 } from "@inrupt/solid-client";
 import { useEffect, useState } from "react";
-import { getPoliciesContainerUrl } from "../../solidClientHelpers/policies";
-import usePodRootUri from "../usePodRootUri";
 
-export default function usePoliciesContainerUrl(resourceUrl) {
+export default function usePoliciesContainerUrl(resourceInfo) {
   const [policiesContainerUrl, setPoliciesContainerUrl] = useState();
-  const rootUrl = usePodRootUri(resourceUrl);
 
   useEffect(() => {
-    setPoliciesContainerUrl(rootUrl ? getPoliciesContainerUrl(rootUrl) : null);
-  }, [rootUrl]);
+    setPoliciesContainerUrl(
+      resourceInfo !== undefined
+        ? acp_v3.getLinkedAcrUrl(resourceInfo) ?? null
+        : null
+    );
+  }, [resourceInfo]);
 
   return policiesContainerUrl;
 }

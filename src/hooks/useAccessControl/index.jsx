@@ -29,9 +29,7 @@ export default function useAccessControl(resourceInfo) {
   const { session } = useSession();
   const { fetch } = session;
   const [accessControl, setAccessControl] = useState(null);
-  const policiesContainerUrl = usePoliciesContainerUrl(
-    resourceInfo && getSourceUrl(resourceInfo)
-  );
+  const policiesContainerUrl = usePoliciesContainerUrl(resourceInfo);
   const [error, setError] = useState(null);
 
   useEffect(() => {
