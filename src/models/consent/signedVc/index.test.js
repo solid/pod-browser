@@ -20,7 +20,12 @@
  */
 
 import getSignedVc from "../../../../__testUtils/mockSignedVc";
-import { getRequestedAccessesFromSignedVc } from "./index";
+
+import {
+  getRequestedAccessesFromSignedVc,
+  getPurposeUrlsFromSignedVc,
+  getRequestorWebIdFromSignedVc,
+} from "./index";
 
 const signedVc = getSignedVc();
 
@@ -40,5 +45,16 @@ describe("getRequestedAccessesFromSignedVc", () => {
       ],
       isProvidedTo: "https://mockapp.com/app#id",
     });
+  });
+  test("it returns requested purpose url", () => {
+    const purposes = getPurposeUrlsFromSignedVc(signedVc);
+    expect(purposes).toEqual([
+      "https://example.org/someSpecificPurpose",
+      "https://example.org/someSpecificPurpose2",
+    ]);
+  });
+  test("it returns requested webId", () => {
+    const webId = getRequestorWebIdFromSignedVc(signedVc);
+    expect(webId).toEqual("https://mockapp.com/app#id");
   });
 });
