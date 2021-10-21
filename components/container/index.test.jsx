@@ -21,8 +21,9 @@
 
 import React from "react";
 import * as RouterFns from "next/router";
+import * as solidClientFns from "@inrupt/solid-client";
+import { act } from "@testing-library/react-hooks";
 import { waitFor } from "@testing-library/dom";
-import { addUrl } from "@inrupt/solid-client";
 import { space } from "rdf-namespaces";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockSession from "../../__testUtils/mockSession";
@@ -44,7 +45,7 @@ import { TESTCAFE_ID_ACCESS_FORBIDDEN } from "../accessForbidden";
 import { TESTCAFE_ID_RESOURCE_NOT_FOUND } from "../resourceNotFound";
 import { TESTCAFE_ID_NOT_SUPPORTED } from "../notSupported";
 import { TESTCAFE_ID_SPINNER } from "../spinner";
-import { TESTCAFE_ID_CONTAINER_TABLE } from "../containerTable";
+import * as accessControlFns from "../../src/accessControl";
 import mockAccessControl from "../../__testUtils/mockAccessControl";
 
 jest.mock("../../src/hooks/useContainer");
@@ -65,6 +66,8 @@ const mockedResourceInfoHook = useResourceInfo;
 jest.mock("../../src/hooks/useAccessControl");
 const mockedAccessControlHook = useAccessControl;
 
+const acpFns = solidClientFns.acp_v3;
+
 describe("Container view", () => {
   const iri = "https://example.com/container/";
   const resourceIri = "https://example.com/container/resource.txt";
@@ -72,6 +75,10 @@ describe("Container view", () => {
   const { dataset } = container;
 
   beforeEach(() => {
+    act(() => {
+      jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
+      jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(true);
+    });
     mockedContainerHook.mockReturnValue({
       data: container,
       mutate: jest.fn(),
@@ -79,7 +86,7 @@ describe("Container view", () => {
     });
     mockedAuthenticatedProfileHook.mockReturnValue({
       data: mockProfileAlice((t) =>
-        addUrl(t, space.storage, "https://example.com/")
+        solidClientFns.addUrl(t, space.storage, "https://example.com/")
       ),
     });
     mockedPodRootUriHook.mockReturnValue(iri);
@@ -100,8 +107,13 @@ describe("Container view", () => {
     ]);
   });
 
-  test("renders a table", () => {
-    const { asFragment } = renderWithTheme(<Container iri={iri} />);
+  test("renders a table", async () => {
+    const { asFragment, getByText } = renderWithTheme(<Container iri={iri} />);
+    await waitFor(() => {
+      expect(getByText("inbox")).toBeInTheDocument();
+      expect(getByText("private")).toBeInTheDocument();
+      expect(getByText("note.txt")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
