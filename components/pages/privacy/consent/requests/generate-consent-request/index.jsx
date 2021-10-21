@@ -24,7 +24,7 @@ import { useSession } from "@inrupt/solid-ui-react";
 import {
   requestAccessWithConsent,
   redirectToConsentManagementUi,
-} from "@inrupt/solid-client-consent";
+} from "@inrupt/solid-client-access-grants";
 import { useRedirectIfLoggedOut } from "../../../../../../src/effects/auth";
 import useFetchProfile from "../../../../../../src/hooks/useFetchProfile";
 import Spinner from "../../../../../spinner";

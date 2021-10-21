@@ -23,7 +23,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
-import { approveAccessRequestWithConsent } from "@inrupt/solid-client-consent";
+import { approveAccessRequestWithConsent } from "@inrupt/solid-client-access-grants";
 import { Button } from "@inrupt/prism-react-components";
 import { makeStyles } from "@material-ui/styles";
 import { useRouter } from "next/router";

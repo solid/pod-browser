@@ -22,7 +22,7 @@
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
-import * as consentFns from "@inrupt/solid-client-consent";
+import * as consentFns from "@inrupt/solid-client-access-grants";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import getSignedVc from "../../__testUtils/mockSignedVc";
 import mockConsentRequestContext from "../../__testUtils/mockConsentRequestContext";

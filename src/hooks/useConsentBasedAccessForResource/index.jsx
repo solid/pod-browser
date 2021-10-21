@@ -20,7 +20,7 @@
  */
 
 import { useState, useEffect } from "react";
-import { getAccessWithConsentAll } from "@inrupt/solid-client-consent";
+import { getAccessWithConsentAll } from "@inrupt/solid-client-access-grants";
 import { useSession } from "@inrupt/solid-ui-react";
 
 export default function useConsentBasedAccessForResource(resourceUrl) {
