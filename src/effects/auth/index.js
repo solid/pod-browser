@@ -20,7 +20,7 @@
  */
 
 import { useEffect } from "react";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { useSession } from "@inrupt/solid-ui-react";
 
 export const SESSION_STATES = {
@@ -57,6 +57,7 @@ export function useRedirectIfLoggedOut(location = "/login") {
   const { session, sessionRequestInProgress } = useSession();
 
   useEffect(() => {
+    if (session.info.isLoggedIn) return;
     redirectBasedOnSessionState(
       session.info.isLoggedIn,
       sessionRequestInProgress,
@@ -68,8 +69,9 @@ export function useRedirectIfLoggedOut(location = "/login") {
 
 export function useRedirectIfLoggedIn(location = "/") {
   const { session, sessionRequestInProgress } = useSession();
-
+  const router = useRouter();
   useEffect(() => {
+    if (session.info.isLoggedIn && !router.asPath.includes("login")) return;
     redirectBasedOnSessionState(
       session.info.isLoggedIn,
       sessionRequestInProgress,
