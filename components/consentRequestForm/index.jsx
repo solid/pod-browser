@@ -66,7 +66,7 @@ export const CONFIRM_TEXT = "Continue with no access";
 export const DENY_TEXT = "Deny All Access";
 export const NO_PURPOSE_TITLE = "Select a purpose";
 
-export default function ConsentRequestForm({ agentDetails }) {
+export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   const classes = useStyles();
   const bem = useBem(classes);
   const router = useRouter();
@@ -204,7 +204,9 @@ export default function ConsentRequestForm({ agentDetails }) {
         onSubmit={handleSubmit}
       >
         <Typography component="h2" align="center" variant="h1">
-          <span className={bem("agent-name")}>Allow {agentName} access?</span>
+          <span className={bem("agent-name")}>
+            Allow {agentName || agentWebId} access?
+          </span>
         </Typography>
         {purposes?.length === 1 ? (
           <span className={bem("purpose")}>
@@ -242,7 +244,7 @@ export default function ConsentRequestForm({ agentDetails }) {
           </div>
         )}
         <span className={bem("request-container__header-text", "small")}>
-          {`${agentName} will have access until`}
+          {`${agentName || agentWebId} will have access until`}
         </span>
         <DateInput
           selectedDate={selectedDate}
@@ -254,13 +256,12 @@ export default function ConsentRequestForm({ agentDetails }) {
         />
         {/* FIXME: place this in a loop when we know the data structure */}
         {requestedAccesses &&
-          agentName &&
           requestedAccesses.map((consent, index) => {
             return (
               <RequestSection
                 // eslint-disable-next-line react/no-array-index-key
                 key={`consent-request-section-${index}`}
-                agentName={agentName}
+                agentName={agentName || agentWebId}
                 sectionDetails={consent}
                 selectedAccess={selectedAccess}
                 setSelectedAccess={setSelectedAccess}
@@ -298,6 +299,7 @@ ConsentRequestForm.propTypes = {
     agentTOS: T.string,
     agentPolicy: T.string,
   }),
+  agentWebId: T.string.isRequired,
 };
 
 ConsentRequestForm.defaultProps = {

@@ -86,7 +86,7 @@ export default function ConsentShow() {
     })();
   }, [agentWebId, fetch, consentRequest]);
 
-  if (!agentName || !consentRequest) return <Spinner />;
+  if (!consentRequest) return <Spinner />;
 
   return (
     <ConsentRequestProvider
@@ -95,7 +95,10 @@ export default function ConsentShow() {
     >
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Container className={bem("request-container")}>
-          <ConsentRequestForm agentDetails={agentDetails} />
+          <ConsentRequestForm
+            agentDetails={agentDetails}
+            agentWebId={agentWebId}
+          />
           <div className={bem("request-container__content")}>
             <Typography
               component="h3"
@@ -110,7 +113,7 @@ export default function ConsentShow() {
               <Typography align="center" variant="body2">
                 <span className={bem("footer__link")}>
                   <Link href={agentWebId} variant="body2">
-                    {agentName}
+                    {agentName || agentWebId}
                   </Link>
                 </span>
               </Typography>
