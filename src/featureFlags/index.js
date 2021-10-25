@@ -55,6 +55,7 @@ function enableForGivenWebIds(webIds) {
 function enableForGivenServerCapability(webIds, capability) {
   async function checkServerCapability(session, fetch) {
     let capabilityEnabled = null;
+    /* istanbul ignore next */
     try {
       if (typeof window !== "undefined") {
         const welKnownData = await getWellKnownSolid(session.info.webId, {
@@ -71,8 +72,7 @@ function enableForGivenServerCapability(webIds, capability) {
         !!capabilityEnabled
       );
     } catch (error) {
-      // returning false here to prevent the page showing in case something goes wrong with the checks
-      // FIXME: add some better error handling here if needed
+      // returning the webId list check to allow showing of these features
       return session.info.isLoggedIn && webIds.includes(session.info.webId);
     }
   }
