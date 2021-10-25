@@ -21,7 +21,7 @@
 
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, { useState } from "react";
+import React from "react";
 import T from "prop-types";
 import { Icons } from "@inrupt/prism-react-components";
 import {
@@ -35,10 +35,8 @@ import { foaf } from "rdf-namespaces";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { CombinedDataProvider, Text } from "@inrupt/solid-ui-react";
-import { Alert } from "@material-ui/lab";
 import { format } from "date-fns";
 import { getAcpAccessDetails } from "../../../../../../../src/accessControl/acp";
-import { isHTTPError } from "../../../../../../../src/error";
 import { permission as permissionPropType } from "../../../../../../../constants/propTypes";
 import ModalAvatar from "../consentDetailsModalAvatar";
 import InfoTooltip from "../../../../../../infoTooltip";
