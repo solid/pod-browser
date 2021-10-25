@@ -42,6 +42,7 @@ export default function ResourceLink(props) {
         containerIriToUseAsBase
       )}
       replace
+      prefetch={false}
     >
       <a {...linkProps}>{children}</a>
     </Link>

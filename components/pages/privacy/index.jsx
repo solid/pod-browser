@@ -20,7 +20,6 @@
  */
 
 import { schema } from "rdf-namespaces";
-import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Link from "next/link";
 import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
@@ -38,10 +37,8 @@ const PERSON_CONTACT_TYPE = schema.Person;
 const APP_CONTACT_TYPE = schema.SoftwareApplication; // this string for now until we define what type the app contact will be
 
 export default function PrivacyPage() {
-  const router = useRouter();
   useRedirectIfLoggedOut();
   const [search, setSearch] = useState("");
-  const [request, setRequest] = useState(null);
   const [searchValues, setSearchValues] = useState(null);
   const [selectedTabValue, setSelectedTabValue] = useState("all");
 
@@ -70,10 +67,6 @@ export default function PrivacyPage() {
       setSearchValues(null);
     }
   };
-  const handleChangeRequestUrl = (e) => {
-    setRequest(e.target.value);
-  };
-  const redirectUrl = router.asPath;
 
   return (
     <DetailsMenuProvider>
@@ -90,26 +83,6 @@ export default function PrivacyPage() {
             contactType={selectedTabValue}
             setSearchValues={setSearchValues}
           />
-          <div>
-            <label htmlFor="test-request">
-              Enter Consent Request Url
-              <input
-                type="url"
-                name="test-url"
-                value={request}
-                onChange={handleChangeRequestUrl}
-              />
-            </label>
-          </div>
-          {request && (
-            <Link
-              href={`/privacy/consent/requests/${encodeURIComponent(
-                request
-              )}?redirectUrl=${redirectUrl}`}
-            >
-              <a>View test request</a>
-            </Link>
-          )}
           <Link href="/privacy/consent/generate">
             <a>Generate consent request</a>
           </Link>

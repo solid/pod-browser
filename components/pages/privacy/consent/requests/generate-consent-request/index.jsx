@@ -24,7 +24,7 @@ import { useSession } from "@inrupt/solid-ui-react";
 import {
   requestAccessWithConsent,
   redirectToConsentManagementUi,
-} from "@inrupt/solid-client-consent";
+} from "@inrupt/solid-client-access-grants";
 import { useRedirectIfLoggedOut } from "../../../../../../src/effects/auth";
 import useFetchProfile from "../../../../../../src/hooks/useFetchProfile";
 import Spinner from "../../../../../spinner";
@@ -55,7 +55,7 @@ export default function GenerateConsentRequest() {
       access: { read: true },
       resources,
       purpose: "https://example.org/someSpecificPurpose",
-      requestorInboxUrl: profile.inbox,
+      requestorInboxUrl: profile.inbox ?? session.info.webId, // FIXME: should Pods have a default inbox? in the meantime, using WebID if inbox not available
       options,
     });
     if (vc && origin) {

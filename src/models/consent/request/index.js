@@ -53,8 +53,8 @@ export function getRequestedResourcesIris(sectionDetails) {
   return sectionDetails.forPersonalData;
 }
 
-export function getAccessMode(sectionDetails) {
-  return sectionDetails.mode;
+export function getAccessMode(access) {
+  return access.mode;
 }
 
 export function getRequestorWebId(consentRequest) {

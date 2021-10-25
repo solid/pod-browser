@@ -70,6 +70,7 @@ export default function Container({ iri }) {
     mutate: update,
     isValidating,
   } = useContainer(iri);
+
   useEffect(() => {
     if (
       !iri ||
@@ -83,6 +84,7 @@ export default function Container({ iri }) {
   }, [container, iri]);
 
   useEffect(() => {
+    if (!accessControlError) return;
     setNoControlError(accessControlError);
   }, [accessControlError]);
 

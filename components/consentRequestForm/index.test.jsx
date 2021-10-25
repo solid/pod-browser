@@ -22,7 +22,7 @@
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
-import * as consentFns from "@inrupt/solid-client-consent";
+import * as consentFns from "@inrupt/solid-client-access-grants";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import getSignedVc from "../../__testUtils/mockSignedVc";
 import mockConsentRequestContext from "../../__testUtils/mockConsentRequestContext";
@@ -57,6 +57,7 @@ const agentDetails = {
   agentPolicy: "http://mockappurl.com/privacy-policy",
   agentTOS: "http://mockappurl.com/TOS",
 };
+const agentWebId = "https://mockappurl.com/app#id";
 
 describe("Consent Request Form", () => {
   const push = jest.fn();
@@ -70,7 +71,10 @@ describe("Consent Request Form", () => {
   test("Renders a consent request form with multiple purposes", () => {
     const { asFragment } = renderWithTheme(
       <ConsentRequestContextProvider>
-        <ConsentRequestForm agentDetails={agentDetails} />
+        <ConsentRequestForm
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
       </ConsentRequestContextProvider>
     );
 
@@ -79,7 +83,10 @@ describe("Consent Request Form", () => {
   test("Renders a consent request form with only one purpose", () => {
     const { asFragment } = renderWithTheme(
       <ConsentRequestContextProviderOnePurpose>
-        <ConsentRequestForm agentDetails={agentDetails} />
+        <ConsentRequestForm
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
       </ConsentRequestContextProviderOnePurpose>
     );
 
@@ -92,7 +99,10 @@ describe("Consent Request Form", () => {
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentRequestContextProvider>
-          <ConsentRequestForm agentDetails={agentDetails} />
+          <ConsentRequestForm
+            agentDetails={agentDetails}
+            agentWebId={agentWebId}
+          />
         </ConsentRequestContextProvider>
       </ConfirmationDialogProvider>
     );
@@ -115,7 +125,10 @@ describe("Consent Request Form", () => {
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentRequestContextProvider>
-          <ConsentRequestForm agentDetails={agentDetails} />
+          <ConsentRequestForm
+            agentDetails={agentDetails}
+            agentWebId={agentWebId}
+          />
         </ConsentRequestContextProvider>
       </ConfirmationDialogProvider>
     );
@@ -160,7 +173,10 @@ describe("Consent Request Form", () => {
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentRequestContextProvider>
-          <ConsentRequestForm agentDetails={agentDetails} />
+          <ConsentRequestForm
+            agentDetails={agentDetails}
+            agentWebId={agentWebId}
+          />
         </ConsentRequestContextProvider>
       </ConfirmationDialogProvider>
     );

@@ -21,7 +21,9 @@
 
 import React from "react";
 import * as RouterFns from "next/router";
-import { addUrl } from "@inrupt/solid-client";
+import * as solidClientFns from "@inrupt/solid-client";
+import { act } from "@testing-library/react-hooks";
+import { waitFor } from "@testing-library/dom";
 import { space } from "rdf-namespaces";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockSession from "../../__testUtils/mockSession";
@@ -43,6 +45,8 @@ import { TESTCAFE_ID_ACCESS_FORBIDDEN } from "../accessForbidden";
 import { TESTCAFE_ID_RESOURCE_NOT_FOUND } from "../resourceNotFound";
 import { TESTCAFE_ID_NOT_SUPPORTED } from "../notSupported";
 import { TESTCAFE_ID_SPINNER } from "../spinner";
+import * as accessControlFns from "../../src/accessControl";
+import mockAccessControl from "../../__testUtils/mockAccessControl";
 
 jest.mock("../../src/hooks/useContainer");
 const mockedContainerHook = useContainer;
@@ -62,6 +66,8 @@ const mockedResourceInfoHook = useResourceInfo;
 jest.mock("../../src/hooks/useAccessControl");
 const mockedAccessControlHook = useAccessControl;
 
+const acpFns = solidClientFns.acp_v3;
+
 describe("Container view", () => {
   const iri = "https://example.com/container/";
   const resourceIri = "https://example.com/container/resource.txt";
@@ -69,6 +75,10 @@ describe("Container view", () => {
   const { dataset } = container;
 
   beforeEach(() => {
+    act(() => {
+      jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
+      jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(true);
+    });
     mockedContainerHook.mockReturnValue({
       data: container,
       mutate: jest.fn(),
@@ -76,12 +86,14 @@ describe("Container view", () => {
     });
     mockedAuthenticatedProfileHook.mockReturnValue({
       data: mockProfileAlice((t) =>
-        addUrl(t, space.storage, "https://example.com/")
+        solidClientFns.addUrl(t, space.storage, "https://example.com/")
       ),
     });
     mockedPodRootUriHook.mockReturnValue(iri);
     mockedResourceInfoHook.mockReturnValue({ data: dataset });
-    mockedAccessControlHook.mockReturnValue({});
+    mockedAccessControlHook.mockReturnValue({
+      accessControl: mockAccessControl(),
+    });
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "asPath",
       replace: jest.fn(),
@@ -95,65 +107,88 @@ describe("Container view", () => {
     ]);
   });
 
-  test("renders a table", () => {
-    const { asFragment } = renderWithTheme(<Container iri={iri} />);
+  test("renders a table", async () => {
+    const { asFragment, getByText } = renderWithTheme(<Container iri={iri} />);
+    await waitFor(() => {
+      expect(getByText("inbox")).toBeInTheDocument();
+      expect(getByText("private")).toBeInTheDocument();
+      expect(getByText("note.txt")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("renders a table for parent container if iri is a resource", () => {
-    const { asFragment } = renderWithTheme(<Container iri={resourceIri} />);
+  test("renders a table for parent container if iri is a resource", async () => {
+    mockedGetContainerResourceUrlAll.mockReturnValue([
+      "https://myaccount.mypodserver.com/resource.txt",
+    ]);
+    const { asFragment, getByText } = renderWithTheme(
+      <Container iri={resourceIri} />
+    );
+    await waitFor(() => {
+      expect(getByText("resource.txt")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("Renders a spinner if data is loading", () => {
+  test("Renders a spinner if data is loading", async () => {
     mockedGetContainerResourceUrlAll.mockReturnValue(undefined);
 
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
   });
 
-  it("renders a spinner if iri is undefined (can happen during build step)", () => {
+  it("renders a spinner if iri is undefined (can happen during build step)", async () => {
     const { getByTestId } = renderWithTheme(<Container iri={undefined} />);
-    expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
+    });
   });
 
-  it("renders Access Forbidden if the fetch for container returns 401", () => {
+  it("renders Access Forbidden if the fetch for container returns 401", async () => {
     mockedContainerHook.mockReturnValue({
       error: new Error("401"),
     });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_ACCESS_FORBIDDEN)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_ACCESS_FORBIDDEN)).toBeDefined();
   });
 
-  it("renders Access Forbidden if the fetch for container returns 403", () => {
+  it("renders Access Forbidden if the fetch for container returns 403", async () => {
     mockedContainerHook.mockReturnValue({
       error: new Error("403"),
     });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_ACCESS_FORBIDDEN)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_ACCESS_FORBIDDEN)).toBeDefined();
   });
 
-  it("renders Access Forbidden if the fetch for container returns 404", () => {
+  it("renders Not Found if the fetch for container returns 404", async () => {
     mockedContainerHook.mockReturnValue({
       error: new Error("404"),
     });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_RESOURCE_NOT_FOUND)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_RESOURCE_NOT_FOUND)).toBeDefined();
   });
 
-  it("renders Not supported if the fetch for container returns 500", () => {
+  it("renders Not supported if the fetch for container returns 500", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
     mockedContainerHook.mockReturnValue({
@@ -164,44 +199,56 @@ describe("Container view", () => {
         <Container iri={iri} />
       </SessionProvider>
     );
-
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_NOT_SUPPORTED)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_NOT_SUPPORTED)).toBeDefined();
   });
 
-  it("renders Not Supported if resource loaded is not a container", () => {
+  it("renders Not Supported if resource loaded is not a container", async () => {
     mockedContainerHook.mockReturnValue({
       data: mockModel(resourceIri),
       mutate: jest.fn(),
     });
-    const { asFragment } = renderWithTheme(<Container iri={resourceIri} />);
+    const { asFragment, getByTestId } = renderWithTheme(
+      <Container iri={resourceIri} />
+    );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_NOT_SUPPORTED)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("renders AuthProfileLoadError if fetching authenticated profile fails", () => {
+  it("renders AuthProfileLoadError if fetching authenticated profile fails", async () => {
     mockedAuthenticatedProfileHook.mockReturnValue({ error: new Error() });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_AUTH_PROFILE_LOAD_ERROR)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_AUTH_PROFILE_LOAD_ERROR)).toBeDefined();
   });
 
-  it("renders PodRootLoadError if it fails to fetch resourceInfo for podRoot", () => {
+  it("renders PodRootLoadError if it fails to fetch resourceInfo for podRoot", async () => {
     mockedResourceInfoHook.mockReturnValue({ error: new Error() });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_POD_ROOT_LOAD_ERROR)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_POD_ROOT_LOAD_ERROR)).toBeDefined();
   });
 
-  it("renders NoControlError if it fails to get access control for podRoot", () => {
+  it("renders NoControlError if it fails to get access control for podRoot", async () => {
     mockedAccessControlHook.mockReturnValue({ error: new Error() });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_NO_CONTROL_ERROR)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_NO_CONTROL_ERROR)).toBeDefined();
   });
 });

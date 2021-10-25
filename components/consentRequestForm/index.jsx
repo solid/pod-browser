@@ -23,7 +23,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
-import { approveAccessRequestWithConsent } from "@inrupt/solid-client-consent";
+import { approveAccessRequestWithConsent } from "@inrupt/solid-client-access-grants";
 import { Button } from "@inrupt/prism-react-components";
 import { makeStyles } from "@material-ui/styles";
 import { useRouter } from "next/router";
@@ -34,6 +34,7 @@ import {
   List,
   FormControlLabel,
 } from "@material-ui/core";
+import { useSession } from "@inrupt/solid-ui-react";
 import { useBem } from "@solid/lit-prism-patterns";
 import ConsentRequestContext from "../../src/contexts/consentRequestContext";
 import InfoTooltip from "../infoTooltip";
@@ -65,10 +66,11 @@ export const CONFIRM_TEXT = "Continue with no access";
 export const DENY_TEXT = "Deny All Access";
 export const NO_PURPOSE_TITLE = "Select a purpose";
 
-export default function ConsentRequestForm({ agentDetails }) {
+export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   const classes = useStyles();
   const bem = useBem(classes);
   const router = useRouter();
+  const { session } = useSession();
   const { redirectUrl } = router.query;
   const { consentRequest } = useContext(ConsentRequestContext);
   const [selectedAccess, setSelectedAccess] = useState([]);
@@ -109,12 +111,13 @@ export default function ConsentRequestForm({ agentDetails }) {
     e.preventDefault();
     if (selectedAccess.length && selectedPurposes.length) {
       const signedVc = await approveAccessRequestWithConsent(
+        session.info.webId,
         consentRequest,
-        requestor,
-        selectedAccess.accessModes,
-        selectedResources.length === 1
-          ? selectedResources[0]
-          : selectedResources
+        {
+          requestor,
+          access: selectedAccess.accessModes,
+          resources: selectedResources,
+        }
       );
       if (signedVc) {
         await router.push(`${redirectUrl}?signedVcUrl=${getVcId(signedVc)}`);
@@ -201,7 +204,9 @@ export default function ConsentRequestForm({ agentDetails }) {
         onSubmit={handleSubmit}
       >
         <Typography component="h2" align="center" variant="h1">
-          <span className={bem("agent-name")}>Allow {agentName} access?</span>
+          <span className={bem("agent-name")}>
+            Allow {agentName || agentWebId} access?
+          </span>
         </Typography>
         {purposes?.length === 1 ? (
           <span className={bem("purpose")}>
@@ -239,7 +244,7 @@ export default function ConsentRequestForm({ agentDetails }) {
           </div>
         )}
         <span className={bem("request-container__header-text", "small")}>
-          {`${agentName} will have access until`}
+          {`${agentName || agentWebId} will have access until`}
         </span>
         <DateInput
           selectedDate={selectedDate}
@@ -251,13 +256,12 @@ export default function ConsentRequestForm({ agentDetails }) {
         />
         {/* FIXME: place this in a loop when we know the data structure */}
         {requestedAccesses &&
-          agentName &&
           requestedAccesses.map((consent, index) => {
             return (
               <RequestSection
                 // eslint-disable-next-line react/no-array-index-key
                 key={`consent-request-section-${index}`}
-                agentName={agentName}
+                agentName={agentName || agentWebId}
                 sectionDetails={consent}
                 selectedAccess={selectedAccess}
                 setSelectedAccess={setSelectedAccess}
@@ -295,6 +299,7 @@ ConsentRequestForm.propTypes = {
     agentTOS: T.string,
     agentPolicy: T.string,
   }),
+  agentWebId: T.string.isRequired,
 };
 
 ConsentRequestForm.defaultProps = {

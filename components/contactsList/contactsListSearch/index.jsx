@@ -65,7 +65,7 @@ export function setupGetOptionLabel() {
 
 export default function ContactsListSearch({ people }) {
   const { route } = useRouter();
-  const { setSearch } = useContext(SearchContext);
+  const { search, setSearch } = useContext(SearchContext);
   const classes = useStyles();
 
   const profiles = people
@@ -82,6 +82,7 @@ export default function ContactsListSearch({ people }) {
         root: classes.search,
         inputRoot: classes.searchInput,
       }}
+      value={search}
       freeSolo
       options={profiles}
       getOptionLabel={getOptionLabel}
