@@ -71,7 +71,11 @@ export function useRedirectIfLoggedIn(location = "/") {
   const { session, sessionRequestInProgress } = useSession();
   const router = useRouter();
   useEffect(() => {
-    if (session.info.isLoggedIn && !router.asPath.includes("login")) return;
+    if (
+      (session.info.isLoggedIn && !router.asPath.includes("login")) ||
+      sessionRequestInProgress
+    )
+      return;
     redirectBasedOnSessionState(
       session.info.isLoggedIn,
       sessionRequestInProgress,
