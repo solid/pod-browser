@@ -19,7 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { waitFor } from "@testing-library/react";
 import rules, {
   GROUPS_PAGE_ENABLED,
   PRIVACY_PAGE_ENABLED_FOR,
