@@ -78,5 +78,5 @@ export function useRedirectIfLoggedIn(location = "/") {
       SESSION_STATES.LOGGED_IN,
       location
     );
-  });
+  }, [session, router, location, sessionRequestInProgress]);
 }
