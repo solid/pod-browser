@@ -47,7 +47,7 @@
     "jss-preset-default": "^10.5.1",
     "license-checker": "^25.0.1",
     "next": "^11.0.1",
-    "npm": "^8.1.0",
+    "npm": "^8.1.1",
     "prop-types": "^15.7.2",
     "rdf-namespaces": "^1.9.2",
     "react": "^17.0.2",
