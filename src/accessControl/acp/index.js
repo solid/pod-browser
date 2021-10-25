@@ -22,7 +22,7 @@
 /* istanbul ignore file */
 
 import {
-  acp_v3 as acp,
+  acp_v4 as acp,
   asUrl,
   deleteFile,
   getSolidDataset,
@@ -31,7 +31,6 @@ import {
   saveSolidDatasetAt,
   setThing,
 } from "@inrupt/solid-client";
-import { v4 } from "uuid";
 import {
   ACL,
   createAccessMap,
@@ -160,45 +159,49 @@ export function getOrCreatePolicy(policyDataset, url) {
   return { policy: newPolicy, dataset: updatedPolicyDataset };
 }
 
-export function getRulesOrCreate(ruleUrls, policy, policyDataset) {
-  // assumption: Rules resides in the same resource as the policies
-  const rules = ruleUrls
-    .map((url) => acp.getRule(policyDataset, url))
-    .filter((rule) => !!rule);
-  if (rules.length === 0) {
-    const ruleUrl = `${asUrl(policy)}Rule`; // e.g. <pod>/policies/.ttl#readPolicyRule
-    return { existing: false, rules: [acp.createRule(ruleUrl)] };
+export function getMatchersOrCreate(matcherUrls, policy, policyDataset) {
+  // assumption: Matchers resides in the same resource as the policies
+  const matchers = matcherUrls
+    .map((url) => acp.getMatcher(policyDataset, url))
+    .filter((matcher) => !!matcher);
+  if (matchers.length === 0) {
+    const matcherUrl = `${asUrl(policy)}Matcher`; // e.g. <pod>/policies/.ttl#readPolicyMatcher
+    return { existing: false, matchers: [acp.createMatcher(matcherUrl)] };
   }
-  return { existing: true, rules };
+  return { existing: true, matchers };
 }
 
-export function getRuleWithAgent(rules, agentWebId) {
-  // assumption 1: the rules for the policies we work with will not have agents across multiple rules
-  // assumption 2: there will always be at least one rule (we enforce this with getRulesOrCreate)
-  const rule = rules.find((r) =>
+export function getMatcherWithAgent(matchers, agentWebId) {
+  // assumption 1: the matchers for the policies we work with will not have agents across multiple matchers
+  // assumption 2: there will always be at least one matcher (we enforce this with getMatchersOrCreate)
+  const matcher = matchers.find((r) =>
     acp.getAgentAll(r).find((webId) => webId === agentWebId)
   );
-  // if we don't find the agent in a rule, we'll just pick the first one
-  return rule || rules[0];
+  // if we don't find the agent in a matcher, we'll just pick the first one
+  return matcher || matchers[0];
 }
 
 export function setAgents(policy, policyDataset, webId, accessToMode) {
-  const ruleUrls = acp.getAllOfRuleUrlAll(policy);
-  const { existing, rules } = getRulesOrCreate(ruleUrls, policy, policyDataset);
-  const rule = getRuleWithAgent(rules, webId);
-  const existingAgents = acp.getAgentAll(rule);
+  const matcherUrls = acp.getAllOfMatcherUrlAll(policy);
+  const { existing, matchers } = getMatchersOrCreate(
+    matcherUrls,
+    policy,
+    policyDataset
+  );
+  const matcher = getMatcherWithAgent(matchers, webId);
+  const existingAgents = acp.getAgentAll(matcher);
   const agentIndex = existingAgents.indexOf(webId);
-  let modifiedRule = rule;
+  let modifiedMatcher = matcher;
   if (accessToMode && agentIndex === -1) {
-    modifiedRule = acp.addAgent(rule, webId);
+    modifiedMatcher = acp.addAgent(matcher, webId);
   }
   if (!accessToMode && agentIndex !== -1) {
-    modifiedRule = acp.removeAgent(rule, webId);
+    modifiedMatcher = acp.removeAgent(matcher, webId);
   }
-  const modifiedDataset = setThing(policyDataset, modifiedRule);
+  const modifiedDataset = setThing(policyDataset, modifiedMatcher);
   const modifiedPolicy = existing
-    ? acp.setAllOfRuleUrl(policy, modifiedRule)
-    : acp.addAllOfRuleUrl(policy, modifiedRule);
+    ? acp.setAllOfMatcherUrl(policy, modifiedMatcher)
+    : acp.addAllOfMatcherUrl(policy, modifiedMatcher);
   return {
     policy: modifiedPolicy,
     dataset: modifiedDataset,
@@ -206,20 +209,24 @@ export function setAgents(policy, policyDataset, webId, accessToMode) {
 }
 
 export function setPublicAgent(dataset, policy, access) {
-  const rulesUrls = acp.getAllOfRuleUrlAll(policy);
-  const { existing, rules } = getRulesOrCreate(rulesUrls, policy, dataset);
-  const modifiedRules = rules.map((rule) =>
-    access ? acp.setPublic(rule) : acp.removePublic(rule)
+  const matchersUrls = acp.getAllOfMatcherUrlAll(policy);
+  const { existing, matchers } = getMatchersOrCreate(
+    matchersUrls,
+    policy,
+    dataset
   );
-  const [modifiedDataset] = modifiedRules.map((modifiedRule) => {
-    return setThing(dataset, modifiedRule);
+  const modifiedMatchers = matchers.map((matcher) =>
+    access ? acp.setPublic(matcher) : acp.removePublic(matcher)
+  );
+  const [modifiedDataset] = modifiedMatchers.map((modifiedMatcher) => {
+    return setThing(dataset, modifiedMatcher);
   });
   const [modifiedPolicy] = existing
-    ? modifiedRules.map((modifiedRule) =>
-        acp.setAllOfRuleUrl(policy, modifiedRule)
+    ? modifiedMatchers.map((modifiedMatcher) =>
+        acp.setAllOfMatcherUrl(policy, modifiedMatcher)
       )
-    : modifiedRules.map((modifiedRule) =>
-        acp.addAllOfRuleUrl(policy, modifiedRule)
+    : modifiedMatchers.map((modifiedMatcher) =>
+        acp.addAllOfMatcherUrl(policy, modifiedMatcher)
       );
   return {
     policy: modifiedPolicy,
@@ -228,23 +235,27 @@ export function setPublicAgent(dataset, policy, access) {
 }
 
 export function setAuthenticatedAgent(dataset, policy, access) {
-  const rulesUrls = acp.getAllOfRuleUrlAll(policy);
-  const { existing, rules } = getRulesOrCreate(rulesUrls, policy, dataset);
-  const modifiedRules = rules.map((rule) => {
-    const modifiedRule = access
-      ? acp.setAuthenticated(rule)
-      : acp.removeAuthenticated(rule);
-    return modifiedRule;
+  const matchersUrls = acp.getAllOfMatcherUrlAll(policy);
+  const { existing, matchers } = getMatchersOrCreate(
+    matchersUrls,
+    policy,
+    dataset
+  );
+  const modifiedMatchers = matchers.map((matcher) => {
+    const modifiedMatcher = access
+      ? acp.setAuthenticated(matcher)
+      : acp.removeAuthenticated(matcher);
+    return modifiedMatcher;
   });
-  const [modifiedDataset] = modifiedRules.map((modifiedRule) => {
-    return setThing(dataset, modifiedRule);
+  const [modifiedDataset] = modifiedMatchers.map((modifiedMatcher) => {
+    return setThing(dataset, modifiedMatcher);
   });
   const [modifiedPolicy] = existing
-    ? modifiedRules.map((modifiedRule) =>
-        acp.setAllOfRuleUrl(policy, modifiedRule)
+    ? modifiedMatchers.map((modifiedMatcher) =>
+        acp.setAllOfMactherUrl(policy, modifiedMatcher)
       )
-    : modifiedRules.map((modifiedRule) =>
-        acp.addAllOfRuleUrl(policy, modifiedRule)
+    : modifiedMatchers.map((modifiedMatcher) =>
+        acp.addAllOfMatcherUrl(policy, modifiedMatcher)
       );
   return {
     policy: modifiedPolicy,
@@ -256,20 +267,22 @@ export function getNamedPolicyModesAndAgents(policyUrl, policyDataset) {
   const policy = acp.getPolicy(policyDataset, policyUrl);
   if (!policy) return { modes: {}, agents: [] };
   const modes = acp.getAllowModes(policy);
-  const ruleUrls = acp.getAllOfRuleUrlAll(policy);
-  // assumption: rule resides in the same resource as policies
-  const rules = ruleUrls
-    .map((url) => acp.getRule(policyDataset, url))
-    .filter((rule) => rule !== null);
-  const agents = rules.reduce(
-    (memo, rule) => memo.concat(acp.getAgentAll(rule)),
+  const matcherUrls = acp.getAllOfMatcherUrlAll(policy);
+  // assumption: matchers resides in the same resource as policies
+  const matchers = matcherUrls
+    .map((url) => acp.getMatcher(policyDataset, url))
+    .filter((matcher) => matcher !== null);
+  const agents = matchers.reduce(
+    (memo, matcher) => memo.concat(acp.getAgentAll(matcher)),
     []
   );
-  const [authenticatedStatus] = rules.map((rule) => acp.hasAuthenticated(rule));
+  const [authenticatedStatus] = matchers.map((matcher) =>
+    acp.hasAuthenticated(matcher)
+  );
   if (authenticatedStatus) {
     agents.unshift(AUTHENTICATED_AGENT_PREDICATE);
   }
-  const [publicStatus] = rules.map((rule) => acp.hasPublic(rule));
+  const [publicStatus] = matchers.map((matcher) => acp.hasPublic(matcher));
   if (publicStatus) {
     agents.unshift(PUBLIC_AGENT_PREDICATE);
   }
@@ -297,11 +310,13 @@ export function getPolicyModesAndAgents(policyUrls, policyDataset) {
     .filter((policy) => !!policy)
     .map((policy) => {
       const modes = acp.getAllowModes(policy);
-      const ruleUrls = acp.getAllOfRuleUrlAll(policy);
-      // assumption: rule resides in the same resource as policies
-      const rules = ruleUrls.map((url) => acp.getRule(policyDataset, url));
-      const agents = rules.reduce(
-        (memo, rule) => memo.concat(acp.getAgentAll(rule)),
+      const matcherUrls = acp.getAllOfMatcherUrlAll(policy);
+      // assumption: matchers resides in the same resource as policies
+      const matchers = matcherUrls.map((matcher) =>
+        acp.getMatcher(policyDataset, matcher)
+      );
+      const agents = matchers.reduce(
+        (memo, matcher) => memo.concat(acp.getAgentAll(matcher)),
         []
       );
       return {
@@ -312,9 +327,9 @@ export function getPolicyModesAndAgents(policyUrls, policyDataset) {
 }
 
 export function removePermissionsForAgent(webId, policyDataset) {
-  return acp.getRuleAll(policyDataset).reduce((dataset, rule) => {
-    const modifiedRule = acp.removeAgent(rule, webId);
-    return setThing(dataset, modifiedRule);
+  return acp.getMatcherAll(policyDataset).reduce((dataset, matcher) => {
+    const modifiedMatcher = acp.removeAgent(matcher, webId);
+    return setThing(dataset, modifiedMatcher);
   }, policyDataset);
 }
 
@@ -349,7 +364,6 @@ function getPolicyUrlName(policyUrl) {
 }
 
 function ensureAccessControl(policyUrl, datasetWithAcr, changed) {
-  console.log("Setting apply on ", policyUrl);
   const policies = acp.getPolicyUrlAll(datasetWithAcr);
   if (policies.includes(policyUrl)) {
     return {
@@ -376,7 +390,6 @@ function ensureApplyMembers(policyUrl, datasetWithAcr, changed) {
       acr: datasetWithAcr,
     };
   }
-  console.log("Setting applyMember on ", policyUrl);
   const policies = acp.getMemberPolicyUrlAll(datasetWithAcr);
   const existingPolicies = policies.find((url) => policyUrl === url);
   if (existingPolicies) {
@@ -483,7 +496,7 @@ export function getWebIdsFromInheritedPermissions(permissions) {
  * FIXME This function doesn't really make sense, but it is the current implementation
  * so let's keep it as is for now and figure it out later.
  *
- * @param {*} policyResourceUrl 
+ * @param {*} policyResourceUrl
  */
 async function updatePolicyIfChanged(policyResourceUrl, fetch) {
   try {
@@ -524,11 +537,6 @@ export default class AcpAccessControlStrategy {
     this.#policyUrl = policyUrl.href;
     this.#policiesContainerUrl = policiesContainerUrl;
     this.#fetch = fetch;
-    console.log(
-      `building a new Access control strategy: policyUrl:${
-        this.#policyUrl
-      } policyContainer:${this.#policiesContainerUrl}`
-    );
   }
 
   async getAllPermissionsForResource() {
@@ -657,9 +665,7 @@ export default class AcpAccessControlStrategy {
   }
 
   async linkPoliciesToAcr(originalChanged, originalAcr) {
-    console.log("updating policies links to Access Control");
     if (originalChanged) {
-      console.log(`updating acr for ${getSourceUrl(originalAcr)}`);
       this.#originalWithAcr = await acp.saveAcrFor(originalAcr, {
         fetch: this.#fetch,
       });
@@ -691,34 +697,10 @@ export default class AcpAccessControlStrategy {
     if (true) {
       // ensuring access controls for policy resource
       await this.linkPoliciesToAcr(originalChanged, originalAcr);
-      console.log("Updating policies content");
       // ensuring policy content is up-to-date
       await updatePolicyIfChanged(editorsPolicyResourceUrl, this.#fetch);
       await updatePolicyIfChanged(viewersPolicyResourceUrl, this.#fetch);
     }
-
-    // const operations = [
-    //   {
-    //     function: this.updateNamedPolicies,
-    //     parameters: [editorsPolicyResourceUrl, viewersPolicyResourceUrl],
-    //   },
-    //   {
-    //     function: this.linkPoliciesToAcr,
-    //     parameters: [originalChanged, originalAcr],
-    //   },
-    // ];
-    // // TODO: conditionally reverse the order depending on the target.
-    // operations.reverse();
-    // for (let i = 0; i < operations.length; i += 1) {
-    //   // We explicitly want operations to happen sequentially.
-    //   // eslint-disable-next-line no-await-in-loop
-    //   await operations[i].function(...operations[i].parameters);
-    // }
-    // operations.forEach((remoteInteraction) => {
-    //   remoteInteraction.function(...remoteInteraction.parameters);
-    //   // The underlying functions are private, so the this needs to be properly
-    //   // bound.
-    // }, this);
   }
 
   async ensureAccessControlAllCustomPolicies() {
@@ -737,7 +719,7 @@ export default class AcpAccessControlStrategy {
       },
       ({ acr, changed }) => ensureApplyControl(viewAndAddPolicy, acr, changed),
       ({ acr, changed }) => ensureApplyControl(editOnlyPolicy, acr, changed),
-      ({ acr, changed }) => ensureApplyControl(addOnlyPolicy, acr, changed),
+      ({ acr, changed }) => ensureApplyControl(addOnlyPolicy, acr, changed)
       // ({ acr, changed }) => ensureApplyMembers(viewAndAddPolicy, acr, changed),
       // ({ acr, changed }) => ensureApplyMembers(editOnlyPolicy, acr, changed),
       // ({ acr, changed }) => ensureApplyMembers(addOnlyPolicy, acr, changed)
@@ -806,9 +788,12 @@ export default class AcpAccessControlStrategy {
     }
   }
 
-  async setRulePublic(policyName, access) {
+  // For backwards compatibility, so that it remains compatible with the legacy
+  // implementation which will still be around.
+  setRulePublic = this.setMatcherPublic;
+
+  async setMatcherPublic(policyName, access) {
     const namedPolicyContainerUrl = `${this.#policyUrl}${policyName}`;
-    console.log("Making a public rule for ", namedPolicyContainerUrl);
 
     const { respond, error } = createResponder();
     const {
@@ -843,7 +828,11 @@ export default class AcpAccessControlStrategy {
     return respond(this.#originalWithAcr);
   }
 
-  async setRuleAuthenticated(policyName, access) {
+  // For backwards compatibility, so that it remains compatible with the legacy
+  // implementation which will still be around.
+  setRuleAuthenticated = this.setRuleAuthenticated;
+
+  async setMatcherAuthenticated(policyName, access) {
     const namedPolicyContainerUrl = `${this.#policyUrl}${policyName}`;
 
     const { respond, error } = createResponder();
@@ -865,7 +854,7 @@ export default class AcpAccessControlStrategy {
       ({ policy, dataset }) => acp.setPolicy(dataset, policy)
     );
 
-    // FIXME should do as for setRulePublic
+    // FIXME should do as for setMatcherPublic
     // saving changes to the policy resource
     await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
       fetch: this.#fetch,
@@ -930,22 +919,24 @@ export default class AcpAccessControlStrategy {
       // we simply terminate and return the original ACR
       return respond(this.#originalWithAcr);
     }
-    const rulesUrls = acp.getAllOfRuleUrlAll(policy);
-    const [updatedDataset] = rulesUrls.map((ruleUrl) => {
-      const rule = acp.getRule(policyDataset, ruleUrl);
-      const modifiedRule = acp.removeAgent(rule, webId);
-      return setThing(policyDataset, modifiedRule);
+    const matchersUrls = acp.getAllOfMatcherUrlAll(policy);
+    const [updatedDataset] = matchersUrls.map((matcherUrl) => {
+      const matcher = acp.getMatcher(policyDataset, matcherUrl);
+      const modifiedMatcher = acp.removeAgent(matcher, webId);
+      return setThing(policyDataset, modifiedMatcher);
     });
     const { agents } = getNamedPolicyModesAndAgents(policyUrl, updatedDataset);
     const isLastAgent = !agents.length;
     if (isLastAgent) {
-      // remove the rule
-      const [modifiedPolicy] = rulesUrls.map((ruleUrl) => {
-        return acp.removeAllOfRuleUrl(policy, ruleUrl);
+      // remove the matcher
+      const [modifiedPolicy] = matchersUrls.map((matcherUrl) => {
+        return acp.removeAllOfMatcherUrl(policy, matcherUrl);
       });
-      const modifiedPolicyRulesUrls = acp.getAllOfRuleUrlAll(modifiedPolicy);
-      // if there are no rules left in the policy
-      if (!modifiedPolicyRulesUrls.length) {
+      const modifiedPolicyMatchersUrls = acp.getAllOfMatcherUrlAll(
+        modifiedPolicy
+      );
+      // if there are no matchers left in the policy
+      if (!modifiedPolicyMatchersUrls.length) {
         await deleteFile(policyUrl, { fetch: this.#fetch });
         // if policies container is a container and it's empty, remove it too
         if (namedPolicyContainerUrl && isContainer(namedPolicyContainerUrl)) {
@@ -978,23 +969,25 @@ export default class AcpAccessControlStrategy {
 
     const policyUrl = getPolicyUrlName(customPolicyContainerUrl, policyName);
     const policy = acp.getPolicy(policyDataset, policyUrl);
-    const rulesUrls = acp.getAllOFRuleUrlAll(policy);
-    const [updatedDataset] = rulesUrls.map((ruleUrl) => {
-      const rule = acp.getRule(policyDataset, ruleUrl);
-      const modifiedRule = acp.removeAgent(rule, webId);
-      return setThing(policyDataset, modifiedRule);
+    const matchersUrls = acp.getAllOfMatcherUrlAll(policy);
+    const [updatedDataset] = matchersUrls.map((matcherUrl) => {
+      const matcher = acp.getMatcher(policyDataset, matcherUrl);
+      const modifiedMatcher = acp.removeAgent(matcher, webId);
+      return setThing(policyDataset, modifiedMatcher);
     });
 
     const { agents } = getNamedPolicyModesAndAgents(policyUrl, updatedDataset);
     const isLastAgent = !agents.length;
     if (isLastAgent) {
-      // remove the rule
-      const [modifiedPolicy] = rulesUrls.map((ruleUrl) => {
-        return acp.removeAllOfRuleUrl(policy, ruleUrl);
+      // remove the matcher
+      const [modifiedPolicy] = matchersUrls.map((matcherUrl) => {
+        return acp.removeAllOfMatcherUrl(policy, matcherUrl);
       });
-      const modifiedPolicyRulesUrls = acp.getAllOfRuleUrlAll(modifiedPolicy);
-      // if there are no rules left in the policy
-      if (!modifiedPolicyRulesUrls.length) {
+      const modifiedPolicyMatchersUrls = acp.getAllOfMatcherUrlAll(
+        modifiedPolicy
+      );
+      // if there are no matchers left in the policy
+      if (!modifiedPolicyMatchersUrls.length) {
         await deleteFile(policyUrl, { fetch: this.#fetch });
         // if policies container is a container and it's empty, remove it too
         if (customPolicyContainerUrl && isContainer(customPolicyContainerUrl)) {

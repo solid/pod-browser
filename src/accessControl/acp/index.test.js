@@ -30,8 +30,8 @@ import AcpAccessControlStrategy, {
   getPolicyDetailFromAccess,
   getOrCreatePolicy,
   getPolicyModesAndAgents,
-  getRulesOrCreate,
-  getRuleWithAgent,
+  getMatchersOrCreate,
+  getMatcherWithAgent,
   noAcrAccessError,
   removePermissionsForAgent,
   setAgents,
@@ -908,7 +908,7 @@ describe("getRulesOrCreate", () => {
   );
 
   it("creates a rule on the fly if no rules exist", () => {
-    expect(getRulesOrCreate([], readPolicy, policyDataset)).toEqual({
+    expect(getMatchersOrCreate([], readPolicy, policyDataset)).toEqual({
       existing: false,
       rules: [acpFns3.createRule(readPolicyRuleUrl)],
     });
@@ -917,7 +917,7 @@ describe("getRulesOrCreate", () => {
   it("returns existing rule if it exist", () => {
     const modifiedPolicyDataset = setThing(policyDataset, readPolicyRule);
     expect(
-      getRulesOrCreate([readPolicyRuleUrl], readPolicy, modifiedPolicyDataset)
+      getMatchersOrCreate([readPolicyRuleUrl], readPolicy, modifiedPolicyDataset)
     ).toEqual({
       existing: true,
       rules: [readPolicyRule],
@@ -932,11 +932,11 @@ describe("getRuleWithAgent", () => {
 
   it("returns a rule if it's connected to the agent", () => {
     const ruleWithAgent = acpFns3.addAgent(rule, webId);
-    expect(getRuleWithAgent([rule, ruleWithAgent], webId)).toBe(ruleWithAgent);
+    expect(getMatcherWithAgent([rule, ruleWithAgent], webId)).toBe(ruleWithAgent);
   });
 
   it("returns first rule if no rule is connected to the agent", () => {
-    expect(getRuleWithAgent([rule], webId)).toBe(rule);
+    expect(getMatcherWithAgent([rule], webId)).toBe(rule);
   });
 });
 
