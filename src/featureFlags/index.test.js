@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { waitFor } from "@testing-library/react";
 import rules, {
   GROUPS_PAGE_ENABLED,
   PRIVACY_PAGE_ENABLED_FOR,
@@ -27,6 +28,7 @@ import rules, {
   PRIVACY_PAGE_ENABLED_SERVER,
   groupsPageEnabled,
   privacyPageEnabled,
+  privacyPageEnabledServer,
 } from "./index";
 
 describe("rules", () => {
@@ -92,5 +94,28 @@ describe("PRIVACY_PAGE_ENABLED", () => {
         },
       })
     ).toBe(true);
+  });
+});
+
+describe("PRIVACY_PAGE_ENABLED_SERVER", () => {
+  it("returns false for a logged out session", async () => {
+    expect.assertions(1);
+    const data = await privacyPageEnabledServer({
+      info: { isLoggedIn: false },
+      fetch: jest.fn(),
+    });
+    expect(data).toEqual(false);
+  });
+
+  it("returns true for a session in the enabled list", async () => {
+    expect.assertions(1);
+    const data = await privacyPageEnabledServer({
+      info: {
+        isLoggedIn: true,
+        webId: PRIVACY_PAGE_ENABLED_FOR[0],
+      },
+      fetch: jest.fn(),
+    });
+    expect(data).toEqual(true);
   });
 });
