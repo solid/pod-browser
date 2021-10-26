@@ -69,7 +69,8 @@ export async function getAccessControl(
     return AcpAccessControlStrategy.init(
       resourceInfo,
       policiesContainerUrl,
-      fetch
+      fetch,
+      false
     );
   }
   throw new Error(noAccessPolicyError);
