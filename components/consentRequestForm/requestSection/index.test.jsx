@@ -20,26 +20,44 @@
  */
 
 import React from "react";
+import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
+import { mockContainerFrom } from "@inrupt/solid-client";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import RequestSection, {
   TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON,
   TESTCAFE_ID_REQUEST_EXPAND_SECTION_BUTTON,
   removeExistingValues,
 } from "./index";
+import useContainer from "../../../src/hooks/useContainer";
+import * as containerFns from "../../../src/models/container";
+
+jest.mock("../../../src/hooks/useContainer");
+const mockedUseContainer = useContainer;
 
 const sectionDetails = {
   mode: ["Read", "Write"],
   hasStatus: "ConsentStatusRequested",
-  forPersonalData: [
-    "https://pod.inrupt.com/alice/private/data",
-    "https://pod.inrupt.com/alice/private/data-2/",
-    "https://pod.inrupt.com/alice/private/data-3",
-  ],
+  forPersonalData: ["https://pod.inrupt.com/alice/private/data/"],
   forPurpose: "https://example.com/SomeSpecificPurpose",
 };
 
 describe("Request Section", () => {
+  beforeEach(() => {
+    mockedUseContainer.mockReturnValue({
+      data: {
+        dataset: mockContainerFrom(
+          "https://pod.inrupt.com/alice/private/data/"
+        ),
+      },
+    });
+    jest
+      .spyOn(containerFns, "getContainerResourceUrlAll")
+      .mockReturnValue([
+        "https://pod.inrupt.com/alice/private/data/data-2",
+        "https://pod.inrupt.com/alice/private/data/data-3",
+      ]);
+  });
   const setSelectedAccess = jest.fn();
   test("Renders initial context data", async () => {
     const { asFragment } = renderWithTheme(
@@ -77,7 +95,7 @@ describe("Request Section", () => {
     expect(getByText("Deny all")).toBeInTheDocument();
   });
 
-  test("it expands a sub-section and selects switch in it", () => {
+  test("it expands a sub-section and selects switch in it", async () => {
     const { getByTestId, getAllByRole } = renderWithTheme(
       <RequestSection
         agentName="agent_name"
@@ -95,18 +113,18 @@ describe("Request Section", () => {
     );
 
     userEvent.click(expandSection);
-    expect(getAllByRole("checkbox")).toHaveLength(switches.length + 3);
+    await waitFor(() => {
+      expect(getAllByRole("checkbox")).toHaveLength(switches.length + 2);
+    });
 
     const updatedSwitches = getAllByRole("checkbox", { checked: false });
 
-    userEvent.click(updatedSwitches[4]);
-    expect(getAllByRole("checkbox", { checked: false })).toHaveLength(
-      updatedSwitches.length - 1
-    );
+    userEvent.click(updatedSwitches[0]);
+    expect(getByTestId("consent-access-switch")).toBeChecked();
   });
 
-  test("it selects a single switch when clicked", () => {
-    const { getAllByRole } = renderWithTheme(
+  test("it selects a single switch when clicked", async () => {
+    const { getAllByRole, getByTestId } = renderWithTheme(
       <RequestSection
         agentName="agent_name"
         sectionDetails={sectionDetails}
@@ -115,16 +133,18 @@ describe("Request Section", () => {
     );
 
     const switches = getAllByRole("checkbox");
-    expect(getAllByRole("checkbox", { checked: false })).toHaveLength(
-      switches.length
-    );
+    await waitFor(() => {
+      expect(getAllByRole("checkbox", { checked: false })).toHaveLength(
+        switches.length
+      );
+    });
     userEvent.click(switches[0]);
-    expect(getAllByRole("checkbox", { checked: false })).toHaveLength(
-      switches.length - 1
-    );
+    await waitFor(() => {
+      expect(getByTestId("consent-access-switch")).toBeChecked();
+    });
   });
 
-  test("switches all to unchecked when clicky deny all", () => {
+  test("switches all to unchecked when clicking deny all", () => {
     const { getByTestId, getAllByRole, getByText } = renderWithTheme(
       <RequestSection
         agentName="agent_name"

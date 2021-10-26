@@ -38,33 +38,25 @@ export function getConsentRequestDetailsOnePurpose() {
         {
           mode: ["Read", "Write"],
           hasStatus: "ConsentStatusRequested",
-          forPersonalData: [
-            "https://pod.inrupt.com/alice/private/data/",
-            "https://pod.inrupt.com/alice/private/data-2",
-            "https://pod.inrupt.com/alice/private/data-3",
-          ],
+          forPersonalData: ["https://pod.inrupt.com/alice/private/data/"],
           forPurpose: "https://example.com/SomeSpecificPurpose",
         },
         {
           mode: ["Read"],
           hasStatus: "ConsentStatusRequested",
-          forPersonalData: [
-            "https://pod.inrupt.com/alice/private/data",
-            "https://pod.inrupt.com/alice/private/data-2/",
-            "https://pod.inrupt.com/alice/private/data-3",
-          ],
+          forPersonalData: ["https://pod.inrupt.com/alice/private/data/"],
           forPurpose: "https://example.com/SomeSpecificPurpose",
         },
         {
           mode: ["Append"],
           hasStatus: "ConsentStatusRequested",
-          forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
+          forPersonalData: ["https://pod.inrupt.com/alice/private/data/"],
           forPurpose: "https://example.com/SomeSpecificPurpose",
         },
         {
           mode: ["Control"],
           hasStatus: "ConsentStatusRequested",
-          forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
+          forPersonalData: ["https://pod.inrupt.com/alice/private/data/"],
           forPurpose: "https://example.com/SomeSpecificPurpose",
         },
       ],
@@ -98,11 +90,7 @@ function getConsentRequestDetails() {
         {
           mode: ["Read", "Write"],
           hasStatus: "ConsentStatusRequested",
-          forPersonalData: [
-            "https://pod.inrupt.com/alice/private/data/",
-            "https://pod.inrupt.com/alice/private/data-2",
-            "https://pod.inrupt.com/alice/private/data-3",
-          ],
+          forPersonalData: ["https://pod.inrupt.com/alice/private/data/"],
           forPurpose: [
             "https://example.com/SomeSpecificPurpose",
             "https://example.com/SomeSpecificPurposeA",
@@ -112,11 +100,7 @@ function getConsentRequestDetails() {
         {
           mode: ["Read"],
           hasStatus: "ConsentStatusRequested",
-          forPersonalData: [
-            "https://pod.inrupt.com/alice/private/data",
-            "https://pod.inrupt.com/alice/private/data-2/",
-            "https://pod.inrupt.com/alice/private/data-3",
-          ],
+          forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
           forPurpose: "https://example.com/SomeSpecificPurpose",
         },
         {

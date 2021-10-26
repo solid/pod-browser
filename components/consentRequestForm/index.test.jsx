@@ -22,6 +22,7 @@
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
+import { mockContainerFrom } from "@inrupt/solid-client";
 import * as consentFns from "@inrupt/solid-client-access-grants";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import getSignedVc from "../../__testUtils/mockSignedVc";
@@ -42,6 +43,11 @@ import { ConfirmationDialogProvider } from "../../src/contexts/confirmationDialo
 import { getConsentRequestDetailsOnePurpose } from "../../__testUtils/mockConsentRequestDetails";
 import { TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT } from "./purposeCheckBox";
 import { TESTCAFE_ID_CONSENT_ACCESS_SWITCH } from "./requestSection";
+import useContainer from "../../src/hooks/useContainer";
+import * as containerFns from "../../src/models/container";
+
+jest.mock("../../src/hooks/useContainer");
+const mockedUseContainer = useContainer;
 
 jest.mock("next/router");
 const mockedUseRouter = useRouter;
@@ -67,9 +73,22 @@ describe("Consent Request Form", () => {
       query: { redirectUrl: "/privacy/" },
       push,
     });
+    mockedUseContainer.mockReturnValue({
+      data: {
+        dataset: mockContainerFrom(
+          "https://pod.inrupt.com/alice/private/data/"
+        ),
+      },
+    });
+    jest
+      .spyOn(containerFns, "getContainerResourceUrlAll")
+      .mockReturnValue([
+        "https://pod.inrupt.com/alice/private/data/data-2",
+        "https://pod.inrupt.com/alice/private/data/data-3",
+      ]);
   });
-  test("Renders a consent request form with multiple purposes", () => {
-    const { asFragment } = renderWithTheme(
+  test("Renders a consent request form with multiple purposes", async () => {
+    const { asFragment, findByTestId } = renderWithTheme(
       <ConsentRequestContextProvider>
         <ConsentRequestForm
           agentDetails={agentDetails}
@@ -77,11 +96,11 @@ describe("Consent Request Form", () => {
         />
       </ConsentRequestContextProvider>
     );
-
+    await expect(findByTestId("spinner")).rejects.toEqual(expect.anything());
     expect(asFragment()).toMatchSnapshot();
   });
-  test("Renders a consent request form with only one purpose", () => {
-    const { asFragment } = renderWithTheme(
+  test("Renders a consent request form with only one purpose", async () => {
+    const { asFragment, findByTestId } = renderWithTheme(
       <ConsentRequestContextProviderOnePurpose>
         <ConsentRequestForm
           agentDetails={agentDetails}
@@ -89,7 +108,7 @@ describe("Consent Request Form", () => {
         />
       </ConsentRequestContextProviderOnePurpose>
     );
-
+    await expect(findByTestId("spinner")).rejects.toEqual(expect.anything());
     expect(asFragment()).toMatchSnapshot();
   });
   test("when submitting form without selecting access and at least one purpose selected, it displays a confirmation dialog with the correct title and content", () => {
@@ -147,8 +166,7 @@ describe("Consent Request Form", () => {
       "At least one purpose needs to be selected to approve access for Mock App"
     );
   });
-  // FIXME: fix this test
-  test.skip("does not display confirmation dialog if at least one access and one purpose are selected and redirects with correct params", async () => {
+  test("does not display confirmation dialog if at least one access and one purpose are selected and redirects with correct params", async () => {
     const { getByTestId, findByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentRequestContextProvider>

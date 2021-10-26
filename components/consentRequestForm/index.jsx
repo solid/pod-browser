@@ -83,7 +83,6 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   );
   const { agentName } = agentDetails || null;
 
-  // FIXME: we will later fetch the description from the purpose Url
   const {
     confirmed,
     open,
@@ -97,7 +96,6 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   const [confirmationSetup, setConfirmationSetup] = useState(false);
 
   const requestedAccesses = getRequestedAccesses(consentRequest);
-  // FIXME: we will later fetch the expiry date from the consent details
 
   const expirationDate = getExpiryDate(consentRequest);
   const [selectedDate, setSelectedDate] = useState(new Date());

@@ -50,4 +50,7 @@ describe("getContainerResourceUrlAll", () => {
     expect(getContainerResourceUrlAll(container)[0]).toEqual(iri1);
     expect(getContainerResourceUrlAll(container)[1]).toEqual(iri2);
   });
+  it("returns an empty array if container thing is null", () => {
+    expect(getContainerResourceUrlAll({ thing: null })).toEqual([]);
+  });
 });

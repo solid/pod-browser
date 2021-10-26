@@ -22,6 +22,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import T from "prop-types";
 import { Icons, Button } from "@inrupt/prism-react-components";
+import { getSourceUrl } from "@inrupt/solid-client";
 import { makeStyles } from "@material-ui/styles";
 import {
   createStyles,
@@ -45,6 +46,8 @@ import {
 } from "../../../src/models/consent/request";
 import { getResourceName } from "../../../src/solidClientHelpers/resource";
 import Spinner from "../../spinner";
+import useContainer from "../../../src/hooks/useContainer";
+import { getContainerResourceUrlAll } from "../../../src/models/container";
 
 export const TESTCAFE_ID_REQUEST_SELECT_ALL_BUTTON = "request-select-all";
 export const TESTCAFE_ID_REQUEST_EXPAND_SECTION_BUTTON = "expand-section";
@@ -161,17 +164,27 @@ const renderSwitch = (
 
 const RequestSubSection = (props) => {
   const { resourceIri, overrideCheck, modesObject, setSelectedAccess } = props;
-
-  // FIXME based on the resourceIri retrieve all resources in this container and replace the mock list below
-  const mockedResources = [
-    "https://pod.inrupt.com/alice/private/data4",
-    "https://pod.inrupt.com/alice/private/data5",
-    resourceIri,
-  ];
-
+  const { data: container, isValidating } = useContainer(resourceIri);
+  const [resourcesIris, setResourcesIris] = useState([]);
   const [isChecked, setIsChecked] = useState(
-    new Array(mockedResources.length).fill(false)
+    new Array((resourcesIris || []).length).fill(false)
   );
+
+  useEffect(() => {
+    if (
+      !resourceIri ||
+      (container &&
+        isContainerIri(resourceIri) &&
+        getSourceUrl(container.dataset) !== resourceIri)
+    )
+      return;
+    const urls = container && getContainerResourceUrlAll(container);
+    setResourcesIris(urls);
+  }, [container, resourceIri]);
+
+  useEffect(() => {
+    setIsChecked(new Array((resourcesIris || []).length).fill(false));
+  }, [resourcesIris]);
 
   const toggleAllSwitches = () => {
     const updatedAllCheckedState = isChecked.map(() => overrideCheck);
@@ -196,16 +209,18 @@ const RequestSubSection = (props) => {
   }, [modesObject, isChecked, setSelectedAccess, resourceIri]);
 
   const handleOnChange = (position) => {
-    const updatedCheckedState = isChecked.map((item, index) =>
-      index === position ? !item : item
-    );
+    const updatedCheckedState = isChecked.map((item, index) => {
+      return index === position ? !item : item;
+    });
 
     setIsChecked(updatedCheckedState);
   };
 
+  if (!resourcesIris || isValidating) return <Spinner />;
+
   return (
     <>
-      {mockedResources.map((containerResourceIri, index) => {
+      {resourcesIris?.map((containerResourceIri, index) => {
         return renderSwitch(
           containerResourceIri,
           index,
@@ -213,7 +228,8 @@ const RequestSubSection = (props) => {
           handleOnChange,
           overrideCheck,
           setSelectedAccess,
-          modesObject
+          modesObject,
+          resourcesIris.length
         );
       })}
     </>
@@ -245,14 +261,31 @@ const ContainerSwitch = (props) => {
     overrideCheck,
     setSelectedAccess,
     modesObject,
+    length,
   } = props;
   const bem = useBem(useStyles());
   const [isExpanded, setIsExpanded] = useState(false);
   const [containerChecked, setContainerChecked] = useState(overrideCheck);
+  const { data: container, isValidating } = useContainer(resourceIri);
+  const [resourcesIris, setResourcesIris] = useState(null);
+
+  useEffect(() => {
+    if (
+      !resourceIri ||
+      (container &&
+        isContainerIri(resourceIri) &&
+        getSourceUrl(container.dataset) !== resourceIri)
+    )
+      return;
+    const urls = container && getContainerResourceUrlAll(container);
+    setResourcesIris(urls || []);
+  }, [container, resourceIri]);
 
   useEffect(() => {
     setContainerChecked(overrideCheck);
   }, [overrideCheck, isChecked]);
+
+  if (!resourcesIris || isValidating) return <Spinner />;
 
   return (
     <>
@@ -283,17 +316,19 @@ const ContainerSwitch = (props) => {
             <Tooltip title={resourceIri} arrow>
               <span>{getResourceName(resourceIri)}</span>
             </Tooltip>
-            <button
-              data-testid={TESTCAFE_ID_REQUEST_EXPAND_SECTION_BUTTON}
-              type="button"
-              className={bem("dropdown-caret")}
-              onClick={() => setIsExpanded(!isExpanded)}
-            >
-              <Icons
-                name={isExpanded ? "caret-up" : "caret-down"}
-                className={bem("icon-small--padded")}
-              />
-            </button>
+            {(length > 0 || resourcesIris.length > 0) && (
+              <button
+                data-testid={TESTCAFE_ID_REQUEST_EXPAND_SECTION_BUTTON}
+                type="button"
+                className={bem("dropdown-caret")}
+                onClick={() => setIsExpanded(!isExpanded)}
+              >
+                <Icons
+                  name={isExpanded ? "caret-up" : "caret-down"}
+                  className={bem("icon-small--padded")}
+                />
+              </button>
+            )}
           </Typography>
         }
         labelPlacement="start"
@@ -315,8 +350,8 @@ const ContainerSwitch = (props) => {
 
 ContainerSwitch.propTypes = {
   resourceIri: T.string.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  isChecked: T.array.isRequired,
+  length: T.number,
+  isChecked: T.arrayOf(T.bool).isRequired,
   overrideCheck: T.bool,
   handleOnChange: T.func.isRequired,
   index: T.number.isRequired,
@@ -331,6 +366,7 @@ ContainerSwitch.propTypes = {
 
 ContainerSwitch.defaultProps = {
   overrideCheck: false,
+  length: null,
 };
 export default function RequestSection(props) {
   const { agentName, sectionDetails, setSelectedAccess } = props;

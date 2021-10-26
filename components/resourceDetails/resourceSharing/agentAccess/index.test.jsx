@@ -267,9 +267,7 @@ describe("AgentAccess", () => {
       await waitFor(() =>
         expect(fetchProfileSpy).toHaveBeenCalledWith(webId, expect.anything())
       );
-      act(() => {
-        fetchProfileSpy.mockResolvedValue(null);
-      });
+      fetchProfileSpy.mockRejectedValue(null);
       await waitFor(() => {
         expect(queryByTestId("try-again-spinner")).toBeFalsy();
       });
