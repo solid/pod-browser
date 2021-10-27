@@ -55,7 +55,8 @@ export async function isWac(resourceUrl, resourceInfo, fetch) {
 export async function getAccessControl(
   resourceInfo,
   policiesContainerUrl,
-  fetch
+  fetch,
+  isLegacy
 ) {
   const resourceUrl = getSourceUrl(resourceInfo);
   const isWacControlledResource = await isWac(resourceUrl, resourceInfo, fetch);
@@ -70,7 +71,7 @@ export async function getAccessControl(
       resourceInfo,
       policiesContainerUrl,
       fetch,
-      false
+      isLegacy ?? false
     );
   }
   throw new Error(noAccessPolicyError);

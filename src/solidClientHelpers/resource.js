@@ -39,7 +39,7 @@ import {
   getPolicyResourceUrl,
   getPolicyUrl,
   getResourcePoliciesContainerPath,
-} from "./policies";
+} from "../models/policy";
 import { createResponder, isContainerIri } from "./utils";
 import { ERROR_CODES, isHTTPError } from "../error";
 
@@ -141,7 +141,7 @@ export const deletePoliciesContainer = async (containerIri, fetch) => {
       !isHTTPError(err.message, 404) &&
       !isHTTPError(err.message, 403)
     ) {
-      throw err;
+      throw new Error(err);
     }
   }
 };
@@ -155,11 +155,14 @@ export async function deleteResource(
   await deleteFile(iri, {
     fetch,
   });
+  // FIXME: Discover whether legacy ACPs are used
+  const legacyAcp = true;
   if (!policiesContainerUrl) return;
-  const policyUrl = getPolicyUrl(resourceInfo, policiesContainerUrl);
+  const policyUrl = getPolicyUrl(resourceInfo, policiesContainerUrl, legacyAcp);
   const resourcePoliciesContainerPath = getResourcePoliciesContainerPath(
     resourceInfo,
-    policiesContainerUrl
+    policiesContainerUrl,
+    legacyAcp
   );
 
   const editorsPolicyUrl = getPolicyResourceUrl(

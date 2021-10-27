@@ -98,11 +98,12 @@ describe("getAccessControl", () => {
       result = await getAccessControl(resource, policiesContainerUrl, fetch);
     });
 
-    it("calls AcpAccessControlStrategy.init", () =>
+    it("calls AcpAccessControlStrategy.init, defaulting to the latest ACP systems", () =>
       expect(AcpAccessControlStrategy.init).toHaveBeenCalledWith(
         resource,
         policiesContainerUrl,
-        fetch
+        fetch,
+        false
       ));
 
     it("returns the result from WacAccessControlStrategy.init", () =>

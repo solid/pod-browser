@@ -39,7 +39,7 @@ import useAgentProfile from "../../../../../src/hooks/useAgentProfile";
 import { isHTTPError } from "../../../../../src/error";
 import { getAccessControl } from "../../../../../src/accessControl";
 import usePodRootUri from "../../../../../src/hooks/usePodRootUri";
-import { getPoliciesContainerUrl } from "../../../../../src/solidClientHelpers/policies";
+import { getPoliciesContainerUrl } from "../../../../../src/models/policy";
 
 export const TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON =
   "access-details-remove-button";
