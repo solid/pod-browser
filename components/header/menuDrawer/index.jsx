@@ -20,6 +20,7 @@
  */
 
 /* eslint react/jsx-props-no-spreading:off */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import React, { useContext, useState, useEffect } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
@@ -42,22 +43,27 @@ export const TESTCAFE_ID_MENU_DRAWER = "menu-drawer";
 export const TESTCAFE_ID_MENU_DRAWER_BUTTON = "menu-drawer-button";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-const menuItems = getMainMenuItems();
 
 export default function MenuDrawer() {
+  const [menuItems, setMenuItems] = useState([]);
   const bem = useBem(useStyles());
   const classes = useStyles();
   const { enabled } = useContext(FeatureContext);
   const [activeLinks, setActiveLinks] = useState([]);
   useEffect(() => {
     filterMenuLinks(menuItems, enabled).then((data) => setActiveLinks(data));
-  }, [enabled]);
+  }, [enabled, menuItems]);
   const menuItemsToShow = activeLinks.filter(({ activePage }) => activePage);
   const [open, setOpen] = useState(false);
   const userMenu = useUserMenu();
 
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
+
+  useEffect(() => {
+    const items = getMainMenuItems();
+    setMenuItems(items);
+  }, [setMenuItems]);
 
   return (
     <div
@@ -88,7 +94,7 @@ export default function MenuDrawer() {
             </Button>
           </ListItem>
           <Divider />
-          {menuItemsToShow.map(({ path, ...action }) => (
+          {menuItemsToShow.map(({ path, activePage, ...action }) => (
             <MenuDrawerItem
               key={path}
               href={path}

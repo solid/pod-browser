@@ -21,6 +21,7 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
+import { waitFor } from "@testing-library/dom";
 import { useSession } from "@inrupt/solid-ui-react";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import MenuDrawer, { TESTCAFE_ID_MENU_DRAWER_BUTTON } from "./index";
@@ -43,23 +44,28 @@ describe("MenuDrawer", () => {
     mockedUseSession.mockReturnValue({ session, logout });
   });
 
-  it("renders menu drawer", () => {
+  it("renders menu drawer", async () => {
     const { asFragment, getByTestId } = renderWithTheme(
       <SessionProvider>
         <MenuDrawer />
       </SessionProvider>
     );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_MENU_DRAWER_BUTTON)).toBeDefined();
+    });
     expect(asFragment()).toMatchSnapshot();
-    expect(getByTestId(TESTCAFE_ID_MENU_DRAWER_BUTTON)).toBeDefined();
   });
 
-  it("customizes onClick for buttons (e.g. for log out)", () => {
+  it("customizes onClick for buttons (e.g. for log out)", async () => {
     const { getByTestId } = renderWithTheme(
       <SessionProvider>
         <MenuDrawer />
       </SessionProvider>
     );
     userEvent.click(getByTestId(TESTCAFE_ID_MENU_DRAWER_BUTTON));
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_USER_MENU_LOGOUT)).toBeInTheDocument();
+    });
     userEvent.click(getByTestId(TESTCAFE_ID_USER_MENU_LOGOUT));
     expect(logout).toHaveBeenCalled();
   });
