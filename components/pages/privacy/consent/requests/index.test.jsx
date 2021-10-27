@@ -22,16 +22,32 @@
 import React from "react";
 import * as RouterFns from "next/router";
 import { waitFor } from "@testing-library/dom";
+import { mockContainerFrom } from "@inrupt/solid-client";
 import * as resourceHelpers from "../../../../../src/solidClientHelpers/resource";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../../../../__testUtils/mockSessionContextProvider";
 import ConsentPage from "./index";
 import getConsentRequestDetails from "../../../../../__testUtils/mockConsentRequestDetails";
 import { mockAppDataset } from "../../../../../__testUtils/mockApp";
+import useContainer from "../../../../../src/hooks/useContainer";
+import * as containerFns from "../../../../../src/models/container";
 
 jest.mock("../../../../../src/effects/auth");
+jest.mock("../../../../../src/hooks/useContainer");
+const mockedUseContainer = useContainer;
 
 describe("Consent Page", () => {
+  beforeEach(() => {
+    mockedUseContainer.mockReturnValue({
+      data: mockContainerFrom("https://pod.inrupt.com/alice/private/data/"),
+    });
+    jest
+      .spyOn(containerFns, "getContainerResourceUrlAll")
+      .mockResolvedValue([
+        "https://pod.inrupt.com/alice/private/data-2",
+        "https://pod.inrupt.com/alice/private/data-3",
+      ]);
+  });
   test("Renders the Consent page", async () => {
     const consentRequestId = "https://example.org/test-request";
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
@@ -56,7 +72,9 @@ describe("Consent Page", () => {
         <ConsentPage />
       </SessionProvider>
     );
-    await waitFor(() => expect(getByText("Mock App")).toBeInTheDocument());
+    await waitFor(() => {
+      expect(getByText("Mock App")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 });

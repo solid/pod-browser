@@ -60,11 +60,7 @@ describe("getRequestedAccesses", () => {
       {
         mode: ["Read", "Write"],
         hasStatus: "ConsentStatusRequested",
-        forPersonalData: [
-          "https://pod.inrupt.com/alice/private/data/",
-          "https://pod.inrupt.com/alice/private/data-2",
-          "https://pod.inrupt.com/alice/private/data-3",
-        ],
+        forPersonalData: ["https://pod.inrupt.com/alice/private/data/"],
         forPurpose: [
           "https://example.com/SomeSpecificPurpose",
           "https://example.com/SomeSpecificPurposeA",
@@ -74,11 +70,7 @@ describe("getRequestedAccesses", () => {
       {
         mode: ["Read"],
         hasStatus: "ConsentStatusRequested",
-        forPersonalData: [
-          "https://pod.inrupt.com/alice/private/data",
-          "https://pod.inrupt.com/alice/private/data-2/",
-          "https://pod.inrupt.com/alice/private/data-3",
-        ],
+        forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
         forPurpose: "https://example.com/SomeSpecificPurpose",
       },
       {
