@@ -23,6 +23,7 @@ import React from "react";
 import * as SolidClientFns from "@inrupt/solid-client";
 import userEvent from "@testing-library/user-event";
 import { act, screen } from "@testing-library/react";
+import { waitFor } from "@testing-library/dom";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import { PodLocationProvider } from "../../src/contexts/podLocationContext";
 import mockSession from "../../__testUtils/mockSession";
@@ -67,22 +68,17 @@ describe("AddFileButton", () => {
       .mockResolvedValue(SolidClientFns.mockSolidDatasetFrom(newFilePath));
   });
 
-  test("Renders an add file button", () => {
-    const { asFragment } = renderWithTheme(
-      <AlertContext.Provider
-        value={{
-          setAlertOpen,
-          setMessage,
-          setSeverity,
-        }}
-      >
-        <PodLocationProvider currentUri={currentUri}>
-          <SessionProvider>
-            <AddFileButton onSave={onSave} />
-          </SessionProvider>
-        </PodLocationProvider>
-      </AlertContext.Provider>
+  test("Renders an add file button", async () => {
+    const { asFragment, getByText } = renderWithTheme(
+      <PodLocationProvider currentUri={currentUri}>
+        <SessionProvider>
+          <AddFileButton onSave={onSave} />
+        </SessionProvider>
+      </PodLocationProvider>
     );
+    await waitFor(() => {
+      expect(getByText("Upload File")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
