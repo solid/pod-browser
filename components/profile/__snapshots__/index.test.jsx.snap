@@ -68,10 +68,13 @@ exports[`Profile renders a person profile 1`] = `
           >
             <label
               class="PodBrowser-root PodBrowser-root PodBrowser-animated"
+              data-testid="profile-name-title"
             >
               Name
             </label>
-            <span>
+            <span
+              data-testid="profile-name-field"
+            >
               Alice
             </span>
           </div>
