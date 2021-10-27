@@ -127,8 +127,8 @@ describe("AgentAccess", () => {
       });
       expect(asFragment()).toMatchSnapshot();
     });
-    it("returns null when no access", () => {
-      const { asFragment } = renderWithTheme(
+    it("returns null when no access", async () => {
+      const { asFragment, queryByText } = renderWithTheme(
         <DatasetProvider solidDataset={dataset}>
           <AgentAccess
             permission={{
@@ -140,7 +140,9 @@ describe("AgentAccess", () => {
           />
         </DatasetProvider>
       );
-
+      await waitFor(() => {
+        expect(queryByText(webId)).toBeNull();
+      });
       expect(asFragment()).toMatchSnapshot();
     });
     it("renders a skeleton while loading profile", async () => {
@@ -202,13 +204,15 @@ describe("AgentAccess", () => {
       });
       const button = getByTestId(TESTCAFE_ID_TRY_AGAIN_BUTTON);
       userEvent.click(button);
-
-      expect(findByTestId("try-again-spinner")).toBeTruthy();
+      await waitFor(() => {
+        expect(findByTestId("try-again-spinner")).toBeTruthy();
+      });
     });
 
-    it("tries to fetch the profile again when clicking 'try again' button", async () => {
+    it("tries to fetch the profile again when clicking 'try again' button, removes spinner if fetching succeeds", async () => {
+      jest.useFakeTimers();
       const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
-      const { findByTestId, getByTestId } = renderWithTheme(
+      const { findByTestId, getByTestId, queryByTestId } = renderWithTheme(
         <DatasetProvider solidDataset={dataset}>
           <AgentAccess
             permission={{
@@ -231,34 +235,11 @@ describe("AgentAccess", () => {
       await waitFor(() => {
         expect(getByTestId(TESTCAFE_ID_TRY_AGAIN_SPINNER)).toBeInTheDocument();
       });
-    });
-    it.skip("removes the spinner when fetching succeeds", async () => {
-      jest.useFakeTimers();
-      const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
-
-      const { queryByTestId, getByTestId } = renderWithTheme(
-        <DatasetProvider solidDataset={dataset}>
-          <AgentAccess
-            permission={{
-              acl: createAccessMap(true, true, false, false),
-              webId,
-              alias: "Editors",
-              type: "agent",
-              profile: null,
-              profileError: "error",
-            }}
-          />
-        </DatasetProvider>
-      );
-
-      await waitFor(() => {
-        expect(getByTestId(TESTCAFE_ID_TRY_AGAIN_BUTTON)).toBeInTheDocument();
-      });
-      const button = getByTestId(TESTCAFE_ID_TRY_AGAIN_BUTTON);
-      userEvent.click(button);
 
       act(() => {
         fetchProfileSpy.mockResolvedValueOnce(mockProfileAlice());
+      });
+      act(() => {
         jest.advanceTimersByTime(1000);
       });
       await waitFor(() => {
@@ -268,7 +249,7 @@ describe("AgentAccess", () => {
       });
       expect(fetchProfileSpy).toHaveBeenCalledWith(webId, expect.anything());
     });
-    it.skip("removes the spinner when fetching errors", async () => {
+    it("tries to fetch the profile again when clicking 'try again' button, removes the spinner when fetching errors", async () => {
       jest.useFakeTimers();
       const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
       const { getByTestId, queryByTestId } = renderWithTheme(
