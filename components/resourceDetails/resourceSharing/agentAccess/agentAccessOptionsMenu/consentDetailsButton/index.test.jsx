@@ -21,13 +21,8 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import * as solidClientFns from "@inrupt/solid-client";
 import { renderWithTheme } from "../../../../../../__testUtils/withTheme";
 import ConsentDetailsButton, { TESTCAFE_ID_VIEW_DETAILS_BUTTON } from "./index";
-import {
-  aliceWebIdUrl,
-  mockPersonDatasetAlice,
-} from "../../../../../../__testUtils/mockPersonResource";
 import getSignedVc from "../../../../../../__testUtils/mockSignedVc";
 import { ConfirmationDialogProvider } from "../../../../../../src/contexts/confirmationDialogContext";
 import ConfirmationDialog, {
@@ -45,16 +40,6 @@ const permission = {
 };
 
 describe("View consent details button and modal", () => {
-  const profileDataset = mockPersonDatasetAlice();
-  const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
-  beforeEach(() => {
-    jest
-      .spyOn(solidClientFns, "getSolidDataset")
-      .mockResolvedValue(profileDataset);
-    jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
-    jest.spyOn(solidClientFns, "getUrl").mockReturnValue("schema.Person");
-  });
-
   test("it renders a button which triggers the opening of the modal", async () => {
     const { baseElement, getByTestId } = renderWithTheme(
       <ConsentDetailsButton permission={permission} />

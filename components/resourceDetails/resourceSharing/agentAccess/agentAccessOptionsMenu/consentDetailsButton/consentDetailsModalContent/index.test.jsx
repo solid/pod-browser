@@ -20,12 +20,7 @@
  */
 
 import React from "react";
-import * as solidClientFns from "@inrupt/solid-client";
 import { renderWithTheme } from "../../../../../../../__testUtils/withTheme";
-import {
-  aliceWebIdUrl,
-  mockPersonDatasetAlice,
-} from "../../../../../../../__testUtils/mockPersonResource";
 import getSignedVc from "../../../../../../../__testUtils/mockSignedVc";
 import ConsentDetailsModalContent, {
   TESTCAFE_ID_CONSENT_DETAILS_CONTENT,
@@ -44,13 +39,6 @@ const closeDialog = jest.fn();
 
 describe("Renders correct consent modal content", () => {
   test("clicking on view details button renders a confirmation dialog with the correct data", async () => {
-    const profileDataset = mockPersonDatasetAlice();
-    const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
-    jest
-      .spyOn(solidClientFns, "getSolidDataset")
-      .mockResolvedValue(profileDataset);
-    jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
-    jest.spyOn(solidClientFns, "getUrl").mockReturnValue("schema.Person");
     const { baseElement, findByTestId, findByText } = renderWithTheme(
       <ConsentDetailsModalContent
         permission={permission}
