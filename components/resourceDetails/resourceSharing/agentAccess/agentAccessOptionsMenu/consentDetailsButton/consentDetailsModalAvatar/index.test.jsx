@@ -24,10 +24,6 @@ import { render } from "@testing-library/react";
 import * as solidClientFns from "@inrupt/solid-client";
 import { CombinedDataProvider } from "@inrupt/solid-ui-react";
 import { renderWithTheme } from "../../../../../../../__testUtils/withTheme";
-import {
-  aliceWebIdUrl,
-  mockPersonDatasetAlice,
-} from "../../../../../../../__testUtils/mockPersonResource";
 import mockSession from "../../../../../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../../../../../__testUtils/mockSessionContextProvider";
 import ConsentDetailsModalAvatar, {
@@ -49,7 +45,7 @@ describe("Person Avatar", () => {
   test("renders an avatar", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
-    const { baseElement, findByTestId } = renderWithTheme(
+    const { baseElement, findByTestId, getByRole } = renderWithTheme(
       <SessionProvider>
         <CombinedDataProvider
           solidDataset={profileDataset}
@@ -63,6 +59,11 @@ describe("Person Avatar", () => {
       </SessionProvider>
     );
     await expect(findByTestId(TESTCAFE_ID_NAME_TITLE)).resolves.not.toBeNull();
+    const profileLink = getByRole("link");
+    expect(profileLink).toHaveAttribute(
+      "href",
+      "/privacy/app/https%3A%2F%2Fexample.com%2Fprofile%2Fcard%23me"
+    );
     expect(baseElement).toMatchSnapshot();
   });
 });
