@@ -35,9 +35,8 @@ import ConsentDetailsModalAvatar, {
   TESTCAFE_ID_NAME_TITLE,
 } from "./index";
 
-const { mockSolidDatasetFrom, mockThingFrom } = solidClientFns;
-const dataset = mockSolidDatasetFrom("http://example.com/dataset");
-const profile = mockThingFrom("http://example.com/profile#this");
+const profileDataset = mockPersonDatasetAlice();
+const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
 
 const profileIri = "https://example.com/profile/card#me";
 const closeDialog = jest.fn();
@@ -52,7 +51,10 @@ describe("Person Avatar", () => {
     const SessionProvider = mockSessionContextProvider(session);
     const { baseElement, findByTestId } = renderWithTheme(
       <SessionProvider>
-        <CombinedDataProvider solidDataset={dataset} thing={profile}>
+        <CombinedDataProvider
+          solidDataset={profileDataset}
+          thing={profileThing}
+        >
           <ConsentDetailsModalAvatar
             profileIri={profileIri}
             closeDialog={closeDialog}
