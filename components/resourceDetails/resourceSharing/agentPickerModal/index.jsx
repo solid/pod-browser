@@ -432,6 +432,7 @@ function AgentPickerModal(
       className={classes.paper}
       data-testid={TESTCAFE_ID_ADD_AGENT_PICKER_MODAL}
       ref={ref}
+      tabIndex={-1}
     >
       <ModalBody>
         <div className={classes.title}>{`${header} for ${resourceName}`}</div>
