@@ -106,6 +106,8 @@ describe("AgentAccess", () => {
   });
   describe("without profile", () => {
     it("renders skeleton placeholders when profile is not available", async () => {
+      const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
+      fetchProfileSpy.mockRejectedValue("error");
       const { asFragment, getByTestId } = renderWithTheme(
         <DatasetProvider solidDataset={dataset}>
           <AgentAccess
@@ -163,6 +165,8 @@ describe("AgentAccess", () => {
       expect(asFragment()).toMatchSnapshot();
     });
     it("renders an error message with a 'try again' button if it's unable to load profile", async () => {
+      const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
+      fetchProfileSpy.mockRejectedValue("error");
       const { asFragment, getByText, getByTestId } = renderWithTheme(
         <DatasetProvider solidDataset={dataset}>
           <AgentAccess
@@ -184,6 +188,8 @@ describe("AgentAccess", () => {
       expect(asFragment()).toMatchSnapshot();
     });
     it("renders a spinner after clicking 'try again' button", async () => {
+      const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
+      fetchProfileSpy.mockRejectedValueOnce("error");
       jest.useFakeTimers();
       const { getByTestId, findByTestId } = renderWithTheme(
         <DatasetProvider solidDataset={dataset}>
@@ -212,6 +218,7 @@ describe("AgentAccess", () => {
     it("tries to fetch the profile again when clicking 'try again' button, removes spinner if fetching succeeds", async () => {
       jest.useFakeTimers();
       const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
+      fetchProfileSpy.mockResolvedValueOnce(mockProfileAlice());
       const { findByTestId, getByTestId, queryByTestId } = renderWithTheme(
         <DatasetProvider solidDataset={dataset}>
           <AgentAccess
@@ -229,18 +236,11 @@ describe("AgentAccess", () => {
       const button = await findByTestId("try-again-button");
       userEvent.click(button);
 
-      await waitFor(() =>
-        expect(fetchProfileSpy).toHaveBeenCalledWith(webId, expect.anything())
-      );
       await waitFor(() => {
         expect(getByTestId(TESTCAFE_ID_TRY_AGAIN_SPINNER)).toBeInTheDocument();
       });
-
       act(() => {
-        fetchProfileSpy.mockResolvedValueOnce(mockProfileAlice());
-      });
-      act(() => {
-        jest.advanceTimersByTime(1000);
+        jest.advanceTimersByTime(1500);
       });
       await waitFor(() => {
         expect(
@@ -252,6 +252,9 @@ describe("AgentAccess", () => {
     it("tries to fetch the profile again when clicking 'try again' button, removes the spinner when fetching errors", async () => {
       jest.useFakeTimers();
       const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
+      act(() => {
+        fetchProfileSpy.mockRejectedValue(null);
+      });
       const { getByTestId, queryByTestId } = renderWithTheme(
         <DatasetProvider solidDataset={dataset}>
           <AgentAccess
@@ -272,7 +275,7 @@ describe("AgentAccess", () => {
       await waitFor(() =>
         expect(fetchProfileSpy).toHaveBeenCalledWith(webId, expect.anything())
       );
-      fetchProfileSpy.mockRejectedValue(null);
+
       await waitFor(() => {
         expect(queryByTestId("try-again-spinner")).toBeFalsy();
       });
