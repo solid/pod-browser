@@ -130,6 +130,8 @@ describe("AgentAccess", () => {
       expect(asFragment()).toMatchSnapshot();
     });
     it("returns null when no access", async () => {
+      const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
+      fetchProfileSpy.mockRejectedValue("error");
       const { asFragment, queryByText } = renderWithTheme(
         <DatasetProvider solidDataset={dataset}>
           <AgentAccess
@@ -148,7 +150,9 @@ describe("AgentAccess", () => {
       expect(asFragment()).toMatchSnapshot();
     });
     it("renders a skeleton while loading profile", async () => {
-      const { asFragment } = renderWithTheme(
+      const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
+      fetchProfileSpy.mockResolvedValue("profile");
+      const { asFragment, getByTestId } = renderWithTheme(
         <DatasetProvider solidDataset={dataset}>
           <AgentAccess
             permission={{
@@ -162,6 +166,11 @@ describe("AgentAccess", () => {
           />
         </DatasetProvider>
       );
+      await waitFor(() => {
+        expect(
+          getByTestId(TESTCAFE_ID_SKELETON_PLACEHOLDER)
+        ).toBeInTheDocument();
+      });
       expect(asFragment()).toMatchSnapshot();
     });
     it("renders an error message with a 'try again' button if it's unable to load profile", async () => {
@@ -186,33 +195,6 @@ describe("AgentAccess", () => {
         expect(getByTestId(TESTCAFE_ID_TRY_AGAIN_BUTTON)).toBeInTheDocument();
       });
       expect(asFragment()).toMatchSnapshot();
-    });
-    it("renders a spinner after clicking 'try again' button", async () => {
-      const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
-      fetchProfileSpy.mockRejectedValueOnce("error");
-      jest.useFakeTimers();
-      const { getByTestId, findByTestId } = renderWithTheme(
-        <DatasetProvider solidDataset={dataset}>
-          <AgentAccess
-            permission={{
-              acl: createAccessMap(true, true, false, false),
-              webId,
-              alias: "Editors",
-              type: "agent",
-              profile: null,
-              profileError: "error",
-            }}
-          />
-        </DatasetProvider>
-      );
-      await waitFor(() => {
-        expect(getByTestId(TESTCAFE_ID_TRY_AGAIN_BUTTON)).toBeInTheDocument();
-      });
-      const button = getByTestId(TESTCAFE_ID_TRY_AGAIN_BUTTON);
-      userEvent.click(button);
-      await waitFor(() => {
-        expect(findByTestId("try-again-spinner")).toBeTruthy();
-      });
     });
 
     it("tries to fetch the profile again when clicking 'try again' button, removes spinner if fetching succeeds", async () => {
