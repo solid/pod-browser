@@ -20,6 +20,7 @@
  */
 
 import React from "react";
+import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
 import { mockContainerFrom } from "@inrupt/solid-client";
@@ -38,6 +39,7 @@ import {
   TESTCAFE_ID_CONFIRMATION_DIALOG,
   TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
   TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE,
+  TESTCAFE_ID_CONFIRM_BUTTON,
 } from "../confirmationDialog";
 import { ConfirmationDialogProvider } from "../../src/contexts/confirmationDialogContext";
 import { getConsentRequestDetailsOnePurpose } from "../../__testUtils/mockConsentRequestDetails";
@@ -51,6 +53,8 @@ const mockedUseContainer = useContainer;
 
 jest.mock("next/router");
 const mockedUseRouter = useRouter;
+
+jest.mock("@inrupt/solid-client-access-grants");
 
 const ConsentRequestContextProvider = mockConsentRequestContext();
 const consentRequestWithOnePurpose = getConsentRequestDetailsOnePurpose();
@@ -166,11 +170,15 @@ describe("Consent Request Form", () => {
       "At least one purpose needs to be selected to approve access for Mock App"
     );
   });
-  test("does not display confirmation dialog if at least one access and one purpose are selected and redirects with correct params", async () => {
+  test("does not display confirmation dialog if at least one access and one purpose are selected, calls approveAccessRequestWithConsent and redirects with correct params", async () => {
+    consentFns.approveAccessRequestWithConsent.mockResolvedValue(signedVc);
     const { getByTestId, findByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentRequestContextProvider>
-          <ConsentRequestForm agentDetails={agentDetails} />
+          <ConsentRequestForm
+            agentDetails={agentDetails}
+            agentWebId={agentWebId}
+          />
         </ConsentRequestContextProvider>
       </ConfirmationDialogProvider>
     );
@@ -183,6 +191,7 @@ describe("Consent Request Form", () => {
     await expect(findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)).rejects.toEqual(
       expect.anything()
     );
+    expect(consentFns.approveAccessRequestWithConsent).toHaveBeenCalled();
     expect(push).toHaveBeenLastCalledWith(
       `/privacy/?signedVcUrl=${signedVc.id}`
     );
@@ -213,6 +222,43 @@ describe("Consent Request Form", () => {
       getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
     ).toHaveTextContent(
       "Mock App will not have access to anything in your Pod."
+    );
+  });
+  test("when confirming deny access, calls denyAccessRequest and redirects with correct params", async () => {
+    consentFns.denyAccessRequest.mockResolvedValue(signedVc);
+    const { getByTestId, getAllByTestId } = renderWithTheme(
+      <ConfirmationDialogProvider>
+        <ConsentRequestContextProvider>
+          <ConsentRequestForm
+            agentDetails={agentDetails}
+            agentWebId={agentWebId}
+          />
+        </ConsentRequestContextProvider>
+      </ConfirmationDialogProvider>
+    );
+    const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
+    userEvent.click(purpose);
+    const toggle = getAllByTestId(TESTCAFE_ID_CONSENT_ACCESS_SWITCH)[0];
+    userEvent.click(toggle);
+    const button = getByTestId(TESTCAFE_ID_CONSENT_REQUEST_DENY_BUTTON);
+    userEvent.click(button);
+    const dialog = getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+    expect(dialog).toBeInTheDocument();
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE)
+    ).toHaveTextContent(DENY_ACCESS_DIALOG_TITLE);
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
+    ).toHaveTextContent(
+      "Mock App will not have access to anything in your Pod."
+    );
+    const confirmButton = getByTestId(TESTCAFE_ID_CONFIRM_BUTTON);
+    userEvent.click(confirmButton);
+    await waitFor(() => {
+      expect(consentFns.denyAccessRequest).toHaveBeenCalled();
+    });
+    expect(push).toHaveBeenLastCalledWith(
+      `/privacy/?signedVcUrl=${signedVc.id}`
     );
   });
 });

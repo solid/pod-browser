@@ -20,7 +20,6 @@
  */
 
 import getSignedVc from "../../../../__testUtils/mockSignedVc";
-
 import { getRequestedAccessesFromSignedVc } from "./index";
 
 const signedVc = getSignedVc();

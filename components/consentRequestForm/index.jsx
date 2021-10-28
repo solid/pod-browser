@@ -23,7 +23,10 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
-import { approveAccessRequestWithConsent } from "@inrupt/solid-client-access-grants";
+import {
+  approveAccessRequestWithConsent,
+  denyAccessRequest,
+} from "@inrupt/solid-client-access-grants";
 import { Button } from "@inrupt/prism-react-components";
 import { makeStyles } from "@material-ui/styles";
 import { useRouter } from "next/router";
@@ -96,13 +99,14 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   const [confirmationSetup, setConfirmationSetup] = useState(false);
 
   const requestedAccesses = getRequestedAccesses(consentRequest);
-
   const expirationDate = getExpiryDate(consentRequest);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const [datepickerOpen, setDatepickerOpen] = useState(false);
 
-  const DIALOG_CONTENT = `${agentName} will not have access to anything in your Pod.`;
+  const DIALOG_CONTENT = `${
+    agentName || agentWebId
+  } will not have access to anything in your Pod.`;
   const NO_PURPOSE_CONTENT = `At least one purpose needs to be selected to approve access for ${agentName}`;
   const requestor = getRequestorWebId(consentRequest);
   const handleSubmit = async (e) => {
@@ -149,6 +153,15 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   };
 
   useEffect(() => {
+    const handleDenyAccessRequest = async () => {
+      const signedVc = await denyAccessRequest(
+        session.info.webId,
+        consentRequest
+      );
+      if (signedVc) {
+        await router.push(`${redirectUrl}?signedVcUrl=${getVcId(signedVc)}`);
+      }
+    };
     if (
       confirmationSetup &&
       confirmed === null &&
@@ -161,14 +174,27 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
       confirmed &&
       open === CONSENT_REQUEST_NO_ACCESS_DIALOG
     ) {
-      closeDialog(); // FIXME: do something with the access request
+      handleDenyAccessRequest();
+      closeDialog();
     }
 
     if (confirmed !== null) {
       closeDialog();
       setConfirmationSetup(false);
     }
-  }, [confirmationSetup, confirmed, closeDialog, open]);
+  }, [
+    confirmationSetup,
+    confirmed,
+    closeDialog,
+    open,
+    consentRequest,
+    selectedAccess,
+    selectedPurposes,
+    selectedResources,
+    redirectUrl,
+    session,
+    router,
+  ]);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -185,6 +211,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
       setSelectedDate(new Date(expirationDate));
     }
   }, [expirationDate]);
+
   const handleSelectPurpose = (e) => {
     if (e.target.checked) {
       setSelectedPurposes((prevState) => [...prevState, e.target.value]);
