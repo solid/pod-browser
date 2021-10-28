@@ -57,7 +57,7 @@ export const permission = PropTypes.shape({
       type: PropTypes.string,
       verificationMethod: PropTypes.string,
     }),
-    type: PropTypes.string,
+    type: PropTypes.arrayOf(PropTypes.string),
   }),
 });
 

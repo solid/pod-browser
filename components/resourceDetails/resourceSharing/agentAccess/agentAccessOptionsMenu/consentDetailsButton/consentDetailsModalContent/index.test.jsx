@@ -40,20 +40,22 @@ const permission = {
   vc: getSignedVc(),
 };
 
+const closeDialog = jest.fn();
+
 describe("Renders correct consent modal content", () => {
-  const profileDataset = mockPersonDatasetAlice();
-  const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
-  beforeEach(() => {
+  test("clicking on view details button renders a confirmation dialog with the correct data", async () => {
+    const profileDataset = mockPersonDatasetAlice();
+    const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
     jest
       .spyOn(solidClientFns, "getSolidDataset")
       .mockResolvedValue(profileDataset);
     jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
     jest.spyOn(solidClientFns, "getUrl").mockReturnValue("schema.Person");
-  });
-
-  test("clicking on view details button renders a confirmation dialog with the correct data", async () => {
     const { baseElement, findByTestId, findByText } = renderWithTheme(
-      <ConsentDetailsModalContent permission={permission} />
+      <ConsentDetailsModalContent
+        permission={permission}
+        closeDialog={closeDialog}
+      />
     );
     await findByTestId(TESTCAFE_ID_CONSENT_DETAILS_CONTENT);
     await findByText(

@@ -59,9 +59,9 @@ describe("View consent details button and modal", () => {
     const { baseElement, getByTestId } = renderWithTheme(
       <ConsentDetailsButton permission={permission} />
     );
-    expect(baseElement).toMatchSnapshot();
     const button = getByTestId(TESTCAFE_ID_VIEW_DETAILS_BUTTON);
     expect(button).toBeDefined();
+    expect(baseElement).toMatchSnapshot();
   });
   test("clicking on view details button renders a confirmation dialog with the correct data", async () => {
     const { baseElement, getByTestId, findByTestId } = renderWithTheme(

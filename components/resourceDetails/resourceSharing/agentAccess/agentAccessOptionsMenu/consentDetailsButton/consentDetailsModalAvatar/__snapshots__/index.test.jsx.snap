@@ -40,7 +40,9 @@ exports[`Person Avatar renders an avatar 1`] = `
           >
             <span
               class="PodBrowser-avatarText"
-            />
+            >
+              Alice
+            </span>
           </h3>
         </a>
       </div>
