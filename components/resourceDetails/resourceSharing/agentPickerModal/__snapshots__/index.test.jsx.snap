@@ -5,6 +5,7 @@ exports[`AgentPickerModal with contacts renders a table with the available conta
   <div
     class="PodBrowser-modal__container PodBrowser-paper"
     data-testid="agent-picker-modal"
+    tabindex="-1"
   >
     <div
       class="PodBrowser-modal__body"
@@ -408,6 +409,7 @@ exports[`AgentPickerModal without contacts renders a table with tabs, searchbox,
   <div
     class="PodBrowser-modal__container PodBrowser-paper"
     data-testid="agent-picker-modal"
+    tabindex="-1"
   >
     <div
       class="PodBrowser-modal__body"
