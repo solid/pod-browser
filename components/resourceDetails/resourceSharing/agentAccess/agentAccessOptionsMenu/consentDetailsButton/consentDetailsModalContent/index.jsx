@@ -58,6 +58,7 @@ export default function ConsentDetailsModalContent({
   const classes = useStyles();
   const bem = useBem(classes);
   const { vc, webId: agentWebId } = permission;
+  console.log("vc", vc);
 
   const allowModes = vc?.credentialSubject?.providedConsent?.mode;
   const modes = allowModes?.map((mode) => {

@@ -21,8 +21,10 @@
 
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
+import { revokeAccess } from "@inrupt/solid-client-access-grants";
 import T from "prop-types";
+import { useSession } from "@inrupt/solid-ui-react";
 import { createStyles, ListItem, ListItemText } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { getResourceName } from "../../../../../../src/solidClientHelpers/resource";
@@ -39,8 +41,11 @@ export const VIEW_DETAILS_CONFIRMATION_DIALOG =
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function ConsentDetailsButton({ resourceIri, permission }) {
+  const { vc } = permission;
+  const { fetch } = useSession();
   const classes = useStyles();
   const {
+    confirmed,
     setContent,
     setCustomContentWrapper,
     setOpen,
@@ -51,6 +56,12 @@ export default function ConsentDetailsButton({ resourceIri, permission }) {
     closeDialog,
   } = useContext(ConfirmationDialogContext);
   const resourceName = getResourceName(resourceIri);
+
+  useEffect(() => {
+    if (confirmed) {
+      revokeAccess(vc, { fetch });
+    }
+  }, [confirmed, fetch, vc]);
 
   const openModal = () => {
     setIsDangerousAction(true);
