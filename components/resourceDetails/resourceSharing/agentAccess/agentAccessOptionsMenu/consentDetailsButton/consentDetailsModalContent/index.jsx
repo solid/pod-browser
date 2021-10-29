@@ -73,7 +73,6 @@ export default function ConsentDetailsModalContent({
     return getAcpAccessDetails(mode);
   });
   const order = ["View", "Edit", "Add", "Share", "View Sharing"];
-  /* istanbul ignore next */
   const sortedAccessDetails = accessDetails?.sort((a, b) => {
     return order.indexOf(a.name) - order.indexOf(b.name);
   });
@@ -83,7 +82,6 @@ export default function ConsentDetailsModalContent({
   const issuanceDate = format(new Date(getIssuanceDate(vc)), "M/dd/Y");
   const purposes = getPurposeUrlsFromSignedVc(vc);
 
-  /* istanbul ignore next */
   return (
     <div
       className={bem("access-details", "wrapper")}
