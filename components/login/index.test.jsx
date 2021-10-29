@@ -20,6 +20,7 @@
  */
 
 import React from "react";
+import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import Login, {
   TESTCAFE_ID_OTHER_PROVIDERS_BUTTON,
@@ -42,14 +43,18 @@ describe("Login form", () => {
   });
 
   it("renders a login page with a sign in button and a 'Sign in with other provider' button", async () => {
-    const { asFragment, findByTestId } = renderWithTheme(<Login />);
-    await expect(findByTestId(TESTCAFE_ID_LOGIN_TITLE)).resolves.not.toBeNull();
+    const { asFragment, getByTestId } = renderWithTheme(<Login />);
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_LOGIN_TITLE)).not.toBeNull();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
   it("clicking the 'other providers' button displays a form", async () => {
-    const { findByTestId, getByTestId } = renderWithTheme(<Login />);
+    const { getByTestId } = renderWithTheme(<Login />);
     const button = getByTestId(TESTCAFE_ID_OTHER_PROVIDERS_BUTTON);
     userEvent.click(button);
-    await expect(findByTestId(TESTCAFE_ID_LOGIN_FIELD)).resolves.not.toBeNull();
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_LOGIN_FIELD)).not.toBeNull();
+    });
   });
 });
