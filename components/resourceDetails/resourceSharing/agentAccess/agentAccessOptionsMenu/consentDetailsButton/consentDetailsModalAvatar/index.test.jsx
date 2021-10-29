@@ -26,6 +26,10 @@ import { CombinedDataProvider } from "@inrupt/solid-ui-react";
 import { renderWithTheme } from "../../../../../../../__testUtils/withTheme";
 import mockSession from "../../../../../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../../../../../__testUtils/mockSessionContextProvider";
+import {
+  aliceWebIdUrl,
+  mockPersonDatasetAlice,
+} from "../../../../../../../__testUtils/mockPersonResource";
 import ConsentDetailsModalAvatar, {
   setupErrorComponent,
   TESTCAFE_ID_NAME_TITLE,
