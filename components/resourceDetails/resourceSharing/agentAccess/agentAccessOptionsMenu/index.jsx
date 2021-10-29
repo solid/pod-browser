@@ -67,7 +67,7 @@ export default function AgentAccessOptionsMenu({
 
   useEffect(() => {
     async function checkVcValidity() {
-      const response = await isValidConsentGrant(vc);
+      const response = await isValidConsentGrant(vc, { fetch });
       setHasValidConsentGrant(response);
       return response;
     }
