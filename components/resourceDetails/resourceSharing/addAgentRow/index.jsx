@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 export const TESTCAFE_ID_WEBID_INPUT = "webid-input";
 export const TESTCAFE_ID_ADD_WEBID_BUTTON = "add-button";
-const TESTCAFE_ID_AGENT_WEB_ID = "agent-webid";
+export const TESTCAFE_ID_AGENT_WEB_ID = "agent-webid";
 export const OWN_WEBID_ERROR_MESSAGE =
   "You cannot add your own WebID to permissions";
 export const EXISTING_WEBID_ERROR_MESSAGE = "That WebID has already been added";
@@ -98,7 +98,7 @@ export default function AddAgentRow({
   const [agentWebId, setAgentWebId] = useState("");
   const [agentName, setAgentName] = useState(null);
   const [agentAvatar, setAgentAvatar] = useState(null);
-  const [displayedWebId, setDisplayedWebId] = useState(null);
+  const [displayedWebId, setDisplayedWebId] = useState("");
   const { data: profile } = useContactProfile(temporaryRowThing);
   const [addingError, setAddingError] = useState(null);
 
@@ -212,9 +212,12 @@ export default function AddAgentRow({
       </Tooltip>
     );
   }
-
   return (
-    <Tooltip title={agentName ? displayedWebId : "Unable to load profile"}>
+    <Tooltip
+      title={
+        agentName ? displayedWebId || agentWebId : "Unable to load profile"
+      }
+    >
       <div className={classes.nameAndAvatarContainer}>
         {displayedWebId === PUBLIC_AGENT_PREDICATE ? (
           <Icons name="globe" className={classes.publicIcon} />
