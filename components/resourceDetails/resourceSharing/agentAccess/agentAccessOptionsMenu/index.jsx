@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   createStyles,
@@ -31,6 +31,8 @@ import {
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
+import { isValidConsentGrant } from "@inrupt/solid-client-access-grants";
+import { useSession } from "@inrupt/solid-ui-react";
 import RemoveButton from "./removeButton";
 import ConsentDetailsButton from "./consentDetailsButton";
 import styles from "./styles";
@@ -49,7 +51,10 @@ export default function AgentAccessOptionsMenu({
   const classes = useStyles();
   const bem = useBem(useStyles());
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
-  const { webId } = permission;
+  // TODO: use the hasValidConsentGrant check to show/hide the view details button on line 122
+  const [hasValidConsentGrant, setHasValidConsentGrant] = useState(false);
+  const { webId, vc } = permission;
+  const { fetch } = useSession();
 
   const handleClick = (event) => {
     setMenuAnchorEl(event.currentTarget);
@@ -59,6 +64,17 @@ export default function AgentAccessOptionsMenu({
   const handleClose = () => {
     setMenuAnchorEl(null);
   };
+
+  useEffect(() => {
+    async function checkVcValidity() {
+      const response = await isValidConsentGrant(vc);
+      setHasValidConsentGrant(response);
+      return response;
+    }
+    if (vc) {
+      checkVcValidity();
+    }
+  }, [fetch, hasValidConsentGrant, vc]);
 
   const menuOpen = Boolean(menuAnchorEl);
 
@@ -103,7 +119,7 @@ export default function AgentAccessOptionsMenu({
               <p className={classes.webId}>{webId}</p>
             </ListItemText>
           </ListItem>
-          {permission.vc ? (
+          {vc ? (
             <ConsentDetailsButton
               resourceIri={resourceIri}
               permission={permission}
