@@ -30,6 +30,7 @@ import { TESTCAFE_ID_AGENT_ACCESS_TABLE } from "../agentAccessTable";
 import { TESTCAFE_ID_ADVANCED_SHARING_BUTTON } from "../advancedSharingButton";
 import useContacts from "../../../../src/hooks/useContacts";
 import useAddressBook from "../../../../src/hooks/useAddressBook";
+import mockPermissionsContextProvider from "../../../../__testUtils/mockPermissionsContextProvider";
 
 jest.mock("next/router");
 const mockedUseRouter = useRouter;
@@ -42,6 +43,8 @@ const mockedUseAddressBook = useAddressBook;
 
 describe("SharingAccordion", () => {
   const addressBook = mockAddressBook();
+  const PermissionsContextProvider = mockPermissionsContextProvider();
+
   beforeEach(() => {
     mockedUseRouter.mockReturnValue({
       query: { resourceIri: "/resource.txt" },
@@ -96,7 +99,11 @@ describe("SharingAccordion", () => {
     });
     // since the permissions cannot be mocked reliably for the custom policies, those are tested separately in the table component
     it("renders an info box which alerts the user that sharing applies to all items inside a folder", async () => {
-      const { asFragment, queryByText } = renderWithTheme(<SharingAccordion />);
+      const { asFragment, queryByText } = renderWithTheme(
+        <PermissionsContextProvider>
+          <SharingAccordion />
+        </PermissionsContextProvider>
+      );
       await waitFor(() => {
         expect(
           queryByText("Sharing applies to all items in this folder")

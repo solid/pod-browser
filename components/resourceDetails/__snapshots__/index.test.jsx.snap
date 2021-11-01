@@ -522,14 +522,14 @@ exports[`Resource details renders Sharing component for ACP-supporting Solid ser
       tabindex="0"
     >
       <div
-        class="PodBrowser-content"
+        class="PodBrowser-content PodBrowser-expanded"
       >
         Sharing
       </div>
       <div
         aria-disabled="false"
         aria-hidden="true"
-        class="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-edgeEnd"
+        class="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-expanded PodBrowser-edgeEnd"
       >
         <span
           class="PodBrowser-label"
@@ -551,8 +551,8 @@ exports[`Resource details renders Sharing component for ACP-supporting Solid ser
       </div>
     </div>
     <div
-      class="PodBrowser-container PodBrowser-hidden"
-      style="min-height: 0px;"
+      class="PodBrowser-container PodBrowser-entered"
+      style="min-height: 0px; height: auto; transition-duration: 0ms;"
     >
       <div
         class="PodBrowser-wrapper"
