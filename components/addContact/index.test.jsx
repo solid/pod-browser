@@ -145,6 +145,31 @@ describe("handleSubmit", () => {
     expect(alertSuccess).not.toHaveBeenCalled();
     expect(alertError).toHaveBeenCalledWith(FETCH_PROFILE_FAILED_ERROR_MESSAGE);
   });
+  test("it saves a contact without name and alerts the user", async () => {
+    const personUri = "http://example.com/marie#me";
+    const mockProfile = { webId: personUri };
+    const handler = handleSubmit({
+      addressBook,
+      setAgentId,
+      setIsLoading,
+      alertError,
+      alertSuccess,
+      session,
+      setDirtyForm,
+    });
+    jest.spyOn(profileHelperFns, "fetchProfile").mockResolvedValue(mockProfile);
+    jest
+      .spyOn(addressBookFns, "findContactInAddressBook")
+      .mockResolvedValue([]);
+    jest.spyOn(addressBookFns, "saveContact").mockResolvedValue({
+      response: "peopleDataset",
+      error: null,
+    });
+    await handler(personUri);
+    expect(setAgentId).toHaveBeenCalledTimes(1);
+    expect(setIsLoading).toHaveBeenCalledTimes(2);
+    expect(alertSuccess).toHaveBeenCalled();
+  });
   test("it saves a new contact", async () => {
     const personUri = "http://example.com/alice#me";
     const personDataset = addStringNoLocale(
