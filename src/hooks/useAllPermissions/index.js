@@ -21,7 +21,7 @@
 
 import { DatasetContext } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 import { getPolicyDetailFromAccess } from "../../accessControl/acp";
 import AccessControlContext from "../../contexts/accessControlContext";
 import useConsentBasedAccessForResource from "../useConsentBasedAccessForResource";
@@ -67,35 +67,38 @@ const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
 
 export default function useAllPermissions() {
   const { accessControl } = useContext(AccessControlContext);
+  const [permissions, setPermissions] = useState(null);
+
   const { solidDataset: dataset } = useContext(DatasetContext);
   const datasetUrl = getSourceUrl(dataset);
+
   const {
     permissions: consentBasedPermissions,
   } = useConsentBasedAccessForResource(datasetUrl);
-  const [acpPermissions, setAcpPermissions] = useState([]);
-  const [permissions, setPermissions] = useState(null);
-  const [consentPermissions, setConsentPermissions] = useState([]);
+
+  const normalizedConsentPermissions = useMemo(
+    () =>
+      consentBasedPermissions
+        ? normalizeConsentBasedPermissions(consentBasedPermissions)
+        : [],
+    [consentBasedPermissions]
+  );
 
   useEffect(() => {
     if (!accessControl) {
       setPermissions(null);
       return;
     }
+
     accessControl
       .getAllPermissionsForResource()
       .then((normalizedPermissions) => {
-        setAcpPermissions(normalizedPermissions.reverse());
+        setPermissions([
+          ...normalizedPermissions,
+          ...normalizedConsentPermissions,
+        ]);
       });
-    const normalizedConsentPermissions = consentBasedPermissions
-      ? normalizeConsentBasedPermissions(consentBasedPermissions)
-      : [];
-    setConsentPermissions(normalizedConsentPermissions);
-  }, [accessControl, consentBasedPermissions]);
-
-  useEffect(() => {
-    if (!acpPermissions.length && !consentPermissions.length) return;
-    setPermissions([...acpPermissions, ...consentPermissions]);
-  }, [acpPermissions, consentPermissions]);
+  }, [accessControl, normalizedConsentPermissions]);
 
   return {
     permissions,
