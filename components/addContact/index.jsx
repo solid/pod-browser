@@ -42,7 +42,6 @@ import useContactsContainerUrl from "../../src/hooks/useContactsContainerUrl";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export const EXISTING_WEBID_ERROR_MESSAGE =
   "That WebID is already in your contacts";
-export const NO_NAME_ERROR_MESSAGE = "That WebID does not have a name";
 export const FETCH_PROFILE_FAILED_ERROR_MESSAGE =
   "Unable to retrieve a profile from the given WebID";
 
@@ -81,26 +80,22 @@ export function handleSubmit({
         setIsLoading(false);
         return;
       }
+      const contact = { webId, fn: name || null };
+      const { response, error } = await saveContact(
+        addressBook,
+        addressBookContainerUrl,
+        contact,
+        types,
+        fetch
+      );
 
-      if (name) {
-        const contact = { webId, fn: name };
-        const { response, error } = await saveContact(
-          addressBook,
-          addressBookContainerUrl,
-          contact,
-          types,
-          fetch
-        );
-
-        if (error) alertError(error);
-        if (response) {
-          alertSuccess(`${contact.fn} was added to your contacts`);
-          setAgentId("");
-          peopleMutate();
-        }
-      } else {
-        alertError(NO_NAME_ERROR_MESSAGE);
+      if (error) alertError(error);
+      if (response) {
+        alertSuccess(`${contact.fn || webId} was added to your contacts`);
+        setAgentId("");
+        peopleMutate();
       }
+      setDirtyForm(false);
     } catch (error) {
       alertError(FETCH_PROFILE_FAILED_ERROR_MESSAGE);
     }

@@ -35,7 +35,6 @@ import AddContact, {
   EXISTING_WEBID_ERROR_MESSAGE,
   FETCH_PROFILE_FAILED_ERROR_MESSAGE,
   handleSubmit,
-  NO_NAME_ERROR_MESSAGE,
 } from "./index";
 import * as addressBookFns from "../../src/addressBook";
 import { contactsContainerIri } from "../../src/addressBook";
@@ -126,28 +125,6 @@ describe("handleSubmit", () => {
     expect(alertError).toHaveBeenCalledWith(EXISTING_WEBID_ERROR_MESSAGE);
     expect(setDirtyForm).toHaveBeenCalledWith(true);
   });
-  test("it alerts the user and exits if the webid doesn't have a name", async () => {
-    const personUri = "http://example.com/marie#me";
-    const mockProfile = { webId: personUri };
-    const handler = handleSubmit({
-      addressBook,
-      setAgentId,
-      setIsLoading,
-      alertError,
-      alertSuccess,
-      session,
-      setDirtyForm,
-    });
-    jest.spyOn(profileHelperFns, "fetchProfile").mockResolvedValue(mockProfile);
-    jest
-      .spyOn(addressBookFns, "findContactInAddressBook")
-      .mockResolvedValue([]);
-    await handler(personUri);
-    expect(setAgentId).toHaveBeenCalledTimes(0);
-    expect(setIsLoading).toHaveBeenCalledTimes(2);
-    expect(alertSuccess).not.toHaveBeenCalled();
-    expect(alertError).toHaveBeenCalledWith(NO_NAME_ERROR_MESSAGE);
-  });
   test("it alerts the user and exits if fetching the profile fails", async () => {
     const mockProfileError = new Error("error");
     const handler = handleSubmit({
@@ -167,6 +144,31 @@ describe("handleSubmit", () => {
     expect(setIsLoading).toHaveBeenCalledTimes(2);
     expect(alertSuccess).not.toHaveBeenCalled();
     expect(alertError).toHaveBeenCalledWith(FETCH_PROFILE_FAILED_ERROR_MESSAGE);
+  });
+  test("it saves a contact without name and alerts the user", async () => {
+    const personUri = "http://example.com/marie#me";
+    const mockProfile = { webId: personUri };
+    const handler = handleSubmit({
+      addressBook,
+      setAgentId,
+      setIsLoading,
+      alertError,
+      alertSuccess,
+      session,
+      setDirtyForm,
+    });
+    jest.spyOn(profileHelperFns, "fetchProfile").mockResolvedValue(mockProfile);
+    jest
+      .spyOn(addressBookFns, "findContactInAddressBook")
+      .mockResolvedValue([]);
+    jest.spyOn(addressBookFns, "saveContact").mockResolvedValue({
+      response: "peopleDataset",
+      error: null,
+    });
+    await handler(personUri);
+    expect(setAgentId).toHaveBeenCalledTimes(1);
+    expect(setIsLoading).toHaveBeenCalledTimes(2);
+    expect(alertSuccess).toHaveBeenCalled();
   });
   test("it saves a new contact", async () => {
     const personUri = "http://example.com/alice#me";

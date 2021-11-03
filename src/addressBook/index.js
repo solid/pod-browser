@@ -78,6 +78,12 @@ export const TYPE_MAP = {
     indexFilePredicate: NAME_EMAIL_INDEX_PREDICATE,
     contactTypeIri: vcard.Individual,
   },
+  [foaf.Agent]: {
+    indexFile: PEOPLE_INDEX_FILE,
+    container: PERSON_CONTAINER,
+    indexFilePredicate: NAME_EMAIL_INDEX_PREDICATE,
+    contactTypeIri: vcard.Individual,
+  },
 };
 
 export function vcardExtras(property) {
