@@ -30,7 +30,6 @@ export default function useConsentBasedAccessForResource(resourceUrl) {
   const [permissions, setPermissions] = useState(null);
   const [permissionsError, setPermissionsError] = useState(null);
   const { fetch } = useSession();
-
   useEffect(() => {
     if (!resourceUrl) {
       setPermissions(null);
@@ -47,21 +46,20 @@ export default function useConsentBasedAccessForResource(resourceUrl) {
     (async () => {
       try {
         const access = await getAccessWithConsentAll(resourceUrl, { fetch });
-        const validVcs = Promise.all(
+        const validVcs = await Promise.all(
           access.map(async (vc) => {
             const isValidVc = await checkVcValidity(vc);
-            if (isValidVc) {
+            if (!isValidVc.errors.length) {
               return vc;
             }
             return null;
           })
-        ).filter((vc) => vc !== null);
-        setPermissions(validVcs);
+        );
+        setPermissions(validVcs.filter((vc) => vc !== null));
       } catch (err) {
         setPermissionsError(err);
       }
     })();
   }, [resourceUrl, fetch]);
-
   return { permissions, permissionsError };
 }
