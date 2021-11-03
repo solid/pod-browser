@@ -176,7 +176,7 @@ exports[`Renders correct consent modal content clicking on view details button r
             October 11, 2022
           </strong>
           .
-        </p>
+        </span>
       </section>
     </div>
   </div>
