@@ -42,6 +42,7 @@
     "@solid/lit-prism-theme-sdk-default": "^0.13.7",
     "date-fns": "^2.23.0",
     "encoding": "^0.1.13",
+    "http-link-header": "^1.0.3",
     "install": "^0.13.0",
     "jss": "^10.5.1",
     "jss-preset-default": "^10.5.1",

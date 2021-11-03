@@ -95,7 +95,8 @@ describe("useAccessControl", () => {
       expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
         resourceInfo,
         null,
-        expect.any(Function)
+        expect.any(Function),
+        expect.anything()
       );
       expect(result.current.accessControl).toBe(accessControl);
       expect(result.current.error).toBeNull();
@@ -119,7 +120,8 @@ describe("useAccessControl", () => {
       expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
         resourceInfo,
         policiesContainerUrl,
-        expect.any(Function)
+        expect.any(Function),
+        expect.anything()
       );
       expect(result.current.accessControl).toBe(accessControl);
       expect(result.current.error).toBeNull();

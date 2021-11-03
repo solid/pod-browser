@@ -19,30 +19,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { acp_v3 as acp, getSourceIri } from "@inrupt/solid-client";
-import { useEffect, useState } from "react";
-import usePodRootUri from "../usePodRootUri";
-import { getPoliciesContainerUrl } from "../../models/policy";
-import useIsLegacyAcp from "../useIsLegacyAcp";
+import useSWR from "swr";
+import { acp_v3 as acp } from "@inrupt/solid-client";
+import { hasAcpConfiguration } from "../../accessControl/acp/index";
 
-export default function usePoliciesContainerUrl(resourceInfo) {
-  const [policiesContainerUrl, setPoliciesContainerUrl] = useState();
-  const rootUrl = usePodRootUri(getSourceIri(resourceInfo));
-  const isLegacy = useIsLegacyAcp(resourceInfo);
-
-  useEffect(() => {
-    if (isLegacy) {
-      setPoliciesContainerUrl(
-        rootUrl ? getPoliciesContainerUrl(rootUrl) : null
-      );
-    } else {
-      setPoliciesContainerUrl(
-        resourceInfo !== undefined && resourceInfo !== null
-          ? acp.getLinkedAcrUrl(resourceInfo) ?? null
-          : null
-      );
-    }
-  }, [isLegacy, resourceInfo, rootUrl]);
-
-  return policiesContainerUrl;
+export default function useIsLegacyAcp(resourceInfo) {
+  return useSWR(
+    resourceInfo ? acp.getLinkedAcrUrl(resourceInfo) : null,
+    // A legacy ACP server is one which does _not_ implement the ACP configuration discovery.
+    (acrUlr) => !hasAcpConfiguration(acrUlr)
+  );
 }
