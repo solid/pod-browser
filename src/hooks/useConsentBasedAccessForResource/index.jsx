@@ -20,7 +20,10 @@
  */
 
 import { useState, useEffect } from "react";
-import { getAccessWithConsentAll } from "@inrupt/solid-client-access-grants";
+import {
+  getAccessWithConsentAll,
+  isValidConsentGrant,
+} from "@inrupt/solid-client-access-grants";
 import { useSession } from "@inrupt/solid-ui-react";
 
 export default function useConsentBasedAccessForResource(resourceUrl) {
@@ -33,10 +36,27 @@ export default function useConsentBasedAccessForResource(resourceUrl) {
       setPermissions(null);
       return;
     }
+    async function checkVcValidity(vc) {
+      try {
+        const response = await isValidConsentGrant(vc, { fetch });
+        return response;
+      } catch (err) {
+        return null;
+      }
+    }
     (async () => {
       try {
         const access = await getAccessWithConsentAll(resourceUrl, { fetch });
-        setPermissions(access);
+        const validVcs = Promise.all(
+          access.map(async (vc) => {
+            const isValidVc = await checkVcValidity(vc);
+            if (isValidVc) {
+              return vc;
+            }
+            return null;
+          })
+        ).filter((vc) => vc !== null);
+        setPermissions(validVcs);
       } catch (err) {
         setPermissionsError(err);
       }

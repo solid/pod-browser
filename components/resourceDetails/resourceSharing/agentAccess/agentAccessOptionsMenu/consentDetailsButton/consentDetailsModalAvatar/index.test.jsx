@@ -21,31 +21,30 @@
 
 import React from "react";
 import { render } from "@testing-library/react";
-import * as solidClientFns from "@inrupt/solid-client";
 import { CombinedDataProvider } from "@inrupt/solid-ui-react";
 import { renderWithTheme } from "../../../../../../../__testUtils/withTheme";
 import mockSession from "../../../../../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../../../../../__testUtils/mockSessionContextProvider";
 import {
-  aliceWebIdUrl,
   mockPersonDatasetAlice,
+  mockPersonThingAlice,
 } from "../../../../../../../__testUtils/mockPersonResource";
 import ConsentDetailsModalAvatar, {
   setupErrorComponent,
   TESTCAFE_ID_NAME_TITLE,
 } from "./index";
+import {
+  mockApp,
+  mockAppDataset,
+} from "../../../../../../../__testUtils/mockApp";
 
 const profileDataset = mockPersonDatasetAlice();
-const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+const profileThing = mockPersonThingAlice();
 
 const profileIri = "https://example.com/profile/card#me";
 const closeDialog = jest.fn();
 
 describe("Person Avatar", () => {
-  beforeEach(() => {
-    jest.spyOn(solidClientFns, "getUrl").mockReturnValue("schema.Person");
-  });
-
   test("renders an avatar", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
@@ -66,7 +65,31 @@ describe("Person Avatar", () => {
     const profileLink = getByRole("link");
     expect(profileLink).toHaveAttribute(
       "href",
-      "/privacy/app/https%3A%2F%2Fexample.com%2Fprofile%2Fcard%23me"
+      "/privacy/person/https%3A%2F%2Fexample.com%2Fprofile%2Fcard%23me"
+    );
+    expect(baseElement).toMatchSnapshot();
+  });
+});
+
+describe("App Avatar", () => {
+  test("renders an avatar", async () => {
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
+    const { baseElement, findByTestId, getByRole } = renderWithTheme(
+      <SessionProvider>
+        <CombinedDataProvider solidDataset={mockAppDataset()} thing={mockApp()}>
+          <ConsentDetailsModalAvatar
+            profileIri="https://mockappurl.com/app#id"
+            closeDialog={closeDialog}
+          />
+        </CombinedDataProvider>
+      </SessionProvider>
+    );
+    await expect(findByTestId(TESTCAFE_ID_NAME_TITLE)).resolves.not.toBeNull();
+    const profileLink = getByRole("link");
+    expect(profileLink).toHaveAttribute(
+      "href",
+      `/privacy/app/${encodeURIComponent("https://mockappurl.com/app#id")}`
     );
     expect(baseElement).toMatchSnapshot();
   });
