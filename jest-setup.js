@@ -20,3 +20,7 @@
  */
 
 import "@testing-library/jest-dom";
+
+process.on("unhandledRejection", (reason) => {
+  throw reason;
+});
