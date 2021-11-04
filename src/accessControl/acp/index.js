@@ -470,7 +470,6 @@ function getAllowApplyPolicy(policyUrl, mode) {
 }
 
 function getPolicyUrlName(policyUrl, name) {
-  // return legacy ? `${policyUrl}#${name}Policy` : `${policyUrl}`;
   return `${policyUrl}#${name}Policy`;
 }
 
@@ -577,7 +576,7 @@ export async function getPodBrowserPermissions(
               legacy
             );
             const directPolicyName = legacy
-              ? getPolicyUrlName(directPolicyUrl, alias)
+              ? getPolicyUrlName(directPolicyUrl, alias, legacy)
               : policyUrl;
             // : `${policyUrl}${alias}`;
             return {
@@ -826,7 +825,6 @@ export default class AcpAccessControlStrategy {
       "editors",
       this.#isLegacy
     );
-    // `${this.#policyUrl}editors`;
     const editorsPolicy = this.#isLegacy
       ? getPolicyUrlName(editorsPolicyResourceUrl, "editors")
       : `${this.#policyUrl}editors`;
@@ -836,7 +834,6 @@ export default class AcpAccessControlStrategy {
       "viewers",
       this.#isLegacy
     );
-    // `${this.#policyUrl}viewers`;
     const viewersPolicy = this.#isLegacy
       ? getPolicyUrlName(viewersPolicyResourceUrl, "viewers")
       : `${this.#policyUrl}viewers`;
@@ -881,7 +878,6 @@ export default class AcpAccessControlStrategy {
       "viewAndAdd",
       this.#isLegacy
     );
-    // `${this.#policyUrl}viewAndAdd`;
     const viewAndAddPolicy = this.#isLegacy
       ? getPolicyUrlName(viewAndAddPolicyResourceUrl, "viewAndAdd")
       : `${this.#policyUrl}viewAndAdd`;
@@ -891,7 +887,6 @@ export default class AcpAccessControlStrategy {
       "editOnly",
       this.#isLegacy
     );
-    // `${this.#policyUrl}editOnly`;
     const editOnlyPolicy = this.#isLegacy
       ? getPolicyUrlName(editOnlyPolicyResourceUrl, "editOnly")
       : `${this.#policyUrl}editOnly`;
@@ -901,7 +896,6 @@ export default class AcpAccessControlStrategy {
       "addOnly",
       this.#isLegacy
     );
-    // `${this.#policyUrl}addOnly`;
     const addOnlyPolicy = this.#isLegacy
       ? getPolicyUrlName(addOnlyPolicyResourceUrl, "addOnly")
       : `${this.#policyUrl}addOnly`;
@@ -1015,7 +1009,6 @@ export default class AcpAccessControlStrategy {
       policyName,
       this.#isLegacy
     );
-    // `${this.#policyUrl}${policyName}`;
 
     const { respond, error } = createResponder();
     const {
@@ -1069,7 +1062,6 @@ export default class AcpAccessControlStrategy {
       policyName,
       this.#isLegacy
     );
-    // `${this.#policyUrl}${policyName}`;
 
     const { respond, error } = createResponder();
     const {
@@ -1119,7 +1111,6 @@ export default class AcpAccessControlStrategy {
       policyName,
       this.#isLegacy
     );
-    // `${this.#policyUrl}${policyName}`;
 
     const { respond, error } = createResponder();
     const {
@@ -1244,7 +1235,6 @@ export default class AcpAccessControlStrategy {
       policyName,
       this.#isLegacy
     );
-    // `${this.#policyUrl}${policyName}`;
     const { respond, error } = createResponder();
 
     const {

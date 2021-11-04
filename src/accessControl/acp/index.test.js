@@ -73,11 +73,6 @@ const policiesContainerUrl = getPoliciesContainerUrl(podUrl);
 const mockPolicyResourceUrl = (legacy) =>
   getPolicyUrl(mockSolidDatasetFrom(resourceUrl), policiesContainerUrl, legacy);
 
-// const policyResourceUrl = getPolicyUrl(
-//   mockSolidDatasetFrom(resourceUrl),
-//   policiesContainerUrl
-// );
-
 const mockEditorsPolicyResourceUrl = (legacy) =>
   getPolicyResourceUrl(
     mockSolidDatasetFrom(resourceUrl),
@@ -85,12 +80,6 @@ const mockEditorsPolicyResourceUrl = (legacy) =>
     "editors",
     legacy
   );
-
-// const editorsPolicyResourceUrl = getPolicyResourceUrl(
-//   mockSolidDatasetFrom(resourceUrl),
-//   policiesContainerUrl,
-//   "editors"
-// );
 
 const mockReadApplyPolicyUrl = (legacy) =>
   `${mockPolicyResourceUrl(legacy)}#readApplyPolicy`;
@@ -113,28 +102,12 @@ const mockControlPolicyRuleUrl = (legacy) =>
 const mockControlApplyPolicyUrl = (legacy) =>
   `${mockPolicyResourceUrl(legacy)}#controlApplyPolicy`;
 
-// const readApplyPolicyUrl = `${policyResourceUrl}#readApplyPolicy`;
-// const readPolicyRuleUrl = `${readApplyPolicyUrl}Rule`;
-// const editorsPolicyUrl = `${editorsPolicyResourceUrl}#editorsPolicy`;
-// const editorsPolicyRuleUrl = `${editorsPolicyResourceUrl}Rule`;
-// const writeApplyPolicyUrl = `${policyResourceUrl}#writeApplyPolicy`;
-// const writePolicyRuleUrl = `${writeApplyPolicyUrl}Rule`;
-// const appendApplyPolicyUrl = `${policyResourceUrl}#appendApplyPolicy`;
-// const controlAccessPolicyUrl = `${policyResourceUrl}#controlAccessPolicy`;
-// const controlPolicyRuleUrl = `${controlAccessPolicyUrl}Rule`;
-// const controlApplyPolicyUrl = `${policyResourceUrl}#controlApplyPolicy`;
-
 describe("AcpAccessControlStrategy", () => {
   const resourceInfoUrl = "http://example.com/resourceInfo";
   const resourceInfo = mockSolidDatasetFrom(resourceInfoUrl);
   const fetch = jest.fn();
   const datasetWithAcrUrl = resourceUrl;
   const acr = acpFns4.mockAcrFor(datasetWithAcrUrl);
-  // const datasetWithAcr = chain(
-  //   mockSolidDatasetFrom(datasetWithAcrUrl),
-  //   (d) => acpFns4.addMockAcrTo(d, acr),
-  //   (d) => acpFns4.addPolicyUrl(d, mockEditorsPolicyUrl(false))
-  // );
 
   const datasetWithLegacyAcr = chain(
     mockSolidDatasetFrom(datasetWithAcrUrl),
@@ -151,8 +124,6 @@ describe("AcpAccessControlStrategy", () => {
     // This prevents re-generating a default Access Control each time, which
     // breaks deep equality.
     legacy ? datasetWithLegacyAcr : datasetWithLatestAcr;
-
-  // let acp;
 
   describe("init", () => {
     let acp;
