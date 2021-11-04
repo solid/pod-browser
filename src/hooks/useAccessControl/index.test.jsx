@@ -32,6 +32,8 @@ import { joinPath } from "../../stringHelpers";
 jest.mock("../usePoliciesContainerUrl");
 const mockedPoliciesContainerUrlHook = usePoliciesContainerUrl;
 
+jest.mock("../useIsLegacyAcp");
+
 describe("useAccessControl", () => {
   const authenticatedProfile = mockProfileAlice();
 
@@ -51,6 +53,8 @@ describe("useAccessControl", () => {
       .spyOn(accessControlFns, "getAccessControl")
       .mockResolvedValue(accessControl);
     mockedPoliciesContainerUrlHook.mockReturnValue(null);
+    const mockedLegacyAcpHook = jest.requireMock("../useIsLegacyAcp");
+    mockedLegacyAcpHook.default.mockReturnValue({ data: false });
     jest.spyOn(accessControlFns, "isAcp").mockReturnValue(false);
   });
 
@@ -96,7 +100,7 @@ describe("useAccessControl", () => {
         resourceInfo,
         null,
         expect.any(Function),
-        expect.anything()
+        false
       );
       expect(result.current.accessControl).toBe(accessControl);
       expect(result.current.error).toBeNull();
@@ -111,7 +115,7 @@ describe("useAccessControl", () => {
       jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
     });
 
-    it("returns accessControl if given resourceUri", async () => {
+    it("returns accessControl with latest ACP if given resourceUri", async () => {
       const { result, waitForNextUpdate } = renderHook(
         () => useAccessControl(resourceInfo),
         { wrapper }
@@ -121,7 +125,25 @@ describe("useAccessControl", () => {
         resourceInfo,
         policiesContainerUrl,
         expect.any(Function),
-        expect.anything()
+        false
+      );
+      expect(result.current.accessControl).toBe(accessControl);
+      expect(result.current.error).toBeNull();
+    });
+
+    it("returns accessControl with legacy ACP if given resourceUri", async () => {
+      const mockedLegacyAcpHook = jest.requireMock("../useIsLegacyAcp");
+      mockedLegacyAcpHook.default.mockReturnValue({ data: true });
+      const { result, waitForNextUpdate } = renderHook(
+        () => useAccessControl(resourceInfo),
+        { wrapper }
+      );
+      await waitForNextUpdate();
+      expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
+        resourceInfo,
+        policiesContainerUrl,
+        expect.any(Function),
+        true
       );
       expect(result.current.accessControl).toBe(accessControl);
       expect(result.current.error).toBeNull();
