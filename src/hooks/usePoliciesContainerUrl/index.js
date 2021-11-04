@@ -28,7 +28,7 @@ import useIsLegacyAcp from "../useIsLegacyAcp";
 export default function usePoliciesContainerUrl(resourceInfo) {
   const [policiesContainerUrl, setPoliciesContainerUrl] = useState();
   const rootUrl = usePodRootUri(getSourceIri(resourceInfo));
-  const isLegacy = useIsLegacyAcp(resourceInfo);
+  const { data: isLegacy } = useIsLegacyAcp(resourceInfo);
 
   useEffect(() => {
     if (isLegacy) {

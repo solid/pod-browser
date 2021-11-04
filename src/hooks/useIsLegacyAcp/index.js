@@ -21,12 +21,15 @@
 
 import useSWR from "swr";
 import { acp_v3 as acp } from "@inrupt/solid-client";
+import { useSession } from "@inrupt/solid-ui-react";
+
 import { hasAcpConfiguration } from "../../accessControl/acp/index";
 
 export default function useIsLegacyAcp(resourceInfo) {
+  const { fetch } = useSession();
   return useSWR(
     resourceInfo ? acp.getLinkedAcrUrl(resourceInfo) : null,
     // A legacy ACP server is one which does _not_ implement the ACP configuration discovery.
-    (acrUlr) => !hasAcpConfiguration(acrUlr)
+    async (acrUlr) => !(await hasAcpConfiguration(acrUlr, fetch))
   );
 }

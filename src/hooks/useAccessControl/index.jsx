@@ -31,7 +31,7 @@ export default function useAccessControl(resourceInfo) {
   const { fetch } = session;
   const [accessControl, setAccessControl] = useState(null);
   const policiesContainerUrl = usePoliciesContainerUrl(resourceInfo);
-  const isLegacy = useIsLegacyAcp(resourceInfo);
+  const { data: isLegacy } = useIsLegacyAcp(resourceInfo);
   const [error, setError] = useState(null);
 
   useEffect(() => {

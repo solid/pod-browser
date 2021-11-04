@@ -148,11 +148,6 @@ describe("AcpAccessControlStrategy", () => {
   );
 
   const mockDatasetWithAcr = (legacy) =>
-    // chain(
-    //   mockSolidDatasetFrom(datasetWithAcrUrl),
-    //   (d) => acpFns4.addMockAcrTo(d, acr),
-    //   (d) => acpFns4.addPolicyUrl(d, mockEditorsPolicyUrl(legacy))
-    // );
     // This prevents re-generating a default Access Control each time, which
     // breaks deep equality.
     legacy ? datasetWithLegacyAcr : datasetWithLatestAcr;
@@ -307,7 +302,7 @@ describe("AcpAccessControlStrategy", () => {
         );
       });
 
-      it("normalizes the permissions retrieved from the policy resource XXX", async () => {
+      it("normalizes the permissions retrieved from the policy resource", async () => {
         const editorsPolicyRule = chain(
           acpFns4.createMatcher(mockEditorsPolicyRuleUrl(false)),
           (r) => acpFns4.addAgent(r, webId)
@@ -371,7 +366,7 @@ describe("AcpAccessControlStrategy", () => {
         );
       });
 
-      it("normalizes the permissions retrieved from the policy resource YYY", async () => {
+      it("normalizes the permissions retrieved from the policy resource", async () => {
         const readPolicyRule = chain(
           acpFns3.createRule(mockReadPolicyRuleUrl(true)),
           (r) => acpFns4.addAgent(r, webId)
@@ -1860,7 +1855,7 @@ describe("getPolicyModesAndAgents", () => {
 
 describe("removePermissionsForAgent", () => {
   describe("legacy ACP systems", () => {
-    it("removes all permissions for a given agent XXX", () => {
+    it("removes all permissions for a given agent", () => {
       const agent1 = aliceWebIdUrl;
       const agent2 = bobWebIdUrl;
       const rule1WithAgents = chain(
@@ -1947,29 +1942,33 @@ describe("getWebIdsFromInheritedPermissions", () => {
 
 describe("hasAcpConfiguration", () => {
   it("returns false if the request to the target ACR returns no Link headers", async () => {
-    jest.spyOn(global, "fetch").mockResolvedValueOnce(
+    const mockedFetch = jest.fn(global.fetch).mockResolvedValueOnce(
       new Response(undefined, {
         headers: {
           "Not-Link": "some value",
         },
       })
     );
-    await expect(hasAcpConfiguration("https://some.acr")).resolves.toBe(false);
+    await expect(
+      hasAcpConfiguration("https://some.acr", mockedFetch)
+    ).resolves.toBe(false);
   });
 
   it("returns false if the request to the target ACR returns no ACP configuration", async () => {
-    jest.spyOn(global, "fetch").mockResolvedValueOnce(
+    const mockedFetch = jest.fn(global.fetch).mockResolvedValueOnce(
       new Response(undefined, {
         headers: {
           Link: '<http://some.link>; rel="someRel"',
         },
       })
     );
-    await expect(hasAcpConfiguration("https://some.acr")).resolves.toBe(false);
+    await expect(
+      hasAcpConfiguration("https://some.acr", mockedFetch)
+    ).resolves.toBe(false);
   });
 
   it("returns true if the request to the target ACR returns an ACP configuration", async () => {
-    jest.spyOn(global, "fetch").mockResolvedValueOnce(
+    const mockedFetch = jest.fn(global.fetch).mockResolvedValueOnce(
       new Response(undefined, {
         headers: {
           Link:
@@ -1977,6 +1976,8 @@ describe("hasAcpConfiguration", () => {
         },
       })
     );
-    await expect(hasAcpConfiguration("https://some.acr")).resolves.toBe(true);
+    await expect(
+      hasAcpConfiguration("https://some.acr", mockedFetch)
+    ).resolves.toBe(true);
   });
 });

@@ -129,13 +129,13 @@ export const getPolicyDetailFromAccess = (access, label) => {
  *
  * @param {*} acrUrl The URL of the Access Control Resource
  */
-export async function hasAcpConfiguration(acrUrl) {
+export async function hasAcpConfiguration(acrUrl, authFetch) {
   // Defaults to the latest system.
   if (typeof acrUrl !== "string") {
     return false;
   }
-  const response = await fetch(acrUrl, {
-    method: "OPTIONS",
+  const response = await authFetch(acrUrl, {
+    method: "HEAD",
   });
   const linkHeader = response.headers.get("Link");
   if (linkHeader === null) {
