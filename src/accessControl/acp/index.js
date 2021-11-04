@@ -135,6 +135,9 @@ export async function hasAcpConfiguration(acrUrl, authFetch) {
     return false;
   }
   const response = await authFetch(acrUrl, {
+    // The specification requires that this should be an OPTIONS request, but
+    // this causes issues for cross-origin requests from a browser. ESS currently
+    // allows to work around this issuing a HEAD request instead.
     method: "HEAD",
   });
   const linkHeader = response.headers.get("Link");
