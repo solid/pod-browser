@@ -21,7 +21,16 @@ exports[`View consent details button and modal clicking on view details button r
       </div>
       <span
         class="PodBrowser-root"
-      />
+      >
+        <span
+          class="PodBrowser-ripple PodBrowser-rippleVisible"
+          style="width: 2.8284271247461903px; height: 2.8284271247461903px; top: -1.4142135623730951px; left: -1.4142135623730951px;"
+        >
+          <span
+            class="PodBrowser-child PodBrowser-childLeaving"
+          />
+        </span>
+      </span>
     </div>
   </div>
   <div
@@ -229,7 +238,7 @@ exports[`View consent details button and modal clicking on view details button r
                       October 11, 2022
                     </strong>
                     .
-                  </p>
+                  </span>
                 </section>
               </div>
             </div>
