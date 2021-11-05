@@ -63,7 +63,6 @@ export default function Container({ iri }) {
     podRootIri
   );
   const { error: accessControlError } = useAccessControl(podRootResourceInfo);
-
   const {
     data: container,
     error: containerError,
@@ -84,7 +83,6 @@ export default function Container({ iri }) {
   }, [container, iri]);
 
   useEffect(() => {
-    if (!accessControlError) return;
     setNoControlError(accessControlError);
   }, [accessControlError]);
 

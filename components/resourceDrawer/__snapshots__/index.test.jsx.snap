@@ -442,16 +442,6 @@ exports[`ResourceDrawer view it renders a Contents view when the router query ha
                       </div>
                     </div>
                     <div
-                      class="PodBrowser-root PodBrowser-root PodBrowser-standardInfo PodBrowser-elevation0"
-                      role="alert"
-                    >
-                      <div
-                        class="PodBrowser-message"
-                      >
-                        Sharing applies to all items in this folder
-                      </div>
-                    </div>
-                    <div
                       class="PodBrowser-sharingButtonContainer"
                     >
                       <button
@@ -983,9 +973,9 @@ exports[`ResourceDrawer view it renders without errors when iri contains spaces 
           <h3
             class="PodBrowser-content-h3"
             data-testid="resource-title"
-            title="/iri/"
+            title="/iri with spaces/"
           >
-            iri
+            iri with spaces
           </h3>
         </section>
         <hr

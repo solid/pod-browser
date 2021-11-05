@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Accordion,
   AccordionDetails,
@@ -77,6 +77,8 @@ export default function ResourceDetails({
   const type = getContentType(dataset);
   const actionMenuBem = ActionMenu.useBem();
   const { accessControl } = useContext(AccessControlContext);
+  const [useAcp, setUseAcp] = useState(false);
+  const [useWac, setUseWac] = useState(false);
   const [actionsAccordion, setActionsAccordion] = useLocalStorage(
     getAccordionKey(dataset, "actions"),
     true
@@ -93,8 +95,15 @@ export default function ResourceDetails({
     getAccordionKey(dataset, "sharing"),
     false
   );
-  const useAcp = isAcp(datasetUrl, fetch);
-  const useWac = isWac(datasetUrl, dataset, fetch);
+
+  useEffect(() => {
+    (async () => {
+      const acp = await isAcp(datasetUrl, fetch);
+      const wac = await isWac(datasetUrl, dataset, fetch);
+      setUseAcp(acp);
+      setUseWac(wac);
+    })();
+  }, [datasetUrl, dataset, fetch]);
 
   const expandIcon = <ExpandMoreIcon />;
   return (

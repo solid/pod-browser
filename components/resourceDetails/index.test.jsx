@@ -48,7 +48,7 @@ describe("Resource details", () => {
   });
 
   it("renders container details", async () => {
-    jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
+    jest.spyOn(accessControlFns, "isAcp").mockResolvedValue(true);
     jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(true);
     const { asFragment, getByText } = renderWithTheme(
       <DatasetProvider solidDataset={dataset}>
@@ -62,7 +62,7 @@ describe("Resource details", () => {
   });
 
   it("renders a decoded container name", async () => {
-    jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
+    jest.spyOn(accessControlFns, "isAcp").mockResolvedValue(true);
     jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(true);
     const datasetWithDecodedContainerName = mockSolidDatasetFrom(
       "http://example.com/Some%20container/"
@@ -80,8 +80,10 @@ describe("Resource details", () => {
   });
 
   it("renders Permissions component for WAC-supporting Solid servers", async () => {
-    jest.spyOn(accessControlFns, "isWac").mockReturnValue(true);
+    jest.spyOn(accessControlFns, "isWac").mockResolvedValue(true);
     jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(false);
+    jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValue(true);
+    jest.spyOn(acpFns, "hasLinkedAcr").mockResolvedValue(false);
     const { asFragment, getByTestId } = renderWithTheme(
       <AccessControlProvider accessControl={accessControl}>
         <DatasetProvider solidDataset={dataset}>
@@ -96,7 +98,7 @@ describe("Resource details", () => {
   });
 
   it("renders Sharing component for ACP-supporting Solid servers", async () => {
-    jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
+    jest.spyOn(accessControlFns, "isAcp").mockResolvedValue(true);
     jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(true);
     const PermissionsContextProvider = mockPermissionsContextProvider();
     const { asFragment, getByTestId, getByText } = renderWithTheme(
