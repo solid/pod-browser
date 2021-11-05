@@ -137,8 +137,8 @@ export default function AgentResourceAccessShowPage({ type }) {
         setResourcesError(error);
       })
       .then(({ data }) => {
-        if (!data) return;
-        const { accessByAgent } = data.pod;
+        if (!data || !data.pod) return;
+        const { accessByAgent = {} } = data.pod;
         setAccessList(accessByAgent);
         const resourceList = [
           ...new Set(data.pod.accessByAgent.map(({ resource }) => resource)),

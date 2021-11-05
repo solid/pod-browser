@@ -26,6 +26,8 @@ export const defaultConfirmationDialogContext = {
   confirmed: false,
   content: null,
   open: false,
+  customContentWrapper: false,
+  setCustomContentWrapper: () => {},
   setConfirmed: () => {},
   setContent: () => {},
   setOpen: () => {},

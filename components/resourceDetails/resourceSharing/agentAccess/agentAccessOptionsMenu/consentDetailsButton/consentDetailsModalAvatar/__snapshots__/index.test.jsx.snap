@@ -1,5 +1,56 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`App Avatar renders an avatar 1`] = `
+<body>
+  <div>
+    <div
+      class="PodBrowser-root PodBrowser-root"
+    >
+      <div
+        class="PodBrowser-root PodBrowser-root"
+      >
+        <div
+          class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+        >
+          <div
+            class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+          >
+            <svg
+              aria-hidden="true"
+              class="PodBrowser-root PodBrowser-fallback"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div
+        class="PodBrowser-root PodBrowser-root"
+      >
+        <a
+          href="/privacy/app/https%3A%2F%2Fmockappurl.com%2Fapp%23id"
+          role="link"
+        >
+          <h3
+            data-testid="profile-name-title"
+          >
+            <span
+              class="PodBrowser-avatarText"
+            >
+              Mock App
+            </span>
+          </h3>
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+`;
+
 exports[`Person Avatar renders an avatar 1`] = `
 <body>
   <div>
@@ -32,7 +83,7 @@ exports[`Person Avatar renders an avatar 1`] = `
         class="PodBrowser-root PodBrowser-root"
       >
         <a
-          href="/privacy/app/https%3A%2F%2Fexample.com%2Fprofile%2Fcard%23me"
+          href="/privacy/person/https%3A%2F%2Fexample.com%2Fprofile%2Fcard%23me"
           role="link"
         >
           <h3

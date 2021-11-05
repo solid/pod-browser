@@ -20,28 +20,46 @@
  */
 
 import { useState, useEffect } from "react";
-import { getAccessWithConsentAll } from "@inrupt/solid-client-access-grants";
+import {
+  getAccessWithConsentAll,
+  isValidConsentGrant,
+} from "@inrupt/solid-client-access-grants";
 import { useSession } from "@inrupt/solid-ui-react";
 
 export default function useConsentBasedAccessForResource(resourceUrl) {
   const [permissions, setPermissions] = useState(null);
   const [permissionsError, setPermissionsError] = useState(null);
   const { fetch } = useSession();
-
   useEffect(() => {
     if (!resourceUrl) {
       setPermissions(null);
       return;
     }
+    async function checkVcValidity(vc) {
+      try {
+        const response = await isValidConsentGrant(vc, { fetch });
+        return response;
+      } catch (err) {
+        return null;
+      }
+    }
     (async () => {
       try {
         const access = await getAccessWithConsentAll(resourceUrl, { fetch });
-        setPermissions(access);
+        const validVcs = await Promise.all(
+          access.map(async (vc) => {
+            const isValidVc = await checkVcValidity(vc);
+            if (!isValidVc.errors.length) {
+              return vc;
+            }
+            return null;
+          })
+        );
+        setPermissions(validVcs.filter((vc) => vc !== null));
       } catch (err) {
         setPermissionsError(err);
       }
     })();
   }, [resourceUrl, fetch]);
-
   return { permissions, permissionsError };
 }

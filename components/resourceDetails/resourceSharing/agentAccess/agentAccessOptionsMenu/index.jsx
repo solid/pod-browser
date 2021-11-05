@@ -31,6 +31,7 @@ import {
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
+import { useSession } from "@inrupt/solid-ui-react";
 import RemoveButton from "./removeButton";
 import ConsentDetailsButton from "./consentDetailsButton";
 import styles from "./styles";
@@ -49,7 +50,7 @@ export default function AgentAccessOptionsMenu({
   const classes = useStyles();
   const bem = useBem(useStyles());
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
-  const { webId } = permission;
+  const { webId, vc } = permission;
 
   const handleClick = (event) => {
     setMenuAnchorEl(event.currentTarget);
@@ -103,7 +104,7 @@ export default function AgentAccessOptionsMenu({
               <p className={classes.webId}>{webId}</p>
             </ListItemText>
           </ListItem>
-          {permission.vc ? (
+          {vc ? (
             <ConsentDetailsButton
               resourceIri={resourceIri}
               permission={permission}
