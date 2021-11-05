@@ -95,7 +95,7 @@ describe("Resource details", () => {
       expect(getByTestId(TESTCAFE_ID_ACCORDION_PERMISSIONS)).toBeDefined();
     });
     expect(asFragment()).toMatchSnapshot();
-  });
+  }, 30000);
 
   it("renders Sharing component for ACP-supporting Solid servers", async () => {
     jest.spyOn(accessControlFns, "isAcp").mockResolvedValue(true);
