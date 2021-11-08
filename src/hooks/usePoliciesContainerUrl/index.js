@@ -31,6 +31,10 @@ export default function usePoliciesContainerUrl(resourceInfo) {
   const { data: isLegacy } = useIsLegacyAcp(resourceInfo);
 
   useEffect(() => {
+    if (isLegacy === undefined) {
+      setPoliciesContainerUrl(null);
+      return;
+    }
     if (isLegacy) {
       setPoliciesContainerUrl(
         rootUrl ? getPoliciesContainerUrl(rootUrl) : null
