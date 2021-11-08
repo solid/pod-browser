@@ -19,7 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { getWellKnownSolid, getThingAll, getIri } from "@inrupt/solid-client";
+import {
+  getWellKnownSolid,
+  getThingAll,
+  getIri,
+  getSolidDataset,
+  getThing,
+} from "@inrupt/solid-client";
 
 const webIdsWithAccessToFeatures = [
   "https://pod.inrupt.com/jacklawson/profile/card#me",
@@ -59,7 +65,14 @@ function enableForGivenServerCapability(webIds, capability) {
     /* istanbul ignore next */
     try {
       if (typeof window !== "undefined") {
-        const welKnownData = await getWellKnownSolid(session.info.webId, {
+        // TODO: Discovering the storage from the profile should be an SDK function.
+        const profile = await getSolidDataset(session.info.webId);
+        const profileData = getThing(profile, session.info.webId);
+        const storageIri = getIri(
+          profileData,
+          "http://www.w3.org/ns/pim/space#storage"
+        );
+        const welKnownData = await getWellKnownSolid(storageIri, {
           fetch,
         });
         const wellKnownSubjects = getThingAll(welKnownData, {
