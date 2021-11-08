@@ -28,11 +28,13 @@ import mockSessionContextProvider from "../../../__testUtils/mockSessionContextP
 import mockSession from "../../../__testUtils/mockSession";
 import { mockProfileAlice } from "../../../__testUtils/mockPersonResource";
 import { joinPath } from "../../stringHelpers";
+import useIsLegacyAcp from "../useIsLegacyAcp";
 
 jest.mock("../usePoliciesContainerUrl");
 const mockedPoliciesContainerUrlHook = usePoliciesContainerUrl;
 
 jest.mock("../useIsLegacyAcp");
+const mockedIsLegacyAcp = useIsLegacyAcp;
 
 describe("useAccessControl", () => {
   const authenticatedProfile = mockProfileAlice();
@@ -53,8 +55,7 @@ describe("useAccessControl", () => {
       .spyOn(accessControlFns, "getAccessControl")
       .mockResolvedValue(accessControl);
     mockedPoliciesContainerUrlHook.mockReturnValue(null);
-    const mockedLegacyAcpHook = jest.requireMock("../useIsLegacyAcp");
-    mockedLegacyAcpHook.default.mockReturnValue({ data: false });
+    mockedIsLegacyAcp.mockReturnValue({ data: false });
     jest.spyOn(accessControlFns, "isAcp").mockReturnValue(false);
   });
 
@@ -132,8 +133,7 @@ describe("useAccessControl", () => {
     });
 
     it("returns accessControl with legacy ACP if given resourceUri", async () => {
-      const mockedLegacyAcpHook = jest.requireMock("../useIsLegacyAcp");
-      mockedLegacyAcpHook.default.mockReturnValue({ data: true });
+      mockedIsLegacyAcp.mockReturnValue({ data: true });
       const { result, waitForNextUpdate } = renderHook(
         () => useAccessControl(resourceInfo),
         { wrapper }
