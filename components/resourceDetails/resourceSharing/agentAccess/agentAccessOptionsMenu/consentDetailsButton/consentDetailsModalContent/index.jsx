@@ -31,10 +31,9 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@material-ui/core";
-import { foaf } from "rdf-namespaces";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { CombinedDataProvider, Text } from "@inrupt/solid-ui-react";
+import { CombinedDataProvider } from "@inrupt/solid-ui-react";
 import { format } from "date-fns";
 import { getAcpAccessDetails } from "../../../../../../../src/accessControl/acp";
 import { permission as permissionPropType } from "../../../../../../../constants/propTypes";
@@ -46,6 +45,7 @@ import {
 } from "../../../../../../../src/models/consent/request";
 import { getPurposeUrlsFromSignedVc } from "../../../../../../../src/models/consent/signedVc";
 import styles from "./styles";
+import AgentName from "../agentName";
 
 export const TESTCAFE_ID_CONSENT_DETAILS_CONTENT = "consent-details-content";
 
@@ -155,8 +155,8 @@ export default function ConsentDetailsModalContent({
           </h3>
           <hr className={bem("access-details", "separator")} />
           <p>
-            <Text className={classes.avatarText} property={foaf.name} /> has
-            access until <strong>{expirationDate}</strong>.
+            <AgentName agentWebId={agentWebId} />
+            has access until <strong>{expirationDate}</strong>.
           </p>
         </section>
       )}
