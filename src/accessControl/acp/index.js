@@ -213,6 +213,14 @@ const removeAllOfMatcherUrl = (policy, matcher, legacy) =>
 const getAllowModes = (policy, legacy) =>
   switchIfLegacy(legacyAcp.getAllowModes, acp.getAllowModes, [policy], legacy);
 
+const setAllowModes = (policy, modes, legacy) =>
+  switchIfLegacy(
+    legacyAcp.setAllowModes,
+    acp.setAllowModes,
+    [policy, modes],
+    legacy
+  );
+
 export function addAcpModes(existingAcpModes, newAcpModes) {
   return existingAcpModes
     ? createAcpMap(
@@ -455,7 +463,7 @@ function updateAllowPolicy(
   return chain(
     getOrCreatePolicy(policyDataset, policyUrl),
     ({ policy, dataset }) => ({
-      policy: acp.setAllowModes(policy, acpMap),
+      policy: setAllowModes(policy, acpMap, legacy),
       dataset,
     }),
     ({ policy, dataset }) =>
@@ -1027,7 +1035,7 @@ export default class AcpAccessControlStrategy {
     const updatedDataset = chain(
       getOrCreatePolicy(policyDataset, policyUrl),
       ({ policy, dataset }) => ({
-        policy: acp.setAllowModes(policy, acpMap),
+        policy: setAllowModes(policy, acpMap, this.#isLegacy),
         dataset,
       }),
       ({ policy, dataset }) =>
@@ -1080,7 +1088,7 @@ export default class AcpAccessControlStrategy {
     const updatedDataset = chain(
       getOrCreatePolicy(policyDataset, policyUrl),
       ({ policy, dataset }) => ({
-        policy: acp.setAllowModes(policy, acpMap),
+        policy: setAllowModes(policy, acpMap, this.#isLegacy),
         dataset,
       }),
       ({ policy, dataset }) =>
@@ -1128,7 +1136,7 @@ export default class AcpAccessControlStrategy {
     const updatedDataset = chain(
       getOrCreatePolicy(policyDataset, policyUrl),
       ({ policy, dataset }) => ({
-        policy: acp.setAllowModes(policy, acpMap),
+        policy: setAllowModes(policy, acpMap, this.#isLegacy),
         dataset,
       }),
       ({ policy, dataset }) =>
