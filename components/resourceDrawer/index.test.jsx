@@ -21,8 +21,8 @@
 
 import React from "react";
 import * as RouterFns from "next/router";
-
-import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import { waitFor } from "@testing-library/dom";
+import * as solidClientFns from "@inrupt/solid-client";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import ResourceDrawer, {
@@ -38,11 +38,18 @@ import mockAccessControl from "../../__testUtils/mockAccessControl";
 jest.mock("../../src/hooks/useResourceInfo");
 jest.mock("../../src/hooks/useAccessControl");
 
+const acp = solidClientFns.acp_v3;
+
 const iri = "/iri/";
 const iriWithSpaces = "/iri with spaces/";
 
 describe("ResourceDrawer view", () => {
-  const resourceInfo = mockSolidDatasetFrom(iri);
+  const resourceInfo = solidClientFns.mockSolidDatasetFrom(iri);
+  const resourceInfoWithSpaces = solidClientFns.mockSolidDatasetFrom(
+    iriWithSpaces
+  );
+  jest.spyOn(acp, "isAcpControlled").mockResolvedValue(true);
+  jest.spyOn(acp, "hasLinkedAcr").mockResolvedValue(true);
 
   let accessControl;
   let fetch;
@@ -58,15 +65,6 @@ describe("ResourceDrawer view", () => {
     SessionProvider = mockSessionContextProvider(session);
     accessControl = mockAccessControl();
 
-    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
-      asPath: "/pathname/",
-      replace: jest.fn(),
-      query: {
-        resourceIri: iri,
-        action: "details",
-      },
-    });
-
     useAccessControl.mockReturnValue({ accessControl });
     useResourceInfo.mockReturnValue({ data: resourceInfo });
 
@@ -76,11 +74,7 @@ describe("ResourceDrawer view", () => {
     });
   });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  test("it renders a loading view when context has no iri", () => {
+  test("it renders a loading view when context has no iri", async () => {
     const DetailsContext = mockDetailsContextMenuProvider({
       menuOpen: true,
       setMenuOpen: jest.fn,
@@ -92,27 +86,32 @@ describe("ResourceDrawer view", () => {
       query: {},
     });
 
-    const { asFragment } = renderWithTheme(
+    const { asFragment, getByText } = renderWithTheme(
       <DetailsContext>
         <ResourceDrawer />
       </DetailsContext>
     );
-
+    await waitFor(() => {
+      expect(getByText("iri")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it renders a Contents view when the router query has an iri", () => {
-    const { asFragment } = renderWithTheme(
+  test("it renders a Contents view when the router query has an iri", async () => {
+    const { asFragment, getByText } = renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
           <ResourceDrawer />
         </DetailsMenuContext>
       </SessionProvider>
     );
+    await waitFor(() => {
+      expect(getByText("iri")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it renders without errors when iri contains spaces", () => {
+  test("it renders without errors when iri contains spaces", async () => {
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
       replace: jest.fn(),
@@ -121,17 +120,29 @@ describe("ResourceDrawer view", () => {
         action: "details",
       },
     });
-    const { asFragment } = renderWithTheme(
+    useResourceInfo.mockReturnValue({ data: resourceInfoWithSpaces });
+    const { asFragment, getByText } = renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
           <ResourceDrawer />
         </DetailsMenuContext>
       </SessionProvider>
     );
+    await waitFor(() => {
+      expect(getByText("iri with spaces")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("uses resource dataset", () => {
+    jest.spyOn(RouterFns, "useRouter").mockReturnValueOnce({
+      asPath: "/pathname/",
+      replace: jest.fn(),
+      query: {
+        resourceIri: iri,
+        action: "details",
+      },
+    });
     renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>

@@ -44,7 +44,9 @@ const resourceIri = "http://example.com";
 const resource = mockSolidDatasetFrom("http://example.com");
 
 describe("isAcp", () => {
-  beforeEach(() => jest.spyOn(acp3, "isAcpControlled").mockReturnValue(true));
+  beforeEach(() => {
+    jest.spyOn(acp3, "isAcpControlled").mockReturnValue(true);
+  });
 
   it("uses acp3.isAcpControlled to determine whether a resource from a server uses ACP", () => {
     const fetch = jest.fn();
@@ -91,6 +93,8 @@ describe("getAccessControl", () => {
   describe("ACP is supported", () => {
     beforeEach(async () => {
       acp.hasLinkedAcr.mockReturnValue(true);
+      jest.spyOn(acp3, "isAcpControlled").mockReturnValue(true);
+
       result = await getAccessControl(resource, policiesContainerUrl, fetch);
     });
 
