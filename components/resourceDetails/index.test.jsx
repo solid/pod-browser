@@ -34,10 +34,13 @@ import mockAccessControl from "../../__testUtils/mockAccessControl";
 import { AccessControlProvider } from "../../src/contexts/accessControlContext";
 import * as accessControlFns from "../../src/accessControl";
 import mockPermissionsContextProvider from "../../__testUtils/mockPermissionsContextProvider";
+import useConsentBasedAccessForResource from "../../src/hooks/useConsentBasedAccessForResource";
 
 const accessControl = mockAccessControl();
 const dataset = mockSolidDatasetFrom("http://example.com/container/");
 
+jest.mock("../../src/hooks/useConsentBasedAccessForResource");
+const mockedUseConsentBasedAccessForResource = useConsentBasedAccessForResource;
 const acpFns = solidClientFns.acp_v3;
 
 describe("Resource details", () => {
@@ -45,6 +48,7 @@ describe("Resource details", () => {
     jest
       .spyOn(routerFns, "useRouter")
       .mockReturnValue({ query: { resourceIri: "" }, push: jest.fn() });
+    mockedUseConsentBasedAccessForResource.mockReturnValue([]);
   });
 
   it("renders container details", async () => {
