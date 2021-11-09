@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import {
   Accordion,
   AccordionDetails,
@@ -34,7 +34,7 @@ import { makeStyles } from "@material-ui/styles";
 import T from "prop-types";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { ActionMenu, ActionMenuItem } from "@inrupt/prism-react-components";
-import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
+import { DatasetContext } from "@inrupt/solid-ui-react";
 import { getContentType, getSourceUrl } from "@inrupt/solid-client";
 import styles from "./styles";
 import DeleteResourceButton from "../deleteResourceButton";
@@ -44,8 +44,9 @@ import { getIriPath } from "../../src/solidClientHelpers/utils";
 import { getResourceName } from "../../src/solidClientHelpers/resource";
 import AccessControlContext from "../../src/contexts/accessControlContext";
 import SharingAccordion from "./resourceSharing/sharingAccordion";
-import { isAcp, isWac } from "../../src/accessControl";
 import useLocalStorage from "../../src/hooks/useLocalStorage";
+import useAcp from "../../src/hooks/useAcp";
+import useWac from "../../src/hooks/useWac";
 
 const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
 const TESTCAFE_ID_DELETE_BUTTON = "delete-resource-button";
@@ -68,8 +69,6 @@ export default function ResourceDetails({
   onDeleteCurrentContainer,
 }) {
   const { solidDataset: dataset } = useContext(DatasetContext);
-  const { session } = useSession();
-  const { fetch } = session;
   const datasetUrl = getSourceUrl(dataset);
   const classes = useStyles();
   const name = getIriPath(datasetUrl);
@@ -77,8 +76,8 @@ export default function ResourceDetails({
   const type = getContentType(dataset);
   const actionMenuBem = ActionMenu.useBem();
   const { accessControl } = useContext(AccessControlContext);
-  const [useAcp, setUseAcp] = useState(false);
-  const [useWac, setUseWac] = useState(false);
+  const { data: isAcpControlled } = useAcp(datasetUrl);
+  const { data: isWacControlled } = useWac(datasetUrl);
   const [actionsAccordion, setActionsAccordion] = useLocalStorage(
     getAccordionKey(dataset, "actions"),
     true
@@ -95,15 +94,6 @@ export default function ResourceDetails({
     getAccordionKey(dataset, "sharing"),
     false
   );
-
-  useEffect(() => {
-    (async () => {
-      const acp = await isAcp(datasetUrl, fetch);
-      const wac = await isWac(datasetUrl, dataset, fetch);
-      setUseAcp(acp);
-      setUseWac(wac);
-    })();
-  }, [datasetUrl, dataset, fetch]);
 
   const expandIcon = <ExpandMoreIcon />;
   return (
@@ -185,7 +175,7 @@ export default function ResourceDetails({
 
       {accessControl && ( // only show when we know user has control access
         <>
-          {useWac && (
+          {isWacControlled && (
             <Accordion
               expanded={permissionsAccordion}
               onChange={() => setPermissionsAccordion(!permissionsAccordion)}
@@ -201,7 +191,7 @@ export default function ResourceDetails({
               </AccordionDetails>
             </Accordion>
           )}
-          {useAcp && (
+          {isAcpControlled && (
             <Accordion
               expanded={sharingAccordion}
               onChange={() => setSharingAccordion(!sharingAccordion)}
