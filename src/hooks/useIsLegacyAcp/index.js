@@ -30,6 +30,8 @@ export default function useIsLegacyAcp(resourceInfo) {
   return useSWR(
     resourceInfo ? acp.getLinkedAcrUrl(resourceInfo) : null,
     // A legacy ACP server is one which does _not_ implement the ACP configuration discovery.
+    // Since we mock SWR, the following line never runs.
+    /* istanbul ignore next */
     async (acrUlr) => !(await hasAcpConfiguration(acrUlr, fetch))
   );
 }
