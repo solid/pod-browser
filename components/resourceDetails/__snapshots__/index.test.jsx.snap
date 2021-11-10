@@ -511,12 +511,12 @@ exports[`Resource details renders Sharing component for ACP-supporting Solid ser
     </div>
   </div>
   <div
-    class="PodBrowser-root PodBrowser-root PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+    class="PodBrowser-root PodBrowser-root PodBrowser-expanded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
   >
     <div
       aria-disabled="false"
-      aria-expanded="false"
-      class="PodBrowser-root PodBrowser-root"
+      aria-expanded="true"
+      class="PodBrowser-root PodBrowser-root PodBrowser-expanded"
       data-testid="accordion-resource-sharing"
       role="button"
       tabindex="0"

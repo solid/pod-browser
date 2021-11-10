@@ -280,24 +280,22 @@ exports[`View consent details button and modal clicking on view details button r
 `;
 
 exports[`View consent details button and modal it renders a button which triggers the opening of the modal 1`] = `
-<body>
-  <div>
+<DocumentFragment>
+  <div
+    aria-disabled="false"
+    class="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
+    data-testid="view-details-button"
+    role="button"
+    tabindex="0"
+  >
     <div
-      aria-disabled="false"
-      class="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
-      data-testid="view-details-button"
-      role="button"
-      tabindex="0"
+      class="PodBrowser-root"
     >
-      <div
-        class="PodBrowser-root"
-      >
-        View Details
-      </div>
-      <span
-        class="PodBrowser-root"
-      />
+      View Details
     </div>
+    <span
+      class="PodBrowser-root"
+    />
   </div>
-</body>
+</DocumentFragment>
 `;

@@ -112,7 +112,7 @@ describe("ResourceDrawer view", () => {
       query: {},
     });
 
-    const { asFragment, getByText } = renderWithTheme(
+    const { asFragment, queryByText } = renderWithTheme(
       <DetailsContext>
         <PermissionsContextProvider>
           <DatasetProvider solidDataset={resourceInfo}>
@@ -122,7 +122,7 @@ describe("ResourceDrawer view", () => {
       </DetailsContext>
     );
     await waitFor(() => {
-      expect(getByText("iri")).toBeInTheDocument();
+      expect(queryByText("iri")).not.toBeInTheDocument();
     });
     expect(asFragment()).toMatchSnapshot();
   });
