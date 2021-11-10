@@ -86,13 +86,15 @@ describe("AgentAccess", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("fetches profile for webId", () => {
+  it("fetches profile for webId", async () => {
     renderWithTheme(
       <DatasetProvider solidDataset={dataset}>
         <AgentAccess permission={permission} />
       </DatasetProvider>
     );
-    expect(useFetchProfile).toHaveBeenCalledWith(webId);
+    await waitFor(() => {
+      expect(useFetchProfile).toHaveBeenCalledWith(webId);
+    });
   });
 
   it("renders skeleton placeholders when profile is not available", async () => {
@@ -176,33 +178,39 @@ describe("AgentAccess", () => {
   });
 
   describe("user tries to change access for themselves", () => {
-    it("checkboxes are disabled", () => {
+    it("checkboxes are disabled", async () => {
       const session = mockSession();
       const SessionProvider = mockSessionContextProvider(session);
 
-      const { asFragment } = renderWithTheme(
+      const { asFragment, queryAllByTestId } = renderWithTheme(
         <SessionProvider>
           <DatasetProvider solidDataset={dataset}>
             <AgentAccess permission={permission} webId={session.info.webId} />
           </DatasetProvider>
         </SessionProvider>
       );
+      await waitFor(() => {
+        expect(queryAllByTestId("permission-checkbox-edit")).toHaveLength(1);
+      });
       expect(asFragment()).toMatchSnapshot();
     });
 
-    it("checkboxes are only disabled if the resource is connected to user's Pod", () => {
+    it("checkboxes are only disabled if the resource is connected to user's Pod", async () => {
       const randomUrl = "http://some-random-pod.com";
       mockedRouterHook.mockReturnValue({ query: { iri: randomUrl } });
       const session = mockSession();
       const SessionProvider = mockSessionContextProvider(session);
 
-      const { asFragment } = renderWithTheme(
+      const { asFragment, queryAllByTestId } = renderWithTheme(
         <SessionProvider>
           <DatasetProvider solidDataset={dataset}>
             <AgentAccess permission={permission} webId={session.info.webId} />
           </DatasetProvider>
         </SessionProvider>
       );
+      await waitFor(() => {
+        expect(queryAllByTestId("permission-checkbox-edit")).toHaveLength(1);
+      });
       expect(asFragment()).toMatchSnapshot();
     });
 
@@ -232,11 +240,14 @@ describe("AgentAccess", () => {
         TESTCAFE_ID_PERMISSIONS_FORM_SUBMIT_BUTTON
       );
       userEvent.click(submitButton);
-      const dialog = await findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
-      expect(dialog).toBeInTheDocument();
-      expect(
-        getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
-      ).toHaveTextContent(OWN_PERMISSIONS_WARNING_PERMISSION);
+      await waitFor(() => {
+        expect(
+          getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
+        ).toBeInTheDocument();
+        expect(
+          getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
+        ).toHaveTextContent(OWN_PERMISSIONS_WARNING_PERMISSION);
+      });
     });
   });
 
