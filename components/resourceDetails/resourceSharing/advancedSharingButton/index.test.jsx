@@ -58,7 +58,7 @@ describe("AdvancedSharingButton", () => {
       expect(getByTestId("agent-picker-modal")).not.toBeNull();
     });
   });
-  it("closes modal when clicking outside the modal", () => {
+  it("closes modal when clicking outside the modal", async () => {
     const { getByTestId, queryByTestId } = renderWithTheme(
       <AdvancedSharingButton
         setShowAdvancedSharing={setShowAdvancedSharing}
@@ -70,6 +70,8 @@ describe("AdvancedSharingButton", () => {
     userEvent.click(button);
     const overlay = getByTestId(TESTCAFE_ID_MODAL_OVERLAY);
     userEvent.click(overlay.firstChild);
-    expect(queryByTestId("agent-picker-modal")).toBeNull();
+    await waitFor(() => {
+      expect(queryByTestId("agent-picker-modal")).toBeNull();
+    });
   });
 });
