@@ -20,6 +20,7 @@
  */
 
 import React from "react";
+import { act } from "@testing-library/react-hooks";
 import { waitFor } from "@testing-library/dom";
 import * as solidClientFns from "@inrupt/solid-client";
 import { schema } from "rdf-namespaces";
@@ -59,10 +60,10 @@ describe("Profile", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("renders an app profile", () => {
+  test("renders an app profile", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
-    const { asFragment } = renderWithTheme(
+    const { asFragment, queryByText } = renderWithTheme(
       <SessionProvider>
         <Profile
           profileIri="https://mockappurl.com"
@@ -70,6 +71,30 @@ describe("Profile", () => {
         />
       </SessionProvider>
     );
+    await waitFor(() => {
+      expect(queryByText("https://mockappurl.com")).toBeInTheDocument();
+    });
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  test("renders an error if profile cannot be fetched", async () => {
+    act(() => {
+      jest.spyOn(solidClientFns, "getSolidDataset").mockImplementation(() => {
+        throw new Error("404");
+      });
+    });
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
+    const { asFragment, queryByText } = renderWithTheme(
+      <SessionProvider>
+        <Profile profileIri="https://somewebid.com" type={schema.Person} />
+      </SessionProvider>
+    );
+    await waitFor(() => {
+      expect(
+        queryByText("Cannot fetch avatar for this WebID: https://somewebid.com")
+      ).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 });
