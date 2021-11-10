@@ -71,12 +71,14 @@ describe("Resource access show page", () => {
     });
     expect(asFragment()).toMatchSnapshot();
   });
-  test("renders profile when clicking on profile tab", () => {
+  test("renders profile when clicking on profile tab", async () => {
     const { getByTestId, getByText } = renderWithTheme(
       <AgentResourceAccessShowPage type={schema.SoftwareApplication} />
     );
     const tab = getByTestId(TESTCAFE_ID_TAB_PROFILE);
     userEvent.click(tab);
-    expect(getByText("Mock App")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(getByText("Mock App")).toBeInTheDocument();
+    });
   });
 });
