@@ -442,6 +442,16 @@ exports[`ResourceDrawer view it renders a Contents view when the router query ha
                       </div>
                     </div>
                     <div
+                      class="PodBrowser-root PodBrowser-root PodBrowser-standardInfo PodBrowser-elevation0"
+                      role="alert"
+                    >
+                      <div
+                        class="PodBrowser-message"
+                      >
+                        Sharing applies to all items in this folder
+                      </div>
+                    </div>
+                    <div
                       class="PodBrowser-sharingButtonContainer"
                     >
                       <button

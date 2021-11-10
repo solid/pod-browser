@@ -128,6 +128,14 @@ describe("ResourceDrawer view", () => {
   });
 
   test("it renders a Contents view when the router query has an iri", async () => {
+    mockedUseRouter.mockReturnValue({
+      asPath: "/pathname/",
+      replace: jest.fn(),
+      query: {
+        resourceIri: iri,
+        action: "details",
+      },
+    });
     const { asFragment, getByText } = renderWithTheme(
       <SessionProvider>
         <ResourceInfoProvider swr={swr}>
@@ -148,6 +156,10 @@ describe("ResourceDrawer view", () => {
   });
 
   test("it renders without errors when iri contains spaces", async () => {
+    mockUseResourceInfo.mockReturnValue({
+      ...swr,
+      data: resourceInfoWithSpaces,
+    });
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
       replace: jest.fn(),
@@ -156,16 +168,17 @@ describe("ResourceDrawer view", () => {
         action: "details",
       },
     });
-    useResourceInfo.mockReturnValue({ data: resourceInfoWithSpaces });
     const { asFragment, getByText } = renderWithTheme(
       <SessionProvider>
-        <DetailsMenuContext>
-          <PermissionsContextProvider>
-            <DatasetProvider solidDataset={resourceInfo}>
-              <ResourceDrawer />
-            </DatasetProvider>
-          </PermissionsContextProvider>
-        </DetailsMenuContext>
+        <ResourceInfoProvider swr={{ ...swr, data: resourceInfoWithSpaces }}>
+          <DetailsMenuContext>
+            <PermissionsContextProvider>
+              <DatasetProvider solidDataset={resourceInfo}>
+                <ResourceDrawer />
+              </DatasetProvider>
+            </PermissionsContextProvider>
+          </DetailsMenuContext>
+        </ResourceInfoProvider>
       </SessionProvider>
     );
     await waitFor(() => {
