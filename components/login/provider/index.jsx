@@ -129,6 +129,7 @@ export default function Provider({ defaultError, provider }) {
             return {
               ...prevState,
               clientId: CLIENT_APP_WEBID,
+              clientName: CLIENT_NAME,
             };
           });
         } else {
