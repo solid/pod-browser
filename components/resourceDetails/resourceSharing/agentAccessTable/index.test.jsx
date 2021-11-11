@@ -21,6 +21,8 @@
 
 import React from "react";
 import { waitFor } from "@testing-library/dom";
+import { DatasetProvider } from "@inrupt/solid-ui-react";
+import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import userEvent from "@testing-library/user-event";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import AgentAccessTable, { TESTCAFE_ID_AGENT_ACCESS_TABLE } from "./index";
@@ -28,7 +30,6 @@ import { createAccessMap } from "../../../../src/solidClientHelpers/permissions"
 import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
 import mockPermissionsContextProvider from "../../../../__testUtils/mockPermissionsContextProvider";
 import getSignedVc from "../../../../__testUtils/mockSignedVc";
-import { mockApp } from "../../../../__testUtils/mockApp";
 import { TESTCAFE_ID_SEARCH_INPUT } from "../agentsSearchBar";
 // import {
 //   TESTCAFE_ID_TAB_PEOPLE,
@@ -145,6 +146,20 @@ const permissionsWithProfiles = permissions.map((p, i) => {
   };
 });
 
+const permissionsWithProfilesNamelessAgent = [
+  ...permissionsWithProfiles,
+  {
+    acl: createAccessMap(true, true, false, false),
+    webId: "https://example6.com/profile/card#me",
+    type: "agent",
+    profile: {
+      avatar: null,
+      webId: "https://example6.com/profile/card#me",
+      types: ["https://schema.org/Person"],
+    },
+  },
+];
+
 const permissionsWithConsentWithProfiles = permissionsWithConsentAgent.map(
   (p, i) => {
     return {
@@ -173,6 +188,8 @@ const permissionsWithProfilesMixedTypes = [
   },
 ];
 describe("AgentAccessTable with agents", () => {
+  const mockDataset = mockSolidDatasetFrom("https://example.org/resource");
+  const setLoading = jest.fn();
   beforeEach(() => {
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles,
@@ -182,7 +199,9 @@ describe("AgentAccessTable with agents", () => {
     const type = "editors";
     const { asFragment, queryAllByRole } = renderWithTheme(
       <PermissionsContextProvider>
-        <AgentAccessTable type={type} />
+        <DatasetProvider solidDataset={mockDataset}>
+          <AgentAccessTable type={type} setLoading={setLoading} />
+        </DatasetProvider>
       </PermissionsContextProvider>
     );
 
@@ -197,7 +216,9 @@ describe("AgentAccessTable with agents", () => {
     const type = "editors";
     const { queryAllByRole, getByTestId } = renderWithTheme(
       <PermissionsContextProvider>
-        <AgentAccessTable type={type} />
+        <DatasetProvider solidDataset={mockDataset}>
+          <AgentAccessTable type={type} setLoading={setLoading} />
+        </DatasetProvider>
       </PermissionsContextProvider>
     );
     const button = getByTestId("show-all-button");
@@ -217,7 +238,9 @@ describe("AgentAccessTable with agents", () => {
     const type = "editors";
     const { queryAllByRole, getByTestId } = renderWithTheme(
       <PermissionsContextProvider>
-        <AgentAccessTable type={type} />
+        <DatasetProvider solidDataset={mockDataset}>
+          <AgentAccessTable type={type} setLoading={setLoading} />
+        </DatasetProvider>
       </PermissionsContextProvider>
     );
     const button = getByTestId("show-all-button");
@@ -232,6 +255,37 @@ describe("AgentAccessTable with agents", () => {
     expect(cells[4]).toHaveTextContent("Example C");
     expect(cells[5]).toHaveTextContent("Example D");
   });
+  it("agents without names appear after alphabetical ordered agents", async () => {
+    mockedUsePermissionsWithProfiles.mockReturnValue({
+      permissionsWithProfiles: [
+        publicPermission,
+        authenticatedPermission,
+        ...permissionsWithProfilesNamelessAgent,
+      ],
+    });
+
+    const type = "editors";
+    const { queryAllByRole, getByTestId } = renderWithTheme(
+      <PermissionsContextProvider>
+        <DatasetProvider solidDataset={mockDataset}>
+          <AgentAccessTable type={type} setLoading={setLoading} />
+        </DatasetProvider>
+      </PermissionsContextProvider>
+    );
+    const button = getByTestId("show-all-button");
+    expect(queryAllByRole("cell")).toHaveLength(3);
+    userEvent.click(button);
+    const cells = queryAllByRole("cell");
+    expect(cells).toHaveLength(7);
+    expect(cells[0]).toHaveTextContent("Anyone");
+    expect(cells[1]).toHaveTextContent("Anyone signed in");
+    expect(cells[2]).toHaveTextContent("Example A");
+    expect(cells[3]).toHaveTextContent("Example B");
+    expect(cells[4]).toHaveTextContent("Example C");
+    expect(cells[5]).toHaveTextContent("Example D");
+    expect(cells[6]).toHaveTextContent("https://example6.com/profile/card#me");
+  });
+
   it("shows first 3 permissions by default and when clicking the 'hide' button", async () => {
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles,
@@ -239,7 +293,9 @@ describe("AgentAccessTable with agents", () => {
     const type = "editors";
     const { queryAllByRole, getByTestId } = renderWithTheme(
       <PermissionsContextProvider>
-        <AgentAccessTable type={type} />
+        <DatasetProvider solidDataset={mockDataset}>
+          <AgentAccessTable type={type} setLoading={setLoading} />
+        </DatasetProvider>
       </PermissionsContextProvider>
     );
     const showAllButton = getByTestId("show-all-button");
@@ -258,7 +314,9 @@ describe("AgentAccessTable with agents", () => {
     const type = "editors";
     const { getByTestId, queryByText } = renderWithTheme(
       <PermissionsContextProvider>
-        <AgentAccessTable type={type} />
+        <DatasetProvider solidDataset={mockDataset}>
+          <AgentAccessTable type={type} setLoading={setLoading} />
+        </DatasetProvider>
       </PermissionsContextProvider>
     );
     waitFor(() => {
@@ -269,7 +327,7 @@ describe("AgentAccessTable with agents", () => {
       expect(queryByText("Example 2")).not.toBeNull();
     });
   });
-  // TODO: tabs have slightly changed so these tests need to be updated when tabs are restores
+  // TODO: tabs have slightly changed so these tests need to be updated when tabs are restored
   it.skip("renders a set of tabs which filter by Group type", () => {
     const permissionsWithTypes = [
       {
@@ -289,7 +347,7 @@ describe("AgentAccessTable with agents", () => {
     });
     const type = "editors";
     const { getByTestId, queryByText } = renderWithTheme(
-      <AgentAccessTable type={type} />
+      <AgentAccessTable type={type} setLoading={setLoading} />
     );
     waitFor(() => {
       // FIXME: change these test ids
@@ -323,7 +381,7 @@ describe("AgentAccessTable with agents", () => {
 
     const type = "editors";
     const { getByTestId, queryByText } = renderWithTheme(
-      <AgentAccessTable type={type} />
+      <AgentAccessTable type={type} setLoading={setLoading} />
     );
 
     waitFor(() => {
@@ -340,6 +398,8 @@ describe("AgentAccessTable with agents", () => {
   });
 });
 describe("AgentAccessTable with consent based agents", () => {
+  const mockDataset = mockSolidDatasetFrom("https://example.org/resource");
+  const setLoading = jest.fn();
   beforeEach(() => {
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: permissionsWithConsentWithProfiles,
@@ -350,7 +410,9 @@ describe("AgentAccessTable with consent based agents", () => {
     const type = "editors";
     const { asFragment, queryAllByRole } = renderWithTheme(
       <PermissionsContextProvider>
-        <AgentAccessTable type={type} />
+        <DatasetProvider solidDataset={mockDataset}>
+          <AgentAccessTable type={type} setLoading={setLoading} />
+        </DatasetProvider>
       </PermissionsContextProvider>
     );
 
@@ -359,6 +421,8 @@ describe("AgentAccessTable with consent based agents", () => {
   });
 });
 describe("AgentAccessTable without agents", () => {
+  const mockDataset = mockSolidDatasetFrom("https://example.org/resource");
+  const setLoading = jest.fn();
   it("renders an empty list of permissions if there are no permissions and the policy is not custom", () => {
     const type = "editors";
     mockedUsePermissionsWithProfiles.mockReturnValue({
@@ -366,7 +430,9 @@ describe("AgentAccessTable without agents", () => {
     });
     const { asFragment } = renderWithTheme(
       <EmptyPermissionsContextProvider>
-        <AgentAccessTable type={type} />
+        <DatasetProvider solidDataset={mockDataset}>
+          <AgentAccessTable type={type} setLoading={setLoading} />
+        </DatasetProvider>
       </EmptyPermissionsContextProvider>
     );
 
@@ -376,7 +442,9 @@ describe("AgentAccessTable without agents", () => {
     const type = "editors";
     const { asFragment } = renderWithTheme(
       <EmptyPermissionsContextProvider>
-        <AgentAccessTable type={type} />
+        <DatasetProvider solidDataset={mockDataset}>
+          <AgentAccessTable type={type} setLoading={setLoading} />
+        </DatasetProvider>
       </EmptyPermissionsContextProvider>
     );
 
@@ -386,7 +454,9 @@ describe("AgentAccessTable without agents", () => {
     const type = "viewAndAdd";
     const { asFragment, queryByTestId } = renderWithTheme(
       <EmptyPermissionsContextProvider>
-        <AgentAccessTable type={type} />
+        <DatasetProvider solidDataset={mockDataset}>
+          <AgentAccessTable type={type} setLoading={setLoading} />
+        </DatasetProvider>
       </EmptyPermissionsContextProvider>
     );
 

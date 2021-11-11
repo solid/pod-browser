@@ -78,7 +78,7 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
     const sorted = permissionsWithProfiles
       .filter((p) => p.type === "agent")
       .sort((a, b) => {
-        return a.profile?.name.localeCompare(b.profile?.name);
+        return a.profile?.name?.localeCompare(b.profile?.name);
       });
     setTablePermissions(publicAndAuth.concat(sorted));
   }, [permissionsWithProfiles]);
@@ -278,6 +278,10 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
 
 AgentAccessTable.propTypes = {
   type: PropTypes.string.isRequired,
-  loading: PropTypes.bool.isRequired,
+  loading: PropTypes.bool,
   setLoading: PropTypes.func.isRequired,
+};
+
+AgentAccessTable.defaultProps = {
+  loading: false,
 };
