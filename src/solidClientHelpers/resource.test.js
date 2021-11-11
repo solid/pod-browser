@@ -42,10 +42,16 @@ import {
   deletePoliciesContainer,
   getProfileResource,
 } from "./resource";
-import { getPolicyUrl } from "./policies";
+import { getPolicyUrl } from "../models/policy";
 import { chain } from "./utils";
 
-jest.mock("./policies");
+jest.mock("../models/policy");
+jest.mock("@inrupt/solid-client", () => {
+  const actualClientModule = jest.requireActual("@inrupt/solid-client");
+  actualClientModule.deleteContainer = jest.fn();
+  // This only mocks out functions which behaviour is intended to be customized.
+  return actualClientModule;
+});
 
 describe("getBaseUrl", () => {
   it("returns the 'base' of a URL", () => {
@@ -397,11 +403,16 @@ describe("deletePoliciesContainer", () => {
   });
 
   it("ignores 403 errors when deleting the policy resource", async () => {
-    SolidClientFns.deleteContainer
-      .mockResolvedValueOnce()
-      .mockRejectedValue("403");
+    SolidClientFns.deleteContainer.mockRejectedValue(new Error("403"));
     await expect(
       deletePoliciesContainer(containerIri, fetch)
     ).resolves.toBeUndefined();
+  });
+
+  it("throws errors which aren't 403, 404 or 409 when deleting the policy resource", async () => {
+    SolidClientFns.deleteContainer.mockRejectedValue(new Error("400"));
+    await expect(
+      deletePoliciesContainer(containerIri, fetch)
+    ).rejects.toThrow();
   });
 });

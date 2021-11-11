@@ -24,14 +24,14 @@ import { useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
 import { getAccessControl, isAcp } from "../../accessControl";
 import usePoliciesContainerUrl from "../usePoliciesContainerUrl";
+import useIsLegacyAcp from "../useIsLegacyAcp";
 
 export default function useAccessControl(resourceInfo) {
   const { session } = useSession();
   const { fetch } = session;
   const [accessControl, setAccessControl] = useState(null);
-  const policiesContainerUrl = usePoliciesContainerUrl(
-    resourceInfo && getSourceUrl(resourceInfo)
-  );
+  const policiesContainerUrl = usePoliciesContainerUrl(resourceInfo);
+  const { data: isLegacy } = useIsLegacyAcp(resourceInfo);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function useAccessControl(resourceInfo) {
     }
     setAccessControl(null);
     setError(null);
-    getAccessControl(resourceInfo, policiesContainerUrl, fetch)
+    getAccessControl(resourceInfo, policiesContainerUrl, fetch, isLegacy)
       .then((response) => {
         setAccessControl(response);
         setError(null);
@@ -55,7 +55,7 @@ export default function useAccessControl(resourceInfo) {
         setAccessControl(null);
         setError(accessControlError);
       });
-  }, [fetch, policiesContainerUrl, resourceInfo, session]);
+  }, [fetch, policiesContainerUrl, resourceInfo, session, isLegacy]);
 
   return { accessControl, error };
 }

@@ -34,39 +34,56 @@ export function getPoliciesContainerUrl(podRootUri) {
   return joinPath(podRootUri, POLICIES_CONTAINER);
 }
 
-export function getPolicyUrl(resource, policiesContainerUrl) {
-  const resourceUrl = getSourceUrl(resource);
-  const rootUrl = policiesContainerUrl.substr(
-    0,
-    policiesContainerUrl.length - POLICIES_CONTAINER.length
-  );
-  const matchingStart = sharedStart(resourceUrl, rootUrl);
-  const path = `${resourceUrl.substr(matchingStart.length)}.ttl`;
-  return joinPath(getPoliciesContainerUrl(matchingStart), path);
+export function getPolicyUrl(resource, policiesContainerUrl, externalPolicy) {
+  if (externalPolicy) {
+    const resourceUrl = getSourceUrl(resource);
+    const rootUrl = policiesContainerUrl.substr(
+      0,
+      policiesContainerUrl.length - POLICIES_CONTAINER.length
+    );
+    const matchingStart = sharedStart(resourceUrl, rootUrl);
+    const path = `${resourceUrl.substr(matchingStart.length)}.ttl`;
+    return joinPath(getPoliciesContainerUrl(matchingStart), path);
+  }
+  // If the policy is not in an external resource, it is inline of the ACR
+  // It is expected that the `policiesContainerUrl` is the IRI or the ACR where
+  // the access control data for the current resource will be stored.
+  const policyUrl = new URL(policiesContainerUrl);
+  // The current base policy IRI is identified by the resource IRI base64-encoded in the ACR dataset.
+  policyUrl.hash = encodeURIComponent(btoa(getSourceUrl(resource)));
+  return policyUrl.href;
 }
 
 export function getResourcePoliciesContainerPath(
   resource,
-  policiesContainerUrl
+  policiesContainerUrl,
+  externalResourcesSupported
 ) {
-  return getContainerUrl(getPolicyUrl(resource, policiesContainerUrl));
+  return getContainerUrl(
+    getPolicyUrl(resource, policiesContainerUrl, externalResourcesSupported)
+  );
 }
 
 export function getPolicyResourceUrl(
   resource,
   policiesContainerUrl,
-  policyName
+  policyName,
+  externalResourcesSupported
 ) {
-  const resourceUrl = getSourceUrl(resource);
-  const rootUrl = policiesContainerUrl.substr(
-    0,
-    policiesContainerUrl.length - POLICIES_CONTAINER.length
-  );
-  const matchingStart = sharedStart(resourceUrl, rootUrl);
-  const path = `${resourceUrl.substr(
-    matchingStart.length
-  )}.ttl.${policyName}.ttl`;
-  return joinPath(getPoliciesContainerUrl(matchingStart), path);
+  // External resources in ACRs are supported in legacy systems.
+  if (externalResourcesSupported) {
+    const resourceUrl = getSourceUrl(resource);
+    const rootUrl = policiesContainerUrl.substr(
+      0,
+      policiesContainerUrl.length - POLICIES_CONTAINER.length
+    );
+    const matchingStart = sharedStart(resourceUrl, rootUrl);
+    const path = `${resourceUrl.substr(
+      matchingStart.length
+    )}.ttl.${policyName}.ttl`;
+    return joinPath(getPoliciesContainerUrl(matchingStart), path);
+  }
+  return policiesContainerUrl;
 }
 
 export function getPolicyType(type) {

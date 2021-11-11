@@ -22,7 +22,8 @@
 /* istanbul ignore file */
 
 import {
-  acp_v3 as acp,
+  acp_v3 as legacyAcp,
+  acp_v4 as acp,
   asUrl,
   deleteFile,
   getSolidDataset,
@@ -31,6 +32,7 @@ import {
   saveSolidDatasetAt,
   setThing,
 } from "@inrupt/solid-client";
+import LinkHeader from "http-link-header";
 import {
   ACL,
   createAccessMap,
@@ -43,9 +45,9 @@ import {
   getOrCreateDatasetOld,
 } from "../../solidClientHelpers/resource";
 import {
-  getPolicyResourceUrl,
-  getPolicyUrl,
   isCustomPolicy,
+  getPolicyUrl,
+  getPolicyResourceUrl,
 } from "../../models/policy";
 import { isHTTPError } from "../../error";
 import {
@@ -114,6 +116,111 @@ export const getPolicyDetailFromAccess = (access, label) => {
   return null;
 };
 
+/**
+ * Discover whether an authorization server advertizes its configuration as descibed
+ * in https://solid.github.io/authorization-panel/acp-specification/#capabilities-discovery.
+ * This is used to determine whether an authorization server conforms to the legacy
+ * ACP specification, or if it implements the latest version. The retrieved configuration
+ * itself is irrelevant in this case, what is important is its presence or absence.
+ *
+ * TODO: Part of this should be moved to `@inrupt/solid-client`. When doing so,
+ * make sure to remove the dependency on `http-link-header`, which will no longer
+ * be necessary.
+ *
+ * @param {*} acrUrl The URL of the Access Control Resource
+ */
+export async function hasAcpConfiguration(acrUrl, authFetch) {
+  // Defaults to the latest system.
+  if (typeof acrUrl !== "string") {
+    return false;
+  }
+  const response = await authFetch(acrUrl, {
+    // The specification requires that this should be an OPTIONS request, but
+    // this causes issues for cross-origin requests from a browser. ESS currently
+    // allows to work around this issuing a HEAD request instead.
+    method: "HEAD",
+  });
+  const linkHeader = response.headers.get("Link");
+  if (linkHeader === null) {
+    return false;
+  }
+  const parsedLinks = LinkHeader.parse(linkHeader);
+  return (
+    parsedLinks.get("rel", "http://www.w3.org/ns/solid/acp#grant").length > 0 ||
+    parsedLinks.get("rel", "http://www.w3.org/ns/solid/acp#attribute").length >
+      0
+  );
+}
+
+// The following functions multiplex between the latest and legacy ACP API
+function switchIfLegacy(legacyFunction, latestFunction, parameters, isLegacy) {
+  return isLegacy
+    ? legacyFunction(...parameters)
+    : latestFunction(...parameters);
+}
+
+const getMatcher = (policyDataset, matcherUrl, legacy) =>
+  switchIfLegacy(
+    legacyAcp.getRule,
+    acp.getMatcher,
+    [policyDataset, matcherUrl],
+    legacy
+  );
+
+const getMatcherAll = (policyDataset, legacy) =>
+  switchIfLegacy(
+    legacyAcp.getRuleAll,
+    acp.getMatcherAll,
+    [policyDataset],
+    legacy
+  );
+
+const createMatcher = (matcherUrl, legacy) =>
+  switchIfLegacy(legacyAcp.createRule, acp.createMatcher, [matcherUrl], legacy);
+
+const getAllOfMatcherUrlAll = (policy, legacy) =>
+  switchIfLegacy(
+    legacyAcp.getAllOfRuleUrlAll,
+    acp.getAllOfMatcherUrlAll,
+    [policy],
+    legacy
+  );
+
+const setAllOfMatcherUrl = (policy, matcher, legacy) =>
+  switchIfLegacy(
+    legacyAcp.setAllOfRuleUrl,
+    acp.setAllOfMatcherUrl,
+    [policy, matcher],
+    legacy
+  );
+
+const addAllOfMatcherUrl = (policy, matcher, legacy) =>
+  switchIfLegacy(
+    legacyAcp.addAllOfRuleUrl,
+    acp.addAllOfMatcherUrl,
+    [policy, matcher],
+    legacy
+  );
+
+const removeAllOfMatcherUrl = (policy, matcher, legacy) =>
+  switchIfLegacy(
+    legacyAcp.removeAllOfRuleUrl,
+    acp.removeAllOfMatcherUrl,
+    [policy, matcher],
+    legacy
+  );
+
+const getAllowModes = (policy, legacy) =>
+  switchIfLegacy(legacyAcp.getAllowModes, acp.getAllowModes, [policy], legacy);
+
+const setAllowModes = (policy, modes, legacy) =>
+  switchIfLegacy(
+    legacyAcp.setAllowModes,
+    acp.setAllowModes,
+    [policy, modes],
+    legacy
+  );
+
 export function addAcpModes(existingAcpModes, newAcpModes) {
   return existingAcpModes
     ? createAcpMap(
@@ -163,66 +270,81 @@ export function getOrCreatePolicy(policyDataset, url) {
   return { policy: newPolicy, dataset: updatedPolicyDataset };
 }
 
-export function getRulesOrCreate(ruleUrls, policy, policyDataset) {
-  // assumption: Rules resides in the same resource as the policies
-  const rules = ruleUrls
-    .map((url) => acp.getRule(policyDataset, url))
-    .filter((rule) => !!rule);
-  if (rules.length === 0) {
-    const ruleUrl = `${asUrl(policy)}Rule`; // e.g. <pod>/policies/.ttl#readPolicyRule
-    return { existing: false, rules: [acp.createRule(ruleUrl)] };
+export function getMatchersOrCreate(
+  matcherUrls,
+  policy,
+  policyDataset,
+  legacy
+) {
+  // assumption: Matchers resides in the same resource as the policies
+  const matchers = matcherUrls
+    .map((url) => getMatcher(policyDataset, url, legacy))
+    .filter((matcher) => !!matcher);
+  if (matchers.length === 0) {
+    const matcherUrl = `${asUrl(policy)}${legacy ? "Rule" : "Matcher"}`; // e.g. <pod>/policies/.ttl#readPolicyMatcher
+    return { existing: false, matchers: [createMatcher(matcherUrl, legacy)] };
   }
-  return { existing: true, rules };
+  return { existing: true, matchers };
 }
 
-export function getRuleWithAgent(rules, agentWebId) {
-  // assumption 1: the rules for the policies we work with will not have agents across multiple rules
-  // assumption 2: there will always be at least one rule (we enforce this with getRulesOrCreate)
-  const rule = rules.find((r) =>
+export function getMatcherWithAgent(matchers, agentWebId) {
+  // assumption 1: the matchers for the policies we work with will not have agents across multiple matchers
+  // assumption 2: there will always be at least one matcher (we enforce this with getMatchersOrCreate)
+  const matcher = matchers.find((r) =>
     acp.getAgentAll(r).find((webId) => webId === agentWebId)
   );
-  // if we don't find the agent in a rule, we'll just pick the first one
-  return rule || rules[0];
+  // if we don't find the agent in a matcher, we'll just pick the first one
+  return matcher || matchers[0];
 }
 
-export function setAgents(policy, policyDataset, webId, accessToMode) {
-  const ruleUrls = acp.getAllOfRuleUrlAll(policy);
-  const { existing, rules } = getRulesOrCreate(ruleUrls, policy, policyDataset);
-  const rule = getRuleWithAgent(rules, webId);
-  const existingAgents = acp.getAgentAll(rule);
+export function setAgents(policy, policyDataset, webId, accessToMode, legacy) {
+  const matcherUrls = getAllOfMatcherUrlAll(policy, legacy);
+  const { existing, matchers } = getMatchersOrCreate(
+    matcherUrls,
+    policy,
+    policyDataset,
+    legacy
+  );
+  const matcher = getMatcherWithAgent(matchers, webId);
+  const existingAgents = acp.getAgentAll(matcher);
   const agentIndex = existingAgents.indexOf(webId);
-  let modifiedRule = rule;
+  let modifiedMatcher = matcher;
   if (accessToMode && agentIndex === -1) {
-    modifiedRule = acp.addAgent(rule, webId);
+    modifiedMatcher = acp.addAgent(matcher, webId);
   }
   if (!accessToMode && agentIndex !== -1) {
-    modifiedRule = acp.removeAgent(rule, webId);
+    modifiedMatcher = acp.removeAgent(matcher, webId);
   }
-  const modifiedDataset = setThing(policyDataset, modifiedRule);
+  const modifiedDataset = setThing(policyDataset, modifiedMatcher);
   const modifiedPolicy = existing
-    ? acp.setAllOfRuleUrl(policy, modifiedRule)
-    : acp.addAllOfRuleUrl(policy, modifiedRule);
+    ? setAllOfMatcherUrl(policy, modifiedMatcher, legacy)
+    : addAllOfMatcherUrl(policy, modifiedMatcher, legacy);
   return {
     policy: modifiedPolicy,
     dataset: modifiedDataset,
   };
 }
 
-export function setPublicAgent(dataset, policy, access) {
-  const rulesUrls = acp.getAllOfRuleUrlAll(policy);
-  const { existing, rules } = getRulesOrCreate(rulesUrls, policy, dataset);
-  const modifiedRules = rules.map((rule) =>
-    access ? acp.setPublic(rule) : acp.removePublic(rule)
+export function setPublicAgent(dataset, policy, access, legacy) {
+  const matchersUrls = getAllOfMatcherUrlAll(policy, legacy);
+  const { existing, matchers } = getMatchersOrCreate(
+    matchersUrls,
+    policy,
+    dataset,
+    legacy
   );
-  const [modifiedDataset] = modifiedRules.map((modifiedRule) => {
-    return setThing(dataset, modifiedRule);
+  const modifiedMatchers = matchers.map((matcher) =>
+    access ? acp.setPublic(matcher) : acp.removePublic(matcher)
+  );
+  const [modifiedDataset] = modifiedMatchers.map((modifiedMatcher) => {
+    return setThing(dataset, modifiedMatcher);
   });
   const [modifiedPolicy] = existing
-    ? modifiedRules.map((modifiedRule) =>
-        acp.setAllOfRuleUrl(policy, modifiedRule)
+    ? modifiedMatchers.map((modifiedMatcher) =>
+        setAllOfMatcherUrl(policy, modifiedMatcher, legacy)
       )
-    : modifiedRules.map((modifiedRule) =>
-        acp.addAllOfRuleUrl(policy, modifiedRule)
+    : modifiedMatchers.map((modifiedMatcher) =>
+        addAllOfMatcherUrl(policy, modifiedMatcher, legacy)
       );
   return {
     policy: modifiedPolicy,
@@ -230,24 +352,29 @@ export function setPublicAgent(dataset, policy, access) {
   };
 }
 
-export function setAuthenticatedAgent(dataset, policy, access) {
-  const rulesUrls = acp.getAllOfRuleUrlAll(policy);
-  const { existing, rules } = getRulesOrCreate(rulesUrls, policy, dataset);
-  const modifiedRules = rules.map((rule) => {
-    const modifiedRule = access
-      ? acp.setAuthenticated(rule)
-      : acp.removeAuthenticated(rule);
-    return modifiedRule;
+export function setAuthenticatedAgent(dataset, policy, access, legacy) {
+  const matchersUrls = getAllOfMatcherUrlAll(policy, legacy);
+  const { existing, matchers } = getMatchersOrCreate(
+    matchersUrls,
+    policy,
+    dataset,
+    legacy
+  );
+  const modifiedMatchers = matchers.map((matcher) => {
+    const modifiedMatcher = access
+      ? acp.setAuthenticated(matcher)
+      : acp.removeAuthenticated(matcher);
+    return modifiedMatcher;
   });
-  const [modifiedDataset] = modifiedRules.map((modifiedRule) => {
-    return setThing(dataset, modifiedRule);
+  const [modifiedDataset] = modifiedMatchers.map((modifiedMatcher) => {
+    return setThing(dataset, modifiedMatcher);
   });
   const [modifiedPolicy] = existing
-    ? modifiedRules.map((modifiedRule) =>
-        acp.setAllOfRuleUrl(policy, modifiedRule)
+    ? modifiedMatchers.map((modifiedMatcher) =>
+        setAllOfMatcherUrl(policy, modifiedMatcher, legacy)
       )
-    : modifiedRules.map((modifiedRule) =>
-        acp.addAllOfRuleUrl(policy, modifiedRule)
+    : modifiedMatchers.map((modifiedMatcher) =>
+        addAllOfMatcherUrl(policy, modifiedMatcher, legacy)
       );
   return {
     policy: modifiedPolicy,
@@ -255,22 +382,26 @@ export function setAuthenticatedAgent(dataset, policy, access) {
   };
 }
 
-export function getNamedPolicyModesAndAgents(policyUrl, policyDataset) {
+export function getNamedPolicyModesAndAgents(policyUrl, policyDataset, legacy) {
   const policy = acp.getPolicy(policyDataset, policyUrl);
   if (!policy) return { modes: {}, agents: [] };
-  const modes = acp.getAllowModes(policy);
-  const ruleUrls = acp.getAllOfRuleUrlAll(policy);
-  // assumption: rule resides in the same resource as policies
-  const rules = ruleUrls.map((url) => acp.getRule(policyDataset, url));
-  const agents = rules.reduce(
-    (memo, rule) => memo.concat(acp.getAgentAll(rule)),
+  const modes = getAllowModes(policy, legacy);
+  const matcherUrls = getAllOfMatcherUrlAll(policy, legacy);
+  // assumption: matchers resides in the same resource as policies
+  const matchers = matcherUrls
+    .map((url) => getMatcher(policyDataset, url, legacy))
+    .filter((matcher) => matcher !== null);
+  const agents = matchers.reduce(
+    (memo, matcher) => memo.concat(acp.getAgentAll(matcher)),
     []
   );
-  const [authenticatedStatus] = rules.map((rule) => acp.hasAuthenticated(rule));
+  const [authenticatedStatus] = matchers.map((matcher) =>
+    acp.hasAuthenticated(matcher)
+  );
   if (authenticatedStatus) {
     agents.unshift(AUTHENTICATED_AGENT_PREDICATE);
   }
-  const [publicStatus] = rules.map((rule) => acp.hasPublic(rule));
+  const [publicStatus] = matchers.map((matcher) => acp.hasPublic(matcher));
   if (publicStatus) {
     agents.unshift(PUBLIC_AGENT_PREDICATE);
   }
@@ -292,17 +423,19 @@ export function getAgentType(webId) {
 }
 
 // this is from old permissions
-export function getPolicyModesAndAgents(policyUrls, policyDataset) {
+export function getPolicyModesAndAgents(policyUrls, policyDataset, legacy) {
   return policyUrls
     .map((url) => acp.getPolicy(policyDataset, url))
     .filter((policy) => !!policy)
     .map((policy) => {
-      const modes = acp.getAllowModes(policy);
-      const ruleUrls = acp.getAllOfRuleUrlAll(policy);
-      // assumption: rule resides in the same resource as policies
-      const rules = ruleUrls.map((url) => acp.getRule(policyDataset, url));
-      const agents = rules.reduce(
-        (memo, rule) => memo.concat(acp.getAgentAll(rule)),
+      const modes = getAllowModes(policy, legacy);
+      const matcherUrls = getAllOfMatcherUrlAll(policy, legacy);
+      // assumption: matchers resides in the same resource as policies
+      const matchers = matcherUrls.map((matcher) =>
+        getMatcher(policyDataset, matcher, legacy)
+      );
+      const agents = matchers.reduce(
+        (memo, matcher) => memo.concat(acp.getAgentAll(matcher)),
         []
       );
       return {
@@ -312,10 +445,10 @@ export function getPolicyModesAndAgents(policyUrls, policyDataset) {
     });
 }
 
-export function removePermissionsForAgent(webId, policyDataset) {
-  return acp.getRuleAll(policyDataset).reduce((dataset, rule) => {
-    const modifiedRule = acp.removeAgent(rule, webId);
-    return setThing(dataset, modifiedRule);
+export function removePermissionsForAgent(webId, policyDataset, legacy) {
+  return getMatcherAll(policyDataset, legacy).reduce((dataset, matcher) => {
+    const modifiedMatcher = acp.removeAgent(matcher, webId);
+    return setThing(dataset, modifiedMatcher);
   }, policyDataset);
 }
 
@@ -324,15 +457,17 @@ function updateAllowPolicy(
   policyUrl,
   webId,
   accessToMode,
-  acpMap
+  acpMap,
+  legacy
 ) {
   return chain(
     getOrCreatePolicy(policyDataset, policyUrl),
     ({ policy, dataset }) => ({
-      policy: acp.setAllowModes(policy, acpMap),
+      policy: setAllowModes(policy, acpMap, legacy),
       dataset,
     }),
-    ({ policy, dataset }) => setAgents(policy, dataset, webId, accessToMode),
+    ({ policy, dataset }) =>
+      setAgents(policy, dataset, webId, accessToMode, legacy),
     ({ policy, dataset }) => acp.setPolicy(dataset, policy)
   );
 }
@@ -364,7 +499,15 @@ function ensureAccessControl(policyUrl, datasetWithAcr, changed) {
   };
 }
 
-function ensureApplyMembers(policyUrl, datasetWithAcr, changed) {
+function ensureApplyMembers(policyUrl, datasetWithAcr, changed, legacy) {
+  // applyMembers is no longer part of the ACP spec and will be ignored by latest
+  // servers.
+  if (!legacy) {
+    return {
+      changed,
+      acr: datasetWithAcr,
+    };
+  }
   const policies = acp.getMemberPolicyUrlAll(datasetWithAcr);
   const existingPolicies = policies.find((url) => policyUrl === url);
   if (existingPolicies) {
@@ -409,7 +552,8 @@ export function getPodBrowserPolicyUrlAll(
 export async function getPodBrowserPermissions(
   resourceWithAcr,
   policiesContainerUrl,
-  fetch
+  fetch,
+  legacy
 ) {
   const policiesUrls = getPodBrowserPolicyUrlAll(
     resourceWithAcr,
@@ -422,7 +566,7 @@ export async function getPodBrowserPermissions(
         const dataset = await getSolidDataset(url, {
           fetch,
         });
-        return getNamedPolicyModesAndAgents(url, dataset);
+        return getNamedPolicyModesAndAgents(url, dataset, legacy);
       })
     );
     return modesAndAgents.reduce(
@@ -439,9 +583,13 @@ export async function getPodBrowserPermissions(
             const directPolicyUrl = getPolicyResourceUrl(
               resourceWithAcr,
               policiesContainerUrl,
-              alias
+              alias,
+              legacy
             );
-            const directPolicyName = getPolicyUrlName(directPolicyUrl, alias);
+            const directPolicyName = legacy
+              ? getPolicyUrlName(directPolicyUrl, alias, legacy)
+              : policyUrl;
+            // : `${policyUrl}${alias}`;
             return {
               type: getAgentType(webId),
               acl,
@@ -471,6 +619,32 @@ export function getWebIdsFromInheritedPermissions(permissions) {
   );
 }
 
+/**
+ * FIXME This function doesn't really make sense, but it is the current implementation
+ * so let's keep it as is for now and figure it out later.
+ *
+ * @param {*} policyResourceUrl
+ */
+async function updatePolicyIfChanged(policyResourceUrl, fetch) {
+  try {
+    const policyDatasetWithAcr = await acp.getSolidDatasetWithAcr(
+      policyResourceUrl,
+      { fetch }
+    );
+    // FIXME: this assignment doesn't make sense to me.
+    const { acr: policyAcr, changed: policyChanged } = {
+      acr: policyDatasetWithAcr,
+      changed: false,
+    };
+    // This is never true ?
+    if (policyChanged) {
+      await acp.saveAcrFor(policyAcr, { fetch });
+    }
+  } catch (err) {
+    if (!isHTTPError(err.message, 404)) throw err;
+  }
+}
+
 export default class AcpAccessControlStrategy {
   #originalWithAcr;
 
@@ -480,18 +654,28 @@ export default class AcpAccessControlStrategy {
 
   #fetch;
 
-  constructor(originalWithAcr, policiesContainerUrl, fetch) {
+  // Legacy ACP behavior uses rules instead of matchers, and stores policies
+  // in resources external to the ACR.
+  #isLegacy;
+
+  constructor(originalWithAcr, policiesContainerUrl, fetch, legacy) {
     this.#originalWithAcr = originalWithAcr;
-    this.#policyUrl = getPolicyUrl(originalWithAcr, policiesContainerUrl);
+    this.#policyUrl = getPolicyUrl(
+      originalWithAcr,
+      policiesContainerUrl,
+      legacy
+    );
     this.#policiesContainerUrl = policiesContainerUrl;
     this.#fetch = fetch;
+    this.#isLegacy = legacy;
   }
 
   async getAllPermissionsForResource() {
     const allPermissions = await getPodBrowserPermissions(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
-      this.#fetch
+      this.#fetch,
+      this.#isLegacy
     );
     return allPermissions;
   }
@@ -500,7 +684,8 @@ export default class AcpAccessControlStrategy {
     const allPermissions = await getPodBrowserPermissions(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
-      this.#fetch
+      this.#fetch,
+      this.#isLegacy
     );
     return allPermissions.filter(({ alias }) => alias === policyName);
   }
@@ -519,7 +704,8 @@ export default class AcpAccessControlStrategy {
           getAllowApplyPolicy(this.#policyUrl, "write"),
           getAllowApplyPolicy(this.#policyUrl, "append"),
         ],
-        policyDataset
+        policyDataset,
+        this.#isLegacy
       ).forEach(({ modes, agents }) =>
         agents.forEach((webId) => {
           const permission = getOrCreatePermission(permissions, webId);
@@ -531,7 +717,8 @@ export default class AcpAccessControlStrategy {
       // assumption 2: control access involves another policy URL, but since both have the same modes, we only check one
       getPolicyModesAndAgents(
         [getAllowAccessPolicy(this.#policyUrl, "control")],
-        policyDataset
+        policyDataset,
+        this.#isLegacy
       ).forEach(({ modes, agents }) =>
         agents.forEach((webId) => {
           const permission = getOrCreatePermission(permissions, webId);
@@ -559,7 +746,14 @@ export default class AcpAccessControlStrategy {
   saveApplyPolicyForOriginalResource(dataset, webId, access, mode, acpMap) {
     const allowUrl = getAllowApplyPolicy(this.#policyUrl, mode);
     return chain(dataset, (d) =>
-      updateAllowPolicy(d, allowUrl, webId, access[mode], acpMap)
+      updateAllowPolicy(
+        d,
+        allowUrl,
+        webId,
+        access[mode],
+        acpMap,
+        this.#isLegacy
+      )
     );
   }
 
@@ -567,7 +761,14 @@ export default class AcpAccessControlStrategy {
     const allowUrl = getAllowAccessPolicy(this.#policyUrl, "control");
     const modes = createAcpMap(true, true);
     return chain(dataset, (d) =>
-      updateAllowPolicy(d, allowUrl, webId, access.control, modes)
+      updateAllowPolicy(
+        d,
+        allowUrl,
+        webId,
+        access.control,
+        modes,
+        this.#isLegacy
+      )
     );
   }
 
@@ -575,7 +776,14 @@ export default class AcpAccessControlStrategy {
     const allowUrl = getAllowApplyPolicy(this.#policyUrl, "control");
     const modes = createAcpMap(true, true);
     return chain(dataset, (d) =>
-      updateAllowPolicy(d, allowUrl, webId, access.control, modes)
+      updateAllowPolicy(
+        d,
+        allowUrl,
+        webId,
+        access.control,
+        modes,
+        this.#isLegacy
+      )
     );
   }
 
@@ -612,20 +820,34 @@ export default class AcpAccessControlStrategy {
     );
   }
 
+  async linkPoliciesToAcr(originalChanged, originalAcr) {
+    if (originalChanged) {
+      this.#originalWithAcr = await acp.saveAcrFor(originalAcr, {
+        fetch: this.#fetch,
+      });
+    }
+  }
+
   async ensureAccessControlAllNamedPolicies() {
     // ensuring access controls for original resource
     const editorsPolicyResourceUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
-      "editors"
+      "editors",
+      this.#isLegacy
     );
+    const editorsPolicy = this.#isLegacy
+      ? getPolicyUrlName(editorsPolicyResourceUrl, "editors")
+      : `${this.#policyUrl}editors`;
     const viewersPolicyResourceUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
-      "viewers"
+      "viewers",
+      this.#isLegacy
     );
-    const editorsPolicy = getPolicyUrlName(editorsPolicyResourceUrl, "editors");
-    const viewersPolicy = getPolicyUrlName(viewersPolicyResourceUrl, "viewers");
+    const viewersPolicy = this.#isLegacy
+      ? getPolicyUrlName(viewersPolicyResourceUrl, "viewers")
+      : `${this.#policyUrl}viewers`;
     const { acr: originalAcr, changed: originalChanged } = chain(
       {
         acr: this.#originalWithAcr,
@@ -633,42 +855,29 @@ export default class AcpAccessControlStrategy {
       },
       ({ acr, changed }) => ensureApplyControl(editorsPolicy, acr, changed),
       ({ acr, changed }) => ensureApplyControl(viewersPolicy, acr, changed),
-      ({ acr, changed }) => ensureApplyMembers(editorsPolicy, acr, changed),
-      ({ acr, changed }) => ensureApplyMembers(viewersPolicy, acr, changed)
+      ({ acr, changed }) =>
+        ensureApplyMembers(editorsPolicy, acr, changed, this.#isLegacy),
+      ({ acr, changed }) =>
+        ensureApplyMembers(viewersPolicy, acr, changed, this.#isLegacy)
     );
-    // ensuring access controls for policy resource
-    try {
-      const editorsPolicyDatasetWithAcr = await acp.getSolidDatasetWithAcr(
-        editorsPolicyResourceUrl,
-        { fetch: this.#fetch }
-      );
-      const viewersPolicyDatasetWithAcr = await acp.getSolidDatasetWithAcr(
-        viewersPolicyResourceUrl,
-        { fetch: this.#fetch }
-      );
-
-      const { acr: editorsPolicyAcr, changed: editorsPolicyChanged } = {
-        acr: editorsPolicyDatasetWithAcr,
-        changed: false,
-      };
-      if (editorsPolicyChanged) {
-        await acp.saveAcrFor(editorsPolicyAcr, { fetch: this.#fetch });
-      }
-      const { acr: viewersPolicyAcr, changed: viewersPolicyChanged } = {
-        acr: viewersPolicyDatasetWithAcr,
-        changed: false,
-      };
-      if (viewersPolicyChanged) {
-        await acp.saveAcrFor(viewersPolicyAcr, { fetch: this.#fetch });
-      }
-    } catch (err) {
-      if (!isHTTPError(err.message, 404)) throw err;
-    }
-    // ensuring access controls for policy resource
-    if (originalChanged) {
-      this.#originalWithAcr = await acp.saveAcrFor(originalAcr, {
-        fetch: this.#fetch,
-      });
+    // In order to apply the policies to the target resource, both the policies'
+    // content and their links to the Access Control must be saved.
+    if (this.#isLegacy) {
+      // In legacy systems, the policies' content must be saved first, because they
+      // are stored in external resources.
+      // ensuring policy content is up-to-date
+      await updatePolicyIfChanged(editorsPolicyResourceUrl, this.#fetch);
+      await updatePolicyIfChanged(viewersPolicyResourceUrl, this.#fetch);
+      // ensuring access controls for policy resource
+      await this.linkPoliciesToAcr(originalChanged, originalAcr);
+    } else {
+      // In latest systems, the policies are inline of the ACR. It means they could
+      // be disregarded if they are not linked to the Access Control first.
+      // ensuring access controls for policy resource
+      await this.linkPoliciesToAcr(originalChanged, originalAcr);
+      // ensuring policy content is up-to-date
+      await updatePolicyIfChanged(editorsPolicyResourceUrl, this.#fetch);
+      await updatePolicyIfChanged(viewersPolicyResourceUrl, this.#fetch);
     }
   }
 
@@ -677,27 +886,30 @@ export default class AcpAccessControlStrategy {
     const viewAndAddPolicyResourceUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
-      "viewAndAdd"
+      "viewAndAdd",
+      this.#isLegacy
     );
+    const viewAndAddPolicy = this.#isLegacy
+      ? getPolicyUrlName(viewAndAddPolicyResourceUrl, "viewAndAdd")
+      : `${this.#policyUrl}viewAndAdd`;
     const editOnlyPolicyResourceUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
-      "editOnly"
+      "editOnly",
+      this.#isLegacy
     );
+    const editOnlyPolicy = this.#isLegacy
+      ? getPolicyUrlName(editOnlyPolicyResourceUrl, "editOnly")
+      : `${this.#policyUrl}editOnly`;
     const addOnlyPolicyResourceUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
-      "addOnly"
+      "addOnly",
+      this.#isLegacy
     );
-    const viewAndAddPolicy = getPolicyUrlName(
-      viewAndAddPolicyResourceUrl,
-      "viewAndAdd"
-    );
-    const editOnlyPolicy = getPolicyUrlName(
-      editOnlyPolicyResourceUrl,
-      "editOnly"
-    );
-    const addOnlyPolicy = getPolicyUrlName(addOnlyPolicyResourceUrl, "addOnly");
+    const addOnlyPolicy = this.#isLegacy
+      ? getPolicyUrlName(addOnlyPolicyResourceUrl, "addOnly")
+      : `${this.#policyUrl}addOnly`;
 
     const { acr: originalAcr, changed: originalChanged } = chain(
       {
@@ -707,54 +919,34 @@ export default class AcpAccessControlStrategy {
       ({ acr, changed }) => ensureApplyControl(viewAndAddPolicy, acr, changed),
       ({ acr, changed }) => ensureApplyControl(editOnlyPolicy, acr, changed),
       ({ acr, changed }) => ensureApplyControl(addOnlyPolicy, acr, changed),
-      ({ acr, changed }) => ensureApplyMembers(viewAndAddPolicy, acr, changed),
-      ({ acr, changed }) => ensureApplyMembers(editOnlyPolicy, acr, changed),
-      ({ acr, changed }) => ensureApplyMembers(addOnlyPolicy, acr, changed)
+      ({ acr, changed }) =>
+        ensureApplyMembers(viewAndAddPolicy, acr, changed, this.#isLegacy),
+      ({ acr, changed }) =>
+        ensureApplyMembers(editOnlyPolicy, acr, changed, this.#isLegacy),
+      ({ acr, changed }) =>
+        ensureApplyMembers(addOnlyPolicy, acr, changed, this.#isLegacy)
     );
-    // ensuring access controls for policy resource
-    try {
-      const viewAndAddPolicyDatasetWithAcr = await acp.getSolidDatasetWithAcr(
-        viewAndAddPolicyResourceUrl,
-        { fetch: this.#fetch }
-      );
-      const editOnlyPolicyDatasetWithAcr = await acp.getSolidDatasetWithAcr(
-        editOnlyPolicyResourceUrl,
-        { fetch: this.#fetch }
-      );
-      const addOnlyPolicyDatasetWithAcr = await acp.getSolidDatasetWithAcr(
-        addOnlyPolicyResourceUrl,
-        { fetch: this.#fetch }
-      );
 
-      const { acr: viewAndAddPolicyAcr, changed: viewAndAddPolicyChanged } = {
-        acr: viewAndAddPolicyDatasetWithAcr,
-        changed: false,
-      };
-      if (viewAndAddPolicyChanged) {
-        await acp.saveAcrFor(viewAndAddPolicyAcr, { fetch: this.#fetch });
-      }
-      const { acr: editOnlyPolicyAcr, changed: editOnlyPolicyChanged } = {
-        acr: editOnlyPolicyDatasetWithAcr,
-        changed: false,
-      };
-      if (editOnlyPolicyChanged) {
-        await acp.saveAcrFor(editOnlyPolicyAcr, { fetch: this.#fetch });
-      }
-      const { acr: addOnlyPolicyAcr, changed: addOnlyPolicyChanged } = {
-        acr: addOnlyPolicyDatasetWithAcr,
-        changed: false,
-      };
-      if (addOnlyPolicyChanged) {
-        await acp.saveAcrFor(addOnlyPolicyAcr, { fetch: this.#fetch });
-      }
-    } catch (err) {
-      if (!isHTTPError(err.message, 404)) throw err;
-    }
-    // important to save changes to original resource ACR _after_ the requests to create new policies are created
-    if (originalChanged) {
-      this.#originalWithAcr = await acp.saveAcrFor(originalAcr, {
-        fetch: this.#fetch,
-      });
+    // In order to apply the policies to the target resource, both the policies'
+    // content and their links to the Access Control must be saved.
+    if (this.#isLegacy) {
+      // In legacy systems, the policies' content must be saved first, because they
+      // are stored in external resources.
+      // ensuring policy content is up-to-date
+      await updatePolicyIfChanged(viewAndAddPolicyResourceUrl, this.#fetch);
+      await updatePolicyIfChanged(editOnlyPolicyResourceUrl, this.#fetch);
+      await updatePolicyIfChanged(addOnlyPolicyResourceUrl, this.#fetch);
+      // ensuring access controls for policy resource
+      await this.linkPoliciesToAcr(originalChanged, originalAcr);
+    } else {
+      // In latest systems, the policies are inline of the ACR. It means they could
+      // be disregarded if they are not linked to the Access Control first.
+      // ensuring access controls for policy resource
+      await this.linkPoliciesToAcr(originalChanged, originalAcr);
+      // ensuring policy content is up-to-date
+      await updatePolicyIfChanged(viewAndAddPolicyResourceUrl, this.#fetch);
+      await updatePolicyIfChanged(editOnlyPolicyResourceUrl, this.#fetch);
+      await updatePolicyIfChanged(addOnlyPolicyResourceUrl, this.#fetch);
     }
   }
 
@@ -780,11 +972,12 @@ export default class AcpAccessControlStrategy {
       ({ acr, changed }) => ensureApplyControl(appendAllowApply, acr, changed),
       ({ acr, changed }) => ensureAccessControl(controlAllowAcc, acr, changed)
     );
-    if (originalChanged) {
-      this.#originalWithAcr = await acp.saveAcrFor(originalAcr, {
-        fetch: this.#fetch,
-      });
+    if (!this.#isLegacy) {
+      // For non-legacy systems, the policy must be linked to the ACR before its
+      // contet is written.
+      await this.linkPoliciesToAcr(originalChanged, originalAcr);
     }
+
     // ensuring access controls for policy resource
     const policyDatasetWithAcr = await acp.getSolidDatasetWithAcr(
       this.#policyUrl,
@@ -808,13 +1001,24 @@ export default class AcpAccessControlStrategy {
         // It doesn't seem to affect the outcome though, so we'll leave it like this for now
       }
     }
+
+    if (this.#isLegacy) {
+      // For legacy systems, the policy must be linked to the ACR after its
+      // contet has been written in external resources.
+      await this.linkPoliciesToAcr(originalChanged, originalAcr);
+    }
   }
 
-  async setRulePublic(policyName, access) {
+  // For backwards compatibility, so that it remains compatible with the legacy
+  // implementation which will still be around.
+  setRulePublic = this.setMatcherPublic;
+
+  async setMatcherPublic(policyName, access) {
     const namedPolicyContainerUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
-      policyName
+      policyName,
+      this.#isLegacy
     );
 
     const { respond, error } = createResponder();
@@ -824,34 +1028,50 @@ export default class AcpAccessControlStrategy {
     } = await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
 
     if (getOrCreateError) return error(getOrCreateError);
-    const policyUrl = getPolicyUrlName(namedPolicyContainerUrl, policyName);
+    const policyUrl = this.#isLegacy
+      ? getPolicyUrlName(namedPolicyContainerUrl, policyName)
+      : `${this.#policyUrl}${policyName}`;
     const acpMap = acpMapForApplyPolicies[policyName];
     const updatedDataset = chain(
       getOrCreatePolicy(policyDataset, policyUrl),
       ({ policy, dataset }) => ({
-        policy: acp.setAllowModes(policy, acpMap),
+        policy: setAllowModes(policy, acpMap, this.#isLegacy),
         dataset,
       }),
-      ({ policy, dataset }) => setPublicAgent(dataset, policy, access),
+      ({ policy, dataset }) =>
+        setPublicAgent(dataset, policy, access, this.#isLegacy),
       ({ policy, dataset }) => acp.setPolicy(dataset, policy)
     );
 
-    // saving changes to the policy resource
-    await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
-      fetch: this.#fetch,
-    });
-
-    // saving changes to the ACRs
-    await this.ensureAccessControlPolicyAll(policyName);
+    if (this.#isLegacy) {
+      // Saving changes to the policy resource first
+      await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
+        fetch: this.#fetch,
+      });
+      // then saving changes to the ACRs
+      await this.ensureAccessControlPolicyAll(policyName);
+    } else {
+      // saving changes to the ACRs first
+      await this.ensureAccessControlPolicyAll(policyName);
+      // then saving changes to the inline policy
+      await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
+        fetch: this.#fetch,
+      });
+    }
 
     return respond(this.#originalWithAcr);
   }
 
-  async setRuleAuthenticated(policyName, access) {
+  // For backwards compatibility, so that it remains compatible with the legacy
+  // implementation which will still be around.
+  setRuleAuthenticated = this.setMatcherAuthenticated;
+
+  async setMatcherAuthenticated(policyName, access) {
     const namedPolicyContainerUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
-      policyName
+      policyName,
+      this.#isLegacy
     );
 
     const { respond, error } = createResponder();
@@ -861,25 +1081,36 @@ export default class AcpAccessControlStrategy {
     } = await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
 
     if (getOrCreateError) return error(getOrCreateError);
-    const policyUrl = getPolicyUrlName(namedPolicyContainerUrl, policyName);
+    const policyUrl = this.#isLegacy
+      ? getPolicyUrlName(namedPolicyContainerUrl, policyName)
+      : `${this.#policyUrl}${policyName}`;
     const acpMap = acpMapForApplyPolicies[policyName];
     const updatedDataset = chain(
       getOrCreatePolicy(policyDataset, policyUrl),
       ({ policy, dataset }) => ({
-        policy: acp.setAllowModes(policy, acpMap),
+        policy: setAllowModes(policy, acpMap, this.#isLegacy),
         dataset,
       }),
-      ({ policy, dataset }) => setAuthenticatedAgent(dataset, policy, access),
+      ({ policy, dataset }) =>
+        setAuthenticatedAgent(dataset, policy, access, this.#isLegacy),
       ({ policy, dataset }) => acp.setPolicy(dataset, policy)
     );
 
-    // saving changes to the policy resource
-    await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
-      fetch: this.#fetch,
-    });
-
-    // saving changes to the ACRs
-    await this.ensureAccessControlPolicyAll(policyName);
+    if (this.#isLegacy) {
+      // Saving changes to the policy resource first
+      await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
+        fetch: this.#fetch,
+      });
+      // then saving changes to the ACRs
+      await this.ensureAccessControlPolicyAll(policyName);
+    } else {
+      // saving changes to the ACRs first
+      await this.ensureAccessControlPolicyAll(policyName);
+      // then saving changes to the inline policy
+      await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
+        fetch: this.#fetch,
+      });
+    }
 
     return respond(this.#originalWithAcr);
   }
@@ -888,7 +1119,8 @@ export default class AcpAccessControlStrategy {
     const namedPolicyContainerUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
-      policyName
+      policyName,
+      this.#isLegacy
     );
 
     const { respond, error } = createResponder();
@@ -897,25 +1129,37 @@ export default class AcpAccessControlStrategy {
       error: getOrCreateError,
     } = await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
     if (getOrCreateError) return error(getOrCreateError);
-    const policyUrl = getPolicyUrlName(namedPolicyContainerUrl, policyName);
+    const policyUrl = this.#isLegacy
+      ? getPolicyUrlName(namedPolicyContainerUrl, policyName)
+      : `${this.#policyUrl}${policyName}`;
     const acpMap = acpMapForApplyPolicies[policyName];
     const updatedDataset = chain(
       getOrCreatePolicy(policyDataset, policyUrl),
       ({ policy, dataset }) => ({
-        policy: acp.setAllowModes(policy, acpMap),
+        policy: setAllowModes(policy, acpMap, this.#isLegacy),
         dataset,
       }),
-      ({ policy, dataset }) => setAgents(policy, dataset, webId, true),
+      ({ policy, dataset }) =>
+        setAgents(policy, dataset, webId, true, this.#isLegacy),
       ({ policy, dataset }) => acp.setPolicy(dataset, policy)
     );
 
-    // saving changes to the policy resource
-    await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
-      fetch: this.#fetch,
-    });
+    if (this.#isLegacy) {
+      // Saving changes to the policy resource first
+      await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
+        fetch: this.#fetch,
+      });
+      // then saving changes to the ACRs
+      await this.ensureAccessControlPolicyAll(policyName);
+    } else {
+      // saving changes to the ACRs first
+      await this.ensureAccessControlPolicyAll(policyName);
+      // then saving changes to the inline policy
+      await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
+        fetch: this.#fetch,
+      });
+    }
 
-    // saving changes to the ACRs
-    await this.ensureAccessControlPolicyAll(policyName);
     return respond(this.#originalWithAcr);
   }
 
@@ -923,7 +1167,8 @@ export default class AcpAccessControlStrategy {
     const namedPolicyContainerUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
-      policyName
+      policyName,
+      this.#isLegacy
     );
     const { respond, error } = createResponder();
 
@@ -933,29 +1178,40 @@ export default class AcpAccessControlStrategy {
     } = await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
     if (getOrCreateError) return error(getOrCreateError);
 
-    const policyUrl = getPolicyUrlName(namedPolicyContainerUrl, policyName);
+    const policyUrl = this.#isLegacy
+      ? getPolicyUrlName(namedPolicyContainerUrl, policyName)
+      : `${this.#policyUrl}${policyName}`;
     const policy = acp.getPolicy(policyDataset, policyUrl);
     if (!policy) {
       // not able to remove the agent from this policy (most likely because it is inherited)
       // we simply terminate and return the original ACR
       return respond(this.#originalWithAcr);
     }
-    const rulesUrls = acp.getAllOfRuleUrlAll(policy);
-    const [updatedDataset] = rulesUrls.map((ruleUrl) => {
-      const rule = acp.getRule(policyDataset, ruleUrl);
-      const modifiedRule = acp.removeAgent(rule, webId);
-      return setThing(policyDataset, modifiedRule);
+    const matchersUrls = getAllOfMatcherUrlAll(policy, this.#isLegacy);
+    const [updatedDataset] = matchersUrls.map((matcherUrl) => {
+      const matcher = getMatcher(policyDataset, matcherUrl, this.#isLegacy);
+      const modifiedMatcher = acp.removeAgent(matcher, webId);
+      return setThing(policyDataset, modifiedMatcher);
     });
-    const { agents } = getNamedPolicyModesAndAgents(policyUrl, updatedDataset);
+    const { agents } = getNamedPolicyModesAndAgents(
+      policyUrl,
+      updatedDataset,
+      this.#isLegacy
+    );
     const isLastAgent = !agents.length;
     if (isLastAgent) {
-      // remove the rule
-      const [modifiedPolicy] = rulesUrls.map((ruleUrl) => {
-        return acp.removeAllOfRuleUrl(policy, ruleUrl);
+      // remove the matcher
+      const [modifiedPolicy] = matchersUrls.map((matcherUrl) => {
+        return removeAllOfMatcherUrl(policy, matcherUrl, this.#isLegacy);
       });
-      const modifiedPolicyRulesUrls = acp.getAllOfRuleUrlAll(modifiedPolicy);
-      // if there are no rules left in the policy
-      if (!modifiedPolicyRulesUrls.length) {
+      const modifiedPolicyMatchersUrls = getAllOfMatcherUrlAll(
+        modifiedPolicy,
+        this.#isLegacy
+      );
+      // if there are no matchers left in the policy
+      // In the case of the latest ACP systems, the policies are stored inline of
+      // the ACR, so there is nothing to delete.
+      if (!modifiedPolicyMatchersUrls.length && this.#isLegacy) {
         await deleteFile(policyUrl, { fetch: this.#fetch });
         // if policies container is a container and it's empty, remove it too
         if (namedPolicyContainerUrl && isContainer(namedPolicyContainerUrl)) {
@@ -964,13 +1220,21 @@ export default class AcpAccessControlStrategy {
       }
     }
 
-    // saving changes to the policy resource
-    await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
-      fetch: this.#fetch,
-    });
-
-    // saving changes to the ACRs
-    await this.ensureAccessControlPolicyAll(policyName);
+    if (this.#isLegacy) {
+      // Saving changes to the policy resource first
+      await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
+        fetch: this.#fetch,
+      });
+      // then saving changes to the ACRs
+      await this.ensureAccessControlPolicyAll(policyName);
+    } else {
+      // saving changes to the ACRs first
+      await this.ensureAccessControlPolicyAll(policyName);
+      // then saving changes to the inline policy
+      await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
+        fetch: this.#fetch,
+      });
+    }
 
     return respond(this.#originalWithAcr);
   }
@@ -979,7 +1243,8 @@ export default class AcpAccessControlStrategy {
     const customPolicyContainerUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
-      policyName
+      policyName,
+      this.#isLegacy
     );
     const { respond, error } = createResponder();
 
@@ -990,25 +1255,33 @@ export default class AcpAccessControlStrategy {
 
     if (getOrCreateError) return error(getOrCreateError);
 
-    const policyUrl = getPolicyUrlName(customPolicyContainerUrl, policyName);
+    const policyUrl = this.#isLegacy
+      ? getPolicyUrlName(customPolicyContainerUrl, policyName)
+      : `${this.#policyUrl}${policyName}`;
     const policy = acp.getPolicy(policyDataset, policyUrl);
-    const rulesUrls = acp.getAllOFRuleUrlAll(policy);
-    const [updatedDataset] = rulesUrls.map((ruleUrl) => {
-      const rule = acp.getRule(policyDataset, ruleUrl);
-      const modifiedRule = acp.removeAgent(rule, webId);
-      return setThing(policyDataset, modifiedRule);
+    const matchersUrls = acp.getAllOfMatcherUrlAll(policy);
+    const [updatedDataset] = matchersUrls.map((matcherUrl) => {
+      const matcher = acp.getMatcher(policyDataset, matcherUrl);
+      const modifiedMatcher = acp.removeAgent(matcher, webId);
+      return setThing(policyDataset, modifiedMatcher);
     });
 
-    const { agents } = getNamedPolicyModesAndAgents(policyUrl, updatedDataset);
+    const { agents } = getNamedPolicyModesAndAgents(
+      policyUrl,
+      updatedDataset,
+      this.#isLegacy
+    );
     const isLastAgent = !agents.length;
     if (isLastAgent) {
-      // remove the rule
-      const [modifiedPolicy] = rulesUrls.map((ruleUrl) => {
-        return acp.removeAllOfRuleUrl(policy, ruleUrl);
+      // remove the matcher
+      const [modifiedPolicy] = matchersUrls.map((matcherUrl) => {
+        return acp.removeAllOfMatcherUrl(policy, matcherUrl);
       });
-      const modifiedPolicyRulesUrls = acp.getAllOfRuleUrlAll(modifiedPolicy);
-      // if there are no rules left in the policy
-      if (!modifiedPolicyRulesUrls.length) {
+      const modifiedPolicyMatchersUrls = acp.getAllOfMatcherUrlAll(
+        modifiedPolicy
+      );
+      // if there are no matchers left in the policy
+      if (!modifiedPolicyMatchersUrls.length) {
         await deleteFile(policyUrl, { fetch: this.#fetch });
         // if policies container is a container and it's empty, remove it too
         if (customPolicyContainerUrl && isContainer(customPolicyContainerUrl)) {
@@ -1017,13 +1290,21 @@ export default class AcpAccessControlStrategy {
       }
     }
 
-    // saving changes to the policy resource
-    await saveSolidDatasetAt(customPolicyContainerUrl, updatedDataset, {
-      fetch: this.#fetch,
-    });
-
-    // saving changes to the ACRs
-    await this.ensureAccessControlPolicyAll(policyName);
+    if (this.#isLegacy) {
+      // Saving changes to the policy resource first
+      await saveSolidDatasetAt(customPolicyContainerUrl, updatedDataset, {
+        fetch: this.#fetch,
+      });
+      // then saving changes to the ACRs
+      await this.ensureAccessControlPolicyAll(policyName);
+    } else {
+      // saving changes to the ACRs first
+      await this.ensureAccessControlPolicyAll(policyName);
+      // then saving changes to the inline policy
+      await saveSolidDatasetAt(customPolicyContainerUrl, updatedDataset, {
+        fetch: this.#fetch,
+      });
+    }
 
     return respond(this.#originalWithAcr);
   }
@@ -1038,18 +1319,29 @@ export default class AcpAccessControlStrategy {
 
     if (getOrCreateError) return error(getOrCreateError);
     const updatedDataset = isEmptyAccess(access)
-      ? removePermissionsForAgent(webId, policyDataset)
+      ? removePermissionsForAgent(webId, policyDataset, this.#isLegacy)
       : this.updatePermissionsForAgent(webId, access, policyDataset);
-    // saving changes to the policy resource
-    await saveSolidDatasetAt(this.#policyUrl, updatedDataset, {
-      fetch: this.#fetch,
-    });
-    // saving changes to the ACRs
-    await this.ensureAccessControlAll();
+
+    if (this.#isLegacy) {
+      // Saving changes to the policy resource first
+      await saveSolidDatasetAt(this.#policyUrl, updatedDataset, {
+        fetch: this.#fetch,
+      });
+      /// saving changes to the ACRs
+      await this.ensureAccessControlAll();
+    } else {
+      // saving changes to the ACRs
+      await this.ensureAccessControlAll();
+      // then saving changes to the inline policy
+      await saveSolidDatasetAt(this.#policyUrl, updatedDataset, {
+        fetch: this.#fetch,
+      });
+    }
+
     return respond(this.#originalWithAcr);
   }
 
-  static async init(resourceInfo, policiesContainerUrl, fetch) {
+  static async init(resourceInfo, policiesContainerUrl, fetch, legacy) {
     const resourceUrl = getSourceUrl(resourceInfo);
     const datasetWithAcr = await acp.getResourceInfoWithAcr(resourceUrl, {
       fetch,
@@ -1060,7 +1352,8 @@ export default class AcpAccessControlStrategy {
     return new AcpAccessControlStrategy(
       datasetWithAcr,
       policiesContainerUrl,
-      fetch
+      fetch,
+      legacy
     );
   }
 }

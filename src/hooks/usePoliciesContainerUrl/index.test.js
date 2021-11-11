@@ -21,28 +21,56 @@
 
 import { renderHook } from "@testing-library/react-hooks";
 import usePoliciesContainerUrl from "./index";
-import { getPoliciesContainerUrl } from "../../solidClientHelpers/policies";
+import { getPoliciesContainerUrl } from "../../models/policy";
 import usePodRootUri from "../usePodRootUri";
+import useIsLegacyAcp from "../useIsLegacyAcp";
 
 jest.mock("../usePodRootUri");
+jest.mock("../useIsLegacyAcp");
+jest.mock("@inrupt/solid-client");
+
 const mockedPodRootUri = usePodRootUri;
+const mockedIsLegacyAcp = useIsLegacyAcp;
 
 describe("usePoliciesContainerUrl", () => {
-  const podRootUrl = "http://example.com/";
-  const policiesContainerUrl = getPoliciesContainerUrl(podRootUrl);
+  describe("latest ACP systems", () => {
+    const podRootUrl = "http://example.com/";
+    const policiesContainerUrl = getPoliciesContainerUrl(podRootUrl);
 
-  beforeEach(() => {
-    mockedPodRootUri.mockReturnValue(null);
-  });
+    beforeEach(() => {
+      mockedPodRootUri.mockReturnValue(null);
+    });
 
-  it("returns null when podRootUrl is yet undetermined", () => {
-    const { result } = renderHook(() => usePoliciesContainerUrl(null));
-    expect(result.current).toBeNull();
-  });
+    it("returns null when podRootUrl is yet undetermined", () => {
+      mockedIsLegacyAcp.mockReturnValue({ data: true });
+      const { result } = renderHook(() => usePoliciesContainerUrl(null));
+      expect(result.current).toBeNull();
+    });
 
-  it("returns response when podRootUrl is finished", async () => {
-    mockedPodRootUri.mockReturnValue(podRootUrl);
-    const { result } = renderHook(() => usePoliciesContainerUrl());
-    expect(result.current).toBe(policiesContainerUrl);
+    it("returns null when isLegacy is yet undetermined", () => {
+      const clientModule = jest.requireMock("@inrupt/solid-client");
+      // The usePoliciesContainerUrl hook discovers the policy container from the
+      // linked ACR.
+      clientModule.acp_v3 = {
+        getLinkedAcrUrl: () => policiesContainerUrl,
+      };
+      mockedPodRootUri.mockReturnValue(podRootUrl);
+      mockedIsLegacyAcp.mockReturnValue({ data: undefined });
+      const { result } = renderHook(() => usePoliciesContainerUrl(podRootUrl));
+      expect(result.current).toBeNull();
+    });
+
+    it("returns response when podRootUrl and isLegacy are finished", async () => {
+      const clientModule = jest.requireMock("@inrupt/solid-client");
+      // The usePoliciesContainerUrl hook discovers the policy container from the
+      // linked ACR.
+      clientModule.acp_v3 = {
+        getLinkedAcrUrl: () => policiesContainerUrl,
+      };
+      mockedPodRootUri.mockReturnValue(podRootUrl);
+      mockedIsLegacyAcp.mockReturnValue({ data: true });
+      const { result } = renderHook(() => usePoliciesContainerUrl(podRootUrl));
+      expect(result.current).toBe(policiesContainerUrl);
+    });
   });
 });

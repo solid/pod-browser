@@ -28,9 +28,13 @@ import mockSessionContextProvider from "../../../__testUtils/mockSessionContextP
 import mockSession from "../../../__testUtils/mockSession";
 import { mockProfileAlice } from "../../../__testUtils/mockPersonResource";
 import { joinPath } from "../../stringHelpers";
+import useIsLegacyAcp from "../useIsLegacyAcp";
 
 jest.mock("../usePoliciesContainerUrl");
 const mockedPoliciesContainerUrlHook = usePoliciesContainerUrl;
+
+jest.mock("../useIsLegacyAcp");
+const mockedIsLegacyAcp = useIsLegacyAcp;
 
 describe("useAccessControl", () => {
   const authenticatedProfile = mockProfileAlice();
@@ -51,6 +55,7 @@ describe("useAccessControl", () => {
       .spyOn(accessControlFns, "getAccessControl")
       .mockResolvedValue(accessControl);
     mockedPoliciesContainerUrlHook.mockReturnValue(null);
+    mockedIsLegacyAcp.mockReturnValue({ data: false });
     jest.spyOn(accessControlFns, "isAcp").mockReturnValue(false);
   });
 
@@ -95,7 +100,8 @@ describe("useAccessControl", () => {
       expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
         resourceInfo,
         null,
-        expect.any(Function)
+        expect.any(Function),
+        false
       );
       expect(result.current.accessControl).toBe(accessControl);
       expect(result.current.error).toBeNull();
@@ -110,7 +116,7 @@ describe("useAccessControl", () => {
       jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
     });
 
-    it("returns accessControl if given resourceUri", async () => {
+    it("returns accessControl with latest ACP if given resourceUri", async () => {
       const { result, waitForNextUpdate } = renderHook(
         () => useAccessControl(resourceInfo),
         { wrapper }
@@ -119,7 +125,25 @@ describe("useAccessControl", () => {
       expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
         resourceInfo,
         policiesContainerUrl,
-        expect.any(Function)
+        expect.any(Function),
+        false
+      );
+      expect(result.current.accessControl).toBe(accessControl);
+      expect(result.current.error).toBeNull();
+    });
+
+    it("returns accessControl with legacy ACP if given resourceUri", async () => {
+      mockedIsLegacyAcp.mockReturnValue({ data: true });
+      const { result, waitForNextUpdate } = renderHook(
+        () => useAccessControl(resourceInfo),
+        { wrapper }
+      );
+      await waitForNextUpdate();
+      expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
+        resourceInfo,
+        policiesContainerUrl,
+        expect.any(Function),
+        true
       );
       expect(result.current.accessControl).toBe(accessControl);
       expect(result.current.error).toBeNull();
