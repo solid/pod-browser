@@ -106,7 +106,7 @@ describe("Resource details", () => {
       expect(getByText("Permissions")).toBeInTheDocument();
     });
     expect(asFragment()).toMatchSnapshot();
-  });
+  }, 30000);
 
   it("renders Sharing component for ACP-supporting Solid servers", async () => {
     mockUseAcp.mockReturnValue({ data: true });

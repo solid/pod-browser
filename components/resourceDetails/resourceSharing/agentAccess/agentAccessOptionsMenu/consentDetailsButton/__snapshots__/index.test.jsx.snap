@@ -221,10 +221,10 @@ exports[`View consent details button and modal clicking on view details button r
                     class="PodBrowser-access-details--separator"
                   />
                   <p>
-                    <h3>
-                      fetching data in progress
-                    </h3>
-                     has access until 
+                    <span>
+                      https://example.com/profile/card#me
+                    </span>
+                    has access until 
                     <strong>
                       October 11, 2022
                     </strong>

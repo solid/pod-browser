@@ -25,19 +25,19 @@
 
 import React from "react";
 import T from "prop-types";
-import { foaf, vcard, rdf } from "rdf-namespaces";
+import { vcard, rdf } from "rdf-namespaces";
 import Link from "next/link";
-import { getUrl } from "@inrupt/solid-client";
+import { asUrl, getUrl } from "@inrupt/solid-client";
 import { Avatar, Box, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Text, Image, useThing } from "@inrupt/solid-ui-react";
+import { Image, useThing } from "@inrupt/solid-ui-react";
 import {
   buildResourcesLink,
   isPerson,
 } from "../../../../../../agentResourceAccessLink";
-
 import styles from "./styles";
+import AgentName from "../agentName";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -74,7 +74,10 @@ export default function ModalAvatar({ profileIri, closeDialog }) {
         <Link href={buildResourcesLink(profileIri, "/privacy", path)}>
           <a role="link" onClick={() => closeDialog()}>
             <h3 data-testid={TESTCAFE_ID_NAME_TITLE}>
-              <Text className={classes.avatarText} property={foaf.name} />
+              <AgentName
+                className={classes.avatarText}
+                agentWebId={asUrl(thing)}
+              />
             </h3>
           </a>
         </Link>
