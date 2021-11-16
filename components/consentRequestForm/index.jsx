@@ -122,7 +122,11 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
         }
       );
       if (signedVc) {
-        await router.push(`${redirectUrl}?signedVcUrl=${getVcId(signedVc)}`);
+        await router.push(
+          `${
+            redirectUrl.includes("signedVc") ? redirectUrl : redirectUrl
+          }?signedVcUrl=${getVcId(signedVc)}`
+        );
       }
     }
     /* istanbul ignore next */
