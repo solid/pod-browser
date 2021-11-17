@@ -221,6 +221,22 @@ const setAllowModes = (policy, modes, legacy) =>
     legacy
   );
 
+const getMemberPolicyUrlAll = (datasetWithAcr, legacy) =>
+  switchIfLegacy(
+    legacyAcp.getMemberPolicyUrlAll,
+    acp.getMemberPolicyUrlAll,
+    [datasetWithAcr],
+    legacy
+  );
+
+const addMemberPolicyUrl = (datasetWithAcr, policyUrl, legacy) =>
+  switchIfLegacy(
+    legacyAcp.addMemberPolicyUrl,
+    acp.addMemberPolicyUrl,
+    [datasetWithAcr, policyUrl],
+    legacy
+  );
+
 export function addAcpModes(existingAcpModes, newAcpModes) {
   return existingAcpModes
     ? createAcpMap(
@@ -500,15 +516,7 @@ function ensureAccessControl(policyUrl, datasetWithAcr, changed) {
 }
 
 function ensureApplyMembers(policyUrl, datasetWithAcr, changed, legacy) {
-  // applyMembers is no longer part of the ACP spec and will be ignored by latest
-  // servers.
-  if (!legacy) {
-    return {
-      changed,
-      acr: datasetWithAcr,
-    };
-  }
-  const policies = acp.getMemberPolicyUrlAll(datasetWithAcr);
+  const policies = getMemberPolicyUrlAll(datasetWithAcr, legacy);
   const existingPolicies = policies.find((url) => policyUrl === url);
   if (existingPolicies) {
     return {
@@ -516,7 +524,7 @@ function ensureApplyMembers(policyUrl, datasetWithAcr, changed, legacy) {
       acr: datasetWithAcr,
     };
   }
-  const acr = acp.addMemberPolicyUrl(datasetWithAcr, policyUrl);
+  const acr = addMemberPolicyUrl(datasetWithAcr, policyUrl, legacy);
   return {
     changed: changed || !existingPolicies,
     acr,
