@@ -167,7 +167,7 @@ exports[`Renders correct consent modal content clicking on view details button r
         <hr
           class="PodBrowser-access-details--separator"
         />
-        <p>
+        <span>
           <span>
             https://example.com/profile/card#me
           </span>
