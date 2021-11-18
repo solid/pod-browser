@@ -21,6 +21,7 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
+import { waitFor } from "@testing-library/dom";
 import { renderWithTheme } from "../../../../../../__testUtils/withTheme";
 import ConsentDetailsButton, { TESTCAFE_ID_VIEW_DETAILS_BUTTON } from "./index";
 import getSignedVc from "../../../../../../__testUtils/mockSignedVc";
@@ -41,15 +42,15 @@ const permission = {
 
 describe("View consent details button and modal", () => {
   test("it renders a button which triggers the opening of the modal", async () => {
-    const { baseElement, getByTestId } = renderWithTheme(
+    const { asFragment, getByTestId } = renderWithTheme(
       <ConsentDetailsButton permission={permission} />
     );
     const button = getByTestId(TESTCAFE_ID_VIEW_DETAILS_BUTTON);
     expect(button).toBeDefined();
-    expect(baseElement).toMatchSnapshot();
+    expect(asFragment()).toMatchSnapshot();
   });
   test("clicking on view details button renders a confirmation dialog with the correct data", async () => {
-    const { baseElement, getByTestId, findByTestId } = renderWithTheme(
+    const { baseElement, getByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentDetailsButton permission={permission} />
         <ConfirmationDialog />
@@ -57,9 +58,12 @@ describe("View consent details button and modal", () => {
     );
     const button = getByTestId(TESTCAFE_ID_VIEW_DETAILS_BUTTON);
     userEvent.click(button);
-    const dialog = await findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
-    expect(dialog).toBeInTheDocument();
-    await findByTestId(TESTCAFE_ID_CONSENT_DETAILS_CONTENT);
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)).toBeInTheDocument();
+      expect(
+        getByTestId(TESTCAFE_ID_CONSENT_DETAILS_CONTENT)
+      ).toBeInTheDocument();
+    });
     expect(baseElement).toMatchSnapshot();
   });
 });

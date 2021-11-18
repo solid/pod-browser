@@ -28,7 +28,12 @@ import PropTypes from "prop-types";
 import { CircularProgress, createStyles } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
-import { Button, Container } from "@inrupt/prism-react-components";
+import {
+  Button,
+  Container,
+  ModalBody,
+  ModalContainer,
+} from "@inrupt/prism-react-components";
 import { makeStyles } from "@material-ui/styles";
 import {
   DatasetContext,
@@ -423,104 +428,107 @@ function AgentPickerModal(
       : setNewAgentsWebIds(newAgentsWebIds.filter((webId) => webId !== value));
   };
   return (
-    <div
+    <ModalContainer
       className={classes.paper}
       data-testid={TESTCAFE_ID_ADD_AGENT_PICKER_MODAL}
       ref={ref}
+      tabIndex={-1}
     >
-      <div className={classes.title}>{`${header} for ${resourceName}`}</div>
-      {advancedSharing ? (
-        <CustomPolicyDropdown
-          setCustomPolicy={setCustomPolicy}
-          defaultValue={type}
-          editing={editing}
-        />
-      ) : (
-        <PolicyHeader type={type} />
-      )}
-      <div className={classes.tableContainer}>
-        <AgentsSearchBar handleFilterChange={handleFilterChange} />
-        <div className={classes.addWebIdButtonContainer}>
-          <AddWebIdButton onClick={handleAddRow} disabled={addingWebId} />
-        </div>
-        {!contacts && !error && (
-          <Container variant="empty">
-            <CircularProgress />
-          </Container>
+      <ModalBody>
+        <div className={classes.title}>{`${header} for ${resourceName}`}</div>
+        {advancedSharing ? (
+          <CustomPolicyDropdown
+            setCustomPolicy={setCustomPolicy}
+            defaultValue={type}
+            editing={editing}
+          />
+        ) : (
+          <PolicyHeader type={type} />
         )}
-        {!!contacts && !!contactsForTable.length && (
-          <Table
-            things={contactsForTable}
-            className={clsx(bem("table"), bem("agentPickerTable"))}
-            filter={globalFilter}
-          >
-            <TableColumn
-              property={AGENT_PREDICATE}
-              dataType="url"
-              header={
-                // eslint-disable-next-line react/jsx-wrap-multilines
-                <span className={classes.tableHeader}>{titleSingular}</span>
-              }
-              body={({ value, row: { index } }) => {
-                return (
-                  <WebIdCheckbox
-                    value={value}
+        <div className={classes.tableContainer}>
+          <AgentsSearchBar handleFilterChange={handleFilterChange} />
+          <div className={classes.addWebIdButtonContainer}>
+            <AddWebIdButton onClick={handleAddRow} disabled={addingWebId} />
+          </div>
+          {!contacts && !error && (
+            <Container variant="empty">
+              <CircularProgress />
+            </Container>
+          )}
+          {!!contacts && !!contactsForTable.length && (
+            <Table
+              things={contactsForTable}
+              className={clsx(bem("table"), bem("agentPickerTable"))}
+              filter={globalFilter}
+            >
+              <TableColumn
+                property={AGENT_PREDICATE}
+                dataType="url"
+                header={
+                  // eslint-disable-next-line react/jsx-wrap-multilines
+                  <span className={classes.tableHeader}>{titleSingular}</span>
+                }
+                body={({ value, row: { index } }) => {
+                  return (
+                    <WebIdCheckbox
+                      value={value}
+                      index={index}
+                      toggleCheckbox={toggleCheckbox}
+                      type={type}
+                    />
+                  );
+                }}
+              />
+              <TableColumn
+                header={<span className={classes.tableHeader}>Name</span>}
+                property={foaf.name}
+                filterable
+                body={({ row: { index } }) => (
+                  <AddAgentRow
+                    type={policyName}
                     index={index}
-                    toggleCheckbox={toggleCheckbox}
-                    type={type}
+                    contactsArrayLength={contactsArray.length}
+                    updateTemporaryRowThing={updateTemporaryRowThing}
                   />
-                );
-              }}
-            />
-            <TableColumn
-              header={<span className={classes.tableHeader}>Name</span>}
-              property={foaf.name}
-              filterable
-              body={({ row: { index } }) => (
-                <AddAgentRow
-                  type={policyName}
-                  index={index}
-                  contactsArrayLength={contactsArray.length}
-                  updateTemporaryRowThing={updateTemporaryRowThing}
-                />
-              )}
-            />
-          </Table>
-        )}
-        {/* TODO: Uncomment to reintroduce tabs */}
-        {/* {!!contacts && !contactsForTable.length && !selectedTabValue && ( */}
-        {!!contacts && !contactsForTable.length && (
-          <AgentPickerEmptyState onClick={handleAddRow} />
-        )}
-        {/* TODO: Uncomment to reintroduce tabs */}
-        {/* {!!contacts && !contactsForTable.length && !!selectedTabValue && ( */}
-        {/*  <span className={classes.emptyStateTextContainer}> */}
-        {/*    <p> */}
-        {/*      {`No ${ */}
-        {/*        selectedTabValue === PERSON_CONTACT ? "people " : "groups " */}
-        {/*      } found`} */}
-        {/*    </p> */}
-        {/*  </span> */}
-        {/* )} */}
-      </div>
-      <div className={classes.buttonsContainer}>
-        <Button
-          variant="secondary"
-          data-testid={TESTCAFE_CANCEL_WEBIDS_BUTTON}
-          className={classes.cancelButton}
-          onClick={onClose}
-        >
-          Cancel
-        </Button>
-        <Button
-          data-testid={TESTCAFE_SUBMIT_WEBIDS_BUTTON}
-          onClick={handleClickOpenDialog}
-        >
-          {saveText}
-        </Button>
-        <ConfirmationDialog />
-      </div>
-    </div>
+                )}
+              />
+            </Table>
+          )}
+          {/* TODO: Uncomment to reintroduce tabs */}
+          {/* {!!contacts && !contactsForTable.length && !selectedTabValue && ( */}
+          {!!contacts && !contactsForTable.length && (
+            <AgentPickerEmptyState onClick={handleAddRow} />
+          )}
+          {/* TODO: Uncomment to reintroduce tabs */}
+          {/* {!!contacts && !contactsForTable.length && !!selectedTabValue && ( */}
+          {/*  <span className={classes.emptyStateTextContainer}> */}
+          {/*    <p> */}
+          {/*      {`No ${ */}
+          {/*        selectedTabValue === PERSON_CONTACT ? "people " : "groups " */}
+          {/*      } found`} */}
+          {/*    </p> */}
+          {/*  </span> */}
+          {/* )} */}
+        </div>
+        <div className={classes.buttonsContainer}>
+          <Button
+            variant="secondary"
+            data-testid={TESTCAFE_CANCEL_WEBIDS_BUTTON}
+            className={classes.cancelButton}
+            onClick={onClose}
+          >
+            Cancel
+          </Button>
+          <Button
+            data-testid={TESTCAFE_SUBMIT_WEBIDS_BUTTON}
+            onClick={handleClickOpenDialog}
+          >
+            {saveText}
+          </Button>
+          <ConfirmationDialog />
+        </div>
+      </ModalBody>
+    </ModalContainer>
   );
 }
 

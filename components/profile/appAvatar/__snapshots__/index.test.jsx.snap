@@ -33,9 +33,12 @@ exports[`App Avatar renders a mock app avatar 1`] = `
         </span>
         <a
           class="PodBrowser-headerLink"
+          href="https://mockapp.com/profile/card#me"
           rel="noreferrer"
           target="_blank"
-        />
+        >
+          https://mockapp.com/profile/card#me
+        </a>
       </h3>
     </div>
   </div>

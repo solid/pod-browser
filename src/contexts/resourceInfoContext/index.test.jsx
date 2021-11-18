@@ -51,7 +51,18 @@ describe("ResourceInfoContext", () => {
   const swr = { data, error, mutate, isValidating };
 
   it("has a default context", () => {
-    const { getByTestId, queryByTestId } = render(<ChildComponent />);
+    const { getByTestId, queryByTestId } = render(
+      <ResourceInfoProvider
+        swr={{
+          data: null,
+          error: null,
+          mutate: jest.fn(),
+          isValidating: true,
+        }}
+      >
+        <ChildComponent />
+      </ResourceInfoProvider>
+    );
 
     expect(queryByTestId("data")).toBeNull();
     expect(queryByTestId("error")).toBeNull();

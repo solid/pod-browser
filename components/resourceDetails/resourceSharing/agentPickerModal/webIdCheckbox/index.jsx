@@ -97,14 +97,13 @@ export default function WebIdCheckbox({ value, index, toggleCheckbox, type }) {
       type="checkbox"
       color="primary"
       size="medium"
-      value={agentId()}
+      value={agentId() || ""}
       disabled={disabled()}
-      checked={checked()}
+      checked={checked() || false}
       onChange={(e) => toggleCheckbox(e, index, agentId())}
     />
   );
 }
-
 WebIdCheckbox.propTypes = {
   value: PropTypes.string,
   index: PropTypes.number.isRequired,

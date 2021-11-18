@@ -21,7 +21,16 @@ exports[`View consent details button and modal clicking on view details button r
       </div>
       <span
         class="PodBrowser-root"
-      />
+      >
+        <span
+          class="PodBrowser-ripple PodBrowser-rippleVisible"
+          style="width: 2.8284271247461903px; height: 2.8284271247461903px; top: -1.4142135623730951px; left: -1.4142135623730951px;"
+        >
+          <span
+            class="PodBrowser-child PodBrowser-childLeaving"
+          />
+        </span>
+      </span>
     </div>
   </div>
   <div
@@ -220,7 +229,7 @@ exports[`View consent details button and modal clicking on view details button r
                   <hr
                     class="PodBrowser-access-details--separator"
                   />
-                  <p>
+                  <span>
                     <span>
                       https://example.com/profile/card#me
                     </span>
@@ -229,7 +238,7 @@ exports[`View consent details button and modal clicking on view details button r
                       October 11, 2022
                     </strong>
                     .
-                  </p>
+                  </span>
                 </section>
               </div>
             </div>
@@ -271,24 +280,22 @@ exports[`View consent details button and modal clicking on view details button r
 `;
 
 exports[`View consent details button and modal it renders a button which triggers the opening of the modal 1`] = `
-<body>
-  <div>
+<DocumentFragment>
+  <div
+    aria-disabled="false"
+    class="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
+    data-testid="view-details-button"
+    role="button"
+    tabindex="0"
+  >
     <div
-      aria-disabled="false"
-      class="PodBrowser-root PodBrowser-root PodBrowser-gutters PodBrowser-button"
-      data-testid="view-details-button"
-      role="button"
-      tabindex="0"
+      class="PodBrowser-root"
     >
-      <div
-        class="PodBrowser-root"
-      >
-        View Details
-      </div>
-      <span
-        class="PodBrowser-root"
-      />
+      View Details
     </div>
+    <span
+      class="PodBrowser-root"
+    />
   </div>
-</body>
+</DocumentFragment>
 `;

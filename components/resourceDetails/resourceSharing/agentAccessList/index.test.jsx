@@ -30,8 +30,10 @@ import AgentAccessList from ".";
 import { AccessControlProvider } from "../../../../src/contexts/accessControlContext";
 import mockAccessControl from "../../../../__testUtils/mockAccessControl";
 import usePermissions from "../../../../src/hooks/usePermissions";
+import useFetchProfile from "../../../../src/hooks/useFetchProfile";
 
 jest.mock("../../../../src/hooks/usePermissions");
+jest.mock("../../../../src/hooks/useFetchProfile");
 
 const datasetUrl = "http://example.com/dataset";
 const dataset = mockSolidDatasetFrom(datasetUrl);
@@ -44,12 +46,40 @@ const permission = {
   profile: { webId },
 };
 
+const permissions = [
+  {
+    webId,
+    alias: ACL.CONTROL.alias,
+    acl: ACL.CONTROL.acl,
+    profile: { webId },
+  },
+  {
+    webId: "https://example2.org/profile/card#me",
+    alias: ACL.CONTROL.alias,
+    acl: ACL.CONTROL.acl,
+    profile: { webId: "https://example2.org/profile/card#me" },
+  },
+  {
+    webId: "https://example3.org/profile/card#me",
+    alias: ACL.CONTROL.alias,
+    acl: ACL.CONTROL.acl,
+    profile: { webId: "https://example3.org/profile/card#me" },
+  },
+  {
+    webId: "https://example4.org/profile/card#me",
+    alias: ACL.CONTROL.alias,
+    acl: ACL.CONTROL.acl,
+    profile: { webId: "https://example4.org/profile/card#me" },
+  },
+];
+
 describe("AgentAccessList", () => {
   beforeEach(() => {
     jest
       .spyOn(routerFns, "useRouter")
       .mockReturnValue({ query: { iri: datasetUrl } });
   });
+  useFetchProfile.mockReturnValue({ webId });
 
   it("renders loading while loading permissions for access control", () => {
     usePermissions.mockReturnValue({ permissions: null });
@@ -88,10 +118,15 @@ describe("AgentAccessList", () => {
   });
   it("shows all permissions when clicking 'show all' button", async () => {
     usePermissions.mockReturnValue({
-      permissions: [permission, permission, permission, permission],
+      permissions: [
+        permission,
+        { ...permission, webId: "https://example2.org/profile/card#me" },
+        { ...permission, webId: "https://example3.org/profile/card#me" },
+        { ...permission, webId: "https://example4.org/profile/card#me" },
+      ],
     });
     const accessControl = mockAccessControl({
-      permissions: [permission, permission, permission, permission],
+      permissions,
     });
     const { getByTestId, getAllByRole } = renderWithTheme(
       <AccessControlProvider accessControl={accessControl}>

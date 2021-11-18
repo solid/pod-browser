@@ -2,9 +2,219 @@
 
 exports[`Resource access show page it renders a resource access page for a person 1`] = `
 <DocumentFragment>
-  <span>
-    Fetching data...
-  </span>
+  <div
+    class="PodBrowser-drawer-container"
+  >
+    <div
+      class="PodBrowser-drawer-container__content"
+    >
+      <div
+        class="PodBrowser-container"
+      >
+        <nav
+          class="PodBrowser-back-to-nav"
+        >
+          <span
+            class="PodBrowser-icon-caret-left PodBrowser-back-to-nav__caret"
+          />
+          <a
+            class="PodBrowser-back-to-nav__link"
+            href="/privacy"
+          >
+            Back to privacy
+          </a>
+        </nav>
+        <div
+          class="PodBrowser-root PodBrowser-root"
+        >
+          <div
+            class="PodBrowser-root PodBrowser-root"
+          >
+            <div
+              class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+            >
+              <div
+                class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="PodBrowser-root PodBrowser-fallback"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div
+            class="PodBrowser-root PodBrowser-root"
+          >
+            <h3
+              data-testid="profile-name-title"
+            >
+              <span
+                class="PodBrowser-avatarText"
+              >
+                Bob
+              </span>
+              <a
+                class="PodBrowser-headerLink"
+                href="http://bob.example.com/bob#me"
+                rel="noreferrer"
+                target="_blank"
+              >
+                http://bob.example.com/bob#me
+              </a>
+            </h3>
+          </div>
+        </div>
+        <div
+          class="PodBrowser-tabsContainer"
+        >
+          <div
+            class="PodBrowser-root"
+          >
+            <div
+              class="PodBrowser-scroller PodBrowser-fixed"
+              style="overflow: hidden;"
+            >
+              <div
+                aria-label="Filter tabs"
+                class="PodBrowser-flexContainer"
+                role="tablist"
+              >
+                <button
+                  aria-selected="true"
+                  class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit PodBrowser-selected PodBrowser-selected"
+                  data-testid="permissions-tab"
+                  role="tab"
+                  tabindex="0"
+                  type="button"
+                >
+                  <span
+                    class="PodBrowser-wrapper"
+                  >
+                    Permissions
+                  </span>
+                  <span
+                    class="PodBrowser-root"
+                  />
+                </button>
+                <button
+                  aria-selected="false"
+                  class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit"
+                  data-testid="profile-tab"
+                  role="tab"
+                  tabindex="-1"
+                  type="button"
+                >
+                  <span
+                    class="PodBrowser-wrapper"
+                  >
+                    Profile
+                  </span>
+                  <span
+                    class="PodBrowser-root"
+                  />
+                </button>
+              </div>
+              <span
+                class="PodBrowser-root PodBrowser-colorSecondary PodBrowser-indicator PodBrowser-indicator"
+                style="left: 0px; width: 0px;"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          aria-labelledby="simple-tab-Permissions"
+          id="simple-tabpanel-Permissions"
+          role="tabpanel"
+        >
+          <div
+            class="PodBrowser-root PodBrowser-root"
+          >
+            <p>
+              <span>
+                Bob
+              </span>
+               has access to these resources
+            </p>
+            <div
+              class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
+            >
+              <svg
+                class="PodBrowser-loading-indicator"
+                data-testid="spinner"
+                viewBox="22 22 44 44"
+              >
+                <circle
+                  cx="44"
+                  cy="44"
+                  fill="none"
+                  r="20.2"
+                  stroke-width="3.6"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div
+          aria-labelledby="simple-tab-Profile"
+          hidden=""
+          id="simple-tabpanel-Profile"
+          role="tabpanel"
+        />
+      </div>
+    </div>
+    <section
+      class="PodBrowser-drawer"
+    >
+      <div
+        class="PodBrowser-drawer__content"
+      >
+        <div
+          class="PodBrowser-drawer__content-wrapper"
+        >
+          <div
+            class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
+          >
+            <button
+              class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
+            >
+              <span
+                class="PodBrowser-button__text"
+              >
+                <span
+                  class="PodBrowser-icon-cancel"
+                />
+                 Close
+              </span>
+            </button>
+          </div>
+          <div
+            class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
+          >
+            <svg
+              class="PodBrowser-loading-indicator"
+              data-testid="spinner"
+              viewBox="22 22 44 44"
+            >
+              <circle
+                cx="44"
+                cy="44"
+                fill="none"
+                r="20.2"
+                stroke-width="3.6"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </DocumentFragment>
 `;
 
@@ -63,11 +273,11 @@ exports[`Resource access show page it renders a resource access page for an app 
               </span>
               <a
                 class="PodBrowser-headerLink"
-                href="https://example.com/profile/card#me"
+                href="http://bob.example.com/bob#me"
                 rel="noreferrer"
                 target="_blank"
               >
-                https://example.com/profile/card#me
+                http://bob.example.com/bob#me
               </a>
             </h3>
           </div>

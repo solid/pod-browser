@@ -20,24 +20,42 @@
  */
 
 import React from "react";
+import { waitFor } from "@testing-library/dom";
+import * as solidClientFns from "@inrupt/solid-client";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import mockSession from "../../../__testUtils/mockSession";
 
 import ProfilePage from "./index";
+import {
+  mockPersonDatasetAlice,
+  aliceWebIdUrl,
+} from "../../../__testUtils/mockPersonResource";
 
 jest.mock("../../../src/effects/auth");
 
 describe("Profile page", () => {
-  test("Renders the profile page", () => {
+  const profileDataset = mockPersonDatasetAlice();
+  const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+
+  beforeEach(() => {
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValue(profileDataset);
+    jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
+  });
+  test("Renders the profile page", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
 
-    const { asFragment } = renderWithTheme(
+    const { asFragment, queryAllByText } = renderWithTheme(
       <SessionProvider>
         <ProfilePage />
       </SessionProvider>
     );
+    await waitFor(() => {
+      expect(queryAllByText("Alice")).toHaveLength(1);
+    });
 
     expect(asFragment()).toMatchSnapshot();
   });

@@ -26,6 +26,9 @@ import { Content, Container, Icons } from "@inrupt/prism-react-components";
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+export const NO_AGENTS_MESSAGE = "No one else has access to your Pod";
+export const NO_AGENTS_PARAGRAPH =
+  "When access has been granted to a person or app, they will show up here.";
 
 export default function AgentsEmptyState() {
   const bem = useBem(useStyles());
@@ -34,11 +37,8 @@ export default function AgentsEmptyState() {
     <Content>
       <Container variant="empty">
         <Icons name="user-shield" className={bem("icon-large")} />
-        <h1>No one else has access to your Pod</h1>
-        <p>
-          When access has been granted to a person or app, they will show up
-          here.
-        </p>
+        <h1>{NO_AGENTS_MESSAGE}</h1>
+        <p>{NO_AGENTS_PARAGRAPH}</p>
       </Container>
     </Content>
   );

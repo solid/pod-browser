@@ -21,6 +21,7 @@
 
 import React from "react";
 import * as RouterFns from "next/router";
+import { DatasetProvider } from "@inrupt/solid-ui-react";
 import { waitFor } from "@testing-library/dom";
 import * as solidClientFns from "@inrupt/solid-client";
 import mockSession from "../../__testUtils/mockSession";
@@ -34,9 +35,23 @@ import mockDetailsContextMenuProvider from "../../__testUtils/mockDetailsContext
 import useResourceInfo from "../../src/hooks/useResourceInfo";
 import useAccessControl from "../../src/hooks/useAccessControl";
 import mockAccessControl from "../../__testUtils/mockAccessControl";
+import { ResourceInfoProvider } from "../../src/contexts/resourceInfoContext";
+import mockPermissionsContextProvider from "../../__testUtils/mockPermissionsContextProvider";
+import useConsentBasedAccessForResource from "../../src/hooks/useConsentBasedAccessForResource";
+import usePermissionsWithProfiles from "../../src/hooks/usePermissionsWithProfiles";
+import useAllPermissions from "../../src/hooks/useAllPermissions";
 
 jest.mock("../../src/hooks/useResourceInfo");
+const mockUseResourceInfo = useResourceInfo;
 jest.mock("../../src/hooks/useAccessControl");
+jest.mock("../../src/hooks/useConsentBasedAccessForResource");
+const mockUseConsentBasedAccessForResource = useConsentBasedAccessForResource;
+jest.mock("../../src/hooks/usePermissionsWithProfiles");
+const mockedUsePermissionsWithProfiles = usePermissionsWithProfiles;
+jest.mock("../../src/hooks/useAllPermissions");
+const mockedUseAllPermissions = useAllPermissions;
+
+const mockedUseRouter = jest.spyOn(RouterFns, "useRouter");
 
 const acp = solidClientFns.acp_v3;
 
@@ -57,6 +72,12 @@ describe("ResourceDrawer view", () => {
   let SessionProvider;
   let DetailsMenuContext;
 
+  const data = resourceInfo;
+  const error = null;
+  const mutate = () => {};
+  const isValidating = false;
+  const swr = { data, error, mutate, isValidating };
+
   beforeEach(() => {
     fetch = jest.fn();
     session = mockSession({
@@ -64,45 +85,68 @@ describe("ResourceDrawer view", () => {
     });
     SessionProvider = mockSessionContextProvider(session);
     accessControl = mockAccessControl();
+    mockUseConsentBasedAccessForResource.mockReturnValue({ permissions: [] });
+    mockedUsePermissionsWithProfiles.mockReturnValue({ permissions: [] });
+    mockedUseAllPermissions.mockReturnValue({ permissions: [] });
 
     useAccessControl.mockReturnValue({ accessControl });
-    useResourceInfo.mockReturnValue({ data: resourceInfo });
+    mockUseResourceInfo.mockReturnValue(swr);
 
     DetailsMenuContext = mockDetailsContextMenuProvider({
       menuOpen: true,
       setMenuOpen: jest.fn,
     });
   });
+  const PermissionsContextProvider = mockPermissionsContextProvider();
 
   test("it renders a loading view when context has no iri", async () => {
+    mockUseResourceInfo.mockReturnValue({ data: null });
     const DetailsContext = mockDetailsContextMenuProvider({
       menuOpen: true,
       setMenuOpen: jest.fn,
     });
 
-    jest.spyOn(RouterFns, "useRouter").mockReturnValue({
+    mockedUseRouter.mockReturnValue({
       asPath: "/pathname/",
       replace: jest.fn(),
       query: {},
     });
 
-    const { asFragment, getByText } = renderWithTheme(
+    const { asFragment, queryByText } = renderWithTheme(
       <DetailsContext>
-        <ResourceDrawer />
+        <PermissionsContextProvider>
+          <DatasetProvider solidDataset={resourceInfo}>
+            <ResourceDrawer />
+          </DatasetProvider>
+        </PermissionsContextProvider>
       </DetailsContext>
     );
     await waitFor(() => {
-      expect(getByText("iri")).toBeInTheDocument();
+      expect(queryByText("iri")).not.toBeInTheDocument();
     });
     expect(asFragment()).toMatchSnapshot();
   });
 
   test("it renders a Contents view when the router query has an iri", async () => {
+    mockedUseRouter.mockReturnValue({
+      asPath: "/pathname/",
+      replace: jest.fn(),
+      query: {
+        resourceIri: iri,
+        action: "details",
+      },
+    });
     const { asFragment, getByText } = renderWithTheme(
       <SessionProvider>
-        <DetailsMenuContext>
-          <ResourceDrawer />
-        </DetailsMenuContext>
+        <ResourceInfoProvider swr={swr}>
+          <DetailsMenuContext>
+            <PermissionsContextProvider>
+              <DatasetProvider solidDataset={resourceInfo}>
+                <ResourceDrawer />
+              </DatasetProvider>
+            </PermissionsContextProvider>
+          </DetailsMenuContext>
+        </ResourceInfoProvider>
       </SessionProvider>
     );
     await waitFor(() => {
@@ -112,6 +156,10 @@ describe("ResourceDrawer view", () => {
   });
 
   test("it renders without errors when iri contains spaces", async () => {
+    mockUseResourceInfo.mockReturnValue({
+      ...swr,
+      data: resourceInfoWithSpaces,
+    });
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
       replace: jest.fn(),
@@ -120,12 +168,17 @@ describe("ResourceDrawer view", () => {
         action: "details",
       },
     });
-    useResourceInfo.mockReturnValue({ data: resourceInfoWithSpaces });
     const { asFragment, getByText } = renderWithTheme(
       <SessionProvider>
-        <DetailsMenuContext>
-          <ResourceDrawer />
-        </DetailsMenuContext>
+        <ResourceInfoProvider swr={{ ...swr, data: resourceInfoWithSpaces }}>
+          <DetailsMenuContext>
+            <PermissionsContextProvider>
+              <DatasetProvider solidDataset={resourceInfo}>
+                <ResourceDrawer />
+              </DatasetProvider>
+            </PermissionsContextProvider>
+          </DetailsMenuContext>
+        </ResourceInfoProvider>
       </SessionProvider>
     );
     await waitFor(() => {
@@ -146,7 +199,11 @@ describe("ResourceDrawer view", () => {
     renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
-          <ResourceDrawer />
+          <PermissionsContextProvider>
+            <DatasetProvider solidDataset={resourceInfo}>
+              <ResourceDrawer />
+            </DatasetProvider>
+          </PermissionsContextProvider>
         </DetailsMenuContext>
       </SessionProvider>
     );
@@ -160,7 +217,11 @@ describe("ResourceDrawer view", () => {
     renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
-          <ResourceDrawer />
+          <PermissionsContextProvider>
+            <DatasetProvider solidDataset={resourceInfo}>
+              <ResourceDrawer />
+            </DatasetProvider>
+          </PermissionsContextProvider>
         </DetailsMenuContext>
       </SessionProvider>
     );
@@ -173,7 +234,11 @@ describe("ResourceDrawer view", () => {
     const { asFragment } = renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
-          <ResourceDrawer />
+          <PermissionsContextProvider>
+            <DatasetProvider solidDataset={resourceInfo}>
+              <ResourceDrawer />
+            </DatasetProvider>
+          </PermissionsContextProvider>
         </DetailsMenuContext>
       </SessionProvider>
     );
@@ -186,7 +251,11 @@ describe("ResourceDrawer view", () => {
     const { asFragment } = renderWithTheme(
       <SessionProvider>
         <DetailsMenuContext>
-          <ResourceDrawer />
+          <PermissionsContextProvider>
+            <DatasetProvider solidDataset={resourceInfo}>
+              <ResourceDrawer />
+            </DatasetProvider>
+          </PermissionsContextProvider>
         </DetailsMenuContext>
       </SessionProvider>
     );

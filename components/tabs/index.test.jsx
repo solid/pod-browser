@@ -49,7 +49,7 @@ describe("Tabs", () => {
     const { asFragment, getByTestId } = renderWithTheme(
       <Tabs
         handleTabChange={handleTabChange}
-        selectedTabValue="Person"
+        selectedTabValue="person"
         tabs={tabs}
       />
     );
@@ -62,7 +62,7 @@ describe("Tabs", () => {
     const { getByTestId } = renderWithTheme(
       <Tabs
         handleTabChange={handleTabChange}
-        selectedTabValue="Person"
+        selectedTabValue="person"
         tabs={tabs}
       />
     );

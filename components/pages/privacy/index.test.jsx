@@ -35,6 +35,7 @@ import {
   mockPersonThingAlice,
   mockPersonThingBob,
 } from "../../../__testUtils/mockPersonResource";
+import { NO_AGENTS_MESSAGE } from "../../agentList/emptyState";
 
 jest.mock("../../../src/hooks/useAgentsProfiles");
 jest.mock("next/router");
@@ -49,13 +50,20 @@ describe("PrivacyPage", () => {
     });
   });
   const people = [mockPersonThingBob(), mockPersonThingAlice()];
-  it("renders empty state if there's no agents to show", () => {
+  it("renders empty state if there's no agents to show", async () => {
     mockUseAgentsProfiles.mockReturnValue({
-      data: null,
+      data: [],
       error: null,
       mutate: jest.fn(),
     });
-    const { asFragment } = renderWithTheme(<PrivacyPage />);
+    const { asFragment, getByText, getByTestId } = renderWithTheme(
+      <PrivacyPage />
+    );
+    const peopleTab = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
+    fireEvent.click(peopleTab);
+    await waitFor(() => {
+      expect(getByText(NO_AGENTS_MESSAGE)).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
   it("renders people list when selecting people tab", () => {

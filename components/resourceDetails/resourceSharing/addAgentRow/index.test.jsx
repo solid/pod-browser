@@ -40,7 +40,8 @@ const mockedThingHook = useThing;
 
 jest.mock("../../../../src/hooks/useContactProfile");
 const mockedUseContactProfile = useContactProfile;
-const permissions = [{ webId: "https://example.org/profile/card#me" }];
+const webId = "https://example.org/profile/card#me";
+const permissions = [{ webId, alias: "editors" }];
 const setNewAgentsWebIds = jest.fn();
 const PermissionsContextProvider = mockPermissionsContextProvider({
   permissions,
@@ -63,12 +64,12 @@ describe("AddAgentRow", () => {
     const setNoAgentsAlert = jest.fn();
     const updateTemporaryRowThing = jest.fn();
     const contactsArrayLength = 0;
-    it("renders a row with an input for the first item in the array", () => {
+    it("renders a row with an input for the first item in the array", async () => {
       const EmptyPermissionsContextProvider = mockPermissionsContextProvider({
         permissions: [],
         addingWebId: true,
       });
-      const { asFragment } = renderWithTheme(
+      const { asFragment, getByTestId } = renderWithTheme(
         <EmptyPermissionsContextProvider>
           <AddAgentRow
             contactsArrayLength={contactsArrayLength}
@@ -79,9 +80,12 @@ describe("AddAgentRow", () => {
           />
         </EmptyPermissionsContextProvider>
       );
+      await waitFor(() => {
+        expect(getByTestId(TESTCAFE_ID_WEBID_INPUT)).toHaveValue("");
+      });
       expect(asFragment()).toMatchSnapshot();
     });
-    it("renders a validation error if added webId is already in permissions", () => {
+    it("renders a validation error if added webId is already in permissions", async () => {
       const { getByTestId, getByText } = renderWithTheme(
         <PermissionsContextProvider>
           <AddAgentRow
@@ -95,11 +99,10 @@ describe("AddAgentRow", () => {
       );
       const input = getByTestId(TESTCAFE_ID_WEBID_INPUT);
       const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
-      userEvent.type(input, "https://example1.org/profile/card#me");
+      userEvent.type(input, webId);
       userEvent.click(addButton);
-      waitFor(() => {
-        const errorText = getByText(EXISTING_WEBID_ERROR_MESSAGE);
-        expect(errorText).not.toBeNull();
+      await waitFor(() => {
+        expect(getByText(EXISTING_WEBID_ERROR_MESSAGE)).toBeInTheDocument();
       });
     });
     it("renders a validation error if added webId is own webId", () => {
@@ -136,10 +139,10 @@ describe("AddAgentRow", () => {
       );
       const input = getByTestId(TESTCAFE_ID_WEBID_INPUT);
       userEvent.type(input, "");
-      const errorText = queryByText("That WebID has already been added");
+      const errorText = queryByText(EXISTING_WEBID_ERROR_MESSAGE);
       expect(errorText).toBeNull();
     });
-    it("adds webId to webIds array on submit", () => {
+    it("adds webId to webIds array on submit", async () => {
       const { getByTestId } = renderWithTheme(
         <PermissionsContextProvider>
           <AddAgentRow
@@ -156,6 +159,9 @@ describe("AddAgentRow", () => {
       userEvent.type(input, "https://somewebid.com/");
       const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
       userEvent.click(addButton);
+      await waitFor(() => {
+        expect(input).toHaveValue("https://somewebid.com/");
+      });
       expect(setNewAgentsWebIds).toHaveBeenCalledWith([
         "https://somewebid.com/",
       ]);

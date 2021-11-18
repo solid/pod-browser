@@ -20,17 +20,31 @@
  */
 
 import React from "react";
+import * as solidClientFns from "@inrupt/solid-client";
+import { waitFor } from "@testing-library/dom";
 import * as RouterFns from "next/router";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../../../__testUtils/mockSessionContextProvider";
 import mockSession from "../../../../__testUtils/mockSession";
-
 import ContactPage from "./index";
+import {
+  mockPersonDatasetAlice,
+  aliceWebIdUrl,
+} from "../../../../__testUtils/mockPersonResource";
 
 jest.mock("../../../../src/effects/auth");
 
 describe("Contact show page", () => {
-  test("Renders the Contact show page", () => {
+  const profileDataset = mockPersonDatasetAlice();
+  const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+
+  beforeEach(() => {
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValue(profileDataset);
+    jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
+  });
+  test("Renders the Contact show page", async () => {
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
       replace: jest.fn(),
@@ -42,12 +56,14 @@ describe("Contact show page", () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
 
-    const { asFragment } = renderWithTheme(
+    const { asFragment, queryAllByText } = renderWithTheme(
       <SessionProvider>
         <ContactPage />
       </SessionProvider>
     );
-
+    await waitFor(() => {
+      expect(queryAllByText("Alice")).toHaveLength(2);
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 });

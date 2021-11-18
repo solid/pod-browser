@@ -21,6 +21,7 @@
 
 import React from "react";
 import userEvent from "@testing-library/user-event";
+import { waitFor } from "@testing-library/dom";
 import { useRouter } from "next/router";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -30,11 +31,13 @@ import ConsentRequestFrom from "../index";
 import {
   TESTCAFE_ID_FOREVER_BUTTON,
   TESTCAFE_ID_DATE_PICKER_CALENDAR_BUTTON,
+  TESTCAFE_ID_DATE_INPUT,
 } from "./index";
 
 const ConsentRequestContextProvider = mockConsentRequestContext();
 jest.mock("next/router");
 const mockedUseRouter = useRouter;
+const agentWebId = "https://mockapp.com/app#id";
 
 describe("DateInput component", () => {
   const push = jest.fn();
@@ -44,11 +47,11 @@ describe("DateInput component", () => {
       push,
     });
   });
-  test("Opens datepicker when calendar is clicked", () => {
+  test("Opens datepicker when calendar is clicked", async () => {
     const { getByTestId } = renderWithTheme(
       <ConsentRequestContextProvider>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <ConsentRequestFrom />
+          <ConsentRequestFrom agentWebId={agentWebId} />
         </MuiPickersUtilsProvider>
       </ConsentRequestContextProvider>
     );
@@ -59,5 +62,8 @@ describe("DateInput component", () => {
     const foreverButton = getByTestId(TESTCAFE_ID_FOREVER_BUTTON);
     expect(foreverButton).toBeInTheDocument();
     userEvent.click(foreverButton);
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_DATE_INPUT)).toHaveValue("Forever");
+    });
   });
 });

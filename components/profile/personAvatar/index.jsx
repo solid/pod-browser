@@ -51,6 +51,7 @@ export default function PersonAvatar({ profileIri }) {
           <Image
             property={vcard.hasPhoto}
             width={120}
+            alt={profileIri}
             errorComponent={errorComponent}
           />
         </Avatar>

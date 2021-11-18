@@ -44,10 +44,8 @@ describe("AddFolderFlyout", () => {
   const session = mockSession();
   const SessionProvider = mockSessionContextProvider(session);
 
-  let result;
-
-  beforeEach(() => {
-    result = render(
+  test("Renders an Add Folder button", async () => {
+    const { asFragment, getByText } = render(
       <AlertContext.Provider
         value={{
           setAlertOpen: jest.fn(),
@@ -62,21 +60,37 @@ describe("AddFolderFlyout", () => {
         </PodLocationProvider>
       </AlertContext.Provider>
     );
-  });
-
-  test("Renders an Add Folder button", () => {
-    expect(result.asFragment()).toMatchSnapshot();
+    await waitFor(() => {
+      expect(getByText("Create Folder")).toBeInTheDocument();
+    });
+    expect(asFragment()).toMatchSnapshot();
   });
 
   test("Displays a flyout on click", async () => {
-    const { container, queryByTestId } = result;
+    const { queryByTestId } = render(
+      <AlertContext.Provider
+        value={{
+          setAlertOpen: jest.fn(),
+          setMessage: jest.fn(),
+          setSeverity: jest.fn(),
+        }}
+      >
+        <PodLocationProvider currentUri={currentUri}>
+          <SessionProvider>
+            <AddFolderFlyout onSave={jest.fn()} folders={folders} />
+          </SessionProvider>
+        </PodLocationProvider>
+      </AlertContext.Provider>
+    );
     await waitFor(() =>
       expect(queryByTestId(TESTCAFE_ID_ADD_FOLDER_BUTTON)).toBeDefined()
     );
     const createFolderButton = queryByTestId(TESTCAFE_ID_ADD_FOLDER_BUTTON);
     userEvent.click(createFolderButton);
 
-    return expect(container.querySelector("#add-folder-flyout")).toBeDefined();
+    await waitFor(() => {
+      expect(queryByTestId("add-folder-flyout")).toBeInTheDocument();
+    });
   });
 });
 

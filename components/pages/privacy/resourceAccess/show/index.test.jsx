@@ -20,43 +20,63 @@
  */
 
 import React from "react";
+import * as solidClientFns from "@inrupt/solid-client";
+import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { schema } from "rdf-namespaces";
 import { useRouter } from "next/router";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import AgentResourceAccessShowPage, { TESTCAFE_ID_TAB_PROFILE } from "./index";
+import {
+  bobWebIdUrl,
+  mockPersonDatasetBob,
+} from "../../../../../__testUtils/mockPersonResource";
 
 jest.mock("next/router");
 
 const mockedUseRouter = useRouter;
-const agentWebId = "https://example.com/profile/card#me";
 
 describe("Resource access show page", () => {
+  const profileDataset = mockPersonDatasetBob();
+
   beforeEach(() => {
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValue(profileDataset);
     mockedUseRouter.mockReturnValue({
       query: {
-        webId: agentWebId,
+        webId: bobWebIdUrl,
       },
     });
   });
-  test("it renders a resource access page for a person", () => {
-    const { asFragment } = renderWithTheme(
+
+  test("it renders a resource access page for a person", async () => {
+    const { asFragment, getAllByText } = renderWithTheme(
       <AgentResourceAccessShowPage type={schema.Person} />
     );
+    await waitFor(() => {
+      expect(getAllByText("Bob")).toHaveLength(2);
+      expect(getAllByText(bobWebIdUrl)).toHaveLength(1);
+    });
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it renders a resource access page for an app", () => {
-    const { asFragment } = renderWithTheme(
+  test("it renders a resource access page for an app", async () => {
+    const { asFragment, getAllByText } = renderWithTheme(
       <AgentResourceAccessShowPage type={schema.SoftwareApplication} />
     );
+    await waitFor(() => {
+      expect(getAllByText("Mock App")).toHaveLength(1);
+    });
     expect(asFragment()).toMatchSnapshot();
   });
-  test("renders profile when clicking on profile tab", () => {
+  test("renders profile when clicking on profile tab", async () => {
     const { getByTestId, getByText } = renderWithTheme(
       <AgentResourceAccessShowPage type={schema.SoftwareApplication} />
     );
     const tab = getByTestId(TESTCAFE_ID_TAB_PROFILE);
     userEvent.click(tab);
-    expect(getByText("Mock App")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(getByText("Mock App")).toBeInTheDocument();
+    });
   });
 });

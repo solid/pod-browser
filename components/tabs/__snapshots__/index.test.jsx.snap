@@ -35,11 +35,11 @@ exports[`Tabs renders tabs 1`] = `
             />
           </button>
           <button
-            aria-selected="false"
-            class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit"
+            aria-selected="true"
+            class="PodBrowser-root PodBrowser-root PodBrowser-tab PodBrowser-textColorInherit PodBrowser-selected PodBrowser-selected"
             data-testid="tab-people"
             role="tab"
-            tabindex="-1"
+            tabindex="0"
             type="button"
           >
             <span

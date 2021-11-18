@@ -2,10 +2,23 @@
 
 exports[`ContainerTableRowSkeleton Renders a ContainerTableRowSkeleton 1`] = `
 <DocumentFragment>
-  <a
-    href="/resource/https%3A%2F%2Fexample.com%2Fresource"
-  >
-    /resource
-  </a>
+  <table>
+    <tbody>
+      <tr
+        class="MuiTableRow-root"
+      >
+        <td
+          class="MuiTableCell-root"
+          rowspan="3"
+        >
+          <a
+            href="/resource/https%3A%2F%2Fexample.com%2Fresource"
+          >
+            /resource
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </DocumentFragment>
 `;

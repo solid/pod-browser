@@ -23,7 +23,6 @@ import {
   addDatetime,
   addStringNoLocale,
   addUrl,
-  createSolidDataset,
   mockSolidDatasetFrom,
   setThing,
   removeThing,

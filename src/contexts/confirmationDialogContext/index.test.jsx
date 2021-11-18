@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { render } from "@testing-library/react";
 import ConfirmationDialogContext, { ConfirmationDialogProvider } from "./index";
 
@@ -35,10 +35,12 @@ function ChildComponent() {
     title,
   } = useContext(ConfirmationDialogContext);
 
-  setOpen(true);
-  setContent("This is my content");
-  setConfirmed(true);
-  setTitle("This is my title");
+  useEffect(() => {
+    setOpen(true);
+    setContent("This is my content");
+    setConfirmed(true);
+    setTitle("This is my title");
+  }, [setConfirmed, setContent, setOpen, setTitle]);
 
   return (
     <div>

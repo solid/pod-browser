@@ -24,7 +24,6 @@ import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { BackToNav, BackToNavLink } from "@inrupt/prism-react-components";
 import clsx from "clsx";
-import Link from "next/link";
 import { useSession } from "@inrupt/solid-ui-react";
 import { foaf } from "rdf-namespaces";
 import Spinner from "../spinner";
@@ -108,9 +107,6 @@ export default function AddContact() {
   useRedirectIfLoggedOut();
   const { alertSuccess, alertError } = useContext(AlertContext);
   const { session } = useSession();
-  const {
-    info: { webId },
-  } = session;
   const { menuOpen } = useContext(DetailsMenuContext);
   const bem = useBem(useStyles());
   const containerClass = clsx(
@@ -130,7 +126,7 @@ export default function AddContact() {
 
   if (peopleError) alertError(peopleError);
 
-  if (!webId || isLoading) return <Spinner />;
+  if (isLoading) return <Spinner />;
 
   const onSubmit = handleSubmit({
     addressBook,
@@ -149,11 +145,7 @@ export default function AddContact() {
     setAgentId(newValue);
   };
 
-  const link = (
-    <Link href="/contacts" passHref>
-      <BackToNavLink>contacts</BackToNavLink>
-    </Link>
-  );
+  const link = <BackToNavLink href="/contacts">contacts</BackToNavLink>;
 
   return (
     <div className={containerClass}>

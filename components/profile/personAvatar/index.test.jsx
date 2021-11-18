@@ -21,6 +21,8 @@
 
 import React from "react";
 import { render } from "@testing-library/react";
+import { waitFor } from "@testing-library/dom";
+import { CombinedDataProvider } from "@inrupt/solid-ui-react";
 import * as solidClientFns from "@inrupt/solid-client";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import {
@@ -47,11 +49,16 @@ describe("Person Avatar", () => {
   test("renders a person avatar", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
-    const { asFragment } = renderWithTheme(
-      <SessionProvider>
-        <PersonAvatar profileIri={profileIri} />
-      </SessionProvider>
+    const { asFragment, getByText } = renderWithTheme(
+      <CombinedDataProvider solidDataset={profileDataset} thing={profileThing}>
+        <SessionProvider>
+          <PersonAvatar profileIri={profileIri} />
+        </SessionProvider>
+      </CombinedDataProvider>
     );
+    await waitFor(() => {
+      expect(getByText("Alice")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 });

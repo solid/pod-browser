@@ -2,9 +2,353 @@
 
 exports[`Profile page Renders the profile page 1`] = `
 <DocumentFragment>
-  <span>
-    Fetching data...
-  </span>
+  <div
+    class="PodBrowser-container"
+  >
+    <div
+      class="PodBrowser-root PodBrowser-elevation1 PodBrowser-rounded"
+      style="margin-top: 1em;"
+    >
+      <div
+        class="PodBrowser-root PodBrowser-root"
+      >
+        <div
+          class="PodBrowser-root PodBrowser-root"
+        >
+          <div
+            class="PodBrowser-root PodBrowser-root"
+          >
+            <div
+              class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+            >
+              <div
+                class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="PodBrowser-root PodBrowser-fallback"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div
+            class="PodBrowser-root PodBrowser-root"
+          >
+            <h3
+              data-testid="profile-name-title"
+            >
+              <span
+                class="PodBrowser-avatarText"
+              >
+                Alice
+              </span>
+              <a
+                class="PodBrowser-headerLink"
+                href="http://example.com/webId#me"
+                rel="noreferrer"
+                target="_blank"
+              >
+                http://example.com/webId#me
+              </a>
+            </h3>
+          </div>
+        </div>
+        <hr />
+        <div
+          class="PodBrowser-root PodBrowser-root"
+        >
+          <div
+            class="PodBrowser-root PodBrowser-root"
+          >
+            <label
+              class="PodBrowser-root PodBrowser-root PodBrowser-animated"
+              data-testid="profile-name-title"
+            >
+              Name
+            </label>
+            <input
+              class="PodBrowser-input"
+              data-testid="profile-name-field"
+              type="text"
+              value="Alice"
+            />
+          </div>
+          <div
+            class="PodBrowser-root PodBrowser-root"
+          >
+            <label
+              class="PodBrowser-root PodBrowser-root PodBrowser-animated"
+            >
+              Role
+            </label>
+            <input
+              class="PodBrowser-input"
+              data-testid="profile-role-field"
+              type="text"
+              value=""
+            />
+          </div>
+          <div
+            class="PodBrowser-root PodBrowser-root"
+          >
+            <label
+              class="PodBrowser-root PodBrowser-root PodBrowser-animated"
+            >
+              Organization
+            </label>
+            <input
+              class="PodBrowser-input"
+              data-testid="profile-org-field"
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
+        <div
+          class="PodBrowser-root PodBrowser-root"
+        >
+          <label
+            class="PodBrowser-root PodBrowser-root PodBrowser-animated"
+          >
+            Email Addresses
+          </label>
+          <div
+            class="PodBrowser-root PodBrowser-root"
+          >
+            <table
+              class="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
+              role="table"
+            >
+              <thead>
+                <tr
+                  role="row"
+                >
+                  <th
+                    colspan="1"
+                    role="columnheader"
+                  />
+                  <th
+                    colspan="1"
+                    role="columnheader"
+                  />
+                  <th
+                    colspan="1"
+                    role="columnheader"
+                  />
+                </tr>
+              </thead>
+              <tbody
+                role="rowgroup"
+              />
+            </table>
+          </div>
+          <div
+            class="PodBrowser-root PodBrowser-root"
+          >
+            <div
+              class="PodBrowser-root PodBrowser-root"
+            >
+              <div
+                class="PodBrowser-root"
+              >
+                <div
+                  class="PodBrowser-root PodBrowser-root PodBrowser-formControl"
+                  data-testid="profile-email-new-type"
+                >
+                  <div
+                    aria-haspopup="listbox"
+                    class="PodBrowser-root PodBrowser-select PodBrowser-selectMenu PodBrowser-outlined PodBrowser-input PodBrowser-input"
+                    role="button"
+                    tabindex="0"
+                  >
+                    Home
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="PodBrowser-nativeInput"
+                    tabindex="-1"
+                    value="http://www.w3.org/2006/vcard/ns#Home"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="PodBrowser-root PodBrowser-icon PodBrowser-iconOutlined"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                  <fieldset
+                    aria-hidden="true"
+                    class="PodBrowser-root PodBrowser-notchedOutline"
+                    style="padding-left: 8px;"
+                  >
+                    <legend
+                      class="PodBrowser-legend"
+                      style="width: 0.01px;"
+                    >
+                      <span>
+                        ​
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+            <div
+              class="PodBrowser-root PodBrowser-root"
+            >
+              <input
+                class="PodBrowser-input"
+                data-testid="profile-email-new-value"
+                label="Value"
+                value=""
+              />
+            </div>
+            <div
+              class="PodBrowser-root PodBrowser-root"
+            >
+              <button
+                class="PodBrowser-button PodBrowser-button--secondary"
+                data-testid="profile-email-add-button"
+              >
+                <span
+                  class="PodBrowser-button__text"
+                >
+                  Add
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          class="PodBrowser-root PodBrowser-root"
+        >
+          <label
+            class="PodBrowser-root PodBrowser-root PodBrowser-animated"
+          >
+            Phone Numbers
+          </label>
+          <div
+            class="PodBrowser-root PodBrowser-root"
+          >
+            <table
+              class="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
+              role="table"
+            >
+              <thead>
+                <tr
+                  role="row"
+                >
+                  <th
+                    colspan="1"
+                    role="columnheader"
+                  />
+                  <th
+                    colspan="1"
+                    role="columnheader"
+                  />
+                  <th
+                    colspan="1"
+                    role="columnheader"
+                  />
+                </tr>
+              </thead>
+              <tbody
+                role="rowgroup"
+              />
+            </table>
+          </div>
+          <div
+            class="PodBrowser-root PodBrowser-root"
+          >
+            <div
+              class="PodBrowser-root PodBrowser-root"
+            >
+              <div
+                class="PodBrowser-root"
+              >
+                <div
+                  class="PodBrowser-root PodBrowser-root PodBrowser-formControl"
+                  data-testid="profile-phone-new-type"
+                >
+                  <div
+                    aria-haspopup="listbox"
+                    class="PodBrowser-root PodBrowser-select PodBrowser-selectMenu PodBrowser-outlined PodBrowser-input PodBrowser-input"
+                    role="button"
+                    tabindex="0"
+                  >
+                    Home
+                  </div>
+                  <input
+                    aria-hidden="true"
+                    class="PodBrowser-nativeInput"
+                    tabindex="-1"
+                    value="http://www.w3.org/2006/vcard/ns#Home"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="PodBrowser-root PodBrowser-icon PodBrowser-iconOutlined"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                  <fieldset
+                    aria-hidden="true"
+                    class="PodBrowser-root PodBrowser-notchedOutline"
+                    style="padding-left: 8px;"
+                  >
+                    <legend
+                      class="PodBrowser-legend"
+                      style="width: 0.01px;"
+                    >
+                      <span>
+                        ​
+                      </span>
+                    </legend>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+            <div
+              class="PodBrowser-root PodBrowser-root"
+            >
+              <input
+                class="PodBrowser-input"
+                data-testid="profile-phone-new-value"
+                label="Value"
+                value=""
+              />
+            </div>
+            <div
+              class="PodBrowser-root PodBrowser-root"
+            >
+              <button
+                class="PodBrowser-button PodBrowser-button--secondary"
+                data-testid="profile-phone-add-button"
+              >
+                <span
+                  class="PodBrowser-button__text"
+                >
+                  Add
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </DocumentFragment>
 `;
 

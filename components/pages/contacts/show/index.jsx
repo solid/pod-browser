@@ -22,7 +22,6 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { schema } from "rdf-namespaces";
-import Link from "next/link";
 import {
   BackToNav,
   BackToNavLink,
@@ -36,11 +35,7 @@ export default function ContactShow() {
   const router = useRouter();
   const decodedIri = decodeURIComponent(router.query.webId);
 
-  const link = (
-    <Link href="/contacts" passHref>
-      <BackToNavLink>contacts</BackToNavLink>
-    </Link>
-  );
+  const link = <BackToNavLink href="/contacts">contacts</BackToNavLink>;
   return (
     <>
       <Container>

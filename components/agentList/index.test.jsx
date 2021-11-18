@@ -28,8 +28,8 @@ import { renderWithTheme } from "../../__testUtils/withTheme";
 import {
   aliceWebIdUrl,
   bobWebIdUrl,
-  mockPersonDatasetAlice,
-  mockPersonDatasetBob,
+  mockPersonThingAlice,
+  mockPersonThingBob,
 } from "../../__testUtils/mockPersonResource";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
@@ -52,15 +52,15 @@ describe("AgentList", () => {
   });
   const session = mockSession();
   const SessionProvider = mockSessionContextProvider(session);
-  const agents = [mockPersonDatasetBob(), mockPersonDatasetAlice(), mockApp()];
-  it("renders spinner while agent profiles are loading", () => {
+  const agents = [mockPersonThingBob(), mockPersonThingAlice(), mockApp()];
+  it("renders spinner while agent profiles are loading", async () => {
     mockUseAgentsProfiles.mockReturnValue({
       data: null,
       error: null,
       isValidating: true,
     });
 
-    const { asFragment } = renderWithTheme(
+    const { asFragment, getByTestId } = renderWithTheme(
       <SessionProvider>
         <AgentList
           contactType={foaf.Person}
@@ -68,17 +68,20 @@ describe("AgentList", () => {
         />
       </SessionProvider>
     );
+    await waitFor(() => {
+      expect(getByTestId("spinner")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("renders page when agents is loaded", () => {
+  it("renders page when agents is loaded", async () => {
     mockUseAgentsProfiles.mockReturnValue({
       data: agents,
       error: null,
-      isValidating: true,
+      isValidating: false,
     });
 
-    const { asFragment } = renderWithTheme(
+    const { asFragment, getByText } = renderWithTheme(
       <SessionProvider>
         <AgentList
           contactType={foaf.Person}
@@ -86,6 +89,9 @@ describe("AgentList", () => {
         />
       </SessionProvider>
     );
+    await waitFor(() => {
+      expect(getByText("Bob")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 

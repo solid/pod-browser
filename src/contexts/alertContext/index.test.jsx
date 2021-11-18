@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { render } from "@testing-library/react";
 import AlertContext, { AlertProvider } from "./index";
 
@@ -33,9 +33,11 @@ function ChildComponent() {
     setSeverity,
   } = useContext(AlertContext);
 
-  setAlertOpen(true);
-  setMessage("message");
-  setSeverity("error");
+  useEffect(() => {
+    setAlertOpen(true);
+    setMessage("message");
+    setSeverity("error");
+  }, [setAlertOpen, setMessage, setSeverity]);
 
   return (
     <div>

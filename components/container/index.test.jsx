@@ -22,7 +22,6 @@
 import React from "react";
 import * as RouterFns from "next/router";
 import * as solidClientFns from "@inrupt/solid-client";
-import { act } from "@testing-library/react-hooks";
 import { waitFor } from "@testing-library/dom";
 import { space } from "rdf-namespaces";
 import { renderWithTheme } from "../../__testUtils/withTheme";
@@ -47,6 +46,8 @@ import { TESTCAFE_ID_NOT_SUPPORTED } from "../notSupported";
 import { TESTCAFE_ID_SPINNER } from "../spinner";
 import * as accessControlFns from "../../src/accessControl";
 import mockAccessControl from "../../__testUtils/mockAccessControl";
+import mockPermissionsContextProvider from "../../__testUtils/mockPermissionsContextProvider";
+import useConsentBasedAccessForResource from "../../src/hooks/useConsentBasedAccessForResource";
 
 jest.mock("../../src/hooks/useContainer");
 const mockedContainerHook = useContainer;
@@ -66,7 +67,11 @@ const mockedResourceInfoHook = useResourceInfo;
 jest.mock("../../src/hooks/useAccessControl");
 const mockedAccessControlHook = useAccessControl;
 
+jest.mock("../../src/hooks/useConsentBasedAccessForResource");
+const mockedUseConsentBasedAccessForResource = useConsentBasedAccessForResource;
+
 const acpFns = solidClientFns.acp_v3;
+const PermissionsContextProvider = mockPermissionsContextProvider();
 
 describe("Container view", () => {
   const iri = "https://example.com/container/";
@@ -75,10 +80,8 @@ describe("Container view", () => {
   const { dataset } = container;
 
   beforeEach(() => {
-    act(() => {
-      jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
-      jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(true);
-    });
+    jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
+    jest.spyOn(acpFns, "isAcpControlled").mockResolvedValue(true);
     mockedContainerHook.mockReturnValue({
       data: container,
       mutate: jest.fn(),
@@ -90,7 +93,12 @@ describe("Container view", () => {
       ),
     });
     mockedPodRootUriHook.mockReturnValue(iri);
-    mockedResourceInfoHook.mockReturnValue({ data: dataset });
+    mockedResourceInfoHook.mockReturnValue({
+      data: dataset,
+      isValidating: false,
+      mutate: jest.fn(),
+      error: null,
+    });
     mockedAccessControlHook.mockReturnValue({
       accessControl: mockAccessControl(),
     });
@@ -105,10 +113,15 @@ describe("Container view", () => {
       "https://myaccount.mypodserver.com/private",
       "https://myaccount.mypodserver.com/note.txt",
     ]);
+    mockedUseConsentBasedAccessForResource.mockReturnValue({ permissions: [] });
   });
 
   test("renders a table", async () => {
-    const { asFragment, getByText } = renderWithTheme(<Container iri={iri} />);
+    const { asFragment, getByText } = renderWithTheme(
+      <PermissionsContextProvider>
+        <Container iri={iri} />
+      </PermissionsContextProvider>
+    );
     await waitFor(() => {
       expect(getByText("inbox")).toBeInTheDocument();
       expect(getByText("private")).toBeInTheDocument();

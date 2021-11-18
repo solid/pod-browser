@@ -55,8 +55,8 @@ describe("RevokeAccessButton", () => {
   ];
 
   const setShouldUpdate = jest.fn();
-  test("it renders correct text for drawer button", () => {
-    const { asFragment } = renderWithTheme(
+  test("it renders correct text for drawer button", async () => {
+    const { asFragment, getByText } = renderWithTheme(
       <RevokeAccessButton
         variant="drawer"
         resources={[resourceIri]}
@@ -65,10 +65,13 @@ describe("RevokeAccessButton", () => {
         setShouldUpdate={setShouldUpdate}
       />
     );
+    await waitFor(() => {
+      expect(getByText("Remove Access to resource.txt?")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it renders correct text for in menu button", () => {
-    const { asFragment } = renderWithTheme(
+  test("it renders correct text for in menu button", async () => {
+    const { asFragment, getByText } = renderWithTheme(
       <RevokeAccessButton
         variant="in-menu"
         resources={[resourceIri]}
@@ -77,10 +80,13 @@ describe("RevokeAccessButton", () => {
         setShouldUpdate={setShouldUpdate}
       />
     );
+    await waitFor(() => {
+      expect(getByText("Revoke access")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it renders correct text for Revoke All Access button", () => {
-    const { asFragment } = renderWithTheme(
+  test("it renders correct text for Revoke All Access button", async () => {
+    const { asFragment, getByText } = renderWithTheme(
       <RevokeAccessButton
         variant="all-access"
         resources={[resourceIri, resourceIri]}
@@ -89,6 +95,9 @@ describe("RevokeAccessButton", () => {
         setShouldUpdate={setShouldUpdate}
       />
     );
+    await waitFor(() => {
+      expect(getByText("Revoke All Access")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
   test("it displays confirmation dialog on click", async () => {

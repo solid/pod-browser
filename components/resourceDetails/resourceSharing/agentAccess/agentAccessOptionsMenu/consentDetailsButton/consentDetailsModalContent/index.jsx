@@ -154,10 +154,10 @@ export default function ConsentDetailsModalContent({
             Access Duration
           </h3>
           <hr className={bem("access-details", "separator")} />
-          <p>
+          <span>
             <AgentName agentWebId={agentWebId} />
             has access until <strong>{expirationDate}</strong>.
-          </p>
+          </span>
         </section>
       )}
     </div>

@@ -21,9 +21,9 @@
 
 import React from "react";
 import { waitFor } from "@testing-library/dom";
+import userEvent from "@testing-library/user-event";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
-import * as solidClientFns from "@inrupt/solid-client";
 import * as routerFns from "next/router";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import ResourceDetails, {
@@ -32,11 +32,11 @@ import ResourceDetails, {
 } from "./index";
 import mockAccessControl from "../../__testUtils/mockAccessControl";
 import { AccessControlProvider } from "../../src/contexts/accessControlContext";
-import * as accessControlFns from "../../src/accessControl";
 import mockPermissionsContextProvider from "../../__testUtils/mockPermissionsContextProvider";
 import useConsentBasedAccessForResource from "../../src/hooks/useConsentBasedAccessForResource";
 import useAcp from "../../src/hooks/useAcp";
 import useWac from "../../src/hooks/useWac";
+import { TESTCAFE_ID_AGENT_ACCESS_TABLE } from "./resourceSharing/agentAccessTable";
 
 const accessControl = mockAccessControl();
 const dataset = mockSolidDatasetFrom("http://example.com/container/");
@@ -49,7 +49,8 @@ jest.mock("../../src/hooks/useWac");
 const mockUseAcp = useAcp;
 const mockUseWac = useWac;
 
-const acpFns = solidClientFns.acp_v3;
+jest.mock("../../src/hooks/useConsentBasedAccessForResource");
+const mockUseConsentBasedAccessForResource = useConsentBasedAccessForResource;
 
 describe("Resource details", () => {
   beforeEach(() => {
@@ -112,7 +113,13 @@ describe("Resource details", () => {
     mockUseAcp.mockReturnValue({ data: true });
     mockUseWac.mockReturnValue({ data: false });
     const PermissionsContextProvider = mockPermissionsContextProvider();
-    const { asFragment, getByTestId, getByText } = renderWithTheme(
+    mockUseConsentBasedAccessForResource.mockReturnValue({ permissions: [] });
+    const {
+      asFragment,
+      getByTestId,
+      getByText,
+      queryAllByTestId,
+    } = renderWithTheme(
       <AccessControlProvider accessControl={accessControl}>
         <DatasetProvider solidDataset={dataset}>
           <PermissionsContextProvider>
@@ -124,6 +131,10 @@ describe("Resource details", () => {
     await waitFor(() => {
       expect(getByTestId(TESTCAFE_ID_ACCORDION_SHARING)).toBeDefined();
       expect(getByText("Sharing")).toBeInTheDocument();
+    });
+    userEvent.click(getByText("Sharing"));
+    await waitFor(() => {
+      expect(queryAllByTestId(TESTCAFE_ID_AGENT_ACCESS_TABLE)).toHaveLength(2);
     });
     expect(asFragment()).toMatchSnapshot();
   });

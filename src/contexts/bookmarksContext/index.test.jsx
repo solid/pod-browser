@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { render } from "@testing-library/react";
 import BookmarkContext, { BookmarksContextProvider } from "./index";
@@ -32,7 +32,9 @@ const bookmark = {
 
 function ChildComponent() {
   const { bookmarks, setBookmarks } = useContext(BookmarkContext);
-  setBookmarks(bookmark);
+  useEffect(() => {
+    setBookmarks([bookmark]);
+  }, [setBookmarks]);
   return (
     <div id="bookmarks">{bookmarks ? "bookmarks exist" : "no bookmarks"}</div>
   );

@@ -20,6 +20,7 @@
  */
 
 import React from "react";
+import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import AddAgentButton, {
   TESTCAFE_ID_ADD_AGENT_BUTTON,
@@ -28,17 +29,24 @@ import AddAgentButton, {
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 
 describe("AddAgentButton", () => {
-  it("renders a button with the correct text", () => {
-    const { asFragment } = renderWithTheme(<AddAgentButton type="editors" />);
+  it("renders a button with the correct text", async () => {
+    const { asFragment, getByText } = renderWithTheme(
+      <AddAgentButton type="editors" />
+    );
+    await waitFor(() => {
+      expect(getByText("Edit Editors")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
-  it("opens modal when clicking the button", () => {
+  it("opens modal when clicking the button", async () => {
     const { getByTestId, queryByTestId } = renderWithTheme(
       <AddAgentButton type="editors" />
     );
     const button = getByTestId("add-agent-button");
     userEvent.click(button);
-    expect(queryByTestId("agent-picker-modal")).not.toBeNull();
+    await waitFor(() => {
+      expect(queryByTestId("agent-picker-modal")).not.toBeNull();
+    });
   });
   it("closes modal when clicking outside the modal", () => {
     const { getByTestId, queryByTestId } = renderWithTheme(

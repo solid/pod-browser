@@ -63,7 +63,10 @@ describe("ContactInfoTable", () => {
     const { asFragment, findByRole } = renderWithTheme(
       <SessionProvider>
         <CombinedDataProvider solidDataset={dataset} thing={thing}>
-          <ContactInfoTable property={vcard.hasEmail} />
+          <ContactInfoTable
+            property={vcard.hasEmail}
+            contactInfoType={CONTACT_INFO_TYPE_EMAIL}
+          />
         </CombinedDataProvider>
       </SessionProvider>
     );

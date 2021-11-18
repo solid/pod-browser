@@ -78,9 +78,10 @@ export default function Profile(props) {
 Profile.propTypes = {
   profileIri: T.string.isRequired,
   editing: T.bool,
-  type: T.string.isRequired,
+  type: T.string,
 };
 
 Profile.defaultProps = {
   editing: false,
+  type: null,
 };

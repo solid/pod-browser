@@ -52,6 +52,7 @@ import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../src/models/contact/au
 import {
   TESTCAFE_ID_ADD_WEBID_BUTTON,
   TESTCAFE_ID_WEBID_INPUT,
+  TESTCAFE_ID_AGENT_WEB_ID,
 } from "../addAgentRow";
 import { TESTCAFE_ADD_WEBID_BUTTON } from "./addWebIdButton";
 import { TESTCAFE_ID_SEARCH_INPUT } from "../agentsSearchBar";
@@ -505,7 +506,9 @@ describe("AgentPickerModal without contacts", () => {
     );
     const submitButton = getByTestId(TESTCAFE_SUBMIT_WEBIDS_BUTTON);
     userEvent.click(submitButton);
-    expect(onClose).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(onClose).toHaveBeenCalled();
+    });
   });
 
   it("updates the temporary row with profile data when available", async () => {
@@ -534,16 +537,18 @@ describe("AgentPickerModal without contacts", () => {
     const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
     userEvent.click(addButton);
     await waitFor(() => {
-      const agentWebId = getByText("Example");
-      expect(agentWebId).not.toBeNull();
+      expect(getByText("Example")).not.toBeNull();
     });
   });
 
   it("opens a confirmation dialog with correct title and content", async () => {
-    jest
-      .spyOn(ProfileFns, "fetchProfile")
-      .mockRejectedValueOnce({ error: "error" });
-    const { getByTestId, findByText } = renderWithTheme(
+    jest.spyOn(ProfileFns, "fetchProfile").mockRejectedValueOnce("error");
+    const {
+      asFragment,
+      getByTestId,
+      getByText,
+      queryAllByTestId,
+    } = renderWithTheme(
       <AccessControlContext.Provider value={{ accessControl }}>
         <ConfirmationDialogProvider>
           <PermissionsContextProvider>
@@ -567,17 +572,19 @@ describe("AgentPickerModal without contacts", () => {
     const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
     userEvent.click(addButton);
     await waitFor(() => {
-      expect(findByText(webId).resolves).not.toBeNull();
+      expect(input).not.toBeInTheDocument();
+      expect(queryAllByTestId(TESTCAFE_ID_AGENT_WEB_ID)).toHaveLength(3);
+      expect(getByText(webId)).toBeInTheDocument();
     });
     const submitWebIdsButton = getByTestId(TESTCAFE_SUBMIT_WEBIDS_BUTTON);
     userEvent.click(submitWebIdsButton);
     await waitFor(() => {
-      const dialog = getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
-      expect(dialog).toBeInTheDocument();
+      expect(getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)).toBeInTheDocument();
       expect(
         getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE)
       ).toHaveTextContent("Change permissions for 1 person");
     });
+    expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders a warning when trying to submit a webId that is already in the policy", async () => {
@@ -609,8 +616,7 @@ describe("AgentPickerModal without contacts", () => {
     });
   });
 
-  // FIXME: skipping test to fix the build
-  it.skip("confirms without dialog if webIds to be added are only public and/or authenticated agents", async () => {
+  it("confirms without dialog if webIds to be added are only public and/or authenticated agents", async () => {
     jest
       .spyOn(ProfileFns, "fetchProfile")
       .mockRejectedValueOnce({ error: "error" });
@@ -634,19 +640,18 @@ describe("AgentPickerModal without contacts", () => {
     const submitWebIdsButton = getByTestId(TESTCAFE_SUBMIT_WEBIDS_BUTTON);
 
     userEvent.click(submitWebIdsButton);
-    expect(
-      queryByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)
-    ).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        queryByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)
+      ).not.toBeInTheDocument();
+    });
   });
 
-  // FIXME: skipping test in order to fix the build
-  it.skip("updates the temporary row with webId only when profile is unavailable", async () => {
+  it("updates the temporary row with webId only when profile is unavailable", async () => {
     const webId = "https://somewebid.com";
-    jest
-      .spyOn(ProfileFns, "fetchProfile")
-      .mockRejectedValue({ error: "error" });
+    jest.spyOn(ProfileFns, "fetchProfile").mockRejectedValue("error");
 
-    const { getByTestId, queryByTestId } = renderWithTheme(
+    const { getByTestId, queryByText } = renderWithTheme(
       <AccessControlContext.Provider value={{ accessControl }}>
         <PermissionsContextProvider>
           <AgentPickerModal
@@ -665,7 +670,9 @@ describe("AgentPickerModal without contacts", () => {
     const addButton = getByTestId(TESTCAFE_ID_ADD_WEBID_BUTTON);
     userEvent.click(addButton);
 
-    await expect(queryByTestId(webId)).not.toBeNull();
+    await waitFor(() => {
+      expect(queryByText(webId)).not.toBeNull();
+    });
   });
 
   it("cannot uncheck checkbox for the agent being added", async () => {
@@ -698,8 +705,7 @@ describe("AgentPickerModal without contacts", () => {
     });
   });
 
-  // FIXME: skipping test to fix the build
-  it.skip("renders the correct confirmation message for more than 1 agent", async () => {
+  it("renders the correct confirmation message for more than 1 agent", async () => {
     const { getByTestId, getByText } = renderWithTheme(
       <ConfirmationDialogProvider>
         <AccessControlContext.Provider value={{ accessControl }}>

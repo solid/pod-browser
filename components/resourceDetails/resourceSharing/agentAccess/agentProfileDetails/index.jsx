@@ -45,7 +45,7 @@ import {
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-const TESTCAFE_ID_AGENT_WEB_ID = "agent-web-id";
+export const TESTCAFE_ID_AGENT_WEB_ID = "agent-web-id";
 
 export default function AgentProfileDetails({
   resourceIri,

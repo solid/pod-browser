@@ -28,7 +28,7 @@ import DeleteButton, {
 } from "./index";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import { ConfirmationDialogProvider } from "../../src/contexts/confirmationDialogContext";
-import {
+import ConfirmationDialog, {
   TESTCAFE_ID_CONFIRMATION_DIALOG,
   TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
   TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE,
@@ -65,6 +65,7 @@ describe("Delete button", () => {
           dialogId={dialogId}
           successMessage={successMessage}
         />
+        <ConfirmationDialog />
       </ConfirmationDialogProvider>
     );
     const deletebutton = getByTestId(TESTCAFE_ID_DELETE_BUTTON);
@@ -89,6 +90,7 @@ describe("Delete button", () => {
           dialogId={dialogId}
           successMessage={successMessage}
         />
+        <ConfirmationDialog />
       </ConfirmationDialogProvider>
     );
     const deletebutton = getByTestId(TESTCAFE_ID_DELETE_BUTTON);

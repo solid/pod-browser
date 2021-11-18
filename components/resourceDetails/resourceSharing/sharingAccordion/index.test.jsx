@@ -21,6 +21,7 @@
 
 import React from "react";
 import { useRouter } from "next/router";
+import { waitFor } from "@testing-library/dom";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import mockPersonContact from "../../../../__testUtils/mockPersonContact";
 import mockAddressBook from "../../../../__testUtils/mockAddressBook";
@@ -29,6 +30,7 @@ import { TESTCAFE_ID_AGENT_ACCESS_TABLE } from "../agentAccessTable";
 import { TESTCAFE_ID_ADVANCED_SHARING_BUTTON } from "../advancedSharingButton";
 import useContacts from "../../../../src/hooks/useContacts";
 import useAddressBook from "../../../../src/hooks/useAddressBook";
+import mockPermissionsContextProvider from "../../../../__testUtils/mockPermissionsContextProvider";
 
 jest.mock("next/router");
 const mockedUseRouter = useRouter;
@@ -41,6 +43,8 @@ const mockedUseAddressBook = useAddressBook;
 
 describe("SharingAccordion", () => {
   const addressBook = mockAddressBook();
+  const PermissionsContextProvider = mockPermissionsContextProvider();
+
   beforeEach(() => {
     mockedUseRouter.mockReturnValue({
       query: { resourceIri: "/resource.txt" },
@@ -62,12 +66,14 @@ describe("SharingAccordion", () => {
     });
   });
   // Note: since the permissions cannot be mocked reliably for the custom policies, those are tested separately in the table component
-  it("renders two lists of named policies for editors and viewers and an Advanced Sharing button", () => {
+  it("renders two lists of named policies for editors and viewers and an Advanced Sharing button", async () => {
     const { asFragment, queryAllByTestId, queryByTestId } = renderWithTheme(
       <SharingAccordion />
     );
-    expect(queryAllByTestId(TESTCAFE_ID_AGENT_ACCESS_TABLE)).toHaveLength(2);
-    expect(queryByTestId(TESTCAFE_ID_ADVANCED_SHARING_BUTTON)).not.toBeNull();
+    await waitFor(() => {
+      expect(queryAllByTestId(TESTCAFE_ID_AGENT_ACCESS_TABLE)).toHaveLength(2);
+      expect(queryByTestId(TESTCAFE_ID_ADVANCED_SHARING_BUTTON)).not.toBeNull();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
   describe("when resource is a container", () => {
@@ -91,13 +97,19 @@ describe("SharingAccordion", () => {
         ],
       });
     });
-    // Note: since the permissions cannot be mocked reliably for the custom policies, those are tested separately in the table component
-    it("renders an info box which alerts the user that sharing applies to all items inside a folder", () => {
-      const { asFragment, queryByText } = renderWithTheme(<SharingAccordion />);
+    // since the permissions cannot be mocked reliably for the custom policies, those are tested separately in the table component
+    it("renders an info box which alerts the user that sharing applies to all items inside a folder", async () => {
+      const { asFragment, queryByText } = renderWithTheme(
+        <PermissionsContextProvider>
+          <SharingAccordion />
+        </PermissionsContextProvider>
+      );
+      await waitFor(() => {
+        expect(
+          queryByText("Sharing applies to all items in this folder")
+        ).not.toBeNull();
+      });
       expect(asFragment()).toMatchSnapshot();
-      expect(
-        queryByText("Sharing applies to all items in this folder")
-      ).not.toBeNull();
     });
   });
 });

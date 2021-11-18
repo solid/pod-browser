@@ -48,7 +48,7 @@ describe("ContainerTableRow", () => {
 
   test("it renders a table row", () => {
     const resource = {
-      iri: "https://example.com/example.ttl",
+      iri: "https://example.com/container/example.ttl",
       name: "/example.ttl",
       types: [],
     };
@@ -62,7 +62,10 @@ describe("ContainerTableRow", () => {
       <table>
         <tbody>
           <BookmarksContext.Provider value={(bookmarks, setBookmarks)}>
-            <ContainerTableRow resource={resource} />
+            <ContainerTableRow
+              resource={resource}
+              container="https://example.com/container/"
+            />
           </BookmarksContext.Provider>
         </tbody>
       </table>
@@ -82,7 +85,10 @@ describe("ContainerTableRow", () => {
       <table>
         <tbody>
           <BookmarksContext.Provider value={(bookmarks, setBookmarks)}>
-            <ContainerTableRow resource={resource} />
+            <ContainerTableRow
+              resource={resource}
+              container="https://example.com/container/"
+            />
           </BookmarksContext.Provider>
         </tbody>
       </table>
@@ -102,7 +108,10 @@ describe("ContainerTableRow", () => {
       <table>
         <tbody>
           <BookmarksContext.Provider value={(bookmarks, setBookmarks)}>
-            <ContainerTableRow resource={resource} />
+            <ContainerTableRow
+              resource={resource}
+              container="https://example.com/container/"
+            />
           </BookmarksContext.Provider>
         </tbody>
       </table>

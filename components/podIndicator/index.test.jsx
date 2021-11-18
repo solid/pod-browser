@@ -43,7 +43,7 @@ describe("PodIndicator", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it returns null if there is no profile", async () => {
+  test("it returns null if there is no profile", () => {
     usePodOwnerProfile.mockReturnValue({
       profile: null,
       error: null,

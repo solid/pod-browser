@@ -27,9 +27,7 @@ import {
   mockThingFrom,
   setThing,
 } from "@inrupt/solid-client";
-import mockSession, {
-  mockUnauthenticatedSession,
-} from "../../__testUtils/mockSession";
+import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import AddContact, {
   EXISTING_WEBID_ERROR_MESSAGE,
@@ -49,18 +47,6 @@ import * as profileHelperFns from "../../src/solidClientHelpers/profile";
 describe("AddContact", () => {
   test("it renders the Add Contact form", () => {
     const session = mockSession();
-    const SessionProvider = mockSessionContextProvider(session);
-    const { asFragment } = renderWithTheme(
-      <SessionProvider>
-        <AddContact />
-      </SessionProvider>
-    );
-
-    expect(asFragment()).toMatchSnapshot();
-  });
-
-  test("it renders a spinner when user is not logged in", () => {
-    const session = mockUnauthenticatedSession();
     const SessionProvider = mockSessionContextProvider(session);
     const { asFragment } = renderWithTheme(
       <SessionProvider>

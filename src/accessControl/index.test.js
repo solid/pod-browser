@@ -76,6 +76,7 @@ describe("getAccessControl", () => {
   const wacStrategy = "wacStrategy";
 
   beforeEach(() => {
+    jest.spyOn(acp3, "isAcpControlled").mockReturnValue(true);
     jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValue(false);
     jest.spyOn(acp, "hasLinkedAcr").mockReturnValue(false);
     jest.spyOn(WacAccessControlStrategy, "init").mockReturnValue(wacStrategy);
@@ -85,6 +86,7 @@ describe("getAccessControl", () => {
   afterEach(() => jest.restoreAllMocks());
 
   it("throws error if no ACL is found", async () => {
+    jest.spyOn(acp3, "isAcpControlled").mockReturnValue(false);
     await expect(
       getAccessControl(resource, policiesContainerUrl, fetch)
     ).rejects.toEqual(new Error(noAccessPolicyError));

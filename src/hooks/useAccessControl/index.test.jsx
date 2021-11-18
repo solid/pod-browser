@@ -149,7 +149,8 @@ describe("useAccessControl", () => {
       expect(result.current.error).toBeNull();
     });
 
-    it("returns null if given usePolicies return null", async () => {
+    it("returns null if policies container url returns null", () => {
+      mockedPoliciesContainerUrlHook.mockReturnValue(null);
       const { result } = renderHook(() => useAccessControl(resourceInfo), {
         wrapper,
       });

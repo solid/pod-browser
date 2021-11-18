@@ -21,6 +21,7 @@
 
 import React from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import { act } from "@testing-library/react-hooks";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
 import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -32,10 +33,8 @@ import AgentAccess, {
   submitHandler,
   TESTCAFE_ID_PERMISSIONS_FORM_SUBMIT_BUTTON,
 } from "./index";
-
 import mockSessionContextProvider from "../../../../__testUtils/mockSessionContextProvider";
 import mockSession from "../../../../__testUtils/mockSession";
-
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
 import useFetchProfile from "../../../../src/hooks/useFetchProfile";
@@ -75,79 +74,61 @@ describe("AgentAccess", () => {
       .mockReturnValue({ query: { iri: datasetUrl } });
   });
 
-  it("renders", () => {
-    const { asFragment } = renderWithTheme(
+  it("renders", async () => {
+    const { asFragment, getByText } = renderWithTheme(
       <DatasetProvider solidDataset={dataset}>
         <AgentAccess permission={permission} />
       </DatasetProvider>
     );
+    await waitFor(() => {
+      expect(getByText("Alice")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("fetches profile for webId", () => {
+  it("fetches profile for webId", async () => {
     renderWithTheme(
       <DatasetProvider solidDataset={dataset}>
         <AgentAccess permission={permission} />
       </DatasetProvider>
     );
-    expect(useFetchProfile).toHaveBeenCalledWith(webId);
+    await waitFor(() => {
+      expect(useFetchProfile).toHaveBeenCalledWith(webId);
+    });
   });
 
-  it("renders skeleton placeholders when profile is not available", () => {
+  it("renders skeleton placeholders when profile is not available", async () => {
     useFetchProfile.mockReturnValue({ profile: null });
-    const { asFragment } = renderWithTheme(
+    const { asFragment, queryByText } = renderWithTheme(
       <DatasetProvider solidDataset={dataset}>
         <AgentAccess permission={permission} />
       </DatasetProvider>
     );
-
+    await waitFor(() => {
+      expect(queryByText("Alice")).not.toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("renders an error message with a 'try again' button if it's unable to load profile", () => {
+  it("renders an error message with a 'try again' button if it's unable to load profile", async () => {
+    jest.useFakeTimers();
     useFetchProfile.mockReturnValue({ error: "error" });
     const { asFragment, getByTestId } = renderWithTheme(
       <DatasetProvider solidDataset={dataset}>
         <AgentAccess permission={permission} />
       </DatasetProvider>
     );
-    expect(getByTestId("try-again-button")).toBeTruthy();
+    await waitFor(() => {
+      expect(getByTestId("try-again-button")).toBeTruthy();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("renders a spinner after clicking 'try again' button", async () => {
-    useFetchProfile.mockReturnValue({ error: "error" });
-    const { getByTestId } = renderWithTheme(
-      <DatasetProvider solidDataset={dataset}>
-        <AgentAccess permission={permission} />
-      </DatasetProvider>
-    );
-    const button = getByTestId("try-again-button");
-    userEvent.click(button);
-
-    expect(getByTestId("try-again-spinner")).toBeTruthy();
-  });
-
-  it("tries to fetch the profile again when clicking 'try again' button", async () => {
+  it("renders a spinner after clicking 'try again' button, tries to fetch profile and removes the spinner when fetching succeeds", async () => {
+    jest.useFakeTimers();
     useFetchProfile.mockReturnValue({ error: "error" });
     const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
-    const { getByTestId } = renderWithTheme(
-      <DatasetProvider solidDataset={dataset}>
-        <AgentAccess permission={permission} />
-      </DatasetProvider>
-    );
-    const button = getByTestId("try-again-button");
-    userEvent.click(button);
 
-    await waitFor(() =>
-      expect(fetchProfile).toHaveBeenCalledWith(webId, expect.anything())
-    );
-  });
-
-  it("removes the spinner when fetching succeeds", async () => {
-    useFetchProfile.mockReturnValue({ error: "error" });
-    const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
-    fetchProfile.mockReturnValue("profile");
     const { getByTestId, queryByTestId } = renderWithTheme(
       <DatasetProvider solidDataset={dataset}>
         <AgentAccess permission={permission} />
@@ -155,13 +136,27 @@ describe("AgentAccess", () => {
     );
     const button = getByTestId("try-again-button");
     userEvent.click(button);
-
-    await waitFor(() => expect(queryByTestId("try-again-spinner")).toBeFalsy());
+    await waitFor(() => {
+      expect(getByTestId("try-again-spinner")).toBeTruthy();
+    });
+    act(() => {
+      fetchProfile.mockReturnValue("profile");
+    });
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+    await waitFor(() => {
+      expect(fetchProfile).toHaveBeenCalledWith(webId, expect.anything());
+      expect(queryByTestId("try-again-spinner")).toBeFalsy();
+    });
   });
 
   it("removes the spinner when fetching errors", async () => {
-    useFetchProfile.mockReturnValue({ error: "error" });
+    jest.useFakeTimers();
     const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
+    act(() => {
+      useFetchProfile.mockReturnValue({ error: "error" });
+    });
     fetchProfile.mockReturnValue("profile");
     const { getByTestId, queryByTestId } = renderWithTheme(
       <DatasetProvider solidDataset={dataset}>
@@ -170,41 +165,52 @@ describe("AgentAccess", () => {
     );
     const button = getByTestId("try-again-button");
     userEvent.click(button);
-
-    await waitFor(() =>
-      expect(fetchProfile).toHaveBeenCalledWith(webId, expect.anything())
-    );
-    await waitFor(() => expect(queryByTestId("try-again-spinner")).toBeFalsy());
+    act(() => {
+      fetchProfile.mockRejectedValue("error");
+    });
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+    await waitFor(() => {
+      expect(queryByTestId("try-again-spinner")).toBeFalsy();
+      expect(fetchProfile).toHaveBeenCalledWith(webId, expect.anything());
+    });
   });
 
   describe("user tries to change access for themselves", () => {
-    it("checkboxes are disabled", () => {
+    it("checkboxes are disabled", async () => {
       const session = mockSession();
       const SessionProvider = mockSessionContextProvider(session);
 
-      const { asFragment } = renderWithTheme(
+      const { asFragment, queryAllByTestId } = renderWithTheme(
         <SessionProvider>
           <DatasetProvider solidDataset={dataset}>
             <AgentAccess permission={permission} webId={session.info.webId} />
           </DatasetProvider>
         </SessionProvider>
       );
+      await waitFor(() => {
+        expect(queryAllByTestId("permission-checkbox-edit")).toHaveLength(1);
+      });
       expect(asFragment()).toMatchSnapshot();
     });
 
-    it("checkboxes are only disabled if the resource is connected to user's Pod", () => {
+    it("checkboxes are only disabled if the resource is connected to user's Pod", async () => {
       const randomUrl = "http://some-random-pod.com";
       mockedRouterHook.mockReturnValue({ query: { iri: randomUrl } });
       const session = mockSession();
       const SessionProvider = mockSessionContextProvider(session);
 
-      const { asFragment } = renderWithTheme(
+      const { asFragment, queryAllByTestId } = renderWithTheme(
         <SessionProvider>
           <DatasetProvider solidDataset={dataset}>
             <AgentAccess permission={permission} webId={session.info.webId} />
           </DatasetProvider>
         </SessionProvider>
       );
+      await waitFor(() => {
+        expect(queryAllByTestId("permission-checkbox-edit")).toHaveLength(1);
+      });
       expect(asFragment()).toMatchSnapshot();
     });
 
@@ -234,11 +240,14 @@ describe("AgentAccess", () => {
         TESTCAFE_ID_PERMISSIONS_FORM_SUBMIT_BUTTON
       );
       userEvent.click(submitButton);
-      const dialog = await findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
-      expect(dialog).toBeInTheDocument();
-      expect(
-        getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
-      ).toHaveTextContent(OWN_PERMISSIONS_WARNING_PERMISSION);
+      await waitFor(() => {
+        expect(
+          getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
+        ).toBeInTheDocument();
+        expect(
+          getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
+        ).toHaveTextContent(OWN_PERMISSIONS_WARNING_PERMISSION);
+      });
     });
   });
 
