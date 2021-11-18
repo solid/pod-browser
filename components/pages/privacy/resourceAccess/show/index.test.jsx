@@ -28,27 +28,24 @@ import { useRouter } from "next/router";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import AgentResourceAccessShowPage, { TESTCAFE_ID_TAB_PROFILE } from "./index";
 import {
-  aliceWebIdUrl,
-  mockPersonDatasetAlice,
+  bobWebIdUrl,
+  mockPersonDatasetBob,
 } from "../../../../../__testUtils/mockPersonResource";
 
 jest.mock("next/router");
 
 const mockedUseRouter = useRouter;
-const agentWebId = "https://example.com/profile/card#me";
 
 describe("Resource access show page", () => {
-  const profileDataset = mockPersonDatasetAlice();
-  const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+  const profileDataset = mockPersonDatasetBob();
 
   beforeEach(() => {
     jest
       .spyOn(solidClientFns, "getSolidDataset")
       .mockResolvedValue(profileDataset);
-    jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
     mockedUseRouter.mockReturnValue({
       query: {
-        webId: agentWebId,
+        webId: bobWebIdUrl,
       },
     });
   });
@@ -58,7 +55,8 @@ describe("Resource access show page", () => {
       <AgentResourceAccessShowPage type={schema.Person} />
     );
     await waitFor(() => {
-      expect(getAllByText("Alice")).toHaveLength(2);
+      expect(getAllByText("Bob")).toHaveLength(2);
+      expect(getAllByText(bobWebIdUrl)).toHaveLength(1);
     });
     expect(asFragment()).toMatchSnapshot();
   });

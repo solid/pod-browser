@@ -58,15 +58,15 @@ exports[`Resource access show page it renders a resource access page for a perso
               <span
                 class="PodBrowser-avatarText"
               >
-                Alice
+                Bob
               </span>
               <a
                 class="PodBrowser-headerLink"
-                href="https://example.com/profile/card#me"
+                href="http://bob.example.com/bob#me"
                 rel="noreferrer"
                 target="_blank"
               >
-                https://example.com/profile/card#me
+                http://bob.example.com/bob#me
               </a>
             </h3>
           </div>
@@ -138,7 +138,7 @@ exports[`Resource access show page it renders a resource access page for a perso
           >
             <p>
               <span>
-                Alice
+                Bob
               </span>
                has access to these resources
             </p>
@@ -273,11 +273,11 @@ exports[`Resource access show page it renders a resource access page for an app 
               </span>
               <a
                 class="PodBrowser-headerLink"
-                href="https://example.com/profile/card#me"
+                href="http://bob.example.com/bob#me"
                 rel="noreferrer"
                 target="_blank"
               >
-                https://example.com/profile/card#me
+                http://bob.example.com/bob#me
               </a>
             </h3>
           </div>
