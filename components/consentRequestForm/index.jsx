@@ -272,7 +272,9 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
           {`${agentName || agentWebId} will have access until`}
         </span>
         <DateInput
-          selectedDate={selectedDate}
+          // selectedDate={selectedDate}
+          // setting date to forever for now until we add functionality to change this
+          selectedDate={null}
           setSelectedDate={setSelectedDate}
           datepickerOpen={datepickerOpen}
           setDatepickerOpen={setDatepickerOpen}

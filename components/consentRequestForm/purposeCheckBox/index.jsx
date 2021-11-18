@@ -34,6 +34,7 @@ export default function PurposeCheckBox({
   handleSelectPurpose,
   url,
   description,
+  disabled,
 }) {
   const [checked, setChecked] = useState(false);
 
@@ -45,6 +46,8 @@ export default function PurposeCheckBox({
   return (
     <Checkbox
       className={classes.root}
+      // temporarily disabling until we have functionality for this
+      disabled={disabled}
       disableRipple
       checked={checked}
       checkedIcon={
@@ -64,8 +67,13 @@ export default function PurposeCheckBox({
   );
 }
 
+PurposeCheckBox.defaultProps = {
+  disabled: false,
+};
+
 PurposeCheckBox.propTypes = {
   handleSelectPurpose: T.func.isRequired,
   url: T.string.isRequired,
   description: T.string.isRequired,
+  disabled: T.bool,
 };

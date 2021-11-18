@@ -140,6 +140,11 @@ export default function styles(theme) {
       margin: 0,
     },
 
+    "icon-small--primary-disabled": {
+      color: theme.palette.grey[700],
+      margin: 0,
+    },
+
     "icon-small--padded": {
       marginLeft: "0.5rem",
     },
