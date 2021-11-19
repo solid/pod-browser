@@ -78,9 +78,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   const { consentRequest } = useContext(ConsentRequestContext);
   const [selectedAccess, setSelectedAccess] = useState([]);
   const purposes = getPurposeUrls(consentRequest);
-  const [selectedPurposes, setSelectedPurposes] = useState(
-    !Array.isArray(purposes) ? purposes : []
-  );
+  const [selectedPurposes, setSelectedPurposes] = useState(purposes);
   const selectedResources = selectedAccess.map(
     ({ resourceIri }) => resourceIri
   );
@@ -233,10 +231,12 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
             Allow {agentName || agentWebId} access?
           </span>
         </Typography>
-        {purposes?.length === 1 ? (
+        {Array.isArray(purposes) && purposes.length === 1 ? (
           <span className={bem("purpose")}>
-            {purposes[0].description}{" "}
-            <InfoTooltip tooltipText={purposes[0].url || "Purpose"} />
+            {purposes[0].description || purposes[0]}{" "}
+            <InfoTooltip
+              tooltipText={purposes[0].url || purposes[0] || "Purpose"}
+            />
           </span>
         ) : (
           <div className={bem("purposes-container")}>
