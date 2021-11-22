@@ -46,13 +46,19 @@ const webIdsWithAccessToFeatures = [
   "https://pod.inrupt.com/podbrowser2/profile/card#me",
   "https://id.inrupt.com/podbrowser",
   "https://id.inrupt.com/podbrowser2",
+  "https://id.play.inrupt.com/podbrowser",
+  "https://id.play.inrupt.com/podbrowser2",
+  "https://che.inrupt.net/profile/card#me",
+  "https://fidel.inrupt.net/profile/card#me",
+  "https://pod.inrupt.com/che/profile/card#me",
+  "https://pod.inrupt.com/fidel/profile/card#me",
+  "https://id.inrupt.com/che",
+  "https://id.inrupt.com/fidel",
   "https://pod.inrupt.com/docsteam/profile/card#me",
   "https://testsharepat.inrupt.net/profile/card#me",
   "https://pod.inrupt.com/acoburn/profile/card#me",
-  "https://pod.inrupt.com/norbertn/profile/card#me",
   "https://pod.inrupt.com/vctestalice1/profile/card#me",
   "https://pod.inrupt.com/zwifi/profile/card#me",
-  "https://id.dev-next.inrupt.com/norbertdev3",
 ];
 function enableForGivenWebIds(webIds) {
   return (session) =>
