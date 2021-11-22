@@ -52,7 +52,7 @@ export default function getMainMenuItems() {
       label: "Privacy",
       icon: "user-shield",
       featureFlag: PRIVACY_PAGE_ENABLED_SERVER,
-      pages: ["/privacy", "/privacy/access/requests/[id]"],
+      pages: ["/privacy", "/privacy/consent/requests/"],
       "data-testid": TESTCAFE_ID_MAIN_MENU_PRIVACY,
     },
     {
