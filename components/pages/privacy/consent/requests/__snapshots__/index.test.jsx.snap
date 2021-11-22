@@ -143,26 +143,24 @@ exports[`Consent Page Renders the Consent page 1`] = `
             placeholder="Consent expiry date"
             readonly=""
             type="text"
-            value="June 23, 2022"
+            value="Forever"
           />
         </div>
         <button
           aria-label="Set expiry date"
-          class="PodBrowser-root PodBrowser-root PodBrowser-date-button"
+          class="PodBrowser-root PodBrowser-root PodBrowser-date-button PodBrowser-disabled PodBrowser-disabled"
           data-testid="date-picker-calendar-button"
-          tabindex="0"
+          disabled=""
+          tabindex="-1"
           type="button"
         >
           <span
             class="PodBrowser-label"
           >
             <span
-              class="PodBrowser-icon-calendar PodBrowser-icon-small--primary"
+              class="PodBrowser-icon-calendar PodBrowser-icon-small--primary-disabled"
             />
           </span>
-          <span
-            class="PodBrowser-root"
-          />
         </button>
       </div>
       <fieldset

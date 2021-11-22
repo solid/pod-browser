@@ -80,10 +80,16 @@ export default function DateInput(props) {
         data-testid={TESTCAFE_ID_DATE_PICKER_CALENDAR_BUTTON}
         classes={{ root: bem("date-button") }}
         type="button"
+        // temporarily disabling until functionality to change date is available
+        disabled
         aria-label="Set expiry date"
         onClick={() => setDatepickerOpen(!datepickerOpen)}
       >
-        <Icons name="calendar" className={bem("icon-small--primary")} />
+        <Icons
+          name="calendar"
+          // temporarily disabling until functionality to change date is available
+          className={bem("icon-small--primary-disabled")}
+        />
       </IconButton>
       {datepickerOpen && (
         <div className={bem("date-picker")}>
@@ -92,6 +98,8 @@ export default function DateInput(props) {
             orientation="portrait"
             variant="static"
             disablePast
+            // temporarily disabling until functionality to change date is available
+            disabled
             format="MM/dd/yyyy"
             margin="normal"
             value={selectedDate}
