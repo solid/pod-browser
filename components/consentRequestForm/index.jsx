@@ -78,10 +78,11 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   const { consentRequest } = useContext(ConsentRequestContext);
   const [selectedAccess, setSelectedAccess] = useState([]);
   const purposes = getPurposeUrls(consentRequest);
-  const [selectedPurposes, setSelectedPurposes] = useState(purposes);
+  const [selectedPurposes, setSelectedPurposes] = useState([]);
   const selectedResources = selectedAccess.map(
     ({ resourceIri }) => resourceIri
   );
+
   const { agentName } = agentDetails || null;
 
   const {
@@ -209,6 +210,16 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
       setSelectedDate(new Date(expirationDate));
     }
   }, [expirationDate]);
+
+  useEffect(() => {
+    if (!purposes) return;
+    if (Array.isArray(purposes) && purposes.length === 1) {
+      setSelectedPurposes(purposes[0]);
+    }
+    if (!Array.isArray(purposes)) {
+      setSelectedPurposes(purposes);
+    }
+  }, [purposes]);
 
   const handleSelectPurpose = (e) => {
     if (e.target.checked) {
