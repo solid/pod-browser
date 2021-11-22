@@ -48,7 +48,7 @@ describe("DateInput component", () => {
     });
   });
   // FIXME: unskip this test when date picker is enabled again
-  test.skip("Opens datepicker when calendar is clicked", () => {
+  test.skip("Opens datepicker when calendar is clicked", async () => {
     const { getByTestId } = renderWithTheme(
       <ConsentRequestContextProvider>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
