@@ -121,9 +121,11 @@ describe("RevokeAccessButton", () => {
   });
   test("clicking confirm button calls remove access function", async () => {
     const resource = SolidClientFns.mockSolidDatasetFrom(resourceIri);
-    const accessControl = mockAccessControl();
-    mockedUseAccessControl.mockReturnValue({ accessControl });
-    mockedGetAccessControl.mockResolvedValue(accessControl);
+    const data = mockAccessControl();
+    const error = "Test Error";
+    const isValidating = false;
+    mockedUseAccessControl.mockReturnValue({ data, error, isValidating });
+    mockedGetAccessControl.mockResolvedValue(data);
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
     jest.spyOn(SolidClientFns, "getResourceInfo").mockResolvedValue(resource);

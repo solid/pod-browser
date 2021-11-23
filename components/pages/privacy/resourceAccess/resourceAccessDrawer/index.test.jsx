@@ -50,10 +50,12 @@ const SessionProvider = mockSessionContextProvider(session);
 const mockResource = SolidClientFns.mockSolidDatasetFrom(resourceIri);
 
 describe("ResourceDrawer", () => {
-  const accessControl = mockAccessControl();
+  const data = mockAccessControl();
+  const error = "Test Error";
+  const isValidating = false;
   beforeEach(() => {
-    mockedUseAccessControl.mockReturnValue({ accessControl });
-    mockedGetAccessControl.mockResolvedValue(accessControl);
+    mockedUseAccessControl.mockReturnValue({ data, error, isValidating });
+    mockedGetAccessControl.mockResolvedValue(data);
     jest
       .spyOn(SolidClientFns, "getResourceInfo")
       .mockResolvedValue(mockResource);
