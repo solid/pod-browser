@@ -141,7 +141,7 @@ exports[`PrivacyPage renders empty state if there's no agents to show 1`] = `
     </div>
   </div>
   <a
-    href="/privacy/consent/generate"
+    href="/privacy/access/generate"
   >
     Generate consent request
   </a>
