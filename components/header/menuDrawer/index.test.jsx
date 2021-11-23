@@ -29,7 +29,13 @@ import { mockAuthenticatedSession } from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import { TESTCAFE_ID_USER_MENU_LOGOUT } from "../../../src/hooks/useUserMenu";
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  const uiReactModule = jest.requireActual("@inrupt/solid-ui-react");
+  return {
+    SessionContext: uiReactModule.SessionContext,
+    useSession: jest.fn(),
+  };
+});
 const mockedUseSession = useSession;
 
 describe("MenuDrawer", () => {

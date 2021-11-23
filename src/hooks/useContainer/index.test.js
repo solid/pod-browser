@@ -27,7 +27,11 @@ import useContainer from "./index";
 import { ERROR_CODES } from "../../error";
 import createContainer from "../../../__testUtils/createContainer";
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+  };
+});
 const mockedSessionHook = useSession;
 
 jest.mock("swr");

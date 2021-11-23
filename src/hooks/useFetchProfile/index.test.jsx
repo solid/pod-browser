@@ -29,7 +29,13 @@ import * as profileHelpers from "../../solidClientHelpers/profile";
 import useFetchProfile, { FETCH_PROFILE } from "./index";
 
 jest.mock("swr");
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  const uiReactModule = jest.requireActual("@inrupt/solid-ui-react");
+  return {
+    SessionContext: uiReactModule.SessionContext,
+    useSession: jest.fn(),
+  };
+});
 const mockedUseSession = useSession;
 
 describe("useFetchProfile", () => {

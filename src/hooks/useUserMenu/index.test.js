@@ -28,7 +28,11 @@ import useUserMenu, {
   TESTCAFE_ID_USER_MENU_PROFILE,
 } from "./index";
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+  };
+});
 const mockedSessionHook = useSession;
 jest.mock("next/router");
 const mockedUseRouter = useRouter;

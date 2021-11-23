@@ -28,7 +28,11 @@ import * as profileModel from "../../models/profile";
 import * as addressBookFns from "../../addressBook";
 import * as resourceFns from "../../solidClientHelpers/resource";
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+  };
+});
 jest.mock("swr");
 
 const mockedSwrHook = useSWR;

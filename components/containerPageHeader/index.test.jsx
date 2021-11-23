@@ -26,7 +26,11 @@ import { useSession } from "@inrupt/solid-ui-react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import ContainerPageHeader from "./index";
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+  };
+});
 jest.mock("next/router");
 
 describe("ContainerPageHeader", () => {

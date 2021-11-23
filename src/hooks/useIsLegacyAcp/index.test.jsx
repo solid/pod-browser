@@ -32,7 +32,11 @@ hasAcpConfiguration.mockResolvedValue(true);
 jest.mock("swr");
 const mockedSwrHook = useSWR;
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+  };
+});
 const mockedSessionHook = useSession;
 
 jest.mock("@inrupt/solid-client", () => {

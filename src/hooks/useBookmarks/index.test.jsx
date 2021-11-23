@@ -33,7 +33,13 @@ import * as resourceFns from "../../solidClientHelpers/resource";
 import * as bookmarkFns from "../../solidClientHelpers/bookmarks";
 import AlertContext from "../../contexts/alertContext";
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  const uiReactModule = jest.requireActual("@inrupt/solid-ui-react");
+  return {
+    SessionContext: uiReactModule.SessionContext,
+    useSession: jest.fn(),
+  };
+});
 const mockedUseSession = useSession;
 
 jest.mock("../useAuthenticatedProfile");

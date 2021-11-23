@@ -31,7 +31,11 @@ import AgentSearchForm, {
   setupSubmitHandler,
 } from "./index";
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+  };
+});
 
 describe("AgentSearchForm", () => {
   beforeEach(() => {

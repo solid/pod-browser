@@ -27,7 +27,11 @@ import { fetchProfile } from "../../solidClientHelpers/profile";
 import { PUBLIC_AGENT_PREDICATE } from "../../models/contact/public";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../models/contact/authenticated";
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+  };
+});
 const mockedSessionHook = useSession;
 
 jest.mock("../../solidClientHelpers/profile");
