@@ -78,12 +78,11 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   const { consentRequest } = useContext(ConsentRequestContext);
   const [selectedAccess, setSelectedAccess] = useState([]);
   const purposes = getPurposeUrls(consentRequest);
-  const [selectedPurposes, setSelectedPurposes] = useState(
-    !Array.isArray(purposes) ? purposes : []
-  );
+  const [selectedPurposes, setSelectedPurposes] = useState([]);
   const selectedResources = selectedAccess.map(
     ({ resourceIri }) => resourceIri
   );
+
   const { agentName } = agentDetails || null;
 
   const {
@@ -212,6 +211,16 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
     }
   }, [expirationDate]);
 
+  useEffect(() => {
+    if (!purposes) return;
+    if (Array.isArray(purposes) && purposes.length === 1) {
+      setSelectedPurposes(purposes[0]);
+    }
+    if (!Array.isArray(purposes)) {
+      setSelectedPurposes(purposes);
+    }
+  }, [purposes]);
+
   const handleSelectPurpose = (e) => {
     if (e.target.checked) {
       setSelectedPurposes((prevState) => [...prevState, e.target.value]);
@@ -233,10 +242,12 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
             Allow {agentName || agentWebId} access?
           </span>
         </Typography>
-        {purposes?.length === 1 ? (
+        {Array.isArray(purposes) && purposes.length === 1 ? (
           <span className={bem("purpose")}>
-            {purposes[0].description}{" "}
-            <InfoTooltip tooltipText={purposes[0].url || "Purpose"} />
+            {purposes[0].description || purposes[0]}{" "}
+            <InfoTooltip
+              tooltipText={purposes[0].url || purposes[0] || "Purpose"}
+            />
           </span>
         ) : (
           <div className={bem("purposes-container")}>

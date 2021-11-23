@@ -144,7 +144,7 @@ describe("Consent Request Form", () => {
       "Mock App will not have access to anything in your Pod."
     );
   });
-  test("when submitting form without selecting purpose and at least one access selected, it displays a confirmation dialog with the correct title and content", () => {
+  test("when submitting form without selecting purpose and at least one access selected, it displays a confirmation dialog with the correct title and content", async () => {
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentRequestContextProvider>
@@ -159,16 +159,17 @@ describe("Consent Request Form", () => {
     userEvent.click(toggle);
     const button = getByTestId(TESTCAFE_ID_CONSENT_REQUEST_SUBMIT_BUTTON);
     userEvent.click(button);
-    const dialog = getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
-    expect(dialog).toBeInTheDocument();
-    expect(
-      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE)
-    ).toHaveTextContent(NO_PURPOSE_TITLE);
-    expect(
-      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
-    ).toHaveTextContent(
-      "At least one purpose needs to be selected to approve access for Mock App"
-    );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)).toBeInTheDocument();
+      expect(
+        getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE)
+      ).toHaveTextContent(NO_PURPOSE_TITLE);
+      expect(
+        getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
+      ).toHaveTextContent(
+        "At least one purpose needs to be selected to approve access for Mock App"
+      );
+    });
   });
   test("does not display confirmation dialog if at least one access and one purpose are selected, calls approveAccessRequestWithConsent and redirects with correct params", async () => {
     consentFns.approveAccessRequestWithConsent.mockResolvedValue(signedVc);
