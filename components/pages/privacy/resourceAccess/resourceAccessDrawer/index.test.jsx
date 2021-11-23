@@ -125,10 +125,7 @@ describe("ResourceDrawer", () => {
     const confirmationButton = await findByTestId(TESTCAFE_ID_CONFIRM_BUTTON);
     userEvent.click(confirmationButton);
     await waitFor(() => {
-      expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledWith(
-        webId,
-        "editors"
-      );
+      expect(data.removeAgentFromPolicy).toHaveBeenCalledWith(webId, "editors");
       expect(onClose).toHaveBeenCalled();
     });
   });

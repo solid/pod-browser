@@ -151,7 +151,7 @@ describe("RevokeAccessButton", () => {
     const confirmButton = getByTestId(TESTCAFE_ID_CONFIRM_BUTTON);
     userEvent.click(confirmButton);
     await waitFor(() => {
-      expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledTimes(2);
+      expect(data.removeAgentFromPolicy).toHaveBeenCalledTimes(2);
     });
   });
 });
