@@ -19,43 +19,29 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useEffect, useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
-import { getSourceUrl } from "@inrupt/solid-client";
-import { getAccessControl, isAcp } from "../../accessControl";
+import useSWR from "swr";
+import { getAccessControl } from "../../accessControl";
 import usePoliciesContainerUrl from "../usePoliciesContainerUrl";
 import useIsLegacyAcp from "../useIsLegacyAcp";
 
-export default function useAccessControl(resourceInfo) {
-  const { session } = useSession();
-  const { fetch } = session;
-  const [accessControl, setAccessControl] = useState(null);
+export default function useAccessControl(resourceInfo, swrOptions = {}) {
   const policiesContainerUrl = usePoliciesContainerUrl(resourceInfo);
   const { data: isLegacy } = useIsLegacyAcp(resourceInfo);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    if (
-      !resourceInfo ||
-      (isAcp(getSourceUrl(resourceInfo), fetch) && !policiesContainerUrl) ||
-      !session.info.isLoggedIn
-    ) {
-      setAccessControl(null);
-      setError(null);
-      return;
-    }
-    setAccessControl(null);
-    setError(null);
-    getAccessControl(resourceInfo, policiesContainerUrl, fetch, isLegacy)
-      .then((response) => {
-        setAccessControl(response);
-        setError(null);
-      })
-      .catch((accessControlError) => {
-        setAccessControl(null);
-        setError(accessControlError);
-      });
-  }, [fetch, policiesContainerUrl, resourceInfo, session, isLegacy]);
-
-  return { accessControl, error };
+  const { session } = useSession();
+  const { fetch } = session;
+  return useSWR(
+    ["useAccessControl", resourceInfo],
+    async () => {
+      if (!resourceInfo) return null;
+      if (!policiesContainerUrl) return null;
+      return getAccessControl(
+        resourceInfo,
+        policiesContainerUrl,
+        fetch,
+        isLegacy
+      );
+    },
+    swrOptions
+  );
 }

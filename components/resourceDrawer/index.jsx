@@ -68,9 +68,15 @@ export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
     shouldRetryOnError: false,
   });
   const { data: resourceInfo, error: resourceError } = resourceInfoSwrResponse;
-  const { accessControl, error: accessControlError } = useAccessControl(
-    resourceInfo
-  );
+
+  const accessControlResponse = useAccessControl(resourceInfo, {
+    revalidateOnFocus: false,
+  });
+  const {
+    data: accessControlData,
+    error: accessControlError,
+    isValidating,
+  } = accessControlResponse;
 
   useEffect(() => {
     setMenuOpen(!!(action && resourceIri));
@@ -93,7 +99,12 @@ export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
       </Drawer>
     );
   }
-  const loading = (!accessControl && !accessControlError) || !resourceInfo;
+
+  if (accessControlError) {
+    // do we want to do anything?
+  }
+
+  const loading = !resourceInfo || isValidating;
 
   return (
     <Drawer open={menuOpen} close={closeDrawer}>
@@ -101,7 +112,7 @@ export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
         <DetailsLoading iri={resourceIri} />
       ) : (
         <ResourceInfoProvider swr={resourceInfoSwrResponse}>
-          <AccessControlProvider accessControl={accessControl}>
+          <AccessControlProvider accessControl={accessControlData}>
             <DatasetProvider solidDataset={resourceInfo}>
               <ResourceDetails
                 onDelete={onUpdate}

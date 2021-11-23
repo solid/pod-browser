@@ -79,7 +79,9 @@ export default function ResourceAccessDrawer({
     revalidateOnFocus: false,
     shouldRetryOnError: false,
   });
-  const { accessControl, accessControlError } = useAccessControl(resourceInfo);
+  const { data: accessControl, error: accessControlError } = useAccessControl(
+    resourceInfo
+  );
   const resourceName = resourceIri && getResourceName(resourceIri);
   const resourcePath =
     resourceIri && getParentContainerUrl(resourceIri)?.replace(podRoot, "");
