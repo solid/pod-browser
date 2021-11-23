@@ -66,7 +66,6 @@ describe("useAccessControl", () => {
     });
     expect(result.current.accessControl).toBeUndefined();
     expect(result.current.error).toBeUndefined();
-    expect(result.current.isValidating).toBeFalsy();
   });
 
   it("returns error if getAccessControl fails", async () => {
