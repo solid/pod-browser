@@ -72,11 +72,7 @@ export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
   const accessControlResponse = useAccessControl(resourceInfo, {
     revalidateOnFocus: false,
   });
-  const {
-    data: accessControlData,
-    error: accessControlError,
-    isValidating,
-  } = accessControlResponse;
+  const { data: accessControlData, isValidating } = accessControlResponse;
 
   useEffect(() => {
     setMenuOpen(!!(action && resourceIri));
@@ -98,10 +94,6 @@ export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
         </Message>
       </Drawer>
     );
-  }
-
-  if (accessControlError) {
-    // do we want to do anything?
   }
 
   const loading = !resourceInfo || isValidating;

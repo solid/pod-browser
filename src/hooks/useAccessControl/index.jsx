@@ -31,9 +31,8 @@ export default function useAccessControl(resourceInfo, swrOptions = {}) {
   const { session } = useSession();
   const { fetch } = session;
   return useSWR(
-    ["useAccessControl", resourceInfo],
+    ["useAccessControl", resourceInfo, fetch, policiesContainerUrl],
     async () => {
-      if (!resourceInfo) return null;
       if (!policiesContainerUrl) return null;
       return getAccessControl(
         resourceInfo,
