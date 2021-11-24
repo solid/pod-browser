@@ -21,7 +21,7 @@
 
 import React from "react";
 
-import ConsentShowPage from "../../../../components/pages/privacy/consent/requests";
+import ConsentShowPage from "../../../../components/pages/privacy/access/requests";
 
 export default function ConsentShow() {
   return <ConsentShowPage />;
