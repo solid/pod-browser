@@ -28,7 +28,7 @@ import { hasAcpConfiguration } from "../../accessControl/acp/index";
 export default function useIsLegacyAcp(resourceInfo) {
   const { fetch } = useSession();
   return useSWR(
-    resourceInfo ? acp.getLinkedAcrUrl(resourceInfo) : null,
+    [resourceInfo ? acp.getLinkedAcrUrl(resourceInfo) : null, fetch],
     // A legacy ACP server is one which does _not_ implement the ACP configuration discovery.
     // Since we mock SWR, the following line never runs.
     /* istanbul ignore next */

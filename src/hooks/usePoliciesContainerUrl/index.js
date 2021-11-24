@@ -24,18 +24,23 @@ import { useEffect, useState } from "react";
 import usePodRootUri from "../usePodRootUri";
 import { getPoliciesContainerUrl } from "../../models/policy";
 import useIsLegacyAcp from "../useIsLegacyAcp";
+import useResourceInfo from "../useResourceInfo";
 
-export default function usePoliciesContainerUrl(resourceInfo) {
+export default function usePoliciesContainerUrl(resourceUrl) {
+  const { data: resourceInfo } = useResourceInfo(resourceUrl);
   const [policiesContainerUrl, setPoliciesContainerUrl] = useState();
   const rootUrl = usePodRootUri(getSourceIri(resourceInfo));
   const { data: isLegacy } = useIsLegacyAcp(resourceInfo);
-
+  console.log({ isLegacy });
   useEffect(() => {
     if (isLegacy === undefined) {
       setPoliciesContainerUrl(null);
       return;
     }
     if (isLegacy) {
+      console.log({ rootUrl });
+      console.log({ resourceInfo });
+      console.log("the container", rootUrl && getPoliciesContainerUrl(rootUrl));
       setPoliciesContainerUrl(
         rootUrl ? getPoliciesContainerUrl(rootUrl) : null
       );
@@ -47,6 +52,5 @@ export default function usePoliciesContainerUrl(resourceInfo) {
       );
     }
   }, [isLegacy, resourceInfo, rootUrl]);
-
   return policiesContainerUrl;
 }

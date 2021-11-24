@@ -74,6 +74,8 @@ export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
   });
   const { data: accessControlData, isValidating } = accessControlResponse;
 
+  console.log("at the provider level", accessControl)
+
   useEffect(() => {
     setMenuOpen(!!(action && resourceIri));
   }, [action, resourceIri, setMenuOpen]);

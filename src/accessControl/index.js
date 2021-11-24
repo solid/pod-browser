@@ -60,9 +60,7 @@ export async function getAccessControl(
 ) {
   const resourceUrl = getSourceUrl(resourceInfo);
   const isWacControlledResource = await isWac(resourceUrl, resourceInfo, fetch);
-  const isAcpControlledResource = await acp3.isAcpControlled(resourceUrl, {
-    fetch,
-  });
+  const isAcpControlledResource = await isAcp(resourceUrl, fetch);
   if (isWacControlledResource) {
     return WacAccessControlStrategy.init(resourceInfo, fetch);
   }

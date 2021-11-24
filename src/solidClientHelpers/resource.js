@@ -152,12 +152,13 @@ export async function deleteResource(
   fetch
 ) {
   const iri = getSourceUrl(resourceInfo);
-  await deleteFile(iri, {
-    fetch,
-  });
+  // await deleteFile(iri, {
+  //   fetch,
+  // });
   // FIXME: Discover whether legacy ACPs are used
   const legacyAcp = true;
-  if (!policiesContainerUrl) return;
+  // if (!policiesContainerUrl) return;
+  console.log(policiesContainerUrl)
   const policyUrl = getPolicyUrl(resourceInfo, policiesContainerUrl, legacyAcp);
   const resourcePoliciesContainerPath = getResourcePoliciesContainerPath(
     resourceInfo,
@@ -184,26 +185,26 @@ export async function deleteResource(
     policyUrl,
   ].filter((url) => Boolean(url));
 
-  Promise.allSettled(
-    urlsToDelete.map(async (url) => {
-      await deleteFile(url, { fetch });
-    })
-  )
-    .then(() => {
-      if (
-        resourcePoliciesContainerPath &&
-        isContainer(resourcePoliciesContainerPath)
-      ) {
-        deletePoliciesContainer(resourcePoliciesContainerPath, fetch);
-      }
-    })
-    .catch((err) => {
-      if (
-        !isHTTPError(err.message, 404) &&
-        !isHTTPError(err.message, 403) &&
-        !isHTTPError(err.message, 409)
-      ) {
-        throw err;
-      }
-    });
+  // Promise.allSettled(
+  //   urlsToDelete.map(async (url) => {
+  //     await deleteFile(url, { fetch });
+  //   })
+  // )
+  //   .then(() => {
+  //     if (
+  //       resourcePoliciesContainerPath &&
+  //       isContainer(resourcePoliciesContainerPath)
+  //     ) {
+  //       deletePoliciesContainer(resourcePoliciesContainerPath, fetch);
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     if (
+  //       !isHTTPError(err.message, 404) &&
+  //       !isHTTPError(err.message, 403) &&
+  //       !isHTTPError(err.message, 409)
+  //     ) {
+  //       throw err;
+  //     }
+  //   });
 }
