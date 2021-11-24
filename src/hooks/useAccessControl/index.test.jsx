@@ -58,7 +58,6 @@ describe("useAccessControl", () => {
   const resourceUrl = joinPath(authenticatedProfile.pods[0], "test");
   const resourceInfo = mockSolidDatasetFrom(resourceUrl);
   const error = "error";
-  const isValidating = false;
 
   const session = mockSession();
   const SessionProvider = mockSessionContextProvider(session);
