@@ -40,14 +40,13 @@ import {
   isEmptyAccess,
 } from "../../solidClientHelpers/permissions";
 import { chain, createResponder } from "../../solidClientHelpers/utils";
-import {
-  deletePoliciesContainer,
-  getOrCreateDatasetOld,
-} from "../../solidClientHelpers/resource";
+// eslint-disable-next-line import/no-cycle
+import { getOrCreateDatasetOld } from "../../solidClientHelpers/resource";
 import {
   isCustomPolicy,
   getPolicyUrl,
   getPolicyResourceUrl,
+  deletePoliciesContainer,
 } from "../../models/policy";
 import { isHTTPError } from "../../error";
 import {

@@ -76,7 +76,6 @@ export default function ResourceDetails({
   const type = getContentType(dataset);
   const actionMenuBem = ActionMenu.useBem();
   const { accessControl } = useContext(AccessControlContext);
-  console.log(accessControl)
   const { data: isAcpControlled } = useAcp(datasetUrl);
   const { data: isWacControlled } = useWac(datasetUrl);
   const [actionsAccordion, setActionsAccordion] = useLocalStorage(

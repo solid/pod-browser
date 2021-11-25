@@ -72,10 +72,7 @@ export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
   const accessControlResponse = useAccessControl(resourceInfo, {
     revalidateOnFocus: false,
   });
-  const { data: accessControlData, isValidating } = accessControlResponse;
-
-  console.log("at the provider level", accessControl)
-
+  const { data: accessControl, isValidating } = accessControlResponse;
   useEffect(() => {
     setMenuOpen(!!(action && resourceIri));
   }, [action, resourceIri, setMenuOpen]);
@@ -106,7 +103,7 @@ export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
         <DetailsLoading iri={resourceIri} />
       ) : (
         <ResourceInfoProvider swr={resourceInfoSwrResponse}>
-          <AccessControlProvider accessControl={accessControlData}>
+          <AccessControlProvider accessControl={accessControl}>
             <DatasetProvider solidDataset={resourceInfo}>
               <ResourceDetails
                 onDelete={onUpdate}

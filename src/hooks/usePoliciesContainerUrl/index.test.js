@@ -43,7 +43,8 @@ describe("usePoliciesContainerUrl", () => {
 
     it("returns null when podRootUrl is yet undetermined", () => {
       mockedIsLegacyAcp.mockReturnValue({ data: true });
-      const { result } = renderHook(() => usePoliciesContainerUrl(null));
+      mockedPodRootUri.mockReturnValue(null);
+      const { result } = renderHook(() => usePoliciesContainerUrl("iri"));
       expect(result.current).toBeNull();
     });
 

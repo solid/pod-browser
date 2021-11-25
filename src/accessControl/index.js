@@ -37,10 +37,9 @@ export function hasAccess(resourceInfo) {
 }
 
 export async function isAcp(resourceUrl, fetch) {
-  const isAcpControlledResource = await acp3.isAcpControlled(resourceUrl, {
+  return acp3.isAcpControlled(resourceUrl, {
     fetch,
   });
-  return resourceUrl && isAcpControlledResource;
 }
 
 export async function isWac(resourceUrl, resourceInfo, fetch) {

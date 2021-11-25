@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import * as SolidClientFns from "@inrupt/solid-client";
 import {
   getPolicyUrl,
   getPoliciesContainerUrl,
@@ -28,6 +28,7 @@ import {
   isCustomPolicy,
   isNamedPolicy,
   getPolicyType,
+  deletePoliciesContainer,
 } from "./index";
 
 const podUrl = "http://example.com/";
@@ -38,52 +39,64 @@ describe("getPolicyUrl", () => {
   describe("legacy ACP systems", () => {
     it("returns corresponding policy URLs", () => {
       expect(
-        getPolicyUrl(mockSolidDatasetFrom(podUrl), containerUrl, true)
+        getPolicyUrl(
+          SolidClientFns.mockSolidDatasetFrom(podUrl),
+          containerUrl,
+          true
+        )
       ).toEqual("http://example.com/pb_policies/.ttl");
       expect(
-        getPolicyUrl(mockSolidDatasetFrom(`${podUrl}test`), containerUrl, true)
+        getPolicyUrl(
+          SolidClientFns.mockSolidDatasetFrom(`${podUrl}test`),
+          containerUrl,
+          true
+        )
       ).toEqual("http://example.com/pb_policies/test.ttl");
       expect(
         getPolicyUrl(
-          mockSolidDatasetFrom(`${podUrl}test.ttl`),
+          SolidClientFns.mockSolidDatasetFrom(`${podUrl}test.ttl`),
           containerUrl,
           true
         )
       ).toEqual("http://example.com/pb_policies/test.ttl.ttl");
       expect(
         getPolicyUrl(
-          mockSolidDatasetFrom(`${podUrl}foo/bar`),
+          SolidClientFns.mockSolidDatasetFrom(`${podUrl}foo/bar`),
           containerUrl,
           true
         )
       ).toEqual("http://example.com/pb_policies/foo/bar.ttl");
       expect(
-        getPolicyUrl(mockSolidDatasetFrom(containerUrl), containerUrl, true)
+        getPolicyUrl(
+          SolidClientFns.mockSolidDatasetFrom(containerUrl),
+          containerUrl,
+          true
+        )
       ).toEqual("http://example.com/pb_policies/pb_policies/.ttl");
       expect(
         getPolicyUrl(
-          mockSolidDatasetFrom(`${containerUrl}test`),
+          SolidClientFns.mockSolidDatasetFrom(`${containerUrl}test`),
           containerUrl,
           true
         )
       ).toEqual("http://example.com/pb_policies/pb_policies/test.ttl");
       expect(
         getPolicyUrl(
-          mockSolidDatasetFrom(`${podUrl}public`),
+          SolidClientFns.mockSolidDatasetFrom(`${podUrl}public`),
           containerUrl,
           true
         )
       ).toEqual("http://example.com/pb_policies/public.ttl");
       expect(
         getPolicyUrl(
-          mockSolidDatasetFrom(`${podUrl}pb_policies/.ttl`),
+          SolidClientFns.mockSolidDatasetFrom(`${podUrl}pb_policies/.ttl`),
           containerUrl,
           true
         )
       ).toEqual("http://example.com/pb_policies/pb_policies/.ttl.ttl");
       expect(
         getPolicyUrl(
-          mockSolidDatasetFrom(`${podUrl}pb_policies/test/`),
+          SolidClientFns.mockSolidDatasetFrom(`${podUrl}pb_policies/test/`),
           containerUrl,
           true
         )
@@ -94,18 +107,26 @@ describe("getPolicyUrl", () => {
   describe("latest ACP systems", () => {
     it("returns corresponding policy URLs", () => {
       expect(
-        getPolicyUrl(mockSolidDatasetFrom(podUrl), containerUrl, false)
+        getPolicyUrl(
+          SolidClientFns.mockSolidDatasetFrom(podUrl),
+          containerUrl,
+          false
+        )
       ).toEqual(
         "http://example.com/pb_policies/#aHR0cDovL2V4YW1wbGUuY29tLw%3D%3D"
       );
       expect(
-        getPolicyUrl(mockSolidDatasetFrom(`${podUrl}test`), containerUrl, false)
+        getPolicyUrl(
+          SolidClientFns.mockSolidDatasetFrom(`${podUrl}test`),
+          containerUrl,
+          false
+        )
       ).toEqual(
         "http://example.com/pb_policies/#aHR0cDovL2V4YW1wbGUuY29tL3Rlc3Q%3D"
       );
       expect(
         getPolicyUrl(
-          mockSolidDatasetFrom(`${podUrl}test.ttl`),
+          SolidClientFns.mockSolidDatasetFrom(`${podUrl}test.ttl`),
           containerUrl,
           false
         )
@@ -114,7 +135,7 @@ describe("getPolicyUrl", () => {
       );
       expect(
         getPolicyUrl(
-          mockSolidDatasetFrom(`${podUrl}foo/bar`),
+          SolidClientFns.mockSolidDatasetFrom(`${podUrl}foo/bar`),
           containerUrl,
           false
         )
@@ -122,13 +143,17 @@ describe("getPolicyUrl", () => {
         "http://example.com/pb_policies/#aHR0cDovL2V4YW1wbGUuY29tL2Zvby9iYXI%3D"
       );
       expect(
-        getPolicyUrl(mockSolidDatasetFrom(containerUrl), containerUrl, false)
+        getPolicyUrl(
+          SolidClientFns.mockSolidDatasetFrom(containerUrl),
+          containerUrl,
+          false
+        )
       ).toEqual(
         "http://example.com/pb_policies/#aHR0cDovL2V4YW1wbGUuY29tL3BiX3BvbGljaWVzLw%3D%3D"
       );
       expect(
         getPolicyUrl(
-          mockSolidDatasetFrom(`${containerUrl}test`),
+          SolidClientFns.mockSolidDatasetFrom(`${containerUrl}test`),
           containerUrl,
           false
         )
@@ -137,7 +162,7 @@ describe("getPolicyUrl", () => {
       );
       expect(
         getPolicyUrl(
-          mockSolidDatasetFrom(`${podUrl}public`),
+          SolidClientFns.mockSolidDatasetFrom(`${podUrl}public`),
           containerUrl,
           false
         )
@@ -146,7 +171,7 @@ describe("getPolicyUrl", () => {
       );
       expect(
         getPolicyUrl(
-          mockSolidDatasetFrom(`${podUrl}pb_policies/.ttl`),
+          SolidClientFns.mockSolidDatasetFrom(`${podUrl}pb_policies/.ttl`),
           containerUrl,
           false
         )
@@ -155,7 +180,7 @@ describe("getPolicyUrl", () => {
       );
       expect(
         getPolicyUrl(
-          mockSolidDatasetFrom(`${podUrl}pb_policies/test/`),
+          SolidClientFns.mockSolidDatasetFrom(`${podUrl}pb_policies/test/`),
           containerUrl,
           false
         )
@@ -173,7 +198,7 @@ describe("getResourcePoliciesContainerPath", () => {
     it("returns corresponding policy resource container for a given resource", () => {
       expect(
         getResourcePoliciesContainerPath(
-          mockSolidDatasetFrom(`${podUrl}foo/`),
+          SolidClientFns.mockSolidDatasetFrom(`${podUrl}foo/`),
           policiesUrl,
           true
         )
@@ -185,7 +210,7 @@ describe("getResourcePoliciesContainerPath", () => {
     it("returns corresponding policy resource container for a given resource", () => {
       expect(
         getResourcePoliciesContainerPath(
-          mockSolidDatasetFrom(`${podUrl}foo/`),
+          SolidClientFns.mockSolidDatasetFrom(`${podUrl}foo/`),
           policiesUrl,
           false
         )
@@ -209,7 +234,7 @@ describe("getPolicyResourceUrl", () => {
     it("returns the policies container url", () => {
       expect(
         getPolicyResourceUrl(
-          mockSolidDatasetFrom(`${podUrl}foo/`),
+          SolidClientFns.mockSolidDatasetFrom(`${podUrl}foo/`),
           policiesUrl,
           "editors",
           true
@@ -222,7 +247,7 @@ describe("getPolicyResourceUrl", () => {
     it("returns the policies container url", () => {
       expect(
         getPolicyResourceUrl(
-          mockSolidDatasetFrom(`${podUrl}foo/`),
+          SolidClientFns.mockSolidDatasetFrom(`${podUrl}foo/`),
           policiesUrl,
           "editors",
           false
@@ -262,5 +287,36 @@ describe("isNamedPolicy", () => {
     expect(isNamedPolicy("viewAndAdd")).toBe(false);
     expect(isNamedPolicy("editOnly")).toBe(false);
     expect(isNamedPolicy("addOnly")).toBe(false);
+  });
+});
+
+describe("deletePoliciesContainer", () => {
+  const mockDeleteContainer = jest
+    .spyOn(SolidClientFns, "deleteContainer")
+    .mockImplementation(jest.fn());
+
+  const fetch = jest.fn();
+  const containerIri = "https://example.org/policies/resource/";
+
+  test("it deletes the policies container", async () => {
+    await deletePoliciesContainer(containerIri, fetch);
+
+    expect(mockDeleteContainer).toHaveBeenCalledWith(containerIri, {
+      fetch,
+    });
+  });
+
+  it("ignores 403 errors when deleting the policy resource", async () => {
+    SolidClientFns.deleteContainer.mockRejectedValue(new Error("403"));
+    await expect(
+      deletePoliciesContainer(containerIri, fetch)
+    ).resolves.toBeUndefined();
+  });
+
+  it("throws errors which aren't 403, 404 or 409 when deleting the policy resource", async () => {
+    SolidClientFns.deleteContainer.mockRejectedValue(new Error("400"));
+    await expect(
+      deletePoliciesContainer(containerIri, fetch)
+    ).rejects.toThrow();
   });
 });

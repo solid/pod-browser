@@ -64,7 +64,7 @@ describe("useIsLegacyAcp", () => {
     const { result } = renderHook(() => useIsLegacyAcp(mockedResource));
     expect(result.current.data).toBe(true);
     expect(mockedSwrHook).toHaveBeenCalledWith(
-      mockedAcrUrl,
+      [mockedAcrUrl, fetch],
       expect.any(Function)
     );
   });
@@ -72,6 +72,9 @@ describe("useIsLegacyAcp", () => {
   it("returns null if no resource info is given", async () => {
     jest.spyOn(mockedAcp, "getLinkedAcrUrl").mockReturnValue(mockedAcrUrl);
     renderHook(() => useIsLegacyAcp(undefined));
-    expect(mockedSwrHook).toHaveBeenCalledWith(null, expect.any(Function));
+    expect(mockedSwrHook).toHaveBeenCalledWith(
+      [null, fetch],
+      expect.any(Function)
+    );
   });
 });
