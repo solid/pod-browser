@@ -225,7 +225,9 @@ describe("ResourceDrawer view", () => {
         </DetailsMenuContext>
       </SessionProvider>
     );
-    expect(useAccessControl).toHaveBeenCalledWith(resourceInfo);
+    expect(useAccessControl).toHaveBeenCalledWith(resourceInfo, {
+      revalidateOnFocus: false,
+    });
   });
 
   it("renders a specific error message if resource fails with 403", () => {

@@ -31,7 +31,6 @@ import {
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
-import { useSession } from "@inrupt/solid-ui-react";
 import RemoveButton from "./removeButton";
 import ConsentDetailsButton from "./consentDetailsButton";
 import styles from "./styles";
