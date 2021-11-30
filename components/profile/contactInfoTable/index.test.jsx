@@ -44,25 +44,31 @@ import ContactInfoTable, {
   setupSaveHandler,
 } from "./index";
 import useDataset from "../../../src/hooks/useDataset";
+import {
+  mockPersonDatasetAliceWithContactInfo,
+  mockPersonThingAliceWithContactInfo,
+} from "../../../__testUtils/mockPersonResource";
 
 jest.mock("../../../src/hooks/useDataset");
 const mockedUseDataset = useDataset;
 
 const { mockSolidDatasetFrom, mockThingFrom } = scFns;
-const dataset = mockSolidDatasetFrom("http://example.com/dataset");
+const dataset = mockPersonDatasetAliceWithContactInfo();
 const profile = mockThingFrom("http://example.com/profile#this");
+
 beforeEach(() => {
-  mockedUseDataset.mockReturnValue();
+  mockedUseDataset.mockReturnValue(dataset);
 });
 
 describe("ContactInfoTable", () => {
   test("renders a table of contact info", async () => {
     const session = mockSession({ fetch });
     const SessionProvider = mockSessionContextProvider(session);
-    const thing = mockThingFrom("http://example.com/alice#me");
+    const profileDataset = mockPersonDatasetAliceWithContactInfo();
+    const thing = mockPersonThingAliceWithContactInfo();
     const { asFragment, findByRole } = renderWithTheme(
       <SessionProvider>
-        <CombinedDataProvider solidDataset={dataset} thing={thing}>
+        <CombinedDataProvider solidDataset={profileDataset} thing={thing}>
           <ContactInfoTable
             property={vcard.hasEmail}
             contactInfoType={CONTACT_INFO_TYPE_EMAIL}
@@ -77,11 +83,12 @@ describe("ContactInfoTable", () => {
   test("renders an editable table of contact info", () => {
     const session = mockSession({ fetch });
     const SessionProvider = mockSessionContextProvider(session);
-    const thing = mockThingFrom("http://example.com/alice#me");
+    const profileDataset = mockPersonDatasetAliceWithContactInfo();
+    const thing = mockPersonThingAliceWithContactInfo();
 
     const { asFragment } = renderWithTheme(
       <SessionProvider>
-        <CombinedDataProvider solidDataset={dataset} thing={thing}>
+        <CombinedDataProvider solidDataset={profileDataset} thing={thing}>
           <ContactInfoTable
             property={vcard.hasEmail}
             editing
@@ -117,7 +124,10 @@ describe("setupAddContactDetail", () => {
 
     expect(saveHandler).toHaveBeenCalled();
     const newDataset = saveHandler.mock.calls[0][1];
-    const newContactDetail = getThingAll(newDataset)[0];
+    const newContactDetail = scFns.getThing(
+      newDataset,
+      "http://www.w3.org/2006/vcard/ns#Home"
+    );
     expect(getUrl(newContactDetail, rdf.type)).toEqual(contactType);
     expect(getUrl(newContactDetail, vcard.value)).toEqual(
       `${PREFIX_MAP[property]}${contactValue}`
