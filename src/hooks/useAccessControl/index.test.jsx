@@ -39,7 +39,13 @@ const mockedPoliciesContainerUrlHook = usePoliciesContainerUrl;
 jest.mock("../useIsLegacyAcp");
 const mockedIsLegacyAcp = useIsLegacyAcp;
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  const uiReactModule = jest.requireActual("@inrupt/solid-ui-react");
+  return {
+    SessionContext: uiReactModule.SessionContext,
+    useSession: jest.fn(),
+  };
+});
 const mockedUseSession = useSession;
 
 jest.mock("swr");
