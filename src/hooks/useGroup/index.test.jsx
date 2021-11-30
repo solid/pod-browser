@@ -25,7 +25,11 @@ import { renderHook } from "@testing-library/react-hooks";
 import * as groupModelFns from "../../models/group";
 import useGroup from "./index";
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+  };
+});
 const mockedSessionHook = useSession;
 
 jest.mock("swr");

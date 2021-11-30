@@ -36,7 +36,11 @@ import { joinPath } from "../../stringHelpers";
 jest.mock("../useAuthenticatedProfile");
 const mockedAuthenticatedProfileHook = useAuthenticatedProfile;
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+  };
+});
 const mockedSessionHook = useSession;
 
 describe("useContactsContainerUrl", () => {

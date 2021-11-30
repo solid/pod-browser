@@ -21,7 +21,7 @@
 
 import React from "react";
 import { renderHook } from "@testing-library/react-hooks";
-import * as solidUiReactFns from "@inrupt/solid-ui-react";
+import { useSession } from "@inrupt/solid-ui-react";
 import useAuthenticatedProfile from "./index";
 import useFetchProfile from "../useFetchProfile";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
@@ -32,12 +32,20 @@ import mockSession, {
 
 jest.mock("../useFetchProfile");
 
+jest.mock("@inrupt/solid-ui-react", () => {
+  const uiReactModule = jest.requireActual("@inrupt/solid-ui-react");
+  return {
+    SessionContext: uiReactModule.SessionContext,
+    useSession: jest.fn(),
+  };
+});
+const mockedUseSession = useSession;
+
 const profile = { webIdUrl };
 
 describe("useAuthenticatedProfile", () => {
   test("no profile loaded when no session is given", () => {
     const session = mockUnauthenticatedSession();
-    const mockedUseSession = jest.spyOn(solidUiReactFns, "useSession");
     mockedUseSession.mockReturnValue({ session });
     const SessionProvider = mockSessionContextProvider(session);
     const wrapper = ({ children }) => (
@@ -53,7 +61,6 @@ describe("useAuthenticatedProfile", () => {
 
   test("profile is loaded when session is given", () => {
     const session = mockSession();
-    const mockedUseSession = jest.spyOn(solidUiReactFns, "useSession");
     mockedUseSession.mockReturnValue({ session });
     const SessionProvider = mockSessionContextProvider(session);
     const wrapper = ({ children }) => (

@@ -69,10 +69,46 @@ export function mockPersonThingAlice(...operations) {
   );
 }
 
+const mockPhoneThing = chain(
+  mockThingFrom("http://www.w3.org/2006/vcard/ns#Home"),
+  (t) => addUrl(t, rdf.type, "http://www.w3.org/2006/vcard/ns#Home"),
+  (t) => addUrl(t, vcard.value, "tel:42-1337")
+);
+
+const mockEmailThing = chain(
+  mockThingFrom("http://alice.example.com/email"),
+  (t) => addUrl(t, vcard.value, "mailto:alice@example.com")
+);
+
+export function mockPersonThingAliceWithContactInfo(...operations) {
+  return chain(
+    mockThingFrom(aliceWebIdUrl),
+    (t) => addStringNoLocale(t, foaf.name, aliceName),
+    (t) => addStringNoLocale(t, vcard.nickname, aliceNick),
+    (t) => addUrl(t, vcard.hasPhoto, alicePhoto),
+    (t) => addUrl(t, rdf.type, foaf.Person),
+    (t) => addUrl(t, vcard.url, aliceAlternativeWebIdUrl),
+    (t) => addUrl(t, space.storage, alicePodRoot),
+    (t) => addUrl(t, vcard.hasTelephone, "http://alice.example.com/phone"),
+    (t) => addUrl(t, vcard.hasEmail, "http://alice.example.com/email"),
+    ...operations
+  );
+}
+
 export function mockPersonDatasetAlice(...operations) {
   return setThing(
     mockSolidDatasetFrom(aliceWebIdUrl),
     mockPersonThingAlice(...operations)
+  );
+}
+
+export function mockPersonDatasetAliceWithContactInfo(...operations) {
+  return chain(
+    mockSolidDatasetFrom(aliceWebIdUrl),
+    (d) => setThing(d, mockPersonThingAlice(...operations)),
+    (d) => setThing(d, mockEmailThing),
+    (d) => setThing(d, mockPhoneThing),
+    ...operations
   );
 }
 

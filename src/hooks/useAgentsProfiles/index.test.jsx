@@ -33,7 +33,11 @@ import {
   mockPersonThingAlice,
 } from "../../../__testUtils/mockPersonResource";
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+  };
+});
 const mockedSessionHook = useSession;
 
 jest.mock("swr");

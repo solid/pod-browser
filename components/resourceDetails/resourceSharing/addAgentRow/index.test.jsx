@@ -35,7 +35,12 @@ import mockPermissionsContextProvider from "../../../../__testUtils/mockPermissi
 import useContactProfile from "../../../../src/hooks/useContactProfile";
 import { vcardExtras } from "../../../../src/addressBook";
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+    useThing: jest.fn(),
+  };
+});
 const mockedThingHook = useThing;
 
 jest.mock("../../../../src/hooks/useContactProfile");

@@ -56,7 +56,11 @@ const mockedContactsHook = useContacts;
 jest.mock("../../../src/hooks/useGroup");
 const mockedGroupHook = useGroup;
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+  };
+});
 const mockedSessionHook = useSession;
 
 jest.mock("next/router");

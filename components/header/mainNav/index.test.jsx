@@ -30,7 +30,11 @@ import mockSession, {
 } from "../../../__testUtils/mockSession";
 import { GROUPS_PAGE_ENABLED_FOR } from "../../../src/featureFlags";
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+  };
+});
 const mockedSessionHook = useSession;
 
 jest.mock("next/router");

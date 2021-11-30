@@ -19,39 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-module.exports = {
-  // Automatically clear mock calls and instances between every test
-  clearMocks: true,
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable global-require */
 
-  // The test environment that will be used for testing
-  testEnvironment: "<rootDir>/customEnvironment.js",
+const Environment = require("jest-environment-jsdom");
 
-  setupFiles: ["jest-localstorage-mock"],
+// Custom test environment copied from https://github.com/jsdom/jsdom/issues/2524
+// in order to add TextEncoder to jsdom. TextEncoder is expected by jose.
 
-  setupFilesAfterEnv: ["<rootDir>/jest-setup.js"],
-
-  testPathIgnorePatterns: ["/node_modules/", "/__testUtils/"],
-
-  transform: {
-    "^.+\\.jsx?$": "babel-jest",
-    "^.+\\.ttl$": "jest-raw-loader",
-  },
-
-  // Coverage configs
-  collectCoverage: true,
-
-  coveragePathIgnorePatterns: [
-    "/node_modules/",
-    "/__testUtils/",
-    "/src/windowHelpers",
-  ],
-
-  coverageThreshold: {
-    global: {
-      branches: 89,
-      functions: 90,
-      lines: 95,
-      statements: 95,
-    },
-  },
+module.exports = class CustomTestEnvironment extends Environment {
+  async setup() {
+    await super.setup();
+    if (typeof this.global.TextEncoder === "undefined") {
+      const { TextEncoder, TextDecoder } = require("util");
+      this.global.TextEncoder = TextEncoder;
+      this.global.TextDecoder = TextDecoder;
+    }
+  }
 };

@@ -26,7 +26,11 @@ import usePermissionsWithProfiles from "./index";
 import { fetchProfile } from "../../solidClientHelpers/profile";
 
 jest.mock("../../solidClientHelpers/profile");
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+  };
+});
 
 describe("usePermissionsWithProfiles", () => {
   const webId = "webId";

@@ -28,7 +28,11 @@ import useDataset, { GET_DATASET } from "./index";
 jest.mock("swr");
 const mockedSwrHook = useSWR;
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+  };
+});
 const mockedSessionHook = useSession;
 
 describe("useDataset", () => {

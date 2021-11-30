@@ -35,7 +35,11 @@ import { ERROR_CODES } from "../../error";
 jest.mock("../useAddressBook");
 const mockedAddressBookHook = useAddressBook;
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+  };
+});
 const mockedSessionHook = useSession;
 
 jest.mock("swr");

@@ -32,7 +32,11 @@ import useAddressBook, { ERROR_USE_ADDRESS_BOOK_NO_POD_ROOT } from "./index";
 import { getAddressBookContainerUrl } from "../../models/addressBook";
 import { ERROR_CODES } from "../../error";
 
-jest.mock("@inrupt/solid-ui-react");
+jest.mock("@inrupt/solid-ui-react", () => {
+  return {
+    useSession: jest.fn(),
+  };
+});
 const mockedSessionHook = useSession;
 
 jest.mock("../useAuthenticatedProfile");
