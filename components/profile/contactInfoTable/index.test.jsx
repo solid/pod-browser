@@ -23,7 +23,7 @@ import React from "react";
 import { rdf, vcard } from "rdf-namespaces";
 import * as scFns from "@inrupt/solid-client";
 import { CombinedDataProvider, ThingProvider } from "@inrupt/solid-ui-react";
-import { addUrl, getThingAll, getUrl, setThing } from "@inrupt/solid-client";
+import { addUrl, getUrl, setThing } from "@inrupt/solid-client";
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import mockSession from "../../../__testUtils/mockSession";

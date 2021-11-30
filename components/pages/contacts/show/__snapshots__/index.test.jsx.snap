@@ -103,7 +103,9 @@ exports[`Contact show page Renders the Contact show page 1`] = `
             >
               Role
             </label>
-            <span />
+            <span>
+              Error: No value found for property.
+            </span>
           </div>
           <div
             class="PodBrowser-root PodBrowser-root"
@@ -113,7 +115,9 @@ exports[`Contact show page Renders the Contact show page 1`] = `
             >
               Organization
             </label>
-            <span />
+            <span>
+              Error: No value found for property.
+            </span>
           </div>
         </div>
         <div
@@ -126,34 +130,7 @@ exports[`Contact show page Renders the Contact show page 1`] = `
           </label>
           <div
             class="PodBrowser-root PodBrowser-root"
-          >
-            <table
-              class="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
-              role="table"
-            >
-              <thead>
-                <tr
-                  role="row"
-                >
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                </tr>
-              </thead>
-              <tbody
-                role="rowgroup"
-              />
-            </table>
-          </div>
+          />
         </div>
         <div
           class="PodBrowser-root PodBrowser-root"
@@ -165,34 +142,7 @@ exports[`Contact show page Renders the Contact show page 1`] = `
           </label>
           <div
             class="PodBrowser-root PodBrowser-root"
-          >
-            <table
-              class="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
-              role="table"
-            >
-              <thead>
-                <tr
-                  role="row"
-                >
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                  <th
-                    colspan="1"
-                    role="columnheader"
-                  />
-                </tr>
-              </thead>
-              <tbody
-                role="rowgroup"
-              />
-            </table>
-          </div>
+          />
         </div>
       </div>
     </div>
