@@ -249,7 +249,7 @@ exports[`setupColumnValueBody renders for editing mode 1`] = `
     class="MuiTypography-root MuiTypography-body1"
   >
     <span>
-      Error: Thing not found as property or in context
+      fetching data in progress
     </span>
   </p>
 </DocumentFragment>
@@ -261,7 +261,7 @@ exports[`setupColumnValueBody renders for read-only mode 1`] = `
     class="MuiTypography-root MuiTypography-body1"
   >
     <span>
-      Error: Thing not found as property or in context
+      fetching data in progress
     </span>
   </p>
 </DocumentFragment>
