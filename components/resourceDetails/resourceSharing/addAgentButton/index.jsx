@@ -21,10 +21,11 @@
 
 /* eslint-disable react/forbid-prop-types */
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { Modal } from "@material-ui/core";
 import { Button } from "@inrupt/prism-react-components";
+import PermissionsContext from "../../../../src/contexts/permissionsContext";
 import AgentPickerModal from "../agentPickerModal";
 import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
 import { isCustomPolicy } from "../../../../src/models/policy";
@@ -35,6 +36,7 @@ export const TESTCAFE_ID_MODAL_OVERLAY = "agent-picker-modal-overlay";
 export default function AddAgentButton({ type, setLoading }) {
   const [editing, setEditing] = useState();
 
+  const { setAddingWebId } = useContext(PermissionsContext);
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -45,6 +47,7 @@ export default function AddAgentButton({ type, setLoading }) {
   const handleClose = () => {
     setEditing(false);
     setOpen(false);
+    setAddingWebId(false);
   };
 
   const { editText } = POLICIES_TYPE_MAP[type];
