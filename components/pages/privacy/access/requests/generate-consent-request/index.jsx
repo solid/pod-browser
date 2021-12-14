@@ -63,7 +63,7 @@ export default function GenerateConsentRequest() {
         vc,
         `${origin}/privacy/?signedVcUrl=${encodeURIComponent(vc.id)}`,
         {
-          fallbackConsentManagementUi: `${origin}/privacy/consent/requests/`,
+          fallbackConsentManagementUi: `${origin}/privacy/access/requests/`,
         }
       );
     }

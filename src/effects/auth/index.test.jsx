@@ -118,7 +118,7 @@ describe("useRedirectIfLoggedIn", () => {
   });
   test("it should not redirect if not immediately after logging in", () => {
     mockedRouterHook.mockReturnValue({
-      asPath: "/privacy/consent/requests/",
+      asPath: "/privacy/access/requests/",
     });
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
