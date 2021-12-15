@@ -111,8 +111,8 @@ describe("AcpAccessControlStrategy", () => {
 
   const datasetWithLegacyAcr = chain(
     mockSolidDatasetFrom(datasetWithAcrUrl),
-    (d) => acpFns4.addMockAcrTo(d, acr),
-    (d) => acpFns4.addPolicyUrl(d, mockEditorsPolicyUrl(true))
+    (d) => acpFns3.addMockAcrTo(d, acr),
+    (d) => acpFns3.addPolicyUrl(d, mockEditorsPolicyUrl(true))
   );
   const datasetWithLatestAcr = chain(
     mockSolidDatasetFrom(datasetWithAcrUrl),

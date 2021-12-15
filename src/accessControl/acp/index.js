@@ -549,9 +549,14 @@ function ensureApplyControl(policyUrl, datasetWithAcr, changed) {
 
 export function getPodBrowserPolicyUrlAll(
   resourceWithAcr,
-  policiesContainerUrl
+  policiesContainerUrl,
+  legacy
 ) {
-  const policies = acp.getPolicyUrlAll(resourceWithAcr);
+  const policies = legacy
+    ? legacyAcp
+        .getMemberPolicyUrlAll(resourceWithAcr)
+        .concat(legacyAcp.getPolicyUrlAll(resourceWithAcr))
+    : acp.getPolicyUrlAll(resourceWithAcr);
   return policies.filter((policyUrl) =>
     policyUrl.startsWith(policiesContainerUrl)
   );
@@ -565,7 +570,8 @@ export async function getPodBrowserPermissions(
 ) {
   const policiesUrls = getPodBrowserPolicyUrlAll(
     resourceWithAcr,
-    policiesContainerUrl
+    policiesContainerUrl,
+    legacy
   );
   if (!policiesUrls.length) return [];
   try {
