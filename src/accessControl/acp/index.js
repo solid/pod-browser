@@ -531,8 +531,10 @@ function ensureApplyMembers(policyUrl, datasetWithAcr, changed, legacy) {
   };
 }
 
-function ensureApplyControl(policyUrl, datasetWithAcr, changed) {
-  const policies = acp.getPolicyUrlAll(datasetWithAcr);
+function ensureApplyControl(policyUrl, datasetWithAcr, changed, legacy) {
+  const policies = legacy
+    ? legacyAcp.getPolicyUrlAll(datasetWithAcr)
+    : acp.getPolicyUrlAll(datasetWithAcr);
   const existingPolicies = policies.find((url) => policyUrl === url);
   if (existingPolicies) {
     return {
@@ -540,7 +542,9 @@ function ensureApplyControl(policyUrl, datasetWithAcr, changed) {
       acr: datasetWithAcr,
     };
   }
-  const acr = acp.addPolicyUrl(datasetWithAcr, policyUrl);
+  const acr = legacy
+    ? legacyAcp.addPolicyUrl(datasetWithAcr, policyUrl)
+    : acp.addPolicyUrl(datasetWithAcr, policyUrl);
   return {
     changed: changed || !existingPolicies,
     acr,
@@ -553,9 +557,7 @@ export function getPodBrowserPolicyUrlAll(
   legacy
 ) {
   const policies = legacy
-    ? legacyAcp
-        .getMemberPolicyUrlAll(resourceWithAcr)
-        .concat(legacyAcp.getPolicyUrlAll(resourceWithAcr))
+    ? legacyAcp.getPolicyUrlAll(resourceWithAcr)
     : acp.getPolicyUrlAll(resourceWithAcr);
   return policies.filter((policyUrl) =>
     policyUrl.startsWith(policiesContainerUrl)
@@ -867,8 +869,10 @@ export default class AcpAccessControlStrategy {
         acr: this.#originalWithAcr,
         changed: false,
       },
-      ({ acr, changed }) => ensureApplyControl(editorsPolicy, acr, changed),
-      ({ acr, changed }) => ensureApplyControl(viewersPolicy, acr, changed),
+      ({ acr, changed }) =>
+        ensureApplyControl(editorsPolicy, acr, changed, this.#isLegacy),
+      ({ acr, changed }) =>
+        ensureApplyControl(viewersPolicy, acr, changed, this.#isLegacy),
       ({ acr, changed }) =>
         ensureApplyMembers(editorsPolicy, acr, changed, this.#isLegacy),
       ({ acr, changed }) =>
@@ -930,9 +934,12 @@ export default class AcpAccessControlStrategy {
         acr: this.#originalWithAcr,
         changed: false,
       },
-      ({ acr, changed }) => ensureApplyControl(viewAndAddPolicy, acr, changed),
-      ({ acr, changed }) => ensureApplyControl(editOnlyPolicy, acr, changed),
-      ({ acr, changed }) => ensureApplyControl(addOnlyPolicy, acr, changed),
+      ({ acr, changed }) =>
+        ensureApplyControl(viewAndAddPolicy, acr, changed, this.#isLegacy),
+      ({ acr, changed }) =>
+        ensureApplyControl(editOnlyPolicy, acr, changed, this.#isLegacy),
+      ({ acr, changed }) =>
+        ensureApplyControl(addOnlyPolicy, acr, changed, this.#isLegacy),
       ({ acr, changed }) =>
         ensureApplyMembers(viewAndAddPolicy, acr, changed, this.#isLegacy),
       ({ acr, changed }) =>
@@ -981,9 +988,12 @@ export default class AcpAccessControlStrategy {
         acr: this.#originalWithAcr,
         changed: false,
       },
-      ({ acr, changed }) => ensureApplyControl(readAllowApply, acr, changed),
-      ({ acr, changed }) => ensureApplyControl(writeAllowApply, acr, changed),
-      ({ acr, changed }) => ensureApplyControl(appendAllowApply, acr, changed),
+      ({ acr, changed }) =>
+        ensureApplyControl(readAllowApply, acr, changed, this.#isLegacy),
+      ({ acr, changed }) =>
+        ensureApplyControl(writeAllowApply, acr, changed, this.#isLegacy),
+      ({ acr, changed }) =>
+        ensureApplyControl(appendAllowApply, acr, changed, this.#isLegacy),
       ({ acr, changed }) => ensureAccessControl(controlAllowAcc, acr, changed)
     );
     if (!this.#isLegacy) {
@@ -1004,7 +1014,8 @@ export default class AcpAccessControlStrategy {
         acr: policyDatasetWithAcr,
         changed: false,
       },
-      ({ acr, changed }) => ensureApplyControl(controlAllowApply, acr, changed)
+      ({ acr, changed }) =>
+        ensureApplyControl(controlAllowApply, acr, changed, this.#isLegacy)
     );
     if (policyChanged) {
       try {
