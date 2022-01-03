@@ -30,6 +30,7 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  Tooltip,
 } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { Icons } from "@inrupt/prism-react-components";
@@ -52,6 +53,7 @@ export default function PodIndicator() {
   const [indicatorWidth, setIndicatorWidth] = useState();
   const [displayNavigator, setDisplayNavigator] = useState(false);
   const [indicatorLabelWidth, setIndicatorLabelWidth] = useState();
+  const [tooltipOpen, setTooltipOpen] = useState(false);
 
   const useStyles = makeStyles((theme) =>
     createStyles(styles(theme, indicatorWidth, indicatorLabelWidth))
@@ -86,6 +88,13 @@ export default function PodIndicator() {
     setIndicatorLabelWidth(width);
   }, [indicatorLabelRef]);
 
+  const handlePodCopyClick = () => {
+    navigator.clipboard.writeText(podIri);
+    setTooltipOpen(true);
+    setTimeout(() => {
+      setTooltipOpen(false);
+    }, 800);
+  };
   return (
     <div
       data-testid={TESTCAFE_ID_POD_INDICATOR}
@@ -167,6 +176,31 @@ export default function PodIndicator() {
                 />
               </ListItemIcon>
               <ListItemText disableTypography primary="Change Pod" />
+            </ListItem>
+            <ListItem
+              button
+              key="copy-text"
+              onClick={handlePodCopyClick}
+              classes={{ root: bem("menuItem") }}
+            >
+              <Tooltip
+                PopperProps={{
+                  disablePortal: true,
+                }}
+                open={tooltipOpen}
+                disableFocusListener
+                disableHoverListener
+                disableTouchListener
+                title="Copied"
+              >
+                <ListItemIcon classes={{ root: bem("itemIcon") }}>
+                  <i
+                    className={clsx(bem("icon-share"), bem("icon"))}
+                    aria-label="Copy pod address"
+                  />
+                </ListItemIcon>
+                <ListItemText disableTypography primary="Copy Pod Address" />
+              </Tooltip>
             </ListItem>
           </List>
         </Popover>
