@@ -20,16 +20,17 @@
  */
 
 import React, { useContext } from "react";
-import { SessionContext, useSession } from "@inrupt/solid-ui-react";
+import { SessionContext } from "@inrupt/solid-ui-react";
 import { getEffectiveAccess, getSourceUrl } from "@inrupt/solid-client";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import Profile from "../../profile";
 
 export default function ProfileShow() {
   useRedirectIfLoggedOut();
-  const { session, sessionRequestInProgress } = useSession();
+  const { session, sessionRequestInProgress, profile } = useContext(
+    SessionContext
+  );
 
-  const { profile } = useContext(SessionContext);
   if (sessionRequestInProgress || !profile) {
     return null;
   }
