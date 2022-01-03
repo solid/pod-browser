@@ -25,7 +25,8 @@ import { SessionContext } from "@inrupt/solid-ui-react";
 
 export default function mockSessionContextProvider(
   session,
-  sessionRequestInProgress = false
+  sessionRequestInProgress = false,
+  profile
 ) {
   function MockedSessionContextProvider({ children }) {
     return (
@@ -33,6 +34,7 @@ export default function mockSessionContextProvider(
         value={{
           session,
           sessionRequestInProgress,
+          profile,
         }}
       >
         {children}
