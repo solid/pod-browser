@@ -37,16 +37,22 @@ jest.mock("../../../src/effects/auth");
 describe("Profile page", () => {
   const profileDataset = mockPersonDatasetAlice();
   const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+  const profile = {
+    webIdProfile: profileDataset,
+  };
 
   beforeEach(() => {
     jest
       .spyOn(solidClientFns, "getSolidDataset")
       .mockResolvedValue(profileDataset);
     jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
+    jest
+      .spyOn(solidClientFns, "getEffectiveAccess")
+      .mockReturnValue({ user: { read: true, write: true, append: true } });
   });
   test("Renders the profile page", async () => {
     const session = mockSession();
-    const SessionProvider = mockSessionContextProvider(session);
+    const SessionProvider = mockSessionContextProvider(session, false, profile);
 
     const { asFragment, queryAllByText } = renderWithTheme(
       <SessionProvider>

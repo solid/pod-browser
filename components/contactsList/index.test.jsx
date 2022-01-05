@@ -55,7 +55,8 @@ describe("ContactsList", () => {
     });
   });
   const session = mockSession();
-  const SessionProvider = mockSessionContextProvider(session);
+  const profile = { webIdProfile: mockPersonDatasetAlice() };
+  const SessionProvider = mockSessionContextProvider(session, false, profile);
   it("renders spinner while useAddressBookOld is loading", () => {
     useAddressBookOld.mockReturnValue([null, null]);
     useContactsOld.mockReturnValue({
@@ -154,12 +155,12 @@ describe("ContactsList", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("renders webId for failed profiles and name for successfully fetched profiles", () => {
+  it("renders webId for failed profiles and name for successfully fetched profiles", async () => {
     useAddressBookOld.mockReturnValue([42, null]);
     const webId = "https://somewebid.com";
     const contact = solidClientFns.addUrl(
       solidClientFns.createThing(),
-      addressBookFns.vcardExtras(webId),
+      addressBookFns.vcardExtras("WebId"),
       webId
     );
     useContactsOld.mockReturnValue({
@@ -174,11 +175,11 @@ describe("ContactsList", () => {
         <ContactsList />
       </SessionProvider>
     );
-    waitFor(() => {
+    await waitFor(() => {
       expect(getAllByTestId(TESTCAFE_ID_PROFILE_LINK)[0]).toHaveTextContent(
         "Alice"
       );
-      expect(getAllByTestId(TESTCAFE_ID_PROFILE_LINK)[1]).toHaveAttribute(
+      expect(getAllByTestId(TESTCAFE_ID_PROFILE_LINK)[1]).toHaveTextContent(
         webId
       );
       expect(asFragment()).toMatchSnapshot();
