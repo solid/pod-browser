@@ -45,6 +45,7 @@ import { createResponder, isContainerIri } from "./utils";
 import { ERROR_CODES, isHTTPError } from "../error";
 // eslint-disable-next-line import/no-cycle
 import { hasAcpConfiguration } from "../accessControl/acp/index";
+import { customPolicies, namedPolicies } from "../../constants/policies";
 
 export function getResourceName(iri) {
   let { pathname } = parseUrl(iri);
@@ -154,26 +155,20 @@ export async function deleteResource(
     legacyAcp
   );
 
-  const editorsPolicyUrl = getPolicyResourceUrl(
-    resourceInfo,
-    policiesContainerUrl,
-    "editors",
-    legacyAcp
-  );
-  const viewersPolicyUrl = getPolicyResourceUrl(
-    resourceInfo,
-    policiesContainerUrl,
-    "viewers",
-    legacyAcp
-  );
+  const policiesUrls = namedPolicies.concat(customPolicies).map(({ name }) => {
+    return getPolicyResourceUrl(
+      resourceInfo,
+      policiesContainerUrl,
+      name,
+      legacyAcp
+    );
+  });
 
-  if (!policyUrl && !editorsPolicyUrl && !viewersPolicyUrl) return;
+  if (!policyUrl && !policiesUrls.length) return;
 
-  const urlsToDelete = [
-    viewersPolicyUrl,
-    editorsPolicyUrl,
-    policyUrl,
-  ].filter((url) => Boolean(url));
+  const urlsToDelete = [...policiesUrls, policyUrl].filter((url) =>
+    Boolean(url)
+  );
 
   Promise.allSettled(
     urlsToDelete.map(async (url) => {

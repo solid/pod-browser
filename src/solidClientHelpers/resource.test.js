@@ -41,7 +41,7 @@ import {
   getBaseUrl,
   getProfileResource,
 } from "./resource";
-import { getPolicyUrl, deletePoliciesContainer } from "../models/policy";
+import { getPolicyUrl } from "../models/policy";
 import { chain } from "./utils";
 
 jest.mock("../models/policy");
