@@ -39,6 +39,9 @@ const profileIri = "https://example.com/profile/card#me";
 describe("Person Profile", () => {
   const profileDataset = mockPersonDatasetAlice();
   const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+  const profile = {
+    webIdProfile: profileDataset,
+  };
 
   beforeEach(() => {
     jest
@@ -49,7 +52,7 @@ describe("Person Profile", () => {
 
   test("renders a profile", async () => {
     const session = mockSession();
-    const SessionProvider = mockSessionContextProvider(session);
+    const SessionProvider = mockSessionContextProvider(session, false, profile);
     const { asFragment, findByTestId } = renderWithTheme(
       <SessionProvider>
         <CombinedDataProvider

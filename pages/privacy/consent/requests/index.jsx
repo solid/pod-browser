@@ -19,33 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
-import { SessionContext } from "@inrupt/solid-ui-react";
-import { getEffectiveAccess, getSourceUrl } from "@inrupt/solid-client";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
-import Profile from "../../profile";
+import React from "react";
 
-export default function ProfileShow() {
-  useRedirectIfLoggedOut();
-  const { session, sessionRequestInProgress, profile } = useContext(
-    SessionContext
-  );
+import ConsentShowPage from "../../../../components/pages/privacy/access/requests";
 
-  if (sessionRequestInProgress || !profile) {
-    return null;
-  }
-  const { user: profileEditingAccess } = getEffectiveAccess(
-    profile.webIdProfile
-  );
-
-  const isWebIdProfileEditable =
-    profileEditingAccess.write || profileEditingAccess.append;
-  const profileDataset = isWebIdProfileEditable
-    ? profile?.webIdProfile
-    : profile?.altProfileAll[0];
-  const profileIri = isWebIdProfileEditable
-    ? session.info.webId
-    : getSourceUrl(profileDataset);
-
-  return <Profile profileIri={profileIri} editing />;
+export default function ConsentShow() {
+  return <ConsentShowPage />;
 }
