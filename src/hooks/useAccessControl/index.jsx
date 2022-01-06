@@ -27,7 +27,7 @@ import usePoliciesContainerUrl from "../usePoliciesContainerUrl";
 import useIsLegacyAcp from "../useIsLegacyAcp";
 
 export default function useAccessControl(resourceInfo, swrOptions = {}) {
-  const resourceUrl = resourceInfo ? getSourceUrl(resourceInfo) : null;
+  const resourceUrl = resourceInfo && getSourceUrl(resourceInfo);
   const policiesContainerUrl = usePoliciesContainerUrl(resourceUrl);
   const { data: isLegacy } = useIsLegacyAcp(resourceInfo);
   const { session } = useSession();
