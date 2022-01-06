@@ -24,9 +24,9 @@ import { renderHook } from "@testing-library/react-hooks";
 import { useSession } from "@inrupt/solid-ui-react";
 import { acp_v3 as acp, mockSolidDatasetFrom } from "@inrupt/solid-client";
 import useIsLegacyAcp from ".";
-import { hasAcpConfiguration } from "../../accessControl/acp/index";
+import { hasAcpConfiguration } from "../../accessControl/acp/helpers/index";
 
-jest.mock("../../accessControl/acp/index");
+jest.mock("../../accessControl/acp/helpers/index");
 hasAcpConfiguration.mockResolvedValue(true);
 
 jest.mock("swr");

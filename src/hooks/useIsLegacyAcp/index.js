@@ -23,7 +23,7 @@ import useSWR from "swr";
 import { acp_v3 as acp } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
 
-import { hasAcpConfiguration } from "../../accessControl/acp/index";
+import { hasAcpConfiguration } from "../../accessControl/acp/helpers/index";
 
 export default function useIsLegacyAcp(resourceInfo) {
   const { fetch } = useSession();

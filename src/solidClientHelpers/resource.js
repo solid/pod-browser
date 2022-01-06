@@ -43,8 +43,7 @@ import {
 } from "../models/policy";
 import { createResponder, isContainerIri } from "./utils";
 import { ERROR_CODES, isHTTPError } from "../error";
-// eslint-disable-next-line import/no-cycle
-import { hasAcpConfiguration } from "../accessControl/acp/index";
+import { hasAcpConfiguration } from "../accessControl/acp/helpers/index";
 import { customPolicies, namedPolicies } from "../../constants/policies";
 
 export function getResourceName(iri) {

@@ -38,7 +38,6 @@ import AcpAccessControlStrategy, {
   getNamedPolicyModesAndAgents,
   getWebIdsFromPermissions,
   getWebIdsFromInheritedPermissions,
-  hasAcpConfiguration,
 } from "./index";
 import { createAccessMap } from "../../solidClientHelpers/permissions";
 import { chain } from "../../solidClientHelpers/utils";
@@ -1908,47 +1907,5 @@ describe("getWebIdsFromInheritedPermissions", () => {
       ])
     ).toEqual([webId1]);
     expect(getWebIdsFromInheritedPermissions(null)).toEqual([]);
-  });
-});
-
-describe("hasAcpConfiguration", () => {
-  it("returns false if the request to the target ACR returns no Link headers", async () => {
-    const mockedFetch = jest.fn(global.fetch).mockResolvedValueOnce(
-      new Response(undefined, {
-        headers: {
-          "Not-Link": "some value",
-        },
-      })
-    );
-    await expect(
-      hasAcpConfiguration("https://some.acr", mockedFetch)
-    ).resolves.toBe(false);
-  });
-
-  it("returns false if the request to the target ACR returns no ACP configuration", async () => {
-    const mockedFetch = jest.fn(global.fetch).mockResolvedValueOnce(
-      new Response(undefined, {
-        headers: {
-          Link: '<http://some.link>; rel="someRel"',
-        },
-      })
-    );
-    await expect(
-      hasAcpConfiguration("https://some.acr", mockedFetch)
-    ).resolves.toBe(false);
-  });
-
-  it("returns true if the request to the target ACR returns an ACP configuration", async () => {
-    const mockedFetch = jest.fn(global.fetch).mockResolvedValueOnce(
-      new Response(undefined, {
-        headers: {
-          Link:
-            '<http://www.w3.org/ns/solid/acp#agent>; rel="http://www.w3.org/ns/solid/acp#attribute"',
-        },
-      })
-    );
-    await expect(
-      hasAcpConfiguration("https://some.acr", mockedFetch)
-    ).resolves.toBe(true);
   });
 });
