@@ -41,7 +41,8 @@ import { locationIsConnectedToProfile } from "../../src/solidClientHelpers/profi
 import useAuthenticatedProfile from "../../src/hooks/useAuthenticatedProfile";
 
 const TESTCAFE_ID_POD_INDICATOR = "pod-indicator";
-const TESTCAFE_ID_POD_NAVIGATE_TRIGGER = "pod-indicator-prompt";
+export const TESTCAFE_ID_POD_NAVIGATE_TRIGGER = "pod-indicator-prompt";
+export const TESTCAFE_ID_POD_INDICATOR_COPY = "pod-indicator-copy-link";
 
 export const clickHandler = (setAnchorEl) => (event) =>
   setAnchorEl(event.currentTarget);
@@ -177,31 +178,32 @@ export default function PodIndicator() {
               </ListItemIcon>
               <ListItemText disableTypography primary="Change Pod" />
             </ListItem>
-            <ListItem
-              button
-              key="copy-text"
-              onClick={handlePodCopyClick}
-              classes={{ root: bem("menuItem") }}
+            <Tooltip
+              PopperProps={{
+                disablePortal: true,
+              }}
+              open={tooltipOpen}
+              disableFocusListener
+              disableHoverListener
+              disableTouchListener
+              title="Copied"
             >
-              <Tooltip
-                PopperProps={{
-                  disablePortal: true,
-                }}
-                open={tooltipOpen}
-                disableFocusListener
-                disableHoverListener
-                disableTouchListener
-                title="Copied"
+              <ListItem
+                button
+                key="copy-text"
+                onClick={handlePodCopyClick}
+                classes={{ root: bem("menuItem") }}
+                data-testid={TESTCAFE_ID_POD_INDICATOR_COPY}
               >
                 <ListItemIcon classes={{ root: bem("itemIcon") }}>
-                  <i
-                    className={clsx(bem("icon-share"), bem("icon"))}
-                    aria-label="Copy pod address"
+                  <Icons
+                    className={clsx(bem("icon-copy"), bem("icon"))}
+                    name="copy"
                   />
                 </ListItemIcon>
-                <ListItemText disableTypography primary="Copy Pod Address" />
-              </Tooltip>
-            </ListItem>
+                <ListItemText disableTypography primary="Copy Link" />
+              </ListItem>
+            </Tooltip>
           </List>
         </Popover>
       )}
