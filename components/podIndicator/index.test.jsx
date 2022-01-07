@@ -95,7 +95,7 @@ describe("copy pod uri", () => {
     );
     const podMenu = getByTestId(TESTCAFE_ID_POD_NAVIGATE_TRIGGER);
     userEvent.click(podMenu);
-    const copyLink = await screen.findByTestId(TESTCAFE_ID_POD_INDICATOR_COPY);
+    const copyLink = screen.getByTestId(TESTCAFE_ID_POD_INDICATOR_COPY);
     userEvent.click(copyLink);
     await waitFor(() => expect(podMenu).toBeInTheDocument());
     await waitFor(() => expect(copyLink).toBeInTheDocument());
