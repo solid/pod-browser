@@ -30,7 +30,7 @@ module.exports = {
 
   setupFilesAfterEnv: ["<rootDir>/jest-setup.js"],
 
-  testPathIgnorePatterns: ["/node_modules/", "/__testUtils/"],
+  testPathIgnorePatterns: ["/node_modules/", "/__testUtils/", "/.next"],
 
   transform: {
     "^.+\\.jsx?$": "babel-jest",
