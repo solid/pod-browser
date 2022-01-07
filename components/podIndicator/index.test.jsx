@@ -80,6 +80,7 @@ describe("closeHandler", () => {
 });
 
 describe("copy pod uri", () => {
+  jest.setTimeout(3000);
   test("it copies the text to the clipboard", async () => {
     Object.assign(navigator, {
       clipboard: {
@@ -94,9 +95,9 @@ describe("copy pod uri", () => {
       </TestApp>
     );
     const podMenu = getByTestId(TESTCAFE_ID_POD_NAVIGATE_TRIGGER);
-    userEvent.click(podMenu);
+    await userEvent.click(podMenu);
     const copyLink = screen.getByTestId(TESTCAFE_ID_POD_INDICATOR_COPY);
-    userEvent.click(copyLink);
+    await userEvent.click(copyLink);
     await waitFor(() => expect(podMenu).toBeInTheDocument());
     await waitFor(() => expect(copyLink).toBeInTheDocument());
     await waitFor(() =>
