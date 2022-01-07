@@ -21,8 +21,9 @@
 
 import React from "react";
 import { useRouter } from "next/router";
+
 import userEvent from "@testing-library/user-event";
-import { act, screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import PodIndicator, {
   clickHandler,
@@ -93,16 +94,13 @@ describe("copy pod uri", () => {
       </TestApp>
     );
     const podMenu = getByTestId(TESTCAFE_ID_POD_NAVIGATE_TRIGGER);
-    await act(async () => {
-      userEvent.click(podMenu);
-    });
+    userEvent.click(podMenu);
     const copyLink = await screen.findByTestId(TESTCAFE_ID_POD_INDICATOR_COPY);
-    copyLink.click();
-    await act(async () => {
-      userEvent.click(copyLink);
-    });
-    expect(podMenu).toBeInTheDocument();
-    expect(copyLink).toBeInTheDocument();
-    expect(navigator.clipboard.writeText).toHaveBeenCalled();
+    userEvent.click(copyLink);
+    await waitFor(() => expect(podMenu).toBeInTheDocument());
+    await waitFor(() => expect(copyLink).toBeInTheDocument());
+    await waitFor(() =>
+      expect(navigator.clipboard.writeText).toHaveBeenCalled()
+    );
   });
 });
