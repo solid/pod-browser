@@ -19,14 +19,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
+import React, { useContext } from "react";
 import T from "prop-types";
 import { foaf, vcard } from "rdf-namespaces";
 import { Avatar, Box, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Text, Image } from "@inrupt/solid-ui-react";
-
+import { Text, Image, useThing, DatasetContext } from "@inrupt/solid-ui-react";
+import { getParentContainerUrl } from "../../../src/stringHelpers";
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -40,21 +40,30 @@ export function setupErrorComponent(bem) {
 }
 
 export default function PersonAvatar({ profileIri }) {
+  const saveLocation = getParentContainerUrl(profileIri);
+  const { thing } = useThing(profileIri);
+  const { solidDataset: dataset } = useContext(DatasetContext);
   const classes = useStyles();
   const bem = useBem(classes);
   const errorComponent = setupErrorComponent(bem);
-
   return (
     <Box alignItems="center" display="flex">
       <Box>
-        <Avatar className={classes.avatar}>
-          <Image
-            property={vcard.hasPhoto}
-            width={120}
-            alt={profileIri}
-            errorComponent={errorComponent}
-          />
-        </Avatar>
+        <Image
+          inputProps={{
+            className: classes.avatarInput,
+          }}
+          className={classes.avatar}
+          thing={thing}
+          solidDataset={dataset}
+          edit
+          saveLocation={saveLocation}
+          autosave
+          property={vcard.hasPhoto}
+          width={120}
+          alt={profileIri}
+          errorComponent={errorComponent}
+        />
       </Box>
 
       <Box p={2}>

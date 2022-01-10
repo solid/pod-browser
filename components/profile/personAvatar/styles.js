@@ -26,6 +26,7 @@ const styles = (theme) => {
     avatar: {
       width: "64px",
       height: "64px",
+      borderRadius: "50%",
     },
     avatarText: {
       fontFamily: theme.typography.h1.fontFamily,
@@ -38,6 +39,11 @@ const styles = (theme) => {
       fontSize: "1rem",
       fontWeight: theme.typography.body2.fontWeight,
       color: theme.palette.secondary.contrastText,
+    },
+    avatarInput: {
+      width: "50px",
+      border: "1px solid red",
+      appearance: "button !important",
     },
   });
 };
