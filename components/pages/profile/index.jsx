@@ -30,14 +30,12 @@ export default function ProfileShow() {
   const { session, sessionRequestInProgress, profile } = useContext(
     SessionContext
   );
-
   if (sessionRequestInProgress || !profile) {
     return null;
   }
   const { user: profileEditingAccess } = getEffectiveAccess(
     profile.webIdProfile
   );
-
   const isWebIdProfileEditable =
     profileEditingAccess.write || profileEditingAccess.append;
   const profileDataset = isWebIdProfileEditable
@@ -46,6 +44,5 @@ export default function ProfileShow() {
   const profileIri = isWebIdProfileEditable
     ? session.info.webId
     : getSourceUrl(profileDataset);
-
   return <Profile profileIri={profileIri} editing />;
 }
