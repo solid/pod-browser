@@ -52,6 +52,7 @@ export default function PersonAvatar({ profileIri }) {
         <Image
           inputProps={{
             className: classes.avatarInput,
+            id: "some-id",
           }}
           className={classes.avatar}
           thing={thing}
