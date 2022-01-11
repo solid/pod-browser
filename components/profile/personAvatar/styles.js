@@ -41,9 +41,34 @@ const styles = (theme) => {
       color: theme.palette.secondary.contrastText,
     },
     avatarInput: {
-      width: "50px",
-      border: "1px solid red",
-      appearance: "button !important",
+      width: "0%",
+      opacity: "0%",
+    },
+    inputLabelUpload: {
+      color: theme.palette.primary.main,
+      fontWeight: "bold",
+      textTransform: "uppercase",
+      width: "100%",
+      margin: "5px",
+    },
+    uploadIcon: {
+      color: theme.palette.primary.main,
+      marginRight: "5px",
+    },
+    inputLabelRemove: {
+      marginRight: "5px",
+      color: theme.palette.error.main,
+      fontWeight: "bold",
+      textTransform: "uppercase",
+      margin: "5px",
+    },
+    removeIcon: {
+      color: theme.palette.error.main,
+      marginRight: "5px",
+    },
+    labelContainer: {
+      alignItems: "center",
+      display: "flex",
     },
   });
 };

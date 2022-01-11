@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /**
  * Copyright 2020 Inrupt Inc.
  *
@@ -19,7 +20,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import T from "prop-types";
 import { foaf, vcard } from "rdf-namespaces";
 import { Avatar, Box, createStyles } from "@material-ui/core";
@@ -33,12 +34,17 @@ import {
   DatasetContext,
 } from "@inrupt/solid-ui-react";
 
+import { getUrl } from "@inrupt/solid-client";
+import { Close, CloudUpload } from "@material-ui/icons";
 import { getParentContainerUrl } from "../../../src/stringHelpers";
 import styles from "./styles";
+// import { property } from "rdf-namespaces/dist/hydra";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export const TESTCAFE_ID_NAME_TITLE = "profile-name-title";
+export const TESTCAFE_ID_UPLOAD_IMAGE = "profile-upload-image";
+export const TESTCAFE_ID_REMOVE_IMAGE = "profile-remove-image";
 
 export function setupErrorComponent(bem) {
   return () => (
@@ -54,25 +60,70 @@ export default function PersonAvatar({ profileIri }) {
   const bem = useBem(classes);
   const errorComponent = setupErrorComponent(bem);
   const { session } = useSession();
+  const [profileImage, setProfileImage] = useState(
+    getUrl(thing, vcard.hasPhoto)
+  );
+
+  const handlePotentialImageUpdate = () => {
+    setProfileImage(getUrl(thing, vcard.hasPhoto));
+  };
 
   return (
     <Box alignItems="center" display="flex">
-      <Box>
-        <Image
-          inputProps={{
-            className: classes.avatarInput,
-          }}
-          className={classes.avatar}
-          thing={thing}
-          solidDataset={dataset}
-          edit
-          saveLocation={saveLocation}
-          autosave
-          property={vcard.hasPhoto}
-          width={120}
-          alt={profileIri}
-          errorComponent={errorComponent}
-        />
+      <Box onClick={handlePotentialImageUpdate}>
+        {profileImage ? (
+          <>
+            <Image
+              inputProps={{
+                className: classes.avatarInput,
+                id: "picture-upload-input-label",
+              }}
+              className={classes.avatar}
+              thing={thing}
+              solidDataset={dataset}
+              edit
+              saveLocation={saveLocation}
+              autosave
+              property={vcard.hasPhoto}
+              width={120}
+              alt={profileIri}
+              errorComponent={errorComponent}
+            />
+            <div className={classes.labelContainer}>
+              <CloudUpload className={classes.uploadIcon} />
+              <label
+                htmlFor="picture-upload-input-label"
+                className={classes.inputLabelUpload}
+                data-testid={TESTCAFE_ID_UPLOAD_IMAGE}
+              >
+                Change Photo
+              </label>
+            </div>
+            <div className={classes.labelContainer}>
+              <Close className={classes.removeIcon} />
+              <label
+                className={classes.inputLabelRemove}
+                data-testid={TESTCAFE_ID_REMOVE_IMAGE}
+              >
+                Remove Photo
+              </label>
+            </div>
+          </>
+        ) : (
+          <>
+            <Avatar className={bem("avatar")} alt="Contact photo placeholder" />
+            <div className={classes.labelContainer}>
+              <CloudUpload className={classes.uploadIcon} />
+              <label
+                htmlFor="picture-upload-input-label"
+                className={classes.inputLabelUpload}
+                data-testid={TESTCAFE_ID_UPLOAD_IMAGE}
+              >
+                Upload Photo
+              </label>
+            </div>
+          </>
+        )}
       </Box>
 
       <Box p={2}>
