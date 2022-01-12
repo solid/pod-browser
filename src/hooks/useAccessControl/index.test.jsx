@@ -76,7 +76,7 @@ describe("useAccessControl", () => {
     mockedSwrHook.mockReturnValue(swrResponse);
   });
 
-  it("returns undefined if given no resourceUri", async () => {
+  it("returns undefined if given no resourceInfo", async () => {
     mockedIsLegacyAcp.mockReturnValue({ data: false });
     const { result } = renderHook(() => useAccessControl(null), {
       wrapper,

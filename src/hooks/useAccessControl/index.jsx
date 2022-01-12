@@ -20,13 +20,15 @@
  */
 
 import { useSession } from "@inrupt/solid-ui-react";
+import { getSourceUrl } from "@inrupt/solid-client";
 import useSWR from "swr";
 import { getAccessControl } from "../../accessControl";
 import usePoliciesContainerUrl from "../usePoliciesContainerUrl";
 import useIsLegacyAcp from "../useIsLegacyAcp";
 
 export default function useAccessControl(resourceInfo, swrOptions = {}) {
-  const policiesContainerUrl = usePoliciesContainerUrl(resourceInfo);
+  const resourceUrl = resourceInfo && getSourceUrl(resourceInfo);
+  const policiesContainerUrl = usePoliciesContainerUrl(resourceUrl);
   const { data: isLegacy } = useIsLegacyAcp(resourceInfo);
   const { session } = useSession();
   const { fetch } = session;

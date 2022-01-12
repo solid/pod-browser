@@ -64,7 +64,7 @@ export default function DeleteResourceButton({
   const { data: resourceInfo, error: resourceError } = useResourceInfo(
     resourceIri
   );
-  const policiesContainerUrl = usePoliciesContainerUrl(resourceInfo);
+  const policiesContainerUrl = usePoliciesContainerUrl(resourceIri);
 
   if (resourceError) {
     alertError(resourceError.message);
