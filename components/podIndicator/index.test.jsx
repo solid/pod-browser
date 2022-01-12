@@ -80,7 +80,6 @@ describe("closeHandler", () => {
 });
 
 describe("copy pod uri", () => {
-  jest.setTimeout(3000);
   test("it copies the text to the clipboard", async () => {
     Object.assign(navigator, {
       clipboard: {
