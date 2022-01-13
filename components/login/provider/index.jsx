@@ -35,7 +35,7 @@ import { useBem } from "@solid/lit-prism-patterns";
 import { LoginButton, useSession } from "@inrupt/solid-ui-react";
 
 import { Button } from "@inrupt/prism-react-components";
-import { checkOidcSupport } from "../../../src/hooks/useClientId";
+import useClientId, { checkOidcSupport } from "../../../src/hooks/useClientId";
 import {
   generateRedirectUrl,
   getCurrentHostname,
@@ -111,8 +111,10 @@ export default function Provider({ defaultError, provider }) {
   const [loginError, setLoginError] = useState(defaultError);
   const theme = useTheme();
   const [providerIri, setProviderIri] = useState(provider?.iri || "");
+  const oidcSupported = useClientId(providerIri);
   const [authOptions, setAuthOptions] = useState({
     clientName: CLIENT_NAME,
+    clientId: oidcSupported ? CLIENT_APP_WEBID : null,
   });
   const loginFieldRef = createRef();
 
