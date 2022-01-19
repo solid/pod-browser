@@ -66,7 +66,7 @@ exports[`Resource access show page it renders a resource access page for a perso
                 rel="noreferrer"
                 target="_blank"
               >
-                http://bob.example.com/bob#me
+                http://example.com/webId#me
               </a>
             </h3>
           </div>

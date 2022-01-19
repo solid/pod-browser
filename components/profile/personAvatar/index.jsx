@@ -25,7 +25,7 @@ import { foaf, vcard } from "rdf-namespaces";
 import { Avatar, Box, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Text, Image } from "@inrupt/solid-ui-react";
+import { Text, Image, useSession } from "@inrupt/solid-ui-react";
 
 import styles from "./styles";
 
@@ -43,6 +43,7 @@ export default function PersonAvatar({ profileIri }) {
   const classes = useStyles();
   const bem = useBem(classes);
   const errorComponent = setupErrorComponent(bem);
+  const { session } = useSession();
 
   return (
     <Box alignItems="center" display="flex">
@@ -66,7 +67,7 @@ export default function PersonAvatar({ profileIri }) {
             rel="noreferrer"
             target="_blank"
           >
-            {profileIri}
+            {session.info.webId}
           </a>
         </h3>
       </Box>
