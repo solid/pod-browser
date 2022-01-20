@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /**
  * Copyright 2020 Inrupt Inc.
@@ -20,7 +21,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import T from "prop-types";
 import { foaf, vcard } from "rdf-namespaces";
@@ -61,16 +62,15 @@ export default function PersonAvatar({ profileIri }) {
   const bem = useBem(classes);
   const errorComponent = setupErrorComponent(bem);
   const { session } = useSession();
-  const [profileImage, setProfileImage] = useState(
-    getUrl(thing, vcard.hasPhoto)
-  );
+  const [profileImage, setProfileImage] = useState(null);
 
-  const handlePotentialImageUpdate = () => {
-    setProfileImage(getUrl(thing, vcard.hasPhoto));
-  };
+  useEffect(() => {
+    const picture = getUrl(thing, vcard.hasPhoto);
+    setProfileImage(picture);
+  }, [thing]);
 
-  const deleteComponent = () => (
-    <div className={classes.labelContainer}>
+  const deleteComponent = (onClickFunc) => (
+    <div className={classes.labelContainer} onClick={onClickFunc}>
       <Close className={classes.removeIcon} />
       <label
         className={classes.inputLabelRemove}
@@ -83,7 +83,7 @@ export default function PersonAvatar({ profileIri }) {
 
   return (
     <Box alignItems="center" display="flex">
-      <Box onClick={handlePotentialImageUpdate}>
+      <Box>
         {profileImage ? (
           <>
             <Image
@@ -99,8 +99,8 @@ export default function PersonAvatar({ profileIri }) {
               width={120}
               alt={profileIri}
               errorComponent={errorComponent}
-              deleteComponent={deleteComponent()}
-              // allowDelete
+              deleteComponent={({ onClick }) => deleteComponent(onClick)}
+              allowDelete
               autosave
               edit
             />
@@ -114,19 +114,26 @@ export default function PersonAvatar({ profileIri }) {
                 Change Photo
               </label>
             </div>
-            <div className={classes.labelContainer}>
-              <Close className={classes.removeIcon} />
-              <label
-                className={classes.inputLabelRemove}
-                data-testid={TESTCAFE_ID_REMOVE_IMAGE}
-              >
-                Remove Photo
-              </label>
-            </div>
           </>
         ) : (
           <>
             <Avatar className={bem("avatar")} alt="Contact photo placeholder" />
+            <Image
+              inputProps={{
+                className: classes.avatarInput,
+                id: "picture-upload-input-label",
+              }}
+              className={classes.avatar}
+              thing={thing}
+              solidDataset={dataset}
+              saveLocation={saveLocation}
+              property={vcard.hasPhoto}
+              width={120}
+              alt={profileIri}
+              errorComponent={errorComponent}
+              autosave
+              edit
+            />
             <div className={classes.labelContainer}>
               <CloudUpload className={classes.uploadIcon} />
               <label
