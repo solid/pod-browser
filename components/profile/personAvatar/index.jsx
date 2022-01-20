@@ -21,6 +21,7 @@
  */
 
 import React, { useContext, useState } from "react";
+
 import T from "prop-types";
 import { foaf, vcard } from "rdf-namespaces";
 import { Avatar, Box, createStyles } from "@material-ui/core";
