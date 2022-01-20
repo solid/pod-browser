@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 /**
  * Copyright 2020 Inrupt Inc.
  *
@@ -20,7 +18,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useContext, useState, useEffect } from "react";
 
 import T from "prop-types";
@@ -70,6 +68,7 @@ export default function PersonAvatar({ profileIri }) {
   }, [thing]);
 
   const deleteComponent = (onClickFunc) => (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
     <div className={classes.labelContainer} onClick={onClickFunc}>
       <Close className={classes.removeIcon} />
       <label
