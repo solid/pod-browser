@@ -68,6 +68,18 @@ export default function PersonAvatar({ profileIri }) {
     setProfileImage(getUrl(thing, vcard.hasPhoto));
   };
 
+  const deleteComponent = () => (
+    <div className={classes.labelContainer}>
+      <Close className={classes.removeIcon} />
+      <label
+        className={classes.inputLabelRemove}
+        data-testid={TESTCAFE_ID_REMOVE_IMAGE}
+      >
+        Remove Photo
+      </label>
+    </div>
+  );
+
   return (
     <Box alignItems="center" display="flex">
       <Box onClick={handlePotentialImageUpdate}>
@@ -81,13 +93,15 @@ export default function PersonAvatar({ profileIri }) {
               className={classes.avatar}
               thing={thing}
               solidDataset={dataset}
-              edit
               saveLocation={saveLocation}
-              autosave
               property={vcard.hasPhoto}
               width={120}
               alt={profileIri}
               errorComponent={errorComponent}
+              deleteComponent={deleteComponent()}
+              // allowDelete
+              autosave
+              edit
             />
             <div className={classes.labelContainer}>
               <CloudUpload className={classes.uploadIcon} />
