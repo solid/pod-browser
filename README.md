@@ -3,6 +3,9 @@
 An application for browsing the data on your Solid pod, and for setting ACLs on
 that data.
 
+---
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
+
 # Installation
 
 1. `npm install`
