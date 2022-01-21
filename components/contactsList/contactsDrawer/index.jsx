@@ -35,6 +35,7 @@ import {
 import { ExpandMore } from "@material-ui/icons";
 import DeleteContactButton from "../../deleteContactButton";
 import { buildProfileLink } from "../../profileLink";
+import ConfirmationDialog from "../../confirmationDialog";
 
 export default function ContactsDrawer({
   open,
@@ -67,6 +68,7 @@ export default function ContactsDrawer({
           </ActionMenu>
         </AccordionDetails>
       </Accordion>
+      <ConfirmationDialog />
     </Drawer>
   );
 }
