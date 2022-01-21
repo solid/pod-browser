@@ -33,12 +33,12 @@ import {
   useThing,
   DatasetContext,
 } from "@inrupt/solid-ui-react";
-
 import { getUrl } from "@inrupt/solid-client";
 import { Close, CloudUpload } from "@material-ui/icons";
+import ConfirmationDialog from "../../confirmationDialog";
+import ConfirmationDialogContext from "../../../src/contexts/confirmationDialogContext";
 import { getParentContainerUrl } from "../../../src/stringHelpers";
 import styles from "./styles";
-// import { property } from "rdf-namespaces/dist/hydra";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -51,7 +51,7 @@ export function setupErrorComponent(bem) {
     <Avatar className={bem("avatar")} alt="Contact photo placeholder" />
   );
 }
-
+const confirmationDialogTitle = "Delete profile picture";
 export default function PersonAvatar({ profileIri }) {
   const saveLocation = getParentContainerUrl(profileIri);
   const { thing } = useThing(profileIri);
@@ -61,15 +61,38 @@ export default function PersonAvatar({ profileIri }) {
   const errorComponent = setupErrorComponent(bem);
   const { session } = useSession();
   const [profileImage, setProfileImage] = useState(null);
+  const { confirmed, setOpen, closeDialog, setTitle } = useContext(
+    ConfirmationDialogContext
+  );
+  const [deletePhotoFunction, setDeletePhotoFunction] = useState(null);
 
   useEffect(() => {
     const picture = getUrl(thing, vcard.hasPhoto);
     setProfileImage(picture);
-  }, [thing]);
+  }, [thing, profileImage]);
+
+  useEffect(() => {
+    if (confirmed && deletePhotoFunction) {
+      (async () => deletePhotoFunction)();
+      closeDialog();
+    }
+    if (confirmed === false) {
+      closeDialog();
+    }
+  }, [confirmed, deletePhotoFunction, closeDialog]);
+
+  const openDeleteConfirmationDialog = (deleteFunction) => {
+    setTitle(confirmationDialogTitle);
+    setOpen(true);
+    if (!deletePhotoFunction) setDeletePhotoFunction(deleteFunction);
+  };
 
   const deleteComponent = (onClickFunc) => (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
-    <div className={classes.labelContainer} onClick={onClickFunc}>
+    <div
+      className={classes.labelContainer}
+      onClick={() => openDeleteConfirmationDialog(onClickFunc)}
+    >
       <Close className={classes.removeIcon} />
       <label
         className={classes.inputLabelRemove}
@@ -77,6 +100,7 @@ export default function PersonAvatar({ profileIri }) {
       >
         Remove Photo
       </label>
+      <ConfirmationDialog />
     </div>
   );
 
