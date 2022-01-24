@@ -69,6 +69,7 @@ const styles = (theme) => {
     labelContainer: {
       alignItems: "center",
       display: "flex",
+      width: "fit-content",
     },
   });
 };

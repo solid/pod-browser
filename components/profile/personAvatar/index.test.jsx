@@ -29,9 +29,13 @@ import {
   aliceWebIdUrl,
   mockPersonDatasetAlice,
 } from "../../../__testUtils/mockPersonResource";
+import userEvent from "@testing-library/user-event";
+
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import PersonAvatar, { setupErrorComponent } from "./index";
+import { TESTCAFE_ID_UPLOAD_IMAGE } from "./index";
+import { Button } from "@material-ui/core";
 
 const profileIri = "https://example.com/profile/card#me";
 
@@ -61,6 +65,45 @@ describe("Person Avatar", () => {
     });
     expect(asFragment()).toMatchSnapshot();
   });
+
+  test("renders an upload/change button ", async () => {
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
+    const picture = null;
+
+    const { getByTestId } = renderWithTheme(
+      <CombinedDataProvider solidDataset={profileDataset} thing={profileThing}>
+        <SessionProvider>
+          <PersonAvatar profileIri={profileIri} />
+        </SessionProvider>
+      </CombinedDataProvider>
+    );
+    const button = getByTestId(TESTCAFE_ID_UPLOAD_IMAGE);
+    expect(button).toBeInTheDocument();
+    userEvent.click(button);
+    await waitFor(() => {
+      expect(copyLink).toBeInTheDocument();
+      expect(writeText).toHaveBeenCalled();
+    });
+
+    test("renders a confirmation dialog when delete pressed", async () => {
+      const session = mockSession();
+      const SessionProvider = mockSessionContextProvider(session);
+  
+      const { getByTestId } = renderWithTheme(
+        <CombinedDataProvider solidDataset={profileDataset} thing={profileThing}>
+          <SessionProvider>
+            <PersonAvatar profileIri={profileIri} />
+          </SessionProvider>
+        </CombinedDataProvider>
+      );
+      const button = getByTestId(TESTCAFE_ID_UPLOAD_IMAGE);
+      expect(button).toBeInTheDocument();
+      userEvent.click(button);
+      await waitFor(() => {
+        expect(copyLink).toBeInTheDocument();
+        expect(writeText).toHaveBeenCalled();
+      });
 });
 
 describe("setupErrorComponent", () => {

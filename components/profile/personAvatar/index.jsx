@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 
 import T from "prop-types";
 import { foaf, vcard } from "rdf-namespaces";
@@ -66,15 +66,22 @@ export default function PersonAvatar({ profileIri }) {
   );
   const [deletePhotoFunction, setDeletePhotoFunction] = useState(null);
 
-  useEffect(() => {
+  const getPicture = useCallback(() => {
     const picture = getUrl(thing, vcard.hasPhoto);
     setProfileImage(picture);
-  }, [thing, profileImage]);
+  }, [thing]);
+
+  useEffect(() => {
+    getPicture();
+  }, [getPicture]);
 
   useEffect(() => {
     if (confirmed && deletePhotoFunction) {
-      (async () => deletePhotoFunction)();
+      // const deleteComplete = async () =>  deletePhotoFunction();
+      // deleteComplete().then(() => {
       closeDialog();
+      // setProfileImage(null);
+      // });
     }
     if (confirmed === false) {
       closeDialog();
@@ -115,14 +122,15 @@ export default function PersonAvatar({ profileIri }) {
                 id: "picture-upload-input-label",
               }}
               className={classes.avatar}
+              width={120}
               thing={thing}
               solidDataset={dataset}
               saveLocation={saveLocation}
               property={vcard.hasPhoto}
-              width={120}
               alt={profileIri}
               errorComponent={errorComponent}
               deleteComponent={({ onClick }) => deleteComponent(onClick)}
+              onSave={getPicture}
               allowDelete
               autosave
               edit
@@ -154,6 +162,7 @@ export default function PersonAvatar({ profileIri }) {
               width={120}
               alt={profileIri}
               errorComponent={errorComponent}
+              onSave={getPicture}
               autosave
               edit
             />
