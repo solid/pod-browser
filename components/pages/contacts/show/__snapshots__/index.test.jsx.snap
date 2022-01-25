@@ -57,6 +57,7 @@ exports[`Contact show page Renders the Contact show page 1`] = `
             />
             <div
               class="PodBrowser-labelContainer"
+              data-testid="profile-remove-image"
             >
               <svg
                 aria-hidden="true"
@@ -70,7 +71,6 @@ exports[`Contact show page Renders the Contact show page 1`] = `
               </svg>
               <label
                 class="PodBrowser-inputLabelRemove"
-                data-testid="profile-remove-image"
               >
                 Remove Photo
               </label>

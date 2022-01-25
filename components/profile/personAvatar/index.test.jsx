@@ -19,23 +19,35 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { render } from "@testing-library/react";
+import React, { useEffect } from "react";
+import { render, screen } from "@testing-library/react";
 import { waitFor } from "@testing-library/dom";
 import { CombinedDataProvider } from "@inrupt/solid-ui-react";
 import * as solidClientFns from "@inrupt/solid-client";
+import userEvent from "@testing-library/user-event";
+import { act } from "react-dom/test-utils";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import {
   aliceWebIdUrl,
   mockPersonDatasetAlice,
 } from "../../../__testUtils/mockPersonResource";
-import userEvent from "@testing-library/user-event";
+import ConfirmationDialogContext from "../../../src/contexts/confirmationDialogContext";
 
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
-import PersonAvatar, { setupErrorComponent } from "./index";
-import { TESTCAFE_ID_UPLOAD_IMAGE } from "./index";
-import { Button } from "@material-ui/core";
+import PersonAvatar, {
+  setupErrorComponent,
+  TESTCAFE_ID_UPLOAD_IMAGE,
+  TESTCAFE_ID_REMOVE_IMAGE,
+  confirmationDialogTitle,
+  openDeleteConfirmationDialogWrapper,
+  deletePhotoFunction,
+} from "./index";
+import mockConfirmationDialogContextProvider from "../../../__testUtils/mockConfirmationDialogContextProvider";
+import {
+  TESTCAFE_ID_CONFIRMATION_DIALOG,
+  TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE,
+} from "../../confirmationDialog";
 
 const profileIri = "https://example.com/profile/card#me";
 
@@ -69,7 +81,6 @@ describe("Person Avatar", () => {
   test("renders an upload/change button ", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
-    const picture = null;
 
     const { getByTestId } = renderWithTheme(
       <CombinedDataProvider solidDataset={profileDataset} thing={profileThing}>
@@ -80,30 +91,63 @@ describe("Person Avatar", () => {
     );
     const button = getByTestId(TESTCAFE_ID_UPLOAD_IMAGE);
     expect(button).toBeInTheDocument();
-    userEvent.click(button);
+  });
+
+  test("renders a confirmation dialog when delete pressed", async () => {
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
+    const { getByTestId } = renderWithTheme(
+      <CombinedDataProvider solidDataset={profileDataset} thing={profileThing}>
+        <SessionProvider>
+          <PersonAvatar profileIri={profileIri} />
+        </SessionProvider>
+      </CombinedDataProvider>
+    );
+
+    const button = await screen.findByTestId(TESTCAFE_ID_REMOVE_IMAGE);
     await waitFor(() => {
-      expect(copyLink).toBeInTheDocument();
-      expect(writeText).toHaveBeenCalled();
+      expect(button).toBeInTheDocument();
+    });
+    userEvent.click(button);
+
+    const confirmationDialog = await screen.findByTestId(
+      TESTCAFE_ID_CONFIRMATION_DIALOG
+    );
+    await waitFor(() => {
+      expect(confirmationDialog).toBeInTheDocument();
     });
 
-    test("renders a confirmation dialog when delete pressed", async () => {
-      const session = mockSession();
-      const SessionProvider = mockSessionContextProvider(session);
-  
-      const { getByTestId } = renderWithTheme(
-        <CombinedDataProvider solidDataset={profileDataset} thing={profileThing}>
-          <SessionProvider>
-            <PersonAvatar profileIri={profileIri} />
-          </SessionProvider>
-        </CombinedDataProvider>
-      );
-      const button = getByTestId(TESTCAFE_ID_UPLOAD_IMAGE);
+    expect(
+      getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE)
+    ).toHaveTextContent(confirmationDialogTitle);
+  });
+
+  // change this to be more about user interaction
+  test("confirmation dialog changes state as expected", async () => {
+    const button = await screen.findByTestId(TESTCAFE_ID_REMOVE_IMAGE);
+    await waitFor(() => {
       expect(button).toBeInTheDocument();
-      userEvent.click(button);
-      await waitFor(() => {
-        expect(copyLink).toBeInTheDocument();
-        expect(writeText).toHaveBeenCalled();
-      });
+    });
+    userEvent.click(button);
+    // act(() => {
+    //   openDeleteConfirmationDialogWrapper(mockDeleteFunc);
+    // });
+    // expect(PersonAvatar.title).toBe(confirmationDialogTitle);
+    // expect(mockConfirmationDialog.open).toBeTruthy();
+    // expect(deletePhotoFunction).toBe(mockDeleteFunc);
+  });
+
+  test("closes confirmation dialog when user clicks button", async () => {
+    const mockDeleteFunc = jest.fn();
+    const mockCloseDialog = jest.fn();
+    const mockConfirmationDialog = mockConfirmationDialogContextProvider({
+      closeDialog: mockCloseDialog,
+    });
+    act(() => {
+      openDeleteConfirmationDialogWrapper(mockDeleteFunc);
+    });
+    expect(mockConfirmationDialog.closeDialog).toHaveBeenCalled();
+  });
 });
 
 describe("setupErrorComponent", () => {

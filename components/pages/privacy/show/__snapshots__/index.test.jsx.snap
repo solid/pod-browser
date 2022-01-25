@@ -57,6 +57,7 @@ exports[`Agent show page Renders the Agent show page 1`] = `
             />
             <div
               class="PodBrowser-labelContainer"
+              data-testid="profile-remove-image"
             >
               <svg
                 aria-hidden="true"
@@ -70,7 +71,6 @@ exports[`Agent show page Renders the Agent show page 1`] = `
               </svg>
               <label
                 class="PodBrowser-inputLabelRemove"
-                data-testid="profile-remove-image"
               >
                 Remove Photo
               </label>

@@ -30,6 +30,7 @@ exports[`Person Avatar renders a person avatar 1`] = `
       />
       <div
         class="PodBrowser-labelContainer"
+        data-testid="profile-remove-image"
       >
         <svg
           aria-hidden="true"
@@ -43,7 +44,6 @@ exports[`Person Avatar renders a person avatar 1`] = `
         </svg>
         <label
           class="PodBrowser-inputLabelRemove"
-          data-testid="profile-remove-image"
         >
           Remove Photo
         </label>

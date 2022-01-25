@@ -51,6 +51,7 @@ export function setupErrorComponent(bem) {
     <Avatar className={bem("avatar")} alt="Contact photo placeholder" />
   );
 }
+
 const confirmationDialogTitle = "Delete profile picture";
 export default function PersonAvatar({ profileIri }) {
   const saveLocation = getParentContainerUrl(profileIri);
@@ -66,6 +67,7 @@ export default function PersonAvatar({ profileIri }) {
   );
   const [deletePhotoFunction, setDeletePhotoFunction] = useState(null);
 
+  // line 69-81 used to manually update avatar v. image component
   const getPicture = useCallback(() => {
     const picture = getUrl(thing, vcard.hasPhoto);
     setProfileImage(picture);
@@ -73,19 +75,17 @@ export default function PersonAvatar({ profileIri }) {
 
   useEffect(() => {
     getPicture();
+    return () => {
+      setProfileImage(null);
+    };
   }, [getPicture]);
 
   useEffect(() => {
-    if (confirmed && deletePhotoFunction) {
-      // const deleteComplete = async () =>  deletePhotoFunction();
-      // deleteComplete().then(() => {
-      closeDialog();
-      // setProfileImage(null);
-      // });
-    }
-    if (confirmed === false) {
-      closeDialog();
-    }
+    if (confirmed && deletePhotoFunction) closeDialog();
+    if (confirmed === false) closeDialog(); // confirmed can also be null hence '=== false'
+    return () => {
+      setDeletePhotoFunction(null);
+    };
   }, [confirmed, deletePhotoFunction, closeDialog]);
 
   const openDeleteConfirmationDialog = (deleteFunction) => {
@@ -99,14 +99,10 @@ export default function PersonAvatar({ profileIri }) {
     <div
       className={classes.labelContainer}
       onClick={() => openDeleteConfirmationDialog(onClickFunc)}
+      data-testid={TESTCAFE_ID_REMOVE_IMAGE}
     >
       <Close className={classes.removeIcon} />
-      <label
-        className={classes.inputLabelRemove}
-        data-testid={TESTCAFE_ID_REMOVE_IMAGE}
-      >
-        Remove Photo
-      </label>
+      <label className={classes.inputLabelRemove}>Remove Photo</label>
       <ConfirmationDialog />
     </div>
   );
@@ -130,7 +126,7 @@ export default function PersonAvatar({ profileIri }) {
               alt={profileIri}
               errorComponent={errorComponent}
               deleteComponent={({ onClick }) => deleteComponent(onClick)}
-              onSave={getPicture}
+              // onSave={getPicture}
               allowDelete
               autosave
               edit
@@ -161,10 +157,11 @@ export default function PersonAvatar({ profileIri }) {
               property={vcard.hasPhoto}
               width={120}
               alt={profileIri}
-              errorComponent={errorComponent}
-              onSave={getPicture}
+              errorComponent={(x) => console.log({ x })}
+              // onSave={getPicture}
               autosave
               edit
+              onError={(x) => console.log({ x })}
             />
             <div className={classes.labelContainer}>
               <CloudUpload className={classes.uploadIcon} />
