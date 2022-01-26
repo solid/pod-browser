@@ -30,7 +30,7 @@
     "@inrupt/prism-react-components": "^0.13.7",
     "@inrupt/solid-client": "^1.17.0",
     "@inrupt/solid-client-access-grants": "^0.3.3-fix2258-verification-endpoint-discovery-1412767200-263-1635864188.0",
-    "@inrupt/solid-client-authn-browser": "^1.8.2",
+    "@inrupt/solid-client-authn-browser": "^1.11.3",
     "@inrupt/solid-ui-react": "^2.6.1",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
