@@ -34,7 +34,7 @@ import {
 } from "../../src/windowHelpers";
 import { isLocalhost } from "../../src/stringHelpers";
 import useClientId from "../../src/hooks/useClientId";
-import { CLIENT_NAME, PUBLIC_OIDC_CLIENT } from "../../constants/constants";
+import { CLIENT_NAME } from "../../constants/constants";
 import useIdpFromQuery from "../../src/hooks/useIdpFromQuery";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -43,8 +43,9 @@ export const TESTCAFE_ID_LOGIN_TITLE = "login-title";
 export const TESTCAFE_ID_OTHER_PROVIDERS_BUTTON = "other-providers-button";
 const PROVIDER_IRI = "https://broker.pod.inrupt.com/";
 const hostname = getCurrentHostname();
+
 const CLIENT_APP_WEBID = isLocalhost(hostname)
-  ? PUBLIC_OIDC_CLIENT
+  ? null
   : `${getCurrentOrigin()}/api/app`;
 
 export default function Login() {
