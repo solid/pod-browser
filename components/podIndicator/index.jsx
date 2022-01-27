@@ -32,6 +32,7 @@ import {
   ListItemIcon,
   Tooltip,
 } from "@material-ui/core";
+import { ContentCopy } from "@material-ui/icons";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { Icons } from "@inrupt/prism-react-components";
 import PodNavigatorPopover from "./podNavigatorPopover";
@@ -94,6 +95,7 @@ export default function PodIndicator() {
     setTooltipOpen(true);
     setTimeout(() => {
       setTooltipOpen(false);
+      handleClose();
     }, 800);
   };
   return (
@@ -196,10 +198,10 @@ export default function PodIndicator() {
                 data-testid={TESTCAFE_ID_POD_INDICATOR_COPY}
               >
                 <ListItemIcon classes={{ root: bem("itemIcon") }}>
-                  <Icons
-                    className={clsx(bem("icon-copy"), bem("icon"))}
-                    name="copy"
-                  />
+                  {/* <Icons name="content_copy" />  // PRISM
+                <i className={clsx(bem("icon-copy"), bem("icon"))} />  // MUI */}
+                  <i name="content_copy" />
+                  {/* <ContentCopy /> */}
                 </ListItemIcon>
                 <ListItemText disableTypography primary="Copy Link" />
               </ListItem>
