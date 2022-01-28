@@ -1,4 +1,7 @@
-<img src="public/inrupt_logo-2020.svg" alt="Inrupt Logo" width="200"/>
+<p align="center">
+  <img src="public/inrupt_logo-2020.svg" alt="Inrupt Logo" width="200"/>
+</p>
+<span align="center">
 
 # PodBrowser
 
@@ -16,6 +19,8 @@
 ![](https://img.shields.io/github/issues-pr/inrupt/pod-browser.svg)
 [![](https://img.shields.io/github/contributors/inrupt/pod-browser.svg)](https://github.com/inrupt/pod-browser/graphs/contributors)
 ![](https://img.shields.io/github/license/inrupt/pod-browser.svg)
+
+</span>
 
 This project adheres to the Contributor Covenant [code of conduct](code_of_conduct.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [engineering@inrupt.com](mailto:engineering@inrupt.com).
 
