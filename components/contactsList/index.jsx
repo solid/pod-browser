@@ -146,7 +146,6 @@ function ContactsList() {
     peopleMutate,
     selectedContactIndex,
   });
-
   const drawer = (
     <ContactsDrawer
       open={selectedContactIndex !== null}
@@ -154,6 +153,7 @@ function ContactsList() {
       onDelete={deleteSelectedContact}
       selectedContactName={selectedContactName}
       profileIri={selectedContactWebId}
+      selectedContactWebId={selectedContactWebId}
     />
   );
 

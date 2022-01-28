@@ -27,12 +27,16 @@ import DeleteButton from "../deleteButton";
 export default function DeleteContactButton({
   onDelete,
   name,
+  webId,
   ...buttonProps
 }) {
+  console.log({ webId });
   return (
     <DeleteButton
       confirmationTitle="Delete Contact"
-      confirmationContent={`Are you sure you wish to delete ${name} from your contacts?`}
+      confirmationContent={`Are you sure you wish to delete ${
+        name || webId
+      } from your contacts?`}
       dialogId="delete-contact"
       onDelete={onDelete}
       successMessage="Contact was successfully deleted."
@@ -45,5 +49,10 @@ export default function DeleteContactButton({
 
 DeleteContactButton.propTypes = {
   onDelete: T.func.isRequired,
-  name: T.string.isRequired,
+  name: T.string,
+  webId: T.string.isRequired,
+};
+
+DeleteContactButton.defaultProps = {
+  name: null,
 };
