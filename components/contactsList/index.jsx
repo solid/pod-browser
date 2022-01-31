@@ -103,7 +103,6 @@ function ContactsList() {
   const profiles = useProfiles(people);
   const formattedNamePredicate = foaf.name;
   const hasPhotoPredicate = vcard.hasPhoto;
-
   const {
     session: { fetch },
   } = useSession();
@@ -118,8 +117,10 @@ function ContactsList() {
     const contactThingUrl = people[selectedContactIndex]?.iri;
     const contactThing = getThing(contactDataset, contactThingUrl);
     const webId = getWebIdUrl(contactDataset, contactThingUrl);
+    console.log({ contactThing });
     const name =
       getStringNoLocale(contactThing, formattedNamePredicate) || webId;
+    console.log({ name });
     setSelectedContactName(name);
     setSelectedContactWebId(webId);
   }, [selectedContactIndex, formattedNamePredicate, people, fetch]);

@@ -22,15 +22,26 @@
 import React from "react";
 import ContactsDrawer from "./index";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
+import { waitFor } from "@testing-library/dom";
+import { act, screen } from "@testing-library/react";
+
+import {
+  TESTCAFE_ID_CONFIRMATION_DIALOG,
+  TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
+  TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE,
+  TESTCAFE_ID_CONFIRM_BUTTON,
+  ConfirmationDialog,
+} from "../confirmationDialog";
+import userEvent from "@testing-library/user-event";
 
 describe("ContactsDrawer", () => {
   const onClose = () => {};
   const onDelete = () => {};
   const selectedContactName = "Alice";
   const profileIri = "https://example.com/profile#alice";
-
-  it("renders", () => {
-    const { asFragment } = renderWithTheme(
+  let renderResult;
+  beforeEach(() => {
+    renderResult = renderWithTheme(
       <ContactsDrawer
         open
         onClose={onClose}
@@ -39,6 +50,46 @@ describe("ContactsDrawer", () => {
         profileIri={profileIri}
       />
     );
-    expect(asFragment()).toMatchSnapshot();
   });
+  it("renders", () => {
+    expect(renderResult.asFragment()).toMatchSnapshot();
+  });
+});
+
+describe("Delete contact button confirmation dialog", () => {
+  const testWebId = "testWebId";
+  let renderResult;
+  const onClose = () => {};
+  const onDelete = () => {};
+  const selectedContactName = "Alice";
+  const profileIri = "https://example.com/profile#alice";
+  beforeEach(() => {
+    renderResult = renderWithTheme(
+      <ContactsDrawer
+        open
+        onClose={onClose}
+        onDelete={onDelete}
+        selectedContactName={selectedContactName}
+        profileIri={profileIri}
+      />
+    );
+  });
+
+  test("the delete confirmation shows webId if no name is available", async () => {
+    const testName = null;
+    const deleteButton = await screen.findByTestId("delete-button");
+    userEvent.click(deleteButton);
+    const dialog = await screen.findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+
+    await waitFor(() => {
+      expect(dialog).toBeInTheDocument();
+      expect(
+        dialog.getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
+      ).toHaveTextContent("testWebId");
+    });
+  });
+
+  // test("it shows name if name is available", () => {
+
+  // });
 });

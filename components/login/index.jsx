@@ -59,11 +59,18 @@ export default function Login() {
   const INFO_BUTTON_LABEL = "Where is your Pod hosted?";
 
   const oidcSupported = useClientId(PROVIDER_IRI);
+  let authOptions;
 
-  const authOptions = {
-    clientName: CLIENT_NAME,
-    clientId: oidcSupported ? CLIENT_APP_WEBID : null,
-  };
+  if (oidcSupported && CLIENT_APP_WEBID) {
+    authOptions = {
+      clientName: CLIENT_NAME,
+      clientId: CLIENT_APP_WEBID,
+    };
+  } else {
+    authOptions = {
+      clientName: CLIENT_NAME,
+    };
+  }
 
   useEffect(() => {
     if (!idp) return;
