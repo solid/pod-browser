@@ -118,7 +118,9 @@ function ContactsList() {
     const contactThing = getThing(contactDataset, contactThingUrl);
     const webId = getWebIdUrl(contactDataset, contactThingUrl);
     const name =
-      getStringNoLocale(contactThing, formattedNamePredicate) || webId;
+      getStringNoLocale(contactThing, formattedNamePredicate) ||
+      getStringNoLocale(contactThing, vcard.fn) ||
+      webId;
     setSelectedContactName(name);
     setSelectedContactWebId(webId);
   }, [selectedContactIndex, formattedNamePredicate, people, fetch]);
