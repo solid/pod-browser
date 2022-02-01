@@ -118,6 +118,9 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
           requestor,
           access: selectedAccess.accessModes,
           resources: selectedResources,
+        },
+        {
+          fetch: session.fetch,
         }
       );
       if (signedVc) {
