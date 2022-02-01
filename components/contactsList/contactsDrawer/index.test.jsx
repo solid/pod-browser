@@ -20,28 +20,24 @@
  */
 
 import React from "react";
+import userEvent from "@testing-library/user-event";
+import { waitFor } from "@testing-library/dom";
 import ContactsDrawer from "./index";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
-import { waitFor } from "@testing-library/dom";
-import { act, screen } from "@testing-library/react";
-
 import {
   TESTCAFE_ID_CONFIRMATION_DIALOG,
   TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
-  TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE,
-  TESTCAFE_ID_CONFIRM_BUTTON,
-  ConfirmationDialog,
-} from "../confirmationDialog";
-import userEvent from "@testing-library/user-event";
+} from "../../confirmationDialog";
+import { ConfirmationDialogProvider } from "../../../src/contexts/confirmationDialogContext";
 
 describe("ContactsDrawer", () => {
   const onClose = () => {};
   const onDelete = () => {};
   const selectedContactName = "Alice";
   const profileIri = "https://example.com/profile#alice";
-  let renderResult;
-  beforeEach(() => {
-    renderResult = renderWithTheme(
+
+  it("renders", () => {
+    const renderResult = renderWithTheme(
       <ContactsDrawer
         open
         onClose={onClose}
@@ -50,46 +46,69 @@ describe("ContactsDrawer", () => {
         profileIri={profileIri}
       />
     );
-  });
-  it("renders", () => {
     expect(renderResult.asFragment()).toMatchSnapshot();
   });
 });
 
 describe("Delete contact button confirmation dialog", () => {
   const testWebId = "testWebId";
-  let renderResult;
   const onClose = () => {};
   const onDelete = () => {};
-  const selectedContactName = "Alice";
   const profileIri = "https://example.com/profile#alice";
-  beforeEach(() => {
-    renderResult = renderWithTheme(
-      <ContactsDrawer
-        open
-        onClose={onClose}
-        onDelete={onDelete}
-        selectedContactName={selectedContactName}
-        profileIri={profileIri}
-      />
-    );
-  });
 
   test("the delete confirmation shows webId if no name is available", async () => {
-    const testName = null;
-    const deleteButton = await screen.findByTestId("delete-button");
+    const selectedContactName = null;
+    const { findByTestId } = renderWithTheme(
+      <ConfirmationDialogProvider>
+        <ContactsDrawer
+          open
+          onClose={onClose}
+          onDelete={onDelete}
+          selectedContactName={selectedContactName}
+          selectedContactWebId={testWebId}
+          profileIri={profileIri}
+        />
+      </ConfirmationDialogProvider>
+    );
+    const deleteButton = await findByTestId("delete-button");
     userEvent.click(deleteButton);
-    const dialog = await screen.findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+    const dialog = await findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+    const dialogText = await findByTestId(
+      TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT
+    );
 
     await waitFor(() => {
       expect(dialog).toBeInTheDocument();
-      expect(
-        dialog.getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
-      ).toHaveTextContent("testWebId");
+      expect(dialogText).toBeInTheDocument();
+      expect(dialogText).toHaveTextContent("testWebId");
     });
   });
 
-  // test("it shows name if name is available", () => {
+  test("it shows name if name is available", async () => {
+    const selectedContactName = "Alice";
+    const { findByTestId } = renderWithTheme(
+      <ConfirmationDialogProvider>
+        <ContactsDrawer
+          open
+          onClose={onClose}
+          onDelete={onDelete}
+          selectedContactName={selectedContactName}
+          selectedContactWebId={testWebId}
+          profileIri={profileIri}
+        />
+      </ConfirmationDialogProvider>
+    );
+    const deleteButton = await findByTestId("delete-button");
+    userEvent.click(deleteButton);
+    const dialog = await findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+    const dialogText = await findByTestId(
+      TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT
+    );
 
-  // });
+    await waitFor(() => {
+      expect(dialog).toBeInTheDocument();
+      expect(dialogText).toBeInTheDocument();
+      expect(dialogText).toHaveTextContent("Alice");
+    });
+  });
 });
