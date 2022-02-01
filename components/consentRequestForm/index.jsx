@@ -247,7 +247,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
         </Typography>
         {Array.isArray(purposes) && purposes.length === 1 ? (
           <span className={bem("purpose")}>
-            {purposes[0].description || purposes[0]}{" "}
+            {purposes[0].description || purposes[0]}
             <InfoTooltip
               tooltipText={purposes[0].url || purposes[0] || "Purpose"}
             />
