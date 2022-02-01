@@ -116,9 +116,7 @@ describe("Consent Request Form", () => {
     expect(asFragment()).toMatchSnapshot();
   });
   test("when submitting form without selecting access and at least one purpose selected, it displays a confirmation dialog with the correct title and content", () => {
-    jest
-      .spyOn(consentFns, "approveAccessRequestWithConsent")
-      .mockResolvedValue(signedVc);
+    jest.spyOn(consentFns, "approveAccessRequest").mockResolvedValue(signedVc);
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentRequestContextProvider>
@@ -171,8 +169,8 @@ describe("Consent Request Form", () => {
       );
     });
   });
-  test("does not display confirmation dialog if at least one access and one purpose are selected, calls approveAccessRequestWithConsent and redirects with correct params", async () => {
-    consentFns.approveAccessRequestWithConsent.mockResolvedValue(signedVc);
+  test("does not display confirmation dialog if at least one access and one purpose are selected, calls approveAccessRequest and redirects with correct params", async () => {
+    consentFns.approveAccessRequest.mockResolvedValue(signedVc);
     const { getByTestId, findByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentRequestContextProvider>
@@ -192,7 +190,7 @@ describe("Consent Request Form", () => {
     await expect(findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)).rejects.toEqual(
       expect.anything()
     );
-    expect(consentFns.approveAccessRequestWithConsent).toHaveBeenCalled();
+    expect(consentFns.approveAccessRequest).toHaveBeenCalled();
     expect(push).toHaveBeenLastCalledWith(
       `/privacy/?signedVcUrl=${signedVc.id}`
     );

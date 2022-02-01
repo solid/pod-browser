@@ -24,7 +24,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import {
-  approveAccessRequestWithConsent,
+  approveAccessRequest,
   denyAccessRequest,
 } from "@inrupt/solid-client-access-grants";
 import { Button } from "@inrupt/prism-react-components";
@@ -111,7 +111,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedAccess.length && selectedPurposes.length) {
-      const signedVc = await approveAccessRequestWithConsent(
+      const signedVc = await approveAccessRequest(
         session.info.webId,
         consentRequest,
         {
