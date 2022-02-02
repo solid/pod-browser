@@ -43,6 +43,12 @@ describe("usePreviousPage", () => {
       const { result } = renderHook(() => usePreviousPage());
       expect(result.current).toBe(previousPage);
     });
+
+    it("removes the value from localstorage after reading", async () => {
+      window.localStorage.setItem("previousPage", previousPage);
+      renderHook(() => usePreviousPage());
+      expect(window.localStorage.getItem("previousPage")).toBeNull();
+    });
   });
 
   describe("without Local Storage", () => {

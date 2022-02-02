@@ -38,20 +38,20 @@ export default function Home() {
   const { webId = "" } = session.info;
   const { data: podIris = [] } = usePodIrisFromWebId(webId);
   const [podIri] = podIris;
-  const redirectUrl = previousPage || null;
 
   useEffect(() => {
-    if (redirectUrl && redirectUrl !== "/") {
-      router.push(redirectUrl).catch((e) => {
+    if (previousPage && previousPage !== "/") {
+      router.push(previousPage).catch((e) => {
         throw e;
       });
     }
+
     if (podIri) {
       router.replace("/resource/[iri]", resourceHref(podIri)).catch((e) => {
         throw e;
       });
     }
-  }, [podIri, router, redirectUrl]);
+  }, [podIri, router, previousPage]);
 
   return null;
 }

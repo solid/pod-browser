@@ -28,5 +28,8 @@ export default function mockLocalStorage() {
     setItem(key, value) {
       store[key] = value.toString();
     },
+    removeItem(key) {
+      store[key] = null;
+    },
   };
 }
