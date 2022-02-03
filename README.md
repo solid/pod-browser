@@ -5,7 +5,7 @@
 
 # PodBrowser
 
-## A modular tool to view, manage, and control access to you Pod.
+## A modular tool to view, manage, and control access to your Pod.
 
 [podbrowser.inrupt.com](https://podbrowser.inrupt.com)
 
