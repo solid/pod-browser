@@ -42,9 +42,12 @@ export default function Home() {
 
   useEffect(() => {
     if (redirectUrl && redirectUrl !== "/") {
-      router.push(redirectUrl).catch((e) => {
-        throw e;
-      });
+      router
+        .push(redirectUrl)
+        .then(() => localStorage.removeItem("previousPage"))
+        .catch((e) => {
+          throw e;
+        });
     }
     if (podIri) {
       router.replace("/resource/[iri]", resourceHref(podIri)).catch((e) => {
