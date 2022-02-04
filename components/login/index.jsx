@@ -63,8 +63,7 @@ export default function Login() {
   const authOptions = {
     clientName: CLIENT_NAME,
   };
-  if (oidcSupported && CLIENT_APP_WEBID)
-    authOptions.clientId = CLIENT_APP_WEBID;
+  if (oidcSupported) authOptions.clientId = CLIENT_APP_WEBID || null;
 
   useEffect(() => {
     if (!idp) return;
