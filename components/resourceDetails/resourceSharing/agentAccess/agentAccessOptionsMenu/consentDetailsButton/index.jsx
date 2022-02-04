@@ -22,7 +22,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 
 import React, { useContext, useEffect } from "react";
-import { revokeAccess } from "@inrupt/solid-client-access-grants";
+import { revokeAccessGrant } from "@inrupt/solid-client-access-grants";
 import T from "prop-types";
 import { useSession } from "@inrupt/solid-ui-react";
 import { createStyles, ListItem, ListItemText } from "@material-ui/core";
@@ -59,7 +59,7 @@ export default function ConsentDetailsButton({ resourceIri, permission }) {
 
   useEffect(() => {
     if (confirmed) {
-      revokeAccess(vc, { fetch });
+      revokeAccessGrant(vc, { fetch });
     }
   }, [confirmed, fetch, vc]);
 

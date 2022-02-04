@@ -22,8 +22,8 @@
 import React, { useEffect, useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
 import {
-  requestAccessWithConsent,
-  redirectToConsentManagementUi,
+  issueAccessRequest,
+  redirectToAccessManagementUi,
 } from "@inrupt/solid-client-access-grants";
 import { useRedirectIfLoggedOut } from "../../../../../../src/effects/auth";
 import useFetchProfile from "../../../../../../src/hooks/useFetchProfile";
@@ -49,7 +49,7 @@ export default function GenerateConsentRequest() {
   async function generateRequest(e) {
     e.preventDefault();
     if (!profile) return;
-    const vc = await requestAccessWithConsent({
+    const vc = await issueAccessRequest({
       requestor: session.info.webId,
       resourceOwner: owner,
       access: { read: true },
@@ -59,7 +59,7 @@ export default function GenerateConsentRequest() {
       options,
     });
     if (vc && origin) {
-      redirectToConsentManagementUi(
+      redirectToAccessManagementUi(
         vc,
         `${origin}/privacy/?signedVcUrl=${encodeURIComponent(vc.id)}`,
         {

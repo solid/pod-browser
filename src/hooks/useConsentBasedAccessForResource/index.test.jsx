@@ -30,7 +30,7 @@ describe("useAllPermissions", () => {
   const resourceIri = "https://example.org/resource/";
   beforeEach(() => {
     jest
-      .spyOn(consentFns, "getAccessWithConsentAll")
+      .spyOn(consentFns, "getAccessGrantAll")
       .mockResolvedValue([getSignedVc()]);
   });
 
@@ -42,7 +42,7 @@ describe("useAllPermissions", () => {
 
   it("returns permissions if available", async () => {
     jest
-      .spyOn(consentFns, "isValidConsentGrant")
+      .spyOn(consentFns, "isValidAccessGrant")
       .mockResolvedValue({ errors: [] });
     const { result, waitForNextUpdate } = renderHook(() =>
       useConsentBasedAccessForResource(resourceIri)
@@ -53,7 +53,7 @@ describe("useAllPermissions", () => {
   });
   it("filters out non-valid vcs", async () => {
     jest
-      .spyOn(consentFns, "isValidConsentGrant")
+      .spyOn(consentFns, "isValidAccessGrant")
       .mockResolvedValue({ errors: ["error"] });
     const { result, waitForNextUpdate } = renderHook(() =>
       useConsentBasedAccessForResource(resourceIri)
