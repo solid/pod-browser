@@ -45,7 +45,7 @@ const PROVIDER_IRI = "https://broker.pod.inrupt.com/";
 const hostname = getCurrentHostname();
 
 const CLIENT_APP_WEBID = isLocalhost(hostname)
-  ? null
+  ? undefined
   : `${getCurrentOrigin()}/api/app`;
 
 export default function Login() {
@@ -64,6 +64,10 @@ export default function Login() {
     clientName: CLIENT_NAME,
   };
   if (oidcSupported) authOptions.clientId = CLIENT_APP_WEBID;
+
+  if (oidcSupported && CLIENT_APP_WEBID) {
+    authOptions.clientId = CLIENT_APP_WEBID;
+  }
 
   useEffect(() => {
     if (!idp) return;
