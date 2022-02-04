@@ -23,19 +23,25 @@ import React from "react";
 import T from "prop-types";
 import DeleteButton from "../deleteButton";
 
+export const TESTCAFE_CONTACT_DELETE_BUTTON = "delete-contact-button";
+export const confirmationTitle = "Delete Contact";
+export const deleteContactSuccessMessage = "Contact was successfully deleted.";
 /* eslint react/jsx-props-no-spreading: 0 */
 export default function DeleteContactButton({
   onDelete,
   name,
+  webId,
   ...buttonProps
 }) {
   return (
     <DeleteButton
-      confirmationTitle="Delete Contact"
-      confirmationContent={`Are you sure you wish to delete ${name} from your contacts?`}
+      confirmationTitle={confirmationTitle}
+      confirmationContent={`Are you sure you wish to delete ${
+        name || webId
+      } from your contacts?`}
       dialogId="delete-contact"
       onDelete={onDelete}
-      successMessage="Contact was successfully deleted."
+      successMessage={deleteContactSuccessMessage}
       {...buttonProps}
     >
       Delete
@@ -45,5 +51,10 @@ export default function DeleteContactButton({
 
 DeleteContactButton.propTypes = {
   onDelete: T.func.isRequired,
-  name: T.string.isRequired,
+  name: T.string,
+  webId: T.string.isRequired,
+};
+
+DeleteContactButton.defaultProps = {
+  name: null,
 };

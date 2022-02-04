@@ -103,7 +103,6 @@ function ContactsList() {
   const profiles = useProfiles(people);
   const formattedNamePredicate = foaf.name;
   const hasPhotoPredicate = vcard.hasPhoto;
-
   const {
     session: { fetch },
   } = useSession();
@@ -119,7 +118,9 @@ function ContactsList() {
     const contactThing = getThing(contactDataset, contactThingUrl);
     const webId = getWebIdUrl(contactDataset, contactThingUrl);
     const name =
-      getStringNoLocale(contactThing, formattedNamePredicate) || webId;
+      getStringNoLocale(contactThing, formattedNamePredicate) ||
+      getStringNoLocale(contactThing, vcard.fn) ||
+      webId;
     setSelectedContactName(name);
     setSelectedContactWebId(webId);
   }, [selectedContactIndex, formattedNamePredicate, people, fetch]);
@@ -146,7 +147,6 @@ function ContactsList() {
     peopleMutate,
     selectedContactIndex,
   });
-
   const drawer = (
     <ContactsDrawer
       open={selectedContactIndex !== null}
@@ -154,6 +154,7 @@ function ContactsList() {
       onDelete={deleteSelectedContact}
       selectedContactName={selectedContactName}
       profileIri={selectedContactWebId}
+      selectedContactWebId={selectedContactWebId}
     />
   );
 
