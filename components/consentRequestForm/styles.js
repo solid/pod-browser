@@ -212,6 +212,7 @@ export default function styles(theme) {
       padding: "1rem",
       textOverflow: "ellipsis",
       overflow: "hidden",
+      wordBreak: "break-word",
     },
 
     "date-container": {
