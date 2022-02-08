@@ -205,6 +205,7 @@ export default function styles(theme) {
       textOverflow: "ellipsis",
       overflow: "hidden",
       wordBreak: "break-word",
+      whiteSpace: "nowrap"
     },
     purpose: {
       display: "flex",
@@ -213,6 +214,7 @@ export default function styles(theme) {
       textOverflow: "ellipsis",
       overflow: "hidden",
       wordBreak: "break-word",
+      whiteSpace: "nowrap"
     },
 
     "date-container": {
@@ -316,6 +318,7 @@ export default function styles(theme) {
       textOverflow: "ellipsis",
       overflow: "hidden",
       wordBreak: "break-word",
+      whiteSpace: "nowrap"
     },
   };
 }
