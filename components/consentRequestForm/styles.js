@@ -202,11 +202,13 @@ export default function styles(theme) {
     "agent-name": {
       display: "flex",
       justifyContent: "center",
+      wordBreak: "break-word",
     },
     purpose: {
       display: "flex",
       justifyContent: "flex-start",
       padding: "1rem",
+      wordBreak: "break-word",
     },
 
     "date-container": {
@@ -307,6 +309,7 @@ export default function styles(theme) {
     },
     "purposes-container": {
       padding: "2rem 0",
+      wordBreak: "break-word",
     },
   };
 }
