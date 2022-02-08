@@ -1,0 +1,184 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders correct consent modal content clicking on view details button renders a confirmation dialog with the correct data 1`] = `
+<body>
+  <div>
+    <div
+      class="PodBrowser-access-details--wrapper"
+      data-testid="consent-details-content"
+    >
+      <span
+        class="PodBrowser-access-details--title"
+      >
+        <h2>
+          <span>
+            Fetching data...
+          </span>
+        </h2>
+      </span>
+      <section
+        class="PodBrowser-access-details--section"
+      >
+        <h3
+          class="PodBrowser-access-details--section-header"
+        >
+          Access
+        </h3>
+        <hr
+          class="PodBrowser-access-details--separator"
+        />
+        <ul
+          class="PodBrowser-root PodBrowser-padding"
+        >
+          <li
+            class="PodBrowser-root PodBrowser-gutters"
+          >
+            <div
+              class="PodBrowser-root PodBrowser-listItemIcon"
+            >
+              <span
+                class="PodBrowser-icon-view PodBrowser-access-details--section-icon"
+              />
+            </div>
+            <div
+              class="PodBrowser-root PodBrowser-listItemText PodBrowser-multiline"
+            >
+              <span
+                class="PodBrowser-root PodBrowser-primary PodBrowser-listItemTitleText PodBrowser-body1 PodBrowser-displayBlock"
+              >
+                View
+              </span>
+              <p
+                class="PodBrowser-root PodBrowser-secondary PodBrowser-listItemSecondaryText PodBrowser-body2 PodBrowser-colorTextSecondary PodBrowser-displayBlock"
+              >
+                Can see this resource
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+      <section
+        class="PodBrowser-access-details--section"
+      >
+        <h3
+          class="PodBrowser-access-details--section-header"
+        >
+          Approved On
+        </h3>
+        <hr
+          class="PodBrowser-access-details--separator"
+        />
+        <p>
+          10/11/2021
+        </p>
+      </section>
+      <section
+        class="PodBrowser-access-details--section"
+      >
+        <h3
+          class="PodBrowser-access-details--section-header"
+        >
+          Purpose
+        </h3>
+        <hr
+          class="PodBrowser-access-details--separator"
+        />
+        <div
+          class=""
+        >
+          <ul
+            class="PodBrowser-root PodBrowser-padding"
+          >
+            <li
+              class="PodBrowser-root PodBrowser-gutters"
+            >
+              <span
+                class="PodBrowser-purpose"
+              >
+                https://example.org/someSpecificPurpose
+                 
+                <div
+                  class="PodBrowser-infoTooltipContainer"
+                >
+                  <button
+                    class="PodBrowser-root PodBrowser-root PodBrowser-infoButton PodBrowser-text"
+                    tabindex="0"
+                    title="https://example.org/someSpecificPurpose"
+                    type="button"
+                  >
+                    <span
+                      class="PodBrowser-label"
+                    >
+                      <i
+                        aria-label="Info"
+                        class="PodBrowser-icon-info PodBrowser-infoIcon"
+                      />
+                    </span>
+                    <span
+                      class="PodBrowser-root"
+                    />
+                  </button>
+                </div>
+              </span>
+            </li>
+            <li
+              class="PodBrowser-root PodBrowser-gutters"
+            >
+              <span
+                class="PodBrowser-purpose"
+              >
+                https://example.org/someSpecificPurpose2
+                 
+                <div
+                  class="PodBrowser-infoTooltipContainer"
+                >
+                  <button
+                    class="PodBrowser-root PodBrowser-root PodBrowser-infoButton PodBrowser-text"
+                    tabindex="0"
+                    title="https://example.org/someSpecificPurpose2"
+                    type="button"
+                  >
+                    <span
+                      class="PodBrowser-label"
+                    >
+                      <i
+                        aria-label="Info"
+                        class="PodBrowser-icon-info PodBrowser-infoIcon"
+                      />
+                    </span>
+                    <span
+                      class="PodBrowser-root"
+                    />
+                  </button>
+                </div>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section
+        class="PodBrowser-access-details--section"
+      >
+        <h3
+          class="PodBrowser-access-details--section-header"
+        >
+          Access Duration
+        </h3>
+        <hr
+          class="PodBrowser-access-details--separator"
+        />
+        <span>
+          <span>
+            https://example.com/profile/card#me
+          </span>
+          has access until 
+          <strong>
+            October 11, 2022
+          </strong>
+          .
+        </span>
+      </section>
+    </div>
+  </div>
+</body>
+`;
