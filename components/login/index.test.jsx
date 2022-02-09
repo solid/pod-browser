@@ -28,18 +28,14 @@ import Login, {
 } from "./index";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import useIdpFromQuery from "../../src/hooks/useIdpFromQuery";
-import useClientId from "../../src/hooks/useClientId";
 import { TESTCAFE_ID_LOGIN_FIELD } from "./provider";
 
 jest.mock("../../src/hooks/useIdpFromQuery");
 const mockedUseIdpFromQuery = useIdpFromQuery;
-jest.mock("../../src/hooks/useClientId");
-const mockedUseClientId = useClientId;
 
 describe("Login form", () => {
   beforeEach(() => {
     mockedUseIdpFromQuery.mockReturnValue(null);
-    mockedUseClientId.mockReturnValue(false);
   });
 
   it("renders a login page with a sign in button and a 'Sign in with other provider' button", async () => {

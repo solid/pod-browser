@@ -33,8 +33,7 @@ import {
   getCurrentOrigin,
 } from "../../src/windowHelpers";
 import { isLocalhost } from "../../src/stringHelpers";
-import useClientId from "../../src/hooks/useClientId";
-import { CLIENT_NAME } from "../../constants/constants";
+import { CLIENT_NAME } from "../../constants/app";
 import useIdpFromQuery from "../../src/hooks/useIdpFromQuery";
 
 export const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
@@ -48,6 +47,14 @@ const CLIENT_APP_WEBID = `${getCurrentOrigin()}/api/app`;
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
+export const AUTH_OPTIONS = {
+  clientName: CLIENT_NAME,
+};
+
+if (!isLocalhost(hostname)) {
+  AUTH_OPTIONS.clientId = CLIENT_APP_WEBID;
+}
+
 export default function Login() {
   const bem = useBem(useStyles());
 
@@ -58,15 +65,7 @@ export default function Login() {
   const INFO_TOOLTIP_TEXT = "This is where you signed up for a Solid Pod";
   const INFO_BUTTON_LABEL = "Where is your Pod hosted?";
 
-  const oidcSupported = useClientId(DEFAULT_PROVIDER_IRI);
-
-  const authOptions = {
-    clientName: CLIENT_NAME,
-  };
-
-  if (oidcSupported && !isLocalhost(hostname)) {
-    authOptions.clientId = CLIENT_APP_WEBID;
-  }
+  
 
   useEffect(() => {
     if (!idp) return;
@@ -85,7 +84,7 @@ export default function Login() {
       <LoginButton
         oidcIssuer={DEFAULT_PROVIDER_IRI}
         redirectUrl={generateRedirectUrl("")}
-        authOptions={authOptions}
+        authOptions={AUTH_OPTIONS}
       >
         <Button
           variant="primary"
