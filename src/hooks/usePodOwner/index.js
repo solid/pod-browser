@@ -34,9 +34,8 @@ export default function usePodOwner(resourceIri) {
   const [podOwnerWebId, setPodOwnerWebId] = useState(null);
   const [error, setError] = useState(null);
   const podRoot = usePodRootUri(resourceIri);
-  const { data: resourceInfo, error: resourceError } = useResourceInfo(
-    resourceIri
-  );
+  const { data: resourceInfo, error: resourceError } =
+    useResourceInfo(resourceIri);
 
   useEffect(() => {
     if (resourceIri && isHTTPError(resourceError, 403)) {

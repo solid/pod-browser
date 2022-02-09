@@ -1008,10 +1008,8 @@ export default class AcpAccessControlStrategy {
     );
 
     const { respond, error } = createResponder();
-    const {
-      response: policyDataset,
-      error: getOrCreateError,
-    } = await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
+    const { response: policyDataset, error: getOrCreateError } =
+      await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
 
     if (getOrCreateError) return error(getOrCreateError);
     const policyUrl = this.#isLegacy
@@ -1061,10 +1059,8 @@ export default class AcpAccessControlStrategy {
     );
 
     const { respond, error } = createResponder();
-    const {
-      response: policyDataset,
-      error: getOrCreateError,
-    } = await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
+    const { response: policyDataset, error: getOrCreateError } =
+      await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
 
     if (getOrCreateError) return error(getOrCreateError);
     const policyUrl = this.#isLegacy
@@ -1110,10 +1106,8 @@ export default class AcpAccessControlStrategy {
     );
 
     const { respond, error } = createResponder();
-    const {
-      response: policyDataset,
-      error: getOrCreateError,
-    } = await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
+    const { response: policyDataset, error: getOrCreateError } =
+      await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
     if (getOrCreateError) return error(getOrCreateError);
     const policyUrl = this.#isLegacy
       ? getPolicyUrlName(namedPolicyContainerUrl, policyName)
@@ -1158,10 +1152,8 @@ export default class AcpAccessControlStrategy {
     );
     const { respond, error } = createResponder();
 
-    const {
-      response: policyDataset,
-      error: getOrCreateError,
-    } = await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
+    const { response: policyDataset, error: getOrCreateError } =
+      await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
     if (getOrCreateError) return error(getOrCreateError);
 
     const policyUrl = this.#isLegacy
@@ -1234,10 +1226,8 @@ export default class AcpAccessControlStrategy {
     );
     const { respond, error } = createResponder();
 
-    const {
-      response: policyDataset,
-      error: getOrCreateError,
-    } = await getOrCreateDatasetOld(customPolicyContainerUrl, this.#fetch);
+    const { response: policyDataset, error: getOrCreateError } =
+      await getOrCreateDatasetOld(customPolicyContainerUrl, this.#fetch);
 
     if (getOrCreateError) return error(getOrCreateError);
 
@@ -1263,9 +1253,8 @@ export default class AcpAccessControlStrategy {
       const [modifiedPolicy] = matchersUrls.map((matcherUrl) => {
         return acp.removeAllOfMatcherUrl(policy, matcherUrl);
       });
-      const modifiedPolicyMatchersUrls = acp.getAllOfMatcherUrlAll(
-        modifiedPolicy
-      );
+      const modifiedPolicyMatchersUrls =
+        acp.getAllOfMatcherUrlAll(modifiedPolicy);
       // if there are no matchers left in the policy
       if (!modifiedPolicyMatchersUrls.length) {
         await deleteFile(policyUrl, { fetch: this.#fetch });
@@ -1298,10 +1287,8 @@ export default class AcpAccessControlStrategy {
   async savePermissionsForAgent(webId, access) {
     const { respond, error } = createResponder();
 
-    const {
-      response: policyDataset,
-      error: getOrCreateError,
-    } = await getOrCreateDatasetOld(this.#policyUrl, this.#fetch);
+    const { response: policyDataset, error: getOrCreateError } =
+      await getOrCreateDatasetOld(this.#policyUrl, this.#fetch);
 
     if (getOrCreateError) return error(getOrCreateError);
     const updatedDataset = isEmptyAccess(access)

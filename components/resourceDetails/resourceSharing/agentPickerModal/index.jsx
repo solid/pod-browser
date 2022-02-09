@@ -159,8 +159,9 @@ export const handleSubmit = ({
           webId !== PUBLIC_AGENT_PREDICATE &&
           webId !== AUTHENTICATED_AGENT_PREDICATE
       )
-      .map((agentWebId) => () =>
-        saveAgentToContacts(agentWebId, addressBook, fetch)
+      .map(
+        (agentWebId) => () =>
+          saveAgentToContacts(agentWebId, addressBook, fetch)
       );
     const args = await serializePromises([
       ...existingPoliciesPromiseFactories,
@@ -199,7 +200,6 @@ export const handleSaveContact = async (iri, addressBook, fetch) => {
       await savePerson(addressBook, contact, fetch);
     }
   } catch (e) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     error = e; // need to do something with the error otherwise the function exits at any point a webId fails and does not continue processing the rest
   }
 };
@@ -214,9 +214,8 @@ function AgentPickerModal(
     advancedSharing ? type : null
   );
   const policyName = advancedSharing ? customPolicy : type;
-  const { header, saveText, titleSingular, title } = POLICIES_TYPE_MAP[
-    policyName
-  ];
+  const { header, saveText, titleSingular, title } =
+    POLICIES_TYPE_MAP[policyName];
 
   const {
     permissions: allPermissions,

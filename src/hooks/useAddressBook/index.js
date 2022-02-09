@@ -34,10 +34,8 @@ export const ERROR_USE_ADDRESS_BOOK_NO_POD_ROOT =
 
 export default function useAddressBook() {
   const { fetch } = useSession();
-  const {
-    data: authenticatedProfile,
-    error: authenticatedError,
-  } = useAuthenticatedProfile();
+  const { data: authenticatedProfile, error: authenticatedError } =
+    useAuthenticatedProfile();
 
   return useSWR(
     ["addressBook", authenticatedProfile],

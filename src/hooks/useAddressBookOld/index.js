@@ -43,10 +43,8 @@ export default function useAddressBookOld() {
     const contactsIndexIri = getContactsIndexIri(addressBookContainerUrl);
 
     (async () => {
-      const {
-        response: existingAddressBook,
-        error: existingError,
-      } = await getResource(contactsIndexIri, fetch);
+      const { response: existingAddressBook, error: existingError } =
+        await getResource(contactsIndexIri, fetch);
 
       if (existingAddressBook) {
         setAddressBook(existingAddressBook.dataset);
@@ -54,16 +52,14 @@ export default function useAddressBookOld() {
       }
 
       if (existingError && isHTTPError(existingError, ERROR_CODES.NOT_FOUND)) {
-        const {
-          response: newAddressBook,
-          error: newError,
-        } = await saveNewAddressBook(
-          {
-            iri: addressBookContainerUrl,
-            owner: webId,
-          },
-          fetch
-        );
+        const { response: newAddressBook, error: newError } =
+          await saveNewAddressBook(
+            {
+              iri: addressBookContainerUrl,
+              owner: webId,
+            },
+            fetch
+          );
         if (newError) {
           setError(newError);
           return;

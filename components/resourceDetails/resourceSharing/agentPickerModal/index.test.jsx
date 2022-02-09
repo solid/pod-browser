@@ -543,25 +543,21 @@ describe("AgentPickerModal without contacts", () => {
 
   it("opens a confirmation dialog with correct title and content", async () => {
     jest.spyOn(ProfileFns, "fetchProfile").mockRejectedValueOnce("error");
-    const {
-      asFragment,
-      getByTestId,
-      getByText,
-      queryAllByTestId,
-    } = renderWithTheme(
-      <AccessControlContext.Provider value={{ accessControl }}>
-        <ConfirmationDialogProvider>
-          <PermissionsContextProvider>
-            <AgentPickerModal
-              type="editors"
-              text={{ editText: "Edit Editors", saveText: "Save Editors" }}
-              onClose={onClose}
-              setLoading={setLoading}
-            />
-          </PermissionsContextProvider>
-        </ConfirmationDialogProvider>
-      </AccessControlContext.Provider>
-    );
+    const { asFragment, getByTestId, getByText, queryAllByTestId } =
+      renderWithTheme(
+        <AccessControlContext.Provider value={{ accessControl }}>
+          <ConfirmationDialogProvider>
+            <PermissionsContextProvider>
+              <AgentPickerModal
+                type="editors"
+                text={{ editText: "Edit Editors", saveText: "Save Editors" }}
+                onClose={onClose}
+                setLoading={setLoading}
+              />
+            </PermissionsContextProvider>
+          </ConfirmationDialogProvider>
+        </AccessControlContext.Provider>
+      );
 
     const webId = "https://somewebid.com";
     const addWebIdButton = getByTestId(TESTCAFE_ADD_WEBID_BUTTON);
@@ -818,20 +814,16 @@ describe("AgentPickerModal with contacts", () => {
       ],
     });
 
-    const {
-      getByTestId,
-      queryAllByTestId,
-      findByText,
-      queryByText,
-    } = renderWithTheme(
-      <PermissionsContextProvider>
-        <AgentPickerModal
-          type="editors"
-          text={{ editText: "Edit Editors", saveText: "Save Editors" }}
-          onClose={onClose}
-        />
-      </PermissionsContextProvider>
-    );
+    const { getByTestId, queryAllByTestId, findByText, queryByText } =
+      renderWithTheme(
+        <PermissionsContextProvider>
+          <AgentPickerModal
+            type="editors"
+            text={{ editText: "Edit Editors", saveText: "Save Editors" }}
+            onClose={onClose}
+          />
+        </PermissionsContextProvider>
+      );
     const searchBar = getByTestId(TESTCAFE_ID_SEARCH_INPUT);
 
     userEvent.type(searchBar, "Example 1");

@@ -48,9 +48,8 @@ export default function WebIdCheckbox({ value, index, toggleCheckbox, type }) {
   const agentIdentifier = thing && getUrl(thing, AGENT_PREDICATE); // todo: add corresponding groupIdentifier when adding groups
   const permissions = allPermissions?.filter((p) => p.alias === type);
   const webIdsInPermissions = getWebIdsFromPermissions(permissions);
-  const webIdsFromInheritedPermissions = getWebIdsFromInheritedPermissions(
-    permissions
-  );
+  const webIdsFromInheritedPermissions =
+    getWebIdsFromInheritedPermissions(permissions);
 
   const agentId = useCallback(() => {
     let agentIdentifierValue;

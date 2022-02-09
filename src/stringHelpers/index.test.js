@@ -51,16 +51,8 @@ describe("normalizeContainerUrl", () => {
 
 describe("parseUrl", () => {
   test("it parses a given url into parts", () => {
-    const {
-      hash,
-      host,
-      hostname,
-      origin,
-      pathname,
-      port,
-      protocol,
-      search,
-    } = parseUrl("https://example.com:1000/path?query=param#hash");
+    const { hash, host, hostname, origin, pathname, port, protocol, search } =
+      parseUrl("https://example.com:1000/path?query=param#hash");
 
     expect(hash).toEqual("#hash");
     expect(host).toEqual("example.com:1000");
@@ -73,16 +65,8 @@ describe("parseUrl", () => {
   });
 
   test("it gracefully handles non-urls", () => {
-    const {
-      hash,
-      host,
-      hostname,
-      origin,
-      pathname,
-      port,
-      protocol,
-      search,
-    } = parseUrl("not a url");
+    const { hash, host, hostname, origin, pathname, port, protocol, search } =
+      parseUrl("not a url");
 
     expect(hash).toEqual("");
     expect(host).toEqual("localhost");

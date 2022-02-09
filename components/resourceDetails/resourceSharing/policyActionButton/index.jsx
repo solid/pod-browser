@@ -85,14 +85,8 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
     : "this resource";
   const policyTitle = POLICIES_TYPE_MAP[type]?.title;
 
-  const {
-    open,
-    confirmed,
-    setContent,
-    setOpen,
-    setTitle,
-    closeDialog,
-  } = useContext(ConfirmationDialogContext);
+  const { open, confirmed, setContent, setOpen, setTitle, closeDialog } =
+    useContext(ConfirmationDialogContext);
   const { mutate: mutateResourceInfo } = useContext(ResourceInfoContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
 

@@ -72,9 +72,8 @@ export default function useAllPermissions() {
   const { solidDataset: dataset } = useContext(DatasetContext);
   const datasetUrl = getSourceUrl(dataset);
 
-  const {
-    permissions: consentBasedPermissions,
-  } = useConsentBasedAccessForResource(datasetUrl);
+  const { permissions: consentBasedPermissions } =
+    useConsentBasedAccessForResource(datasetUrl);
 
   const normalizedConsentPermissions = useMemo(
     () =>

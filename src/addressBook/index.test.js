@@ -75,12 +75,8 @@ import {
 import { chain } from "../solidClientHelpers/utils";
 import { joinPath } from "../stringHelpers";
 
-const {
-  createThing,
-  getStringNoLocale,
-  getStringNoLocaleAll,
-  getUrl,
-} = solidClientFns;
+const { createThing, getStringNoLocale, getStringNoLocaleAll, getUrl } =
+  solidClientFns;
 
 describe("createAddressBook", () => {
   test("it creates all the datasets that an addressBook needs, with a default title", () => {
@@ -296,8 +292,9 @@ describe("getGroups", () => {
 
 describe("getSchemaFunction", () => {
   test("it returns a function for the given key, value", () => {
-    const value = mockWebIdNode("https://user.example.com/card#me")
-      .webIdNodeUrl;
+    const value = mockWebIdNode(
+      "https://user.example.com/card#me"
+    ).webIdNodeUrl;
     const options = { name: "this" };
     const fn = getSchemaFunction("webId", value);
     const thing = fn(createThing(options));
@@ -557,9 +554,8 @@ describe("saveContact", () => {
   const webId = "https://user.example.com/card#me";
   const contactDataset = solidClientFns.mockSolidDatasetFrom(webId);
   const peopleIndexIri = `${addressBookDatasetIri}/people.ttl`;
-  const peopleIndexDataset = solidClientFns.mockSolidDatasetFrom(
-    peopleIndexIri
-  );
+  const peopleIndexDataset =
+    solidClientFns.mockSolidDatasetFrom(peopleIndexIri);
   const mockAddressBook = chain(
     solidClientFns.mockSolidDatasetFrom(addressBookDatasetIri),
     (d) =>
@@ -1022,9 +1018,8 @@ describe("getProfileIriFromContactThing", () => {
 describe("getIndexDatasetFromAddressBook", () => {
   const addressBookIri = "https://user.example.com/contacts";
   const peopleIndexIri = `${addressBookIri}/people.ttl`;
-  const peopleIndexDataset = solidClientFns.mockSolidDatasetFrom(
-    peopleIndexIri
-  );
+  const peopleIndexDataset =
+    solidClientFns.mockSolidDatasetFrom(peopleIndexIri);
   const nameEmailIndex = vcardExtras("nameEmailIndex");
   const addressBookDataset = chain(
     solidClientFns.mockSolidDatasetFrom(addressBookIri),
@@ -1068,9 +1063,7 @@ describe("getIndexDatasetFromAddressBook", () => {
       throw fetchError;
     });
 
-    const {
-      error,
-    } = await addressBookFns.getIndexDatasetFromAddressBook(
+    const { error } = await addressBookFns.getIndexDatasetFromAddressBook(
       addressBookDataset,
       nameEmailIndex,
       () => {}

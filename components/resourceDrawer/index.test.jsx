@@ -60,9 +60,8 @@ const iriWithSpaces = "/iri with spaces/";
 
 describe("ResourceDrawer view", () => {
   const resourceInfo = solidClientFns.mockSolidDatasetFrom(iri);
-  const resourceInfoWithSpaces = solidClientFns.mockSolidDatasetFrom(
-    iriWithSpaces
-  );
+  const resourceInfoWithSpaces =
+    solidClientFns.mockSolidDatasetFrom(iriWithSpaces);
   jest.spyOn(acp, "isAcpControlled").mockResolvedValue(true);
   jest.spyOn(acp, "hasLinkedAcr").mockResolvedValue(true);
 

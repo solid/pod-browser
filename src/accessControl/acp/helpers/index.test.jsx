@@ -53,8 +53,7 @@ describe("hasAcpConfiguration", () => {
     const mockedFetch = jest.fn(global.fetch).mockResolvedValueOnce(
       new Response(undefined, {
         headers: {
-          Link:
-            '<http://www.w3.org/ns/solid/acp#agent>; rel="http://www.w3.org/ns/solid/acp#attribute"',
+          Link: '<http://www.w3.org/ns/solid/acp#agent>; rel="http://www.w3.org/ns/solid/acp#attribute"',
         },
       })
     );
