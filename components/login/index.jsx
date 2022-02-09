@@ -37,16 +37,16 @@ import useClientId from "../../src/hooks/useClientId";
 import { CLIENT_NAME } from "../../constants/constants";
 import useIdpFromQuery from "../../src/hooks/useIdpFromQuery";
 
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
+export const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
 export const TESTCAFE_ID_LOGIN_TITLE = "login-title";
 export const TESTCAFE_ID_OTHER_PROVIDERS_BUTTON = "other-providers-button";
-const PROVIDER_IRI = "https://broker.pod.inrupt.com/";
+
+const DEFAULT_PROVIDER_IRI = "https://broker.pod.inrupt.com/";
 const hostname = getCurrentHostname();
 
-const CLIENT_APP_WEBID = isLocalhost(hostname)
-  ? undefined
-  : `${getCurrentOrigin()}/api/app`;
+const CLIENT_APP_WEBID = `${getCurrentOrigin()}/api/app`;
+
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function Login() {
   const bem = useBem(useStyles());
@@ -58,14 +58,13 @@ export default function Login() {
   const INFO_TOOLTIP_TEXT = "This is where you signed up for a Solid Pod";
   const INFO_BUTTON_LABEL = "Where is your Pod hosted?";
 
-  const oidcSupported = useClientId(PROVIDER_IRI);
+  const oidcSupported = useClientId(DEFAULT_PROVIDER_IRI);
 
   const authOptions = {
     clientName: CLIENT_NAME,
   };
-  if (oidcSupported) authOptions.clientId = CLIENT_APP_WEBID;
 
-  if (oidcSupported && CLIENT_APP_WEBID) {
+  if (oidcSupported && !isLocalhost(hostname)) {
     authOptions.clientId = CLIENT_APP_WEBID;
   }
 
@@ -84,7 +83,7 @@ export default function Login() {
         className={bem("login-form__logo")}
       />
       <LoginButton
-        oidcIssuer={PROVIDER_IRI}
+        oidcIssuer={DEFAULT_PROVIDER_IRI}
         redirectUrl={generateRedirectUrl("")}
         authOptions={authOptions}
       >
