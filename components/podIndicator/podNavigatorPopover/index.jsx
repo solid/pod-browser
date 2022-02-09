@@ -47,36 +47,31 @@ export const closeHandler = (setAnchorEl, setDisplayNavigator) => () => {
   setDisplayNavigator(false);
 };
 
-export const submitHandler = (
-  handleClose,
-  setUrl,
-  setDirtyForm,
-  setDirtyUrlField,
-  url,
-  router,
-  fetch
-) => async (event) => {
-  event.preventDefault();
-  setDirtyForm(true);
+export const submitHandler =
+  (handleClose, setUrl, setDirtyForm, setDirtyUrlField, url, router, fetch) =>
+  async (event) => {
+    event.preventDefault();
+    setDirtyForm(true);
 
-  if (url === "") {
-    return;
-  }
-  let resourceInfo;
-  try {
-    resourceInfo = await getResourceInfo(url, { fetch });
-  } catch (error) {
-    resourceInfo = null;
-  }
-  const sourceUrl =
-    (resourceInfo && getSourceIri(resourceInfo)) || normalizeContainerUrl(url);
+    if (url === "") {
+      return;
+    }
+    let resourceInfo;
+    try {
+      resourceInfo = await getResourceInfo(url, { fetch });
+    } catch (error) {
+      resourceInfo = null;
+    }
+    const sourceUrl =
+      (resourceInfo && getSourceIri(resourceInfo)) ||
+      normalizeContainerUrl(url);
 
-  await router.push("/resource/[iri]", resourceHref(sourceUrl));
-  handleClose();
-  setDirtyForm(false);
-  setDirtyUrlField(false);
-  setUrl("");
-};
+    await router.push("/resource/[iri]", resourceHref(sourceUrl));
+    handleClose();
+    setDirtyForm(false);
+    setDirtyUrlField(false);
+    setUrl("");
+  };
 
 export default function PodNavigatorPopover({
   anchor,

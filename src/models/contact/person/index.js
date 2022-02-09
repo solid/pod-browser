@@ -139,7 +139,11 @@ function createPersonContact(addressBook, contact) {
     ...emails
       .concat(addresses)
       .concat(telephones)
-      .map(({ thing }) => (d) => setThing(d, thing))
+      .map(
+        ({ thing }) =>
+          (d) =>
+            setThing(d, thing)
+      )
   );
   return {
     iri,

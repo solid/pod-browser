@@ -73,10 +73,8 @@ export default function AgentAccess({ permission }) {
   }, [webId]);
 
   const handleRetryClick = async () => {
-    const {
-      profile: fetchedProfile,
-      profileError: fetchedProfileError,
-    } = await getProfile(webId, fetch);
+    const { profile: fetchedProfile, profileError: fetchedProfileError } =
+      await getProfile(webId, fetch);
     if (fetchedProfile) {
       setLocalProfile(profile);
       setIsLoadingProfile(false);

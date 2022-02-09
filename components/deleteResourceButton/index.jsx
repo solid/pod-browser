@@ -61,9 +61,8 @@ export default function DeleteResourceButton({
   const { fetch } = useSession();
   const router = useRouter();
   const { alertError } = useContext(AlertContext);
-  const { data: resourceInfo, error: resourceError } = useResourceInfo(
-    resourceIri
-  );
+  const { data: resourceInfo, error: resourceError } =
+    useResourceInfo(resourceIri);
   const policiesContainerUrl = usePoliciesContainerUrl(resourceIri);
 
   if (resourceError) {

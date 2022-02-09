@@ -37,13 +37,12 @@ export default function useContactsOld(addressBook, type) {
     async () => {
       const { indexFilePredicate } = TYPE_MAP[type];
       const { contactTypeIri } = TYPE_MAP[type];
-      const {
-        response: indexFileDataset,
-      } = await getIndexDatasetFromAddressBook(
-        addressBook,
-        indexFilePredicate,
-        fetch
-      );
+      const { response: indexFileDataset } =
+        await getIndexDatasetFromAddressBook(
+          addressBook,
+          indexFilePredicate,
+          fetch
+        );
       const { response, error } = await getContacts(
         indexFileDataset,
         contactTypeIri,

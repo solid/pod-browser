@@ -27,9 +27,8 @@ import Profile from "../../profile";
 
 export default function ProfileShow() {
   useRedirectIfLoggedOut();
-  const { session, sessionRequestInProgress, profile } = useContext(
-    SessionContext
-  );
+  const { session, sessionRequestInProgress, profile } =
+    useContext(SessionContext);
 
   if (sessionRequestInProgress || !profile) {
     return null;

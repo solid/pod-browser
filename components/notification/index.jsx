@@ -25,9 +25,8 @@ import { Snackbar } from "@material-ui/core";
 import AlertContext from "../../src/contexts/alertContext";
 
 export default function Notification() {
-  const { alertOpen, message, severity, setAlertOpen } = useContext(
-    AlertContext
-  );
+  const { alertOpen, message, severity, setAlertOpen } =
+    useContext(AlertContext);
   const onClose = () => setAlertOpen(false);
 
   return (

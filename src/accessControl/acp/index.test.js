@@ -139,9 +139,10 @@ describe("AcpAccessControlStrategy", () => {
     });
 
     it("uses getResourceInfoWithAcr to fetch data", () =>
-      expect(
-        acpFns4.getResourceInfoWithAcr
-      ).toHaveBeenCalledWith(resourceInfoUrl, { fetch }));
+      expect(acpFns4.getResourceInfoWithAcr).toHaveBeenCalledWith(
+        resourceInfoUrl,
+        { fetch }
+      ));
 
     it("exposes the methods we expect for a access control strategy", () =>
       ["getPermissions", "savePermissionsForAgent"].forEach((method) =>

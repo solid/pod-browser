@@ -44,9 +44,8 @@ export const MESSAGE_GROUP_DETAILS_DESCRIPTION_FALLBACK =
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function GroupDetails() {
-  const { data: group, isValidating: groupIsValidating } = useContext(
-    GroupContext
-  );
+  const { data: group, isValidating: groupIsValidating } =
+    useContext(GroupContext);
   const { isValidating: groupAllIsValidating } = useContext(GroupAllContext);
   const bem = useBem(useStyles());
 

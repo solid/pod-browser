@@ -59,9 +59,8 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
   const { permissions } = useContext(PermissionsContext);
   const [tablePermissions, setTablePermissions] = useState([]);
   const [policyPermissions, setPolicyPermissions] = useState([]);
-  const { permissionsWithProfiles } = usePermissionsWithProfiles(
-    policyPermissions
-  );
+  const { permissionsWithProfiles } =
+    usePermissionsWithProfiles(policyPermissions);
 
   useEffect(() => {
     const filteredPermissions =
