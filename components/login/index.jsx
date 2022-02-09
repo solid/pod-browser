@@ -65,8 +65,6 @@ export default function Login() {
   const INFO_TOOLTIP_TEXT = "This is where you signed up for a Solid Pod";
   const INFO_BUTTON_LABEL = "Where is your Pod hosted?";
 
-  
-
   useEffect(() => {
     if (!idp) return;
     setIsOpen(true);

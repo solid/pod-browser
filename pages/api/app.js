@@ -19,8 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { isLocalhost } from "../../src/stringHelpers";
-import { CLIENT_NAME, PUBLIC_OIDC_CLIENT } from "../../constants/constants";
+import { CLIENT_NAME } from "../../constants/app";
 
 function buildAppProfile(hostname, clientId) {
   return {
@@ -32,9 +31,7 @@ function buildAppProfile(hostname, clientId) {
 }
 
 export default function handler(req, res) {
-  const clientId = isLocalhost(req.headers.host.replace(":3000", ""))
-    ? PUBLIC_OIDC_CLIENT
-    : `https://${req.headers.host}/api/app`;
+  const clientId = `https://${req.headers.host}/api/app`;
   const hostname = `https://${req.headers.host}/`;
   res.status(200).json(buildAppProfile(hostname, clientId));
 }

@@ -23,13 +23,6 @@ import nock from "nock";
 import { createRequest, createResponse } from "node-mocks-http";
 import handler from "./app";
 
-const LOCALHOST_RESPONSE = {
-  "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
-  client_id: "http://www.w3.org/ns/solid/terms#PublicOidcClient",
-  client_name: "Inrupt PodBrowser",
-  redirect_uris: ["https://localhost:3000/", "https://localhost:3000/login"],
-};
-
 const PODBROWSER_RESPONSE = {
   "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
   client_id: "https://podbrowser.inrupt.com/api/app",
@@ -59,21 +52,7 @@ describe("/api/app handler tests", () => {
     nock.restore();
   });
 
-  test("responds with 200 and correct json for localhost", async () => {
-    req.headers = { host: "localhost:3000" };
-    nock(/api/).get(/app$/).reply(200, LOCALHOST_RESPONSE);
-    handler(req, res);
-
-    expect(res.status).toHaveBeenCalledTimes(1);
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.end).toHaveBeenCalledTimes(1);
-    // eslint-disable-next-line no-underscore-dangle
-    expect(JSON.parse(res._getData())).toEqual(
-      expect.objectContaining(LOCALHOST_RESPONSE)
-    );
-  });
-
-  test("responds with 200 and correct json for podBrowser", async () => {
+  it("responds with 200 and correct json for podBrowser", async () => {
     req.headers = { host: "podbrowser.inrupt.com" };
     nock(/api/).get(/app$/).reply(200, PODBROWSER_RESPONSE);
     handler(req, res);
