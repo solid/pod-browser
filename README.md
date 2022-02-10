@@ -5,7 +5,7 @@
 
 # PodBrowser
 
-## A modular tool to view, manage, and control access to you Pod.
+## A modular tool to view, manage, and control access to your Pod.
 
 [podbrowser.inrupt.com](https://podbrowser.inrupt.com)
 
@@ -25,7 +25,7 @@ This project adheres to the Contributor Covenant [code of conduct](code_of_condu
 # Installation
 
 1. `npm install`
-2. `npm run dev` to run a dev server, or `npm run build` to compile static html
+2. `npm run dev` to run a dev server, or `npm run build` to compile static HTML
   and other assets.
 
 # Development
@@ -33,7 +33,7 @@ This project adheres to the Contributor Covenant [code of conduct](code_of_condu
 * PodBrowser uses a framework called [Next.js](https://nextjs.org/), which has
   [extensive documentation](https://nextjs.org/docs/getting-started). It uses
   [React](https://reactjs.org/) for client-side templates, [Webpack](https://webpack.js.org/) for building assets, and [Jest](https://jestjs.io/) for tests.
-* Any environment variables you wish to expose must be added to next.config.js.
+* Any environment variables you wish to expose must be added to `next.config.js`.
 
 
 # Deployment
