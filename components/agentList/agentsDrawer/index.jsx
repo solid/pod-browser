@@ -66,6 +66,7 @@ export default function AgentsDrawer({
                 className={actionMenuBem("action-menu__trigger", "danger")}
                 onDelete={onDelete}
                 name={selectedContactName}
+                webId={profileIri}
               />
             </ActionMenuItem>
           </ActionMenu>

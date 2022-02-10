@@ -21,12 +21,17 @@
 
 import { useEffect, useState } from "react";
 
+export const PREVIOUS_PAGE = "previousPage";
+
 export default function usePreviousPage() {
   const [previousPage, setPreviousPage] = useState(null);
+
   useEffect(() => {
     if (!localStorage) return;
-    const url = localStorage.getItem("previousPage");
+    const url = localStorage.getItem(PREVIOUS_PAGE);
     setPreviousPage(url || null);
+    localStorage.removeItem(PREVIOUS_PAGE);
   }, []);
+
   return previousPage;
 }

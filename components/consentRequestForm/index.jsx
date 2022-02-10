@@ -24,7 +24,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import {
-  approveAccessRequestWithConsent,
+  approveAccessRequest,
   denyAccessRequest,
 } from "@inrupt/solid-client-access-grants";
 import { Button } from "@inrupt/prism-react-components";
@@ -111,13 +111,16 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedAccess.length && selectedPurposes.length) {
-      const signedVc = await approveAccessRequestWithConsent(
+      const signedVc = await approveAccessRequest(
         session.info.webId,
         consentRequest,
         {
           requestor,
           access: selectedAccess.accessModes,
           resources: selectedResources,
+        },
+        {
+          fetch: session.fetch,
         }
       );
       if (signedVc) {
@@ -244,7 +247,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
         </Typography>
         {Array.isArray(purposes) && purposes.length === 1 ? (
           <span className={bem("purpose")}>
-            {purposes[0].description || purposes[0]}{" "}
+            {purposes[0].description || purposes[0]}
             <InfoTooltip
               tooltipText={purposes[0].url || purposes[0] || "Purpose"}
             />

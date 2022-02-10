@@ -20,8 +20,15 @@
  */
 
 import React from "react";
+import userEvent from "@testing-library/user-event";
+import { waitFor } from "@testing-library/dom";
 import ContactsDrawer from "./index";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
+import {
+  TESTCAFE_ID_CONFIRMATION_DIALOG,
+  TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
+} from "../../confirmationDialog";
+import { ConfirmationDialogProvider } from "../../../src/contexts/confirmationDialogContext";
 
 describe("ContactsDrawer", () => {
   const onClose = () => {};
@@ -30,7 +37,7 @@ describe("ContactsDrawer", () => {
   const profileIri = "https://example.com/profile#alice";
 
   it("renders", () => {
-    const { asFragment } = renderWithTheme(
+    const renderResult = renderWithTheme(
       <ContactsDrawer
         open
         onClose={onClose}
@@ -39,6 +46,69 @@ describe("ContactsDrawer", () => {
         profileIri={profileIri}
       />
     );
-    expect(asFragment()).toMatchSnapshot();
+    expect(renderResult.asFragment()).toMatchSnapshot();
+  });
+});
+
+describe("Delete contact button confirmation dialog", () => {
+  const testWebId = "testWebId";
+  const onClose = () => {};
+  const onDelete = () => {};
+  const profileIri = "https://example.com/profile#alice";
+
+  test("the delete confirmation shows webId if no name is available", async () => {
+    const selectedContactName = null;
+    const { findByTestId } = renderWithTheme(
+      <ConfirmationDialogProvider>
+        <ContactsDrawer
+          open
+          onClose={onClose}
+          onDelete={onDelete}
+          selectedContactName={selectedContactName}
+          selectedContactWebId={testWebId}
+          profileIri={profileIri}
+        />
+      </ConfirmationDialogProvider>
+    );
+    const deleteButton = await findByTestId("delete-button");
+    userEvent.click(deleteButton);
+    const dialog = await findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+    const dialogText = await findByTestId(
+      TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT
+    );
+
+    await waitFor(() => {
+      expect(dialog).toBeInTheDocument();
+      expect(dialogText).toBeInTheDocument();
+      expect(dialogText).toHaveTextContent("testWebId");
+    });
+  });
+
+  test("it shows name if name is available", async () => {
+    const selectedContactName = "Alice";
+    const { findByTestId } = renderWithTheme(
+      <ConfirmationDialogProvider>
+        <ContactsDrawer
+          open
+          onClose={onClose}
+          onDelete={onDelete}
+          selectedContactName={selectedContactName}
+          selectedContactWebId={testWebId}
+          profileIri={profileIri}
+        />
+      </ConfirmationDialogProvider>
+    );
+    const deleteButton = await findByTestId("delete-button");
+    userEvent.click(deleteButton);
+    const dialog = await findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG);
+    const dialogText = await findByTestId(
+      TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT
+    );
+
+    await waitFor(() => {
+      expect(dialog).toBeInTheDocument();
+      expect(dialogText).toBeInTheDocument();
+      expect(dialogText).toHaveTextContent("Alice");
+    });
   });
 });

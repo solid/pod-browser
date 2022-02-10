@@ -74,7 +74,6 @@ export function handleDeleteContact({
 }) {
   return async () => {
     const selectedContact = people[selectedContactIndex];
-
     await deleteContact(
       getSourceUrl(addressBook),
       selectedContact,
@@ -104,7 +103,6 @@ function ContactsList() {
   const profiles = useProfiles(people);
   const formattedNamePredicate = foaf.name;
   const hasPhotoPredicate = vcard.hasPhoto;
-
   const {
     session: { fetch },
   } = useSession();
@@ -115,12 +113,15 @@ function ContactsList() {
 
   useEffect(() => {
     if (selectedContactIndex === null) return;
-    const contactDataset = people[selectedContactIndex].dataset;
-    const contactThingUrl = people[selectedContactIndex].iri;
+    const contactDataset = people[selectedContactIndex]?.dataset;
+    const contactThingUrl = people[selectedContactIndex]?.iri;
     const contactThing = getThing(contactDataset, contactThingUrl);
-    const name = getStringNoLocale(contactThing, formattedNamePredicate);
-    setSelectedContactName(name);
     const webId = getWebIdUrl(contactDataset, contactThingUrl);
+    const name =
+      getStringNoLocale(contactThing, formattedNamePredicate) ||
+      getStringNoLocale(contactThing, vcard.fn) ||
+      webId;
+    setSelectedContactName(name);
     setSelectedContactWebId(webId);
   }, [selectedContactIndex, formattedNamePredicate, people, fetch]);
 
@@ -146,7 +147,6 @@ function ContactsList() {
     peopleMutate,
     selectedContactIndex,
   });
-
   const drawer = (
     <ContactsDrawer
       open={selectedContactIndex !== null}
@@ -154,6 +154,7 @@ function ContactsList() {
       onDelete={deleteSelectedContact}
       selectedContactName={selectedContactName}
       profileIri={selectedContactWebId}
+      selectedContactWebId={selectedContactWebId}
     />
   );
 
