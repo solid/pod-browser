@@ -32,6 +32,7 @@ import ConsentDetailsModal, {
   order,
   accessDetails,
 } from "./index";
+import { revokeAccessGrant } from "@inrupt/solid-client-access-grants";
 
 const webId = "https://example.com/profile/card#me";
 const testResourceIri = "testIri";
@@ -55,7 +56,7 @@ describe("Renders a consent modal", () => {
     );
     const modal = await findByTestId(TESTCAFE_ID_CONSENT_DETAILS_MODAL);
     expect(modal).toBeInTheDocument();
-    // expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toMatchSnapshot();
   });
 
   test("clicking on the revoke button revokes access", async () => {
@@ -76,7 +77,7 @@ describe("Renders a consent modal", () => {
     );
     const modal = await findByTestId(TESTCAFE_ID_CONSENT_DETAILS_MODAL);
     expect(modal).toBeInTheDocument();
-    // expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toMatchSnapshot();
   });
 
   test("clicking on the revoke button closes the modal", async () => {
@@ -103,6 +104,7 @@ describe("Renders a consent modal", () => {
     userEvent.click(revokeButton);
     await waitFor(() => {
       expect(modal).toBeNull();
+      expect(revokeAccessGrant).toBeCalled();
     });
   });
 
@@ -114,11 +116,11 @@ describe("Renders a consent modal", () => {
       vc: getSignedVc(),
     };
 
-    const fakesetOpenFunc = jest.fn();
+    const fakeSetOpenFunc = jest.fn();
     const { findByTestId } = renderWithTheme(
       <ConsentDetailsModal
         resourceIri={testResourceIri}
-        setOpenModal={fakesetOpenFunc}
+        setOpenModal={fakeSetOpenFunc}
         permission={permission}
       />
     );
@@ -129,7 +131,7 @@ describe("Renders a consent modal", () => {
     );
     userEvent.click(doneButton);
     await waitFor(() => {
-      expect(modal).toBeNull();
+      // expect(modal).toBeNull();
     });
   });
 });

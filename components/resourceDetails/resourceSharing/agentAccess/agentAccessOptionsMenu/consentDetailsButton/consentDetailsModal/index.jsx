@@ -30,7 +30,11 @@ import {
 import { revokeAccessGrant } from "@inrupt/solid-client-access-grants";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { CombinedDataProvider, useSession } from "@inrupt/solid-ui-react";
+import {
+  CombinedDataProvider,
+  Image,
+  useSession,
+} from "@inrupt/solid-ui-react";
 import { format } from "date-fns";
 import {
   createStyles,
@@ -39,6 +43,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Avatar,
 } from "@material-ui/core";
 import { permission as permissionPropType } from "../../../../../../../constants/propTypes";
 import { getAcpAccessDetails } from "../../../../../../../src/accessControl/acp";
@@ -51,7 +56,7 @@ import { getPurposeUrlsFromSignedVc } from "../../../../../../../src/models/cons
 import styles from "./styles";
 import AgentName from "../agentName";
 import { getResourceName } from "../../../../../../../src/solidClientHelpers/resource";
-import ModalAvatar from "../consentDetailsModalAvatar";
+import { vcard } from "rdf-namespaces";
 
 // export const TESTCAFE_ID_CONSENT_DETAILS_CONTENT = "consent-details-modal";
 export const TESTCAFE_ID_CONSENT_DETAILS_MODAL = "consent-details-modal";
@@ -62,6 +67,11 @@ export const TESTCAFE_ID_CONSENT_DETAILS_REVOKE_BUTTON =
   "consent-details-revoke";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+export function setupErrorComponent(bem) {
+  return () => (
+    <Avatar className={bem("avatar")} alt="Contact photo placeholder" />
+  );
+}
 export default function ConsentDetailsModal({
   resourceIri,
   setOpenModal,
@@ -70,6 +80,8 @@ export default function ConsentDetailsModal({
   const classes = useStyles();
   const bem = useBem(classes);
   const { vc, webId: agentWebId } = permission;
+  const errorComponent = setupErrorComponent(bem);
+
   const allowModes = vc?.credentialSubject?.providedConsent?.mode;
   const modes = allowModes?.map((mode) => ({
     read: !!mode.includes("Read"),
@@ -114,9 +126,10 @@ export default function ConsentDetailsModal({
                 xs={12}
                 sm={2}
               >
-                <ModalAvatar
+                <Image
                   profileIri={agentWebId}
-                  className={classes.avatar}
+                  property={vcard.hasPhoto}
+                  errorComponent={errorComponent}
                 />
               </Grid>
               <Grid item xs={12} sm={10}>
