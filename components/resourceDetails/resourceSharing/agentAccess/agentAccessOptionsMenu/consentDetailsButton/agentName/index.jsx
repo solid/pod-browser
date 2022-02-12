@@ -24,20 +24,40 @@
 import React from "react";
 import T from "prop-types";
 import { getStringNoLocale } from "@inrupt/solid-client";
-import { foaf } from "rdf-namespaces";
+import { foaf, vcard } from "rdf-namespaces";
 import { useThing } from "@inrupt/solid-ui-react";
 
-export default function AgentName({ agentWebId, className }) {
+export default function AgentName({ agentWebId, className, link }) {
   const { thing } = useThing();
-  const name = thing && getStringNoLocale(thing, foaf.name);
-  return <span className={className}>{name || agentWebId}</span>;
+  let name = agentWebId;
+
+  if (thing) {
+    name =
+      getStringNoLocale(thing, foaf.name) ||
+      getStringNoLocale(thing, vcard.fn) ||
+      agentWebId;
+  }
+
+  return (
+    <>
+      {link ? (
+        <a target="_blank" href={agentWebId} rel="noopener noreferrer">
+          <h3 className={className}>{name || agentWebId}</h3>
+        </a>
+      ) : (
+        <span className={className}> {name} </span>
+      )}
+    </>
+  );
 }
 
 AgentName.propTypes = {
   agentWebId: T.string.isRequired,
   className: T.string,
+  link: T.bool,
 };
 
 AgentName.defaultProps = {
   className: null,
+  link: false,
 };

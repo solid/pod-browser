@@ -20,23 +20,21 @@
  */
 
 const DETAILS_ICON_COLOR = "#4CAF50";
+const EDIT_ICON_COLOR = "#7B4DFF";
 
 export default function styles(theme) {
   return {
     "access-details--wrapper": {
       display: "flex",
       flexDirection: "column",
+      wordBreak: "break-word",
+      margin: "1rem",
     },
     "access-details--title": {
-      "& h2": {
-        padding: 0,
-        margin: 0,
-        fontFamily: theme.typography.h2.fontFamily,
-        position: "relative",
-      },
-      "& h3": {
-        margin: 0,
-      },
+      padding: 0,
+      margin: 0,
+      fontFamily: theme.typography.h2.fontFamily,
+      position: "relative",
     },
     "access-details--resource-info": {
       flexGrow: 1,
@@ -58,11 +56,33 @@ export default function styles(theme) {
       color: "transparent",
       marginRight: "1rem",
     },
+    avatar: {
+      marginRight: "1rem",
+    },
+    "access-details--avatar-container": {
+      display: "flex",
+      justifyContent: "center",
+    },
+    "access-details--agent-name": {
+      color: "#000",
+      textDecorationColor: "#000",
+      fontSize: "20px",
+      fontWeight: "700",
+      textDecoration: "underline",
+    },
     "access-details--section": {
       minWidth: "100%",
+      display: "flex",
+      flexDirection: "column",
     },
     "access-details--section-header": {
       fontFamily: theme.typography.h3.fontFamily,
+      alignSelf: "end",
+      marginBottom: 0,
+    },
+    "access-details--edit-icon": {
+      color: EDIT_ICON_COLOR,
+      paddingRight: ".5rem",
     },
     "access-details--section-icon": {
       color: DETAILS_ICON_COLOR,
@@ -88,23 +108,31 @@ export default function styles(theme) {
       backgroundColor: theme.palette.grey.A100,
       border: "none",
       height: "1px",
+      width: "100%",
     },
     listItemText: {
       marginTop: 0,
     },
-    "access-details--remove-access-button": {
+    purpose: {
+      display: "flex",
+      justifyContent: "flex-start",
+    },
+    "access-details--action-container": {
+      justifyContent: "space-between",
+      width: "100%",
+      marginTop: "1rem",
+    },
+    "access-details--revoke-text": {
+      textTransform: "none",
+      color: theme.palette.error.main,
+      padding: "1rem 0",
       border: "none",
       background: "transparent",
-      color: theme.palette.error.main,
       textDecoration: "underline",
       fontSize: "1rem",
       cursor: "pointer",
       textAlign: "left",
       justifySelf: "flex-end",
-    },
-    purpose: {
-      display: "flex",
-      justifyContent: "flex-start",
     },
   };
 }

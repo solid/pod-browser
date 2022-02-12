@@ -25,7 +25,7 @@
 
 import React from "react";
 import T from "prop-types";
-import { vcard, rdf } from "rdf-namespaces";
+import { vcard, rdf, foaf } from "rdf-namespaces";
 import Link from "next/link";
 import { asUrl, getUrl } from "@inrupt/solid-client";
 import { Avatar, Box, createStyles } from "@material-ui/core";
@@ -37,7 +37,6 @@ import {
   isPerson,
 } from "../../../../../../agentResourceAccessLink";
 import styles from "./styles";
-import AgentName from "../agentName";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -49,44 +48,22 @@ export function setupErrorComponent(bem) {
   );
 }
 
-export default function ModalAvatar({ profileIri, closeDialog }) {
+export default function ModalAvatar() {
   const classes = useStyles();
   const bem = useBem(classes);
   const errorComponent = setupErrorComponent(bem);
   const { thing } = useThing();
-
   const type = getUrl(thing, rdf.type);
   const path = isPerson(type) ? "person" : "app";
 
   return (
-    <Box alignItems="center" display="flex">
-      <Box>
-        <Avatar className={classes.avatar}>
-          <Image
-            property={vcard.hasPhoto}
-            width={120}
-            errorComponent={errorComponent}
-          />
-        </Avatar>
-      </Box>
-
-      <Box p={2}>
-        <Link href={buildResourcesLink(profileIri, "/privacy", path)}>
-          <a role="link" onClick={() => closeDialog()}>
-            <h3 data-testid={TESTCAFE_ID_NAME_TITLE}>
-              <AgentName
-                className={classes.avatarText}
-                agentWebId={asUrl(thing)}
-              />
-            </h3>
-          </a>
-        </Link>
-      </Box>
-    </Box>
+    // <Box>
+    <Image
+      thing={thing}
+      width={120}
+      errorComponent={errorComponent}
+      properties={[vcard.hasPhoto, foaf.img]}
+    />
+    // </Box>
   );
 }
-
-ModalAvatar.propTypes = {
-  profileIri: T.string.isRequired,
-  closeDialog: T.func.isRequired,
-};

@@ -21,77 +21,53 @@
 
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, { useContext, useEffect } from "react";
-import { revokeAccessGrant } from "@inrupt/solid-client-access-grants";
+import React, { useState } from "react";
+import { Modal } from "@inrupt/prism-react-components";
 import T from "prop-types";
-import { useSession } from "@inrupt/solid-ui-react";
 import { createStyles, ListItem, ListItemText } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import { getResourceName } from "../../../../../../src/solidClientHelpers/resource";
 import { permission as permissionPropType } from "../../../../../../constants/propTypes";
-import ConfirmationDialogContext from "../../../../../../src/contexts/confirmationDialogContext";
-import ConsentDetailsModalContent from "./consentDetailsModalContent";
 import styles from "./styles";
+import ConsentDetailsModal from "./consentDetailsModal";
 
 export const TESTCAFE_ID_VIEW_DETAILS_BUTTON = "view-details-button";
-
-export const VIEW_DETAILS_CONFIRMATION_DIALOG =
-  "view-details-confirmation-dialog";
-
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function ConsentDetailsButton({ resourceIri, permission }) {
-  const { vc } = permission;
-  const { fetch } = useSession();
   const classes = useStyles();
-  const {
-    confirmed,
-    setContent,
-    setCustomContentWrapper,
-    setOpen,
-    setTitle,
-    setConfirmText,
-    setCancelText,
-    setIsDangerousAction,
-    closeDialog,
-  } = useContext(ConfirmationDialogContext);
-  const resourceName = getResourceName(resourceIri);
+  const [openModal, setOpenModal] = useState(false);
 
-  useEffect(() => {
-    if (confirmed) {
-      revokeAccessGrant(vc, { fetch });
-    }
-  }, [confirmed, fetch, vc]);
-
-  const openModal = () => {
-    setIsDangerousAction(true);
-    setCustomContentWrapper(true);
-    setOpen(VIEW_DETAILS_CONFIRMATION_DIALOG);
-    setTitle(``);
-    setCancelText("Done");
-    setConfirmText(`Revoke Access to ${resourceName}`);
-    setContent(
-      <div>
-        <ConsentDetailsModalContent
-          permission={permission}
-          closeDialog={closeDialog}
-        />
-      </div>
-    );
+  const handleClose = () => {
+    setOpenModal(true);
+    // setMenuAnchorEl(null);
   };
-
   return (
-    <ListItem
-      data-testid={TESTCAFE_ID_VIEW_DETAILS_BUTTON}
-      button
-      onClick={openModal}
-    >
+    <ListItem data-testid={TESTCAFE_ID_VIEW_DETAILS_BUTTON} button>
       <ListItemText
         disableTypography
         classes={{ primary: classes.listItemText }}
+        onClick={() => setOpenModal(true)}
       >
         View Details
       </ListItemText>
+      <Modal
+        // data-testid={TESTCAFE_ID_MODAL_OVERLAY}
+        open={openModal}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        onClose={handleClose}
+        aria-labelledby={`${resourceIri} Modal`}
+        aria-describedby={`${resourceIri} for this resource`}
+      >
+        <ConsentDetailsModal
+          resourceIri={resourceIri}
+          setOpenModal={setOpenModal}
+          permission={permission}
+        />
+      </Modal>
     </ListItem>
   );
 }
