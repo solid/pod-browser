@@ -22,17 +22,14 @@
 import React from "react";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
+import { revokeAccessGrant } from "@inrupt/solid-client-access-grants";
 import { renderWithTheme } from "../../../../../../../__testUtils/withTheme";
 import getSignedVc from "../../../../../../../__testUtils/mockSignedVc";
 import ConsentDetailsModal, {
   TESTCAFE_ID_CONSENT_DETAILS_MODAL,
   TESTCAFE_ID_CONSENT_DETAILS_REVOKE_BUTTON,
   TESTCAFE_ID_CONSENT_DETAILS_DONE_BUTTON,
-  sortedAccessDetails,
-  order,
-  accessDetails,
 } from "./index";
-import { revokeAccessGrant } from "@inrupt/solid-client-access-grants";
 
 const webId = "https://example.com/profile/card#me";
 const testResourceIri = "testIri";

@@ -36,6 +36,7 @@ import {
   useSession,
 } from "@inrupt/solid-ui-react";
 import { format } from "date-fns";
+import { vcard } from "rdf-namespaces";
 import {
   createStyles,
   Grid,
@@ -56,7 +57,6 @@ import { getPurposeUrlsFromSignedVc } from "../../../../../../../src/models/cons
 import styles from "./styles";
 import AgentName from "../agentName";
 import { getResourceName } from "../../../../../../../src/solidClientHelpers/resource";
-import { vcard } from "rdf-namespaces";
 
 // export const TESTCAFE_ID_CONSENT_DETAILS_CONTENT = "consent-details-modal";
 export const TESTCAFE_ID_CONSENT_DETAILS_MODAL = "consent-details-modal";
