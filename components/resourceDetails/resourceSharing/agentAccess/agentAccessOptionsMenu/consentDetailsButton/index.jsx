@@ -33,14 +33,14 @@ import ConsentDetailsModal from "./consentDetailsModal";
 export const TESTCAFE_ID_VIEW_DETAILS_BUTTON = "view-details-button";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function ConsentDetailsButton({ resourceIri, permission }) {
+export default function ConsentDetailsButton({
+  resourceIri,
+  permission,
+  handleCloseModal,
+}) {
   const classes = useStyles();
   const [openModal, setOpenModal] = useState(false);
 
-  const handleClose = () => {
-    setOpenModal(true);
-    // setMenuAnchorEl(null);
-  };
   return (
     <ListItem data-testid={TESTCAFE_ID_VIEW_DETAILS_BUTTON} button>
       <ListItemText
@@ -58,7 +58,7 @@ export default function ConsentDetailsButton({ resourceIri, permission }) {
           alignItems: "center",
           justifyContent: "center",
         }}
-        onClose={handleClose}
+        onClose={handleCloseModal}
         aria-labelledby={`${resourceIri} Modal`}
         aria-describedby={`${resourceIri} for this resource`}
       >
@@ -66,6 +66,7 @@ export default function ConsentDetailsButton({ resourceIri, permission }) {
           resourceIri={resourceIri}
           setOpenModal={setOpenModal}
           permission={permission}
+          handleCloseModal={handleCloseModal}
         />
       </Modal>
     </ListItem>
@@ -75,6 +76,7 @@ export default function ConsentDetailsButton({ resourceIri, permission }) {
 ConsentDetailsButton.propTypes = {
   resourceIri: T.string,
   permission: permissionPropType.isRequired,
+  handleCloseModal: T.func.isRequired,
 };
 
 ConsentDetailsButton.defaultProps = {

@@ -107,6 +107,7 @@ export default function AgentAccessOptionsMenu({
             <ConsentDetailsButton
               resourceIri={resourceIri}
               permission={permission}
+              handleCloseModal={handleClose}
             />
           ) : (
             <RemoveButton

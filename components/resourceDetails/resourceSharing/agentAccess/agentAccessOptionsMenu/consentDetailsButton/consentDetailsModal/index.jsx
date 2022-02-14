@@ -74,8 +74,8 @@ export function setupErrorComponent(bem) {
 }
 export default function ConsentDetailsModal({
   resourceIri,
-  setOpenModal,
   permission,
+  handleCloseModal,
 }) {
   const classes = useStyles();
   const bem = useBem(classes);
@@ -104,7 +104,7 @@ export default function ConsentDetailsModal({
 
   const handleRevoke = () => {
     revokeAccessGrant(vc, { fetch });
-    setOpenModal(false);
+    handleCloseModal();
   };
   return (
     <ModalContainer
@@ -255,9 +255,7 @@ export default function ConsentDetailsModal({
             <Grid item xs={12} sm={2}>
               <Button
                 type="submit"
-                onClick={() => {
-                  setOpenModal(false);
-                }}
+                onClick={handleCloseModal}
                 data-testid={TESTCAFE_ID_CONSENT_DETAILS_DONE_BUTTON}
               >
                 Done
@@ -272,5 +270,5 @@ export default function ConsentDetailsModal({
 ConsentDetailsModal.propTypes = {
   resourceIri: T.string.isRequired,
   permission: permissionPropType.isRequired,
-  setOpenModal: T.func.isRequired,
+  handleCloseModal: T.func.isRequired,
 };

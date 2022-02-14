@@ -62,6 +62,7 @@ export default function styles(theme) {
     "access-details--avatar-container": {
       display: "flex",
       justifyContent: "center",
+      alignSelf: "center",
     },
     "access-details--agent-name": {
       color: "#000",
