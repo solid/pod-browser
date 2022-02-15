@@ -113,11 +113,7 @@ export default function ConsentDetailsModal({
     >
       <ModalBody className={bem("access-details", "wrapper")}>
         <Grid container>
-          <Grid
-            className={bem("access-details", "title")}
-            flexDirection="row"
-            container
-          >
+          <Grid className={bem("access-details", "title")} container>
             <CombinedDataProvider datasetUrl={agentWebId} thingUrl={agentWebId}>
               <Grid
                 className={bem("access-details", "avatar-container")}
@@ -143,12 +139,7 @@ export default function ConsentDetailsModal({
           </Grid>
 
           <Grid className={bem("access-details", "section")} container>
-            <Grid
-              flexDirection="row"
-              justifyContent="space-between"
-              container
-              item
-            >
+            <Grid justifyContent="space-between" container item>
               <h3 className={bem("access-details", "section-header")}>
                 Access
               </h3>

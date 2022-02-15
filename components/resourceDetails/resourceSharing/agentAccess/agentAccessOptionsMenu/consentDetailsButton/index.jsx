@@ -21,7 +21,7 @@
 
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal } from "@inrupt/prism-react-components";
 import T from "prop-types";
 import { createStyles, ListItem, ListItemText } from "@material-ui/core";
@@ -46,6 +46,7 @@ export default function ConsentDetailsButton({
       <ListItemText
         disableTypography
         classes={{ primary: classes.listItemText }}
+        /* istanbul ignore next */
         onClick={() => setOpenModal(true)}
       >
         View Details

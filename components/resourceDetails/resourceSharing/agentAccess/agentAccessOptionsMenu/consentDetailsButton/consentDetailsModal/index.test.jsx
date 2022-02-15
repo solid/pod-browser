@@ -20,6 +20,7 @@
  */
 
 import React from "react";
+import { act, render } from "@testing-library/react";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { revokeAccessGrant } from "@inrupt/solid-client-access-grants";
@@ -29,25 +30,26 @@ import ConsentDetailsModal, {
   TESTCAFE_ID_CONSENT_DETAILS_MODAL,
   TESTCAFE_ID_CONSENT_DETAILS_REVOKE_BUTTON,
   TESTCAFE_ID_CONSENT_DETAILS_DONE_BUTTON,
+  setupErrorComponent,
 } from "./index";
 
 const webId = "https://example.com/profile/card#me";
 const testResourceIri = "testIri";
 
 describe("Renders a consent modal", () => {
-  test("clicking on view details button renders a modal with the correct data", async () => {
-    const permission = {
-      webId,
-      alias: "editors",
-      type: "agent",
-      vc: getSignedVc(),
-    };
+  const permission = {
+    webId,
+    alias: "editors",
+    type: "agent",
+    vc: getSignedVc(),
+  };
+  const fakeHandleCloseModal = jest.fn();
 
-    const fakesetOpenFunc = jest.fn();
+  test("clicking on view details button renders a modal with the correct data", async () => {
     const { baseElement, findByTestId } = renderWithTheme(
       <ConsentDetailsModal
         resourceIri={testResourceIri}
-        setOpenModal={fakesetOpenFunc}
+        handleCloseModal={fakeHandleCloseModal}
         permission={permission}
       />
     );
@@ -57,18 +59,10 @@ describe("Renders a consent modal", () => {
   });
 
   test("clicking on the revoke button revokes access", async () => {
-    const permission = {
-      webId,
-      alias: "editors",
-      type: "agent",
-      vc: getSignedVc(),
-    };
-
-    const fakesetOpenFunc = jest.fn();
     const { baseElement, findByTestId } = renderWithTheme(
       <ConsentDetailsModal
         resourceIri={testResourceIri}
-        setOpenModal={fakesetOpenFunc}
+        handleCloseModal={fakeHandleCloseModal}
         permission={permission}
       />
     );
@@ -78,18 +72,10 @@ describe("Renders a consent modal", () => {
   });
 
   test.skip("clicking on the revoke button closes the modal", async () => {
-    const permission = {
-      webId,
-      alias: "editors",
-      type: "agent",
-      vc: getSignedVc(),
-    };
-
-    const fakesetOpenFunc = jest.fn();
     const { findByTestId } = renderWithTheme(
       <ConsentDetailsModal
         resourceIri={testResourceIri}
-        setOpenModal={fakesetOpenFunc}
+        handleCloseModal={fakeHandleCloseModal}
         permission={permission}
       />
     );
@@ -98,26 +84,18 @@ describe("Renders a consent modal", () => {
     const revokeButton = await findByTestId(
       TESTCAFE_ID_CONSENT_DETAILS_REVOKE_BUTTON
     );
-    userEvent.click(revokeButton);
+    act(() => userEvent.click(revokeButton));
     await waitFor(() => {
       expect(modal).toBeNull();
-      expect(revokeAccessGrant).toBeCalled();
     });
   });
 
-  test.skip("clicking on the done button closes the modal", async () => {
-    const permission = {
-      webId,
-      alias: "editors",
-      type: "agent",
-      vc: getSignedVc(),
-    };
-
-    const fakeSetOpenFunc = jest.fn();
+  test("clicking on the done button closes the modal", async () => {
+    const fakeHandleCloseModal = jest.fn();
     const { findByTestId } = renderWithTheme(
       <ConsentDetailsModal
         resourceIri={testResourceIri}
-        setOpenModal={fakeSetOpenFunc}
+        handleCloseModal={fakeHandleCloseModal}
         permission={permission}
       />
     );
@@ -126,9 +104,17 @@ describe("Renders a consent modal", () => {
     const doneButton = await findByTestId(
       TESTCAFE_ID_CONSENT_DETAILS_DONE_BUTTON
     );
-    userEvent.click(doneButton);
+    act(() => userEvent.click(doneButton));
     await waitFor(() => {
-      expect(modal).toBeNull();
+      expect(fakeHandleCloseModal).toHaveBeenCalled();
+    });
+  });
+
+  describe("setupErrorComponent", () => {
+    it("renders", () => {
+      const bem = (value) => value;
+      const { asFragment } = render(setupErrorComponent(bem)());
+      expect(asFragment()).toMatchSnapshot();
     });
   });
 });

@@ -21,18 +21,39 @@
 
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import T from "prop-types";
-import { getStringNoLocale } from "@inrupt/solid-client";
+import { getProfileAll, getStringNoLocale } from "@inrupt/solid-client";
 import { foaf, vcard } from "rdf-namespaces";
 import { useThing } from "@inrupt/solid-ui-react";
+import AlertContext from "../../../../../../../src/contexts/alertContext";
 
 export default function AgentName({ agentWebId, className, link }) {
   const { thing } = useThing();
-  let name = agentWebId;
+  const [agentProfile, setAgentProfile] = useState(null);
+  const { setMessage, setSeverity } = useContext(AlertContext);
 
-  if (thing) {
-    name =
+  const profile = useCallback(
+    (agentWebId) => {
+      return async () => {
+        try {
+          const res = await getProfileAll(agentWebId);
+          setAgentProfile(res);
+        } catch (error) {
+          setSeverity("error");
+          setMessage(error.toString());
+        }
+      };
+    },
+    [setSeverity, setMessage]
+  );
+  useEffect(() => {
+    profile(agentWebId);
+  }, [agentWebId, profile]);
+
+  let text = agentWebId;
+  if (agentProfile) {
+    text =
       getStringNoLocale(thing, foaf.name) ||
       getStringNoLocale(thing, vcard.fn) ||
       agentWebId;
@@ -42,10 +63,10 @@ export default function AgentName({ agentWebId, className, link }) {
     <>
       {link ? (
         <a target="_blank" href={agentWebId} rel="noopener noreferrer">
-          <h3 className={className}>{name || agentWebId}</h3>
+          <h3 className={className}>{text || agentWebId}</h3>
         </a>
       ) : (
-        <span className={className}> {name} </span>
+        <span className={className}> {text} </span>
       )}
     </>
   );
