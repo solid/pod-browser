@@ -42,7 +42,7 @@ const permission = {
 const testResourceIri = "testIri";
 
 describe("View consent details button and modal", () => {
-  test("it renders a button which triggers the opening of the modal", async () => {
+  it("renders a button which triggers the opening of the modal", async () => {
     const { asFragment, getByTestId } = renderWithTheme(
       <ConsentDetailsButton
         permission={permission}
@@ -54,7 +54,7 @@ describe("View consent details button and modal", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test.skip("clicking on view details button renders a details modal", async () => {
+  it("renders a details modal when you click on the view details button", async () => {
     const { baseElement, getByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentDetailsButton permission={permission} />

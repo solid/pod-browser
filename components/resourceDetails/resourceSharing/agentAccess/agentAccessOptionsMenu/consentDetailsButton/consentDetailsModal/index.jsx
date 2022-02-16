@@ -139,7 +139,7 @@ export default function ConsentDetailsModal({
           </Grid>
 
           <Grid className={bem("access-details", "section")} container>
-            <Grid justifyContent="space-between" container item>
+            <Grid justify="space-between" container item>
               <h3 className={bem("access-details", "section-header")}>
                 Access
               </h3>

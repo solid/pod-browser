@@ -24,8 +24,7 @@ exports[`Renders a consent modal clicking on the revoke button revokes access 1`
             class="PodBrowser-root PodBrowser-access-details--section PodBrowser-container"
           >
             <div
-              class="PodBrowser-root PodBrowser-container PodBrowser-item"
-              justifycontent="space-between"
+              class="PodBrowser-root PodBrowser-container PodBrowser-item PodBrowser-justify-xs-space-between"
             >
               <h3
                 class="PodBrowser-access-details--section-header"
@@ -264,8 +263,7 @@ exports[`Renders a consent modal clicking on view details button renders a modal
             class="PodBrowser-root PodBrowser-access-details--section PodBrowser-container"
           >
             <div
-              class="PodBrowser-root PodBrowser-container PodBrowser-item"
-              justifycontent="space-between"
+              class="PodBrowser-root PodBrowser-container PodBrowser-item PodBrowser-justify-xs-space-between"
             >
               <h3
                 class="PodBrowser-access-details--section-header"

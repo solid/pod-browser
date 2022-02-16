@@ -19,50 +19,71 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { ThingProvider } from "@inrupt/solid-ui-react";
-import { render } from "@testing-library/react";
+import { render, act } from "@testing-library/react";
 import { getByText, waitFor } from "@testing-library/dom";
-import AgentName from ".";
+// import { getStringNoLocale } from "@inrupt/solid-client";
+import * as solidClientFns from "@inrupt/solid-client";
+import AgentName, { TESTCAFE_ID_AGENT_NAME_LINK } from ".";
 import mockPermissionsContextProvider from "../../../../../../../__testUtils/mockPermissionsContextProvider";
-import mockPersonContactThing from "../../../../../../../__testUtils/mockPersonContactThing";
-
-const webId = "https://example.com/profile/card#me";
-const testResourceIri = "testIri";
 
 describe("Renders the correct agent name", () => {
   const mockWebId = "https://mockperson.com/profile/card#me";
   const mockFOAFName = "FOAF NAME";
+  const mockVCARDName = "VCARD NAME";
   const PermissionsContextProvider = mockPermissionsContextProvider();
 
-  it("if foaf, returns name", async () => {
-    const mockAgent = mockPersonContactThing("", mockWebId, mockFOAFName);
-    // spy on profile function and have it return a mockProfile
-    // and have it setAgentProfile
-    // put it in an act because it's changing state
-    // spy on getStringNoLocale for each foaf test and vcard test
+  it.skip("returns a name if the profile has a foaf name", async () => {
+    const mockProfile = {};
+    jest.spyOn(solidClientFns, "getProfileAll").mockResolvedValue(mockProfile);
+    jest
+      .spyOn(solidClientFns, "getStringNoLocale")
+      .mockResolvedValue(mockFOAFName);
 
-    const { asFragment } = render(
+    const AgentNameComponent = render(
       <PermissionsContextProvider>
         <AgentName agentWebId={mockWebId} link />
       </PermissionsContextProvider>
     );
 
-    await expect(asFragment()).toHaveTextContent(mockFOAFName);
+    waitFor(() => expect(getByText(mockFOAFName)).toBeInTheDocument());
   });
 
-  it.skip("if vcard, returns name", async () => {
-    const mockVcardName = "VCARD NAME";
-    const mockAgent = mockPersonContactThing("", mockWebId, mockVcardName);
-    const { asFragment } = render(<AgentName agentWebId={mockWebId} />);
-    await expect(asFragment).toHaveTextContent(mockVcardName);
-  });
+  it.skip("returns a name if the profile has a vcard name", async () => {
+    const mockProfile = {};
+    jest.spyOn(solidClientFns, "getProfileAll").mockResolvedValue(mockProfile);
+    jest.spyOn(solidClientFns, "getStringNoLocale").mockResolvedValueOnce(null);
+    jest
+      .spyOn(solidClientFns, "getStringNoLocale")
+      .mockResolvedValue(mockVCARDName);
 
-  it("if no name available, returns webId", async () => {
-    render(
+    const AgentNameComponent = render(
       <PermissionsContextProvider>
         <AgentName agentWebId={mockWebId} link />
       </PermissionsContextProvider>
     );
-    waitFor(() => expect(getByText(mockWebId)).toBeInTheDocument());
+
+    waitFor(() => expect(getByText(mockVCARDName)).toBeInTheDocument());
+  });
+
+  it("renders a webId if no name is on the profile", async () => {
+    const { getByText } = render(
+      <PermissionsContextProvider>
+        <AgentName agentWebId={mockWebId} link />
+      </PermissionsContextProvider>
+    );
+    waitFor(() =>
+      expect(getByText(TESTCAFE_ID_AGENT_NAME_LINK)).toBeInTheDocument()
+    );
+  });
+
+  it("renders an agent name without a link if no link prop is passed", async () => {
+    const { getByText } = render(
+      <PermissionsContextProvider>
+        <AgentName agentWebId={mockWebId} />
+      </PermissionsContextProvider>
+    );
+    waitFor(() =>
+      expect(getByText(TESTCAFE_ID_AGENT_NAME_LINK)).toNotBeInTheDocument()
+    );
   });
 });

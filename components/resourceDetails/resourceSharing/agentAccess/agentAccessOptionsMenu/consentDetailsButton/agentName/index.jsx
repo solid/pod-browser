@@ -21,49 +21,53 @@
 
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import { getProfileAll, getStringNoLocale } from "@inrupt/solid-client";
 import { foaf, vcard } from "rdf-namespaces";
-import { useThing } from "@inrupt/solid-ui-react";
+import { useSession } from "@inrupt/solid-ui-react";
 import AlertContext from "../../../../../../../src/contexts/alertContext";
 
+export const TESTCAFE_ID_AGENT_NAME_LINK = "agent-name-link";
 export default function AgentName({ agentWebId, className, link }) {
-  const { thing } = useThing();
-  const [agentProfile, setAgentProfile] = useState(null);
+  const [text, setText] = useState(agentWebId);
   const { setMessage, setSeverity } = useContext(AlertContext);
+  const {
+    session: { fetch },
+  } = useSession();
 
-  const profile = useCallback(
-    (agentWebId) => {
-      return async () => {
-        try {
-          const res = await getProfileAll(agentWebId);
-          setAgentProfile(res);
-        } catch (error) {
-          setSeverity("error");
-          setMessage(error.toString());
-        }
-      };
-    },
-    [setSeverity, setMessage]
-  );
   useEffect(() => {
-    profile(agentWebId);
-  }, [agentWebId, profile]);
+    const fetchProfile = async () => {
+      try {
+        const res = await getProfileAll(agentWebId, { fetch });
+        console.log({ res });
 
-  let text = agentWebId;
-  if (agentProfile) {
-    text =
-      getStringNoLocale(thing, foaf.name) ||
-      getStringNoLocale(thing, vcard.fn) ||
-      agentWebId;
-  }
+        if (res) {
+          setText(
+            getStringNoLocale(res, foaf.name) ||
+              getStringNoLocale(res, vcard.fn) ||
+              agentWebId
+          );
+        }
+      } catch (error) {
+        console.log({ error });
+        setSeverity("error");
+        setMessage(error.toString());
+      }
+    };
+    fetchProfile();
+  }, [agentWebId, setMessage, setSeverity, fetch]);
 
   return (
     <>
       {link ? (
-        <a target="_blank" href={agentWebId} rel="noopener noreferrer">
-          <h3 className={className}>{text || agentWebId}</h3>
+        <a
+          target="_blank"
+          href={agentWebId}
+          rel="noopener noreferrer"
+          data-testid={TESTCAFE_ID_AGENT_NAME_LINK}
+        >
+          <h3 className={className}>{text}</h3>
         </a>
       ) : (
         <span className={className}> {text} </span>
