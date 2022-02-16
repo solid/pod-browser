@@ -23,7 +23,11 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
-import { getProfileAll, getStringNoLocale } from "@inrupt/solid-client";
+import {
+  getProfileAll,
+  getStringNoLocale,
+  getResourceInfoWithAcr,
+} from "@inrupt/solid-client";
 import { foaf, vcard } from "rdf-namespaces";
 import { useSession } from "@inrupt/solid-ui-react";
 import AlertContext from "../../../../../../../src/contexts/alertContext";
@@ -41,7 +45,10 @@ export default function AgentName({ agentWebId, className, link }) {
       try {
         const res = await getProfileAll(agentWebId, { fetch });
         console.log({ res });
-
+        const acr = getResourceInfoWithAcr(
+          "https://storage.dev-next.inrupt.com/4a198ba3-f7f1-4631-9686-0d09f200c758/profile"
+        );
+        console.log({ acr });
         if (res) {
           setText(
             getStringNoLocale(res, foaf.name) ||

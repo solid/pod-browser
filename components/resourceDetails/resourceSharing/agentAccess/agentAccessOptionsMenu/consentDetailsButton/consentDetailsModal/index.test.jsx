@@ -45,7 +45,7 @@ describe("Renders a consent modal", () => {
   };
   const fakeHandleCloseModal = jest.fn();
 
-  test("clicking on view details button renders a modal with the correct data", async () => {
+  it("renders a modal with the correct data when a user clicks on view details button ", async () => {
     const { baseElement, findByTestId } = renderWithTheme(
       <ConsentDetailsModal
         resourceIri={testResourceIri}
@@ -58,7 +58,7 @@ describe("Renders a consent modal", () => {
     expect(baseElement).toMatchSnapshot();
   });
 
-  test("clicking on the revoke button revokes access", async () => {
+  it("revokes access when the user clicks the revokes access button", async () => {
     const { baseElement, findByTestId } = renderWithTheme(
       <ConsentDetailsModal
         resourceIri={testResourceIri}
@@ -71,7 +71,7 @@ describe("Renders a consent modal", () => {
     expect(baseElement).toMatchSnapshot();
   });
 
-  test.skip("clicking on the revoke button closes the modal", async () => {
+  it("closes the modal when the user clicks on the revoke button", async () => {
     const { findByTestId } = renderWithTheme(
       <ConsentDetailsModal
         resourceIri={testResourceIri}
@@ -90,7 +90,7 @@ describe("Renders a consent modal", () => {
     });
   });
 
-  test("clicking on the done button closes the modal", async () => {
+  it("closes the modal when the user clicks on the done button ", async () => {
     const fakeHandleCloseModal = jest.fn();
     const { findByTestId } = renderWithTheme(
       <ConsentDetailsModal

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Renders a consent modal clicking on the revoke button revokes access 1`] = `
+exports[`Renders a consent modal renders a modal with the correct data when a user clicks on view details button  1`] = `
 <body>
   <div>
     <div
@@ -239,7 +239,7 @@ exports[`Renders a consent modal clicking on the revoke button revokes access 1`
 </body>
 `;
 
-exports[`Renders a consent modal clicking on view details button renders a modal with the correct data 1`] = `
+exports[`Renders a consent modal revokes access when the user clicks the revokes access button 1`] = `
 <body>
   <div>
     <div
