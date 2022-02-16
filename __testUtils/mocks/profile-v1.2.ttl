@@ -1,0 +1,8 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+<https://storage.dev-next.inrupt.com/87dce7b3-86f9-49b1-9f71-9ae5842bbff4/profile>
+        a                  foaf:Document ;
+
+        foaf:maker         <https://id.example.com/testuser> ;
+        foaf:name          "Test User" ;
+        foaf:primaryTopic  <https://id.example.com/testuser> .
