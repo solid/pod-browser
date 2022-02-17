@@ -35,15 +35,14 @@ export default function ConsentDetailsButton({ setOpenModal }) {
   const classes = useStyles();
 
   return (
-    <ListItem data-testid={TESTCAFE_ID_VIEW_DETAILS_BUTTON} button>
+    <ListItem
+      data-testid={TESTCAFE_ID_VIEW_DETAILS_BUTTON}
+      button
+      onClick={() => setOpenModal(true)}
+    >
       <ListItemText
         disableTypography
         classes={{ primary: classes.listItemText }}
-        /* istanbul ignore next */
-        onClick={() => {
-          console.log("AKB");
-          setOpenModal(true);
-        }}
       >
         View Details
       </ListItemText>
@@ -52,11 +51,5 @@ export default function ConsentDetailsButton({ setOpenModal }) {
 }
 
 ConsentDetailsButton.propTypes = {
-  resourceIri: T.string,
-  permission: permissionPropType.isRequired,
   setOpenModal: T.func.isRequired,
-};
-
-ConsentDetailsButton.defaultProps = {
-  resourceIri: null,
 };

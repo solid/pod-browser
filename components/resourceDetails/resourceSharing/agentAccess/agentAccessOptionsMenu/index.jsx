@@ -115,7 +115,6 @@ export default function AgentAccessOptionsMenu({
                 permission={permission}
                 setOpenModal={setOpenModal}
               />
-
               <ConsentDetailsModal
                 openModal={openModal}
                 resourceIri={resourceIri}

@@ -41,20 +41,17 @@ const permission = {
 };
 
 describe("Renders a consent modal", () => {
-  it("renders a modal with the correct data when a user clicks on view details button ", async () => {
-    const fakeHandleCloseModal = jest.fn();
-    const fakeSetOpenModal = jest.fn();
-    const { baseElement, findByTestId } = renderWithTheme(
+  it("renders a modal when the user clicks on view details button ", async () => {
+    const { asFragment } = renderWithTheme(
       <ConsentDetailsModal
         resourceIri={testResourceIri}
-        handleCloseModal={fakeHandleCloseModal}
+        handleCloseModal={jest.fn()}
         permission={permission}
-        setOpenModal={fakeSetOpenModal}
+        setOpenModal={jest.fn()}
       />
     );
-    const modal = await findByTestId(TESTCAFE_ID_CONSENT_DETAILS_MODAL);
-    expect(modal).toBeInTheDocument();
-    expect(baseElement).toMatchSnapshot();
+
+    expect(asFragment()).toMatchSnapshot();
   });
 
   describe("setupErrorComponent", () => {
