@@ -26,6 +26,7 @@ import {
   ModalBody,
   ModalContainer,
   Button,
+  Modal,
 } from "@inrupt/prism-react-components";
 import { revokeAccessGrant } from "@inrupt/solid-client-access-grants";
 import { makeStyles } from "@material-ui/styles";
@@ -76,6 +77,7 @@ export default function ConsentDetailsModal({
   resourceIri,
   permission,
   handleCloseModal,
+  openModal,
 }) {
   const classes = useStyles();
   const bem = useBem(classes);
@@ -107,159 +109,178 @@ export default function ConsentDetailsModal({
     handleCloseModal();
   };
   return (
-    <ModalContainer
-      className={classes.paper}
-      data-testid={TESTCAFE_ID_CONSENT_DETAILS_MODAL}
+    <Modal
+      open={openModal}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+      onClose={handleCloseModal}
+      aria-labelledby={`${resourceIri} Modal`}
+      aria-describedby={`${resourceIri} for this resource`}
     >
-      <ModalBody className={bem("access-details", "wrapper")}>
-        <Grid container>
-          <Grid className={bem("access-details", "title")} container>
-            <CombinedDataProvider datasetUrl={agentWebId} thingUrl={agentWebId}>
-              <Grid
-                className={bem("access-details", "avatar-container")}
-                container
-                item
-                xs={12}
-                sm={2}
+      <ModalContainer
+        className={classes.paper}
+        data-testid={TESTCAFE_ID_CONSENT_DETAILS_MODAL}
+      >
+        <ModalBody className={bem("access-details", "wrapper")}>
+          <Grid container>
+            <Grid className={bem("access-details", "title")} container>
+              <CombinedDataProvider
+                datasetUrl={agentWebId}
+                thingUrl={agentWebId}
               >
-                <Image
-                  profileIri={agentWebId}
-                  property={vcard.hasPhoto}
-                  errorComponent={errorComponent}
-                />
-              </Grid>
-              <Grid item xs={12} sm={10}>
-                <AgentName
-                  className={bem("access-details", "agent-name")}
-                  agentWebId={agentWebId}
-                  link
-                />
-              </Grid>
-            </CombinedDataProvider>
-          </Grid>
-
-          <Grid className={bem("access-details", "section")} container>
-            <Grid justify="space-between" container item>
-              <h3 className={bem("access-details", "section-header")}>
-                Access
-              </h3>
-              {/* <Button variant="outlined">
-                <Icons
-                  className={bem("access-details", "edit-icon")}
-                  name="edit"
-                />
-                {`Edit`.toUpperCase()}
-              </Button> */}
-            </Grid>
-
-            <Grid item>
-              <hr className={bem("access-details", "separator")} />
-              <List dense style={{ overflow: "visable" }}>
-                {sortedAccessDetails?.map(({ name, icon, description }) => (
-                  <ListItem key={name} style={{ padding: "0px" }}>
-                    <ListItemIcon classes={{ root: classes.listItemIcon }}>
-                      <Icons
-                        name={icon}
-                        className={bem("access-details", "section-icon")}
-                      />
-                    </ListItemIcon>
-                    <ListItemText
-                      classes={{
-                        root: classes.listItemText,
-                        primary: classes.listItemTitleText,
-                        secondary: classes.listItemSecondaryText,
-                      }}
-                      key={name}
-                      primary={name}
-                      secondary={description}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            </Grid>
-            <Grid item>
-              <h3 className={bem("access-details", "section-header")}>
-                Approved On
-              </h3>
-              <hr className={bem("access-details", "separator")} />
-              <p>{issuanceDate}</p>
-            </Grid>
-            <Grid item>
-              <h3 className={bem("access-details", "section-header")}>
-                Purpose
-              </h3>
-              <hr className={bem("access-details", "separator")} />
-              <div className={bem("purposes-container")}>
-                {Array.isArray(purposes) ? (
-                  <List dense style={{ overflow: "visable" }}>
-                    {purposes?.map((purpose) => (
-                      <ListItem key={purpose} className={bem("list-item")}>
-                        <span className={bem("purpose")}>
-                          {purpose} <InfoTooltip tooltipText={purpose} />
-                        </span>
-                      </ListItem>
-                    ))}
-                  </List>
-                ) : (
-                  <span className={bem("purpose")}>
-                    {purposes} <InfoTooltip tooltipText={purposes} />
-                  </span>
-                )}
-              </div>
-            </Grid>
-            <Grid item>
-              {expirationDate && (
-                <Grid container>
-                  <h3 className={bem("access-details", "section-header")}>
-                    Access Duration
-                  </h3>
-                  {/* <Button variant="outlined">
-                <Icons
-                  className={bem("access-details", "edit-icon")}
-                  name="edit"
-                />
-                {`Edit`.toUpperCase()}
-              </Button> */}
-                  <hr className={bem("access-details", "separator")} />
-                  <span>
-                    <AgentName agentWebId={agentWebId} />
-                    has access until <strong>{expirationDate}</strong>.
-                  </span>
+                <Grid
+                  className={bem("access-details", "avatar-container")}
+                  container
+                  item
+                  xs={12}
+                  sm={2}
+                >
+                  <Image
+                    profileIri={agentWebId}
+                    property={vcard.hasPhoto}
+                    errorComponent={errorComponent}
+                  />
                 </Grid>
-              )}
-            </Grid>
-          </Grid>
-
-          <Grid container className={bem("access-details", "action-container")}>
-            <Grid item xs={12} sm={6}>
-              <Button
-                className={bem("access-details", "revoke-text")}
-                variant="all-access"
-                /* istanbul ignore next */
-                onClick={handleRevoke}
-                data-testid={TESTCAFE_ID_CONSENT_DETAILS_REVOKE_BUTTON}
-              >
-                {`Revoke access to ${resourceName}`}
-              </Button>
+                <Grid item xs={12} sm={10}>
+                  <AgentName
+                    className={bem("access-details", "agent-name")}
+                    agentWebId={agentWebId}
+                    link
+                  />
+                </Grid>
+              </CombinedDataProvider>
             </Grid>
 
-            <Grid item xs={12} sm={2}>
-              <Button
-                type="submit"
-                onClick={handleCloseModal}
-                data-testid={TESTCAFE_ID_CONSENT_DETAILS_DONE_BUTTON}
-              >
-                Done
-              </Button>
+            <Grid className={bem("access-details", "section")} container>
+              <Grid justify="space-between" container item>
+                <h3 className={bem("access-details", "section-header")}>
+                  Access
+                </h3>
+                {/* <Button variant="outlined">
+                <Icons
+                  className={bem("access-details", "edit-icon")}
+                  name="edit"
+                />
+                {`Edit`.toUpperCase()}
+              </Button> */}
+              </Grid>
+
+              <Grid item>
+                <hr className={bem("access-details", "separator")} />
+                <List dense style={{ overflow: "visable" }}>
+                  {sortedAccessDetails?.map(({ name, icon, description }) => (
+                    <ListItem key={name} style={{ padding: "0px" }}>
+                      <ListItemIcon classes={{ root: classes.listItemIcon }}>
+                        <Icons
+                          name={icon}
+                          className={bem("access-details", "section-icon")}
+                        />
+                      </ListItemIcon>
+                      <ListItemText
+                        classes={{
+                          root: classes.listItemText,
+                          primary: classes.listItemTitleText,
+                          secondary: classes.listItemSecondaryText,
+                        }}
+                        key={name}
+                        primary={name}
+                        secondary={description}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </Grid>
+              <Grid item>
+                <h3 className={bem("access-details", "section-header")}>
+                  Approved On
+                </h3>
+                <hr className={bem("access-details", "separator")} />
+                <p>{issuanceDate}</p>
+              </Grid>
+              <Grid item>
+                <h3 className={bem("access-details", "section-header")}>
+                  Purpose
+                </h3>
+                <hr className={bem("access-details", "separator")} />
+                <div className={bem("purposes-container")}>
+                  {Array.isArray(purposes) ? (
+                    <List dense style={{ overflow: "visable" }}>
+                      {purposes?.map((purpose) => (
+                        <ListItem key={purpose} className={bem("list-item")}>
+                          <span className={bem("purpose")}>
+                            {purpose} <InfoTooltip tooltipText={purpose} />
+                          </span>
+                        </ListItem>
+                      ))}
+                    </List>
+                  ) : (
+                    <span className={bem("purpose")}>
+                      {purposes} <InfoTooltip tooltipText={purposes} />
+                    </span>
+                  )}
+                </div>
+              </Grid>
+              <Grid item>
+                {expirationDate && (
+                  <Grid container>
+                    <h3 className={bem("access-details", "section-header")}>
+                      Access Duration
+                    </h3>
+                    {/* <Button variant="outlined">
+                <Icons
+                  className={bem("access-details", "edit-icon")}
+                  name="edit"
+                />
+                {`Edit`.toUpperCase()}
+              </Button> */}
+                    <hr className={bem("access-details", "separator")} />
+                    <span>
+                      <AgentName agentWebId={agentWebId} />
+                      has access until <strong>{expirationDate}</strong>.
+                    </span>
+                  </Grid>
+                )}
+              </Grid>
+            </Grid>
+
+            <Grid
+              container
+              className={bem("access-details", "action-container")}
+            >
+              <Grid item xs={12} sm={6}>
+                <Button
+                  className={bem("access-details", "revoke-text")}
+                  variant="all-access"
+                  /* istanbul ignore next */
+                  onClick={handleRevoke}
+                  data-testid={TESTCAFE_ID_CONSENT_DETAILS_REVOKE_BUTTON}
+                >
+                  {`Revoke access to ${resourceName}`}
+                </Button>
+              </Grid>
+
+              <Grid item xs={12} sm={2}>
+                <Button
+                  type="submit"
+                  onClick={handleCloseModal}
+                  data-testid={TESTCAFE_ID_CONSENT_DETAILS_DONE_BUTTON}
+                >
+                  Done
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </ModalBody>
-    </ModalContainer>
+        </ModalBody>
+      </ModalContainer>
+    </Modal>
   );
 }
 ConsentDetailsModal.propTypes = {
   resourceIri: T.string.isRequired,
   permission: permissionPropType.isRequired,
   handleCloseModal: T.func.isRequired,
+  openModal: T.bool.isRequired,
 };

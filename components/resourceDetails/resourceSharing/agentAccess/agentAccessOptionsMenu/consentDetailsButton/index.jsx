@@ -22,24 +22,17 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 
 import React, { useState, useEffect } from "react";
-import { Modal } from "@inrupt/prism-react-components";
 import T from "prop-types";
 import { createStyles, ListItem, ListItemText } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { permission as permissionPropType } from "../../../../../../constants/propTypes";
 import styles from "./styles";
-import ConsentDetailsModal from "./consentDetailsModal";
 
 export const TESTCAFE_ID_VIEW_DETAILS_BUTTON = "view-details-button";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function ConsentDetailsButton({
-  resourceIri,
-  permission,
-  handleCloseModal,
-}) {
+export default function ConsentDetailsButton({ setOpenModal }) {
   const classes = useStyles();
-  const [openModal, setOpenModal] = useState(false);
 
   return (
     <ListItem data-testid={TESTCAFE_ID_VIEW_DETAILS_BUTTON} button>
@@ -47,29 +40,13 @@ export default function ConsentDetailsButton({
         disableTypography
         classes={{ primary: classes.listItemText }}
         /* istanbul ignore next */
-        onClick={() => setOpenModal(true)}
+        onClick={() => {
+          console.log("AKB");
+          setOpenModal(true);
+        }}
       >
         View Details
       </ListItemText>
-      <Modal
-        // data-testid={TESTCAFE_ID_MODAL_OVERLAY}
-        open={openModal}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        onClose={handleCloseModal}
-        aria-labelledby={`${resourceIri} Modal`}
-        aria-describedby={`${resourceIri} for this resource`}
-      >
-        <ConsentDetailsModal
-          resourceIri={resourceIri}
-          setOpenModal={setOpenModal}
-          permission={permission}
-          handleCloseModal={handleCloseModal}
-        />
-      </Modal>
     </ListItem>
   );
 }
@@ -77,7 +54,7 @@ export default function ConsentDetailsButton({
 ConsentDetailsButton.propTypes = {
   resourceIri: T.string,
   permission: permissionPropType.isRequired,
-  handleCloseModal: T.func.isRequired,
+  setOpenModal: T.func.isRequired,
 };
 
 ConsentDetailsButton.defaultProps = {

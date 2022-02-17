@@ -21,93 +21,40 @@
 
 import React from "react";
 import { act, render } from "@testing-library/react";
-import { waitFor } from "@testing-library/dom";
+import { screen, waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { revokeAccessGrant } from "@inrupt/solid-client-access-grants";
 import { renderWithTheme } from "../../../../../../../__testUtils/withTheme";
 import getSignedVc from "../../../../../../../__testUtils/mockSignedVc";
 import ConsentDetailsModal, {
   TESTCAFE_ID_CONSENT_DETAILS_MODAL,
-  TESTCAFE_ID_CONSENT_DETAILS_REVOKE_BUTTON,
-  TESTCAFE_ID_CONSENT_DETAILS_DONE_BUTTON,
   setupErrorComponent,
 } from "./index";
 
-const webId = "https://example.com/profile/card#me";
 const testResourceIri = "testIri";
+const webId = "https://example.com/profile/card#me";
+const permission = {
+  webId,
+  alias: "editors",
+  type: "agent",
+  vc: getSignedVc(),
+};
 
 describe("Renders a consent modal", () => {
-  const permission = {
-    webId,
-    alias: "editors",
-    type: "agent",
-    vc: getSignedVc(),
-  };
-  const fakeHandleCloseModal = jest.fn();
-
   it("renders a modal with the correct data when a user clicks on view details button ", async () => {
-    const { baseElement, findByTestId } = renderWithTheme(
-      <ConsentDetailsModal
-        resourceIri={testResourceIri}
-        handleCloseModal={fakeHandleCloseModal}
-        permission={permission}
-      />
-    );
-    const modal = await findByTestId(TESTCAFE_ID_CONSENT_DETAILS_MODAL);
-    expect(modal).toBeInTheDocument();
-    expect(baseElement).toMatchSnapshot();
-  });
-
-  it("revokes access when the user clicks the revokes access button", async () => {
-    const { baseElement, findByTestId } = renderWithTheme(
-      <ConsentDetailsModal
-        resourceIri={testResourceIri}
-        handleCloseModal={fakeHandleCloseModal}
-        permission={permission}
-      />
-    );
-    const modal = await findByTestId(TESTCAFE_ID_CONSENT_DETAILS_MODAL);
-    expect(modal).toBeInTheDocument();
-    expect(baseElement).toMatchSnapshot();
-  });
-
-  it("closes the modal when the user clicks on the revoke button", async () => {
-    const { findByTestId } = renderWithTheme(
-      <ConsentDetailsModal
-        resourceIri={testResourceIri}
-        handleCloseModal={fakeHandleCloseModal}
-        permission={permission}
-      />
-    );
-    const modal = await findByTestId(TESTCAFE_ID_CONSENT_DETAILS_MODAL);
-    expect(modal).toBeInTheDocument();
-    const revokeButton = await findByTestId(
-      TESTCAFE_ID_CONSENT_DETAILS_REVOKE_BUTTON
-    );
-    act(() => userEvent.click(revokeButton));
-    await waitFor(() => {
-      expect(modal).toBeNull();
-    });
-  });
-
-  it("closes the modal when the user clicks on the done button ", async () => {
     const fakeHandleCloseModal = jest.fn();
-    const { findByTestId } = renderWithTheme(
+    const fakeSetOpenModal = jest.fn();
+    const { baseElement, findByTestId } = renderWithTheme(
       <ConsentDetailsModal
         resourceIri={testResourceIri}
         handleCloseModal={fakeHandleCloseModal}
         permission={permission}
+        setOpenModal={fakeSetOpenModal}
       />
     );
     const modal = await findByTestId(TESTCAFE_ID_CONSENT_DETAILS_MODAL);
     expect(modal).toBeInTheDocument();
-    const doneButton = await findByTestId(
-      TESTCAFE_ID_CONSENT_DETAILS_DONE_BUTTON
-    );
-    act(() => userEvent.click(doneButton));
-    await waitFor(() => {
-      expect(fakeHandleCloseModal).toHaveBeenCalled();
-    });
+    expect(baseElement).toMatchSnapshot();
   });
 
   describe("setupErrorComponent", () => {

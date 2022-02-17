@@ -27,44 +27,16 @@ import {
   getProfileAll,
   getStringNoLocale,
   getResourceInfoWithAcr,
+  getPodUrlAll,
 } from "@inrupt/solid-client";
 import { foaf, vcard } from "rdf-namespaces";
-import { useSession } from "@inrupt/solid-ui-react";
+import { useSession, useThing } from "@inrupt/solid-ui-react";
 import AlertContext from "../../../../../../../src/contexts/alertContext";
 
 export const TESTCAFE_ID_AGENT_NAME_LINK = "agent-name-link";
 export default function AgentName({ agentWebId, className, link }) {
-  const [text, setText] = useState(agentWebId);
-  const { setMessage, setSeverity } = useContext(AlertContext);
-  const {
-    session: { fetch },
-  } = useSession();
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await getProfileAll(agentWebId, { fetch });
-        console.log({ res });
-        const acr = getResourceInfoWithAcr(
-          "https://storage.dev-next.inrupt.com/4a198ba3-f7f1-4631-9686-0d09f200c758/profile"
-        );
-        console.log({ acr });
-        if (res) {
-          setText(
-            getStringNoLocale(res, foaf.name) ||
-              getStringNoLocale(res, vcard.fn) ||
-              agentWebId
-          );
-        }
-      } catch (error) {
-        console.log({ error });
-        setSeverity("error");
-        setMessage(error.toString());
-      }
-    };
-    fetchProfile();
-  }, [agentWebId, setMessage, setSeverity, fetch]);
-
+  const { thing } = useThing();
+  const name = thing && getStringNoLocale(thing, foaf.name);
   return (
     <>
       {link ? (
@@ -74,10 +46,10 @@ export default function AgentName({ agentWebId, className, link }) {
           rel="noopener noreferrer"
           data-testid={TESTCAFE_ID_AGENT_NAME_LINK}
         >
-          <h3 className={className}>{text}</h3>
+          <h3 className={className}>{name || agentWebId}</h3>
         </a>
       ) : (
-        <span className={className}> {text} </span>
+        <span className={className}> {name || agentWebId} </span>
       )}
     </>
   );
