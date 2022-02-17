@@ -22,7 +22,9 @@
 import {
   getSolidDataset,
   getStringNoLocale,
+  getProfileAll,
   getThing,
+  getThingAll,
   getUrl,
   getUrlAll,
 } from "@inrupt/solid-client";
@@ -91,6 +93,23 @@ export function packageProfile(webId, dataset) {
 }
 
 export async function fetchProfile(webId, fetch) {
+  // This is a temporary fix until the SDK team returns
+  // the correct webIdProfile from the getProfileAll call
   const dataset = await getSolidDataset(webId, { fetch });
-  return packageProfile(webId, dataset);
+  const personThing = getThing(dataset, webId);
+  const pods = getUrlAll(personThing, space.storage) || [];
+  const inbox = getUrl(personThing, ldp.inbox);
+
+  const { webIdProfile } = await getProfileAll(webId, { fetch });
+  const [profileThing] = getThingAll(webIdProfile);
+  const profileUrl = getUrl(profileThing, foaf.isPrimaryTopicOf);
+  const actualProfile = await getSolidDataset(profileUrl, { fetch });
+
+  return {
+    ...getProfileFromPersonThing(getThing(actualProfile, profileUrl)),
+    webId,
+    dataset,
+    pods,
+    inbox,
+  };
 }
