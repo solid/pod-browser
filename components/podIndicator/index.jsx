@@ -31,6 +31,7 @@ import {
   ListItemText,
   ListItemIcon,
   Tooltip,
+  createSvgIcon,
 } from "@material-ui/core";
 import { ContentCopy } from "@material-ui/icons";
 import Skeleton from "@material-ui/lab/Skeleton";
@@ -49,6 +50,11 @@ export const clickHandler = (setAnchorEl) => (event) =>
   setAnchorEl(event.currentTarget);
 
 export const closeHandler = (setAnchorEl) => () => setAnchorEl(null);
+
+const CopyContentIcon = createSvgIcon(
+  <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />,
+  "ContentCut"
+);
 
 export default function PodIndicator() {
   const router = useRouter();
@@ -198,10 +204,7 @@ export default function PodIndicator() {
                 data-testid={TESTCAFE_ID_POD_INDICATOR_COPY}
               >
                 <ListItemIcon classes={{ root: bem("itemIcon") }}>
-                  {/* <Icons name="content_copy" />  // PRISM
-                <i className={clsx(bem("icon-copy"), bem("icon"))} />  // MUI */}
-                  <i name="content_copy" />
-                  {/* <ContentCopy /> */}
+                  <CopyContentIcon />
                 </ListItemIcon>
                 <ListItemText disableTypography primary="Copy Link" />
               </ListItem>
