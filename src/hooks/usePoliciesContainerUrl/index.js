@@ -19,18 +19,20 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { acp_v3 as acp, getSourceIri } from "@inrupt/solid-client";
+import { acp_v3 as acp } from "@inrupt/solid-client";
 import { useEffect, useState } from "react";
 import usePodRootUri from "../usePodRootUri";
 import { getPoliciesContainerUrl } from "../../models/policy";
 import useIsLegacyAcp from "../useIsLegacyAcp";
+import useResourceInfo from "../useResourceInfo";
 
-export default function usePoliciesContainerUrl(resourceInfo) {
+export default function usePoliciesContainerUrl(resourceUrl) {
+  const { data: resourceInfo } = useResourceInfo(resourceUrl);
   const [policiesContainerUrl, setPoliciesContainerUrl] = useState();
-  const rootUrl = usePodRootUri(getSourceIri(resourceInfo));
+  const rootUrl = usePodRootUri(resourceUrl);
   const { data: isLegacy } = useIsLegacyAcp(resourceInfo);
-
   useEffect(() => {
+    if (!resourceUrl) return;
     if (isLegacy === undefined) {
       setPoliciesContainerUrl(null);
       return;
@@ -46,7 +48,6 @@ export default function usePoliciesContainerUrl(resourceInfo) {
           : null
       );
     }
-  }, [isLegacy, resourceInfo, rootUrl]);
-
+  }, [isLegacy, resourceInfo, resourceUrl, rootUrl]);
   return policiesContainerUrl;
 }

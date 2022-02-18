@@ -32,7 +32,6 @@ import ProviderLogin, {
   setupOnProviderChange,
   TESTCAFE_ID_LOGIN_FIELD,
 } from "./index";
-import * as useClientId from "../../../src/hooks/useClientId";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import useIdpFromQuery from "../../../src/hooks/useIdpFromQuery";
 
@@ -100,29 +99,6 @@ describe("ProviderLogin form", () => {
     const input = getByTestId(TESTCAFE_ID_LOGIN_FIELD).querySelector("input");
     expect(input.value).toEqual(iri);
     expect(document.activeElement).toEqual(input);
-  });
-
-  it("calls checkOidcSupported method with the correct value on change", async () => {
-    const session = mockUnauthenticatedSession();
-    const SessionProvider = mockSessionContextProvider(session);
-    const iri = "http://example.com";
-    const label = "example.com";
-    const checkOidcSupportSpy = jest.spyOn(useClientId, "checkOidcSupport");
-    const { getByTestId, getByLabelText } = renderWithTheme(
-      <SessionProvider>
-        <ProviderLogin provider={{ iri, label }} />
-      </SessionProvider>
-    );
-    expect(checkOidcSupportSpy).toHaveBeenCalledWith(iri);
-    const input = getByTestId(TESTCAFE_ID_LOGIN_FIELD).querySelector("input");
-    expect(input.value).toEqual(iri);
-    const clearButton = getByLabelText("Clear");
-    userEvent.click(clearButton);
-    userEvent.type(input, "https://broker.pod.inrupt.com");
-    userEvent.type(input, "{enter}");
-    expect(checkOidcSupportSpy).toHaveBeenCalledWith(
-      "https://broker.pod.inrupt.com"
-    );
   });
 });
 

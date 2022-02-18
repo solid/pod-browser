@@ -227,9 +227,9 @@ describe("saveGroup", () => {
       indexDataset,
       getAddressBookThingUrl(addressBookWithGroupIndex)
     );
-    expect(
-      getUrlAll(addressBookInIndex, vcardExtras("includesGroup"))
-    ).toEqual([group2Url, group1Url]);
+    expect(getUrlAll(addressBookInIndex, vcardExtras("includesGroup"))).toEqual(
+      [group2Url, group1Url]
+    );
   });
 
   it("will create the corresponding index on the fly and link it to the addressBook", async () => {

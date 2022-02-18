@@ -42,9 +42,11 @@ export default function CreateGroupButton({ children, ...props }) {
     error: addressBookError,
     mutate: mutateAddressBook,
   } = useContext(AddressBookContext);
-  const { data: groups, error: groupsError, mutate: mutateGroups } = useContext(
-    GroupAllContext
-  );
+  const {
+    data: groups,
+    error: groupsError,
+    mutate: mutateGroups,
+  } = useContext(GroupAllContext);
   const { mutate: mutateGroup } = useContext(GroupContext);
   const { fetch } = useSession();
   const router = useRouter();

@@ -53,15 +53,12 @@ export default function Container({ iri }) {
   useRedirectIfLoggedOut();
   const { sessionRequestInProgress } = useSession();
   const [resourceUrls, setResourceUrls] = useState(null);
-  const {
-    data: authenticatedProfile,
-    error: authenticatedProfileError,
-  } = useAuthenticatedProfile();
+  const { data: authenticatedProfile, error: authenticatedProfileError } =
+    useAuthenticatedProfile();
   const podRootIri = usePodRootUri(iri);
   const [noControlError, setNoControlError] = useState(null);
-  const { data: podRootResourceInfo, error: podRootError } = useResourceInfo(
-    podRootIri
-  );
+  const { data: podRootResourceInfo, error: podRootError } =
+    useResourceInfo(podRootIri);
   const { error: accessControlError } = useAccessControl(podRootResourceInfo);
   const {
     data: container,

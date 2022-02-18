@@ -31,6 +31,8 @@ import {
   bobWebIdUrl,
   mockPersonDatasetBob,
 } from "../../../../../__testUtils/mockPersonResource";
+import mockSessionContextProvider from "../../../../../__testUtils/mockSessionContextProvider";
+import mockSession from "../../../../../__testUtils/mockSession";
 
 jest.mock("next/router");
 
@@ -38,6 +40,8 @@ const mockedUseRouter = useRouter;
 
 describe("Resource access show page", () => {
   const profileDataset = mockPersonDatasetBob();
+  const session = mockSession();
+  const SessionProvider = mockSessionContextProvider(session);
 
   beforeEach(() => {
     jest
@@ -52,11 +56,13 @@ describe("Resource access show page", () => {
 
   test("it renders a resource access page for a person", async () => {
     const { asFragment, getAllByText } = renderWithTheme(
-      <AgentResourceAccessShowPage type={schema.Person} />
+      <SessionProvider>
+        <AgentResourceAccessShowPage type={schema.Person} />
+      </SessionProvider>
     );
     await waitFor(() => {
       expect(getAllByText("Bob")).toHaveLength(2);
-      expect(getAllByText(bobWebIdUrl)).toHaveLength(1);
+      expect(getAllByText("http://example.com/webId#me")).toHaveLength(1);
     });
     expect(asFragment()).toMatchSnapshot();
   });

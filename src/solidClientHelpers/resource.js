@@ -23,7 +23,6 @@ import {
   createContainerAt,
   createSolidDataset,
   createThing,
-  deleteContainer,
   deleteFile,
   getSolidDataset,
   getSourceUrl,
@@ -31,6 +30,7 @@ import {
   isContainer,
   saveSolidDatasetAt,
   setThing,
+  acp_v3 as acp,
 } from "@inrupt/solid-client";
 // TODO: delete this when node 10 support drops"
 import "core-js/proposals/promise-all-settled";
@@ -39,9 +39,12 @@ import {
   getPolicyResourceUrl,
   getPolicyUrl,
   getResourcePoliciesContainerPath,
+  deletePoliciesContainer,
 } from "../models/policy";
 import { createResponder, isContainerIri } from "./utils";
 import { ERROR_CODES, isHTTPError } from "../error";
+import { hasAcpConfiguration } from "../accessControl/acp/helpers/index";
+import { customPolicies, namedPolicies } from "../../constants/policies";
 
 export function getResourceName(iri) {
   let { pathname } = parseUrl(iri);
@@ -132,20 +135,6 @@ export async function saveResource({ dataset, iri }, fetch) {
   }
 }
 
-export const deletePoliciesContainer = async (containerIri, fetch) => {
-  try {
-    await deleteContainer(containerIri, { fetch });
-  } catch (err) {
-    if (
-      !isHTTPError(err.message, 409) &&
-      !isHTTPError(err.message, 404) &&
-      !isHTTPError(err.message, 403)
-    ) {
-      throw new Error(err);
-    }
-  }
-};
-
 export async function deleteResource(
   resourceInfo,
   policiesContainerUrl,
@@ -155,8 +144,8 @@ export async function deleteResource(
   await deleteFile(iri, {
     fetch,
   });
-  // FIXME: Discover whether legacy ACPs are used
-  const legacyAcp = true;
+  const acrUrl = await acp.getLinkedAcrUrl(resourceInfo);
+  const legacyAcp = !(await hasAcpConfiguration(acrUrl, fetch));
   if (!policiesContainerUrl) return;
   const policyUrl = getPolicyUrl(resourceInfo, policiesContainerUrl, legacyAcp);
   const resourcePoliciesContainerPath = getResourcePoliciesContainerPath(
@@ -165,24 +154,20 @@ export async function deleteResource(
     legacyAcp
   );
 
-  const editorsPolicyUrl = getPolicyResourceUrl(
-    resourceInfo,
-    policiesContainerUrl,
-    "editors"
-  );
-  const viewersPolicyUrl = getPolicyResourceUrl(
-    resourceInfo,
-    policiesContainerUrl,
-    "viewers"
-  );
+  const policiesUrls = namedPolicies.concat(customPolicies).map(({ name }) => {
+    return getPolicyResourceUrl(
+      resourceInfo,
+      policiesContainerUrl,
+      name,
+      legacyAcp
+    );
+  });
 
-  if (!policyUrl && !editorsPolicyUrl && !viewersPolicyUrl) return;
+  if (!policyUrl && !policiesUrls.length) return;
 
-  const urlsToDelete = [
-    viewersPolicyUrl,
-    editorsPolicyUrl,
-    policyUrl,
-  ].filter((url) => Boolean(url));
+  const urlsToDelete = [...policiesUrls, policyUrl].filter((url) =>
+    Boolean(url)
+  );
 
   Promise.allSettled(
     urlsToDelete.map(async (url) => {

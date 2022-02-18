@@ -114,20 +114,16 @@ describe("Resource details", () => {
     mockUseWac.mockReturnValue({ data: false });
     const PermissionsContextProvider = mockPermissionsContextProvider();
     mockUseConsentBasedAccessForResource.mockReturnValue({ permissions: [] });
-    const {
-      asFragment,
-      getByTestId,
-      getByText,
-      queryAllByTestId,
-    } = renderWithTheme(
-      <AccessControlProvider accessControl={accessControl}>
-        <DatasetProvider solidDataset={dataset}>
-          <PermissionsContextProvider>
-            <ResourceDetails />
-          </PermissionsContextProvider>
-        </DatasetProvider>
-      </AccessControlProvider>
-    );
+    const { asFragment, getByTestId, getByText, queryAllByTestId } =
+      renderWithTheme(
+        <AccessControlProvider accessControl={accessControl}>
+          <DatasetProvider solidDataset={dataset}>
+            <PermissionsContextProvider>
+              <ResourceDetails />
+            </PermissionsContextProvider>
+          </DatasetProvider>
+        </AccessControlProvider>
+      );
     await waitFor(() => {
       expect(getByTestId(TESTCAFE_ID_ACCORDION_SHARING)).toBeDefined();
       expect(getByText("Sharing")).toBeInTheDocument();

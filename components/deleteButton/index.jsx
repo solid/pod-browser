@@ -65,14 +65,8 @@ export default function DeleteButton({
   const bem = useBem(useStyles());
   const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
-  const {
-    confirmed,
-    open,
-    setContent,
-    setOpen,
-    setTitle,
-    closeDialog,
-  } = useContext(ConfirmationDialogContext);
+  const { confirmed, open, setContent, setOpen, setTitle, closeDialog } =
+    useContext(ConfirmationDialogContext);
 
   function onDeleteError(e) {
     setSeverity("error");

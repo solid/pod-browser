@@ -66,7 +66,6 @@ export default function MainNav() {
   }, [enabled]);
   const links = activeLinks
     .filter(({ activePage }) => activePage)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .map(({ featureFlag, activePage, path, label, pages, ...rest }) => {
       // extracting featureFlag and activePage props as we don't want them added to the html
       return {

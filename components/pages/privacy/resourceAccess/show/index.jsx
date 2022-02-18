@@ -197,20 +197,15 @@ export default function AgentResourceAccessShowPage({ type }) {
     return resources;
   }, [resources]);
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable(
-    {
-      columns,
-      data,
-      defaultCanSort: true,
-    },
-    useSortBy
-  );
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable(
+      {
+        columns,
+        data,
+        defaultCanSort: true,
+      },
+      useSortBy
+    );
 
   // FIXME: update when we have mocked errors
   /* istanbul ignore next */

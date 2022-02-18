@@ -29,38 +29,41 @@ import {
   TextField,
   useTheme,
 } from "@material-ui/core";
+
 import { makeStyles, createStyles } from "@material-ui/styles";
 import { Autocomplete } from "@material-ui/lab";
 import { useBem } from "@solid/lit-prism-patterns";
 import { LoginButton, useSession } from "@inrupt/solid-ui-react";
 
 import { Button } from "@inrupt/prism-react-components";
-import { checkOidcSupport } from "../../../src/hooks/useClientId";
+
 import {
   generateRedirectUrl,
   getCurrentHostname,
   getCurrentOrigin,
 } from "../../../src/windowHelpers";
+
 import { isLocalhost } from "../../../src/stringHelpers";
 import getIdentityProviders from "../../../constants/provider";
 import { ERROR_REGEXES, hasError } from "../../../src/error";
 import styles from "./styles";
-import { CLIENT_NAME, PUBLIC_OIDC_CLIENT } from "../../../constants/constants";
+import { CLIENT_NAME } from "../../../constants/app";
 
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+export const TESTCAFE_ID_LOGIN_FIELD = "login-field";
+export const TESTCAFE_ID_GO_BUTTON = "go-button";
 
 const providers = getIdentityProviders();
-export const TESTCAFE_ID_LOGIN_FIELD = "login-field";
-const TESTCAFE_ID_GO_BUTTON = "go-button";
 const hostname = getCurrentHostname();
-const CLIENT_APP_WEBID = isLocalhost(hostname)
-  ? PUBLIC_OIDC_CLIENT
-  : `${getCurrentOrigin()}/api/app`;
+
+const CLIENT_APP_WEBID = `${getCurrentOrigin()}/api/app`;
+
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export function setupOnProviderChange(setProviderIri, setLoginError) {
   return (e, newValue) => {
     e.preventDefault();
     setLoginError(null);
+
     if (typeof newValue === "string") {
       if (newValue.startsWith("https://") || newValue.startsWith("http://")) {
         setProviderIri(newValue);
@@ -72,9 +75,11 @@ export function setupOnProviderChange(setProviderIri, setLoginError) {
     }
   };
 }
+
 export function setupLoginHandler(login, setLoginError) {
   return async (e, providerIri) => {
     e.preventDefault();
+
     try {
       await login({ oidcIssuer: providerIri });
       setLoginError(null);
@@ -82,6 +87,7 @@ export function setupLoginHandler(login, setLoginError) {
       if (!e.target.value && !providerIri) {
         return;
       }
+
       setLoginError(error);
     }
   };
@@ -95,13 +101,24 @@ export function setupErrorHandler(setLoginError) {
 
 export function getErrorMessage(error) {
   const postFix = " Please fill out a valid Solid Identity Provider.";
+
   if (hasError(error, ERROR_REGEXES.INVALID_IDP)) {
     return "This URL is not a Solid Identity Provider.";
   }
+
   if (hasError(error, ERROR_REGEXES.HANDLER_NOT_FOUND)) {
     return "Please fill out a valid Solid Identity Provider.";
   }
+
   return `We were unable to log in with this URL.${postFix}`;
+}
+
+export const AUTH_OPTIONS = {
+  clientName: CLIENT_NAME,
+};
+
+if (!isLocalhost(hostname)) {
+  AUTH_OPTIONS.clientId = CLIENT_APP_WEBID;
 }
 
 export default function Provider({ defaultError, provider }) {
@@ -111,38 +128,14 @@ export default function Provider({ defaultError, provider }) {
   const [loginError, setLoginError] = useState(defaultError);
   const theme = useTheme();
   const [providerIri, setProviderIri] = useState(provider?.iri || "");
-  const [authOptions, setAuthOptions] = useState({
-    clientName: CLIENT_NAME,
-  });
+
   const loginFieldRef = createRef();
 
   useEffect(() => {
     if (!provider) return;
+
     loginFieldRef.current?.querySelector("input").focus();
   }, [provider, loginFieldRef]);
-
-  useEffect(() => {
-    if (providerIri) {
-      checkOidcSupport(providerIri).then((res) => {
-        if (res === true) {
-          setAuthOptions((prevState) => {
-            return {
-              ...prevState,
-              clientId: CLIENT_APP_WEBID,
-              clientName: CLIENT_NAME,
-            };
-          });
-        } else {
-          setAuthOptions((prevState) => {
-            return {
-              ...prevState,
-              clientName: CLIENT_NAME,
-            };
-          });
-        }
-      });
-    }
-  }, [providerIri]);
 
   const onProviderChange = setupOnProviderChange(setProviderIri, setLoginError);
   const handleLogin = setupLoginHandler(login, setLoginError);
@@ -223,7 +216,7 @@ export default function Provider({ defaultError, provider }) {
         <LoginButton
           oidcIssuer={providerIri}
           redirectUrl={generateRedirectUrl("")}
-          authOptions={authOptions}
+          authOptions={AUTH_OPTIONS}
           onError={onError}
         >
           <Button

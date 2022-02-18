@@ -32,7 +32,6 @@ import {
   saveSolidDatasetAt,
   setThing,
 } from "@inrupt/solid-client";
-import LinkHeader from "http-link-header";
 import {
   ACL,
   createAccessMap,
@@ -40,14 +39,12 @@ import {
   isEmptyAccess,
 } from "../../solidClientHelpers/permissions";
 import { chain, createResponder } from "../../solidClientHelpers/utils";
-import {
-  deletePoliciesContainer,
-  getOrCreateDatasetOld,
-} from "../../solidClientHelpers/resource";
+import { getOrCreateDatasetOld } from "../../solidClientHelpers/resource";
 import {
   isCustomPolicy,
   getPolicyUrl,
   getPolicyResourceUrl,
+  deletePoliciesContainer,
 } from "../../models/policy";
 import { isHTTPError } from "../../error";
 import {
@@ -115,42 +112,6 @@ export const getPolicyDetailFromAccess = (access, label) => {
   }
   return null;
 };
-
-/**
- * Discover whether an authorization server advertizes its configuration as descibed
- * in https://solid.github.io/authorization-panel/acp-specification/#capabilities-discovery.
- * This is used to determine whether an authorization server conforms to the legacy
- * ACP specification, or if it implements the latest version. The retrieved configuration
- * itself is irrelevant in this case, what is important is its presence or absence.
- *
- * TODO: Part of this should be moved to `@inrupt/solid-client`. When doing so,
- * make sure to remove the dependency on `http-link-header`, which will no longer
- * be necessary.
- *
- * @param {*} acrUrl The URL of the Access Control Resource
- */
-export async function hasAcpConfiguration(acrUrl, authFetch) {
-  // Defaults to the latest system.
-  if (typeof acrUrl !== "string") {
-    return false;
-  }
-  const response = await authFetch(acrUrl, {
-    // The specification requires that this should be an OPTIONS request, but
-    // this causes issues for cross-origin requests from a browser. ESS currently
-    // allows to work around this issuing a HEAD request instead.
-    method: "HEAD",
-  });
-  const linkHeader = response.headers.get("Link");
-  if (linkHeader === null) {
-    return false;
-  }
-  const parsedLinks = LinkHeader.parse(linkHeader);
-  return (
-    parsedLinks.get("rel", "http://www.w3.org/ns/solid/acp#grant").length > 0 ||
-    parsedLinks.get("rel", "http://www.w3.org/ns/solid/acp#attribute").length >
-      0
-  );
-}
 
 // The following functions multiplex between the latest and legacy ACP API
 function switchIfLegacy(legacyFunction, latestFunction, parameters, isLegacy) {
@@ -1047,10 +1008,8 @@ export default class AcpAccessControlStrategy {
     );
 
     const { respond, error } = createResponder();
-    const {
-      response: policyDataset,
-      error: getOrCreateError,
-    } = await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
+    const { response: policyDataset, error: getOrCreateError } =
+      await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
 
     if (getOrCreateError) return error(getOrCreateError);
     const policyUrl = this.#isLegacy
@@ -1100,10 +1059,8 @@ export default class AcpAccessControlStrategy {
     );
 
     const { respond, error } = createResponder();
-    const {
-      response: policyDataset,
-      error: getOrCreateError,
-    } = await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
+    const { response: policyDataset, error: getOrCreateError } =
+      await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
 
     if (getOrCreateError) return error(getOrCreateError);
     const policyUrl = this.#isLegacy
@@ -1149,10 +1106,8 @@ export default class AcpAccessControlStrategy {
     );
 
     const { respond, error } = createResponder();
-    const {
-      response: policyDataset,
-      error: getOrCreateError,
-    } = await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
+    const { response: policyDataset, error: getOrCreateError } =
+      await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
     if (getOrCreateError) return error(getOrCreateError);
     const policyUrl = this.#isLegacy
       ? getPolicyUrlName(namedPolicyContainerUrl, policyName)
@@ -1197,10 +1152,8 @@ export default class AcpAccessControlStrategy {
     );
     const { respond, error } = createResponder();
 
-    const {
-      response: policyDataset,
-      error: getOrCreateError,
-    } = await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
+    const { response: policyDataset, error: getOrCreateError } =
+      await getOrCreateDatasetOld(namedPolicyContainerUrl, this.#fetch);
     if (getOrCreateError) return error(getOrCreateError);
 
     const policyUrl = this.#isLegacy
@@ -1273,10 +1226,8 @@ export default class AcpAccessControlStrategy {
     );
     const { respond, error } = createResponder();
 
-    const {
-      response: policyDataset,
-      error: getOrCreateError,
-    } = await getOrCreateDatasetOld(customPolicyContainerUrl, this.#fetch);
+    const { response: policyDataset, error: getOrCreateError } =
+      await getOrCreateDatasetOld(customPolicyContainerUrl, this.#fetch);
 
     if (getOrCreateError) return error(getOrCreateError);
 
@@ -1302,9 +1253,8 @@ export default class AcpAccessControlStrategy {
       const [modifiedPolicy] = matchersUrls.map((matcherUrl) => {
         return acp.removeAllOfMatcherUrl(policy, matcherUrl);
       });
-      const modifiedPolicyMatchersUrls = acp.getAllOfMatcherUrlAll(
-        modifiedPolicy
-      );
+      const modifiedPolicyMatchersUrls =
+        acp.getAllOfMatcherUrlAll(modifiedPolicy);
       // if there are no matchers left in the policy
       if (!modifiedPolicyMatchersUrls.length) {
         await deleteFile(policyUrl, { fetch: this.#fetch });
@@ -1337,10 +1287,8 @@ export default class AcpAccessControlStrategy {
   async savePermissionsForAgent(webId, access) {
     const { respond, error } = createResponder();
 
-    const {
-      response: policyDataset,
-      error: getOrCreateError,
-    } = await getOrCreateDatasetOld(this.#policyUrl, this.#fetch);
+    const { response: policyDataset, error: getOrCreateError } =
+      await getOrCreateDatasetOld(this.#policyUrl, this.#fetch);
 
     if (getOrCreateError) return error(getOrCreateError);
     const updatedDataset = isEmptyAccess(access)

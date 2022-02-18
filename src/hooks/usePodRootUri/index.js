@@ -40,9 +40,8 @@ export default function usePodRootUri(location) {
     errorRetryCount: 0, // This usually returns a 403 when visiting someone else's Pod, so we don't want to retry that call
   });
   const [podOwnerUri, setPodOwnerUri] = useState(null);
-  const { data: podOwnerDataset, error: podOwnerError } = useDataset(
-    podOwnerUri
-  );
+  const { data: podOwnerDataset, error: podOwnerError } =
+    useDataset(podOwnerUri);
 
   useEffect(() => {
     if (!location || location === "undefined" || !profile) {

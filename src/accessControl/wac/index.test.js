@@ -58,11 +58,9 @@ describe("WacAccessControlStrategy", () => {
       }));
 
     it("exposes the methods we expect for a access control strategy", () =>
-      [
-        "deleteFile",
-        "getPermissions",
-        "savePermissionsForAgent",
-      ].forEach((method) => expect(wac[method]).toBeDefined()));
+      ["deleteFile", "getPermissions", "savePermissionsForAgent"].forEach(
+        (method) => expect(wac[method]).toBeDefined()
+      ));
 
     it("throws an error if no ACL resource is available", async () => {
       solidClientFns.getResourceInfoWithAcl.mockResolvedValue(resourceInfo);
@@ -237,9 +235,11 @@ describe("WacAccessControlStrategy", () => {
         webId,
         access
       );
-      expect(
-        solidClientFns.saveAclFor
-      ).toHaveBeenCalledWith(resourceInfoWithAcl, updatedAcl, { fetch });
+      expect(solidClientFns.saveAclFor).toHaveBeenCalledWith(
+        resourceInfoWithAcl,
+        updatedAcl,
+        { fetch }
+      );
       expect(solidClientFns.getResourceInfoWithAcl).toHaveBeenCalledWith(url, {
         fetch,
       });
@@ -274,9 +274,11 @@ describe("WacAccessControlStrategy", () => {
         webId,
         access
       );
-      expect(
-        solidClientFns.saveAclFor
-      ).toHaveBeenCalledWith(resourceInfoWithAcl, updatedAcl, { fetch });
+      expect(solidClientFns.saveAclFor).toHaveBeenCalledWith(
+        resourceInfoWithAcl,
+        updatedAcl,
+        { fetch }
+      );
       expect(solidClientFns.getResourceInfoWithAcl).toHaveBeenCalledWith(url, {
         fetch,
       });

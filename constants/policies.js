@@ -174,15 +174,8 @@ export const POLICIES_TYPE_MAP = {
   },
 };
 
-const {
-  editors,
-  viewers,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  blocked,
-  viewAndAdd,
-  editOnly,
-  addOnly,
-} = POLICIES_TYPE_MAP;
+const { editors, viewers, blocked, viewAndAdd, editOnly, addOnly } =
+  POLICIES_TYPE_MAP;
 
 export const customPolicies = [viewAndAdd, editOnly, addOnly];
 

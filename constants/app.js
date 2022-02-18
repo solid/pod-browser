@@ -19,29 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useEffect, useState } from "react";
+/* eslint import/prefer-default-export: 0 */
 
-const OPENID_CONFIGURATION_IRI = "/.well-known/openid-configuration";
-const OIDC_SUPPORTED = "https://solidproject.org/TR/solid-oidc";
-
-export const checkOidcSupport = async (providerIri) => {
-  const trimmedProviderIri = providerIri?.replace(/\/$/, "");
-  try {
-    const fetchUrl = `${trimmedProviderIri}${OPENID_CONFIGURATION_IRI}`;
-    const res = await fetch(fetchUrl);
-    const { solid_oidc_supported: solidOidcSupported } = await res.json();
-    return solidOidcSupported && solidOidcSupported === OIDC_SUPPORTED;
-  } catch {
-    return false;
-  }
-};
-
-export default function useClientId(providerIri) {
-  const [isSupported, setIsSupported] = useState(null);
-  useEffect(() => {
-    checkOidcSupport(providerIri).then((res) => {
-      setIsSupported(res);
-    });
-  }, [providerIri]);
-  return isSupported;
-}
+export const CLIENT_NAME = "Inrupt PodBrowser";

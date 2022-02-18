@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { getSourceUrl } from "@inrupt/solid-client";
+import { deleteContainer, getSourceUrl } from "@inrupt/solid-client";
 import { sharedStart } from "../../solidClientHelpers/utils";
 import { getContainerUrl, joinPath } from "../../stringHelpers";
 import {
@@ -27,6 +27,7 @@ import {
   namedPolicies,
   POLICIES_TYPE_MAP,
 } from "../../../constants/policies";
+import { isHTTPError } from "../../error";
 
 const POLICIES_CONTAINER = "pb_policies/";
 
@@ -97,3 +98,17 @@ export function isCustomPolicy(type) {
 export function isNamedPolicy(type) {
   return namedPolicies.find((policy) => policy.name === type) !== undefined;
 }
+
+export const deletePoliciesContainer = async (containerIri, fetch) => {
+  try {
+    await deleteContainer(containerIri, { fetch });
+  } catch (err) {
+    if (
+      !isHTTPError(err.message, 409) &&
+      !isHTTPError(err.message, 404) &&
+      !isHTTPError(err.message, 403)
+    ) {
+      throw new Error(err);
+    }
+  }
+};

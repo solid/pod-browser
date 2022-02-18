@@ -137,14 +137,8 @@ export default function AddFileButton({ className, onSave, resourceList }) {
   const { currentUri } = useContext(PodLocationContext);
   const [isUploading, setIsUploading] = useState(false);
   const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
-  const {
-    confirmed,
-    open,
-    setContent,
-    setOpen,
-    setTitle,
-    closeDialog,
-  } = useContext(ConfirmationDialogContext);
+  const { confirmed, open, setContent, setOpen, setTitle, closeDialog } =
+    useContext(ConfirmationDialogContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
   const [file, setFile] = useState(null);
   const ref = useRef(null);

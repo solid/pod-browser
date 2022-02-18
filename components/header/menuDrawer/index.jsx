@@ -20,7 +20,6 @@
  */
 
 /* eslint react/jsx-props-no-spreading:off */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import React, { useContext, useState, useEffect } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";

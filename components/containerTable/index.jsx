@@ -61,20 +61,15 @@ export default function ContainerTable({ containerPath, data, resourcePath }) {
     []
   );
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable(
-    {
-      columns,
-      data,
-      defaultCanSort: true,
-    },
-    useSortBy
-  );
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable(
+      {
+        columns,
+        data,
+        defaultCanSort: true,
+      },
+      useSortBy
+    );
 
   return (
     <table
