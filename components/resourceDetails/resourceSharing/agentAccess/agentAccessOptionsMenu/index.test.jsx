@@ -22,15 +22,19 @@
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
-import { waitFor } from "@testing-library/dom";
+import { screen, waitFor } from "@testing-library/dom";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import AgentAccessOptionsMenu from "./index";
 import { TESTCAFE_ID_REMOVE_BUTTON } from "./removeButton";
 import getSignedVc from "../../../../../__testUtils/mockSignedVc";
-import ConsentDetailsButton, {
-  TESTCAFE_ID_VIEW_DETAILS_BUTTON,
-} from "./consentDetailsButton";
-import { TESTCAFE_ID_CONSENT_DETAILS_MODAL } from "./consentDetailsButton/consentDetailsModal";
+import { revokeAccessGrant } from "@inrupt/solid-client-access-grants";
+
+import { TESTCAFE_ID_VIEW_DETAILS_BUTTON } from "./consentDetailsButton";
+import {
+  TESTCAFE_ID_CONSENT_DETAILS_DONE_BUTTON,
+  TESTCAFE_ID_CONSENT_DETAILS_MODAL,
+  TESTCAFE_ID_CONSENT_DETAILS_REVOKE_BUTTON,
+} from "./consentDetailsButton/consentDetailsModal";
 
 const resourceIri = "/iri/";
 const webId = "https://example.com/profile/card#me";
@@ -39,10 +43,10 @@ const profile = {
   name: "Example Agent",
   webId,
 };
-const permission = { webId, profile, alias: "editors" };
 
 describe("AgentAccessOptionsMenu", () => {
   it("renders a button which triggers the opening of the menu", () => {
+    const permission = { webId, profile, alias: "editors" };
     const { asFragment, getByTestId, queryByText } = renderWithTheme(
       <AgentAccessOptionsMenu
         resourceIri={resourceIri}
@@ -59,7 +63,9 @@ describe("AgentAccessOptionsMenu", () => {
     const removeButton = getByTestId(TESTCAFE_ID_REMOVE_BUTTON);
     expect(removeButton).toBeDefined();
   });
+});
 
+describe("Consent Details Modal", () => {
   it("renders a details modal when you click on the view details button", async () => {
     const permission = {
       webId,
@@ -88,6 +94,77 @@ describe("AgentAccessOptionsMenu", () => {
       expect(
         getByTestId(TESTCAFE_ID_CONSENT_DETAILS_MODAL)
       ).toBeInTheDocument();
+    });
+  });
+
+  it("closes the details modal when you click on the revoke button", async () => {
+    const permission = {
+      webId,
+      alias: "Editors",
+      type: "agent",
+      vc: getSignedVc(),
+    };
+
+    const { getByTestId } = renderWithTheme(
+      <AgentAccessOptionsMenu
+        resourceIri={resourceIri}
+        permission={permission}
+        setLoading={jest.fn}
+        setLocalAccess={jest.fn}
+      />
+    );
+
+    const menuButton = getByTestId("menu-button");
+    userEvent.click(menuButton);
+
+    await waitFor(() => {
+      const viewDetailsButton = getByTestId(TESTCAFE_ID_VIEW_DETAILS_BUTTON);
+      userEvent.click(viewDetailsButton);
+    });
+    const revokeButton = getByTestId(TESTCAFE_ID_CONSENT_DETAILS_REVOKE_BUTTON);
+    userEvent.click(revokeButton);
+
+    userEvent.click(revokeButton);
+    await waitFor(() => {
+      const closedModal = screen.queryByTestId(
+        TESTCAFE_ID_CONSENT_DETAILS_MODAL
+      );
+      expect(closedModal).toHaveLength(0);
+    });
+  });
+  it("closes the details modal when you click on the done button", async () => {
+    const permission = {
+      webId,
+      alias: "Editors",
+      type: "agent",
+      vc: getSignedVc(),
+    };
+
+    const { getByTestId } = renderWithTheme(
+      <AgentAccessOptionsMenu
+        resourceIri={resourceIri}
+        permission={permission}
+        setLoading={jest.fn}
+        setLocalAccess={jest.fn}
+      />
+    );
+
+    const menuButton = getByTestId("menu-button");
+    userEvent.click(menuButton);
+
+    await waitFor(() => {
+      const viewDetailsButton = getByTestId(TESTCAFE_ID_VIEW_DETAILS_BUTTON);
+      userEvent.click(viewDetailsButton);
+    });
+    const revokeButton = getByTestId(TESTCAFE_ID_CONSENT_DETAILS_DONE_BUTTON);
+    userEvent.click(revokeButton);
+
+    act(() => userEvent.click(revokeButton));
+    await waitFor(() => {
+      const closedModal = screen.queryByTestId(
+        TESTCAFE_ID_CONSENT_DETAILS_MODAL
+      );
+      expect(closedModal).toBeNull();
     });
   });
 });
