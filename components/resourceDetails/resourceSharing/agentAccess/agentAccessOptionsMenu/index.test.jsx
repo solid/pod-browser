@@ -23,11 +23,11 @@ import React from "react";
 import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
 import { screen, waitFor } from "@testing-library/dom";
+import * as accesGrantFns from "@inrupt/solid-client-access-grants";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import AgentAccessOptionsMenu from "./index";
 import { TESTCAFE_ID_REMOVE_BUTTON } from "./removeButton";
 import getSignedVc from "../../../../../__testUtils/mockSignedVc";
-import * as accesGrantFns from "@inrupt/solid-client-access-grants";
 
 import { TESTCAFE_ID_VIEW_DETAILS_BUTTON } from "./consentDetailsButton";
 import {
