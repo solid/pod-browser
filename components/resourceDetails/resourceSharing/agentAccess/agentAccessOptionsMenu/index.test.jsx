@@ -27,7 +27,7 @@ import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import AgentAccessOptionsMenu from "./index";
 import { TESTCAFE_ID_REMOVE_BUTTON } from "./removeButton";
 import getSignedVc from "../../../../../__testUtils/mockSignedVc";
-import { revokeAccessGrant } from "@inrupt/solid-client-access-grants";
+import * as accesGrantFns from "@inrupt/solid-client-access-grants";
 
 import { TESTCAFE_ID_VIEW_DETAILS_BUTTON } from "./consentDetailsButton";
 import {
@@ -104,6 +104,7 @@ describe("Consent Details Modal", () => {
       type: "agent",
       vc: getSignedVc(),
     };
+    jest.spyOn(accesGrantFns, "revokeAccessGrant").mockResolvedValue(true);
 
     const { getByTestId } = renderWithTheme(
       <AgentAccessOptionsMenu
@@ -129,7 +130,7 @@ describe("Consent Details Modal", () => {
       const closedModal = screen.queryByTestId(
         TESTCAFE_ID_CONSENT_DETAILS_MODAL
       );
-      expect(closedModal).toHaveLength(0);
+      expect(closedModal).toBeNull();
     });
   });
   it("closes the details modal when you click on the done button", async () => {
