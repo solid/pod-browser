@@ -27,7 +27,5 @@ module.exports = {
     "no-shadow": 0,
     // temporarily set this to warn this until we fix it everywhere
     "no-unused-vars": 0,
-
-    "react/jsx-filename-extension": [1, { extensions: [".js", ".jsx"] }],
   },
 };
