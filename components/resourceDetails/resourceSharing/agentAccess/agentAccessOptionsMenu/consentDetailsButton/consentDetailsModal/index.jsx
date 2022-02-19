@@ -27,6 +27,7 @@ import {
   ModalContainer,
   Button,
   Modal,
+  LinkButton,
 } from "@inrupt/prism-react-components";
 import { revokeAccessGrant } from "@inrupt/solid-client-access-grants";
 import { makeStyles } from "@material-ui/styles";
@@ -251,15 +252,15 @@ export default function ConsentDetailsModal({
               className={bem("access-details", "action-container")}
             >
               <Grid item xs={12} sm={6}>
-                <Button
+                <LinkButton
                   className={bem("access-details", "revoke-text")}
-                  variant="all-access"
+                  variant="secondary"
                   /* istanbul ignore next */
                   onClick={handleRevoke}
                   data-testid={TESTCAFE_ID_CONSENT_DETAILS_REVOKE_BUTTON}
                 >
                   {`Revoke access to ${resourceName}`}
-                </Button>
+                </LinkButton>
               </Grid>
 
               <Grid item xs={12} sm={2}>

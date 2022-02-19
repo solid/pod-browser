@@ -134,6 +134,9 @@ export default function styles(theme) {
       cursor: "pointer",
       textAlign: "left",
       justifySelf: "flex-end",
+      "&:hover": {
+        backgroundColor: "transparent",
+      },
     },
   };
 }
