@@ -19,51 +19,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { render, act } from "@testing-library/react";
-import { getByText, waitFor } from "@testing-library/dom";
-// import { getStringNoLocale } from "@inrupt/solid-client";
-import * as solidClientFns from "@inrupt/solid-client";
+import { render } from "@testing-library/react";
+import { waitFor } from "@testing-library/dom";
 import AgentName, { TESTCAFE_ID_AGENT_NAME_LINK } from ".";
 import mockPermissionsContextProvider from "../../../../../../../__testUtils/mockPermissionsContextProvider";
 
 describe("Renders the correct agent name", () => {
   const mockWebId = "https://mockperson.com/profile/card#me";
-  const mockFOAFName = "FOAF NAME";
-  const mockVCARDName = "VCARD NAME";
+
   const PermissionsContextProvider = mockPermissionsContextProvider();
-
-  // it.skip("returns a name if the profile has a foaf name", async () => {
-  //   const mockProfile = {};
-  //   jest.spyOn(solidClientFns, "getProfileAll").mockResolvedValue(mockProfile);
-  //   jest
-  //     .spyOn(solidClientFns, "getStringNoLocale")
-  //     .mockResolvedValue(mockFOAFName);
-
-  //   const AgentNameComponent = render(
-  //     <PermissionsContextProvider>
-  //       <AgentName agentWebId={mockWebId} link />
-  //     </PermissionsContextProvider>
-  //   );
-
-  //   waitFor(() => expect(getByText(mockFOAFName)).toBeInTheDocument());
-  // });
-
-  // it.skip("returns a name if the profile has a vcard name", async () => {
-  //   const mockProfile = {};
-  //   jest.spyOn(solidClientFns, "getProfileAll").mockResolvedValue(mockProfile);
-  //   jest.spyOn(solidClientFns, "getStringNoLocale").mockResolvedValueOnce(null);
-  //   jest
-  //     .spyOn(solidClientFns, "getStringNoLocale")
-  //     .mockResolvedValue(mockVCARDName);
-
-  //   const AgentNameComponent = render(
-  //     <PermissionsContextProvider>
-  //       <AgentName agentWebId={mockWebId} link />
-  //     </PermissionsContextProvider>
-  //   );
-
-  //   waitFor(() => expect(getByText(mockVCARDName)).toBeInTheDocument());
-  // });
 
   it("renders a webId if no name is on the profile", async () => {
     const { getByText } = render(

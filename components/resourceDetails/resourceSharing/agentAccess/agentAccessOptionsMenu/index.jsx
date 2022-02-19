@@ -28,9 +28,6 @@ import {
   ListItemText,
   Popover,
 } from "@material-ui/core";
-import { Modal } from "@inrupt/prism-react-components";
-// import ConsentDetailsModal from "./../..consentDetailsModal";
-
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";

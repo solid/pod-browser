@@ -21,17 +21,11 @@
 
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import T from "prop-types";
-import {
-  getProfileAll,
-  getStringNoLocale,
-  getResourceInfoWithAcr,
-  getPodUrlAll,
-} from "@inrupt/solid-client";
-import { foaf, vcard } from "rdf-namespaces";
-import { useSession, useThing } from "@inrupt/solid-ui-react";
-import AlertContext from "../../../../../../../src/contexts/alertContext";
+import { getStringNoLocale } from "@inrupt/solid-client";
+import { foaf } from "rdf-namespaces";
+import { useThing } from "@inrupt/solid-ui-react";
 
 export const TESTCAFE_ID_AGENT_NAME_LINK = "agent-name-link";
 export default function AgentName({ agentWebId, className, link }) {

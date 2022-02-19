@@ -255,7 +255,6 @@ export default function ConsentDetailsModal({
                 <LinkButton
                   className={bem("access-details", "revoke-text")}
                   variant="secondary"
-                  /* istanbul ignore next */
                   onClick={handleRevoke}
                   data-testid={TESTCAFE_ID_CONSENT_DETAILS_REVOKE_BUTTON}
                 >
