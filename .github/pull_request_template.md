@@ -1,18 +1,18 @@
-<!-- When fixing a bug: -->
+# Description
 
-This PR fixes bug #.
+# Changes
 
-- [ ] I've added a unit test to test for potential regressions of this bug.
-- [ ] The changelog has been updated, if applicable.
-- [ ] Commits in this PR are minimal and [have descriptive commit messages](https://chris.beams.io/posts/git-commit/).
+# Screenshots/captures
 
-<!-- When adding a new feature: -->
+# Testing
 
-# New feature description
-
-# Checklist
+# Commit checklist
 
 - [ ] All acceptance criteria are met.
+- [ ] Includes tests to ensure functionality and prevent regressions.
 - [ ] Relevant documentation, if any, has been written/updated.
 - [ ] The changelog has been updated, if applicable.
-- [ ] Commits in this PR are minimal and [have descriptive commit messages](https://chris.beams.io/posts/git-commit/).
+
+# Interested parties
+
+# Notes
