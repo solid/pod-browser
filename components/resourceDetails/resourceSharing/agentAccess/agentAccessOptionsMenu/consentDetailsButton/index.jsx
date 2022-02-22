@@ -21,70 +21,24 @@
 
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, { useContext, useEffect } from "react";
-import { revokeAccessGrant } from "@inrupt/solid-client-access-grants";
+import React, { useState, useEffect } from "react";
 import T from "prop-types";
-import { useSession } from "@inrupt/solid-ui-react";
 import { createStyles, ListItem, ListItemText } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import { getResourceName } from "../../../../../../src/solidClientHelpers/resource";
 import { permission as permissionPropType } from "../../../../../../constants/propTypes";
-import ConfirmationDialogContext from "../../../../../../src/contexts/confirmationDialogContext";
-import ConsentDetailsModalContent from "./consentDetailsModalContent";
 import styles from "./styles";
 
 export const TESTCAFE_ID_VIEW_DETAILS_BUTTON = "view-details-button";
-
-export const VIEW_DETAILS_CONFIRMATION_DIALOG =
-  "view-details-confirmation-dialog";
-
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function ConsentDetailsButton({ resourceIri, permission }) {
-  const { vc } = permission;
-  const { fetch } = useSession();
+export default function ConsentDetailsButton({ setOpenModal }) {
   const classes = useStyles();
-  const {
-    confirmed,
-    setContent,
-    setCustomContentWrapper,
-    setOpen,
-    setTitle,
-    setConfirmText,
-    setCancelText,
-    setIsDangerousAction,
-    closeDialog,
-  } = useContext(ConfirmationDialogContext);
-  const resourceName = getResourceName(resourceIri);
-
-  useEffect(() => {
-    if (confirmed) {
-      revokeAccessGrant(vc, { fetch });
-    }
-  }, [confirmed, fetch, vc]);
-
-  const openModal = () => {
-    setIsDangerousAction(true);
-    setCustomContentWrapper(true);
-    setOpen(VIEW_DETAILS_CONFIRMATION_DIALOG);
-    setTitle(``);
-    setCancelText("Done");
-    setConfirmText(`Revoke Access to ${resourceName}`);
-    setContent(
-      <div>
-        <ConsentDetailsModalContent
-          permission={permission}
-          closeDialog={closeDialog}
-        />
-      </div>
-    );
-  };
 
   return (
     <ListItem
       data-testid={TESTCAFE_ID_VIEW_DETAILS_BUTTON}
       button
-      onClick={openModal}
+      onClick={() => setOpenModal(true)}
     >
       <ListItemText
         disableTypography
@@ -97,10 +51,5 @@ export default function ConsentDetailsButton({ resourceIri, permission }) {
 }
 
 ConsentDetailsButton.propTypes = {
-  resourceIri: T.string,
-  permission: permissionPropType.isRequired,
-};
-
-ConsentDetailsButton.defaultProps = {
-  resourceIri: null,
+  setOpenModal: T.func.isRequired,
 };

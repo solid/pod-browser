@@ -20,35 +20,45 @@
  */
 
 import React from "react";
+import { act, render } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/dom";
+import userEvent from "@testing-library/user-event";
+import { revokeAccessGrant } from "@inrupt/solid-client-access-grants";
 import { renderWithTheme } from "../../../../../../../__testUtils/withTheme";
 import getSignedVc from "../../../../../../../__testUtils/mockSignedVc";
-import ConsentDetailsModalContent, {
-  TESTCAFE_ID_CONSENT_DETAILS_CONTENT,
+import ConsentDetailsModal, {
+  TESTCAFE_ID_CONSENT_DETAILS_MODAL,
+  setupErrorComponent,
 } from "./index";
 
+const testResourceIri = "testIri";
 const webId = "https://example.com/profile/card#me";
-
 const permission = {
   webId,
-  alias: "Editors",
+  alias: "editors",
   type: "agent",
   vc: getSignedVc(),
 };
 
-const closeDialog = jest.fn();
-
-describe("Renders correct consent modal content", () => {
-  test("clicking on view details button renders a confirmation dialog with the correct data", async () => {
-    const { baseElement, findByTestId, findByText } = renderWithTheme(
-      <ConsentDetailsModalContent
+describe("Renders a consent modal", () => {
+  it("renders a modal when the user clicks on view details button ", async () => {
+    const { asFragment } = renderWithTheme(
+      <ConsentDetailsModal
+        resourceIri={testResourceIri}
+        handleCloseModal={jest.fn()}
         permission={permission}
-        closeDialog={closeDialog}
+        setOpenModal={jest.fn()}
       />
     );
-    await findByTestId(TESTCAFE_ID_CONSENT_DETAILS_CONTENT);
-    await findByText(
-      permission.vc.credentialSubject.providedConsent.forPurpose[0]
-    );
-    expect(baseElement).toMatchSnapshot();
+
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  describe("setupErrorComponent", () => {
+    it("renders", () => {
+      const bem = (value) => value;
+      const { asFragment } = render(setupErrorComponent(bem)());
+      expect(asFragment()).toMatchSnapshot();
+    });
   });
 });
