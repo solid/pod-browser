@@ -35,6 +35,7 @@ import RemoveButton from "./removeButton";
 import ConsentDetailsButton from "./consentDetailsButton";
 import styles from "./styles";
 import { profile as profilePropType } from "../../../../../constants/propTypes";
+import ConsentDetailsModal from "./consentDetailsButton/consentDetailsModal";
 
 export const TESTCAFE_ID_MENU_BUTTON = "menu-button";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -49,6 +50,7 @@ export default function AgentAccessOptionsMenu({
   const classes = useStyles();
   const bem = useBem(useStyles());
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
   const { webId, vc } = permission;
 
   const handleClick = (event) => {
@@ -58,10 +60,10 @@ export default function AgentAccessOptionsMenu({
   /* istanbul ignore next */
   const handleClose = () => {
     setMenuAnchorEl(null);
+    setOpenModal(false);
   };
 
   const menuOpen = Boolean(menuAnchorEl);
-
   const id = menuOpen ? "agent-access-options-menu" : undefined;
 
   return (
@@ -104,10 +106,19 @@ export default function AgentAccessOptionsMenu({
             </ListItemText>
           </ListItem>
           {vc ? (
-            <ConsentDetailsButton
-              resourceIri={resourceIri}
-              permission={permission}
-            />
+            <>
+              <ConsentDetailsButton
+                resourceIri={resourceIri}
+                permission={permission}
+                setOpenModal={setOpenModal}
+              />
+              <ConsentDetailsModal
+                openModal={openModal}
+                resourceIri={resourceIri}
+                permission={permission}
+                handleCloseModal={handleClose}
+              />
+            </>
           ) : (
             <RemoveButton
               resourceIri={resourceIri}

@@ -27,17 +27,35 @@ import { getStringNoLocale } from "@inrupt/solid-client";
 import { foaf } from "rdf-namespaces";
 import { useThing } from "@inrupt/solid-ui-react";
 
-export default function AgentName({ agentWebId, className }) {
+export const TESTCAFE_ID_AGENT_NAME_LINK = "agent-name-link";
+export default function AgentName({ agentWebId, className, link }) {
   const { thing } = useThing();
   const name = thing && getStringNoLocale(thing, foaf.name);
-  return <span className={className}>{name || agentWebId}</span>;
+  return (
+    <>
+      {link ? (
+        <a
+          target="_blank"
+          href={agentWebId}
+          rel="noopener noreferrer"
+          data-testid={TESTCAFE_ID_AGENT_NAME_LINK}
+        >
+          <h3 className={className}>{name || agentWebId}</h3>
+        </a>
+      ) : (
+        <span className={className}> {name || agentWebId} </span>
+      )}
+    </>
+  );
 }
 
 AgentName.propTypes = {
   agentWebId: T.string.isRequired,
   className: T.string,
+  link: T.bool,
 };
 
 AgentName.defaultProps = {
   className: null,
+  link: false,
 };

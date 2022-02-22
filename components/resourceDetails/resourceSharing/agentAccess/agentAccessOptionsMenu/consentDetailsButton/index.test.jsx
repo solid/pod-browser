@@ -20,50 +20,32 @@
  */
 
 import React from "react";
-import userEvent from "@testing-library/user-event";
-import { waitFor } from "@testing-library/dom";
 import { renderWithTheme } from "../../../../../../__testUtils/withTheme";
 import ConsentDetailsButton, { TESTCAFE_ID_VIEW_DETAILS_BUTTON } from "./index";
 import getSignedVc from "../../../../../../__testUtils/mockSignedVc";
-import { ConfirmationDialogProvider } from "../../../../../../src/contexts/confirmationDialogContext";
-import ConfirmationDialog, {
-  TESTCAFE_ID_CONFIRMATION_DIALOG,
-} from "../../../../../confirmationDialog";
-import { TESTCAFE_ID_CONSENT_DETAILS_CONTENT } from "./consentDetailsModalContent";
 
 const webId = "https://example.com/profile/card#me";
 
-const permission = {
-  webId,
-  alias: "Editors",
-  type: "agent",
-  vc: getSignedVc(),
-};
-
 describe("View consent details button and modal", () => {
-  test("it renders a button which triggers the opening of the modal", async () => {
+  it("renders a button which triggers the opening of the modal", async () => {
+    const testResourceIri = "testIri";
+    const permission = {
+      webId,
+      alias: "Editors",
+      type: "agent",
+      vc: getSignedVc(),
+    };
+
+    const fakeHandleCloseModal = jest.fn();
     const { asFragment, getByTestId } = renderWithTheme(
-      <ConsentDetailsButton permission={permission} />
+      <ConsentDetailsButton
+        permission={permission}
+        resourceIri={testResourceIri}
+        handleCloseModal={fakeHandleCloseModal}
+      />
     );
     const button = getByTestId(TESTCAFE_ID_VIEW_DETAILS_BUTTON);
     expect(button).toBeDefined();
     expect(asFragment()).toMatchSnapshot();
-  });
-  test("clicking on view details button renders a confirmation dialog with the correct data", async () => {
-    const { baseElement, getByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <ConsentDetailsButton permission={permission} />
-        <ConfirmationDialog />
-      </ConfirmationDialogProvider>
-    );
-    const button = getByTestId(TESTCAFE_ID_VIEW_DETAILS_BUTTON);
-    userEvent.click(button);
-    await waitFor(() => {
-      expect(getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)).toBeInTheDocument();
-      expect(
-        getByTestId(TESTCAFE_ID_CONSENT_DETAILS_CONTENT)
-      ).toBeInTheDocument();
-    });
-    expect(baseElement).toMatchSnapshot();
   });
 });
