@@ -81,7 +81,7 @@ export function setupLoginHandler(login, setLoginError) {
     e.preventDefault();
 
     try {
-      await login({ oidcIssuer: providerIri });
+      await login({ ...AUTH_OPTIONS, oidcIssuer: providerIri });
       setLoginError(null);
     } catch (error) {
       if (!e.target.value && !providerIri) {
