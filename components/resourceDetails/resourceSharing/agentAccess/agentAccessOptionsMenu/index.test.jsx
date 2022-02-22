@@ -133,6 +133,7 @@ describe("Consent Details Modal", () => {
       expect(closedModal).toBeNull();
     });
   });
+
   it("closes the details modal when you click on the done button", async () => {
     const permission = {
       webId,
