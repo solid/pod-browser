@@ -35,6 +35,8 @@ import ProviderLogin, {
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import useIdpFromQuery from "../../../src/hooks/useIdpFromQuery";
 
+import { getCurrentHostname } from "../../../src/windowHelpers";
+
 jest.mock("../../../src/windowHelpers");
 jest.mock("../../../src/hooks/useIdpFromQuery");
 jest.mock("next/router");
@@ -151,9 +153,15 @@ describe("setupLoginHandler", () => {
     const setLoginError = jest.fn();
     const providerIri = "https://example.org";
     const event = { preventDefault: jest.fn() };
+
     setupLoginHandler(login, setLoginError, providerIri)(event, providerIri);
+
     expect(event.preventDefault).toHaveBeenCalled();
-    expect(login).toHaveBeenCalledWith({ oidcIssuer: providerIri });
+    expect(login).toHaveBeenCalledWith({
+      oidcIssuer: providerIri,
+      clientId: "undefined/api/app",
+      clientName: "Inrupt PodBrowser",
+    });
   });
 });
 
