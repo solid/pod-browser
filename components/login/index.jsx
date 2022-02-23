@@ -35,6 +35,7 @@ import {
 import { isLocalhost } from "../../src/stringHelpers";
 import { CLIENT_NAME } from "../../constants/app";
 import useIdpFromQuery from "../../src/hooks/useIdpFromQuery";
+import getConfig from "../../constants/config";
 
 export const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
 export const TESTCAFE_ID_LOGIN_TITLE = "login-title";
@@ -43,17 +44,15 @@ export const TESTCAFE_ID_OTHER_PROVIDERS_BUTTON = "other-providers-button";
 const DEFAULT_PROVIDER_IRI = "https://broker.pod.inrupt.com/";
 const hostname = getCurrentHostname();
 
-const CLIENT_APP_WEBID = `${getCurrentOrigin()}/api/app`;
+const CLIENT_APP_WEBID = isLocalhost(hostname)
+  ? getConfig().devClientId
+  : `${getCurrentOrigin()}/api/app`;
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export const AUTH_OPTIONS = {
   clientName: CLIENT_NAME,
 };
-
-if (!isLocalhost(hostname)) {
-  AUTH_OPTIONS.clientId = CLIENT_APP_WEBID;
-}
 
 export default function Login() {
   const bem = useBem(useStyles());

@@ -1,0 +1,1 @@
+{"@context":"https://www.w3.org/ns/solid/oidc-context.jsonld","client_id":"https://pod.inrupt.com/appsteamdev/clientid.json","redirect_uris":["https://localhost:3000/","https://localhost:3000/login"],"client_name":"Inrupt PodBrowser Localhost"}
