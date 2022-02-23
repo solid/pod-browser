@@ -48,6 +48,7 @@ import getIdentityProviders from "../../../constants/provider";
 import { ERROR_REGEXES, hasError } from "../../../src/error";
 import styles from "./styles";
 import { CLIENT_NAME } from "../../../constants/app";
+import getConfig from "../../../constants/config";
 
 export const TESTCAFE_ID_LOGIN_FIELD = "login-field";
 export const TESTCAFE_ID_GO_BUTTON = "go-button";
@@ -55,7 +56,14 @@ export const TESTCAFE_ID_GO_BUTTON = "go-button";
 const providers = getIdentityProviders();
 const hostname = getCurrentHostname();
 
-const CLIENT_APP_WEBID = `${getCurrentOrigin()}/api/app`;
+const CLIENT_APP_WEBID = isLocalhost(hostname)
+  ? getConfig().devClientId
+  : `${getCurrentOrigin()}/api/app`;
+
+export const AUTH_OPTIONS = {
+  clientName: CLIENT_NAME,
+  clientId: CLIENT_APP_WEBID,
+};
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -111,14 +119,6 @@ export function getErrorMessage(error) {
   }
 
   return `We were unable to log in with this URL.${postFix}`;
-}
-
-export const AUTH_OPTIONS = {
-  clientName: CLIENT_NAME,
-};
-
-if (!isLocalhost(hostname)) {
-  AUTH_OPTIONS.clientId = CLIENT_APP_WEBID;
 }
 
 export default function Provider({ defaultError, provider }) {

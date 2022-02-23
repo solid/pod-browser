@@ -19,15 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// type ConfigEntity = {
-//   idpClientId: string;
-//   loginRedirect: string;
-//   host: string;
-// };
-
 export default function getConfig() {
   return {
-    idpClientId: process.env.NEXT_PUBLIC_IDP_CLIENT_ID || "",
+    devClientId: process.env.NEXT_PUBLIC_DEV_CLIENT_ID || "",
     host: process.env.NEXT_PUBLIC_APP_HOST || "",
     loginRedirect: "/",
   };
