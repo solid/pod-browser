@@ -23,6 +23,7 @@ import * as solidClientFns from "@inrupt/solid-client";
 import { renderHook, waitFor } from "@testing-library/react-hooks";
 import mockSession, {
   mockUnauthenticatedSession,
+  newProfileTurtle,
   profileTurtle,
   webIdUrl,
 } from "../../../__testUtils/mockSession";
