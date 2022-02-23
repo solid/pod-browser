@@ -22,8 +22,7 @@
 import mockFetch from "./mockFetch";
 import mockResponse from "./mockResponse";
 
-import oldProfileTurtle from "./mocks/profile.ttl";
-import newProfileTurtle from "./mocks/profile-v1.2.ttl";
+import profileTurtle from "./mocks/profile.ttl";
 import storageTurtle from "./mocks/podRoot.ttl";
 import storageAclTurtle from "./mocks/storageAcl.ttl";
 
@@ -33,28 +32,19 @@ export const storageAclUrl = "http://example.com/.acl";
 export const anotherUsersStorageUrl = "http://anotheruser.com/";
 export const anotherUsersStorageAclUrl = "http://anotheruser.com/.acl";
 
-const profileTurtle = oldProfileTurtle;
 export { profileTurtle };
-export { newProfileTurtle };
-
-function getProfileFile(version) {
-  if (!version) return oldProfileTurtle;
-  return version < 1.2 ? oldProfileTurtle : newProfileTurtle;
-}
 
 export default function mockSession(options = {}) {
   // this instance is a normal, authenticated session
   // you can override the properties with what you need, but if you repeat something a lot
   // consider naming it and create a reusable mock function
-  const { profileVersion, webId, ...restOptions } = options;
-  const profileFile = getProfileFile(profileVersion);
-
+  const { webId, ...restOptions } = options;
   return {
     on: jest.fn(),
     handleIncomingRedirect: jest.fn().mockResolvedValue(null),
     fetch: mockFetch({
       [webId || webIdUrl]: () =>
-        mockResponse(200, profileFile, { "Content-Type": "text/turtle" }),
+        mockResponse(200, profileTurtle, { "Content-Type": "text/turtle" }),
       [storageUrl]: () =>
         mockResponse(200, storageTurtle, {
           Link: `<${storageAclUrl}>; rel="acl"`,
