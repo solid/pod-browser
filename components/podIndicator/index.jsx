@@ -33,7 +33,6 @@ import {
   Tooltip,
   createSvgIcon,
 } from "@material-ui/core";
-import { ContentCopy } from "@material-ui/icons";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { Icons } from "@inrupt/prism-react-components";
 import PodNavigatorPopover from "./podNavigatorPopover";
@@ -50,11 +49,6 @@ export const clickHandler = (setAnchorEl) => (event) =>
   setAnchorEl(event.currentTarget);
 
 export const closeHandler = (setAnchorEl) => () => setAnchorEl(null);
-
-const CopyContentIcon = createSvgIcon(
-  <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />,
-  "ContentCut"
-);
 
 export default function PodIndicator() {
   const router = useRouter();
@@ -204,7 +198,7 @@ export default function PodIndicator() {
                 data-testid={TESTCAFE_ID_POD_INDICATOR_COPY}
               >
                 <ListItemIcon classes={{ root: bem("itemIcon") }}>
-                  <CopyContentIcon />
+                  <Icons name="copy" className={clsx(bem("icon"))} />
                 </ListItemIcon>
                 <ListItemText disableTypography primary="Copy Link" />
               </ListItem>
