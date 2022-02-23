@@ -20,7 +20,7 @@
  */
 
 import * as solidClientFns from "@inrupt/solid-client";
-import { schema, foaf, rdf } from "rdf-namespaces";
+import { solid, schema, foaf, rdf, space, vcard } from "rdf-namespaces";
 import {
   displayProfileName,
   fetchProfile,
@@ -36,9 +36,19 @@ import {
   mockPersonThingBob,
   mockProfileAlice,
   mockProfileBob,
+  mockWebIdNode,
 } from "../../__testUtils/mockPersonResource";
+import createDataset from "../../__testUtils/createDataset";
 import mockSession, { webIdUrl } from "../../__testUtils/mockSession";
 import { chain } from "./utils";
+
+const {
+  setThing,
+  createSolidDataset,
+  addUrl,
+  mockThingFrom,
+  addStringNoLocale,
+} = solidClientFns;
 
 describe("displayProfileName", () => {
   test("with name, displays the name", () => {
@@ -62,22 +72,61 @@ describe("displayProfileName", () => {
 
 describe("fetchProfile", () => {
   it("fetches a profile and its information", async () => {
-    const profileWebId = webIdUrl;
-    const session = mockSession();
-    const { fetch } = session;
-    const dataset = await solidClientFns.getSolidDataset(profileWebId, {
-      fetch,
+    const idUrl = "https://id.example.com/testuser";
+    const vcardOrgName = "http://www.w3.org/2006/vcard/ns#organization-name";
+    const storageUrl = "https://storage.example.com/testuser";
+    const oidcUrl = "https://openid.example.com";
+    const profileUrl = "https://storage.example.com/testuser/profile";
+    const avatarUrl = "https://storage.example.com/testuser/avatar.png";
+    const role = "Test Role";
+    const nickname = "testuser";
+    const name = "Test User";
+    const organization = "Test Organization";
+
+    const webIdDataset = setThing(
+      createSolidDataset(),
+      chain(
+        mockThingFrom(idUrl),
+        (t) => addUrl(t, rdf.type, foaf.Agent),
+        (t) => addUrl(t, space.storage, storageUrl),
+        (t) => addUrl(t, solid.oidcIssuer, oidcUrl),
+        (t) => addUrl(t, foaf.isPrimaryTopicOf, profileUrl)
+      )
+    );
+    const profileDataset = setThing(
+      createSolidDataset(),
+      chain(
+        mockThingFrom(profileUrl),
+        (t) => addUrl(t, rdf.type, foaf.Document),
+        (t) => addStringNoLocale(t, vcardOrgName, organization),
+        (t) => addStringNoLocale(t, vcard.role, role),
+        (t) => addStringNoLocale(t, vcard.nickname, nickname),
+        (t) => addUrl(t, foaf.maker, idUrl),
+        (t) => addUrl(t, vcard.hasPhoto, avatarUrl),
+        (t) => addStringNoLocale(t, foaf.name, name),
+        (t) => addUrl(t, foaf.primaryTopic, idUrl)
+      )
+    );
+
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValueOnce(webIdDataset);
+
+    jest.spyOn(solidClientFns, "getProfileAll").mockResolvedValueOnce({
+      webIdProfile: webIdDataset,
+      altProfileAll: [profileDataset],
     });
 
-    const profile = await fetchProfile(profileWebId, fetch);
+    jest.spyOn(solidClientFns, "getSourceUrl").mockReturnValueOnce(profileUrl);
 
-    expect(profile.webId).toEqual(profileWebId);
-    expect(profile.name).toEqual("Test Testersen");
-    expect(profile.nickname).toEqual("Testy");
-    expect(profile.avatar).toEqual("http://example.com/photo.jpg");
-    expect(profile.pods).toEqual(["http://example.com/"]);
-    expect(profile.types).toEqual([schema.Person, foaf.Person]);
-    expect(profile.dataset).toEqual(dataset);
+    const profile = await fetchProfile(idUrl, fetch);
+
+    expect(profile.webId).toEqual(profileUrl);
+    expect(profile.name).toEqual(name);
+    expect(profile.nickname).toEqual(nickname);
+    expect(profile.avatar).toEqual(avatarUrl);
+    expect(profile.pods).toEqual([storageUrl]);
+    expect(profile.dataset).toEqual(profileDataset);
   });
 });
 

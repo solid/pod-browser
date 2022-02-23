@@ -27,6 +27,7 @@ import {
   getThingAll,
   getUrl,
   getUrlAll,
+  getSourceUrl,
 } from "@inrupt/solid-client";
 import { foaf, rdf, schema, space, vcard, ldp } from "rdf-namespaces";
 import { getProfileIriFromContactThing } from "../addressBook";
@@ -81,35 +82,34 @@ export function locationIsConnectedToProfile(profile, location) {
   return !!getPodConnectedToProfile(profile, location);
 }
 
-export function packageProfile(webId, dataset) {
+export function packageProfile(webId, dataset, pods, inbox) {
   const profile = getThing(dataset, webId);
   return {
     ...getProfileFromPersonThing(profile),
     webId,
     dataset,
-    pods: getUrlAll(profile, space.storage) || [],
-    inbox: getUrl(profile, ldp.inbox),
+    pods: pods || getUrlAll(profile, space.storage) || [],
+    inbox: inbox || getUrl(profile, ldp.inbox),
   };
 }
 
 export async function fetchProfile(webId, fetch) {
-  // This is a temporary fix until the SDK team returns
-  // the correct webIdProfile from the getProfileAll call
-  const dataset = await getSolidDataset(webId, { fetch });
-  const personThing = getThing(dataset, webId);
-  const pods = getUrlAll(personThing, space.storage) || [];
-  const inbox = getUrl(personThing, ldp.inbox);
+  const profiles = await getProfileAll(webId, { fetch });
+  const {
+    webIdProfile,
+    altProfileAll: [altProfile],
+  } = profiles;
 
-  const { webIdProfile } = await getProfileAll(webId, { fetch });
-  const [profileThing] = getThingAll(webIdProfile);
-  const profileUrl = getUrl(profileThing, foaf.isPrimaryTopicOf);
-  const actualProfile = await getSolidDataset(profileUrl, { fetch });
+  let profileDataset = webIdProfile;
+  let webIdUrl = webId;
 
-  return {
-    ...getProfileFromPersonThing(getThing(actualProfile, profileUrl)),
-    webId,
-    dataset,
-    pods,
-    inbox,
-  };
+  if (altProfile) {
+    webIdUrl = getSourceUrl(altProfile);
+    profileDataset = altProfile;
+  }
+
+  const pods = getUrlAll(getThing(webIdProfile, webId), space.storage);
+  const inbox = getUrlAll(getThing(webIdProfile, webId), ldp.inbox);
+
+  return packageProfile(webIdUrl, profileDataset, pods, inbox);
 }

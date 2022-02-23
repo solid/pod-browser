@@ -19,9 +19,11 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { renderHook } from "@testing-library/react-hooks";
+import * as solidClientFns from "@inrupt/solid-client";
+import { renderHook, waitFor } from "@testing-library/react-hooks";
 import mockSession, {
   mockUnauthenticatedSession,
+  newProfileTurtle,
   profileTurtle,
   webIdUrl,
 } from "../../../__testUtils/mockSession";
@@ -40,14 +42,13 @@ describe("usePodBrowserSettings", () => {
 
   describe("when profile and session is loaded", () => {
     it("should return a dataset for pod browser settings", async () => {
-      const session = mockSession({
-        fetch: mockFetch({
-          [webIdUrl]: () => mockResponse(200, profileTurtle),
-          [settingsUrl]: () => mockResponse(200, podBrowserPrefs),
-        }),
-      });
+      const session = mockSession();
       // TODO: Wanted to avoid the use of mockResolvedValue, but didn't find another way
       const dataset = "testDataset";
+      jest.spyOn(solidClientFns, "getProfileAll").mockResolvedValue({
+        webIdProfile: {},
+        altProfileAll: [{}],
+      });
       getOrCreateSettings.mockResolvedValue(dataset);
       const wrapper = mockSessionContextProvider(session);
       const { result, waitForNextUpdate } = renderHook(
@@ -55,6 +56,7 @@ describe("usePodBrowserSettings", () => {
         { wrapper }
       );
       await waitForNextUpdate();
+
       expect(result.current).toEqual(dataset);
     });
   });

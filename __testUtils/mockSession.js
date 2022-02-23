@@ -35,6 +35,7 @@ export const anotherUsersStorageAclUrl = "http://anotheruser.com/.acl";
 
 const profileTurtle = oldProfileTurtle;
 export { profileTurtle };
+export { newProfileTurtle };
 
 function getProfileFile(version) {
   if (!version) return oldProfileTurtle;
