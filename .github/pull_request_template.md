@@ -2,8 +2,6 @@
 
 ## Changes
 
-## Screenshots/captures
-
 ## Testing
 
 ## Commit checklist
@@ -16,3 +14,5 @@
 ## Interested parties
 
 ## Notes
+
+## Screenshots/captures
