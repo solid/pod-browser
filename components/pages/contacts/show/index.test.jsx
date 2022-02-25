@@ -32,8 +32,6 @@ import {
   aliceWebIdUrl,
 } from "../../../../__testUtils/mockPersonResource";
 
-jest.mock("../../../../src/effects/auth");
-
 describe("Contact show page", () => {
   const profileDataset = mockPersonDatasetAlice();
   const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);

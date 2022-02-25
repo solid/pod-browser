@@ -21,7 +21,12 @@
 
 import React from "react";
 import AddContactPage from "../../components/addContact";
+import AuthenticatedRoute from "../../src/authentication/AuthenticatedRoute";
 
 export default function Contacts() {
-  return <AddContactPage />;
+  return (
+    <AuthenticatedRoute>
+      <AddContactPage />
+    </AuthenticatedRoute>
+  );
 }

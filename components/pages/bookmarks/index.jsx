@@ -21,12 +21,9 @@
 
 import React from "react";
 import { BookmarksContextProvider } from "../../../src/contexts/bookmarksContext";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import BookmarksList from "../../bookmarksList";
 
 export default function BookmarksPage() {
-  useRedirectIfLoggedOut();
-
   return (
     <BookmarksContextProvider>
       <BookmarksList />

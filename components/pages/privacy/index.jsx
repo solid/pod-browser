@@ -23,7 +23,6 @@ import { schema } from "rdf-namespaces";
 import React, { useState } from "react";
 import Link from "next/link";
 import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import AgentList from "../../agentList";
 import Tabs from "../../tabs";
 import ContactsListSearch from "../../contactsList/contactsListSearch";
@@ -37,7 +36,6 @@ const PERSON_CONTACT_TYPE = schema.Person;
 const APP_CONTACT_TYPE = schema.SoftwareApplication; // this string for now until we define what type the app contact will be
 
 export default function PrivacyPage() {
-  useRedirectIfLoggedOut();
   const [search, setSearch] = useState("");
   const [searchValues, setSearchValues] = useState(null);
   const [selectedTabValue, setSelectedTabValue] = useState("all");

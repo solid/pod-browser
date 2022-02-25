@@ -22,12 +22,10 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { render, waitFor } from "@testing-library/react";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import IndexPage from "./index";
 import TestApp from "../../../__testUtils/testApp";
 import useAccessControl from "../../../src/hooks/useAccessControl";
 
-jest.mock("../../../src/effects/auth");
 jest.mock("../../../src/hooks/useAccessControl");
 jest.mock("next/router");
 
@@ -55,17 +53,6 @@ describe("Resource page", () => {
       expect(getByText("Resource Not Supported")).toBeInTheDocument();
     });
     expect(asFragment()).toMatchSnapshot();
-  });
-
-  test("Redirects if the user is logged out", async () => {
-    render(
-      <TestApp>
-        <IndexPage />
-      </TestApp>
-    );
-    await waitFor(() => {
-      expect(useRedirectIfLoggedOut).toHaveBeenCalled();
-    });
   });
 
   test("Renders spinner while validating access control", async () => {

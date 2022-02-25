@@ -21,6 +21,7 @@
 
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable @next/next/no-sync-scripts */
 import React, { useEffect, useState } from "react";
 import * as Sentry from "@sentry/node";
 import { MatomoProvider, createInstance } from "@datapunt/matomo-tracker-react";
@@ -46,6 +47,7 @@ import theme from "../src/theme";
 import { AlertProvider } from "../src/contexts/alertContext";
 import { ConfirmationDialogProvider } from "../src/contexts/confirmationDialogContext";
 import { FeatureProvider } from "../src/contexts/featureFlagsContext";
+import AuthenticationProvider from "../src/authentication/AuthenticationProvider";
 import Notification from "../components/notification";
 import PodBrowserHeader from "../components/header";
 
@@ -78,23 +80,11 @@ const jss = create(preset());
 
 const useStyles = makeStyles(() => createStyles(appLayout.styles(theme)));
 
-export function hasSolidAuthClientHash() {
-  if (typeof window === "undefined") {
-    return false;
-  }
-
-  if (window.location.hash.indexOf("#access_token=") === 0) {
-    return true;
-  }
-
-  return false;
-}
-
-const updateHistory = (prevState, path) => {
+function updateHistory(prevState, path) {
   return [...prevState, path].filter(
     (historyItem) => historyItem !== "/undefined"
   );
-};
+}
 
 export default function App(props) {
   const { Component, pageProps } = props;
@@ -134,29 +124,25 @@ export default function App(props) {
       <MatomoProvider value={matomoInstance}>
         <StylesProvider jss={jss}>
           <ThemeProvider theme={theme}>
-            <SessionProvider
-              sessionId="pod-browser"
-              restorePreviousSession
-              onSessionRestore={async (url) => {
-                await router.push(url);
-              }}
-            >
-              <FeatureProvider>
-                <AlertProvider>
-                  <ConfirmationDialogProvider>
-                    <CssBaseline />
-                    <div className={bem("app-layout")}>
-                      <PodBrowserHeader />
+            <CssBaseline />
+            <AlertProvider>
+              <SessionProvider sessionId="pod-browser" restorePreviousSession>
+                <AuthenticationProvider>
+                  <FeatureProvider>
+                    <ConfirmationDialogProvider>
+                      <div className={bem("app-layout")}>
+                        <PodBrowserHeader />
 
-                      <main className={bem("app-layout__main")}>
-                        <Component {...pageProps} history={history} />
-                      </main>
-                    </div>
-                    <Notification />
-                  </ConfirmationDialogProvider>
-                </AlertProvider>
-              </FeatureProvider>
-            </SessionProvider>
+                        <main className={bem("app-layout__main")}>
+                          <Component {...pageProps} history={history} />
+                        </main>
+                      </div>
+                      <Notification />
+                    </ConfirmationDialogProvider>
+                  </FeatureProvider>
+                </AuthenticationProvider>
+              </SessionProvider>
+            </AlertProvider>
           </ThemeProvider>
         </StylesProvider>
       </MatomoProvider>

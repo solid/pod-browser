@@ -23,33 +23,23 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { useSession } from "@inrupt/solid-ui-react";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 
 import { resourceHref } from "../../../src/navigator";
 import usePodIrisFromWebId from "../../../src/hooks/usePodIrisFromWebId";
-import usePreviousPage from "../../../src/hooks/usePreviousPage";
 
 export default function Home() {
   const router = useRouter();
-  const previousPage = usePreviousPage();
-  useRedirectIfLoggedOut();
 
   const { session } = useSession();
   const { data: podIris = [] } = usePodIrisFromWebId(session.info.webId);
 
   useEffect(() => {
-    if (previousPage && previousPage !== "/") {
-      router.push(previousPage).catch((e) => {
-        throw e;
-      });
-    }
-
     if (podIris.length > 0) {
-      router.replace("/resource/[iri]", resourceHref(podIris[0])).catch((e) => {
-        throw e;
+      router.replace("/resource/[iri]", resourceHref(podIris[0])).catch(() => {
+        /* fire and forget */
       });
     }
-  }, [podIris, router, previousPage]);
+  }, [podIris, router]);
 
   return null;
 }

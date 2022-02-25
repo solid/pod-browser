@@ -24,7 +24,6 @@ import T from "prop-types";
 import { getSourceUrl, isContainer } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
 import { renderResourceType } from "../containerTableRow";
-import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import { getResourceName } from "../../src/solidClientHelpers/resource";
 import Spinner from "../spinner";
 import PageHeader from "../containerPageHeader";
@@ -76,7 +75,6 @@ function maybeRenderWarning(locationIsInUsersPod, noControlError, podRootIri) {
 }
 
 export default function Container({ iri }) {
-  useRedirectIfLoggedOut();
   const { sessionRequestInProgress } = useSession();
   const [resourceUrls, setResourceUrls] = useState(null);
   const { data: authenticatedProfile, error: authenticatedProfileError } =
