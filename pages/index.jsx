@@ -22,7 +22,12 @@
 import React from "react";
 
 import IndexPage from "../components/pages/index";
+import AuthenticatedRoute from "../src/authentication/AuthenticatedRoute";
 
 export default function Index() {
-  return <IndexPage />;
+  return (
+    <AuthenticatedRoute>
+      <IndexPage />
+    </AuthenticatedRoute>
+  );
 }

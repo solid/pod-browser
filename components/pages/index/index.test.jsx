@@ -20,18 +20,14 @@
  */
 
 import React from "react";
-import Router, * as nextRouterFns from "next/router";
+import { useRouter } from "next/router";
 
 import { render } from "@testing-library/react";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import IndexPage from "./index";
-import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
 import { resourceHref } from "../../../src/navigator";
 import usePodIrisFromWebId from "../../../src/hooks/usePodIrisFromWebId";
-import usePreviousPage from "../../../src/hooks/usePreviousPage";
 import TestApp from "../../../__testUtils/testApp";
 
-jest.mock("../../../src/effects/auth");
 jest.mock("../../../src/hooks/usePodIrisFromWebId");
 jest.mock("../../../src/hooks/usePreviousPage");
 jest.mock("next/router");
@@ -40,16 +36,14 @@ describe("Index page", () => {
   const podIri = "https://mypod.myhost.com";
 
   beforeEach(() => {
-    Router.push.mockReturnValue(null);
     usePodIrisFromWebId.mockReturnValue({
       data: [podIri],
     });
   });
 
   test("Renders null if there are no pod iris", () => {
-    nextRouterFns.useRouter.mockReturnValue({
-      replace: jest.fn().mockResolvedValue(undefined),
-    });
+    const replaceMock = jest.fn().mockResolvedValue();
+    useRouter.mockReturnValue({ replace: replaceMock });
 
     usePodIrisFromWebId.mockReturnValue({
       data: undefined,
@@ -64,7 +58,7 @@ describe("Index page", () => {
   });
 
   test("Renders null if there is an empty array of pod iris", () => {
-    nextRouterFns.useRouter.mockReturnValue({
+    useRouter.mockReturnValue({
       replace: jest.fn().mockResolvedValue(undefined),
     });
 
@@ -81,9 +75,8 @@ describe("Index page", () => {
   });
 
   test("Redirects to the resource page if there is a pod iri", () => {
-    const replace = jest.fn().mockResolvedValue(undefined);
-
-    nextRouterFns.useRouter.mockReturnValue({ replace });
+    const replaceMock = jest.fn().mockResolvedValue();
+    useRouter.mockReturnValue({ replace: replaceMock });
 
     render(
       <TestApp>
@@ -91,40 +84,28 @@ describe("Index page", () => {
       </TestApp>
     );
 
-    expect(replace).toHaveBeenCalledWith(
+    expect(replaceMock).toHaveBeenCalledWith(
       "/resource/[iri]",
       resourceHref(podIri)
     );
   });
 
-  test("Redirects to the previous page if it is available", () => {
-    const push = jest.fn().mockResolvedValue(undefined);
-    const replace = jest.fn().mockResolvedValue(undefined);
-    const previousPage = "/resource/https://pod.example.com/someresource.txt";
+  test("It silently fails on router errors", () => {
+    // This case should never actually happen, but there's test coverage just in case:
+    const replaceMock = jest.fn().mockRejectedValue();
+    useRouter.mockReturnValue({ replace: replaceMock });
 
-    nextRouterFns.useRouter.mockReturnValue({ push, replace });
-    usePreviousPage.mockReturnValue(previousPage);
-
-    render(
+    const { asFragment } = render(
       <TestApp>
         <IndexPage />
       </TestApp>
     );
 
-    expect(push).toHaveBeenCalledWith(previousPage);
-  });
-
-  test("Redirects if the user is logged out", () => {
-    usePreviousPage.mockReturnValue(null);
-    const replace = jest.fn().mockResolvedValue(undefined);
-
-    nextRouterFns.useRouter.mockReturnValue({ replace });
-
-    render(
-      <TestApp session={mockUnauthenticatedSession()}>
-        <IndexPage />
-      </TestApp>
+    expect(replaceMock).toHaveBeenCalledWith(
+      "/resource/[iri]",
+      resourceHref(podIri)
     );
-    expect(useRedirectIfLoggedOut).toHaveBeenCalled();
+
+    expect(asFragment()).toMatchSnapshot();
   });
 });

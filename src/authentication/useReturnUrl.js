@@ -19,30 +19,35 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
-import { SessionContext } from "@inrupt/solid-ui-react";
-import { getEffectiveAccess, getSourceUrl } from "@inrupt/solid-client";
-import Profile from "../../profile";
+import React, { useCallback } from "react";
+import { useRouter } from "next/router";
 
-export default function ProfileShow() {
-  const { session, sessionRequestInProgress, profile } =
-    useContext(SessionContext);
+export const RETURN_TO_PAGE_KEY = "podbrowser:returnTo";
 
-  if (sessionRequestInProgress || !profile) {
-    return null;
-  }
-  const { user: profileEditingAccess } = getEffectiveAccess(
-    profile.webIdProfile
-  );
+const useReturnUrl = () => {
+  const router = useRouter();
 
-  const isWebIdProfileEditable =
-    profileEditingAccess.write || profileEditingAccess.append;
-  const profileDataset = isWebIdProfileEditable
-    ? profile?.webIdProfile
-    : profile?.altProfileAll[0];
-  const profileIri = isWebIdProfileEditable
-    ? session.info.webId
-    : getSourceUrl(profileDataset);
+  const persist = useCallback(() => {
+    if (router.query.returnTo && router.query.returnTo.startsWith("/")) {
+      localStorage.setItem(RETURN_TO_PAGE_KEY, router.query.returnTo);
+    }
+  }, [router]);
 
-  return <Profile profileIri={profileIri} editing />;
-}
+  const restore = useCallback(() => {
+    const returnTo = localStorage.getItem(RETURN_TO_PAGE_KEY);
+    localStorage.removeItem(RETURN_TO_PAGE_KEY);
+
+    if (returnTo && returnTo.startsWith("/")) {
+      router.replace(returnTo);
+    } else {
+      router.replace("/");
+    }
+  }, [router]);
+
+  return {
+    persist,
+    restore,
+  };
+};
+
+export default useReturnUrl;

@@ -21,7 +21,12 @@
 
 import React from "react";
 import GroupsPage from "../../components/pages/groups";
+import AuthenticatedRoute from "../../src/authentication/AuthenticatedRoute";
 
 export default function Group() {
-  return <GroupsPage />;
+  return (
+    <AuthenticatedRoute>
+      <GroupsPage />
+    </AuthenticatedRoute>
+  );
 }

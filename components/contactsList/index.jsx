@@ -42,7 +42,6 @@ import SortedTableCarat from "../sortedTableCarat";
 import Spinner from "../spinner";
 import styles from "./styles";
 
-import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import useAddressBookOld from "../../src/hooks/useAddressBookOld";
 import useContactsOld from "../../src/hooks/useContactsOld";
 import useProfiles from "../../src/hooks/useProfiles";
@@ -86,8 +85,6 @@ export function handleDeleteContact({
 }
 
 function ContactsList() {
-  useRedirectIfLoggedOut();
-
   const tableClass = PrismTable.useTableClass("table", "inherits");
   const classes = useStyles();
   const bem = useBem(classes);

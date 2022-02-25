@@ -28,10 +28,8 @@ import {
   Container,
 } from "@inrupt/prism-react-components";
 import Profile from "../../../profile";
-import { useRedirectIfLoggedOut } from "../../../../src/effects/auth";
 
 export default function ContactShow() {
-  useRedirectIfLoggedOut();
   const router = useRouter();
   const decodedIri = decodeURIComponent(router.query.webId);
 

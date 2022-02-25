@@ -19,22 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { useCallback } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
-import { useRouter } from "next/router";
 
 export const TESTCAFE_ID_USER_MENU_PROFILE = "user-menu-profile";
 export const TESTCAFE_ID_USER_MENU_LOGOUT = "user-menu-logout";
 
 export default function useUserMenu() {
-  const { logout, session } = useSession();
-  const router = useRouter();
+  const { logout } = useSession();
 
-  async function handleLogout() {
+  const handleLogout = useCallback(async () => {
     await logout();
-    if (!session.info.isLoggedIn) {
-      router.push("/login");
-    }
-  }
+  }, [logout]);
 
   return [
     {

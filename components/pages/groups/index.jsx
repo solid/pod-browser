@@ -26,7 +26,6 @@ import { createStyles } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import { useRouter } from "next/router";
 import styles from "./styles";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import GroupList from "../../groupList";
 import GroupView from "../../groupView";
 import { GroupAllProvider } from "../../../src/contexts/groupAllContext";
@@ -36,7 +35,6 @@ import { GroupProvider } from "../../../src/contexts/groupContext";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function GroupsPage() {
-  useRedirectIfLoggedOut();
   const bem = useBem(useStyles());
   const router = useRouter();
   const groupIsSelected = !!router.query.iri;

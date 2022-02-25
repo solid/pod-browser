@@ -22,7 +22,12 @@
 import React from "react";
 
 import ContactShowPage from "../../components/pages/contacts/show";
+import AuthenticatedRoute from "../../src/authentication/AuthenticatedRoute";
 
 export default function ContactShow() {
-  return <ContactShowPage />;
+  return (
+    <AuthenticatedRoute>
+      <ContactShowPage />
+    </AuthenticatedRoute>
+  );
 }
