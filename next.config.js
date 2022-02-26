@@ -34,6 +34,9 @@ process.env.SENTRY_DSN = SENTRY_DSN;
 
 /* eslint no-param-reassign: 0 */
 module.exports = {
+  experimental: {
+    esmExternals: false,
+  },
   productionBrowserSourceMaps: true,
   webpack(config, options) {
     // If the environment is the browser, we should load sentry/react instead of
