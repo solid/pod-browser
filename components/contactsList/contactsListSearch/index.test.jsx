@@ -114,8 +114,8 @@ describe("setupFilterOptions", () => {
 describe("setupGetOptionLabel", () => {
   it("calls a function", () => {
     const getOptionLabel = setupGetOptionLabel();
-    expect(getOptionLabel()).toEqual("");
-    expect(getOptionLabel("test")).toEqual("test");
-    expect(getOptionLabel({ name: "Alice" })).toEqual("Alice");
+    expect(getOptionLabel()).toBe("");
+    expect(getOptionLabel("test")).toBe("test");
+    expect(getOptionLabel({ name: "Alice" })).toBe("Alice");
   });
 });

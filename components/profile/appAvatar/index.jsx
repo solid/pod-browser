@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export const TESTCAFE_ID_NAME_TITLE = "app-name-title";
 export const TESTCAFE_ID_NAME_FIELD = "app-name-field";
 
-export function setupErrorComponent(bem) {
+function setupErrorComponent(bem) {
   return () => (
     <Avatar className={bem("appAvatar")} alt="Contact avatar">
       <Icons className={bem("appAvatar")} name="project-diagram" />
@@ -80,6 +80,7 @@ export default function AppAvatar({ profileIri }) {
               <Image
                 property={LOGO_PREDICATE}
                 width={120}
+                alt=""
                 errorComponent={errorComponent}
               />
             </Avatar>

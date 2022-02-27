@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Renders a consent modal renders a modal when the user clicks on view details button  1`] = `<DocumentFragment />`;
+exports[`Renders a consent modal renders a modal when the user clicks on view details button 1`] = `<DocumentFragment />`;
 
 exports[`Renders a consent modal setupErrorComponent renders 1`] = `
 <DocumentFragment>

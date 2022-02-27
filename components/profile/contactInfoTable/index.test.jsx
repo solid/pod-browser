@@ -128,8 +128,8 @@ describe("setupAddContactDetail", () => {
       newDataset,
       "http://www.w3.org/2006/vcard/ns#Home"
     );
-    expect(getUrl(newContactDetail, rdf.type)).toEqual(contactType);
-    expect(getUrl(newContactDetail, vcard.value)).toEqual(
+    expect(getUrl(newContactDetail, rdf.type)).toBe(contactType);
+    expect(getUrl(newContactDetail, vcard.value)).toBe(
       `${PREFIX_MAP[property]}${contactValue}`
     );
 

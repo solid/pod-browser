@@ -268,7 +268,7 @@ describe("AgentAccess", () => {
 
 describe("getDialogId", () => {
   it("generates dialogId", () =>
-    expect(getDialogId("foo")).toEqual("change-agent-access-foo"));
+    expect(getDialogId("foo")).toBe("change-agent-access-foo"));
 });
 
 describe("submitHandler", () => {

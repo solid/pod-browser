@@ -28,23 +28,23 @@ describe("BookmarkText", () => {
   test("it renders default add string when no addText is passed", async () => {
     renderWithTheme(<BookmarkText />);
     const text = screen.getByTestId("bookmark-text");
-    expect(text.textContent).toEqual("Add Bookmark");
+    expect(text.textContent).toBe("Add Bookmark");
   });
   test("it renders default remove string when no removeText is passed", async () => {
     renderWithTheme(<BookmarkText bookmarked />);
     const text = screen.getByTestId("bookmark-text");
-    expect(text.textContent).toEqual("Remove Bookmark");
+    expect(text.textContent).toBe("Remove Bookmark");
   });
   test("it renders passed addText when available", async () => {
     renderWithTheme(<BookmarkText addText="Bookmark Pod" />);
     const text = screen.getByTestId("bookmark-text");
-    expect(text.textContent).toEqual("Bookmark Pod");
+    expect(text.textContent).toBe("Bookmark Pod");
   });
   test("it renders passed removeText when available", async () => {
     renderWithTheme(
       <BookmarkText bookmarked removeText="Remove Pod Bookmark" />
     );
     const text = screen.getByTestId("bookmark-text");
-    expect(text.textContent).toEqual("Remove Pod Bookmark");
+    expect(text.textContent).toBe("Remove Pod Bookmark");
   });
 });

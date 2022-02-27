@@ -10,7 +10,7 @@
     "ci": "npm run lint && npm run test",
     "deploy": "vercel",
     "dev": "node server.js",
-    "lint": "eslint pages components constants src --ext .js,.jsx",
+    "lint": "next lint",
     "start": "next start",
     "test": "NODE_OPTIONS=--max_old_space_size=4096 jest --maxWorkers=5",
     "test:debug": "node --inspect-brk ./node_modules/.bin/jest -i"

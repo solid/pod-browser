@@ -65,7 +65,7 @@ describe("validateProviderIri", () => {
       accept: "application/json",
     });
 
-    expect(result.error).not.toBeDefined();
+    expect(result.error).toBeUndefined();
     expect(result.issuer).toBe(VALID_ISSUER);
   });
 
@@ -75,7 +75,7 @@ describe("validateProviderIri", () => {
     const result = await validateProviderIri("http://openid.provider.com/");
 
     expect(result.error).toBe("network_error");
-    expect(result.issuer).not.toBeDefined();
+    expect(result.issuer).toBeUndefined();
   });
 
   it("should handle json errors", async () => {
@@ -84,7 +84,7 @@ describe("validateProviderIri", () => {
     const result = await validateProviderIri("http://openid.provider.com/");
 
     expect(result.error).toBe("invalid_url");
-    expect(result.issuer).not.toBeDefined();
+    expect(result.issuer).toBeUndefined();
   });
 
   it("should handle json not containing the issuer key", async () => {
@@ -93,7 +93,7 @@ describe("validateProviderIri", () => {
     const result = await validateProviderIri("http://openid.provider.com/");
 
     expect(result.error).toBe("invalid_url");
-    expect(result.issuer).not.toBeDefined();
+    expect(result.issuer).toBeUndefined();
   });
 
   it("should handle 4xx errors", async () => {
@@ -102,7 +102,7 @@ describe("validateProviderIri", () => {
     const result = await validateProviderIri("http://openid.provider.com/");
 
     expect(result.error).toBe("bad_request");
-    expect(result.issuer).not.toBeDefined();
+    expect(result.issuer).toBeUndefined();
   });
 
   it("should handle 5xx errors", async () => {
@@ -111,7 +111,7 @@ describe("validateProviderIri", () => {
     const result = await validateProviderIri("http://openid.provider.com/");
 
     expect(result.error).toBe("unavailable");
-    expect(result.issuer).not.toBeDefined();
+    expect(result.issuer).toBeUndefined();
   });
 
   it("should return the issuer from the openid configuration, not the provider passed in", async () => {
@@ -125,7 +125,7 @@ describe("validateProviderIri", () => {
       expect.anything()
     );
 
-    expect(result.error).not.toBeDefined();
+    expect(result.error).toBeUndefined();
     expect(result.issuer).toBe(expectedIssuer);
   });
 
@@ -139,6 +139,6 @@ describe("validateProviderIri", () => {
       expect.anything()
     );
 
-    expect(result.error).not.toBeDefined();
+    expect(result.error).toBeUndefined();
   });
 });

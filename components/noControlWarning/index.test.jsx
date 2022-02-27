@@ -53,6 +53,6 @@ describe("setupOnClose", () => {
     const event = { preventDefault: jest.fn() };
     expect(setupOnClose()(event)).toBeUndefined();
     expect(event.preventDefault).toHaveBeenCalledWith();
-    expect(sessionStorage.getItem("no-control-warning-closed")).toEqual("true");
+    expect(sessionStorage.getItem("no-control-warning-closed")).toBe("true");
   });
 });

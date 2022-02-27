@@ -41,7 +41,7 @@ const permission = {
 };
 
 describe("Renders a consent modal", () => {
-  it("renders a modal when the user clicks on view details button ", async () => {
+  it("renders a modal when the user clicks on view details button", async () => {
     const { asFragment } = renderWithTheme(
       <ConsentDetailsModal
         resourceIri={testResourceIri}
