@@ -117,6 +117,7 @@ export default function AgentAccessOptionsMenu({
                 resourceIri={resourceIri}
                 permission={permission}
                 handleCloseModal={handleClose}
+                setLoading={setLoading}
               />
             </>
           ) : (

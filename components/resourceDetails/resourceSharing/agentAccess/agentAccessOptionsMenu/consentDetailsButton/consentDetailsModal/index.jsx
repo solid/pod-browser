@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
+import React, { useContext } from "react";
 import T from "prop-types";
 import {
   Icons,
@@ -59,6 +59,7 @@ import { getPurposeUrlsFromSignedVc } from "../../../../../../../src/models/cons
 import styles from "./styles";
 import AgentName from "../agentName";
 import { getResourceName } from "../../../../../../../src/solidClientHelpers/resource";
+import PermissionsContext from "../../../../../../../src/contexts/permissionsContext";
 
 // export const TESTCAFE_ID_CONSENT_DETAILS_CONTENT = "consent-details-modal";
 export const TESTCAFE_ID_CONSENT_DETAILS_MODAL = "consent-details-modal";
@@ -79,6 +80,7 @@ export default function ConsentDetailsModal({
   permission,
   handleCloseModal,
   openModal,
+  setLoading,
 }) {
   const classes = useStyles();
   const bem = useBem(classes);
@@ -105,10 +107,13 @@ export default function ConsentDetailsModal({
   const purposes = getPurposeUrlsFromSignedVc(vc);
   const { fetch } = useSession();
 
-  const handleRevoke = () => {
+  const handleRevoke = async () => {
+    setLoading(true);
     revokeAccessGrant(vc, { fetch });
     handleCloseModal();
+    setLoading(false);
   };
+
   return (
     <Modal
       open={openModal}
@@ -278,9 +283,11 @@ export default function ConsentDetailsModal({
     </Modal>
   );
 }
+
 ConsentDetailsModal.propTypes = {
   resourceIri: T.string.isRequired,
   permission: permissionPropType.isRequired,
   handleCloseModal: T.func.isRequired,
   openModal: T.bool.isRequired,
+  setLoading: T.func.isRequired,
 };
