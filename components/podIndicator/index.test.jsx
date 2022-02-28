@@ -21,9 +21,18 @@
 
 import React from "react";
 import { useRouter } from "next/router";
+
+import userEvent from "@testing-library/user-event";
+import { screen, waitFor } from "@testing-library/react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
-import PodIndicator, { clickHandler, closeHandler } from "./index";
+import PodIndicator, {
+  clickHandler,
+  closeHandler,
+  TESTCAFE_ID_POD_NAVIGATE_TRIGGER,
+  TESTCAFE_ID_POD_INDICATOR_COPY,
+} from "./index";
 import usePodOwnerProfile from "../../src/hooks/usePodOwnerProfile";
+import TestApp from "../../__testUtils/testApp";
 
 jest.mock("next/router");
 jest.mock("../../src/hooks/usePodOwnerProfile");
@@ -50,6 +59,29 @@ describe("PodIndicator", () => {
     });
     const { asFragment } = renderWithTheme(<PodIndicator />);
     expect(asFragment).toMatchSnapshot();
+  });
+  test("copy text button copies the text to the clipboard", async () => {
+    const writeText = jest.fn();
+    Object.assign(navigator, {
+      clipboard: {
+        writeText,
+      },
+    });
+
+    const { getByTestId } = renderWithTheme(
+      <TestApp>
+        <PodIndicator />
+      </TestApp>
+    );
+    const podMenu = getByTestId(TESTCAFE_ID_POD_NAVIGATE_TRIGGER);
+    userEvent.click(podMenu);
+    const copyLink = screen.getByTestId(TESTCAFE_ID_POD_INDICATOR_COPY);
+    userEvent.click(copyLink);
+    await waitFor(() => {
+      expect(podMenu).toBeInTheDocument();
+      expect(copyLink).toBeInTheDocument();
+      expect(writeText).toHaveBeenCalled();
+    });
   });
 });
 

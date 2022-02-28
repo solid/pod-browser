@@ -3,11 +3,11 @@
 exports[`AddFolderFlyout Renders an Add Folder button 1`] = `
 <DocumentFragment>
   <button
-    class="makeStyles-button-1550 makeStyles-button--small-1557"
+    class="makeStyles-button-1554 makeStyles-button--small-1561"
     data-testid="add-folder-button"
   >
     <span
-      class="makeStyles-button__text-1554"
+      class="makeStyles-button__text-1558"
     >
       Create Folder
     </span>

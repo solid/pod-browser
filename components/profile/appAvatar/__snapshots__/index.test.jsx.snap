@@ -51,7 +51,7 @@ exports[`setupErrorComponent renders 1`] = `
     class="MuiAvatar-root MuiAvatar-circle appAvatar MuiAvatar-colorDefault"
   >
     <span
-      class="makeStyles-icon-project-diagram-1521 appAvatar"
+      class="makeStyles-icon-project-diagram-1524 appAvatar"
     />
   </div>
 </DocumentFragment>

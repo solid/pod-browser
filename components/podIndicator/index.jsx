@@ -30,6 +30,8 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  Tooltip,
+  createSvgIcon,
 } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { Icons } from "@inrupt/prism-react-components";
@@ -40,7 +42,8 @@ import { locationIsConnectedToProfile } from "../../src/solidClientHelpers/profi
 import useAuthenticatedProfile from "../../src/hooks/useAuthenticatedProfile";
 
 const TESTCAFE_ID_POD_INDICATOR = "pod-indicator";
-const TESTCAFE_ID_POD_NAVIGATE_TRIGGER = "pod-indicator-prompt";
+export const TESTCAFE_ID_POD_NAVIGATE_TRIGGER = "pod-indicator-prompt";
+export const TESTCAFE_ID_POD_INDICATOR_COPY = "pod-indicator-copy-link";
 
 export const clickHandler = (setAnchorEl) => (event) =>
   setAnchorEl(event.currentTarget);
@@ -52,6 +55,7 @@ export default function PodIndicator() {
   const [indicatorWidth, setIndicatorWidth] = useState();
   const [displayNavigator, setDisplayNavigator] = useState(false);
   const [indicatorLabelWidth, setIndicatorLabelWidth] = useState();
+  const [tooltipOpen, setTooltipOpen] = useState(false);
 
   const useStyles = makeStyles((theme) =>
     createStyles(styles(theme, indicatorWidth, indicatorLabelWidth))
@@ -86,6 +90,14 @@ export default function PodIndicator() {
     setIndicatorLabelWidth(width);
   }, [indicatorLabelRef]);
 
+  const handlePodCopyClick = () => {
+    navigator.clipboard.writeText(podIri);
+    setTooltipOpen(true);
+    setTimeout(() => {
+      setTooltipOpen(false);
+      handleClose();
+    }, 800);
+  };
   return (
     <div
       data-testid={TESTCAFE_ID_POD_INDICATOR}
@@ -168,6 +180,29 @@ export default function PodIndicator() {
               </ListItemIcon>
               <ListItemText disableTypography primary="Change Pod" />
             </ListItem>
+            <Tooltip
+              PopperProps={{
+                disablePortal: true,
+              }}
+              open={tooltipOpen}
+              disableFocusListener
+              disableHoverListener
+              disableTouchListener
+              title="Copied"
+            >
+              <ListItem
+                button
+                key="copy-text"
+                onClick={handlePodCopyClick}
+                classes={{ root: bem("menuItem") }}
+                data-testid={TESTCAFE_ID_POD_INDICATOR_COPY}
+              >
+                <ListItemIcon classes={{ root: bem("itemIcon") }}>
+                  <Icons name="copy" className={clsx(bem("icon"))} />
+                </ListItemIcon>
+                <ListItemText disableTypography primary="Copy Link" />
+              </ListItem>
+            </Tooltip>
           </List>
         </Popover>
       )}

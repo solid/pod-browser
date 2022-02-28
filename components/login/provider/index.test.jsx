@@ -35,6 +35,8 @@ import ProviderLogin, {
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import useIdpFromQuery from "../../../src/hooks/useIdpFromQuery";
 
+import { getCurrentHostname } from "../../../src/windowHelpers";
+
 jest.mock("../../../src/windowHelpers");
 jest.mock("../../../src/hooks/useIdpFromQuery");
 jest.mock("next/router");
@@ -151,9 +153,15 @@ describe("setupLoginHandler", () => {
     const setLoginError = jest.fn();
     const providerIri = "https://example.org";
     const event = { preventDefault: jest.fn() };
+
     setupLoginHandler(login, setLoginError, providerIri)(event, providerIri);
+
     expect(event.preventDefault).toHaveBeenCalled();
-    expect(login).toHaveBeenCalledWith({ oidcIssuer: providerIri });
+    expect(login).toHaveBeenCalledWith({
+      oidcIssuer: providerIri,
+      clientId: "undefined/api/app",
+      clientName: "Inrupt PodBrowser",
+    });
   });
 });
 
@@ -171,14 +179,17 @@ describe("getErrorMessage", () => {
     expect(getErrorMessage(new Error())).toEqual(
       "We were unable to log in with this URL. Please fill out a valid Solid Identity Provider."
     ));
+
   it("handles when URL is not an IdP for Chrome, Edge, and Firefox", () =>
     expect(getErrorMessage(new Error("fetch"))).toEqual(
       "This URL is not a Solid Identity Provider."
     ));
+
   it("handles when URL is not an IDP for Safari", () =>
     expect(
       getErrorMessage(new Error("Not allowed to request resource"))
     ).toEqual("This URL is not a Solid Identity Provider."));
+
   it("handles when value is empty", () =>
     expect(getErrorMessage(new Error("sessionId"))).toEqual(
       "Please fill out a valid Solid Identity Provider."
