@@ -32,8 +32,10 @@ async function fetchPodIrisFromWebId(webId, fetch) {
 
 export const FETCH_POD_IRIS_FROM_WEB_ID = "fetchPodIrisFromWebId";
 export default function usePodIrisFromWebId(webId) {
-  const { session } = useSession();
+  const {
+    session: { fetch },
+  } = useSession();
   return useSWR([webId, FETCH_POD_IRIS_FROM_WEB_ID], () =>
-    fetchPodIrisFromWebId(webId, session.fetch)
+    fetchPodIrisFromWebId(webId, fetch)
   );
 }

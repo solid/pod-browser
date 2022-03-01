@@ -26,6 +26,7 @@ import { fetchProfile } from "../../solidClientHelpers/profile";
 export const FETCH_PROFILE = "fetchProfile";
 export default function useFetchProfile(webId) {
   const { fetch } = useSession();
+
   return useSWR(webId ? [webId, FETCH_PROFILE] : null, () =>
     fetchProfile(webId, fetch)
   );

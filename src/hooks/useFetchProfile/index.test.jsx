@@ -39,10 +39,7 @@ jest.mock("@inrupt/solid-ui-react", () => {
 const mockedUseSession = useSession;
 
 describe("useFetchProfile", () => {
-  const webId = webIdUrl;
-  let value;
-
-  beforeEach(() => {
+  it("caches with SWR", () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
     mockedUseSession.mockReturnValue(session);
@@ -51,20 +48,31 @@ describe("useFetchProfile", () => {
     );
     jest.spyOn(profileHelpers, "fetchProfile");
     useSWR.mockReturnValue(42);
-    value = renderHook(() => useFetchProfile(webId), { wrapper });
-  });
+    const value = renderHook(() => useFetchProfile(webIdUrl), { wrapper });
 
-  it("caches with SWR", () => {
     expect(value.result.current).toBe(42);
     expect(useSWR).toHaveBeenCalledWith(
-      [webId, FETCH_PROFILE],
+      [webIdUrl, FETCH_PROFILE],
       expect.any(Function)
     );
   });
-  test("useSWR fetches data using fetchProfile", () => {
+
+  it("useSWR fetches data using fetchProfile", () => {
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
+    mockedUseSession.mockReturnValue(session);
+    const wrapper = ({ children }) => (
+      <SessionProvider>{children}</SessionProvider>
+    );
+    jest
+      .spyOn(profileHelpers, "fetchProfile")
+      .mockResolvedValue({ webIdProfile: {}, altProfileAll: [{}] });
+    useSWR.mockReturnValue(42);
+    const value = renderHook(() => useFetchProfile(webIdUrl), { wrapper });
+
     useSWR.mock.calls[0][1]();
     expect(profileHelpers.fetchProfile).toHaveBeenCalledWith(
-      webId,
+      webIdUrl,
       expect.any(Function)
     );
   });

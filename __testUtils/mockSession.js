@@ -118,4 +118,5 @@ export function mockAuthenticatedSessionWithNoAccessToAnotherUsersPod() {
   };
 }
 
-export const mockAuthenticatedSession = mockAuthenticatedSessionWithNoAccessToPod;
+export const mockAuthenticatedSession =
+  mockAuthenticatedSessionWithNoAccessToPod;
