@@ -218,15 +218,10 @@ export async function saveNewAddressBook(
   { iri, owner, title = "Contacts" },
   fetch
 ) {
-  const { respond, error } = createResponder();
+  const { respond, error } = createResponder({
+    unauthorizedMessage: "You do not have permission to create an address book",
+  });
   const { response: existingAddressBook } = await getResource(iri, fetch);
-  const respondWithError = (msg) => {
-    if (isHTTPError(msg, ERROR_CODES.UNAUTHORIZED)) {
-      return error("You do not have permission to create an address book");
-    }
-
-    return error(msg);
-  };
 
   if (existingAddressBook) return error("Address book already exists.");
 
@@ -249,9 +244,9 @@ export async function saveNewAddressBook(
     fetch
   );
 
-  if (saveIndexError) return respondWithError(saveIndexError);
-  if (saveGroupsError) return respondWithError(saveGroupsError);
-  if (savePeopleError) return respondWithError(savePeopleError);
+  if (saveIndexError) return error(saveIndexError);
+  if (saveGroupsError) return error(saveGroupsError);
+  if (savePeopleError) return error(savePeopleError);
 
   return respond({ iri, index, groups, people });
 }
