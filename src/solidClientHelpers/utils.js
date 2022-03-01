@@ -31,7 +31,7 @@ import {
   setThing,
 } from "@inrupt/solid-client";
 import { ldp, rdf } from "rdf-namespaces";
-
+import { ERROR_CODES, isHTTPError } from "../error";
 import { parseUrl } from "../stringHelpers";
 
 function mirrorKeysAndValues(obj) {
@@ -102,9 +102,17 @@ export function displayTypes(types) {
   return types?.length ? types.map((t) => getTypeName(t)) : [];
 }
 
-export function createResponder() {
+export function createResponder(
+  { unauthorizedMessage } = {
+    unauthorizedMessage: "You are not authorized for that action",
+  }
+) {
   const respond = (response) => ({ response });
-  const error = (e) => ({ error: e });
+  const error = (e) => {
+    const unauthorized = isHTTPError(e, ERROR_CODES.UNAUTHORIZED);
+    const msg = unauthorized ? unauthorizedMessage : e;
+    return { error: msg };
+  };
 
   return { respond, error };
 }
