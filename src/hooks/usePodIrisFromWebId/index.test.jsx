@@ -44,6 +44,7 @@ describe("usePodIrisFromWebId", () => {
   const iri1 = "http://example.com/foo";
   const iri2 = "http://example.com/bar";
   let value;
+  let wrapper;
 
   beforeEach(() => {
     const fetch = mockFetch({
@@ -51,9 +52,10 @@ describe("usePodIrisFromWebId", () => {
     });
     const session = mockSession({ fetch });
     const SessionProvider = mockSessionContextProvider(session);
-    const wrapper = ({ children }) => (
-      <SessionProvider>{children}</SessionProvider>
-    );
+
+    // eslint-disable-next-line react/prop-types
+    wrapper = ({ children }) => <SessionProvider>{children}</SessionProvider>;
+
     const profile = chain(
       mockThingFrom(webId),
       (t) => addUrl(t, space.storage, iri1),
@@ -63,23 +65,38 @@ describe("usePodIrisFromWebId", () => {
       setThing(t, profile)
     );
     jest.spyOn(solidClientFns, "getSolidDataset").mockResolvedValue(data);
-    useSWR.mockReturnValue(42);
-    value = renderHook(() => usePodIrisFromWebId(webId), { wrapper });
   });
 
   it("caches with SWR", () => {
+    useSWR.mockReturnValue(42);
+
+    const value = renderHook(() => usePodIrisFromWebId(webId), { wrapper });
     expect(value.result.current).toBe(42);
     expect(useSWR).toHaveBeenCalledWith(
       [webId, FETCH_POD_IRIS_FROM_WEB_ID],
       expect.any(Function)
     );
   });
+
   test("useSWR fetches data using getSolidDataset", async () => {
+    renderHook(() => usePodIrisFromWebId(webId), { wrapper });
+
     const pods = await useSWR.mock.calls[0][1]();
     expect(solidClientFns.getSolidDataset).toHaveBeenCalledWith(
       webId,
       expect.any(Object)
     );
     expect(pods).toEqual([iri1, iri2]);
+  });
+
+  test("returns an empty array if the WebID is falsy", async () => {
+    jest.spyOn(solidClientFns, "getSolidDataset");
+
+    renderHook(() => usePodIrisFromWebId(""), { wrapper });
+
+    const pods = await useSWR.mock.calls[0][1]();
+
+    expect(pods).toEqual([]);
+    expect(solidClientFns.getSolidDataset).not.toHaveBeenCalled();
   });
 });
