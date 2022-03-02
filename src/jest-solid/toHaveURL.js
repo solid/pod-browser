@@ -19,11 +19,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import "@testing-library/jest-dom";
-import jestSolid from "./src/jest-solid";
+import { rdf } from "rdf-namespaces";
+import { getUrlAll } from "@inrupt/solid-client";
 
-process.on("unhandledRejection", (reason) => {
-  throw reason;
-});
+export default function toHaveURL(received, predicate, expectedValue) {
+  if (!predicate) {
+    return {
+      pass: false,
+      message: () => "You must provide a URL predicate",
+    };
+  }
 
-expect.extend(jestSolid);
+  const actualURLValues = getUrlAll(received, predicate);
+
+  if (!expectedValue) {
+    return {
+      pass: !!actualURLValues.length,
+      message: () => `Expected thing to have a predicate of ${predicate}`,
+    };
+  }
+
+  const actuallyReceived = actualURLValues.length
+    ? actualURLValues.join(", ")
+    : null;
+
+  return {
+    pass: actualURLValues.includes(expectedValue),
+    message: () =>
+      `Expected thing to have an ${predicate} predicate with a value of ${expectedValue}, received ${actuallyReceived}`,
+  };
+}

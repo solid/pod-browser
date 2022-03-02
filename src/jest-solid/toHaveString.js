@@ -19,11 +19,32 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import "@testing-library/jest-dom";
-import jestSolid from "./src/jest-solid";
+import { getStringNoLocaleAll } from "@inrupt/solid-client";
 
-process.on("unhandledRejection", (reason) => {
-  throw reason;
-});
+export default function toHaveString(received, predicate, expectedString) {
+  if (!predicate) {
+    return {
+      pass: false,
+      message: () => "You must provide a string predicate",
+    };
+  }
 
-expect.extend(jestSolid);
+  const actualStringValues = getStringNoLocaleAll(received, predicate);
+
+  if (!expectedString) {
+    return {
+      pass: !!actualStringValues.length,
+      message: () => `Expected thing to have a predicate of ${predicate}`,
+    };
+  }
+
+  const actuallyReceived = actualStringValues.length
+    ? actualStringValues.join(", ")
+    : null;
+
+  return {
+    pass: actualStringValues.includes(expectedString),
+    message: () =>
+      `Expected thing to have an ${predicate} predicate with a value of ${expectedString}, received ${actuallyReceived}`,
+  };
+}

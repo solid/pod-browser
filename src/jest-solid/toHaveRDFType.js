@@ -19,11 +19,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import "@testing-library/jest-dom";
-import jestSolid from "./src/jest-solid";
+import { rdf } from "rdf-namespaces";
+import { getUrlAll } from "@inrupt/solid-client";
 
-process.on("unhandledRejection", (reason) => {
-  throw reason;
-});
+export default function toHaveRDFType(received, expectedType) {
+  if (!expectedType) {
+    return {
+      pass: false,
+      message: () => "You must provide a type value",
+    };
+  }
 
-expect.extend(jestSolid);
+  const actualTypes = getUrlAll(received, rdf.type);
+  const actualTypesString = actualTypes.join(", ");
+
+  return {
+    pass: actualTypes.includes(expectedType),
+    message: () =>
+      `Expected thing to have a type of ${expectedType}, received ${actualTypesString}`,
+  };
+}
