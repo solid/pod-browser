@@ -51,6 +51,26 @@ describe("createResponder", () => {
     expect(respond("data")).toMatchObject({ response: "data" });
     expect(error("message")).toMatchObject({ error: "message" });
   });
+
+  describe("given an unauthorized error", () => {
+    test("it returns a more human-friendly unauthorized message", () => {
+      const { error } = createResponder();
+
+      expect(error("Unauthorized 401")).toMatchObject({
+        error: "You are not authorized for that action",
+      });
+    });
+
+    test("it accepts a custom unauthorized message", () => {
+      const { error } = createResponder({
+        unauthorizedMessage: "Custom error",
+      });
+
+      expect(error("Unauthorized 401")).toMatchObject({
+        error: "Custom error",
+      });
+    });
+  });
 });
 
 describe("chain", () => {
