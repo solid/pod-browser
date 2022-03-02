@@ -1,5 +1,44 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Resource page Renders spinner while validating access control 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="not-supported"
+  >
+    <div
+      class="PodBrowser-page-header"
+    >
+      <h1
+        class="PodBrowser-page-header__title"
+      >
+        Resource Not Supported
+      </h1>
+    </div>
+    <div
+      class="PodBrowser-container"
+    >
+      <div
+        class="PodBrowser-content"
+      >
+        <p>
+          PodBrowser can only show resources that are Solid containers.
+        </p>
+        <p>
+          <span>
+            Navigate to the resource directly (this will navigate away from PodBrowser): 
+          </span>
+          <a
+            href="https://mypod.myhost.com/"
+          >
+            https://mypod.myhost.com/
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`Resource page Renders the resource page 1`] = `
 <DocumentFragment>
   <div

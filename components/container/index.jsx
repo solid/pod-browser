@@ -85,7 +85,11 @@ export default function Container({ iri }) {
   const [noControlError, setNoControlError] = useState(null);
   const { data: podRootResourceInfo, error: podRootError } =
     useResourceInfo(podRootIri);
-  const { error: accessControlError } = useAccessControl(podRootResourceInfo);
+  const {
+    error: accessControlError,
+    isValidating: validatingPodRootAccessControl,
+  } = useAccessControl(podRootResourceInfo);
+
   const {
     data: container,
     error: containerError,
@@ -116,7 +120,8 @@ export default function Container({ iri }) {
     }));
   }, [resourceUrls]);
 
-  if (!iri || isValidating) return <Spinner />;
+  if (!iri || isValidating || validatingPodRootAccessControl)
+    return <Spinner />;
 
   if (containerError && isHTTPError(containerError.message, 401))
     return <AccessForbidden />;
