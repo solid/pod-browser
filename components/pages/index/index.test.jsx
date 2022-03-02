@@ -63,6 +63,23 @@ describe("Index page", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
+  test("Renders null if there is an empty array of pod iris", () => {
+    nextRouterFns.useRouter.mockReturnValue({
+      replace: jest.fn().mockResolvedValue(undefined),
+    });
+
+    usePodIrisFromWebId.mockReturnValue({
+      data: [],
+    });
+
+    const { asFragment } = render(
+      <TestApp>
+        <IndexPage />
+      </TestApp>
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+
   test("Redirects to the resource page if there is a pod iri", () => {
     const replace = jest.fn().mockResolvedValue(undefined);
 
