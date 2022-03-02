@@ -22,7 +22,7 @@
 import React from "react";
 import * as RouterFns from "next/router";
 import * as solidClientFns from "@inrupt/solid-client";
-import { waitFor } from "@testing-library/dom";
+import { findByTestId, waitFor } from "@testing-library/dom";
 import { space } from "rdf-namespaces";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockSession from "../../__testUtils/mockSession";
