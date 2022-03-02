@@ -99,6 +99,7 @@ describe("ResourceDrawer view", () => {
       setMenuOpen: jest.fn,
     });
   });
+
   const PermissionsContextProvider = mockPermissionsContextProvider();
 
   test("it renders a loading view when context has no iri", async () => {
