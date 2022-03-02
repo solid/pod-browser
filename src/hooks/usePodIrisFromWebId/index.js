@@ -25,6 +25,11 @@ import { getSolidDataset, getThing, getUrlAll } from "@inrupt/solid-client";
 import { space } from "rdf-namespaces";
 
 async function fetchPodIrisFromWebId(webId, fetch) {
+  // Temporary fix until we can switch to getPodUrlAll in @inrupt/solid-client@1.20.0
+  if (!webId) {
+    return [];
+  }
+
   const profileDoc = await getSolidDataset(webId, { fetch });
   const profile = getThing(profileDoc, webId);
   return getUrlAll(profile, space.storage);

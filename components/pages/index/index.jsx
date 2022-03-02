@@ -35,9 +35,7 @@ export default function Home() {
   useRedirectIfLoggedOut();
 
   const { session } = useSession();
-  const { webId = "" } = session.info;
-  const { data: podIris = [] } = usePodIrisFromWebId(webId);
-  const [podIri] = podIris;
+  const { data: podIris = [] } = usePodIrisFromWebId(session.info.webId);
 
   useEffect(() => {
     if (previousPage && previousPage !== "/") {
@@ -46,12 +44,12 @@ export default function Home() {
       });
     }
 
-    if (podIri) {
-      router.replace("/resource/[iri]", resourceHref(podIri)).catch((e) => {
+    if (podIris.length > 0) {
+      router.replace("/resource/[iri]", resourceHref(podIris[0])).catch((e) => {
         throw e;
       });
     }
-  }, [podIri, router, previousPage]);
+  }, [podIris, router, previousPage]);
 
   return null;
 }
