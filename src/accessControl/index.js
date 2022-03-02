@@ -37,17 +37,12 @@ export function hasAccess(resourceInfo) {
 }
 
 export async function isAcp(resourceUrl, fetch) {
-  return acp3.isAcpControlled(resourceUrl, {
-    fetch,
-  });
+  return acp3.isAcpControlled(resourceUrl, { fetch });
 }
 
-export async function isWac(resourceUrl, resourceInfo, fetch) {
-  const isAcpControlledResource = await acp3.isAcpControlled(resourceUrl, {
-    fetch,
-  });
+export function isWac(resourceInfo, fetch) {
   return (
-    resourceUrl && !isAcpControlledResource && hasAccessibleAcl(resourceInfo)
+    !acp.hasLinkedAcr(resourceInfo, fetch) && hasAccessibleAcl(resourceInfo)
   );
 }
 
@@ -55,11 +50,10 @@ export async function getAccessControl(
   resourceInfo,
   policiesContainerUrl,
   fetch,
-  isLegacy
+  isLegacy,
+  isAcpControlledResource,
+  isWacControlledResource
 ) {
-  const resourceUrl = getSourceUrl(resourceInfo);
-  const isWacControlledResource = await isWac(resourceUrl, resourceInfo, fetch);
-  const isAcpControlledResource = await isAcp(resourceUrl, fetch);
   if (isWacControlledResource) {
     return WacAccessControlStrategy.init(resourceInfo, fetch);
   }
