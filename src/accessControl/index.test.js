@@ -62,16 +62,19 @@ describe("isAcp", () => {
     const accessControlType = "acp";
     expect(isAcp(accessControlType)).toBeTruthy();
   });
+
   it("returns false if type is not ACP given an access control type", () => {
     const accessControlType = "wac";
     expect(isAcp(accessControlType)).toBeFalsy();
   });
 });
+
 describe("isWac", () => {
   it("returns true if type is WAC given an access control type", () => {
     const accessControlType = "wac";
     expect(isWac(accessControlType)).toBeTruthy();
   });
+
   it("returns false if type is not WAC given an access control type", () => {
     const accessControlType = "acp";
     expect(isWac(accessControlType)).toBeFalsy();
@@ -95,6 +98,7 @@ describe("getAccessControl", () => {
       getAccessControl(resource, policiesContainerUrl, fetch)
     ).rejects.toEqual(new Error(noAccessPolicyError));
   });
+
   describe("ACP is supported", () => {
     beforeEach(async () => {
       jest.spyOn(acp, "hasLinkedAcr").mockReturnValue(true);
