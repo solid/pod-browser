@@ -49,6 +49,32 @@ import { isHTTPError } from "../../src/error";
 import { locationIsConnectedToProfile } from "../../src/solidClientHelpers/profile";
 import { isContainerIri } from "../../src/solidClientHelpers/utils";
 
+function isNotAContainerResource(iri, container) {
+  if (!iri) return true;
+  return (
+    container && isContainerIri(iri) && getSourceUrl(container.dataset) !== iri
+  );
+}
+
+function renderContainerContent(isValidating, iri, data) {
+  return isValidating ? (
+    <Spinner />
+  ) : (
+    <ContainerTable
+      containerPath={getContainerUrl(iri)}
+      data={data}
+      resourcePath={iri}
+    />
+  );
+}
+
+function maybeRenderWarning(locationIsInUsersPod, noControlError, podRootIri) {
+  return (
+    locationIsInUsersPod &&
+    noControlError && <NoControlWarning podRootIri={podRootIri} />
+  );
+}
+
 export default function Container({ iri }) {
   useRedirectIfLoggedOut();
   const { sessionRequestInProgress } = useSession();
@@ -59,7 +85,11 @@ export default function Container({ iri }) {
   const [noControlError, setNoControlError] = useState(null);
   const { data: podRootResourceInfo, error: podRootError } =
     useResourceInfo(podRootIri);
-  const { error: accessControlError } = useAccessControl(podRootResourceInfo);
+  const {
+    error: accessControlError,
+    isValidating: validatingPodRootAccessControl,
+  } = useAccessControl(podRootResourceInfo);
+
   const {
     data: container,
     error: containerError,
@@ -68,13 +98,7 @@ export default function Container({ iri }) {
   } = useContainer(iri);
 
   useEffect(() => {
-    if (
-      !iri ||
-      (container &&
-        isContainerIri(iri) &&
-        getSourceUrl(container.dataset) !== iri)
-    )
-      return;
+    if (isNotAContainerResource(iri, container)) return;
     const urls = container && getContainerResourceUrlAll(container);
     setResourceUrls(urls);
   }, [container, iri]);
@@ -96,7 +120,8 @@ export default function Container({ iri }) {
     }));
   }, [resourceUrls]);
 
-  if (!iri || isValidating) return <Spinner />;
+  if (!iri || isValidating || validatingPodRootAccessControl)
+    return <Spinner />;
 
   if (containerError && isHTTPError(containerError.message, 401))
     return <AccessForbidden />;
@@ -127,18 +152,8 @@ export default function Container({ iri }) {
         <PageHeader />
         <ContainerDetails update={update}>
           <ContainerSubHeader update={update} resourceList={data} />
-          {locationIsInUsersPod && noControlError && (
-            <NoControlWarning podRootIri={podRootIri} />
-          )}
-          {isValidating ? (
-            <Spinner />
-          ) : (
-            <ContainerTable
-              containerPath={getContainerUrl(iri)}
-              data={data}
-              resourcePath={iri}
-            />
-          )}
+          {maybeRenderWarning(locationIsInUsersPod, noControlError, podRootIri)}
+          {renderContainerContent(isValidating, iri, data)}
         </ContainerDetails>
       </BookmarksContextProvider>
     </>

@@ -22,7 +22,7 @@
 import React from "react";
 import * as RouterFns from "next/router";
 import * as solidClientFns from "@inrupt/solid-client";
-import { waitFor } from "@testing-library/dom";
+import { findByTestId, waitFor } from "@testing-library/dom";
 import { space } from "rdf-namespaces";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockSession from "../../__testUtils/mockSession";
@@ -78,6 +78,11 @@ describe("Container view", () => {
   const resourceIri = "https://example.com/container/resource.txt";
   const container = mockContainer(iri);
   const { dataset } = container;
+  const accessControlData = {
+    accessControl: mockAccessControl(),
+    isAcp: true,
+    isWac: false,
+  };
 
   beforeEach(() => {
     jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
@@ -100,7 +105,9 @@ describe("Container view", () => {
       error: null,
     });
     mockedAccessControlHook.mockReturnValue({
-      accessControl: mockAccessControl(),
+      data: accessControlData,
+      error: undefined,
+      isValidating: false,
     });
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "asPath",

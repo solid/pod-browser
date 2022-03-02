@@ -21,7 +21,7 @@
 
 import { renderHook } from "@testing-library/react-hooks";
 import { waitFor } from "@testing-library/dom";
-import useSWR from "swr";
+import { act } from "react-test-renderer";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
 import useAccessControl from "./index";
@@ -32,12 +32,16 @@ import mockSession from "../../../__testUtils/mockSession";
 import { mockProfileAlice } from "../../../__testUtils/mockPersonResource";
 import { joinPath } from "../../stringHelpers";
 import useIsLegacyAcp from "../useIsLegacyAcp";
+import useAcp from "../useAcp";
 
 jest.mock("../usePoliciesContainerUrl");
 const mockedPoliciesContainerUrlHook = usePoliciesContainerUrl;
 
 jest.mock("../useIsLegacyAcp");
 const mockedIsLegacyAcp = useIsLegacyAcp;
+
+jest.mock("../useAcp");
+const mockedUseAcp = useAcp;
 
 jest.mock("@inrupt/solid-ui-react", () => {
   const uiReactModule = jest.requireActual("@inrupt/solid-ui-react");
@@ -48,11 +52,9 @@ jest.mock("@inrupt/solid-ui-react", () => {
 });
 const mockedUseSession = useSession;
 
-jest.mock("swr");
-const mockedSwrHook = useSWR;
-
 describe("useAccessControl", () => {
   const authenticatedProfile = mockProfileAlice();
+  const policiesContainerUrl = "policiesContainer";
 
   const accessControl = "accessControl";
   const resourceUrl = joinPath(authenticatedProfile.pods[0], "test");
@@ -65,19 +67,16 @@ describe("useAccessControl", () => {
     <SessionProvider>{children}</SessionProvider>
   );
 
-  const swrResponse = "response";
   beforeEach(() => {
     jest
       .spyOn(accessControlFns, "getAccessControl")
       .mockResolvedValue(accessControl);
-    mockedPoliciesContainerUrlHook.mockReturnValue("policiesContainer");
-    jest.spyOn(accessControlFns, "isAcp").mockReturnValue(false);
     mockedUseSession.mockReturnValue({ session });
-    mockedSwrHook.mockReturnValue(swrResponse);
   });
 
   it("returns undefined if given no resourceInfo", async () => {
     mockedIsLegacyAcp.mockReturnValue({ data: false });
+    mockedUseAcp.mockReturnValue({ data: false });
     const { result } = renderHook(() => useAccessControl(null), {
       wrapper,
     });
@@ -89,53 +88,53 @@ describe("useAccessControl", () => {
 
   it("returns error if getAccessControl fails", async () => {
     mockedIsLegacyAcp.mockReturnValue({ data: false });
-    jest
-      .spyOn(accessControlFns, "getAccessControl")
-      .mockRejectedValueOnce(error);
-    renderHook(() => useAccessControl(resourceInfo), {
+    mockedUseAcp.mockReturnValue({ data: true });
+    mockedPoliciesContainerUrlHook.mockReturnValue(policiesContainerUrl);
+    jest.spyOn(accessControlFns, "getAccessControl").mockRejectedValue(error);
+    const { result } = renderHook(() => useAccessControl(resourceInfo), {
       wrapper,
     });
-    await expect(mockedSwrHook.mock.calls[0][1]()).rejects.toEqual(error);
+    await waitFor(() => {
+      expect(result.current.error).toEqual(error);
+    });
   });
 
   describe("using latest ACP", () => {
     const policiesContainerUrl = "policiesContainer";
     beforeEach(() => {
-      mockedPoliciesContainerUrlHook.mockReturnValue(policiesContainerUrl);
       mockedIsLegacyAcp.mockReturnValue({ data: false });
-      jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
       mockedUseSession.mockReturnValue({ session });
-      mockedSwrHook.mockReturnValue(swrResponse);
+      mockedUseAcp.mockReturnValue({ data: true });
     });
 
     it("returns accessControl with latest ACP if given resourceUri", async () => {
       mockedPoliciesContainerUrlHook.mockReturnValue(policiesContainerUrl);
-      renderHook(() => useAccessControl(resourceInfo), {
-        wrapper,
-      });
-      await expect(useSWR.mock.calls[0][1]()).resolves.toBe(accessControl);
-      expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
-        resourceInfo,
-        policiesContainerUrl,
-        expect.any(Function),
-        false
-      );
-      expect(useSWR).toHaveBeenCalledWith(
-        ["useAccessControl", resourceInfo, session.fetch, policiesContainerUrl],
-        expect.any(Function),
-        {}
-      );
-    });
-
-    it("returns undefined if policies container url returns null", async () => {
-      mockedPoliciesContainerUrlHook.mockReturnValueOnce(null);
+      mockedUseAcp.mockReturnValue({ data: true });
       const { result } = renderHook(() => useAccessControl(resourceInfo), {
         wrapper,
       });
       await waitFor(() => {
-        expect(result.current.accessControl).toBeUndefined();
+        expect(result.current.data.accessControl).toBe(accessControl);
+        expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
+          resourceInfo,
+          policiesContainerUrl,
+          expect.any(Function),
+          false,
+          true,
+          false
+        );
+      });
+    });
+
+    it("returns true for isValidating when neither data or error are available", async () => {
+      mockedPoliciesContainerUrlHook.mockReturnValue(null);
+      const { result } = renderHook(() => useAccessControl(resourceInfo), {
+        wrapper,
+      });
+      await waitFor(() => {
+        expect(result.current.data).toBeUndefined();
         expect(result.current.error).toBeUndefined();
-        expect(result.current.isValidating).toBeFalsy();
+        expect(result.current.isValidating).toBeTruthy();
       });
     });
   });
@@ -145,32 +144,30 @@ describe("useAccessControl", () => {
     beforeEach(() => {
       mockedPoliciesContainerUrlHook.mockReturnValue(policiesContainerUrl);
       mockedIsLegacyAcp.mockReturnValue({ data: true });
-      jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
+      mockedUseAcp.mockReturnValue({ data: true });
       jest
         .spyOn(accessControlFns, "getAccessControl")
         .mockResolvedValue(accessControl);
       mockedUseSession.mockReturnValue({ session });
-      mockedSwrHook.mockReturnValue(swrResponse);
     });
 
     it("returns accessControl with legacy ACP if given resourceUri", async () => {
       mockedPoliciesContainerUrlHook.mockReturnValue(policiesContainerUrl);
       mockedIsLegacyAcp.mockReturnValue({ data: true });
-      renderHook(() => useAccessControl(resourceInfo), {
+      const { result } = renderHook(() => useAccessControl(resourceInfo), {
         wrapper,
       });
-      await expect(useSWR.mock.calls[0][1]()).resolves.toBe(accessControl);
-      expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
-        resourceInfo,
-        policiesContainerUrl,
-        expect.any(Function),
-        true
-      );
-      expect(useSWR).toHaveBeenCalledWith(
-        ["useAccessControl", resourceInfo, session.fetch, policiesContainerUrl],
-        expect.any(Function),
-        {}
-      );
+      await waitFor(() => {
+        expect(result.current.data.accessControl).toBe(accessControl);
+        expect(accessControlFns.getAccessControl).toHaveBeenCalledWith(
+          resourceInfo,
+          policiesContainerUrl,
+          expect.any(Function),
+          true,
+          true,
+          false
+        );
+      });
     });
   });
 });

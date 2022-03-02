@@ -25,8 +25,10 @@ import { render, waitFor } from "@testing-library/react";
 import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import IndexPage from "./index";
 import TestApp from "../../../__testUtils/testApp";
+import useAccessControl from "../../../src/hooks/useAccessControl";
 
 jest.mock("../../../src/effects/auth");
+jest.mock("../../../src/hooks/useAccessControl");
 jest.mock("next/router");
 
 describe("Resource page", () => {
@@ -36,6 +38,11 @@ describe("Resource page", () => {
         iri: "https://mypod.myhost.com/",
       },
     }));
+    useAccessControl.mockReturnValue({
+      data: null,
+      error: null,
+      isValidating: false,
+    });
   });
 
   test("Renders the resource page", async () => {
@@ -59,5 +66,22 @@ describe("Resource page", () => {
     await waitFor(() => {
       expect(useRedirectIfLoggedOut).toHaveBeenCalled();
     });
+  });
+
+  test("Renders spinner while validating access control", async () => {
+    useAccessControl.mockReturnValueOnce({
+      data: null,
+      error: null,
+      isValidating: true,
+    });
+    const { asFragment, getByTestId } = render(
+      <TestApp>
+        <IndexPage />
+      </TestApp>
+    );
+    await waitFor(() => {
+      expect(getByTestId("spinner")).toBeInTheDocument();
+    });
+    expect(asFragment()).toMatchSnapshot();
   });
 });

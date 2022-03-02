@@ -22,9 +22,12 @@
 import {
   getSolidDataset,
   getStringNoLocale,
+  getProfileAll,
   getThing,
+  getThingAll,
   getUrl,
   getUrlAll,
+  getSourceUrl,
 } from "@inrupt/solid-client";
 import { foaf, rdf, schema, space, vcard, ldp } from "rdf-namespaces";
 import { getProfileIriFromContactThing } from "../addressBook";
@@ -79,18 +82,34 @@ export function locationIsConnectedToProfile(profile, location) {
   return !!getPodConnectedToProfile(profile, location);
 }
 
-export function packageProfile(webId, dataset) {
+export function packageProfile(webId, dataset, pods, inbox) {
   const profile = getThing(dataset, webId);
   return {
     ...getProfileFromPersonThing(profile),
     webId,
     dataset,
-    pods: getUrlAll(profile, space.storage) || [],
-    inbox: getUrl(profile, ldp.inbox),
+    pods: pods || getUrlAll(profile, space.storage) || [],
+    inbox: inbox || getUrl(profile, ldp.inbox),
   };
 }
 
 export async function fetchProfile(webId, fetch) {
-  const dataset = await getSolidDataset(webId, { fetch });
-  return packageProfile(webId, dataset);
+  const profiles = await getProfileAll(webId, { fetch });
+  const {
+    webIdProfile,
+    altProfileAll: [altProfile],
+  } = profiles;
+
+  let profileDataset = webIdProfile;
+  let webIdUrl = webId;
+
+  if (altProfile) {
+    webIdUrl = getSourceUrl(altProfile);
+    profileDataset = altProfile;
+  }
+
+  const pods = getUrlAll(getThing(webIdProfile, webId), space.storage);
+  const inbox = getUrlAll(getThing(webIdProfile, webId), ldp.inbox);
+
+  return packageProfile(webIdUrl, profileDataset, pods, inbox);
 }

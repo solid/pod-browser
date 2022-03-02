@@ -93,10 +93,8 @@ describe("Resource details", () => {
   });
 
   it("renders Permissions component for WAC-supporting Solid servers", async () => {
-    mockUseAcp.mockReturnValue({ data: false });
-    mockUseWac.mockReturnValue({ data: true });
     const { asFragment, getByTestId, getByText } = renderWithTheme(
-      <AccessControlProvider accessControl={accessControl}>
+      <AccessControlProvider accessControl={accessControl} isWac>
         <DatasetProvider solidDataset={dataset}>
           <ResourceDetails />
         </DatasetProvider>
@@ -110,13 +108,11 @@ describe("Resource details", () => {
   }, 30000);
 
   it("renders Sharing component for ACP-supporting Solid servers", async () => {
-    mockUseAcp.mockReturnValue({ data: true });
-    mockUseWac.mockReturnValue({ data: false });
     const PermissionsContextProvider = mockPermissionsContextProvider();
     mockUseConsentBasedAccessForResource.mockReturnValue({ permissions: [] });
     const { asFragment, getByTestId, getByText, queryAllByTestId } =
       renderWithTheme(
-        <AccessControlProvider accessControl={accessControl}>
+        <AccessControlProvider accessControl={accessControl} isAcp>
           <DatasetProvider solidDataset={dataset}>
             <PermissionsContextProvider>
               <ResourceDetails />

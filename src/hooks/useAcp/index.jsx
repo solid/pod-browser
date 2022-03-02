@@ -23,13 +23,13 @@ import { useSession } from "@inrupt/solid-ui-react";
 import useSWR from "swr";
 import { isAcp } from "../../accessControl";
 
-export default function useAcp(datasetUrl) {
+export default function useAcp(resourceUrl) {
   const { fetch } = useSession();
   return useSWR(
-    ["useAcp", datasetUrl],
+    ["useAcp", resourceUrl],
     async () => {
-      if (!datasetUrl) return null;
-      return isAcp(datasetUrl, fetch);
+      if (!resourceUrl) return null;
+      return isAcp(resourceUrl, fetch);
     },
     { revalidateOnFocus: false }
   );

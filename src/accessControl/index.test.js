@@ -56,15 +56,13 @@ describe("isAcp", () => {
 });
 describe("isWac", () => {
   beforeEach(() => {
-    jest.spyOn(acp3, "isAcpControlled").mockReturnValue(false);
+    jest.spyOn(acp, "hasLinkedAcr").mockReturnValue(false);
     jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValue(true);
   });
   const fetch = jest.fn();
-  it("uses acp3.isAcpControlled and hasAccessibleAcl to determine whether a resource from a server uses WAC", () => {
-    expect(isWac(resourceIri, resource, fetch)).toBeTruthy();
-    expect(acp3.isAcpControlled).toHaveBeenCalledWith(resourceIri, {
-      fetch,
-    });
+  it("uses acp.hasLinkedAcr and hasAccessibleAcl to determine whether a resource from a server uses WAC", () => {
+    expect(isWac(resourceIri, fetch)).toBeTruthy();
+    expect(acp.hasLinkedAcr).toHaveBeenCalledWith(resourceIri, fetch);
   });
 });
 
@@ -97,7 +95,14 @@ describe("getAccessControl", () => {
       acp.hasLinkedAcr.mockReturnValue(true);
       jest.spyOn(acp3, "isAcpControlled").mockReturnValue(true);
 
-      result = await getAccessControl(resource, policiesContainerUrl, fetch);
+      result = await getAccessControl(
+        resource,
+        policiesContainerUrl,
+        fetch,
+        false,
+        true,
+        false
+      );
     });
 
     it("calls AcpAccessControlStrategy.init, defaulting to the latest ACP systems", () =>
@@ -116,7 +121,14 @@ describe("getAccessControl", () => {
     beforeEach(async () => {
       jest.spyOn(acp3, "isAcpControlled").mockReturnValue(false);
       solidClientFns.hasAccessibleAcl.mockReturnValue(true);
-      result = await getAccessControl(resource, policiesContainerUrl, fetch);
+      result = await getAccessControl(
+        resource,
+        policiesContainerUrl,
+        fetch,
+        false,
+        false,
+        true
+      );
     });
 
     it("calls WacAccessControlStrategy.init", () =>

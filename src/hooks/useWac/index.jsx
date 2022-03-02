@@ -19,19 +19,17 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
+import { useSession } from "@inrupt/solid-ui-react";
 import useSWR from "swr";
-import { useContext } from "react";
 import { isWac } from "../../accessControl";
 
-export default function useWac(datasetUrl) {
-  const { solidDataset: dataset } = useContext(DatasetContext);
+export default function useWac(resourceInfo) {
   const { fetch } = useSession();
   return useSWR(
-    ["useWac", dataset, datasetUrl],
+    ["useWac", resourceInfo],
     async () => {
-      if (!dataset || !datasetUrl) return null;
-      return isWac(datasetUrl, dataset, fetch);
+      if (!resourceInfo) return null;
+      return isWac(resourceInfo, fetch);
     },
     { revalidateOnFocus: false }
   );

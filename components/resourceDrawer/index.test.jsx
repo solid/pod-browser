@@ -65,7 +65,7 @@ describe("ResourceDrawer view", () => {
   jest.spyOn(acp, "isAcpControlled").mockResolvedValue(true);
   jest.spyOn(acp, "hasLinkedAcr").mockResolvedValue(true);
 
-  let accessControl;
+  let accessControlData;
   let fetch;
   let session;
   let SessionProvider;
@@ -83,12 +83,16 @@ describe("ResourceDrawer view", () => {
       fetch,
     });
     SessionProvider = mockSessionContextProvider(session);
-    accessControl = mockAccessControl();
+    accessControlData = {
+      accessControl: mockAccessControl(),
+      isAcp: true,
+      isWac: false,
+    };
     mockUseConsentBasedAccessForResource.mockReturnValue({ permissions: [] });
     mockedUsePermissionsWithProfiles.mockReturnValue({ permissions: [] });
     mockedUseAllPermissions.mockReturnValue({ permissions: [] });
 
-    useAccessControl.mockReturnValue({ accessControl });
+    useAccessControl.mockReturnValue({ data: accessControlData });
     mockUseResourceInfo.mockReturnValue(swr);
 
     DetailsMenuContext = mockDetailsContextMenuProvider({
@@ -224,9 +228,7 @@ describe("ResourceDrawer view", () => {
         </DetailsMenuContext>
       </SessionProvider>
     );
-    expect(useAccessControl).toHaveBeenCalledWith(resourceInfo, {
-      revalidateOnFocus: false,
-    });
+    expect(useAccessControl).toHaveBeenCalledWith(resourceInfo);
   });
 
   it("renders a specific error message if resource fails with 403", () => {

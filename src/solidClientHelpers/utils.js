@@ -34,50 +34,39 @@ import { ldp, rdf } from "rdf-namespaces";
 
 import { parseUrl } from "../stringHelpers";
 
-const typeNameMap = Object.keys(ldp).reduce((acc, key) => {
-  const value = ldp[key];
-  return {
-    ...acc,
-    [value]: key,
-  };
-}, {});
+function mirrorKeysAndValues(obj) {
+  return Object.keys(obj).reduce((acc, key) => {
+    const value = obj[key];
+    return {
+      ...acc,
+      [value]: key,
+    };
+  }, obj);
+}
+
+const missingNamespaces = {
+  mtime: "http://www.w3.org/ns/posix/stat#mtime",
+  modified: "http://purl.org/dc/terms/modified",
+  size: "http://www.w3.org/ns/posix/stat#size",
+  nickname: "http://xmlns.com/foaf/0.1/nick",
+  familyName: "http://xmlns.com/foaf/0.1/familyName",
+  img: "http://xmlns.com/foaf/0.1/img",
+  name: "http://xmlns.com/foaf/0.1/name",
+  hasPhoto: "http://www.w3.org/2006/vcard/ns#hasPhoto",
+  countryName: "http://www.w3.org/2006/vcard/ns#country-name",
+  locality: "http://www.w3.org/2006/vcard/ns#locality",
+  postalCode: "http://www.w3.org/2006/vcard/ns#postal-code",
+  region: "http://www.w3.org/2006/vcard/ns#region",
+  streetAddress: "http://www.w3.org/2006/vcard/ns#street-address",
+  preferencesFile: "http://www.w3.org/ns/pim/space#preferencesFile",
+  podBrowserPreferencesFile: "https://inrupt.com/podbrowser#preferencesFile",
+  ConfigurationFile: "http://www.w3.org/ns/pim/space#ConfigurationFile",
+};
 
 // TODO use ldp namespace when available
 export const namespace = {
-  ...ldp,
-  ...typeNameMap,
-  mtime: "http://www.w3.org/ns/posix/stat#mtime",
-  "http://www.w3.org/ns/posix/stat#mtime": "mtime",
-  modified: "http://purl.org/dc/terms/modified",
-  "http://purl.org/dc/terms/modified": "modified",
-  size: "http://www.w3.org/ns/posix/stat#size",
-  "http://www.w3.org/ns/posix/stat#size": "size",
-  nickname: "http://xmlns.com/foaf/0.1/nick",
-  "http://xmlns.com/foaf/0.1/nick": "nickname",
-  familyName: "http://xmlns.com/foaf/0.1/familyName",
-  "http://xmlns.com/foaf/0.1/familyName": "familyName",
-  img: "http://xmlns.com/foaf/0.1/img",
-  "http://xmlns.com/foaf/0.1/img": "img",
-  name: "http://xmlns.com/foaf/0.1/name",
-  "http://xmlns.com/foaf/0.1/name": "name",
-  hasPhoto: "http://www.w3.org/2006/vcard/ns#hasPhoto",
-  "http://www.w3.org/2006/vcard/ns#hasPhoto": "hasPhoto",
-  "http://www.w3.org/2006/vcard/ns#country-name": "countryName",
-  countryName: "http://www.w3.org/2006/vcard/ns#country-name",
-  "http://www.w3.org/2006/vcard/ns#locality": "locality",
-  locality: "http://www.w3.org/2006/vcard/ns#locality",
-  "http://www.w3.org/2006/vcard/ns#postal-code": "postalCode",
-  postalCode: "http://www.w3.org/2006/vcard/ns#postal-code",
-  "http://www.w3.org/2006/vcard/ns#region": "region",
-  region: "http://www.w3.org/2006/vcard/ns#region",
-  "http://www.w3.org/2006/vcard/ns#street-address": "streetAddress",
-  streetAddress: "http://www.w3.org/2006/vcard/ns#street-address",
-  "http://www.w3.org/ns/pim/space#preferencesFile": "preferencesFile",
-  preferencesFile: "http://www.w3.org/ns/pim/space#preferencesFile",
-  "https://inrupt.com/podbrowser#preferencesFile": "podBrowserPreferencesFile",
-  podBrowserPreferencesFile: "https://inrupt.com/podbrowser#preferencesFile",
-  "http://www.w3.org/ns/pim/space#ConfigurationFile": "ConfigurationFile",
-  ConfigurationFile: "http://www.w3.org/ns/pim/space#ConfigurationFile",
+  ...mirrorKeysAndValues(ldp),
+  ...mirrorKeysAndValues(missingNamespaces),
 };
 
 export function isContainerIri(iri) {
