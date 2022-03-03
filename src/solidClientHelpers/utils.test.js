@@ -39,6 +39,7 @@ import {
   getTypeName,
   getTypes,
   isContainerIri,
+  isPodOwner,
   namespace,
   serializePromises,
   sharedStart,
@@ -288,5 +289,22 @@ describe("uniqueObjects", () => {
     expect(uniqueList).toHaveLength(2);
     expect(uniqueList[0]).toMatchObject(one);
     expect(uniqueList[1]).toMatchObject(two);
+  });
+});
+
+describe("isPodOwner", () => {
+  it("returns true if the given id is the same as the agent of the given session", () => {
+    const webId = "webId";
+    const session = { info: { webId } };
+
+    expect(isPodOwner(session, webId)).toBe(true);
+  });
+
+  it("returns false if the given id is not the same as the agent of the given session", () => {
+    const webId = "webId";
+    const otherId = "otherId";
+    const session = { info: { webId } };
+
+    expect(isPodOwner(session, otherId)).toBe(false);
   });
 });

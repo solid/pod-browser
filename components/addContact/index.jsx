@@ -35,6 +35,7 @@ import AlertContext from "../../src/contexts/alertContext";
 import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import styles from "./styles";
 import { fetchProfile } from "../../src/solidClientHelpers/profile";
+import { isPodOwner } from "../../src/solidClientHelpers/utils";
 import useContactsOld from "../../src/hooks/useContactsOld";
 import useContactsContainerUrl from "../../src/hooks/useContactsContainerUrl";
 
@@ -59,12 +60,11 @@ export function handleSubmit({
   return async (iri) => {
     const { fetch } = session;
     setDirtyForm(true);
-    if (!iri) {
-      return;
-    }
-    if (iri === session.info.webId) {
+    if (!iri) return;
+    if (isPodOwner(session, iri)) {
       alertError("You cannot add yourself as a contact");
     }
+
     setIsLoading(true);
 
     try {
@@ -74,11 +74,13 @@ export function handleSubmit({
         webId,
         fetch
       );
-      if (existingContact.length) {
+
+      if (existingContact) {
         alertError(EXISTING_WEBID_ERROR_MESSAGE);
         setIsLoading(false);
         return;
       }
+
       const contact = { webId, fn: name || null };
       const { response, error } = await saveContact(
         addressBook,
@@ -141,9 +143,7 @@ export default function AddContact() {
     people,
   });
 
-  const handleChange = (newValue) => {
-    setAgentId(newValue);
-  };
+  const handleChange = (newValue) => setAgentId(newValue);
 
   const link = <BackToNavLink href="/contacts">contacts</BackToNavLink>;
 
@@ -158,7 +158,7 @@ export default function AddContact() {
         onChange={handleChange}
         onSubmit={onSubmit}
         buttonText="Add Contact"
-        value={agentId}
+        agentId={agentId}
         dirtyForm={dirtyForm}
       />
     </div>

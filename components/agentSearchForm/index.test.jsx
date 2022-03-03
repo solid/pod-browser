@@ -54,7 +54,7 @@ describe("AgentSearchForm", () => {
         heading={heading}
         onChange={onChange}
         onSubmit={onSubmit}
-        value=""
+        agentId=""
       />
     );
 
@@ -73,7 +73,7 @@ describe("AgentSearchForm", () => {
     const onChange = jest.fn();
     const onSubmit = jest.fn();
     const wrapper = render(
-      <AgentSearchForm onSubmit={onSubmit} onChange={onChange} value="" />
+      <AgentSearchForm onSubmit={onSubmit} onChange={onChange} agentId="" />
     );
     const input = wrapper.getByRole("textbox");
     fireEvent.change(input, { target: { value: "https://www.example.com" } });
@@ -85,7 +85,7 @@ describe("AgentSearchForm", () => {
     const wrapper = render(
       <AgentSearchForm
         onSubmit={onSubmit}
-        value="https://www.example.com"
+        agentId="https://www.example.com"
         permissions={[
           {
             acl: { read: true, append: true, write: true, control: true },
@@ -105,7 +105,7 @@ describe("AgentSearchForm", () => {
     const wrapper = render(
       <AgentSearchForm
         onSubmit={onSubmit}
-        value="https://www.example.com"
+        agentId="https://www.example.com"
         permissions={[
           {
             acl: { read: true, append: true, write: true, control: true },
@@ -129,7 +129,7 @@ describe("AgentSearchForm", () => {
     const wrapper = render(
       <AgentSearchForm
         onSubmit={onSubmit}
-        value="http://example.com/webId#me"
+        agentId="http://example.com/webId#me"
         permissions={[
           {
             acl: { read: true, append: true, write: true, control: true },
@@ -153,7 +153,7 @@ describe("AgentSearchForm", () => {
       <AgentSearchForm
         type="contacts"
         onSubmit={onSubmit}
-        value="http://example.com/webId#me"
+        agentId="http://example.com/webId#me"
         permissions={[
           {
             acl: { read: true, append: true, write: true, control: true },
