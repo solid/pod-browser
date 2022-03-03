@@ -25,8 +25,7 @@ import { useEffect, useState } from "react";
 import { getAccessControl } from "../../accessControl";
 import usePoliciesContainerUrl from "../usePoliciesContainerUrl";
 import useIsLegacyAcp from "../useIsLegacyAcp";
-import useAcp from "../useAcp";
-import useWac from "../useWac";
+import useAccessControlType from "../useAccessControlType";
 
 export default function useAccessControl(resourceInfo) {
   const { session } = useSession();
@@ -36,30 +35,25 @@ export default function useAccessControl(resourceInfo) {
   const resourceUrl = resourceInfo && getSourceUrl(resourceInfo);
   const policiesContainerUrl = usePoliciesContainerUrl(resourceUrl);
   const { data: isLegacy } = useIsLegacyAcp(resourceInfo);
-  const { data: isAcpControlled, isValidating: validatingAcp } = useAcp(
-    resourceUrl,
+
+  const { data: accessControlType, isValidating } = useAccessControlType(
+    resourceInfo,
     fetch
   );
-  const { data: isWacControlled, isValidating: validatingWac } =
-    useWac(resourceInfo);
-  const isValidating = validatingAcp || validatingWac;
-
   useEffect(() => {
     (async () => {
-      if (isValidating || !resourceInfo) return;
+      if (isValidating || !resourceInfo || !policiesContainerUrl) return;
       try {
         const accessControl = await getAccessControl(
           resourceInfo,
           policiesContainerUrl,
           fetch,
           isLegacy,
-          isAcpControlled,
-          isWacControlled
+          accessControlType
         );
         setData({
           accessControl,
-          isAcp: isAcpControlled,
-          isWac: isWacControlled,
+          accessControlType,
         });
         setError(null);
       } catch (error) {
@@ -68,8 +62,7 @@ export default function useAccessControl(resourceInfo) {
       }
     })();
   }, [
-    isWacControlled,
-    isAcpControlled,
+    accessControlType,
     isLegacy,
     isValidating,
     resourceInfo,

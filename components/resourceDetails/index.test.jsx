@@ -34,8 +34,7 @@ import mockAccessControl from "../../__testUtils/mockAccessControl";
 import { AccessControlProvider } from "../../src/contexts/accessControlContext";
 import mockPermissionsContextProvider from "../../__testUtils/mockPermissionsContextProvider";
 import useConsentBasedAccessForResource from "../../src/hooks/useConsentBasedAccessForResource";
-import useAcp from "../../src/hooks/useAcp";
-import useWac from "../../src/hooks/useWac";
+import useAccessControlType from "../../src/hooks/useAccessControlType";
 import { TESTCAFE_ID_AGENT_ACCESS_TABLE } from "./resourceSharing/agentAccessTable";
 
 const accessControl = mockAccessControl();
@@ -44,10 +43,8 @@ const dataset = mockSolidDatasetFrom("http://example.com/container/");
 jest.mock("../../src/hooks/useConsentBasedAccessForResource");
 const mockedUseConsentBasedAccessForResource = useConsentBasedAccessForResource;
 
-jest.mock("../../src/hooks/useAcp");
-jest.mock("../../src/hooks/useWac");
-const mockUseAcp = useAcp;
-const mockUseWac = useWac;
+jest.mock("../../src/hooks/useAccessControlType");
+const mockUseAccessControlType = useAccessControlType;
 
 jest.mock("../../src/hooks/useConsentBasedAccessForResource");
 const mockUseConsentBasedAccessForResource = useConsentBasedAccessForResource;
@@ -61,8 +58,7 @@ describe("Resource details", () => {
   });
 
   it("renders container details", async () => {
-    mockUseAcp.mockReturnValue({ data: true });
-    mockUseWac.mockReturnValue({ data: false });
+    mockUseAccessControlType.mockReturnValue({ data: "acp" });
     const { asFragment, getByText } = renderWithTheme(
       <DatasetProvider solidDataset={dataset}>
         <ResourceDetails />
@@ -75,8 +71,7 @@ describe("Resource details", () => {
   });
 
   it("renders a decoded container name", async () => {
-    mockUseAcp.mockReturnValue({ data: true });
-    mockUseWac.mockReturnValue({ data: false });
+    mockUseAccessControlType.mockReturnValue({ data: "acp" });
     const datasetWithDecodedContainerName = mockSolidDatasetFrom(
       "http://example.com/Some%20container/"
     );
@@ -94,7 +89,10 @@ describe("Resource details", () => {
 
   it("renders Permissions component for WAC-supporting Solid servers", async () => {
     const { asFragment, getByTestId, getByText } = renderWithTheme(
-      <AccessControlProvider accessControl={accessControl} isWac>
+      <AccessControlProvider
+        accessControl={accessControl}
+        accessControlType="wac"
+      >
         <DatasetProvider solidDataset={dataset}>
           <ResourceDetails />
         </DatasetProvider>
@@ -112,7 +110,10 @@ describe("Resource details", () => {
     mockUseConsentBasedAccessForResource.mockReturnValue({ permissions: [] });
     const { asFragment, getByTestId, getByText, queryAllByTestId } =
       renderWithTheme(
-        <AccessControlProvider accessControl={accessControl} isAcp>
+        <AccessControlProvider
+          accessControl={accessControl}
+          accessControlType="acp"
+        >
           <DatasetProvider solidDataset={dataset}>
             <PermissionsContextProvider>
               <ResourceDetails />

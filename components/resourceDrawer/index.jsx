@@ -111,8 +111,7 @@ export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
         <ResourceInfoProvider swr={resourceInfoSwrResponse}>
           <AccessControlProvider
             accessControl={accessControlData?.accessControl}
-            isAcp={accessControlData?.isAcp}
-            isWac={accessControlData?.isWac}
+            accessControlType={accessControlData?.accessControlType}
           >
             <DatasetProvider solidDataset={resourceInfo}>
               <ResourceDetails

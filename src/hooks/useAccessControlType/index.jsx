@@ -19,17 +19,40 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import {
+  hasAccessibleAcl,
+  acp_v3 as acp3,
+  getSourceUrl,
+} from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
 import useSWR from "swr";
-import { isWac } from "../../accessControl";
 
-export default function useWac(resourceInfo) {
+export const ACP = "acp";
+export const WAC = "wac";
+
+async function getAccessControlType(resourceInfo, fetch) {
+  const resourceUrl = getSourceUrl(resourceInfo);
+  const isAcpControlledResource = await acp3.isAcpControlled(resourceUrl, {
+    fetch,
+  });
+  const isWacControlledResource =
+    !isAcpControlledResource && hasAccessibleAcl(resourceInfo);
+  if (isAcpControlledResource) {
+    return ACP;
+  }
+  if (isWacControlledResource) {
+    return WAC;
+  }
+  return null;
+}
+
+export default function useAccessControlType(resourceInfo) {
   const { fetch } = useSession();
   return useSWR(
-    ["useWac", resourceInfo],
+    ["useAccessControlType", resourceInfo],
     async () => {
       if (!resourceInfo) return null;
-      return isWac(resourceInfo, fetch);
+      return getAccessControlType(resourceInfo, fetch);
     },
     { revalidateOnFocus: false }
   );

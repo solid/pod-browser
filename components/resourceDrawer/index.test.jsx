@@ -85,8 +85,7 @@ describe("ResourceDrawer view", () => {
     SessionProvider = mockSessionContextProvider(session);
     accessControlData = {
       accessControl: mockAccessControl(),
-      isAcp: true,
-      isWac: false,
+      accessControlType: "acp",
     };
     mockUseConsentBasedAccessForResource.mockReturnValue({ permissions: [] });
     mockedUsePermissionsWithProfiles.mockReturnValue({ permissions: [] });
