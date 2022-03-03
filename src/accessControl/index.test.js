@@ -41,28 +41,40 @@ jest.mock("./acp");
 jest.mock("./wac");
 
 const resourceIri = "http://example.com";
-const resource = mockSolidDatasetFrom("http://example.com");
+const resource = mockSolidDatasetFrom(resourceIri);
+
+describe("hasAccess", () => {
+  it("checks whether resource is accessible either through ACP or WAC", () => {
+    const resourceWithWac = addMockResourceAclTo(resource);
+    const resourceWithAcp = acp.addMockAcrTo(resource);
+    jest
+      .spyOn(acp, "hasLinkedAcr")
+      .mockImplementation((r) => r === resourceWithAcp);
+
+    expect(hasAccess(resource)).toBeFalsy();
+    expect(hasAccess(resourceWithWac)).toBeTruthy();
+    expect(hasAccess(resourceWithAcp)).toBeTruthy();
+  });
+});
 
 describe("isAcp", () => {
-  beforeEach(() => {
-    jest.spyOn(acp3, "isAcpControlled").mockReturnValue(true);
+  it("returns true if type is ACP given an access control type", () => {
+    const accessControlType = "acp";
+    expect(isAcp(accessControlType)).toBeTruthy();
   });
-
-  it("uses acp3.isAcpControlled to determine whether a resource from a server uses ACP", () => {
-    const fetch = jest.fn();
-    expect(isAcp(resourceIri, fetch)).toBeTruthy();
-    expect(acp3.isAcpControlled).toHaveBeenCalledWith(resourceIri, { fetch });
+  it("returns false if type is not ACP given an access control type", () => {
+    const accessControlType = "wac";
+    expect(isAcp(accessControlType)).toBeFalsy();
   });
 });
 describe("isWac", () => {
-  beforeEach(() => {
-    jest.spyOn(acp, "hasLinkedAcr").mockReturnValue(false);
-    jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValue(true);
+  it("returns true if type is WAC given an access control type", () => {
+    const accessControlType = "wac";
+    expect(isWac(accessControlType)).toBeTruthy();
   });
-  const fetch = jest.fn();
-  it("uses acp.hasLinkedAcr and hasAccessibleAcl to determine whether a resource from a server uses WAC", () => {
-    expect(isWac(resourceIri, fetch)).toBeTruthy();
-    expect(acp.hasLinkedAcr).toHaveBeenCalledWith(resourceIri, fetch);
+  it("returns false if type is not WAC given an access control type", () => {
+    const accessControlType = "acp";
+    expect(isWac(accessControlType)).toBeFalsy();
   });
 });
 
@@ -74,25 +86,18 @@ describe("getAccessControl", () => {
   const wacStrategy = "wacStrategy";
 
   beforeEach(() => {
-    jest.spyOn(acp3, "isAcpControlled").mockReturnValue(true);
-    jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValue(false);
-    jest.spyOn(acp, "hasLinkedAcr").mockReturnValue(false);
     jest.spyOn(WacAccessControlStrategy, "init").mockReturnValue(wacStrategy);
     jest.spyOn(AcpAccessControlStrategy, "init").mockReturnValue(acpStrategy);
   });
 
-  afterEach(() => jest.restoreAllMocks());
-
   it("throws error if no ACL is found", async () => {
-    jest.spyOn(acp3, "isAcpControlled").mockReturnValue(false);
     await expect(
       getAccessControl(resource, policiesContainerUrl, fetch)
     ).rejects.toEqual(new Error(noAccessPolicyError));
   });
-
   describe("ACP is supported", () => {
     beforeEach(async () => {
-      acp.hasLinkedAcr.mockReturnValue(true);
+      jest.spyOn(acp, "hasLinkedAcr").mockReturnValue(true);
       jest.spyOn(acp3, "isAcpControlled").mockReturnValue(true);
 
       result = await getAccessControl(
@@ -100,8 +105,7 @@ describe("getAccessControl", () => {
         policiesContainerUrl,
         fetch,
         false,
-        true,
-        false
+        "acp"
       );
     });
 
@@ -120,14 +124,13 @@ describe("getAccessControl", () => {
   describe("WAC is supported", () => {
     beforeEach(async () => {
       jest.spyOn(acp3, "isAcpControlled").mockReturnValue(false);
-      solidClientFns.hasAccessibleAcl.mockReturnValue(true);
+      jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
       result = await getAccessControl(
         resource,
         policiesContainerUrl,
         fetch,
         false,
-        false,
-        true
+        "wac"
       );
     });
 
@@ -139,19 +142,5 @@ describe("getAccessControl", () => {
 
     it("returns the result from WacAccessControlStrategy.init", () =>
       expect(result).toBe(wacStrategy));
-  });
-});
-
-describe("hasAccess", () => {
-  it("checks whether resource is accessible either through ACP or WAC", () => {
-    const resourceWithWac = addMockResourceAclTo(resource);
-    const resourceWithAcp = acp.addMockAcrTo(resource);
-    jest
-      .spyOn(acp, "hasLinkedAcr")
-      .mockImplementation((r) => r === resourceWithAcp);
-
-    expect(hasAccess(resource)).toBeFalsy();
-    expect(hasAccess(resourceWithWac)).toBeTruthy();
-    expect(hasAccess(resourceWithAcp)).toBeTruthy();
   });
 });

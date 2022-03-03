@@ -22,7 +22,7 @@
 import React from "react";
 import * as RouterFns from "next/router";
 import * as solidClientFns from "@inrupt/solid-client";
-import { findByTestId, waitFor } from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 import { space } from "rdf-namespaces";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockSession from "../../__testUtils/mockSession";
@@ -80,8 +80,7 @@ describe("Container view", () => {
   const { dataset } = container;
   const accessControlData = {
     accessControl: mockAccessControl(),
-    isAcp: true,
-    isWac: false,
+    accessControlType: "acp",
   };
 
   beforeEach(() => {
