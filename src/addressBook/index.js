@@ -398,7 +398,7 @@ export function createContact(
 
 export async function findContactInAddressBook(people, webId, fetch) {
   const profiles = await getProfiles(people, fetch);
-  return profiles.filter(
+  return profiles.find(
     (profile) => webId === getProfileIriFromContactThing(profile)
   );
 }

@@ -30,30 +30,46 @@ import {
   SimpleInput,
 } from "@inrupt/prism-react-components";
 import { useSession } from "@inrupt/solid-ui-react";
+import { isPodOwner } from "../../src/solidClientHelpers/utils";
 
 export const TESTCAFE_ID_ADD_AGENT_BUTTON = "add-agent-button";
 
+const AGENT_TYPE_MAP = {
+  contacts: {
+    OWN_WEBID_ERROR_MESSAGE: "You cannot add yourself as a contact.",
+  },
+  permissions: {
+    OWN_WEBID_ERROR_MESSAGE: "You cannot overwrite your own permissions.",
+  },
+};
+
+function isDuplicateContact(permissions, agentId) {
+  return permissions.filter((p) => p.webId === agentId).length;
+}
+
 export function setupSubmitHandler(
-  value,
+  agentId,
   session,
   setIsPodOwner,
-  permissions,
+  permissions = [],
   setExistingWebId,
   onSubmit
 ) {
   return async (event) => {
     event.preventDefault();
-    if (value === session.info.webId) {
+
+    if (isPodOwner(session, agentId)) {
       setIsPodOwner(true);
       return;
     }
     /* ignoring next block because it is affecting the coverage and we're removing this code soon */
     /* istanbul ignore next */
-    if ((permissions || []).filter((p) => p.webId === value).length) {
-      setExistingWebId(value);
+    if (isDuplicateContact(permissions, agentId)) {
+      setExistingWebId(agentId);
       return;
     }
-    await onSubmit(value);
+
+    await onSubmit(agentId);
   };
 }
 
@@ -81,26 +97,16 @@ export default function AgentSearchForm({
   onChange,
   onSubmit,
   permissions,
-  value,
+  agentId,
 }) {
   const inputId = useId();
   const { session } = useSession();
   const [dirtyWebIdField, setDirtyWebIdField] = useState(dirtyForm);
-  const invalidWebIdField = !value && (dirtyForm || dirtyWebIdField);
+  const invalidWebIdField = !agentId && (dirtyForm || dirtyWebIdField);
   const [existingWebId, setExistingWebId] = useState(null);
   const [isPodOwner, setIsPodOwner] = useState(false);
-
-  const AGENT_TYPE_MAP = {
-    contacts: {
-      OWN_WEBID_ERROR_MESSAGE: "You cannot add yourself as a contact.",
-    },
-    permissions: {
-      OWN_WEBID_ERROR_MESSAGE: "You cannot overwrite your own permissions.",
-    },
-  };
-
   const handleSubmit = setupSubmitHandler(
-    value,
+    agentId,
     session,
     setIsPodOwner,
     permissions,
@@ -136,7 +142,7 @@ export default function AgentSearchForm({
       <SimpleInput
         id={inputId}
         onChange={handleChange}
-        value={value}
+        value={agentId}
         type="url"
         pattern="https:\/\/\S+"
         title="Must be a valid URL that starts with https:// and does not contain spaces"
@@ -159,7 +165,7 @@ AgentSearchForm.propTypes = {
   onChange: T.func,
   onSubmit: T.func,
   permissions: T.arrayOf(T.object),
-  value: T.string,
+  agentId: T.string,
   type: T.string,
 };
 
@@ -170,6 +176,6 @@ AgentSearchForm.defaultProps = {
   onChange: () => {},
   onSubmit: () => {},
   permissions: [],
-  value: "",
+  agentId: "",
   type: "permissions",
 };

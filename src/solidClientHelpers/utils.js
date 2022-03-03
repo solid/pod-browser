@@ -158,3 +158,7 @@ export async function serializePromises(promiseFactories) {
 export function uniqueObjects(array) {
   return Array.from(new Set(array.map(JSON.stringify))).map(JSON.parse);
 }
+
+export function isPodOwner(session, agentId) {
+  return agentId === session?.info?.webId;
+}
