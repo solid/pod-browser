@@ -98,7 +98,6 @@ describe("getAccessControl", () => {
       getAccessControl(resource, policiesContainerUrl, fetch)
     ).rejects.toEqual(new Error(noAccessPolicyError));
   });
-
   describe("ACP is supported", () => {
     beforeEach(async () => {
       jest.spyOn(acp, "hasLinkedAcr").mockReturnValue(true);
