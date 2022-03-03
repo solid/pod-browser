@@ -62,7 +62,6 @@ export default function AgentAccess({ permission }) {
   const [loading, setLoading] = useState(false);
   const resourceIri = getSourceUrl(dataset);
   const [localAccess, setLocalAccess] = useState(acl);
-
   useEffect(() => {
     if (webId === PUBLIC_AGENT_PREDICATE) {
       setLocalProfile({ name: PUBLIC_AGENT_NAME });
@@ -86,17 +85,6 @@ export default function AgentAccess({ permission }) {
   };
 
   if (!localAccess) return null;
-
-  if (loading)
-    return (
-      <div className={classes.spinnerContainer}>
-        <CircularProgress
-          size={20}
-          className={bem("spinner")}
-          color="primary"
-        />
-      </div>
-    );
 
   if (localProfileError) {
     return (
@@ -148,7 +136,7 @@ export default function AgentAccess({ permission }) {
     );
   }
 
-  if (!localProfile && !localProfileError) {
+  if ((!localProfile && !localProfileError) || loading) {
     return (
       <div className={classes.loadingStateContainer}>
         <Skeleton

@@ -27,14 +27,15 @@ import {
 import { useSession } from "@inrupt/solid-ui-react";
 
 export default function useConsentBasedAccessForResource(resourceUrl) {
-  const [permissions, setPermissions] = useState(null);
+  const [permissions, setPermissions] = useState([]);
   const [permissionsError, setPermissionsError] = useState(null);
   const { fetch } = useSession();
   useEffect(() => {
     if (!resourceUrl) {
-      setPermissions(null);
+      setPermissions([]);
       return;
     }
+
     async function checkVcValidity(vc) {
       try {
         const response = await isValidAccessGrant(vc, { fetch });
@@ -43,23 +44,30 @@ export default function useConsentBasedAccessForResource(resourceUrl) {
         return null;
       }
     }
+
     (async () => {
       try {
         const access = await getAccessGrantAll(resourceUrl, { fetch });
         const validVcs = await Promise.all(
           access.map(async (vc) => {
+            // could this be an Array.reduce?
             const isValidVc = await checkVcValidity(vc);
-            if (!isValidVc.errors.length) {
+            if (isValidVc.errors.length === 0) {
               return vc;
             }
             return null;
           })
         );
         setPermissions(validVcs.filter((vc) => vc !== null));
+        console.log("permissions in useConsentBasedAccessForResource", {
+          permissions,
+        });
+        if (permissions.length) debugger;
       } catch (err) {
         setPermissionsError(err);
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resourceUrl, fetch]);
   return { permissions, permissionsError };
 }

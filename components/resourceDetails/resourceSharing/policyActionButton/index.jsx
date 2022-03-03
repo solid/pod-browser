@@ -74,7 +74,7 @@ export const handleRemoveAllAgents = ({
 
 export default function PolicyActionButton({ permissions, setLoading, type }) {
   const { accessControl } = useContext(AccessControlContext);
-  const disableRemoveButton = permissions.length === 0 && isNamedPolicy(type);
+  const disableRemoveButton = !permissions.length && isNamedPolicy(type);
   const policyType = getPolicyType(type);
   const dialogId = "remove-policy";
   const [policyToDelete, setPolicyToDelete] = useState();

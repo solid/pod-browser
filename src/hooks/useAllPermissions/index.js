@@ -67,7 +67,7 @@ const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
 
 export default function useAllPermissions() {
   const { accessControl } = useContext(AccessControlContext);
-  const [permissions, setPermissions] = useState(null);
+  const [permissions, setPermissions] = useState([]);
 
   const { solidDataset: dataset } = useContext(DatasetContext);
   const datasetUrl = getSourceUrl(dataset);
@@ -75,20 +75,24 @@ export default function useAllPermissions() {
   const { permissions: consentBasedPermissions } =
     useConsentBasedAccessForResource(datasetUrl);
 
+  const removePermission = (p) => {
+    const newPermissions = permissions.filter((permission) => {
+      // eslint-disable-next-line eqeqeq
+      return permission.vc.id != p.vc.id;
+    });
+    setPermissions(newPermissions);
+  };
+
   const normalizedConsentPermissions = useMemo(
-    () =>
-      consentBasedPermissions
-        ? normalizeConsentBasedPermissions(consentBasedPermissions)
-        : [],
+    () => normalizeConsentBasedPermissions(consentBasedPermissions),
     [consentBasedPermissions]
   );
 
   useEffect(() => {
     if (!accessControl) {
-      setPermissions(null);
+      setPermissions([]);
       return;
     }
-
     accessControl
       .getAllPermissionsForResource()
       .then((normalizedPermissions) => {
@@ -101,5 +105,7 @@ export default function useAllPermissions() {
 
   return {
     permissions,
+    removePermission,
+    setPermissions,
   };
 }

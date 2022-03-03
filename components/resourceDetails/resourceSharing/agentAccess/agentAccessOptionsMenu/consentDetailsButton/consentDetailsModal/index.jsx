@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import T from "prop-types";
 import {
   Icons,
@@ -59,7 +59,8 @@ import { getPurposeUrlsFromSignedVc } from "../../../../../../../src/models/cons
 import styles from "./styles";
 import AgentName from "../agentName";
 import { getResourceName } from "../../../../../../../src/solidClientHelpers/resource";
-import PermissionsContext from "../../../../../../../src/contexts/permissionsContext";
+import AlertContext from "../../../../../../../src/contexts/alertContext";
+import useAllPermissions from "../../../../../../../src/hooks/useAllPermissions";
 
 // export const TESTCAFE_ID_CONSENT_DETAILS_CONTENT = "consent-details-modal";
 export const TESTCAFE_ID_CONSENT_DETAILS_MODAL = "consent-details-modal";
@@ -86,7 +87,7 @@ export default function ConsentDetailsModal({
   const bem = useBem(classes);
   const { vc, webId: agentWebId } = permission;
   const errorComponent = setupErrorComponent(bem);
-
+  const { removePermission } = useAllPermissions;
   const allowModes = vc?.credentialSubject?.providedConsent?.mode;
   const modes = allowModes?.map((mode) => ({
     read: !!mode.includes("Read"),
@@ -106,12 +107,18 @@ export default function ConsentDetailsModal({
   const issuanceDate = format(new Date(getIssuanceDate(vc)), "M/dd/Y");
   const purposes = getPurposeUrlsFromSignedVc(vc);
   const { fetch } = useSession();
+  const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
 
   const handleRevoke = async () => {
-    setLoading(true);
-    revokeAccessGrant(vc, { fetch });
+    try {
+      await revokeAccessGrant(vc, { fetch });
+      removePermission(permission);
+    } catch (error) {
+      setSeverity("error");
+      setMessage(error.toString());
+      setAlertOpen(true);
+    }
     handleCloseModal();
-    setLoading(false);
   };
 
   return (

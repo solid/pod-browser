@@ -35,7 +35,7 @@ export const PUBLIC_AGENT_NAME = "Anyone";
 export const PUBLIC_AGENT_TYPE = "public";
 
 export const PUBLIC_AGENT_PREDICATE =
-  "http://www.w3.org/ns/solid/acp#PublicAgent";
+  "http://www.w3.org/ns/solid/acp#PublicAgent"; // 404 not found
 
 export const PUBLIC_AGENT = {
   isOfType: (thing) =>

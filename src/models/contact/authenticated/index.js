@@ -32,7 +32,7 @@ import { chain } from "../../../solidClientHelpers/utils";
 
 const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 export const AUTHENTICATED_AGENT_PREDICATE =
-  "http://www.w3.org/ns/solid/acp#AuthenticatedAgent";
+  "http://www.w3.org/ns/solid/acp#AuthenticatedAgent"; // 404 not found
 
 export const AUTHENTICATED_AGENT_NAME = "Anyone signed in";
 export const AUTHENTICATED_AGENT_TYPE = "authenticated";

@@ -37,9 +37,8 @@ function SharingAccordion() {
   const router = useRouter();
   const isContainer = isContainerIri(router.query.resourceIri);
   const [loading, setLoading] = useState(false);
-
   return (
-    <PermissionsContextProvider>
+    <>
       {namedPolicies.concat(customPolicies).map(({ name }) => (
         <AgentAccessTable
           type={name}
@@ -48,13 +47,15 @@ function SharingAccordion() {
           setLoading={setLoading}
         />
       ))}
+      {/* <PermissionsContextProvider> */}
       {isContainer && (
         <Alert icon={false} severity="info">
           Sharing applies to all items in this folder
         </Alert>
       )}
       <AdvancedSharingButton loading={loading} setLoading={setLoading} />
-    </PermissionsContextProvider>
+      {/* </PermissionsContextProvider> */}
+    </>
   );
 }
 
