@@ -78,6 +78,10 @@ describe("Container view", () => {
   const resourceIri = "https://example.com/container/resource.txt";
   const container = mockContainer(iri);
   const { dataset } = container;
+  const accessControlData = {
+    accessControl: mockAccessControl(),
+    accessControlType: "acp",
+  };
 
   beforeEach(() => {
     jest.spyOn(accessControlFns, "isAcp").mockReturnValue(true);
@@ -100,7 +104,9 @@ describe("Container view", () => {
       error: null,
     });
     mockedAccessControlHook.mockReturnValue({
-      accessControl: mockAccessControl(),
+      data: accessControlData,
+      error: undefined,
+      isValidating: false,
     });
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "asPath",

@@ -19,19 +19,40 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
+import {
+  hasAccessibleAcl,
+  acp_v3 as acp3,
+  getSourceUrl,
+} from "@inrupt/solid-client";
+import { useSession } from "@inrupt/solid-ui-react";
 import useSWR from "swr";
-import { useContext } from "react";
-import { isWac } from "../../accessControl";
 
-export default function useWac(datasetUrl) {
-  const { solidDataset: dataset } = useContext(DatasetContext);
+export const ACP = "acp";
+export const WAC = "wac";
+
+async function getAccessControlType(resourceInfo, fetch) {
+  const resourceUrl = getSourceUrl(resourceInfo);
+  const isAcpControlledResource = await acp3.isAcpControlled(resourceUrl, {
+    fetch,
+  });
+  const isWacControlledResource =
+    !isAcpControlledResource && hasAccessibleAcl(resourceInfo);
+  if (isAcpControlledResource) {
+    return ACP;
+  }
+  if (isWacControlledResource) {
+    return WAC;
+  }
+  return null;
+}
+
+export default function useAccessControlType(resourceInfo) {
   const { fetch } = useSession();
   return useSWR(
-    ["useWac", dataset, datasetUrl],
+    ["useAccessControlType", resourceInfo],
     async () => {
-      if (!dataset || !datasetUrl) return null;
-      return isWac(datasetUrl, dataset, fetch);
+      if (!resourceInfo) return null;
+      return getAccessControlType(resourceInfo, fetch);
     },
     { revalidateOnFocus: false }
   );

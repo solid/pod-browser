@@ -24,12 +24,13 @@ import T from "prop-types";
 
 const defaultValues = {
   accessControl: null,
+  accessControlType: null,
 };
 const AccessControlContext = createContext(defaultValues);
 
-function AccessControlProvider({ children, accessControl }) {
+function AccessControlProvider({ children, accessControl, accessControlType }) {
   return (
-    <AccessControlContext.Provider value={{ accessControl }}>
+    <AccessControlContext.Provider value={{ accessControl, accessControlType }}>
       {children}
     </AccessControlContext.Provider>
   );
@@ -37,12 +38,14 @@ function AccessControlProvider({ children, accessControl }) {
 
 AccessControlProvider.defaultProps = {
   accessControl: null,
+  accessControlType: null,
 };
 
 AccessControlProvider.propTypes = {
   children: T.node.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   accessControl: T.object,
+  accessControlType: T.string,
 };
 
 export { AccessControlProvider };

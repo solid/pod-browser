@@ -45,8 +45,7 @@ import { getResourceName } from "../../src/solidClientHelpers/resource";
 import AccessControlContext from "../../src/contexts/accessControlContext";
 import SharingAccordion from "./resourceSharing/sharingAccordion";
 import useLocalStorage from "../../src/hooks/useLocalStorage";
-import useAcp from "../../src/hooks/useAcp";
-import useWac from "../../src/hooks/useWac";
+import { isAcp, isWac } from "../../src/accessControl";
 
 const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
 const TESTCAFE_ID_DELETE_BUTTON = "delete-resource-button";
@@ -75,9 +74,8 @@ export default function ResourceDetails({
   const displayName = getResourceName(name);
   const type = getContentType(dataset);
   const actionMenuBem = ActionMenu.useBem();
-  const { accessControl } = useContext(AccessControlContext);
-  const { data: isAcpControlled } = useAcp(datasetUrl);
-  const { data: isWacControlled } = useWac(datasetUrl);
+  const { accessControl, accessControlType } = useContext(AccessControlContext);
+
   const [actionsAccordion, setActionsAccordion] = useLocalStorage(
     getAccordionKey(dataset, "actions"),
     true
@@ -175,7 +173,7 @@ export default function ResourceDetails({
 
       {accessControl && ( // only show when we know user has control access
         <>
-          {isWacControlled && (
+          {isWac(accessControlType) && (
             <Accordion
               expanded={permissionsAccordion}
               onChange={() => setPermissionsAccordion(!permissionsAccordion)}
@@ -191,7 +189,7 @@ export default function ResourceDetails({
               </AccordionDetails>
             </Accordion>
           )}
-          {isAcpControlled && (
+          {isAcp(accessControlType) && (
             <Accordion
               expanded={sharingAccordion}
               onChange={() => setSharingAccordion(!sharingAccordion)}

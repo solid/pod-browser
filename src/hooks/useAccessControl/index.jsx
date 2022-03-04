@@ -21,28 +21,60 @@
 
 import { useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
-import useSWR from "swr";
+import { useEffect, useState } from "react";
 import { getAccessControl } from "../../accessControl";
 import usePoliciesContainerUrl from "../usePoliciesContainerUrl";
 import useIsLegacyAcp from "../useIsLegacyAcp";
+import useAccessControlType from "../useAccessControlType";
 
-export default function useAccessControl(resourceInfo, swrOptions = {}) {
+export default function useAccessControl(resourceInfo) {
+  const { session } = useSession();
+  const { fetch } = session;
+  const [data, setData] = useState();
+  const [error, setError] = useState();
   const resourceUrl = resourceInfo && getSourceUrl(resourceInfo);
   const policiesContainerUrl = usePoliciesContainerUrl(resourceUrl);
   const { data: isLegacy } = useIsLegacyAcp(resourceInfo);
-  const { session } = useSession();
-  const { fetch } = session;
-  return useSWR(
-    ["useAccessControl", resourceInfo, fetch, policiesContainerUrl],
-    async () => {
-      if (!policiesContainerUrl) return null;
-      return getAccessControl(
-        resourceInfo,
-        policiesContainerUrl,
-        fetch,
-        isLegacy
-      );
-    },
-    swrOptions
+
+  const { data: accessControlType, isValidating } = useAccessControlType(
+    resourceInfo,
+    fetch
   );
+  useEffect(() => {
+    (async () => {
+      if (
+        isValidating ||
+        !resourceInfo ||
+        !policiesContainerUrl ||
+        accessControlType === undefined
+      )
+        return;
+      try {
+        const accessControl = await getAccessControl(
+          resourceInfo,
+          policiesContainerUrl,
+          fetch,
+          isLegacy,
+          accessControlType
+        );
+        setData({
+          accessControl,
+          accessControlType,
+        });
+        setError(null);
+      } catch (error) {
+        setError(error);
+        setData(null);
+      }
+    })();
+  }, [
+    accessControlType,
+    isLegacy,
+    isValidating,
+    resourceInfo,
+    policiesContainerUrl,
+    fetch,
+  ]);
+
+  return { data, error, isValidating: !data && !error };
 }

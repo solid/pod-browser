@@ -20,12 +20,7 @@
  */
 
 // eslint-disable-next-line camelcase
-import {
-  hasAccessibleAcl,
-  acp_v1 as acp,
-  acp_v3 as acp3,
-  getSourceUrl,
-} from "@inrupt/solid-client";
+import { hasAccessibleAcl, acp_v1 as acp } from "@inrupt/solid-client";
 import WacAccessControlStrategy from "./wac";
 import AcpAccessControlStrategy from "./acp";
 
@@ -36,34 +31,25 @@ export function hasAccess(resourceInfo) {
   return hasAccessibleAcl(resourceInfo) || acp.hasLinkedAcr(resourceInfo);
 }
 
-export async function isAcp(resourceUrl, fetch) {
-  return acp3.isAcpControlled(resourceUrl, {
-    fetch,
-  });
+export function isAcp(accessControlType) {
+  return accessControlType === "acp";
 }
 
-export async function isWac(resourceUrl, resourceInfo, fetch) {
-  const isAcpControlledResource = await acp3.isAcpControlled(resourceUrl, {
-    fetch,
-  });
-  return (
-    resourceUrl && !isAcpControlledResource && hasAccessibleAcl(resourceInfo)
-  );
+export function isWac(accessControlType) {
+  return accessControlType === "wac";
 }
 
 export async function getAccessControl(
   resourceInfo,
   policiesContainerUrl,
   fetch,
-  isLegacy
+  isLegacy,
+  accessControlType
 ) {
-  const resourceUrl = getSourceUrl(resourceInfo);
-  const isWacControlledResource = await isWac(resourceUrl, resourceInfo, fetch);
-  const isAcpControlledResource = await isAcp(resourceUrl, fetch);
-  if (isWacControlledResource) {
+  if (isWac(accessControlType)) {
     return WacAccessControlStrategy.init(resourceInfo, fetch);
   }
-  if (isAcpControlledResource) {
+  if (isAcp(accessControlType)) {
     return AcpAccessControlStrategy.init(
       resourceInfo,
       policiesContainerUrl,
