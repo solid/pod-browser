@@ -48,13 +48,6 @@ const links = [
     target: "_blank",
     "data-testid": TESTCAFE_ID_TOS_LINK,
   },
-  {
-    href: "https://inrupt.atlassian.net/servicedesk/customer/portal/7",
-    text: "Help",
-    rel: "noreferrer",
-    target: "_blank",
-    "data-testid": TESTCAFE_ID_TOS_LINK,
-  },
 ];
 
 export default function Login({ history }) {

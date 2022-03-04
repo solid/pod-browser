@@ -104,14 +104,6 @@ exports[`Login page renders a login button 1`] = `
         >
           Privacy Policy
         </a>
-        <a
-          class="PodBrowser-links-container__link"
-          href="https://inrupt.atlassian.net/servicedesk/customer/portal/7"
-          rel="noreferrer"
-          target="_blank"
-        >
-          Help
-        </a>
       </div>
     </div>
   </div>
