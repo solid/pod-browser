@@ -42,7 +42,13 @@ export default function useAccessControl(resourceInfo) {
   );
   useEffect(() => {
     (async () => {
-      if (isValidating || !resourceInfo || !policiesContainerUrl) return;
+      if (
+        isValidating ||
+        !resourceInfo ||
+        !policiesContainerUrl ||
+        accessControlType === undefined
+      )
+        return;
       try {
         const accessControl = await getAccessControl(
           resourceInfo,
