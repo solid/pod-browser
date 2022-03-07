@@ -19,41 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
- import {
-  hasAccessibleAcl,
-  acp_v3 as acp3,
-  getSourceUrl,
-} from "@inrupt/solid-client";
-import { useSession } from "@inrupt/solid-ui-react";
-import useSWR from "swr";
+import toHaveRDFType from "./toHaveRDFType";
+import toHaveString from "./toHaveString";
+import toHaveURL from "./toHaveURL";
 
-export const ACP = "acp";
-export const WAC = "wac";
-
-async function getAccessControlType(resourceInfo, fetch) {
-  const resourceUrl = getSourceUrl(resourceInfo);
-  const isAcpControlledResource = await acp3.isAcpControlled(resourceUrl, {
-    fetch,
-  });
-  const isWacControlledResource =
-    !isAcpControlledResource && hasAccessibleAcl(resourceInfo);
-  if (isAcpControlledResource) {
-    return ACP;
-  }
-  if (isWacControlledResource) {
-    return WAC;
-  }
-  return null;
-}
-
-export default function useAccessControlType(resourceInfo) {
-  const { fetch } = useSession();
-  return useSWR(
-    ["useAccessControlType", resourceInfo],
-    async () => {
-      if (!resourceInfo) return null;
-      return getAccessControlType(resourceInfo, fetch);
-    },
-    { revalidateOnFocus: false }
-  );
-}
+export default {
+  toHaveRDFType,
+  toHaveString,
+  toHaveURL,
+};

@@ -537,14 +537,14 @@ describe("findContactInAddressBook", () => {
   });
 
   it("finds a given WebId from a list of profiles fetched from a list of datasets about people", async () => {
-    const [profile1] = await findContactInAddressBook(people, webId1Url, fetch);
+    const profile1 = await findContactInAddressBook(people, webId1Url, fetch);
     expect(asUrl(profile1)).toEqual(webId1Url);
   });
 
-  it("returns an empty list if no profile is found", async () => {
+  it("returns undefined if no profile is found", async () => {
     await expect(
       findContactInAddressBook(people, webId3Url, fetch)
-    ).resolves.toEqual([]);
+    ).resolves.toBeUndefined();
   });
 });
 

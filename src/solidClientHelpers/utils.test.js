@@ -39,9 +39,11 @@ import {
   getTypeName,
   getTypes,
   isContainerIri,
+  isPodOwner,
   namespace,
   serializePromises,
   sharedStart,
+  uniqueObjects,
 } from "./utils";
 
 describe("createResponder", () => {
@@ -181,6 +183,10 @@ describe("getTypeName", () => {
 });
 
 describe("isContainerIri", () => {
+  test("it returns false when given undefined", () => {
+    expect(isContainerIri()).toBe(false);
+  });
+
   test("it returns true when the iri ends in /", () => {
     expect(isContainerIri("https://user.dev.inrupt.net/public/")).toEqual(true);
   });
@@ -269,5 +275,36 @@ describe("serializePromises", () => {
     await expect(promiseFactories[0]()).resolves.toBe("example1");
     await expect(promiseFactories[1]()).resolves.toBe("example2");
     await expect(promiseFactories[2]()).resolves.toBe("example3");
+  });
+});
+
+describe("uniqueObjects", () => {
+  test("it returns a unique set of objects", () => {
+    const one = { one: "one" };
+    const two = { two: "two" };
+    const duplicate = { two: "two" };
+    const list = [one, two, duplicate];
+    const uniqueList = uniqueObjects(list);
+
+    expect(uniqueList).toHaveLength(2);
+    expect(uniqueList[0]).toMatchObject(one);
+    expect(uniqueList[1]).toMatchObject(two);
+  });
+});
+
+describe("isPodOwner", () => {
+  it("returns true if the given id is the same as the agent of the given session", () => {
+    const webId = "webId";
+    const session = { info: { webId } };
+
+    expect(isPodOwner(session, webId)).toBe(true);
+  });
+
+  it("returns false if the given id is not the same as the agent of the given session", () => {
+    const webId = "webId";
+    const otherId = "otherId";
+    const session = { info: { webId } };
+
+    expect(isPodOwner(session, otherId)).toBe(false);
   });
 });

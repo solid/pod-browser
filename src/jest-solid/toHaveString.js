@@ -19,41 +19,32 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
- import {
-  hasAccessibleAcl,
-  acp_v3 as acp3,
-  getSourceUrl,
-} from "@inrupt/solid-client";
-import { useSession } from "@inrupt/solid-ui-react";
-import useSWR from "swr";
+import { getStringNoLocaleAll } from "@inrupt/solid-client";
 
-export const ACP = "acp";
-export const WAC = "wac";
-
-async function getAccessControlType(resourceInfo, fetch) {
-  const resourceUrl = getSourceUrl(resourceInfo);
-  const isAcpControlledResource = await acp3.isAcpControlled(resourceUrl, {
-    fetch,
-  });
-  const isWacControlledResource =
-    !isAcpControlledResource && hasAccessibleAcl(resourceInfo);
-  if (isAcpControlledResource) {
-    return ACP;
+export default function toHaveString(received, predicate, expectedString) {
+  if (!predicate) {
+    return {
+      pass: false,
+      message: () => "You must provide a string predicate",
+    };
   }
-  if (isWacControlledResource) {
-    return WAC;
-  }
-  return null;
-}
 
-export default function useAccessControlType(resourceInfo) {
-  const { fetch } = useSession();
-  return useSWR(
-    ["useAccessControlType", resourceInfo],
-    async () => {
-      if (!resourceInfo) return null;
-      return getAccessControlType(resourceInfo, fetch);
-    },
-    { revalidateOnFocus: false }
-  );
+  const actualStringValues = getStringNoLocaleAll(received, predicate);
+
+  if (!expectedString) {
+    return {
+      pass: !!actualStringValues.length,
+      message: () => `Expected thing to have a predicate of ${predicate}`,
+    };
+  }
+
+  const actuallyReceived = actualStringValues.length
+    ? actualStringValues.join(", ")
+    : null;
+
+  return {
+    pass: actualStringValues.includes(expectedString),
+    message: () =>
+      `Expected thing to have an ${predicate} predicate with a value of ${expectedString}, received ${actuallyReceived}`,
+  };
 }

@@ -20,7 +20,10 @@
  */
 
 import "@testing-library/jest-dom";
+import jestSolid from "./src/jest-solid";
 
 process.on("unhandledRejection", (reason) => {
   throw reason;
 });
+
+expect.extend(jestSolid);

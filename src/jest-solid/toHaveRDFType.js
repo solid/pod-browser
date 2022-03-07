@@ -19,41 +19,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
- import {
-  hasAccessibleAcl,
-  acp_v3 as acp3,
-  getSourceUrl,
-} from "@inrupt/solid-client";
-import { useSession } from "@inrupt/solid-ui-react";
-import useSWR from "swr";
+import { rdf } from "rdf-namespaces";
+import { getUrlAll } from "@inrupt/solid-client";
 
-export const ACP = "acp";
-export const WAC = "wac";
-
-async function getAccessControlType(resourceInfo, fetch) {
-  const resourceUrl = getSourceUrl(resourceInfo);
-  const isAcpControlledResource = await acp3.isAcpControlled(resourceUrl, {
-    fetch,
-  });
-  const isWacControlledResource =
-    !isAcpControlledResource && hasAccessibleAcl(resourceInfo);
-  if (isAcpControlledResource) {
-    return ACP;
+export default function toHaveRDFType(received, expectedType) {
+  if (!expectedType) {
+    return {
+      pass: false,
+      message: () => "You must provide a type value",
+    };
   }
-  if (isWacControlledResource) {
-    return WAC;
-  }
-  return null;
-}
 
-export default function useAccessControlType(resourceInfo) {
-  const { fetch } = useSession();
-  return useSWR(
-    ["useAccessControlType", resourceInfo],
-    async () => {
-      if (!resourceInfo) return null;
-      return getAccessControlType(resourceInfo, fetch);
-    },
-    { revalidateOnFocus: false }
-  );
+  const actualTypes = getUrlAll(received, rdf.type);
+  const actualTypesString = actualTypes.join(", ");
+
+  return {
+    pass: actualTypes.includes(expectedType),
+    message: () =>
+      `Expected thing to have a type of ${expectedType}, received ${actualTypesString}`,
+  };
 }
