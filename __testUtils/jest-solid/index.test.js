@@ -19,11 +19,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import "@testing-library/jest-dom";
-import jestSolid from "./__testUtils/jest-solid";
+import jestSolid from "./index";
+import toHaveRDFType from "./toHaveRDFType";
+import toHaveString from "./toHaveString";
+import toHaveURL from "./toHaveURL";
 
-process.on("unhandledRejection", (reason) => {
-  throw reason;
+describe("jest-solid", () => {
+  it("should have methods exported", () => {
+    expect(jestSolid.toHaveRDFType).toBe(toHaveRDFType);
+    expect(jestSolid.toHaveString).toBe(toHaveString);
+    expect(jestSolid.toHaveURL).toBe(toHaveURL);
+  });
 });
-
-expect.extend(jestSolid);
