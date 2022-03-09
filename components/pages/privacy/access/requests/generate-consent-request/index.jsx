@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
 import {
   issueAccessRequest,
@@ -28,6 +28,7 @@ import {
 import { useRedirectIfLoggedOut } from "../../../../../../src/effects/auth";
 import useFetchProfile from "../../../../../../src/hooks/useFetchProfile";
 import Spinner from "../../../../../spinner";
+import AlertContext from "../../../../../../src/contexts/alertContext";
 
 export default function GenerateConsentRequest() {
   useRedirectIfLoggedOut();
@@ -39,6 +40,7 @@ export default function GenerateConsentRequest() {
   const [origin, setOrigin] = useState(null);
   const [resource, setResource] = useState([]);
   const { data: profile } = useFetchProfile(session.info.webId);
+  const { alertError } = useContext(AlertContext);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -49,23 +51,27 @@ export default function GenerateConsentRequest() {
   async function generateRequest(e) {
     e.preventDefault();
     if (!profile) return;
-    const vc = await issueAccessRequest({
-      requestor: session.info.webId,
-      resourceOwner: owner,
-      access: { read: true },
-      resources,
-      purpose: "https://example.org/someSpecificPurpose",
-      requestorInboxUrl: profile.inbox ?? session.info.webId, // FIXME: should Pods have a default inbox? in the meantime, using WebID if inbox not available
-      options,
-    });
-    if (vc && origin) {
-      redirectToAccessManagementUi(
-        vc,
-        `${origin}/privacy/?signedVcUrl=${encodeURIComponent(vc.id)}`,
-        {
-          fallbackConsentManagementUi: `${origin}/privacy/access/requests/`,
-        }
-      );
+    try {
+      const vc = await issueAccessRequest({
+        requestor: session.info.webId,
+        resourceOwner: owner,
+        access: { read: true },
+        resources,
+        purpose: "https://example.org/someSpecificPurpose",
+        requestorInboxUrl: profile.inbox || session.info.webId, // FIXME: should Pods have a default inbox? in the meantime, using WebID if inbox not available
+        options,
+      });
+      if (vc && origin) {
+        redirectToAccessManagementUi(
+          vc,
+          `${origin}/privacy/?signedVcUrl=${encodeURIComponent(vc.id)}`,
+          {
+            fallbackConsentManagementUi: `${origin}/privacy/access/requests/`,
+          }
+        );
+      }
+    } catch (e) {
+      alertError(e.message);
     }
   }
 
