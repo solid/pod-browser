@@ -112,7 +112,7 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
   });
 
   useEffect(() => {
-    setConfirmationSetup(true);
+    // setConfirmationSetup(true);
     if (open !== dialogId) return;
     if (confirmationSetup && confirmed === null) return;
     if (confirmationSetup && confirmed) {
