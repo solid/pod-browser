@@ -71,7 +71,7 @@ exports[`Agent show page Renders the Agent show page 1`] = `
                 rel="noreferrer"
                 target="_blank"
               >
-                http://example.com/webId#me
+                https://example.com/profile/card#me
               </a>
             </h3>
           </div>
