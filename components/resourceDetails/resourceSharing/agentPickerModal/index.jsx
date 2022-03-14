@@ -77,6 +77,7 @@ import {
 import ResourceInfoContext from "../../../../src/contexts/resourceInfoContext";
 import { getWebIdsFromPermissions } from "../../../../src/accessControl/acp";
 import PermissionsContext from "../../../../src/contexts/permissionsContext";
+import { isPublicAgentorAuthenticatedAgentWebId } from "../../utils";
 
 const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
@@ -275,6 +276,7 @@ function AgentPickerModal(
     const { value } = e.target;
     setGlobalFilter(value || undefined);
   };
+
   const handleSubmitNewWebIds = handleSubmit({
     permissions: allPermissions,
     newAgentsWebIds,
@@ -297,15 +299,13 @@ function AgentPickerModal(
       return;
     }
     const filteredNewWebIds = newAgentsWebIds.filter(
-      (webId) =>
-        webId !== PUBLIC_AGENT_PREDICATE &&
-        webId !== AUTHENTICATED_AGENT_PREDICATE
+      (webId) => !isPublicAgentorAuthenticatedAgentWebId(webId)
     );
+
     const filteredWebIdsToDelete = webIdsToDelete.filter(
-      (webId) =>
-        webId !== PUBLIC_AGENT_PREDICATE &&
-        webId !== AUTHENTICATED_AGENT_PREDICATE
+      (webId) => !isPublicAgentorAuthenticatedAgentWebId(webId)
     );
+
     if (!filteredNewWebIds.length && !filteredWebIdsToDelete.length) {
       setTitle(null);
       setContent(null);

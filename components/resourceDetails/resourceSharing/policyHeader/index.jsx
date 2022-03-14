@@ -38,6 +38,7 @@ export default function PolicyHeader({ children, type, isPolicyList }) {
   const bem = useBem(useStyles());
 
   const classes = useStyles();
+  console.log(POLICIES_TYPE_MAP);
 
   const {
     titlePlural,
@@ -46,7 +47,6 @@ export default function PolicyHeader({ children, type, isPolicyList }) {
     iconClassName,
     DescriptionComponent,
   } = POLICIES_TYPE_MAP[type];
-
   return (
     <div className={classes.headerContainer}>
       <i className={clsx(bem(icon), bem("icon"), bem(iconClassName))} />
@@ -66,7 +66,7 @@ export default function PolicyHeader({ children, type, isPolicyList }) {
 }
 
 PolicyHeader.propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(Object.keys(POLICIES_TYPE_MAP)).isRequired,
   isPolicyList: PropTypes.bool,
   children: PropTypes.node,
 };

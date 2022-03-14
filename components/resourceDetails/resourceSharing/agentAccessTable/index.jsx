@@ -124,6 +124,7 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
       defaultExpanded
       classes={{ root: classes.accordion, rounded: classes.rounded }}
       data-testid={TESTCAFE_ID_AGENT_ACCESS_TABLE}
+      style={{ border: "red solid 1px" }}
     >
       <PolicyHeader type={type} isPolicyList>
         <>
@@ -131,11 +132,13 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
             type={type}
             setLoading={setLoading}
             permissions={tablePermissions}
+            style={{ border: "green solid 1px" }}
           />
           <PolicyActionButton
             permissions={tablePermissions}
             setLoading={setLoading}
             type={type}
+            style={{ border: "purple solid 1px" }}
           />
         </>
       </PolicyHeader>

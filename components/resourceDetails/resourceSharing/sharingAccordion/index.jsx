@@ -29,6 +29,8 @@ import AdvancedSharingButton from "../advancedSharingButton";
 import { namedPolicies, customPolicies } from "../../../../constants/policies";
 import { isContainerIri } from "../../../../src/solidClientHelpers/utils";
 import { PermissionsContextProvider } from "../../../../src/contexts/permissionsContext";
+import AgentAccessSharingList from "../agentAccessSharingList";
+import PermissionsPanel from "../PermissionsPanel";
 
 export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
   "agent-access-list-show-all";
@@ -40,20 +42,25 @@ function SharingAccordion() {
 
   return (
     <PermissionsContextProvider>
-      {namedPolicies.concat(customPolicies).map(({ name }) => (
-        <AgentAccessTable
-          type={name}
-          key={name}
-          loading={loading}
-          setLoading={setLoading}
-        />
-      ))}
-      {isContainer && (
-        <Alert icon={false} severity="info">
-          Sharing applies to all items in this folder
-        </Alert>
-      )}
-      <AdvancedSharingButton loading={loading} setLoading={setLoading} />
+      <>
+        <PermissionsPanel type="editors" />
+        <PermissionsPanel type="viewers" />
+
+        {namedPolicies.concat(customPolicies).map(({ name }) => (
+          <AgentAccessTable //AgentAccessTable
+            key={name}
+            type={name}
+            loading={loading}
+            setLoading={setLoading}
+          />
+        ))}
+        {isContainer && (
+          <Alert icon={false} severity="info">
+            Sharing applies to all items in this folder
+          </Alert>
+        )}
+        {/* <AdvancedSharingButton loading={loading} setLoading={setLoading} /> */}
+      </>
     </PermissionsContextProvider>
   );
 }
