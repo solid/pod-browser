@@ -20,5 +20,25 @@
  */
 
 /* eslint import/prefer-default-export: 0 */
+import getConfig from "./config";
+import { isLocalhost } from "../src/stringHelpers";
+import {
+  generateRedirectUrl,
+  getCurrentHostname,
+  getCurrentOrigin,
+} from "../src/windowHelpers";
 
 export const CLIENT_NAME = "Inrupt PodBrowser";
+
+export const getClientOptions = () => {
+  const clientId = isLocalhost(getCurrentHostname())
+    ? getConfig().devClientId
+    : `${getCurrentOrigin()}/api/app`;
+
+  return {
+    clientName: CLIENT_NAME,
+    clientId,
+    // TODO: Improve redirect url to be something specific:
+    redirectUrl: generateRedirectUrl(""),
+  };
+};

@@ -19,22 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export default function getIdentityProviders() {
-  return [
-    {
-      logo: "solid-logo.svg",
-      label: "Solidcommunity.net",
-      iri: "https://solidcommunity.net/",
-    },
-    {
-      logo: "solid-logo.svg",
-      label: "Solidweb.org",
-      iri: "https://solidweb.org/",
-    },
-    {
-      logo: "inrupt_logo-2020.svg",
-      label: "inrupt.net",
-      iri: "https://inrupt.net/",
-    },
-  ];
-}
+/* eslint-disable import/prefer-default-export */
+export const defaultIdentityProviders = [
+  {
+    logo: "solid-logo.svg",
+    label: "Solidcommunity.net",
+    iri: "https://solidcommunity.net/",
+  },
+  {
+    logo: "solid-logo.svg",
+    label: "Solidweb.org",
+    iri: "https://solidweb.org/",
+  },
+  {
+    logo: "inrupt_logo-2020.svg",
+    label: "inrupt.net",
+    iri: "https://inrupt.net/",
+  },
+];

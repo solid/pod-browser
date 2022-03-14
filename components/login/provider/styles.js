@@ -31,18 +31,17 @@ export default function styles(theme) {
       position: "relative",
       width: "100%",
       flexDirection: "row",
-      alignItems: "center",
+      alignItems: "flex-start",
     },
     "provider-login__button": {
       display: "flex",
       whiteSpace: "nowrap",
       minWidth: "max-content",
-      position: "absolute",
-      top: 0,
-      margin: theme.spacing(0, 0.4),
+      position: "relative",
+      margin: theme.spacing(0, 0, 0, 0.4),
     },
-    selectionBox: {
-      width: "80%",
+    "provider-login__formcontrol": {
+      flex: 1,
     },
   });
 }

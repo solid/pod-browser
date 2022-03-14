@@ -21,7 +21,7 @@
 
 /* eslint react/jsx-props-no-spreading: 0 */
 
-import React, { createRef, useEffect, useState } from "react";
+import React, { createRef, useEffect, useState, useCallback } from "react";
 import T from "prop-types";
 import {
   FormControl,
@@ -33,217 +33,195 @@ import {
 import { makeStyles, createStyles } from "@material-ui/styles";
 import { Autocomplete } from "@material-ui/lab";
 import { useBem } from "@solid/lit-prism-patterns";
-import { LoginButton, useSession } from "@inrupt/solid-ui-react";
-
 import { Button } from "@inrupt/prism-react-components";
 
-import {
-  generateRedirectUrl,
-  getCurrentHostname,
-  getCurrentOrigin,
-} from "../../../src/windowHelpers";
+import { defaultIdentityProviders } from "../../../constants/provider";
+import { validateProviderIri } from "./validateProviderIri";
 
-import { isLocalhost } from "../../../src/stringHelpers";
-import getIdentityProviders from "../../../constants/provider";
-import { ERROR_REGEXES, hasError } from "../../../src/error";
 import styles from "./styles";
-import { CLIENT_NAME } from "../../../constants/app";
-import getConfig from "../../../constants/config";
 
 export const TESTCAFE_ID_LOGIN_FIELD = "login-field";
 export const TESTCAFE_ID_GO_BUTTON = "go-button";
 
-const providers = getIdentityProviders();
-const hostname = getCurrentHostname();
-
-const CLIENT_APP_WEBID = isLocalhost(hostname)
-  ? getConfig().devClientId
-  : `${getCurrentOrigin()}/api/app`;
-
-export const AUTH_OPTIONS = {
-  clientName: CLIENT_NAME,
-  clientId: CLIENT_APP_WEBID,
-};
-
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export function setupOnProviderChange(setProviderIri, setLoginError) {
-  return (e, newValue) => {
-    e.preventDefault();
-    setLoginError(null);
+const errors = {
+  invalid_url: "Please enter a valid URL",
+  bad_request: "This URL is not a Solid Identity Provider.",
+  network_error:
+    "We were unable to log in with this URL. Please fill out a valid Solid Identity Provider.",
+  unavailable:
+    "We were unable to log in at this time, it seems your provider is unavailable.",
+};
 
-    if (typeof newValue === "string") {
-      if (newValue.startsWith("https://") || newValue.startsWith("http://")) {
-        setProviderIri(newValue);
-      } else {
-        setProviderIri(`https://${newValue}`);
-      }
-    } else {
-      setProviderIri(newValue?.iri || null);
-    }
-  };
-}
-
-export function setupLoginHandler(login, setLoginError) {
-  return async (e, providerIri) => {
-    e.preventDefault();
-
-    try {
-      await login({ ...AUTH_OPTIONS, oidcIssuer: providerIri });
-      setLoginError(null);
-    } catch (error) {
-      if (!e.target.value && !providerIri) {
-        return;
-      }
-
-      setLoginError(error);
-    }
-  };
-}
-
-export function setupErrorHandler(setLoginError) {
-  return (error) => {
-    setLoginError(error);
-  };
-}
-
-export function getErrorMessage(error) {
-  const postFix = " Please fill out a valid Solid Identity Provider.";
-
-  if (hasError(error, ERROR_REGEXES.INVALID_IDP)) {
-    return "This URL is not a Solid Identity Provider.";
+export function translateError(error) {
+  if (typeof errors[error] === "string") {
+    return errors[error];
   }
 
-  if (hasError(error, ERROR_REGEXES.HANDLER_NOT_FOUND)) {
-    return "Please fill out a valid Solid Identity Provider.";
-  }
-
-  return `We were unable to log in with this URL.${postFix}`;
+  return null;
 }
 
-export default function Provider({ defaultError, provider }) {
-  const bem = useBem(useStyles());
-  const classes = useStyles();
-  const { login } = useSession();
-  const [loginError, setLoginError] = useState(defaultError);
+export default function Provider({ provider, handleLogin }) {
   const theme = useTheme();
+  const bem = useBem(useStyles());
+
+  const [loginError, setLoginError] = useState(null);
   const [providerIri, setProviderIri] = useState(provider?.iri || "");
+  const [inputValue, setInputValue] = useState(provider?.label || "");
 
   const loginFieldRef = createRef();
 
   useEffect(() => {
-    if (!provider) return;
+    loginFieldRef.current?.querySelector("input")?.focus();
+  }, [loginFieldRef]);
 
-    loginFieldRef.current?.querySelector("input").focus();
-  }, [provider, loginFieldRef]);
+  const handleSubmit = useCallback(
+    async (ev) => {
+      // null if called from "create-option":
+      ev?.preventDefault();
 
-  const onProviderChange = setupOnProviderChange(setProviderIri, setLoginError);
-  const handleLogin = setupLoginHandler(login, setLoginError);
-  const onError = setupErrorHandler(setLoginError);
-  const providersWithIdp = provider ? [provider, ...providers] : providers;
-  const [inputValue, setInputValue] = useState(provider?.label || "");
+      const { error, issuer } = await validateProviderIri(providerIri);
+      if (error) {
+        setLoginError(translateError(error));
+      } else {
+        handleLogin(issuer);
+      }
+    },
+    [setLoginError, handleLogin, providerIri]
+  );
 
-  const handleChange = (e) => {
-    setInputValue(e.target.value);
-  };
+  const handleInputChange = useCallback(
+    (_ev, newValue, reason) => {
+      setLoginError(null);
+
+      if (!newValue || reason === "clear") {
+        setInputValue("");
+        setProviderIri("");
+        return;
+      }
+
+      let issuer = newValue;
+      if (!issuer.startsWith("http://") && !issuer.startsWith("https://")) {
+        issuer = `https://${issuer}`;
+      }
+
+      setInputValue(newValue);
+      setProviderIri(issuer);
+    },
+    [setLoginError, setInputValue, setProviderIri]
+  );
+
+  const handleProviderChange = useCallback(
+    (_ev, newValue, reason) => {
+      setLoginError(null);
+
+      // For some reason "clear" doesn't actually fire here in the tests:
+      // if (reason === "clear") {
+      //   setInputValue("");
+      //   setProviderIri("");
+      // }
+
+      // For some reason in testing, the reason "select-option" never gets
+      // emitted despite it working as expected:
+      if (reason === "select-option") {
+        setInputValue(newValue.label);
+        setProviderIri(newValue.iri);
+      }
+
+      // User has typed their own URL in, and when they select that, we want to trigger the login:
+      if (reason === "create-option") {
+        handleSubmit();
+      }
+    },
+    [setLoginError, setInputValue, setProviderIri, handleSubmit]
+  );
 
   return (
-    <form
-      onSubmit={(e) => handleLogin(e, providerIri)}
-      className={bem("provider-login__form")}
-    >
+    <form onSubmit={handleSubmit} className={bem("provider-login__form")}>
       <div className={bem("provider-login__wrapper")}>
         <FormControl
-          classes={{ root: classes.selectionBox }}
+          classes={{ root: bem("provider-login__formcontrol") }}
           error={!!loginError}
         >
           <Autocomplete
-            onChange={onProviderChange}
+            onChange={handleProviderChange}
+            onInputChange={handleInputChange}
             id="provider-select"
             freeSolo
-            options={providersWithIdp}
+            options={defaultIdentityProviders}
             getOptionLabel={(option) => option.label ?? option}
-            value={provider?.iri || providerIri}
+            defaultValue={provider?.iri}
             autoSelect
             renderOption={(option) => {
               return (
                 <>
-                  {option.logo ? (
+                  {option.logo && (
                     <img
                       src={`../${option.logo}`}
                       width={20}
-                      style={{ margin: "1rem" }}
                       alt={option.label}
                     />
-                  ) : (
-                    <div style={{ minWidth: "20px", padding: "1.6rem" }} />
                   )}
-                  {option.label}
+                  <div
+                    style={{
+                      padding: "0.5rem 1rem",
+                    }}
+                  >
+                    {option.label}
+                  </div>
                 </>
               );
             }}
             renderInput={(params) => {
               return (
                 <TextField
-                  onChange={handleChange}
                   {...params}
+                  inputProps={{
+                    ...params.inputProps,
+                    autoComplete: "off",
+                    inputMode: "url",
+                    "data-testid": TESTCAFE_ID_LOGIN_FIELD,
+                  }}
                   error={!!loginError}
                   margin="none"
                   variant="outlined"
-                  type="url"
                   aria-describedby={loginError ? "login-error-text" : null}
-                  data-testid={TESTCAFE_ID_LOGIN_FIELD}
                   ref={loginFieldRef}
                   value={inputValue}
-                  onKeyUp={(e) => {
-                    if (e.key === "Enter") {
-                      handleLogin(e, providerIri);
-                    }
-                  }}
                 />
               );
             }}
           />
           {loginError ? (
-            <FormHelperText
-              id="login-error-text"
-              style={{ marginBottom: theme.spacing(1) }}
-            >
-              {getErrorMessage(loginError)}
+            <FormHelperText id="login-error-text" style={{ marginBottom: 0 }}>
+              {loginError}
             </FormHelperText>
-          ) : null}
+          ) : (
+            <p style={{ margin: 0 }}>&nbsp;</p>
+          )}
         </FormControl>
-        <LoginButton
-          oidcIssuer={providerIri}
-          redirectUrl={generateRedirectUrl("")}
-          authOptions={AUTH_OPTIONS}
-          onError={onError}
+        <Button
+          type="submit"
+          variant="primary"
+          className={bem("provider-login__button")}
+          data-testid={TESTCAFE_ID_GO_BUTTON}
         >
-          <Button
-            variant="primary"
-            data-testid={TESTCAFE_ID_GO_BUTTON}
-            type="submit"
-            className={bem("provider-login__button")}
-            onClick={() => setProviderIri(inputValue)}
-          >
-            Go
-          </Button>
-        </LoginButton>
+          Go
+        </Button>
       </div>
     </form>
   );
 }
 
 Provider.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  defaultError: T.object,
   provider: T.shape({
     iri: T.string,
     label: T.string,
   }),
+  handleLogin: T.func.isRequired,
 };
 
 Provider.defaultProps = {
-  defaultError: null,
   provider: null,
 };

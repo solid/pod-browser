@@ -20,22 +20,47 @@
  */
 
 import React from "react";
+import { act } from "react-dom/test-utils";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import Login, {
+  TESTCAFE_ID_LOGIN_BUTTON,
   TESTCAFE_ID_OTHER_PROVIDERS_BUTTON,
   TESTCAFE_ID_LOGIN_TITLE,
 } from "./index";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import useIdpFromQuery from "../../src/hooks/useIdpFromQuery";
+import useReturnUrl from "../../src/authentication/useReturnUrl";
+
+import { mockUnauthenticatedSession } from "../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
+
 import { TESTCAFE_ID_LOGIN_FIELD } from "./provider";
 
 jest.mock("../../src/hooks/useIdpFromQuery");
-const mockedUseIdpFromQuery = useIdpFromQuery;
+jest.mock("../../src/authentication/useReturnUrl");
+
+jest.mock("../../constants/app", () => {
+  return {
+    getClientOptions: jest.fn().mockReturnValue({
+      clientId: "Test Client ID",
+      clientName: "Test Client",
+      redirectUrl: "http://localhost:3000/",
+    }),
+  };
+});
+
+const mockUseReturnUrl = {
+  persist: jest.fn(),
+  restore: jest.fn(),
+};
 
 describe("Login form", () => {
   beforeEach(() => {
-    mockedUseIdpFromQuery.mockReturnValue(null);
+    useIdpFromQuery.mockReturnValue(null);
+
+    mockUseReturnUrl.persist = jest.fn().mockReturnValue();
+    useReturnUrl.mockReturnValue(mockUseReturnUrl);
   });
 
   it("renders a login page with a sign in button and a 'Sign in with other provider' button", async () => {
@@ -45,6 +70,7 @@ describe("Login form", () => {
     });
     expect(asFragment()).toMatchSnapshot();
   });
+
   it("clicking the 'other providers' button displays a form", async () => {
     const { getByTestId } = renderWithTheme(<Login />);
     const button = getByTestId(TESTCAFE_ID_OTHER_PROVIDERS_BUTTON);
@@ -52,5 +78,44 @@ describe("Login form", () => {
     await waitFor(() => {
       expect(getByTestId(TESTCAFE_ID_LOGIN_FIELD)).not.toBeNull();
     });
+  });
+
+  it("the `idp` query parameter automatically expands the 'other providers' field", async () => {
+    useIdpFromQuery.mockReturnValue({
+      iri: "http://some.provider/",
+      label: "some.provider",
+    });
+
+    const { asFragment, getByTestId } = renderWithTheme(<Login />);
+
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_LOGIN_FIELD)).not.toBeNull();
+    });
+
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("clicking the Sign In button", async () => {
+    const session = mockUnauthenticatedSession();
+    const SessionProvider = mockSessionContextProvider(session, false, null);
+
+    const { getByTestId } = renderWithTheme(
+      <SessionProvider>
+        <Login />
+      </SessionProvider>
+    );
+
+    const signinButton = getByTestId(TESTCAFE_ID_LOGIN_BUTTON);
+
+    act(() => {
+      signinButton.click();
+    });
+
+    expect(mockUseReturnUrl.persist).toHaveBeenCalled();
+    expect(session.login).toHaveBeenCalled();
+
+    const loginArgs = session.login.mock.calls[0][0];
+    expect(loginArgs.oidcIssuer).toBe("https://broker.pod.inrupt.com/");
+    expect(loginArgs.redirectUrl).toBe("http://localhost:3000/");
   });
 });
