@@ -19,9 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { DatasetContext } from "@inrupt/solid-ui-react";
+import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
 import { useState, useEffect, useContext, useMemo } from "react";
+import {
+  getAccessGrantAll,
+  isValidAccessGrant,
+} from "@inrupt/solid-client-access-grants";
 import { getPolicyDetailFromAccess } from "../../accessControl/acp";
 import AccessControlContext from "../../contexts/accessControlContext";
 import useConsentBasedAccessForResource from "../useConsentBasedAccessForResource";
@@ -29,6 +33,8 @@ import {
   getRequestedAccessesFromSignedVc,
   getRequestorWebIdFromSignedVc,
 } from "../../models/consent/signedVc";
+import { isPublicAgentorAuthenticatedAgentWebId } from "../../../components/resourceDetails/utils";
+import { fetchProfile } from "../../solidClientHelpers/profile";
 
 const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
   if (!consentBasedPermissions) return [];
@@ -68,12 +74,47 @@ const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
 export default function useAllPermissions() {
   const { accessControl } = useContext(AccessControlContext);
   const [permissions, setPermissions] = useState([]);
-
   const { solidDataset: dataset } = useContext(DatasetContext);
   const datasetUrl = getSourceUrl(dataset);
+  const { fetch } = useSession();
 
-  const { permissions: consentBasedPermissions } =
-    useConsentBasedAccessForResource(datasetUrl);
+  // this function used to be a hook and I brought it in here to reduce rerender
+  const tempFunction = (resourceUrl) => {
+    let permissions = [];
+    let permissionsError = "";
+    if (!resourceUrl) return { permissions, permissionsError: "Invalid Url" };
+    async function checkVcValidity(vc) {
+      try {
+        const response = await isValidAccessGrant(vc, { fetch });
+        return response;
+      } catch (err) {
+        return null;
+      }
+    }
+    (async () => {
+      try {
+        const access = await getAccessGrantAll(resourceUrl, { fetch });
+        const validVcs = await Promise.all(
+          access.map(async (vc) => {
+            const isValidVc = await checkVcValidity(vc);
+            if (!isValidVc.errors.length) {
+              return vc;
+            }
+            return null;
+          })
+        );
+        const permissionsWithNullsRemoved = validVcs.filter(
+          (vc) => vc !== null
+        );
+        permissions = permissionsWithNullsRemoved;
+      } catch (err) {
+        permissionsError = err;
+      }
+    })();
+    return { permissions, permissionsError };
+  };
+
+  const { permissions: consentBasedPermissions } = tempFunction(datasetUrl);
 
   const removePermission = (p) => {
     const newPermissions = permissions.filter((permission) => {
@@ -88,24 +129,63 @@ export default function useAllPermissions() {
     [consentBasedPermissions]
   );
 
-  useEffect(() => {
-    if (!accessControl) {
-      setPermissions([]);
-      return;
-    }
-    accessControl
-      .getAllPermissionsForResource()
-      .then((normalizedPermissions) => {
-        setPermissions([
-          ...normalizedPermissions,
-          ...normalizedConsentPermissions,
-        ]);
-      });
-  }, [accessControl, normalizedConsentPermissions]);
+  // this function used to be a hook and I brought it in here to reduce rerender
+  const getPermissionsWithProfiles = () => {
+    let permissionsWithProfiles = [];
+    Promise.all(
+      permissions.map(async (p) => {
+        let profile;
+        let profileError;
+        if (isPublicAgentorAuthenticatedAgentWebId(p.webId)) return p;
+        try {
+          profile = await fetchProfile(p.webId, fetch);
+        } catch (error) {
+          profileError = error;
+        }
+        return {
+          ...p,
+          profile,
+          profileError,
+        };
+      })
+    ).then((response) => {
+      permissionsWithProfiles = response;
+    });
+    return { permissionsWithProfiles };
+  };
+
+  // useEffect(() => { // add this back in again when we figure out exactly what changes that needs useEffect
+  console.log("In useEffect for useAllPermissions. What keeps changing? ");
+
+  // if (!accessControl) { // i think this changes more than it should trigering rerenders, do we check this somewhere else?
+  //   setPermissions([]);
+  //   return;
+  // }
+
+  accessControl.getAllPermissionsForResource().then((normalizedPermissions) => {
+    console.log("are these the same?: ", [
+      ...normalizedPermissions,
+      ...normalizedConsentPermissions,
+    ]);
+    console.log(
+      "shallow",
+      permissions == [...normalizedPermissions, ...normalizedConsentPermissions]
+    );
+    console.log(
+      "deep: ",
+      permissions ===
+        [...normalizedPermissions, ...normalizedConsentPermissions]
+    );
+    setPermissions([...normalizedPermissions, ...normalizedConsentPermissions]);
+  });
+  // datasetUrl was a useEffect dependency in useConsentBasedAccessForResource
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [normalizedConsentPermissions]); // this should be in there but I took it out, still a lot of rerenders normalizedConsentPermissions accessControl
 
   return {
     permissions,
     removePermission,
     setPermissions,
+    getPermissionsWithProfiles,
   };
 }

@@ -35,7 +35,6 @@ export default function useConsentBasedAccessForResource(resourceUrl) {
       setPermissions([]);
       return;
     }
-
     async function checkVcValidity(vc) {
       try {
         const response = await isValidAccessGrant(vc, { fetch });
@@ -44,30 +43,28 @@ export default function useConsentBasedAccessForResource(resourceUrl) {
         return null;
       }
     }
-
     (async () => {
       try {
         const access = await getAccessGrantAll(resourceUrl, { fetch });
         const validVcs = await Promise.all(
           access.map(async (vc) => {
-            // could this be an Array.reduce?
             const isValidVc = await checkVcValidity(vc);
-            if (isValidVc.errors.length === 0) {
+            if (!isValidVc.errors.length) {
               return vc;
             }
             return null;
           })
         );
-        setPermissions(validVcs.filter((vc) => vc !== null));
-        console.log("permissions in useConsentBasedAccessForResource", {
-          permissions,
-        });
-        if (permissions.length) debugger;
+        const permissionsWithNullsRemoved = validVcs.filter(
+          (vc) => vc !== null
+        );
+        console.log({ permissionsWithNullsRemoved });
+        // if (permissionsWithNullsRemoved.length) debugger;
+        setPermissions(permissionsWithNullsRemoved);
       } catch (err) {
         setPermissionsError(err);
       }
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resourceUrl, fetch]);
   return { permissions, permissionsError };
 }

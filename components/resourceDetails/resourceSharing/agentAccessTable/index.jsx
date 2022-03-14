@@ -65,31 +65,32 @@ const TESTCAFE_ID_HIDE_BUTTON = "hide-button";
 export const TESTCAFE_ID_AGENT_ACCESS_TABLE = "agent-access-table";
 
 export default function AgentAccessTable({ type, loading, setLoading }) {
+  // this component gets rerendered for each "row"
   const bem = useBem(useStyles());
   const classes = useStyles();
   const [showAll, setShowAll] = useState(false);
   const [selectedTabValue, setSelectedTabValue] = useState("");
-  const { permissions } = useAllPermissions();
-
+  const { permissions, getPermissionsWithProfiles } = useAllPermissions();
+  // console.log("agent table rendering");
+  // const [permissions,setPermissions] = useState([]) // use state to trigger rerenders
+  // const [permissionsForTableView, setPermissionsForTableView] = useState([])
   const filteredPermissions = filterPermissionsByAlias(permissions, type);
   const { permissionsWithProfiles } =
-    usePermissionsWithProfiles(filteredPermissions);
+    getPermissionsWithProfiles(filteredPermissions);
   const publicAndAuthPermissions = filterPublicPermissions(
     permissionsWithProfiles
   );
   const sortedPermissions = sortByAgentName(
     filterAgentPermissions(permissionsWithProfiles)
   );
-  const tablePermissions = publicAndAuthPermissions.concat(sortedPermissions);
+  const permissionsForTableView =
+    publicAndAuthPermissions.concat(sortedPermissions);
+  // console.log("AgentTable", { permissions, permissionsForTableView });
+  const data = showAll
+    ? permissionsForTableView
+    : permissionsForTableView.slice(0, 3);
 
-  const data = useMemo(() => {
-    if (!tablePermissions) {
-      return [];
-    }
-
-    return showAll ? tablePermissions : tablePermissions.slice(0, 3);
-  }, [tablePermissions, showAll]);
-
+  // return <p>hi</p>;
   const {
     getTableProps,
     getTableBodyProps,
@@ -120,7 +121,7 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
     setFilter("type", newValue);
   };
 
-  if (!tablePermissions.length && isCustomPolicy(type)) return null;
+  if (!permissionsForTableView.length && isCustomPolicy(type)) return null;
   const { emptyStateText } = POLICIES_TYPE_MAP[type];
   return (
     <Accordion
@@ -133,17 +134,17 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
           <AddAgentButton
             type={type}
             setLoading={setLoading}
-            permissions={tablePermissions}
+            permissions={permissionsForTableView}
           />
           <PolicyActionButton
-            permissions={tablePermissions}
+            permissions={permissionsForTableView}
             setLoading={setLoading}
             type={type}
           />
         </>
       </PolicyHeader>
       <div className={classes.permissionsContainer}>
-        {!!tablePermissions.length && (
+        {!!permissionsForTableView.length && (
           <>
             {/* TODO: Uncomment to reintroduce tabs */}
             {/* <Tabs */}
@@ -159,7 +160,7 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
             <CircularProgress />
           </Container>
         )}
-        {!loading && tablePermissions.length ? (
+        {!loading && permissionsForTableView.length ? (
           <table
             className={clsx(bem("table"), bem("agents-table"))}
             {...getTableProps()}
@@ -199,7 +200,7 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
             {!loading && <p>{emptyStateText}</p>}
           </span>
         )}
-        {!loading && tablePermissions.length > 3 && (
+        {!loading && permissionsForTableView.length > 3 && (
           <div
             className={clsx(
               classes.showAllButtonContainer,
@@ -227,7 +228,7 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
                   </span>
                 ) : (
                   <span>
-                    Show all ({tablePermissions.length}){" "}
+                    Show all ({permissionsForTableView.length}){" "}
                     <i
                       className={clsx(
                         bem("icon-caret-down"),
