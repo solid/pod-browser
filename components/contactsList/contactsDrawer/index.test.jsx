@@ -42,6 +42,7 @@ describe("ContactsDrawer", () => {
         open
         onClose={onClose}
         onDelete={onDelete}
+        selectedContactWebId={profileIri}
         selectedContactName={selectedContactName}
         profileIri={profileIri}
       />
@@ -51,7 +52,6 @@ describe("ContactsDrawer", () => {
 });
 
 describe("Delete contact button confirmation dialog", () => {
-  const testWebId = "testWebId";
   const onClose = () => {};
   const onDelete = () => {};
   const profileIri = "https://example.com/profile#alice";
@@ -65,7 +65,7 @@ describe("Delete contact button confirmation dialog", () => {
           onClose={onClose}
           onDelete={onDelete}
           selectedContactName={selectedContactName}
-          selectedContactWebId={testWebId}
+          selectedContactWebId={profileIri}
           profileIri={profileIri}
         />
       </ConfirmationDialogProvider>
@@ -80,7 +80,7 @@ describe("Delete contact button confirmation dialog", () => {
     await waitFor(() => {
       expect(dialog).toBeInTheDocument();
       expect(dialogText).toBeInTheDocument();
-      expect(dialogText).toHaveTextContent("testWebId");
+      expect(dialogText).toHaveTextContent(profileIri);
     });
   });
 
@@ -93,7 +93,7 @@ describe("Delete contact button confirmation dialog", () => {
           onClose={onClose}
           onDelete={onDelete}
           selectedContactName={selectedContactName}
-          selectedContactWebId={testWebId}
+          selectedContactWebId={profileIri}
           profileIri={profileIri}
         />
       </ConfirmationDialogProvider>

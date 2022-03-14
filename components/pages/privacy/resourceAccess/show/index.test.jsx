@@ -62,7 +62,7 @@ describe("Resource access show page", () => {
     );
     await waitFor(() => {
       expect(getAllByText("Bob")).toHaveLength(2);
-      expect(getAllByText("http://example.com/webId#me")).toHaveLength(1);
+      expect(getAllByText(bobWebIdUrl)).toHaveLength(1);
     });
     expect(asFragment()).toMatchSnapshot();
   });

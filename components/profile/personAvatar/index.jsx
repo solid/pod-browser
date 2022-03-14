@@ -67,7 +67,7 @@ export default function PersonAvatar({ profileIri }) {
             rel="noreferrer"
             target="_blank"
           >
-            {session.info.webId}
+            {profileIri}
           </a>
         </h3>
       </Box>
