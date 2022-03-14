@@ -60,6 +60,7 @@ describe("PodIndicator", () => {
     const { asFragment } = renderWithTheme(<PodIndicator />);
     expect(asFragment).toMatchSnapshot();
   });
+
   test("copy text button copies the text to the clipboard", async () => {
     const writeText = jest.fn();
     Object.assign(navigator, {

@@ -68,9 +68,10 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
     usePermissionsWithProfiles(policyPermissions);
 
   useEffect(() => {
-    const filteredPermissions =
-      permissions?.filter((permission) => permission.alias === type) || null;
-    if (!filteredPermissions || !filteredPermissions.length) return;
+    const filteredPermissions = permissions?.filter(
+      (permission) => permission.alias === type
+    );
+    if (!filteredPermissions.length) return;
     setPolicyPermissions(filteredPermissions);
   }, [permissions, type]);
 
