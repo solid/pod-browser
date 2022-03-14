@@ -20,178 +20,247 @@
  */
 
 import React from "react";
-import { waitFor } from "@testing-library/dom";
+import { act, waitFor, screen, getAllByRole } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
-import { mockUnauthenticatedSession } from "../../../__testUtils/mockSession";
-import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
+import { validateProviderIri } from "./validateProviderIri";
+import { defaultIdentityProviders } from "../../../constants/provider";
+
 import ProviderLogin, {
-  getErrorMessage,
-  setupErrorHandler,
-  setupLoginHandler,
-  setupOnProviderChange,
   TESTCAFE_ID_LOGIN_FIELD,
+  TESTCAFE_ID_GO_BUTTON,
+  translateError,
 } from "./index";
+
 import { renderWithTheme } from "../../../__testUtils/withTheme";
-import useIdpFromQuery from "../../../src/hooks/useIdpFromQuery";
 
-import { getCurrentHostname } from "../../../src/windowHelpers";
-
-jest.mock("../../../src/windowHelpers");
+jest.mock("./validateProviderIri");
 jest.mock("../../../src/hooks/useIdpFromQuery");
 jest.mock("next/router");
 
 describe("ProviderLogin form", () => {
   beforeEach(() => {
-    useIdpFromQuery.mockReturnValue(null);
     useRouter.mockReturnValue({ push: jest.fn() });
+    validateProviderIri.mockReturnValue({ issuer: "https://example.com/" });
   });
 
-  it("renders a webid login form", () => {
-    const { asFragment } = renderWithTheme(<ProviderLogin />);
+  it("renders a provider login form", () => {
+    const { asFragment, getByTestId } = renderWithTheme(
+      <ProviderLogin handleLogin={() => {}} />
+    );
+
+    const loginInput = getByTestId(TESTCAFE_ID_LOGIN_FIELD);
+
     expect(asFragment()).toMatchSnapshot();
+    expect(document.activeElement).toEqual(loginInput);
   });
 
-  it("renders a webid login form with a pre-populated input if idp is available from query", () => {
+  it("renders a provider login form with a pre-populated input if provider prop passed", async () => {
     const iri = "http://example.com";
     const label = "example.com";
-    const { asFragment } = renderWithTheme(
-      <ProviderLogin provider={{ iri, label }} />
+
+    const handleLogin = jest.fn();
+    validateProviderIri.mockReturnValue({ issuer: "http://example.com/" });
+
+    const { asFragment, getByTestId } = renderWithTheme(
+      <ProviderLogin provider={{ iri, label }} handleLogin={handleLogin} />
     );
     expect(asFragment()).toMatchSnapshot();
+
+    const submitBtn = getByTestId(TESTCAFE_ID_GO_BUTTON);
+    submitBtn.click();
+
+    await waitFor(() => {
+      expect(validateProviderIri).toHaveBeenCalledWith(iri);
+      expect(handleLogin).toHaveBeenCalledWith("http://example.com/");
+    });
+  });
+
+  it("can be cleared using a button", async () => {
+    const handleLogin = jest.fn();
+
+    const { asFragment, getByTestId, getByLabelText } = renderWithTheme(
+      <ProviderLogin handleLogin={handleLogin} />
+    );
+
+    const loginInput = getByTestId(TESTCAFE_ID_LOGIN_FIELD);
+    userEvent.type(loginInput, "a");
+
+    await waitFor(() => {
+      expect(loginInput.value).toBe("a");
+    });
+
+    const clearButton = getByLabelText("Clear");
+    userEvent.click(clearButton);
+
+    await waitFor(() => {
+      expect(loginInput.value).toBe("");
+    });
+
+    // Click the "go" button, triggering the login via handleSubmit
+    const submitBtn = getByTestId(TESTCAFE_ID_GO_BUTTON);
+    submitBtn.click();
+
+    await waitFor(() => {
+      expect(validateProviderIri).toHaveBeenCalledWith("");
+      expect(handleLogin).not.toHaveBeenCalled();
+    });
+
+    expect(asFragment).toMatchSnapshot();
+  });
+
+  it("can select an option from the autocomplete", async () => {
+    const provider = defaultIdentityProviders[0];
+    const handleLogin = jest.fn();
+    validateProviderIri.mockReturnValue({
+      issuer: provider.iri,
+    });
+
+    const { getByTestId } = renderWithTheme(
+      <ProviderLogin handleLogin={handleLogin} />
+    );
+
+    const loginInput = getByTestId(TESTCAFE_ID_LOGIN_FIELD);
+    userEvent.type(loginInput, "s");
+
+    // The autocomplete popup does not have a specific data-testid, so we need
+    // to do it this way instead:
+    const autocompletes = screen
+      .getAllByRole("listbox")
+      .filter(
+        (listbox) => listbox.getAttribute("id") === "provider-select-popup"
+      );
+
+    await waitFor(() => {
+      // There should be one provider-select-popup on the page:
+      expect(autocompletes).toHaveLength(1);
+    });
+
+    // Get the options that are within the autocomplete:
+    const options = getAllByRole(autocompletes[0], "option");
+
+    // solidweb.org, solidcommunity.net:
+    expect(options).toHaveLength(2);
+
+    // Click the first option from the autocomplete:
+    userEvent.click(options[0]);
+
+    await waitFor(() => {
+      expect(loginInput.value).toBe(provider.label);
+    });
+
+    // Click the "go" button, triggering the login via handleSubmit
+    const submitBtn = getByTestId(TESTCAFE_ID_GO_BUTTON);
+    submitBtn.click();
+
+    await waitFor(() => {
+      expect(validateProviderIri).toHaveBeenCalledWith(provider.iri);
+      expect(handleLogin).toHaveBeenCalledWith(provider.iri);
+    });
   });
 
   it("calls the login function upon submitting the form", async () => {
-    const session = mockUnauthenticatedSession();
-    const SessionProvider = mockSessionContextProvider(session);
-    const { login } = session;
+    const handleLogin = jest.fn();
+    validateProviderIri.mockReturnValue({
+      issuer: "https://example.com/",
+    });
+
     const { getByTestId } = renderWithTheme(
-      <SessionProvider>
-        <ProviderLogin />
-      </SessionProvider>
+      <ProviderLogin handleLogin={handleLogin} />
     );
+
     const loginInput = getByTestId(TESTCAFE_ID_LOGIN_FIELD);
+    // Tests the handleInputChange with an empty input value:
+    userEvent.type(loginInput, "a{backspace}");
+
+    await waitFor(() => {
+      expect(loginInput.value).toBe("");
+    });
+
+    // Finally for our test:
+    userEvent.type(loginInput, "example.com");
+
+    await waitFor(() => {
+      expect(loginInput.value).toBe("example.com");
+    });
+
+    // Trigger submit using enter:
     userEvent.type(loginInput, "{enter}");
-    waitFor(() => {
-      expect(login).toHaveBeenCalled();
+
+    await waitFor(() => {
+      // If the users' input does not have a protocol, we append: https://
+      expect(validateProviderIri).toHaveBeenCalledWith("https://example.com");
+      expect(handleLogin).toHaveBeenCalledWith("https://example.com/");
     });
   });
 
-  it("renders a validation error if login fails", () => {
-    const session = mockUnauthenticatedSession();
-    const SessionProvider = mockSessionContextProvider(session);
-    const { asFragment } = renderWithTheme(
-      <SessionProvider>
-        <ProviderLogin defaultError={new Error()} />
-      </SessionProvider>
+  it("should not call the login function upon clicking the submit button if no provider is selected", async () => {
+    const handleLogin = jest.fn();
+
+    validateProviderIri.mockReturnValue({ error: "invalid_url" });
+
+    const { asFragment, getByTestId } = renderWithTheme(
+      <ProviderLogin handleLogin={handleLogin} />
     );
+
+    const submitBtn = getByTestId(TESTCAFE_ID_GO_BUTTON);
+    submitBtn.click();
+
+    await waitFor(() => {
+      expect(validateProviderIri).toHaveBeenCalledWith("");
+      expect(handleLogin).not.toHaveBeenCalled();
+    });
+
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("allows setting idp with query param", () => {
-    const session = mockUnauthenticatedSession();
-    const SessionProvider = mockSessionContextProvider(session);
-    const iri = "http://example.com";
-    const label = "example.com";
-    const { getByTestId } = renderWithTheme(
-      <SessionProvider>
-        <ProviderLogin provider={{ iri, label }} />
-      </SessionProvider>
-    );
-    const input = getByTestId(TESTCAFE_ID_LOGIN_FIELD).querySelector("input");
-    expect(input.value).toEqual(iri);
-    expect(document.activeElement).toEqual(input);
-  });
-});
+  it("renders a validation error if login fails", async () => {
+    const handleLogin = jest.fn();
+    validateProviderIri.mockReturnValue({ error: "network_error" });
 
-describe("setupOnProviderChange", () => {
-  it("sets up event handler", () => {
-    const setProviderIri = jest.fn();
-    const setLoginError = jest.fn();
-    setupOnProviderChange(setProviderIri, setLoginError)(
-      { preventDefault: jest.fn() },
-      "string"
+    const { asFragment, getByTestId } = renderWithTheme(
+      <ProviderLogin handleLogin={handleLogin} />
     );
-    expect(setLoginError).toHaveBeenCalledWith(null);
-    expect(setProviderIri).toHaveBeenCalledWith("https://string");
-  });
-  it("calls setProviderIri with provided string if user providers a correct URL", () => {
-    const setProviderIri = jest.fn();
-    const setLoginError = jest.fn();
-    setupOnProviderChange(setProviderIri, setLoginError)(
-      { preventDefault: jest.fn() },
-      "https://string"
-    );
-    expect(setLoginError).toHaveBeenCalledWith(null);
-    expect(setProviderIri).toHaveBeenCalledWith("https://string");
-  });
-  it("calls setProviderIri with correct iri when passed an object from the autocomplete options", () => {
-    const setProviderIri = jest.fn();
-    const setLoginError = jest.fn();
-    setupOnProviderChange(setProviderIri, setLoginError)(
-      { preventDefault: jest.fn() },
-      { iri: "https://example.com", label: "example.com" }
-    );
-    expect(setLoginError).toHaveBeenCalledWith(null);
-    expect(setProviderIri).toHaveBeenCalledWith("https://example.com");
-  });
-  it("calls setProviderIri with null for other values", () => {
-    const setProviderIri = jest.fn();
-    const setLoginError = jest.fn();
-    setupOnProviderChange(setProviderIri, setLoginError)(
-      { preventDefault: jest.fn() },
-      42
-    );
-    expect(setLoginError).toHaveBeenCalledWith(null);
-    expect(setProviderIri).toHaveBeenCalledWith(null);
-  });
-});
 
-describe("setupLoginHandler", () => {
-  it("sets up event handler", () => {
-    const login = jest.fn();
-    const setLoginError = jest.fn();
-    const providerIri = "https://example.org";
-    const event = { preventDefault: jest.fn() };
+    const loginInput = getByTestId(TESTCAFE_ID_LOGIN_FIELD);
+    userEvent.type(loginInput, "not-a-provider.com{enter}");
 
-    setupLoginHandler(login, setLoginError, providerIri)(event, providerIri);
+    await waitFor(() => {
+      // The typing in text area appends `https://` to the value if a protocol
+      // is not found, hence we have the protocol here, but we did not type one:
+      expect(validateProviderIri).toHaveBeenCalledWith(
+        "https://not-a-provider.com"
+      );
+      expect(handleLogin).not.toHaveBeenCalled();
+    });
 
-    expect(event.preventDefault).toHaveBeenCalled();
-    expect(login).toHaveBeenCalledWith({
-      oidcIssuer: providerIri,
-      clientId: "undefined/api/app",
-      clientName: "Inrupt PodBrowser",
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  describe("translateErrors", () => {
+    it("handles invalid_url", () => {
+      const actual = translateError("invalid_url");
+      expect(actual).toMatchSnapshot();
+    });
+
+    it("handles bad_request", () => {
+      const actual = translateError("bad_request");
+      expect(actual).toMatchSnapshot();
+    });
+
+    it("handles network_error", () => {
+      const actual = translateError("network_error");
+      expect(actual).toMatchSnapshot();
+    });
+
+    it("handles unavailable", () => {
+      const actual = translateError("unavailable");
+      expect(actual).toMatchSnapshot();
+    });
+
+    it("handles null/undefined", () => {
+      const actual = translateError(undefined);
+      expect(actual).toBeNull();
     });
   });
-});
-
-describe("setupErrorHandler", () => {
-  it("sets up event handler", () => {
-    const setLoginError = jest.fn();
-    const error = new Error();
-    setupErrorHandler(setLoginError)(error);
-    expect(setLoginError).toHaveBeenCalledWith(error);
-  });
-});
-
-describe("getErrorMessage", () => {
-  it("has a standard message", () =>
-    expect(getErrorMessage(new Error())).toEqual(
-      "We were unable to log in with this URL. Please fill out a valid Solid Identity Provider."
-    ));
-
-  it("handles when URL is not an IdP for Chrome, Edge, and Firefox", () =>
-    expect(getErrorMessage(new Error("fetch"))).toEqual(
-      "This URL is not a Solid Identity Provider."
-    ));
-
-  it("handles when URL is not an IDP for Safari", () =>
-    expect(
-      getErrorMessage(new Error("Not allowed to request resource"))
-    ).toEqual("This URL is not a Solid Identity Provider."));
-
-  it("handles when value is empty", () =>
-    expect(getErrorMessage(new Error("sessionId"))).toEqual(
-      "Please fill out a valid Solid Identity Provider."
-    ));
 });

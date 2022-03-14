@@ -22,7 +22,7 @@
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable @next/next/no-sync-scripts */
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import * as Sentry from "@sentry/node";
 import { MatomoProvider, createInstance } from "@datapunt/matomo-tracker-react";
 
@@ -80,18 +80,11 @@ const jss = create(preset());
 
 const useStyles = makeStyles(() => createStyles(appLayout.styles(theme)));
 
-function updateHistory(prevState, path) {
-  return [...prevState, path].filter(
-    (historyItem) => historyItem !== "/undefined"
-  );
-}
-
 export default function App(props) {
   const { Component, pageProps } = props;
   const bem = useBem(useStyles());
   const router = useRouter();
   const { pathname, asPath } = router;
-  const [history, setHistory] = useState([]);
 
   useEffect(() => {
     // Remove injected serverside JSS
@@ -108,7 +101,6 @@ export default function App(props) {
     matomoInstance?.trackPageView({
       href: pathname,
     });
-    setHistory((prevState) => updateHistory(prevState, asPath));
   }, [pathname, asPath]);
 
   return (
@@ -134,7 +126,7 @@ export default function App(props) {
                         <PodBrowserHeader />
 
                         <main className={bem("app-layout__main")}>
-                          <Component {...pageProps} history={history} />
+                          <Component {...pageProps} />
                         </main>
                       </div>
                       <Notification />

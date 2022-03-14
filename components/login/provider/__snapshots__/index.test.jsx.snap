@@ -1,5 +1,213 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ProviderLogin form can be cleared using a button 1`] = `[Function]`;
+
+exports[`ProviderLogin form renders a provider login form 1`] = `
+<DocumentFragment>
+  <form
+    class="PodBrowser-provider-login__form"
+  >
+    <div
+      class="PodBrowser-provider-login__wrapper"
+    >
+      <div
+        class="PodBrowser-root PodBrowser-provider-login__formcontrol"
+      >
+        <div
+          aria-expanded="false"
+          class="PodBrowser-root PodBrowser-focused PodBrowser-hasClearIcon"
+          role="combobox"
+        >
+          <div
+            class="PodBrowser-root PodBrowser-root PodBrowser-fullWidth"
+          >
+            <div
+              class="PodBrowser-root PodBrowser-root PodBrowser-inputRoot PodBrowser-fullWidth PodBrowser-focused PodBrowser-focused PodBrowser-formControl PodBrowser-adornedEnd PodBrowser-adornedEnd"
+            >
+              <input
+                aria-autocomplete="list"
+                aria-invalid="false"
+                autocapitalize="none"
+                autocomplete="off"
+                class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd"
+                data-testid="login-field"
+                id="provider-select"
+                inputmode="url"
+                spellcheck="false"
+                type="text"
+                value=""
+              />
+              <div
+                class="PodBrowser-endAdornment"
+              >
+                <button
+                  aria-label="Clear"
+                  class="PodBrowser-root PodBrowser-root PodBrowser-clearIndicator"
+                  tabindex="-1"
+                  title="Clear"
+                  type="button"
+                >
+                  <span
+                    class="PodBrowser-label"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="PodBrowser-root PodBrowser-fontSizeSmall"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                      />
+                    </svg>
+                  </span>
+                  <span
+                    class="PodBrowser-root"
+                  />
+                </button>
+              </div>
+              <fieldset
+                aria-hidden="true"
+                class="PodBrowser-root PodBrowser-notchedOutline"
+                style="padding-left: 8px;"
+              >
+                <legend
+                  class="PodBrowser-legend"
+                  style="width: 0.01px;"
+                >
+                  <span>
+                    ​
+                  </span>
+                </legend>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+        <p
+          style="margin: 0px;"
+        >
+           
+        </p>
+      </div>
+      <button
+        class="PodBrowser-button PodBrowser-provider-login__button"
+        data-testid="go-button"
+        type="submit"
+      >
+        <span
+          class="PodBrowser-button__text"
+        >
+          Go
+        </span>
+      </button>
+    </div>
+  </form>
+</DocumentFragment>
+`;
+
+exports[`ProviderLogin form renders a provider login form with a pre-populated input if provider prop passed 1`] = `
+<DocumentFragment>
+  <form
+    class="PodBrowser-provider-login__form"
+  >
+    <div
+      class="PodBrowser-provider-login__wrapper"
+    >
+      <div
+        class="PodBrowser-root PodBrowser-provider-login__formcontrol"
+      >
+        <div
+          aria-expanded="false"
+          class="PodBrowser-root PodBrowser-focused PodBrowser-hasClearIcon"
+          role="combobox"
+        >
+          <div
+            class="PodBrowser-root PodBrowser-root PodBrowser-fullWidth"
+          >
+            <div
+              class="PodBrowser-root PodBrowser-root PodBrowser-inputRoot PodBrowser-fullWidth PodBrowser-focused PodBrowser-focused PodBrowser-formControl PodBrowser-adornedEnd PodBrowser-adornedEnd"
+            >
+              <input
+                aria-autocomplete="list"
+                aria-invalid="false"
+                autocapitalize="none"
+                autocomplete="off"
+                class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd"
+                data-testid="login-field"
+                id="provider-select"
+                inputmode="url"
+                spellcheck="false"
+                type="text"
+                value="http://example.com"
+              />
+              <div
+                class="PodBrowser-endAdornment"
+              >
+                <button
+                  aria-label="Clear"
+                  class="PodBrowser-root PodBrowser-root PodBrowser-clearIndicator PodBrowser-clearIndicatorDirty"
+                  tabindex="-1"
+                  title="Clear"
+                  type="button"
+                >
+                  <span
+                    class="PodBrowser-label"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="PodBrowser-root PodBrowser-fontSizeSmall"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                      />
+                    </svg>
+                  </span>
+                  <span
+                    class="PodBrowser-root"
+                  />
+                </button>
+              </div>
+              <fieldset
+                aria-hidden="true"
+                class="PodBrowser-root PodBrowser-notchedOutline"
+                style="padding-left: 8px;"
+              >
+                <legend
+                  class="PodBrowser-legend"
+                  style="width: 0.01px;"
+                >
+                  <span>
+                    ​
+                  </span>
+                </legend>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+        <p
+          style="margin: 0px;"
+        >
+           
+        </p>
+      </div>
+      <button
+        class="PodBrowser-button PodBrowser-provider-login__button"
+        data-testid="go-button"
+        type="submit"
+      >
+        <span
+          class="PodBrowser-button__text"
+        >
+          Go
+        </span>
+      </button>
+    </div>
+  </form>
+</DocumentFragment>
+`;
+
 exports[`ProviderLogin form renders a validation error if login fails 1`] = `
 <DocumentFragment>
   <form
@@ -9,20 +217,19 @@ exports[`ProviderLogin form renders a validation error if login fails 1`] = `
       class="PodBrowser-provider-login__wrapper"
     >
       <div
-        class="PodBrowser-root PodBrowser-selectionBox"
+        class="PodBrowser-root PodBrowser-provider-login__formcontrol"
       >
         <div
           aria-expanded="false"
-          class="PodBrowser-root PodBrowser-hasClearIcon"
+          class="PodBrowser-root PodBrowser-focused PodBrowser-hasClearIcon"
           role="combobox"
         >
           <div
             aria-describedby="login-error-text"
             class="PodBrowser-root PodBrowser-root PodBrowser-fullWidth"
-            data-testid="login-field"
           >
             <div
-              class="PodBrowser-root PodBrowser-root PodBrowser-inputRoot PodBrowser-error PodBrowser-error PodBrowser-fullWidth PodBrowser-formControl PodBrowser-adornedEnd PodBrowser-adornedEnd"
+              class="PodBrowser-root PodBrowser-root PodBrowser-inputRoot PodBrowser-error PodBrowser-error PodBrowser-fullWidth PodBrowser-focused PodBrowser-focused PodBrowser-formControl PodBrowser-adornedEnd PodBrowser-adornedEnd"
             >
               <input
                 aria-autocomplete="list"
@@ -30,10 +237,12 @@ exports[`ProviderLogin form renders a validation error if login fails 1`] = `
                 autocapitalize="none"
                 autocomplete="off"
                 class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd"
+                data-testid="login-field"
                 id="provider-select"
+                inputmode="url"
                 spellcheck="false"
-                type="url"
-                value=""
+                type="text"
+                value="not-a-provider.com"
               />
               <div
                 class="PodBrowser-endAdornment"
@@ -84,33 +293,28 @@ exports[`ProviderLogin form renders a validation error if login fails 1`] = `
         <p
           class="PodBrowser-root PodBrowser-error"
           id="login-error-text"
-          style="margin-bottom: 10px;"
+          style="margin-bottom: 0px;"
         >
           We were unable to log in with this URL. Please fill out a valid Solid Identity Provider.
         </p>
       </div>
-      <div
-        role="button"
-        tabindex="0"
+      <button
+        class="PodBrowser-button PodBrowser-provider-login__button"
+        data-testid="go-button"
+        type="submit"
       >
-        <button
-          class="PodBrowser-button PodBrowser-provider-login__button"
-          data-testid="go-button"
-          type="submit"
+        <span
+          class="PodBrowser-button__text"
         >
-          <span
-            class="PodBrowser-button__text"
-          >
-            Go
-          </span>
-        </button>
-      </div>
+          Go
+        </span>
+      </button>
     </div>
   </form>
 </DocumentFragment>
 `;
 
-exports[`ProviderLogin form renders a webid login form 1`] = `
+exports[`ProviderLogin form should not call the login function upon clicking the submit button if no provider is selected 1`] = `
 <DocumentFragment>
   <form
     class="PodBrowser-provider-login__form"
@@ -119,109 +323,7 @@ exports[`ProviderLogin form renders a webid login form 1`] = `
       class="PodBrowser-provider-login__wrapper"
     >
       <div
-        class="PodBrowser-root PodBrowser-selectionBox"
-      >
-        <div
-          aria-expanded="false"
-          class="PodBrowser-root PodBrowser-hasClearIcon"
-          role="combobox"
-        >
-          <div
-            class="PodBrowser-root PodBrowser-root PodBrowser-fullWidth"
-            data-testid="login-field"
-          >
-            <div
-              class="PodBrowser-root PodBrowser-root PodBrowser-inputRoot PodBrowser-fullWidth PodBrowser-formControl PodBrowser-adornedEnd PodBrowser-adornedEnd"
-            >
-              <input
-                aria-autocomplete="list"
-                aria-invalid="false"
-                autocapitalize="none"
-                autocomplete="off"
-                class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd"
-                id="provider-select"
-                spellcheck="false"
-                type="url"
-                value=""
-              />
-              <div
-                class="PodBrowser-endAdornment"
-              >
-                <button
-                  aria-label="Clear"
-                  class="PodBrowser-root PodBrowser-root PodBrowser-clearIndicator PodBrowser-clearIndicatorDirty"
-                  tabindex="-1"
-                  title="Clear"
-                  type="button"
-                >
-                  <span
-                    class="PodBrowser-label"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="PodBrowser-root PodBrowser-fontSizeSmall"
-                      focusable="false"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-                      />
-                    </svg>
-                  </span>
-                  <span
-                    class="PodBrowser-root"
-                  />
-                </button>
-              </div>
-              <fieldset
-                aria-hidden="true"
-                class="PodBrowser-root PodBrowser-notchedOutline"
-                style="padding-left: 8px;"
-              >
-                <legend
-                  class="PodBrowser-legend"
-                  style="width: 0.01px;"
-                >
-                  <span>
-                    ​
-                  </span>
-                </legend>
-              </fieldset>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        role="button"
-        tabindex="0"
-      >
-        <button
-          class="PodBrowser-button PodBrowser-provider-login__button"
-          data-testid="go-button"
-          type="submit"
-        >
-          <span
-            class="PodBrowser-button__text"
-          >
-            Go
-          </span>
-        </button>
-      </div>
-    </div>
-  </form>
-</DocumentFragment>
-`;
-
-exports[`ProviderLogin form renders a webid login form with a pre-populated input if idp is available from query 1`] = `
-<DocumentFragment>
-  <form
-    class="PodBrowser-provider-login__form"
-  >
-    <div
-      class="PodBrowser-provider-login__wrapper"
-    >
-      <div
-        class="PodBrowser-root PodBrowser-selectionBox"
+        class="PodBrowser-root PodBrowser-provider-login__formcontrol"
       >
         <div
           aria-expanded="false"
@@ -229,29 +331,31 @@ exports[`ProviderLogin form renders a webid login form with a pre-populated inpu
           role="combobox"
         >
           <div
+            aria-describedby="login-error-text"
             class="PodBrowser-root PodBrowser-root PodBrowser-fullWidth"
-            data-testid="login-field"
           >
             <div
-              class="PodBrowser-root PodBrowser-root PodBrowser-inputRoot PodBrowser-fullWidth PodBrowser-focused PodBrowser-focused PodBrowser-formControl PodBrowser-adornedEnd PodBrowser-adornedEnd"
+              class="PodBrowser-root PodBrowser-root PodBrowser-inputRoot PodBrowser-error PodBrowser-error PodBrowser-fullWidth PodBrowser-focused PodBrowser-focused PodBrowser-formControl PodBrowser-adornedEnd PodBrowser-adornedEnd"
             >
               <input
                 aria-autocomplete="list"
-                aria-invalid="false"
+                aria-invalid="true"
                 autocapitalize="none"
                 autocomplete="off"
                 class="PodBrowser-input PodBrowser-input PodBrowser-input PodBrowser-inputFocused PodBrowser-inputAdornedEnd PodBrowser-inputAdornedEnd"
+                data-testid="login-field"
                 id="provider-select"
+                inputmode="url"
                 spellcheck="false"
-                type="url"
-                value="http://example.com"
+                type="text"
+                value=""
               />
               <div
                 class="PodBrowser-endAdornment"
               >
                 <button
                   aria-label="Clear"
-                  class="PodBrowser-root PodBrowser-root PodBrowser-clearIndicator PodBrowser-clearIndicatorDirty"
+                  class="PodBrowser-root PodBrowser-root PodBrowser-clearIndicator"
                   tabindex="-1"
                   title="Clear"
                   type="button"
@@ -292,24 +396,34 @@ exports[`ProviderLogin form renders a webid login form with a pre-populated inpu
             </div>
           </div>
         </div>
-      </div>
-      <div
-        role="button"
-        tabindex="0"
-      >
-        <button
-          class="PodBrowser-button PodBrowser-provider-login__button"
-          data-testid="go-button"
-          type="submit"
+        <p
+          class="PodBrowser-root PodBrowser-error"
+          id="login-error-text"
+          style="margin-bottom: 0px;"
         >
-          <span
-            class="PodBrowser-button__text"
-          >
-            Go
-          </span>
-        </button>
+          Please enter a valid URL
+        </p>
       </div>
+      <button
+        class="PodBrowser-button PodBrowser-provider-login__button"
+        data-testid="go-button"
+        type="submit"
+      >
+        <span
+          class="PodBrowser-button__text"
+        >
+          Go
+        </span>
+      </button>
     </div>
   </form>
 </DocumentFragment>
 `;
+
+exports[`ProviderLogin form translateErrors handles bad_request 1`] = `"This URL is not a Solid Identity Provider."`;
+
+exports[`ProviderLogin form translateErrors handles invalid_url 1`] = `"Please enter a valid URL"`;
+
+exports[`ProviderLogin form translateErrors handles network_error 1`] = `"We were unable to log in with this URL. Please fill out a valid Solid Identity Provider."`;
+
+exports[`ProviderLogin form translateErrors handles unavailable 1`] = `"We were unable to log in at this time, it seems your provider is unavailable."`;

@@ -19,55 +19,63 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useEffect, useState } from "react";
+/* eslint-disable @next/next/no-img-element */
+
+import React, { useCallback, useState, useEffect } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { Button } from "@inrupt/prism-react-components";
-import { LoginButton } from "@inrupt/solid-ui-react";
+import { useSession } from "@inrupt/solid-ui-react";
 import { useBem } from "@solid/lit-prism-patterns";
 import InfoTooltip from "../infoTooltip";
 import ProviderLogin from "./provider";
 import styles from "./styles";
-import {
-  generateRedirectUrl,
-  getCurrentHostname,
-  getCurrentOrigin,
-} from "../../src/windowHelpers";
-import { isLocalhost } from "../../src/stringHelpers";
-import { CLIENT_NAME } from "../../constants/app";
+
+import { getClientOptions } from "../../constants/app";
+
+import useReturnUrl from "../../src/authentication/useReturnUrl";
 import useIdpFromQuery from "../../src/hooks/useIdpFromQuery";
-import getConfig from "../../constants/config";
 
 export const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
 export const TESTCAFE_ID_LOGIN_TITLE = "login-title";
 export const TESTCAFE_ID_OTHER_PROVIDERS_BUTTON = "other-providers-button";
 
 const DEFAULT_PROVIDER_IRI = "https://broker.pod.inrupt.com/";
-const hostname = getCurrentHostname();
-
-const CLIENT_APP_WEBID = isLocalhost(hostname)
-  ? getConfig().devClientId
-  : `${getCurrentOrigin()}/api/app`;
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export const AUTH_OPTIONS = {
-  clientName: CLIENT_NAME,
-};
-
-export default function Login() {
+export default function LoginForm() {
   const bem = useBem(useStyles());
 
+  const { persist } = useReturnUrl();
+  const { login: sessionLogin } = useSession();
+
+  const login = useCallback(
+    (oidcIssuer) => {
+      persist();
+      sessionLogin({
+        oidcIssuer,
+        ...getClientOptions(),
+      });
+    },
+    [sessionLogin, persist]
+  );
+
+  // useIdpFromQuery requires several re-renders due to using useEffect & useState:
   const idp = useIdpFromQuery();
-  const [isOpen, setIsOpen] = useState(!!idp);
-  const dropdownIcon = isOpen ? "caret-up" : "caret-down";
+  // hence we don't use it directly here for setting the initial state:
+  const [isOpen, setIsOpen] = useState(false);
   const toggleOpenDropdown = () => setIsOpen(!isOpen);
-  const INFO_TOOLTIP_TEXT = "This is where you signed up for a Solid Pod";
-  const INFO_BUTTON_LABEL = "Where is your Pod hosted?";
 
   useEffect(() => {
-    if (!idp) return;
-    setIsOpen(true);
+    if (idp && idp.iri) {
+      setIsOpen(true);
+    }
   }, [idp]);
+
+  const handleDefaultLogin = (ev) => {
+    ev.preventDefault();
+    login(DEFAULT_PROVIDER_IRI);
+  };
 
   return (
     <div className={bem("login-form")}>
@@ -78,20 +86,16 @@ export default function Login() {
         alt="Inrupt PodBrowser"
         className={bem("login-form__logo")}
       />
-      <LoginButton
-        oidcIssuer={DEFAULT_PROVIDER_IRI}
-        redirectUrl={generateRedirectUrl("")}
-        authOptions={AUTH_OPTIONS}
-      >
+      <form>
         <Button
           variant="primary"
           data-testid={TESTCAFE_ID_LOGIN_BUTTON}
-          type="submit"
+          onClick={handleDefaultLogin}
           className={bem("login-form__button")}
         >
           Sign In
         </Button>
-      </LoginButton>
+      </form>
       <div className={bem("separator__wrap")}>
         <h2 className={bem("separator__centre-line")}>
           <span>Or</span>
@@ -99,7 +103,7 @@ export default function Login() {
       </div>
       <Button
         variant="secondary"
-        iconAfter={dropdownIcon}
+        iconAfter={isOpen ? "caret-up" : "caret-down"}
         onClick={toggleOpenDropdown}
         data-testid={TESTCAFE_ID_OTHER_PROVIDERS_BUTTON}
       >
@@ -108,11 +112,11 @@ export default function Login() {
       {isOpen && (
         <div className={bem("provider-login-container", "visible")}>
           <InfoTooltip
-            label={INFO_BUTTON_LABEL}
-            tooltipText={INFO_TOOLTIP_TEXT}
+            label="Where is your Pod hosted?"
+            tooltipText="This is where you signed up for a Solid Pod"
             className={bem("info-button")}
           />
-          <ProviderLogin provider={idp} />
+          <ProviderLogin provider={idp} handleLogin={login} />
         </div>
       )}
     </div>

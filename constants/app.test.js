@@ -19,12 +19,38 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import getIdentityProviders from "./provider";
+import getConfig from "./config";
+import { getClientOptions } from "./app";
+import { getCurrentHostname } from "../src/windowHelpers";
 
-describe("getIdentityProviders", () => {
-  it("returns an array of providers", () => {
-    const providers = getIdentityProviders();
-    expect(Object.values(providers).length).toBeTruthy();
-    expect(providers).toMatchSnapshot();
+jest.mock("./config");
+
+jest.mock("../src/windowHelpers", () => ({
+  getCurrentHostname: jest.fn().mockReturnValue("localhost"),
+  generateRedirectUrl: () => "https://localhost:3000/",
+  getCurrentOrigin: () => "https://localhost:3000",
+}));
+
+const TEST_CLIENT_ID = "https://pod.inrupt.com/appsteamdev/clientid.json";
+
+describe("app - getClientOptions", () => {
+  beforeEach(() => {
+    getConfig.mockReturnValue({
+      devClientId: TEST_CLIENT_ID,
+    });
+  });
+
+  it("should return configuration for login", () => {
+    const actual = getClientOptions();
+    expect(actual).toMatchSnapshot();
+  });
+
+  it("should not use the devClientId in production", () => {
+    getCurrentHostname.mockReturnValue("http://example.podbrowser");
+
+    const actual = getClientOptions();
+    expect(actual).toMatchSnapshot();
+    expect(actual.clientId).toBe("https://localhost:3000/api/app");
+    expect(actual.clientId).not.toBe(TEST_CLIENT_ID);
   });
 });

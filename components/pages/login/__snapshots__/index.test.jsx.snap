@@ -29,14 +29,10 @@ exports[`Login page renders a login button 1`] = `
         src="/pod-spaces-logo.svg"
         width="160"
       />
-      <div
-        role="button"
-        tabindex="0"
-      >
+      <form>
         <button
           class="PodBrowser-button PodBrowser-login-form__button"
           data-testid="login-button"
-          type="submit"
         >
           <span
             class="PodBrowser-button__text"
@@ -44,7 +40,7 @@ exports[`Login page renders a login button 1`] = `
             Sign In
           </span>
         </button>
-      </div>
+      </form>
       <div
         class="PodBrowser-separator__wrap"
       >
