@@ -124,10 +124,6 @@ export default function AddContact() {
     mutate: peopleMutate,
   } = useContactsOld(addressBook, foaf.Person);
 
-  if (peopleError) alertError(peopleError);
-
-  if (isLoading) return <Spinner />;
-
   const onSubmit = handleSubmit({
     addressBook,
     addressBookContainerUrl,
@@ -143,11 +139,19 @@ export default function AddContact() {
 
   const handleChange = (newValue) => setAgentId(newValue);
 
-  const link = <BackToNavLink href="/contacts">contacts</BackToNavLink>;
+  if (peopleError) {
+    alertError(peopleError);
+  }
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className={containerClass}>
-      <BackToNav link={link} />
+      <BackToNav
+        link={<BackToNavLink href="/contacts">contacts</BackToNavLink>}
+      />
 
       <h3>Add new contact</h3>
 
