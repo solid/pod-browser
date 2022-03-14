@@ -85,30 +85,6 @@ export default function useAllPermissions() {
     [consentBasedPermissions]
   );
 
-  const getPermissionsWithProfiles = () => {
-    let permissionsWithProfiles = [];
-    Promise.all(
-      permissions.map(async (p) => {
-        let profile;
-        let profileError;
-        if (isPublicAgentorAuthenticatedAgentWebId(p.webId)) return p;
-        try {
-          profile = await fetchProfile(p.webId, fetch);
-        } catch (error) {
-          profileError = error;
-        }
-        return {
-          ...p,
-          profile,
-          profileError,
-        };
-      })
-    ).then((response) => {
-      permissionsWithProfiles = response;
-    });
-    return { permissionsWithProfiles };
-  };
-
   useEffect(() => {
     if (!accessControl) {
       setPermissions([]);
@@ -127,6 +103,5 @@ export default function useAllPermissions() {
 
   return {
     permissions,
-    getPermissionsWithProfiles,
   };
 }
