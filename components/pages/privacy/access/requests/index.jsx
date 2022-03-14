@@ -30,7 +30,6 @@ import { createStyles, Typography, Link } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { useRedirectIfLoggedOut } from "../../../../../src/effects/auth";
 import { ConsentRequestProvider } from "../../../../../src/contexts/consentRequestContext";
 import styles from "./styles";
 import ConsentRequestForm from "../../../../consentRequestForm";
@@ -46,7 +45,6 @@ import Spinner from "../../../../spinner";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function ConsentShow() {
-  useRedirectIfLoggedOut();
   const { session } = useSession();
   const { fetch } = session;
   const router = useRouter();

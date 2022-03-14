@@ -21,12 +21,9 @@
 
 import React from "react";
 import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import ContactsList from "../../contactsList";
 
 export default function ContactsPage() {
-  useRedirectIfLoggedOut();
-
   return (
     <DetailsMenuProvider>
       <ContactsList />

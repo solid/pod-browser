@@ -39,7 +39,6 @@ import Spinner from "../spinner";
 import AgentAvatar from "../agentAvatar";
 import styles from "./styles";
 
-import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import { mockApp } from "../../__testUtils/mockApp";
 import AgentResourceAccessLink from "../agentResourceAccessLink";
 import SearchContext from "../../src/contexts/searchContext";
@@ -67,7 +66,6 @@ const WebIdRow = () => {
 };
 
 function AgentList({ contactType, setSearchValues }) {
-  useRedirectIfLoggedOut();
   const tableClass = PrismTable.useTableClass("table", "inherits");
   const classes = useStyles();
   const bem = useBem(classes);

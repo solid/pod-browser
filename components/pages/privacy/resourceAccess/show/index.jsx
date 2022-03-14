@@ -42,7 +42,6 @@ import {
 import { createStyles, Divider } from "@material-ui/core";
 import ConfirmationDialog from "../../../../confirmationDialog";
 import { handleAction } from "../../../../containerTableRow";
-import { useRedirectIfLoggedOut } from "../../../../../src/effects/auth";
 import PersonAvatar from "../../../../profile/personAvatar";
 import AppAvatar from "../../../../profile/appAvatar";
 import PersonProfile from "../../../../profile/personProfile";
@@ -67,11 +66,10 @@ export const TESTCAFE_ID_TAB_PROFILE = "profile-tab";
 export const USER_ACCESS_STRING = "has access to these resources";
 
 export default function AgentResourceAccessShowPage({ type }) {
-  useRedirectIfLoggedOut();
   const router = useRouter();
   const decodedIri = decodeURIComponent(router.query.webId);
   const tableClass = PrismTable.useTableClass("table", "inherits");
-  useRedirectIfLoggedOut();
+
   const { session, fetch } = useSession();
   const podRoot = usePodRootUri(session.info.webId);
   const [resources, setResources] = useState([]);

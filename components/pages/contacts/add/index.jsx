@@ -21,12 +21,9 @@
 
 import React from "react";
 import { DetailsMenuProvider } from "../../../../src/contexts/detailsMenuContext";
-import { useRedirectIfLoggedOut } from "../../../../src/effects/auth";
 import AddContact from "../../../addContact";
 
 export default function AddContactPage() {
-  useRedirectIfLoggedOut();
-
   return (
     <DetailsMenuProvider>
       <AddContact />

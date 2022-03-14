@@ -21,7 +21,12 @@
 
 import React from "react";
 import PrivacyPage from "../components/pages/privacy";
+import AuthenticatedRoute from "../src/authentication/AuthenticatedRoute";
 
 export default function Privacy() {
-  return <PrivacyPage />;
+  return (
+    <AuthenticatedRoute>
+      <PrivacyPage />
+    </AuthenticatedRoute>
+  );
 }

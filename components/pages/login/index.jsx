@@ -19,13 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+import React from "react";
+import clsx from "clsx";
+import { useRouter } from "next/router";
+import { useSession } from "@inrupt/solid-ui-react";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { Button } from "@inrupt/prism-react-components";
-import clsx from "clsx";
 import { useBem } from "@solid/lit-prism-patterns";
-import { useRedirectIfLoggedIn } from "../../../src/effects/auth";
 import LoginForm from "../../login";
 import styles from "./styles";
 
@@ -57,22 +57,16 @@ const links = [
   },
 ];
 
-export default function Login({ history }) {
-  const filteredHistory = history
-    .slice(0, history.indexOf("/login"))
-    .filter((item) => !item.startsWith("/?code="));
-  const previousPage = filteredHistory[filteredHistory.length - 1];
-  const redirectUrl = previousPage || "/";
-  useRedirectIfLoggedIn(redirectUrl);
+export default function Login() {
   const bem = useBem(useStyles());
   const buttonBem = Button.useBem();
+  const { session } = useSession();
+  const router = useRouter();
 
-  useEffect(() => {
-    if (!localStorage) return;
-    if (previousPage) {
-      localStorage.setItem("previousPage", previousPage);
-    }
-  }, [previousPage]);
+  // Redirect to root if you're already logged in:
+  if (session.info.isLoggedIn) {
+    router.replace("/");
+  }
 
   return (
     <div className={bem("login-page")}>
@@ -114,11 +108,3 @@ export default function Login({ history }) {
     </div>
   );
 }
-
-Login.propTypes = {
-  history: PropTypes.arrayOf(PropTypes.string),
-};
-
-Login.defaultProps = {
-  history: [],
-};

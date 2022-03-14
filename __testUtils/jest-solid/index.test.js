@@ -19,30 +19,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
-import { SessionContext } from "@inrupt/solid-ui-react";
-import { getEffectiveAccess, getSourceUrl } from "@inrupt/solid-client";
-import Profile from "../../profile";
+import jestSolid from "./index";
+import toHaveRDFType from "./toHaveRDFType";
+import toHaveString from "./toHaveString";
+import toHaveURL from "./toHaveURL";
 
-export default function ProfileShow() {
-  const { session, sessionRequestInProgress, profile } =
-    useContext(SessionContext);
-
-  if (sessionRequestInProgress || !profile) {
-    return null;
-  }
-  const { user: profileEditingAccess } = getEffectiveAccess(
-    profile.webIdProfile
-  );
-
-  const isWebIdProfileEditable =
-    profileEditingAccess.write || profileEditingAccess.append;
-  const profileDataset = isWebIdProfileEditable
-    ? profile?.webIdProfile
-    : profile?.altProfileAll[0];
-  const profileIri = isWebIdProfileEditable
-    ? session.info.webId
-    : getSourceUrl(profileDataset);
-
-  return <Profile profileIri={profileIri} editing />;
-}
+describe("jest-solid", () => {
+  it("should have methods exported", () => {
+    expect(jestSolid.toHaveRDFType).toBe(toHaveRDFType);
+    expect(jestSolid.toHaveString).toBe(toHaveString);
+    expect(jestSolid.toHaveURL).toBe(toHaveURL);
+  });
+});

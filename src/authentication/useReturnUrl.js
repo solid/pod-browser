@@ -19,12 +19,35 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import getIdentityProviders from "./provider";
+import React, { useCallback } from "react";
+import { useRouter } from "next/router";
 
-describe("getIdentityProviders", () => {
-  it("returns an array of providers", () => {
-    const providers = getIdentityProviders();
-    expect(Object.values(providers).length).toBeTruthy();
-    expect(providers).toMatchSnapshot();
-  });
-});
+export const RETURN_TO_PAGE_KEY = "podbrowser:returnTo";
+
+const useReturnUrl = () => {
+  const router = useRouter();
+
+  const persist = useCallback(() => {
+    if (router.query.returnTo && router.query.returnTo.startsWith("/")) {
+      localStorage.setItem(RETURN_TO_PAGE_KEY, router.query.returnTo);
+    }
+  }, [router]);
+
+  const restore = useCallback(() => {
+    const returnTo = localStorage.getItem(RETURN_TO_PAGE_KEY);
+    localStorage.removeItem(RETURN_TO_PAGE_KEY);
+
+    if (returnTo && returnTo.startsWith("/")) {
+      router.replace(returnTo);
+    } else {
+      router.replace("/");
+    }
+  }, [router]);
+
+  return {
+    persist,
+    restore,
+  };
+};
+
+export default useReturnUrl;

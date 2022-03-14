@@ -25,12 +25,10 @@ import {
   issueAccessRequest,
   redirectToAccessManagementUi,
 } from "@inrupt/solid-client-access-grants";
-import { useRedirectIfLoggedOut } from "../../../../../../src/effects/auth";
 import useFetchProfile from "../../../../../../src/hooks/useFetchProfile";
 import Spinner from "../../../../../spinner";
 
 export default function GenerateConsentRequest() {
-  useRedirectIfLoggedOut();
   const { session } = useSession();
   const { fetch } = session;
   const options = { fetch };

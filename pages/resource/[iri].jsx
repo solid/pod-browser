@@ -21,7 +21,12 @@
 
 import React from "react";
 import ResourcePage from "../../components/pages/resource";
+import AuthenticatedRoute from "../../src/authentication/AuthenticatedRoute";
 
 export default function Resource() {
-  return <ResourcePage />;
+  return (
+    <AuthenticatedRoute>
+      <ResourcePage />
+    </AuthenticatedRoute>
+  );
 }

@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`app - getClientOptions should not use the devClientId in production 1`] = `
+Object {
+  "clientId": "https://localhost:3000/api/app",
+  "clientName": "Inrupt PodBrowser",
+  "redirectUrl": "https://localhost:3000/",
+}
+`;
+
+exports[`app - getClientOptions should return configuration for login 1`] = `
+Object {
+  "clientId": "https://pod.inrupt.com/appsteamdev/clientid.json",
+  "clientName": "Inrupt PodBrowser",
+  "redirectUrl": "https://localhost:3000/",
+}
+`;

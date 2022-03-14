@@ -29,7 +29,11 @@ jest.mock("@inrupt/solid-client");
 describe("Delete contact button", () => {
   test("it renders a delete contact button", () => {
     const { asFragment } = renderWithTheme(
-      <DeleteContactButton onDelete={jest.fn()} name="Test" />
+      <DeleteContactButton
+        onDelete={jest.fn()}
+        name="Test"
+        webId="https://id.inrupt.com/test"
+      />
     );
 
     expect(asFragment()).toMatchSnapshot();

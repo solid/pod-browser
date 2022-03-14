@@ -32,7 +32,6 @@ import { mockAppDataset } from "../../../../../__testUtils/mockApp";
 import useContainer from "../../../../../src/hooks/useContainer";
 import * as containerFns from "../../../../../src/models/container";
 
-jest.mock("../../../../../src/effects/auth");
 jest.mock("../../../../../src/hooks/useContainer");
 const mockedUseContainer = useContainer;
 

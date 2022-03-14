@@ -21,7 +21,12 @@
 
 import React from "react";
 import BookmarksPage from "../components/pages/bookmarks";
+import AuthenticatedRoute from "../src/authentication/AuthenticatedRoute";
 
 export default function Contacts() {
-  return <BookmarksPage />;
+  return (
+    <AuthenticatedRoute>
+      <BookmarksPage />
+    </AuthenticatedRoute>
+  );
 }

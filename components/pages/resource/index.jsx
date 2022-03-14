@@ -22,12 +22,10 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { DetailsMenuProvider } from "../../../src/contexts/detailsMenuContext";
-import { useRedirectIfLoggedOut } from "../../../src/effects/auth";
 import ContainerView from "../../container";
 import { PodLocationProvider } from "../../../src/contexts/podLocationContext";
 
 export default function Resource() {
-  useRedirectIfLoggedOut();
   const router = useRouter();
 
   return (

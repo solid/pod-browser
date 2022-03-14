@@ -20,13 +20,19 @@
  */
 
 import React from "react";
+import { useRouter } from "next/router";
+
 import { renderWithTheme } from "../../../__testUtils/withTheme";
-import { useRedirectIfLoggedIn } from "../../../src/effects/auth";
-import LoginPage from "./index";
 import useIdpFromQuery from "../../../src/hooks/useIdpFromQuery";
 
-jest.mock("../../../src/effects/auth");
+import LoginPage from "./index";
+
+import mockSession from "../../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
+import { mockProfileAlice } from "../../../__testUtils/mockPersonResource";
+
 jest.mock("../../../src/hooks/useIdpFromQuery");
+jest.mock("next/router");
 
 describe("Login page", () => {
   beforeEach(() => {
@@ -38,45 +44,23 @@ describe("Login page", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("redirects if the user is logged out", () => {
-    renderWithTheme(<LoginPage />);
-    expect(useRedirectIfLoggedIn).toHaveBeenCalled();
-  });
-
-  it("redirects with correct location if logged out", () => {
-    const previousPage = "https://pod.example.com/someresource.txt";
-    renderWithTheme(<LoginPage history={[previousPage, "/login"]} />);
-    expect(useRedirectIfLoggedIn).toHaveBeenCalledWith(previousPage);
-  });
-
-  it("sets previous page in local storage is available", () => {
-    const previousPage = "https://pod.example.com/someresource.txt";
-    const mockedLocalStorage = {
-      setItem: jest.fn(),
-    };
-    Object.defineProperty(window, "localStorage", {
-      value: mockedLocalStorage,
-      writable: true,
-    });
-    renderWithTheme(<LoginPage history={[previousPage, "/login"]} />);
-
-    expect(mockedLocalStorage.setItem).toHaveBeenCalledWith(
-      "previousPage",
-      previousPage
+  it("redirects to the index page if already logged in", () => {
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(
+      session,
+      false,
+      mockProfileAlice()
     );
-  });
 
-  it("does not call setItem if local storage unavailable", () => {
-    const previousPage = "https://pod.example.com/someresource.txt";
-    const mockedLocalStorage = {
-      setItem: jest.fn(),
-    };
-    Object.defineProperty(window, "localStorage", {
-      value: undefined,
-      writable: true,
-    });
-    renderWithTheme(<LoginPage history={[previousPage, "/login"]} />);
+    const replaceMock = jest.fn();
+    useRouter.mockReturnValue({ replace: replaceMock });
 
-    expect(mockedLocalStorage.setItem).not.toHaveBeenCalled();
+    renderWithTheme(
+      <SessionProvider>
+        <LoginPage />
+      </SessionProvider>
+    );
+
+    expect(replaceMock).toHaveBeenCalledWith("/");
   });
 });

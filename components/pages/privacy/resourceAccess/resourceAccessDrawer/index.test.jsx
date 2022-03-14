@@ -37,7 +37,6 @@ import mockSession from "../../../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../../../__testUtils/mockSessionContextProvider";
 import { TESTCAFE_ID_REVOKE_ACCESS_BUTTON } from "../revokeAccessButton";
 
-jest.mock("../../../../../src/effects/auth");
 jest.mock("../../../../../src/hooks/useAccessControl");
 const mockedUseAccessControl = useAccessControl;
 jest.mock("../../../../../src/accessControl");

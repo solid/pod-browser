@@ -35,6 +35,7 @@ export default function mockSessionContextProvider(
           session,
           sessionRequestInProgress,
           profile,
+          login: session.login,
         }}
       >
         {children}

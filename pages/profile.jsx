@@ -20,9 +20,13 @@
  */
 
 import React from "react";
-
 import ProfilePage from "../components/pages/profile";
+import AuthenticatedRoute from "../src/authentication/AuthenticatedRoute";
 
 export default function Profile() {
-  return <ProfilePage />;
+  return (
+    <AuthenticatedRoute>
+      <ProfilePage />
+    </AuthenticatedRoute>
+  );
 }

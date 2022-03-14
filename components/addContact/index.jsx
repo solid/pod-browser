@@ -32,7 +32,6 @@ import useAddressBookOld from "../../src/hooks/useAddressBookOld";
 import AgentSearchForm from "../agentSearchForm";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 import AlertContext from "../../src/contexts/alertContext";
-import { useRedirectIfLoggedOut } from "../../src/effects/auth";
 import styles from "./styles";
 import { fetchProfile } from "../../src/solidClientHelpers/profile";
 import { isPodOwner } from "../../src/solidClientHelpers/utils";
@@ -106,7 +105,6 @@ export function handleSubmit({
 }
 
 export default function AddContact() {
-  useRedirectIfLoggedOut();
   const { alertSuccess, alertError } = useContext(AlertContext);
   const { session } = useSession();
   const { menuOpen } = useContext(DetailsMenuContext);
@@ -126,10 +124,6 @@ export default function AddContact() {
     mutate: peopleMutate,
   } = useContactsOld(addressBook, foaf.Person);
 
-  if (peopleError) alertError(peopleError);
-
-  if (isLoading) return <Spinner />;
-
   const onSubmit = handleSubmit({
     addressBook,
     addressBookContainerUrl,
@@ -145,11 +139,19 @@ export default function AddContact() {
 
   const handleChange = (newValue) => setAgentId(newValue);
 
-  const link = <BackToNavLink href="/contacts">contacts</BackToNavLink>;
+  if (peopleError) {
+    alertError(peopleError);
+  }
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className={containerClass}>
-      <BackToNav link={link} />
+      <BackToNav
+        link={<BackToNavLink href="/contacts">contacts</BackToNavLink>}
+      />
 
       <h3>Add new contact</h3>
 
