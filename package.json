@@ -12,7 +12,8 @@
     "dev": "node server.js",
     "lint": "eslint pages components constants src --ext .js,.jsx",
     "start": "next start",
-    "test": "NODE_OPTIONS=--max_old_space_size=4096 jest --maxWorkers=5"
+    "test": "NODE_OPTIONS=--max_old_space_size=4096 jest --maxWorkers=5",
+    "test:debug": "node --inspect-brk ./node_modules/.bin/jest -i"
   },
   "repository": {
     "type": "git",
@@ -50,7 +51,7 @@
     "prop-types": "^15.7.2",
     "rdf-namespaces": "^1.9.2",
     "react": "^17.0.2",
-    "react-dom": "^18.0.0",
+    "react-dom": "^17.0.2",
     "react-id-generator": "^3.0.1",
     "react-jss": "^10.4.0",
     "react-table": "^7.6.3",

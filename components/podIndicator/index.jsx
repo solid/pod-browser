@@ -69,13 +69,11 @@ export default function PodIndicator() {
   const id = open ? "pod-indicator-menu" : undefined;
   const handleClick = clickHandler(setAnchorEl);
   const handleClose = closeHandler(setAnchorEl);
-
   const handleOpenNavigator = () => {
     setNavigatorAnchor(anchorEl);
     setDisplayNavigator(true);
     handleClose();
   };
-
   const ref = createRef();
   const indicatorLabelRef = createRef();
   const { data: authenticatedProfile } = useAuthenticatedProfile();
@@ -100,7 +98,6 @@ export default function PodIndicator() {
       handleClose();
     }, 800);
   };
-
   return (
     <div
       data-testid={TESTCAFE_ID_POD_INDICATOR}
@@ -162,13 +159,13 @@ export default function PodIndicator() {
           }}
         >
           <List classes={{ root: bem("list") }}>
-            {/* <Bookmark
+            <Bookmark
               iri={podIri}
               menuItem
               addText="Bookmark Pod"
               removeText="Remove Pod Bookmark"
               profileName={podIri}
-            /> */}
+            />
             <ListItem
               button
               key="change-pod"

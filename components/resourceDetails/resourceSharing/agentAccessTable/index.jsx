@@ -48,7 +48,6 @@ import PolicyActionButton from "../policyActionButton";
 import { isCustomPolicy } from "../../../../src/models/policy";
 import PermissionsContext from "../../../../src/contexts/permissionsContext";
 import columns from "./tableColumns";
-
 import { preparePermissionsDataForTable } from "../../utils";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
