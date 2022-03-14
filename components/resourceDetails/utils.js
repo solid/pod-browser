@@ -28,18 +28,16 @@ import {
   PUBLIC_AGENT_TYPE,
 } from "../../src/models/contact/public";
 
+export function filterAgentPermissions(permissions) {
+  return permissions.filter((p) => p.type === "agent");
+}
+
 export function filterPermissionsByAlias(permissions, alias) {
   return permissions?.filter((permission) => permission.alias === alias) || [];
 }
 
 export function filterPermissionsByType(permissions, type) {
   return permissions?.filter((permission) => permission.type === type) || [];
-}
-
-export function isPublicAgentorAuthenticatedAgentWebId(webId) {
-  return (
-    webId === PUBLIC_AGENT_PREDICATE || webId === AUTHENTICATED_AGENT_PREDICATE
-  );
 }
 
 export function isPublicAgentorAuthenticatedAgentType(type) {
@@ -52,8 +50,10 @@ export function filterPublicPermissions(permissions) {
   );
 }
 
-export function filterAgentPermissions(permissions) {
-  return permissions.filter((p) => p.type === "agent");
+export function isPublicAgentorAuthenticatedAgentWebId(webId) {
+  return (
+    webId === PUBLIC_AGENT_PREDICATE || webId === AUTHENTICATED_AGENT_PREDICATE
+  );
 }
 
 export function sortByAgentName(permissions) {
@@ -62,4 +62,11 @@ export function sortByAgentName(permissions) {
   });
 }
 
-export function preparePermissionsDataForTable() {}
+export function preparePermissionsDataForTable(data) {
+  const publicAndAuthPermissions = data?.filter((p) =>
+    isPublicAgentorAuthenticatedAgentType(p.type)
+  );
+  const permissionsFilteredByType = filterPermissionsByType(data, "agent");
+  const permissionsSortedByName = sortByAgentName(permissionsFilteredByType);
+  return publicAndAuthPermissions.concat(permissionsSortedByName);
+}

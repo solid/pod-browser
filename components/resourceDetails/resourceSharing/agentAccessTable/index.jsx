@@ -46,21 +46,10 @@ import styles from "./styles";
 import PolicyHeader from "../policyHeader";
 import PolicyActionButton from "../policyActionButton";
 import { isCustomPolicy } from "../../../../src/models/policy";
-import { PUBLIC_AGENT_TYPE } from "../../../../src/models/contact/public";
-import { AUTHENTICATED_AGENT_TYPE } from "../../../../src/models/contact/authenticated";
 import PermissionsContext from "../../../../src/contexts/permissionsContext";
 import columns from "./tableColumns";
 
-import {
-  filterAgentPermissions,
-  filterPermissionsByAlias,
-  filterPermissionsByType,
-  filterPublicPermissions,
-  isPublicAgentorAuthenticatedAgentType,
-  sortByAgentName,
-  preparePermissionsDataForTable,
-} from "../../utils";
-import useAllPermissions from "../../../../src/hooks/useAllPermissions";
+import { preparePermissionsDataForTable } from "../../utils";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const TESTCAFE_ID_SHOW_ALL_BUTTON = "show-all-button";
@@ -81,26 +70,21 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
   useEffect(() => {
     const filteredPermissions =
       permissions?.filter((permission) => permission.alias === type) || null;
-    if (!filteredPermissions) return;
+    if (!filteredPermissions.length) return;
     setPolicyPermissions(filteredPermissions);
   }, [permissions, type]);
 
   useEffect(() => {
-    if (!permissionsWithProfiles) return;
-    const publicAndAuth = permissionsWithProfiles?.filter(
-      (p) => p.type === PUBLIC_AGENT_TYPE || p.type === AUTHENTICATED_AGENT_TYPE
+    if (!permissionsWithProfiles.length) return;
+    setTablePermissions(
+      preparePermissionsDataForTable(permissionsWithProfiles)
     );
-    const sorted = permissionsWithProfiles
-      .filter((p) => p.type === "agent")
-      .sort((a, b) => {
-        return a.profile?.name?.localeCompare(b.profile?.name);
-      });
-    setTablePermissions(publicAndAuth.concat(sorted));
   }, [permissionsWithProfiles]);
 
   const data = useMemo(() => {
     return showAll ? tablePermissions : tablePermissions.slice(0, 3);
   }, [tablePermissions, showAll]);
+
   const {
     getTableProps,
     getTableBodyProps,
