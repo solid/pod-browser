@@ -28,26 +28,12 @@ import {
   PUBLIC_AGENT_TYPE,
 } from "../../src/models/contact/public";
 
-export function filterAgentPermissions(permissions) {
-  return permissions.filter((p) => p.type === "agent");
-}
-
-export function filterPermissionsByAlias(permissions, alias) {
-  return permissions?.filter((permission) => permission.alias === alias) || [];
-}
-
 export function filterPermissionsByType(permissions, type) {
   return permissions?.filter((permission) => permission.type === type) || [];
 }
 
 export function isPublicAgentorAuthenticatedAgentType(type) {
   return type === PUBLIC_AGENT_TYPE || type === AUTHENTICATED_AGENT_TYPE;
-}
-
-export function filterPublicPermissions(permissions) {
-  return permissions.filter((p) =>
-    isPublicAgentorAuthenticatedAgentType(p.type)
-  );
 }
 
 export function isPublicAgentorAuthenticatedAgentWebId(webId) {
