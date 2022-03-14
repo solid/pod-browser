@@ -110,11 +110,11 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
     setGlobalFilter(value || undefined);
   };
 
-  const handleTabChange = (e, newValue) => {
-    setSelectedTabValue(newValue);
-    // TODO: this will change when Groups are available since we will not have profiles for Groups
-    setFilter("type", newValue);
-  };
+  // const handleTabChange = (e, newValue) => {
+  //   setSelectedTabValue(newValue);
+  //   // TODO: this will change when Groups are available since we will not have profiles for Groups
+  //   setFilter("type", newValue);
+  // };
 
   if (!tablePermissions.length && isCustomPolicy(type)) return null;
 
