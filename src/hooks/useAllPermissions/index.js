@@ -29,6 +29,8 @@ import {
   getRequestedAccessesFromSignedVc,
   getRequestorWebIdFromSignedVc,
 } from "../../models/consent/signedVc";
+import { isPublicAgentorAuthenticatedAgentWebId } from "../../../components/resourceDetails/utils";
+import { fetchProfile } from "../../solidClientHelpers/profile";
 
 const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
   if (!consentBasedPermissions) return [];
@@ -67,7 +69,7 @@ const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
 
 export default function useAllPermissions() {
   const { accessControl } = useContext(AccessControlContext);
-  const [permissions, setPermissions] = useState(null);
+  const [permissions, setPermissions] = useState([]);
 
   const { solidDataset: dataset } = useContext(DatasetContext);
   const datasetUrl = getSourceUrl(dataset);
@@ -83,9 +85,33 @@ export default function useAllPermissions() {
     [consentBasedPermissions]
   );
 
+  const getPermissionsWithProfiles = () => {
+    let permissionsWithProfiles = [];
+    Promise.all(
+      permissions.map(async (p) => {
+        let profile;
+        let profileError;
+        if (isPublicAgentorAuthenticatedAgentWebId(p.webId)) return p;
+        try {
+          profile = await fetchProfile(p.webId, fetch);
+        } catch (error) {
+          profileError = error;
+        }
+        return {
+          ...p,
+          profile,
+          profileError,
+        };
+      })
+    ).then((response) => {
+      permissionsWithProfiles = response;
+    });
+    return { permissionsWithProfiles };
+  };
+
   useEffect(() => {
     if (!accessControl) {
-      setPermissions(null);
+      setPermissions([]);
       return;
     }
 
@@ -101,5 +127,6 @@ export default function useAllPermissions() {
 
   return {
     permissions,
+    getPermissionsWithProfiles,
   };
 }

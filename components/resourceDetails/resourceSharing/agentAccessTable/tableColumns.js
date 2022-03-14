@@ -19,35 +19,20 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useSession } from "@inrupt/solid-ui-react";
-import { useState, useEffect } from "react";
-import { isPublicAgentorAuthenticatedAgentWebId } from "../../../components/resourceDetails/utils";
-
-import { fetchProfile } from "../../solidClientHelpers/profile";
-
-export default function usePermissionsWithProfiles(permissions = []) {
-  const [permissionsWithProfiles, setPermissionsWithProfiles] = useState([]);
-  const { fetch } = useSession();
-
-  useEffect(() => {
-    if (!permissions) return;
-    Promise.all(
-      permissions.map(async (p) => {
-        let profile;
-        let profileError;
-        if (isPublicAgentorAuthenticatedAgentWebId(p.webId)) return p;
-        try {
-          profile = await fetchProfile(p.webId, fetch);
-        } catch (error) {
-          profileError = error;
-        }
-        return {
-          ...p,
-          profile,
-          profileError,
-        };
-      })
-    ).then((completed) => setPermissionsWithProfiles(completed));
-  }, [permissions, fetch]);
-  return { permissionsWithProfiles };
-}
+export default [
+  {
+    header: "",
+    accessor: "profile.name",
+    modifiers: ["align-center", "width-preview"],
+  },
+  {
+    header: "",
+    accessor: "webId",
+    modifiers: ["align-center", "width-preview"],
+  },
+  {
+    header: "",
+    accessor: "type",
+    modifiers: ["align-center", "width-preview"],
+  },
+];

@@ -28,11 +28,11 @@ import { useSession } from "@inrupt/solid-ui-react";
 
 export default function useConsentBasedAccessForResource(resourceUrl) {
   const [permissions, setPermissions] = useState(null);
-  const [permissionsError, setPermissionsError] = useState(null);
+  const [permissionsError, setPermissionsError] = useState([]);
   const { fetch } = useSession();
   useEffect(() => {
     if (!resourceUrl) {
-      setPermissions(null);
+      setPermissions([]);
       return;
     }
     async function checkVcValidity(vc) {
@@ -55,7 +55,10 @@ export default function useConsentBasedAccessForResource(resourceUrl) {
             return null;
           })
         );
-        setPermissions(validVcs.filter((vc) => vc !== null));
+        const permissionsWithNullsRemoved = validVcs.filter(
+          (vc) => vc !== null
+        );
+        setPermissions(permissionsWithNullsRemoved);
       } catch (err) {
         setPermissionsError(err);
       }
