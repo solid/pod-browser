@@ -37,9 +37,9 @@ describe("usePermissions", () => {
     permissions: [permission, permission],
   });
 
-  it("returns null if no access control", () => {
+  it("returns an empty array if no access control", () => {
     const { result } = renderHook(() => usePermissions(null));
-    expect(result.current.permissions).toBeNull();
+    expect(result.current.permissions).toEqual([]);
   });
 
   it("returns permissions if accessControl is available", async () => {

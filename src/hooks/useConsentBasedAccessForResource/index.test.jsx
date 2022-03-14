@@ -34,10 +34,9 @@ describe("useAllPermissions", () => {
       .mockResolvedValue([getSignedVc()]);
   });
 
-  it("returns null if no resourceIri is given", async () => {
+  it("returns an empty array if no resourceIri is given", async () => {
     const { result } = renderHook(() => useConsentBasedAccessForResource(null));
-
-    expect(result.current.permissions).toBeNull();
+    expect(result.current.permissions).toEqual([]);
   });
 
   it("returns permissions if available", async () => {

@@ -22,11 +22,11 @@
 import { useState, useEffect } from "react";
 
 export default function usePermissions(accessControl) {
-  const [permissions, setPermissions] = useState(null);
+  const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
     if (!accessControl) {
-      setPermissions(null);
+      setPermissions([]);
       return;
     }
     accessControl.getPermissions().then((normalizedPermissions) => {

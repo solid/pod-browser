@@ -54,12 +54,12 @@ describe("useAllPermissions", () => {
     vc: getSignedVc(),
   };
 
-  it("returns null if no access control", async () => {
+  it("returns an empty array if no access control", async () => {
     mockedUseConsentBasedAccessForResource.mockReturnValue({
       permissions: [],
     });
     const { result } = renderHook(() => useAllPermissions());
-    expect(result.current.permissions).toBeNull();
+    expect(result.current.permissions).toEqual([]);
   });
 
   it("returns permissions if accessControl is available", async () => {

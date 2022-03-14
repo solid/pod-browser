@@ -82,7 +82,7 @@ describe("AgentAccessList", () => {
   useFetchProfile.mockReturnValue({ webId });
 
   it("renders loading while loading permissions for access control", () => {
-    usePermissions.mockReturnValue({ permissions: null });
+    usePermissions.mockReturnValue({ permissions: [] });
     const { asFragment } = renderWithTheme(
       <AgentAccessList accessControl={null} />
     );

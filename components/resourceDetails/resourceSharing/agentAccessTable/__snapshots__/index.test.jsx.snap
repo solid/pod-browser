@@ -235,7 +235,7 @@ exports[`AgentAccessTable with agents renders a list of permissions 1`] = `
                     class="PodBrowser-root PodBrowser-body1 PodBrowser-showAllText"
                   >
                     <span>
-                      Show all (4) 
+                      Show all (4)
                       <i
                         class="PodBrowser-icon-caret-down PodBrowser-showAllButtonIcon"
                       />
