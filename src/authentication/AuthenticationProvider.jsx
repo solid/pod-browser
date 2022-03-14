@@ -68,17 +68,15 @@ export default function AuthenticationProvider({ children }) {
 
   useEffect(() => {
     session.on(EVENTS.ERROR, onError);
-    // FIXME: Replace with EVENTS once solid-client-authn-js #2002 is merged
-    session.on("login", onLogin);
-    session.on("logout", onLogout);
-    session.on("sessionRestore", onSessionRestore);
+    session.on(EVENTS.LOGIN, onLogin);
+    session.on(EVENTS.LOGOUT, onLogout);
+    session.on(EVENTS.SESSION_RESTORED, onSessionRestore);
 
     return () => {
       session.off(EVENTS.ERROR, onError);
-      // FIXME: Replace with EVENTS once solid-client-authn-js #2002 is merged
-      session.off("login", onLogin);
-      session.off("logout", onLogout);
-      session.off("sessionRestore", onSessionRestore);
+      session.off(EVENTS.LOGIN, onLogin);
+      session.off(EVENTS.LOGOUT, onLogout);
+      session.off(EVENTS.SESSION_RESTORED, onSessionRestore);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
