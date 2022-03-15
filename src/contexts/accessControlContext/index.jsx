@@ -24,7 +24,7 @@ import T from "prop-types";
 
 const defaultValues = {
   accessControl: null,
-  accessControlType: "",
+  accessControlType: null,
 };
 const AccessControlContext = createContext(defaultValues);
 
@@ -38,7 +38,7 @@ function AccessControlProvider({ children, accessControl, accessControlType }) {
 
 AccessControlProvider.defaultProps = {
   accessControl: null,
-  accessControlType: "",
+  accessControlType: null,
 };
 
 AccessControlProvider.propTypes = {
