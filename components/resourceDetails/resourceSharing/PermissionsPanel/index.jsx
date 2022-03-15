@@ -25,50 +25,107 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import PropTypes from "prop-types";
-import { Card } from "@material-ui/core";
+import { Card, Avatar, Typography } from "@material-ui/core";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import Skeleton from "@material-ui/lab/Skeleton";
 import { Button } from "@inrupt/prism-react-components";
 import PolicyHeader from "../policyHeader";
 import AddAgentButton from "../addAgentButton";
 import { isCustomPolicy } from "../../../../src/models/policy";
+import { stringToColor } from "../../../../src/stringHelpers";
 import AgentPickerModal from "../agentPickerModal";
 import styles from "./styles";
 import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
 
-const typeMap = {
-  viewers: {
-    editButtonText: "Edit Viewers",
-  },
-  editors: {
-    editButtonText: "Edit Editors",
-  },
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+
+function AgentPermissionSearch() {
+  return <input name="search" type="search" />;
+}
+
+function AgentPermissionsList({ permissions }) {
+  const classes = useStyles();
+
+  return (
+    <ul className={classes.agentPermissionsList}>
+      {permissions.map((p) => (
+        <AgentPermissionItem {...p} />
+      ))}
+    </ul>
+  );
+}
+
+AgentPermissionsList.propTypes = {
+  permissions: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+function AgentPermissionItem({ webId }) {
+  const classes = useStyles();
+
+  return (
+    <li className={classes.agentPermissionItem}>
+      <Avatar
+        className={classes.agentPermissionAvatar}
+        style={{ background: stringToColor(webId) }}
+      >
+        <AccountCircleIcon />
+      </Avatar>
+      <Typography noWrap title={webId}>
+        {webId}
+      </Typography>
+      <Button onClick={() => {}} variant="in-menu">
+        <MoreVertIcon />
+      </Button>
+    </li>
+  );
+}
+
+AgentPermissionItem.propTypes = {
+  webId: PropTypes.string.isRequired,
+};
+
+function renderCardBody(permissions) {
+  if (!permissions.length) return <Skeleton />;
+
+  return (
+    <>
+      <AgentPermissionSearch />
+      <AgentPermissionsList permissions={permissions} />
+    </>
+  );
+}
+
+function AgentPermissionListSkeleton() {
+  const classes = useStyles();
+
+  return (
+    <Card className={classes.card}>
+      <Skeleton />
+      <Skeleton />
+      <Skeleton />
+    </Card>
+  );
+}
 
 export default function PermissionsPanel({ type, permissions }) {
   const classes = useStyles();
-  const { open, setOpen } = useContext(ConfirmationDialogContext);
+  const editButtonText = type === "editors" ? "Editors" : "Viewers";
 
-  if (permissions) console.log("permissions", permissions);
+  if (!permissions.length) return <AgentPermissionListSkeleton />;
 
-  const handleEditClick = (e) => {
-    setOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setOpen(false);
-  };
-
-  const { editButtonText } = typeMap[type];
   return (
     <>
       <Card className={classes.card}>
         <PolicyHeader type={type} pluralTitle>
-          <Button variant="text" onClick={handleEditClick} iconBefore="edit">
+          <Button variant="text" onClick={() => {}} iconBefore="edit">
             {editButtonText}
           </Button>
-          <button type="button">...</button>
+          <Button type="button" variant="in-menu">
+            <MoreVertIcon />
+          </Button>
         </PolicyHeader>
+        {renderCardBody(permissions, classes)}
       </Card>
     </>
   );

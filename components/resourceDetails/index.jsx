@@ -46,6 +46,7 @@ import AccessControlContext from "../../src/contexts/accessControlContext";
 import SharingAccordion from "./resourceSharing/sharingAccordion";
 import useLocalStorage from "../../src/hooks/useLocalStorage";
 import { isAcp, isWac } from "../../src/accessControl";
+import { PermissionsContextProvider } from "../../src/contexts/permissionsContext";
 
 const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
 const TESTCAFE_ID_DELETE_BUTTON = "delete-resource-button";
@@ -201,7 +202,9 @@ export default function ResourceDetails({
                 Sharing
               </AccordionSummary>
               <AccordionDetails className={classes.accordionDetails}>
-                <SharingAccordion />
+                <PermissionsContextProvider>
+                  <SharingAccordion />
+                </PermissionsContextProvider>
               </AccordionDetails>
             </Accordion>
           )}

@@ -24,4 +24,17 @@ export default () => ({
     padding: "1em",
     marginBottom: "1em",
   },
+  agentPermissionsList: {
+    listStyleType: "none",
+    listStylePosition: "inside",
+    padding: 0,
+  },
+  agentPermissionItem: {
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "flex-end",
+  },
+  agentPermissionAvatar: {
+    marginRight: ".5em",
+  },
 });
