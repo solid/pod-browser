@@ -30,6 +30,7 @@ import PodIndicator, {
   closeHandler,
   TESTCAFE_ID_POD_NAVIGATE_TRIGGER,
   TESTCAFE_ID_POD_INDICATOR_COPY,
+  TESTCAFE_POD_INDICATOR_TOOLTIP,
 } from "./index";
 import usePodOwnerProfile from "../../src/hooks/usePodOwnerProfile";
 import TestApp from "../../__testUtils/testApp";
@@ -46,13 +47,13 @@ describe("PodIndicator", () => {
     }));
   });
 
-  test("it renders the pod indicator with the pod iri", async () => {
+  it("renders the pod indicator with the pod iri", async () => {
     const { asFragment, queryByText } = renderWithTheme(<PodIndicator />);
     expect(queryByText("https://mypod.myhost.com")).toBeDefined();
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it returns null if there is no profile", () => {
+  it("returns null if there is no profile", () => {
     usePodOwnerProfile.mockReturnValue({
       profile: null,
       error: null,
@@ -61,7 +62,7 @@ describe("PodIndicator", () => {
     expect(asFragment).toMatchSnapshot();
   });
 
-  test("copy text button copies the text to the clipboard", async () => {
+  it("copies text to the clipboard when the copy button is clicked", async () => {
     const writeText = jest.fn();
     Object.assign(navigator, {
       clipboard: {
@@ -85,6 +86,29 @@ describe("PodIndicator", () => {
     });
   });
 });
+
+// it("renders the tooltip and then the tooltip automatically disappears ", async () => {
+//   const writeText = jest.fn();
+//   Object.assign(navigator, {
+//     clipboard: {
+//       writeText,
+//     },
+//   });
+
+//   const { getByTestId } = renderWithTheme(
+//     <TestApp>
+//       <PodIndicator />
+//     </TestApp>
+//   );
+//   const podMenu = getByTestId(TESTCAFE_ID_POD_NAVIGATE_TRIGGER);
+//   userEvent.click(podMenu);
+//   const copyLink = screen.getByTestId(TESTCAFE_ID_POD_INDICATOR_COPY);
+//   userEvent.click(copyLink);
+//   await waitFor(() => {
+//     expect(TESTCAFE_POD_INDICATOR_TOOLTIP).toBeInTheDocument();
+//     // set time out and it should disappear again
+//   });
+// });
 
 describe("clickHandler", () => {
   test("it sets up a click handler", () => {

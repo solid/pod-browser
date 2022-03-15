@@ -44,6 +44,7 @@ import useAuthenticatedProfile from "../../src/hooks/useAuthenticatedProfile";
 const TESTCAFE_ID_POD_INDICATOR = "pod-indicator";
 export const TESTCAFE_ID_POD_NAVIGATE_TRIGGER = "pod-indicator-prompt";
 export const TESTCAFE_ID_POD_INDICATOR_COPY = "pod-indicator-copy-link";
+export const TESTCAFE_POD_INDICATOR_TOOLTIP = "pod-indicator-copy-tooltip";
 
 export const clickHandler = (setAnchorEl) => (event) =>
   setAnchorEl(event.currentTarget);
@@ -189,6 +190,7 @@ export default function PodIndicator() {
               disableHoverListener
               disableTouchListener
               title="Copied"
+              data-testid={TESTCAFE_POD_INDICATOR_TOOLTIP}
             >
               <ListItem
                 button
