@@ -32,7 +32,7 @@ export function filterPermissionsByType(permissions, type) {
   return permissions?.filter((permission) => permission.type === type) || [];
 }
 
-export function isPublicAgentorAuthenticatedAgentType(type) {
+export function isPublicAgentOrAuthenticatedAgentType(type) {
   return type === PUBLIC_AGENT_TYPE || type === AUTHENTICATED_AGENT_TYPE;
 }
 
