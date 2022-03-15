@@ -20,11 +20,8 @@
  */
 
 export default () => ({
-  listItem: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    paddingRight: 0,
-    paddingLeft: 0,
+  card: {
+    padding: "1em",
+    marginBottom: "1em",
   },
 });

@@ -34,11 +34,10 @@ import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function PolicyHeader({ children, type, isPolicyList }) {
+export default function PolicyHeader({ children, type, pluralTitle }) {
   const bem = useBem(useStyles());
 
   const classes = useStyles();
-  console.log(POLICIES_TYPE_MAP);
 
   const {
     titlePlural,
@@ -53,7 +52,7 @@ export default function PolicyHeader({ children, type, isPolicyList }) {
       <div className={classes.textContainer}>
         <div className={classes.titleAndButtonContainer}>
           <p className={classes.title}>
-            {isPolicyList ? titlePlural : titleSingular}
+            {pluralTitle ? titlePlural : titleSingular}
           </p>
           {children}
         </div>
@@ -67,11 +66,11 @@ export default function PolicyHeader({ children, type, isPolicyList }) {
 
 PolicyHeader.propTypes = {
   type: PropTypes.oneOf(Object.keys(POLICIES_TYPE_MAP)).isRequired,
-  isPolicyList: PropTypes.bool,
+  pluralTitle: PropTypes.bool,
   children: PropTypes.node,
 };
 
 PolicyHeader.defaultProps = {
-  isPolicyList: false,
+  pluralTitle: false,
   children: null,
 };

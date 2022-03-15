@@ -21,30 +21,48 @@
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Alert } from "@material-ui/lab";
 import AgentAccessTable from "../agentAccessTable";
 import AdvancedSharingButton from "../advancedSharingButton";
 import { namedPolicies, customPolicies } from "../../../../constants/policies";
 import { isContainerIri } from "../../../../src/solidClientHelpers/utils";
-import { PermissionsContextProvider } from "../../../../src/contexts/permissionsContext";
+import PermissionsContext, {
+  PermissionsContextProvider,
+} from "../../../../src/contexts/permissionsContext";
 import AgentAccessSharingList from "../agentAccessSharingList";
 import PermissionsPanel from "../PermissionsPanel";
 
 export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
   "agent-access-list-show-all";
 
+function getEditPermissions(permissions) {
+  return permissions;
+}
+
+function getViewPermissions(permissions) {
+  return permissions;
+}
+
 function SharingAccordion() {
   const router = useRouter();
   const isContainer = isContainerIri(router.query.resourceIri);
   const [loading, setLoading] = useState(false);
+  const { permissions } = useContext(PermissionsContext);
+  const [editPermissions, setEditPermissions] = useState([]);
+  const [viewPermissions, setViewPermsissions] = useState([]);
+
+  useEffect(() => {
+    setEditPermissions(getEditPermissions(permissions));
+    setViewPermsissions(getViewPermissions(permissions));
+  }, [permissions, editPermissions, viewPermissions]);
 
   return (
     <PermissionsContextProvider>
       <>
-        <PermissionsPanel type="editors" />
-        <PermissionsPanel type="viewers" />
+        <PermissionsPanel type="editors" permissions={editPermissions} />
+        <PermissionsPanel type="viewers" permissions={viewPermissions} />
 
         {namedPolicies.concat(customPolicies).map(({ name }) => (
           <AgentAccessTable //AgentAccessTable
@@ -54,11 +72,11 @@ function SharingAccordion() {
             setLoading={setLoading}
           />
         ))}
-        {isContainer && (
+        {/*isContainer && (
           <Alert icon={false} severity="info">
             Sharing applies to all items in this folder
           </Alert>
-        )}
+        )*/}
         {/* <AdvancedSharingButton loading={loading} setLoading={setLoading} /> */}
       </>
     </PermissionsContextProvider>

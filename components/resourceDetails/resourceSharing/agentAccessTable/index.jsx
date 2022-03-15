@@ -126,7 +126,7 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
       data-testid={TESTCAFE_ID_AGENT_ACCESS_TABLE}
       style={{ border: "red solid 1px" }}
     >
-      <PolicyHeader type={type} isPolicyList>
+      <PolicyHeader type={type} pluralTitle>
         <>
           <AddAgentButton
             type={type}
