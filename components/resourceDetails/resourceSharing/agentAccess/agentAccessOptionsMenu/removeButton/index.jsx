@@ -44,6 +44,7 @@ export const handleRemovePermissions = ({
   mutateResourceInfo,
 }) => {
   return async (agentWebId, policyName) => {
+    console.log({ policyName, agentWebId });
     setLoading(true);
     if (PUBLIC_AGENT_PREDICATE === agentWebId) {
       accessControl.setRulePublic(policyName, false);

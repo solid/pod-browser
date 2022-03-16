@@ -39,7 +39,6 @@ export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
   "agent-access-list-show-all";
 
 function getEditPermissions(permissions) {
-  // can we memo this?
   const permissionsList = permissions.filter(
     ({ alias }) => alias === "editors"
   );
@@ -47,7 +46,6 @@ function getEditPermissions(permissions) {
 }
 
 function getViewPermissions(permissions) {
-  // can we memo this?
   const permissionsList = permissions.filter(
     ({ alias }) => alias === "viewers"
   );
@@ -63,7 +61,8 @@ function SharingAccordion() {
   const viewPermissions = getViewPermissions(permissions);
   const { solidDataset: dataset } = useContext(DatasetContext);
   const resourceIri = getSourceUrl(dataset);
-  console.log("sharing accordion render", permissions);
+  console.log("sharing accordion render editors: ", editPermissions);
+  console.log("sharing accordion render viewers: ", viewPermissions);
   return (
     <>
       <PermissionsPanel
@@ -76,8 +75,8 @@ function SharingAccordion() {
         permissions={viewPermissions}
         resourceIri={resourceIri}
       />
-
-      {/* namedPolicies.concat(customPolicies).map(({ name }) => (
+      {/* REFACTOR REMOVE THIS LINE  */}
+      {/* namedPolicies.concat(customPolicies).map(({ name }) => ( 
         <AgentAccessTable //AgentAccessTable
           key={name}
           type={name}
@@ -90,6 +89,7 @@ function SharingAccordion() {
           Sharing applies to all items in this folder
         </Alert>
       ) */}
+      {/* advanced sharing button is not REFACTOR yet and could cause rerenders */}
       {/* <AdvancedSharingButton loading={loading} setLoading={setLoading} /> */}
     </>
   );

@@ -61,6 +61,8 @@ import ConfirmationDialog from "../../../confirmationDialog";
 import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
 import { getResourceName } from "../../../../src/solidClientHelpers/resource";
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
+import ResourceInfoContext from "../../../../src/contexts/resourceInfoContext";
+import AlertContext from "../../../../src/contexts/alertContext";
 
 export const TESTCAFE_ID_VIEW_DETAILS_BUTTON = "view-details-button";
 export const TESTCAFE_ID_REMOVE_BUTTON = "remove-button";
@@ -75,14 +77,20 @@ function AgentPermissionSearch() {
 
 function AgentPermissionsList({ permissions, resourceIri }) {
   const classes = useStyles();
-  console.log("permissions list render");
   // need to add where if it's more than three you get cut off and there's a link from AgentAccessTable
-
+  let id = 0;
   return (
     <ul className={classes.agentPermissionsList}>
-      {permissions.map((p) => (
-        <AgentPermissionItem permission={p} resourceIri={resourceIri} />
-      ))}
+      {permissions.map((p) => {
+        id += 1;
+        return (
+          <AgentPermissionItem
+            key={id}
+            permission={p}
+            resourceIri={resourceIri}
+          />
+        );
+      })}
     </ul>
   );
 }
@@ -98,6 +106,7 @@ function AgentPermissionItem({ permission, resourceIri }) {
   const resourceName = getResourceName(resourceIri);
   const [openModal, setOpenModal] = useState(false);
   const [popoverAnchorEl, setPopoverAnchorEl] = useState(null);
+  const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
 
   const handleClosePopoverAndModal = () => {
     setPopoverAnchorEl(null);
@@ -105,33 +114,46 @@ function AgentPermissionItem({ permission, resourceIri }) {
   };
 
   let name = "";
-  if (webId === PUBLIC_AGENT_PREDICATE) name = PUBLIC_AGENT_NAME;
-  if (webId === AUTHENTICATED_AGENT_PREDICATE) name = AUTHENTICATED_AGENT_NAME;
   let anotherNameThatNeedsToBeUpdated = "";
-  if (webId === PUBLIC_AGENT_PREDICATE)
+  if (webId === PUBLIC_AGENT_PREDICATE) {
+    name = PUBLIC_AGENT_NAME;
     anotherNameThatNeedsToBeUpdated = "Anyone";
-  if (webId === AUTHENTICATED_AGENT_PREDICATE)
+  }
+  if (webId === AUTHENTICATED_AGENT_PREDICATE) {
+    name = AUTHENTICATED_AGENT_NAME;
     anotherNameThatNeedsToBeUpdated = "Anyone signed in";
-  const { accessControl } = useContext(AccessControlContext);
-  // console.log("permissions item render");
-  const handleOpenPopover = (event) => setPopoverAnchorEl(event.currentTarget);
+  }
 
-  const removePermissions = ({
+  const { accessControl } = useContext(AccessControlContext);
+  const handleOpenPopover = (event) => setPopoverAnchorEl(event.currentTarget);
+  const { mutate: mutateResourceInfo } = useContext(ResourceInfoContext);
+
+  const removePermissions = (
     accessControl,
-    setLocalAccess,
+    // setLocalAccess
     mutateResourceInfo,
-  }) => {
-    return async (agentWebId, policyName) => {
-      if (PUBLIC_AGENT_PREDICATE === agentWebId) {
-        accessControl.setRulePublic(policyName, false);
+    agentWebId
+  ) => {
+    console.log("hi");
+    return async () => {
+      try {
+        if (PUBLIC_AGENT_PREDICATE === agentWebId) {
+          accessControl.setRulePublic(type, false); // backwards compatibility
+        }
+        if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {
+          accessControl.setRuleAuthenticated(type, false); // backwards compatibility
+        }
+        const { response: updatedAcr } =
+          await accessControl.removeAgentFromPolicy(agentWebId, type);
+        console.log("here", { updatedAcr });
+        await mutateResourceInfo(updatedAcr, false);
+      } catch (e) {
+        setSeverity("error");
+        setMessage(e.toString());
+        setAlertOpen(true);
+        console.log("e", e);
       }
-      if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {
-        accessControl.setRuleAuthenticated(policyName, false);
-      }
-      const { response: updatedAcr } =
-        await accessControl.removeAgentFromPolicy(agentWebId, policyName);
-      await mutateResourceInfo(updatedAcr, false);
-      setLocalAccess(null);
+      // setLocalAccess(null); // what is local access?
     };
   };
 
@@ -147,6 +169,7 @@ function AgentPermissionItem({ permission, resourceIri }) {
   } = useContext(ConfirmationDialogContext);
 
   useEffect(() => {
+    console.log("does this re-render");
     // this use effect looks at confirmation dialog and removes agent if user clicked yes
     // setConfirmationSetup(true); // do we need this?
     if (openConfirmationDialog !== CONFIRMATION_DIALOG_ID) return; // because confirmation dialog context is app wide we need to confirm we are dealing with the correct dialog
@@ -158,29 +181,22 @@ function AgentPermissionItem({ permission, resourceIri }) {
     // if (confirmationSetup && confirmed === null) return; // what does confirmation setup do?
 
     if (confirmed) {
-      removePermissions(webId, alias);
+      removePermissions(accessControl, mutateResourceInfo, webId);
       closeDialog();
+      handleClosePopoverAndModal();
     }
 
     // if (confirmationSetup && confirmed !== null) {
     // closeDialog();
     // setConfirmationSetup(false); // do we need this?
     // }
-  }, [
-    confirmed,
-    title,
-    webId,
-    alias,
-    setConfirmed,
-    setConfirmText,
-    openConfirmationDialog,
-    closeDialog,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [confirmed]);
 
   const handleOpenConfirmationDialog = () => {
     setConfirmText("Remove");
     if (name) {
-      // what is this actually saying? that we can base the bool off of it. why doesn't it need conf dialog
+      // what is this actually saying? that we can base the bool off of it. why doesn't it need conf dialog?
       // setBypassDialog(true);
       setConfirmed(true);
       removePermissions(webId, alias);
@@ -207,19 +223,16 @@ function AgentPermissionItem({ permission, resourceIri }) {
             <MoreVertIcon />
           </Button>
           <PermissionsPopoverMenu
-            vc={vc}
             name={name}
-            type={type}
-            webId={webId}
-            inherited={inherited}
-            permission={permission} // only pass permission, clean up vars when I wrap up refactor
+            permission={permission}
             popoverAnchorEl={popoverAnchorEl}
-            handleClosePopover={handleClosePopoverAndModal}
+            handleClosePopoverAndModal={handleClosePopoverAndModal}
             handleOpenConfirmationDialog={handleOpenConfirmationDialog}
+            setOpenModal={setOpenModal}
           />
         </>
       )}
-      {/* <AgentProfileDetails /> this is replaced! */}
+      {/* <AgentProfileDetails />  REFACTOR REMOVE THIS LINE */}
       {vc && ( // confirm that this could also be type=viewer which I think would make more sense
         <ConsentDetailsModal
           openModal={openModal}
@@ -241,15 +254,14 @@ AgentPermissionItem.propTypes = {
 
 function PermissionsPopoverMenu({
   name,
-  webId,
   setOpenModal,
   popoverAnchorEl,
   handleClosePopoverAndModal,
-  vc,
+  permission,
   handleOpenConfirmationDialog,
 }) {
+  const { vc, type, webId, inherited } = permission;
   const classes = useStyles();
-  // console.log("PermissionsPopoverMenu render");
   const popoverOpen = Boolean(popoverAnchorEl);
   const id = popoverOpen ? "agent-access-options-menu" : undefined;
 
@@ -319,13 +331,13 @@ function PermissionsPopoverMenu({
 
 PermissionsPopoverMenu.propTypes = {
   name: PropTypes.string.isRequired,
-  webId: PropTypes.string.isRequired,
-  setOpenModal: PropTypes.bool.isRequired,
-  popoverAnchorEl: PropTypes.string.isRequired,
+  setOpenModal: PropTypes.func.isRequired,
+  // eslint-disable-next-line
+  popoverAnchorEl: PropTypes.object, // keep this eslint above because it can be null and is required , don't force a default of null
+  // eslint-disable-next-line
+  permission: PropTypes.object, // keep this eslint above because it can be null and is required , don't force a default of null
   handleClosePopoverAndModal: PropTypes.func.isRequired,
   handleOpenConfirmationDialog: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  vc: PropTypes.object.isRequired,
 };
 
 function renderCardBody(permissions, resourceIri) {
@@ -359,7 +371,7 @@ export default function PermissionsPanel({ type, permissions, resourceIri }) {
   const editButtonText = type === "editors" ? "Editors" : "Viewers";
 
   if (!permissions.length) return <AgentPermissionListSkeleton />; // should be a loading var instead of []
-  console.log("permissions panel render");
+  console.log("permissions panel render", type);
   return (
     <>
       <Card className={classes.card}>
@@ -372,7 +384,8 @@ export default function PermissionsPanel({ type, permissions, resourceIri }) {
           </Button>
         </PolicyHeader>
         {renderCardBody(permissions, resourceIri, classes)}
-        {/* <AgentPickerModal/> */}
+        {/* agentpicker is not REFACTOR yet and could cause rerenders */}
+        <AgentPickerModal />
         <ConfirmationDialog />
       </Card>
     </>
