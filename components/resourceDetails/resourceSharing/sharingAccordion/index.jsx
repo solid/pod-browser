@@ -31,6 +31,8 @@ import { isContainerIri } from "../../../../src/solidClientHelpers/utils";
 import PermissionsContext from "../../../../src/contexts/permissionsContext";
 import AgentAccessSharingList from "../agentAccessSharingList";
 import PermissionsPanel from "../PermissionsPanel";
+import { DatasetContext } from "@inrupt/solid-ui-react";
+import { getSourceUrl } from "@inrupt/solid-client";
 
 export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
   "agent-access-list-show-all";
@@ -50,11 +52,21 @@ function SharingAccordion() {
   const { permissions } = useContext(PermissionsContext);
   const editPermissions = getEditPermissions(permissions);
   const viewPermissions = getViewPermissions(permissions);
-
+  const { solidDataset: dataset } = useContext(DatasetContext);
+  const resourceIri = getSourceUrl(dataset);
+  console.log("sharing accordion render", permissions);
   return (
     <>
-      <PermissionsPanel type="editors" permissions={editPermissions} />
-      <PermissionsPanel type="viewers" permissions={viewPermissions} />
+      <PermissionsPanel
+        type="editors"
+        permissions={editPermissions}
+        resourceIri={resourceIri}
+      />
+      <PermissionsPanel
+        type="viewers"
+        permissions={viewPermissions}
+        resourceIri={resourceIri}
+      />
 
       {/*namedPolicies.concat(customPolicies).map(({ name }) => (
         <AgentAccessTable //AgentAccessTable
