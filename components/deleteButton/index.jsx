@@ -65,8 +65,14 @@ export default function DeleteButton({
   const bem = useBem(useStyles());
   const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
-  const { confirmed, open, setContent, setOpen, setTitle, closeDialog } =
-    useContext(ConfirmationDialogContext);
+  const {
+    confirmed,
+    openConfirmationDialog,
+    setContent,
+    setOpenConfirmationDialog,
+    setTitle,
+    closeDialog,
+  } = useContext(ConfirmationDialogContext);
 
   function onDeleteError(e) {
     setSeverity("error");
@@ -88,7 +94,7 @@ export default function DeleteButton({
   });
 
   useEffect(() => {
-    if (open !== dialogId) return;
+    if (openConfirmationDialog !== dialogId) return;
     if (confirmationSetup && confirmed === null) return;
     setTitle(confirmationTitle);
     setContent(confirmationContent);
@@ -104,7 +110,7 @@ export default function DeleteButton({
     }
   }, [
     deleteResource,
-    open,
+    openConfirmationDialog,
     dialogId,
     confirmationTitle,
     confirmationContent,
@@ -122,7 +128,7 @@ export default function DeleteButton({
       className={clsx(bem("button"))}
       data-testid={TESTCAFE_ID_DELETE_BUTTON}
       {...buttonProps}
-      onClick={() => setOpen(dialogId)}
+      onClick={() => setOpenConfirmationDialog(dialogId)}
     />
   );
 }

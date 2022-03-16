@@ -136,9 +136,9 @@ export default function RevokeAccessButton({
   const agentName = agentProfile?.name || agentWebId;
   const {
     confirmed,
-    open: dialogOpen,
+    openConfirmationDialog: dialogOpen,
     setContent,
-    setOpen,
+    setOpenConfirmationDialog,
     setTitle,
     closeDialog,
     setConfirmText,
@@ -171,7 +171,7 @@ export default function RevokeAccessButton({
 
   const handleConfirmation = () => {
     setConfirmationSetup(true);
-    setOpen(REMOVE_ACCESS_CONFIRMATION_DIALOG);
+    setOpenConfirmationDialog(REMOVE_ACCESS_CONFIRMATION_DIALOG);
     setIsDangerousAction(true);
     setTitle(
       resources.length === 1

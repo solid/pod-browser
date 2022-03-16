@@ -18,6 +18,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+// REFACTOR REMOVE THIS FILE
 
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
@@ -65,7 +66,6 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export const TESTCAFE_ID_REMOVE_BUTTON = "remove-button";
 export const DIALOG_ID = "remove-agent";
 export const CONFIRMATION_TEXT = "Remove";
-
 export default function RemoveButton({
   resourceIri,
   permission: { webId, alias },
@@ -77,8 +77,8 @@ export default function RemoveButton({
   const { mutate: mutateResourceInfo } = useContext(ResourceInfoContext);
   const resourceName = getResourceName(resourceIri);
   const classes = useStyles();
-  const [bypassDialog, setBypassDialog] = useState(false);
-  const [confirmationSetup, setConfirmationSetup] = useState(false);
+  const [bypassDialog, setBypassDialog] = useState(false); // what does this do?
+  const [confirmationSetup, setConfirmationSetup] = useState(false); // do we need this?
   const handleRemoveAgent = handleRemovePermissions({
     setLoading,
     accessControl,
@@ -88,9 +88,9 @@ export default function RemoveButton({
 
   const {
     confirmed,
-    open,
+    openConfirmationDialog,
     setConfirmed,
-    setOpen,
+    setOpenConfirmationDialog,
     title,
     setTitle,
     setConfirmText,
@@ -110,7 +110,7 @@ export default function RemoveButton({
       profile?.name || webId
     }'s access from ${resourceName}`;
     setTitle(text);
-    setOpen(DIALOG_ID);
+    setOpenConfirmationDialog(DIALOG_ID);
   };
 
   useEffect(() => {
@@ -119,7 +119,7 @@ export default function RemoveButton({
       setConfirmed(true);
       handleRemoveAgent(webId, alias);
     }
-    if (open !== DIALOG_ID) return;
+    if (openConfirmationDialog !== DIALOG_ID) return;
     if (confirmationSetup && confirmed === null) return;
 
     if (confirmationSetup && confirmed) {
@@ -142,7 +142,7 @@ export default function RemoveButton({
     setConfirmationSetup,
     setConfirmText,
     handleRemoveAgent,
-    open,
+    openConfirmationDialog,
     closeDialog,
   ]);
 

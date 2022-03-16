@@ -25,12 +25,12 @@ import T from "prop-types";
 export const defaultConfirmationDialogContext = {
   confirmed: false,
   content: null,
-  open: false,
+  openConfirmationDialog: false,
   customContentWrapper: false,
   setCustomContentWrapper: () => {},
   setConfirmed: () => {},
   setContent: () => {},
-  setOpen: () => {},
+  setOpenConfirmationDialog: () => {},
   setTitle: () => {},
   title: "Confirmation",
   cancelText: "Cancel",
@@ -49,7 +49,7 @@ const ConfirmationDialogContext = createContext(
 export default ConfirmationDialogContext;
 
 function ConfirmationDialogProvider({ children }) {
-  const [open, setOpen] = useState(null);
+  const [openConfirmationDialog, setOpenConfirmationDialog] = useState(null);
   const [content, setContent] = useState(null);
   const [customContentWrapper, setCustomContentWrapper] = useState(false);
   const [title, setTitle] = useState("Confirmation");
@@ -61,9 +61,10 @@ function ConfirmationDialogProvider({ children }) {
 
   const closeDialog = () => {
     setConfirmed(null);
-    setOpen(null);
+    setOpenConfirmationDialog(null);
     setContent(null);
     setTitle(null);
+    setConfirmText(null);
   };
 
   return (
@@ -71,11 +72,11 @@ function ConfirmationDialogProvider({ children }) {
       value={{
         content,
         confirmed,
-        open,
+        openConfirmationDialog,
         customContentWrapper,
         setContent,
         setConfirmed,
-        setOpen,
+        setOpenConfirmationDialog,
         setTitle,
         setCustomContentWrapper,
         title,

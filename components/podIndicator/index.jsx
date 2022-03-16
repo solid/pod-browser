@@ -65,8 +65,8 @@ export default function PodIndicator() {
   const bem = useBem(useStyles());
   const podIri = router.query.iri;
   const loading = !podIri;
-  const open = Boolean(anchorEl);
-  const id = open ? "pod-indicator-menu" : undefined;
+  const openPopover = Boolean(anchorEl);
+  const id = openPopover ? "pod-indicator-menu" : undefined;
   const handleClick = clickHandler(setAnchorEl);
   const handleClose = closeHandler(setAnchorEl);
   const handleOpenNavigator = () => {
@@ -122,7 +122,7 @@ export default function PodIndicator() {
             </span>
             Pod
             <Icons
-              name={open ? "caret-up" : "caret-down"}
+              name={openPopover ? "caret-up" : "caret-down"}
               className={bem("indicatorChevron")}
             />
           </span>
@@ -146,7 +146,7 @@ export default function PodIndicator() {
           classes={{
             paper: bem("popoverMenu"),
           }}
-          open={open}
+          open={openPopover}
           anchorEl={anchorEl}
           onClose={handleClose}
           anchorOrigin={{

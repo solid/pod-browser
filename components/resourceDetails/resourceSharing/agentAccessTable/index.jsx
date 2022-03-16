@@ -22,6 +22,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/jsx-one-expression-per-line */
 
+// REFACTOR REMOVE THIS FILE
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { useFilters, useGlobalFilter, useTable } from "react-table";
@@ -115,7 +116,7 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
   //   setFilter("type", newValue);
   // };
 
-  if (!tablePermissions.length && isCustomPolicy(type)) return null;
+  if (!tablePermissions.length && isCustomPolicy(type)) return null; // we only render editors and viewers at this point
 
   const { emptyStateText } = POLICIES_TYPE_MAP[type];
 

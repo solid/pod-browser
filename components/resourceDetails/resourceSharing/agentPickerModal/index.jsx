@@ -209,7 +209,17 @@ export const handleSaveContact = async (iri, addressBook, fetch) => {
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 function AgentPickerModal(
-  { type, onClose, setLoading, advancedSharing, editing, accessibilityLabel },
+  {
+    type,
+    handleModalClose,
+    setLoading,
+    advancedSharing,
+    editing,
+    accessibilityDescribe,
+    accessibilityLabel,
+    open,
+    setOpen,
+  },
   ref
 ) {
   const [customPolicy, setCustomPolicy] = useState(
@@ -259,11 +269,11 @@ function AgentPickerModal(
   const [globalFilter, setGlobalFilter] = useState("");
   const [confirmationSetup, setConfirmationSetup] = useState(false);
   const {
-    open,
+    openConfirmationDialog,
     confirmed,
     setConfirmed,
     setContent,
-    setOpen,
+    setOpenConfirmationDialog,
     setTitle,
     closeDialog,
   } = useContext(ConfirmationDialogContext);
@@ -286,7 +296,7 @@ function AgentPickerModal(
     addressBook,
     mutateResourceInfo,
     saveAgentToContacts: handleSaveContact,
-    onClose,
+    handleModalClose,
     setLoading,
     policyName,
     advancedSharing,
@@ -295,7 +305,7 @@ function AgentPickerModal(
 
   const handleClickOpenDialog = () => {
     if (!newAgentsWebIds.length && !webIdsToDelete.length) {
-      onClose();
+      handleModalClose();
       setConfirmed(false);
       return;
     }
@@ -310,7 +320,7 @@ function AgentPickerModal(
     if (!filteredNewWebIds.length && !filteredWebIdsToDelete.length) {
       setTitle(null);
       setContent(null);
-      setOpen(null);
+      setOpenConfirmationDialog(null);
       setBypassDialog(true);
     }
     const confirmationTitle = `Change permissions for ${
@@ -325,7 +335,7 @@ function AgentPickerModal(
     } permissions to ${title}`;
     setTitle(confirmationTitle);
     setContent(confirmationContent);
-    setOpen(DIALOG_ID);
+    setOpenConfirmationDialog(DIALOG_ID);
   };
 
   const updateTemporaryRowThing = (newThing) => {
@@ -371,7 +381,7 @@ function AgentPickerModal(
       setConfirmed(true);
       handleSubmitNewWebIds();
     }
-    if (open !== DIALOG_ID) return;
+    if (openConfirmationDialog !== DIALOG_ID) return;
     if (confirmationSetup && confirmed === null) return;
     if (confirmationSetup && confirmed) {
       handleSubmitNewWebIds();
@@ -382,7 +392,7 @@ function AgentPickerModal(
       setConfirmationSetup(false);
     }
   }, [
-    open,
+    openConfirmationDialog,
     bypassDialog,
     setConfirmationSetup,
     confirmationSetup,
@@ -435,9 +445,9 @@ function AgentPickerModal(
         alignItems: "center",
         justifyContent: "center",
       }}
-      onClose={() => setOpen(false)}
-      aria-labelledby={`${accessibilityLabel} Modal`}
-      aria-describedby={`${accessibilityLabel} for this resource`}
+      onClose={handleModalClose}
+      aria-labelledby={accessibilityLabel}
+      aria-describedby={accessibilityDescribe}
     >
       <ModalContainer
         className={classes.paper}
@@ -526,7 +536,7 @@ function AgentPickerModal(
               variant="secondary"
               data-testid={TESTCAFE_CANCEL_WEBIDS_BUTTON}
               className={classes.cancelButton}
-              onClick={onClose}
+              onClick={handleModalClose}
             >
               Cancel
             </Button>
@@ -548,17 +558,21 @@ const AgentPickerModalRef = forwardRef(AgentPickerModal);
 export default AgentPickerModalRef;
 
 AgentPickerModal.propTypes = {
-  onClose: PropTypes.func,
+  handleModalClose: PropTypes.func.isRequired,
   setLoading: PropTypes.func,
   type: PropTypes.string.isRequired,
   advancedSharing: PropTypes.bool,
   editing: PropTypes.bool,
-  accessibilityLabel: PropTypes.string.isRequired,
+  open: PropTypes.bool.isRequired,
+  setOpen: PropTypes.func.isRequired,
+  accessibilityLabel: PropTypes.string,
+  accessibilityDescribe: PropTypes.string,
 };
 
 AgentPickerModal.defaultProps = {
-  onClose: () => {},
   setLoading: () => {},
   advancedSharing: false,
   editing: false,
+  accessibilityLabel: "",
+  accessibilityDescribe: "",
 };

@@ -37,17 +37,17 @@ export const TESTCAFE_ID_ADVANCED_SHARING_BUTTON = "advanced-sharing-button";
 export const TESTCAFE_ID_MODAL_OVERLAY = "advanced-sharing-modal-overlay";
 
 export default function AdvancedSharingButton({ loading, setLoading }) {
-  const defaultType = "viewAndAdd";
-  const classes = useStyles();
-
   const bem = useBem(useStyles());
+  const classes = useStyles();
+  const defaultType = "viewAndAdd";
+
   const [open, setOpen] = useState(false);
 
-  const handleOpen = () => {
+  const handleModalOpen = () => {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleModalClose = () => {
     setOpen(false);
   };
 
@@ -57,7 +57,7 @@ export default function AdvancedSharingButton({ loading, setLoading }) {
         data-testid={TESTCAFE_ID_ADVANCED_SHARING_BUTTON}
         variant="text"
         className={classes.sharingButton}
-        onClick={handleOpen}
+        onClick={handleModalOpen}
       >
         <i className={clsx(bem("icon-settings"), bem("icon"))} />
         Advanced Sharing
@@ -71,16 +71,18 @@ export default function AdvancedSharingButton({ loading, setLoading }) {
           alignItems: "center",
           justifyContent: "center",
         }}
-        onClose={handleClose}
+        onClose={handleModalClose}
         aria-labelledby="Advanced sharing modal"
         aria-describedby="Advanced sharing for this resource"
       >
         <AgentPickerModal
           type={defaultType}
-          onClose={handleClose}
+          handleModalClose={handleModalClose}
           advancedSharing
           loading={loading}
           setLoading={setLoading}
+          accessibilityLabel="Advanced sharing modal"
+          accessibilityDescribe="Advanced sharing for this resource"
         />
       </Modal>
     </div>

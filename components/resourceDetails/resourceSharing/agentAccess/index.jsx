@@ -20,7 +20,7 @@
  */
 
 /* eslint-disable react/forbid-prop-types */
-
+// REFACTOR REMOVE THIS FILE
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import { Button, CircularProgress, createStyles } from "@material-ui/core";
@@ -73,6 +73,7 @@ export default function AgentAccess({ permission }) {
   }, [webId]);
 
   const handleRetryClick = async () => {
+    // what does this do?
     const { profile: fetchedProfile, profileError: fetchedProfileError } =
       await getProfile(webId, fetch);
     if (fetchedProfile) {
@@ -88,6 +89,7 @@ export default function AgentAccess({ permission }) {
   if (!localAccess) return null;
 
   if (loading)
+    // do we need a circular progress and skeleotons below
     return (
       <div className={classes.spinnerContainer}>
         <CircularProgress
@@ -99,6 +101,7 @@ export default function AgentAccess({ permission }) {
     );
 
   if (localProfileError) {
+    // handle this in the file we keep
     return (
       <div className={bem("alert-container")}>
         <Alert

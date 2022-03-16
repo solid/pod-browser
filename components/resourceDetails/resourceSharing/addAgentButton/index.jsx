@@ -44,7 +44,7 @@ export default function AddAgentButton({ type, setLoading }) {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleModalClose = () => {
     setEditing(false);
     setOpen(false);
     setAddingWebId(false);
@@ -71,16 +71,19 @@ export default function AddAgentButton({ type, setLoading }) {
           alignItems: "center",
           justifyContent: "center",
         }}
-        onClose={handleClose}
+        onClose={handleModalClose}
         aria-labelledby={`${editText} Modal`}
         aria-describedby={`${editText} for this resource`}
       >
         <AgentPickerModal
+          open={open}
           type={type}
-          onClose={handleClose}
+          handleModalClose={handleModalClose}
           setLoading={setLoading}
           advancedSharing={isCustomPolicy(type)}
           editing={editing}
+          accessibilityLabel={`${editText} Modal`}
+          accessibilityDescribe={`${editText} for this resource`}
         />
       </Modal>
     </>

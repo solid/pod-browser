@@ -24,6 +24,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Alert } from "@material-ui/lab";
+import { DatasetContext } from "@inrupt/solid-ui-react";
+import { getSourceUrl } from "@inrupt/solid-client";
 import AgentAccessTable from "../agentAccessTable";
 import AdvancedSharingButton from "../advancedSharingButton";
 import { namedPolicies, customPolicies } from "../../../../constants/policies";
@@ -31,18 +33,25 @@ import { isContainerIri } from "../../../../src/solidClientHelpers/utils";
 import PermissionsContext from "../../../../src/contexts/permissionsContext";
 import AgentAccessSharingList from "../agentAccessSharingList";
 import PermissionsPanel from "../PermissionsPanel";
-import { DatasetContext } from "@inrupt/solid-ui-react";
-import { getSourceUrl } from "@inrupt/solid-client";
+import { preparePermissionsDataForTable } from "../../utils";
 
 export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
   "agent-access-list-show-all";
 
 function getEditPermissions(permissions) {
-  return permissions.filter(({ alias }) => alias === "editors");
+  // can we memo this?
+  const permissionsList = permissions.filter(
+    ({ alias }) => alias === "editors"
+  );
+  return preparePermissionsDataForTable(permissionsList);
 }
 
 function getViewPermissions(permissions) {
-  return permissions.filter(({ alias }) => alias === "viewers");
+  // can we memo this?
+  const permissionsList = permissions.filter(
+    ({ alias }) => alias === "viewers"
+  );
+  return preparePermissionsDataForTable(permissionsList);
 }
 
 function SharingAccordion() {
@@ -68,19 +77,19 @@ function SharingAccordion() {
         resourceIri={resourceIri}
       />
 
-      {/*namedPolicies.concat(customPolicies).map(({ name }) => (
+      {/* namedPolicies.concat(customPolicies).map(({ name }) => (
         <AgentAccessTable //AgentAccessTable
           key={name}
           type={name}
           loading={loading}
           setLoading={setLoading}
         />
-      ))*/}
-      {/*isContainer && (
+      )) */}
+      {/* isContainer && (
         <Alert icon={false} severity="info">
           Sharing applies to all items in this folder
         </Alert>
-      )*/}
+      ) */}
       {/* <AdvancedSharingButton loading={loading} setLoading={setLoading} /> */}
     </>
   );

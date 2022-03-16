@@ -96,7 +96,7 @@ describe("GroupDeleteModal", () => {
 
   it("renders", () => {
     const { getByTestId } = renderGroupsPage(
-      <GroupDeleteModal open handleClose={handleClose} />
+      <GroupDeleteModal openModal handleClose={handleClose} />
     );
     expect(getByTestId(TESTCAFE_ID_GROUP_DELETE_MODAL)).toBeDefined();
     expect(
@@ -115,7 +115,7 @@ describe("GroupDeleteModal", () => {
 
   it("closes modal when clicking the cancel button", () => {
     const { getByTestId } = renderGroupsPage(
-      <GroupDeleteModal open handleClose={handleClose} />
+      <GroupDeleteModal openModal handleClose={handleClose} />
     );
     userEvent.click(getByTestId(TESTCAFE_ID_GROUP_DELETE_MODAL_CANCEL_BUTTON));
     expect(handleClose).toHaveBeenCalled();
@@ -132,7 +132,7 @@ describe("GroupDeleteModal", () => {
 
     it("deletes the group, updates dependencies, and redirects", async () => {
       const { getByTestId } = renderGroupsPage(
-        <GroupDeleteModal open handleClose={handleClose} />
+        <GroupDeleteModal openModal handleClose={handleClose} />
       );
       userEvent.click(getByTestId(TESTCAFE_ID_GROUP_DELETE_MODAL_SAVE_BUTTON));
       expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();

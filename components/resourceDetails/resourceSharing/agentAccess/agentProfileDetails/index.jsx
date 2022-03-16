@@ -21,7 +21,7 @@
 
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
-
+// REFACTOR REMOVE THIS FILE
 import React from "react";
 import T from "prop-types";
 import { createStyles, Typography } from "@material-ui/core";
@@ -59,6 +59,7 @@ export default function AgentProfileDetails({
   const { webId } = permission;
 
   const getAvatarProps = (localPermission) => {
+    // will revisit this when we get the right avatar. now everything is default
     if (localPermission.webId === PUBLIC_AGENT_PREDICATE) {
       return PUBLIC_AGENT.getAvatarProps();
     }
@@ -73,6 +74,7 @@ export default function AgentProfileDetails({
   };
 
   const getLocalProfile = (localPermission) => {
+    // this is moved to th epermission panel but unsure of where it's used. Called anotherNameThatNeedsToBeUpdated
     if (localPermission.webId === PUBLIC_AGENT_PREDICATE) {
       return {
         name: "Anyone",

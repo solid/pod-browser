@@ -66,7 +66,7 @@ export default function GroupDetailsActionButton(props) {
       />
       <GroupDeleteModal
         handleClose={handleClose}
-        open={action === ACTION_DELETE}
+        openModal={action === ACTION_DELETE}
       />
     </div>
   );
