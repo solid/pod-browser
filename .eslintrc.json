@@ -1,0 +1,12 @@
+{
+  "extends": ["@inrupt/eslint-config-react", "plugin:@next/next/recommended"],
+
+  "rules": {
+    // temporarily disable this until we fix it everywhere
+    "no-shadow": 0,
+    // temporarily set this to warn this until we fix it everywhere
+    "no-unused-vars": 0,
+    "react/display-name": 0,
+    "react/forbid-prop-types": 0
+  }
+}

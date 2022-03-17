@@ -138,7 +138,7 @@ describe("PodNavigatorPopover", () => {
       expect(setDirtyUrlField).not.toHaveBeenCalled();
     });
 
-    it("it redirects with the correct url for a container on submit", async () => {
+    it("redirects with the correct url for the Photos container on submit", async () => {
       const resourceInfo = solidClientFns.mockSolidDatasetFrom(
         "https://example.org/Photos/"
       );

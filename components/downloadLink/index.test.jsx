@@ -53,8 +53,8 @@ describe("forceDownload", () => {
 
     forceDownload("filename", file);
 
-    expect(mockAnchor.style.display).toEqual("none");
-    expect(mockAnchor.href).toEqual("object-url");
+    expect(mockAnchor.style.display).toBe("none");
+    expect(mockAnchor.href).toBe("object-url");
     expect(setAttributeMock).toHaveBeenCalledWith("download", "filename");
     expect(appendChildMock).toHaveBeenCalledWith(mockAnchor);
     expect(clickMock).toHaveBeenCalled();

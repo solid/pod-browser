@@ -24,10 +24,7 @@ import { render } from "@testing-library/react";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
-import AppAvatar, {
-  setupErrorComponent,
-  TESTCAFE_ID_NAME_TITLE,
-} from "./index";
+import AppAvatar, { TESTCAFE_ID_NAME_TITLE } from "./index";
 
 describe("App Avatar", () => {
   // FIXME: for now this renders only one possibility - need to update once we're not hardcoding the mock app
@@ -43,14 +40,6 @@ describe("App Avatar", () => {
     expect(await findByTestId(TESTCAFE_ID_NAME_TITLE)).toHaveTextContent(
       "Mock App"
     );
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
-
-describe("setupErrorComponent", () => {
-  it("renders", () => {
-    const bem = (value) => value;
-    const { asFragment } = render(setupErrorComponent(bem)());
     expect(asFragment()).toMatchSnapshot();
   });
 });

@@ -35,7 +35,7 @@ const setBookmarks = jest.fn();
 describe("Bookmark", () => {
   test("it renders a bookmark icon", async () => {
     const { asFragment } = renderWithTheme(
-      <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
+      <BookmarkContext.Provider value={{ bookmarks, setBookmarks }}>
         <Bookmark iri={iri} />
       </BookmarkContext.Provider>
     );
@@ -44,7 +44,7 @@ describe("Bookmark", () => {
 
   test("it renders a bookmark icon and text if withText prop is true", async () => {
     const { asFragment, getByTestId } = renderWithTheme(
-      <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
+      <BookmarkContext.Provider value={{ bookmarks, setBookmarks }}>
         <Bookmark iri={iri} withText />
       </BookmarkContext.Provider>
     );
@@ -55,7 +55,7 @@ describe("Bookmark", () => {
 
   test("it renders default text if add and remove strings are not passed", async () => {
     const { getByText } = renderWithTheme(
-      <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
+      <BookmarkContext.Provider value={{ bookmarks, setBookmarks }}>
         <Bookmark iri={iri} withText />
       </BookmarkContext.Provider>
     );
@@ -64,7 +64,7 @@ describe("Bookmark", () => {
   });
   test("it renders passed strings for add and remove if available", async () => {
     const { getByText } = renderWithTheme(
-      <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
+      <BookmarkContext.Provider value={{ bookmarks, setBookmarks }}>
         <Bookmark
           iri={iri}
           withText
@@ -79,7 +79,7 @@ describe("Bookmark", () => {
 
   test("it renders a button if menuItem is false", async () => {
     const { asFragment, getByTestId } = renderWithTheme(
-      <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
+      <BookmarkContext.Provider value={{ bookmarks, setBookmarks }}>
         <Bookmark iri={iri} />
       </BookmarkContext.Provider>
     );
@@ -90,7 +90,7 @@ describe("Bookmark", () => {
 
   test("it renders a list item button if menuItem is true", async () => {
     const { asFragment, getByTestId } = renderWithTheme(
-      <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
+      <BookmarkContext.Provider value={{ bookmarks, setBookmarks }}>
         <Bookmark iri={iri} menuItem />
       </BookmarkContext.Provider>
     );
@@ -103,7 +103,7 @@ describe("Bookmark", () => {
 describe("toggleHandler", () => {
   test("it updates icon when the toggle handler is triggered", async () => {
     const { container } = renderWithTheme(
-      <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
+      <BookmarkContext.Provider value={{ bookmarks, setBookmarks }}>
         <Bookmark iri={iri} />
       </BookmarkContext.Provider>
     );
@@ -163,7 +163,7 @@ describe("toggleHandler", () => {
   });
   test("it renders an error when it is unsuccessful in adding bookmark", async () => {
     const { container } = renderWithTheme(
-      <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
+      <BookmarkContext.Provider value={{ bookmarks, setBookmarks }}>
         <Bookmark iri={iri} />
       </BookmarkContext.Provider>
     );

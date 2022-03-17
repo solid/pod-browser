@@ -114,7 +114,7 @@ export default function GenerateConsentRequest() {
         </label>
         <div>
           {resources.map((url) => (
-            <span>{url}</span>
+            <span key={url}>{url}</span>
           ))}
         </div>
         <button type="submit">Generate consent request</button>

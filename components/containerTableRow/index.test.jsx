@@ -61,7 +61,7 @@ describe("ContainerTableRow", () => {
     const { asFragment } = renderWithTheme(
       <table>
         <tbody>
-          <BookmarksContext.Provider value={(bookmarks, setBookmarks)}>
+          <BookmarksContext.Provider value={{ bookmarks, setBookmarks }}>
             <ContainerTableRow
               resource={resource}
               container="https://example.com/container/"
@@ -84,7 +84,7 @@ describe("ContainerTableRow", () => {
     const { asFragment } = renderWithTheme(
       <table>
         <tbody>
-          <BookmarksContext.Provider value={(bookmarks, setBookmarks)}>
+          <BookmarksContext.Provider value={{ bookmarks, setBookmarks }}>
             <ContainerTableRow
               resource={resource}
               container="https://example.com/container/"
@@ -107,7 +107,7 @@ describe("ContainerTableRow", () => {
     const { asFragment } = renderWithTheme(
       <table>
         <tbody>
-          <BookmarksContext.Provider value={(bookmarks, setBookmarks)}>
+          <BookmarksContext.Provider value={{ bookmarks, setBookmarks }}>
             <ContainerTableRow
               resource={resource}
               container="https://example.com/container/"
@@ -200,10 +200,10 @@ describe("ResourceIcon", () => {
 
 describe("renderResourceType", () => {
   test("it renders Container with a container iri", () => {
-    expect(renderResourceType("/container/")).toEqual("Container");
+    expect(renderResourceType("/container/")).toBe("Container");
   });
 
   test("it renders Resource with a resource iri", () => {
-    expect(renderResourceType("/resource")).toEqual("Resource");
+    expect(renderResourceType("/resource")).toBe("Resource");
   });
 });

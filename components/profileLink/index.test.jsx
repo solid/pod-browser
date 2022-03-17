@@ -90,12 +90,12 @@ describe("ProfileLink", () => {
 
 describe("buildProfileLink", () => {
   it("generates a valid path when path is contacts", () => {
-    expect(buildProfileLink(iri, "/contacts")).toEqual(
+    expect(buildProfileLink(iri, "/contacts")).toBe(
       `/contacts/${encodeURIComponent(iri)}`
     );
   });
   it("generates a valid path when path is privacy", () => {
-    expect(buildProfileLink(iri, "/privacy", "app")).toEqual(
+    expect(buildProfileLink(iri, "/privacy", "app")).toBe(
       `/privacy/app/${encodeURIComponent(iri)}`
     );
   });
