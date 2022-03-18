@@ -9,13 +9,3 @@ exports[`BookmarksContext has context data 1`] = `
   </div>
 </DocumentFragment>
 `;
-
-exports[`BookmarksContext it has context data 1`] = `
-<DocumentFragment>
-  <div
-    id="bookmarks"
-  >
-    no bookmarks
-  </div>
-</DocumentFragment>
-`;

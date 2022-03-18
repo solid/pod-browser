@@ -1,17 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Delete contact button it renders a delete contact button 1`] = `
-<DocumentFragment>
-  <button
-    class="PodBrowser-button"
-    data-testid="delete-button"
-    type="button"
-  >
-    Delete
-  </button>
-</DocumentFragment>
-`;
-
 exports[`Delete contact button renders a delete contact button 1`] = `
 <DocumentFragment>
   <button

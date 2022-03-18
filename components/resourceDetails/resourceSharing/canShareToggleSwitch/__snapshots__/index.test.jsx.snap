@@ -1,40 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CanToggleShareSwitch it renders a toggle switch for Can Share 1`] = `
-<DocumentFragment>
-  <span
-    class="PodBrowser-root PodBrowser-edgeEnd"
-  >
-    <span
-      aria-disabled="false"
-      class="PodBrowser-root PodBrowser-root PodBrowser-root PodBrowser-switchBase PodBrowser-switchBase PodBrowser-colorSecondary PodBrowser-checked PodBrowser-checked PodBrowser-switchChecked"
-      data-testid="can-share-toggle"
-    >
-      <span
-        class="PodBrowser-label"
-      >
-        <input
-          aria-label="Can Share Toggle"
-          checked=""
-          class="PodBrowser-input PodBrowser-input"
-          type="checkbox"
-          value=""
-        />
-        <span
-          class="PodBrowser-thumb"
-        />
-      </span>
-      <span
-        class="PodBrowser-root"
-      />
-    </span>
-    <span
-      class="PodBrowser-track PodBrowser-switchTrack"
-    />
-  </span>
-</DocumentFragment>
-`;
-
 exports[`CanToggleShareSwitch renders a toggle switch for Can Share 1`] = `
 <DocumentFragment>
   <span

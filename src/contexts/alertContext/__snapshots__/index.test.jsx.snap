@@ -21,25 +21,3 @@ exports[`AlertContext has context data 1`] = `
   </div>
 </DocumentFragment>
 `;
-
-exports[`AlertContext it has context data 1`] = `
-<DocumentFragment>
-  <div>
-    <div
-      class="alertOpen"
-    >
-      true
-    </div>
-    <div
-      class="message"
-    >
-      message
-    </div>
-    <div
-      class="severity"
-    >
-      error
-    </div>
-  </div>
-</DocumentFragment>
-`;

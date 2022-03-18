@@ -9,13 +9,3 @@ exports[`DetailsMenuContext has context data 1`] = `
   </div>
 </DocumentFragment>
 `;
-
-exports[`DetailsMenuContext it has context data 1`] = `
-<DocumentFragment>
-  <div
-    id="menuOpen"
-  >
-    true
-  </div>
-</DocumentFragment>
-`;
