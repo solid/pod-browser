@@ -41,7 +41,7 @@ export default function AdvancedSharingButton({ loading, setLoading }) {
   const classes = useStyles();
 
   const bem = useBem(useStyles());
-  const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   return (
     <div className={classes.sharingButtonContainer}>
@@ -49,7 +49,7 @@ export default function AdvancedSharingButton({ loading, setLoading }) {
         data-testid={TESTCAFE_ID_ADVANCED_SHARING_BUTTON}
         variant="text"
         className={classes.sharingButton}
-        onClick={() => setOpen(true)}
+        onClick={() => setOpenModal(true)}
       >
         <i className={clsx(bem("icon-settings"), bem("icon"))} />
         Advanced Sharing
@@ -57,19 +57,19 @@ export default function AdvancedSharingButton({ loading, setLoading }) {
 
       <Modal
         data-testid={TESTCAFE_ID_MODAL_OVERLAY}
-        open={open}
+        open={openModal}
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
         }}
-        onClose={() => setOpen(false)}
+        onClose={() => setOpenModal(false)}
         aria-labelledby="Advanced sharing modal"
         aria-describedby="Advanced sharing for this resource"
       >
         <AgentPickerModal
           type={defaultType}
-          onClose={() => setOpen(false)}
+          onClose={() => setOpenModal(false)}
           advancedSharing
           loading={loading}
           setLoading={setLoading}

@@ -53,11 +53,11 @@ export default function MenuDrawer() {
     filterMenuLinks(menuItems, enabled).then((data) => setActiveLinks(data));
   }, [enabled, menuItems]);
   const menuItemsToShow = activeLinks.filter(({ activePage }) => activePage);
-  const [open, setOpen] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(false);
   const userMenu = useUserMenu();
 
-  const handleDrawerOpen = () => setOpen(true);
-  const handleDrawerClose = () => setOpen(false);
+  const handleDrawerOpen = () => setOpenDrawer(true);
+  const handleDrawerClose = () => setOpenDrawer(false);
 
   useEffect(() => {
     const items = getMainMenuItems();
@@ -77,7 +77,7 @@ export default function MenuDrawer() {
       </Button>
       <Drawer
         anchor="top"
-        open={open}
+        open={openDrawer}
         onClose={handleDrawerClose}
         classes={{ paper: classes.drawerContainer }}
       >
@@ -107,7 +107,6 @@ export default function MenuDrawer() {
               key={action.label}
               onClick={() => {
                 handleDrawerClose();
-                onClick();
               }}
               {...action}
             />

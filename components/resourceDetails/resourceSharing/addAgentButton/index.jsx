@@ -37,16 +37,16 @@ export default function AddAgentButton({ type, setLoading }) {
   const [editing, setEditing] = useState();
 
   const { setAddingWebId } = useContext(PermissionsContext);
-  const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const handleOpen = () => {
     setEditing(true);
-    setOpen(true);
+    setOpenModal(true);
   };
 
   const handleModalClose = () => {
     setEditing(false);
-    setOpen(false);
+    setOpenModal(false);
     setAddingWebId(false);
   };
 
@@ -65,7 +65,7 @@ export default function AddAgentButton({ type, setLoading }) {
 
       <Modal
         data-testid={TESTCAFE_ID_MODAL_OVERLAY}
-        open={open}
+        open={openModal}
         style={{
           display: "flex",
           alignItems: "center",

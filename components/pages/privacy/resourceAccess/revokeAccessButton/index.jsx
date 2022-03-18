@@ -138,7 +138,7 @@ export default function RevokeAccessButton({
     confirmed,
     openConfirmationDialog,
     setContent,
-    setOpen,
+    setOpenConfirmationSetup,
     setTitle,
     closeDialog,
     setConfirmText,
@@ -171,7 +171,7 @@ export default function RevokeAccessButton({
 
   const handleConfirmation = () => {
     setConfirmationSetup(true);
-    setOpen(REMOVE_ACCESS_CONFIRMATION_DIALOG);
+    setOpenConfirmationSetup(REMOVE_ACCESS_CONFIRMATION_DIALOG);
     setIsDangerousAction(true);
     setTitle(
       resources.length === 1
