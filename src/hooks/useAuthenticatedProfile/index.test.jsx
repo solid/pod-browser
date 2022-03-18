@@ -44,7 +44,7 @@ const mockedUseSession = useSession;
 const profile = { webIdUrl };
 
 describe("useAuthenticatedProfile", () => {
-  test("no profile loaded when no session is given", () => {
+  it("doesn't load a profile when no session is given", () => {
     const session = mockUnauthenticatedSession();
     mockedUseSession.mockReturnValue({ session });
     const SessionProvider = mockSessionContextProvider(session);
@@ -59,7 +59,7 @@ describe("useAuthenticatedProfile", () => {
     expect(useFetchProfile).toHaveBeenCalledWith(null);
   });
 
-  test("profile is loaded when session is given", () => {
+  it("loads a profile when session is given", () => {
     const session = mockSession();
     mockedUseSession.mockReturnValue({ session });
     const SessionProvider = mockSessionContextProvider(session);

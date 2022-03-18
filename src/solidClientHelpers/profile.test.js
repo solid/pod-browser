@@ -51,20 +51,20 @@ const {
 } = solidClientFns;
 
 describe("displayProfileName", () => {
-  test("with name, displays the name", () => {
+  it("displays the name when name provided", () => {
     const name = "name";
     const nickname = "nickname";
     const webId = "webId";
     expect(displayProfileName({ name, nickname, webId })).toEqual(name);
   });
 
-  test("without name, and a nickname, displays the nickname", () => {
+  it("displays the nickname when there is no name and a nickname, ", () => {
     const nickname = "nickname";
     const webId = "webId";
     expect(displayProfileName({ nickname, webId })).toEqual(nickname);
   });
 
-  test("with only webId, displays the webId", () => {
+  it("displays the webId when there is only a webID", () => {
     const webId = "webId";
     expect(displayProfileName({ webId })).toEqual(webId);
   });

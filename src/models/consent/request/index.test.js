@@ -28,7 +28,7 @@ const consentRequest = getConsentRequestDetails();
 const consentRequestOnePurpose = getConsentRequestDetailsOnePurpose();
 
 describe("getPurposeUrls", () => {
-  test("returns null if consentRequest is unavailable", () => {
+  it("returns null if consentRequest is unavailable", () => {
     const purposes = getPurposeUrls(undefined);
     expect(purposes).toBeNull();
   });
@@ -40,6 +40,7 @@ describe("getPurposeUrls", () => {
       "https://example.com/SomeSpecificPurposeB",
     ]);
   });
+
   it("returns purpose urls for one purpose", () => {
     const purpose = getPurposeUrls(consentRequestOnePurpose);
     expect(purpose).toEqual("https://example.com/SomeSpecificPurpose");

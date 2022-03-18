@@ -37,3 +37,41 @@ exports[`PodIndicator it renders the pod indicator with the pod iri 1`] = `
 `;
 
 exports[`PodIndicator it returns null if there is no profile 1`] = `[Function]`;
+
+exports[`PodIndicator renders the pod indicator with the pod iri 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-indicator"
+    data-testid="pod-indicator"
+  >
+    <button
+      class="PodBrowser-indicatorPrompt"
+      data-testid="pod-indicator-prompt"
+      id="pod-indicator-prompt"
+      title="https%3A%2F%2Fmypod.myhost.com"
+      type="button"
+    >
+      <span
+        class="PodBrowser-indicatorLabel"
+      >
+        <span
+          class="PodBrowser-indicatorLabelYour"
+        >
+          Your 
+        </span>
+        Pod
+        <span
+          class="PodBrowser-icon-caret-down PodBrowser-indicatorChevron"
+        />
+      </span>
+      <span
+        class="PodBrowser-indicatorName"
+      >
+        https%3A%2F%2Fmypod.myhost.com
+      </span>
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`PodIndicator returns null if there is no profile 1`] = `[Function]`;

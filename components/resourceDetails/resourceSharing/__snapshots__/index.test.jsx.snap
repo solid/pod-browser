@@ -129,3 +129,133 @@ exports[`ResourceSharing it renders the spinner if it's loading 1`] = `
   </div>
 </DocumentFragment>
 `;
+
+exports[`ResourceSharing renders the sharing action component 1`] = `
+<DocumentFragment>
+  <ul
+    class="PodBrowser-action-menu"
+  >
+    <li
+      class="PodBrowser-action-menu__item"
+    >
+      <button
+        class="PodBrowser-button PodBrowser-button--small"
+        data-testid="permissions-add-user-with-webid-button"
+      >
+        <span
+          class="PodBrowser-button__text"
+        >
+          Add with WebId
+        </span>
+        <span
+          class="PodBrowser-icon-caret-right PodBrowser-button__icon PodBrowser-button__icon--after"
+        />
+      </button>
+    </li>
+  </ul>
+  <div
+    class="PodBrowser-root PodBrowser-root PodBrowser-expanded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+  >
+    <div
+      aria-disabled="false"
+      aria-expanded="true"
+      class="PodBrowser-root PodBrowser-root PodBrowser-expanded"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="PodBrowser-content PodBrowser-expanded"
+      >
+        Individual permissions
+      </div>
+      <div
+        aria-disabled="false"
+        aria-hidden="true"
+        class="PodBrowser-root PodBrowser-root PodBrowser-expandIcon PodBrowser-expanded PodBrowser-edgeEnd"
+      >
+        <span
+          class="PodBrowser-label"
+        >
+          <svg
+            aria-hidden="true"
+            class="PodBrowser-root"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+            />
+          </svg>
+        </span>
+        <span
+          class="PodBrowser-root"
+        />
+      </div>
+    </div>
+    <div
+      class="PodBrowser-container PodBrowser-entered"
+      style="min-height: 0px;"
+    >
+      <div
+        class="PodBrowser-wrapper"
+      >
+        <div
+          class="PodBrowser-wrapperInner"
+        >
+          <div
+            role="region"
+          >
+            <div
+              class="PodBrowser-root PodBrowser-details"
+            >
+              <div
+                class="PodBrowser-root PodBrowser-colorPrimary PodBrowser-indeterminate"
+                role="progressbar"
+                style="width: 40px; height: 40px;"
+              >
+                <svg
+                  class="PodBrowser-svg"
+                  viewBox="22 22 44 44"
+                >
+                  <circle
+                    class="PodBrowser-circle PodBrowser-circleIndeterminate"
+                    cx="44"
+                    cy="44"
+                    fill="none"
+                    r="20.2"
+                    stroke-width="3.6"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ResourceSharing renders the spinner if it's loading 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-root PodBrowser-colorPrimary PodBrowser-indeterminate"
+    role="progressbar"
+    style="width: 40px; height: 40px;"
+  >
+    <svg
+      class="PodBrowser-svg"
+      viewBox="22 22 44 44"
+    >
+      <circle
+        class="PodBrowser-circle PodBrowser-circleIndeterminate"
+        cx="44"
+        cy="44"
+        fill="none"
+        r="20.2"
+        stroke-width="3.6"
+      />
+    </svg>
+  </div>
+</DocumentFragment>
+`;

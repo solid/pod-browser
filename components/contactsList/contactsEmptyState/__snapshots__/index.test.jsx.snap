@@ -34,3 +34,38 @@ exports[`ContactsEmptyState it renders an empty state component 1`] = `
   </div>
 </DocumentFragment>
 `;
+
+exports[`ContactsEmptyState renders an empty state component 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-content"
+  >
+    <div
+      class="PodBrowser-container PodBrowser-container--empty"
+    >
+      <span
+        class="PodBrowser-icon-user-astronaut PodBrowser-icon-large"
+      />
+      <h1>
+        You don’t have any contacts yet!
+      </h1>
+      <p>
+        Add a new contact to share files with.
+      </p>
+      <a
+        class="PodBrowser-button PodBrowser-button--small"
+        data-testid="add-new-contact-button"
+      >
+        <span
+          class="PodBrowser-icon-add PodBrowser-button__icon PodBrowser-button__icon--before"
+        />
+        <span
+          class="PodBrowser-button__text"
+        >
+          Add new contact
+        </span>
+      </a>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -80,3 +80,84 @@ exports[`Bookmark it renders a list item button if menuItem is true 1`] = `
   </div>
 </DocumentFragment>
 `;
+
+exports[`Bookmark renders a bookmark icon 1`] = `
+<DocumentFragment>
+  <button
+    class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+    data-testid="bookmark-button"
+    disabled=""
+    type="button"
+  >
+    <i
+      alt="bookmark button"
+      aria-label="bookmark"
+      class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+    />
+  </button>
+</DocumentFragment>
+`;
+
+exports[`Bookmark renders a bookmark icon and text if withText prop is true 1`] = `
+<DocumentFragment>
+  <button
+    class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+    data-testid="bookmark-button"
+    disabled=""
+    type="button"
+  >
+    <i
+      alt="bookmark button"
+      aria-label="bookmark"
+      class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+    />
+    <span
+      class="PodBrowser-bookmark-text"
+      data-testid="bookmark-text"
+    >
+      Add Bookmark
+    </span>
+  </button>
+</DocumentFragment>
+`;
+
+exports[`Bookmark renders a button if menuItem is false 1`] = `
+<DocumentFragment>
+  <button
+    class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+    data-testid="bookmark-button"
+    disabled=""
+    type="button"
+  >
+    <i
+      alt="bookmark button"
+      aria-label="bookmark"
+      class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+    />
+  </button>
+</DocumentFragment>
+`;
+
+exports[`Bookmark renders a list item button if menuItem is true 1`] = `
+<DocumentFragment>
+  <div
+    aria-disabled="true"
+    class="PodBrowser-root PodBrowser-root PodBrowser-bookmark-menu-item PodBrowser-gutters PodBrowser-disabled PodBrowser-button PodBrowser-disabled"
+    data-testid="bookmark-list-item-button"
+    role="button"
+    tabindex="-1"
+  >
+    <i
+      alt="bookmark button"
+      aria-label="bookmark"
+      class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+    />
+    <span
+      class="PodBrowser-bookmark-text"
+      data-testid="bookmark-text"
+    >
+      Add Bookmark
+    </span>
+  </div>
+</DocumentFragment>
+`;

@@ -125,3 +125,129 @@ exports[`CustomPolicyDropdown it renders a dropdown with the custom policies as 
   </div>
 </DocumentFragment>
 `;
+
+exports[`CustomPolicyDropdown renders a disabled dropdown if editing is true 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-root PodBrowser-root PodBrowser-disabled PodBrowser-disabled"
+    data-testid="custom-policy-dropdown"
+  >
+    <div
+      aria-disabled="true"
+      aria-haspopup="listbox"
+      class="PodBrowser-root PodBrowser-dropdown PodBrowser-select PodBrowser-selectMenu PodBrowser-input PodBrowser-input PodBrowser-disabled PodBrowser-disabled PodBrowser-disabled"
+      role="button"
+    >
+      <div
+        class="PodBrowser-root"
+      >
+        <span
+          class="PodBrowser-icon-settings PodBrowser-icon-custom-policies"
+        />
+      </div>
+      <div
+        class="PodBrowser-root PodBrowser-menuItemText"
+      >
+        <div
+          class="PodBrowser-title"
+        >
+          View & Add
+        </div>
+        <div
+          class="PodBrowser-description"
+        >
+          <p>
+            <b>
+              Can 
+            </b>
+            view and add new content but
+            <b>
+               cannot 
+            </b>
+            edit or delete existing content
+          </p>
+        </div>
+      </div>
+    </div>
+    <input
+      aria-hidden="true"
+      class="PodBrowser-nativeInput"
+      tabindex="-1"
+      value="viewAndAdd"
+    />
+    <svg
+      aria-hidden="true"
+      class="PodBrowser-root PodBrowser-iconCaret PodBrowser-icon PodBrowser-disabled PodBrowser-fontSizeInherit"
+      focusable="false"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+      />
+    </svg>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`CustomPolicyDropdown renders a dropdown with the custom policies as options and View & ADd as default option 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-root PodBrowser-root"
+    data-testid="custom-policy-dropdown"
+  >
+    <div
+      aria-haspopup="listbox"
+      class="PodBrowser-root PodBrowser-dropdown PodBrowser-select PodBrowser-selectMenu PodBrowser-input PodBrowser-input"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="PodBrowser-root"
+      >
+        <span
+          class="PodBrowser-icon-settings PodBrowser-icon-custom-policies"
+        />
+      </div>
+      <div
+        class="PodBrowser-root PodBrowser-menuItemText"
+      >
+        <div
+          class="PodBrowser-title"
+        >
+          View & Add
+        </div>
+        <div
+          class="PodBrowser-description"
+        >
+          <p>
+            <b>
+              Can 
+            </b>
+            view and add new content but
+            <b>
+               cannot 
+            </b>
+            edit or delete existing content
+          </p>
+        </div>
+      </div>
+    </div>
+    <input
+      aria-hidden="true"
+      class="PodBrowser-nativeInput"
+      tabindex="-1"
+      value="viewAndAdd"
+    />
+    <svg
+      aria-hidden="true"
+      class="PodBrowser-root PodBrowser-iconCaret PodBrowser-icon PodBrowser-fontSizeInherit"
+      focusable="false"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+      />
+    </svg>
+  </div>
+</DocumentFragment>
+`;

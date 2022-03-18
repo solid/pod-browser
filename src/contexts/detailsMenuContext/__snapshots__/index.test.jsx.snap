@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`DetailsMenuContext has context data 1`] = `
+<DocumentFragment>
+  <div
+    id="menuOpen"
+  >
+    true
+  </div>
+</DocumentFragment>
+`;
+
 exports[`DetailsMenuContext it has context data 1`] = `
 <DocumentFragment>
   <div

@@ -141,6 +141,147 @@ exports[`ContainerTableRow it renders a table row with loaded data without a typ
 </DocumentFragment>
 `;
 
+exports[`ContainerTableRow renders a table row 1`] = `
+<DocumentFragment>
+  <table>
+    <tbody>
+      <tr
+        class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
+        tabindex="0"
+      >
+        <td
+          class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+        >
+          <button
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+            data-testid="bookmark-button"
+            disabled=""
+            type="button"
+          >
+            <i
+              alt="bookmark button"
+              aria-label="bookmark"
+              class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+            />
+          </button>
+        </td>
+        <td
+          class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+        >
+          <i
+            class="PodBrowser-icon-file PodBrowser-resource-icon"
+          />
+        </td>
+        <td
+          class="PodBrowser-table__body-cell"
+        >
+          /example.ttl
+        </td>
+        <td
+          class="PodBrowser-table__body-cell"
+        >
+          Resource
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</DocumentFragment>
+`;
+
+exports[`ContainerTableRow renders a table row with loaded data 1`] = `
+<DocumentFragment>
+  <table>
+    <tbody>
+      <tr
+        class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
+        tabindex="0"
+      >
+        <td
+          class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+        >
+          <button
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+            data-testid="bookmark-button"
+            disabled=""
+            type="button"
+          >
+            <i
+              alt="bookmark button"
+              aria-label="bookmark"
+              class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+            />
+          </button>
+        </td>
+        <td
+          class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+        >
+          <i
+            class="PodBrowser-icon-file PodBrowser-resource-icon"
+          />
+        </td>
+        <td
+          class="PodBrowser-table__body-cell"
+        >
+          /example.ttl
+        </td>
+        <td
+          class="PodBrowser-table__body-cell"
+        >
+          Resource
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</DocumentFragment>
+`;
+
+exports[`ContainerTableRow renders a table row with loaded data without a type 1`] = `
+<DocumentFragment>
+  <table>
+    <tbody>
+      <tr
+        class="PodBrowser-table__body-row PodBrowser-table__body-row--selectable"
+        tabindex="0"
+      >
+        <td
+          class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+        >
+          <button
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
+            data-testid="bookmark-button"
+            disabled=""
+            type="button"
+          >
+            <i
+              alt="bookmark button"
+              aria-label="bookmark"
+              class="PodBrowser-icon-star PodBrowser-bookmark-icon-unselected"
+            />
+          </button>
+        </td>
+        <td
+          class="PodBrowser-table__body-cell PodBrowser-table__body-cell--align-center PodBrowser-table__body-cell--width-preview"
+        >
+          <i
+            class="PodBrowser-icon-file PodBrowser-resource-icon"
+          />
+        </td>
+        <td
+          class="PodBrowser-table__body-cell"
+        >
+          /example.ttl
+        </td>
+        <td
+          class="PodBrowser-table__body-cell"
+        >
+          Resource
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</DocumentFragment>
+`;
+
 exports[`ResourceIcon it renders a container icon for containers 1`] = `
 <DocumentFragment>
   <i
@@ -150,6 +291,22 @@ exports[`ResourceIcon it renders a container icon for containers 1`] = `
 `;
 
 exports[`ResourceIcon it renders a container icon for resources 1`] = `
+<DocumentFragment>
+  <i
+    class=""
+  />
+</DocumentFragment>
+`;
+
+exports[`ResourceIcon renders a container icon for containers 1`] = `
+<DocumentFragment>
+  <i
+    class=""
+  />
+</DocumentFragment>
+`;
+
+exports[`ResourceIcon renders a container icon for resources 1`] = `
 <DocumentFragment>
   <i
     class=""

@@ -69,3 +69,73 @@ exports[`PolicyHeader it renders a Policy Header for editors with singular title
   </div>
 </DocumentFragment>
 `;
+
+exports[`PolicyHeader renders a Policy Header for editors with plural title for policy agents list 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-headerContainer"
+  >
+    <i
+      class="PodBrowser-icon-editor PodBrowser-icon PodBrowser-iconEditor"
+    />
+    <div
+      class="PodBrowser-textContainer"
+    >
+      <div
+        class="PodBrowser-titleAndButtonContainer"
+      >
+        <p
+          class="PodBrowser-title"
+        >
+          Editors
+        </p>
+      </div>
+      <span
+        class="PodBrowser-description"
+      >
+        <p>
+          <b>
+            Can 
+          </b>
+          view, edit and delete this resource
+        </p>
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`PolicyHeader renders a Policy Header for editors with singular title for agent picker 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-headerContainer"
+  >
+    <i
+      class="PodBrowser-icon-editor PodBrowser-icon PodBrowser-iconEditor"
+    />
+    <div
+      class="PodBrowser-textContainer"
+    >
+      <div
+        class="PodBrowser-titleAndButtonContainer"
+      >
+        <p
+          class="PodBrowser-title"
+        >
+          Editor
+        </p>
+      </div>
+      <span
+        class="PodBrowser-description"
+      >
+        <p>
+          <b>
+            Can 
+          </b>
+          view, edit and delete this resource
+        </p>
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;

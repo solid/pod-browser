@@ -1,5 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`AgentSearchForm has a default heading 1`] = `
+<DocumentFragment>
+  <form
+    class="PodBrowser-form"
+  >
+    <label
+      class="PodBrowser-label"
+    >
+      WebID
+    </label>
+    <input
+      class="PodBrowser-input"
+      id="id2"
+      pattern="https:\\\\/\\\\/\\\\S+"
+      title="Must be a valid URL that starts with https:// and does not contain spaces"
+      type="url"
+      value=""
+    />
+    <button
+      class="PodBrowser-button"
+      data-testid="add-agent-button"
+      type="submit"
+    >
+      <span
+        class="PodBrowser-button__text"
+      >
+        Add
+      </span>
+    </button>
+  </form>
+</DocumentFragment>
+`;
+
 exports[`AgentSearchForm it has a default heading 1`] = `
 <DocumentFragment>
   <form
@@ -34,6 +67,39 @@ exports[`AgentSearchForm it has a default heading 1`] = `
 `;
 
 exports[`AgentSearchForm it renders an AgentSearchForm 1`] = `
+<DocumentFragment>
+  <form
+    class="PodBrowser-form"
+  >
+    <label
+      class="PodBrowser-label"
+    >
+      WebID
+    </label>
+    <input
+      class="PodBrowser-input"
+      id="id1"
+      pattern="https:\\\\/\\\\/\\\\S+"
+      title="Must be a valid URL that starts with https:// and does not contain spaces"
+      type="url"
+      value=""
+    />
+    <button
+      class="PodBrowser-button"
+      data-testid="add-agent-button"
+      type="submit"
+    >
+      <span
+        class="PodBrowser-button__text"
+      >
+        Add
+      </span>
+    </button>
+  </form>
+</DocumentFragment>
+`;
+
+exports[`AgentSearchForm renders an AgentSearchForm 1`] = `
 <DocumentFragment>
   <form
     class="PodBrowser-form"
