@@ -108,7 +108,7 @@ export const deletePoliciesContainer = async (containerIri, fetch) => {
       !isHTTPError(err.message, 404) &&
       !isHTTPError(err.message, 403)
     ) {
-      throw new Error(err);
+      throw err;
     }
   }
 };

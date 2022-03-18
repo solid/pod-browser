@@ -73,7 +73,7 @@ export default function AgentAccess({ permission }) {
   }, [webId]);
 
   const handleRetryClick = async () => {
-    // what does this do?
+    // ask Kyra about this to have the retry, may go to webid from beginning because names will be hard to get
     const { profile: fetchedProfile, profileError: fetchedProfileError } =
       await getProfile(webId, fetch);
     if (fetchedProfile) {

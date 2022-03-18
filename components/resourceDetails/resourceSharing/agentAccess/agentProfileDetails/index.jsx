@@ -59,7 +59,7 @@ export default function AgentProfileDetails({
   const { webId } = permission;
 
   const getAvatarProps = (localPermission) => {
-    // will revisit this when we get the right avatar. now everything is default
+    // will revisit this when we get the right avatar. now everything is default. "PersonAvatar component " or MUI
     if (localPermission.webId === PUBLIC_AGENT_PREDICATE) {
       return PUBLIC_AGENT.getAvatarProps();
     }

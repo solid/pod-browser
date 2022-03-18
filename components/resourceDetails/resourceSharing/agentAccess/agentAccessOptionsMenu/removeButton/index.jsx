@@ -44,7 +44,14 @@ export const handleRemovePermissions = ({
   mutateResourceInfo,
 }) => {
   return async (agentWebId, policyName) => {
-    console.log({ policyName, agentWebId });
+    console.log("REMOVE BUTTON2", {
+      policyName,
+      agentWebId,
+      setLoading,
+      accessControl,
+      setLocalAccess,
+      mutateResourceInfo,
+    });
     setLoading(true);
     if (PUBLIC_AGENT_PREDICATE === agentWebId) {
       accessControl.setRulePublic(policyName, false);
@@ -118,6 +125,7 @@ export default function RemoveButton({
     setConfirmationSetup(true);
     if (bypassDialog) {
       setConfirmed(true);
+      console.log("REMOVE BUTTON", { webId, alias });
       handleRemoveAgent(webId, alias);
     }
     if (openConfirmationDialog !== DIALOG_ID) return;

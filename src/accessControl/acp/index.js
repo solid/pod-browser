@@ -217,6 +217,30 @@ export function convertAcpToAcl(access) {
   );
 }
 
+async function legacySaveDataset( // ask nic for a better functionname
+  isLegacy,
+  namedPolicyContainerUrl,
+  updatedDataset,
+  policyName,
+  fetch
+) {
+  if (isLegacy) {
+    // Saving changes to the policy resource first
+    await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
+      fetch,
+    });
+    // then saving changes to the ACRs
+    await this.ensureAccessControlPolicyAll(policyName);
+  } else {
+    // saving changes to the ACRs first
+    await this.ensureAccessControlPolicyAll(policyName);
+    // then saving changes to the inline policy
+    await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
+      fetch,
+    });
+  }
+}
+
 export function getOrCreatePermission(
   permissions,
   webId,
@@ -1027,21 +1051,13 @@ export default class AcpAccessControlStrategy {
       ({ policy, dataset }) => acp.setPolicy(dataset, policy)
     );
 
-    if (this.#isLegacy) {
-      // Saving changes to the policy resource first
-      await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
-        fetch: this.#fetch,
-      });
-      // then saving changes to the ACRs
-      await this.ensureAccessControlPolicyAll(policyName);
-    } else {
-      // saving changes to the ACRs first
-      await this.ensureAccessControlPolicyAll(policyName);
-      // then saving changes to the inline policy
-      await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
-        fetch: this.#fetch,
-      });
-    }
+    legacySaveDataset(
+      this.#isLegacy,
+      namedPolicyContainerUrl,
+      updatedDataset,
+      policyName,
+      this.#fetch
+    );
 
     return respond(this.#originalWithAcr);
   }
@@ -1077,22 +1093,13 @@ export default class AcpAccessControlStrategy {
         setAuthenticatedAgent(dataset, policy, access, this.#isLegacy),
       ({ policy, dataset }) => acp.setPolicy(dataset, policy)
     );
-
-    if (this.#isLegacy) {
-      // Saving changes to the policy resource first
-      await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
-        fetch: this.#fetch,
-      });
-      // then saving changes to the ACRs
-      await this.ensureAccessControlPolicyAll(policyName);
-    } else {
-      // saving changes to the ACRs first
-      await this.ensureAccessControlPolicyAll(policyName);
-      // then saving changes to the inline policy
-      await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
-        fetch: this.#fetch,
-      });
-    }
+    legacySaveDataset(
+      this.#isLegacy,
+      namedPolicyContainerUrl,
+      updatedDataset,
+      policyName,
+      this.#fetch
+    );
 
     return respond(this.#originalWithAcr);
   }
@@ -1123,27 +1130,19 @@ export default class AcpAccessControlStrategy {
         setAgents(policy, dataset, webId, true, this.#isLegacy),
       ({ policy, dataset }) => acp.setPolicy(dataset, policy)
     );
-
-    if (this.#isLegacy) {
-      // Saving changes to the policy resource first
-      await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
-        fetch: this.#fetch,
-      });
-      // then saving changes to the ACRs
-      await this.ensureAccessControlPolicyAll(policyName);
-    } else {
-      // saving changes to the ACRs first
-      await this.ensureAccessControlPolicyAll(policyName);
-      // then saving changes to the inline policy
-      await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
-        fetch: this.#fetch,
-      });
-    }
+    legacySaveDataset(
+      this.#isLegacy,
+      namedPolicyContainerUrl,
+      updatedDataset,
+      policyName,
+      this.#fetch
+    );
 
     return respond(this.#originalWithAcr);
   }
 
   async removeAgentFromPolicy(webId, policyName) {
+    console.log("IN ACP");
     const namedPolicyContainerUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
@@ -1163,6 +1162,7 @@ export default class AcpAccessControlStrategy {
     if (!policy) {
       // not able to remove the agent from this policy (most likely because it is inherited)
       // we simply terminate and return the original ACR
+      // should be an error?
       return respond(this.#originalWithAcr);
     }
     const matchersUrls = getAllOfMatcherUrlAll(policy, this.#isLegacy);
@@ -1176,6 +1176,8 @@ export default class AcpAccessControlStrategy {
       updatedDataset,
       this.#isLegacy
     );
+    console.log("IN ACP-middle");
+
     const isLastAgent = !agents.length;
     if (isLastAgent) {
       // remove the matcher
@@ -1197,23 +1199,16 @@ export default class AcpAccessControlStrategy {
         }
       }
     }
+    legacySaveDataset(
+      //look at dataset context to see if it's changing and causing rerenders
+      this.#isLegacy,
+      namedPolicyContainerUrl,
+      updatedDataset,
+      policyName,
+      fetch
+    );
 
-    if (this.#isLegacy) {
-      // Saving changes to the policy resource first
-      await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
-        fetch: this.#fetch,
-      });
-      // then saving changes to the ACRs
-      await this.ensureAccessControlPolicyAll(policyName);
-    } else {
-      // saving changes to the ACRs first
-      await this.ensureAccessControlPolicyAll(policyName);
-      // then saving changes to the inline policy
-      await saveSolidDatasetAt(namedPolicyContainerUrl, updatedDataset, {
-        fetch: this.#fetch,
-      });
-    }
-
+    console.log("IN ACP-END");
     return respond(this.#originalWithAcr);
   }
 
@@ -1265,21 +1260,13 @@ export default class AcpAccessControlStrategy {
       }
     }
 
-    if (this.#isLegacy) {
-      // Saving changes to the policy resource first
-      await saveSolidDatasetAt(customPolicyContainerUrl, updatedDataset, {
-        fetch: this.#fetch,
-      });
-      // then saving changes to the ACRs
-      await this.ensureAccessControlPolicyAll(policyName);
-    } else {
-      // saving changes to the ACRs first
-      await this.ensureAccessControlPolicyAll(policyName);
-      // then saving changes to the inline policy
-      await saveSolidDatasetAt(customPolicyContainerUrl, updatedDataset, {
-        fetch: this.#fetch,
-      });
-    }
+    legacySaveDataset(
+      this.#isLegacy,
+      customPolicyContainerUrl,
+      updatedDataset,
+      policyName,
+      this.#fetch
+    );
 
     return respond(this.#originalWithAcr);
   }

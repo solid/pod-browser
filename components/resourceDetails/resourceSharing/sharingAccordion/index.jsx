@@ -24,7 +24,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Alert } from "@material-ui/lab";
-import { DatasetContext } from "@inrupt/solid-ui-react";
+import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
 import AgentAccessTable from "../agentAccessTable";
 import AdvancedSharingButton from "../advancedSharingButton";
@@ -34,6 +34,7 @@ import PermissionsContext from "../../../../src/contexts/permissionsContext";
 import AgentAccessSharingList from "../agentAccessSharingList";
 import PermissionsPanel from "../PermissionsPanel";
 import { preparePermissionsDataForTable } from "../../utils";
+import { getPermissions } from "../../../../src/hooks/useAllPermissions";
 
 export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
   "agent-access-list-show-all";
@@ -57,24 +58,34 @@ function SharingAccordion() {
   const isContainer = isContainerIri(router.query.resourceIri);
   const [loading, setLoading] = useState(false);
   const { permissions } = useContext(PermissionsContext);
-  const editPermissions = getEditPermissions(permissions);
-  const viewPermissions = getViewPermissions(permissions);
+  // const editPermissions = getEditPermissions(permissions);
+  // const viewPermissions = getViewPermissions(permissions);
+  const { session } = useSession();
   const { solidDataset: dataset } = useContext(DatasetContext);
   const resourceIri = getSourceUrl(dataset);
-  console.log("sharing accordion render editors: ", editPermissions);
-  console.log("sharing accordion render viewers: ", viewPermissions);
+
+  // console.log("sharing accordion render editors: ", editPermissions);
+  // console.log("sharing accordion render viewers: ", viewPermissions);
+
+  useEffect(() => {
+    getPermissions(resourceIri, session.fetch);
+  }, [resourceIri, session.fetch]);
+
+  const editPermissions = [];
+  const viewPermissions = [];
+
   return (
     <>
-      <PermissionsPanel
-        type="editors"
+      {/* <PermissionsPanel
+        permissionType="editors"
         permissions={editPermissions}
         resourceIri={resourceIri}
       />
       <PermissionsPanel
-        type="viewers"
+        permissionType="viewers"
         permissions={viewPermissions}
         resourceIri={resourceIri}
-      />
+      />  */}
       {/* REFACTOR REMOVE THIS LINE  */}
       {/* namedPolicies.concat(customPolicies).map(({ name }) => ( 
         <AgentAccessTable //AgentAccessTable
