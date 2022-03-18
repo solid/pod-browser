@@ -64,7 +64,6 @@ export function handleSaveResource({
       );
 
       onSave();
-
       setSeverity("success");
       setMessage(`Your file has been uploaded as ${fileName}`);
       setAlertOpen(true);
@@ -79,7 +78,7 @@ export function handleSaveResource({
 }
 
 export function handleUploadedFile({
-  setOpen,
+  setOpenConfirmationDialog,
   setTitle,
   setContent,
   setConfirmationSetup,
@@ -88,7 +87,7 @@ export function handleUploadedFile({
 }) {
   return (uploadedFile, existingFile) => {
     if (existingFile) {
-      setOpen(DUPLICATE_DIALOG_ID);
+      setOpenConfirmationDialog(DUPLICATE_DIALOG_ID);
       setTitle(
         `File ${normalizeSafeFileName(uploadedFile.name)} already exists`
       );
@@ -148,7 +147,7 @@ export default function AddFileButton({ className, onSave, resourceList }) {
   const [confirmationSetup, setConfirmationSetup] = useState(false);
   const [file, setFile] = useState(null);
   const ref = useRef(null);
-
+  console.log({ openConfirmationDialog });
   const saveResource = handleSaveResource({
     fetch,
     currentUri,

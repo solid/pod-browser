@@ -68,7 +68,7 @@ describe("AddFileButton", () => {
       .mockResolvedValue(SolidClientFns.mockSolidDatasetFrom(newFilePath));
   });
 
-  test("Renders an add file button", async () => {
+  it("Renders an add file button", async () => {
     const { asFragment, getByText } = renderWithTheme(
       <PodLocationProvider currentUri={currentUri}>
         <SessionProvider>
@@ -82,7 +82,7 @@ describe("AddFileButton", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("Handles focus correctly on click", () => {
+  it("Handles focus correctly on click", () => {
     const { getByTestId } = renderWithTheme(
       <AlertContext.Provider
         value={{
@@ -108,7 +108,7 @@ describe("AddFileButton", () => {
     expect(input).toHaveFocus();
   });
 
-  test("Handles focus correctly on enter", () => {
+  it("Handles focus correctly on enter", () => {
     const { getByTestId } = renderWithTheme(
       <AlertContext.Provider
         value={{
@@ -134,7 +134,7 @@ describe("AddFileButton", () => {
     expect(input).toHaveFocus();
   });
 
-  test("Uploads a file", async () => {
+  it("Uploads a file", async () => {
     const { getByTestId } = renderWithTheme(
       <AlertContext.Provider
         value={{
@@ -168,7 +168,8 @@ describe("AddFileButton", () => {
     expect(onSave).toHaveBeenCalled();
     expect(setAlertOpen).toHaveBeenCalled();
   });
-  test("displays a confirmation dialog with the correct title and message when trying to upload a duplicate file", async () => {
+
+  it("displays a confirmation dialog with the correct title and message when trying to upload a duplicate file", async () => {
     const resourceList = [
       {
         iri: `${currentUri}myfile.txt`,
@@ -196,7 +197,8 @@ describe("AddFileButton", () => {
       getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
     ).toHaveTextContent(CONFIRMATION_MESSAGE);
   });
-  test("if dialog is confirmed, it overwrites file", async () => {
+
+  it("overwrites file if dialog is confirmed", async () => {
     const resourceList = [
       {
         iri: `${currentUri}myfile.txt`,
