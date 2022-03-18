@@ -88,9 +88,9 @@ export default function RemoveButton({
 
   const {
     confirmed,
-    open,
+    openConfirmationDialog,
     setConfirmed,
-    setOpen,
+    setOpenConfirmationDialog,
     title,
     setTitle,
     setConfirmText,
@@ -110,7 +110,7 @@ export default function RemoveButton({
       profile?.name || webId
     }'s access from ${resourceName}`;
     setTitle(text);
-    setOpen(DIALOG_ID);
+    setOpenConfirmationDialog(DIALOG_ID);
   };
 
   useEffect(() => {
@@ -119,7 +119,7 @@ export default function RemoveButton({
       setConfirmed(true);
       handleRemoveAgent(webId, alias);
     }
-    if (open !== DIALOG_ID) return;
+    if (openConfirmationDialog !== DIALOG_ID) return;
     if (confirmationSetup && confirmed === null) return;
 
     if (confirmationSetup && confirmed) {
@@ -142,7 +142,7 @@ export default function RemoveButton({
     setConfirmationSetup,
     setConfirmText,
     handleRemoveAgent,
-    open,
+    openConfirmationDialog,
     closeDialog,
   ]);
 

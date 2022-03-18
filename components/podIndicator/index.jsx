@@ -55,7 +55,7 @@ export default function PodIndicator() {
   const [indicatorWidth, setIndicatorWidth] = useState();
   const [displayNavigator, setDisplayNavigator] = useState(false);
   const [indicatorLabelWidth, setIndicatorLabelWidth] = useState();
-  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [openTooltip, setOpenTooltip] = useState(false);
 
   const useStyles = makeStyles((theme) =>
     createStyles(styles(theme, indicatorWidth, indicatorLabelWidth))
@@ -65,8 +65,8 @@ export default function PodIndicator() {
   const bem = useBem(useStyles());
   const podIri = router.query.iri;
   const loading = !podIri;
-  const open = Boolean(anchorEl);
-  const id = open ? "pod-indicator-menu" : undefined;
+  const openPopover = Boolean(anchorEl);
+  const id = openPopover ? "pod-indicator-menu" : undefined;
   const handleClick = clickHandler(setAnchorEl);
   const handleClose = closeHandler(setAnchorEl);
   const handleOpenNavigator = () => {
@@ -92,9 +92,9 @@ export default function PodIndicator() {
 
   const handlePodCopyClick = () => {
     navigator.clipboard.writeText(podIri);
-    setTooltipOpen(true);
+    setOpenTooltip(true);
     setTimeout(() => {
-      setTooltipOpen(false);
+      setOpenTooltip(false);
       handleClose();
     }, 800);
   };
@@ -122,7 +122,7 @@ export default function PodIndicator() {
             </span>
             Pod
             <Icons
-              name={open ? "caret-up" : "caret-down"}
+              name={openPopover ? "caret-up" : "caret-down"}
               className={bem("indicatorChevron")}
             />
           </span>
@@ -146,7 +146,7 @@ export default function PodIndicator() {
           classes={{
             paper: bem("popoverMenu"),
           }}
-          open={open}
+          open={openPopover}
           anchorEl={anchorEl}
           onClose={handleClose}
           anchorOrigin={{
@@ -184,7 +184,7 @@ export default function PodIndicator() {
               PopperProps={{
                 disablePortal: true,
               }}
-              open={tooltipOpen}
+              open={openTooltip}
               disableFocusListener
               disableHoverListener
               disableTouchListener

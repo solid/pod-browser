@@ -134,8 +134,8 @@ export default function AddPermissionUsingWebIdButton({
     permissions
   );
 
-  const open = Boolean(anchorEl);
-  const id = open ? POPOVER_ID : undefined;
+  const openPopover = Boolean(anchorEl);
+  const id = openPopover ? POPOVER_ID : undefined;
   const permissionFormInvalid = dirtyForm && isEmptyAccess(access);
 
   return (
@@ -153,7 +153,7 @@ export default function AddPermissionUsingWebIdButton({
       <Popover
         id={id}
         classes={classes}
-        open={open}
+        open={openPopover}
         anchorEl={anchorEl}
         getContentAnchorEl={null}
         onClose={handleClose}

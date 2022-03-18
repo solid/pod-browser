@@ -136,8 +136,8 @@ export default function AddFolderFlyout({ onSave, className, resourceList }) {
     setAnchorEl(null);
   };
 
-  const open = Boolean(anchorEl);
-  const id = open ? "add-folder-flyout" : undefined;
+  const openPopover = Boolean(anchorEl);
+  const id = openPopover ? "add-folder-flyout" : undefined;
   const options = { fetch };
 
   const onSubmit = handleFolderSubmit({
@@ -171,9 +171,9 @@ export default function AddFolderFlyout({ onSave, className, resourceList }) {
       </Button>
       <Popover
         data-testid={id}
-        open={open}
         anchorEl={anchorEl}
         classes={classes}
+        open={openPopover}
         onClose={handleClose}
         anchorOrigin={{
           vertical: "bottom",

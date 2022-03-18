@@ -52,7 +52,7 @@ const ID_GROUP_DELETE_MODAL_TITLE = "GroupDeleteModalTitle";
 export const MESSAGE_GROUP_DELETE_MODAL_BODY =
   "Everyone in the group will lose access to anything shared with this group.";
 
-export default function GroupDeleteModal({ handleClose, open }) {
+export default function GroupDeleteModal({ handleClose, open: openModal }) {
   const { data: addressBook } = useContext(AddressBookContext);
   const { mutate: mutateGroupAll } = useContext(GroupAllContext);
   const { data: group } = useContext(GroupContext);
@@ -72,7 +72,7 @@ export default function GroupDeleteModal({ handleClose, open }) {
 
   return (
     <Modal
-      open={open}
+      open={openModal}
       onClose={handleClose}
       data-testid={TESTCAFE_ID_GROUP_DELETE_MODAL}
       aria-labelledby={ID_GROUP_DELETE_MODAL_TITLE}

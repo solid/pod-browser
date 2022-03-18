@@ -136,7 +136,7 @@ export default function RevokeAccessButton({
   const agentName = agentProfile?.name || agentWebId;
   const {
     confirmed,
-    open: dialogOpen,
+    openConfirmationDialog,
     setContent,
     setOpen,
     setTitle,
@@ -188,14 +188,14 @@ export default function RevokeAccessButton({
     if (
       confirmationSetup &&
       confirmed === null &&
-      dialogOpen === REMOVE_ACCESS_CONFIRMATION_DIALOG
+      openConfirmationDialog === REMOVE_ACCESS_CONFIRMATION_DIALOG
     )
       return;
 
     if (
       confirmationSetup &&
       confirmed &&
-      dialogOpen === REMOVE_ACCESS_CONFIRMATION_DIALOG
+      openConfirmationDialog === REMOVE_ACCESS_CONFIRMATION_DIALOG
     ) {
       removeAccess();
     }
@@ -204,7 +204,13 @@ export default function RevokeAccessButton({
       closeDialog();
       setConfirmationSetup(false);
     }
-  }, [confirmationSetup, confirmed, closeDialog, dialogOpen, removeAccess]);
+  }, [
+    confirmationSetup,
+    confirmed,
+    closeDialog,
+    openConfirmationDialog,
+    removeAccess,
+  ]);
 
   if (variant === "in-menu") {
     return (

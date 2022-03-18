@@ -90,8 +90,8 @@ export default function PodNavigatorPopover({
   const invalidUrlField = !url && (dirtyForm || dirtyUrlField);
   const { fetch } = useSession();
 
-  const open = Boolean(anchorEl);
-  const id = open ? "pod-navigator" : undefined;
+  const openPopover = Boolean(anchorEl);
+  const id = openPopover ? "pod-navigator" : undefined;
   const handleClose = closeHandler(setAnchorEl, setDisplayNavigator);
   const onSubmit = submitHandler(
     handleClose,
@@ -113,7 +113,7 @@ export default function PodNavigatorPopover({
       classes={{
         paper: classes.popoverNavigator,
       }}
-      open={open}
+      open={openPopover}
       anchorEl={anchorEl}
       onClose={handleClose}
       anchorOrigin={{

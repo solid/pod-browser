@@ -257,11 +257,11 @@ function AgentPickerModal(
   const [globalFilter, setGlobalFilter] = useState("");
   const [confirmationSetup, setConfirmationSetup] = useState(false);
   const {
-    open,
+    openConfirmationDialog,
     confirmed,
     setConfirmed,
     setContent,
-    setOpen,
+    setOpenConfirmationDialog,
     setTitle,
     closeDialog,
   } = useContext(ConfirmationDialogContext);
@@ -309,7 +309,7 @@ function AgentPickerModal(
     if (!filteredNewWebIds.length && !filteredWebIdsToDelete.length) {
       setTitle(null);
       setContent(null);
-      setOpen(null);
+      setOpenConfirmationDialog(null);
       setBypassDialog(true);
     }
     const confirmationTitle = `Change permissions for ${
@@ -324,7 +324,7 @@ function AgentPickerModal(
     } permissions to ${title}`;
     setTitle(confirmationTitle);
     setContent(confirmationContent);
-    setOpen(DIALOG_ID);
+    setOpenConfirmationDialog(DIALOG_ID);
   };
 
   const updateTemporaryRowThing = (newThing) => {
@@ -370,7 +370,7 @@ function AgentPickerModal(
       setConfirmed(true);
       handleSubmitNewWebIds();
     }
-    if (open !== DIALOG_ID) return;
+    if (openConfirmationDialog !== DIALOG_ID) return;
     if (confirmationSetup && confirmed === null) return;
     if (confirmationSetup && confirmed) {
       handleSubmitNewWebIds();
@@ -381,7 +381,7 @@ function AgentPickerModal(
       setConfirmationSetup(false);
     }
   }, [
-    open,
+    openConfirmationDialog,
     bypassDialog,
     setConfirmationSetup,
     confirmationSetup,
