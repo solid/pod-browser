@@ -36,7 +36,7 @@ export function isPublicAgentOrAuthenticatedAgentType(type) {
   return type === PUBLIC_AGENT_TYPE || type === AUTHENTICATED_AGENT_TYPE;
 }
 
-export function isPublicAgentorAuthenticatedAgentWebId(webId) {
+export function isPublicAgentOrAuthenticatedAgentWebId(webId) {
   return (
     webId === PUBLIC_AGENT_PREDICATE || webId === AUTHENTICATED_AGENT_PREDICATE
   );
@@ -50,7 +50,7 @@ export function sortByAgentName(permissions) {
 
 export function preparePermissionsDataForTable(data) {
   const publicAndAuthPermissions = data?.filter((p) =>
-    isPublicAgentorAuthenticatedAgentType(p.type)
+    isPublicAgentOrAuthenticatedAgentType(p.type)
   );
   const permissionsFilteredByType = filterPermissionsByType(data, "agent");
   const permissionsSortedByName = sortByAgentName(permissionsFilteredByType);

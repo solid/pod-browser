@@ -21,7 +21,7 @@
 
 import { useSession } from "@inrupt/solid-ui-react";
 import { useState, useEffect } from "react";
-import { isPublicAgentorAuthenticatedAgentWebId } from "../../../components/resourceDetails/utils";
+import { isPublicAgentOrAuthenticatedAgentWebId } from "../../../components/resourceDetails/utils";
 
 import { fetchProfile } from "../../solidClientHelpers/profile";
 
@@ -35,7 +35,7 @@ export default function usePermissionsWithProfiles(permissions = []) {
       permissions.map(async (p) => {
         let profile;
         let profileError;
-        if (isPublicAgentorAuthenticatedAgentWebId(p.webId)) return p;
+        if (isPublicAgentOrAuthenticatedAgentWebId(p.webId)) return p;
         try {
           profile = await fetchProfile(p.webId, fetch);
         } catch (error) {

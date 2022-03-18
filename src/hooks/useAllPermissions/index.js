@@ -29,7 +29,7 @@ import {
   getRequestedAccessesFromSignedVc,
   getRequestorWebIdFromSignedVc,
 } from "../../models/consent/signedVc";
-import { isPublicAgentorAuthenticatedAgentWebId } from "../../../components/resourceDetails/utils";
+import { isPublicAgentOrAuthenticatedAgentWebId } from "../../../components/resourceDetails/utils";
 import { fetchProfile } from "../../solidClientHelpers/profile";
 
 const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
