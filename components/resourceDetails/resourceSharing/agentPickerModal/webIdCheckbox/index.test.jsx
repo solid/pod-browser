@@ -45,7 +45,7 @@ describe("WebIdCheckbox", () => {
     });
   });
 
-  test("renders a checkbox with the correct value", () => {
+  it("renders a checkbox with the correct value", () => {
     mockedUseContactProfile.mockReturnValue({
       data: { webId },
     });
@@ -65,7 +65,8 @@ describe("WebIdCheckbox", () => {
     expect(checkbox).toBeDefined();
     expect(checkbox).toHaveAttribute("value", webId);
   });
-  test("checkbox has the correct value if profile is available", () => {
+
+  it("renders a checkbox with the correct value if profile is available", () => {
     mockedUseContactProfile.mockReturnValue({
       data: { webId },
     });
@@ -83,7 +84,8 @@ describe("WebIdCheckbox", () => {
     expect(checkbox).toBeDefined();
     expect(checkbox).toHaveAttribute("value", webId);
   });
-  test("checkbox has a null value if value is unavailable and it's the first row", () => {
+
+  it("reners a checkbox with a null value if value is unavailable and it's the first row", () => {
     mockedUseContactProfile.mockReturnValue({
       data: null,
     });
@@ -101,7 +103,8 @@ describe("WebIdCheckbox", () => {
     expect(checkbox).toBeDefined();
     expect(checkbox).toHaveAttribute("value", "");
   });
-  test("checkbox is checked if agent is already in permissions", () => {
+
+  it("renders a checkbox that is checked if agent is already in permissions", () => {
     const { getByTestId } = renderWithTheme(
       <PermissionsContextProvider>
         <WebIdCheckbox
@@ -116,7 +119,8 @@ describe("WebIdCheckbox", () => {
     expect(checkbox).toBeDefined();
     expect(checkbox).toBeChecked();
   });
-  test("calls toggleCheckbox on click with the correct values", () => {
+
+  it("calls toggleCheckbox on click with the correct values", () => {
     const { getByTestId } = renderWithTheme(
       <PermissionsContextProvider>
         <WebIdCheckbox
@@ -135,6 +139,7 @@ describe("WebIdCheckbox", () => {
       webId
     );
   });
+
   it("disables checkbox if permission came from inherited policy", () => {
     mockedUseContactProfile.mockReturnValue({
       data: { webId: inheritedAccessWebId },

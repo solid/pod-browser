@@ -251,7 +251,7 @@ describe("AgentAccess", () => {
     });
   });
 
-  test("default value for onLoading", async () => {
+  it("renders default value for onLoading", async () => {
     useFetchProfile.mockReturnValue({ error: "error" });
     const { getByTestId } = renderWithTheme(
       <DatasetProvider solidDataset={dataset}>
@@ -287,7 +287,7 @@ describe("submitHandler", () => {
     setContent = jest.fn();
   });
 
-  test("user changes their own permissions", () => {
+  it("handles when a user changes their own permissions", () => {
     submitHandler(
       42,
       42,
@@ -305,7 +305,7 @@ describe("submitHandler", () => {
     );
   });
 
-  test("user changes someone else's permissions", () => {
+  it("handles when a user changes someone else's permissions", () => {
     submitHandler(
       42,
       1337,
@@ -355,7 +355,7 @@ describe("saveHandler", () => {
     );
   });
 
-  test("save is successful", async () => {
+  it("handles when a save is successful", async () => {
     await expect(savePermissions(newAccess)).resolves.toBeUndefined();
 
     expect(onLoading).toHaveBeenCalledWith(true);
@@ -371,7 +371,7 @@ describe("saveHandler", () => {
     expect(onLoading).toHaveBeenCalledWith(false);
   });
 
-  test("save request fails", async () => {
+  it("handles when a save request fails", async () => {
     const error = "error";
     accessControl.savePermissionsForAgent.mockResolvedValue({ error });
 

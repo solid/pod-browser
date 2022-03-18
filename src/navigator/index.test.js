@@ -26,14 +26,14 @@ import {
 } from "./index";
 
 describe("resourceHref", () => {
-  test("it generates a resource link", () => {
+  it("generates a resource link", () => {
     const link = resourceHref("https://example.com/example.ttl");
     expect(link).toEqual("/resource/https%3A%2F%2Fexample.com%2Fexample.ttl");
   });
 });
 
 describe("resourceContextRedirect", () => {
-  test("it calls router.replace with a new action for a given container and resource", () => {
+  it("calls router.replace with a new action for a given container and resource", () => {
     const resourceIri = "https://mypod.myhost.com/resource";
     const containerIri = "https://mypod.myhost.com";
     const action = "myAction";

@@ -41,7 +41,7 @@ describe("Index page", () => {
     });
   });
 
-  test("Renders null if there are no pod iris", () => {
+  it("Renders null if there are no pod iris", () => {
     const replaceMock = jest.fn().mockResolvedValue();
     useRouter.mockReturnValue({ replace: replaceMock });
 
@@ -57,7 +57,7 @@ describe("Index page", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("Renders null if there is an empty array of pod iris", () => {
+  it("Renders null if there is an empty array of pod iris", () => {
     useRouter.mockReturnValue({
       replace: jest.fn().mockResolvedValue(undefined),
     });
@@ -74,7 +74,7 @@ describe("Index page", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("Redirects to the resource page if there is a pod iri", () => {
+  it("Redirects to the resource page if there is a pod iri", () => {
     const replaceMock = jest.fn().mockResolvedValue();
     useRouter.mockReturnValue({ replace: replaceMock });
 
@@ -90,7 +90,7 @@ describe("Index page", () => {
     );
   });
 
-  test("It silently fails on router errors", () => {
+  it("silently fails on router errors", () => {
     // This case should never actually happen, but there's test coverage just in case:
     const replaceMock = jest.fn().mockRejectedValue();
     useRouter.mockReturnValue({ replace: replaceMock });

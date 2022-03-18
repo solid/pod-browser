@@ -28,7 +28,7 @@ import CustomPolicyDropdown, {
 } from "./index";
 
 describe("CustomPolicyDropdown", () => {
-  test("it renders a dropdown with the custom policies as options and View & ADd as default option", () => {
+  it("renders a dropdown with the custom policies as options and View & ADd as default option", () => {
     const setCustomPolicy = jest.fn();
     const { asFragment, getByText } = renderWithTheme(
       <CustomPolicyDropdown

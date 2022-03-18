@@ -41,7 +41,7 @@ function ChildComponent() {
 }
 
 describe("BookmarksContext", () => {
-  test("it has context data", () => {
+  it("has context data", () => {
     const { asFragment } = render(
       <BookmarksContextProvider>
         <ChildComponent />

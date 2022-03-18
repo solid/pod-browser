@@ -68,7 +68,7 @@ describe("AddFileButton", () => {
       .mockResolvedValue(SolidClientFns.mockSolidDatasetFrom(newFilePath));
   });
 
-  test("Renders an add file button", async () => {
+  it("Renders an add file button", async () => {
     const { asFragment, getByText } = renderWithTheme(
       <PodLocationProvider currentUri={currentUri}>
         <SessionProvider>
@@ -82,7 +82,7 @@ describe("AddFileButton", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("Handles focus correctly on click", () => {
+  it("Handles focus correctly on click", () => {
     const { getByTestId } = renderWithTheme(
       <AlertContext.Provider
         value={{
@@ -108,7 +108,7 @@ describe("AddFileButton", () => {
     expect(input).toHaveFocus();
   });
 
-  test("Handles focus correctly on enter", () => {
+  it("Handles focus correctly on enter", () => {
     const { getByTestId } = renderWithTheme(
       <AlertContext.Provider
         value={{
@@ -134,7 +134,7 @@ describe("AddFileButton", () => {
     expect(input).toHaveFocus();
   });
 
-  test("Uploads a file", async () => {
+  it("Uploads a file", async () => {
     const { getByTestId } = renderWithTheme(
       <AlertContext.Provider
         value={{
@@ -168,7 +168,7 @@ describe("AddFileButton", () => {
     expect(onSave).toHaveBeenCalled();
     expect(setAlertOpen).toHaveBeenCalled();
   });
-  test("displays a confirmation dialog with the correct title and message when trying to upload a duplicate file", async () => {
+  it("displays a confirmation dialog with the correct title and message when trying to upload a duplicate file", async () => {
     const resourceList = [
       {
         iri: `${currentUri}myfile.txt`,
@@ -196,7 +196,7 @@ describe("AddFileButton", () => {
       getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
     ).toHaveTextContent(CONFIRMATION_MESSAGE);
   });
-  test("if dialog is confirmed, it overwrites file", async () => {
+  it("overwrites file if dialog is confirmed", async () => {
     const resourceList = [
       {
         iri: `${currentUri}myfile.txt`,
@@ -272,7 +272,7 @@ describe("handleSaveResource", () => {
     });
   });
 
-  test("it returns a handler that saves the resource and gives feedback to user", async () => {
+  it("returns a handler that saves the resource and gives feedback to user", async () => {
     const fileName = "myfile with space.txt";
     const fileWithSpace = new File(["test"], fileName, {
       type: "text/plain",
@@ -301,7 +301,7 @@ describe("handleSaveResource", () => {
     expect(setAlertOpen).toHaveBeenCalledWith(true);
   });
 
-  test("it returns a handler that gives feedback to user if an error occurs", async () => {
+  it("returns a handler that gives feedback to user if an error occurs", async () => {
     const fileName = "myfile.txt";
     const newFilePath = currentUri + encodeURIComponent(fileName);
 
@@ -374,7 +374,7 @@ describe("handleFileSelect", () => {
     resourceList,
   });
 
-  test("it returns a handler that uploads a file", () => {
+  it("returns a handler that uploads a file", () => {
     handler({ target: { files: [file] } });
 
     expect(setIsUploading).toHaveBeenCalled();
@@ -382,7 +382,7 @@ describe("handleFileSelect", () => {
     expect(saveUploadedFile).toHaveBeenCalled();
   });
 
-  test("it returns a handler that exits if there are no files", () => {
+  it("returns a handler that exits if there are no files", () => {
     handler({ target: { files: [] } });
 
     expect(setIsUploading).not.toHaveBeenCalled();
@@ -391,7 +391,7 @@ describe("handleFileSelect", () => {
     expect(setAlertOpen).not.toHaveBeenCalled();
   });
 
-  test("it returns a handler that returns an error if not successful", () => {
+  it("returns a handler that returns an error if not successful", () => {
     handler({ target: { files: ["something else"] } });
 
     expect(setSeverity).toHaveBeenCalledWith("error");
@@ -401,7 +401,7 @@ describe("handleFileSelect", () => {
 });
 
 describe("handleUploadedFile", () => {
-  test("it returns a handler that triggers the confirmation logic in case the file already exists", () => {
+  it("returns a handler that triggers the confirmation logic in case the file already exists", () => {
     const existingFile = true;
 
     const saveResource = jest.fn();

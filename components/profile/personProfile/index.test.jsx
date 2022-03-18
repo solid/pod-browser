@@ -50,7 +50,7 @@ describe("Person Profile", () => {
     jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
   });
 
-  test("renders a profile", async () => {
+  it("renders a profile", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session, false, profile);
     const { asFragment, findByTestId } = renderWithTheme(

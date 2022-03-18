@@ -29,7 +29,7 @@ import {
 } from "./permissions";
 
 describe("aclToString", () => {
-  test("it converts the acl to a standardized string", () => {
+  it("converts the acl to a standardized string", () => {
     const access = createAccessMap(true, true, true, true);
 
     expect(aclToString(access)).toEqual(
@@ -39,13 +39,13 @@ describe("aclToString", () => {
 });
 
 describe("isEqualACL", () => {
-  test("it returns true when acls are identical", () => {
+  it("returns true when acls are identical", () => {
     const access = createAccessMap(true, true, true, true);
 
     expect(isEqualACL(access, access)).toEqual(true);
   });
 
-  test("it returns false when acls are NOT identical", () => {
+  it("returns false when acls are NOT identical", () => {
     const aclA = createAccessMap(true, true, true, true);
     const aclB = createAccessMap(true, true, true, false);
 
@@ -54,13 +54,13 @@ describe("isEqualACL", () => {
 });
 
 describe("displayPermissions", () => {
-  test("it returns the CONTROL alias when all options are true", () => {
+  it("returns the CONTROL alias when all options are true", () => {
     const perms = displayPermissions(createAccessMap(true, true, true, true));
 
     expect(perms).toEqual(ACL.CONTROL.alias);
   });
 
-  test("it returns the NONE alias when all options are false", () => {
+  it("returns the NONE alias when all options are false", () => {
     const perms = displayPermissions(
       createAccessMap(false, false, false, false)
     );
@@ -68,19 +68,19 @@ describe("displayPermissions", () => {
     expect(perms).toEqual(ACL.NONE.alias);
   });
 
-  test("it returns the APPEND alias when append permissions are true and edit is false", () => {
+  it("returns the APPEND alias when append permissions are true and edit is false", () => {
     const perms = displayPermissions(createAccessMap(true, false, true, false));
 
     expect(perms).toEqual(ACL.APPEND.alias);
   });
 
-  test("it returns the WRITE alias when write permissions are true", () => {
+  it("returns the WRITE alias when write permissions are true", () => {
     const perms = displayPermissions(createAccessMap(true, true, true, false));
 
     expect(perms).toEqual(ACL.WRITE.alias);
   });
 
-  test("it returns the READ alias when read permissions are true", () => {
+  it("returns the READ alias when read permissions are true", () => {
     const perms = displayPermissions(
       createAccessMap(true, false, false, false)
     );
@@ -88,7 +88,7 @@ describe("displayPermissions", () => {
     expect(perms).toEqual(ACL.READ.alias);
   });
 
-  test("it returns 'Custom' when the permissions don't follow a template", () => {
+  it("returns 'Custom' when the permissions don't follow a template", () => {
     const perms = displayPermissions(
       createAccessMap(false, true, false, false)
     );

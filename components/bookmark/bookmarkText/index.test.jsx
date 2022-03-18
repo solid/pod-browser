@@ -25,22 +25,22 @@ import { renderWithTheme } from "../../../__testUtils/withTheme";
 import BookmarkText from "./index";
 
 describe("BookmarkText", () => {
-  test("it renders default add string when no addText is passed", async () => {
+  it("renders default add string when no addText is passed", async () => {
     renderWithTheme(<BookmarkText />);
     const text = screen.getByTestId("bookmark-text");
     expect(text.textContent).toEqual("Add Bookmark");
   });
-  test("it renders default remove string when no removeText is passed", async () => {
+  it("renders default remove string when no removeText is passed", async () => {
     renderWithTheme(<BookmarkText bookmarked />);
     const text = screen.getByTestId("bookmark-text");
     expect(text.textContent).toEqual("Remove Bookmark");
   });
-  test("it renders passed addText when available", async () => {
+  it("renders passed addText when available", async () => {
     renderWithTheme(<BookmarkText addText="Bookmark Pod" />);
     const text = screen.getByTestId("bookmark-text");
     expect(text.textContent).toEqual("Bookmark Pod");
   });
-  test("it renders passed removeText when available", async () => {
+  it("renders passed removeText when available", async () => {
     renderWithTheme(
       <BookmarkText bookmarked removeText="Remove Pod Bookmark" />
     );

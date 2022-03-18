@@ -25,16 +25,16 @@ import ContactsEmptyState from ".";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 
 describe("ContactsEmptyState", () => {
-  test("it renders an empty state component", () => {
+  it("renders an empty state component", () => {
     const { asFragment } = renderWithTheme(<ContactsEmptyState />);
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it renders an empty state message", () => {
+  it("renders an empty state message", () => {
     renderWithTheme(<ContactsEmptyState />);
     const message = screen.getByText("You don’t have any contacts yet!");
     expect(message).toBeTruthy();
   });
-  test("it renders an 'add new contact' button", () => {
+  it("renders an 'add new contact' button", () => {
     renderWithTheme(<ContactsEmptyState />);
     const button = screen.getByTestId("add-new-contact-button");
     expect(button).toBeTruthy();

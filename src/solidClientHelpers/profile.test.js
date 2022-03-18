@@ -131,7 +131,7 @@ describe("fetchProfile", () => {
 });
 
 describe("getProfileFromPersonThing", () => {
-  test("it maps people into profiles", async () => {
+  it("maps people into profiles", async () => {
     const alice = mockProfileAlice();
     expect(getProfileFromPersonThing(mockPersonThingAlice())).toEqual({
       avatar: alice.avatar,

@@ -41,12 +41,14 @@ describe("ContainerPageHeader", () => {
       },
     }));
   });
-  test("Renders view", () => {
+
+  it("Renders view", () => {
     useSession.mockReturnValue({ session: { info: { isLoggedIn: true } } });
     const { asFragment } = renderWithTheme(<ContainerPageHeader />);
     expect(asFragment()).toMatchSnapshot();
   });
-  test("renders title only when logged out", () => {
+
+  it("renders title only when logged out", () => {
     useSession.mockReturnValue({ session: { info: { isLoggedIn: false } } });
     renderWithTheme(<ContainerPageHeader />);
     const title = screen.getByText("Files");
@@ -54,7 +56,8 @@ describe("ContainerPageHeader", () => {
     expect(title).toBeTruthy();
     expect(podIndicator).toBeNull();
   });
-  test("renders pod indicator when logged in", () => {
+
+  it("renders pod indicator when logged in", () => {
     useSession.mockReturnValue({ session: { info: { isLoggedIn: true } } });
     renderWithTheme(<ContainerPageHeader />);
     const title = screen.getByText("Files");

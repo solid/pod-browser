@@ -29,7 +29,7 @@ function ChildComponent() {
 }
 
 describe("AccessControlContext", () => {
-  test("it provides accessControl", () => {
+  it("provides accessControl", () => {
     const accessControl = "accessControl";
     const { queryByText } = render(
       <AccessControlProvider accessControl={{ toString: () => accessControl }}>

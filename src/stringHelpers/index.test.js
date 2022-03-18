@@ -50,7 +50,7 @@ describe("normalizeContainerUrl", () => {
 });
 
 describe("parseUrl", () => {
-  test("it parses a given url into parts", () => {
+  it("parses a given url into parts", () => {
     const { hash, host, hostname, origin, pathname, port, protocol, search } =
       parseUrl("https://example.com:1000/path?query=param#hash");
 
@@ -64,7 +64,7 @@ describe("parseUrl", () => {
     expect(search).toEqual("?query=param");
   });
 
-  test("it gracefully handles non-urls", () => {
+  it("gracefully handles non-urls", () => {
     const { hash, host, hostname, origin, pathname, port, protocol, search } =
       parseUrl("not a url");
 
@@ -80,23 +80,23 @@ describe("parseUrl", () => {
 });
 
 describe("isUrl", () => {
-  test("it returns true when given a string beginning with https", () => {
+  it("returns true when given a string beginning with https", () => {
     expect(
       isUrl("https://ajacksified-dev.dev.inrupt.net/profile/card#me")
     ).toEqual(true);
   });
 
-  test("it returns true when given a string beginning with http", () => {
+  it("returns true when given a string beginning with http", () => {
     expect(
       isUrl("http://ajacksified-dev.dev.inrupt.net/profile/card#me")
     ).toEqual(true);
   });
 
-  test("it returns false when given a mailto link", () => {
+  it("returns false when given a mailto link", () => {
     expect(isUrl("mailto:example@example.com")).toEqual(false);
   });
 
-  test("it returns false when given a url with no protocol", () => {
+  it("returns false when given a url with no protocol", () => {
     expect(isUrl("ajacksified-dev.dev.inrupt.net/profile/card#me")).toEqual(
       false
     );
@@ -104,7 +104,7 @@ describe("isUrl", () => {
 });
 
 describe("stripQueryParams", () => {
-  test("it removes everything in a string after a ?", () => {
+  it("removes everything in a string after a ?", () => {
     expect(stripQueryParams("foo?bar=baz")).toEqual("foo");
   });
 });
@@ -112,10 +112,10 @@ describe("stripQueryParams", () => {
 describe("getContainerUrl", () => {
   const resourceUrl = "https://www.example.org/stuff/photo.jpg";
   const containerUrl = "https://www.example.org/stuff/";
-  test("it returns the url of the parent container of a given resource", () => {
+  it("returns the url of the parent container of a given resource", () => {
     expect(getContainerUrl(resourceUrl)).toEqual(containerUrl);
   });
-  test("it returns the same url when passed a container url", () => {
+  it("returns the same url when passed a container url", () => {
     expect(getContainerUrl(containerUrl)).toEqual(containerUrl);
   });
   it("allows passing undefined (can happen during build step)", () => {
@@ -126,34 +126,34 @@ describe("getContainerUrl", () => {
 describe("getParentContainerUrl", () => {
   const resourceUrl = "https://www.example.org/stuff/photo.jpg";
   const containerUrl = "https://www.example.org/stuff/";
-  test("it returns the url of the parent container of a given resource", () => {
+  it("returns the url of the parent container of a given resource", () => {
     expect(getParentContainerUrl(resourceUrl)).toEqual(containerUrl);
   });
   const nestedContainerUrl = "https://www.example.org/stuff/nested/";
-  test("it returns the url of the parent container of a given container", () => {
+  it("returns the url of the parent container of a given container", () => {
     expect(getParentContainerUrl(nestedContainerUrl)).toEqual(containerUrl);
   });
 });
 
 describe("isLocalhost", () => {
-  test("it returns true when called with 'localhost' ", () => {
+  it("returns true when called with 'localhost' ", () => {
     expect(isLocalhost("localhost")).toEqual(true);
   });
-  test("it returns false when called with string not matching 'localhost' ", () => {
+  it("returns false when called with string not matching 'localhost' ", () => {
     expect(isLocalhost("not localhost")).toEqual(false);
   });
 });
 
 describe("buildModesString", () => {
-  test("it returns same string if called with one item", () => {
+  it("returns same string if called with one item", () => {
     const modesArray = ["item"];
     expect(buildModeString(modesArray, "and")).toEqual("item");
   });
-  test("it returns correct string when called with an array of 2 items", () => {
+  it("returns correct string when called with an array of 2 items", () => {
     const modesArray = ["item", "item2"];
     expect(buildModeString(modesArray, "and")).toEqual("item and item2");
   });
-  test("it returns correct string when called with an array of more than 2 items", () => {
+  it("returns correct string when called with an array of more than 2 items", () => {
     const modesArray = ["item", "item2", "item3"];
     expect(buildModeString(modesArray, "and")).toEqual(
       "item, item2, and item3"

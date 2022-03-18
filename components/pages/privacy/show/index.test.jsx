@@ -43,7 +43,7 @@ describe("Agent show page", () => {
     jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
   });
 
-  test("Renders the Agent show page", async () => {
+  it("Renders the Agent show page", async () => {
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
       replace: jest.fn(),

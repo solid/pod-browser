@@ -91,7 +91,8 @@ describe("Consent Request Form", () => {
         "https://pod.inrupt.com/alice/private/data/data-3",
       ]);
   });
-  test("Renders a consent request form with multiple purposes", async () => {
+
+  it("Renders a consent request form with multiple purposes", async () => {
     const { asFragment, findByTestId } = renderWithTheme(
       <ConsentRequestContextProvider>
         <ConsentRequestForm
@@ -103,7 +104,8 @@ describe("Consent Request Form", () => {
     await expect(findByTestId("spinner")).rejects.toEqual(expect.anything());
     expect(asFragment()).toMatchSnapshot();
   });
-  test("Renders a consent request form with only one purpose", async () => {
+
+  it("Renders a consent request form with only one purpose", async () => {
     const { asFragment, findByTestId } = renderWithTheme(
       <ConsentRequestContextProviderOnePurpose>
         <ConsentRequestForm
@@ -115,7 +117,8 @@ describe("Consent Request Form", () => {
     await expect(findByTestId("spinner")).rejects.toEqual(expect.anything());
     expect(asFragment()).toMatchSnapshot();
   });
-  test("when submitting form without selecting access and at least one purpose selected, it displays a confirmation dialog with the correct title and content", () => {
+
+  it("displays a confirmation dialog with the correct title and content when submitting form without selecting access and at least one purpose selected", () => {
     jest.spyOn(consentFns, "approveAccessRequest").mockResolvedValue(signedVc);
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
@@ -142,7 +145,8 @@ describe("Consent Request Form", () => {
       "Mock App will not have access to anything in your Pod."
     );
   });
-  test("when submitting form without selecting purpose and at least one access selected, it displays a confirmation dialog with the correct title and content", async () => {
+
+  it("displays a confirmation dialog with the correct title and content when submitting form without selecting purpose and at least one access selected", async () => {
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentRequestContextProvider>
@@ -169,7 +173,8 @@ describe("Consent Request Form", () => {
       );
     });
   });
-  test("does not display confirmation dialog if at least one access and one purpose are selected, calls approveAccessRequest and redirects with correct params", async () => {
+
+  it("does not display confirmation dialog if at least one access and one purpose are selected, calls approveAccessRequest and redirects with correct params", async () => {
     consentFns.approveAccessRequest.mockResolvedValue(signedVc);
     const { getByTestId, findByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
@@ -195,7 +200,8 @@ describe("Consent Request Form", () => {
       `/privacy/?signedVcUrl=${signedVc.id}`
     );
   });
-  test("displays the confirmation dialog with the correct title and content regardless of the state of the toggles when clicking 'Deny All Access' button", async () => {
+
+  it("displays the confirmation dialog with the correct title and content regardless of the state of the toggles when clicking 'Deny All Access' button", async () => {
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <ConsentRequestContextProvider>
@@ -223,7 +229,8 @@ describe("Consent Request Form", () => {
       "Mock App will not have access to anything in your Pod."
     );
   });
-  test("when confirming deny access, calls denyAccessRequest and redirects with correct params", async () => {
+
+  it(" calls denyAccessRequest and redirects with correct params when confirming deny access", async () => {
     consentFns.denyAccessRequest.mockResolvedValue(signedVc);
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
