@@ -94,27 +94,21 @@ export function packageProfile(webId, dataset, pods, inbox) {
 }
 
 export async function fetchProfile(webId, fetch) {
-  try {
-    const profiles = await getProfileAll(webId, { fetch });
-    const {
-      webIdProfile,
-      altProfileAll: [altProfile],
-    } = profiles;
+  const profiles = await getProfileAll(webId);
+  const { webIdProfile, altProfileAll } = profiles;
 
-    let profileDataset = webIdProfile;
-    let webIdUrl = webId;
+  let profileDataset = webIdProfile;
+  let webIdUrl = webId;
 
-    if (altProfile) {
-      webIdUrl = getSourceUrl(altProfile);
-      profileDataset = altProfile;
-    }
-
-    const pods = getUrlAll(getThing(webIdProfile, webId), space.storage);
-    const inbox = getUrlAll(getThing(webIdProfile, webId), ldp.inbox);
-
-    return packageProfile(webIdUrl, profileDataset, pods, inbox);
-  } catch (e) {
-    const dataset = await getSolidDataset(webId, fetch);
-    return packageProfile(webId, dataset);
+  if (altProfileAll.length >= 1) {
+    // FIXME: Correctly handle multiple profiles
+    const [altProfile] = altProfileAll;
+    webIdUrl = getSourceUrl(altProfile);
+    profileDataset = altProfile;
   }
+
+  const pods = getUrlAll(getThing(webIdProfile, webId), space.storage);
+  const inbox = getUrlAll(getThing(webIdProfile, webId), ldp.inbox);
+
+  return packageProfile(webIdUrl, profileDataset, pods, inbox);
 }
