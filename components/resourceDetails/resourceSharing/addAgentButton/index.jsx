@@ -19,7 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { Modal } from "@material-ui/core";
