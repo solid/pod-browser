@@ -43,8 +43,7 @@ AccessControlProvider.defaultProps = {
 
 AccessControlProvider.propTypes = {
   children: T.node.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  accessControl: T.object,
+  accessControl: T.oneOfType([Object]),
   accessControlType: T.string,
 };
 

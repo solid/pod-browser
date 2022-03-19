@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint react/forbid-prop-types: off, react/jsx-props-no-spreading: off */
+/* eslint react/jsx-props-no-spreading: off */
 
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
