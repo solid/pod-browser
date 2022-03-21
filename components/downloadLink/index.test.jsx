@@ -25,7 +25,7 @@ import * as stringHelpers from "../../src/stringHelpers";
 import DownloadLink, { downloadResource, forceDownload } from "./index";
 
 describe("forceDownload", () => {
-  test("it creates an anchor with an object url and clicks it", () => {
+  it("creates an anchor with an object url and clicks it", () => {
     const setAttributeMock = jest.fn();
     const clickMock = jest.fn();
     const revokeObjectURLMock = jest.fn();
@@ -66,7 +66,7 @@ describe("forceDownload", () => {
 });
 
 describe("downloadResource", () => {
-  test("it returns a handler to download the resource", () => {
+  it("returns a handler to download the resource", () => {
     const iri = "http://example.com/resource";
     const blobMock = jest.fn();
     const responseMock = { blob: blobMock };
@@ -86,14 +86,14 @@ describe("downloadResource", () => {
 });
 
 describe("DownloadLink", () => {
-  test("returns null if resource is a container", () => {
+  it("returns null if resource is a container", () => {
     const { asFragment } = render(
       <DownloadLink type="container" iri="http://example.com/resource" />
     );
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("returns a download button if resource is not a container", () => {
+  it("returns a download button if resource is not a container", () => {
     const { asFragment } = render(
       <DownloadLink type="foo" iri="http://example.com/resource" />
     );

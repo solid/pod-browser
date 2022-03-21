@@ -30,7 +30,7 @@ import {
 const signedVc = getSignedVc();
 
 describe("getRequestedAccessesFromSignedVc", () => {
-  test("it returns requested accesses", () => {
+  it("returns requested accesses", () => {
     const accesses = getRequestedAccessesFromSignedVc(signedVc);
     expect(accesses).toEqual({
       mode: ["http://www.w3.org/ns/auth/acl#Read"],
@@ -46,14 +46,14 @@ describe("getRequestedAccessesFromSignedVc", () => {
       isProvidedTo: "https://mockapp.com/app#id",
     });
   });
-  test("it returns requested purpose url", () => {
+  it("returns requested purpose url", () => {
     const purposes = getPurposeUrlsFromSignedVc(signedVc);
     expect(purposes).toEqual([
       "https://example.org/someSpecificPurpose",
       "https://example.org/someSpecificPurpose2",
     ]);
   });
-  test("it returns requested webId", () => {
+  it("returns requested webId", () => {
     const webId = getRequestorWebIdFromSignedVc(signedVc);
     expect(webId).toEqual("https://mockapp.com/app#id");
   });

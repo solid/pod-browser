@@ -79,7 +79,7 @@ const { createThing, getStringNoLocale, getStringNoLocaleAll, getUrl } =
   solidClientFns;
 
 describe("createAddressBook", () => {
-  test("it creates all the datasets that an addressBook needs, with a default title", () => {
+  it("creates all the datasets that an addressBook needs, with a default title", () => {
     const iri = "https://example.pod.com/contacts";
     const owner = "https://example.pod.com/card#me";
 
@@ -105,7 +105,7 @@ describe("createAddressBook", () => {
     );
   });
 
-  test("it creates all the datasets that an addressBook needs, with a given title", () => {
+  it("creates all the datasets that an addressBook needs, with a given title", () => {
     const iri = "https://example.pod.com/contacts";
     const owner = "https://example.pod.com/card#me";
     const title = "My Address Book";
@@ -143,7 +143,7 @@ describe("createContact", () => {
     .spyOn(addressBookFns, "createWebIdNodeFn")
     .mockImplementation(() => mockedWebIdNode);
 
-  test("it creates a new contact with a given schema object", () => {
+  it("creates a new contact with a given schema object", () => {
     const schema = {
       webId: webIdUrl,
       addresses: [
@@ -226,7 +226,7 @@ describe("createContact", () => {
 });
 
 describe("getGroups", () => {
-  test("it fetches the groups for a given address book", async () => {
+  it("fetches the groups for a given address book", async () => {
     const containerIri = "https://user.example.com/contacts";
     const fetch = jest.fn();
     const groupsIndex = joinPath(containerIri, "groups.ttl");
@@ -276,7 +276,7 @@ describe("getGroups", () => {
     expect(group2.name).toEqual("Group2");
   });
 
-  test("it returns an error if the group index does not exist", async () => {
+  it("returns an error if the group index does not exist", async () => {
     const containerIri = "https://user.example.com/contacts";
     const fetch = jest.fn();
 
@@ -291,7 +291,7 @@ describe("getGroups", () => {
 });
 
 describe("getSchemaFunction", () => {
-  test("it returns a function for the given key, value", () => {
+  it("returns a function for the given key, value", () => {
     const value = mockWebIdNode(
       "https://user.example.com/card#me"
     ).webIdNodeUrl;
@@ -302,7 +302,7 @@ describe("getSchemaFunction", () => {
     expect(getUrl(thing, vcard.url)).toEqual(value);
   });
 
-  test("it returns an identity function if the key does not exist in the map", () => {
+  it("returns an identity function if the key does not exist in the map", () => {
     const value = "value";
     const options = { name: "this" };
     const thing = createThing(options);
@@ -314,7 +314,7 @@ describe("getSchemaFunction", () => {
 });
 
 describe("mapSchema", () => {
-  test("it maps the schema to a thing with a generated name with a prefix", () => {
+  it("maps the schema to a thing with a generated name with a prefix", () => {
     const schema = { name: "test" };
     const fn = mapSchema("prefix");
     const { name, thing } = fn(schema);
@@ -325,20 +325,20 @@ describe("mapSchema", () => {
 });
 
 describe("getSchemaOperations", () => {
-  test("it returns a list of operations bound to the given values", () => {
+  it("returns a list of operations bound to the given values", () => {
     const schema = { fn: "Test", name: "Test" };
     const operations = getSchemaOperations(schema);
 
     expect(operations).toHaveLength(2);
   });
 
-  test("it returns an emtpy arry if no schema is given", () => {
+  it("returns an emtpy arry if no schema is given", () => {
     const operations = getSchemaOperations();
 
     expect(operations).toHaveLength(0);
   });
 
-  test("it only returns operations for string values", () => {
+  it("only returns operations for string values", () => {
     const schema = { fn: "Test", name: "Test", address: [] };
     const operations = getSchemaOperations(schema);
 
@@ -351,7 +351,7 @@ describe("getContacts", () => {
     jest.restoreAllMocks();
   });
 
-  test("it fetches the people in the address book", async () => {
+  it("fetches the people in the address book", async () => {
     const fetch = jest.fn();
 
     const mockIndexFileDatasetIri =
@@ -394,7 +394,7 @@ describe("getContacts", () => {
     expect(person2).toEqual(expectedPerson2);
   });
 
-  test("it filters out the contacts that it cannot fetch due to an error", async () => {
+  it("filters out the contacts that it cannot fetch due to an error", async () => {
     const personContainer1 = "https://user.example.com/contacts/Person/1234/";
     const personDoc1 = joinPath(personContainer1, "index.ttl");
     const personIri1 = `${personDoc1}#me`;
@@ -470,7 +470,7 @@ describe("getProfiles", () => {
     jest.restoreAllMocks();
   });
 
-  test("it fetches the profiles of the given people contacts", async () => {
+  it("fetches the profiles of the given people contacts", async () => {
     const fetch = jest.fn();
     const person1 = {
       dataset: chain(mockSolidDatasetFrom(aliceProfileUrl), (d) =>
@@ -736,7 +736,7 @@ describe("deleteContact", () => {
 
   afterEach(() => jest.restoreAllMocks());
 
-  test("it deletes the contact file and its containing folder", async () => {
+  it("deletes the contact file and its containing folder", async () => {
     await deleteContact(addressBookUrl, contactToDelete, foaf.Person, fetch);
 
     expect(mockDeleteFile).toHaveBeenCalledTimes(2);
@@ -746,7 +746,7 @@ describe("deleteContact", () => {
     });
   });
 
-  test("it updates the people index", async () => {
+  it("updates the people index", async () => {
     await deleteContact(addressBookUrl, contactToDelete, foaf.Person, fetch);
 
     expect(mockSaveResource).toHaveBeenCalledWith(
@@ -777,7 +777,7 @@ describe("saveNewAddressBook", () => {
       .mockResolvedValue({ error: "There was an error" });
   });
 
-  test("it saves a new address at the given iri, for the given owner, with a default title", async () => {
+  it("saves a new address at the given iri, for the given owner, with a default title", async () => {
     const addressBook = createAddressBook({ iri, owner });
 
     jest
@@ -797,7 +797,7 @@ describe("saveNewAddressBook", () => {
     expect(savePeopleArgs[0].iri).toEqual(addressBook.people.iri);
   });
 
-  test("it returns an error if the user is unauthorized", async () => {
+  it("returns an error if the user is unauthorized", async () => {
     jest
       .spyOn(resourceFns, "saveResource")
       .mockResolvedValueOnce({ error: error401 })
@@ -811,7 +811,7 @@ describe("saveNewAddressBook", () => {
     );
   });
 
-  test("it returns an error if the address book already exists", async () => {
+  it("returns an error if the address book already exists", async () => {
     resourceFns.getResource.mockResolvedValue({
       response: "existing address book",
     });
@@ -859,7 +859,7 @@ describe("saveNewAddressBook", () => {
 });
 
 describe("schemaFunctionMappings", () => {
-  test("webId sets a vcard.url", () => {
+  it("webId sets a vcard.url", () => {
     const webId = "https://user.example.com/card#me";
     const options = { name: "this" };
     const { webIdNode, webIdNodeUrl } = mockWebIdNode(webId);
@@ -870,7 +870,7 @@ describe("schemaFunctionMappings", () => {
     expect(getUrl(webIdNode, vcard.value)).toEqual(webId);
   });
 
-  test("fn sets a vcard.fn", () => {
+  it("fn sets a vcard.fn", () => {
     const value = "Test Person";
     const options = { name: "this" };
     const thing = schemaFunctionMappings.fn(value)(createThing(options));
@@ -878,7 +878,7 @@ describe("schemaFunctionMappings", () => {
     expect(getStringNoLocale(thing, vcard.fn)).toEqual(value);
   });
 
-  test("name sets a foaf.name", () => {
+  it("name sets a foaf.name", () => {
     const value = "Test Person";
     const options = { name: "this" };
     const thing = schemaFunctionMappings.name(value)(createThing(options));
@@ -886,7 +886,7 @@ describe("schemaFunctionMappings", () => {
     expect(getStringNoLocale(thing, foaf.name)).toEqual(value);
   });
 
-  test("organizationName sets a 'vcard' organization-name", () => {
+  it("organizationName sets a 'vcard' organization-name", () => {
     const value = "Test Org";
     const options = { name: "this" };
     const thing = schemaFunctionMappings.organizationName(value)(
@@ -898,7 +898,7 @@ describe("schemaFunctionMappings", () => {
     );
   });
 
-  test("role sets a vcard.role", () => {
+  it("role sets a vcard.role", () => {
     const value = "Developer";
     const options = { name: "this" };
     const thing = schemaFunctionMappings.role(value)(createThing(options));
@@ -906,7 +906,7 @@ describe("schemaFunctionMappings", () => {
     expect(getStringNoLocale(thing, vcard.role)).toEqual(value);
   });
 
-  test("countryName sets a 'vcard' country-name", () => {
+  it("countryName sets a 'vcard' country-name", () => {
     const value = "Fake Country";
     const options = { name: "this" };
     const thing = schemaFunctionMappings.countryName(value)(
@@ -918,7 +918,7 @@ describe("schemaFunctionMappings", () => {
     );
   });
 
-  test("locality sets a vcard.locality", () => {
+  it("locality sets a vcard.locality", () => {
     const value = "Fake Town";
     const options = { name: "this" };
     const thing = schemaFunctionMappings.locality(value)(createThing(options));
@@ -926,7 +926,7 @@ describe("schemaFunctionMappings", () => {
     expect(getStringNoLocale(thing, vcard.locality)).toEqual(value);
   });
 
-  test("postalCode sets a 'vcard' postal-code", () => {
+  it("postalCode sets a 'vcard' postal-code", () => {
     const value = "55555";
     const options = { name: "this" };
     const thing = schemaFunctionMappings.postalCode(value)(
@@ -936,7 +936,7 @@ describe("schemaFunctionMappings", () => {
     expect(getStringNoLocale(thing, vcardExtras("postal-code"))).toEqual(value);
   });
 
-  test("region sets a vcard.region", () => {
+  it("region sets a vcard.region", () => {
     const value = "Fake State";
     const options = { name: "this" };
     const thing = schemaFunctionMappings.region(value)(createThing(options));
@@ -944,7 +944,7 @@ describe("schemaFunctionMappings", () => {
     expect(getStringNoLocale(thing, vcard.region)).toEqual(value);
   });
 
-  test("streetAddress sets a 'vcard' street-address", () => {
+  it("streetAddress sets a 'vcard' street-address", () => {
     const value = "123 Fake St.";
     const options = { name: "this" };
     const thing = schemaFunctionMappings.streetAddress(value)(
@@ -956,7 +956,7 @@ describe("schemaFunctionMappings", () => {
     );
   });
 
-  test("type sets an rdf.type", () => {
+  it("type sets an rdf.type", () => {
     const value = "type";
     const options = { name: "this" };
     const thing = schemaFunctionMappings.type(value)(createThing(options));
@@ -964,7 +964,7 @@ describe("schemaFunctionMappings", () => {
     expect(getStringNoLocale(thing, rdf.type)).toEqual(value);
   });
 
-  test("value sets a vcard.value", () => {
+  it("value sets a vcard.value", () => {
     const value = "value";
     const options = { name: "this" };
     const thing = schemaFunctionMappings.value(value)(createThing(options));
@@ -974,13 +974,13 @@ describe("schemaFunctionMappings", () => {
 });
 
 describe("shortId", () => {
-  test("it creates a short id string", () => {
+  it("creates a short id string", () => {
     expect(shortId()).toMatch(/[\w\d]{7}/);
   });
 });
 
 describe("vcardExtras", () => {
-  test("it returns an unsupported vcard attribute", () => {
+  it("returns an unsupported vcard attribute", () => {
     expect(vcardExtras("attribute")).toEqual(
       "http://www.w3.org/2006/vcard/ns#attribute"
     );
@@ -988,7 +988,7 @@ describe("vcardExtras", () => {
 });
 
 describe("contactsContainerIri", () => {
-  test("it appends the container path to the given iri", () => {
+  it("appends the container path to the given iri", () => {
     expect(contactsContainerIri("http://example.com")).toEqual(
       "http://example.com/contacts/"
     );
@@ -1039,7 +1039,7 @@ describe("getIndexDatasetFromAddressBook", () => {
     jest.clearAllMocks();
   });
 
-  test("it gets the index dataset for a given address book and predicate", async () => {
+  it("gets the index dataset for a given address book and predicate", async () => {
     const fetch = jest.fn();
     jest
       .spyOn(solidClientFns, "getSolidDataset")

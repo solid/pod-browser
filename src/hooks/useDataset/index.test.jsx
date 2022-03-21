@@ -57,7 +57,7 @@ describe("useDataset", () => {
     );
   });
 
-  test("useSWR fetches data using getSolidDataset", async () => {
+  it("fetches data using getSolidDataset with useSWR", async () => {
     renderHook(() => useDataset(iri));
     await expect(useSWR.mock.calls[0][1]()).resolves.toBe(response);
     expect(solidClientFns.getSolidDataset).toHaveBeenCalledWith(iri, { fetch });

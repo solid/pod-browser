@@ -24,7 +24,7 @@ import { render } from "@testing-library/react";
 import Notification from "./index";
 
 describe("Notification", () => {
-  test("Renders a Notification", () => {
+  it("Renders a Notification", () => {
     const { asFragment } = render(<Notification />);
     expect(asFragment()).toMatchSnapshot();
   });

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ConfirmationDialogContext it has context data 1`] = `
+exports[`ConfirmationDialogContext has context data 1`] = `
 <DocumentFragment>
   <div>
     <div

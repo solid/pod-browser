@@ -72,7 +72,7 @@ describe("Header", () => {
   });
 
   describe("while user logged out", () => {
-    test("renders only logo", () => {
+    it("renders only logo", () => {
       const session = mockUnauthenticatedSession();
       const SessionProvider = mockSessionContextProvider(session);
 

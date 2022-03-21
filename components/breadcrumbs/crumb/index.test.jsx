@@ -24,7 +24,7 @@ import { renderWithTheme } from "../../../__testUtils/withTheme";
 import Crumb from "./index";
 
 describe("Breadcrumbs crumb component", () => {
-  test("Renders last breadcrumb as plain text", () => {
+  it("Renders last breadcrumb as plain text", () => {
     const crumbProps = {
       crumb: {
         uri: "https://www.mypodbrowser.com/some/location",
@@ -39,7 +39,7 @@ describe("Breadcrumbs crumb component", () => {
     expect(container.querySelector("[href]")).toBeNull();
   });
 
-  test("Renders all crumbs except last one as links", () => {
+  it("Renders all crumbs except last one as links", () => {
     const crumbProps = {
       crumb: {
         uri: "https://www.mypodbrowser.com/some",

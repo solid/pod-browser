@@ -49,7 +49,7 @@ function ChildComponent() {
 }
 
 describe("AlertContext", () => {
-  test("it has context data", () => {
+  it("has context data", () => {
     const { asFragment } = render(
       <AlertProvider>
         <ChildComponent />

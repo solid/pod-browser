@@ -69,7 +69,6 @@ describe("usePodIrisFromWebId", () => {
 
   it("caches with SWR", () => {
     useSWR.mockReturnValue(42);
-
     const value = renderHook(() => usePodIrisFromWebId(webId), { wrapper });
     expect(value.result.current).toBe(42);
     expect(useSWR).toHaveBeenCalledWith(
@@ -78,7 +77,7 @@ describe("usePodIrisFromWebId", () => {
     );
   });
 
-  test("useSWR fetches data using getSolidDataset", async () => {
+  it("fetches data using getSolidDataset with useSWR", async () => {
     renderHook(() => usePodIrisFromWebId(webId), { wrapper });
 
     const pods = await useSWR.mock.calls[0][1]();
@@ -89,7 +88,7 @@ describe("usePodIrisFromWebId", () => {
     expect(pods).toEqual([iri1, iri2]);
   });
 
-  test("returns an empty array if the WebID is falsy", async () => {
+  it("returns an empty array if the WebID is falsy", async () => {
     jest.spyOn(solidClientFns, "getSolidDataset");
 
     renderHook(() => usePodIrisFromWebId(""), { wrapper });

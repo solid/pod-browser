@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CustomPolicyDropdown dropdown is disabled if editing is true 1`] = `
+exports[`CustomPolicyDropdown renders a disabled dropdown if editing is true 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-root PodBrowser-root PodBrowser-disabled PodBrowser-disabled"
@@ -63,7 +63,7 @@ exports[`CustomPolicyDropdown dropdown is disabled if editing is true 1`] = `
 </DocumentFragment>
 `;
 
-exports[`CustomPolicyDropdown it renders a dropdown with the custom policies as options and View & ADd as default option 1`] = `
+exports[`CustomPolicyDropdown renders a dropdown with the custom policies as options and View & ADd as default option 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-root PodBrowser-root"

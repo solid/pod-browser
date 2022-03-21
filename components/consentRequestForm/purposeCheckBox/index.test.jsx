@@ -26,7 +26,8 @@ import PurposeCheckbox, { TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT } from "./index";
 
 describe("Purpose Checkbox", () => {
   const handleSelectPurpose = jest.fn();
-  test("renders a checkbox", () => {
+
+  it("renders a checkbox", () => {
     const { asFragment } = renderWithTheme(
       <PurposeCheckbox
         url="url"
@@ -36,7 +37,8 @@ describe("Purpose Checkbox", () => {
     );
     expect(asFragment()).toMatchSnapshot();
   });
-  test("calls handleSelectPurpose on click", () => {
+
+  it("calls handleSelectPurpose on click", () => {
     const { getByTestId } = renderWithTheme(
       <PurposeCheckbox
         url="url"

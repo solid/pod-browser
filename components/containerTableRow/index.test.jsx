@@ -46,7 +46,7 @@ describe("ContainerTableRow", () => {
     }));
   });
 
-  test("it renders a table row", () => {
+  it("renders a table row", () => {
     const resource = {
       iri: "https://example.com/container/example.ttl",
       name: "/example.ttl",
@@ -74,7 +74,7 @@ describe("ContainerTableRow", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it renders a table row with loaded data", () => {
+  it("renders a table row with loaded data", () => {
     const resource = {
       iri: "https://example.com/example.ttl",
       name: "/example.ttl",
@@ -97,7 +97,7 @@ describe("ContainerTableRow", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it renders a table row with loaded data without a type", () => {
+  it("renders a table row with loaded data without a type", () => {
     const resource = {
       iri: "https://example.com/example.ttl",
       name: "/example.ttl",
@@ -179,7 +179,7 @@ describe("handleAction", () => {
 });
 
 describe("ResourceIcon", () => {
-  test("it renders a container icon for containers", () => {
+  it("renders a container icon for containers", () => {
     const bem = jest.fn();
     const { asFragment } = renderWithTheme(
       <ResourceIcon iri="/container/" bem={bem} />
@@ -188,7 +188,7 @@ describe("ResourceIcon", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it renders a container icon for resources", () => {
+  it("renders a container icon for resources", () => {
     const bem = jest.fn();
     const { asFragment } = renderWithTheme(
       <ResourceIcon iri="/resource" bem={bem} />
@@ -199,11 +199,11 @@ describe("ResourceIcon", () => {
 });
 
 describe("renderResourceType", () => {
-  test("it renders Container with a container iri", () => {
+  it("renders Container with a container iri", () => {
     expect(renderResourceType("/container/")).toEqual("Container");
   });
 
-  test("it renders Resource with a resource iri", () => {
+  it("renders Resource with a resource iri", () => {
     expect(renderResourceType("/resource")).toEqual("Resource");
   });
 });

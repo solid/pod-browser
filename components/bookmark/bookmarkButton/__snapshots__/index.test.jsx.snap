@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`BookmarkButton it returns a button when menuItem is false 1`] = `
+exports[`BookmarkButton returns a button when menuItem is false 1`] = `
 <DocumentFragment>
   <button
     data-testid="bookmark-button"
@@ -9,7 +9,7 @@ exports[`BookmarkButton it returns a button when menuItem is false 1`] = `
 </DocumentFragment>
 `;
 
-exports[`BookmarkButton it returns a list item when menuItem is true 1`] = `
+exports[`BookmarkButton returns a list item when menuItem is true 1`] = `
 <DocumentFragment>
   <div
     aria-disabled="false"

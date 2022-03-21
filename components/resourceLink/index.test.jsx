@@ -26,7 +26,7 @@ import ResourceLink from "./index";
 jest.mock("next/router");
 
 describe("ResourceLink", () => {
-  test("renders with a resource and container", () => {
+  it("renders with a resource and container", () => {
     const resourceIri = "https://mypod.myhost.com/resource";
     const containerIri = "https://mypod.myhost.com";
 
@@ -38,7 +38,7 @@ describe("ResourceLink", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("renders with a resource, container, and action", () => {
+  it("renders with a resource, container, and action", () => {
     const resourceIri = "https://mypod.myhost.com/resource";
     const containerIri = "https://mypod.myhost.com";
     const action = "myAction";

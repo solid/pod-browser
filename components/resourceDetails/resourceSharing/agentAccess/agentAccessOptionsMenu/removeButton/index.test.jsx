@@ -52,7 +52,7 @@ const profile = {
 const permission = { webId, alias: "editors" };
 
 describe("AgentAccessOptionsMenu", () => {
-  test("it renders a button which triggers the opening of the menu", () => {
+  it("renders a button which triggers the opening of the menu", () => {
     const { asFragment, getByTestId } = renderWithTheme(
       <RemoveButton
         resourceIri={resourceIri}
@@ -66,7 +66,8 @@ describe("AgentAccessOptionsMenu", () => {
     const button = getByTestId("remove-button");
     expect(button).toBeDefined();
   });
-  test("clicking on delete button renders a confirmation dialog with the correct title and message", async () => {
+
+  it("renders a confirmation dialog with the correct title and message when clicking on delete button ", async () => {
     const { getByTestId, findByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <RemoveButton
@@ -86,7 +87,8 @@ describe("AgentAccessOptionsMenu", () => {
       getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE)
     ).toHaveTextContent(`Remove ${name}'s access from iri`);
   });
-  test("if no profile is available, confirmation dialog title is agent's webId", async () => {
+
+  it("renders confirmation dialog title is agent's webId if no profile is available, ", async () => {
     const { getByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <RemoveButton
@@ -104,7 +106,8 @@ describe("AgentAccessOptionsMenu", () => {
       getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE)
     ).toHaveTextContent(`Remove ${webId}'s access from iri`);
   });
-  test("if dialog is confirmed, it removes agent from permissions", async () => {
+
+  it("removes agent from permissions if dialog is confirmed", async () => {
     const accessControl = mockAccessControl();
     const { getByTestId } = renderWithTheme(
       <AccessControlContext.Provider value={{ accessControl }}>
@@ -130,7 +133,8 @@ describe("AgentAccessOptionsMenu", () => {
       )
     );
   });
-  test("if agent is public agent or authenticated agent, it does not render a dialog and removes it from permissions", async () => {
+
+  it("does not render a dialog and removes it from permissions if agent is public agent or authenticated agent", async () => {
     const accessControl = mockAccessControl();
     const { getByTestId } = renderWithTheme(
       <AccessControlContext.Provider value={{ accessControl }}>
@@ -178,7 +182,7 @@ describe("handleRemovePermissions", () => {
     accessControl.removeAgentFromPolicy.mockResolvedValue({ response: acr });
   });
 
-  test("it returns a handler that removes the agent", async () => {
+  it("returns a handler that removes the agent", async () => {
     handler(webId, policyName);
 
     expect(setLoading).toHaveBeenCalledWith(true);

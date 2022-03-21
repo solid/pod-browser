@@ -25,7 +25,7 @@ import useEscKey, { ESC_KEYCODE, handleEscKeydown } from "./index";
 jest.mock("react");
 
 describe("handleEscKeydown", () => {
-  test("it returns a function that calls the callback when esc is pressed", () => {
+  it("returns a function that calls the callback when esc is pressed", () => {
     const callback = jest.fn();
     const handler = handleEscKeydown(callback);
     const evnt = { keyCode: ESC_KEYCODE };
@@ -34,7 +34,7 @@ describe("handleEscKeydown", () => {
     expect(callback).toHaveBeenCalledWith(evnt);
   });
 
-  test("it causes no operation when other keys are pressed", () => {
+  it("causes no operation when other keys are pressed", () => {
     const callback = jest.fn();
     const handler = handleEscKeydown(callback);
     const evnt = { keyCode: 13 };
@@ -43,7 +43,7 @@ describe("handleEscKeydown", () => {
     expect(callback).not.toHaveBeenCalledWith(evnt);
   });
 
-  test("it causes no operation when no keyCode is present", () => {
+  it("causes no operation when no keyCode is present", () => {
     const callback = jest.fn();
     const handler = handleEscKeydown(callback);
     const evnt = {};
@@ -54,7 +54,7 @@ describe("handleEscKeydown", () => {
 });
 
 describe("useEscKey", () => {
-  test("it registers the event to trigger the esc handler", () => {
+  it("registers the event to trigger the esc handler", () => {
     jest
       .spyOn(ReactFns, "useEffect")
       .mockImplementationOnce((callback) => callback());

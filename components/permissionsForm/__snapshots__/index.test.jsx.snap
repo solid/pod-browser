@@ -228,7 +228,7 @@ exports[`PermissionsForm Renders a permissions form 1`] = `
 </DocumentFragment>
 `;
 
-exports[`PermissionsForm arrowIcon it returns the down arrow when open is false 1`] = `
+exports[`PermissionsForm arrowIcon returns the down arrow when open is false 1`] = `
 <DocumentFragment>
   <svg
     aria-hidden="true"
@@ -243,7 +243,7 @@ exports[`PermissionsForm arrowIcon it returns the down arrow when open is false 
 </DocumentFragment>
 `;
 
-exports[`PermissionsForm arrowIcon it returns the up arrow when open is true 1`] = `
+exports[`PermissionsForm arrowIcon returns the up arrow when open is true 1`] = `
 <DocumentFragment>
   <svg
     aria-hidden="true"
@@ -258,7 +258,7 @@ exports[`PermissionsForm arrowIcon it returns the up arrow when open is true 1`]
 </DocumentFragment>
 `;
 
-exports[`PermissionsForm it returns null if control is false 1`] = `
+exports[`PermissionsForm returns null if control is false 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-container"

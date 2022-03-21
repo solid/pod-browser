@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Tab Panel it renders permissions panel 1`] = `
+exports[`Tab Panel renders permissions panel 1`] = `
 <DocumentFragment>
   <div
     aria-labelledby="simple-tab-Permissions"
@@ -14,7 +14,7 @@ exports[`Tab Panel it renders permissions panel 1`] = `
 </DocumentFragment>
 `;
 
-exports[`Tab Panel it renders profile panel 1`] = `
+exports[`Tab Panel renders profile panel 1`] = `
 <DocumentFragment>
   <div
     aria-labelledby="simple-tab-Profile"

@@ -56,7 +56,7 @@ describe("Delete contact button confirmation dialog", () => {
   const onDelete = () => {};
   const profileIri = "https://example.com/profile#alice";
 
-  test("the delete confirmation shows webId if no name is available", async () => {
+  it("tests if the delete confirmation shows webId if no name is available", async () => {
     const selectedContactName = null;
     const { findByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
@@ -84,7 +84,7 @@ describe("Delete contact button confirmation dialog", () => {
     });
   });
 
-  test("it shows name if name is available", async () => {
+  it("shows name if name is available", async () => {
     const selectedContactName = "Alice";
     const { findByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>

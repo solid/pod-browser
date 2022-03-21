@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AgentSearchForm it has a default heading 1`] = `
+exports[`AgentSearchForm has a default heading 1`] = `
 <DocumentFragment>
   <form
     class="PodBrowser-form"
@@ -33,7 +33,7 @@ exports[`AgentSearchForm it has a default heading 1`] = `
 </DocumentFragment>
 `;
 
-exports[`AgentSearchForm it renders an AgentSearchForm 1`] = `
+exports[`AgentSearchForm renders an AgentSearchForm 1`] = `
 <DocumentFragment>
   <form
     class="PodBrowser-form"

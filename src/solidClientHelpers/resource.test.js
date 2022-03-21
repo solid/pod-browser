@@ -64,7 +64,7 @@ describe("getBaseUrl", () => {
 });
 
 describe("getResource", () => {
-  test("it returns a dataset and an iri", async () => {
+  it("returns a dataset and an iri", async () => {
     const dataset = createContainer();
     jest
       .spyOn(SolidClientFns, "getSolidDataset")
@@ -76,7 +76,7 @@ describe("getResource", () => {
     expect(response.dataset).toEqual(dataset);
   });
 
-  test("it returns an error message when it throws an error", async () => {
+  it("returns an error message when it throws an error", async () => {
     jest.spyOn(SolidClientFns, "getSolidDataset").mockImplementationOnce(() => {
       throw new Error("boom");
     });
@@ -88,7 +88,7 @@ describe("getResource", () => {
 });
 
 describe("getProfileResource", () => {
-  test("it returns a dataset and an iri", async () => {
+  it("returns a dataset and an iri", async () => {
     const profile = createContainer();
     jest
       .spyOn(SolidClientFns, "getSolidDataset")
@@ -100,7 +100,7 @@ describe("getProfileResource", () => {
     expect(dataset).toEqual(profile);
   });
 
-  test("it returns an error message and iri for the requested profile when it throws an error", async () => {
+  it("returns an error message and iri for the requested profile when it throws an error", async () => {
     jest.spyOn(SolidClientFns, "getSolidDataset").mockImplementationOnce(() => {
       throw new Error("boom");
     });
@@ -113,18 +113,18 @@ describe("getProfileResource", () => {
 });
 
 describe("getResourceName", () => {
-  test("it returns the resource name string when given a resource pathname", () => {
+  it("returns the resource name string when given a resource pathname", () => {
     const resourceName = getResourceName("/public/games/tictactoe/data.ttl");
 
     expect(resourceName).toEqual("data.ttl");
   });
-  test("it returns the resource name string when given a container pathname", () => {
+  it("returns the resource name string when given a container pathname", () => {
     const resourceName = getResourceName("/public/games/tictactoe/");
 
     expect(resourceName).toEqual("tictactoe");
   });
 
-  test("it returns the decoded resource name when spaces and special characters have been URI encoded", () => {
+  it("returns the decoded resource name when spaces and special characters have been URI encoded", () => {
     const resourceName = getResourceName(
       "public/notes/Hello%20World%3AHello%40World%3BHello.txt"
     );
@@ -281,7 +281,7 @@ describe("saveResource", () => {
     expect(response).toEqual("resource");
   });
 
-  test("it returns an error response if the save fails", async () => {
+  it("returns an error response if the save fails", async () => {
     mockedSaveResource.mockImplementation(() => {
       throw new Error("boom");
     });
@@ -329,7 +329,7 @@ describe("deleteResource", () => {
   const policiesContainerUrl = "https://example.og/pb_policies/";
   const resourceInfo = mockSolidDatasetFrom(resourceIri);
 
-  test("it won't try to delete policy if no policy container is given", async () => {
+  it("won't try to delete policy if no policy container is given", async () => {
     await deleteResource(resourceInfo, null, fetch);
 
     expect(mockDeleteFile).toHaveBeenCalledWith(resourceIri, {
@@ -337,7 +337,7 @@ describe("deleteResource", () => {
     });
   });
 
-  test("it deletes the given resource only when no policy is found", async () => {
+  it("deletes the given resource only when no policy is found", async () => {
     getPolicyUrl.mockReturnValue(null);
 
     await deleteResource(resourceInfo, policiesContainerUrl, fetch);
@@ -348,7 +348,7 @@ describe("deleteResource", () => {
     expect(mockDeleteFile).not.toHaveBeenCalledWith(null);
   });
 
-  test("it deletes the given resource and corresponding access policy if available", async () => {
+  it("deletes the given resource and corresponding access policy if available", async () => {
     getPolicyUrl.mockReturnValue("https://example.org/examplePolicyUrl");
 
     await deleteResource(resourceInfo, policiesContainerUrl, fetch);

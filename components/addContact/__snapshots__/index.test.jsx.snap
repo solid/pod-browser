@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AddContact it renders the Add Contact form 1`] = `
+exports[`AddContact renders the Add Contact form 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-container"
