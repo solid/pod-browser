@@ -19,8 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable react/forbid-prop-types */
-
 import React from "react";
 
 export const ViewersDescription = () => (
