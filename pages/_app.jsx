@@ -43,6 +43,8 @@ import {
   ThemeProvider,
 } from "@inrupt/prism-react-components";
 
+import { filterSentryEvent } from "../src/sentryFilter";
+
 import theme from "../src/theme";
 import { AlertProvider } from "../src/contexts/alertContext";
 import { ConfirmationDialogProvider } from "../src/contexts/confirmationDialogContext";
@@ -59,6 +61,7 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
     enabled: process.env.NODE_ENV === "production",
     dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
     tracesSampleRate: process.env.NEXT_PUBLIC_SENTRY_SAMPLE_RATE || 0.1,
+    beforeSend: filterSentryEvent,
   });
 }
 
