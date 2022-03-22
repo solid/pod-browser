@@ -149,38 +149,24 @@ const mapAgentsToSharingType = (agents) => {
   return output;
 };
 
-export async function getPermissions(resourceIri, fetch) {
-  // const { getAgentAccessAll: getAgentAccessAllAccess } = access;
-
-  const { getAgentAccess, getAgentAccessAll } = universalAccess;
-  const agents = await getAgentAccessAll(resourceIri, {
-    fetch,
-  });
-
-  // update this when getAgentAccessAll is working in universalAccess
-  // const agents = await Promise.all(
-  //   Object.keys(allAgentsWithAccess).map((agent) =>
-  //     getAgentAccess(resourceIri, agent, { fetch }).then((acl) => {
-  //       return { agent, ...acl };
-  //     })
-  //   )
-  // );
-
-  const agentsWithSharingType = findSharingTypeForAgents(agents);
-
-  const sharingTypeWithAssociatedAgents = mapAgentsToSharingType(
-    agentsWithSharingType
-  );
-
-  return sharingTypeWithAssociatedAgents;
-}
-
 export default function useAllPermissions() {
   const { solidDataset: dataset } = useContext(DatasetContext);
   const { session } = useSession();
   const resourceIri = getSourceUrl(dataset);
   const [permissions, setPermissions] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  async function getPermissions(resourceIri, fetch) {
+    const { getAgentAccessAll } = universalAccess;
+    const agents = await getAgentAccessAll(resourceIri, {
+      fetch,
+    });
+    const agentsWithSharingType = findSharingTypeForAgents(agents);
+    const sharingTypeWithAssociatedAgents = mapAgentsToSharingType(
+      agentsWithSharingType
+    );
+    return sharingTypeWithAssociatedAgents;
+  }
 
   useEffect(() => {
     setLoading(true);
@@ -194,7 +180,7 @@ export default function useAllPermissions() {
     }
     fetchPermissions();
     setLoading(false);
-  }, [resourceIri, session.fetch]);
+  }, [permissions, resourceIri, session.fetch]);
 
   async function setAgentPermissions(resourceIri, agent, access, fetch) {
     console.log("permissions before func gets called", permissions);
@@ -206,8 +192,6 @@ export default function useAllPermissions() {
         { fetch }
       );
       console.log("after set func", { res, resourceIri, agent, access });
-
-      // fetch new data after this.
       const newPermissions = await getPermissions(resourceIri, fetch);
       console.log("updated permissions?", newPermissions);
       setPermissions(newPermissions);
@@ -232,5 +216,6 @@ export default function useAllPermissions() {
     loading,
     setAgentPermissions,
     setPublicPermissions,
+    getPermissions,
   };
 }
