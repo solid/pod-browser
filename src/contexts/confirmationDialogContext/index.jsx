@@ -43,29 +43,6 @@ export const defaultConfirmationDialogContext = {
   isDangerousAction: false,
 };
 
-export const proposal = {
-  // title: "Confirmation",
-  // cancelText: "Cancel",
-  // confirmText: "Confirm",
-  // open: false,
-  // onCancel:()=>{},
-  // onConfirm:()=>{},
-  // content?: null,
-  // omitCancelButton?: false,
-  // customContentWrapper?: false,
-  // isDangerousAction?: false,
-  // confirmed: false,
-  // setCustomContentWrapper: () => {},
-  // setConfirmed: () => {},
-  // setContent: () => {},
-  // setOpen: () => {},
-  // setTitle: () => {},
-  // setCancelText: () => {},
-  // setConfirmText: () => {},
-  // closeDialog: () => {},
-  // setIsDangerousAction: () => {},
-};
-
 const ConfirmationDialogContext = createContext(
   defaultConfirmationDialogContext
 );
