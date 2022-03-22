@@ -110,7 +110,7 @@ export default function AddPermissionUsingWebIdButton({
   const { accessControl } = useContext(AccessControlContext);
   const [agentId, setAgentId] = useState("");
   const [dirtyForm, setDirtyForm] = useState(false);
-  const { permissions } = usePermissions(accessControl);
+  const { permissions } = usePermissions(accessControl); // can we remove this hook and use useAllPermissions
 
   const handleChange = changeHandler(setAgentId);
 

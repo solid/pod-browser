@@ -269,11 +269,11 @@ function AgentPickerModal(
   const [globalFilter, setGlobalFilter] = useState("");
   const [confirmationSetup, setConfirmationSetup] = useState(false);
   const {
-    openConfirmationDialog,
+    open: openConfirmationDialog,
     confirmed,
     setConfirmed,
     setContent,
-    setOpenConfirmationDialog,
+    setOpen: setOpenConfirmationDialog,
     setTitle,
     closeDialog,
   } = useContext(ConfirmationDialogContext);

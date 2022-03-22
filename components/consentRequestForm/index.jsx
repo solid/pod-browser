@@ -87,9 +87,9 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
 
   const {
     confirmed,
-    openConfirmationDialog,
+    open,
     setContent,
-    setOpenConfirmationDialog,
+    setOpen,
     setTitle,
     closeDialog,
     setConfirmText,
@@ -130,7 +130,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
     /* istanbul ignore next */
     if (!selectedPurposes.length) {
       setConfirmationSetup(true);
-      setOpenConfirmationDialog(CONSENT_REQUEST_NO_ACCESS_DIALOG);
+      setOpen(CONSENT_REQUEST_NO_ACCESS_DIALOG);
       setTitle(NO_PURPOSE_TITLE);
       setConfirmText("Ok");
       setOmitCancelButton(true);
@@ -138,7 +138,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
     } else if (!selectedAccess.length) {
       setConfirmationSetup(true);
       setOmitCancelButton(false);
-      setOpenConfirmationDialog(CONSENT_REQUEST_NO_ACCESS_DIALOG);
+      setOpen(CONSENT_REQUEST_NO_ACCESS_DIALOG);
       setTitle(NO_ACCESS_DIALOG_TITLE);
       setConfirmText(CONFIRM_TEXT);
       setContent(DIALOG_CONTENT);
@@ -151,7 +151,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
     setTitle(DENY_ACCESS_DIALOG_TITLE);
     setConfirmText(DENY_TEXT);
     setContent(DIALOG_CONTENT);
-    setOpenConfirmationDialog(CONSENT_REQUEST_NO_ACCESS_DIALOG);
+    setOpen(CONSENT_REQUEST_NO_ACCESS_DIALOG);
   };
 
   useEffect(() => {
@@ -167,14 +167,14 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
     if (
       confirmationSetup &&
       confirmed === null &&
-      openConfirmationDialog === CONSENT_REQUEST_NO_ACCESS_DIALOG
+      open === CONSENT_REQUEST_NO_ACCESS_DIALOG
     )
       return;
 
     if (
       confirmationSetup &&
       confirmed &&
-      openConfirmationDialog === CONSENT_REQUEST_NO_ACCESS_DIALOG
+      open === CONSENT_REQUEST_NO_ACCESS_DIALOG
     ) {
       handleDenyAccessRequest();
       closeDialog();
@@ -188,7 +188,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
     confirmationSetup,
     confirmed,
     closeDialog,
-    openConfirmationDialog,
+    open,
     consentRequest,
     selectedAccess,
     selectedPurposes,

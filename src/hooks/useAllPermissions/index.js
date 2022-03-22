@@ -20,7 +20,7 @@
  */
 
 import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
-import { getSourceUrl, universalAccess, access } from "@inrupt/solid-client";
+import { getSourceUrl, universalAccess } from "@inrupt/solid-client";
 
 import { useState, useEffect, useContext, useMemo } from "react";
 import { getPolicyDetailFromAccess } from "../../accessControl/acp";
@@ -114,49 +114,123 @@ import { fetchProfile } from "../../solidClientHelpers/profile";
 //   members: WebId[]           // each agent that has edit permission on the resource
 // }
 
-export async function getPermissions(resourceIri, fetch) /* Group[] */ {
-  const { getAgentAccessAll } = access;
-  const { getAgentAccess } = universalAccess;
+const findSharingTypeForAgents = (agents) => {
+  const outputArray = [];
+  Object.keys(agents).forEach((key) => {
+    const tempObj = {};
+    tempObj.webId = key;
+    tempObj.permissions = agents[key];
+    const access = {
+      read: tempObj.permissions.read,
+      append: tempObj.permissions.append,
+      write: tempObj.permissions.write,
+    };
+    const alias = getPolicyDetailFromAccess(access, "name");
+    tempObj.alias = alias;
+    outputArray.push(tempObj);
+  });
+  return outputArray;
+};
 
-  const allAgentsWithAccess = await getAgentAccessAll(resourceIri, { fetch });
+const mapAgentsToSharingType = (agents) => {
+  const sharingTypeHash = {};
+  const output = [];
+  agents.forEach((agent) => {
+    const { alias } = agent;
+    if (sharingTypeHash[alias]) {
+      sharingTypeHash[alias].push(agent);
+    } else {
+      sharingTypeHash[alias] = [agent];
+    }
+  });
+  Object.keys(sharingTypeHash).forEach((key) => {
+    output.push({ type: key, data: sharingTypeHash[key] });
+  });
+  return output;
+};
 
-  const agents = await Promise.all(
-    Object.keys(allAgentsWithAccess).map((agent) =>
-      getAgentAccess(resourceIri, agent, { fetch }).then((acl) => {
-        return { agent, ...acl };
-      })
-    )
+export async function getPermissions(resourceIri, fetch) {
+  // const { getAgentAccessAll: getAgentAccessAllAccess } = access;
+
+  const { getAgentAccess, getAgentAccessAll } = universalAccess;
+  const agents = await getAgentAccessAll(resourceIri, {
+    fetch,
+  });
+
+  // update this when getAgentAccessAll is working in universalAccess
+  // const agents = await Promise.all(
+  //   Object.keys(allAgentsWithAccess).map((agent) =>
+  //     getAgentAccess(resourceIri, agent, { fetch }).then((acl) => {
+  //       return { agent, ...acl };
+  //     })
+  //   )
+  // );
+
+  const agentsWithSharingType = findSharingTypeForAgents(agents);
+
+  const sharingTypeWithAssociatedAgents = mapAgentsToSharingType(
+    agentsWithSharingType
   );
 
-  console.log({ allAgentsWithAccess });
-  console.log({ agents });
-
-  return agents;
+  return sharingTypeWithAssociatedAgents;
 }
 
-export default async function useAllPermissions() {
-  // run
+export default function useAllPermissions() {
   const { solidDataset: dataset } = useContext(DatasetContext);
   const { session } = useSession();
   const resourceIri = getSourceUrl(dataset);
-
-  //   const agentAll = await getAgentAccessAll(datasetUrl);
-  //   const groupAll = await getGroupAccessAll(datasetUrl);
-
-  const [permissions, setPermissions] = useState(null);
+  const [permissions, setPermissions] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getPermissions(resourceIri, session.fetch)
-      .then((agentsWithAccess) => {
-        setPermissions(agentsWithAccess);
-      })
-      .catch((err) => {
-        // FIXME: handle this?
-        console.error(err);
-      });
+    setLoading(true);
+    async function fetchPermissions() {
+      const newPermissions = await getPermissions(resourceIri, session.fetch);
+      setPermissions(newPermissions);
+      console.log(
+        "permissions in useEffect hook in useAllPermissionsHook",
+        permissions
+      );
+    }
+    fetchPermissions();
+    setLoading(false);
   }, [resourceIri, session.fetch]);
+
+  async function setAgentPermissions(resourceIri, agent, access, fetch) {
+    console.log("permissions before func gets called", permissions);
+    try {
+      const res = await universalAccess.setAgentAccess(
+        resourceIri,
+        agent,
+        access,
+        { fetch }
+      );
+      console.log("after set func", { res, resourceIri, agent, access });
+
+      // fetch new data after this.
+      const newPermissions = await getPermissions(resourceIri, fetch);
+      console.log("updated permissions?", newPermissions);
+      setPermissions(newPermissions);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async function setPublicPermissions(resourceIri, access, fetch) {
+    try {
+      universalAccess.setPublicAccess(resourceIri, access);
+      // fetch new data after this.
+      const newPermissions = await getPermissions(resourceIri, fetch);
+      // setPermissions(newPermissions);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return {
     permissions,
+    loading,
+    setAgentPermissions,
+    setPublicPermissions,
   };
 }

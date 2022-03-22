@@ -85,14 +85,8 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
     : "this resource";
   const policyTitle = POLICIES_TYPE_MAP[type]?.title;
 
-  const {
-    openConfirmationDialog,
-    confirmed,
-    setContent,
-    setOpenConfirmationDialog,
-    setTitle,
-    closeDialog,
-  } = useContext(ConfirmationDialogContext);
+  const { open, confirmed, setContent, setOpen, setTitle, closeDialog } =
+    useContext(ConfirmationDialogContext);
   const { mutate: mutateResourceInfo } = useContext(ResourceInfoContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
 
@@ -102,7 +96,7 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
     const confirmationContent = `Everyone will be removed from the ${policyTitle} list.`;
     setTitle(confirmationTitle);
     setContent(confirmationContent);
-    setOpenConfirmationDialog(dialogId);
+    setOpen(dialogId);
   };
 
   const webIds = permissions
@@ -119,7 +113,7 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
 
   useEffect(() => {
     setConfirmationSetup(true);
-    if (openConfirmationDialog !== dialogId) return;
+    if (open !== dialogId) return;
     if (confirmationSetup && confirmed === null) return;
     if (confirmationSetup && confirmed) {
       removeAllAgents(webIds);
@@ -130,7 +124,7 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
       setConfirmationSetup(false);
     }
   }, [
-    openConfirmationDialog,
+    open,
     dialogId,
     setConfirmationSetup,
     confirmationSetup,

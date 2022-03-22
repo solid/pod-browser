@@ -137,14 +137,8 @@ export default function AddFileButton({ className, onSave, resourceList }) {
   const { currentUri } = useContext(PodLocationContext);
   const [isUploading, setIsUploading] = useState(false);
   const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
-  const {
-    confirmed,
-    openConfirmationDialog,
-    setContent,
-    setOpenConfirmationDialog,
-    setTitle,
-    closeDialog,
-  } = useContext(ConfirmationDialogContext);
+  const { confirmed, open, setContent, setOpen, setTitle, closeDialog } =
+    useContext(ConfirmationDialogContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
   const [file, setFile] = useState(null);
   const ref = useRef(null);
@@ -160,7 +154,7 @@ export default function AddFileButton({ className, onSave, resourceList }) {
   });
 
   const saveUploadedFile = handleUploadedFile({
-    setOpenConfirmationDialog,
+    setOpen,
     setTitle,
     setContent,
     setConfirmationSetup,
@@ -182,18 +176,10 @@ export default function AddFileButton({ className, onSave, resourceList }) {
   });
 
   useEffect(() => {
-    if (
-      confirmationSetup &&
-      confirmed === null &&
-      openConfirmationDialog === DUPLICATE_DIALOG_ID
-    )
+    if (confirmationSetup && confirmed === null && open === DUPLICATE_DIALOG_ID)
       return;
 
-    if (
-      confirmationSetup &&
-      confirmed &&
-      openConfirmationDialog === DUPLICATE_DIALOG_ID
-    ) {
+    if (confirmationSetup && confirmed && open === DUPLICATE_DIALOG_ID) {
       saveResource(file);
     }
 
@@ -201,14 +187,7 @@ export default function AddFileButton({ className, onSave, resourceList }) {
       closeDialog();
       setConfirmationSetup(false);
     }
-  }, [
-    confirmationSetup,
-    confirmed,
-    saveResource,
-    closeDialog,
-    file,
-    openConfirmationDialog,
-  ]);
+  }, [confirmationSetup, confirmed, saveResource, closeDialog, file, open]);
 
   return (
     <>

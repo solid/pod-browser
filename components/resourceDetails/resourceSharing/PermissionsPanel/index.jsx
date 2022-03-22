@@ -30,7 +30,7 @@ import React, {
   useState,
 } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
-import PropTypes from "prop-types";
+import { PropTypes } from "prop-types";
 import {
   Card,
   Avatar,
@@ -44,6 +44,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { Button } from "@inrupt/prism-react-components";
+import { useSession } from "@inrupt/solid-ui-react";
 import PolicyHeader from "../policyHeader";
 import AddAgentButton from "../addAgentButton";
 import { isCustomPolicy } from "../../../../src/models/policy";
@@ -69,6 +70,7 @@ import { getResourceName } from "../../../../src/solidClientHelpers/resource";
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
 import ResourceInfoContext from "../../../../src/contexts/resourceInfoContext";
 import AlertContext from "../../../../src/contexts/alertContext";
+import useAllPermissions from "../../../../src/hooks/useAllPermissions";
 
 export const TESTCAFE_ID_VIEW_DETAILS_BUTTON = "view-details-button";
 export const TESTCAFE_ID_REMOVE_BUTTON = "remove-button";
@@ -85,6 +87,7 @@ function AgentPermissionsList({ permissions, resourceIri }) {
   const classes = useStyles();
   // need to add where if it's more than three you get cut off and there's a link from AgentAccessTable
   let id = 0;
+  console.log("agentPermissionsList", { permissions });
   return (
     <ul className={classes.agentPermissionsList}>
       {permissions.map((p) => {
@@ -92,8 +95,10 @@ function AgentPermissionsList({ permissions, resourceIri }) {
         return (
           <AgentPermissionItem
             key={id}
-            permission={p}
+            webId={p.webId}
+            agentPermissionInfo={p.permissions}
             resourceIri={resourceIri}
+            permissionType={p.alias}
           />
         );
       })}
@@ -106,58 +111,82 @@ AgentPermissionsList.propTypes = {
   resourceIri: PropTypes.string.isRequired,
 };
 
-function AgentPermissionItem({ permission, resourceIri }) {
+function AgentPermissionItem({
+  webId,
+  resourceIri,
+  permissionType,
+  agentPermissionInfo,
+}) {
   const classes = useStyles();
-  const { webId, inherited, vc, alias } = permission;
+  // const { agent: webId } = agentInfo; // we no longer grab inherited. Is that a problem?
+  const viewer = permissionType === "viewer"; // maybe unnecessary
   const resourceName = getResourceName(resourceIri);
   const [openModal, setOpenModal] = useState(false);
   const [popoverAnchorEl, setPopoverAnchorEl] = useState(null);
   const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
+  const { session } = useSession();
 
   const handleClosePopoverAndModal = () => {
     setPopoverAnchorEl(null);
     setOpenModal(false);
   };
-
+  console.log({ webId, resourceIri, permissionType, agentPermissionInfo });
   let name = "";
   let anotherNameThatNeedsToBeUpdated = "";
-  let publicAKB = false;
+  let publicResource = false;
   if (webId === PUBLIC_AGENT_PREDICATE) {
     // ask kyra why
     name = PUBLIC_AGENT_NAME;
     anotherNameThatNeedsToBeUpdated = "Anyone";
-    publicAKB = true;
+    publicResource = true;
   }
   if (webId === AUTHENTICATED_AGENT_PREDICATE) {
     name = AUTHENTICATED_AGENT_NAME;
     anotherNameThatNeedsToBeUpdated = "Anyone signed in";
-    publicAKB = true;
+    publicResource = true;
   }
+  const { setAgentPermissions, setPublicPermissions } = useAllPermissions();
 
   const handleOpenPopover = (event) => setPopoverAnchorEl(event.currentTarget);
-  const { mutate: mutateResourceInfo } = useContext(ResourceInfoContext);
 
-  const removePermissions = useCallback(async (agentWebId, permissionType) => {
+  const removePermissions = (agentWebId) => {
+    const removePermissionsAccessObject = {
+      append: false,
+      controlRead: false,
+      controlWrite: false,
+      read: false,
+      write: false,
+    };
+
     if (PUBLIC_AGENT_PREDICATE === agentWebId) {
-      // accessControl.setRulePublic(permissionType, false);
+      // confirm this is what we want to be doing
+      console.log("in public resource", agentWebId);
+      setPublicPermissions(
+        resourceIri,
+        removePermissionsAccessObject,
+        session.fetch
+      );
+      return;
     }
     if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {
       // accessControl.setRuleAuthenticated(permissionType, false);
+      return;
     }
-    // can we pull what's in acp directly here and then do try catch here or in hook- move it to a hook
-    // const { response: updatedAcr } =
-    // await accessControl.removeAgentFromPolicy(agentWebId, permissionType);
+    console.log("in non-public resource", agentWebId);
 
-    // error handling happening two ways - look at     const { respond, error } = createResponder(); thing and try catch
-    // await mutateResourceInfo(updatedAcr, false);
-    // setLocalAccess(null); // what is local access?
-  }, []);
+    setAgentPermissions(
+      resourceIri,
+      agentWebId,
+      removePermissionsAccessObject,
+      session.fetch
+    );
+  };
 
   const {
     confirmed,
-    openConfirmationDialog,
+    open,
     setConfirmed,
-    setOpenConfirmationDialog,
+    setOpen,
     title,
     setTitle,
     setConfirmText,
@@ -165,31 +194,24 @@ function AgentPermissionItem({ permission, resourceIri }) {
   } = useContext(ConfirmationDialogContext);
 
   useEffect(() => {
-    console.log("does this re-render");
-    // this use effect looks at confirmation dialog and removes agent if user clicked yes
-    if (openConfirmationDialog !== CONFIRMATION_DIALOG_ID) return; // because confirmation dialog context is app wide we need to confirm we are dealing with the correct dialog
-
-    // if (confirmationSetup && confirmed === null) return; // what does confirmation setup do?
+    // this gets called twice when it should only happen once upon confirm diloag click
+    if (open !== CONFIRMATION_DIALOG_ID) return;
     if (confirmed) {
-      removePermissions(webId, permission.alias);
+      removePermissions(webId);
       closeDialog();
       handleClosePopoverAndModal();
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [confirmed]);
 
   const handleOpenConfirmationDialog = () => {
-    setConfirmText("Remove");
-    if (publicAKB) {
-      // what is this actually saying? that we can base the bool off of it. why doesn't it need conf dialog?
-      // setBypassDialog(true);
+    if (publicResource) {
       setConfirmed(true);
       removePermissions();
     }
-    const text = `Remove ${webId}'s access from ${resourceName}`;
-    setTitle(text);
-    setOpenConfirmationDialog("remove-agent");
+    setConfirmText("Remove");
+    setTitle(`Remove ${webId}'s access from ${resourceName}`);
+    setOpen("remove-agent");
   };
 
   return (
@@ -203,28 +225,30 @@ function AgentPermissionItem({ permission, resourceIri }) {
       <Typography noWrap title={name || webId}>
         {name || webId}
       </Typography>
-      {!inherited && (
-        <>
-          <Button onClick={handleOpenPopover} variant="in-menu">
-            <MoreVertIcon />
-          </Button>
-          <PermissionsPopoverMenu
-            name={name}
-            permission={permission}
-            popoverAnchorEl={popoverAnchorEl}
-            handleClosePopoverAndModal={handleClosePopoverAndModal}
-            handleOpenConfirmationDialog={handleOpenConfirmationDialog}
-            setOpenModal={setOpenModal}
-            resourceIri={resourceIri}
-          />
-        </>
-      )}
-      {/* <AgentProfileDetails />  REFACTOR REMOVE THIS LINE */}
-      {vc && ( // confirm that this could also be type=viewer which I think would make more sense
+      {/* {!inherited && ( */}
+      <>
+        <Button onClick={handleOpenPopover} variant="in-menu">
+          <MoreVertIcon />
+        </Button>
+        <PermissionsPopoverMenu
+          name={name}
+          webId={webId}
+          viewer={viewer}
+          popoverAnchorEl={popoverAnchorEl}
+          handleClosePopoverAndModal={handleClosePopoverAndModal}
+          handleOpenConfirmationDialog={handleOpenConfirmationDialog}
+          setOpenModal={setOpenModal}
+          resourceIri={resourceIri}
+        />
+      </>
+      {/* )} */}
+      {/* <AgentProfileDetails />  TODO: REFACTOR REMOVE THIS LINE */}
+      {viewer && (
         <ConsentDetailsModal
           openModal={openModal}
           resourceIri={resourceIri}
-          permission={permission}
+          agentPermissionInfo={agentPermissionInfo}
+          vc={viewer}
           handleCloseModal={handleClosePopoverAndModal}
           setOpenModal={setOpenModal}
         />
@@ -235,20 +259,20 @@ function AgentPermissionItem({ permission, resourceIri }) {
 
 AgentPermissionItem.propTypes = {
   // eslint-disable-next-line
-  permission: PropTypes.object.isRequired,
   resourceIri: PropTypes.string.isRequired,
+  webId: PropTypes.string.isRequired,
+  permissionType: PropTypes.string.isRequired,
 };
 
 function PermissionsPopoverMenu({
-  name,
   setOpenModal,
   popoverAnchorEl,
   handleClosePopoverAndModal,
-  permission,
   handleOpenConfirmationDialog,
   resourceIri,
+  viewer,
+  webId,
 }) {
-  const { vc, type, webId, inherited } = permission;
   const classes = useStyles();
   const popoverOpen = Boolean(popoverAnchorEl);
   const id = popoverOpen ? "agent-access-options-menu" : undefined;
@@ -283,7 +307,7 @@ function PermissionsPopoverMenu({
             <p className={classes.webId}>{webId}</p>
           </ListItemText>
         </ListItem>
-        {vc ? (
+        {viewer ? (
           <>
             <ListItem
               data-testid={TESTCAFE_ID_VIEW_DETAILS_BUTTON}
@@ -336,6 +360,7 @@ PermissionsPopoverMenu.propTypes = {
 };
 
 function renderCardBody(permissions, resourceIri) {
+  console.log("cardBody", { permissions });
   if (!permissions.length) return <Skeleton />;
 
   return (
@@ -368,9 +393,10 @@ export default function PermissionsPanel({
 }) {
   const classes = useStyles();
   const editButtonText = permissionType === "editors" ? "Editors" : "Viewers";
+  const { loading } = useAllPermissions();
 
-  if (!permissions.length) return <AgentPermissionListSkeleton />; // should be a loading var instead of []
-  console.log("permissions panel render", permissionType);
+  if (loading) return <AgentPermissionListSkeleton />;
+  console.log("permissions panel render", permissionType, permissions);
   return (
     <>
       <Card className={classes.card}>

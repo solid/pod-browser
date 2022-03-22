@@ -76,16 +76,17 @@ export function setupErrorComponent(bem) {
 }
 export default function ConsentDetailsModal({
   resourceIri,
-  permission,
+  vc,
+  webId,
+  agentPermissionInfo,
   handleCloseModal,
   openModal,
 }) {
   const classes = useStyles();
   const bem = useBem(classes);
-  const { vc, webId: agentWebId } = permission;
+  // const { vc, webId: agentWebId } = permission;
   const errorComponent = setupErrorComponent(bem);
-
-  const allowModes = vc?.credentialSubject?.providedConsent?.mode;
+  const allowModes = vc?.credentialSubject?.providedConsent?.mode; // this will always be false in current implementation
   const modes = allowModes?.map((mode) => ({
     read: !!mode.includes("Read"),
     write: !!mode.includes("Write"),
@@ -94,9 +95,9 @@ export default function ConsentDetailsModal({
   }));
   const resourceName = getResourceName(resourceIri);
   const accessDetails = modes?.map((mode) => getAcpAccessDetails(mode));
-  const order = ["View", "Edit", "Add", "Share", "View Sharing"];
+  const viewOrder = ["View", "Edit", "Add", "Share", "View Sharing"];
   const sortedAccessDetails = accessDetails?.sort(
-    (a, b) => order.indexOf(a.name) - order.indexOf(b.name)
+    (a, b) => viewOrder.indexOf(a.name) - viewOrder.indexOf(b.name)
   );
   const expirationDate = getExpiryDate(vc)
     ? format(new Date(getExpiryDate(vc)), "MMMM' 'd', 'Y")
@@ -128,10 +129,7 @@ export default function ConsentDetailsModal({
         <ModalBody className={bem("access-details", "wrapper")}>
           <Grid container>
             <Grid className={bem("access-details", "title")} container>
-              <CombinedDataProvider
-                datasetUrl={agentWebId}
-                thingUrl={agentWebId}
-              >
+              <CombinedDataProvider datasetUrl={webId} thingUrl={webId}>
                 <Grid
                   className={bem("access-details", "avatar-container")}
                   container
@@ -140,7 +138,7 @@ export default function ConsentDetailsModal({
                   sm={2}
                 >
                   <Image
-                    profileIri={agentWebId}
+                    profileIri={webId}
                     property={vcard.hasPhoto}
                     errorComponent={errorComponent}
                   />
@@ -148,7 +146,7 @@ export default function ConsentDetailsModal({
                 <Grid item xs={12} sm={10}>
                   <AgentName
                     className={bem("access-details", "agent-name")}
-                    agentWebId={agentWebId}
+                    agentWebId={webId}
                     link
                   />
                 </Grid>
@@ -239,7 +237,7 @@ export default function ConsentDetailsModal({
               </Button> */}
                     <hr className={bem("access-details", "separator")} />
                     <span>
-                      <AgentName agentWebId={agentWebId} />
+                      <AgentName agentWebId={webId} />
                       has access until <strong>{expirationDate}</strong>.
                     </span>
                   </Grid>

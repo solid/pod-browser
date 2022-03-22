@@ -23,7 +23,7 @@
 
 import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
-import { Alert } from "@material-ui/lab";
+import { Alert, Skeleton } from "@material-ui/lab";
 import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
 import AgentAccessTable from "../agentAccessTable";
@@ -34,74 +34,56 @@ import PermissionsContext from "../../../../src/contexts/permissionsContext";
 import AgentAccessSharingList from "../agentAccessSharingList";
 import PermissionsPanel from "../PermissionsPanel";
 import { preparePermissionsDataForTable } from "../../utils";
-import { getPermissions } from "../../../../src/hooks/useAllPermissions";
+import useAllPermissions, {
+  getPermissions,
+} from "../../../../src/hooks/useAllPermissions";
 
 export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
   "agent-access-list-show-all";
 
-function getEditPermissions(permissions) {
-  const permissionsList = permissions.filter(
-    ({ alias }) => alias === "editors"
-  );
-  return preparePermissionsDataForTable(permissionsList);
-}
+// function getEditPermissions(permissions) {
+//   const permissionsList = permissions.filter(
+//     ({ alias }) => alias === "editors"
+//   );
+//   return preparePermissionsDataForTable(permissionsList);
+// }
 
-function getViewPermissions(permissions) {
-  const permissionsList = permissions.filter(
-    ({ alias }) => alias === "viewers"
-  );
-  return preparePermissionsDataForTable(permissionsList);
-}
+// function getViewPermissions(permissions) {
+//   const permissionsList = permissions.filter(
+//     ({ alias }) => alias === "viewers"
+//   );
+//   return preparePermissionsDataForTable(permissionsList);
+// }
 
 function SharingAccordion() {
   const router = useRouter();
   const isContainer = isContainerIri(router.query.resourceIri);
-  const [loading, setLoading] = useState(false);
-  const { permissions } = useContext(PermissionsContext);
-  // const editPermissions = getEditPermissions(permissions);
-  // const viewPermissions = getViewPermissions(permissions);
+  const { permissions, loading } = useAllPermissions();
   const { session } = useSession();
   const { solidDataset: dataset } = useContext(DatasetContext);
   const resourceIri = getSourceUrl(dataset);
 
-  // console.log("sharing accordion render editors: ", editPermissions);
-  // console.log("sharing accordion render viewers: ", viewPermissions);
-
   useEffect(() => {
     getPermissions(resourceIri, session.fetch);
   }, [resourceIri, session.fetch]);
-
-  const editPermissions = [];
-  const viewPermissions = [];
-
+  console.log("sharing accordion", { permissions });
   return (
     <>
-      {/* <PermissionsPanel
-        permissionType="editors"
-        permissions={editPermissions}
-        resourceIri={resourceIri}
-      />
-      <PermissionsPanel
-        permissionType="viewers"
-        permissions={viewPermissions}
-        resourceIri={resourceIri}
-      />  */}
-      {/* REFACTOR REMOVE THIS LINE  */}
-      {/* namedPolicies.concat(customPolicies).map(({ name }) => ( 
-        <AgentAccessTable //AgentAccessTable
-          key={name}
-          type={name}
-          loading={loading}
-          setLoading={setLoading}
-        />
-      )) */}
-      {/* isContainer && (
-        <Alert icon={false} severity="info">
-          Sharing applies to all items in this folder
-        </Alert>
-      ) */}
-      {/* advanced sharing button is not REFACTOR yet and could cause rerenders */}
-      {/* <AdvancedSharingButton loading={loading} setLoading={setLoading} /> */}
+      {permissions.map((p) => {
+        return (
+          <PermissionsPanel
+            permissionType={p.type}
+            permissions={p.data}
+            resourceIri={resourceIri}
+          />
+        );
+      })}
+      {/* ; isContainer && (
+      <Alert icon={false} severity="info">
+        Sharing applies to all items in this folder
+      </Alert>
+      ); } advanced sharing button is not REFACTOR yet and could cause rerenders
+      <AdvancedSharingButton loading={loading} setLoading={setLoading} /> */}
     </>
   );
 }

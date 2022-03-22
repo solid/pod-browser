@@ -25,12 +25,12 @@ import T from "prop-types";
 export const defaultConfirmationDialogContext = {
   confirmed: false,
   content: null,
-  openConfirmationDialog: false,
+  open: false,
   customContentWrapper: false,
   setCustomContentWrapper: () => {},
   setConfirmed: () => {},
   setContent: () => {},
-  setOpenConfirmationDialog: () => {},
+  setOpen: () => {},
   setTitle: () => {},
   title: "Confirmation",
   cancelText: "Cancel",
@@ -42,6 +42,30 @@ export const defaultConfirmationDialogContext = {
   setIsDangerousAction: () => {},
   isDangerousAction: false,
 };
+
+export const proposal = {
+  // title: "Confirmation",
+  // cancelText: "Cancel",
+  // confirmText: "Confirm",
+  // open: false,
+  // onCancel:()=>{},
+  // onConfirm:()=>{},
+  // content?: null,
+  // omitCancelButton?: false,
+  // customContentWrapper?: false,
+  // isDangerousAction?: false,
+  // confirmed: false,
+  // setCustomContentWrapper: () => {},
+  // setConfirmed: () => {},
+  // setContent: () => {},
+  // setOpen: () => {},
+  // setTitle: () => {},
+  // setCancelText: () => {},
+  // setConfirmText: () => {},
+  // closeDialog: () => {},
+  // setIsDangerousAction: () => {},
+};
+
 const ConfirmationDialogContext = createContext(
   defaultConfirmationDialogContext
 );
@@ -49,7 +73,7 @@ const ConfirmationDialogContext = createContext(
 export default ConfirmationDialogContext;
 
 function ConfirmationDialogProvider({ children }) {
-  const [openConfirmationDialog, setOpenConfirmationDialog] = useState(null);
+  const [open, setOpen] = useState(null);
   const [content, setContent] = useState(null);
   const [customContentWrapper, setCustomContentWrapper] = useState(false);
   const [title, setTitle] = useState("Confirmation");
@@ -61,7 +85,7 @@ function ConfirmationDialogProvider({ children }) {
 
   const closeDialog = () => {
     setConfirmed(null);
-    setOpenConfirmationDialog(null);
+    setOpen(null);
     setContent(null);
     setTitle(null);
     setConfirmText(null);
@@ -72,11 +96,11 @@ function ConfirmationDialogProvider({ children }) {
       value={{
         content,
         confirmed,
-        openConfirmationDialog,
+        open,
         customContentWrapper,
         setContent,
         setConfirmed,
-        setOpenConfirmationDialog,
+        setOpen,
         setTitle,
         setCustomContentWrapper,
         title,
