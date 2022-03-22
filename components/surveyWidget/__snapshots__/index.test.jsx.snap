@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Survey Widget renders a button 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-button PodBrowser-widget-button-wrap"
+  >
+    <button
+      class="PodBrowser-button PodBrowser-widget-button"
+      data-testid="widget-button"
+      type="button"
+    >
+      Help improve PodBrowser!
+    </button>
+  </div>
+</DocumentFragment>
+`;

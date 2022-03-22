@@ -28,6 +28,7 @@ import { Button } from "@inrupt/prism-react-components";
 import { useBem } from "@solid/lit-prism-patterns";
 import LoginForm from "../../login";
 import styles from "./styles";
+import SurveyWidget from "../../surveyWidget";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const TESTCAFE_ID_TOS_LINK = "tos-link";
@@ -105,6 +106,7 @@ export default function Login() {
           ))}
         </div>
       </div>
+      <SurveyWidget />
     </div>
   );
 }
