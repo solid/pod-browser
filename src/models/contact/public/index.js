@@ -40,7 +40,6 @@ export const PUBLIC_AGENT_PREDICATE =
 export const PUBLIC_AGENT = {
   isOfType: (thing) =>
     thing && getUrl(thing, AGENT_PREDICATE) === PUBLIC_AGENT_PREDICATE,
-  getName: (thing) => getStringNoLocale(thing, foaf.name),
   getAvatarProps: () => ({
     icon: "globe",
     src: null,
