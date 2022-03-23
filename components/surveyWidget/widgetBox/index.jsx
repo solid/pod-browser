@@ -41,7 +41,7 @@ export default function WidgetBox({ id, open, anchorEl, onClose }) {
   return (
     <Popover
       data-testid={TESTCAFE_ID_WIDGET_BOX}
-      classes={{ paper: classes.widgetBox }}
+      classes={{ paper: classes["survey-widget-box"] }}
       id={id}
       open={open}
       anchorEl={anchorEl}

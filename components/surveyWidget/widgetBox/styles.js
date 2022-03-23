@@ -27,7 +27,7 @@ const DARK_TEAL_TEXT_COLOR = "073D6C";
 
 export default function styles(theme) {
   return createStyles(theme, ["button"], {
-    widgetBox: {
+    "survey-widget-box": {
       padding: "2rem",
       width: "19rem",
       borderRadius: 30,
