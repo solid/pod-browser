@@ -87,29 +87,6 @@ describe("PodIndicator", () => {
   });
 });
 
-// it("renders the tooltip and then the tooltip automatically disappears ", async () => {
-//   const writeText = jest.fn();
-//   Object.assign(navigator, {
-//     clipboard: {
-//       writeText,
-//     },
-//   });
-
-//   const { getByTestId } = renderWithTheme(
-//     <TestApp>
-//       <PodIndicator />
-//     </TestApp>
-//   );
-//   const podMenu = getByTestId(TESTCAFE_ID_POD_NAVIGATE_TRIGGER);
-//   userEvent.click(podMenu);
-//   const copyLink = screen.getByTestId(TESTCAFE_ID_POD_INDICATOR_COPY);
-//   userEvent.click(copyLink);
-//   await waitFor(() => {
-//     expect(TESTCAFE_POD_INDICATOR_TOOLTIP).toBeInTheDocument();
-//     // set time out and it should disappear again
-//   });
-// });
-
 describe("clickHandler", () => {
   it("sets up a click handler", () => {
     const setAnchorEl = jest.fn();
