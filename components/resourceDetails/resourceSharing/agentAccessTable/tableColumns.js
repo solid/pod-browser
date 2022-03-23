@@ -19,20 +19,20 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useState, useEffect } from "react";
-
-export default function usePermissions(accessControl) {
-  const [permissions, setPermissions] = useState([]);
-
-  useEffect(() => {
-    if (!accessControl) {
-      setPermissions([]);
-      return;
-    }
-    accessControl.getPermissions().then((normalizedPermissions) => {
-      setPermissions(normalizedPermissions.reverse());
-    });
-  }, [accessControl]);
-
-  return { permissions };
-}
+export default [
+  {
+    header: "",
+    accessor: "profile.name",
+    modifiers: ["align-center", "width-preview"],
+  },
+  {
+    header: "",
+    accessor: "webId",
+    modifiers: ["align-center", "width-preview"],
+  },
+  {
+    header: "",
+    accessor: "type",
+    modifiers: ["align-center", "width-preview"],
+  },
+];

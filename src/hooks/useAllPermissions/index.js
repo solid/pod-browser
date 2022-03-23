@@ -29,6 +29,8 @@ import {
   getRequestedAccessesFromSignedVc,
   getRequestorWebIdFromSignedVc,
 } from "../../models/consent/signedVc";
+import { isPublicAgentOrAuthenticatedAgentWebId } from "../../../components/resourceDetails/utils";
+import { fetchProfile } from "../../solidClientHelpers/profile";
 
 const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
   if (!consentBasedPermissions) return [];
@@ -67,7 +69,7 @@ const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
 
 export default function useAllPermissions() {
   const { accessControl } = useContext(AccessControlContext);
-  const [permissions, setPermissions] = useState(null);
+  const [permissions, setPermissions] = useState([]);
 
   const { solidDataset: dataset } = useContext(DatasetContext);
   const datasetUrl = getSourceUrl(dataset);
@@ -85,7 +87,7 @@ export default function useAllPermissions() {
 
   useEffect(() => {
     if (!accessControl) {
-      setPermissions(null);
+      setPermissions([]);
       return;
     }
 

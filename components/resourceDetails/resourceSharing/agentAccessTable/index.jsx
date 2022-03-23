@@ -46,9 +46,9 @@ import styles from "./styles";
 import PolicyHeader from "../policyHeader";
 import PolicyActionButton from "../policyActionButton";
 import { isCustomPolicy } from "../../../../src/models/policy";
-import { PUBLIC_AGENT_TYPE } from "../../../../src/models/contact/public";
-import { AUTHENTICATED_AGENT_TYPE } from "../../../../src/models/contact/authenticated";
 import PermissionsContext from "../../../../src/contexts/permissionsContext";
+import columns from "./tableColumns";
+import { preparePermissionsDataForTable } from "../../utils";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const TESTCAFE_ID_SHOW_ALL_BUTTON = "show-all-button";
@@ -56,65 +56,32 @@ const TESTCAFE_ID_HIDE_BUTTON = "hide-button";
 export const TESTCAFE_ID_AGENT_ACCESS_TABLE = "agent-access-table";
 
 export default function AgentAccessTable({ type, loading, setLoading }) {
+  const bem = useBem(useStyles());
+  const classes = useStyles();
   const { permissions } = useContext(PermissionsContext);
   const [tablePermissions, setTablePermissions] = useState([]);
   const [policyPermissions, setPolicyPermissions] = useState([]);
+  const [selectedTabValue, setSelectedTabValue] = useState("");
+  const [showAll, setShowAll] = useState(false);
   const { permissionsWithProfiles } =
     usePermissionsWithProfiles(policyPermissions);
 
   useEffect(() => {
-    const filteredPermissions =
-      permissions?.filter((permission) => permission.alias === type) || null;
-    if (!filteredPermissions) return;
+    const filteredPermissions = permissions?.filter(
+      (permission) => permission.alias === type
+    );
+    if (!filteredPermissions.length) return;
     setPolicyPermissions(filteredPermissions);
   }, [permissions, type]);
 
   useEffect(() => {
-    if (!permissionsWithProfiles) return;
-    const publicAndAuth = permissionsWithProfiles?.filter(
-      (p) => p.type === PUBLIC_AGENT_TYPE || p.type === AUTHENTICATED_AGENT_TYPE
+    if (!permissionsWithProfiles || !permissionsWithProfiles.length) return;
+    setTablePermissions(
+      preparePermissionsDataForTable(permissionsWithProfiles)
     );
-    const sorted = permissionsWithProfiles
-      .filter((p) => p.type === "agent")
-      .sort((a, b) => {
-        return a.profile?.name?.localeCompare(b.profile?.name);
-      });
-    setTablePermissions(publicAndAuth.concat(sorted));
   }, [permissionsWithProfiles]);
 
-  const bem = useBem(useStyles());
-
-  const classes = useStyles();
-
-  const [showAll, setShowAll] = useState(false);
-  const [selectedTabValue, setSelectedTabValue] = useState("");
-
-  const columns = useMemo(
-    () => [
-      {
-        header: "",
-        accessor: "profile.name",
-        modifiers: ["align-center", "width-preview"],
-      },
-      {
-        header: "",
-        accessor: "webId",
-        modifiers: ["align-center", "width-preview"],
-      },
-      {
-        header: "",
-        accessor: "type",
-        modifiers: ["align-center", "width-preview"],
-      },
-    ],
-    []
-  );
-
   const data = useMemo(() => {
-    if (!tablePermissions) {
-      return [];
-    }
-
     return showAll ? tablePermissions : tablePermissions.slice(0, 3);
   }, [tablePermissions, showAll]);
 
@@ -142,11 +109,11 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
     setGlobalFilter(value || undefined);
   };
 
-  const handleTabChange = (e, newValue) => {
-    setSelectedTabValue(newValue);
-    // TODO: this will change when Groups are available since we will not have profiles for Groups
-    setFilter("type", newValue);
-  };
+  // const handleTabChange = (e, newValue) => {
+  //   setSelectedTabValue(newValue);
+  //   // TODO: this will change when Groups are available since we will not have profiles for Groups
+  //   setFilter("type", newValue);
+  // };
 
   if (!tablePermissions.length && isCustomPolicy(type)) return null;
 
@@ -247,7 +214,7 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
               <Typography classes={{ body1: classes.showAllText }}>
                 {showAll ? (
                   <span>
-                    Hide{" "}
+                    Hide
                     <i
                       className={clsx(
                         bem("icon-caret-up"),
@@ -257,7 +224,7 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
                   </span>
                 ) : (
                   <span>
-                    Show all ({tablePermissions.length}){" "}
+                    Show all ({tablePermissions.length})
                     <i
                       className={clsx(
                         bem("icon-caret-down"),

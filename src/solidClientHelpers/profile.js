@@ -109,7 +109,7 @@ export async function fetchProfile(webId, fetch) {
   }
 
   const pods = getUrlAll(getThing(webIdProfile, webId), space.storage);
-  const inbox = getUrlAll(getThing(webIdProfile, webId), ldp.inbox);
+  const inbox = getUrl(getThing(webIdProfile, webId), ldp.inbox);
 
   return packageProfile(webIdUrl, profileDataset, pods, inbox);
 }

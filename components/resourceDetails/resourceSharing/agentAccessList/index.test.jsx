@@ -21,6 +21,7 @@
 
 import React from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
+import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
 import * as routerFns from "next/router";
@@ -81,17 +82,23 @@ describe("AgentAccessList", () => {
   });
   useFetchProfile.mockReturnValue({ webId });
 
-  it("renders loading while loading permissions for access control", () => {
-    usePermissions.mockReturnValue({ permissions: null });
-    const { asFragment } = renderWithTheme(
+  it("renders loading while loading permissions for access control", async () => {
+    usePermissions.mockReturnValue({ permissions: undefined });
+    const { asFragment, queryByTestId } = renderWithTheme(
       <AgentAccessList accessControl={null} />
     );
+    await waitFor(() => {
+      expect(queryByTestId("spinner")).toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders an empty list of permissions", async () => {
     usePermissions.mockReturnValue({ permissions: [] });
-    const accessControl = mockAccessControl();
+    const accessControl = {
+      accessControl: mockAccessControl(),
+      accessControlType: "acp",
+    };
     const { asFragment } = renderWithTheme(
       <AccessControlProvider accessControl={accessControl}>
         <DatasetProvider solidDataset={dataset}>
@@ -107,13 +114,16 @@ describe("AgentAccessList", () => {
     const accessControl = mockAccessControl({
       permissions: [permission],
     });
-    const { asFragment } = renderWithTheme(
+    const { asFragment, queryByTestId } = renderWithTheme(
       <AccessControlProvider accessControl={accessControl}>
         <DatasetProvider solidDataset={dataset}>
           <AgentAccessList />
         </DatasetProvider>
       </AccessControlProvider>
     );
+    await waitFor(() => {
+      expect(queryByTestId("spinner")).not.toBeInTheDocument();
+    });
     expect(asFragment()).toMatchSnapshot();
   });
   it("shows all permissions when clicking 'show all' button", async () => {

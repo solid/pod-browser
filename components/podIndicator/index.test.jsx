@@ -30,6 +30,7 @@ import PodIndicator, {
   closeHandler,
   TESTCAFE_ID_POD_NAVIGATE_TRIGGER,
   TESTCAFE_ID_POD_INDICATOR_COPY,
+  TESTCAFE_POD_INDICATOR_TOOLTIP,
 } from "./index";
 import usePodOwnerProfile from "../../src/hooks/usePodOwnerProfile";
 import TestApp from "../../__testUtils/testApp";
@@ -61,7 +62,7 @@ describe("PodIndicator", () => {
     expect(asFragment).toMatchSnapshot();
   });
 
-  it("copy text button copies the text to the clipboard", async () => {
+  it("copies text to the clipboard when the copy button is clicked", async () => {
     const writeText = jest.fn();
     Object.assign(navigator, {
       clipboard: {

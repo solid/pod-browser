@@ -286,7 +286,7 @@ describe("AgentAccessTable with agents", () => {
     expect(cells[6]).toHaveTextContent("https://example6.com/profile/card#me");
   });
 
-  it("shows first 3 permissions by default and when clicking the 'hide' button", async () => {
+  it("shows first 3 permissions by default and when clicking the 'hide' button", () => {
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles,
     });
@@ -306,26 +306,27 @@ describe("AgentAccessTable with agents", () => {
     userEvent.click(hideButton);
     expect(queryAllByRole("cell")).toHaveLength(3);
   });
-  it("renders a search box which filters by name or webId", () => {
+  it("renders a search box which filters by name or webId", async () => {
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles,
     });
 
     const type = "editors";
-    const { getByTestId, queryByText } = renderWithTheme(
+    const { getByTestId, queryByText, queryByTestId } = renderWithTheme(
       <PermissionsContextProvider>
         <DatasetProvider solidDataset={mockDataset}>
           <AgentAccessTable type={type} setLoading={setLoading} />
         </DatasetProvider>
       </PermissionsContextProvider>
     );
-    waitFor(() => {
-      expect(queryByText("Example 2")).not.toBeNull();
-      const searchInput = getByTestId(TESTCAFE_ID_SEARCH_INPUT);
-      userEvent.type(searchInput, "2");
-      expect(queryByText("Example 4")).toBeNull();
-      expect(queryByText("Example 2")).not.toBeNull();
+    await waitFor(() => {
+      expect(queryByTestId("spinner")).toBeNull();
     });
+    expect(queryByText("Example B")).not.toBeNull();
+    const searchInput = getByTestId(TESTCAFE_ID_SEARCH_INPUT);
+    userEvent.type(searchInput, "B");
+    expect(queryByText("Example C")).toBeNull();
+    expect(queryByText("Example B")).not.toBeNull();
   });
   // TODO: tabs have slightly changed so these tests need to be updated when tabs are restored
   it.skip("renders a set of tabs which filter by Group type", () => {
