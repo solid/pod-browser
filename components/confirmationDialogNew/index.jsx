@@ -44,7 +44,7 @@ export const TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT =
   "confirmation-dialog-content";
 
 export default function ConfirmationDialogNew(
-  open,
+  openConfirmationDialog,
   title,
   content,
   customContentWrapper,
@@ -63,7 +63,7 @@ export default function ConfirmationDialogNew(
       data-testid={TESTCAFE_ID_CONFIRMATION_DIALOG}
       maxWidth={false}
       aria-labelledby="confirmation-dialog"
-      open={!!open}
+      open={!!openConfirmationDialog}
     >
       {title && (
         <DialogTitle

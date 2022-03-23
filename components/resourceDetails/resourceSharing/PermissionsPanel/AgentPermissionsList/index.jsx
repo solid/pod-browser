@@ -205,7 +205,7 @@ function AgentPermissionItem({
           resourceIri={resourceIri}
         />
         <ConfirmationDialogNew
-          open={openConfirmationDialog}
+          openConfirmationDialog={openConfirmationDialog}
           title={`Remove ${webId}'s access from ${resourceName}`}
           confirmText="Remove"
           onConfirm={handleConfirmRemove}

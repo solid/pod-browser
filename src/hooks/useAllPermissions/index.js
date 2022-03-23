@@ -81,10 +81,12 @@ export default function useAllPermissions() {
 
   async function getPermissions(resourceIri, fetch) {
     const { getAgentAccessAll } = universalAccess;
+    console.log("original response of getAgentAccessAll", resourceIri);
+
     const agents = await getAgentAccessAll(resourceIri, {
       fetch,
     });
-    console.log("original response of agent", { agents });
+    console.log("original response of agent", agents);
     const agentsWithSharingType = findSharingTypeForAgents(agents);
     const sharingTypeWithAssociatedAgents = mapAgentsToSharingType(
       agentsWithSharingType

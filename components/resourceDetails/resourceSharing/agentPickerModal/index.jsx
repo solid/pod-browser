@@ -217,7 +217,6 @@ function AgentPickerModal(
     accessibilityDescribe,
     accessibilityLabel,
     open,
-    setOpen,
   },
   ref
 ) {
@@ -563,7 +562,6 @@ AgentPickerModal.propTypes = {
   advancedSharing: PropTypes.bool,
   editing: PropTypes.bool,
   open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired,
   accessibilityLabel: PropTypes.string,
   accessibilityDescribe: PropTypes.string,
 };
