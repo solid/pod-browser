@@ -41,7 +41,7 @@ function AgentAccessList({ onLoading }) {
   const { accessControl } = useContext(AccessControlContext);
   const { permissions } = usePermissions(accessControl);
 
-  const loading = !permissions;
+  const loading = !permissions.length;
 
   if (loading) return <CircularProgress color="primary" />;
 
