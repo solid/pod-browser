@@ -33,6 +33,7 @@ function ConsentRequestProvider({
   consentRequest,
   setConsentRequest,
 }) {
+  console.log("invalid consent request in provider?", consentRequest);
   return (
     <ConsentRequestContext.Provider
       value={{ consentRequest, setConsentRequest }}

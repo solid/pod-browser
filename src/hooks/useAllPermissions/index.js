@@ -22,7 +22,7 @@
 import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl, universalAccess } from "@inrupt/solid-client";
 
-import { useState, useEffect, useContext, useMemo } from "react";
+import { useState, useEffect, useContext, useMemo, useCallback } from "react";
 import { getPolicyDetailFromAccess } from "../../accessControl/acp";
 import AccessControlContext from "../../contexts/accessControlContext";
 import useConsentBasedAccessForResource from "../useConsentBasedAccessForResource";
@@ -53,6 +53,7 @@ const findSharingTypeForAgents = (agents) => {
 };
 
 // where we make an array of everyone with the same type (ex: viewer) of permission
+// [{type:'editors',data:[webId,webID,webId]}, {type:'viewers',data:[webId,webID,webId]}]
 const mapAgentsToSharingType = (agents) => {
   const sharingTypeHash = {};
   const output = [];
@@ -73,8 +74,8 @@ const mapAgentsToSharingType = (agents) => {
 
 export default function useAllPermissions() {
   const { solidDataset: dataset } = useContext(DatasetContext);
-  const { session } = useSession();
   const resourceIri = getSourceUrl(dataset);
+  const { session } = useSession();
   const [permissions, setPermissions] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -83,6 +84,7 @@ export default function useAllPermissions() {
     const agents = await getAgentAccessAll(resourceIri, {
       fetch,
     });
+    console.log("original response of agent", { agents });
     const agentsWithSharingType = findSharingTypeForAgents(agents);
     const sharingTypeWithAssociatedAgents = mapAgentsToSharingType(
       agentsWithSharingType
@@ -91,19 +93,18 @@ export default function useAllPermissions() {
   }
 
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     async function fetchPermissions() {
       const newPermissions = await getPermissions(resourceIri, session.fetch);
-      console.log("problem is this an array? plz", newPermissions);
       setPermissions(newPermissions);
       console.log(
-        "permissions in useEffect hook in useAllPermissionsHook",
+        "permissions in useEffect in useAllPermissionsHook",
         permissions
       );
     }
     fetchPermissions();
-    setLoading(false);
-  }, [permissions, resourceIri, session.fetch]);
+    // setLoading(false);
+  }, [resourceIri, session.fetch]); // removed permissions here and the endless rerender stopped
 
   async function setAgentPermissions(resourceIri, agent, access, fetch) {
     console.log("permissions before func gets called", permissions);
@@ -115,6 +116,7 @@ export default function useAllPermissions() {
         { fetch }
       );
       console.log("after set func", { res, resourceIri, agent, access });
+      // if this takes a long time look at optomistic rendering
       const newPermissions = await getPermissions(resourceIri, fetch);
       console.log("updated permissions?", newPermissions);
       setPermissions(newPermissions);
@@ -123,22 +125,22 @@ export default function useAllPermissions() {
     }
   }
 
-  async function setPublicPermissions(resourceIri, access, fetch) {
-    // redo this one once func above works
-    try {
-      universalAccess.setPublicAccess(resourceIri, access);
+  // async function setPublicPermissions(resourceIri, access, fetch) {
+  //   // redo this one once func above works
+  //   try {
+  //     universalAccess.setPublicAccess(resourceIri, access);
 
-      const newPermissions = await getPermissions(resourceIri, fetch);
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  //     const newPermissions = await getPermissions(resourceIri, fetch);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
 
   return {
     permissions,
     loading,
     setAgentPermissions,
-    setPublicPermissions,
+    // setPublicPermissions,
     getPermissions,
   };
 }

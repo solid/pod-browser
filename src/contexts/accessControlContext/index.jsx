@@ -29,6 +29,7 @@ const defaultValues = {
 const AccessControlContext = createContext(defaultValues);
 
 function AccessControlProvider({ children, accessControl, accessControlType }) {
+  console.log("accesscontrol provider invalid accessControl", accessControl);
   return (
     <AccessControlContext.Provider value={{ accessControl, accessControlType }}>
       {children}

@@ -64,18 +64,21 @@ function SharingAccordion() {
   useEffect(() => {
     getPermissions(resourceIri, session.fetch);
   }, [getPermissions, resourceIri, session.fetch]);
+
   console.log("sharing accordion", { permissions });
   return (
     <>
-      {permissions.map((p) => {
-        return (
-          <PermissionsPanel
-            permissionType={p.type}
-            permissions={p.data}
-            resourceIri={resourceIri}
-          />
-        );
-      })}
+      <PermissionsPanel
+        permissionType="editors"
+        permissions={permissions.editors}
+        resourceIri={resourceIri}
+      />
+      <PermissionsPanel
+        permissionType="viewers"
+        permissions={permissions.viewers}
+        resourceIri={resourceIri}
+      />
+
       {/* ; isContainer && (
       <Alert icon={false} severity="info">
         Sharing applies to all items in this folder

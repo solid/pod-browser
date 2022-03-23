@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Accordion,
   AccordionDetails,
@@ -34,7 +34,7 @@ import { makeStyles } from "@material-ui/styles";
 import T from "prop-types";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { ActionMenu, ActionMenuItem } from "@inrupt/prism-react-components";
-import { DatasetContext } from "@inrupt/solid-ui-react";
+import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
 import { getContentType, getSourceUrl } from "@inrupt/solid-client";
 import styles from "./styles";
 import DeleteResourceButton from "../deleteResourceButton";
@@ -47,6 +47,7 @@ import SharingAccordion from "./resourceSharing/sharingAccordion";
 import useLocalStorage from "../../src/hooks/useLocalStorage";
 import { isAcp, isWac } from "../../src/accessControl";
 import { PermissionsContextProvider } from "../../src/contexts/permissionsContext";
+import useAllPermissions from "../../src/hooks/useAllPermissions";
 
 const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
 const TESTCAFE_ID_DELETE_BUTTON = "delete-resource-button";
@@ -75,7 +76,10 @@ export default function ResourceDetails({
   const displayName = getResourceName(name);
   const type = getContentType(dataset);
   const actionMenuBem = ActionMenu.useBem();
+  const { permissions, getPermissions } = useAllPermissions();
   const { accessControl, accessControlType } = useContext(AccessControlContext);
+  const resourceIri = getSourceUrl(dataset);
+  const { session } = useSession();
 
   const [actionsAccordion, setActionsAccordion] = useLocalStorage(
     getAccordionKey(dataset, "actions"),
@@ -190,6 +194,7 @@ export default function ResourceDetails({
               </AccordionDetails>
             </Accordion>
           )}
+          {/* are there permissions? */}
           {isAcp(accessControlType) && (
             <Accordion
               expanded={sharingAccordion}
@@ -202,9 +207,9 @@ export default function ResourceDetails({
                 Sharing
               </AccordionSummary>
               <AccordionDetails className={classes.accordionDetails}>
-                <PermissionsContextProvider>
-                  <SharingAccordion />
-                </PermissionsContextProvider>
+                {/* <PermissionsContextProvider> */}
+                <SharingAccordion />
+                {/* </PermissionsContextProvider> */}
               </AccordionDetails>
             </Accordion>
           )}

@@ -105,7 +105,7 @@ function AgentPermissionItem({
   const [popoverAnchorEl, setPopoverAnchorEl] = useState(null);
   const { session } = useSession();
   const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
-  const { setAgentPermissions, setPublicPermissions } = useAllPermissions();
+  const { setAgentPermissions } = useAllPermissions();
 
   const handleClosePopoverAndModal = () => {
     setPopoverAnchorEl(null);
@@ -142,11 +142,11 @@ function AgentPermissionItem({
     if (PUBLIC_AGENT_PREDICATE === agentWebId) {
       // confirm this function is what we want to be calling
       console.log("in public resource", agentWebId);
-      setPublicPermissions(
-        resourceIri,
-        removePermissionsAccessObject,
-        session.fetch
-      );
+      // setPublicPermissions(
+      //   resourceIri,
+      //   removePermissionsAccessObject,
+      //   session.fetch
+      // );
       return;
     }
     if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {

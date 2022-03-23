@@ -375,7 +375,7 @@ export default function RequestSection(props) {
   const accessMode = sectionDetails && getAccessMode(sectionDetails);
   const bem = useBem(useStyles());
   const [isChecked, setIsChecked] = useState([]);
-
+  console.log("in request section: sectionDetails", sectionDetails);
   const [allTogglesSelected, setAllTogglesSelected] = useState(false);
 
   const modesObject = useMemo(() => {

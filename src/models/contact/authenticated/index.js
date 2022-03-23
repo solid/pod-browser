@@ -40,7 +40,6 @@ export const AUTHENTICATED_AGENT_TYPE = "authenticated";
 export const AUTHENTICATED_AGENT = {
   isOfType: (thing) =>
     thing && getUrl(thing, AGENT_PREDICATE) === AUTHENTICATED_AGENT_PREDICATE,
-  getName: (thing) => getStringNoLocale(thing, foaf.name),
   getAvatarProps: () => ({
     icon: "user-lock",
     src: null,
