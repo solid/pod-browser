@@ -22,38 +22,22 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useContext, useState } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { PropTypes } from "prop-types";
 import {
-  Card,
   Avatar,
   Typography,
   Popover,
   List,
   ListItem,
   ListItemText,
+  Button,
 } from "@material-ui/core";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import Skeleton from "@material-ui/lab/Skeleton";
-import { Button } from "@inrupt/prism-react-components";
 import { useSession } from "@inrupt/solid-ui-react";
-import PolicyHeader from "../../policyHeader";
-import AddAgentButton from "../../addAgentButton";
-import { isCustomPolicy } from "../../../../../src/models/policy";
 import { stringToColor } from "../../../../../src/stringHelpers";
-import AgentPickerModal from "../../agentPickerModal";
-import styles from "./styles";
-import AgentProfileDetails from "../../agentAccess/agentProfileDetails";
-// import { displayProfileName } from "../../../../../src/solidClientHelpers/profile";
-
 import {
   PUBLIC_AGENT_NAME,
   PUBLIC_AGENT_PREDICATE,
@@ -63,32 +47,27 @@ import {
   AUTHENTICATED_AGENT_PREDICATE,
 } from "../../../../../src/models/contact/authenticated";
 import ConsentDetailsModal from "../../agentAccess/agentAccessOptionsMenu/consentDetailsButton/consentDetailsModal";
-import RemoveButton from "../../agentAccess/agentAccessOptionsMenu/removeButton";
-import ConfirmationDialog from "../../../../confirmationDialog";
-import ConfirmationDialogContext from "../../../../../src/contexts/confirmationDialogContext";
 import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
-import AccessControlContext from "../../../../../src/contexts/accessControlContext";
-import ResourceInfoContext from "../../../../../src/contexts/resourceInfoContext";
 import AlertContext from "../../../../../src/contexts/alertContext";
 import useAllPermissions from "../../../../../src/hooks/useAllPermissions";
 import ConfirmationDialogNew from "../../../../confirmationDialogNew";
+import styles from "./styles";
 
 export const TESTCAFE_ID_VIEW_DETAILS_BUTTON = "view-details-button";
 export const TESTCAFE_ID_REMOVE_BUTTON = "remove-button";
 export const CONFIRMATION_DIALOG_ID = "remove-agent";
+
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-// handle loading states generally
-// handle empty states? search for "Person" ? in agentaccess table
-function AgentPermissionSearch() {
+
+export function AgentPermissionSearch() {
   // add search functionality
   return <input name="search" type="search" />;
 }
 
-function AgentPermissionsList({ permissions, resourceIri }) {
+export function AgentPermissionsList({ permissions, resourceIri }) {
   const classes = useStyles();
   // need to add where if it's more than three you get cut off and there's a link from AgentAccessTable
   let id = 0;
-  console.log("agentPermissionsList", { permissions });
   return (
     <ul className={classes.agentPermissionsList}>
       {permissions.map((p) => {
@@ -97,9 +76,9 @@ function AgentPermissionsList({ permissions, resourceIri }) {
           <AgentPermissionItem
             key={id}
             webId={p.webId}
-            agentPermissionInfo={p.permissions}
             resourceIri={resourceIri}
             permissionType={p.alias}
+            agentPermissionInfo={p.permissions}
           />
         );
       })}
@@ -124,13 +103,15 @@ function AgentPermissionItem({
   const resourceName = getResourceName(resourceIri);
   const [openModal, setOpenModal] = useState(false);
   const [popoverAnchorEl, setPopoverAnchorEl] = useState(null);
-  const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
   const { session } = useSession();
   const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
+  const { setAgentPermissions, setPublicPermissions } = useAllPermissions();
+
   const handleClosePopoverAndModal = () => {
     setPopoverAnchorEl(null);
     setOpenModal(false);
   };
+
   console.log({ webId, resourceIri, permissionType, agentPermissionInfo });
   let name = "";
   let anotherNameThatNeedsToBeUpdated = "";
@@ -146,7 +127,6 @@ function AgentPermissionItem({
     anotherNameThatNeedsToBeUpdated = "Anyone signed in";
     publicResource = true;
   }
-  const { setAgentPermissions, setPublicPermissions } = useAllPermissions();
 
   const handleOpenPopover = (event) => setPopoverAnchorEl(event.currentTarget);
 
@@ -233,7 +213,6 @@ function AgentPermissionItem({
         />
       </>
       {/* )} */}
-      {/* <AgentProfileDetails />  TODO: REFACTOR REMOVE THIS LINE */}
       {viewer && (
         <ConsentDetailsModal
           openModal={openModal}
@@ -249,10 +228,10 @@ function AgentPermissionItem({
 }
 
 AgentPermissionItem.propTypes = {
-  // eslint-disable-next-line
   resourceIri: PropTypes.string.isRequired,
   webId: PropTypes.string.isRequired,
   permissionType: PropTypes.string.isRequired,
+  agentPermissionInfo: PropTypes.oneOfType([Object]).isRequired,
 };
 
 function PermissionsPopoverMenu({
@@ -333,80 +312,10 @@ function PermissionsPopoverMenu({
 }
 
 PermissionsPopoverMenu.propTypes = {
-  name: PropTypes.string.isRequired,
+  // name: PropTypes.string.isRequired,
   setOpenModal: PropTypes.func.isRequired,
   // eslint-disable-next-line
   popoverAnchorEl: PropTypes.object, // keep this eslint above because it can be null and is required , don't force a default of null
-  // eslint-disable-next-line
-  permission: PropTypes.object, // keep this eslint above because it can be null and is required , don't force a default of null
   handleClosePopoverAndModal: PropTypes.func.isRequired,
   handleOpenConfirmationDialog: PropTypes.func.isRequired,
-};
-
-function renderCardBody(permissions, resourceIri) {
-  console.log("cardBody", { permissions });
-  if (!permissions.length) return <Skeleton />;
-
-  return (
-    <>
-      <AgentPermissionSearch />
-      <AgentPermissionsList
-        permissions={permissions}
-        resourceIri={resourceIri}
-      />
-    </>
-  );
-}
-
-function AgentPermissionListSkeleton() {
-  const classes = useStyles();
-
-  return (
-    <Card className={classes.card}>
-      <Skeleton />
-      <Skeleton />
-      <Skeleton />
-    </Card>
-  );
-}
-
-export default function PermissionsPanel({
-  permissionType,
-  permissions,
-  resourceIri,
-}) {
-  const classes = useStyles();
-  const editButtonText = permissionType === "editors" ? "Editors" : "Viewers";
-  const { loading } = useAllPermissions();
-
-  if (loading) return <AgentPermissionListSkeleton />;
-  console.log("permissions panel render", permissionType, permissions);
-  return (
-    <>
-      <Card className={classes.card}>
-        <PolicyHeader type={permissionType} pluralTitle>
-          <Button variant="text" onClick={() => {}} iconBefore="edit">
-            {editButtonText}
-          </Button>
-          <Button type="button" variant="in-menu">
-            <MoreVertIcon />
-          </Button>
-        </PolicyHeader>
-        {renderCardBody(permissions, resourceIri, classes)}
-        {/* agentpicker is not REFACTOR yet and could cause rerenders */}
-        {/* <AgentPickerModal /> */}
-        <ConfirmationDialog />
-      </Card>
-    </>
-  );
-}
-
-PermissionsPanel.propTypes = {
-  permissionType: PropTypes.string.isRequired,
-  resourceIri: PropTypes.string.isRequired,
-  permissions: PropTypes.arrayOf(PropTypes.object),
-};
-
-PermissionsPanel.defaultProps = {
-  permissions: [],
 };

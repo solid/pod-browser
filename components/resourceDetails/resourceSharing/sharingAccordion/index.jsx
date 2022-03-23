@@ -34,9 +34,7 @@ import PermissionsContext from "../../../../src/contexts/permissionsContext";
 import AgentAccessSharingList from "../agentAccessSharingList";
 import PermissionsPanel from "../PermissionsPanel";
 import { preparePermissionsDataForTable } from "../../utils";
-import useAllPermissions, {
-  getPermissions,
-} from "../../../../src/hooks/useAllPermissions";
+import useAllPermissions from "../../../../src/hooks/useAllPermissions";
 
 export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
   "agent-access-list-show-all";
@@ -58,14 +56,14 @@ export const TESTCAFE_ID_AGENT_ACCESS_LIST_SHOW_ALL =
 function SharingAccordion() {
   const router = useRouter();
   const isContainer = isContainerIri(router.query.resourceIri);
-  const { permissions, loading } = useAllPermissions();
+  const { permissions, loading, getPermissions } = useAllPermissions();
   const { session } = useSession();
   const { solidDataset: dataset } = useContext(DatasetContext);
   const resourceIri = getSourceUrl(dataset);
 
   useEffect(() => {
     getPermissions(resourceIri, session.fetch);
-  }, [resourceIri, session.fetch]);
+  }, [getPermissions, resourceIri, session.fetch]);
   console.log("sharing accordion", { permissions });
   return (
     <>

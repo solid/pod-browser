@@ -33,87 +33,7 @@ import {
 import { isPublicAgentorAuthenticatedAgentWebId } from "../../../components/resourceDetails/utils";
 import { fetchProfile } from "../../solidClientHelpers/profile";
 
-// const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
-//   if (!consentBasedPermissions) return [];
-//   const requestedAccessModes = consentBasedPermissions.map((vc) => {
-//     const accessMode = {
-//       read: getRequestedAccessesFromSignedVc(vc).mode.some((el) =>
-//         el.includes("Read")
-//       ),
-//       write: getRequestedAccessesFromSignedVc(vc).mode.some((el) =>
-//         el.includes("Write")
-//       ),
-//       append: getRequestedAccessesFromSignedVc(vc).mode.some((el) =>
-//         el.includes("Append")
-//       ),
-//       control: getRequestedAccessesFromSignedVc(vc).mode.some((el) =>
-//         el.includes("Control")
-//       ),
-//     };
-//     return {
-//       acl: accessMode,
-//       vc,
-//     };
-//   });
-
-//   const normalizedPermissions = requestedAccessModes.map(({ acl, vc }) => {
-//     return {
-//       type: "agent",
-//       acl,
-//       webId: getRequestorWebIdFromSignedVc(vc),
-//       alias: getPolicyDetailFromAccess(acl, "name"),
-//       vc,
-//     };
-//   });
-//   return normalizedPermissions;
-// };
-
-// export default function useAllPermissions() {
-//   const { accessControl } = useContext(AccessControlContext);
-//   const [permissions, setPermissions] = useState([]);
-
-//   const { solidDataset: dataset } = useContext(DatasetContext);
-//   console.log("Is this causing the rerenders", dataset);
-//   const datasetUrl = getSourceUrl(dataset);
-
-//   const { permissions: consentBasedPermissions } =
-//     useConsentBasedAccessForResource(datasetUrl);
-
-//   const normalizedConsentPermissions = useMemo(
-//     () =>
-//       consentBasedPermissions
-//         ? normalizeConsentBasedPermissions(consentBasedPermissions)
-//         : [],
-//     [consentBasedPermissions]
-//   );
-
-//   useEffect(() => {
-//     if (!accessControl) {
-//       setPermissions([]);
-//       return;
-//     }
-
-//     accessControl
-//       .getAllPermissionsForResource()
-//       .then((normalizedPermissions) => {
-//         setPermissions([
-//           ...normalizedPermissions,
-//           ...normalizedConsentPermissions,
-//         ]);
-//       });
-//   }, [accessControl, normalizedConsentPermissions]);
-
-//   return {
-//     permissions,
-//   };
-// }
-
-// interface Group {
-//   name: string;              // editors, friends, family, etc: descriptive text
-//   permissions: AccessModes[] // permissions required for "editors" { edit / control / write }
-//   members: WebId[]           // each agent that has edit permission on the resource
-// }
-
+//  where we map {read:true, append:false} etc to "viewer"
 const findSharingTypeForAgents = (agents) => {
   const outputArray = [];
   Object.keys(agents).forEach((key) => {
@@ -132,6 +52,7 @@ const findSharingTypeForAgents = (agents) => {
   return outputArray;
 };
 
+// where we make an array of everyone with the same type (ex: viewer) of permission
 const mapAgentsToSharingType = (agents) => {
   const sharingTypeHash = {};
   const output = [];
@@ -146,6 +67,7 @@ const mapAgentsToSharingType = (agents) => {
   Object.keys(sharingTypeHash).forEach((key) => {
     output.push({ type: key, data: sharingTypeHash[key] });
   });
+
   return output;
 };
 
@@ -172,6 +94,7 @@ export default function useAllPermissions() {
     setLoading(true);
     async function fetchPermissions() {
       const newPermissions = await getPermissions(resourceIri, session.fetch);
+      console.log("problem is this an array? plz", newPermissions);
       setPermissions(newPermissions);
       console.log(
         "permissions in useEffect hook in useAllPermissionsHook",
@@ -201,11 +124,11 @@ export default function useAllPermissions() {
   }
 
   async function setPublicPermissions(resourceIri, access, fetch) {
+    // redo this one once func above works
     try {
       universalAccess.setPublicAccess(resourceIri, access);
-      // fetch new data after this.
+
       const newPermissions = await getPermissions(resourceIri, fetch);
-      // setPermissions(newPermissions);
     } catch (e) {
       console.log(e);
     }
