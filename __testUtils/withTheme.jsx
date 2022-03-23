@@ -36,8 +36,7 @@ export default function WithTheme(props) {
 }
 
 WithTheme.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  theme: T.object,
+  theme: T.oneOfType([Object]),
   children: T.node.isRequired,
 };
 

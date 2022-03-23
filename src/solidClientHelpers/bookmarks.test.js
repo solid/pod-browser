@@ -50,7 +50,7 @@ const bookmarkThing = defineThing({}, (t) =>
 const filledDataset = setThing(emptyDataset, bookmarkThing);
 
 describe("initialize bookmarks", () => {
-  test("it saves a new bookmarks dataset at a given IRI", async () => {
+  it("saves a new bookmarks dataset at a given IRI", async () => {
     saveResource.mockResolvedValue({ response: bookmarksDataset });
     const expected = await initializeBookmarks(bookmarksIri, fetch);
 
@@ -60,7 +60,7 @@ describe("initialize bookmarks", () => {
 
 describe("addBookmark", () => {
   const bookmarkUrl = "https://example.org/cats";
-  test("it saves a new bookmark to the bookmarks dataset", async () => {
+  it("saves a new bookmark to the bookmarks dataset", async () => {
     saveResource.mockResolvedValue({ response: 42 });
     getResourceName.mockReturnValue("cats");
 

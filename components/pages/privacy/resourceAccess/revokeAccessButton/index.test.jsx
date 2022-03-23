@@ -55,7 +55,7 @@ describe("RevokeAccessButton", () => {
   ];
 
   const setShouldUpdate = jest.fn();
-  test("it renders correct text for drawer button", async () => {
+  it("renders correct text for drawer button", async () => {
     const { asFragment, getByText } = renderWithTheme(
       <RevokeAccessButton
         variant="drawer"
@@ -70,7 +70,8 @@ describe("RevokeAccessButton", () => {
     });
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it renders correct text for in menu button", async () => {
+
+  it("renders correct text for in menu button", async () => {
     const { asFragment, getByText } = renderWithTheme(
       <RevokeAccessButton
         variant="in-menu"
@@ -85,7 +86,8 @@ describe("RevokeAccessButton", () => {
     });
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it renders correct text for Revoke All Access button", async () => {
+
+  it("renders correct text for Revoke All Access button", async () => {
     const { asFragment, getByText } = renderWithTheme(
       <RevokeAccessButton
         variant="all-access"
@@ -100,7 +102,8 @@ describe("RevokeAccessButton", () => {
     });
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it displays confirmation dialog on click", async () => {
+
+  it("displays confirmation dialog on click", async () => {
     const { getByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <RevokeAccessButton
@@ -119,7 +122,8 @@ describe("RevokeAccessButton", () => {
       expect(getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)).toBeInTheDocument()
     );
   });
-  test("clicking confirm button calls remove access function", async () => {
+
+  it("calls remove access function when clicking confirm button ", async () => {
     const resource = SolidClientFns.mockSolidDatasetFrom(resourceIri);
     const data = mockAccessControl();
     const error = "Test Error";

@@ -24,7 +24,7 @@ import { render } from "@testing-library/react";
 import Spinner from "./index";
 
 describe("Spinner", () => {
-  test("Renders a spinner", () => {
+  it("Renders a spinner", () => {
     const { asFragment } = render(<Spinner />);
     expect(asFragment()).toMatchSnapshot();
   });

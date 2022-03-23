@@ -48,7 +48,8 @@ describe("Profile page", () => {
       .spyOn(solidClientFns, "getEffectiveAccess")
       .mockReturnValue({ user: { read: true, write: true, append: true } });
   });
-  test("Renders the profile page", async () => {
+
+  it("Renders the profile page", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session, false, profile);
 
@@ -63,7 +64,8 @@ describe("Profile page", () => {
 
     expect(asFragment()).toMatchSnapshot();
   });
-  test("returns null if session request is in progress", () => {
+
+  it("returns null if session request is in progress", () => {
     const sessionRequestInProgress = true;
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(

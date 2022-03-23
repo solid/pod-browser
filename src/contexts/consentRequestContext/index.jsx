@@ -44,8 +44,7 @@ function ConsentRequestProvider({
 
 ConsentRequestProvider.propTypes = {
   children: T.node.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  consentRequest: T.object,
+  consentRequest: T.oneOfType([Object]),
   setConsentRequest: T.func,
 };
 

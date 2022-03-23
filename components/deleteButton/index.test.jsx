@@ -43,7 +43,7 @@ const dialogId = "dialogId";
 const successMessage = "successMessage";
 
 describe("Delete button", () => {
-  test("it renders a delete button", () => {
+  it("renders a delete button", () => {
     const { asFragment } = renderWithTheme(
       <DeleteButton
         onDelete={jest.fn()}
@@ -55,7 +55,8 @@ describe("Delete button", () => {
     );
     expect(asFragment()).toMatchSnapshot();
   });
-  test("clicking on delete button opens a confirmation dialog with the correct title and content", () => {
+
+  it("opens a confirmation dialog with the correct title and content when clicking on delete button ", () => {
     const { getByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <DeleteButton
@@ -79,7 +80,8 @@ describe("Delete button", () => {
       getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
     ).toHaveTextContent(confirmationContent);
   });
-  test("if confirmation dialog is confirmed, it deletes the resource", () => {
+
+  it("deletes the resource if confirmation dialog is confirmed", () => {
     const onDelete = jest.fn();
     const { getByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
@@ -102,7 +104,7 @@ describe("Delete button", () => {
 });
 
 describe("handleDeleteResource", () => {
-  test("it returns a handler that calls the given onDelete", async () => {
+  it("returns a handler that calls the given onDelete", async () => {
     const onDelete = jest.fn();
     const onDeleteError = jest.fn();
     const setAlertOpen = jest.fn();
@@ -122,7 +124,7 @@ describe("handleDeleteResource", () => {
     expect(onDelete).toHaveBeenCalled();
   });
 
-  test("it returns a handler that shows an alert if successful", async () => {
+  it("returns a handler that shows an alert if successful", async () => {
     const onDelete = jest.fn();
     const onDeleteError = jest.fn();
     const setAlertOpen = jest.fn();
@@ -144,7 +146,7 @@ describe("handleDeleteResource", () => {
     expect(setAlertOpen).toHaveBeenCalledWith(true);
   });
 
-  test("it returns a handler that calls onError if not successful", async () => {
+  it("returns a handler that calls onError if not successful", async () => {
     const error = new Error("boom");
     const onDelete = jest.fn(() => {
       throw error;

@@ -46,7 +46,7 @@ describe("Profile", () => {
     jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
   });
 
-  test("renders a person profile", async () => {
+  it("renders a person profile", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
     const { asFragment, queryAllByText } = renderWithTheme(
@@ -60,7 +60,7 @@ describe("Profile", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("renders an app profile", async () => {
+  it("renders an app profile", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
     const { asFragment, queryByText } = renderWithTheme(
@@ -77,7 +77,7 @@ describe("Profile", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("renders an error if profile cannot be fetched", async () => {
+  it("renders an error if profile cannot be fetched", async () => {
     act(() => {
       jest.spyOn(solidClientFns, "getSolidDataset").mockImplementation(() => {
         throw new Error("404");

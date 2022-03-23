@@ -63,7 +63,7 @@ describe("PermissionsForm", () => {
     SessionProvider = mockSessionContextProvider(session);
   });
 
-  test("Renders a permissions form", () => {
+  it("Renders a permissions form", () => {
     const { asFragment, getByTestId } = renderWithTheme(
       <PermissionsForm acl={acl} />
     );
@@ -74,7 +74,7 @@ describe("PermissionsForm", () => {
     expect(getByTestId(controlCheckbox).disabled).toBe(false);
   });
 
-  test("it returns null if control is false", () => {
+  it("returns null if control is false", () => {
     const aclNoControl = createAccessMap(true, true, true, false);
 
     const { asFragment } = renderWithTheme(
@@ -90,13 +90,13 @@ describe("PermissionsForm", () => {
       setOpen = jest.fn();
     });
 
-    test("it calls setOpen with false is open is true", () => {
+    it("calls setOpen with false is open is true", () => {
       toggleOpen(true, setOpen)();
 
       expect(setOpen).toHaveBeenCalledWith(false);
     });
 
-    test("it calls setOpen with true is open is false", () => {
+    it("calls setOpen with true is open is false", () => {
       toggleOpen(false, setOpen)();
 
       expect(setOpen).toHaveBeenCalledWith(true);
@@ -104,12 +104,12 @@ describe("PermissionsForm", () => {
   });
 
   describe("arrowIcon", () => {
-    test("it returns the up arrow when open is true", () => {
+    it("returns the up arrow when open is true", () => {
       const { asFragment } = renderWithTheme(arrowIcon(true));
       expect(asFragment()).toMatchSnapshot();
     });
 
-    test("it returns the down arrow when open is false", () => {
+    it("returns the down arrow when open is false", () => {
       const { asFragment } = renderWithTheme(arrowIcon(false));
       expect(asFragment()).toMatchSnapshot();
     });

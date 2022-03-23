@@ -61,7 +61,7 @@ beforeEach(() => {
 });
 
 describe("ContactInfoTable", () => {
-  test("renders a table of contact info", async () => {
+  it("renders a table of contact info", async () => {
     const session = mockSession({ fetch });
     const SessionProvider = mockSessionContextProvider(session);
     const profileDataset = mockPersonDatasetAliceWithContactInfo();
@@ -80,7 +80,7 @@ describe("ContactInfoTable", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("renders an editable table of contact info", () => {
+  it("renders an editable table of contact info", () => {
     const session = mockSession({ fetch });
     const SessionProvider = mockSessionContextProvider(session);
     const profileDataset = mockPersonDatasetAliceWithContactInfo();

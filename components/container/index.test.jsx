@@ -122,7 +122,7 @@ describe("Container view", () => {
     mockedUseConsentBasedAccessForResource.mockReturnValue({ permissions: [] });
   });
 
-  test("renders a table", async () => {
+  it("renders a table", async () => {
     const { asFragment, getByText } = renderWithTheme(
       <PermissionsContextProvider>
         <Container iri={iri} />
@@ -136,7 +136,7 @@ describe("Container view", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("renders a table for parent container if iri is a resource", async () => {
+  it("renders a table for parent container if iri is a resource", async () => {
     mockedGetContainerResourceUrlAll.mockReturnValue([
       "https://myaccount.mypodserver.com/resource.txt",
     ]);
@@ -149,7 +149,7 @@ describe("Container view", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("Renders a spinner if data is loading", async () => {
+  it("Renders a spinner if data is loading", async () => {
     mockedGetContainerResourceUrlAll.mockReturnValue(undefined);
 
     const { asFragment, getByTestId } = renderWithTheme(

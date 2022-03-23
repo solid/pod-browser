@@ -25,14 +25,14 @@ import { renderWithTheme } from "../../__testUtils/withTheme";
 import SortedTableCarat from "./index";
 
 describe("Sorted", () => {
-  test("Displays an upwards facing carat when ascending", () => {
+  it("Displays an upwards facing carat when ascending", () => {
     const { asFragment } = renderWithTheme(
       <SortedTableCarat sorted sortedDesc={false} />
     );
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("Displays a downwards facing carat when descending", () => {
+  it("Displays a downwards facing carat when descending", () => {
     const { asFragment } = renderWithTheme(
       <SortedTableCarat sorted sortedDesc />
     );
@@ -41,7 +41,7 @@ describe("Sorted", () => {
 });
 
 describe("Unsorted", () => {
-  test("Displays nothing when unsorted", () => {
+  it("Displays nothing when unsorted", () => {
     const { asFragment } = renderWithTheme(
       <SortedTableCarat sorted sortedDesc={false} />
     );
@@ -50,7 +50,7 @@ describe("Unsorted", () => {
 });
 
 describe("Hiding the caret", () => {
-  test("Is hidden", () => {
+  it("Is hidden", () => {
     const { asFragment } = renderWithTheme(<SortedTableCarat sorted={false} />);
     expect(asFragment()).toMatchSnapshot();
   });

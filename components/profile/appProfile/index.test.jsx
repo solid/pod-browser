@@ -36,7 +36,7 @@ import {
 
 describe("App Profile", () => {
   // FIXME: for now this renders only one possibility - need to update once we're not hardcoding the mock app
-  test("renders a mock app profile", async () => {
+  it("renders a mock app profile", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
     const { asFragment, findByTestId } = renderWithTheme(

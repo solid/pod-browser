@@ -71,23 +71,23 @@ describe("ContainerDetails", () => {
     renderResult = render(<ContainerDetails update={update} />);
   });
 
-  test("Renders view", () => {
+  it("Renders view", () => {
     expect(renderResult.asFragment()).toMatchSnapshot();
   });
 
   describe("when DetailsContextMenu.onUpdate is called", () => {
     beforeEach(() => onUpdateFn());
 
-    test("it calls mutate", () => expect(update).toHaveBeenCalled());
-    test("it calls handleCloseDrawerFn", () =>
+    it("calls mutate", () => expect(update).toHaveBeenCalled());
+    it("calls handleCloseDrawerFn", () =>
       expect(handleCloseDrawerFn).toHaveBeenCalled());
   });
 
   describe("when onDeleteCurrentContainer is called", () => {
     beforeEach(() => onDeleteCurrentContainerFn());
 
-    test("it calls mutate", () => expect(update).toHaveBeenCalled());
-    test("it calls handleRedirectToParentContainerFn", () =>
+    it("calls mutate", () => expect(update).toHaveBeenCalled());
+    it("calls handleRedirectToParentContainerFn", () =>
       expect(handleRedirectToParentContainerFn).toHaveBeenCalled());
   });
 });

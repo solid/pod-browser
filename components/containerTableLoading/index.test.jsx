@@ -24,7 +24,7 @@ import { render } from "@testing-library/react";
 import ContainerTableLoading from "./index";
 
 describe("ContainerTableLoading", () => {
-  test("Renders a details error view", () => {
+  it("Renders a details error view", () => {
     const { asFragment } = render(<ContainerTableLoading />);
     expect(asFragment()).toMatchSnapshot();
   });

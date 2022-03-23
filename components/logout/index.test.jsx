@@ -30,7 +30,7 @@ import { hardRedirect } from "../../src/windowHelpers";
 jest.mock("../../src/windowHelpers");
 
 describe("Logout button", () => {
-  test("Renders a logout button", () => {
+  it("Renders a logout button", () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
 

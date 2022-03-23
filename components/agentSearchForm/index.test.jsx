@@ -45,7 +45,7 @@ describe("AgentSearchForm", () => {
     });
   });
 
-  test("it renders an AgentSearchForm", () => {
+  it("renders an AgentSearchForm", () => {
     const heading = "Heading";
     const onChange = jest.fn();
     const onSubmit = jest.fn();
@@ -61,7 +61,7 @@ describe("AgentSearchForm", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it has a default heading", () => {
+  it("has a default heading", () => {
     const onSubmit = jest.fn();
     const { asFragment } = renderWithTheme(
       <AgentSearchForm onSubmit={onSubmit} />
@@ -69,7 +69,7 @@ describe("AgentSearchForm", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it calls onChange when updating the input", () => {
+  it("calls onChange when updating the input", () => {
     const onChange = jest.fn();
     const onSubmit = jest.fn();
     const wrapper = render(
@@ -80,7 +80,7 @@ describe("AgentSearchForm", () => {
     expect(onChange).toHaveBeenCalledWith("https://www.example.com");
   });
 
-  test("it calls onSubmit when clicking the submit button", () => {
+  it("calls onSubmit when clicking the submit button", () => {
     const onSubmit = jest.fn();
     const wrapper = render(
       <AgentSearchForm
@@ -100,7 +100,7 @@ describe("AgentSearchForm", () => {
     expect(onSubmit).toHaveBeenCalledWith("https://www.example.com");
   });
 
-  test("when agentId is already in permissions, it renders error message and does not call onSubmit", () => {
+  it("renders error message and does not call onSubmit when agentId is already in permissions", () => {
     const onSubmit = jest.fn();
     const wrapper = render(
       <AgentSearchForm
@@ -124,7 +124,7 @@ describe("AgentSearchForm", () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  test("when agentId is same as session webId, it renders error message and does not call onSubmit", () => {
+  it("renders error message and does not call onSubmit when agentId is same as session webId", () => {
     const onSubmit = jest.fn();
     const wrapper = render(
       <AgentSearchForm
@@ -147,7 +147,7 @@ describe("AgentSearchForm", () => {
     expect(errorMessage).toBeTruthy();
     expect(onSubmit).not.toHaveBeenCalled();
   });
-  test("renders correct error message when agent type is 'contacts'", () => {
+  it("renders correct error message when agent type is 'contacts'", () => {
     const onSubmit = jest.fn();
     const wrapper = render(
       <AgentSearchForm

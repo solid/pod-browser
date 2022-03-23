@@ -37,13 +37,13 @@ describe("Tab Panel", () => {
       },
     });
   });
-  test("it renders permissions panel", () => {
+  it("renders permissions panel", () => {
     const { asFragment } = renderWithTheme(
       <TabPanel panelName="Permissions" value="Permissions" />
     );
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it renders profile panel", () => {
+  it("renders profile panel", () => {
     const { asFragment } = renderWithTheme(
       <TabPanel panelName="Profile" value="Profile" />
     );

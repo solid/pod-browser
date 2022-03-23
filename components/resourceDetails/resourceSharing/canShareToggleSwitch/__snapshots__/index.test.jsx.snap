@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CanToggleShareSwitch it renders a toggle switch for Can Share 1`] = `
+exports[`CanToggleShareSwitch renders a toggle switch for Can Share 1`] = `
 <DocumentFragment>
   <span
     class="PodBrowser-root PodBrowser-edgeEnd"

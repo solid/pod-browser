@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PodIndicator it renders the pod indicator with the pod iri 1`] = `
+exports[`PodIndicator renders the pod indicator with the pod iri 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-indicator"
@@ -36,4 +36,4 @@ exports[`PodIndicator it renders the pod indicator with the pod iri 1`] = `
 </DocumentFragment>
 `;
 
-exports[`PodIndicator it returns null if there is no profile 1`] = `[Function]`;
+exports[`PodIndicator returns null if there is no profile 1`] = `[Function]`;

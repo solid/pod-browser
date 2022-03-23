@@ -26,14 +26,14 @@ import {
 } from "./index";
 
 describe("resourceHref", () => {
-  test("it generates a resource link", () => {
+  it("generates a resource link", () => {
     const link = resourceHref("https://example.com/example.ttl");
     expect(link).toEqual("/resource/https%3A%2F%2Fexample.com%2Fexample.ttl");
   });
 });
 
 describe("resourceContextRedirect", () => {
-  test("it calls router.replace with a new action for a given container and resource", () => {
+  it("calls router.replace with a new action for a given container and resource", () => {
     const resourceIri = "https://mypod.myhost.com/resource";
     const containerIri = "https://mypod.myhost.com";
     const action = "myAction";
@@ -52,7 +52,7 @@ describe("resourceContextRedirect", () => {
 });
 
 describe("urlForResourceAction", () => {
-  test("generates a url without a querystring if no action is given", () => {
+  it("generates a url without a querystring if no action is given", () => {
     const resourceIri = "https://mypod.myhost.com/resource";
     const containerIri = "https://mypod.myhost.com";
 
@@ -62,7 +62,7 @@ describe("urlForResourceAction", () => {
     });
   });
 
-  test("generates a url for a resource+container", () => {
+  it("generates a url for a resource+container", () => {
     const resourceIri = "https://mypod.myhost.com/resource";
     const containerIri = "https://mypod.myhost.com";
     const action = "myAction";
@@ -73,7 +73,7 @@ describe("urlForResourceAction", () => {
     });
   });
 
-  test("generates an alias url for a resource", () => {
+  it("generates an alias url for a resource", () => {
     const resourceIri = "https://mypod.myhost.com/resource";
     const action = "myAction";
 

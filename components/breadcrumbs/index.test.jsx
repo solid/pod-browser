@@ -34,7 +34,7 @@ describe("Breadcrumbs view", () => {
     mockedPodRootUriHook.mockReturnValue("https://www.mypodbrowser.com/");
   });
 
-  test("Renders a breadcrumbs view", () => {
+  it("Renders a breadcrumbs view", () => {
     const { asFragment } = renderWithTheme(
       <PodLocationProvider currentUri="https://www.mypodbrowser.com/">
         <Breadcrumbs />
@@ -43,7 +43,7 @@ describe("Breadcrumbs view", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("Renders a breadcrumbs view with breadcrumbs based on url slashes", () => {
+  it("Renders a breadcrumbs view with breadcrumbs based on url slashes", () => {
     const { asFragment } = renderWithTheme(
       <PodLocationProvider currentUri="https://www.mypodbrowser.com/some/location">
         <Breadcrumbs />
@@ -52,7 +52,7 @@ describe("Breadcrumbs view", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("Renders last breadcrumb as plain text", () => {
+  it("Renders last breadcrumb as plain text", () => {
     const { container } = renderWithTheme(
       <PodLocationProvider currentUri="https://www.mypodbrowser.com/some/location">
         <Breadcrumbs />
@@ -70,7 +70,7 @@ describe("Breadcrumbs view", () => {
     ).toBeNull();
   });
 
-  test("Displays current folder as crumb in breadcrumbs", () => {
+  it("Displays current folder as crumb in breadcrumbs", () => {
     const { queryByText } = renderWithTheme(
       <PodLocationProvider currentUri="https://www.mypodbrowser.com/some/location">
         <Breadcrumbs />

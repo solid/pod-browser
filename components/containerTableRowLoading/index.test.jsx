@@ -24,7 +24,7 @@ import { render } from "@testing-library/react";
 import ContainerTableRowSkeleton from "./index";
 
 describe("ContainerTableRowSkeleton", () => {
-  test("Renders a ContainerTableRowSkeleton", () => {
+  it("Renders a ContainerTableRowSkeleton", () => {
     const { asFragment } = render(
       <table>
         <tbody>

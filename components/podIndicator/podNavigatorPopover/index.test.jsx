@@ -42,7 +42,8 @@ describe("PodNavigatorPopover", () => {
     );
     anchorEl = getByText("Anchor button");
   });
-  test("renders a pod navigator popover", async () => {
+
+  it("renders a pod navigator popover", async () => {
     const { asFragment, getByTestId } = renderWithTheme(
       <div>
         <PodNavigatorPopover
@@ -77,7 +78,7 @@ describe("PodNavigatorPopover", () => {
     });
 
     describe("clickHandler", () => {
-      test("it sets up a click handler", () => {
+      it("sets up a click handler", () => {
         const setAnchorEl = jest.fn();
         const currentTarget = "test";
         clickHandler(setAnchorEl)({ currentTarget });
@@ -86,7 +87,7 @@ describe("PodNavigatorPopover", () => {
     });
 
     describe("closeHandler", () => {
-      test("it sets up a close handler", () => {
+      it("sets up a close handler", () => {
         const setAnchorEl = jest.fn();
         const setDisplayNavigator = jest.fn();
         closeHandler(setAnchorEl, setDisplayNavigator)();
@@ -95,7 +96,7 @@ describe("PodNavigatorPopover", () => {
       });
     });
 
-    test("it sets up a submit handler", async () => {
+    it("sets up a submit handler", async () => {
       const resourceInfo = solidClientFns.mockSolidDatasetFrom(url);
       jest
         .spyOn(solidClientFns, "getResourceInfo")

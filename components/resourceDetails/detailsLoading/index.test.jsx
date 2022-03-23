@@ -25,7 +25,7 @@ import DetailsLoading from "./index";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 
 describe("DetailsLoading", () => {
-  test("Renders a details error view", () => {
+  it("Renders a details error view", () => {
     jest
       .spyOn(RouterFns, "useRouter")
       .mockReturnValueOnce({ pathname: "/pathname/", replace: jest.fn() });

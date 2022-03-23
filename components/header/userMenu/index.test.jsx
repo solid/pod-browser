@@ -36,7 +36,7 @@ describe("UserMenu", () => {
     });
   });
 
-  test("renders a menu", () => {
+  it("renders a menu", () => {
     const { asFragment } = renderWithTheme(<UserMenu />);
     expect(asFragment()).toMatchSnapshot();
   });

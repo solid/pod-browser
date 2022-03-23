@@ -46,13 +46,13 @@ describe("PodIndicator", () => {
     }));
   });
 
-  test("it renders the pod indicator with the pod iri", async () => {
+  it("renders the pod indicator with the pod iri", async () => {
     const { asFragment, queryByText } = renderWithTheme(<PodIndicator />);
     expect(queryByText("https://mypod.myhost.com")).toBeDefined();
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it returns null if there is no profile", () => {
+  it("returns null if there is no profile", () => {
     usePodOwnerProfile.mockReturnValue({
       profile: null,
       error: null,
@@ -61,7 +61,7 @@ describe("PodIndicator", () => {
     expect(asFragment).toMatchSnapshot();
   });
 
-  test("copy text button copies the text to the clipboard", async () => {
+  it("copy text button copies the text to the clipboard", async () => {
     const writeText = jest.fn();
     Object.assign(navigator, {
       clipboard: {
@@ -87,7 +87,7 @@ describe("PodIndicator", () => {
 });
 
 describe("clickHandler", () => {
-  test("it sets up a click handler", () => {
+  it("sets up a click handler", () => {
     const setAnchorEl = jest.fn();
     const currentTarget = "test";
     clickHandler(setAnchorEl)({ currentTarget });
@@ -96,7 +96,7 @@ describe("clickHandler", () => {
 });
 
 describe("closeHandler", () => {
-  test("it sets up a close handler", () => {
+  it("sets up a close handler", () => {
     const setAnchorEl = jest.fn();
     closeHandler(setAnchorEl)();
     expect(setAnchorEl).toHaveBeenCalledWith(null);

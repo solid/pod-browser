@@ -486,6 +486,5 @@ export default function RequestSection(props) {
 RequestSection.propTypes = {
   agentName: T.string.isRequired,
   setSelectedAccess: T.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  sectionDetails: T.object.isRequired,
+  sectionDetails: T.oneOfType([Object]).isRequired,
 };

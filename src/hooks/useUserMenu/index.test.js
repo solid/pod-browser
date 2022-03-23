@@ -55,7 +55,7 @@ describe("useUserMenu", () => {
     expect(testIds).toContain(TESTCAFE_ID_USER_MENU_LOGOUT);
   });
 
-  test("log out button triggers logout and redirect", () => {
+  it("handles logout and redirect when log out button triggered", () => {
     mockedSessionHook.mockReturnValueOnce({
       logout,
       session: { info: { isLoggedIn: false } },

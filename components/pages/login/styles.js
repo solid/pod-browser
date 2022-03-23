@@ -47,6 +47,7 @@ const styles = (theme) =>
       [theme.breakpoints.up("sm")]: {
         padding: 0,
         paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(12.8),
       },
     },
     "login-page__title": {
@@ -73,7 +74,6 @@ const styles = (theme) =>
         minWidth: 420,
         maxWidth: 600,
         padding: 0,
-        paddingBottom: theme.spacing(12.8),
       },
     },
     "links-container__text": {

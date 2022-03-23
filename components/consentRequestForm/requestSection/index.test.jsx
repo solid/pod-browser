@@ -59,7 +59,7 @@ describe("Request Section", () => {
       ]);
   });
   const setSelectedAccess = jest.fn();
-  test("Renders initial context data", async () => {
+  it("Renders initial context data", async () => {
     const { asFragment } = renderWithTheme(
       <RequestSection
         agentName="agent_name"
@@ -71,7 +71,7 @@ describe("Request Section", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it selects all switches in a section and displays 'Deny all' in the toggle title", () => {
+  it("selects all switches in a section and displays 'Deny all' in the toggle title", () => {
     const { getByTestId, getAllByRole, getByText } = renderWithTheme(
       <RequestSection
         agentName="agent_name"
@@ -95,7 +95,7 @@ describe("Request Section", () => {
     expect(getByText("Deny all")).toBeInTheDocument();
   });
 
-  test("it expands a sub-section and selects switch in it", async () => {
+  it("expands a sub-section and selects switch in it", async () => {
     const { getByTestId, getAllByRole } = renderWithTheme(
       <RequestSection
         agentName="agent_name"
@@ -123,7 +123,7 @@ describe("Request Section", () => {
     expect(getByTestId("consent-access-switch")).toBeChecked();
   });
 
-  test("it selects a single switch when clicked", async () => {
+  it("selects a single switch when clicked", async () => {
     const { getAllByRole, getByTestId } = renderWithTheme(
       <RequestSection
         agentName="agent_name"
@@ -144,7 +144,7 @@ describe("Request Section", () => {
     });
   });
 
-  test("switches all to unchecked when clicking deny all", () => {
+  it("switches all to unchecked when clicking deny all", () => {
     const { getByTestId, getAllByRole, getByText } = renderWithTheme(
       <RequestSection
         agentName="agent_name"
@@ -174,7 +174,7 @@ describe("Request Section", () => {
 });
 
 describe("removeExistingValues", () => {
-  test("returns array of accesses after removing those checked to false in newer accesses and adding newly checked ones", () => {
+  it("returns array of accesses after removing those checked to false in newer accesses and adding newly checked ones", () => {
     const previousAccess = [
       {
         index: 0,

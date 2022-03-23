@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Bookmark it renders a bookmark icon 1`] = `
+exports[`Bookmark renders a bookmark icon 1`] = `
 <DocumentFragment>
   <button
     class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
@@ -17,7 +17,7 @@ exports[`Bookmark it renders a bookmark icon 1`] = `
 </DocumentFragment>
 `;
 
-exports[`Bookmark it renders a bookmark icon and text if withText prop is true 1`] = `
+exports[`Bookmark renders a bookmark icon and text if withText prop is true 1`] = `
 <DocumentFragment>
   <button
     class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
@@ -40,7 +40,7 @@ exports[`Bookmark it renders a bookmark icon and text if withText prop is true 1
 </DocumentFragment>
 `;
 
-exports[`Bookmark it renders a button if menuItem is false 1`] = `
+exports[`Bookmark renders a button if menuItem is false 1`] = `
 <DocumentFragment>
   <button
     class="PodBrowser-button PodBrowser-button--text PodBrowser-bookmark-button"
@@ -57,7 +57,7 @@ exports[`Bookmark it renders a button if menuItem is false 1`] = `
 </DocumentFragment>
 `;
 
-exports[`Bookmark it renders a list item button if menuItem is true 1`] = `
+exports[`Bookmark renders a list item button if menuItem is true 1`] = `
 <DocumentFragment>
   <div
     aria-disabled="true"

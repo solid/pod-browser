@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ResourceSharing it renders the sharing action component 1`] = `
+exports[`ResourceSharing renders the sharing action component 1`] = `
 <DocumentFragment>
   <ul
     class="PodBrowser-action-menu"
@@ -90,7 +90,7 @@ exports[`ResourceSharing it renders the sharing action component 1`] = `
 </DocumentFragment>
 `;
 
-exports[`ResourceSharing it renders the spinner if it's loading 1`] = `
+exports[`ResourceSharing renders the spinner if it's loading 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-root PodBrowser-colorPrimary PodBrowser-indeterminate"

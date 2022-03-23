@@ -24,7 +24,7 @@ import { renderWithTheme } from "../../../__testUtils/withTheme";
 import DetailsError from "./index";
 
 describe("DetailsError", () => {
-  test("Renders a details error view", () => {
+  it("Renders a details error view", () => {
     const name = "name";
     const message = "message";
     const iri = "iri";
