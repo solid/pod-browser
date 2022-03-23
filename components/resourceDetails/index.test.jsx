@@ -88,17 +88,19 @@ describe("Resource details", () => {
   });
 
   it("renders Permissions component for WAC-supporting Solid servers", async () => {
-    const { asFragment, getByTestId, getByText } = renderWithTheme(
-      <AccessControlProvider
-        accessControl={accessControl}
-        accessControlType="wac"
-      >
-        <DatasetProvider solidDataset={dataset}>
-          <ResourceDetails />
-        </DatasetProvider>
-      </AccessControlProvider>
-    );
+    const { asFragment, getByTestId, getByText, queryByTestId } =
+      renderWithTheme(
+        <AccessControlProvider
+          accessControl={accessControl}
+          accessControlType="wac"
+        >
+          <DatasetProvider solidDataset={dataset}>
+            <ResourceDetails />
+          </DatasetProvider>
+        </AccessControlProvider>
+      );
     await waitFor(() => {
+      expect(queryByTestId("spinner")).not.toBeInTheDocument();
       expect(getByTestId(TESTCAFE_ID_ACCORDION_PERMISSIONS)).toBeDefined();
       expect(getByText("Permissions")).toBeInTheDocument();
     });

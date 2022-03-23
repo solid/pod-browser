@@ -48,6 +48,7 @@ import {
 import AlertContext from "../../../../src/contexts/alertContext";
 import useFetchProfile from "../../../../src/hooks/useFetchProfile";
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
+import { permission } from "../../../../constants/propTypes";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -301,7 +302,7 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
 }
 
 AgentAccess.propTypes = {
-  permission: T.oneOfType([Object]).isRequired,
+  permission: permission.isRequired,
   onLoading: T.func,
 };
 

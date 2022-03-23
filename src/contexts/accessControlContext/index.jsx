@@ -43,7 +43,10 @@ AccessControlProvider.defaultProps = {
 
 AccessControlProvider.propTypes = {
   children: T.node.isRequired,
-  accessControl: T.oneOfType([Object]),
+  accessControl: T.shape({
+    accessControl: T.instanceOf(Object),
+    accessControlType: T.string,
+  }),
   accessControlType: T.string,
 };
 

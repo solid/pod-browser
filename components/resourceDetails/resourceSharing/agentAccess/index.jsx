@@ -38,6 +38,7 @@ import {
   AUTHENTICATED_AGENT_NAME,
   AUTHENTICATED_AGENT_PREDICATE,
 } from "../../../../src/models/contact/authenticated";
+import { permission } from "../../../../constants/propTypes";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -175,7 +176,7 @@ export default function AgentAccess({ permission }) {
 }
 
 AgentAccess.propTypes = {
-  permission: T.oneOfType([Object]).isRequired,
+  permission: permission.isRequired,
 };
 
 AgentAccess.defaultProps = {};
