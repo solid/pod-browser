@@ -49,6 +49,5 @@ TestApp.defaultProps = {
 
 TestApp.propTypes = {
   children: T.node.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  session: T.object,
+  session: T.oneOfType([Object]),
 };

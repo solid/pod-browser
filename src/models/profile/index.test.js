@@ -44,7 +44,7 @@ import {
 } from "./index";
 
 describe("getProfilesForPersonContacts", () => {
-  test("it fetches the profiles of the given people contacts", async () => {
+  it("fetches the profiles of the given people contacts", async () => {
     const fetch = jest.fn();
     const person1Iri =
       "https://user.example.com/contacts/Person/1234/index.ttl";
@@ -122,7 +122,7 @@ describe("getProfilesForPersonContacts", () => {
     expect(profile2.webId).toEqual(bobAlternateWebIdUrl);
   });
 
-  test("it filters out people for which the resource couldn't be fetched", async () => {
+  it("filters out people for which the resource couldn't be fetched", async () => {
     const fetch = jest.fn();
     const person1Iri =
       "https://user.example.com/contacts/Person/1234/index.ttl";
@@ -217,14 +217,14 @@ describe("getProfile", () => {
     avatar: null,
     name: "Alice",
   };
-  test("it returns a profile for a given webId", async () => {
+  it("returns a profile for a given webId", async () => {
     jest.spyOn(profileFns, "fetchProfile").mockResolvedValueOnce(profileAlice);
     expect(await getProfile(aliceWebIdUrl)).toEqual({
       profile: profileAlice,
       profileError: undefined,
     });
   });
-  test("it returns a profile error if fetching profile fails", async () => {
+  it("returns a profile error if fetching profile fails", async () => {
     jest.spyOn(profileFns, "fetchProfile").mockRejectedValueOnce("error");
     expect(await getProfile(aliceWebIdUrl)).toEqual({
       profile: undefined,

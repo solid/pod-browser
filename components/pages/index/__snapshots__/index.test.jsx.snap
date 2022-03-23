@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Index page It silently fails on router errors 1`] = `<DocumentFragment />`;
-
 exports[`Index page Renders null if there are no pod iris 1`] = `<DocumentFragment />`;
 
 exports[`Index page Renders null if there is an empty array of pod iris 1`] = `<DocumentFragment />`;
+
+exports[`Index page silently fails on router errors 1`] = `<DocumentFragment />`;

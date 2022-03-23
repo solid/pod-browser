@@ -32,7 +32,7 @@ function ChildComponent() {
 }
 
 describe("DetailsMenuContext", () => {
-  test("it has context data", () => {
+  it("has context data", () => {
     const { asFragment } = render(
       <DetailsMenuProvider>
         <ChildComponent />

@@ -28,11 +28,11 @@ const consentRequest = getConsentRequestDetails();
 const consentRequestOnePurpose = getConsentRequestDetailsOnePurpose();
 
 describe("getPurposeUrls", () => {
-  test("returns null if consentRequest is unavailable", () => {
+  it("returns null if consentRequest is unavailable", () => {
     const purposes = getPurposeUrls(undefined);
     expect(purposes).toBeNull();
   });
-  test("it returns purpose urls for multiple purposes", () => {
+  it("returns purpose urls for multiple purposes", () => {
     const purposes = getPurposeUrls(consentRequest);
     expect(purposes).toEqual([
       "https://example.com/SomeSpecificPurpose",
@@ -40,21 +40,22 @@ describe("getPurposeUrls", () => {
       "https://example.com/SomeSpecificPurposeB",
     ]);
   });
-  test("it returns purpose urls for one purpose", () => {
+
+  it("returns purpose urls for one purpose", () => {
     const purpose = getPurposeUrls(consentRequestOnePurpose);
     expect(purpose).toEqual("https://example.com/SomeSpecificPurpose");
   });
 });
 
 describe("getExpiryDate", () => {
-  test("it returns expiration date", () => {
+  it("returns expiration date", () => {
     const date = getExpiryDate(consentRequest);
     expect(date).toEqual("2022-06-23T16:40:03Z");
   });
 });
 
 describe("getRequestedAccesses", () => {
-  test("it returns requested accesses", () => {
+  it("returns requested accesses", () => {
     const resources = getRequestedAccesses(consentRequest);
     expect(resources).toEqual([
       {

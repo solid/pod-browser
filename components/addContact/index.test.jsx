@@ -45,7 +45,7 @@ import {
 import * as profileHelperFns from "../../src/solidClientHelpers/profile";
 
 describe("AddContact", () => {
-  test("it renders the Add Contact form", () => {
+  it("renders the Add Contact form", () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
     const { asFragment } = renderWithTheme(
@@ -80,7 +80,7 @@ describe("handleSubmit", () => {
     jest.restoreAllMocks();
   });
 
-  test("it alerts the user and exits if the webid already exists", async () => {
+  it("alerts the user and exits if the webid already exists", async () => {
     const personDataset = mockPersonDatasetAlice();
     const personProfile = mockProfileAlice();
     const people = [personDataset];
@@ -112,7 +112,7 @@ describe("handleSubmit", () => {
     expect(setDirtyForm).toHaveBeenCalledWith(true);
   });
 
-  test("it alerts the user and exits if fetching the profile fails", async () => {
+  it("alerts the user and exits if fetching the profile fails", async () => {
     const mockProfileError = new Error("error");
     const handler = handleSubmit({
       addressBook,
@@ -133,7 +133,7 @@ describe("handleSubmit", () => {
     expect(alertError).toHaveBeenCalledWith(FETCH_PROFILE_FAILED_ERROR_MESSAGE);
   });
 
-  test("it saves a contact without name and alerts the user", async () => {
+  it("saves a contact without name and alerts the user", async () => {
     const personUri = "http://example.com/marie#me";
     const mockProfile = { webId: personUri };
     const handler = handleSubmit({
@@ -159,7 +159,7 @@ describe("handleSubmit", () => {
     expect(alertSuccess).toHaveBeenCalled();
   });
 
-  test("it saves a new contact", async () => {
+  it("saves a new contact", async () => {
     const personUri = "http://example.com/alice#me";
     const personDataset = addStringNoLocale(
       mockThingFrom(personUri),
@@ -200,7 +200,7 @@ describe("handleSubmit", () => {
     expect(setDirtyForm).toHaveBeenCalledWith(false);
   });
 
-  test("it alerts the user if there is an error while creating the contact", async () => {
+  it("alerts the user if there is an error while creating the contact", async () => {
     const mockProfile = mockProfileAlice();
     const handler = handleSubmit({
       addressBook,

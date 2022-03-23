@@ -19,8 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable react/forbid-prop-types */
-
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import { Button, CircularProgress, createStyles } from "@material-ui/core";
@@ -177,7 +175,7 @@ export default function AgentAccess({ permission }) {
 }
 
 AgentAccess.propTypes = {
-  permission: T.object.isRequired,
+  permission: T.oneOfType([Object]).isRequired,
 };
 
 AgentAccess.defaultProps = {};

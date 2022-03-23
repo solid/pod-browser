@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable camelcase, no-console, react/forbid-prop-types */
+/* eslint-disable camelcase, no-console */
 
 import React, { useState } from "react";
 import T from "prop-types";

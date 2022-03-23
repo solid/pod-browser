@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Resource access show page it renders a resource access page for a person 1`] = `
+exports[`Resource access show page renders a resource access page for a person 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-drawer-container"
@@ -218,7 +218,7 @@ exports[`Resource access show page it renders a resource access page for a perso
 </DocumentFragment>
 `;
 
-exports[`Resource access show page it renders a resource access page for an app 1`] = `
+exports[`Resource access show page renders a resource access page for an app 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-drawer-container"

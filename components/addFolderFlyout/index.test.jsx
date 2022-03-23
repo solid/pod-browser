@@ -44,7 +44,7 @@ describe("AddFolderFlyout", () => {
   const session = mockSession();
   const SessionProvider = mockSessionContextProvider(session);
 
-  test("Renders an Add Folder button", async () => {
+  it("Renders an Add Folder button", async () => {
     const { asFragment, getByText } = render(
       <AlertContext.Provider
         value={{
@@ -66,7 +66,7 @@ describe("AddFolderFlyout", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("Displays a flyout on click", async () => {
+  it("Displays a flyout on click", async () => {
     const { queryByTestId } = render(
       <AlertContext.Provider
         value={{
@@ -95,7 +95,7 @@ describe("AddFolderFlyout", () => {
 });
 
 describe("determineFinalUrl", () => {
-  test("it returns a URL for a new folder with apended integer if folder already exists", () => {
+  it("returns a URL for a new folder with apended integer if folder already exists", () => {
     const name = "SomeFolder";
     const url = determineFinalUrl(folders, currentUri, name);
     expect(url).toMatch("https://www.mypodbrowser.com/SomeFolder(1)");

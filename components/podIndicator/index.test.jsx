@@ -111,7 +111,7 @@ describe("PodIndicator", () => {
 // });
 
 describe("clickHandler", () => {
-  test("it sets up a click handler", () => {
+  it("sets up a click handler", () => {
     const setAnchorEl = jest.fn();
     const currentTarget = "test";
     clickHandler(setAnchorEl)({ currentTarget });
@@ -120,7 +120,7 @@ describe("clickHandler", () => {
 });
 
 describe("closeHandler", () => {
-  test("it sets up a close handler", () => {
+  it("sets up a close handler", () => {
     const setAnchorEl = jest.fn();
     closeHandler(setAnchorEl)();
     expect(setAnchorEl).toHaveBeenCalledWith(null);

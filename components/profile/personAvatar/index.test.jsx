@@ -46,7 +46,7 @@ describe("Person Avatar", () => {
     jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
   });
 
-  test("renders a person avatar", async () => {
+  it("renders a person avatar", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
     const { asFragment, getByText } = renderWithTheme(

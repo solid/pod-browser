@@ -19,8 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable react/forbid-prop-types */
-
 // TODO: this component is kept here to keep the old Permissions accordion working.
 // It can be removed after the old permissions accordion is gone.
 
@@ -303,7 +301,7 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
 }
 
 AgentAccess.propTypes = {
-  permission: T.object.isRequired,
+  permission: T.oneOfType([Object]).isRequired,
   onLoading: T.func,
 };
 

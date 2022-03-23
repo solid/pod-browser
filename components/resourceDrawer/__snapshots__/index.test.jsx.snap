@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ResourceDrawer view it renders a Contents view when the router query has an iri 1`] = `
+exports[`ResourceDrawer view renders a Contents view when the router query has an iri 1`] = `
 <DocumentFragment>
   <section
     class="PodBrowser-drawer PodBrowser-drawer--open"
@@ -480,7 +480,7 @@ exports[`ResourceDrawer view it renders a Contents view when the router query ha
 </DocumentFragment>
 `;
 
-exports[`ResourceDrawer view it renders a loading view when context has no iri 1`] = `
+exports[`ResourceDrawer view renders a loading view when context has no iri 1`] = `
 <DocumentFragment>
   <section
     class="PodBrowser-drawer PodBrowser-drawer--open"
@@ -543,7 +543,95 @@ exports[`ResourceDrawer view it renders a loading view when context has no iri 1
 </DocumentFragment>
 `;
 
-exports[`ResourceDrawer view it renders without errors when iri contains spaces 1`] = `
+exports[`ResourceDrawer view renders a specific error message if resource fails with 403 1`] = `
+<DocumentFragment>
+  <section
+    class="PodBrowser-drawer PodBrowser-drawer--open"
+  >
+    <div
+      class="PodBrowser-drawer__content"
+    >
+      <div
+        class="PodBrowser-drawer__content-wrapper"
+      >
+        <div
+          class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
+        >
+          <button
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                class="PodBrowser-icon-cancel"
+              />
+               Close
+            </span>
+          </button>
+        </div>
+        <div
+          class="PodBrowser-message PodBrowser-message--error"
+        >
+          <div
+            class="PodBrowser-message__main"
+          >
+            <p>
+              You do not have access to this resource.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</DocumentFragment>
+`;
+
+exports[`ResourceDrawer view renders an error message if resource fails to load 1`] = `
+<DocumentFragment>
+  <section
+    class="PodBrowser-drawer PodBrowser-drawer--open"
+  >
+    <div
+      class="PodBrowser-drawer__content"
+    >
+      <div
+        class="PodBrowser-drawer__content-wrapper"
+      >
+        <div
+          class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
+        >
+          <button
+            class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                class="PodBrowser-icon-cancel"
+              />
+               Close
+            </span>
+          </button>
+        </div>
+        <div
+          class="PodBrowser-message PodBrowser-message--error"
+        >
+          <div
+            class="PodBrowser-message__main"
+          >
+            <p>
+              We had a problem loading the resource.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</DocumentFragment>
+`;
+
+exports[`ResourceDrawer view renders without errors when iri contains spaces 1`] = `
 <DocumentFragment>
   <section
     class="PodBrowser-drawer PodBrowser-drawer--open"
@@ -1015,94 +1103,6 @@ exports[`ResourceDrawer view it renders without errors when iri contains spaces 
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-</DocumentFragment>
-`;
-
-exports[`ResourceDrawer view renders a specific error message if resource fails with 403 1`] = `
-<DocumentFragment>
-  <section
-    class="PodBrowser-drawer PodBrowser-drawer--open"
-  >
-    <div
-      class="PodBrowser-drawer__content"
-    >
-      <div
-        class="PodBrowser-drawer__content-wrapper"
-      >
-        <div
-          class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
-        >
-          <button
-            class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
-          >
-            <span
-              class="PodBrowser-button__text"
-            >
-              <span
-                class="PodBrowser-icon-cancel"
-              />
-               Close
-            </span>
-          </button>
-        </div>
-        <div
-          class="PodBrowser-message PodBrowser-message--error"
-        >
-          <div
-            class="PodBrowser-message__main"
-          >
-            <p>
-              You do not have access to this resource.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-</DocumentFragment>
-`;
-
-exports[`ResourceDrawer view renders an error message if resource fails to load 1`] = `
-<DocumentFragment>
-  <section
-    class="PodBrowser-drawer PodBrowser-drawer--open"
-  >
-    <div
-      class="PodBrowser-drawer__content"
-    >
-      <div
-        class="PodBrowser-drawer__content-wrapper"
-      >
-        <div
-          class="PodBrowser-drawer__article PodBrowser-drawer__article--close-button"
-        >
-          <button
-            class="PodBrowser-button PodBrowser-button--text PodBrowser-drawer__close-button"
-          >
-            <span
-              class="PodBrowser-button__text"
-            >
-              <span
-                class="PodBrowser-icon-cancel"
-              />
-               Close
-            </span>
-          </button>
-        </div>
-        <div
-          class="PodBrowser-message PodBrowser-message--error"
-        >
-          <div
-            class="PodBrowser-message__main"
-          >
-            <p>
-              We had a problem loading the resource.
-            </p>
           </div>
         </div>
       </div>

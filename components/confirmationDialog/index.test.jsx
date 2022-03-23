@@ -30,11 +30,12 @@ import ConfirmationDialog, {
 } from "./index";
 
 describe("ConfirmationDialog", () => {
-  test("Renders a ConfirmationDialog", () => {
+  it("Renders a ConfirmationDialog", () => {
     const { asFragment } = renderWithTheme(<ConfirmationDialog />);
     expect(asFragment()).toMatchSnapshot();
   });
-  test("clicking on confirm button calls setConfirmed with true", () => {
+
+  it(" calls setConfirmed with true when clicking on confirm button ", () => {
     const setConfirmed = jest.fn();
     const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
       open: "confirmation-dialog",
@@ -49,7 +50,8 @@ describe("ConfirmationDialog", () => {
     act(() => userEvent.click(button));
     expect(setConfirmed).toHaveBeenCalledWith(true);
   });
-  test("when cancelText and confirmText are null, it displays default values", () => {
+
+  it("displays default values when cancelText and confirmText are null", () => {
     const setConfirmed = jest.fn();
     const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
       open: "confirmation-dialog",
@@ -67,7 +69,8 @@ describe("ConfirmationDialog", () => {
     const cancelButton = getByText("Cancel");
     expect(cancelButton).not.toBeNull();
   });
-  test("when omitCancelButton is true, it displays only confirm button", async () => {
+
+  it("displays only confirm button when omitCancelButton is true", async () => {
     const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
       open: "confirmation-dialog",
       omitCancelButton: true,
@@ -83,7 +86,8 @@ describe("ConfirmationDialog", () => {
       findByTestId(TESTCAFE_ID_CONFIRMATION_CANCEL_BUTTON)
     ).rejects.toEqual(expect.anything());
   });
-  test("clicking on cancel button calls setConfirmed with false", () => {
+
+  it("calls setConfirmed with false when clicking on cancel button", () => {
     const setConfirmed = jest.fn();
     const ConfirmationDialogProvider = mockConfirmationDialogContextProvider({
       open: "confirmation-dialog",

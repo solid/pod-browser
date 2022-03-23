@@ -110,6 +110,17 @@ exports[`Login page renders a login button 1`] = `
         </a>
       </div>
     </div>
+    <div
+      class="PodBrowser-button PodBrowser-widget-button-wrap"
+    >
+      <button
+        class="PodBrowser-button PodBrowser-widget-button"
+        data-testid="widget-button"
+        type="button"
+      >
+        Help improve PodBrowser!
+      </button>
+    </div>
   </div>
 </DocumentFragment>
 `;

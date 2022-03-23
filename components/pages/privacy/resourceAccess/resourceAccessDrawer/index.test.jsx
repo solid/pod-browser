@@ -60,7 +60,7 @@ describe("ResourceDrawer", () => {
       .mockResolvedValue(mockResource);
   });
 
-  test("clicking the remove access button displays confirmation dialog", async () => {
+  it("displays confirmation dialog when clicking the remove access button ", async () => {
     const onClose = jest.fn();
     const accessListEditors = [
       {
@@ -90,7 +90,8 @@ describe("ResourceDrawer", () => {
       expect(getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)).toBeInTheDocument();
     });
   });
-  test("calls the remove access function with the corrects values and closes the drawer on confirmation", async () => {
+
+  it("calls the remove access function with the corrects values and closes the drawer on confirmation", async () => {
     const onClose = jest.fn();
     const accessListEditors = [
       {
@@ -128,7 +129,8 @@ describe("ResourceDrawer", () => {
       expect(onClose).toHaveBeenCalled();
     });
   });
-  test("Renders the ResourceDrawer with correct title and access list", () => {
+
+  it("Renders the ResourceDrawer with correct title and access list", () => {
     const accessList = [
       {
         agent: webId,

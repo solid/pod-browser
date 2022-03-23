@@ -24,7 +24,7 @@ import { renderWithTheme } from "../../__testUtils/withTheme";
 import ContainerSubHeader from "./index";
 
 describe("ContainerSubHeader", () => {
-  test("Renders subheader", () => {
+  it("Renders subheader", () => {
     const { asFragment } = renderWithTheme(<ContainerSubHeader />);
     expect(asFragment()).toMatchSnapshot();
   });

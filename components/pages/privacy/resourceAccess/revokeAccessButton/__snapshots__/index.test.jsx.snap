@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`RevokeAccessButton it renders correct text for Revoke All Access button 1`] = `
+exports[`RevokeAccessButton renders correct text for Revoke All Access button 1`] = `
 <DocumentFragment>
   <button
     class="PodBrowser-revoke-button"
@@ -12,7 +12,7 @@ exports[`RevokeAccessButton it renders correct text for Revoke All Access button
 </DocumentFragment>
 `;
 
-exports[`RevokeAccessButton it renders correct text for drawer button 1`] = `
+exports[`RevokeAccessButton renders correct text for drawer button 1`] = `
 <DocumentFragment>
   <button
     class="PodBrowser-revoke-button"
@@ -24,7 +24,7 @@ exports[`RevokeAccessButton it renders correct text for drawer button 1`] = `
 </DocumentFragment>
 `;
 
-exports[`RevokeAccessButton it renders correct text for in menu button 1`] = `
+exports[`RevokeAccessButton renders correct text for in menu button 1`] = `
 <DocumentFragment>
   <button
     class="PodBrowser-button PodBrowser-button--in-menu PodBrowser-revoke-button"

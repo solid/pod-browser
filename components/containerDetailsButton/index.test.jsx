@@ -24,7 +24,7 @@ import { render } from "@testing-library/react";
 import ContainerDetailsButton from "./index";
 
 describe("ContainerDetailsButton", () => {
-  test("Renders view", () => {
+  it("Renders view", () => {
     const { asFragment } = render(<ContainerDetailsButton />);
     expect(asFragment()).toMatchSnapshot();
   });

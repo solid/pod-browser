@@ -32,7 +32,7 @@ function ChildComponent() {
 }
 
 describe("consentRequestContext", () => {
-  test("Renders initial context data", () => {
+  it("Renders initial context data", () => {
     const consentRequest = { agentName: "Consent Request initial" };
     const { asFragment } = render(
       <ConsentRequestProvider consentRequest={consentRequest}>
@@ -42,7 +42,8 @@ describe("consentRequestContext", () => {
 
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it provides consentRequest and setConsentRequest", () => {
+
+  it("provides consentRequest and setConsentRequest", () => {
     const consentRequest = { agentName: "Consent Request initial" };
     const setConsentRequest = jest.fn();
     const { container } = render(

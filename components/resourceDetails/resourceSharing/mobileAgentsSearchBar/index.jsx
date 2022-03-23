@@ -19,8 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable react/forbid-prop-types */
-
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useBem } from "@solid/lit-prism-patterns";

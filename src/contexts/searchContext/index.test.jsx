@@ -30,7 +30,7 @@ function ChildComponent() {
 }
 
 describe("SearchContext", () => {
-  test("Renders initial context data", () => {
+  it("Renders initial context data", () => {
     const search = "foo";
     const { asFragment } = render(
       <SearchProvider search={search}>
@@ -40,7 +40,8 @@ describe("SearchContext", () => {
 
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it provides search and setSearch", () => {
+
+  it("provides search and setSearch", () => {
     const search = "foo";
     const setSearch = jest.fn();
     const { container } = render(

@@ -53,7 +53,7 @@ function ChildComponent() {
 }
 
 describe("ConfirmationDialogContext", () => {
-  test("it has context data", () => {
+  it("has context data", () => {
     const { asFragment } = render(
       <ConfirmationDialogProvider>
         <ChildComponent />

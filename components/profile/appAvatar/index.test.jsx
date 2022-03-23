@@ -31,7 +31,7 @@ import AppAvatar, {
 
 describe("App Avatar", () => {
   // FIXME: for now this renders only one possibility - need to update once we're not hardcoding the mock app
-  test("renders a mock app avatar", async () => {
+  it("renders a mock app avatar", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
     const { asFragment, findByTestId } = renderWithTheme(

@@ -54,7 +54,7 @@ describe("Resource access show page", () => {
     });
   });
 
-  test("it renders a resource access page for a person", async () => {
+  it("renders a resource access page for a person", async () => {
     const { asFragment, getAllByText } = renderWithTheme(
       <SessionProvider>
         <AgentResourceAccessShowPage type={schema.Person} />
@@ -66,7 +66,8 @@ describe("Resource access show page", () => {
     });
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it renders a resource access page for an app", async () => {
+
+  it("renders a resource access page for an app", async () => {
     const { asFragment, getAllByText } = renderWithTheme(
       <AgentResourceAccessShowPage type={schema.SoftwareApplication} />
     );
@@ -75,7 +76,8 @@ describe("Resource access show page", () => {
     });
     expect(asFragment()).toMatchSnapshot();
   });
-  test("renders profile when clicking on profile tab", async () => {
+
+  it("renders profile when clicking on profile tab", async () => {
     const { getByTestId, getByText } = renderWithTheme(
       <AgentResourceAccessShowPage type={schema.SoftwareApplication} />
     );

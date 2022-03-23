@@ -42,7 +42,8 @@ describe("Contact show page", () => {
       .mockResolvedValue(profileDataset);
     jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
   });
-  test("Renders the Contact show page", async () => {
+
+  it("Renders the Contact show page", async () => {
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
       replace: jest.fn(),

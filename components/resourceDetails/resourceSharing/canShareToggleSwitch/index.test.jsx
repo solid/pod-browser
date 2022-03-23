@@ -24,7 +24,7 @@ import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import CanToggleShareSwitch from "./index";
 
 describe("CanToggleShareSwitch", () => {
-  test("it renders a toggle switch for Can Share", () => {
+  it("renders a toggle switch for Can Share", () => {
     const { asFragment } = renderWithTheme(
       <CanToggleShareSwitch canShare toggleShare={jest.fn()} />
     );

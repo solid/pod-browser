@@ -28,12 +28,12 @@ describe("ResourceSharing", () => {
     jest.restoreAllMocks();
   });
 
-  test("it renders the sharing action component", () => {
+  it("renders the sharing action component", () => {
     const { asFragment } = renderWithTheme(<ResourceSharing />);
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it renders the spinner if it's loading", () => {
+  it("renders the spinner if it's loading", () => {
     const { asFragment } = renderWithTheme(<ResourceSharing startLoading />);
     expect(asFragment()).toMatchSnapshot();
   });

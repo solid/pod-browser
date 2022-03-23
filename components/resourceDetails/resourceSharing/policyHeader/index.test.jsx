@@ -24,13 +24,13 @@ import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import PolicyHeader from "./index";
 
 describe("PolicyHeader", () => {
-  test("it renders a Policy Header for editors with plural title for policy agents list", () => {
+  it("renders a Policy Header for editors with plural title for policy agents list", () => {
     const { asFragment } = renderWithTheme(
       <PolicyHeader type="editors" isPolicyList />
     );
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it renders a Policy Header for editors with singular title for agent picker", () => {
+  it("renders a Policy Header for editors with singular title for agent picker", () => {
     const { asFragment } = renderWithTheme(<PolicyHeader type="editors" />);
     expect(asFragment()).toMatchSnapshot();
   });

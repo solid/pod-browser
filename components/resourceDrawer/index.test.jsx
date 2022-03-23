@@ -101,7 +101,7 @@ describe("ResourceDrawer view", () => {
   });
   const PermissionsContextProvider = mockPermissionsContextProvider();
 
-  test("it renders a loading view when context has no iri", async () => {
+  it("renders a loading view when context has no iri", async () => {
     mockUseResourceInfo.mockReturnValue({ data: null });
     const DetailsContext = mockDetailsContextMenuProvider({
       menuOpen: true,
@@ -129,7 +129,7 @@ describe("ResourceDrawer view", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it renders a Contents view when the router query has an iri", async () => {
+  it("renders a Contents view when the router query has an iri", async () => {
     mockedUseRouter.mockReturnValue({
       asPath: "/pathname/",
       replace: jest.fn(),
@@ -157,7 +157,7 @@ describe("ResourceDrawer view", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it renders without errors when iri contains spaces", async () => {
+  it("renders without errors when iri contains spaces", async () => {
     mockUseResourceInfo.mockReturnValue({
       ...swr,
       data: resourceInfoWithSpaces,
@@ -266,7 +266,7 @@ describe("ResourceDrawer view", () => {
 });
 
 describe("handleCloseDrawer", () => {
-  test("it creates a function to close the drawer", async () => {
+  it("creates a function to close the drawer", async () => {
     const setMenuOpen = jest.fn();
     const router = {
       asPath: "/path?with=query",
@@ -294,7 +294,7 @@ describe("handleCloseDrawer", () => {
 });
 
 describe("handleRedirectToParentContainer", () => {
-  test("it creates a function that closes the drawer and redirects to parent container", async () => {
+  it("creates a function that closes the drawer and redirects to parent container", async () => {
     const setMenuOpen = jest.fn();
     const router = {
       replace: jest.fn(),

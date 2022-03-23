@@ -47,7 +47,7 @@ import {
 } from "./utils";
 
 describe("createResponder", () => {
-  test("it returns a function to respond with a data or with an error message", () => {
+  it("returns a function to respond with a data or with an error message", () => {
     const { respond, error } = createResponder();
 
     expect(respond("data")).toMatchObject({ response: "data" });
@@ -55,7 +55,7 @@ describe("createResponder", () => {
   });
 
   describe("given an unauthorized error", () => {
-    test("it returns a more human-friendly unauthorized message", () => {
+    it("returns a more human-friendly unauthorized message", () => {
       const { error } = createResponder();
 
       expect(error("Unauthorized 401")).toMatchObject({
@@ -63,7 +63,7 @@ describe("createResponder", () => {
       });
     });
 
-    test("it accepts a custom unauthorized message", () => {
+    it("accepts a custom unauthorized message", () => {
       const { error } = createResponder({
         unauthorizedMessage: "Custom error",
       });
@@ -76,7 +76,7 @@ describe("createResponder", () => {
 });
 
 describe("chain", () => {
-  test("it reduces an arbitrary list of functions, accumulating each operation's return product", () => {
+  it("reduces an arbitrary list of functions, accumulating each operation's return product", () => {
     const opOne = jest.fn((x) => [x, "one"].join(":"));
     const opTwo = jest.fn((x) => [x, "two"].join(":"));
     const value = chain("x", opOne, opTwo);
@@ -108,7 +108,7 @@ describe("chainPromise", () => {
 });
 
 describe("defineDataset", () => {
-  test("it creates a new dataset with an arbitrary list of setter functions", () => {
+  it("creates a new dataset with an arbitrary list of setter functions", () => {
     const opOne = jest.fn((x) => [x, "one"].join(":"));
     const opTwo = jest.fn((x) => [x, "two"].join(":"));
 
@@ -129,7 +129,7 @@ describe("defineDataset", () => {
 });
 
 describe("defineThing", () => {
-  test("it creates a new thing with an arbitrary list of setter functions", () => {
+  it("creates a new thing with an arbitrary list of setter functions", () => {
     const opOne = jest.fn((x) => [x, "one"].join(":"));
     const opTwo = jest.fn((x) => [x, "two"].join(":"));
 
@@ -142,7 +142,7 @@ describe("defineThing", () => {
     expect(thing).toEqual("thing:one:two");
   });
 
-  test("it correctly applies options when creating a thing", () => {
+  it("correctly applies options when creating a thing", () => {
     const url = "https://www.example.org/";
     const mockThing = mockThingFrom(url);
 
@@ -155,7 +155,7 @@ describe("defineThing", () => {
 });
 
 describe("displayTypes", () => {
-  test("it returns a list of the human-friendly type names", () => {
+  it("returns a list of the human-friendly type names", () => {
     const types = displayTypes([
       "http://www.w3.org/ns/ldp#BasicContainer",
       "http://www.w3.org/ns/ldp#Container",
@@ -165,17 +165,17 @@ describe("displayTypes", () => {
     expect(types).toContain("Container");
   });
 
-  test("it returns an empty Array if types are empty", () => {
+  it("returns an empty Array if types are empty", () => {
     expect(displayTypes([])).toHaveLength(0);
   });
 
-  test("it returns an empty array if types are not a list", () => {
+  it("returns an empty array if types are not a list", () => {
     expect(displayTypes(null)).toHaveLength(0);
   });
 });
 
 describe("getIriPath", () => {
-  test("it extracts the pathname from the iri", () => {
+  it("extracts the pathname from the iri", () => {
     const path1 = getIriPath("https://user.dev.inrupt.net/public/");
     const path2 = getIriPath(
       "https://user.dev.inrupt.net/public/games/tictactoe/data.ttl"
@@ -187,37 +187,37 @@ describe("getIriPath", () => {
 });
 
 describe("getTypeName", () => {
-  test("it returns the type display name", () => {
+  it("returns the type display name", () => {
     Object.keys(ldp).forEach((key) => {
       expect(getTypeName(ldp[key])).toEqual(key);
     });
   });
 
-  test("it returns the raw type when given an invalid type", () => {
+  it("returns the raw type when given an invalid type", () => {
     expect(getTypeName("invalid")).toEqual("invalid");
   });
 
-  test("it returns an empty string if given a falsey value", () => {
+  it("returns an empty string if given a falsey value", () => {
     expect(getTypeName(undefined)).toEqual("");
   });
 });
 
 describe("isContainerIri", () => {
-  test("it returns false when given undefined", () => {
+  it("returns false when given undefined", () => {
     expect(isContainerIri()).toBe(false);
   });
 
-  test("it returns true when the iri ends in /", () => {
+  it("returns true when the iri ends in /", () => {
     expect(isContainerIri("https://user.dev.inrupt.net/public/")).toEqual(true);
   });
 
-  test("it returns false when the iri ends in /", () => {
+  it("returns false when the iri ends in /", () => {
     expect(isContainerIri("https://user.dev.inrupt.net/public")).toEqual(false);
   });
 });
 
 describe("namespace", () => {
-  test("it reflects all the keys and values", () => {
+  it("reflects all the keys and values", () => {
     Object.keys(namespace).forEach((key) => {
       const value = namespace[key];
       expect(value).not.toBeUndefined();
@@ -225,7 +225,7 @@ describe("namespace", () => {
     });
   });
 
-  test("it contains all the definitions in ldp", () => {
+  it("contains all the definitions in ldp", () => {
     Object.keys(ldp).forEach((key) => {
       const value = namespace[key];
       const expectedValue = ldp[key];
@@ -299,7 +299,7 @@ describe("serializePromises", () => {
 });
 
 describe("uniqueObjects", () => {
-  test("it returns a unique set of objects", () => {
+  it("returns a unique set of objects", () => {
     const one = { one: "one" };
     const two = { two: "two" };
     const duplicate = { two: "two" };

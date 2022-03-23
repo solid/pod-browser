@@ -24,7 +24,7 @@ import { renderWithTheme } from "../../__testUtils/withTheme";
 import Footer from "./index";
 
 describe("Footer", () => {
-  test("renders the footer", () => {
+  it("renders the footer", () => {
     const { asFragment } = renderWithTheme(<Footer />);
     expect(asFragment()).toMatchSnapshot();
   });

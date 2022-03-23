@@ -43,7 +43,7 @@ describe("Resource page", () => {
     });
   });
 
-  test("Renders the resource page", async () => {
+  it("Renders the resource page", async () => {
     const { asFragment, getByText } = render(
       <TestApp>
         <IndexPage />
@@ -55,7 +55,7 @@ describe("Resource page", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("Renders spinner while validating access control", async () => {
+  it("Renders spinner while validating access control", async () => {
     useAccessControl.mockReturnValueOnce({
       data: null,
       error: null,

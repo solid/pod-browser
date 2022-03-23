@@ -25,7 +25,7 @@ import { renderWithTheme } from "../../../__testUtils/withTheme";
 import BookmarkButton from "./index";
 
 describe("BookmarkButton", () => {
-  test("it returns a list item when menuItem is true", () => {
+  it("returns a list item when menuItem is true", () => {
     const { asFragment, getByTestId } = renderWithTheme(
       <BookmarkButton menuItem />
     );
@@ -33,13 +33,13 @@ describe("BookmarkButton", () => {
     expect(listItem).toBeTruthy();
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it returns a button when menuItem is false", () => {
+  it("returns a button when menuItem is false", () => {
     const { asFragment, getByTestId } = renderWithTheme(<BookmarkButton />);
     const button = getByTestId("bookmark-button");
     expect(button).toBeTruthy();
     expect(asFragment()).toMatchSnapshot();
   });
-  test("it calls the clickHandler on click", () => {
+  it("calls the clickHandler on click", () => {
     const clickHandler = jest.fn();
     const { getByTestId } = renderWithTheme(
       <BookmarkButton clickHandler={clickHandler} />
@@ -48,7 +48,7 @@ describe("BookmarkButton", () => {
     userEvent.click(button);
     expect(clickHandler).toHaveBeenCalled();
   });
-  test("default value for clickHandler", () => {
+  it("default value for clickHandler", () => {
     const { getByTestId } = renderWithTheme(<BookmarkButton />);
     const { clickHandler } = BookmarkButton.defaultProps;
     const button = getByTestId("bookmark-button");

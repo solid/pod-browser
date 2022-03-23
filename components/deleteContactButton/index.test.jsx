@@ -27,7 +27,7 @@ import { renderWithTheme } from "../../__testUtils/withTheme";
 jest.mock("@inrupt/solid-client");
 
 describe("Delete contact button", () => {
-  test("it renders a delete contact button", () => {
+  it("renders a delete contact button", () => {
     const { asFragment } = renderWithTheme(
       <DeleteContactButton
         onDelete={jest.fn()}

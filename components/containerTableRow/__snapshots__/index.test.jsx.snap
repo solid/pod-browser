@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ContainerTableRow it renders a table row 1`] = `
+exports[`ContainerTableRow renders a table row 1`] = `
 <DocumentFragment>
   <table>
     <tbody>
@@ -47,7 +47,7 @@ exports[`ContainerTableRow it renders a table row 1`] = `
 </DocumentFragment>
 `;
 
-exports[`ContainerTableRow it renders a table row with loaded data 1`] = `
+exports[`ContainerTableRow renders a table row with loaded data 1`] = `
 <DocumentFragment>
   <table>
     <tbody>
@@ -94,7 +94,7 @@ exports[`ContainerTableRow it renders a table row with loaded data 1`] = `
 </DocumentFragment>
 `;
 
-exports[`ContainerTableRow it renders a table row with loaded data without a type 1`] = `
+exports[`ContainerTableRow renders a table row with loaded data without a type 1`] = `
 <DocumentFragment>
   <table>
     <tbody>
@@ -141,7 +141,7 @@ exports[`ContainerTableRow it renders a table row with loaded data without a typ
 </DocumentFragment>
 `;
 
-exports[`ResourceIcon it renders a container icon for containers 1`] = `
+exports[`ResourceIcon renders a container icon for containers 1`] = `
 <DocumentFragment>
   <i
     class=""
@@ -149,7 +149,7 @@ exports[`ResourceIcon it renders a container icon for containers 1`] = `
 </DocumentFragment>
 `;
 
-exports[`ResourceIcon it renders a container icon for resources 1`] = `
+exports[`ResourceIcon renders a container icon for resources 1`] = `
 <DocumentFragment>
   <i
     class=""

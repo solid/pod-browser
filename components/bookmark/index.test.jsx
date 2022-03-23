@@ -33,7 +33,7 @@ const bookmarks = mockSolidDatasetFrom(
 const setBookmarks = jest.fn();
 
 describe("Bookmark", () => {
-  test("it renders a bookmark icon", async () => {
+  it("renders a bookmark icon", async () => {
     const { asFragment } = renderWithTheme(
       <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
         <Bookmark iri={iri} />
@@ -42,7 +42,7 @@ describe("Bookmark", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it renders a bookmark icon and text if withText prop is true", async () => {
+  it("renders a bookmark icon and text if withText prop is true", async () => {
     const { asFragment, getByTestId } = renderWithTheme(
       <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
         <Bookmark iri={iri} withText />
@@ -53,7 +53,7 @@ describe("Bookmark", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it renders default text if add and remove strings are not passed", async () => {
+  it("renders default text if add and remove strings are not passed", async () => {
     const { getByText } = renderWithTheme(
       <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
         <Bookmark iri={iri} withText />
@@ -62,7 +62,7 @@ describe("Bookmark", () => {
     const addText = getByText("Add Bookmark");
     expect(addText).toBeTruthy();
   });
-  test("it renders passed strings for add and remove if available", async () => {
+  it("renders passed strings for add and remove if available", async () => {
     const { getByText } = renderWithTheme(
       <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
         <Bookmark
@@ -77,7 +77,7 @@ describe("Bookmark", () => {
     expect(addText).toBeTruthy();
   });
 
-  test("it renders a button if menuItem is false", async () => {
+  it("renders a button if menuItem is false", async () => {
     const { asFragment, getByTestId } = renderWithTheme(
       <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
         <Bookmark iri={iri} />
@@ -88,7 +88,7 @@ describe("Bookmark", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  test("it renders a list item button if menuItem is true", async () => {
+  it("renders a list item button if menuItem is true", async () => {
     const { asFragment, getByTestId } = renderWithTheme(
       <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
         <Bookmark iri={iri} menuItem />
@@ -101,7 +101,7 @@ describe("Bookmark", () => {
 });
 
 describe("toggleHandler", () => {
-  test("it updates icon when the toggle handler is triggered", async () => {
+  it("updates icon when the toggle handler is triggered", async () => {
     const { container } = renderWithTheme(
       <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
         <Bookmark iri={iri} />
@@ -111,7 +111,7 @@ describe("toggleHandler", () => {
     expect(container.querySelector("#bookmark-icon-unselected")).toBeDefined();
   });
 
-  test("it updates the icon when adding bookmarks", async () => {
+  it("updates the icon when adding bookmarks", async () => {
     const setBookmarked = jest.fn();
     const setDisabled = jest.fn();
 
@@ -136,7 +136,7 @@ describe("toggleHandler", () => {
     expect(setBookmarked).toHaveBeenCalledWith(true);
     expect(setBookmarks).toHaveBeenCalled();
   });
-  test("it updates the icon when removing bookmarks", async () => {
+  it("updates the icon when removing bookmarks", async () => {
     const setBookmarked = jest.fn();
     const setDisabled = jest.fn();
 
@@ -161,7 +161,7 @@ describe("toggleHandler", () => {
     expect(setBookmarked).toHaveBeenCalledWith(false);
     expect(setBookmarks).toHaveBeenCalled();
   });
-  test("it renders an error when it is unsuccessful in adding bookmark", async () => {
+  it("renders an error when it is unsuccessful in adding bookmark", async () => {
     const { container } = renderWithTheme(
       <BookmarkContext.Provider value={(bookmarks, setBookmarks)}>
         <Bookmark iri={iri} />

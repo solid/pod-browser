@@ -47,7 +47,7 @@ describe("Consent Page", () => {
         "https://pod.inrupt.com/alice/private/data-3",
       ]);
   });
-  test("Renders the Consent page", async () => {
+  it("Renders the Consent page", async () => {
     const consentRequestId = "https://example.org/test-request";
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",

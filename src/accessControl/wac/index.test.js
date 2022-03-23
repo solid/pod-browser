@@ -151,7 +151,7 @@ describe("WacAccessControlStrategy", () => {
       wac = await WacAccessControlStrategy.init(resourceInfo, fetch);
     });
 
-    test("it returns the webId and the human-friendly permission name", () => {
+    it("returns the webId and the human-friendly permission name", () => {
       const access = {
         [webId1]: createAccessMap(true),
         [webId2]: createAccessMap(true, true, true, true),
@@ -186,7 +186,7 @@ describe("WacAccessControlStrategy", () => {
       });
     });
 
-    test("it filters out invalid webIds", async () => {
+    it("filters out invalid webIds", async () => {
       const access = {
         acl1: createAccessMap(true),
         "mailto:example@example.com": createAccessMap(true, true, true, true),
@@ -209,7 +209,7 @@ describe("WacAccessControlStrategy", () => {
       wac = await WacAccessControlStrategy.init(resourceInfoWithAcl, fetch);
     });
 
-    test("it saves the new permissions for specific resource", async () => {
+    it("saves the new permissions for specific resource", async () => {
       jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
       jest
         .spyOn(solidClientFns, "getResourceAcl")
@@ -247,7 +247,7 @@ describe("WacAccessControlStrategy", () => {
       expect(response).toEqual(resourceInfoWithAcl);
     });
 
-    test("it saves the new permissions based on fallback resource", async () => {
+    it("saves the new permissions based on fallback resource", async () => {
       jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
       jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(false);
       jest.spyOn(solidClientFns, "hasFallbackAcl").mockReturnValueOnce(true);
@@ -286,7 +286,7 @@ describe("WacAccessControlStrategy", () => {
       expect(response).toEqual("datasetWithAcl");
     });
 
-    test("it returns an error message if the ACL resource is not accessible", async () => {
+    it("returns an error message if the ACL resource is not accessible", async () => {
       jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(false);
 
       const { error } = await wac.savePermissionsForAgent(webId, access);
@@ -294,7 +294,7 @@ describe("WacAccessControlStrategy", () => {
       expect(error).toEqual("dataset does not have accessible ACL");
     });
 
-    test("it returns an error message if the dataset has neither a resource ACL nor a fallback ACL", async () => {
+    it("returns an error message if the dataset has neither a resource ACL nor a fallback ACL", async () => {
       jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
       jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(false);
       jest.spyOn(solidClientFns, "hasFallbackAcl").mockReturnValueOnce(false);
@@ -304,7 +304,7 @@ describe("WacAccessControlStrategy", () => {
       expect(error).toEqual("unable to access ACL");
     });
 
-    test("it returns an error message if can't get resource ACL", async () => {
+    it("returns an error message if can't get resource ACL", async () => {
       jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
       jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
       jest.spyOn(solidClientFns, "getResourceAcl").mockReturnValueOnce(null);
@@ -314,7 +314,7 @@ describe("WacAccessControlStrategy", () => {
       expect(error).toEqual("aclDataset is empty");
     });
 
-    test("it returns an error if the updated ACL is empty", async () => {
+    it("returns an error if the updated ACL is empty", async () => {
       jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
       jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
       jest
@@ -329,7 +329,7 @@ describe("WacAccessControlStrategy", () => {
       expect(error).toEqual("updatedAcl is empty");
     });
 
-    test("it returns an error if the save response is empty", async () => {
+    it("returns an error if the save response is empty", async () => {
       jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
       jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
       jest
@@ -345,7 +345,7 @@ describe("WacAccessControlStrategy", () => {
       expect(error).toEqual("response is empty");
     });
 
-    test("it returns an error response if there is no dataset", async () => {
+    it("returns an error response if there is no dataset", async () => {
       jest.spyOn(solidClientFns, "hasAccessibleAcl").mockReturnValueOnce(true);
       jest.spyOn(solidClientFns, "hasResourceAcl").mockReturnValueOnce(true);
       jest
