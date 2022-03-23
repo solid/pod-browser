@@ -77,7 +77,7 @@ describe("useReturnUrl", () => {
 
     const { result } = renderHook(() => useReturnUrl());
 
-    await act(() => {
+    act(() => {
       result.current.restore();
     });
 
@@ -94,7 +94,7 @@ describe("useReturnUrl", () => {
 
     const { result } = renderHook(() => useReturnUrl());
 
-    await act(() => {
+    act(() => {
       result.current.restore();
     });
 
