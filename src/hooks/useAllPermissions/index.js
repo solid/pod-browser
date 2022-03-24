@@ -32,100 +32,69 @@ import {
 } from "../../models/consent/signedVc";
 import { isPublicAgentorAuthenticatedAgentWebId } from "../../../components/resourceDetails/utils";
 import { fetchProfile } from "../../solidClientHelpers/profile";
+import { findSharingTypeForAgents, mapAgentsToSharingType } from "./utils";
 
-//  where we map {read:true, append:false} etc to "viewer"
-const findSharingTypeForAgents = (agents) => {
-  const outputArray = [];
-  Object.keys(agents).forEach((key) => {
-    const tempObj = {};
-    tempObj.webId = key;
-    tempObj.permissions = agents[key];
-    const access = {
-      read: tempObj.permissions.read,
-      append: tempObj.permissions.append,
-      write: tempObj.permissions.write,
-    };
-    const alias = getPolicyDetailFromAccess(access, "name");
-    tempObj.alias = alias;
-    outputArray.push(tempObj);
+export async function getPermissions(resourceIri, fetch) {
+  const { getAgentAccessAll } = universalAccess;
+  const agents = await getAgentAccessAll(resourceIri, {
+    fetch,
   });
-  return outputArray;
-};
+  const agentsWithSharingType = findSharingTypeForAgents(agents);
+  const sharingTypeWithAssociatedAgents = mapAgentsToSharingType(
+    agentsWithSharingType
+  );
+  return sharingTypeWithAssociatedAgents;
+}
 
-// where we make an array of everyone with the same type (ex: viewer) of permission
-// [{type:'editors',data:[webId,webID,webId]}, {type:'viewers',data:[webId,webID,webId]}]
-const mapAgentsToSharingType = (agents) => {
-  const sharingTypeHash = {};
-  const output = [];
-  agents.forEach((agent) => {
-    const { alias } = agent;
-    if (sharingTypeHash[alias]) {
-      sharingTypeHash[alias].push(agent);
-    } else {
-      sharingTypeHash[alias] = [agent];
-    }
-  });
-  Object.keys(sharingTypeHash).forEach((key) => {
-    output.push({ type: key, data: sharingTypeHash[key] });
-  });
+export async function setAgentPermissions(resourceIri, agent, access, fetch) {
+  console.log(
+    "permissions before func gets called",
+    useAllPermissions.permissions
+  );
+  try {
+    const res = await universalAccess.setAgentAccess(
+      resourceIri,
+      agent,
+      access,
+      { fetch }
+    );
+    console.log("after set func", { res, resourceIri, agent, access });
+    // if this takes a long time look at optomistic rendering
+    const newPermissions = await getPermissions(resourceIri, fetch);
+    console.log("updated permissions?", newPermissions);
+    // is this allowed??
+    useAllPermissions.setPermissions(newPermissions);
+  } catch (e) {
+    console.log(e);
+  }
+}
 
-  return output;
-};
-
-export default function useAllPermissions() {
+export function useAllPermissions() {
   const { solidDataset: dataset } = useContext(DatasetContext);
   const resourceIri = getSourceUrl(dataset);
   const { session } = useSession();
   const [permissions, setPermissions] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  async function getPermissions(resourceIri, fetch) {
-    const { getAgentAccessAll } = universalAccess;
-    console.log("original response of getAgentAccessAll", resourceIri);
-
-    const agents = await getAgentAccessAll(resourceIri, {
-      fetch,
-    });
-    console.log("original response of agent", agents);
-    const agentsWithSharingType = findSharingTypeForAgents(agents);
-    const sharingTypeWithAssociatedAgents = mapAgentsToSharingType(
-      agentsWithSharingType
-    );
-    return sharingTypeWithAssociatedAgents;
-  }
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // setLoading(true);
     async function fetchPermissions() {
-      const newPermissions = await getPermissions(resourceIri, session.fetch);
-      setPermissions(newPermissions);
-      console.log(
-        "permissions in useEffect in useAllPermissionsHook",
-        permissions
-      );
+      setLoading(true);
+      getPermissions(resourceIri, session.fetch)
+        .then(
+          (permissions) => {
+            console.log("before set in hook", permissions);
+            setPermissions(permissions);
+          },
+          (error) => {
+            setError(error);
+          }
+        )
+        .then(() => setLoading(false));
     }
     fetchPermissions();
-    // setLoading(false);
-  }, [resourceIri, session.fetch]); // removed permissions here and the endless rerender stopped
-
-  async function setAgentPermissions(resourceIri, agent, access, fetch) {
-    console.log("permissions before func gets called", permissions);
-    try {
-      const res = await universalAccess.setAgentAccess(
-        resourceIri,
-        agent,
-        access,
-        { fetch }
-      );
-      console.log("after set func", { res, resourceIri, agent, access });
-      // if this takes a long time look at optomistic rendering
-      const newPermissions = await getPermissions(resourceIri, fetch);
-      console.log("updated permissions?", newPermissions);
-      setPermissions(newPermissions);
-    } catch (e) {
-      console.log(e);
-    }
-  }
+    console.log("in hook permissions:", permissions);
+  }, [resourceIri, session.fetch]);
 
   // async function setPublicPermissions(resourceIri, access, fetch) {
   //   // redo this one once func above works
@@ -141,8 +110,7 @@ export default function useAllPermissions() {
   return {
     permissions,
     loading,
-    setAgentPermissions,
+    // setAgentPermissions,
     // setPublicPermissions,
-    getPermissions,
   };
 }

@@ -29,6 +29,7 @@ import {
   createStyles,
   DialogContentText,
 } from "@material-ui/core";
+import { PropTypes } from "prop-types";
 import { Button } from "@inrupt/prism-react-components";
 import styles from "./styles";
 
@@ -43,7 +44,7 @@ export const TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE =
 export const TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT =
   "confirmation-dialog-content";
 
-export default function ConfirmationDialogNew(
+export default function ConfirmationDialogNew({
   openConfirmationDialog,
   title,
   content,
@@ -53,8 +54,8 @@ export default function ConfirmationDialogNew(
   omitCancelButton,
   isDangerousAction,
   onConfirm,
-  onCancel
-) {
+  onCancel,
+}) {
   const classes = useStyles();
 
   return (
@@ -114,3 +115,26 @@ export default function ConfirmationDialogNew(
     </Dialog>
   );
 }
+ConfirmationDialogNew.propTypes = {
+  openConfirmationDialog: PropTypes.bool.isRequired,
+  title: PropTypes.string,
+  content: PropTypes.string,
+  // eslint-disable-next-line react/forbid-prop-types
+  customContentWrapper: PropTypes.any,
+  cancelText: PropTypes.string,
+  confirmText: PropTypes.string,
+  omitCancelButton: PropTypes.bool,
+  isDangerousAction: PropTypes.bool,
+  onConfirm: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+};
+
+ConfirmationDialogNew.defaultProps = {
+  title: "",
+  content: null,
+  customContentWrapper: null,
+  cancelText: "",
+  confirmText: "",
+  omitCancelButton: false,
+  isDangerousAction: false,
+};

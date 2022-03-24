@@ -47,7 +47,6 @@ import SharingAccordion from "./resourceSharing/sharingAccordion";
 import useLocalStorage from "../../src/hooks/useLocalStorage";
 import { isAcp, isWac } from "../../src/accessControl";
 import { PermissionsContextProvider } from "../../src/contexts/permissionsContext";
-import useAllPermissions from "../../src/hooks/useAllPermissions";
 
 const TESTCAFE_ID_DOWNLOAD_BUTTON = "download-resource-button";
 const TESTCAFE_ID_DELETE_BUTTON = "delete-resource-button";
@@ -76,7 +75,6 @@ export default function ResourceDetails({
   const displayName = getResourceName(name);
   const type = getContentType(dataset);
   const actionMenuBem = ActionMenu.useBem();
-  const { permissions, getPermissions } = useAllPermissions();
   const { accessControl, accessControlType } = useContext(AccessControlContext);
   const resourceIri = getSourceUrl(dataset);
   const { session } = useSession();

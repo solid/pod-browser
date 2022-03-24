@@ -26,7 +26,7 @@ import { Card } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { Button } from "@inrupt/prism-react-components";
 import PolicyHeader from "../policyHeader";
-import useAllPermissions from "../../../../src/hooks/useAllPermissions";
+import { useAllPermissions } from "../../../../src/hooks/useAllPermissions";
 import {
   AgentPermissionSearch,
   AgentPermissionsList,

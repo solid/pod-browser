@@ -49,7 +49,9 @@ import {
 import ConsentDetailsModal from "../../agentAccess/agentAccessOptionsMenu/consentDetailsButton/consentDetailsModal";
 import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
 import AlertContext from "../../../../../src/contexts/alertContext";
-import useAllPermissions from "../../../../../src/hooks/useAllPermissions";
+import useAllPermissions, {
+  setAgentPermissions,
+} from "../../../../../src/hooks/useAllPermissions";
 import ConfirmationDialogNew from "../../../../confirmationDialogNew";
 import styles from "./styles";
 
@@ -68,6 +70,9 @@ export function AgentPermissionsList({ permissions, resourceIri }) {
   const classes = useStyles();
   // need to add where if it's more than three you get cut off and there's a link from AgentAccessTable
   let id = 0;
+  console.log("in AgentPermissionsList", {
+    permissions,
+  });
   return (
     <ul className={classes.agentPermissionsList}>
       {permissions.map((p) => {
@@ -78,7 +83,7 @@ export function AgentPermissionsList({ permissions, resourceIri }) {
             webId={p.webId}
             resourceIri={resourceIri}
             permissionType={p.alias}
-            agentPermissionInfo={p.permissions}
+            agentAccess={p.permissions}
           />
         );
       })}
@@ -95,7 +100,7 @@ function AgentPermissionItem({
   webId,
   resourceIri,
   permissionType,
-  agentPermissionInfo,
+  agentAccess,
 }) {
   const classes = useStyles();
   // const { agent: webId } = agentInfo; // we no longer grab inherited. Is that a problem?
@@ -105,14 +110,20 @@ function AgentPermissionItem({
   const [popoverAnchorEl, setPopoverAnchorEl] = useState(null);
   const { session } = useSession();
   const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
-  const { setAgentPermissions } = useAllPermissions();
+  // const { setAgentPermissions } = useAllPermissions();
 
   const handleClosePopoverAndModal = () => {
     setPopoverAnchorEl(null);
     setOpenModal(false);
   };
+  // debugger;
 
-  console.log({ webId, resourceIri, permissionType, agentPermissionInfo });
+  console.log("in AgentPermissionItem", {
+    webId,
+    resourceIri,
+    permissionType,
+    agentAccess,
+  });
   let name = "";
   let anotherNameThatNeedsToBeUpdated = "";
   let publicResource = false;
@@ -174,6 +185,7 @@ function AgentPermissionItem({
     if (publicResource) {
       handleConfirmRemove();
     } else {
+      console.log("here?");
       setOpenConfirmationDialog(true);
     }
   };
@@ -191,7 +203,7 @@ function AgentPermissionItem({
       </Typography>
       {/* {!inherited && ( */}
       <>
-        <Button onClick={handleOpenPopover} variant="in-menu">
+        <Button onClick={handleOpenPopover} variant="contained">
           <MoreVertIcon />
         </Button>
         <PermissionsPopoverMenu
@@ -209,7 +221,10 @@ function AgentPermissionItem({
           title={`Remove ${webId}'s access from ${resourceName}`}
           confirmText="Remove"
           onConfirm={handleConfirmRemove}
-          onCancel={() => setOpenConfirmationDialog(false)}
+          onCancel={(event) => {
+            setOpenConfirmationDialog(false);
+            setPopoverAnchorEl(null);
+          }}
         />
       </>
       {/* )} */}
@@ -217,7 +232,7 @@ function AgentPermissionItem({
         <ConsentDetailsModal
           openModal={openModal}
           resourceIri={resourceIri}
-          agentPermissionInfo={agentPermissionInfo}
+          agentAccess={agentAccess}
           vc={viewer}
           handleCloseModal={handleClosePopoverAndModal}
           setOpenModal={setOpenModal}
@@ -231,7 +246,8 @@ AgentPermissionItem.propTypes = {
   resourceIri: PropTypes.string.isRequired,
   webId: PropTypes.string.isRequired,
   permissionType: PropTypes.string.isRequired,
-  agentPermissionInfo: PropTypes.oneOfType([Object]).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  agentAccess: PropTypes.object.isRequired,
 };
 
 function PermissionsPopoverMenu({

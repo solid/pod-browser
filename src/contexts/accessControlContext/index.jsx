@@ -29,7 +29,6 @@ const defaultValues = {
 const AccessControlContext = createContext(defaultValues);
 
 function AccessControlProvider({ children, accessControl, accessControlType }) {
-  console.log("accesscontrol provider invalid accessControl", accessControl);
   return (
     <AccessControlContext.Provider value={{ accessControl, accessControlType }}>
       {children}
@@ -44,7 +43,8 @@ AccessControlProvider.defaultProps = {
 
 AccessControlProvider.propTypes = {
   children: T.node.isRequired,
-  accessControl: T.oneOfType([Object]),
+  // eslint-disable-next-line react/forbid-prop-types
+  accessControl: T.object,
   accessControlType: T.string,
 };
 
