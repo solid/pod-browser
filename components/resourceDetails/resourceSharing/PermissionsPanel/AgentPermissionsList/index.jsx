@@ -209,7 +209,7 @@ function AgentPermissionItem({
           title={`Remove ${webId}'s access from ${resourceName}`}
           confirmText="Remove"
           onConfirm={handleConfirmRemove}
-          onCancel={(event) => {
+          onCancel={() => {
             setOpenConfirmationDialog(false);
             setPopoverAnchorEl(null);
           }}

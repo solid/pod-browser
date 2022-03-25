@@ -24,7 +24,7 @@
 
 import React, { useContext, useState, useEffect, forwardRef } from "react";
 import PropTypes from "prop-types";
-import { CircularProgress, createStyles } from "@material-ui/core";
+import { Checkbox, CircularProgress, createStyles } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import {
@@ -222,6 +222,10 @@ function AgentPickerModal(
   },
   ref
 ) {
+  const bem = useBem(useStyles());
+  const classes = useStyles();
+  const { session } = useSession();
+  const { fetch } = session;
   const [customPolicy, setCustomPolicy] = useState(
     advancedSharing ? type : null
   );
@@ -246,15 +250,12 @@ function AgentPickerModal(
     GROUP_CONTACT,
     PERSON_CONTACT,
   ]);
-
+  const [checkedBoxes, setCheckedBoxes] = useState({
+    "http://www.w3.org/ns/solid/acp#PublicAgent": true,
+    [AUTHENTICATED_AGENT_PREDICATE]: true,
+  });
   const webIdsInPermissions = getWebIdsFromPermissions(permissions);
 
-  const bem = useBem(useStyles());
-
-  const classes = useStyles();
-
-  const { session } = useSession();
-  const { fetch } = session;
   const { solidDataset: dataset } = useContext(DatasetContext);
   const resourceIri = getSourceUrl(dataset);
   const resourceName = getResourceName(resourceIri);
@@ -361,6 +362,7 @@ function AgentPickerModal(
         dataset: addressBookDataset,
       };
     });
+
     contactsArrayForTable.unshift(publicAgent, authenticatedAgent);
     setContactsArray(contactsArrayForTable);
   }, [contacts, addressBook]);
@@ -420,22 +422,22 @@ function AgentPickerModal(
   const contactsForTable = contactsArray;
   // TODO: Uncomment to reintroduce tabs
   // const contactsForTable = selectedTabValue ? filteredContacts : contactsArray;
-  const toggleCheckbox = (e, index, value) => {
+  const toggleCheckbox = (e, index) => {
+    const value = e.target.value;
+    const { checked } = e.target;
+    setCheckedBoxes({
+      ...checkedBoxes,
+      [value]: checked,
+    });
+    console.log({ e, index, value, checked });
     if (index === 0 && addingWebId) return null;
-    if (
-      !webIdsToDelete.includes(value) &&
-      webIdsInPermissions.includes(value)
-    ) {
+    if (checked) {
+      setNewAgentsWebIds([value, ...newAgentsWebIds]);
+    } else {
       setWebIdsToDelete([value, ...webIdsToDelete]);
-    } else if (
-      webIdsToDelete.includes(value) &&
-      webIdsInPermissions.includes(value)
-    ) {
-      setWebIdsToDelete(webIdsToDelete.filter((webId) => webId !== value));
     }
-    return e.target.checked
-      ? setNewAgentsWebIds([value, ...newAgentsWebIds])
-      : setNewAgentsWebIds(newAgentsWebIds.filter((webId) => webId !== value));
+
+    return checked;
   };
   return (
     <Modal
@@ -490,12 +492,21 @@ function AgentPickerModal(
                     <span className={classes.tableHeader}>{titleSingular}</span>
                   }
                   body={({ value, row: { index } }) => {
+                    console.log({ value });
                     return (
-                      <WebIdCheckbox
-                        value={value}
-                        index={index}
-                        toggleCheckbox={toggleCheckbox}
-                        type={type}
+                      // only return if index not 0 and not addingWebId
+                      // <WebIdCheckbox
+                      //   value={value}
+                      //   index={index}
+                      //   toggleCheckbox={toggleCheckbox}
+                      //   type={type}
+                      // />
+
+                      <Checkbox
+                        key={index}
+                        checked={checkedBoxes.value}
+                        onChange={(e) => toggleCheckbox(e, index)}
+                        name={value}
                       />
                     );
                   }}

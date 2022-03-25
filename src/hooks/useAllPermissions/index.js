@@ -62,6 +62,14 @@ export function useAllPermissions() {
   }, [resourceIri, session.fetch]);
 
   async function setAgentPermissions(resourceIri, agent, access, fetch) {
+    const agentPermissions1 = await universalAccess.getAgentAccess(
+      resourceIri,
+      agent,
+      {
+        fetch,
+      }
+    );
+    console.log("before", { agentPermissions1 });
     console.log(
       "permissions before universalAccess.setAgentAccess gets called:",
       permissions
@@ -76,6 +84,14 @@ export function useAllPermissions() {
       );
       console.log("universalAccess.setAgentAccess response", res);
       // if this takes a long time look at optomistic rendering
+      const agentPermissions2 = await universalAccess.getAgentAccess(
+        resourceIri,
+        agent,
+        {
+          fetch,
+        }
+      );
+      console.log("after", { agentPermissions2 });
       const newPermissions = await getPermissions(resourceIri, fetch);
       console.log("res for getPermissions", newPermissions);
       setPermissions(newPermissions);

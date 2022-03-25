@@ -19,6 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+// REFACTOR REMOVE THIS FILE
+
 import React, { useCallback, useContext } from "react";
 import { useThing } from "@inrupt/solid-ui-react";
 import { getUrl } from "@inrupt/solid-client";
