@@ -21,17 +21,7 @@
 
 import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl, universalAccess } from "@inrupt/solid-client";
-
-import { useState, useEffect, useContext, useMemo, useCallback } from "react";
-import { getPolicyDetailFromAccess } from "../../accessControl/acp";
-import AccessControlContext from "../../contexts/accessControlContext";
-import useConsentBasedAccessForResource from "../useConsentBasedAccessForResource";
-import {
-  getRequestedAccessesFromSignedVc,
-  getRequestorWebIdFromSignedVc,
-} from "../../models/consent/signedVc";
-import { isPublicAgentorAuthenticatedAgentWebId } from "../../../components/resourceDetails/utils";
-import { fetchProfile } from "../../solidClientHelpers/profile";
+import { useState, useEffect, useContext } from "react";
 import { findSharingTypeForAgents, mapAgentsToSharingType } from "./utils";
 
 export async function getPermissions(resourceIri, fetch) {
@@ -44,29 +34,6 @@ export async function getPermissions(resourceIri, fetch) {
     agentsWithSharingType
   );
   return sharingTypeWithAssociatedAgents;
-}
-
-export async function setAgentPermissions(resourceIri, agent, access, fetch) {
-  console.log(
-    "permissions before func gets called",
-    useAllPermissions.permissions
-  );
-  try {
-    const res = await universalAccess.setAgentAccess(
-      resourceIri,
-      agent,
-      access,
-      { fetch }
-    );
-    console.log("after set func", { res, resourceIri, agent, access });
-    // if this takes a long time look at optomistic rendering
-    const newPermissions = await getPermissions(resourceIri, fetch);
-    console.log("updated permissions?", newPermissions);
-    // is this allowed??
-    useAllPermissions.setPermissions(newPermissions);
-  } catch (e) {
-    console.log(e);
-  }
 }
 
 export function useAllPermissions() {
@@ -83,7 +50,6 @@ export function useAllPermissions() {
       getPermissions(resourceIri, session.fetch)
         .then(
           (permissions) => {
-            console.log("before set in hook", permissions);
             setPermissions(permissions);
           },
           (error) => {
@@ -93,8 +59,30 @@ export function useAllPermissions() {
         .then(() => setLoading(false));
     }
     fetchPermissions();
-    console.log("in hook permissions:", permissions);
   }, [resourceIri, session.fetch]);
+
+  async function setAgentPermissions(resourceIri, agent, access, fetch) {
+    console.log(
+      "permissions before universalAccess.setAgentAccess gets called:",
+      permissions
+    );
+    console.log("setAgentAccess access object getting passed in:", access);
+    try {
+      const res = await universalAccess.setAgentAccess(
+        resourceIri,
+        agent,
+        access,
+        { fetch }
+      );
+      console.log("universalAccess.setAgentAccess response", res);
+      // if this takes a long time look at optomistic rendering
+      const newPermissions = await getPermissions(resourceIri, fetch);
+      console.log("res for getPermissions", newPermissions);
+      setPermissions(newPermissions);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   // async function setPublicPermissions(resourceIri, access, fetch) {
   //   // redo this one once func above works
@@ -110,7 +98,7 @@ export function useAllPermissions() {
   return {
     permissions,
     loading,
-    // setAgentPermissions,
+    setAgentPermissions,
     // setPublicPermissions,
   };
 }

@@ -49,11 +49,9 @@ import {
 import ConsentDetailsModal from "../../agentAccess/agentAccessOptionsMenu/consentDetailsButton/consentDetailsModal";
 import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
 import AlertContext from "../../../../../src/contexts/alertContext";
-import useAllPermissions, {
-  setAgentPermissions,
-} from "../../../../../src/hooks/useAllPermissions";
 import ConfirmationDialogNew from "../../../../confirmationDialogNew";
 import styles from "./styles";
+import { useAllPermissions } from "../../../../../src/hooks/useAllPermissions";
 
 export const TESTCAFE_ID_VIEW_DETAILS_BUTTON = "view-details-button";
 export const TESTCAFE_ID_REMOVE_BUTTON = "remove-button";
@@ -70,9 +68,7 @@ export function AgentPermissionsList({ permissions, resourceIri }) {
   const classes = useStyles();
   // need to add where if it's more than three you get cut off and there's a link from AgentAccessTable
   let id = 0;
-  console.log("in AgentPermissionsList", {
-    permissions,
-  });
+
   return (
     <ul className={classes.agentPermissionsList}>
       {permissions.map((p) => {
@@ -110,7 +106,7 @@ function AgentPermissionItem({
   const [popoverAnchorEl, setPopoverAnchorEl] = useState(null);
   const { session } = useSession();
   const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
-  // const { setAgentPermissions } = useAllPermissions();
+  const { setAgentPermissions } = useAllPermissions();
 
   const handleClosePopoverAndModal = () => {
     setPopoverAnchorEl(null);
@@ -118,12 +114,6 @@ function AgentPermissionItem({
   };
   // debugger;
 
-  console.log("in AgentPermissionItem", {
-    webId,
-    resourceIri,
-    permissionType,
-    agentAccess,
-  });
   let name = "";
   let anotherNameThatNeedsToBeUpdated = "";
   let publicResource = false;
@@ -164,7 +154,6 @@ function AgentPermissionItem({
       // accessControl.setRuleAuthenticated(permissionType, false);
       return;
     }
-    console.log("in non-public resource", agentWebId);
 
     setAgentPermissions(
       resourceIri,
@@ -185,7 +174,6 @@ function AgentPermissionItem({
     if (publicResource) {
       handleConfirmRemove();
     } else {
-      console.log("here?");
       setOpenConfirmationDialog(true);
     }
   };
