@@ -130,6 +130,7 @@ export const handleSubmit = ({
         });
       }
     );
+
     const addPermissionsPromiseFactories = newAgentsWebIds?.map(
       (agentWebId) => () => {
         if (PUBLIC_AGENT_PREDICATE === agentWebId) {
@@ -138,6 +139,7 @@ export const handleSubmit = ({
         if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {
           return accessControl.setRuleAuthenticated(policyName, true);
         }
+        console.log("add an agent", { agentWebId, policyName });
         return accessControl.addAgentToPolicy(agentWebId, policyName);
       }
     );
