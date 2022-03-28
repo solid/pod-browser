@@ -35,17 +35,10 @@ import {
   ModalContainer,
 } from "@inrupt/prism-react-components";
 import { makeStyles } from "@material-ui/styles";
-import {
-  DatasetContext,
-  Table,
-  TableColumn,
-  useSession,
-} from "@inrupt/solid-ui-react";
+import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
 import { createThing, getSourceUrl } from "@inrupt/solid-client";
-import { foaf } from "rdf-namespaces";
 import { serializePromises } from "../../../../src/solidClientHelpers/utils";
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
-import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
 import { getResourceName } from "../../../../src/solidClientHelpers/resource";
 import PolicyHeader from "../policyHeader";
 import AgentsSearchBar from "../agentsSearchBar";
@@ -54,16 +47,9 @@ import AgentPickerEmptyState from "../agentPickerEmptyState";
 import CustomPolicyDropdown from "../customPolicyDropdown";
 import styles from "./styles";
 import AddWebIdButton from "./addWebIdButton";
-import WebIdCheckbox from "./webIdCheckbox";
-import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
-import ConfirmationDialog from "../../../confirmationDialog";
 import useContacts from "../../../../src/hooks/useContacts";
 import { GROUP_CONTACT } from "../../../../src/models/contact/group";
-import {
-  PERSON_CONTACT,
-  findPersonContactInAddressBook,
-  savePerson,
-} from "../../../../src/models/contact/person";
+import { PERSON_CONTACT } from "../../../../src/models/contact/person";
 import useAddressBook from "../../../../src/hooks/useAddressBook";
 import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
 import {
@@ -75,31 +61,20 @@ import {
   AUTHENTICATED_AGENT_PREDICATE,
 } from "../../../../src/models/contact/authenticated";
 import ResourceInfoContext from "../../../../src/contexts/resourceInfoContext";
-import { getWebIdsFromPermissions } from "../../../../src/accessControl/acp";
-import PermissionsContext from "../../../../src/contexts/permissionsContext";
 import { isPublicAgentorAuthenticatedAgentWebId } from "../../utils";
+import {
+  getConfirmationDialogText,
+  handleSaveContact,
+  removeExistingAgentFromOtherPolicies,
+  setupWebIdCheckBoxObject,
+} from "./utils";
+import ConfirmationDialogNew from "../../../confirmationDialogNew";
 
 const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
 export const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
 const TESTCAFE_CANCEL_WEBIDS_BUTTON = "cancel-webids-button";
 export const DIALOG_ID = "add-new-permissions";
-
-export const removeExistingAgentFromOtherPolicies = ({
-  permissions,
-  newPolicy,
-  agentWebId,
-  accessControl,
-}) => {
-  const existingPermission = permissions.filter(
-    (p) => p.webId === agentWebId && p.alias !== newPolicy
-  );
-  if (existingPermission.length) {
-    existingPermission.map((ep) =>
-      accessControl.removeAgentFromPolicy(ep.webId, ep.alias)
-    );
-  }
-};
 
 export const handleSubmit = ({
   permissions,
@@ -119,7 +94,8 @@ export const handleSubmit = ({
     if ((!newAgentsWebIds.length && !webIdsToDelete.length) || !accessControl) {
       return;
     }
-    setLoading(true);
+    // setLoading(true);
+    console.log("handling stuff");
     const existingPoliciesPromiseFactories = newAgentsWebIds?.map(
       (agentWebId) => () => {
         removeExistingAgentFromOtherPolicies({
@@ -157,11 +133,7 @@ export const handleSubmit = ({
     );
 
     const addAgentsToContactsPromiseFactories = newAgentsWebIds
-      ?.filter(
-        (webId) =>
-          webId !== PUBLIC_AGENT_PREDICATE &&
-          webId !== AUTHENTICATED_AGENT_PREDICATE
-      )
+      ?.filter((webId) => !isPublicAgentorAuthenticatedAgentWebId(webId))
       .map(
         (agentWebId) => () =>
           saveAgentToContacts(agentWebId, addressBook, fetch)
@@ -172,43 +144,15 @@ export const handleSubmit = ({
       ...removePermissionsPromiseFactories,
       ...addAgentsToContactsPromiseFactories,
     ]);
+    console.log({ args });
     const responses = args.filter((res) => typeof res !== "undefined");
     const { response: latestAcr } = responses[responses.length - 1];
     await mutateResourceInfo(latestAcr, false);
-    setLoading(false);
+    // setLoading(false);
   };
 };
 
-export const handleSaveContact = async (iri, addressBook, fetch) => {
-  let error;
-  if (!iri) {
-    return;
-  }
-
-  try {
-    const { name, webId } = await fetchProfile(iri, fetch);
-    // TODO: we will likely need to change this if we want to save groups on the fly as well
-    const existingContact = await findPersonContactInAddressBook(
-      addressBook,
-      webId,
-      fetch
-    );
-    if (existingContact.length) {
-      return;
-    }
-
-    if (name) {
-      const contact = { webId, fn: name };
-      // TODO: we will likely need to update this if we also want to create and save groups
-      await savePerson(addressBook, contact, fetch);
-    }
-  } catch (e) {
-    error = e; // need to do something with the error otherwise the function exits at any point a webId fails and does not continue processing the rest
-  }
-};
-
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-
 function AgentPickerModal(
   {
     type,
@@ -219,6 +163,7 @@ function AgentPickerModal(
     accessibilityDescribe,
     accessibilityLabel,
     open,
+    permissions,
   },
   ref
 ) {
@@ -232,17 +177,6 @@ function AgentPickerModal(
   const policyName = advancedSharing ? customPolicy : type;
   const { header, saveText, titleSingular, title } =
     POLICIES_TYPE_MAP[policyName];
-
-  const {
-    permissions: allPermissions,
-    newAgentsWebIds,
-    setNewAgentsWebIds,
-    webIdsToDelete,
-    setWebIdsToDelete,
-    setAddingWebId,
-    addingWebId,
-  } = useContext(PermissionsContext);
-  const permissions = allPermissions?.filter((p) => p.alias === type);
   const { mutate: mutateResourceInfo } = useContext(ResourceInfoContext);
 
   const { data: addressBook } = useAddressBook();
@@ -250,93 +184,74 @@ function AgentPickerModal(
     GROUP_CONTACT,
     PERSON_CONTACT,
   ]);
-  const [checkedBoxes, setCheckedBoxes] = useState({
-    "http://www.w3.org/ns/solid/acp#PublicAgent": true,
-    [AUTHENTICATED_AGENT_PREDICATE]: true,
-  });
-  const webIdsInPermissions = getWebIdsFromPermissions(permissions);
 
   const { solidDataset: dataset } = useContext(DatasetContext);
   const resourceIri = getSourceUrl(dataset);
   const resourceName = getResourceName(resourceIri);
-  // TODO: Uncomment to reintroduce tabs
-  // const [selectedTabValue, setSelectedTabValue] = useState("");
   const { accessControl } = useContext(AccessControlContext);
-
-  const [bypassDialog, setBypassDialog] = useState(false);
   const [contactsArray, setContactsArray] = useState([]);
-  // TODO: Uncomment to reintroduce tabs
-  // const [filteredContacts, setFilteredContacts] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
-  const [confirmationSetup, setConfirmationSetup] = useState(false);
-  const {
-    open: openConfirmationDialog,
-    confirmed,
-    setConfirmed,
-    setContent,
-    setOpen: setOpenConfirmationDialog,
-    setTitle,
-    closeDialog,
-  } = useContext(ConfirmationDialogContext);
+  const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
+  const [webIdsToDelete, setWebIdsToDelete] = useState([]);
+  const [newAgentsWebIds, setNewAgentsWebIds] = useState([]);
+  const [addingWebId, setAddingWebId] = useState(false);
+  const [checkedBoxes, setCheckedBoxes] = useState(
+    setupWebIdCheckBoxObject(permissions) || {}
+  );
 
-  // TODO: Uncomment to reintroduce tabs
-  // const handleTabChange = (e, newValue) => {
-  //   setSelectedTabValue(newValue);
-  // };
+  const setupDataForTable = () => {
+    // revisit how/if contacts will be added
+    const output = [];
+    Object.keys(checkedBoxes).forEach((webId) => {
+      output.push({ checked: checkedBoxes[webId], webId });
+    });
+    return output;
+  };
+
+  const confirmationDialogText = getConfirmationDialogText(
+    webIdsToDelete.length + newAgentsWebIds.length,
+    resourceName
+  );
 
   const handleFilterChange = (e) => {
     const { value } = e.target;
     setGlobalFilter(value || undefined);
   };
 
+  // can we get rid of wrapper?
   const handleSubmitNewWebIds = handleSubmit({
-    permissions: allPermissions,
+    permissions,
     newAgentsWebIds,
     webIdsToDelete,
     accessControl,
     addressBook,
     mutateResourceInfo,
     saveAgentToContacts: handleSaveContact,
-    handleModalClose,
+    onClose: handleModalClose,
     setLoading,
     policyName,
     advancedSharing,
     fetch,
   });
 
-  const handleClickOpenDialog = () => {
+  const handleSaveChangesClick = () => {
     if (!newAgentsWebIds.length && !webIdsToDelete.length) {
       handleModalClose();
-      setConfirmed(false);
       return;
     }
     const filteredNewWebIds = newAgentsWebIds.filter(
       (webId) => !isPublicAgentorAuthenticatedAgentWebId(webId)
     );
-
     const filteredWebIdsToDelete = webIdsToDelete.filter(
       (webId) => !isPublicAgentorAuthenticatedAgentWebId(webId)
     );
-
     if (!filteredNewWebIds.length && !filteredWebIdsToDelete.length) {
-      setTitle(null);
-      setContent(null);
-      setOpenConfirmationDialog(null);
-      setBypassDialog(true);
+      // what to do here where all new webIDs are public
+      handleModalClose();
+    } else {
+      //  first get confirmation then handleSubmitNewWebIds
+      setOpenConfirmationDialog(true);
     }
-    const confirmationTitle = `Change permissions for ${
-      filteredNewWebIds.length + filteredWebIdsToDelete.length === 1
-        ? "1 person"
-        : `${newAgentsWebIds.length + filteredWebIdsToDelete.length} people`
-    }`;
-    const confirmationContent = `Continuing will change ${
-      filteredNewWebIds.length + filteredWebIdsToDelete.length === 1
-        ? "1 person "
-        : `${filteredNewWebIds.length + filteredWebIdsToDelete.length} people `
-    } permissions to ${title}`;
-    setTitle(confirmationTitle);
-    setContent(confirmationContent);
-    setOpenConfirmationDialog(DIALOG_ID);
   };
 
   const updateTemporaryRowThing = (newThing) => {
@@ -367,43 +282,6 @@ function AgentPickerModal(
     setContactsArray(contactsArrayForTable);
   }, [contacts, addressBook]);
 
-  // TODO: Uncomment to reintroduce tabs
-  // useEffect(() => {
-  //   if (selectedTabValue) {
-  //     const filtered = contactsArray.filter(({ thing }) =>
-  //       selectedTabValue.isOfType(thing)
-  //     );
-  //     setFilteredContacts(filtered);
-  //   }
-  // }, [contactsArray, selectedTabValue, globalFilter]);
-
-  useEffect(() => {
-    setConfirmationSetup(true);
-    if (bypassDialog) {
-      setConfirmed(true);
-      handleSubmitNewWebIds();
-    }
-    if (openConfirmationDialog !== DIALOG_ID) return;
-    if (confirmationSetup && confirmed === null) return;
-    if (confirmationSetup && confirmed) {
-      handleSubmitNewWebIds();
-    }
-
-    if (confirmationSetup && confirmed !== null) {
-      closeDialog();
-      setConfirmationSetup(false);
-    }
-  }, [
-    openConfirmationDialog,
-    bypassDialog,
-    setConfirmationSetup,
-    confirmationSetup,
-    setConfirmed,
-    confirmed,
-    handleSubmitNewWebIds,
-    closeDialog,
-  ]);
-
   const handleAddRow = () => {
     setAddingWebId(true);
     const emptyThing = createThing();
@@ -412,33 +290,26 @@ function AgentPickerModal(
       thing: emptyThing,
       dataset: addressBookDataset,
     };
-    // TODO: Uncomment to reintroduce tabs
-    // if (selectedTabValue) {
-    //   setFilteredContacts([newItem, ...filteredContacts]);
-    // }
+
     setContactsArray([newItem, ...contactsArray]);
   };
 
-  const contactsForTable = contactsArray;
-  // TODO: Uncomment to reintroduce tabs
-  // const contactsForTable = selectedTabValue ? filteredContacts : contactsArray;
   const toggleCheckbox = (e, index) => {
-    const value = e.target.value;
-    const { checked } = e.target;
+    const { value, checked } = e.target;
     setCheckedBoxes({
       ...checkedBoxes,
       [value]: checked,
     });
-    console.log({ e, index, value, checked });
     if (index === 0 && addingWebId) return null;
     if (checked) {
       setNewAgentsWebIds([value, ...newAgentsWebIds]);
     } else {
       setWebIdsToDelete([value, ...webIdsToDelete]);
     }
-
     return checked;
   };
+  const tableData = setupDataForTable();
+
   return (
     <Modal
       open={open}
@@ -473,74 +344,47 @@ function AgentPickerModal(
             <div className={classes.addWebIdButtonContainer}>
               <AddWebIdButton onClick={handleAddRow} disabled={addingWebId} />
             </div>
-            {!contacts && !error && (
-              <Container variant="empty">
-                <CircularProgress />
-              </Container>
-            )}
-            {!!contacts && !!contactsForTable.length && (
-              <Table
-                things={contactsForTable}
-                className={clsx(bem("table"), bem("agentPickerTable"))}
-                filter={globalFilter}
-              >
-                <TableColumn
-                  property={AGENT_PREDICATE}
-                  dataType="url"
-                  header={
-                    // eslint-disable-next-line react/jsx-wrap-multilines
-                    <span className={classes.tableHeader}>{titleSingular}</span>
-                  }
-                  body={({ value, row: { index } }) => {
-                    console.log({ value });
+            {!contacts &&
+              !error && ( // should be a loading var
+                <Container variant="empty">
+                  <CircularProgress />
+                </Container>
+              )}
+            {!!contacts && !!tableData.length && (
+              <table className={clsx(bem("table"), bem("agentPickerTable"))}>
+                <thead className={classes.tableHeader}>
+                  <tr>
+                    <td>Editor</td>
+                    <td>Name/WebID</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableData.map((row, i) => {
+                    const { webId } = row;
                     return (
-                      // only return if index not 0 and not addingWebId
-                      // <WebIdCheckbox
-                      //   value={value}
-                      //   index={index}
-                      //   toggleCheckbox={toggleCheckbox}
-                      //   type={type}
-                      // />
-
-                      <Checkbox
-                        key={index}
-                        checked={checkedBoxes.value}
-                        onChange={(e) => toggleCheckbox(e, index)}
-                        name={value}
-                      />
+                      <tr key={i}>
+                        <>
+                          <td>
+                            <Checkbox
+                              checked={checkedBoxes[webId]}
+                              onChange={(e) => toggleCheckbox(e, i)}
+                              value={webId}
+                            />
+                          </td>
+                          <td>
+                            <p>{webId}</p>
+                          </td>
+                        </>
+                      </tr>
                     );
-                  }}
-                />
-                <TableColumn
-                  header={<span className={classes.tableHeader}>Name</span>}
-                  property={foaf.name}
-                  filterable
-                  body={({ row: { index } }) => (
-                    <AddAgentRow
-                      type={policyName}
-                      index={index}
-                      contactsArrayLength={contactsArray.length}
-                      updateTemporaryRowThing={updateTemporaryRowThing}
-                    />
-                  )}
-                />
-              </Table>
+                  })}
+                </tbody>
+              </table>
             )}
-            {/* TODO: Uncomment to reintroduce tabs */}
-            {/* {!!contacts && !contactsForTable.length && !selectedTabValue && ( */}
-            {!!contacts && !contactsForTable.length && (
+
+            {!!contacts && !tableData.length && (
               <AgentPickerEmptyState onClick={handleAddRow} />
             )}
-            {/* TODO: Uncomment to reintroduce tabs */}
-            {/* {!!contacts && !contactsForTable.length && !!selectedTabValue && ( */}
-            {/*  <span className={classes.emptyStateTextContainer}> */}
-            {/*    <p> */}
-            {/*      {`No ${ */}
-            {/*        selectedTabValue === PERSON_CONTACT ? "people " : "groups " */}
-            {/*      } found`} */}
-            {/*    </p> */}
-            {/*  </span> */}
-            {/* )} */}
           </div>
           <div className={classes.buttonsContainer}>
             <Button
@@ -553,11 +397,17 @@ function AgentPickerModal(
             </Button>
             <Button
               data-testid={TESTCAFE_SUBMIT_WEBIDS_BUTTON}
-              onClick={handleClickOpenDialog}
+              onClick={handleSaveChangesClick}
             >
               {saveText}
             </Button>
-            <ConfirmationDialog />
+            <ConfirmationDialogNew
+              openConfirmationDialog={openConfirmationDialog}
+              title={confirmationDialogText.title}
+              content={confirmationDialogText.content}
+              onConfirm={handleSubmitNewWebIds}
+              onCancel={() => setOpenConfirmationDialog(false)}
+            />
           </div>
         </ModalBody>
       </ModalContainer>
@@ -565,6 +415,7 @@ function AgentPickerModal(
   );
 }
 
+// why the change in name?
 const AgentPickerModalRef = forwardRef(AgentPickerModal);
 export default AgentPickerModalRef;
 
@@ -577,6 +428,8 @@ AgentPickerModal.propTypes = {
   open: PropTypes.bool.isRequired,
   accessibilityLabel: PropTypes.string,
   accessibilityDescribe: PropTypes.string,
+  // eslint-disable-next-line react/forbid-prop-types
+  permissions: PropTypes.array.isRequired,
 };
 
 AgentPickerModal.defaultProps = {

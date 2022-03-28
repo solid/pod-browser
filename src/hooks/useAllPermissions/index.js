@@ -69,12 +69,7 @@ export function useAllPermissions() {
         fetch,
       }
     );
-    console.log("before", { agentPermissions1 });
-    console.log(
-      "permissions before universalAccess.setAgentAccess gets called:",
-      permissions
-    );
-    console.log("setAgentAccess access object getting passed in:", access);
+
     try {
       const res = await universalAccess.setAgentAccess(
         resourceIri,
@@ -82,8 +77,7 @@ export function useAllPermissions() {
         access,
         { fetch }
       );
-      console.log("universalAccess.setAgentAccess response", res);
-      // if this takes a long time look at optomistic rendering
+      // if this takes a long time look at optimistic rendering
       const agentPermissions2 = await universalAccess.getAgentAccess(
         resourceIri,
         agent,
@@ -91,9 +85,7 @@ export function useAllPermissions() {
           fetch,
         }
       );
-      console.log("after", { agentPermissions2 });
       const newPermissions = await getPermissions(resourceIri, fetch);
-      console.log("res for getPermissions", newPermissions);
       setPermissions(newPermissions);
     } catch (e) {
       console.log(e);

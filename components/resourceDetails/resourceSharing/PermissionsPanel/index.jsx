@@ -114,6 +114,7 @@ export default function PermissionsPanel({
           editing={editing}
           accessibilityLabel={`${editButtonText} Modal`}
           accessibilityDescribe={`${editButtonText} for this resource`}
+          permissions={permissions}
         />
       </Card>
     </>
