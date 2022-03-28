@@ -62,29 +62,12 @@ export function useAllPermissions() {
   }, [resourceIri, session.fetch]);
 
   async function setAgentPermissions(resourceIri, agent, access, fetch) {
-    const agentPermissions1 = await universalAccess.getAgentAccess(
-      resourceIri,
-      agent,
-      {
-        fetch,
-      }
-    );
-
     try {
-      const res = await universalAccess.setAgentAccess(
-        resourceIri,
-        agent,
-        access,
-        { fetch }
-      );
+      await universalAccess.setAgentAccess(resourceIri, agent, access, {
+        fetch,
+      });
       // if this takes a long time look at optimistic rendering
-      const agentPermissions2 = await universalAccess.getAgentAccess(
-        resourceIri,
-        agent,
-        {
-          fetch,
-        }
-      );
+
       const newPermissions = await getPermissions(resourceIri, fetch);
       setPermissions(newPermissions);
     } catch (e) {
