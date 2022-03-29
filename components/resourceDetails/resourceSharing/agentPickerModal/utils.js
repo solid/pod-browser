@@ -26,7 +26,7 @@ import {
 } from "../../../../src/models/contact/person";
 import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
 
-export const setupWebIdCheckBoxObject = (permissions) => {
+export const setupWebIdCheckBoxObject = (permissions, contacts) => {
   const webIds = getWebIdsFromPermissions(permissions);
   const output = {
     "http://www.w3.org/ns/solid/acp#PublicAgent": true,
@@ -34,6 +34,13 @@ export const setupWebIdCheckBoxObject = (permissions) => {
   };
   webIds.forEach((webId) => {
     output[webId] = true;
+  });
+  // how do we get the name/ webID from the contact?
+  console.log({ contacts });
+  contacts.forEach((contact) => {
+    console.log({ contact });
+    const { webId } = contact;
+    if (!output[webId]) output[webId] = false;
   });
   return output;
 };
@@ -96,3 +103,7 @@ export const getConfirmationDialogText = (
   } permissions to ${resourceName}`;
   return { title, content };
 };
+
+export const editorAccessMatrix = { read: true, write: true, append: false }; // from acp file - should user have append access as well?
+export const viewerAccessMatrix = { read: true, write: false, append: false }; // from acp file - should user have append access as well?
+export const removeAccessMatrix = { read: false, write: false, append: false }; // from acp file - should user have append access as well?

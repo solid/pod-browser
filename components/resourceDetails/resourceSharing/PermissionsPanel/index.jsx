@@ -32,7 +32,7 @@ import {
   AgentPermissionsList,
 } from "./AgentPermissionsList";
 import styles from "./styles";
-import AgentPickerModal from "../agentPickerModal";
+import AgentPickerModal from "../AgentPickerModal";
 import { isCustomPolicy } from "../../../../src/models/policy";
 import PermissionsContext from "../../../../src/contexts/permissionsContext";
 import PolicyActionButton from "../policyActionButton";
@@ -115,6 +115,7 @@ export default function PermissionsPanel({
           accessibilityLabel={`${editButtonText} Modal`}
           accessibilityDescribe={`${editButtonText} for this resource`}
           permissions={permissions}
+          resourceIri={resourceIri}
         />
       </Card>
     </>

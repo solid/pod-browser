@@ -26,7 +26,7 @@ import PropTypes from "prop-types";
 import { Modal } from "@material-ui/core";
 import { Button } from "@inrupt/prism-react-components";
 import PermissionsContext from "../../../../src/contexts/permissionsContext";
-import AgentPickerModal from "../agentPickerModal";
+import AgentPickerModal from "../AgentPickerModal";
 import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
 import { isCustomPolicy } from "../../../../src/models/policy";
 

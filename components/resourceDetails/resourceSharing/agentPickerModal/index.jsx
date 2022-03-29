@@ -63,18 +63,21 @@ import {
 import ResourceInfoContext from "../../../../src/contexts/resourceInfoContext";
 import { isPublicAgentorAuthenticatedAgentWebId } from "../../utils";
 import {
+  editorAccessMatrix,
   getConfirmationDialogText,
   handleSaveContact,
+  removeAccessMatrix,
+  viewerAccessMatrix,
   removeExistingAgentFromOtherPolicies,
   setupWebIdCheckBoxObject,
 } from "./utils";
 import ConfirmationDialogNew from "../../../confirmationDialogNew";
+import { useAllPermissions } from "../../../../src/hooks/useAllPermissions";
 
 const AGENT_PREDICATE = "http://www.w3.org/ns/solid/acp#agent";
 const TESTCAFE_ID_ADD_AGENT_PICKER_MODAL = "agent-picker-modal";
 export const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
 const TESTCAFE_CANCEL_WEBIDS_BUTTON = "cancel-webids-button";
-export const DIALOG_ID = "add-new-permissions";
 
 export const handleSubmit = ({
   permissions,
@@ -87,6 +90,8 @@ export const handleSubmit = ({
   onClose,
   setLoading,
   policyName,
+  resourceIri,
+  setAgentPermissions,
   fetch,
 }) => {
   return async () => {
@@ -95,40 +100,57 @@ export const handleSubmit = ({
       return;
     }
     // setLoading(true);
-    console.log("handling stuff");
-    const existingPoliciesPromiseFactories = newAgentsWebIds?.map(
-      (agentWebId) => () => {
-        removeExistingAgentFromOtherPolicies({
-          permissions,
-          newPolicy: policyName,
-          agentWebId,
-          accessControl,
-        });
-      }
-    );
+    // take this out because we can have more than one permission and also why is this being returned and serialized?
+    // const existingPoliciesPromiseFactories = newAgentsWebIds?.map(
+    //   (agentWebId) => () => {
+    //     removeExistingAgentFromOtherPolicies({
+    //       permissions,
+    //       newPolicy: policyName,
+    //       agentWebId,
+    //       accessControl,
+    //     });
+    //   }
+    // );
 
     const addPermissionsPromiseFactories = newAgentsWebIds?.map(
       (agentWebId) => () => {
         if (PUBLIC_AGENT_PREDICATE === agentWebId) {
+          console.log("public agent add");
           return accessControl.setRulePublic(policyName, true);
         }
         if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {
+          console.log("public agent2 add");
           return accessControl.setRuleAuthenticated(policyName, true);
         }
         console.log("add an agent", { agentWebId, policyName });
-        return accessControl.addAgentToPolicy(agentWebId, policyName);
+        let accessMatrix = viewerAccessMatrix;
+        if (policyName === "editors") accessMatrix = editorAccessMatrix;
+        return setAgentPermissions(
+          resourceIri,
+          agentWebId,
+          accessMatrix,
+          fetch
+        );
       }
     );
 
     const removePermissionsPromiseFactories = webIdsToDelete?.map(
       (agentWebId) => () => {
         if (PUBLIC_AGENT_PREDICATE === agentWebId) {
+          console.log("public agent remove");
           return accessControl.setRulePublic(policyName, false);
         }
         if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {
+          console.log("public agent2 remove");
           return accessControl.setRuleAuthenticated(policyName, false);
         }
-        return accessControl.removeAgentFromPolicy(agentWebId, policyName);
+        console.log("remove an agent", { agentWebId, policyName });
+        return setAgentPermissions(
+          resourceIri,
+          agentWebId,
+          removeAccessMatrix,
+          fetch
+        );
       }
     );
 
@@ -139,7 +161,7 @@ export const handleSubmit = ({
           saveAgentToContacts(agentWebId, addressBook, fetch)
       );
     const args = await serializePromises([
-      ...existingPoliciesPromiseFactories,
+      // ...existingPoliciesPromiseFactories,
       ...addPermissionsPromiseFactories,
       ...removePermissionsPromiseFactories,
       ...addAgentsToContactsPromiseFactories,
@@ -164,6 +186,7 @@ function AgentPickerModal(
     accessibilityLabel,
     open,
     permissions,
+    resourceIri,
   },
   ref
 ) {
@@ -186,7 +209,7 @@ function AgentPickerModal(
   ]);
 
   const { solidDataset: dataset } = useContext(DatasetContext);
-  const resourceIri = getSourceUrl(dataset);
+  // const resourceIri = getSourceUrl(dataset);
   const resourceName = getResourceName(resourceIri);
   const { accessControl } = useContext(AccessControlContext);
   const [contactsArray, setContactsArray] = useState([]);
@@ -196,9 +219,9 @@ function AgentPickerModal(
   const [newAgentsWebIds, setNewAgentsWebIds] = useState([]);
   const [addingWebId, setAddingWebId] = useState(false);
   const [checkedBoxes, setCheckedBoxes] = useState(
-    setupWebIdCheckBoxObject(permissions) || {}
+    setupWebIdCheckBoxObject(permissions, contactsArray) || {}
   );
-
+  const { setAgentPermissions } = useAllPermissions();
   const setupDataForTable = () => {
     // revisit how/if contacts will be added
     const output = [];
@@ -231,6 +254,8 @@ function AgentPickerModal(
     setLoading,
     policyName,
     advancedSharing,
+    resourceIri,
+    setAgentPermissions,
     fetch,
   });
 
@@ -267,6 +292,13 @@ function AgentPickerModal(
   };
 
   useEffect(() => {
+    console.log("contactsarray in useEffect", contactsArray);
+
+    setCheckedBoxes(setupWebIdCheckBoxObject(permissions, contactsArray));
+  }, [permissions, contactsArray]);
+
+  // currently re-render ~20 times, check useEffects and see if we can get rid of this.
+  useEffect(() => {
     if (!contacts || !addressBook) return;
     const { dataset: addressBookDataset } = addressBook;
     const publicAgent = createPublicAgent(addressBookDataset);
@@ -302,8 +334,10 @@ function AgentPickerModal(
     });
     if (index === 0 && addingWebId) return null;
     if (checked) {
+      // remove from add if the final state is unchecked
       setNewAgentsWebIds([value, ...newAgentsWebIds]);
     } else {
+      // remove from remove if the final state is checked
       setWebIdsToDelete([value, ...webIdsToDelete]);
     }
     return checked;
@@ -415,7 +449,7 @@ function AgentPickerModal(
   );
 }
 
-// why the change in name?
+// why change the name?
 const AgentPickerModalRef = forwardRef(AgentPickerModal);
 export default AgentPickerModalRef;
 

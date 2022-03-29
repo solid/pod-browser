@@ -26,7 +26,7 @@ import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import { Button } from "@inrupt/prism-react-components";
-import AgentPickerModal from "../agentPickerModal";
+import AgentPickerModal from "../AgentPickerModal";
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
