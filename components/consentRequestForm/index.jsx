@@ -99,7 +99,9 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
 
   const requestedAccesses = getRequestedAccesses(consentRequest);
   const expirationDate = getExpiryDate(consentRequest);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(
+    new Date(expirationDate) ?? new Date()
+  );
 
   const [datepickerOpen, setDatepickerOpen] = useState(false);
 
@@ -207,10 +209,11 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
     setSelectedDate(null);
     setDatepickerOpen(false);
   };
-
   useEffect(() => {
     if (expirationDate) {
       setSelectedDate(new Date(expirationDate));
+    } else {
+      setDateForever();
     }
   }, [expirationDate]);
 
@@ -286,10 +289,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
           {`${agentName || agentWebId} will have access until`}
         </span>
         <DateInput
-          // selectedDate={selectedDate}
-          // setting date to forever for now until we add functionality to change this
-          selectedDate={null}
-          setSelectedDate={setSelectedDate}
+          selectedDate={selectedDate}
           datepickerOpen={datepickerOpen}
           setDatepickerOpen={setDatepickerOpen}
           handleDateChange={handleDateChange}

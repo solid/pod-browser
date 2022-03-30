@@ -43,7 +43,6 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export default function DateInput(props) {
   const {
     selectedDate,
-    setSelectedDate,
     datepickerOpen,
     setDatepickerOpen,
     handleDateChange,
@@ -52,17 +51,10 @@ export default function DateInput(props) {
   const classes = useStyles();
   const bem = useBem(classes);
   const { consentRequest } = useContext(ConsentRequestContext);
-  const expirationDate = getExpiryDate(consentRequest);
   // FIXME: we will later fetch the expiry date from the consent details
   const clickRef = useRef();
 
   useOutsideClick(clickRef, () => setDatepickerOpen(false));
-
-  useEffect(() => {
-    if (expirationDate) {
-      setSelectedDate(expirationDate);
-    }
-  }, [expirationDate, setSelectedDate]);
 
   return (
     <div ref={clickRef} className={bem("date-container")}>
@@ -126,7 +118,6 @@ DateInput.defaultProps = {
 
 DateInput.propTypes = {
   selectedDate: T.instanceOf(Date),
-  setSelectedDate: T.func.isRequired,
   datepickerOpen: T.bool.isRequired,
   setDatepickerOpen: T.func.isRequired,
   handleDateChange: T.func.isRequired,

@@ -140,7 +140,7 @@ exports[`Consent Request Form Renders a consent request form with multiple purpo
           placeholder="Consent expiry date"
           readonly=""
           type="text"
-          value="Forever"
+          value="June 23, 2022"
         />
       </div>
       <button
@@ -573,7 +573,7 @@ exports[`Consent Request Form Renders a consent request form with only one purpo
           placeholder="Consent expiry date"
           readonly=""
           type="text"
-          value="Forever"
+          value="June 23, 2022"
         />
       </div>
       <button
