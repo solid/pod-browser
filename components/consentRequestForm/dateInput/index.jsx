@@ -39,8 +39,7 @@ export const TESTCAFE_ID_DATE_PICKER_CALENDAR_BUTTON =
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function DateInput(props) {
-  const { selectedDate, handleDateChange, setDateForever } = props;
+export default function DateInput({ selectedDate, handleDateChange }) {
   const classes = useStyles();
   const bem = useBem(classes);
   // FIXME: we will later fetch the expiry date from the consent details
