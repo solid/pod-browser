@@ -53,6 +53,7 @@ export default function DateInput({ selectedDate, handleDateChange }) {
     <div ref={clickRef} className={bem("date-container")}>
       <InputBase
         classes={{ root: bem("date-input") }}
+        onClick={() => setDatepickerOpen(!datepickerOpen)}
         placeholder="Access request expiration date"
         value={
           selectedDate
@@ -64,22 +65,13 @@ export default function DateInput({ selectedDate, handleDateChange }) {
           "aria-label": "Access request expiration date",
           readOnly: "readonly",
         }}
+        endAdornment={
+          <Icons
+            name="calendar"
+            className={bem("icon-small--primary-disabled")}
+          />
+        }
       />
-      <IconButton
-        data-testid={TESTCAFE_ID_DATE_PICKER_CALENDAR_BUTTON}
-        classes={{ root: bem("date-button") }}
-        type="button"
-        // temporarily disabling until functionality to change date is available
-        // disabled
-        aria-label="Set expiry date"
-        onClick={() => setDatepickerOpen(!datepickerOpen)}
-      >
-        <Icons
-          name="calendar"
-          // temporarily disabling until functionality to change date is available
-          className={bem("icon-small--primary-disabled")}
-        />
-      </IconButton>
       {datepickerOpen && (
         <div className={bem("date-picker")}>
           <DatePicker
