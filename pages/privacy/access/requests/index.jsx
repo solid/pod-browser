@@ -20,9 +20,13 @@
  */
 
 import React from "react";
-
+import AuthenticatedRoute from "../../../../src/authentication/AuthenticatedRoute";
 import ConsentShowPage from "../../../../components/pages/privacy/access/requests";
 
 export default function ConsentShow() {
-  return <ConsentShowPage />;
+  return (
+    <AuthenticatedRoute>
+      <ConsentShowPage />
+    </AuthenticatedRoute>
+  );
 }
