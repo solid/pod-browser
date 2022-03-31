@@ -99,11 +99,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
 
   const requestedAccesses = getRequestedAccesses(consentRequest);
   const expirationDate = getExpiryDate(consentRequest);
-  const [selectedDate, setSelectedDate] = useState(
-    new Date(expirationDate) ?? new Date()
-  );
-
-  const [datepickerOpen, setDatepickerOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date(expirationDate));
 
   const DIALOG_CONTENT = `${
     agentName || agentWebId
@@ -120,6 +116,8 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
           requestor,
           access: selectedAccess.accessModes,
           resources: selectedResources,
+          expirationDate: new Date(selectedDate),
+          resourceOwner: session.info.webId,
         },
         {
           fetch: session.fetch,
@@ -201,21 +199,8 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   ]);
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);
-    setDatepickerOpen(false);
+    setSelectedDate(date ? date.toISOString() : null);
   };
-
-  const setDateForever = () => {
-    setSelectedDate(null);
-    setDatepickerOpen(false);
-  };
-  useEffect(() => {
-    if (expirationDate) {
-      setSelectedDate(new Date(expirationDate));
-    } else {
-      setDateForever();
-    }
-  }, [expirationDate]);
 
   useEffect(() => {
     if (!purposes) return;
@@ -290,10 +275,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
         </span>
         <DateInput
           selectedDate={selectedDate}
-          datepickerOpen={datepickerOpen}
-          setDatepickerOpen={setDatepickerOpen}
           handleDateChange={handleDateChange}
-          setDateForever={setDateForever}
         />
         {/* FIXME: place this in a loop when we know the data structure */}
         {requestedAccesses &&

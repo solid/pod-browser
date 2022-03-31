@@ -137,10 +137,10 @@ exports[`Consent Page Renders the Consent page 1`] = `
           class="PodBrowser-root PodBrowser-date-input"
         >
           <input
-            aria-label="Consent expiry date"
+            aria-label="Access request expiration date"
             class="PodBrowser-input"
             data-testid="date-input-field"
-            placeholder="Consent expiry date"
+            placeholder="Access request expiration date"
             readonly=""
             type="text"
             value="June 23, 2022"
@@ -148,10 +148,9 @@ exports[`Consent Page Renders the Consent page 1`] = `
         </div>
         <button
           aria-label="Set expiry date"
-          class="PodBrowser-root PodBrowser-root PodBrowser-date-button PodBrowser-disabled PodBrowser-disabled"
+          class="PodBrowser-root PodBrowser-root PodBrowser-date-button"
           data-testid="date-picker-calendar-button"
-          disabled=""
-          tabindex="-1"
+          tabindex="0"
           type="button"
         >
           <span
@@ -161,6 +160,9 @@ exports[`Consent Page Renders the Consent page 1`] = `
               class="PodBrowser-icon-calendar PodBrowser-icon-small--primary-disabled"
             />
           </span>
+          <span
+            class="PodBrowser-root"
+          />
         </button>
       </div>
       <fieldset

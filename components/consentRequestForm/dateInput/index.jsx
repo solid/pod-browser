@@ -21,7 +21,7 @@
 
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Button, Icons, useOutsideClick } from "@inrupt/prism-react-components";
 import { format } from "date-fns";
 import T from "prop-types";
@@ -30,7 +30,6 @@ import { makeStyles } from "@material-ui/styles";
 import { createStyles, IconButton, InputBase } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import ConsentRequestContext from "../../../src/contexts/consentRequestContext";
-import { getExpiryDate } from "../../../src/models/consent/request";
 import styles from "../styles";
 
 export const TESTCAFE_ID_DATE_INPUT = "date-input-field";
@@ -41,18 +40,13 @@ export const TESTCAFE_ID_DATE_PICKER_CALENDAR_BUTTON =
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function DateInput(props) {
-  const {
-    selectedDate,
-    datepickerOpen,
-    setDatepickerOpen,
-    handleDateChange,
-    setDateForever,
-  } = props;
+  const { selectedDate, handleDateChange, setDateForever } = props;
   const classes = useStyles();
   const bem = useBem(classes);
-  const { consentRequest } = useContext(ConsentRequestContext);
   // FIXME: we will later fetch the expiry date from the consent details
   const clickRef = useRef();
+
+  const [datepickerOpen, setDatepickerOpen] = useState(false);
 
   useOutsideClick(clickRef, () => setDatepickerOpen(false));
 
@@ -60,11 +54,15 @@ export default function DateInput(props) {
     <div ref={clickRef} className={bem("date-container")}>
       <InputBase
         classes={{ root: bem("date-input") }}
-        placeholder="Consent expiry date"
-        value={selectedDate ? format(selectedDate, "MMMM' 'd', 'Y") : "Forever"}
+        placeholder="Access request expiration date"
+        value={
+          selectedDate
+            ? format(new Date(selectedDate), "MMMM' 'd', 'Y")
+            : "Forever"
+        }
         inputProps={{
           "data-testid": TESTCAFE_ID_DATE_INPUT,
-          "aria-label": "Consent expiry date",
+          "aria-label": "Access request expiration date",
           readOnly: "readonly",
         }}
       />
@@ -73,7 +71,7 @@ export default function DateInput(props) {
         classes={{ root: bem("date-button") }}
         type="button"
         // temporarily disabling until functionality to change date is available
-        disabled
+        // disabled
         aria-label="Set expiry date"
         onClick={() => setDatepickerOpen(!datepickerOpen)}
       >
@@ -90,8 +88,6 @@ export default function DateInput(props) {
             orientation="portrait"
             variant="static"
             disablePast
-            // temporarily disabling until functionality to change date is available
-            disabled
             format="MM/dd/yyyy"
             margin="normal"
             value={selectedDate}
@@ -100,7 +96,7 @@ export default function DateInput(props) {
           <Button
             type="button"
             variant="small"
-            onClick={() => setDateForever()}
+            onClick={() => handleDateChange(null)}
             className={bem("request-container__button", "full-width")}
             data-testid={TESTCAFE_ID_FOREVER_BUTTON}
           >
@@ -118,8 +114,6 @@ DateInput.defaultProps = {
 
 DateInput.propTypes = {
   selectedDate: T.instanceOf(Date),
-  datepickerOpen: T.bool.isRequired,
-  setDatepickerOpen: T.func.isRequired,
   handleDateChange: T.func.isRequired,
   setDateForever: T.func.isRequired,
 };
