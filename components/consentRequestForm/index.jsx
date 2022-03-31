@@ -116,7 +116,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
           requestor,
           access: selectedAccess.accessModes,
           resources: selectedResources,
-          expirationDate: new Date(selectedDate),
+          expirationDate: selectedDate ? new Date(selectedDate) : null,
           resourceOwner: session.info.webId,
         },
         {
