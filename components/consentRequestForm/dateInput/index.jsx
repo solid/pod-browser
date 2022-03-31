@@ -87,7 +87,10 @@ export default function DateInput({ selectedDate, handleDateChange }) {
           <Button
             type="button"
             variant="small"
-            onClick={() => handleDateChange(null)}
+            onClick={() => {
+              setDatepickerOpen(false);
+              handleDateChange(null);
+            }}
             className={bem("request-container__button", "full-width")}
             data-testid={TESTCAFE_ID_FOREVER_BUTTON}
           >

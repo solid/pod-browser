@@ -131,36 +131,21 @@ exports[`Consent Request Form Renders a consent request form with multiple purpo
       class="PodBrowser-date-container"
     >
       <div
-        class="PodBrowser-root PodBrowser-date-input"
+        class="PodBrowser-root PodBrowser-date-input PodBrowser-adornedEnd"
       >
         <input
           aria-label="Access request expiration date"
-          class="PodBrowser-input"
+          class="PodBrowser-input PodBrowser-inputAdornedEnd"
           data-testid="date-input-field"
           placeholder="Access request expiration date"
           readonly=""
           type="text"
           value="June 23, 2022"
         />
-      </div>
-      <button
-        aria-label="Set expiry date"
-        class="PodBrowser-root PodBrowser-root PodBrowser-date-button"
-        data-testid="date-picker-calendar-button"
-        tabindex="0"
-        type="button"
-      >
         <span
-          class="PodBrowser-label"
-        >
-          <span
-            class="PodBrowser-icon-calendar PodBrowser-icon-small--primary-disabled"
-          />
-        </span>
-        <span
-          class="PodBrowser-root"
+          class="PodBrowser-icon-calendar PodBrowser-icon-small--primary-disabled"
         />
-      </button>
+      </div>
     </div>
     <fieldset
       class="PodBrowser-root PodBrowser-request-container__section"
@@ -566,36 +551,21 @@ exports[`Consent Request Form Renders a consent request form with only one purpo
       class="PodBrowser-date-container"
     >
       <div
-        class="PodBrowser-root PodBrowser-date-input"
+        class="PodBrowser-root PodBrowser-date-input PodBrowser-adornedEnd"
       >
         <input
           aria-label="Access request expiration date"
-          class="PodBrowser-input"
+          class="PodBrowser-input PodBrowser-inputAdornedEnd"
           data-testid="date-input-field"
           placeholder="Access request expiration date"
           readonly=""
           type="text"
           value="June 23, 2022"
         />
-      </div>
-      <button
-        aria-label="Set expiry date"
-        class="PodBrowser-root PodBrowser-root PodBrowser-date-button"
-        data-testid="date-picker-calendar-button"
-        tabindex="0"
-        type="button"
-      >
         <span
-          class="PodBrowser-label"
-        >
-          <span
-            class="PodBrowser-icon-calendar PodBrowser-icon-small--primary-disabled"
-          />
-        </span>
-        <span
-          class="PodBrowser-root"
+          class="PodBrowser-icon-calendar PodBrowser-icon-small--primary-disabled"
         />
-      </button>
+      </div>
     </div>
     <fieldset
       class="PodBrowser-root PodBrowser-request-container__section"
