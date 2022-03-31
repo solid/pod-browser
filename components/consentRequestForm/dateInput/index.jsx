@@ -21,7 +21,7 @@
 
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button, Icons, useOutsideClick } from "@inrupt/prism-react-components";
 import { format } from "date-fns";
 import T from "prop-types";
@@ -114,5 +114,4 @@ DateInput.defaultProps = {
 DateInput.propTypes = {
   selectedDate: T.instanceOf(Date),
   handleDateChange: T.func.isRequired,
-  setDateForever: T.func.isRequired,
 };
