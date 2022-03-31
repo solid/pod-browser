@@ -229,6 +229,7 @@ export default function styles(theme) {
       font: "inherit",
       fontWeight: 500,
       color: theme.palette.primary.text,
+      cursor: "pointer",
     },
 
     "date-button": {

@@ -99,9 +99,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
 
   const requestedAccesses = getRequestedAccesses(consentRequest);
   const expirationDate = getExpiryDate(consentRequest);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-
-  const [datepickerOpen, setDatepickerOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date(expirationDate));
 
   const DIALOG_CONTENT = `${
     agentName || agentWebId
@@ -118,6 +116,8 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
           requestor,
           access: selectedAccess.accessModes,
           resources: selectedResources,
+          expirationDate: selectedDate ? new Date(selectedDate) : null,
+          resourceOwner: session.info.webId,
         },
         {
           fetch: session.fetch,
@@ -199,20 +199,8 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   ]);
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);
-    setDatepickerOpen(false);
+    setSelectedDate(date ? date.toISOString() : null);
   };
-
-  const setDateForever = () => {
-    setSelectedDate(null);
-    setDatepickerOpen(false);
-  };
-
-  useEffect(() => {
-    if (expirationDate) {
-      setSelectedDate(new Date(expirationDate));
-    }
-  }, [expirationDate]);
 
   useEffect(() => {
     if (!purposes) return;
@@ -286,14 +274,8 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
           {`${agentName || agentWebId} will have access until`}
         </span>
         <DateInput
-          // selectedDate={selectedDate}
-          // setting date to forever for now until we add functionality to change this
-          selectedDate={null}
-          setSelectedDate={setSelectedDate}
-          datepickerOpen={datepickerOpen}
-          setDatepickerOpen={setDatepickerOpen}
+          selectedDate={selectedDate}
           handleDateChange={handleDateChange}
-          setDateForever={setDateForever}
         />
         {/* FIXME: place this in a loop when we know the data structure */}
         {requestedAccesses &&

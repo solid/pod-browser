@@ -131,34 +131,21 @@ exports[`Consent Request Form Renders a consent request form with multiple purpo
       class="PodBrowser-date-container"
     >
       <div
-        class="PodBrowser-root PodBrowser-date-input"
+        class="PodBrowser-root PodBrowser-date-input PodBrowser-adornedEnd"
       >
         <input
-          aria-label="Consent expiry date"
-          class="PodBrowser-input"
+          aria-label="Access request expiration date"
+          class="PodBrowser-input PodBrowser-inputAdornedEnd"
           data-testid="date-input-field"
-          placeholder="Consent expiry date"
+          placeholder="Access request expiration date"
           readonly=""
           type="text"
-          value="Forever"
+          value="June 23, 2022"
+        />
+        <span
+          class="PodBrowser-icon-calendar PodBrowser-icon-small--primary-disabled"
         />
       </div>
-      <button
-        aria-label="Set expiry date"
-        class="PodBrowser-root PodBrowser-root PodBrowser-date-button PodBrowser-disabled PodBrowser-disabled"
-        data-testid="date-picker-calendar-button"
-        disabled=""
-        tabindex="-1"
-        type="button"
-      >
-        <span
-          class="PodBrowser-label"
-        >
-          <span
-            class="PodBrowser-icon-calendar PodBrowser-icon-small--primary-disabled"
-          />
-        </span>
-      </button>
     </div>
     <fieldset
       class="PodBrowser-root PodBrowser-request-container__section"
@@ -564,34 +551,21 @@ exports[`Consent Request Form Renders a consent request form with only one purpo
       class="PodBrowser-date-container"
     >
       <div
-        class="PodBrowser-root PodBrowser-date-input"
+        class="PodBrowser-root PodBrowser-date-input PodBrowser-adornedEnd"
       >
         <input
-          aria-label="Consent expiry date"
-          class="PodBrowser-input"
+          aria-label="Access request expiration date"
+          class="PodBrowser-input PodBrowser-inputAdornedEnd"
           data-testid="date-input-field"
-          placeholder="Consent expiry date"
+          placeholder="Access request expiration date"
           readonly=""
           type="text"
-          value="Forever"
+          value="June 23, 2022"
+        />
+        <span
+          class="PodBrowser-icon-calendar PodBrowser-icon-small--primary-disabled"
         />
       </div>
-      <button
-        aria-label="Set expiry date"
-        class="PodBrowser-root PodBrowser-root PodBrowser-date-button PodBrowser-disabled PodBrowser-disabled"
-        data-testid="date-picker-calendar-button"
-        disabled=""
-        tabindex="-1"
-        type="button"
-      >
-        <span
-          class="PodBrowser-label"
-        >
-          <span
-            class="PodBrowser-icon-calendar PodBrowser-icon-small--primary-disabled"
-          />
-        </span>
-      </button>
     </div>
     <fieldset
       class="PodBrowser-root PodBrowser-request-container__section"
