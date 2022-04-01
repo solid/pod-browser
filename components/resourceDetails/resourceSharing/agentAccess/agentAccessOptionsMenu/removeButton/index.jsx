@@ -25,8 +25,6 @@ import { createStyles, ListItem, ListItemText } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { getResourceName } from "../../../../../../src/solidClientHelpers/resource";
 import AccessControlContext from "../../../../../../src/contexts/accessControlContext";
-import ConfirmationDialogContext from "../../../../../../src/contexts/confirmationDialogContext";
-import styles from "./styles";
 import { PUBLIC_AGENT_PREDICATE } from "../../../../../../src/models/contact/public";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../../../src/models/contact/authenticated";
 import {
@@ -34,7 +32,8 @@ import {
   profile as profilePropType,
 } from "../../../../../../constants/propTypes";
 import ResourceInfoContext from "../../../../../../src/contexts/resourceInfoContext";
-import ConfirmationDialog from "../../../../../confirmationDialog";
+import ConfirmationDialogProps from "../../../../../confirmationDialogProps";
+import styles from "./styles";
 
 export const handleRemovePermissions = ({
   setLoading,
@@ -77,8 +76,7 @@ export default function RemoveButton({
   const { mutate: mutateResourceInfo } = useContext(ResourceInfoContext);
   const resourceName = getResourceName(resourceIri);
   const classes = useStyles();
-  const [bypassDialog, setBypassDialog] = useState(false);
-  const [confirmationSetup, setConfirmationSetup] = useState(false);
+  const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
   const handleRemoveAgent = handleRemovePermissions({
     setLoading,
     accessControl,
@@ -86,65 +84,17 @@ export default function RemoveButton({
     mutateResourceInfo,
   });
 
-  const {
-    confirmed,
-    open,
-    setConfirmed,
-    setOpen,
-    title,
-    setTitle,
-    setConfirmText,
-    closeDialog,
-  } = useContext(ConfirmationDialogContext);
-
   const handleOpenDialog = () => {
-    setConfirmText(CONFIRMATION_TEXT);
     // eslint-disable-next-line prettier/prettier
     if (
       PUBLIC_AGENT_PREDICATE === webId ||
       AUTHENTICATED_AGENT_PREDICATE === webId
     ) {
-      setBypassDialog(true);
+      handleRemoveAgent(webId, alias);
+      return;
     }
-    const text = `Remove ${
-      profile?.name || webId
-    }'s access from ${resourceName}`;
-    setTitle(text);
-    setOpen(DIALOG_ID);
+    setOpenConfirmationDialog(true);
   };
-
-  useEffect(() => {
-    setConfirmationSetup(true);
-    if (bypassDialog) {
-      setConfirmed(true);
-      handleRemoveAgent(webId, alias);
-    }
-    if (open !== DIALOG_ID) return;
-    if (confirmationSetup && confirmed === null) return;
-
-    if (confirmationSetup && confirmed) {
-      handleRemoveAgent(webId, alias);
-    }
-
-    if (confirmationSetup && confirmed !== null) {
-      closeDialog();
-      setConfirmationSetup(false);
-    }
-    setConfirmText(null);
-  }, [
-    confirmationSetup,
-    confirmed,
-    title,
-    webId,
-    alias,
-    bypassDialog,
-    setConfirmed,
-    setConfirmationSetup,
-    setConfirmText,
-    handleRemoveAgent,
-    open,
-    closeDialog,
-  ]);
 
   return (
     <ListItem
@@ -158,7 +108,13 @@ export default function RemoveButton({
       >
         Remove
       </ListItemText>
-      <ConfirmationDialog />
+      <ConfirmationDialogProps
+        openConfirmationDialog={openConfirmationDialog}
+        title={`Remove ${profile?.name || webId}'s access from ${resourceName}`}
+        confirmText={CONFIRMATION_TEXT}
+        onConfirm={() => handleRemoveAgent(webId, alias)}
+        onCancel={() => setOpenConfirmationDialog(false)}
+      />
     </ListItem>
   );
 }
