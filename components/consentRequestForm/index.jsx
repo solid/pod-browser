@@ -57,7 +57,7 @@ import PurposeCheckbox from "./purposeCheckBox";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export const NO_ACCESS_DIALOG_TITLE = "Your haven't selected any access";
+export const NO_ACCESS_DIALOG_TITLE = "You haven't selected any access";
 export const DENY_ACCESS_DIALOG_TITLE = "Deny all access?";
 export const CONSENT_REQUEST_NO_ACCESS_DIALOG =
   "consent-request-no-access-dialog";
