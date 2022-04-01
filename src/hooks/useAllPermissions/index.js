@@ -62,7 +62,6 @@ export function useAllPermissions() {
   }, [resourceIri, session.fetch]);
 
   async function setAgentPermissions(resourceIri, agent, access, fetch) {
-    console.log("do we get in the setpermissions func in the hook?");
     try {
       const test = await universalAccess.setAgentAccess(
         resourceIri,
@@ -72,31 +71,16 @@ export function useAllPermissions() {
           fetch,
         }
       );
-      console.log({ test });
-      // if this takes a long time look at optimistic rendering
-
       const newPermissions = await getPermissions(resourceIri, fetch);
       setPermissions(newPermissions);
     } catch (e) {
-      console.log(e);
+      setError(e);
     }
   }
-
-  // async function setPublicPermissions(resourceIri, access, fetch) {
-  //   // redo this one once func above works
-  //   try {
-  //     universalAccess.setPublicAccess(resourceIri, access);
-
-  //     const newPermissions = await getPermissions(resourceIri, fetch);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
 
   return {
     permissions,
     loading,
     setAgentPermissions,
-    // setPublicPermissions,
   };
 }

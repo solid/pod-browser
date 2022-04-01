@@ -1142,7 +1142,6 @@ export default class AcpAccessControlStrategy {
   }
 
   async removeAgentFromPolicy(webId, policyName) {
-    console.log("IN ACP");
     const namedPolicyContainerUrl = getPolicyResourceUrl(
       this.#originalWithAcr,
       this.#policiesContainerUrl,
@@ -1176,7 +1175,6 @@ export default class AcpAccessControlStrategy {
       updatedDataset,
       this.#isLegacy
     );
-    console.log("IN ACP-middle");
 
     const isLastAgent = !agents.length;
     if (isLastAgent) {
@@ -1208,7 +1206,6 @@ export default class AcpAccessControlStrategy {
       fetch
     );
 
-    console.log("IN ACP-END");
     return respond(this.#originalWithAcr);
   }
 

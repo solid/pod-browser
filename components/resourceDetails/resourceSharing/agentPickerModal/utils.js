@@ -24,6 +24,7 @@ import {
   findPersonContactInAddressBook,
   savePerson,
 } from "../../../../src/models/contact/person";
+import { PUBLIC_AGENT_PREDICATE } from "../../../../src/models/contact/public";
 import { fetchProfile } from "../../../../src/solidClientHelpers/profile";
 
 export const setupWebIdCheckBoxObject = (permissions, contacts) => {
@@ -31,17 +32,17 @@ export const setupWebIdCheckBoxObject = (permissions, contacts) => {
   const output = {
     "http://www.w3.org/ns/solid/acp#PublicAgent": true,
     [AUTHENTICATED_AGENT_PREDICATE]: true,
+    "https://id.inrupt.com/annaprod125": false,
+    "https://id.inrupt.com/annaprod124": false,
   };
   webIds.forEach((webId) => {
     output[webId] = true;
   });
   // how do we get the name/ webID from the contact?
-  console.log({ contacts });
-  contacts.forEach((contact) => {
-    console.log({ contact });
-    const { webId } = contact;
-    if (!output[webId]) output[webId] = false;
-  });
+  // contacts.forEach((contact) => {
+  //   const { webId } = contact;
+  //   if (!output[webId]) output[webId] = false;
+  // });
   return output;
 };
 
@@ -83,7 +84,7 @@ export const handleSaveContact = async (iri, addressBook, fetch) => {
       await savePerson(addressBook, contact, fetch);
     }
   } catch (e) {
-    error = e; // need to do something with the error otherwise the function exits at any point a webId fails and does not continue processing the rest
+    error = e;
   }
 };
 
@@ -107,3 +108,44 @@ export const getConfirmationDialogText = (
 export const editorAccessMatrix = { read: true, write: true, append: false }; // from acp file - should user have append access as well?
 export const viewerAccessMatrix = { read: true, write: false, append: false }; // from acp file - should user have append access as well?
 export const removeAccessMatrix = { read: false, write: false, append: false }; // from acp file - should user have append access as well?
+
+export const addAgentsToPermissions = (
+  agents,
+  accessControl,
+  policyName,
+  setAgentPermissions,
+  resourceIri,
+  fetch
+) => {
+  agents?.forEach((agentWebId) => {
+    if (PUBLIC_AGENT_PREDICATE === agentWebId)
+      accessControl.setRulePublic(policyName, true);
+    if (AUTHENTICATED_AGENT_PREDICATE === agentWebId)
+      accessControl.setRuleAuthenticated(policyName, true);
+    let accessMatrix = viewerAccessMatrix;
+    if (policyName === "editors") accessMatrix = editorAccessMatrix;
+    return setAgentPermissions(resourceIri, agentWebId, accessMatrix, fetch);
+  });
+};
+
+export const removeAgentsFromPermissions = (
+  agents,
+  accessControl,
+  policyName,
+  setAgentPermissions,
+  resourceIri,
+  fetch
+) => {
+  agents?.forEach((agentWebId) => {
+    if (PUBLIC_AGENT_PREDICATE === agentWebId)
+      accessControl.setRulePublic(policyName, false);
+    if (AUTHENTICATED_AGENT_PREDICATE === agentWebId)
+      accessControl.setRuleAuthenticated(policyName, false);
+    return setAgentPermissions(
+      resourceIri,
+      agentWebId,
+      removeAccessMatrix,
+      fetch
+    );
+  });
+};

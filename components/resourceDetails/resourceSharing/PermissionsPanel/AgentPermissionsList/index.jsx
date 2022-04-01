@@ -142,7 +142,6 @@ function AgentPermissionItem({
 
     if (PUBLIC_AGENT_PREDICATE === agentWebId) {
       // confirm this function is what we want to be calling
-      console.log("in public resource", agentWebId);
       // setPublicPermissions(
       //   resourceIri,
       //   removePermissionsAccessObject,

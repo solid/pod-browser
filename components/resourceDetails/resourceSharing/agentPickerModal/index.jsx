@@ -70,6 +70,8 @@ import {
   viewerAccessMatrix,
   removeExistingAgentFromOtherPolicies,
   setupWebIdCheckBoxObject,
+  removeAgentsFromPermissions,
+  addAgentsToPermissions,
 } from "./utils";
 import ConfirmationDialogNew from "../../../confirmationDialogNew";
 import { useAllPermissions } from "../../../../src/hooks/useAllPermissions";
@@ -80,15 +82,10 @@ export const TESTCAFE_SUBMIT_WEBIDS_BUTTON = "submit-webids-button";
 const TESTCAFE_CANCEL_WEBIDS_BUTTON = "cancel-webids-button";
 
 export const handleSubmit = ({
-  permissions,
   newAgentsWebIds,
   webIdsToDelete,
   accessControl,
-  addressBook,
-  mutateResourceInfo,
-  saveAgentToContacts,
   onClose,
-  setLoading,
   policyName,
   resourceIri,
   setAgentPermissions,
@@ -99,78 +96,23 @@ export const handleSubmit = ({
     if ((!newAgentsWebIds.length && !webIdsToDelete.length) || !accessControl) {
       return;
     }
-    // setLoading(true);
-    // take this out because we can have more than one permission and also why is this being returned and serialized?
-    // const existingPoliciesPromiseFactories = newAgentsWebIds?.map(
-    //   (agentWebId) => () => {
-    //     removeExistingAgentFromOtherPolicies({
-    //       permissions,
-    //       newPolicy: policyName,
-    //       agentWebId,
-    //       accessControl,
-    //     });
-    //   }
-    // );
-
-    const addPermissionsPromiseFactories = newAgentsWebIds?.map(
-      (agentWebId) => () => {
-        if (PUBLIC_AGENT_PREDICATE === agentWebId) {
-          console.log("public agent add");
-          return accessControl.setRulePublic(policyName, true);
-        }
-        if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {
-          console.log("public agent2 add");
-          return accessControl.setRuleAuthenticated(policyName, true);
-        }
-        console.log("add an agent", { agentWebId, policyName });
-        let accessMatrix = viewerAccessMatrix;
-        if (policyName === "editors") accessMatrix = editorAccessMatrix;
-        return setAgentPermissions(
-          resourceIri,
-          agentWebId,
-          accessMatrix,
-          fetch
-        );
-      }
+    addAgentsToPermissions(
+      newAgentsWebIds,
+      accessControl,
+      policyName,
+      setAgentPermissions,
+      resourceIri,
+      fetch
     );
 
-    const removePermissionsPromiseFactories = webIdsToDelete?.map(
-      (agentWebId) => () => {
-        if (PUBLIC_AGENT_PREDICATE === agentWebId) {
-          console.log("public agent remove");
-          return accessControl.setRulePublic(policyName, false);
-        }
-        if (AUTHENTICATED_AGENT_PREDICATE === agentWebId) {
-          console.log("public agent2 remove");
-          return accessControl.setRuleAuthenticated(policyName, false);
-        }
-        console.log("remove an agent", { agentWebId, policyName });
-        return setAgentPermissions(
-          resourceIri,
-          agentWebId,
-          removeAccessMatrix,
-          fetch
-        );
-      }
+    removeAgentsFromPermissions(
+      webIdsToDelete,
+      accessControl,
+      policyName,
+      setAgentPermissions,
+      resourceIri,
+      fetch
     );
-
-    const addAgentsToContactsPromiseFactories = newAgentsWebIds
-      ?.filter((webId) => !isPublicAgentorAuthenticatedAgentWebId(webId))
-      .map(
-        (agentWebId) => () =>
-          saveAgentToContacts(agentWebId, addressBook, fetch)
-      );
-    const args = await serializePromises([
-      // ...existingPoliciesPromiseFactories,
-      ...addPermissionsPromiseFactories,
-      ...removePermissionsPromiseFactories,
-      ...addAgentsToContactsPromiseFactories,
-    ]);
-    console.log({ args });
-    const responses = args.filter((res) => typeof res !== "undefined");
-    const { response: latestAcr } = responses[responses.length - 1];
-    await mutateResourceInfo(latestAcr, false);
-    // setLoading(false);
   };
 };
 
@@ -200,16 +142,12 @@ function AgentPickerModal(
   const policyName = advancedSharing ? customPolicy : type;
   const { header, saveText, titleSingular, title } =
     POLICIES_TYPE_MAP[policyName];
-  const { mutate: mutateResourceInfo } = useContext(ResourceInfoContext);
 
   const { data: addressBook } = useAddressBook();
   const { data: contacts, error } = useContacts([
     GROUP_CONTACT,
     PERSON_CONTACT,
   ]);
-
-  const { solidDataset: dataset } = useContext(DatasetContext);
-  // const resourceIri = getSourceUrl(dataset);
   const resourceName = getResourceName(resourceIri);
   const { accessControl } = useContext(AccessControlContext);
   const [contactsArray, setContactsArray] = useState([]);
@@ -243,17 +181,11 @@ function AgentPickerModal(
 
   // can we get rid of wrapper?
   const handleSubmitNewWebIds = handleSubmit({
-    permissions,
     newAgentsWebIds,
     webIdsToDelete,
     accessControl,
-    addressBook,
-    mutateResourceInfo,
-    saveAgentToContacts: handleSaveContact,
     onClose: handleModalClose,
-    setLoading,
     policyName,
-    advancedSharing,
     resourceIri,
     setAgentPermissions,
     fetch,
@@ -292,8 +224,6 @@ function AgentPickerModal(
   };
 
   useEffect(() => {
-    console.log("contactsarray in useEffect", contactsArray);
-
     setCheckedBoxes(setupWebIdCheckBoxObject(permissions, contactsArray));
   }, [permissions, contactsArray]);
 
@@ -462,6 +392,7 @@ AgentPickerModal.propTypes = {
   open: PropTypes.bool.isRequired,
   accessibilityLabel: PropTypes.string,
   accessibilityDescribe: PropTypes.string,
+  resourceIri: PropTypes.string.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   permissions: PropTypes.array.isRequired,
 };
