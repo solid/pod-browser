@@ -39,8 +39,7 @@ import { Form, Button as PrismButton } from "@inrupt/prism-react-components";
 import { Alert, Skeleton } from "@material-ui/lab";
 import PermissionsForm from "../../../permissionsForm";
 import styles from "./styles";
-import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
-import ConfirmationDialog from "../../../confirmationDialog";
+import ConfirmationDialogProps from "../../../ConfirmationDialogProps";
 import {
   displayProfileName,
   fetchProfile,
@@ -63,17 +62,14 @@ export const OWN_PERMISSIONS_WARNING_PERMISSION =
 export function submitHandler(
   authenticatedWebId,
   webId,
-  setOpen,
-  dialogId,
+  setOpenConfirmationDialog,
   savePermissions,
-  tempAccess,
-  setContent
+  tempAccess
 ) {
   return async (event) => {
     event.preventDefault();
     if (authenticatedWebId === webId) {
-      setContent(OWN_PERMISSIONS_WARNING_PERMISSION);
-      setOpen(dialogId);
+      setOpenConfirmationDialog(true);
     } else {
       await savePermissions(tempAccess);
     }
@@ -118,24 +114,19 @@ export function getDialogId(datasetIri) {
 }
 
 export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
-  let { data: profile, error: profileError } = useFetchProfile(webId);
   const classes = useStyles();
+  const bem = useBem(useStyles());
+  let { data: profile, error: profileError } = useFetchProfile(webId);
   const { fetch, session } = useSession();
   const { webId: authenticatedWebId } = session.info;
-  const bem = useBem(useStyles());
   const [access, setAccess] = useState(acl);
   const [tempAccess, setTempAccess] = useState(acl);
   const { solidDataset: dataset } = useContext(DatasetContext);
   const { accessControl } = useContext(AccessControlContext);
   const [isLoading, setIsLoading] = useState(false);
-
-  const { open, confirmed, setContent, setOpen } = useContext(
-    ConfirmationDialogContext
-  );
-
   const { setMessage, setSeverity, setAlertOpen } = useContext(AlertContext);
   const dialogId = getDialogId(getSourceUrl(dataset));
-
+  const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
   const savePermissions = saveHandler(
     accessControl,
     onLoading,
@@ -148,27 +139,16 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
   );
 
   useEffect(() => {
-    if (open !== dialogId || !confirmed || authenticatedWebId !== webId) return;
     // this triggers when a visitor changes their own permissions
     savePermissions(tempAccess);
-  }, [
-    authenticatedWebId,
-    confirmed,
-    savePermissions,
-    tempAccess,
-    webId,
-    dialogId,
-    open,
-  ]);
+  }, [authenticatedWebId, savePermissions, tempAccess, webId, dialogId]);
 
   const onSubmit = submitHandler(
     authenticatedWebId,
     webId,
-    setOpen,
-    dialogId,
+    setOpenConfirmationDialog,
     savePermissions,
-    tempAccess,
-    setContent
+    tempAccess
   );
 
   const handleRetryClick = async () => {
@@ -246,7 +226,13 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
             </PermissionsForm>
           </Form>
         </div>
-        <ConfirmationDialog />
+        {/* I don't actually think this confirmation dialog is being used */}
+        <ConfirmationDialogProps
+          openConfirmationDialog={openConfirmationDialog}
+          onConfirm={() => console.log("confirmed")}
+          onCancel={() => console.log("canceled")}
+          content={OWN_PERMISSIONS_WARNING_PERMISSION}
+        />
       </div>
     );
   }
@@ -296,7 +282,12 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
           </PrismButton>
         </PermissionsForm>
       </Form>
-      <ConfirmationDialog />
+      <ConfirmationDialogProps
+        openConfirmationDialog={openConfirmationDialog}
+        onConfirm={() => console.log("confirmed")}
+        onCancel={() => console.log("canceled")}
+        content={OWN_PERMISSIONS_WARNING_PERMISSION}
+      />
     </>
   );
 }

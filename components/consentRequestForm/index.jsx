@@ -51,13 +51,12 @@ import {
   getRequestorWebId,
   getVcId,
 } from "../../src/models/consent/request";
-import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
 import ConfirmationDialog from "../confirmationDialog";
 import PurposeCheckbox from "./purposeCheckBox";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export const NO_ACCESS_DIALOG_TITLE = "Your haven't selected any access";
+export const NO_ACCESS_DIALOG_TITLE = "You haven't selected any access";
 export const DENY_ACCESS_DIALOG_TITLE = "Deny all access?";
 export const CONSENT_REQUEST_NO_ACCESS_DIALOG =
   "consent-request-no-access-dialog";
@@ -82,25 +81,12 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   const selectedResources = selectedAccess.map(
     ({ resourceIri }) => resourceIri
   );
-
   const { agentName } = agentDetails || null;
-
-  const {
-    confirmed,
-    open,
-    setContent,
-    setOpen,
-    setTitle,
-    closeDialog,
-    setConfirmText,
-    setOmitCancelButton,
-  } = useContext(ConfirmationDialogContext);
-  const [confirmationSetup, setConfirmationSetup] = useState(false);
-
   const requestedAccesses = getRequestedAccesses(consentRequest);
   const expirationDate = getExpiryDate(consentRequest);
   const [selectedDate, setSelectedDate] = useState(new Date(expirationDate));
-
+  const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
+  const [denyAccessRequest, setDenyAccessRequest] = useState(false);
   const DIALOG_CONTENT = `${
     agentName || agentWebId
   } will not have access to anything in your Pod.`;
@@ -129,74 +115,21 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
     }
     /* istanbul ignore next */
     if (!selectedPurposes.length) {
-      setConfirmationSetup(true);
-      setOpen(CONSENT_REQUEST_NO_ACCESS_DIALOG);
-      setTitle(NO_PURPOSE_TITLE);
-      setConfirmText("Ok");
-      setOmitCancelButton(true);
-      setContent(NO_PURPOSE_CONTENT);
+      setOpenConfirmationDialog(true);
     } else if (!selectedAccess.length) {
-      setConfirmationSetup(true);
-      setOmitCancelButton(false);
-      setOpen(CONSENT_REQUEST_NO_ACCESS_DIALOG);
-      setTitle(NO_ACCESS_DIALOG_TITLE);
-      setConfirmText(CONFIRM_TEXT);
-      setContent(DIALOG_CONTENT);
+      setOpenConfirmationDialog(true);
     }
   };
 
-  const handleDenyAccess = () => {
-    setConfirmationSetup(true);
-    setOmitCancelButton(false);
-    setTitle(DENY_ACCESS_DIALOG_TITLE);
-    setConfirmText(DENY_TEXT);
-    setContent(DIALOG_CONTENT);
-    setOpen(CONSENT_REQUEST_NO_ACCESS_DIALOG);
+  const handleDenyAccessRequest = async () => {
+    const signedVc = await denyAccessRequest(
+      session.info.webId,
+      consentRequest
+    );
+    if (signedVc) {
+      await router.push(`${redirectUrl}?signedVcUrl=${getVcId(signedVc)}`);
+    }
   };
-
-  useEffect(() => {
-    const handleDenyAccessRequest = async () => {
-      const signedVc = await denyAccessRequest(
-        session.info.webId,
-        consentRequest
-      );
-      if (signedVc) {
-        await router.push(`${redirectUrl}?signedVcUrl=${getVcId(signedVc)}`);
-      }
-    };
-    if (
-      confirmationSetup &&
-      confirmed === null &&
-      open === CONSENT_REQUEST_NO_ACCESS_DIALOG
-    )
-      return;
-
-    if (
-      confirmationSetup &&
-      confirmed &&
-      open === CONSENT_REQUEST_NO_ACCESS_DIALOG
-    ) {
-      handleDenyAccessRequest();
-      closeDialog();
-    }
-
-    if (confirmed !== null) {
-      closeDialog();
-      setConfirmationSetup(false);
-    }
-  }, [
-    confirmationSetup,
-    confirmed,
-    closeDialog,
-    open,
-    consentRequest,
-    selectedAccess,
-    selectedPurposes,
-    selectedResources,
-    redirectUrl,
-    session,
-    router,
-  ]);
 
   const handleDateChange = (date) => {
     setSelectedDate(date ? date.toISOString() : null);
@@ -220,6 +153,51 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
         prevState.filter((value) => value !== e.target.value)
       );
     }
+  };
+
+  const determineConfirmationDialog = () => {
+    if (denyAccessRequest) {
+      return (
+        <ConfirmationDialog
+          openConfirmationDialog={openConfirmationDialog}
+          onConfirm={() => {
+            handleDenyAccessRequest();
+            setOpenConfirmationDialog(false);
+          }}
+          onCancel={() => setOpenConfirmationDialog(false)}
+          title={DENY_ACCESS_DIALOG_TITLE}
+          confirmText={DENY_TEXT}
+          content={DIALOG_CONTENT}
+        />
+      );
+    }
+    if (!selectedPurposes.length) {
+      return (
+        <ConfirmationDialog
+          openConfirmationDialog={openConfirmationDialog}
+          onConfirm={() => setOpenConfirmationDialog(false)}
+          onCancel={() => setOpenConfirmationDialog(false)}
+          title={NO_PURPOSE_TITLE}
+          confirmText={NO_PURPOSE_TITLE}
+          content={NO_PURPOSE_CONTENT}
+          omitCancelButton
+        />
+      );
+    }
+    if (!selectedAccess.length) {
+      return (
+        <ConfirmationDialog
+          openConfirmationDialog={openConfirmationDialog}
+          onConfirm={() => setOpenConfirmationDialog(false)}
+          onCancel={() => setOpenConfirmationDialog(false)}
+          title={NO_ACCESS_DIALOG_TITLE}
+          confirmText={CONFIRM_TEXT}
+          content={DIALOG_CONTENT}
+          omitCancelButton
+        />
+      );
+    }
+    return null;
   };
 
   return (
@@ -297,7 +275,10 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
             variant="secondary"
             type="button"
             className={bem("request-container__button")}
-            onClick={handleDenyAccess}
+            onClick={() => {
+              setDenyAccessRequest(true);
+              setOpenConfirmationDialog(true);
+            }}
           >
             Deny all access
           </Button>
@@ -310,7 +291,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
           </Button>
         </div>
       </form>
-      <ConfirmationDialog />
+      {determineConfirmationDialog()}
     </>
   );
 }

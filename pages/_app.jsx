@@ -45,7 +45,6 @@ import {
 
 import theme from "../src/theme";
 import { AlertProvider } from "../src/contexts/alertContext";
-import { ConfirmationDialogProvider } from "../src/contexts/confirmationDialogContext";
 import { FeatureProvider } from "../src/contexts/featureFlagsContext";
 import AuthenticationProvider from "../src/authentication/AuthenticationProvider";
 import Notification from "../components/notification";
@@ -121,16 +120,14 @@ export default function App(props) {
               <SessionProvider sessionId="pod-browser" restorePreviousSession>
                 <AuthenticationProvider>
                   <FeatureProvider>
-                    <ConfirmationDialogProvider>
-                      <div className={bem("app-layout")}>
-                        <PodBrowserHeader />
+                    <div className={bem("app-layout")}>
+                      <PodBrowserHeader />
 
-                        <main className={bem("app-layout__main")}>
-                          <Component {...pageProps} />
-                        </main>
-                      </div>
-                      <Notification />
-                    </ConfirmationDialogProvider>
+                      <main className={bem("app-layout__main")}>
+                        <Component {...pageProps} />
+                      </main>
+                    </div>
+                    <Notification />
                   </FeatureProvider>
                 </AuthenticationProvider>
               </SessionProvider>

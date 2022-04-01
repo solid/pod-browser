@@ -25,7 +25,6 @@ import { waitFor } from "@testing-library/dom";
 import { acp_v3 as acp } from "@inrupt/solid-client";
 import * as solidClientFns from "@inrupt/solid-client";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import { ConfirmationDialogProvider } from "../../../../src/contexts/confirmationDialogContext";
 import PolicyActionButton, {
   handleRemoveAllAgents,
   TESTCAFE_ID_REMOVE_POLICY_BUTTON,
@@ -130,13 +129,11 @@ describe("PolicyActionButton", () => {
   });
   it("opens a confirmation dialog with the correct title and content", () => {
     const { getByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <PolicyActionButton
-          type={type}
-          permissions={permissions}
-          setLoading={setLoading}
-        />
-      </ConfirmationDialogProvider>
+      <PolicyActionButton
+        type={type}
+        permissions={permissions}
+        setLoading={setLoading}
+      />
     );
 
     const button = getByTestId(TESTCAFE_ID_REMOVE_POLICY_BUTTON);
@@ -152,13 +149,11 @@ describe("PolicyActionButton", () => {
   });
   it("closes the dialog when Cancel button is clicked", async () => {
     const { getByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <PolicyActionButton
-          type={type}
-          permissions={permissions}
-          setLoading={setLoading}
-        />
-      </ConfirmationDialogProvider>
+      <PolicyActionButton
+        type={type}
+        permissions={permissions}
+        setLoading={setLoading}
+      />
     );
 
     const button = getByTestId(TESTCAFE_ID_REMOVE_POLICY_BUTTON);
@@ -180,13 +175,11 @@ describe("PolicyActionButton", () => {
       .mockResolvedValueOnce([{ response: acr }]);
     const { getByTestId } = renderWithTheme(
       <AccessControlContext.Provider value={{ accessControl }}>
-        <ConfirmationDialogProvider>
-          <PolicyActionButton
-            type={type}
-            permissions={permissions}
-            setLoading={setLoading}
-          />
-        </ConfirmationDialogProvider>
+        <PolicyActionButton
+          type={type}
+          permissions={permissions}
+          setLoading={setLoading}
+        />
       </AccessControlContext.Provider>
     );
 

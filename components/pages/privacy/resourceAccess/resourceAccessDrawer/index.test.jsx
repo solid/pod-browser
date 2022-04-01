@@ -32,7 +32,6 @@ import ConfirmationDialog, {
   TESTCAFE_ID_CONFIRMATION_DIALOG,
   TESTCAFE_ID_CONFIRM_BUTTON,
 } from "../../../../confirmationDialog";
-import { ConfirmationDialogProvider } from "../../../../../src/contexts/confirmationDialogContext";
 import mockSession from "../../../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../../../__testUtils/mockSessionContextProvider";
 import { TESTCAFE_ID_REVOKE_ACCESS_BUTTON } from "../revokeAccessButton";
@@ -74,7 +73,7 @@ describe("ResourceDrawer", () => {
       },
     ];
     const { getByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
+      <>
         <ResourceDrawer
           open
           onClose={onClose}
@@ -82,7 +81,7 @@ describe("ResourceDrawer", () => {
           resourceIri={resourceIri}
         />
         <ConfirmationDialog />
-      </ConfirmationDialogProvider>
+      </>
     );
     const button = getByTestId(TESTCAFE_ID_REVOKE_ACCESS_BUTTON);
     userEvent.click(button);
@@ -105,17 +104,15 @@ describe("ResourceDrawer", () => {
       },
     ];
     const { getByTestId, findByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <SessionProvider>
-          <ResourceDrawer
-            open
-            onClose={onClose}
-            accessList={accessListEditors}
-            resourceIri={resourceIri}
-          />
-          <ConfirmationDialog />
-        </SessionProvider>
-      </ConfirmationDialogProvider>
+      <SessionProvider>
+        <ResourceDrawer
+          open
+          onClose={onClose}
+          accessList={accessListEditors}
+          resourceIri={resourceIri}
+        />
+        <ConfirmationDialog />
+      </SessionProvider>
     );
     const button = getByTestId(TESTCAFE_ID_REVOKE_ACCESS_BUTTON);
     userEvent.click(button);

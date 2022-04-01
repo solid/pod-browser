@@ -121,14 +121,12 @@ describe("Consent Request Form", () => {
   it("displays a confirmation dialog with the correct title and content when submitting form without selecting access and at least one purpose selected", () => {
     jest.spyOn(consentFns, "approveAccessRequest").mockResolvedValue(signedVc);
     const { getByTestId, getAllByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <ConsentRequestContextProvider>
-          <ConsentRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </ConsentRequestContextProvider>
-      </ConfirmationDialogProvider>
+      <ConsentRequestContextProvider>
+        <ConsentRequestForm
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
+      </ConsentRequestContextProvider>
     );
     const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
     userEvent.click(purpose);
@@ -148,14 +146,12 @@ describe("Consent Request Form", () => {
 
   it("displays a confirmation dialog with the correct title and content when submitting form without selecting purpose and at least one access selected", async () => {
     const { getByTestId, getAllByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <ConsentRequestContextProvider>
-          <ConsentRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </ConsentRequestContextProvider>
-      </ConfirmationDialogProvider>
+      <ConsentRequestContextProvider>
+        <ConsentRequestForm
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
+      </ConsentRequestContextProvider>
     );
     const toggle = getAllByTestId(TESTCAFE_ID_CONSENT_ACCESS_SWITCH)[0];
     userEvent.click(toggle);
@@ -177,14 +173,12 @@ describe("Consent Request Form", () => {
   it("does not display confirmation dialog if at least one access and one purpose are selected, calls approveAccessRequest and redirects with correct params", async () => {
     consentFns.approveAccessRequest.mockResolvedValue(signedVc);
     const { getByTestId, findByTestId, getAllByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <ConsentRequestContextProvider>
-          <ConsentRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </ConsentRequestContextProvider>
-      </ConfirmationDialogProvider>
+      <ConsentRequestContextProvider>
+        <ConsentRequestForm
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
+      </ConsentRequestContextProvider>
     );
     const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
     userEvent.click(purpose);
@@ -203,14 +197,12 @@ describe("Consent Request Form", () => {
 
   it("displays the confirmation dialog with the correct title and content regardless of the state of the toggles when clicking 'Deny All Access' button", async () => {
     const { getByTestId, getAllByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <ConsentRequestContextProvider>
-          <ConsentRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </ConsentRequestContextProvider>
-      </ConfirmationDialogProvider>
+      <ConsentRequestContextProvider>
+        <ConsentRequestForm
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
+      </ConsentRequestContextProvider>
     );
     const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
     userEvent.click(purpose);
@@ -233,14 +225,12 @@ describe("Consent Request Form", () => {
   it(" calls denyAccessRequest and redirects with correct params when confirming deny access", async () => {
     consentFns.denyAccessRequest.mockResolvedValue(signedVc);
     const { getByTestId, getAllByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <ConsentRequestContextProvider>
-          <ConsentRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </ConsentRequestContextProvider>
-      </ConfirmationDialogProvider>
+      <ConsentRequestContextProvider>
+        <ConsentRequestForm
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
+      </ConsentRequestContextProvider>
     );
     const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
     userEvent.click(purpose);

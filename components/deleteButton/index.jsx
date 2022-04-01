@@ -19,15 +19,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import clsx from "clsx";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import T from "prop-types";
 import AlertContext from "../../src/contexts/alertContext";
-import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
 import styles from "./styles";
 import { isHTTPError } from "../../src/error";
+import ConfirmationDialogProps from "../ConfirmationDialogProps";
 
 export const TESTCAFE_ID_DELETE_BUTTON = "delete-button";
 
@@ -64,9 +64,7 @@ export default function DeleteButton({
 }) {
   const bem = useBem(useStyles());
   const { setAlertOpen, setMessage, setSeverity } = useContext(AlertContext);
-  const [confirmationSetup, setConfirmationSetup] = useState(false);
-  const { confirmed, open, setContent, setOpen, setTitle, closeDialog } =
-    useContext(ConfirmationDialogContext);
+  const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
 
   function onDeleteError(e) {
     setSeverity("error");
@@ -87,43 +85,23 @@ export default function DeleteButton({
     successMessage,
   });
 
-  useEffect(() => {
-    if (open !== dialogId) return;
-    if (confirmationSetup && confirmed === null) return;
-    setTitle(confirmationTitle);
-    setContent(confirmationContent);
-    setConfirmationSetup(true);
-
-    if (confirmationSetup && confirmed) {
-      deleteResource();
-    }
-
-    if (confirmationSetup && confirmed !== null) {
-      closeDialog();
-      setConfirmationSetup(false);
-    }
-  }, [
-    deleteResource,
-    open,
-    dialogId,
-    confirmationTitle,
-    confirmationContent,
-    setConfirmationSetup,
-    confirmed,
-    confirmationSetup,
-    setContent,
-    setTitle,
-    closeDialog,
-  ]);
-
   return (
-    <button
-      type="button"
-      className={clsx(bem("button"))}
-      data-testid={TESTCAFE_ID_DELETE_BUTTON}
-      {...buttonProps}
-      onClick={() => setOpen(dialogId)}
-    />
+    <>
+      <button
+        type="button"
+        className={clsx(bem("button"))}
+        data-testid={TESTCAFE_ID_DELETE_BUTTON}
+        {...buttonProps}
+        onClick={() => setOpenConfirmationDialog(true)}
+      />
+      <ConfirmationDialogProps
+        openConfirmationDialog={openConfirmationDialog}
+        onCancel={() => setOpenConfirmationDialog(false)}
+        title={confirmationTitle}
+        content={confirmationContent}
+        onConfirm={deleteResource}
+      />
+    </>
   );
 }
 

@@ -29,7 +29,6 @@ import ConfirmationDialog, {
   TESTCAFE_ID_CONFIRMATION_DIALOG,
   TESTCAFE_ID_CONFIRM_BUTTON,
 } from "../../../../confirmationDialog";
-import { ConfirmationDialogProvider } from "../../../../../src/contexts/confirmationDialogContext";
 import mockSession from "../../../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../../../__testUtils/mockSessionContextProvider";
 import mockAccessControl from "../../../../../__testUtils/mockAccessControl";
@@ -105,7 +104,7 @@ describe("RevokeAccessButton", () => {
 
   it("displays confirmation dialog on click", async () => {
     const { getByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
+      <>
         <RevokeAccessButton
           variant="all-access"
           resources={[resourceIri, resourceIri]}
@@ -114,7 +113,7 @@ describe("RevokeAccessButton", () => {
           setShouldUpdate={setShouldUpdate}
         />
         <ConfirmationDialog />
-      </ConfirmationDialogProvider>
+      </>
     );
     const button = getByTestId(TESTCAFE_ID_REVOKE_ACCESS_BUTTON);
     userEvent.click(button);
@@ -135,16 +134,14 @@ describe("RevokeAccessButton", () => {
     jest.spyOn(SolidClientFns, "getResourceInfo").mockResolvedValue(resource);
     const { getByTestId } = renderWithTheme(
       <SessionProvider>
-        <ConfirmationDialogProvider>
-          <RevokeAccessButton
-            variant="all-access"
-            resources={[resourceIri, resourceIri]}
-            onClose={onClose}
-            accessList={accessList}
-            setShouldUpdate={setShouldUpdate}
-          />
-          <ConfirmationDialog />
-        </ConfirmationDialogProvider>
+        <RevokeAccessButton
+          variant="all-access"
+          resources={[resourceIri, resourceIri]}
+          onClose={onClose}
+          accessList={accessList}
+          setShouldUpdate={setShouldUpdate}
+        />
+        <ConfirmationDialog />
       </SessionProvider>
     );
     const button = getByTestId(TESTCAFE_ID_REVOKE_ACCESS_BUTTON);

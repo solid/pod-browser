@@ -28,7 +28,6 @@ import {
   TESTCAFE_ID_CONFIRMATION_DIALOG,
   TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
 } from "../../confirmationDialog";
-import { ConfirmationDialogProvider } from "../../../src/contexts/confirmationDialogContext";
 
 describe("ContactsDrawer", () => {
   const onClose = () => {};
@@ -59,16 +58,14 @@ describe("Delete contact button confirmation dialog", () => {
   it("tests if the delete confirmation shows webId if no name is available", async () => {
     const selectedContactName = null;
     const { findByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <ContactsDrawer
-          open
-          onClose={onClose}
-          onDelete={onDelete}
-          selectedContactName={selectedContactName}
-          selectedContactWebId={profileIri}
-          profileIri={profileIri}
-        />
-      </ConfirmationDialogProvider>
+      <ContactsDrawer
+        open
+        onClose={onClose}
+        onDelete={onDelete}
+        selectedContactName={selectedContactName}
+        selectedContactWebId={profileIri}
+        profileIri={profileIri}
+      />
     );
     const deleteButton = await findByTestId("delete-button");
     userEvent.click(deleteButton);
@@ -87,16 +84,14 @@ describe("Delete contact button confirmation dialog", () => {
   it("shows name if name is available", async () => {
     const selectedContactName = "Alice";
     const { findByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <ContactsDrawer
-          open
-          onClose={onClose}
-          onDelete={onDelete}
-          selectedContactName={selectedContactName}
-          selectedContactWebId={profileIri}
-          profileIri={profileIri}
-        />
-      </ConfirmationDialogProvider>
+      <ContactsDrawer
+        open
+        onClose={onClose}
+        onDelete={onDelete}
+        selectedContactName={selectedContactName}
+        selectedContactWebId={profileIri}
+        profileIri={profileIri}
+      />
     );
     const deleteButton = await findByTestId("delete-button");
     userEvent.click(deleteButton);

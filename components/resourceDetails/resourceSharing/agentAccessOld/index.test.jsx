@@ -45,7 +45,6 @@ import {
   TESTCAFE_ID_CONFIRMATION_DIALOG,
   TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
 } from "../../../confirmationDialog";
-import { ConfirmationDialogProvider } from "../../../../src/contexts/confirmationDialogContext";
 
 jest.mock("../../../../src/solidClientHelpers/permissions");
 jest.mock("../../../../src/hooks/useFetchProfile");
@@ -223,12 +222,10 @@ describe("AgentAccess", () => {
       const { findByTestId, getAllByRole, getByTestId } = renderWithTheme(
         <SessionProvider>
           <DatasetProvider solidDataset={dataset}>
-            <ConfirmationDialogProvider>
-              <AgentAccess
-                permission={readPermission}
-                webId={session.info.webId}
-              />
-            </ConfirmationDialogProvider>
+            <AgentAccess
+              permission={readPermission}
+              webId={session.info.webId}
+            />
           </DatasetProvider>
         </SessionProvider>
       );

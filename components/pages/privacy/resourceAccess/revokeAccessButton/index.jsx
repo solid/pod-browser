@@ -34,12 +34,12 @@ import { getPolicyDetailFromAccess } from "../../../../../src/accessControl/acp"
 import { getResourceName } from "../../../../../src/solidClientHelpers/resource";
 import styles from "./styles";
 import AlertContext from "../../../../../src/contexts/alertContext";
-import ConfirmationDialogContext from "../../../../../src/contexts/confirmationDialogContext";
 import useAgentProfile from "../../../../../src/hooks/useAgentProfile";
 import { isHTTPError } from "../../../../../src/error";
 import { getAccessControl } from "../../../../../src/accessControl";
 import usePodRootUri from "../../../../../src/hooks/usePodRootUri";
 import { getPoliciesContainerUrl } from "../../../../../src/models/policy";
+import ConfirmationDialogProps from "../../../../ConfirmationDialogProps";
 
 export const TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON =
   "access-details-remove-button";
@@ -134,24 +134,13 @@ export default function RevokeAccessButton({
   const { fetch } = session;
   const { data: agentProfile } = useAgentProfile(agentWebId);
   const agentName = agentProfile?.name || agentWebId;
-  const {
-    confirmed,
-    open: dialogOpen,
-    setContent,
-    setOpen,
-    setTitle,
-    closeDialog,
-    setConfirmText,
-    setIsDangerousAction,
-  } = useContext(ConfirmationDialogContext);
-  const [confirmationSetup, setConfirmationSetup] = useState(false);
   const podRoot = usePodRootUri(session.info.webId);
   const policiesContainer = podRoot && getPoliciesContainerUrl(podRoot);
   const resourceName =
     resources.length === 1
       ? getResourceName(resources[0])
       : ACCESS_TO_POD_MESSAGE;
-
+  const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
   const removeAccess = handleRemoveAccess({
     resources,
     policiesContainer,
@@ -169,67 +158,68 @@ export default function RevokeAccessButton({
     setAgentWebId(accessList[0]?.agent);
   }, [accessList]);
 
-  const handleConfirmation = () => {
-    setConfirmationSetup(true);
-    setOpen(REMOVE_ACCESS_CONFIRMATION_DIALOG);
-    setIsDangerousAction(true);
-    setTitle(
-      resources.length === 1
-        ? `Revoke access to ${resourceName}?`
-        : `Revoke access from ${agentName}?`
-    );
-    setConfirmText(
-      resources.length === 1 ? SINGLE_ACCESS_MESSAGE : ALL_ACCESS_MESSAGE
-    );
-    setContent(`${agentName} will not be able to access ${resourceName}`);
-  };
-
-  useEffect(() => {
-    if (
-      confirmationSetup &&
-      confirmed === null &&
-      dialogOpen === REMOVE_ACCESS_CONFIRMATION_DIALOG
-    )
-      return;
-
-    if (
-      confirmationSetup &&
-      confirmed &&
-      dialogOpen === REMOVE_ACCESS_CONFIRMATION_DIALOG
-    ) {
-      removeAccess();
-    }
-
-    if (confirmed !== null) {
-      closeDialog();
-      setConfirmationSetup(false);
-    }
-  }, [confirmationSetup, confirmed, closeDialog, dialogOpen, removeAccess]);
-
   if (variant === "in-menu") {
     return (
-      <Button
-        type="button"
-        variant={variant}
-        className={clsx(bem(`revoke-button`))}
-        data-testid={TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON}
-        onClick={handleConfirmation}
-      >
-        Revoke access
-      </Button>
+      <>
+        <Button
+          type="button"
+          variant={variant}
+          className={clsx(bem(`revoke-button`))}
+          data-testid={TESTCAFE_ID_ACCESS_DETAILS_REMOVE_BUTTON}
+          onClick={() => {
+            setOpenConfirmationDialog(true);
+          }}
+        >
+          Revoke access
+        </Button>
+        <ConfirmationDialogProps
+          openConfirmationDialog={openConfirmationDialog}
+          title={
+            resources.length === 1
+              ? `Revoke access to ${resourceName}?`
+              : `Revoke access from ${agentName}?`
+          }
+          confirmText={
+            resources.length === 1 ? SINGLE_ACCESS_MESSAGE : ALL_ACCESS_MESSAGE
+          }
+          content={`${agentName} will not be able to access ${resourceName}`}
+          onConfirm={removeAccess}
+          onCancel={() => openConfirmationDialog(false)}
+          isDangerousAction
+        />
+      </>
     );
   }
   return (
-    <button
-      type="button"
-      className={bem("revoke-button")}
-      data-testid={TESTCAFE_ID_REVOKE_ACCESS_BUTTON}
-      onClick={handleConfirmation}
-    >
-      {resources.length > 1
-        ? ALL_ACCESS_MESSAGE
-        : `Remove Access to ${resourceName}?`}
-    </button>
+    <>
+      <button
+        type="button"
+        className={bem("revoke-button")}
+        data-testid={TESTCAFE_ID_REVOKE_ACCESS_BUTTON}
+        onClick={() => {
+          setOpenConfirmationDialog(true);
+        }}
+      >
+        {resources.length > 1
+          ? ALL_ACCESS_MESSAGE
+          : `Remove Access to ${resourceName}?`}
+      </button>
+      <ConfirmationDialogProps
+        openConfirmationDialog={openConfirmationDialog}
+        title={
+          resources.length === 1
+            ? `Revoke access to ${resourceName}?`
+            : `Revoke access from ${agentName}?`
+        }
+        confirmText={
+          resources.length === 1 ? SINGLE_ACCESS_MESSAGE : ALL_ACCESS_MESSAGE
+        }
+        content={`${agentName} will not be able to access ${resourceName}`}
+        onConfirm={removeAccess}
+        onCancel={() => openConfirmationDialog(false)}
+        isDangerousAction
+      />
+    </>
   );
 }
 

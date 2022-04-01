@@ -27,7 +27,6 @@ import DeleteButton, {
   handleDeleteResource,
 } from "./index";
 import { renderWithTheme } from "../../__testUtils/withTheme";
-import { ConfirmationDialogProvider } from "../../src/contexts/confirmationDialogContext";
 import ConfirmationDialog, {
   TESTCAFE_ID_CONFIRMATION_DIALOG,
   TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
@@ -58,7 +57,7 @@ describe("Delete button", () => {
 
   it("opens a confirmation dialog with the correct title and content when clicking on delete button ", () => {
     const { getByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
+      <>
         <DeleteButton
           onDelete={jest.fn()}
           confirmationTitle={confirmationTitle}
@@ -67,7 +66,7 @@ describe("Delete button", () => {
           successMessage={successMessage}
         />
         <ConfirmationDialog />
-      </ConfirmationDialogProvider>
+      </>
     );
     const deletebutton = getByTestId(TESTCAFE_ID_DELETE_BUTTON);
     userEvent.click(deletebutton);
@@ -84,7 +83,7 @@ describe("Delete button", () => {
   it("deletes the resource if confirmation dialog is confirmed", () => {
     const onDelete = jest.fn();
     const { getByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
+      <>
         <DeleteButton
           onDelete={onDelete}
           confirmationTitle={confirmationTitle}
@@ -93,7 +92,7 @@ describe("Delete button", () => {
           successMessage={successMessage}
         />
         <ConfirmationDialog />
-      </ConfirmationDialogProvider>
+      </>
     );
     const deletebutton = getByTestId(TESTCAFE_ID_DELETE_BUTTON);
     userEvent.click(deletebutton);

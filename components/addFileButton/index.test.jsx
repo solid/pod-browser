@@ -44,7 +44,6 @@ import {
   TESTCAFE_ID_CONFIRM_BUTTON,
 } from "../confirmationDialog";
 import TestApp from "../../__testUtils/testApp";
-import { ConfirmationDialogProvider } from "../../src/contexts/confirmationDialogContext";
 
 const currentUri = "https://www.mypodbrowser.com/";
 const file = new File(["file contents"], "myfile.txt", {
@@ -168,6 +167,7 @@ describe("AddFileButton", () => {
     expect(onSave).toHaveBeenCalled();
     expect(setAlertOpen).toHaveBeenCalled();
   });
+
   it("displays a confirmation dialog with the correct title and message when trying to upload a duplicate file", async () => {
     const resourceList = [
       {
@@ -177,12 +177,15 @@ describe("AddFileButton", () => {
         type: "Resource",
       },
     ];
-    const { getByTestId } = renderWithTheme(
+
+    const { getByTestId, asFragment } = renderWithTheme(
       <TestApp>
         <AddFileButton onSave={onSave} resourceList={resourceList} />
       </TestApp>
     );
+    console.log({ asFragment });
     const input = getByTestId(TESTCAFE_ID_UPLOAD_INPUT);
+
     await act(async () => {
       userEvent.click(input);
       userEvent.upload(input, file);
@@ -208,9 +211,7 @@ describe("AddFileButton", () => {
     const { getByTestId } = renderWithTheme(
       <PodLocationProvider currentUri={currentUri}>
         <SessionProvider>
-          <ConfirmationDialogProvider>
-            <AddFileButton onSave={onSave} resourceList={resourceList} />
-          </ConfirmationDialogProvider>
+          <AddFileButton onSave={onSave} resourceList={resourceList} />
         </SessionProvider>
       </PodLocationProvider>
     );

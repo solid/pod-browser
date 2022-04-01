@@ -54,8 +54,7 @@ import CustomPolicyDropdown from "../customPolicyDropdown";
 import styles from "./styles";
 import AddWebIdButton from "./addWebIdButton";
 import WebIdCheckbox from "./webIdCheckbox";
-import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
-import ConfirmationDialog from "../../../confirmationDialog";
+import ConfirmationDialogProps from "../../../ConfirmationDialogProps";
 import useContacts from "../../../../src/hooks/useContacts";
 import { GROUP_CONTACT } from "../../../../src/models/contact/group";
 import {
@@ -249,21 +248,11 @@ function AgentPickerModal(
   // const [selectedTabValue, setSelectedTabValue] = useState("");
   const { accessControl } = useContext(AccessControlContext);
 
-  const [bypassDialog, setBypassDialog] = useState(false);
   const [contactsArray, setContactsArray] = useState([]);
   // TODO: Uncomment to reintroduce tabs
   // const [filteredContacts, setFilteredContacts] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
-  const [confirmationSetup, setConfirmationSetup] = useState(false);
-  const {
-    open,
-    confirmed,
-    setConfirmed,
-    setContent,
-    setOpen,
-    setTitle,
-    closeDialog,
-  } = useContext(ConfirmationDialogContext);
+  const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
 
   // TODO: Uncomment to reintroduce tabs
   // const handleTabChange = (e, newValue) => {
@@ -292,7 +281,6 @@ function AgentPickerModal(
   const handleClickOpenDialog = () => {
     if (!newAgentsWebIds.length && !webIdsToDelete.length) {
       onClose();
-      setConfirmed(false);
       return;
     }
     const filteredNewWebIds = newAgentsWebIds.filter(
@@ -306,24 +294,11 @@ function AgentPickerModal(
         webId !== AUTHENTICATED_AGENT_PREDICATE
     );
     if (!filteredNewWebIds.length && !filteredWebIdsToDelete.length) {
-      setTitle(null);
-      setContent(null);
-      setOpen(null);
-      setBypassDialog(true);
+      handleSubmitNewWebIds();
+      onClose();
+      return;
     }
-    const confirmationTitle = `Change permissions for ${
-      filteredNewWebIds.length + filteredWebIdsToDelete.length === 1
-        ? "1 person"
-        : `${newAgentsWebIds.length + filteredWebIdsToDelete.length} people`
-    }`;
-    const confirmationContent = `Continuing will change ${
-      filteredNewWebIds.length + filteredWebIdsToDelete.length === 1
-        ? "1 person "
-        : `${filteredNewWebIds.length + filteredWebIdsToDelete.length} people `
-    } permissions to ${title}`;
-    setTitle(confirmationTitle);
-    setContent(confirmationContent);
-    setOpen(DIALOG_ID);
+    setOpenConfirmationDialog(true);
   };
 
   const updateTemporaryRowThing = (newThing) => {
@@ -363,33 +338,6 @@ function AgentPickerModal(
   //   }
   // }, [contactsArray, selectedTabValue, globalFilter]);
 
-  useEffect(() => {
-    setConfirmationSetup(true);
-    if (bypassDialog) {
-      setConfirmed(true);
-      handleSubmitNewWebIds();
-    }
-    if (open !== DIALOG_ID) return;
-    if (confirmationSetup && confirmed === null) return;
-    if (confirmationSetup && confirmed) {
-      handleSubmitNewWebIds();
-    }
-
-    if (confirmationSetup && confirmed !== null) {
-      closeDialog();
-      setConfirmationSetup(false);
-    }
-  }, [
-    open,
-    bypassDialog,
-    setConfirmationSetup,
-    confirmationSetup,
-    setConfirmed,
-    confirmed,
-    handleSubmitNewWebIds,
-    closeDialog,
-  ]);
-
   const handleAddRow = () => {
     setAddingWebId(true);
     const emptyThing = createThing();
@@ -425,6 +373,28 @@ function AgentPickerModal(
       ? setNewAgentsWebIds([value, ...newAgentsWebIds])
       : setNewAgentsWebIds(newAgentsWebIds.filter((webId) => webId !== value));
   };
+
+  const getConfirmationDialogText = (
+    numberOfPermissionsChanged,
+    resourceName
+  ) => {
+    const title = `Change permissions for ${
+      numberOfPermissionsChanged === 1
+        ? "1 person"
+        : `${numberOfPermissionsChanged} people`
+    }`;
+    const content = `Continuing will change ${
+      numberOfPermissionsChanged === 1
+        ? "1 person's "
+        : `${numberOfPermissionsChanged} people's `
+    } permissions to ${resourceName}`;
+    return { title, content };
+  };
+  const confirmationDialogText = getConfirmationDialogText(
+    webIdsToDelete.length + newAgentsWebIds.length,
+    resourceName
+  );
+
   return (
     <ModalContainer
       className={classes.paper}
@@ -523,7 +493,13 @@ function AgentPickerModal(
           >
             {saveText}
           </Button>
-          <ConfirmationDialog />
+          <ConfirmationDialogProps
+            openConfirmationDialog={openConfirmationDialog}
+            title={confirmationDialogText.title}
+            content={confirmationDialogText.content}
+            onConfirm={handleSubmitNewWebIds}
+            onCancel={() => setOpenConfirmationDialog(false)}
+          />
         </div>
       </ModalBody>
     </ModalContainer>

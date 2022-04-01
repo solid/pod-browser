@@ -32,7 +32,6 @@ import RemoveButton, {
 } from "./index";
 import { PUBLIC_AGENT_PREDICATE } from "../../../../../../src/models/contact/public";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../../../src/models/contact/authenticated";
-import { ConfirmationDialogProvider } from "../../../../../../src/contexts/confirmationDialogContext";
 import {
   TESTCAFE_ID_CONFIRM_BUTTON,
   TESTCAFE_ID_CONFIRMATION_DIALOG,
@@ -69,15 +68,13 @@ describe("AgentAccessOptionsMenu", () => {
 
   it("renders a confirmation dialog with the correct title and message when clicking on delete button ", async () => {
     const { getByTestId, findByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <RemoveButton
-          resourceIri={resourceIri}
-          permission={permission}
-          profile={profile}
-          setLoading={jest.fn()}
-          setLocalAccess={jest.fn()}
-        />
-      </ConfirmationDialogProvider>
+      <RemoveButton
+        resourceIri={resourceIri}
+        permission={permission}
+        profile={profile}
+        setLoading={jest.fn()}
+        setLocalAccess={jest.fn()}
+      />
     );
     const button = getByTestId(TESTCAFE_ID_REMOVE_BUTTON);
     userEvent.click(button);
@@ -90,15 +87,13 @@ describe("AgentAccessOptionsMenu", () => {
 
   it("renders confirmation dialog title is agent's webId if no profile is available, ", async () => {
     const { getByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <RemoveButton
-          resourceIri={resourceIri}
-          permission={permission}
-          profile={null}
-          setLoading={jest.fn()}
-          setLocalAccess={jest.fn()}
-        />
-      </ConfirmationDialogProvider>
+      <RemoveButton
+        resourceIri={resourceIri}
+        permission={permission}
+        profile={null}
+        setLoading={jest.fn()}
+        setLocalAccess={jest.fn()}
+      />
     );
     const button = getByTestId(TESTCAFE_ID_REMOVE_BUTTON);
     userEvent.click(button);
@@ -111,15 +106,13 @@ describe("AgentAccessOptionsMenu", () => {
     const accessControl = mockAccessControl();
     const { getByTestId } = renderWithTheme(
       <AccessControlContext.Provider value={{ accessControl }}>
-        <ConfirmationDialogProvider>
-          <RemoveButton
-            resourceIri={resourceIri}
-            permission={permission}
-            profile={profile}
-            setLoading={jest.fn()}
-            setLocalAccess={jest.fn()}
-          />
-        </ConfirmationDialogProvider>
+        <RemoveButton
+          resourceIri={resourceIri}
+          permission={permission}
+          profile={profile}
+          setLoading={jest.fn()}
+          setLocalAccess={jest.fn()}
+        />
       </AccessControlContext.Provider>
     );
     const button = getByTestId(TESTCAFE_ID_REMOVE_BUTTON);
@@ -138,15 +131,13 @@ describe("AgentAccessOptionsMenu", () => {
     const accessControl = mockAccessControl();
     const { getByTestId } = renderWithTheme(
       <AccessControlContext.Provider value={{ accessControl }}>
-        <ConfirmationDialogProvider>
-          <RemoveButton
-            resourceIri={resourceIri}
-            permission={{ webId: PUBLIC_AGENT_PREDICATE, alias: "editors" }}
-            profile={null}
-            setLoading={jest.fn()}
-            setLocalAccess={jest.fn()}
-          />
-        </ConfirmationDialogProvider>
+        <RemoveButton
+          resourceIri={resourceIri}
+          permission={{ webId: PUBLIC_AGENT_PREDICATE, alias: "editors" }}
+          profile={null}
+          setLoading={jest.fn()}
+          setLocalAccess={jest.fn()}
+        />
       </AccessControlContext.Provider>
     );
     const button = getByTestId(TESTCAFE_ID_REMOVE_BUTTON);

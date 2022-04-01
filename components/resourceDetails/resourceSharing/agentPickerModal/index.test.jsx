@@ -39,7 +39,6 @@ import mockAddressBook from "../../../../__testUtils/mockAddressBook";
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
 import mockPermissionsContextProvider from "../../../../__testUtils/mockPermissionsContextProvider";
 import * as ProfileFns from "../../../../src/solidClientHelpers/profile";
-import { ConfirmationDialogProvider } from "../../../../src/contexts/confirmationDialogContext";
 import {
   TESTCAFE_ID_CONFIRMATION_DIALOG,
   TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
@@ -492,17 +491,15 @@ describe("AgentPickerModal without contacts", () => {
 
   it("simply closes the modal if no agents are selected", async () => {
     const { getByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <AccessControlContext.Provider value={{ accessControl }}>
-          <PermissionsContextProvider>
-            <AgentPickerModal
-              type="editors"
-              text={{ editText: "Edit Editors", saveText: "Save Editors" }}
-              onClose={onClose}
-            />
-          </PermissionsContextProvider>
-        </AccessControlContext.Provider>
-      </ConfirmationDialogProvider>
+      <AccessControlContext.Provider value={{ accessControl }}>
+        <PermissionsContextProvider>
+          <AgentPickerModal
+            type="editors"
+            text={{ editText: "Edit Editors", saveText: "Save Editors" }}
+            onClose={onClose}
+          />
+        </PermissionsContextProvider>
+      </AccessControlContext.Provider>
     );
     const submitButton = getByTestId(TESTCAFE_SUBMIT_WEBIDS_BUTTON);
     userEvent.click(submitButton);
@@ -546,16 +543,14 @@ describe("AgentPickerModal without contacts", () => {
     const { asFragment, getByTestId, getByText, queryAllByTestId } =
       renderWithTheme(
         <AccessControlContext.Provider value={{ accessControl }}>
-          <ConfirmationDialogProvider>
-            <PermissionsContextProvider>
-              <AgentPickerModal
-                type="editors"
-                text={{ editText: "Edit Editors", saveText: "Save Editors" }}
-                onClose={onClose}
-                setLoading={setLoading}
-              />
-            </PermissionsContextProvider>
-          </ConfirmationDialogProvider>
+          <PermissionsContextProvider>
+            <AgentPickerModal
+              type="editors"
+              text={{ editText: "Edit Editors", saveText: "Save Editors" }}
+              onClose={onClose}
+              setLoading={setLoading}
+            />
+          </PermissionsContextProvider>
         </AccessControlContext.Provider>
       );
 
@@ -619,16 +614,14 @@ describe("AgentPickerModal without contacts", () => {
 
     const { getByTestId, findAllByRole, queryByTestId } = renderWithTheme(
       <PermissionsContextProvider>
-        <ConfirmationDialogProvider>
-          <AccessControlContext.Provider value={{ accessControl }}>
-            <AgentPickerModal
-              type="editors"
-              text={{ editText: "Edit Editors", saveText: "Save Editors" }}
-              onClose={onClose}
-              setLoading={setLoading}
-            />
-          </AccessControlContext.Provider>
-        </ConfirmationDialogProvider>
+        <AccessControlContext.Provider value={{ accessControl }}>
+          <AgentPickerModal
+            type="editors"
+            text={{ editText: "Edit Editors", saveText: "Save Editors" }}
+            onClose={onClose}
+            setLoading={setLoading}
+          />
+        </AccessControlContext.Provider>
       </PermissionsContextProvider>
     );
     const checkBoxes = await findAllByRole("checkbox");
@@ -673,18 +666,16 @@ describe("AgentPickerModal without contacts", () => {
 
   it("cannot uncheck checkbox for the agent being added", async () => {
     const { getByTestId, getAllByRole } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <AccessControlContext.Provider value={{ accessControl }}>
-          <PermissionsContextProvider>
-            <AgentPickerModal
-              type="editors"
-              text={{ editText: "Edit Editors", saveText: "Save Editors" }}
-              onClose={onClose}
-              setLoading={setLoading}
-            />
-          </PermissionsContextProvider>
-        </AccessControlContext.Provider>
-      </ConfirmationDialogProvider>
+      <AccessControlContext.Provider value={{ accessControl }}>
+        <PermissionsContextProvider>
+          <AgentPickerModal
+            type="editors"
+            text={{ editText: "Edit Editors", saveText: "Save Editors" }}
+            onClose={onClose}
+            setLoading={setLoading}
+          />
+        </PermissionsContextProvider>
+      </AccessControlContext.Provider>
     );
 
     jest
@@ -703,18 +694,16 @@ describe("AgentPickerModal without contacts", () => {
 
   it("renders the correct confirmation message for more than 1 agent", async () => {
     const { getByTestId, getByText } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <AccessControlContext.Provider value={{ accessControl }}>
-          <PermissionsContextProvider>
-            <AgentPickerModal
-              type="editors"
-              text={{ editText: "Edit Editors", saveText: "Save Editors" }}
-              onClose={onClose}
-              setLoading={setLoading}
-            />
-          </PermissionsContextProvider>
-        </AccessControlContext.Provider>
-      </ConfirmationDialogProvider>
+      <AccessControlContext.Provider value={{ accessControl }}>
+        <PermissionsContextProvider>
+          <AgentPickerModal
+            type="editors"
+            text={{ editText: "Edit Editors", saveText: "Save Editors" }}
+            onClose={onClose}
+            setLoading={setLoading}
+          />
+        </PermissionsContextProvider>
+      </AccessControlContext.Provider>
     );
 
     const webId1 = "https://somewebid.com";

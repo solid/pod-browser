@@ -40,7 +40,7 @@ import {
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
 import { createStyles, Divider } from "@material-ui/core";
-import ConfirmationDialog from "../../../../confirmationDialog";
+import ConfirmationDialogProps from "../../../../ConfirmationDialogProps";
 import { handleAction } from "../../../../containerTableRow";
 import PersonAvatar from "../../../../profile/personAvatar";
 import AppAvatar from "../../../../profile/appAvatar";
@@ -405,7 +405,7 @@ export default function AgentResourceAccessShowPage({ type }) {
           <TabPanel value={selectedTabValue} panelName="Profile">
             {renderProfile()}
           </TabPanel>
-          <ConfirmationDialog />
+          <ConfirmationDialogProps />
         </div>
       </DrawerContainer>
     </ConditionalWrapper>
