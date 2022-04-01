@@ -32,7 +32,7 @@ import ErrorMessage from "../../../errorMessage";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../src/models/contact/authenticated";
 import { PUBLIC_AGENT_PREDICATE } from "../../../../src/models/contact/public";
 import { serializePromises } from "../../../../src/solidClientHelpers/utils";
-import ConfirmationDialogProps from "../../../ConfirmationDialogProps";
+import ConfirmationDialogProps from "../../../confirmationDialogProps";
 import { getResourceName } from "../../../../src/solidClientHelpers/resource";
 import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
 import ResourceInfoContext from "../../../../src/contexts/resourceInfoContext";
