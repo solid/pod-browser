@@ -29,7 +29,12 @@ const useReturnUrl = () => {
 
   const persist = useCallback(() => {
     if (router.query.returnTo && router.query.returnTo.startsWith("/")) {
-      localStorage.setItem(RETURN_TO_PAGE_KEY, router.query.returnTo);
+      try {
+        localStorage.setItem(RETURN_TO_PAGE_KEY, router.query.returnTo);
+      } catch {
+        // silently fail if persisting the return to URL fails, it sucks but
+        // there isn't really a "good" user experience to have here.
+      }
     }
   }, [router]);
 

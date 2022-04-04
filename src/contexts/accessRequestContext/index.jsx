@@ -38,7 +38,7 @@ function AccessRequestProvider({ children, accessRequest, setAccessRequest }) {
 
 AccessRequestProvider.propTypes = {
   children: T.node.isRequired,
-  accessRequest: T.oneOfType([Object]),
+  accessRequest: T.object,
   setAccessRequest: T.func,
 };
 
