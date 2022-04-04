@@ -38,6 +38,7 @@ function AccessRequestProvider({ children, accessRequest, setAccessRequest }) {
 
 AccessRequestProvider.propTypes = {
   children: T.node.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
   accessRequest: T.object,
   setAccessRequest: T.func,
 };
