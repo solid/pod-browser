@@ -113,8 +113,9 @@ export default function GenerateAccessRequest() {
           </button>
         </label>
         <div>
-          {resources.map((url) => (
-            <span>{url}</span>
+          {resources.map((url, i) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <span key={i}>{url}</span>
           ))}
         </div>
         <button type="submit">Generate access request</button>

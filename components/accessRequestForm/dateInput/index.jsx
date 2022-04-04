@@ -27,9 +27,8 @@ import { format } from "date-fns";
 import T from "prop-types";
 import { DatePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/styles";
-import { createStyles, IconButton, InputBase } from "@material-ui/core";
+import { createStyles, InputBase } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
-import AccessRequestContext from "../../../src/contexts/accessRequestContext";
 import styles from "../styles";
 
 export const TESTCAFE_ID_DATE_INPUT = "date-input-field";
