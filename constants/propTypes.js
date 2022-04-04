@@ -72,7 +72,8 @@ export const profile = PropTypes.shape({
 export const swrResponse = PropTypes.shape({
   // eslint-disable-next-line react/forbid-prop-types
   data: PropTypes.any,
-  error: PropTypes.oneOfType([Object]),
+  // eslint-disable-next-line react/forbid-prop-types
+  error: PropTypes.object,
   isValidating: PropTypes.bool.isRequired,
   mutate: PropTypes.func.isRequired,
 });
