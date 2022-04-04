@@ -19,6 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+// TODO: remove after 2.0
+/* istanbul ignore file */
+
 import {
   hasAccessibleAcl,
   acp_v3 as acp3,
