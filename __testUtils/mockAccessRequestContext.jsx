@@ -19,44 +19,38 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// FIXME: ignoring this file until 2.0
-/* istanbul ignore file */
+import React, { useState } from "react";
+import T from "prop-types";
+import AccessRequestContext from "../src/contexts/accessRequestContext";
+import getAccessRequestDetails from "./mockAccessRequestDetails";
 
-import {
-  hasAccessibleAcl,
-  acp_v3 as acp3,
-  getSourceUrl,
-} from "@inrupt/solid-client";
-import { useSession } from "@inrupt/solid-ui-react";
-import useSWR from "swr";
+const defaultAccessRequest = getAccessRequestDetails();
 
-export const ACP = "acp";
-export const WAC = "wac";
+export default function mockAccessRequestContext(request) {
+  function AccessRequestContextProvider({ children }) {
+    const [accessRequest, setAccessRequest] = useState(
+      request || defaultAccessRequest
+    );
 
-async function getAccessControlType(resourceInfo, fetch) {
-  const resourceUrl = getSourceUrl(resourceInfo);
-  const isAcpControlledResource = await acp3.isAcpControlled(resourceUrl, {
-    fetch,
-  });
-  const isWacControlledResource =
-    !isAcpControlledResource && hasAccessibleAcl(resourceInfo);
-  if (isAcpControlledResource) {
-    return ACP;
+    return (
+      <AccessRequestContext.Provider
+        value={{
+          accessRequest,
+          setAccessRequest,
+        }}
+      >
+        {children}
+      </AccessRequestContext.Provider>
+    );
   }
-  if (isWacControlledResource) {
-    return WAC;
-  }
-  return null;
-}
 
-export default function useAccessControlType(resourceInfo) {
-  const { fetch } = useSession();
-  return useSWR(
-    ["useAccessControlType", resourceInfo],
-    async () => {
-      if (!resourceInfo) return null;
-      return getAccessControlType(resourceInfo, fetch);
-    },
-    { revalidateOnFocus: false }
-  );
+  AccessRequestContextProvider.propTypes = {
+    children: T.node,
+  };
+
+  AccessRequestContextProvider.defaultProps = {
+    children: null,
+  };
+
+  return AccessRequestContextProvider;
 }

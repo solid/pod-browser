@@ -19,44 +19,37 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// FIXME: ignoring this file until 2.0
-/* istanbul ignore file */
+/* eslint-disable react/jsx-one-expression-per-line */
 
-import {
-  hasAccessibleAcl,
-  acp_v3 as acp3,
-  getSourceUrl,
-} from "@inrupt/solid-client";
-import { useSession } from "@inrupt/solid-ui-react";
-import useSWR from "swr";
+import React, { useState, useEffect } from "react";
+import T from "prop-types";
+import { createStyles, ListItem, ListItemText } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
+import { permission as permissionPropType } from "../../../../../../constants/propTypes";
+import styles from "./styles";
 
-export const ACP = "acp";
-export const WAC = "wac";
+export const TESTCAFE_ID_VIEW_DETAILS_BUTTON = "view-details-button";
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-async function getAccessControlType(resourceInfo, fetch) {
-  const resourceUrl = getSourceUrl(resourceInfo);
-  const isAcpControlledResource = await acp3.isAcpControlled(resourceUrl, {
-    fetch,
-  });
-  const isWacControlledResource =
-    !isAcpControlledResource && hasAccessibleAcl(resourceInfo);
-  if (isAcpControlledResource) {
-    return ACP;
-  }
-  if (isWacControlledResource) {
-    return WAC;
-  }
-  return null;
-}
+export default function AccessDetailsButton({ setOpenModal }) {
+  const classes = useStyles();
 
-export default function useAccessControlType(resourceInfo) {
-  const { fetch } = useSession();
-  return useSWR(
-    ["useAccessControlType", resourceInfo],
-    async () => {
-      if (!resourceInfo) return null;
-      return getAccessControlType(resourceInfo, fetch);
-    },
-    { revalidateOnFocus: false }
+  return (
+    <ListItem
+      data-testid={TESTCAFE_ID_VIEW_DETAILS_BUTTON}
+      button
+      onClick={() => setOpenModal(true)}
+    >
+      <ListItemText
+        disableTypography
+        classes={{ primary: classes.listItemText }}
+      >
+        View Details
+      </ListItemText>
+    </ListItem>
   );
 }
+
+AccessDetailsButton.propTypes = {
+  setOpenModal: T.func.isRequired,
+};

@@ -33,28 +33,28 @@ import ResourceDetails, {
 import mockAccessControl from "../../__testUtils/mockAccessControl";
 import { AccessControlProvider } from "../../src/contexts/accessControlContext";
 import mockPermissionsContextProvider from "../../__testUtils/mockPermissionsContextProvider";
-import useConsentBasedAccessForResource from "../../src/hooks/useConsentBasedAccessForResource";
+import useAccessBasedAccessForResource from "../../src/hooks/useAccessBasedAccessForResource";
 import useAccessControlType from "../../src/hooks/useAccessControlType";
 import { TESTCAFE_ID_AGENT_ACCESS_TABLE } from "./resourceSharing/agentAccessTable";
 
 const accessControl = mockAccessControl();
 const dataset = mockSolidDatasetFrom("http://example.com/container/");
 
-jest.mock("../../src/hooks/useConsentBasedAccessForResource");
-const mockedUseConsentBasedAccessForResource = useConsentBasedAccessForResource;
+jest.mock("../../src/hooks/useAccessBasedAccessForResource");
+const mockedUseAccessBasedAccessForResource = useAccessBasedAccessForResource;
 
 jest.mock("../../src/hooks/useAccessControlType");
 const mockUseAccessControlType = useAccessControlType;
 
-jest.mock("../../src/hooks/useConsentBasedAccessForResource");
-const mockUseConsentBasedAccessForResource = useConsentBasedAccessForResource;
+jest.mock("../../src/hooks/useAccessBasedAccessForResource");
+const mockUseAccessBasedAccessForResource = useAccessBasedAccessForResource;
 
 describe("Resource details", () => {
   beforeEach(() => {
     jest
       .spyOn(routerFns, "useRouter")
       .mockReturnValue({ query: { resourceIri: "" }, push: jest.fn() });
-    mockedUseConsentBasedAccessForResource.mockReturnValue([]);
+    mockedUseAccessBasedAccessForResource.mockReturnValue([]);
   });
 
   it("renders container details", async () => {
@@ -109,7 +109,7 @@ describe("Resource details", () => {
 
   it("renders Sharing component for ACP-supporting Solid servers", async () => {
     const PermissionsContextProvider = mockPermissionsContextProvider();
-    mockUseConsentBasedAccessForResource.mockReturnValue({ permissions: [] });
+    mockUseAccessBasedAccessForResource.mockReturnValue({ permissions: [] });
     const { asFragment, getByTestId, getByText, queryAllByTestId } =
       renderWithTheme(
         <AccessControlProvider

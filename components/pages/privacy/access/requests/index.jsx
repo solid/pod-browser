@@ -30,39 +30,39 @@ import { createStyles, Typography, Link } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { ConsentRequestProvider } from "../../../../../src/contexts/consentRequestContext";
+import { AccessRequestProvider } from "../../../../../src/contexts/accessRequestContext";
 import styles from "./styles";
-import ConsentRequestForm from "../../../../consentRequestForm";
+import AccessRequestForm from "../../../../accessRequestForm";
 import {
   CONTACTS_PREDICATE,
   POLICY_PREDICATE,
   TOS_PREDICATE,
 } from "../../../../../__testUtils/mockApp";
-import { getRequestorWebId } from "../../../../../src/models/consent/request";
+import { getRequestorWebId } from "../../../../../src/models/access/request";
 import { getProfileResource } from "../../../../../src/solidClientHelpers/resource";
 import Spinner from "../../../../spinner";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function ConsentShow() {
+export default function AccessShow() {
   const { session } = useSession();
   const { fetch } = session;
   const router = useRouter();
   const { requestVc } = router.query;
   const bem = useBem(useStyles());
-  const [consentRequest, setConsentRequest] = useState(null);
-  const agentWebId = getRequestorWebId(consentRequest);
+  const [accessRequest, setAccessRequest] = useState(null);
+  const agentWebId = getRequestorWebId(accessRequest);
   const [agentDetails, setAgentDetails] = useState({});
   const { agentName, agentUrl, agentPolicy, agentTOS } = agentDetails || null;
 
   useEffect(() => {
     if (!requestVc) return;
     const req = JSON.parse(atob(requestVc));
-    setConsentRequest(req);
+    setAccessRequest(req);
   }, [requestVc, fetch]);
 
   useEffect(() => {
-    if (!consentRequest) return;
+    if (!accessRequest) return;
     (async () => {
       const { dataset: profileDataset } = await getProfileResource(
         agentWebId,
@@ -82,18 +82,18 @@ export default function ConsentShow() {
         agentPolicy: agentProfile && getUrl(agentProfile, POLICY_PREDICATE),
       });
     })();
-  }, [agentWebId, fetch, consentRequest]);
+  }, [agentWebId, fetch, accessRequest]);
 
-  if (!consentRequest) return <Spinner />;
+  if (!accessRequest) return <Spinner />;
 
   return (
-    <ConsentRequestProvider
-      consentRequest={consentRequest}
-      setConsentRequest={setConsentRequest}
+    <AccessRequestProvider
+      accessRequest={accessRequest}
+      setAccessRequest={setAccessRequest}
     >
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Container className={bem("request-container")}>
-          <ConsentRequestForm
+          <AccessRequestForm
             agentDetails={agentDetails}
             agentWebId={agentWebId}
           />
@@ -154,6 +154,6 @@ export default function ConsentShow() {
           </div>
         </Container>
       </MuiPickersUtilsProvider>
-    </ConsentRequestProvider>
+    </AccessRequestProvider>
   );
 }

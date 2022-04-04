@@ -29,12 +29,12 @@ import AgentAccessOptionsMenu from "./index";
 import { TESTCAFE_ID_REMOVE_BUTTON } from "./removeButton";
 import getSignedVc from "../../../../../__testUtils/mockSignedVc";
 
-import { TESTCAFE_ID_VIEW_DETAILS_BUTTON } from "./consentDetailsButton";
+import { TESTCAFE_ID_VIEW_DETAILS_BUTTON } from "./accessDetailsButton";
 import {
-  TESTCAFE_ID_CONSENT_DETAILS_DONE_BUTTON,
-  TESTCAFE_ID_CONSENT_DETAILS_MODAL,
-  TESTCAFE_ID_CONSENT_DETAILS_REVOKE_BUTTON,
-} from "./consentDetailsButton/consentDetailsModal";
+  TESTCAFE_ID_ACCESS_DETAILS_DONE_BUTTON,
+  TESTCAFE_ID_ACCESS_DETAILS_MODAL,
+  TESTCAFE_ID_ACCESS_DETAILS_REVOKE_BUTTON,
+} from "./accessDetailsButton/accessDetailsModal";
 
 const resourceIri = "/iri/";
 const webId = "https://example.com/profile/card#me";
@@ -65,7 +65,7 @@ describe("AgentAccessOptionsMenu", () => {
   });
 });
 
-describe("Consent Details Modal", () => {
+describe("Access Details Modal", () => {
   it("renders a details modal when you click on the view details button", async () => {
     const permission = {
       webId,
@@ -91,9 +91,7 @@ describe("Consent Details Modal", () => {
     });
 
     await waitFor(() => {
-      expect(
-        getByTestId(TESTCAFE_ID_CONSENT_DETAILS_MODAL)
-      ).toBeInTheDocument();
+      expect(getByTestId(TESTCAFE_ID_ACCESS_DETAILS_MODAL)).toBeInTheDocument();
     });
   });
 
@@ -122,13 +120,13 @@ describe("Consent Details Modal", () => {
       const viewDetailsButton = getByTestId(TESTCAFE_ID_VIEW_DETAILS_BUTTON);
       userEvent.click(viewDetailsButton);
     });
-    const revokeButton = getByTestId(TESTCAFE_ID_CONSENT_DETAILS_REVOKE_BUTTON);
+    const revokeButton = getByTestId(TESTCAFE_ID_ACCESS_DETAILS_REVOKE_BUTTON);
     userEvent.click(revokeButton);
 
     userEvent.click(revokeButton);
     await waitFor(() => {
       const closedModal = screen.queryByTestId(
-        TESTCAFE_ID_CONSENT_DETAILS_MODAL
+        TESTCAFE_ID_ACCESS_DETAILS_MODAL
       );
       expect(closedModal).toBeNull();
     });
@@ -158,13 +156,13 @@ describe("Consent Details Modal", () => {
       const viewDetailsButton = getByTestId(TESTCAFE_ID_VIEW_DETAILS_BUTTON);
       userEvent.click(viewDetailsButton);
     });
-    const revokeButton = getByTestId(TESTCAFE_ID_CONSENT_DETAILS_DONE_BUTTON);
+    const revokeButton = getByTestId(TESTCAFE_ID_ACCESS_DETAILS_DONE_BUTTON);
     userEvent.click(revokeButton);
 
     act(() => userEvent.click(revokeButton));
     await waitFor(() => {
       const closedModal = screen.queryByTestId(
-        TESTCAFE_ID_CONSENT_DETAILS_MODAL
+        TESTCAFE_ID_ACCESS_DETAILS_MODAL
       );
       expect(closedModal).toBeNull();
     });

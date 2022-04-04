@@ -32,10 +32,10 @@ import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import RemoveButton from "./removeButton";
-import ConsentDetailsButton from "./consentDetailsButton";
+import AccessDetailsButton from "./accessDetailsButton";
 import styles from "./styles";
 import { profile as profilePropType } from "../../../../../constants/propTypes";
-import ConsentDetailsModal from "./consentDetailsButton/consentDetailsModal";
+import AccessDetailsModal from "./accessDetailsButton/accessDetailsModal";
 
 export const TESTCAFE_ID_MENU_BUTTON = "menu-button";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -107,12 +107,12 @@ export default function AgentAccessOptionsMenu({
           </ListItem>
           {vc ? (
             <>
-              <ConsentDetailsButton
+              <AccessDetailsButton
                 resourceIri={resourceIri}
                 permission={permission}
                 setOpenModal={setOpenModal}
               />
-              <ConsentDetailsModal
+              <AccessDetailsModal
                 openModal={openModal}
                 resourceIri={resourceIri}
                 permission={permission}

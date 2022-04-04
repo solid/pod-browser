@@ -48,12 +48,12 @@ describe("Consent Page", () => {
       ]);
   });
   it("Renders the Consent page", async () => {
-    const consentRequestId = "https://example.org/test-request";
+    const accessRequestId = "https://example.org/test-request";
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
       replace: jest.fn(),
       query: {
-        id: consentRequestId,
+        id: accessRequestId,
         requestVc: btoa(JSON.stringify(getConsentRequestDetails())),
       },
     });

@@ -24,12 +24,12 @@ export default function getSignedVc() {
     "@context": [
       "https://www.w3.org/2018/credentials/v1",
       "https://w3id.org/security/suites/ed25519-2020/v1",
-      "https://consent.pod.inrupt.com/credentials/v1",
+      "https://access.pod.inrupt.com/credentials/v1",
     ],
     credentialSubject: {
-      providedConsent: {
+      providedAccess: {
         mode: ["http://www.w3.org/ns/auth/acl#Read"],
-        hasStatus: "https://w3id.org/GConsent#ConsentStatusExplicitlyGiven",
+        hasStatus: "https://w3id.org/GAccess#AccessStatusExplicitlyGiven",
         forPersonalData: [
           "https://example.com/resource1",
           "https://example.com/resource2",
@@ -43,18 +43,18 @@ export default function getSignedVc() {
       id: "https://pod.inrupt.com/virginiabalseiro/profile/card#me",
       inbox: "https://mockapp.com/inbox",
     },
-    id: "https://consent.pod.inrupt.com/vc/examplevc",
+    id: "https://access.pod.inrupt.com/vc/examplevc",
     issuanceDate: "2021-10-11T08:45:31.222Z",
     expirationDate: "2022-10-11T08:45:31.222Z",
-    issuer: "https://consent.pod.inrupt.com",
+    issuer: "https://access.pod.inrupt.com",
     proof: {
       created: "2021-10-11T08:45:42.351Z",
       domain: "solid",
       proofPurpose: "assertionMethod",
       proofValue: "exampleproof",
       type: "Ed25519Signature2020",
-      verificationMethod: "https://consent.pod.inrupt.com/key/examplekey",
+      verificationMethod: "https://access.pod.inrupt.com/key/examplekey",
     },
-    type: ["VerifiableCredential", "SolidConsentGrant"],
+    type: ["VerifiableCredential", "SolidAccessGrant"],
   };
 }

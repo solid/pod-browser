@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import GenerateConsentRequest from "../../../components/pages/privacy/access/requests/generate-consent-request";
+import GenerateConsentRequest from "../../../components/pages/privacy/access/requests/generate-access-request";
 
 export default function GenerateConsentRequestPage() {
   return <GenerateConsentRequest />;

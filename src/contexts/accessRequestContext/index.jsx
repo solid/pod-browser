@@ -19,44 +19,36 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// FIXME: ignoring this file until 2.0
-/* istanbul ignore file */
+import React, { createContext } from "react";
+import T from "prop-types";
 
-import {
-  hasAccessibleAcl,
-  acp_v3 as acp3,
-  getSourceUrl,
-} from "@inrupt/solid-client";
-import { useSession } from "@inrupt/solid-ui-react";
-import useSWR from "swr";
+const defaultValues = {
+  accessRequest: {},
+  setConsentRequest: () => {},
+};
+const ConsentRequestContext = createContext(defaultValues);
 
-export const ACP = "acp";
-export const WAC = "wac";
-
-async function getAccessControlType(resourceInfo, fetch) {
-  const resourceUrl = getSourceUrl(resourceInfo);
-  const isAcpControlledResource = await acp3.isAcpControlled(resourceUrl, {
-    fetch,
-  });
-  const isWacControlledResource =
-    !isAcpControlledResource && hasAccessibleAcl(resourceInfo);
-  if (isAcpControlledResource) {
-    return ACP;
-  }
-  if (isWacControlledResource) {
-    return WAC;
-  }
-  return null;
-}
-
-export default function useAccessControlType(resourceInfo) {
-  const { fetch } = useSession();
-  return useSWR(
-    ["useAccessControlType", resourceInfo],
-    async () => {
-      if (!resourceInfo) return null;
-      return getAccessControlType(resourceInfo, fetch);
-    },
-    { revalidateOnFocus: false }
+function ConsentRequestProvider({
+  children,
+  accessRequest,
+  setConsentRequest,
+}) {
+  return (
+    <ConsentRequestContext.Provider
+      value={{ accessRequest, setConsentRequest }}
+    >
+      {children}
+    </ConsentRequestContext.Provider>
   );
 }
+
+ConsentRequestProvider.propTypes = {
+  children: T.node.isRequired,
+  accessRequest: T.oneOfType([Object]),
+  setConsentRequest: T.func,
+};
+
+ConsentRequestProvider.defaultProps = defaultValues;
+
+export { ConsentRequestProvider };
+export default ConsentRequestContext;

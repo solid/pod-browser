@@ -19,44 +19,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// FIXME: ignoring this file until 2.0
-/* istanbul ignore file */
+import React from "react";
+import { renderWithTheme } from "../../../../../../__testUtils/withTheme";
+import ConsentDetailsButton, { TESTCAFE_ID_VIEW_DETAILS_BUTTON } from "./index";
+import getSignedVc from "../../../../../../__testUtils/mockSignedVc";
 
-import {
-  hasAccessibleAcl,
-  acp_v3 as acp3,
-  getSourceUrl,
-} from "@inrupt/solid-client";
-import { useSession } from "@inrupt/solid-ui-react";
-import useSWR from "swr";
+const webId = "https://example.com/profile/card#me";
 
-export const ACP = "acp";
-export const WAC = "wac";
+describe("View access details button and modal", () => {
+  it("renders a button which triggers the opening of the modal", async () => {
+    const testResourceIri = "testIri";
+    const permission = {
+      webId,
+      alias: "Editors",
+      type: "agent",
+      vc: getSignedVc(),
+    };
 
-async function getAccessControlType(resourceInfo, fetch) {
-  const resourceUrl = getSourceUrl(resourceInfo);
-  const isAcpControlledResource = await acp3.isAcpControlled(resourceUrl, {
-    fetch,
+    const fakeHandleCloseModal = jest.fn();
+    const { asFragment, getByTestId } = renderWithTheme(
+      <ConsentDetailsButton
+        permission={permission}
+        resourceIri={testResourceIri}
+        handleCloseModal={fakeHandleCloseModal}
+      />
+    );
+    const button = getByTestId(TESTCAFE_ID_VIEW_DETAILS_BUTTON);
+    expect(button).toBeDefined();
+    expect(asFragment()).toMatchSnapshot();
   });
-  const isWacControlledResource =
-    !isAcpControlledResource && hasAccessibleAcl(resourceInfo);
-  if (isAcpControlledResource) {
-    return ACP;
-  }
-  if (isWacControlledResource) {
-    return WAC;
-  }
-  return null;
-}
-
-export default function useAccessControlType(resourceInfo) {
-  const { fetch } = useSession();
-  return useSWR(
-    ["useAccessControlType", resourceInfo],
-    async () => {
-      if (!resourceInfo) return null;
-      return getAccessControlType(resourceInfo, fetch);
-    },
-    { revalidateOnFocus: false }
-  );
-}
+});

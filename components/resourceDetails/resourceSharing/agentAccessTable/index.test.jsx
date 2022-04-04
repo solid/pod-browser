@@ -398,7 +398,7 @@ describe("AgentAccessTable with agents", () => {
     });
   });
 });
-describe("AgentAccessTable with consent based agents", () => {
+describe("AgentAccessTable with access based agents", () => {
   const mockDataset = mockSolidDatasetFrom("https://example.org/resource");
   const setLoading = jest.fn();
   beforeEach(() => {
@@ -407,7 +407,7 @@ describe("AgentAccessTable with consent based agents", () => {
     });
   });
 
-  it("renders a list of permissions including consent based agent", async () => {
+  it("renders a list of permissions including access based agent", async () => {
     const type = "editors";
     const { asFragment, queryAllByRole } = renderWithTheme(
       <PermissionsContextProvider>
