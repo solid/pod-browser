@@ -19,28 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const { withSentryConfig } = require("@sentry/nextjs");
+import * as Sentry from "@sentry/nextjs";
 
-const moduleExports = {
-  experimental: {
-    esmExternals: false,
-  },
-  productionBrowserSourceMaps: true,
-};
+const SENTRY_DSN = process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN;
 
-const sentryWebpackPluginOptions = {
-  // Additional config options for the Sentry Webpack plugin. Keep in mind that
-  // the following options are set automatically, and overriding them is not
-  // recommended:
-  //   release, url, org, project, authToken, configFile, stripPrefix,
-  //   urlPrefix, include, ignore
-
-  // Suppresses all logs
-  silent: true,
-  // For all available options, see:
-  // https://github.com/getsentry/sentry-webpack-plugin#options.
-};
-
-// Make sure adding Sentry options is the last code to run before exporting, to
-// ensure that your source maps include changes from all other Webpack plugins
-module.exports = withSentryConfig(moduleExports, sentryWebpackPluginOptions);
+if (SENTRY_DSN) {
+  Sentry.init({
+    dsn: SENTRY_DSN,
+    // Adjust this value in production, or use tracesSampler for greater control
+    tracesSampleRate: 1.0,
+    // ...
+    // Note: if you want to override the automatic release value, do not set a
+    // `release` value here - use the environment variable `SENTRY_RELEASE`, so
+    // that it will also get attached to your source maps
+  });
+}
