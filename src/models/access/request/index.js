@@ -34,9 +34,9 @@ export const MOCK_PURPOSES_DESCRIPTIONS = {
 
 export function getPurposeUrls(accessRequest) {
   if (!accessRequest) return null;
-  return Array.isArray(accessRequest?.credentialSubject?.hasConsent)
-    ? accessRequest?.credentialSubject?.hasConsent[0].forPurpose // getting first item in array for now
-    : accessRequest?.credentialSubject?.hasConsent.forPurpose;
+  return Array.isArray(accessRequest?.credentialSubject?.hasAccess)
+    ? accessRequest?.credentialSubject?.hasAccess[0].forPurpose // getting first item in array for now
+    : accessRequest?.credentialSubject?.hasAccess.forPurpose;
 }
 
 export function getIssuanceDate(accessRequest) {
@@ -48,9 +48,9 @@ export function getExpiryDate(accessRequest) {
 }
 
 export function getRequestedAccesses(accessRequest) {
-  return Array.isArray(accessRequest?.credentialSubject?.hasConsent)
-    ? accessRequest?.credentialSubject?.hasConsent
-    : [accessRequest?.credentialSubject?.hasConsent];
+  return Array.isArray(accessRequest?.credentialSubject?.hasAccess)
+    ? accessRequest?.credentialSubject?.hasAccess
+    : [accessRequest?.credentialSubject?.hasAccess];
 }
 
 export function getRequestedResourcesIris(sectionDetails) {
