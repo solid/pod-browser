@@ -23,7 +23,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable @next/next/no-sync-scripts */
 import React, { useEffect } from "react";
-import * as Sentry from "@sentry/node";
 import { MatomoProvider, createInstance } from "@datapunt/matomo-tracker-react";
 
 import PropTypes from "prop-types";
@@ -43,8 +42,6 @@ import {
   ThemeProvider,
 } from "@inrupt/prism-react-components";
 
-import { filterSentryEvent } from "../src/sentryFilter";
-
 import theme from "../src/theme";
 import { AlertProvider } from "../src/contexts/alertContext";
 import { ConfirmationDialogProvider } from "../src/contexts/confirmationDialogContext";
@@ -54,16 +51,6 @@ import Notification from "../components/notification";
 import PodBrowserHeader from "../components/header";
 
 import "./styles.css";
-
-// Enable Sentry if there's an env var for it.
-if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
-  Sentry.init({
-    enabled: process.env.NODE_ENV === "production",
-    dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
-    tracesSampleRate: process.env.NEXT_PUBLIC_SENTRY_SAMPLE_RATE || 0.1,
-    beforeSend: filterSentryEvent,
-  });
-}
 
 let matomoInstance = null;
 
