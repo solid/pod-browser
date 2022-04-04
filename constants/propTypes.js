@@ -35,7 +35,7 @@ export const permission = PropTypes.shape({
   vc: PropTypes.shape({
     "@context": PropTypes.arrayOf(PropTypes.string),
     credentialSubject: PropTypes.shape({
-      hasConsent: PropTypes.shape({
+      hasAccess: PropTypes.shape({
         mode: PropTypes.arrayOf(PropTypes.string),
         hasStatus: PropTypes.string,
         forPersonalData: PropTypes.arrayOf(PropTypes.string),

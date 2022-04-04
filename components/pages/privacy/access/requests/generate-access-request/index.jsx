@@ -28,7 +28,7 @@ import {
 import useFetchProfile from "../../../../../../src/hooks/useFetchProfile";
 import Spinner from "../../../../../spinner";
 
-export default function GenerateConsentRequest() {
+export default function GenerateAccessRequest() {
   const { session } = useSession();
   const { fetch } = session;
   const options = { fetch };
@@ -61,7 +61,7 @@ export default function GenerateConsentRequest() {
         vc,
         `${origin}/privacy/?signedVcUrl=${encodeURIComponent(vc.id)}`,
         {
-          fallbackConsentManagementUi: `${origin}/privacy/access/requests/`,
+          fallbackAccessManagementUi: `${origin}/privacy/access/requests/`,
         }
       );
     }

@@ -60,13 +60,12 @@ import styles from "./styles";
 import AgentName from "../agentName";
 import { getResourceName } from "../../../../../../../src/solidClientHelpers/resource";
 
-// export const TESTCAFE_ID_CONSENT_DETAILS_CONTENT = "access-details-modal";
-export const TESTCAFE_ID_CONSENT_DETAILS_MODAL = "access-details-modal";
+// export const TESTCAFE_ID_ACCESS_DETAILS_CONTENT = "access-details-modal";
+export const TESTCAFE_ID_ACCESS_DETAILS_MODAL = "access-details-modal";
 export const TESTCAFE_ID_RESOURCE_DETAILS_REVOKE_ACCESS_LINK =
   "resource-details-revoke";
-export const TESTCAFE_ID_CONSENT_DETAILS_DONE_BUTTON = "access-details-done";
-export const TESTCAFE_ID_CONSENT_DETAILS_REVOKE_BUTTON =
-  "access-details-revoke";
+export const TESTCAFE_ID_ACCESS_DETAILS_DONE_BUTTON = "access-details-done";
+export const TESTCAFE_ID_ACCESS_DETAILS_REVOKE_BUTTON = "access-details-revoke";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export function setupErrorComponent(bem) {
@@ -123,7 +122,7 @@ export default function AccessDetailsModal({
     >
       <ModalContainer
         className={classes.paper}
-        data-testid={TESTCAFE_ID_CONSENT_DETAILS_MODAL}
+        data-testid={TESTCAFE_ID_ACCESS_DETAILS_MODAL}
       >
         <ModalBody className={bem("access-details", "wrapper")}>
           <Grid container>
@@ -256,7 +255,7 @@ export default function AccessDetailsModal({
                   className={bem("access-details", "revoke-text")}
                   variant="secondary"
                   onClick={handleRevoke}
-                  data-testid={TESTCAFE_ID_CONSENT_DETAILS_REVOKE_BUTTON}
+                  data-testid={TESTCAFE_ID_ACCESS_DETAILS_REVOKE_BUTTON}
                 >
                   {`Revoke access to ${resourceName}`}
                 </LinkButton>
@@ -266,7 +265,7 @@ export default function AccessDetailsModal({
                 <Button
                   type="submit"
                   onClick={handleCloseModal}
-                  data-testid={TESTCAFE_ID_CONSENT_DETAILS_DONE_BUTTON}
+                  data-testid={TESTCAFE_ID_ACCESS_DETAILS_DONE_BUTTON}
                 >
                   Done
                 </Button>

@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`accessRequestContext Renders initial context data 1`] = `
+<DocumentFragment>
+  <div
+    id="accessRequest"
+  >
+    Access Request initial
+  </div>
+</DocumentFragment>
+`;

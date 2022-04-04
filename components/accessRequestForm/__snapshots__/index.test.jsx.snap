@@ -159,7 +159,7 @@ exports[`Access Request Form Renders a access request form with multiple purpose
         <span
           class="PodBrowser-header__content"
         >
-          Mock App undefined
+          Mock App wants to create, edit, or delete
         </span>
         <button
           class="PodBrowser-button PodBrowser-button--secondary PodBrowser-request-container__button--small"
@@ -253,7 +253,7 @@ exports[`Access Request Form Renders a access request form with multiple purpose
         <span
           class="PodBrowser-header__content"
         >
-          Mock App undefined
+          Mock App wants to see
         </span>
         <button
           class="PodBrowser-button PodBrowser-button--secondary PodBrowser-request-container__button--small"
@@ -337,7 +337,7 @@ exports[`Access Request Form Renders a access request form with multiple purpose
         <span
           class="PodBrowser-header__content"
         >
-          Mock App undefined
+          Mock App wants to add to
         </span>
         <button
           class="PodBrowser-button PodBrowser-button--secondary PodBrowser-request-container__button--small"
@@ -421,7 +421,7 @@ exports[`Access Request Form Renders a access request form with multiple purpose
         <span
           class="PodBrowser-header__content"
         >
-          Mock App undefined
+          Mock App wants to add or remove people from
         </span>
         <button
           class="PodBrowser-button PodBrowser-button--secondary PodBrowser-request-container__button--small"
@@ -579,7 +579,7 @@ exports[`Access Request Form Renders a access request form with only one purpose
         <span
           class="PodBrowser-header__content"
         >
-          Mock App undefined
+          Mock App wants to create, edit, or delete
         </span>
         <button
           class="PodBrowser-button PodBrowser-button--secondary PodBrowser-request-container__button--small"
@@ -673,7 +673,7 @@ exports[`Access Request Form Renders a access request form with only one purpose
         <span
           class="PodBrowser-header__content"
         >
-          Mock App undefined
+          Mock App wants to see
         </span>
         <button
           class="PodBrowser-button PodBrowser-button--secondary PodBrowser-request-container__button--small"
@@ -767,7 +767,7 @@ exports[`Access Request Form Renders a access request form with only one purpose
         <span
           class="PodBrowser-header__content"
         >
-          Mock App undefined
+          Mock App wants to add to
         </span>
         <button
           class="PodBrowser-button PodBrowser-button--secondary PodBrowser-request-container__button--small"
@@ -861,7 +861,7 @@ exports[`Access Request Form Renders a access request form with only one purpose
         <span
           class="PodBrowser-header__content"
         >
-          Mock App undefined
+          Mock App wants to add or remove people from
         </span>
         <button
           class="PodBrowser-button PodBrowser-button--secondary PodBrowser-request-container__button--small"

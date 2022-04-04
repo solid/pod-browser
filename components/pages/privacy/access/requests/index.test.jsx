@@ -26,8 +26,8 @@ import { mockContainerFrom } from "@inrupt/solid-client";
 import * as resourceHelpers from "../../../../../src/solidClientHelpers/resource";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../../../../__testUtils/mockSessionContextProvider";
-import ConsentPage from "./index";
-import getConsentRequestDetails from "../../../../../__testUtils/mockConsentRequestDetails";
+import AccessPage from "./index";
+import getAccessRequestDetails from "../../../../../__testUtils/mockAccessRequestDetails";
 import { mockAppDataset } from "../../../../../__testUtils/mockApp";
 import useContainer from "../../../../../src/hooks/useContainer";
 import * as containerFns from "../../../../../src/models/container";
@@ -35,7 +35,7 @@ import * as containerFns from "../../../../../src/models/container";
 jest.mock("../../../../../src/hooks/useContainer");
 const mockedUseContainer = useContainer;
 
-describe("Consent Page", () => {
+describe("Access Page", () => {
   beforeEach(() => {
     mockedUseContainer.mockReturnValue({
       data: mockContainerFrom("https://pod.inrupt.com/alice/private/data/"),
@@ -47,14 +47,14 @@ describe("Consent Page", () => {
         "https://pod.inrupt.com/alice/private/data-3",
       ]);
   });
-  it("Renders the Consent page", async () => {
+  it("Renders the Access page", async () => {
     const accessRequestId = "https://example.org/test-request";
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
       replace: jest.fn(),
       query: {
         id: accessRequestId,
-        requestVc: btoa(JSON.stringify(getConsentRequestDetails())),
+        requestVc: btoa(JSON.stringify(getAccessRequestDetails())),
       },
     });
 
@@ -68,7 +68,7 @@ describe("Consent Page", () => {
 
     const { asFragment, getByText } = renderWithTheme(
       <SessionProvider>
-        <ConsentPage />
+        <AccessPage />
       </SessionProvider>
     );
     await waitFor(() => {

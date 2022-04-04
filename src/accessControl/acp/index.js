@@ -60,8 +60,8 @@ import { ACP_TYPE_MAP, POLICIES_TYPE_MAP } from "../../../constants/policies";
 export const noAcrAccessError =
   "No access to Access Control Resource for this resource";
 
-const CONTROL_ACCESS_CONSENT = {
-  titleConsent: "wants to add or remove people from",
+const CONTROL_ACCESS_ACCESS = {
+  titleAccess: "wants to add or remove people from",
   iconName: "user",
 };
 
@@ -108,7 +108,7 @@ export const getPolicyDetailFromAccess = (access, label) => {
     return POLICIES_TYPE_MAP.editOnly[label];
   }
   if (control) {
-    return CONTROL_ACCESS_CONSENT[label];
+    return CONTROL_ACCESS_ACCESS[label];
   }
   return null;
 };

@@ -21,7 +21,7 @@
 
 import { renderHook } from "@testing-library/react-hooks";
 import * as accessFns from "@inrupt/solid-client-access-grants";
-import useConsentBasedAccessForResource from "./index";
+import useAccessBasedAccessForResource from "./index";
 import getSignedVc from "../../../__testUtils/mockSignedVc";
 
 jest.mock("@inrupt/solid-client-access-grants");
@@ -35,7 +35,7 @@ describe("useAllPermissions", () => {
   });
 
   it("returns an empty array if no resourceIri is given", async () => {
-    const { result } = renderHook(() => useConsentBasedAccessForResource(null));
+    const { result } = renderHook(() => useAccessBasedAccessForResource(null));
     expect(result.current.permissions).toEqual([]);
   });
 
@@ -44,7 +44,7 @@ describe("useAllPermissions", () => {
       .spyOn(accessFns, "isValidAccessGrant")
       .mockResolvedValue({ errors: [] });
     const { result, waitForNextUpdate } = renderHook(() =>
-      useConsentBasedAccessForResource(resourceIri)
+      useAccessBasedAccessForResource(resourceIri)
     );
 
     await waitForNextUpdate();
@@ -55,7 +55,7 @@ describe("useAllPermissions", () => {
       .spyOn(accessFns, "isValidAccessGrant")
       .mockResolvedValue({ errors: ["error"] });
     const { result, waitForNextUpdate } = renderHook(() =>
-      useConsentBasedAccessForResource(resourceIri)
+      useAccessBasedAccessForResource(resourceIri)
     );
 
     await waitForNextUpdate();

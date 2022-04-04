@@ -14,7 +14,7 @@ exports[`Request Section Renders initial context data 1`] = `
       <span
         class="PodBrowser-header__content"
       >
-        agent_name undefined
+        agent_name wants to create, edit, or delete
       </span>
       <button
         class="PodBrowser-button PodBrowser-button--secondary PodBrowser-request-container__button--small"

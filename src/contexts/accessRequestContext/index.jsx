@@ -24,31 +24,25 @@ import T from "prop-types";
 
 const defaultValues = {
   accessRequest: {},
-  setConsentRequest: () => {},
+  setAccessRequest: () => {},
 };
-const ConsentRequestContext = createContext(defaultValues);
+const AccessRequestContext = createContext(defaultValues);
 
-function ConsentRequestProvider({
-  children,
-  accessRequest,
-  setConsentRequest,
-}) {
+function AccessRequestProvider({ children, accessRequest, setAccessRequest }) {
   return (
-    <ConsentRequestContext.Provider
-      value={{ accessRequest, setConsentRequest }}
-    >
+    <AccessRequestContext.Provider value={{ accessRequest, setAccessRequest }}>
       {children}
-    </ConsentRequestContext.Provider>
+    </AccessRequestContext.Provider>
   );
 }
 
-ConsentRequestProvider.propTypes = {
+AccessRequestProvider.propTypes = {
   children: T.node.isRequired,
   accessRequest: T.oneOfType([Object]),
-  setConsentRequest: T.func,
+  setAccessRequest: T.func,
 };
 
-ConsentRequestProvider.defaultProps = defaultValues;
+AccessRequestProvider.defaultProps = defaultValues;
 
-export { ConsentRequestProvider };
-export default ConsentRequestContext;
+export { AccessRequestProvider };
+export default AccessRequestContext;

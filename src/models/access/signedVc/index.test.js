@@ -34,7 +34,7 @@ describe("getRequestedAccessesFromSignedVc", () => {
     const accesses = getRequestedAccessesFromSignedVc(signedVc);
     expect(accesses).toEqual({
       mode: ["http://www.w3.org/ns/auth/acl#Read"],
-      hasStatus: "https://w3id.org/GConsent#ConsentStatusExplicitlyGiven",
+      hasStatus: "https://w3id.org/GAccess#AccessStatusExplicitlyGiven",
       forPersonalData: [
         "https://example.com/resource1",
         "https://example.com/resource2",

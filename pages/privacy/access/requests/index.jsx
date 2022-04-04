@@ -21,12 +21,12 @@
 
 import React from "react";
 import AuthenticatedRoute from "../../../../src/authentication/AuthenticatedRoute";
-import ConsentShowPage from "../../../../components/pages/privacy/access/requests";
+import AccessShowPage from "../../../../components/pages/privacy/access/requests";
 
-export default function ConsentShow() {
+export default function AccessShow() {
   return (
     <AuthenticatedRoute>
-      <ConsentShowPage />
+      <AccessShowPage />
     </AuthenticatedRoute>
   );
 }

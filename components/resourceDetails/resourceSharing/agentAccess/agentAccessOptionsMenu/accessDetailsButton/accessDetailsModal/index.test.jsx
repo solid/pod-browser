@@ -26,8 +26,8 @@ import userEvent from "@testing-library/user-event";
 import { revokeAccessGrant } from "@inrupt/solid-client-access-grants";
 import { renderWithTheme } from "../../../../../../../__testUtils/withTheme";
 import getSignedVc from "../../../../../../../__testUtils/mockSignedVc";
-import ConsentDetailsModal, {
-  TESTCAFE_ID_CONSENT_DETAILS_MODAL,
+import AccessDetailsModal, {
+  TESTCAFE_ID_ACCESS_DETAILS_MODAL,
   setupErrorComponent,
 } from "./index";
 
@@ -43,7 +43,7 @@ const permission = {
 describe("Renders a access modal", () => {
   it("renders a modal when the user clicks on view details button ", async () => {
     const { asFragment } = renderWithTheme(
-      <ConsentDetailsModal
+      <AccessDetailsModal
         resourceIri={testResourceIri}
         handleCloseModal={jest.fn()}
         permission={permission}

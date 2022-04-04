@@ -21,7 +21,7 @@
 
 import React from "react";
 import { renderWithTheme } from "../../../../../../__testUtils/withTheme";
-import ConsentDetailsButton, { TESTCAFE_ID_VIEW_DETAILS_BUTTON } from "./index";
+import AccessDetailsButton, { TESTCAFE_ID_VIEW_DETAILS_BUTTON } from "./index";
 import getSignedVc from "../../../../../../__testUtils/mockSignedVc";
 
 const webId = "https://example.com/profile/card#me";
@@ -38,7 +38,7 @@ describe("View access details button and modal", () => {
 
     const fakeHandleCloseModal = jest.fn();
     const { asFragment, getByTestId } = renderWithTheme(
-      <ConsentDetailsButton
+      <AccessDetailsButton
         permission={permission}
         resourceIri={testResourceIri}
         handleCloseModal={fakeHandleCloseModal}

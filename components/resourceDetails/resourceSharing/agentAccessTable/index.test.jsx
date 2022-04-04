@@ -125,7 +125,7 @@ const permissions = [
   },
 ];
 
-const permissionsWithConsentAgent = [
+const permissionsWithAccessAgent = [
   {
     acl: createAccessMap(true, true, false, false),
     webId: "https://example1.com/profile/card#me",
@@ -160,7 +160,7 @@ const permissionsWithProfilesNamelessAgent = [
   },
 ];
 
-const permissionsWithConsentWithProfiles = permissionsWithConsentAgent.map(
+const permissionsWithAccessWithProfiles = permissionsWithAccessAgent.map(
   (p, i) => {
     return {
       ...p,
@@ -403,7 +403,7 @@ describe("AgentAccessTable with access based agents", () => {
   const setLoading = jest.fn();
   beforeEach(() => {
     mockedUsePermissionsWithProfiles.mockReturnValue({
-      permissionsWithProfiles: permissionsWithConsentWithProfiles,
+      permissionsWithProfiles: permissionsWithAccessWithProfiles,
     });
   });
 
