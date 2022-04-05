@@ -24,38 +24,38 @@ export function getAccessRequestDetailsOnePurpose() {
     "@context": [
       "https://www.w3.org/2018/credentials/v1",
       "https://w3id.org/security/suites/ed25519-2020/v1",
-      "https://access.pod.inrupt.com/credentials/v1",
+      "https://consent.pod.inrupt.com/credentials/v1",
     ],
-    id: "https://access.pod.inrupt.com/vc/53973727-f4d0-9e8dbdc041fd",
-    type: ["VerifiableCredential", "SolidCredential", "SolidAccessRequest"],
-    issuer: "https://access.pod.inrupt.com",
+    id: "https://consent.pod.inrupt.com/vc/53973727-f4d0-9e8dbdc041fd",
+    type: ["VerifiableCredential", "SolidCredential", "SolidConsentRequest"],
+    issuer: "https://consent.pod.inrupt.com",
     issuanceDate: "2021-05-26T16:40:03Z",
     expirationDate: "2022-06-23T16:40:03Z",
     credentialSubject: {
       id: "https://mockappurl.com",
       inbox: "https://mockappurl.com/inbox/",
-      hasAccess: [
+      hasConsent: [
         {
           mode: ["Read", "Write"],
-          hasStatus: "AccessStatusRequested",
+          hasStatus: "ConsentStatusRequested",
           forPersonalData: ["https://pod.inrupt.com/alice/private/data/"],
           forPurpose: "https://example.com/SomeSpecificPurpose",
         },
         {
           mode: ["Read"],
-          hasStatus: "AccessStatusRequested",
+          hasStatus: "ConsentStatusRequested",
           forPersonalData: ["https://pod.inrupt.com/alice/private/data/"],
           forPurpose: "https://example.com/SomeSpecificPurpose",
         },
         {
           mode: ["Append"],
-          hasStatus: "AccessStatusRequested",
+          hasStatus: "ConsentStatusRequested",
           forPersonalData: ["https://pod.inrupt.com/alice/private/data/"],
           forPurpose: "https://example.com/SomeSpecificPurpose",
         },
         {
           mode: ["Control"],
-          hasStatus: "AccessStatusRequested",
+          hasStatus: "ConsentStatusRequested",
           forPersonalData: ["https://pod.inrupt.com/alice/private/data/"],
           forPurpose: "https://example.com/SomeSpecificPurpose",
         },
@@ -66,7 +66,7 @@ export function getAccessRequestDetailsOnePurpose() {
       proofPurpose: "assertionMethod",
       proofValue: "eqp8h_kL1DwJCpn65z-d1Arnysx6b11...jb8j0MxUCc1uDQ",
       type: "Ed25519Signature2020",
-      verificationMethod: "https://access.pod.inrupt.com/key/396f686b4ec",
+      verificationMethod: "https://consent.pod.inrupt.com/key/396f686b4ec",
     },
   };
 }
@@ -76,20 +76,20 @@ function getAccessRequestDetails() {
     "@context": [
       "https://www.w3.org/2018/credentials/v1",
       "https://w3id.org/security/suites/ed25519-2020/v1",
-      "https://access.pod.inrupt.com/credentials/v1",
+      "https://consent.pod.inrupt.com/credentials/v1",
     ],
-    id: "https://access.pod.inrupt.com/vc/53973727-f4d0-9e8dbdc041fd",
-    type: ["VerifiableCredential", "SolidCredential", "SolidAccessRequest"],
-    issuer: "https://access.pod.inrupt.com",
+    id: "https://consent.pod.inrupt.com/vc/53973727-f4d0-9e8dbdc041fd",
+    type: ["VerifiableCredential", "SolidCredential", "SolidConsentRequest"],
+    issuer: "https://consent.pod.inrupt.com",
     issuanceDate: "2021-05-26T16:40:03Z",
     expirationDate: "2022-06-23T16:40:03Z",
     credentialSubject: {
       id: "https://mockappurl.com",
       inbox: "https://mockappurl.com/inbox/",
-      hasAccess: [
+      hasConsent: [
         {
           mode: ["Read", "Write"],
-          hasStatus: "AccessStatusRequested",
+          hasStatus: "ConsentStatusRequested",
           forPersonalData: ["https://pod.inrupt.com/alice/private/data/"],
           forPurpose: [
             "https://example.com/SomeSpecificPurpose",
@@ -99,19 +99,19 @@ function getAccessRequestDetails() {
         },
         {
           mode: ["Read"],
-          hasStatus: "AccessStatusRequested",
+          hasStatus: "ConsentStatusRequested",
           forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
           forPurpose: "https://example.com/SomeSpecificPurpose",
         },
         {
           mode: ["Append"],
-          hasStatus: "AccessStatusRequested",
+          hasStatus: "ConsentStatusRequested",
           forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
           forPurpose: "https://example.com/SomeSpecificPurpose",
         },
         {
           mode: ["Control"],
-          hasStatus: "AccessStatusRequested",
+          hasStatus: "ConsentStatusRequested",
           forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
           forPurpose: "https://example.com/SomeSpecificPurpose",
         },
@@ -122,7 +122,7 @@ function getAccessRequestDetails() {
       proofPurpose: "assertionMethod",
       proofValue: "eqp8h_kL1DwJCpn65z-d1Arnysx6b11...jb8j0MxUCc1uDQ",
       type: "Ed25519Signature2020",
-      verificationMethod: "https://access.pod.inrupt.com/key/396f686b4ec",
+      verificationMethod: "https://consent.pod.inrupt.com/key/396f686b4ec",
     },
   };
 }
