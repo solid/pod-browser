@@ -21,8 +21,14 @@
 
 import getConsentRequestDetails, {
   getConsentRequestDetailsOnePurpose,
+  getConsentRequestDetailsOneResource,
 } from "../../../../__testUtils/mockConsentRequestDetails";
-import { getExpiryDate, getPurposeUrls, getRequestedAccesses } from "./index";
+import {
+  getDataSubjectWebId,
+  getExpiryDate,
+  getPurposeUrls,
+  getRequestedAccesses,
+} from "./index";
 
 const consentRequest = getConsentRequestDetails();
 const consentRequestOnePurpose = getConsentRequestDetailsOnePurpose();
@@ -67,25 +73,41 @@ describe("getRequestedAccesses", () => {
           "https://example.com/SomeSpecificPurposeA",
           "https://example.com/SomeSpecificPurposeB",
         ],
+        isConsentForDataSubject: "https://id.inrupt.com/someWebId",
       },
       {
         mode: ["Read"],
         hasStatus: "ConsentStatusRequested",
         forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
         forPurpose: "https://example.com/SomeSpecificPurpose",
+        isConsentForDataSubject: "https://id.inrupt.com/someWebId",
       },
       {
         mode: ["Append"],
         hasStatus: "ConsentStatusRequested",
         forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
         forPurpose: "https://example.com/SomeSpecificPurpose",
+        isConsentForDataSubject: "https://id.inrupt.com/someWebId",
       },
       {
         mode: ["Control"],
         hasStatus: "ConsentStatusRequested",
         forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
         forPurpose: "https://example.com/SomeSpecificPurpose",
+        isConsentForDataSubject: "https://id.inrupt.com/someWebId",
       },
     ]);
+  });
+});
+
+describe("getDataSubjectWebId", () => {
+  it("returns data subject WebId for request with multiple resources", () => {
+    const resourceOwnerWebId = getDataSubjectWebId(consentRequest);
+    expect(resourceOwnerWebId).toEqual("https://id.inrupt.com/someWebId");
+  });
+  it("returns data subject WebId for request with one resource", () => {
+    const oneResourceRequest = getConsentRequestDetailsOneResource();
+    const resourceOwnerWebId = getDataSubjectWebId(oneResourceRequest);
+    expect(resourceOwnerWebId).toEqual("https://id.inrupt.com/someWebId");
   });
 });
