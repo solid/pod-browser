@@ -21,6 +21,6 @@
 
 module.exports = {
   hooks: {
-    "pre-push": "npm run ci",
+    "pre-push": "npm run lint && npm run test",
   },
 };
