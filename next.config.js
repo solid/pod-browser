@@ -19,50 +19,28 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const SentryWebpackPlugin = require("@sentry/webpack-plugin");
+const { withSentryConfig } = require("@sentry/nextjs");
 
-const {
-  NEXT_PUBLIC_SENTRY_DSN: SENTRY_DSN,
-  VERCEL_GITHUB_COMMIT_SHA: COMMIT_SHA,
-  SENTRY_ORG,
-  SENTRY_PROJECT,
-  SENTRY_AUTH_TOKEN,
-  NODE_ENV,
-} = process.env;
-
-process.env.SENTRY_DSN = SENTRY_DSN;
-
-/* eslint no-param-reassign: 0 */
-module.exports = {
+const moduleExports = {
   experimental: {
     esmExternals: false,
   },
   productionBrowserSourceMaps: true,
-  webpack(config, options) {
-    // If the environment is the browser, we should load sentry/react instead of
-    // sentry/node.
-    if (!options.isServer) {
-      config.resolve.alias["@sentry/node"] = "@sentry/react";
-    }
-
-    if (
-      SENTRY_DSN &&
-      SENTRY_ORG &&
-      SENTRY_PROJECT &&
-      SENTRY_AUTH_TOKEN &&
-      COMMIT_SHA &&
-      NODE_ENV === "production"
-    ) {
-      config.plugins.push(
-        new SentryWebpackPlugin({
-          include: ".next",
-          ignore: ["node_modules"],
-          urlPrefix: "~/_next",
-          release: COMMIT_SHA,
-        })
-      );
-    }
-
-    return config;
-  },
 };
+
+const sentryWebpackPluginOptions = {
+  // Additional config options for the Sentry Webpack plugin. Keep in mind that
+  // the following options are set automatically, and overriding them is not
+  // recommended:
+  //   release, url, org, project, authToken, configFile, stripPrefix,
+  //   urlPrefix, include, ignore
+
+  // Suppresses all logs
+  silent: true,
+  // For all available options, see:
+  // https://github.com/getsentry/sentry-webpack-plugin#options.
+};
+
+// Make sure adding Sentry options is the last code to run before exporting, to
+// ensure that your source maps include changes from all other Webpack plugins
+module.exports = withSentryConfig(moduleExports, sentryWebpackPluginOptions);

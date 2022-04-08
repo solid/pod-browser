@@ -68,6 +68,22 @@ describe("useReturnUrl", () => {
     expect(setItemSpy).not.toHaveBeenCalled();
   });
 
+  it("should not persist if localStorage returns an error", () => {
+    useRouter.mockReturnValue({ query: { returnTo: "/some/path" } });
+    const setItemSpy = jest.spyOn(window.localStorage, "setItem");
+    setItemSpy.mockImplementation(() => {
+      throw new Error("Storage is full");
+    });
+
+    const { result } = renderHook(() => useReturnUrl());
+
+    act(() => {
+      result.current.persist();
+    });
+
+    expect(setItemSpy).toHaveBeenCalled();
+  });
+
   it("restores the route from localstorage", async () => {
     const replaceMock = jest.fn();
     useRouter.mockReturnValue({ replace: replaceMock });

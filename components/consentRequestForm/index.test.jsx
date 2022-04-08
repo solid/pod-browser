@@ -42,7 +42,10 @@ import {
   TESTCAFE_ID_CONFIRM_BUTTON,
 } from "../confirmationDialog";
 import { ConfirmationDialogProvider } from "../../src/contexts/confirmationDialogContext";
+import { AlertProvider } from "../../src/contexts/alertContext";
 import { getConsentRequestDetailsOnePurpose } from "../../__testUtils/mockConsentRequestDetails";
+import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
+import mockSession from "../../__testUtils/mockSession";
 import { TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT } from "./purposeCheckBox";
 import { TESTCAFE_ID_CONSENT_ACCESS_SWITCH } from "./requestSection";
 import useContainer from "../../src/hooks/useContainer";
@@ -61,6 +64,7 @@ const consentRequestWithOnePurpose = getConsentRequestDetailsOnePurpose();
 const ConsentRequestContextProviderOnePurpose = mockConsentRequestContext(
   consentRequestWithOnePurpose
 );
+const SessionProvider = mockSessionContextProvider(mockSession());
 const agentDetails = {
   agentName: "Mock App",
   agentUrl: "http://mockappurl.com",
@@ -90,6 +94,22 @@ describe("Consent Request Form", () => {
         "https://pod.inrupt.com/alice/private/data/data-2",
         "https://pod.inrupt.com/alice/private/data/data-3",
       ]);
+  });
+
+  it("redirects user if not data subject of access request", async () => {
+    const { getByText } = renderWithTheme(
+      <SessionProvider>
+        <ConsentRequestContextProvider>
+          <ConsentRequestForm
+            agentDetails={agentDetails}
+            agentWebId={agentWebId}
+          />
+        </ConsentRequestContextProvider>
+      </SessionProvider>
+    );
+    await waitFor(() => {
+      expect(push).toHaveBeenCalledWith("/");
+    });
   });
 
   it("Renders a consent request form with multiple purposes", async () => {

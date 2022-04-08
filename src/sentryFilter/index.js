@@ -19,36 +19,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import T from "prop-types";
-import WithTheme from "./withTheme";
-import { FeatureProvider } from "../src/contexts/featureFlagsContext";
-import { AlertProvider } from "../src/contexts/alertContext";
-import { ConfirmationDialogProvider } from "../src/contexts/confirmationDialogContext";
-import mockSessionContextProvider from "./mockSessionContextProvider";
-import mockSession from "./mockSession";
-
-export default function TestApp({ children, session }) {
-  const SessionProvider = mockSessionContextProvider(session);
-  return (
-    <WithTheme>
-      <SessionProvider>
-        <FeatureProvider>
-          <AlertProvider>
-            <ConfirmationDialogProvider>{children}</ConfirmationDialogProvider>
-          </AlertProvider>
-        </FeatureProvider>
-      </SessionProvider>
-    </WithTheme>
-  );
+function hasBreadcrumbs(event) {
+  return !!(event && event?.breadcrumbs && event?.breadcrumbs?.length);
 }
 
-TestApp.defaultProps = {
-  session: mockSession(),
-};
+export function redactCodeParameter(string) {
+  return string.replace(/([?&])(code=[^&]+)/, "$1code=[REDACTED]");
+}
 
-TestApp.propTypes = {
-  children: T.node.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  session: T.object,
-};
+function redactBreadcrumbs(crumbs) {
+  return crumbs.map((crumb) => {
+    if (crumb.category !== "navigation") {
+      return crumb;
+    }
+
+    if (crumb.from) {
+      Object.assign(crumb, { from: redactCodeParameter(crumb.from) });
+    }
+
+    if (crumb.to) {
+      Object.assign(crumb, { to: redactCodeParameter(crumb.to) });
+    }
+    return crumb;
+  }, []);
+}
+
+export function filterSentryEvent(event) {
+  if (!hasBreadcrumbs(event)) {
+    return event;
+  }
+
+  const breadcrumbs = redactBreadcrumbs(event.breadcrumbs);
+
+  return { ...event, breadcrumbs };
+}
+
+export default { filterSentryEvent };

@@ -19,36 +19,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import T from "prop-types";
-import WithTheme from "./withTheme";
-import { FeatureProvider } from "../src/contexts/featureFlagsContext";
-import { AlertProvider } from "../src/contexts/alertContext";
-import { ConfirmationDialogProvider } from "../src/contexts/confirmationDialogContext";
-import mockSessionContextProvider from "./mockSessionContextProvider";
-import mockSession from "./mockSession";
+import * as Sentry from "@sentry/nextjs";
+import { filterSentryEvent } from "./src/sentryFilter/index";
 
-export default function TestApp({ children, session }) {
-  const SessionProvider = mockSessionContextProvider(session);
-  return (
-    <WithTheme>
-      <SessionProvider>
-        <FeatureProvider>
-          <AlertProvider>
-            <ConfirmationDialogProvider>{children}</ConfirmationDialogProvider>
-          </AlertProvider>
-        </FeatureProvider>
-      </SessionProvider>
-    </WithTheme>
-  );
+const SENTRY_DSN = process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN;
+
+if (SENTRY_DSN) {
+  Sentry.init({
+    dsn: SENTRY_DSN,
+    // Adjust this value in production, or use tracesSampler for greater control
+    tracesSampleRate: process.env.NEXT_PUBLIC_SENTRY_SAMPLE_RATE || 0.1,
+    // ...
+    // Note: if you want to override the automatic release value, do not set a
+    // `release` value here - use the environment variable `SENTRY_RELEASE`, so
+    // that it will also get attached to your source maps
+    enabled: process.env.NODE_ENV === "production",
+    // This filter is currently only really needed client-side:
+    beforeSend: filterSentryEvent,
+  });
 }
-
-TestApp.defaultProps = {
-  session: mockSession(),
-};
-
-TestApp.propTypes = {
-  children: T.node.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  session: T.object,
-};

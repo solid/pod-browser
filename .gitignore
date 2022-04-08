@@ -110,3 +110,5 @@ out/
 .vercel
 
 .DS_Store
+# Sentry
+.sentryclirc
