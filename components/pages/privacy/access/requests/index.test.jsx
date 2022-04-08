@@ -59,7 +59,10 @@ describe("Consent Page", () => {
     });
 
     const fetch = jest.fn();
-    const session = { fetch };
+    const session = {
+      fetch,
+      info: { webId: "https://id.inrupt.com/someWebId" },
+    };
     const SessionProvider = mockSessionContextProvider(session);
 
     jest.spyOn(resourceHelpers, "getProfileResource").mockResolvedValue({

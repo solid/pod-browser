@@ -45,6 +45,7 @@ import RequestSection from "./requestSection";
 import DateInput from "./dateInput";
 import styles from "./styles";
 import {
+  getDataSubjectWebId,
   getExpiryDate,
   getPurposeUrls,
   getRequestedAccesses,
@@ -53,6 +54,7 @@ import {
 } from "../../src/models/consent/request";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
 import ConfirmationDialog from "../confirmationDialog";
+import AlertContext from "../../src/contexts/alertContext";
 import PurposeCheckbox from "./purposeCheckBox";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -78,11 +80,11 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   const { consentRequest } = useContext(ConsentRequestContext);
   const [selectedAccess, setSelectedAccess] = useState([]);
   const purposes = getPurposeUrls(consentRequest);
+  const resourceOwnerWebId = getDataSubjectWebId(consentRequest);
   const [selectedPurposes, setSelectedPurposes] = useState([]);
   const selectedResources = selectedAccess.map(
     ({ resourceIri }) => resourceIri
   );
-
   const { agentName } = agentDetails || null;
 
   const {
@@ -96,6 +98,8 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
     setOmitCancelButton,
   } = useContext(ConfirmationDialogContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
+
+  const { alertError } = useContext(AlertContext);
 
   const requestedAccesses = getRequestedAccesses(consentRequest);
   const expirationDate = getExpiryDate(consentRequest);
@@ -221,6 +225,11 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
       );
     }
   };
+
+  if (resourceOwnerWebId !== session.info.webId) {
+    alertError("You don't have access to that");
+    router.push("/");
+  }
 
   return (
     <>
