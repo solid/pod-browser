@@ -23,14 +23,14 @@ import { act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
-import ConfirmationDialogProps, {
+import ConfirmationDialogWithProps, {
   TESTCAFE_ID_CONFIRMATION_CANCEL_BUTTON,
   TESTCAFE_ID_CONFIRM_BUTTON,
 } from "./index";
 
 describe("ConfirmationDialog", () => {
   it("Renders a ConfirmationDialog", () => {
-    const { asFragment } = renderWithTheme(<ConfirmationDialogProps />);
+    const { asFragment } = renderWithTheme(<ConfirmationDialogWithProps />);
     expect(asFragment()).toMatchSnapshot();
   });
 
@@ -39,7 +39,7 @@ describe("ConfirmationDialog", () => {
     const onCancel = jest.fn();
 
     const { getByTestId } = renderWithTheme(
-      <ConfirmationDialogProps
+      <ConfirmationDialogWithProps
         openConfirmationDialog
         onConfirm={onConfirm}
         onCancel={onCancel}
@@ -55,7 +55,7 @@ describe("ConfirmationDialog", () => {
     const onCancel = jest.fn();
 
     const { getByText } = renderWithTheme(
-      <ConfirmationDialogProps
+      <ConfirmationDialogWithProps
         openConfirmationDialog
         onConfirm={onConfirm}
         onCancel={onCancel}
@@ -71,7 +71,7 @@ describe("ConfirmationDialog", () => {
     const onConfirm = jest.fn();
     const onCancel = jest.fn();
     const { getByText, findByTestId } = renderWithTheme(
-      <ConfirmationDialogProps
+      <ConfirmationDialogWithProps
         openConfirmationDialog
         onConfirm={onConfirm}
         onCancel={onCancel}
@@ -90,7 +90,7 @@ describe("ConfirmationDialog", () => {
     const onCancel = jest.fn();
 
     const { getByTestId } = renderWithTheme(
-      <ConfirmationDialogProps
+      <ConfirmationDialogWithProps
         openConfirmationDialog
         onConfirm={onConfirm}
         onCancel={onCancel}

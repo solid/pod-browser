@@ -27,7 +27,7 @@ import T from "prop-types";
 import AlertContext from "../../src/contexts/alertContext";
 import styles from "./styles";
 import { isHTTPError } from "../../src/error";
-import ConfirmationDialogProps from "../confirmationDialogProps";
+import ConfirmationDialogWithProps from "../confirmationDialogWithProps";
 
 export const TESTCAFE_ID_DELETE_BUTTON = "delete-button";
 
@@ -94,7 +94,7 @@ export default function DeleteButton({
         {...buttonProps}
         onClick={() => setOpenConfirmationDialog(true)}
       />
-      <ConfirmationDialogProps
+      <ConfirmationDialogWithProps
         openConfirmationDialog={openConfirmationDialog}
         onCancel={() => setOpenConfirmationDialog(false)}
         title={confirmationTitle}

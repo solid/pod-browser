@@ -32,7 +32,7 @@ import {
   profile as profilePropType,
 } from "../../../../../../constants/propTypes";
 import ResourceInfoContext from "../../../../../../src/contexts/resourceInfoContext";
-import ConfirmationDialogProps from "../../../../../confirmationDialogProps";
+import ConfirmationDialogWithProps from "../../../../../confirmationDialogWithProps";
 import styles from "./styles";
 
 export const handleRemovePermissions = ({
@@ -108,7 +108,7 @@ export default function RemoveButton({
       >
         Remove
       </ListItemText>
-      <ConfirmationDialogProps
+      <ConfirmationDialogWithProps
         openConfirmationDialog={openConfirmationDialog}
         title={`Remove ${profile?.name || webId}'s access from ${resourceName}`}
         confirmText={CONFIRMATION_TEXT}

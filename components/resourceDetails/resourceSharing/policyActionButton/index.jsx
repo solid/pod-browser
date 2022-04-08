@@ -32,7 +32,7 @@ import ErrorMessage from "../../../errorMessage";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../src/models/contact/authenticated";
 import { PUBLIC_AGENT_PREDICATE } from "../../../../src/models/contact/public";
 import { serializePromises } from "../../../../src/solidClientHelpers/utils";
-import ConfirmationDialogProps from "../../../confirmationDialogProps";
+import ConfirmationDialogWithProps from "../../../confirmationDialogWithProps";
 import { getResourceName } from "../../../../src/solidClientHelpers/resource";
 import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
 import ResourceInfoContext from "../../../../src/contexts/resourceInfoContext";
@@ -118,7 +118,7 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
       >
         {policyType.removeButtonLabel}
       </Button>
-      <ConfirmationDialogProps
+      <ConfirmationDialogWithProps
         openConfirmationDialog={openConfirmationDialog}
         title={`Remove ${policyTitle} access from ${resourceName}?`}
         content={`Everyone will be removed from the ${policyTitle} list.`}

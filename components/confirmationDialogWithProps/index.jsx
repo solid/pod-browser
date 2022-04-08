@@ -44,7 +44,7 @@ export const TESTCAFE_ID_CONFIRMATION_DIALOG_TITLE =
 export const TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT =
   "confirmation-dialog-content";
 
-export default function ConfirmationDialogProps({
+export default function ConfirmationDialogWithProps({
   openConfirmationDialog,
   title,
   content,
@@ -115,7 +115,7 @@ export default function ConfirmationDialogProps({
     </Dialog>
   );
 }
-ConfirmationDialogProps.propTypes = {
+ConfirmationDialogWithProps.propTypes = {
   openConfirmationDialog: PropTypes.bool.isRequired,
   title: PropTypes.string,
   content: PropTypes.string,
@@ -129,7 +129,7 @@ ConfirmationDialogProps.propTypes = {
   onCancel: PropTypes.func.isRequired,
 };
 
-ConfirmationDialogProps.defaultProps = {
+ConfirmationDialogWithProps.defaultProps = {
   title: "",
   content: null,
   customContentWrapper: null,
