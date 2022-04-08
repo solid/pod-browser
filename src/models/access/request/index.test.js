@@ -32,6 +32,7 @@ describe("getPurposeUrls", () => {
     const purposes = getPurposeUrls(undefined);
     expect(purposes).toBeNull();
   });
+
   it("returns purpose urls for multiple purposes", () => {
     const purposes = getPurposeUrls(accessRequest);
     expect(purposes).toEqual([
@@ -60,7 +61,7 @@ describe("getRequestedAccesses", () => {
     expect(resources).toEqual([
       {
         mode: ["Read", "Write"],
-        hasStatus: "AccessStatusRequested",
+        hasStatus: "ConsentStatusRequested",
         forPersonalData: ["https://pod.inrupt.com/alice/private/data/"],
         forPurpose: [
           "https://example.com/SomeSpecificPurpose",
@@ -70,19 +71,19 @@ describe("getRequestedAccesses", () => {
       },
       {
         mode: ["Read"],
-        hasStatus: "AccessStatusRequested",
+        hasStatus: "ConsentStatusRequested",
         forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
         forPurpose: "https://example.com/SomeSpecificPurpose",
       },
       {
         mode: ["Append"],
-        hasStatus: "AccessStatusRequested",
+        hasStatus: "ConsentStatusRequested",
         forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
         forPurpose: "https://example.com/SomeSpecificPurpose",
       },
       {
         mode: ["Control"],
-        hasStatus: "AccessStatusRequested",
+        hasStatus: "ConsentStatusRequested",
         forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
         forPurpose: "https://example.com/SomeSpecificPurpose",
       },

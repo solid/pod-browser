@@ -37,7 +37,7 @@ const mockedUseContainer = useContainer;
 
 const sectionDetails = {
   mode: ["Read", "Write"],
-  hasStatus: "AccessStatusRequested",
+  hasStatus: "ConsentStatusRequested",
   forPersonalData: ["https://pod.inrupt.com/alice/private/data/"],
   forPurpose: "https://example.com/SomeSpecificPurpose",
 };
