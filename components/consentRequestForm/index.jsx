@@ -227,7 +227,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   };
 
   if (resourceOwnerWebId !== session.info.webId) {
-    alertError("You don't have access to that.");
+    alertError("You don't have access to that");
     router.push("/");
   }
 
