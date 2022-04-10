@@ -21,7 +21,8 @@
 
 import React from "react";
 import { useRouter } from "next/router";
-import { fireEvent, waitFor } from "@testing-library/react";
+import { waitFor, act } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import PrivacyPage, {
   TESTCAFE_ID_TAB_ALL,
   TESTCAFE_ID_TAB_APPS,
@@ -50,6 +51,7 @@ describe("PrivacyPage", () => {
     });
   });
   const people = [mockPersonThingBob(), mockPersonThingAlice()];
+
   it("renders empty state if there's no agents to show", async () => {
     mockUseAgentsProfiles.mockReturnValue({
       data: [],
@@ -60,13 +62,16 @@ describe("PrivacyPage", () => {
       <PrivacyPage />
     );
     const peopleTab = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
-    fireEvent.click(peopleTab);
+    act(() => {
+      userEvent.click(peopleTab);
+    });
     await waitFor(() => {
       expect(getByText(NO_AGENTS_MESSAGE)).toBeInTheDocument();
     });
     expect(asFragment()).toMatchSnapshot();
   });
-  it("renders people list when selecting people tab", () => {
+
+  it("renders people list when selecting people tab", async () => {
     mockUseAgentsProfiles.mockReturnValue({
       data: people,
       error: null,
@@ -74,12 +79,13 @@ describe("PrivacyPage", () => {
     });
     const { getByTestId, getByText } = renderWithTheme(<PrivacyPage />);
     const peopleTab = getByTestId(TESTCAFE_ID_TAB_PEOPLE);
-    fireEvent.click(peopleTab);
-    waitFor(() => {
+    userEvent.click(peopleTab);
+    await waitFor(() => {
       expect(getByText(bobWebIdUrl)).toBeInTheDocument();
       expect(getByText(aliceWebIdUrl)).toBeInTheDocument();
     });
   });
+
   it("renders app list when selecting apps tab", () => {
     mockUseAgentsProfiles.mockReturnValue({
       data: null,
@@ -89,10 +95,11 @@ describe("PrivacyPage", () => {
 
     const { getByTestId, getByText } = renderWithTheme(<PrivacyPage />);
     const appsTab = getByTestId(TESTCAFE_ID_TAB_APPS);
-    fireEvent.click(appsTab);
+    userEvent.click(appsTab);
     expect(getByText("https://mockappurl.com")).toBeInTheDocument();
   });
-  it("renders both people and app lists when selecting all tab", () => {
+
+  it("renders both people and app lists when selecting all tab", async () => {
     mockUseAgentsProfiles.mockReturnValue({
       data: people,
       error: null,
@@ -101,8 +108,8 @@ describe("PrivacyPage", () => {
 
     const { getByTestId, getByText } = renderWithTheme(<PrivacyPage />);
     const allTab = getByTestId(TESTCAFE_ID_TAB_ALL);
-    fireEvent.click(allTab);
-    waitFor(() => {
+    userEvent.click(allTab);
+    await waitFor(() => {
       expect(getByText(bobWebIdUrl)).toBeInTheDocument();
       expect(getByText(aliceWebIdUrl)).toBeInTheDocument();
       expect(getByText("https://mockappurl.com")).toBeInTheDocument();

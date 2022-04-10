@@ -19,8 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { fireEvent, render } from "@testing-library/react";
 import React from "react";
+import { render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { useSession } from "@inrupt/solid-ui-react";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import mockSession from "../../__testUtils/mockSession";
@@ -76,8 +77,11 @@ describe("AgentSearchForm", () => {
       <AgentSearchForm onSubmit={onSubmit} onChange={onChange} agentId="" />
     );
     const input = wrapper.getByRole("textbox");
-    fireEvent.change(input, { target: { value: "https://www.example.com" } });
-    expect(onChange).toHaveBeenCalledWith("https://www.example.com");
+    // onChange is fired for every single character typed:
+    userEvent.type(input, "ht");
+    expect(onChange).toHaveBeenCalledTimes(2);
+    expect(onChange).toHaveBeenNthCalledWith(1, "h");
+    expect(onChange).toHaveBeenNthCalledWith(2, "t");
   });
 
   it("calls onSubmit when clicking the submit button", () => {
@@ -96,7 +100,7 @@ describe("AgentSearchForm", () => {
       />
     );
     const button = wrapper.getByRole("button");
-    fireEvent.click(button);
+    userEvent.click(button);
     expect(onSubmit).toHaveBeenCalledWith("https://www.example.com");
   });
 
@@ -116,7 +120,7 @@ describe("AgentSearchForm", () => {
       />
     );
     const button = wrapper.getByRole("button");
-    fireEvent.click(button);
+    userEvent.click(button);
     const errorMessage = wrapper.queryByText(
       "The WebID https://www.example.com is already in your permissions."
     );
@@ -140,7 +144,7 @@ describe("AgentSearchForm", () => {
       />
     );
     const button = wrapper.getByRole("button");
-    fireEvent.click(button);
+    userEvent.click(button);
     const errorMessage = wrapper.queryByText(
       "You cannot overwrite your own permissions."
     );
@@ -164,7 +168,7 @@ describe("AgentSearchForm", () => {
       />
     );
     const button = wrapper.getByTestId(TESTCAFE_ID_ADD_AGENT_BUTTON);
-    fireEvent.click(button);
+    userEvent.click(button);
     const errorMessage = wrapper.queryByText(
       "You cannot add yourself as a contact."
     );
