@@ -29,7 +29,6 @@ import usePodIrisFromWebId from "../../../src/hooks/usePodIrisFromWebId";
 import TestApp from "../../../__testUtils/testApp";
 
 jest.mock("../../../src/hooks/usePodIrisFromWebId");
-jest.mock("../../../src/hooks/usePreviousPage");
 jest.mock("next/router");
 
 describe("Index page", () => {
