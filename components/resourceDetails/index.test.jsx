@@ -24,12 +24,13 @@ import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
-import * as routerFns from "next/router";
+import { useRouter } from "next/router";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import ResourceDetails, {
   TESTCAFE_ID_ACCORDION_PERMISSIONS,
   TESTCAFE_ID_ACCORDION_SHARING,
 } from "./index";
+import mockLocalStorage from "../../__testUtils/mockLocalStorage";
 import mockAccessControl from "../../__testUtils/mockAccessControl";
 import { AccessControlProvider } from "../../src/contexts/accessControlContext";
 import mockPermissionsContextProvider from "../../__testUtils/mockPermissionsContextProvider";
@@ -49,11 +50,17 @@ const mockUseAccessControlType = useAccessControlType;
 jest.mock("../../src/hooks/useConsentBasedAccessForResource");
 const mockUseConsentBasedAccessForResource = useConsentBasedAccessForResource;
 
+jest.mock("next/router");
+
 describe("Resource details", () => {
   beforeEach(() => {
-    jest
-      .spyOn(routerFns, "useRouter")
-      .mockReturnValue({ query: { resourceIri: "" }, push: jest.fn() });
+    useRouter.mockReturnValue({ query: { resourceIri: "" }, push: jest.fn() });
+
+    Object.defineProperty(window, "localStorage", {
+      value: mockLocalStorage(),
+      writable: true,
+    });
+
     mockedUseConsentBasedAccessForResource.mockReturnValue([]);
   });
 
