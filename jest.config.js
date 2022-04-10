@@ -31,7 +31,24 @@ module.exports = {
   testPathIgnorePatterns: ["/node_modules/", "/__testUtils/", "/.next"],
 
   transform: {
-    "^.+\\.jsx?$": "babel-jest",
+    "^.+\\.(t|j)sx?$": [
+      "@swc/jest",
+      {
+        jsc: {
+          parser: {
+            jsx: true,
+          },
+          transform: {
+            react: {
+              runtime: "automatic",
+              development: true,
+              useBuiltins: true,
+            },
+          },
+          target: "es2020",
+        },
+      },
+    ],
     "^.+\\.ttl$": "jest-raw-loader",
   },
 

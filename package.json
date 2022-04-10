@@ -64,6 +64,7 @@
     "@inrupt/eslint-config-base": "^0.3.0",
     "@inrupt/eslint-config-react": "^0.3.0",
     "@next/eslint-plugin-next": "^12.0.10",
+    "@swc/jest": "^0.2.15",
     "@testing-library/dom": "^7.29.4",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
