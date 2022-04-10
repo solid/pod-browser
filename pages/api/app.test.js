@@ -19,9 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import nock from "nock";
-import { createRequest, createResponse } from "node-mocks-http";
-import handler from "./app";
+/* eslint-disable no-underscore-dangle */
+
+import { createMocks } from "node-mocks-http";
+import handleAppRequest from "./app";
 
 const PODBROWSER_RESPONSE = {
   "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
@@ -34,33 +35,15 @@ const PODBROWSER_RESPONSE = {
 };
 
 describe("/api/app handler tests", () => {
-  let req;
-  let res;
-
-  beforeEach(() => {
-    req = createRequest();
-    res = createResponse();
-    // eslint-disable-next-line func-names
-    res.status = jest.fn(function () {
-      return this;
-    });
-    res.end = jest.fn();
-  });
-
-  afterEach(() => {
-    jest.resetAllMocks();
-    nock.restore();
-  });
-
   it("responds with 200 and correct json for podBrowser", async () => {
-    req.headers = { host: "podbrowser.inrupt.com" };
-    nock(/api/).get(/app$/).reply(200, PODBROWSER_RESPONSE);
-    handler(req, res);
+    const { req, res } = createMocks({
+      method: "GET",
+      headers: { host: "podbrowser.inrupt.com" },
+    });
 
-    expect(res.status).toHaveBeenCalledTimes(1);
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.end).toHaveBeenCalledTimes(1);
-    // eslint-disable-next-line no-underscore-dangle
+    handleAppRequest(req, res);
+
+    expect(res._getStatusCode()).toBe(200);
     expect(JSON.parse(res._getData())).toEqual(
       expect.objectContaining(PODBROWSER_RESPONSE)
     );
