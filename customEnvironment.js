@@ -19,7 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable global-require */
 
 const Environment = require("jest-environment-jsdom");
