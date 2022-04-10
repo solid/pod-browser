@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders the correct agent name renders a webId if no name is on the profile 1`] = `
+<DocumentFragment>
+  <a
+    data-testid="agent-name-link"
+    href="https://mockperson.com/profile/card#me"
+    rel="noopener noreferrer"
+    target="_blank"
+  >
+    <h3>
+      https://mockperson.com/profile/card#me
+    </h3>
+  </a>
+</DocumentFragment>
+`;
+
+exports[`Renders the correct agent name renders an agent name without a link if no link prop is passed 1`] = `
+<DocumentFragment>
+  <span>
+     https://mockperson.com/profile/card#me 
+  </span>
+</DocumentFragment>
+`;

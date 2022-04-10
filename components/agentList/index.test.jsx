@@ -113,14 +113,14 @@ describe("AgentList", () => {
     expect(setSearchValues).toHaveBeenCalledWith(["agentsData"]);
   });
 
-  it("renders apps when type is app", () => {
+  it("renders apps when type is app", async () => {
     mockUseAgentsProfiles.mockReturnValue({
       data: agents,
       error: null,
-      isValidating: true,
+      isValidating: false,
     });
 
-    const { getByText } = renderWithTheme(
+    const { getAllByText } = renderWithTheme(
       <SessionProvider>
         <AgentList
           contactType={schema.SoftwareApplication}
@@ -128,55 +128,56 @@ describe("AgentList", () => {
         />
       </SessionProvider>
     );
-    waitFor(() => {
-      expect(getByText("Mock App")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(getAllByText("Mock App").length).toBeGreaterThan(0);
     });
   });
 
-  it("renders apps along with people when type is all", () => {
+  it("renders apps along with people when type is all", async () => {
     mockUseAgentsProfiles.mockReturnValue({
       data: agents,
       error: null,
-      isValidating: true,
+      isValidating: false,
     });
 
-    const { getByText } = renderWithTheme(
+    const { getByText, getAllByText } = renderWithTheme(
       <SessionProvider>
         <AgentList contactType="all" setSearchValues={setSearchValues} />
       </SessionProvider>
     );
-    waitFor(() => {
+    await waitFor(() => {
       expect(getByText(bobWebIdUrl)).toBeInTheDocument();
       expect(getByText(aliceWebIdUrl)).toBeInTheDocument();
-      expect(getByText("Mock App")).toBeInTheDocument();
+      expect(getAllByText("Mock App").length).toBeGreaterThan(0);
     });
   });
 
-  it("renders only apps if no people available when type is all", () => {
+  it("renders only apps if no people available when type is all", async () => {
     mockUseAgentsProfiles.mockReturnValue({
       data: [mockApp()],
       error: null,
-      isValidating: true,
+      isValidating: false,
     });
 
-    const { getByText } = renderWithTheme(
+    const { getAllByText } = renderWithTheme(
       <SessionProvider>
         <AgentList contactType="all" setSearchValues={setSearchValues} />
       </SessionProvider>
     );
-    waitFor(() => {
-      expect(getByText("Mock App")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(getAllByText("Mock App").length).toBeGreaterThan(0);
     });
   });
 
-  it("renders empty state message when there are no agents", () => {
+  it("renders empty state message when there are no agents", async () => {
     mockUseAgentsProfiles.mockReturnValue({
-      data: null,
+      data: [],
       error: undefined,
       mutate: () => {},
+      isValidating: false,
     });
 
-    renderWithTheme(
+    const { getByText } = renderWithTheme(
       <SessionProvider>
         <AgentList
           contactType={foaf.Person}
@@ -185,8 +186,10 @@ describe("AgentList", () => {
       </SessionProvider>
     );
 
-    const message = screen.getByText("No one else has access to your Pod");
-
-    expect(message).toBeTruthy();
+    await waitFor(() => {
+      expect(
+        getByText("No one else has access to your Pod")
+      ).toBeInTheDocument();
+    });
   });
 });

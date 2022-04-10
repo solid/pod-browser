@@ -329,7 +329,7 @@ describe("AgentAccessTable with agents", () => {
     expect(queryByText("Example B")).not.toBeNull();
   });
   // TODO: tabs have slightly changed so these tests need to be updated when tabs are restored
-  it.skip("renders a set of tabs which filter by Group type", () => {
+  it.skip("renders a set of tabs which filter by Group type", async () => {
     const permissionsWithTypes = [
       {
         type: "agent",
@@ -350,7 +350,7 @@ describe("AgentAccessTable with agents", () => {
     const { getByTestId, queryByText } = renderWithTheme(
       <AgentAccessTable type={type} setLoading={setLoading} />
     );
-    waitFor(() => {
+    await waitFor(() => {
       // FIXME: change these test ids
       const tabPeople = getByTestId("tab-people");
       const tabGroups = getByTestId("tab-groups");
@@ -362,7 +362,7 @@ describe("AgentAccessTable with agents", () => {
       expect(queryByText("Example 1")).toBeNull();
     });
   });
-  it.skip("renders a set of tabs which filter by People type", () => {
+  it.skip("renders a set of tabs which filter by People type", async () => {
     const permissionsWithTypes = [
       {
         acl: createAccessMap(true, true, false, false),
@@ -385,7 +385,7 @@ describe("AgentAccessTable with agents", () => {
       <AgentAccessTable type={type} setLoading={setLoading} />
     );
 
-    waitFor(() => {
+    await waitFor(() => {
       // FIXME: change these test ids
       const tabPeople = getByTestId("tab-people");
       const tabGroups = getByTestId("tab-groups");

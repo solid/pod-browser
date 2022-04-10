@@ -29,25 +29,24 @@ describe("Renders the correct agent name", () => {
 
   const PermissionsContextProvider = mockPermissionsContextProvider();
 
-  it("renders a webId if no name is on the profile", async () => {
-    const { getByText } = render(
+  it("renders a webId if no name is on the profile", () => {
+    const { getByTestId, asFragment } = render(
       <PermissionsContextProvider>
         <AgentName agentWebId={mockWebId} link />
       </PermissionsContextProvider>
     );
-    waitFor(() =>
-      expect(getByText(TESTCAFE_ID_AGENT_NAME_LINK)).toBeInTheDocument()
-    );
+
+    expect(asFragment()).toMatchSnapshot();
+    expect(getByTestId(TESTCAFE_ID_AGENT_NAME_LINK)).toBeInTheDocument();
   });
 
-  it("renders an agent name without a link if no link prop is passed", async () => {
-    const { getByText } = render(
+  it("renders an agent name without a link if no link prop is passed", () => {
+    const { asFragment } = render(
       <PermissionsContextProvider>
         <AgentName agentWebId={mockWebId} />
       </PermissionsContextProvider>
     );
-    waitFor(() =>
-      expect(getByText(TESTCAFE_ID_AGENT_NAME_LINK)).toNotBeInTheDocument()
-    );
+
+    expect(asFragment()).toMatchSnapshot();
   });
 });

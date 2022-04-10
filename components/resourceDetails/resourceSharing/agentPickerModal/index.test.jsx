@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { waitFor } from "@testing-library/dom";
+import { act, waitFor } from "@testing-library/react";
 // eslint-disable-next-line camelcase
 import { acp_v2, mockSolidDatasetFrom } from "@inrupt/solid-client";
 import userEvent from "@testing-library/user-event";
@@ -791,7 +791,7 @@ describe("AgentPickerModal with contacts", () => {
     });
     expect(asFragment()).toMatchSnapshot();
   });
-  it("search bar filters by name", () => {
+  it("search bar filters by name", async () => {
     const containerUrl = "https://example.com/contacts/";
     const emptyAddressBook = mockAddressBook({ containerUrl });
     mockedUseContacts.mockReturnValue({
@@ -826,13 +826,21 @@ describe("AgentPickerModal with contacts", () => {
       );
     const searchBar = getByTestId(TESTCAFE_ID_SEARCH_INPUT);
 
-    userEvent.type(searchBar, "Example 1");
+    act(() => {
+      userEvent.type(searchBar, "Example 1");
+    });
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(queryAllByTestId("agent-webid")).toHaveLength(1);
       expect(findByText("Example 1")).not.toBeNull();
       expect(queryByText("Example 2")).toBeNull();
+    });
+
+    act(() => {
       userEvent.clear(searchBar);
+    });
+
+    await waitFor(() => {
       expect(queryAllByTestId("agent-webid")).toHaveLength(5);
     });
   });

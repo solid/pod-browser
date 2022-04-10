@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { waitFor } from "@testing-library/dom";
+import { waitFor, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 // eslint-disable-next-line camelcase
 import { acp_v2 } from "@inrupt/solid-client";
@@ -126,7 +126,7 @@ describe("AgentAccessOptionsMenu", () => {
     userEvent.click(button);
     const confirmButton = getByTestId(TESTCAFE_ID_CONFIRM_BUTTON);
     userEvent.click(confirmButton);
-    waitFor(() =>
+    await waitFor(() =>
       expect(accessControl.removeAgentFromPolicy).toHaveBeenCalledWith(
         webId,
         "editors"
@@ -136,7 +136,7 @@ describe("AgentAccessOptionsMenu", () => {
 
   it("does not render a dialog and removes it from permissions if agent is public agent or authenticated agent", async () => {
     const accessControl = mockAccessControl();
-    const { getByTestId } = renderWithTheme(
+    const { getByTestId, queryByTestId } = renderWithTheme(
       <AccessControlContext.Provider value={{ accessControl }}>
         <ConfirmationDialogProvider>
           <RemoveButton
@@ -150,10 +150,12 @@ describe("AgentAccessOptionsMenu", () => {
       </AccessControlContext.Provider>
     );
     const button = getByTestId(TESTCAFE_ID_REMOVE_BUTTON);
-    userEvent.click(button);
-    waitFor(() => {
+    act(() => {
+      userEvent.click(button);
+    });
+    await waitFor(() => {
       expect(
-        getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)
+        queryByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)
       ).not.toBeInTheDocument();
       expect(accessControl.setRulePublic).toHaveBeenCalledWith(
         "editors",
