@@ -21,59 +21,88 @@
 
 import { renderHook, act } from "@testing-library/react-hooks";
 import useLocalStorage from "./index";
-import * as windowFns from "../../windowHelpers/index";
-import { getFakeLocalStorage } from "../../windowHelpers/index";
+
+import mockLocalStorage from "../../../__testUtils/mockLocalStorage";
 import mockConsole from "../../../__testUtils/mockConsole";
 
-describe("useLocalStorage", () => {
-  const KEY = "key";
-  const VALUE = {
-    INITIAL: "initial value",
-    CHANGED: "changed value",
-    NONE: "",
-  };
-  const fakeLocalStorage = getFakeLocalStorage();
-  const fakeConsole = mockConsole();
+const KEY = "key";
+const VALUES = {
+  INITIAL: "initial value",
+  CHANGED: "changed value",
+  NONE: "",
+};
 
+describe("useLocalStorage", () => {
   beforeEach(() => {
-    jest.spyOn(windowFns, "getLocalStorage").mockReturnValue(fakeLocalStorage);
-    jest.spyOn(windowFns, "getConsole").mockReturnValue(fakeConsole);
+    Object.defineProperty(window, "localStorage", {
+      value: mockLocalStorage(),
+      writable: true,
+    });
+
+    Object.defineProperty(window, "console", {
+      value: mockConsole(),
+      writable: true,
+    });
   });
 
   describe("Setup", () => {
     it("Returns initial value", () => {
-      const { result } = renderHook(() => useLocalStorage(KEY, VALUE.INITIAL));
-      expect(result.current[0]).toMatch(VALUE.INITIAL);
+      const { result } = renderHook(() => useLocalStorage(KEY, VALUES.INITIAL));
+      expect(result.current[0]).toMatch(VALUES.INITIAL);
     });
 
     it("When no initial value is passed, returns an empty string", () => {
       const { result } = renderHook(() => useLocalStorage(KEY));
-      expect(result.current[0]).toMatch(VALUE.NONE);
+      expect(result.current[0]).toMatch(VALUES.NONE);
     });
 
     it("Returns setValue function", () => {
-      const { result } = renderHook(() => useLocalStorage(KEY, VALUE.INITIAL));
+      const { result } = renderHook(() => useLocalStorage(KEY, VALUES.INITIAL));
       expect(typeof result.current[1]).toMatch("function");
+    });
+
+    it("Returns the initial value when localstorage contains invalid JSON", () => {
+      jest.spyOn(window.localStorage, "getItem").mockReturnValue("not json");
+
+      const { result } = renderHook(() => useLocalStorage(KEY, VALUES.INITIAL));
+
+      expect(result.current[0]).toMatch(VALUES.INITIAL);
+
+      // I don't think we really need a test to cover this:
+      // eslint-disable-next-line no-console
+      expect(console.error).toHaveBeenCalled();
     });
   });
 
   it("When `setValue()` is called, the `value` updates", () => {
-    const { result } = renderHook(() => useLocalStorage(KEY, VALUE.INITIAL));
+    const setItemSpy = jest.spyOn(window.localStorage, "setItem");
+
+    const { result } = renderHook(() => useLocalStorage(KEY, VALUES.INITIAL));
 
     act(() => {
-      result.current[1](VALUE.CHANGED);
+      result.current[1](VALUES.CHANGED);
     });
 
-    expect(result.current[0]).toMatch(VALUE.CHANGED);
+    expect(result.current[0]).toMatch(VALUES.CHANGED);
+    expect(setItemSpy).toHaveBeenCalledWith(KEY, VALUES.CHANGED);
   });
 
-  it("When `value` changes, `localStorage` is updated", () => {
-    const { result } = renderHook(() => useLocalStorage(KEY, VALUE.INITIAL));
-
-    act(() => {
-      result.current[1](VALUE.CHANGED);
+  // Ideally the error case for localstorage.setItem is handled, but this is
+  // currently not present in the code:
+  it.skip("When `setValue()` is called, handles errors from localstorage", () => {
+    // Replace setItem in localStorage with something that errors:
+    const setItemSpy = jest.spyOn(window.localStorage, "setItem");
+    setItemSpy.mockImplementation(() => {
+      throw new Error("Storage is full");
     });
 
-    expect(fakeLocalStorage.getItem(KEY)).toBe(VALUE.CHANGED);
+    const { result } = renderHook(() => useLocalStorage(KEY, VALUES.INITIAL));
+
+    act(() => {
+      result.current[1](VALUES.CHANGED);
+    });
+
+    expect(setItemSpy).toHaveBeenCalledWith(KEY, VALUES.CHANGED);
+    expect(result.current[0]).toBe(VALUES.INITIAL);
   });
 });
