@@ -41,7 +41,6 @@ import AddAgentButton from "../addAgentButton";
 // import AgentsTableTabs from "../agentsTableTabs";
 import AgentsSearchBar from "../agentsSearchBar";
 import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
-
 import styles from "./styles";
 import PolicyHeader from "../policyHeader";
 import PolicyActionButton from "../policyActionButton";
@@ -116,47 +115,28 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
   // };
 
   if (!tablePermissions.length && isCustomPolicy(type)) return null;
-
   const { emptyStateText } = POLICIES_TYPE_MAP[type];
 
-  return (
-    <Accordion
-      defaultExpanded
-      classes={{ root: classes.accordion, rounded: classes.rounded }}
-      data-testid={TESTCAFE_ID_AGENT_ACCESS_TABLE}
-    >
-      <PolicyHeader type={type} isPolicyList>
-        <>
-          <AddAgentButton
-            type={type}
-            setLoading={setLoading}
-            permissions={tablePermissions}
-          />
-          <PolicyActionButton
-            permissions={tablePermissions}
-            setLoading={setLoading}
-            type={type}
-          />
-        </>
-      </PolicyHeader>
-      <div className={classes.permissionsContainer}>
-        {!!tablePermissions.length && (
-          <>
-            {/* TODO: Uncomment to reintroduce tabs */}
-            {/* <Tabs */}
-            {/*  handleTabChange={handleTabChange} */}
-            {/*  selectedTabValue={selectedTabValue} */}
-            {/*  tabs={[{ label: "All", value: "all", testid: TESTCAFE_ID_TAB_ALL },  { label: "People", value: "agent", testid: TESTCAFE_ID_TAB_PEOPLE }, { label: "Groups", value: "group", testid: TESTCAFE_ID_TAB_GROUPS } }]} */}
-            {/* /> */}
-            <AgentsSearchBar handleFilterChange={handleFilterChange} />
-          </>
-        )}
-        {loading && (
-          <Container variant="empty">
-            <CircularProgress />
-          </Container>
-        )}
-        {!loading && tablePermissions.length ? (
+  const tableContents = () => {
+    if (loading) {
+      return (
+        <Container variant="empty">
+          <CircularProgress />
+        </Container>
+      );
+    }
+    if (!loading && !tablePermissions.length) {
+      return (
+        <div className={classes.permissionsContainer}>
+          <span className={classes.emptyStateTextContainer}>
+            <p>{emptyStateText}</p>
+          </span>
+        </div>
+      );
+    }
+    if (!loading && tablePermissions.length) {
+      return (
+        <div className={classes.permissionsContainer}>
           <table
             className={clsx(bem("table"), bem("agents-table"))}
             {...getTableProps()}
@@ -191,53 +171,89 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
               )}
             </tbody>
           </table>
-        ) : (
-          <span className={classes.emptyStateTextContainer}>
-            {!loading && <p>{emptyStateText}</p>}
-          </span>
-        )}
-        {!loading && tablePermissions.length > 3 && (
-          <div
-            className={clsx(
-              classes.showAllButtonContainer,
-              showAll && bem("expanded")
-            )}
-          >
-            <button
-              data-testid={
-                showAll ? TESTCAFE_ID_HIDE_BUTTON : TESTCAFE_ID_SHOW_ALL_BUTTON
-              }
-              type="button"
-              className={classes.showAllButton}
-              onClick={() => setShowAll(!showAll)}
+
+          {tablePermissions.length > 3 && (
+            <div
+              className={clsx(
+                classes.showAllButtonContainer,
+                showAll && bem("expanded")
+              )}
             >
-              <Typography classes={{ body1: classes.showAllText }}>
-                {showAll ? (
-                  <span>
-                    Hide
-                    <i
-                      className={clsx(
-                        bem("icon-caret-up"),
-                        classes.showAllButtonIcon
-                      )}
-                    />
-                  </span>
-                ) : (
-                  <span>
-                    Show all ({tablePermissions.length})
-                    <i
-                      className={clsx(
-                        bem("icon-caret-down"),
-                        classes.showAllButtonIcon
-                      )}
-                    />
-                  </span>
-                )}
-              </Typography>
-            </button>
-          </div>
-        )}
-      </div>
+              <button
+                data-testid={
+                  showAll
+                    ? TESTCAFE_ID_HIDE_BUTTON
+                    : TESTCAFE_ID_SHOW_ALL_BUTTON
+                }
+                type="button"
+                className={classes.showAllButton}
+                onClick={() => setShowAll(!showAll)}
+              >
+                <Typography classes={{ body1: classes.showAllText }}>
+                  {showAll ? (
+                    <span>
+                      Hide
+                      <i
+                        className={clsx(
+                          bem("icon-caret-up"),
+                          classes.showAllButtonIcon
+                        )}
+                      />
+                    </span>
+                  ) : (
+                    <span>
+                      Show all ({tablePermissions.length})
+                      <i
+                        className={clsx(
+                          bem("icon-caret-down"),
+                          classes.showAllButtonIcon
+                        )}
+                      />
+                    </span>
+                  )}
+                </Typography>
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    }
+    return null;
+  };
+
+  return (
+    <Accordion
+      defaultExpanded
+      classes={{ root: classes.accordion, rounded: classes.rounded }}
+      data-testid={TESTCAFE_ID_AGENT_ACCESS_TABLE}
+    >
+      <PolicyHeader type={type} isPolicyList>
+        <>
+          <AddAgentButton
+            type={type}
+            setLoading={setLoading}
+            permissions={tablePermissions}
+          />
+          <PolicyActionButton
+            permissions={tablePermissions}
+            setLoading={setLoading}
+            type={type}
+          />
+        </>
+      </PolicyHeader>
+      {!!tablePermissions.length && (
+        <>
+          {/* TODO: Uncomment to reintroduce tabs */}
+          {/* <Tabs */}
+          {/*  handleTabChange={handleTabChange} */}
+          {/*  selectedTabValue={selectedTabValue} */}
+          {/*  tabs={[{ label: "All", value: "all", testid: TESTCAFE_ID_TAB_ALL },  { label: "People", value: "agent", testid: TESTCAFE_ID_TAB_PEOPLE }, { label: "Groups", value: "group", testid: TESTCAFE_ID_TAB_GROUPS } }]} */}
+          {/* /> */}
+          <AgentsSearchBar handleFilterChange={handleFilterChange} />
+        </>
+      )}
+      {tableContents()}
+      {/* <AgentAccessTableContent loading={loading} data={data} type={type} /> */}
     </Accordion>
   );
 }

@@ -37,12 +37,9 @@ describe("View consent details button and modal", () => {
     };
 
     const fakeHandleCloseModal = jest.fn();
+    const fakeSetOpenModal = jest.fn();
     const { asFragment, getByTestId } = renderWithTheme(
-      <ConsentDetailsButton
-        permission={permission}
-        resourceIri={testResourceIri}
-        handleCloseModal={fakeHandleCloseModal}
-      />
+      <ConsentDetailsButton setOpenModal={fakeSetOpenModal} />
     );
     const button = getByTestId(TESTCAFE_ID_VIEW_DETAILS_BUTTON);
     expect(button).toBeDefined();
