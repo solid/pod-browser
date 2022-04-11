@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Renders a access modal renders a modal when the user clicks on view details button  1`] = `<DocumentFragment />`;
+exports[`Renders an access modal renders a modal when the user clicks on view details button  1`] = `<DocumentFragment />`;
 
-exports[`Renders a access modal setupErrorComponent renders 1`] = `
+exports[`Renders an access modal setupErrorComponent renders 1`] = `
 <DocumentFragment>
   <div
     class="MuiAvatar-root MuiAvatar-circle avatar MuiAvatar-colorDefault"
