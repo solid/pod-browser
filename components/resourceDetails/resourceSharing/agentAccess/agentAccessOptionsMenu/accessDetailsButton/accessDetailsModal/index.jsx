@@ -84,7 +84,7 @@ export default function AccessDetailsModal({
   const { vc, webId: agentWebId } = permission;
   const errorComponent = setupErrorComponent(bem);
 
-  const allowModes = vc?.credentialSubject?.providedAccess?.mode;
+  const allowModes = vc?.credentialSubject?.providedConsent?.mode;
   const modes = allowModes?.map((mode) => ({
     read: !!mode.includes("Read"),
     write: !!mode.includes("Write"),

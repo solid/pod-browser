@@ -40,7 +40,7 @@ const permission = {
   vc: getSignedVc(),
 };
 
-describe("Renders a access modal", () => {
+describe("Renders an access modal", () => {
   it("renders a modal when the user clicks on view details button ", async () => {
     const { asFragment } = renderWithTheme(
       <AccessDetailsModal

@@ -55,6 +55,6 @@ export default function getSignedVc() {
       type: "Ed25519Signature2020",
       verificationMethod: "https://consent.pod.inrupt.com/key/examplekey",
     },
-    type: ["VerifiableCredential", "SolidAccessGrant"],
+    type: ["VerifiableCredential", "SolidConsentGrant"],
   };
 }
