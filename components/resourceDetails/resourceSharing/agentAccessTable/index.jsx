@@ -253,7 +253,6 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
         </>
       )}
       {tableContents()}
-      {/* <AgentAccessTableContent loading={loading} data={data} type={type} /> */}
     </Accordion>
   );
 }
