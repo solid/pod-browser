@@ -57,8 +57,10 @@ describe("Delete button", () => {
   });
 
   it("opens a confirmation dialog with the correct title and content when clicking on delete button ", () => {
+    const onConfirm = jest.fn();
+    const onCancel = jest.fn();
     const { getByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
+      <>
         <DeleteButton
           onDelete={jest.fn()}
           confirmationTitle={confirmationTitle}
@@ -66,8 +68,14 @@ describe("Delete button", () => {
           dialogId={dialogId}
           successMessage={successMessage}
         />
-        <ConfirmationDialog />
-      </ConfirmationDialogProvider>
+        <ConfirmationDialog
+          title={confirmationTitle}
+          content={confirmationContent}
+          openConfirmationDialog
+          onConfirm={onConfirm}
+          onCancel={onCancel}
+        />
+      </>
     );
     const deletebutton = getByTestId(TESTCAFE_ID_DELETE_BUTTON);
     userEvent.click(deletebutton);

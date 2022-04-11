@@ -19,44 +19,28 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// TODO: remove after 2.0
-/* istanbul ignore file */
+import { createStyles } from "@solid/lit-prism-patterns";
 
-import {
-  hasAccessibleAcl,
-  acp_v3 as acp3,
-  getSourceUrl,
-} from "@inrupt/solid-client";
-import { useSession } from "@inrupt/solid-ui-react";
-import useSWR from "swr";
+const WIDTH_DIALOG = 640;
 
-export const ACP = "acp";
-export const WAC = "wac";
-
-async function getAccessControlType(resourceInfo, fetch) {
-  const resourceUrl = getSourceUrl(resourceInfo);
-  const isAcpControlledResource = await acp3.isAcpControlled(resourceUrl, {
-    fetch,
-  });
-  const isWacControlledResource =
-    !isAcpControlledResource && hasAccessibleAcl(resourceInfo);
-  if (isAcpControlledResource) {
-    return ACP;
-  }
-  if (isWacControlledResource) {
-    return WAC;
-  }
-  return null;
-}
-
-export default function useAccessControlType(resourceInfo) {
-  const { fetch } = useSession();
-  return useSWR(
-    ["useAccessControlType", resourceInfo],
-    async () => {
-      if (!resourceInfo) return null;
-      return getAccessControlType(resourceInfo, fetch);
+export default function styles(theme) {
+  return createStyles(theme, ["icons", "button"], {
+    dialog: {
+      width: WIDTH_DIALOG,
     },
-    { revalidateOnFocus: false }
-  );
+    dialogActions: {
+      padding: theme.spacing(2.4),
+    },
+    dialogTitle: {
+      fontSize: theme.typography.h2.fontSize,
+      fontWeight: theme.typography.h2.fontWeight,
+    },
+    dialogText: {
+      fontWeight: theme.typography.body.fontWeight,
+      fontFamily: theme.typography.body.fontFamily,
+    },
+    dangerButton: {
+      backgroundColor: theme.palette.error.main,
+    },
+  });
 }
