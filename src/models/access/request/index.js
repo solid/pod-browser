@@ -65,10 +65,10 @@ export function getRequestorWebId(accessRequest) {
   return accessRequest?.credentialSubject?.id;
 }
 
-export function getDataSubjectWebId(consentRequest) {
-  return Array.isArray(consentRequest?.credentialSubject?.hasConsent)
-    ? consentRequest?.credentialSubject?.hasConsent[0].isConsentForDataSubject
-    : consentRequest?.credentialSubject?.hasConsent?.isConsentForDataSubject;
+export function getDataSubjectWebId(accessRequest) {
+  return Array.isArray(accessRequest?.credentialSubject?.hasConsent)
+    ? accessRequest?.credentialSubject?.hasConsent[0].isConsentForDataSubject
+    : accessRequest?.credentialSubject?.hasConsent?.isConsentForDataSubject;
 }
 
 export function getVcId(vc) {
