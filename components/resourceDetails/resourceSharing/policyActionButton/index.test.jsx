@@ -25,7 +25,6 @@ import { waitFor } from "@testing-library/dom";
 import { acp_v3 as acp } from "@inrupt/solid-client";
 import * as solidClientFns from "@inrupt/solid-client";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
-import { ConfirmationDialogProvider } from "../../../../src/contexts/confirmationDialogContext";
 import PolicyActionButton, {
   handleRemoveAllAgents,
   TESTCAFE_ID_REMOVE_POLICY_BUTTON,
@@ -89,6 +88,7 @@ describe("PolicyActionButton", () => {
   ];
   const setLoading = jest.fn();
   const type = "editors";
+
   it("renders an action button that displays a menu with a disabled 'remove all' option when there are no permissions", () => {
     const { asFragment, getByTestId, getByText } = renderWithTheme(
       <PolicyActionButton
@@ -103,6 +103,7 @@ describe("PolicyActionButton", () => {
     const text = getByText(TEXT_POLICY_ACTION_BUTTON_DISABLED_REMOVE_BUTTON);
     expect(text).not.toBeNull();
   });
+
   it("renders an action button that displays a menu with a 'remove all' option when there are permissions", () => {
     const { getByTestId, queryByText } = renderWithTheme(
       <PolicyActionButton
@@ -116,6 +117,7 @@ describe("PolicyActionButton", () => {
     const text = queryByText(TEXT_POLICY_ACTION_BUTTON_DISABLED_REMOVE_BUTTON);
     expect(text).toBeNull();
   });
+
   it("renders an error if policy type is not recognized", () => {
     const { asFragment, getByTestId } = renderWithTheme(
       <PolicyActionButton
@@ -128,15 +130,14 @@ describe("PolicyActionButton", () => {
     const error = getByTestId("error-message");
     expect(error).not.toBeNull();
   });
+
   it("opens a confirmation dialog with the correct title and content", () => {
     const { getByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <PolicyActionButton
-          type={type}
-          permissions={permissions}
-          setLoading={setLoading}
-        />
-      </ConfirmationDialogProvider>
+      <PolicyActionButton
+        type={type}
+        permissions={permissions}
+        setLoading={setLoading}
+      />
     );
 
     const button = getByTestId(TESTCAFE_ID_REMOVE_POLICY_BUTTON);
@@ -150,15 +151,14 @@ describe("PolicyActionButton", () => {
       getByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT)
     ).toHaveTextContent("Everyone will be removed from the Editors list.");
   });
+
   it("closes the dialog when Cancel button is clicked", async () => {
     const { getByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <PolicyActionButton
-          type={type}
-          permissions={permissions}
-          setLoading={setLoading}
-        />
-      </ConfirmationDialogProvider>
+      <PolicyActionButton
+        type={type}
+        permissions={permissions}
+        setLoading={setLoading}
+      />
     );
 
     const button = getByTestId(TESTCAFE_ID_REMOVE_POLICY_BUTTON);
@@ -171,6 +171,7 @@ describe("PolicyActionButton", () => {
       expect(dialog).not.toBeInTheDocument();
     });
   });
+
   // FIXME: cannot fix this test so removing it to prevent issues during CI - might need to be reqritten
   it.skip("removes all agents if Confirm button is clicked", async () => {
     const accessControl = mockAccessControl();
@@ -180,13 +181,11 @@ describe("PolicyActionButton", () => {
       .mockResolvedValueOnce([{ response: acr }]);
     const { getByTestId } = renderWithTheme(
       <AccessControlContext.Provider value={{ accessControl }}>
-        <ConfirmationDialogProvider>
-          <PolicyActionButton
-            type={type}
-            permissions={permissions}
-            setLoading={setLoading}
-          />
-        </ConfirmationDialogProvider>
+        <PolicyActionButton
+          type={type}
+          permissions={permissions}
+          setLoading={setLoading}
+        />
       </AccessControlContext.Provider>
     );
 

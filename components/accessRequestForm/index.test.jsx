@@ -42,7 +42,10 @@ import {
   TESTCAFE_ID_CONFIRM_BUTTON,
 } from "../confirmationDialog";
 import { ConfirmationDialogProvider } from "../../src/contexts/confirmationDialogContext";
+import { AlertProvider } from "../../src/contexts/alertContext";
 import { getAccessRequestDetailsOnePurpose } from "../../__testUtils/mockAccessRequestDetails";
+import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
+import mockSession from "../../__testUtils/mockSession";
 import { TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT } from "./purposeCheckBox";
 import { TESTCAFE_ID_ACCESS_ACCESS_SWITCH } from "./requestSection";
 import useContainer from "../../src/hooks/useContainer";
@@ -61,6 +64,7 @@ const accessRequestWithOnePurpose = getAccessRequestDetailsOnePurpose();
 const AccessRequestContextProviderOnePurpose = mockAccessRequestContext(
   accessRequestWithOnePurpose
 );
+const SessionProvider = mockSessionContextProvider(mockSession());
 const agentDetails = {
   agentName: "Mock App",
   agentUrl: "http://mockappurl.com",
@@ -92,7 +96,23 @@ describe("Access Request Form", () => {
       ]);
   });
 
-  it("Renders a access request form with multiple purposes", async () => {
+  it("redirects user if not data subject of access request", async () => {
+    const { getByText } = renderWithTheme(
+      <SessionProvider>
+        <AccessRequestContextProvider>
+          <AccessRequestForm
+            agentDetails={agentDetails}
+            agentWebId={agentWebId}
+          />
+        </AccessRequestContextProvider>
+      </SessionProvider>
+    );
+    await waitFor(() => {
+      expect(push).toHaveBeenCalledWith("/");
+    });
+  });
+
+  it("Renders a consent request form with multiple purposes", async () => {
     const { asFragment, findByTestId } = renderWithTheme(
       <AccessRequestContextProvider>
         <AccessRequestForm

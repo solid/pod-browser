@@ -19,8 +19,28 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-module.exports = {
-  hooks: {
-    "pre-push": "npm run lint && npm run test",
-  },
-};
+import { createStyles } from "@solid/lit-prism-patterns";
+
+const WIDTH_DIALOG = 640;
+
+export default function styles(theme) {
+  return createStyles(theme, ["icons", "button"], {
+    dialog: {
+      width: WIDTH_DIALOG,
+    },
+    dialogActions: {
+      padding: theme.spacing(2.4),
+    },
+    dialogTitle: {
+      fontSize: theme.typography.h2.fontSize,
+      fontWeight: theme.typography.h2.fontWeight,
+    },
+    dialogText: {
+      fontWeight: theme.typography.body.fontWeight,
+      fontFamily: theme.typography.body.fontFamily,
+    },
+    dangerButton: {
+      backgroundColor: theme.palette.error.main,
+    },
+  });
+}

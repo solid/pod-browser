@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// FIXME: ignoring this file until 2.0
+// TODO: remove after 2.0
 /* istanbul ignore file */
 
 import {

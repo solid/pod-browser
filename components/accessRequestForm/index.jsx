@@ -45,6 +45,7 @@ import RequestSection from "./requestSection";
 import DateInput from "./dateInput";
 import styles from "./styles";
 import {
+  getDataSubjectWebId,
   getExpiryDate,
   getPurposeUrls,
   getRequestedAccesses,
@@ -53,11 +54,12 @@ import {
 } from "../../src/models/access/request";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
 import ConfirmationDialog from "../confirmationDialog";
+import AlertContext from "../../src/contexts/alertContext";
 import PurposeCheckbox from "./purposeCheckBox";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export const NO_ACCESS_DIALOG_TITLE = "Your haven't selected any access";
+export const NO_ACCESS_DIALOG_TITLE = "You haven't selected any access";
 export const DENY_ACCESS_DIALOG_TITLE = "Deny all access?";
 export const ACCESS_REQUEST_NO_ACCESS_DIALOG =
   "access-request-no-access-dialog";
@@ -78,11 +80,11 @@ export default function AccessRequestForm({ agentDetails, agentWebId }) {
   const { accessRequest } = useContext(AccessRequestContext);
   const [selectedAccess, setSelectedAccess] = useState([]);
   const purposes = getPurposeUrls(accessRequest);
+  const resourceOwnerWebId = getDataSubjectWebId(accessRequest);
   const [selectedPurposes, setSelectedPurposes] = useState([]);
   const selectedResources = selectedAccess.map(
     ({ resourceIri }) => resourceIri
   );
-
   const { agentName } = agentDetails || null;
 
   const {
@@ -96,6 +98,8 @@ export default function AccessRequestForm({ agentDetails, agentWebId }) {
     setOmitCancelButton,
   } = useContext(ConfirmationDialogContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
+
+  const { alertError } = useContext(AlertContext);
 
   const requestedAccesses = getRequestedAccesses(accessRequest);
   const expirationDate = getExpiryDate(accessRequest);
@@ -221,6 +225,11 @@ export default function AccessRequestForm({ agentDetails, agentWebId }) {
       );
     }
   };
+
+  if (resourceOwnerWebId !== session.info.webId) {
+    alertError("You don't have access to that");
+    router.push("/");
+  }
 
   return (
     <>

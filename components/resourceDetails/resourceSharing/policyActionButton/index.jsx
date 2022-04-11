@@ -21,7 +21,7 @@
 
 /* eslint react/require-default-props:off */
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { ActionButton, Button } from "@inrupt/prism-react-components";
 import T from "prop-types";
 import { DatasetContext } from "@inrupt/solid-ui-react";
@@ -32,8 +32,7 @@ import ErrorMessage from "../../../errorMessage";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../src/models/contact/authenticated";
 import { PUBLIC_AGENT_PREDICATE } from "../../../../src/models/contact/public";
 import { serializePromises } from "../../../../src/solidClientHelpers/utils";
-import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
-import ConfirmationDialog from "../../../confirmationDialog";
+import ConfirmationDialogWithProps from "../../../confirmationDialogWithProps";
 import { getResourceName } from "../../../../src/solidClientHelpers/resource";
 import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
 import ResourceInfoContext from "../../../../src/contexts/resourceInfoContext";
@@ -71,12 +70,10 @@ export const handleRemoveAllAgents = ({
     setLoading(false);
   };
 };
-
 export default function PolicyActionButton({ permissions, setLoading, type }) {
   const { accessControl } = useContext(AccessControlContext);
   const disableRemoveButton = permissions.length === 0 && isNamedPolicy(type);
   const policyType = getPolicyType(type);
-  const dialogId = "remove-policy";
   const [policyToDelete, setPolicyToDelete] = useState();
   const { solidDataset: dataset } = useContext(DatasetContext);
   const resourceIri = getSourceUrl(dataset);
@@ -85,19 +82,8 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
     : "this resource";
   const policyTitle = POLICIES_TYPE_MAP[type]?.title;
 
-  const { open, confirmed, setContent, setOpen, setTitle, closeDialog } =
-    useContext(ConfirmationDialogContext);
   const { mutate: mutateResourceInfo } = useContext(ResourceInfoContext);
-  const [confirmationSetup, setConfirmationSetup] = useState(false);
-
-  const handleClickOpenDialog = () => {
-    setPolicyToDelete(type);
-    const confirmationTitle = `Remove ${policyTitle} access from ${resourceName}?`;
-    const confirmationContent = `Everyone will be removed from the ${policyTitle} list.`;
-    setTitle(confirmationTitle);
-    setContent(confirmationContent);
-    setOpen(dialogId);
-  };
+  const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
 
   const webIds = permissions
     .filter(({ alias }) => alias === policyToDelete)
@@ -111,29 +97,6 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
     mutateResourceInfo,
   });
 
-  useEffect(() => {
-    setConfirmationSetup(true);
-    if (open !== dialogId) return;
-    if (confirmationSetup && confirmed === null) return;
-    if (confirmationSetup && confirmed) {
-      removeAllAgents(webIds);
-    }
-
-    if (confirmationSetup && confirmed !== null) {
-      closeDialog();
-      setConfirmationSetup(false);
-    }
-  }, [
-    open,
-    dialogId,
-    setConfirmationSetup,
-    confirmationSetup,
-    confirmed,
-    removeAllAgents,
-    webIds,
-    closeDialog,
-  ]);
-
   if (!policyType)
     return <ErrorMessage error={new Error("Type of policy not recognized")} />;
 
@@ -141,7 +104,10 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
     <ActionButton label="Show menu for policy">
       <Button
         data-testid={TESTCAFE_ID_REMOVE_POLICY_BUTTON}
-        onClick={handleClickOpenDialog}
+        onClick={() => {
+          setPolicyToDelete(type);
+          setOpenConfirmationDialog(true);
+        }}
         variant="in-menu"
         disabled={disableRemoveButton}
         disabledText={
@@ -152,7 +118,13 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
       >
         {policyType.removeButtonLabel}
       </Button>
-      <ConfirmationDialog />
+      <ConfirmationDialogWithProps
+        openConfirmationDialog={openConfirmationDialog}
+        title={`Remove ${policyTitle} access from ${resourceName}?`}
+        content={`Everyone will be removed from the ${policyTitle} list.`}
+        onConfirm={() => removeAllAgents(webIds)}
+        onCancel={() => setOpenConfirmationDialog(false)}
+      />
     </ActionButton>
   );
 }

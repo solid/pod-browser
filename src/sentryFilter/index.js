@@ -19,8 +19,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-module.exports = {
-  hooks: {
-    "pre-push": "npm run lint && npm run test",
-  },
-};
+function hasBreadcrumbs(event) {
+  return !!(event && event?.breadcrumbs && event?.breadcrumbs?.length);
+}
+
+export function redactCodeParameter(string) {
+  return string.replace(/([?&])(code=[^&]+)/, "$1code=[REDACTED]");
+}
+
+function redactBreadcrumbs(crumbs) {
+  return crumbs.map((crumb) => {
+    if (crumb.category !== "navigation") {
+      return crumb;
+    }
+
+    if (crumb.from) {
+      Object.assign(crumb, { from: redactCodeParameter(crumb.from) });
+    }
+
+    if (crumb.to) {
+      Object.assign(crumb, { to: redactCodeParameter(crumb.to) });
+    }
+    return crumb;
+  }, []);
+}
+
+export function filterSentryEvent(event) {
+  if (!hasBreadcrumbs(event)) {
+    return event;
+  }
+
+  const breadcrumbs = redactBreadcrumbs(event.breadcrumbs);
+
+  return { ...event, breadcrumbs };
+}
+
+export default { filterSentryEvent };

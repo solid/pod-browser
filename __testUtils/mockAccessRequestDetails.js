@@ -18,6 +18,38 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+export function getAccessRequestDetailsOneResource() {
+  return {
+    "@context": [
+      "https://www.w3.org/2018/credentials/v1",
+      "https://w3id.org/security/suites/ed25519-2020/v1",
+      "https://consent.pod.inrupt.com/credentials/v1",
+    ],
+    id: "https://consent.pod.inrupt.com/vc/53973727-f4d0-9e8dbdc041fd",
+    type: ["VerifiableCredential", "SolidCredential", "SolidConsentRequest"],
+    issuer: "https://consent.pod.inrupt.com",
+    issuanceDate: "2021-05-26T16:40:03Z",
+    expirationDate: "2022-06-23T16:40:03Z",
+    credentialSubject: {
+      id: "https://mockappurl.com",
+      inbox: "https://mockappurl.com/inbox/",
+      hasConsent: {
+        mode: ["Read", "Write"],
+        hasStatus: "ConsentStatusRequested",
+        forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
+        forPurpose: "https://example.com/SomeSpecificPurpose",
+        isConsentForDataSubject: "https://id.inrupt.com/someWebId",
+      },
+      proof: {
+        created: "2021-05-26T16:40:03.009Z",
+        proofPurpose: "assertionMethod",
+        proofValue: "eqp8h_kL1DwJCpn65z-d1Arnysx6b11...jb8j0MxUCc1uDQ",
+        type: "Ed25519Signature2020",
+        verificationMethod: "https://consent.pod.inrupt.com/key/396f686b4ec",
+      },
+    },
+  };
+}
 
 export function getAccessRequestDetailsOnePurpose() {
   return {
@@ -96,24 +128,28 @@ function getAccessRequestDetails() {
             "https://example.com/SomeSpecificPurposeA",
             "https://example.com/SomeSpecificPurposeB",
           ],
+          isConsentForDataSubject: "https://id.inrupt.com/someWebId",
         },
         {
           mode: ["Read"],
           hasStatus: "ConsentStatusRequested",
           forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
           forPurpose: "https://example.com/SomeSpecificPurpose",
+          isConsentForDataSubject: "https://id.inrupt.com/someWebId",
         },
         {
           mode: ["Append"],
           hasStatus: "ConsentStatusRequested",
           forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
           forPurpose: "https://example.com/SomeSpecificPurpose",
+          isConsentForDataSubject: "https://id.inrupt.com/someWebId",
         },
         {
           mode: ["Control"],
           hasStatus: "ConsentStatusRequested",
           forPersonalData: ["https://pod.inrupt.com/alice/private/data"],
           forPurpose: "https://example.com/SomeSpecificPurpose",
+          isConsentForDataSubject: "https://id.inrupt.com/someWebId",
         },
       ],
     },
