@@ -21,6 +21,7 @@
 
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/jsx-one-expression-per-line */
+/*  eslint-disable react/forbid-prop-types */
 
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
@@ -53,9 +54,122 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 const TESTCAFE_ID_SHOW_ALL_BUTTON = "show-all-button";
 const TESTCAFE_ID_HIDE_BUTTON = "hide-button";
 export const TESTCAFE_ID_AGENT_ACCESS_TABLE = "agent-access-table";
-
-export default function AgentAccessTable({ type, loading, setLoading }) {
+function TableContents({
+  loading,
+  tablePermissions,
+  classes,
+  emptyStateText,
+  getTableProps,
+  prepareRow,
+  selectedTabValue,
+  showAll,
+  setShowAll,
+  getTableBodyProps,
+  rows,
+}) {
   const bem = useBem(useStyles());
+
+  if (loading) {
+    return (
+      <Container variant="empty">
+        <CircularProgress />
+      </Container>
+    );
+  }
+  if (!loading && !tablePermissions.length) {
+    return (
+      <div className={classes.permissionsContainer}>
+        <span className={classes.emptyStateTextContainer}>
+          <p>{emptyStateText}</p>
+        </span>
+      </div>
+    );
+  }
+  if (!loading && tablePermissions.length) {
+    return (
+      <div className={classes.permissionsContainer}>
+        <table
+          className={clsx(bem("table"), bem("agents-table"))}
+          {...getTableProps()}
+        >
+          <tbody className={bem("table__body")} {...getTableBodyProps()}>
+            {rows.length ? (
+              rows.map((row) => {
+                prepareRow(row);
+                const details = row.original;
+                return (
+                  <tr className={bem("table__body-row")} key={details.webId}>
+                    <td
+                      className={clsx(
+                        bem("table__body-cell"),
+                        bem("agent-cell")
+                      )}
+                    >
+                      <AgentAccess permission={details} />
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr className={classes.emptyStateTextContainer}>
+                <td>
+                  {selectedTabValue &&
+                    `No ${
+                      selectedTabValue === "Person" ? "people " : "groups "
+                    } found`}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+
+        {tablePermissions.length > 3 && (
+          <div
+            className={clsx(
+              classes.showAllButtonContainer,
+              showAll && bem("expanded")
+            )}
+          >
+            <button
+              data-testid={
+                showAll ? TESTCAFE_ID_HIDE_BUTTON : TESTCAFE_ID_SHOW_ALL_BUTTON
+              }
+              type="button"
+              className={classes.showAllButton}
+              onClick={() => setShowAll(!showAll)}
+            >
+              <Typography classes={{ body1: classes.showAllText }}>
+                {showAll ? (
+                  <span>
+                    Hide
+                    <i
+                      className={clsx(
+                        bem("icon-caret-up"),
+                        classes.showAllButtonIcon
+                      )}
+                    />
+                  </span>
+                ) : (
+                  <span>
+                    Show all ({tablePermissions.length})
+                    <i
+                      className={clsx(
+                        bem("icon-caret-down"),
+                        classes.showAllButtonIcon
+                      )}
+                    />
+                  </span>
+                )}
+              </Typography>
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+  return null;
+}
+export default function AgentAccessTable({ type, loading, setLoading }) {
   const classes = useStyles();
   const { permissions } = useContext(PermissionsContext);
   const [tablePermissions, setTablePermissions] = useState([]);
@@ -117,110 +231,6 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
   if (!tablePermissions.length && isCustomPolicy(type)) return null;
   const { emptyStateText } = POLICIES_TYPE_MAP[type];
 
-  const tableContents = () => {
-    if (loading) {
-      return (
-        <Container variant="empty">
-          <CircularProgress />
-        </Container>
-      );
-    }
-    if (!loading && !tablePermissions.length) {
-      return (
-        <div className={classes.permissionsContainer}>
-          <span className={classes.emptyStateTextContainer}>
-            <p>{emptyStateText}</p>
-          </span>
-        </div>
-      );
-    }
-    if (!loading && tablePermissions.length) {
-      return (
-        <div className={classes.permissionsContainer}>
-          <table
-            className={clsx(bem("table"), bem("agents-table"))}
-            {...getTableProps()}
-          >
-            <tbody className={bem("table__body")} {...getTableBodyProps()}>
-              {rows.length ? (
-                rows.map((row) => {
-                  prepareRow(row);
-                  const details = row.original;
-                  return (
-                    <tr className={bem("table__body-row")} key={details.webId}>
-                      <td
-                        className={clsx(
-                          bem("table__body-cell"),
-                          bem("agent-cell")
-                        )}
-                      >
-                        <AgentAccess permission={details} />
-                      </td>
-                    </tr>
-                  );
-                })
-              ) : (
-                <tr className={classes.emptyStateTextContainer}>
-                  <td>
-                    {selectedTabValue &&
-                      `No ${
-                        selectedTabValue === "Person" ? "people " : "groups "
-                      } found`}
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-
-          {tablePermissions.length > 3 && (
-            <div
-              className={clsx(
-                classes.showAllButtonContainer,
-                showAll && bem("expanded")
-              )}
-            >
-              <button
-                data-testid={
-                  showAll
-                    ? TESTCAFE_ID_HIDE_BUTTON
-                    : TESTCAFE_ID_SHOW_ALL_BUTTON
-                }
-                type="button"
-                className={classes.showAllButton}
-                onClick={() => setShowAll(!showAll)}
-              >
-                <Typography classes={{ body1: classes.showAllText }}>
-                  {showAll ? (
-                    <span>
-                      Hide
-                      <i
-                        className={clsx(
-                          bem("icon-caret-up"),
-                          classes.showAllButtonIcon
-                        )}
-                      />
-                    </span>
-                  ) : (
-                    <span>
-                      Show all ({tablePermissions.length})
-                      <i
-                        className={clsx(
-                          bem("icon-caret-down"),
-                          classes.showAllButtonIcon
-                        )}
-                      />
-                    </span>
-                  )}
-                </Typography>
-              </button>
-            </div>
-          )}
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
     <Accordion
       defaultExpanded
@@ -252,7 +262,20 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
           <AgentsSearchBar handleFilterChange={handleFilterChange} />
         </>
       )}
-      {tableContents()}
+      <TableContents
+        loading={loading}
+        tablePermissions={tablePermissions}
+        classes={classes}
+        setGlobalFilter={setGlobalFilter}
+        showAll={showAll}
+        setShowAll={setShowAll}
+        emptyStateText={emptyStateText}
+        getTableProps={getTableProps}
+        prepareRow={prepareRow}
+        selectedTabValue={selectedTabValue}
+        getTableBodyProps={getTableBodyProps}
+        rows={rows}
+      />
     </Accordion>
   );
 }
@@ -265,4 +288,30 @@ AgentAccessTable.propTypes = {
 
 AgentAccessTable.defaultProps = {
   loading: false,
+};
+
+TableContents.propTypes = {
+  type: PropTypes.string.isRequired,
+  loading: PropTypes.bool.isRequired,
+  tablePermissions: PropTypes.array.isRequired,
+  classes: PropTypes.any,
+  emptyStateText: PropTypes.string,
+  getTableProps: PropTypes.func,
+  prepareRow: PropTypes.func,
+  selectedTabValue: PropTypes.string,
+  showAll: PropTypes.bool,
+  setShowAll: PropTypes.func,
+  getTableBodyProps: PropTypes.func,
+  rows: PropTypes.array.isRequired,
+};
+
+TableContents.defaultProps = {
+  classes: {},
+  emptyStateText: "",
+  getTableProps: () => {},
+  prepareRow: () => {},
+  selectedTabValue: "",
+  showAll: false,
+  setShowAll: () => {},
+  getTableBodyProps: () => {},
 };
