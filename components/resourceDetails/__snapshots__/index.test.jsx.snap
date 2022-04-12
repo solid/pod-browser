@@ -81,6 +81,16 @@ exports[`Resource details renders Permissions component for WAC-supporting Solid
                 <li
                   class="PodBrowser-action-menu__item"
                 >
+                  <p
+                    class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
+                    data-testid="pod-indicator-copy-tooltip"
+                  >
+                    COPY LINK
+                  </p>
+                </li>
+                <li
+                  class="PodBrowser-action-menu__item"
+                >
                   <button
                     class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                     data-testid="delete-resource-button"
@@ -88,16 +98,6 @@ exports[`Resource details renders Permissions component for WAC-supporting Solid
                   >
                     Delete
                   </button>
-                </li>
-                <li
-                  class="PodBrowser-action-menu__item"
-                >
-                  <p
-                    class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
-                    data-testid="pod-indicator-copy-tooltip"
-                  >
-                    COPY LINK
-                  </p>
                 </li>
               </ul>
             </div>
@@ -421,6 +421,16 @@ exports[`Resource details renders Sharing component for ACP-supporting Solid ser
                 <li
                   class="PodBrowser-action-menu__item"
                 >
+                  <p
+                    class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
+                    data-testid="pod-indicator-copy-tooltip"
+                  >
+                    COPY LINK
+                  </p>
+                </li>
+                <li
+                  class="PodBrowser-action-menu__item"
+                >
                   <button
                     class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                     data-testid="delete-resource-button"
@@ -428,16 +438,6 @@ exports[`Resource details renders Sharing component for ACP-supporting Solid ser
                   >
                     Delete
                   </button>
-                </li>
-                <li
-                  class="PodBrowser-action-menu__item"
-                >
-                  <p
-                    class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
-                    data-testid="pod-indicator-copy-tooltip"
-                  >
-                    COPY LINK
-                  </p>
                 </li>
               </ul>
             </div>
@@ -873,6 +873,16 @@ exports[`Resource details renders a decoded container name 1`] = `
                 <li
                   class="PodBrowser-action-menu__item"
                 >
+                  <p
+                    class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
+                    data-testid="pod-indicator-copy-tooltip"
+                  >
+                    COPY LINK
+                  </p>
+                </li>
+                <li
+                  class="PodBrowser-action-menu__item"
+                >
                   <button
                     class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                     data-testid="delete-resource-button"
@@ -880,16 +890,6 @@ exports[`Resource details renders a decoded container name 1`] = `
                   >
                     Delete
                   </button>
-                </li>
-                <li
-                  class="PodBrowser-action-menu__item"
-                >
-                  <p
-                    class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
-                    data-testid="pod-indicator-copy-tooltip"
-                  >
-                    COPY LINK
-                  </p>
                 </li>
               </ul>
             </div>
@@ -1066,6 +1066,16 @@ exports[`Resource details renders container details 1`] = `
                 <li
                   class="PodBrowser-action-menu__item"
                 >
+                  <p
+                    class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
+                    data-testid="pod-indicator-copy-tooltip"
+                  >
+                    COPY LINK
+                  </p>
+                </li>
+                <li
+                  class="PodBrowser-action-menu__item"
+                >
                   <button
                     class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                     data-testid="delete-resource-button"
@@ -1073,16 +1083,6 @@ exports[`Resource details renders container details 1`] = `
                   >
                     Delete
                   </button>
-                </li>
-                <li
-                  class="PodBrowser-action-menu__item"
-                >
-                  <p
-                    class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
-                    data-testid="pod-indicator-copy-tooltip"
-                  >
-                    COPY LINK
-                  </p>
                 </li>
               </ul>
             </div>

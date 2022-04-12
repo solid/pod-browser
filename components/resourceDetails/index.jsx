@@ -140,16 +140,6 @@ export default function ResourceDetails({
               </DownloadLink>
             </ActionMenuItem>
             <ActionMenuItem>
-              <DeleteResourceButton
-                className={actionMenuBem("action-menu__trigger", "danger")}
-                resourceIri={datasetUrl}
-                name={displayName}
-                onDelete={onDelete}
-                onDeleteCurrentContainer={onDeleteCurrentContainer}
-                data-testid={TESTCAFE_ID_DELETE_BUTTON}
-              />
-            </ActionMenuItem>
-            <ActionMenuItem>
               <Tooltip
                 PopperProps={{
                   disablePortal: true,
@@ -168,6 +158,16 @@ export default function ResourceDetails({
                   COPY LINK
                 </Typography>
               </Tooltip>
+            </ActionMenuItem>
+            <ActionMenuItem>
+              <DeleteResourceButton
+                className={actionMenuBem("action-menu__trigger", "danger")}
+                resourceIri={datasetUrl}
+                name={displayName}
+                onDelete={onDelete}
+                onDeleteCurrentContainer={onDeleteCurrentContainer}
+                data-testid={TESTCAFE_ID_DELETE_BUTTON}
+              />
             </ActionMenuItem>
           </ActionMenu>
         </AccordionDetails>

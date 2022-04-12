@@ -106,6 +106,16 @@ exports[`ResourceDrawer view renders a Contents view when the router query has a
                       <li
                         class="PodBrowser-action-menu__item"
                       >
+                        <p
+                          class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
+                          data-testid="pod-indicator-copy-tooltip"
+                        >
+                          COPY LINK
+                        </p>
+                      </li>
+                      <li
+                        class="PodBrowser-action-menu__item"
+                      >
                         <button
                           class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                           data-testid="delete-resource-button"
@@ -113,16 +123,6 @@ exports[`ResourceDrawer view renders a Contents view when the router query has a
                         >
                           Delete
                         </button>
-                      </li>
-                      <li
-                        class="PodBrowser-action-menu__item"
-                      >
-                        <p
-                          class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
-                          data-testid="pod-indicator-copy-tooltip"
-                        >
-                          COPY LINK
-                        </p>
                       </li>
                     </ul>
                   </div>
@@ -747,6 +747,16 @@ exports[`ResourceDrawer view renders without errors when iri contains spaces 1`]
                       <li
                         class="PodBrowser-action-menu__item"
                       >
+                        <p
+                          class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
+                          data-testid="pod-indicator-copy-tooltip"
+                        >
+                          COPY LINK
+                        </p>
+                      </li>
+                      <li
+                        class="PodBrowser-action-menu__item"
+                      >
                         <button
                           class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                           data-testid="delete-resource-button"
@@ -754,16 +764,6 @@ exports[`ResourceDrawer view renders without errors when iri contains spaces 1`]
                         >
                           Delete
                         </button>
-                      </li>
-                      <li
-                        class="PodBrowser-action-menu__item"
-                      >
-                        <p
-                          class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
-                          data-testid="pod-indicator-copy-tooltip"
-                        >
-                          COPY LINK
-                        </p>
                       </li>
                     </ul>
                   </div>
