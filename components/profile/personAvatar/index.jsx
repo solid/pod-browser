@@ -25,8 +25,8 @@ import { foaf, vcard } from "rdf-namespaces";
 import { Avatar, Box, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Text, Image, useSession } from "@inrupt/solid-ui-react";
-
+import { Image, useThing } from "@inrupt/solid-ui-react";
+import { getStringNoLocale } from "@inrupt/solid-client";
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
@@ -43,8 +43,8 @@ export default function PersonAvatar({ profileIri }) {
   const classes = useStyles();
   const bem = useBem(classes);
   const errorComponent = setupErrorComponent(bem);
-  const { session } = useSession();
-
+  const { thing } = useThing();
+  const name = getStringNoLocale(thing, foaf.name);
   return (
     <Box alignItems="center" display="flex">
       <Box>
@@ -60,14 +60,14 @@ export default function PersonAvatar({ profileIri }) {
 
       <Box p={2}>
         <h3 data-testid={TESTCAFE_ID_NAME_TITLE}>
-          <Text className={classes.avatarText} property={foaf.name} />
           <a
             className={classes.headerLink}
             href={profileIri}
             rel="noreferrer"
             target="_blank"
           >
-            {profileIri}
+            {name ||
+              `Please add your name to your profile, in the meantime we'll call you ${profileIri}`}
           </a>
         </h3>
       </Box>
