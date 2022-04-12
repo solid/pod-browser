@@ -31,10 +31,6 @@ import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWith
 import mockPermissionsContextProvider from "../../../../__testUtils/mockPermissionsContextProvider";
 import getSignedVc from "../../../../__testUtils/mockSignedVc";
 import { TESTCAFE_ID_SEARCH_INPUT } from "../agentsSearchBar";
-// import {
-//   TESTCAFE_ID_TAB_PEOPLE,
-//   TESTCAFE_ID_TAB_GROUPS,
-// } from "../agentsTableTabs";
 import {
   PUBLIC_AGENT_PREDICATE,
   PUBLIC_AGENT_TYPE,
@@ -125,7 +121,7 @@ const permissions = [
   },
 ];
 
-const permissionsWithAccessAgent = [
+const permissionsWithAccessGrantBasedAccessAgent = [
   {
     acl: createAccessMap(true, true, false, false),
     webId: "https://example1.com/profile/card#me",
@@ -160,14 +156,13 @@ const permissionsWithProfilesNamelessAgent = [
   },
 ];
 
-const permissionsWithAccessWithProfiles = permissionsWithAccessAgent.map(
-  (p, i) => {
+const permissionsWithAccessGrantWithProfiles =
+  permissionsWithAccessGrantBasedAccessAgent.map((p, i) => {
     return {
       ...p,
       profile: profilesWithApp[i],
     };
-  }
-);
+  });
 
 const permissionsWithProfilesMixedTypes = [
   {
@@ -187,7 +182,7 @@ const permissionsWithProfilesMixedTypes = [
     },
   },
 ];
-describe("AgentAccessTable with agents", () => {
+describe("AgentAccessTable with access based agents", () => {
   const mockDataset = mockSolidDatasetFrom("https://example.org/resource");
   const setLoading = jest.fn();
   beforeEach(() => {
@@ -195,7 +190,8 @@ describe("AgentAccessTable with agents", () => {
       permissionsWithProfiles,
     });
   });
-  it("renders a list of permissions", async () => {
+
+  it("renders a list of permissions including access based agent", async () => {
     const type = "editors";
     const { asFragment, queryAllByRole } = renderWithTheme(
       <PermissionsContextProvider>
@@ -208,6 +204,7 @@ describe("AgentAccessTable with agents", () => {
     expect(queryAllByRole("cell")).toHaveLength(3);
     expect(asFragment()).toMatchSnapshot();
   });
+
   it("shows all permissions when clicking 'show all' button", async () => {
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles,
@@ -226,6 +223,7 @@ describe("AgentAccessTable with agents", () => {
     userEvent.click(button);
     expect(queryAllByRole("cell")).toHaveLength(4);
   });
+
   it("agents appear in alphabetical order with public and authenticated first", async () => {
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: [
@@ -255,6 +253,7 @@ describe("AgentAccessTable with agents", () => {
     expect(cells[4]).toHaveTextContent("Example C");
     expect(cells[5]).toHaveTextContent("Example D");
   });
+
   it("agents without names appear after alphabetical ordered agents", async () => {
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles: [
@@ -306,6 +305,7 @@ describe("AgentAccessTable with agents", () => {
     userEvent.click(hideButton);
     expect(queryAllByRole("cell")).toHaveLength(3);
   });
+
   it("renders a search box which filters by name or webId", async () => {
     mockedUsePermissionsWithProfiles.mockReturnValue({
       permissionsWithProfiles,
@@ -328,6 +328,7 @@ describe("AgentAccessTable with agents", () => {
     expect(queryByText("Example C")).toBeNull();
     expect(queryByText("Example B")).not.toBeNull();
   });
+
   // TODO: tabs have slightly changed so these tests need to be updated when tabs are restored
   it.skip("renders a set of tabs which filter by Group type", () => {
     const permissionsWithTypes = [
@@ -362,6 +363,7 @@ describe("AgentAccessTable with agents", () => {
       expect(queryByText("Example 1")).toBeNull();
     });
   });
+
   it.skip("renders a set of tabs which filter by People type", () => {
     const permissionsWithTypes = [
       {
@@ -398,16 +400,17 @@ describe("AgentAccessTable with agents", () => {
     });
   });
 });
-describe("AgentAccessTable with access based agents", () => {
+
+describe("AgentAccessTable with access grant based agents", () => {
   const mockDataset = mockSolidDatasetFrom("https://example.org/resource");
   const setLoading = jest.fn();
   beforeEach(() => {
     mockedUsePermissionsWithProfiles.mockReturnValue({
-      permissionsWithProfiles: permissionsWithAccessWithProfiles,
+      permissionsWithProfiles: permissionsWithAccessGrantWithProfiles,
     });
   });
 
-  it("renders a list of permissions including access based agent", async () => {
+  it("renders a list of permissions including access grant based agent", async () => {
     const type = "editors";
     const { asFragment, queryAllByRole } = renderWithTheme(
       <PermissionsContextProvider>
@@ -421,6 +424,7 @@ describe("AgentAccessTable with access based agents", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 });
+
 describe("AgentAccessTable without agents", () => {
   const mockDataset = mockSolidDatasetFrom("https://example.org/resource");
   const setLoading = jest.fn();
@@ -439,6 +443,7 @@ describe("AgentAccessTable without agents", () => {
 
     expect(asFragment()).toMatchSnapshot();
   });
+
   it("renders an empty list of permissions if permissions are unavailable", () => {
     const type = "editors";
     const { asFragment } = renderWithTheme(
@@ -451,6 +456,7 @@ describe("AgentAccessTable without agents", () => {
 
     expect(asFragment()).toMatchSnapshot();
   });
+
   it("does not render table at all if there aren't any permissions for a custom policy", () => {
     const type = "viewAndAdd";
     const { asFragment, queryByTestId } = renderWithTheme(

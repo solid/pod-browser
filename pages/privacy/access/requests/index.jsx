@@ -21,12 +21,12 @@
 
 import React from "react";
 import AuthenticatedRoute from "../../../../src/authentication/AuthenticatedRoute";
-import AccessShowPage from "../../../../components/pages/privacy/access/requests";
+import AccessRequestShowPage from "../../../../components/pages/privacy/access/requests";
 
-export default function AccessShow() {
+export default function AccessRequestShow() {
   return (
     <AuthenticatedRoute>
-      <AccessShowPage />
+      <AccessRequestShowPage />
     </AuthenticatedRoute>
   );
 }

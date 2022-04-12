@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Access Page Renders the Access page 1`] = `
+exports[`AccessRequest Page Renders the Access page 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-container PodBrowser-request-container"

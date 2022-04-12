@@ -24,7 +24,7 @@ import { getSourceUrl } from "@inrupt/solid-client";
 import { useState, useEffect, useContext, useMemo } from "react";
 import { getPolicyDetailFromAccess } from "../../accessControl/acp";
 import AccessControlContext from "../../contexts/accessControlContext";
-import useConsentBasedAccessForResource from "../useAccessBasedAccessForResource";
+import useAccessGrantBasedAccessForResource from "../useAccessGrantBasedAccessForResource";
 import {
   getRequestedAccessesFromSignedVc,
   getRequestorWebIdFromSignedVc,
@@ -32,9 +32,9 @@ import {
 import { isPublicAgentOrAuthenticatedAgentWebId } from "../../../components/resourceDetails/utils";
 import { fetchProfile } from "../../solidClientHelpers/profile";
 
-const normalizeConsentBasedPermissions = (accessBasedPermissions) => {
-  if (!accessBasedPermissions) return [];
-  const requestedAccessModes = accessBasedPermissions.map((vc) => {
+const normalizeAccessGrantBasedPermissions = (accessGrantBasedPermissions) => {
+  if (!accessGrantBasedPermissions) return [];
+  const requestedAccessModes = accessGrantBasedPermissions.map((vc) => {
     const accessMode = {
       read: getRequestedAccessesFromSignedVc(vc).mode.some((el) =>
         el.includes("Read")
@@ -74,15 +74,15 @@ export default function useAllPermissions() {
   const { solidDataset: dataset } = useContext(DatasetContext);
   const datasetUrl = getSourceUrl(dataset);
 
-  const { permissions: accessBasedPermissions } =
-    useConsentBasedAccessForResource(datasetUrl);
+  const { permissions: accessGrantBasedPermissions } =
+    useAccessGrantBasedAccessForResource(datasetUrl);
 
   const normalizedConsentPermissions = useMemo(
     () =>
-      accessBasedPermissions
-        ? normalizeConsentBasedPermissions(accessBasedPermissions)
+      accessGrantBasedPermissions
+        ? normalizeAccessGrantBasedPermissions(accessGrantBasedPermissions)
         : [],
-    [accessBasedPermissions]
+    [accessGrantBasedPermissions]
   );
 
   useEffect(() => {

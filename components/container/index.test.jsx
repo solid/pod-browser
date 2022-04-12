@@ -47,7 +47,7 @@ import { TESTCAFE_ID_SPINNER } from "../spinner";
 import * as accessControlFns from "../../src/accessControl";
 import mockAccessControl from "../../__testUtils/mockAccessControl";
 import mockPermissionsContextProvider from "../../__testUtils/mockPermissionsContextProvider";
-import useAccessBasedAccessForResource from "../../src/hooks/useAccessBasedAccessForResource";
+import useAccessGrantBasedAccessForResource from "../../src/hooks/useAccessGrantBasedAccessForResource";
 
 jest.mock("../../src/hooks/useContainer");
 const mockedContainerHook = useContainer;
@@ -67,8 +67,9 @@ const mockedResourceInfoHook = useResourceInfo;
 jest.mock("../../src/hooks/useAccessControl");
 const mockedAccessControlHook = useAccessControl;
 
-jest.mock("../../src/hooks/useAccessBasedAccessForResource");
-const mockedUseAccessBasedAccessForResource = useAccessBasedAccessForResource;
+jest.mock("../../src/hooks/useAccessGrantBasedAccessForResource");
+const mockedUseAccessGrantBasedAccessForResource =
+  useAccessGrantBasedAccessForResource;
 
 const acpFns = solidClientFns.acp_v3;
 const PermissionsContextProvider = mockPermissionsContextProvider();
@@ -119,7 +120,9 @@ describe("Container view", () => {
       "https://myaccount.mypodserver.com/private",
       "https://myaccount.mypodserver.com/note.txt",
     ]);
-    mockedUseAccessBasedAccessForResource.mockReturnValue({ permissions: [] });
+    mockedUseAccessGrantBasedAccessForResource.mockReturnValue({
+      permissions: [],
+    });
   });
 
   it("renders a table", async () => {

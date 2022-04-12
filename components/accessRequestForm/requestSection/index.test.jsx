@@ -120,7 +120,7 @@ describe("Request Section", () => {
     const updatedSwitches = getAllByRole("checkbox", { checked: false });
 
     userEvent.click(updatedSwitches[0]);
-    expect(getByTestId("access-access-switch")).toBeChecked();
+    expect(getByTestId("access-switch")).toBeChecked();
   });
 
   it("selects a single switch when clicked", async () => {
@@ -140,7 +140,7 @@ describe("Request Section", () => {
     });
     userEvent.click(switches[0]);
     await waitFor(() => {
-      expect(getByTestId("access-access-switch")).toBeChecked();
+      expect(getByTestId("access-switch")).toBeChecked();
     });
   });
 

@@ -44,7 +44,7 @@ import Spinner from "../../../../spinner";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function AccessShow() {
+export default function AccessRequestShow() {
   const { session } = useSession();
   const { fetch } = session;
   const router = useRouter();

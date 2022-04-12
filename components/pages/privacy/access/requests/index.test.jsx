@@ -26,7 +26,7 @@ import { mockContainerFrom } from "@inrupt/solid-client";
 import * as resourceHelpers from "../../../../../src/solidClientHelpers/resource";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../../../../__testUtils/mockSessionContextProvider";
-import AccessPage from "./index";
+import AccessRequestPage from "./index";
 import getAccessRequestDetails from "../../../../../__testUtils/mockAccessRequestDetails";
 import { mockAppDataset } from "../../../../../__testUtils/mockApp";
 import useContainer from "../../../../../src/hooks/useContainer";
@@ -35,7 +35,7 @@ import * as containerFns from "../../../../../src/models/container";
 jest.mock("../../../../../src/hooks/useContainer");
 const mockedUseContainer = useContainer;
 
-describe("Access Page", () => {
+describe("AccessRequest Page", () => {
   beforeEach(() => {
     mockedUseContainer.mockReturnValue({
       data: mockContainerFrom("https://pod.inrupt.com/alice/private/data/"),
@@ -71,7 +71,7 @@ describe("Access Page", () => {
 
     const { asFragment, getByText } = renderWithTheme(
       <SessionProvider>
-        <AccessPage />
+        <AccessRequestPage />
       </SessionProvider>
     );
     await waitFor(() => {

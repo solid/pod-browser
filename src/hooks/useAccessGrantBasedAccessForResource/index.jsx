@@ -26,7 +26,7 @@ import {
 } from "@inrupt/solid-client-access-grants";
 import { useSession } from "@inrupt/solid-ui-react";
 
-export default function useConsentBasedAccessForResource(resourceUrl) {
+export default function useAccessGrantBasedAccessForResource(resourceUrl) {
   const [permissions, setPermissions] = useState(null);
   const [permissionsError, setPermissionsError] = useState([]);
   const { fetch } = useSession();

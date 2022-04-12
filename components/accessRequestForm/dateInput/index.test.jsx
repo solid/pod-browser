@@ -27,7 +27,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import mockAccessRequestContext from "../../../__testUtils/mockAccessRequestContext";
-import AccessRequestFrom from "../index";
+import AccessRequestForm from "../index";
 import {
   TESTCAFE_ID_FOREVER_BUTTON,
   TESTCAFE_ID_DATE_PICKER_CALENDAR_BUTTON,
@@ -52,7 +52,7 @@ describe("DateInput component", () => {
     const { getByTestId } = renderWithTheme(
       <AccessRequestContextProvider>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <AccessRequestFrom agentWebId={agentWebId} />
+          <AccessRequestForm agentWebId={agentWebId} />
         </MuiPickersUtilsProvider>
       </AccessRequestContextProvider>
     );

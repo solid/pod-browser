@@ -20,8 +20,8 @@
  */
 
 import { renderHook } from "@testing-library/react-hooks";
-import * as accessFns from "@inrupt/solid-client-access-grants";
-import useAccessBasedAccessForResource from "./index";
+import * as accessGrantFns from "@inrupt/solid-client-access-grants";
+import useAccessGrantBasedAccessForResource from "./index";
 import getSignedVc from "../../../__testUtils/mockSignedVc";
 
 jest.mock("@inrupt/solid-client-access-grants");
@@ -30,21 +30,23 @@ describe("useAllPermissions", () => {
   const resourceIri = "https://example.org/resource/";
   beforeEach(() => {
     jest
-      .spyOn(accessFns, "getAccessGrantAll")
+      .spyOn(accessGrantFns, "getAccessGrantAll")
       .mockResolvedValue([getSignedVc()]);
   });
 
   it("returns an empty array if no resourceIri is given", async () => {
-    const { result } = renderHook(() => useAccessBasedAccessForResource(null));
+    const { result } = renderHook(() =>
+      useAccessGrantBasedAccessForResource(null)
+    );
     expect(result.current.permissions).toEqual([]);
   });
 
   it("returns permissions if available", async () => {
     jest
-      .spyOn(accessFns, "isValidAccessGrant")
+      .spyOn(accessGrantFns, "isValidAccessGrant")
       .mockResolvedValue({ errors: [] });
     const { result, waitForNextUpdate } = renderHook(() =>
-      useAccessBasedAccessForResource(resourceIri)
+      useAccessGrantBasedAccessForResource(resourceIri)
     );
 
     await waitForNextUpdate();
@@ -52,10 +54,10 @@ describe("useAllPermissions", () => {
   });
   it("filters out non-valid vcs", async () => {
     jest
-      .spyOn(accessFns, "isValidAccessGrant")
+      .spyOn(accessGrantFns, "isValidAccessGrant")
       .mockResolvedValue({ errors: ["error"] });
     const { result, waitForNextUpdate } = renderHook(() =>
-      useAccessBasedAccessForResource(resourceIri)
+      useAccessGrantBasedAccessForResource(resourceIri)
     );
 
     await waitForNextUpdate();

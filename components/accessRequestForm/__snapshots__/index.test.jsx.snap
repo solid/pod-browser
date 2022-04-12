@@ -93,7 +93,7 @@ exports[`Access Request Form Renders a access request form with only one purpose
               >
                 <input
                   class="PodBrowser-input PodBrowser-input"
-                  data-testid="access-access-switch"
+                  data-testid="access-switch"
                   type="checkbox"
                   value="https://pod.inrupt.com/alice/private/data/"
                 />
@@ -187,7 +187,7 @@ exports[`Access Request Form Renders a access request form with only one purpose
               >
                 <input
                   class="PodBrowser-input PodBrowser-input"
-                  data-testid="access-access-switch"
+                  data-testid="access-switch"
                   type="checkbox"
                   value="https://pod.inrupt.com/alice/private/data/"
                 />
@@ -281,7 +281,7 @@ exports[`Access Request Form Renders a access request form with only one purpose
               >
                 <input
                   class="PodBrowser-input PodBrowser-input"
-                  data-testid="access-access-switch"
+                  data-testid="access-switch"
                   type="checkbox"
                   value="https://pod.inrupt.com/alice/private/data/"
                 />
@@ -375,7 +375,7 @@ exports[`Access Request Form Renders a access request form with only one purpose
               >
                 <input
                   class="PodBrowser-input PodBrowser-input"
-                  data-testid="access-access-switch"
+                  data-testid="access-switch"
                   type="checkbox"
                   value="https://pod.inrupt.com/alice/private/data/"
                 />
@@ -646,7 +646,7 @@ exports[`Access Request Form Renders a consent request form with multiple purpos
               >
                 <input
                   class="PodBrowser-input PodBrowser-input"
-                  data-testid="access-access-switch"
+                  data-testid="access-switch"
                   type="checkbox"
                   value="https://pod.inrupt.com/alice/private/data/"
                 />

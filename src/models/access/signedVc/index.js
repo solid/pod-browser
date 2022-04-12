@@ -20,17 +20,17 @@
  */
 
 export function getRequestedAccessesFromSignedVc(signedVc) {
-  return Array.isArray(signedVc?.credentialSubject?.providedAccess.mode)
-    ? signedVc?.credentialSubject?.providedAccess
-    : [signedVc?.credentialSubject?.providedAccess];
+  return Array.isArray(signedVc?.credentialSubject?.providedConsent.mode)
+    ? signedVc?.credentialSubject?.providedConsent
+    : [signedVc?.credentialSubject?.providedConsent];
 }
 
 export function getRequestorWebIdFromSignedVc(signedVc) {
-  return signedVc?.credentialSubject?.providedAccess?.isProvidedTo;
+  return signedVc?.credentialSubject?.providedConsent?.isProvidedTo;
 }
 
 export function getPurposeUrlsFromSignedVc(signedVc) {
-  return Array.isArray(signedVc?.credentialSubject?.providedAccess)
-    ? signedVc?.credentialSubject?.providedAccess[0].forPurpose // getting first item in array for now
-    : signedVc?.credentialSubject?.providedAccess.forPurpose;
+  return Array.isArray(signedVc?.credentialSubject?.providedConsent)
+    ? signedVc?.credentialSubject?.providedConsent[0].forPurpose // getting first item in array for now
+    : signedVc?.credentialSubject?.providedConsent.forPurpose;
 }

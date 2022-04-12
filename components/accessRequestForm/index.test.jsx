@@ -24,7 +24,7 @@ import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/router";
 import { mockContainerFrom } from "@inrupt/solid-client";
-import * as accessFns from "@inrupt/solid-client-access-grants";
+import * as accessGrantsFns from "@inrupt/solid-client-access-grants";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import getSignedVc from "../../__testUtils/mockSignedVc";
 import mockAccessRequestContext from "../../__testUtils/mockAccessRequestContext";
@@ -47,7 +47,7 @@ import { getAccessRequestDetailsOnePurpose } from "../../__testUtils/mockAccessR
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import mockSession from "../../__testUtils/mockSession";
 import { TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT } from "./purposeCheckBox";
-import { TESTCAFE_ID_ACCESS_ACCESS_SWITCH } from "./requestSection";
+import { TESTCAFE_ID_ACCESS_SWITCH } from "./requestSection";
 import useContainer from "../../src/hooks/useContainer";
 import * as containerFns from "../../src/models/container";
 
@@ -139,7 +139,9 @@ describe("Access Request Form", () => {
   });
 
   it("displays a confirmation dialog with the correct title and content when submitting form without selecting access and at least one purpose selected", () => {
-    jest.spyOn(accessFns, "approveAccessRequest").mockResolvedValue(signedVc);
+    jest
+      .spyOn(accessGrantsFns, "approveAccessRequest")
+      .mockResolvedValue(signedVc);
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <AccessRequestContextProvider>
@@ -177,7 +179,7 @@ describe("Access Request Form", () => {
         </AccessRequestContextProvider>
       </ConfirmationDialogProvider>
     );
-    const toggle = getAllByTestId(TESTCAFE_ID_ACCESS_ACCESS_SWITCH)[0];
+    const toggle = getAllByTestId(TESTCAFE_ID_ACCESS_SWITCH)[0];
     userEvent.click(toggle);
     const button = getByTestId(TESTCAFE_ID_ACCESS_REQUEST_SUBMIT_BUTTON);
     userEvent.click(button);
@@ -195,7 +197,7 @@ describe("Access Request Form", () => {
   });
 
   it("does not display confirmation dialog if at least one access and one purpose are selected, calls approveAccessRequest and redirects with correct params", async () => {
-    accessFns.approveAccessRequest.mockResolvedValue(signedVc);
+    accessGrantsFns.approveAccessRequest.mockResolvedValue(signedVc);
     const { getByTestId, findByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <AccessRequestContextProvider>
@@ -208,14 +210,14 @@ describe("Access Request Form", () => {
     );
     const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
     userEvent.click(purpose);
-    const toggle = getAllByTestId(TESTCAFE_ID_ACCESS_ACCESS_SWITCH)[0];
+    const toggle = getAllByTestId(TESTCAFE_ID_ACCESS_SWITCH)[0];
     userEvent.click(toggle);
     const button = getByTestId(TESTCAFE_ID_ACCESS_REQUEST_SUBMIT_BUTTON);
     userEvent.click(button);
     await expect(findByTestId(TESTCAFE_ID_CONFIRMATION_DIALOG)).rejects.toEqual(
       expect.anything()
     );
-    expect(accessFns.approveAccessRequest).toHaveBeenCalled();
+    expect(accessGrantsFns.approveAccessRequest).toHaveBeenCalled();
     expect(push).toHaveBeenLastCalledWith(
       `/privacy/?signedVcUrl=${signedVc.id}`
     );
@@ -234,7 +236,7 @@ describe("Access Request Form", () => {
     );
     const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
     userEvent.click(purpose);
-    const toggle = getAllByTestId(TESTCAFE_ID_ACCESS_ACCESS_SWITCH)[0];
+    const toggle = getAllByTestId(TESTCAFE_ID_ACCESS_SWITCH)[0];
     userEvent.click(toggle);
     const button = getByTestId(TESTCAFE_ID_ACCESS_REQUEST_DENY_BUTTON);
     userEvent.click(button);
@@ -251,7 +253,7 @@ describe("Access Request Form", () => {
   });
 
   it(" calls denyAccessRequest and redirects with correct params when confirming deny access", async () => {
-    accessFns.denyAccessRequest.mockResolvedValue(signedVc);
+    accessGrantsFns.denyAccessRequest.mockResolvedValue(signedVc);
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <AccessRequestContextProvider>
@@ -264,7 +266,7 @@ describe("Access Request Form", () => {
     );
     const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
     userEvent.click(purpose);
-    const toggle = getAllByTestId(TESTCAFE_ID_ACCESS_ACCESS_SWITCH)[0];
+    const toggle = getAllByTestId(TESTCAFE_ID_ACCESS_SWITCH)[0];
     userEvent.click(toggle);
     const button = getByTestId(TESTCAFE_ID_ACCESS_REQUEST_DENY_BUTTON);
     userEvent.click(button);
@@ -281,7 +283,7 @@ describe("Access Request Form", () => {
     const confirmButton = getByTestId(TESTCAFE_ID_CONFIRM_BUTTON);
     userEvent.click(confirmButton);
     await waitFor(() => {
-      expect(accessFns.denyAccessRequest).toHaveBeenCalled();
+      expect(accessGrantsFns.denyAccessRequest).toHaveBeenCalled();
     });
     expect(push).toHaveBeenLastCalledWith(
       `/privacy/?signedVcUrl=${signedVc.id}`
