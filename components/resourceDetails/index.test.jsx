@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { waitFor } from "@testing-library/dom";
+import { waitFor, screen } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
@@ -29,6 +29,7 @@ import { renderWithTheme } from "../../__testUtils/withTheme";
 import ResourceDetails, {
   TESTCAFE_ID_ACCORDION_PERMISSIONS,
   TESTCAFE_ID_ACCORDION_SHARING,
+  TESTCAFE_RESOURCE_ADDRESS_TOOLTIP,
 } from "./index";
 import mockAccessControl from "../../__testUtils/mockAccessControl";
 import { AccessControlProvider } from "../../src/contexts/accessControlContext";
@@ -68,6 +69,27 @@ describe("Resource details", () => {
       expect(getByText("container")).toBeInTheDocument();
     });
     expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("copies resource address to the clipboard when the copy link button is clicked", async () => {
+    const writeText = jest.fn();
+    Object.assign(navigator, {
+      clipboard: {
+        writeText,
+      },
+    });
+
+    const { getByTestId } = renderWithTheme(
+      <DatasetProvider solidDataset={dataset}>
+        <ResourceDetails />
+      </DatasetProvider>
+    );
+    const copyLink = screen.getByTestId(TESTCAFE_RESOURCE_ADDRESS_TOOLTIP);
+    userEvent.click(copyLink);
+    await waitFor(() => {
+      expect(copyLink).toBeInTheDocument();
+      expect(writeText).toHaveBeenCalled();
+    });
   });
 
   it("renders a decoded container name", async () => {

@@ -544,6 +544,16 @@ exports[`Container view renders NoControlError if it fails to get access control
                             Delete
                           </button>
                         </li>
+                        <li
+                          class="PodBrowser-action-menu__item"
+                        >
+                          <p
+                            class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
+                            data-testid="pod-indicator-copy-tooltip"
+                          >
+                            COPY LINK
+                          </p>
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -1117,6 +1127,16 @@ exports[`Container view renders a table 1`] = `
                           >
                             Delete
                           </button>
+                        </li>
+                        <li
+                          class="PodBrowser-action-menu__item"
+                        >
+                          <p
+                            class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
+                            data-testid="pod-indicator-copy-tooltip"
+                          >
+                            COPY LINK
+                          </p>
                         </li>
                       </ul>
                     </div>
@@ -1750,6 +1770,16 @@ exports[`Container view renders a table for parent container if iri is a resourc
                           >
                             Delete
                           </button>
+                        </li>
+                        <li
+                          class="PodBrowser-action-menu__item"
+                        >
+                          <p
+                            class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
+                            data-testid="pod-indicator-copy-tooltip"
+                          >
+                            COPY LINK
+                          </p>
                         </li>
                       </ul>
                     </div>
