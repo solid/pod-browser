@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   Accordion,
   AccordionDetails,
@@ -28,6 +28,7 @@ import {
   Divider,
   List,
   ListItem,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
@@ -56,6 +57,7 @@ export const TESTCAFE_ID_ACCORDION_PERMISSIONS =
   "accordion-resource-permissions";
 export const TESTCAFE_ID_ACCORDION_SHARING = "accordion-resource-sharing";
 const TESTCAFE_ID_TITLE = "resource-title";
+export const TESTCAFE_RESOURCE_ADDRESS_TOOLTIP = "pod-indicator-copy-tooltip";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -74,6 +76,7 @@ export default function ResourceDetails({
   const displayName = getResourceName(name);
   const type = getContentType(dataset);
   const actionMenuBem = ActionMenu.useBem();
+  const [tooltipOpen, setTooltipOpen] = useState(false);
   const { accessControl, accessControlType } = useContext(AccessControlContext);
 
   const [actionsAccordion, setActionsAccordion] = useLocalStorage(
@@ -92,6 +95,13 @@ export default function ResourceDetails({
     getAccordionKey(dataset, "sharing"),
     false
   );
+  const handleResourceCopyClick = () => {
+    navigator.clipboard.writeText(datasetUrl);
+    setTooltipOpen(true);
+    setTimeout(() => {
+      setTooltipOpen(false);
+    }, 800);
+  };
 
   const expandIcon = <ExpandMoreIcon />;
   return (
@@ -138,6 +148,26 @@ export default function ResourceDetails({
                 onDeleteCurrentContainer={onDeleteCurrentContainer}
                 data-testid={TESTCAFE_ID_DELETE_BUTTON}
               />
+            </ActionMenuItem>
+            <ActionMenuItem>
+              <Tooltip
+                PopperProps={{
+                  disablePortal: true,
+                }}
+                open={tooltipOpen}
+                disableFocusListener
+                disableHoverListener
+                disableTouchListener
+                title="Copied"
+                data-testid={TESTCAFE_RESOURCE_ADDRESS_TOOLTIP}
+              >
+                <Typography
+                  onClick={handleResourceCopyClick}
+                  className={actionMenuBem("action-menu__trigger")}
+                >
+                  COPY LINK
+                </Typography>
+              </Tooltip>
             </ActionMenuItem>
           </ActionMenu>
         </AccordionDetails>
