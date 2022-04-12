@@ -538,7 +538,7 @@ exports[`Container view renders NoControlError if it fails to get access control
                         >
                           <p
                             class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
-                            data-testid="pod-indicator-copy-tooltip"
+                            data-testid="resource-address-copy-tooltip"
                           >
                             COPY LINK
                           </p>
@@ -1122,7 +1122,7 @@ exports[`Container view renders a table 1`] = `
                         >
                           <p
                             class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
-                            data-testid="pod-indicator-copy-tooltip"
+                            data-testid="resource-address-copy-tooltip"
                           >
                             COPY LINK
                           </p>
@@ -1765,7 +1765,7 @@ exports[`Container view renders a table for parent container if iri is a resourc
                         >
                           <p
                             class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
-                            data-testid="pod-indicator-copy-tooltip"
+                            data-testid="resource-address-copy-tooltip"
                           >
                             COPY LINK
                           </p>

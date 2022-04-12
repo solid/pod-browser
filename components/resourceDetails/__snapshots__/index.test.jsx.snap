@@ -83,7 +83,7 @@ exports[`Resource details renders Permissions component for WAC-supporting Solid
                 >
                   <p
                     class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
-                    data-testid="pod-indicator-copy-tooltip"
+                    data-testid="resource-address-copy-tooltip"
                   >
                     COPY LINK
                   </p>
@@ -423,7 +423,7 @@ exports[`Resource details renders Sharing component for ACP-supporting Solid ser
                 >
                   <p
                     class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
-                    data-testid="pod-indicator-copy-tooltip"
+                    data-testid="resource-address-copy-tooltip"
                   >
                     COPY LINK
                   </p>
@@ -875,7 +875,7 @@ exports[`Resource details renders a decoded container name 1`] = `
                 >
                   <p
                     class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
-                    data-testid="pod-indicator-copy-tooltip"
+                    data-testid="resource-address-copy-tooltip"
                   >
                     COPY LINK
                   </p>
@@ -1068,7 +1068,7 @@ exports[`Resource details renders container details 1`] = `
                 >
                   <p
                     class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
-                    data-testid="pod-indicator-copy-tooltip"
+                    data-testid="resource-address-copy-tooltip"
                   >
                     COPY LINK
                   </p>

@@ -108,7 +108,7 @@ exports[`ResourceDrawer view renders a Contents view when the router query has a
                       >
                         <p
                           class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
-                          data-testid="pod-indicator-copy-tooltip"
+                          data-testid="resource-address-copy-tooltip"
                         >
                           COPY LINK
                         </p>
@@ -749,7 +749,7 @@ exports[`ResourceDrawer view renders without errors when iri contains spaces 1`]
                       >
                         <p
                           class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
-                          data-testid="pod-indicator-copy-tooltip"
+                          data-testid="resource-address-copy-tooltip"
                         >
                           COPY LINK
                         </p>

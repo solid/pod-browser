@@ -57,7 +57,8 @@ export const TESTCAFE_ID_ACCORDION_PERMISSIONS =
   "accordion-resource-permissions";
 export const TESTCAFE_ID_ACCORDION_SHARING = "accordion-resource-sharing";
 const TESTCAFE_ID_TITLE = "resource-title";
-export const TESTCAFE_RESOURCE_ADDRESS_TOOLTIP = "pod-indicator-copy-tooltip";
+export const TESTCAFE_RESOURCE_ADDRESS_TOOLTIP =
+  "resource-address-copy-tooltip";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
