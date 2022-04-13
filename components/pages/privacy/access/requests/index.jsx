@@ -50,7 +50,6 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 export default function ConsentShow() {
   const { session } = useSession();
   const { fetch } = session;
-  const redirectUrl = window.location.href;
   const bem = useBem(useStyles());
   const [consentRequest, setConsentRequest] = useState(null);
   const agentWebId = getRequestorWebId(consentRequest);
@@ -59,20 +58,21 @@ export default function ConsentShow() {
 
   useEffect(() => {
     (async () => {
-      if (!redirectUrl) return;
       const { accessRequest } = await getAccessRequestFromRedirectUrl(
-        redirectUrl,
+        window.location.href,
         { fetch }
       );
       setConsentRequest(accessRequest);
     })();
-  }, [redirectUrl, fetch]);
+  }, [fetch]);
 
   useEffect(() => {
     if (!consentRequest) return;
     (async () => {
       const profiles = await getProfileAll(agentWebId);
-      const profileDataset = profiles.webIdProfile || profiles.altProfileAll[0]; // getting the first profile for now
+      const profileDataset =
+        profiles.webIdProfile ||
+        profiles.altProfileAll.first((profile) => !!profile); // getting the first profile for now
       const agentProfile =
         profileDataset && getThing(profileDataset, agentWebId);
       const agentContactsUrl =

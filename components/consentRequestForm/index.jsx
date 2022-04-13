@@ -83,8 +83,8 @@ export default function ConsentRequestForm({
   // values from request needed for UI
   const requestedAccesses = getRequestedAccesses(consentRequest);
   const expirationDate = getExpiryDate(consentRequest);
-  const purposes = useState(getPurposeUrls(consentRequest));
-  const resourceOwnerWebId = useState(getDataSubjectWebId(consentRequest));
+  const purposes = getPurposeUrls(consentRequest);
+  const resourceOwnerWebId = getDataSubjectWebId(consentRequest);
 
   // local state based on request values
   const [selectedDate, setSelectedDate] = useState(expirationDate);
@@ -337,7 +337,21 @@ export default function ConsentRequestForm({
 }
 
 ConsentRequestForm.propTypes = {
-  consentRequest: T.objectOf(T.any).isRequired,
+  consentRequest: T.shape({
+    credentialSubject: T.shape({
+      hasConsent:
+        T.arrayOf(
+          T.shape({
+            forPurpose: T.arrayOf(T.string) || T.string,
+          })
+        ) ||
+        T.shape({
+          forPurpose: T.arrayOf(T.string) || T.string,
+        }),
+      id: T.string,
+      expirationDate: T.string,
+    }),
+  }).isRequired,
   agentDetails: T.shape({
     agentName: T.string,
     agentUrl: T.string,
