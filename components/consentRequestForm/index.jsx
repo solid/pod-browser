@@ -87,9 +87,17 @@ export default function ConsentRequestForm({
   const resourceOwnerWebId = getDataSubjectWebId(consentRequest);
 
   // local state based on request values
-  const [selectedDate, setSelectedDate] = useState(expirationDate);
+  const [selectedDate, setSelectedDate] = useState(new Date(expirationDate));
   const [selectedAccess, setSelectedAccess] = useState([]);
-  const [selectedPurposes, setSelectedPurposes] = useState([]);
+  const [selectedPurposes, setSelectedPurposes] = useState(() => {
+    if (Array.isArray(purposes) && purposes.length === 1) {
+      return purposes[0];
+    }
+    if (!Array.isArray(purposes)) {
+      return purposes;
+    }
+    return [];
+  });
   const selectedResources = selectedAccess.map(
     ({ resourceIri }) => resourceIri
   );
@@ -212,21 +220,6 @@ export default function ConsentRequestForm({
   const handleDateChange = (date) => {
     setSelectedDate(date ? date.toISOString() : null);
   };
-
-  useEffect(() => {
-    if (!purposes) return;
-    if (Array.isArray(purposes) && purposes.length === 1) {
-      setSelectedPurposes(purposes[0]);
-    }
-    if (!Array.isArray(purposes)) {
-      setSelectedPurposes(purposes);
-    }
-  }, [purposes]);
-
-  useEffect(() => {
-    if (!expirationDate) return;
-    setSelectedDate(new Date(expirationDate));
-  }, [expirationDate]);
 
   const handleSelectPurpose = (e) => {
     if (e.target.checked) {
