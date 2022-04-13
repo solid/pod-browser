@@ -56,6 +56,7 @@ export default function ConfirmationDialog() {
     cancelText,
     confirmText,
     omitCancelButton,
+    omitConfirmButton,
     isDangerousAction,
   } = useContext(ConfirmationDialogContext);
 
@@ -91,27 +92,29 @@ export default function ConfirmationDialog() {
       <DialogActions classes={{ root: classes.dialogActions }}>
         {!omitCancelButton && (
           <Button
-            variant="secondary"
+            variant={omitConfirmButton ? "primary" : "secondary"}
             data-testid={TESTCAFE_ID_CONFIRMATION_CANCEL_BUTTON}
-            className={classes.cancelButton}
+            className={
+              omitConfirmButton ? classes.primaryButton : classes.cancelButton
+            }
             autoFocus
             onClick={() => setConfirmed(false)}
           >
             {cancelText || "Cancel"}
           </Button>
         )}
-        <Button
-          data-testid={TESTCAFE_ID_CONFIRM_BUTTON}
-          className={
-            isDangerousAction
-              ? classes.dangerButton
-              : classes.submitAgentsButton
-          }
-          type="submit"
-          onClick={() => setConfirmed(true)}
-        >
-          {confirmText || "Confirm"}
-        </Button>
+        {!omitConfirmButton && (
+          <Button
+            data-testid={TESTCAFE_ID_CONFIRM_BUTTON}
+            className={
+              isDangerousAction ? classes.dangerButton : classes.primaryButton
+            }
+            type="submit"
+            onClick={() => setConfirmed(true)}
+          >
+            {confirmText || "Confirm"}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

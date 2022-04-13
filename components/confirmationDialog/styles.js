@@ -42,5 +42,17 @@ export default function styles(theme) {
     dangerButton: {
       backgroundColor: theme.palette.error.main,
     },
+    primaryButton: {
+      textAlign: "center",
+      width: "100%",
+      fontSize: theme.typography.body1.fontSize,
+      fontWeight: theme.typography.body1.fontWeight,
+      color: theme.palette.common.white,
+      backgroundColor: theme.palette.primary.main,
+      padding: theme.spacing(1.4, 1.8),
+      [theme.breakpoints.up("sm")]: {
+        width: "max-content",
+      },
+    },
   });
 }

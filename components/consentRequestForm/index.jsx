@@ -39,7 +39,6 @@ import {
 } from "@material-ui/core";
 import { useSession } from "@inrupt/solid-ui-react";
 import { useBem } from "@solid/lit-prism-patterns";
-import ConsentRequestContext from "../../src/contexts/consentRequestContext";
 import InfoTooltip from "../infoTooltip";
 import RequestSection from "./requestSection";
 import DateInput from "./dateInput";
@@ -71,20 +70,30 @@ export const CONFIRM_TEXT = "Continue with no access";
 export const DENY_TEXT = "Deny All Access";
 export const NO_PURPOSE_TITLE = "Select a purpose";
 
-export default function ConsentRequestForm({ agentDetails, agentWebId }) {
+export default function ConsentRequestForm({
+  consentRequest,
+  agentDetails,
+  agentWebId,
+}) {
   const classes = useStyles();
   const bem = useBem(classes);
   const router = useRouter();
   const { session } = useSession();
   const { redirectUrl } = router.query;
-  const { consentRequest } = useContext(ConsentRequestContext);
+  // values from request needed for UI
+  const [requestedAccesses, setRequestedAccesses] = useState([]);
+  const [expirationDate, setExpirationDate] = useState(new Date());
+  const [purposes, setPurposes] = useState([]);
+  const [resourceOwnerWebId, setResourceOwnerWebId] = useState("");
+
+  // local state based on request values
+  const [selectedDate, setSelectedDate] = useState(expirationDate);
   const [selectedAccess, setSelectedAccess] = useState([]);
-  const purposes = getPurposeUrls(consentRequest);
-  const resourceOwnerWebId = getDataSubjectWebId(consentRequest);
   const [selectedPurposes, setSelectedPurposes] = useState([]);
   const selectedResources = selectedAccess.map(
     ({ resourceIri }) => resourceIri
   );
+  // other state
   const { agentName } = agentDetails || null;
 
   const {
@@ -95,15 +104,13 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
     setTitle,
     closeDialog,
     setConfirmText,
+    setCancelText,
+    setOmitConfirmButton,
     setOmitCancelButton,
   } = useContext(ConfirmationDialogContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
 
   const { alertError } = useContext(AlertContext);
-
-  const requestedAccesses = getRequestedAccesses(consentRequest);
-  const expirationDate = getExpiryDate(consentRequest);
-  const [selectedDate, setSelectedDate] = useState(new Date(expirationDate));
 
   const DIALOG_CONTENT = `${
     agentName || agentWebId
@@ -136,8 +143,8 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
       setConfirmationSetup(true);
       setOpen(CONSENT_REQUEST_NO_ACCESS_DIALOG);
       setTitle(NO_PURPOSE_TITLE);
-      setConfirmText("Ok");
-      setOmitCancelButton(true);
+      setCancelText("Ok");
+      setOmitConfirmButton(true);
       setContent(NO_PURPOSE_CONTENT);
     } else if (!selectedAccess.length) {
       setConfirmationSetup(true);
@@ -207,6 +214,14 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
   };
 
   useEffect(() => {
+    if (!consentRequest) return;
+    setRequestedAccesses(getRequestedAccesses(consentRequest));
+    setExpirationDate(getExpiryDate(consentRequest));
+    setPurposes(getPurposeUrls(consentRequest));
+    setResourceOwnerWebId(getDataSubjectWebId(consentRequest));
+  }, [consentRequest]);
+
+  useEffect(() => {
     if (!purposes) return;
     if (Array.isArray(purposes) && purposes.length === 1) {
       setSelectedPurposes(purposes[0]);
@@ -215,6 +230,11 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
       setSelectedPurposes(purposes);
     }
   }, [purposes]);
+
+  useEffect(() => {
+    if (!expirationDate) return;
+    setSelectedDate(new Date(expirationDate));
+  }, [expirationDate]);
 
   const handleSelectPurpose = (e) => {
     if (e.target.checked) {
@@ -226,7 +246,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
     }
   };
 
-  if (resourceOwnerWebId !== session.info.webId) {
+  if (resourceOwnerWebId && resourceOwnerWebId !== session.info.webId) {
     alertError("You don't have access to that");
     router.push("/");
   }
@@ -325,6 +345,7 @@ export default function ConsentRequestForm({ agentDetails, agentWebId }) {
 }
 
 ConsentRequestForm.propTypes = {
+  consentRequest: T.objectOf(T.any).isRequired,
   agentDetails: T.shape({
     agentName: T.string,
     agentUrl: T.string,
