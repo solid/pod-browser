@@ -19,15 +19,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
+import React, { useContext } from "react";
 import T from "prop-types";
 import { foaf, vcard } from "rdf-namespaces";
 import { Avatar, Box, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Image, useThing } from "@inrupt/solid-ui-react";
+import { Image, SessionContext, Text, useThing } from "@inrupt/solid-ui-react";
 import { getStringNoLocale } from "@inrupt/solid-client";
 import styles from "./styles";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -42,9 +43,16 @@ export function setupErrorComponent(bem) {
 export default function PersonAvatar({ profileIri }) {
   const classes = useStyles();
   const bem = useBem(classes);
+  const router = useRouter();
   const errorComponent = setupErrorComponent(bem);
   const { thing } = useThing();
   const name = getStringNoLocale(thing, foaf.name);
+  const decodedIri = decodeURIComponent(router.query.webId);
+  const { session, sessionRequestInProgress, profile } =
+    useContext(SessionContext);
+  const webID = session.info.webId;
+
+  console.log({ name, decodedIri, webID });
   return (
     <Box alignItems="center" display="flex">
       <Box>
@@ -60,15 +68,11 @@ export default function PersonAvatar({ profileIri }) {
 
       <Box p={2}>
         <h3 data-testid={TESTCAFE_ID_NAME_TITLE}>
-          <a
-            className={classes.headerLink}
-            href={profileIri}
-            rel="noreferrer"
-            target="_blank"
-          >
-            {name ||
-              `Please add your name to your profile, in the meantime we'll call you ${profileIri}`}
-          </a>
+          <Text
+            className={classes.avatarText}
+            property={foaf.name}
+            errorComponent={() => <span>{name || ``}</span>}
+          />
         </h3>
       </Box>
     </Box>
