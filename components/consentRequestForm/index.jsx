@@ -81,10 +81,10 @@ export default function ConsentRequestForm({
   const { session } = useSession();
   const { redirectUrl } = router.query;
   // values from request needed for UI
-  const [requestedAccesses, setRequestedAccesses] = useState([]);
-  const [expirationDate, setExpirationDate] = useState(new Date());
-  const [purposes, setPurposes] = useState([]);
-  const [resourceOwnerWebId, setResourceOwnerWebId] = useState("");
+  const requestedAccesses = getRequestedAccesses(consentRequest);
+  const expirationDate = getExpiryDate(consentRequest);
+  const purposes = useState(getPurposeUrls(consentRequest));
+  const resourceOwnerWebId = useState(getDataSubjectWebId(consentRequest));
 
   // local state based on request values
   const [selectedDate, setSelectedDate] = useState(expirationDate);
@@ -212,14 +212,6 @@ export default function ConsentRequestForm({
   const handleDateChange = (date) => {
     setSelectedDate(date ? date.toISOString() : null);
   };
-
-  useEffect(() => {
-    if (!consentRequest) return;
-    setRequestedAccesses(getRequestedAccesses(consentRequest));
-    setExpirationDate(getExpiryDate(consentRequest));
-    setPurposes(getPurposeUrls(consentRequest));
-    setResourceOwnerWebId(getDataSubjectWebId(consentRequest));
-  }, [consentRequest]);
 
   useEffect(() => {
     if (!purposes) return;
