@@ -32,6 +32,7 @@ import {
   TESTCAFE_ID_DATE_PICKER_CALENDAR_BUTTON,
   TESTCAFE_ID_DATE_INPUT,
 } from "./index";
+import getConsentRequestDetails from "../../../__testUtils/mockConsentRequestDetails";
 
 jest.mock("next/router");
 const mockedUseRouter = useRouter;
@@ -49,7 +50,10 @@ describe("DateInput component", () => {
   test("Opens datepicker when calendar is clicked", async () => {
     const { getByTestId } = renderWithTheme(
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <ConsentRequestForm agentWebId={agentWebId} />
+        <ConsentRequestForm
+          consentRequest={getConsentRequestDetails()}
+          agentWebId={agentWebId}
+        />
       </MuiPickersUtilsProvider>
     );
 
