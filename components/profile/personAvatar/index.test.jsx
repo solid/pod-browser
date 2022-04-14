@@ -24,6 +24,7 @@ import { render } from "@testing-library/react";
 import { waitFor } from "@testing-library/dom";
 import { CombinedDataProvider } from "@inrupt/solid-ui-react";
 import * as solidClientFns from "@inrupt/solid-client";
+import { foaf } from "rdf-namespaces";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import {
   aliceWebIdUrl,
@@ -32,12 +33,13 @@ import {
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import PersonAvatar, { setupErrorComponent } from "./index";
+import { chain } from "../../../src/solidClientHelpers/utils";
 
 const profileIri = "https://example.com/profile/card#me";
 
 describe("Person Avatar", () => {
   const profileDataset = mockPersonDatasetAlice();
-  const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+  let profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
 
   beforeEach(() => {
     jest
@@ -61,20 +63,14 @@ describe("Person Avatar", () => {
     });
     expect(asFragment()).toMatchSnapshot();
   });
-});
 
-describe("setupErrorComponent", () => {
-  it("renders", () => {
-    const bem = (value) => value;
-    const { asFragment } = render(setupErrorComponent(bem)());
-    expect(asFragment()).toMatchSnapshot();
-  });
-  it("renders a webId if no name in profile", async () => {
-    const profileDataset = mockPersonDatasetAlice();
-    const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+  it("renders a webId if there is no name in the profile", async () => {
+    const name = solidClientFns.getThing(profileDataset, foaf.name);
+    solidClientFns.removeStringNoLocale(profileThing, foaf.name, name);
+    profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
-    const { asFragment, getByText } = renderWithTheme(
+    const { getByText, asFragment } = renderWithTheme(
       <CombinedDataProvider solidDataset={profileDataset} thing={profileThing}>
         <SessionProvider>
           <PersonAvatar profileIri={profileIri} />
@@ -82,7 +78,15 @@ describe("setupErrorComponent", () => {
       </CombinedDataProvider>
     );
     await waitFor(() => {
-      expect(getByText("Alice")).toBeInTheDocument();
+      expect(getByText(aliceWebIdUrl)).toBeInTheDocument();
     });
+  });
+});
+
+describe("setupErrorComponent", () => {
+  it("renders", () => {
+    const bem = (value) => value;
+    const { asFragment } = render(setupErrorComponent(bem)());
+    expect(asFragment()).toMatchSnapshot();
   });
 });
