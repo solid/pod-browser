@@ -152,12 +152,13 @@ export default function ResourceDetails({
                 title="Copied"
                 data-testid={TESTCAFE_RESOURCE_ADDRESS_TOOLTIP}
               >
-                <Typography
+                <button
+                  type="button"
                   onClick={handleResourceCopyClick}
                   className={actionMenuBem("action-menu__trigger")}
                 >
                   COPY LINK
-                </Typography>
+                </button>
               </Tooltip>
             </ActionMenuItem>
             <ActionMenuItem>

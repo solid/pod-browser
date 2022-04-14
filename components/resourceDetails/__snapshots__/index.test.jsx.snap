@@ -81,12 +81,13 @@ exports[`Resource details renders Permissions component for WAC-supporting Solid
                 <li
                   class="PodBrowser-action-menu__item"
                 >
-                  <p
-                    class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
+                  <button
+                    class="PodBrowser-action-menu__trigger"
                     data-testid="resource-address-copy-tooltip"
+                    type="button"
                   >
                     COPY LINK
-                  </p>
+                  </button>
                 </li>
                 <li
                   class="PodBrowser-action-menu__item"
@@ -421,12 +422,13 @@ exports[`Resource details renders Sharing component for ACP-supporting Solid ser
                 <li
                   class="PodBrowser-action-menu__item"
                 >
-                  <p
-                    class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
+                  <button
+                    class="PodBrowser-action-menu__trigger"
                     data-testid="resource-address-copy-tooltip"
+                    type="button"
                   >
                     COPY LINK
-                  </p>
+                  </button>
                 </li>
                 <li
                   class="PodBrowser-action-menu__item"
@@ -873,12 +875,13 @@ exports[`Resource details renders a decoded container name 1`] = `
                 <li
                   class="PodBrowser-action-menu__item"
                 >
-                  <p
-                    class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
+                  <button
+                    class="PodBrowser-action-menu__trigger"
                     data-testid="resource-address-copy-tooltip"
+                    type="button"
                   >
                     COPY LINK
-                  </p>
+                  </button>
                 </li>
                 <li
                   class="PodBrowser-action-menu__item"
@@ -1066,12 +1069,13 @@ exports[`Resource details renders container details 1`] = `
                 <li
                   class="PodBrowser-action-menu__item"
                 >
-                  <p
-                    class="PodBrowser-root PodBrowser-action-menu__trigger PodBrowser-body1"
+                  <button
+                    class="PodBrowser-action-menu__trigger"
                     data-testid="resource-address-copy-tooltip"
+                    type="button"
                   >
                     COPY LINK
-                  </p>
+                  </button>
                 </li>
                 <li
                   class="PodBrowser-action-menu__item"
