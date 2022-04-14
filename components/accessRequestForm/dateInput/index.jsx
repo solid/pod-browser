@@ -67,6 +67,7 @@ export default function DateInput({ selectedDate, handleDateChange }) {
         endAdornment={
           <Icons
             name="calendar"
+            data-testid={TESTCAFE_ID_DATE_PICKER_CALENDAR_BUTTON}
             className={bem("icon-small--primary-disabled")}
           />
         }

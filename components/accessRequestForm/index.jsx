@@ -39,7 +39,6 @@ import {
 } from "@material-ui/core";
 import { useSession } from "@inrupt/solid-ui-react";
 import { useBem } from "@solid/lit-prism-patterns";
-import AccessRequestContext from "../../src/contexts/accessRequestContext";
 import InfoTooltip from "../infoTooltip";
 import RequestSection from "./requestSection";
 import DateInput from "./dateInput";
@@ -71,20 +70,38 @@ export const CONFIRM_TEXT = "Continue with no access";
 export const DENY_TEXT = "Deny All Access";
 export const NO_PURPOSE_TITLE = "Select a purpose";
 
-export default function AccessRequestForm({ agentDetails, agentWebId }) {
+export default function AccessRequestForm({
+  agentDetails,
+  agentWebId,
+  accessRequest,
+}) {
   const classes = useStyles();
   const bem = useBem(classes);
   const router = useRouter();
   const { session } = useSession();
   const { redirectUrl } = router.query;
-  const { accessRequest } = useContext(AccessRequestContext);
-  const [selectedAccess, setSelectedAccess] = useState([]);
+  // values from request needed for UI
+  const requestedAccesses = getRequestedAccesses(accessRequest);
+  const expirationDate = getExpiryDate(accessRequest);
   const purposes = getPurposeUrls(accessRequest);
   const resourceOwnerWebId = getDataSubjectWebId(accessRequest);
-  const [selectedPurposes, setSelectedPurposes] = useState([]);
+
+  // local state based on request values
+  const [selectedDate, setSelectedDate] = useState(new Date(expirationDate));
+  const [selectedAccess, setSelectedAccess] = useState([]);
+  const [selectedPurposes, setSelectedPurposes] = useState(() => {
+    if (Array.isArray(purposes) && purposes.length === 1) {
+      return purposes[0];
+    }
+    if (!Array.isArray(purposes)) {
+      return purposes;
+    }
+    return [];
+  });
   const selectedResources = selectedAccess.map(
     ({ resourceIri }) => resourceIri
   );
+  // other state
   const { agentName } = agentDetails || null;
 
   const {
@@ -95,16 +112,13 @@ export default function AccessRequestForm({ agentDetails, agentWebId }) {
     setTitle,
     closeDialog,
     setConfirmText,
+    setCancelText,
+    setOmitConfirmButton,
     setOmitCancelButton,
   } = useContext(ConfirmationDialogContext);
   const [confirmationSetup, setConfirmationSetup] = useState(false);
 
   const { alertError } = useContext(AlertContext);
-
-  const requestedAccesses = getRequestedAccesses(accessRequest);
-  const expirationDate = getExpiryDate(accessRequest);
-  const [selectedDate, setSelectedDate] = useState(new Date(expirationDate));
-
   const DIALOG_CONTENT = `${
     agentName || agentWebId
   } will not have access to anything in your Pod.`;
@@ -136,8 +150,8 @@ export default function AccessRequestForm({ agentDetails, agentWebId }) {
       setConfirmationSetup(true);
       setOpen(ACCESS_REQUEST_NO_ACCESS_DIALOG);
       setTitle(NO_PURPOSE_TITLE);
-      setConfirmText("Ok");
-      setOmitCancelButton(true);
+      setCancelText("Ok");
+      setOmitConfirmButton(true);
       setContent(NO_PURPOSE_CONTENT);
     } else if (!selectedAccess.length) {
       setConfirmationSetup(true);
@@ -206,16 +220,6 @@ export default function AccessRequestForm({ agentDetails, agentWebId }) {
     setSelectedDate(date ? date.toISOString() : null);
   };
 
-  useEffect(() => {
-    if (!purposes) return;
-    if (Array.isArray(purposes) && purposes.length === 1) {
-      setSelectedPurposes(purposes[0]);
-    }
-    if (!Array.isArray(purposes)) {
-      setSelectedPurposes(purposes);
-    }
-  }, [purposes]);
-
   const handleSelectPurpose = (e) => {
     if (e.target.checked) {
       setSelectedPurposes((prevState) => [...prevState, e.target.value]);
@@ -226,7 +230,7 @@ export default function AccessRequestForm({ agentDetails, agentWebId }) {
     }
   };
 
-  if (resourceOwnerWebId !== session.info.webId) {
+  if (resourceOwnerWebId && resourceOwnerWebId !== session.info.webId) {
     alertError("You don't have access to that");
     router.push("/");
   }
@@ -325,6 +329,21 @@ export default function AccessRequestForm({ agentDetails, agentWebId }) {
 }
 
 AccessRequestForm.propTypes = {
+  accessRequest: T.shape({
+    credentialSubject: T.shape({
+      hasConsent:
+        T.arrayOf(
+          T.shape({
+            forPurpose: T.arrayOf(T.string) || T.string,
+          })
+        ) ||
+        T.shape({
+          forPurpose: T.arrayOf(T.string) || T.string,
+        }),
+      id: T.string,
+      expirationDate: T.string,
+    }),
+  }).isRequired,
   agentDetails: T.shape({
     agentName: T.string,
     agentUrl: T.string,

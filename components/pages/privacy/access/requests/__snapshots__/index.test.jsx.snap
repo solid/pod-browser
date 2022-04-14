@@ -147,6 +147,7 @@ exports[`AccessRequest Page Renders the Access page 1`] = `
           />
           <span
             class="PodBrowser-icon-calendar PodBrowser-icon-small--primary-disabled"
+            data-testid="date-picker-calendar-button"
           />
         </div>
       </div>

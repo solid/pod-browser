@@ -26,15 +26,14 @@ import { useRouter } from "next/router";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
-import mockAccessRequestContext from "../../../__testUtils/mockAccessRequestContext";
 import AccessRequestForm from "../index";
 import {
   TESTCAFE_ID_FOREVER_BUTTON,
   TESTCAFE_ID_DATE_PICKER_CALENDAR_BUTTON,
   TESTCAFE_ID_DATE_INPUT,
 } from "./index";
+import getAccessRequestDetails from "../../../__testUtils/mockAccessRequestDetails";
 
-const AccessRequestContextProvider = mockAccessRequestContext();
 jest.mock("next/router");
 const mockedUseRouter = useRouter;
 const agentWebId = "https://mockapp.com/app#id";
@@ -47,14 +46,15 @@ describe("DateInput component", () => {
       push,
     });
   });
-  // FIXME: unskip this test when date picker is enabled again
-  test.skip("Opens datepicker when calendar is clicked", async () => {
+
+  test("Opens datepicker when calendar is clicked", async () => {
     const { getByTestId } = renderWithTheme(
-      <AccessRequestContextProvider>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <AccessRequestForm agentWebId={agentWebId} />
-        </MuiPickersUtilsProvider>
-      </AccessRequestContextProvider>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <AccessRequestForm
+          accessRequest={getAccessRequestDetails()}
+          agentWebId={agentWebId}
+        />
+      </MuiPickersUtilsProvider>
     );
 
     const calendarButton = getByTestId(TESTCAFE_ID_DATE_PICKER_CALENDAR_BUTTON);

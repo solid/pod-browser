@@ -48,6 +48,7 @@ describe("Renders an access modal", () => {
         handleCloseModal={jest.fn()}
         permission={permission}
         setOpenModal={jest.fn()}
+        openModal
       />
     );
 

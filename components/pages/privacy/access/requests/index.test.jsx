@@ -22,7 +22,8 @@
 import React from "react";
 import * as RouterFns from "next/router";
 import { waitFor } from "@testing-library/dom";
-import { mockContainerFrom } from "@inrupt/solid-client";
+import * as solidClientFns from "@inrupt/solid-client";
+import { getAccessRequestFromRedirectUrl } from "@inrupt/solid-client-access-grants";
 import * as resourceHelpers from "../../../../../src/solidClientHelpers/resource";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../../../../__testUtils/mockSessionContextProvider";
@@ -35,17 +36,28 @@ import * as containerFns from "../../../../../src/models/container";
 jest.mock("../../../../../src/hooks/useContainer");
 const mockedUseContainer = useContainer;
 
+jest.mock("@inrupt/solid-client-access-grants");
+const mockGetAccessRequestFromRedirectUrl = getAccessRequestFromRedirectUrl;
+
 describe("AccessRequest Page", () => {
   beforeEach(() => {
     mockedUseContainer.mockReturnValue({
-      data: mockContainerFrom("https://pod.inrupt.com/alice/private/data/"),
+      data: solidClientFns.mockContainerFrom(
+        "https://pod.inrupt.com/alice/private/data/"
+      ),
     });
+    jest
+      .spyOn(solidClientFns, "getProfileAll")
+      .mockResolvedValue({ webIdProfile: mockAppDataset(), altProfileAll: [] });
     jest
       .spyOn(containerFns, "getContainerResourceUrlAll")
       .mockResolvedValue([
         "https://pod.inrupt.com/alice/private/data-2",
         "https://pod.inrupt.com/alice/private/data-3",
       ]);
+    mockGetAccessRequestFromRedirectUrl.mockResolvedValue({
+      accessRequest: getAccessRequestDetails(),
+    });
   });
   it("Renders the Access page", async () => {
     const accessRequestId = "https://example.org/test-request";
@@ -64,10 +76,6 @@ describe("AccessRequest Page", () => {
       info: { webId: "https://id.inrupt.com/someWebId" },
     };
     const SessionProvider = mockSessionContextProvider(session);
-
-    jest.spyOn(resourceHelpers, "getProfileResource").mockResolvedValue({
-      dataset: mockAppDataset(),
-    });
 
     const { asFragment, getByText } = renderWithTheme(
       <SessionProvider>

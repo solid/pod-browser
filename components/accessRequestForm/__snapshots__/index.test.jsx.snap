@@ -41,6 +41,7 @@ exports[`Access Request Form Renders a access request form with only one purpose
         />
         <span
           class="PodBrowser-icon-calendar PodBrowser-icon-small--primary-disabled"
+          data-testid="date-picker-calendar-button"
         />
       </div>
     </div>
@@ -594,6 +595,7 @@ exports[`Access Request Form Renders a consent request form with multiple purpos
         />
         <span
           class="PodBrowser-icon-calendar PodBrowser-icon-small--primary-disabled"
+          data-testid="date-picker-calendar-button"
         />
       </div>
     </div>

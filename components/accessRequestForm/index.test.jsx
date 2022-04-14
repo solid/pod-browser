@@ -27,7 +27,6 @@ import { mockContainerFrom } from "@inrupt/solid-client";
 import * as accessGrantsFns from "@inrupt/solid-client-access-grants";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import getSignedVc from "../../__testUtils/mockSignedVc";
-import mockAccessRequestContext from "../../__testUtils/mockAccessRequestContext";
 import AccessRequestForm, {
   DENY_ACCESS_DIALOG_TITLE,
   NO_ACCESS_DIALOG_TITLE,
@@ -42,8 +41,9 @@ import {
   TESTCAFE_ID_CONFIRM_BUTTON,
 } from "../confirmationDialog";
 import { ConfirmationDialogProvider } from "../../src/contexts/confirmationDialogContext";
-import { AlertProvider } from "../../src/contexts/alertContext";
-import { getAccessRequestDetailsOnePurpose } from "../../__testUtils/mockAccessRequestDetails";
+import getAccessRequestDetails, {
+  getAccessRequestDetailsOnePurpose,
+} from "../../__testUtils/mockAccessRequestDetails";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import mockSession from "../../__testUtils/mockSession";
 import { TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT } from "./purposeCheckBox";
@@ -59,11 +59,9 @@ const mockedUseRouter = useRouter;
 
 jest.mock("@inrupt/solid-client-access-grants");
 
-const AccessRequestContextProvider = mockAccessRequestContext();
+const defaultAccessRequest = getAccessRequestDetails();
 const accessRequestWithOnePurpose = getAccessRequestDetailsOnePurpose();
-const AccessRequestContextProviderOnePurpose = mockAccessRequestContext(
-  accessRequestWithOnePurpose
-);
+
 const SessionProvider = mockSessionContextProvider(mockSession());
 const agentDetails = {
   agentName: "Mock App",
@@ -99,12 +97,11 @@ describe("Access Request Form", () => {
   it("redirects user if not data subject of access request", async () => {
     const { getByText } = renderWithTheme(
       <SessionProvider>
-        <AccessRequestContextProvider>
-          <AccessRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </AccessRequestContextProvider>
+        <AccessRequestForm
+          consentRequest={defaultAccessRequest}
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
       </SessionProvider>
     );
     await waitFor(() => {
@@ -114,12 +111,11 @@ describe("Access Request Form", () => {
 
   it("Renders a consent request form with multiple purposes", async () => {
     const { asFragment, findByTestId } = renderWithTheme(
-      <AccessRequestContextProvider>
-        <AccessRequestForm
-          agentDetails={agentDetails}
-          agentWebId={agentWebId}
-        />
-      </AccessRequestContextProvider>
+      <AccessRequestForm
+        consentRequest={defaultAccessRequest}
+        agentDetails={agentDetails}
+        agentWebId={agentWebId}
+      />
     );
     await expect(findByTestId("spinner")).rejects.toEqual(expect.anything());
     expect(asFragment()).toMatchSnapshot();
@@ -127,12 +123,11 @@ describe("Access Request Form", () => {
 
   it("Renders a access request form with only one purpose", async () => {
     const { asFragment, findByTestId } = renderWithTheme(
-      <AccessRequestContextProviderOnePurpose>
-        <AccessRequestForm
-          agentDetails={agentDetails}
-          agentWebId={agentWebId}
-        />
-      </AccessRequestContextProviderOnePurpose>
+      <AccessRequestForm
+        consentRequest={accessRequestWithOnePurpose}
+        agentDetails={agentDetails}
+        agentWebId={agentWebId}
+      />
     );
     await expect(findByTestId("spinner")).rejects.toEqual(expect.anything());
     expect(asFragment()).toMatchSnapshot();
@@ -144,12 +139,11 @@ describe("Access Request Form", () => {
       .mockResolvedValue(signedVc);
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
-        <AccessRequestContextProvider>
-          <AccessRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </AccessRequestContextProvider>
+        <AccessRequestForm
+          consentRequest={defaultAccessRequest}
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
       </ConfirmationDialogProvider>
     );
     const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
@@ -171,12 +165,11 @@ describe("Access Request Form", () => {
   it("displays a confirmation dialog with the correct title and content when submitting form without selecting purpose and at least one access selected", async () => {
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
-        <AccessRequestContextProvider>
-          <AccessRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </AccessRequestContextProvider>
+        <AccessRequestForm
+          consentRequest={defaultAccessRequest}
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
       </ConfirmationDialogProvider>
     );
     const toggle = getAllByTestId(TESTCAFE_ID_ACCESS_SWITCH)[0];
@@ -200,12 +193,11 @@ describe("Access Request Form", () => {
     accessGrantsFns.approveAccessRequest.mockResolvedValue(signedVc);
     const { getByTestId, findByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
-        <AccessRequestContextProvider>
-          <AccessRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </AccessRequestContextProvider>
+        <AccessRequestForm
+          consentRequest={defaultAccessRequest}
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
       </ConfirmationDialogProvider>
     );
     const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
@@ -226,12 +218,11 @@ describe("Access Request Form", () => {
   it("displays the confirmation dialog with the correct title and content regardless of the state of the toggles when clicking 'Deny All Access' button", async () => {
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
-        <AccessRequestContextProvider>
-          <AccessRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </AccessRequestContextProvider>
+        <AccessRequestForm
+          consentRequest={defaultAccessRequest}
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
       </ConfirmationDialogProvider>
     );
     const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
@@ -256,12 +247,11 @@ describe("Access Request Form", () => {
     accessGrantsFns.denyAccessRequest.mockResolvedValue(signedVc);
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
-        <AccessRequestContextProvider>
-          <AccessRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </AccessRequestContextProvider>
+        <AccessRequestForm
+          consentRequest={defaultAccessRequest}
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
       </ConfirmationDialogProvider>
     );
     const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];

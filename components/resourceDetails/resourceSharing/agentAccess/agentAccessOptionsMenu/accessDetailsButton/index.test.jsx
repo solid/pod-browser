@@ -22,27 +22,12 @@
 import React from "react";
 import { renderWithTheme } from "../../../../../../__testUtils/withTheme";
 import AccessDetailsButton, { TESTCAFE_ID_VIEW_DETAILS_BUTTON } from "./index";
-import getSignedVc from "../../../../../../__testUtils/mockSignedVc";
-
-const webId = "https://example.com/profile/card#me";
 
 describe("View access details button and modal", () => {
   it("renders a button which triggers the opening of the modal", async () => {
-    const testResourceIri = "testIri";
-    const permission = {
-      webId,
-      alias: "Editors",
-      type: "agent",
-      vc: getSignedVc(),
-    };
-
-    const fakeHandleCloseModal = jest.fn();
+    const fakeSetOpenModal = jest.fn();
     const { asFragment, getByTestId } = renderWithTheme(
-      <AccessDetailsButton
-        permission={permission}
-        resourceIri={testResourceIri}
-        handleCloseModal={fakeHandleCloseModal}
-      />
+      <AccessDetailsButton setOpenModal={fakeSetOpenModal} />
     );
     const button = getByTestId(TESTCAFE_ID_VIEW_DETAILS_BUTTON);
     expect(button).toBeDefined();

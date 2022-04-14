@@ -57,6 +57,7 @@ function ConfirmationDialogProvider({ children }) {
   const [confirmText, setConfirmText] = useState("Confirm");
   const [confirmed, setConfirmed] = useState(null);
   const [omitCancelButton, setOmitCancelButton] = useState(false);
+  const [omitConfirmButton, setOmitConfirmButton] = useState(false);
   const [isDangerousAction, setIsDangerousAction] = useState(false);
 
   const closeDialog = () => {
@@ -85,7 +86,9 @@ function ConfirmationDialogProvider({ children }) {
         setConfirmText,
         closeDialog,
         omitCancelButton,
+        omitConfirmButton,
         setOmitCancelButton,
+        setOmitConfirmButton,
         isDangerousAction,
         setIsDangerousAction,
       }}

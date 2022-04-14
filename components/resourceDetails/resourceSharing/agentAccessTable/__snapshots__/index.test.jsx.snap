@@ -75,42 +75,42 @@ exports[`AgentAccessTable with access based agents renders a list of permissions
             role="region"
           >
             <div
+              class="PodBrowser-searchBoxContainer"
+            >
+              <button
+                aria-label="search"
+                class="PodBrowser-root PodBrowser-root"
+                tabindex="0"
+                type="submit"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <i
+                    aria-label="search"
+                    class="PodBrowser-icon-search PodBrowser-iconSearch"
+                  />
+                </span>
+                <span
+                  class="PodBrowser-root"
+                />
+              </button>
+              <div
+                class="PodBrowser-root PodBrowser-searchInput"
+              >
+                <input
+                  aria-label="Search by name or WebId"
+                  class="PodBrowser-input"
+                  data-testid="search-input"
+                  placeholder="Search by name or WebId"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
+            <div
               class="PodBrowser-permissionsContainer"
             >
-              <div
-                class="PodBrowser-searchBoxContainer"
-              >
-                <button
-                  aria-label="search"
-                  class="PodBrowser-root PodBrowser-root"
-                  tabindex="0"
-                  type="submit"
-                >
-                  <span
-                    class="PodBrowser-label"
-                  >
-                    <i
-                      aria-label="search"
-                      class="PodBrowser-icon-search PodBrowser-iconSearch"
-                    />
-                  </span>
-                  <span
-                    class="PodBrowser-root"
-                  />
-                </button>
-                <div
-                  class="PodBrowser-root PodBrowser-searchInput"
-                >
-                  <input
-                    aria-label="Search by name or WebId"
-                    class="PodBrowser-input"
-                    data-testid="search-input"
-                    placeholder="Search by name or WebId"
-                    type="text"
-                    value=""
-                  />
-                </div>
-              </div>
               <table
                 class="PodBrowser-table PodBrowser-agents-table"
                 role="table"
@@ -327,42 +327,42 @@ exports[`AgentAccessTable with access grant based agents renders a list of permi
             role="region"
           >
             <div
+              class="PodBrowser-searchBoxContainer"
+            >
+              <button
+                aria-label="search"
+                class="PodBrowser-root PodBrowser-root"
+                tabindex="0"
+                type="submit"
+              >
+                <span
+                  class="PodBrowser-label"
+                >
+                  <i
+                    aria-label="search"
+                    class="PodBrowser-icon-search PodBrowser-iconSearch"
+                  />
+                </span>
+                <span
+                  class="PodBrowser-root"
+                />
+              </button>
+              <div
+                class="PodBrowser-root PodBrowser-searchInput"
+              >
+                <input
+                  aria-label="Search by name or WebId"
+                  class="PodBrowser-input"
+                  data-testid="search-input"
+                  placeholder="Search by name or WebId"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
+            <div
               class="PodBrowser-permissionsContainer"
             >
-              <div
-                class="PodBrowser-searchBoxContainer"
-              >
-                <button
-                  aria-label="search"
-                  class="PodBrowser-root PodBrowser-root"
-                  tabindex="0"
-                  type="submit"
-                >
-                  <span
-                    class="PodBrowser-label"
-                  >
-                    <i
-                      aria-label="search"
-                      class="PodBrowser-icon-search PodBrowser-iconSearch"
-                    />
-                  </span>
-                  <span
-                    class="PodBrowser-root"
-                  />
-                </button>
-                <div
-                  class="PodBrowser-root PodBrowser-searchInput"
-                >
-                  <input
-                    aria-label="Search by name or WebId"
-                    class="PodBrowser-input"
-                    data-testid="search-input"
-                    placeholder="Search by name or WebId"
-                    type="text"
-                    value=""
-                  />
-                </div>
-              </div>
               <table
                 class="PodBrowser-table PodBrowser-agents-table"
                 role="table"
