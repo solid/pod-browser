@@ -42,7 +42,6 @@ export function setupErrorComponent(bem) {
 export default function PersonAvatar({ profileIri }) {
   const classes = useStyles();
   const bem = useBem(classes);
-  const router = useRouter();
   const errorComponent = setupErrorComponent(bem);
   const { session } = useSession();
   const { webId } = session.info;
