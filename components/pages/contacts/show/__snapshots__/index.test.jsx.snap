@@ -65,14 +65,6 @@ exports[`Contact show page Renders the Contact show page 1`] = `
               >
                 Alice
               </span>
-              <a
-                class="PodBrowser-headerLink"
-                href="https://example.com/profile/card#me"
-                rel="noreferrer"
-                target="_blank"
-              >
-                https://example.com/profile/card#me
-              </a>
             </h3>
           </div>
         </div>

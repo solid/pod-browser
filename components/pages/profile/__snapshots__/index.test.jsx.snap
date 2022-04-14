@@ -48,14 +48,6 @@ exports[`Profile page Renders the profile page 1`] = `
               >
                 Alice
               </span>
-              <a
-                class="PodBrowser-headerLink"
-                href="http://example.com/webId#me"
-                rel="noreferrer"
-                target="_blank"
-              >
-                http://example.com/webId#me
-              </a>
             </h3>
           </div>
         </div>

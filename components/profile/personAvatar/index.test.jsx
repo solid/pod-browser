@@ -69,4 +69,20 @@ describe("setupErrorComponent", () => {
     const { asFragment } = render(setupErrorComponent(bem)());
     expect(asFragment()).toMatchSnapshot();
   });
+  it("renders a webId if no name in profile", async () => {
+    const profileDataset = mockPersonDatasetAlice();
+    const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
+    const { asFragment, getByText } = renderWithTheme(
+      <CombinedDataProvider solidDataset={profileDataset} thing={profileThing}>
+        <SessionProvider>
+          <PersonAvatar profileIri={profileIri} />
+        </SessionProvider>
+      </CombinedDataProvider>
+    );
+    await waitFor(() => {
+      expect(getByText("Alice")).toBeInTheDocument();
+    });
+  });
 });

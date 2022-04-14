@@ -19,16 +19,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React from "react";
 import T from "prop-types";
 import { foaf, vcard } from "rdf-namespaces";
 import { Avatar, Box, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Image, SessionContext, Text, useThing } from "@inrupt/solid-ui-react";
-import { getStringNoLocale } from "@inrupt/solid-client";
-import styles from "./styles";
+import { Image, Text, useSession } from "@inrupt/solid-ui-react";
 import { useRouter } from "next/router";
+import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -45,14 +44,9 @@ export default function PersonAvatar({ profileIri }) {
   const bem = useBem(classes);
   const router = useRouter();
   const errorComponent = setupErrorComponent(bem);
-  const { thing } = useThing();
-  const name = getStringNoLocale(thing, foaf.name);
-  const decodedIri = decodeURIComponent(router.query.webId);
-  const { session, sessionRequestInProgress, profile } =
-    useContext(SessionContext);
-  const webID = session.info.webId;
+  const { session } = useSession();
+  const { webId } = session.info;
 
-  console.log({ name, decodedIri, webID });
   return (
     <Box alignItems="center" display="flex">
       <Box>
@@ -71,7 +65,7 @@ export default function PersonAvatar({ profileIri }) {
           <Text
             className={classes.avatarText}
             property={foaf.name}
-            errorComponent={() => <span>{name || ``}</span>}
+            errorComponent={() => <span>{webId || ""}</span>}
           />
         </h3>
       </Box>
