@@ -31,7 +31,6 @@ import {
   ListItemText,
   ListItemIcon,
   Tooltip,
-  createSvgIcon,
 } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { Icons } from "@inrupt/prism-react-components";

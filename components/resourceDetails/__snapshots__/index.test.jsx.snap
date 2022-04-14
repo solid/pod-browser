@@ -82,6 +82,17 @@ exports[`Resource details renders Permissions component for WAC-supporting Solid
                   class="PodBrowser-action-menu__item"
                 >
                   <button
+                    class="PodBrowser-action-menu__trigger"
+                    data-testid="resource-address-copy-tooltip"
+                    type="button"
+                  >
+                    COPY LINK
+                  </button>
+                </li>
+                <li
+                  class="PodBrowser-action-menu__item"
+                >
+                  <button
                     class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                     data-testid="delete-resource-button"
                     type="button"
@@ -408,6 +419,17 @@ exports[`Resource details renders Sharing component for ACP-supporting Solid ser
                 <li
                   class="PodBrowser-action-menu__item"
                 />
+                <li
+                  class="PodBrowser-action-menu__item"
+                >
+                  <button
+                    class="PodBrowser-action-menu__trigger"
+                    data-testid="resource-address-copy-tooltip"
+                    type="button"
+                  >
+                    COPY LINK
+                  </button>
+                </li>
                 <li
                   class="PodBrowser-action-menu__item"
                 >
@@ -854,6 +876,17 @@ exports[`Resource details renders a decoded container name 1`] = `
                   class="PodBrowser-action-menu__item"
                 >
                   <button
+                    class="PodBrowser-action-menu__trigger"
+                    data-testid="resource-address-copy-tooltip"
+                    type="button"
+                  >
+                    COPY LINK
+                  </button>
+                </li>
+                <li
+                  class="PodBrowser-action-menu__item"
+                >
+                  <button
                     class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                     data-testid="delete-resource-button"
                     type="button"
@@ -1033,6 +1066,17 @@ exports[`Resource details renders container details 1`] = `
                 <li
                   class="PodBrowser-action-menu__item"
                 />
+                <li
+                  class="PodBrowser-action-menu__item"
+                >
+                  <button
+                    class="PodBrowser-action-menu__trigger"
+                    data-testid="resource-address-copy-tooltip"
+                    type="button"
+                  >
+                    COPY LINK
+                  </button>
+                </li>
                 <li
                   class="PodBrowser-action-menu__item"
                 >
