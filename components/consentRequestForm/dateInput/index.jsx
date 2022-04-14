@@ -29,7 +29,6 @@ import { DatePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/styles";
 import { createStyles, IconButton, InputBase } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
-import ConsentRequestContext from "../../../src/contexts/consentRequestContext";
 import styles from "../styles";
 
 export const TESTCAFE_ID_DATE_INPUT = "date-input-field";
@@ -68,6 +67,7 @@ export default function DateInput({ selectedDate, handleDateChange }) {
         endAdornment={
           <Icons
             name="calendar"
+            data-testid={TESTCAFE_ID_DATE_PICKER_CALENDAR_BUTTON}
             className={bem("icon-small--primary-disabled")}
           />
         }
