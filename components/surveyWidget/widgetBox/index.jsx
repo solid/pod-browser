@@ -84,7 +84,7 @@ WidgetBox.propTypes = {
   id: T.string,
   open: T.bool,
   // eslint-disable-next-line react/forbid-prop-types
-  anchorEl: T.any,
+  anchorEl: T.object,
   onClose: T.func.isRequired,
 };
 
