@@ -87,7 +87,7 @@ export default function AccessRequestForm({
   const resourceOwnerWebId = getDataSubjectWebId(accessRequest);
 
   // local state based on request values
-  const [selectedDate, setSelectedDate] = useState(new Date(expirationDate));
+  const [selectedDate, setSelectedDate] = useState(expirationDate);
   const [selectedAccess, setSelectedAccess] = useState([]);
   const [selectedPurposes, setSelectedPurposes] = useState(() => {
     if (Array.isArray(purposes) && purposes.length === 1) {
@@ -331,15 +331,16 @@ export default function AccessRequestForm({
 AccessRequestForm.propTypes = {
   accessRequest: T.shape({
     credentialSubject: T.shape({
-      hasConsent:
+      hasConsent: T.oneOfType([
         T.arrayOf(
           T.shape({
             forPurpose: T.arrayOf(T.string) || T.string,
           })
-        ) ||
+        ),
         T.shape({
           forPurpose: T.arrayOf(T.string) || T.string,
         }),
+      ]),
       id: T.string,
       expirationDate: T.string,
     }),

@@ -107,6 +107,6 @@ DateInput.defaultProps = {
 };
 
 DateInput.propTypes = {
-  selectedDate: T.instanceOf(Date),
+  selectedDate: T.string,
   handleDateChange: T.func.isRequired,
 };
