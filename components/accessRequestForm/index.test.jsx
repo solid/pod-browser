@@ -98,7 +98,7 @@ describe("Access Request Form", () => {
     const { getByText } = renderWithTheme(
       <SessionProvider>
         <AccessRequestForm
-          consentRequest={defaultAccessRequest}
+          accessRequest={defaultAccessRequest}
           agentDetails={agentDetails}
           agentWebId={agentWebId}
         />
@@ -112,7 +112,7 @@ describe("Access Request Form", () => {
   it("Renders a consent request form with multiple purposes", async () => {
     const { asFragment, findByTestId } = renderWithTheme(
       <AccessRequestForm
-        consentRequest={defaultAccessRequest}
+        accessRequest={defaultAccessRequest}
         agentDetails={agentDetails}
         agentWebId={agentWebId}
       />
@@ -124,7 +124,7 @@ describe("Access Request Form", () => {
   it("Renders a access request form with only one purpose", async () => {
     const { asFragment, findByTestId } = renderWithTheme(
       <AccessRequestForm
-        consentRequest={accessRequestWithOnePurpose}
+        accessRequest={accessRequestWithOnePurpose}
         agentDetails={agentDetails}
         agentWebId={agentWebId}
       />
@@ -140,7 +140,7 @@ describe("Access Request Form", () => {
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <AccessRequestForm
-          consentRequest={defaultAccessRequest}
+          accessRequest={defaultAccessRequest}
           agentDetails={agentDetails}
           agentWebId={agentWebId}
         />
@@ -166,7 +166,7 @@ describe("Access Request Form", () => {
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <AccessRequestForm
-          consentRequest={defaultAccessRequest}
+          accessRequest={defaultAccessRequest}
           agentDetails={agentDetails}
           agentWebId={agentWebId}
         />
@@ -194,7 +194,7 @@ describe("Access Request Form", () => {
     const { getByTestId, findByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <AccessRequestForm
-          consentRequest={defaultAccessRequest}
+          accessRequest={defaultAccessRequest}
           agentDetails={agentDetails}
           agentWebId={agentWebId}
         />
@@ -219,7 +219,7 @@ describe("Access Request Form", () => {
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <AccessRequestForm
-          consentRequest={defaultAccessRequest}
+          accessRequest={defaultAccessRequest}
           agentDetails={agentDetails}
           agentWebId={agentWebId}
         />
@@ -248,7 +248,7 @@ describe("Access Request Form", () => {
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
         <AccessRequestForm
-          consentRequest={defaultAccessRequest}
+          accessRequest={defaultAccessRequest}
           agentDetails={agentDetails}
           agentWebId={agentWebId}
         />
