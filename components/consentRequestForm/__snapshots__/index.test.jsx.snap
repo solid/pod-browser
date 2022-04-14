@@ -144,6 +144,7 @@ exports[`Consent Request Form Renders a consent request form with multiple purpo
         />
         <span
           class="PodBrowser-icon-calendar PodBrowser-icon-small--primary-disabled"
+          data-testid="date-picker-calendar-button"
         />
       </div>
     </div>
@@ -564,6 +565,7 @@ exports[`Consent Request Form Renders a consent request form with only one purpo
         />
         <span
           class="PodBrowser-icon-calendar PodBrowser-icon-small--primary-disabled"
+          data-testid="date-picker-calendar-button"
         />
       </div>
     </div>

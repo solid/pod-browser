@@ -48,6 +48,7 @@ describe("Renders a consent modal", () => {
         handleCloseModal={jest.fn()}
         permission={permission}
         setOpenModal={jest.fn()}
+        openModal
       />
     );
 

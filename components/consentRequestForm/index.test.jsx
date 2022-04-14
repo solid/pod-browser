@@ -27,7 +27,6 @@ import { mockContainerFrom } from "@inrupt/solid-client";
 import * as consentFns from "@inrupt/solid-client-access-grants";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import getSignedVc from "../../__testUtils/mockSignedVc";
-import mockConsentRequestContext from "../../__testUtils/mockConsentRequestContext";
 import ConsentRequestForm, {
   DENY_ACCESS_DIALOG_TITLE,
   NO_ACCESS_DIALOG_TITLE,
@@ -42,8 +41,9 @@ import {
   TESTCAFE_ID_CONFIRM_BUTTON,
 } from "../confirmationDialog";
 import { ConfirmationDialogProvider } from "../../src/contexts/confirmationDialogContext";
-import { AlertProvider } from "../../src/contexts/alertContext";
-import { getConsentRequestDetailsOnePurpose } from "../../__testUtils/mockConsentRequestDetails";
+import getConsentRequestDetails, {
+  getConsentRequestDetailsOnePurpose,
+} from "../../__testUtils/mockConsentRequestDetails";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 import mockSession from "../../__testUtils/mockSession";
 import { TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT } from "./purposeCheckBox";
@@ -59,11 +59,9 @@ const mockedUseRouter = useRouter;
 
 jest.mock("@inrupt/solid-client-access-grants");
 
-const ConsentRequestContextProvider = mockConsentRequestContext();
+const defaultConsentRequest = getConsentRequestDetails();
 const consentRequestWithOnePurpose = getConsentRequestDetailsOnePurpose();
-const ConsentRequestContextProviderOnePurpose = mockConsentRequestContext(
-  consentRequestWithOnePurpose
-);
+
 const SessionProvider = mockSessionContextProvider(mockSession());
 const agentDetails = {
   agentName: "Mock App",
@@ -99,12 +97,11 @@ describe("Consent Request Form", () => {
   it("redirects user if not data subject of access request", async () => {
     const { getByText } = renderWithTheme(
       <SessionProvider>
-        <ConsentRequestContextProvider>
-          <ConsentRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </ConsentRequestContextProvider>
+        <ConsentRequestForm
+          consentRequest={defaultConsentRequest}
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
       </SessionProvider>
     );
     await waitFor(() => {
@@ -114,12 +111,11 @@ describe("Consent Request Form", () => {
 
   it("Renders a consent request form with multiple purposes", async () => {
     const { asFragment, findByTestId } = renderWithTheme(
-      <ConsentRequestContextProvider>
-        <ConsentRequestForm
-          agentDetails={agentDetails}
-          agentWebId={agentWebId}
-        />
-      </ConsentRequestContextProvider>
+      <ConsentRequestForm
+        consentRequest={defaultConsentRequest}
+        agentDetails={agentDetails}
+        agentWebId={agentWebId}
+      />
     );
     await expect(findByTestId("spinner")).rejects.toEqual(expect.anything());
     expect(asFragment()).toMatchSnapshot();
@@ -127,12 +123,11 @@ describe("Consent Request Form", () => {
 
   it("Renders a consent request form with only one purpose", async () => {
     const { asFragment, findByTestId } = renderWithTheme(
-      <ConsentRequestContextProviderOnePurpose>
-        <ConsentRequestForm
-          agentDetails={agentDetails}
-          agentWebId={agentWebId}
-        />
-      </ConsentRequestContextProviderOnePurpose>
+      <ConsentRequestForm
+        consentRequest={consentRequestWithOnePurpose}
+        agentDetails={agentDetails}
+        agentWebId={agentWebId}
+      />
     );
     await expect(findByTestId("spinner")).rejects.toEqual(expect.anything());
     expect(asFragment()).toMatchSnapshot();
@@ -142,12 +137,11 @@ describe("Consent Request Form", () => {
     jest.spyOn(consentFns, "approveAccessRequest").mockResolvedValue(signedVc);
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
-        <ConsentRequestContextProvider>
-          <ConsentRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </ConsentRequestContextProvider>
+        <ConsentRequestForm
+          consentRequest={defaultConsentRequest}
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
       </ConfirmationDialogProvider>
     );
     const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
@@ -169,12 +163,11 @@ describe("Consent Request Form", () => {
   it("displays a confirmation dialog with the correct title and content when submitting form without selecting purpose and at least one access selected", async () => {
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
-        <ConsentRequestContextProvider>
-          <ConsentRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </ConsentRequestContextProvider>
+        <ConsentRequestForm
+          consentRequest={defaultConsentRequest}
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
       </ConfirmationDialogProvider>
     );
     const toggle = getAllByTestId(TESTCAFE_ID_CONSENT_ACCESS_SWITCH)[0];
@@ -198,12 +191,11 @@ describe("Consent Request Form", () => {
     consentFns.approveAccessRequest.mockResolvedValue(signedVc);
     const { getByTestId, findByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
-        <ConsentRequestContextProvider>
-          <ConsentRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </ConsentRequestContextProvider>
+        <ConsentRequestForm
+          consentRequest={defaultConsentRequest}
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
       </ConfirmationDialogProvider>
     );
     const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
@@ -224,12 +216,11 @@ describe("Consent Request Form", () => {
   it("displays the confirmation dialog with the correct title and content regardless of the state of the toggles when clicking 'Deny All Access' button", async () => {
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
-        <ConsentRequestContextProvider>
-          <ConsentRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </ConsentRequestContextProvider>
+        <ConsentRequestForm
+          consentRequest={defaultConsentRequest}
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
       </ConfirmationDialogProvider>
     );
     const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
@@ -254,12 +245,11 @@ describe("Consent Request Form", () => {
     consentFns.denyAccessRequest.mockResolvedValue(signedVc);
     const { getByTestId, getAllByTestId } = renderWithTheme(
       <ConfirmationDialogProvider>
-        <ConsentRequestContextProvider>
-          <ConsentRequestForm
-            agentDetails={agentDetails}
-            agentWebId={agentWebId}
-          />
-        </ConsentRequestContextProvider>
+        <ConsentRequestForm
+          consentRequest={defaultConsentRequest}
+          agentDetails={agentDetails}
+          agentWebId={agentWebId}
+        />
       </ConfirmationDialogProvider>
     );
     const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];

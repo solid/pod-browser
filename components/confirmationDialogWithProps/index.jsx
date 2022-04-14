@@ -52,6 +52,7 @@ export default function ConfirmationDialogWithProps({
   cancelText,
   confirmText,
   omitCancelButton,
+  omitConfirmButton,
   isDangerousAction,
   onConfirm,
   onCancel,
@@ -99,18 +100,20 @@ export default function ConfirmationDialogWithProps({
             {cancelText || "Cancel"}
           </Button>
         )}
-        <Button
-          data-testid={TESTCAFE_ID_CONFIRM_BUTTON}
-          className={
-            isDangerousAction
-              ? classes.dangerButton
-              : classes.submitAgentsButton
-          }
-          type="submit"
-          onClick={onConfirm}
-        >
-          {confirmText || "Confirm"}
-        </Button>
+        {!omitConfirmButton && (
+          <Button
+            data-testid={TESTCAFE_ID_CONFIRM_BUTTON}
+            className={
+              isDangerousAction
+                ? classes.dangerButton
+                : classes.submitAgentsButton
+            }
+            type="submit"
+            onClick={onConfirm}
+          >
+            {confirmText || "Confirm"}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );
@@ -124,6 +127,7 @@ ConfirmationDialogWithProps.propTypes = {
   cancelText: PropTypes.string,
   confirmText: PropTypes.string,
   omitCancelButton: PropTypes.bool,
+  omitConfirmButton: PropTypes.bool,
   isDangerousAction: PropTypes.bool,
   onConfirm: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
@@ -136,5 +140,6 @@ ConfirmationDialogWithProps.defaultProps = {
   cancelText: "",
   confirmText: "",
   omitCancelButton: false,
+  omitConfirmButton: false,
   isDangerousAction: false,
 };
