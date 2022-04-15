@@ -39,7 +39,7 @@ const profileIri = "https://example.com/profile/card#me";
 
 describe("Person Avatar", () => {
   const profileDataset = mockPersonDatasetAlice();
-  let profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+  const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
 
   beforeEach(() => {
     jest
@@ -65,20 +65,31 @@ describe("Person Avatar", () => {
   });
 
   it("renders a webId if there is no name in the profile", async () => {
-    const name = solidClientFns.getThing(profileDataset, foaf.name);
-    solidClientFns.removeStringNoLocale(profileThing, foaf.name, name);
-    profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+    const nameToRemove = solidClientFns.getStringNoLocale(
+      profileThing,
+      foaf.name
+    );
+    const profileThingWithNameRemoved = solidClientFns.removeStringNoLocale(
+      profileThing,
+      foaf.name,
+      nameToRemove
+    );
+
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
-    const { getByText, asFragment } = renderWithTheme(
-      <CombinedDataProvider solidDataset={profileDataset} thing={profileThing}>
+    const { getByText } = renderWithTheme(
+      <CombinedDataProvider
+        solidDataset={profileDataset}
+        thing={profileThingWithNameRemoved}
+      >
         <SessionProvider>
           <PersonAvatar profileIri={profileIri} />
         </SessionProvider>
       </CombinedDataProvider>
     );
+
     await waitFor(() => {
-      expect(getByText(aliceWebIdUrl)).toBeInTheDocument();
+      expect(getByText(session.info.webId)).toBeInTheDocument();
     });
   });
 });
