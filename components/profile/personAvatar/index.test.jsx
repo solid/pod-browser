@@ -33,7 +33,6 @@ import {
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import PersonAvatar, { setupErrorComponent } from "./index";
-import { chain } from "../../../src/solidClientHelpers/utils";
 
 const profileIri = "https://example.com/profile/card#me";
 

@@ -26,7 +26,6 @@ import { Avatar, Box, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { Image, Text, useSession } from "@inrupt/solid-ui-react";
-import { useRouter } from "next/router";
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
