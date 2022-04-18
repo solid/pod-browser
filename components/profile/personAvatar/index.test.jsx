@@ -24,6 +24,7 @@ import { render } from "@testing-library/react";
 import { waitFor } from "@testing-library/dom";
 import { CombinedDataProvider } from "@inrupt/solid-ui-react";
 import * as solidClientFns from "@inrupt/solid-client";
+import { foaf } from "rdf-namespaces";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import {
   aliceWebIdUrl,
@@ -31,7 +32,11 @@ import {
 } from "../../../__testUtils/mockPersonResource";
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
-import PersonAvatar, { setupErrorComponent } from "./index";
+import PersonAvatar, {
+  setupErrorComponent,
+  TESTCAFE_ID_NAME_TITLE,
+  TESTCAFE_ID_WEBID_TITLE,
+} from "./index";
 
 const profileIri = "https://example.com/profile/card#me";
 
@@ -49,17 +54,51 @@ describe("Person Avatar", () => {
   it("renders a person avatar", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
-    const { asFragment, getByText } = renderWithTheme(
-      <CombinedDataProvider solidDataset={profileDataset} thing={profileThing}>
-        <SessionProvider>
+    const { asFragment, getByTestId } = renderWithTheme(
+      <SessionProvider>
+        <CombinedDataProvider
+          solidDataset={profileDataset}
+          thing={profileThing}
+        >
           <PersonAvatar profileIri={profileIri} />
-        </SessionProvider>
-      </CombinedDataProvider>
+        </CombinedDataProvider>
+      </SessionProvider>
     );
     await waitFor(() => {
-      expect(getByText("Alice")).toBeInTheDocument();
+      expect(getByTestId(TESTCAFE_ID_NAME_TITLE)).toBeInTheDocument();
+      expect(getByTestId(TESTCAFE_ID_WEBID_TITLE)).toBeInTheDocument();
     });
     expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("renders only a webId if there is no name in the profile", async () => {
+    const nameToRemove = solidClientFns.getStringNoLocale(
+      profileThing,
+      foaf.name
+    );
+    const profileThingWithNameRemoved = solidClientFns.removeStringNoLocale(
+      profileThing,
+      foaf.name,
+      nameToRemove
+    );
+
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session);
+    const { getByTestId, queryAllByTestId } = renderWithTheme(
+      <SessionProvider>
+        <CombinedDataProvider
+          solidDataset={profileDataset}
+          thing={profileThingWithNameRemoved}
+        >
+          <PersonAvatar profileIri={profileIri} />
+        </CombinedDataProvider>
+      </SessionProvider>
+    );
+
+    await waitFor(() => {
+      expect(queryAllByTestId(TESTCAFE_ID_NAME_TITLE)).toHaveLength(0);
+      expect(getByTestId(TESTCAFE_ID_WEBID_TITLE)).toBeInTheDocument();
+    });
   });
 });
 

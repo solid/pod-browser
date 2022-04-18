@@ -52,23 +52,18 @@ exports[`Resource access show page renders a resource access page for a person 1
           <div
             class="PodBrowser-root PodBrowser-root"
           >
-            <h3
+            <h1
+              class="PodBrowser-root PodBrowser-h1"
               data-testid="profile-name-title"
             >
-              <span
-                class="PodBrowser-avatarText"
-              >
-                Bob
-              </span>
-              <a
-                class="PodBrowser-headerLink"
-                href="http://bob.example.com/bob#me"
-                rel="noreferrer"
-                target="_blank"
-              >
-                http://bob.example.com/bob#me
-              </a>
-            </h3>
+              Bob
+            </h1>
+            <p
+              class="PodBrowser-root PodBrowser-body2"
+              data-testid="profile-webid-title"
+            >
+              http://example.com/webId#me
+            </p>
           </div>
         </div>
         <div

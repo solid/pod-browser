@@ -22,16 +22,17 @@
 import React from "react";
 import T from "prop-types";
 import { foaf, vcard } from "rdf-namespaces";
-import { Avatar, Box, createStyles } from "@material-ui/core";
+import { Avatar, Box, createStyles, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Text, Image, useSession } from "@inrupt/solid-ui-react";
-
+import { Image, Text, useSession, useThing } from "@inrupt/solid-ui-react";
+import { getStringNoLocale } from "@inrupt/solid-client";
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export const TESTCAFE_ID_NAME_TITLE = "profile-name-title";
+export const TESTCAFE_ID_WEBID_TITLE = "profile-webid-title";
 
 export function setupErrorComponent(bem) {
   return () => (
@@ -44,7 +45,11 @@ export default function PersonAvatar({ profileIri }) {
   const bem = useBem(classes);
   const errorComponent = setupErrorComponent(bem);
   const { session } = useSession();
+  const { webId } = session.info;
+  const { thing } = useThing();
 
+  const name =
+    getStringNoLocale(thing, foaf.name) || getStringNoLocale(thing, vcard.fn);
   return (
     <Box alignItems="center" display="flex">
       <Box>
@@ -59,17 +64,20 @@ export default function PersonAvatar({ profileIri }) {
       </Box>
 
       <Box p={2}>
-        <h3 data-testid={TESTCAFE_ID_NAME_TITLE}>
-          <Text className={classes.avatarText} property={foaf.name} />
-          <a
-            className={classes.headerLink}
-            href={profileIri}
-            rel="noreferrer"
-            target="_blank"
-          >
-            {profileIri}
-          </a>
-        </h3>
+        {name ? (
+          <>
+            <Typography variant="h1" data-testid={TESTCAFE_ID_NAME_TITLE}>
+              {name}
+            </Typography>
+            <Typography variant="body2" data-testid={TESTCAFE_ID_WEBID_TITLE}>
+              {webId}
+            </Typography>
+          </>
+        ) : (
+          <Typography variant="h1" data-testid={TESTCAFE_ID_WEBID_TITLE}>
+            {webId}
+          </Typography>
+        )}
       </Box>
     </Box>
   );
