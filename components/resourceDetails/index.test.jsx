@@ -49,10 +49,6 @@ const mockUseAccessGrantBasedAccessForResource =
 jest.mock("../../src/hooks/useAccessControlType");
 const mockUseAccessControlType = useAccessControlType;
 
-jest.mock("../../src/hooks/useConsentBasedAccessForResource");
-const mockUseConsentBasedAccessForResource =
-  useAccessGrantBasedAccessForResource;
-
 jest.mock("next/router");
 
 describe("Resource details", () => {
