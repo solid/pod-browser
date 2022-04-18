@@ -26,8 +26,6 @@ module.exports = {
   // The test environment that will be used for testing
   testEnvironment: "<rootDir>/customEnvironment.js",
 
-  setupFiles: ["jest-localstorage-mock"],
-
   setupFilesAfterEnv: ["<rootDir>/jest-setup.js"],
 
   testPathIgnorePatterns: ["/node_modules/", "/__testUtils/", "/.next"],
