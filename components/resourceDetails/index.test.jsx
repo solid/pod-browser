@@ -20,16 +20,18 @@
  */
 
 import React from "react";
-import { waitFor } from "@testing-library/dom";
+import { waitFor, screen } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
-import * as routerFns from "next/router";
+import { useRouter } from "next/router";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import ResourceDetails, {
   TESTCAFE_ID_ACCORDION_PERMISSIONS,
   TESTCAFE_ID_ACCORDION_SHARING,
+  TESTCAFE_RESOURCE_ADDRESS_TOOLTIP,
 } from "./index";
+import mockLocalStorage from "../../__testUtils/mockLocalStorage";
 import mockAccessControl from "../../__testUtils/mockAccessControl";
 import { AccessControlProvider } from "../../src/contexts/accessControlContext";
 import mockPermissionsContextProvider from "../../__testUtils/mockPermissionsContextProvider";
@@ -47,11 +49,21 @@ const mockUseAccessGrantBasedAccessForResource =
 jest.mock("../../src/hooks/useAccessControlType");
 const mockUseAccessControlType = useAccessControlType;
 
+jest.mock("../../src/hooks/useConsentBasedAccessForResource");
+const mockUseConsentBasedAccessForResource =
+  useAccessGrantBasedAccessForResource;
+
+jest.mock("next/router");
+
 describe("Resource details", () => {
   beforeEach(() => {
-    jest
-      .spyOn(routerFns, "useRouter")
-      .mockReturnValue({ query: { resourceIri: "" }, push: jest.fn() });
+    useRouter.mockReturnValue({ query: { resourceIri: "" }, push: jest.fn() });
+
+    Object.defineProperty(window, "localStorage", {
+      value: mockLocalStorage(),
+      writable: true,
+    });
+
     mockUseAccessGrantBasedAccessForResource.mockReturnValue([]);
   });
 
@@ -66,6 +78,27 @@ describe("Resource details", () => {
       expect(getByText("container")).toBeInTheDocument();
     });
     expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("copies resource address to the clipboard when the copy link button is clicked", async () => {
+    const writeText = jest.fn();
+    Object.assign(navigator, {
+      clipboard: {
+        writeText,
+      },
+    });
+
+    const { getByTestId } = renderWithTheme(
+      <DatasetProvider solidDataset={dataset}>
+        <ResourceDetails />
+      </DatasetProvider>
+    );
+    const copyLink = screen.getByTestId(TESTCAFE_RESOURCE_ADDRESS_TOOLTIP);
+    userEvent.click(copyLink);
+    await waitFor(() => {
+      expect(copyLink).toBeInTheDocument();
+      expect(writeText).toHaveBeenCalled();
+    });
   });
 
   it("renders a decoded container name", async () => {

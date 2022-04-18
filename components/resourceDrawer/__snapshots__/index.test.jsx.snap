@@ -107,6 +107,17 @@ exports[`ResourceDrawer view renders a Contents view when the router query has a
                         class="PodBrowser-action-menu__item"
                       >
                         <button
+                          class="PodBrowser-action-menu__trigger"
+                          data-testid="resource-address-copy-tooltip"
+                          type="button"
+                        >
+                          COPY LINK
+                        </button>
+                      </li>
+                      <li
+                        class="PodBrowser-action-menu__item"
+                      >
+                        <button
                           class="PodBrowser-action-menu__trigger PodBrowser-action-menu__trigger--danger"
                           data-testid="delete-resource-button"
                           type="button"
@@ -734,6 +745,17 @@ exports[`ResourceDrawer view renders without errors when iri contains spaces 1`]
                       <li
                         class="PodBrowser-action-menu__item"
                       />
+                      <li
+                        class="PodBrowser-action-menu__item"
+                      >
+                        <button
+                          class="PodBrowser-action-menu__trigger"
+                          data-testid="resource-address-copy-tooltip"
+                          type="button"
+                        >
+                          COPY LINK
+                        </button>
+                      </li>
                       <li
                         class="PodBrowser-action-menu__item"
                       >
