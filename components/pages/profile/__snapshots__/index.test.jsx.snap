@@ -40,15 +40,18 @@ exports[`Profile page Renders the profile page 1`] = `
           <div
             class="PodBrowser-root PodBrowser-root"
           >
-            <h3
+            <h1
+              class="PodBrowser-root PodBrowser-h1"
               data-testid="profile-name-title"
             >
-              <span
-                class="PodBrowser-avatarText"
-              >
-                Alice
-              </span>
-            </h3>
+              Alice
+            </h1>
+            <p
+              class="PodBrowser-root PodBrowser-body2"
+              data-testid="profile-webid-title"
+            >
+              http://example.com/webId#me
+            </p>
           </div>
         </div>
         <hr />
