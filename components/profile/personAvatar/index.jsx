@@ -64,16 +64,20 @@ export default function PersonAvatar({ profileIri }) {
       </Box>
 
       <Box p={2}>
-        {/* <h3 > */}
-        {name && (
-          <Typography variant="h1" data-testid={TESTCAFE_ID_NAME_TITLE}>
-            {name}
+        {name ? (
+          <>
+            <Typography variant="h1" data-testid={TESTCAFE_ID_NAME_TITLE}>
+              {name}
+            </Typography>
+            <Typography variant="body2" data-testid={TESTCAFE_ID_WEBID_TITLE}>
+              {webId}
+            </Typography>
+          </>
+        ) : (
+          <Typography variant="h1" data-testid={TESTCAFE_ID_WEBID_TITLE}>
+            {webId}
           </Typography>
         )}
-        <Typography variant="body2" data-testid={TESTCAFE_ID_WEBID_TITLE}>
-          {webId}
-        </Typography>
-        {/* </h3> */}
       </Box>
     </Box>
   );
