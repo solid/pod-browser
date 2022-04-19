@@ -156,6 +156,7 @@ export default function AccessRequestForm({
     } else if (!selectedAccess.length) {
       setConfirmationSetup(true);
       setOmitCancelButton(false);
+      setOmitConfirmButton(false);
       setOpen(ACCESS_REQUEST_NO_ACCESS_DIALOG);
       setTitle(NO_ACCESS_DIALOG_TITLE);
       setConfirmText(CONFIRM_TEXT);
