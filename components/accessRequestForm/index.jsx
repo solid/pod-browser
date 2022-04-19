@@ -116,7 +116,6 @@ export default function AccessRequestForm({
     setOmitConfirmButton,
     setOmitCancelButton,
   } = useContext(ConfirmationDialogContext);
-  const [confirmationSetup, setConfirmationSetup] = useState(false);
 
   const { alertError } = useContext(AlertContext);
   const DIALOG_CONTENT = `${
@@ -147,14 +146,12 @@ export default function AccessRequestForm({
     }
     /* istanbul ignore next */
     if (!selectedPurposes.length) {
-      setConfirmationSetup(true);
       setOpen(ACCESS_REQUEST_NO_ACCESS_DIALOG);
       setTitle(NO_PURPOSE_TITLE);
       setCancelText("Ok");
       setOmitConfirmButton(true);
       setContent(NO_PURPOSE_CONTENT);
     } else if (!selectedAccess.length) {
-      setConfirmationSetup(true);
       setOmitCancelButton(false);
       setOmitConfirmButton(false);
       setOpen(ACCESS_REQUEST_NO_ACCESS_DIALOG);
@@ -165,7 +162,6 @@ export default function AccessRequestForm({
   };
 
   const handleDenyAccess = () => {
-    setConfirmationSetup(true);
     setOmitCancelButton(false);
     setTitle(DENY_ACCESS_DIALOG_TITLE);
     setConfirmText(DENY_TEXT);
@@ -183,28 +179,17 @@ export default function AccessRequestForm({
         await router.push(`${redirectUrl}?signedVcUrl=${getVcId(signedVc)}`);
       }
     };
-    if (
-      confirmationSetup &&
-      confirmed === null &&
-      open === ACCESS_REQUEST_NO_ACCESS_DIALOG
-    )
-      return;
+    if (confirmed === null && open === ACCESS_REQUEST_NO_ACCESS_DIALOG) return;
 
-    if (
-      confirmationSetup &&
-      confirmed &&
-      open === ACCESS_REQUEST_NO_ACCESS_DIALOG
-    ) {
+    if (confirmed && open === ACCESS_REQUEST_NO_ACCESS_DIALOG) {
       handleDenyAccessRequest();
       closeDialog();
     }
 
     if (confirmed !== null) {
       closeDialog();
-      setConfirmationSetup(false);
     }
   }, [
-    confirmationSetup,
     confirmed,
     closeDialog,
     open,
