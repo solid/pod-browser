@@ -27,7 +27,7 @@ function buildAppProfile(hostname, clientId) {
     client_id: clientId,
     redirect_uris: [hostname, hostname.concat("login")],
     client_name: CLIENT_NAME,
-    grant_types: GRANT_TYPES.join(" "),
+    grant_types: GRANT_TYPES,
   };
 }
 
