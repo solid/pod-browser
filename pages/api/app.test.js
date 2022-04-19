@@ -31,6 +31,7 @@ const PODBROWSER_RESPONSE = {
     "https://podbrowser.inrupt.com/",
     "https://podbrowser.inrupt.com/login",
   ],
+  grant_types: ["refresh_token", "authorization_code"],
 };
 
 describe("/api/app handler tests", () => {
@@ -61,8 +62,6 @@ describe("/api/app handler tests", () => {
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.end).toHaveBeenCalledTimes(1);
     // eslint-disable-next-line no-underscore-dangle
-    expect(JSON.parse(res._getData())).toEqual(
-      expect.objectContaining(PODBROWSER_RESPONSE)
-    );
+    expect(JSON.parse(res._getData())).toStrictEqual(PODBROWSER_RESPONSE);
   });
 });
