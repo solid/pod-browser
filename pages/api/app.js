@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { CLIENT_NAME } from "../../constants/app";
+import { CLIENT_NAME, GRANT_TYPES } from "../../constants/app";
 
 function buildAppProfile(hostname, clientId) {
   return {
@@ -27,6 +27,7 @@ function buildAppProfile(hostname, clientId) {
     client_id: clientId,
     redirect_uris: [hostname, hostname.concat("login")],
     client_name: CLIENT_NAME,
+    grant_types: GRANT_TYPES.join(" "),
   };
 }
 

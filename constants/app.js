@@ -42,3 +42,5 @@ export const getClientOptions = () => {
     redirectUrl: generateRedirectUrl(""),
   };
 };
+
+export const GRANT_TYPES = ["refresh_token", "authorization_code"];
