@@ -38,4 +38,4 @@ This project adheres to the Contributor Covenant [code of conduct](code_of_condu
 You can use `npm deploy` to deploy a PodBrowser instance to Vercel, if you create an account. Alternatively, you can:
 
 - Run `npm run build` and `npm run start` to run the node server;
-- Run `npm run build` and `npm run export` to export static HTML and assets to host on the server of your choice..
+- Run `npm run build` and `npm run export` to export static HTML and assets to host on the server of your choice.
