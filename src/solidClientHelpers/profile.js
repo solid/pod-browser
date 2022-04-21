@@ -24,13 +24,15 @@ import {
   getStringNoLocale,
   getProfileAll,
   getThing,
-  getThingAll,
   getUrl,
   getUrlAll,
   getSourceUrl,
+  getEffectiveAccess,
+  getResourceInfo,
+  getSourceIri,
 } from "@inrupt/solid-client";
-import { foaf, rdf, schema, space, vcard, ldp } from "rdf-namespaces";
-import { getProfileIriFromContactThing } from "../addressBook";
+import { foaf, rdf, schema, space, vcard, ldp, rdfs } from "rdf-namespaces";
+import { getProfileIriFromContactThing, vcardExtras } from "../addressBook";
 
 export function displayProfileName({ nickname, name, webId }) {
   if (name) return name;
@@ -112,4 +114,191 @@ export async function fetchProfile(webId, fetch) {
   const inbox = getUrl(getThing(webIdProfile, webId), ldp.inbox);
 
   return packageProfile(webIdUrl, profileDataset, pods, inbox);
+}
+
+export async function getFullProfile(webId, session) {
+  const profiles = await getProfileAll(webId);
+  const profile = {
+    names: [],
+    avatars: [],
+    types: [],
+    webId,
+    roles: [],
+    organizations: [],
+    editableProfileDatasets: [],
+    contactInfo: {
+      phones: [],
+      emails: [],
+    },
+  };
+
+  const profileDataItems = [
+    {
+      label: "names",
+      getDataItem: getStringNoLocale,
+      properties: [foaf.name, vcard.fn],
+    },
+    {
+      label: "avatars",
+      getDataItem: getUrl,
+      properties: [vcard.hasPhoto],
+    },
+    {
+      label: "types",
+      getDataItem: getUrl,
+      properties: [rdf.type],
+    },
+    {
+      label: "roles",
+      getDataItem: getStringNoLocale,
+      properties: [vcard.role],
+    },
+    {
+      label: "organizations",
+      getDataItem: getStringNoLocale,
+      properties: [vcardExtras("organization-name")],
+    },
+  ];
+
+  const contactInfoDataItems = [
+    {
+      label: "phones",
+      properties: [vcard.hasTelephone],
+    },
+    {
+      label: "emails",
+      properties: [vcard.hasEmail],
+    },
+  ];
+
+  // Note: the WebID doc is handled separately from rest of documents because of the issues with authenticated fetches and checking effective access to the resource
+
+  // step 1: find preferences file in webId doc
+  const readableProfileDocuments = [...profiles.altProfileAll];
+  const webIdProfileThing = getThing(profiles.webIdProfile, webId);
+  const preferencesFileUrl = getUrl(webIdProfileThing, space.preferencesFile);
+
+  // step 2: seeAlso(s) within preferences file
+  if (preferencesFileUrl && webId === session.info.webId) {
+    try {
+      const preferencesFile = await getSolidDataset(preferencesFileUrl, {
+        fetch,
+      });
+      const preferencesFileThing = getThing(preferencesFile, webId);
+      const seeAlsoUrls = getUrlAll(preferencesFileThing, rdfs.seeAlso);
+      seeAlsoUrls.forEach(async (url) => {
+        const seeAlsoDocument = await getSolidDataset(url, {
+          fetch: session.fetch,
+        });
+        if (seeAlsoDocument) readableProfileDocuments.push(seeAlsoDocument);
+      });
+    } catch (e) {
+      // ignore, if we cannot get this we move on
+    }
+  }
+  // step 3: seeAlso(s) within webID doc (and isPrimaryTopicOf)
+  const extendedProfilesUrls = getUrlAll(webIdProfileThing, rdfs.seeAlso);
+
+  extendedProfilesUrls.push(getUrl(webIdProfileThing, foaf.isPrimaryTopicOf));
+  const extendedProfileDocuments = await Promise.all(
+    extendedProfilesUrls.map((url) => {
+      return (
+        url &&
+        getSolidDataset(url, {
+          fetch: session.fetch,
+        })
+      );
+    })
+  );
+  readableProfileDocuments.push(...extendedProfileDocuments);
+  // try to find profile data in WebId document first:
+  profileDataItems.forEach((dataItem) => {
+    dataItem.properties.forEach((property) => {
+      const value = dataItem.getDataItem(webIdProfileThing, property);
+      if (value) profile[dataItem.label].push(value);
+    });
+  });
+  // try the rest of the readable documents
+  readableProfileDocuments.forEach((doc) => {
+    if (!doc) return;
+    const webIdSubjectThing = getThing(doc, webId);
+    const storageThing = getThing(doc, getSourceUrl(doc));
+    const thing = webIdSubjectThing ?? storageThing;
+    profileDataItems.forEach((dataItem) => {
+      dataItem.properties.forEach((property) => {
+        const value = dataItem.getDataItem(thing, property);
+        if (value) profile[dataItem.label].push(value);
+      });
+    });
+  });
+
+  // find the editable profile datasets
+  // check if webid is editable
+  const webIdResourceInfo = await getResourceInfo(
+    getSourceIri(profiles.webIdProfile),
+    {
+      fetch: session.fetch,
+    }
+  );
+  const { user: profileEditingAccess } = getEffectiveAccess(webIdResourceInfo);
+  const isProfileEditable =
+    profileEditingAccess.write || profileEditingAccess.append;
+  if (isProfileEditable) {
+    profile.editableProfileDatasets.push(profiles.webIdProfile);
+  }
+  // rest of documents
+  readableProfileDocuments.forEach((doc) => {
+    if (!doc) return;
+    const { user: profileEditingAccess } = getEffectiveAccess(doc);
+    const isProfileEditable =
+      profileEditingAccess.write || profileEditingAccess.append;
+    if (isProfileEditable) {
+      profile.editableProfileDatasets.push(doc);
+    }
+  });
+
+  // find contact info
+  // in webid profile
+  const webIdSubjectThing = getThing(profiles.webIdProfile, webId);
+  contactInfoDataItems.forEach((item) => {
+    item.properties.forEach((property) => {
+      const contactDetailUrls =
+        webIdSubjectThing && getUrlAll(webIdSubjectThing, property);
+      const contactDetailThings = contactDetailUrls?.map(
+        (url) => profiles.webIdProfile && getThing(profiles.webIdProfile, url)
+      );
+      contactDetailThings.forEach((contactDetailItem) => {
+        const contactItem = {
+          type: getUrl(contactDetailItem, rdf.type),
+          value: getUrl(contactDetailItem, vcard.value),
+        };
+        profile.contactInfo[item.label].push(contactItem);
+      });
+    });
+  });
+
+  // in rest of readable docs
+  readableProfileDocuments.forEach((doc) => {
+    if (!doc) return;
+    const webIdSubjectThing = getThing(doc, webId);
+    const storageThing = getThing(doc, getSourceUrl(doc));
+    const thing = webIdSubjectThing ?? storageThing;
+    contactInfoDataItems.forEach((item) => {
+      item.properties.forEach((property) => {
+        const contactDetailUrls = thing && getUrlAll(thing, property);
+        const contactDetailThings = contactDetailUrls?.map(
+          (url) => doc && getThing(doc, url)
+        );
+        contactDetailThings.forEach((contactDetailItem) => {
+          const contactItem = {
+            type: getUrl(contactDetailItem, rdf.type),
+            value: getUrl(contactDetailItem, vcard.value),
+          };
+          profile.contactInfo[item.label].push(contactItem);
+        });
+      });
+    });
+  });
+
+  return profile;
 }

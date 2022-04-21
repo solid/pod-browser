@@ -20,13 +20,9 @@
  */
 
 import React from "react";
-import { CombinedDataProvider } from "@inrupt/solid-ui-react";
-import * as solidClientFns from "@inrupt/solid-client";
+import { foaf } from "rdf-namespaces";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
-import {
-  aliceWebIdUrl,
-  mockPersonDatasetAlice,
-} from "../../../__testUtils/mockPersonResource";
+import { aliceWebIdUrl } from "../../../__testUtils/mockPersonResource";
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import PersonProfile, {
@@ -34,33 +30,25 @@ import PersonProfile, {
   TESTCAFE_ID_NAME_TITLE,
 } from "./index";
 
-const profileIri = "https://example.com/profile/card#me";
-
 describe("Person Profile", () => {
-  const profileDataset = mockPersonDatasetAlice();
-  const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
-  const profile = {
-    webIdProfile: profileDataset,
+  const mockProfileAlice = {
+    names: ["Alice"],
+    webId: aliceWebIdUrl,
+    types: [foaf.Person],
+    avatars: [],
+    roles: [],
+    organizations: [],
+    contactInfo: {
+      phones: [],
+      emails: [],
+    },
   };
-
-  beforeEach(() => {
-    jest
-      .spyOn(solidClientFns, "getSolidDataset")
-      .mockResolvedValue(profileDataset);
-    jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
-  });
-
   it("renders a profile", async () => {
     const session = mockSession();
-    const SessionProvider = mockSessionContextProvider(session, false, profile);
+    const SessionProvider = mockSessionContextProvider(session, false);
     const { asFragment, findByTestId } = renderWithTheme(
       <SessionProvider>
-        <CombinedDataProvider
-          solidDataset={profileDataset}
-          thing={profileThing}
-        >
-          <PersonProfile profileIri={profileIri} />
-        </CombinedDataProvider>
+        <PersonProfile profile={mockProfileAlice} />
       </SessionProvider>
     );
     await expect(findByTestId(TESTCAFE_ID_NAME_TITLE)).resolves.not.toBeNull();

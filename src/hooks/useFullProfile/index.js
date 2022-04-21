@@ -18,12 +18,25 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-/* istanbul ignore file */
 
-export default function getConfig() {
-  return {
-    devClientId: process.env.NEXT_PUBLIC_DEV_CLIENT_ID || "",
-    host: process.env.NEXT_PUBLIC_APP_HOST || "",
-    loginRedirect: "/",
-  };
+import { useSession } from "@inrupt/solid-ui-react";
+import { useEffect, useState } from "react";
+import { getFullProfile } from "../../solidClientHelpers/profile";
+
+export default function useFullProfile(webId) {
+  const { session } = useSession();
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const fullSolidProfile = await getFullProfile(webId, session);
+        setProfile(fullSolidProfile);
+      } catch (e) {
+        // ignore errors
+      }
+    })();
+  }, [session, webId]);
+
+  return profile;
 }

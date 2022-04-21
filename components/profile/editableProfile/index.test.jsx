@@ -20,21 +20,24 @@
  */
 
 import React from "react";
-import { act } from "@testing-library/react-hooks";
 import { waitFor } from "@testing-library/dom";
 import { foaf, schema } from "rdf-namespaces";
-import { renderWithTheme } from "../../__testUtils/withTheme";
-import { aliceWebIdUrl } from "../../__testUtils/mockPersonResource";
-import mockSession from "../../__testUtils/mockSession";
-import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
-import Profile from "./index";
-import useFullProfile from "../../src/hooks/useFullProfile";
+import { renderWithTheme } from "../../../__testUtils/withTheme";
+import {
+  aliceWebIdUrl,
+  mockPersonDatasetAlice,
+} from "../../../__testUtils/mockPersonResource";
+import mockSession from "../../../__testUtils/mockSession";
+import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
+import useFullProfile from "../../../src/hooks/useFullProfile";
+import EditableProfile from "./index";
 
-jest.mock("../../src/hooks/useFullProfile");
+jest.mock("../../../src/hooks/useFullProfile");
 
 const mockedUseFullProfile = useFullProfile;
 
-describe("Profile", () => {
+describe("EditableProfile", () => {
+  const profileDataset = mockPersonDatasetAlice();
   const mockProfileAlice = {
     names: ["Alice"],
     webId: aliceWebIdUrl,
@@ -46,6 +49,7 @@ describe("Profile", () => {
       phones: [],
       emails: [],
     },
+    editableProfileDatasets: [profileDataset],
   };
 
   const mockAppProfile = {
@@ -62,13 +66,16 @@ describe("Profile", () => {
     it("renders a person profile", async () => {
       const session = mockSession();
       const SessionProvider = mockSessionContextProvider(session);
-      const { asFragment, queryAllByText } = renderWithTheme(
+      const { asFragment, queryByText } = renderWithTheme(
         <SessionProvider>
-          <Profile profile={mockProfileAlice} />
+          <EditableProfile
+            profile={mockProfileAlice}
+            profileDataset={profileDataset}
+          />
         </SessionProvider>
       );
       await waitFor(() => {
-        expect(queryAllByText("Alice")).toHaveLength(2);
+        expect(queryByText("Alice")).toBeInTheDocument();
       });
       expect(asFragment()).toMatchSnapshot();
     });
@@ -84,7 +91,10 @@ describe("Profile", () => {
       const SessionProvider = mockSessionContextProvider(session);
       const { asFragment, queryByText } = renderWithTheme(
         <SessionProvider>
-          <Profile profile={mockAppProfile} />
+          <EditableProfile
+            profileDataset={profileDataset}
+            profile={mockAppProfile}
+          />
         </SessionProvider>
       );
       await waitFor(() => {
@@ -99,12 +109,12 @@ describe("Profile", () => {
     const SessionProvider = mockSessionContextProvider(session);
     const { asFragment, queryByText } = renderWithTheme(
       <SessionProvider>
-        <Profile profile={null} webId="https://somewebid.com" />
+        <EditableProfile profileDataset={null} webId="https://somewebid.com" />
       </SessionProvider>
     );
     await waitFor(() => {
       expect(
-        queryByText("Cannot fetch avatar for this WebID: https://somewebid.com")
+        queryByText("No profile document found this this WebID")
       ).toBeInTheDocument();
     });
     expect(asFragment()).toMatchSnapshot();

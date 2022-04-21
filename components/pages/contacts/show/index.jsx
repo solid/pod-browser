@@ -19,8 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
+import React, { useContext } from "react";
 import { useRouter } from "next/router";
+import { SessionContext } from "@inrupt/solid-ui-react";
 import { schema } from "rdf-namespaces";
 import {
   BackToNav,
@@ -28,10 +29,17 @@ import {
   Container,
 } from "@inrupt/prism-react-components";
 import Profile from "../../../profile";
+import useFullProfile from "../../../../src/hooks/useFullProfile";
 
 export default function ContactShow() {
   const router = useRouter();
   const decodedIri = decodeURIComponent(router.query.webId);
+  const { sessionRequestInProgress } = useContext(SessionContext);
+  const agentProfile = useFullProfile(decodedIri);
+
+  if (sessionRequestInProgress || !agentProfile) {
+    return null;
+  }
 
   const link = <BackToNavLink href="/contacts">contacts</BackToNavLink>;
   return (
@@ -39,7 +47,7 @@ export default function ContactShow() {
       <Container>
         <BackToNav link={link} />
       </Container>
-      <Profile profileIri={decodedIri} type={schema.Person} />
+      <Profile profile={agentProfile} />
     </>
   );
 }

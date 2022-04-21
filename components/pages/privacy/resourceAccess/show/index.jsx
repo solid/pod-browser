@@ -22,10 +22,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useEffect, useState, useMemo } from "react";
-import { CombinedDataProvider, useSession, Text } from "@inrupt/solid-ui-react";
+import { useSession } from "@inrupt/solid-ui-react";
 import { useRouter } from "next/router";
 import T from "prop-types";
-import { schema, foaf } from "rdf-namespaces";
+import { schema } from "rdf-namespaces";
 import { makeStyles } from "@material-ui/styles";
 import { useSortBy, useTable } from "react-table";
 import clsx from "clsx";
@@ -39,7 +39,7 @@ import {
   Icons,
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
-import { createStyles, Divider } from "@material-ui/core";
+import { createStyles, Divider, Typography } from "@material-ui/core";
 import ConfirmationDialog from "../../../../confirmationDialog";
 import { handleAction } from "../../../../containerTableRow";
 import PersonAvatar from "../../../../profile/personAvatar";
@@ -58,6 +58,7 @@ import { isContainerIri } from "../../../../../src/solidClientHelpers/utils";
 import { getParentContainerUrl } from "../../../../../src/stringHelpers";
 import TabPanel from "./tabPanel";
 import styles from "./styles";
+import useFullProfile from "../../../../../src/hooks/useFullProfile";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -69,7 +70,6 @@ export default function AgentResourceAccessShowPage({ type }) {
   const router = useRouter();
   const decodedIri = decodeURIComponent(router.query.webId);
   const tableClass = PrismTable.useTableClass("table", "inherits");
-
   const { session, fetch } = useSession();
   const podRoot = usePodRootUri(session.info.webId);
   const [resources, setResources] = useState([]);
@@ -79,6 +79,8 @@ export default function AgentResourceAccessShowPage({ type }) {
   const [resourcesError, setResourcesError] = useState(null);
   const [shouldUpdate, setShouldUpdate] = useState(false);
   const [selectedTabValue, setSelectedTabValue] = useState("Permissions");
+  const agentProfile = useFullProfile(decodedIri);
+  const agentTypes = agentProfile?.types ?? [type];
 
   const link = <BackToNavLink href="/privacy">privacy</BackToNavLink>;
 
@@ -113,9 +115,10 @@ export default function AgentResourceAccessShowPage({ type }) {
     }
   }
   `;
+
   useEffect(() => {
     /* istanbul ignore next */
-    if (!podRoot) return;
+    if (!podRoot || !decodedIri) return;
     // FIXME: write tests for this
     /* istanbul ignore next */
     fetch("https://access.pod.inrupt.com/graphql/", {
@@ -139,7 +142,7 @@ export default function AgentResourceAccessShowPage({ type }) {
         setResources(resourceList);
         setShouldUpdate(false);
       });
-  }, [query, podRoot, fetch, session, shouldUpdate]);
+  }, [query, podRoot, fetch, session, shouldUpdate, decodedIri]);
 
   useEffect(() => {
     // FIXME: ignoring this until we have mock resources in the tests
@@ -216,199 +219,181 @@ export default function AgentResourceAccessShowPage({ type }) {
   if (shouldUpdate) {
     return <Spinner />;
   }
-  // FIXME: using a conditional dataset provider wrapper while we mock app profiles
-  const ConditionalWrapper = ({ condition, wrapper, children }) =>
-    condition ? wrapper(children) : children;
 
   const renderAvatar = () => {
-    if (type === schema.SoftwareApplication) {
-      return <AppAvatar profileIri={decodedIri} />;
+    if (agentTypes.includes(schema.SoftwareApplication)) {
+      return <AppAvatar profile={agentProfile} webId={decodedIri} />;
     }
-    return <PersonAvatar profileIri={decodedIri} />;
+    return <PersonAvatar profile={agentProfile} webId={decodedIri} />;
   };
 
   const renderProfile = () => {
-    if (type === schema.SoftwareApplication) {
-      return <AppProfile profileIri={decodedIri} />;
+    if (agentTypes.includes(schema.SoftwareApplication)) {
+      return <AppProfile profile={agentProfile} />;
     }
-    return <PersonProfile profileIri={decodedIri} />;
+    return <PersonProfile profile={agentProfile} />;
   };
-
   return (
-    <ConditionalWrapper
-      condition={type !== schema.SoftwareApplication}
-      wrapper={(children) => (
-        <CombinedDataProvider datasetUrl={decodedIri} thingUrl={decodedIri}>
-          {children}
-        </CombinedDataProvider>
-      )}
-    >
-      <DrawerContainer drawer={drawer} open={selectedResourceIndex !== null}>
-        <div className={classes.container}>
-          <BackToNav link={link} />
-          {renderAvatar()}
-          <Tabs
-            tabs={tabs}
-            handleTabChange={handleTabChange}
-            selectedTabValue={selectedTabValue}
-          />
-          <TabPanel value={selectedTabValue} panelName="Permissions">
-            <p>
-              {/* FIXME: Temporary workaround for mockApp name since there is no dataset */}
-              {type === schema.SoftwareApplication && <span>MockApp</span>}
-              {type !== schema.SoftwareApplication && (
-                <Text property={foaf.name} />
-              )}
-              {` `}
-              {USER_ACCESS_STRING}
-            </p>
-            {resources.length === 0 && <Spinner />}
-            {resources.length !== 0 && (
-              // FIXME: update when we have mock list of resources
-              /* istanbul ignore next */
-              <>
-                <div className={bem("table__container")}>
-                  <table
-                    className={clsx(tableClass, bem("table"))}
-                    {...getTableProps()}
-                  >
-                    <thead className={bem("table__header")}>
-                      {headerGroups.map((headerGroup) => (
-                        <tr
-                          key={headerGroup.id}
-                          {...headerGroup.getHeaderGroupProps()}
-                        >
-                          {headerGroup.headers.map((column) => (
-                            <td
-                              key={column.id}
-                              className={bem("table__head-cell")}
-                              {...column.getHeaderProps(
-                                column.getSortByToggleProps()
-                              )}
-                            >
-                              {column.render("Header")}
-                              {` `}
-                              <SortedTableCarat
-                                sorted={column.isSorted}
-                                sortedDesc={column.isSortedDesc}
-                              />
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </thead>
-                    <tbody {...getTableBodyProps()}>
-                      {rows.map((row, i) => {
-                        prepareRow(row);
-                        const details = row.original;
-                        const resourceName =
-                          details && getResourceName(details);
-                        const resourcePath = getParentContainerUrl(
-                          details
-                        ).replace(podRoot, "");
-                        const resourcePathAndName = `${
-                          resourcePath + resourceName.trim()
-                        }`;
-                        const resourceAccess = accessList.filter(
-                          ({ resource }) => resource === row.original
-                        );
-                        const allowModes = getAllowModes(resourceAccess);
-                        const modes = allowModes?.map((mode) => {
-                          return {
-                            read: !!mode.includes("Read"),
-                            write: !!mode.includes("Write"),
-                            append: !!mode.includes("Append"),
-                            control: !!mode.includes("Control"),
-                          };
-                        });
-                        const accessDetails = modes?.map((mode) => {
-                          return getAcpAccessDetails(mode);
-                        });
-                        const accessDetailsName = accessDetails?.map(
-                          ({ name }) => name
-                        );
-                        return (
-                          <tr
-                            key={details}
-                            className={`${
-                              selectedResourceIndex === i
-                                ? bem("table__body-row", "active")
-                                : bem("table__body-row")
-                            }`}
+    <DrawerContainer drawer={drawer} open={selectedResourceIndex !== null}>
+      <div className={classes.container}>
+        <BackToNav link={link} />
+        {renderAvatar()}
+        <Tabs
+          tabs={tabs}
+          handleTabChange={handleTabChange}
+          selectedTabValue={selectedTabValue}
+        />
+        <TabPanel value={selectedTabValue} panelName="Permissions">
+          <p>
+            {agentProfile ? agentProfile.names[0] : decodedIri}
+            {` `}
+            {USER_ACCESS_STRING}
+          </p>
+          {resources.length === 0 && <Spinner />}
+          {resources.length !== 0 && (
+            // FIXME: update when we have mock list of resources
+            /* istanbul ignore next */
+            <>
+              <div className={bem("table__container")}>
+                <table
+                  className={clsx(tableClass, bem("table"))}
+                  {...getTableProps()}
+                >
+                  <thead className={bem("table__header")}>
+                    {headerGroups.map((headerGroup) => (
+                      <tr
+                        key={headerGroup.id}
+                        {...headerGroup.getHeaderGroupProps()}
+                      >
+                        {headerGroup.headers.map((column) => (
+                          <td
+                            key={column.id}
+                            className={bem("table__head-cell")}
+                            {...column.getHeaderProps(
+                              column.getSortByToggleProps()
+                            )}
                           >
-                            <td className={bem("table__body-cell")}>
-                              <Icons
-                                name={
-                                  details && isContainerIri(details)
-                                    ? "folder"
-                                    : "file"
-                                }
-                                className={bem("access-details", "icon")}
+                            {column.render("Header")}
+                            {` `}
+                            <SortedTableCarat
+                              sorted={column.isSorted}
+                              sortedDesc={column.isSortedDesc}
+                            />
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </thead>
+                  <tbody {...getTableBodyProps()}>
+                    {rows.map((row, i) => {
+                      prepareRow(row);
+                      const details = row.original;
+                      const resourceName = details && getResourceName(details);
+                      const resourcePath = getParentContainerUrl(
+                        details
+                      ).replace(podRoot, "");
+                      const resourcePathAndName = `${
+                        resourcePath + resourceName.trim()
+                      }`;
+                      const resourceAccess = accessList.filter(
+                        ({ resource }) => resource === row.original
+                      );
+                      const allowModes = getAllowModes(resourceAccess);
+                      const modes = allowModes?.map((mode) => {
+                        return {
+                          read: !!mode.includes("Read"),
+                          write: !!mode.includes("Write"),
+                          append: !!mode.includes("Append"),
+                          control: !!mode.includes("Control"),
+                        };
+                      });
+                      const accessDetails = modes?.map((mode) => {
+                        return getAcpAccessDetails(mode);
+                      });
+                      const accessDetailsName = accessDetails?.map(
+                        ({ name }) => name
+                      );
+                      return (
+                        <tr
+                          key={details}
+                          className={`${
+                            selectedResourceIndex === i
+                              ? bem("table__body-row", "active")
+                              : bem("table__body-row")
+                          }`}
+                        >
+                          <td className={bem("table__body-cell")}>
+                            <Icons
+                              name={
+                                details && isContainerIri(details)
+                                  ? "folder"
+                                  : "file"
+                              }
+                              className={bem("access-details", "icon")}
+                            />
+                          </td>
+                          <td
+                            className={bem("table__body-cell", "interactive")}
+                            onClick={() => setSelectedResourceIndex(i)}
+                            onKeyDown={() => setSelectedResourceIndex(i)}
+                          >
+                            {decodeURIComponent(resourcePathAndName)}
+                          </td>
+                          <td>{accessDetailsName?.join(", ")}</td>
+                          <td className={bem("table__body-cell")}>
+                            <ActionButton>
+                              <Button
+                                variant="in-menu"
+                                /* istanbul ignore next */
+                                onClick={() => setSelectedResourceIndex(i)}
+                              >
+                                Details
+                              </Button>
+                              <Button
+                                onClick={handleAction(
+                                  resources[i],
+                                  getParentContainerUrl(details),
+                                  router
+                                )}
+                                variant="in-menu"
+                              >
+                                View Resource
+                              </Button>
+                              <Divider />
+                              <RevokeAccessButton
+                                variant="in-menu"
+                                /* istanbul ignore next */
+                                onClose={() => setSelectedResourceIndex(null)}
+                                accessList={resourceAccess}
+                                resources={[resources[i]]}
+                                setShouldUpdate={setShouldUpdate}
                               />
-                            </td>
-                            <td
-                              className={bem("table__body-cell", "interactive")}
-                              onClick={() => setSelectedResourceIndex(i)}
-                              onKeyDown={() => setSelectedResourceIndex(i)}
-                            >
-                              {decodeURIComponent(resourcePathAndName)}
-                            </td>
-                            <td>{accessDetailsName?.join(", ")}</td>
-                            <td className={bem("table__body-cell")}>
-                              <ActionButton>
-                                <Button
-                                  variant="in-menu"
-                                  /* istanbul ignore next */
-                                  onClick={() => setSelectedResourceIndex(i)}
-                                >
-                                  Details
-                                </Button>
-                                <Button
-                                  onClick={handleAction(
-                                    resources[i],
-                                    getParentContainerUrl(details),
-                                    router
-                                  )}
-                                  variant="in-menu"
-                                >
-                                  View Resource
-                                </Button>
-                                <Divider />
-                                <RevokeAccessButton
-                                  variant="in-menu"
-                                  /* istanbul ignore next */
-                                  onClose={() => setSelectedResourceIndex(null)}
-                                  accessList={resourceAccess}
-                                  resources={[resources[i]]}
-                                  setShouldUpdate={setShouldUpdate}
-                                />
-                              </ActionButton>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-                <div className={bem("revoke-button__container")}>
-                  <RevokeAccessButton
-                    variant="all-access"
-                    /* istanbul ignore next */
-                    onClose={() => router.push("/privacy")}
-                    accessList={accessList}
-                    resources={resources}
-                  />
-                </div>
-              </>
-            )}
-          </TabPanel>
-          <TabPanel value={selectedTabValue} panelName="Profile">
-            {renderProfile()}
-          </TabPanel>
-          <ConfirmationDialog />
-        </div>
-      </DrawerContainer>
-    </ConditionalWrapper>
+                            </ActionButton>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <div className={bem("revoke-button__container")}>
+                <RevokeAccessButton
+                  variant="all-access"
+                  /* istanbul ignore next */
+                  onClose={() => router.push("/privacy")}
+                  accessList={accessList}
+                  resources={resources}
+                />
+              </div>
+            </>
+          )}
+        </TabPanel>
+        <TabPanel value={selectedTabValue} panelName="Profile">
+          {renderProfile()}
+        </TabPanel>
+        <ConfirmationDialog />
+      </div>
+    </DrawerContainer>
   );
 }
 

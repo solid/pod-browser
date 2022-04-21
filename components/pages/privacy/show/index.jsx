@@ -28,10 +28,12 @@ import {
   Container,
 } from "@inrupt/prism-react-components";
 import Profile from "../../../profile";
+import useFullProfile from "../../../../src/hooks/useFullProfile";
 
 export default function AgentShow({ type }) {
   const router = useRouter();
   const decodedIri = decodeURIComponent(router.query.webId);
+  const profile = useFullProfile(decodedIri);
 
   const link = <BackToNavLink href="/privacy">privacy</BackToNavLink>;
   return (
@@ -39,7 +41,7 @@ export default function AgentShow({ type }) {
       <Container>
         <BackToNav link={link} />
       </Container>
-      <Profile profileIri={decodedIri} type={type} />
+      <Profile profile={profile} type={type} webId={decodedIri} />
     </>
   );
 }

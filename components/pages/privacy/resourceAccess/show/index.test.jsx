@@ -20,60 +20,84 @@
  */
 
 import React from "react";
-import * as solidClientFns from "@inrupt/solid-client";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import { schema } from "rdf-namespaces";
+import { schema, foaf } from "rdf-namespaces";
 import { useRouter } from "next/router";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import AgentResourceAccessShowPage, { TESTCAFE_ID_TAB_PROFILE } from "./index";
-import {
-  bobWebIdUrl,
-  mockPersonDatasetBob,
-} from "../../../../../__testUtils/mockPersonResource";
+import { bobWebIdUrl } from "../../../../../__testUtils/mockPersonResource";
 import mockSessionContextProvider from "../../../../../__testUtils/mockSessionContextProvider";
 import mockSession from "../../../../../__testUtils/mockSession";
+import useFullProfile from "../../../../../src/hooks/useFullProfile";
 
 jest.mock("next/router");
+jest.mock("../../../../../src/hooks/useFullProfile");
 
 const mockedUseRouter = useRouter;
+const mockedUseFullProfile = useFullProfile;
 
 describe("Resource access show page", () => {
-  const profileDataset = mockPersonDatasetBob();
+  const mockProfileBob = {
+    names: ["Bob"],
+    webId: bobWebIdUrl,
+    types: [foaf.Person],
+    avatars: [],
+    roles: [],
+    organizations: [],
+    contactInfo: {
+      phones: [],
+      emails: [],
+    },
+  };
   const session = mockSession();
   const SessionProvider = mockSessionContextProvider(session);
+  describe("for Person agent", () => {
+    beforeEach(() => {
+      mockedUseFullProfile.mockReturnValue(mockProfileBob);
+      mockedUseRouter.mockReturnValue({
+        query: {
+          webId: bobWebIdUrl,
+        },
+      });
+    });
 
-  beforeEach(() => {
-    jest
-      .spyOn(solidClientFns, "getSolidDataset")
-      .mockResolvedValue(profileDataset);
-    mockedUseRouter.mockReturnValue({
-      query: {
-        webId: bobWebIdUrl,
-      },
+    it("renders a resource access page for a person", async () => {
+      const { asFragment, getByText } = renderWithTheme(
+        <SessionProvider>
+          <AgentResourceAccessShowPage type={schema.Person} />
+        </SessionProvider>
+      );
+      await waitFor(() => {
+        expect(getByText("Bob")).toBeInTheDocument();
+      });
+      expect(asFragment()).toMatchSnapshot();
     });
   });
+  describe("for App agent", () => {
+    const mockAppProfile = {
+      types: [schema.SoftwareApplication],
+      names: ["Mock app"],
+      webId: "https://mockappurl.com",
+    };
 
-  it("renders a resource access page for a person", async () => {
-    const { asFragment, getAllByText } = renderWithTheme(
-      <SessionProvider>
-        <AgentResourceAccessShowPage type={schema.Person} />
-      </SessionProvider>
-    );
-    await waitFor(() => {
-      expect(getAllByText("Bob")).toHaveLength(2);
+    beforeEach(() => {
+      mockedUseFullProfile.mockReturnValue(mockAppProfile);
+      mockedUseRouter.mockReturnValue({
+        query: {
+          webId: "https://mockappurl.com",
+        },
+      });
     });
-    expect(asFragment()).toMatchSnapshot();
-  });
-
-  it("renders a resource access page for an app", async () => {
-    const { asFragment, getAllByText } = renderWithTheme(
-      <AgentResourceAccessShowPage type={schema.SoftwareApplication} />
-    );
-    await waitFor(() => {
-      expect(getAllByText("Mock App")).toHaveLength(1);
+    it("renders a resource access page for an app", async () => {
+      const { asFragment, getAllByText } = renderWithTheme(
+        <AgentResourceAccessShowPage type={schema.SoftwareApplication} />
+      );
+      await waitFor(() => {
+        expect(getAllByText("Mock App")).toHaveLength(1);
+      });
+      expect(asFragment()).toMatchSnapshot();
     });
-    expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders profile when clicking on profile tab", async () => {

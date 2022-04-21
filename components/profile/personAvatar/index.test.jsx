@@ -26,10 +26,7 @@ import { CombinedDataProvider } from "@inrupt/solid-ui-react";
 import * as solidClientFns from "@inrupt/solid-client";
 import { foaf } from "rdf-namespaces";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
-import {
-  aliceWebIdUrl,
-  mockPersonDatasetAlice,
-} from "../../../__testUtils/mockPersonResource";
+import { aliceWebIdUrl } from "../../../__testUtils/mockPersonResource";
 import mockSession from "../../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import PersonAvatar, {
@@ -41,27 +38,25 @@ import PersonAvatar, {
 const profileIri = "https://example.com/profile/card#me";
 
 describe("Person Avatar", () => {
-  const profileDataset = mockPersonDatasetAlice();
-  const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
-
-  beforeEach(() => {
-    jest
-      .spyOn(solidClientFns, "getSolidDataset")
-      .mockResolvedValue(profileDataset);
-    jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
-  });
+  const mockProfileAlice = {
+    names: ["Alice"],
+    webId: aliceWebIdUrl,
+    types: [foaf.Person],
+    avatars: [],
+    roles: [],
+    organizations: [],
+    contactInfo: {
+      phones: [],
+      emails: [],
+    },
+  };
 
   it("renders a person avatar", async () => {
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
     const { asFragment, getByTestId } = renderWithTheme(
       <SessionProvider>
-        <CombinedDataProvider
-          solidDataset={profileDataset}
-          thing={profileThing}
-        >
-          <PersonAvatar profileIri={profileIri} />
-        </CombinedDataProvider>
+        <PersonAvatar webId={profileIri} profile={mockProfileAlice} />
       </SessionProvider>
     );
     await waitFor(() => {
@@ -72,26 +67,11 @@ describe("Person Avatar", () => {
   });
 
   it("renders only a webId if there is no name in the profile", async () => {
-    const nameToRemove = solidClientFns.getStringNoLocale(
-      profileThing,
-      foaf.name
-    );
-    const profileThingWithNameRemoved = solidClientFns.removeStringNoLocale(
-      profileThing,
-      foaf.name,
-      nameToRemove
-    );
-
     const session = mockSession();
     const SessionProvider = mockSessionContextProvider(session);
     const { getByTestId, queryAllByTestId } = renderWithTheme(
       <SessionProvider>
-        <CombinedDataProvider
-          solidDataset={profileDataset}
-          thing={profileThingWithNameRemoved}
-        >
-          <PersonAvatar profileIri={profileIri} />
-        </CombinedDataProvider>
+        <PersonAvatar webId={profileIri} />
       </SessionProvider>
     );
 

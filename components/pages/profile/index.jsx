@@ -19,30 +19,34 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SessionContext } from "@inrupt/solid-ui-react";
-import { getEffectiveAccess, getSourceUrl } from "@inrupt/solid-client";
+import { useRouter } from "next/router";
 import Profile from "../../profile";
+import EditableProfile from "../../profile/editableProfile";
+import useFullProfile from "../../../src/hooks/useFullProfile";
 
 export default function ProfileShow() {
-  const { session, sessionRequestInProgress, profile } =
-    useContext(SessionContext);
+  const router = useRouter();
+  const { session, sessionRequestInProgress } = useContext(SessionContext);
 
-  if (sessionRequestInProgress || !profile) {
+  const decodedIri = router.query.webId
+    ? decodeURIComponent(router.query.webId)
+    : null;
+  const agentProfile = useFullProfile(decodedIri ?? session.info.webId);
+
+  if (sessionRequestInProgress || !agentProfile) {
     return null;
   }
-  const { user: profileEditingAccess } = getEffectiveAccess(
-    profile.webIdProfile
-  );
+  const editableProfile = agentProfile?.editableProfileDatasets[0];
 
-  const isWebIdProfileEditable =
-    profileEditingAccess.write || profileEditingAccess.append;
-  const profileDataset = isWebIdProfileEditable
-    ? profile?.webIdProfile
-    : profile?.altProfileAll[0];
-  const profileIri = isWebIdProfileEditable
-    ? session.info.webId
-    : getSourceUrl(profileDataset);
-
-  return <Profile profileIri={profileIri} editing />;
+  if (editableProfile) {
+    return (
+      <EditableProfile
+        profile={agentProfile}
+        profileDataset={editableProfile}
+      />
+    );
+  }
+  return <Profile profile={agentProfile} webId={decodedIri} />;
 }

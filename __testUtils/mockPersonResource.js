@@ -27,7 +27,7 @@ import {
   mockThingFrom,
   setThing,
 } from "@inrupt/solid-client";
-import { vcard, foaf, rdf, space } from "rdf-namespaces";
+import { vcard, foaf, rdf, space, rdfs } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
 import { packageProfile } from "../src/solidClientHelpers/profile";
 import { vcardExtras } from "../src/addressBook";
@@ -70,7 +70,7 @@ export function mockPersonThingAlice(...operations) {
 }
 
 const mockPhoneThing = chain(
-  mockThingFrom("http://www.w3.org/2006/vcard/ns#Home"),
+  mockThingFrom("http://alice.example.com/phone"),
   (t) => addUrl(t, rdf.type, "http://www.w3.org/2006/vcard/ns#Home"),
   (t) => addUrl(t, vcard.value, "tel:42-1337")
 );
@@ -109,6 +109,46 @@ export function mockPersonDatasetAliceWithContactInfo(...operations) {
     (d) => setThing(d, mockEmailThing),
     (d) => setThing(d, mockPhoneThing),
     ...operations
+  );
+}
+
+export function mockSeeAlsoThingAlice() {
+  return chain(
+    mockThingFrom("http://alice.example.com/aliceSeeAlso"),
+    (t) => addStringNoLocale(t, foaf.name, "Alternative Alice"),
+    (t) =>
+      addUrl(t, vcard.hasPhoto, "https://example.com/anotherphotoforalice.jpg")
+  );
+}
+
+export function mockSeeAlsoDatasetAlice() {
+  return chain(
+    mockSolidDatasetFrom("http://alice.example.com/aliceSeeAlso"),
+    (d) => setThing(d, mockSeeAlsoThingAlice(d, mockPhoneThing))
+  );
+}
+
+export function mockPersonThingAliceWithContactInfoAndSeeAlso() {
+  return chain(
+    mockThingFrom(aliceWebIdUrl),
+    (t) => addStringNoLocale(t, foaf.name, aliceName),
+    (t) => addStringNoLocale(t, vcard.nickname, aliceNick),
+    (t) => addUrl(t, vcard.hasPhoto, alicePhoto),
+    (t) => addUrl(t, rdf.type, foaf.Person),
+    (t) => addUrl(t, vcard.url, aliceAlternativeWebIdUrl),
+    (t) => addUrl(t, space.storage, alicePodRoot),
+    (t) => addUrl(t, vcard.hasTelephone, "http://alice.example.com/phone"),
+    (t) => addUrl(t, vcard.hasEmail, "http://alice.example.com/email"),
+    (t) => addUrl(t, rdfs.seeAlso, "http://alice.example.com/aliceSeeAlso")
+  );
+}
+
+export function mockPersonDatasetAliceWithContactInfoAndSeeAlso() {
+  return chain(
+    mockSolidDatasetFrom(aliceWebIdUrl),
+    (d) => setThing(d, mockPersonThingAliceWithContactInfoAndSeeAlso()),
+    (d) => setThing(d, mockEmailThing),
+    (d) => setThing(d, mockPhoneThing)
   );
 }
 

@@ -28,9 +28,7 @@ exports[`Person Profile renders a profile 1`] = `
       >
         Role
       </label>
-      <span>
-        Error: No value found for property.
-      </span>
+      <span />
     </div>
     <div
       class="PodBrowser-root PodBrowser-root"
@@ -40,9 +38,7 @@ exports[`Person Profile renders a profile 1`] = `
       >
         Organization
       </label>
-      <span>
-        Error: No value found for property.
-      </span>
+      <span />
     </div>
   </div>
   <div
@@ -55,7 +51,13 @@ exports[`Person Profile renders a profile 1`] = `
     </label>
     <div
       class="PodBrowser-root PodBrowser-root"
-    />
+    >
+      <table
+        class="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
+      >
+        <tbody />
+      </table>
+    </div>
   </div>
   <div
     class="PodBrowser-root PodBrowser-root"
@@ -67,7 +69,13 @@ exports[`Person Profile renders a profile 1`] = `
     </label>
     <div
       class="PodBrowser-root PodBrowser-root"
-    />
+    >
+      <table
+        class="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
+      >
+        <tbody />
+      </table>
+    </div>
   </div>
 </DocumentFragment>
 `;

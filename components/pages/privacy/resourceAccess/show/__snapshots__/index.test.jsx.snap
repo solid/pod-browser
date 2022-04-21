@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Resource access show page renders a resource access page for a person 1`] = `
+exports[`Resource access show page for App agent renders a resource access page for an app 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-drawer-container"
@@ -34,36 +34,34 @@ exports[`Resource access show page renders a resource access page for a person 1
               class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
             >
               <div
-                class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+                class="PodBrowser-root PodBrowser-circle PodBrowser-appAvatar PodBrowser-colorDefault"
               >
-                <svg
-                  aria-hidden="true"
-                  class="PodBrowser-root PodBrowser-fallback"
-                  focusable="false"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
-                  />
-                </svg>
+                <span
+                  class="PodBrowser-icon-project-diagram PodBrowser-appAvatar"
+                />
               </div>
             </div>
           </div>
           <div
             class="PodBrowser-root PodBrowser-root"
           >
-            <h1
-              class="PodBrowser-root PodBrowser-h1"
-              data-testid="profile-name-title"
+            <h3
+              data-testid="app-name-title"
             >
-              Bob
-            </h1>
-            <p
-              class="PodBrowser-root PodBrowser-body2"
-              data-testid="profile-webid-title"
-            >
-              http://example.com/webId#me
-            </p>
+              <span
+                class="PodBrowser-avatarText"
+              >
+                Mock App
+              </span>
+              <a
+                class="PodBrowser-headerLink"
+                href="https://mockappurl.com"
+                rel="noreferrer"
+                target="_blank"
+              >
+                https://mockappurl.com
+              </a>
+            </h3>
           </div>
         </div>
         <div
@@ -132,10 +130,7 @@ exports[`Resource access show page renders a resource access page for a person 1
             class="PodBrowser-root PodBrowser-root"
           >
             <p>
-              <span>
-                Bob
-              </span>
-               has access to these resources
+              Mock app has access to these resources
             </p>
             <div
               class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"
@@ -213,7 +208,7 @@ exports[`Resource access show page renders a resource access page for a person 1
 </DocumentFragment>
 `;
 
-exports[`Resource access show page renders a resource access page for an app 1`] = `
+exports[`Resource access show page for Person agent renders a resource access page for a person 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-drawer-container"
@@ -247,34 +242,37 @@ exports[`Resource access show page renders a resource access page for an app 1`]
               class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
             >
               <div
-                class="PodBrowser-root PodBrowser-circle PodBrowser-appAvatar PodBrowser-colorDefault"
+                class="PodBrowser-root PodBrowser-circle PodBrowser-colorDefault"
+                fallback="PodBrowser-avatar"
               >
-                <span
-                  class="PodBrowser-icon-project-diagram PodBrowser-appAvatar"
-                />
+                <svg
+                  aria-hidden="true"
+                  class="PodBrowser-root PodBrowser-fallback"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                  />
+                </svg>
               </div>
             </div>
           </div>
           <div
             class="PodBrowser-root PodBrowser-root"
           >
-            <h3
-              data-testid="app-name-title"
+            <h1
+              class="PodBrowser-root PodBrowser-h1"
+              data-testid="profile-name-title"
             >
-              <span
-                class="PodBrowser-avatarText"
-              >
-                Mock App
-              </span>
-              <a
-                class="PodBrowser-headerLink"
-                href="http://bob.example.com/bob#me"
-                rel="noreferrer"
-                target="_blank"
-              >
-                http://bob.example.com/bob#me
-              </a>
-            </h3>
+              Bob
+            </h1>
+            <p
+              class="PodBrowser-root PodBrowser-body2"
+              data-testid="profile-webid-title"
+            >
+              http://bob.example.com/bob#me
+            </p>
           </div>
         </div>
         <div
@@ -343,10 +341,7 @@ exports[`Resource access show page renders a resource access page for an app 1`]
             class="PodBrowser-root PodBrowser-root"
           >
             <p>
-              <span>
-                MockApp
-              </span>
-               has access to these resources
+              Bob has access to these resources
             </p>
             <div
               class="PodBrowser-loading-indicator-container PodBrowser-loading-indicator-container--center"

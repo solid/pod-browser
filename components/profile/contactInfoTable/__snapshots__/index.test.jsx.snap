@@ -7,55 +7,39 @@ exports[`ContactInfoTable renders a table of contact info 1`] = `
   >
     <table
       class="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
-      role="table"
     >
-      <thead>
-        <tr
-          role="row"
-        >
-          <th
-            colspan="1"
-            role="columnheader"
-          />
-          <th
-            colspan="1"
-            role="columnheader"
-          />
-          <th
-            colspan="1"
-            role="columnheader"
-          />
-        </tr>
-      </thead>
-      <tbody
-        role="rowgroup"
-      >
-        <tr
-          class="PodBrowser-table__body-row"
-          role="row"
-        >
-          <td
-            role="cell"
-          >
-            <p
-              class="PodBrowser-root PodBrowser-body1"
-              data-testid="profile-email-existing-type"
-            />
-          </td>
-          <td
-            role="cell"
-          >
+      <tbody>
+        <tr>
+          <td>
             <p
               class="PodBrowser-root PodBrowser-body1"
             >
-              <span>
-                mailto:alice@example.com
-              </span>
+              Home
             </p>
           </td>
-          <td
-            role="cell"
-          />
+          <td>
+            <p
+              class="PodBrowser-root PodBrowser-body1"
+            >
+              tel:42-1337
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p
+              class="PodBrowser-root PodBrowser-body1"
+            >
+              Home
+            </p>
+          </td>
+          <td>
+            <p
+              class="PodBrowser-root PodBrowser-body1"
+            >
+              mailto:alice@example.com
+            </p>
+          </td>
         </tr>
       </tbody>
     </table>

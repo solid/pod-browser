@@ -36,7 +36,7 @@ describe("App Avatar", () => {
     const SessionProvider = mockSessionContextProvider(session);
     const { asFragment, findByTestId } = renderWithTheme(
       <SessionProvider>
-        <AppAvatar profileIri="https://mockapp.com/profile/card#me" />
+        <AppAvatar webId="https://mockapp.com/profile/card#me" />
       </SessionProvider>
     );
     await expect(findByTestId(TESTCAFE_ID_NAME_TITLE)).resolves.not.toBeNull();

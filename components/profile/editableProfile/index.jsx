@@ -24,27 +24,23 @@ import T from "prop-types";
 import { Box, Paper } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { Container } from "@inrupt/prism-react-components";
+import { CombinedDataProvider, useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
 import { schema } from "rdf-namespaces";
-import { isHTTPError } from "../../src/error";
-import PersonProfile from "./personProfile";
-import PersonAvatar from "./personAvatar";
-import AppProfile from "./appProfile";
-import { profilePropTypes } from "../../constants/propTypes";
+import { isHTTPError } from "../../../src/error";
+import PersonProfile from "../personProfile";
+import PersonAvatar from "../personAvatar";
+import AppProfile from "../appProfile";
+import { profilePropTypes } from "../../../constants/propTypes";
 
 export const TESTCAFE_ID_NAME_TITLE = "profile-name-title";
 export const TESTCAFE_ID_NAME_FIELD = "profile-name-field";
 export const TESTCAFE_ID_ROLE_FIELD = "profile-role-field";
 export const TESTCAFE_ID_ORG_FIELD = "profile-org-field";
 
-export default function Profile({ profile, webId }) {
-  // TODO replace with toast error or something?
-  if (!profile) {
-    return (
-      <Alert severity="error">
-        {`Cannot fetch avatar for this WebID: ${webId}`}
-      </Alert>
-    );
+export default function EditableProfile({ profileDataset, profile }) {
+  if (!profileDataset) {
+    return <span>No profile document found this this WebID</span>;
   }
 
   if (profile.types.includes(schema.SoftwareApplication)) {
@@ -52,24 +48,38 @@ export default function Profile({ profile, webId }) {
   }
 
   return (
-    <Container>
-      <Paper style={{ marginTop: "1em" }}>
-        <Box p={2}>
-          <PersonAvatar webId={profile.webId} profile={profile} />
-          <hr />
-          <PersonProfile profile={profile} />
-        </Box>
-      </Paper>
-    </Container>
+    <CombinedDataProvider
+      solidDataset={profileDataset}
+      thingUrl={getSourceUrl(profileDataset)}
+    >
+      <Container>
+        <Paper style={{ marginTop: "1em" }}>
+          <Box p={2}>
+            <PersonAvatar
+              profileDataset={profileDataset}
+              profile={profile}
+              editing
+            />
+            <hr />
+            <PersonProfile
+              profileDataset={profileDataset}
+              profile={profile}
+              editing
+            />
+          </Box>
+        </Paper>
+      </Container>
+    </CombinedDataProvider>
   );
 }
 
-Profile.propTypes = {
+EditableProfile.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
+  profileDataset: T.object,
   profile: profilePropTypes,
-  webId: T.string.isRequired,
 };
 
-Profile.defaultProps = {
+EditableProfile.defaultProps = {
+  profileDataset: null,
   profile: null,
 };
