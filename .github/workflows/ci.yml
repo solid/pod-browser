@@ -1,7 +1,9 @@
 name: CI
 
 on: [push]
-
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 env:
   CI: true
 jobs:
@@ -16,6 +18,3 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run test
-concurrency:
-  group: ${{ github.head_ref || github.run_id }}
-  cancel-in-progress: true
