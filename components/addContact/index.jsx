@@ -33,7 +33,10 @@ import AgentSearchForm from "../agentSearchForm";
 import DetailsMenuContext from "../../src/contexts/detailsMenuContext";
 import AlertContext from "../../src/contexts/alertContext";
 import styles from "./styles";
-import { fetchProfile } from "../../src/solidClientHelpers/profile";
+import {
+  fetchProfile,
+  getFullProfile,
+} from "../../src/solidClientHelpers/profile";
 import { isPodOwner } from "../../src/solidClientHelpers/utils";
 import useContactsOld from "../../src/hooks/useContactsOld";
 import useContactsContainerUrl from "../../src/hooks/useContactsContainerUrl";
@@ -67,7 +70,7 @@ export function handleSubmit({
     setIsLoading(true);
 
     try {
-      const { name, webId, types } = await fetchProfile(iri, fetch);
+      const { names, webId, types } = await getFullProfile(iri, session);
       const existingContact = await findContactInAddressBook(
         people,
         webId,
@@ -80,7 +83,7 @@ export function handleSubmit({
         return;
       }
 
-      const contact = { webId, fn: name || null };
+      const contact = { webId, fn: names[0] || null };
       const { response, error } = await saveContact(
         addressBook,
         addressBookContainerUrl,

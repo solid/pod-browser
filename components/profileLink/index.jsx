@@ -23,10 +23,11 @@ import React from "react";
 import T from "prop-types";
 import Link from "next/link";
 import { useThing } from "@inrupt/solid-ui-react";
-import { getStringNoLocale, getUrl } from "@inrupt/solid-client";
-import { vcard, foaf, rdf, schema } from "rdf-namespaces";
+import { getUrl } from "@inrupt/solid-client";
+import { rdf, schema } from "rdf-namespaces";
 import { useRouter } from "next/router";
 import { getProfileIriFromContactThing } from "../../src/addressBook";
+import useFullProfile from "../../src/hooks/useFullProfile";
 
 export const TESTCAFE_ID_PROFILE_LINK = "profile-link";
 
@@ -37,34 +38,20 @@ export function buildProfileLink(webId, route, path) {
   return `${route}/${path}/${encodeURIComponent(webId)}`;
 }
 
-export default function ProfileLink(props) {
+export default function ProfileLink() {
   const { route } = useRouter();
-  const { webId } = props;
   const { thing } = useThing();
-  const contact = getProfileIriFromContactThing(thing);
-
+  const webId = getProfileIriFromContactThing(thing);
+  const profile = useFullProfile(webId);
   const type = getUrl(thing, rdf.type);
   const path = type === schema.Person ? "person" : "app";
   // Pass in an iri, or use the thing from context (such as for the contacts list)
-  const profileIri = webId || contact;
 
   // TODO remove this once react-sdk allows property fallbacks
-  const name =
-    getStringNoLocale(thing, foaf.name) ||
-    getStringNoLocale(thing, vcard.fn) ||
-    profileIri;
 
   return (
-    <Link href={buildProfileLink(profileIri, route, path)}>
-      <a data-testid={TESTCAFE_ID_PROFILE_LINK}>{name}</a>
+    <Link href={buildProfileLink(webId, route, path)}>
+      <a data-testid={TESTCAFE_ID_PROFILE_LINK}>{profile?.names[0] || webId}</a>
     </Link>
   );
 }
-
-ProfileLink.propTypes = {
-  webId: T.string,
-};
-
-ProfileLink.defaultProps = {
-  webId: null,
-};

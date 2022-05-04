@@ -234,13 +234,9 @@ export async function getFullProfile(webId, session) {
 
   // find the editable profile datasets
   // check if webid is editable
-  const webIdResourceInfo = await getResourceInfo(
-    getSourceIri(profiles.webIdProfile),
-    {
-      fetch: session.fetch,
-    }
+  const { user: profileEditingAccess } = getEffectiveAccess(
+    profiles.webIdProfile
   );
-  const { user: profileEditingAccess } = getEffectiveAccess(webIdResourceInfo);
   const isProfileEditable =
     profileEditingAccess.write || profileEditingAccess.append;
   if (isProfileEditable) {
