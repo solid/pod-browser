@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AgentAccessTable with agents renders a list of permissions 1`] = `
+exports[`AgentAccessTable with access based agents renders a list of permissions including access based agent 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
@@ -252,7 +252,7 @@ exports[`AgentAccessTable with agents renders a list of permissions 1`] = `
 </DocumentFragment>
 `;
 
-exports[`AgentAccessTable with consent based agents renders a list of permissions including consent based agent 1`] = `
+exports[`AgentAccessTable with access grant based agents renders a list of permissions including access grant based agent 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"

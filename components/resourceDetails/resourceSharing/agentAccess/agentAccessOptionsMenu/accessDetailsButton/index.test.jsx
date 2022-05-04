@@ -20,13 +20,17 @@
  */
 
 import React from "react";
-import AuthenticatedRoute from "../../../../src/authentication/AuthenticatedRoute";
-import AccessRequestShowPage from "../../../../components/pages/privacy/access/requests";
+import { renderWithTheme } from "../../../../../../__testUtils/withTheme";
+import AccessDetailsButton, { TESTCAFE_ID_VIEW_DETAILS_BUTTON } from "./index";
 
-export default function AccessRequestShow() {
-  return (
-    <AuthenticatedRoute>
-      <AccessRequestShowPage />
-    </AuthenticatedRoute>
-  );
-}
+describe("View access details button and modal", () => {
+  it("renders a button which triggers the opening of the modal", async () => {
+    const fakeSetOpenModal = jest.fn();
+    const { asFragment, getByTestId } = renderWithTheme(
+      <AccessDetailsButton setOpenModal={fakeSetOpenModal} />
+    );
+    const button = getByTestId(TESTCAFE_ID_VIEW_DETAILS_BUTTON);
+    expect(button).toBeDefined();
+    expect(asFragment()).toMatchSnapshot();
+  });
+});

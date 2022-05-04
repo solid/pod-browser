@@ -24,17 +24,17 @@ import { getSourceUrl } from "@inrupt/solid-client";
 import { useState, useEffect, useContext, useMemo } from "react";
 import { getPolicyDetailFromAccess } from "../../accessControl/acp";
 import AccessControlContext from "../../contexts/accessControlContext";
-import useConsentBasedAccessForResource from "../useConsentBasedAccessForResource";
+import useAccessGrantBasedAccessForResource from "../useAccessGrantBasedAccessForResource";
 import {
   getRequestedAccessesFromSignedVc,
   getRequestorWebIdFromSignedVc,
-} from "../../models/consent/signedVc";
+} from "../../models/access/signedVc";
 import { isPublicAgentOrAuthenticatedAgentWebId } from "../../../components/resourceDetails/utils";
 import { fetchProfile } from "../../solidClientHelpers/profile";
 
-const normalizeConsentBasedPermissions = (consentBasedPermissions) => {
-  if (!consentBasedPermissions) return [];
-  const requestedAccessModes = consentBasedPermissions.map((vc) => {
+const normalizeAccessGrantBasedPermissions = (accessGrantBasedPermissions) => {
+  if (!accessGrantBasedPermissions) return [];
+  const requestedAccessModes = accessGrantBasedPermissions.map((vc) => {
     const accessMode = {
       read: getRequestedAccessesFromSignedVc(vc).mode.some((el) =>
         el.includes("Read")
@@ -74,15 +74,15 @@ export default function useAllPermissions() {
   const { solidDataset: dataset } = useContext(DatasetContext);
   const datasetUrl = getSourceUrl(dataset);
 
-  const { permissions: consentBasedPermissions } =
-    useConsentBasedAccessForResource(datasetUrl);
+  const { permissions: accessGrantBasedPermissions } =
+    useAccessGrantBasedAccessForResource(datasetUrl);
 
   const normalizedConsentPermissions = useMemo(
     () =>
-      consentBasedPermissions
-        ? normalizeConsentBasedPermissions(consentBasedPermissions)
+      accessGrantBasedPermissions
+        ? normalizeAccessGrantBasedPermissions(accessGrantBasedPermissions)
         : [],
-    [consentBasedPermissions]
+    [accessGrantBasedPermissions]
   );
 
   useEffect(() => {

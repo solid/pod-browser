@@ -27,8 +27,8 @@ import { getAccessRequestFromRedirectUrl } from "@inrupt/solid-client-access-gra
 import * as resourceHelpers from "../../../../../src/solidClientHelpers/resource";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../../../../__testUtils/mockSessionContextProvider";
-import ConsentPage from "./index";
-import getConsentRequestDetails from "../../../../../__testUtils/mockConsentRequestDetails";
+import AccessRequestPage from "./index";
+import getAccessRequestDetails from "../../../../../__testUtils/mockAccessRequestDetails";
 import { mockAppDataset } from "../../../../../__testUtils/mockApp";
 import useContainer from "../../../../../src/hooks/useContainer";
 import * as containerFns from "../../../../../src/models/container";
@@ -39,7 +39,7 @@ const mockedUseContainer = useContainer;
 jest.mock("@inrupt/solid-client-access-grants");
 const mockGetAccessRequestFromRedirectUrl = getAccessRequestFromRedirectUrl;
 
-describe("Consent Page", () => {
+describe("AccessRequest Page", () => {
   beforeEach(() => {
     mockedUseContainer.mockReturnValue({
       data: solidClientFns.mockContainerFrom(
@@ -56,17 +56,17 @@ describe("Consent Page", () => {
         "https://pod.inrupt.com/alice/private/data-3",
       ]);
     mockGetAccessRequestFromRedirectUrl.mockResolvedValue({
-      accessRequest: getConsentRequestDetails(),
+      accessRequest: getAccessRequestDetails(),
     });
   });
-  it("Renders the Consent page", async () => {
-    const consentRequestId = "https://example.org/test-request";
+  it("Renders the Access page", async () => {
+    const accessRequestId = "https://example.org/test-request";
     jest.spyOn(RouterFns, "useRouter").mockReturnValue({
       asPath: "/pathname/",
       replace: jest.fn(),
       query: {
-        id: consentRequestId,
-        requestVc: btoa(JSON.stringify(getConsentRequestDetails())),
+        id: accessRequestId,
+        requestVc: btoa(JSON.stringify(getAccessRequestDetails())),
       },
     });
 
@@ -79,7 +79,7 @@ describe("Consent Page", () => {
 
     const { asFragment, getByText } = renderWithTheme(
       <SessionProvider>
-        <ConsentPage />
+        <AccessRequestPage />
       </SessionProvider>
     );
     await waitFor(() => {

@@ -82,7 +82,7 @@ export default function PrivacyPage() {
             setSearchValues={setSearchValues}
           />
           <Link href="/privacy/access/generate">
-            <a>Generate consent request</a>
+            <a>Generate access request</a>
           </Link>
         </>
       </SearchProvider>

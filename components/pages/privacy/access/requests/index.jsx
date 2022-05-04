@@ -36,23 +36,23 @@ import { useBem } from "@solid/lit-prism-patterns";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import styles from "./styles";
-import ConsentRequestForm from "../../../../consentRequestForm";
+import AccessRequestForm from "../../../../accessRequestForm";
 import {
   CONTACTS_PREDICATE,
   POLICY_PREDICATE,
   TOS_PREDICATE,
 } from "../../../../../__testUtils/mockApp";
-import { getRequestorWebId } from "../../../../../src/models/consent/request";
+import { getRequestorWebId } from "../../../../../src/models/access/request";
 import Spinner from "../../../../spinner";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-export default function ConsentShow() {
+export default function AccessRequestShow() {
   const { session } = useSession();
   const { fetch } = session;
   const bem = useBem(useStyles());
-  const [consentRequest, setConsentRequest] = useState(null);
-  const agentWebId = getRequestorWebId(consentRequest);
+  const [accessRequest, setAccessRequest] = useState(null);
+  const agentWebId = getRequestorWebId(accessRequest);
   const [agentDetails, setAgentDetails] = useState({});
   const { agentName, agentUrl, agentPolicy, agentTOS } = agentDetails || null;
 
@@ -62,12 +62,12 @@ export default function ConsentShow() {
         window.location.href,
         { fetch }
       );
-      setConsentRequest(accessRequest);
+      setAccessRequest(accessRequest);
     })();
   }, [fetch]);
 
   useEffect(() => {
-    if (!consentRequest) return;
+    if (!accessRequest) return;
     (async () => {
       const profiles = await getProfileAll(agentWebId);
       const profileDataset =
@@ -87,15 +87,15 @@ export default function ConsentShow() {
         agentPolicy: agentProfile && getUrl(agentProfile, POLICY_PREDICATE),
       });
     })();
-  }, [agentWebId, fetch, consentRequest]);
+  }, [agentWebId, fetch, accessRequest]);
 
-  if (!consentRequest) return <Spinner />;
+  if (!accessRequest) return <Spinner />;
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Container className={bem("request-container")}>
-        <ConsentRequestForm
-          consentRequest={consentRequest}
+        <AccessRequestForm
+          accessRequest={accessRequest}
           agentDetails={agentDetails}
           agentWebId={agentWebId}
         />

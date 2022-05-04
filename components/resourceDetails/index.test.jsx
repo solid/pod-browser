@@ -35,21 +35,19 @@ import mockLocalStorage from "../../__testUtils/mockLocalStorage";
 import mockAccessControl from "../../__testUtils/mockAccessControl";
 import { AccessControlProvider } from "../../src/contexts/accessControlContext";
 import mockPermissionsContextProvider from "../../__testUtils/mockPermissionsContextProvider";
-import useConsentBasedAccessForResource from "../../src/hooks/useConsentBasedAccessForResource";
+import useAccessGrantBasedAccessForResource from "../../src/hooks/useAccessGrantBasedAccessForResource";
 import useAccessControlType from "../../src/hooks/useAccessControlType";
 import { TESTCAFE_ID_AGENT_ACCESS_TABLE } from "./resourceSharing/agentAccessTable";
 
 const accessControl = mockAccessControl();
 const dataset = mockSolidDatasetFrom("http://example.com/container/");
 
-jest.mock("../../src/hooks/useConsentBasedAccessForResource");
-const mockedUseConsentBasedAccessForResource = useConsentBasedAccessForResource;
+jest.mock("../../src/hooks/useAccessGrantBasedAccessForResource");
+const mockUseAccessGrantBasedAccessForResource =
+  useAccessGrantBasedAccessForResource;
 
 jest.mock("../../src/hooks/useAccessControlType");
 const mockUseAccessControlType = useAccessControlType;
-
-jest.mock("../../src/hooks/useConsentBasedAccessForResource");
-const mockUseConsentBasedAccessForResource = useConsentBasedAccessForResource;
 
 jest.mock("next/router");
 
@@ -62,7 +60,7 @@ describe("Resource details", () => {
       writable: true,
     });
 
-    mockedUseConsentBasedAccessForResource.mockReturnValue([]);
+    mockUseAccessGrantBasedAccessForResource.mockReturnValue([]);
   });
 
   it("renders container details", async () => {
@@ -138,7 +136,9 @@ describe("Resource details", () => {
 
   it("renders Sharing component for ACP-supporting Solid servers", async () => {
     const PermissionsContextProvider = mockPermissionsContextProvider();
-    mockUseConsentBasedAccessForResource.mockReturnValue({ permissions: [] });
+    mockUseAccessGrantBasedAccessForResource.mockReturnValue({
+      permissions: [],
+    });
     const { asFragment, getByTestId, getByText, queryAllByTestId } =
       renderWithTheme(
         <AccessControlProvider

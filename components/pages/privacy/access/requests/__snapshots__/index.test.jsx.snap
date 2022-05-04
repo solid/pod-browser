@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Consent Page Renders the Consent page 1`] = `
+exports[`AccessRequest Page Renders the Access page 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-container PodBrowser-request-container"
@@ -461,7 +461,7 @@ exports[`Consent Page Renders the Consent page 1`] = `
       >
         <button
           class="PodBrowser-button PodBrowser-button--secondary"
-          data-testid="consent-request-deny-button"
+          data-testid="access-request-deny-button"
           type="button"
         >
           <span
@@ -472,7 +472,7 @@ exports[`Consent Page Renders the Consent page 1`] = `
         </button>
         <button
           class="PodBrowser-button"
-          data-testid="consent-request-submit-button"
+          data-testid="access-request-submit-button"
           type="submit"
         >
           <span

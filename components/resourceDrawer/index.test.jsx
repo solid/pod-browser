@@ -37,15 +37,16 @@ import useAccessControl from "../../src/hooks/useAccessControl";
 import mockAccessControl from "../../__testUtils/mockAccessControl";
 import { ResourceInfoProvider } from "../../src/contexts/resourceInfoContext";
 import mockPermissionsContextProvider from "../../__testUtils/mockPermissionsContextProvider";
-import useConsentBasedAccessForResource from "../../src/hooks/useConsentBasedAccessForResource";
+import useAccessGrantBasedAccessForResource from "../../src/hooks/useAccessGrantBasedAccessForResource";
 import usePermissionsWithProfiles from "../../src/hooks/usePermissionsWithProfiles";
 import useAllPermissions from "../../src/hooks/useAllPermissions";
 
 jest.mock("../../src/hooks/useResourceInfo");
 const mockUseResourceInfo = useResourceInfo;
 jest.mock("../../src/hooks/useAccessControl");
-jest.mock("../../src/hooks/useConsentBasedAccessForResource");
-const mockUseConsentBasedAccessForResource = useConsentBasedAccessForResource;
+jest.mock("../../src/hooks/useAccessGrantBasedAccessForResource");
+const mockUseAccessGrantBasedAccessForResource =
+  useAccessGrantBasedAccessForResource;
 jest.mock("../../src/hooks/usePermissionsWithProfiles");
 const mockedUsePermissionsWithProfiles = usePermissionsWithProfiles;
 jest.mock("../../src/hooks/useAllPermissions");
@@ -87,7 +88,9 @@ describe("ResourceDrawer view", () => {
       accessControl: mockAccessControl(),
       accessControlType: "acp",
     };
-    mockUseConsentBasedAccessForResource.mockReturnValue({ permissions: [] });
+    mockUseAccessGrantBasedAccessForResource.mockReturnValue({
+      permissions: [],
+    });
     mockedUsePermissionsWithProfiles.mockReturnValue({ permissions: [] });
     mockedUseAllPermissions.mockReturnValue({ permissions: [] });
 

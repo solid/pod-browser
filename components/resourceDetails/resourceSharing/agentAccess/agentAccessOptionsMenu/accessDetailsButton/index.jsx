@@ -19,14 +19,37 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import AuthenticatedRoute from "../../../../src/authentication/AuthenticatedRoute";
-import AccessRequestShowPage from "../../../../components/pages/privacy/access/requests";
+/* eslint-disable react/jsx-one-expression-per-line */
 
-export default function AccessRequestShow() {
+import React, { useState, useEffect } from "react";
+import T from "prop-types";
+import { createStyles, ListItem, ListItemText } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
+import { permission as permissionPropType } from "../../../../../../constants/propTypes";
+import styles from "./styles";
+
+export const TESTCAFE_ID_VIEW_DETAILS_BUTTON = "view-details-button";
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+
+export default function AccessDetailsButton({ setOpenModal }) {
+  const classes = useStyles();
+
   return (
-    <AuthenticatedRoute>
-      <AccessRequestShowPage />
-    </AuthenticatedRoute>
+    <ListItem
+      data-testid={TESTCAFE_ID_VIEW_DETAILS_BUTTON}
+      button
+      onClick={() => setOpenModal(true)}
+    >
+      <ListItemText
+        disableTypography
+        classes={{ primary: classes.listItemText }}
+      >
+        View Details
+      </ListItemText>
+    </ListItem>
   );
 }
+
+AccessDetailsButton.propTypes = {
+  setOpenModal: T.func.isRequired,
+};

@@ -24,11 +24,12 @@ import useAllPermissions from "./index";
 import mockAccessControl from "../../../__testUtils/mockAccessControl";
 import * as permissionHelpers from "../../solidClientHelpers/permissions";
 import getSignedVc from "../../../__testUtils/mockSignedVc";
-import useConsentBasedAccessForResource from "../useConsentBasedAccessForResource";
+import useAccessGrantBasedAccessForResource from "../useAccessGrantBasedAccessForResource";
 import { AccessControlProvider } from "../../contexts/accessControlContext";
 
-jest.mock("../useConsentBasedAccessForResource");
-const mockedUseConsentBasedAccessForResource = useConsentBasedAccessForResource;
+jest.mock("../useAccessGrantBasedAccessForResource");
+const mockedUseAccessGrantBasedAccessForResource =
+  useAccessGrantBasedAccessForResource;
 
 describe("useAllPermissions", () => {
   const { ACL } = permissionHelpers;
@@ -55,7 +56,7 @@ describe("useAllPermissions", () => {
   };
 
   it("returns an empty array if no access control", async () => {
-    mockedUseConsentBasedAccessForResource.mockReturnValue({
+    mockedUseAccessGrantBasedAccessForResource.mockReturnValue({
       permissions: [],
     });
     const { result } = renderHook(() => useAllPermissions());
@@ -63,7 +64,7 @@ describe("useAllPermissions", () => {
   });
 
   it("returns permissions if accessControl is available", async () => {
-    mockedUseConsentBasedAccessForResource.mockReturnValue({
+    mockedUseAccessGrantBasedAccessForResource.mockReturnValue({
       permissions: [getSignedVc()],
     });
     const { result, waitForNextUpdate } = renderHook(

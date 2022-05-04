@@ -114,9 +114,7 @@ export const privacyPageEnabledServer = enableForGivenServerCapability(
   PRIVACY_PAGE_ENABLED_FOR,
   GRAPHQL_ENABLED
 );
-export const consentPageEnabled = enableForGivenWebIds(
-  PRIVACY_PAGE_ENABLED_FOR
-);
+export const accessPageEnabled = enableForGivenWebIds(PRIVACY_PAGE_ENABLED_FOR);
 
 export default function FeatureFlags() {
   return {
