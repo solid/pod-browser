@@ -22,11 +22,12 @@
 import React from "react";
 import * as solidClientFns from "@inrupt/solid-client";
 import { useRouter } from "next/router";
-import { foaf } from "rdf-namespaces";
+import { foaf, schema } from "rdf-namespaces";
 import { screen, waitFor } from "@testing-library/react";
 import * as addressBookFns from "../../src/addressBook";
 import useAddressBookOld from "../../src/hooks/useAddressBookOld";
 import useContactsOld from "../../src/hooks/useContactsOld";
+import useFullProfile from "../../src/hooks/useFullProfile";
 import useProfiles from "../../src/hooks/useProfiles";
 import { renderWithTheme } from "../../__testUtils/withTheme";
 import ContactsList, { handleDeleteContact } from "./index";
@@ -44,6 +45,7 @@ import { TESTCAFE_ID_PROFILE_LINK } from "../profileLink";
 jest.mock("../../src/hooks/useAddressBookOld");
 jest.mock("../../src/hooks/useContactsOld");
 jest.mock("../../src/hooks/useProfiles");
+jest.mock("../../src/hooks/useFullProfile");
 jest.mock("next/router");
 
 const mockedUseRouter = useRouter;
@@ -129,6 +131,17 @@ describe("ContactsList", () => {
   });
 
   it("renders page when people is loaded", async () => {
+    useFullProfile
+      .mockReturnValueOnce({
+        webId: aliceWebIdUrl,
+        names: ["Alice"],
+        types: [schema.Person],
+      })
+      .mockReturnValueOnce({
+        webId: bobWebIdUrl,
+        names: ["Bob"],
+        types: [schema.Person],
+      });
     useAddressBookOld.mockReturnValue([42, null]);
     useContactsOld.mockReturnValue({
       data: "peopleData",
@@ -169,6 +182,17 @@ describe("ContactsList", () => {
       mutate: () => {},
     });
     useProfiles.mockReturnValue([mockPersonThingAlice(), contact]);
+    useFullProfile
+      .mockReturnValueOnce({
+        webId: aliceWebIdUrl,
+        names: ["Alice"],
+        types: [schema.Person],
+      })
+      .mockReturnValueOnce({
+        webId,
+        names: [],
+        types: [schema.Person],
+      });
 
     const { asFragment, getAllByTestId } = renderWithTheme(
       <SessionProvider>

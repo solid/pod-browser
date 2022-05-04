@@ -43,8 +43,7 @@ export default function ProfileLink() {
   const { thing } = useThing();
   const webId = getProfileIriFromContactThing(thing);
   const profile = useFullProfile(webId);
-  const type = getUrl(thing, rdf.type);
-  const path = type === schema.Person ? "person" : "app";
+  const path = profile.types.includes(schema.Person) ? "person" : "app";
   // Pass in an iri, or use the thing from context (such as for the contacts list)
 
   // TODO remove this once react-sdk allows property fallbacks

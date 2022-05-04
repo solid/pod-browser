@@ -11,6 +11,17 @@ exports[`ProfileLink renders correct path for privacy contacts 1`] = `
 </DocumentFragment>
 `;
 
+exports[`ProfileLink renders first name from profile names array 1`] = `
+<DocumentFragment>
+  <a
+    data-testid="profile-link"
+    href="/contacts/https%3A%2F%2Fexample.com%2Falice"
+  >
+    Alice
+  </a>
+</DocumentFragment>
+`;
+
 exports[`ProfileLink renders iri if name is not found 1`] = `
 <DocumentFragment>
   <a
@@ -18,28 +29,6 @@ exports[`ProfileLink renders iri if name is not found 1`] = `
     href="/contacts/https%3A%2F%2Fmockiri.com"
   >
     https://mockiri.com
-  </a>
-</DocumentFragment>
-`;
-
-exports[`ProfileLink supports rendering name from foaf.name 1`] = `
-<DocumentFragment>
-  <a
-    data-testid="profile-link"
-    href="/contacts/https%3A%2F%2Fexample.com%2Fbob"
-  >
-    Bob
-  </a>
-</DocumentFragment>
-`;
-
-exports[`ProfileLink supports rendering name from vcard.fn 1`] = `
-<DocumentFragment>
-  <a
-    data-testid="profile-link"
-    href="/contacts/https%3A%2F%2Fexample.com%2Falice"
-  >
-    Alice
   </a>
 </DocumentFragment>
 `;

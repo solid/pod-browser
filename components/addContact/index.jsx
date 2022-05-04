@@ -76,14 +76,15 @@ export function handleSubmit({
         webId,
         fetch
       );
-
       if (existingContact) {
         alertError(EXISTING_WEBID_ERROR_MESSAGE);
         setIsLoading(false);
         return;
       }
-
-      const contact = { webId, fn: names[0] || null };
+      const contact = {
+        webId,
+        fn: names[0],
+      };
       const { response, error } = await saveContact(
         addressBook,
         addressBookContainerUrl,
@@ -91,7 +92,6 @@ export function handleSubmit({
         types,
         fetch
       );
-
       if (error) alertError(error);
       if (response) {
         alertSuccess(`${contact.fn || webId} was added to your contacts`);
