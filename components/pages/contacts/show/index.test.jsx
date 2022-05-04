@@ -20,27 +20,35 @@
  */
 
 import React from "react";
-import * as solidClientFns from "@inrupt/solid-client";
+import { foaf } from "rdf-namespaces";
 import { waitFor } from "@testing-library/dom";
 import * as RouterFns from "next/router";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../../../__testUtils/mockSessionContextProvider";
 import mockSession from "../../../../__testUtils/mockSession";
 import ContactPage from "./index";
-import {
-  mockPersonDatasetAlice,
-  aliceWebIdUrl,
-} from "../../../../__testUtils/mockPersonResource";
+import { aliceWebIdUrl } from "../../../../__testUtils/mockPersonResource";
+import useFullProfile from "../../../../src/hooks/useFullProfile";
+
+jest.mock("../../../../src/hooks/useFullProfile");
+const mockedUseFullProfile = useFullProfile;
 
 describe("Contact show page", () => {
-  const profileDataset = mockPersonDatasetAlice();
-  const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
+  const mockProfileAlice = {
+    names: ["Alice"],
+    webId: aliceWebIdUrl,
+    types: [foaf.Person],
+    avatars: [],
+    roles: [],
+    organizations: [],
+    contactInfo: {
+      phones: [],
+      emails: [],
+    },
+  };
 
   beforeEach(() => {
-    jest
-      .spyOn(solidClientFns, "getSolidDataset")
-      .mockResolvedValue(profileDataset);
-    jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
+    mockedUseFullProfile.mockReturnValue(mockProfileAlice);
   });
 
   it("Renders the Contact show page", async () => {

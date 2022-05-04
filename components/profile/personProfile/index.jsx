@@ -21,6 +21,7 @@
 
 import React from "react";
 import T from "prop-types";
+import { getSourceUrl } from "@inrupt/solid-client";
 import { foaf, vcard } from "rdf-namespaces";
 import { Box, InputLabel, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
@@ -33,6 +34,7 @@ import ContactInfoTable, {
 } from "../contactInfoTable";
 
 import styles from "./styles";
+import { profilePropTypes } from "../../../constants/propTypes";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -41,59 +43,102 @@ export const TESTCAFE_ID_NAME_TITLE = "profile-name-title";
 export const TESTCAFE_ID_ROLE_FIELD = "profile-role-field";
 export const TESTCAFE_ID_ORG_FIELD = "profile-org-field";
 
-export default function PersonProfile({ profileIri, editing }) {
+export default function PersonProfile({ profile, profileDataset, editing }) {
   const classes = useStyles();
   const bem = useBem(classes);
+  if (!profile) {
+    return <span>No profile found for this WebID.</span>;
+  }
+  if (editing)
+    return (
+      <>
+        <Box mt={2}>
+          <Box>
+            <InputLabel data-testid={TESTCAFE_ID_NAME_TITLE}>Name</InputLabel>
+            <Text
+              data-testid={TESTCAFE_ID_NAME_FIELD}
+              property={foaf.name}
+              edit={editing}
+              autosave
+              inputProps={{
+                className: bem("input"),
+                "data-testid": TESTCAFE_ID_NAME_FIELD,
+              }}
+              errorComponent={() => <span>{profile.webId}</span>}
+            />
+          </Box>
+
+          <Box mt={1}>
+            <InputLabel>Role</InputLabel>
+            <Text
+              property={vcard.role}
+              edit={editing}
+              inputProps={{
+                className: bem("input"),
+                "data-testid": TESTCAFE_ID_ROLE_FIELD,
+              }}
+              autosave
+            />
+          </Box>
+
+          <Box mt={1}>
+            <InputLabel>Organization</InputLabel>
+            <Text
+              property={vcardExtras("organization-name")}
+              edit={editing}
+              inputProps={{
+                className: bem("input"),
+                "data-testid": TESTCAFE_ID_ORG_FIELD,
+              }}
+              autosave
+            />
+          </Box>
+        </Box>
+
+        <Box mt={4}>
+          <InputLabel>Email Addresses</InputLabel>
+          <ContactInfoTable
+            datasetIri={getSourceUrl(profileDataset)}
+            property={vcard.hasEmail}
+            editing={editing}
+            contactInfoType={CONTACT_INFO_TYPE_EMAIL}
+          />
+        </Box>
+
+        <Box mt={4}>
+          <InputLabel>Phone Numbers</InputLabel>
+          <ContactInfoTable
+            datasetIri={getSourceUrl(profileDataset)}
+            property={vcard.hasTelephone}
+            editing={editing}
+            contactInfoType={CONTACT_INFO_TYPE_PHONE}
+          />
+        </Box>
+      </>
+    );
   return (
     <>
       <Box mt={2}>
         <Box>
           <InputLabel data-testid={TESTCAFE_ID_NAME_TITLE}>Name</InputLabel>
-          <Text
-            data-testid={TESTCAFE_ID_NAME_FIELD}
-            property={foaf.name}
-            edit={editing}
-            autosave
-            inputProps={{
-              className: bem("input"),
-              "data-testid": TESTCAFE_ID_NAME_FIELD,
-            }}
-          />
+          <span data-testid={TESTCAFE_ID_NAME_FIELD}>{profile.names[0]}</span>
         </Box>
 
         <Box mt={1}>
           <InputLabel>Role</InputLabel>
-          <Text
-            property={vcard.role}
-            edit={editing}
-            inputProps={{
-              className: bem("input"),
-              "data-testid": TESTCAFE_ID_ROLE_FIELD,
-            }}
-            autosave
-          />
+          <span>{profile.roles[0]}</span>
         </Box>
 
         <Box mt={1}>
           <InputLabel>Organization</InputLabel>
-          <Text
-            property={vcardExtras("organization-name")}
-            edit={editing}
-            inputProps={{
-              className: bem("input"),
-              "data-testid": TESTCAFE_ID_ORG_FIELD,
-            }}
-            autosave
-          />
+          <span>{profile.organizations[0]}</span>
         </Box>
       </Box>
 
       <Box mt={4}>
         <InputLabel>Email Addresses</InputLabel>
         <ContactInfoTable
-          datasetIri={profileIri}
-          property={vcard.hasEmail}
-          editing={editing}
+          values={profile.contactInfo.emails}
           contactInfoType={CONTACT_INFO_TYPE_EMAIL}
         />
       </Box>
@@ -101,9 +146,7 @@ export default function PersonProfile({ profileIri, editing }) {
       <Box mt={4}>
         <InputLabel>Phone Numbers</InputLabel>
         <ContactInfoTable
-          datasetIri={profileIri}
-          property={vcard.hasTelephone}
-          editing={editing}
+          values={profile.contactInfo.phones}
           contactInfoType={CONTACT_INFO_TYPE_PHONE}
         />
       </Box>
@@ -112,10 +155,14 @@ export default function PersonProfile({ profileIri, editing }) {
 }
 
 PersonProfile.propTypes = {
-  profileIri: T.string.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  profileDataset: T.object,
+  profile: profilePropTypes,
   editing: T.bool,
 };
 
 PersonProfile.defaultProps = {
+  profileDataset: null,
+  profile: null,
   editing: false,
 };

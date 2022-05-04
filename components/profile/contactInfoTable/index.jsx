@@ -209,7 +209,12 @@ export function setupOnChange(setFn) {
   return (e) => setFn(e.target.value);
 }
 
-export default function ContactTable({ editing, property, contactInfoType }) {
+export default function ContactTable({
+  editing,
+  property,
+  values,
+  contactInfoType,
+}) {
   const tableClass = PrismTable.useTableClass("table", "inherits");
   const classes = useStyles();
   const bem = useBem(classes);
@@ -256,90 +261,107 @@ export default function ContactTable({ editing, property, contactInfoType }) {
   const newContactTypeOnChange = setupOnChange(setNewContactType);
   const newContactValueOnChange = setupOnChange(setNewContactValue);
 
-  if (!dataset) {
+  if (!dataset && !values) {
     return null;
   }
-
-  return (
-    <>
-      <Box mb={1}>
-        <Table
-          things={contactDetailThings}
-          className={clsx(tableClass, bem("table"))}
-          getRowProps={getRowProps}
-        >
-          <TableColumn
-            property={rdf.type}
-            body={columnTypeBody}
-            dataType="url"
-            header={() => null}
-          />
-          <TableColumn
-            property={vcard.value}
-            body={columnValueBody}
-            dataType="url"
-            header={() => null}
-          />
-          <TableColumn
-            property={vcard.value}
-            body={DeleteButtonCell}
-            dataType="url"
-            header=""
-          />
-        </Table>
-      </Box>
-
-      {editing && (
-        <>
-          <Box display="flex" alignItems="center">
-            <Box>
-              <FormControl className={classes.formControl} variant="outlined">
-                <Select
-                  value={newContactType}
-                  onChange={newContactTypeOnChange}
-                  data-testid={TESTCAFE_ID_NEW_TYPE.replace(
-                    "<TYPE>",
-                    contactInfoType
-                  )}
-                >
-                  {Object.keys(CONTACT_TYPE_LABEL_MAP).map((iri) => (
-                    <MenuItem key={iri} value={iri}>
-                      {CONTACT_TYPE_LABEL_MAP[iri]}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-
-            <Box width="100%" ml={1} mr={1}>
-              <input
-                label="Value"
-                value={newContactValue}
-                onChange={newContactValueOnChange}
-                className={bem("input")}
-                data-testid={TESTCAFE_ID_NEW_VALUE.replace(
-                  "<TYPE>",
-                  contactInfoType
-                )}
-              />
-            </Box>
-
-            <Box width="8.25em" textAlign="center">
-              <Button
-                onClick={addContactDetail}
-                variant="secondary"
-                data-testid={TESTCAFE_ID_ADD_BUTTON.replace(
+  if (editing) {
+    return (
+      <>
+        <Box mb={1}>
+          <Table
+            things={contactDetailThings}
+            className={clsx(tableClass, bem("table"))}
+            getRowProps={getRowProps}
+          >
+            <TableColumn
+              property={rdf.type}
+              body={columnTypeBody}
+              dataType="url"
+              header={() => null}
+            />
+            <TableColumn
+              property={vcard.value}
+              body={columnValueBody}
+              dataType="url"
+              header={() => null}
+            />
+            <TableColumn
+              property={vcard.value}
+              body={DeleteButtonCell}
+              dataType="url"
+              header=""
+            />
+          </Table>
+        </Box>
+        <Box display="flex" alignItems="center">
+          <Box>
+            <FormControl className={classes.formControl} variant="outlined">
+              <Select
+                value={newContactType}
+                onChange={newContactTypeOnChange}
+                data-testid={TESTCAFE_ID_NEW_TYPE.replace(
                   "<TYPE>",
                   contactInfoType
                 )}
               >
-                Add
-              </Button>
-            </Box>
+                {Object.keys(CONTACT_TYPE_LABEL_MAP).map((iri) => (
+                  <MenuItem key={iri} value={iri}>
+                    {CONTACT_TYPE_LABEL_MAP[iri]}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Box>
-        </>
-      )}
-    </>
+
+          <Box width="100%" ml={1} mr={1}>
+            <input
+              label="Value"
+              value={newContactValue}
+              onChange={newContactValueOnChange}
+              className={bem("input")}
+              data-testid={TESTCAFE_ID_NEW_VALUE.replace(
+                "<TYPE>",
+                contactInfoType
+              )}
+            />
+          </Box>
+
+          <Box width="8.25em" textAlign="center">
+            <Button
+              onClick={addContactDetail}
+              variant="secondary"
+              data-testid={TESTCAFE_ID_ADD_BUTTON.replace(
+                "<TYPE>",
+                contactInfoType
+              )}
+            >
+              Add
+            </Button>
+          </Box>
+        </Box>
+      </>
+    );
+  }
+
+  return (
+    <Box mb={1}>
+      <table className={clsx(tableClass, bem("table"))}>
+        <tbody>
+          {values.map((item) => {
+            return (
+              <tr>
+                <td>
+                  <Typography>{CONTACT_TYPE_LABEL_MAP[item.type]}</Typography>
+                </td>
+                <td>
+                  <Typography>{item.value}</Typography>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </Box>
   );
 }
 
@@ -348,8 +370,10 @@ ContactTable.propTypes = {
   property: T.string.isRequired,
   contactInfoType: T.oneOf([CONTACT_INFO_TYPE_EMAIL, CONTACT_INFO_TYPE_PHONE])
     .isRequired,
+  values: T.arrayOf(T.shape({ type: T.string, value: T.string })),
 };
 
 ContactTable.defaultProps = {
   editing: false,
+  values: [],
 };

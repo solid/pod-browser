@@ -21,37 +21,56 @@
 
 import React from "react";
 import { waitFor } from "@testing-library/dom";
+import { useRouter } from "next/router";
+import { foaf } from "rdf-namespaces";
 import * as solidClientFns from "@inrupt/solid-client";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import mockSession from "../../../__testUtils/mockSession";
-
 import ProfilePage from "./index";
 import {
   mockPersonDatasetAlice,
   aliceWebIdUrl,
 } from "../../../__testUtils/mockPersonResource";
+import useFullProfile from "../../../src/hooks/useFullProfile";
+
+jest.mock("next/router");
+jest.mock("../../../src/hooks/useFullProfile");
+
+const mockedUseRouter = useRouter;
+const mockedUseFullProfile = useFullProfile;
 
 describe("Profile page", () => {
   const profileDataset = mockPersonDatasetAlice();
-  const profileThing = solidClientFns.getThing(profileDataset, aliceWebIdUrl);
-  const profile = {
-    webIdProfile: profileDataset,
+  const mockProfileAlice = {
+    names: ["Alice"],
+    webId: aliceWebIdUrl,
+    types: [foaf.Person],
+    avatars: [],
+    roles: [],
+    organizations: [],
+    contactInfo: {
+      phones: [],
+      emails: [],
+    },
+    editableProfileDatasets: [profileDataset],
   };
 
   beforeEach(() => {
-    jest
-      .spyOn(solidClientFns, "getSolidDataset")
-      .mockResolvedValue(profileDataset);
-    jest.spyOn(solidClientFns, "getThing").mockReturnValue(profileThing);
+    mockedUseFullProfile.mockReturnValue(mockProfileAlice);
     jest
       .spyOn(solidClientFns, "getEffectiveAccess")
       .mockReturnValue({ user: { read: true, write: true, append: true } });
+    mockedUseRouter.mockReturnValue({
+      query: {
+        webId: aliceWebIdUrl,
+      },
+    });
   });
 
   it("Renders the profile page", async () => {
     const session = mockSession();
-    const SessionProvider = mockSessionContextProvider(session, false, profile);
+    const SessionProvider = mockSessionContextProvider(session, false);
 
     const { asFragment, queryAllByText } = renderWithTheme(
       <SessionProvider>

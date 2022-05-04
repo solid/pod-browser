@@ -19,15 +19,20 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
+import React, { useContext } from "react";
 import T from "prop-types";
 import { foaf, vcard } from "rdf-namespaces";
 import { Avatar, Box, createStyles, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Image, Text, useSession, useThing } from "@inrupt/solid-ui-react";
-import { getStringNoLocale } from "@inrupt/solid-client";
+import { Image } from "@inrupt/solid-ui-react";
+import {
+  getSourceUrl,
+  getStringNoLocale,
+  getThing,
+} from "@inrupt/solid-client";
 import styles from "./styles";
+import { profilePropTypes } from "../../../constants/propTypes";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -40,42 +45,66 @@ export function setupErrorComponent(bem) {
   );
 }
 
-export default function PersonAvatar({ profileIri }) {
+export default function PersonAvatar({
+  profile,
+  profileDataset,
+  editing,
+  webId,
+}) {
   const classes = useStyles();
   const bem = useBem(classes);
   const errorComponent = setupErrorComponent(bem);
-  const { session } = useSession();
-  const { webId } = session.info;
-  const { thing } = useThing();
+  const thing =
+    profileDataset && getThing(profileDataset, getSourceUrl(profileDataset));
+  const name = editing
+    ? (thing && getStringNoLocale(thing, foaf.name)) ||
+      (thing && getStringNoLocale(thing, vcard.fn))
+    : profile?.names[0];
 
-  const name =
-    getStringNoLocale(thing, foaf.name) || getStringNoLocale(thing, vcard.fn);
+  if (!profile && !profileDataset) {
+    return (
+      <Box p={2}>
+        <Typography variant="h1" data-testid={TESTCAFE_ID_WEBID_TITLE}>
+          {webId}
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box alignItems="center" display="flex">
       <Box>
         <Avatar className={classes.avatar}>
-          <Image
-            property={vcard.hasPhoto}
-            width={120}
-            alt={profileIri}
-            errorComponent={errorComponent}
-          />
+          {editing ? (
+            <Image
+              property={vcard.hasPhoto}
+              width={120}
+              alt={profile.webId}
+              errorComponent={errorComponent}
+            />
+          ) : (
+            <Avatar
+              src={profile.avatars[0]}
+              alt={profile.webId}
+              fallback={bem("avatar")}
+            />
+          )}
         </Avatar>
       </Box>
 
       <Box p={2}>
-        {name ? (
+        {profile || profileDataset ? (
           <>
             <Typography variant="h1" data-testid={TESTCAFE_ID_NAME_TITLE}>
               {name}
             </Typography>
             <Typography variant="body2" data-testid={TESTCAFE_ID_WEBID_TITLE}>
-              {webId}
+              {profile.webId}
             </Typography>
           </>
         ) : (
           <Typography variant="h1" data-testid={TESTCAFE_ID_WEBID_TITLE}>
-            {webId}
+            {profile.webId}
           </Typography>
         )}
       </Box>
@@ -84,5 +113,15 @@ export default function PersonAvatar({ profileIri }) {
 }
 
 PersonAvatar.propTypes = {
-  profileIri: T.string.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  profileDataset: T.object,
+  profile: profilePropTypes,
+  editing: T.bool,
+  webId: T.string.isRequired,
+};
+
+PersonAvatar.defaultProps = {
+  profileDataset: null,
+  profile: null,
+  editing: false,
 };

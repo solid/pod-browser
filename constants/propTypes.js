@@ -77,3 +77,17 @@ export const swrResponse = PropTypes.shape({
   isValidating: PropTypes.bool.isRequired,
   mutate: PropTypes.func.isRequired,
 });
+
+export const profilePropTypes = PropTypes.shape({
+  names: PropTypes.arrayOf(PropTypes.string),
+  avatars: PropTypes.arrayOf(PropTypes.string),
+  types: PropTypes.arrayOf(PropTypes.string),
+  webId: PropTypes.string,
+  roles: PropTypes.arrayOf(PropTypes.string),
+  organizations: PropTypes.arrayOf(PropTypes.string),
+  editableProfileDatasets: PropTypes.arrayOf(PropTypes.object),
+  contactInfo: PropTypes.shape({
+    phones: PropTypes.arrayOf(PropTypes.string),
+    emails: PropTypes.arrayOf(PropTypes.string),
+  }),
+});

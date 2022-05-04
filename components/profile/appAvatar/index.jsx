@@ -57,7 +57,7 @@ export function setupErrorComponent(bem) {
 const app = mockApp();
 const dataset = mockAppDataset();
 
-export default function AppAvatar({ profileIri }) {
+export default function AppAvatar({ webId }) {
   const [error, setError] = useState(null);
 
   const classes = useStyles();
@@ -90,11 +90,11 @@ export default function AppAvatar({ profileIri }) {
               <Text className={classes.avatarText} property={foaf.name} />
               <a
                 className={classes.headerLink}
-                href={profileIri}
+                href={webId}
                 rel="noreferrer"
                 target="_blank"
               >
-                {profileIri}
+                {webId}
               </a>
             </h3>
           </Box>
@@ -105,5 +105,5 @@ export default function AppAvatar({ profileIri }) {
 }
 
 AppAvatar.propTypes = {
-  profileIri: T.string.isRequired,
+  webId: T.string.isRequired,
 };

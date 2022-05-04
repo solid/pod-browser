@@ -24,6 +24,7 @@ import { solid, schema, foaf, rdf, space, vcard } from "rdf-namespaces";
 import {
   displayProfileName,
   fetchProfile,
+  getFullProfile,
   getPodConnectedToProfile,
   getProfileFromPersonThing,
   getProfileFromThing,
@@ -32,14 +33,15 @@ import {
   TYPE_MAP,
 } from "./profile";
 import {
+  mockPersonDatasetAliceWithContactInfoAndSeeAlso,
+  mockSeeAlsoDatasetAlice,
   mockPersonThingAlice,
   mockPersonThingBob,
   mockProfileAlice,
   mockProfileBob,
-  mockWebIdNode,
+  aliceWebIdUrl,
 } from "../../__testUtils/mockPersonResource";
-import createDataset from "../../__testUtils/createDataset";
-import mockSession, { webIdUrl } from "../../__testUtils/mockSession";
+import mockSession from "../../__testUtils/mockSession";
 import { chain } from "./utils";
 
 const {
@@ -49,6 +51,56 @@ const {
   mockThingFrom,
   addStringNoLocale,
 } = solidClientFns;
+
+describe("getFullProfile", () => {
+  const mockProfileAlice = {
+    names: ["Alice", "Alternative Alice"],
+    webId: aliceWebIdUrl,
+    types: [foaf.Person],
+    avatars: [
+      "http://alice.example.com/alice.jpg",
+      "https://example.com/anotherphotoforalice.jpg",
+    ],
+    roles: [],
+    organizations: [],
+    editableProfileDatasets: [
+      mockPersonDatasetAliceWithContactInfoAndSeeAlso(),
+      mockSeeAlsoDatasetAlice(),
+    ],
+    contactInfo: {
+      phones: [
+        {
+          type: "http://www.w3.org/2006/vcard/ns#Home",
+          value: "tel:42-1337",
+        },
+      ],
+      emails: [
+        {
+          type: null,
+          value: "mailto:alice@example.com",
+        },
+      ],
+    },
+  };
+  const session = mockSession();
+  it("returns a full Solid profile after following discovery steps", async () => {
+    jest.spyOn(solidClientFns, "getProfileAll").mockResolvedValue({
+      webIdProfile: mockPersonDatasetAliceWithContactInfoAndSeeAlso(),
+      altProfileAll: [],
+    });
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValue(mockSeeAlsoDatasetAlice());
+    jest
+      .spyOn(solidClientFns, "getResourceInfo")
+      .mockResolvedValue(mockPersonDatasetAliceWithContactInfoAndSeeAlso());
+    jest
+      .spyOn(solidClientFns, "getEffectiveAccess")
+      .mockReturnValue({ user: { read: true, write: true, append: true } });
+    const profile = await getFullProfile(aliceWebIdUrl, session);
+    expect(profile).toEqual(mockProfileAlice);
+  });
+});
 
 describe("displayProfileName", () => {
   it("displays the name when name provided", () => {

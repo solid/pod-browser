@@ -39,7 +39,8 @@ exports[`Contact show page Renders the Contact show page 1`] = `
               class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
             >
               <div
-                class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+                class="PodBrowser-root PodBrowser-circle PodBrowser-colorDefault"
+                fallback="PodBrowser-avatar"
               >
                 <svg
                   aria-hidden="true"
@@ -67,7 +68,7 @@ exports[`Contact show page Renders the Contact show page 1`] = `
               class="PodBrowser-root PodBrowser-body2"
               data-testid="profile-webid-title"
             >
-              http://example.com/webId#me
+              http://alice.example.com/alice#me
             </p>
           </div>
         </div>
@@ -98,9 +99,7 @@ exports[`Contact show page Renders the Contact show page 1`] = `
             >
               Role
             </label>
-            <span>
-              Error: No value found for property.
-            </span>
+            <span />
           </div>
           <div
             class="PodBrowser-root PodBrowser-root"
@@ -110,9 +109,7 @@ exports[`Contact show page Renders the Contact show page 1`] = `
             >
               Organization
             </label>
-            <span>
-              Error: No value found for property.
-            </span>
+            <span />
           </div>
         </div>
         <div
@@ -125,7 +122,13 @@ exports[`Contact show page Renders the Contact show page 1`] = `
           </label>
           <div
             class="PodBrowser-root PodBrowser-root"
-          />
+          >
+            <table
+              class="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
+            >
+              <tbody />
+            </table>
+          </div>
         </div>
         <div
           class="PodBrowser-root PodBrowser-root"
@@ -137,7 +140,13 @@ exports[`Contact show page Renders the Contact show page 1`] = `
           </label>
           <div
             class="PodBrowser-root PodBrowser-root"
-          />
+          >
+            <table
+              class="PodBrowser-table  PodBrowser-table--inherits PodBrowser-table"
+            >
+              <tbody />
+            </table>
+          </div>
         </div>
       </div>
     </div>

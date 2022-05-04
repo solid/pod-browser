@@ -64,16 +64,21 @@ describe("ContactInfoTable", () => {
   it("renders a table of contact info", async () => {
     const session = mockSession({ fetch });
     const SessionProvider = mockSessionContextProvider(session);
-    const profileDataset = mockPersonDatasetAliceWithContactInfo();
-    const thing = mockPersonThingAliceWithContactInfo();
+    const contactInfo = [
+      {
+        type: vcard.Home,
+        value: "tel:42-1337",
+      },
+      { type: vcard.Home, value: "mailto:alice@example.com" },
+    ];
+
     const { asFragment, findByRole } = renderWithTheme(
       <SessionProvider>
-        <CombinedDataProvider solidDataset={profileDataset} thing={thing}>
-          <ContactInfoTable
-            property={vcard.hasEmail}
-            contactInfoType={CONTACT_INFO_TYPE_EMAIL}
-          />
-        </CombinedDataProvider>
+        <ContactInfoTable
+          property={vcard.hasEmail}
+          contactInfoType={CONTACT_INFO_TYPE_EMAIL}
+          values={contactInfo}
+        />
       </SessionProvider>
     );
     await expect(findByRole("table")).resolves.not.toBeNull();
@@ -126,7 +131,7 @@ describe("setupAddContactDetail", () => {
     const newDataset = saveHandler.mock.calls[0][1];
     const newContactDetail = scFns.getThing(
       newDataset,
-      "http://www.w3.org/2006/vcard/ns#Home"
+      "http://alice.example.com/phone"
     );
     expect(getUrl(newContactDetail, rdf.type)).toEqual(contactType);
     expect(getUrl(newContactDetail, vcard.value)).toEqual(
