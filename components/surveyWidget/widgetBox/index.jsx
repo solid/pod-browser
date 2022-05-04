@@ -52,6 +52,7 @@ export default function WidgetBox({ id, open, anchorEl, onClose }) {
       }}
       transformOrigin={{
         vertical: "bottom",
+        horizontal: "left",
       }}
     >
       <span className={bem("survey-widget-close-button-wrapper")}>
@@ -82,7 +83,8 @@ export default function WidgetBox({ id, open, anchorEl, onClose }) {
 WidgetBox.propTypes = {
   id: T.string,
   open: T.bool,
-  anchorEl: T.element,
+  // eslint-disable-next-line react/forbid-prop-types
+  anchorEl: T.object,
   onClose: T.func.isRequired,
 };
 
