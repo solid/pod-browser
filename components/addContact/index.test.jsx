@@ -95,7 +95,7 @@ describe("handleSubmit", () => {
       people,
     });
     jest
-      .spyOn(profileHelperFns, "fetchProfile")
+      .spyOn(profileHelperFns, "getFullProfile")
       .mockResolvedValue(personProfile);
     jest
       .spyOn(addressBookFns, "findContactInAddressBook")
@@ -124,7 +124,7 @@ describe("handleSubmit", () => {
       setDirtyForm,
     });
     jest
-      .spyOn(profileHelperFns, "fetchProfile")
+      .spyOn(profileHelperFns, "getFullProfile")
       .mockRejectedValueOnce(mockProfileError);
     await handler("iri");
     expect(setAgentId).toHaveBeenCalledTimes(0);
@@ -135,7 +135,8 @@ describe("handleSubmit", () => {
 
   it("saves a contact without name and alerts the user", async () => {
     const personUri = "http://example.com/marie#me";
-    const mockProfile = { webId: personUri };
+    const mockProfile = { webId: personUri, names: [] };
+    const mockSaveContact = jest.spyOn(addressBookFns, "saveContact");
     const handler = handleSubmit({
       addressBook,
       setAgentId,
@@ -145,15 +146,18 @@ describe("handleSubmit", () => {
       session,
       setDirtyForm,
     });
-    jest.spyOn(profileHelperFns, "fetchProfile").mockResolvedValue(mockProfile);
+    jest
+      .spyOn(profileHelperFns, "getFullProfile")
+      .mockResolvedValue(mockProfile);
     jest
       .spyOn(addressBookFns, "findContactInAddressBook")
       .mockResolvedValue(undefined);
-    jest.spyOn(addressBookFns, "saveContact").mockResolvedValue({
+    mockSaveContact.mockResolvedValue({
       response: "peopleDataset",
       error: null,
     });
     await handler(personUri);
+    expect(mockSaveContact).toHaveBeenCalledTimes(1);
     expect(setAgentId).toHaveBeenCalledTimes(1);
     expect(setIsLoading).toHaveBeenCalledTimes(2);
     expect(alertSuccess).toHaveBeenCalled();
@@ -170,7 +174,7 @@ describe("handleSubmit", () => {
     const people = mockSolidDatasetFrom(contactsIri);
     const peopleMutate = jest.fn();
     const peopleDatasetWithContact = setThing(people, personDataset);
-    const mockProfile = mockProfileAlice();
+    const mockProfile = { webId: personUri, names: ["Alice"] };
     const handler = handleSubmit({
       addressBook,
       setAgentId,
@@ -185,7 +189,9 @@ describe("handleSubmit", () => {
     jest
       .spyOn(addressBookFns, "findContactInAddressBook")
       .mockResolvedValue(undefined);
-    jest.spyOn(profileHelperFns, "fetchProfile").mockResolvedValue(mockProfile);
+    jest
+      .spyOn(profileHelperFns, "getFullProfile")
+      .mockResolvedValue(mockProfile);
     jest.spyOn(addressBookFns, "saveContact").mockResolvedValue({
       response: peopleDatasetWithContact,
       error: null,
@@ -201,7 +207,8 @@ describe("handleSubmit", () => {
   });
 
   it("alerts the user if there is an error while creating the contact", async () => {
-    const mockProfile = mockProfileAlice();
+    const personUri = "http://example.com/alice#me";
+    const mockProfile = { webId: personUri, names: [] };
     const handler = handleSubmit({
       addressBook,
       setAgentId,
@@ -211,7 +218,9 @@ describe("handleSubmit", () => {
       session,
       setDirtyForm,
     });
-    jest.spyOn(profileHelperFns, "fetchProfile").mockResolvedValue(mockProfile);
+    jest
+      .spyOn(profileHelperFns, "getFullProfile")
+      .mockResolvedValue(mockProfile);
     jest
       .spyOn(addressBookFns, "findContactInAddressBook")
       .mockResolvedValue(undefined);

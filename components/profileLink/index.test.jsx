@@ -27,10 +27,13 @@ import { ThingProvider } from "@inrupt/solid-ui-react";
 import { foaf, rdf, vcard, schema } from "rdf-namespaces";
 import ProfileLink, { buildProfileLink } from "./index";
 import { chain } from "../../src/solidClientHelpers/utils";
+import useFullProfile from "../../src/hooks/useFullProfile";
 
 jest.mock("next/router");
+jest.mock("../../src/hooks/useFullProfile");
 
 const mockedUseRouter = useRouter;
+const mockedUseFullProfile = useFullProfile;
 
 const alice = chain(mockThingFrom("https://example.com/alice"), (t) =>
   setStringNoLocale(t, vcard.fn, "Alice")
@@ -48,7 +51,9 @@ describe("ProfileLink", () => {
       route: "/contacts",
     });
   });
-  it("supports rendering name from vcard.fn", () => {
+
+  it("returns null on first render when profile is still null", () => {
+    mockedUseFullProfile.mockReturnValue(null);
     const { asFragment } = render(
       <ThingProvider thing={alice}>
         <ProfileLink iri={iri} />
@@ -57,16 +62,26 @@ describe("ProfileLink", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("supports rendering name from foaf.name", () => {
+  it("renders first name from profile names array", () => {
+    mockedUseFullProfile.mockReturnValue({
+      webId: "https://example.com/alice",
+      names: ["Alice", "Alice2"],
+      types: [schema.Person],
+    });
     const { asFragment } = render(
-      <ThingProvider thing={bob}>
-        <ProfileLink />
+      <ThingProvider thing={alice}>
+        <ProfileLink iri={iri} />
       </ThingProvider>
     );
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders iri if name is not found", () => {
+    mockedUseFullProfile.mockReturnValue({
+      webId: "https://example.com/alice",
+      names: [],
+      types: [schema.Person],
+    });
     const { asFragment } = render(
       <ThingProvider thing={mockThingFrom("https://mockiri.com")}>
         <ProfileLink />
@@ -76,6 +91,11 @@ describe("ProfileLink", () => {
   });
 
   it("renders correct path for privacy contacts", () => {
+    mockedUseFullProfile.mockReturnValue({
+      webId: "https://example.com/bob",
+      names: ["Bob"],
+      types: [schema.Person],
+    });
     mockedUseRouter.mockReturnValueOnce({
       route: "/privacy",
     });
