@@ -51,6 +51,17 @@ describe("ProfileLink", () => {
       route: "/contacts",
     });
   });
+
+  it("returns null on first render when profile is still null", () => {
+    mockedUseFullProfile.mockReturnValue(null);
+    const { asFragment } = render(
+      <ThingProvider thing={alice}>
+        <ProfileLink iri={iri} />
+      </ThingProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+
   it("renders first name from profile names array", () => {
     mockedUseFullProfile.mockReturnValue({
       webId: "https://example.com/alice",

@@ -32,3 +32,5 @@ exports[`ProfileLink renders iri if name is not found 1`] = `
   </a>
 </DocumentFragment>
 `;
+
+exports[`ProfileLink returns null on first render when profile is still null 1`] = `<DocumentFragment />`;
