@@ -36,7 +36,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import usePermissionsWithProfiles from "../../../../src/hooks/usePermissionsWithProfiles";
 import AgentAccess from "../agentAccess";
 import AddAgentButton from "../addAgentButton";
 // import AgentsTableTabs from "../agentsTableTabs";
@@ -56,6 +55,8 @@ const TESTCAFE_ID_HIDE_BUTTON = "hide-button";
 export const TESTCAFE_ID_AGENT_ACCESS_TABLE = "agent-access-table";
 function TableContents({
   loading,
+  setLoading,
+  mutateAccessGrantBasedPermissions,
   tablePermissions,
   classes,
   emptyStateText,
@@ -105,7 +106,13 @@ function TableContents({
                         bem("agent-cell")
                       )}
                     >
-                      <AgentAccess permission={details} />
+                      <AgentAccess
+                        permission={details}
+                        setLoadingTable={setLoading}
+                        mutateAccessGrantBasedPermissions={
+                          mutateAccessGrantBasedPermissions
+                        }
+                      />
                     </td>
                   </tr>
                 );
@@ -171,28 +178,20 @@ function TableContents({
 }
 export default function AgentAccessTable({ type, loading, setLoading }) {
   const classes = useStyles();
-  const { permissions } = useContext(PermissionsContext);
+  const { permissions, mutateAccessGrantBasedPermissions } =
+    useContext(PermissionsContext);
   const [tablePermissions, setTablePermissions] = useState([]);
-  const [policyPermissions, setPolicyPermissions] = useState([]);
   const [selectedTabValue, setSelectedTabValue] = useState("");
   const [showAll, setShowAll] = useState(false);
-  const { permissionsWithProfiles } =
-    usePermissionsWithProfiles(policyPermissions);
 
   useEffect(() => {
     const filteredPermissions = permissions?.filter(
       (permission) => permission.alias === type
     );
-    if (!filteredPermissions.length) return;
-    setPolicyPermissions(filteredPermissions);
-  }, [permissions, type]);
-
-  useEffect(() => {
-    if (!permissionsWithProfiles || !permissionsWithProfiles.length) return;
-    setTablePermissions(
-      preparePermissionsDataForTable(permissionsWithProfiles)
-    );
-  }, [permissionsWithProfiles]);
+    if (!filteredPermissions) return;
+    setTablePermissions(preparePermissionsDataForTable(filteredPermissions));
+    setLoading(false);
+  }, [permissions, type, setLoading]);
 
   const data = useMemo(() => {
     return showAll ? tablePermissions : tablePermissions.slice(0, 3);
@@ -263,7 +262,10 @@ export default function AgentAccessTable({ type, loading, setLoading }) {
         </>
       )}
       <TableContents
+        type={type}
         loading={loading}
+        setLoading={setLoading}
+        mutateAccessGrantBasedPermissions={mutateAccessGrantBasedPermissions}
         tablePermissions={tablePermissions}
         classes={classes}
         setGlobalFilter={setGlobalFilter}
@@ -294,6 +296,8 @@ TableContents.propTypes = {
   type: PropTypes.string.isRequired,
   loading: PropTypes.bool.isRequired,
   tablePermissions: PropTypes.array.isRequired,
+  setLoading: PropTypes.func,
+  mutateAccessGrantBasedPermissions: PropTypes.func,
   classes: PropTypes.any,
   emptyStateText: PropTypes.string,
   getTableProps: PropTypes.func,
@@ -314,4 +318,6 @@ TableContents.defaultProps = {
   showAll: false,
   setShowAll: () => {},
   getTableBodyProps: () => {},
+  setLoading: () => {},
+  mutateAccessGrantBasedPermissions: () => {},
 };

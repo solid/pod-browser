@@ -28,16 +28,14 @@ import {
   getUrlAll,
   getSourceUrl,
   getEffectiveAccess,
-  getResourceInfo,
-  getSourceIri,
 } from "@inrupt/solid-client";
 import { foaf, rdf, schema, space, vcard, ldp, rdfs } from "rdf-namespaces";
 import { getProfileIriFromContactThing, vcardExtras } from "../addressBook";
 
-export function displayProfileName({ nickname, name, webId }) {
-  if (name) return name;
-  if (nickname) return nickname;
-  return webId;
+export function displayProfileName(profile) {
+  if (!profile) return null;
+  if (profile.names?.length) return profile.names[0];
+  return profile.webId;
 }
 
 export function getProfileFromPersonThing(profileThing) {
@@ -124,6 +122,7 @@ export async function getFullProfile(webId, session) {
     types: [],
     webId,
     roles: [],
+    pods: [],
     organizations: [],
     editableProfileDatasets: [],
     contactInfo: {
@@ -157,6 +156,11 @@ export async function getFullProfile(webId, session) {
       label: "organizations",
       getDataItem: getStringNoLocale,
       properties: [vcardExtras("organization-name")],
+    },
+    {
+      label: "pods",
+      getDataItem: getUrl,
+      properties: [space.storage],
     },
   ];
 

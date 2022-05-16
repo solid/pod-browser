@@ -29,6 +29,8 @@ import { useSession } from "@inrupt/solid-ui-react";
 export default function useAccessGrantBasedAccessForResource(resourceUrl) {
   const [permissions, setPermissions] = useState(null);
   const [permissionsError, setPermissionsError] = useState([]);
+  const [shouldUpdate, setShouldUpdate] = useState(false);
+  const mutate = () => setShouldUpdate(true);
   const { fetch } = useSession();
   useEffect(() => {
     if (!resourceUrl) {
@@ -61,8 +63,11 @@ export default function useAccessGrantBasedAccessForResource(resourceUrl) {
         setPermissions(permissionsWithNullsRemoved);
       } catch (err) {
         setPermissionsError(err);
+      } finally {
+        setShouldUpdate(false);
       }
     })();
-  }, [resourceUrl, fetch]);
-  return { permissions, permissionsError };
+  }, [resourceUrl, fetch, shouldUpdate]);
+
+  return { permissions, permissionsError, mutate };
 }

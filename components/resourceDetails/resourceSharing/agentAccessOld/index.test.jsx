@@ -22,6 +22,7 @@
 import React from "react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
 import { act } from "@testing-library/react-hooks";
+import { foaf } from "rdf-namespaces";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
 import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -37,20 +38,18 @@ import mockSessionContextProvider from "../../../../__testUtils/mockSessionConte
 import mockSession from "../../../../__testUtils/mockSession";
 import { renderWithTheme } from "../../../../__testUtils/withTheme";
 import { createAccessMap } from "../../../../src/solidClientHelpers/permissions";
-import useFetchProfile from "../../../../src/hooks/useFetchProfile";
-import * as profileFns from "../../../../src/solidClientHelpers/profile";
-import { mockProfileAlice } from "../../../../__testUtils/mockPersonResource";
 import { joinPath } from "../../../../src/stringHelpers";
 import {
   TESTCAFE_ID_CONFIRMATION_DIALOG,
   TESTCAFE_ID_CONFIRMATION_DIALOG_CONTENT,
 } from "../../../confirmationDialog";
 import { ConfirmationDialogProvider } from "../../../../src/contexts/confirmationDialogContext";
+import useFullProfile from "../../../../src/hooks/useFullProfile";
 
 jest.mock("../../../../src/solidClientHelpers/permissions");
-jest.mock("../../../../src/hooks/useFetchProfile");
+jest.mock("../../../../src/hooks/useFullProfile");
 
-const webId = "http://example.com/webId#me";
+const webId = "http://alice.example.com/alice#me";
 
 describe("AgentAccess", () => {
   const permission = {
@@ -61,14 +60,26 @@ describe("AgentAccess", () => {
     acl: createAccessMap(true),
     webId,
   };
-  const authUser = mockProfileAlice();
+  const authUser = {
+    names: ["Alice"],
+    webId,
+    types: [foaf.Person],
+    avatars: ["http://alice.example.com/alice.jpg"],
+    roles: [],
+    pods: ["http://alice.example.com/pod/"],
+    organizations: [],
+    contactInfo: {
+      phones: [],
+      emails: [],
+    },
+  };
   const datasetUrl = joinPath(authUser.pods[0], "dataset");
   const dataset = mockSolidDatasetFrom(datasetUrl);
 
   let mockedRouterHook;
 
   beforeEach(() => {
-    useFetchProfile.mockReturnValue({ data: authUser });
+    useFullProfile.mockReturnValue(authUser);
     mockedRouterHook = jest
       .spyOn(routerFns, "useRouter")
       .mockReturnValue({ query: { iri: datasetUrl } });
@@ -93,12 +104,12 @@ describe("AgentAccess", () => {
       </DatasetProvider>
     );
     await waitFor(() => {
-      expect(useFetchProfile).toHaveBeenCalledWith(webId);
+      expect(useFullProfile).toHaveBeenCalledWith(webId);
     });
   });
 
   it("renders skeleton placeholders when profile is not available", async () => {
-    useFetchProfile.mockReturnValue({ profile: null });
+    useFullProfile.mockReturnValue(undefined);
     const { asFragment, queryByText } = renderWithTheme(
       <DatasetProvider solidDataset={dataset}>
         <AgentAccess permission={permission} />
@@ -110,82 +121,15 @@ describe("AgentAccess", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("renders an error message with a 'try again' button if it's unable to load profile", async () => {
-    jest.useFakeTimers();
-    useFetchProfile.mockReturnValue({ error: "error" });
-    const { asFragment, getByTestId } = renderWithTheme(
-      <DatasetProvider solidDataset={dataset}>
-        <AgentAccess permission={permission} />
-      </DatasetProvider>
-    );
-    await waitFor(() => {
-      expect(getByTestId("try-again-button")).toBeTruthy();
-    });
-    expect(asFragment()).toMatchSnapshot();
-  });
-
-  it("renders a spinner after clicking 'try again' button, tries to fetch profile and removes the spinner when fetching succeeds", async () => {
-    jest.useFakeTimers();
-    useFetchProfile.mockReturnValue({ error: "error" });
-    const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
-
-    const { getByTestId, queryByTestId } = renderWithTheme(
-      <DatasetProvider solidDataset={dataset}>
-        <AgentAccess permission={permission} />
-      </DatasetProvider>
-    );
-    const button = getByTestId("try-again-button");
-    userEvent.click(button);
-    await waitFor(() => {
-      expect(getByTestId("try-again-spinner")).toBeTruthy();
-    });
-    act(() => {
-      fetchProfile.mockReturnValue("profile");
-    });
-    act(() => {
-      jest.advanceTimersByTime(1000);
-    });
-    await waitFor(() => {
-      expect(fetchProfile).toHaveBeenCalledWith(webId, expect.anything());
-      expect(queryByTestId("try-again-spinner")).toBeFalsy();
-    });
-  });
-
-  it("removes the spinner when fetching errors", async () => {
-    jest.useFakeTimers();
-    const fetchProfile = jest.spyOn(profileFns, "fetchProfile");
-    act(() => {
-      useFetchProfile.mockReturnValue({ error: "error" });
-    });
-    fetchProfile.mockReturnValue("profile");
-    const { getByTestId, queryByTestId } = renderWithTheme(
-      <DatasetProvider solidDataset={dataset}>
-        <AgentAccess permission={permission} />
-      </DatasetProvider>
-    );
-    const button = getByTestId("try-again-button");
-    userEvent.click(button);
-    act(() => {
-      fetchProfile.mockRejectedValue("error");
-    });
-    act(() => {
-      jest.advanceTimersByTime(1000);
-    });
-    await waitFor(() => {
-      expect(queryByTestId("try-again-spinner")).toBeFalsy();
-      expect(fetchProfile).toHaveBeenCalledWith(webId, expect.anything());
-    });
-  });
-
   describe("user tries to change access for themselves", () => {
     it("checkboxes are disabled", async () => {
-      const session = mockSession();
+      const session = mockSession({ webId });
       const SessionProvider = mockSessionContextProvider(session);
 
       const { asFragment, queryAllByTestId } = renderWithTheme(
         <SessionProvider>
           <DatasetProvider solidDataset={dataset}>
-            <AgentAccess permission={permission} webId={session.info.webId} />
+            <AgentAccess permission={permission} />
           </DatasetProvider>
         </SessionProvider>
       );
@@ -198,13 +142,13 @@ describe("AgentAccess", () => {
     it("checkboxes are only disabled if the resource is connected to user's Pod", async () => {
       const randomUrl = "http://some-random-pod.com";
       mockedRouterHook.mockReturnValue({ query: { iri: randomUrl } });
-      const session = mockSession();
+      const session = mockSession({ webId });
       const SessionProvider = mockSessionContextProvider(session);
 
       const { asFragment, queryAllByTestId } = renderWithTheme(
         <SessionProvider>
           <DatasetProvider solidDataset={dataset}>
-            <AgentAccess permission={permission} webId={session.info.webId} />
+            <AgentAccess permission={permission} />
           </DatasetProvider>
         </SessionProvider>
       );
@@ -217,17 +161,14 @@ describe("AgentAccess", () => {
     it("displays a confirmation dialog with correct content for a resource not connected to the user's Pod", async () => {
       const randomUrl = "http://some-random-pod.com";
       mockedRouterHook.mockReturnValue({ query: { iri: randomUrl } });
-      const session = mockSession();
+      const session = mockSession({ webId });
       const SessionProvider = mockSessionContextProvider(session);
 
-      const { findByTestId, getAllByRole, getByTestId } = renderWithTheme(
+      const { getAllByRole, getByTestId } = renderWithTheme(
         <SessionProvider>
           <DatasetProvider solidDataset={dataset}>
             <ConfirmationDialogProvider>
-              <AgentAccess
-                permission={readPermission}
-                webId={session.info.webId}
-              />
+              <AgentAccess permission={readPermission} />
             </ConfirmationDialogProvider>
           </DatasetProvider>
         </SessionProvider>
@@ -249,20 +190,6 @@ describe("AgentAccess", () => {
         ).toHaveTextContent(OWN_PERMISSIONS_WARNING_PERMISSION);
       });
     });
-  });
-
-  it("renders default value for onLoading", async () => {
-    useFetchProfile.mockReturnValue({ error: "error" });
-    const { getByTestId } = renderWithTheme(
-      <DatasetProvider solidDataset={dataset}>
-        <AgentAccess permission={permission} onLoading={undefined} />
-      </DatasetProvider>
-    );
-    const button = getByTestId("try-again-button");
-    const { onLoading } = AgentAccess.defaultProps;
-    userEvent.click(button);
-
-    expect(onLoading).toBeInstanceOf(Function);
   });
 });
 

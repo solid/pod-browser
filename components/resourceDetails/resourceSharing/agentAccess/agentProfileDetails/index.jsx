@@ -21,7 +21,7 @@
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React from "react";
+import React, { useState } from "react";
 import T from "prop-types";
 import { createStyles, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
@@ -37,10 +37,8 @@ import styles from "./styles";
 import { displayProfileName } from "../../../../../src/solidClientHelpers/profile";
 import Avatar from "../../../../avatar";
 import AgentAccessOptionsMenu from "../agentAccessOptionsMenu";
-import {
-  permission as permissionPropType,
-  profile as profilePropType,
-} from "../../../../../constants/propTypes";
+import { permission as permissionPropType } from "../../../../../constants/propTypes";
+import useFullProfile from "../../../../../src/hooks/useFullProfile";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -49,15 +47,17 @@ export const TESTCAFE_ID_AGENT_WEB_ID = "agent-web-id";
 export default function AgentProfileDetails({
   resourceIri,
   permission,
-  profile,
   setLoading,
   setLocalAccess,
+  mutateAccessGrantBasedPermissions,
+  setLoadingTable,
 }) {
   const classes = useStyles();
 
   const { webId } = permission;
+  const profile = useFullProfile(webId);
 
-  const getAvatarProps = (localPermission) => {
+  const getAvatarProps = (localPermission, profile) => {
     if (localPermission.webId === PUBLIC_AGENT_PREDICATE) {
       return PUBLIC_AGENT.getAvatarProps();
     }
@@ -67,26 +67,27 @@ export default function AgentProfileDetails({
     }
 
     return {
-      src: profile?.avatar,
+      src: profile?.avatars[0],
     };
   };
 
-  const getLocalProfile = (localPermission) => {
+  const getLocalProfile = (localPermission, profile) => {
     if (localPermission.webId === PUBLIC_AGENT_PREDICATE) {
       return {
-        name: "Anyone",
+        names: ["Anyone"],
       };
     }
 
     if (localPermission.webId === AUTHENTICATED_AGENT_PREDICATE) {
       return {
-        name: "Anyone signed in",
+        names: ["Anyone signed in"],
       };
     }
     return profile;
   };
-  const localProfile = getLocalProfile(permission);
-  const avatarProps = getAvatarProps(permission);
+
+  const localProfile = getLocalProfile(permission, profile);
+  const avatarProps = getAvatarProps(permission, profile);
 
   return (
     <div className={classes.nameAndAvatarContainer}>
@@ -105,6 +106,8 @@ export default function AgentProfileDetails({
           permission={permission}
           setLoading={setLoading}
           setLocalAccess={setLocalAccess}
+          mutateAccessGrantBasedPermissions={mutateAccessGrantBasedPermissions}
+          setLoadingTable={setLoadingTable}
         />
       ) : null}
     </div>
@@ -113,14 +116,16 @@ export default function AgentProfileDetails({
 AgentProfileDetails.propTypes = {
   resourceIri: T.string,
   permission: permissionPropType.isRequired,
-  profile: profilePropType,
   setLoading: T.func,
   setLocalAccess: T.func,
+  mutateAccessGrantBasedPermissions: T.func,
+  setLoadingTable: T.func,
 };
 
 AgentProfileDetails.defaultProps = {
   resourceIri: null,
   setLoading: () => {},
   setLocalAccess: () => {},
-  profile: null,
+  mutateAccessGrantBasedPermissions: () => {},
+  setLoadingTable: () => {},
 };

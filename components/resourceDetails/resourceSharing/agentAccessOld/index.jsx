@@ -43,10 +43,10 @@ import ConfirmationDialogContext from "../../../../src/contexts/confirmationDial
 import ConfirmationDialog from "../../../confirmationDialog";
 import {
   displayProfileName,
-  fetchProfile,
+  getFullProfile,
 } from "../../../../src/solidClientHelpers/profile";
 import AlertContext from "../../../../src/contexts/alertContext";
-import useFetchProfile from "../../../../src/hooks/useFetchProfile";
+import useFullProfile from "../../../../src/hooks/useFullProfile";
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
 import { permission } from "../../../../constants/propTypes";
 
@@ -118,16 +118,14 @@ export function getDialogId(datasetIri) {
 }
 
 export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
-  let { data: profile, error: profileError } = useFetchProfile(webId);
+  const profile = useFullProfile(webId);
   const classes = useStyles();
-  const { fetch, session } = useSession();
+  const { session } = useSession();
   const { webId: authenticatedWebId } = session.info;
-  const bem = useBem(useStyles());
   const [access, setAccess] = useState(acl);
   const [tempAccess, setTempAccess] = useState(acl);
   const { solidDataset: dataset } = useContext(DatasetContext);
   const { accessControl } = useContext(AccessControlContext);
-  const [isLoading, setIsLoading] = useState(false);
 
   const { open, confirmed, setContent, setOpen } = useContext(
     ConfirmationDialogContext
@@ -171,87 +169,7 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
     setContent
   );
 
-  const handleRetryClick = async () => {
-    try {
-      profile = await fetchProfile(webId, fetch);
-      setIsLoading(false);
-    } catch (error) {
-      profileError = error;
-      setIsLoading(false);
-    }
-  };
-
-  if (profileError) {
-    const message = "Unable to load this profile";
-    return (
-      <div className={bem("alert-container")}>
-        <Alert
-          classes={{
-            root: classes.alertBox,
-            message: classes.alertMessage,
-            action: classes.action,
-          }}
-          severity="warning"
-          action={
-            // eslint-disable-next-line react/jsx-wrap-multilines
-            isLoading ? (
-              <CircularProgress
-                data-testid={TESTCAFE_ID_TRY_AGAIN_SPINNER}
-                size={20}
-                className={bem("spinner")}
-                color="inherit"
-              />
-            ) : (
-              <Button
-                data-testid={TESTCAFE_ID_TRY_AGAIN_BUTTON}
-                className={bem("bold-button")}
-                color="inherit"
-                size="small"
-                onClick={() => {
-                  setIsLoading(true);
-                  setTimeout(handleRetryClick, 750);
-                }}
-              >
-                Try again
-              </Button>
-            )
-          }
-        >
-          {message}
-        </Alert>
-        <div className={classes.separator} />
-        <div className={bem("avatar-container")}>
-          <Avatar className={classes.avatar} alt={webId} src={null} />
-          <Typography
-            data-testid={TESTCAFE_ID_AGENT_WEB_ID}
-            className={classes.detailText}
-          >
-            {webId}
-          </Typography>
-          <Form onSubmit={onSubmit}>
-            <PermissionsForm
-              key={webId}
-              webId={webId}
-              acl={access}
-              onChange={setTempAccess}
-            >
-              <PrismButton
-                onClick={onSubmit}
-                type="submit"
-                variant="secondary"
-                data-testid={TESTCAFE_ID_PERMISSIONS_FORM_SUBMIT_BUTTON}
-              >
-                Save
-              </PrismButton>
-            </PermissionsForm>
-          </Form>
-        </div>
-        <ConfirmationDialog />
-      </div>
-    );
-  }
-
-  if (!profile) {
+  if (profile === undefined) {
     return (
       <>
         <Skeleton
@@ -267,8 +185,8 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
     );
   }
 
-  const { avatar } = profile;
-  const name = displayProfileName(profile);
+  const avatar = profile?.avatars[0];
+  const name = displayProfileName(profile) || webId;
 
   return (
     <>

@@ -34,15 +34,18 @@ export const defaultPermissionsContext = {
   addingWebId: false,
   /* istanbul ignore next */
   setAddingWebId: () => {},
+  mutateAccessGrantBasedPermissions: () => {},
 };
 
 const PermissionsContext = createContext(defaultPermissionsContext);
 
 function PermissionsContextProvider({ children }) {
-  const { permissions } = useAllPermissions();
+  const { permissions, mutateAccessGrantBasedPermissions } =
+    useAllPermissions();
   const [newAgentsWebIds, setNewAgentsWebIds] = useState([]);
   const [webIdsToDelete, setWebIdsToDelete] = useState([]);
   const [addingWebId, setAddingWebId] = useState(false);
+
   return (
     <PermissionsContext.Provider
       value={{
@@ -53,6 +56,7 @@ function PermissionsContextProvider({ children }) {
         setWebIdsToDelete,
         addingWebId,
         setAddingWebId,
+        mutateAccessGrantBasedPermissions,
       }}
     >
       {children}

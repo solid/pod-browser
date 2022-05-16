@@ -63,6 +63,7 @@ describe("getFullProfile", () => {
     ],
     roles: [],
     organizations: [],
+    pods: ["http://alice.example.com/"],
     editableProfileDatasets: [
       mockPersonDatasetAliceWithContactInfoAndSeeAlso(),
       mockSeeAlsoDatasetAlice(),
@@ -104,16 +105,9 @@ describe("getFullProfile", () => {
 
 describe("displayProfileName", () => {
   it("displays the name when name provided", () => {
-    const name = "name";
-    const nickname = "nickname";
+    const names = ["name"];
     const webId = "webId";
-    expect(displayProfileName({ name, nickname, webId })).toEqual(name);
-  });
-
-  it("displays the nickname when there is no name and a nickname, ", () => {
-    const nickname = "nickname";
-    const webId = "webId";
-    expect(displayProfileName({ nickname, webId })).toEqual(nickname);
+    expect(displayProfileName({ names, webId })).toEqual("name");
   });
 
   it("displays the webId when there is only a webID", () => {

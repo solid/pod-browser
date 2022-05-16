@@ -34,11 +34,6 @@ const permissions = [
       control: false,
     },
     webId: "https://example1.com/profile/card#me",
-    profile: {
-      avatar: null,
-      name: "Example 1",
-      types: ["https://schema.org/Person"],
-    },
     alias: "editors",
   },
   {
@@ -49,11 +44,6 @@ const permissions = [
       control: false,
     },
     webId: "https://example2.com/profile/card#me",
-    profile: {
-      avatar: null,
-      name: "Example 2",
-      types: ["https://schema.org/Person"],
-    },
     alias: "editors",
   },
   {
@@ -64,11 +54,6 @@ const permissions = [
       control: false,
     },
     webId: "https://example3.com/profile/card#me",
-    profile: {
-      avatar: null,
-      name: "Example 3",
-      types: ["https://schema.org/Person"],
-    },
     alias: "editors",
   },
   {
@@ -80,11 +65,6 @@ const permissions = [
     },
     alias: "editors",
     webId: "https://example.com/profile/card#me",
-    profile: {
-      avatar: null,
-      name: "Example 0",
-      types: ["https://schema.org/Person"],
-    },
   },
   {
     acl: {
@@ -95,11 +75,6 @@ const permissions = [
     },
     alias: "editors",
     webId: "https://example4.com/profile/card#me",
-    profile: {
-      avatar: null,
-      name: "Example 4",
-      types: ["https://schema.org/Person"],
-    },
     inherited: true,
   },
 ];

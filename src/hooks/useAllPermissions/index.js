@@ -29,8 +29,6 @@ import {
   getRequestedAccessesFromSignedVc,
   getRequestorWebIdFromSignedVc,
 } from "../../models/access/signedVc";
-import { isPublicAgentOrAuthenticatedAgentWebId } from "../../../components/resourceDetails/utils";
-import { fetchProfile } from "../../solidClientHelpers/profile";
 
 const normalizeAccessGrantBasedPermissions = (accessGrantBasedPermissions) => {
   if (!accessGrantBasedPermissions) return [];
@@ -74,8 +72,10 @@ export default function useAllPermissions() {
   const { solidDataset: dataset } = useContext(DatasetContext);
   const datasetUrl = getSourceUrl(dataset);
 
-  const { permissions: accessGrantBasedPermissions } =
-    useAccessGrantBasedAccessForResource(datasetUrl);
+  const {
+    permissions: accessGrantBasedPermissions,
+    mutate: mutateAccessGrantBasedPermissions,
+  } = useAccessGrantBasedAccessForResource(datasetUrl);
 
   const normalizedConsentPermissions = useMemo(
     () =>
@@ -103,5 +103,6 @@ export default function useAllPermissions() {
 
   return {
     permissions,
+    mutateAccessGrantBasedPermissions,
   };
 }

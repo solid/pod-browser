@@ -20,20 +20,31 @@
  */
 
 import React from "react";
+import { foaf } from "rdf-namespaces";
 import AgentProfileDetails from "./index";
-
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import { PUBLIC_AGENT_PREDICATE } from "../../../../../src/models/contact/public";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../../src/models/contact/authenticated";
 import { TESTCAFE_ID_MENU_BUTTON } from "../agentAccessOptionsMenu";
+import useFullProfile from "../../../../../src/hooks/useFullProfile";
 
 const webId = "https://example.com/profile/card#me";
 
+jest.mock("../../../../../src/hooks/useFullProfile");
+const mockedUseFullProfile = useFullProfile;
+
 describe("AgentProfileDetails", () => {
   const profile = {
-    avatar: null,
-    name: "Example Agent",
+    names: ["Example Agent"],
     webId,
+    types: [foaf.Person],
+    avatars: [],
+    roles: [],
+    organizations: [],
+    contactInfo: {
+      phones: [],
+      emails: [],
+    },
   };
   const permission = { webId, alias: "editors", type: "agent" };
   const resourceIri = "/iri/";
@@ -57,11 +68,11 @@ describe("AgentProfileDetails", () => {
   };
 
   it("renders without error", () => {
+    mockedUseFullProfile.mockReturnValue(profile);
     const { asFragment } = renderWithTheme(
       <AgentProfileDetails
         resourceIri={resourceIri}
         permission={permission}
-        profile={profile}
         setLoading={jest.fn()}
         setLocalAccess={jest.fn()}
       />
@@ -73,7 +84,6 @@ describe("AgentProfileDetails", () => {
       <AgentProfileDetails
         resourceIri={resourceIri}
         permission={permission}
-        profile={profile}
         setLoading={jest.fn()}
         setLocalAccess={jest.fn()}
       />
@@ -92,7 +102,6 @@ describe("AgentProfileDetails", () => {
       <AgentProfileDetails
         resourceIri={resourceIri}
         permission={inheritedPermission}
-        profile={profile}
         setLoading={jest.fn()}
         setLocalAccess={jest.fn()}
       />
@@ -106,7 +115,6 @@ describe("AgentProfileDetails", () => {
       <AgentProfileDetails
         resourceIri={resourceIri}
         permission={publicPermission}
-        profile={publicProfile}
         setLoading={jest.fn()}
         setLocalAccess={jest.fn()}
       />
@@ -120,7 +128,6 @@ describe("AgentProfileDetails", () => {
       <AgentProfileDetails
         resourceIri={resourceIri}
         permission={authenticatedPermission}
-        profile={authenticatedProfile}
         setLoading={jest.fn()}
         setLocalAccess={jest.fn()}
       />
