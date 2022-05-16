@@ -21,6 +21,7 @@
 
 import React from "react";
 import { act } from "react-test-renderer";
+import { foaf } from "rdf-namespaces";
 import { waitFor } from "@testing-library/react";
 import { DatasetProvider } from "@inrupt/solid-ui-react";
 import { mockSolidDatasetFrom } from "@inrupt/solid-client";
@@ -37,14 +38,30 @@ import * as profileFns from "../../../../src/solidClientHelpers/profile";
 import { mockProfileAlice } from "../../../../__testUtils/mockPersonResource";
 import { PUBLIC_AGENT_PREDICATE } from "../../../../src/models/contact/public";
 import { AUTHENTICATED_AGENT_PREDICATE } from "../../../../src/models/contact/authenticated";
+import useFullProfile from "../../../../src/hooks/useFullProfile";
 
 jest.mock("../../../../src/hooks/useAgentProfile");
+jest.mock("../../../../src/hooks/useFullProfile");
 
 const webId = "https://example.com/profile/card#me";
 const iri = "https://example.com/resource.txt";
 const dataset = mockSolidDatasetFrom(iri);
 
+const profile = {
+  names: ["Alice"],
+  webId,
+  types: [foaf.Person],
+  avatars: ["http://alice.example.com/alice.jpg"],
+  roles: [],
+  organizations: [],
+  contactInfo: {
+    phones: [],
+    emails: [],
+  },
+};
+
 describe("AgentAccess", () => {
+  useFullProfile.mockReturnValue(profile);
   describe("with profile", () => {
     const permission = {
       acl: createAccessMap(true, true, false, false),
@@ -105,30 +122,6 @@ describe("AgentAccess", () => {
     });
   });
   describe("without profile", () => {
-    it("renders skeleton placeholders when profile is not available", async () => {
-      const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
-      fetchProfileSpy.mockRejectedValue("error");
-      const { asFragment, getByTestId } = renderWithTheme(
-        <DatasetProvider solidDataset={dataset}>
-          <AgentAccess
-            permission={{
-              acl: createAccessMap(true, true, false, false),
-              webId,
-              alias: "Editors",
-              type: "agent",
-              profile: undefined,
-              profileError: undefined,
-            }}
-          />
-        </DatasetProvider>
-      );
-      await waitFor(() => {
-        expect(
-          getByTestId(TESTCAFE_ID_SKELETON_PLACEHOLDER)
-        ).toBeInTheDocument();
-      });
-      expect(asFragment()).toMatchSnapshot();
-    });
     it("returns null when no access", async () => {
       const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
       fetchProfileSpy.mockRejectedValue("error");
@@ -148,119 +141,6 @@ describe("AgentAccess", () => {
         expect(queryByText(webId)).toBeNull();
       });
       expect(asFragment()).toMatchSnapshot();
-    });
-    it("renders a skeleton while loading profile", async () => {
-      const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
-      fetchProfileSpy.mockResolvedValue("profile");
-      const { asFragment, getByTestId } = renderWithTheme(
-        <DatasetProvider solidDataset={dataset}>
-          <AgentAccess
-            permission={{
-              acl: createAccessMap(true, true, false, false),
-              webId,
-              alias: "Editors",
-              type: "agent",
-              profile: undefined,
-              profileError: undefined,
-            }}
-          />
-        </DatasetProvider>
-      );
-      await waitFor(() => {
-        expect(
-          getByTestId(TESTCAFE_ID_SKELETON_PLACEHOLDER)
-        ).toBeInTheDocument();
-      });
-      expect(asFragment()).toMatchSnapshot();
-    });
-    it("renders an error message with a 'try again' button if it's unable to load profile", async () => {
-      const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
-      fetchProfileSpy.mockRejectedValue("error");
-      const { asFragment, getByText, getByTestId } = renderWithTheme(
-        <DatasetProvider solidDataset={dataset}>
-          <AgentAccess
-            permission={{
-              acl: createAccessMap(true, true, false, false),
-              webId,
-              alias: "Editors",
-              type: "agent",
-              profile: null,
-              profileError: "error",
-            }}
-          />
-        </DatasetProvider>
-      );
-      await waitFor(() => {
-        expect(getByText(PROFILE_ERROR_MESSAGE)).toBeInTheDocument();
-        expect(getByTestId(TESTCAFE_ID_TRY_AGAIN_BUTTON)).toBeInTheDocument();
-      });
-      expect(asFragment()).toMatchSnapshot();
-    });
-
-    it("tries to fetch the profile again when clicking 'try again' button, removes spinner if fetching succeeds", async () => {
-      jest.useFakeTimers();
-      const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
-      fetchProfileSpy.mockResolvedValueOnce(mockProfileAlice());
-      const { findByTestId, getByTestId, queryByTestId } = renderWithTheme(
-        <DatasetProvider solidDataset={dataset}>
-          <AgentAccess
-            permission={{
-              acl: createAccessMap(true, true, false, false),
-              webId,
-              alias: "Editors",
-              type: "agent",
-              profile: null,
-              profileError: "error",
-            }}
-          />
-        </DatasetProvider>
-      );
-      const button = await findByTestId("try-again-button");
-      userEvent.click(button);
-
-      await waitFor(() => {
-        expect(getByTestId(TESTCAFE_ID_TRY_AGAIN_SPINNER)).toBeInTheDocument();
-      });
-      act(() => {
-        jest.advanceTimersByTime(1500);
-      });
-      await waitFor(() => {
-        expect(
-          queryByTestId(TESTCAFE_ID_TRY_AGAIN_SPINNER)
-        ).not.toBeInTheDocument();
-      });
-      expect(fetchProfileSpy).toHaveBeenCalledWith(webId, expect.anything());
-    });
-    it("tries to fetch the profile again when clicking 'try again' button, removes the spinner when fetching errors", async () => {
-      jest.useFakeTimers();
-      const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
-      act(() => {
-        fetchProfileSpy.mockRejectedValue(null);
-      });
-      const { getByTestId, queryByTestId } = renderWithTheme(
-        <DatasetProvider solidDataset={dataset}>
-          <AgentAccess
-            permission={{
-              acl: createAccessMap(true, true, false, false),
-              webId,
-              alias: "Editors",
-              type: "agent",
-              profile: null,
-              profileError: "error",
-            }}
-          />
-        </DatasetProvider>
-      );
-      const button = getByTestId("try-again-button");
-      userEvent.click(button);
-
-      await waitFor(() =>
-        expect(fetchProfileSpy).toHaveBeenCalledWith(webId, expect.anything())
-      );
-
-      await waitFor(() => {
-        expect(queryByTestId("try-again-spinner")).toBeFalsy();
-      });
     });
   });
 });

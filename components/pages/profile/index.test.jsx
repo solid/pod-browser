@@ -100,4 +100,34 @@ describe("Profile page", () => {
 
     expect(asFragment()).toMatchSnapshot();
   });
+
+  it("Renders the profile page without editable profile", async () => {
+    const mockProfile = {
+      names: ["Alice"],
+      webId: aliceWebIdUrl,
+      types: [foaf.Person],
+      avatars: [],
+      roles: [],
+      organizations: [],
+      contactInfo: {
+        phones: [],
+        emails: [],
+      },
+      editableProfileDatasets: [],
+    };
+    mockedUseFullProfile.mockReturnValue(mockProfile);
+    const session = mockSession();
+    const SessionProvider = mockSessionContextProvider(session, false);
+
+    const { asFragment, queryAllByText } = renderWithTheme(
+      <SessionProvider>
+        <ProfilePage />
+      </SessionProvider>
+    );
+    await waitFor(() => {
+      expect(queryAllByText("Alice")).toHaveLength(2);
+    });
+
+    expect(asFragment()).toMatchSnapshot();
+  });
 });

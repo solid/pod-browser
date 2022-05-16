@@ -29,15 +29,15 @@ import PermissionsForm, {
 } from "./index";
 import { ACL, createAccessMap } from "../../src/solidClientHelpers/permissions";
 import { renderWithTheme } from "../../__testUtils/withTheme";
-import useAuthenticatedProfile from "../../src/hooks/useAuthenticatedProfile";
+import useFullProfile from "../../src/hooks/useFullProfile";
 import { mockProfileAlice } from "../../__testUtils/mockPersonResource";
 import { TESTCASE_ID_PERMISSION_CHECKBOX } from "./permissionCheckbox";
 import { joinPath } from "../../src/stringHelpers";
 import mockSession from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 
-jest.mock("../../src/hooks/useAuthenticatedProfile");
-const mockedAuthenticationProfile = useAuthenticatedProfile;
+jest.mock("../../src/hooks/useFullProfile");
+const mockedUseFullProfile = useFullProfile;
 
 describe("PermissionsForm", () => {
   const authProfile = mockProfileAlice();
@@ -56,7 +56,7 @@ describe("PermissionsForm", () => {
     mockedRouterHook = jest
       .spyOn(routerFns, "useRouter")
       .mockReturnValue({ query: { iri: visitorIri } });
-    mockedAuthenticationProfile.mockReturnValue({ data: authProfile });
+    mockedUseFullProfile.mockReturnValue(authProfile);
   });
   beforeEach(() => {
     const session = mockSession({ webId: authProfile.webId });

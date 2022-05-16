@@ -35,6 +35,7 @@ import {
 import styles from "./styles";
 import useAuthenticatedProfile from "../../src/hooks/useAuthenticatedProfile";
 import { locationIsConnectedToProfile } from "../../src/solidClientHelpers/profile";
+import useFullProfile from "../../src/hooks/useFullProfile";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
@@ -70,7 +71,7 @@ export default function PermissionsForm({
 }) {
   const classes = useStyles();
   const { session } = useSession();
-  const { data: authenticatedProfile } = useAuthenticatedProfile();
+  const authenticatedProfile = useFullProfile(session.info.webId);
   const router = useRouter();
   const { iri } = router.query;
   const locationIsInUsersPod = locationIsConnectedToProfile(

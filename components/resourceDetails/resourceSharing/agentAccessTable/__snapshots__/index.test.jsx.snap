@@ -139,7 +139,7 @@ exports[`AgentAccessTable with access based agents renders a list of permissions
                           class="PodBrowser-root PodBrowser-detailText PodBrowser-body1 PodBrowser-detailText"
                           data-testid="agent-web-id"
                         >
-                          Example A
+                          https://example1.com/profile/card#me
                         </p>
                         <button
                           class="PodBrowser-button"
@@ -173,7 +173,7 @@ exports[`AgentAccessTable with access based agents renders a list of permissions
                           class="PodBrowser-root PodBrowser-detailText PodBrowser-body1 PodBrowser-detailText"
                           data-testid="agent-web-id"
                         >
-                          Example B
+                          https://example2.com/profile/card#me
                         </p>
                         <button
                           class="PodBrowser-button"
@@ -207,7 +207,7 @@ exports[`AgentAccessTable with access based agents renders a list of permissions
                           class="PodBrowser-root PodBrowser-detailText PodBrowser-body1 PodBrowser-detailText"
                           data-testid="agent-web-id"
                         >
-                          Example C
+                          https://example3.com/profile/card#me
                         </p>
                         <button
                           class="PodBrowser-button"
@@ -391,7 +391,7 @@ exports[`AgentAccessTable with access grant based agents renders a list of permi
                           class="PodBrowser-root PodBrowser-detailText PodBrowser-body1 PodBrowser-detailText"
                           data-testid="agent-web-id"
                         >
-                          Example A
+                          https://example1.com/profile/card#me
                         </p>
                         <button
                           class="PodBrowser-button"
@@ -425,7 +425,7 @@ exports[`AgentAccessTable with access grant based agents renders a list of permi
                           class="PodBrowser-root PodBrowser-detailText PodBrowser-body1 PodBrowser-detailText"
                           data-testid="agent-web-id"
                         >
-                          Mock App
+                          https://mockapp.com/app#id
                         </p>
                         <button
                           class="PodBrowser-button"
@@ -629,6 +629,111 @@ exports[`AgentAccessTable without agents renders an empty list of permissions if
                   No editors
                 </p>
               </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AgentAccessTable without agents renders spinner if loading 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-root PodBrowser-root PodBrowser-accordion PodBrowser-expanded PodBrowser-rounded PodBrowser-rounded PodBrowser-elevation1 PodBrowser-rounded"
+    data-testid="agent-access-table"
+  >
+    <div
+      class="PodBrowser-headerContainer"
+    >
+      <i
+        class="PodBrowser-icon-editor PodBrowser-icon PodBrowser-iconEditor"
+      />
+      <div
+        class="PodBrowser-textContainer"
+      >
+        <div
+          class="PodBrowser-titleAndButtonContainer"
+        >
+          <p
+            class="PodBrowser-title"
+          >
+            Editors
+          </p>
+          <button
+            class="PodBrowser-button PodBrowser-button--text"
+            data-testid="add-agent-button"
+          >
+            <span
+              class="PodBrowser-icon-edit PodBrowser-button__icon PodBrowser-button__icon--before"
+            />
+            <span
+              class="PodBrowser-button__text"
+            >
+              Edit Editors
+            </span>
+          </button>
+          <button
+            class="PodBrowser-button PodBrowser-button--icon-only PodBrowser-action-button"
+          >
+            <span
+              class="PodBrowser-button__text"
+            >
+              <span
+                aria-label="Show menu for policy"
+                class="PodBrowser-icon-more"
+              />
+            </span>
+          </button>
+        </div>
+        <span
+          class="PodBrowser-description"
+        >
+          <p>
+            <b>
+              Can 
+            </b>
+            view, edit and delete this resource
+          </p>
+        </span>
+      </div>
+    </div>
+    <div
+      class="PodBrowser-container PodBrowser-entered"
+      style="min-height: 0px;"
+    >
+      <div
+        class="PodBrowser-wrapper"
+      >
+        <div
+          class="PodBrowser-wrapperInner"
+        >
+          <div
+            role="region"
+          >
+            <div
+              class="PodBrowser-container PodBrowser-container--empty"
+            >
+              <div
+                class="PodBrowser-root PodBrowser-colorPrimary PodBrowser-indeterminate"
+                role="progressbar"
+                style="width: 40px; height: 40px;"
+              >
+                <svg
+                  class="PodBrowser-svg"
+                  viewBox="22 22 44 44"
+                >
+                  <circle
+                    class="PodBrowser-circle PodBrowser-circleIndeterminate"
+                    cx="44"
+                    cy="44"
+                    fill="none"
+                    r="20.2"
+                    stroke-width="3.6"
+                  />
+                </svg>
+              </div>
             </div>
           </div>
         </div>

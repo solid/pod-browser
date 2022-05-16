@@ -46,6 +46,8 @@ export default function AgentAccessOptionsMenu({
   profile,
   setLoading,
   setLocalAccess,
+  mutateAccessGrantBasedPermissions,
+  setLoadingTable,
 }) {
   const classes = useStyles();
   const bem = useBem(useStyles());
@@ -117,6 +119,10 @@ export default function AgentAccessOptionsMenu({
                 resourceIri={resourceIri}
                 permission={permission}
                 handleCloseModal={handleClose}
+                mutateAccessGrantBasedPermissions={
+                  mutateAccessGrantBasedPermissions
+                }
+                setLoadingTable={setLoadingTable}
               />
             </>
           ) : (
@@ -140,6 +146,8 @@ AgentAccessOptionsMenu.propTypes = {
   setLoading: PropTypes.func,
   profile: profilePropType,
   setLocalAccess: PropTypes.func,
+  mutateAccessGrantBasedPermissions: PropTypes.func,
+  setLoadingTable: PropTypes.func,
 };
 
 /* istanbul ignore next */
@@ -148,4 +156,6 @@ AgentAccessOptionsMenu.defaultProps = {
   setLoading: () => {},
   profile: null,
   setLocalAccess: () => {},
+  mutateAccessGrantBasedPermissions: () => {},
+  setLoadingTable: () => {},
 };

@@ -78,6 +78,8 @@ export default function AccessDetailsModal({
   permission,
   handleCloseModal,
   openModal,
+  mutateAccessGrantBasedPermissions,
+  setLoadingTable,
 }) {
   const classes = useStyles();
   const bem = useBem(classes);
@@ -104,8 +106,10 @@ export default function AccessDetailsModal({
   const purposes = getPurposeUrlsFromSignedVc(vc);
   const { fetch } = useSession();
 
-  const handleRevoke = () => {
-    revokeAccessGrant(vc, { fetch });
+  const handleRevoke = async () => {
+    setLoadingTable(true);
+    await revokeAccessGrant(vc, { fetch });
+    mutateAccessGrantBasedPermissions();
     handleCloseModal();
   };
   return (
@@ -282,4 +286,11 @@ AccessDetailsModal.propTypes = {
   permission: permissionPropType.isRequired,
   handleCloseModal: T.func.isRequired,
   openModal: T.bool.isRequired,
+  mutateAccessGrantBasedPermissions: T.func,
+  setLoadingTable: T.func,
+};
+
+AccessDetailsModal.defaultProps = {
+  mutateAccessGrantBasedPermissions: () => {},
+  setLoadingTable: () => {},
 };
