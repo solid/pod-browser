@@ -169,22 +169,6 @@ export default function AgentAccess({ onLoading, permission: { acl, webId } }) {
     setContent
   );
 
-  if (profile === undefined) {
-    return (
-      <>
-        <Skeleton
-          className={classes.avatar}
-          variant="circle"
-          width={40}
-          height={40}
-        />
-        <div className={classes.detailText}>
-          <Skeleton variant="text" width={100} />
-        </div>
-      </>
-    );
-  }
-
   const avatar = profile?.avatars[0];
   const name = displayProfileName(profile) || webId;
 

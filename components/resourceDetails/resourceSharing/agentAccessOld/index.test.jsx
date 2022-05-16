@@ -108,19 +108,6 @@ describe("AgentAccess", () => {
     });
   });
 
-  it("renders skeleton placeholders when profile is not available", async () => {
-    useFullProfile.mockReturnValue(undefined);
-    const { asFragment, queryByText } = renderWithTheme(
-      <DatasetProvider solidDataset={dataset}>
-        <AgentAccess permission={permission} />
-      </DatasetProvider>
-    );
-    await waitFor(() => {
-      expect(queryByText("Alice")).not.toBeInTheDocument();
-    });
-    expect(asFragment()).toMatchSnapshot();
-  });
-
   describe("user tries to change access for themselves", () => {
     it("checkboxes are disabled", async () => {
       const session = mockSession({ webId });

@@ -122,30 +122,6 @@ describe("AgentAccess", () => {
     });
   });
   describe("without profile", () => {
-    it("renders skeleton placeholders when profile is not available", async () => {
-      useFullProfile.mockReturnValue(null);
-
-      const { asFragment, getByTestId } = renderWithTheme(
-        <DatasetProvider solidDataset={dataset}>
-          <AgentAccess
-            permission={{
-              acl: createAccessMap(true, true, false, false),
-              webId,
-              alias: "Editors",
-              type: "agent",
-              profile: undefined,
-              profileError: undefined,
-            }}
-          />
-        </DatasetProvider>
-      );
-      await waitFor(() => {
-        expect(
-          getByTestId(TESTCAFE_ID_SKELETON_PLACEHOLDER)
-        ).toBeInTheDocument();
-      });
-      expect(asFragment()).toMatchSnapshot();
-    });
     it("returns null when no access", async () => {
       const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
       fetchProfileSpy.mockRejectedValue("error");
@@ -163,30 +139,6 @@ describe("AgentAccess", () => {
       );
       await waitFor(() => {
         expect(queryByText(webId)).toBeNull();
-      });
-      expect(asFragment()).toMatchSnapshot();
-    });
-    it("renders a skeleton while loading profile", async () => {
-      const fetchProfileSpy = jest.spyOn(profileFns, "fetchProfile");
-      fetchProfileSpy.mockResolvedValue("profile");
-      const { asFragment, getByTestId } = renderWithTheme(
-        <DatasetProvider solidDataset={dataset}>
-          <AgentAccess
-            permission={{
-              acl: createAccessMap(true, true, false, false),
-              webId,
-              alias: "Editors",
-              type: "agent",
-              profile: undefined,
-              profileError: undefined,
-            }}
-          />
-        </DatasetProvider>
-      );
-      await waitFor(() => {
-        expect(
-          getByTestId(TESTCAFE_ID_SKELETON_PLACEHOLDER)
-        ).toBeInTheDocument();
       });
       expect(asFragment()).toMatchSnapshot();
     });

@@ -95,44 +95,4 @@ exports[`AgentAccess with profile renders 1`] = `
 </DocumentFragment>
 `;
 
-exports[`AgentAccess without profile renders a skeleton while loading profile 1`] = `
-<DocumentFragment>
-  <div
-    class="PodBrowser-loadingStateContainer"
-  >
-    <span
-      class="PodBrowser-root PodBrowser-circle PodBrowser-pulse"
-      data-testid="skeleton-placeholder"
-      style="width: 40px; height: 40px;"
-    />
-    <div>
-      <span
-        class="PodBrowser-root PodBrowser-text PodBrowser-pulse"
-        style="width: 100px;"
-      />
-    </div>
-  </div>
-</DocumentFragment>
-`;
-
-exports[`AgentAccess without profile renders skeleton placeholders when profile is not available 1`] = `
-<DocumentFragment>
-  <div
-    class="PodBrowser-loadingStateContainer"
-  >
-    <span
-      class="PodBrowser-root PodBrowser-circle PodBrowser-pulse"
-      data-testid="skeleton-placeholder"
-      style="width: 40px; height: 40px;"
-    />
-    <div>
-      <span
-        class="PodBrowser-root PodBrowser-text PodBrowser-pulse"
-        style="width: 100px;"
-      />
-    </div>
-  </div>
-</DocumentFragment>
-`;
-
 exports[`AgentAccess without profile returns null when no access 1`] = `<DocumentFragment />`;

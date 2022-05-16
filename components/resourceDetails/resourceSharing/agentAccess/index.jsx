@@ -85,23 +85,6 @@ export default function AgentAccess({
       </div>
     );
 
-  if (!profile && !localProfile) {
-    return (
-      <div className={classes.loadingStateContainer}>
-        <Skeleton
-          data-testid={TESTCAFE_ID_SKELETON_PLACEHOLDER}
-          className={classes.avatar}
-          variant="circle"
-          width={40}
-          height={40}
-        />
-        <div className={classes.detailText}>
-          <Skeleton variant="text" width={100} />
-        </div>
-      </div>
-    );
-  }
-
   return (
     <AgentProfileDetails
       resourceIri={resourceIri}

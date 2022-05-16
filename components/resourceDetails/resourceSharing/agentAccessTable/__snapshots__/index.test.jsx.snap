@@ -194,19 +194,30 @@ exports[`AgentAccessTable with access based agents renders a list of permissions
                       class="PodBrowser-table__body-cell PodBrowser-agent-cell"
                     >
                       <div
-                        class="PodBrowser-loadingStateContainer"
+                        class="PodBrowser-nameAndAvatarContainer"
                       >
-                        <span
-                          class="PodBrowser-root PodBrowser-circle PodBrowser-pulse"
-                          data-testid="skeleton-placeholder"
-                          style="width: 40px; height: 40px;"
-                        />
-                        <div>
+                        <div
+                          class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+                        >
                           <span
-                            class="PodBrowser-root PodBrowser-text PodBrowser-pulse"
-                            style="width: 100px;"
+                            class="PodBrowser-icon-user PodBrowser-avatar__icon"
                           />
                         </div>
+                        <p
+                          class="PodBrowser-root PodBrowser-detailText PodBrowser-body1 PodBrowser-detailText"
+                          data-testid="agent-web-id"
+                        >
+                          https://example3.com/profile/card#me
+                        </p>
+                        <button
+                          class="PodBrowser-button"
+                          data-testid="menu-button"
+                          type="button"
+                        >
+                          <i
+                            class="PodBrowser-icon-more"
+                          />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -401,19 +412,30 @@ exports[`AgentAccessTable with access grant based agents renders a list of permi
                       class="PodBrowser-table__body-cell PodBrowser-agent-cell"
                     >
                       <div
-                        class="PodBrowser-loadingStateContainer"
+                        class="PodBrowser-nameAndAvatarContainer"
                       >
-                        <span
-                          class="PodBrowser-root PodBrowser-circle PodBrowser-pulse"
-                          data-testid="skeleton-placeholder"
-                          style="width: 40px; height: 40px;"
-                        />
-                        <div>
+                        <div
+                          class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+                        >
                           <span
-                            class="PodBrowser-root PodBrowser-text PodBrowser-pulse"
-                            style="width: 100px;"
+                            class="PodBrowser-icon-user PodBrowser-avatar__icon"
                           />
                         </div>
+                        <p
+                          class="PodBrowser-root PodBrowser-detailText PodBrowser-body1 PodBrowser-detailText"
+                          data-testid="agent-web-id"
+                        >
+                          https://mockapp.com/app#id
+                        </p>
+                        <button
+                          class="PodBrowser-button"
+                          data-testid="menu-button"
+                          type="button"
+                        >
+                          <i
+                            class="PodBrowser-icon-more"
+                          />
+                        </button>
                       </div>
                     </td>
                   </tr>

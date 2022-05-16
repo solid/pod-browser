@@ -252,23 +252,6 @@ exports[`AgentAccess renders 1`] = `
 </DocumentFragment>
 `;
 
-exports[`AgentAccess renders skeleton placeholders when profile is not available 1`] = `
-<DocumentFragment>
-  <span
-    class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-pulse"
-    style="width: 40px; height: 40px;"
-  />
-  <div
-    class="PodBrowser-detailText"
-  >
-    <span
-      class="PodBrowser-root PodBrowser-text PodBrowser-pulse"
-      style="width: 100px;"
-    />
-  </div>
-</DocumentFragment>
-`;
-
 exports[`AgentAccess user tries to change access for themselves checkboxes are disabled 1`] = `
 <DocumentFragment>
   <div
