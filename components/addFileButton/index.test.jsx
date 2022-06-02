@@ -50,9 +50,13 @@ const currentUri = "https://www.mypodbrowser.com/";
 const file = new File(["file contents"], "myfile.txt", {
   type: "text/plain",
 });
+const turtleFile = new File(["file contents"], "myfile.ttl", {
+  type: "",
+});
 
 describe("AddFileButton", () => {
   const newFilePath = currentUri + file.name;
+  const turtleFilePath = currentUri + turtleFile.name;
   const session = mockSession();
   const SessionProvider = mockSessionContextProvider(session);
   let onSave;
@@ -160,7 +164,41 @@ describe("AddFileButton", () => {
       newFilePath,
       file,
       {
-        type: file.type,
+        contentType: file.type,
+        fetch: session.fetch,
+      }
+    );
+
+    expect(onSave).toHaveBeenCalled();
+    expect(setAlertOpen).toHaveBeenCalled();
+  });
+  it("Uploads a turtle file", async () => {
+    const { getByTestId } = renderWithTheme(
+      <AlertContext.Provider
+        value={{
+          setAlertOpen,
+          setMessage,
+          setSeverity,
+        }}
+      >
+        <PodLocationProvider currentUri={currentUri}>
+          <SessionProvider>
+            <AddFileButton onSave={onSave} />
+          </SessionProvider>
+        </PodLocationProvider>
+      </AlertContext.Provider>
+    );
+    const input = getByTestId(TESTCAFE_ID_UPLOAD_INPUT);
+    await act(async () => {
+      userEvent.click(input);
+      userEvent.upload(input, turtleFile);
+    });
+
+    expect(SolidClientFns.overwriteFile).toHaveBeenCalledWith(
+      turtleFilePath,
+      turtleFile,
+      {
+        contentType: "text/turtle",
         fetch: session.fetch,
       }
     );
@@ -237,7 +275,7 @@ describe("AddFileButton", () => {
       newFilePath,
       file,
       {
-        type: file.type,
+        contentType: file.type,
         fetch: session.fetch,
       }
     );
@@ -275,7 +313,7 @@ describe("handleSaveResource", () => {
   it("returns a handler that saves the resource and gives feedback to user", async () => {
     const fileName = "myfile with space.txt";
     const fileWithSpace = new File(["test"], fileName, {
-      type: "text/plain",
+      contentType: "text/plain",
     });
     const newFilePath = currentUri + encodeURIComponent(fileName);
 
@@ -289,7 +327,7 @@ describe("handleSaveResource", () => {
       newFilePath,
       fileWithSpace,
       {
-        type: fileWithSpace.type,
+        contentType: fileWithSpace.type,
         fetch,
       }
     );
@@ -315,7 +353,7 @@ describe("handleSaveResource", () => {
       newFilePath,
       file,
       {
-        type: file.type,
+        contentType: file.type,
         fetch,
       }
     );
@@ -328,7 +366,7 @@ describe("handleSaveResource", () => {
   it("handles resources that starts with a dash", async () => {
     const fileName = "-starting-with-a-dash-";
     const fileWithDash = new File(["test"], fileName, {
-      type: "text/plain",
+      contentType: "text/plain",
     });
     const newFilePathWithoutStartingDash =
       currentUri + encodeURIComponent(fileName.substr(1));
@@ -345,7 +383,7 @@ describe("handleSaveResource", () => {
       newFilePathWithoutStartingDash,
       fileWithDash,
       {
-        type: fileWithDash.type,
+        contentType: fileWithDash.type,
         fetch,
       }
     );
