@@ -52,13 +52,15 @@ export function handleSaveResource({
   setSeverity,
 }) {
   return async (uploadedFile) => {
+    const isTurtle =
+      uploadedFile.name.includes(".ttl") && !uploadedFile.type.length;
     try {
       const fileName = normalizeSafeFileName(uploadedFile.name);
       await overwriteFile(
         joinPath(currentUri, encodeURIComponent(fileName)),
         uploadedFile,
         {
-          type: uploadedFile.type,
+          contentType: isTurtle ? "text/turtle" : uploadedFile.type,
           fetch,
         }
       );
