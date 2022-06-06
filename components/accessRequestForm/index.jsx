@@ -26,6 +26,7 @@ import T from "prop-types";
 import {
   approveAccessRequest,
   denyAccessRequest,
+  GRANT_VC_URL_PARAM_NAME,
 } from "@inrupt/solid-client-access-grants";
 import { Button } from "@inrupt/prism-react-components";
 import { makeStyles } from "@material-ui/styles";
@@ -141,7 +142,9 @@ export default function AccessRequestForm({
         }
       );
       if (signedVc) {
-        await router.push(`${redirectUrl}?signedVcUrl=${getVcId(signedVc)}`);
+        await router.push(
+          `${redirectUrl}?${GRANT_VC_URL_PARAM_NAME}=${getVcId(signedVc)}`
+        );
       }
     }
     /* istanbul ignore next */
@@ -176,7 +179,9 @@ export default function AccessRequestForm({
         accessRequest
       );
       if (signedVc) {
-        await router.push(`${redirectUrl}?signedVcUrl=${getVcId(signedVc)}`);
+        await router.push(
+          `${redirectUrl}?${GRANT_VC_URL_PARAM_NAME}=${getVcId(signedVc)}`
+        );
       }
     };
     if (confirmed === null && open === ACCESS_REQUEST_NO_ACCESS_DIALOG) return;

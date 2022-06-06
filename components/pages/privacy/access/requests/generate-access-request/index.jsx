@@ -24,6 +24,7 @@ import { useSession } from "@inrupt/solid-ui-react";
 import {
   issueAccessRequest,
   redirectToAccessManagementUi,
+  GRANT_VC_URL_PARAM_NAME,
 } from "@inrupt/solid-client-access-grants";
 import useFetchProfile from "../../../../../../src/hooks/useFetchProfile";
 import Spinner from "../../../../../spinner";
@@ -59,7 +60,8 @@ export default function GenerateAccessRequest() {
     if (vc && origin) {
       redirectToAccessManagementUi(
         vc,
-        `${origin}/privacy/?signedVcUrl=${encodeURIComponent(vc.id)}`,
+        // eslint-disable-next-line prettier/prettier
+        `${origin}/privacy/?${GRANT_VC_URL_PARAM_NAME}=${encodeURIComponent(vc.id)}`,
         {
           fallbackAccessManagementUi: `${origin}/privacy/access/requests/`,
         }
