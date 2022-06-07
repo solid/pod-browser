@@ -211,7 +211,7 @@ describe("Access Request Form", () => {
     );
     expect(accessGrantsFns.approveAccessRequest).toHaveBeenCalled();
     expect(push).toHaveBeenLastCalledWith(
-      `/privacy/?signedVcUrl=${signedVc.id}`
+      `/privacy/?${accessGrantsFns.GRANT_VC_URL_PARAM_NAME}=${signedVc.id}`
     );
   });
 
@@ -276,7 +276,7 @@ describe("Access Request Form", () => {
       expect(accessGrantsFns.denyAccessRequest).toHaveBeenCalled();
     });
     expect(push).toHaveBeenLastCalledWith(
-      `/privacy/?signedVcUrl=${signedVc.id}`
+      `/privacy/?${accessGrantsFns.GRANT_VC_URL_PARAM_NAME}=${signedVc.id}`
     );
   });
 });
