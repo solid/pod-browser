@@ -136,6 +136,7 @@ export default function AccessRequestForm({
           resources: selectedResources,
           expirationDate: selectedDate ? new Date(selectedDate) : null,
           resourceOwner: session.info.webId,
+          purpose: selectedPurposes,
         },
         {
           fetch: session.fetch,
