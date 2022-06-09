@@ -127,6 +127,8 @@ export default function AccessRequestForm({
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedAccess.length && selectedPurposes.length) {
+      const date = new Date(selectedDate);
+      date.setUTCHours(23, 59, 59, 0);
       const signedVc = await approveAccessRequest(
         session.info.webId,
         accessRequest,
@@ -134,7 +136,7 @@ export default function AccessRequestForm({
           requestor,
           access: selectedAccess.accessModes,
           resources: selectedResources,
-          expirationDate: selectedDate ? new Date(selectedDate) : null,
+          expirationDate: date || null,
           resourceOwner: session.info.webId,
           purpose: selectedPurposes,
         },
@@ -209,7 +211,6 @@ export default function AccessRequestForm({
   ]);
 
   const handleDateChange = (date) => {
-    date?.setUTCHours(23, 59, 59, 0);
     setSelectedDate(date ? date.toISOString() : null);
   };
 
