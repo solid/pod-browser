@@ -126,7 +126,10 @@ export default function AccessRequestForm({
   const requestor = getRequestorWebId(accessRequest);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (selectedAccess.length && selectedPurposes.length) {
+    if (
+      selectedAccess.length &&
+      ((purposes && selectedPurposes.length) || !purposes)
+    ) {
       const date = new Date(selectedDate);
       date.setUTCHours(23, 59, 59, 0);
       const signedVc = await approveAccessRequest(
@@ -151,7 +154,7 @@ export default function AccessRequestForm({
       }
     }
     /* istanbul ignore next */
-    if (!selectedPurposes.length) {
+    if (purposes && !selectedPurposes.length) {
       setOpen(ACCESS_REQUEST_NO_ACCESS_DIALOG);
       setTitle(NO_PURPOSE_TITLE);
       setCancelText("Ok");
