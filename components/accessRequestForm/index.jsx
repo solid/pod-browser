@@ -209,6 +209,7 @@ export default function AccessRequestForm({
   ]);
 
   const handleDateChange = (date) => {
+    date?.setUTCHours(23, 59, 59, 0);
     setSelectedDate(date ? date.toISOString() : null);
   };
 
