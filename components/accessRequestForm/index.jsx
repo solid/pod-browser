@@ -130,8 +130,8 @@ export default function AccessRequestForm({
       selectedAccess.length &&
       ((purposes && selectedPurposes.length) || !purposes)
     ) {
-      const date = new Date(selectedDate);
-      date.setUTCHours(23, 59, 59, 0);
+      const expirationDate = selectedDate ? new Date(selectedDate) : null;
+      expirationDate?.setUTCHours(23, 59, 59, 0);
       const signedVc = await approveAccessRequest(
         session.info.webId,
         accessRequest,
@@ -139,7 +139,7 @@ export default function AccessRequestForm({
           requestor,
           access: selectedAccess.accessModes,
           resources: selectedResources,
-          expirationDate: date || null,
+          expirationDate,
           resourceOwner: session.info.webId,
           purpose: selectedPurposes,
         },
