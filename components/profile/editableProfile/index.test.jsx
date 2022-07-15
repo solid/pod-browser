@@ -71,6 +71,7 @@ describe("EditableProfile", () => {
           <EditableProfile
             profile={mockProfileAlice}
             profileDataset={profileDataset}
+            webId={aliceWebIdUrl}
           />
         </SessionProvider>
       );
@@ -94,6 +95,7 @@ describe("EditableProfile", () => {
           <EditableProfile
             profileDataset={profileDataset}
             profile={mockAppProfile}
+            webId={aliceWebIdUrl}
           />
         </SessionProvider>
       );

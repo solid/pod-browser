@@ -45,6 +45,7 @@ export default function ProfileShow() {
       <EditableProfile
         profile={agentProfile}
         profileDataset={editableProfile}
+        webId={agentProfile.webId}
       />
     );
   }

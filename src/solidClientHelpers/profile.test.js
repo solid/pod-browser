@@ -25,6 +25,7 @@ import {
   displayProfileName,
   fetchProfile,
   getFullProfile,
+  createAndSaveProfileThing,
   getPodConnectedToProfile,
   getProfileFromPersonThing,
   getProfileFromThing,
@@ -40,6 +41,10 @@ import {
   mockProfileAlice,
   mockProfileBob,
   aliceWebIdUrl,
+  mockEmptyDatasetAlice,
+  mockDatasetAliceWithNewThing,
+  mockPersonDatasetAliceWithEmptySeeAlso,
+  mockPersonThingAliceWithEmptySeeAlso,
 } from "../../__testUtils/mockPersonResource";
 import mockSession from "../../__testUtils/mockSession";
 import { chain } from "./utils";
@@ -83,6 +88,20 @@ describe("getFullProfile", () => {
       ],
     },
   };
+  const mockNewProfileAlice = {
+    names: [],
+    webId: aliceWebIdUrl,
+    types: [schema.Person],
+    avatars: [],
+    roles: [],
+    organizations: [],
+    pods: [],
+    editableProfileDatasets: [mockPersonDatasetAliceWithEmptySeeAlso()],
+    contactInfo: {
+      phones: [],
+      emails: [],
+    },
+  };
   const session = mockSession();
   it("returns a full Solid profile after following discovery steps", async () => {
     jest.spyOn(solidClientFns, "getProfileAll").mockResolvedValue({
@@ -93,6 +112,9 @@ describe("getFullProfile", () => {
       .spyOn(solidClientFns, "getSolidDataset")
       .mockResolvedValue(mockSeeAlsoDatasetAlice());
     jest
+      .spyOn(solidClientFns, "saveSolidDatasetAt")
+      .mockResolvedValue(mockSeeAlsoDatasetAlice());
+    jest
       .spyOn(solidClientFns, "getResourceInfo")
       .mockResolvedValue(mockPersonDatasetAliceWithContactInfoAndSeeAlso());
     jest
@@ -100,6 +122,41 @@ describe("getFullProfile", () => {
       .mockReturnValue({ user: { read: true, write: true, append: true } });
     const profile = await getFullProfile(aliceWebIdUrl, session);
     expect(profile).toEqual(mockProfileAlice);
+  });
+  it("returns a Solid profile after initializing a new Thing if an extended profile dataset is found and there are no triples with WebId as a subject", async () => {
+    jest.spyOn(solidClientFns, "getProfileAll").mockResolvedValue({
+      webIdProfile: mockPersonDatasetAliceWithEmptySeeAlso(),
+      altProfileAll: [],
+    });
+    jest
+      .spyOn(solidClientFns, "getSolidDataset")
+      .mockResolvedValue(mockEmptyDatasetAlice());
+    jest
+      .spyOn(solidClientFns, "saveSolidDatasetAt")
+      .mockResolvedValue(mockDatasetAliceWithNewThing());
+    jest
+      .spyOn(solidClientFns, "getResourceInfo")
+      .mockResolvedValue(mockDatasetAliceWithNewThing());
+    jest
+      .spyOn(solidClientFns, "getEffectiveAccess")
+      .mockReturnValueOnce({ user: { read: true, write: true, append: true } })
+      .mockReturnValueOnce({ user: { read: true } });
+
+    const profile = await getFullProfile(aliceWebIdUrl, session);
+    expect(profile).toEqual(mockNewProfileAlice);
+  });
+});
+
+describe("createAndSaveProfileThing", () => {
+  const session = mockSession();
+  it("returns the given dataset with a newly initialized thing", async () => {
+    const dataset = mockEmptyDatasetAlice();
+    const { dataset: updatedDataset } = await createAndSaveProfileThing(
+      dataset,
+      aliceWebIdUrl,
+      session
+    );
+    expect(updatedDataset).toEqual(mockDatasetAliceWithNewThing());
   });
 });
 

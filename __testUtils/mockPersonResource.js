@@ -27,7 +27,7 @@ import {
   mockThingFrom,
   setThing,
 } from "@inrupt/solid-client";
-import { vcard, foaf, rdf, space, rdfs } from "rdf-namespaces";
+import { vcard, foaf, rdf, space, rdfs, schema } from "rdf-namespaces";
 import { chain } from "../src/solidClientHelpers/utils";
 import { packageProfile } from "../src/solidClientHelpers/profile";
 import { vcardExtras } from "../src/addressBook";
@@ -102,10 +102,35 @@ export function mockPersonDatasetAlice(...operations) {
   );
 }
 
+export function mockEmptyDatasetAlice() {
+  return mockSolidDatasetFrom("http://alice.example.com/seeAlsoEmpty");
+}
+
+export function mockPersonThingAliceWithEmptySeeAlso() {
+  return chain(
+    mockThingFrom(aliceWebIdUrl),
+    (t) => addUrl(t, rdfs.seeAlso, "http://alice.example.com/seeAlsoEmpty"),
+    (t) => addUrl(t, rdf.type, schema.Person)
+  );
+}
+
+export function mockPersonDatasetAliceWithEmptySeeAlso() {
+  return chain(mockSolidDatasetFrom(aliceWebIdUrl), (d) =>
+    setThing(d, mockPersonThingAliceWithEmptySeeAlso())
+  );
+}
+
+export function mockDatasetAliceWithNewThing() {
+  return setThing(
+    mockEmptyDatasetAlice(),
+    addUrl(mockThingFrom(aliceWebIdUrl), rdf.type, schema.Person)
+  );
+}
+
 export function mockPersonDatasetAliceWithContactInfo(...operations) {
   return chain(
     mockSolidDatasetFrom(aliceWebIdUrl),
-    (d) => setThing(d, mockPersonThingAlice(...operations)),
+    (d) => setThing(d, mockPersonThingAliceWithContactInfo(...operations)),
     (d) => setThing(d, mockEmailThing),
     (d) => setThing(d, mockPhoneThing),
     ...operations
@@ -114,7 +139,7 @@ export function mockPersonDatasetAliceWithContactInfo(...operations) {
 
 export function mockSeeAlsoThingAlice() {
   return chain(
-    mockThingFrom("http://alice.example.com/aliceSeeAlso"),
+    mockThingFrom(aliceWebIdUrl),
     (t) => addStringNoLocale(t, foaf.name, "Alternative Alice"),
     (t) =>
       addUrl(t, vcard.hasPhoto, "https://example.com/anotherphotoforalice.jpg")
@@ -124,7 +149,7 @@ export function mockSeeAlsoThingAlice() {
 export function mockSeeAlsoDatasetAlice() {
   return chain(
     mockSolidDatasetFrom("http://alice.example.com/aliceSeeAlso"),
-    (d) => setThing(d, mockSeeAlsoThingAlice(d, mockPhoneThing))
+    (d) => setThing(d, mockSeeAlsoThingAlice())
   );
 }
 
