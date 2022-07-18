@@ -28,6 +28,7 @@ import {
 } from "@inrupt/solid-client";
 
 const webIdsWithAccessToFeatures = [
+  "https://id.inrupt.com/annaprod122",
   "https://pod.inrupt.com/jacklawson/profile/card#me",
   "https://pod.inrupt.com/arneh/profile/card#me",
   "https://pod.inrupt.com/megoth/profile/card#me",
