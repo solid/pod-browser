@@ -75,7 +75,7 @@ exports[`Login page renders a login button 1`] = `
         Need a Pod?
         <a
           class="PodBrowser-links-container__button PodBrowser-button PodBrowser-button--secondary"
-          href="https://start.pod.inrupt.com/"
+          href="https://start.inrupt.com/"
           variant="secondary"
         >
           Sign up
