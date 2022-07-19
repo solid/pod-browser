@@ -39,7 +39,7 @@ export const TESTCAFE_ID_LOGIN_BUTTON = "login-button";
 export const TESTCAFE_ID_LOGIN_TITLE = "login-title";
 export const TESTCAFE_ID_OTHER_PROVIDERS_BUTTON = "other-providers-button";
 
-const DEFAULT_PROVIDER_IRI = "https://broker.pod.inrupt.com/";
+const DEFAULT_PROVIDER_IRI = "https://login.inrupt.com";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 

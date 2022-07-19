@@ -82,7 +82,7 @@ export default function Login() {
         <div className={bem("links-container__text")}>
           Need a Pod?
           <a
-            href="https://signup.pod.inrupt.com/"
+            href="https://start.pod.inrupt.com/"
             variant="secondary"
             className={clsx(
               bem("links-container__button"),
