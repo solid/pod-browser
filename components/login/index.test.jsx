@@ -115,7 +115,7 @@ describe("Login form", () => {
     expect(session.login).toHaveBeenCalled();
 
     const loginArgs = session.login.mock.calls[0][0];
-    expect(loginArgs.oidcIssuer).toBe("https://broker.pod.inrupt.com/");
+    expect(loginArgs.oidcIssuer).toBe("https://login.inrupt.com/");
     expect(loginArgs.redirectUrl).toBe("http://localhost:3000/");
   });
 });
