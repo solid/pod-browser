@@ -59,17 +59,4 @@ describe("MainNav", () => {
     });
     expect(asFragment()).toMatchSnapshot();
   });
-
-  it("renders Group and Privacy for people with the feature flag turned on", async () => {
-    const session = mockSession({ webId: GROUPS_PAGE_ENABLED_FOR[0] });
-    mockedSessionHook.mockReturnValue({ session });
-
-    const { asFragment, getByTestId } = renderWithTheme(<MainNav />);
-    await waitFor(() => {
-      expect(
-        getByTestId(TESTCAFE_ID_MAIN_NAV).querySelectorAll("li")
-      ).toHaveLength(5);
-      expect(asFragment()).toMatchSnapshot();
-    });
-  });
 });
