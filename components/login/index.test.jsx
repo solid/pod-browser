@@ -35,7 +35,7 @@ import useReturnUrl from "../../src/authentication/useReturnUrl";
 import { mockUnauthenticatedSession } from "../../__testUtils/mockSession";
 import mockSessionContextProvider from "../../__testUtils/mockSessionContextProvider";
 
-import { TESTCAFE_ID_LOGIN_FIELD } from "./provider";
+import { TESTCAFE_ID_GO_BUTTON, TESTCAFE_ID_LOGIN_FIELD } from "./provider";
 
 jest.mock("../../src/hooks/useIdpFromQuery");
 jest.mock("../../src/authentication/useReturnUrl");
@@ -93,6 +93,31 @@ describe("Login form", () => {
     });
 
     expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("logs in with non-default IDP", async () => {
+    const session = mockUnauthenticatedSession();
+    const SessionProvider = mockSessionContextProvider(session, false, null);
+    useIdpFromQuery.mockReturnValue({
+      iri: "http://inrupt.net/",
+      label: "inrupt.net",
+    });
+
+    const { getByTestId } = renderWithTheme(
+      <SessionProvider>
+        <Login />
+      </SessionProvider>
+    );
+
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_LOGIN_FIELD)).not.toBeNull();
+    });
+
+    getByTestId(TESTCAFE_ID_GO_BUTTON).click();
+    await waitFor(() => {
+      expect(mockUseReturnUrl.persist).toHaveBeenCalled();
+      expect(session.login).toHaveBeenCalled();
+    });
   });
 
   // FIXME: unskip once pod migration is completed
