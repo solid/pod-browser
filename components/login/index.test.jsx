@@ -95,7 +95,8 @@ describe("Login form", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("clicking the Sign In button", async () => {
+  // FIXME: unskip once pod migration is completed
+  it.skip("clicking the Sign In button", async () => {
     const session = mockUnauthenticatedSession();
     const SessionProvider = mockSessionContextProvider(session, false, null);
 
@@ -117,5 +118,28 @@ describe("Login form", () => {
     const loginArgs = session.login.mock.calls[0][0];
     expect(loginArgs.oidcIssuer).toBe("https://login.inrupt.com");
     expect(loginArgs.redirectUrl).toBe("http://localhost:3000/");
+  });
+
+  // FIXME: remove once pod migration is completed
+  it("clicking the Sign In button does not login and displays error message", async () => {
+    const session = mockUnauthenticatedSession();
+    const SessionProvider = mockSessionContextProvider(session, false, null);
+
+    const { asFragment, getByTestId } = renderWithTheme(
+      <SessionProvider>
+        <Login />
+      </SessionProvider>
+    );
+
+    const signinButton = getByTestId(TESTCAFE_ID_LOGIN_BUTTON);
+
+    act(() => {
+      signinButton.click();
+    });
+
+    expect(mockUseReturnUrl.persist).not.toHaveBeenCalled();
+    expect(session.login).not.toHaveBeenCalled();
+
+    expect(asFragment).toMatchSnapshot();
   });
 });
