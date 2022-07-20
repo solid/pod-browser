@@ -92,9 +92,9 @@ export default function LoginForm() {
       {shouldDisplayWarning && (
         <Message variant="warning" prominent hasIcon>
           Sorry, we cannot log you in at the moment due to planned system
-          maintenance. Please see our
-          <a href="https://inrupt.com/blog/pod-spaces-upgrade"> blog post </a>
-          for more information.
+          maintenance. Please see our{" "}
+          <a href="https://inrupt.com/blog/pod-spaces-upgrade">blog post</a> for
+          more information.
         </Message>
       )}
       <h3 data-testid={TESTCAFE_ID_LOGIN_TITLE}>Sign in with</h3>
