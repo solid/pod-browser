@@ -76,7 +76,7 @@ export default function PodIndicator() {
   };
   const ref = createRef();
   const indicatorLabelRef = createRef();
-  const { data: authenticatedProfile } = useAuthenticatedProfile();
+  const authenticatedProfile = useAuthenticatedProfile();
   const isOwnPod = locationIsConnectedToProfile(authenticatedProfile, podIri);
 
   useEffect(() => {

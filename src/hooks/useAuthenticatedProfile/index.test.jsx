@@ -23,14 +23,14 @@ import React from "react";
 import { renderHook } from "@testing-library/react-hooks";
 import { useSession } from "@inrupt/solid-ui-react";
 import useAuthenticatedProfile from "./index";
-import useFetchProfile from "../useFetchProfile";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import mockSession, {
   mockUnauthenticatedSession,
   webIdUrl,
 } from "../../../__testUtils/mockSession";
+import useFullProfile from "../useFullProfile";
 
-jest.mock("../useFetchProfile");
+jest.mock("../useFullProfile");
 
 jest.mock("@inrupt/solid-ui-react", () => {
   const uiReactModule = jest.requireActual("@inrupt/solid-ui-react");
@@ -52,11 +52,11 @@ describe("useAuthenticatedProfile", () => {
       <SessionProvider>{children}</SessionProvider>
     );
 
-    useFetchProfile.mockReturnValue(null);
+    useFullProfile.mockReturnValue(null);
 
     const { result } = renderHook(() => useAuthenticatedProfile(), { wrapper });
     expect(result.current).toBeNull();
-    expect(useFetchProfile).toHaveBeenCalledWith(null);
+    expect(useFullProfile).toHaveBeenCalledWith(null);
   });
 
   it("loads a profile when session is given", () => {
@@ -67,11 +67,11 @@ describe("useAuthenticatedProfile", () => {
       <SessionProvider>{children}</SessionProvider>
     );
 
-    useFetchProfile.mockReturnValue(profile);
+    useFullProfile.mockReturnValue(profile);
 
     const { result } = renderHook(() => useAuthenticatedProfile(), { wrapper });
 
     expect(result.current).toBe(profile);
-    expect(useFetchProfile).toHaveBeenCalledWith(webIdUrl);
+    expect(useFullProfile).toHaveBeenCalledWith(webIdUrl);
   });
 });

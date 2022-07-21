@@ -53,9 +53,7 @@ const resourceInfo = mockSolidDatasetFrom(location);
 describe("usePodRootUri", () => {
   beforeEach(() => {
     jest.spyOn(solidClientFns, "getPodOwner").mockReturnValue(aliceWebIdUrl);
-    mockedAuthenticatedProfileHook.mockReturnValue({
-      data: profile,
-    });
+    mockedAuthenticatedProfileHook.mockReturnValue(profile);
     mockedResourceInfoHook.mockReturnValue({ data: resourceInfo });
     mockedDatasetHook.mockReturnValue({
       data: mockPersonDatasetAlice((t) => setUrl(t, space.storage, podRoot)),
@@ -67,33 +65,45 @@ describe("usePodRootUri", () => {
     expect(result.current).toBeNull();
   });
 
-  it("will use getPodOwner if profile.pods is empty", () => {
-    mockedAuthenticatedProfileHook.mockReturnValue({
-      data: { ...profile, pods: undefined },
-    });
+  it("will use getOwnerPod if profile.pods is empty", () => {
+    const profileNoPods = {
+      webId: "webId",
+      pods: [],
+    };
+    mockedAuthenticatedProfileHook.mockReturnValue(profileNoPods);
     const { result } = renderHook(() => usePodRootUri(location));
     expect(result.current).toEqual(podRoot);
   });
 
   it("will use the domain of the location if getOwnerPod is unable to return info", () => {
-    mockedAuthenticatedProfileHook.mockReturnValue({
-      data: { ...profile, pods: undefined },
-    });
+    const profileNoPods = {
+      webId: "webId",
+      pods: [],
+    };
+    mockedAuthenticatedProfileHook.mockReturnValue(profileNoPods);
     solidClientFns.getPodOwner.mockReturnValue(null);
     const { result } = renderHook(() => usePodRootUri(location));
     expect(result.current).toEqual("https://foo.com/");
   });
 
   it("will fallback to the domain of the location if owner's profile fails to load", () => {
-    mockedAuthenticatedProfileHook.mockReturnValue({
-      data: { ...profile, pods: undefined },
-    });
+    const profileNoPods = {
+      webId: "webId",
+      pods: [],
+    };
+    mockedAuthenticatedProfileHook.mockReturnValue(profileNoPods);
     mockedDatasetHook.mockReturnValue({ error: new Error() });
     const { result } = renderHook(() => usePodRootUri(location));
     expect(result.current).toEqual("https://foo.com/");
   });
 
   it("makes sure baseUri ends with slash", () => {
+    const profilePodWithNoSlash = {
+      webId: "webId",
+      pods: [locationWithNoEndingSlash],
+    };
+    mockedAuthenticatedProfileHook.mockReturnValue(profilePodWithNoSlash);
+
     const { result } = renderHook(() =>
       usePodRootUri(locationWithNoEndingSlash)
     );

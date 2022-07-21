@@ -92,11 +92,11 @@ describe("Container view", () => {
       mutate: jest.fn(),
       update: jest.fn(),
     });
-    mockedAuthenticatedProfileHook.mockReturnValue({
-      data: mockProfileAlice((t) =>
+    mockedAuthenticatedProfileHook.mockReturnValue(
+      mockProfileAlice((t) =>
         solidClientFns.addUrl(t, space.storage, "https://example.com/")
-      ),
-    });
+      )
+    );
     mockedPodRootUriHook.mockReturnValue(iri);
     mockedResourceInfoHook.mockReturnValue({
       data: dataset,
@@ -232,6 +232,7 @@ describe("Container view", () => {
       data: mockModel(resourceIri),
       mutate: jest.fn(),
     });
+
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={resourceIri} />
     );
@@ -242,7 +243,12 @@ describe("Container view", () => {
   });
 
   it("renders AuthProfileLoadError if fetching authenticated profile fails", async () => {
-    mockedAuthenticatedProfileHook.mockReturnValue({ error: new Error() });
+    mockedAccessControlHook.mockReturnValue({
+      data: accessControlData,
+      error: undefined,
+      isValidating: false,
+    });
+    mockedAuthenticatedProfileHook.mockReturnValue(null);
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );
@@ -264,7 +270,10 @@ describe("Container view", () => {
   });
 
   it("renders NoControlError if it fails to get access control for podRoot", async () => {
-    mockedAccessControlHook.mockReturnValue({ error: new Error() });
+    mockedAccessControlHook.mockReturnValue({
+      error: new Error(),
+      isValidating: false,
+    });
     const { asFragment, getByTestId } = renderWithTheme(
       <Container iri={iri} />
     );

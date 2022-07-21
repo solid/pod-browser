@@ -77,8 +77,7 @@ function maybeRenderWarning(locationIsInUsersPod, noControlError, podRootIri) {
 export default function Container({ iri }) {
   const { sessionRequestInProgress } = useSession();
   const [resourceUrls, setResourceUrls] = useState(null);
-  const { data: authenticatedProfile, error: authenticatedProfileError } =
-    useAuthenticatedProfile();
+  const authenticatedProfile = useAuthenticatedProfile();
   const podRootIri = usePodRootUri(iri);
   const [noControlError, setNoControlError] = useState(null);
   const { data: podRootResourceInfo, error: podRootError } =
@@ -128,7 +127,7 @@ export default function Container({ iri }) {
   if (containerError && isHTTPError(containerError.message, 404))
     return <ResourceNotFound />;
   if (containerError && !sessionRequestInProgress) return <NotSupported />;
-  if (authenticatedProfileError) return <AuthProfileLoadError />;
+  if (!authenticatedProfile) return <AuthProfileLoadError />;
 
   const locationIsInUsersPod = locationIsConnectedToProfile(
     authenticatedProfile,

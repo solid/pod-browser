@@ -53,9 +53,7 @@ describe("useBookmarks", () => {
     it("should not return any bookmarks", () => {
       const session = mockUnauthenticatedSession();
       mockedUseSession.mockReturnValue({ session });
-      mockedUseAuthenticatedProfile.mockReturnValue({
-        data: null,
-      });
+      mockedUseAuthenticatedProfile.mockReturnValue(null);
       const { result } = renderHook(() => useBookmarks());
       expect(result.current[0]).toBeUndefined();
     });
@@ -75,9 +73,7 @@ describe("useBookmarks", () => {
       setAlertOpen = jest.fn();
       setSeverity = jest.fn();
       mockedUseSession.mockReturnValue({ session });
-      mockedUseAuthenticatedProfile.mockReturnValue({
-        data: { pods: [podUri] },
-      });
+      mockedUseAuthenticatedProfile.mockReturnValue({ pods: [podUri] });
     });
 
     describe("with an existing bookmarks index", () => {
@@ -103,7 +99,7 @@ describe("useBookmarks", () => {
         expect(result.current[0].dataset).toEqual(dataset);
       });
 
-      it("reeturns a refresh function", async () => {
+      it("returns a refresh function", async () => {
         const { result, waitForNextUpdate } = renderHook(() => useBookmarks());
         await waitForNextUpdate();
         expect(resourceFns.getResource).toHaveBeenCalledTimes(1);

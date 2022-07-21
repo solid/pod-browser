@@ -34,14 +34,12 @@ export const ERROR_USE_ADDRESS_BOOK_NO_POD_ROOT =
 
 export default function useAddressBook() {
   const { fetch } = useSession();
-  const { data: authenticatedProfile, error: authenticatedError } =
-    useAuthenticatedProfile();
+  const authenticatedProfile = useAuthenticatedProfile();
 
   return useSWR(
     ["addressBook", authenticatedProfile],
     async () => {
-      if (!authenticatedProfile && !authenticatedError) return null;
-      if (authenticatedError) throw authenticatedError;
+      if (!authenticatedProfile) return null;
       const podRootUrl = authenticatedProfile.pods[0];
       if (!podRootUrl) throw new Error(ERROR_USE_ADDRESS_BOOK_NO_POD_ROOT);
       const containerUrl = getAddressBookContainerUrl(podRootUrl);

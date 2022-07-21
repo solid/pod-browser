@@ -31,7 +31,7 @@ export default function useAddressBookOld() {
   const [addressBook, setAddressBook] = useState(null);
   const [error, setError] = useState(null);
   const { session } = useSession();
-  const { data: profile } = useAuthenticatedProfile();
+  const profile = useAuthenticatedProfile();
   const addressBookContainerUrl = useContactsContainerUrl();
 
   useEffect(() => {

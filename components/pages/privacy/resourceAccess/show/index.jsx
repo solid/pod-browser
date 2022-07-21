@@ -21,6 +21,8 @@
 
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* istanbul ignore file */
+
 import React, { useEffect, useState, useMemo } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
 import { useRouter } from "next/router";
@@ -70,7 +72,7 @@ export default function AgentResourceAccessShowPage({ type }) {
   const router = useRouter();
   const decodedIri = decodeURIComponent(router.query.webId);
   const tableClass = PrismTable.useTableClass("table", "inherits");
-  const { session, fetch } = useSession();
+  const { session } = useSession();
   const podRoot = usePodRootUri(session.info.webId);
   const [resources, setResources] = useState([]);
   const [accessList, setAccessList] = useState([]);
@@ -117,15 +119,13 @@ export default function AgentResourceAccessShowPage({ type }) {
   `;
 
   useEffect(() => {
-    /* istanbul ignore next */
     if (!podRoot || !decodedIri) return;
-    // FIXME: write tests for this
-    /* istanbul ignore next */
-    fetch("https://access.pod.inrupt.com/graphql/", {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({ query }),
-    })
+    session
+      .fetch("https://access.pod.inrupt.com/graphql/", {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({ query }),
+      })
       .then((response) => {
         return response.json();
       })
@@ -142,7 +142,7 @@ export default function AgentResourceAccessShowPage({ type }) {
         setResources(resourceList);
         setShouldUpdate(false);
       });
-  }, [query, podRoot, fetch, session, shouldUpdate, decodedIri]);
+  }, [query, podRoot, session, shouldUpdate, decodedIri]);
 
   useEffect(() => {
     // FIXME: ignoring this until we have mock resources in the tests
