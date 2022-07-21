@@ -23,7 +23,7 @@
 
 import React, { useCallback, useState, useEffect } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
-import { Button, Message } from "@inrupt/prism-react-components";
+import { Button } from "@inrupt/prism-react-components";
 import { useSession } from "@inrupt/solid-ui-react";
 import { useBem } from "@solid/lit-prism-patterns";
 import InfoTooltip from "../infoTooltip";
@@ -45,21 +45,12 @@ const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 export default function LoginForm() {
   const bem = useBem(useStyles());
-  // FIXME: remove after pod migration is completed
-  const [shouldDisplayWarning, setShouldDisplayWarning] = useState(false);
 
   const { persist } = useReturnUrl();
   const { login: sessionLogin } = useSession();
 
   const login = useCallback(
     (oidcIssuer) => {
-      if (
-        oidcIssuer.includes("login.inrupt.com") ||
-        oidcIssuer.includes("broker.pod.inrupt.com")
-      ) {
-        setShouldDisplayWarning(true);
-        return;
-      }
       persist();
       sessionLogin({
         oidcIssuer,
@@ -88,15 +79,6 @@ export default function LoginForm() {
 
   return (
     <div className={bem("login-form")}>
-      {/* FIXME: remove after pod migration is completed */}
-      {shouldDisplayWarning && (
-        <Message variant="warning" prominent hasIcon>
-          Sorry, we cannot log you in at the moment due to planned system
-          maintenance. Please see our{" "}
-          <a href="https://inrupt.com/blog/pod-spaces-upgrade">blog post</a> for
-          more information.
-        </Message>
-      )}
       <h3 data-testid={TESTCAFE_ID_LOGIN_TITLE}>Sign in with</h3>
       <img
         width={160}
