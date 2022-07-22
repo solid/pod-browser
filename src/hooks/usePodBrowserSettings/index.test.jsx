@@ -20,33 +20,26 @@
  */
 
 import * as solidClientFns from "@inrupt/solid-client";
-import { renderHook, waitFor } from "@testing-library/react-hooks";
+import { renderHook } from "@testing-library/react-hooks";
 import mockSession, {
   mockUnauthenticatedSession,
-  profileTurtle,
-  webIdUrl,
 } from "../../../__testUtils/mockSession";
 import usePodBrowserSettings from "./index";
 import mockSessionContextProvider from "../../../__testUtils/mockSessionContextProvider";
 import { getOrCreateSettings } from "../../solidClientHelpers/settings";
-import mockFetch from "../../../__testUtils/mockFetch";
-import mockResponse from "../../../__testUtils/mockResponse";
-import podBrowserPrefs from "../../solidClientHelpers/mocks/podBrowserPrefs.ttl";
+import useFullProfile from "../useFullProfile";
 
 jest.mock("../../solidClientHelpers/settings");
-jest.mock("@inrupt/solid-client");
+jest.mock("../useFullProfile");
 
 describe("usePodBrowserSettings", () => {
-  const settingsUrl = "http://example.com/settings/podBrowserPrefs.ttl";
-
   describe("when profile and session is loaded", () => {
     it("should return a dataset for pod browser settings", async () => {
       const session = mockSession();
       // TODO: Wanted to avoid the use of mockResolvedValue, but didn't find another way
       const dataset = "testDataset";
-      jest.spyOn(solidClientFns, "getProfileAll").mockResolvedValue({
-        webIdProfile: {},
-        altProfileAll: [{}],
+      useFullProfile.mockReturnValue({
+        webId: "https://example.org/profile/card/#me",
       });
       getOrCreateSettings.mockResolvedValue(dataset);
       const wrapper = mockSessionContextProvider(session);

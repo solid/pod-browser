@@ -35,7 +35,7 @@ function normalizeBaseUri(baseUri) {
 
 export default function usePodRootUri(location) {
   const [rootUri, setRootUri] = useState(null);
-  const { data: profile } = useAuthenticatedProfile();
+  const profile = useAuthenticatedProfile();
   const { data: resourceInfo } = useResourceInfo(location, {
     errorRetryCount: 0, // This usually returns a 403 when visiting someone else's Pod, so we don't want to retry that call
   });
@@ -48,9 +48,10 @@ export default function usePodRootUri(location) {
       setRootUri(null);
       return;
     }
-    const profilePod = getPodConnectedToProfile(profile, location);
-    if (profilePod) {
-      setRootUri(normalizeBaseUri(profilePod));
+    // defaulting to first pod until we have UI for multiple pods
+
+    if (profile.pods[0]) {
+      setRootUri(normalizeBaseUri(profile.pods[0]));
       return;
     }
     const podOwner = getPodOwner(resourceInfo);

@@ -27,7 +27,7 @@ import { contactsContainerIri } from "../../addressBook";
 export default function useContactsContainerUrl() {
   const [addressBookContainer, setAddressBookContainer] = useState(null);
   const { session } = useSession();
-  const { data: profile } = useAuthenticatedProfile();
+  const profile = useAuthenticatedProfile();
 
   useEffect(() => {
     if (!session.info.isLoggedIn || !profile) return;

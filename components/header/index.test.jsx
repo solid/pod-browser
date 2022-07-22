@@ -54,7 +54,7 @@ describe("Header", () => {
     it("renders a header", async () => {
       const session = mockAuthenticatedSession();
       const SessionProvider = mockSessionContextProvider(session);
-      mockedAuthenticatedHook.mockReturnValue({ data: mockProfileAlice() });
+      mockedAuthenticatedHook.mockReturnValue(mockProfileAlice());
 
       const { asFragment, queryByTestId } = renderWithTheme(
         <SessionProvider>

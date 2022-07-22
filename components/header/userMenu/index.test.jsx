@@ -23,7 +23,11 @@ import React from "react";
 import { renderWithTheme } from "../../../__testUtils/withTheme";
 import UserMenu from "./index";
 import useAuthenticatedProfile from "../../../src/hooks/useAuthenticatedProfile";
-import { mockProfileAlice } from "../../../__testUtils/mockPersonResource";
+import {
+  alicePodRoot,
+  aliceWebIdUrl,
+  mockProfileAlice,
+} from "../../../__testUtils/mockPersonResource";
 import { TESTCAFE_ID_SPINNER } from "../../spinner";
 
 jest.mock("../../../src/hooks/useAuthenticatedProfile");
@@ -31,9 +35,7 @@ const mockedAuthenticatedProfileHook = useAuthenticatedProfile;
 
 describe("UserMenu", () => {
   beforeEach(() => {
-    mockedAuthenticatedProfileHook.mockReturnValue({
-      data: mockProfileAlice(),
-    });
+    mockedAuthenticatedProfileHook.mockReturnValue(mockProfileAlice());
   });
 
   it("renders a menu", () => {
@@ -42,13 +44,16 @@ describe("UserMenu", () => {
   });
 
   it("renders a spinner while loading user profile", () => {
-    mockedAuthenticatedProfileHook.mockReturnValue({ data: null });
+    mockedAuthenticatedProfileHook.mockReturnValue(null);
     const { getByTestId } = renderWithTheme(<UserMenu />);
     expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
   });
 
   it("renders fallback for name and user photo if not available", () => {
-    mockedAuthenticatedProfileHook.mockReturnValue({ data: {} });
+    mockedAuthenticatedProfileHook.mockReturnValue({
+      webId: aliceWebIdUrl,
+      pods: [alicePodRoot],
+    });
     const { asFragment } = renderWithTheme(<UserMenu />);
     expect(asFragment()).toMatchSnapshot();
   });

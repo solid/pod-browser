@@ -20,9 +20,9 @@
  */
 
 import { useSession } from "@inrupt/solid-ui-react";
-import useFetchProfile from "../useFetchProfile";
+import useFullProfile from "../useFullProfile";
 
 export default function useAuthenticatedProfile() {
   const { session } = useSession();
-  return useFetchProfile(session.info?.webId);
+  return useFullProfile(session.info?.webId);
 }

@@ -31,7 +31,7 @@ import { ERROR_CODES, isHTTPError } from "../../error";
 const BOOKMARKS_PATH = "bookmarks/index.ttl";
 
 export default function useBookmarks() {
-  const { data: profile } = useAuthenticatedProfile();
+  const profile = useAuthenticatedProfile();
   const { session } = useSession();
   const { setMessage, setAlertOpen, setSeverity } = useContext(AlertContext);
   const [bookmarks, setBookmarks] = useState();

@@ -38,7 +38,7 @@ export const TESTCAFE_ID_USER_MENU = "user-menu";
 
 export default function UserMenu() {
   const bem = useBem(useStyles());
-  const { data: authenticatedProfile } = useAuthenticatedProfile();
+  const authenticatedProfile = useAuthenticatedProfile();
   const menu = useUserMenu();
 
   if (!authenticatedProfile) return <Spinner />;

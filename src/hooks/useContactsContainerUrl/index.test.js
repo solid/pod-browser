@@ -50,9 +50,7 @@ describe("useContactsContainerUrl", () => {
     });
   });
   beforeEach(() => {
-    mockedAuthenticatedProfileHook.mockReturnValue({
-      data: mockProfileAlice(),
-    });
+    mockedAuthenticatedProfileHook.mockReturnValue(mockProfileAlice());
   });
 
   it("returns the URL to the contacts container", () => {
@@ -69,7 +67,7 @@ describe("useContactsContainerUrl", () => {
   });
 
   it("returns null if profile is not authenticated yet", () => {
-    mockedAuthenticatedProfileHook.mockReturnValue({ data: null });
+    mockedAuthenticatedProfileHook.mockReturnValue(null);
     const { result } = renderHook(() => useContactsContainerUrl());
     expect(result.current).toBeNull();
   });

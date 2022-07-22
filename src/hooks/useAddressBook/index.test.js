@@ -61,7 +61,7 @@ describe("useAddressBook", () => {
 
   beforeEach(() => {
     mockedSessionHook.mockReturnValue({ fetch });
-    mockedAuthenticatedProfileHook.mockReturnValue({ data: profile });
+    mockedAuthenticatedProfileHook.mockReturnValue(profile);
     mockedGetSolidDataset = jest
       .spyOn(solidClientFns, "getSolidDataset")
       .mockResolvedValue(addressBookDataset);
@@ -94,17 +94,11 @@ describe("useAddressBook", () => {
     expect(newAddressBook.thing).toBeDefined();
   });
 
-  it("returns null while loading authenticated profile", async () => {
-    mockedAuthenticatedProfileHook.mockReturnValue({});
+  it("returns null if authenticated profile fails to load", async () => {
+    const error = "error";
+    mockedAuthenticatedProfileHook.mockReturnValue(null);
     renderHook(() => useAddressBook());
     await expect(mockedSwrHook.mock.calls[0][1]()).resolves.toBeNull();
-  });
-
-  it("throws an error if authenticated profile fails to load", async () => {
-    const error = "error";
-    mockedAuthenticatedProfileHook.mockReturnValue({ error });
-    renderHook(() => useAddressBook());
-    await expect(mockedSwrHook.mock.calls[0][1]()).rejects.toEqual(error);
   });
 
   it("throws an error if it there's something wrong when loading the address book", async () => {
@@ -116,7 +110,7 @@ describe("useAddressBook", () => {
   });
 
   it("throws an error if no pod is found for profile", async () => {
-    mockedAuthenticatedProfileHook.mockReturnValue({ data: { pods: [] } });
+    mockedAuthenticatedProfileHook.mockReturnValue({ pods: [] });
     renderHook(() => useAddressBook());
     await expect(mockedSwrHook.mock.calls[0][1]()).rejects.toEqual(
       new Error(ERROR_USE_ADDRESS_BOOK_NO_POD_ROOT)
