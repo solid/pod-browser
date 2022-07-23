@@ -31,8 +31,7 @@ jest.mock("../src/windowHelpers", () => ({
   getCurrentOrigin: () => "https://localhost:3000",
 }));
 
-const TEST_CLIENT_ID =
-  "https://inrupt.test/clientid.json";
+const TEST_CLIENT_ID = "https://inrupt.test/clientid.json";
 
 describe("app - getClientOptions", () => {
   beforeEach(() => {
