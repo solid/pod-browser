@@ -32,7 +32,7 @@ jest.mock("../src/windowHelpers", () => ({
 }));
 
 const TEST_CLIENT_ID =
-  "https://pod.inrupt.com/appsteamdev/clientid.example.json";
+  "https://inrupt.test/clientid.json";
 
 describe("app - getClientOptions", () => {
   beforeEach(() => {
