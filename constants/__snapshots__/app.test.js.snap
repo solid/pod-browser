@@ -10,7 +10,7 @@ Object {
 
 exports[`app - getClientOptions should return configuration for login 1`] = `
 Object {
-  "clientId": "https://pod.inrupt.com/appsteamdev/clientid.example.json",
+  "clientId": "https://inrupt.test/clientid.json",
   "clientName": "Inrupt PodBrowser",
   "redirectUrl": "https://localhost:3000/",
 }
