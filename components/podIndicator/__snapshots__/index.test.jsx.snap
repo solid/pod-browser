@@ -19,9 +19,9 @@ exports[`PodIndicator renders the pod indicator with the pod iri 1`] = `
         <span
           class="PodBrowser-indicatorLabelYour"
         >
-          Your 
+          Current 
         </span>
-        Pod
+        Location
         <span
           class="PodBrowser-icon-caret-down PodBrowser-indicatorChevron"
         />

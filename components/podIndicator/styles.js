@@ -44,9 +44,6 @@ const styles = (theme, indicatorWidth, indicatorLabelWidth) => {
       textTransform: "uppercase",
     },
     indicatorLabelYour: {
-      display: "none",
-    },
-    "indicatorLabelYour--isOwnPod": {
       display: "inline",
       [theme.breakpoints.up("md")]: {
         display: "inline",

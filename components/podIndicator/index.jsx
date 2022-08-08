@@ -117,10 +117,8 @@ export default function PodIndicator() {
           title={podIri}
         >
           <span className={bem("indicatorLabel")}>
-            <span className={bem("indicatorLabelYour", { isOwnPod })}>
-              Your&nbsp;
-            </span>
-            Pod
+            <span className={bem("indicatorLabelYour")}>Current&nbsp;</span>
+            Location
             <Icons
               name={open ? "caret-up" : "caret-down"}
               className={bem("indicatorChevron")}
@@ -162,23 +160,23 @@ export default function PodIndicator() {
             <Bookmark
               iri={podIri}
               menuItem
-              addText="Bookmark Pod"
-              removeText="Remove Pod Bookmark"
+              addText="Bookmark Location"
+              removeText="Remove Bookmark"
               profileName={podIri}
             />
             <ListItem
               button
-              key="change-pod"
+              key="change-location"
               onClick={handleOpenNavigator}
               classes={{ root: bem("menuItem") }}
             >
               <ListItemIcon classes={{ root: bem("itemIcon") }}>
                 <i
                   className={clsx(bem("icon-move"), bem("icon"))}
-                  aria-label="Change pod"
+                  aria-label="Change location"
                 />
               </ListItemIcon>
-              <ListItemText disableTypography primary="Change Pod" />
+              <ListItemText disableTypography primary="Change Location" />
             </ListItem>
             <Tooltip
               PopperProps={{

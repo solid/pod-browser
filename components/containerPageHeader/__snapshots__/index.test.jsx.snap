@@ -30,9 +30,9 @@ exports[`ContainerPageHeader Renders view 1`] = `
             <span
               class="PodBrowser-indicatorLabelYour"
             >
-              Your 
+              Current 
             </span>
-            Pod
+            Location
             <span
               class="PodBrowser-icon-caret-down PodBrowser-indicatorChevron"
             />
