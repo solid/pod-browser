@@ -19,18 +19,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext } from "react";
+import React from "react";
 import T from "prop-types";
-import { foaf, vcard } from "rdf-namespaces";
+import { vcard } from "rdf-namespaces";
 import { Avatar, Box, createStyles, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { Image } from "@inrupt/solid-ui-react";
-import {
-  getSourceUrl,
-  getStringNoLocale,
-  getThing,
-} from "@inrupt/solid-client";
+import { getSourceUrl, getThing } from "@inrupt/solid-client";
 import styles from "./styles";
 import { profilePropTypes } from "../../../constants/propTypes";
 
@@ -56,10 +52,7 @@ export default function PersonAvatar({
   const errorComponent = setupErrorComponent(bem);
   const thing =
     profileDataset && getThing(profileDataset, getSourceUrl(profileDataset));
-  const name = editing
-    ? (thing && getStringNoLocale(thing, foaf.name)) ||
-      (thing && getStringNoLocale(thing, vcard.fn))
-    : profile?.names[0];
+  const name = profile?.names[0];
 
   if (!profile && !profileDataset) {
     return (

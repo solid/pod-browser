@@ -40,14 +40,13 @@ export default function UserMenu() {
   const bem = useBem(useStyles());
   const authenticatedProfile = useAuthenticatedProfile();
   const menu = useUserMenu();
-
   if (!authenticatedProfile) return <Spinner />;
 
   return (
     <div className={bem("userMenu")} data-testid={TESTCAFE_ID_USER_MENU}>
       <PrismUserMenu
         className={bem("userMenu__trigger")}
-        label={authenticatedProfile.name || "Account"}
+        label={authenticatedProfile.names[0] || "Account"}
         imgSrc={authenticatedProfile.avatar}
         menu={menu}
         menuId="UserMenu"
