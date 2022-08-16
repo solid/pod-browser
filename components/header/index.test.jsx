@@ -33,7 +33,10 @@ import { TESTCAFE_ID_USER_MENU } from "./userMenu";
 import { TESTCAFE_ID_MAIN_NAV } from "./mainNav";
 import { TESTCAFE_ID_MENU_DRAWER } from "./menuDrawer";
 import useAuthenticatedProfile from "../../src/hooks/useAuthenticatedProfile";
-import { mockProfileAlice } from "../../__testUtils/mockPersonResource";
+import {
+  alicePodRoot,
+  aliceWebIdUrl,
+} from "../../__testUtils/mockPersonResource";
 
 jest.mock("next/router");
 const mockedRouterHook = useRouter;
@@ -54,7 +57,11 @@ describe("Header", () => {
     it("renders a header", async () => {
       const session = mockAuthenticatedSession();
       const SessionProvider = mockSessionContextProvider(session);
-      mockedAuthenticatedHook.mockReturnValue(mockProfileAlice());
+      mockedAuthenticatedHook.mockReturnValue({
+        names: [],
+        webId: aliceWebIdUrl,
+        pods: [alicePodRoot],
+      });
 
       const { asFragment, queryByTestId } = renderWithTheme(
         <SessionProvider>

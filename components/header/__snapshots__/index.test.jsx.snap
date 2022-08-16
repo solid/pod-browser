@@ -150,15 +150,12 @@ exports[`Header with user logged in renders a header 1`] = `
           type="button"
         >
           <span
-            class="PodBrowser-user-menu__trigger-profile-image"
-            style="background-image: url(http://alice.example.com/alice.jpg);"
-          >
-             
-          </span>
+            class="PodBrowser-icon-user-circle PodBrowser-user-menu__trigger-icon"
+          />
           <span
             class="PodBrowser-user-menu__trigger-label"
           >
-            Alice
+            Account
           </span>
           <span
             class="PodBrowser-icon-caret-down PodBrowser-user-menu__trigger-chevron PodBrowser-user-menu__trigger-chevron--show"
