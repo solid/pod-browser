@@ -21,7 +21,7 @@
 
 import React from "react";
 import T from "prop-types";
-import { getSourceUrl, getThing } from "@inrupt/solid-client";
+import { getSourceUrl } from "@inrupt/solid-client";
 import { foaf, vcard } from "rdf-namespaces";
 import { Box, InputLabel, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
