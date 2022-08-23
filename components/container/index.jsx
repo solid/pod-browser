@@ -63,6 +63,8 @@ import styles from "../resourceDetails/styles";
 import useAccessToResourceAndParentContainer from "../../src/hooks/useAccessToResourceAndParentContainer";
 import DownloadResourceMessage from "../downloadResourceMessage";
 
+export const NO_POD_URL_ERROR = "We could not find a URL for your Pod.";
+
 function isNotAContainerResource(iri, container) {
   if (!iri) return true;
   return (
@@ -149,6 +151,8 @@ export default function Container({ iri }) {
     }));
   }, [resourceUrls]);
 
+  if (!podRootIri) return <span>{NO_POD_URL_ERROR}</span>;
+
   if (!iri || isValidating || validatingPodRootAccessControl)
     return <Spinner />;
 
@@ -172,7 +176,7 @@ export default function Container({ iri }) {
 
   if (podRootError && locationIsInUsersPod) return <PodRootLoadError />;
 
-  if (!resourceUrls || !container || !podRootIri) return <Spinner />;
+  if (!resourceUrls || !container) return <Spinner />;
 
   const { dataset: containerDataset } = container;
 

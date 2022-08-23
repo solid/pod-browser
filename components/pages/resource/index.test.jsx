@@ -25,15 +25,19 @@ import { render, waitFor } from "@testing-library/react";
 import IndexPage from "./index";
 import TestApp from "../../../__testUtils/testApp";
 import useAccessControl from "../../../src/hooks/useAccessControl";
+import usePodRootUri from "../../../src/hooks/usePodRootUri";
+import { NO_POD_URL_ERROR } from "../../container";
 
 jest.mock("../../../src/hooks/useAccessControl");
+jest.mock("../../../src/hooks/usePodRootUri");
 jest.mock("next/router");
 
 describe("Resource page", () => {
+  const podRootIri = "https://mypod.myhost.com/";
   beforeEach(() => {
     useRouter.mockImplementation(() => ({
       query: {
-        iri: "https://mypod.myhost.com/",
+        iri: podRootIri,
       },
     }));
     useAccessControl.mockReturnValue({
@@ -44,6 +48,7 @@ describe("Resource page", () => {
   });
 
   it("Renders the resource page", async () => {
+    usePodRootUri.mockReturnValue(podRootIri);
     const { asFragment, getByText } = render(
       <TestApp>
         <IndexPage />
@@ -61,6 +66,7 @@ describe("Resource page", () => {
       error: null,
       isValidating: true,
     });
+
     const { asFragment, getByTestId } = render(
       <TestApp>
         <IndexPage />
@@ -68,6 +74,25 @@ describe("Resource page", () => {
     );
     await waitFor(() => {
       expect(getByTestId("spinner")).toBeInTheDocument();
+    });
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("Renders an error if it cannot find a URL for a Pod", async () => {
+    usePodRootUri.mockReturnValue(null);
+    useAccessControl.mockReturnValueOnce({
+      data: null,
+      error: null,
+      isValidating: false,
+    });
+
+    const { asFragment, getByText } = render(
+      <TestApp>
+        <IndexPage />
+      </TestApp>
+    );
+    await waitFor(() => {
+      expect(getByText(NO_POD_URL_ERROR)).toBeInTheDocument();
     });
     expect(asFragment()).toMatchSnapshot();
   });

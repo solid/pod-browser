@@ -137,6 +137,7 @@ export async function getFullProfile(webId, session) {
   // function to get all the extended profiles linked from WebID (although still
   // need to manually retrieve the ones linked from preferences file)
   const profiles = await getProfileAll(webId, { fetch: session.fetch });
+
   const profile = {
     names: [],
     avatars: [],
@@ -213,9 +214,15 @@ export async function getFullProfile(webId, session) {
       const preferencesFileThing = getThing(preferencesFile, webId);
       const seeAlsoUrls = getUrlAll(preferencesFileThing, rdfs.seeAlso);
       seeAlsoUrls.forEach(async (url) => {
-        const seeAlsoDocument = await getSolidDataset(url, {
-          fetch: session.fetch,
-        });
+        let seeAlsoDocument;
+        try {
+          seeAlsoDocument = await getSolidDataset(url, {
+            fetch: session.fetch,
+          });
+        } catch (e) {
+          // ignore errors
+        }
+
         if (seeAlsoDocument) readableProfileDocuments.push(seeAlsoDocument);
       });
     } catch (e) {
@@ -225,13 +232,17 @@ export async function getFullProfile(webId, session) {
   // step 3: seeAlso(s) within webID doc
   const extendedProfilesUrls = getUrlAll(webIdProfileThing, rdfs.seeAlso);
   const extendedProfileDocuments = await Promise.all(
-    extendedProfilesUrls.map((url) => {
-      return (
-        url &&
-        getSolidDataset(url, {
+    extendedProfilesUrls.map(async (url) => {
+      if (!url) return null;
+      let extendedProfileDataset;
+      try {
+        extendedProfileDataset = await getSolidDataset(url, {
           fetch: session.fetch,
-        })
-      );
+        });
+      } catch (e) {
+        // ignore errors
+      }
+      return extendedProfileDataset;
     })
   );
   readableProfileDocuments.push(...extendedProfileDocuments);

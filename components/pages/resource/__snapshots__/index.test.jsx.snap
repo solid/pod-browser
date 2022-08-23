@@ -1,5 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Resource page Renders an error if it cannot find a URL for a Pod 1`] = `
+<DocumentFragment>
+  <span>
+    We could not find a URL for your Pod.
+  </span>
+</DocumentFragment>
+`;
+
 exports[`Resource page Renders spinner while validating access control 1`] = `
 <DocumentFragment>
   <div

@@ -39,9 +39,8 @@ export default function useBookmarks() {
   const { fetch } = session;
 
   useEffect(() => {
-    if (!session.info.isLoggedIn || !profile) return;
-    const { pods } = profile;
-    const pod = pods[0];
+    const pod = profile?.pods[0];
+    if (!session.info.isLoggedIn || !profile || !pod) return;
 
     const bookmarksIri = joinPath(pod, BOOKMARKS_PATH);
     (async () => {

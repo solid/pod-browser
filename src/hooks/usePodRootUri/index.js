@@ -20,11 +20,6 @@
  */
 
 import { useEffect, useState } from "react";
-import { getPodOwner } from "@inrupt/solid-client";
-import {
-  getPodConnectedToProfile,
-  packageProfile,
-} from "../../solidClientHelpers/profile";
 import useAuthenticatedProfile from "../useAuthenticatedProfile";
 import useResourceInfo from "../useResourceInfo";
 import useDataset from "../useDataset";
@@ -39,7 +34,7 @@ export default function usePodRootUri(location) {
   const { data: resourceInfo } = useResourceInfo(location, {
     errorRetryCount: 0, // This usually returns a 403 when visiting someone else's Pod, so we don't want to retry that call
   });
-  const [podOwnerUri, setPodOwnerUri] = useState(null);
+  const [podOwnerUri] = useState(null);
   const { data: podOwnerDataset, error: podOwnerError } =
     useDataset(podOwnerUri);
 
@@ -52,19 +47,6 @@ export default function usePodRootUri(location) {
 
     if (profile.pods[0]) {
       setRootUri(normalizeBaseUri(profile.pods[0]));
-      return;
-    }
-    const podOwner = getPodOwner(resourceInfo);
-    setPodOwnerUri(podOwner);
-    if (!podOwner || podOwnerError) {
-      const { origin } = new URL(location);
-      setRootUri(normalizeBaseUri(origin));
-      return;
-    }
-    if (podOwner && podOwnerDataset) {
-      const podOwnerProfile = packageProfile(podOwner, podOwnerDataset);
-      const podOwnerPod = getPodConnectedToProfile(podOwnerProfile, location);
-      setRootUri(podOwnerPod);
     }
   }, [location, podOwnerDataset, podOwnerError, profile, resourceInfo]);
 

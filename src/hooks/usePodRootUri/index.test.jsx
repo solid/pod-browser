@@ -65,28 +65,7 @@ describe("usePodRootUri", () => {
     expect(result.current).toBeNull();
   });
 
-  it("will use getOwnerPod if profile.pods is empty", () => {
-    const profileNoPods = {
-      webId: "webId",
-      pods: [],
-    };
-    mockedAuthenticatedProfileHook.mockReturnValue(profileNoPods);
-    const { result } = renderHook(() => usePodRootUri(location));
-    expect(result.current).toEqual(podRoot);
-  });
-
-  it("will use the domain of the location if getOwnerPod is unable to return info", () => {
-    const profileNoPods = {
-      webId: "webId",
-      pods: [],
-    };
-    mockedAuthenticatedProfileHook.mockReturnValue(profileNoPods);
-    solidClientFns.getPodOwner.mockReturnValue(null);
-    const { result } = renderHook(() => usePodRootUri(location));
-    expect(result.current).toEqual("https://foo.com/");
-  });
-
-  it("will fallback to the domain of the location if owner's profile fails to load", () => {
+  it("will return null owner's full profile fails to load", () => {
     const profileNoPods = {
       webId: "webId",
       pods: [],
@@ -94,7 +73,7 @@ describe("usePodRootUri", () => {
     mockedAuthenticatedProfileHook.mockReturnValue(profileNoPods);
     mockedDatasetHook.mockReturnValue({ error: new Error() });
     const { result } = renderHook(() => usePodRootUri(location));
-    expect(result.current).toEqual("https://foo.com/");
+    expect(result.current).toBeNull();
   });
 
   it("makes sure baseUri ends with slash", () => {

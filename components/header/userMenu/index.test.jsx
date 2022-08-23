@@ -47,12 +47,6 @@ describe("UserMenu", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("renders a spinner while loading user profile", () => {
-    mockedAuthenticatedProfileHook.mockReturnValue(null);
-    const { getByTestId } = renderWithTheme(<UserMenu />);
-    expect(getByTestId(TESTCAFE_ID_SPINNER)).toBeDefined();
-  });
-
   it("renders fallback for name and user photo if not available", () => {
     mockedAuthenticatedProfileHook.mockReturnValue({
       names: [],
