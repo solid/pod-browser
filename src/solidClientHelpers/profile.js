@@ -28,6 +28,10 @@ import {
   getUrlAll,
   getSourceUrl,
   getEffectiveAccess,
+  setThing,
+  createThing,
+  saveSolidDatasetAt,
+  addUrl,
 } from "@inrupt/solid-client";
 import { foaf, rdf, schema, space, vcard, ldp, rdfs } from "rdf-namespaces";
 import { getProfileIriFromContactThing, vcardExtras } from "../addressBook";
@@ -114,8 +118,25 @@ export async function fetchProfile(webId, fetch) {
   return packageProfile(webIdUrl, profileDataset, pods, inbox);
 }
 
+export async function createAndSaveProfileThing(dataset, webId, session) {
+  const profileDatasetWithThing = setThing(
+    dataset,
+    addUrl(createThing({ url: webId }), rdf.type, schema.Person)
+  );
+  const updatedDataset = await saveSolidDatasetAt(
+    getSourceUrl(dataset),
+    profileDatasetWithThing,
+    { fetch: session.fetch }
+  );
+  return { dataset: updatedDataset };
+}
+
 export async function getFullProfile(webId, session) {
-  const profiles = await getProfileAll(webId);
+  // getProfileAll currently gets the profiles linked via isPrimaryTopicOf. Once this is
+  // changed to seeAlso we can simplify the code below and just use this
+  // function to get all the extended profiles linked from WebID (although still
+  // need to manually retrieve the ones linked from preferences file)
+  const profiles = await getProfileAll(webId, { fetch: session.fetch });
   const profile = {
     names: [],
     avatars: [],
@@ -175,10 +196,11 @@ export async function getFullProfile(webId, session) {
     },
   ];
 
-  // Note: the WebID doc is handled separately from rest of documents because of the issues with authenticated fetches and checking effective access to the resource
-
   // step 1: find preferences file in webId doc
-  const readableProfileDocuments = [...profiles.altProfileAll];
+  const readableProfileDocuments = [
+    profiles.webIdProfile,
+    ...profiles.altProfileAll,
+  ];
   const webIdProfileThing = getThing(profiles.webIdProfile, webId);
   const preferencesFileUrl = getUrl(webIdProfileThing, space.preferencesFile);
 
@@ -200,10 +222,8 @@ export async function getFullProfile(webId, session) {
       // ignore, if we cannot get this we move on
     }
   }
-  // step 3: seeAlso(s) within webID doc (and isPrimaryTopicOf)
+  // step 3: seeAlso(s) within webID doc
   const extendedProfilesUrls = getUrlAll(webIdProfileThing, rdfs.seeAlso);
-
-  extendedProfilesUrls.push(getUrl(webIdProfileThing, foaf.isPrimaryTopicOf));
   const extendedProfileDocuments = await Promise.all(
     extendedProfilesUrls.map((url) => {
       return (
@@ -215,74 +235,57 @@ export async function getFullProfile(webId, session) {
     })
   );
   readableProfileDocuments.push(...extendedProfileDocuments);
-  // try to find profile data in WebId document first:
-  profileDataItems.forEach((dataItem) => {
-    dataItem.properties.forEach((property) => {
-      const value = dataItem.getDataItem(webIdProfileThing, property);
-      if (value) profile[dataItem.label].push(value);
-    });
-  });
-  // try the rest of the readable documents
-  readableProfileDocuments.forEach((doc) => {
+  // try to find profile data in all readable documents
+  readableProfileDocuments.forEach(async (doc, i) => {
     if (!doc) return;
+    let dataset;
     const webIdSubjectThing = getThing(doc, webId);
-    const storageThing = getThing(doc, getSourceUrl(doc));
-    const thing = webIdSubjectThing ?? storageThing;
+    // if no triples with WebID as subject is found, create and save one so that
+    // it is available to use in the dataset context
+    if (!webIdSubjectThing) {
+      const { dataset: fixedProfileDataset } = await createAndSaveProfileThing(
+        doc,
+        webId,
+        session
+      );
+      dataset = fixedProfileDataset;
+      readableProfileDocuments[i] = fixedProfileDataset;
+    } else {
+      dataset = doc;
+    }
+    const thing = getThing(dataset, webId);
     profileDataItems.forEach((dataItem) => {
       dataItem.properties.forEach((property) => {
         const value = dataItem.getDataItem(thing, property);
         if (value) profile[dataItem.label].push(value);
       });
     });
-  });
-
-  // find the editable profile datasets
-  // check if webid is editable
-  const { user: profileEditingAccess } = getEffectiveAccess(
-    profiles.webIdProfile
-  );
-  const isProfileEditable =
-    profileEditingAccess.write || profileEditingAccess.append;
-  if (isProfileEditable) {
-    profile.editableProfileDatasets.push(profiles.webIdProfile);
-  }
-  // rest of documents
-  readableProfileDocuments.forEach((doc) => {
-    if (!doc) return;
-    const { user: profileEditingAccess } = getEffectiveAccess(doc);
+    const { user: profileEditingAccess } = getEffectiveAccess(dataset);
     const isProfileEditable =
       profileEditingAccess.write || profileEditingAccess.append;
     if (isProfileEditable) {
-      profile.editableProfileDatasets.push(doc);
+      profile.editableProfileDatasets.push(dataset);
     }
   });
 
-  // find contact info
-  // in webid profile
-  const webIdSubjectThing = getThing(profiles.webIdProfile, webId);
-  contactInfoDataItems.forEach((item) => {
-    item.properties.forEach((property) => {
-      const contactDetailUrls =
-        webIdSubjectThing && getUrlAll(webIdSubjectThing, property);
-      const contactDetailThings = contactDetailUrls?.map(
-        (url) => profiles.webIdProfile && getThing(profiles.webIdProfile, url)
-      );
-      contactDetailThings.forEach((contactDetailItem) => {
-        const contactItem = {
-          type: getUrl(contactDetailItem, rdf.type),
-          value: getUrl(contactDetailItem, vcard.value),
-        };
-        profile.contactInfo[item.label].push(contactItem);
-      });
-    });
-  });
-
-  // in rest of readable docs
-  readableProfileDocuments.forEach((doc) => {
+  readableProfileDocuments.forEach(async (doc, i) => {
     if (!doc) return;
+    let dataset;
     const webIdSubjectThing = getThing(doc, webId);
-    const storageThing = getThing(doc, getSourceUrl(doc));
-    const thing = webIdSubjectThing ?? storageThing;
+    // if no triples with WebID as subject is found, create and save one so that
+    // it is available to use in the dataset context
+    if (!webIdSubjectThing) {
+      const { dataset: fixedProfileDataset } = await createAndSaveProfileThing(
+        doc,
+        webId,
+        session
+      );
+      dataset = fixedProfileDataset;
+      readableProfileDocuments[i] = fixedProfileDataset;
+    } else {
+      dataset = doc;
+    }
+    const thing = getThing(dataset, webId);
     contactInfoDataItems.forEach((item) => {
       item.properties.forEach((property) => {
         const contactDetailUrls = thing && getUrlAll(thing, property);

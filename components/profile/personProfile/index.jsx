@@ -98,6 +98,7 @@ export default function PersonProfile({ profile, profileDataset, editing }) {
         <Box mt={4}>
           <InputLabel>Email Addresses</InputLabel>
           <ContactInfoTable
+            webId={profile.webId}
             datasetIri={getSourceUrl(profileDataset)}
             property={vcard.hasEmail}
             editing={editing}
@@ -108,6 +109,7 @@ export default function PersonProfile({ profile, profileDataset, editing }) {
         <Box mt={4}>
           <InputLabel>Phone Numbers</InputLabel>
           <ContactInfoTable
+            webId={profile.webId}
             datasetIri={getSourceUrl(profileDataset)}
             property={vcard.hasTelephone}
             editing={editing}

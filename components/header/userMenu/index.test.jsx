@@ -35,7 +35,11 @@ const mockedAuthenticatedProfileHook = useAuthenticatedProfile;
 
 describe("UserMenu", () => {
   beforeEach(() => {
-    mockedAuthenticatedProfileHook.mockReturnValue(mockProfileAlice());
+    mockedAuthenticatedProfileHook.mockReturnValue({
+      names: [],
+      webId: aliceWebIdUrl,
+      pods: [alicePodRoot],
+    });
   });
 
   it("renders a menu", () => {
@@ -51,6 +55,7 @@ describe("UserMenu", () => {
 
   it("renders fallback for name and user photo if not available", () => {
     mockedAuthenticatedProfileHook.mockReturnValue({
+      names: [],
       webId: aliceWebIdUrl,
       pods: [alicePodRoot],
     });

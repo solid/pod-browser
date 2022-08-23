@@ -45,6 +45,7 @@ import ContactInfoTable, {
 } from "./index";
 import useDataset from "../../../src/hooks/useDataset";
 import {
+  aliceWebIdUrl,
   mockPersonDatasetAliceWithContactInfo,
   mockPersonThingAliceWithContactInfo,
 } from "../../../__testUtils/mockPersonResource";
@@ -78,6 +79,7 @@ describe("ContactInfoTable", () => {
           property={vcard.hasEmail}
           contactInfoType={CONTACT_INFO_TYPE_EMAIL}
           values={contactInfo}
+          webId={aliceWebIdUrl}
         />
       </SessionProvider>
     );
@@ -98,6 +100,7 @@ describe("ContactInfoTable", () => {
             property={vcard.hasEmail}
             editing
             contactInfoType={CONTACT_INFO_TYPE_EMAIL}
+            webId={aliceWebIdUrl}
           />
         </CombinedDataProvider>
       </SessionProvider>

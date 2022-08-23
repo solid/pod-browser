@@ -19,15 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
+import React from "react";
 import T from "prop-types";
 import { Box, Paper } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
 import { Container } from "@inrupt/prism-react-components";
-import { CombinedDataProvider, useSession } from "@inrupt/solid-ui-react";
-import { getSourceUrl } from "@inrupt/solid-client";
+import { CombinedDataProvider } from "@inrupt/solid-ui-react";
+import { getThing } from "@inrupt/solid-client";
 import { schema } from "rdf-namespaces";
-import { isHTTPError } from "../../../src/error";
 import PersonProfile from "../personProfile";
 import PersonAvatar from "../personAvatar";
 import AppProfile from "../appProfile";
@@ -38,20 +36,16 @@ export const TESTCAFE_ID_NAME_FIELD = "profile-name-field";
 export const TESTCAFE_ID_ROLE_FIELD = "profile-role-field";
 export const TESTCAFE_ID_ORG_FIELD = "profile-org-field";
 
-export default function EditableProfile({ profileDataset, profile }) {
+export default function EditableProfile({ profileDataset, profile, webId }) {
   if (!profileDataset) {
     return <span>No profile document found this this WebID</span>;
   }
-
   if (profile.types.includes(schema.SoftwareApplication)) {
     return <AppProfile />;
   }
 
   return (
-    <CombinedDataProvider
-      solidDataset={profileDataset}
-      thingUrl={getSourceUrl(profileDataset)}
-    >
+    <CombinedDataProvider solidDataset={profileDataset} thingUrl={webId}>
       <Container>
         <Paper style={{ marginTop: "1em" }}>
           <Box p={2}>
@@ -77,6 +71,7 @@ EditableProfile.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   profileDataset: T.object,
   profile: profilePropTypes,
+  webId: T.string.isRequired,
 };
 
 EditableProfile.defaultProps = {

@@ -210,6 +210,7 @@ export function setupOnChange(setFn) {
 }
 
 export default function ContactTable({
+  webId,
   editing,
   property,
   values,
@@ -224,7 +225,7 @@ export default function ContactTable({
   const { fetch } = useSession();
 
   const { solidDataset: dataset, setDataset } = useContext(DatasetContext);
-  const { thing: profile } = useThing();
+  const profile = dataset && getThing(dataset, webId);
   const contactDetailUrls = profile && getUrlAll(profile, property);
   const contactDetailThings = contactDetailUrls?.map((url) => ({
     dataset,
@@ -371,6 +372,7 @@ ContactTable.propTypes = {
   contactInfoType: T.oneOf([CONTACT_INFO_TYPE_EMAIL, CONTACT_INFO_TYPE_PHONE])
     .isRequired,
   values: T.arrayOf(T.shape({ type: T.string, value: T.string })),
+  webId: T.string.isRequired,
 };
 
 ContactTable.defaultProps = {
