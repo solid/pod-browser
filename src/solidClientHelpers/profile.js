@@ -79,7 +79,7 @@ export function getProfileFromThing(contactThing) {
 
 export function getPodConnectedToProfile(profile, location) {
   const pods = profile ? profile.pods || [] : [];
-  return pods.find((pod) => location.startsWith(pod));
+  return pods.find((pod) => location?.startsWith(pod));
 }
 
 export function locationIsConnectedToProfile(profile, location) {

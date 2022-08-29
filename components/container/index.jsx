@@ -47,7 +47,6 @@ import {
   getParentContainerUrl,
 } from "../../src/stringHelpers";
 import ContainerSubHeader from "../containerSubHeader";
-import usePodRootUri from "../../src/hooks/usePodRootUri";
 import useAuthenticatedProfile from "../../src/hooks/useAuthenticatedProfile";
 import AuthProfileLoadError from "../authProfileLoadError";
 import NoControlWarning from "../noControlWarning";
@@ -62,6 +61,7 @@ import DownloadLink, { downloadResource } from "../downloadLink";
 import styles from "../resourceDetails/styles";
 import useAccessToResourceAndParentContainer from "../../src/hooks/useAccessToResourceAndParentContainer";
 import DownloadResourceMessage from "../downloadResourceMessage";
+import usePodRootUri from "../../src/hooks/usePodRootUri";
 
 export const NO_POD_URL_ERROR = "We could not find a URL for your Pod.";
 
@@ -151,9 +151,17 @@ export default function Container({ iri }) {
     }));
   }, [resourceUrls]);
 
-  if (!podRootIri) return <span>{NO_POD_URL_ERROR}</span>;
+  if (authenticatedProfile && podRootIri === null)
+    return <span>{NO_POD_URL_ERROR}</span>;
 
-  if (!iri || isValidating || validatingPodRootAccessControl)
+  const locationIsInUsersPod = locationIsConnectedToProfile(
+    authenticatedProfile,
+    iri
+  );
+
+  if (podRootError && locationIsInUsersPod) return <PodRootLoadError />;
+
+  if ((!iri || isValidating || validatingPodRootAccessControl) && !podRootError)
     return <Spinner />;
 
   if (iri && download) {
@@ -167,14 +175,8 @@ export default function Container({ iri }) {
   if (containerError && isHTTPError(containerError.message, 404))
     return <ResourceNotFound />;
   if (containerError && !sessionRequestInProgress) return <NotSupported />;
+
   if (!authenticatedProfile) return <AuthProfileLoadError />;
-
-  const locationIsInUsersPod = locationIsConnectedToProfile(
-    authenticatedProfile,
-    iri
-  );
-
-  if (podRootError && locationIsInUsersPod) return <PodRootLoadError />;
 
   if (!resourceUrls || !container) return <Spinner />;
 

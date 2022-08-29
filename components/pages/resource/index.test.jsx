@@ -22,15 +22,33 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { render, waitFor } from "@testing-library/react";
+import { foaf } from "rdf-namespaces";
 import IndexPage from "./index";
 import TestApp from "../../../__testUtils/testApp";
 import useAccessControl from "../../../src/hooks/useAccessControl";
-import usePodRootUri from "../../../src/hooks/usePodRootUri";
+import useAuthenticatedProfile from "../../../src/hooks/useAuthenticatedProfile";
+import useResourceInfo from "../../../src/hooks/useResourceInfo";
 import { NO_POD_URL_ERROR } from "../../container";
+import { aliceWebIdUrl } from "../../../__testUtils/mockPersonResource";
 
 jest.mock("../../../src/hooks/useAccessControl");
-jest.mock("../../../src/hooks/usePodRootUri");
+jest.mock("../../../src/hooks/useResourceInfo");
+jest.mock("../../../src/hooks/useAuthenticatedProfile");
 jest.mock("next/router");
+
+const mockProfileAlice = {
+  names: ["Alice", "Alternative Alice"],
+  webId: aliceWebIdUrl,
+  types: [foaf.Person],
+  pods: ["https://mypod.myhost.com/"],
+};
+
+const mockProfileAliceWithoutPod = {
+  names: ["Alice", "Alternative Alice"],
+  webId: aliceWebIdUrl,
+  types: [foaf.Person],
+  pods: [],
+};
 
 describe("Resource page", () => {
   const podRootIri = "https://mypod.myhost.com/";
@@ -45,10 +63,11 @@ describe("Resource page", () => {
       error: null,
       isValidating: false,
     });
+    useResourceInfo.mockReturnValue("resourceInfo");
   });
 
   it("Renders the resource page", async () => {
-    usePodRootUri.mockReturnValue(podRootIri);
+    useAuthenticatedProfile.mockReturnValueOnce(mockProfileAlice);
     const { asFragment, getByText } = render(
       <TestApp>
         <IndexPage />
@@ -61,6 +80,7 @@ describe("Resource page", () => {
   });
 
   it("Renders spinner while validating access control", async () => {
+    useAuthenticatedProfile.mockReturnValueOnce(mockProfileAlice);
     useAccessControl.mockReturnValueOnce({
       data: null,
       error: null,
@@ -79,7 +99,7 @@ describe("Resource page", () => {
   });
 
   it("Renders an error if it cannot find a URL for a Pod", async () => {
-    usePodRootUri.mockReturnValue(null);
+    useAuthenticatedProfile.mockReturnValue(mockProfileAliceWithoutPod);
     useAccessControl.mockReturnValueOnce({
       data: null,
       error: null,

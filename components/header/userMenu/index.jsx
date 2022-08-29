@@ -40,7 +40,6 @@ export default function UserMenu() {
   const bem = useBem(useStyles());
   const authenticatedProfile = useAuthenticatedProfile();
   const menu = useUserMenu();
-  // if (!authenticatedProfile) return <Spinner />;
 
   return (
     <div className={bem("userMenu")} data-testid={TESTCAFE_ID_USER_MENU}>

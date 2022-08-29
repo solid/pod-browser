@@ -60,9 +60,9 @@ describe("usePodRootUri", () => {
     });
   });
 
-  it("will return null if location is undefined", () => {
+  it("will return undefined if location is undefined", () => {
     const { result } = renderHook(() => usePodRootUri("undefined"));
-    expect(result.current).toBeNull();
+    expect(result.current).toBeUndefined();
   });
 
   it("will return null owner's full profile fails to load", () => {
@@ -74,18 +74,5 @@ describe("usePodRootUri", () => {
     mockedDatasetHook.mockReturnValue({ error: new Error() });
     const { result } = renderHook(() => usePodRootUri(location));
     expect(result.current).toBeNull();
-  });
-
-  it("makes sure baseUri ends with slash", () => {
-    const profilePodWithNoSlash = {
-      webId: "webId",
-      pods: [locationWithNoEndingSlash],
-    };
-    mockedAuthenticatedProfileHook.mockReturnValue(profilePodWithNoSlash);
-
-    const { result } = renderHook(() =>
-      usePodRootUri(locationWithNoEndingSlash)
-    );
-    expect(result.current).toEqual("https://bar.com/");
   });
 });
