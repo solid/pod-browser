@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import { blue } from "@material-ui/core/colors";
 import { content } from "@solid/lit-prism-patterns";
 
 const rules = {
@@ -38,6 +39,16 @@ const rules = {
     "& button": {
       marginLeft: "auto",
     },
+  },
+  downloadLink: {
+    background: "none",
+    border: "none",
+    color: blue,
+    cursor: "pointer",
+    textDecoration: "underline",
+    fontFamily: "inherit",
+    fontSize: "inherit",
+    textAlign: "left",
   },
   raw: {
     height: "100%",
