@@ -87,7 +87,11 @@ export const profilePropTypes = PropTypes.shape({
   organizations: PropTypes.arrayOf(PropTypes.string),
   editableProfileDatasets: PropTypes.arrayOf(PropTypes.object),
   contactInfo: PropTypes.shape({
-    phones: PropTypes.arrayOf(PropTypes.string),
-    emails: PropTypes.arrayOf(PropTypes.string),
+    phones: PropTypes.arrayOf(
+      PropTypes.shape({ value: PropTypes.string, type: PropTypes.string })
+    ),
+    emails: PropTypes.arrayOf(
+      PropTypes.shape({ value: PropTypes.string, type: PropTypes.string })
+    ),
   }),
 });
