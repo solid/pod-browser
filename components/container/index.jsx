@@ -182,7 +182,7 @@ export default function Container({ iri }) {
       <span>
         Downloading resource.{" "}
         <p>
-          If you download down not start, click here:{" "}
+          If you download does not start, click here:{" "}
           <DownloadLink className={classes.downloadLink} iri={iri}>
             {iri}
           </DownloadLink>
