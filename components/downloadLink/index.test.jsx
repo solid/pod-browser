@@ -66,12 +66,11 @@ describe("forceDownload", () => {
 });
 
 describe("downloadResource", () => {
-  it("returns a handler to download the resource", () => {
+  it("downloads the resource", () => {
     const iri = "http://example.com/resource";
     const blobMock = jest.fn();
     const responseMock = { blob: blobMock };
     const fetchMock = jest.fn().mockResolvedValue(responseMock);
-    const handler = downloadResource(iri, fetchMock);
 
     blobMock.mockResolvedValue("file");
 
@@ -79,7 +78,7 @@ describe("downloadResource", () => {
       .spyOn(stringHelpers, "parseUrl")
       .mockReturnValue({ pathname: "/resource" });
 
-    handler();
+    downloadResource(iri, fetchMock);
 
     expect(fetchMock).toHaveBeenCalledWith(iri);
   });

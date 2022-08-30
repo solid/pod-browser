@@ -31,7 +31,7 @@ export default function useAccessToResourceAndParentContainer(iri) {
   const [accessToResource, setAccessToResource] = useState(null);
 
   useEffect(() => {
-    if (sessionRequestInProgress || isContainerIri(iri)) return;
+    if (sessionRequestInProgress || isContainerIri(iri) || !iri) return;
     (async () => {
       const parentContainerUrl = getParentContainerUrl(iri);
       try {
@@ -53,6 +53,7 @@ export default function useAccessToResourceAndParentContainer(iri) {
         });
 
         const { user } = getEffectiveAccess(resourceInfo);
+
         setAccessToResource(user);
       } catch (e) {
         setAccessToResource(null);
