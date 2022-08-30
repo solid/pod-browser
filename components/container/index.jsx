@@ -60,6 +60,8 @@ import { locationIsConnectedToProfile } from "../../src/solidClientHelpers/profi
 import { isContainerIri } from "../../src/solidClientHelpers/utils";
 import DownloadLink, { downloadResource } from "../downloadLink";
 import styles from "../resourceDetails/styles";
+import useAccessToResourceAndParentContainer from "../../src/hooks/useAccessToResourceAndParentContainer";
+import DownloadResourceMessage from "../downloadResourceMessage";
 
 function isNotAContainerResource(iri, container) {
   if (!iri) return true;
@@ -112,44 +114,17 @@ export default function Container({ iri }) {
     isValidating,
   } = useContainer(iri);
 
+  const { accessToParentContainer, accessToResource } =
+    useAccessToResourceAndParentContainer(iri);
+
   useEffect(() => {
-    if (sessionRequestInProgress || isContainerIri(iri)) return;
-    (async () => {
-      const parentContainerUrl = getParentContainerUrl(iri);
-      let accessToParentContainer;
-      let accessToResource;
-      try {
-        const resourceInfoParentContainer = await getResourceInfo(
-          parentContainerUrl,
-          {
-            fetch: session.fetch,
-          }
-        );
-        const { user } = getEffectiveAccess(resourceInfoParentContainer);
-        accessToParentContainer = user;
-      } catch (e) {
-        // no access to parent container
-      }
-
-      try {
-        const resourceInfo = await getResourceInfo(iri, {
-          fetch: session.fetch,
-        });
-
-        const { user } = getEffectiveAccess(resourceInfo);
-        accessToResource = user;
-      } catch (e) {
-        // no access to resource
-      }
-
-      if (accessToResource?.read && !accessToParentContainer?.read) {
-        setDownload(true);
-        await downloadResource(iri, session.fetch);
-      } else {
-        setDownload(false);
-      }
-    })();
-  }, [iri, session, router, authenticatedProfile, sessionRequestInProgress]);
+    if (accessToResource?.read && !accessToParentContainer?.read) {
+      setDownload(true);
+      downloadResource(iri, session.fetch);
+    } else {
+      setDownload(false);
+    }
+  }, [accessToParentContainer, accessToResource, iri, session]);
 
   useEffect(() => {
     if (isNotAContainerResource(iri, container)) return;
@@ -178,17 +153,7 @@ export default function Container({ iri }) {
     return <Spinner />;
 
   if (iri && download) {
-    return (
-      <span>
-        Downloading resource.{" "}
-        <p>
-          If you download does not start, click here:{" "}
-          <DownloadLink className={classes.downloadLink} iri={iri}>
-            {iri}
-          </DownloadLink>
-        </p>
-      </span>
-    );
+    return <DownloadResourceMessage iri={iri} />;
   }
 
   if (containerError && isHTTPError(containerError.message, 401))
