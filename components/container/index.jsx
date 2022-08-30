@@ -62,8 +62,7 @@ import styles from "../resourceDetails/styles";
 import useAccessToResourceAndParentContainer from "../../src/hooks/useAccessToResourceAndParentContainer";
 import DownloadResourceMessage from "../downloadResourceMessage";
 import usePodRootUri from "../../src/hooks/usePodRootUri";
-
-export const NO_POD_URL_ERROR = "We could not find a URL for your Pod.";
+import NoPodFoundError from "../noPodFoundError";
 
 function isNotAContainerResource(iri, container) {
   if (!iri) return true;
@@ -151,8 +150,7 @@ export default function Container({ iri }) {
     }));
   }, [resourceUrls]);
 
-  if (authenticatedProfile && podRootIri === null)
-    return <span>{NO_POD_URL_ERROR}</span>;
+  if (authenticatedProfile && podRootIri === null) return <NoPodFoundError />;
 
   const locationIsInUsersPod = locationIsConnectedToProfile(
     authenticatedProfile,

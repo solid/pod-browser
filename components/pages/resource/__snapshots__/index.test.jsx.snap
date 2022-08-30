@@ -2,9 +2,26 @@
 
 exports[`Resource page Renders an error if it cannot find a URL for a Pod 1`] = `
 <DocumentFragment>
-  <span>
-    We could not find a URL for your Pod.
-  </span>
+  <div
+    data-testid="no-pod-found-error"
+  >
+    <div
+      class="PodBrowser-page-header"
+    >
+      <h1
+        class="PodBrowser-page-header__title"
+      >
+        Pod URL Not Found
+      </h1>
+    </div>
+    <div
+      class="PodBrowser-container"
+    >
+      <p>
+        PodBrowser could not found a URL fo a Pod linked to your profile.
+      </p>
+    </div>
+  </div>
 </DocumentFragment>
 `;
 

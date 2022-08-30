@@ -19,34 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useEffect } from "react";
-import { useRouter } from "next/router";
+import React from "react";
+import { Container, PageHeader } from "@inrupt/prism-react-components";
 
-import { useSession } from "@inrupt/solid-ui-react";
+export const TESTCAFE_ID_NO_POD_FOUND_ERROR = "no-pod-found-error";
 
-import { resourceHref } from "../../../src/navigator";
-import useFullProfile from "../../../src/hooks/useFullProfile";
-import NoPodFoundError from "../../noPodFoundError";
-
-export default function Home() {
-  const router = useRouter();
-
-  const { session } = useSession();
-  const authenticatedProfile = useFullProfile(session.info.webId);
-
-  useEffect(() => {
-    if (authenticatedProfile?.pods.length > 0) {
-      router
-        .replace("/resource/[iri]", resourceHref(authenticatedProfile?.pods[0]))
-        .catch(() => {
-          /* fire and forget */
-        });
-    }
-  }, [authenticatedProfile, router]);
-
-  if (authenticatedProfile && !authenticatedProfile?.pods.length) {
-    return <NoPodFoundError />;
-  }
-
-  return null;
+export default function NoPodFoundError() {
+  return (
+    <div data-testid={TESTCAFE_ID_NO_POD_FOUND_ERROR}>
+      <PageHeader title="Pod URL Not Found" />
+      <Container>
+        <p>PodBrowser could not found a URL fo a Pod linked to your profile.</p>
+      </Container>
+    </div>
+  );
 }

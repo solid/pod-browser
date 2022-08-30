@@ -19,34 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useEffect } from "react";
-import { useRouter } from "next/router";
+import React from "react";
+import { renderWithTheme } from "../../__testUtils/withTheme";
+import PodRootLoadError from "./index";
 
-import { useSession } from "@inrupt/solid-ui-react";
-
-import { resourceHref } from "../../../src/navigator";
-import useFullProfile from "../../../src/hooks/useFullProfile";
-import NoPodFoundError from "../../noPodFoundError";
-
-export default function Home() {
-  const router = useRouter();
-
-  const { session } = useSession();
-  const authenticatedProfile = useFullProfile(session.info.webId);
-
-  useEffect(() => {
-    if (authenticatedProfile?.pods.length > 0) {
-      router
-        .replace("/resource/[iri]", resourceHref(authenticatedProfile?.pods[0]))
-        .catch(() => {
-          /* fire and forget */
-        });
-    }
-  }, [authenticatedProfile, router]);
-
-  if (authenticatedProfile && !authenticatedProfile?.pods.length) {
-    return <NoPodFoundError />;
-  }
-
-  return null;
-}
+describe("PodRootLoadError", () => {
+  it("renders", () => {
+    const { asFragment } = renderWithTheme(<PodRootLoadError />);
+    expect(asFragment()).toMatchSnapshot();
+  });
+});

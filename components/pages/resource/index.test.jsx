@@ -28,7 +28,6 @@ import TestApp from "../../../__testUtils/testApp";
 import useAccessControl from "../../../src/hooks/useAccessControl";
 import useAuthenticatedProfile from "../../../src/hooks/useAuthenticatedProfile";
 import useResourceInfo from "../../../src/hooks/useResourceInfo";
-import { NO_POD_URL_ERROR } from "../../container";
 import { aliceWebIdUrl } from "../../../__testUtils/mockPersonResource";
 
 jest.mock("../../../src/hooks/useAccessControl");
@@ -112,7 +111,7 @@ describe("Resource page", () => {
       </TestApp>
     );
     await waitFor(() => {
-      expect(getByText(NO_POD_URL_ERROR)).toBeInTheDocument();
+      expect(getByText("Pod URL Not Found")).toBeInTheDocument();
     });
     expect(asFragment()).toMatchSnapshot();
   });

@@ -27,7 +27,7 @@ export default function usePodRootUri(location) {
   const profile = useAuthenticatedProfile();
 
   useEffect(() => {
-    if (!location || location === "undefined") {
+    if (!location || location === "undefined" || !profile) {
       return;
     }
 
