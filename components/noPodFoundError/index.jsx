@@ -29,7 +29,7 @@ export default function NoPodFoundError() {
     <div data-testid={TESTCAFE_ID_NO_POD_FOUND_ERROR}>
       <PageHeader title="Pod URL Not Found" />
       <Container>
-        <p>PodBrowser could not found a URL fo a Pod linked to your profile.</p>
+        <p>PodBrowser could not find a URL for a Pod linked to your profile.</p>
       </Container>
     </div>
   );

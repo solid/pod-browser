@@ -18,7 +18,7 @@ exports[`Resource page Renders an error if it cannot find a URL for a Pod 1`] = 
       class="PodBrowser-container"
     >
       <p>
-        PodBrowser could not found a URL fo a Pod linked to your profile.
+        PodBrowser could not find a URL for a Pod linked to your profile.
       </p>
     </div>
   </div>

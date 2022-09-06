@@ -18,7 +18,7 @@ exports[`Index page Renders an error if there is an empty array of pod iris 1`] 
       class="PodBrowser-container"
     >
       <p>
-        PodBrowser could not found a URL fo a Pod linked to your profile.
+        PodBrowser could not find a URL for a Pod linked to your profile.
       </p>
     </div>
   </div>

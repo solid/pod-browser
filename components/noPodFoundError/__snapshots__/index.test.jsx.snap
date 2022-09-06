@@ -18,7 +18,7 @@ exports[`PodRootLoadError renders 1`] = `
       class="PodBrowser-container"
     >
       <p>
-        PodBrowser could not found a URL fo a Pod linked to your profile.
+        PodBrowser could not find a URL for a Pod linked to your profile.
       </p>
     </div>
   </div>
