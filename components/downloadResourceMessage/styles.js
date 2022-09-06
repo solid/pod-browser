@@ -19,38 +19,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import T from "prop-types";
-import { makeStyles } from "@material-ui/styles";
-import { createStyles } from "@material-ui/core";
-import { Container, PageHeader } from "@inrupt/prism-react-components";
-import styles from "./styles";
-import DownloadLink from "../downloadLink";
+import { content } from "@solid/lit-prism-patterns";
 
-export const TESTCAFE_ID_DOWNLOAD_RESOURCE_MESSAGE =
-  "download-resource-message";
-
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-
-export default function DownloadResourceMessage({ iri }) {
-  const classes = useStyles();
-
-  return (
-    <div
-      className={classes.downloadLinkContainer}
-      data-testid={TESTCAFE_ID_DOWNLOAD_RESOURCE_MESSAGE}
-    >
-      <h1>Downloading resource...</h1>
-      <p>
-        If you download does not start, click here:{" "}
-        <DownloadLink className={classes.downloadLink} iri={iri}>
-          {iri}
-        </DownloadLink>
-      </p>
-    </div>
-  );
-}
-
-DownloadResourceMessage.propTypes = {
-  iri: T.string.isRequired,
+const rules = {
+  downloadLinkContainer: {
+    display: "flex",
+    flexDirection: "column",
+    textAlign: "center",
+    justifyContent: "center",
+    padding: "20% 2rem 2rem 2rem",
+  },
+  downloadLink: {
+    background: "none",
+    border: "none",
+    color: "revert",
+    cursor: "pointer",
+    textDecoration: "underline",
+    fontFamily: "inherit",
+    fontSize: "inherit",
+    textAlign: "left",
+  },
 };
+
+export default function styles(theme) {
+  return {
+    ...rules,
+    ...content.styles(theme),
+  };
+}
