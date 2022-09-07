@@ -20,16 +20,8 @@
  */
 
 import React, { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/router";
 import T from "prop-types";
-import {
-  getEffectiveAccess,
-  getResourceInfo,
-  getSourceUrl,
-  isContainer,
-} from "@inrupt/solid-client";
-import { makeStyles } from "@material-ui/styles";
-import { createStyles } from "@material-ui/core";
+import { getSourceUrl, isContainer } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
 import { renderResourceType } from "../containerTableRow";
 import { getResourceName } from "../../src/solidClientHelpers/resource";
@@ -42,10 +34,7 @@ import ResourceNotFound from "../resourceNotFound";
 import useContainer from "../../src/hooks/useContainer";
 import NotSupported from "../notSupported";
 import { getContainerResourceUrlAll } from "../../src/models/container";
-import {
-  getContainerUrl,
-  getParentContainerUrl,
-} from "../../src/stringHelpers";
+import { getContainerUrl } from "../../src/stringHelpers";
 import ContainerSubHeader from "../containerSubHeader";
 import useAuthenticatedProfile from "../../src/hooks/useAuthenticatedProfile";
 import AuthProfileLoadError from "../authProfileLoadError";
@@ -57,8 +46,7 @@ import ContainerTable from "../containerTable";
 import { isHTTPError } from "../../src/error";
 import { locationIsConnectedToProfile } from "../../src/solidClientHelpers/profile";
 import { isContainerIri } from "../../src/solidClientHelpers/utils";
-import DownloadLink, { downloadResource } from "../downloadLink";
-import styles from "../resourceDetails/styles";
+import { downloadResource } from "../downloadLink";
 import useAccessToResourceAndParentContainer from "../../src/hooks/useAccessToResourceAndParentContainer";
 import DownloadResourceMessage from "../downloadResourceMessage";
 import usePodRootUri from "../../src/hooks/usePodRootUri";
@@ -90,12 +78,8 @@ function maybeRenderWarning(locationIsInUsersPod, noControlError, podRootIri) {
   );
 }
 
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-
 export default function Container({ iri }) {
   const [download, setDownload] = useState(false);
-  const classes = useStyles();
-  const router = useRouter();
   const { sessionRequestInProgress, session } = useSession();
   const [resourceUrls, setResourceUrls] = useState(null);
   const authenticatedProfile = useAuthenticatedProfile();
