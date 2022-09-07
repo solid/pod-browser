@@ -19,55 +19,25 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { blue } from "@material-ui/core/colors";
 import { content } from "@solid/lit-prism-patterns";
 
 const rules = {
-  accordionDetails: {
-    display: "block",
-    paddingBottom: "5rem",
-  },
-  centeredSection: {
-    paddingLeft: "1rem",
-    paddingRight: "1rem",
-  },
-  headerSection: {
-    paddingLeft: "1rem",
-    paddingRight: "1rem",
+  downloadLinkContainer: {
     display: "flex",
-    alignItems: "flex-start",
-    "& button": {
-      marginLeft: "auto",
-    },
+    flexDirection: "column",
+    textAlign: "center",
+    justifyContent: "center",
+    padding: "20% 2rem 2rem 2rem",
   },
   downloadLink: {
     background: "none",
     border: "none",
-    color: blue,
+    color: "revert",
     cursor: "pointer",
     textDecoration: "underline",
     fontFamily: "inherit",
     fontSize: "inherit",
     textAlign: "left",
-  },
-  raw: {
-    height: "100%",
-    width: "100%",
-    maxHeight: "200px",
-    overflow: "auto",
-  },
-  formListItem: {
-    display: "block",
-  },
-  detailText: {
-    fontSize: "0.75rem",
-  },
-  typeValue: {
-    marginLeft: "auto",
-  },
-  agentInput: {
-    width: "100%",
-    marginBottom: "1rem",
   },
 };
 

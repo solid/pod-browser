@@ -19,61 +19,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { blue } from "@material-ui/core/colors";
-import { content } from "@solid/lit-prism-patterns";
+import React from "react";
+import { renderWithTheme } from "../../__testUtils/withTheme";
+import DownloadResourceMessage from "./index";
 
-const rules = {
-  accordionDetails: {
-    display: "block",
-    paddingBottom: "5rem",
-  },
-  centeredSection: {
-    paddingLeft: "1rem",
-    paddingRight: "1rem",
-  },
-  headerSection: {
-    paddingLeft: "1rem",
-    paddingRight: "1rem",
-    display: "flex",
-    alignItems: "flex-start",
-    "& button": {
-      marginLeft: "auto",
-    },
-  },
-  downloadLink: {
-    background: "none",
-    border: "none",
-    color: blue,
-    cursor: "pointer",
-    textDecoration: "underline",
-    fontFamily: "inherit",
-    fontSize: "inherit",
-    textAlign: "left",
-  },
-  raw: {
-    height: "100%",
-    width: "100%",
-    maxHeight: "200px",
-    overflow: "auto",
-  },
-  formListItem: {
-    display: "block",
-  },
-  detailText: {
-    fontSize: "0.75rem",
-  },
-  typeValue: {
-    marginLeft: "auto",
-  },
-  agentInput: {
-    width: "100%",
-    marginBottom: "1rem",
-  },
-};
-
-export default function styles(theme) {
-  return {
-    ...rules,
-    ...content.styles(theme),
-  };
-}
+describe("DownloadResourceMessage", () => {
+  const iri = "https://example.pod.com/resource.txt";
+  it("renders", () => {
+    const { asFragment } = renderWithTheme(
+      <DownloadResourceMessage iri={iri} />
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+});

@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DownloadResourceMessage renders 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-downloadLinkContainer"
+    data-testid="download-resource-message"
+  >
+    <h1>
+      Downloading resource...
+    </h1>
+    <p>
+      If you download does not start, click here: 
+      <button
+        class="PodBrowser-downloadLink"
+        type="button"
+      >
+        https://example.pod.com/resource.txt
+      </button>
+    </p>
+  </div>
+</DocumentFragment>
+`;

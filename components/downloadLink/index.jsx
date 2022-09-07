@@ -41,25 +41,25 @@ export function forceDownload(name, file) {
   document.body.removeChild(a);
 }
 
-export function downloadResource(iri, fetch) {
-  return () => {
-    const { pathname } = parseUrl(iri);
-    const name = pathname.replace(/\//g, "");
-
-    fetch(iri)
-      .then((response) => response.blob())
-      .then((file) => forceDownload(name, file))
-      .catch((e) => e);
-  };
+export async function downloadResource(iri, fetch) {
+  const { pathname } = parseUrl(iri);
+  const name = pathname.replace(/\//g, "");
+  await fetch(iri)
+    .then((response) => response.blob())
+    .then((file) => forceDownload(name, file))
+    .catch((e) => e);
 }
 
 export default function DownloadLink({ iri, ...props }) {
   const { fetch } = useSession();
-
   if (isContainerIri(iri)) return null;
 
   return (
-    <button {...props} onClick={downloadResource(iri, fetch)} type="button" />
+    <button
+      {...props}
+      onClick={() => downloadResource(iri, fetch)}
+      type="button"
+    />
   );
 }
 

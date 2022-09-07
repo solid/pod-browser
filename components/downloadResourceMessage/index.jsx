@@ -19,61 +19,38 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { blue } from "@material-ui/core/colors";
-import { content } from "@solid/lit-prism-patterns";
+import React from "react";
+import T from "prop-types";
+import { makeStyles } from "@material-ui/styles";
+import { createStyles } from "@material-ui/core";
+import { Container, PageHeader } from "@inrupt/prism-react-components";
+import styles from "./styles";
+import DownloadLink from "../downloadLink";
 
-const rules = {
-  accordionDetails: {
-    display: "block",
-    paddingBottom: "5rem",
-  },
-  centeredSection: {
-    paddingLeft: "1rem",
-    paddingRight: "1rem",
-  },
-  headerSection: {
-    paddingLeft: "1rem",
-    paddingRight: "1rem",
-    display: "flex",
-    alignItems: "flex-start",
-    "& button": {
-      marginLeft: "auto",
-    },
-  },
-  downloadLink: {
-    background: "none",
-    border: "none",
-    color: blue,
-    cursor: "pointer",
-    textDecoration: "underline",
-    fontFamily: "inherit",
-    fontSize: "inherit",
-    textAlign: "left",
-  },
-  raw: {
-    height: "100%",
-    width: "100%",
-    maxHeight: "200px",
-    overflow: "auto",
-  },
-  formListItem: {
-    display: "block",
-  },
-  detailText: {
-    fontSize: "0.75rem",
-  },
-  typeValue: {
-    marginLeft: "auto",
-  },
-  agentInput: {
-    width: "100%",
-    marginBottom: "1rem",
-  },
-};
+export const TESTCAFE_ID_DOWNLOAD_RESOURCE_MESSAGE =
+  "download-resource-message";
 
-export default function styles(theme) {
-  return {
-    ...rules,
-    ...content.styles(theme),
-  };
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+
+export default function DownloadResourceMessage({ iri }) {
+  const classes = useStyles();
+
+  return (
+    <div
+      className={classes.downloadLinkContainer}
+      data-testid={TESTCAFE_ID_DOWNLOAD_RESOURCE_MESSAGE}
+    >
+      <h1>Downloading resource...</h1>
+      <p>
+        If you download does not start, click here:{" "}
+        <DownloadLink className={classes.downloadLink} iri={iri}>
+          {iri}
+        </DownloadLink>
+      </p>
+    </div>
+  );
 }
+
+DownloadResourceMessage.propTypes = {
+  iri: T.string.isRequired,
+};

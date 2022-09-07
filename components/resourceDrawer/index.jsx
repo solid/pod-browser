@@ -98,10 +98,7 @@ export default function ResourceDrawer({ onUpdate, onDeleteCurrentContainer }) {
     );
   }
 
-  const loading =
-    !resourceInfo ||
-    (!accessControlData && !accessControlError) ||
-    isValidating;
+  const loading = !resourceInfo || isValidating;
 
   return (
     <Drawer open={menuOpen} close={closeDrawer}>
