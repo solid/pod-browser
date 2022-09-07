@@ -19,25 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import { makeStyles } from "@material-ui/styles";
-import { createStyles } from "@material-ui/core";
-import styles from "./styles";
+import { content } from "@solid/lit-prism-patterns";
 
-export const TESTCAFE_ID_NO_POD_MESSAGE = "no-pod-message";
+const rules = {
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    textAlign: "center",
+    justifyContent: "center",
+    padding: "15% 2rem 2rem 2rem",
+  },
+};
 
-const useStyles = makeStyles((theme) => createStyles(styles(theme)));
-
-export default function NoPodFoundError() {
-  const classes = useStyles();
-
-  return (
-    <div className={classes.container} data-testid={TESTCAFE_ID_NO_POD_MESSAGE}>
-      <h1>Pod Not Found</h1>
-      <p>
-        It appears you do not have a Pod.
-        <a href="https://id.inrupt.com/">Get a Pod</a>
-      </p>
-    </div>
-  );
+export default function styles(theme) {
+  return {
+    ...rules,
+    ...content.styles(theme),
+  };
 }

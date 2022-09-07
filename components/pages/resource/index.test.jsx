@@ -29,6 +29,7 @@ import useAccessControl from "../../../src/hooks/useAccessControl";
 import useAuthenticatedProfile from "../../../src/hooks/useAuthenticatedProfile";
 import useResourceInfo from "../../../src/hooks/useResourceInfo";
 import { aliceWebIdUrl } from "../../../__testUtils/mockPersonResource";
+import { TESTCAFE_ID_NO_POD_MESSAGE } from "../../noPodFoundError";
 
 jest.mock("../../../src/hooks/useAccessControl");
 jest.mock("../../../src/hooks/useResourceInfo");
@@ -105,13 +106,13 @@ describe("Resource page", () => {
       isValidating: false,
     });
 
-    const { asFragment, getByText } = render(
+    const { asFragment, getByTestId } = render(
       <TestApp>
         <IndexPage />
       </TestApp>
     );
     await waitFor(() => {
-      expect(getByText("Pod URL Not Found")).toBeInTheDocument();
+      expect(getByTestId(TESTCAFE_ID_NO_POD_MESSAGE)).toBeInTheDocument();
     });
     expect(asFragment()).toMatchSnapshot();
   });
