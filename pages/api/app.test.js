@@ -31,6 +31,7 @@ const PODBROWSER_RESPONSE = {
     "https://podbrowser.inrupt.com/",
     "https://podbrowser.inrupt.com/login",
   ],
+  grant_types: ["authorization_code", "refresh_token"],
 };
 
 describe("/api/app handler tests", () => {
