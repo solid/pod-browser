@@ -32,6 +32,7 @@ const PODBROWSER_RESPONSE = {
     "https://podbrowser.inrupt.com/login",
   ],
   grant_types: ["authorization_code", "refresh_token"],
+  scope: "openid offline_access webid",
 };
 
 describe("/api/app handler tests", () => {
