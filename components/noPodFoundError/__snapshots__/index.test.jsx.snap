@@ -11,12 +11,15 @@ exports[`PodRootLoadError renders 1`] = `
     </h1>
     <p>
       It appears you do not have a Pod.
-      <a
-        href="https://id.inrupt.com/"
-      >
-        Get a Pod
-      </a>
     </p>
+    <a
+      class="PodBrowser-podLink"
+      href="https://id.inrupt.com/"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      Get a Pod
+    </a>
   </div>
 </DocumentFragment>
 `;
