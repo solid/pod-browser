@@ -34,10 +34,15 @@ export default function NoPodFoundError() {
   return (
     <div className={classes.container} data-testid={TESTCAFE_ID_NO_POD_MESSAGE}>
       <h1>Pod Not Found</h1>
-      <p>
-        It appears you do not have a Pod.
-        <a href="https://id.inrupt.com/">Get a Pod</a>
-      </p>
+      <p>It appears you do not have a Pod.</p>
+      <a
+        className={classes.podLink}
+        href="https://id.inrupt.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Get a Pod
+      </a>
     </div>
   );
 }

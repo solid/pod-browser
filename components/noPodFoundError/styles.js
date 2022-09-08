@@ -19,21 +19,25 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { content } from "@solid/lit-prism-patterns";
+import { createStyles, button } from "@solid/lit-prism-patterns";
 
-const rules = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    textAlign: "center",
-    justifyContent: "center",
-    padding: "15% 2rem 2rem 2rem",
-  },
+const styles = (theme) => {
+  const buttonStyles = button.styles(theme);
+  return createStyles(theme, ["table", "icons"], {
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      textAlign: "center",
+      justifyContent: "center",
+      padding: "15% 2rem 2rem 2rem",
+    },
+    podLink: {
+      ...buttonStyles.button,
+      maxWidth: "fit-content",
+      alignSelf: "center",
+      cursor: "pointer",
+    },
+  });
 };
 
-export default function styles(theme) {
-  return {
-    ...rules,
-    ...content.styles(theme),
-  };
-}
+export default styles;
