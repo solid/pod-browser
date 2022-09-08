@@ -22,18 +22,40 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { render, waitFor } from "@testing-library/react";
+import { foaf } from "rdf-namespaces";
 import IndexPage from "./index";
 import TestApp from "../../../__testUtils/testApp";
 import useAccessControl from "../../../src/hooks/useAccessControl";
+import useAuthenticatedProfile from "../../../src/hooks/useAuthenticatedProfile";
+import useResourceInfo from "../../../src/hooks/useResourceInfo";
+import { aliceWebIdUrl } from "../../../__testUtils/mockPersonResource";
+import { TESTCAFE_ID_NO_POD_MESSAGE } from "../../noPodFoundError";
 
 jest.mock("../../../src/hooks/useAccessControl");
+jest.mock("../../../src/hooks/useResourceInfo");
+jest.mock("../../../src/hooks/useAuthenticatedProfile");
 jest.mock("next/router");
 
+const mockProfileAlice = {
+  names: ["Alice", "Alternative Alice"],
+  webId: aliceWebIdUrl,
+  types: [foaf.Person],
+  pods: ["https://mypod.myhost.com/"],
+};
+
+const mockProfileAliceWithoutPod = {
+  names: ["Alice", "Alternative Alice"],
+  webId: aliceWebIdUrl,
+  types: [foaf.Person],
+  pods: [],
+};
+
 describe("Resource page", () => {
+  const podRootIri = "https://mypod.myhost.com/";
   beforeEach(() => {
     useRouter.mockImplementation(() => ({
       query: {
-        iri: "https://mypod.myhost.com/",
+        iri: podRootIri,
       },
     }));
     useAccessControl.mockReturnValue({
@@ -41,9 +63,11 @@ describe("Resource page", () => {
       error: null,
       isValidating: false,
     });
+    useResourceInfo.mockReturnValue("resourceInfo");
   });
 
   it("Renders the resource page", async () => {
+    useAuthenticatedProfile.mockReturnValueOnce(mockProfileAlice);
     const { asFragment, getByText } = render(
       <TestApp>
         <IndexPage />
@@ -56,11 +80,13 @@ describe("Resource page", () => {
   });
 
   it("Renders spinner while validating access control", async () => {
+    useAuthenticatedProfile.mockReturnValueOnce(mockProfileAlice);
     useAccessControl.mockReturnValueOnce({
       data: null,
       error: null,
       isValidating: true,
     });
+
     const { asFragment, getByTestId } = render(
       <TestApp>
         <IndexPage />
@@ -68,6 +94,25 @@ describe("Resource page", () => {
     );
     await waitFor(() => {
       expect(getByTestId("spinner")).toBeInTheDocument();
+    });
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("Renders an error if it cannot find a URL for a Pod", async () => {
+    useAuthenticatedProfile.mockReturnValue(mockProfileAliceWithoutPod);
+    useAccessControl.mockReturnValueOnce({
+      data: null,
+      error: null,
+      isValidating: false,
+    });
+
+    const { asFragment, getByTestId } = render(
+      <TestApp>
+        <IndexPage />
+      </TestApp>
+    );
+    await waitFor(() => {
+      expect(getByTestId(TESTCAFE_ID_NO_POD_MESSAGE)).toBeInTheDocument();
     });
     expect(asFragment()).toMatchSnapshot();
   });

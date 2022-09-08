@@ -110,11 +110,12 @@ PersonAvatar.propTypes = {
   profileDataset: T.object,
   profile: profilePropTypes,
   editing: T.bool,
-  webId: T.string.isRequired,
+  webId: T.string,
 };
 
 PersonAvatar.defaultProps = {
   profileDataset: null,
   profile: null,
   editing: false,
+  webId: null,
 };

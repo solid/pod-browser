@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Index page Renders an error if there is an empty array of pod iris 1`] = `
+exports[`PodRootLoadError renders 1`] = `
 <DocumentFragment>
   <div
     class="PodBrowser-container"
@@ -23,7 +23,3 @@ exports[`Index page Renders an error if there is an empty array of pod iris 1`] 
   </div>
 </DocumentFragment>
 `;
-
-exports[`Index page Renders null if there is no profile 1`] = `<DocumentFragment />`;
-
-exports[`Index page silently fails on router errors 1`] = `<DocumentFragment />`;

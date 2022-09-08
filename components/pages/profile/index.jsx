@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { SessionContext } from "@inrupt/solid-ui-react";
 import { useRouter } from "next/router";
 import Profile from "../../profile";
@@ -33,6 +33,7 @@ export default function ProfileShow() {
   const decodedIri = router.query.webId
     ? decodeURIComponent(router.query.webId)
     : null;
+
   const agentProfile = useFullProfile(decodedIri ?? session.info.webId);
 
   if (sessionRequestInProgress || !agentProfile) {

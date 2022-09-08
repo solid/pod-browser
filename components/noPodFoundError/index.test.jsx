@@ -20,40 +20,12 @@
  */
 
 import React from "react";
-import { renderWithTheme } from "../../../__testUtils/withTheme";
-import UserMenu from "./index";
-import useAuthenticatedProfile from "../../../src/hooks/useAuthenticatedProfile";
-import {
-  alicePodRoot,
-  aliceWebIdUrl,
-  mockProfileAlice,
-} from "../../../__testUtils/mockPersonResource";
-import { TESTCAFE_ID_SPINNER } from "../../spinner";
+import { renderWithTheme } from "../../__testUtils/withTheme";
+import PodRootLoadError from "./index";
 
-jest.mock("../../../src/hooks/useAuthenticatedProfile");
-const mockedAuthenticatedProfileHook = useAuthenticatedProfile;
-
-describe("UserMenu", () => {
-  beforeEach(() => {
-    mockedAuthenticatedProfileHook.mockReturnValue({
-      names: [],
-      webId: aliceWebIdUrl,
-      pods: [alicePodRoot],
-    });
-  });
-
-  it("renders a menu", () => {
-    const { asFragment } = renderWithTheme(<UserMenu />);
-    expect(asFragment()).toMatchSnapshot();
-  });
-
-  it("renders fallback for name and user photo if not available", () => {
-    mockedAuthenticatedProfileHook.mockReturnValue({
-      names: [],
-      webId: aliceWebIdUrl,
-      pods: [alicePodRoot],
-    });
-    const { asFragment } = renderWithTheme(<UserMenu />);
+describe("PodRootLoadError", () => {
+  it("renders", () => {
+    const { asFragment } = renderWithTheme(<PodRootLoadError />);
     expect(asFragment()).toMatchSnapshot();
   });
 });

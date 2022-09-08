@@ -41,7 +41,7 @@ const mockedUseFullProfile = useFullProfile;
 
 describe("PermissionsForm", () => {
   const authProfile = mockProfileAlice();
-  const authOwnedIri = joinPath(authProfile.pods[0], "test");
+  const authOwnedIri = authProfile.pods[0];
   const visitorIri = "http://some-random-pod.com/";
   const viewCheckbox = `${TESTCASE_ID_PERMISSION_CHECKBOX}view`;
   const editCheckbox = `${TESTCASE_ID_PERMISSION_CHECKBOX}edit`;

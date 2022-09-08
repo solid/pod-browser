@@ -1,5 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Resource page Renders an error if it cannot find a URL for a Pod 1`] = `
+<DocumentFragment>
+  <div
+    class="PodBrowser-container"
+    data-testid="no-pod-message"
+  >
+    <h1>
+      Pod Not Found
+    </h1>
+    <p>
+      It appears you do not have a Pod.
+    </p>
+    <a
+      class="PodBrowser-podLink"
+      href="https://id.inrupt.com/"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      Get a Pod
+    </a>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`Resource page Renders spinner while validating access control 1`] = `
 <DocumentFragment>
   <div

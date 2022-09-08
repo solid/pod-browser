@@ -20,40 +20,29 @@
  */
 
 import React from "react";
-import { renderWithTheme } from "../../../__testUtils/withTheme";
-import UserMenu from "./index";
-import useAuthenticatedProfile from "../../../src/hooks/useAuthenticatedProfile";
-import {
-  alicePodRoot,
-  aliceWebIdUrl,
-  mockProfileAlice,
-} from "../../../__testUtils/mockPersonResource";
-import { TESTCAFE_ID_SPINNER } from "../../spinner";
+import { makeStyles } from "@material-ui/styles";
+import { createStyles } from "@material-ui/core";
+import styles from "./styles";
 
-jest.mock("../../../src/hooks/useAuthenticatedProfile");
-const mockedAuthenticatedProfileHook = useAuthenticatedProfile;
+export const TESTCAFE_ID_NO_POD_MESSAGE = "no-pod-message";
 
-describe("UserMenu", () => {
-  beforeEach(() => {
-    mockedAuthenticatedProfileHook.mockReturnValue({
-      names: [],
-      webId: aliceWebIdUrl,
-      pods: [alicePodRoot],
-    });
-  });
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
-  it("renders a menu", () => {
-    const { asFragment } = renderWithTheme(<UserMenu />);
-    expect(asFragment()).toMatchSnapshot();
-  });
+export default function NoPodFoundError() {
+  const classes = useStyles();
 
-  it("renders fallback for name and user photo if not available", () => {
-    mockedAuthenticatedProfileHook.mockReturnValue({
-      names: [],
-      webId: aliceWebIdUrl,
-      pods: [alicePodRoot],
-    });
-    const { asFragment } = renderWithTheme(<UserMenu />);
-    expect(asFragment()).toMatchSnapshot();
-  });
-});
+  return (
+    <div className={classes.container} data-testid={TESTCAFE_ID_NO_POD_MESSAGE}>
+      <h1>Pod Not Found</h1>
+      <p>It appears you do not have a Pod.</p>
+      <a
+        className={classes.podLink}
+        href="https://id.inrupt.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Get a Pod
+      </a>
+    </div>
+  );
+}

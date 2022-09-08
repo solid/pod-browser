@@ -19,34 +19,25 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useEffect } from "react";
-import { useRouter } from "next/router";
+import { createStyles, button } from "@solid/lit-prism-patterns";
 
-import { useSession } from "@inrupt/solid-ui-react";
+const styles = (theme) => {
+  const buttonStyles = button.styles(theme);
+  return createStyles(theme, ["table", "icons"], {
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      textAlign: "center",
+      justifyContent: "center",
+      padding: "15% 2rem 2rem 2rem",
+    },
+    podLink: {
+      ...buttonStyles.button,
+      maxWidth: "fit-content",
+      alignSelf: "center",
+      cursor: "pointer",
+    },
+  });
+};
 
-import { resourceHref } from "../../../src/navigator";
-import useFullProfile from "../../../src/hooks/useFullProfile";
-import NoPodFoundError from "../../noPodFoundError";
-
-export default function Home() {
-  const router = useRouter();
-
-  const { session } = useSession();
-  const authenticatedProfile = useFullProfile(session.info.webId);
-
-  useEffect(() => {
-    if (authenticatedProfile?.pods.length > 0) {
-      router
-        .replace("/resource/[iri]", resourceHref(authenticatedProfile?.pods[0]))
-        .catch(() => {
-          /* fire and forget */
-        });
-    }
-  }, [authenticatedProfile, router]);
-
-  if (authenticatedProfile && !authenticatedProfile?.pods.length) {
-    return <NoPodFoundError />;
-  }
-
-  return null;
-}
+export default styles;

@@ -25,28 +25,25 @@ import { useRouter } from "next/router";
 import { render } from "@testing-library/react";
 import IndexPage from "./index";
 import { resourceHref } from "../../../src/navigator";
-import usePodIrisFromWebId from "../../../src/hooks/usePodIrisFromWebId";
+import useFullProfile from "../../../src/hooks/useFullProfile";
 import TestApp from "../../../__testUtils/testApp";
 
-jest.mock("../../../src/hooks/usePodIrisFromWebId");
+jest.mock("../../../src/hooks/useFullProfile");
 jest.mock("next/router");
 
 describe("Index page", () => {
   const podIri = "https://mypod.myhost.com";
 
   beforeEach(() => {
-    usePodIrisFromWebId.mockReturnValue({
-      data: [podIri],
+    useFullProfile.mockReturnValue({
+      pods: [podIri],
     });
   });
 
-  it("Renders null if there are no pod iris", () => {
+  it("Renders null if there is no profile", () => {
+    useFullProfile.mockReturnValue(null);
     const replaceMock = jest.fn().mockResolvedValue();
     useRouter.mockReturnValue({ replace: replaceMock });
-
-    usePodIrisFromWebId.mockReturnValue({
-      data: undefined,
-    });
 
     const { asFragment } = render(
       <TestApp>
@@ -56,13 +53,12 @@ describe("Index page", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it("Renders null if there is an empty array of pod iris", () => {
+  it("Renders an error if there is an empty array of pod iris", () => {
     useRouter.mockReturnValue({
       replace: jest.fn().mockResolvedValue(undefined),
     });
-
-    usePodIrisFromWebId.mockReturnValue({
-      data: [],
+    useFullProfile.mockReturnValue({
+      pods: [],
     });
 
     const { asFragment } = render(

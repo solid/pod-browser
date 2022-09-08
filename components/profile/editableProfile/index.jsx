@@ -24,7 +24,6 @@ import T from "prop-types";
 import { Box, Paper } from "@material-ui/core";
 import { Container } from "@inrupt/prism-react-components";
 import { CombinedDataProvider } from "@inrupt/solid-ui-react";
-import { getThing } from "@inrupt/solid-client";
 import { schema } from "rdf-namespaces";
 import PersonProfile from "../personProfile";
 import PersonAvatar from "../personAvatar";
