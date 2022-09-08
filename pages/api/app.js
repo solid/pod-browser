@@ -25,8 +25,14 @@ function buildAppProfile(hostname, clientId) {
   return {
     "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
     client_id: clientId,
-    redirect_uris: [hostname, hostname.concat("login")],
     client_name: CLIENT_NAME,
+    // URLs the user will be redirected back to upon successful authentication:
+    redirect_uris: [hostname, hostname.concat("login")],
+    // Support refresh_tokens for refreshing the session:
+    grant_types: ["authorization_code", "refresh_token"],
+    // The scope must be explicit, as the default doesn't include offline_access,
+    // preventing the refresh token from being issued.
+    scope: "openid offline_access webid",
   };
 }
 
