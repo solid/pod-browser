@@ -108,7 +108,7 @@ export default function ContainerTable({ containerPath, data, resourcePath }) {
         {!data || !data.length ? (
           <tr key="no-resources-found" className={bem("table__body-row")}>
             <td rowSpan={3} className={bem("table__body-cell")}>
-              No resources were found within this container.
+              No resources were found within this folder.
             </td>
           </tr>
         ) : null}
