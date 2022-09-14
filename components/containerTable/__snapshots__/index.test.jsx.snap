@@ -59,7 +59,7 @@ exports[`ContainerTable renders a table view without data 1`] = `
           class="PodBrowser-table__body-cell"
           rowspan="3"
         >
-          No resources were found within this container.
+          No resources were found within this folder.
         </td>
       </tr>
     </tbody>
