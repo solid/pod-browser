@@ -133,7 +133,6 @@ export default function AccessRequestForm({
       const expirationDate = selectedDate ? new Date(selectedDate) : null;
       expirationDate?.setUTCHours(23, 59, 59, 0);
       const signedVc = await approveAccessRequest(
-        session.info.webId,
         accessRequest,
         {
           requestor,
@@ -180,10 +179,7 @@ export default function AccessRequestForm({
 
   useEffect(() => {
     const handleDenyAccessRequest = async () => {
-      const signedVc = await denyAccessRequest(
-        session.info.webId,
-        accessRequest
-      );
+      const signedVc = await denyAccessRequest(accessRequest);
       if (signedVc) {
         await router.push(
           `${redirectUrl}?${GRANT_VC_URL_PARAM_NAME}=${getVcId(signedVc)}`
