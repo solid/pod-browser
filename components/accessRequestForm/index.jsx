@@ -179,7 +179,9 @@ export default function AccessRequestForm({
 
   useEffect(() => {
     const handleDenyAccessRequest = async () => {
-      const signedVc = await denyAccessRequest(accessRequest);
+      const signedVc = await denyAccessRequest(accessRequest, {
+        fetch: session.fetch,
+      });
       if (signedVc) {
         await router.push(
           `${redirectUrl}?${GRANT_VC_URL_PARAM_NAME}=${getVcId(signedVc)}`
