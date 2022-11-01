@@ -61,8 +61,8 @@ jest.mock("@inrupt/solid-client-access-grants");
 
 const defaultAccessRequest = getAccessRequestDetails();
 const accessRequestWithOnePurpose = getAccessRequestDetailsOnePurpose();
-
-const SessionProvider = mockSessionContextProvider(mockSession());
+const session = mockSession();
+const SessionProvider = mockSessionContextProvider(session);
 const agentDetails = {
   agentName: "Mock App",
   agentUrl: "http://mockappurl.com",
@@ -243,16 +243,18 @@ describe("Access Request Form", () => {
     );
   });
 
-  it(" calls denyAccessRequest and redirects with correct params when confirming deny access", async () => {
+  it("calls denyAccessRequest and redirects with correct params when confirming deny access", async () => {
     accessGrantsFns.denyAccessRequest.mockResolvedValue(signedVc);
     const { getByTestId, getAllByTestId } = renderWithTheme(
-      <ConfirmationDialogProvider>
-        <AccessRequestForm
-          accessRequest={defaultAccessRequest}
-          agentDetails={agentDetails}
-          agentWebId={agentWebId}
-        />
-      </ConfirmationDialogProvider>
+      <SessionProvider>
+        <ConfirmationDialogProvider>
+          <AccessRequestForm
+            accessRequest={defaultAccessRequest}
+            agentDetails={agentDetails}
+            agentWebId={agentWebId}
+          />
+        </ConfirmationDialogProvider>
+      </SessionProvider>
     );
     const purpose = getAllByTestId(TESTCAFE_ID_PURPOSE_CHECKBOX_INPUT)[0];
     userEvent.click(purpose);
@@ -273,7 +275,10 @@ describe("Access Request Form", () => {
     const confirmButton = getByTestId(TESTCAFE_ID_CONFIRM_BUTTON);
     userEvent.click(confirmButton);
     await waitFor(() => {
-      expect(accessGrantsFns.denyAccessRequest).toHaveBeenCalled();
+      expect(accessGrantsFns.denyAccessRequest).toHaveBeenCalledWith(
+        defaultAccessRequest,
+        { fetch: session.fetch }
+      );
     });
     expect(push).toHaveBeenLastCalledWith(
       `/privacy/?${accessGrantsFns.GRANT_VC_URL_PARAM_NAME}=${signedVc.id}`
