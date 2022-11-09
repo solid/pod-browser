@@ -23,7 +23,7 @@ import React from "react";
 import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
 import { screen, waitFor } from "@testing-library/dom";
-import * as accesGrantFns from "@inrupt/solid-client-access-grants";
+import * as accessGrantFns from "@inrupt/solid-client-access-grants";
 import { renderWithTheme } from "../../../../../__testUtils/withTheme";
 import AgentAccessOptionsMenu from "./index";
 import { TESTCAFE_ID_REMOVE_BUTTON } from "./removeButton";
@@ -35,6 +35,8 @@ import {
   TESTCAFE_ID_ACCESS_DETAILS_MODAL,
   TESTCAFE_ID_ACCESS_DETAILS_REVOKE_BUTTON,
 } from "./accessDetailsButton/accessDetailsModal";
+
+jest.mock("@inrupt/solid-client-access-grants");
 
 const resourceIri = "/iri/";
 const webId = "https://example.com/profile/card#me";
@@ -96,13 +98,13 @@ describe("Access Details Modal", () => {
   });
 
   it("closes the details modal when you click on the revoke button", async () => {
+    accessGrantFns.revokeAccessGrant.mockResolvedValue(true);
     const permission = {
       webId,
       alias: "Editors",
       type: "agent",
       vc: getSignedVc(),
     };
-    jest.spyOn(accesGrantFns, "revokeAccessGrant").mockResolvedValue(true);
 
     const { getByTestId } = renderWithTheme(
       <AgentAccessOptionsMenu
@@ -112,6 +114,9 @@ describe("Access Details Modal", () => {
         setLocalAccess={jest.fn}
       />
     );
+    await waitFor(() => {
+      expect(getByTestId("menu-button")).toBeInTheDocument();
+    });
 
     const menuButton = getByTestId("menu-button");
     userEvent.click(menuButton);
