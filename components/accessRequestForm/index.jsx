@@ -131,7 +131,6 @@ export default function AccessRequestForm({
       ((purposes && selectedPurposes.length) || !purposes)
     ) {
       const expirationDate = selectedDate ? new Date(selectedDate) : null;
-      expirationDate?.setUTCHours(23, 59, 59, 0);
       const signedVc = await approveAccessRequest(
         accessRequest,
         {
@@ -212,7 +211,7 @@ export default function AccessRequestForm({
   ]);
 
   const handleDateChange = (date) => {
-    setSelectedDate(date ? date.toISOString() : null);
+    setSelectedDate(date ? new Date(date) : null);
   };
 
   const handleSelectPurpose = (e) => {
