@@ -92,6 +92,9 @@ describe("Access Request Form", () => {
         "https://pod.inrupt.com/alice/private/data/data-2",
         "https://pod.inrupt.com/alice/private/data/data-3",
       ]);
+    jest
+      .useFakeTimers("modern")
+      .setSystemTime(new Date("2022-06-23 16:40 UTC"));
   });
 
   it("redirects user if not data subject of access request", async () => {
