@@ -25,7 +25,7 @@ import React, { useRef, useState } from "react";
 import { Button, Icons, useOutsideClick } from "@inrupt/prism-react-components";
 import { format } from "date-fns";
 import T from "prop-types";
-import { DatePicker } from "@material-ui/pickers";
+import { DateTimePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/styles";
 import { createStyles, InputBase } from "@material-ui/core";
 import { useBem } from "@solid/lit-prism-patterns";
@@ -56,7 +56,7 @@ export default function DateInput({ selectedDate, handleDateChange }) {
         placeholder="Access request expiration date"
         value={
           selectedDate
-            ? format(new Date(selectedDate), "MMMM' 'd', 'Y")
+            ? format(new Date(selectedDate), "MMMM' 'd', 'Y', 'kk:mm'")
             : "Forever"
         }
         inputProps={{
@@ -74,12 +74,10 @@ export default function DateInput({ selectedDate, handleDateChange }) {
       />
       {datepickerOpen && (
         <div className={bem("date-picker")}>
-          <DatePicker
-            disableToolbar
+          <DateTimePicker
             orientation="portrait"
-            variant="static"
             disablePast
-            format="MM/dd/yyyy"
+            variant="static"
             margin="normal"
             value={selectedDate}
             onChange={handleDateChange}

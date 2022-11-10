@@ -143,7 +143,7 @@ exports[`AccessRequest Page Renders the Access page 1`] = `
             placeholder="Access request expiration date"
             readonly=""
             type="text"
-            value="June 23, 2022"
+            value="June 23, 2022, 16:40"
           />
           <span
             class="PodBrowser-icon-calendar PodBrowser-icon-small--primary-disabled"
