@@ -70,7 +70,7 @@ export default function ContainerTable({ containerPath, data, resourcePath }) {
       },
       useSortBy
     );
-  console.log({ data });
+
   return (
     <table
       className={clsx(bem("table"))}
@@ -134,6 +134,12 @@ export default function ContainerTable({ containerPath, data, resourcePath }) {
 
 ContainerTable.propTypes = {
   containerPath: T.string.isRequired,
-  data: T.arrayOf(T.object).isRequired,
+  data: T.arrayOf(
+    T.shape({
+      filename: T.string,
+      iri: T.string,
+      type: T.string,
+    })
+  ).isRequired,
   resourcePath: T.string.isRequired,
 };

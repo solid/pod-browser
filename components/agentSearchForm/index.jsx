@@ -119,7 +119,6 @@ export default function AgentSearchForm({
     setExistingWebId
   );
   const onBlur = setupOnBlurHandler(setDirtyWebIdField);
-  console.log({ permissions });
   /* ignoring next block because it is affecting the coverage and we're removing this code soon */
   /* istanbul ignore next */
   return (
@@ -164,16 +163,17 @@ AgentSearchForm.propTypes = {
   dirtyForm: T.bool,
   onChange: T.func,
   onSubmit: T.func,
-  permissions: T.arrayOf(T.object),
+  permissions: T.arrayOf(
+    T.shape({
+      read: T.bool,
+      write: T.bool,
+      append: T.bool,
+      control: T.bool,
+    })
+  ),
   agentId: T.string,
   type: T.string,
 };
-
-// static propTypes = {
-//   user: PropTypes.shape({
-//   id: PropTypes.number,
-//   name: PropTypes.string,
-// }),
 
 AgentSearchForm.defaultProps = {
   buttonText: "Add",

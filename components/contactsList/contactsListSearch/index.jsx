@@ -67,7 +67,6 @@ export default function ContactsListSearch({ people }) {
   const { route } = useRouter();
   const { search, setSearch } = useContext(SearchContext);
   const classes = useStyles();
-  console.log({ people });
   const profiles = people
     .filter((profile) => !!getUrl(profile, rdf.type) === foaf.Person)
     .map(getProfileFromThing);
@@ -112,6 +111,7 @@ export default function ContactsListSearch({ people }) {
 }
 
 ContactsListSearch.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
   people: T.arrayOf(T.object),
 };
 
