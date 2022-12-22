@@ -68,7 +68,7 @@ export default function Login() {
   if (session.info.isLoggedIn) {
     router.replace("/");
   }
-
+  console.log("Look at need a pod link to see if the variant is off");
   return (
     <div className={bem("login-page")}>
       <h1 className={clsx(bem("content-h1"), bem("login-page__title"))}>
@@ -83,7 +83,7 @@ export default function Login() {
           Need a Pod?
           <a
             href="https://start.inrupt.com/"
-            variant="secondary"
+            // variant="secondary"
             className={clsx(
               bem("links-container__button"),
               buttonBem("button", "secondary")

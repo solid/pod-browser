@@ -70,7 +70,7 @@ export default function ContainerTable({ containerPath, data, resourcePath }) {
       },
       useSortBy
     );
-
+  console.log({ data });
   return (
     <table
       className={clsx(bem("table"))}

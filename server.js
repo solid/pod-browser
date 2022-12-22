@@ -33,7 +33,6 @@ const httpsOptions = {
   cert: fs.readFileSync("./certificates/localhost.crt"),
 };
 
-
 app.prepare().then(() => {
   createServer(httpsOptions, (req, res) => {
     const parsedUrl = parse(req.url, true);

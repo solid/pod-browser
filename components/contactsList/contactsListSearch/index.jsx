@@ -67,7 +67,7 @@ export default function ContactsListSearch({ people }) {
   const { route } = useRouter();
   const { search, setSearch } = useContext(SearchContext);
   const classes = useStyles();
-
+  console.log({ people });
   const profiles = people
     .filter((profile) => !!getUrl(profile, rdf.type) === foaf.Person)
     .map(getProfileFromThing);
