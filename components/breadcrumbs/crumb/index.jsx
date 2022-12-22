@@ -43,8 +43,7 @@ export default function Crumb({ crumb, isLink }) {
         <Link href={crumb.uri} className={bem("breadcrumb__link")}>
           <span className={bem("breadcrumb__prefix")}>Back to </span>
           {crumb.label}
-
-        </Link>)
+        </Link>
       ) : (
         crumb.label
       )}
