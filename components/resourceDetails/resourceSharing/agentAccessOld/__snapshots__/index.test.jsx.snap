@@ -3,7 +3,7 @@
 exports[`AgentAccess renders 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-root PodBrowser-circle PodBrowser-avatar"
+    class="PodBrowser-root PodBrowser-circular PodBrowser-avatar"
   >
     <img
       alt="Alice"
@@ -255,7 +255,7 @@ exports[`AgentAccess renders 1`] = `
 exports[`AgentAccess user tries to change access for themselves checkboxes are disabled 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-root PodBrowser-circle PodBrowser-avatar"
+    class="PodBrowser-root PodBrowser-circular PodBrowser-avatar"
   >
     <img
       alt="Alice"
@@ -503,7 +503,7 @@ exports[`AgentAccess user tries to change access for themselves checkboxes are d
 exports[`AgentAccess user tries to change access for themselves checkboxes are only disabled if the resource is connected to user's Pod 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-root PodBrowser-circle PodBrowser-avatar"
+    class="PodBrowser-root PodBrowser-circular PodBrowser-avatar"
   >
     <img
       alt="Alice"

@@ -82,7 +82,7 @@ exports[`ResourceDrawer view renders a Contents view when the router query has a
             </div>
           </div>
           <div
-            class="PodBrowser-container PodBrowser-entered"
+            class="PodBrowser-root PodBrowser-entered"
             style="min-height: 0px;"
           >
             <div
@@ -173,7 +173,7 @@ exports[`ResourceDrawer view renders a Contents view when the router query has a
             </div>
           </div>
           <div
-            class="PodBrowser-container PodBrowser-hidden"
+            class="PodBrowser-root PodBrowser-hidden"
             style="min-height: 0px;"
           >
             <div
@@ -257,7 +257,7 @@ exports[`ResourceDrawer view renders a Contents view when the router query has a
             </div>
           </div>
           <div
-            class="PodBrowser-container PodBrowser-hidden"
+            class="PodBrowser-root PodBrowser-hidden"
             style="min-height: 0px;"
           >
             <div
@@ -332,7 +332,7 @@ exports[`ResourceDrawer view renders a Contents view when the router query has a
                         </div>
                       </div>
                       <div
-                        class="PodBrowser-container PodBrowser-entered"
+                        class="PodBrowser-root PodBrowser-entered"
                         style="min-height: 0px;"
                       >
                         <div
@@ -424,7 +424,7 @@ exports[`ResourceDrawer view renders a Contents view when the router query has a
                         </div>
                       </div>
                       <div
-                        class="PodBrowser-container PodBrowser-entered"
+                        class="PodBrowser-root PodBrowser-entered"
                         style="min-height: 0px;"
                       >
                         <div
@@ -724,7 +724,7 @@ exports[`ResourceDrawer view renders without errors when iri contains spaces 1`]
             </div>
           </div>
           <div
-            class="PodBrowser-container PodBrowser-entered"
+            class="PodBrowser-root PodBrowser-entered"
             style="min-height: 0px;"
           >
             <div
@@ -815,7 +815,7 @@ exports[`ResourceDrawer view renders without errors when iri contains spaces 1`]
             </div>
           </div>
           <div
-            class="PodBrowser-container PodBrowser-hidden"
+            class="PodBrowser-root PodBrowser-hidden"
             style="min-height: 0px;"
           >
             <div
@@ -899,7 +899,7 @@ exports[`ResourceDrawer view renders without errors when iri contains spaces 1`]
             </div>
           </div>
           <div
-            class="PodBrowser-container PodBrowser-hidden"
+            class="PodBrowser-root PodBrowser-hidden"
             style="min-height: 0px;"
           >
             <div
@@ -974,7 +974,7 @@ exports[`ResourceDrawer view renders without errors when iri contains spaces 1`]
                         </div>
                       </div>
                       <div
-                        class="PodBrowser-container PodBrowser-entered"
+                        class="PodBrowser-root PodBrowser-entered"
                         style="min-height: 0px;"
                       >
                         <div
@@ -1066,7 +1066,7 @@ exports[`ResourceDrawer view renders without errors when iri contains spaces 1`]
                         </div>
                       </div>
                       <div
-                        class="PodBrowser-container PodBrowser-entered"
+                        class="PodBrowser-root PodBrowser-entered"
                         style="min-height: 0px;"
                       >
                         <div

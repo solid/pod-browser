@@ -3,7 +3,7 @@
 exports[`AgentAvatar renders avatar for person contact 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-root PodBrowser-circle PodBrowser-avatar"
+    class="PodBrowser-root PodBrowser-circular PodBrowser-avatar"
   >
     <img
       alt="alt text"
@@ -17,7 +17,7 @@ exports[`AgentAvatar renders avatar for person contact 1`] = `
 exports[`AgentAvatar renders fallback icon for app contact 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-root PodBrowser-circle PodBrowser-appAvatar PodBrowser-colorDefault"
+    class="PodBrowser-root PodBrowser-circular PodBrowser-appAvatar PodBrowser-colorDefault"
   >
     <span
       class="PodBrowser-icon-project-diagram PodBrowser-appAvatar"

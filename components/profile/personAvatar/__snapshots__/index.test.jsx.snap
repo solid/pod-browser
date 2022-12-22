@@ -9,10 +9,10 @@ exports[`Person Avatar renders a person avatar 1`] = `
       class="PodBrowser-root PodBrowser-root"
     >
       <div
-        class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+        class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
       >
         <div
-          class="PodBrowser-root PodBrowser-circle PodBrowser-colorDefault"
+          class="PodBrowser-root PodBrowser-circular PodBrowser-colorDefault"
           fallback="PodBrowser-avatar"
         >
           <svg
@@ -51,7 +51,7 @@ exports[`Person Avatar renders a person avatar 1`] = `
 exports[`setupErrorComponent renders 1`] = `
 <DocumentFragment>
   <div
-    class="MuiAvatar-root MuiAvatar-circle avatar MuiAvatar-colorDefault"
+    class="MuiAvatar-root MuiAvatar-circular avatar MuiAvatar-colorDefault"
   >
     <svg
       aria-hidden="true"

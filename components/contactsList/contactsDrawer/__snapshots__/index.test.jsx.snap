@@ -67,7 +67,7 @@ exports[`ContactsDrawer renders 1`] = `
             </div>
           </div>
           <div
-            class="PodBrowser-container PodBrowser-entered"
+            class="PodBrowser-root PodBrowser-entered"
             style="min-height: 0px;"
           >
             <div

@@ -6,7 +6,7 @@ exports[`AgentProfileDetails does not render action button for inherited permiss
     class="PodBrowser-nameAndAvatarContainer"
   >
     <div
-      class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+      class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
     >
       <span
         class="PodBrowser-icon-user PodBrowser-avatar__icon"
@@ -28,7 +28,7 @@ exports[`AgentProfileDetails renders action button for non-inherited permissions
     class="PodBrowser-nameAndAvatarContainer"
   >
     <div
-      class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+      class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
     >
       <span
         class="PodBrowser-icon-user PodBrowser-avatar__icon"
@@ -59,7 +59,7 @@ exports[`AgentProfileDetails renders correctly for authenticated agent 1`] = `
     class="PodBrowser-nameAndAvatarContainer"
   >
     <div
-      class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+      class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
     >
       <span
         class="PodBrowser-icon-user-lock PodBrowser-avatar__icon PodBrowser-avatar__icon--authenticated"
@@ -90,7 +90,7 @@ exports[`AgentProfileDetails renders correctly for public agent 1`] = `
     class="PodBrowser-nameAndAvatarContainer"
   >
     <div
-      class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+      class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
     >
       <span
         class="PodBrowser-icon-globe PodBrowser-avatar__icon PodBrowser-avatar__icon--public"
@@ -121,7 +121,7 @@ exports[`AgentProfileDetails renders without error 1`] = `
     class="PodBrowser-nameAndAvatarContainer"
   >
     <div
-      class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+      class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
     >
       <span
         class="PodBrowser-icon-user PodBrowser-avatar__icon"

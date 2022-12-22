@@ -55,7 +55,7 @@ exports[`AddAgentRow with existing contacts for newly added webids, if profile i
     title="Unable to load profile"
   >
     <div
-      class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+      class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
     >
       <svg
         aria-hidden="true"
@@ -83,7 +83,7 @@ exports[`AddAgentRow with existing contacts renders a row with the agent's name 
     title="https://somewebid.org"
   >
     <div
-      class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+      class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
     >
       <svg
         aria-hidden="true"

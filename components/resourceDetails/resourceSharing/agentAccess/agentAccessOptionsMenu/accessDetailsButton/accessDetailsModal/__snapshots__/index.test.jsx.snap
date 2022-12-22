@@ -5,7 +5,7 @@ exports[`Renders an access modal renders a modal when the user clicks on view de
 exports[`Renders an access modal setupErrorComponent renders 1`] = `
 <DocumentFragment>
   <div
-    class="MuiAvatar-root MuiAvatar-circle avatar MuiAvatar-colorDefault"
+    class="MuiAvatar-root MuiAvatar-circular avatar MuiAvatar-colorDefault"
   >
     <svg
       aria-hidden="true"

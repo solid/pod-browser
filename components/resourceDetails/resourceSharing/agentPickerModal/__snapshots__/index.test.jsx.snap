@@ -286,7 +286,7 @@ exports[`AgentPickerModal with contacts renders a table with the available conta
                   title=""
                 >
                   <div
-                    class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+                    class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
                   >
                     <svg
                       aria-hidden="true"
@@ -352,7 +352,7 @@ exports[`AgentPickerModal with contacts renders a table with the available conta
                   title=""
                 >
                   <div
-                    class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+                    class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
                   >
                     <svg
                       aria-hidden="true"
@@ -583,7 +583,7 @@ exports[`AgentPickerModal without contacts opens a confirmation dialog with corr
                   title="Unable to load profile"
                 >
                   <div
-                    class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+                    class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
                   >
                     <svg
                       aria-hidden="true"

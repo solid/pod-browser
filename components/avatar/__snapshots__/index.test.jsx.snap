@@ -3,7 +3,7 @@
 exports[`Avatar renders an avatar with a profile picture src is available 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-root PodBrowser-circle"
+    class="PodBrowser-root PodBrowser-circular"
   >
     <img
       class="PodBrowser-img"
@@ -16,7 +16,7 @@ exports[`Avatar renders an avatar with a profile picture src is available 1`] = 
 exports[`Avatar renders an avatar with a user icon when no src is available 1`] = `
 <DocumentFragment>
   <div
-    class="PodBrowser-root PodBrowser-circle PodBrowser-colorDefault"
+    class="PodBrowser-root PodBrowser-circular PodBrowser-colorDefault"
   >
     <span
       class="PodBrowser-icon-user PodBrowser-avatar__icon"

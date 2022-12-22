@@ -6,7 +6,7 @@ exports[`AgentAccess for authenticated agent renders correctly 1`] = `
     class="PodBrowser-nameAndAvatarContainer"
   >
     <div
-      class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+      class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
     >
       <span
         class="PodBrowser-icon-user-lock PodBrowser-avatar__icon PodBrowser-avatar__icon--authenticated"
@@ -37,7 +37,7 @@ exports[`AgentAccess for public agent renders correctly 1`] = `
     class="PodBrowser-nameAndAvatarContainer"
   >
     <div
-      class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+      class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
     >
       <span
         class="PodBrowser-icon-globe PodBrowser-avatar__icon PodBrowser-avatar__icon--public"
@@ -68,7 +68,7 @@ exports[`AgentAccess with profile renders 1`] = `
     class="PodBrowser-nameAndAvatarContainer"
   >
     <div
-      class="PodBrowser-root PodBrowser-circle PodBrowser-avatar"
+      class="PodBrowser-root PodBrowser-circular PodBrowser-avatar"
     >
       <img
         alt="https://example.com/profile/card#me"

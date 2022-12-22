@@ -36,10 +36,10 @@ exports[`Agent show page Renders the Agent show page 1`] = `
             class="PodBrowser-root PodBrowser-root"
           >
             <div
-              class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+              class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
             >
               <div
-                class="PodBrowser-root PodBrowser-circle PodBrowser-colorDefault"
+                class="PodBrowser-root PodBrowser-circular PodBrowser-colorDefault"
                 fallback="PodBrowser-avatar"
               >
                 <svg

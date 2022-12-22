@@ -9,7 +9,7 @@ exports[`AgentAccessList renders a list of permissions 1`] = `
       class="PodBrowser-root PodBrowser-listItem PodBrowser-gutters"
     >
       <div
-        class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+        class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
       >
         <svg
           aria-hidden="true"

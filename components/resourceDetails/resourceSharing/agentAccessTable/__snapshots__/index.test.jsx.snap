@@ -62,7 +62,7 @@ exports[`AgentAccessTable with access based agents renders a list of permissions
       </div>
     </div>
     <div
-      class="PodBrowser-container PodBrowser-entered"
+      class="PodBrowser-root PodBrowser-entered"
       style="min-height: 0px;"
     >
       <div
@@ -129,7 +129,7 @@ exports[`AgentAccessTable with access based agents renders a list of permissions
                         class="PodBrowser-nameAndAvatarContainer"
                       >
                         <div
-                          class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+                          class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
                         >
                           <span
                             class="PodBrowser-icon-user PodBrowser-avatar__icon"
@@ -163,7 +163,7 @@ exports[`AgentAccessTable with access based agents renders a list of permissions
                         class="PodBrowser-nameAndAvatarContainer"
                       >
                         <div
-                          class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+                          class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
                         >
                           <span
                             class="PodBrowser-icon-user PodBrowser-avatar__icon"
@@ -197,7 +197,7 @@ exports[`AgentAccessTable with access based agents renders a list of permissions
                         class="PodBrowser-nameAndAvatarContainer"
                       >
                         <div
-                          class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+                          class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
                         >
                           <span
                             class="PodBrowser-icon-user PodBrowser-avatar__icon"
@@ -314,7 +314,7 @@ exports[`AgentAccessTable with access grant based agents renders a list of permi
       </div>
     </div>
     <div
-      class="PodBrowser-container PodBrowser-entered"
+      class="PodBrowser-root PodBrowser-entered"
       style="min-height: 0px;"
     >
       <div
@@ -381,7 +381,7 @@ exports[`AgentAccessTable with access grant based agents renders a list of permi
                         class="PodBrowser-nameAndAvatarContainer"
                       >
                         <div
-                          class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+                          class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
                         >
                           <span
                             class="PodBrowser-icon-user PodBrowser-avatar__icon"
@@ -415,7 +415,7 @@ exports[`AgentAccessTable with access grant based agents renders a list of permi
                         class="PodBrowser-nameAndAvatarContainer"
                       >
                         <div
-                          class="PodBrowser-root PodBrowser-circle PodBrowser-avatar PodBrowser-colorDefault"
+                          class="PodBrowser-root PodBrowser-circular PodBrowser-avatar PodBrowser-colorDefault"
                         >
                           <span
                             class="PodBrowser-icon-user PodBrowser-avatar__icon"
@@ -514,7 +514,7 @@ exports[`AgentAccessTable without agents renders an empty list of permissions if
       </div>
     </div>
     <div
-      class="PodBrowser-container PodBrowser-entered"
+      class="PodBrowser-root PodBrowser-entered"
       style="min-height: 0px;"
     >
       <div
@@ -607,7 +607,7 @@ exports[`AgentAccessTable without agents renders an empty list of permissions if
       </div>
     </div>
     <div
-      class="PodBrowser-container PodBrowser-entered"
+      class="PodBrowser-root PodBrowser-entered"
       style="min-height: 0px;"
     >
       <div
@@ -700,7 +700,7 @@ exports[`AgentAccessTable without agents renders spinner if loading 1`] = `
       </div>
     </div>
     <div
-      class="PodBrowser-container PodBrowser-entered"
+      class="PodBrowser-root PodBrowser-entered"
       style="min-height: 0px;"
     >
       <div
