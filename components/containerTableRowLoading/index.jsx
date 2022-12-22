@@ -32,9 +32,7 @@ function ContainerTableRowSkeleton({ iri }) {
   return (
     <TableRow key="no-resources-found">
       <TableCell rowSpan={3}>
-        <Link href={resourceHref(iri)}>
-          <a>{name}</a>
-        </Link>
+        <Link href={resourceHref(iri)}>{name}</Link>
       </TableCell>
     </TableRow>
   );

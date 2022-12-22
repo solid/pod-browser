@@ -41,15 +41,13 @@ export default function Header() {
   return (
     <header className={bem("header-banner")}>
       <div className={classes.logoContainer}>
-        <Link href="/">
-          <a data-testid={TESTCAFE_ID_HEADER_LOGO}>
-            <img
-              height={40}
-              src="/inrupt_logo-2020.svg"
-              className={bem("header-banner__logo-image")}
-              alt="Inrupt PodBrowser"
-            />
-          </a>
+        <Link href="/" data-testid={TESTCAFE_ID_HEADER_LOGO}>
+          <img
+            height={40}
+            src="/inrupt_logo-2020.svg"
+            className={bem("header-banner__logo-image")}
+            alt="Inrupt PodBrowser"
+          />
         </Link>
       </div>
       {session.info.isLoggedIn ? (

@@ -81,9 +81,7 @@ export default function PrivacyPage() {
             contactType={selectedTabValue}
             setSearchValues={setSearchValues}
           />
-          <Link href="/privacy/access/generate">
-            <a>Generate access request</a>
-          </Link>
+          <Link href="/privacy/access/generate">Generate access request</Link>
         </>
       </SearchProvider>
     </DetailsMenuProvider>

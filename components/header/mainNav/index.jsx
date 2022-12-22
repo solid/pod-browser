@@ -82,7 +82,7 @@ export default function MainNav() {
         links={links}
         data-testid={TESTCAFE_ID_MAIN_NAV}
         renderLink={(link) => (
-          <Link href={link.href}>
+          <Link href={link.href} legacyBehavior>
             <MainNavLink {...link} />
           </Link>
         )}

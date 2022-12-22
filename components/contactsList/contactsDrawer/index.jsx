@@ -53,10 +53,11 @@ export default function ContactsDrawer({
         <AccordionDetails>
           <ActionMenu>
             <ActionMenuItem>
-              <Link href={buildProfileLink(profileIri, "/contacts")}>
-                <a className={actionMenuBem("action-menu__trigger")}>
-                  View Profile
-                </a>
+              <Link
+                href={buildProfileLink(profileIri, "/contacts")}
+                className={actionMenuBem("action-menu__trigger")}
+              >
+                View Profile
               </Link>
             </ActionMenuItem>
             <ActionMenuItem>

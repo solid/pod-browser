@@ -59,7 +59,7 @@ export default function GroupDetails() {
       className={bem("group-details")}
     >
       <div className={bem("group-details__main-content")}>
-        <Link href="/groups">
+        <Link href="/groups" legacyBehavior>
           <LinkButton
             variant="text"
             iconBefore="caret-left"

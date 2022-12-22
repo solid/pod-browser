@@ -160,8 +160,8 @@ function ContactsList() {
       <PageHeader
         title="Contacts"
         actions={[
-          <Link href="/contacts/add">
-            <a className={actionClass}>Add new contact</a>
+          <Link href="/contacts/add" className={actionClass}>
+            Add new contact
           </Link>,
         ]}
       >

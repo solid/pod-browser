@@ -74,17 +74,16 @@ export default function GroupList() {
                 key={groupUrl}
                 data-testid={TESTCAFE_ID_GROUP_LIST_ITEM}
               >
-                <Link href={`/groups/${encodeURIComponent(groupUrl)}`}>
-                  <a
-                    className={bem("group-list__link", { selected })}
-                    data-testid={TESTCAFE_ID_GROUP_LIST_LINK}
-                  >
-                    <Icons
-                      name="users"
-                      className={bem("group-list__icon", { selected })}
-                    />
-                    <span className={bem("group-list__text")}>{groupName}</span>
-                  </a>
+                <Link
+                  href={`/groups/${encodeURIComponent(groupUrl)}`}
+                  className={bem("group-list__link", { selected })}
+                  data-testid={TESTCAFE_ID_GROUP_LIST_LINK}
+                >
+                  <Icons
+                    name="users"
+                    className={bem("group-list__icon", { selected })}
+                  />
+                  <span className={bem("group-list__text")}>{groupName}</span>
                 </Link>
               </li>
             );

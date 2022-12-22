@@ -28,7 +28,7 @@ import T from "prop-types";
 
 export default function UserMenuAction({ href, ...action }) {
   return href ? (
-    <Link href={href}>
+    <Link href={href} legacyBehavior>
       <UserMenuLink {...action} />
     </Link>
   ) : (

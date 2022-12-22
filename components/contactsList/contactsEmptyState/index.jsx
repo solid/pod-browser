@@ -44,7 +44,7 @@ export default function ContactsEmptyState() {
         <Icons name="user-astronaut" className={bem("icon-large")} />
         <h1>You don’t have any contacts yet!</h1>
         <p>Add a new contact to share files with.</p>
-        <Link href="/contacts/add">
+        <Link href="/contacts/add" legacyBehavior>
           <LinkButton
             data-testid={TESTCAFE_ID_ADD_NEW_CONTACT_BUTTON}
             variant="small"

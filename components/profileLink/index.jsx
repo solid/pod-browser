@@ -49,8 +49,11 @@ export default function ProfileLink() {
   const path = profile?.types.includes(schema.Person) ? "person" : "app";
 
   return (
-    <Link href={buildProfileLink(webId, route, path)}>
-      <a data-testid={TESTCAFE_ID_PROFILE_LINK}>{profile?.names[0] || webId}</a>
+    <Link
+      href={buildProfileLink(webId, route, path)}
+      data-testid={TESTCAFE_ID_PROFILE_LINK}
+    >
+      {profile?.names[0] || webId}
     </Link>
   );
 }

@@ -55,10 +55,12 @@ export default function AgentsDrawer({
         <AccordionDetails>
           <ActionMenu>
             <ActionMenuItem>
-              <Link href={buildProfileLink(profileIri, "/privacy", path)}>
-                <a className={actionMenuBem("action-menu__trigger")}>
+              <Link
+                href={buildProfileLink(profileIri, "/privacy", path)}
+                className={actionMenuBem("action-menu__trigger")}>
+                
                   View Profile
-                </a>
+                
               </Link>
             </ActionMenuItem>
             <ActionMenuItem>

@@ -43,8 +43,9 @@ export default function ResourceLink(props) {
       )}
       replace
       prefetch={false}
+      {...linkProps}
     >
-      <a {...linkProps}>{children}</a>
+      {children}
     </Link>
   );
 }

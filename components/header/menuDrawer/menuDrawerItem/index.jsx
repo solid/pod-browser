@@ -44,7 +44,7 @@ export default function MenuDrawerItem({
 }) {
   const bem = useBem(useStyles());
   return href ? (
-    <Link href={href}>
+    <Link href={href} legacyBehavior>
       <ListItem
         key={label}
         onClick={onClick}

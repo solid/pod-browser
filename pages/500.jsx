@@ -28,9 +28,7 @@ export default function Custom404() {
       <h1>500 - Unhandled server error</h1>
       <p>
         This error has been logged.
-        <Link href="/">
-          <a>Return to the home page.</a>
-        </Link>
+        <Link href="/">Return to the home page.</Link>
       </p>
     </>
   );

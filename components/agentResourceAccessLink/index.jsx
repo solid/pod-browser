@@ -56,8 +56,10 @@ export default function AgentResourceAccessLink(props) {
     profileIri;
 
   return (
-    <Link href={buildResourcesLink(profileIri, route, path)}>
-      <a data-testid={TESTCAFE_ID_RESOURCE_ACCESS_LINK}>{name}</a>
+    <Link
+      href={buildResourcesLink(profileIri, route, path)}
+      data-testid={TESTCAFE_ID_RESOURCE_ACCESS_LINK}>
+      {name}
     </Link>
   );
 }
