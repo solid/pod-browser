@@ -19,13 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint-disable @next/next/no-img-element */
-
 import React, { useCallback, useState, useEffect } from "react";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { Button } from "@inrupt/prism-react-components";
 import { useSession } from "@inrupt/solid-ui-react";
 import { useBem } from "@solid/lit-prism-patterns";
+import Image from "next/image";
 import InfoTooltip from "../infoTooltip";
 import ProviderLogin from "./provider";
 import styles from "./styles";
@@ -80,7 +79,7 @@ export default function LoginForm() {
   return (
     <div className={bem("login-form")}>
       <h3 data-testid={TESTCAFE_ID_LOGIN_TITLE}>Sign in with</h3>
-      <img
+      <Image
         width={160}
         src="/pod-spaces-logo.svg"
         alt="Inrupt PodBrowser"
