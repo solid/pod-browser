@@ -22,28 +22,22 @@
 module.exports = {
   // Automatically clear mock calls and instances between every test
   clearMocks: true,
-
   // The test environment that will be used for testing
   testEnvironment: "<rootDir>/customEnvironment.js",
-
   setupFilesAfterEnv: ["<rootDir>/jest-setup.js"],
-
   testPathIgnorePatterns: ["/node_modules/", "/__testUtils/", "/.next"],
-
   transform: {
     "^.+\\.jsx?$": "babel-jest",
     "^.+\\.ttl$": "jest-raw-loader",
   },
-
   // Coverage configs
   collectCoverage: true,
-
+  coverageReporters: process.env.CI ? ["text", "lcov"] : ["text"],
   coveragePathIgnorePatterns: [
     "/node_modules/",
     "/__testUtils/",
     "/src/windowHelpers",
   ],
-
   coverageThreshold: {
     global: {
       branches: 89,
