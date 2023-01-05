@@ -30,7 +30,7 @@ const isAuthCallback = (asPath) => {
     const route = new URL(asPath, window.location.href);
     const params = route.searchParams;
 
-    return params.has("error") || (params.has("code") && params.has("code"));
+    return params.has("error") || (params.has("code") && params.has("state"));
   } catch (e) {
     return false;
   }
