@@ -25,7 +25,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
 import { Avatar, createStyles, Typography } from "@mui/core";
-import { makeStyles } from "mui/styles";
+import { makeStyles } from "@mui/styles";
 import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
 import { Form, Button as PrismButton } from "@inrupt/prism-react-components";

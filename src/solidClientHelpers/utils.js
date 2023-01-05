@@ -88,7 +88,9 @@ export function getTypes(dataset) {
 }
 
 export function datasetIsContainer(dataset) {
-  return getTypes(dataset).find((type) => type.match(/container/i)) !== undefined;
+  return (
+    getTypes(dataset).find((type) => type.match(/container/i)) !== undefined
+  );
 }
 
 export function getTypeName(rawType) {
