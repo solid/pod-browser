@@ -29,7 +29,7 @@ import {
   GRANT_VC_URL_PARAM_NAME,
 } from "@inrupt/solid-client-access-grants";
 import { Button } from "@inrupt/prism-react-components";
-import { makeStyles } from "mui/styles";
+import { makeStyles } from "@mui/styles";
 import { useRouter } from "next/router";
 import {
   createStyles,

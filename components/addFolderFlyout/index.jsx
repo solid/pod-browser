@@ -22,7 +22,7 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { createContainerAt, getSourceUrl } from "@inrupt/solid-client";
-import { makeStyles } from "@mui/core/styles";
+import { makeStyles } from "@mui/styles";
 import { useSession } from "@inrupt/solid-ui-react";
 import { createStyles, Popover } from "@mui/core";
 import {
