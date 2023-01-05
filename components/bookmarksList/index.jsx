@@ -21,8 +21,8 @@
 
 import React, { useContext, useState } from "react";
 import clsx from "clsx";
-import { createStyles, TextField } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { createStyles, TextField } from "@mui/core";
+import { makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import {
   Container,

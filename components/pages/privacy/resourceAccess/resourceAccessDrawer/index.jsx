@@ -30,8 +30,8 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+} from "@mui/core";
+import { makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { getAcpAccessDetails } from "../../../../../src/accessControl/acp";
 import { getResourceName } from "../../../../../src/solidClientHelpers/resource";

@@ -20,8 +20,8 @@
  */
 
 import React from "react";
-import { Divider } from "@material-ui/core";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
+import { Divider } from "@mui/core";
+import { makeStyles, createStyles } from "@mui/styles";
 import T from "prop-types";
 import styles from "../styles";
 

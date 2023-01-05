@@ -26,8 +26,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
-import { createStyles } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { createStyles } from "@mui/core";
+import { makeStyles } from "@mui/styles";
 import { POLICIES_TYPE_MAP } from "../../../../constants/policies";
 
 import styles from "./styles";

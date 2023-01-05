@@ -20,8 +20,8 @@
  */
 
 import React from "react";
-import { createStyles, makeStyles } from "@material-ui/styles";
-import { header, useBem } from "@solid/lit-prism-patterns";
+import { createStyles, makeStyles } from "@mui/styles";
+import { useBem } from "@solid/lit-prism-patterns";
 import { useSession } from "@inrupt/solid-ui-react";
 import Link from "next/link";
 import UserMenu from "./userMenu";

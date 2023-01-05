@@ -19,13 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-// material-ui is broken and doesn't allow `ListItem` to accept `component`
-
 import React from "react";
-import { Divider, createStyles } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { Divider, createStyles, Skeleton } from "@mui/core";
+import { makeStyles } from "@mui/styles";
 import T from "prop-types";
-import Skeleton from "@material-ui/lab/Skeleton";
 import styles from "./styles";
 import { getIriPath } from "../../../src/solidClientHelpers/utils";
 import { getResourceName } from "../../../src/solidClientHelpers/resource";

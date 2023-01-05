@@ -23,7 +23,7 @@ import React, { useCallback, useContext } from "react";
 import { useThing } from "@inrupt/solid-ui-react";
 import { getUrl } from "@inrupt/solid-client";
 import PropTypes from "prop-types";
-import { Checkbox } from "@material-ui/core";
+import { Checkbox } from "@mui/core";
 import useContactProfile from "../../../../../src/hooks/useContactProfile";
 import {
   getWebIdsFromInheritedPermissions,

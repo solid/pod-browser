@@ -23,9 +23,9 @@
 
 import React from "react";
 import { Icons } from "@inrupt/prism-react-components";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { Avatar as MuiAvatar, createStyles } from "@material-ui/core";
+import { Avatar as MuiAvatar, createStyles } from "@mui/core";
 import T from "prop-types";
 import styles from "./styles";
 

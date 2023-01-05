@@ -23,7 +23,7 @@
 
 import { ActionButton, Button } from "@inrupt/prism-react-components";
 import React, { useState } from "react";
-import { Divider } from "@material-ui/core";
+import { Divider } from "@mui/core";
 import GroupDetailsModal from "../groupDetailsModal";
 import GroupDeleteModal from "../groupDeleteModal";
 

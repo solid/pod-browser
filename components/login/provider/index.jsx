@@ -24,14 +24,14 @@
 import React, { createRef, useEffect, useState, useCallback } from "react";
 import T from "prop-types";
 import {
+  Autocomplete,
   FormControl,
   FormHelperText,
   TextField,
   useTheme,
-} from "@material-ui/core";
+} from "@mui/core";
 
-import { makeStyles, createStyles } from "@material-ui/styles";
-import { Autocomplete } from "@material-ui/lab";
+import { makeStyles, createStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { Button } from "@inrupt/prism-react-components";
 

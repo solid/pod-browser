@@ -23,8 +23,8 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/styles";
-import { IconButton, InputBase, createStyles } from "@material-ui/core";
+import { makeStyles } from "@mui/styles";
+import { IconButton, InputBase, createStyles } from "@mui/core";
 import styles from "./styles";
 
 export const TESTCAFE_ID_MOBILE_SEARCH_INPUT = "mobile-search-input";

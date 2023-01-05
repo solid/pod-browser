@@ -23,7 +23,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { Alert } from "@material-ui/lab";
+import { Alert } from "@mui/core";
 import AgentAccessTable from "../agentAccessTable";
 import AdvancedSharingButton from "../advancedSharingButton";
 import { namedPolicies, customPolicies } from "../../../../constants/policies";

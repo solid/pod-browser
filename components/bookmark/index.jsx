@@ -22,7 +22,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useSession } from "@inrupt/solid-ui-react";
 import PropTypes from "prop-types";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import { getThingAll, getUrl } from "@inrupt/solid-client";

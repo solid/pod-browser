@@ -22,9 +22,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useThing } from "@inrupt/solid-ui-react";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@mui/styles";
 import { Icons } from "@inrupt/prism-react-components";
-import { Avatar, createStyles } from "@material-ui/core";
+import { Avatar, createStyles } from "@mui/core";
 import { getUrl } from "@inrupt/solid-client";
 import { rdf, schema } from "rdf-namespaces";
 import styles from "./styles";

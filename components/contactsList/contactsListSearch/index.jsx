@@ -27,10 +27,14 @@ import T from "prop-types";
 import { getUrl } from "@inrupt/solid-client";
 import { rdf, foaf } from "rdf-namespaces";
 import Router, { useRouter } from "next/router";
-import { Autocomplete } from "@material-ui/lab";
-import { createStyles, InputAdornment, TextField } from "@material-ui/core";
+import {
+  Autocomplete,
+  createStyles,
+  InputAdornment,
+  TextField,
+} from "@mui/core";
 import { Icons } from "@inrupt/prism-react-components";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@mui/styles";
 import { getProfileFromThing } from "../../../src/solidClientHelpers/profile";
 import SearchContext from "../../../src/contexts/searchContext";
 import { buildProfileLink } from "../../profileLink";

@@ -24,7 +24,7 @@
 
 import React, { useContext, useState, useEffect, forwardRef } from "react";
 import PropTypes from "prop-types";
-import { CircularProgress, createStyles } from "@material-ui/core";
+import { CircularProgress, createStyles } from "@mui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
 import {
@@ -33,7 +33,7 @@ import {
   ModalBody,
   ModalContainer,
 } from "@inrupt/prism-react-components";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@mui/styles";
 import {
   DatasetContext,
   Table,

@@ -22,8 +22,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/styles";
-import { Tabs as MuiTabs, Tab, createStyles } from "@material-ui/core";
+import { makeStyles } from "@mui/styles";
+import { Tabs as MuiTabs, Tab, createStyles } from "@mui/core";
 
 import styles from "./styles";
 

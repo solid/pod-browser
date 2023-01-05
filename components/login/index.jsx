@@ -22,7 +22,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import React, { useCallback, useState, useEffect } from "react";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import { Button } from "@inrupt/prism-react-components";
 import { useSession } from "@inrupt/solid-ui-react";
 import { useBem } from "@solid/lit-prism-patterns";

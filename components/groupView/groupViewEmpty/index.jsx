@@ -22,8 +22,8 @@
 import { Icons } from "@inrupt/prism-react-components";
 import React from "react";
 import { useBem } from "@solid/lit-prism-patterns";
-import { makeStyles } from "@material-ui/styles";
-import { createStyles } from "@material-ui/core";
+import { makeStyles } from "@mui/styles";
+import { createStyles } from "@mui/core";
 import styles from "./styles";
 import CreateGroupButton from "../../createGroupButton";
 

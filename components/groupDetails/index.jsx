@@ -20,10 +20,10 @@
  */
 
 import React, { useContext } from "react";
-import { createStyles } from "@material-ui/core";
+import { createStyles } from "@mui/core";
 import { Content, LinkButton } from "@inrupt/prism-react-components";
 import Link from "next/link";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import styles from "./styles";
 import GroupContext from "../../src/contexts/groupContext";

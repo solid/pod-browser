@@ -21,7 +21,7 @@
 
 import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
-import { Modal } from "@material-ui/core";
+import { Modal } from "@mui/core";
 import { Button } from "@inrupt/prism-react-components";
 import PermissionsContext from "../../../../src/contexts/permissionsContext";
 import AgentPickerModal from "../agentPickerModal";

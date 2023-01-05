@@ -20,8 +20,7 @@
  */
 
 import React, { useContext } from "react";
-import Alert from "@material-ui/lab/Alert";
-import { Snackbar } from "@material-ui/core";
+import { Alert, Snackbar } from "@mui/core";
 import AlertContext from "../../src/contexts/alertContext";
 
 export default function Notification() {

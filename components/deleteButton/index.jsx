@@ -21,7 +21,7 @@
 
 import React, { useContext, useState } from "react";
 import clsx from "clsx";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import T from "prop-types";
 import AlertContext from "../../src/contexts/alertContext";

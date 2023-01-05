@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@mui/styles";
 import {
   Dialog,
   DialogActions,
@@ -28,7 +28,7 @@ import {
   DialogTitle,
   createStyles,
   DialogContentText,
-} from "@material-ui/core";
+} from "@mui/core";
 import { PropTypes } from "prop-types";
 import { Button } from "@inrupt/prism-react-components";
 import styles from "./styles";

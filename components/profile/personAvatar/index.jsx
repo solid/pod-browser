@@ -22,8 +22,8 @@
 import React from "react";
 import T from "prop-types";
 import { vcard } from "rdf-namespaces";
-import { Avatar, Box, createStyles, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { Avatar, Box, createStyles, Typography } from "@mui/core";
+import { makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { Image } from "@inrupt/solid-ui-react";
 import { getSourceUrl, getThing } from "@inrupt/solid-client";

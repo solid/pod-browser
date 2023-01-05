@@ -21,7 +21,7 @@
 
 import React from "react";
 import { Button } from "@inrupt/prism-react-components";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import T from "prop-types";
 import styles from "./styles";

@@ -19,14 +19,11 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from "react";
+import React from "react";
 import T from "prop-types";
-import { Box, Paper } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import { Alert, Box, Paper } from "@mui/core";
 import { Container } from "@inrupt/prism-react-components";
-import { getSourceUrl } from "@inrupt/solid-client";
 import { schema } from "rdf-namespaces";
-import { isHTTPError } from "../../src/error";
 import PersonProfile from "./personProfile";
 import PersonAvatar from "./personAvatar";
 import AppProfile from "./appProfile";

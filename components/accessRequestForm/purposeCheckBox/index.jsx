@@ -22,8 +22,8 @@
 import React, { useState } from "react";
 import T from "prop-types";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/styles";
-import { createStyles, Checkbox } from "@material-ui/core";
+import { makeStyles } from "@mui/styles";
+import { createStyles, Checkbox } from "@mui/core";
 import styles from "./styles";
 
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));

@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { ListItem } from "@material-ui/core";
+import { ListItem } from "@mui/core";
 import PropTypes from "prop-types";
 
 const TESTCAFE_ID_BOOKMARK_LIST_ITEM_BUTTON = "bookmark-list-item-button";

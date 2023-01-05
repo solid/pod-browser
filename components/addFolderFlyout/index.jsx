@@ -22,9 +22,9 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { createContainerAt, getSourceUrl } from "@inrupt/solid-client";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/core/styles";
 import { useSession } from "@inrupt/solid-ui-react";
-import { createStyles, Popover } from "@material-ui/core";
+import { createStyles, Popover } from "@mui/core";
 import {
   Button,
   Form,

@@ -34,8 +34,8 @@ import {
   CircularProgress,
   createStyles,
   Typography,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+} from "@mui/core";
+import { makeStyles } from "@mui/styles";
 import AgentAccess from "../agentAccess";
 import AddAgentButton from "../addAgentButton";
 // import AgentsTableTabs from "../agentsTableTabs";

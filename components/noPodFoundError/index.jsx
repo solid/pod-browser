@@ -20,8 +20,8 @@
  */
 
 import React from "react";
-import { makeStyles } from "@material-ui/styles";
-import { createStyles } from "@material-ui/core";
+import { makeStyles } from "@mui/styles";
+import { createStyles } from "@mui/core";
 import styles from "./styles";
 
 export const TESTCAFE_ID_NO_POD_MESSAGE = "no-pod-message";

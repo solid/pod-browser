@@ -22,8 +22,8 @@
 import React from "react";
 import clsx from "clsx";
 import T from "prop-types";
-import { Popover } from "@material-ui/core";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { Popover } from "@mui/core";
+import { createStyles, makeStyles } from "@mui/styles";
 import { Icons } from "@inrupt/prism-react-components";
 import { useBem } from "@solid/lit-prism-patterns";
 import styles from "./styles";

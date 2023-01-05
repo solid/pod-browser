@@ -23,8 +23,8 @@
 
 import React, { useContext, useState } from "react";
 import T from "prop-types";
-import { List, ListItem } from "@material-ui/core";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { List, ListItem } from "@mui/core";
+import { createStyles, makeStyles } from "@mui/styles";
 import { Button } from "@inrupt/prism-react-components";
 import styles from "./styles";
 import AgentAccess from "../agentAccessOld";

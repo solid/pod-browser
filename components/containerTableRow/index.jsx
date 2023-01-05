@@ -21,7 +21,7 @@
 
 /* eslint-disable camelcase */
 import React, { useContext, useEffect, useState } from "react";
-import { makeStyles, createStyles } from "@material-ui/styles";
+import { makeStyles, createStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { useRouter } from "next/router";
 import clsx from "clsx";

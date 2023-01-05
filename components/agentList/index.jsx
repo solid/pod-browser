@@ -22,8 +22,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import { createStyles } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { createStyles } from "@mui/core";
+import { makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { Container, Table as PrismTable } from "@inrupt/prism-react-components";
 import { asUrl, createSolidDataset } from "@inrupt/solid-client";

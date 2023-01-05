@@ -23,7 +23,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import T from "prop-types";
 import { Icons, Button } from "@inrupt/prism-react-components";
 import { getSourceUrl } from "@inrupt/solid-client";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@mui/styles";
 import {
   createStyles,
   Typography,
@@ -32,7 +32,7 @@ import {
   FormControlLabel,
   Switch,
   Tooltip,
-} from "@material-ui/core";
+} from "@mui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import { getPolicyDetailFromAccess } from "../../../src/accessControl/acp";
 import styles from "../styles";

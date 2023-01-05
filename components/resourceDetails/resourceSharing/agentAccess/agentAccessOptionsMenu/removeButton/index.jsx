@@ -19,10 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
-import { createStyles, ListItem, ListItemText } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { createStyles, ListItem, ListItemText } from "@mui/core";
+import { makeStyles } from "@mui/styles";
 import { getResourceName } from "../../../../../../src/solidClientHelpers/resource";
 import AccessControlContext from "../../../../../../src/contexts/accessControlContext";
 import { PUBLIC_AGENT_PREDICATE } from "../../../../../../src/models/contact/public";

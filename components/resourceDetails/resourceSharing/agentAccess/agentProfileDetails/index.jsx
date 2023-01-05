@@ -23,8 +23,8 @@
 
 import React, { useState } from "react";
 import T from "prop-types";
-import { createStyles, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { createStyles, Typography } from "@mui/core";
+import { makeStyles } from "@mui/styles";
 import {
   PUBLIC_AGENT,
   PUBLIC_AGENT_PREDICATE,

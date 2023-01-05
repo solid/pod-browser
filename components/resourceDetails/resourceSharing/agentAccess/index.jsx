@@ -21,14 +21,12 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
-import { Button, CircularProgress, createStyles } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { CircularProgress, createStyles } from "@mui/core";
+import { makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
+import { DatasetContext } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
-import { Alert, Skeleton } from "@material-ui/lab";
 import styles from "./styles";
-import { getProfile } from "../../../../src/models/profile";
 import AgentProfileDetails from "./agentProfileDetails";
 import {
   PUBLIC_AGENT_NAME,

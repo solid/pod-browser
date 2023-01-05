@@ -21,9 +21,8 @@
 
 import React from "react";
 import T from "prop-types";
-import { makeStyles } from "@material-ui/styles";
-import { createStyles } from "@material-ui/core";
-import { Container, PageHeader } from "@inrupt/prism-react-components";
+import { makeStyles } from "@mui/styles";
+import { createStyles } from "@mui/core";
 import styles from "./styles";
 import DownloadLink from "../downloadLink";
 

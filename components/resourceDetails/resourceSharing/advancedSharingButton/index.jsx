@@ -21,10 +21,10 @@
 
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { createStyles, Modal } from "@material-ui/core";
+import { createStyles, Modal } from "@mui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@mui/styles";
 import { Button } from "@inrupt/prism-react-components";
 import AgentPickerModal from "../agentPickerModal";
 import styles from "./styles";

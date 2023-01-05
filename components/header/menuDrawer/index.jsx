@@ -22,14 +22,16 @@
 /* eslint react/jsx-props-no-spreading:off */
 
 import React, { useContext, useState, useEffect } from "react";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
-import Drawer from "@material-ui/core/Drawer";
-import Button from "@material-ui/core/Button";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import {
+  Drawer,
+  Button,
+  List,
+  Divider,
+  ListItem,
+  ListItemText,
+} from "@mui/core";
 import { Icons } from "@inrupt/prism-react-components";
 import styles from "./styles";
 import FeatureContext from "../../../src/contexts/featureFlagsContext";

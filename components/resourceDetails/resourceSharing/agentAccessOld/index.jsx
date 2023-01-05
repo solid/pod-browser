@@ -24,27 +24,16 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import T from "prop-types";
-import {
-  Avatar,
-  Button,
-  CircularProgress,
-  createStyles,
-  Typography,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
-import { useBem } from "@solid/lit-prism-patterns";
+import { Avatar, createStyles, Typography } from "@mui/core";
+import { makeStyles } from "mui/styles";
 import { DatasetContext, useSession } from "@inrupt/solid-ui-react";
 import { getSourceUrl } from "@inrupt/solid-client";
 import { Form, Button as PrismButton } from "@inrupt/prism-react-components";
-import { Alert, Skeleton } from "@material-ui/lab";
 import PermissionsForm from "../../../permissionsForm";
 import styles from "./styles";
 import ConfirmationDialogContext from "../../../../src/contexts/confirmationDialogContext";
 import ConfirmationDialog from "../../../confirmationDialog";
-import {
-  displayProfileName,
-  getFullProfile,
-} from "../../../../src/solidClientHelpers/profile";
+import { displayProfileName } from "../../../../src/solidClientHelpers/profile";
 import AlertContext from "../../../../src/contexts/alertContext";
 import useFullProfile from "../../../../src/hooks/useFullProfile";
 import AccessControlContext from "../../../../src/contexts/accessControlContext";
@@ -53,8 +42,6 @@ import { permission } from "../../../../constants/propTypes";
 const useStyles = makeStyles((theme) => createStyles(styles(theme)));
 
 const TESTCAFE_ID_AGENT_WEB_ID = "agent-web-id";
-const TESTCAFE_ID_TRY_AGAIN_BUTTON = "try-again-button";
-const TESTCAFE_ID_TRY_AGAIN_SPINNER = "try-again-spinner";
 export const TESTCAFE_ID_PERMISSIONS_FORM_SUBMIT_BUTTON =
   "permissions-form-submit-button";
 export const OWN_PERMISSIONS_WARNING_PERMISSION =

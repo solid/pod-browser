@@ -22,7 +22,7 @@
 import React from "react";
 import T from "prop-types";
 import { Footer as PrismFooter } from "@inrupt/prism-react-components";
-import { useTheme } from "@material-ui/core";
+import { useTheme } from "@mui/core";
 
 const TESTCAFE_ID_TOS_LINK = "tos-link";
 

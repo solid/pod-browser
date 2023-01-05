@@ -23,8 +23,8 @@ import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import Link from "next/link";
 import T from "prop-types";
-import { createStyles } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { createStyles } from "@mui/core";
+import { makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import {
   DrawerContainer,

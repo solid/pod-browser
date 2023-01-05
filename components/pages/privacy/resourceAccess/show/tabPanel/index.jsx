@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { Box } from "@material-ui/core";
+import { Box } from "@mui/core";
 import T from "prop-types";
 
 export default function TabPanel(props) {

@@ -22,8 +22,8 @@
 import React, { useState } from "react";
 import { foaf } from "rdf-namespaces";
 import T from "prop-types";
-import { Avatar, Box, createStyles } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { Avatar, Box, createStyles } from "@mui/core";
+import { makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { Icons } from "@inrupt/prism-react-components";
 import {

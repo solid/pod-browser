@@ -26,7 +26,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useBem } from "@solid/lit-prism-patterns";
 import { Icons } from "@inrupt/prism-react-components";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandMoreIcon from "@mui/icons-material";
 import clsx from "clsx";
 import {
   createStyles,
@@ -34,8 +34,8 @@ import {
   ListItemText,
   MenuItem,
   Select,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+} from "@mui/core";
+import { makeStyles } from "@mui/styles";
 import { customPolicies } from "../../../../constants/policies";
 import styles from "./styles";
 

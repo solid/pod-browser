@@ -28,10 +28,10 @@ import {
   AccordionDetails,
   AccordionSummary,
   CircularProgress,
-} from "@material-ui/core";
+} from "@mui/core";
 import { ActionMenu, ActionMenuItem } from "@inrupt/prism-react-components";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { createStyles, makeStyles } from "@mui/styles";
 import styles from "./styles";
 import AgentAccessList from "./agentAccessList";
 import AddPermissionUsingWebIdButton from "../../addPermissionUsingWebIdButton";

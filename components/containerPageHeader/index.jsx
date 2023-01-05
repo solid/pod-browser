@@ -22,7 +22,7 @@
 import React from "react";
 import { PageHeader as PrismPageHeader } from "@inrupt/prism-react-components";
 import { useSession } from "@inrupt/solid-ui-react";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import styles from "./styles";
 import PodIndicator from "../podIndicator";

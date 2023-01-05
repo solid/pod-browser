@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import PropTypes from "prop-types";
 import { useBem } from "@solid/lit-prism-patterns";
 import Link from "next/link";

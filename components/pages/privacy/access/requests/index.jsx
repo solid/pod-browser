@@ -30,8 +30,8 @@ import {
   getUrl,
 } from "@inrupt/solid-client";
 import { foaf, vcard } from "rdf-namespaces";
-import { makeStyles } from "@material-ui/styles";
-import { createStyles, Typography, Link } from "@material-ui/core";
+import { makeStyles } from "@mui/styles";
+import { createStyles, Typography, Link } from "@mui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";

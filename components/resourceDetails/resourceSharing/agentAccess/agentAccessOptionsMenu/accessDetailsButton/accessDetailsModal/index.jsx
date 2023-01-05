@@ -30,7 +30,7 @@ import {
   LinkButton,
 } from "@inrupt/prism-react-components";
 import { revokeAccessGrant } from "@inrupt/solid-client-access-grants";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import {
   CombinedDataProvider,
@@ -47,7 +47,7 @@ import {
   ListItemIcon,
   ListItemText,
   Avatar,
-} from "@material-ui/core";
+} from "@mui/core";
 import { permission as permissionPropType } from "../../../../../../../constants/propTypes";
 import { getAcpAccessDetails } from "../../../../../../../src/accessControl/acp";
 import InfoTooltip from "../../../../../../infoTooltip";

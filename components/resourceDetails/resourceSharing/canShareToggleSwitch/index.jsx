@@ -21,8 +21,8 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { createStyles, Switch } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { createStyles, Switch } from "@mui/core";
+import { makeStyles } from "@mui/styles";
 
 import styles from "./styles";
 

@@ -22,9 +22,9 @@
 /* eslint-disable camelcase */
 import React, { useState } from "react";
 import T from "prop-types";
-import { Button, createStyles, List, makeStyles } from "@material-ui/core";
-import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowUp from "@material-ui/icons/KeyboardArrowUp";
+import { Button, createStyles, List, makeStyles } from "@mui/core";
+import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUp from "@mui/icons-material/KeyboardArrowUp";
 import { useSession } from "@inrupt/solid-ui-react";
 import { useRouter } from "next/router";
 import PermissionCheckbox from "./permissionCheckbox";

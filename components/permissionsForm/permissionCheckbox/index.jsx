@@ -27,7 +27,7 @@ import {
   ListItem,
   makeStyles,
   createStyles,
-} from "@material-ui/core";
+} from "@mui/core";
 import styles from "../styles";
 
 const TESTCAFE_ID_PERMISSION_LABEL = "permission-label-";

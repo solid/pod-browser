@@ -20,7 +20,7 @@
  */
 
 import React, { createRef, useContext } from "react";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import PodLocationContext from "../../src/contexts/podLocationContext";
 import Spinner from "../spinner";

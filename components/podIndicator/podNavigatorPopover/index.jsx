@@ -21,11 +21,11 @@
 
 import React, { useEffect, useState } from "react";
 import T from "prop-types";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import { useRouter } from "next/router";
 import { getResourceInfo, getSourceIri } from "@inrupt/solid-client";
 import { useSession } from "@inrupt/solid-ui-react";
-import { Popover } from "@material-ui/core";
+import { Popover } from "@mui/core";
 import {
   Button,
   Form,

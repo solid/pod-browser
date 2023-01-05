@@ -21,9 +21,9 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { createStyles } from "@material-ui/core";
+import { createStyles } from "@mui/core";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@mui/styles";
 import { Button } from "@inrupt/prism-react-components";
 import styles from "./styles";
 

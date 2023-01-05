@@ -22,7 +22,7 @@
 import React from "react";
 import clsx from "clsx";
 import T from "prop-types";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import styles from "./styles";
 

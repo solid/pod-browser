@@ -28,7 +28,7 @@ import { useSession } from "@inrupt/solid-ui-react";
 import { useRouter } from "next/router";
 import T from "prop-types";
 import { schema } from "rdf-namespaces";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@mui/styles";
 import { useSortBy, useTable } from "react-table";
 import clsx from "clsx";
 import { useBem } from "@solid/lit-prism-patterns";
@@ -41,7 +41,7 @@ import {
   Icons,
   Table as PrismTable,
 } from "@inrupt/prism-react-components";
-import { createStyles, Divider, Typography } from "@material-ui/core";
+import { createStyles, Divider, Typography } from "@mui/core";
 import ConfirmationDialog from "../../../../confirmationDialog";
 import { handleAction } from "../../../../containerTableRow";
 import PersonAvatar from "../../../../profile/personAvatar";

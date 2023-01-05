@@ -21,7 +21,7 @@
 
 import React from "react";
 import T from "prop-types";
-import { TableCell, TableRow } from "@material-ui/core";
+import { TableCell, TableRow } from "@mui/core";
 import Link from "next/link";
 import { getIriPath } from "../../src/solidClientHelpers/utils";
 import { resourceHref } from "../../src/navigator";

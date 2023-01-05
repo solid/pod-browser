@@ -23,7 +23,7 @@ import React from "react";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import { useSession } from "@inrupt/solid-ui-react";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import { Button } from "@inrupt/prism-react-components";
 import { useBem } from "@solid/lit-prism-patterns";
 import LoginForm from "../../login";

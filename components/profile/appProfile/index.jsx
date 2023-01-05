@@ -23,8 +23,8 @@ import React, { useState } from "react";
 import { vcard } from "rdf-namespaces";
 import clsx from "clsx";
 import { getThing, getUrl } from "@inrupt/solid-client";
-import { Box, InputLabel, createStyles } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import { Box, InputLabel, createStyles } from "@mui/core";
+import { makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { Table as PrismTable } from "@inrupt/prism-react-components";
 import {

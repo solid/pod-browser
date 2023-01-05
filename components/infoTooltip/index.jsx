@@ -21,10 +21,10 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { Button, createStyles, Tooltip } from "@material-ui/core";
+import { Button, createStyles, Tooltip } from "@mui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@mui/styles";
 
 import styles from "./styles";
 

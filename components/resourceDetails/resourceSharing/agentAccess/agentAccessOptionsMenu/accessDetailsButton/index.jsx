@@ -21,11 +21,10 @@
 
 /* eslint-disable react/jsx-one-expression-per-line */
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import T from "prop-types";
-import { createStyles, ListItem, ListItemText } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
-import { permission as permissionPropType } from "../../../../../../constants/propTypes";
+import { createStyles, ListItem, ListItemText } from "@mui/core";
+import { makeStyles } from "@mui/styles";
 import styles from "./styles";
 
 export const TESTCAFE_ID_VIEW_DETAILS_BUTTON = "view-details-button";

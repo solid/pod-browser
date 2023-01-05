@@ -20,7 +20,7 @@
  */
 
 import React, { useContext, useState, useEffect } from "react";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import {
   MainNav as PrismMainNav,

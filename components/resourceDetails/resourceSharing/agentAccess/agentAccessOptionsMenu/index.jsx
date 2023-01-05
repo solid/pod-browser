@@ -21,16 +21,10 @@
 
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import {
-  createStyles,
-  List,
-  ListItem,
-  ListItemText,
-  Popover,
-} from "@material-ui/core";
+import { createStyles, List, ListItem, ListItemText, Popover } from "@mui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@mui/styles";
 import RemoveButton from "./removeButton";
 import AccessDetailsButton from "./accessDetailsButton";
 import styles from "./styles";

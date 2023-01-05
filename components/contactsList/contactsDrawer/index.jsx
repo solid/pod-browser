@@ -27,12 +27,8 @@ import {
   ActionMenuItem,
   Drawer,
 } from "@inrupt/prism-react-components";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-} from "@material-ui/core";
-import { ExpandMore } from "@material-ui/icons";
+import { Accordion, AccordionDetails, AccordionSummary } from "@mui/core";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 import DeleteContactButton from "../../deleteContactButton";
 import { buildProfileLink } from "../../profileLink";
 import ConfirmationDialog from "../../confirmationDialog";

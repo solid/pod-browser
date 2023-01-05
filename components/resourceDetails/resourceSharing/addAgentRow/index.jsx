@@ -28,8 +28,8 @@ import {
   TextField,
   Tooltip,
   Typography,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+} from "@mui/core";
+import { makeStyles } from "@mui/styles";
 import { Button, Icons } from "@inrupt/prism-react-components";
 
 import {

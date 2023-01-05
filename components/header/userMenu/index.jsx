@@ -20,12 +20,11 @@
  */
 
 import React from "react";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import { UserMenu as PrismUserMenu } from "@inrupt/prism-react-components";
 import { useBem } from "@solid/lit-prism-patterns";
 import styles from "./styles";
 import useAuthenticatedProfile from "../../../src/hooks/useAuthenticatedProfile";
-import Spinner from "../../spinner";
 import useUserMenu from "../../../src/hooks/useUserMenu";
 import UserMenuAction from "./userMenuAction";
 

@@ -21,13 +21,13 @@
 
 import React from "react";
 import {
+  Skeleton,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-} from "@material-ui/core";
-import Skeleton from "@material-ui/lab/Skeleton";
+} from "@mui/core";
 
 export default function ContainerTableLoading() {
   return (

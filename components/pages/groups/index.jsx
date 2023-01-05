@@ -21,8 +21,8 @@
 
 import React from "react";
 import { Container, PageHeader } from "@inrupt/prism-react-components";
-import { makeStyles } from "@material-ui/styles";
-import { createStyles } from "@material-ui/core";
+import { makeStyles } from "@mui/styles";
+import { createStyles } from "@mui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import { useRouter } from "next/router";
 import styles from "./styles";

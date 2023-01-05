@@ -29,7 +29,7 @@ import {
   GRANT_VC_URL_PARAM_NAME,
 } from "@inrupt/solid-client-access-grants";
 import { Button } from "@inrupt/prism-react-components";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "mui/styles";
 import { useRouter } from "next/router";
 import {
   createStyles,
@@ -37,7 +37,7 @@ import {
   Typography,
   List,
   FormControlLabel,
-} from "@material-ui/core";
+} from "@mui/core";
 import { useSession } from "@inrupt/solid-ui-react";
 import { useBem } from "@solid/lit-prism-patterns";
 import InfoTooltip from "../infoTooltip";

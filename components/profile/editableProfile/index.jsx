@@ -21,7 +21,7 @@
 
 import React from "react";
 import T from "prop-types";
-import { Box, Paper } from "@material-ui/core";
+import { Box, Paper } from "@mui/core";
 import { Container } from "@inrupt/prism-react-components";
 import { CombinedDataProvider } from "@inrupt/solid-ui-react";
 import { schema } from "rdf-namespaces";

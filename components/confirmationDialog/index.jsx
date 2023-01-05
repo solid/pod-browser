@@ -20,7 +20,7 @@
  */
 
 import React, { useContext } from "react";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@mui/styles";
 import {
   Dialog,
   DialogActions,
@@ -28,7 +28,7 @@ import {
   DialogTitle,
   createStyles,
   DialogContentText,
-} from "@material-ui/core";
+} from "@mui/core";
 import { Button } from "@inrupt/prism-react-components";
 import ConfirmationDialogContext from "../../src/contexts/confirmationDialogContext";
 import styles from "./styles";

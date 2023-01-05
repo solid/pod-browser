@@ -22,13 +22,11 @@
 /* eslint react/jsx-props-no-spreading:off */
 
 import Link from "next/link";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
+import { ListItem, ListItemIcon, ListItemText } from "@mui/core";
 import { Icons } from "@inrupt/prism-react-components";
-import ListItemText from "@material-ui/core/ListItemText";
 import clsx from "clsx";
 import React from "react";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import T from "prop-types";
 import styles from "./styles";

@@ -22,7 +22,7 @@
 import React, { createRef, useEffect, useState } from "react";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import {
   Popover,
@@ -30,9 +30,9 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  Skeleton,
   Tooltip,
-} from "@material-ui/core";
-import Skeleton from "@material-ui/lab/Skeleton";
+} from "@mui/core";
 import { Icons } from "@inrupt/prism-react-components";
 import PodNavigatorPopover from "./podNavigatorPopover";
 import Bookmark from "../bookmark";

@@ -23,7 +23,7 @@ import T from "prop-types";
 import React, { useContext, useState } from "react";
 import { rdf, vcard } from "rdf-namespaces";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import {
   addUrl,
@@ -54,7 +54,7 @@ import {
   FormControl,
   Select,
   createStyles,
-} from "@material-ui/core";
+} from "@mui/core";
 
 import { Button, Table as PrismTable } from "@inrupt/prism-react-components";
 import styles from "./styles";

@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { createStyles, makeStyles } from "@material-ui/styles";
+import { createStyles, makeStyles } from "@mui/styles";
 import { useBem } from "@solid/lit-prism-patterns";
 import { Content, Container, Icons } from "@inrupt/prism-react-components";
 import styles from "./styles";

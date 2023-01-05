@@ -26,8 +26,8 @@ import { Button, Icons, useOutsideClick } from "@inrupt/prism-react-components";
 import { format } from "date-fns";
 import T from "prop-types";
 import { DateTimePicker } from "@material-ui/pickers";
-import { makeStyles } from "@material-ui/styles";
-import { createStyles, InputBase } from "@material-ui/core";
+import { makeStyles } from "@mui/styles";
+import { createStyles, InputBase } from "@mui/core";
 import { useBem } from "@solid/lit-prism-patterns";
 import styles from "../styles";
 
