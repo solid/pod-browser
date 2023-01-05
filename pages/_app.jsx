@@ -39,9 +39,9 @@ import {
   createStyles,
   makeStyles,
   StylesProvider,
-  ThemeProvider,
 } from "@inrupt/prism-react-components";
 
+import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "../src/theme";
 import { AlertProvider } from "../src/contexts/alertContext";
 import { ConfirmationDialogProvider } from "../src/contexts/confirmationDialogContext";

@@ -22,7 +22,8 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import T from "prop-types";
-import { StylesProvider, ThemeProvider } from "@inrupt/prism-react-components";
+import { StylesProvider } from "@inrupt/prism-react-components";
+import { ThemeProvider } from "@material-ui/core/styles";
 import { FeatureProvider } from "../src/contexts/featureFlagsContext";
 import defaultTheme from "../src/theme";
 
