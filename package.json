@@ -19,7 +19,7 @@
     "url": "git+https://github.com/inrupt/pod-browser.git"
   },
   "author": "Inrupt <engineering@inrupt.com>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/inrupt/pod-browser/issues"
   },
