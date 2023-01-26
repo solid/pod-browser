@@ -40,14 +40,12 @@ import { TESTCAFE_ID_GO_BUTTON, TESTCAFE_ID_LOGIN_FIELD } from "./provider";
 jest.mock("../../src/hooks/useIdpFromQuery");
 jest.mock("../../src/authentication/useReturnUrl");
 
-jest.mock("../../constants/app", () => {
-  return {
-    getClientOptions: jest.fn().mockReturnValue({
-      clientId: "Test Client ID",
-      clientName: "Test Client",
-      redirectUrl: "http://localhost:3000/",
-    }),
-  };
+jest.mock("./getClientDetails", () => {
+  return jest.fn().mockReturnValue({
+    clientId: "Test Client ID",
+    clientName: "Test Client",
+    redirectUrl: "http://localhost:3000/",
+  });
 });
 
 const mockUseReturnUrl = {
@@ -113,7 +111,10 @@ describe("Login form", () => {
       expect(getByTestId(TESTCAFE_ID_LOGIN_FIELD)).not.toBeNull();
     });
 
-    getByTestId(TESTCAFE_ID_GO_BUTTON).click();
+    await act(() => {
+      getByTestId(TESTCAFE_ID_GO_BUTTON).click();
+    });
+
     await waitFor(() => {
       expect(mockUseReturnUrl.persist).toHaveBeenCalled();
       expect(session.login).toHaveBeenCalled();
