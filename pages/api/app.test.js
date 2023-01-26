@@ -50,12 +50,12 @@ function mockRequestResponse(method, origin, accepts) {
 
 describe("/api/app handler tests", () => {
   describe("errors", () => {
-    it("responds with 400 Bad Request if the request method is not GET", async () => {
+    it("responds with 405 Method Not Allowed if the request method is not GET", async () => {
       const { req, res } = mockRequestResponse("POST", TEST_ORIGIN, undefined);
 
       await handler(req, res);
 
-      expect(res.statusCode).toBe(400);
+      expect(res.statusCode).toBe(405);
     });
   });
 
@@ -87,7 +87,7 @@ describe("/api/app handler tests", () => {
   });
 
   describe("content-type negotiation", () => {
-    it("responds with 200 and content-type of application/json when no Accept header is present", async () => {
+    it("responds with 200 and content-type of application/ld+json when no Accept header is present", async () => {
       const { req, res } = mockRequestResponse("GET", TEST_ORIGIN, undefined);
 
       // Run the API handler
@@ -96,7 +96,7 @@ describe("/api/app handler tests", () => {
       // Check headers and status code:
       expect(res.statusCode).toBe(200);
       expect(res.getHeaders()).toEqual({
-        "content-type": "application/json",
+        "content-type": "application/ld+json",
       });
 
       // Check payload:

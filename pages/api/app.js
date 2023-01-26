@@ -39,21 +39,18 @@ function buildAppProfile(hostname, clientId) {
 
 export default function handler(req, res) {
   if (req.method !== "GET") {
-    return res.status(400).send("Bad Request");
+    return res.status(405).send("Method Not Allowed");
   }
 
   const clientId = `https://${req.headers.host}/api/app`;
   const hostname = `https://${req.headers.host}/`;
 
-  const acceptedType = accepts(req).types([
-    "application/json",
-    // This comes second, as we're currently not changing the default
-    // content-type to application/ld+json, only if the request was sent with
-    // application/ld+json. This is technically breaking spec, but to change the
-    // default would be a breaking change in how PodBrowser interacts with Solid
-    // Servers.
+  const acceptedType = accepts(req).type([
     "application/ld+json",
+    "application/json",
   ]);
+
+  console.log({ acceptedType });
 
   // Set the Content-Type to the accepted / negotiated type, otherwise set to
   // application/ld+json, as to handle loading the Client Identifier document
