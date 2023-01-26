@@ -48,15 +48,17 @@ export default function handler(req, res) {
   const acceptedType = accepts(req).type([
     "application/ld+json",
     "application/json",
+    // handle loading the Client Identifier document directly in the browser
+    "text/html",
   ]);
 
-  console.log({ acceptedType });
+  if (acceptedType === false) {
+    return res.status(406).send("Not Acceptable");
+  }
 
-  // Set the Content-Type to the accepted / negotiated type, otherwise set to
-  // application/ld+json, as to handle loading the Client Identifier document
-  // directly in the browser:
+  // If the request is for text/html, serve it as application/json:
   const contentType =
-    acceptedType === false ? "application/ld+json" : acceptedType;
+    acceptedType === "text/html" ? "application/json" : acceptedType;
 
   res.status(200);
   res.setHeader("Content-Type", contentType);

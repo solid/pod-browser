@@ -49,14 +49,12 @@ function mockRequestResponse(method, origin, accepts) {
 }
 
 describe("/api/app handler tests", () => {
-  describe("errors", () => {
-    it("responds with 405 Method Not Allowed if the request method is not GET", async () => {
-      const { req, res } = mockRequestResponse("POST", TEST_ORIGIN, undefined);
+  it("responds with 405 Method Not Allowed if the request method is not GET", async () => {
+    const { req, res } = mockRequestResponse("POST", TEST_ORIGIN, undefined);
 
-      await handler(req, res);
+    await handler(req, res);
 
-      expect(res.statusCode).toBe(405);
-    });
+    expect(res.statusCode).toBe(405);
   });
 
   describe("document contents", () => {
@@ -87,6 +85,16 @@ describe("/api/app handler tests", () => {
   });
 
   describe("content-type negotiation", () => {
+    it("responds with 406 if the Accept header is set but is not application/json, application/ld+json, or text/html", async () => {
+      const { req, res } = mockRequestResponse("GET", TEST_ORIGIN, "image/png");
+
+      // Run the API handler
+      await handler(req, res);
+
+      // Check headers and status code:
+      expect(res.statusCode).toBe(406);
+    });
+
     it("responds with 200 and content-type of application/ld+json when no Accept header is present", async () => {
       const { req, res } = mockRequestResponse("GET", TEST_ORIGIN, undefined);
 
@@ -146,7 +154,7 @@ describe("/api/app handler tests", () => {
       expect(responseData).toEqual(PODBROWSER_RESPONSE);
     });
 
-    it("responds with 200 and content-type of application/ld+json when Accept header isn't supported (e.g. text/html)", async () => {
+    it("responds with 200 and content-type of application/json when Accept header is text/html", async () => {
       const { req, res } = mockRequestResponse("GET", TEST_ORIGIN, "text/html");
 
       // Run the API handler
@@ -155,7 +163,7 @@ describe("/api/app handler tests", () => {
       // Check headers and status code:
       expect(res.statusCode).toBe(200);
       expect(res.getHeaders()).toEqual({
-        "content-type": "application/ld+json",
+        "content-type": "application/json",
       });
 
       // Check payload:
