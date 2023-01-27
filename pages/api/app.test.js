@@ -33,6 +33,10 @@ const PODBROWSER_RESPONSE = {
   redirect_uris: ["https://podbrowser.test/", "https://podbrowser.test/login"],
   grant_types: ["authorization_code", "refresh_token"],
   scope: "openid offline_access webid",
+  response_types: ["code"],
+  token_endpoint_auth_method: "none",
+  application_type: "web",
+  require_auth_time: false,
 };
 
 function mockRequestResponse(method, origin, accepts) {

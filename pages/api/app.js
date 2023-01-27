@@ -34,6 +34,10 @@ function buildAppProfile(hostname, clientId) {
     // The scope must be explicit, as the default doesn't include offline_access,
     // preventing the refresh token from being issued.
     scope: "openid offline_access webid",
+    response_types: ["code"],
+    token_endpoint_auth_method: "none",
+    application_type: "web",
+    require_auth_time: false,
   };
 }
 
