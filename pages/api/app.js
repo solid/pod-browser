@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import accepts from "accepts";
 import { CLIENT_NAME } from "../../constants/app";
 
 function buildAppProfile(hostname, clientId) {
@@ -33,11 +34,40 @@ function buildAppProfile(hostname, clientId) {
     // The scope must be explicit, as the default doesn't include offline_access,
     // preventing the refresh token from being issued.
     scope: "openid offline_access webid",
+    response_types: ["code"],
+    token_endpoint_auth_method: "none",
+    application_type: "web",
+    require_auth_time: false,
   };
 }
 
 export default function handler(req, res) {
+  if (req.method !== "GET") {
+    return res.status(405).send("Method Not Allowed");
+  }
+
   const clientId = `https://${req.headers.host}/api/app`;
   const hostname = `https://${req.headers.host}/`;
-  res.status(200).json(buildAppProfile(hostname, clientId));
+
+  const acceptedType = accepts(req).type([
+    "application/ld+json",
+    "application/json",
+    // handle loading the Client Identifier document directly in the browser
+    "text/html",
+  ]);
+
+  if (acceptedType === false) {
+    return res.status(406).send("Not Acceptable");
+  }
+
+  // If the request is for text/html, serve it as application/json:
+  const contentType =
+    acceptedType === "text/html" ? "application/json" : acceptedType;
+
+  res.status(200);
+  res.setHeader("Content-Type", contentType);
+  // Cannot use res.json as that sets the content-type header, overriding it if already set:
+  res.send(JSON.stringify(buildAppProfile(hostname, clientId)));
+
+  return res;
 }

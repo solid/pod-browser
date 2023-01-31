@@ -18,39 +18,24 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+import getConfig from "../../constants/config";
+import { CLIENT_NAME } from "../../constants/app";
+import { isLocalhost } from "../../src/stringHelpers";
+import {
+  generateRedirectUrl,
+  getCurrentHostname,
+  getCurrentOrigin,
+} from "../../src/windowHelpers";
 
-import getConfig from "./config";
-import { getClientOptions } from "./app";
-import { getCurrentHostname } from "../src/windowHelpers";
+export default function getClientDetails() {
+  const clientId = isLocalhost(getCurrentHostname())
+    ? getConfig().devClientId
+    : `${getCurrentOrigin()}/api/app`;
 
-jest.mock("./config");
-
-jest.mock("../src/windowHelpers", () => ({
-  getCurrentHostname: jest.fn().mockReturnValue("localhost"),
-  generateRedirectUrl: () => "https://localhost:3000/",
-  getCurrentOrigin: () => "https://localhost:3000",
-}));
-
-const TEST_CLIENT_ID = "https://pod.inrupt.com/appsteamdev/clientid.json";
-
-describe("app - getClientOptions", () => {
-  beforeEach(() => {
-    getConfig.mockReturnValue({
-      devClientId: TEST_CLIENT_ID,
-    });
-  });
-
-  it("should return configuration for login", () => {
-    const actual = getClientOptions();
-    expect(actual).toMatchSnapshot();
-  });
-
-  it("should not use the devClientId in production", () => {
-    getCurrentHostname.mockReturnValue("http://example.podbrowser");
-
-    const actual = getClientOptions();
-    expect(actual).toMatchSnapshot();
-    expect(actual.clientId).toBe("https://localhost:3000/api/app");
-    expect(actual.clientId).not.toBe(TEST_CLIENT_ID);
-  });
-});
+  return {
+    clientName: CLIENT_NAME,
+    clientId,
+    // TODO: Improve redirect url to be something specific:
+    redirectUrl: generateRedirectUrl(""),
+  };
+}

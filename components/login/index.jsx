@@ -29,8 +29,7 @@ import { useBem } from "@solid/lit-prism-patterns";
 import InfoTooltip from "../infoTooltip";
 import ProviderLogin from "./provider";
 import styles from "./styles";
-
-import { getClientOptions } from "../../constants/app";
+import getClientDetails from "./getClientDetails";
 
 import useReturnUrl from "../../src/authentication/useReturnUrl";
 import useIdpFromQuery from "../../src/hooks/useIdpFromQuery";
@@ -54,7 +53,7 @@ export default function LoginForm() {
       persist();
       sessionLogin({
         oidcIssuer,
-        ...getClientOptions(),
+        ...getClientDetails(),
       });
     },
     [sessionLogin, persist]

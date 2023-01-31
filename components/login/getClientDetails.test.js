@@ -19,5 +19,36 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/* eslint import/prefer-default-export: 0 */
-export const CLIENT_NAME = "Inrupt PodBrowser";
+import { getCurrentHostname } from "../../src/windowHelpers";
+import getClientDetails from "./getClientDetails";
+
+const TEST_CLIENT_ID = "https://pod.inrupt.com/appsteamdev/clientid.json";
+
+jest.mock("../../constants/config", () =>
+  // the getConfig default export:
+  jest.fn().mockReturnValue({
+    devClientId: TEST_CLIENT_ID,
+  })
+);
+
+jest.mock("../../src/windowHelpers", () => ({
+  getCurrentHostname: jest.fn(() => "localhost"),
+  generateRedirectUrl: () => "https://localhost:3000/",
+  getCurrentOrigin: () => "https://localhost:3000",
+}));
+
+describe("getClientDetails", () => {
+  it("should return configuration for login", () => {
+    const actual = getClientDetails();
+    expect(actual).toMatchSnapshot();
+  });
+
+  it("should not use the devClientId in production", () => {
+    getCurrentHostname.mockReturnValue("https://example.podbrowser");
+
+    const actual = getClientDetails();
+    expect(actual).toMatchSnapshot();
+    expect(actual.clientId).toBe("https://localhost:3000/api/app");
+    expect(actual.clientId).not.toBe(TEST_CLIENT_ID);
+  });
+});
