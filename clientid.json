@@ -1,6 +1,0 @@
-{
-  "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
-  "client_id": "https://storage.inrupt.com/87048fc7-b553-4c86-95de-633e1675f0bd/clientid.json",
-  "redirect_uris": ["https://localhost:3000/", "https://localhost:3000/login"],
-  "client_name": "Inrupt PodBrowser Localhost"
-}
