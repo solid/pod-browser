@@ -20,6 +20,9 @@
  */
 
 module.exports = {
+  // In CI, we can use 100% of the available resources:
+  maxWorkers: process.env.CI ? "100%" : "50%",
+
   // Automatically clear mock calls and instances between every test
   clearMocks: true,
 
