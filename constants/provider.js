@@ -36,4 +36,9 @@ export const defaultIdentityProviders = [
     label: "inrupt.net",
     iri: "https://inrupt.net/",
   },
+  {
+    logo: "useid-logo.svg",
+    label: "use.id",
+    iri: "https://idp.use.id/",
+  },
 ];
