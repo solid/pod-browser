@@ -37,6 +37,7 @@ module.exports = {
 
   // Coverage configs
   collectCoverage: true,
+  coverageReporters: process.env.CI ? ["text", "lcov"] : ["text"],
 
   coveragePathIgnorePatterns: [
     "/node_modules/",
