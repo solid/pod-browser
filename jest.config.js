@@ -20,6 +20,9 @@
  */
 
 module.exports = {
+  // In CI, we can use 100% of the available resources:
+  maxWorkers: process.env.CI ? "100%" : "50%",
+
   // Automatically clear mock calls and instances between every test
   clearMocks: true,
 
@@ -37,6 +40,7 @@ module.exports = {
 
   // Coverage configs
   collectCoverage: true,
+  coverageReporters: process.env.CI ? ["text", "lcov"] : ["text"],
 
   coveragePathIgnorePatterns: [
     "/node_modules/",
