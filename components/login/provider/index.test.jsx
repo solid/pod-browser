@@ -139,8 +139,8 @@ describe("ProviderLogin form", () => {
     // Get the options that are within the autocomplete:
     const options = getAllByRole(autocompletes[0], "option");
 
-    // solidweb.org, solidcommunity.net:
-    expect(options).toHaveLength(2);
+    // solidweb.org, solidcommunity.net, use.id:
+    expect(options).toHaveLength(3);
 
     // Click the first option from the autocomplete:
     userEvent.click(options[0]);
