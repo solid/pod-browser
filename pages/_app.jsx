@@ -23,7 +23,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable @next/next/no-sync-scripts */
 import React, { useEffect } from "react";
-import { MatomoProvider, createInstance } from "@datapunt/matomo-tracker-react";
 
 import PropTypes from "prop-types";
 import Head from "next/head";
@@ -52,20 +51,6 @@ import PodBrowserHeader from "../components/header";
 
 import "./styles.css";
 
-let matomoInstance = null;
-
-if (process.env.NEXT_PUBLIC_MATOMO_URL_BASE) {
-  matomoInstance = createInstance({
-    urlBase: process.env.NEXT_PUBLIC_MATOMO_URL_BASE,
-    siteId: process.env.NEXT_PUBLIC_MATOMO_SITE_ID,
-    configurations: {
-      disableCookies: true,
-      setSecureCookie: true,
-      setRequestMethod: "POST",
-    },
-  });
-}
-
 const jss = create(preset());
 
 const useStyles = makeStyles(() => createStyles(appLayout.styles(theme)));
@@ -85,14 +70,6 @@ export default function App(props) {
     }
   }, []);
 
-  // Fire off a pageview tracker whenever the path changes. Use the pagename
-  // (e.g. /resource/[iri]) instead of the full path to scrub sensitive data.
-  useEffect(() => {
-    matomoInstance?.trackPageView({
-      href: pathname,
-    });
-  }, [pathname, asPath]);
-
   return (
     <>
       <Head>
@@ -103,31 +80,29 @@ export default function App(props) {
         />
       </Head>
 
-      <MatomoProvider value={matomoInstance}>
-        <StylesProvider jss={jss}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <AlertProvider>
-              <SessionProvider sessionId="pod-browser" restorePreviousSession>
-                <AuthenticationProvider>
-                  <FeatureProvider>
-                    <ConfirmationDialogProvider>
-                      <div className={bem("app-layout")}>
-                        <PodBrowserHeader />
+      <StylesProvider jss={jss}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <AlertProvider>
+            <SessionProvider sessionId="pod-browser" restorePreviousSession>
+              <AuthenticationProvider>
+                <FeatureProvider>
+                  <ConfirmationDialogProvider>
+                    <div className={bem("app-layout")}>
+                      <PodBrowserHeader />
 
-                        <main className={bem("app-layout__main")}>
-                          <Component {...pageProps} />
-                        </main>
-                      </div>
-                      <Notification />
-                    </ConfirmationDialogProvider>
-                  </FeatureProvider>
-                </AuthenticationProvider>
-              </SessionProvider>
-            </AlertProvider>
-          </ThemeProvider>
-        </StylesProvider>
-      </MatomoProvider>
+                      <main className={bem("app-layout__main")}>
+                        <Component {...pageProps} />
+                      </main>
+                    </div>
+                    <Notification />
+                  </ConfirmationDialogProvider>
+                </FeatureProvider>
+              </AuthenticationProvider>
+            </SessionProvider>
+          </AlertProvider>
+        </ThemeProvider>
+      </StylesProvider>
     </>
   );
 }
