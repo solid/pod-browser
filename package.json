@@ -11,7 +11,7 @@
     "dev": "node server.js",
     "lint": "eslint pages components constants src --ext .js,.jsx",
     "start": "next start",
-    "test": "NODE_OPTIONS=--max_old_space_size=4096 TZ=UTC jest --maxWorkers=5",
+    "test": "NODE_OPTIONS=--max_old_space_size=4096 TZ=UTC jest --maxWorkers=3",
     "test:debug": "node --inspect-brk ./node_modules/.bin/jest -i"
   },
   "repository": {
