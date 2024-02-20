@@ -50,6 +50,7 @@ import Notification from "../components/notification";
 import PodBrowserHeader from "../components/header";
 
 import "./styles.css";
+import HeaderBanner from "../components/banner";
 
 const jss = create(preset());
 
@@ -79,7 +80,6 @@ export default function App(props) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-
       <StylesProvider jss={jss}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
@@ -90,7 +90,7 @@ export default function App(props) {
                   <ConfirmationDialogProvider>
                     <div className={bem("app-layout")}>
                       <PodBrowserHeader />
-
+                      <HeaderBanner />
                       <main className={bem("app-layout__main")}>
                         <Component {...pageProps} />
                       </main>

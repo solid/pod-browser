@@ -18,9 +18,25 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+import { createStyles } from "@solid/lit-prism-patterns";
 
-module.exports = {
-  hooks: {
-    "pre-push": "npm run lint",
-  },
+const BANNER_COLOR = "#FFD740";
+const FONT_COLOR = "#000000";
+
+const styles = (theme) => {
+  return createStyles(theme, [], {
+    banner: {
+      width: "100%",
+      height: "2.8rem",
+      padding: ".8rem 3.7rem",
+      fontWeight: "700",
+      backgroundColor: BANNER_COLOR,
+      color: FONT_COLOR,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });
 };
+
+export default styles;

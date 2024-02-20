@@ -18,9 +18,22 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+import React from "react";
+import { makeStyles } from "@material-ui/styles";
+import { createStyles } from "@material-ui/core";
+import styles from "./styles";
 
-module.exports = {
-  hooks: {
-    "pre-push": "npm run lint",
-  },
-};
+const useStyles = makeStyles((theme) => createStyles(styles(theme)));
+
+export default function HeaderBanner() {
+  const classes = useStyles();
+  return (
+    <div className={classes.banner}>
+      <p>
+        We&#39;re planning to sunset PodBrowser beginning on the 19th of March.
+        Learn more{" "}
+        <a href="https://www.inrupt.com/blog/podbrowser-sunset">here</a>
+      </p>
+    </div>
+  );
+}
