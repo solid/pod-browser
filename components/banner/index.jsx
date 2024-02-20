@@ -30,7 +30,7 @@ export default function HeaderBanner() {
   return (
     <div className={classes.banner}>
       <p>
-        We&#39;re planning to sunset PodBrowser beginning on the 6th of March.
+        We&#39;re planning to sunset PodBrowser beginning on the 19th of March.
         Learn more{" "}
         <a href="https://www.inrupt.com/blog/podbrowser-sunset">here</a>
       </p>
