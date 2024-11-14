@@ -18,9 +18,15 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 import accepts from "accepts";
 import { CLIENT_NAME } from "../../constants/app";
+
+// Simple safety check
+function sanitizeHost(host) {
+  if (!host) return '';
+  // Only allow valid hostname characters
+  return host.toLowerCase().trim().replace(/[^a-z0-9.-]/gi, '');
+}
 
 function buildAppProfile(hostname, clientId) {
   return {
@@ -46,8 +52,10 @@ export default function handler(req, res) {
     return res.status(405).send("Method Not Allowed");
   }
 
-  const clientId = `https://${req.headers.host}/api/app`;
-  const hostname = `https://${req.headers.host}/`;
+  // Sanitize the host before using it
+  const safeHost = sanitizeHost(req.headers.host);
+  const clientId = `https://${safeHost}/api/app`;
+  const hostname = `https://${safeHost}/`;
 
   const acceptedType = accepts(req).type([
     "application/ld+json",
@@ -66,6 +74,8 @@ export default function handler(req, res) {
 
   res.status(200);
   res.setHeader("Content-Type", contentType);
+  // Simple XSS protection header
+  res.setHeader("X-Content-Type-Options", "nosniff");
   // Cannot use res.json as that sets the content-type header, overriding it if already set:
   res.send(JSON.stringify(buildAppProfile(hostname, clientId)));
 
