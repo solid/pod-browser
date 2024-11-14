@@ -109,6 +109,7 @@ describe("/api/app handler tests", () => {
       expect(res.statusCode).toBe(200);
       expect(res.getHeaders()).toEqual({
         "content-type": "application/ld+json",
+        "x-content-type-options": "nosniff",
       });
 
       // Check payload:
@@ -130,6 +131,7 @@ describe("/api/app handler tests", () => {
       expect(res.statusCode).toBe(200);
       expect(res.getHeaders()).toEqual({
         "content-type": "application/json",
+        "x-content-type-options": "nosniff",
       });
 
       // Check payload:
@@ -151,6 +153,7 @@ describe("/api/app handler tests", () => {
       expect(res.statusCode).toBe(200);
       expect(res.getHeaders()).toEqual({
         "content-type": "application/ld+json",
+        "x-content-type-options": "nosniff",
       });
 
       // Check payload:
@@ -168,6 +171,7 @@ describe("/api/app handler tests", () => {
       expect(res.statusCode).toBe(200);
       expect(res.getHeaders()).toEqual({
         "content-type": "application/json",
+        "x-content-type-options": "nosniff",
       });
 
       // Check payload:
