@@ -23,9 +23,12 @@ import { CLIENT_NAME } from "../../constants/app";
 
 // Simple safety check
 function sanitizeHost(host) {
-  if (!host) return '';
+  if (!host) return "";
   // Only allow valid hostname characters
-  return host.toLowerCase().trim().replace(/[^a-z0-9.-]/gi, '');
+  return host
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9.-]/gi, "");
 }
 
 function buildAppProfile(hostname, clientId) {
