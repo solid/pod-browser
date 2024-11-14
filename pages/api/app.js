@@ -21,14 +21,29 @@
 import accepts from "accepts";
 import { CLIENT_NAME } from "../../constants/app";
 
-// Simple safety check
-function sanitizeHost(host) {
-  if (!host) return "";
-  // Only allow valid hostname characters
-  return host
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9.-]/gi, "");
+// Validate host header according to RFC 9110
+function validateHost(host) {
+  if (!host) {
+    throw new Error("Host header is required");
+  }
+
+  const [hostname, port] = host.split(":");
+
+  // Basic hostname validation
+  const hostnameRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*$/;
+  if (!hostnameRegex.test(hostname)) {
+    throw new Error("Invalid hostname format");
+  }
+
+  // Port validation if present
+  if (port !== undefined) {
+    const portNum = parseInt(port, 10);
+    if (Number.isNaN(portNum) || portNum < 1 || portNum > 65535) {
+      throw new Error("Invalid port number");
+    }
+  }
+
+  return host;
 }
 
 function buildAppProfile(hostname, clientId) {
@@ -55,32 +70,37 @@ export default function handler(req, res) {
     return res.status(405).send("Method Not Allowed");
   }
 
-  // Sanitize the host before using it
-  const safeHost = sanitizeHost(req.headers.host);
-  const clientId = `https://${safeHost}/api/app`;
-  const hostname = `https://${safeHost}/`;
+  try {
+    // Validate the host
+    const validHost = validateHost(req.headers.host);
+    const clientId = `https://${validHost}/api/app`;
+    const hostname = `https://${validHost}/`;
 
-  const acceptedType = accepts(req).type([
-    "application/ld+json",
-    "application/json",
-    // handle loading the Client Identifier document directly in the browser
-    "text/html",
-  ]);
+    const acceptedType = accepts(req).type([
+      "application/ld+json",
+      "application/json",
+      // handle loading the Client Identifier document directly in the browser
+      "text/html",
+    ]);
 
-  if (acceptedType === false) {
-    return res.status(406).send("Not Acceptable");
+    if (acceptedType === false) {
+      return res.status(406).send("Not Acceptable");
+    }
+
+    // If the request is for text/html, serve it as application/json:
+    const contentType =
+      acceptedType === "text/html" ? "application/json" : acceptedType;
+
+    res.status(200);
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.send(JSON.stringify(buildAppProfile(hostname, clientId)));
+
+    return res;
+  } catch (error) {
+    return res.status(400).json({
+      error: "Invalid Host header",
+      message: error.message,
+    });
   }
-
-  // If the request is for text/html, serve it as application/json:
-  const contentType =
-    acceptedType === "text/html" ? "application/json" : acceptedType;
-
-  res.status(200);
-  res.setHeader("Content-Type", contentType);
-  // Simple XSS protection header
-  res.setHeader("X-Content-Type-Options", "nosniff");
-  // Cannot use res.json as that sets the content-type header, overriding it if already set:
-  res.send(JSON.stringify(buildAppProfile(hostname, clientId)));
-
-  return res;
 }

@@ -86,6 +86,34 @@ describe("/api/app handler tests", () => {
         `https://${HOST_UNDER_TEST}/login`,
       ]);
     });
+
+    it("accepts localhost:3000", async () => {
+      const { req, res } = mockRequestResponse(
+        "GET",
+        "localhost:3000",
+        "application/json"
+      );
+
+      await handler(req, res);
+
+      expect(res.statusCode).toBe(200);
+      const responseData = res._getJSONData();
+      expect(responseData.client_id).toBe("https://localhost:3000/api/app");
+    });
+
+    it("rejects invalid host with special characters", async () => {
+      const { req, res } = mockRequestResponse(
+        "GET",
+        "invalid*host:3000",
+        "application/json"
+      );
+
+      await handler(req, res);
+
+      expect(res.statusCode).toBe(400);
+      const responseData = res._getJSONData();
+      expect(responseData.error).toBe("Invalid Host header");
+    });
   });
 
   describe("content-type negotiation", () => {
