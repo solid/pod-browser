@@ -112,3 +112,4 @@ out/
 .DS_Store
 # Sentry
 .sentryclirc
+.env*.local

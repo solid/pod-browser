@@ -19,44 +19,41 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 import accepts from "accepts";
+import { URL } from "url";
 import { CLIENT_NAME } from "../../constants/app";
 
-// Validate host header according to RFC 9110
-function validateHost(host) {
+function validateAndParseHost(host) {
   if (!host) {
     throw new Error("Host header is required");
   }
 
-  const [hostname, port] = host.split(":");
+  try {
+    const url = new URL(`https://${host}`);
 
-  // Basic hostname validation
-  const hostnameRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*$/;
-  if (!hostnameRegex.test(hostname)) {
-    throw new Error("Invalid hostname format");
-  }
-
-  // Port validation if present
-  if (port !== undefined) {
-    const portNum = parseInt(port, 10);
-    if (Number.isNaN(portNum) || portNum < 1 || portNum > 65535) {
-      throw new Error("Invalid port number");
+    if (
+      !/^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*$/.test(
+        url.hostname
+      )
+    ) {
+      throw new Error("Invalid hostname format");
     }
-  }
 
-  return host;
+    return {
+      hostname: url.hostname,
+      port: url.port || null,
+    };
+  } catch (error) {
+    throw new Error(`Invalid host: ${error.message}`);
+  }
 }
 
-function buildAppProfile(hostname, clientId) {
+function buildAppProfile(baseUrl) {
   return {
     "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
-    client_id: clientId,
+    client_id: new URL("/api/app", baseUrl).toString(),
     client_name: CLIENT_NAME,
-    // URLs the user will be redirected back to upon successful authentication:
-    redirect_uris: [hostname, hostname.concat("login")],
-    // Support refresh_tokens for refreshing the session:
+    redirect_uris: [baseUrl, new URL("/login", baseUrl).toString()],
     grant_types: ["authorization_code", "refresh_token"],
-    // The scope must be explicit, as the default doesn't include offline_access,
-    // preventing the refresh token from being issued.
     scope: "openid offline_access webid",
     response_types: ["code"],
     token_endpoint_auth_method: "none",
@@ -71,15 +68,13 @@ export default function handler(req, res) {
   }
 
   try {
-    // Validate the host
-    const validHost = validateHost(req.headers.host);
-    const clientId = `https://${validHost}/api/app`;
-    const hostname = `https://${validHost}/`;
+    const { hostname, port } = validateAndParseHost(req.headers.host);
+
+    const baseUrl = `https://${hostname}${port ? `:${port}` : ""}/`;
 
     const acceptedType = accepts(req).type([
       "application/ld+json",
       "application/json",
-      // handle loading the Client Identifier document directly in the browser
       "text/html",
     ]);
 
@@ -87,14 +82,12 @@ export default function handler(req, res) {
       return res.status(406).send("Not Acceptable");
     }
 
-    // If the request is for text/html, serve it as application/json:
-    const contentType =
-      acceptedType === "text/html" ? "application/json" : acceptedType;
+    const contentType = acceptedType === "text/html" ? "application/json" : acceptedType;
 
     res.status(200);
     res.setHeader("Content-Type", contentType);
     res.setHeader("X-Content-Type-Options", "nosniff");
-    res.send(JSON.stringify(buildAppProfile(hostname, clientId)));
+    res.send(JSON.stringify(buildAppProfile(baseUrl)));
 
     return res;
   } catch (error) {
