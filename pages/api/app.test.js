@@ -18,7 +18,6 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 import { createMocks } from "node-mocks-http";
 import handler from "./app";
 
@@ -52,7 +51,7 @@ function mockRequestResponse(method, origin, accepts) {
 describe("/api/app handler tests", () => {
   describe("HTTP method handling", () => {
     it("responds with 405 Method Not Allowed if the request method is not GET", async () => {
-      const { req, res } = mockRequestResponse("POST", TEST_ORIGIN, undefined);
+      const { req, res } = mockRequestResponse("GET", TEST_ORIGIN, undefined);
       await handler(req, res);
       expect(res.statusCode).toBe(405);
     });
@@ -92,14 +91,9 @@ describe("/api/app handler tests", () => {
 
     describe("valid hosts", () => {
       test.each(validHosts)("accepts %s: %s", async (_, host) => {
-        const { req, res } = mockRequestResponse(
-          "GET",
-          host,
-          "application/json"
-        );
+        const { req, res } = mockRequestResponse("GET", host, "application/json");
         await handler(req, res);
         expect(res.statusCode).toBe(200);
-        // eslint-disable-next-line no-underscore-dangle
         const responseData = res._getJSONData();
         expect(responseData.client_id).toBe(`https://${host}/api/app`);
       });
@@ -107,14 +101,9 @@ describe("/api/app handler tests", () => {
 
     describe("invalid hosts", () => {
       test.each(invalidHosts)("rejects %s: %s", async (_, host) => {
-        const { req, res } = mockRequestResponse(
-          "GET",
-          host,
-          "application/json"
-        );
+        const { req, res } = mockRequestResponse("GET", host, "application/json");
         await handler(req, res);
         expect(res.statusCode).toBe(400);
-        // eslint-disable-next-line no-underscore-dangle
         const responseData = res._getJSONData();
         expect(responseData.error).toBe("Invalid Host header");
       });
@@ -124,16 +113,11 @@ describe("/api/app handler tests", () => {
   describe("document contents", () => {
     it("mirrors the Host header in the document contents", async () => {
       const HOST_UNDER_TEST = "podbrowser-different-host.test";
-      const { req, res } = mockRequestResponse(
-        "GET",
-        HOST_UNDER_TEST,
-        "application/ld+json"
-      );
+      const { req, res } = mockRequestResponse("GET", HOST_UNDER_TEST, "application/ld+json");
 
       await handler(req, res);
       expect(res.statusCode).toBe(200);
 
-      // eslint-disable-next-line no-underscore-dangle
       const responseData = res._getJSONData();
       expect(responseData.client_id).toBe(`https://${HOST_UNDER_TEST}/api/app`);
       expect(responseData.redirect_uris).toEqual([
@@ -144,16 +128,11 @@ describe("/api/app handler tests", () => {
 
     it("properly handles hostname with port in URIs", async () => {
       const HOST_WITH_PORT = "localhost:3000";
-      const { req, res } = mockRequestResponse(
-        "GET",
-        HOST_WITH_PORT,
-        "application/json"
-      );
+      const { req, res } = mockRequestResponse("GET", HOST_WITH_PORT, "application/json");
 
       await handler(req, res);
       expect(res.statusCode).toBe(200);
 
-      // eslint-disable-next-line no-underscore-dangle
       const responseData = res._getJSONData();
       expect(responseData.client_id).toBe(`https://${HOST_WITH_PORT}/api/app`);
       expect(responseData.redirect_uris).toEqual([
@@ -171,11 +150,7 @@ describe("/api/app handler tests", () => {
     });
 
     it("responds with 200 and content-type of application/ld+json when no Accept header is present", async () => {
-      const { req, res } = mockRequestResponse(
-        "GET",
-        TEST_ORIGIN,
-        undefined
-      );
+      const { req, res } = mockRequestResponse("GET", TEST_ORIGIN, undefined);
       await handler(req, res);
 
       expect(res.statusCode).toBe(200);
@@ -183,16 +158,11 @@ describe("/api/app handler tests", () => {
         "content-type": "application/ld+json",
         "x-content-type-options": "nosniff",
       });
-      // eslint-disable-next-line no-underscore-dangle
       expect(res._getJSONData()).toEqual(PODBROWSER_RESPONSE);
     });
 
     it("responds with 200 and content-type of application/json when Accept header requests application/json", async () => {
-      const { req, res } = mockRequestResponse(
-        "GET",
-        TEST_ORIGIN,
-        "application/json"
-      );
+      const { req, res } = mockRequestResponse("GET", TEST_ORIGIN, "application/json");
       await handler(req, res);
 
       expect(res.statusCode).toBe(200);
@@ -200,7 +170,6 @@ describe("/api/app handler tests", () => {
         "content-type": "application/json",
         "x-content-type-options": "nosniff",
       });
-      // eslint-disable-next-line no-underscore-dangle
       expect(res._getJSONData()).toEqual(PODBROWSER_RESPONSE);
     });
   });
@@ -208,14 +177,9 @@ describe("/api/app handler tests", () => {
   describe("URL construction", () => {
     it("properly constructs URLs with encoded characters", async () => {
       const HOST = "example-site.test";
-      const { req, res } = mockRequestResponse(
-        "GET",
-        HOST,
-        "application/json"
-      );
+      const { req, res } = mockRequestResponse("GET", HOST, "application/json");
       await handler(req, res);
 
-      // eslint-disable-next-line no-underscore-dangle
       const responseData = res._getJSONData();
       expect(responseData.client_id).toBe(`https://${HOST}/api/app`);
       expect(responseData.redirect_uris[0]).toBe(`https://${HOST}/`);

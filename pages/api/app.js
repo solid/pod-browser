@@ -69,7 +69,6 @@ export default function handler(req, res) {
 
   try {
     const { hostname, port } = validateAndParseHost(req.headers.host);
-
     const baseUrl = `https://${hostname}${port ? `:${port}` : ""}/`;
 
     const acceptedType = accepts(req).type([
@@ -82,7 +81,8 @@ export default function handler(req, res) {
       return res.status(406).send("Not Acceptable");
     }
 
-    const contentType = acceptedType === "text/html" ? "application/json" : acceptedType;
+    const contentType =
+      acceptedType === "text/html" ? "application/json" : acceptedType;
 
     res.status(200);
     res.setHeader("Content-Type", contentType);
