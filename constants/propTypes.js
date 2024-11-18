@@ -70,10 +70,16 @@ export const profile = PropTypes.shape({
 });
 
 export const swrResponse = PropTypes.shape({
-  // eslint-disable-next-line react/forbid-prop-types
-  data: PropTypes.any,
-  // eslint-disable-next-line react/forbid-prop-types
-  error: PropTypes.object,
+  data: PropTypes.oneOfType([
+  PropTypes.string,
+  PropTypes.number,
+  PropTypes.bool,
+  PropTypes.array,
+]),
+error: PropTypes.shape({
+  message: PropTypes.string,
+  status: PropTypes.number,
+}),
   isValidating: PropTypes.bool.isRequired,
   mutate: PropTypes.func.isRequired,
 });

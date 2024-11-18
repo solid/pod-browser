@@ -130,7 +130,10 @@ export default function PolicyActionButton({ permissions, setLoading, type }) {
 }
 
 PolicyActionButton.propTypes = {
-  permissions: T.arrayOf(T.object),
+  permissions: T.arrayOf(T.shape({
+  alias: T.string,
+  webId: T.string.isRequired,
+})),
   setLoading: T.func,
   type: T.string.isRequired,
 };
