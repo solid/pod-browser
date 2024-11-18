@@ -164,9 +164,11 @@ AgentSearchForm.propTypes = {
   dirtyForm: T.bool,
   onChange: T.func,
   onSubmit: T.func,
-  permissions: T.arrayOf(T.shape({
-  webId: T.string.isRequired,
-})),
+  permissions: T.arrayOf(
+    T.shape({
+      webId: T.string.isRequired,
+    })
+  ),
   agentId: T.string,
   type: T.string,
 };

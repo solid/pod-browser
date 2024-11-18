@@ -71,17 +71,25 @@ export const profile = PropTypes.shape({
 
 export const swrResponse = PropTypes.shape({
   data: PropTypes.oneOfType([
-  PropTypes.string,
-  PropTypes.number,
-  PropTypes.bool,
-  PropTypes.array,
-]),
-error: PropTypes.shape({
-  message: PropTypes.string,
-  status: PropTypes.number,
-}),
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.bool,
+    PropTypes.array,
+  ]),
+  error: PropTypes.shape({
+    message: PropTypes.string,
+    status: PropTypes.number,
+  }),
   isValidating: PropTypes.bool.isRequired,
   mutate: PropTypes.func.isRequired,
+});
+
+// Define the shape of an editable profile dataset
+export const editableProfileDataset = PropTypes.shape({
+  dataset: PropTypes.string.isRequired,
+  sourceIri: PropTypes.string.isRequired,
+  profile: PropTypes.bool,
+  permissions: PropTypes.arrayOf(permission),
 });
 
 export const profilePropTypes = PropTypes.shape({
@@ -91,7 +99,7 @@ export const profilePropTypes = PropTypes.shape({
   webId: PropTypes.string,
   roles: PropTypes.arrayOf(PropTypes.string),
   organizations: PropTypes.arrayOf(PropTypes.string),
-  editableProfileDatasets: PropTypes.arrayOf(PropTypes.object),
+  editableProfileDatasets: PropTypes.arrayOf(editableProfileDataset),
   contactInfo: PropTypes.shape({
     phones: PropTypes.arrayOf(
       PropTypes.shape({ value: PropTypes.string, type: PropTypes.string })

@@ -112,10 +112,12 @@ export default function ContactsListSearch({ people }) {
 }
 
 ContactsListSearch.propTypes = {
-  people: T.arrayOf(T.shape({
-  name: T.string,
-  webId: T.string,
-})),
+  people: T.arrayOf(
+    T.shape({
+      name: T.string,
+      webId: T.string,
+    })
+  ),
 };
 
 ContactsListSearch.defaultProps = {

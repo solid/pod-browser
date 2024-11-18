@@ -83,7 +83,6 @@ export default function Login() {
           Need a Pod?
           <a
             href="https://start.inrupt.com/"
-            variant="secondary"
             className={clsx(
               bem("links-container__button"),
               buttonBem("button", "secondary")

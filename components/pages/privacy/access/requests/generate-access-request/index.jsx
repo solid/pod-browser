@@ -61,7 +61,9 @@ export default function GenerateAccessRequest() {
       redirectToAccessManagementUi(
         vc,
         // eslint-disable-next-line prettier/prettier
-        `${origin}/privacy/?${GRANT_VC_URL_PARAM_NAME}=${encodeURIComponent(vc.id)}`,
+        `${origin}/privacy/?${GRANT_VC_URL_PARAM_NAME}=${encodeURIComponent(
+          vc.id
+        )}`,
         {
           fallbackAccessManagementUi: `${origin}/privacy/access/requests/`,
         }

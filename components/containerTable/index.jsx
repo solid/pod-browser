@@ -134,12 +134,14 @@ export default function ContainerTable({ containerPath, data, resourcePath }) {
 
 ContainerTable.propTypes = {
   containerPath: T.string.isRequired,
-  data: T.arrayOf(T.shape({
-  iri: T.string.isRequired,
-  filename: T.string,
-  type: T.string,
-  icon: T.node,
-  "bookmark-icon": T.node,
-})).isRequired,
+  data: T.arrayOf(
+    T.shape({
+      iri: T.string.isRequired,
+      filename: T.string,
+      type: T.string,
+      icon: T.node,
+      "bookmark-icon": T.node,
+    })
+  ).isRequired,
   resourcePath: T.string.isRequired,
 };

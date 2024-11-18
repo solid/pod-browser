@@ -24,6 +24,7 @@ import { createStyles, makeStyles } from "@material-ui/styles";
 import { header, useBem } from "@solid/lit-prism-patterns";
 import { useSession } from "@inrupt/solid-ui-react";
 import Link from "next/link";
+import Image from "next/image";
 import UserMenu from "./userMenu";
 import MenuDrawer from "./menuDrawer";
 import MainNav from "./mainNav";
@@ -43,7 +44,7 @@ export default function Header() {
       <div className={classes.logoContainer}>
         <Link href="/">
           <a data-testid={TESTCAFE_ID_HEADER_LOGO}>
-            <img
+            <Image
               height={40}
               src="/inrupt_logo-2020.svg"
               className={bem("header-banner__logo-image")}

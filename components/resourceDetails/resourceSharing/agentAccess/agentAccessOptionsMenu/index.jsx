@@ -71,6 +71,7 @@ export default function AgentAccessOptionsMenu({
   return (
     <>
       <button
+        aria-label="descriptive label"
         data-testid={TESTCAFE_ID_MENU_BUTTON}
         type="button"
         className={classes.button}

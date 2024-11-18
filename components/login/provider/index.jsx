@@ -35,6 +35,7 @@ import { Autocomplete } from "@material-ui/lab";
 import { useBem } from "@solid/lit-prism-patterns";
 import { Button } from "@inrupt/prism-react-components";
 
+import Image from "next/image";
 import { defaultIdentityProviders } from "../../../constants/provider";
 import { validateProviderIri } from "./validateProviderIri";
 
@@ -157,7 +158,7 @@ export default function Provider({ provider, handleLogin }) {
               return (
                 <>
                   {option.logo && (
-                    <img
+                    <Image
                       src={`../${option.logo}`}
                       width={20}
                       alt={option.label}
