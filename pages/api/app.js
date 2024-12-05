@@ -18,21 +18,42 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 import accepts from "accepts";
+import { URL } from "url";
 import { CLIENT_NAME } from "../../constants/app";
 
-function buildAppProfile(hostname, clientId) {
+function validateAndParseHost(host) {
+  if (!host) {
+    throw new Error("Host header is required");
+  }
+
+  try {
+    const url = new URL(`https://${host}`);
+
+    if (
+      !/^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*$/.test(
+        url.hostname
+      )
+    ) {
+      throw new Error("Invalid hostname format");
+    }
+
+    return {
+      hostname: url.hostname,
+      port: url.port || null,
+    };
+  } catch (error) {
+    throw new Error(`Invalid host: ${error.message}`);
+  }
+}
+
+function buildAppProfile(baseUrl) {
   return {
     "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
-    client_id: clientId,
+    client_id: new URL("/api/app", baseUrl).toString(),
     client_name: CLIENT_NAME,
-    // URLs the user will be redirected back to upon successful authentication:
-    redirect_uris: [hostname, hostname.concat("login")],
-    // Support refresh_tokens for refreshing the session:
+    redirect_uris: [baseUrl, new URL("/login", baseUrl).toString()],
     grant_types: ["authorization_code", "refresh_token"],
-    // The scope must be explicit, as the default doesn't include offline_access,
-    // preventing the refresh token from being issued.
     scope: "openid offline_access webid",
     response_types: ["code"],
     token_endpoint_auth_method: "none",
@@ -46,28 +67,33 @@ export default function handler(req, res) {
     return res.status(405).send("Method Not Allowed");
   }
 
-  const clientId = `https://${req.headers.host}/api/app`;
-  const hostname = `https://${req.headers.host}/`;
+  try {
+    const { hostname, port } = validateAndParseHost(req.headers.host);
+    const baseUrl = `https://${hostname}${port ? `:${port}` : ""}/`;
 
-  const acceptedType = accepts(req).type([
-    "application/ld+json",
-    "application/json",
-    // handle loading the Client Identifier document directly in the browser
-    "text/html",
-  ]);
+    const acceptedType = accepts(req).type([
+      "application/ld+json",
+      "application/json",
+      "text/html",
+    ]);
 
-  if (acceptedType === false) {
-    return res.status(406).send("Not Acceptable");
+    if (acceptedType === false) {
+      return res.status(406).send("Not Acceptable");
+    }
+
+    const contentType =
+      acceptedType === "text/html" ? "application/json" : acceptedType;
+
+    res.status(200);
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.send(JSON.stringify(buildAppProfile(baseUrl)));
+
+    return res;
+  } catch (error) {
+    return res.status(400).json({
+      error: "Invalid Host header",
+      message: error.message,
+    });
   }
-
-  // If the request is for text/html, serve it as application/json:
-  const contentType =
-    acceptedType === "text/html" ? "application/json" : acceptedType;
-
-  res.status(200);
-  res.setHeader("Content-Type", contentType);
-  // Cannot use res.json as that sets the content-type header, overriding it if already set:
-  res.send(JSON.stringify(buildAppProfile(hostname, clientId)));
-
-  return res;
 }
