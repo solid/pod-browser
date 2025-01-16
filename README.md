@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="public/inrupt_logo-2020.svg" alt="Inrupt Logo" width="200"/>
-</p>
-
 <span align="center">
 
 # PodBrowser
