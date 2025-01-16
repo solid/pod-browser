@@ -7,10 +7,6 @@
 [Code of Conduct](code-of-conduct.md) · [Documentation] · [Support]
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
-![](https://img.shields.io/github/issues/inrupt/pod-browser.svg)
-![](https://img.shields.io/github/issues-pr/inrupt/pod-browser.svg)
-[![](https://img.shields.io/github/contributors/inrupt/pod-browser.svg)](https://github.com/inrupt/pod-browser/graphs/contributors)
-![](https://img.shields.io/github/license/inrupt/pod-browser.svg)
 
 </span>
 
