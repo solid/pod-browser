@@ -59,8 +59,7 @@ representative at an online or offline event.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the project members responsible for enforcement at
-[engineering@inrupt.com](mailto:engineering@inrupt.com).
+reported to the project members responsible for enforcement.
 All complaints will be reviewed and investigated promptly and fairly.
 
 All project members are obligated to respect the privacy and security of the
