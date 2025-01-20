@@ -5,6 +5,7 @@ on: [push]
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -17,30 +18,8 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run lint
       - run: npm run test
-      # Upload coverage for sonarcube (only matching OS and one node version required)
+      # Coverage artifacts still uploaded for potential future use
       - uses: actions/upload-artifact@v3
         with:
           name: code-coverage
           path: coverage/
-
-  sonarqube:
-    name: run sonarqube
-    if: ${{ github.actor != 'dependabot[bot]' }}
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checking out
-        uses: actions/checkout@v3
-        with:
-          # Sonar analysis needs the full history for features like automatic assignment of bugs. If the following step
-          # is not included the project will show a warning about incomplete information.
-          fetch-depth: 0
-      - uses: actions/download-artifact@v3
-        with:
-          name: code-coverage
-          path: coverage/
-      - name: SonarQube Scan
-        uses: kitabisa/sonarqube-action@v1.2.0
-        with:
-          host: ${{ secrets.SONARQUBE_HOST }}
-          login: ${{ secrets.SONARQUBE_TOKEN }}
