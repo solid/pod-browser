@@ -48,7 +48,7 @@
     "ip": "^2.0.1",
     "jss": "^10.10.0",
     "jss-preset-default": "^10.10.0",
-    "next": "^15.1.4",
+    "next": "^15.3.3",
     "path-to-regexp": "^8.2.0",
     "prop-types": "^15.8.1",
     "rdf-namespaces": "^1.12.0",
